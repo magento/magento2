@@ -22,27 +22,21 @@
              <magentoCLI command="config:set {{EnableFlatRateConfigData.path}} {{EnableFlatRateConfigData.value}}" stepKey="enableFlatRate"/>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
             <createData entity="VirtualProduct" stepKey="virtualProduct1"/>
-
             <!-- Fill in rules to display tax in the cart -->
             <actionGroup ref="EditTaxConfigurationByUIActionGroup" stepKey="fillDefaultTaxForms"/>
-
             <!-- Go to tax rule page -->
             <actionGroup ref="AdminTaxRuleGridOpenPageActionGroup" stepKey="goToTaxRulePage"/>
             <click stepKey="addNewTaxRate" selector="{{AdminGridMainControls.add}}"/>
             <fillField stepKey="fillRuleName" selector="{{AdminTaxRulesSection.ruleName}}" userInput="SampleRule"/>
-
             <!-- Add NY and CA tax rules -->
             <actionGroup ref="AddNewTaxRateNoZipUIActionGroup" stepKey="addNYTaxRate">
                 <argument name="taxCode" value="SimpleTaxNY"/>
             </actionGroup>
-
             <actionGroup ref="AddNewTaxRateNoZipUIActionGroup" stepKey="addCATaxRate">
                 <argument name="taxCode" value="SimpleTaxCA"/>
             </actionGroup>
-
             <click stepKey="clickSave" selector="{{AdminStoresMainActionsSection.saveButton}}"/>
             <see userInput="You saved the tax rule." selector="{{AdminMessagesSection.success}}" stepKey="seeSuccessMessageForSavingRule"/>
-
             <!-- Fill out form for a new user with address -->
             <actionGroup ref="StorefrontOpenCustomerAccountCreatePageActionGroup" stepKey="openCreateAccountPage"/>
             <actionGroup ref="StorefrontFillCustomerAccountCreationFormActionGroup" stepKey="fillCreateAccountForm">
@@ -53,7 +47,6 @@
                 <argument name="messageType" value="success"/>
                 <argument name="message" value="Thank you for registering with Main Website Store."/>
             </actionGroup>
-
             <actionGroup ref="EnterCustomerAddressInfoActionGroup" stepKey="enterAddressInfo">
                 <argument name="Address" value="US_Address_NY"/>
             </actionGroup>
@@ -65,22 +58,21 @@
                 <argument name="name" value="SampleRule"/>
                 <argument name="searchInput" value="{{AdminSecondaryGridSection.taxIdentifierSearch}}"/>
             </actionGroup>
-
             <!-- Go to the tax rate page -->
             <actionGroup ref="AdminTaxRateGridOpenPageActionGroup" stepKey="goToTaxRatesPage"/>
-
             <!-- Delete the two tax rates that were created -->
             <actionGroup ref="AdminDeleteMultipleTaxRatesActionGroup" stepKey="deleteAllNonDefaultTaxRates"/>
             <comment userInput="Preserve BiC" stepKey="deleteNYRate"/>
             <comment userInput="Preserve BiC" stepKey="deleteCARate"/>
-
             <!-- Ensure tax won't be shown in the cart -->
             <actionGroup ref="ChangeToDefaultTaxConfigurationUIActionGroup" stepKey="changeToDefaultTaxConfiguration"/>
-
+            <!--Delete customer created during test execution-->
+            <actionGroup ref="AdminDeleteCustomerActionGroup" stepKey="deleteCustomerFromGrid">
+                <argument name="customerEmail" value="Simple_US_Customer_NY.email"/>
+            </actionGroup>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="amOnLogoutPage"/>
             <deleteData createDataKey="virtualProduct1" stepKey="deleteVirtualProduct1"/>
         </after>
-
         <!-- Go to the created product page and add it to the cart -->
         <amOnPage url="$$virtualProduct1.custom_attributes[url_key]$$.html" stepKey="goToVirtualProductPage"/>
         <waitForPageLoad stepKey="waitForVirtualProductPage"/>
@@ -88,33 +80,27 @@
         <click stepKey="addVirtualProductToCart" selector="{{StorefrontProductActionSection.addToCart}}"/>
         <waitForPageLoad stepKey="waitForProductAdded"/>
         <see stepKey="seeSuccess" selector="{{StorefrontMessagesSection.success}}" userInput="You added"/>
-
         <!-- Assert that taxes are applied correctly for NY -->
         <actionGroup ref="StorefrontCartPageOpenActionGroup" stepKey="goToCheckout"/>
         <waitForLoadingMaskToDisappear stepKey="waitForLoadingMask"/>
-
         <waitForElementVisible stepKey="waitForOverviewVisible" selector="{{CheckoutPaymentSection.tax}}"/>
         <see stepKey="seeTax" selector="{{CheckoutPaymentSection.tax}}" userInput="$8.37"/>
         <click stepKey="expandTax" selector="{{CheckoutPaymentSection.tax}}"/>
         <see stepKey="seeTaxPercent" selector="{{CheckoutPaymentSection.taxPercentage}}" userInput="({{SimpleTaxNY.rate}}%)"/>
         <see stepKey="seeTotalIncl" selector="{{CheckoutPaymentSection.orderSummaryTotalIncluding}}" userInput="$108.36"/>
         <see stepKey="seeTotalExcl" selector="{{CheckoutPaymentSection.orderSummaryTotalExcluding}}" userInput="$$virtualProduct1.price$$"/>
-
         <!-- Change the address -->
         <actionGroup ref="ChangeSummaryQuoteAddressActionGroup" stepKey="changeAddress">
             <argument name="taxCode" value="SimpleTaxSwiss"/>
         </actionGroup>
-
         <!-- Assert that taxes are applied correctly for Switzerland -->
         <see stepKey="seeTax2" selector="{{CheckoutPaymentSection.tax}}" userInput="$0.00"/>
         <see stepKey="seeTotalIncl2" selector="{{CheckoutPaymentSection.orderSummaryTotalIncluding}}" userInput="$$$virtualProduct1.price$$"/>
         <see stepKey="seeTotalExcl2" selector="{{CheckoutPaymentSection.orderSummaryTotalExcluding}}" userInput="$$$virtualProduct1.price$$"/>
-
         <!-- Change the address -->
         <actionGroup ref="ChangeSummaryQuoteAddressActionGroup" stepKey="changeAddress2">
             <argument name="taxCode" value="SimpleTaxCA"/>
         </actionGroup>
-
         <!-- Assert that taxes are applied correctly for CA -->
         <see stepKey="seeTax3" selector="{{CheckoutPaymentSection.tax}}" userInput="$8.25"/>
         <click stepKey="expandTax2" selector="{{CheckoutPaymentSection.tax}}"/>

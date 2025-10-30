@@ -38,6 +38,9 @@
                 <argument name="productName" value="simpleProductWithShortNameAndSku.name"/>
             </actionGroup>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <actionGroup ref="AdminDeleteCategoryByNameActionGroup" stepKey="deleteImportCategory">
+                <argument name="categoryName" value="{{ImportCategoryFromCSV.name}}"/>
+            </actionGroup>
             <!--Delete attribute-->
             <deleteData createDataKey="productAttribute" stepKey="deleteProductAttribute"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin"/>
