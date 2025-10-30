@@ -36,7 +36,7 @@
         <element name="asLowAsLabel" type="input" selector="//strong[@id='block-related-heading']/following::span[@class='price-label'][1]"/>
         <element name="asLowAsLabelAgain" type="input" selector="//strong[@id='block-related-heading']/following::span[@class='price-label'][2]"/>
         <element name="specialPriceValue" type="text" selector="//span[@class='special-price']//span[@class='price']"/>
-        <element name="mapPrice" type="text" selector="//div[@class='price-box price-final_price']//span[contains(@class, 'price-msrp_price')]"/>
+        <element name="mapPrice" type="text" selector="//div[@class='price-box price-final_price']//span[contains(@class, 'price-msrp_price')]//span"/>
         <element name="clickForPriceLink" type="text" selector="//div[@class='price-box price-final_price']//a[contains(text(), 'Click for price')]"/>
         <element name="addReviewLink" type="text" selector="//div[@class='reviews-actions']//a[@class='action add']"/>
         <element name="fptPrice" type="text" selector=".//*[@class='weee']/span"/>

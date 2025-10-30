@@ -80,7 +80,7 @@ class RegularPriceTest extends TestCase
             ->method('getPrice')
             ->willReturn($price);
         $this->priceCurrencyMock->expects($this->any())
-            ->method('convertAndRound')
+            ->method('convert')
             ->with($price)
             ->willReturn($convertedPrice);
         $this->assertEquals($convertedPrice, $this->regularPrice->getValue());
@@ -114,7 +114,7 @@ class RegularPriceTest extends TestCase
             ->method('getPrice')
             ->willReturn($priceValue);
         $this->priceCurrencyMock->expects($this->any())
-            ->method('convertAndRound')
+            ->method('convert')
             ->with($priceValue)
             ->willReturn($convertedPrice);
         $this->calculatorMock->expects($this->once())

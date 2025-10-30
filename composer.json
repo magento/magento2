@@ -387,7 +387,10 @@
         "exclude-from-classmap": [
             "**/dev/**",
             "**/update/**",
-            "*/*/Test/**/*Test"
+            "**/Test/Fixture/**",
+            "**/Test/Integration/**",
+            "**/Test/Mftf/**",
+            "**/Test/Unit/**"
         ]
     },
     "autoload-dev": {

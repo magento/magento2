@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -19,7 +19,7 @@ class SkipDataSetTest extends AbstractOverridesTest
     /**
      * The first_data_set should not be executed according to override config it should be mark as skipped
      *
-     * @dataProvider testDataProvider
+     * @dataProvider configDataProvider
      *
      * @return void
      */
@@ -33,7 +33,7 @@ class SkipDataSetTest extends AbstractOverridesTest
     /**
      * @return array
      */
-    public static function testDataProvider(): array
+    public static function configDataProvider(): array
     {
         return [
             'first_data_set' => ['This test should be skipped via override config in data set node'],

@@ -19,5 +19,6 @@
         <element name="purchaseOrderNumber" type="input" selector="#po_number"/>
         <element name="checkPaypalExpress" type="radio" selector="//div/input[@id='paypal_express']"/>
         <element name="checkPaypalExpressActive" type="radio" selector="//div[@class='payment-method _active']/div/input[@id='paypal_express']"/>
+        <element name="paymentMethod" type="radio" selector="//dl[@class='checkout-payment-method']//label[contains(., '{{methodName}}')]/../..//input" parameterized="true"/>
     </section>
 </sections>
