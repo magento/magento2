@@ -6,51 +6,63 @@
 
 /** @var $block \Magento\Sales\Block\Adminhtml\Order\View\Giftmessage */
 ?>
-<?php if ($block->canDisplayGiftmessage()) : ?>
+<?php if ($block->canDisplayGiftmessage()): ?>
     <?php $_required = $block->getMessage()->getMessage() != '' ?>
-    <div id="<?= $block->escapeHtmlAttr($block->getHtmlId()) ?>" class="admin__page-section-content giftmessage-whole-order-container">
-        <form class="entry-edit form-inline" id="<?= $block->escapeHtmlAttr($block->getFieldId('form')) ?>" action="<?= $block->escapeUrl($block->getSaveUrl()) ?>">
+    <div id="<?= $escaper->escapeHtmlAttr($block->getHtmlId()) ?>"
+         class="admin__page-section-content giftmessage-whole-order-container">
+        <form class="entry-edit form-inline"
+              id="<?= $escaper->escapeHtmlAttr($block->getFieldId('form')) ?>"
+              action="<?= $escaper->escapeUrl($block->getSaveUrl()) ?>">
             <fieldset class="admin__fieldset">
-                <legend class="admin__legend"><span><?= $block->escapeHtml(__('Gift Message for the Entire Order')) ?></span></legend>
+                <legend class="admin__legend">
+                    <span><?= $escaper->escapeHtml(__('Gift Message for the Entire Order')) ?></span>
+                </legend>
                 <br/>
 
-                <input type="hidden" id="<?= $block->escapeHtmlAttr($block->getFieldId('type')) ?>"
-                       name="<?= $block->escapeHtmlAttr($block->getFieldName('type')) ?>"
+                <input type="hidden" id="<?= $escaper->escapeHtmlAttr($block->getFieldId('type')) ?>"
+                       name="<?= $escaper->escapeHtmlAttr($block->getFieldName('type')) ?>"
                        value="order"/>
 
                 <div class="admin__field field-from-name<?= $_required ? ' required' : '' ?>">
                     <label class="admin__field-label"
-                           for="<?= $block->escapeHtmlAttr($block->getFieldId('sender')) ?>"><span><?= $block->escapeHtml(__('From Name')) ?></span></label>
+                           for="<?= $escaper->escapeHtmlAttr($block->getFieldId('sender')) ?>">
+                        <span><?= $escaper->escapeHtml(__('From Name')) ?></span>
+                    </label>
 
                     <div class="admin__field-control">
                         <input class="admin__control-text <?= $_required ? 'required-entry' : '' ?>" type="text"
-                               id="<?= $block->escapeHtmlAttr($block->getFieldId('sender')) ?>"
-                               name="<?= $block->escapeHtmlAttr($block->getFieldName('sender')) ?>"
-                               value="<?= $block->escapeHtml($block->getMessage()->getSender()) ?>"/>
+                               id="<?= $escaper->escapeHtmlAttr($block->getFieldId('sender')) ?>"
+                               name="<?= $escaper->escapeHtmlAttr($block->getFieldName('sender')) ?>"
+                               value="<?= $_required ? $escaper->escapeHtml($block->getMessage()->getSender()):'' ?>"/>
                     </div>
                 </div>
 
                 <div class="admin__field field-to-name<?= $_required ? ' required' : '' ?>">
                     <label class="admin__field-label"
-                           for="<?= $block->escapeHtmlAttr($block->getFieldId('recipient')) ?>"><span><?= $block->escapeHtml(__('To Name')) ?></span></label>
+                           for="<?= $escaper->escapeHtmlAttr($block->getFieldId('recipient')) ?>">
+                        <span><?= $escaper->escapeHtml(__('To Name')) ?></span>
+                    </label>
 
                     <div class="admin__field-control">
                         <input class="admin__control-text <?= $_required ? 'required-entry' : '' ?>" type="text"
-                               id="<?= $block->escapeHtmlAttr($block->getFieldId('recipient')) ?>"
-                               name="<?= $block->escapeHtmlAttr($block->getFieldName('recipient')) ?>"
-                               value="<?= $block->escapeHtml($block->getMessage()->getRecipient()) ?>"/>
+                               id="<?= $escaper->escapeHtmlAttr($block->getFieldId('recipient')) ?>"
+                               name="<?= $escaper->escapeHtmlAttr($block->getFieldName('recipient')) ?>"
+                               value="<?= $_required ?
+                                   $escaper->escapeHtml($block->getMessage()->getRecipient()):'' ?>"
+                        />
                     </div>
                 </div>
-
                 <div class="admin__field field-gift-message">
                     <label class="admin__field-label"
-                           for="<?= $block->escapeHtmlAttr($block->getFieldId('message')) ?>"><span><?= $block->escapeHtml(__('Gift Message')) ?></span></label>
+                           for="<?= $escaper->escapeHtmlAttr($block->getFieldId('message')) ?>">
+                        <span><?= $escaper->escapeHtml(__('Gift Message')) ?></span>
+                    </label>
                     <div class="admin__field-control">
-                        <textarea id="<?= $block->escapeHtmlAttr($block->getFieldId('message')) ?>"
-                                  name="<?= $block->escapeHtmlAttr($block->getFieldName('message')) ?>"
+                        <textarea id="<?= $escaper->escapeHtmlAttr($block->getFieldId('message')) ?>"
+                                  name="<?= $escaper->escapeHtmlAttr($block->getFieldName('message')) ?>"
                                   class="admin__control-textarea"
                                   rows="2"
-                                  cols="15"><?= $block->escapeHtml($block->getMessage()->getMessage()) ?></textarea>
+                                  cols="15"><?= $escaper->escapeHtml($block->getMessage()->getMessage()) ?></textarea>
                     </div>
                 </div>
 

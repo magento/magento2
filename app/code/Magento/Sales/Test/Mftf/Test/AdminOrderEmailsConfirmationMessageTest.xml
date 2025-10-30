@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright 2025 Adobe
+  * All Rights Reserved.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminOrderEmailsConfirmationMessageTest">
+        <annotations>
+            <features value="Sales"/>
+            <title value="Admin sees confirmation messages for invoice, shipment, and credit memo emails"/>
+            <description value="Covers storefront order placement and admin sending invoice, shipment, and credit memo emails with confirmation message checks"/>
+            <stories value="Place order, send invoice, shipment, and credit memo emails and check confirmation messages"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="AC-9122"/>
+            <group value="Sales"/>
+        </annotations>
+        <before>
+            <!-- Create simple product -->
+            <createData entity="SimpleProduct2" stepKey="createSimpleProduct"/>
+            <!-- Create customer -->
+            <createData entity="Simple_US_Customer" stepKey="createCustomer"/>
+        </before>
+        <after>
+            <!-- Delete product and customer -->
+            <deleteData createDataKey="createSimpleProduct" stepKey="deleteSimpleProduct"/>
+            <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
+            <!-- Logout from admin -->
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="adminLogout"/>
+            <!-- Logout from storefront -->
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer"/>
+        </after>
+        <!-- Step 1: Go to frontend and log in as customer -->
+        <actionGroup ref="LoginToStorefrontActionGroup" stepKey="loginToStorefrontAccount">
+            <argument name="Customer" value="$$createCustomer$$"/>
+        </actionGroup>
+        <!-- Step 2: Add product to cart and place order -->
+        <actionGroup ref="StorefrontAddSimpleProductWithQtyActionGroup" stepKey="addSimpleProductToCart">
+            <argument name="product" value="$$createSimpleProduct$$"/>
+            <argument name="quantity" value="1"/>
+        </actionGroup>
+        <actionGroup ref="GoToCheckoutFromMinicartActionGroup" stepKey="goToCheckoutFromMinicart"/>
+        <actionGroup ref="CheckoutSelectFlatRateShippingMethodActionGroup" stepKey="selectFlatRate"/>
+        <actionGroup ref="StorefrontCheckoutClickNextOnShippingStepActionGroup" stepKey="goToReview"/>
+        <actionGroup ref="CheckoutSelectCheckMoneyOrderPaymentActionGroup" stepKey="selectCheckMoneyOrder"/>
+        <actionGroup ref="ClickPlaceOrderActionGroup" stepKey="clickPlacePurchaseOrder"/>
+        <grabTextFrom selector="{{CheckoutSuccessMainSection.orderNumber22}}" stepKey="orderNumber"/>
+        <!-- Step 3: Log in to admin -->
+        <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+        <!-- Step 4: Go to sales order and open order -->
+        <actionGroup ref="OpenOrderByIdActionGroup" stepKey="openOrderInAdmin">
+            <argument name="orderId" value="{$orderNumber}"/>
+        </actionGroup>
+        <!-- Step 5: Create invoice, shipment, and credit memo -->
+        <actionGroup ref="AdminCreateInvoiceAndShipmentActionGroup" stepKey="createInvoiceAndShipment"/>
+        <actionGroup ref="AdminCreateCreditMemoWithReturnToStockActionGroup" stepKey="createCreditMemo"/>
+        <!-- Step 6: In the order page, click on invoice under the information tab -->
+        <click selector="{{AdminOrderDetailsMainActionsSection.invoiceTab}}" stepKey="goToInvoiceTab"/>
+        <!-- Steps 7: Click on view button under action. -->
+        <actionGroup ref="AdminSelectFirstGridRowActionGroup" stepKey="openInvoiceFromGrid"/>
+        <!-- Step 8: Click on Send Email button -->
+        <click selector="{{AdminOrderDetailsMainActionsSection.sendEmail}}" stepKey="clickSendInvoiceEmail"/>
+        <waitForElementVisible selector="{{AdminConfirmationModalSection.ok}}" stepKey="waitForInvoiceConfirmationModal"/>
+        <click selector="{{AdminConfirmationModalSection.ok}}" stepKey="confirmSendInvoiceEmail"/>
+        <waitForElementVisible selector="{{AdminOrderDetailsMessagesSection.successMessage}}" stepKey="waitForInvoiceSuccessMessage"/>
+        <grabTextFrom selector="{{AdminOrderDetailsMessagesSection.successMessage}}" stepKey="grabInvoiceSuccessMessage"/>
+        <!-- Assert invoice email confirmation -->
+        <assertEquals stepKey="assertInvoiceEmailConfirmation">
+            <actualResult type="const">$grabInvoiceSuccessMessage</actualResult>
+            <expectedResult type="string">{{AdminOrderEmailsSendMessage.emailSuccessMessage}}</expectedResult>
+        </assertEquals>
+        <!-- Step 9: Send shipment email -->
+        <actionGroup ref="OpenOrderByIdActionGroup" stepKey="openOrderInAdmin1">
+            <argument name="orderId" value="{$orderNumber}"/>
+        </actionGroup>
+        <click selector="{{AdminOrderDetailsMainActionsSection.shipmentsTab}}" stepKey="goToShipmentTab"/>
+        <click selector="{{AdminOrderDetailsMainActionsSection.openShipmentFromGrid}}" stepKey="clickShipmentViewLink"/>
+        <waitForElementVisible selector="{{AdminOrderDetailsMainActionsSection.sendShipmentEmail}}" stepKey="waitForSendShipmentEmailButton"/>
+        <click selector="{{AdminOrderDetailsMainActionsSection.sendShipmentEmail}}" stepKey="clickSendShipmentEmail"/>
+        <waitForElementVisible selector="{{AdminConfirmationModalSection.ok}}" stepKey="waitForShipmentConfirmationModal"/>
+        <click selector="{{AdminConfirmationModalSection.ok}}" stepKey="confirmSendShipmentEmail"/>
+        <waitForElementVisible selector="{{AdminOrderDetailsMessagesSection.successMessage}}" stepKey="waitForShipmentSuccessMessage"/>
+        <grabTextFrom selector="{{AdminOrderDetailsMessagesSection.successMessage}}" stepKey="grabShipmentSuccessMessage"/>
+        <!-- Assert shipment email confirmation -->
+        <assertEquals stepKey="assertShipmentEmailConfirmation">
+            <actualResult type="const">$grabShipmentSuccessMessage</actualResult>
+            <expectedResult type="string">{{AdminOrderEmailsSendMessage.shipmentEmailSuccessMessage}}</expectedResult>
+        </assertEquals>
+        <!-- Step 10: Send credit memo email -->
+        <actionGroup ref="OpenOrderByIdActionGroup" stepKey="openOrderInAdmin2">
+            <argument name="orderId" value="{$orderNumber}"/>
+        </actionGroup>
+        <click selector="{{AdminCreditMemoTotalSection.creditMemoItem}}" stepKey="goToCreditMemoTab"/>
+        <click selector="{{AdminOrderDetailsMainActionsSection.openCreditMemoFromGrid}}" stepKey="openCreditMemoFromGrid"/>
+        <click selector="{{AdminOrderDetailsMainActionsSection.sendCreditMemoEmail}}" stepKey="clickSendCreditMemoEmail"/>
+        <waitForElementVisible selector="{{AdminConfirmationModalSection.ok}}" stepKey="waitForCreditMemoConfirmationModal"/>
+        <click selector="{{AdminConfirmationModalSection.ok}}" stepKey="confirmSendCreditMemoEmail"/>
+        <waitForElementVisible selector="{{AdminOrderDetailsMessagesSection.successMessage}}" stepKey="waitForCreditMemoSuccessMessage"/>
+        <grabTextFrom selector="{{AdminOrderDetailsMessagesSection.successMessage}}" stepKey="grabCreditMemoSuccessMessage"/>
+        <!-- Assert credit memo email confirmation -->
+        <assertEquals stepKey="assertCreditMemoEmailConfirmation">
+            <actualResult type="const">$grabCreditMemoSuccessMessage</actualResult>
+            <expectedResult type="string">{{AdminOrderEmailsSendMessage.emailSuccessMessage}}</expectedResult>
+        </assertEquals>
+    </test>
+</tests>
