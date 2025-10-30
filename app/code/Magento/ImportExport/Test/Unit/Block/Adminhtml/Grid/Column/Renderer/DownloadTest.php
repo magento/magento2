@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -75,8 +75,15 @@ class DownloadTest extends TestCase
         $row = new DataObject($data);
         $this->escaperMock
             ->method('escapeHtml')
-            ->withConsecutive(['file.csv'], ['Download'])
-            ->willReturnOnConsecutiveCalls('file.csv', 'Download');
+            ->willReturnCallback(
+                function ($arg) use (&$callCount) {
+                    if ($arg == 'file.csv') {
+                        return 'file.csv';
+                    } elseif ($arg == 'Download') {
+                        return 'Download';
+                    }
+                }
+            );
         $this->assertEquals('<p> file.csv</p><a href="url">Download</a>', $this->download->_getValue($row));
     }
 }

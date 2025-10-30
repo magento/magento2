@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -45,7 +45,7 @@ class CanViewNotificationTest extends TestCase
             ->getMock();
         $this->sessionMock = $this->getMockBuilder(Session::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getUser', 'getId'])
+            ->addMethods(['getUser', 'getId'])
             ->getMock();
         $this->viewerLoggerMock = $this->getMockBuilder(Logger::class)
             ->disableOriginalConstructor()
@@ -117,7 +117,7 @@ class CanViewNotificationTest extends TestCase
     /**
      * @return array
      */
-    public function isVisibleProvider()
+    public static function isVisibleProvider()
     {
         return [
             [false, '2.2.1-dev', '999.999.999-alpha'],

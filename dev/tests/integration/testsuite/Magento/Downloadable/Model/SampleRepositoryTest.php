@@ -162,7 +162,7 @@ class SampleRepositoryTest extends \PHPUnit\Framework\TestCase
      * @param int|null $sampleId
      * @return Sample|null
      */
-    private function getTargetSample(Product $product, int $sampleId = null): ?Sample
+    private function getTargetSample(Product $product, ?int $sampleId = null): ?Sample
     {
         $samples = $product->getExtensionAttributes()->getDownloadableProductSamples();
         if ($sampleId) {

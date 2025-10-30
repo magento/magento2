@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -50,7 +50,7 @@ class CouponGeneratorTest extends TestCase
     {
         $this->generationSpecFactoryMock = $this->getMockBuilder(CouponGenerationSpecInterfaceFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])->getMock();
+            ->onlyMethods(['create'])->getMock();
         $this->couponManagementServiceMock = $this->createMock(CouponManagementService::class);
         $this->generationSpecMock = $this->getMockForAbstractClass(CouponGenerationSpecInterface::class);
         $this->couponGenerator = new CouponGenerator(

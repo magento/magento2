@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -113,7 +113,7 @@ class LinkTest extends TestCase
     /**
      * @return array
      */
-    public function getLabelDataProvider()
+    public static function getLabelDataProvider()
     {
         return [[1, 'My Cart (1 item)'], [2, 'My Cart (2 items)'], [0, 'My Cart']];
     }

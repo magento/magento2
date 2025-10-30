@@ -78,7 +78,8 @@ class UiComponentTest extends TestCase
         )->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $this->uiComponentFactoryMock = $this->getMockBuilder(UiComponentFactory::class)
-            ->setMethods(['setLayout', 'create'])
+            ->addMethods(['setLayout'])
+            ->onlyMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->scheduledStructureMock = $this->getMockBuilder(ScheduledStructure::class)

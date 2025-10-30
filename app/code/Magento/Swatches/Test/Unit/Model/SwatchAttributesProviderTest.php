@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -72,7 +72,8 @@ class SwatchAttributesProviderTest extends TestCase
 
         $attributeMock =  $this->getMockBuilder(Attribute::class)
             ->disableOriginalConstructor()
-            ->setMethods(['setStoreId', 'getData', 'setData', 'getSource', 'hasData'])
+            ->addMethods(['setStoreId'])
+            ->onlyMethods(['getData', 'setData', 'getSource', 'hasData'])
             ->getMock();
 
         $configAttributeMock = $this->getMockBuilder(Configurable\Attribute::class)->addMethods(['getProductAttribute'])

@@ -76,7 +76,7 @@ class SubtotalTest extends \Magento\TestFramework\Indexer\TestCase
         $this->quote($quoteItems, $expected);
     }
 
-    public function collectUnitBasedDataProvider(): array
+    public static function collectUnitBasedDataProvider(): array
     {
         return [
             'one_item' => [
@@ -136,7 +136,7 @@ class SubtotalTest extends \Magento\TestFramework\Indexer\TestCase
         $this->quote($quoteItems, $expected);
     }
 
-    public function collectUnitBasedBundleProductDataProvider(): array
+    public static function collectUnitBasedBundleProductDataProvider(): array
     {
         return [
             'one_item' => [
@@ -200,7 +200,7 @@ class SubtotalTest extends \Magento\TestFramework\Indexer\TestCase
     /**
      * @return array
      */
-    public function collectUnitBasedPriceIncludesTaxDataProvider(): array
+    public static function collectUnitBasedPriceIncludesTaxDataProvider(): array
     {
         return [
             [

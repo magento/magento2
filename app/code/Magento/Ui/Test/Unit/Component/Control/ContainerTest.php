@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -55,7 +55,7 @@ class ContainerTest extends TestCase
 
         $abstractContextMock = $this->getMockBuilder(AbstractBlock::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getNameInLayout'])
+            ->onlyMethods(['getNameInLayout'])
             ->getMockForAbstractClass();
         $abstractContextMock->expects($this->any())->method('getNameInLayout')->willReturn($nameInLayout);
 

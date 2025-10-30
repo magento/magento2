@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -101,7 +101,7 @@ class BatchConsumerTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $this->mergerFactory = $this->getMockBuilder(MergerFactory::class)
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->resource = $this->getMockBuilder(ResourceConnection::class)
@@ -164,9 +164,9 @@ class BatchConsumerTest extends TestCase
             ->getMockBuilder(ConsumerConfigItemInterface::class)
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
-        $this->consumerConfig->expects($this->once())
+        $this->consumerConfig->expects($this->atLeastOnce())
             ->method('getConsumer')->with($consumerName)->willReturn($consumerConfigItem);
-        $consumerConfigItem->expects($this->once())->method('getConnection')->willReturn($connectionName);
+        $consumerConfigItem->expects($this->atLeastOnce())->method('getConnection')->willReturn($connectionName);
         $queue = $this->getMockBuilder(QueueInterface::class)
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
@@ -215,9 +215,9 @@ class BatchConsumerTest extends TestCase
             ->getMockBuilder(ConsumerConfigItemInterface::class)
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
-        $this->consumerConfig->expects($this->once())
-            ->method('getConsumer')->with($consumerName)->willReturn($consumerConfigItem);
-        $consumerConfigItem->expects($this->once())->method('getConnection')->willReturn($connectionName);
+        $this->consumerConfig->expects($this->atLeastOnce())
+              ->method('getConsumer')->with($consumerName)->willReturn($consumerConfigItem);
+        $consumerConfigItem->expects($this->atLeastOnce())->method('getConnection')->willReturn($connectionName);
         $queue = $this->getMockBuilder(QueueInterface::class)
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();

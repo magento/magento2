@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -49,7 +49,7 @@ class CountryWithWebsitesTest extends TestCase
     {
         $this->countriesFactoryMock =
             $this->getMockBuilder(CollectionFactory::class)
-                ->setMethods(['create'])
+                ->onlyMethods(['create'])
                 ->disableOriginalConstructor()
                 ->getMock();
         $this->allowedCountriesMock = $this->getMockBuilder(AllowedCountries::class)
@@ -97,14 +97,15 @@ class CountryWithWebsitesTest extends TestCase
 
         $this->allowedCountriesMock->expects($this->exactly(2))
             ->method('getAllowedCountries')
-            ->withConsecutive(
-                ['website', 1],
-                ['website', 2]
-            )
-            ->willReturnMap([
-                ['website', 1, ['AM' => 'AM']],
-                ['website', 2, ['AM' => 'AM', 'DZ' => 'DZ']]
-            ]);
+            ->willReturnCallback(
+                function ($arg1, $arg2) {
+                    if ($arg1 === 'website' && $arg2 === 1) {
+                        return ['AM' => 'AM'];
+                    } elseif ($arg1 === 'website' && $arg2 === 2) {
+                        return ['AM' => 'AM', 'DZ' => 'DZ'];
+                    }
+                }
+            );
         $this->countriesFactoryMock->expects($this->once())
             ->method('create')
             ->willReturn($collectionMock);

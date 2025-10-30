@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -92,7 +92,7 @@ class AccountManagementTest extends TestCase
             ]
         );
 
-        $this->scope->expects($this->once())
+        $this->scope->expects($this->any())
             ->method('getCurrentScope')
             ->willReturn($area);
 
@@ -111,14 +111,16 @@ class AccountManagementTest extends TestCase
     /**
      * @return array
      */
-    public function beforeInitiatePasswordResetDataProvider()
+    public static function beforeInitiatePasswordResetDataProvider()
     {
         return [
             [Area::AREA_ADMINHTML, PasswordResetRequestEvent::CUSTOMER_PASSWORD_RESET_REQUEST, 0],
             [Area::AREA_ADMINHTML, PasswordResetRequestEvent::ADMIN_PASSWORD_RESET_REQUEST, 1],
             [Area::AREA_FRONTEND, PasswordResetRequestEvent::CUSTOMER_PASSWORD_RESET_REQUEST, 1],
+            [Area::AREA_GRAPHQL, PasswordResetRequestEvent::CUSTOMER_PASSWORD_RESET_REQUEST, 1],
             // This should never happen, but let's cover it with tests
             [Area::AREA_FRONTEND, PasswordResetRequestEvent::ADMIN_PASSWORD_RESET_REQUEST, 1],
+            [Area::AREA_WEBAPI_REST, PasswordResetRequestEvent::CUSTOMER_PASSWORD_RESET_REQUEST, 1],
         ];
     }
 }

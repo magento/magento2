@@ -290,7 +290,7 @@ class DataTest extends \PHPUnit\Framework\TestCase
     /**
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function getTaxPriceDataProvider()
+    public static function getTaxPriceDataProvider()
     {
         return [
             'price is 0' => [

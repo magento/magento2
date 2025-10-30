@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -88,7 +88,7 @@ class UnlockTest extends TestCase
             ->getMockForAbstractClass();
 
         $this->requestMock = $this->getMockBuilder(RequestInterface::class)
-            ->setMethods(['getParam'])
+            ->onlyMethods(['getParam'])
             ->getMockForAbstractClass();
         $this->messageManagerMock = $this->getMockForAbstractClass(ManagerInterface::class);
         $this->resultFactoryMock = $this->createPartialMock(
@@ -98,7 +98,7 @@ class UnlockTest extends TestCase
         $this->redirectMock = $this->createPartialMock(Redirect::class, ['setPath']);
         $this->customerDataMock = $this->createMock(Customer::class);
         $this->contextMock = $this->getMockBuilder(Context::class)
-            ->setMethods(['getObjectManager', 'getResultFactory', 'getMessageManager', 'getRequest'])
+            ->onlyMethods(['getObjectManager', 'getResultFactory', 'getMessageManager', 'getRequest'])
             ->disableOriginalConstructor()
             ->getMock();
 

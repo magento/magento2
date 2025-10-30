@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -45,7 +45,7 @@ class WizardTest extends TestCase
             ->getMock();
         $this->productBuilder = $this->getMockBuilder(Builder::class)
             ->disableOriginalConstructor()
-            ->setMethods(['build'])
+            ->onlyMethods(['build'])
             ->getMock();
         $this->request = $this->getMockBuilder(RequestInterface::class)
             ->disableOriginalConstructor()

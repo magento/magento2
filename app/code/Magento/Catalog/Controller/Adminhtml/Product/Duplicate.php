@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Catalog\Controller\Adminhtml\Product;
 
@@ -9,9 +9,6 @@ use Magento\Backend\App\Action;
 use Magento\Catalog\Controller\Adminhtml\Product;
 use Magento\Framework\App\ObjectManager;
 
-/**
- * Class Duplicate
- */
 class Duplicate extends \Magento\Catalog\Controller\Adminhtml\Product implements
     \Magento\Framework\App\Action\HttpGetActionInterface
 {
@@ -35,7 +32,7 @@ class Duplicate extends \Magento\Catalog\Controller\Adminhtml\Product implements
         \Magento\Backend\App\Action\Context $context,
         Product\Builder $productBuilder,
         \Magento\Catalog\Model\Product\Copier $productCopier,
-        \Psr\Log\LoggerInterface $logger = null
+        ?\Psr\Log\LoggerInterface $logger = null
     ) {
         $this->productCopier = $productCopier;
         $this->logger = $logger ?: ObjectManager::getInstance()

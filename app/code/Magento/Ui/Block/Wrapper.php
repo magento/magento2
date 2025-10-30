@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Ui\Block;
 
@@ -14,6 +14,8 @@ use Magento\Ui\Model\UiComponentGenerator;
  */
 class Wrapper extends \Magento\Framework\View\Element\Template
 {
+    protected const RENDER_TYPE = '';
+
     /**
      * @var UiComponentGenerator
      */
@@ -91,6 +93,6 @@ class Wrapper extends \Magento\Framework\View\Element\Template
             ->generateUiComponent($this->getData('uiComponent'), $this->getLayout());
         $this->injectDataInDataSource($uiComponent, $this->getData());
         $this->addDataToChildComponents($uiComponent, $data);
-        return (string) $uiComponent->render();
+        return (string) $uiComponent->render(static::RENDER_TYPE);
     }
 }

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -103,7 +103,7 @@ class DesignTest extends TestCase
     /**
      * @return array
      */
-    public function getThemePathDataProvider()
+    public static function getThemePathDataProvider()
     {
         return [
             ['some_path', '', 'some_path'],
@@ -115,7 +115,7 @@ class DesignTest extends TestCase
     /**
      * @return array
      */
-    public function designThemeDataProvider()
+    public static function designThemeDataProvider()
     {
         return [
             'single' => [true, ScopeInterface::SCOPE_WEBSITES],

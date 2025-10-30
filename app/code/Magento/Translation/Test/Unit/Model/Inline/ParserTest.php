@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -85,6 +85,14 @@ class ParserTest extends TestCase
     protected function setUp(): void
     {
         $this->objectManager = new ObjectManager($this);
+        $objects = [
+            [
+                \Magento\Framework\Translate\InlineInterface::class,
+                $this->createMock(\Magento\Framework\Translate\InlineInterface::class)
+            ]
+        ];
+        $this->objectManager->prepareObjectManager($objects);
+
         $this->translateInlineMock =
             $this->getMockForAbstractClass(InlineInterface::class);
         $this->appCacheMock = $this->getMockForAbstractClass(TypeListInterface::class);
@@ -96,11 +104,10 @@ class ParserTest extends TestCase
             StringUtilsFactory::class
         )
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
         $this->resourceMock = $this->getMockBuilder(StringUtils::class)
             ->disableOriginalConstructor()
-            ->setMethods([])
             ->getMock();
 
         $this->inputFilterMock = $this->getMockForAbstractClass(FilterInterface::class);
@@ -109,12 +116,10 @@ class ParserTest extends TestCase
             ->willReturn($this->resourceMock);
         $this->cacheManagerMock = $this->getMockBuilder(CacheManager::class)
             ->disableOriginalConstructor()
-            ->setMethods([])
             ->getMock();
 
         $this->appStateMock = $this->getMockBuilder(State::class)
             ->disableOriginalConstructor()
-            ->setMethods([])
             ->getMock();
 
         $this->model = $this->objectManager->getObject(

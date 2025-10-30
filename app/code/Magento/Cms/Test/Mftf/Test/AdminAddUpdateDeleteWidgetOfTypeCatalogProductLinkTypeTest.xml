@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
-  */
+/**
+ * Copyright 2022 Adobe
+ * All Rights Reserved.
+ */
 -->
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -16,12 +16,12 @@
             <description value="Admin should be able to create widget type of Catalog product link and shown on storefront"/>
             <severity value="MAJOR"/>
             <testCaseId value="MC-12209"/>
-             <skip>
-                <issueId value="ACQE-4481"/>
-            </skip>
         </annotations>
 
         <before>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="login"/>
+            <!-- Delete old products -->
+            <actionGroup ref="DeleteAllProductsUsingProductGridActionGroup" stepKey="deleteAllProducts"/>
             <createData entity="_defaultCategory" stepKey="createPreReqCategory"/>
             <createData entity="_defaultProduct" stepKey="createPreReqProduct1">
                 <requiredEntity createDataKey="createPreReqCategory"/>
@@ -29,7 +29,6 @@
             <createData entity="_defaultProduct" stepKey="createPreReqProduct2">
                 <requiredEntity createDataKey="createPreReqCategory"/>
             </createData>
-            <actionGroup ref="AdminLoginActionGroup" stepKey="login"/>
         </before>
 
         <!--Main test-->

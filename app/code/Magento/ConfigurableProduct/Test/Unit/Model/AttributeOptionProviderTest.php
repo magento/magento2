@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -73,7 +73,6 @@ class AttributeOptionProviderTest extends TestCase
     protected function setUp(): void
     {
         $this->select = $this->getMockBuilder(Select::class)
-            ->setMethods([])
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -98,7 +97,7 @@ class AttributeOptionProviderTest extends TestCase
             ->getMockForAbstractClass();
 
         $this->abstractAttribute = $this->getMockBuilder(AbstractAttribute::class)
-            ->setMethods(['getSourceModel', 'getSource'])
+            ->onlyMethods(['getSourceModel', 'getSource'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
 
@@ -155,7 +154,7 @@ class AttributeOptionProviderTest extends TestCase
 
         $source = $this->getMockBuilder(AbstractSource::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getAllOptions'])
+            ->onlyMethods(['getAllOptions'])
             ->getMockForAbstractClass();
         $source->expects($this->once())
             ->method('getAllOptions')
@@ -195,7 +194,7 @@ class AttributeOptionProviderTest extends TestCase
     /**
      * @return array
      */
-    public function getAttributeOptionsDataProvider()
+    public static function getAttributeOptionsDataProvider()
     {
         return [
             [
@@ -229,7 +228,7 @@ class AttributeOptionProviderTest extends TestCase
     /**
      * @return array
      */
-    public function optionsWithBackendModelDataProvider()
+    public static function optionsWithBackendModelDataProvider()
     {
         return [
             [

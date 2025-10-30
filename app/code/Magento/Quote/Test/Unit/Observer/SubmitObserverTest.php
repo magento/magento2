@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -64,7 +64,7 @@ class SubmitObserverTest extends TestCase
     private $paymentMock;
 
     /**
-     * @inheirtDoc
+     * @inheritDoc
      */
     protected function setUp(): void
     {
@@ -75,7 +75,7 @@ class SubmitObserverTest extends TestCase
         $this->orderSenderMock = $this->createMock(OrderSender::class);
         $eventMock = $this->getMockBuilder(Event::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getQuote', 'getOrder'])
+            ->addMethods(['getQuote', 'getOrder'])
             ->getMock();
         $this->observerMock = $this->createPartialMock(Observer::class, ['getEvent']);
         $this->observerMock->expects($this->any())->method('getEvent')->willReturn($eventMock);

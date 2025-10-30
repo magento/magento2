@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\MessageQueue\Console;
 
@@ -52,7 +52,7 @@ class StartConsumerCommand extends Command
         \Magento\Framework\App\State $appState,
         ConsumerFactory $consumerFactory,
         $name = null,
-        LockManagerInterface $lockManager = null
+        ?LockManagerInterface $lockManager = null
     ) {
         $this->appState = $appState;
         $this->consumerFactory = $consumerFactory;

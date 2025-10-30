@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
-  */
+/**
+ * Copyright 2023 Adobe
+ * All Rights Reserved.
+ */
 -->
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -15,6 +15,9 @@
             <description value="As a guest, place an order using paypal payflow pro and assert the order details in order view page in the admin site"/>
             <severity value="MAJOR"/>
             <testCaseId value="AC-5272"/>
+            <group value="paypalPayflowPro"/>
+            <group value="pr_exclude"/>
+            <group value="3rd_party_integration"/>
         </annotations>
         <before>
             <createData entity="SimpleProduct" stepKey="createSimpleProduct1"/>
@@ -22,22 +25,17 @@
             <createData entity="SimpleProduct" stepKey="createSimpleProduct3"/>
             <createData entity="Simple_US_Customer" stepKey="createCustomer"/>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
-            <actionGroup ref="AdminPayPalPayflowProActionGroup" stepKey="configPaypalPayflowPro">
-                <argument name="credentials" value="_CREDS"/>
-            </actionGroup>
-            <actionGroup ref="CliCacheCleanActionGroup" stepKey="cleanInvalidatedCaches">
-                <argument name="tags" value="config full_page"/>
-            </actionGroup>
+            <comment userInput="BIC workaround" stepKey="configPaypalPayflowPro"/>
+            <comment userInput="BIC workaround" stepKey="SamplePaypalPaymentsProConfig"/>
+            <comment userInput="BIC workaround" stepKey="cleanInvalidatedCaches"/>
         </before>
         <after>
+            <comment userInput="BIC workaround" stepKey="rollbackPaypalPayflowProConfig"/>
+            <comment userInput="BIC workaround" stepKey="disablePayPalExpress"/>
+            <comment userInput="BIC workaround" stepKey="disablePayPalExpressBML"/>
+            <comment userInput="BIC workaround" stepKey="cleanInvalidatedCaches"/>
             <actionGroup ref="AdminOrdersPageOpenActionGroup" stepKey="navigateToSalesOrderPage"/>
             <actionGroup ref="AdminClearFiltersActionGroup" stepKey="ClickOnButtonToRemoveFiltersIfPresent"/>
-            <createData entity="RollbackPaypalPayflowPro" stepKey="rollbackPaypalPayflowProConfig"/>
-            <magentoCLI command="config:set payment/payflow_express/active 0" stepKey="disablePayPalExpress"/>
-            <magentoCLI command="config:set payment/payflow_express_bml/active 0" stepKey="disablePayPalExpressBML"/>
-            <actionGroup ref="CliCacheCleanActionGroup" stepKey="cleanInvalidatedCaches">
-                <argument name="tags" value="config full_page"/>
-            </actionGroup>
             <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
             <deleteData createDataKey="createSimpleProduct1" stepKey="deleteSimpleProduct"/>
             <deleteData createDataKey="createSimpleProduct2" stepKey="deleteSimpleProduct2"/>

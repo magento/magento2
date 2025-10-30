@@ -1,9 +1,7 @@
 <?php declare(strict_types=1);
 /**
- * Unit test for customer service layer \Magento\Customer\Model\Customer
- *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 
 /**
@@ -150,15 +148,15 @@ class CustomerTest extends TestCase
         $this->accountConfirmation = $this->createMock(AccountConfirmation::class);
         $this->addressesFactory = $this->getMockBuilder(AddressCollectionFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
         $this->customerDataFactory = $this->getMockBuilder(CustomerInterfaceFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
         $this->dataObjectHelper = $this->getMockBuilder(DataObjectHelper::class)
             ->disableOriginalConstructor()
-            ->setMethods(['populateWithArray'])
+            ->onlyMethods(['populateWithArray'])
             ->getMock();
         $this->mathRandom = $this->createMock(Random::class);
 
@@ -278,11 +276,11 @@ class CustomerTest extends TestCase
     /**
      * @return array
      */
-    public function isCustomerLockedDataProvider()
+    public static function isCustomerLockedDataProvider()
     {
         return [
-            ['lockExpirationDate' => date("F j, Y", strtotime('-1 days')), 'expectedResult' => false],
-            ['lockExpirationDate' => date("F j, Y", strtotime('+1 days')), 'expectedResult' => true]
+            ['lockExpires' => date("F j, Y", strtotime('-1 days')), 'expectedResult' => false],
+            ['lockExpires' => date("F j, Y", strtotime('+1 days')), 'expectedResult' => true]
         ];
     }
 
@@ -316,7 +314,7 @@ class CustomerTest extends TestCase
     /**
      * @return array
      */
-    public function dataProviderIsConfirmationRequired()
+    public static function dataProviderIsConfirmationRequired()
     {
         return [
             [null, null, false, false],
@@ -351,9 +349,13 @@ class CustomerTest extends TestCase
 
         $this->dataObjectProcessor->expects($this->once())
             ->method('buildOutputDataArray')
-            ->withConsecutive(
-                [$customer, CustomerInterface::class]
-            )->willReturn($customerDataAttributes);
+            ->willReturnCallback(
+                function ($arg1, $arg2) use ($customer, $customerDataAttributes) {
+                    if ($arg1 == $customer && $arg2 == CustomerInterface::class) {
+                        return $customerDataAttributes;
+                    }
+                }
+            );
 
         $attribute->expects($this->exactly(3))
             ->method('getAttributeCode')
@@ -387,15 +389,16 @@ class CustomerTest extends TestCase
         $this->_model->setEntityId($customerId);
         $this->_model->setId($customerId);
         $addressDataModel = $this->getMockForAbstractClass(AddressInterface::class);
+        $addressDataModel->expects($this->exactly(4))->method('isDefaultShipping')->willReturn(true);
         $address = $this->getMockBuilder(AddressModel::class)
             ->disableOriginalConstructor()
-            ->setMethods(['setCustomer', 'getDataModel'])
+            ->onlyMethods(['setCustomer', 'getDataModel'])
             ->getMock();
         $address->expects($this->atLeastOnce())->method('getDataModel')->willReturn($addressDataModel);
         $addresses = new \ArrayIterator([$address, $address]);
         $addressCollection = $this->getMockBuilder(AddressCollection::class)
             ->disableOriginalConstructor()
-            ->setMethods(['setCustomerFilter', 'addAttributeToSelect', 'getIterator', 'getItems'])
+            ->onlyMethods(['setCustomerFilter', 'addAttributeToSelect', 'getIterator', 'getItems'])
             ->getMock();
         $addressCollection->expects($this->atLeastOnce())->method('setCustomerFilter')->willReturnSelf();
         $addressCollection->expects($this->atLeastOnce())->method('addAttributeToSelect')->willReturnSelf();

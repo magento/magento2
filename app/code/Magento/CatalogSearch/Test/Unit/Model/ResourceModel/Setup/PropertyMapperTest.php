@@ -2,8 +2,8 @@
 declare(strict_types=1);
 
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\CatalogSearch\Test\Unit\Model\ResourceModel\Setup;
@@ -29,7 +29,7 @@ class PropertyMapperTest extends TestCase
     /**
      * @return array
      */
-    public function caseProvider(): array
+    public static function caseProvider(): array
     {
         return [
             [

@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright 2024 Adobe
+  * All Rights Reserved.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontVerifyDiscountOnDynamicBundleProductDifferentCartRulesTest">
+        <annotations>
+            <features value="Bundle"/>
+            <stories value="Discount on dynamic bundle products with different Cart Rules"/>
+            <title value="Verify dynamic bundle product prices with different Cart Rules on storefront"/>
+            <description value="Verify discount on dynamic-priced Bundle Product when associated Products are assigned to Categories with different Cart Rules"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="AC-4709"/>
+        </annotations>
+        <before>
+            <createData entity="SimpleSubCategory" stepKey="createFirstCategory"/>
+            <createData entity="SimpleSubCategory" stepKey="createSecondCategory"/>
+            <!--Create two simple product-->
+            <createData entity="ApiSimpleProduct" stepKey="simpleProduct1">
+                <requiredEntity createDataKey="createFirstCategory"/>
+                <field key="price">99.99</field>
+            </createData>
+            <createData entity="ApiSimpleProduct" stepKey="simpleProduct2">
+                <requiredEntity createDataKey="createSecondCategory"/>
+                <field key="price">34.49</field>
+            </createData>
+            <!--Create Bundle product-->
+            <createData entity="ApiBundleProductPriceViewRange" stepKey="createBundleProduct">
+                <requiredEntity createDataKey="createFirstCategory"/>
+            </createData>
+            <createData entity="MultipleSelectOption" stepKey="createBundleOption1">
+                <requiredEntity createDataKey="createBundleProduct"/>
+                <field key="required">true</field>
+            </createData>
+            <createData entity="ApiBundleLink" stepKey="linkOptionToProduct">
+                <requiredEntity createDataKey="createBundleProduct"/>
+                <requiredEntity createDataKey="createBundleOption1"/>
+                <requiredEntity createDataKey="simpleProduct1"/>
+            </createData>
+            <createData entity="ApiBundleLink" stepKey="linkOptionToProduct2">
+                <requiredEntity createDataKey="createBundleProduct"/>
+                <requiredEntity createDataKey="createBundleOption1"/>
+                <requiredEntity createDataKey="simpleProduct2"/>
+            </createData>
+        </before>
+        <after>
+            <deleteData createDataKey="createFirstCategory" stepKey="deleteFirstCategory"/>
+            <deleteData createDataKey="createSecondCategory" stepKey="deleteSecondCategory"/>
+            <deleteData createDataKey="simpleProduct1" stepKey="deleteSimpleProduct1"/>
+            <deleteData createDataKey="simpleProduct2" stepKey="deleteSimpleProduct2"/>
+            <deleteData createDataKey="createBundleProduct" stepKey="deleteBundleProduct"/>
+            <actionGroup ref="DeleteCartPriceRuleByName" stepKey="deleteCartPriceRule">
+                <argument name="ruleName" value="{{CustomSalesRuleWithNoCouponCode.name}}"/>
+            </actionGroup>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+        <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+        <!-- Create cart price rule -->
+        <actionGroup ref="AdminCreateCartPriceRuleActionGroup" stepKey="createCartPriceRule">
+            <argument name="ruleName" value="CustomSalesRuleWithNoCouponCode"/>
+        </actionGroup>
+        <!-- Search and go to cart price rule page -->
+        <actionGroup ref="AdminFilterCartPriceRuleActionGroup" stepKey="filterCreatedCartPriceRule">
+            <argument name="ruleName" value="CustomSalesRuleWithNoCouponCode.name"/>
+        </actionGroup>
+        <actionGroup ref="AdminCreateCustomConditionInCartPriceRuleActionGroup" stepKey="createCustomCondition"/>
+        <actionGroup ref="AssertCartPriceRuleSuccessSaveMessageActionGroup" stepKey="saveAndAssertCartPriceRuleSuccessSaveMessage"/>
+        <!-- Open Bundle Product page on storefront-->
+        <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="openBundleProductPage">
+            <argument name="productUrl" value="$createBundleProduct.custom_attributes[url_key]$"/>
+        </actionGroup>
+        <!-- Click on customize And Add To Cart Button -->
+        <actionGroup ref="StorefrontSelectCustomizeAndAddToTheCartButtonActionGroup" stepKey="clickOnCustomizeAndAddToCartButton"/>
+        <!-- Select Two Products, enter the quantity and add product to the cart -->
+        <selectOption selector="{{StorefrontBundledSection.multiSelectOption}}" parameterArray="[$$simpleProduct1.name$$ +$99.99, $$simpleProduct2.name$$ +$34.49]" stepKey="selectOptions"/>
+        <actionGroup ref="StorefrontEnterProductQuantityAndAddToTheCartActionGroup" stepKey="enterProductQuantityAndAddToTheCart">
+            <argument name="quantity" value="1"/>
+        </actionGroup>
+        <!-- Go to shopping cart page -->
+        <actionGroup ref="StorefrontCartPageOpenActionGroup" stepKey="openShoppingCartPage"/>
+        <actionGroup ref="AssertStorefrontCartDiscountActionGroup" stepKey="seeDiscountTotal">
+            <argument name="discount" value="13.45"/>
+        </actionGroup>
+        <!-- Search and go to cart price rule page and remove condition-->
+        <actionGroup ref="AdminOpenCartPriceRulesPageActionGroup" stepKey="goToCartPriceRulePage"/>
+        <actionGroup ref="AdminFilterCartPriceRuleActionGroup" stepKey="filterCartPriceRule">
+            <argument name="ruleName" value="CustomSalesRuleWithNoCouponCode.name"/>
+        </actionGroup>
+        <scrollTo selector="{{AdminCartPriceRulesFormSection.conditionsHeader}}" stepKey="scrollToConditionsHeader"/>
+        <conditionalClick selector="{{AdminCartPriceRulesFormSection.conditionsHeader}}" dependentSelector="{{AdminCartPriceRulesFormSection.conditionsHeader}}" visible="true" stepKey="clickToExpandConditions"/>
+        <waitForElementClickable selector="{{AdminCartPriceRulesFormSection.removeCondition('1--1')}}" stepKey="waitForRemoveToBeClickable"/>
+        <click selector="{{AdminCartPriceRulesFormSection.removeCondition('1--1')}}" stepKey="removeCondition"/>
+        <actionGroup ref="AssertCartPriceRuleSuccessSaveMessageActionGroup" stepKey="saveCartPriceRuleSuccessSaveMessage"/>
+        <!-- Go to shopping cart page -->
+        <actionGroup ref="StorefrontCartPageOpenActionGroup" stepKey="goToShoppingCartPage"/>
+        <actionGroup ref="AssertStorefrontCartDiscountActionGroup" stepKey="checkDiscount">
+            <argument name="discount" value="13.45"/>
+        </actionGroup>
+        <!-- Assign category 1 to simple product 2 and unAssign category2 -->
+        <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="OpenSimpleProductPage">
+            <argument name="productId" value="$$simpleProduct2.id$$"/>
+        </actionGroup>
+        <waitForPageLoad stepKey="waitForProductPageLoad"/>
+        <actionGroup ref="AdminUnassignCategoryOnProductAndSaveActionGroup" stepKey="unAssignCategoryTwo">
+            <argument name="categoryName" value="$$createSecondCategory.name$$"/>
+        </actionGroup>
+        <createData entity="AssignProductToCategory" stepKey="assignCategoryOne">
+            <requiredEntity createDataKey="createFirstCategory"/>
+            <requiredEntity createDataKey="simpleProduct2"/>
+        </createData>
+        <!-- Search and go to cart price rule page and add condition in action tab -->
+        <actionGroup ref="AdminOpenCartPriceRulesPageActionGroup" stepKey="againOpenCartPriceRulePage"/>
+        <actionGroup ref="AdminFilterCartPriceRuleActionGroup" stepKey="againFilterCartPriceRule">
+            <argument name="ruleName" value="CustomSalesRuleWithNoCouponCode.name"/>
+        </actionGroup>
+        <actionGroup ref="AdminCreateCustomConditionInActionTabInCartPriceRuleActionGroup" stepKey="createConditionInActionsTab"/>
+        <actionGroup ref="AssertCartPriceRuleSuccessSaveMessageActionGroup" stepKey="saveCartPriceRule"/>
+        <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+            <argument name="indices" value="catalogsearch_fulltext catalog_category_product catalog_product_price catalogrule_rule"/>
+        </actionGroup>
+        <actionGroup ref="CliCacheCleanActionGroup" stepKey="cleanCache">
+            <argument name="tags" value="config full_page"/>
+        </actionGroup>
+        <!-- Go to shopping cart page -->
+        <actionGroup ref="StorefrontCartPageOpenActionGroup" stepKey="againGoToShoppingCartPage"/>
+        <waitForElementNotVisible selector="{{CheckoutCartSummarySection.discountLabel}}" stepKey="discountIsNotApplied"/>
+    </test>
+</tests>

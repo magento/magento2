@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -281,23 +281,23 @@ class MassInvalidateTest extends TestCase
     /**
      * @return array
      */
-    public function executeDataProvider()
+    public static function executeDataProvider()
     {
         return [
             'set1' => [
-                'indexers' => 1,
+                'indexerIds' => 1,
                 'exception' => null,
             ],
             'set2' => [
-                'indexers' => [1],
+                'indexerIds' => [1],
                 'exception' => null,
             ],
             'set3' => [
-                'indexers' => [2],
+                'indexerIds' => [2],
                 'exception' => new LocalizedException(__('Test Phrase')),
             ],
             'set4' => [
-                'indexers' => [2],
+                'indexerIds' => [2],
                 'exception' => new \Exception(),
             ]
         ];

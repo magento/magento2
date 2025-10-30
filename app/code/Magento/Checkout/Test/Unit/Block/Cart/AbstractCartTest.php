@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -81,7 +81,7 @@ class AbstractCartTest extends TestCase
     /**
      * @return array
      */
-    public function getItemRendererDataProvider()
+    public static function getItemRendererDataProvider()
     {
         return [[null, AbstractCart::DEFAULT_TYPE], ['some-type', 'some-type']];
     }
@@ -136,7 +136,7 @@ class AbstractCartTest extends TestCase
     /**
      * @return array
      */
-    public function getTotalsCacheDataProvider()
+    public static function getTotalsCacheDataProvider()
     {
         return [
             [['billing_totals'], true],

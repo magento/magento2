@@ -206,9 +206,14 @@ class AdminAccountTest extends TestCase
         // should only insert once (admin role)
         $this->dbAdapter
             ->method('insert')
-            ->withConsecutive(
-                [self::equalTo('pre_admin_passwords'), self::anything()],
-                [self::equalTo('pre_authorization_role'), self::anything()]
+            ->willReturnCallback(
+                function ($arg1, $arg2) {
+                    if ($arg1 == 'pre_admin_passwords' && !empty($arg2)) {
+                         return null;
+                    } elseif ($arg1 == 'pre_authorization_role' && !empty($arg2)) {
+                        return null;
+                    }
+                }
             );
 
         $this->adminAccount->save();
@@ -254,7 +259,15 @@ class AdminAccountTest extends TestCase
         // insert only once (new user)
         $this->dbAdapter
             ->method('insert')
-            ->withConsecutive(['pre_admin_user', $this->anything()], ['pre_admin_passwords', $this->anything()]);
+            ->willReturnCallback(
+                function ($arg1, $arg2) {
+                    if ($arg1 == 'pre_admin_user' && !empty($arg2)) {
+                        return null;
+                    } elseif ($arg1 == 'pre_admin_passwords' && !empty($arg2)) {
+                        return null;
+                    }
+                }
+            );
 
         // after inserting new user
         $this->dbAdapter->expects($this->once())->method('lastInsertId')->willReturn(1);

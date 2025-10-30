@@ -123,7 +123,13 @@ class AggregatedTest extends TestCase
     {
         $this->fileListMock
             ->method('add')
-            ->withConsecutive([$libraryFiles], [$baseFiles]);
+            ->willReturnCallback(
+                function ($arg) use ($libraryFiles, $baseFiles) {
+                    if ($arg === $libraryFiles || $arg === $baseFiles) {
+                        return null;
+                    }
+                }
+            );
         $this->fileListMock->expects($this->any())->method('getAll')->willReturn(['returnedFile']);
 
         $subPath = '*';
@@ -162,7 +168,7 @@ class AggregatedTest extends TestCase
      *
      * @return array
      */
-    public function getFilesDataProvider(): array
+    public static function getFilesDataProvider(): array
     {
         return [
             'all files' => [['file1'], ['file2'], ['file3']],

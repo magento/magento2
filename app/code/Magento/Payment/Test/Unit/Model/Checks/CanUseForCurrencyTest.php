@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -35,21 +35,17 @@ class CanUseForCurrencyTest extends TestCase
     {
         $paymentMethod = $this->getMockBuilder(
             MethodInterface::class
-        )->disableOriginalConstructor()
-            ->setMethods([])->getMock();
+        )->disableOriginalConstructor()->getMock();
         $paymentMethod->expects($this->once())->method('canUseForCurrency')->with(
             self::EXPECTED_CURRENCY_CODE
         )->willReturn($expectation);
 
         $quoteMock = $this->getMockBuilder(Quote::class)
             ->disableOriginalConstructor()
-            ->setMethods(
-                []
-            )->getMock();
+            ->getMock();
         $store = $this->getMockBuilder(
             Store::class
-        )->disableOriginalConstructor()
-            ->setMethods([])->getMock();
+        )->disableOriginalConstructor()->getMock();
         $store->expects($this->once())->method('getBaseCurrencyCode')->willReturn(
             self::EXPECTED_CURRENCY_CODE
         );
@@ -61,7 +57,7 @@ class CanUseForCurrencyTest extends TestCase
     /**
      * @return array
      */
-    public function paymentMethodDataProvider()
+    public static function paymentMethodDataProvider()
     {
         return [[true], [false]];
     }

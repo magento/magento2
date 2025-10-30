@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -12,7 +12,9 @@ use Magento\Framework\Data\Form\Element\Factory;
 use Magento\Framework\Data\Form\Element\CollectionFactory;
 use Magento\Framework\DataObject;
 use Magento\Framework\Escaper;
+use Magento\Framework\Math\Random;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\View\Helper\SecureHtmlRenderer;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -70,6 +72,17 @@ class FileTest extends TestCase
     protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
+        $objects = [
+            [
+                SecureHtmlRenderer::class,
+                $this->createMock(SecureHtmlRenderer::class)
+            ],
+            [
+                Random::class,
+                $this->createMock(Random::class)
+            ]
+        ];
+        $objectManager->prepareObjectManager($objects);
 
         $this->factoryMock = $this->getMockBuilder(Factory::class)
             ->disableOriginalConstructor()
@@ -101,11 +114,13 @@ class FileTest extends TestCase
         $expectedHtmlId = $this->testData['html_id_prefix']
             . $this->testData['html_id']
             . $this->testData['html_id_suffix'];
+        $escapeValue = $this->testData['value'];
         $this->escaperMock->expects($this->any())->method('escapeHtml')->willReturnMap(
             [
                 [$expectedHtmlId, null, $expectedHtmlId],
                 [self::XSS_FILE_NAME_TEST, null, self::XSS_FILE_NAME_TEST],
                 [self::INPUT_NAME_TEST, null, self::INPUT_NAME_TEST],
+                [$escapeValue, null, $escapeValue],
             ]
         );
 

@@ -37,7 +37,7 @@ class Env implements \Magento\Framework\Config\ReaderInterface
      */
     public function __construct(
         DeploymentConfig $deploymentConfig,
-        PublisherConverter $publisherConverter = null
+        ?PublisherConverter $publisherConverter = null
     ) {
         $this->deploymentConfig = $deploymentConfig;
         $this->publisherConverter = $publisherConverter ?: ObjectManager::getInstance()->get(PublisherConverter::class);

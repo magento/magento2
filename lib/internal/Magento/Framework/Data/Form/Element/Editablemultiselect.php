@@ -51,7 +51,7 @@ class Editablemultiselect extends \Magento\Framework\Data\Form\Element\Multisele
         CollectionFactory $factoryCollection,
         Escaper $escaper,
         array $data = [],
-        \Magento\Framework\Serialize\Serializer\Json $serializer = null,
+        ?\Magento\Framework\Serialize\Serializer\Json $serializer = null,
         ?SecureHtmlRenderer $secureRenderer = null,
         ?Random $random = null
     ) {

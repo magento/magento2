@@ -40,7 +40,7 @@ class Resolver
      */
     public function __construct(
         \Magento\Framework\View\FileSystem $viewFileSystem,
-        Json $serializer = null
+        ?Json $serializer = null
     ) {
         $this->_viewFileSystem = $viewFileSystem;
         $this->serializer = $serializer ?: ObjectManager::getInstance()->get(Json::class);

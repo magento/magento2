@@ -126,7 +126,7 @@ class InlineTest extends TestCase
      *
      * @return array
      */
-    public function isAllowedDataProvider(): array
+    public static function isAllowedDataProvider(): array
     {
         return [
             [true, true, true, Area::AREA_FRONTEND, true],
@@ -192,7 +192,7 @@ class InlineTest extends TestCase
      *
      * @return array
      */
-    public function processResponseBodyStripInlineDataProvider(): array
+    public static function processResponseBodyStripInlineDataProvider(): array
     {
         return [
             ['test', 'test'],
@@ -253,7 +253,7 @@ class InlineTest extends TestCase
      *
      * @return array
      */
-    public function processResponseBodyDataProvider(): array
+    public static function processResponseBodyDataProvider(): array
     {
         return [
             ['admin', 'test', 'test'],
@@ -310,7 +310,7 @@ class InlineTest extends TestCase
      *
      * @return array
      */
-    public function processResponseBodyGetInlineScriptDataProvider(): array
+    public static function processResponseBodyGetInlineScriptDataProvider(): array
     {
         return [
             ['admin', 'test', 'test'],

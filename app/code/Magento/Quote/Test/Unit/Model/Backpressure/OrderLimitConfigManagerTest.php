@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2021 Adobe
+ * All Rights Reserved.
  */
 
 declare(strict_types=1);
@@ -44,7 +44,7 @@ class OrderLimitConfigManagerTest extends TestCase
      *
      * @return array
      */
-    public function getConfigCases(): array
+    public static function getConfigCases(): array
     {
         return [
             'guest' => [ContextInterface::IDENTITY_TYPE_IP, 100, 50, 60, 100, 60],
@@ -114,7 +114,7 @@ class OrderLimitConfigManagerTest extends TestCase
      *
      * @return array
      */
-    public function getEnabledCases(): array
+    public static function getEnabledCases(): array
     {
         return [
             'disabled' => [false, false],

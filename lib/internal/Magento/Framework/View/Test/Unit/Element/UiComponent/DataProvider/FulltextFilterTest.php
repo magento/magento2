@@ -84,7 +84,8 @@ class FulltextFilterTest extends TestCase
             ->getMockForAbstractClass();
 
         $this->collectionAbstractDbMock = $this->getMockBuilder(CollectionAbstractDb::class)
-            ->setMethods(['getConnection', 'getSelect', 'getMainTable'])
+            ->addMethods(['getMainTable'])
+            ->onlyMethods(['getConnection', 'getSelect'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
 
@@ -130,7 +131,6 @@ class FulltextFilterTest extends TestCase
         $this->expectException('InvalidArgumentException');
         /** @var MviewCollection $mviewCollection */
         $mviewCollection = $this->getMockBuilder(MviewCollection::class)
-            ->setMethods([])
             ->disableOriginalConstructor()
             ->getMock();
 

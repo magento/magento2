@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -246,7 +246,7 @@ class ColumnTest extends TestCase
         $method->invokeArgs($column, []);
     }
 
-    public function sortingDataProvider()
+    public static function sortingDataProvider()
     {
         return [
             [['dataType' => 'test_type', 'sortable' => true], 'ASC', 1],

@@ -91,7 +91,7 @@ class LayoutTest extends TestCase
     /**
      * Data provider for the testSaveData test.
      */
-    public function dataProviderForSaveDataTest(): array
+    public static function dataProviderForSaveDataTest(): array
     {
         return [
             'Test with normal data' => ['test-data', 'test-identifier'],
@@ -123,7 +123,7 @@ class LayoutTest extends TestCase
         $this->assertEquals($expectedResult, $result);
     }
 
-    public function loadDataProvider(): array
+    public static function loadDataProvider(): array
     {
         $identifier = 'test-identifier';
         $hashedValue = Layout::HASH_PREFIX . hash(Layout::HASH_TYPE, 'test-data');

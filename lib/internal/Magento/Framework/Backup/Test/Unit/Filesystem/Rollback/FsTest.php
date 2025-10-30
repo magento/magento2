@@ -61,7 +61,7 @@ class FsTest extends TestCase
 
         $this->objectManager = new ObjectManager($this);
         $this->snapshotMock = $this->getMockBuilder(Filesystem::class)
-            ->setMethods(['getBackupPath', 'getRootDir', 'getIgnorePaths'])
+            ->onlyMethods(['getBackupPath', 'getRootDir', 'getIgnorePaths'])
             ->getMock();
         $this->snapshotMock->expects($this->any())
             ->method('getBackupPath')
@@ -73,7 +73,7 @@ class FsTest extends TestCase
             ->method('getIgnorePaths')
             ->willReturn($this->ignorePaths);
         $this->fsHelperMock = $this->getMockBuilder(Helper::class)
-            ->setMethods(['getInfo', 'rm'])
+            ->onlyMethods(['getInfo', 'rm'])
             ->getMock();
         $this->fs = $this->objectManager->getObject(
             Fs::class,

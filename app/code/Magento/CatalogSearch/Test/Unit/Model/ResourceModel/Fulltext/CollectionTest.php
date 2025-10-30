@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -226,7 +226,7 @@ class CollectionTest extends TestCase
 
         $searchResultApplier = $this->getMockBuilder(SearchResultApplierInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['apply'])
+            ->onlyMethods(['apply'])
             ->getMockForAbstractClass();
         $this->searchResultApplierFactory->expects($this->any())
             ->method('create')

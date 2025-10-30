@@ -61,12 +61,12 @@ class PriceFilterTest extends AbstractFiltersTest
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      * @return array
      */
-    public function getFiltersDataProvider(): array
+    public static function getFiltersDataProvider(): array
     {
         return [
             'auto_calculation_variation_with_small_price_difference' => [
                 'config' => ['catalog/layered_navigation/price_range_calculation' => 'auto'],
-                'products_data' => ['simple1000' => 10.00, 'simple1001' => 20.00, 'simple1002' => 50.00],
+                'products' => ['simple1000' => 10.00, 'simple1001' => 20.00, 'simple1002' => 50.00],
                 'expectation' => [
                     ['label' => '$10.00 - $19.99', 'value' => '10-20', 'count' => 1],
                     ['label' => '$20.00 - $29.99', 'value' => '20-30', 'count' => 1],
@@ -75,7 +75,7 @@ class PriceFilterTest extends AbstractFiltersTest
             ],
             'auto_calculation_variation_with_big_price_difference' => [
                 'config' => ['catalog/layered_navigation/price_range_calculation' => 'auto'],
-                'products_data' => ['simple1000' => 10.00, 'simple1001' => 20.00, 'simple1002' => 300.00],
+                'products' => ['simple1000' => 10.00, 'simple1001' => 20.00, 'simple1002' => 300.00],
                 'expectation' => [
                     ['label' => '$0.00 - $99.99', 'value' => '0-100', 'count' => 2],
                     ['label' => '$300.00 and above', 'value' => '300-400', 'count' => 1],
@@ -83,7 +83,7 @@ class PriceFilterTest extends AbstractFiltersTest
             ],
             'auto_calculation_variation_with_fixed_price_step' => [
                 'config' => ['catalog/layered_navigation/price_range_calculation' => 'auto'],
-                'products_data' => ['simple1000' => 300.00, 'simple1001' => 400.00, 'simple1002' => 500.00],
+                'products' => ['simple1000' => 300.00, 'simple1001' => 400.00, 'simple1002' => 500.00],
                 'expectation' => [
                     ['label' => '$300.00 - $399.99', 'value' => '300-400', 'count' => 1],
                     ['label' => '$400.00 - $499.99', 'value' => '400-500', 'count' => 1],
@@ -95,7 +95,7 @@ class PriceFilterTest extends AbstractFiltersTest
                     'catalog/layered_navigation/price_range_calculation' => 'improved',
                     'catalog/layered_navigation/interval_division_limit' => 3,
                 ],
-                'products_data' => ['simple1000' => 10.00, 'simple1001' => 20.00, 'simple1002' => 50.00],
+                'products' => ['simple1000' => 10.00, 'simple1001' => 20.00, 'simple1002' => 50.00],
                 'expectation' => [
                     ['label' => '$0.00 - $19.99', 'value' => '0-20', 'count' => 1],
                     ['label' => '$20.00 and above', 'value' => '20-50.01', 'count' => 2],
@@ -106,7 +106,7 @@ class PriceFilterTest extends AbstractFiltersTest
                     'catalog/layered_navigation/price_range_calculation' => 'improved',
                     'catalog/layered_navigation/interval_division_limit' => 3,
                 ],
-                'products_data' => ['simple1000' => 10.00, 'simple1001' => 20.00, 'simple1002' => 300.00],
+                'products' => ['simple1000' => 10.00, 'simple1001' => 20.00, 'simple1002' => 300.00],
                 'expectation' => [
                     ['label' => '$0.00 - $19.99', 'value' => '0-20', 'count' => 1],
                     ['label' => '$20.00 and above', 'value' => '20-300.01', 'count' => 2],
@@ -117,7 +117,7 @@ class PriceFilterTest extends AbstractFiltersTest
                     'catalog/layered_navigation/price_range_calculation' => 'manual',
                     'catalog/layered_navigation/price_range_step' => 200,
                 ],
-                'products_data' => ['simple1000' => 300.00, 'simple1001' => 300.00, 'simple1002' => 500.00],
+                'products' => ['simple1000' => 300.00, 'simple1001' => 300.00, 'simple1002' => 500.00],
                 'expectation' => [
                     ['label' => '$200.00 - $399.99', 'value' => '200-400', 'count' => 2],
                     ['label' => '$400.00 and above', 'value' => '400-600', 'count' => 1],
@@ -128,7 +128,7 @@ class PriceFilterTest extends AbstractFiltersTest
                     'catalog/layered_navigation/price_range_calculation' => 'manual',
                     'catalog/layered_navigation/price_range_step' => 10,
                 ],
-                'products_data' => ['simple1000' => 300.00, 'simple1001' => 300.00, 'simple1002' => 500.00],
+                'products' => ['simple1000' => 300.00, 'simple1001' => 300.00, 'simple1002' => 500.00],
                 'expectation' => [
                     ['label' => '$300.00 - $309.99', 'value' => '300-310', 'count' => 2],
                     ['label' => '$500.00 and above', 'value' => '500-510', 'count' => 1],
@@ -140,7 +140,7 @@ class PriceFilterTest extends AbstractFiltersTest
                     'catalog/layered_navigation/price_range_step' => 10,
                     'catalog/layered_navigation/price_range_max_intervals' => 10,
                 ],
-                'products_data' => ['simple1000' => 10.00, 'simple1001' => 20.00, 'simple1002' => 30.00],
+                'products' => ['simple1000' => 10.00, 'simple1001' => 20.00, 'simple1002' => 30.00],
                 'expectation' => [
                     ['label' => '$10.00 - $19.99', 'value' => '10-20', 'count' => 1],
                     ['label' => '$20.00 - $29.99', 'value' => '20-30', 'count' => 1],
@@ -153,7 +153,7 @@ class PriceFilterTest extends AbstractFiltersTest
                     'catalog/layered_navigation/price_range_step' => 10,
                     'catalog/layered_navigation/price_range_max_intervals' => 2,
                 ],
-                'products_data' => ['simple1000' => 10.00, 'simple1001' => 20.00, 'simple1002' => 30.00],
+                'products' => ['simple1000' => 10.00, 'simple1001' => 20.00, 'simple1002' => 30.00],
                 'expectation' => [
                     ['label' => '$10.00 - $19.99', 'value' => '10-20', 'count' => 1],
                     ['label' => '$20.00 and above', 'value' => '20-30.01', 'count' => 2],
@@ -181,23 +181,23 @@ class PriceFilterTest extends AbstractFiltersTest
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      * @return array
      */
-    public function getActiveFiltersDataProvider(): array
+    public static function getActiveFiltersDataProvider(): array
     {
         return [
             'auto_calculation' => [
                 'config' => ['catalog/layered_navigation/price_range_calculation' => 'auto'],
-                'products_data' => ['simple1000' => 10.00, 'simple1001' => 20.00, 'simple1002' => 50.00],
+                'products' => ['simple1000' => 10.00, 'simple1001' => 20.00, 'simple1002' => 50.00],
                 'expectation' => ['label' => '$10.00 - $19.99', 'count' => 0],
-                'filter_value' => '10-20',
+                'filterValue' => '10-20',
             ],
             'improved_calculation' => [
                 'config' => [
                     'catalog/layered_navigation/price_range_calculation' => 'improved',
                     'catalog/layered_navigation/interval_division_limit' => 3,
                 ],
-                'products_data' => ['simple1000' => 10.00, 'simple1001' => 20.00, 'simple1002' => 50.00],
+                'products' => ['simple1000' => 10.00, 'simple1001' => 20.00, 'simple1002' => 50.00],
                 'expectation' => ['label' => '$0.00 - $19.99', 'count' => 0],
-                'filter_value' => '0-20',
+                'filterValue' => '0-20',
             ],
             'manual_calculation' => [
                 'config' => [
@@ -205,9 +205,9 @@ class PriceFilterTest extends AbstractFiltersTest
                     'catalog/layered_navigation/price_range_step' => 10,
                     'catalog/layered_navigation/price_range_max_intervals' => 10,
                 ],
-                'products_data' => ['simple1000' => 10.00, 'simple1001' => 20.00, 'simple1002' => 30.00],
+                'products' => ['simple1000' => 10.00, 'simple1001' => 20.00, 'simple1002' => 30.00],
                 'expectation' => ['label' => '$10.00 - $19.99', 'count' => 0],
-                'filter_value' => '10-20',
+                'filterValue' => '10-20',
             ],
         ];
     }

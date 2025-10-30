@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -928,6 +928,10 @@ class DataProviderTest extends TestCase
             );
 
         $objectManager = new ObjectManager($this);
+        $this->fileUploaderDataResolver = $this->getMockBuilder(FileUploaderDataResolver::class)
+            ->disableOriginalConstructor()
+            ->onlyMethods([])
+            ->getMock();
         $dataProvider = $objectManager->getObject(
             CustomerDataProvider::class,
             [
@@ -936,7 +940,8 @@ class DataProviderTest extends TestCase
                 'requestFieldName' => 'request-field-name',
                 'eavValidationRules' => $this->eavValidationRulesMock,
                 'customerCollectionFactory' => $this->customerCollectionFactoryMock,
-                'eavConfig' => $this->eavConfigMock
+                'eavConfig' => $this->eavConfigMock,
+                'fileUploaderDataResolver' => $this->fileUploaderDataResolver
             ]
         );
 

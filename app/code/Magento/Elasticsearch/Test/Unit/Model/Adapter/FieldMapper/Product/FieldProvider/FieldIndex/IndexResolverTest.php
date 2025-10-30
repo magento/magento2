@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -37,7 +37,7 @@ class IndexResolverTest extends TestCase
     {
         $this->converter = $this->getMockBuilder(ConverterInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['convert'])
+            ->onlyMethods(['convert'])
             ->getMockForAbstractClass();
         $objectManager = new ObjectManagerHelper($this);
 
@@ -68,7 +68,7 @@ class IndexResolverTest extends TestCase
             ->willReturn('something');
         $attributeMock = $this->getMockBuilder(AttributeAdapter::class)
             ->disableOriginalConstructor()
-            ->setMethods([
+            ->onlyMethods([
                 'isSearchable',
                 'isAlwaysIndexable',
             ])
@@ -89,7 +89,7 @@ class IndexResolverTest extends TestCase
     /**
      * @return array
      */
-    public function getFieldIndexProvider()
+    public static function getFieldIndexProvider()
     {
         return [
             [true, true, 'string', null],

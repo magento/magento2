@@ -9,7 +9,7 @@ use Magento\ProductAlert\Block\Product\View;
  * See COPYING.txt for license details.
  */
 return [
-    '$replaceRules' => [
+    'replaceRules' => [
         [
             'table',
             'field',
@@ -17,12 +17,12 @@ return [
             Migration::FIELD_CONTENT_TYPE_WIKI,
         ],
     ],
-    '$tableData' => [
+    'tableData' => [
         ['field' => '<p>{{widget type="productalert/product_view"}}</p>'],
         ['field' => '<p>{{widget type="catalogSearch/result"}}</p>'],
         ['field' => '<p>Some HTML code</p>'],
     ],
-    '$expected' => [
+    'expected' => [
         'updates' => [
             [
                 'table' => 'table',

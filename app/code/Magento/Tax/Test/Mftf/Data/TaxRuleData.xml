@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
  /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
+  * Copyright 2018 Adobe
+  * All Rights Reserved.
   */
 -->
 <entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -134,7 +134,7 @@
         <data key="calculate_subtotal">true</data>
     </entity>
     <entity name="TaxRule" type="taxRule">
-        <data key="name" unique="suffix">TaxName</data>
+        <data key="name" unique="suffix">TaxNameA</data>
     </entity>
     <entity name="TaxRuleZeroRate" type="taxRule">
         <data key="name" unique="suffix">TaxNameZeroRate</data>
@@ -163,5 +163,8 @@
     </entity>
     <entity name="ShippingGood" type="taxRule">
         <data key="name" unique="suffix">ShippingGood</data>
+    </entity>
+    <entity name="TaxRuleSuccessMessages">
+        <data key="delete">The tax rule has been deleted.</data>
     </entity>
 </entities>

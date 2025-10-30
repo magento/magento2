@@ -21,7 +21,7 @@ use PHPUnit\Framework\TestCase;
  */
 class BuilderTest extends TestCase
 {
-    const CLASS_NAME = Builder::class;
+    private const CLASS_NAME = Builder::class;
 
     /**
      * @return void
@@ -54,11 +54,15 @@ class BuilderTest extends TestCase
         $eventManager = $this->getMockForAbstractClass(ManagerInterface::class);
         $eventManager
             ->method('dispatch')
-            ->withConsecutive(
-                ['layout_load_before', $data],
-                ['layout_generate_blocks_before', $data],
-                ['layout_generate_blocks_after', $data]
-            );
+            ->willReturnCallback(function ($arg1, $arg2) use ($data) {
+                if ($arg1 == 'layout_load_before' && $arg2 == $data) {
+                    return null;
+                } elseif ($arg1 == 'layout_generate_blocks_before' && $arg2 == $data) {
+                    return null;
+                } elseif ($arg1 == 'layout_generate_blocks_after' && $arg2 == $data) {
+                    return null;
+                }
+            });
         $builder = $this->getBuilder(['eventManager' => $eventManager, 'request' => $request, 'layout' => $layout]);
         $builder->build();
     }

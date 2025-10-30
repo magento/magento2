@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2021 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -34,7 +34,7 @@ class StoreNameValidatorTest extends TestCase
     {
         $this->notEmptyValidatorFactoryMock = $this->getMockBuilder(NotEmptyFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
         $this->notEmptyValidatorMock = $this->createMock(NotEmpty::class);
         $this->notEmptyValidatorFactoryMock->method('create')
@@ -64,7 +64,7 @@ class StoreNameValidatorTest extends TestCase
         $this->assertEquals($messages, $this->model->getMessages());
     }
 
-    public function isValidDataProvider(): array
+    public static function isValidDataProvider(): array
     {
         return [
             'true' => [

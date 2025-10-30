@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All rights reserved.
  */
 declare(strict_types=1);
 
@@ -110,6 +110,11 @@ class MysqlTest extends TestCase
         (new Mysql($this->adapterMock, $query))->_execute($params);
     }
 
+    /**
+     * Test execute method when params are passed as Parameter objects.
+     *
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     */
     public function testExecuteWhenParamsAsParameterObject()
     {
         $param1 = $this->createMock(Parameter::class);
@@ -143,9 +148,33 @@ class MysqlTest extends TestCase
             ->willReturn($this->pdoStatementMock);
         $this->pdoStatementMock->expects($this->exactly(2))
             ->method('bindParam')
-            ->withConsecutive(
-                [':param1', $param1Value, $param1DataType, $param1Length, $param1DriverOptions],
-                [':param2', 'value2', \PDO::PARAM_STR, 6, null]
+            ->willReturnCallback(
+                function (
+                    $arg1,
+                    $arg2,
+                    $arg3,
+                    $arg4,
+                    $arg5
+                ) use (
+                    $param1Value,
+                    $param1DataType,
+                    $param1Length,
+                    $param1DriverOptions
+                ) {
+                    if ($arg1 == ':param1' &&
+                        $arg2 == $param1Value &&
+                        $arg3 == $param1DataType &&
+                        $arg4 == $param1Length &&
+                        $arg5 == $param1DriverOptions) {
+                        return true;
+                    } elseif ($arg1 == ':param2' &&
+                        $arg2 == 'value2' &&
+                        $arg3 == \PDO::PARAM_STR &&
+                        $arg4 == 6 &&
+                        $arg5 == null) {
+                        return true;
+                    }
+                }
             );
         $this->pdoStatementMock->expects($this->once())
             ->method('execute');
@@ -165,10 +194,7 @@ class MysqlTest extends TestCase
         /*
          * In PHP 8.1 $queryString is a Typed property, thus it should be initialized before the 1st call.
          * But it's not automatically initialized in case of Mocking, so we do it here.
-         * Note: In PHP < 8.1 such assignment prohibited.
          */
-        if (PHP_VERSION_ID >= 80100) {
-            $this->pdoStatementMock->queryString = $query;
-        }
+        $this->pdoStatementMock->queryString = $query;
     }
 }

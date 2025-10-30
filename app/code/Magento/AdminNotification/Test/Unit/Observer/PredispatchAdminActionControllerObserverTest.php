@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -68,17 +68,17 @@ class PredispatchAdminActionControllerObserverTest extends TestCase
 
         $this->backendAuthSessionMock = $this->getMockBuilder(Session::class)
             ->disableOriginalConstructor()
-            ->setMethods(['isLoggedIn'])
+            ->onlyMethods(['isLoggedIn'])
             ->getMock();
 
         $this->feedMock = $this->getMockBuilder(Feed::class)
             ->disableOriginalConstructor()
-            ->setMethods(['checkUpdate'])
+            ->onlyMethods(['checkUpdate'])
             ->getMock();
 
         $this->feedFactoryMock = $this->getMockBuilder(FeedFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
 
         $this->observer = $this->objectManager->getObject(

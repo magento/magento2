@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2022 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -45,7 +45,7 @@ class DatabaseTemplateCompatibilityCommand extends Command
     public function __construct(
         VariableCompatibilityChecker $compatibilityChecker,
         CollectionFactory $templateCollection,
-        string $name = null
+        ?string $name = null
     ) {
         parent::__construct($name);
         $this->templateCollection = $templateCollection;

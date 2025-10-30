@@ -1,8 +1,7 @@
 <?php
-
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -31,14 +30,14 @@ use PHPUnit\Framework\TestCase;
  */
 class DataTest extends TestCase
 {
-    const ROW_AMOUNT_INVOICED = '200';
-    const BASE_ROW_AMOUNT_INVOICED = '400';
-    const TAX_AMOUNT_INVOICED = '20';
-    const BASE_TAX_AMOUNT_INVOICED = '40';
-    const ROW_AMOUNT_REFUNDED = '100';
-    const BASE_ROW_AMOUNT_REFUNDED = '201';
-    const TAX_AMOUNT_REFUNDED = '10';
-    const BASE_TAX_AMOUNT_REFUNDED = '21';
+    private const ROW_AMOUNT_INVOICED = '200';
+    private const BASE_ROW_AMOUNT_INVOICED = '400';
+    private const TAX_AMOUNT_INVOICED = '20';
+    private const BASE_TAX_AMOUNT_INVOICED = '40';
+    private const ROW_AMOUNT_REFUNDED = '100';
+    private const BASE_ROW_AMOUNT_REFUNDED = '201';
+    private const TAX_AMOUNT_REFUNDED = '10';
+    private const BASE_TAX_AMOUNT_REFUNDED = '21';
 
     /**
      * @var Product
@@ -337,7 +336,7 @@ class DataTest extends TestCase
     /**
      * @return array
      */
-    public function dataProviderGetWeeeAttributesForBundle(): array
+    public static function dataProviderGetWeeeAttributesForBundle(): array
     {
         return [
             [2, false, ["16.00", "15.00"]],
@@ -403,14 +402,11 @@ class DataTest extends TestCase
 
         $itemProductBundle = $this->getMockBuilder(QuoteItem::class)
             ->addMethods(['getHasChildren'])
-            ->onlyMethods(['isChildrenCalculated', 'getChildren'])
+            ->onlyMethods(['getChildren'])
             ->disableOriginalConstructor()
             ->getMock();
         $itemProductBundle
             ->method('getHasChildren')
-            ->willReturn(true);
-        $itemProductBundle
-            ->method('isChildrenCalculated')
             ->willReturn(true);
         $itemProductBundle
             ->method('getChildren')
@@ -488,14 +484,11 @@ class DataTest extends TestCase
 
         $itemProductBundle = $this->getMockBuilder(QuoteItem::class)
             ->addMethods(['getHasChildren'])
-            ->onlyMethods(['isChildrenCalculated', 'getChildren'])
+            ->onlyMethods(['getChildren'])
             ->disableOriginalConstructor()
             ->getMock();
         $itemProductBundle
             ->method('getHasChildren')
-            ->willReturn(true);
-        $itemProductBundle
-            ->method('isChildrenCalculated')
             ->willReturn(true);
         $itemProductBundle
             ->method('getChildren')

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -102,9 +102,9 @@ class ShippingMethodManagement implements
         Cart\ShippingMethodConverter $converter,
         AddressRepositoryInterface $addressRepository,
         TotalsCollector $totalsCollector,
-        AddressInterfaceFactory $addressFactory = null,
-        QuoteAddressResource $quoteAddressResource = null,
-        CustomerSession $customerSession = null
+        ?AddressInterfaceFactory $addressFactory = null,
+        ?QuoteAddressResource $quoteAddressResource = null,
+        ?CustomerSession $customerSession = null
     ) {
         $this->quoteRepository = $quoteRepository;
         $this->converter = $converter;

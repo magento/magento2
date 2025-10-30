@@ -41,6 +41,9 @@ directive @typeResolver(class: String="") on UNION
 
 directive @cache(cacheIdentity: String="" cacheable: Boolean=true) on QUERY
 
+directive @implementation(class: String="") on SCALAR
+    | OBJECT
+
 type Query {
 }
 

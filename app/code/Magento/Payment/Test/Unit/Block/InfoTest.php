@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -50,13 +50,13 @@ class InfoTest extends TestCase
         $helper = new ObjectManager($this);
         $this->_storeManager = $this->getMockBuilder(
             StoreManager::class
-        )->setMethods(
+        )->onlyMethods(
             ['getStore']
         )->disableOriginalConstructor()
             ->getMock();
         $this->_eventManager = $this->getMockBuilder(
             ManagerInterface::class
-        )->setMethods(
+        )->onlyMethods(
             ['dispatch']
         )->disableOriginalConstructor()
             ->getMock();
@@ -105,7 +105,7 @@ class InfoTest extends TestCase
     /**
      * @return array
      */
-    public function getIsSecureModeDataProvider()
+    public static function getIsSecureModeDataProvider()
     {
         return [
             [false, true, null, null, false],
@@ -125,7 +125,7 @@ class InfoTest extends TestCase
     {
         $methodInstance = $this->getMockBuilder(
             AbstractMethod::class
-        )->setMethods(
+        )->onlyMethods(
             ['getStore']
         )->disableOriginalConstructor()
             ->getMock();
@@ -176,7 +176,7 @@ class InfoTest extends TestCase
     /**
      * @return array
      */
-    public function getValueAsArrayDataProvider()
+    public static function getValueAsArrayDataProvider()
     {
         return [
             [[], true, []],

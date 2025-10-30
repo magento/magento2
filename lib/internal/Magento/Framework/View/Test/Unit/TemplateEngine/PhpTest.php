@@ -48,7 +48,7 @@ class PhpTest extends TestCase
     {
         $blockMock = $this->getMockBuilder(
             Template::class
-        )->setMethods(
+        )->addMethods(
             ['testMethod']
         )->disableOriginalConstructor()
             ->getMock();
@@ -75,7 +75,7 @@ class PhpTest extends TestCase
         $this->expectException('PHPUnit\Framework\Exception');
         $blockMock = $this->getMockBuilder(
             Template::class
-        )->setMethods(
+        )->onlyMethods(
             ['testMethod']
         )->disableOriginalConstructor()
             ->getMock();

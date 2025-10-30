@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -49,26 +49,27 @@ class PluginTest extends TestCase
         $helper = new ObjectManager($this);
 
         $this->registry = $this->getMockBuilder(Registry::class)
-            ->setMethods(['registry'])
+            ->onlyMethods(['registry'])
             ->disableOriginalConstructor()
             ->getMock();
 
         $this->attributeFactory = $this->getMockBuilder(
             AttributeFactory::class
         )
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
 
         $this->attribute = $this->getMockBuilder(
             \Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable\Attribute::class
         )
-            ->setMethods(['getUsedAttributes', 'getAttributeId'])
+            ->addMethods(['getAttributeId'])
+            ->onlyMethods(['getUsedAttributes'])
             ->disableOriginalConstructor()
             ->getMock();
 
         $this->magentoObject = $this->getMockBuilder(DataObject::class)
-            ->setMethods(['getId'])
+            ->addMethods(['getId'])
             ->disableOriginalConstructor()
             ->getMock();
 

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -42,7 +42,7 @@ class ViewTest extends TestCase
         $invoice = $this->getMockBuilder(
             Invoice::class
         )->disableOriginalConstructor()
-            ->setMethods(
+            ->onlyMethods(
                 ['getOrder']
             )->getMock();
         $invoice->expects($this->once())->method('getOrder')->willReturn($order);
@@ -51,7 +51,7 @@ class ViewTest extends TestCase
         $block = $this->getMockBuilder(
             View::class
         )->disableOriginalConstructor()
-            ->setMethods(
+            ->onlyMethods(
                 ['getInvoice']
             )->getMock();
         $block->expects($this->once())->method('getInvoice')->willReturn($invoice);
@@ -67,7 +67,7 @@ class ViewTest extends TestCase
     /**
      * @return array
      */
-    public function isPaymentReviewDataProvider()
+    public static function isPaymentReviewDataProvider()
     {
         return [
             [true, true, true],

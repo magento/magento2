@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Tax\Api\Data;
@@ -26,7 +26,7 @@ interface QuoteDetailsInterface extends \Magento\Framework\Api\ExtensibleDataInt
      * @param \Magento\Customer\Api\Data\AddressInterface $billingAddress
      * @return $this
      */
-    public function setBillingAddress(\Magento\Customer\Api\Data\AddressInterface $billingAddress = null);
+    public function setBillingAddress(?\Magento\Customer\Api\Data\AddressInterface $billingAddress = null);
 
     /**
      * Get customer shipping address
@@ -41,7 +41,7 @@ interface QuoteDetailsInterface extends \Magento\Framework\Api\ExtensibleDataInt
      * @param \Magento\Customer\Api\Data\AddressInterface $shippingAddress
      * @return $this
      */
-    public function setShippingAddress(\Magento\Customer\Api\Data\AddressInterface $shippingAddress = null);
+    public function setShippingAddress(?\Magento\Customer\Api\Data\AddressInterface $shippingAddress = null);
 
     /**
      * Get customer tax class key
@@ -56,7 +56,7 @@ interface QuoteDetailsInterface extends \Magento\Framework\Api\ExtensibleDataInt
      * @param \Magento\Tax\Api\Data\TaxClassKeyInterface $customerTaxClassKey
      * @return $this
      */
-    public function setCustomerTaxClassKey(\Magento\Tax\Api\Data\TaxClassKeyInterface $customerTaxClassKey = null);
+    public function setCustomerTaxClassKey(?\Magento\Tax\Api\Data\TaxClassKeyInterface $customerTaxClassKey = null);
 
     /**
      * Get customer id
@@ -86,7 +86,7 @@ interface QuoteDetailsInterface extends \Magento\Framework\Api\ExtensibleDataInt
      * @param \Magento\Tax\Api\Data\QuoteDetailsItemInterface[] $items
      * @return $this
      */
-    public function setItems(array $items = null);
+    public function setItems(?array $items = null);
 
     /**
      * Get customer tax class id

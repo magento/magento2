@@ -24,7 +24,7 @@ class Data extends \Magento\Framework\Config\Data
         \Magento\Framework\Communication\Config\CompositeReader $reader,
         \Magento\Framework\Config\CacheInterface $cache,
         $cacheId = 'communication_config_cache',
-        SerializerInterface $serializer = null
+        ?SerializerInterface $serializer = null
     ) {
         parent::__construct($reader, $cache, $cacheId, $serializer);
     }

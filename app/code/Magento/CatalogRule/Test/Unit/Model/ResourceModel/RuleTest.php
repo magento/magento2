@@ -1,18 +1,7 @@
 <?php
-/************************************************************************
- *
+/**
  * Copyright 2024 Adobe
  * All Rights Reserved.
- *
- * NOTICE: All information contained herein is, and remains
- * the property of Adobe and its suppliers, if any. The intellectual
- * and technical concepts contained herein are proprietary to Adobe
- * and its suppliers and are protected by all applicable intellectual
- * property laws, including trade secret and copyright laws.
- * Dissemination of this information or reproduction of this material
- * is strictly forbidden unless prior written permission is obtained
- * from Adobe.
- * ************************************************************************
  */
 declare(strict_types=1);
 
@@ -64,6 +53,24 @@ class RuleTest extends TestCase implements TestProvidesServiceInterface
         $context = $this->createMock(Context::class);
         $context->expects($this->once())->method('getResources')->willReturn($this->resource);
 
+        $associatedEntitiesMap = $this->createPartialMock(DataObject::class, ['getData']);
+        $associatedEntitiesMap->expects($this->any())
+            ->method('getData')
+            ->willReturn(
+                [
+                    'website' => [
+                        'associations_table' => 'catalogrule_website',
+                        'rule_id_field' => 'rule_id',
+                        'entity_id_field' => 'website_id'
+                    ],
+                    'customer_group' => [
+                        'associations_table' => 'catalogrule_customer_group',
+                        'rule_id_field' => 'rule_id',
+                        'entity_id_field' => 'customer_group_id'
+                    ],
+                ]
+            );
+
         $this->model = new Rule(
             $context,
             $this->createMock(StoreManagerInterface::class),
@@ -77,6 +84,7 @@ class RuleTest extends TestCase implements TestProvidesServiceInterface
             $this->createMock(PriceCurrencyInterface::class),
             null,
             $this->createMock(EntityManager::class),
+            $associatedEntitiesMap
         );
     }
 

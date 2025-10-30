@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -129,9 +129,13 @@ class WebsiteTest extends TestCase
     {
         $this->typeList->expects($this->exactly(2))
             ->method('cleanType')
-            ->willReturnCallback(fn($param) => match ([$param]) {
-                ['full_page'], [Config::TYPE_IDENTIFIER] => $this->typeList
-            });
+            ->willReturnCallback(
+                function ($arg) {
+                    if ($arg == 'full_page' || $arg == Config::TYPE_IDENTIFIER) {
+                        return null;
+                    }
+                }
+            );
 
         $this->model->afterDelete();
     }

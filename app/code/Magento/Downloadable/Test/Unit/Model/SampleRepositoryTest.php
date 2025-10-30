@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -113,7 +113,7 @@ class SampleRepositoryTest extends TestCase
             ->getMock();
         $this->sampleDataObjectFactory = $this->getMockBuilder(
             SampleInterfaceFactory::class
-        )->setMethods(['create'])
+        )->onlyMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
 

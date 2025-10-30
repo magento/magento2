@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -176,8 +176,18 @@ class CollectionTest extends TestCase
 
         if ($sqlConditionWithSec) {
             $this->connectionMock->method('prepareSqlCondition')
-                ->withConsecutive(['rdt.customer_id', $sqlConditionWith], ['rdt.store_id', $sqlConditionWithSec])
-                ->willReturnOnConsecutiveCalls($conditionSqlQuery, $conditionSqlQuery);
+                ->willReturnCallback(
+                    function ($arg1, $arg2) use ($sqlConditionWith, $conditionSqlQuery, $sqlConditionWithSec) {
+                        static $callCount = 0;
+                        if ($callCount === 0 && $arg1 === 'rdt.customer_id' && $arg2 === $sqlConditionWith) {
+                            $callCount++;
+                            return $conditionSqlQuery;
+                        } elseif ($callCount === 1 && $arg1 === 'rdt.store_id' && $arg2 === $sqlConditionWithSec) {
+                            $callCount++;
+                            return $conditionSqlQuery;
+                        }
+                    }
+                );
         } else {
             $this->connectionMock->method('prepareSqlCondition')
                 ->with('rdt.customer_id', $sqlConditionWith)

@@ -60,7 +60,7 @@ class Customer extends WebapiAbstract
     /** @var DataObjectProcessor */
     private $dataObjectProcessor;
 
-    public function __construct($name = null, array $data = [], $dataName = '')
+    public function __construct($name, array $data = [], $dataName = '')
     {
         parent::__construct($name, $data, $dataName);
 

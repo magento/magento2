@@ -40,7 +40,7 @@ class IdentityTest extends TestCase
         $this->objectManager = new ObjectManager($this);
         $this->columnMock = $this->getMockBuilder(Column::class)
             ->disableOriginalConstructor()
-            ->setMethods(['isIdentity'])
+            ->addMethods(['isIdentity'])
             ->getMock();
         $this->identity = $this->objectManager->getObject(
             Identity::class

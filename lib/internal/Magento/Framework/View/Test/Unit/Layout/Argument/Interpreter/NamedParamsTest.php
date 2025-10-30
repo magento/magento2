@@ -46,8 +46,13 @@ class NamedParamsTest extends TestCase
 
         $this->_interpreter
             ->method('evaluate')
-            ->withConsecutive([['value' => 'value 1']], [['value' => 'value 2']])
-            ->willReturnOnConsecutiveCalls('value 1 (evaluated)', 'value 2 (evaluated)');
+            ->willReturnCallback(function ($arg1) {
+                if ($arg1 == ['value' => 'value 1']) {
+                    return 'value 1 (evaluated)';
+                } elseif ($arg1 == ['value' => 'value 2']) {
+                    return 'value 2 (evaluated)';
+                }
+            });
         $expected = ['param1' => 'value 1 (evaluated)', 'param2' => 'value 2 (evaluated)'];
 
         $actual = $this->_model->evaluate($input);
@@ -69,7 +74,7 @@ class NamedParamsTest extends TestCase
     /**
      * @return array
      */
-    public function evaluateWrongParamDataProvider(): array
+    public static function evaluateWrongParamDataProvider(): array
     {
         return [
             'root param is non-array' => [

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -43,7 +43,7 @@ class JsTest extends TestCase
         );
 
         $this->_model = $this->getMockBuilder(Js::class)
-            ->setMethods(['_getCurrentTheme'])
+            ->onlyMethods(['_getCurrentTheme'])
             ->setConstructorArgs($constructArguments)
             ->getMock();
     }

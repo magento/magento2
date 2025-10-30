@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 
 declare(strict_types=1);
@@ -55,7 +55,7 @@ class ChangeTitleTest extends TestCase
         /** @var Status|MockObject $trackingStatusMock */
         $trackingStatusMock = $this->getMockBuilder(Status::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getCarrier'])
+            ->addMethods(['getCarrier'])
             ->getMock();
         $trackingStatusMock->expects($this::once())
             ->method('getCarrier')
@@ -71,7 +71,7 @@ class ChangeTitleTest extends TestCase
      *
      * @return array
      */
-    public function testAfterGetTitleDataProvider(): array
+    public static function testAfterGetTitleDataProvider(): array
     {
         return [
             [Carrier::CODE, 'Original Title', __('Status Updated On:')],

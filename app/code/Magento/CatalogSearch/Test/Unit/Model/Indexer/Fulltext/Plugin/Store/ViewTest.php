@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -55,7 +55,7 @@ class ViewTest extends TestCase
             ->getMock();
         $this->storeMock = $this->getMockBuilder(Store::class)
             ->disableOriginalConstructor()
-            ->setMethods(['isObjectNew'])
+            ->onlyMethods(['isObjectNew'])
             ->getMock();
 
         $this->plugin = new StoreViewIndexerPlugin($this->indexerRegistryMock);
@@ -85,7 +85,7 @@ class ViewTest extends TestCase
     /**
      * @return array
      */
-    public function afterSaveDataProvider(): array
+    public static function afterSaveDataProvider(): array
     {
         return [
             [false, 0],

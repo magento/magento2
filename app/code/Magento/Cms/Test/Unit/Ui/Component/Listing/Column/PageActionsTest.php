@@ -1,7 +1,7 @@
 <?php
-/***
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+/**
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -65,7 +65,7 @@ class PageActionsTest extends TestCase
             ->getMockForAbstractClass();
         $this->escaperMock = $this->getMockBuilder(Escaper::class)
             ->disableOriginalConstructor()
-            ->setMethods(['escapeHtml'])
+            ->onlyMethods(['escapeHtml'])
             ->getMock();
 
         $objectManager = new ObjectManager($this);
@@ -144,7 +144,7 @@ class PageActionsTest extends TestCase
      *
      * @return array
      */
-    public function configDataProvider():array
+    public static function configDataProvider():array
     {
         $pageId = 1;
         $title = 'page title';

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Catalog\Model;
@@ -237,11 +237,11 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
         MimeTypeExtensionMap $mimeTypeExtensionMap,
         ImageProcessorInterface $imageProcessor,
         \Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface $extensionAttributesJoinProcessor,
-        CollectionProcessorInterface $collectionProcessor = null,
-        \Magento\Framework\Serialize\Serializer\Json $serializer = null,
+        ?CollectionProcessorInterface $collectionProcessor = null,
+        ?\Magento\Framework\Serialize\Serializer\Json $serializer = null,
         $cacheLimit = 1000,
-        ReadExtensions $readExtensions = null,
-        CategoryLinkManagementInterface $linkManagement = null,
+        ?ReadExtensions $readExtensions = null,
+        ?CategoryLinkManagementInterface $linkManagement = null,
         ?ScopeOverriddenValue $scopeOverriddenValue = null
     ) {
         $this->productFactory = $productFactory;
@@ -285,7 +285,7 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
             $productId = $this->resourceModel->getIdBySku($sku);
             if (!$productId) {
                 throw new NoSuchEntityException(
-                    __("The product that was requested doesn't exist. Verify the product and try again.")
+                    __('The product with SKU "%1" does not exist.', $sku)
                 );
             }
             if ($editMode) {
@@ -307,7 +307,7 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
      */
     public function getById($productId, $editMode = false, $storeId = null, $forceReload = false)
     {
-        $cacheKey = $this->getCacheKey([$editMode, $storeId]);
+        $cacheKey = $this->getCacheKey([$editMode, $storeId === null ? $storeId : (int) $storeId]);
         if (!isset($this->instancesById[$productId][$cacheKey]) || $forceReload) {
             $product = $this->productFactory->create();
             if ($editMode) {
@@ -319,7 +319,7 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
             $product->load($productId);
             if (!$product->getId()) {
                 throw new NoSuchEntityException(
-                    __("The product that was requested doesn't exist. Verify the product and try again.")
+                    __('The product with ID "%1" does not exist.', $productId)
                 );
             }
             $this->cacheProduct($cacheKey, $product);
@@ -526,6 +526,13 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
         $assignToCategories = false;
         $tierPrices = $product->getData('tier_price');
         $productDataToChange = $product->getData();
+
+        if (!$product->getSku()) {
+            throw new CouldNotSaveException(
+                __("The \"%1\" attribute value is empty. Set the attribute and try again.", "sku")
+            );
+        }
+
         try {
             $existingProduct = $product->getId() ?
                 $this->getById($product->getId()) :
@@ -813,7 +820,7 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
     {
         if (!$this->collectionProcessor) {
             $this->collectionProcessor = \Magento\Framework\App\ObjectManager::getInstance()->get(
-                // phpstan:ignore "Class Magento\Catalog\Model\Api\SearchCriteria\ProductCollectionProcessor not found."
+                // @phpstan-ignore-next-line - this is a virtual type defined in di.xml
                 \Magento\Catalog\Model\Api\SearchCriteria\ProductCollectionProcessor::class
             );
         }

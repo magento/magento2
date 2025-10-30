@@ -98,12 +98,12 @@ class ItemTest extends TestCase
     /**
      * @return array
      */
-    public function updateSetOutOfStockDataProvider(): array
+    public static function updateSetOutOfStockDataProvider(): array
     {
         return [
             'backorders_no' => [
                 'backorders' => Stock::BACKORDERS_NO,
-                'expected_stock_items' => [
+                'expectedStockItems' => [
                     'simple-1' => [
                         'is_in_stock' => Stock::STOCK_OUT_OF_STOCK,
                         'stock_status_changed_auto' => 1,
@@ -116,7 +116,7 @@ class ItemTest extends TestCase
             ],
             'backorders_yes' => [
                 'backorders' => Stock::BACKORDERS_YES_NONOTIFY,
-                'expected_stock_items' => [
+                'expectedStockItems' => [
                     'simple-1' => [
                         'is_in_stock' => Stock::STOCK_IN_STOCK,
                         'stock_status_changed_auto' => 0,
@@ -168,12 +168,12 @@ class ItemTest extends TestCase
     /**
      * @return array
      */
-    public function updateUpdateSetInStockDataProvider(): array
+    public static function updateUpdateSetInStockDataProvider(): array
     {
         return [
             'manage_stock_yes' => [
-                'manage_stock' => 1,
-                'expected_stock_items' => [
+                'manageStock' => 1,
+                'expectedStockItems' => [
                     'out-of-stock-product' => [
                         'is_in_stock' => Stock::STOCK_IN_STOCK,
                     ],
@@ -183,8 +183,8 @@ class ItemTest extends TestCase
                 ],
             ],
             'manage_stock_no' => [
-                'manage_stock' => 0,
-                'expected_stock_items' => [
+                'manageStock' => 0,
+                'expectedStockItems' => [
                     'out-of-stock-product' => [
                         'is_in_stock' => Stock::STOCK_OUT_OF_STOCK,
                     ],
@@ -222,12 +222,12 @@ class ItemTest extends TestCase
     /**
      * @return array
      */
-    public function updateLowStockDateDataProvider(): array
+    public static function updateLowStockDateDataProvider(): array
     {
         return [
             'manage_stock_yes' => [
-                'manage_stock' => 1,
-                'expected_low_stock_date' => [
+                'manageStock' => 1,
+                'expectedLowStockDate' => [
                     'simple1' => [
                         'is_low_stock_date_null' => false,
                     ],
@@ -237,8 +237,8 @@ class ItemTest extends TestCase
                 ],
             ],
             'manage_stock_no' => [
-                'manage_stock' => 0,
-                'expected_low_stock_date' => [
+                'manageStock' => 0,
+                'expectedLowStockDate' => [
                     'simple1' => [
                         'is_low_stock_date_null' => true,
                     ],

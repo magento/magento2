@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\PageCache\Model;
@@ -50,6 +50,11 @@ class Config
      * @var \Magento\Framework\App\Config\ScopeConfigInterface
      */
     protected $_scopeConfig;
+
+    /**
+     * XML path to Varnish 7 config template path
+     */
+    public const VARNISH_7_CONFIGURATION_PATH = 'system/full_page_cache/varnish7/path';
 
     /**
      * XML path to Varnish 6 config template path
@@ -109,7 +114,7 @@ class Config
         \Magento\Framework\App\Cache\StateInterface $cacheState,
         \Magento\Framework\Module\Dir\Reader $reader,
         VclGeneratorFactory $vclGeneratorFactory,
-        Json $serializer = null
+        ?Json $serializer = null
     ) {
         $this->readFactory = $readFactory;
         $this->_scopeConfig = $scopeConfig;
@@ -155,6 +160,9 @@ class Config
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE
         );
         switch ($vclTemplatePath) {
+            case self::VARNISH_7_CONFIGURATION_PATH:
+                $version = 7;
+                break;
             case self::VARNISH_6_CONFIGURATION_PATH:
                 $version = 6;
                 break;

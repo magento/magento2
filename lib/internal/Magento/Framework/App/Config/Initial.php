@@ -47,7 +47,7 @@ class Initial
     public function __construct(
         \Magento\Framework\App\Config\Initial\Reader $reader,
         \Magento\Framework\App\Cache\Type\Config $cache,
-        SerializerInterface $serializer = null
+        ?SerializerInterface $serializer = null
     ) {
         $this->serializer = $serializer ?: \Magento\Framework\App\ObjectManager::getInstance()
             ->get(SerializerInterface::class);

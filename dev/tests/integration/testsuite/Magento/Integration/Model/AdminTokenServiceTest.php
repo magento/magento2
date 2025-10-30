@@ -105,7 +105,7 @@ class AdminTokenServiceTest extends \PHPUnit\Framework\TestCase
      *
      * @return array
      */
-    public function validationDataProvider()
+    public static function validationDataProvider()
     {
         return [
             'Check for empty credentials' => ['', ''],

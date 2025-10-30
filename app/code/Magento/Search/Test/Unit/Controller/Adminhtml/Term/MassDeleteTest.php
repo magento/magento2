@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -145,8 +145,14 @@ class MassDeleteTest extends TestCase
 
         $this->objectManager
             ->method('create')
-            ->withConsecutive([Query::class], [Query::class])
-            ->willReturnOnConsecutiveCalls(...$willReturnArgs);
+            ->willReturnCallback(function ($arg) use ($willReturnArgs) {
+                if ($arg == Query::class) {
+                    static $callCount = 0;
+                    $returnValue = $willReturnArgs[$callCount] ?? null;
+                    $callCount++;
+                    return $returnValue;
+                }
+            });
 
         $this->messageManager->expects($this->once())
             ->method('addSuccessMessage')->willReturnSelf();

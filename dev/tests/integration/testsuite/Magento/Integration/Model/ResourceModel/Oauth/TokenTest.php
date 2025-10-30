@@ -155,7 +155,7 @@ class TokenTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    public function deleteExpiredTokenUsingObserverDataProvider()
+    public static function deleteExpiredTokenUsingObserverDataProvider()
     {
         return [
             "Clean up long before default admin and default customer token life time" => [
@@ -216,7 +216,7 @@ class TokenTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    public function deleteExpiredTokensDataProvider()
+    public static function deleteExpiredTokensDataProvider()
     {
         return [
           "Clean up for admin tokens which were created ('token_lifetime' + 1 second) ago" => [

@@ -1,6 +1,6 @@
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 
 var config = {
@@ -10,6 +10,13 @@ var config = {
             priceBundle:    'Magento_Bundle/js/price-bundle',
             slide:          'Magento_Bundle/js/slide',
             productSummary: 'Magento_Bundle/js/product-summary'
+        }
+    },
+    config: {
+        mixins: {
+            'mage/validation': {
+                'Magento_Bundle/js/validation': true
+            }
         }
     }
 };

@@ -59,7 +59,7 @@ class DbStatusValidatorTest extends TestCase
     protected function setUp(): void
     {
         $this->_cacheMock = $this->getMockBuilder(FrontendInterface::class)
-            ->setMethods(['db_is_up_to_date'])
+            ->addMethods(['db_is_up_to_date'])
             ->getMockForAbstractClass();
         $this->requestMock = $this->getMockForAbstractClass(RequestInterface::class);
         $this->subjectMock = $this->createMock(FrontController::class);
@@ -147,7 +147,7 @@ class DbStatusValidatorTest extends TestCase
     /**
      * @return array
      */
-    public function aroundDispatchExceptionDataProvider()
+    public static function aroundDispatchExceptionDataProvider()
     {
         return [
             'schema is outdated' => [

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -38,7 +38,7 @@ class PurchasedPriceTest extends TestCase
             ->getMock();
         $contextMock->expects($this->never())->method('getProcessor')->willReturn($processor);
         $this->currencyMock = $this->getMockBuilder(Currency::class)
-            ->setMethods(['load', 'format'])
+            ->onlyMethods(['load', 'format'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->model = $objectManager->getObject(

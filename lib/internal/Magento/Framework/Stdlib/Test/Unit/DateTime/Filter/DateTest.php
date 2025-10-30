@@ -43,7 +43,7 @@ class DateTest extends TestCase
     /**
      * @return array
      */
-    public function dateFilterDataProvider()
+    public static function dateFilterDataProvider()
     {
         return [
             ['2000-01-01', '2000-01-01'],
@@ -78,7 +78,7 @@ class DateTest extends TestCase
     /**
      * @return array
      */
-    public function dateFilterWithExceptionDataProvider()
+    public static function dateFilterWithExceptionDataProvider()
     {
         return [
             ['12-31-2000'],

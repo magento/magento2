@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Newsletter\Model\Plugin;
@@ -88,7 +88,7 @@ class CustomerPlugin
         Share $shareConfig,
         StoreManagerInterface $storeManager,
         LoggerInterface $logger,
-        CustomerSubscriberCache $customerSubscriberCache = null
+        ?CustomerSubscriberCache $customerSubscriberCache = null
     ) {
         $this->subscriberFactory = $subscriberFactory;
         $this->extensionFactory = $extensionFactory;
@@ -119,7 +119,7 @@ class CustomerPlugin
     ) {
         /** @var Subscriber $subscriber */
         $subscriber = $this->getSubscriber($result);
-        $subscribeStatus = $this->getIsSubscribedFromExtensionAttributes($customer) ?? $subscriber->isSubscribed();
+        $subscribeStatus = $this->isSubscribedFromExtensionAttributes($customer) ?? $subscriber->isSubscribed();
         $needToUpdate = $this->isSubscriptionChanged($result, $subscriber, $subscribeStatus);
 
         /**
@@ -153,7 +153,7 @@ class CustomerPlugin
      * @param CustomerInterface $customer
      * @return bool|null
      */
-    private function getIsSubscribedFromExtensionAttributes(CustomerInterface $customer): ?bool
+    private function isSubscribedFromExtensionAttributes(CustomerInterface $customer): ?bool
     {
         $extensionAttributes = $customer->getExtensionAttributes();
         if ($extensionAttributes === null || $extensionAttributes->getIsSubscribed() === null) {
@@ -265,7 +265,7 @@ class CustomerPlugin
             /** @var CustomerExtensionInterface $extensionAttributes */
             $extensionAttributes = $customer->getExtensionAttributes();
             /** @var Subscriber $subscribe */
-            $subscribe = $collection->getItemByColumnValue('subscriber_email', $customer->getEmail());
+            $subscribe = $collection->getItemByColumnValue('customer_id', $customer->getId());
             $isSubscribed = $subscribe && (int)$subscribe->getStatus() === Subscriber::STATUS_SUBSCRIBED;
             $extensionAttributes->setIsSubscribed($isSubscribed);
         }

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -25,8 +25,6 @@ use PHPUnit\Framework\TestCase;
 class DataTest extends TestCase
 {
     /**
-     * Helper
-     *
      * @var Data
      */
     private $helper;
@@ -59,7 +57,7 @@ class DataTest extends TestCase
         $this->scopeConfigMock = $this->getMockForAbstractClass(ScopeConfigInterface::class);
 
         $contextMock = $this->getMockBuilder(Context::class)
-            ->setMethods(['getScopeConfig'])
+            ->onlyMethods(['getScopeConfig'])
             ->disableOriginalConstructor()
             ->getMock();
         $contextMock->expects($this->any())

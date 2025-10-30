@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -64,7 +64,7 @@ class ConsumerTest extends TestCase
     {
         $this->_consumerFactory = $this->getMockBuilder(ConsumerFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
         $this->_consumerMock = $this->getMockBuilder(
             Consumer::class
@@ -81,7 +81,7 @@ class ConsumerTest extends TestCase
         $this->_tokenFactory = $this->getMockBuilder(
             TokenFactory::class
         )->disableOriginalConstructor()
-            ->setMethods(['create'])->getMock();
+            ->onlyMethods(['create'])->getMock();
         $this->_tokenMock = $this->getMockBuilder(
             Token::class
         )->disableOriginalConstructor()

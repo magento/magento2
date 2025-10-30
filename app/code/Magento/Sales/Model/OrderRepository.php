@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -13,11 +13,9 @@ use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
-use Magento\Sales\Api\Data\OrderExtensionFactory;
 use Magento\Sales\Api\Data\OrderExtensionInterface;
 use Magento\Sales\Api\Data\OrderInterface;
 use Magento\Sales\Api\Data\OrderSearchResultInterfaceFactory as SearchResultFactory;
-use Magento\Sales\Api\Data\ShippingAssignmentInterface;
 use Magento\Sales\Model\Order\ShippingAssignmentBuilder;
 use Magento\Sales\Model\ResourceModel\Metadata;
 use Magento\Tax\Api\OrderTaxManagementInterface;
@@ -42,11 +40,6 @@ class OrderRepository implements \Magento\Sales\Api\OrderRepositoryInterface, Re
      * @var SearchResultFactory
      */
     protected $searchResultFactory = null;
-
-    /**
-     * @var OrderExtensionFactory
-     */
-    private $orderExtensionFactory;
 
     /**
      * @var ShippingAssignmentBuilder
@@ -89,7 +82,6 @@ class OrderRepository implements \Magento\Sales\Api\OrderRepositoryInterface, Re
      * @param Metadata $metadata
      * @param SearchResultFactory $searchResultFactory
      * @param CollectionProcessorInterface|null $collectionProcessor
-     * @param \Magento\Sales\Api\Data\OrderExtensionFactory|null $orderExtensionFactory
      * @param OrderTaxManagementInterface|null $orderTaxManagement
      * @param PaymentAdditionalInfoInterfaceFactory|null $paymentAdditionalInfoFactory
      * @param JsonSerializer|null $serializer
@@ -99,20 +91,17 @@ class OrderRepository implements \Magento\Sales\Api\OrderRepositoryInterface, Re
     public function __construct(
         Metadata $metadata,
         SearchResultFactory $searchResultFactory,
-        CollectionProcessorInterface $collectionProcessor = null,
-        \Magento\Sales\Api\Data\OrderExtensionFactory $orderExtensionFactory = null,
-        OrderTaxManagementInterface $orderTaxManagement = null,
-        PaymentAdditionalInfoInterfaceFactory $paymentAdditionalInfoFactory = null,
-        JsonSerializer $serializer = null,
-        JoinProcessorInterface $extensionAttributesJoinProcessor = null,
-        ShippingAssignmentBuilder $shippingAssignmentBuilder = null
+        ?CollectionProcessorInterface $collectionProcessor = null,
+        ?OrderTaxManagementInterface $orderTaxManagement = null,
+        ?PaymentAdditionalInfoInterfaceFactory $paymentAdditionalInfoFactory = null,
+        ?JsonSerializer $serializer = null,
+        ?JoinProcessorInterface $extensionAttributesJoinProcessor = null,
+        ?ShippingAssignmentBuilder $shippingAssignmentBuilder = null
     ) {
         $this->metadata = $metadata;
         $this->searchResultFactory = $searchResultFactory;
         $this->collectionProcessor = $collectionProcessor ?: ObjectManager::getInstance()
             ->get(\Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface::class);
-        $this->orderExtensionFactory = $orderExtensionFactory ?: ObjectManager::getInstance()
-            ->get(\Magento\Sales\Api\Data\OrderExtensionFactory::class);
         $this->orderTaxManagement = $orderTaxManagement ?: ObjectManager::getInstance()
             ->get(OrderTaxManagementInterface::class);
         $this->paymentAdditionalInfoFactory = $paymentAdditionalInfoFactory ?: ObjectManager::getInstance()
@@ -159,13 +148,12 @@ class OrderRepository implements \Magento\Sales\Api\OrderRepositoryInterface, Re
      *
      * @param OrderInterface $order
      * @return void
+     * @throws NoSuchEntityException
      */
     private function setOrderTaxDetails(OrderInterface $order)
     {
         $extensionAttributes = $order->getExtensionAttributes();
-        if ($extensionAttributes === null) {
-            $extensionAttributes = $this->orderExtensionFactory->create();
-        }
+
         $orderTaxDetails = $this->orderTaxManagement->getOrderTaxDetails($order->getEntityId());
         $appliedTaxes = $orderTaxDetails->getAppliedTaxes();
 
@@ -187,9 +175,6 @@ class OrderRepository implements \Magento\Sales\Api\OrderRepositoryInterface, Re
     private function setPaymentAdditionalInfo(OrderInterface $order): void
     {
         $extensionAttributes = $order->getExtensionAttributes();
-        if ($extensionAttributes === null) {
-            $extensionAttributes = $this->orderExtensionFactory->create();
-        }
 
         $paymentAdditionalInformation = [];
         $payment = $order->getPayment();
@@ -220,10 +205,10 @@ class OrderRepository implements \Magento\Sales\Api\OrderRepositoryInterface, Re
      *
      * @param \Magento\Framework\Api\SearchCriteriaInterface $searchCriteria
      * @return \Magento\Sales\Api\Data\OrderSearchResultInterface
+     * @throws NoSuchEntityException
      */
     public function getList(\Magento\Framework\Api\SearchCriteriaInterface $searchCriteria)
     {
-        /** @var \Magento\Sales\Api\Data\OrderSearchResultInterface $searchResult */
         $searchResult = $this->searchResultFactory->create();
         $this->extensionAttributesJoinProcessor->process($searchResult);
         $this->collectionProcessor->process($searchCriteria, $searchResult);
@@ -305,9 +290,7 @@ class OrderRepository implements \Magento\Sales\Api\OrderRepositoryInterface, Re
         /** @var OrderExtensionInterface $extensionAttributes */
         $extensionAttributes = $order->getExtensionAttributes();
 
-        if ($extensionAttributes === null) {
-            $extensionAttributes = $this->orderExtensionFactory->create();
-        } elseif ($extensionAttributes->getShippingAssignments() !== null) {
+        if ($extensionAttributes->getShippingAssignments() !== null) {
             return;
         }
         $this->shippingAssignmentBuilder->setOrder($order);

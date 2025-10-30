@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Quote\Model;
@@ -108,7 +108,7 @@ class ShippingAddressManagement implements \Magento\Quote\Model\ShippingAddressM
         if ($customerAddressId) {
             $addressData = $this->addressRepository->getById($customerAddressId);
             $address = $quote->getShippingAddress()->importCustomerAddressData($addressData);
-        } elseif ($quote->getCustomerId()) {
+        } elseif ($quote->getCustomerId() && !$address->getEmail()) {
             $address->setEmail($quote->getCustomerEmail());
         }
         $address->setSameAsBilling($sameAsBilling);

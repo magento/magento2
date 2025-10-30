@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2021 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Sales\Plugin\Model\ResourceModel\Order;
@@ -55,7 +55,7 @@ class OrderGridCollectionFilter
                 }
             }
 
-            $fieldName = $subject->getConnection()->quoteIdentifier($field);
+            $fieldName = $subject->getConnection()->quoteIdentifier('main_table.' . $field);
             $condition = $subject->getConnection()->prepareSqlCondition($fieldName, $condition);
             $subject->getSelect()->where($condition, null, Select::TYPE_CONDITION);
 

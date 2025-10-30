@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 
 declare(strict_types=1);
@@ -50,7 +50,7 @@ class DeleteHandlerTest extends TestCase
         $this->entityMock = $this->createMock(Product::class);
         $this->sampleRepositoryMock = $this->getMockBuilder(SampleRepository::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getList', 'delete'])
+            ->onlyMethods(['getList', 'delete'])
             ->getMockForAbstractClass();
 
         $this->deleteHandler = (new ObjectManagerHelper($this))->getObject(

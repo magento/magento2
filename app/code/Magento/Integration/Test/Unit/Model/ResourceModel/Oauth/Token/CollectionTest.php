@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -45,7 +45,7 @@ class CollectionTest extends TestCase
 
         $resource = $this->getMockBuilder(AbstractDb::class)
             ->disableOriginalConstructor()
-            ->setMethods(['__wakeup', 'getConnection'])
+            ->onlyMethods(['__wakeup', 'getConnection'])
             ->getMockForAbstractClass();
         $resource->expects($this->any())
             ->method('getConnection')
@@ -60,7 +60,7 @@ class CollectionTest extends TestCase
         $this->collection = $this->getMockBuilder(
             Collection::class
         )->setConstructorArgs($arguments)
-            ->setMethods(['addFilter', 'getSelect', 'getTable', '_initSelect'])
+            ->onlyMethods(['addFilter', 'getSelect', 'getTable', '_initSelect'])
             ->getMock();
     }
 

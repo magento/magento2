@@ -1,8 +1,7 @@
 <?php
 /**
- *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -41,11 +40,12 @@ class GuestCartTestHelper
     public function mockQuoteIdMask($maskedCartId, $cartId)
     {
         $quoteIdMaskMock = $this->testCase->getMockBuilder(QuoteIdMask::class)
-            ->setMethods(['load', 'getQuoteId', 'getMaskedId'])
+            ->addMethods(['getQuoteId', 'getMaskedId'])
+            ->onlyMethods(['load'])
             ->disableOriginalConstructor()
             ->getMock();
         $quoteIdMaskFactoryMock = $this->testCase->getMockBuilder(QuoteIdMaskFactory::class)
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
         $quoteIdMaskFactoryMock->expects($this->testCase->once())->method('create')->willReturn($quoteIdMaskMock);

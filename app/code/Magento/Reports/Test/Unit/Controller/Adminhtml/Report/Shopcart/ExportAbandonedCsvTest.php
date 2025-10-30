@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2022 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -10,9 +10,9 @@ namespace Magento\Reports\Test\Unit\Controller\Adminhtml\Report\Shopcart;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Reports\Block\Adminhtml\Shopcart\Abandoned\Grid;
 use Magento\Reports\Controller\Adminhtml\Report\Shopcart\ExportAbandonedCsv;
-use Magento\Reports\Test\Unit\Controller\Adminhtml\Report\AbstractControllerTest;
+use Magento\Reports\Test\Unit\Controller\Adminhtml\Report\AbstractControllerTestCase;
 
-class ExportAbandonedCsvTest extends AbstractControllerTest
+class ExportAbandonedCsvTest extends AbstractControllerTestCase
 {
     /**
      * @var ExportAbandonedCsv

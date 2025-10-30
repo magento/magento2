@@ -48,9 +48,9 @@ class ExtensionAttributesGenerator extends \Magento\Framework\Code\Generator\Ent
         \Magento\Framework\Api\ExtensionAttribute\Config $config,
         $sourceClassName = null,
         $resultClassName = null,
-        Io $ioObject = null,
-        \Magento\Framework\Code\Generator\CodeGeneratorInterface $classGenerator = null,
-        DefinedClasses $definedClasses = null
+        ?Io $ioObject = null,
+        ?\Magento\Framework\Code\Generator\CodeGeneratorInterface $classGenerator = null,
+        ?DefinedClasses $definedClasses = null
     ) {
         $sourceClassName .= 'Interface';
         $this->config = $config;

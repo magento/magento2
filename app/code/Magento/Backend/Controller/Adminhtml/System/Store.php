@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Backend\Controller\Adminhtml\System;
@@ -13,7 +13,6 @@ use Magento\Framework\Filesystem;
 /**
  * Store controller
  *
- * @author      Magento Core Team <core@magentocommerce.com>
  * @SuppressWarnings(PHPMD.AllPurposeAction)
  */
 abstract class Store extends Action
@@ -23,11 +22,9 @@ abstract class Store extends Action
      *
      * @see _isAllowed()
      */
-    const ADMIN_RESOURCE = 'Magento_Backend::store';
+    public const ADMIN_RESOURCE = 'Magento_Backend::store';
 
     /**
-     * Core registry
-     *
      * @var \Magento\Framework\Registry
      */
     protected $_coreRegistry;
@@ -89,6 +86,7 @@ abstract class Store extends Action
      * @return bool
      *
      * @deprecated 100.2.7 Backup module is to be removed.
+     * @see Nothing
      */
     protected function _backupDatabase()
     {

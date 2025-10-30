@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -74,7 +74,7 @@ class ValidatorTest extends TestCase
         $this->entityMock = $this->getMockForAbstractClass(OrderInterface::class);
         $this->validatorMock = $this->getMockForAbstractClass(ValidatorInterface::class);
         $this->validatorResultFactoryMock = $this->getMockBuilder(ValidatorResultInterfaceFactory::class)
-            ->setMethods(['create'])->disableOriginalConstructor()
+            ->onlyMethods(['create'])->disableOriginalConstructor()
             ->getMock();
         $this->validatorResultMock = $this->getMockForAbstractClass(ValidatorResultInterface::class);
         $this->validatorResultFactoryMock->expects($this->any())->method('create')

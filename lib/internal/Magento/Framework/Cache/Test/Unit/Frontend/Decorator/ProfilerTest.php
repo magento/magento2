@@ -30,7 +30,7 @@ class ProfilerTest extends TestCase
      * @param string $method
      * @param array $params
      * @param \Zend_Cache_Backend $cacheBackend
-     * @param \Zend_Cache_Core $cacheFrontend
+     * @param \Closure $cacheFrontend
      * @param string $expectedProfileId
      * @param array $expectedProfilerTags
      * @param mixed $expectedResult
@@ -45,6 +45,7 @@ class ProfilerTest extends TestCase
         $expectedProfilerTags,
         $expectedResult
     ) {
+        $cacheFrontend = $cacheFrontend($this);
         // Cache frontend setup
         $frontendMock = $this->getMockForAbstractClass(FrontendInterface::class);
 
@@ -65,17 +66,23 @@ class ProfilerTest extends TestCase
         $this->assertSame($expectedResult, $result);
     }
 
-    /**
-     * @return array
-     */
-    public function proxyMethodDataProvider()
+    protected function getMockForZendCache()
     {
-        $backend = new \Zend_Cache_Backend_BlackHole();
         $adaptee = $this->createMock(\Zend_Cache_Core::class);
         $frontendFactory = function () use ($adaptee) {
             return $adaptee;
         };
         $lowLevelFrontend = new Zend($frontendFactory);
+        return $lowLevelFrontend;
+    }
+
+    /**
+     * @return array
+     */
+    public static function proxyMethodDataProvider()
+    {
+        $backend = new \Zend_Cache_Backend_BlackHole();
+        $lowLevelFrontend = static fn (self $testCase) => $testCase->getMockForZendCache();
 
         return [
             [

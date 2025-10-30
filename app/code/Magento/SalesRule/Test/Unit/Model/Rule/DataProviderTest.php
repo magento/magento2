@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -66,7 +66,6 @@ class DataProviderTest extends TestCase
         $ruleMock = $this->createMock(Rule::class);
         $metaDataValueProviderMock = $this->getMockBuilder(ValueProvider::class)
             ->disableOriginalConstructor()
-            ->setMethods([])
             ->getMock();
         $registryMock = $this->createMock(Registry::class);
         $registryMock->expects($this->once())

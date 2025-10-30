@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -28,7 +28,7 @@ class FileProviderTest extends TestCase
     protected function setUp(): void
     {
         $fileFactory = $this->getMockBuilder(\Magento\Theme\Model\ResourceModel\Theme\File\CollectionFactory::class)
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->file = $this->getMockBuilder(Collection::class)

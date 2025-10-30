@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -46,11 +46,11 @@ class MinsaleqtyTest extends TestCase
             ->willReturn('unique_hash');
 
         $groupManagement = $this->getMockBuilder(GroupManagementInterface::class)
-            ->setMethods(['getAllCustomersGroup'])
+            ->onlyMethods(['getAllCustomersGroup'])
             ->getMockForAbstractClass();
 
         $allGroup = $this->getMockBuilder(GroupInterface::class)
-            ->setMethods(['getId'])
+            ->onlyMethods(['getId'])
             ->getMockForAbstractClass();
 
         $allGroup->expects($this->any())
@@ -104,7 +104,7 @@ class MinsaleqtyTest extends TestCase
     /**
      * @return array
      */
-    public function getConfigValueDataProvider()
+    public static function getConfigValueDataProvider()
     {
         return [
             'valid numeric' => [1, 2, '20', 20.],
@@ -179,7 +179,7 @@ class MinsaleqtyTest extends TestCase
     /**
      * @return array
      */
-    public function makeArrayFieldValueDataProvider()
+    public static function makeArrayFieldValueDataProvider()
     {
         return [
             'empty string' => ['', []],
@@ -221,7 +221,7 @@ class MinsaleqtyTest extends TestCase
     /**
      * @return array
      */
-    public function makeStorableArrayFieldValueDataProvider()
+    public static function makeStorableArrayFieldValueDataProvider()
     {
         return [
             'invalid bool' => [false, false],

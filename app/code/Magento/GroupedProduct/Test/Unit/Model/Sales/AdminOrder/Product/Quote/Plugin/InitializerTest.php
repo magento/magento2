@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -62,12 +62,12 @@ class InitializerTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $this->quote = $this->getMockBuilder(Quote::class)
-            ->setMethods(['addProduct'])
+            ->onlyMethods(['addProduct'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->product = $this->getMockBuilder(Product::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getTypeId'])
+            ->onlyMethods(['getTypeId'])
             ->getMock();
         $this->quoteItem = $this->getMockBuilder(QuoteItem::class)
             ->disableOriginalConstructor()

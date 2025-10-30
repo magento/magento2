@@ -146,8 +146,15 @@ class ChecksumTest extends TestCase
 
         $this->assetSource->expects($this->exactly(2))
             ->method('findSource')
-            ->withConsecutive([$one], [$two])
-            ->willReturnOnConsecutiveCalls('/dir/file/one.txt', '/dir/file/two.txt');
+            ->willReturnCallback(
+                function ($arg) use ($one, $two) {
+                    if ($arg == $one) {
+                        return '/dir/file/one.txt';
+                    } elseif ($arg == $two) {
+                        return '/dir/file/two.txt';
+                    }
+                }
+            );
 
         $this->sourceDir->expects($this->exactly(2))
             ->method('getRelativePath')

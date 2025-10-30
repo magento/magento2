@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 -->
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
@@ -68,6 +68,7 @@
                    userInput="red" stepKey="fillAdmin1"/>
 
         <!-- Add 2 additional new swatch options -->
+        <waitForElementClickable selector="{{AdminManageSwatchSection.addSwatch}}" stepKey="waitAddSwatch2ToBeClickable"/>
         <click selector="{{AdminManageSwatchSection.addSwatch}}" stepKey="clickAddSwatch2"/>
         <actionGroup ref="OpenSwatchMenuByIndexActionGroup" stepKey="clickSwatch2">
             <argument name="index" value="1"/>
@@ -80,6 +81,7 @@
         <fillField selector="{{AdminManageSwatchSection.adminInputByIndex('1')}}"
                    userInput="green" stepKey="fillAdmin2"/>
 
+        <waitForElementClickable selector="{{AdminManageSwatchSection.addSwatch}}" stepKey="waitAddSwatch3ToBeClickable"/>
         <click selector="{{AdminManageSwatchSection.addSwatch}}" stepKey="clickAddSwatch3"/>
         <actionGroup ref="OpenSwatchMenuByIndexActionGroup" stepKey="clickSwatch3">
             <argument name="index" value="2"/>
@@ -93,6 +95,8 @@
                    userInput="blue" stepKey="fillAdmin3"/>
 
         <!-- Mark second option as default -->
+        <scrollTo selector="{{AdminManageSwatchSection.manageSwatchSection}}" stepKey="scrollToManageSwatchSection"/>
+        <waitForElementClickable selector="{{AdminManageSwatchSection.nthIsDefault('2')}}" stepKey="waitForSetSecondOptionAsDefault"/>
         <click selector="{{AdminManageSwatchSection.nthIsDefault('2')}}" stepKey="setSecondOptionAsDefault"/>
 
         <!-- Go to Storefront Properties tab -->

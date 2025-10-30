@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -64,7 +64,7 @@ class CreditmemoTest extends TestCase
         );
 
         $this->model = $this->getMockBuilder(Creditmemo::class)
-            ->setMethods(['getLinks', 'getLinksTitle'])
+            ->onlyMethods(['getLinks', 'getLinksTitle'])
             ->setConstructorArgs($modelConstructorArgs)
             ->getMock();
 
@@ -142,13 +142,13 @@ class CreditmemoTest extends TestCase
         )->method(
             'getLinks'
         )->willReturn(
-            
+
                 new DataObject(
                     ['purchased_items' => [
                         new DataObject(['link_title' => 'Magento User Guide']), ],
                     ]
                 )
-            
+
         );
         $this->pdf->expects(
             $this->once()

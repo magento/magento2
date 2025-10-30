@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -38,7 +38,7 @@ class FloatTypeTest extends TestCase
     {
         $this->fieldTypeConverter = $this->getMockBuilder(FieldTypeConverterInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['convert'])
+            ->onlyMethods(['convert'])
             ->getMockForAbstractClass();
 
         $objectManager = new ObjectManagerHelper($this);
@@ -61,7 +61,7 @@ class FloatTypeTest extends TestCase
     {
         $attributeMock = $this->getMockBuilder(AttributeAdapter::class)
             ->disableOriginalConstructor()
-            ->setMethods(['isFloatType'])
+            ->onlyMethods(['isFloatType'])
             ->getMock();
         $attributeMock->expects($this->any())
             ->method('isFloatType')
@@ -79,7 +79,7 @@ class FloatTypeTest extends TestCase
     /**
      * @return array
      */
-    public function getFieldTypeProvider()
+    public static function getFieldTypeProvider()
     {
         return [
             [true, 'something'],

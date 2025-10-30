@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -44,17 +44,17 @@ class LoaderTest extends TestCase
     {
         $this->optionValueFactory = $this->getMockBuilder(OptionValueInterfaceFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
 
         $this->product = $this->getMockBuilder(Product::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getTypeInstance'])
+            ->onlyMethods(['getTypeInstance'])
             ->getMock();
 
         $this->configurable = $this->getMockBuilder(Configurable::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getConfigurableAttributeCollection'])
+            ->onlyMethods(['getConfigurableAttributeCollection'])
             ->getMock();
 
         $extensionAttributesJoinProcessor = $this->getMockBuilder(JoinProcessorInterface::class)
@@ -78,7 +78,7 @@ class LoaderTest extends TestCase
 
         $attribute = $this->getMockBuilder(Attribute::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getOptions', 'setValues'])
+            ->onlyMethods(['getOptions', 'setValues'])
             ->getMock();
 
         $attributes = [$attribute];

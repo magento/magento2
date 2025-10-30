@@ -1,19 +1,15 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
  */
 
 /**
  * Send to friend form
  */
 /** @var \Magento\SendFriend\Block\Send $block */
-if (!$block->getButtonLockManager()) {
-    $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
-    $block->setButtonLockManager(
-        $objectManager->get(\Magento\Framework\View\Element\ButtonLockManager::class)
-    );
-}
+/** @var \Magento\Framework\View\Element\ButtonLockManager|null $buttonLockManager */
+$buttonLockManager = $block->getData('button_lock_manager');
 /** @var $escaper \Magento\Framework\Escaper */
 /** @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer */
 // phpcs:disable PHPCompatibility.Miscellaneous.RemovedAlternativePHPTags.MaybeASPOpenTagFound
@@ -134,7 +130,7 @@ if (!$block->getButtonLockManager()) {
             <button type="submit"
                     class="action submit primary"
                     <?php if (!$block->canSend() ||
-                        $block->getButtonLockManager()->isDisabled('sendfriend_form_submit')): ?>
+                        ($buttonLockManager?->isDisabled('sendfriend_form_submit'))): ?>
                     disabled="disabled"
                     <?php endif ?>>
                 <span><?= $escaper->escapeHtml(__('Send Email')) ?></span></button>

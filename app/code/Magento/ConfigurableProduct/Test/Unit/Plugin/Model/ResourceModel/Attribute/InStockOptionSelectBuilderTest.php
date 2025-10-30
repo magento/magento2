@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -53,7 +53,6 @@ class InStockOptionSelectBuilderTest extends TestCase
             ->getMock();
 
         $this->optionSelectBuilderMock = $this->getMockBuilder(OptionSelectBuilder::class)
-            ->setMethods([])
             ->disableOriginalConstructor()
             ->getMock();
 

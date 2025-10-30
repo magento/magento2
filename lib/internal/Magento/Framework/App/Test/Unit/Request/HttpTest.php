@@ -78,7 +78,7 @@ class HttpTest extends TestCase
         $this->objectManagerMock = $this->getMockForAbstractClass(ObjectManagerInterface::class);
         $this->converterMock = $this->getMockBuilder(StringUtils::class)
             ->disableOriginalConstructor()
-            ->setMethods(['cleanString'])
+            ->onlyMethods(['cleanString'])
             ->getMock();
 
         // Stash the $_SERVER array to protect it from modification in test
@@ -285,7 +285,7 @@ class HttpTest extends TestCase
     /**
      * @return array
      */
-    public function getDistroBaseUrlPathDataProvider()
+    public static function getDistroBaseUrlPathDataProvider()
     {
         return [
             [null, '/'],
@@ -302,7 +302,7 @@ class HttpTest extends TestCase
     /**
      * @return array
      */
-    public function serverVariablesProvider()
+    public static function serverVariablesProvider()
     {
         $returnValue = [];
         $defaultServerData = [
@@ -381,7 +381,7 @@ class HttpTest extends TestCase
         $configOffloadHeader = 'Header-From-Proxy';
         $configMock = $this->getMockBuilder(Config::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getValue'])
+            ->onlyMethods(['getValue'])
             ->getMock();
         $configMock->expects($this->exactly($configCall))
             ->method('getValue')
@@ -426,7 +426,7 @@ class HttpTest extends TestCase
     /**
      * @return array
      */
-    public function httpSafeMethodProvider()
+    public static function httpSafeMethodProvider()
     {
         return [
             'Test 1' => ['GET'],
@@ -439,7 +439,7 @@ class HttpTest extends TestCase
     /**
      * @return array
      */
-    public function httpNotSafeMethodProvider()
+    public static function httpNotSafeMethodProvider()
     {
         return [
             'Test 1' => ['POST'],
@@ -454,7 +454,7 @@ class HttpTest extends TestCase
     /**
      * @return array
      */
-    public function isSecureDataProvider()
+    public static function isSecureDataProvider()
     {
         /**
          * Data structure:
@@ -512,7 +512,7 @@ class HttpTest extends TestCase
     /**
      * @return array
      */
-    public function setPathInfoDataProvider()
+    public static function setPathInfoDataProvider()
     {
         return [
             ['http://svr.com/', '', ''],

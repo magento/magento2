@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -48,13 +48,14 @@ class CleanThemeRelatedContentObserverTest extends TestCase
             ->getMock();
 
         $this->themeImageFactory = $this->getMockBuilder(ImageFactory::class)
-            ->setMethods(['create', 'removePreviewImage'])
+            ->onlyMethods(['create'])
+            ->addMethods(['removePreviewImage'])
             ->disableOriginalConstructor()
             ->getMock();
 
         $this->updateCollection = $this->getMockBuilder(
             Collection::class
-        )->setMethods(['addThemeFilter', 'delete'])
+        )->onlyMethods(['addThemeFilter', 'delete'])
             ->disableOriginalConstructor()
             ->getMock();
 

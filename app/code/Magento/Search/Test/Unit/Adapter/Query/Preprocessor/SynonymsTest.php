@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -31,7 +31,7 @@ class SynonymsTest extends TestCase
         $objectManager = new ObjectManager($this);
 
         $this->synonymAnalyzer = $this->getMockBuilder(SynonymAnalyzer::class)
-            ->setMethods(['getSynonymsForPhrase'])
+            ->onlyMethods(['getSynonymsForPhrase'])
             ->disableOriginalConstructor()
             ->getMock();
 

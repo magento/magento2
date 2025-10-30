@@ -1,24 +1,23 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2021 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
-/**
- * Test class for \Magento\Framework\Session\SaveHandler
- */
-
 namespace Magento\Framework\Session\Test\Unit;
 
+use Magento\Framework\App\Area as AppArea;
+use Magento\Framework\App\State as AppState;
+use Magento\Framework\Message\ManagerInterface;
 use Magento\Framework\Session\Config\ConfigInterface;
 use Magento\Framework\Session\SaveHandler;
 use Magento\Framework\Session\SaveHandlerFactory;
 use Magento\Framework\Session\SaveHandlerInterface;
 use Magento\Framework\Session\SessionMaxSizeConfig;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Psr\Log\LoggerInterface;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -26,72 +25,64 @@ use PHPUnit\Framework\TestCase;
 class SaveHandlerTest extends TestCase
 {
     /**
-     * @var ObjectManager
-     */
-    protected $helper;
-
-    /**
      * @var SaveHandler
      */
-    protected $saveHandler;
+    private $saveHandler;
 
     /**
      * @var SaveHandlerFactory|MockObject
      */
-    protected $saveHandlerFactoryMock;
+    private $saveHandlerFactoryMock;
 
     /**
      * @var SaveHandlerInterface|MockObject
      */
-    protected $saveHandlerAdapterMock;
+    private $saveHandlerAdapterMock;
 
     /**
      * @var ConfigInterface|MockObject
      */
-    protected $configMock;
+    private $configMock;
 
     /**
      * @var SessionMaxSizeConfig|MockObject
      */
-    protected $sessionMaxSizeConfigMock;
+    private $sessionMaxSizeConfigMock;
+
+    /**
+     * @var ManagerInterface|MockObject
+     */
+    private $messageManagerMock;
+
+    /**
+     * @var AppState|MockObject
+     */
+    private $appStateMock;
 
     protected function setUp(): void
     {
-        $this->configMock = $this->getMockBuilder(ConfigInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-
-        $this->sessionMaxSizeConfigMock = $this->getMockBuilder(SaveHandlerFactory::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['getSessionMaxSize'])
-            ->getMock();
-
-        $this->saveHandlerAdapterMock = $this->getMockBuilder(SaveHandlerInterface::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['write'])
-            ->getMockForAbstractClass();
-
+        $this->configMock = $this->createMock(ConfigInterface::class);
+        $this->sessionMaxSizeConfigMock = $this->createMock(SessionMaxSizeConfig::class);
+        $this->saveHandlerAdapterMock = $this->createMock(SaveHandlerInterface::class);
         $this->saveHandlerAdapterMock->expects($this->any())
             ->method('write')
             ->willReturn(true);
-
-        $this->saveHandlerFactoryMock = $this->getMockBuilder(SaveHandlerFactory::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['create'])
-            ->getMock();
-
+        $this->saveHandlerFactoryMock = $this->createMock(SaveHandlerFactory::class);
         $this->saveHandlerFactoryMock->expects($this->any())
             ->method('create')
             ->willReturn($this->saveHandlerAdapterMock);
+        $loggerMock = $this->createMock(LoggerInterface::class);
+        $this->messageManagerMock = $this->createMock(ManagerInterface::class);
+        $this->appStateMock = $this->createMock(AppState::class);
 
-        $this->helper = new ObjectManager($this);
-        $this->saveHandler = $this->helper->getObject(
-            SaveHandler::class,
-            [
-                'saveHandlerFactory' => $this->saveHandlerFactoryMock,
-                'sessionConfig' => $this->configMock,
-                'sessionMaxSizeConfig' => $this->sessionMaxSizeConfigMock,
-            ]
+        $this->saveHandler = new SaveHandler(
+            $this->saveHandlerFactoryMock,
+            $this->configMock,
+            $loggerMock,
+            $this->sessionMaxSizeConfigMock,
+            SaveHandlerInterface::DEFAULT_HANDLER,
+            $this->messageManagerMock,
+            $this->appStateMock
         );
     }
 
@@ -146,7 +137,14 @@ class SaveHandlerTest extends TestCase
             ->with('test_session_id')
             ->willReturn('test_session_data');
 
-        $this->assertEquals(null, $this->saveHandler->read("test_session_id"));
+        $this->appStateMock->expects($this->atLeastOnce())
+            ->method('getAreaCode')
+            ->willReturn(AppArea::AREA_FRONTEND);
+        $this->messageManagerMock->expects($this->once())
+            ->method('addErrorMessage')
+            ->willReturnSelf();
+
+        $this->assertEmpty($this->saveHandler->read('test_session_id'));
     }
 
     public function testReadSessionMaxZero(): void
@@ -162,6 +160,31 @@ class SaveHandlerTest extends TestCase
             ->with('test_session_id')
             ->willReturn('test_session_data');
 
-        $this->assertEquals(null, $this->saveHandler->read("test_session_id"));
+        $this->appStateMock->expects($this->atLeastOnce())
+            ->method('getAreaCode')
+            ->willReturn(AppArea::AREA_FRONTEND);
+        $this->messageManagerMock->expects($this->once())
+            ->method('addErrorMessage')
+            ->willReturnSelf();
+
+        $this->assertEmpty($this->saveHandler->read('test_session_id'));
+    }
+
+    public function testReadMoreThanSessionMaxSizeAdmin(): void
+    {
+        $this->sessionMaxSizeConfigMock->expects($this->once())
+            ->method('getSessionMaxSize')
+            ->willReturn(1);
+
+        $this->saveHandlerAdapterMock->expects($this->once())
+            ->method('read')
+            ->with('test_session_id')
+            ->willReturn('test_session_data');
+
+        $this->appStateMock->expects($this->once())
+            ->method('getAreaCode')
+            ->willReturn(AppArea::AREA_ADMINHTML);
+
+        $this->assertEquals('test_session_data', $this->saveHandler->read('test_session_id'));
     }
 }

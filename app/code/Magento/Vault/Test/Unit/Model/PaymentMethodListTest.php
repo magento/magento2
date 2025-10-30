@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -38,7 +38,7 @@ class PaymentMethodListTest extends TestCase
         $this->paymentMethodList = $this->getMockForAbstractClass(PaymentMethodListInterface::class);
         $this->instanceFactory = $this->getMockBuilder(InstanceFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
 
         $this->vaultPaymentList = new PaymentMethodList($this->paymentMethodList, $this->instanceFactory);

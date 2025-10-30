@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -78,7 +78,7 @@ class MetadataLoaderTest extends TestCase
         $this->designConfigExtension = $this->getMockBuilder(
             \Magento\Theme\Api\Data\DesignConfigExtensionInterface::class
         )
-            ->setMethods(['getDesignConfigData'])
+            ->addMethods(['getDesignConfigData'])
             ->getMockForAbstractClass();
         $this->storeManager = $this->getMockBuilder(StoreManagerInterface::class)
             ->getMockForAbstractClass();
@@ -161,7 +161,7 @@ class MetadataLoaderTest extends TestCase
     /**
      * @return array
      */
-    public function dataProviderGetData()
+    public static function dataProviderGetData()
     {
         return [
             ['default', 0, 1],

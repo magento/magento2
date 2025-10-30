@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -145,7 +145,7 @@ class DataTest extends TestCase
     public function testSendPaymentFailedEmail()
     {
         $quoteMock = $this->getMockBuilder(Quote::class)
-            ->setMethods(['getId'])
+            ->onlyMethods(['getId'])
             ->disableOriginalConstructor()
             ->getMock();
         $quoteMock->expects($this->any())->method('getId')->willReturn(1);

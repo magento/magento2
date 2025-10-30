@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -157,7 +157,7 @@ class TypeTest extends TestCase
 
         $this->typeHandler = $this->getMockBuilder(TypeHandler::class)
             ->disableOriginalConstructor()
-            ->setMethods(['save'])
+            ->onlyMethods(['save'])
             ->getMock();
 
         $this->target = $this->objectManager->getObject(
@@ -205,7 +205,7 @@ class TypeTest extends TestCase
     public function testCheckProductBuyState()
     {
         $optionMock = $this->getMockBuilder(Option::class)
-            ->setMethods(['getValue'])
+            ->onlyMethods(['getValue'])
             ->disableOriginalConstructor()
             ->getMock();
 

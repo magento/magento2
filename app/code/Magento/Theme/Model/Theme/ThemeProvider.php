@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Theme\Model\Theme;
 
@@ -69,8 +69,8 @@ class ThemeProvider implements ThemeProviderInterface, ResetAfterRequestInterfac
         \Magento\Theme\Model\ResourceModel\Theme\CollectionFactory $collectionFactory,
         \Magento\Theme\Model\ThemeFactory $themeFactory,
         \Magento\Framework\App\CacheInterface $cache,
-        Json $serializer = null,
-        DeploymentConfig $deploymentConfig = null
+        ?Json $serializer = null,
+        ?DeploymentConfig $deploymentConfig = null
     ) {
         $this->collectionFactory = $collectionFactory;
         $this->themeFactory = $themeFactory;

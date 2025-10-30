@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -95,19 +95,21 @@ class SaveHandlerTest extends TestCase
             ->getMockForAbstractClass();
         $this->quoteMock = $this->getMockBuilder(Quote::class)
             ->disableOriginalConstructor()
-            ->setMethods(
+            ->addMethods(['setLastAddedItem'])
+            ->onlyMethods(
                 [
-                    'getItems', 'setLastAddedItem', 'getBillingAddress', 'getExtensionAttributes', 'isVirtual',
+                    'getItems', 'getBillingAddress', 'getExtensionAttributes', 'isVirtual',
                     'collectTotals'
                 ]
             )
             ->getMock();
         $this->billingAddressMock = $this->getMockBuilder(QuoteAddress::class)
-            ->setMethods(['getCustomerAddress', 'getCustomerAddressId', 'setCustomerAddressId'])
+            ->onlyMethods(['getCustomerAddressId', 'setCustomerAddressId'])
+            ->addMethods(['getCustomerAddress'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->extensionAttributesMock = $this->getMockBuilder(CartExtensionInterface::class)
-            ->setMethods(['getShippingAssignments'])
+            ->addMethods(['getShippingAssignments'])
             ->getMockForAbstractClass();
 
         $this->quoteMock->expects(static::any())

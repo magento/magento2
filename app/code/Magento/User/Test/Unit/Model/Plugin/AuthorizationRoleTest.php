@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -35,12 +35,10 @@ class AuthorizationRoleTest extends TestCase
     {
         $this->userResourceModelMock = $this->getMockBuilder(User::class)
             ->disableOriginalConstructor()
-            ->setMethods([])
             ->getMock();
 
         $this->roleMock = $this->getMockBuilder(Role::class)
             ->disableOriginalConstructor()
-            ->setMethods([])
             ->getMock();
 
         $objectManager = new ObjectManager($this);

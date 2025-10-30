@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -46,7 +46,7 @@ class DateTest extends TestCase
     {
         $this->dateTime = $this->getMockBuilder(DateTime::class)
             ->disableOriginalConstructor()
-            ->setMethods(['isEmptyDate'])
+            ->onlyMethods(['isEmptyDate'])
             ->getMock();
 
         $this->localeDate = $this->getMockBuilder(TimezoneInterface::class)

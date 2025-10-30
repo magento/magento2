@@ -127,7 +127,7 @@ class AssetKeywordsTest extends TestCase
      *
      * @return array
      */
-    public function keywordsProvider(): array
+    public static function keywordsProvider(): array
     {
         return [
             [['one-keyword'],['plum','orange']],

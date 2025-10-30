@@ -40,7 +40,7 @@ class RelationCompositeTest extends TestCase
     {
         $this->modelMock = $this->getMockBuilder(AbstractModel::class)
             ->disableOriginalConstructor()
-            ->setMethods(
+            ->onlyMethods(
                 [
                     'getEventPrefix'
                 ]

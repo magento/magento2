@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -157,8 +157,13 @@ class ReportTest extends TestCase
         $startDateMock = $this->createTestProxy(\DateTime::class, ['time' => $startDate]);
         $endDateMock = $this->createTestProxy(\DateTime::class, ['time' => $endDate]);
         $this->getTimezone()->method('date')
-            ->withConsecutive([$startDate], [])
-            ->willReturnOnConsecutiveCalls($startDateMock, $endDateMock);
+            ->willReturnCallback(function ($arg1, $arg2) use ($startDate, $startDateMock, $endDateMock) {
+                if ($arg1 == $startDate) {
+                    return $startDateMock;
+                } elseif ($arg2 == null) {
+                    return $endDateMock;
+                }
+            });
 
         $this->assertEquals($executionTime, $this->report->getExecutionTime($startDate));
     }
@@ -216,6 +221,7 @@ class ReportTest extends TestCase
         $localeEmulator = $this->getMockForAbstractClass(LocaleEmulatorInterface::class);
         $localeEmulator->method('emulate')
             ->willReturnCallback(fn (callable $callback) => $callback());
+        $this->objectManagerHelper->prepareObjectManager();
         $import = new Import(
             $logger,
             $filesystem,
@@ -270,7 +276,7 @@ class ReportTest extends TestCase
      *
      * @return array
      */
-    public function importFileExistsDataProvider()
+    public static function importFileExistsDataProvider()
     {
         return [
             [

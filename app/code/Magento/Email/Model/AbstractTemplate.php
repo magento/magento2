@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Email\Model;
@@ -20,7 +20,6 @@ use Magento\MediaStorage\Helper\File\Storage\Database;
  * Template model class.
  *
  * phpcs:disable Magento2.Classes.AbstractApi
- * @author      Magento Core Team <core@magentocommerce.com>
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @api
@@ -200,7 +199,7 @@ abstract class AbstractTemplate extends AbstractModel implements TemplateTypesIn
         \Magento\Framework\Filter\FilterManager $filterManager,
         \Magento\Framework\UrlInterface $urlModel,
         array $data = [],
-        Database $fileStorageDatabase = null
+        ?Database $fileStorageDatabase = null
     ) {
         $this->design = $design;
         $this->area = isset($data['area']) ? $data['area'] : null;

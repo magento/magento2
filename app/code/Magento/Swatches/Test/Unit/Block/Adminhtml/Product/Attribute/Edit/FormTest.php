@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -27,7 +27,7 @@ class FormTest extends TestCase
     /**
      * @return array
      */
-    public function dataForAddValues()
+    public static function dataForAddValues()
     {
         $additionalData = [
             'swatch_input_type' => 'visual',

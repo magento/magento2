@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -115,7 +115,7 @@ class SaveTest extends TestCase
             ->getMockForAbstractClass();
         $this->resultJsonFactory = $this->getMockBuilder(JsonFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
         $this->json = $this->getMockBuilder(Json::class)
             ->disableOriginalConstructor()
@@ -183,8 +183,15 @@ class SaveTest extends TestCase
         ];
 
         $this->requestMock->method('getParam')
-            ->withConsecutive(['parent_id'], ['entity_id'])
-            ->willReturnOnConsecutiveCalls(22, 1);
+            ->willReturnCallback(
+                function ($arg) {
+                    if ($arg == 'parent_id') {
+                        return 22;
+                    } elseif ($arg == 'entity_id') {
+                        return 1;
+                    }
+                }
+            );
 
         $customerMock = $this->getMockBuilder(CustomerInterface::class)
             ->disableOriginalConstructor()

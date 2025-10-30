@@ -103,7 +103,7 @@ class InlineUtilTest extends TestCase
      * @return array
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function getTags(): array
+    public static function getTags(): array
     {
         return [
             'remote-script' => [

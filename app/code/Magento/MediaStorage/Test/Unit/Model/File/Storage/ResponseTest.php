@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -35,7 +35,7 @@ class ResponseTest extends TestCase
         $objectManager = new ObjectManager($this);
         $this->transferAdapter = $this->getMockBuilder(Http::class)
             ->disableOriginalConstructor()
-            ->setMethods(['send'])
+            ->onlyMethods(['send'])
             ->getMock();
         $this->response = $objectManager->getObject(
             Response::class,

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -78,7 +78,8 @@ class QueryTest extends TestCase
     {
         /** @var \Magento\Search\Model\Query|MockObject $model */
         $model = $this->getMockBuilder(\Magento\Search\Model\Query::class)
-            ->setMethods(['getNumResults', 'getStoreId', 'getQueryText'])
+            ->onlyMethods(['getStoreId', 'getQueryText'])
+            ->addMethods(['getNumResults'])
             ->disableOriginalConstructor()
             ->getMock();
         $model->expects($this->any())

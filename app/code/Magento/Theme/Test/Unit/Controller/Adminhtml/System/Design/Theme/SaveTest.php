@@ -1,8 +1,7 @@
 <?php
 /**
- *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -13,9 +12,9 @@ use Magento\Theme\Model\Theme;
 use Magento\Theme\Model\Theme\Customization\File\CustomCss;
 use Magento\Theme\Model\Theme\Data;
 use Magento\Theme\Model\Theme\SingleFile;
-use Magento\Theme\Test\Unit\Controller\Adminhtml\System\Design\ThemeTest;
+use Magento\Theme\Test\Unit\Controller\Adminhtml\System\Design\ThemeTestCase;
 
-class SaveTest extends ThemeTest
+class SaveTest extends ThemeTestCase
 {
     /**
      * @var string

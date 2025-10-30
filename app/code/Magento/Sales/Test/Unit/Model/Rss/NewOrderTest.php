@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -105,7 +105,7 @@ class NewOrderTest extends TestCase
         $this->eventManager = $this->getMockForAbstractClass(ManagerInterface::class);
         $this->layout = $this->getMockForAbstractClass(LayoutInterface::class);
         $this->rssUrlBuilderInterface = $this->getMockBuilder(UrlBuilderInterface::class)
-            ->setMethods(['getUrl'])
+            ->onlyMethods(['getUrl'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $this->objectManagerHelper = new ObjectManagerHelper($this);
@@ -141,7 +141,7 @@ class NewOrderTest extends TestCase
             ->willReturn('2014-09-10 17:39:50');
 
         $order = $this->getMockBuilder(Order::class)
-            ->setMethods(['getResourceCollection', 'getIncrementId', 'getId', 'getCreatedAt'])
+            ->onlyMethods(['getResourceCollection', 'getIncrementId', 'getId', 'getCreatedAt'])
             ->disableOriginalConstructor()
             ->getMock();
         $order->expects($this->once())->method('getId')->willReturn(1);
@@ -149,7 +149,7 @@ class NewOrderTest extends TestCase
         $order->expects($this->once())->method('getCreatedAt')->willReturn(time());
 
         $collection = $this->getMockBuilder(Collection::class)
-            ->setMethods(['addAttributeToFilter', 'addAttributeToSort', 'getIterator'])
+            ->onlyMethods(['addAttributeToFilter', 'addAttributeToSort', 'getIterator'])
             ->disableOriginalConstructor()
             ->getMock();
         $collection->expects($this->once())->method('addAttributeToFilter')->willReturnSelf();

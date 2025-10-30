@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -63,11 +63,11 @@ class OptionSelectBuilderTest extends TestCase
     protected function setUp(): void
     {
         $this->connectionMock = $this->getMockBuilder(AdapterInterface::class)
-            ->setMethods(['select', 'getIfNullSql'])
+            ->onlyMethods(['select', 'getIfNullSql'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $this->select = $this->getMockBuilder(Select::class)
-            ->setMethods(['from', 'joinInner', 'joinLeft', 'where', 'columns', 'order'])
+            ->onlyMethods(['from', 'joinInner', 'joinLeft', 'where', 'columns', 'order'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->connectionMock->expects($this->atLeastOnce())
@@ -75,7 +75,7 @@ class OptionSelectBuilderTest extends TestCase
             ->willReturn($this->select);
 
         $this->attributeResourceMock = $this->getMockBuilder(Attribute::class)
-            ->setMethods(['getTable', 'getConnection'])
+            ->onlyMethods(['getTable', 'getConnection'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->attributeResourceMock->expects($this->atLeastOnce())
@@ -83,12 +83,12 @@ class OptionSelectBuilderTest extends TestCase
             ->willReturn($this->connectionMock);
 
         $this->attributeOptionProviderMock = $this->getMockBuilder(OptionProvider::class)
-            ->setMethods(['getProductEntityLinkField'])
+            ->onlyMethods(['getProductEntityLinkField'])
             ->disableOriginalConstructor()
             ->getMock();
 
         $this->abstractAttributeMock = $this->getMockBuilder(AbstractAttribute::class)
-            ->setMethods(['getBackendTable', 'getAttributeId', 'getSourceModel'])
+            ->onlyMethods(['getBackendTable', 'getAttributeId', 'getSourceModel'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
 

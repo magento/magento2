@@ -53,7 +53,7 @@ class BulkStatusInterfaceTest extends WebapiAbstract
     /**
      * @return array
      */
-    public function getBulkOperationCountDataProvider(): array
+    public static function getBulkOperationCountDataProvider(): array
     {
         return [
             'Completed operations' => [

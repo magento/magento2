@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -257,7 +257,7 @@ class AddressTest extends TestCase
      * @param void
      * @return array
      */
-    public function getDataProvider(): array
+    public static function getDataProvider(): array
     {
         return [
             'Non-virtual Quote' => [
@@ -538,8 +538,13 @@ class AddressTest extends TestCase
             ->willReturnSelf();
 
         $this->storeManager->method('getStore')
-            ->withConsecutive([$storeId], [null])
-            ->willReturn($this->store);
+            ->willReturnCallback(
+                function ($arg) use ($storeId,) {
+                    if ($arg === $storeId || is_null($arg)) {
+                        return $this->store;
+                    }
+                }
+            );
 
         $this->store->method('getBaseCurrency')
             ->willReturn($baseCurrency);

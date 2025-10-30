@@ -1,6 +1,6 @@
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 
  define([
@@ -326,12 +326,26 @@
 
             if (this.isBillingField(fieldName)) {
                 syncName = fieldName.replace('billing', 'shipping');
+
+                if (fieldName.indexOf('country')) {
+                    jQuery('#order-shipping_address_region').css(
+                        'display',
+                        jQuery('#order-billing_address_region').css('display')
+                    );
+                    jQuery('#order-shipping_address_region_id').css(
+                        'display',
+                        jQuery('#order-billing_address_region_id').css('display')
+                    );
+                }
             }
 
             $(container).select('[name="' + syncName + '"]').each(function (element) {
                 if (~['input', 'textarea', 'select'].indexOf(element.tagName.toLowerCase())) {
                     if (element.type === "checkbox") {
                         element.checked = fieldValue.checked;
+                    } else if (element.type === "select" || element.type === "select-one") {
+                        element.innerHTML = fieldValue.innerHTML;
+                        element.value = fieldValue.value;
                     } else {
                         element.value = fieldValue.value;
                     }
@@ -426,7 +440,7 @@
          */
         setShippingAsBilling: function (flag) {
             var data,
-                areasToLoad = ['billing_method', 'shipping_address', 'shipping_method', 'totals', 'giftmessage'];
+                areasToLoad = ['items', 'billing_method', 'shipping_address', 'shipping_method', 'totals', 'giftmessage'];
 
             this.disableShippingAddress(flag);
             data = this.serializeData(flag ? this.billingAddressContainer : this.shippingAddressContainer);
@@ -493,7 +507,7 @@
         loadPaymentMethods: function () {
             var data = this.serializeData(this.billingAddressContainer).toObject();
 
-            this.loadArea(['billing_method', 'totals'], true, data);
+            this.loadArea(['items', 'billing_method', 'totals'], true, data);
 
             return false;
         },
@@ -510,7 +524,7 @@
             this.setPaymentMethod(method);
             var data = {};
             data['order[payment_method]'] = method;
-            this.loadArea(['card_validation'], true, data);
+            this.loadArea(['items', 'card_validation'], true, data);
         },
 
         setPaymentMethod: function (method) {
@@ -1362,15 +1376,26 @@
 
         submit: function () {
             var $editForm = jQuery('#edit_form'),
+                $submitButton = jQuery('#submit_order_top_button'),
                 beforeSubmitOrderEvent;
 
             if ($editForm.valid()) {
+                $submitButton.prop('disabled', true);
+
                 $editForm.trigger('processStart');
                 beforeSubmitOrderEvent = jQuery.Event('beforeSubmitOrder');
                 $editForm.trigger(beforeSubmitOrderEvent);
+
                 if (beforeSubmitOrderEvent.result !== false) {
                     $editForm.trigger('submitOrder');
+                } else {
+                    $submitButton.prop('disabled', false);
                 }
+
+                $editForm.on('submitOrderComplete', function () {
+                    $submitButton.prop('disabled', false);
+                    $editForm.trigger('processStop');
+                });
             }
         },
 

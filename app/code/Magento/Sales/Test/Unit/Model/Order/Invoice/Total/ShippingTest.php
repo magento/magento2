@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -91,7 +91,7 @@ class ShippingTest extends TestCase
     private function createInvoiceStub(array $prevInvoicesData, $orderShipping)
     {
         $order = $this->getMockBuilder(Order::class)
-            ->setMethods(['getInvoiceCollection', 'getShippingAmount'])
+            ->onlyMethods(['getInvoiceCollection', 'getShippingAmount'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $order->expects($this->any())
@@ -146,7 +146,7 @@ class ShippingTest extends TestCase
             $arguments = $objectManagerHelper->getConstructArguments($className, $arguments);
             /** @var \Magento\Sales\Model\Order\Invoice $prevInvoice */
             $prevInvoice = $this->getMockBuilder($className)
-                ->setMethods(['_init'])
+                ->onlyMethods(['_init'])
                 ->setConstructorArgs($arguments)
                 ->getMock();
             $result->addItem($prevInvoice);

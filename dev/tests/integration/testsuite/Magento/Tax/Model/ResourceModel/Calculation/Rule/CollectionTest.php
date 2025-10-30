@@ -35,7 +35,7 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
         $this->assertMatchesRegularExpression($expected, (string)$collection->getSelect());
     }
 
-    public function setClassTypeFilterDataProvider()
+    public static function setClassTypeFilterDataProvider()
     {
         return [
             [

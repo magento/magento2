@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\CatalogWidget\Block\Product;
@@ -11,10 +11,12 @@ use Magento\Catalog\Block\Product\AbstractProduct;
 use Magento\Catalog\Block\Product\Context;
 use Magento\Catalog\Block\Product\Widget\Html\Pager;
 use Magento\Catalog\Model\Product;
+use Magento\Catalog\Model\Product\Attribute\Source\Status as ProductStatus;
 use Magento\Catalog\Model\Product\Visibility;
 use Magento\Catalog\Model\ResourceModel\Product\Collection;
 use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory;
 use Magento\Catalog\Pricing\Price\FinalPrice;
+use Magento\Catalog\ViewModel\Product\OptionsData;
 use Magento\CatalogWidget\Model\Rule;
 use Magento\Framework\App\ActionInterface;
 use Magento\Framework\App\Http\Context as HttpContext;
@@ -131,6 +133,11 @@ class ProductsList extends AbstractProduct implements BlockInterface, IdentityIn
     private $categoryRepository;
 
     /**
+     * @var OptionsData
+     */
+    private OptionsData $optionsData;
+
+    /**
      * @param Context $context
      * @param CollectionFactory $productCollectionFactory
      * @param Visibility $catalogProductVisibility
@@ -143,6 +150,7 @@ class ProductsList extends AbstractProduct implements BlockInterface, IdentityIn
      * @param LayoutFactory|null $layoutFactory
      * @param EncoderInterface|null $urlEncoder
      * @param CategoryRepositoryInterface|null $categoryRepository
+     * @param OptionsData|null $optionsData
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -155,10 +163,11 @@ class ProductsList extends AbstractProduct implements BlockInterface, IdentityIn
         Rule $rule,
         Conditions $conditionsHelper,
         array $data = [],
-        Json $json = null,
-        LayoutFactory $layoutFactory = null,
-        EncoderInterface $urlEncoder = null,
-        CategoryRepositoryInterface $categoryRepository = null
+        ?Json $json = null,
+        ?LayoutFactory $layoutFactory = null,
+        ?EncoderInterface $urlEncoder = null,
+        ?CategoryRepositoryInterface $categoryRepository = null,
+        ?OptionsData $optionsData = null
     ) {
         $this->productCollectionFactory = $productCollectionFactory;
         $this->catalogProductVisibility = $catalogProductVisibility;
@@ -171,6 +180,7 @@ class ProductsList extends AbstractProduct implements BlockInterface, IdentityIn
         $this->urlEncoder = $urlEncoder ?: ObjectManager::getInstance()->get(EncoderInterface::class);
         $this->categoryRepository = $categoryRepository ?? ObjectManager::getInstance()
                 ->get(CategoryRepositoryInterface::class);
+        $this->optionsData = $optionsData ?: ObjectManager::getInstance()->get(OptionsData::class);
         parent::__construct(
             $context,
             $data
@@ -301,9 +311,21 @@ class ProductsList extends AbstractProduct implements BlockInterface, IdentityIn
             'action' => $url,
             'data' => [
                 'product' => $product->getEntityId(),
+                'options' => $this->optionsData->getOptionsData($product),
                 ActionInterface::PARAM_NAME_URL_ENCODED => $this->urlEncoder->encode($url),
             ]
         ];
+    }
+
+    /**
+     * Return product options
+     *
+     * @param Product $product
+     * @return array
+     */
+    public function getOptionsData(Product $product): array
+    {
+        return $this->optionsData->getOptionsData($product);
     }
 
     /**
@@ -350,6 +372,7 @@ class ProductsList extends AbstractProduct implements BlockInterface, IdentityIn
          */
         $collection = $this->_addProductAttributesAndPrices($collection)
             ->addStoreFilter()
+            ->addAttributeToFilter(Product::STATUS, ProductStatus::STATUS_ENABLED)
             ->addAttributeToSort('entity_id', 'desc')
             ->setPageSize($this->getPageSize())
             ->setCurPage($this->getRequest()->getParam($this->getData('page_var_name'), 1));
@@ -599,5 +622,13 @@ class ProductsList extends AbstractProduct implements BlockInterface, IdentityIn
     private function decodeConditions(string $encodedConditions): array
     {
         return $this->conditionsHelper->decode(htmlspecialchars_decode($encodedConditions));
+    }
+
+    /**
+     * @inheritdoc
+     */
+    protected function _afterToHtml($html)
+    {
+        return trim($html);
     }
 }

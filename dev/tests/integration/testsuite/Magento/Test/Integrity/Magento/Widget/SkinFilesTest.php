@@ -23,7 +23,7 @@ class SkinFilesTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function widgetPlaceholderImagesDataProvider()
+    public static function widgetPlaceholderImagesDataProvider()
     {
         $result = [];
         /** @var $model \Magento\Widget\Model\Widget */

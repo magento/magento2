@@ -13,6 +13,10 @@ use Magento\Framework\Data\Test\Unit\Stub\SearchCriteriaBuilder;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\TestCase;
 
+/**
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class SearchCriteriaBuilderTest extends TestCase
 {
     public function testMake()

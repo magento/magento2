@@ -190,7 +190,7 @@ class AddSimpleProductToCartSingleMutationTest extends GraphQlAbstract
 
         self::assertArrayHasKey('user_errors', $response['addProductsToCart']);
         self::assertEquals(
-            'The requested qty is not available',
+            'Not enough items for sale',
             $response['addProductsToCart']['user_errors'][0]['message']
         );
         self::assertEquals(100, $response['addProductsToCart']['cart']['total_quantity']);
@@ -395,7 +395,7 @@ class AddSimpleProductToCartSingleMutationTest extends GraphQlAbstract
     /**
      * @return array
      */
-    public function addProductNotAssignedToWebsiteDataProvider(): array
+    public static function addProductNotAssignedToWebsiteDataProvider(): array
     {
         return [
             ['cart1', 'product2', []],
@@ -407,7 +407,7 @@ class AddSimpleProductToCartSingleMutationTest extends GraphQlAbstract
     /**
      * @return array
      */
-    public function wrongSkuDataProvider(): array
+    public static function wrongSkuDataProvider(): array
     {
         return [
             'Non-existent SKU' => [
@@ -424,12 +424,12 @@ class AddSimpleProductToCartSingleMutationTest extends GraphQlAbstract
     /**
      * @return array
      */
-    public function wrongQuantityDataProvider(): array
+    public static function wrongQuantityDataProvider(): array
     {
         return [
             'More quantity than in stock' => [
                 101,
-                'The requested qty is not available'
+                'Not enough items for sale'
             ],
             'Quantity equals zero' => [
                 0,

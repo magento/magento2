@@ -1219,7 +1219,7 @@
 & when (@media-common = true) {
     .abs-field-date-input {
         margin-right: @indent__s;
-        width: calc(~'100% -' @icon-calendar__font-size + @indent__s);
+        width: calc(~'100% -' @icon-calendar__font-size - @indent__s);
     }
 }
 
@@ -1234,7 +1234,7 @@
 
         input {
             margin-right: @indent__s;
-            width: calc(~'100% -' @checkout-tooltip-icon__font-size + @indent__s + @indent__xs);
+            width: calc(~'100% -' @checkout-tooltip-icon__font-size - @indent__s - @indent__xs);
         }
     }
 }

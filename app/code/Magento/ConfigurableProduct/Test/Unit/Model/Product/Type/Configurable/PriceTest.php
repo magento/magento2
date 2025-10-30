@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -60,12 +60,12 @@ class PriceTest extends TestCase
         /** @var Product|MockObject $configurableProduct */
         $configurableProduct = $this->getMockBuilder(Product::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getCustomOption', 'getPriceInfo', 'setFinalPrice'])
+            ->onlyMethods(['getCustomOption', 'getPriceInfo', 'setFinalPrice'])
             ->getMock();
         /** @var PriceInfoBase|MockObject $priceInfo */
         $priceInfo = $this->getMockBuilder(PriceInfoBase::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getPrice'])
+            ->onlyMethods(['getPrice'])
             ->getMock();
         /** @var PriceInterface|MockObject $price */
         $price = $this->getMockBuilder(PriceInterface::class)

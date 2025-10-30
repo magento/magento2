@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -85,8 +85,8 @@ class PriceBackendTest extends TestCase
     public static function aroundValidateDataProvider()
     {
         return [
-            ['type' => Configurable::TYPE_CODE, 'result' => true],
-            ['type' => Type::TYPE_VIRTUAL, 'result' => static::CLOSURE_VALUE],
+            ['typeId' => Configurable::TYPE_CODE, 'expectedResult' => true],
+            ['typeId' => Type::TYPE_VIRTUAL, 'expectedResult' => static::CLOSURE_VALUE],
         ];
     }
 }

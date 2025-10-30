@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -40,19 +40,19 @@ class FormTest extends TestCase
     {
         $this->variablesMock = $this->getMockBuilder(Variables::class)
             ->disableOriginalConstructor()
-            ->setMethods(['toOptionArray'])
+            ->onlyMethods(['toOptionArray'])
             ->getMock();
         $this->variableFactoryMock = $this->getMockBuilder(VariableFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
         $this->variableMock = $this->getMockBuilder(Variable::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getVariablesOptionArray'])
+            ->onlyMethods(['getVariablesOptionArray'])
             ->getMock();
         $this->templateMock = $this->getMockBuilder(Template::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getId', 'getVariablesOptionArray'])
+            ->onlyMethods(['getId', 'getVariablesOptionArray'])
             ->getMock();
         $objectManager = new ObjectManager($this);
         $this->form = $objectManager->getObject(

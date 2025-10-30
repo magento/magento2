@@ -1,8 +1,7 @@
 <?php
 /**
- *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -75,7 +74,7 @@ class ChooserTest extends TestCase
         $helper = new ObjectManager($this);
 
         $context = $this->getMockBuilder(Context::class)
-            ->setMethods(['getRequest', 'getResponse', 'getMessageManager', 'getSession'])
+            ->onlyMethods(['getRequest', 'getResponse', 'getMessageManager', 'getSession'])
             ->setConstructorArgs(
                 $helper->getConstructArguments(
                     Context::class,
@@ -94,7 +93,7 @@ class ChooserTest extends TestCase
             ->getMock();
         $resultRawFactory = $this->getMockBuilder(RawFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
         $resultRawFactory->expects($this->atLeastOnce())
             ->method('create')
@@ -103,7 +102,7 @@ class ChooserTest extends TestCase
         $this->layoutMock = $this->createPartialMock(Layout::class, ['createBlock']);
         $layoutFactory = $this->getMockBuilder(LayoutFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
         $layoutFactory->expects($this->any())
             ->method('create')

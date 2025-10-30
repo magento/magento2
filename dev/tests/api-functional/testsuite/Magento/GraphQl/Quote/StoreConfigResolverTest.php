@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2025 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -40,42 +40,105 @@ class StoreConfigResolverTest extends GraphQlAbstract
             ScopeInterface::SCOPE_STORE,
             'default'
         ),
+        ConfigFixture('checkout/cart/grouped_product_image', 'parent', ScopeInterface::SCOPE_STORE, 'default'),
+        ConfigFixture('checkout/cart/configurable_product_image', 'itself', ScopeInterface::SCOPE_STORE, 'default'),
+        ConfigFixture('checkout/options/enable_agreements', true, ScopeInterface::SCOPE_STORE, 'default')
     ]
     public function testGetStoreConfig(): void
     {
-        $query
-            = <<<QUERY
-{
-  storeConfig {
-    is_guest_checkout_enabled,
-    is_one_page_checkout_enabled,
-    max_items_in_order_summary,
-    cart_summary_display_quantity,
-    minicart_display,
-    minicart_max_items,
-    cart_expires_in_days
-  }
-}
-QUERY;
-        $response = $this->graphQlQuery($query);
-        $this->assertArrayHasKey('storeConfig', $response);
-        $this->validateStoreConfig($response['storeConfig']);
+        $this->assertEquals(
+            [
+                'storeConfig' => [
+                    'is_guest_checkout_enabled' => true,
+                    'is_one_page_checkout_enabled' => true,
+                    'max_items_in_order_summary' => self::MAX_ITEMS_TO_DISPLAY,
+                    'cart_summary_display_quantity' => self::CART_SUMMARY_DISPLAY_TOTAL,
+                    'minicart_display' => true,
+                    'minicart_max_items' => self::MINICART_MAX_ITEMS,
+                    'cart_expires_in_days' => self::CART_EXPIRES_IN_DAYS,
+                    'grouped_product_image' => 'PARENT',
+                    'configurable_product_image' => 'ITSELF',
+                    'is_checkout_agreements_enabled' => true,
+                ],
+            ],
+            $this->graphQlQuery($this->getStoreConfigQuery())
+        );
+    }
+
+    #[
+        ConfigFixture('checkout/cart/cart_merge_preference', 'guest')
+    ]
+    public function testStoreConfigForMergePreferenceGuestPriority(): void
+    {
+        $this->assertEquals([
+            'storeConfig' => [
+                'cart_merge_preference' => 'guest'
+            ]
+        ], $this->graphQlQuery($this->getStoreConfigQueryForMergePreference()));
+    }
+
+    #[
+        ConfigFixture('checkout/cart/cart_merge_preference', 'customer')
+    ]
+    public function testStoreConfigForMergePreferenceCustomerPriority(): void
+    {
+        $this->assertEquals([
+            'storeConfig' => [
+                'cart_merge_preference' => 'customer'
+            ]
+        ], $this->graphQlQuery($this->getStoreConfigQueryForMergePreference()));
+    }
+
+    #[
+        ConfigFixture('checkout/cart/cart_merge_preference', 'merge')
+    ]
+    public function testStoreConfigForMergePreferenceMergePriority(): void
+    {
+        $this->assertEquals([
+            'storeConfig' => [
+                'cart_merge_preference' => 'merge'
+            ]
+        ], $this->graphQlQuery($this->getStoreConfigQueryForMergePreference()));
     }
 
     /**
-     * Validate Store Config Data
+     * Generates storeConfig query
      *
-     * @param array $responseConfig
+     * @return string
      */
-    private function validateStoreConfig(
-        array $responseConfig,
-    ): void {
-        $this->assertTrue($responseConfig['is_guest_checkout_enabled']);
-        $this->assertTrue($responseConfig['is_one_page_checkout_enabled']);
-        $this->assertEquals(self::MAX_ITEMS_TO_DISPLAY, $responseConfig['max_items_in_order_summary']);
-        $this->assertEquals(self::CART_SUMMARY_DISPLAY_TOTAL, $responseConfig['cart_summary_display_quantity']);
-        $this->assertTrue($responseConfig['minicart_display']);
-        $this->assertEquals(self::MINICART_MAX_ITEMS, $responseConfig['minicart_max_items']);
-        $this->assertEquals(self::CART_EXPIRES_IN_DAYS, $responseConfig['cart_expires_in_days']);
+    private function getStoreConfigQuery(): string
+    {
+        return <<<QUERY
+            {
+              storeConfig {
+                is_guest_checkout_enabled
+                is_one_page_checkout_enabled
+                max_items_in_order_summary
+                cart_summary_display_quantity
+                minicart_display
+                minicart_max_items
+                cart_expires_in_days
+                grouped_product_image
+                configurable_product_image
+                is_checkout_agreements_enabled
+              }
+            }
+        QUERY;
+    }
+
+    /**
+     * Generates storeConfig query with newly added configurations
+     *
+     * @return string
+     */
+    private function getStoreConfigQueryForMergePreference(): string
+    {
+        return <<<QUERY
+            {
+              storeConfig {
+                cart_merge_preference
+              }
+            }
+        QUERY;
     }
 }

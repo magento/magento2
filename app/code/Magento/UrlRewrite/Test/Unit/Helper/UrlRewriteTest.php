@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -62,7 +62,7 @@ class UrlRewriteTest extends TestCase
     /**
      * @return array
      */
-    public function requestPathDataProvider()
+    public static function requestPathDataProvider()
     {
         return [
             'no leading slash' => ['correct/request/path'],
@@ -73,7 +73,7 @@ class UrlRewriteTest extends TestCase
     /**
      * @return array
      */
-    public function requestPathExceptionDataProvider()
+    public static function requestPathExceptionDataProvider()
     {
         return [
             'two slashes' => ['request/path/with/two//slashes'],

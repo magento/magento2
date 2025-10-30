@@ -544,7 +544,7 @@ class CustomerRepositoryTest extends \PHPUnit\Framework\TestCase
      *
      * @return array
      */
-    public function updateCustomerDataProvider()
+    public static function updateCustomerDataProvider()
     {
         return [
             'Customer remove default shipping and billing' => [
@@ -563,7 +563,7 @@ class CustomerRepositoryTest extends \PHPUnit\Framework\TestCase
      *
      * @return array
      */
-    public function searchCustomersDataProvider()
+    public static function searchCustomersDataProvider()
     {
         $builder = Bootstrap::getObjectManager()->create(FilterBuilder::class);
         return [

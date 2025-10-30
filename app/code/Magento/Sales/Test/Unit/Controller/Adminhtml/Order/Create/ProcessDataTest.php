@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -137,7 +137,7 @@ class ProcessDataTest extends TestCase
             ->getMock();
         $this->resultForwardFactory = $this->getMockBuilder(ForwardFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
 
         $this->resultForwardFactory->expects($this->once())
@@ -241,7 +241,7 @@ class ProcessDataTest extends TestCase
     /**
      * @return array
      */
-    public function isApplyDiscountDataProvider()
+    public static function isApplyDiscountDataProvider()
     {
         return [
             [true, '123'],

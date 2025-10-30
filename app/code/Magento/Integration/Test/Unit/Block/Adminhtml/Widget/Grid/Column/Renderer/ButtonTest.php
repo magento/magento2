@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -85,7 +85,8 @@ class ButtonTest extends TestCase
     {
         $column = $this->getMockBuilder(Column::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getType', 'getId', 'getIndex', 'getStyle', 'getOnclick'])
+            ->onlyMethods(['getId'])
+            ->addMethods(['getType', 'getIndex', 'getStyle', 'getOnclick'])
             ->getMock();
         $column->expects($this->any())
             ->method('getType')

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -51,16 +51,16 @@ class SearchDataTest extends TestCase
     {
         $this->dataProvider = $this->getMockBuilder(SuggestedQueriesInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getItems', 'isResultsCountEnabled'])
+            ->onlyMethods(['getItems', 'isResultsCountEnabled'])
             ->getMockForAbstractClass();
 
         $this->searchQueryMock = $this->getMockBuilder(QueryInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getQueryText'])
+            ->onlyMethods(['getQueryText'])
             ->getMockForAbstractClass();
         $this->queryFactoryMock = $this->getMockBuilder(QueryFactoryInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['get'])
+            ->onlyMethods(['get'])
             ->getMockForAbstractClass();
         $this->queryFactoryMock->expects($this->once())
             ->method('get')
@@ -78,7 +78,7 @@ class SearchDataTest extends TestCase
                     [],
                 ]
             )
-            ->setMethods(['getUrl'])
+            ->onlyMethods(['getUrl'])
             ->getMockForAbstractClass();
     }
 

@@ -1,8 +1,7 @@
 <?php
 /**
- *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -107,7 +106,7 @@ class EsiTest extends TestCase
 
         $regexFactoryMock = $this->getMockBuilder(RegexFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
 
         $regexObject = new Regex(self::VALIDATION_RULE_PATTERN);
@@ -189,7 +188,7 @@ class EsiTest extends TestCase
     /**
      * @return array
      */
-    public function executeDataProvider()
+    public static function executeDataProvider()
     {
         return [
             [StubBlock::class, true],

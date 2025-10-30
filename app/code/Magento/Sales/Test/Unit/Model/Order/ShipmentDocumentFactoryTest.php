@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -102,7 +102,7 @@ class ShipmentDocumentFactoryTest extends TestCase
 
         $this->shipmentMock = $this->getMockBuilder(ShipmentInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['addComment', 'addTrack', 'setCustomerNote', 'setCustomerNoteNotify'])
+            ->addMethods(['addComment', 'addTrack', 'setCustomerNote', 'setCustomerNoteNotify'])
             ->getMockForAbstractClass();
 
         $this->hydratorPoolMock = $this->getMockBuilder(HydratorPool::class)
@@ -110,7 +110,7 @@ class ShipmentDocumentFactoryTest extends TestCase
             ->getMock();
 
         $this->trackFactoryMock = $this->getMockBuilder(TrackFactory::class)
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
 

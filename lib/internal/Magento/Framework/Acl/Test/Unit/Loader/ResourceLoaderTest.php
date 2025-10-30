@@ -31,8 +31,15 @@ class ResourceLoaderTest extends TestCase
         $acl->expects($this->exactly(2))->method('addResource');
         $acl
             ->method('addResource')
-            ->withConsecutive([$aclResource, null], [$aclResource, $aclResource])
-            ->willReturnOnConsecutiveCalls($acl, $acl);
+            ->willReturnCallback(
+                function ($arg1, $arg2) use ($aclResource, $acl) {
+                    if ($arg1 == $aclResource && $arg2 == null) {
+                        return $acl;
+                    } elseif ($arg1 == $aclResource && $arg2 == $aclResource) {
+                        return $acl;
+                    }
+                }
+            );
 
         $factoryObject = $this->createPartialMock(AclResourceFactory::class, ['createResource']);
         $factoryObject->expects($this->any())->method('createResource')->willReturn($aclResource);

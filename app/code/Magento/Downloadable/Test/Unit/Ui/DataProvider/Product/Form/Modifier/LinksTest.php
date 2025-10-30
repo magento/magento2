@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -151,11 +151,11 @@ class LinksTest extends TestCase
     /**
      * @return array
      */
-    public function modifyDataDataProvider()
+    public static function modifyDataDataProvider()
     {
         return [
-            ['isPurchasedSeparatelyBool' => true, 'PurchasedSeparatelyStr' => '1'],
-            ['isPurchasedSeparatelyBool' => false, 'PurchasedSeparatelyStr' => '0'],
+            ['isPurchasedSeparatelyBool' => true, 'isPurchasedSeparatelyStr' => '1'],
+            ['isPurchasedSeparatelyBool' => false, 'isPurchasedSeparatelyStr' => '0'],
         ];
     }
 
@@ -185,7 +185,7 @@ class LinksTest extends TestCase
         $currencyMock->expects($this->once())
             ->method('getCurrencySymbol');
         $storeMock = $this->getMockBuilder(StoreInterface::class)
-            ->setMethods(['getBaseCurrency'])
+            ->addMethods(['getBaseCurrency'])
             ->getMockForAbstractClass();
         $storeMock->expects($this->once())
             ->method('getBaseCurrency')

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Config\Model\Config\Source\Locale;
@@ -44,7 +44,7 @@ class Currency implements \Magento\Framework\Option\ArrayInterface
      */
     public function __construct(
         ListsInterface $localeLists,
-        ScopeConfigInterface $config = null
+        ?ScopeConfigInterface $config = null
     ) {
         $this->_localeLists = $localeLists;
         $this->config = $config ?: ObjectManager::getInstance()->get(ScopeConfigInterface::class);

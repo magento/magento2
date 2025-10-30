@@ -85,7 +85,7 @@ XML;
     /**
      * @return array
      */
-    public function assocToXmlExceptionDataProvider()
+    public static function assocToXmlExceptionDataProvider()
     {
         return [[[], ''], [[], 0], [[1, 2, 3]], [['root' => 1], 'root']];
     }

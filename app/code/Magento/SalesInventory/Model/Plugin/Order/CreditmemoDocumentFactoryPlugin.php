@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2022 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -39,9 +39,9 @@ class CreditmemoDocumentFactoryPlugin
         CreditmemoInterface $creditmemo,
         OrderInterface $order,
         array $items = [],
-        CreditmemoCommentCreationInterface $comment = null,
+        ?CreditmemoCommentCreationInterface $comment = null,
         $appendComment = false,
-        CreditmemoCreationArgumentsInterface $arguments = null
+        ?CreditmemoCreationArgumentsInterface $arguments = null
     ): CreditmemoInterface {
         if ($arguments !== null
             && $arguments->getExtensionAttributes() !== null
@@ -75,9 +75,9 @@ class CreditmemoDocumentFactoryPlugin
         CreditmemoInterface $creditmemo,
         InvoiceInterface $invoice,
         array $items = [],
-        CreditmemoCommentCreationInterface $comment = null,
+        ?CreditmemoCommentCreationInterface $comment = null,
         $appendComment = false,
-        CreditmemoCreationArgumentsInterface $arguments = null
+        ?CreditmemoCreationArgumentsInterface $arguments = null
     ): CreditmemoInterface {
         if ($arguments !== null
             && $arguments->getExtensionAttributes() !== null
