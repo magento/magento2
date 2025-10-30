@@ -32,9 +32,8 @@
             <actionGroup ref="AdminDeleteReviewsByUserNicknameActionGroup" stepKey="deleteCustomerReview"/>
             <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearNickNameReviewFilters"/>
             <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer" />
-            <actionGroup ref="AdminDeleteCustomerActionGroup" stepKey="deleteCustomer">
-                <argument name="customerEmail" value="CustomerEntityOne.email"/>
-            </actionGroup>
+            <!-- Delete all customers created during test execution using grid select all -->
+            <actionGroup ref="AdminDeleteAllCustomerActionGroup" stepKey="deleteCustomer"/>
             <deleteData createDataKey="createProduct1" stepKey="deleteProduct1"/>
             <deleteData createDataKey="createProduct2" stepKey="deleteProduct2"/>
             <deleteData createDataKey="category" stepKey="deleteCategory"/>

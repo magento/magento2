@@ -29,6 +29,7 @@
         <after>
             <deleteData createDataKey="createSimpleProduct" stepKey="deleteSimpleProduct"/>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
             <wait stepKey="k1" time="10"/>
             <!-- Go to Admin > Store > Configuration > Sales > Multishipping, Choose YES to mutishipping which is the default state-->
             <amOnPage url="{{MultishippingAdminConfigPage.url}}" stepKey="NavigateToMultishippingOptions"/>

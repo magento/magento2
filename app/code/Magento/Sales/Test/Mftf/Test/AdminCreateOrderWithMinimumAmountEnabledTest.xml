@@ -37,6 +37,7 @@
             <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
             <createData entity="DisabledMinimumOrderAmount" stepKey="disableMinimumOrderAmount"/>
             <actionGroup ref="ClearCacheActionGroup" stepKey="clearCacheAfter"/>
+            <actionGroup ref="AdminDeleteAllCustomerActionGroup" stepKey="deleteAllCustomers"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="amOnLogoutPage"/>
         </after>
 

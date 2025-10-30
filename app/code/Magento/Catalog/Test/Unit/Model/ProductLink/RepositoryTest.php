@@ -298,4 +298,16 @@ class RepositoryTest extends TestCase
 
         $this->model->delete($entityMock);
     }
+
+    public function testSaveWithNullLinkedProductSku()
+    {
+        $this->expectException('Magento\Framework\Exception\CouldNotSaveException');
+        $this->expectExceptionMessage('The linked product SKU is invalid. Verify the data and try again.');
+
+        $entityMock = $this->createMock(\Magento\Catalog\Model\ProductLink\Link::class);
+        $entityMock->expects($this->any())->method('getSku')->willReturn('sku1');
+        $entityMock->expects($this->any())->method('getLinkedProductSku')->willReturn(null);
+
+        $this->model->save($entityMock);
+    }
 }
