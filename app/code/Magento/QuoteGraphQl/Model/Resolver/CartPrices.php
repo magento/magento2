@@ -17,7 +17,6 @@ use Magento\Framework\Api\DataObjectHelper;
 use Magento\Framework\Api\ExtensibleDataInterface;
 use Magento\Quote\Api\Data\TotalsInterface as QuoteTotalsInterface;
 use Magento\Quote\Api\Data\TotalsInterfaceFactory;
-use Magento\Quote\Api\Data\TotalsExtensionInterfaceFactory;
 use Magento\Quote\Model\Quote;
 use Magento\Quote\Model\Quote\Address\Total;
 use Magento\Quote\Model\Cart\Totals as CartTotals;
@@ -57,23 +56,16 @@ class CartPrices implements ResolverInterface
     private DataObjectHelper $dataObjectHelper;
 
     /**
-     * @var TotalsExtensionInterfaceFactory
-     */
-    private TotalsExtensionInterfaceFactory $totalsExtension;
-
-    /**
      * @param TotalsCollector $totalsCollector
      * @param ScopeConfigInterface|null $scopeConfig
      * @param TotalsInterfaceFactory|null $totalsFactory
      * @param DataObjectHelper|null $dataObjectHelper
-     * @param TotalsExtensionInterfaceFactory|null $totalsExtensionFactory
-     */
+     * */
     public function __construct(
         TotalsCollector $totalsCollector,
         ?ScopeConfigInterface $scopeConfig = null,
         ?TotalsInterfaceFactory $totalsFactory = null,
-        ?DataObjectHelper $dataObjectHelper = null,
-        ?TotalsExtensionInterfaceFactory $totalsExtensionFactory = null
+        ?DataObjectHelper $dataObjectHelper = null
     ) {
         $this->totalsCollector = $totalsCollector;
         $this->scopeConfig = $scopeConfig ??  ObjectManager::getInstance()->get(ScopeConfigInterface::class);
@@ -81,8 +73,6 @@ class CartPrices implements ResolverInterface
             ObjectManager::getInstance()->get(TotalsInterfaceFactory::class);
         $this->dataObjectHelper = $dataObjectHelper ??
             ObjectManager::getInstance()->get(DataObjectHelper::class);
-        $this->totalsExtension = $totalsExtensionFactory ??
-            ObjectManager::getInstance()->get(TotalsExtensionInterfaceFactory::class);
     }
 
     /**
@@ -98,9 +88,11 @@ class CartPrices implements ResolverInterface
         $quote = $value['model'];
         $currency = $quote->getQuoteCurrencyCode();
 
-        if (!$quote->isVirtual() && $info->operation->operation == self::QUERY_TYPE) {
+        if (!$quote->isVirtual() &&
+            $info->operation->operation == self::QUERY_TYPE &&
+            !array_key_exists('discounts', $info->getFieldSelection(1))
+        ) {
             $addressTotalsData = $quote->getShippingAddress()->getData();
-            $extensionAttributes = $quote->getShippingAddress()->getExtensionAttributes()->__toArray();
             unset($addressTotalsData[ExtensibleDataInterface::EXTENSION_ATTRIBUTES_KEY]);
             $cartTotals = $this->totalsFactory->create();
             $this->dataObjectHelper->populateWithArray(
@@ -108,16 +100,6 @@ class CartPrices implements ResolverInterface
                 $addressTotalsData,
                 QuoteTotalsInterface::class
             );
-
-            if ($extensionAttributes) {
-                $newExtensionAttributes = $this->totalsExtension->create();
-                $this->dataObjectHelper->populateWithArray(
-                    $newExtensionAttributes,
-                    $extensionAttributes,
-                    \Magento\Quote\Api\Data\TotalsExtensionInterface::class
-                );
-                $cartTotals->setExtensionAttributes($newExtensionAttributes);
-            }
 
             if (isset($addressTotalsData['discount_description'])) {
                 $cartTotals->setDiscountDescription($addressTotalsData['discount_description']);
