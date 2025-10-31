@@ -171,7 +171,7 @@ input CartAddressInput @doc(description: "Defines the billing or shipping addres
     region_id: Int @doc(description: "An integer that defines the state or province of the billing or shipping address.")
     postcode: String @doc(description: "The ZIP or postal code of the billing or shipping address.")
     country_code: String! @doc(description: "The country code and label for the billing or shipping address.")
-    telephone: String @doc(description: "The telephone number for the billing or shipping address.")
+    telephone: String! @doc(description: "The telephone number for the billing or shipping address.")
     vat_id: String @doc(description: "The VAT company number for billing or shipping address.")
     save_in_address_book: Boolean @doc(description: "Determines whether to save the address in the customer's address book. The default value is true.")
     fax: String @doc(description: "The customer's fax number.")

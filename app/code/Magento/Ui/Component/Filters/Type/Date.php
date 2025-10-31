@@ -6,6 +6,10 @@
 
 namespace Magento\Ui\Component\Filters\Type;
 
+use Magento\Framework\Api\FilterBuilder;
+use Magento\Framework\View\Element\UiComponent\ContextInterface;
+use Magento\Framework\View\Element\UiComponentFactory;
+use Magento\Ui\Component\Filters\FilterModifier;
 use Magento\Ui\Component\Form\Element\DataType\Date as DataTypeDate;
 
 /**
@@ -16,24 +20,47 @@ use Magento\Ui\Component\Form\Element\DataType\Date as DataTypeDate;
  */
 class Date extends AbstractFilter
 {
-    const NAME = 'filter_date';
+    public const NAME = 'filter_date';
 
-    const COMPONENT = 'date';
+    public const COMPONENT = 'date';
 
     /**
-     * Wrapped component
-     *
      * @var DataTypeDate
      */
     protected $wrappedComponent;
 
     /**
-     * Date format
-     *
      * @var string
      * @since 100.1.2
      */
     protected static $dateFormat = 'Y-m-d H:i:s';
+
+    /**
+     * @var bool
+     */
+    private bool $userDefined;
+
+    /**
+     * @param ContextInterface $context
+     * @param UiComponentFactory $uiComponentFactory
+     * @param FilterBuilder $filterBuilder
+     * @param FilterModifier $filterModifier
+     * @param array $components
+     * @param array $data
+     * @param bool $userDefined
+     */
+    public function __construct(
+        ContextInterface $context,
+        UiComponentFactory $uiComponentFactory,
+        FilterBuilder $filterBuilder,
+        FilterModifier $filterModifier,
+        array $components = [],
+        array $data = [],
+        bool $userDefined = false
+    ) {
+        $this->userDefined = $userDefined;
+        parent::__construct($context, $uiComponentFactory, $filterBuilder, $filterModifier, $components, $data);
+    }
 
     /**
      * Prepare component configuration
@@ -128,7 +155,7 @@ class Date extends AbstractFilter
      * @param int $hour
      * @param int $minute
      * @param int $second
-     * @return \DateTime
+     * @return \DateTime|null
      */
     private function convertDatetime(string $value, int $hour = 0, int $minute = 0, int $second = 0): ?\DateTime
     {
@@ -137,12 +164,13 @@ class Date extends AbstractFilter
                 $value,
                 !$this->getData('config/skipTimeZoneConversion')
             )
-            : $this->wrappedComponent->convertDate(
+            : $this->wrappedComponent->convertDateWithTimezone(
                 $value,
                 $hour,
                 $minute,
                 $second,
-                !$this->getData('config/skipTimeZoneConversion')
+                !$this->getData('config/skipTimeZoneConversion'),
+                !$this->userDefined
             );
 
         return $value;
