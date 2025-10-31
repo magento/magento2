@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright 2015 Adobe
+ * Copyright 2014 Adobe
  * All Rights Reserved.
  */
 declare(strict_types=1);
@@ -16,6 +16,7 @@ use Magento\Quote\Api\Data\AddressInterface;
 use Magento\Quote\Model\Quote;
 use Magento\Quote\Model\Quote\TotalsCollector;
 use Magento\Quote\Model\QuoteAddressValidator;
+use Magento\Quote\Model\QuoteAddressValidationService;
 use Magento\Quote\Model\ShippingAddressManagement;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
@@ -63,6 +64,11 @@ class ShippingAddressManagementTest extends TestCase
     private $quoteMock;
 
     /**
+     * @var QuoteAddressValidationService
+     */
+    private $quoteAddressValidationServiceMock;
+
+    /**
      * @inheritdoc
      */
     protected function setUp(): void
@@ -74,13 +80,15 @@ class ShippingAddressManagementTest extends TestCase
         $this->scopeConfigMock = $this->createMock(ScopeConfigInterface::class);
         $this->totalsCollectorMock = $this->createMock(TotalsCollector::class);
         $this->quoteMock = $this->createMock(Quote::class);
+        $this->quoteAddressValidationServiceMock = $this->createMock(QuoteAddressValidationService::class);
         $this->model = new ShippingAddressManagement(
             $this->quoteRepositoryMock,
             $this->addressValidatorMock,
             $this->loggerMock,
             $this->addressRepositoryMock,
             $this->scopeConfigMock,
-            $this->totalsCollectorMock
+            $this->totalsCollectorMock,
+            $this->quoteAddressValidationServiceMock
         );
     }
 
@@ -149,6 +157,14 @@ class ShippingAddressManagementTest extends TestCase
         $this->quoteMock
             ->method('getShippingAddress')
             ->willReturn($addressMock);
+        $this->quoteAddressValidationServiceMock
+            ->expects($this->once())
+            ->method('validateAddressesWithRules')
+            ->with(
+                $this->isInstanceOf(Quote::class),
+                $addressMock,
+                null
+            );
         $this->model->assign($cartId, $addressMock);
     }
 
