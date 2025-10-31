@@ -1271,6 +1271,7 @@ XMLRequest;
             $rateResponseData = json_decode($rateResponse, true);
             if ($rateResponseData['RateResponse']['Response']['ResponseStatus']['Description'] === 'Success') {
                 $arr = $rateResponseData['RateResponse']['RatedShipment'] ?? [];
+                if (array_key_exists("Service", $arr)) $arr = [$arr];
                 $allowedMethods = explode(",", $this->getConfigData('allowed_methods') ?? '');
 
                 $allowedCurrencies = $this->_currencyFactory->create()->getConfigAllowCurrencies();
