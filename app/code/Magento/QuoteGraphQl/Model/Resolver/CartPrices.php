@@ -1,20 +1,4 @@
-<?php
-/**
- * Copyright 2025 Adobe
- * * All Rights Reserved.
- */
-declare(strict_types=1);
-
-namespace Magento\QuoteGraphQl\Model\Resolver;
-
-use Magento\Framework\App\Config\ScopeConfigInterface;
-use Magento\Framework\App\ObjectManager;
-use Magento\Framework\Exception\LocalizedException;
-use Magento\Framework\GraphQl\Config\Element\Field;
-use Magento\Framework\GraphQl\Query\ResolverInterface;
-use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
-use Magento\Framework\Api\DataObjectHelper;
-use Magento\Framework\Api\ExtensibleDataInterface;
+\ExtensibleDataInterface;
 use Magento\Quote\Api\Data\TotalsInterface as QuoteTotalsInterface;
 use Magento\Quote\Api\Data\TotalsInterfaceFactory;
 use Magento\Quote\Model\Quote;
@@ -48,19 +32,6 @@ class CartPrices implements ResolverInterface
 
     /**
      * @var TotalsInterfaceFactory
-<<<<<<< HEAD
-=======
-     */
-    private TotalsInterfaceFactory $totalsFactory;
-
-    /**
-     * @var DataObjectHelper
-     */
-    private DataObjectHelper $dataObjectHelper;
-
-    /**
-     * @var TotalsExtensionInterfaceFactory
->>>>>>> 7f7f37d6a0f (Merge conflict resolved)
      */
     private TotalsInterfaceFactory $totalsFactory;
 
@@ -74,22 +45,12 @@ class CartPrices implements ResolverInterface
      * @param ScopeConfigInterface|null $scopeConfig
      * @param TotalsInterfaceFactory|null $totalsFactory
      * @param DataObjectHelper|null $dataObjectHelper
-<<<<<<< HEAD
      * */
-=======
-     * @param TotalsExtensionInterfaceFactory|null $totalsExtensionFactory
-     */
->>>>>>> 7f7f37d6a0f (Merge conflict resolved)
     public function __construct(
         TotalsCollector $totalsCollector,
         ?ScopeConfigInterface $scopeConfig = null,
         ?TotalsInterfaceFactory $totalsFactory = null,
-<<<<<<< HEAD
         ?DataObjectHelper $dataObjectHelper = null
-=======
-        ?DataObjectHelper $dataObjectHelper = null,
-        ?TotalsExtensionInterfaceFactory $totalsExtensionFactory = null
->>>>>>> 7f7f37d6a0f (Merge conflict resolved)
     ) {
         $this->totalsCollector = $totalsCollector;
         $this->scopeConfig = $scopeConfig ??  ObjectManager::getInstance()->get(ScopeConfigInterface::class);
@@ -97,11 +58,6 @@ class CartPrices implements ResolverInterface
             ObjectManager::getInstance()->get(TotalsInterfaceFactory::class);
         $this->dataObjectHelper = $dataObjectHelper ??
             ObjectManager::getInstance()->get(DataObjectHelper::class);
-<<<<<<< HEAD
-=======
-        $this->totalsExtension = $totalsExtensionFactory ??
-            ObjectManager::getInstance()->get(TotalsExtensionInterfaceFactory::class);
->>>>>>> 7f7f37d6a0f (Merge conflict resolved)
     }
 
     /**
@@ -132,19 +88,6 @@ class CartPrices implements ResolverInterface
                 QuoteTotalsInterface::class
             );
 
-<<<<<<< HEAD
-=======
-            if ($extensionAttributes) {
-                $newExtensionAttributes = $this->totalsExtension->create();
-                $this->dataObjectHelper->populateWithArray(
-                    $newExtensionAttributes,
-                    $extensionAttributes,
-                    \Magento\Quote\Api\Data\TotalsExtensionInterface::class
-                );
-                $cartTotals->setExtensionAttributes($newExtensionAttributes);
-            }
-
->>>>>>> 7f7f37d6a0f (Merge conflict resolved)
             if (isset($addressTotalsData['discount_description'])) {
                 $cartTotals->setDiscountDescription($addressTotalsData['discount_description']);
             }
