@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2022 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -61,6 +61,7 @@ class RedisRequestLogger implements RequestLoggerInterface
     public function incrAndGetFor(ContextInterface $context, int $timeSlot, int $discardAfter): int
     {
         $id = $this->generateId($context, $timeSlot);
+        $this->redisClient->pipeline();
         $this->redisClient->incrBy($id, 1);
         $this->redisClient->expireAt($id, time() + $discardAfter);
 

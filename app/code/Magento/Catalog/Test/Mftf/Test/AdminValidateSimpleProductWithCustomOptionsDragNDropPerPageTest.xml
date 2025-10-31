@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
-  */
+/**
+ * Copyright 2022 Adobe
+ * All Rights Reserved.
+ */
 -->
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -18,7 +18,10 @@
             <testCaseId value="AC-6086"/>
             <useCaseId value="ACP2E-980"/>
             <group value="SimpleProduct"/>
+            <group value="pr_exclude"/>
         </annotations>
+
+        <scrollTo selector="{{AdminProductCustomizableOptionsSection.customizableOptions}}" stepKey="scrollToCustomOptions"/>
 
         <!-- Create two more custom options with 2 values -->
         <actionGroup ref="AdminCreateCustomDropDownOptionsActionGroup" stepKey="createSecondCustomOption">

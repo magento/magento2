@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Sales\Block\Adminhtml\Order\View;
 
@@ -132,9 +132,9 @@ class History extends \Magento\Backend\Block\Template
     /**
      * Replace links in string
      *
-     * @param array|string $data
+     * @param string|int|float|\Stringable|array<string|int|float|\Stringable> $data
      * @param null|array $allowedTags
-     * @return string
+     * @return ($data is array ? string[] : string)
      */
     public function escapeHtml($data, $allowedTags = null)
     {

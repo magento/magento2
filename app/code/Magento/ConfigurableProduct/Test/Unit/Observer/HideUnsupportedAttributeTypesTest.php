@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -91,7 +91,7 @@ class HideUnsupportedAttributeTypesTest extends TestCase
      * @return EventObserver|\PHPUnit\Framework\MockObject\MockObject
      * @internal param null|MockObject $block
      */
-    private function createEventMock(MockObject $form = null)
+    private function createEventMock(?MockObject $form = null)
     {
         $event = $this->getMockBuilder(EventObserver::class)
             ->addMethods(['getForm', 'getBlock'])

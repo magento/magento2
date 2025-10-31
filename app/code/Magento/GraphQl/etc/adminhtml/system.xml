@@ -1,10 +1,8 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Representation of Webapi module in System Configuration (Magento admin panel).
- *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
@@ -23,6 +21,19 @@
                     <config_path>graphql/validation/maximum_page_size</config_path>
                     <depends>
                         <field id="input_limit_enabled">1</field>
+                    </depends>
+                </field>
+                <field id="alias_limit_enabled" translate="label" type="select" sortOrder="5" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <label>Enable Maximum Alias Limit</label>
+                    <config_path>graphql/validation/alias_limit_enabled</config_path>
+                </field>
+                <field id="maximum_alias_allowed" translate="label comment" type="text" sortOrder="15" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Maximum Alias Allowed</label>
+                    <comment>Maximum number of aliases allowed in a graphql request.</comment>
+                    <config_path>graphql/validation/maximum_alias_allowed</config_path>
+                    <depends>
+                        <field id="alias_limit_enabled">1</field>
                     </depends>
                 </field>
             </group>

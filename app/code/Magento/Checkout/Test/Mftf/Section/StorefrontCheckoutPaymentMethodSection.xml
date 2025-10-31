@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
-  */
+/**
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
+ */
 -->
 
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -19,5 +19,6 @@
         <element name="purchaseOrderNumber" type="input" selector="#po_number"/>
         <element name="checkPaypalExpress" type="radio" selector="//div/input[@id='paypal_express']"/>
         <element name="checkPaypalExpressActive" type="radio" selector="//div[@class='payment-method _active']/div/input[@id='paypal_express']"/>
+        <element name="paymentMethod" type="radio" selector="//dl[@class='checkout-payment-method']//label[contains(., '{{methodName}}')]/../..//input" parameterized="true"/>
     </section>
 </sections>

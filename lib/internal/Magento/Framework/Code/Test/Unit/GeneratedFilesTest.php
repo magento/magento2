@@ -164,7 +164,7 @@ class GeneratedFilesTest extends TestCase
      * @param bool|null $lockResult
      * @return void
      */
-    private function expectLockOperation(int $times, bool $lockResult = null): void
+    private function expectLockOperation(int $times, ?bool $lockResult = null): void
     {
         $invocationMocker = $this->lockManager->expects($this->exactly($times))
             ->method('lock')
@@ -182,7 +182,7 @@ class GeneratedFilesTest extends TestCase
      * @param bool|null $unlockResult
      * @return void
      */
-    private function expectUnlockOperation(int $times, bool $unlockResult = null): void
+    private function expectUnlockOperation(int $times, ?bool $unlockResult = null): void
     {
         $invocationMocker = $this->lockManager->expects($this->exactly($times))
             ->method('unlock')

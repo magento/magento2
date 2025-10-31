@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -392,5 +392,21 @@ class VaultTest extends TestCase
             ['configValue' => null, 'paymentValue' => false, 'expected' => false],
             ['configValue' => null, 'paymentValue' => null, 'expected' => false],
         ];
+    }
+
+    public function testSetStore(): void
+    {
+        $storeId = 2;
+        /** @var Vault $model */
+        $model = $this->objectManager->getObject(
+            Vault::class,
+            [
+                'vaultProvider' => $this->vaultProvider,
+            ]
+        );
+        $this->vaultProvider->expects($this->once())
+            ->method('setStore')
+            ->willReturn($storeId);
+        $model->setStore($storeId);
     }
 }

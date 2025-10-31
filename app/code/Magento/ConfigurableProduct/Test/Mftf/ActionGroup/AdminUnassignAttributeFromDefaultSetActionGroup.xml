@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright 2025 Adobe
+  * All Rights Reserved.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminUnassignAttributeFromDefaultSetActionGroup">
+        <annotations>
+            <description>Unassign given attribute from default attribute set</description>
+        </annotations>
+        <arguments>
+            <argument name="ProductAttributeCode" type="string"/>
+        </arguments>
+        <amOnPage url="{{AdminProductAttributeSetGridPage.url}}" stepKey="goToAttributeSetPage"/>
+        <click selector="{{AdminProductAttributeSetGridSection.resetFilter}}" stepKey="clickResetButton"/>
+        <fillField selector="{{AdminProductAttributeSetGridSection.filter}}" userInput="Default" stepKey="filterByName"/>
+        <click selector="{{AdminProductAttributeSetGridSection.searchBtn}}" stepKey="clickSearchBtn"/>
+        <click selector="{{AdminProductAttributeSetGridSection.nthRow('1')}}" stepKey="clickFirstRow"/>
+        <waitForPageLoad stepKey="waitForSelectCustomGroup"/>
+        <dragAndDrop selector1="{{AdminProductAttributeSetSection.attribute(ProductAttributeCode)}}" selector2="{{AdminProductAttributeSetSection.attribute('manufacturer')}}" stepKey="unassignAttributeFromDefaultAttributeSet"/>
+        <click selector="{{AdminProductAttributeSetSection.saveBtn}}" stepKey="clickSaveDefaultAttributeSet"/>
+    </actionGroup>
+</actionGroups>

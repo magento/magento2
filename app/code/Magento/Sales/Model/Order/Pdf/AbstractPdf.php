@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Sales\Model\Order\Pdf;
@@ -177,7 +177,7 @@ abstract class AbstractPdf extends \Magento\Framework\DataObject
         \Magento\Framework\Translate\Inline\StateInterface $inlineTranslation,
         \Magento\Sales\Model\Order\Address\Renderer $addressRenderer,
         array $data = [],
-        Database $fileStorageDatabase = null,
+        ?Database $fileStorageDatabase = null,
         ?RtlTextHandler $rtlTextHandler = null,
         ?Image $image = null,
         ?TaxHelper $taxHelper = null

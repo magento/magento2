@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Catalog\Model\Indexer\Category\Product\Action;
 
@@ -29,8 +29,6 @@ use Magento\Indexer\Model\WorkingStateProvider;
 class Rows extends \Magento\Catalog\Model\Indexer\Category\Product\AbstractAction
 {
     /**
-     * Limitation by categories
-     *
      * @var int[]
      */
     protected $limitationByCategories;
@@ -72,12 +70,12 @@ class Rows extends \Magento\Catalog\Model\Indexer\Category\Product\AbstractActio
         ResourceConnection $resource,
         StoreManagerInterface $storeManager,
         Config $config,
-        QueryGenerator $queryGenerator = null,
-        MetadataPool $metadataPool = null,
+        ?QueryGenerator $queryGenerator = null,
+        ?MetadataPool $metadataPool = null,
         ?TableMaintainer $tableMaintainer = null,
-        CacheContext $cacheContext = null,
-        EventManagerInterface $eventManager = null,
-        IndexerRegistry $indexerRegistry = null,
+        ?CacheContext $cacheContext = null,
+        ?EventManagerInterface $eventManager = null,
+        ?IndexerRegistry $indexerRegistry = null,
         ?WorkingStateProvider $workingStateProvider = null
     ) {
         parent::__construct($resource, $storeManager, $config, $queryGenerator, $metadataPool, $tableMaintainer);

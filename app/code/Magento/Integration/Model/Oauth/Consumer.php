@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Integration\Model\Oauth;
 
@@ -62,8 +62,8 @@ class Consumer extends \Magento\Framework\Model\AbstractModel implements Consume
         \Magento\Integration\Model\Oauth\Consumer\Validator\KeyLength $keyLength,
         \Magento\Framework\Url\Validator $urlValidator,
         \Magento\Integration\Helper\Oauth\Data $dataHelper,
-        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
-        \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
+        ?\Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
+        ?\Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
     ) {
         $this->keyLengthValidator = $keyLength;

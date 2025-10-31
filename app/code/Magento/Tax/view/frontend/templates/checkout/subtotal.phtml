@@ -1,17 +1,18 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
  */
 
 /**
  * @var $block \Magento\Tax\Block\Checkout\Subtotal
  * @see \Magento\Tax\Block\Checkout\Subtotal
  * @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer
+ * @var $escaper \Magento\Framework\Escaper
  */
 ?>
 <?php
-$style = $block->escapeHtmlAttr($block->getStyle());
+$style = $escaper->escapeHtmlAttr($block->getStyle());
 $colspan = (int) $block->getColspan();
 /** @var \Magento\Checkout\Helper\Data $checkoutHelper */
 $checkoutHelper = $block->getData('checkoutHelper');
@@ -19,9 +20,9 @@ $checkoutHelper = $block->getData('checkoutHelper');
 <?php if ($block->displayBoth()): ?>
 <tr class="totals sub excl">
     <th class="mark" colspan="<?= /* @noEscape */ $colspan ?>" scope="row">
-        <?= $block->escapeHtml(__('Subtotal (Excl. Tax)')) ?>
+        <?= $escaper->escapeHtml(__('Subtotal (Excl. Tax)')) ?>
     </th>
-    <tdclass="amount" data-th="<?= $block->escapeHtmlAttr(__('Subtotal (Excl. Tax)')) ?>">
+    <td class="amount" data-th="<?= $escaper->escapeHtmlAttr(__('Subtotal (Excl. Tax)')) ?>">
         <?= /* @noEscape */ $checkoutHelper->formatPrice($block->getTotal()->getValueExclTax()) ?>
     </td>
 </tr>
@@ -31,9 +32,9 @@ $checkoutHelper = $block->getData('checkoutHelper');
     <?php endif; ?>
 <tr class="totals sub incl">
     <th class="mark" colspan="<?= /* @noEscape */ $colspan ?>" scope="row">
-        <?= $block->escapeHtml(__('Subtotal (Incl. Tax)')) ?>
+        <?= $escaper->escapeHtml(__('Subtotal (Incl. Tax)')) ?>
     </th>
-    <td class="amount" data-th="<?= $block->escapeHtmlAttr(__('Subtotal (Incl. Tax)')) ?>">
+    <td class="amount" data-th="<?= $escaper->escapeHtmlAttr(__('Subtotal (Incl. Tax)')) ?>">
         <?= /* @noEscape */ $checkoutHelper->formatPrice($block->getTotal()->getValueInclTax()) ?>
     </td>
 </tr>
@@ -44,9 +45,9 @@ $checkoutHelper = $block->getData('checkoutHelper');
 <?php else: ?>
 <tr class="totals sub">
     <th class="mark" colspan="<?= /* @noEscape */ $colspan ?>" scope="row">
-        <?= $block->escapeHtml($block->getTotal()->getTitle()) ?>
+        <?= $escaper->escapeHtml($block->getTotal()->getTitle()) ?>
     </th>
-    <td class="amount" data-th="<?= $block->escapeHtmlAttr($block->getTotal()->getTitle()) ?>">
+    <td class="amount" data-th="<?= $escaper->escapeHtmlAttr($block->getTotal()->getTitle()) ?>">
         <?= /* @noEscape */ $checkoutHelper->formatPrice($block->getTotal()->getValue()) ?>
     </td>
 </tr>

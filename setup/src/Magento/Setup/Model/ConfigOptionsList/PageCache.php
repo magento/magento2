@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Setup\Model\ConfigOptionsList;
@@ -21,6 +21,8 @@ class PageCache implements ConfigOptionsListInterface
 {
     public const INPUT_VALUE_PAGE_CACHE_REDIS = 'redis';
     public const CONFIG_VALUE_PAGE_CACHE_REDIS = \Magento\Framework\Cache\Backend\Redis::class;
+    public const INPUT_VALUE_PAGE_CACHE_VALKEY = 'valkey';
+    public const CONFIG_VALUE_PAGE_CACHE_VALKEY = \Magento\Framework\Cache\Backend\Valkey::class;
 
     public const INPUT_KEY_PAGE_CACHE_BACKEND = 'page-cache';
     public const INPUT_KEY_PAGE_CACHE_BACKEND_REDIS_SERVER = 'page-cache-redis-server';
@@ -29,6 +31,12 @@ class PageCache implements ConfigOptionsListInterface
     public const INPUT_KEY_PAGE_CACHE_BACKEND_REDIS_PASSWORD = 'page-cache-redis-password';
     public const INPUT_KEY_PAGE_CACHE_BACKEND_REDIS_COMPRESS_DATA = 'page-cache-redis-compress-data';
     public const INPUT_KEY_PAGE_CACHE_BACKEND_REDIS_COMPRESSION_LIB = 'page-cache-redis-compression-lib';
+    public const INPUT_KEY_PAGE_CACHE_BACKEND_VALKEY_SERVER = 'page-cache-valkey-server';
+    public const INPUT_KEY_PAGE_CACHE_BACKEND_VALKEY_DATABASE = 'page-cache-valkey-db';
+    public const INPUT_KEY_PAGE_CACHE_BACKEND_VALKEY_PORT = 'page-cache-valkey-port';
+    public const INPUT_KEY_PAGE_CACHE_BACKEND_VALKEY_PASSWORD = 'page-cache-valkey-password';
+    public const INPUT_KEY_PAGE_CACHE_BACKEND_VALKEY_COMPRESS_DATA = 'page-cache-valkey-compress-data';
+    public const INPUT_KEY_PAGE_CACHE_BACKEND_VALKEY_COMPRESSION_LIB = 'page-cache-valkey-compression-lib';
     public const INPUT_KEY_PAGE_CACHE_ID_PREFIX = 'page-cache-id-prefix';
 
     public const CONFIG_PATH_PAGE_CACHE_BACKEND = 'cache/frontend/page_cache/backend';
@@ -52,13 +60,20 @@ class PageCache implements ConfigOptionsListInterface
         self::INPUT_KEY_PAGE_CACHE_BACKEND_REDIS_PASSWORD => '',
         self::INPUT_KEY_PAGE_CACHE_BACKEND_REDIS_COMPRESS_DATA => '0',
         self::INPUT_KEY_PAGE_CACHE_BACKEND_REDIS_COMPRESSION_LIB => '',
+        self::INPUT_KEY_PAGE_CACHE_BACKEND_VALKEY_SERVER => '127.0.0.1',
+        self::INPUT_KEY_PAGE_CACHE_BACKEND_VALKEY_DATABASE => '1',
+        self::INPUT_KEY_PAGE_CACHE_BACKEND_VALKEY_PORT => '6379',
+        self::INPUT_KEY_PAGE_CACHE_BACKEND_VALKEY_PASSWORD => '',
+        self::INPUT_KEY_PAGE_CACHE_BACKEND_VALKEY_COMPRESS_DATA => '0',
+        self::INPUT_KEY_PAGE_CACHE_BACKEND_VALKEY_COMPRESSION_LIB => '',
     ];
 
     /**
      * @var array
      */
     private $validPageCacheOptions = [
-        self::INPUT_VALUE_PAGE_CACHE_REDIS
+        self::INPUT_VALUE_PAGE_CACHE_REDIS,
+        self::INPUT_VALUE_PAGE_CACHE_VALKEY
     ];
 
     /**
@@ -71,6 +86,19 @@ class PageCache implements ConfigOptionsListInterface
         self::INPUT_KEY_PAGE_CACHE_BACKEND_REDIS_PASSWORD => self::CONFIG_PATH_PAGE_CACHE_BACKEND_PASSWORD,
         self::INPUT_KEY_PAGE_CACHE_BACKEND_REDIS_COMPRESS_DATA => self::CONFIG_PATH_PAGE_CACHE_BACKEND_COMPRESS_DATA,
         self::INPUT_KEY_PAGE_CACHE_BACKEND_REDIS_COMPRESSION_LIB =>
+            self::CONFIG_PATH_PAGE_CACHE_BACKEND_COMPRESSION_LIB,
+    ];
+
+    /**
+     * @var array
+     */
+    private $inputKeyToValkeyConfigPathMap = [
+        self::INPUT_KEY_PAGE_CACHE_BACKEND_VALKEY_SERVER => self::CONFIG_PATH_PAGE_CACHE_BACKEND_SERVER,
+        self::INPUT_KEY_PAGE_CACHE_BACKEND_VALKEY_DATABASE => self::CONFIG_PATH_PAGE_CACHE_BACKEND_DATABASE,
+        self::INPUT_KEY_PAGE_CACHE_BACKEND_VALKEY_PORT => self::CONFIG_PATH_PAGE_CACHE_BACKEND_PORT,
+        self::INPUT_KEY_PAGE_CACHE_BACKEND_VALKEY_PASSWORD => self::CONFIG_PATH_PAGE_CACHE_BACKEND_PASSWORD,
+        self::INPUT_KEY_PAGE_CACHE_BACKEND_VALKEY_COMPRESS_DATA => self::CONFIG_PATH_PAGE_CACHE_BACKEND_COMPRESS_DATA,
+        self::INPUT_KEY_PAGE_CACHE_BACKEND_VALKEY_COMPRESSION_LIB =>
             self::CONFIG_PATH_PAGE_CACHE_BACKEND_COMPRESSION_LIB,
     ];
 
@@ -144,6 +172,42 @@ class PageCache implements ConfigOptionsListInterface
                 self::CONFIG_PATH_PAGE_CACHE_ID_PREFIX,
                 'ID prefix for cache keys'
             ),
+            new TextConfigOption(
+                self::INPUT_KEY_PAGE_CACHE_BACKEND_VALKEY_SERVER,
+                TextConfigOption::FRONTEND_WIZARD_TEXT,
+                self::CONFIG_PATH_PAGE_CACHE_BACKEND_SERVER,
+                'Valkey server'
+            ),
+            new TextConfigOption(
+                self::INPUT_KEY_PAGE_CACHE_BACKEND_VALKEY_DATABASE,
+                TextConfigOption::FRONTEND_WIZARD_TEXT,
+                self::CONFIG_PATH_PAGE_CACHE_BACKEND_DATABASE,
+                'Database number for the cache'
+            ),
+            new TextConfigOption(
+                self::INPUT_KEY_PAGE_CACHE_BACKEND_VALKEY_PORT,
+                TextConfigOption::FRONTEND_WIZARD_TEXT,
+                self::CONFIG_PATH_PAGE_CACHE_BACKEND_PORT,
+                'Valkey server listen port'
+            ),
+            new TextConfigOption(
+                self::INPUT_KEY_PAGE_CACHE_BACKEND_VALKEY_PASSWORD,
+                TextConfigOption::FRONTEND_WIZARD_TEXT,
+                self::CONFIG_PATH_PAGE_CACHE_BACKEND_PASSWORD,
+                'Valkey server password'
+            ),
+            new TextConfigOption(
+                self::INPUT_KEY_PAGE_CACHE_BACKEND_VALKEY_COMPRESS_DATA,
+                TextConfigOption::FRONTEND_WIZARD_TEXT,
+                self::CONFIG_PATH_PAGE_CACHE_BACKEND_COMPRESS_DATA,
+                'Set to 1 to compress the full page cache (use 0 to disable)'
+            ),
+            new TextConfigOption(
+                self::INPUT_KEY_PAGE_CACHE_BACKEND_VALKEY_COMPRESSION_LIB,
+                TextConfigOption::FRONTEND_WIZARD_TEXT,
+                self::CONFIG_PATH_PAGE_CACHE_BACKEND_COMPRESSION_LIB,
+                'Compression library to use [snappy,lzf,l4z,zstd,gzip] (leave blank to determine automatically)'
+            )
         ];
     }
 
@@ -163,18 +227,40 @@ class PageCache implements ConfigOptionsListInterface
             if ($options[self::INPUT_KEY_PAGE_CACHE_BACKEND] == self::INPUT_VALUE_PAGE_CACHE_REDIS) {
                 $configData->set(self::CONFIG_PATH_PAGE_CACHE_BACKEND, self::CONFIG_VALUE_PAGE_CACHE_REDIS);
                 $this->setDefaultRedisConfig($deploymentConfig, $configData);
+            } elseif ($options[self::INPUT_KEY_PAGE_CACHE_BACKEND] == self::INPUT_VALUE_PAGE_CACHE_VALKEY) {
+                $configData->set(self::CONFIG_PATH_PAGE_CACHE_BACKEND, self::CONFIG_VALUE_PAGE_CACHE_VALKEY);
+                $this->setDefaultValkeyConfig($deploymentConfig, $configData);
             } else {
                 $configData->set(self::CONFIG_PATH_PAGE_CACHE_BACKEND, $options[self::INPUT_KEY_PAGE_CACHE_BACKEND]);
             }
         }
 
-        foreach ($this->inputKeyToConfigPathMap as $inputKey => $configPath) {
-            if (isset($options[$inputKey])) {
-                $configData->set($configPath, $options[$inputKey]);
-            }
-        }
+        $this->applyCacheBackendConfig($options, $configData);
 
         return $configData;
+    }
+
+    /**
+     * Applies cache backend configuration to the config data based on the selected Redis or Valkey backend.
+     *
+     * @param array $options
+     * @param ConfigData $configData
+     *
+     * @return void
+     */
+    private function applyCacheBackendConfig(array $options, ConfigData $configData): void
+    {
+        if (isset($options[self::INPUT_KEY_PAGE_CACHE_BACKEND])) {
+            $map = $options[self::INPUT_KEY_PAGE_CACHE_BACKEND] === self::INPUT_VALUE_PAGE_CACHE_VALKEY
+                ? $this->inputKeyToValkeyConfigPathMap
+                : $this->inputKeyToConfigPathMap;
+
+            foreach ($map as $inputKey => $configPath) {
+                if (isset($options[$inputKey])) {
+                    $configData->set($configPath, $options[$inputKey]);
+                }
+            }
+        }
     }
 
     /**
@@ -184,23 +270,25 @@ class PageCache implements ConfigOptionsListInterface
     {
         $errors = [];
 
-        $currentCacheBackend = $deploymentConfig->get(PageCache::CONFIG_PATH_PAGE_CACHE_BACKEND);
-        if (isset($options[self::INPUT_KEY_PAGE_CACHE_BACKEND])) {
-            if ($options[self::INPUT_KEY_PAGE_CACHE_BACKEND] == self::INPUT_VALUE_PAGE_CACHE_REDIS) {
-                if (!$this->validateRedisConfig($options, $deploymentConfig)) {
-                    $errors[] = 'Invalid Redis configuration. Could not connect to Redis server.';
-                }
-            }
-        } elseif ($currentCacheBackend == self::CONFIG_VALUE_PAGE_CACHE_REDIS) {
+        $selectedBackend = $options[self::INPUT_KEY_PAGE_CACHE_BACKEND] ?? null;
+        $currentBackend = $deploymentConfig->get(PageCache::CONFIG_PATH_PAGE_CACHE_BACKEND);
+
+        if (in_array($selectedBackend, [self::INPUT_VALUE_PAGE_CACHE_REDIS,
+            self::INPUT_VALUE_PAGE_CACHE_VALKEY], true)) {
             if (!$this->validateRedisConfig($options, $deploymentConfig)) {
-                $errors[] = 'Invalid Redis configuration. Could not connect to Redis server.';
+                $errors[] = "Invalid {$selectedBackend} configuration. Could not connect to {$selectedBackend} server.";
             }
         }
 
-        if (isset($options[self::INPUT_KEY_PAGE_CACHE_BACKEND])
-            && !in_array($options[self::INPUT_KEY_PAGE_CACHE_BACKEND], $this->validPageCacheOptions)
-        ) {
-            $errors[] = "Invalid cache handler '{$options[self::INPUT_KEY_PAGE_CACHE_BACKEND]}'";
+        if (!$selectedBackend && in_array($currentBackend, [self::CONFIG_VALUE_PAGE_CACHE_REDIS,
+                self::CONFIG_VALUE_PAGE_CACHE_VALKEY], true)) {
+            if (!$this->validateRedisConfig($options, $deploymentConfig)) {
+                $errors[] = "Invalid {$currentBackend} configuration. Could not connect to {$currentBackend} server.";
+            }
+        }
+
+        if ($selectedBackend && !in_array($selectedBackend, $this->validPageCacheOptions, true)) {
+            $errors[] = "Invalid cache handler '{$selectedBackend}'";
         }
 
         return $errors;
@@ -216,35 +304,49 @@ class PageCache implements ConfigOptionsListInterface
     private function validateRedisConfig(array $options, DeploymentConfig $deploymentConfig)
     {
         $config = [];
+        if ($options[self::INPUT_KEY_PAGE_CACHE_BACKEND] == self::INPUT_VALUE_PAGE_CACHE_VALKEY
+            || $options[Cache::INPUT_KEY_CACHE_BACKEND] == Cache::INPUT_VALUE_CACHE_VALKEY) {
+            $config['host'] = $options[self::INPUT_KEY_PAGE_CACHE_BACKEND_VALKEY_SERVER] ?? $deploymentConfig->get(
+                self::CONFIG_PATH_PAGE_CACHE_BACKEND_SERVER,
+                $this->getDefaultConfigValue(self::INPUT_KEY_PAGE_CACHE_BACKEND_VALKEY_SERVER)
+            );
 
-        $config['host'] = isset($options[self::INPUT_KEY_PAGE_CACHE_BACKEND_REDIS_SERVER])
-            ? $options[self::INPUT_KEY_PAGE_CACHE_BACKEND_REDIS_SERVER]
-            : $deploymentConfig->get(
+              $config['port'] = $options[self::INPUT_KEY_PAGE_CACHE_BACKEND_VALKEY_PORT] ?? $deploymentConfig->get(
+                  self::CONFIG_PATH_PAGE_CACHE_BACKEND_PORT,
+                  $this->getDefaultConfigValue(self::INPUT_KEY_PAGE_CACHE_BACKEND_VALKEY_PORT)
+              );
+
+              $config['db'] = $options[self::INPUT_KEY_PAGE_CACHE_BACKEND_VALKEY_DATABASE] ?? $deploymentConfig->get(
+                  self::CONFIG_PATH_PAGE_CACHE_BACKEND_DATABASE,
+                  $this->getDefaultConfigValue(self::INPUT_KEY_PAGE_CACHE_BACKEND_VALKEY_DATABASE)
+              );
+
+              $config['password'] =
+                $options[self::INPUT_KEY_PAGE_CACHE_BACKEND_VALKEY_PASSWORD] ?? $deploymentConfig->get(
+                    self::CONFIG_PATH_PAGE_CACHE_BACKEND_PASSWORD,
+                    $this->getDefaultConfigValue(self::INPUT_KEY_PAGE_CACHE_BACKEND_VALKEY_PASSWORD)
+                );
+        } else {
+            $config['host'] = $options[self::INPUT_KEY_PAGE_CACHE_BACKEND_REDIS_SERVER] ?? $deploymentConfig->get(
                 self::CONFIG_PATH_PAGE_CACHE_BACKEND_SERVER,
                 $this->getDefaultConfigValue(self::INPUT_KEY_PAGE_CACHE_BACKEND_REDIS_SERVER)
             );
 
-        $config['port'] = isset($options[self::INPUT_KEY_PAGE_CACHE_BACKEND_REDIS_PORT])
-            ? $options[self::INPUT_KEY_PAGE_CACHE_BACKEND_REDIS_PORT]
-            : $deploymentConfig->get(
+            $config['port'] = $options[self::INPUT_KEY_PAGE_CACHE_BACKEND_REDIS_PORT] ?? $deploymentConfig->get(
                 self::CONFIG_PATH_PAGE_CACHE_BACKEND_PORT,
                 $this->getDefaultConfigValue(self::INPUT_KEY_PAGE_CACHE_BACKEND_REDIS_PORT)
             );
 
-        $config['db'] = isset($options[self::INPUT_KEY_PAGE_CACHE_BACKEND_REDIS_DATABASE])
-            ? $options[self::INPUT_KEY_PAGE_CACHE_BACKEND_REDIS_DATABASE]
-            : $deploymentConfig->get(
+            $config['db'] = $options[self::INPUT_KEY_PAGE_CACHE_BACKEND_REDIS_DATABASE] ?? $deploymentConfig->get(
                 self::CONFIG_PATH_PAGE_CACHE_BACKEND_DATABASE,
                 $this->getDefaultConfigValue(self::INPUT_KEY_PAGE_CACHE_BACKEND_REDIS_DATABASE)
             );
 
-        $config['password'] = isset($options[self::INPUT_KEY_PAGE_CACHE_BACKEND_REDIS_PASSWORD])
-            ? $options[self::INPUT_KEY_PAGE_CACHE_BACKEND_REDIS_PASSWORD]
-            : $deploymentConfig->get(
+            $config['password'] = $options[self::INPUT_KEY_PAGE_CACHE_BACKEND_REDIS_PASSWORD] ?? $deploymentConfig->get(
                 self::CONFIG_PATH_PAGE_CACHE_BACKEND_PASSWORD,
                 $this->getDefaultConfigValue(self::INPUT_KEY_PAGE_CACHE_BACKEND_REDIS_PASSWORD)
             );
-
+        }
         return $this->redisValidator->isValidConnection($config);
     }
 
@@ -258,6 +360,22 @@ class PageCache implements ConfigOptionsListInterface
     private function setDefaultRedisConfig(DeploymentConfig $deploymentConfig, ConfigData $configData)
     {
         foreach ($this->inputKeyToConfigPathMap as $inputKey => $configPath) {
+            $configData->set($configPath, $deploymentConfig->get($configPath, $this->getDefaultConfigValue($inputKey)));
+        }
+
+        return $configData;
+    }
+
+    /**
+     * Set default values for Redis configuration
+     *
+     * @param DeploymentConfig $deploymentConfig
+     * @param ConfigData $configData
+     * @return ConfigData
+     */
+    private function setDefaultValkeyConfig(DeploymentConfig $deploymentConfig, ConfigData $configData)
+    {
+        foreach ($this->inputKeyToValkeyConfigPathMap as $inputKey => $configPath) {
             $configData->set($configPath, $deploymentConfig->get($configPath, $this->getDefaultConfigValue($inputKey)));
         }
 

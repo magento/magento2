@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -190,6 +190,11 @@ class MultishippingTest extends TestCase
     private $scopeConfigMock;
 
     /**
+     * @var \Magento\Quote\Model\CartMutexInterface::class
+     */
+    private $cartMutex;
+
+    /**
      * @inheritDoc
      */
     protected function setUp(): void
@@ -243,6 +248,8 @@ class MultishippingTest extends TestCase
             ->getMock();
         $logger = $this->createSimpleMock(LoggerInterface::class);
 
+        $this->cartMutex = $this->createMock(\Magento\Quote\Model\CartMutexInterface::class);
+
         $this->model = new Multishipping(
             $this->checkoutSessionMock,
             $this->customerSessionMock,
@@ -270,7 +277,8 @@ class MultishippingTest extends TestCase
             $allowedCountryReaderMock,
             $this->placeOrderFactoryMock,
             $logger,
-            $this->dataObjectHelperMock
+            $this->dataObjectHelperMock,
+            $this->cartMutex
         );
 
         $this->shippingAssignmentProcessorMock = $this->createSimpleMock(ShippingAssignmentProcessor::class);
@@ -593,6 +601,8 @@ class MultishippingTest extends TestCase
         $this->placeOrderFactoryMock->method('create')->with($paymentProviderCode)->willReturn($placeOrderServiceMock);
         $this->quoteRepositoryMock->method('save')->with($this->quoteMock);
 
+        $this->assertMutexIsInvoked();
+
         $this->model->createOrders();
     }
 
@@ -695,6 +705,8 @@ class MultishippingTest extends TestCase
             ->with($this->quoteMock);
 
         $this->expectExceptionMessage('Quote address for failed order ID "1" not found.');
+
+        $this->assertMutexIsInvoked();
 
         $this->model->createOrders();
     }
@@ -986,6 +998,8 @@ class MultishippingTest extends TestCase
             ->willReturn([$shippingAddressMock]);
         $this->expectExceptionMessage($exceptionMessage);
 
+        $this->assertMutexIsInvoked();
+
         $this->model->createOrders();
     }
 
@@ -1212,5 +1226,24 @@ class MultishippingTest extends TestCase
                 ]
             ]
         ];
+    }
+
+    private function assertMutexIsInvoked(): void
+    {
+        $this->cartMutex
+            ->expects($this->once())
+            ->method('execute')
+            ->with(
+                $this->quoteMock->getId(),
+                $this->callback(is_callable(...))
+            )
+            ->willReturnCallback(
+                function ($arg1, $callback) {
+                    if ($arg1 != $this->quoteMock->getId()) {
+                        throw new \Exception('Quote ID does not match.');
+                    }
+                    return $callback();
+                }
+            );
     }
 }

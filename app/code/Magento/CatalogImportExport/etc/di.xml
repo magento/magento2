@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
@@ -32,6 +32,8 @@
                 <item name="quantity" xsi:type="object">Magento\CatalogImportExport\Model\Import\Product\Validator\Quantity</item>
                 <item name="layout_update" xsi:type="object">Magento\CatalogImportExport\Model\Import\Product\Validator\LayoutUpdate</item>
                 <item name="layout_update_permissions" xsi:type="object">Magento\CatalogImportExport\Model\Import\Product\Validator\LayoutUpdatePermissions</item>
+                <item name="name" xsi:type="object">Magento\CatalogImportExport\Model\Import\Product\Validator\Name</item>
+                <item name="backorders" xsi:type="object">Magento\CatalogImportExport\Model\Import\Product\Validator\Backorders</item>
             </argument>
         </arguments>
     </type>
@@ -55,6 +57,26 @@
                 <item name="_related_" xsi:type="const">Magento\Catalog\Model\Product\Link::LINK_TYPE_RELATED</item>
                 <item name="_crosssell_" xsi:type="const">Magento\Catalog\Model\Product\Link::LINK_TYPE_CROSSSELL</item>
                 <item name="_upsell_" xsi:type="const">Magento\Catalog\Model\Product\Link::LINK_TYPE_UPSELL</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\ImportExport\Model\Export\EntityFiltersProvider">
+        <arguments>
+            <argument name="providers" xsi:type="array">
+                <item name="catalog_product" xsi:type="object">Magento\CatalogImportExport\Model\Export\EntityFiltersProvider</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\CatalogImportExport\Model\Export\EntityFiltersProvider">
+        <arguments>
+            <argument name="additionalFilters" xsi:type="array">
+                <item name="website_ids" xsi:type="array">
+                    <item name="attribute_code" xsi:type="string">website_ids</item>
+                    <item name="default_frontend_label" xsi:type="string" translatable="true">Websites</item>
+                    <item name="backend_type" xsi:type="string">int</item>
+                    <item name="frontend_input" xsi:type="string">multiselect</item>
+                    <item name="source_model" xsi:type="string">Magento\CatalogImportExport\Model\Export\Product\WebsiteFilterOptions</item>
+                </item>
             </argument>
         </arguments>
     </type>

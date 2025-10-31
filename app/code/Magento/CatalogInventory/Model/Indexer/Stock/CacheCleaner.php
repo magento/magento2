@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\CatalogInventory\Model\Indexer\Stock;
@@ -64,7 +64,7 @@ class CacheCleaner
         StockConfigurationInterface $stockConfiguration,
         CacheContext $cacheContext,
         ManagerInterface $eventManager,
-        MetadataPool $metadataPool = null
+        ?MetadataPool $metadataPool = null
     ) {
         $this->resource = $resource;
         $this->stockConfiguration = $stockConfiguration;

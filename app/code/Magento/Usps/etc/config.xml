@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2025 Adobe
+ * All Rights Reserved.
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Store:etc/config.xsd">
@@ -10,12 +10,16 @@
         <carriers>
             <usps>
                 <active>0</active>
+                <usps_type>USPS_XML</usps_type>
                 <sallowspecific>0</sallowspecific>
                 <allowed_methods>0_FCLE,0_FCL,0_FCP,1,2,3,4,6,7,13,16,17,22,23,25,27,28,33,34,35,36,37,42,43,53,57,61,INT_1,INT_2,INT_4,INT_6,INT_7,INT_8,INT_9,INT_10,INT_11,INT_12,INT_13,INT_14,INT_15,INT_16,INT_20,1058,4058,6058,2058,4096,1096,2096,6096</allowed_methods>
+                <rest_allowed_methods>LIBRARY_MAIL_MACHINABLE_5-DIGIT,MEDIA_MAIL_MACHINABLE_5-DIGIT,USPS_GROUND_ADVANTAGE_MACHINABLE_SINGLE-PIECE,PRIORITY_MAIL_MACHINABLE_SINGLE-PIECE,PRIORITY_MAIL_FLAT_RATE_ENVELOPE,PRIORITY_MAIL_MACHINABLE_MEDIUM_FLAT_RATE_BOX,PRIORITY_MAIL_MACHINABLE_LARGE_FLAT_RATE_BOX,PRIORITY_MAIL_MACHINABLE_SMALL_FLAT_RATE_BOX,PRIORITY_MAIL_PADDED_FLAT_RATE_ENVELOPE,PRIORITY_MAIL_LEGAL_FLAT_RATE_ENVELOPE,PRIORITY_MAIL_EXPRESS_MACHINABLE_SINGLE-PIECE,PRIORITY_MAIL_EXPRESS_FLAT_RATE_ENVELOPE,PRIORITY_MAIL_EXPRESS_LEGAL_FLAT_RATE_ENVELOPE,FIRST-CLASS_PACKAGE_INTERNATIONAL_SERVICE_MACHINABLE_ISC_SINGLE-PIECE,PRIORITY_MAIL_INTERNATIONAL_ISC_SINGLE-PIECE,PRIORITY_MAIL_INTERNATIONAL_ISC_FLAT_RATE_ENVELOPE</rest_allowed_methods>
                 <container>VARIABLE</container>
                 <cutoff_cost />
                 <free_method />
                 <gateway_url>https://production.shippingapis.com/ShippingAPI.dll</gateway_url>
+                <gateway_rest_prod_url>https://api.usps.com/</gateway_rest_prod_url>
+                <gateway_rest_dev_url>https://apis-tem.usps.com/</gateway_rest_dev_url>
                 <gateway_secure_url>https://secure.shippingapis.com/ShippingAPI.dll</gateway_secure_url>
                 <shipment_requesttype>0</shipment_requesttype>
                 <handling />
@@ -23,9 +27,13 @@
                 <methods></methods>
                 <model>Magento\Usps\Model\Carrier</model>
                 <size>REGULAR</size>
+                <price_type>EPS</price_type>
+                <price_type>COMMERCIAL</price_type>
                 <title>United States Postal Service</title>
                 <userid backend_model="Magento\Config\Model\Config\Backend\Encrypted" />
                 <password backend_model="Magento\Config\Model\Config\Backend\Encrypted" />
+                <client_id backend_model="Magento\Config\Model\Config\Backend\Encrypted" />
+                <client_secret backend_model="Magento\Config\Model\Config\Backend\Encrypted" />
                 <isproduction>0</isproduction>
                 <specificerrmsg>This shipping method is currently unavailable. If you would like to ship using this shipping method, please contact us.</specificerrmsg>
                 <max_package_weight>70</max_package_weight>

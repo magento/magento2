@@ -1,8 +1,7 @@
 <?php
 /**
- *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -24,6 +23,8 @@ use Magento\Framework\ObjectManagerInterface;
 
 /**
  * Class ProductAttributeMediaGalleryManagementInterfaceTest
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class ProductAttributeMediaGalleryManagementInterfaceTest extends WebapiAbstract
 {
@@ -499,11 +500,6 @@ class ProductAttributeMediaGalleryManagementInterfaceTest extends WebapiAbstract
      */
     public function testCreateThrowsExceptionIfTargetProductDoesNotExist()
     {
-        $this->expectException(\Exception::class);
-        $this->expectExceptionMessage(
-            'The product that was requested doesn\'t exist. Verify the product and try again.'
-        );
-
         $this->createServiceInfo['rest']['resourcePath'] = '/V1/products/wrong_product_sku/media';
 
         $requestData = [
@@ -520,7 +516,15 @@ class ProductAttributeMediaGalleryManagementInterfaceTest extends WebapiAbstract
             ]
         ];
 
-        $this->_webApiCall($this->createServiceInfo, ['sku' => 'simple', 'entry' => $requestData]);
+        $expectedMessage = 'The product with SKU "%1" does not exist.';
+        try {
+            $this->_webApiCall($this->createServiceInfo, ['sku' => 'simple', 'entry' => $requestData]);
+        } catch (\SoapFault $e) {
+            $this->assertEquals($expectedMessage, $e->getMessage());
+        } catch (\Exception $e) {
+            $errorObj = $this->processRestExceptionResult($e);
+            $this->assertEquals($expectedMessage, $errorObj['message']);
+        }
     }
 
     /**
@@ -556,11 +560,6 @@ class ProductAttributeMediaGalleryManagementInterfaceTest extends WebapiAbstract
      */
     public function testUpdateThrowsExceptionIfTargetProductDoesNotExist()
     {
-        $this->expectException(\Exception::class);
-        $this->expectExceptionMessage(
-            'The product that was requested doesn\'t exist. Verify the product and try again.'
-        );
-
         $this->updateServiceInfo['rest']['resourcePath'] = '/V1/products/wrong_product_sku/media'
             . '/' . 'wrong-sku';
         $requestData = [
@@ -575,7 +574,15 @@ class ProductAttributeMediaGalleryManagementInterfaceTest extends WebapiAbstract
             ],
         ];
 
-        $this->_webApiCall($this->updateServiceInfo, $requestData, null, 'all');
+        $expectedMessage = 'The product with SKU "%1" does not exist.';
+        try {
+            $this->_webApiCall($this->updateServiceInfo, $requestData, null, 'all');
+        } catch (\SoapFault $e) {
+            $this->assertEquals($expectedMessage, $e->getMessage());
+        } catch (\Exception $e) {
+            $errorObj = $this->processRestExceptionResult($e);
+            $this->assertEquals($expectedMessage, $errorObj['message']);
+        }
     }
 
     /**
@@ -612,18 +619,21 @@ class ProductAttributeMediaGalleryManagementInterfaceTest extends WebapiAbstract
      */
     public function testDeleteThrowsExceptionIfTargetProductDoesNotExist()
     {
-        $this->expectException(\Exception::class);
-        $this->expectExceptionMessage(
-            'The product that was requested doesn\'t exist. Verify the product and try again.'
-        );
-
         $this->deleteServiceInfo['rest']['resourcePath'] = '/V1/products/wrong_product_sku/media/9999';
         $requestData = [
             'sku' => 'wrong_product_sku',
             'entryId' => 9999,
         ];
 
-        $this->_webApiCall($this->deleteServiceInfo, $requestData);
+        $expectedMessage = 'The product with SKU "%1" does not exist.';
+        try {
+            $this->_webApiCall($this->deleteServiceInfo, $requestData);
+        } catch (\SoapFault $e) {
+            $this->assertEquals($expectedMessage, $e->getMessage());
+        } catch (\Exception $e) {
+            $errorObj = $this->processRestExceptionResult($e);
+            $this->assertEquals($expectedMessage, $errorObj['message']);
+        }
     }
 
     /**
@@ -779,7 +789,7 @@ class ProductAttributeMediaGalleryManagementInterfaceTest extends WebapiAbstract
         if (TESTS_WEB_API_ADAPTER == self::ADAPTER_SOAP) {
             $this->expectException('SoapFault');
             $this->expectExceptionMessage(
-                "The product that was requested doesn't exist. Verify the product and try again."
+                'The product with SKU "%1" does not exist.'
             );
         } else {
             $this->expectException('Exception');
@@ -894,5 +904,42 @@ class ProductAttributeMediaGalleryManagementInterfaceTest extends WebapiAbstract
         ];
         $response = $this->_webApiCall($serviceInfo, $requestData);
         $this->assertArrayHasKey('content', $response);
+    }
+
+    /**
+     * Test update() method when existing image gets overwritten and name is not changed
+     *
+     * @magentoApiDataFixture Magento/Catalog/_files/product_with_image.php
+     */
+    public function testUpdateExistingImage()
+    {
+        $productRepository = $this->objectManager->create(ProductRepositoryInterface::class);
+        /** @var \Magento\Catalog\Api\Data\ProductInterface $product */
+        $product = $productRepository->get('simple');
+        $imageId = (int)$product->getMediaGalleryImages()->getFirstItem()->getValueId();
+        $requestData = [
+            'sku' => 'simple',
+            'entry' => [
+                'id' => $this->getTargetGalleryEntryId(),
+                'label' => 'Updated Image Text',
+                'position' => 10,
+                'types' => ['thumbnail'],
+                'disabled' => true,
+                'media_type' => 'image',
+                'content' => [
+                    'base64_encoded_data' => base64_encode(file_get_contents($this->testImagePath)),
+                    'type' => 'image/jpeg',
+                    'name' => 'magento_image.jpg',
+                ]
+            ]
+        ];
+
+        $this->updateServiceInfo['rest']['resourcePath'] = $this->updateServiceInfo['rest']['resourcePath']
+            . '/' . $this->getTargetGalleryEntryId();
+
+        $this->assertTrue($this->_webApiCall($this->updateServiceInfo, $requestData, null, 'all'));
+        $updatedImage = $this->assertMediaGalleryData($imageId, '/m/a/magento_image.jpg', 'Updated Image Text');
+        $this->assertEquals(10, $updatedImage['position_default']);
+        $this->assertEquals(1, $updatedImage['disabled_default']);
     }
 }

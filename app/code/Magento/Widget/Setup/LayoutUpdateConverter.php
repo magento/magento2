@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Widget\Setup;
 
@@ -40,7 +40,7 @@ class LayoutUpdateConverter extends SerializedToJson
         Serialize $serialize,
         Json $json,
         Normalizer $normalizer,
-        Escaper $escaper = null
+        ?Escaper $escaper = null
     ) {
         $this->normalizer = $normalizer;
         $this->escaper = $escaper ?? ObjectManager::getInstance()->get(

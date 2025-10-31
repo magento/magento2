@@ -52,7 +52,7 @@ class TypeList implements TypeListInterface
         StateInterface $cacheState,
         InstanceFactory $factory,
         \Magento\Framework\App\CacheInterface $cache,
-        SerializerInterface $serializer = null
+        ?SerializerInterface $serializer = null
     ) {
         $this->_config = $config;
         $this->_factory = $factory;

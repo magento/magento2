@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -130,10 +130,11 @@ class ShippingAddressAssignmentTest extends TestCase
     private function getCartExtensionMock(): MockObject
     {
         $mockBuilder = $this->getMockBuilder(CartExtension::class);
-        try {
+
+        if (method_exists(CartExtension::class, 'setShippingAssignments')) {
+            $mockBuilder->onlyMethods(['setShippingAssignments']);
+        } else {
             $mockBuilder->addMethods(['setShippingAssignments']);
-        } catch (RuntimeException $e) {
-            // CartExtension already generated.
         }
 
         return $mockBuilder->getMock();

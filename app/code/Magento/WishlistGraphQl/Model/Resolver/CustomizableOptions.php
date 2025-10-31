@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2022 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -36,7 +36,7 @@ class CustomizableOptions implements ResolverInterface
     /**
      * @inheritdoc
      */
-    public function resolve(Field $field, $context, ResolveInfo $info, array $value = null, array $args = null)
+    public function resolve(Field $field, $context, ResolveInfo $info, ?array $value = null, ?array $args = null)
     {
         if (!isset($value['itemModel'])) {
             throw new LocalizedException(__('"itemModel" value should be specified'));

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\ConfigurableProduct\Api;
@@ -24,10 +24,10 @@ use Magento\TestFramework\TestCase\WebapiAbstract;
  */
 class ProductRepositoryTest extends WebapiAbstract
 {
-    const SERVICE_NAME = 'catalogProductRepositoryV1';
-    const SERVICE_VERSION = 'V1';
-    const RESOURCE_PATH = '/V1/products';
-    const CONFIGURABLE_PRODUCT_SKU = 'configurable-product-sku';
+    private const SERVICE_NAME = 'catalogProductRepositoryV1';
+    private const SERVICE_VERSION = 'V1';
+    private const RESOURCE_PATH = '/V1/products';
+    private const CONFIGURABLE_PRODUCT_SKU = 'configurable-product-sku';
 
     /**
      * @var Config
@@ -383,7 +383,7 @@ class ProductRepositoryTest extends WebapiAbstract
             $nonExistingId,
         ];
 
-        $expectedMessage = 'The product that was requested doesn\'t exist. Verify the product and try again.';
+        $expectedMessage = 'The product with ID "%1" does not exist.';
         try {
             $this->saveProduct($response);
             $this->fail("Expected exception");
@@ -461,7 +461,7 @@ class ProductRepositoryTest extends WebapiAbstract
             $productId2,
         ];
 
-        $expectedMessage = 'The product that was requested doesn\'t exist. Verify the product and try again.';
+        $expectedMessage = 'The product with ID "%1" does not exist.';
         try {
             $this->saveProduct($response);
             $this->fail("Expected exception");

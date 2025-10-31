@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Catalog\Controller\Adminhtml\Product\Initialization;
@@ -151,12 +151,12 @@ class Helper
         ProductLinks $productLinks,
         Js $jsHelper,
         Date $dateFilter,
-        CustomOptionFactory $customOptionFactory = null,
-        ProductLinkFactory $productLinkFactory = null,
-        ProductRepositoryInterface $productRepository = null,
-        LinkTypeProvider $linkTypeProvider = null,
-        AttributeFilter $attributeFilter = null,
-        FormatInterface $localeFormat = null,
+        ?CustomOptionFactory $customOptionFactory = null,
+        ?ProductLinkFactory $productLinkFactory = null,
+        ?ProductRepositoryInterface $productRepository = null,
+        ?LinkTypeProvider $linkTypeProvider = null,
+        ?AttributeFilter $attributeFilter = null,
+        ?FormatInterface $localeFormat = null,
         ?ProductAuthorization $productAuthorization = null,
         ?DateTimeFilter $dateTimeFilter = null,
         ?CategoryLinkInterfaceFactory $categoryLinkFactory = null

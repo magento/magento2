@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\CatalogWidget\Block\Product;
@@ -11,6 +11,7 @@ use Magento\Catalog\Block\Product\AbstractProduct;
 use Magento\Catalog\Block\Product\Context;
 use Magento\Catalog\Block\Product\Widget\Html\Pager;
 use Magento\Catalog\Model\Product;
+use Magento\Catalog\Model\Product\Attribute\Source\Status as ProductStatus;
 use Magento\Catalog\Model\Product\Visibility;
 use Magento\Catalog\Model\ResourceModel\Product\Collection;
 use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory;
@@ -162,11 +163,11 @@ class ProductsList extends AbstractProduct implements BlockInterface, IdentityIn
         Rule $rule,
         Conditions $conditionsHelper,
         array $data = [],
-        Json $json = null,
-        LayoutFactory $layoutFactory = null,
-        EncoderInterface $urlEncoder = null,
-        CategoryRepositoryInterface $categoryRepository = null,
-        OptionsData $optionsData = null
+        ?Json $json = null,
+        ?LayoutFactory $layoutFactory = null,
+        ?EncoderInterface $urlEncoder = null,
+        ?CategoryRepositoryInterface $categoryRepository = null,
+        ?OptionsData $optionsData = null
     ) {
         $this->productCollectionFactory = $productCollectionFactory;
         $this->catalogProductVisibility = $catalogProductVisibility;
@@ -371,6 +372,7 @@ class ProductsList extends AbstractProduct implements BlockInterface, IdentityIn
          */
         $collection = $this->_addProductAttributesAndPrices($collection)
             ->addStoreFilter()
+            ->addAttributeToFilter(Product::STATUS, ProductStatus::STATUS_ENABLED)
             ->addAttributeToSort('entity_id', 'desc')
             ->setPageSize($this->getPageSize())
             ->setCurPage($this->getRequest()->getParam($this->getData('page_var_name'), 1));
@@ -620,5 +622,13 @@ class ProductsList extends AbstractProduct implements BlockInterface, IdentityIn
     private function decodeConditions(string $encodedConditions): array
     {
         return $this->conditionsHelper->decode(htmlspecialchars_decode($encodedConditions));
+    }
+
+    /**
+     * @inheritdoc
+     */
+    protected function _afterToHtml($html)
+    {
+        return trim($html);
     }
 }

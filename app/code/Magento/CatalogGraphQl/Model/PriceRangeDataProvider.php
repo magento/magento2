@@ -1,19 +1,17 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2022 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\CatalogGraphQl\Model;
 
-use Exception;
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Model\Product;
 use Magento\CatalogGraphQl\Model\Resolver\Product\Price\Discount;
 use Magento\CatalogGraphQl\Model\Resolver\Product\Price\ProviderPool as PriceProviderPool;
 use Magento\Framework\Exception\LocalizedException;
-use Magento\Framework\GraphQl\Query\Resolver\Value;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
 use Magento\Framework\Pricing\SaleableInterface;
@@ -26,6 +24,8 @@ use Magento\Store\Api\Data\StoreInterface;
 class PriceRangeDataProvider
 {
     private const STORE_FILTER_CACHE_KEY = '_cache_instance_store_filter';
+
+    private const TYPE_DOWNLOADABLE = 'downloadable';
 
     /**
      * @param PriceProviderPool $priceProviderPool
@@ -45,18 +45,48 @@ class PriceRangeDataProvider
      * @param ContextInterface $context
      * @param ResolveInfo $info
      * @param array $value
-     * @throws Exception
-     * @return mixed|Value
+     * @return array
+     * @throws LocalizedException
      */
     public function prepare(ContextInterface $context, ResolveInfo $info, array $value): array
+    {
+        $store = $context->getExtensionAttributes()->getStore();
+        $product = $this->getProduct($value, $context, $store);
+
+        $requestedFields = $info->getFieldSelection(10);
+        $returnArray = [];
+
+        $returnArray['minimum_price'] = ($requestedFields['minimum_price'] ?? 0) ? ($this->canShowPrice($product) ?
+            $this->getMinimumProductPrice($product, $store) : $this->formatEmptyResult()) : $this->formatEmptyResult();
+        $returnArray['maximum_price'] = ($requestedFields['maximum_price'] ?? 0) ? ($this->canShowPrice($product) ?
+            $this->getMaximumProductPrice($product, $store) : $this->formatEmptyResult()) : $this->formatEmptyResult();
+
+        if ($product->getTypeId() === self::TYPE_DOWNLOADABLE &&
+            $product->getData('links_purchased_separately')) {
+            $downloadableLinkPrice = (float)$this->getDownloadableLinkPrice($product);
+            if ($downloadableLinkPrice > 0) {
+                $returnArray['maximum_price']['regular_price']['value'] += $downloadableLinkPrice;
+                $returnArray['maximum_price']['final_price']['value'] += $downloadableLinkPrice;
+            }
+        }
+
+        return $returnArray;
+    }
+
+    /**
+     * Validate and return product
+     *
+     * @param array $value
+     * @param ContextInterface $context
+     * @param StoreInterface $store
+     * @return Product
+     * @throws LocalizedException
+     */
+    private function getProduct(array $value, ContextInterface $context, StoreInterface $store): Product
     {
         if (!isset($value['model'])) {
             throw new LocalizedException(__('"model" value should be specified'));
         }
-        /** @var StoreInterface $store */
-        $store = $context->getExtensionAttributes()->getStore();
-
-        /** @var Product $product */
         $product = $value['model'];
         $product->unsetData('minimal_price');
         // add store filter for the product
@@ -69,15 +99,28 @@ class PriceRangeDataProvider
             }
         }
 
-        $requestedFields = $info->getFieldSelection(10);
-        $returnArray = [];
+        return $product;
+    }
 
-        $returnArray['minimum_price'] = ($requestedFields['minimum_price'] ?? 0) ? ($this->canShowPrice($product) ?
-            $this->getMinimumProductPrice($product, $store) : $this->formatEmptyResult()) : $this->formatEmptyResult();
-        $returnArray['maximum_price'] = ($requestedFields['maximum_price'] ?? 0) ? ($this->canShowPrice($product) ?
-            $this->getMaximumProductPrice($product, $store) : $this->formatEmptyResult()) : $this->formatEmptyResult();
+    /**
+     * Get the downloadable link price
+     *
+     * @param Product $product
+     * @return float
+     */
+    private function getDownloadableLinkPrice(Product $product): float
+    {
+        $downloadableLinks = $product->getTypeInstance()->getLinks($product);
+        if (empty($downloadableLinks)) {
+            return 0.0;
+        }
 
-        return $returnArray;
+        $price = 0.0;
+        foreach ($downloadableLinks as $link) {
+            $price += (float)$link->getPrice();
+        }
+
+        return $price;
     }
 
     /**

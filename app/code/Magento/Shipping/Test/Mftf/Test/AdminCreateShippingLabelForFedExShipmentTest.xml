@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
  /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
+  * Copyright 2025 Adobe
+  * All Rights Reserved.
   */
 -->
 
@@ -116,8 +116,11 @@
             </actionGroup>
             <!-- Go to Checkout Page -->
             <actionGroup ref="StorefrontOpenCheckoutPageActionGroup" stepKey="goToCheckout"/>
-            <waitForElementClickable selector="{{CheckoutShippingMethodsSection.smartPostShippingMethod}}" stepKey="waitForSelectFedexShippingMethod"/>
-            <click selector="{{CheckoutShippingMethodsSection.smartPostShippingMethod}}" stepKey="selectFedexShippingMethod"/>
+            <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForSelectFedexShippingMethod"/>
+            <conditionalClick selector="{{CheckoutShippingMethodsSection.fedexExpressServerShippingMethod}}" dependentSelector="{{CheckoutShippingMethodsSection.fedexExpressServerShippingMethod}}" visible="true" stepKey="selectFedexShippingExpressServer"/>
+            <conditionalClick selector="{{CheckoutShippingMethodsSection.fedex2dayShippingMethod}}" dependentSelector="{{CheckoutShippingMethodsSection.fedex2dayShippingMethod}}" visible="true" stepKey="selectFedexShipping2Day"/>
+            <conditionalClick selector="{{CheckoutShippingMethodsSection.smartPostShippingMethod}}" dependentSelector="{{CheckoutShippingMethodsSection.smartPostShippingMethod}}" visible="true" stepKey="selectFedexShippingMethod"/>
+            <conditionalClick selector="{{CheckoutShippingMethodsSection.groundShippingMethod}}" dependentSelector="{{CheckoutShippingMethodsSection.groundShippingMethod}}" visible="true" stepKey="selectFedexShippingMethodGround"/>
             <actionGroup ref="StorefrontCheckoutClickNextOnShippingStepActionGroup" stepKey="clickNext"/>
             <!-- Click on PayPal payment radio button -->
             <waitForElementClickable selector="{{CheckoutPaymentSection.placeOrder}}" stepKey="waitForPayPalRadioButton"/>

@@ -45,7 +45,7 @@ class Manager
      * @param callable $afterCallback
      * @return void
      */
-    public function process(\Closure $beforeCallback = null, \Closure $afterCallback = null)
+    public function process(?\Closure $beforeCallback = null, ?\Closure $afterCallback = null)
     {
         /** @var OperationInterface $operation */
         foreach ($this->operationsList as $operation) {

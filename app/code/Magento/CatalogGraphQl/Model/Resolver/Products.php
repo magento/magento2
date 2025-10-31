@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -43,8 +43,8 @@ class Products implements ResolverInterface
      */
     public function __construct(
         ProductQueryInterface $searchQuery,
-        SearchCriteriaBuilder $searchApiCriteriaBuilder = null,
-        Uid $uidEncoder = null
+        ?SearchCriteriaBuilder $searchApiCriteriaBuilder = null,
+        ?Uid $uidEncoder = null
     ) {
         $this->searchQuery = $searchQuery;
         $this->searchApiCriteriaBuilder = $searchApiCriteriaBuilder ??
@@ -59,8 +59,8 @@ class Products implements ResolverInterface
         Field $field,
         $context,
         ResolveInfo $info,
-        array $value = null,
-        array $args = null
+        ?array $value = null,
+        ?array $args = null
     ) {
         $this->validateInput($args);
 

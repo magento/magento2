@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -24,8 +24,8 @@ class ProductList
     public const XML_PATH_LIST_MODE = 'catalog/frontend/list_mode';
     public const DEFAULT_SORT_DIRECTION = 'asc';
 
-    const VIEW_MODE_LIST = 'list';
-    const VIEW_MODE_GRID = 'grid';
+    public const VIEW_MODE_LIST = 'list';
+    public const VIEW_MODE_GRID = 'grid';
 
     /**
      * @var ScopeConfigInterface
@@ -50,7 +50,7 @@ class ProductList
      */
     public function __construct(
         ScopeConfigInterface $scopeConfig,
-        Registry $coreRegistry = null
+        ?Registry $coreRegistry = null
     ) {
         $this->scopeConfig = $scopeConfig;
         $this->coreRegistry = $coreRegistry ?? ObjectManager::getInstance()->get(Registry::class);

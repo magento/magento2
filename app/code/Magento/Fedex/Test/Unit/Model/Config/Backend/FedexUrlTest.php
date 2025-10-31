@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2023 Adobe
+ * All Rights Reserved.
  */
 
 declare(strict_types=1);
@@ -76,7 +76,7 @@ class FedexUrlTest extends TestCase
      * @param string|null $data The valid data
      * @throws ValidatorException
      */
-    public function testBeforeSave(string $data = null): void
+    public function testBeforeSave(?string $data = null): void
     {
         $this->url->expects($this->any())->method('isValid')->willReturn(true);
         $this->urlConfig->setValue($data);

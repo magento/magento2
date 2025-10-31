@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -360,7 +360,7 @@ class AbstractProductTest extends TestCase
         $attrObjectSourceMock
             ->expects((null === $expectedAttrObjSourceAllOptionsParam) ? $this->never() : $this->once())
             ->method('getAllOptions')
-            ->with($expectedAttrObjSourceAllOptionsParam)
+            ->with($expectedAttrObjSourceAllOptionsParam, true)
             ->willReturn($attrObjectSourceAllOptionsValue);
 
         $attributeObjectMock = $this->getMockBuilder(Attribute::class)

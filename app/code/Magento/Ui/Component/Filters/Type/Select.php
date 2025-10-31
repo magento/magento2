@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Ui\Component\Filters\Type;
 
@@ -47,7 +47,7 @@ class Select extends AbstractFilter
         UiComponentFactory $uiComponentFactory,
         \Magento\Framework\Api\FilterBuilder $filterBuilder,
         FilterModifier $filterModifier,
-        OptionSourceInterface $optionsProvider = null,
+        ?OptionSourceInterface $optionsProvider = null,
         array $components = [],
         array $data = []
     ) {

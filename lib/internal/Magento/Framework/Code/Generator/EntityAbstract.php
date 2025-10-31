@@ -68,9 +68,9 @@ abstract class EntityAbstract
     public function __construct(
         $sourceClassName = null,
         $resultClassName = null,
-        Io $ioObject = null,
-        \Magento\Framework\Code\Generator\CodeGeneratorInterface $classGenerator = null,
-        DefinedClasses $definedClasses = null
+        ?Io $ioObject = null,
+        ?\Magento\Framework\Code\Generator\CodeGeneratorInterface $classGenerator = null,
+        ?DefinedClasses $definedClasses = null
     ) {
         if ($ioObject) {
             $this->_ioObject = $ioObject;

@@ -26,7 +26,7 @@ class SourceArgumentsReader
     /**
      * @param NamespaceResolver|null $namespaceResolver
      */
-    public function __construct(NamespaceResolver $namespaceResolver = null)
+    public function __construct(?NamespaceResolver $namespaceResolver = null)
     {
         $this->namespaceResolver = $namespaceResolver ?: new NamespaceResolver();
     }

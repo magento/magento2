@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Cms\Block\Adminhtml\Wysiwyg\Images;
 
@@ -41,7 +41,7 @@ class Tree extends \Magento\Backend\Block\Template
         \Magento\Cms\Helper\Wysiwyg\Images $cmsWysiwygImages,
         \Magento\Framework\Registry $registry,
         array $data = [],
-        \Magento\Framework\Serialize\Serializer\Json $serializer = null
+        ?\Magento\Framework\Serialize\Serializer\Json $serializer = null
     ) {
         $this->_coreRegistry = $registry;
         $this->_cmsWysiwygImages = $cmsWysiwygImages;

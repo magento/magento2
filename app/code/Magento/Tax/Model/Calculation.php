@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Tax\Model;
 
@@ -224,7 +224,7 @@ class Calculation extends \Magento\Framework\Model\AbstractModel implements Rese
         SearchCriteriaBuilder $searchCriteriaBuilder,
         FilterBuilder $filterBuilder,
         TaxClassRepositoryInterface $taxClassRepository,
-        \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
+        ?\Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
     ) {
         $this->_scopeConfig = $scopeConfig;

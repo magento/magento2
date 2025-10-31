@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -26,6 +26,7 @@ use Magento\Quote\Api\PaymentMethodManagementInterface;
 use Magento\Quote\Model\Quote;
 use Magento\Quote\Model\Quote\TotalsCollector;
 use Magento\Quote\Model\QuoteAddressValidator;
+use Magento\Quote\Model\QuoteAddressValidationService;
 use Magento\Quote\Model\ShippingAssignmentFactory;
 use Magento\Quote\Model\ShippingFactory;
 use Psr\Log\LoggerInterface as Logger;
@@ -34,6 +35,7 @@ use Psr\Log\LoggerInterface as Logger;
  * Class checkout shipping information management
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.TooManyFields)
  */
 class ShippingInformationManagement implements ShippingInformationManagementInterface
 {
@@ -108,6 +110,11 @@ class ShippingInformationManagement implements ShippingInformationManagementInte
     private $addressComparator;
 
     /**
+     * @var QuoteAddressValidationService
+     */
+    private $quoteAddressValidationService;
+
+    /**
      * @param PaymentMethodManagementInterface $paymentMethodManagement
      * @param PaymentDetailsFactory $paymentDetailsFactory
      * @param CartTotalRepositoryInterface $cartTotalsRepository
@@ -121,6 +128,7 @@ class ShippingInformationManagement implements ShippingInformationManagementInte
      * @param ShippingAssignmentFactory|null $shippingAssignmentFactory
      * @param ShippingFactory|null $shippingFactory
      * @param AddressComparatorInterface|null $addressComparator
+     * @param QuoteAddressValidationService|null $quoteAddressValidationService
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -133,10 +141,11 @@ class ShippingInformationManagement implements ShippingInformationManagementInte
         AddressRepositoryInterface $addressRepository,
         ScopeConfigInterface $scopeConfig,
         TotalsCollector $totalsCollector,
-        CartExtensionFactory $cartExtensionFactory = null,
-        ShippingAssignmentFactory $shippingAssignmentFactory = null,
-        ShippingFactory $shippingFactory = null,
+        ?CartExtensionFactory $cartExtensionFactory = null,
+        ?ShippingAssignmentFactory $shippingAssignmentFactory = null,
+        ?ShippingFactory $shippingFactory = null,
         ?AddressComparatorInterface $addressComparator = null,
+        ?QuoteAddressValidationService $quoteAddressValidationService = null
     ) {
         $this->paymentMethodManagement = $paymentMethodManagement;
         $this->paymentDetailsFactory = $paymentDetailsFactory;
@@ -155,6 +164,8 @@ class ShippingInformationManagement implements ShippingInformationManagementInte
             ->get(ShippingFactory::class);
         $this->addressComparator = $addressComparator
             ?? ObjectManager::getInstance()->get(AddressComparatorInterface::class);
+        $this->quoteAddressValidationService = $quoteAddressValidationService ?: ObjectManager::getInstance()
+            ->get(QuoteAddressValidationService::class);
     }
 
     /**
@@ -177,6 +188,7 @@ class ShippingInformationManagement implements ShippingInformationManagementInte
 
         $address = $addressInformation->getShippingAddress();
         $this->validateAddress($address);
+
         $this->updateCustomerShippingAddressId($quote, $address);
         if (!$address->getCustomerAddressId()) {
             $address->setCustomerAddressId(null);
@@ -184,6 +196,11 @@ class ShippingInformationManagement implements ShippingInformationManagementInte
 
         try {
             $billingAddress = $addressInformation->getBillingAddress();
+            $this->quoteAddressValidationService->validateAddressesWithRules(
+                $quote,
+                $address,
+                $billingAddress
+            );
             if ($billingAddress) {
                 $this->updateCustomerBillingAddressId($quote, $billingAddress);
                 if (!$billingAddress->getCustomerAddressId()) {

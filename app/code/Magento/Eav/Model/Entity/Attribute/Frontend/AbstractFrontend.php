@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 
 /**
@@ -78,11 +78,11 @@ abstract class AbstractFrontend implements \Magento\Eav\Model\Entity\Attribute\F
      */
     public function __construct(
         BooleanFactory $attrBooleanFactory,
-        CacheInterface $cache = null,
+        ?CacheInterface $cache = null,
         $storeResolver = null,
-        array $cacheTags = null,
-        StoreManagerInterface $storeManager = null,
-        Serializer $serializer = null
+        ?array $cacheTags = null,
+        ?StoreManagerInterface $storeManager = null,
+        ?Serializer $serializer = null
     ) {
         $this->_attrBooleanFactory = $attrBooleanFactory;
         $this->cache = $cache ?: ObjectManager::getInstance()->get(CacheInterface::class);

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 
 declare(strict_types=1);
@@ -176,7 +176,7 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
      *
      * @return bool|mixed
      */
-    private function isSynchronousInvocationOnlyTrue(\DOMElement $synchronousInvocationOnlyNode = null)
+    private function isSynchronousInvocationOnlyTrue(?\DOMElement $synchronousInvocationOnlyNode = null)
     {
         if ($synchronousInvocationOnlyNode === null) {
             return false;

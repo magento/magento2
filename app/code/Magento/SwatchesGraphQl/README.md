@@ -1,4 +1,4 @@
-# SwatchesGraphQl
+# Magento_SwatchesGraphQl module
 
-**SwatchesGraphQl** provides type information for the GraphQl module
+This module provides type information for the GraphQL module
 to generate swatches fields for catalog and product information endpoints.

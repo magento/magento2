@@ -1,18 +1,7 @@
 <?php
-/************************************************************************
- *
+/**
  * Copyright 2023 Adobe
  * All Rights Reserved.
- *
- * NOTICE: All information contained herein is, and remains
- * the property of Adobe and its suppliers, if any. The intellectual
- * and technical concepts contained herein are proprietary to Adobe
- * and its suppliers and are protected by all applicable intellectual
- * property laws, including trade secret and copyright laws.
- * Dissemination of this information or reproduction of this material
- * is strictly forbidden unless prior written permission is obtained
- * from Adobe.
- * ************************************************************************
  */
 declare(strict_types=1);
 
@@ -27,9 +16,14 @@ use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\EntityManager\EntityMetadataInterface;
 use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Framework\Session\SessionManagerInterface;
+use Magento\Store\Api\Data\StoreInterface;
+use Magento\Store\Model\StoreManagerInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class SpecialPriceBulkResolverTest extends TestCase
 {
     /**
@@ -48,9 +42,14 @@ class SpecialPriceBulkResolverTest extends TestCase
     private SpecialPriceBulkResolver $specialPriceBulkResolver;
 
     /**
-     * @var SessionManagerInterface
+     * @var SessionManagerInterface|MockObject
      */
     private SessionManagerInterface $customerSession;
+
+    /**
+     * @var StoreManagerInterface|MockObject
+     */
+    private StoreManagerInterface $storeManager;
 
     /**
      * @return void
@@ -63,11 +62,12 @@ class SpecialPriceBulkResolverTest extends TestCase
             ->disableOriginalConstructor()
             ->addMethods(['getCustomerGroupId'])
             ->getMockForAbstractClass();
-
+        $this->storeManager = $this->createMock(StoreManagerInterface::class);
         $this->specialPriceBulkResolver = new SpecialPriceBulkResolver(
             $this->resource,
             $this->metadataPool,
-            $this->customerSession
+            $this->customerSession,
+            $this->storeManager
         );
     }
 
@@ -86,9 +86,19 @@ class SpecialPriceBulkResolverTest extends TestCase
      */
     public function testGenerateSpecialPriceMapCollection(): void
     {
+        $storeId = 2;
+        $websiteId = 1;
+        $customerGroupId = 3;
         $product = $this->createMock(Product::class);
-
-        $this->customerSession->expects($this->once())->method('getCustomerGroupId')->willReturn(1);
+        $store = $this->createMock(StoreInterface::class);
+        $store->expects($this->once())->method('getWebsiteId')->willReturn($websiteId);
+        $this->storeManager->expects($this->once())
+            ->method('getStore')
+            ->with($storeId)
+            ->willReturn($store);
+        $this->customerSession->expects($this->once())
+            ->method('getCustomerGroupId')
+            ->willReturn($customerGroupId);
         $collection = $this->getMockBuilder(AbstractCollection::class)
             ->disableOriginalConstructor()
             ->onlyMethods(['getAllIds', 'getIterator'])
@@ -103,14 +113,13 @@ class SpecialPriceBulkResolverTest extends TestCase
             ->method('getMetadata')
             ->with(ProductInterface::class)
             ->willReturn($metadata);
-
         $connection = $this->getMockBuilder(AdapterInterface::class)
             ->addMethods(['from', 'joinInner', 'where', 'columns', 'joinLeft'])
             ->getMockForAbstractClass();
         $connection->expects($this->once())->method('select')->willReturnSelf();
         $connection->expects($this->once())
             ->method('from')
-            ->with(['e' => 'catalog_product_super_link'])
+            ->with(['e' => 'catalog_product_entity'])
             ->willReturnSelf();
         $connection->expects($this->exactly(3))
             ->method('joinLeft')
@@ -141,12 +150,13 @@ class SpecialPriceBulkResolverTest extends TestCase
         $this->resource->expects($this->exactly(4))
             ->method('getTableName')
             ->willReturnOnConsecutiveCalls(
-                'catalog_product_super_link',
                 'catalog_product_entity',
+                'catalog_product_super_link',
                 'catalog_product_website',
                 'catalog_product_index_price'
             );
-
-        $this->specialPriceBulkResolver->generateSpecialPriceMap(1, $collection);
+        $result = $this->specialPriceBulkResolver->generateSpecialPriceMap($storeId, $collection);
+        $expectedResult = [1 => true];
+        $this->assertEquals($expectedResult, $result);
     }
 }

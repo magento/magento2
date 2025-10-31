@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Elasticsearch\Model\ResourceModel;
 
@@ -64,8 +64,8 @@ class Index extends \Magento\AdvancedSearch\Model\ResourceModel\Index
         CategoryRepositoryInterface $categoryRepository,
         Config $eavConfig,
         $connectionName = null,
-        TableResolver $tableResolver = null,
-        DimensionCollectionFactory $dimensionCollectionFactory = null
+        ?TableResolver $tableResolver = null,
+        ?DimensionCollectionFactory $dimensionCollectionFactory = null
     ) {
         $this->productRepository = $productRepository;
         $this->categoryRepository = $categoryRepository;

@@ -122,9 +122,9 @@ class Template implements FilterInterface
         StringUtils $string,
         $variables = [],
         $directiveProcessors = [],
-        VariableResolverInterface $variableResolver = null,
-        SignatureProvider $signatureProvider = null,
-        FilteringDepthMeter $filteringDepthMeter = null
+        ?VariableResolverInterface $variableResolver = null,
+        ?SignatureProvider $signatureProvider = null,
+        ?FilteringDepthMeter $filteringDepthMeter = null
     ) {
         $this->string = $string;
         $this->setVariables($variables);

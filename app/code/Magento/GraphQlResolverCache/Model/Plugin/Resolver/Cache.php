@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2023 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -110,8 +110,8 @@ class Cache
         Field $field,
         $context,
         ResolveInfo $info,
-        array $value = null,
-        array $args = null
+        ?array $value = null,
+        ?array $args = null
     ) {
         // even though a frontend access proxy is used to prevent saving/loading in $graphQlResolverCache when it is
         // disabled, it's best to return as early as possible to avoid unnecessary processing
@@ -187,8 +187,8 @@ class Cache
         Field $field,
         ContextInterface $context,
         ResolveInfo $info,
-        array &$value = null,
-        array $args = null
+        ?array &$value = null,
+        ?array $args = null
     ) {
         if (is_array($value)) {
             $this->valueProcessor->preProcessParentValue($value);

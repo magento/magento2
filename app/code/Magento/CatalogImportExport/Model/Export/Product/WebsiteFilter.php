@@ -1,8 +1,9 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2021 Adobe
+ * All Rights Reserved.
  */
+
 declare(strict_types=1);
 
 namespace Magento\CatalogImportExport\Model\Export\Product;
@@ -15,19 +16,21 @@ use Magento\CatalogImportExport\Model\Export\ProductFilterInterface;
  */
 class WebsiteFilter implements ProductFilterInterface
 {
-    private const NAME = 'website_id';
+    private const WEBSITE_ID = 'website_id';
+    private const WEBSITE_IDS = 'website_ids';
 
     /**
      * @inheritDoc
      */
     public function filter(Collection $collection, array $filters): Collection
     {
-        if (!isset($filters[self::NAME])) {
+        if (!isset($filters[self::WEBSITE_ID]) && !isset($filters[self::WEBSITE_IDS])) {
             return $collection;
         }
 
-        $collection->addWebsiteFilter($filters[self::NAME]);
-        $collection->setFlag(self::NAME . '_filter_applied');
+        $collection->addWebsiteFilter($filters[self::WEBSITE_IDS] ?? $filters[self::WEBSITE_ID]);
+        $collection->setFlag(self::WEBSITE_ID . '_filter_applied');
+        $collection->setFlag(self::WEBSITE_IDS . '_filter_applied');
 
         return $collection;
     }

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2021 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -56,8 +56,8 @@ abstract class AbstractEntityUrl implements ResolverInterface
         Field $field,
         $context,
         ResolveInfo $info,
-        array $value = null,
-        array $args = null
+        ?array $value = null,
+        ?array $args = null
     ) {
         $this->validateArgs($args);
         $storeId = (int)$context->getExtensionAttributes()->getStore()->getId();
@@ -136,8 +136,11 @@ abstract class AbstractEntityUrl implements ResolverInterface
                 $urlRewrite->getTargetPath(),
                 (int) $urlRewrite->getStoreId()
             );
-            if ($nextUrlRewrite) {
+
+            if ($nextUrlRewrite && $nextUrlRewrite->getTargetPath() !== $urlRewrite->getTargetPath()) {
                 $urlRewrite = $nextUrlRewrite;
+            } else {
+                $nextUrlRewrite = null;
             }
         } while ($nextUrlRewrite);
 

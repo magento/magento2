@@ -26,5 +26,5 @@ interface ResolverInterface
      * @param string|null $module
      * @return string|bool
      */
-    public function resolve($type, $file, $area = null, ThemeInterface $theme = null, $locale = null, $module = null);
+    public function resolve($type, $file, $area = null, ?ThemeInterface $theme = null, $locale = null, $module = null);
 }

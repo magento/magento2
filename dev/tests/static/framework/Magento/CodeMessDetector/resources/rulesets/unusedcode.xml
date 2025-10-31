@@ -13,7 +13,7 @@
 
     <rule name="UnusedFormalParameter"
           message="Avoid unused parameters such as '{0}'."
-          class="Magento\CodeMessDetector\Rule\UnusedCode\UnusedFormalParameter">
+          class="PHPMD\Rule\UnusedFormalParameter">
         <description><![CDATA[Avoid passing parameters to methods or constructors and then not using those parameters except on plugins]]></description>
         <example>
 <![CDATA[

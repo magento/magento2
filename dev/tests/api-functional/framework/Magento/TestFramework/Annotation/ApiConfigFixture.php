@@ -184,7 +184,7 @@ class ApiConfigFixture extends ConfigFixture
     /**
      * @inheritdoc
      */
-    protected function getScopeConfigValue(string $configPath, string $scopeType, string $scopeCode = null): ?string
+    protected function getScopeConfigValue(string $configPath, string $scopeType, ?string $scopeCode = null): ?string
     {
         /** @var ConfigStorage $configStorage */
         $configStorage = Bootstrap::getObjectManager()->get(ConfigStorage::class);

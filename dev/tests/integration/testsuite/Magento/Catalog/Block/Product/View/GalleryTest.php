@@ -502,7 +502,7 @@ class GalleryTest extends \PHPUnit\Framework\TestCase
      * @param int|null $storeId
      * @return void
      */
-    private function setGalleryImages(ProductInterface $product, array $images, int $storeId = null): void
+    private function setGalleryImages(ProductInterface $product, array $images, ?int $storeId = null): void
     {
         $product->setImage(null);
         foreach ($images as $file => $data) {
