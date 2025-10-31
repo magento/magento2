@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2021 Adobe
+ * All Rights Reserved.
  */
 
 declare(strict_types=1);
@@ -750,6 +750,11 @@ class JwkFactory
         return $this->createOct($password, Jwk::PUBLIC_KEY_USE_ENCRYPTION, Jwk::ALGORITHM_PBES2_HS512_A256KW, $kid);
     }
 
+    /**
+     * Create JWK with "none" algorithm (no signature/encryption).
+     *
+     * @return Jwk
+     */
     public function createNone(): Jwk
     {
         return new Jwk(
@@ -761,6 +766,15 @@ class JwkFactory
         );
     }
 
+    /**
+     * Create JWK with octet sequence key type.
+     *
+     * @param string $key
+     * @param string $use
+     * @param string $algo
+     * @param string|null $kid
+     * @return Jwk
+     */
     private function createOct(string $key, string $use, string $algo, ?string $kid): Jwk
     {
         if (strlen($key) < 2048) {
@@ -781,6 +795,16 @@ class JwkFactory
         );
     }
 
+    /**
+     * Create JWK with private RSA key.
+     *
+     * @param string $key
+     * @param string|null $pass
+     * @param string $use
+     * @param string $algorithm
+     * @param string|null $kid
+     * @return Jwk
+     */
     private function createPrivateRsa(string $key, ?string $pass, string $use, string $algorithm, ?string $kid): Jwk
     {
         $resource = openssl_get_privatekey($key, (string)$pass);
@@ -816,6 +840,15 @@ class JwkFactory
         );
     }
 
+    /**
+     * Create JWK with public RSA key.
+     *
+     * @param string $key
+     * @param string $use
+     * @param string $algorithm
+     * @param string|null $kid
+     * @return Jwk
+     */
     private function createPublicRsa(string $key, string $use, string $algorithm, ?string $kid): Jwk
     {
         $resource = openssl_get_publickey($key);
@@ -845,6 +878,17 @@ class JwkFactory
         );
     }
 
+    /**
+     * Create JWK with private EC (Elliptic Curve) key.
+     *
+     * @param string $key
+     * @param string|null $pass
+     * @param int|null $validateCurveBits
+     * @param string $algorithm
+     * @param string $use
+     * @param string|null $kid
+     * @return Jwk
+     */
     private function createPrivateEc(
         string $key,
         ?string $pass,
@@ -883,6 +927,16 @@ class JwkFactory
         );
     }
 
+    /**
+     * Create JWK with public EC (Elliptic Curve) key.
+     *
+     * @param string $key
+     * @param int|null $validateCurveBits
+     * @param string $algorithm
+     * @param string $use
+     * @param string|null $kid
+     * @return Jwk
+     */
     private function createPublicEc(
         string $key,
         ?int $validateCurveBits,

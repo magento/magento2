@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework\Locale\Bundle;
 
@@ -38,6 +38,8 @@ class DataBundle
     }
 
     /**
+     * Create resource bundle for the locale and path
+     *
      * @param string $locale
      * @param string $path
      * @return null|\ResourceBundle
