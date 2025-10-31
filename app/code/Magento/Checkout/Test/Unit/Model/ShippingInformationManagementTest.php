@@ -9,6 +9,7 @@ namespace Magento\Checkout\Test\Unit\Model;
 
 use Magento\Checkout\Api\Data\PaymentDetailsInterface;
 use Magento\Checkout\Api\Data\ShippingInformationInterface;
+use Magento\Checkout\Model\AddressComparatorInterface;
 use Magento\Checkout\Model\PaymentDetailsFactory;
 use Magento\Checkout\Model\ShippingInformationManagement;
 use Magento\Framework\Exception\InputException;
@@ -27,6 +28,7 @@ use Magento\Quote\Api\PaymentMethodManagementInterface;
 use Magento\Quote\Model\Quote;
 use Magento\Quote\Model\Quote\Address;
 use Magento\Quote\Model\QuoteAddressValidator;
+use Magento\Quote\Model\QuoteAddressValidationService;
 use Magento\Quote\Model\Shipping;
 use Magento\Quote\Model\ShippingAssignment;
 use Magento\Quote\Model\ShippingAssignmentFactory;
@@ -124,6 +126,16 @@ class ShippingInformationManagementTest extends TestCase
     private $addressValidatorMock;
 
     /**
+     * @var QuoteAddressValidationService|MockObject
+     */
+    private $quoteAddressValidationServiceMock;
+
+    /**
+     * @var AddressComparatorInterface|MockObject
+     */
+    private $addressComparatorMock;
+
+    /**
      * @inheritdoc
      */
     protected function setUp(): void
@@ -185,6 +197,9 @@ class ShippingInformationManagementTest extends TestCase
         );
         $this->shippingFactoryMock = $this->createPartialMock(ShippingFactory::class, ['create']);
         $this->addressValidatorMock = $this->createMock(QuoteAddressValidator::class);
+        $this->quoteAddressValidationServiceMock = $this->createMock(QuoteAddressValidationService::class);
+        $this->addressComparatorMock = $this->getMockForAbstractClass(AddressComparatorInterface::class);
+        $this->addressComparatorMock->method('isEqual')->willReturn(false);
 
         $this->model = $this->objectManager->getObject(
             ShippingInformationManagement::class,
@@ -196,7 +211,9 @@ class ShippingInformationManagementTest extends TestCase
                 'shippingAssignmentFactory' => $this->shippingAssignmentFactoryMock,
                 'cartExtensionFactory' => $this->cartExtensionFactoryMock,
                 'shippingFactory' => $this->shippingFactoryMock,
-                'addressValidator' => $this->addressValidatorMock
+                'addressValidator' => $this->addressValidatorMock,
+                'addressComparator' => $this->addressComparatorMock,
+                'quoteAddressValidationService' => $this->quoteAddressValidationServiceMock
             ]
         );
     }
@@ -336,6 +353,9 @@ class ShippingInformationManagementTest extends TestCase
         $this->addressValidatorMock->expects($this->exactly(2))
             ->method('validateForCart');
 
+        $this->quoteAddressValidationServiceMock->expects($this->once())
+            ->method('validateAddressesWithRules');
+
         $this->quoteRepositoryMock->expects($this->once())
             ->method('getActive')
             ->with($cartId)
@@ -355,6 +375,7 @@ class ShippingInformationManagementTest extends TestCase
         $billingAddress->expects($this->once())
             ->method('getCustomerAddressId')
             ->willReturn(1);
+        $billingAddress->method('setCustomerAddressId')->willReturnSelf();
 
         $addressInformationMock->expects($this->once())
             ->method('getBillingAddress')
@@ -377,19 +398,23 @@ class ShippingInformationManagementTest extends TestCase
             ->method('setBillingAddress')
             ->with($billingAddress)
             ->willReturnSelf();
-        $this->quoteMock->expects($this->once())
+
+        $quoteBillingAddressMock = $this->getMockForAbstractClass(AddressInterface::class);
+        $quoteBillingAddressMock->method('getCustomerAddressId')->willReturn(null);
+        $this->quoteMock->expects($this->atLeastOnce())
             ->method('getBillingAddress')
-            ->willReturnSelf();
-        $this->quoteMock->expects($this->once())
+            ->willReturn($quoteBillingAddressMock);
+
+        $this->quoteMock->expects($this->atLeastOnce())
             ->method('getShippingAddress')
-            ->willReturnSelf();
+            ->willReturn($this->shippingAddressMock);
 
         $this->quoteRepositoryMock->expects($this->once())
             ->method('save')
             ->with($this->quoteMock)
             ->willThrowException($exception);
 
-        $this->expectException(LocalizedException::class);
+        $this->expectException(InputException::class);
         $this->expectExceptionMessage(
             'The shipping information was unable to be saved. Error: "' . $errorMessage . '"'
         );
@@ -428,6 +453,8 @@ class ShippingInformationManagementTest extends TestCase
             ->willReturn($shippingMethod);
 
         $billingAddress = $this->getMockForAbstractClass(AddressInterface::class);
+        $billingAddress->method('getCustomerAddressId')->willReturn(null);
+        $billingAddress->method('setCustomerAddressId')->willReturnSelf();
         $addressInformationMock->expects($this->once())
             ->method('getBillingAddress')
             ->willReturn($billingAddress);
@@ -450,12 +477,13 @@ class ShippingInformationManagementTest extends TestCase
             ->willReturnSelf();
 
         $quoteBillingAddress = $this->createMock(Address::class);
-        $this->quoteMock->expects($this->once())
+        $quoteBillingAddress->method('getCustomerAddressId')->willReturn(null);
+        $this->quoteMock->expects($this->atLeastOnce())
             ->method('getBillingAddress')
             ->willReturn($quoteBillingAddress);
 
         $quoteShippingAddress = $this->createMock(Address::class);
-        $this->quoteMock->expects($this->once())
+        $this->quoteMock->expects($this->atLeastOnce())
             ->method('getShippingAddress')
             ->willReturn($quoteShippingAddress);
 
@@ -505,6 +533,7 @@ class ShippingInformationManagementTest extends TestCase
         $billingAddress->expects($this->once())
             ->method('getCustomerAddressId')
             ->willReturn(1);
+        $billingAddress->method('setCustomerAddressId')->willReturnSelf();
 
         $addressInformationMock->expects($this->once())
             ->method('getBillingAddress')
@@ -518,9 +547,12 @@ class ShippingInformationManagementTest extends TestCase
         $this->quoteMock->expects($this->once())
             ->method('getItemsCount')
             ->willReturn(self::STUB_ITEMS_COUNT);
-        $this->quoteMock->expects($this->once())
+
+        $quoteBillingAddressMock = $this->getMockForAbstractClass(AddressInterface::class);
+        $quoteBillingAddressMock->method('getCustomerAddressId')->willReturn(null);
+        $this->quoteMock->expects($this->atLeastOnce())
             ->method('getBillingAddress')
-            ->willReturnSelf();
+            ->willReturn($quoteBillingAddressMock);
 
         $this->quoteMock->expects($this->once())
             ->method('setIsMultiShipping')
@@ -530,7 +562,8 @@ class ShippingInformationManagementTest extends TestCase
             ->method('setBillingAddress')
             ->with($billingAddress)
             ->willReturnSelf();
-        $this->quoteMock->expects($this->exactly(2))
+
+        $this->quoteMock->expects($this->atLeastOnce())
             ->method('getShippingAddress')
             ->willReturn($this->shippingAddressMock);
 
@@ -558,6 +591,7 @@ class ShippingInformationManagementTest extends TestCase
      * Save address info test.
      *
      * @return void
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function testSaveAddressInformation(): void
     {
@@ -585,6 +619,8 @@ class ShippingInformationManagementTest extends TestCase
             ->willReturn($shippingMethod);
 
         $billingAddress = $this->getMockForAbstractClass(AddressInterface::class);
+        $billingAddress->method('getCustomerAddressId')->willReturn(null);
+        $billingAddress->method('setCustomerAddressId')->willReturnSelf();
         $addressInformationMock->expects($this->once())
             ->method('getBillingAddress')
             ->willReturn($billingAddress);
@@ -597,9 +633,12 @@ class ShippingInformationManagementTest extends TestCase
         $this->quoteMock->expects($this->once())
             ->method('getItemsCount')
             ->willReturn(self::STUB_ITEMS_COUNT);
-        $this->quoteMock->expects($this->once())
+
+        $quoteBillingAddressMock = $this->getMockForAbstractClass(AddressInterface::class);
+        $quoteBillingAddressMock->method('getCustomerAddressId')->willReturn(null);
+        $this->quoteMock->expects($this->atLeastOnce())
             ->method('getBillingAddress')
-            ->willReturnSelf();
+            ->willReturn($quoteBillingAddressMock);
 
         $this->quoteMock->expects($this->once())
             ->method('setIsMultiShipping')
@@ -609,7 +648,7 @@ class ShippingInformationManagementTest extends TestCase
             ->method('setBillingAddress')
             ->with($billingAddress)
             ->willReturnSelf();
-        $this->quoteMock->expects($this->exactly(2))
+        $this->quoteMock->expects($this->atLeastOnce())
             ->method('getShippingAddress')
             ->willReturn($this->shippingAddressMock);
 
@@ -664,10 +703,11 @@ class ShippingInformationManagementTest extends TestCase
     private function getCartExtensionMock(): MockObject
     {
         $mockBuilder = $this->getMockBuilder(CartExtension::class);
-        try {
+
+        if (method_exists(CartExtension::class, 'getShippingAssignments')) {
+            $mockBuilder->onlyMethods(['getShippingAssignments', 'setShippingAssignments']);
+        } else {
             $mockBuilder->addMethods(['getShippingAssignments', 'setShippingAssignments']);
-        } catch (RuntimeException $e) {
-            // CartExtension already generated.
         }
 
         return $mockBuilder->getMock();

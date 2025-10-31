@@ -192,4 +192,5 @@
     <preference for="Magento\Quote\Model\Quote\Item\CartItemValidatorInterface" type="Magento\Quote\Model\Quote\Item\CartItemValidatorChain"/>
     <preference for="Magento\Quote\Model\Quote\Item\CartItemValidatorResultInterface" type="Magento\Quote\Model\Quote\Item\CartItemValidatorResult"/>
     <virtualType name="Magento\Quote\Model\Quote\Item\CartItemValidatorChainOnSave" type="Magento\Quote\Model\Quote\Item\CartItemValidatorChain"/>
+    <preference for="Magento\Quote\Model\Address\Validator\AddressAttributeValidatorInterface" type="Magento\Quote\Model\Address\Validator\AddressAttributeValidator"/>
 </config>
