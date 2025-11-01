@@ -167,7 +167,6 @@ class CartPricesTest extends TestCase
             ->method('getFieldSelection')
             ->with(1)
             ->willReturn([]);
-        $extAttributes = ['custom_field' => 'custom_value'];
 
         $this->addressExtensionMock = $this->createMock(AddressExtension::class);
 
