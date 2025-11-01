@@ -39,7 +39,7 @@ class PluginTest extends TestCase
 
     public function testAfterGetOptionArray()
     {
-        $this->moduleManagerMock->expects($this->any())->method('isOutputEnabled')->willReturn(false);
+        $this->moduleManagerMock->method('isOutputEnabled')->willReturn(false);
         $this->assertEquals(
             [],
             $this->object->afterGetOptionArray($this->subjectMock, ['grouped' => 'test'])

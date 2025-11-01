@@ -74,48 +74,18 @@ class ConfigurableTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->connectionMock = $this->getMockBuilder(AdapterInterface::class)
-            ->onlyMethods(['select', 'fetchAll', 'insertOnDuplicate'])
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-        $this->resource = $this->getMockBuilder(ResourceConnection::class)
-            ->onlyMethods(['getConnection', 'getTableName'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->connectionMock = $this->createMock(AdapterInterface::class);
+        $this->resource = $this->createPartialMock(ResourceConnection::class, ['getConnection', 'getTableName']);
 
-        $this->relation = $this->getMockBuilder(ProductRelation::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $scopeResolver = $this->getMockBuilder(ScopeResolverInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-        $this->abstractAttribute = $this->getMockBuilder(AbstractAttribute::class)
-            ->onlyMethods(['getBackendTable', 'getAttributeId'])
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-        $this->product = $this->getMockBuilder(Product::class)
-            ->onlyMethods(['__sleep', 'getData'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->attributeOptionProvider = $this->getMockBuilder(AttributeOptionProvider::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->optionProvider = $this->getMockBuilder(OptionProvider::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->relation = $this->createMock(ProductRelation::class);
+        $scopeResolver = $this->createMock(ScopeResolverInterface::class);
+        $this->abstractAttribute = $this->createMock(AbstractAttribute::class);
+        $this->product = $this->createPartialMock(Product::class, ['__sleep', 'getData']);
+        $this->attributeOptionProvider = $this->createMock(AttributeOptionProvider::class);
+        $this->optionProvider = $this->createMock(OptionProvider::class);
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
-        $context = $this->getMockBuilder(Context::class)
-            ->onlyMethods(['getResources'])
-            ->setConstructorArgs(
-                $this->objectManagerHelper->getConstructArguments(
-                    Context::class,
-                    [
-                        'resources' => $this->resource
-                    ]
-                )
-            )
-            ->getMock();
+        $context = $this->createPartialMock(Context::class, ['getResources']);
         $context->expects($this->once())->method('getResources')->willReturn($this->resource);
 
         $this->configurable = $this->objectManagerHelper->getObject(
@@ -138,13 +108,10 @@ class ConfigurableTest extends TestCase
         $this->optionProvider->expects($this->once())
             ->method('getProductEntityLinkField')
             ->willReturnSelf();
-        $this->resource->expects($this->any())->method('getConnection')->willReturn($this->connectionMock);
-        $this->resource->expects($this->any())->method('getTableName')->willReturn('table name');
+        $this->resource->method('getConnection')->willReturn($this->connectionMock);
+        $this->resource->method('getTableName')->willReturn('table name');
 
-        $select = $this->getMockBuilder(Select::class)
-            ->onlyMethods(['from', 'where'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $select = $this->createPartialMock(Select::class, ['from', 'where']);
         $select->expects($this->exactly(1))->method('from')->willReturnSelf();
         $select->expects($this->exactly(1))->method('where')->willReturnSelf();
 
@@ -190,12 +157,8 @@ class ConfigurableTest extends TestCase
             ->with('link')
             ->willReturn('getId value');
 
-        $this->abstractAttribute->expects($this->any())
-            ->method('getBackendTable')
-            ->willReturn('getBackendTable value');
-        $this->abstractAttribute->expects($this->any())
-            ->method('getAttributeId')
-            ->willReturn('getAttributeId value');
+        $this->abstractAttribute->method('getBackendTable')->willReturn('getBackendTable value');
+        $this->abstractAttribute->method('getAttributeId')->willReturn('getAttributeId value');
         $attributes = [
             $this->abstractAttribute,
         ];

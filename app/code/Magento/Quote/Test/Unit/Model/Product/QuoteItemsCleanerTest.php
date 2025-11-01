@@ -35,10 +35,10 @@ class QuoteItemsCleanerTest extends TestCase
     public function testExecute()
     {
         $tableName = 'table_name';
-        $productMock = $this->getMockForAbstractClass(ProductInterface::class);
+        $productMock = $this->createMock(ProductInterface::class);
         $productMock->expects($this->once())->method('getId')->willReturn(1);
 
-        $connectionMock = $this->getMockForAbstractClass(AdapterInterface::class);
+        $connectionMock = $this->createMock(AdapterInterface::class);
         $this->itemResourceMock->expects($this->once())->method('getConnection')->willReturn($connectionMock);
         $this->itemResourceMock->expects($this->once())->method('getMainTable')->willReturn($tableName);
 

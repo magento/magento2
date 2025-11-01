@@ -40,22 +40,13 @@ class WizardTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->resultFactory = $this->getMockBuilder(ResultFactory::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->productBuilder = $this->getMockBuilder(Builder::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['build'])
-            ->getMock();
-        $this->request = $this->getMockBuilder(RequestInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-        $context = $this->getMockBuilder(Context::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->resultFactory = $this->createMock(ResultFactory::class);
+        $this->productBuilder = $this->createPartialMock(Builder::class, ['build']);
+        $this->request = $this->createMock(RequestInterface::class);
+        $context = $this->createMock(Context::class);
 
-        $context->expects($this->any())->method('getResultFactory')->willReturn($this->resultFactory);
-        $context->expects($this->any())->method('getRequest')->willReturn($this->request);
+        $context->method('getResultFactory')->willReturn($this->resultFactory);
+        $context->method('getRequest')->willReturn($this->request);
 
         $objectManagerHelper = new ObjectManagerHelper($this);
         $this->model = $objectManagerHelper->getObject(

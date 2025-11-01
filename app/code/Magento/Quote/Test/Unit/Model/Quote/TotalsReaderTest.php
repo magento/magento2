@@ -9,6 +9,7 @@ namespace Magento\Quote\Test\Unit\Model\Quote;
 
 use Magento\Quote\Model\Quote;
 use Magento\Quote\Model\Quote\Address\Total;
+use Magento\Quote\Test\Unit\Helper\TotalTestHelper;
 use Magento\Quote\Model\Quote\Address\Total\AbstractTotal;
 use Magento\Quote\Model\Quote\Address\TotalFactory;
 use Magento\Quote\Model\Quote\TotalsCollectorList;
@@ -73,12 +74,7 @@ class TotalsReaderTest extends TestCase
     {
         $total = [];
         $storeId = 1;
-        $testedTotalMock =
-            $this->getMockBuilder(Total::class)
-                ->addMethods(['getCode'])
-                ->onlyMethods(['setData'])
-                ->disableOriginalConstructor()
-                ->getMock();
+        $testedTotalMock = $this->createPartialMock(TotalTestHelper::class, ['setData', 'getCode']);
         $expected = ['my_total_type' => $testedTotalMock];
         $data = ['code' => 'my_total_type'];
         $this->totalMock->expects($this->once())->method('setData')->with([])->willReturnSelf();
@@ -96,7 +92,7 @@ class TotalsReaderTest extends TestCase
             ->with($this->quoteMock, $this->totalMock)
             ->willReturn($data);
         $testedTotalMock->expects($this->once())->method('setData')->with($data)->willReturnSelf();
-        $testedTotalMock->expects($this->any())->method('getCode')->willReturn('my_total_type');
+        $testedTotalMock->method('getCode')->willReturn('my_total_type');
         $this->assertEquals($expected, $this->model->fetch($this->quoteMock, $total));
     }
 
@@ -132,18 +128,8 @@ class TotalsReaderTest extends TestCase
     {
         $total = [];
         $storeId = 1;
-        $firstTotalMock =
-            $this->getMockBuilder(Total::class)
-                ->addMethods(['getCode'])
-                ->onlyMethods(['setData'])
-                ->disableOriginalConstructor()
-                ->getMock();
-        $secondTotalMock =
-            $this->getMockBuilder(Total::class)
-                ->addMethods(['getCode'])
-                ->onlyMethods(['setData'])
-                ->disableOriginalConstructor()
-                ->getMock();
+        $firstTotalMock = $this->createPartialMock(TotalTestHelper::class, ['setData', 'getCode']);
+        $secondTotalMock = $this->createPartialMock(TotalTestHelper::class, ['setData', 'getCode']);
         $expected = ['first_total_type' => $firstTotalMock, 'second_total_type' => $secondTotalMock];
         $data = [['code' => 'first_total_type'], ['code' => 'second_total_type']];
         $this->totalMock->expects($this->once())->method('setData')->with([])->willReturnSelf();
@@ -162,8 +148,8 @@ class TotalsReaderTest extends TestCase
             ->willReturn($data);
         $firstTotalMock->expects($this->once())->method('setData')->with($data[0])->willReturnSelf();
         $secondTotalMock->expects($this->once())->method('setData')->with($data[1])->willReturnSelf();
-        $firstTotalMock->expects($this->any())->method('getCode')->willReturn('first_total_type');
-        $secondTotalMock->expects($this->any())->method('getCode')->willReturn('second_total_type');
+        $firstTotalMock->method('getCode')->willReturn('first_total_type');
+        $secondTotalMock->method('getCode')->willReturn('second_total_type');
         $this->assertEquals($expected, $this->model->fetch($this->quoteMock, $total));
     }
 
@@ -174,12 +160,7 @@ class TotalsReaderTest extends TestCase
     {
         $total = [];
         $storeId = 1;
-        $testedTotalMock =
-            $this->getMockBuilder(Total::class)
-                ->addMethods(['getCode'])
-                ->onlyMethods(['setData'])
-                ->disableOriginalConstructor()
-                ->getMock();
+        $testedTotalMock = $this->createPartialMock(TotalTestHelper::class, ['setData', 'getCode']);
         $expected = ['my_total_type' => $testedTotalMock];
         $this->totalMock->expects($this->once())->method('setData')->with([])->willReturnSelf();
         $this->quoteMock->expects($this->once())->method('getStoreId')->willReturn($storeId);
@@ -197,7 +178,7 @@ class TotalsReaderTest extends TestCase
             ->with($this->quoteMock, $this->totalMock)
             ->willReturn($testedTotalMock);
         $testedTotalMock->expects($this->never())->method('setData');
-        $testedTotalMock->expects($this->any())->method('getCode')->willReturn('my_total_type');
+        $testedTotalMock->method('getCode')->willReturn('my_total_type');
         $this->assertEquals($expected, $this->model->fetch($this->quoteMock, $total));
     }
 }

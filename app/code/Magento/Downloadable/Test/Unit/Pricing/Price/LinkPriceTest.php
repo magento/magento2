@@ -53,12 +53,12 @@ class LinkPriceTest extends TestCase
         $this->saleableItemMock = $this->createMock(Product::class);
         $this->amountMock = $this->createMock(Base::class);
         $this->calculatorMock = $this->createMock(Calculator::class);
-        $this->linkMock = $this->getMockBuilder(\Magento\Downloadable\Model\Link::class)->addMethods(['getProduct'])
-            ->onlyMethods(['getPrice', '__wakeup'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->linkMock = $this->createPartialMock(
+            \Magento\Downloadable\Test\Unit\Helper\LinkTestHelper::class,
+            ['getProduct', 'getPrice', '__wakeup']
+        );
 
-        $this->priceCurrencyMock = $this->getMockForAbstractClass(PriceCurrencyInterface::class);
+        $this->priceCurrencyMock = $this->createMock(PriceCurrencyInterface::class);
 
         $this->linkPrice = new LinkPrice(
             $this->saleableItemMock,

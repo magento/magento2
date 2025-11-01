@@ -3,6 +3,7 @@
  * Copyright 2025 Adobe
  * All Rights Reserved.
  */
+
 declare(strict_types=1);
 
 namespace Magento\QuoteGraphQl\Test\Unit\Model\Resolver;
@@ -24,6 +25,7 @@ use Magento\QuoteGraphQl\Model\Resolver\CartPrices;
 use GraphQL\Language\AST\OperationDefinitionNode;
 use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\MockObject\MockObject;
+use Magento\Quote\Test\Unit\Helper\TotalTestHelper;
 
 /**
  * @see CartPrices
@@ -143,7 +145,6 @@ class CartPricesTest extends TestCase
                 ]
             )
             ->getMock();
-
         $this->cartPrices = new CartPrices(
             $this->totalsCollectorMock,
             $this->scopeConfigMock,

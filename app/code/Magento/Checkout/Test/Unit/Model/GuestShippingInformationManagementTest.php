@@ -11,8 +11,8 @@ use Magento\Checkout\Api\Data\PaymentDetailsInterface;
 use Magento\Checkout\Api\Data\ShippingInformationInterface;
 use Magento\Checkout\Api\ShippingInformationManagementInterface;
 use Magento\Checkout\Model\GuestShippingInformationManagement;
-use Magento\Quote\Model\QuoteIdMask;
 use Magento\Quote\Model\QuoteIdMaskFactory;
+use Magento\Quote\Test\Unit\Helper\QuoteIdMaskLoadByMaskedIdTestHelper;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -38,10 +38,7 @@ class GuestShippingInformationManagementTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->quoteIdMaskFactoryMock = $this->createPartialMock(
-            QuoteIdMaskFactory::class,
-            ['create']
-        );
+        $this->quoteIdMaskFactoryMock = $this->createMock(QuoteIdMaskFactory::class);
         $this->shippingInformationManagementMock = $this->createMock(
             ShippingInformationManagementInterface::class
         );
@@ -55,19 +52,12 @@ class GuestShippingInformationManagementTest extends TestCase
     {
         $cartId = 'masked_id';
         $quoteId = '100';
-        $addressInformationMock = $this->getMockForAbstractClass(ShippingInformationInterface::class);
-        $quoteIdMaskMock = $this->getMockBuilder(QuoteIdMask::class)
-            ->addMethods(['getQuoteId'])
-            ->onlyMethods(['load'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->quoteIdMaskFactoryMock->expects($this->once())->method('create')->willReturn($quoteIdMaskMock);
-        $quoteIdMaskMock->expects($this->once())
-            ->method('load')
-            ->with($cartId, 'masked_id')
-            ->willReturnSelf();
-        $quoteIdMaskMock->expects($this->once())->method('getQuoteId')->willReturn($quoteId);
-        $paymentInformationMock = $this->getMockForAbstractClass(PaymentDetailsInterface::class);
+        $addressInformationMock = $this->createMock(ShippingInformationInterface::class);
+
+        $quoteIdMask = new QuoteIdMaskLoadByMaskedIdTestHelper($quoteId);
+        $this->quoteIdMaskFactoryMock->expects($this->once())->method('create')->willReturn($quoteIdMask);
+
+        $paymentInformationMock = $this->createMock(PaymentDetailsInterface::class);
         $this->shippingInformationManagementMock->expects($this->once())
             ->method('saveAddressInformation')
             ->with(
@@ -75,6 +65,7 @@ class GuestShippingInformationManagementTest extends TestCase
                 $addressInformationMock
             )
             ->willReturn($paymentInformationMock);
+
         $this->model->saveAddressInformation($cartId, $addressInformationMock);
     }
 }
