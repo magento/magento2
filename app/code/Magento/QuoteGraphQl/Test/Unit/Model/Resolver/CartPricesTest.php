@@ -25,7 +25,6 @@ use Magento\QuoteGraphQl\Model\Resolver\CartPrices;
 use GraphQL\Language\AST\OperationDefinitionNode;
 use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\MockObject\MockObject;
-use Magento\Quote\Test\Unit\Helper\TotalTestHelper;
 
 /**
  * @see CartPrices
