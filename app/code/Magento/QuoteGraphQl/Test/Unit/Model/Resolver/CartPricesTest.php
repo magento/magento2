@@ -126,7 +126,7 @@ class CartPricesTest extends TestCase
         $this->contextMock = $this->createMock(Context::class);
         $this->quoteMock = $this->getMockBuilder(Quote::class)
             ->disableOriginalConstructor()
-            ->addMethods(['getQuoteCurrencyCode'])
+            ->addMethods(['getQuoteCurrencyCode', 'getTriggerRecollect'])
             ->onlyMethods(['isVirtual', 'getShippingAddress'])
             ->getMock();
         $this->totalMock = $this->getMockBuilder(Total::class)
@@ -139,8 +139,7 @@ class CartPricesTest extends TestCase
                     'getDiscountTaxCompensationAmount',
                     'getDiscountAmount',
                     'getDiscountDescription',
-                    'getAppliedTaxes',
-                    'setExtensionAttributes'
+                    'getAppliedTaxes'
                 ]
             )
             ->getMock();
@@ -182,6 +181,11 @@ class CartPricesTest extends TestCase
         $this->quoteMock
             ->expects($this->once())
             ->method('isVirtual')
+            ->willReturn(0);
+
+        $this->quoteMock
+            ->expects($this->once())
+            ->method('getTriggerRecollect')
             ->willReturn(0);
 
         $this->quoteMock
