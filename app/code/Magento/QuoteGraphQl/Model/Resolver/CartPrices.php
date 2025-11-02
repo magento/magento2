@@ -90,7 +90,7 @@ class CartPrices implements ResolverInterface
 
         // check scenarios require force recollecting totals
         // discounts should return rule details, which are calculated as part of collectTotals
-        if (!$quote->isVirtual() && $quote->getTriggerRecollect() == 0 &&
+        if (!$quote->isVirtual() && $quote->getTriggerRecollect() != 1 &&
             $info->operation->operation == self::QUERY_TYPE &&
             !array_key_exists('discounts', $info->getFieldSelection(1))
         ) {

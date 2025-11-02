@@ -25,6 +25,7 @@ use Magento\QuoteGraphQl\Model\Resolver\CartPrices;
 use GraphQL\Language\AST\OperationDefinitionNode;
 use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\MockObject\MockObject;
+use Magento\Quote\Test\Unit\Helper\TotalTestHelper;
 
 /**
  * @see CartPrices
@@ -130,20 +131,18 @@ class CartPricesTest extends TestCase
             ->addMethods(['getQuoteCurrencyCode', 'getTriggerRecollect'])
             ->onlyMethods(['isVirtual', 'getShippingAddress'])
             ->getMock();
-        $this->totalMock = $this->getMockBuilder(Total::class)
-            ->disableOriginalConstructor()
-            ->addMethods(
-                [
-                    'getSubtotal',
-                    'getSubtotalInclTax',
-                    'getGrandTotal',
-                    'getDiscountTaxCompensationAmount',
-                    'getDiscountAmount',
-                    'getDiscountDescription',
-                    'getAppliedTaxes'
-                ]
-            )
-            ->getMock();
+        $this->totalMock = $this->createPartialMock(
+            TotalTestHelper::class,
+            [
+                'getSubtotal',
+                'getSubtotalInclTax',
+                'getGrandTotal',
+                'getDiscountTaxCompensationAmount',
+                'getDiscountAmount',
+                'getDiscountDescription',
+                'getAppliedTaxes'
+            ]
+        );
         $this->cartPrices = new CartPrices(
             $this->totalsCollectorMock,
             $this->scopeConfigMock,
