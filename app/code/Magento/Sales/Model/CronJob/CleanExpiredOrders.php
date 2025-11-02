@@ -60,7 +60,7 @@ class CleanExpiredOrders
             /** @var $orders \Magento\Sales\Model\ResourceModel\Order\Collection */
             $orders = $this->orderCollectionFactory->create();
             $orders->addFieldToFilter('store_id', $storeId);
-            $orders->addFieldToFilter('status', Order::STATE_PENDING_PAYMENT);
+            $orders->addFieldToFilter('state', Order::STATE_PENDING_PAYMENT);
             $orders->getSelect()->where(
                 new \Zend_Db_Expr('TIME_TO_SEC(TIMEDIFF(CURRENT_TIMESTAMP, `updated_at`)) >= ' . $lifetime * 60)
             );
