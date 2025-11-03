@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\ConfigurableProduct\Test\Unit\Model\Product\Type;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\Catalog\Model\Product\Type;
 use Magento\ConfigurableProduct\Model\Product\Type\Plugin;
 use Magento\Framework\Module\Manager;
@@ -17,12 +18,11 @@ class PluginTest extends TestCase
     /**
      * @param array $expected
      * @param array $data
-     * @dataProvider afterGetOptionArrayDataProvider
      */
+    #[DataProvider('afterGetOptionArrayDataProvider')]
     public function testAfterGetOptionArray(array $expected, array $data)
     {
-        if (!empty($data['subject']) && is_callable($data['subject']))
-        {
+        if (!empty($data['subject']) && is_callable($data['subject'])) {
             $data['subject'] = $data['subject']($this);
         }
         $moduleManagerMock = $this->createPartialMock(Manager::class, ['isOutputEnabled']);

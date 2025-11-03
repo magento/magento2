@@ -59,20 +59,30 @@ class QuoteSetupTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->moduleDataSetupMock = $this->getMockBuilder(ModuleDataSetupInterface::class)
-            ->getMockForAbstractClass();
+        $this->moduleDataSetupMock = $this->createMock(ModuleDataSetupInterface::class);
         $this->contextMock = $this->getMockBuilder(Context::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->cacheMock = $this->getMockBuilder(CacheInterface::class)
-            ->getMockForAbstractClass();
+        $this->cacheMock = $this->createMock(CacheInterface::class);
         $this->collectionFactoryMock = $this->getMockBuilder(CollectionFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->scopeConfigMock = $this->getMockBuilder(ScopeConfigInterface::class)
-            ->getMockForAbstractClass();
+        $this->scopeConfigMock = $this->createMock(ScopeConfigInterface::class);
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
+        // Prepare ObjectManager mappings for optional EAV dependencies used inside EavSetup constructor
+        $this->objectManagerHelper->prepareObjectManager([
+            [\Magento\Eav\Setup\AddOptionToAttribute::class,
+                $this->createMock(\Magento\Eav\Setup\AddOptionToAttribute::class)],
+            [\Magento\Eav\Model\Validator\Attribute\Code::class,
+                $this->createMock(\Magento\Eav\Model\Validator\Attribute\Code::class)],
+            [\Magento\Eav\Model\ReservedAttributeCheckerInterface::class,
+                $this->createMock(\Magento\Eav\Model\ReservedAttributeCheckerInterface::class)],
+            [\Magento\Eav\Model\AttributeFactory::class,
+                $this->createMock(\Magento\Eav\Model\AttributeFactory::class)],
+            [\Magento\Eav\Model\Config::class,
+                $this->createMock(\Magento\Eav\Model\Config::class)],
+        ]);
         $this->model = $this->objectManagerHelper->getObject(
             QuoteSetup::class,
             [

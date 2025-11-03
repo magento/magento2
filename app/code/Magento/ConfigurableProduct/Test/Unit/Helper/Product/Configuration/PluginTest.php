@@ -49,7 +49,7 @@ class PluginTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->itemMock = $this->getMockForAbstractClass(ItemInterface::class);
+        $this->itemMock = $this->createMock(ItemInterface::class);
         $this->productMock = $this->createMock(Product::class);
         $this->typeInstanceMock = $this->createPartialMock(
             Configurable::class,

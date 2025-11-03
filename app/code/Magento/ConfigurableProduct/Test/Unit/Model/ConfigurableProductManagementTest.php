@@ -52,8 +52,8 @@ class ConfigurableProductManagementTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->attributeRepository = $this->getMockForAbstractClass(ProductAttributeRepositoryInterface::class);
-        $this->product = $this->getMockForAbstractClass(ProductInterface::class);
+        $this->attributeRepository = $this->createMock(ProductAttributeRepositoryInterface::class);
+        $this->product = $this->createMock(ProductInterface::class);
         $this->option = $this->createMock(
             Attribute::class
         );
@@ -79,13 +79,13 @@ class ConfigurableProductManagementTest extends TestCase
         $attributeOption->expects($this->once())->method('getData')->willReturn(['key' => 'value']);
 
         $attribute = $this->createMock(\Magento\Catalog\Model\ResourceModel\Eav\Attribute::class);
-        $attribute->expects($this->any())->method('getOptions')->willReturn([$attributeOption]);
+        $attribute->method('getOptions')->willReturn([$attributeOption]);
         $attribute->expects($this->once())->method('getAttributeCode')->willReturn(10);
 
-        $this->option->expects($this->any())->method('getAttributeId')->willReturn(1);
+        $this->option->method('getAttributeId')->willReturn(1);
         $this->attributeRepository->expects($this->once())->method('get')->with(1)->willReturn($attribute);
 
-        $this->option->expects($this->any())->method('getData')->willReturn($data);
+        $this->option->method('getData')->willReturn($data);
 
         $expectedAttributes = [
             1 => [
