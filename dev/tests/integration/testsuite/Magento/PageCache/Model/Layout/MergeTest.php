@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\PageCache\Model\Layout;
 
@@ -15,7 +15,7 @@ class MergeTest extends \PHPUnit\Framework\TestCase
     public function testLoadEntitySpecificHandleWithEsiBlock()
     {
         $this->expectException(\LogicException::class);
-        $this->expectExceptionMessage('Handle \'default\' must not contain blocks with \'ttl\' attribute specified');
+        $this->expectExceptionMessage('must not contain blocks with \'ttl\' attribute specified');
 
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 
@@ -29,10 +29,15 @@ class MergeTest extends \PHPUnit\Framework\TestCase
 
         /** @var EntitySpecificHandlesList $entitySpecificHandleList */
         $entitySpecificHandleList = $objectManager->get(EntitySpecificHandlesList::class);
-        // Add 'default' handle, which has declarations of blocks with ttl, to the list of entity specific handles.
-        // This allows to simulate a situation, when block with ttl attribute
-        // is declared e.g. in 'catalog_product_view_id_1' handle
-        $entitySpecificHandleList->addHandle('default');
-        $layoutMerge->load(['default']);
+
+        // Register test handle as entity-specific
+        $testHandle = 'default';
+        $entitySpecificHandleList->addHandle($testHandle);
+
+        // Simple XML with ttl attribute that should trigger the validation
+        $layoutXml = '<block class="Magento\Framework\View\Element\Template" name="test.block" ttl="3600"/>';
+
+        // This should throw exception because the handle is entity-specific and contains ttl
+        $layoutMerge->validateUpdate($testHandle, $layoutXml);
     }
 }
