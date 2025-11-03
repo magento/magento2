@@ -28,7 +28,7 @@ class AttributeSelectorTest extends TestCase
     protected function setUp(): void
     {
         $helper = new ObjectManager($this);
-        $this->urlBuilder = $this->getMockForAbstractClass(UrlInterface::class);
+        $this->urlBuilder = $this->createMock(UrlInterface::class);
         $this->attributeSelector = $helper->getObject(
             AttributeSelector::class,
             ['urlBuilder' => $this->urlBuilder]

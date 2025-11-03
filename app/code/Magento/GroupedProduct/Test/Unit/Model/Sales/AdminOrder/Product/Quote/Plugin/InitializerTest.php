@@ -58,23 +58,11 @@ class InitializerTest extends TestCase
     {
         $this->objectManagerHelper = new ObjectManagerHelper($this);
 
-        $this->initializer = $this->getMockBuilder(QuoteInitializer::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->quote = $this->getMockBuilder(Quote::class)
-            ->onlyMethods(['addProduct'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->product = $this->getMockBuilder(Product::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['getTypeId'])
-            ->getMock();
-        $this->quoteItem = $this->getMockBuilder(QuoteItem::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->config = $this->getMockBuilder(DataObject::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->initializer = $this->createMock(QuoteInitializer::class);
+        $this->quote = $this->createPartialMock(Quote::class, ['addProduct']);
+        $this->product = $this->createPartialMock(Product::class, ['getTypeId']);
+        $this->quoteItem = $this->createMock(QuoteItem::class);
+        $this->config = $this->createMock(DataObject::class);
 
         $this->plugin = $this->objectManagerHelper->getObject(
             QuoteInitializerPlugin::class

@@ -7,6 +7,8 @@ declare(strict_types=1);
 
 namespace Magento\GroupedProduct\Test\Unit\Model\Product\Type\Grouped;
 
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\Product\Option;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
@@ -15,6 +17,7 @@ use Magento\GroupedProduct\Model\Product\Type\Grouped\Price;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
+#[CoversClass(\Magento\GroupedProduct\Model\Product\Type\Grouped\Price::class)]
 class PriceTest extends TestCase
 {
     /**
@@ -43,17 +46,12 @@ class PriceTest extends TestCase
 
     /**
      * @return void
-     * @covers \Magento\GroupedProduct\Model\Product\Type\Grouped\Price::getFinalPrice
      */
     public function testGetFinalPriceIfQtyIsNullAndFinalPriceExist(): void
     {
         $finalPrice = 15;
 
-        $this->productMock->expects(
-            $this->any()
-        )->method(
-            'getCalculatedFinalPrice'
-        )->willReturn(
+        $this->productMock->method('getCalculatedFinalPrice')->willReturn(
             $finalPrice
         );
 
@@ -69,9 +67,9 @@ class PriceTest extends TestCase
      * @param $expectedFinalPrice
      *
      * @return void
-     * @dataProvider getFinalPriceDataProvider
-     * @covers \Magento\GroupedProduct\Model\Product\Type\Grouped\Price::getFinalPrice
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
+    #[DataProvider('getFinalPriceDataProvider')]
     public function testGetFinalPrice(
         array $associatedProducts,
         array $options,
@@ -93,16 +91,12 @@ class PriceTest extends TestCase
             $associatedProducts = $associatedProducts[0]($this);
         }
 
-        $this->productMock->expects(
-            $this->any()
-        )->method(
-            'getCalculatedFinalPrice'
-        )->willReturn(
+        $this->productMock->method('getCalculatedFinalPrice')->willReturn(
             $rawFinalPrice
         );
 
         //mock for parent::getFinal price call
-        $this->productMock->expects($this->any())->method('getPrice')->willReturn($rawFinalPrice);
+        $this->productMock->method('getPrice')->willReturn($rawFinalPrice);
 
         $this->productMock
             ->method('setFinalPrice')
@@ -152,7 +146,7 @@ class PriceTest extends TestCase
             $productTypeMock
         );
 
-        $this->productMock->expects($this->any())->method('getStore')->willReturn('store1');
+        $this->productMock->method('getStore')->willReturn('store1');
 
         $productTypeMock->expects(
             $this->once()
@@ -182,13 +176,9 @@ class PriceTest extends TestCase
 
     protected function getMockForOptionsClass()
     {
-        $optionMock = $this->getMockBuilder(Option::class)
-            ->addMethods(['getValue'])
-            ->onlyMethods(['__wakeup'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $optionMock = $this->createMock(Option::class);
         /* quantity of options */
-        $optionMock->expects($this->any())->method('getValue')->willReturn(5);
+        $optionMock->setValue(5);
         return $optionMock;
     }
 

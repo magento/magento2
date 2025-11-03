@@ -606,6 +606,18 @@ class Payflowpro extends \Magento\Payment\Model\Method\Cc implements GatewayInte
 
     /**
      * @inheritdoc
+     */
+    public function setStore($storeId)
+    {
+        parent::setStore($storeId);
+        if ($this->config) {
+            $storeId = $this->storeManager->getStore($this->getStore())->getId();
+            $this->config->setStoreId($storeId);
+        }
+    }
+
+    /**
+     * @inheritdoc
      *
      * @throws ClientException
      */
