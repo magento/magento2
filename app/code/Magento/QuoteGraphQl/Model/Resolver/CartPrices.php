@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright 2025 Adobe
+ * Copyright 2019 Adobe
  * All Rights Reserved.
  */
 declare(strict_types=1);
@@ -22,6 +22,7 @@ use Magento\Quote\Model\Quote\Address\Total;
 use Magento\Quote\Model\Cart\Totals as CartTotals;
 use Magento\QuoteGraphQl\Model\Cart\TotalsCollector;
 use Magento\Store\Model\ScopeInterface;
+use Magento\Quote\Model\Quote\Address;
 
 /**
  * @inheritdoc
@@ -145,14 +146,14 @@ class CartPrices implements ResolverInterface
     /**
      * Returns taxes applied to the current quote
      *
-     * @param \Magento\Quote\Model\Quote\Address|Total $addressOrTotals
+     * @param Address|Total $addressOrTotals
      * @param string $currency
      * @return array
      * @throws \InvalidArgumentException
      */
-    private function getAppliedTaxes($addressOrTotals, string $currency): array
+    private function getAppliedTaxes(Address|Total $addressOrTotals, string $currency): array
     {
-        if (!$addressOrTotals instanceof Total && !$addressOrTotals instanceof \Magento\Quote\Model\Quote\Address) {
+        if (!$addressOrTotals instanceof Total && !$addressOrTotals instanceof Address) {
             throw new \InvalidArgumentException('Unsupported totals type: ' . get_class($addressOrTotals));
         }
 
@@ -196,7 +197,7 @@ class CartPrices implements ResolverInterface
      * @return array|null
      * @throws \InvalidArgumentException
      */
-    private function getDiscount($totals, string $currency)
+    private function getDiscount(Total|CartTotals $totals, string $currency)
     {
         $this->validateTotalsInstance($totals);
 
@@ -217,7 +218,7 @@ class CartPrices implements ResolverInterface
      * @return float
      * @throws \InvalidArgumentException
      */
-    private function getSubtotalWithDiscountExcludingTax($totals): float
+    private function getSubtotalWithDiscountExcludingTax(Total|CartTotals $totals): float
     {
         $this->validateTotalsInstance($totals);
 
@@ -239,7 +240,7 @@ class CartPrices implements ResolverInterface
      * @return void
      * @throws \InvalidArgumentException If the provided totals instance is of an unsupported type.
      */
-    private function validateTotalsInstance($totals)
+    private function validateTotalsInstance($totals): void
     {
 
         if (!$totals instanceof Total && !$totals instanceof CartTotals) {
