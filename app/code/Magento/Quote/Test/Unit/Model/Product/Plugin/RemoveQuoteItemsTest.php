@@ -37,7 +37,7 @@ class RemoveQuoteItemsTest extends TestCase
     public function testAfterDelete()
     {
         $productResourceMock = $this->createMock(Product::class);
-        $productMock = $this->getMockForAbstractClass(ProductInterface::class);
+        $productMock = $this->createMock(ProductInterface::class);
 
         $this->quoteItemsCleanerMock->expects($this->once())->method('execute')->with($productMock);
         $result = $this->model->afterDelete($productResourceMock, $productResourceMock, $productMock);

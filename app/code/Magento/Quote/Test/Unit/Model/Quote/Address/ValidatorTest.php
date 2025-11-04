@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright 2015 Adobe
+ * Copyright 2014 Adobe
  * All Rights Reserved.
  */
 declare(strict_types=1);
@@ -48,9 +48,7 @@ class ValidatorTest extends TestCase
             ['getCountryId', 'getEmail']
         );
         $this->countryFactoryMock
-            ->expects($this->any())
-            ->method('create')
-            ->willReturn($this->countryMock);
+            ->method('create')->willReturn($this->countryMock);
         $this->model = $objectManager->getObject(
             Validator::class,
             [

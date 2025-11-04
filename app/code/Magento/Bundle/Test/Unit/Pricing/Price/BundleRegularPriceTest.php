@@ -11,6 +11,7 @@ use Magento\Bundle\Model\Product\Price;
 use Magento\Bundle\Pricing\Adjustment\BundleCalculatorInterface;
 use Magento\Bundle\Pricing\Price\BundleRegularPrice;
 use Magento\Catalog\Model\Product;
+use Magento\Catalog\Test\Unit\Helper\ProductTestHelper;
 use Magento\Catalog\Pricing\Price\CustomOptionPrice;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
 use Magento\Framework\Pricing\PriceInfo\Base;
@@ -54,26 +55,19 @@ class BundleRegularPriceTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->saleableInterfaceMock = $this->getMockBuilder(Product::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['getPriceType'])
-            ->onlyMethods(['getPriceInfo', 'getPrice'])
-            ->getMock();
+        /** @var Product */
+        $this->saleableInterfaceMock = new ProductTestHelper();
         $this->bundleCalculatorMock = $this->createMock(
             BundleCalculatorInterface::class
         );
 
         $this->priceInfoMock = $this->createMock(Base::class);
 
-        $this->customOptionPriceMock = $this->getMockBuilder(CustomOptionPrice::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->customOptionPriceMock = $this->createMock(CustomOptionPrice::class);
 
-        $this->saleableInterfaceMock->expects($this->once())
-            ->method('getPriceInfo')
-            ->willReturn($this->priceInfoMock);
+        $this->saleableInterfaceMock->setPriceInfo($this->priceInfoMock);
 
-        $this->priceCurrencyMock = $this->getMockForAbstractClass(PriceCurrencyInterface::class);
+        $this->priceCurrencyMock = $this->createMock(PriceCurrencyInterface::class);
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->regularPrice = new BundleRegularPrice(
@@ -88,9 +82,7 @@ class BundleRegularPriceTest extends TestCase
     {
         $expectedResult = 5;
 
-        $this->saleableInterfaceMock->expects($this->once())
-            ->method('getPrice')
-            ->willReturn($expectedResult);
+        $this->saleableInterfaceMock->setPrice($expectedResult);
 
         $this->bundleCalculatorMock->expects($this->once())
             ->method('getMinRegularAmount')
@@ -113,9 +105,7 @@ class BundleRegularPriceTest extends TestCase
     {
         $expectedResult = 5;
 
-        $this->saleableInterfaceMock->expects($this->once())
-            ->method('getPrice')
-            ->willReturn($expectedResult);
+        $this->saleableInterfaceMock->setPrice($expectedResult);
 
         $this->bundleCalculatorMock->expects($this->once())
             ->method('getMaxRegularAmount')
@@ -151,13 +141,9 @@ class BundleRegularPriceTest extends TestCase
             ->with(false)
             ->willReturn($maxOptionPrice);
 
-        $this->saleableInterfaceMock->expects($this->once())
-            ->method('getPriceType')
-            ->willReturn(Price::PRICE_TYPE_FIXED);
+        $this->saleableInterfaceMock->setPriceType(Price::PRICE_TYPE_FIXED);
 
-        $this->saleableInterfaceMock->expects($this->once())
-            ->method('getPrice')
-            ->willReturn($price);
+        $this->saleableInterfaceMock->setPrice($price);
 
         $this->bundleCalculatorMock->expects($this->once())
             ->method('getMaxRegularAmount')
@@ -180,9 +166,7 @@ class BundleRegularPriceTest extends TestCase
     {
         $expectedResult = 5;
 
-        $this->saleableInterfaceMock->expects($this->once())
-            ->method('getPrice')
-            ->willReturn($expectedResult);
+        $this->saleableInterfaceMock->setPrice($expectedResult);
 
         $this->priceCurrencyMock->expects($this->once())
             ->method('convert')
@@ -207,13 +191,9 @@ class BundleRegularPriceTest extends TestCase
         $minOptionPrice = 1;
         $expectedValue = $price + $minOptionPrice;
 
-        $this->saleableInterfaceMock->expects($this->once())
-            ->method('getPrice')
-            ->willReturn($price);
+        $this->saleableInterfaceMock->setPrice($price);
 
-        $this->saleableInterfaceMock->expects($this->once())
-            ->method('getPriceType')
-            ->willReturn(Price::PRICE_TYPE_FIXED);
+        $this->saleableInterfaceMock->setPriceType(Price::PRICE_TYPE_FIXED);
 
         $this->priceInfoMock->expects($this->atLeastOnce())
             ->method('getPrice')

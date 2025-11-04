@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\Quote\Test\Unit\Model\Cart;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Quote\Api\CartTotalManagementInterface;
 use Magento\Quote\Api\CartTotalRepositoryInterface;
@@ -48,8 +49,8 @@ class CartTotalManagementTest extends TestCase
     {
         $this->objectManager = new ObjectManager($this);
         $this->shippingMock = $this->createMock(ShippingMethodManagement::class);
-        $this->paymentMock = $this->getMockForAbstractClass(PaymentMethodManagementInterface::class);
-        $this->cartTotalMock = $this->getMockForAbstractClass(CartTotalRepositoryInterface::class);
+        $this->paymentMock = $this->createMock(PaymentMethodManagementInterface::class);
+        $this->cartTotalMock = $this->createMock(CartTotalRepositoryInterface::class);
         $this->model = $this->objectManager->getObject(
             CartTotalManagement::class,
             [
@@ -66,7 +67,7 @@ class CartTotalManagementTest extends TestCase
         $shippingCarrierCode = 'careful_carrier';
         $shippingMethodCode = 'drone_delivery';
         $total = 3322.31;
-        $paymentDataMock = $this->getMockForAbstractClass(PaymentInterface::class);
+        $paymentDataMock = $this->createMock(PaymentInterface::class);
 
         $this->shippingMock->expects($this->once())
             ->method('set')
@@ -80,15 +81,15 @@ class CartTotalManagementTest extends TestCase
     }
 
     /**
-     * @dataProvider collectTotalsShippingData
      * @param $shippingCarrierCode
      * @param $shippingMethodCode
      */
+    #[DataProvider('collectTotalsShippingData')]
     public function testCollectTotalsNoShipping($shippingCarrierCode, $shippingMethodCode)
     {
         $cartId = 123;
         $total = 3322.31;
-        $paymentDataMock = $this->getMockForAbstractClass(PaymentInterface::class);
+        $paymentDataMock = $this->createMock(PaymentInterface::class);
 
         $this->shippingMock->expects($this->never())
             ->method('set')

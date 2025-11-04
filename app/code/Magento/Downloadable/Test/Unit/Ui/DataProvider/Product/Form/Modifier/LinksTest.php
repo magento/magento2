@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\Downloadable\Test\Unit\Ui\DataProvider\Product\Form\Modifier;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Model\Locator\LocatorInterface;
 use Magento\Directory\Model\Currency;
@@ -84,10 +85,10 @@ class LinksTest extends TestCase
     protected function setUp(): void
     {
         $this->objectManagerHelper = new ObjectManagerHelper($this);
-        $this->locatorMock = $this->getMockForAbstractClass(LocatorInterface::class);
-        $this->productMock = $this->getMockForAbstractClass(ProductInterface::class);
-        $this->storeManagerMock = $this->getMockForAbstractClass(StoreManagerInterface::class);
-        $this->urlBuilderMock = $this->getMockForAbstractClass(UrlInterface::class);
+        $this->locatorMock = $this->createMock(LocatorInterface::class);
+        $this->productMock = $this->createMock(ProductInterface::class);
+        $this->storeManagerMock = $this->createMock(StoreManagerInterface::class);
+        $this->urlBuilderMock = $this->createMock(UrlInterface::class);
         $this->linksDataMock = $this->createMock(LinksData::class);
         $this->typeUploadMock = $this->createMock(TypeUpload::class);
         $this->shareableMock = $this->createMock(Shareable::class);
@@ -110,8 +111,8 @@ class LinksTest extends TestCase
      * @param bool $isPurchasedSeparatelyBool
      * @param string $isPurchasedSeparatelyStr
      * @return void
-     * @dataProvider modifyDataDataProvider
      */
+    #[DataProvider('modifyDataDataProvider')]
     public function testModifyData($isPurchasedSeparatelyBool, $isPurchasedSeparatelyStr)
     {
         $productId = 1;
@@ -132,9 +133,7 @@ class LinksTest extends TestCase
         $this->locatorMock->expects($this->once())
             ->method('getProduct')
             ->willReturn($this->productMock);
-        $this->productMock->expects($this->any())
-            ->method('getId')
-            ->willReturn($productId);
+        $this->productMock->method('getId')->willReturn($productId);
         $this->linksDataMock->expects($this->once())
             ->method('getLinksTitle')
             ->willReturn($linksTitle);
@@ -184,9 +183,10 @@ class LinksTest extends TestCase
         $currencyMock = $this->createMock(Currency::class);
         $currencyMock->expects($this->once())
             ->method('getCurrencySymbol');
-        $storeMock = $this->getMockBuilder(StoreInterface::class)
-            ->addMethods(['getBaseCurrency'])
-            ->getMockForAbstractClass();
+        $storeMock = $this->createPartialMock(
+            \Magento\Store\Test\Unit\Helper\StoreTestHelper::class,
+            ['getBaseCurrency']
+        );
         $storeMock->expects($this->once())
             ->method('getBaseCurrency')
             ->willReturn($currencyMock);

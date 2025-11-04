@@ -56,7 +56,7 @@ class OnepageTest extends TestCase
         $this->formKeyMock = $this->createMock(FormKey::class);
         $this->configProviderMock = $this->createMock(CompositeConfigProvider::class);
 
-        $this->storeManagerMock = $this->getMockForAbstractClass(StoreManagerInterface::class);
+        $this->storeManagerMock = $this->createMock(StoreManagerInterface::class);
         $contextMock->expects($this->once())->method('getStoreManager')->willReturn($this->storeManagerMock);
         $this->layoutProcessorMock = $this->createMock(
             LayoutProcessorInterface::class

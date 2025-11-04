@@ -15,6 +15,8 @@ use Magento\Quote\Model\Quote;
 use Magento\Quote\Model\Quote\Address;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Magento\Quote\Test\Unit\Helper\QuoteTestHelper;
+use Magento\Quote\Test\Unit\Helper\QuoteAddressTestHelper;
 
 class CouponManagementTest extends TestCase
 {
@@ -30,7 +32,7 @@ class CouponManagementTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->quoteRepository = $this->getMockForAbstractClass(CartRepositoryInterface::class);
+        $this->quoteRepository = $this->createMock(CartRepositoryInterface::class);
         $this->couponManagement = new CouponManagement($this->quoteRepository);
 
         parent::setUp();
@@ -46,13 +48,23 @@ class CouponManagementTest extends TestCase
         $cartId = 1;
         $couponCode = ' code ';
 
-        $shippingAddress = $this->getShippingAddressMock();
+        $shippingAddress = $this->createPartialMock(
+            QuoteAddressTestHelper::class,
+            ['setCollectShippingRates']
+        );
         $shippingAddress->expects($this->once())->method('setCollectShippingRates')->with(true);
-        $quote = $this->getMockBuilder(Quote::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['setCouponCode', 'getCouponCode'])
-            ->onlyMethods(['getItemsCount', 'getStoreId', 'getShippingAddress', 'collectTotals'])
-            ->getMock();
+        $quote = $this->createPartialMock(
+            QuoteTestHelper::class,
+            [
+                'getItemsCount',
+                'getStoreId',
+                'getShippingAddress',
+                'collectTotals',
+                'setCouponCode',
+                'getCouponCode',
+                '__wakeup'
+            ]
+        );
         $quote->expects($this->once())->method('getItemsCount')->willReturn(2);
         $quote->expects($this->once())->method('getStoreId')->willReturn(1);
         $quote->expects($this->once())->method('getShippingAddress')->willReturn($shippingAddress);
@@ -78,11 +90,18 @@ class CouponManagementTest extends TestCase
         $this->expectException(NoSuchEntityException::class);
         $this->expectExceptionMessage('The "' . $cartId . '" Cart doesn\'t contain products.');
 
-        $quote = $this->getMockBuilder(Quote::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['setCouponCode', 'getCouponCode'])
-            ->onlyMethods(['getItemsCount', 'getStoreId', 'getShippingAddress', 'collectTotals'])
-            ->getMock();
+        $quote = $this->createPartialMock(
+            QuoteTestHelper::class,
+            [
+                'getItemsCount',
+                'getStoreId',
+                'getShippingAddress',
+                'collectTotals',
+                'setCouponCode',
+                'getCouponCode',
+                '__wakeup'
+            ]
+        );
         $quote->expects($this->once())->method('getItemsCount')->willReturn(0);
         $this->quoteRepository->expects($this->once())->method('getActive')->with($cartId)->willReturn($quote);
 
@@ -102,11 +121,18 @@ class CouponManagementTest extends TestCase
         $this->expectException(NoSuchEntityException::class);
         $this->expectExceptionMessage('Cart isn\'t assigned to correct store');
 
-        $quote = $this->getMockBuilder(Quote::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['setCouponCode', 'getCouponCode'])
-            ->onlyMethods(['getItemsCount', 'getStoreId', 'getShippingAddress', 'collectTotals'])
-            ->getMock();
+        $quote = $this->createPartialMock(
+            QuoteTestHelper::class,
+            [
+                'getItemsCount',
+                'getStoreId',
+                'getShippingAddress',
+                'collectTotals',
+                'setCouponCode',
+                'getCouponCode',
+                '__wakeup'
+            ]
+        );
         $quote->expects($this->once())->method('getItemsCount')->willReturn(1);
         $quote->expects($this->once())->method('getStoreId')->willReturn(0);
         $this->quoteRepository->expects($this->once())->method('getActive')->with($cartId)->willReturn($quote);
@@ -127,13 +153,25 @@ class CouponManagementTest extends TestCase
         $this->expectException(CouldNotSaveException::class);
         $this->expectExceptionMessage("The coupon code couldn't be applied. Verify the coupon code and try again.");
 
-        $shippingAddress = $this->getShippingAddressMock();
+        $shippingAddress = $this->createPartialMock(
+            QuoteAddressTestHelper::class,
+            [
+                'setCollectShippingRates'
+            ]
+        );
         $shippingAddress->expects($this->once())->method('setCollectShippingRates')->with(true);
-        $quote = $this->getMockBuilder(Quote::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['setCouponCode', 'getCouponCode'])
-            ->onlyMethods(['getItemsCount', 'getStoreId', 'getShippingAddress', 'collectTotals'])
-            ->getMock();
+        $quote = $this->createPartialMock(
+            QuoteTestHelper::class,
+            [
+                'getItemsCount',
+                'getStoreId',
+                'getShippingAddress',
+                'collectTotals',
+                'setCouponCode',
+                'getCouponCode',
+                '__wakeup'
+            ]
+        );
         $quote->expects($this->once())->method('getItemsCount')->willReturn(2);
         $quote->expects($this->once())->method('getStoreId')->willReturn(1);
         $quote->expects($this->once())->method('getShippingAddress')->willReturn($shippingAddress);
@@ -160,11 +198,18 @@ class CouponManagementTest extends TestCase
 
         $shippingAddress = $this->getShippingAddressMock();
         $shippingAddress->expects($this->once())->method('setCollectShippingRates')->with(true);
-        $quote = $this->getMockBuilder(Quote::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['setCouponCode', 'getCouponCode'])
-            ->onlyMethods(['getItemsCount', 'getStoreId', 'getShippingAddress', 'collectTotals'])
-            ->getMock();
+        $quote = $this->createPartialMock(
+            QuoteTestHelper::class,
+            [
+                'getItemsCount',
+                'getStoreId',
+                'getShippingAddress',
+                'collectTotals',
+                'setCouponCode',
+                'getCouponCode',
+                '__wakeup'
+            ]
+        );
         $quote->expects($this->once())->method('getItemsCount')->willReturn(2);
         $quote->expects($this->once())->method('getStoreId')->willReturn(1);
         $quote->expects($this->once())->method('getShippingAddress')->willReturn($shippingAddress);
@@ -182,9 +227,11 @@ class CouponManagementTest extends TestCase
      */
     private function getShippingAddressMock(): MockObject
     {
-        return $this->getMockBuilder(Address::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['setCollectShippingRates'])
-            ->getMock();
+        return $this->createPartialMock(
+            QuoteAddressTestHelper::class,
+            [
+                'setCollectShippingRates'
+            ]
+        );
     }
 }

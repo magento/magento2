@@ -62,39 +62,31 @@ class OptionSelectBuilderTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->connectionMock = $this->getMockBuilder(AdapterInterface::class)
-            ->onlyMethods(['select', 'getIfNullSql'])
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-        $this->select = $this->getMockBuilder(Select::class)
-            ->onlyMethods(['from', 'joinInner', 'joinLeft', 'where', 'columns', 'order'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->connectionMock = $this->createMock(AdapterInterface::class);
+        $this->select = $this->createPartialMock(
+            Select::class,
+            ['from', 'joinInner', 'joinLeft', 'where', 'columns', 'order']
+        );
         $this->connectionMock->expects($this->atLeastOnce())
             ->method('select', 'getIfNullSql')
             ->willReturn($this->select);
 
-        $this->attributeResourceMock = $this->getMockBuilder(Attribute::class)
-            ->onlyMethods(['getTable', 'getConnection'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->attributeResourceMock = $this->createPartialMock(
+            Attribute::class,
+            ['getTable', 'getConnection']
+        );
         $this->attributeResourceMock->expects($this->atLeastOnce())
             ->method('getConnection')
             ->willReturn($this->connectionMock);
 
-        $this->attributeOptionProviderMock = $this->getMockBuilder(OptionProvider::class)
-            ->onlyMethods(['getProductEntityLinkField'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->attributeOptionProviderMock = $this->createPartialMock(
+            OptionProvider::class,
+            ['getProductEntityLinkField']
+        );
 
-        $this->abstractAttributeMock = $this->getMockBuilder(AbstractAttribute::class)
-            ->onlyMethods(['getBackendTable', 'getAttributeId', 'getSourceModel'])
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->abstractAttributeMock = $this->createMock(AbstractAttribute::class);
 
-        $this->scope = $this->getMockBuilder(ScopeInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->scope = $this->createMock(ScopeInterface::class);
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->model = $this->objectManagerHelper->getObject(
@@ -140,7 +132,7 @@ class OptionSelectBuilderTest extends TestCase
             ->method('getBackendTable')
             ->willReturn('getMainTable value');
 
-        $this->scope->expects($this->any())->method('getId')->willReturn(123);
+        $this->scope->method('getId')->willReturn(123);
 
         $this->assertEquals(
             $this->select,
@@ -184,7 +176,7 @@ class OptionSelectBuilderTest extends TestCase
             ->method('getSourceModel')
             ->willReturn('source model value');
 
-        $this->scope->expects($this->any())->method('getId')->willReturn(123);
+        $this->scope->method('getId')->willReturn(123);
 
         $this->assertEquals(
             $this->select,

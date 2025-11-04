@@ -54,16 +54,10 @@ class UpdateConfigurationsTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->requestMock = $this->getMockBuilder(RequestInterface::class)
-            ->getMockForAbstractClass();
-        $this->productRepositoryMock = $this->getMockBuilder(ProductRepositoryInterface::class)
-            ->getMockForAbstractClass();
-        $this->variationHandlerMock = $this->getMockBuilder(VariationHandler::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->subjectMock = $this->getMockBuilder(ProductInitializationHelper::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->requestMock = $this->createMock(RequestInterface::class);
+        $this->productRepositoryMock = $this->createMock(ProductRepositoryInterface::class);
+        $this->variationHandlerMock = $this->createMock(VariationHandler::class);
+        $this->subjectMock = $this->createMock(ProductInitializationHelper::class);
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->updateConfigurations = $this->objectManagerHelper->getObject(
@@ -226,9 +220,7 @@ class UpdateConfigurationsTest extends TestCase
      */
     protected function getProductMock(?array $expectedData = null, $hasDataChanges = false, $wasChanged = false)
     {
-        $productMock = $this->getMockBuilder(Product::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $productMock = $this->createMock(Product::class);
 
         if ($wasChanged !== false) {
             if ($expectedData !== null) {

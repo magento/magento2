@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\ConfigurableProductGraphQl\Test\Unit\Plugin\Quote;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\Product\Type;
@@ -65,32 +66,17 @@ class UpdateCustomizedOptionsTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->productRepositoryMock = $this->getMockBuilder(ProductRepositoryInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->productRepositoryMock = $this->createMock(ProductRepositoryInterface::class);
 
-        $this->productMock = $this->getMockBuilder(Product::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->productMock = $this->createMock(Product::class);
+        $this->storeMock = $this->createMock(Store::class);
+        $this->superAttributeDataProviderMock = $this->createMock(SuperAttributeDataProvider::class);
 
-        $this->storeMock = $this->getMockBuilder(Store::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $this->superAttributeDataProviderMock = $this->getMockBuilder(SuperAttributeDataProvider::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $this->quote = $this->getMockBuilder(Quote::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['getStore', 'getItemById'])
-            ->getMock();
-
-        $this->quoteItem = $this->getMockBuilder(QuoteItem::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['getProduct', 'getProductType', 'getChildren'])
-            ->onlyMethods(['getQty', 'getSku'])
-            ->getMock();
+        $this->quote = $this->createPartialMock(Quote::class, ['getStore', 'getItemById']);
+        $this->quoteItem = $this->createPartialMock(
+            QuoteItem::class,
+            ['getProduct', 'getProductType', 'getChildren', 'getQty', 'getSku']
+        );
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->model = $this->objectManagerHelper->getObject(
             UpdateCustomizedOptions::class,
@@ -116,8 +102,8 @@ class UpdateCustomizedOptionsTest extends TestCase
      * @throws GraphQlNoSuchEntityException
      * @throws LocalizedException
      * @throws NoSuchEntityException
-     * @dataProvider updateCustomizedOptionsDataProvider
      */
+    #[DataProvider('updateCustomizedOptionsDataProvider')]
     public function testBeforeUpdateItem(
         array $superAttributeDetails,
         DataObject $buyRequest,
@@ -129,23 +115,13 @@ class UpdateCustomizedOptionsTest extends TestCase
         ?int $productId = null
     ) {
         $params = new DataObject([]);
-        $this->productMock->expects($this->any())
-            ->method('getId')
-            ->willReturn($productId);
-        $this->productMock->expects($this->any())
-            ->method('getSku')
-            ->willReturn($itemDetails['parent_sku']);
-        $this->quoteItem->expects($this->any())
-            ->method('getProduct')
-            ->willReturn($this->productMock);
+        $this->productMock->method('getId')->willReturn($productId);
+        $this->productMock->method('getSku')->willReturn($itemDetails['parent_sku']);
+        $this->quoteItem->method('getProduct')->willReturn($this->productMock);
 
-        $this->quote->expects($this->any())
-            ->method('getStore')
-            ->willReturn($this->storeMock);
+        $this->quote->method('getStore')->willReturn($this->storeMock);
 
-        $this->storeMock->expects($this->any())
-            ->method('getId')
-            ->willReturn($itemDetails['store_id']);
+        $this->storeMock->method('getId')->willReturn($itemDetails['store_id']);
 
         $this->quote->expects($this->once())
             ->method('getItemById')
@@ -156,25 +132,15 @@ class UpdateCustomizedOptionsTest extends TestCase
             ->with($productId)
             ->willReturn($this->productMock);
 
-        $this->productMock->expects($this->any())
-            ->method('getOptions')
-            ->willReturn([$productOptions]);
+        $this->productMock->method('getOptions')->willReturn([$productOptions]);
 
-        $this->quoteItem->expects($this->any())
-            ->method('getProductType')
-            ->willReturn($productType);
+        $this->quoteItem->method('getProductType')->willReturn($productType);
 
-        $this->quoteItem->expects($this->any())
-            ->method('getChildren')
-            ->willReturn([$productChildren]);
+        $this->quoteItem->method('getChildren')->willReturn([$productChildren]);
 
-        $this->quoteItem->expects($this->any())
-            ->method('getSku')
-            ->willReturn($itemDetails['sku']);
+        $this->quoteItem->method('getSku')->willReturn($itemDetails['sku']);
 
-        $this->superAttributeDataProviderMock->expects($this->any())
-            ->method('execute')
-            ->willReturn($superAttributeDetails);
+        $this->superAttributeDataProviderMock->method('execute')->willReturn($superAttributeDetails);
 
         $this->model->beforeUpdateItem($this->quote, $itemDetails['item_id'], $buyRequest, $params);
     }
