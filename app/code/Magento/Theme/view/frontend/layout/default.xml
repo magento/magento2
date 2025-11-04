@@ -73,7 +73,7 @@
                     <arguments>
                         <argument name="title" translate="true" xsi:type="string">Menu</argument>
                     </arguments>
-                    <block class="Magento\Theme\Block\Html\Topmenu" name="catalog.topnav" template="Magento_Theme::html/topmenu.phtml" ttl="3600" before="-"/>
+                    <block class="Magento\Theme\Block\Html\Topmenu" name="catalog.topnav" template="Magento_Theme::html/topmenu.phtml" before="-"/>
                 </block>
                 <block class="Magento\Framework\View\Element\Text" name="store.links" group="navigation-sections">
                     <arguments>
