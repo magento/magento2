@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\ConfigurableProduct\Test\Unit\Plugin\Model\Order\Invoice;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\Bundle\Model\Product\Type as Bundle;
 use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
 use Magento\ConfigurableProduct\Plugin\Model\Order\Invoice\UpdateConfigurableProductTotalQty;
@@ -52,9 +53,7 @@ class UpdateConfigurableProductTotalQtyTest extends TestCase
     {
         $this->invoiceMock = $this->createMock(Invoice::class);
         $this->orderMock = $this->createMock(Order::class);
-        $this->orderItemsMock = $this->getMockBuilder(Item::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->orderItemsMock = $this->createMock(Item::class);
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->model = $this->objectManagerHelper->getObject(
             UpdateConfigurableProductTotalQty::class,
@@ -68,20 +67,16 @@ class UpdateConfigurableProductTotalQtyTest extends TestCase
      * @param \Closure $orderItems
      * @param float $totalQty
      * @param float $productTotalQty
-     * @dataProvider getOrdersForConfigurableProducts
      */
+    #[DataProvider('getOrdersForConfigurableProducts')]
     public function testBeforeSetTotalQty(
         \Closure $orderItems,
         float $totalQty,
         float $productTotalQty
     ): void {
         $orderItems = $orderItems($this);
-        $this->invoiceMock->expects($this->any())
-            ->method('getOrder')
-            ->willReturn($this->orderMock);
-        $this->orderMock->expects($this->any())
-            ->method('getAllItems')
-            ->willReturn($orderItems);
+        $this->invoiceMock->method('getOrder')->willReturn($this->orderMock);
+        $this->orderMock->method('getAllItems')->willReturn($orderItems);
         $expectedQty= $this->model->beforeSetTotalQty($this->invoiceMock, $totalQty);
         $this->assertEquals($expectedQty, $productTotalQty);
     }
@@ -158,18 +153,10 @@ class UpdateConfigurableProductTotalQtyTest extends TestCase
     {
         $orderItemsMock = [];
         foreach ($orderItems as $key => $orderItem) {
-            $orderItemsMock[$key] = $this->getMockBuilder(Item::class)
-                ->disableOriginalConstructor()
-                ->getMock();
-            $orderItemsMock[$key]->expects($this->any())
-                ->method('getParentItemId')
-                ->willReturn($orderItem['parent_item_id']);
-            $orderItemsMock[$key]->expects($this->any())
-                ->method('getProductType')
-                ->willReturn($orderItem['product_type']);
-            $orderItemsMock[$key]->expects($this->any())
-                ->method('getQtyOrdered')
-                ->willReturn($orderItem['qty_ordered']);
+            $orderItemsMock[$key] = $this->createMock(Item::class);
+            $orderItemsMock[$key]->method('getParentItemId')->willReturn($orderItem['parent_item_id']);
+            $orderItemsMock[$key]->method('getProductType')->willReturn($orderItem['product_type']);
+            $orderItemsMock[$key]->method('getQtyOrdered')->willReturn($orderItem['qty_ordered']);
         }
         return $orderItemsMock;
     }

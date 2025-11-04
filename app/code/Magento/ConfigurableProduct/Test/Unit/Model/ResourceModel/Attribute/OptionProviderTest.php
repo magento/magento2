@@ -38,12 +38,8 @@ class OptionProviderTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->metadataPool = $this->getMockBuilder(MetadataPool::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->entityManager = $this->getMockBuilder(EntityMetadataInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->metadataPool = $this->createMock(MetadataPool::class);
+        $this->entityManager = $this->createMock(EntityMetadataInterface::class);
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->model = $this->objectManagerHelper->getObject(

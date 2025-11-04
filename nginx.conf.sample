@@ -164,7 +164,7 @@ location /media/ {
 #       image_filter_jpeg_quality 90;
 #   }
 
-    try_files $uri $uri/ /get.php$is_args$args;
+    # try_files $uri $uri/ /get.php$is_args$args;
 
     location ~ ^/media/theme_customization/.*\.xml {
         deny all;
@@ -180,7 +180,7 @@ location /media/ {
         add_header Cache-Control "no-store";
         add_header X-Frame-Options "SAMEORIGIN";
         expires    off;
-        try_files $uri $uri/ /get.php$is_args$args;
+        # try_files $uri $uri/ /get.php$is_args$args;
     }
     add_header X-Frame-Options "SAMEORIGIN";
 }

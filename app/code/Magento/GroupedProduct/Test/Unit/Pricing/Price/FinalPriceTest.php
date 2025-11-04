@@ -47,7 +47,7 @@ class FinalPriceTest extends TestCase
         $this->saleableItemMock =  $this->createMock(Product::class);
         $this->calculatorMock = $this->createMock(Calculator::class);
 
-        $this->priceCurrencyMock = $this->getMockForAbstractClass(PriceCurrencyInterface::class);
+        $this->priceCurrencyMock = $this->createMock(PriceCurrencyInterface::class);
 
         $this->finalPrice = new FinalPrice(
             $this->saleableItemMock,
@@ -117,9 +117,7 @@ class FinalPriceTest extends TestCase
     protected function getProductMock($price)
     {
         $priceTypeMock = $this->createMock(\Magento\Catalog\Pricing\Price\FinalPrice::class);
-        $priceTypeMock->expects($this->any())
-            ->method('getValue')
-            ->willReturn($price);
+        $priceTypeMock->method('getValue')->willReturn($price);
 
         $priceInfoMock = $this->createMock(Base::class);
         $priceInfoMock->expects($this->any())
@@ -131,9 +129,7 @@ class FinalPriceTest extends TestCase
         $productMock->expects($this->any())
             ->method('setQty')
             ->with(PriceInfoInterface::PRODUCT_QUANTITY_DEFAULT);
-        $productMock->expects($this->any())
-            ->method('getPriceInfo')
-            ->willReturn($priceInfoMock);
+        $productMock->method('getPriceInfo')->willReturn($priceInfoMock);
 
         return $productMock;
     }
