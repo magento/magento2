@@ -15,6 +15,11 @@ use Magento\Customer\Model\Customer;
 class CustomerTestHelper extends Customer
 {
     /**
+     * @var int
+     */
+    private $callCount = 0;
+
+    /**
      * Constructor intentionally empty to skip parent dependencies.
      */
     public function __construct()
@@ -29,5 +34,37 @@ class CustomerTestHelper extends Customer
     public function getDefaultBilling()
     {
         return $this->getData('default_billing');
+    }
+
+    /**
+     * Get store ID with call counter
+     *
+     * Custom logic: Returns 1 on first call, 2 on second call
+     * This is used to test different store access scenarios
+     *
+     * @return int
+     */
+    public function getStoreId()
+    {
+        $this->callCount++;
+        // Return store1 on first call, store2 on second call
+        return $this->callCount === 1 ? 1 : 2;
+    }
+
+    /**
+     * Load customer
+     *
+     * Custom logic: Sets ID via parent's setId() without requiring a resource (for testing)
+     * Parent AbstractModel::load() requires a resource to be set
+     *
+     * @param mixed $id
+     * @param mixed $field
+     * @return $this
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     */
+    public function load($id, $field = null)
+    {
+        parent::setId($id);
+        return $this;
     }
 }
