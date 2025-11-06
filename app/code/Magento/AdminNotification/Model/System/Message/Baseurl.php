@@ -125,7 +125,7 @@ class Baseurl implements \Magento\Framework\Notification\MessageInterface
     public function getText()
     {
         return __(
-            '{{base_url}} is not recommended to use in a production environment to declare the Base Unsecure '
+            '{{base_url}} is not recommended to use in a production environment to declare the Base Insecure '
             . 'URL / Base Secure URL. We highly recommend changing this value in your Magento '
             . '<a href="%1">configuration</a>.',
             $this->_getConfigUrl()

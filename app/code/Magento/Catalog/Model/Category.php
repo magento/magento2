@@ -568,7 +568,7 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
     /**
      * Return store id.
      *
-     * If store id is underfined for category return current active store id
+     * If store id is undefined for category return current active store id
      *
      * @return int
      */

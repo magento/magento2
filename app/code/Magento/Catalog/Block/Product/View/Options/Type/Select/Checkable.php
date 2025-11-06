@@ -23,7 +23,7 @@ class Checkable extends AbstractOptions
     protected $_template = 'Magento_Catalog::product/composite/fieldset/options/view/checkable.phtml';
 
     /**
-     * Returns formated price
+     * Returns formatted price
      *
      * @param ProductCustomOptionValuesInterface $value
      * @return string

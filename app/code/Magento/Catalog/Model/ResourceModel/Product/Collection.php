@@ -1047,7 +1047,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
     }
 
     /**
-     * Retrieve ranging product count for arrtibute range
+     * Retrieve ranging product count for attribute range
      *
      * @param string $attribute
      * @param int $range

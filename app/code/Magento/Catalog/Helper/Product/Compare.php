@@ -27,7 +27,7 @@ class Compare extends \Magento\Framework\Url\Helper\Data
     protected $_itemCollection;
 
     /**
-     * Product Comapare Items Collection has items flag
+     * Product Compare Items Collection has items flag
      *
      * @var bool
      */

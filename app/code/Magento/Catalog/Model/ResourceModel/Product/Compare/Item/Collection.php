@@ -365,7 +365,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
     }
 
     /**
-     * Retrieve comapre products attribute set ids
+     * Retrieve compare products attribute set ids
      *
      * @return array
      */

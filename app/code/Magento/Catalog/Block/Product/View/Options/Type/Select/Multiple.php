@@ -76,7 +76,7 @@ class Multiple extends AbstractOptions
     }
 
     /**
-     * Returns select with formated option prices
+     * Returns select with formatted option prices
      *
      * @param Select $select
      * @param Option $option

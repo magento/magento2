@@ -174,7 +174,7 @@ class Weight extends Text
     }
 
     /**
-     * Get input html by sting value.
+     * Get input html by string value.
      *
      * @param string|null $value
      *
