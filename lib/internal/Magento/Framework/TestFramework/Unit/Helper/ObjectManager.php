@@ -393,4 +393,27 @@ class ObjectManager
         $reflectionProperty->setAccessible(true);
         $reflectionProperty->setValue($objectManagerMock, $objectManagerMock);
     }
+
+    /**
+     * Create a partial mock with reflection.
+     *
+     * @param string $className
+     * @param array $methods
+     * @return MockObject
+     */
+    public function createPartialMockWithReflection(string $className, array $methods): MockObject
+    {
+        $reflection = new \ReflectionClass($this->_testObject);
+        $getMockBuilderMethod = $reflection->getMethod('getMockBuilder');
+        $getMockBuilderMethod->setAccessible(true);
+        $mockBuilder = $getMockBuilderMethod->invoke($this->_testObject, $className);
+        
+        $builderReflection = new \ReflectionClass($mockBuilder);
+        $methodsProperty = $builderReflection->getProperty('methods');
+        $methodsProperty->setAccessible(true);
+        $methodsProperty->setValue($mockBuilder, $methods);
+        
+        $mockBuilder->disableOriginalConstructor();
+        return $mockBuilder->getMock();
+    }
 }
