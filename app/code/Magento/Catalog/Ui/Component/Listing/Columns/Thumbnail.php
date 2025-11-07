@@ -91,6 +91,6 @@ class Thumbnail extends \Magento\Ui\Component\Listing\Columns\Column
             return null;
         }
         // phpcs:disable Magento2.Functions.DiscouragedFunction
-        return html_entity_decode($row[$altField], ENT_QUOTES, "UTF-8") ?? null;
+        return html_entity_decode((string) $row[$altField], ENT_QUOTES, "UTF-8") ?? null;
     }
 }
