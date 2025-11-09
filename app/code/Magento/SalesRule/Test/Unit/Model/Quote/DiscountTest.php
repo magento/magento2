@@ -201,7 +201,7 @@ class DiscountTest extends TestCase
         $itemNoDiscount->expects($this->any())->method('getExtensionAttributes')->willReturn($itemExtension);
         $itemNoDiscount->expects($this->any())->method('getId')->willReturn(1);
         $itemNoDiscount->expects($this->once())->method('getNoDiscount')->willReturn(true);
-        $itemNoDiscount->expects($this->once())->method('getAddress')->willReturn($this->addressMock);
+        $itemNoDiscount->expects($this->any())->method('getAddress')->willReturn($this->addressMock);
         $this->validatorMock->expects($this->once())->method('sortItemsByPriority')
             ->with([$itemNoDiscount], $this->addressMock)
             ->willReturnArgument(0);
@@ -256,7 +256,7 @@ class DiscountTest extends TestCase
         $itemWithParentId->expects($this->any())->method('getId')->willReturn(1);
         $itemWithParentId->expects($this->any())->method('getParentItem')->willReturn(true);
         $itemWithParentId->expects($this->any())->method('getExtensionAttributes')->willReturn(false);
-        $itemWithParentId->expects($this->once())->method('getAddress')->willReturn($this->addressMock);
+        $itemWithParentId->expects($this->any())->method('getAddress')->willReturn($this->addressMock);
 
         $this->validatorMock->expects($this->any())->method('canApplyDiscount')->willReturn(true);
         $this->validatorMock->expects($this->any())->method('sortItemsByPriority')
@@ -339,7 +339,7 @@ class DiscountTest extends TestCase
         $itemWithChildren->expects($this->any())->method('getParentItem')->willReturn(false);
         $itemWithChildren->expects($this->once())->method('getHasChildren')->willReturn(false);
         $itemWithChildren->expects($this->any())->method('getId')->willReturn(2);
-        $itemWithChildren->expects($this->once())->method('getAddress')->willReturn($this->addressMock);
+        $itemWithChildren->expects($this->any())->method('getAddress')->willReturn($this->addressMock);
 
         $this->validatorMock->expects($this->any())->method('canApplyDiscount')->willReturn(true);
         $this->validatorMock->expects($this->once())->method('sortItemsByPriority')
@@ -459,7 +459,7 @@ class DiscountTest extends TestCase
         $item->expects($this->any())->method('getId')->willReturn(1);
         $item->expects($this->any())->method('getParentItem')->willReturn(false);
         $item->expects($this->any())->method('getExtensionAttributes')->willReturn(false);
-        $item->expects($this->once())->method('getAddress')->willReturn($this->addressMock);
+        $item->expects($this->any())->method('getAddress')->willReturn($this->addressMock);
         $child = $this->getMockBuilder(Item::class)
             ->addMethods(['getBaseDiscountAmount'])
             ->disableOriginalConstructor()

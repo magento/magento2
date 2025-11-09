@@ -244,7 +244,7 @@ class DiscountTest extends TestCase
     {
         $discounts = [
             // bundle with dynamic price does not have discount on its own, instead it's distributed to children
-            'bundle' => 0,
+            'bundle' => 5.90,
             // rule1 = (20/100 * 21.98) * (5.99 / 21.98) = 1.198
             // rule2 = 1.50
             // D = rule1 + rule1 = 1.198 + 1.50 = 2.698 ~ 2.70
@@ -324,7 +324,7 @@ class DiscountTest extends TestCase
     {
         $discounts = [
             // bundle with dynamic price does not have discount on its own, instead it's distributed to children
-            'bundle' => 0,
+            'bundle' => 5.60,
             // rule2 = 1.50
             // rule1 = (20/100 * (21.98 - 1.50) * ((5.99 - 1.50) / (21.98 - 1.50)) = 0.898
             // D = rule2 + rule1 = 1.50 + 0.898 = 2.398 ~ 2.40
@@ -360,7 +360,7 @@ class DiscountTest extends TestCase
                 'bundle_cc',
                 [
                     // bundle with dynamic price does not have discount on its own, instead it's distributed to children
-                    'bundle' => 0,
+                    'bundle' => 10.99,
                     'simple1' => 3,
                     'simple2' => 7.99,
                 ],
@@ -369,7 +369,7 @@ class DiscountTest extends TestCase
             [
                 'simple1_cc',
                 [
-                    'bundle' => 0,
+                    'bundle' => 3,
                     'simple1' => 3,
                     'simple2' => 0,
                 ],
@@ -378,7 +378,7 @@ class DiscountTest extends TestCase
             [
                 'simple2_cc',
                 [
-                    'bundle' => 0,
+                    'bundle' => 8,
                     'simple1' => 0,
                     'simple2' => 8,
                 ],

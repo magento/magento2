@@ -181,6 +181,7 @@ class Discount extends AbstractTotal
                     $child->setDiscountPercent(0);
                 }
             }
+            $item->getAddress()->setDiscountAmount(0);
             $item->getAddress()->setBaseDiscountAmount(0);
         }
         $this->calculator->initFromQuote($quote);
@@ -189,6 +190,8 @@ class Discount extends AbstractTotal
         $itemsToApplyRules = $items;
         $rules = $this->calculator->getRules($address);
         $address->setBaseDiscountAmount(0);
+        $address->setDiscountAmount(0);
+        $ruleTotalDiscount = $ruleBaseTotalDiscount = 0;
         /** @var Rule $rule */
         foreach ($rules as $rule) {
             /** @var Item $item */
@@ -219,27 +222,12 @@ class Discount extends AbstractTotal
                 if ($rule->getStopRulesProcessing() && in_array($rule->getId(), $appliedRuleIds)) {
                     unset($itemsToApplyRules[$key]);
                 }
+
+                $ruleBaseTotalDiscount += $item->getBaseDiscountAmount();
+                $ruleTotalDiscount += $item->getDiscountAmount();
             }
-            $baseDiscountAmount = 0;
-            $discountAmount = 0;
-            // $itemsAggregate are items specific to the current shipping address
-            foreach ($itemsAggregate as $item) {
-                if ($item->getParentItem()) {
-                    continue;
-                }
-                if ($item->getChildren() && $item->isChildrenCalculated()) {
-                    foreach ($item->getChildren() as $child) {
-                        $baseDiscountAmount += $child->getBaseDiscountAmount();
-                        $discountAmount += $child->getDiscountAmount();
-                    }
-                }
-                $baseDiscountAmount += $item->getBaseDiscountAmount();
-                $discountAmount += $item->getDiscountAmount();
-            }
-            $address->setBaseDiscountAmount(-$baseDiscountAmount);
-            $address->setDiscountAmount(-$discountAmount);
-            $address->setBaseSubtotalWithDiscount($address->getBaseSubtotal() - $baseDiscountAmount);
-            $address->setSubtotalWithDiscount($address->getSubtotal() - $discountAmount);
+            $address->setBaseDiscountAmount($ruleBaseTotalDiscount);
+            $address->setDiscountAmount($ruleTotalDiscount);
         }
         $this->calculator->initTotals($items, $address);
         foreach ($items as $item) {
@@ -254,12 +242,14 @@ class Discount extends AbstractTotal
                     $this->eventManager->dispatch('sales_quote_address_discount_item', $eventArgs);
                     $this->aggregateItemDiscount($child, $total);
                 }
+            } else {
+                $this->aggregateItemDiscount($item, $total);
             }
-            $this->aggregateItemDiscount($item, $total);
             if ($item->getExtensionAttributes()) {
                 $this->aggregateDiscountPerRule($item, $address);
             }
         }
+
         $this->calculator->prepareDescription($address);
         $total->setDiscountDescription($address->getDiscountDescription());
         $total->setSubtotalWithDiscount($total->getSubtotal() + $total->getDiscountAmount());

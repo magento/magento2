@@ -80,6 +80,11 @@ class RulesApplier
     private $priceCurrency;
 
     /**
+     * @var DataFactory
+     */
+    private $aggregateDiscount =  null;
+
+    /**
      * @param CalculatorFactory $calculatorFactory
      * @param ManagerInterface $eventManager
      * @param Utility $utility
@@ -247,28 +252,30 @@ class RulesApplier
     {
         if ($item->getChildren() && $item->isChildrenCalculated()) {
             $cloneItem = clone $item;
+            $canApplytoParent = $rule->getActions()->validate($cloneItem);
+            $canApplyChild = false;
             /**
              * Validates item without children to check whether the rule can be applied to the item itself
              * If the rule can be applied to the item, the discount is applied to the item itself and
              * distributed among its children
              */
-            if ($rule->getActions()->validate($cloneItem)) {
-                // Aggregate discount data from children
-                $discountData = $this->getDiscountDataFromChildren($item);
-                $this->setDiscountData($discountData, $item);
-                // Calculate discount data based on parent item
-                $discountData = $this->getDiscountData($item, $rule, $address, $couponCodes);
-                $this->distributeDiscount($discountData, $item);
-                // reset discount data in parent item after distributing discount to children
-                $discountData = $this->discountFactory->create();
-                $this->setDiscountData($discountData, $item);
-            } else {
-                foreach ($item->getChildren() as $childItem) {
-                    if ($rule->getActions()->validate($childItem)) {
-                        $discountData = $this->getDiscountData($childItem, $rule, $address, $couponCodes);
-                        $this->setDiscountData($discountData, $childItem);
-                    }
+            foreach ($item->getChildren() as $childItem) {
+                if ($canApplytoParent || $rule->getActions()->validate($childItem)) {
+                    // setting it to true if it was false and child in action conditions validated true
+                    $canApplyChild = true;
+                    // Cloning the items to find out rule specific discount
+                    $childClone = clone $childItem;
+                    $discountData = $this->getDiscountData($childItem, $rule, $address, $couponCodes);
+                    $this->setDiscountData($discountData, $childItem);
+                    $this->setAggregateDiscountData($childItem, $childClone);
                 }
+            }
+            /**
+             * apply discount to parent item if parent or children is valid
+             */
+            if ($canApplytoParent || $canApplyChild) {
+                $discountData = $this->getDiscountDataFromChildren();
+                $this->setDiscountData($discountData, $item);
             }
         } else {
             $discountData = $this->getDiscountData($item, $rule, $address, $couponCodes);
@@ -282,25 +289,43 @@ class RulesApplier
     }
 
     /**
-     * Get discount data from children
+     * Set Sum of child items discount data
      *
      * @param AbstractItem $item
+     * @param AbstractItem $childClone
+     * @return void
+     */
+    private function setAggregateDiscountData(AbstractItem $item, AbstractItem $childClone)
+    {
+        $this->aggregateDiscount ??= $this->discountFactory->create();
+        $this->aggregateDiscount->setAmount(
+            ($this->aggregateDiscount->getAmount() - $childClone->getDiscountAmount())
+            + $item->getDiscountAmount()
+        );
+        $this->aggregateDiscount->setBaseAmount(
+            ($this->aggregateDiscount->getBaseAmount()-$childClone->getBaseDiscountAmount())
+            + $item->getBaseDiscountAmount()
+        );
+        $this->aggregateDiscount->setOriginalAmount(
+            ($this->aggregateDiscount->getOriginalAmount()
+                - $childClone->getOriginalDiscountAmount())
+            + $item->getOriginalDiscountAmount()
+        );
+        $this->aggregateDiscount->setBaseOriginalAmount(
+            ($this->aggregateDiscount->getBaseOriginalAmount()
+                - $childClone->getBaseOriginalDiscountAmount())
+            + $item->getBaseOriginalDiscountAmount()
+        );
+    }
+
+    /**
+     * Get Aggregated discount data
+     *
      * @return Data
      */
-    private function getDiscountDataFromChildren(AbstractItem $item): Data
+    private function getDiscountDataFromChildren(): Data
     {
-        $discountData = $this->discountFactory->create();
-
-        foreach ($item->getChildren() as $child) {
-            $discountData->setAmount($discountData->getAmount() + $child->getDiscountAmount());
-            $discountData->setBaseAmount($discountData->getBaseAmount() + $child->getBaseDiscountAmount());
-            $discountData->setOriginalAmount($discountData->getOriginalAmount() + $child->getOriginalDiscountAmount());
-            $discountData->setBaseOriginalAmount(
-                $discountData->getBaseOriginalAmount() + $child->getBaseOriginalDiscountAmount()
-            );
-        }
-
-        return $discountData;
+        return $this->aggregateDiscount;
     }
 
     /**
