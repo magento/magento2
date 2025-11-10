@@ -8,6 +8,7 @@ declare(strict_types=1);
 
 namespace Magento\Quote\Test\Unit\Model\Backpressure;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\Framework\Exception\RuntimeException;
 use Magento\Quote\Model\Backpressure\OrderLimitConfigManager;
 use Magento\Framework\App\Backpressure\ContextInterface;
@@ -62,9 +63,9 @@ class OrderLimitConfigManagerTest extends TestCase
      * @param int $expectedLimit
      * @param int $expectedPeriod
      * @return void
-     * @dataProvider getConfigCases
      * @throws RuntimeException
      */
+    #[DataProvider('getConfigCases')]
     public function testReadLimit(
         int $identityType,
         int $guestLimit,
@@ -96,8 +97,8 @@ class OrderLimitConfigManagerTest extends TestCase
      * @param bool $enabled
      * @param bool $expected
      * @return void
-     * @dataProvider getEnabledCases
      */
+    #[DataProvider('getEnabledCases')]
     public function testIsEnforcementEnabled(
         bool    $enabled,
         bool    $expected

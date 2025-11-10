@@ -46,7 +46,7 @@ class CartTest extends TestCase
         $this->layoutMock = $this->createMock(LayoutInterface::class);
         $this->escaper = $objectManager->getObject(Escaper::class);
         $quoteMock->expects($this->once())->method('getAllVisibleItems')->willReturn([]);
-        $checkoutSession->expects($this->any())->method('getQuote')->willReturn($quoteMock);
+        $checkoutSession->method('getQuote')->willReturn($quoteMock);
         $this->context->expects($this->once())->method('getEscaper')->willReturn($this->escaper);
         $this->context->expects($this->once())->method('getLayout')->willReturn($this->layoutMock);
 
@@ -63,7 +63,7 @@ class CartTest extends TestCase
 
     public function testGetMethodHtmlWithException()
     {
-        $this->layoutMock->expects($this->any())->method('getBlock')->willReturn(false);
+        $this->layoutMock->method('getBlock')->willReturn(false);
         $name='blockMethod';
         $this->expectException(LocalizedException::class);
         $this->expectExceptionMessage(

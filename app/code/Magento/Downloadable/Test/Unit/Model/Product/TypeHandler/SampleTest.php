@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\Downloadable\Test\Unit\Model\Product\TypeHandler;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\Catalog\Model\Product;
 use Magento\Downloadable\Helper\Download;
 use Magento\Downloadable\Model\Product\TypeHandler\Sample;
@@ -16,8 +17,11 @@ use Magento\Framework\EntityManager\EntityMetadata;
 use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\Store\Model\Store;
+use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Magento\Downloadable\Model\ResourceModel\SampleFactory as ResourceSampleFactory;
+use Magento\Downloadable\Model\ResourceModel\Sample as ResourceSample;
 
 /**
  * Test for \Magento\Downloadable\Model\Product\TypeHandler\Sample
@@ -47,33 +51,20 @@ class SampleTest extends TestCase
     private $sampleFactory;
 
     /**
-     * @var \Magento\Downloadable\Model\Product\TypeHandler\Sample
+     * @var Sample
      */
     private $target;
 
     protected function setUp(): void
     {
         $objectManagerHelper = new ObjectManagerHelper($this);
-        $this->sampleFactory = $this->getMockBuilder(SampleFactory::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['create'])
-            ->getMock();
-        $this->sampleResource = $this->getMockBuilder(\Magento\Downloadable\Model\ResourceModel\Sample::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['deleteItems'])
-            ->getMock();
-        $sampleResourceFactory = $this->getMockBuilder(\Magento\Downloadable\Model\ResourceModel\SampleFactory::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['create'])
-            ->getMock();
-        $sampleResourceFactory->expects($this->any())
-            ->method('create')
-            ->willReturn($this->sampleResource);
-        $this->metadataPoolMock = $this->getMockBuilder(MetadataPool::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->sampleFactory = $this->createPartialMock(SampleFactory::class, ['create']);
+        $this->sampleResource = $this->createPartialMock(ResourceSample::class, ['deleteItems']);
+        $sampleResourceFactory = $this->createPartialMock(ResourceSampleFactory::class, ['create']);
+        $sampleResourceFactory->method('create')->willReturn($this->sampleResource);
+        $this->metadataPoolMock = $this->createMock(MetadataPool::class);
         $this->metadataMock = $this->createMock(EntityMetadata::class);
-        $this->metadataPoolMock->expects($this->any())->method('getMetadata')->willReturn($this->metadataMock);
+        $this->metadataPoolMock->method('getMetadata')->willReturn($this->metadataMock);
         $this->target = $objectManagerHelper->getObject(
             Sample::class,
             [
@@ -89,11 +80,11 @@ class SampleTest extends TestCase
     }
 
     /**
-     * @dataProvider saveDataProvider
      * @param \Closure $product
      * @param array $data
      * @param array $modelData
      */
+    #[DataProvider('saveDataProvider')]
     public function testSave(\Closure $product, array $data, array $modelData)
     {
         $product = $product($this);
@@ -112,7 +103,8 @@ class SampleTest extends TestCase
     {
         return [
             [
-                'product' => static fn (self $testCase) => $testCase->createProductMock(100500, 1, 10, [10]),
+                'product' => static fn (self $testCase) => $testCase
+                    ->createProductMock(100500, 1, 10, [10]),
                 'data' => [
                     'sample' => [
                         [
@@ -139,8 +131,8 @@ class SampleTest extends TestCase
      * @param \Closure $product
      * @param array $data
      * @param array $expectedItems
-     * @dataProvider deleteDataProvider
      */
+    #[DataProvider('deleteDataProvider')]
     public function testDelete(\Closure $product, array $data, array $expectedItems)
     {
         $product = $product($this);
@@ -157,7 +149,8 @@ class SampleTest extends TestCase
     {
         return [
             [
-                'product' =>  static fn (self $testCase) => $testCase->createProductMock(1, 1, 1, [1]),
+                'product' =>  static fn (self $testCase) => $testCase
+                    ->createProductMock(1, 1, 1, [1]),
                 'data' => [
                     'sample' => [
                         [
@@ -188,33 +181,27 @@ class SampleTest extends TestCase
     }
 
     /**
-     * @param \Magento\Catalog\Model\Product|MockObject $product
+     * @param Product|MockObject $product
      * @param array $modelData
      * @return \Magento\Downloadable\Model\Sample|MockObject
      */
     private function createSampleModel($product, array $modelData)
     {
-        $sample = $this->getMockBuilder(\Magento\Downloadable\Model\Sample::class)
-            ->disableOriginalConstructor()
-            ->addMethods(
-                [
-                    'setProductId',
-                    'setStoreId',
-                    'setProductWebsiteIds',
-                    'setNumberOfDownloads',
-                    'setLinkFile'
-                ]
-            )
-            ->onlyMethods(
-                [
-                    'setData',
-                    'setSampleType',
-                    'setSampleUrl',
-                    'setSampleFile',
-                    'save',
-                ]
-            )
-            ->getMock();
+        $sample = $this->createPartialMock(
+            \Magento\Downloadable\Test\Unit\Helper\SampleTestHelper::class,
+            [
+                'setProductId',
+                'setStoreId',
+                'setProductWebsiteIds',
+                'setNumberOfDownloads',
+                'setLinkFile',
+                'setData',
+                'setSampleType',
+                'setSampleUrl',
+                'setSampleFile',
+                'save'
+            ]
+        );
         $sample->expects($this->once())
             ->method('setData')
             ->with($modelData)->willReturnSelf();
@@ -237,34 +224,22 @@ class SampleTest extends TestCase
      * @param int $storeId
      * @param int $storeWebsiteId
      * @param array $websiteIds
-     * @return \Magento\Catalog\Model\Product|MockObject
+     * @return Product|MockObject
+     * @throws Exception
      * @internal param bool $isUnlimited
      */
     protected function createProductMock($id, $storeId, $storeWebsiteId, array $websiteIds)
     {
-        $product = $this->getMockBuilder(Product::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['getId', 'getStoreId', 'getStore', 'getWebsiteIds', 'getData'])
-            ->getMock();
-        $product->expects($this->any())
-            ->method('getId')
-            ->willReturn($id);
-        $product->expects($this->any())
-            ->method('getStoreId')
-            ->willReturn($storeId);
-        $product->expects($this->any())
-            ->method('getWebsiteIds')
-            ->willReturn($websiteIds);
-        $store = $this->getMockBuilder(Store::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['getWebsiteId'])
-            ->getMock();
-        $store->expects($this->any())
-            ->method('getWebsiteId')
-            ->willReturn($storeWebsiteId);
-        $product->expects($this->any())
-            ->method('getStore')
-            ->willReturn($store);
+        $product = $this->createPartialMock(
+            Product::class,
+            ['getId', 'getStoreId', 'getStore', 'getWebsiteIds', 'getData']
+        );
+        $product->method('getId')->willReturn($id);
+        $product->method('getStoreId')->willReturn($storeId);
+        $product->method('getWebsiteIds')->willReturn($websiteIds);
+        $store = $this->createPartialMock(Store::class, ['getWebsiteId']);
+        $store->method('getWebsiteId')->willReturn($storeWebsiteId);
+        $product->method('getStore')->willReturn($store);
         $product->expects($this->any())
             ->method('getData')
             ->with('id')

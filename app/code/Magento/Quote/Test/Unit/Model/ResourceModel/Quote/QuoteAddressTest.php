@@ -61,11 +61,10 @@ class QuoteAddressTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->addressMock = $this->getMockBuilder(QuoteAddressModel::class)
-            ->addMethods(['getOrderId', 'getOrder'])
-            ->onlyMethods(['__wakeup', 'hasDataChanges', 'beforeSave', 'afterSave', 'validateBeforeSave'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->addressMock = $this->createPartialMock(
+            \Magento\Quote\Test\Unit\Helper\QuoteAddressTestHelper::class,
+            ['__wakeup', 'hasDataChanges', 'beforeSave', 'afterSave', 'validateBeforeSave', 'getOrderId', 'getOrder']
+        );
         $this->quoteMock = $this->createPartialMock(Quote::class, ['__wakeup', 'getId']);
         $this->appResourceMock = $this->createMock(ResourceConnection::class);
         $this->connectionMock = $this->createMock(Mysql::class);
@@ -75,13 +74,9 @@ class QuoteAddressTest extends TestCase
         $this->relationCompositeMock = $this->createMock(
             RelationComposite::class
         );
-        $this->appResourceMock->expects($this->any())
-            ->method('getConnection')
-            ->willReturn($this->connectionMock);
+        $this->appResourceMock->method('getConnection')->willReturn($this->connectionMock);
         $objectManager = new ObjectManager($this);
-        $this->connectionMock->expects($this->any())
-            ->method('describeTable')
-            ->willReturn([]);
+        $this->connectionMock->method('describeTable')->willReturn([]);
         $this->connectionMock->expects($this->any())
             ->method('insert');
         $this->connectionMock->expects($this->any())

@@ -195,6 +195,13 @@ class Layout extends \Magento\Framework\Simplexml\Config implements \Magento\Fra
     private ResponseHttp $response;
 
     /**
+     * Property used to cache the results of the isCacheable() method.
+     *
+     * @var bool|null
+     */
+    private ?bool $isCacheableCache = null;
+
+    /**
      * @param ProcessorFactory $processorFactory
      * @param ManagerInterface $eventManager
      * @param Structure $structure
@@ -349,6 +356,7 @@ class Layout extends \Magento\Framework\Simplexml\Config implements \Magento\Fra
     public function generateElements()
     {
         \Magento\Framework\Profiler::start(__CLASS__ . '::' . __METHOD__);
+        $this->isCacheableCache = null;
         $cacheId = 'structure_' . $this->getUpdate()->getCacheId();
         $result = $this->cache->load($cacheId);
         if ($result) {
@@ -1182,18 +1190,22 @@ class Layout extends \Magento\Framework\Simplexml\Config implements \Magento\Fra
      */
     public function isCacheable()
     {
-        $this->build();
-        $elements = $this->getXml()->xpath('//' . Element::TYPE_BLOCK . '[@cacheable="false"]');
-        $cacheable = $this->cacheable;
-        foreach ($elements as $element) {
-            $blockName = $element->getBlockName();
-            if ($blockName !== false && $this->structure->hasElement($blockName)) {
-                $cacheable = false;
-                break;
+        if ($this->isCacheableCache === null) {
+            $this->build();
+            $elements  = $this->getXml()->xpath('//' . Element::TYPE_BLOCK . '[@cacheable="false"]');
+            $cacheable = $this->cacheable;
+            foreach ($elements as $element) {
+                $blockName = $element->getBlockName();
+                if ($blockName !== false && $this->structure->hasElement($blockName)) {
+                    $cacheable = false;
+                    break;
+                }
             }
+
+            $this->isCacheableCache = $cacheable;
         }
 
-        return $cacheable;
+        return $this->isCacheableCache;
     }
 
     /**

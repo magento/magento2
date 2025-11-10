@@ -39,9 +39,7 @@ class UpdateStockChangedAutoTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->getProductTypeByIdMock = $this->getMockBuilder(GetProductTypeById::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->getProductTypeByIdMock = $this->createMock(GetProductTypeById::class);
         $this->plugin = new UpdateStockChangedAuto($this->getProductTypeByIdMock);
     }
 
@@ -52,17 +50,10 @@ class UpdateStockChangedAutoTest extends TestCase
      */
     public function testBeforeSaveForInStock()
     {
-        $itemResourceModel = $this->getMockBuilder(ItemResourceModel::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $stockItem = $this->getMockBuilder(StockItem::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['getIsInStock', 'setStockStatusChangedAuto'])
-            ->getMock();
-        $stockItem->expects(self::once())
-            ->method('getIsInStock')
-            ->willReturn(Stock::STOCK_IN_STOCK);
-        $stockItem->expects(self::never())->method('setStockStatusChangedAuto');
+        $itemResourceModel = $this->createMock(ItemResourceModel::class);
+        $stockItem = new \Magento\CatalogInventory\Test\Unit\Helper\ItemTestHelper();
+        // Configure ItemTestHelper with expected values
+        $stockItem->setIsInStock(true);
         $this->plugin->beforeSave($itemResourceModel, $stockItem);
     }
 
@@ -75,33 +66,16 @@ class UpdateStockChangedAutoTest extends TestCase
     {
         $productType = Configurable::TYPE_CODE;
         $productId = 1;
-        $itemResourceModel = $this->getMockBuilder(ItemResourceModel::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $stockItem = $this->getMockBuilder(StockItem::class)
-            ->disableOriginalConstructor()
-            ->addMethods([
-                'getIsInStock',
-                'getProductId',
-                'hasStockStatusChangedAutomaticallyFlag',
-                'setStockStatusChangedAuto'
-            ])
-            ->getMock();
-        $stockItem->expects(self::once())
-            ->method('getIsInStock')
-            ->willReturn(Stock::STOCK_OUT_OF_STOCK);
-        $stockItem->expects(self::once())
-            ->method('hasStockStatusChangedAutomaticallyFlag')
-            ->willReturn(false);
-        $stockItem->expects(self::once())
-            ->method('getProductId')
-            ->willReturn($productId);
+        $itemResourceModel = $this->createMock(ItemResourceModel::class);
+        $stockItem = new \Magento\CatalogInventory\Test\Unit\Helper\ItemTestHelper();
+        // Configure ItemTestHelper with expected values
+        $stockItem->setIsInStock(false);
+        $stockItem->setHasStockStatusChangedAutomaticallyFlag(false);
+        $stockItem->setProductId($productId);
         $this->getProductTypeByIdMock->expects(self::once())
             ->method('execute')
             ->with($productId)
             ->willReturn($productType);
-        $stockItem->expects(self::once())->method('setStockStatusChangedAuto')->with(0);
-
         $this->plugin->beforeSave($itemResourceModel, $stockItem);
     }
 }

@@ -10,6 +10,7 @@ namespace Magento\QuoteGraphQl\Model\Cart;
 use Magento\Framework\GraphQl\Exception\GraphQlAuthorizationException;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Framework\GraphQl\Exception\GraphQlNoSuchEntityException;
+use Magento\Framework\GraphQl\Query\Uid;
 use Magento\GraphQl\Model\Query\ContextInterface;
 use Magento\Quote\Api\Data\CartInterface;
 use Magento\Quote\Model\Quote\Address;
@@ -20,25 +21,17 @@ use Magento\Quote\Model\Quote\Address;
 class SetBillingAddressOnCart
 {
     /**
-     * @var QuoteAddressFactory
-     */
-    private $quoteAddressFactory;
-
-    /**
-     * @var AssignBillingAddressToCart
-     */
-    private $assignBillingAddressToCart;
-
-    /**
+     * SetBillingAddressOnCart Constructor
+     *
      * @param QuoteAddressFactory $quoteAddressFactory
      * @param AssignBillingAddressToCart $assignBillingAddressToCart
+     * @param Uid $uidEncoder
      */
     public function __construct(
-        QuoteAddressFactory $quoteAddressFactory,
-        AssignBillingAddressToCart $assignBillingAddressToCart
+        private readonly QuoteAddressFactory        $quoteAddressFactory,
+        private readonly AssignBillingAddressToCart $assignBillingAddressToCart,
+        private readonly Uid                        $uidEncoder
     ) {
-        $this->quoteAddressFactory = $quoteAddressFactory;
-        $this->assignBillingAddressToCart = $assignBillingAddressToCart;
     }
 
     /**
@@ -49,10 +42,19 @@ class SetBillingAddressOnCart
      * @param array $billingAddressInput
      * @return void
      * @throws GraphQlAuthorizationException
+     * @throws GraphQlInputException
+     * @throws GraphQlNoSuchEntityException
      */
     public function execute(ContextInterface $context, CartInterface $cart, array $billingAddressInput): void
     {
         $this->checkForInputExceptions($billingAddressInput);
+
+        if (isset($billingAddressInput['customer_address_uid'])) {
+            $billingAddressInput['customer_address_id'] =  $this->uidEncoder->decode(
+                (string) $billingAddressInput['customer_address_uid']
+            );
+            unset($billingAddressInput['customer_address_uid']);
+        }
 
         $customerAddressId = $billingAddressInput['customer_address_id'] ?? null;
         $addressInput = $billingAddressInput['address'] ?? null;
@@ -97,19 +99,22 @@ class SetBillingAddressOnCart
     private function checkForInputExceptions(
         ?array $billingAddressInput
     ) {
+        $customerAddressUID = $billingAddressInput['customer_address_uid'] ?? null;
         $customerAddressId = $billingAddressInput['customer_address_id'] ?? null;
         $addressInput = $billingAddressInput['address'] ?? null;
         $sameAsShipping = $billingAddressInput['same_as_shipping'] ?? null;
 
-        if (null === $customerAddressId && null === $addressInput && empty($sameAsShipping)) {
+        if (empty($customerAddressId) && empty($customerAddressUID) && empty($addressInput) && empty($sameAsShipping)) {
             throw new GraphQlInputException(
-                __('The billing address must contain either "customer_address_id", "address", or "same_as_shipping".')
+                __('The billing address must contain either "customer_address_id", '
+                    . '"customer_address_uid", "address", or "same_as_shipping".')
             );
         }
 
-        if ($customerAddressId && $addressInput) {
+        if ((!empty($customerAddressId) || !empty($customerAddressUID)) && !empty($addressInput)) {
             throw new GraphQlInputException(
-                __('The billing address cannot contain "customer_address_id" and "address" at the same time.')
+                __('The billing address cannot contain "customer_address_id" or '
+                    . '"customer_address_uid" together with "address".')
             );
         }
     }

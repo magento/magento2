@@ -101,7 +101,6 @@ class NewProductsTest extends TestCase
             $visibleIds
         );
         $productCollection->expects($this->once())->method('setVisibility')->with($visibleIds)->willReturnSelf(
-            
         );
 
         $products = $this->newProducts->getProductsCollection($storeId);

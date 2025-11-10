@@ -22,6 +22,7 @@ use Magento\Quote\Model\Quote\Address\Rate;
 
 /**
  * @see SelectedShippingMethod
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class SelectedShippingMethodTest extends TestCase
 {
@@ -85,27 +86,19 @@ class SelectedShippingMethodTest extends TestCase
         $this->resolveInfoMock = $this->getMockBuilder(ResolveInfo::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->scopeConfigMock = $this->getMockBuilder(ScopeConfigInterface::class)
-            ->getMockForAbstractClass();
-        $this->addressMock = $this->getMockBuilder(Address::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['getShippingMethod','getAllShippingRates','getQuote',])
-            ->AddMethods(['getShippingAmount','getMethod',])
-            ->getMock();
-        $this->rateMock = $this->getMockBuilder(Rate::class)
-            ->disableOriginalConstructor()
-            ->AddMethods(['getCode','getCarrier','getMethod'])
-            ->getMock();
-        $this->quoteMock = $this->getMockBuilder(Quote::class)
-            ->disableOriginalConstructor()
-            ->addMethods([
-                'getQuoteCurrencyCode',
-                'getMethodTitle',
-                'getCarrierTitle',
-                'getPriceExclTax',
-                'getPriceInclTax'
-            ])
-            ->getMock();
+        $this->scopeConfigMock = $this->createMock(ScopeConfigInterface::class);
+        $this->addressMock = $this->createPartialMock(
+            \Magento\Quote\Test\Unit\Helper\QuoteAddressTestHelper::class,
+            ['getShippingMethod', 'getAllShippingRates', 'getQuote', 'getShippingAmount', 'getMethod']
+        );
+        $this->rateMock = $this->createPartialMock(
+            \Magento\Quote\Test\Unit\Helper\RateTestHelper::class,
+            ['getCode', 'getCarrier', 'getMethod']
+        );
+        $this->quoteMock = $this->createPartialMock(
+            \Magento\Quote\Test\Unit\Helper\QuoteTestHelper::class,
+            ['getQuoteCurrencyCode', 'getMethodTitle', 'getCarrierTitle', 'getPriceExclTax', 'getPriceInclTax']
+        );
         $this->selectedShippingMethod = new SelectedShippingMethod(
             $this->shippingMethodConverterMock
         );
