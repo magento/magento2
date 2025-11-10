@@ -35,7 +35,7 @@ class PaymentExtensionTestHelper extends PaymentExtension
     /**
      * Set agreement IDs for tests.
      *
-     * @param string[] $agreementIds
+     * @param array<int> $agreementIds
      * @return $this
      */
     public function setAgreementIds($agreementIds)
