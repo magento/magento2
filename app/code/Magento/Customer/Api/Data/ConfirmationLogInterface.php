@@ -1,5 +1,8 @@
 <?php
-
+/**
+ * Copyright 2025 Adobe
+ * All Rights Reserved.
+ */
 declare(strict_types=1);
 
 namespace Magento\Customer\Api\Data;
@@ -9,18 +12,17 @@ interface ConfirmationLogInterface
     /**
      * @var string
      */
-    public const CUSTOMER_ID = 'customer_id';
+    public const string CUSTOMER_ID = 'customer_id';
 
     /**
      * @var string
      */
-    public const EMAIL_SENT_COUNTER = 'email_sent_counter';
+    public const string EMAIL_SENT_COUNTER = 'email_sent_counter';
 
     /**
      * @var string
      */
-    public const LAST_EMAIL_SENT_AT = 'last_email_sent_at';
-
+    public const string LAST_EMAIL_SENT_AT = 'last_email_sent_at';
 
     /**
      * To get the customer id
@@ -32,6 +34,7 @@ interface ConfirmationLogInterface
     /**
      * To set the customer id
      *
+     * @param int $customerId
      * @return $this
      */
     public function setCustomerId(int $customerId): self;

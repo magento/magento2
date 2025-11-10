@@ -1,4 +1,8 @@
 <?php
+/**
+ * Copyright 2025 Adobe
+ * All Rights Reserved.
+ */
 declare(strict_types=1);
 
 namespace Magento\Customer\Model;
@@ -20,7 +24,8 @@ class ConfirmationEmailLogManagement implements ConfirmationEmailLogManagementIn
     /**
      * @var string
      */
-    public const string XML_PATH_MIN_TIME_INTERVAL = 'customer/create_account/min_time_between_confirmation_email_requests';
+    public const string XML_PATH_MIN_TIME_INTERVAL =
+        'customer/create_account/min_time_between_confirmation_email_requests';
 
     /**
      * @var string
@@ -109,7 +114,7 @@ class ConfirmationEmailLogManagement implements ConfirmationEmailLogManagementIn
     }
 
     /**
-     * @inheirtDoc
+     * @inheritdoc
      */
     public function isConfirmationEmailRateLimitDisabled(): bool
     {
@@ -118,6 +123,7 @@ class ConfirmationEmailLogManagement implements ConfirmationEmailLogManagementIn
 
     /**
      * Processes an existing confirmation log by updating email counters and timestamps.
+     *
      * Handles scenarios where the email limit has been exceeded.
      *
      * @param ConfirmationLogInterface $log
@@ -125,8 +131,11 @@ class ConfirmationEmailLogManagement implements ConfirmationEmailLogManagementIn
      * @param int $minTimeBetweenEmails
      * @return bool
      */
-    private function processExistingLog(ConfirmationLogInterface $log, int $maxEmailLimit, int $minTimeBetweenEmails): bool
-    {
+    private function processExistingLog(
+        ConfirmationLogInterface $log,
+        int $maxEmailLimit,
+        int $minTimeBetweenEmails
+    ): bool {
         $currentEmailCount = $log->getEmailSentCounter();
         $log->setEmailSentCounter($currentEmailCount + 1);
 

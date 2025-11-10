@@ -1,12 +1,15 @@
 <?php
-
+/**
+ * Copyright 2025 Adobe
+ * All Rights Reserved.
+ */
 declare(strict_types=1);
 
 namespace Magento\Customer\Model;
 
-use Magento\Framework\Model\AbstractModel;
 use Magento\Customer\Api\Data\ConfirmationLogInterface;
 use Magento\Customer\Model\ResourceModel\ConfirmationLog as ResourceModel;
+use Magento\Framework\Model\AbstractModel;
 
 class ConfirmationLog extends AbstractModel implements ConfirmationLogInterface
 {
