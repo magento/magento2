@@ -386,6 +386,16 @@
         "last_email_sent_at": {
             "type": "timestamp",
             "description": "Timestamp of the last confirmation email sent."
+        },
+        "column": {
+            "id": true,
+            "customer_id": true,
+            "email_sent_counter": true,
+            "last_email_sent_at": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "CUSTOMER_CONFIRMATION_LOG_CUSTOMER_ID": true
         }
     }
 }

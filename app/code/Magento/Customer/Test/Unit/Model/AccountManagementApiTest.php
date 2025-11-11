@@ -253,7 +253,6 @@ class AccountManagementApiTest extends TestCase
      */
     private $storeMock;
 
-
     /**
      * @var ConfirmationEmailLogManagementInterface|MockObject
      */

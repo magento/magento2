@@ -12,7 +12,7 @@ use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
 class ConfirmationLog extends AbstractDb
 {
     /**
-     * @return void
+     * @inheritdoc
      */
     protected function _construct()
     {

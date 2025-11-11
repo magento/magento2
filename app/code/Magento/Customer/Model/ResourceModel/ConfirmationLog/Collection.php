@@ -13,14 +13,16 @@ use Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection;
 
 class Collection extends AbstractCollection
 {
+    /**
+     * @var string
+     */
     protected $_idFieldName = 'id';
 
     /**
-     * @return void
+     * @inheritdoc
      */
     protected function _construct(): void
     {
         $this->_init(Model::class, ResourceModel::class);
     }
 }
-
