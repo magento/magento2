@@ -91,10 +91,24 @@ class General implements ValidatorInterface
     {
         $this->reloadAddressAttributes($address);
         $errors = [];
+
+        if ($this->isCityRequired()
+            && !ValidatorChain::is($address->getCity(), NotEmpty::class)
+        ) {
+            $errors[] = __('"%fieldName" is required. Enter and try again.', ['fieldName' => 'city']);
+        }
+
         if ($this->isTelephoneRequired()
             && !ValidatorChain::is($address->getTelephone(), NotEmpty::class)
         ) {
             $errors[] = __('"%fieldName" is required. Enter and try again.', ['fieldName' => 'telephone']);
+        }
+
+        $havingOptionalZip = $this->directoryData->getCountriesWithOptionalZip();
+        if (!in_array($address->getCountryId(), $havingOptionalZip)
+            && !ValidatorChain::is($address->getPostcode(), NotEmpty::class)
+        ) {
+            $errors[] = __('"%fieldName" is required. Enter and try again.', ['fieldName' => 'postcode']);
         }
 
         if ($this->isFaxRequired()
@@ -107,19 +121,6 @@ class General implements ValidatorInterface
             && !ValidatorChain::is($address->getCompany(), NotEmpty::class)
         ) {
             $errors[] = __('"%fieldName" is required. Enter and try again.', ['fieldName' => 'company']);
-        }
-
-        if ($this->isCityRequired()
-            && !ValidatorChain::is($address->getCity(), NotEmpty::class)
-        ) {
-            $errors[] = __('"%fieldName" is required. Enter and try again.', ['fieldName' => 'city']);
-        }
-
-        $havingOptionalZip = $this->directoryData->getCountriesWithOptionalZip();
-        if (!in_array($address->getCountryId(), $havingOptionalZip)
-            && !ValidatorChain::is($address->getPostcode(), NotEmpty::class)
-        ) {
-            $errors[] = __('"%fieldName" is required. Enter and try again.', ['fieldName' => 'postcode']);
         }
 
         return $errors;
