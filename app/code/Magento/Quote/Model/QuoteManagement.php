@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -234,11 +234,11 @@ class QuoteManagement implements CartManagementInterface, ResetAfterRequestInter
         CustomerSession $customerSession,
         AccountManagementInterface $accountManagement,
         QuoteFactory $quoteFactory,
-        QuoteIdMaskFactory $quoteIdMaskFactory = null,
-        AddressRepositoryInterface $addressRepository = null,
-        RequestInterface $request = null,
-        RemoteAddress $remoteAddress = null,
-        LockManagerInterface $lockManager = null,
+        ?QuoteIdMaskFactory $quoteIdMaskFactory = null,
+        ?AddressRepositoryInterface $addressRepository = null,
+        ?RequestInterface $request = null,
+        ?RemoteAddress $remoteAddress = null,
+        ?LockManagerInterface $lockManager = null,
         ?CartMutexInterface $cartMutex = null
     ) {
         $this->eventManager = $eventManager;
@@ -397,7 +397,7 @@ class QuoteManagement implements CartManagementInterface, ResetAfterRequestInter
     /**
      * @inheritdoc
      */
-    public function placeOrder($cartId, PaymentInterface $paymentMethod = null)
+    public function placeOrder($cartId, ?PaymentInterface $paymentMethod = null)
     {
         return $this->cartMutex->execute(
             (int)$cartId,
@@ -417,7 +417,7 @@ class QuoteManagement implements CartManagementInterface, ResetAfterRequestInter
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @SuppressWarnings(PHPMD.UnusedPrivateMethod)
      */
-    private function placeOrderRun($cartId, PaymentInterface $paymentMethod = null)
+    private function placeOrderRun($cartId, ?PaymentInterface $paymentMethod = null)
     {
         $quote = $this->quoteRepository->getActive($cartId);
         $customer = $quote->getCustomer();
@@ -453,7 +453,7 @@ class QuoteManagement implements CartManagementInterface, ResetAfterRequestInter
             ) {
                 $quote->setCustomerFirstname($billingAddress->getFirstname());
                 $quote->setCustomerLastname($billingAddress->getLastname());
-                if ($billingAddress->getMiddlename() === null) {
+                if ($billingAddress->getMiddlename() !== null) {
                     $quote->setCustomerMiddlename($billingAddress->getMiddlename());
                 }
             }
@@ -565,10 +565,10 @@ class QuoteManagement implements CartManagementInterface, ResetAfterRequestInter
         if (!$quote->getCustomerIsGuest()) {
             if ($quote->getCustomerId()) {
                 $this->_prepareCustomerQuote($quote);
-                $this->customerManagement->validateAddresses($quote);
             }
             $this->customerManagement->populateCustomerInfo($quote);
         }
+        $this->customerManagement->validateAddresses($quote);
         $addresses = [];
         $quote->reserveOrderId();
         if ($quote->isVirtual()) {

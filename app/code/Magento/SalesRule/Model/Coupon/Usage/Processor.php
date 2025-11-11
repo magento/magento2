@@ -1,38 +1,68 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\SalesRule\Model\Coupon\Usage;
 
+use Exception;
 use Magento\Framework\Api\SearchCriteriaBuilder;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Exception\CouldNotSaveException;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\SalesRule\Api\CouponRepositoryInterface;
 use Magento\SalesRule\Model\Coupon;
 use Magento\SalesRule\Model\ResourceModel\Coupon\Usage;
 use Magento\SalesRule\Model\Rule\CustomerFactory;
 use Magento\SalesRule\Model\RuleFactory;
+use Magento\Framework\Lock\LockManagerInterface;
 
 /**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * Processor to update coupon usage
  */
 class Processor
 {
+    /**
+     * @var string
+     */
+    private const LOCK_NAME = 'coupon_code_';
+
+    /**
+     * @var string
+     */
+    private const ERROR_MESSAGE = "coupon exceeds usage limit.";
+
+    /**
+     * @var int
+     */
+    private const LOCK_TIMEOUT = 60;
+
+    /**
+     * @var LockManagerInterface
+     */
+    private LockManagerInterface $lockManager;
+
     /**
      * @param RuleFactory $ruleFactory
      * @param CustomerFactory $ruleCustomerFactory
      * @param Usage $couponUsage
      * @param CouponRepositoryInterface $couponRepository
      * @param SearchCriteriaBuilder $criteriaBuilder
+     * @param LockManagerInterface|null $lockManager
      */
     public function __construct(
         private readonly RuleFactory $ruleFactory,
         private readonly CustomerFactory $ruleCustomerFactory,
         private readonly Usage $couponUsage,
         private readonly CouponRepositoryInterface $couponRepository,
-        private readonly SearchCriteriaBuilder $criteriaBuilder
+        private readonly SearchCriteriaBuilder $criteriaBuilder,
+        ?LockManagerInterface $lockManager = null
     ) {
+        $this->lockManager = $lockManager ?? ObjectManager::getInstance()->get(LockManagerInterface::class);
     }
 
     /**
@@ -54,21 +84,78 @@ class Processor
     /**
      * Update the number of coupon usages
      *
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @param UpdateInfo $updateInfo
+     * @throws CouldNotSaveException|LocalizedException
      */
     public function updateCouponUsages(UpdateInfo $updateInfo): void
     {
-        $isIncrement = $updateInfo->isIncrement();
         $coupons = $this->retrieveCoupons($updateInfo);
 
         if ($updateInfo->isCouponAlreadyApplied()) {
             return;
         }
-
+        $incrementedCouponIds = [];
         foreach ($coupons as $coupon) {
-            if ($updateInfo->isIncrement() || $coupon->getTimesUsed() > 0) {
-                $coupon->setTimesUsed($coupon->getTimesUsed() + ($isIncrement ? 1 : -1));
-                $coupon->save();
+            $this->lockLoadedCoupon($coupon, $updateInfo, $incrementedCouponIds);
+            $incrementedCouponIds[] = $coupon->getId();
+        }
+    }
+
+    /**
+     * Lock loaded coupons
+     *
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @param Coupon $coupon
+     * @param UpdateInfo $updateInfo
+     * @param array $incrementedCouponIds
+     * @return void
+     * @throws CouldNotSaveException
+     */
+    private function lockLoadedCoupon(Coupon $coupon, UpdateInfo $updateInfo, array $incrementedCouponIds): void
+    {
+        $isIncrement = $updateInfo->isIncrement();
+        // Lock name based on coupon id, rather than coupon code that may contain illegal symbols for file based lock
+        $lockName = self::LOCK_NAME . $coupon->getId();
+        if ($this->lockManager->lock($lockName, self::LOCK_TIMEOUT)) {
+            try {
+                $coupon = $this->couponRepository->getById($coupon->getId());
+
+                if ($updateInfo->isIncrement() && $coupon->getUsageLimit() &&
+                    $coupon->getTimesUsed() >= $coupon->getUsageLimit()) {
+
+                    if (!empty($incrementedCouponIds)) {
+                        $this->revertCouponTimesUsed($incrementedCouponIds);
+                    }
+                    throw new CouldNotSaveException(__('%1 %2', $coupon->getCode(), self::ERROR_MESSAGE));
+                }
+
+                if ($updateInfo->isIncrement() || $coupon->getTimesUsed() > 0) {
+                    $coupon->setTimesUsed($coupon->getTimesUsed() + ($isIncrement ? 1 : -1));
+                    $coupon->save();
+                }
+            } finally {
+                $this->lockManager->unlock($lockName);
+            }
+        }
+    }
+
+    /**
+     * Revert times_used of coupon if exception occurred for multiple applied coupon.
+     *
+     * @param array $incrementedCouponIds
+     * @return void
+     * @throws CouldNotSaveException|Exception
+     */
+    private function revertCouponTimesUsed(array $incrementedCouponIds): void
+    {
+        foreach ($incrementedCouponIds as $couponId) {
+            $coupon = $this->couponRepository->getById($couponId);
+            $coupon->setTimesUsed($coupon->getTimesUsed() - 1);
+            try {
+                $this->couponRepository->save($coupon);
+            } catch (Exception $e) {
+                throw new CouldNotSaveException(__('Error occurred when saving coupon: %1', $e->getMessage()));
             }
         }
     }
@@ -130,7 +217,7 @@ class Processor
      * @param bool $isIncrement
      * @param int $ruleId
      * @param int $customerId
-     * @throws \Exception
+     * @throws Exception
      */
     private function updateCustomerRuleUsages(bool $isIncrement, int $ruleId, int $customerId): void
     {
@@ -157,6 +244,7 @@ class Processor
      */
     private function retrieveCoupons(UpdateInfo $updateInfo): array
     {
+
         if (!$updateInfo->getCouponCode() && empty($updateInfo->getCouponCodes())) {
             return [];
         }

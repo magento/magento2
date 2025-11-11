@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -22,6 +22,9 @@ use PHPUnit\Framework\TestCase;
 
 class ConfigTest extends TestCase
 {
+    /**
+     * @var array
+     */
     private static $designParams = [
         'area' => Area::AREA_FRONTEND,
         'theme' => 'Magento/blank',
@@ -310,7 +313,7 @@ class ConfigTest extends TestCase
     public function testGetterMethodUnknownTemplate($getterMethod, $argument = null)
     {
         $this->expectException('UnexpectedValueException');
-        $this->expectExceptionMessage('Email template \'unknown\' is not defined');
+        $this->expectExceptionMessage('Email template is not defined');
         if (!$argument) {
             $this->model->{$getterMethod}('unknown');
         } else {
@@ -374,21 +377,21 @@ class ConfigTest extends TestCase
     public static function getterMethodUnknownFieldDataProvider()
     {
         return [
-            'label getter' => ['getTemplateLabel', "Field 'label' is not defined for email template 'fixture'."],
-            'type getter' => ['getTemplateType', "Field 'type' is not defined for email template 'fixture'."],
+            'label getter' => ['getTemplateLabel', "Field 'label' is not defined for email template."],
+            'type getter' => ['getTemplateType', "Field 'type' is not defined for email template."],
             'module getter' => [
                 'getTemplateModule',
-                "Field 'module' is not defined for email template 'fixture'.",
+                "Field 'module' is not defined for email template.",
             ],
             'file getter, unknown module' => [
                 'getTemplateFilename',
-                "Field 'module' is not defined for email template 'fixture'.",
+                "Field 'module' is not defined for email template.",
                 [],
                 self::$designParams,
             ],
             'file getter, unknown file' => [
                 'getTemplateFilename',
-                "Field 'file' is not defined for email template 'fixture'.",
+                "Field 'file' is not defined for email template.",
                 ['module' => 'Fixture_Module'],
                 self::$designParams,
             ],

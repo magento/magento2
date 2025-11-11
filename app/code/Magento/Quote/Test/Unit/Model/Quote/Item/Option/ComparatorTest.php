@@ -1,12 +1,13 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2021 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Quote\Test\Unit\Model\Quote\Item\Option;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\Framework\DataObject;
 use Magento\Quote\Model\Quote\Item\Option\Comparator;
 use Magento\Quote\Model\Quote\Item\Option\ComparatorInterface;
@@ -46,8 +47,8 @@ class ComparatorTest extends TestCase
      * @param array $option1
      * @param array $option2
      * @param bool $expected
-     * @dataProvider compareDataProvider
      */
+    #[DataProvider('compareDataProvider')]
     public function testCompare(array $option1, array $option2, bool $expected): void
     {
         $this->customComparator

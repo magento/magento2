@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2021 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -136,14 +136,94 @@ class DataFixtureSetup
      */
     private function parseFixtureKeyValue(string $data)
     {
+        // Check if entire string is a single placeholder
         if (preg_match('/^\$\w+(\.\w+)?\$$/', $data)) {
-            list($fixtureName, $attribute) = array_pad(explode('.', trim($data, '$')), 2, null);
-            $fixtureData = DataFixtureStorageManager::getStorage()->get($fixtureName);
-            if (!$fixtureData) {
-                throw new \InvalidArgumentException("Unable to resolve fixture reference '$data'");
-            }
-            return $attribute ? $fixtureData->getDataUsingMethod($attribute) : $fixtureData;
+            return $this->resolveSinglePlaceholder($data);
         }
+
+        // Check if string contains one or more placeholders, for multi value support
+        if (preg_match('/\$\w+(\.\w+)?\$/', $data)) {
+            return $this->resolveMultiplePlaceholders($data);
+        }
+
         return false;
+    }
+
+    /**
+     * Resolve a single fixture placeholder
+     *
+     * @param string $data
+     * @return DataObject|mixed
+     * @throws \InvalidArgumentException
+     */
+    private function resolveSinglePlaceholder(string $data)
+    {
+        list($fixtureName, $attribute) = array_pad(explode('.', trim($data, '$')), 2, null);
+        $fixtureData = $this->getFixtureData($fixtureName, $data);
+        return $this->extractValue($fixtureData, $attribute);
+    }
+
+    /**
+     * Resolve multiple fixture placeholders in a string
+     *
+     * @param string $data
+     * @return string|false
+     */
+    private function resolveMultiplePlaceholders(string $data)
+    {
+        $resolved = preg_replace_callback(
+            '/\$(\w+)(\.\w+)?\$/',
+            function ($matches) {
+                return $this->replacePlaceholder($matches);
+            },
+            $data
+        );
+        return $resolved !== $data ? $resolved : false;
+    }
+
+    /**
+     * Replace a single placeholder match
+     *
+     * @param array $matches
+     * @return string|mixed
+     * @throws \InvalidArgumentException
+     */
+    private function replacePlaceholder(array $matches)
+    {
+        $fixtureName = $matches[1];
+        $attribute = isset($matches[2]) ? ltrim($matches[2], '.') : null;
+        $reference = "\${$fixtureName}" . ($attribute ? ".{$attribute}" : '') . "\$";
+        $fixtureData = $this->getFixtureData($fixtureName, $reference);
+        $value = $this->extractValue($fixtureData, $attribute);
+        return is_scalar($value) ? (string)$value : $value;
+    }
+
+    /**
+     * Get fixture data from storage
+     *
+     * @param string $fixtureName
+     * @param string $reference
+     * @return DataObject
+     * @throws \InvalidArgumentException
+     */
+    private function getFixtureData(string $fixtureName, string $reference): DataObject
+    {
+        $fixtureData = DataFixtureStorageManager::getStorage()->get($fixtureName);
+        if (!$fixtureData) {
+            throw new \InvalidArgumentException("Unable to resolve fixture reference '{$reference}'");
+        }
+        return $fixtureData;
+    }
+
+    /**
+     * Extract value from fixture data
+     *
+     * @param DataObject $fixtureData
+     * @param string|null $attribute
+     * @return DataObject|mixed
+     */
+    private function extractValue(DataObject $fixtureData, ?string $attribute)
+    {
+        return $attribute ? $fixtureData->getDataUsingMethod($attribute) : $fixtureData;
     }
 }

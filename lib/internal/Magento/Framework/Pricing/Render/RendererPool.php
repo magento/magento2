@@ -98,8 +98,8 @@ class RendererPool extends AbstractBlock
      */
     public function createAmountRender(
         AmountInterface $amount,
-        SaleableInterface $saleableItem = null,
-        PriceInterface $price = null,
+        ?SaleableInterface $saleableItem = null,
+        ?PriceInterface $price = null,
         array $data = []
     ) {
         $type = self::DEFAULT_PRICE_GROUP_TYPE;
@@ -155,7 +155,7 @@ class RendererPool extends AbstractBlock
      * @param PriceInterface $price
      * @return array
      */
-    public function getAdjustmentRenders(SaleableInterface $saleableItem = null, PriceInterface $price = null)
+    public function getAdjustmentRenders(?SaleableInterface $saleableItem = null, ?PriceInterface $price = null)
     {
         $itemType = null === $saleableItem ? 'default' : $saleableItem->getTypeId();
         $priceType = null === $price ? 'default' : $price->getPriceCode();

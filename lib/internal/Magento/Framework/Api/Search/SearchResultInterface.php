@@ -35,7 +35,7 @@ interface SearchResultInterface extends SearchResultsInterface
      * @param \Magento\Framework\Api\Search\DocumentInterface[] $items
      * @return $this
      */
-    public function setItems(array $items = null);
+    public function setItems(?array $items = null);
 
     /**
      * @return \Magento\Framework\Api\Search\AggregationInterface

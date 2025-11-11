@@ -212,7 +212,7 @@ class Diff implements DiffInterface
     public function register(
         ElementInterface $dtoObject,
         $operation,
-        ElementInterface $oldDtoObject = null
+        ?ElementInterface $oldDtoObject = null
     ) {
         if (!$this->canBeRegistered($dtoObject, $operation)) {
             return $this;

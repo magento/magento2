@@ -21,7 +21,7 @@ return [
     ],
     'after' => [
         'store' => 'CREATE TABLE `store` (
-  `store_owner` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT \'Store Owner Name\'
+  `store_owner` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT \'Store Owner Name\'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci'
     ]
 ];

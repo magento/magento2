@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\CatalogInventory\Helper;
@@ -54,7 +54,7 @@ class Minsaleqty implements ResetAfterRequestInterface
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Framework\Math\Random $mathRandom,
         GroupManagementInterface $groupManagement,
-        Json $serializer = null
+        ?Json $serializer = null
     ) {
         $this->scopeConfig = $scopeConfig;
         $this->mathRandom = $mathRandom;

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -440,7 +440,7 @@ class ProductRepositoryTest extends TestCase
     {
         $this->expectException('Magento\Framework\Exception\NoSuchEntityException');
         $this->expectExceptionMessage(
-            'The product that was requested doesn\'t exist. Verify the product and try again.'
+            'The product with SKU "test_sku" does not exist.'
         );
         $this->productFactory->expects($this->once())->method('create')
             ->willReturn($this->product);
@@ -521,7 +521,7 @@ class ProductRepositoryTest extends TestCase
     {
         $this->expectException('Magento\Framework\Exception\NoSuchEntityException');
         $this->expectExceptionMessage(
-            'The product that was requested doesn\'t exist. Verify the product and try again.'
+            'The product with ID "product_id" does not exist.'
         );
         $this->productFactory->expects($this->once())->method('create')
             ->willReturn($this->product);

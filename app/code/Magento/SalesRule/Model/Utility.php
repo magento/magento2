@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\SalesRule\Model;
@@ -71,7 +71,7 @@ class Utility
         CustomerFactory $customerFactory,
         DataObjectFactory $objectFactory,
         PriceCurrencyInterface $priceCurrency,
-        ValidateCoupon $validateCoupon = null
+        ?ValidateCoupon $validateCoupon = null
     ) {
         $this->couponFactory = $couponFactory;
         $this->customerFactory = $customerFactory;

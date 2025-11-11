@@ -46,7 +46,7 @@ class SetupTestCase extends \PHPUnit\Framework\TestCase implements MutableDataIn
         $name = null,
         array $data = [],
         $dataName = '',
-        ResourceConnection $resourceConnection = null
+        ?ResourceConnection $resourceConnection = null
     ) {
         parent::__construct($name);
 

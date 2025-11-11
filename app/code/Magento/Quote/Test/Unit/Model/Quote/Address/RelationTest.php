@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -11,6 +11,7 @@ use Magento\Framework\Model\AbstractModel;
 use Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Quote\Model\Quote\Address\Relation;
+use Magento\Quote\Test\Unit\Helper\AddressRelationModelTestHelper;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -29,17 +30,14 @@ class RelationTest extends TestCase
     protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
-        $this->modelMock = $this->getMockBuilder(AbstractModel::class)
-            ->addMethods(
-                [
-                    'getItemsCollection',
-                    'getShippingRatesCollection',
-                    'itemsCollectionWasSet',
-                    'shippingRatesCollectionWasSet'
-                ]
-            )
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->modelMock = $this->getMockBuilder(AddressRelationModelTestHelper::class)
+            ->onlyMethods([
+                'getItemsCollection',
+                'getShippingRatesCollection',
+                'itemsCollectionWasSet',
+                'shippingRatesCollectionWasSet'
+            ])
+            ->getMock();
         $this->relation = $objectManager->getObject(Relation::class, []);
     }
 

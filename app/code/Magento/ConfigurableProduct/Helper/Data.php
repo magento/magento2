@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\ConfigurableProduct\Helper;
@@ -46,7 +46,7 @@ class Data
      */
     public function __construct(
         ImageHelper $imageHelper,
-        UrlBuilder $urlBuilder = null,
+        ?UrlBuilder $urlBuilder = null,
         ?ScopeConfigInterface $scopeConfig = null
     ) {
         $this->imageHelper = $imageHelper;

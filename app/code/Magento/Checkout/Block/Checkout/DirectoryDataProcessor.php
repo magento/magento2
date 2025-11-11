@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Checkout\Block\Checkout;
 
@@ -61,7 +61,7 @@ class DirectoryDataProcessor implements \Magento\Checkout\Block\Checkout\LayoutP
         \Magento\Directory\Model\ResourceModel\Region\CollectionFactory $regionCollection,
         StoreResolverInterface $storeResolver,
         DirectoryHelper $directoryHelper,
-        StoreManagerInterface $storeManager = null
+        ?StoreManagerInterface $storeManager = null
     ) {
         $this->countryCollectionFactory = $countryCollection;
         $this->regionCollectionFactory = $regionCollection;

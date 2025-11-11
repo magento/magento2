@@ -1,7 +1,17 @@
 <?php
-/**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+/************************************************************************
+ * Copyright 2025 Adobe
+ * All Rights Reserved.
+ *
+ * NOTICE: All information contained herein is, and remains
+ * the property of Adobe and its suppliers, if any. The intellectual
+ * and technical concepts contained herein are proprietary to Adobe
+ * and its suppliers and are protected by all applicable intellectual
+ * property laws, including trade secret and copyright laws.
+ * Dissemination of this information or reproduction of this material
+ * is strictly forbidden unless prior written permission is obtained
+ * from Adobe.
+ * ***********************************************************************
  */
 
 declare(strict_types=1);
@@ -25,17 +35,10 @@ class ValidateQuoteOrigOrder
     private $orderRepository;
 
     /**
-     * @var RestRequest $request
-     */
-    private $request;
-
-    /**
-     * @param RestRequest $request
      * @param OrderRepositoryInterface $orderRepository
      */
-    public function __construct(RestRequest $request, OrderRepositoryInterface $orderRepository)
+    public function __construct(OrderRepositoryInterface $orderRepository)
     {
-        $this->request = $request;
         $this->orderRepository = $orderRepository;
     }
 
@@ -52,12 +55,10 @@ class ValidateQuoteOrigOrder
         CartRepositoryInterface $cartRepository,
         CartInterface $quote
     ): void {
-        $params = $this->request->getBodyParams();
-        if (!empty($params) && isset($params['quote']['orig_order_id'])) {
-            $orderId = $params['quote']['orig_order_id'];
-            $order = $this->orderRepository->get($orderId);
+        if ($quote->getOrigOrderId() && $quote->getCustomerId()) {
+            $order = $this->orderRepository->get((int)$quote->getOrigOrderId());
             $orderCustomer = (int)$order->getCustomerId();
-            if ($quote->getCustomerId() !== $orderCustomer) {
+            if ((int)$quote->getCustomerId() !== $orderCustomer) {
                 throw new NoSuchEntityException(__('Please check input parameters.'));
             }
         }

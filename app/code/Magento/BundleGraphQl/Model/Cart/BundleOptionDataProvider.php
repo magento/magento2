@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -41,7 +41,7 @@ class BundleOptionDataProvider
         private readonly SerializerInterface $serializer,
         private readonly Configuration $configuration,
         private readonly OriginalPrice $originalPrice,
-        Uid $uidEncoder = null
+        ?Uid $uidEncoder = null
     ) {
         $this->uidEncoder = $uidEncoder ?: ObjectManager::getInstance()
             ->get(Uid::class);

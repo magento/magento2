@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
@@ -17,24 +17,36 @@
                     <label>Enable New Relic Integration</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
-                <field id="api_url" translate="label" type="text" sortOrder="2" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
-                    <label>New Relic API URL</label>
+                <field id="api_mode" translate="label comment" type="select" sortOrder="2" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Deployment API Mode</label>
+                    <source_model>Magento\NewRelicReporting\Model\Config\Source\ApiMode</source_model>
+                    <comment>Choose between legacy v2 REST API or modern NerdGraph (GraphQL)</comment>
                     <depends>
                         <field id="enable">1</field>
                     </depends>
                 </field>
-                <field id="insights_api_url" translate="label comment" type="text" sortOrder="3" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
-                    <label>Insights API URL</label>
-                    <comment>Use %s to replace the account ID in the URL</comment>
+                <field id="nerd_graph_api_url" translate="label comment" type="text" sortOrder="5" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>New Relic API URL (Nerd Graph)</label>
+                    <comment>Nerd Graph endpoint for deployments (Recommended)</comment>
                     <depends>
                         <field id="enable">1</field>
+                        <field id="api_mode">nerdgraph</field>
                     </depends>
                 </field>
-                <field id="account_id" translate="label comment" type="text" sortOrder="4" showInDefault="1" showInWebsite="1" showInStore="1">
-                    <label>New Relic Account ID</label>
-                    <comment><![CDATA["Need a New Relic account? <a href="http://www.newrelic.com/magento" target="_blank">Click here to get one]]></comment>
+                <field id="entity_guid" translate="label comment" type="obscure" sortOrder="4" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Entity GUID (NerdGraph)</label>
+                    <comment>Application Entity GUID for NerdGraph. Leave empty for auto-detection from App ID.</comment>
                     <depends>
                         <field id="enable">1</field>
+                        <field id="api_mode">nerdgraph</field>
+                    </depends>
+                </field>
+                <field id="api_url" translate="label comment" type="text" sortOrder="5" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>New Relic API URL (v2 REST)</label>
+                    <comment>Legacy v2 REST API endpoint for deployments</comment>
+                    <depends>
+                        <field id="enable">1</field>
+                        <field id="api_mode">v2_rest</field>
                     </depends>
                 </field>
                 <field id="app_id" translate="label comment" type="text" sortOrder="5" showInDefault="1" showInWebsite="1" showInStore="1">
@@ -52,7 +64,21 @@
                         <field id="enable">1</field>
                     </depends>
                 </field>
-                <field id="insights_insert_key" translate="label comment" type="obscure" sortOrder="7" showInDefault="1" showInWebsite="1" showInStore="1">
+                <field id="insights_api_url" translate="label comment" type="text" sortOrder="8" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Insights API URL</label>
+                    <comment>Use %s to replace the account ID in the URL</comment>
+                    <depends>
+                        <field id="enable">1</field>
+                    </depends>
+                </field>
+                <field id="account_id" translate="label comment" type="text" sortOrder="9" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>New Relic Account ID</label>
+                    <comment><![CDATA["Need a New Relic account? <a href="http://www.newrelic.com/magento" target="_blank">Click here to get one]]></comment>
+                    <depends>
+                        <field id="enable">1</field>
+                    </depends>
+                </field>
+                <field id="insights_insert_key" translate="label comment" type="obscure" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Insights API Key</label>
                     <backend_model>Magento\Config\Model\Config\Backend\Encrypted</backend_model>
                     <comment>Generated under Insights in Manage data -> API Keys -> Insert Keys</comment>
@@ -60,14 +86,14 @@
                         <field id="enable">1</field>
                     </depends>
                 </field>
-                <field id="app_name" translate="label comment" type="text" sortOrder="8" showInDefault="1" showInWebsite="1" showInStore="1">
+                <field id="app_name" translate="label comment" type="text" sortOrder="11" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>New Relic Application Name</label>
                     <comment>This is located by navigating to Settings from the New Relic APM website</comment>
                     <depends>
                         <field id="enable">1</field>
                     </depends>
                 </field>
-                <field id="separate_apps" translate="label comment" type="select" sortOrder="9" showInDefault="1" showInWebsite="1" showInStore="1">
+                <field id="separate_apps" translate="label comment" type="select" sortOrder="12" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Send each Magento Area Code as Separate App</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                     <comment>In addition to the main app (which includes all PHP execution), separate apps for each Magento area code (adminhtml, frontend, ...) will be created. Requires New Relic Application Name to be set.</comment>

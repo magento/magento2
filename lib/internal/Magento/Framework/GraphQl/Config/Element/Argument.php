@@ -81,7 +81,7 @@ class Argument implements FieldInterface
         bool $isList,
         string $itemType = '',
         bool $itemsRequired = false,
-        string $defaultValue = null,
+        ?string $defaultValue = null,
         array $deprecated = []
     ) {
         $this->name = $name;

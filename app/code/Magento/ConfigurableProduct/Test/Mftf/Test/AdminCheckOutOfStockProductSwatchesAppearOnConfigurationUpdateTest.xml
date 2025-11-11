@@ -1,0 +1,194 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright 2025 Adobe
+  * All Rights Reserved.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminCheckOutOfStockProductSwatchesAppearOnConfigurationUpdateTest">
+        <annotations>
+            <features value="ConfigurableProduct"/>
+            <stories value="Verify out of stock product swatch visibility"/>
+            <title value="Display Out of Stock Swatch on Configurable Product Page"/>
+            <description value="Verify Swatch of Configurable Product when display Out of Stock products is enabled"/>
+            <severity value="MINOR"/>
+            <testCaseId value="AC-7020"/>
+            <group value="catalog"/>
+        </annotations>
+        <before>
+            <!-- Pre-condition Step-1 Create Category and Create Configurable product -->
+            <createData entity="_defaultCategory" stepKey="createCategory"/>
+            <createData entity="BaseConfigurableProduct" stepKey="createConfigProduct">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <!-- Pre-condition Step-2 Set Display out of stock products to yes -->
+            <magentoCLI command="config:set {{CatalogInventoryOptionsShowOutOfStockEnable.path}} {{CatalogInventoryOptionsShowOutOfStockEnable.value}}" stepKey="setConfigShowOutOfStockTrue"/>
+        </before>
+        <after>
+            <!-- Delete Category -->
+            <deleteData stepKey="deleteCategory" createDataKey="createCategory" />
+            <!-- Delete Config Product -->
+            <deleteData stepKey="deleteConfigProduct" createDataKey="createConfigProduct" />
+            <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="navigateToProductIndex"/>
+            <actionGroup ref="FilterProductGridBySkuActionGroup" stepKey="filterProduct">
+                <argument name="product" value="$$createConfigProduct$$"/>
+            </actionGroup>
+            <scrollToTopOfPage stepKey="scrollToTopOfPage"/>
+            <actionGroup ref="AdminDeleteAllProductsFromGridActionGroup" stepKey="selectAndDeleteProducts"/>
+            <waitForElement selector="{{AdminCategoryMessagesSection.SuccessMessage}}" stepKey="deleteMessage"/>
+            <click selector="{{AdminProductGridFilterSection.clearFilters}}" stepKey="clickClearFiltersAfter"/>
+            <!-- Delete color attribute -->
+            <actionGroup ref="DeleteProductAttributeByCodeActionGroup" stepKey="deleteColorAttribute">
+                <argument name="attribute_code" value="{{colorProductAttributeWithOptions.default_label}}"/>
+            </actionGroup>
+            <!-- Delete size attribute -->
+            <actionGroup ref="DeleteProductAttributeByCodeActionGroup" stepKey="deleteSizeAttribute">
+                <argument name="attribute_code" value="{{sizeProductAttributeWithOptions.default_label}}"/>
+            </actionGroup>
+            <magentoCLI command="config:set {{CatalogInventoryOptionsShowOutOfStockDisable.path}} {{CatalogInventoryOptionsShowOutOfStockDisable.value}}" stepKey="setConfigShowOutOfStockFalse"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+        <!-- Step 1 - Admin Login -->
+        <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+        <!-- Step 2 - Navigate to Stores > Attributes > Products > Product Attribute-->
+        <actionGroup ref="AdminOpenProductAttributePageActionGroup" stepKey="navigateToProductAttributeGrid" />
+        <actionGroup ref="FillProductAttributeFieldsActionGroup" stepKey="fillColorAttributeFields">
+            <argument name="attributeLabel" value="{{colorProductAttributeWithOptions.default_label}}" />
+            <argument name="attributeCode" value="{{colorProductAttributeWithOptions.default_label}}" />
+            <argument name="inputType" value="{{colorProductAttributeWithOptions.input_type}}" />
+            <argument name="scope" value="{{colorProductAttributeWithOptions.scope}}" />
+        </actionGroup>
+        <waitForElementVisible selector="{{AttributePropertiesSection.addSwatch}}" stepKey="waitForAddBlackSwatch" />
+        <click selector="{{AttributePropertiesSection.addSwatch}}" stepKey="clickAddBlackSwatch"/>
+        <waitForAjaxLoad stepKey="waitForAjaxLoad"/>
+        <actionGroup ref="AdminAddTextSwatchForAdminActionGroup" stepKey="addBlackSwatchOption">
+            <argument name="position" value="0"/>
+            <argument name="swatchName" value="{{colorProductAttributeWithOptions.option1}}"/>
+            <argument name="swatchDescription" value="{{colorProductAttributeWithOptions.option1}}"/>
+        </actionGroup>
+        <waitForElementVisible selector="{{AttributePropertiesSection.addSwatch}}" stepKey="waitForAddBlueSwatch" />
+        <click selector="{{AttributePropertiesSection.addSwatch}}" stepKey="clickAddBlueSwatch"/>
+        <waitForAjaxLoad stepKey="waitForAjaxLoad1"/>
+        <actionGroup ref="AdminAddTextSwatchForAdminActionGroup" stepKey="addBlueSwatchOption">
+            <argument name="position" value="1"/>
+            <argument name="swatchName" value="{{colorProductAttributeWithOptions.option2}}"/>
+            <argument name="swatchDescription" value="{{colorProductAttributeWithOptions.option2}}"/>
+        </actionGroup>
+        <waitForElementVisible selector="{{AttributePropertiesSection.addSwatch}}" stepKey="waitForAddWhiteSwatch" />
+        <click selector="{{AttributePropertiesSection.addSwatch}}" stepKey="clickAddWhiteSwatch"/>
+        <waitForAjaxLoad stepKey="waitForAjaxLoad2"/>
+        <actionGroup ref="AdminAddTextSwatchForAdminActionGroup" stepKey="addWhiteSwatchOption">
+            <argument name="position" value="2"/>
+            <argument name="swatchName" value="{{colorProductAttributeWithOptions.option3}}"/>
+            <argument name="swatchDescription" value="{{colorProductAttributeWithOptions.option3}}"/>
+        </actionGroup>
+        <waitForElementVisible selector="{{AdminCreateNewProductAttributeSection.saveAttribute}}" stepKey="waitForColorSaveButton" />
+        <click selector="{{AdminCreateNewProductAttributeSection.saveAttribute}}" stepKey="clickOnColorSaveAttribute"/>
+        <waitForPageLoad stepKey="waitForColorAttributeToSave"/>
+        <waitForElement selector="{{AdminProductMessagesSection.successMessage}}" stepKey="seeColorSaveProductMessage"/>
+        <!-- Step 3: Create other new Attribute with label size -->
+        <actionGroup ref="AdminOpenProductAttributePageActionGroup" stepKey="navigateToProductAttributeGrid1" />
+        <actionGroup ref="FillProductAttributeFieldsActionGroup" stepKey="fillSizeAttributeFields">
+            <argument name="attributeLabel" value="{{sizeProductAttributeWithOptions.default_label}}" />
+            <argument name="attributeCode" value="{{sizeProductAttributeWithOptions.default_label}}" />
+            <argument name="inputType" value="{{sizeProductAttributeWithOptions.input_type}}" />
+            <argument name="scope" value="{{sizeProductAttributeWithOptions.scope}}" />
+        </actionGroup>
+        <waitForElementVisible selector="{{AttributePropertiesSection.addSwatch}}" stepKey="waitForAddSmallSwatch" />
+        <click selector="{{AttributePropertiesSection.addSwatch}}" stepKey="clickAddSmallSwatch"/>
+        <waitForAjaxLoad stepKey="waitForAjaxLoad3"/>
+        <actionGroup ref="AdminAddTextSwatchForAdminActionGroup" stepKey="addSmallSwatchOption">
+            <argument name="position" value="0"/>
+            <argument name="swatchName" value="{{sizeProductAttributeWithOptions.option1}}"/>
+            <argument name="swatchDescription" value="{{sizeProductAttributeWithOptions.option1}}"/>
+        </actionGroup>
+        <waitForElementVisible selector="{{AttributePropertiesSection.addSwatch}}" stepKey="waitForAddMediumSwatch" />
+        <click selector="{{AttributePropertiesSection.addSwatch}}" stepKey="clickAddMediumSwatch"/>
+        <waitForAjaxLoad stepKey="waitForAjaxLoad4"/>
+        <actionGroup ref="AdminAddTextSwatchForAdminActionGroup" stepKey="addMediumSwatchOption">
+            <argument name="position" value="1"/>
+            <argument name="swatchName" value="{{sizeProductAttributeWithOptions.option2}}"/>
+            <argument name="swatchDescription" value="{{sizeProductAttributeWithOptions.option2}}"/>
+        </actionGroup>
+        <waitForElementVisible selector="{{AttributePropertiesSection.addSwatch}}" stepKey="waitForAddLargeSwatch" />
+        <click selector="{{AttributePropertiesSection.addSwatch}}" stepKey="clickAddLargeSwatch"/>
+        <waitForAjaxLoad stepKey="waitForAjaxLoad5"/>
+        <actionGroup ref="AdminAddTextSwatchForAdminActionGroup" stepKey="addLargeSwatchOption">
+            <argument name="position" value="2"/>
+            <argument name="swatchName" value="{{sizeProductAttributeWithOptions.option3}}"/>
+            <argument name="swatchDescription" value="{{sizeProductAttributeWithOptions.option3}}"/>
+        </actionGroup>
+        <waitForElementVisible selector="{{AdminCreateNewProductAttributeSection.saveAttribute}}" stepKey="waitForSizeSaveButton" />
+        <click selector="{{AdminCreateNewProductAttributeSection.saveAttribute}}" stepKey="clickOnSizeSaveAttribute"/>
+        <waitForPageLoad stepKey="waitForSizeAttributeToSave"/>
+        <waitForElement selector="{{AdminProductMessagesSection.successMessage}}" stepKey="seeSizeSaveProductMessage"/>
+        <actionGroup ref="AdminOpenAttributeSetGridPageActionGroup" stepKey="openAttributeSetPage"/>
+        <actionGroup ref="AdminOpenAttributeSetByNameActionGroup" stepKey="openAttributeSetForColor">
+            <argument name="attributeSetName" value="Default"/>
+        </actionGroup>
+        <waitForText userInput="{{colorProductAttributeWithOptions.default_label}}" selector="{{AdminProductAttributeSetEditSection.unassignedAttributesTree}}" stepKey="seeColorAttributeInUnassigned"/>
+        <actionGroup ref="AssignAttributeToGroupActionGroup" stepKey="assignColorAttributeToGroup">
+            <argument name="group" value="Product Details"/>
+            <argument name="attribute" value="{{colorProductAttributeWithOptions.default_label}}"/>
+        </actionGroup>
+        <waitForText userInput="{{sizeProductAttributeWithOptions.default_label}}" selector="{{AdminProductAttributeSetEditSection.unassignedAttributesTree}}" stepKey="seeSizeAttributeInUnassigned"/>
+        <actionGroup ref="AssignAttributeToGroupActionGroup" stepKey="assignSizeAttributeToGroup">
+            <argument name="group" value="Product Details"/>
+            <argument name="attribute" value="{{sizeProductAttributeWithOptions.default_label}}"/>
+        </actionGroup>
+        <actionGroup ref="SaveAttributeSetActionGroup" stepKey="saveSizeAttributeSet"/>
+        <!-- Step 4 - Edit Configurable Product -->
+        <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="navigateToProductIndex"/>
+        <actionGroup ref="FilterProductGridBySkuActionGroup" stepKey="filterProduct">
+            <argument name="product" value="$$createConfigProduct$$"/>
+        </actionGroup>
+        <actionGroup ref="OpenEditProductOnBackendActionGroup" stepKey="openEditProduct2">
+            <argument name="product" value="$$createConfigProduct$$"/>
+        </actionGroup>
+        <waitForElementVisible selector="{{AdminProductFormConfigurationsSection.createConfigurations}}" stepKey="waitForCreateConfigurations" />
+        <click selector="{{AdminProductFormConfigurationsSection.createConfigurations}}" stepKey="clickOnCreateConfigurations"/>
+        <actionGroup ref="AdminSelectAttributeInConfigurableAttributesGrid" stepKey="selectColorAttribute">
+            <argument name="attributeCode" value="{{colorProductAttributeWithOptions.default_label}}"/>
+        </actionGroup>
+        <actionGroup ref="AdminSelectAttributeInConfigurableAttributesGrid" stepKey="selectSizeAttribute">
+            <argument name="attributeCode" value="{{sizeProductAttributeWithOptions.default_label}}"/>
+        </actionGroup>
+        <actionGroup ref="AdminSelectAllValueOfTwoAttributesPageActionGroup" stepKey="selectColorOptions">
+            <argument name="attributeLabel1" value="{{colorProductAttributeWithOptions.default_label}}" />
+            <argument name="attributeLabel2" value="{{sizeProductAttributeWithOptions.default_label}}" />
+            <argument name="quantity" value="100" />
+        </actionGroup>
+        <actionGroup ref="SaveProductFormActionGroup" stepKey="saveConfigurableProductAfterGeneratingVariations"/>
+        <!-- Step 5 - open child product and make out of stock -->
+        <actionGroup ref="AdminOpenChildVariationOfConfigurableProductActionGroup" stepKey="OpenChildVariation">
+            <argument name="variation" value="$$createConfigProduct.name$$-Blue-Medium" />
+        </actionGroup>
+        <switchToNextTab stepKey="switchToConfigChildProductPage"/>
+        <waitForPageLoad stepKey="waitForProductPageLoad"/>
+        <selectOption selector="{{AdminProductFormSection.productStockStatus}}" userInput="{{UpdateAttributeQtyAndStockToOutOfStock.stockAvailability}}" stepKey="setChildProductStockStatusToOutOfStock"/>
+        <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProductAfterSettingChildProductToOutOfStock"/>
+        <closeTab stepKey="closeConfigChildProductPage"/>
+        <!-- Step 6 - Navigate to Storefront product page -->
+        <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="openProductPage">
+            <argument name="productUrl" value="$$createConfigProduct.custom_attributes[url_key]$$"/>
+        </actionGroup>
+        <!-- Step 7 - Verify Blue Medium combination is disabled -->
+        <waitForElementVisible selector="{{StorefrontProductInfoMainSection.swatchOptionByLabel('Blue')}}" stepKey="waitForBlueSwatch" />
+        <click selector="{{StorefrontProductInfoMainSection.swatchOptionByLabel('Blue')}}" stepKey="clickBlueSwatch1"/>
+        <waitForElementVisible selector="{{StorefrontProductInfoMainSection.swatchOptionByLabel('Medium')}}" stepKey="waitForMediumSwatchVisible"/>
+        <grabAttributeFrom selector="{{StorefrontProductInfoMainSection.swatchOptionByLabel('Medium')}}" userInput="disabled" stepKey="grabMediumAttribute"/>
+        <assertEquals stepKey="assertMediumDisabled">
+            <expectedResult type="string">true</expectedResult>
+            <actualResult type="string">{$grabMediumAttribute}</actualResult>
+        </assertEquals>
+        <!-- Step 8 - Verify Blue Large combination is enabled -->
+        <!-- Select Blue color swatch -->
+        <waitForElementVisible selector="{{StorefrontProductInfoMainSection.swatchOptionByLabel('Blue')}}" stepKey="waitForBlueSwatchAgain" />
+        <click selector="{{StorefrontProductInfoMainSection.swatchOptionByLabel('Blue')}}" stepKey="clickBlueSwatch2"/>
+        <waitForElementClickable selector="{{StorefrontProductInfoMainSection.swatchOptionByLabel('Large')}}" stepKey="waitForLargeSwatchClickable"/>
+        <click selector="{{StorefrontProductInfoMainSection.swatchOptionByLabel('Large')}}" stepKey="clickLargeSize"/>
+        <waitForElement selector="{{StorefrontProductInfoMainSection.selectedSwatchValue('Large')}}" stepKey="assertLargeSelected"/>
+    </test>
+</tests>

@@ -1,6 +1,6 @@
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 /**
@@ -14,6 +14,7 @@ define([
 
     return Abstract.extend({
         defaults: {
+            value: '',
             links: {
                 value: ''
             }
@@ -47,6 +48,16 @@ define([
             this.formId = namespace[0];
 
             return this;
+        },
+
+        /**
+         * Set the file input value
+         *
+         * @param {FileUploader} fileUploader - UI Class
+         * @param {Event} e
+         */
+        setFileValue: function (fileUploader, e) {
+            this.value(e.target.files.length ? e.target.files.length : '');
         }
     });
 });

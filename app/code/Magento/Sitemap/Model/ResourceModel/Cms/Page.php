@@ -1,8 +1,8 @@
 <?php
 
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Sitemap\Model\ResourceModel\Cms;
@@ -58,7 +58,7 @@ class Page extends AbstractDb
         MetadataPool $metadataPool,
         EntityManager $entityManager,
         $connectionName = null,
-        GetUtilityPageIdentifiersInterface $getUtilityPageIdentifiers = null
+        ?GetUtilityPageIdentifiersInterface $getUtilityPageIdentifiers = null
     ) {
         $this->metadataPool      = $metadataPool;
         $this->entityManager     = $entityManager;

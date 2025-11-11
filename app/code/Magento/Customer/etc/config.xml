@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2025 Adobe
+ * All Rights Reserved.
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Store:etc/config.xsd">
@@ -33,6 +33,7 @@
                 <change_email_template>customer_account_information_change_email_template</change_email_template>
                 <change_email_and_password_template>customer_account_information_change_email_and_password_template</change_email_and_password_template>
                 <confirm>0</confirm>
+                <graphql_share_customer_group>1</graphql_share_customer_group>
             </account_information>
             <password>
                 <forgot_email_identity>support</forgot_email_identity>

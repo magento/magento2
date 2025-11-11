@@ -1,12 +1,13 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\CatalogGraphQl\Model\Resolver\Products\Query;
 
+use Magento\AdvancedSearch\Model\Client\ClientException;
 use Magento\CatalogGraphQl\DataProvider\Product\SearchCriteriaBuilder;
 use Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\ProductSearch;
 use Magento\CatalogGraphQl\Model\Resolver\Products\Query\Search\QueryPopularity;
@@ -29,42 +30,42 @@ class Search implements ProductQueryInterface
     /**
      * @var SearchInterface
      */
-    private $search;
+    private SearchInterface $search;
 
     /**
      * @var SearchResultFactory
      */
-    private $searchResultFactory;
+    private SearchResultFactory $searchResultFactory;
 
     /**
      * @var FieldSelection
      */
-    private $fieldSelection;
+    private FieldSelection $fieldSelection;
 
     /**
      * @var ArgumentsProcessorInterface
      */
-    private $argsSelection;
+    private ArgumentsProcessorInterface $argsSelection;
 
     /**
      * @var ProductSearch
      */
-    private $productsProvider;
+    private ProductSearch $productsProvider;
 
     /**
      * @var SearchCriteriaBuilder
      */
-    private $searchCriteriaBuilder;
+    private SearchCriteriaBuilder $searchCriteriaBuilder;
 
     /**
      * @var Suggestions
      */
-    private $suggestions;
+    private Suggestions $suggestions;
 
     /**
      * @var QueryPopularity
      */
-    private $queryPopularity;
+    private QueryPopularity $queryPopularity;
 
     /**
      * @param SearchInterface $search
@@ -111,47 +112,61 @@ class Search implements ProductQueryInterface
         ContextInterface $context
     ): SearchResult {
         $searchCriteria = $this->buildSearchCriteria($args, $info);
-        $itemsResults = $this->search->search($searchCriteria);
-        $searchResults = $this->productsProvider->getList(
-            $searchCriteria,
-            $itemsResults,
-            $this->fieldSelection->getProductsFieldSelection($info),
-            $context
-        );
+        try {
+            $itemsResults = $this->search->search($searchCriteria);
+            $searchResults = $this->productsProvider->getList(
+                $searchCriteria,
+                $itemsResults,
+                $this->fieldSelection->getProductsFieldSelection($info),
+                $context
+            );
 
-        $totalPages = $searchCriteria->getPageSize()
-            ? ((int)ceil($searchResults->getTotalCount() / $searchCriteria->getPageSize()))
-            : 0;
+            $totalPages = $searchCriteria->getPageSize()
+                ? ((int)ceil($searchResults->getTotalCount() / $searchCriteria->getPageSize()))
+                : 0;
 
-        // add query statistics data
-        if (!empty($args['search'])) {
-            $this->queryPopularity->execute($context, $args['search'], (int) $searchResults->getTotalCount());
+            // add query statistics data
+            if (!empty($args['search'])) {
+                $this->queryPopularity->execute($context, $args['search'], (int) $searchResults->getTotalCount());
+            }
+
+            $productArray = [];
+            /** @var \Magento\Catalog\Model\Product $product */
+            foreach ($searchResults->getItems() as $product) {
+                $productArray[$product->getId()] = $product->getData();
+                $productArray[$product->getId()]['model'] = $product;
+            }
+
+            $suggestions = [];
+            $totalCount = (int) $searchResults->getTotalCount();
+            if ($totalCount === 0 && !empty($args['search'])) {
+                $suggestions = $this->suggestions->execute($context, $args['search']);
+            }
+
+            return $this->searchResultFactory->create(
+                [
+                    'totalCount' => $totalCount,
+                    'productsSearchResult' => $productArray,
+                    'searchAggregation' => $itemsResults->getAggregations(),
+                    'pageSize' => $args['pageSize'],
+                    'currentPage' => $args['currentPage'],
+                    'totalPages' => $totalPages,
+                    'suggestions' => $suggestions,
+                ]
+            );
+        } catch (\InvalidArgumentException|ClientException) {
+            return $this->searchResultFactory->create(
+                [
+                    'totalCount' => 0,
+                    'productsSearchResult' => [],
+                    'searchAggregation' => null,
+                    'pageSize' => $args['pageSize'],
+                    'currentPage' => $args['currentPage'],
+                    'totalPages' => 0,
+                    'suggestions' => [],
+                ]
+            );
         }
-
-        $productArray = [];
-        /** @var \Magento\Catalog\Model\Product $product */
-        foreach ($searchResults->getItems() as $product) {
-            $productArray[$product->getId()] = $product->getData();
-            $productArray[$product->getId()]['model'] = $product;
-        }
-
-        $suggestions = [];
-        $totalCount = (int) $searchResults->getTotalCount();
-        if ($totalCount === 0 && !empty($args['search'])) {
-            $suggestions = $this->suggestions->execute($context, $args['search']);
-        }
-
-        return $this->searchResultFactory->create(
-            [
-                'totalCount' => $totalCount,
-                'productsSearchResult' => $productArray,
-                'searchAggregation' => $itemsResults->getAggregations(),
-                'pageSize' => $args['pageSize'],
-                'currentPage' => $args['currentPage'],
-                'totalPages' => $totalPages,
-                'suggestions' => $suggestions,
-            ]
-        );
     }
 
     /**

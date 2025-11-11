@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Quote\Model\Cart\Totals;
 
@@ -57,7 +57,7 @@ class ItemConverter
         EventManager $eventManager,
         \Magento\Quote\Api\Data\TotalsItemInterfaceFactory $totalsItemFactory,
         DataObjectHelper $dataObjectHelper,
-        \Magento\Framework\Serialize\Serializer\Json $serializer = null
+        ?\Magento\Framework\Serialize\Serializer\Json $serializer = null
     ) {
         $this->configurationPool = $configurationPool;
         $this->eventManager = $eventManager;

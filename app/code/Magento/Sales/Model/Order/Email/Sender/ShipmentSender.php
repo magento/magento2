@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Sales\Model\Order\Email\Sender;
 
@@ -86,7 +86,7 @@ class ShipmentSender extends Sender
         ShipmentResource $shipmentResource,
         \Magento\Framework\App\Config\ScopeConfigInterface $globalConfig,
         ManagerInterface $eventManager,
-        Emulation $appEmulation = null
+        ?Emulation $appEmulation = null
     ) {
         parent::__construct($templateContainer, $identityContainer, $senderBuilderFactory, $logger, $addressRenderer);
         $this->paymentHelper = $paymentHelper;

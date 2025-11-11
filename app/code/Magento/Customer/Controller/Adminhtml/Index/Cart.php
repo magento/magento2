@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -123,7 +123,7 @@ class Cart extends BaseAction implements HttpGetActionInterface, HttpPostActionI
         PageFactory $resultPageFactory,
         ForwardFactory $resultForwardFactory,
         JsonFactory $resultJsonFactory,
-        QuoteFactory $quoteFactory = null,
+        ?QuoteFactory $quoteFactory = null,
         ?StoreManagerInterface $storeManager = null
     ) {
         parent::__construct(

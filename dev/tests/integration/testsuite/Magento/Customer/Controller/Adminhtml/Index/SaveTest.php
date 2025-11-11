@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2025 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -385,7 +385,7 @@ class SaveTest extends AbstractBackendController
                 'sendemail_store_id' => '1',
                 'sendemail' => '1',
                 CustomerData::CREATED_AT => '2000-01-01 00:00:00',
-                CustomerData::DEFAULT_SHIPPING => '_item1',
+                CustomerData::DEFAULT_SHIPPING => '1',
                 CustomerData::DEFAULT_BILLING => '1'
             ]
         ];

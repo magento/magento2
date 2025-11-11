@@ -1,18 +1,14 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
  */
 
 // phpcs:disable Generic.Files.LineLength.TooLong
 
 /** @var \Magento\Customer\Block\Form\Login $block */
-if (!$block->getButtonLockManager()) {
-    $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
-    $block->setButtonLockManager(
-        $objectManager->get(\Magento\Framework\View\Element\ButtonLockManager::class)
-    );
-}
+/** @var \Magento\Framework\View\Element\ButtonLockManager|null $buttonLockManager */
+$buttonLockManager = $block->getData('button_lock_manager');
 /** @var $escaper \Magento\Framework\Escaper */
 ?>
 <div class="block block-customer-login">
@@ -35,7 +31,6 @@ if (!$block->getButtonLockManager()) {
                             <?php if ($block->isAutocompleteDisabled()): ?> autocomplete="off"<?php endif; ?>
                                id="email" type="email" class="input-text"
                                title="<?= $escaper->escapeHtmlAttr(__('Email')) ?>"
-                               data-mage-init='{"mage/trim-input":{}}'
                                data-validate="{required:true, 'validate-email':true}">
                     </div>
                 </div>
@@ -55,7 +50,7 @@ if (!$block->getButtonLockManager()) {
                 <?= $block->getChildHtml('form_additional_info') ?>
                 <div class="actions-toolbar">
                     <div class="primary">
-                        <button type="submit" class="action login primary" name="send" id="send2" <?php if ($block->getButtonLockManager()->isDisabled('customer_login_form_submit')): ?> disabled="disabled" <?php endif; ?>>
+                        <button type="submit" class="action login primary" name="send" id="send2" <?php if ($buttonLockManager?->isDisabled('customer_login_form_submit')): ?> disabled="disabled" <?php endif; ?>>
                             <span><?= $escaper->escapeHtml(__('Sign In')) ?></span>
                         </button>
                     </div>

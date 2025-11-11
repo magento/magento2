@@ -1,9 +1,7 @@
 <?php declare(strict_types=1);
 /**
- * \Magento\Config\Model\Config\Structure\Element\Field
- *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Config\Test\Unit\Model\Config\Structure\Element;

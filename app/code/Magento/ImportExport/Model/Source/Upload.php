@@ -1,13 +1,13 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\ImportExport\Model\Source;
 
-use Laminas\File\Transfer\Adapter\Http;
+use Magento\Framework\File\HttpInterface as Http;
 use Laminas\Validator\File\Upload as FileUploadValidator;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Exception\LocalizedException;

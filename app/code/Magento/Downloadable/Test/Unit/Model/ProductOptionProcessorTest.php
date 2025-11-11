@@ -1,12 +1,13 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Downloadable\Test\Unit\Model;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\Catalog\Api\Data\ProductOptionExtensionInterface;
 use Magento\Catalog\Api\Data\ProductOptionInterface;
 use Magento\Downloadable\Api\Data\DownloadableOptionInterface;
@@ -52,41 +53,23 @@ class ProductOptionProcessorTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->dataObject = $this->getMockBuilder(DataObject::class)
-            ->addMethods(['getLinks'])
-            ->onlyMethods(['addData'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->dataObject = $this->createPartialMock(
+            \Magento\Framework\DataObject\Test\Unit\Helper\DataObjectTestHelper::class,
+            ['getLinks', 'addData']
+        );
 
-        $this->dataObjectFactory = $this->getMockBuilder(\Magento\Framework\DataObject\Factory::class)
-            ->onlyMethods(['create'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->dataObjectFactory->expects($this->any())
-            ->method('create')
-            ->willReturn($this->dataObject);
+        $this->dataObjectFactory = $this->createPartialMock(DataObjectFactory::class, ['create']);
+        $this->dataObjectFactory->method('create')->willReturn($this->dataObject);
 
-        $this->dataObjectHelper = $this->getMockBuilder(DataObjectHelper::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->dataObjectHelper = $this->createMock(DataObjectHelper::class);
 
-        $this->downloadableOption = $this->getMockBuilder(
-            DownloadableOptionInterface::class
-        )
-            ->onlyMethods([
-                'getDownloadableLinks',
-            ])
-            ->getMockForAbstractClass();
+        $this->downloadableOption = $this->createMock(DownloadableOptionInterface::class);
 
-        $this->downloadableOptionFactory = $this->getMockBuilder(
-            DownloadableOptionFactory::class
-        )
-            ->onlyMethods(['create'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->downloadableOptionFactory->expects($this->any())
-            ->method('create')
-            ->willReturn($this->downloadableOption);
+        $this->downloadableOptionFactory = $this->createPartialMock(
+            DownloadableOptionFactory::class,
+            ['create']
+        );
+        $this->downloadableOptionFactory->method('create')->willReturn($this->downloadableOption);
 
         $this->processor = new ProductOptionProcessor(
             $this->dataObjectFactory,
@@ -98,34 +81,24 @@ class ProductOptionProcessorTest extends TestCase
     /**
      * @param array|string $options
      * @param array $requestData
-     * @dataProvider dataProviderConvertToBuyRequest
      */
+    #[DataProvider('dataProviderConvertToBuyRequest')]
     public function testConvertToBuyRequest(
         $options,
         $requestData
     ) {
-        $productOptionMock = $this->getMockBuilder(ProductOptionInterface::class)
-            ->getMockForAbstractClass();
+        $productOptionMock = $this->createMock(ProductOptionInterface::class);
 
-        $productOptionExtensionMock = $this->getMockBuilder(
-            ProductOptionExtensionInterface::class
-        )
-            ->addMethods([
-                'getDownloadableOption',
-            ])
-            ->getMockForAbstractClass();
+        $productOptionExtensionMock = $this->createPartialMock(
+            \Magento\Quote\Test\Unit\Helper\ProductOptionExtensionTestHelper::class,
+            ['getDownloadableOption']
+        );
 
-        $productOptionMock->expects($this->any())
-            ->method('getExtensionAttributes')
-            ->willReturn($productOptionExtensionMock);
+        $productOptionMock->method('getExtensionAttributes')->willReturn($productOptionExtensionMock);
 
-        $productOptionExtensionMock->expects($this->any())
-            ->method('getDownloadableOption')
-            ->willReturn($this->downloadableOption);
+        $productOptionExtensionMock->method('getDownloadableOption')->willReturn($this->downloadableOption);
 
-        $this->downloadableOption->expects($this->any())
-            ->method('getDownloadableLinks')
-            ->willReturn($options);
+        $this->downloadableOption->method('getDownloadableLinks')->willReturn($options);
 
         $this->dataObject->expects($this->any())
             ->method('addData')
@@ -155,15 +128,13 @@ class ProductOptionProcessorTest extends TestCase
     /**
      * @param array|string $options
      * @param string|null $expected
-     * @dataProvider dataProviderConvertToProductOption
      */
+    #[DataProvider('dataProviderConvertToProductOption')]
     public function testConvertToProductOption(
         $options,
         $expected
     ) {
-        $this->dataObject->expects($this->any())
-            ->method('getLinks')
-            ->willReturn($options);
+        $this->dataObject->method('getLinks')->willReturn($options);
 
         $this->dataObjectHelper->expects($this->any())
             ->method('populateWithArray')

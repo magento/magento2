@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Integration\Model;
@@ -18,6 +18,7 @@ use Magento\Framework\Webapi\Exception as HTTPExceptionCodes;
 use Magento\Integration\Model\ResourceModel\Oauth\Token\CollectionFactory;
 use Magento\Integration\Model\Oauth\Token\RequestLog\Config as TokenThrottlerConfig;
 use Magento\Integration\Api\CustomerTokenServiceInterface;
+use Magento\Customer\Model\CustomerFactory;
 
 /**
  * api-functional test for \Magento\Integration\Model\CustomerTokenService.
@@ -26,9 +27,9 @@ use Magento\Integration\Api\CustomerTokenServiceInterface;
  */
 class CustomerTokenServiceTest extends WebapiAbstract
 {
-    const SERVICE_NAME = "integrationCustomerTokenServiceV1";
-    const SERVICE_VERSION = "V1";
-    const RESOURCE_PATH_CUSTOMER_TOKEN = "/V1/integration/customer/token";
+    private const SERVICE_NAME = "integrationCustomerTokenServiceV1";
+    private const SERVICE_VERSION = "V1";
+    private const RESOURCE_PATH_CUSTOMER_TOKEN = "/V1/integration/customer/token";
 
     /**
      * @var CustomerTokenServiceInterface
@@ -61,6 +62,11 @@ class CustomerTokenServiceTest extends WebapiAbstract
     private $tokenReader;
 
     /**
+     * @var CustomerFactory
+     */
+    private $customerFactory;
+
+    /**
      * Setup CustomerTokenService
      */
     protected function setUp(): void
@@ -81,6 +87,7 @@ class CustomerTokenServiceTest extends WebapiAbstract
         $tokenThrottlerConfig = Bootstrap::getObjectManager()->get(TokenThrottlerConfig::class);
         $this->attemptsCountToLockAccount = $tokenThrottlerConfig->getMaxFailuresCount();
         $this->tokenReader = Bootstrap::getObjectManager()->get(UserTokenReaderInterface::class);
+        $this->customerFactory = Bootstrap::getObjectManager()->get(CustomerFactory::class);
     }
 
     /**
@@ -103,9 +110,26 @@ class CustomerTokenServiceTest extends WebapiAbstract
                 'httpMethod' => Request::HTTP_METHOD_POST,
             ],
         ];
+
+        $invalidCredentials = [
+            'username' => $userName,
+            'password' => 'invalid',
+        ];
+        try {
+            $this->_webApiCall($serviceInfo, $invalidCredentials);
+        } catch (\Exception $e) {
+        }
+        $customerData = $this->customerAccountManagement->authenticate($userName, $password);
+        $customer = $this->customerFactory->create()->setWebsiteId($customerData->getWebsiteId())
+            ->loadByEmail($customerData->getEmail());
+        $this->assertEquals(1, $customer->getFailuresNum());
+        $this->assertNotNull($customer->getFirstFailure());
         $requestData = ['username' => $userName, 'password' => $password];
         $accessToken = $this->_webApiCall($serviceInfo, $requestData, null, $store);
-
+        $customer = $this->customerFactory->create()->setWebsiteId($customerData->getWebsiteId())
+            ->loadByEmail($customerData->getEmail());
+        $this->assertEquals(0, $customer->getFailuresNum());
+        $this->assertNull($customer->getFirstFailure());
         $this->assertToken($accessToken, $userName, $password);
     }
 

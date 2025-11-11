@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -15,6 +15,7 @@ use Magento\Framework\Event\ManagerInterface;
 use Magento\Framework\HTTP\LaminasClient;
 use Magento\Framework\HTTP\LaminasClientFactory;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\TestFramework\Unit\Matcher\MethodInvokedAtIndex;
 use Magento\Payment\Model\Info;
 use Magento\Payment\Model\InfoInterface;
 use Magento\Payment\Model\Method\ConfigInterface;
@@ -481,16 +482,17 @@ class PayflowproTest extends TestCase
      */
     protected function initStoreMock(): void
     {
-        $storeId = 27;
-        $storeMock = $this->getMockBuilder(Store::class)->disableOriginalConstructor()
-            ->onlyMethods(['getId'])
-            ->getMock();
-        $this->storeManagerMock->expects(static::once())
+        $this->storeManagerMock->expects(static::any())
             ->method('getStore')
-            ->willReturn($storeMock);
-        $storeMock->expects(static::once())
-            ->method('getId')
-            ->willReturn($storeId);
+            ->willReturnCallback(
+                function ($storeId) {
+                    $storeMock = $this->createPartialMock(Store::class, ['getId']);
+                    $storeMock->expects(static::once())
+                        ->method('getId')
+                        ->willReturn($storeId === null ? 1 : $storeId);
+                    return $storeMock;
+                }
+            );
     }
 
     /**
@@ -805,5 +807,21 @@ class PayflowproTest extends TestCase
                 ])
             ]
         ];
+    }
+
+    public function testSetStore(): void
+    {
+        $storeId = 2;
+        $this->initStoreMock();
+        $this->configMock->expects($this->exactly(2))
+            ->method('setStoreId');
+        $this->configMock->expects(new MethodInvokedAtIndex(0))
+            ->method('setStoreId')
+            ->with(1);
+        $this->configMock->expects(new MethodInvokedAtIndex(1))
+            ->method('setStoreId')
+            ->with($storeId);
+        $this->payflowpro->getConfig();
+        $this->payflowpro->setStore($storeId);
     }
 }

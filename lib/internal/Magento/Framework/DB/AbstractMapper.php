@@ -93,7 +93,7 @@ abstract class AbstractMapper implements MapperInterface
         FetchStrategyInterface $fetchStrategy,
         ObjectFactory $objectFactory,
         MapperFactory $mapperFactory,
-        Select $select = null
+        ?Select $select = null
     ) {
         $this->logger = $logger;
         $this->fetchStrategy = $fetchStrategy;

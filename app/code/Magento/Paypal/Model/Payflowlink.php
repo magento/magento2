@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Paypal\Model;
@@ -168,8 +168,8 @@ class Payflowlink extends \Magento\Paypal\Model\Payflowpro
         \Magento\Framework\App\RequestInterface $requestHttp,
         \Magento\Store\Model\WebsiteFactory $websiteFactory,
         OrderSender $orderSender,
-        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
-        \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
+        ?\Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
+        ?\Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
     ) {
         $this->_requestFactory = $requestFactory;
@@ -216,7 +216,7 @@ class Payflowlink extends \Magento\Paypal\Model\Payflowpro
      * @return bool
      * @throws \Magento\Framework\Exception\LocalizedException
      */
-    public function isAvailable(\Magento\Quote\Api\Data\CartInterface $quote = null)
+    public function isAvailable(?\Magento\Quote\Api\Data\CartInterface $quote = null)
     {
         return AbstractMethod::isAvailable($quote) && $this->getConfig()->isMethodAvailable($this->getCode());
     }

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Sales\Model\Config;
 
@@ -91,7 +91,7 @@ abstract class Ordered extends \Magento\Framework\App\Config\Base
         \Psr\Log\LoggerInterface $logger,
         \Magento\Sales\Model\Config $salesConfig,
         $sourceData = null,
-        SerializerInterface $serializer = null
+        ?SerializerInterface $serializer = null
     ) {
         parent::__construct($sourceData);
         $this->_configCacheType = $configCacheType;

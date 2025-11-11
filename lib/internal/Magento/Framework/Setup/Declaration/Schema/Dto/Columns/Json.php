@@ -38,8 +38,8 @@ class Json extends Column implements ElementDiffAwareInterface, ColumnNullableAw
         string $type,
         Table $table,
         bool $nullable = true,
-        string $comment = null,
-        string $onCreate = null
+        ?string $comment = null,
+        ?string $onCreate = null
     ) {
         parent::__construct($name, $type, $table, $comment, $onCreate);
         $this->nullable = $nullable;

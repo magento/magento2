@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
@@ -86,5 +86,14 @@
     </type>
     <type name="Magento\Catalog\Ui\Component\Listing\Columns">
         <plugin name="changeWeeColumnConfig" type="Magento\Weee\Plugin\Catalog\Ui\Component\Listing\Columns"/>
+    </type>
+    <type name="Magento\Weee\Model\Tax">
+        <plugin name="configurableVariationAttributePriority" type="Magento\Weee\Plugin\Model\ConfigurableVariationAttributePriority"/>
+    </type>
+    <type name="Magento\ConfigurableProduct\Pricing\Price\FinalPriceResolver">
+        <plugin name="configurableProductPriceAdjustment" type="Magento\Weee\Plugin\ConfigurableProduct\Pricing\FinalPriceResolver"/>
+    </type>
+    <type name="Magento\Catalog\Model\ResourceModel\Product\Indexer\LinkedProductSelectBuilderByIndexPrice">
+        <plugin name="weeeAttributeProductSort" type="Magento\Weee\Plugin\Catalog\ResourceModel\Product\WeeeAttributeProductSort"/>
     </type>
 </config>

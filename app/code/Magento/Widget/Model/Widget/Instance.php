@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Widget\Model\Widget;
 
@@ -196,12 +196,12 @@ class Instance extends \Magento\Framework\Model\AbstractModel
         Random $mathRandom,
         Filesystem $filesystem,
         Conditions $conditionsHelper,
-        AbstractResource $resource = null,
-        AbstractDb $resourceCollection = null,
+        ?AbstractResource $resource = null,
+        ?AbstractDb $resourceCollection = null,
         array $relatedCacheTypes = [],
         array $data = [],
-        Json $serializer = null,
-        ValidatorFactory $xmlValidatorFactory = null
+        ?Json $serializer = null,
+        ?ValidatorFactory $xmlValidatorFactory = null
     ) {
         $this->_escaper = $escaper;
         $this->_viewFileSystem = $viewFileSystem;

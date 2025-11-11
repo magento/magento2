@@ -63,16 +63,16 @@ class Writer
      * @param Filesystem $filesystem
      * @param ConfigFilePool $configFilePool
      * @param DeploymentConfig $deploymentConfig
-     * @param Writer\FormatterInterface $formatter
-     * @param CommentParser $commentParser The parser of comments from configuration files
+     * @param Writer\FormatterInterface|null $formatter
+     * @param CommentParser|null $commentParser The parser of comments from configuration files
      */
     public function __construct(
         Reader $reader,
         Filesystem $filesystem,
         ConfigFilePool $configFilePool,
         DeploymentConfig $deploymentConfig,
-        Writer\FormatterInterface $formatter = null,
-        CommentParser $commentParser = null
+        ?Writer\FormatterInterface $formatter = null,
+        ?CommentParser $commentParser = null
     ) {
         $this->reader = $reader;
         $this->filesystem = $filesystem;

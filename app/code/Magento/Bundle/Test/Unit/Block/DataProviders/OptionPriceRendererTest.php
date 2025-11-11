@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -9,10 +9,10 @@ namespace Magento\Bundle\Test\Unit\Block\DataProviders;
 
 use Magento\Bundle\Block\DataProviders\OptionPriceRenderer;
 use Magento\Catalog\Model\Product;
-use Magento\Framework\Pricing\Render;
+use Magento\Framework\View\Test\Unit\Helper\AbstractBlockTestHelper;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-use Magento\Framework\View\Element\BlockInterface;
 use Magento\Framework\View\LayoutInterface;
+use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -52,22 +52,17 @@ class OptionPriceRendererTest extends TestCase
      * Test to render Tier price html
      *
      * @return void
+     * @throws Exception
      */
     public function testRenderTierPrice(): void
     {
         $expectedHtml = 'tier price html';
-        $expectedArguments = ['zone' => Render::ZONE_ITEM_OPTION];
 
         $productMock = $this->createMock(Product::class);
 
-        $priceRenderer = $this->getMockBuilder(BlockInterface::class)
-            ->addMethods(['render'])
-            ->onlyMethods(['toHtml'])
-            ->getMockForAbstractClass();
-        $priceRenderer->expects($this->once())
-            ->method('render')
-            ->with('tier_price', $productMock, $expectedArguments)
-            ->willReturn($expectedHtml);
+        /** @var AbstractBlockTestHelper $priceRenderer */
+        $priceRenderer = new AbstractBlockTestHelper();
+        $priceRenderer->setRenderResult($expectedHtml);
 
         $this->layoutMock->method('getBlock')
             ->with('product.price.render.default')
@@ -84,6 +79,7 @@ class OptionPriceRendererTest extends TestCase
      * Test to render Tier price html when render block is not exists
      *
      * @return void
+     * @throws Exception
      */
     public function testRenderTierPriceNotExist(): void
     {

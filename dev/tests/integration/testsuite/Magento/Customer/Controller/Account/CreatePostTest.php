@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -24,6 +24,7 @@ use Magento\TestFramework\Mail\Template\TransportBuilderMock;
 use Magento\TestFramework\Request;
 use Magento\TestFramework\TestCase\AbstractController;
 use Magento\Theme\Controller\Result\MessagePlugin;
+use Symfony\Component\Mime\Test\Constraint\EmailTextBodyContains;
 
 /**
  * Tests from customer account create post action.
@@ -176,6 +177,37 @@ class CreatePostTest extends AbstractController
      * @magentoDbIsolation enabled
      * @magentoAppIsolation enabled
      * @magentoConfigFixture current_website customer/create_account/confirm 0
+     * @magentoConfigFixture current_store customer/create_account/default_group 1
+     * @magentoConfigFixture current_store customer/create_account/generate_human_friendly_id 0
+     *
+     * @dataProvider emailDataProvider
+     * @param string $email
+     * @param string $expectedEmail
+     * @return void
+     * @throws NoSuchEntityException
+     */
+    public function testNoConfirmCreatePostPunycodeEmailAction(string $email, string $expectedEmail): void
+    {
+        $this->fillRequestWithAccountData($email);
+        $this->dispatch('customer/account/createPost');
+        $this->assertRedirect($this->stringEndsWith('customer/account/'));
+        $this->assertSessionMessages(
+            $this->containsEqual(
+                (string)__('Thank you for registering with %1.', $this->storeManager->getStore()->getFrontendName())
+            ),
+            MessageInterface::TYPE_SUCCESS
+        );
+        $customer = $this->customerRegistry->retrieveByEmail($expectedEmail);
+        //Assert customer group
+        $this->assertEquals(1, $customer->getDataModel()->getGroupId());
+        //Assert customer email
+        $this->assertEquals($expectedEmail, $customer->getData('email'));
+    }
+
+    /**
+     * @magentoDbIsolation enabled
+     * @magentoAppIsolation enabled
+     * @magentoConfigFixture current_website customer/create_account/confirm 0
      * @magentoConfigFixture current_store customer/create_account/default_group 2
      * @magentoConfigFixture current_store customer/create_account/generate_human_friendly_id 1
      * @return void
@@ -255,20 +287,15 @@ class CreatePostTest extends AbstractController
         $message = 'You must confirm your account.'
             . ' Please check your email for the confirmation link or <a href="%1">click here</a> for a new link.';
         $url = $this->urlBuilder->getUrl('customer/account/confirmation', ['_query' => ['email' => $email]]);
+
         $this->assertSessionMessages($this->containsEqual((string)__($message, $url)), MessageInterface::TYPE_SUCCESS);
         /** @var CustomerInterface $customer */
         $customer = $this->customerRepository->get($email);
         $confirmation = $customer->getConfirmation();
         $sendMessage = $this->transportBuilderMock->getSentMessage();
         $this->assertNotNull($sendMessage);
-        $rawMessage = $sendMessage->getBody()->getParts()[0]->getRawContent();
-        $this->assertStringContainsString(
-            (string)__(
-                'You must confirm your %customer_email email before you can sign in (link is only valid once):',
-                ['customer_email' => $email]
-            ),
-            $rawMessage
-        );
+        $rawMessage = quoted_printable_decode($sendMessage->getBody()->bodyToString());
+
         $this->assertStringContainsString(
             sprintf(
                 'customer/account/confirm/?email=%s&amp;id=%s&amp;key=%s',
@@ -291,6 +318,25 @@ class CreatePostTest extends AbstractController
             MessageInterface::TYPE_SUCCESS
         );
         $this->assertEmpty($this->customerRepository->get($email)->getConfirmation());
+    }
+
+    /**
+     * Email data provider for testing punycode functionality
+     *
+     * @return array[]
+     */
+    public static function emailDataProvider(): array
+    {
+        return [
+            'encoded' => [
+                'email' => 'test@xn--smething-v3a.com',
+                'expected' => 'test@sómething.com',
+            ],
+            'non-encoded' => [
+                'email' => 'test@sómething.com',
+                'expected' => 'test@sómething.com',
+            ]
+        ];
     }
 
     /**

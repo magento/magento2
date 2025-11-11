@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -57,8 +57,8 @@ class LoadBlock extends CreateAction implements HttpPostActionInterface, HttpGet
         PageFactory $resultPageFactory,
         ForwardFactory $resultForwardFactory,
         RawFactory $resultRawFactory,
-        StoreManagerInterface $storeManager = null,
-        RegexValidator $regexValidator = null
+        ?StoreManagerInterface $storeManager = null,
+        ?RegexValidator $regexValidator = null
     ) {
         $this->resultRawFactory = $resultRawFactory;
         parent::__construct(
