@@ -50,7 +50,7 @@ class OptionTypeListTest extends TestCase
             ->method('toOptionArray')
             ->willReturn([['value' => 'value', 'label' => 'label']]);
 
-        $typeMock = $this->getMockForAbstractClass(OptionTypeInterface::class);
+        $typeMock = $this->createMock(OptionTypeInterface::class);
         $typeMock->expects($this->once())->method('setCode')->with('value')->willReturnSelf();
         $typeMock->expects($this->once())->method('setLabel')->with('label')->willReturnSelf();
         $this->typeFactoryMock->expects($this->once())->method('create')->willReturn($typeMock);

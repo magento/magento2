@@ -7,7 +7,9 @@ declare(strict_types=1);
 
 namespace Magento\Quote\Test\Unit\Model\Quote\Item;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\Quote\Model\Quote\Item\AbstractItem;
+use Magento\Quote\Test\Unit\Helper\AbstractItemForTestHelper;
 use PHPUnit\Framework\TestCase;
 
 class AbstractItemTest extends TestCase
@@ -19,32 +21,18 @@ class AbstractItemTest extends TestCase
      * @param array     $children
      * @param bool      $calculated
      * @param float|int $myDiscountAmount
-     * @dataProvider    dataProviderGetTotalDiscountAmount
      */
+    #[DataProvider('dataProviderGetTotalDiscountAmount')]
     public function testGetTotalDiscountAmount($expectedDiscountAmount, $children, $calculated, $myDiscountAmount)
     {
         $finalChildMock = [];
         foreach ($children as $child) {
             $finalChildMock[] = $child($this);
         }
-        $abstractItemMock = $this->getMockForAbstractClass(
-            AbstractItem::class,
-            [],
-            '',
-            false,
-            false,
-            true,
-            ['getChildren', 'isChildrenCalculated', 'getDiscountAmount']
-        );
-        $abstractItemMock->expects($this->any())
-            ->method('getChildren')
-            ->willReturn($finalChildMock);
-        $abstractItemMock->expects($this->any())
-            ->method('isChildrenCalculated')
-            ->willReturn($calculated);
-        $abstractItemMock->expects($this->any())
-            ->method('getDiscountAmount')
-            ->willReturn($myDiscountAmount);
+        $abstractItemMock = new AbstractItemForTestHelper();
+        $abstractItemMock->setChildren($finalChildMock)
+            ->setIsChildrenCalculated($calculated)
+            ->setDiscountAmount($myDiscountAmount);
 
         $totalDiscountAmount = $abstractItemMock->getTotalDiscountAmount();
         $this->assertEquals($expectedDiscountAmount, $totalDiscountAmount);
@@ -52,18 +40,7 @@ class AbstractItemTest extends TestCase
 
     protected function getMockForAbstractItem($childDiscountAmount)
     {
-        $childItemMock = $this->getMockForAbstractClass(
-            AbstractItem::class,
-            [],
-            '',
-            false,
-            false,
-            true,
-            ['getDiscountAmount']
-        );
-        $childItemMock->expects($this->any())
-            ->method('getDiscountAmount')
-            ->willReturn($childDiscountAmount);
+        $childItemMock = (new AbstractItemForTestHelper())->setDiscountAmount($childDiscountAmount);
 
         return $childItemMock;
     }

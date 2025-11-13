@@ -27,8 +27,7 @@ class GiftMessageTest extends AbstractModifierTestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $this->scopeConfigMock = $this->getMockBuilder(ScopeConfigInterface::class)
-            ->getMockForAbstractClass();
+        $this->scopeConfigMock = $this->createMock(ScopeConfigInterface::class);
     }
 
     /**
@@ -74,7 +73,7 @@ class GiftMessageTest extends AbstractModifierTestCase
     public function testModifyDataUsesConfigurationValuesWhenProductDoesNotContainValidValue()
     {
         $productId = 1;
-        $this->productMock->expects($this->any())->method('getId')->willReturn($productId);
+        $this->productMock->setId($productId);
 
         $configValue = 1;
         $this->scopeConfigMock->expects($this->any())

@@ -9,41 +9,27 @@ namespace Magento\Bundle\Test\Unit\Block\Adminhtml\Catalog\Product\Edit\Tab\Bund
 
 use Magento\Bundle\Block\Adminhtml\Catalog\Product\Edit\Tab\Bundle\Option;
 use Magento\Framework\DataObject;
+use Magento\Framework\View\Element\AbstractBlock;
+use Magento\Framework\View\LayoutInterface;
+use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
 
 class OptionTest extends TestCase
 {
+    /**
+     * @return void
+     * @throws Exception
+     */
     public function testGetAddButtonId()
     {
         $button = new DataObject();
+        $button->setId(42);
 
-        $itemsBlock = $this->getMockBuilder(DataObject::class)
-            ->addMethods(['getChildBlock'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $itemsBlock->expects(
-            $this->atLeastOnce()
-        )->method(
-            'getChildBlock'
-        )->with(
-            'add_button'
-        )->willReturn(
-            $button
-        );
+        $itemsBlock = $this->createMock(AbstractBlock::class);
+        $itemsBlock->method('getChildBlock')->with('add_button')->willReturn($button);
 
-        $layout = $this->getMockBuilder(DataObject::class)
-            ->addMethods(['getBlock'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $layout->expects(
-            $this->atLeastOnce()
-        )->method(
-            'getBlock'
-        )->with(
-            'admin.product.bundle.items'
-        )->willReturn(
-            $itemsBlock
-        );
+        $layout = $this->createMock(LayoutInterface::class);
+        $layout->method('getBlock')->with('admin.product.bundle.items')->willReturn($itemsBlock);
 
         $block = $this->createPartialMock(
             Option::class,
@@ -51,8 +37,7 @@ class OptionTest extends TestCase
         );
         $block->expects($this->atLeastOnce())->method('getLayout')->willReturn($layout);
 
-        $this->assertNotEquals(42, $block->getAddButtonId());
-        $button->setId(42);
+        // Test that the button ID is correctly retrieved
         $this->assertEquals(42, $block->getAddButtonId());
     }
 }

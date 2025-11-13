@@ -108,7 +108,9 @@ class ProductCustomAttributes implements ResolverInterface
             }
             $attributeValue = $productData[$attributeCode] ?? "";
             if (is_array($attributeValue)) {
-                $attributeValue = implode(',', $attributeValue);
+                $attributeValue = (count($attributeValue) != count($attributeValue, COUNT_RECURSIVE))
+                    ? json_encode($attributeValue)
+                    : implode(',', $attributeValue);
             }
             $customAttributes[] = [
                 'attribute_code' => $attributeCode,

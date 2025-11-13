@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\ConfigurableProduct\Test\Unit\Model\Plugin;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\Product\Attribute\Backend\Price;
 use Magento\Catalog\Model\Product\Type;
@@ -18,7 +19,7 @@ use PHPUnit\Framework\TestCase;
 
 class PriceBackendTest extends TestCase
 {
-    const CLOSURE_VALUE = 'CLOSURE';
+    private const CLOSURE_VALUE = 'CLOSURE';
 
     /**
      * @var PriceBackend
@@ -48,22 +49,16 @@ class PriceBackendTest extends TestCase
         $this->closure = function () {
             return static::CLOSURE_VALUE;
         };
-        $this->priceAttribute = $this->getMockBuilder(Price::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->product = $this->getMockBuilder(Product::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['getTypeId'])
-            ->addMethods(['getPriceType'])
-            ->getMock();
+        $this->priceAttribute = $this->createMock(Price::class);
+        $this->product = $this->createPartialMock(Product::class, ['getTypeId']);
     }
 
     /**
-     * @dataProvider aroundValidateDataProvider
      *
      * @param $typeId
      * @param $expectedResult
      */
+    #[DataProvider('aroundValidateDataProvider')]
     public function testAroundValidate($typeId, $expectedResult)
     {
         $this->product->expects(static::once())

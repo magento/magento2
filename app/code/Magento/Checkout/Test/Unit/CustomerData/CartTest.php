@@ -22,6 +22,10 @@ use Magento\Quote\Model\Quote\Item\Option;
 use Magento\Store\Model\System\Store;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Magento\Quote\Test\Unit\Helper\QuoteFixtureTestHelper;
+use Magento\Quote\Test\Unit\Helper\QuoteItemTestHelper;
+use Magento\Store\Test\Unit\Helper\StoreWebsiteIdTestHelper;
+use Magento\Catalog\Test\Unit\Helper\ProductTestHelper;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -72,8 +76,8 @@ class CartTest extends TestCase
         );
         $this->checkoutCartMock = $this->createMock(\Magento\Checkout\Model\Cart::class);
         $this->checkoutHelperMock = $this->createMock(Data::class);
-        $this->layoutMock = $this->getMockForAbstractClass(LayoutInterface::class);
-        $this->itemPoolInterfaceMock = $this->getMockForAbstractClass(ItemPoolInterface::class);
+        $this->layoutMock = $this->createMock(LayoutInterface::class);
+        $this->itemPoolInterfaceMock = $this->createMock(ItemPoolInterface::class);
 
         $this->model = new Cart(
             $this->checkoutSessionMock,
@@ -106,21 +110,12 @@ class CartTest extends TestCase
         $shortcutButtonsHtml = '<span>Buttons</span>';
         $websiteId = 100;
 
-        $subtotalMock = $this->getMockBuilder(DataObject::class)
-            ->addMethods(['getValue'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $subtotalMock->expects($this->once())->method('getValue')->willReturn($subtotalValue);
+        $subtotalMock = new DataObject(['value' => $subtotalValue]);
         $totals = ['subtotal' => $subtotalMock];
 
-        $quoteMock = $this->getMockBuilder(Quote::class)
-            ->addMethods(['getHasError'])
-            ->onlyMethods(['getTotals', 'getAllVisibleItems', 'getStore'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $quoteMock = new QuoteFixtureTestHelper();
         $this->checkoutSessionMock->expects($this->exactly(2))->method('getQuote')->willReturn($quoteMock);
-        $quoteMock->expects($this->once())->method('getTotals')->willReturn($totals);
-        $quoteMock->expects($this->once())->method('getHasError')->willReturn(false);
+        $quoteMock->setFixtureTotals($totals);
 
         $this->checkoutCartMock->expects($this->once())->method('getSummaryQty')->willReturn($summaryQty);
         $this->checkoutHelperMock->expects($this->once())
@@ -129,34 +124,15 @@ class CartTest extends TestCase
             ->willReturn($subtotalValue);
         $this->checkoutHelperMock->expects($this->once())->method('canOnepageCheckout')->willReturn(true);
 
-        $quoteItemMock = $this->getMockBuilder(Item::class)
-            ->addMethods(['getStoreId'])
-            ->onlyMethods(['getProduct'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $quoteMock->expects($this->once())->method('getAllVisibleItems')->willReturn([$quoteItemMock]);
+        $quoteItemMock = new QuoteItemTestHelper($storeId);
+        $quoteMock->setFixtureItems([$quoteItemMock]);
 
-        $storeMock = $this->getMockBuilder(Store::class)
-            ->addMethods(['getWebsiteId'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $storeMock->expects($this->once())->method('getWebsiteId')->willReturn($websiteId);
-        $quoteMock->expects($this->any())->method('getStore')->willReturn($storeMock);
+        $storeMock = new StoreWebsiteIdTestHelper($websiteId);
+        $quoteMock->setFixtureStore($storeMock);
 
-        $productMock = $this->getMockBuilder(Product::class)
-            ->addMethods(['setUrlDataObject'])
-            ->onlyMethods(['isVisibleInSiteVisibility', 'getId'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $quoteItemMock->expects($this->exactly(3))->method('getProduct')->willReturn($productMock);
-        $quoteItemMock->expects($this->once())->method('getStoreId')->willReturn($storeId);
-
-        $productMock->expects($this->once())->method('isVisibleInSiteVisibility')->willReturn(false);
-        $productMock->expects($this->exactly(3))->method('getId')->willReturn($productId);
-        $productMock->expects($this->once())
-            ->method('setUrlDataObject')
-            ->with(new DataObject($productRewrite[$productId]))
-            ->willReturnSelf();
+        $productMock = new ProductTestHelper();
+        $productMock->setId($productId);
+        $quoteItemMock->setProduct($productMock);
 
         $this->catalogUrlMock->expects($this->once())
             ->method('getRewriteByProductStore')
@@ -210,34 +186,17 @@ class CartTest extends TestCase
         $productRewrite = [$productId => ['rewrite' => 'product']];
         $itemData = ['item' => 'data'];
         $shortcutButtonsHtml = '<span>Buttons</span>';
-        $subtotalMock = $this->getMockBuilder(DataObject::class)
-            ->addMethods(['getValue'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $subtotalMock->expects($this->once())->method('getValue')->willReturn($subtotalValue);
+        $subtotalMock = new DataObject(['value' => $subtotalValue]);
         $totals = ['subtotal' => $subtotalMock];
 
-        $quoteMock = $this->getMockBuilder(Quote::class)
-            ->addMethods(['getHasError'])
-            ->onlyMethods(['getTotals', 'getAllVisibleItems', 'getStore'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $quoteItemMock = $this->getMockBuilder(Item::class)
-            ->addMethods(['getStoreId'])
-            ->onlyMethods(['getProduct', 'getOptionByCode'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $quoteMock = new QuoteFixtureTestHelper();
+        $quoteItemMock = new QuoteItemTestHelper($storeId);
 
         $this->checkoutSessionMock->expects($this->exactly(2))->method('getQuote')->willReturn($quoteMock);
-        $quoteMock->expects($this->once())->method('getTotals')->willReturn($totals);
-        $quoteMock->expects($this->once())->method('getHasError')->willReturn(false);
+        $quoteMock->setFixtureTotals($totals);
 
-        $storeMock = $this->getMockBuilder(Store::class)
-            ->addMethods(['getWebsiteId'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $storeMock->expects($this->once())->method('getWebsiteId')->willReturn($websiteId);
-        $quoteMock->expects($this->any())->method('getStore')->willReturn($storeMock);
+        $storeMock = new StoreWebsiteIdTestHelper($websiteId);
+        $quoteMock->setFixtureStore($storeMock);
 
         $this->checkoutCartMock->expects($this->once())->method('getSummaryQty')->willReturn($summaryQty);
         $this->checkoutHelperMock->expects($this->once())
@@ -246,30 +205,15 @@ class CartTest extends TestCase
             ->willReturn($subtotalValue);
         $this->checkoutHelperMock->expects($this->once())->method('canOnepageCheckout')->willReturn(true);
 
-        $quoteMock->expects($this->once())->method('getAllVisibleItems')->willReturn([$quoteItemMock]);
+        $quoteMock->setFixtureItems([$quoteItemMock]);
 
-        $productMock = $this->getMockBuilder(Product::class)
-            ->addMethods(['setUrlDataObject'])
-            ->onlyMethods(['isVisibleInSiteVisibility', 'getId'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $productMock = new ProductTestHelper();
+        $productMock->setId($productId);
 
         $optionsMock = $this->createMock(Option::class);
         $optionsMock->expects($this->once())->method('getProduct')->willReturn($productMock);
 
-        $quoteItemMock->expects($this->exactly(2))->method('getProduct')->willReturn($productMock);
-        $quoteItemMock->expects($this->exactly(2))
-            ->method('getOptionByCode')
-            ->with('product_type')
-            ->willReturn($optionsMock);
-        $quoteItemMock->expects($this->once())->method('getStoreId')->willReturn($storeId);
-
-        $productMock->expects($this->once())->method('isVisibleInSiteVisibility')->willReturn(false);
-        $productMock->expects($this->exactly(3))->method('getId')->willReturn($productId);
-        $productMock->expects($this->once())
-            ->method('setUrlDataObject')
-            ->with(new DataObject($productRewrite[$productId]))
-            ->willReturnSelf();
+        $quoteItemMock->setProduct($productMock)->setOption('product_type', $optionsMock);
 
         $this->catalogUrlMock->expects($this->once())
             ->method('getRewriteByProductStore')
