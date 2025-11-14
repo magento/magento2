@@ -19,6 +19,7 @@ use Magento\Downloadable\Model\Product\Type;
 use Magento\QuoteGraphQl\Model\Cart\TotalsCollector;
 use Magento\QuoteGraphQl\Model\GetDiscounts;
 use Magento\QuoteGraphQl\Model\GetOptionsRegularPrice;
+use Magento\Bundle\Model\Product\Type as BundleType;
 
 /**
  * @inheritdoc
@@ -64,7 +65,13 @@ class CartItemPrices implements ResolverInterface, ResetAfterRequestInterface
         }
         /** @var Item $cartItem */
         $cartItem = $value['model'];
-        if (!$this->totals) {
+        // Collect totals only if discount, original item price and original rowtotal is there in the request
+        // avoid retrieve totals with the below keys if its not absolutely required
+        if (!$this->totals && !empty(array_intersect(
+            ['discounts', 'original_item_price', 'original_row_total'],
+            array_keys($info->getFieldSelection(1))
+        ))
+        ) {
             // The totals calculation is based on quote address.
             // But the totals should be calculated even if no address is set
             $this->totals = $this->totalsCollector->collectQuoteTotals($cartItem->getQuote());
@@ -72,14 +79,11 @@ class CartItemPrices implements ResolverInterface, ResetAfterRequestInterface
         $currencyCode = $cartItem->getQuote()->getQuoteCurrencyCode();
 
         /** calculate bundle product discount */
-        if ($cartItem->getProductType() == 'bundle') {
-            $discounts = $cartItem->getExtensionAttributes()->getDiscounts() ?? [];
-            $discountAmount = 0;
-            foreach ($discounts as $discount) {
-                $discountAmount += $discount->getDiscountData()->getAmount();
+        $discountAmount = 0;
+        if ($cartItem->getProductType() == BundleType::TYPE_CODE) {
+            foreach ($cartItem->getChildren() as $childItem) {
+                $discountAmount += $childItem->getDiscountAmount();
             }
-        } else {
-            $discountAmount = $cartItem->getDiscountAmount();
         }
 
         return [
