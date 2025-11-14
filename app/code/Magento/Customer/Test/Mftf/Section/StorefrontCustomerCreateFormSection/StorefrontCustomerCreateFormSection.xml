@@ -19,5 +19,6 @@
         <element name="showPasswordCheckbox" type="input" selector="#show-password"/>
         <element name="createAccountButton" type="button" selector="button.action.submit.primary" timeout="30"/>
         <element name="passwordErrorMessages" type="text" selector="#password-error"/>
+        <element name="fieldErrorByFieldId" type="text" selector="//div[@id='{{fieldName}}' and contains (text(),'This is a required field.')]" parameterized="true"/>
     </section>
 </sections>

@@ -54,11 +54,6 @@
         <amOnPage url="{{StorefrontCustomerSignOutPage.url}}" stepKey="signOut"/>
         <waitForLoadingMaskToDisappear stepKey="waitSignOutPage"/>
 
-        <openNewTab stepKey="openNewTab1"/>
-        <waitForPageLoad stepKey="waitForNewTabToOpen1" />
-        <switchToNextTab stepKey="switchForward1"/>
-        <waitForElement selector="body" stepKey="waitForNewTabHTML1"/>
-
         <!-- Log in to Storefront as Customer 2 -->
         <actionGroup ref="LoginToStorefrontActionGroup" stepKey="signUp2">
             <argument name="Customer" value="$createCustomer2$"/>
@@ -69,10 +64,6 @@
             <argument name="Category" value="$createCategory$"/>
         </actionGroup>
 
-        <openNewTab stepKey="openNewTab3"/>
-        <waitForPageLoad stepKey="waitForNewTabToOpen2" />
-        <switchToNextTab stepKey="switchForward4"/>
-        <waitForElement selector="body" stepKey="waitForNewTabHTML"/>
 
         <!-- Assert trying to load 'print order' page as customer 2 with the the order id created by customer 1 will redirect to 'order history' page -->
         <amOnPage url="{{StorefrontSalesOrderPrintPage.url({$grabOrderIdFromURL})}}" stepKey="duplicatePrintPage2"/>
