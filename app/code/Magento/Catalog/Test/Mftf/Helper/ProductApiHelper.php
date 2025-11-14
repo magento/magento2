@@ -7,13 +7,16 @@ declare(strict_types=1);
 
 namespace Magento\Catalog\Test\Mftf\Helper;
 
+use Magento\FunctionalTestingFramework\DataGenerator\Handlers\DataObjectHandler;
+use Magento\FunctionalTestingFramework\DataGenerator\Handlers\PersistedObjectHandler;
 use Magento\FunctionalTestingFramework\DataGenerator\Persist\CurlHandler;
 use Magento\FunctionalTestingFramework\DataGenerator\Objects\EntityDataObject;
+use Magento\FunctionalTestingFramework\DataGenerator\Persist\DataPersistenceHandler;
 use Magento\FunctionalTestingFramework\Helper\Helper;
 use Magento\FunctionalTestingFramework\ObjectManagerFactory;
 
 /**
- * This helper use to delete all available products:
+ * This helper use to create/delete products:
  *
  * - CurlHandler::executeRequest() for all API calls
  * - Operation definitions from ProductMeta.xml
@@ -23,6 +26,115 @@ use Magento\FunctionalTestingFramework\ObjectManagerFactory;
  */
 class ProductApiHelper extends Helper
 {
+    /**
+     * Create products using the ACTUAL category entity object as dependent object.
+     *
+     * @param string $categoryStepKey
+     * @param int $count
+     * @param int $quantity
+     * @param string $entityType
+     * @return array
+     * @throws \Exception
+     */
+    public function createProduct(
+        string $categoryStepKey,
+        int $count = 1,
+        int $quantity = 100,
+        string $entityType = 'ApiSimpleProduct'
+    ): array {
+        $createdSkus = [];
+        $timestamp = time();
+
+        for ($i = 1; $i <= $count; $i++) {
+            try {
+                // Get the predefined product entity from MFTF (now dynamic!)
+                $apiProductEntity = DataObjectHandler::getInstance()->getObject($entityType);
+
+                if ($apiProductEntity === null) {
+                    continue; // Skip this iteration if entity not found
+                }
+
+                // Create unique SKU and name for this product
+                $uniqueSku =  strtolower(str_replace('Api', '', $entityType)). '-' . $timestamp . '_' . $i;
+                $uniqueName = str_replace('Api', '', $entityType)  . $timestamp . '_' . $i;
+
+                // Override fields - this is how MFTF handles custom values
+                $overrideFields = [
+                    'sku' => $uniqueSku,
+                    'name' => $uniqueName,
+                    'quantity' => $quantity  // Override the default quantity (100) with our value
+                ];
+
+                // Use actual entity object as dependent object!
+                $dependentObjects = [];
+                $categoryEntityObject = $this->getCategoryEntity($categoryStepKey);
+                if ($categoryEntityObject !== null) {
+                    $dependentObjects[] = $categoryEntityObject;
+                }
+
+                // Use MFTF's native DataPersistenceHandler with ACTUAL entity object
+                $persistenceHandler = new DataPersistenceHandler(
+                    $apiProductEntity,
+                    $dependentObjects, // Pass the ACTUAL category entity object
+                    $overrideFields
+                );
+
+                // Create the entity using MFTF's native mechanism
+                $persistenceHandler->createEntity();
+
+                // Get the created object to extract the SKU
+                $createdObject = $persistenceHandler->getCreatedObject();
+                if ($createdObject && isset($createdObject->getAllData()['sku'])) {
+                    $createdSkus[] = $createdObject->getAllData()['sku'];
+                } else {
+                    $createdSkus[] = $uniqueSku; // Fallback to our generated SKU
+                }
+                usleep(100000);
+            } catch (\Exception $e) {
+                // Log error and continue with fallback SKU
+                error_log("Product creation failed : " . $e->getMessage());
+            }
+        }
+        return $createdSkus;
+    }
+
+    /**
+     * Create products using MFTF's native product entities with ACTUAL category entity object.
+     *
+     * @param string $categoryStepKey
+     * @return DataPersistenceHandler|null
+     */
+    private function getCategoryEntity(string $categoryStepKey): DataPersistenceHandler
+    {
+        $actualCategoryEntityObject = null;
+
+        // Try to get the actual category entity object using reflection
+        if ($categoryStepKey) {
+            try {
+                $persistedHandler = PersistedObjectHandler::getInstance();
+
+                // Use reflection to access the private retrieveEntity method
+                $reflection = new \ReflectionClass($persistedHandler);
+                $retrieveEntityMethod = $reflection->getMethod('retrieveEntity');
+                $retrieveEntityMethod->setAccessible(true);
+
+                // Call the private method to get the actual DataPersistenceHandler object
+                $actualCategoryEntityObject = $retrieveEntityMethod->invoke(
+                    $persistedHandler,
+                    $categoryStepKey,
+                    'test'
+                );
+            } catch (\Exception $e) {
+                // Exception in retrieving category entity object, continue without category
+                error_log(
+                    "Failed to retrieve category entity while creating product for stepKey '{$categoryStepKey}': " .
+                    $e->getMessage()
+                );
+            }
+        }
+        return $actualCategoryEntityObject;
+    }
+
     /**
      * Delete all products using ONLY MFTF CurlHandler
      *
@@ -193,8 +305,8 @@ class ProductApiHelper extends Helper
         $jsonData = json_decode($response, true);
         if (json_last_error() === JSON_ERROR_NONE) {
             return ($jsonData === true ||
-                   ($jsonData['success'] ?? false) ||
-                   ($jsonData['status'] ?? '') === 'success');
+                ($jsonData['success'] ?? false) ||
+                ($jsonData['status'] ?? '') === 'success');
         }
 
         // Plain text fallback
