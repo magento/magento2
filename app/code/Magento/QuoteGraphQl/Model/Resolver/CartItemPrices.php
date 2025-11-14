@@ -86,6 +86,8 @@ class CartItemPrices implements ResolverInterface, ResetAfterRequestInterface
             }
         }
 
+        $discountAmount += $cartItem->getDiscountAmount();
+
         return [
             'model' => $cartItem,
             'price' => [
