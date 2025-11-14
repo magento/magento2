@@ -7,7 +7,7 @@
 -->
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
     <test name="StorefrontPersistentCartCheckoutAfterSessionExpireLoginAndOrderTest">
         <annotations>
             <features value="Persistent"/>
@@ -17,6 +17,9 @@
             <severity value="MAJOR"/>
             <testCaseId value="AC-5489"/>
             <group value="persistent"/>
+            <skip>
+                <issueId value="AC-15962"/>
+            </skip>
         </annotations>
         <before>
             <!-- Step 2: Enable Persistence shopping cart and set enable persistence to yes -->

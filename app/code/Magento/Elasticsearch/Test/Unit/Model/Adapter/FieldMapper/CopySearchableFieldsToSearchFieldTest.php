@@ -31,6 +31,37 @@ class CopySearchableFieldsToSearchFieldTest extends TestCase
     }
 
     /**
+     * Test excluded fields should not get "copy_to" parameter.
+     *
+     * @return void
+     */
+    public function testProcessWithExcludes(): void
+    {
+        $model = new CopySearchableFieldsToSearchField();
+        $mappingBefore = [
+            'sku' => [
+                'type' => 'text'
+            ],
+            'name' => [
+                'type' => 'text'
+            ]
+        ];
+        $mappingAfter = [
+            'sku' => [
+                'type' => 'text',
+                'copy_to' => [
+                    '_search'
+                ]
+            ],
+            'name' => [
+                'type' => 'text'
+            ]
+        ];
+        $model->addExclude(['name']);
+        $this->assertEquals($mappingAfter, $model->process($mappingBefore));
+    }
+
+    /**
      * @return array
      */
     public static function processDataProvider(): array
