@@ -395,7 +395,8 @@
         },
         "constraint": {
             "PRIMARY": true,
-            "CUSTOMER_CONFIRMATION_LOG_CUSTOMER_ID": true
+            "CUSTOMER_CONFIRMATION_LOG_CUSTOMER_ID": true,
+            "CUSTOMER_CONFIRMATION_LOG_CUSTOMER_ID_CUSTOMER_ENTITY_ENTITY_ID": true
         }
     }
 }
