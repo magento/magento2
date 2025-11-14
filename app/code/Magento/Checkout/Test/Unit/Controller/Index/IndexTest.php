@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\Checkout\Test\Unit\Controller\Index;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\Checkout\Controller\Index\Index;
 use Magento\Checkout\Helper\Data;
 use Magento\Checkout\Model\Type\Onepage;
@@ -32,6 +33,7 @@ use PHPUnit\Framework\MockObject\Builder\InvocationMocker as InvocationMocker;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\MockObject\Rule\InvokedCount as InvokedCount;
 use PHPUnit\Framework\TestCase;
+use Magento\Quote\Test\Unit\Helper\QuoteMutableFlagsTestHelper;
 
 /**
  * @SuppressWarnings(PHPMD.TooManyFields)
@@ -130,11 +132,7 @@ class IndexTest extends TestCase
         $this->objectManager = new ObjectManager($this);
         $this->objectManagerMock = $this->basicMock(ObjectManagerInterface::class);
         $this->data = $this->basicMock(Data::class);
-        $this->quote = $this->getMockBuilder(Quote::class)
-            ->addMethods(['getHasError', 'hasError'])
-            ->onlyMethods(['hasItems', 'validateMinimumAmount'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->quote = new QuoteMutableFlagsTestHelper();
         $this->contextMock = $this->basicMock(Context::class);
         $this->session = $this->basicMock(Session::class);
         $this->onepageMock = $this->basicMock(Onepage::class);
@@ -148,24 +146,20 @@ class IndexTest extends TestCase
         $this->resultPage = $this->basicMock(Page::class);
         $this->pageConfigMock = $this->basicMock(Config::class);
         $this->titleMock = $this->basicMock(Title::class);
-        $this->url = $this->getMockForAbstractClass(UrlInterface::class);
+        $this->url = $this->createMock(UrlInterface::class);
         $this->resultRedirectMock = $this->basicMock(Redirect::class);
 
         $resultPageFactoryMock = $this->getMockBuilder(PageFactory::class)
             ->disableOriginalConstructor()
             ->onlyMethods(['create'])
             ->getMock();
-        $resultPageFactoryMock->expects($this->any())
-            ->method('create')
-            ->willReturn($this->resultPage);
+        $resultPageFactoryMock->method('create')->willReturn($this->resultPage);
 
         $resultRedirectFactoryMock = $this->getMockBuilder(RedirectFactory::class)
             ->disableOriginalConstructor()
             ->onlyMethods(['create'])
             ->getMock();
-        $resultRedirectFactoryMock->expects($this->any())
-            ->method('create')
-            ->willReturn($this->resultRedirectMock);
+        $resultRedirectFactoryMock->method('create')->willReturn($this->resultRedirectMock);
 
         // stubs
         $this->basicStub($this->onepageMock, 'getQuote')->willReturn($this->quote);
@@ -217,22 +211,19 @@ class IndexTest extends TestCase
      *
      * @param bool $secure
      * @param string $referer
-     * @param InvokedCount $expectedCall
-     * @dataProvider sessionRegenerationDataProvider
+     * @param string $expectedCall
      */
+    #[DataProvider('sessionRegenerationDataProvider')]
     public function testRegenerateSessionIdOnExecute(
         bool $secure,
         ?string $referer,
-        \PHPUnit\Framework\MockObject\Rule\InvokedCount $expectedCall
+        string $expectedCall
     ) {
         $this->data->method('canOnepageCheckout')
             ->willReturn(true);
-        $this->quote->method('hasItems')
-            ->willReturn(true);
-        $this->quote->method('getHasError')
-            ->willReturn(false);
-        $this->quote->method('validateMinimumAmount')
-            ->willReturn(true);
+        $this->quote->setHasItemsVal(true);
+        $this->quote->setHasErrorVal(false);
+        $this->quote->setValidateMinimumAmountVal(true);
         $this->session->method('isLoggedIn')
             ->willReturn(true);
         $this->request->method('isSecure')
@@ -241,7 +232,7 @@ class IndexTest extends TestCase
             ->with('referer')
             ->willReturn($referer);
 
-        $this->session->expects($expectedCall)
+        $this->session->expects($this->$expectedCall())
             ->method('regenerateId');
         $this->assertSame($this->resultPage, $this->model->execute());
     }
@@ -257,23 +248,23 @@ class IndexTest extends TestCase
             [
                 'secure' => false,
                 'referer' => 'https://test.domain.com/',
-                'expectedCall' => self::once()
+                'expectedCall' => 'once'
             ],
             [
                 'secure' => true,
                 'referer' => null,
-                'expectedCall' => self::once()
+                'expectedCall' => 'once'
             ],
             [
                 'secure' => true,
                 'referer' => 'http://test.domain.com/',
-                'expectedCall' => self::once()
+                'expectedCall' => 'once'
             ],
             // This is the only case in which session regeneration can be skipped
             [
                 'secure' => true,
                 'referer' => 'https://test.domain.com/',
-                'expectedCall' => self::never()
+                'expectedCall' => 'never'
             ],
         ];
     }
@@ -293,7 +284,7 @@ class IndexTest extends TestCase
 
     public function testInvalidQuote()
     {
-        $this->basicStub($this->quote, 'hasError')->willReturn(true);
+        $this->quote->setHasErrorVal(true);
 
         $expectedPath = 'checkout/cart';
         $this->resultRedirectMock->expects($this->once())
@@ -310,7 +301,7 @@ class IndexTest extends TestCase
      *
      * @return InvocationMocker
      */
-    private function basicStub($mock, $method): InvocationMocker
+    private function basicStub($mock, $method)
     {
         return $mock->method($method)
             ->withAnyParameters();

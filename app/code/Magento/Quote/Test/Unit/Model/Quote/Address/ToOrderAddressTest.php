@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -56,7 +56,7 @@ class ToOrderAddressTest extends TestCase
             ['create']
         );
         $this->objectCopyMock = $this->createMock(Copy::class);
-        $this->orderInterfaceMock = $this->getMockForAbstractClass(OrderAddressInterface::class);
+        $this->orderInterfaceMock = $this->createMock(OrderAddressInterface::class);
         $this->dataObjectHelper = $this->createMock(DataObjectHelper::class);
         $objectManager = new ObjectManager($this);
         $this->converter = $objectManager->getObject(

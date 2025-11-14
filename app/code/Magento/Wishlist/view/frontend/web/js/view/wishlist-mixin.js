@@ -11,22 +11,52 @@ define(['jquery', 'Magento_Customer/js/customer-data'], function ($, customerDat
             initialize: function () {
                 this._super();
 
+                let updateTimer = null;
+
                 const selector = '.wishlist .counter.qty, .customer-menu .wishlist .counter, .link.wishlist .counter',
-                    wishlist = customerData.get('wishlist');
+                    wishlist = customerData.get('wishlist'),
+                    clearPeriodicCounterUpdate = function () {
+                        if (updateTimer) {
+                            clearInterval(updateTimer);
+                            updateTimer = null;
+                        }
+                    },
+                    updateCounters = function (updatedWishlist) {
+                        const counters = $(selector);
 
-                wishlist.subscribe(function (updatedWishlist) {
-                    const counters = $(selector);
+                        if (typeof updatedWishlist.counter !== 'undefined'
+                            && updatedWishlist.counter !== null
+                            && counters.length
+                        ) {
+                            const expectedText = updatedWishlist.counter.toString(),
+                                currentText = counters.first().text().trim();
 
-                    if (typeof updatedWishlist.counter !== 'undefined'
-                        && updatedWishlist.counter !== null
-                        && counters.length
-                    ) {
-                        counters.text(updatedWishlist.counter);
+                            // Check if text is already correct
+                            if (currentText === expectedText) {
+                                clearPeriodicCounterUpdate();
+                                return;
+                            }
+
+                            counters.text(updatedWishlist.counter);
+                            counters.show();
+                        }
+                        if (updatedWishlist.counter === null) {
+                            clearPeriodicCounterUpdate();
+                            counters.hide();
+                        }
+                    };
+
+                // Subscribe to future wishlist changes
+                wishlist.subscribe(updateCounters);
+
+                // Simple timer to periodically update counters
+                updateTimer = setInterval(function () {
+                    const wishlistData = wishlist();
+
+                    if (wishlistData && typeof wishlistData.counter !== 'undefined') {
+                        updateCounters(wishlistData);
                     }
-                    if (updatedWishlist.counter === null) {
-                        counters.hide();
-                    }
-                });
+                }, 1000);
 
                 return this;
             }

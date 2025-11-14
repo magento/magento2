@@ -1,13 +1,14 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 
 declare(strict_types=1);
 
 namespace Magento\Downloadable\Test\Unit\Helper;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\Downloadable\Helper\Data;
 use Magento\Downloadable\Model\Link;
 use Magento\Framework\App\Config\ScopeConfigInterface;
@@ -39,7 +40,7 @@ class DataTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->scopeConfigMock = $this->getMockForAbstractClass(ScopeConfigInterface::class);
+        $this->scopeConfigMock = $this->createMock(ScopeConfigInterface::class);
         $this->contextMock = $this->createMock(Context::class);
         $this->contextMock->method('getScopeConfig')->willReturn($this->scopeConfigMock);
 
@@ -56,8 +57,8 @@ class DataTest extends TestCase
      * @param int $linkShareable
      * @param bool $config
      * @param bool $expectedResult
-     * @dataProvider getIsShareableDataProvider
      */
+    #[DataProvider('getIsShareableDataProvider')]
     public function testGetIsShareable($linkShareable, $config, $expectedResult)
     {
         $this->scopeConfigMock->method('isSetFlag')

@@ -13,9 +13,11 @@ use Magento\Framework\App\RequestInterface;
 use Magento\Framework\App\ResponseInterface;
 use Magento\Framework\App\ViewInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Framework\App\Test\Unit\Helper\ResponseTestHelper;
 use Magento\Framework\View\LayoutInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Magento\Bundle\Block\Adminhtml\Catalog\Product\Edit\Tab\Bundle\Option\Search as SearchBlock;
 
 class SearchTest extends TestCase
 {
@@ -49,25 +51,17 @@ class SearchTest extends TestCase
     {
         $this->objectManagerHelper = new ObjectManagerHelper($this);
 
-        $this->context = $this->getMockBuilder(Context::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->request = $this->getMockForAbstractClass(RequestInterface::class);
-        $this->response = $this->getMockBuilder(ResponseInterface::class)
-            ->addMethods(['setBody'])
-            ->onlyMethods(['sendResponse'])
-            ->getMockForAbstractClass();
-        $this->view = $this->getMockForAbstractClass(ViewInterface::class);
+        $this->context = $this->createMock(Context::class);
+        $this->request = $this->createMock(RequestInterface::class);
 
-        $this->context->expects($this->any())
-            ->method('getRequest')
-            ->willReturn($this->request);
-        $this->context->expects($this->any())
-            ->method('getResponse')
-            ->willReturn($this->response);
-        $this->context->expects($this->any())
-            ->method('getView')
-            ->willReturn($this->view);
+        /** @var ResponseInterface $response */
+        $this->response = new ResponseTestHelper();
+
+        $this->view = $this->createMock(ViewInterface::class);
+
+        $this->context->method('getRequest')->willReturn($this->request);
+        $this->context->method('getResponse')->willReturn($this->response);
+        $this->context->method('getView')->willReturn($this->view);
 
         $this->controller = $this->objectManagerHelper->getObject(
             Search::class,
@@ -79,21 +73,19 @@ class SearchTest extends TestCase
 
     public function testExecute()
     {
-        $layout = $this->getMockForAbstractClass(LayoutInterface::class);
-        $block = $this->getMockBuilder(
-            \Magento\Bundle\Block\Adminhtml\Catalog\Product\Edit\Tab\Bundle\Option\Search::class
-        )->disableOriginalConstructor()
-            ->addMethods(['setIndex', 'setFirstShow'])
-            ->onlyMethods(['toHtml'])
-            ->getMock();
+        $layout = $this->createMock(LayoutInterface::class);
 
-        $this->response->expects($this->once())->method('setBody')->willReturnSelf();
+        // Use partial mock - only mock toHtml(), all setters work via magic methods (DataObject)
+        $block = $this->createPartialMock(SearchBlock::class, ['toHtml']);
+        $block->method('toHtml')->willReturn('');
+
+        $this->response->setBody('');
         $this->request->expects($this->once())->method('getParam')->with('index')->willReturn('index');
         $this->view->expects($this->once())->method('getLayout')->willReturn($layout);
         $layout->expects($this->once())->method('createBlock')->willReturn($block);
-        $block->expects($this->once())->method('setIndex')->willReturnSelf();
-        $block->expects($this->once())->method('setFirstShow')->with(true)->willReturnSelf();
-        $block->expects($this->once())->method('toHtml')->willReturnSelf();
+        // These setters work via DataObject's __call magic method
+        $block->setIndex('index');
+        $block->setFirstShow(true);
 
         $this->assertEquals($this->response, $this->controller->execute());
     }

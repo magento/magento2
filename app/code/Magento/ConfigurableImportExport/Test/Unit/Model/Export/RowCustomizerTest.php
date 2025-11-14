@@ -1,12 +1,13 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\ConfigurableImportExport\Test\Unit\Model\Export;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\ResourceModel\Product\Collection as ProductCollection;
 use Magento\CatalogImportExport\Model\Import\Product as ImportProduct;
@@ -46,12 +47,8 @@ class RowCustomizerTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->productCollectionMock = $this->getMockBuilder(ProductCollection::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->configurableProductTypeMock = $this->getMockBuilder(ConfigurableProductType::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->productCollectionMock = $this->createMock(ProductCollection::class);
+        $this->configurableProductTypeMock = $this->createMock(ConfigurableProductType::class);
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->exportRowCustomizer = $this->objectManagerHelper->getObject(ExportRowCustomizer::class);
@@ -76,9 +73,8 @@ class RowCustomizerTest extends TestCase
     /**
      * @param array $expected
      * @param array $data
-     *
-     * @dataProvider addDataDataProvider
      */
+    #[DataProvider('addDataDataProvider')]
     public function testAddData(array $expected, array $data)
     {
         $this->initConfigurableData();
@@ -133,9 +129,8 @@ class RowCustomizerTest extends TestCase
     /**
      * @param array $expected
      * @param array $data
-     *
-     * @dataProvider getAdditionalRowsCountDataProvider
      */
+    #[DataProvider('getAdditionalRowsCountDataProvider')]
     public function testGetAdditionalRowsCount(array $expected, array $data)
     {
         $this->initConfigurableData();
@@ -280,9 +275,7 @@ class RowCustomizerTest extends TestCase
      */
     private function createProductMock()
     {
-        return $this->getMockBuilder(Product::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        return $this->createMock(Product::class);
     }
 
     /**

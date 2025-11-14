@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -359,11 +359,11 @@ class RendererTest extends TestCase
         /** @var \Magento\Quote\Model\Quote\Item|MockObject $quoteItemMock */
         $quoteItemMock = $this->getMockBuilder(\Magento\Quote\Model\Quote\Item::class)
             ->disableOriginalConstructor()
-            ->onlyMethods(['getCalculationPrice', '__wakeup'])
+            ->onlyMethods(['getPrice', '__wakeup'])
             ->getMock();
 
         $quoteItemMock->expects($this->once())
-            ->method('getCalculationPrice')
+            ->method('getPrice')
             ->willReturn($price);
 
         $this->renderer->setItem($quoteItemMock);

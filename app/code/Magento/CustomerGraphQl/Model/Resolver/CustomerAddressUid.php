@@ -34,11 +34,7 @@ class CustomerAddressUid implements ResolverInterface
         ResolveInfo $info,
         ?array $value = null,
         ?array $args = null
-    ): string {
-        if (!isset($value['id'])) {
-            throw new LocalizedException(__('Missing required address ID.'));
-        }
-
-        return $this->idEncoder->encode((string) $value['id']);
+    ): ?string {
+        return isset($value['id']) ? $this->idEncoder->encode((string) $value['id']): null;
     }
 }

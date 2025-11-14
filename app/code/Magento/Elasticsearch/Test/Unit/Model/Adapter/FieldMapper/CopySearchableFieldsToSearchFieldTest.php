@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -27,6 +27,37 @@ class CopySearchableFieldsToSearchFieldTest extends TestCase
     {
         $objectManager = new ObjectManager($this);
         $model = $objectManager->getObject(CopySearchableFieldsToSearchField::class);
+        $this->assertEquals($mappingAfter, $model->process($mappingBefore));
+    }
+
+    /**
+     * Test excluded fields should not get "copy_to" parameter.
+     *
+     * @return void
+     */
+    public function testProcessWithExcludes(): void
+    {
+        $model = new CopySearchableFieldsToSearchField();
+        $mappingBefore = [
+            'sku' => [
+                'type' => 'text'
+            ],
+            'name' => [
+                'type' => 'text'
+            ]
+        ];
+        $mappingAfter = [
+            'sku' => [
+                'type' => 'text',
+                'copy_to' => [
+                    '_search'
+                ]
+            ],
+            'name' => [
+                'type' => 'text'
+            ]
+        ];
+        $model->addExclude(['name']);
         $this->assertEquals($mappingAfter, $model->process($mappingBefore));
     }
 

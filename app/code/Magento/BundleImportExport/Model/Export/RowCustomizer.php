@@ -5,38 +5,46 @@
  */
 namespace Magento\BundleImportExport\Model\Export;
 
+use Magento\Bundle\Model\Option;
+use Magento\Bundle\Model\Selection;
+use Magento\Catalog\Helper\Data as CatalogData;
+use Magento\Catalog\Model\Product;
+use Magento\Catalog\Model\Product\Type;
 use Magento\Catalog\Model\ResourceModel\Product\Collection;
 use Magento\CatalogImportExport\Model\Export\RowCustomizerInterface;
 use Magento\CatalogImportExport\Model\Import\Product as ImportProductModel;
 use Magento\Bundle\Model\ResourceModel\Selection\Collection as SelectionCollection;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\ImportExport\Model\Import as ImportModel;
 use Magento\Catalog\Model\Product\Type\AbstractType;
+use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
 
 /**
- * Class RowCustomizer
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class RowCustomizer implements RowCustomizerInterface
 {
-    const BUNDLE_PRICE_TYPE_COL = 'bundle_price_type';
+    public const BUNDLE_PRICE_TYPE_COL = 'bundle_price_type';
 
-    const BUNDLE_SKU_TYPE_COL = 'bundle_sku_type';
+    public const BUNDLE_SKU_TYPE_COL = 'bundle_sku_type';
 
-    const BUNDLE_PRICE_VIEW_COL = 'bundle_price_view';
+    public const BUNDLE_PRICE_VIEW_COL = 'bundle_price_view';
 
-    const BUNDLE_WEIGHT_TYPE_COL = 'bundle_weight_type';
+    public const BUNDLE_WEIGHT_TYPE_COL = 'bundle_weight_type';
 
-    const BUNDLE_VALUES_COL = 'bundle_values';
+    public const BUNDLE_VALUES_COL = 'bundle_values';
 
-    const VALUE_FIXED = 'fixed';
+    public const VALUE_FIXED = 'fixed';
 
-    const VALUE_DYNAMIC = 'dynamic';
+    public const VALUE_DYNAMIC = 'dynamic';
 
-    const VALUE_PERCENT = 'percent';
+    public const VALUE_PERCENT = 'percent';
 
-    const VALUE_PRICE_RANGE = 'Price range';
+    public const VALUE_PRICE_RANGE = 'Price range';
 
-    const VALUE_AS_LOW_AS = 'As low as';
+    public const VALUE_AS_LOW_AS = 'As low as';
 
     /**
      * Mapping for bundle types
@@ -126,15 +134,25 @@ class RowCustomizer implements RowCustomizerInterface
     private $storeManager;
 
     /**
-     * @param StoreManagerInterface $storeManager
+     * @var CatalogData
      */
-    public function __construct(StoreManagerInterface $storeManager)
-    {
+    private $catalogData;
+
+    /**
+     * @param StoreManagerInterface $storeManager
+     * @param CatalogData|null $catalogData
+     */
+    public function __construct(
+        StoreManagerInterface $storeManager,
+        ?CatalogData $catalogData = null
+    ) {
         $this->storeManager = $storeManager;
+        $this->catalogData = $catalogData ?? ObjectManager::getInstance()->get(CatalogData::class);
     }
 
     /**
      * Retrieve list of bundle specific columns
+     *
      * @return array
      */
     private function getBundleColumns()
@@ -145,7 +163,7 @@ class RowCustomizer implements RowCustomizerInterface
     /**
      * Prepare data for export
      *
-     * @param \Magento\Catalog\Model\ResourceModel\Product\Collection $collection
+     * @param Collection $collection
      * @param int[] $productIds
      * @return $this
      */
@@ -157,7 +175,7 @@ class RowCustomizer implements RowCustomizerInterface
             ['in' => $productIds]
         )->addAttributeToFilter(
             'type_id',
-            ['eq' => \Magento\Catalog\Model\Product\Type::TYPE_BUNDLE]
+            ['eq' => Type::TYPE_BUNDLE]
         );
 
         return $this->populateBundleData($productCollection);
@@ -208,7 +226,7 @@ class RowCustomizer implements RowCustomizerInterface
     /**
      * Populate bundle product data
      *
-     * @param \Magento\Catalog\Model\ResourceModel\Product\Collection $collection
+     * @param Collection $collection
      * @return $this
      */
     protected function populateBundleData($collection)
@@ -223,6 +241,8 @@ class RowCustomizer implements RowCustomizerInterface
             $this->bundleData[$id][self::BUNDLE_PRICE_VIEW_COL] = $this->getPriceViewValue($product->getPriceView());
             $this->bundleData[$id][self::BUNDLE_WEIGHT_TYPE_COL] = $this->getTypeValue($product->getWeightType());
             $this->bundleData[$id][self::BUNDLE_VALUES_COL] = $this->getFormattedBundleOptionValues($product);
+            // cleanup memory
+            unset($this->optionCollections[$product->getSku()]);
         }
         return $this;
     }
@@ -230,21 +250,26 @@ class RowCustomizer implements RowCustomizerInterface
     /**
      * Retrieve formatted bundle options
      *
-     * @param \Magento\Catalog\Model\Product $product
+     * @param Product $product
      * @return string
      */
-    protected function getFormattedBundleOptionValues(\Magento\Catalog\Model\Product $product): string
+    protected function getFormattedBundleOptionValues(Product $product): string
     {
         $optionCollections = $this->getProductOptionCollection($product);
         $bundleData = '';
         $optionTitles = $this->getBundleOptionTitles($product);
+        $optionsRawSelections = $this->getBundleOptionSelections($product);
         foreach ($optionCollections->getItems() as $option) {
             $optionValues = $this->getFormattedOptionValues($option, $optionTitles);
-            $bundleData .= $this->getFormattedBundleSelections(
-                $optionValues,
-                $product->getTypeInstance()
-                    ->getSelectionsCollection([$option->getId()], $product)
-                    ->setOrder('position', Collection::SORT_ORDER_ASC)
+            $bundleData .= implode(
+                '',
+                array_map(
+                    fn ($selectionData) => $optionValues
+                        . ImportModel::DEFAULT_GLOBAL_MULTI_VALUE_SEPARATOR
+                        . $this->serialize($selectionData)
+                        . ImportProductModel::PSEUDO_MULTI_LINE_SEPARATOR,
+                    $optionsRawSelections[$option->getOptionId()] ?? []
+                )
             );
         }
 
@@ -257,6 +282,7 @@ class RowCustomizer implements RowCustomizerInterface
      * @param string $optionValues
      * @param SelectionCollection $selections
      * @return string
+     * @deprecared Not used anymore
      */
     protected function getFormattedBundleSelections($optionValues, SelectionCollection $selections)
     {
@@ -273,16 +299,7 @@ class RowCustomizer implements RowCustomizerInterface
             ];
             $bundleData .= $optionValues
                 . ImportModel::DEFAULT_GLOBAL_MULTI_VALUE_SEPARATOR
-                . implode(
-                    ImportModel::DEFAULT_GLOBAL_MULTI_VALUE_SEPARATOR,
-                    array_map(
-                        function ($value, $key) {
-                            return $key . ImportProductModel::PAIR_NAME_VALUE_SEPARATOR . $value;
-                        },
-                        $selectionData,
-                        array_keys($selectionData)
-                    )
-                )
+                . $this->serialize($selectionData)
                 . ImportProductModel::PSEUDO_MULTI_LINE_SEPARATOR;
         }
 
@@ -292,26 +309,46 @@ class RowCustomizer implements RowCustomizerInterface
     /**
      * Retrieve option value of bundle product
      *
-     * @param \Magento\Bundle\Model\Option $option
+     * @param Option $option
      * @param string[] $optionTitles
      * @return string
      */
     protected function getFormattedOptionValues(
-        \Magento\Bundle\Model\Option $option,
+        Option $option,
         array $optionTitles = []
     ): string {
-        $names = implode(ImportModel::DEFAULT_GLOBAL_MULTI_VALUE_SEPARATOR, array_map(
-            function ($title, $storeName) {
-                return $storeName . ImportProductModel::PAIR_NAME_VALUE_SEPARATOR . $title;
-            },
-            $optionTitles[$option->getOptionId()],
-            array_keys($optionTitles[$option->getOptionId()])
-        ));
-        return $names . ImportModel::DEFAULT_GLOBAL_MULTI_VALUE_SEPARATOR
-            . 'type' . ImportProductModel::PAIR_NAME_VALUE_SEPARATOR
-            . $option->getType() . ImportModel::DEFAULT_GLOBAL_MULTI_VALUE_SEPARATOR
-            . 'required' . ImportProductModel::PAIR_NAME_VALUE_SEPARATOR
-            . $option->getRequired();
+        $data = [
+            ...[
+                'name' => $option->getTitle()
+            ],
+            ...($optionTitles[$option->getOptionId()] ?? []),
+            ...[
+                'type' => $option->getType(),
+                'required' => $option->getRequired()
+            ]
+        ];
+
+        return $this->serialize($data);
+    }
+
+    /**
+     * Format associative array to serialized string as name1=value1,name2=value2 format
+     *
+     * @param array $data
+     * @return string
+     */
+    private function serialize(array $data): string
+    {
+        return implode(
+            ImportModel::DEFAULT_GLOBAL_MULTI_VALUE_SEPARATOR,
+            array_map(
+                function ($value, $key) {
+                    return $key . ImportProductModel::PAIR_NAME_VALUE_SEPARATOR . $value;
+                },
+                $data,
+                array_keys($data)
+            )
+        );
     }
 
     /**
@@ -428,14 +465,14 @@ class RowCustomizer implements RowCustomizerInterface
      *  - 'name=All store views name' for all store views
      *  - 'name_specific_store=Specific store name' for store view with 'specific_store' store code
      *
-     * @param \Magento\Catalog\Model\Product $product
+     * @param Product $product
      * @return array
      */
-    private function getBundleOptionTitles(\Magento\Catalog\Model\Product $product): array
+    private function getBundleOptionTitles(Product $product): array
     {
         $optionCollections = $this->getProductOptionCollection($product);
         $optionsTitles = [];
-        /** @var \Magento\Bundle\Model\Option $option */
+        /** @var Option $option */
         foreach ($optionCollections->getItems() as $option) {
             $optionsTitles[$option->getId()]['name'] = $option->getTitle();
         }
@@ -443,7 +480,7 @@ class RowCustomizer implements RowCustomizerInterface
         if (count($storeIds) > 1) {
             foreach ($storeIds as $storeId) {
                 $optionCollections = $this->getProductOptionCollection($product, (int)$storeId);
-                /** @var \Magento\Bundle\Model\Option $option */
+                /** @var Option $option */
                 foreach ($optionCollections->getItems() as $option) {
                     $optionTitle = $option->getTitle();
                     if ($optionsTitles[$option->getId()]['name'] != $optionTitle) {
@@ -457,27 +494,131 @@ class RowCustomizer implements RowCustomizerInterface
     }
 
     /**
+     * Get bundle product options selections data
+     *
+     * The selection price data for the global scope is stored under the 'price' and 'price_type' keys,
+     * while for a specific website it is stored under
+     * public the 'price_website_<website-code>' and 'price_type_website_<website-code>' keys.
+     *
+     * @param Product $product
+     * @return array
+     */
+    private function getBundleOptionSelections(Product $product): array
+    {
+        $selections = $this->getBundleOptionSelectionsData($product);
+
+        if (!$this->catalogData->isPriceGlobal()) {
+            foreach ($product->getWebsiteIds() as $websiteId) {
+                $websiteCode = $this->getWebsiteCodeById((int) $websiteId);
+                $storeId = $this->getWebsiteDefaultStoreId((int) $websiteId);
+                foreach ($this->getProductOptionCollection($product, $storeId) as $option) {
+                    foreach ($option->getSelections() as $selection) {
+                        $selectionData = $selections[$option->getOptionId()][$selection->getSelectionId()] ?? [];
+                        if ($selectionData && $selection->getPriceScope() == $websiteId) {
+                            $selections[$option->getOptionId()][$selection->getSelectionId()] = [
+                                ...$selectionData,
+                                'price_website_' . $websiteCode => $selection->getSelectionPriceValue(),
+                                'price_type_website_' . $websiteCode =>
+                                    $this->getPriceTypeValue($selection->getSelectionPriceType())
+                            ];
+                        }
+                    }
+                }
+            }
+        }
+
+        return $selections;
+    }
+
+    /**
+     * Get bundle product options selections data.
+     *
+     * @param Product $product
+     * @param int $storeId
+     * @return array
+     */
+    private function getBundleOptionSelectionsData(
+        Product $product,
+        int $storeId = Store::DEFAULT_STORE_ID
+    ): array {
+        $data = [];
+        foreach ($this->getProductOptionCollection($product, $storeId) as $option) {
+            /** @var Option $option*/
+            foreach ($option->getSelections() as $selection) {
+                /** @var Selection $selection*/
+                $data[$option->getOptionId()][$selection->getSelectionId()] = [
+                    'sku' => $selection->getSku(),
+                    'price' => $selection->getSelectionPriceValue(),
+                    'default' => $selection->getIsDefault(),
+                    'default_qty' => $selection->getSelectionQty(),
+                    'price_type' => $this->getPriceTypeValue($selection->getSelectionPriceType()),
+                    'can_change_qty' => $selection->getSelectionCanChangeQty(),
+                ];
+            }
+        }
+        return $data;
+    }
+
+    /**
      * Get product options collection by provided product model.
      *
      * Set given store id to the product if it was defined (default store id will be set if was not).
      *
-     * @param \Magento\Catalog\Model\Product $product $product
+     * @param Product $product $product
      * @param int $storeId
      * @return \Magento\Bundle\Model\ResourceModel\Option\Collection
      */
     private function getProductOptionCollection(
-        \Magento\Catalog\Model\Product $product,
-        int $storeId = \Magento\Store\Model\Store::DEFAULT_STORE_ID
+        Product $product,
+        int $storeId = Store::DEFAULT_STORE_ID
     ): \Magento\Bundle\Model\ResourceModel\Option\Collection {
         $productSku = $product->getSku();
         if (!isset($this->optionCollections[$productSku][$storeId])) {
             $product->unsetData($this->optionCollectionCacheKey);
             $product->setStoreId($storeId);
-            $this->optionCollections[$productSku][$storeId] = $product->getTypeInstance()
+            $optionCollection = $product->getTypeInstance()
                 ->getOptionsCollection($product)
                 ->setOrder('position', Collection::SORT_ORDER_ASC);
+            // Ensure children products are not filtered by website.
+            // We need to export all children products regardless of the website they are assigned to.
+            $product->getTypeInstance()->setStoreFilter(Store::DEFAULT_STORE_ID, $product);
+            $selectionCollection = $product->getTypeInstance()
+                ->getSelectionsCollection(
+                    $product->getTypeInstance()->getOptionsIds($product),
+                    $product
+                )
+                ->setOrder('position', Collection::SORT_ORDER_ASC)
+                ->addAttributeToSort('position', Collection::SORT_ORDER_ASC);
+            $optionCollection->appendSelections($selectionCollection, true);
+            $this->optionCollections[$productSku][$storeId] = $optionCollection;
         }
         return $this->optionCollections[$productSku][$storeId];
+    }
+
+    /**
+     * Retrieve default store id for website
+     *
+     * @param int $websiteId
+     * @return int
+     * @throws LocalizedException
+     */
+    private function getWebsiteDefaultStoreId(int $websiteId): int
+    {
+        return (int) $this->storeManager
+            ->getGroup($this->storeManager->getWebsite($websiteId)->getDefaultGroupId())
+            ->getDefaultStoreId();
+    }
+
+    /**
+     * Retrieve website code by its ID.
+     *
+     * @param int $websiteId
+     * @return string
+     * @throws LocalizedException
+     */
+    private function getWebsiteCodeById(int $websiteId): string
+    {
+        return $this->storeManager->getWebsite($websiteId)->getCode();
     }
 
     /**
