@@ -259,7 +259,7 @@ class Translit implements FilterInterface
         'С' => 'S',
         'Т' => 'T',
         'У' => 'U',
-        'Ф' => 'V',
+        'Ф' => 'F',
         'Х' => 'H',
         'Ц' => 'Ts',
         'Ч' => 'Ch',
