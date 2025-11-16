@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2024 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -12,9 +12,6 @@ use Magento\Quote\Model\ResourceModel\Quote as QuoteResource;
 use Magento\Quote\Model\QuoteIdToMaskedQuoteIdInterface;
 use Magento\Quote\Model\QuoteFactory;
 
-/**
- * Get masked quote id by reserved order id
- */
 class GetMaskedQuoteIdByReservedOrderId
 {
     /**
@@ -55,7 +52,7 @@ class GetMaskedQuoteIdByReservedOrderId
      * @return string
      * @throws NoSuchEntityException
      */
-    public function execute(string $reservedOrderId, bool $forceCollectTotal=false): string
+    public function execute(string $reservedOrderId, bool $forceCollectTotal = false): string
     {
         $quote = $this->quoteFactory->create();
         $quote->setSharedStoreIds(['*']);

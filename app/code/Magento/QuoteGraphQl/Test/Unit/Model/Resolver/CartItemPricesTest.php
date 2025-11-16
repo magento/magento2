@@ -25,6 +25,7 @@ use PHPUnit\Framework\MockObject\MockObject;
 
 /**
  * @see CartItemPrices
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class CartItemPricesTest extends TestCase
 {
@@ -212,4 +213,3 @@ class CartItemPricesTest extends TestCase
         $this->cartItemPrices->resolve($this->fieldMock, $this->contextMock, $this->resolveInfoMock, $this->valueMock);
     }
 }
-
