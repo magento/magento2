@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\GroupedProduct\Test\Unit\Model\Product\Type;
 
+use Magento\Catalog\Test\Unit\Helper\ProductTestHelper;
 use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\Product\Attribute\Source\Status;
@@ -22,6 +23,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\GroupedProduct\Model\Product\Type\Grouped;
 use Magento\GroupedProduct\Model\ResourceModel\Product\Link;
 use Magento\MediaStorage\Helper\File\Storage\Database;
+use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
@@ -162,6 +164,58 @@ class GroupedTest extends TestCase
         $this->product->expects($this->once())->method('hasData')->willReturn($cached);
         $this->product->expects($this->once())->method('getData')->willReturn($associatedProducts);
         $this->assertEquals($associatedProducts, $this->_model->getAssociatedProducts($this->product));
+    }
+
+    /**
+     * Verify get associated products with setting initial qty
+     *
+     * @return void
+     */
+    public function testGetAssociatedProductsSetsInitialQty(): void
+    {
+        $this->product->expects($this->atLeastOnce())
+            ->method('hasData')
+            ->willReturn(false);
+        $savedValue = null;
+        $this->product->expects($this->atLeastOnce())
+            ->method('setData')
+            ->willReturnCallback(function ($key, $value) use (&$savedValue) {
+                $savedValue = $value;
+                return null;
+            });
+        $this->product->expects($this->atLeastOnce())
+            ->method('getData')
+            ->willReturnCallback(function () use (&$savedValue) {
+                return $savedValue;
+            });
+        $itemMock = $this->createMock(ProductTestHelper::class);
+        $itemMock->expects($this->once())
+            ->method('getQty')
+            ->willReturn(10);
+        $itemMock->expects($this->once())
+            ->method('setInitialQty')
+            ->with(10);
+        $collectionMock = $this->createMock(Collection::class);
+        $collectionMock->method('addAttributeToSelect')->willReturnSelf();
+        $collectionMock->method('addFilterByRequiredOptions')->willReturnSelf();
+        $collectionMock->method('setPositionOrder')->willReturnSelf();
+        $collectionMock->method('addStoreFilter')->willReturnSelf();
+        $collectionMock->method('addAttributeToFilter')->willReturnSelf();
+        $collectionMock->method('setFlag')->willReturnSelf();
+        $collectionMock->method('setIsStrongMode')->willReturnSelf();
+        $collectionMock->expects($this->once())
+            ->method('getIterator')
+            ->willReturn(new \ArrayIterator([$itemMock]));
+        $linkMock = $this->createMock(Product\Link::class);
+        $linkMock->expects($this->once())
+            ->method('getProductCollection')
+            ->willReturn($collectionMock);
+        $this->product->expects($this->once())
+            ->method('getLinkInstance')
+            ->willReturn($linkMock);
+        $result = $this->_model->getAssociatedProducts($this->product);
+        $this->assertCount(1, $result);
+        $this->assertSame($itemMock, $result[0]);
     }
 
     /**

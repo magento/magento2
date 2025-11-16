@@ -228,6 +228,7 @@ class Grouped extends \Magento\Catalog\Model\Product\Type\AbstractType
             );
 
             foreach ($collection as $item) {
+                $item->setInitialQty($item->getQty());
                 $associatedProducts[] = $item;
             }
 
@@ -280,7 +281,7 @@ class Grouped extends \Magento\Catalog\Model\Product\Type\AbstractType
         return $this;
     }
 
-    /**
+    /**testGetAssociatedProductsSetsInitialQty
      * Return all assigned status filters
      *
      * @param \Magento\Catalog\Model\Product $product

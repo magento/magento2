@@ -20,7 +20,7 @@ class Converter implements ConverterInterface
             'sku' => $product->getSku(),
             'position' => $product->getPosition(),
             'custom_attributes' => [
-                ['attribute_code' => 'qty', 'value' => $product->getQty()],
+                ['attribute_code' => 'qty', 'value' => $product->getInitialQty() ?? $product->getQty()],
             ]
         ];
     }
