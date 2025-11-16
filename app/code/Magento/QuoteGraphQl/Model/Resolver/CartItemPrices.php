@@ -19,7 +19,6 @@ use Magento\Downloadable\Model\Product\Type;
 use Magento\QuoteGraphQl\Model\Cart\TotalsCollector;
 use Magento\QuoteGraphQl\Model\GetDiscounts;
 use Magento\QuoteGraphQl\Model\GetOptionsRegularPrice;
-use Magento\Bundle\Model\Product\Type as BundleType;
 
 /**
  * @inheritdoc
@@ -86,7 +85,7 @@ class CartItemPrices implements ResolverInterface, ResetAfterRequestInterface
 
         /** calculate bundle product discount */
         $discountAmount = 0;
-        if ($cartItem->getProductType() == BundleType::TYPE_CODE) {
+        if ($cartItem->getProductType() == 'bundle') {
             foreach ($cartItem->getChildren() as $childItem) {
                 $discountAmount += $childItem->getDiscountAmount();
             }
