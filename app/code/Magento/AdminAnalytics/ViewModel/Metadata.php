@@ -8,12 +8,12 @@ declare(strict_types=1);
 
 namespace Magento\AdminAnalytics\ViewModel;
 
+use Magento\Backend\Model\Auth\Session;
 use Magento\Config\Model\Config\Backend\Admin\Custom;
-use Magento\Csp\Helper\CspNonceProvider;
+use Magento\Csp\Model\CspNonceProvider;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\ProductMetadataInterface;
-use Magento\Backend\Model\Auth\Session;
 use Magento\Framework\App\State;
 use Magento\Framework\View\Element\Block\ArgumentInterface;
 use Magento\Store\Model\Information;

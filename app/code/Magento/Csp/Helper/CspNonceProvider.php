@@ -8,79 +8,33 @@ declare(strict_types=1);
 
 namespace Magento\Csp\Helper;
 
-use Magento\Csp\Model\Collector\DynamicCollector;
-use Magento\Csp\Model\Policy\FetchPolicy;
-use Magento\Framework\Exception\LocalizedException;
-use Magento\Framework\Math\Random;
+use Magento\Csp\Model\CspNonceProvider as CspNonceProviderModel;
 
 /**
- * This helper class is used to provide nonce for CSP
- *
- * It also adds a nonce to the CSP header.
+ * @deprecated This class was moved to Magento\Csp\Model\CspNonceProvider.
+ * It is kept for backward compatibility and will be removed in a future major version.
+ * @see \Magento\Csp\Model\CspNonceProvider
  */
 class CspNonceProvider
 {
     /**
-     * @var string
+     * @var CspNonceProviderModel
      */
-    private const NONCE_LENGTH = 32;
+    private CspNonceProviderModel $model;
 
     /**
-     * @var string
+     * @param CspNonceProviderModel $model
      */
-    private string $nonce;
-
-    /**
-     * @var Random
-     */
-    private Random $random;
-
-    /**
-     * @var DynamicCollector
-     */
-    private DynamicCollector $dynamicCollector;
-
-    /**
-     * @param Random $random
-     * @param DynamicCollector $dynamicCollector
-     */
-    public function __construct(
-        Random $random,
-        DynamicCollector $dynamicCollector
-    ) {
-        $this->random = $random;
-        $this->dynamicCollector = $dynamicCollector;
+    public function __construct(CspNonceProviderModel $model)
+    {
+        $this->model = $model;
     }
 
     /**
-     * Generate nonce and add it to the CSP header
-     *
-     * @return string
-     * @throws LocalizedException
+     * @deprecated
      */
     public function generateNonce(): string
     {
-        if (empty($this->nonce)) {
-            $this->nonce = $this->random->getRandomString(
-                self::NONCE_LENGTH,
-                Random::CHARS_DIGITS . Random::CHARS_LOWERS
-            );
-
-            $policy = new FetchPolicy(
-                'script-src',
-                false,
-                [],
-                [],
-                false,
-                false,
-                false,
-                [$this->nonce],
-                []
-            );
-
-            $this->dynamicCollector->add($policy);
-        }
-
-        return base64_encode($this->nonce);
+        return $this->model->generateNonce();
     }
 }

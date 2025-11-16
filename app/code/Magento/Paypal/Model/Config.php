@@ -6,7 +6,7 @@
 
 namespace Magento\Paypal\Model;
 
-use Magento\Csp\Helper\CspNonceProvider;
+use Magento\Csp\Model\CspNonceProvider;
 use Magento\Framework\App\ObjectManager;
 use Magento\Payment\Helper\Formatter;
 

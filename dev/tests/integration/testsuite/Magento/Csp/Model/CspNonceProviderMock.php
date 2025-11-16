@@ -5,9 +5,10 @@
  */
 declare(strict_types=1);
 
-namespace Magento\Csp\Helper;
+namespace Magento\Csp\Model;
 
 use Magento\Csp\Model\Collector\DynamicCollector;
+use Magento\Csp\Model\CspNonceProvider;
 use Magento\Csp\Model\Policy\FetchPolicy;
 use Magento\Framework\Math\Random;
 

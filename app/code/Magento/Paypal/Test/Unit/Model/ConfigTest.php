@@ -7,7 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\Paypal\Test\Unit\Model;
 
-use Magento\Csp\Helper\CspNonceProvider;
+use Magento\Csp\Model\CspNonceProvider;
 use Magento\Directory\Helper\Data;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;

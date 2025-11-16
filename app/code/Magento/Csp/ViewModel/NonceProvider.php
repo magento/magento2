@@ -7,7 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\Csp\ViewModel;
 
-use Magento\Csp\Helper\CspNonceProvider;
+use Magento\Csp\Model\CspNonceProvider;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\View\Element\Block\ArgumentInterface;
 

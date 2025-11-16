@@ -11,6 +11,7 @@ namespace Magento\Csp\Helper;
 use Magento\Csp\Api\InlineUtilInterface;
 use Magento\Csp\Model\Collector\ConfigCollector;
 use Magento\Csp\Model\Collector\DynamicCollector;
+use Magento\Csp\Model\CspNonceProvider;
 use Magento\Csp\Model\Policy\FetchPolicy;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\View\Helper\SecureHtmlRender\EventHandlerData;

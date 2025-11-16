@@ -7,9 +7,11 @@ declare(strict_types=1);
 
 namespace Magento\Csp\Helper;
 
+use Magento\Csp\Model\CspNonceProviderMock;
 use Magento\Csp\Api\Data\PolicyInterface;
 use Magento\Csp\Model\Collector\DynamicCollector;
 use Magento\Csp\Model\Collector\DynamicCollectorMock;
+use Magento\Csp\Model\CspNonceProvider;
 use Magento\Csp\Model\Policy\FetchPolicy;
 use Magento\Framework\View\Helper\SecureHtmlRenderer;
 use Magento\TestFramework\Helper\Bootstrap;
