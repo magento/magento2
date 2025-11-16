@@ -113,7 +113,8 @@ class CartItemPricesWithFPTTest extends GraphQlAbstract
     public function testCartItemFixedProductTax(array $taxSettings, array $expectedFtps): void
     {
         $this->writeConfig($taxSettings);
-        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_quote');
+        // Second argument true is to ensure collectTotals and save after every quote update
+        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_quote', true);
         $query = $this->getQuery($maskedQuoteId);
         $result = $this->graphQlQuery($query);
         $this->assertArrayNotHasKey('errors', $result);

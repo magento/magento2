@@ -65,10 +65,15 @@ class CartItemPrices implements ResolverInterface, ResetAfterRequestInterface
         }
         /** @var Item $cartItem */
         $cartItem = $value['model'];
+
         // Collect totals only if discount, original item price and original rowtotal is there in the request
         // avoid retrieve totals with the below keys if its not absolutely required
+        // except discounts can be removed if original_item_price and original_row_total is saved in db
         if (!$this->totals && !empty(array_intersect(
-            ['discounts', 'original_item_price', 'original_row_total'],
+            [
+                    'discounts', 'original_item_price', 'original_row_total',
+                    'catalog_discount', 'row_catalog_discount'
+                ],
             array_keys($info->getFieldSelection(1))
         ))
         ) {
@@ -76,6 +81,7 @@ class CartItemPrices implements ResolverInterface, ResetAfterRequestInterface
             // But the totals should be calculated even if no address is set
             $this->totals = $this->totalsCollector->collectQuoteTotals($cartItem->getQuote());
         }
+
         $currencyCode = $cartItem->getQuote()->getQuoteCurrencyCode();
 
         /** calculate bundle product discount */
