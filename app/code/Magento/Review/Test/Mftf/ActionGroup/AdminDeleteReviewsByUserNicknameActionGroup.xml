@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-/**
- * Copyright 2019 Adobe
- * All Rights Reserved.
- */
+ /**
+  * Copyright 2019 Adobe
+  * All Rights Reserved.
+  */
 -->
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
@@ -18,6 +18,8 @@
         <click selector="{{AdminReviewGridSection.submit}}" stepKey="clickSubmit"/>
         <waitForElementVisible selector="{{AdminReviewGridSection.acceptModal}}" stepKey="waitForModalPopUp"/>
         <click selector="{{AdminReviewGridSection.acceptModal}}" stepKey="confirmProductDelete"/>
+        <scrollToTopOfPage stepKey="scrollToTopOfPage"/>
+        <waitForElementVisible selector="{{AdminMessagesSection.success}}" stepKey="waitForSuccessMessageVisible"/>
         <see selector="{{AdminMessagesSection.success}}" userInput="record(s) have been deleted." stepKey="seeSuccessMessage"/>
     </actionGroup>
 </actionGroups>

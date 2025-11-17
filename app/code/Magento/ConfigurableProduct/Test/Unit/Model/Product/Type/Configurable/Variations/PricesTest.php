@@ -3,7 +3,6 @@
  * Copyright 2018 Adobe
  * All Rights Reserved.
  */
-
 declare(strict_types=1);
 
 namespace Magento\ConfigurableProduct\Test\Unit\Model\Product\Type\Configurable\Variations;
@@ -53,10 +52,10 @@ class PricesTest extends TestCase
             ]
         ];
         $priceInfoMock = $this->createMock(Base::class);
-        $priceMock = $this->getMockForAbstractClass(PriceInterface::class);
+        $priceMock = $this->createMock(PriceInterface::class);
         $priceInfoMock->expects($this->atLeastOnce())->method('getPrice')->willReturn($priceMock);
 
-        $amountMock = $this->getMockForAbstractClass(AmountInterface::class);
+        $amountMock = $this->createMock(AmountInterface::class);
         $amountMock->expects($this->atLeastOnce())->method('getValue')->willReturn(500);
         $amountMock->expects($this->atLeastOnce())->method('getBaseAmount')->willReturn(1000);
         $priceMock->expects($this->atLeastOnce())->method('getAmount')->willReturn($amountMock);

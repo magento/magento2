@@ -86,15 +86,10 @@ class MaskedCartIdTest extends TestCase
             QuoteIdMaskFactory::class,
             ['create']
         );
-        $this->quoteIdMaskResourceModelMock = $this->getMockBuilder(QuoteIdMaskResourceModel::class)
-            ->disableOriginalConstructor()
-            ->addMethods(
-                [
-                    'setQuoteId',
-                ]
-            )
-            ->onlyMethods(['save'])
-            ->getMock();
+        $this->quoteIdMaskResourceModelMock = $this->createPartialMock(
+            QuoteIdMaskResourceModel::class,
+            ['save']
+        );
         $this->maskedCartId = new MaskedCartId(
             $this->quoteIdToMaskedQuoteId,
             $this->quoteIdMaskFactory,

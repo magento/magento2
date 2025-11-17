@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\ConfigurableProduct\Test\Unit\Pricing\Render;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\Product\Pricing\Renderer\SalableResolverInterface;
 use Magento\Catalog\Pricing\Price\FinalPrice;
@@ -75,13 +76,11 @@ class FinalPriceBoxTest extends TestCase
     {
         $this->context = $this->createMock(Context::class);
         $this->saleableItem = $this->createMock(Product::class);
-        $this->price = $this->getMockForAbstractClass(PriceInterface::class);
+        $this->price = $this->createMock(PriceInterface::class);
         $this->rendererPool = $this->createMock(RendererPool::class);
-        $this->salableResolver = $this->getMockForAbstractClass(SalableResolverInterface::class);
-        $this->minimalPriceCalculator = $this->getMockForAbstractClass(MinimalPriceCalculatorInterface::class);
-        $this->configurableOptionsProvider = $this->getMockForAbstractClass(
-            ConfigurableOptionsProviderInterface::class
-        );
+        $this->salableResolver = $this->createMock(SalableResolverInterface::class);
+        $this->minimalPriceCalculator = $this->createMock(MinimalPriceCalculatorInterface::class);
+        $this->configurableOptionsProvider = $this->createMock(ConfigurableOptionsProviderInterface::class);
 
         $this->model = new FinalPriceBox(
             $this->context,
@@ -99,23 +98,23 @@ class FinalPriceBoxTest extends TestCase
      * @param float $regularPrice
      * @param float $finalPrice
      * @param bool $expected
-     * @dataProvider hasSpecialPriceDataProvider
      * @throws \Exception
      */
+    #[DataProvider('hasSpecialPriceDataProvider')]
     public function testHasSpecialPriceProductDetailsPage(
         float $regularPrice,
         float $finalPrice,
         bool  $expected
     ): void {
-        $priceMockOne = $this->getMockForAbstractClass(PriceInterface::class);
+        $priceMockOne = $this->createMock(PriceInterface::class);
         $priceMockOne->expects($this->once())
             ->method('getValue')
             ->willReturn($regularPrice);
-        $priceMockTwo = $this->getMockForAbstractClass(PriceInterface::class);
+        $priceMockTwo = $this->createMock(PriceInterface::class);
         $priceMockTwo->expects($this->once())
             ->method('getValue')
             ->willReturn($finalPrice);
-        $priceInfoMock = $this->getMockForAbstractClass(PriceInfoInterface::class);
+        $priceInfoMock = $this->createMock(PriceInfoInterface::class);
         $priceInfoMock->expects($this->exactly(2))
             ->method('getPrice')
             ->willReturnMap(

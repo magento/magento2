@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright 2025 Adobe
+  * All Rights Reserved.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminVoidSalesOrderPlacedWithPayPalStandardTest">
+        <annotations>
+            <features value="PayPal"/>
+            <stories value="PayPal Standard"/>
+            <title value="Void a Sales Order placed with PayPal Standard"/>
+            <description value="Place an order with PayPal Standard payment method and void the order from admin. Validate order status, transaction details, and comments history."/>
+            <severity value="MAJOR"/>
+            <testCaseId value="AC-5375"/>
+            <group value="paypalStandard"/>
+            <group value="3rd_party_integration"/>
+            <group value="pr_exclude"/>
+        </annotations>
+        <before>
+            <!-- Login to admin -->
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <!-- Create simple product -->
+            <createData entity="simpleProductWithoutCategory" stepKey="createProduct">
+                <field key="price">10</field>
+            </createData>
+            <!-- Create US customer -->
+            <createData entity="Simple_US_Customer" stepKey="createCustomer"/>
+        </before>
+        <after>
+            <!-- Customer logout -->
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="customerLogout"/>
+            <!-- Clean up created data -->
+            <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
+            <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
+            <!-- Admin logout -->
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+        <!-- Step 1: Navigate to StoreFront -->
+        <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="goToStoreFront"/>
+        <!-- Login as customer -->
+        <actionGroup ref="LoginToStorefrontActionGroup" stepKey="storefrontCustomerLogin">
+            <argument name="Customer" value="$$createCustomer$$"/>
+        </actionGroup>
+        <!-- Add product to cart -->
+        <actionGroup ref="AddSimpleProductToCartActionGroup" stepKey="addProductToCart">
+            <argument name="product" value="$$createProduct$$"/>
+        </actionGroup>
+        <!-- Proceed to checkout -->
+        <actionGroup ref="StorefrontOpenCheckoutPageActionGroup" stepKey="goToCheckout"/>
+        <!-- Proceed to payment step -->
+        <actionGroup ref="StorefrontCheckoutClickNextButtonActionGroup" stepKey="clickNext"/>
+        <!-- Select PayPal Standard payment method -->
+        <actionGroup ref="AdminSelectPaypalStandardPaymentInPaymentPageActionGroup" stepKey="selectPaypalStandardPaymentAndClickOnContinueButton"/>
+        <!-- Login to PayPal and complete payment -->
+        <actionGroup ref="StorefrontLoginToPayPalPaymentAccountTwoStepActionGroup" stepKey="loginToPayPal"/>
+        <actionGroup ref="StorefrontPaypalSwitchBackToMagentoFromCheckoutPageActionGroup" stepKey="confirmPaymentAndGoBackToMagento"/>
+        <!-- Wait for order success page and grab order number -->
+        <waitForElementVisible selector="{{CheckoutSuccessMainSection.orderNumber22}}" stepKey="waitForOrderNumberToBeGrabbed"/>
+        <grabTextFrom selector="{{CheckoutSuccessMainSection.orderNumber22}}" stepKey="grabOrderNumber"/>
+        <!-- Step 2: Go to Sales > Orders (Admin) -->
+        <actionGroup ref="AdminOrdersPageOpenActionGroup" stepKey="navigateToSalesOrderPage"/>
+        <!-- Filter orders by the created order ID -->
+        <actionGroup ref="FilterOrderGridByIdActionGroup" stepKey="filterOrderGrid">
+            <argument name="orderId" value="$grabOrderNumber"/>
+        </actionGroup>
+        <!-- Step 3: Open the Order from preconditions -->
+        <actionGroup ref="AdminOrderGridClickFirstRowActionGroup" stepKey="clickOrderRow"/>
+        <!-- Verify order details and totals -->
+        <actionGroup ref="AdminAssertTotalsOnOrderViewPageActionGroup" stepKey="checkOrderTotals">
+            <argument name="subtotal" value="$10.00"/>
+            <argument name="shippingAndHandling" value="$5.00"/>
+            <argument name="grandTotal" value="$15.00"/>
+        </actionGroup>
+        <!-- Verify initial order status is Processing -->
+        <actionGroup ref="AdminOrderViewCheckStatusActionGroup" stepKey="checkInitialOrderStatus">
+            <argument name="status" value="Processing"/>
+        </actionGroup>
+        <!-- Step 4: Click Void button -->
+        <!-- Step 5: Click OK button and verify success message -->
+        <actionGroup ref="AdminVoidPendingOrderActionGroup" stepKey="voidPendingOrder"/>
+        <!-- Step 6: Observe order data -->
+        <!-- Verify order status remains Processing -->
+        <actionGroup ref="AdminOrderViewCheckStatusActionGroup" stepKey="checkOrderStatusAfterVoid">
+            <argument name="status" value="Processing"/>
+        </actionGroup>
+         <!-- Grab transaction ID for validation -->
+        <waitForElementVisible selector="{{AdminOrderPaymentInformationSection.paymentInformationField('Last Transaction ID')}}" stepKey="waitForGrabLastTransactionID"/>
+        <grabTextFrom selector="{{AdminOrderPaymentInformationSection.paymentInformationField('Last Transaction ID')}}" stepKey="grabLastTransactionID"/>
+        <!-- Verify void authorization message in comments history -->
+        <actionGroup ref="AdminOpenOrderCommentsHistoryActionGroup" stepKey="clickOnCommentsHistory"/>
+        <!-- Verify void authorization message with amount and transaction ID in comments -->
+        <waitForText selector="{{AdminOrderCommentsTabSection.authorizationNotes('Voided authorization')}}" userInput="{{BillingAgreement.amount_note}} Transaction ID: &quot;$grabLastTransactionID&quot;" stepKey="seeVoidAuthorizationMessageWithAmount"/>
+        <!-- Verify transactions tab shows both authorization and void transactions -->
+        <actionGroup ref="AdminOpenTransactionsTabActionGroup" stepKey="openTransactionTypeHasAuthorization">
+            <argument name="transactionType" value="authorization"/>
+        </actionGroup>
+        <waitForText selector="{{AdminTransactionsGridSection.transactionData('Is Closed')}}" userInput="Yes" stepKey="seeIfClosedHeaderIsSetAsYesForAuthorization"/>
+        <!-- Navigate back to order details -->
+        <waitForElementClickable selector="{{AdminProductFormActionSection.backButton}}" stepKey="waitForBackButtonToBeClicked"/>
+        <click selector="{{AdminProductFormActionSection.backButton}}" stepKey="clickBackButton"/>
+        <!-- Verify void transaction -->
+        <actionGroup ref="AdminOpenTransactionsTabActionGroup" stepKey="openTransactionTypeHasVoid">
+            <argument name="transactionType" value="void"/>
+        </actionGroup>
+        <waitForText selector="{{AdminTransactionsGridSection.transactionData('Is Closed')}}" userInput="Yes" stepKey="seeIfClosedHeaderIsSetAsYesForVoid"/>
+    </test>
+</tests>

@@ -62,8 +62,8 @@ class UsedProductsCacheTest extends TestCase
     {
         parent::setUp();
         $this->metadataPool = $this->createMock(MetadataPool::class);
-        $this->cache = $this->getMockForAbstractClass(FrontendInterface::class);
-        $this->serializer = $this->getMockForAbstractClass(SerializerInterface::class);
+        $this->cache = $this->createMock(FrontendInterface::class);
+        $this->serializer = $this->createMock(SerializerInterface::class);
         $this->productFactory = $this->createMock(ProductInterfaceFactory::class);
         $this->customerSession = $this->createMock(Session::class);
     }
@@ -90,7 +90,7 @@ class UsedProductsCacheTest extends TestCase
         $this->metadataPool
             ->method('getMetadata')
             ->with(ProductInterface::class)
-            ->willReturn($this->getMockForAbstractClass(EntityMetadataInterface::class));
+            ->willReturn($this->createMock(EntityMetadataInterface::class));
         $this->cache->expects($this->once())
             ->method('save')
             ->with($this->anything(), $this->anything(), $this->anything(), $lifeTime)
@@ -128,7 +128,7 @@ class UsedProductsCacheTest extends TestCase
         $this->metadataPool
             ->method('getMetadata')
             ->with(ProductInterface::class)
-            ->willReturn($this->getMockForAbstractClass(EntityMetadataInterface::class));
+            ->willReturn($this->createMock(EntityMetadataInterface::class));
         $this->cache->expects($this->once())
             ->method('save')
             ->with($this->anything(), $this->anything(), $this->anything(), $lifeTime)
