@@ -8,6 +8,7 @@ declare(strict_types=1);
 namespace Magento\Catalog\Test\Unit\Model\ResourceModel\Category;
 
 use Magento\Catalog\Model\Category;
+use Magento\Catalog\Test\Unit\Helper\CategoryTestHelper;
 use Magento\Framework\Data\Collection\EntityFactory;
 use Magento\Store\Model\Store;
 use Psr\Log\LoggerInterface;
@@ -229,11 +230,7 @@ class CollectionTest extends TestCase
         $items = [];
         $categoryIds = [];
         for ($i = 1; $i <= $categoryCount; $i++) {
-            $category = $this->getMockBuilder(Category::class)
-                ->addMethods(['getIsAnchor'])
-                ->onlyMethods(['getId', 'setProductCount'])
-                ->disableOriginalConstructor()
-                ->getMock();
+            $category = $this->createMock(CategoryTestHelper::class);
             $category->method('getId')->willReturn($i);
             $category->method('getIsAnchor')->willReturn(true);
             $category->expects($this->once())->method('setProductCount')->with(5);
@@ -265,6 +262,26 @@ class CollectionTest extends TestCase
         $this->connection->method('select')->willReturn($this->select);
         $this->connection->method('insertFromSelect')->willReturn('INSERT QUERY');
         $this->connection->method('query')->with('INSERT QUERY')->willReturnSelf();
+        $withs = [];
+        foreach ($categoryIds as $categoryId) {
+            $withs[] = [
+                'category_id'   => $categoryId,
+                'descendant_id' => $categoryId
+            ];
+        }
+        $callIndex = 0;
+        $this->connection
+            ->expects($this->exactly(count($categoryIds)))
+            ->method('insert')
+            ->with(
+                $this->stringContains('temp_category_descendants_'),
+                $this->callback(function($args) use (&$callIndex, $withs) {
+                    $expected = $withs[$callIndex];
+                    $valid = $args === $expected;
+                    $callIndex++;
+                    return $valid;
+                })
+            );
         $this->select->method('from')->willReturnSelf();
         $this->select->method('joinLeft')->willReturnSelf();
         $this->select->method('join')->willReturnSelf();

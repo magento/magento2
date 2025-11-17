@@ -412,7 +412,6 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
                 []
             )
             ->where('ce.entity_id IN (?)', $categoryIds);
-
         $connection->query(
             $connection->insertFromSelect(
                 $selectDescendants,
@@ -420,6 +419,15 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
                 ['category_id', 'descendant_id']
             )
         );
+        foreach ($categoryIds as $catId) {
+            $connection->insert(
+                $tempTableName,
+                [
+                    'category_id' => $catId,
+                    'descendant_id' => $catId
+                ]
+            );
+        }
         $select = $connection->select()
             ->from(
                 ['t' => $tempTableName],
