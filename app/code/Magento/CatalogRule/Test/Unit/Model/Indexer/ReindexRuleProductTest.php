@@ -8,6 +8,7 @@ declare(strict_types=1);
 namespace Magento\CatalogRule\Test\Unit\Model\Indexer;
 
 use Magento\Catalog\Model\ResourceModel\Indexer\ActiveTableSwitcher;
+use Magento\CatalogRule\Model\Indexer\DynamicBatchSizeCalculator;
 use Magento\CatalogRule\Model\Indexer\IndexerTableSwapperInterface;
 use Magento\CatalogRule\Model\Indexer\ReindexRuleProduct;
 use Magento\CatalogRule\Model\Rule;
@@ -53,6 +54,11 @@ class ReindexRuleProductTest extends TestCase
     private $ruleMock;
 
     /**
+     * @var DynamicBatchSizeCalculator|MockObject
+     */
+    private $batchSizeCalculatorMock;
+
+    /**
      * @var string
      */
     private $adminTimeZone;
@@ -73,13 +79,18 @@ class ReindexRuleProductTest extends TestCase
         $this->localeDateMock = $this->getMockForAbstractClass(TimezoneInterface::class);
         $this->connectionMock = $this->getMockForAbstractClass(AdapterInterface::class);
         $this->ruleMock = $this->createMock(Rule::class);
+        $this->batchSizeCalculatorMock = $this->createMock(DynamicBatchSizeCalculator::class);
+
+        $this->batchSizeCalculatorMock->method('getAttributeBatchSize')
+            ->willReturn(1000);
 
         $this->model = new ReindexRuleProduct(
             $this->resourceMock,
             $activeTableSwitcherMock,
             $this->tableSwapperMock,
             $this->localeDateMock,
-            true
+            true,
+            $this->batchSizeCalculatorMock
         );
 
         $this->adminTimeZone = 'America/Chicago';
@@ -187,7 +198,7 @@ class ReindexRuleProductTest extends TestCase
                     }
                 }
             );
-        
+
         self::assertTrue($this->model->execute($this->ruleMock, 2, true));
     }
 
