@@ -14,6 +14,7 @@ use Magento\Framework\Config\ConfigOptionsListConstants;
 use Magento\Framework\Config\Data\ConfigData;
 use Magento\Framework\Config\File\ConfigFilePool;
 use Magento\Framework\Encryption\EncryptorInterface;
+use Magento\Framework\Encryption\Encryptor;
 use Magento\Framework\Exception\FileSystemException;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Filesystem;
@@ -21,6 +22,9 @@ use Magento\Framework\Filesystem\Directory\WriteInterface;
 use Magento\Framework\Math\Random;
 use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
 use Magento\Framework\Model\ResourceModel\Db\Context;
+use Magento\Framework\Indexer\ConfigInterface;
+use Magento\Framework\Json\EncoderInterface;
+use Magento\Indexer\Model\ResourceModel\Indexer\State\CollectionFactory;
 
 /**
  * Encryption key changer resource model
@@ -29,9 +33,9 @@ use Magento\Framework\Model\ResourceModel\Db\Context;
  * @api
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @since 100.0.2
+ * @since                                          100.0.2
  * @deprecated
- * @see Extensible Reencryption Mechanism
+ * @see                                            Extensible Reencryption Mechanism
  */
 class Change extends AbstractDb
 {
@@ -66,19 +70,45 @@ class Change extends AbstractDb
     /**
      * Random string generator
      *
-     * @var Random
+     * @var   Random
      * @since 100.0.4
      */
     protected $random;
 
     /**
-     * @param Context $context
-     * @param Filesystem $filesystem
-     * @param Structure $structure
-     * @param EncryptorInterface $encryptor
-     * @param Writer $writer
-     * @param Random $random
-     * @param string $connectionName
+     * Indexer Configuration
+     *
+     * @var IndexerConfig
+     */
+    protected $indexerConfig;
+
+    /**
+     * Json Encoder
+     *
+     * @var Encoder
+     */
+    protected $encoder;
+
+    /**
+     * Indexer State Collection Factory
+     *
+     * @var IndexerStateCollection
+     */
+    protected $indexerStateCollection;
+
+    /**
+     * @param Context                $context
+     * @param Filesystem             $filesystem
+     * @param Structure              $structure
+     * @param EncryptorInterface     $encryptor
+     * @param Writer                 $writer
+     * @param Random                 $random
+     * @param ConfigInterface        $indexerConfig
+     * @param EncoderInterface       $encoder
+     * @param CollectionFactory      $indexerStateCollection
+     * @param string                 $connectionName
+     *
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         Context $context,
@@ -87,6 +117,9 @@ class Change extends AbstractDb
         EncryptorInterface $encryptor,
         Writer $writer,
         Random $random,
+        ConfigInterface $indexerConfig,
+        EncoderInterface $encoder,
+        CollectionFactory $indexerStateCollection,
         $connectionName = null
     ) {
         $this->encryptor = clone $encryptor;
@@ -95,6 +128,9 @@ class Change extends AbstractDb
         $this->structure = $structure;
         $this->writer = $writer;
         $this->random = $random;
+        $this->indexerConfig = $indexerConfig;
+        $this->encoder = $encoder;
+        $this->indexerStateCollection = $indexerStateCollection;
     }
 
     /**
@@ -110,11 +146,11 @@ class Change extends AbstractDb
     /**
      * Change encryption key
      *
-     * @param string|null $key
-     * @return null|string
-     * @throws FileSystemException|LocalizedException|Exception
+     * @param      string|null $key
+     * @return     null|string
+     * @throws     FileSystemException|LocalizedException|Exception
      * @deprecated
-     * @see Extensible Reencryption Mechanism
+     * @see        Extensible Reencryption Mechanism
      */
     public function changeEncryptionKey($key = null)
     {
@@ -139,6 +175,7 @@ class Change extends AbstractDb
         try {
             $this->_reEncryptSystemConfigurationValues();
             $this->_reEncryptCreditCardNumbers();
+            $this->updateIndexersHash();
             $this->writer->saveConfig($configData);
             $this->commit();
             return $key;
@@ -151,14 +188,16 @@ class Change extends AbstractDb
     /**
      * Gather all encrypted system config values and re-encrypt them
      *
-     * @return void
+     * @return     void
      * @deprecated
-     * @see Extensible Reencryption Mechanism
+     * @see        Extensible Reencryption Mechanism
      */
     protected function _reEncryptSystemConfigurationValues()
     {
         // look for encrypted node entries in all system.xml files
-        /** @var Structure $configStructure  */
+        /**
+         * @var Structure $configStructure
+        */
         $configStructure = $this->structure;
         $paths = $configStructure->getFieldPathsByAttribute(
             'backend_model',
@@ -188,9 +227,9 @@ class Change extends AbstractDb
     /**
      * Gather saved credit card numbers from sales order payments and re-encrypt them
      *
-     * @return void
+     * @return     void
      * @deprecated
-     * @see Extensible Reencryption Mechanism
+     * @see        Extensible Reencryption Mechanism
      */
     protected function _reEncryptCreditCardNumbers()
     {
@@ -205,6 +244,36 @@ class Change extends AbstractDb
                 ['cc_number_enc' => $this->encryptor->encrypt($this->encryptor->decrypt($value))],
                 ['entity_id = ?' => (int)$valueId]
             );
+        }
+    }
+
+    /**
+     * Refresh the indexer hash to avoid grid data regeneration
+     *
+     * @return void
+     */
+    protected function updateIndexersHash()
+    {
+        
+        $stateIndexers = [];
+        $stateCollection = $this->indexerStateCollection->create();
+        foreach ($stateCollection->getItems() as $state) {
+            /**
+             * @var \Magento\Indexer\Model\Indexer\State $state
+            */
+            $stateIndexers[$state->getIndexerId()] = $state;
+        }
+        
+        foreach ($this->indexerConfig->getIndexers() as $indexerId => $indexerConfig) {
+            $newHashConfig = $this->encryptor->hash(
+                $this->encoder->encode($indexerConfig),
+                Encryptor::HASH_VERSION_MD5
+            );
+
+            if (isset($stateIndexers[$indexerId])) {
+                $stateIndexers[$indexerId]->setHashConfig($newHashConfig);
+                $stateIndexers[$indexerId]->save();
+            }
         }
     }
 }
