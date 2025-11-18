@@ -19,7 +19,6 @@ use Magento\Catalog\Model\Product;
 use Magento\Store\Api\Data\StoreInterface;
 use Magento\CatalogInventory\Api\Data\StockItemInterface;
 use Magento\CatalogInventory\Api\Data\StockStatusInterface;
-use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
 use PHPUnit\Framework\MockObject\MockObject;
 
@@ -87,10 +86,6 @@ class OnlyXLeftInStockResolverTest extends TestCase
      */
     private $stockStatusMock;
 
-    /**
-     * @var ProductRepositoryInterface|MockObject
-     */
-    private $productRepositoryMock;
 
     /**
      * @var Configurable|MockObject
@@ -126,7 +121,6 @@ class OnlyXLeftInStockResolverTest extends TestCase
         $this->storeMock = $this->getMockBuilder(StoreInterface::class)->getMock();
         $this->stockItemMock = $this->getMockBuilder(StockItemInterface::class)->getMock();
         $this->stockStatusMock = $this->getMockBuilder(StockStatusInterface::class)->getMock();
-        $this->productRepositoryMock = $this->getMockBuilder(ProductRepositoryInterface::class)->getMock();
         $this->configurableTypeMock = $this->getMockBuilder(Configurable::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -142,8 +136,7 @@ class OnlyXLeftInStockResolverTest extends TestCase
             OnlyXLeftInStockResolver::class,
             [
                 'scopeConfig' => $this->scopeConfigMock,
-                'stockRegistry' => $this->stockRegistryMock,
-                'productRepositoryInterface' => $this->productRepositoryMock
+                'stockRegistry' => $this->stockRegistryMock
             ]
         );
     }
