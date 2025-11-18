@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\CatalogUrlRewrite\Test\Unit\Model\Category\Plugin;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\CatalogUrlRewrite\Model\Category\Plugin\Storage as CategoryStoragePlugin;
 use Magento\CatalogUrlRewrite\Model\ResourceModel\Category\Product as ProductResourceModel;
 use Magento\Framework\Serialize\Serializer\Json;
@@ -42,10 +43,8 @@ class StorageTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->storage = $this->getMockBuilder(StorageInterface::class)
-            ->getMockForAbstractClass();
-        $this->urlFinder = $this->getMockBuilder(UrlFinderInterface::class)
-            ->getMockForAbstractClass();
+        $this->storage = $this->createMock(StorageInterface::class);
+        $this->urlFinder = $this->createMock(UrlFinderInterface::class);
         $this->productResourceModel = $this->getMockBuilder(ProductResourceModel::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -67,9 +66,8 @@ class StorageTest extends TestCase
 
     /**
      * test AfterReplace method
-     *
-     * @dataProvider afterReplaceDataProvider
      */
+    #[DataProvider('afterReplaceDataProvider')]
     public function testAfterReplace(
         array $oldUrlsData,
         array $newUrlsData,

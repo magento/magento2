@@ -47,14 +47,10 @@ class SearchIndexNameResolverTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->clientConfig = $this->getMockBuilder(Config::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['getIndexSettings'])
-            ->onlyMethods([
-                'getIndexPrefix',
-                'getEntityType',
-            ])
-            ->getMock();
+        $this->clientConfig = $this->createPartialMock(Config::class, [
+            'getIndexPrefix',
+            'getEntityType'
+        ]);
 
         $this->clientConfig->expects($this->any())
             ->method('getIndexPrefix')

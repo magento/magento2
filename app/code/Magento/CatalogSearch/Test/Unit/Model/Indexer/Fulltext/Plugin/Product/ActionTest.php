@@ -48,8 +48,7 @@ class ActionTest extends TestCase
         $this->indexerRegistryMock = $this->getMockBuilder(IndexerRegistry::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->indexerMock = $this->getMockBuilder(IndexerInterface::class)
-            ->getMockForAbstractClass();
+        $this->indexerMock = $this->createMock(IndexerInterface::class);
         $this->subjectMock = $this->getMockBuilder(ProductAction::class)
             ->disableOriginalConstructor()
             ->getMock();

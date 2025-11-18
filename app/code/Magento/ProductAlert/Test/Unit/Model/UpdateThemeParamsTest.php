@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\ProductAlert\Test\Unit\Model;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\View\DesignInterface;
 use Magento\ProductAlert\Block\Email\Stock;
@@ -70,8 +71,8 @@ class UpdateThemeParamsTest extends TestCase
      * @return void
      * @throws Exception
      * @throws NoSuchEntityException
-     * @dataProvider getTemplateFileDataProvider
      */
+    #[DataProvider('getTemplateFileDataProvider')]
     public function testBeforeGetTemplateFileName(
         string $templateFileName,
         string $stockTemplateFileName,

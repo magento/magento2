@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\AdvancedSearch\Test\Unit\Model\Client;
 
+use PHPUnit\Framework\Attributes\CoversClass;
 use InvalidArgumentException;
 use LogicException;
 use Magento\AdvancedSearch\Model\Client\ClientFactoryInterface;
@@ -18,9 +19,7 @@ use Magento\Framework\Search\EngineResolverInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
-/**
- * @covers \Magento\AdvancedSearch\Model\Client\ClientResolver
- */
+#[CoversClass(ClientResolver::class)]
 class ClientResolverTest extends TestCase
 {
     /**
@@ -42,10 +41,9 @@ class ClientResolverTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->engineResolverMock = $this->getMockBuilder(EngineResolverInterface::class)
-            ->getMockForAbstractClass();
+        $this->engineResolverMock = $this->createMock(EngineResolverInterface::class);
 
-        $this->objectManager = $this->getMockForAbstractClass(ObjectManagerInterface::class);
+        $this->objectManager = $this->createMock(ObjectManagerInterface::class);
 
         $this->model = new ClientResolver(
             $this->objectManager,
@@ -60,11 +58,11 @@ class ClientResolverTest extends TestCase
         $this->engineResolverMock->expects($this->once())->method('getCurrentSearchEngine')
             ->willReturn('engineName');
 
-        $factoryMock = $this->getMockForAbstractClass(ClientFactoryInterface::class);
+        $factoryMock = $this->createMock(ClientFactoryInterface::class);
 
-        $clientMock = $this->getMockForAbstractClass(ClientInterface::class);
+        $clientMock = $this->createMock(ClientInterface::class);
 
-        $clientOptionsMock = $this->getMockForAbstractClass(ClientOptionsInterface::class);
+        $clientOptionsMock = $this->createMock(ClientOptionsInterface::class);
 
         $this->objectManager->expects($this->exactly(2))->method('create')
             ->willReturnCallback(function ($className) use ($factoryMock, $clientOptionsMock) {
