@@ -19,6 +19,9 @@ use Magento\Catalog\Model\Product;
 use Magento\Store\Api\Data\StoreInterface;
 use Magento\CatalogInventory\Api\Data\StockItemInterface;
 use Magento\CatalogInventory\Api\Data\StockStatusInterface;
+use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
+use PHPUnit\Framework\MockObject\MockObject;
 
 /**
  * Test class for \Magento\CatalogInventoryGraphQl\Model\Resolver\OnlyXLeftInStockResolver
@@ -85,6 +88,16 @@ class OnlyXLeftInStockResolverTest extends TestCase
     private $stockStatusMock;
 
     /**
+     * @var ProductRepositoryInterface|MockObject
+     */
+    private $productRepositoryMock;
+
+    /**
+     * @var Configurable|MockObject
+     */
+    private $configurableTypeMock;
+
+    /**
      * @inheritdoc
      */
 
@@ -113,6 +126,10 @@ class OnlyXLeftInStockResolverTest extends TestCase
         $this->storeMock = $this->getMockBuilder(StoreInterface::class)->getMock();
         $this->stockItemMock = $this->getMockBuilder(StockItemInterface::class)->getMock();
         $this->stockStatusMock = $this->getMockBuilder(StockStatusInterface::class)->getMock();
+        $this->productRepositoryMock = $this->getMockBuilder(ProductRepositoryInterface::class)->getMock();
+        $this->configurableTypeMock = $this->getMockBuilder(Configurable::class)
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->productModelMock->expects($this->any())->method('getId')
             ->willReturn(1);
         $this->productModelMock->expects($this->atMost(1))->method('getStore')
@@ -125,7 +142,8 @@ class OnlyXLeftInStockResolverTest extends TestCase
             OnlyXLeftInStockResolver::class,
             [
                 'scopeConfig' => $this->scopeConfigMock,
-                'stockRegistry' => $this->stockRegistryMock
+                'stockRegistry' => $this->stockRegistryMock,
+                'productRepositoryInterface' => $this->productRepositoryMock
             ]
         );
     }
@@ -189,6 +207,96 @@ class OnlyXLeftInStockResolverTest extends TestCase
 
         $this->assertEquals(
             null,
+            $this->resolver->resolve(
+                $this->fieldMock,
+                $this->contextMock,
+                $this->resolveInfoMock,
+                ['model' => $this->productModelMock]
+            )
+        );
+    }
+
+    /**
+     * Test configurable product with no variants
+     */
+    public function testResolveConfigurableProductWithNoVariants()
+    {
+        $thresholdQty = 1;
+        
+        $configurableProductMock = $this->getMockBuilder(Product::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        
+        $configurableProductMock->expects($this->once())
+            ->method('getTypeId')
+            ->willReturn('configurable');
+            
+        $configurableProductMock->expects($this->once())
+            ->method('getTypeInstance')
+            ->willReturn($this->configurableTypeMock);
+            
+        $this->configurableTypeMock->expects($this->once())
+            ->method('getUsedProducts')
+            ->with($configurableProductMock)
+            ->willReturn([]);
+        
+        $this->scopeConfigMock->method('getValue')->willReturn($thresholdQty);
+        
+        $this->assertNull(
+            $this->resolver->resolve(
+                $this->fieldMock,
+                $this->contextMock,
+                $this->resolveInfoMock,
+                ['model' => $configurableProductMock]
+            )
+        );
+    }
+
+    /**
+     * Test simple product regression
+     */
+    public function testResolveSimpleProductRegression()
+    {
+        $stockCurrentQty = 8;
+        $minQty = 2;
+        $thresholdQty = 10;
+        
+        $this->productModelMock->expects($this->once())
+            ->method('getTypeId')
+            ->willReturn('simple');
+        
+        $this->stockItemMock->expects($this->once())->method('getMinQty')->willReturn($minQty);
+        $this->stockStatusMock->expects($this->once())->method('getQty')->willReturn($stockCurrentQty);
+        $this->stockRegistryMock->expects($this->once())->method('getStockItem')->willReturn($this->stockItemMock);
+        $this->scopeConfigMock->method('getValue')->willReturn($thresholdQty);
+        
+        $this->assertEquals(
+            $stockCurrentQty,
+            $this->resolver->resolve(
+                $this->fieldMock,
+                $this->contextMock,
+                $this->resolveInfoMock,
+                ['model' => $this->productModelMock]
+            )
+        );
+    }
+
+    /**
+     * Test basic stock threshold logic
+     */
+    public function testResolveBasicStockThresholdLogic()
+    {
+        $stockCurrentQty = 15;
+        $minQty = 5;
+        $thresholdQty = 20;
+        
+        $this->stockItemMock->expects($this->once())->method('getMinQty')->willReturn($minQty);
+        $this->stockStatusMock->expects($this->once())->method('getQty')->willReturn($stockCurrentQty);
+        $this->stockRegistryMock->expects($this->once())->method('getStockItem')->willReturn($this->stockItemMock);
+        $this->scopeConfigMock->method('getValue')->willReturn($thresholdQty);
+        
+        $this->assertEquals(
+            $stockCurrentQty,
             $this->resolver->resolve(
                 $this->fieldMock,
                 $this->contextMock,
