@@ -22,6 +22,7 @@ use OpenSearch\Common\Exceptions\BadRequest400Exception;
 use OpenSearch\Common\Exceptions\Missing404Exception;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -98,8 +99,8 @@ class AdapterTest extends TestCase
      * @return void
      * @throws ClientException
      * @throws \PHPUnit\Framework\MockObject\Exception
-     * @dataProvider exceptionDataProvider
      */
+    #[DataProvider('exceptionDataProvider')]
     public function testQuery($exception, $throws): void
     {
         $request = $this->createMock(RequestInterface::class);

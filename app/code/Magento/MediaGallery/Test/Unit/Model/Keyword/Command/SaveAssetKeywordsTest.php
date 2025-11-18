@@ -14,6 +14,7 @@ use Magento\Framework\DB\Select;
 use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\MediaGallery\Model\Keyword\Command\SaveAssetKeywords;
 use Magento\MediaGallery\Model\ResourceModel\Keyword\SaveAssetLinks;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
@@ -57,11 +58,9 @@ class SaveAssetKeywordsTest extends TestCase
     {
         $this->resourceConnectionMock = $this->createMock(ResourceConnection::class);
         $this->saveAssetLinksMock = $this->createMock(SaveAssetLinks::class);
-        $this->connectionMock = $this->getMockBuilder(Mysql::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->connectionMock = $this->createMock(Mysql::class);
         $this->selectMock = $this->createMock(Select::class);
-        $this->loggerMock = $this->getMockForAbstractClass(LoggerInterface::class);
+        $this->loggerMock = $this->createMock(LoggerInterface::class);
 
         $this->sut = new SaveAssetKeywords(
             $this->resourceConnectionMock,
@@ -73,12 +72,11 @@ class SaveAssetKeywordsTest extends TestCase
     /**
      * Test saving the asset keywords
      *
-     * @dataProvider assetKeywordsDataProvider
-     *
      * @param array $keywords
      * @param int $assetId
      * @param array $items
      */
+    #[DataProvider('assetKeywordsDataProvider')]
     public function testAssetKeywordsSave(array $keywords, int $assetId, array $items): void
     {
         $expectedCalls = (int) (count($keywords));
