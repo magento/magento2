@@ -34,6 +34,7 @@ use Magento\Sales\Model\Order\Item as OrderItem;
 use Magento\Sales\Model\ResourceModel\Order\Item\Collection as ItemCollection;
 use Magento\Store\Api\Data\StoreInterface;
 use PHPUnit\Framework\MockObject\MockObject;
+use Magento\Customer\Api\CustomerRepositoryInterface;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -637,5 +638,96 @@ class CreateTest extends TestCase
                 ]
             ]
         ];
+    }
+
+    public function testGetQuoteAssignsCustomerWhenCustomerIdPresent(): void
+    {
+        $quote = $this->getMockBuilder(Quote::class)
+            ->disableOriginalConstructor()
+            ->onlyMethods(['updateCustomerData'])
+            ->addMethods(['getCustomerId'])
+            ->getMock();
+
+        $quote->expects($this->once())
+            ->method('getCustomerId')
+            ->willReturn(self::CUSTOMER_ID);
+
+        $customerData = $this->getMockBuilder(CustomerInterface::class)
+            ->getMockForAbstractClass();
+
+        $customerRepository = $this->getMockBuilder(CustomerRepositoryInterface::class)
+            ->getMockForAbstractClass();
+        $customerRepository->expects($this->once())
+            ->method('getById')
+            ->with(self::CUSTOMER_ID)
+            ->willReturn($customerData);
+
+        $quote->expects($this->once())
+            ->method('updateCustomerData')
+            ->with($customerData);
+
+        $this->sessionQuote->expects($this->once())
+            ->method('getQuote')
+            ->willReturn($quote);
+
+        $subject = $this->createAdminOrderCreateWithCustomerRepository($customerRepository);
+
+        $result = $subject->getQuote();
+
+        $this->assertSame($quote, $result);
+    }
+
+    public function testGetQuoteSkipsAssignWhenNoCustomerId(): void
+    {
+        $quote = $this->getMockBuilder(Quote::class)
+            ->disableOriginalConstructor()
+            ->onlyMethods(['updateCustomerData'])
+            ->addMethods(['getCustomerId'])
+            ->getMock();
+
+        $quote->expects($this->once())
+            ->method('getCustomerId')
+            ->willReturn(0);
+
+        $quote->expects($this->never())
+            ->method('updateCustomerData');
+
+        $customerRepository = $this->getMockBuilder(CustomerRepositoryInterface::class)
+            ->getMockForAbstractClass();
+        $customerRepository->expects($this->never())
+            ->method('getById');
+
+        $this->sessionQuote->expects($this->once())
+            ->method('getQuote')
+            ->willReturn($quote);
+
+        $subject = $this->createAdminOrderCreateWithCustomerRepository($customerRepository);
+
+        $result = $subject->getQuote();
+
+        $this->assertSame($quote, $result);
+    }
+
+    private function createAdminOrderCreateWithCustomerRepository(
+        CustomerRepositoryInterface $customerRepository
+    ): Create {
+        $objectManagerHelper = new ObjectManagerHelper($this);
+        return $objectManagerHelper->getObject(
+            Create::class,
+            [
+                '_objectManager' => $this->objectManager,
+                'messageManager' => $this->messageManager,
+                'quoteSession' => $this->sessionQuote,
+                'metadataFormFactory' => $this->formFactory,
+                'customerFactory' => $this->customerFactory,
+                'groupRepository' => $this->groupRepository,
+                'quoteItemUpdater' => $this->itemUpdater,
+                'customerMapper' => $this->customerMapper,
+                'dataObjectHelper' => $this->dataObjectHelper,
+                'quoteRepository' => $this->quoteRepository,
+                'quoteFactory' => $this->quoteFactory,
+                'customerRepository' => $customerRepository,
+            ]
+        );
     }
 }
