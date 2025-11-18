@@ -50,10 +50,8 @@ class ActivityTest extends TestCase
     protected function setUp(): void
     {
         $this->objectManager = new ObjectManager($this);
-        $this->contextMock = $this->getMockBuilder(Context::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->viewMock = $this->getMockForAbstractClass(ViewInterface::class);
+        $this->contextMock = $this->createMock(Context::class);
+        $this->viewMock = $this->createMock(ViewInterface::class);
         $this->contextMock->expects($this->any())
             ->method('getView')
             ->willReturn($this->viewMock);
@@ -71,9 +69,7 @@ class ActivityTest extends TestCase
      */
     public function testExecute()
     {
-        $titleMock = $this->getMockBuilder(Title::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $titleMock = $this->createMock(Title::class);
         $titleMock
             ->expects($this->once())
             ->method('prepend')

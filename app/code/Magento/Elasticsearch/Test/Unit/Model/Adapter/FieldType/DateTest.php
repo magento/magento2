@@ -49,13 +49,9 @@ class DateTest extends TestCase
             ->onlyMethods(['isEmptyDate'])
             ->getMock();
 
-        $this->localeDate = $this->getMockBuilder(TimezoneInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->localeDate = $this->createMock(TimezoneInterface::class);
 
-        $this->scopeConfig = $this->getMockBuilder(ScopeConfigInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->scopeConfig = $this->createMock(ScopeConfigInterface::class);
 
         $objectManager = new ObjectManagerHelper($this);
         $this->model = $objectManager->getObject(

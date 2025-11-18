@@ -60,14 +60,9 @@ class SuggestTest extends TestCase
         $this->autocomplete = $this->getMockBuilder(AutocompleteInterface::class)
             ->disableOriginalConstructor()
             ->onlyMethods(['getItems'])
-            ->getMockForAbstractClass();
-        $this->request = $this->getMockBuilder(RequestInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-        $this->url = $this->getMockBuilder(UrlInterface::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['getBaseUrl'])
-            ->getMockForAbstractClass();
+            ->getMock();
+        $this->request = $this->createMock(RequestInterface::class);
+        $this->url = $this->createMock(UrlInterface::class);
         $this->resultFactoryMock = $this->getMockBuilder(ResultFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
