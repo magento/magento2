@@ -18,7 +18,7 @@ class Item extends \Magento\Backend\Block\Widget
     protected $_accordion;
 
     /**
-     * Set accordion objet and return self
+     * Set accordion object and return self
      *
      * @param Accordion $accordion
      * @return $this
