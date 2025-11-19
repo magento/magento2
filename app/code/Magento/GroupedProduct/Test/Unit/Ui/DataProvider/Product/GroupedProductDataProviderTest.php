@@ -52,31 +52,22 @@ class GroupedProductDataProviderTest extends TestCase
     {
         $this->objectManager = new ObjectManager($this);
 
-        $this->requestMock = $this->getMockBuilder(RequestInterface::class)
-            ->getMockForAbstractClass();
-        $this->collectionMock = $this->getMockBuilder(Collection::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(
-                [
-                    'toArray',
-                    'isLoaded',
-                    'addAttributeToFilter',
-                    'load',
-                    'getSize',
-                    'addFilterByRequiredOptions',
-                    'addStoreFilter'
-                ]
-            )->getMock();
-        $this->collectionFactoryMock = $this->getMockBuilder(CollectionFactory::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['create'])
-            ->getMock();
-        $this->collectionFactoryMock->expects($this->any())
-            ->method('create')
-            ->willReturn($this->collectionMock);
-        $this->configMock = $this->getMockBuilder(ConfigInterface::class)
-            ->onlyMethods(['getComposableTypes'])
-            ->getMockForAbstractClass();
+        $this->requestMock = $this->createMock(RequestInterface::class);
+        $this->collectionMock = $this->createPartialMock(
+            Collection::class,
+            [
+                'toArray',
+                'isLoaded',
+                'addAttributeToFilter',
+                'load',
+                'getSize',
+                'addFilterByRequiredOptions',
+                'addStoreFilter'
+            ]
+        );
+        $this->collectionFactoryMock = $this->createPartialMock(CollectionFactory::class, ['create']);
+        $this->collectionFactoryMock->method('create')->willReturn($this->collectionMock);
+        $this->configMock = $this->createMock(ConfigInterface::class);
     }
 
     /**

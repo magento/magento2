@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\ProductVideo\Test\Unit\Model\Plugin\Catalog\Product\Gallery;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\ResourceModel\Product\Gallery;
 use Magento\Eav\Model\Entity\Attribute;
@@ -55,9 +56,7 @@ class CreateHandlerTest extends TestCase
         $this->product = $this->createMock(Product::class);
 
         $this->attribute = $this->createMock(Attribute::class);
-        $this->attribute->expects($this->any())
-            ->method('getAttributeCode')
-            ->willReturn('media_gallery');
+        $this->attribute->method('getAttributeCode')->willReturn('media_gallery');
 
         $this->resourceModel = $this->createMock(Gallery::class);
 
@@ -76,11 +75,11 @@ class CreateHandlerTest extends TestCase
     }
 
     /**
-     * @dataProvider provideImageForAfterExecute
      * @param array $image
      * @param array $expectedSave
      * @param int $rowSaved
      */
+    #[DataProvider('provideImageForAfterExecute')]
     public function testAfterExecute($image, $expectedSave, $rowSaved): void
     {
         $this->product->expects($this->once())
@@ -91,9 +90,7 @@ class CreateHandlerTest extends TestCase
             ->method('getStoreId')
             ->willReturn(0);
 
-        $this->mediaGalleryCreateHandler->expects($this->any())
-            ->method('getAttribute')
-            ->willReturn($this->attribute);
+        $this->mediaGalleryCreateHandler->method('getAttribute')->willReturn($this->attribute);
 
         $this->resourceModel->expects($this->exactly($rowSaved))
             ->method('saveDataRow')
@@ -245,9 +242,7 @@ class CreateHandlerTest extends TestCase
             ->with('media_gallery')
             ->willReturn([]);
 
-        $this->mediaGalleryCreateHandler->expects($this->any())
-            ->method('getAttribute')
-            ->willReturn($this->attribute);
+        $this->mediaGalleryCreateHandler->method('getAttribute')->willReturn($this->attribute);
 
         $this->subject->afterExecute(
             $this->mediaGalleryCreateHandler,
@@ -316,9 +311,7 @@ class CreateHandlerTest extends TestCase
             ->method('getData')
             ->with('media_gallery')
             ->willReturn($mediaData);
-        $this->product->expects($this->any())
-            ->method('getStoreId')
-            ->willReturn(0);
+        $this->product->method('getStoreId')->willReturn(0);
 
         $resourceEntryResult = [
             [
@@ -355,9 +348,7 @@ class CreateHandlerTest extends TestCase
             ->method('loadDataFromTableByValueId')
             ->willReturn($resourceEntryResult);
 
-        $this->mediaGalleryCreateHandler->expects($this->any())
-            ->method('getAttribute')
-            ->willReturn($this->attribute);
+        $this->mediaGalleryCreateHandler->method('getAttribute')->willReturn($this->attribute);
 
         $this->subject->beforeExecute(
             $this->mediaGalleryCreateHandler,

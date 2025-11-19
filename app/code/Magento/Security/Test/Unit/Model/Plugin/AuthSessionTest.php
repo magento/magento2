@@ -10,7 +10,7 @@ namespace Magento\Security\Test\Unit\Model\Plugin;
 use Magento\Backend\Model\Auth\Session;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\Message\ManagerInterface;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Security\Model\AdminSessionInfo;
 use Magento\Security\Model\AdminSessionsManager;
 use Magento\Security\Model\Plugin\AuthSession;
@@ -24,6 +24,8 @@ use PHPUnit\Framework\TestCase;
  */
 class AuthSessionTest extends TestCase
 {
+    use MockCreationTrait;
+
     /** @var  AuthSession */
     protected $model;
 
@@ -45,9 +47,6 @@ class AuthSessionTest extends TestCase
     /** @var AdminSessionInfo */
     protected $currentSessionMock;
 
-    /** @var  ObjectManager */
-    protected $objectManager;
-
     /**@var \Magento\Security\Model\UserExpirationManager */
     protected $userExpirationManagerMock;
 
@@ -60,16 +59,9 @@ class AuthSessionTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->objectManager = new ObjectManager($this);
+        $this->requestMock = $this->createMock(RequestInterface::class);
 
-        $this->requestMock = $this->getMockForAbstractClass(
-            RequestInterface::class,
-            ['getParam', 'getModuleName', 'getActionName'],
-            '',
-            false
-        );
-
-        $this->messageManagerMock = $this->getMockForAbstractClass(ManagerInterface::class);
+        $this->messageManagerMock = $this->createMock(ManagerInterface::class);
 
         $this->adminSessionsManagerMock = $this->createPartialMock(
             AdminSessionsManager::class,
@@ -78,17 +70,15 @@ class AuthSessionTest extends TestCase
 
         $this->securityCookieMock = $this->createPartialMock(SecurityCookie::class, ['setLogoutReasonCookie']);
 
-        $this->authSessionMock = $this->getMockBuilder(Session::class)
-            ->addMethods(['getUser'])
-            ->onlyMethods(['destroy'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->authSessionMock = $this->createPartialMockWithReflection(
+            Session::class,
+            ['getUser', 'destroy']
+        );
 
-        $this->currentSessionMock = $this->getMockBuilder(AdminSessionInfo::class)
-            ->addMethods(['getStatus', 'isActive'])
-            ->onlyMethods(['isLoggedInStatus'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->currentSessionMock = $this->createPartialMockWithReflection(
+            AdminSessionInfo::class,
+            ['getStatus', 'isActive', 'isLoggedInStatus']
+        );
 
         $this->userExpirationManagerMock = $this->createPartialMock(
             UserExpirationManager::class,
@@ -97,15 +87,12 @@ class AuthSessionTest extends TestCase
 
         $this->userMock = $this->createMock(User::class);
 
-        $this->model = $this->objectManager->getObject(
-            AuthSession::class,
-            [
-                'request' => $this->requestMock,
-                'messageManager' => $this->messageManagerMock,
-                'sessionsManager' => $this->adminSessionsManagerMock,
-                'securityCookie' => $this->securityCookieMock,
-                'userExpirationManager' => $this->userExpirationManagerMock,
-            ]
+        $this->model = new AuthSession(
+            $this->requestMock,
+            $this->messageManagerMock,
+            $this->adminSessionsManagerMock,
+            $this->securityCookieMock,
+            $this->userExpirationManagerMock
         );
 
         $this->adminSessionsManagerMock->expects($this->any())

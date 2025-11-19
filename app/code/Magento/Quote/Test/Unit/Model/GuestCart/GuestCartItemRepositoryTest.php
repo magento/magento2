@@ -71,22 +71,14 @@ class GuestCartItemRepositoryTest extends TestCase
                 $this->cartId
             );
 
-        $this->quoteIdMaskMock->expects($this->any())
-            ->method('getMaskedId')
-            ->willReturn($this->maskedCartId);
-
         $this->quoteItemMock = $this->createMock(Item::class);
-        $this->quoteItemMock->expects($this->any())
-            ->method('getItemId')
-            ->willReturn($this->maskedCartId);
-        $this->quoteItemMock->expects($this->any())
-            ->method('getQuoteId')
-            ->willReturn($this->maskedCartId);
+        $this->quoteItemMock->method('getItemId')->willReturn($this->maskedCartId);
+        $this->quoteItemMock->method('getQuoteId')->willReturn($this->maskedCartId);
         $this->quoteItemMock->expects($this->any())
             ->method('setQuoteId')
             ->with($this->cartId);
 
-        $this->cartItemRepositoryMock = $this->getMockForAbstractClass(CartItemRepositoryInterface::class);
+        $this->cartItemRepositoryMock = $this->createMock(CartItemRepositoryInterface::class);
         $this->guestCartItemRepository =
             $objectManager->getObject(
                 GuestCartItemRepository::class,

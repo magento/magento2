@@ -87,8 +87,8 @@ class UpdatePostTest extends TestCase
     protected function setUp(): void
     {
         // Create mocks
-        $this->requestMock = $this->getMockForAbstractClass(RequestInterface::class);
-        $this->messageManagerMock = $this->getMockForAbstractClass(ManagerInterface::class);
+        $this->requestMock = $this->createMock(RequestInterface::class);
+        $this->messageManagerMock = $this->createMock(ManagerInterface::class);
         $this->quantityProcessorMock = $this->createMock(RequestQuantityProcessor::class);
         $this->cartMock = $this->createMock(Cart::class);
         $this->customerSessionMock = $this->createMock(CustomerSession::class);
@@ -137,9 +137,9 @@ class UpdatePostTest extends TestCase
 
         $controller = new UpdatePost(
             $context,
-            $this->getMockForAbstractClass(ScopeConfigInterface::class),
+            $this->createMock(ScopeConfigInterface::class),
             $this->createMock(CheckoutSession::class),
-            $this->getMockForAbstractClass(StoreManagerInterface::class),
+            $this->createMock(StoreManagerInterface::class),
             $formKeyValidator,
             $this->cartMock,
             $this->quantityProcessorMock

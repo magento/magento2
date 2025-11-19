@@ -10,6 +10,7 @@ namespace Magento\Weee\Plugin\ConfigurableProduct\Pricing;
 use Magento\Catalog\Pricing\Price\FinalPrice as CatalogFinalPrice;
 use Magento\ConfigurableProduct\Pricing\Price\FinalPriceResolver as ConfigurableProductFinalPriceResolver;
 use Magento\Framework\Pricing\SaleableInterface;
+use Magento\Tax\Pricing\Adjustment;
 use Magento\Weee\Helper\Data as WeeeHelperData;
 
 class FinalPriceResolver
@@ -44,8 +45,10 @@ class FinalPriceResolver
         SaleableInterface $product
     ):float {
         return $this->weeePriceDisplay()
-            ? $product->getPriceInfo()->getPrice(CatalogFinalPrice::PRICE_CODE)->getAmount()->getValue()
-            : $product->getPriceInfo()->getPrice(CatalogFinalPrice::PRICE_CODE)->getValue();
+            ? $product->getPriceInfo()->getPrice(CatalogFinalPrice::PRICE_CODE)
+                ->getAmount()->getValue(Adjustment::ADJUSTMENT_CODE)
+            : $product->getPriceInfo()->getPrice(CatalogFinalPrice::PRICE_CODE)
+                ->getValue();
     }
 
     /**

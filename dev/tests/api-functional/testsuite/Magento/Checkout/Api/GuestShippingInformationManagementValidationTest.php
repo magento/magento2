@@ -169,6 +169,29 @@ class GuestShippingInformationManagementValidationTest extends WebapiAbstract
         return $this->_webApiCall($serviceInfo, $requestData);
     }
 
+    #[
+        DataFixture(ProductFixture::class, as: 'p1'),
+        DataFixture(GuestCartFixture::class, as: 'cart'),
+        DataFixture(AddProductToCartFixture::class, ['cart_id' => '$cart.id$', 'product_id' => '$p1.id$']),
+        DataFixture(SetBillingAddressFixture::class, ['cart_id' => '$cart.id$']),
+    ]
+    public function testSaveAddressInformationWithInvalidBillingAddressPostcodeAndTelephoneRequired()
+    {
+        $cart = $this->fixtures->get('cart');
+        $maskedCartId = $this->getMaskedCartId($cart->getId());
+
+        $shippingAddress = $this->createValidAddress();
+        $billingAddress = $this->createInvalidAddressWithEmptyPostcodeAndTelephone();
+        $shippingInformation = $this->createShippingInformation($shippingAddress, $billingAddress);
+
+        try {
+            $this->callSaveAddressInformation($maskedCartId, $shippingInformation);
+            $this->fail('Expected exception not thrown');
+        } catch (\Exception $e) {
+            $this->assertValidationError($e);
+        }
+    }
+
     /**
      * Convert address object to array for API call
      *
@@ -190,5 +213,164 @@ class GuestShippingInformationManagementValidationTest extends WebapiAbstract
             'postcode' => $address->getPostcode(),
             'telephone' => $address->getTelephone(),
         ];
+    }
+
+    /**
+     * Create valid address data
+     *
+     * @return AddressInterface
+     */
+    private function createValidAddress(): AddressInterface
+    {
+        $address = $this->addressFactory->create();
+        $address->setData([
+            'firstname' => 'John',
+            'lastname' => 'Doe',
+            'email' => 'john.doe@example.com',
+            'country_id' => 'US',
+            'region_id' => 12,
+            'region' => 'California',
+            'region_code' => 'CA',
+            'street' => ['123 Test Street'],
+            'city' => 'Test City',
+            'postcode' => '90210',
+            'telephone' => '1234567890',
+        ]);
+        return $address;
+    }
+
+    /**
+     * Create invalid address with empty postcode and telephone
+     *
+     * @return AddressInterface
+     */
+    private function createInvalidAddressWithEmptyPostcodeAndTelephone(): AddressInterface
+    {
+        $address = $this->addressFactory->create();
+        $address->setData([
+            'firstname' => 'John',
+            'lastname' => 'Doe',
+            'email' => 'john.doe@example.com',
+            'country_id' => 'US',
+            'region_id' => 12,
+            'region' => 'California',
+            'region_code' => 'CA',
+            'street' => ['123 Test Street'],
+            'city' => 'Test City',
+            'postcode' => '',
+            'telephone' => '',
+        ]);
+        return $address;
+    }
+
+    /**
+     * Create shipping information
+     *
+     * @param AddressInterface $shippingAddress
+     * @param AddressInterface $billingAddress
+     * @return ShippingInformationInterface
+     */
+    private function createShippingInformation(
+        AddressInterface $shippingAddress,
+        AddressInterface $billingAddress
+    ): ShippingInformationInterface {
+        $shippingInformation = $this->shippingInformationFactory->create();
+        $shippingInformation->setShippingAddress($shippingAddress);
+        $shippingInformation->setBillingAddress($billingAddress);
+        $shippingInformation->setShippingMethodCode('flatrate');
+        $shippingInformation->setShippingCarrierCode('flatrate');
+        return $shippingInformation;
+    }
+
+    /**
+     * Assert validation error for REST or SOAP
+     *
+     * @param \Exception $exception
+     * @return void
+     */
+    private function assertValidationError(\Exception $exception): void
+    {
+        if (TESTS_WEB_API_ADAPTER === self::ADAPTER_REST) {
+            $this->assertRestValidationError($exception);
+        } elseif (TESTS_WEB_API_ADAPTER === self::ADAPTER_SOAP) {
+            $this->assertSoapValidationError($exception);
+        }
+    }
+
+    /**
+     * Assert REST validation error
+     *
+     * @param \Exception $exception
+     * @return void
+     */
+    private function assertRestValidationError(\Exception $exception): void
+    {
+        $errorData = $this->processRestExceptionResult($exception);
+        $this->assertEquals(
+            'The shipping information was unable to be saved. Error: "%message"',
+            $errorData['message']
+        );
+        $this->assertArrayHasKey('parameters', $errorData);
+        $this->assertArrayHasKey('message', $errorData['parameters']);
+        $this->assertStringContainsString('billing address contains invalid data', $errorData['parameters']['message']);
+    }
+
+    /**
+     * Assert SOAP validation error
+     *
+     * @param \Exception $exception
+     * @return void
+     */
+    private function assertSoapValidationError(\Exception $exception): void
+    {
+        $this->assertInstanceOf('SoapFault', $exception);
+        $this->assertStringContainsString(
+            'The shipping information was unable to be saved. Error: "%message"',
+            $exception->getMessage()
+        );
+        $this->assertObjectHasProperty('detail', $exception);
+        $this->assertSoapFaultParameters($exception);
+    }
+
+    /**
+     * Assert SOAP fault parameters
+     *
+     * @param \SoapFault $soapFault
+     * @return void
+     */
+    private function assertSoapFaultParameters(\SoapFault $soapFault): void
+    {
+        if (!isset($soapFault->detail->GenericFault->Parameters)) {
+            return;
+        }
+
+        $parameters = $soapFault->detail->GenericFault->Parameters->GenericFaultParameter;
+        $messageParam = $this->extractMessageParameter($parameters);
+
+        $this->assertNotNull($messageParam, 'Message parameter should be present in SOAP fault');
+        $this->assertStringContainsString(
+            'billing address contains invalid data',
+            (string)$messageParam
+        );
+    }
+
+    /**
+     * Extract message parameter from SOAP fault parameters
+     *
+     * @param mixed $parameters
+     * @return mixed|null
+     */
+    private function extractMessageParameter($parameters)
+    {
+        if (is_array($parameters)) {
+            foreach ($parameters as $param) {
+                if ($param->key === 'message') {
+                    return $param->value;
+                }
+            }
+        } elseif (isset($parameters->key) && $parameters->key === 'message') {
+            return $parameters->value;
+        }
+        return null;
     }
 }

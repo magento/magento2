@@ -26,6 +26,10 @@ use PHPUnit\Framework\TestCase;
  * Class RenderLayered Render Swatches at Layered Navigation
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+ * @SuppressWarnings(PHPMD.UnusedLocalVariable)
+ * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+ * @SuppressWarnings(PHPMD.NPathComplexity)
  */
 class RenderLayeredTest extends TestCase
 {
@@ -87,7 +91,7 @@ class RenderLayeredTest extends TestCase
     protected function setUp(): void
     {
         $this->contextMock = $this->createMock(Context::class);
-        $this->requestMock = $this->getMockForAbstractClass(RequestInterface::class);
+        $this->requestMock = $this->createMock(RequestInterface::class);
         $this->urlBuilder = $this->createPartialMock(
             Url::class,
             ['getCurrentUrl', 'getRedirectUrl', 'getUrl']
@@ -108,28 +112,23 @@ class RenderLayeredTest extends TestCase
         $this->filterMock = $this->createMock(AbstractFilter::class);
         $this->htmlBlockPagerMock = $this->createMock(Pager::class);
 
-        $this->block = $this->getMockBuilder(RenderLayered::class)
-            ->addMethods(['filter', 'eavAttribute'])
-            ->setConstructorArgs(
-                [
-                    $this->contextMock,
-                    $this->eavAttributeMock,
-                    $this->layerAttributeFactoryMock,
-                    $this->swatchHelperMock,
-                    $this->mediaHelperMock,
-                    [],
-                    $this->htmlBlockPagerMock
-                ]
-            )
-            ->getMock();
+        $this->block = new RenderLayered(
+            $this->contextMock,
+            $this->eavAttributeMock,
+            $this->layerAttributeFactoryMock,
+            $this->swatchHelperMock,
+            $this->mediaHelperMock,
+            [],
+            $this->htmlBlockPagerMock
+        );
     }
 
     public function testSetSwatchFilter()
     {
-        $this->block->method('filter')->willReturn($this->filterMock);
+        $this->block->setFilter($this->filterMock);
         $eavAttribute = $this->createMock(\Magento\Catalog\Model\ResourceModel\Eav\Attribute::class);
         $this->filterMock->expects($this->once())->method('getAttributeModel')->willReturn($eavAttribute);
-        $this->block->method('eavAttribute')->willReturn($eavAttribute);
+        $this->block->setEavAttribute($eavAttribute);
         $result = $this->block->setSwatchFilter($this->filterMock);
         $this->assertEquals($result, $this->block);
     }
@@ -142,7 +141,7 @@ class RenderLayeredTest extends TestCase
         $item3 = $this->createMock(Item::class);
         $item4 = $this->createMock(Item::class);
 
-        $item1->method('__call')->willReturnCallback(function ($arg1)  {
+        $item1->method('__call')->willReturnCallback(function ($arg1) {
             if ($arg1 == 'getValue') {
                 return 'yellow';
             } elseif ($arg1 == 'getCount') {
@@ -154,7 +153,7 @@ class RenderLayeredTest extends TestCase
 
         $item2->method('__call')->with('getValue')->willReturn('blue');
 
-        $item3->method('__call')->willReturnCallback(function ($arg1)  {
+        $item3->method('__call')->willReturnCallback(function ($arg1) {
             if ($arg1 == 'getValue') {
                 return 'red';
             } elseif ($arg1 == 'getCount') {
@@ -162,23 +161,35 @@ class RenderLayeredTest extends TestCase
             }
         });
 
-        $item4->method('__call')->willReturnCallback(function ($arg1)  {
-            if ($arg1 == 'getValue') {
-                return 'green';
-            } elseif ($arg1 == 'getCount') {
-                return 3;
-            } elseif ($arg1 == 'getLabel') {
-                return 'Green';
-            }
-        });
-        $this->filterMock->method('getItems')->willReturnOnConsecutiveCalls(
-            [$item1],
-            [$item2],
-            [$item3],
-            [$item4]
-        );
+        $item4->method('__call')
+            ->willReturnCallback(function ($arg1) {
+                if ($arg1 == 'getValue') {
+                    return 'green';
+                } elseif ($arg1 == 'getCount') {
+                    return 3;
+                } elseif ($arg1 == 'getLabel') {
+                    return 'Green';
+                }
+            });
+        $callCount = 0;
+        $this->filterMock->method('getItems')
+            ->willReturnCallback(function () use (&$callCount, $item1, $item2, $item3, $item4) {
+                $callCount++;
+                switch ($callCount) {
+                    case 1:
+                        return [$item1];
+                    case 2:
+                        return [$item2];
+                    case 3:
+                        return [$item3];
+                    case 4:
+                        return [$item4];
+                    default:
+                        return [];
+                }
+            });
 
-        $this->block->method('filter')->willReturn($this->filterMock);
+        $this->block->setFilter($this->filterMock);
 
         $option1 = $this->createMock(Option::class);
         $option1->method('getValue')->willReturn('yellow');
@@ -199,7 +210,7 @@ class RenderLayeredTest extends TestCase
         $eavAttribute->method('getIsFilterable')->willReturn(0);
 
         $this->filterMock->expects($this->once())->method('getAttributeModel')->willReturn($eavAttribute);
-        $this->block->method('eavAttribute')->willReturn($eavAttribute);
+        $this->block->setEavAttribute($eavAttribute);
         $this->block->setSwatchFilter($this->filterMock);
 
         $this->urlBuilder->expects($this->atLeastOnce())->method('getUrl')->willReturn('http://example.com/image.png');
@@ -217,7 +228,7 @@ class RenderLayeredTest extends TestCase
 
     public function testGetSwatchDataException()
     {
-        $this->block->method('filter')->willReturn($this->filterMock);
+        $this->block->setFilter($this->filterMock);
         $this->block->setSwatchFilter($this->filterMock);
         $this->expectException(\RuntimeException::class);
         $this->block->getSwatchData();

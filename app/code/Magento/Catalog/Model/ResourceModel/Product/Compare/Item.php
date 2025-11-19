@@ -260,6 +260,23 @@ class Item extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     }
 
     /**
+     * Assign customer to compare list items
+     *
+     * @param int $listId
+     * @param int $customerId
+     * @return $this
+     */
+    public function updateCustomerIdForListItems(int $listId, int $customerId)
+    {
+        $this->getConnection()->update(
+            $this->getMainTable(),
+            ['customer_id' => $customerId],
+            ['list_id = ?' => $listId]
+        );
+        return $this;
+    }
+
+    /**
      * Clear compare items by visitor and/or customer
      *
      * @param int $visitorId

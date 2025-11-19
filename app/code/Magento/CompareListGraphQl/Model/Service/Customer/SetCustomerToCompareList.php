@@ -10,9 +10,10 @@ namespace Magento\CompareListGraphQl\Model\Service\Customer;
 use Magento\Catalog\Model\CompareList;
 use Magento\Catalog\Model\CompareListFactory;
 use Magento\Catalog\Model\ResourceModel\Product\Compare\CompareList as ResourceCompareList;
-use Magento\Catalog\Model\ResourceModel\Product\Compare\Item\Collection;
-use Magento\Catalog\Model\ResourceModel\Product\Compare\Item\CollectionFactory as CompareItemsCollectionFactory;
-use Magento\CompareListGraphQl\Model\Service\AddToCompareList;
+use Magento\Catalog\Model\ResourceModel\Product\Compare\Item as ResourceCompareItem;
+use Magento\CompareListGraphQl\Model\Service\Customer\GetListIdByCustomerId;
+use Magento\CompareListGraphQl\Model\Service\Customer\MergeCompareLists;
+use Magento\CompareListGraphQl\Model\Service\Customer\ValidateCustomer;
 use Magento\Framework\GraphQl\Exception\GraphQlAuthenticationException;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Framework\GraphQl\Exception\GraphQlNoSuchEntityException;
@@ -44,39 +45,37 @@ class SetCustomerToCompareList
     private $getListIdByCustomerId;
 
     /**
-     * @var Collection
+     * @var ResourceCompareItem
      */
-    private $items;
+    private $resourceCompareItem;
 
     /**
-     * @var CompareItemsCollectionFactory
+     * @var MergeCompareLists
      */
-    private $itemCollectionFactory;
-
-    /**
-     * @var AddToCompareList
-     */
-    private $addProductToCompareList;
+    private $mergeCompareLists;
 
     /**
      * @param ValidateCustomer $validateCustomer
      * @param CompareListFactory $compareListFactory
      * @param ResourceCompareList $resourceCompareList
+     * @param GetListIdByCustomerId $getListIdByCustomerId
+     * @param ResourceCompareItem $resourceCompareItem
+     * @param MergeCompareLists $mergeCompareLists
      */
     public function __construct(
         ValidateCustomer $validateCustomer,
         CompareListFactory $compareListFactory,
         ResourceCompareList $resourceCompareList,
         GetListIdByCustomerId $getListIdByCustomerId,
-        CompareItemsCollectionFactory $itemCollectionFactory,
-        AddToCompareList $addProductToCompareList
+        ResourceCompareItem $resourceCompareItem,
+        MergeCompareLists $mergeCompareLists
     ) {
         $this->validateCustomer = $validateCustomer;
         $this->compareListFactory = $compareListFactory;
         $this->resourceCompareList = $resourceCompareList;
         $this->getListIdByCustomerId = $getListIdByCustomerId;
-        $this->itemCollectionFactory = $itemCollectionFactory;
-        $this->addProductToCompareList = $addProductToCompareList;
+        $this->resourceCompareItem = $resourceCompareItem;
+        $this->mergeCompareLists = $mergeCompareLists;
     }
 
     /**
@@ -84,6 +83,7 @@ class SetCustomerToCompareList
      *
      * @param int $listId
      * @param int $customerId
+     * @param ContextInterface $context
      *
      * @return CompareList
      *
@@ -94,21 +94,29 @@ class SetCustomerToCompareList
     public function execute(int $listId, int $customerId, ContextInterface $context): ?CompareList
     {
         if ($this->validateCustomer->execute($customerId)) {
-            /** @var CompareList $compareListModel */
             $compareList = $this->compareListFactory->create();
             $customerListId = $this->getListIdByCustomerId->execute($customerId);
             $this->resourceCompareList->load($compareList, $listId, 'list_id');
-            if ($customerListId) {
-                $this->items = $this->itemCollectionFactory->create();
-                $products = $this->items->getProductsByListId($listId);
-                $this->addProductToCompareList->execute($customerListId, $products, $context);
-                $this->resourceCompareList->delete($compareList);
-                $compareList = $this->compareListFactory->create();
-                $this->resourceCompareList->load($compareList, $customerListId, 'list_id');
-                return $compareList;
+            if (!$compareList->getListId()) {
+                throw new GraphQlNoSuchEntityException(
+                    __('The compare list with ID "%list_id" does not exist.', ['list_id' => $listId])
+                );
             }
-            $compareList->setCustomerId($customerId);
-            $this->resourceCompareList->save($compareList);
+            if ($customerListId) {
+                return $this->mergeCompareLists->execute($listId, $customerListId, $context);
+            }
+
+            $this->resourceCompareList->beginTransaction();
+            try {
+                $compareList->setCustomerId($customerId);
+                $this->resourceCompareList->save($compareList);
+                $this->resourceCompareItem->updateCustomerIdForListItems($listId, $customerId);
+                $this->resourceCompareList->commit();
+            } catch (\Exception $e) {
+                $this->resourceCompareList->rollBack();
+                throw $e;
+            }
+
             return $compareList;
         }
 

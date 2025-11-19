@@ -95,25 +95,27 @@ class ProductStockTest extends TestCase
             $this->scopeConfigMock,
             $this->stockRegistryMock
         );
-        $this->stockStatusMock = $this->getMockBuilder(StockStatusInterface::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['getQty', 'getStockStatus'])
-            ->getMockForAbstractClass();
-        $this->cartItemMock = $this->getMockBuilder(Item::class)
-            ->addMethods(['getQtyToAdd', 'getPreviousQty'])
-            ->onlyMethods(['getStore', 'getProductType', 'getProduct', 'getChildren', 'getQtyOptions'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->productMock = $this->getMockBuilder(ProductInterface::class)
-            ->onlyMethods(['getId'])
-            ->addMethods(['getStore'])
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-        $this->optionProductMock = $this->getMockBuilder(ProductInterface::class)
-            ->onlyMethods(['getId'])
-            ->addMethods(['getStore'])
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->stockStatusMock = $this->createMock(StockStatusInterface::class);
+        $this->cartItemMock = $this->createPartialMock(
+            \Magento\Quote\Test\Unit\Helper\QuoteItemUpdaterTestHelper::class,
+            [
+                'getStore',
+                'getProductType',
+                'getProduct',
+                'getChildren',
+                'getQtyOptions',
+                'getQtyToAdd',
+                'getPreviousQty'
+            ]
+        );
+        $this->productMock = $this->createPartialMock(
+            \Magento\Catalog\Test\Unit\Helper\ProductTestHelper::class,
+            ['getId', 'getStore']
+        );
+        $this->optionProductMock = $this->createPartialMock(
+            \Magento\Catalog\Test\Unit\Helper\ProductTestHelper::class,
+            ['getId', 'getStore']
+        );
         $this->storeMock = $this->createMock(StoreInterface::class);
         $this->qtyOptionMock = $this->createMock(Option::class);
     }

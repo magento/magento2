@@ -29,8 +29,7 @@ class ReviewTest extends AbstractModifierTestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $this->urlBuilderMock = $this->getMockBuilder(UrlInterface::class)
-            ->getMockForAbstractClass();
+        $this->urlBuilderMock = $this->createMock(UrlInterface::class);
         $this->moduleManagerMock = $this->createMock(ModuleManager::class);
     }
 
@@ -60,17 +59,13 @@ class ReviewTest extends AbstractModifierTestCase
 
     public function testModifyMetaDoesNotAddReviewSectionForNewProduct()
     {
-        $this->productMock->expects($this->once())
-            ->method('getId');
-
+        // productMock->getId() will return null by default
         $this->assertSame([], $this->getModel()->modifyMeta([]));
     }
 
     public function testModifyMetaDoesNotAddReviewSectionIfReviewModuleOutputIsDisabled()
     {
-        $this->productMock->expects($this->once())
-            ->method('getId')
-            ->willReturn(1);
+        $this->productMock->setId(1);
 
         $this->moduleManagerMock->expects($this->any())
             ->method('isOutputEnabled')
@@ -82,9 +77,7 @@ class ReviewTest extends AbstractModifierTestCase
 
     public function testModifyMetaAddsReviewSectionForExistingProductIfReviewModuleOutputIsEnabled()
     {
-        $this->productMock->expects($this->once())
-            ->method('getId')
-            ->willReturn(1);
+        $this->productMock->setId(1);
 
         $this->moduleManagerMock->expects($this->any())
             ->method('isOutputEnabled')
@@ -98,9 +91,7 @@ class ReviewTest extends AbstractModifierTestCase
     {
         $productId = 1;
 
-        $this->productMock->expects($this->exactly(3))
-            ->method('getId')
-            ->willReturn($productId);
+        $this->productMock->setId($productId);
 
         $this->assertArrayHasKey($productId, $this->getModel()->modifyData([]));
         $this->assertArrayHasKey(Review::DATA_SOURCE_DEFAULT, $this->getModel()->modifyData([])[$productId]);

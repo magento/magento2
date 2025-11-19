@@ -8,13 +8,20 @@ declare(strict_types=1);
 namespace Magento\Sales\Controller\Adminhtml\Order\Create;
 
 use Magento\Backend\Model\Session\Quote;
+use Magento\Catalog\Test\Fixture\Product as ProductFixture;
+use Magento\Customer\Test\Fixture\Customer;
 use Magento\Framework\App\Request\Http;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Message\MessageInterface;
 use Magento\Framework\View\LayoutInterface;
 use Magento\Quote\Api\CartRepositoryInterface;
 use Magento\Quote\Api\Data\CartInterface;
+use Magento\Quote\Test\Fixture\AddProductToCart;
+use Magento\Quote\Test\Fixture\CustomerCart;
 use Magento\Store\Model\StoreManagerInterface;
+use Magento\TestFramework\Fixture\DataFixture;
+use Magento\TestFramework\Fixture\DataFixtureStorage;
+use Magento\TestFramework\Fixture\DataFixtureStorageManager;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\Quote\Model\GetQuoteByReservedOrderId;
 use Magento\TestFramework\TestCase\AbstractBackendController;
@@ -49,6 +56,9 @@ class LoadBlockTest extends AbstractBackendController
     /** @var array */
     private $quoteIdsToRemove;
 
+    /** @var DataFixtureStorage */
+    private $fixtures;
+
     /**
      * @inheritdoc
      */
@@ -61,6 +71,7 @@ class LoadBlockTest extends AbstractBackendController
         $this->session = $this->_objectManager->get(Quote::class);
         $this->quoteRepository = $this->_objectManager->get(CartRepositoryInterface::class);
         $this->storeManager = $this->_objectManager->get(StoreManagerInterface::class);
+        $this->fixtures = DataFixtureStorageManager::getStorage();
     }
 
     /**
@@ -116,7 +127,16 @@ class LoadBlockTest extends AbstractBackendController
         $this->assertNotNull($newQuoteItemsCollection->getItemByColumnValue('sku', 'simple2'));
         if ($asJsVarname) {
             $this->assertRedirect($this->stringContains('sales/order_create/showUpdateResult'));
-            $body = (string) $this->_objectManager->get(\Magento\Backend\Model\Session::class)->getUpdateResult();
+            $sessionData = $this->_objectManager->get(\Magento\Backend\Model\Session::class)->getUpdateResult();
+            // Handle compressed data for JSON responses
+            if (is_array($sessionData) && isset($sessionData['compressed']) && $sessionData['compressed']) {
+                $body = gzdecode($sessionData['data']);
+            } else {
+                $body = (string) $sessionData;
+            }
+            if ($asJson) {
+                $body = json_decode($body, true, 512, JSON_THROW_ON_ERROR)['sidebar'];
+            }
         } elseif ($asJson) {
             $body = json_decode($this->getResponse()->getBody(), true, 512, JSON_THROW_ON_ERROR)['sidebar'];
         } else {
@@ -140,6 +160,84 @@ class LoadBlockTest extends AbstractBackendController
                 'asJsVarname' => true,
             ],
         ];
+    }
+
+    /**
+     * Test that JSON response with as_js_varname stores compressed data to prevent session bloat
+     *
+     * @return void
+     */
+    #[
+        DataFixture(ProductFixture::class, ['sku' => 'simple2'], as: 'product'),
+        DataFixture(Customer::class, as: 'customer'),
+        DataFixture(CustomerCart::class, ['customer_id' => '$customer.id$', 'is_active' => 1], as: 'quote'),
+        DataFixture(AddProductToCart::class, ['cart_id' => '$quote.id$', 'product_id' => '$product.id$', 'qty' => 1])
+    ]
+    public function testJsonResponseWithJsVarnameUsesCompressionToPreventSessionBloat(): void
+    {
+        /** @var CartInterface $quote */
+        $quote = $this->fixtures->get('quote');
+        $product = $this->fixtures->get('product');
+        $customer = $this->fixtures->get('customer');
+
+        // Ensure the quote is properly loaded with items
+        $quote = $this->quoteRepository->get($quote->getId());
+
+        $params = $this->hydrateParams([
+            'json' => true,
+            'as_js_varname' => 'iFrameResponse',
+        ]);
+        $itemId = $quote->getItemsCollection()->getFirstItem()->getId();
+        $post = $this->hydratePost([
+            'customer_id' => $customer->getId(),
+            'sidebar' => [
+                'add_cart_item' => [
+                    $itemId => 1,
+                ],
+            ],
+        ]);
+
+        $this->dispatchWitParams($params, $post);
+
+        // Verify handles are properly set for JSON response
+        $this->checkHandles(explode(',', $params['block']), true);
+
+        // Verify product was added to quote
+        $newQuote = $this->session->getQuote();
+        $newQuoteItemsCollection = $newQuote->getItemsCollection(false);
+        $this->assertNotNull($newQuoteItemsCollection->getItemByColumnValue('sku', $product->getSku()));
+
+        // Verify redirect happens (maintains 2-request pattern for PAT compatibility)
+        $response = $this->getResponse();
+        $this->assertTrue(
+            $response->isRedirect(),
+            'Response should redirect to ShowUpdateResult'
+        );
+        $this->assertRedirect($this->stringContains('sales/order_create/showUpdateResult'));
+
+        // Verify session stores compressed data to prevent bloat
+        $backendSession = $this->_objectManager->get(\Magento\Backend\Model\Session::class);
+        $this->assertTrue(
+            $backendSession->hasUpdateResult(),
+            'Session should contain compressed updateResult'
+        );
+        
+        $sessionData = $backendSession->getUpdateResult();
+        $this->assertIsArray($sessionData, 'Session data should be array for compressed format');
+        $this->assertTrue($sessionData['compressed'], 'Data should be marked as compressed');
+        $this->assertArrayHasKey('data', $sessionData, 'Compressed data should exist');
+        
+        // Verify compression actually reduces size
+        $decompressed = gzdecode($sessionData['data']);
+        $this->assertNotEmpty($decompressed, 'Decompressed data should not be empty');
+        
+        $originalSize = strlen($decompressed);
+        $compressedSize = strlen($sessionData['data']);
+        $this->assertLessThan(
+            $originalSize,
+            $compressedSize,
+            'Compressed size should be smaller than original'
+        );
     }
 
     /**

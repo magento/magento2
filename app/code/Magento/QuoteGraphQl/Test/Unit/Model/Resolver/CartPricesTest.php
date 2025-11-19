@@ -3,6 +3,7 @@
  * Copyright 2021 Adobe
  * All Rights Reserved.
  */
+
 declare(strict_types=1);
 
 namespace Magento\QuoteGraphQl\Test\Unit\Model\Resolver;
@@ -18,6 +19,8 @@ use Magento\QuoteGraphQl\Model\Cart\TotalsCollector;
 use Magento\QuoteGraphQl\Model\Resolver\CartPrices;
 use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\MockObject\MockObject;
+use Magento\Quote\Test\Unit\Helper\QuoteTestHelper;
+use Magento\Quote\Test\Unit\Helper\TotalTestHelper;
 
 /**
  * @see CartPrices
@@ -76,24 +79,19 @@ class CartPricesTest extends TestCase
         $this->fieldMock = $this->createMock(Field::class);
         $this->resolveInfoMock = $this->createMock(ResolveInfo::class);
         $this->contextMock = $this->createMock(Context::class);
-        $this->quoteMock = $this->getMockBuilder(Quote::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['getQuoteCurrencyCode'])
-            ->getMock();
-        $this->totalMock = $this->getMockBuilder(Total::class)
-            ->disableOriginalConstructor()
-            ->addMethods(
-                [
-                    'getSubtotal',
-                    'getSubtotalInclTax',
-                    'getGrandTotal',
-                    'getDiscountTaxCompensationAmount',
-                    'getDiscountAmount',
-                    'getDiscountDescription',
-                    'getAppliedTaxes'
-                ]
-            )
-            ->getMock();
+        $this->quoteMock = $this->createPartialMock(QuoteTestHelper::class, ['getQuoteCurrencyCode']);
+        $this->totalMock = $this->createPartialMock(
+            TotalTestHelper::class,
+            [
+                'getSubtotal',
+                'getSubtotalInclTax',
+                'getGrandTotal',
+                'getDiscountTaxCompensationAmount',
+                'getDiscountAmount',
+                'getDiscountDescription',
+                'getAppliedTaxes'
+            ]
+        );
         $this->cartPrices = new CartPrices(
             $this->totalsCollectorMock,
             $this->scopeConfigMock
