@@ -10,12 +10,14 @@ namespace Magento\CatalogSearch\Test\Unit\Ui\DataProvider\Product;
 use Magento\CatalogSearch\Model\ResourceModel\Search\Collection as SearchCollection;
 use Magento\CatalogSearch\Ui\DataProvider\Product\AddFulltextFilterToCollection;
 use Magento\Framework\Data\Collection;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 class AddFulltextFilterToCollectionTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var SearchCollection|MockObject
      */
@@ -27,37 +29,24 @@ class AddFulltextFilterToCollectionTest extends TestCase
     private $collection;
 
     /**
-     * @var ObjectManagerHelper
-     */
-    private $objectManager;
-
-    /**
      * @var AddFulltextFilterToCollection
      */
     private $model;
 
     protected function setUp(): void
     {
-        $this->objectManager = new ObjectManagerHelper($this);
-
-        $this->searchCollection = $this->getMockBuilder(SearchCollection::class)
-            ->onlyMethods(['addBackendSearchFilter', 'load', 'getAllIds'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->searchCollection->expects($this->any())
-            ->method('load')
-            ->willReturnSelf();
-        $this->collection = $this->getMockBuilder(Collection::class)
-            ->addMethods(['addIdFilter'])
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $this->model = $this->objectManager->getObject(
-            AddFulltextFilterToCollection::class,
-            [
-                'searchCollection' => $this->searchCollection
-            ]
+        $this->searchCollection = $this->createPartialMock(
+            SearchCollection::class,
+            ['addBackendSearchFilter', 'load', 'getAllIds']
         );
+        $this->searchCollection->method('load')->willReturnSelf();
+
+        $this->collection = $this->createPartialMockWithReflection(
+            Collection::class,
+            ['addIdFilter']
+        );
+
+        $this->model = new AddFulltextFilterToCollection($this->searchCollection);
     }
 
     public function testAddFilter()

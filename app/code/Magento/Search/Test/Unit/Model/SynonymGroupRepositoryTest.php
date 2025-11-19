@@ -57,7 +57,7 @@ class SynonymGroupRepositoryTest extends TestCase
         $synonymGroupModel->expects($this->once())->method('setSynonymGroup');
         $this->resourceModel->expects($this->once())->method('save')->with($synonymGroupModel);
 
-        $data = $this->getMockForAbstractClass(SynonymGroupInterface::class, [], '', false);
+        $data = $this->createMock(SynonymGroupInterface::class);
         $data->expects($this->once())->method('getGroupId')->willReturn(null);
         $data->expects($this->exactly(2))->method('getStoreId');
         $data->expects($this->exactly(2))->method('getWebsiteId');
@@ -82,7 +82,7 @@ class SynonymGroupRepositoryTest extends TestCase
             ->willReturn([['group_id' => 1, 'synonyms' => 'a,b,c']]);
         $this->resourceModel->expects($this->never())->method('save');
 
-        $data = $this->getMockForAbstractClass(SynonymGroupInterface::class, [], '', false);
+        $data = $this->createMock(SynonymGroupInterface::class);
         $data->expects($this->once())->method('getGroupId')->willReturn(null);
         $data->expects($this->once())->method('getStoreId');
         $data->expects($this->once())->method('getWebsiteId');
@@ -125,7 +125,7 @@ class SynonymGroupRepositoryTest extends TestCase
 
         $this->resourceModel->expects($this->once())->method('save')->with($newSynonymGroupModel);
 
-        $data = $this->getMockForAbstractClass(SynonymGroupInterface::class, [], '', false);
+        $data = $this->createMock(SynonymGroupInterface::class);
         $data->expects($this->once())->method('getGroupId')->willReturn(null);
         $data->expects($this->exactly(2))->method('getStoreId');
         $data->expects($this->exactly(2))->method('getWebsiteId');
@@ -153,7 +153,7 @@ class SynonymGroupRepositoryTest extends TestCase
         $synonymGroupModel->expects($this->once())->method('setSynonymGroup')->with('d,e,f');
         $this->resourceModel->expects($this->once())->method('save')->with($synonymGroupModel);
 
-        $data = $this->getMockForAbstractClass(SynonymGroupInterface::class, [], '', false);
+        $data = $this->createMock(SynonymGroupInterface::class);
         $data->expects($this->once())->method('getGroupId')->willReturn(1);
         $data->expects($this->exactly(2))->method('getStoreId');
         $data->expects($this->exactly(2))->method('getWebsiteId');
@@ -180,7 +180,7 @@ class SynonymGroupRepositoryTest extends TestCase
             ->willReturn([['group_id' => 2, 'synonyms' => 'd,h,i']]);
         $this->resourceModel->expects($this->never())->method('save');
 
-        $data = $this->getMockForAbstractClass(SynonymGroupInterface::class, [], '', false);
+        $data = $this->createMock(SynonymGroupInterface::class);
         $data->expects($this->once())->method('getGroupId')->willReturn(1);
         $data->expects($this->once())->method('getStoreId');
         $data->expects($this->once())->method('getWebsiteId');
@@ -219,7 +219,7 @@ class SynonymGroupRepositoryTest extends TestCase
 
         $this->resourceModel->expects($this->once())->method('save')->with($synonymGroupModel);
 
-        $data = $this->getMockForAbstractClass(SynonymGroupInterface::class, [], '', false);
+        $data = $this->createMock(SynonymGroupInterface::class);
         $data->expects($this->once())->method('getGroupId')->willReturn(1);
         $data->expects($this->exactly(2))->method('getStoreId');
         $data->expects($this->exactly(2))->method('getWebsiteId');
