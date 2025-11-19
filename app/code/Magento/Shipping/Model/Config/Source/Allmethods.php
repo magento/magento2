@@ -45,11 +45,14 @@ class Allmethods implements \Magento\Framework\Option\ArrayInterface
     public function toOptionArray($isActiveOnlyFlag = false)
     {
         $methods = [['value' => '', 'label' => '']];
-        $carriers = $this->_shippingConfig->getAllCarriers();
+        
+        if ($isActiveOnlyFlag) {
+            $carriers = $this->_shippingConfig->getActiveCarriers();
+        } else {
+            $carriers = $this->_shippingConfig->getAllCarriers();
+        }
+        
         foreach ($carriers as $carrierCode => $carrierModel) {
-            if (!$carrierModel->isActive() && (bool)$isActiveOnlyFlag === true) {
-                continue;
-            }
             $carrierMethods = $carrierModel->getAllowedMethods();
             if (!$carrierMethods) {
                 continue;
