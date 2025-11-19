@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\ConfigurableProduct\Test\Unit\Helper\Product\Options;
 
+use PHPUnit\Framework\Attributes\CoversClass;
 use Magento\Catalog\Api\ProductAttributeRepositoryInterface;
 use Magento\Catalog\Model\ResourceModel\Eav\Attribute as EavAttribute;
 use Magento\ConfigurableProduct\Api\Data\OptionValueInterface;
@@ -22,6 +23,7 @@ use PHPUnit\Framework\TestCase;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
+#[CoversClass(\Magento\ConfigurableProduct\Helper\Product\Options\Factory::class)]
 class FactoryTest extends TestCase
 {
     /**
@@ -61,22 +63,13 @@ class FactoryTest extends TestCase
     {
         $this->objectManager = new ObjectManager($this);
 
-        $this->configurable = $this->getMockBuilder(Configurable::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['canUseAttribute'])
-            ->getMock();
+        $this->configurable = $this->createPartialMock(Configurable::class, ['canUseAttribute']);
 
-        $this->attributeFactory = $this->getMockBuilder(AttributeFactory::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['create'])
-            ->getMock();
+        $this->attributeFactory = $this->createPartialMock(AttributeFactory::class, ['create']);
 
-        $this->optionValueFactory = $this->getMockBuilder(OptionValueInterfaceFactory::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['create'])
-            ->getMock();
+        $this->optionValueFactory = $this->createPartialMock(OptionValueInterfaceFactory::class, ['create']);
 
-        $this->productAttributeRepository = $this->getMockForAbstractClass(ProductAttributeRepositoryInterface::class);
+        $this->productAttributeRepository = $this->createMock(ProductAttributeRepositoryInterface::class);
 
         $this->factory = new Factory(
             $this->configurable,
@@ -86,9 +79,6 @@ class FactoryTest extends TestCase
         );
     }
 
-    /**
-     * @covers \Magento\ConfigurableProduct\Helper\Product\Options\Factory::create
-     */
     public function testCreateWithException()
     {
         $this->expectException('InvalidArgumentException');
@@ -100,18 +90,13 @@ class FactoryTest extends TestCase
             ]]
         ];
 
-        $attribute = $this->getMockBuilder(Attribute::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['setValues', 'getData'])
-            ->getMock();
+        $attribute = $this->createPartialMock(Attribute::class, ['setValues', 'getData']);
 
         $this->attributeFactory->expects(static::once())
             ->method('create')
             ->willReturn($attribute);
 
-        $eavAttribute = $this->getMockBuilder(EavAttribute::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $eavAttribute = $this->createMock(EavAttribute::class);
         $this->productAttributeRepository->expects(static::once())
             ->method('get')
             ->with($attributeId)
@@ -125,9 +110,6 @@ class FactoryTest extends TestCase
         $this->factory->create($data);
     }
 
-    /**
-     * @covers \Magento\ConfigurableProduct\Helper\Product\Options\Factory::create
-     */
     public function testCreate()
     {
         $attributeId = 90;
@@ -135,18 +117,13 @@ class FactoryTest extends TestCase
         $item = ['attribute_id' => $attributeId, 'values' => [['value_index' => $valueIndex]]];
         $data = [$item];
 
-        $attribute = $this->getMockBuilder(Attribute::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['setValues', 'setData'])
-            ->getMock();
+        $attribute = $this->createPartialMock(Attribute::class, ['setValues', 'setData']);
 
         $this->attributeFactory->expects(static::once())
             ->method('create')
             ->willReturn($attribute);
 
-        $eavAttribute = $this->getMockBuilder(EavAttribute::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $eavAttribute = $this->createMock(EavAttribute::class);
         $this->productAttributeRepository->expects(static::once())
             ->method('get')
             ->with($attributeId)
@@ -157,7 +134,7 @@ class FactoryTest extends TestCase
             ->with($eavAttribute)
             ->willReturn(true);
 
-        $option = $this->getMockForAbstractClass(OptionValueInterface::class);
+        $option = $this->createMock(OptionValueInterface::class);
         $option->expects(static::once())
             ->method('setValueIndex')
             ->with($valueIndex)

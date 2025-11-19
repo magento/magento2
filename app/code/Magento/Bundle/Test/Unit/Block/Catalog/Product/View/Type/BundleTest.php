@@ -7,6 +7,10 @@ declare(strict_types=1);
 
 namespace Magento\Bundle\Test\Unit\Block\Catalog\Product\View\Type;
 
+use Magento\Catalog\Test\Unit\Helper\BasePriceTestHelper;
+use Magento\Catalog\Test\Unit\Helper\ProductTestHelper;
+use Magento\Framework\Pricing\Test\Unit\Helper\AmountTestHelper;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\Bundle\Block\Catalog\Product\View\Type\Bundle as BundleBlock;
 use Magento\Bundle\Block\Catalog\Product\View\Type\Bundle\Option\Checkbox;
 use Magento\Bundle\Model\Option;
@@ -14,6 +18,7 @@ use Magento\Bundle\Model\Product\Price;
 use Magento\Bundle\Model\Product\PriceFactory;
 use Magento\Bundle\Model\Product\Type;
 use Magento\Bundle\Model\ResourceModel\Option\Collection;
+use Magento\Bundle\Pricing\Price\BundleOptionPrice;
 use Magento\Bundle\Pricing\Price\TierPrice;
 use Magento\Catalog\Helper\Product;
 use Magento\Catalog\Pricing\Price\BasePrice;
@@ -58,7 +63,7 @@ class BundleTest extends TestCase
     private $eventManager;
 
     /**
-     * @var \Magento\Catalog\Model\Product|MockObject
+     * @var ProductTestHelper
      */
     private $product;
 
@@ -79,48 +84,15 @@ class BundleTest extends TestCase
     {
         $objectHelper = new ObjectManager($this);
 
-        $this->bundleProductPriceFactory = $this->getMockBuilder(PriceFactory::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['create'])
-            ->getMock();
+        $this->bundleProductPriceFactory = $this->createPartialMock(PriceFactory::class, ['create']);
 
-        $this->product = $this->getMockBuilder(\Magento\Catalog\Model\Product::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(
-                [
-                    'getTypeInstance',
-                    'getPriceInfo',
-                    'getStoreId',
-                    'getPreconfiguredValues'
-                ]
-            )
-            ->addMethods(
-                [
-                    'getPriceType',
-                    'hasPreconfiguredValues',
-                    'getLowestPrice'
-                ]
-            )
-            ->getMock();
-        $registry = $this->getMockBuilder(Registry::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['registry'])
-            ->getMock();
-        $registry->expects($this->any())
-            ->method('registry')
-            ->willReturn($this->product);
-        $this->eventManager = $this->getMockBuilder(ManagerInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-        $this->jsonEncoder = $this->getMockBuilder(Encoder::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->catalogProduct = $this->getMockBuilder(Product::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->escaperMock = $this->getMockBuilder(Escaper::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->product = new ProductTestHelper();
+        $registry = $this->createPartialMock(Registry::class, ['registry']);
+        $registry->method('registry')->willReturn($this->product);
+        $this->eventManager = $this->createMock(ManagerInterface::class);
+        $this->jsonEncoder = $this->createMock(Encoder::class);
+        $this->catalogProduct = $this->createMock(Product::class);
+        $this->escaperMock = $this->createMock(Escaper::class);
         /** @var BundleBlock $bundleBlock */
         $this->bundleBlock = $objectHelper->getObject(
             BundleBlock::class,
@@ -134,10 +106,9 @@ class BundleTest extends TestCase
             ]
         );
 
-        $ruleProcessor = $this->getMockBuilder(
+        $ruleProcessor = $this->createMock(
             CollectionProcessor::class
-        )->disableOriginalConstructor()
-            ->getMock();
+        );
         $objectHelper->setBackwardCompatibleProperty(
             $this->bundleBlock,
             'catalogRuleProcessor',
@@ -150,18 +121,12 @@ class BundleTest extends TestCase
      */
     public function testGetOptionHtmlNoRenderer(): void
     {
-        $option = $this->getMockBuilder(Option::class)
-            ->onlyMethods(['getType'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $option->expects($this->any())->method('getType')->willReturn('checkbox');
+        $option = $this->createPartialMock(Option::class, ['getType']);
+        $option->method('getType')->willReturn('checkbox');
         $this->escaperMock->expects($this->once())->method('escapeHtml')->willReturn('checkbox');
         $expected='There is no defined renderer for "checkbox" option type.';
-        $layout = $this->getMockBuilder(Layout::class)
-            ->onlyMethods(['getChildName', 'getBlock'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $layout->expects($this->any())->method('getChildName')->willReturn(false);
+        $layout = $this->createPartialMock(Layout::class, ['getChildName', 'getBlock']);
+        $layout->method('getChildName')->willReturn(false);
         $this->bundleBlock->setLayout($layout);
         $this->assertEquals(
             $expected,
@@ -174,23 +139,15 @@ class BundleTest extends TestCase
      */
     public function testGetOptionHtml(): void
     {
-        $option = $this->getMockBuilder(Option::class)
-            ->onlyMethods(['getType'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $option = $this->createPartialMock(Option::class, ['getType']);
         $option->expects($this->once())->method('getType')->willReturn('checkbox');
 
-        $optionBlock = $this->getMockBuilder(Checkbox::class)
-            ->onlyMethods(['setOption', 'toHtml'])->disableOriginalConstructor()
-            ->getMock();
+        $optionBlock = $this->createPartialMock(Checkbox::class, ['setOption', 'toHtml']);
         $optionBlock->expects($this->any())->method('setOption')->willReturnSelf();
-        $optionBlock->expects($this->any())->method('toHtml')->willReturn('option html');
-        $layout = $this->getMockBuilder(Layout::class)
-            ->onlyMethods(['getChildName', 'getBlock'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $layout->expects($this->any())->method('getChildName')->willReturn('name');
-        $layout->expects($this->any())->method('getBlock')->willReturn($optionBlock);
+        $optionBlock->method('toHtml')->willReturn('option html');
+        $layout = $this->createPartialMock(Layout::class, ['getChildName', 'getBlock']);
+        $layout->method('getChildName')->willReturn('name');
+        $layout->method('getBlock')->willReturn($optionBlock);
         $this->bundleBlock->setLayout($layout);
 
         $this->assertEquals('option html', $this->bundleBlock->getOptionHtml($option));
@@ -262,19 +219,15 @@ class BundleTest extends TestCase
                 true
             )
         ];
-        $bundleProductPrice = $this->getMockBuilder(Price::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['getLowestPrice'])
-            ->getMock();
-        $this->product
-            ->method('getLowestPrice')
-            ->willReturnCallback(function ($arg1, $arg2) use ($baseAmount, $basePriceValue) {
-                if ($arg1 == $this->product && $arg2==$baseAmount) {
-                    return 999;
-                } elseif ($arg1 == $this->product && $arg2==$basePriceValue) {
-                    return 888;
-                }
-            });
+        $bundleProductPrice = $this->createPartialMock(Price::class, ['getLowestPrice']);
+        $this->product->setLowestPriceCallback(function ($arg1, $arg2) use ($baseAmount, $basePriceValue) {
+            if ($arg1 == $this->product && $arg2==$baseAmount) {
+                return 999;
+            } elseif ($arg1 == $this->product && $arg2==$basePriceValue) {
+                return 888;
+            }
+            return null;
+        });
         $this->bundleProductPriceFactory->expects($this->once())
             ->method('create')
             ->willReturn($bundleProductPrice);
@@ -299,9 +252,9 @@ class BundleTest extends TestCase
                 )
             ]
         );
-        $bundleOptionPriceMock = $this->getAmountPriceMock(
+        $bundleOptionPriceMock = $this->getBundleOptionPriceMock(
             $baseAmount,
-            $regularPriceMock,
+            $baseAmount,
             [['item' => $selections[0], 'value' => $basePriceValue, 'base_amount' => 321321]]
         );
         $prices = [
@@ -311,9 +264,7 @@ class BundleTest extends TestCase
             RegularPrice::PRICE_CODE => $regularPriceMock
         ];
         $priceInfo = $this->getPriceInfoMock($prices);
-        $this->product->expects($this->once())
-            ->method('hasPreconfiguredValues')
-            ->willReturn(true);
+        $this->product->setHasPreconfiguredValues(true);
         $preconfiguredValues = new DataObject(
             [
                 'bundle_option' => [
@@ -324,9 +275,7 @@ class BundleTest extends TestCase
                 ]
             ]
         );
-        $this->product->expects($this->once())
-            ->method('getPreconfiguredValues')
-            ->willReturn($preconfiguredValues);
+        $this->product->setPreconfiguredValues($preconfiguredValues);
 
         $this->updateBundleBlock(
             $options,
@@ -350,41 +299,23 @@ class BundleTest extends TestCase
      */
     private function updateBundleBlock(array $options, Base $priceInfo, int $priceType): void
     {
-        $this->eventManager->expects($this->any())->method('dispatch')->willReturn(true);
-        $optionCollection = $this->getMockBuilder(Collection::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $optionCollection->expects($this->any())
-            ->method('appendSelections')
-            ->willReturn($options);
+        $this->eventManager->method('dispatch')->willReturn(true);
+        $optionCollection = $this->createMock(Collection::class);
+        $optionCollection->method('appendSelections')->willReturn($options);
 
-        $selectionCollection = $this->getMockBuilder(\Magento\Bundle\Model\ResourceModel\Selection\Collection::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $selectionCollection = $this->createMock(\Magento\Bundle\Model\ResourceModel\Selection\Collection::class);
         $selectionCollection->expects($this->once())->method('addTierPriceData');
 
-        $typeInstance = $this->getMockBuilder(Type::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $typeInstance->expects($this->any())
-            ->method('getOptionsCollection')
-            ->willReturn($optionCollection);
-        $typeInstance->expects($this->any())
-            ->method('getStoreFilter')
-            ->willReturn(true);
+        $typeInstance = $this->createMock(Type::class);
+        $typeInstance->method('getOptionsCollection')->willReturn($optionCollection);
+        $typeInstance->method('getStoreFilter')->willReturn(true);
         $typeInstance->expects($this->once())
             ->method('getSelectionsCollection')
             ->willReturn($selectionCollection);
 
-        $this->product->expects($this->any())
-            ->method('getTypeInstance')
-            ->willReturn($typeInstance);
-        $this->product->expects($this->any())
-            ->method('getPriceInfo')
-            ->willReturn($priceInfo);
-        $this->product->expects($this->any())
-            ->method('getPriceType')
-            ->willReturn($priceType);
+        $this->product->setTypeInstance($typeInstance);
+        $this->product->setPriceInfo($priceInfo);
+        $this->product->setPriceType($priceType);
         $this->jsonEncoder->expects($this->any())
             ->method('encode')
             ->willReturnArgument(0);
@@ -397,10 +328,7 @@ class BundleTest extends TestCase
      */
     private function getPriceInfoMock($price): Base
     {
-        $priceInfoMock = $this->getMockBuilder(Base::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['getPrice'])
-            ->getMock();
+        $priceInfoMock = $this->createPartialMock(Base::class, ['getPrice']);
 
         if (is_array($price)) {
             $withArgs = $willReturnArgs = [];
@@ -418,9 +346,7 @@ class BundleTest extends TestCase
                     return $returnValue;
                 });
         } else {
-            $priceInfoMock->expects($this->any())
-                ->method('getPrice')
-                ->willReturn($price);
+            $priceInfoMock->method('getPrice')->willReturn($price);
         }
         return $priceInfoMock;
     }
@@ -430,68 +356,58 @@ class BundleTest extends TestCase
      *
      * @return MockObject
      */
-    private function getPriceMock($prices): MockObject
+    private function getPriceMock($prices)
     {
-        $onlyMethods = $addMethods = [];
-
-        foreach (array_keys($prices) as $methodName) {
-            if (method_exists(BasePrice::class, $methodName)) {
-                $onlyMethods[] = $methodName;
-            } else {
-                $addMethods[] = $methodName;
-            }
-        }
-        $priceMockBuilder = $this->getMockBuilder(BasePrice::class)
-            ->disableOriginalConstructor();
-
-        if ($onlyMethods) {
-            $priceMockBuilder->onlyMethods($onlyMethods);
-        }
-
-        if ($addMethods) {
-            $priceMockBuilder->addMethods($addMethods);
-        }
-        $priceMock = $priceMockBuilder->getMock();
+        $priceMock = new BasePriceTestHelper();
 
         foreach ($prices as $methodName => $amount) {
-            $priceMock->expects($this->any())
-                ->method($methodName)
-                ->willReturn($amount);
+            // Use the magic __call method or specific setters
+            if ($methodName === 'getPriceWithoutOption') {
+                $priceMock->setPriceWithoutOption($amount);
+            } elseif ($methodName === 'getAmount') {
+                $priceMock->setAmount($amount);
+            } else {
+                $priceMock->setTestData(strtolower(substr($methodName, 3)), $amount);
+            }
         }
 
         return $priceMock;
     }
 
     /**
+     * Create a BundleOptionPrice mock with getOptionSelectionAmount method
+     *
      * @param float $value
      * @param mixed $baseAmount
      * @param array $selectionAmounts
-     *
-     * @return AmountInterface|MockObject
+     * @return MockObject
      */
-    private function getAmountPriceMock($value, $baseAmount, array $selectionAmounts): AmountInterface
+    private function getBundleOptionPriceMock($value, $baseAmount, array $selectionAmounts): MockObject
     {
-        $amountPrice = $this->getMockBuilder(AmountInterface::class)->disableOriginalConstructor()
-            ->onlyMethods(['getValue', 'getBaseAmount'])
-            ->addMethods(['getOptionSelectionAmount'])
-            ->getMockForAbstractClass();
-        $amountPrice->expects($this->any())->method('getValue')->willReturn($value);
-        $amountPrice->expects($this->any())->method('getBaseAmount')->willReturn($baseAmount);
-        foreach ($selectionAmounts as $selectionAmount) {
-            $amountPrice->expects($this->any())
-                ->method('getOptionSelectionAmount')
-                ->with($selectionAmount['item'])
-                ->willReturn(
-                    new DataObject(
-                        [
-                            'value' => $selectionAmount['value'],
-                            'base_amount' => $selectionAmount['base_amount']
-                        ]
-                    )
-                );
-        }
+        $bundleOptionPrice = $this->createMock(BundleOptionPrice::class);
 
-        return $amountPrice;
+        // Mock getOptionSelectionAmount to return AmountInterface with proper values
+        $bundleOptionPrice->method('getOptionSelectionAmount')->willReturnCallback(
+            function ($selection) use ($selectionAmounts, $value, $baseAmount) {
+                // Check if this selection has specific amounts configured
+                foreach ($selectionAmounts as $selectionAmount) {
+                    if ($selection === $selectionAmount['item']) {
+                        $amount = new AmountTestHelper();
+                        $amount->setValue($selectionAmount['value']);
+                        $amount->setBaseAmount($selectionAmount['base_amount']);
+                        return $amount;
+                    }
+                }
+
+                // Default amount for other selections
+                $amount = new AmountTestHelper();
+                $amount->setValue($value);
+                $amount->setBaseAmount($baseAmount);
+                return $amount;
+            }
+        );
+
+        return $bundleOptionPrice;
     }
 
     /**
@@ -511,16 +427,13 @@ class BundleTest extends TestCase
         $type = 'checkbox',
         $isRequired = false
     ) {
-        $option = $this->getMockBuilder(Option::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['getId', 'getTitle', 'getType', 'getRequired'])
-            ->addMethods(['getSelections', 'getIsDefault'])
-            ->getMockForAbstractClass();
-        $option->expects($this->any())->method('getId')->willReturn($id);
-        $option->expects($this->any())->method('getTitle')->willReturn($title);
-        $option->expects($this->any())->method('getSelections')->willReturn($selections);
-        $option->expects($this->any())->method('getType')->willReturn($type);
-        $option->expects($this->any())->method('getRequired')->willReturn($isRequired);
+        // Use partial mock - all setters work via magic methods
+        $option = $this->createPartialMock(Option::class, []);
+        $option->setId($id);
+        $option->setTitle($title);
+        $option->setSelections($selections);
+        $option->setType($type);
+        $option->setRequired($isRequired);
 
         return $option;
     }
@@ -545,26 +458,18 @@ class BundleTest extends TestCase
         $isDefault = false,
         $isSalable = true
     ) {
-        $selection = $this->getMockBuilder(\Magento\Catalog\Model\Product::class)
-            ->onlyMethods(['getName', 'getPriceInfo', 'isSalable'])
-            ->addMethods(['getSelectionId', 'getSelectionQty', 'getSelectionCanChangeQty', 'getIsDefault'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $tierPrice = $this->getMockBuilder(TierPrice::class)->disableOriginalConstructor()
-            ->onlyMethods(['getTierPriceList'])
-            ->getMock();
-        $tierPrice->expects($this->any())->method('getTierPriceList')->willReturn($tierPriceList);
-        $priceInfo = $this->getMockBuilder(Base::class)->disableOriginalConstructor()
-            ->onlyMethods(['getPrice'])
-            ->getMock();
-        $priceInfo->expects($this->any())->method('getPrice')->willReturn($tierPrice);
-        $selection->expects($this->any())->method('getSelectionId')->willReturn($id);
-        $selection->expects($this->any())->method('getName')->willReturn($name);
-        $selection->expects($this->any())->method('getSelectionQty')->willReturn($qty);
-        $selection->expects($this->any())->method('getPriceInfo')->willReturn($priceInfo);
-        $selection->expects($this->any())->method('getSelectionCanChangeQty')->willReturn($isCanChangeQty);
-        $selection->expects($this->any())->method('getIsDefault')->willReturn($isDefault);
-        $selection->expects($this->any())->method('isSalable')->willReturn($isSalable);
+        $selection = new ProductTestHelper();
+        $tierPrice = $this->createPartialMock(TierPrice::class, ['getTierPriceList']);
+        $tierPrice->method('getTierPriceList')->willReturn($tierPriceList);
+        $priceInfo = $this->createPartialMock(Base::class, ['getPrice']);
+        $priceInfo->method('getPrice')->willReturn($tierPrice);
+        $selection->setSelectionId($id);
+        $selection->setName($name);
+        $selection->setSelectionQty($qty);
+        $selection->setPriceInfo($priceInfo);
+        $selection->setSelectionCanChangeQty($isCanChangeQty);
+        $selection->setIsDefault($isDefault);
+        $selection->setIsSalable($isSalable);
 
         return $selection;
     }
@@ -573,35 +478,28 @@ class BundleTest extends TestCase
      * @param bool $stripSelection
      *
      * @return void
-     * @dataProvider getOptionsDataProvider
      */
+    #[DataProvider('getOptionsDataProvider')]
     public function testGetOptions(bool $stripSelection): void
     {
         $newOptions = ['option_1', 'option_2'];
 
-        $optionCollection = $this->getMockBuilder(Collection::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $selectionConnection = $this->getMockBuilder(\Magento\Bundle\Model\ResourceModel\Selection\Collection::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $typeInstance = $this->getMockBuilder(Type::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $optionCollection = $this->createMock(Collection::class);
+        $selectionConnection = $this->createMock(\Magento\Bundle\Model\ResourceModel\Selection\Collection::class);
+        $typeInstance = $this->createMock(Type::class);
 
         $optionCollection->expects($this->any())->method('appendSelections')
             ->with($selectionConnection, $stripSelection, true)
             ->willReturn($newOptions);
         $typeInstance->expects($this->any())->method('setStoreFilter')->with(0, $this->product)
             ->willReturn($optionCollection);
-        $typeInstance->expects($this->any())->method('getStoreFilter')->willReturn(true);
-        $typeInstance->expects($this->any())->method('getOptionsCollection')->willReturn($optionCollection);
-        $typeInstance->expects($this->any())->method('getOptionsIds')->willReturn([1, 2]);
+        $typeInstance->method('getStoreFilter')->willReturn(true);
+        $typeInstance->method('getOptionsCollection')->willReturn($optionCollection);
+        $typeInstance->method('getOptionsIds')->willReturn([1, 2]);
         $typeInstance->expects($this->once())->method('getSelectionsCollection')->with([1, 2], $this->product)
             ->willReturn($selectionConnection);
-        $this->product->expects($this->any())
-            ->method('getTypeInstance')->willReturn($typeInstance);
-        $this->product->expects($this->any())->method('getStoreId')->willReturn(0);
+        $this->product->setTypeInstance($typeInstance);
+        $this->product->setStoreId(0);
         $this->catalogProduct->expects($this->once())->method('getSkipSaleableCheck')->willReturn(true);
 
         $this->assertEquals($newOptions, $this->bundleBlock->getOptions($stripSelection));

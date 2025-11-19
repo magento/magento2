@@ -10,6 +10,7 @@ namespace Magento\Elasticsearch\Test\Unit\Model\Adapter\FieldMapper;
 use Magento\Elasticsearch\Model\Adapter\FieldMapper\CopySearchableFieldsToSearchField;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Test mapping preprocessor CopySearchableFieldsToSearchField
@@ -19,14 +20,45 @@ class CopySearchableFieldsToSearchFieldTest extends TestCase
     /**
      * Test "copy_to" parameter should be added to searchable fields.
      *
-     * @dataProvider processDataProvider
      * @param array $mappingBefore
      * @param array $mappingAfter
      */
+    #[DataProvider('processDataProvider')]
     public function testProcess(array $mappingBefore, array $mappingAfter)
     {
         $objectManager = new ObjectManager($this);
         $model = $objectManager->getObject(CopySearchableFieldsToSearchField::class);
+        $this->assertEquals($mappingAfter, $model->process($mappingBefore));
+    }
+
+    /**
+     * Test excluded fields should not get "copy_to" parameter.
+     *
+     * @return void
+     */
+    public function testProcessWithExcludes(): void
+    {
+        $model = new CopySearchableFieldsToSearchField();
+        $mappingBefore = [
+            'sku' => [
+                'type' => 'text'
+            ],
+            'name' => [
+                'type' => 'text'
+            ]
+        ];
+        $mappingAfter = [
+            'sku' => [
+                'type' => 'text',
+                'copy_to' => [
+                    '_search'
+                ]
+            ],
+            'name' => [
+                'type' => 'text'
+            ]
+        ];
+        $model->addExclude(['name']);
         $this->assertEquals($mappingAfter, $model->process($mappingBefore));
     }
 

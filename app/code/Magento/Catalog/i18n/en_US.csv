@@ -218,6 +218,7 @@ Catalog,Catalog
 "The value of Admin scope can't be empty.","The value of Admin scope can't be empty."
 "You duplicated the product.","You duplicated the product."
 "This product doesn't exist.","This product doesn't exist."
+"Attribute set %1 does not exist.","Attribute set %1 does not exist."
 "Invalid product id. Should be numeric value greater than 0","Invalid product id. Should be numeric value greater than 0"
 Products,Products
 "A group with the same name already exists.","A group with the same name already exists."

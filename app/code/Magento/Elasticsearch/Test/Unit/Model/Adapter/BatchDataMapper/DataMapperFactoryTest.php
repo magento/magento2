@@ -40,9 +40,7 @@ class DataMapperFactoryTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->objectManagerMock = $this->getMockBuilder(ObjectManagerInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->objectManagerMock = $this->createMock(ObjectManagerInterface::class);
         $this->dataMappers = [
             'product' => 'productDataMapper',
         ];
@@ -96,7 +94,7 @@ class DataMapperFactoryTest extends TestCase
     {
         $this->objectManagerMock->expects($this->once())
             ->method('create')
-            ->willReturn($this->getMockForAbstractClass(BatchDataMapperInterface::class));
+            ->willReturn($this->createMock(BatchDataMapperInterface::class));
         $this->assertInstanceOf(BatchDataMapperInterface::class, $this->model->create('product'));
     }
 }

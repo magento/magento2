@@ -7,6 +7,8 @@ declare(strict_types=1);
 
 namespace Magento\Quote\Test\Unit\Model\ValidationRules;
 
+use Magento\Framework\Phrase;
+use Magento\Framework\Validation\ValidationResult;
 use Magento\Quote\Model\Quote\Address;
 use PHPUnit\Framework\MockObject\MockObject;
 use Magento\Framework\Validation\ValidationResultFactory;
@@ -38,11 +40,11 @@ class BillingAddressValidationRuleTest extends TestCase
     public function testValidate()
     {
         $storeId = 1;
-        $error = new \Magento\Framework\Phrase(
+        $error = new Phrase(
             'A customer with the same email address already exists in an associated website.'
         );
         $validationResult = [$error];
-        $validationResultObj = new \Magento\Framework\Validation\ValidationResult($validationResult);
+        $validationResultObj = new ValidationResult($validationResult);
         $this->validationResultFactoryMock->expects($this->once())->method('create')->with(
             ['errors' => $validationResult]
         )->willReturn($validationResultObj);

@@ -45,7 +45,7 @@ class ExportAbandonedCsvTest extends AbstractControllerTestCase
 
         $this->abstractBlockMock
             ->expects($this->once())
-            ->method('getCsv')
+            ->method('getCsvFile')
             ->willReturn($content);
 
         $this->layoutMock

@@ -21,6 +21,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\Session\SessionStartChecker;
 use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManager;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -105,11 +106,17 @@ class DefaultTest extends TestCase
     private $userContextMock;
 
     /**
+     * @var ObjectManager
+     */
+    private $objectManagerHelper;
+
+    /**
      * Sets up the fixture, for example, opens a network connection.
      * This method is called before a test is executed.
      */
     protected function setUp(): void
     {
+        $this->objectManagerHelper = new ObjectManager($this);
         $this->session = $this->_getSessionStub();
 
         $this->_storeManager = $this->createPartialMock(StoreManager::class, ['getStore']);
@@ -136,7 +143,7 @@ class DefaultTest extends TestCase
         $randomMock = $this->createMock(Random::class);
         $randomMock->method('getRandomString')->willReturn('random-string');
 
-        $this->userContextMock = $this->getMockForAbstractClass(UserContextInterface::class);
+        $this->userContextMock = $this->createMock(UserContextInterface::class);
 
         $this->_object = new DefaultModel(
             $this->session,
@@ -271,20 +278,18 @@ class DefaultTest extends TestCase
      */
     protected function _getSessionStub()
     {
-        $helper = new ObjectManager($this);
         $objects = [
             [
                 SessionStartChecker::class,
                 $this->createMock(SessionStartChecker::class)
             ]
         ];
-        $helper->prepareObjectManager($objects);
-        $sessionArgs = $helper->getConstructArguments(
+        $this->objectManagerHelper->prepareObjectManager($objects);
+        $sessionArgs = $this->objectManagerHelper->getConstructArguments(
             Session::class,
             ['storage' => new Storage()]
         );
         $session = $this->getMockBuilder(Session::class)
-            ->addMethods(['getUserCreateWord'])
             ->onlyMethods(['isLoggedIn'])
             ->setConstructorArgs($sessionArgs)
             ->getMock();
@@ -308,12 +313,10 @@ class DefaultTest extends TestCase
      */
     protected function _getHelperStub()
     {
-        $helper = $this->getMockBuilder(
-            Data::class
-        )->disableOriginalConstructor()
-            ->onlyMethods(
-                ['getConfig', 'getFonts', '_getWebsiteCode', 'getImgUrl']
-            )->getMock();
+        $helper = $this->createPartialMock(
+            Data::class,
+            ['getConfig', 'getFonts', '_getWebsiteCode', 'getImgUrl']
+        );
 
         $helper->expects(
             $this->any()
@@ -383,20 +386,18 @@ class DefaultTest extends TestCase
     protected function _getStoreStub()
     {
         $store = $this->getMockBuilder(Store::class)
-            ->addMethods(['isAdmin'])
             ->onlyMethods(['getBaseUrl'])
             ->disableOriginalConstructor()
             ->getMock();
         $store->expects($this->any())->method('getBaseUrl')->willReturn('http://localhost/media/');
-        $store->expects($this->any())->method('isAdmin')->willReturn(false);
         return $store;
     }
 
     /**
      * @param boolean $expectedResult
      * @param string $formId
-     * @dataProvider isShownToLoggedInUserDataProvider
      */
+    #[DataProvider('isShownToLoggedInUserDataProvider')]
     public function testIsShownToLoggedInUser($expectedResult, $formId)
     {
         $captcha = new DefaultModel(
@@ -422,9 +423,9 @@ class DefaultTest extends TestCase
 
     /**
      * @param string $string
-     * @dataProvider generateWordProvider
      * @throws \ReflectionException
      */
+    #[DataProvider('generateWordProvider')]
     public function testGenerateWord($string)
     {
         $randomMock = $this->createMock(Random::class);

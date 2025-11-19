@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\ConfigurableProduct\Test\Unit\Model\Product\Type;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\ConfigurableProduct\Model\Product\Type\VariationMatrix;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use PHPUnit\Framework\TestCase;
@@ -31,111 +32,78 @@ class VariationMatrixTest extends TestCase
     /**
      * Variations matrix test.
      *
-     * @param array $expectedResult
-     * @dataProvider variationProvider
+     * @param array $result
+     * @param array $input
      */
-    public function testGetVariations($expectedResult)
+    #[DataProvider('variationProvider')]
+    public function testGetVariations($result, $input)
     {
-        $this->assertEquals($expectedResult['result'], $this->model->getVariations($expectedResult['input']));
+        $this->assertEquals($result, $this->model->getVariations($input));
     }
 
     /**
      * Test data provider.
      */
+
     public static function variationProvider()
-    {   
+    {
         return [
             [
+                // result parameter
                 [
-                    'result' => [
-                        [
-                            130 => [
-                                'value' => '3',
-                                'label' => 'red',
-                                'price' => [
-                                    'value_index' => '3',
-                                    'pricing_value' => '',
-                                    'is_percent' => '0',
-                                    'include' => '1'
-                                ],
-                            ],
-                        ],
-                        [
-                            130 => [
-                                'value' => '4',
-                                'label' => 'blue',
-                                'price' => [
-                                    'value_index' => '4',
-                                    'pricing_value' => '',
-                                    'is_percent' => '0',
-                                    'include' => '1'
-                                ],
+                    [
+                        130 => [
+                            'value' => '3',
+                            'label' => 'red',
+                            'price' => [
+                                'value_index' => '3',
+                                'pricing_value' => '',
+                                'is_percent' => '0',
+                                'include' => '1'
                             ],
                         ],
                     ],
-                    'input' => [
+                    [
                         130 => [
-                            'values' => [
-                                [
-                                    'value_index' => '3',
-                                    'pricing_value' => '',
-                                    'is_percent' => '0',
-                                    'include' => '1'
-                                ],
-                                [
-                                    'value_index' => '4',
-                                    'pricing_value' => '',
-                                    'is_percent' => '0',
-                                    'include' => '1'
-                                ],
-                            ],
-                            'attribute_id' => '130',
-                            'options' => [
-                                [
-                                    'value' => '3',
-                                    'label' => 'red'
-                                ],
-                                ['value' => '4',
-                                    'label' => 'blue'
-                                ]
+                            'value' => '4',
+                            'label' => 'blue',
+                            'price' => [
+                                'value_index' => '4',
+                                'pricing_value' => '',
+                                'is_percent' => '0',
+                                'include' => '1'
                             ],
                         ],
-                    ]
+                    ],
                 ],
+                // input parameter
                 [
-                    'result' => [
-                        [
-                            130 => [
-                                'value' => '4',
-                                'label' => 'blue',
-                                'price' => [
-                                    'value_index' => '4',
-                                    'pricing_value' => '',
-                                    'is_percent' => '0',
-                                    'include' => '1'
-                                ],
+                    130 => [
+                        'values' => [
+                            [
+                                'value_index' => '3',
+                                'pricing_value' => '',
+                                'is_percent' => '0',
+                                'include' => '1'
                             ],
+                            [
+                                'value_index' => '4',
+                                'pricing_value' => '',
+                                'is_percent' => '0',
+                                'include' => '1'
+                            ],
+                        ],
+                        'attribute_id' => '130',
+                        'options' => [
+                            [
+                                'value' => '3',
+                                'label' => 'red'
+                            ],
+                            ['value' => '4',
+                                'label' => 'blue'
+                            ]
                         ],
                     ],
-                    'input' => [
-                        130 => [
-                            'values' => [
-                                [
-                                    'value_index' => '3',
-                                    'pricing_value' => '',
-                                    'is_percent' => '0',
-                                    'include' => '1'
-                                ]
-                            ],
-                            'attribute_id' => '',
-                            'options' => [
-                                [
-                                    'value' => '3',
-                                    'label' => 'red'
-                                ]
-                            ],
-                        ],
-                    ]
                 ]
             ]
         ];

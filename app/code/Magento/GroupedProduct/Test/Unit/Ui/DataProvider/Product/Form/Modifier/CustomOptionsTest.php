@@ -30,9 +30,7 @@ class CustomOptionsTest extends AbstractModifierTestCase
     {
         $data = ['data'];
 
-        $this->productMock->expects($this->once())
-            ->method('getTypeId')
-            ->willReturn('simple');
+        $this->productMock->setTypeId('simple');
         $this->arrayManagerMock->expects($this->never())
             ->method('findPath');
 
@@ -43,9 +41,7 @@ class CustomOptionsTest extends AbstractModifierTestCase
     {
         $data = ['data'];
 
-        $this->productMock->expects($this->once())
-            ->method('getTypeId')
-            ->willReturn(CustomOptionsModifier::PRODUCT_TYPE_GROUPED);
+        $this->productMock->setTypeId(CustomOptionsModifier::PRODUCT_TYPE_GROUPED);
         $this->arrayManagerMock->expects($this->once())
             ->method('findPath');
 
