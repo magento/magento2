@@ -15,6 +15,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Security\Model\Config;
 use Magento\Security\Model\Config\Source\ResetMethod;
 use Magento\Security\Model\ConfigInterface;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -48,7 +49,7 @@ class ConfigTest extends TestCase
             ['getValue', 'isSetFlag']
         );
 
-        $this->scopeMock =  $this->getMockForAbstractClass(ScopeInterface::class);
+        $this->scopeMock = $this->createMock(ScopeInterface::class);
 
         $objectManager = new ObjectManager($this);
         $this->model = $objectManager->getObject(
@@ -105,8 +106,8 @@ class ConfigTest extends TestCase
 
     /**
      * @param bool $isShared
-     * @dataProvider dataProviderBoolValues
      */
+    #[DataProvider('dataProviderBoolValues')]
     public function testIsAdminAccountSharingIsEnabled($isShared)
     {
         $this->scopeConfigMock->expects($this->once())
@@ -129,8 +130,8 @@ class ConfigTest extends TestCase
     /**
      * @param int $resetMethod
      * @param int $scope
-     * @dataProvider dataProviderResetMethodValues
      */
+    #[DataProvider('dataProviderResetMethodValues')]
     public function testGetPasswordResetProtectionType($resetMethod, $scope)
     {
         $this->scopeConfigMock->expects($this->once())
@@ -180,8 +181,8 @@ class ConfigTest extends TestCase
     /**
      * @param int $limitNumber
      * @param int $scope
-     * @dataProvider dataProviderNumberValueWithScope
      */
+    #[DataProvider('dataProviderNumberValueWithScope')]
     public function testGetMaxNumberPasswordResetRequests($limitNumber, $scope)
     {
         $this->scopeConfigMock->expects($this->once())
@@ -200,8 +201,8 @@ class ConfigTest extends TestCase
     /**
      * @param int $limitTime
      * @param int $scope
-     * @dataProvider dataProviderNumberValueWithScope
      */
+    #[DataProvider('dataProviderNumberValueWithScope')]
     public function testGetMinTimeBetweenPasswordResetRequests($limitTime, $scope)
     {
         $this->scopeConfigMock->expects($this->once())

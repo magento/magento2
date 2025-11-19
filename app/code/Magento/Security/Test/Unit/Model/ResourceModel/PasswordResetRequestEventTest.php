@@ -43,7 +43,7 @@ class PasswordResetRequestEventTest extends TestCase
 
         $this->resourceMock = $this->createMock(ResourceConnection::class);
 
-        $this->dbAdapterMock = $this->getMockForAbstractClass(AdapterInterface::class);
+        $this->dbAdapterMock = $this->createMock(AdapterInterface::class);
 
         $this->model = $objectManager->getObject(
             PasswordResetRequestEvent::class,
