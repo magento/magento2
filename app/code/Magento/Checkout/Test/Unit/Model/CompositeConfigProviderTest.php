@@ -29,7 +29,7 @@ class CompositeConfigProviderTest extends TestCase
     {
         $objectManager = new ObjectManager($this);
 
-        $this->configProviderMock = $this->getMockForAbstractClass(ConfigProviderInterface::class);
+        $this->configProviderMock = $this->createMock(ConfigProviderInterface::class);
         $this->model = $objectManager->getObject(
             CompositeConfigProvider::class,
             ['configProviders' => [$this->configProviderMock]]

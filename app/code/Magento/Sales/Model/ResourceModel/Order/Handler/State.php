@@ -8,6 +8,8 @@ namespace Magento\Sales\Model\ResourceModel\Order\Handler;
 
 use Magento\Sales\Model\Order;
 use Magento\Sales\Model\Order\Invoice;
+use Magento\Catalog\Model\Product\Type;
+use Magento\Catalog\Model\Product\Type\AbstractType;
 
 /**
  * Checking order status and adjusting order status before saving
@@ -60,7 +62,9 @@ class State
      */
     private function checkForCompleteState(Order $order, ?string $currentState): bool
     {
-        if ($currentState === Order::STATE_PROCESSING && !$order->canShip()) {
+        if ($currentState === Order::STATE_PROCESSING
+            && (!$order->canShip() || $this->areAllItemsFulfilled($order))
+        ) {
             return true;
         }
 
@@ -96,7 +100,7 @@ class State
     {
         if (in_array($currentState, [Order::STATE_PROCESSING, Order::STATE_COMPLETE])
             && !$order->canCreditmemo()
-            && !$order->canShip()
+            && (!$order->canShip() || $this->areAllItemsFulfilled($order))
             && $order->getIsNotVirtual()
         ) {
             return true;
@@ -107,6 +111,49 @@ class State
         }
 
         return false;
+    }
+
+    /**
+     * Determine whether all shippable items have been fulfilled by shipment, refund, or cancellation.
+     *
+     * @param Order $order
+     * @return bool
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     */
+    private function areAllItemsFulfilled(Order $order): bool
+    {
+        foreach ($order->getAllItems() as $item) {
+            if ($item->getIsVirtual() || $item->getLockedDoShip()) {
+                continue;
+            }
+
+            // For bundle shipped together, evaluate fulfillment using the parent only
+            $parentItem = $item->getParentItem();
+            if ($parentItem && $parentItem->getProductType() === Type::TYPE_BUNDLE) {
+                $parentProduct = $parentItem->getProduct();
+                if ($parentProduct && $parentProduct->getShipmentType() == AbstractType::SHIPMENT_TOGETHER) {
+                    continue;
+                }
+            }
+
+            $subject = $parentItem && $parentItem->getProductType() === Type::TYPE_BUNDLE
+            && $parentItem->getProduct()
+            && $parentItem->getProduct()->getShipmentType() == AbstractType::SHIPMENT_TOGETHER
+                ? $parentItem
+                : $item;
+
+            $qtyOrdered = (int) $subject->getQtyOrdered();
+            $qtyCanceled = (int) $subject->getQtyCanceled();
+            $qtyShipped  = (int) $subject->getQtyShipped();
+            $qtyRefunded = (int) $subject->getQtyRefunded();
+
+            $openQty = $qtyOrdered - $qtyCanceled - $qtyShipped - $qtyRefunded;
+            if ($openQty > 0) {
+                return false;
+            }
+        }
+
+        return true;
     }
 
     /**

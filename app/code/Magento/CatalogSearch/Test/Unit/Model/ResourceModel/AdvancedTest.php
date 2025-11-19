@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\CatalogSearch\Test\Unit\Model\ResourceModel;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\Catalog\Model\ResourceModel\Eav\Attribute;
 use Magento\CatalogSearch\Model\ResourceModel\Advanced;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
@@ -30,9 +31,7 @@ class AdvancedTest extends TestCase
         $this->model = $helper->getObject(Advanced::class);
     }
 
-    /**
-     * @dataProvider prepareConditionDataProvider
-     */
+    #[DataProvider('prepareConditionDataProvider')]
     public function testPrepareCondition($backendType, $value, $expected)
     {
         /** @var Attribute|MockObject $attributeMock */

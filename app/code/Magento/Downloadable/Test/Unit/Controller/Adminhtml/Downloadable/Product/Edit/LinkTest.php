@@ -7,12 +7,15 @@ declare(strict_types=1);
 
 namespace Magento\Downloadable\Test\Unit\Controller\Adminhtml\Downloadable\Product\Edit;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\Downloadable\Controller\Adminhtml\Downloadable\Product\Edit\Link;
 use Magento\Downloadable\Helper\Download;
 use Magento\Downloadable\Helper\File;
+use Magento\Downloadable\Test\Unit\Helper\LinkTestHelper;
 use Magento\Framework\App\Request\Http;
 use Magento\Framework\App\ResponseInterface;
 use Magento\Framework\ObjectManager\ObjectManager;
+use Magento\Framework\App\Test\Unit\Helper\ResponseTestHelper;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -64,13 +67,17 @@ class LinkTest extends TestCase
     {
         $this->objectManagerHelper = new ObjectManagerHelper($this);
 
-        $this->request = $this->getMockBuilder(Http::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->response = $this->getMockBuilder(ResponseInterface::class)
-            ->addMethods(['setHttpResponseCode', 'clearBody', 'sendHeaders', 'setHeader'])
-            ->onlyMethods(['sendResponse'])
-            ->getMockForAbstractClass();
+        $this->request = $this->createMock(Http::class);
+        $this->response = $this->createPartialMock(
+            ResponseTestHelper::class,
+            [
+                'setHttpResponseCode',
+                'clearBody',
+                'setHeader',
+                'sendHeaders',
+                'sendResponse'
+            ]
+        );
         $this->fileHelper = $this->createPartialMock(
             File::class,
             ['getFilePath']
@@ -86,23 +93,21 @@ class LinkTest extends TestCase
                 'getContentDisposition'
             ]
         );
-        $this->linkModel = $this->getMockBuilder(Link::class)
-            ->addMethods(
-                [
-                    'load',
-                    'getId',
-                    'getLinkType',
-                    'getLinkUrl',
-                    'getSampleUrl',
-                    'getSampleType',
-                    'getBasePath',
-                    'getBaseSamplePath',
-                    'getLinkFile',
-                    'getSampleFile'
-                ]
-            )
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->linkModel = $this->createPartialMock(
+            LinkTestHelper::class,
+            [
+                'load',
+                'getId',
+                'getLinkType',
+                'getLinkUrl',
+                'getSampleUrl',
+                'getSampleType',
+                'getBasePath',
+                'getBaseSamplePath',
+                'getLinkFile',
+                'getSampleFile'
+            ]
+        );
         $this->objectManager = $this->createPartialMock(
             ObjectManager::class,
             [
@@ -125,9 +130,9 @@ class LinkTest extends TestCase
      * @param string $fileType
      *
      * @return void
-     * @dataProvider executeDataProvider
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
+    #[DataProvider('executeDataProvider')]
     public function testExecuteFile(string $fileType): void
     {
         $fileSize = 58493;
@@ -184,7 +189,7 @@ class LinkTest extends TestCase
         $this->response->expects($this->once())->method('sendHeaders')->willReturnSelf();
         $this->objectManager
             ->method('get')
-            ->willReturnCallback(fn($param) => match ([$param]) {
+            ->willReturnCallback(fn ($param) => match ([$param]) {
                 [File::class] => $this->fileHelper,
                 [\Magento\Downloadable\Model\Link::class] => $this->linkModel,
                 [Download::class] => $this->downloadHelper,
@@ -219,8 +224,8 @@ class LinkTest extends TestCase
      * @param string $fileType
      *
      * @return void
-     * @dataProvider executeDataProvider
      */
+    #[DataProvider('executeDataProvider')]
     public function testExecuteUrl(string $fileType): void
     {
         $this->request

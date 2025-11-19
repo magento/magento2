@@ -10,7 +10,7 @@ define(function () {
     'use strict';
 
     return {
-        'reset': '#reset_ui_form',
+        'reset': '#reset',
         'save': '#save',
         'saveAndContinue': '#save_and_continue'
     };

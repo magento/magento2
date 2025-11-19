@@ -214,16 +214,28 @@ class RuleTest extends TestCase
             'created_at' => '2014-06-25 13:14:30',
             'updated_at' => '2014-06-25 14:37:15'
         ];
-        $this->storeManager->expects($this->any())->method('getWebsites')->with(false)
-            ->willReturn([$this->websiteModel, $this->websiteModel, $this->websiteModel]);
-        $this->websiteModel
-            ->method('getId')
-            ->willReturnOnConsecutiveCalls('1', '2', '3');
-        $this->websiteModel->expects($this->any())->method('getDefaultStore')
-            ->willReturn($this->storeModel);
-        $this->storeModel
-            ->method('getId')
-            ->willReturnOnConsecutiveCalls('1', '2', '3');
+
+        $website1 = $this->createPartialMock(Website::class, ['getId', 'getDefaultStore']);
+        $website1->method('getId')->willReturn('1');
+        $store1 = $this->createPartialMock(Store::class, ['getId']);
+        $store1->method('getId')->willReturn('1');
+        $website1->method('getDefaultStore')->willReturn($store1);
+
+        $website2 = $this->createPartialMock(Website::class, ['getId', 'getDefaultStore']);
+        $website2->method('getId')->willReturn('2');
+        $store2 = $this->createPartialMock(Store::class, ['getId']);
+        $store2->method('getId')->willReturn('2');
+        $website2->method('getDefaultStore')->willReturn($store2);
+
+        $website3 = $this->createPartialMock(Website::class, ['getId', 'getDefaultStore']);
+        $website3->method('getId')->willReturn('3');
+        $store3 = $this->createPartialMock(Store::class, ['getId']);
+        $store3->method('getId')->willReturn('3');
+        $website3->method('getDefaultStore')->willReturn($store3);
+
+        $this->storeManager->expects($this->any())->method('getWebsites')
+            ->willReturn([$website1, $website2, $website3]);
+
         $this->combineFactory->expects($this->any())->method('create')
             ->willReturn($this->condition);
         $this->condition->expects($this->any())->method('validate')
@@ -233,6 +245,9 @@ class RuleTest extends TestCase
             ->willReturn(1);
 
         $this->rule->setWebsiteIds('1,2');
+
+        $this->initializeCachedProperties();
+
         $this->rule->callbackValidateProduct($args);
 
         $matchingProducts = $this->rule->getMatchingProductIds();
@@ -460,5 +475,24 @@ class RuleTest extends TestCase
         $this->rule->setData('rule_id', $ruleId);
         $this->ruleProductProcessor->expects($this->once())->method('reindexRow')->with($ruleId);
         $this->rule->reindex();
+    }
+
+    /**
+     * Initialize cached properties using reflection
+     *
+     * @return void
+     */
+    private function initializeCachedProperties(): void
+    {
+        $reflection = new \ReflectionClass($this->rule);
+
+        $cachedWebsitesMapProperty = $reflection->getProperty('cachedWebsitesMap');
+        $cachedWebsitesMapProperty->setValue($this->rule, [1 => 1, 2 => 2, 3 => 3]);
+
+        $cachedWebsiteIdsArrayProperty = $reflection->getProperty('cachedWebsiteIdsArray');
+        $cachedWebsiteIdsArrayProperty->setValue($this->rule, ['1', '2']);
+
+        $cachedConditionsProperty = $reflection->getProperty('cachedConditions');
+        $cachedConditionsProperty->setValue($this->rule, $this->condition);
     }
 }

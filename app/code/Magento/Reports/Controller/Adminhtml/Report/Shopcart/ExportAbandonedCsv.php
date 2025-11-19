@@ -27,7 +27,7 @@ class ExportAbandonedCsv extends ShopCartAbandoned implements HttpGetActionInter
         $fileName = 'shopcart_abandoned.csv';
         $content = $this->_view->getLayout()->createBlock(
             \Magento\Reports\Block\Adminhtml\Shopcart\Abandoned\Grid::class
-        )->getCsv();
+        )->getCsvFile();
 
         return $this->_fileFactory->create($fileName, $content, DirectoryList::VAR_DIR);
     }

@@ -269,6 +269,8 @@ return [
         Magento\TestFramework\ObjectManager\Config::class => null,
         Magento\Framework\Escaper::class => null,
         Magento\Framework\Css\PreProcessor\Adapter\CssInliner::class => null, // FIXME
+        \Magento\Framework\DB\Adapter\SqlVersionProvider::class => null,
+        \Magento\Framework\Setup\Declaration\Schema\Dto\Factories\Table::class => null,
     ],
     '*-fromConstructed' => [
         // phpcs:disable Generic.Files.LineLength.TooLong

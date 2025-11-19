@@ -15,6 +15,7 @@ use Magento\Store\Api\Data\StoreInterface;
 use Magento\Store\Model\StoreSwitcher\ContextInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class RedirectDataPreprocessorTest extends TestCase
 {
@@ -73,10 +74,10 @@ class RedirectDataPreprocessorTest extends TestCase
     }
 
     /**
-     * @dataProvider processDataProvider
      * @param array $mock
      * @param array $data
      */
+    #[DataProvider('processDataProvider')]
     public function testProcess(array $mock, array $data): void
     {
         $this->customerSession->method('isLoggedIn')

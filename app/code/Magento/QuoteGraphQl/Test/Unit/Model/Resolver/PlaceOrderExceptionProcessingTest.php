@@ -11,7 +11,6 @@ use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\GraphQl\Model\Query\Context;
-use Magento\GraphQl\Model\Query\ContextExtensionInterface;
 use Magento\Quote\Model\Quote;
 use Magento\QuoteGraphQl\Model\Cart\GetCartForCheckout;
 use Magento\QuoteGraphQl\Model\Cart\PlaceOrder as PlaceOrderModel;
@@ -21,6 +20,7 @@ use Magento\QuoteGraphQl\Model\Resolver\PlaceOrder;
 use Magento\Sales\Api\OrderRepositoryInterface;
 use Magento\SalesGraphQl\Model\Formatter\Order as OrderFormatter;
 use Magento\Store\Api\Data\StoreInterface;
+use Magento\Quote\Test\Unit\Helper\DataObjectTestHelper;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -74,16 +74,9 @@ class PlaceOrderExceptionProcessingTest extends TestCase
         $this->placeOrderModelMock->method('execute')->willThrowException($exception);
 
         $contextMock = $this->createMock(Context::class);
-        $extensionAttributesMock = $this->getMockBuilder(ContextExtensionInterface::class)
-            ->disableOriginalConstructor()
-            ->addMethods(
-                [
-                    'getStore',
-                ]
-            )
-            ->getMock();
-        $extensionAttributesMock->method('getStore')->willReturn($this->createMock(StoreInterface::class));
-        $contextMock->method('getExtensionAttributes')->willReturn($extensionAttributesMock);
+        $extAttrs = new DataObjectTestHelper();
+        $extAttrs->setStore($this->createMock(StoreInterface::class));
+        $contextMock->method('getExtensionAttributes')->willReturn($extAttrs);
 
         $field = $this->createMock(Field::class);
         $info = $this->createMock(ResolveInfo::class);

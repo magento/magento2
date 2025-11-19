@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\Bundle\Test\Unit\Model\ResourceModel\Indexer;
 
+use Magento\Framework\DB\Select;
 use Magento\Bundle\Model\ResourceModel\Indexer\Price;
 use Magento\Catalog\Model\Indexer\Product\Price\TableMaintainer;
 use Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\BasePriceModifier;
@@ -18,8 +19,10 @@ use Magento\Framework\EntityManager\EntityMetadataInterface;
 use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Framework\Event\ManagerInterface;
 use Magento\Framework\Module\Manager;
+use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use ReflectionException;
 
 /**
  * Class to test Bundle products Price indexer resource model
@@ -98,7 +101,7 @@ class PriceTest extends TestCase
     }
 
     /**
-     * @throws \ReflectionException
+     * @throws ReflectionException|Exception
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
@@ -206,18 +209,16 @@ class PriceTest extends TestCase
             }
         });
 
-        $select = $this->createMock(\Magento\Framework\DB\Select::class);
+        $select = $this->createMock(Select::class);
         $select->expects($this->once())->method('from')->willReturn($select);
         $select->expects($this->exactly(5))->method('join')->willReturn($select);
         $select->expects($this->exactly(2))->method('where')->willReturn($select);
         $select->expects($this->once())->method('columns')->willReturn($select);
-        $select->expects($this->any())->method('__toString')->willReturn($selectQuery);
+        $select->method('__toString')->willReturn($selectQuery);
 
         $this->connectionMock->expects($this->once())->method('getIfNullSql');
         $this->connectionMock->expects($this->once())->method('getLeastSql');
-        $this->connectionMock->expects($this->any())
-            ->method('select')
-            ->willReturn($select);
+        $this->connectionMock->method('select')->willReturn($select);
         $this->connectionMock->expects($this->exactly(9))->method('quoteIdentifier');
         $this->connectionMock->expects($this->once())->method('query')->with($processedQuery);
 
@@ -290,7 +291,7 @@ class PriceTest extends TestCase
      * @param string $methodName
      * @param array $args
      * @return string
-     * @throws \ReflectionException
+     * @throws ReflectionException
      */
     private function invokeMethodViaReflection(string $methodName, array $args = []): string
     {

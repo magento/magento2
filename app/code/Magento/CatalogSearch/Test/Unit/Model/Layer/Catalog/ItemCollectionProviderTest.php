@@ -27,7 +27,7 @@ class ItemCollectionProviderTest extends TestCase
             CollectionFactory::class,
             ['create']
         );
-        $collectionFactoryMock->expects($this->any())->method('create')->willReturn($collectionMock);
+        $collectionFactoryMock->method('create')->willReturn($collectionMock);
 
         $objectManager = new ObjectManagerHelper($this);
         $provider = $objectManager->getObject(
