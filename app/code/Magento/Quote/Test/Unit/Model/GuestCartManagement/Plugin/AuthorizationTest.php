@@ -32,7 +32,7 @@ class AuthorizationTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->userContextMock = $this->getMockForAbstractClass(UserContextInterface::class);
+        $this->userContextMock = $this->createMock(UserContextInterface::class);
         $this->quoteManagementMock = $this->createMock(GuestCartManagement::class);
         $this->plugin = new Authorization(
             $this->userContextMock

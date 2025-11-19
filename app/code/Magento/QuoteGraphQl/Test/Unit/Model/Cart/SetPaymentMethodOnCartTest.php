@@ -37,7 +37,7 @@ class SetPaymentMethodOnCartTest extends TestCase
         parent::setUp();
 
         $objectManager = new ObjectManager($this);
-        $this->rateLimiterMock = $this->getMockForAbstractClass(PaymentSavingRateLimiterInterface::class);
+        $this->rateLimiterMock = $this->createMock(PaymentSavingRateLimiterInterface::class);
         $this->model = $objectManager->getObject(
             SetPaymentMethodOnCart::class,
             ['savingRateLimiter' => $this->rateLimiterMock]

@@ -38,12 +38,11 @@ class SaveTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->registryMock = $this->getMockBuilder(Registry::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->productMock = $this->getMockBuilder(ProductInterface::class)
-            ->addMethods(['isReadonly', 'isDuplicable', 'isComposite'])
-            ->getMockForAbstractClass();
+        $this->registryMock = $this->createMock(Registry::class);
+        $this->productMock = $this->createPartialMock(
+            \Magento\Catalog\Model\Product::class,
+            ['isReadonly', 'isDuplicable', 'isComposite']
+        );
 
         $this->registryMock->expects(static::any())
             ->method('registry')

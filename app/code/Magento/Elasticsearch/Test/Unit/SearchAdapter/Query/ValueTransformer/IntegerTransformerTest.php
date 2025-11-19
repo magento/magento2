@@ -10,6 +10,7 @@ namespace Magento\Elasticsearch\Test\Unit\SearchAdapter\Query\ValueTransformer;
 use Magento\Elasticsearch\SearchAdapter\Query\ValueTransformer\IntegerTransformer;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Test value transformer
@@ -38,8 +39,8 @@ class IntegerTransformerTest extends TestCase
      * @param string $value
      * @param int|null $expected
      * @return void
-     * @dataProvider valuesDataProvider
      */
+    #[DataProvider('valuesDataProvider')]
     public function testIntegerTransform(string $value, ?int $expected): void
     {
         $this->assertEquals($expected, $this->model->transform($value));

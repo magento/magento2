@@ -8,11 +8,12 @@ declare(strict_types=1);
 namespace Magento\Checkout\Test\Unit\Plugin;
 
 use Magento\Checkout\Plugin\Model\Quote\ResetQuoteAddresses;
-use Magento\Quote\Api\Data\CartExtensionInterface;
+use Magento\Checkout\Test\Unit\Helper\ExtensionAttributesTestHelper;
 use Magento\Quote\Model\Quote;
 use Magento\Quote\Model\Quote\Address;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Class ResetQuoteAddressesTest
@@ -52,7 +53,7 @@ class ResetQuoteAddressesTest extends TestCase
     private $quoteMock;
 
     /**
-     * @var CartExtensionInterface|MockObject
+     * @var ExtensionAttributesTestHelper
      */
     private $extensionAttributesMock;
 
@@ -68,14 +69,7 @@ class ResetQuoteAddressesTest extends TestCase
             'getExtensionAttributes',
             'isVirtual',
         ]);
-        $this->extensionAttributesMock = $this->getMockBuilder(CartExtensionInterface::class)
-            ->addMethods(
-                [
-                    'getShippingAssignments',
-                    'setShippingAssignments'
-                ]
-            )
-            ->getMockForAbstractClass();
+        $this->extensionAttributesMock = new ExtensionAttributesTestHelper();
 
         $this->plugin = new ResetQuoteAddresses();
     }
@@ -85,9 +79,7 @@ class ResetQuoteAddressesTest extends TestCase
      */
     public function testRemovingTheAddressesFromNonEmptyQuote()
     {
-        $this->quoteMock->expects($this->any())
-            ->method('getAllVisibleItems')
-            ->willReturn(static::STUB_QUOTE_ITEMS);
+        $this->quoteMock->method('getAllVisibleItems')->willReturn(static::STUB_QUOTE_ITEMS);
         $this->quoteMock->expects($this->never())
             ->method('getAllAddresses')
             ->willReturnSelf();
@@ -98,30 +90,23 @@ class ResetQuoteAddressesTest extends TestCase
     /**
      * Test clearing the addresses from an empty quote with addresses
      *
-     * @dataProvider quoteAddressesDataProvider
-     *
      * @param bool $isVirtualQuote
      * @param array $extensionAttributes
      */
+    #[DataProvider('quoteAddressesDataProvider')]
     public function testClearingAddressesSuccessfullyFromEmptyQuoteWithAddress(
         bool $isVirtualQuote,
         array $extensionAttributes
     ) {
-        $this->quoteMock->expects($this->any())
-            ->method('getAllVisibleItems')
-            ->willReturn([]);
+        $this->quoteMock->method('getAllVisibleItems')->willReturn([]);
 
         $address = $this->createPartialMock(Address::class, ['getId']);
 
-        $address->expects($this->any())
-            ->method('getId')
-            ->willReturn(static::STUB_ADDRESS_ID);
+        $address->method('getId')->willReturn(static::STUB_ADDRESS_ID);
 
         $addresses = [$address];
 
-        $this->quoteMock->expects($this->any())
-            ->method('getAllAddresses')
-            ->willReturn($addresses);
+        $this->quoteMock->method('getAllAddresses')->willReturn($addresses);
 
         $this->quoteMock->expects($this->exactly(count($addresses)))
             ->method('removeAddress')
@@ -136,26 +121,22 @@ class ResetQuoteAddressesTest extends TestCase
             ->willReturn($isVirtualQuote);
 
         if (!$isVirtualQuote && $extensionAttributes) {
-            $this->extensionAttributesMock->expects($this->any())
-                ->method('getShippingAssignments')
-                ->willReturn([static::STUB_SHIPPING_ASSIGNMENTS]);
-
-            $this->extensionAttributesMock->expects($this->once())
-                ->method('setShippingAssignments')
-                ->willReturnSelf();
+            $this->extensionAttributesMock->setShippingAssignments([static::STUB_SHIPPING_ASSIGNMENTS]);
         }
 
         $this->plugin->afterRemoveItem($this->quoteMock, $this->quoteMock, static::STUB_ITEM_ID);
+        if (!$isVirtualQuote && $extensionAttributes) {
+            $this->assertSame([], $this->extensionAttributesMock->getShippingAssignments());
+        }
     }
 
     /**
      * Test clearing the addresses from an empty quote
      *
-     * @dataProvider quoteNoAddressesDataProvider
-     *
      * @param bool $isVirtualQuote
      * @param array $extensionAttributes
      */
+    #[DataProvider('quoteNoAddressesDataProvider')]
     public function testClearingTheAddressesFromEmptyQuote(
         bool $isVirtualQuote,
         array $extensionAttributes
@@ -163,13 +144,9 @@ class ResetQuoteAddressesTest extends TestCase
         $quoteVisibleItems = [];
         $addresses = [];
 
-        $this->quoteMock->expects($this->any())
-            ->method('getAllVisibleItems')
-            ->willReturn($quoteVisibleItems);
+        $this->quoteMock->method('getAllVisibleItems')->willReturn($quoteVisibleItems);
 
-        $this->quoteMock->expects($this->any())
-            ->method('getAllAddresses')
-            ->willReturn($addresses);
+        $this->quoteMock->method('getAllAddresses')->willReturn($addresses);
 
         $this->quoteMock->expects($this->once())
             ->method('getExtensionAttributes')
@@ -180,16 +157,13 @@ class ResetQuoteAddressesTest extends TestCase
             ->willReturn($isVirtualQuote);
 
         if (!$isVirtualQuote && $extensionAttributes) {
-            $this->extensionAttributesMock->expects($this->any())
-                ->method('getShippingAssignments')
-                ->willReturn($extensionAttributes);
-
-            $this->extensionAttributesMock->expects($this->once())
-                ->method('setShippingAssignments')
-                ->willReturnSelf();
+            $this->extensionAttributesMock->setShippingAssignments($extensionAttributes);
         }
 
         $this->plugin->afterRemoveItem($this->quoteMock, $this->quoteMock, static::STUB_ITEM_ID);
+        if (!$isVirtualQuote && $extensionAttributes) {
+            $this->assertSame([], $this->extensionAttributesMock->getShippingAssignments());
+        }
     }
 
     /**

@@ -86,7 +86,7 @@ class GuestPaymentMethodManagementTest extends TestCase
 
     public function testGetList()
     {
-        $paymentMethod = $this->getMockForAbstractClass(PaymentMethodInterface::class);
+        $paymentMethod = $this->createMock(PaymentMethodInterface::class);
         $this->paymentMethodManagementMock->expects($this->once())->method('getList')->willReturn([$paymentMethod]);
         $this->assertEquals([$paymentMethod], $this->model->getList($this->maskedCartId));
     }

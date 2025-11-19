@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -111,8 +111,7 @@ class AttributeTest extends TestCase
                 'index' => false,
             ],
             'dropdown_attribute_value' => [
-                'type' => 'text',
-                'copy_to' => ['_search'],
+                'type' => 'text'
             ],
         ];
 
@@ -130,6 +129,24 @@ class AttributeTest extends TestCase
         $this->assertTrue($this->indexerProcessor->getIndexer()->isInvalid());
 
         $this->assertEquals($mappedAttributesAfter, $this->getMappingProperties());
+        
+        $this->indexerProcessor->getIndexer()->reindexAll();
+
+        $expectedResultAfterReindex = [
+            'dropdown_attribute' => [
+                'type' => 'integer',
+            ],
+            'dropdown_attribute_value' => [
+                'type' => 'text',
+                'copy_to' => ['_search'],
+            ],
+        ];
+
+        $mappedAttributesAfterReindex = $this->getMappingProperties();
+        $this->assertEquals(
+            $expectedResultAfterReindex,
+            array_diff_key($mappedAttributesAfterReindex, $mappedAttributesBefore)
+        );
     }
 
     /**

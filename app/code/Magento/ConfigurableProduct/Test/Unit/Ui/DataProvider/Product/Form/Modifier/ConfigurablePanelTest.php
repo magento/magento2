@@ -44,12 +44,9 @@ class ConfigurablePanelTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->productLocatorMock = $this->getMockBuilder(LocatorInterface::class)
-            ->getMockForAbstractClass();
-        $this->urlBuilderMock = $this->getMockBuilder(UrlInterface::class)
-            ->getMockForAbstractClass();
-        $this->productMock = $this->getMockBuilder(ProductInterface::class)
-            ->getMockForAbstractClass();
+        $this->productLocatorMock = $this->createMock(LocatorInterface::class);
+        $this->urlBuilderMock = $this->createMock(UrlInterface::class);
+        $this->productMock = $this->createMock(ProductInterface::class);
 
         $this->productLocatorMock->expects(static::any())
             ->method('getProduct')

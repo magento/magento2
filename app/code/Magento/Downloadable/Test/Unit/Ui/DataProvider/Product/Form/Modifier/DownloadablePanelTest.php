@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\Downloadable\Test\Unit\Ui\DataProvider\Product\Form\Modifier;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Model\Locator\LocatorInterface;
 use Magento\Downloadable\Api\Data\ProductAttributeInterface;
@@ -53,8 +54,8 @@ class DownloadablePanelTest extends TestCase
     protected function setUp(): void
     {
         $this->objectManagerHelper = new ObjectManagerHelper($this);
-        $this->productMock = $this->getMockForAbstractClass(ProductInterface::class);
-        $this->locatorMock = $this->getMockForAbstractClass(LocatorInterface::class);
+        $this->productMock = $this->createMock(ProductInterface::class);
+        $this->locatorMock = $this->createMock(LocatorInterface::class);
         $this->arrayManagerMock = $this->createMock(ArrayManager::class);
         $this->downloadablePanel = $this->objectManagerHelper->getObject(
             DownloadablePanel::class,
@@ -69,8 +70,8 @@ class DownloadablePanelTest extends TestCase
      * @param string $typeId
      * @param string $isDownloadable
      * @return void
-     * @dataProvider modifyDataDataProvider
      */
+    #[DataProvider('modifyDataDataProvider')]
     public function testModifyData($typeId, $isDownloadable)
     {
         $productId = 1;

@@ -12,8 +12,10 @@ use Magento\Catalog\Model\Product\Option as ProductOption;
 use Magento\Catalog\Model\ProductOptions\ConfigInterface;
 use Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\CustomOptions;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Store\Api\Data\StoreInterface;
 use Magento\Store\Model\StoreManagerInterface;
+use Magento\Store\Test\Unit\Helper\StoreTestHelper;
 use PHPUnit\Framework\MockObject\MockObject;
 
 class CustomOptionsTest extends AbstractModifierTestCase
@@ -46,26 +48,16 @@ class CustomOptionsTest extends AbstractModifierTestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $this->productOptionsConfigMock = $this->getMockBuilder(ConfigInterface::class)
-            ->getMockForAbstractClass();
+        $this->productOptionsConfigMock = $this->createMock(ConfigInterface::class);
         $this->productOptionsPriceMock = $this->getMockBuilder(ProductOptionsPrice::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->storeManagerMock = $this->getMockBuilder(StoreManagerInterface::class)
-            ->getMockForAbstractClass();
-        $this->storeMock = $this->getMockBuilder(StoreInterface::class)
-            ->addMethods(['getBaseCurrency'])
-            ->getMockForAbstractClass();
-        $this->priceCurrency = $this->getMockBuilder(PriceCurrencyInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->storeManagerMock = $this->createMock(StoreManagerInterface::class);
+        $this->storeMock = new StoreTestHelper();
+        $this->priceCurrency = $this->createMock(PriceCurrencyInterface::class);
 
-        $this->storeManagerMock->expects($this->any())
-            ->method('getStore')
-            ->willReturn($this->storeMock);
-        $this->storeMock->expects($this->any())
-            ->method('getBaseCurrency')
-            ->willReturn($this->priceCurrency);
+        $this->storeManagerMock->method('getStore')->willReturn($this->storeMock);
+        $this->storeMock->setBaseCurrency($this->priceCurrency);
     }
 
     /**
@@ -135,21 +127,15 @@ class CustomOptionsTest extends AbstractModifierTestCase
             ]
         ];
 
-        $this->productMock->expects($this->any())
-            ->method('getId')
-            ->willReturn($productId);
-        $this->productMock->expects($this->once())
-            ->method('getOptions')
-            ->willReturn($options);
+        $this->productMock->setId($productId);
+        $this->productMock->setOptions($options);
 
         $this->assertSame($resultData, $this->getModel()->modifyData($originalData));
     }
 
     public function testModifyMeta()
     {
-        $this->priceCurrency->expects($this->any())
-            ->method('getCurrencySymbol')
-            ->willReturn('$');
+        $this->priceCurrency->method('getCurrencySymbol')->willReturn('$');
         $this->productOptionsConfigMock->expects($this->once())
             ->method('getAll')
             ->willReturn([]);
@@ -203,9 +189,7 @@ class CustomOptionsTest extends AbstractModifierTestCase
             ->getMock();
 
         $productOptionMock->setData($data);
-        $productOptionMock->expects($this->any())
-            ->method('getValues')
-            ->willReturn($values);
+        $productOptionMock->method('getValues')->willReturn($values);
 
         return $productOptionMock;
     }

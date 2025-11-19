@@ -90,11 +90,10 @@ class SampleRepositoryTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->productMock = $this->getMockBuilder(Product::class)
-            ->addMethods(['setDownloadableData'])
-            ->onlyMethods(['__wakeup', 'getTypeId', 'save', 'getId', 'getStoreId', 'getData'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->productMock = $this->createPartialMock(
+            \Magento\Catalog\Test\Unit\Helper\ProductTestHelper::class,
+            ['setDownloadableData', '__wakeup', 'getTypeId', 'save', 'getId', 'getStoreId', 'getData']
+        );
         $this->repositoryMock = $this->createMock(ProductRepository::class);
         $this->productTypeMock = $this->createMock(Type::class);
         $this->contentValidatorMock = $this->createMock(ContentValidator::class);
@@ -108,14 +107,11 @@ class SampleRepositoryTest extends TestCase
             SampleFactory::class,
             ['create']
         );
-        $this->productTypeMock = $this->getMockBuilder(Type::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->sampleDataObjectFactory = $this->getMockBuilder(
-            SampleInterfaceFactory::class
-        )->onlyMethods(['create'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->productTypeMock = $this->createMock(Type::class);
+        $this->sampleDataObjectFactory = $this->createPartialMock(
+            SampleInterfaceFactory::class,
+            ['create']
+        );
 
         $this->service = new SampleRepository(
             $this->repositoryMock,
@@ -127,25 +123,17 @@ class SampleRepositoryTest extends TestCase
             $this->sampleFactoryMock
         );
 
-        $this->entityMetadataMock = $this->getMockBuilder(
-            EntityMetadataInterface::class
-        )->getMockForAbstractClass();
+        $this->entityMetadataMock = $this->createMock(EntityMetadataInterface::class);
         $linkRepository = new \ReflectionClass(get_class($this->service));
         $metadataPoolProperty = $linkRepository->getProperty('metadataPool');
-        $this->metadataPoolMock = $this->getMockBuilder(
-            MetadataPool::class
-        )->disableOriginalConstructor()
-            ->getMock();
+        $this->metadataPoolMock = $this->createMock(MetadataPool::class);
         $metadataPoolProperty->setAccessible(true);
         $metadataPoolProperty->setValue(
             $this->service,
             $this->metadataPoolMock
         );
         $saveHandlerProperty = $linkRepository->getProperty('sampleTypeHandler');
-        $this->sampleHandlerMock = $this->getMockBuilder(
-            Sample::class
-        )->disableOriginalConstructor()
-            ->getMock();
+        $this->sampleHandlerMock = $this->createMock(Sample::class);
         $saveHandlerProperty->setAccessible(true);
         $saveHandlerProperty->setValue(
             $this->service,
@@ -162,7 +150,7 @@ class SampleRepositoryTest extends TestCase
      */
     protected function getSampleMock(array $sampleData)
     {
-        $sampleMock = $this->getMockForAbstractClass(SampleInterface::class);
+        $sampleMock = $this->createMock(SampleInterface::class);
 
         if (isset($sampleData['id'])) {
             $sampleMock->method('getId')->willReturn($sampleData['id']);
@@ -264,11 +252,10 @@ class SampleRepositoryTest extends TestCase
         $this->repositoryMock->method('get')->with($productSku, true)
             ->willReturn($this->productMock);
         $this->productMock->method('getData')->willReturn($productId);
-        $existingSampleMock = $this->getMockBuilder(\Magento\Downloadable\Model\Sample::class)
-            ->addMethods(['getProductId'])
-            ->onlyMethods(['__wakeup', 'getId', 'load'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $existingSampleMock = $this->createPartialMock(
+            \Magento\Downloadable\Test\Unit\Helper\SampleTestHelper::class,
+            ['getProductId', '__wakeup', 'getId', 'load']
+        );
         $this->sampleFactoryMock->expects($this->once())->method('create')
             ->willReturn($existingSampleMock);
         $sampleMock = $this->getSampleMock($sampleData);
@@ -315,11 +302,10 @@ class SampleRepositoryTest extends TestCase
         $this->repositoryMock->method('get')->with($productSku, true)
             ->willReturn($this->productMock);
         $this->productMock->method('getData')->willReturn($productId);
-        $existingSampleMock = $this->getMockBuilder(\Magento\Downloadable\Model\Sample::class)
-            ->addMethods(['getProductId'])
-            ->onlyMethods(['__wakeup', 'getId', 'load'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $existingSampleMock = $this->createPartialMock(
+            \Magento\Downloadable\Test\Unit\Helper\SampleTestHelper::class,
+            ['getProductId', '__wakeup', 'getId', 'load']
+        );
         $this->sampleFactoryMock->expects($this->once())->method('create')
             ->willReturn($existingSampleMock);
         $sampleMock = $this->getSampleMock($sampleData);
@@ -377,11 +363,10 @@ class SampleRepositoryTest extends TestCase
         $this->repositoryMock->method('get')->with($productSku, true)
             ->willReturn($this->productMock);
         $this->productMock->method('getData')->willReturn($productId);
-        $existingSampleMock = $this->getMockBuilder(\Magento\Downloadable\Model\Sample::class)
-            ->addMethods(['getProductId'])
-            ->onlyMethods(['__wakeup', 'getId', 'load', 'save'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $existingSampleMock = $this->createPartialMock(
+            \Magento\Downloadable\Test\Unit\Helper\SampleTestHelper::class,
+            ['getProductId', '__wakeup', 'getId', 'load', 'save']
+        );
         $existingSampleMock->method('getId')->willReturn($sampleId);
         $existingSampleMock->expects($this->once())->method('load')->with($sampleId)->willReturnSelf();
         $existingSampleMock->method('getProductId')->willReturn($productId);
@@ -438,9 +423,10 @@ class SampleRepositoryTest extends TestCase
             'sample_file' => '/r/o/rock.melody.ogg',
         ];
 
-        $sampleMock = $this->getMockBuilder(\Magento\Downloadable\Model\Sample::class)
-            ->addMethods(['getStoreTitle'])
-            ->onlyMethods([
+        $sampleMock = $this->createPartialMock(
+            \Magento\Downloadable\Test\Unit\Helper\SampleTestHelper::class,
+            [
+                'getStoreTitle',
                 'getId',
                 'getTitle',
                 'getSampleType',
@@ -449,11 +435,10 @@ class SampleRepositoryTest extends TestCase
                 'getSortOrder',
                 'getData',
                 '__wakeup'
-            ])
-            ->disableOriginalConstructor()
-            ->getMock();
+            ]
+        );
 
-        $sampleInterfaceMock = $this->getMockForAbstractClass(SampleInterface::class);
+        $sampleInterfaceMock = $this->createMock(SampleInterface::class);
 
         $this->repositoryMock->expects($this->once())
             ->method('get')
