@@ -56,8 +56,8 @@ class RemoveAssetAfterRemoveImageTest extends TestCase
         $this->processorSubjectMock = $this->createMock(ProcessorSubject::class);
         $this->productMock = $this->createMock(Product::class);
 
-        $this->deleteMediaAssetByPathMock = $this->getMockForAbstractClass(DeleteAssetsByPathsInterface::class);
-        $this->loggerMock = $this->getMockForAbstractClass(LoggerInterface::class);
+        $this->deleteMediaAssetByPathMock = $this->createMock(DeleteAssetsByPathsInterface::class);
+        $this->loggerMock = $this->createMock(LoggerInterface::class);
 
         $this->plugin = (new ObjectManagerHelper($this))->getObject(
             RemoveAssetAfterRemoveImage::class,

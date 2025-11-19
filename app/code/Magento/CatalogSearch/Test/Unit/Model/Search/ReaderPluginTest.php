@@ -46,7 +46,7 @@ class ReaderPluginTest extends TestCase
         $result = $this->object->afterRead(
             $this->getMockBuilder(ReaderInterface::class)
                 ->disableOriginalConstructor()
-                ->getMockForAbstractClass(),
+                ->getMock(),
             $readerConfig,
             null
         );
