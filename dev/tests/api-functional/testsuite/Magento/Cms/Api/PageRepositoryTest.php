@@ -419,7 +419,7 @@ class PageRepositoryTest extends WebapiAbstract
      * @dataProvider byStoresProvider
      * @magentoApiDataFixture Magento/Cms/_files/pages.php
      * @magentoApiDataFixture Magento/Store/_files/second_website_with_store_group_and_store.php
-     * @param string $requestStore
+     * @param string $requestStore$rules
      * @return void
      */
     public function testDeleteByStores(string $requestStore): void

@@ -11,7 +11,7 @@
         <service class="Magento\LoginAsCustomerApi\Api\GenerateLoginCustomerTokenInterface"
                  method="createCustomerAccessToken"/>
         <resources>
-            <resource ref="anonymous"/>
+            <resource ref="Magento_LoginAsCustomerApi::token"/>
         </resources>
     </route>
 </routes>
