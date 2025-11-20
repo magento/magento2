@@ -48,6 +48,9 @@ This module provides API for ability to login into customer account for an admin
 - `\Magento\LoginAsCustomerApi\Api\SetLoggedAsCustomerCustomerIdInterface`:
     - set id of customer admin is logged as
 
+- `\Magento\LoginAsCustomerApi\Api\GenerateLoginCustomerTokenInterface`:
+    - generate an integration access token from a valid Login As Customer secret
+
 For information about a public API, see [Public interfaces & APIs](https://developer.adobe.com/commerce/php/development/components/api-concepts/).
 
 ## Additional information
