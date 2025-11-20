@@ -65,12 +65,7 @@ class GenerateLoginCustomerTokenTest extends WebapiAbstract
             'rest' => [
                 'resourcePath' => self::RESOURCE_PATH,
                 'httpMethod' => Request::HTTP_METHOD_POST,
-            ],
-            'soap' => [
-                'service' => self::SERVICE_NAME,
-                'serviceVersion' => self::SERVICE_VERSION,
-                'operation' => self::SERVICE_NAME . 'Get',
-            ],
+            ]
         ];
     }
 }
