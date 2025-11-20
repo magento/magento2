@@ -419,15 +419,14 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
                 ['category_id', 'descendant_id']
             )
         );
+        $data = [];
         foreach ($categoryIds as $catId) {
-            $connection->insert(
-                $tempTableName,
-                [
-                    'category_id' => $catId,
-                    'descendant_id' => $catId
-                ]
-            );
+            $data[] = [
+                'category_id'   => $catId,
+                'descendant_id' => $catId
+            ];
         }
+        $connection->insertMultiple($tempTableName, $data);
         $select = $connection->select()
             ->from(
                 ['t' => $tempTableName],
