@@ -53,7 +53,7 @@ class PagerTest extends TestCase
      *
      * @return void
      */
-    public function testGetNextItemId()
+    public function testGetNextItemId(): void
     {
         $item = new DataObject(['id' => 10]);
 
@@ -85,7 +85,7 @@ class PagerTest extends TestCase
      *
      * @return void
      */
-    public function testGetNextItemIdReturnsFalse()
+    public function testGetNextItemIdReturnsFalse(): void
     {
         $item = new DataObject([]);
 
@@ -117,7 +117,7 @@ class PagerTest extends TestCase
      *
      * @return void
      */
-    public function testGetPreviousItemId()
+    public function testGetPreviousItemId(): void
     {
         $item = new DataObject(['id' => 4]);
 
@@ -149,7 +149,7 @@ class PagerTest extends TestCase
      *
      * @return void
      */
-    public function testGetPreviousItemIdReturnsFalse()
+    public function testGetPreviousItemIdReturnsFalse(): void
     {
         $item = new DataObject([]);
 

@@ -3,7 +3,6 @@
  * Copyright 2013 Adobe
  * All Rights Reserved.
  */
-
 namespace Magento\Review\Helper\Action;
 
 use Magento\Framework\App\Helper\AbstractHelper;
@@ -18,7 +17,7 @@ use Magento\Review\Model\ResourceModel\Review\CollectionFactory;
 class Pager extends AbstractHelper
 {
     /**
-     * Review collection factory
+     * Review collection model factory
      *
      * @var CollectionFactory
      */
@@ -42,9 +41,9 @@ class Pager extends AbstractHelper
      * Get the next review id.
      *
      * @param int $id
-     * @return int|false 
+     * @return int|false
      */
-    public function getNextItemId($id)
+    public function getNextItemId($id): int|false
     {
         return $this->getRelativeReviewId($id, 'gt', 'ASC');
     }
@@ -55,7 +54,7 @@ class Pager extends AbstractHelper
      * @param int $id
      * @return int|false
      */
-    public function getPreviousItemId($id)
+    public function getPreviousItemId($id): int|false
     {
         return $this->getRelativeReviewId($id, 'lt', 'DESC');
     }
@@ -63,12 +62,12 @@ class Pager extends AbstractHelper
     /**
      * Get the review id based on comparison and order.
      *
-     * @param int $id 
-     * @param string $operator 
-     * @param string $order 
+     * @param int $id
+     * @param string $operator
+     * @param string $order
      * @return int|false
      */
-    private function getRelativeReviewId($id, $operator, $order)
+    private function getRelativeReviewId($id, $operator, $order): int|false
     {
         $collection = $this->reviewCollectionFactory->create();
         $collection->addFieldToFilter('main_table.review_id', [$operator => $id])
