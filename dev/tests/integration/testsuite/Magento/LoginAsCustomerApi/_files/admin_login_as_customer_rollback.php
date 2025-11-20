@@ -40,4 +40,3 @@ $rulesResource->delete($rules);
 /** @var RoleResource $roleResource */
 $roleResource = Bootstrap::getObjectManager()->get(RoleResource::class);
 $roleResource->delete($role);
-
