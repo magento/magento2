@@ -61,27 +61,17 @@ class FullTest extends TestCase
         $engineProvider = $this->getMockBuilder(EngineProvider::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $eventManager = $this->getMockBuilder(ManagerInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $eventManager = $this->createMock(ManagerInterface::class);
         $catalogSearchData = $this->getMockBuilder(Data::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $scopeConfig = $this->getMockBuilder(ScopeConfigInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-        $this->storeManager = $this->getMockBuilder(StoreManagerInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $scopeConfig = $this->createMock(ScopeConfigInterface::class);
+        $this->storeManager = $this->createMock(StoreManagerInterface::class);
         $dateTime = $this->getMockBuilder(DateTime::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $localeResolver = $this->getMockBuilder(ResolverInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-        $localeDate = $this->getMockBuilder(TimezoneInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $localeResolver = $this->createMock(ResolverInterface::class);
+        $localeDate = $this->createMock(TimezoneInterface::class);
         $fulltextResource = $this->getMockBuilder(Fulltext::class)
             ->disableOriginalConstructor()
             ->getMock();

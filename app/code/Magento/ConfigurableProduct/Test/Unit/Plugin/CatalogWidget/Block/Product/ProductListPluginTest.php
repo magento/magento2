@@ -7,6 +7,8 @@ declare(strict_types=1);
 
 namespace Magento\ConfigurableProduct\Test\Unit\Plugin\CatalogWidget\Block\Product;
 
+use Magento\Catalog\Api\Data\ProductInterface;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\Product\Visibility;
 use Magento\Catalog\Model\ResourceModel\Product\Collection;
@@ -71,7 +73,7 @@ class ProductListPluginTest extends TestCase
 
     /**
      * @return void
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      */
     public function testAfterCreateCollectionNoCount(): void
     {
@@ -87,7 +89,7 @@ class ProductListPluginTest extends TestCase
 
     /**
      * @return void
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      */
     public function testAfterCreateCollectionSuccess(): void
     {
@@ -104,7 +106,7 @@ class ProductListPluginTest extends TestCase
         $entity->expects($this->once())->method('getLinkField')->willReturn($linkField);
         $this->metadataPool->expects($this->once())
             ->method('getMetadata')
-            ->with(\Magento\Catalog\Api\Data\ProductInterface::class)
+            ->with(ProductInterface::class)
             ->willReturn($entity);
 
         $select = $this->createMock(Select::class);

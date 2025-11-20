@@ -44,10 +44,7 @@ class SidebarTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->itemMock = $this->getMockBuilder(DataObject::class)
-            ->addMethods(['getProduct'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->itemMock = new \Magento\Framework\DataObject\Test\Unit\Helper\DataObjectTestHelper();
         $this->productMock = $this->createMock(Product::class);
         $this->subjectMock = $this->createMock(
             AbstractSidebar::class
@@ -60,7 +57,7 @@ class SidebarTest extends TestCase
 
     public function testAroundGetItemQtyWhenProductGrouped()
     {
-        $this->itemMock->expects($this->once())->method('getProduct')->willReturn($this->productMock);
+        $this->itemMock->setProduct($this->productMock);
         $this->productMock->expects(
             $this->once()
         )->method(
@@ -76,7 +73,7 @@ class SidebarTest extends TestCase
 
     public function testAroundGetItemQtyWhenProductNotGrouped()
     {
-        $this->itemMock->expects($this->once())->method('getProduct')->willReturn($this->productMock);
+        $this->itemMock->setProduct($this->productMock);
         $this->productMock->expects($this->once())->method('getTypeId')->willReturn('one');
         $this->sidebarMock->aroundGetItemQty($this->subjectMock, $this->closureMock, $this->itemMock);
     }

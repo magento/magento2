@@ -57,13 +57,9 @@ class PriceTest extends TestCase
         $shippingPrice = 5;
         $convertedPrice = "$5";
 
-        $shippingRateMock = $this->getMockBuilder(Rate::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['getPrice'])
-            ->getMock();
-        $shippingRateMock->expects($this->once())
-            ->method('getPrice')
-            ->willReturn($shippingPrice);
+        $rateReflection = new \ReflectionClass(Rate::class);
+        $shippingRateMock = $rateReflection->newInstanceWithoutConstructor();
+        $shippingRateMock->setData('price', $shippingPrice);
 
         $this->priceCurrency->expects($this->once())
             ->method('convertAndFormat')

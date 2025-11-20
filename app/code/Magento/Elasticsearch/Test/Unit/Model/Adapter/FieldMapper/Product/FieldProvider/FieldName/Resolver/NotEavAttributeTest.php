@@ -11,6 +11,7 @@ use Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\AttributeAdapter;
 use Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider\FieldName\Resolver\NotEavAttribute;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * @SuppressWarnings(PHPMD)
@@ -37,13 +38,13 @@ class NotEavAttributeTest extends TestCase
     }
 
     /**
-     * @dataProvider getFieldNameProvider
      * @param $attributeCode
      * @param $isEavAttribute
      * @param $context
      * @param $expected
      * @return void
      */
+    #[DataProvider('getFieldNameProvider')]
     public function testGetFieldName($attributeCode, $isEavAttribute, $context, $expected)
     {
         $attributeMock = $this->getMockBuilder(AttributeAdapter::class)

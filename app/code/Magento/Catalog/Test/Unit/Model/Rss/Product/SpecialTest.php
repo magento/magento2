@@ -80,9 +80,8 @@ class SpecialTest extends TestCase
         );
         $customerGroupId = 1;
         $productCollection->expects($this->once())->method('addPriceDataFieldFilter')->willReturnSelf();
-        $productCollection->expects($this->once())->method('addPriceData')->with($storeId, $customerGroupId)->willReturnSelf(
-            
-        );
+        $productCollection->expects($this->once())->method('addPriceData')->with($storeId, $customerGroupId)
+            ->willReturnSelf();
         $productCollection->expects($this->once())->method('addAttributeToSelect')->willReturnSelf();
         $productCollection->expects($this->once())->method('addAttributeToSort')->willReturnSelf();
 
