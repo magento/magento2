@@ -265,22 +265,16 @@ class CollectionTest extends TestCase
         $withs = [];
         foreach ($categoryIds as $categoryId) {
             $withs[] = [
-                'category_id'   => $categoryId,
+                'category_id' => $categoryId,
                 'descendant_id' => $categoryId
             ];
         }
-        $callIndex = 0;
         $this->connection
-            ->expects($this->exactly(count($categoryIds)))
-            ->method('insert')
+            ->expects($this->once())
+            ->method('insertMultiple')
             ->with(
                 $this->stringContains('temp_category_descendants_'),
-                $this->callback(function($args) use (&$callIndex, $withs) {
-                    $expected = $withs[$callIndex];
-                    $valid = $args === $expected;
-                    $callIndex++;
-                    return $valid;
-                })
+                $withs
             );
         $this->select->method('from')->willReturnSelf();
         $this->select->method('joinLeft')->willReturnSelf();
