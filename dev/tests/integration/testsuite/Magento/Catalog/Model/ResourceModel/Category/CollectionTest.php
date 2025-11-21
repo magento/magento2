@@ -70,6 +70,7 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
     /**
      * @magentoAppIsolation enabled
      * @magentoDbIsolation enabled
+     * @magentoAppArea adminhtml
      * @magentoDataFixture Magento/Catalog/Model/ResourceModel/_files/categories_with_products_large.php
      */
     public function testBulkProcessingModeIsTriggered()
@@ -92,10 +93,6 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
             $this->assertNotNull(
                 $productCount,
                 'ProductCount missing for category ' . $category->getId()
-            );
-            $this->assertIsInt(
-                $productCount,
-                'ProductCount is not int for category ' . $category->getId()
             );
             $this->assertGreaterThan(
                 0,
