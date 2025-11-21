@@ -9,6 +9,7 @@ use Magento\Catalog\Model\ResourceModel\Product\Collection\ProductLimitationFact
 use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
 use Magento\Framework\DB\Select;
 use Magento\Framework\EntityManager\MetadataPool;
+use Magento\Review\Helper\Action\Pager;
 
 /**
  * Review Product Collection
@@ -406,6 +407,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
      *
      * @return array
      * @deprecated This method is not being used to fetch ids anymore.We use it only to support backward compatibility
+     * @see Pager
      */
     public function getResultingIds()
     {
