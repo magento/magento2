@@ -19,21 +19,21 @@ namespace Magento\Review\Block\Adminhtml;
 class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
 {
     /**
-     * Review action pager
+     * Review action pager helper
      *
      * @var \Magento\Review\Helper\Action\Pager
      */
     protected $_reviewActionPager = null;
 
     /**
-     * Review data
+     * Review helper data
      *
      * @var \Magento\Review\Helper\Data
      */
     protected $_reviewData = null;
 
     /**
-     * Core registry
+     * Magento framework Core registry
      *
      * @var \Magento\Framework\Registry
      */
