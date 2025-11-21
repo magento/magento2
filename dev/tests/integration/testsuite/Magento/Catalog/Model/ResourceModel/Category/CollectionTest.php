@@ -7,14 +7,27 @@ declare(strict_types=1);
 
 namespace Magento\Catalog\Model\ResourceModel\Category;
 
+use Magento\Catalog\Test\Fixture\CategoryTreeWithProducts as CategoryTreeWithProductsFixture;
+use Magento\Catalog\Test\Fixture\CategoryTree as CategoryTreeFixture;
 use Magento\Store\Model\StoreManagerInterface;
+use Magento\TestFramework\Fixture\AppArea;
+use Magento\TestFramework\Fixture\AppIsolation;
+use Magento\TestFramework\Fixture\DataFixture;
+use Magento\TestFramework\Fixture\DbIsolation;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\Catalog\Model\ResourceModel\Category\Collection as CategoryCollection;
 use Magento\Catalog\Model\ResourceModel\Category\CollectionFactory;
 
 class CollectionTest extends \PHPUnit\Framework\TestCase
 {
+    /**
+     * @var Collection|mixed
+     */
     private Collection $collection;
+
+    /**
+     * @var CollectionFactory
+     */
     private CollectionFactory $categoryCollectionFactory;
 
     /**
@@ -67,18 +80,29 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
         $this->assertStringEndsWith('category-3-on-2.html', $category->getUrl());
     }
 
-    /**
-     * @magentoAppIsolation enabled
-     * @magentoDbIsolation enabled
-     * @magentoAppArea adminhtml
-     * @magentoDataFixture Magento/Catalog/Model/ResourceModel/_files/categories_with_products_large.php
-     */
+    #[
+        DataFixture (
+            CategoryTreeWithProductsFixture ::class,
+            [
+                'category_identifier' => 'bulk_test_123_cat',
+                'category_count' => 401,
+                'product_identifier' => 'bulk_test_123_prd',
+                'product_count' => 20,
+                'depth' => 3,
+                'fanout' => [5, 10, 4, 6],
+            ],
+            'cats'
+        ),
+        AppArea('adminhtml'),
+        DbIsolation(true),
+        AppIsolation(true)
+    ]
     public function testBulkProcessingModeIsTriggered()
     {
         /** @var CategoryCollection $collection */
         $collection = $this->categoryCollectionFactory->create();
         $collection->addAttributeToSelect('*');
-        $collection->addAttributeToFilter('name', ['like' => 'bulk_test_123%']);
+        $collection->addAttributeToFilter('name', ['like' => 'bulk_test_123_cat%']);
         $collection->setLoadProductCount(true);
         $collection->load();
 

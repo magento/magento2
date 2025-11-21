@@ -20,7 +20,7 @@ class CategoryTestHelper extends Category
      *
      * @return bool
      */
-    public function getIsAnchor(): bool
+    public function getIsAnchor()
     {
         return $this->getData('is_anchor');
     }
