@@ -7,28 +7,27 @@ declare(strict_types=1);
 
 namespace Magento\Catalog\Test\Unit\Model\ResourceModel\Category;
 
-use Magento\Catalog\Model\Category;
+use Magento\Catalog\Model\Product\Visibility;
+use Magento\Catalog\Model\ResourceModel\Category as CategoryEntity;
+use Magento\Catalog\Model\ResourceModel\Category\Collection;
 use Magento\Catalog\Test\Unit\Helper\CategoryTestHelper;
-use Magento\Framework\Data\Collection\EntityFactory;
-use Magento\Store\Model\Store;
-use Psr\Log\LoggerInterface;
-use Magento\Framework\Data\Collection\Db\FetchStrategyInterface;
-use Magento\Framework\Event\ManagerInterface;
 use Magento\Eav\Model\Config;
-use Magento\Framework\App\ResourceConnection;
 use Magento\Eav\Model\EntityFactory as EavEntityFactory;
 use Magento\Eav\Model\ResourceModel\Helper;
-use Magento\Framework\Validator\UniversalFactory;
-use Magento\Store\Model\StoreManagerInterface;
-use Magento\Store\Api\Data\StoreInterface;
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\App\ResourceConnection;
+use Magento\Framework\Data\Collection\Db\FetchStrategyInterface;
+use Magento\Framework\Data\Collection\EntityFactory;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\DB\Select;
-use Magento\Framework\App\Config\ScopeConfigInterface;
-use Magento\Catalog\Model\Product\Visibility;
-use Magento\Catalog\Model\ResourceModel\Category\Collection;
-use Magento\Catalog\Model\ResourceModel\Category as CategoryEntity;
+use Magento\Framework\Event\ManagerInterface;
+use Magento\Framework\Validator\UniversalFactory;
+use Magento\Store\Api\Data\StoreInterface;
+use Magento\Store\Model\Store;
+use Magento\Store\Model\StoreManagerInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Psr\Log\LoggerInterface;
 
 /**
  * @SuppressWarnings(PHPMD.TooManyFields)

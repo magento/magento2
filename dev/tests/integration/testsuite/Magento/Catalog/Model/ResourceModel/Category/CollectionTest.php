@@ -7,18 +7,14 @@ declare(strict_types=1);
 
 namespace Magento\Catalog\Model\ResourceModel\Category;
 
-use Magento\Framework\Exception\LocalizedException;
+use Magento\Store\Model\StoreManagerInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\Catalog\Model\ResourceModel\Category\Collection as CategoryCollection;
 use Magento\Catalog\Model\ResourceModel\Category\CollectionFactory;
 
 class CollectionTest extends \PHPUnit\Framework\TestCase
 {
-    /**
-     * @var \Magento\Catalog\Model\ResourceModel\Category\Collection
-     */
-    private $collection;
-
+    private Collection $collection;
     private CollectionFactory $categoryCollectionFactory;
 
     /**
@@ -27,18 +23,16 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
      */
     protected function setUp(): void
     {
-        $this->collection = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            \Magento\Catalog\Model\ResourceModel\Category\Collection::class
-        );
         $objectManager = Bootstrap::getObjectManager();
+        $this->collection = Bootstrap::getObjectManager()->create(Collection::class);
         $this->categoryCollectionFactory = $objectManager->get(CollectionFactory::class);
     }
 
-    protected function setDown()
+    protected function tearDown(): void
     {
         /* Refresh stores memory cache after store deletion */
-        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            \Magento\Store\Model\StoreManagerInterface::class
+        Bootstrap::getObjectManager()->get(
+            StoreManagerInterface::class
         )->reinitStores();
     }
 
@@ -63,7 +57,7 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
      */
     public function testJoinUrlRewriteNotOnDefaultStore()
     {
-        $store = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
+        $store = Bootstrap::getObjectManager()
             ->create(\Magento\Store\Model\Store::class);
         $storeId = $store->load('second_category_store', 'code')->getId();
         $categories = $this->collection->setStoreId($storeId)->joinUrlRewrite()->addPathFilter('1/2/3');
@@ -77,7 +71,6 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
      * @magentoAppIsolation enabled
      * @magentoDbIsolation enabled
      * @magentoDataFixture Magento/Catalog/Model/ResourceModel/_files/categories_with_products_large.php
-     * @throws LocalizedException
      */
     public function testBulkProcessingModeIsTriggered()
     {
@@ -90,23 +83,24 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
 
         $this->assertGreaterThan(
             400,
-            $collection->count(),
+            $collection->getSize(),
             'Bulk limit path not triggered.'
         );
 
         foreach ($collection as $category) {
+            $productCount = $category->getProductCount();
             $this->assertNotNull(
-                $category->getProductCount(),
+                $productCount,
                 'ProductCount missing for category ' . $category->getId()
             );
             $this->assertIsInt(
-                $category->getProductCount(),
+                $productCount,
                 'ProductCount is not int for category ' . $category->getId()
             );
             $this->assertGreaterThan(
                 0,
-                $category->getProductCount(),
-                'Invalid product count value.'
+                $productCount,
+                sprintf('Invalid product count for category %d.', $category->getId())
             );
         }
     }
