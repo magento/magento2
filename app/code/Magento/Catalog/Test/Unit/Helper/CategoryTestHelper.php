@@ -11,9 +11,6 @@ use Magento\Catalog\Model\Category;
 
 /**
  * Test helper class for Catalog Category with custom methods
- *
- * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
- * @SuppressWarnings(PHPMD.ExcessivePublicCount)
  */
 class CategoryTestHelper extends Category
 {
