@@ -7,11 +7,13 @@ declare(strict_types=1);
 
 namespace Magento\Catalog\Test\Unit\Model\ResourceModel\Category;
 
+use Magento\Catalog\Model\Category;
 use Magento\Catalog\Model\Product\Visibility;
 use Magento\Catalog\Model\ResourceModel\Category as CategoryEntity;
 use Magento\Catalog\Model\ResourceModel\Category\Collection;
 use Magento\Catalog\Test\Unit\Helper\CategoryTestHelper;
 use Magento\Eav\Model\Config;
+use Magento\Eav\Model\Entity\Attribute\AttributeInterface;
 use Magento\Eav\Model\EntityFactory as EavEntityFactory;
 use Magento\Eav\Model\ResourceModel\Helper;
 use Magento\Framework\App\Config\ScopeConfigInterface;
@@ -229,7 +231,11 @@ class CollectionTest extends TestCase
         $items = [];
         $categoryIds = [];
         for ($i = 1; $i <= $categoryCount; $i++) {
-            $category = $this->createMock(CategoryTestHelper::class);
+            $category = $this->getMockBuilder(Category::class)
+                ->addMethods(['getIsAnchor'])
+                ->onlyMethods(['getId', 'setProductCount'])
+                ->disableOriginalConstructor()
+                ->getMock();
             $category->method('getId')->willReturn($i);
             $category->method('getIsAnchor')->willReturn(true);
             $category->expects($this->once())->method('setProductCount')->with(5);

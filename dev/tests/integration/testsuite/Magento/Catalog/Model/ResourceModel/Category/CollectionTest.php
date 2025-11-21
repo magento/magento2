@@ -82,7 +82,7 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
 
     #[
         DataFixture (
-            CategoryTreeWithProductsFixture ::class,
+            CategoryTreeWithProductsFixture::class,
             [
                 'category_identifier' => 'bulk_test_123_cat',
                 'category_count' => 401,

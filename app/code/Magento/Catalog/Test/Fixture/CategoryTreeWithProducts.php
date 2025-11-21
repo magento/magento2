@@ -41,7 +41,14 @@ class CategoryTreeWithProducts implements DataFixtureInterface
         'root_id'             => null,
     ];
 
+    /**
+     * @var AdapterInterface
+     */
     private AdapterInterface $connection;
+
+    /**
+     * @var string
+     */
     private string $categoryProductTable;
 
     public function __construct(
