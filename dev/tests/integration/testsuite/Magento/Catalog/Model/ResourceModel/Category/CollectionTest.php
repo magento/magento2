@@ -88,8 +88,7 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
                 'category_count' => 401,
                 'product_identifier' => 'bulk_test_123_prd',
                 'product_count' => 20,
-                'depth' => 3,
-                'fanout' => [5, 10, 4, 6],
+                'depth' => 3
             ],
             'cats'
         ),

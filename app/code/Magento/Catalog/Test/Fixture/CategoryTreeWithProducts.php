@@ -114,27 +114,24 @@ class CategoryTreeWithProducts implements DataFixtureInterface
                 $parentCategories
             );
         }
-
-        /* ---------------- LEVELS 1 → depth ---------------- */
-        for ($level = 1; $level <= $depth; $level++) {
-
-            $levelParents[$level] = [];
-
-            foreach ($levelParents[$level - 1] as $parentId) {
-                foreach (range(1, $fanout[$level]) as $i) {
-
-                    $levelParents[$level][] = $this->createCategoryNode(
-                        "{$categoryIdentifier}_l{$level}_{$parentId}_{$i}",
-                        $parentId,
-                        ($level === $depth),
-                        $products,
-                        $leafCategories,
-                        $parentCategories
-                    );
+        if (count($fanout) > 1) {
+            /* ---------------- LEVELS 1 → depth ---------------- */
+            for ($level = 1; $level <= $depth; $level++) {
+                $levelParents[$level] = [];
+                foreach ($levelParents[$level - 1] as $parentId) {
+                    foreach (range(1, $fanout[$level]) as $i) {
+                        $levelParents[$level][] = $this->createCategoryNode(
+                            "{$categoryIdentifier}_l{$level}_{$parentId}_{$i}",
+                            $parentId,
+                            ($level === $depth),
+                            $products,
+                            $leafCategories,
+                            $parentCategories
+                        );
+                    }
                 }
             }
         }
-
         return $this->finalize(
             $categoriesCount,
             $categoryIdentifier,
@@ -149,9 +146,12 @@ class CategoryTreeWithProducts implements DataFixtureInterface
      */
     private function computeFanout(int $total, int $depth, array $fanout): array
     {
-        $levels = $depth + 1;
         $computed = [];
-
+        if (count($fanout) && array_sum($fanout) > $total) {
+            $computed[] = $total;
+            return $computed;
+        }
+        $levels = $depth + 1;
         for ($i = 0; $i < $levels; $i++) {
             if (isset($fanout[$i]) && $fanout[$i] > 0) {
                 $computed[$i] = (int)$fanout[$i];
