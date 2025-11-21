@@ -422,7 +422,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
         $data = [];
         foreach ($categoryIds as $catId) {
             $data[] = [
-                'category_id'   => $catId,
+                'category_id' => $catId,
                 'descendant_id' => $catId
             ];
         }
