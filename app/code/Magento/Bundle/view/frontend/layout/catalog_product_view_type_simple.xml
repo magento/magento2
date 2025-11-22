@@ -9,7 +9,7 @@
     <body>
         <referenceBlock name="product.info.upsell">
             <action method="setItemLimit">
-                <argument name="type" xsi:type="string">bundle</argument>
+                <argument name="type" xsi:type="string">upsell</argument>
                 <argument name="limit" xsi:type="string">4</argument>
             </action>
         </referenceBlock>

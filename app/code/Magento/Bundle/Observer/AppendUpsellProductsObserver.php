@@ -91,6 +91,10 @@ class AppendUpsellProductsObserver implements ObserverInterface
             return $this;
         }
 
+        // Limits must not add up. If there are other products in the upsell collection
+        // we should reduce the bundle limit by the upsell items count.
+        $limit = $limit - count($productIds);
+
         // retrieve bundle product ids
         $bundleIds = $resource->getParentIdsByChild($product->getId());
         // exclude up-sell product ids
