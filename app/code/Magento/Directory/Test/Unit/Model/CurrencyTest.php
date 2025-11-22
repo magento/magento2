@@ -138,83 +138,25 @@ class CurrencyTest extends TestCase
      */
     public static function getOutputFormatDataProvider(): array
     {
-        // Use dynamic detection for problematic locale/currency combinations!
-        $ar_DZ_EGP = self::getExpectedFormatForLocale('ar_DZ', 'EGP');
-
         return [
-            'en_US:USD' => ['en_US', 'USD', '$%s'],
-            'en_US:PLN' => ['en_US', 'PLN', "PLN\u{00A0}%s"],
-            'en_US:PKR' => ['en_US', 'PKR', "PKR\u{00A0}%s"],
-            'af_ZA:VND' => ['af_ZA', 'VND', "\u{20AB}%s"],
-            'ar_DZ:EGP' => ['ar_DZ', 'EGP', $ar_DZ_EGP],
-            'ar_SA:USD' => ['ar_SA', 'USD', "%s\u{00A0}US$"],
-            'ar_SA:LBP' => ['ar_SA', 'LBP', "%s\u{00A0}\u{0644}.\u{0644}.\u{200F}"],
-            'fa_IR:USD' => ['fa_IR', 'USD', "\u{200E}$%s"],
-            'ar_KW:USD' => ['ar_KW', 'USD', "%s\u{00A0}US$"],
-            'bn_BD:IQD' => ['bn_BD', 'IQD', "%s\u{00A0}IQD"],
-            'ca_ES:VND' => ['ca_ES', 'VND', "%s\u{00A0}\u{20AB}"],
-            'de_DE:USD' => ['de_DE', 'USD', "%s\u{00A0}$"],
-            'de_DE:AED' => ['de_DE', 'AED', "%s\u{00A0}AED"],
-            'es_VE:VEF' => ['es_VE', 'VEF', "Bs.\u{00A0}%s"],
-            'pl_PL:USD' => ['pl_PL', 'USD', "%s\u{00A0}USD"],
-            'pl_PL:PLN' => ['pl_PL', 'PLN', "%s\u{00A0}z\u{0142}"],
+            'en_US:USD'  => ['en_US', 'USD', '$%s'],
+            'en_US:PLN'  => ['en_US', 'PLN', "PLN\u{00A0}%s"],
+            'en_US:PKR'  => ['en_US', 'PKR', "PKR\u{00A0}%s"],
+            'af_ZA:VND'  => ['af_ZA', 'VND', "\u{20AB}%s"],
+            'ar_MAD:MAD' => ['ar_MAD', 'MAD', "%s\u{00A0}\u{062F}.\u{0645}.\u{200F}"],
+            'ar_EG:EGP'  => ['ar_EG', 'EGP', "%s\u{00A0}\u{062C}.\u{0645}.\u{200F}"],
+            'ar_SA:USD'  => ['ar_SA', 'USD', "%s\u{00A0}US$"],
+            'ar_SA:LBP'  => ['ar_SA', 'LBP', "%s\u{00A0}\u{0644}.\u{0644}.\u{200F}"],
+            'fa_IR:USD'  => ['fa_IR', 'USD', "\u{200E}$%s"],
+            'ar_KW:USD'  => ['ar_KW', 'USD', "%s\u{00A0}US$"],
+            'bn_BD:IQD'  => ['bn_BD', 'IQD', "%s\u{00A0}IQD"],
+            'ca_ES:VND'  => ['ca_ES', 'VND', "%s\u{00A0}\u{20AB}"],
+            'de_DE:USD'  => ['de_DE', 'USD', "%s\u{00A0}$"],
+            'de_DE:AED'  => ['de_DE', 'AED', "%s\u{00A0}AED"],
+            'es_VE:VEF'  => ['es_VE', 'VEF', "Bs.\u{00A0}%s"],
+            'pl_PL:USD'  => ['pl_PL', 'USD', "%s\u{00A0}USD"],
+            'pl_PL:PLN'  => ['pl_PL', 'PLN', "%s\u{00A0}z\u{0142}"],
         ];
-    }
-
-    /**
-     * Get expected format for a specific locale/currency combination
-     * This handles cases where intl extension version affects formatting
-     *
-     * @param string $locale
-     * @param string $currency
-     * @return string
-     */
-    private static function getExpectedFormatForLocale(string $locale, string $currency): string
-    {
-        // Define known problematic combinations and their expected formats
-        $problematicFormats = [
-            'ar_DZ:EGP' => [
-                'old' => "\u{062C}.\u{0645}.\u{200F}\u{00A0}%s",
-                'new' => "%s\u{00A0}\u{062C}.\u{0645}.\u{200F}"
-            ]
-        ];
-
-        $key = $locale . ':' . $currency;
-
-        if (isset($problematicFormats[$key])) {
-            // Check if we're using a newer intl version that changes formatting
-            if (self::isNewerIntlVersion()) {
-                return $problematicFormats[$key]['new'];
-            }
-            return $problematicFormats[$key]['old'];
-        }
-
-        // For non-problematic combinations, return a default format
-        // This could be enhanced with more specific formats as needed
-        return "%s";
-    }
-
-    /**
-     * Check if the current intl extension version uses newer formatting rules
-     *
-     * @return bool
-     */
-    private static function isNewerIntlVersion(): bool
-    {
-        // Check intl extension version
-        if (extension_loaded('intl')) {
-            $intlVersion = INTL_ICU_VERSION ?? '0.0.0';
-
-            // ICU 72+ (released around 2022) introduced changes to RTL formatting
-            // This is a more reliable indicator than PHP version
-            if (version_compare($intlVersion, '72.0', '>=')) {
-                return true;
-            }
-        }
-
-        // Fallback: Check PHP version as a rough indicator
-        // This is less reliable but provides some backward compatibility
-        return version_compare(PHP_VERSION, '8.3', '>=');
     }
 
     /**
@@ -296,10 +238,25 @@ class CurrencyTest extends TestCase
                 ['precision' => 2, 'symbol' => '#', 'display' => CurrencyData::NO_SYMBOL],
                 '9,999.99'
             ],
-            ['he_IL', 'USD', '9999', [], '9,999.00 ‏$'],
+            ['he_IL', 'USD', '9999', [], self::expectedHeIlUsd()],
             ['he_IL', 'USD', '9999', ['display' => CurrencyData::NO_SYMBOL], '9,999.00'],
         ];
     }
+
+    private static function expectedHeIlUsd(): string
+    {
+        if (!extension_loaded('intl')) {
+            return "9,999.00\u{00A0}$";
+        }
+
+        $icu = INTL_ICU_VERSION ?? '0.0.0';
+        if (version_compare($icu, '72.0', '>=')) {
+            return "9,999.00\u{00A0}\u{200F}$";
+        }
+
+        return "9,999.00\u{00A0}$";
+    }
+
 
     /**
      * @dataProvider getFormatTxtZendCurrencyDataProvider

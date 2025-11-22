@@ -1,14 +1,14 @@
 <?php
-
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2023 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Framework\Test\Unit\Currency\Data;
 
 use Magento\Framework\Currency\Data\Currency;
+use Magento\Framework\Currency\Exception\CurrencyException;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -21,7 +21,7 @@ class CurrencyTest extends TestCase
      * @param array $options
      * @param string $expectedResult
      * @return void
-     * @throws \Magento\Framework\Currency\Exception\CurrencyException
+     * @throws CurrencyException
      *
      * @dataProvider optionsDataProvider
      */
@@ -120,6 +120,43 @@ class CurrencyTest extends TestCase
                 ],
                 'expectedResult' => '$12',
             ],
+            'format_ar_MA_MAD' => [
+                'value' => 3,
+                'options' => [
+                    'locale' => 'ar_MA',
+                    'currency' => 'MAD',
+                ],
+                'expectedResult' => self::expectedMadFormat(),
+            ],
         ];
+    }
+
+    /**
+     * Check if the current intl extension version uses newer formatting rules
+     *
+     * @return bool
+     */
+    private static function isNewerIntlVersion(): bool
+    {
+        // Check intl extension version
+        if (extension_loaded('intl')) {
+            $intlVersion = INTL_ICU_VERSION ?? '0.0.0';
+
+            // ICU 72+ (released around 2022) introduced changes to RTL formatting
+            // This is a more reliable indicator than PHP version
+            return version_compare($intlVersion, '72.0', '>=');
+        }
+
+        // Fallback: Check PHP version as a rough indicator
+        // This is less reliable but provides some backward compatibility
+        return version_compare(PHP_VERSION, '8.3', '>=');
+    }
+
+    private static function expectedMadFormat(): string
+    {
+        if (self::isNewerIntlVersion()) {
+            return "\u{200F}3,00\u{00A0}\u{062F}.\u{0645}.\u{200F}";
+        }
+        return "\u{062F}.\u{0645}.\u{200F}\u{00A0}3,00";
     }
 }
