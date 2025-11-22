@@ -8,7 +8,6 @@ declare(strict_types=1);
 namespace Magento\Catalog\Model\ResourceModel\Category;
 
 use Magento\Catalog\Test\Fixture\CategoryTreeWithProducts as CategoryTreeWithProductsFixture;
-use Magento\Catalog\Test\Fixture\CategoryTree as CategoryTreeFixture;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\TestFramework\Fixture\AppArea;
 use Magento\TestFramework\Fixture\AppIsolation;
@@ -17,11 +16,17 @@ use Magento\TestFramework\Fixture\DbIsolation;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\Catalog\Model\ResourceModel\Category\Collection as CategoryCollection;
 use Magento\Catalog\Model\ResourceModel\Category\CollectionFactory;
+use PHPUnit\Framework\TestCase;
 
-class CollectionTest extends \PHPUnit\Framework\TestCase
+/**
+ * Tests collection category
+ *
+ * @see \Magento\Catalog\Model\ResourceModel\Category\Collection
+ */
+class CollectionTest extends TestCase
 {
     /**
-     * @var Collection|mixed
+     * @var Collection
      */
     private Collection $collection;
 
