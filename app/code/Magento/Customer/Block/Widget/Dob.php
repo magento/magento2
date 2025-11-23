@@ -410,19 +410,25 @@ class Dob extends AbstractWidget
         $localeData = (new DataBundle())->get($this->localeResolver->getLocale());
         $monthsData = $localeData['calendar']['gregorian']['monthNames'];
         $daysData = $localeData['calendar']['gregorian']['dayNames'];
-
+        $monthsFormat = $monthsData['format'];
+        $daysFormat = $daysData['format'];
+        $monthsAbbreviated = $monthsFormat['abbreviated'];
+        $monthsShort = $monthsAbbreviated ?? $monthsFormat['wide'];
+        $daysAbbreviated = $daysFormat['abbreviated'];
+        $daysShort = $daysAbbreviated ?? $daysFormat['wide'];
+        $daysShortFormat = $daysFormat['short'];
+        $daysMin = $daysShortFormat ?? $daysShort;
         return $this->encoder->encode(
             [
                 'closeText' => __('Done'),
                 'prevText' => __('Prev'),
                 'nextText' => __('Next'),
                 'currentText' => __('Today'),
-                'monthNames' => array_values(iterator_to_array($monthsData['format']['wide'])),
-                'monthNamesShort' => array_values(iterator_to_array($monthsData['format']['abbreviated'])),
-                'dayNames' => array_values(iterator_to_array($daysData['format']['wide'])),
-                'dayNamesShort' => array_values(iterator_to_array($daysData['format']['abbreviated'])),
-                'dayNamesMin' =>
-                 array_values(iterator_to_array(($daysData['format']['short']) ?: $daysData['format']['abbreviated'])),
+                'monthNames' => array_values(iterator_to_array($monthsFormat['wide'])),
+                'monthNamesShort' => array_values(iterator_to_array($monthsShort)),
+                'dayNames' => array_values(iterator_to_array($daysFormat['wide'])),
+                'dayNamesShort' => array_values(iterator_to_array($daysShort)),
+                'dayNamesMin' => array_values(iterator_to_array($daysMin)),
             ]
         );
     }
