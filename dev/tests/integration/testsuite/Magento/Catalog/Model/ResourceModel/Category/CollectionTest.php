@@ -7,7 +7,9 @@ declare(strict_types=1);
 
 namespace Magento\Catalog\Model\ResourceModel\Category;
 
+use Magento\Catalog\Test\Fixture\Category as CategoryFixture;
 use Magento\Catalog\Test\Fixture\CategoryTreeWithProducts as CategoryTreeWithProductsFixture;
+use Magento\Catalog\Test\Fixture\Product as ProductFixture;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\TestFramework\Fixture\AppArea;
 use Magento\TestFramework\Fixture\AppIsolation;
@@ -86,46 +88,47 @@ class CollectionTest extends TestCase
     }
 
     #[
-        DataFixture(
-            CategoryTreeWithProductsFixture::class,
-            [
-                'category_identifier' => 'bulk_test_123_cat',
-                'category_count' => 401,
-                'product_identifier' => 'bulk_test_123_prd',
-                'product_count' => 20,
-                'depth' => 3
-            ],
-            'cats'
-        ),
+        DataFixture(CategoryFixture::class, ['name' => 'TC L1 Root', 'parent_id' => '2', 'is_anchor' => 1], 'c1'),
+        DataFixture(CategoryFixture::class, ['name' => 'TC L2 A', 'parent_id' => '$c1.id$', 'is_anchor' => 1], 'c11'),
+        DataFixture(CategoryFixture::class, ['name' => 'TC L2 B', 'parent_id' => '$c1.id$', 'is_anchor' => 1], 'c12'),
+        DataFixture(CategoryFixture::class, ['name' => 'TC L2 C', 'parent_id' => '$c1.id$', 'is_anchor' => 0], 'c13'),
+        DataFixture(CategoryFixture::class, ['name' => 'TC L3 A1', 'parent_id' => '$c11.id$', 'is_anchor' => 1], 'c1111'),
+        DataFixture(CategoryFixture::class, ['name' => 'TC L3 A2', 'parent_id' => '$c11.id$', 'is_anchor' => 1], 'c1112'),
+        DataFixture(CategoryFixture::class, ['name' => 'TC L3 C1', 'parent_id' => '$c13.id$', 'is_anchor' => 0], 'c1113'),
+
+        DataFixture(ProductFixture::class, ['sku' => 'TP-1A', 'category_ids' => ['$c12.id$']], as: 'p1'),
+        DataFixture(ProductFixture::class, ['sku' => 'TP-2A', 'category_ids' => ['$c1111.id$']], as: 'p2'),
+        DataFixture(ProductFixture::class, ['sku' => 'TP-3B', 'category_ids' => ['$c1112.id$',  '$c1113.id$']], as: 'p3'),
+        DataFixture(ProductFixture::class, ['sku' => 'TP-4B', 'category_ids' => ['$c1112.id$', '$c1113.id$']], as: 'p4'),
+
         AppArea('adminhtml'),
         DbIsolation(true),
         AppIsolation(true)
     ]
-    public function testBulkProcessingModeIsTriggered()
+    public function testLoadProductCountWithoutIndex()
     {
-        /** @var CategoryCollection $collection */
         $collection = $this->categoryCollectionFactory->create();
-        $collection->addAttributeToSelect('*');
-        $collection->addAttributeToFilter('name', ['like' => 'bulk_test_123_cat%']);
+        $collection->addAttributeToSelect(['name', 'is_anchor']);
+        $collection->addAttributeToFilter('name', ['like' => 'TC L%']);
         $collection->setLoadProductCount(true);
         $collection->load();
 
-        $this->assertGreaterThan(
-            400,
-            $collection->getSize(),
-            'Bulk limit path not triggered.'
-        );
+        $expected = [
+            'TC L1 Root' => 4,
+            'TC L2 A'    => 3,
+            'TC L2 B'    => 1,
+            'TC L2 C'    => 0,
+            'TC L3 A1'   => 1,
+            'TC L3 A2'   => 2,
+            'TC L3 C1'   => 2
+        ];
 
         foreach ($collection as $category) {
-            $productCount = $category->getProductCount();
-            $this->assertNotNull(
-                $productCount,
-                'ProductCount missing for category ' . $category->getId()
-            );
-            $this->assertGreaterThan(
-                0,
-                $productCount,
-                sprintf('Invalid product count for category %d.', $category->getId())
+            $name = $category->getName();
+            $this->assertEquals(
+                $expected[$name],
+                (int)$category->getProductCount(),
+                "Product count incorrect for category $name"
             );
         }
     }

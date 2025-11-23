@@ -21,6 +21,7 @@ use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\Data\Collection\Db\FetchStrategyInterface;
 use Magento\Framework\Data\Collection\EntityFactory;
 use Magento\Framework\DB\Adapter\AdapterInterface;
+use Magento\Framework\DB\Ddl\Table;
 use Magento\Framework\DB\Select;
 use Magento\Framework\Event\ManagerInterface;
 use Magento\Framework\Validator\UniversalFactory;
@@ -220,75 +221,65 @@ class CollectionTest extends TestCase
         $this->collection->loadProductCount([]);
     }
 
-    /**
-     * Test that loadProductCount calls getCountFromCategoryTableBulk
-     */
-    public function testLoadProductCountCallsBulkMethodForLargeCategoryCount()
+    public function testLoadProductCountWithAnchors()
     {
         $websiteId = 1;
         $storeId = 1;
-        $categoryCount = 401;
         $items = [];
-        $categoryIds = [];
-        for ($i = 1; $i <= $categoryCount; $i++) {
+        $categoryIds = range(1, 10);
+        foreach ($categoryIds as $id) {
             $category = $this->getMockBuilder(Category::class)
                 ->addMethods(['getIsAnchor'])
                 ->onlyMethods(['getId', 'setProductCount'])
                 ->disableOriginalConstructor()
                 ->getMock();
-            $category->method('getId')->willReturn($i);
+            $category->method('getId')->willReturn($id);
             $category->method('getIsAnchor')->willReturn(true);
-            $category->expects($this->once())->method('setProductCount')->with(5);
-            $items[$i] = $category;
-            $categoryIds[] = $i;
+            $category
+                ->expects($this->once())
+                ->method('setProductCount')->with(5);
+            $items[$id] = $category;
         }
-        $storeMock = $this->createMock(Store::class);
-        $storeMock->method('getWebsiteId')->willReturn($websiteId);
-        $this->storeManager->method('getStore')->with($storeId)->willReturn($storeMock);
-        $this->connection->method('select')->willReturn($this->select);
-        $counts = array_fill_keys($categoryIds, 5);
-        $tableMock = $this->createMock(\Magento\Framework\DB\Ddl\Table::class);
+
+        $store = $this->createMock(Store::class);
+        $store->method('getWebsiteId')->willReturn($websiteId);
+        $this->storeManager->method('getStore')->with($storeId)->willReturn($store);
+
+        $indexedIds = array_slice($categoryIds, 0, 5);
+        $firstCounts = array_fill_keys($indexedIds, 5);
+
+        $missingIds = array_diff($categoryIds, $indexedIds);
+        $fallbackCounts = array_fill_keys($missingIds, 5);
+
+        $this->connection->method('fetchPairs')
+            ->willReturnOnConsecutiveCalls($firstCounts, $fallbackCounts);
+
+        $tableMock = $this->createMock(Table::class);
         $tableMock->method('addColumn')->willReturnSelf();
         $tableMock->method('addIndex')->willReturnSelf();
-        $this->connection->method('newTable')
-            ->with($this->stringContains('temp_category_descendants_'))
-            ->willReturn($tableMock);
+
+        $this->connection->method('newTable')->willReturn($tableMock);
         $this->connection->expects($this->once())->method('createTemporaryTable')->with($tableMock);
-        $this->connection->expects($this->once())->method('dropTemporaryTable')
-            ->with($this->stringContains('temp_category_descendants_'));
-        $this->select->method('from')->willReturnSelf();
-        $this->select->expects($this->once())->method('joinInner')
-            ->with(
-                ['ce2' => null],
-                'ce2.path LIKE CONCAT(ce.path, \'/%\')',
-                []
-            )->willReturnSelf();
-        $this->select->method('where')->willReturnSelf();
-        $this->connection->method('select')->willReturn($this->select);
-        $this->connection->method('insertFromSelect')->willReturn('INSERT QUERY');
-        $this->connection->method('query')->with('INSERT QUERY')->willReturnSelf();
-        $withs = [];
-        foreach ($categoryIds as $categoryId) {
-            $withs[] = [
-                'category_id' => $categoryId,
-                'descendant_id' => $categoryId
-            ];
+        $this->connection->expects($this->once())->method('dropTemporaryTable');
+
+        $this->connection->method('insertFromSelect')->willReturn('SQL');
+        $this->connection->method('query')->with('SQL');
+
+        $expectedData = [];
+        foreach ($missingIds as $id) {
+            $expectedData[] = ['category_id' => $id, 'descendant_id' => $id];
         }
-        $this->connection
-            ->expects($this->once())
-            ->method('insertMultiple')
-            ->with(
-                $this->stringContains('temp_category_descendants_'),
-                $withs
-            );
+        $this->connection->expects($this->once())->method('insertMultiple')
+            ->with($this->stringContains('temp_category_descendants_'), $expectedData);
+
+        $this->connection->method('select')->willReturn($this->select);
         $this->select->method('from')->willReturnSelf();
+        $this->select->method('joinInner')->willReturnSelf();
         $this->select->method('joinLeft')->willReturnSelf();
         $this->select->method('join')->willReturnSelf();
         $this->select->method('where')->willReturnSelf();
         $this->select->method('group')->willReturnSelf();
-        $this->connection->method('fetchPairs')
-            ->with($this->isInstanceOf(Select::class))
-            ->willReturn($counts);
+
         $this->collection->setProductStoreId($storeId);
         $this->collection->loadProductCount($items, false, true);
     }
