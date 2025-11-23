@@ -92,4 +92,16 @@ class HttpPluginTest extends TestCase
 
         $this->httpPlugin->beforeSendResponse($responseMock);
     }
+
+    public function testBeforeSendResponseVaryNotSet()
+    {
+        /** @var HttpResponse|MockObject $responseMock */
+        $this->context->expects($this->any())->method('getVaryString')->willReturn('currentVary');
+        $this->request->expects($this->any())->method('get')->willReturn(null);
+        /** @var HttpResponse|MockObject $responseMock */
+        $responseMock = $this->createMock(HttpResponse::class);
+        $responseMock->expects($this->never())->method('setNoCacheHeaders');
+        $responseMock->expects($this->once())->method('sendVary');
+        $this->httpPlugin->beforeSendResponse($responseMock);
+    }
 }
