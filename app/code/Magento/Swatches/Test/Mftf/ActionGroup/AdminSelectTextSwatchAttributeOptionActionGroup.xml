@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright 2025 Adobe
+ * All Rights Reserved.
+ */
+-->
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminSelectTextSwatchAttributeOptionActionGroup">
+        <annotations>
+            <description>Selects an option for a text swatch attribute on the product edit form.</description>
+        </annotations>
+        <arguments>
+            <argument name="attributeCode" type="string"/>
+            <argument name="optionValue" type="string"/>
+        </arguments>
+        <waitForElementClickable selector="{{AdminProductAttributesSection.attributeDropdownByCode(attributeCode)}}" stepKey="waitForAttributeDropdown"/>
+        <selectOption selector="{{AdminProductAttributesSection.attributeDropdownByCode(attributeCode)}}" userInput="{{optionValue}}" stepKey="selectAttributeOption"/>
+        <waitForPageLoad stepKey="waitAfterSelection"/>
+    </actionGroup>
+</actionGroups>
+

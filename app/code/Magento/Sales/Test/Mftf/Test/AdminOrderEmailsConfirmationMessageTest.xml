@@ -57,6 +57,10 @@
         <!-- Step 5: Create invoice, shipment, and credit memo -->
         <actionGroup ref="AdminCreateInvoiceAndShipmentActionGroup" stepKey="createInvoiceAndShipment"/>
         <actionGroup ref="AdminCreateCreditMemoWithReturnToStockActionGroup" stepKey="createCreditMemo"/>
+        <!-- Reload order page to clear form state -->
+        <actionGroup ref="OpenOrderByIdActionGroup" stepKey="reloadOrderBeforeInvoice">
+            <argument name="orderId" value="{$orderNumber}"/>
+        </actionGroup>
         <!-- Step 6: In the order page, click on invoice under the information tab -->
         <click selector="{{AdminOrderDetailsMainActionsSection.invoiceTab}}" stepKey="goToInvoiceTab"/>
         <!-- Steps 7: Click on view button under action. -->
