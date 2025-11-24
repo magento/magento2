@@ -44,8 +44,9 @@ class PagerTest extends TestCase
             ->willReturn($this->collection);
 
         $context = $this->createMock(Context::class);
+        $backendSession = $this->createMock(\Magento\Backend\Model\Session::class);
 
-        $this->pager = new Pager($context, $this->collectionFactory);
+        $this->pager = new Pager($context, $backendSession, $this->collectionFactory);
     }
 
     /**

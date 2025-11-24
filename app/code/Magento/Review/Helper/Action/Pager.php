@@ -15,13 +15,14 @@ use Magento\Review\Model\ResourceModel\Review\CollectionFactory;
  *
  * @api
  * @since 100.0.2
+ * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
  */
 class Pager extends \Magento\Framework\App\Helper\AbstractHelper
 {
-    const STORAGE_PREFIX = 'search_result_ids';
+    protected const STORAGE_PREFIX = 'search_result_ids';
 
     /**
-     * Storage id
+     * Key identifier for session storage id
      *
      * @var int
      */
@@ -51,12 +52,12 @@ class Pager extends \Magento\Framework\App\Helper\AbstractHelper
     /**
      * @param \Magento\Framework\App\Helper\Context $context
      * @param \Magento\Backend\Model\Session $backendSession
+     * @param CollectionFactory|null $reviewCollectionFactory
      */
     public function __construct(
         \Magento\Framework\App\Helper\Context $context,
         \Magento\Backend\Model\Session $backendSession,
         ?CollectionFactory $reviewCollectionFactory = null
-
     ) {
         $this->_backendSession = $backendSession;
         $this->reviewCollectionFactory = $reviewCollectionFactory ?: ObjectManager::getInstance()->get(CollectionFactory::class);
@@ -81,7 +82,7 @@ class Pager extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @param array $items
      * @return $this
-     * @deprecated This method is no longer used for setting items in the session.We use it only to support backward compatibility
+     * @deprecated This method is not being used.We use it only to support compatibility
      * @see self::getRelativeReviewId()
      */
     public function setItems(array $items)
@@ -96,7 +97,7 @@ class Pager extends \Magento\Framework\App\Helper\AbstractHelper
      * Load stored items
      *
      * @return void
-     * @deprecated This method is not being used anymore to load the items.We use it only to support backward compatibility
+     * @deprecated This method is not being used.We use it only to support compatibility
      * @see self::getRelativeReviewId()
      */
     protected function _loadItems()
@@ -133,7 +134,7 @@ class Pager extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @param mixed $value
      * @return int|bool
-     * @deprecated This method is not being used anymore.We use it only to support backward compatibility
+     * @deprecated This method is not being used.We use it only to support compatibility
      * @see self::getRelativeReviewId()
      */
     protected function _findItemPositionByValue($value)
@@ -147,7 +148,8 @@ class Pager extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @return string
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @deprecated This method is not being used anymore to get storage key.We use it only to support backward compatibility
+     * @deprecated This method is not being used.We use it only to support compatibility
+     * @see self::getRelativeReviewId()
      */
     protected function _getStorageKey()
     {
