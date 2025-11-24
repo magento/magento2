@@ -111,9 +111,9 @@ class Pager extends \Magento\Framework\App\Helper\AbstractHelper
      * Get the next review id.
      *
      * @param int $id
-     * @return int|false
+     * @return int|bool
      */
-    public function getNextItemId($id): int|false
+    public function getNextItemId($id): int|bool
     {
         return $this->getRelativeReviewId($id, 'gt', 'ASC');
     }
@@ -122,9 +122,9 @@ class Pager extends \Magento\Framework\App\Helper\AbstractHelper
      * Get the previous review id.
      *
      * @param int $id
-     * @return int|false
+     * @return int|bool
      */
-    public function getPreviousItemId($id): int|false
+    public function getPreviousItemId($id): int|bool
     {
         return $this->getRelativeReviewId($id, 'lt', 'DESC');
     }
@@ -166,9 +166,9 @@ class Pager extends \Magento\Framework\App\Helper\AbstractHelper
      * @param int $id
      * @param string $operator
      * @param string $order
-     * @return int|false
+     * @return int|bool
      */
-    private function getRelativeReviewId($id, $operator, $order): int|false
+    private function getRelativeReviewId($id, $operator, $order): int|bool
     {
         $collection = $this->reviewCollectionFactory->create();
         $collection->addFieldToFilter('main_table.review_id', [$operator => $id])
