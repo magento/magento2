@@ -3,9 +3,11 @@
  * Copyright 2013 Adobe
  * All Rights Reserved.
  */
+
 namespace Magento\Review\Helper\Action;
 
-use Magento\Framework\App\Helper\AbstractHelper;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Review\Model\ResourceModel\Review\CollectionFactory;
 
 /**
@@ -14,27 +16,94 @@ use Magento\Review\Model\ResourceModel\Review\CollectionFactory;
  * @api
  * @since 100.0.2
  */
-class Pager extends AbstractHelper
+class Pager extends \Magento\Framework\App\Helper\AbstractHelper
 {
+    const STORAGE_PREFIX = 'search_result_ids';
+
+    /**
+     * Storage id
+     *
+     * @var int
+     */
+    protected $_storageId = null;
+
+    /**
+     * Array of items
+     *
+     * @var array
+     */
+    protected $_items = null;
+
+    /**
+     * Backend session model
+     *
+     * @var \Magento\Backend\Model\Session
+     */
+    protected $_backendSession;
+
     /**
      * Review collection model factory
      *
-     * @var CollectionFactory
+     * @var CollectionFactory|null
      */
-    protected $reviewCollectionFactory;
+    protected $reviewCollectionFactory = null;
 
     /**
-     * Pager constructor.
-     *
      * @param \Magento\Framework\App\Helper\Context $context
-     * @param CollectionFactory $reviewCollectionFactory
+     * @param \Magento\Backend\Model\Session $backendSession
      */
     public function __construct(
         \Magento\Framework\App\Helper\Context $context,
-        CollectionFactory $reviewCollectionFactory
+        \Magento\Backend\Model\Session $backendSession,
+        ?CollectionFactory $reviewCollectionFactory = null
+
     ) {
+        $this->_backendSession = $backendSession;
+        $this->reviewCollectionFactory = $reviewCollectionFactory ?: ObjectManager::getInstance()->get(CollectionFactory::class);
         parent::__construct($context);
-        $this->reviewCollectionFactory = $reviewCollectionFactory;
+    }
+
+    /**
+     * Set storage id
+     *
+     * @param int $storageId
+     * @return void
+     * @deprecated This method is no longer used for setting storage id.We use it only to support backward compatibility
+     * @see self::getRelativeReviewId()
+     */
+    public function setStorageId($storageId)
+    {
+        $this->_storageId = $storageId;
+    }
+
+    /**
+     * Set items to storage
+     *
+     * @param array $items
+     * @return $this
+     * @deprecated This method is no longer used for setting items in the session.We use it only to support backward compatibility
+     * @see self::getRelativeReviewId()
+     */
+    public function setItems(array $items)
+    {
+        $this->_items = $items;
+        $this->_backendSession->setData($this->_getStorageKey(), $this->_items);
+
+        return $this;
+    }
+
+    /**
+     * Load stored items
+     *
+     * @return void
+     * @deprecated This method is not being used anymore to load the items.We use it only to support backward compatibility
+     * @see self::getRelativeReviewId()
+     */
+    protected function _loadItems()
+    {
+        if ($this->_items === null) {
+            $this->_items = (array)$this->_backendSession->getData($this->_getStorageKey());
+        }
     }
 
     /**
@@ -57,6 +126,36 @@ class Pager extends AbstractHelper
     public function getPreviousItemId($id): int|false
     {
         return $this->getRelativeReviewId($id, 'lt', 'DESC');
+    }
+
+    /**
+     * Return item position based on passed in value
+     *
+     * @param mixed $value
+     * @return int|bool
+     * @deprecated This method is not being used anymore.We use it only to support backward compatibility
+     * @see self::getRelativeReviewId()
+     */
+    protected function _findItemPositionByValue($value)
+    {
+        $this->_loadItems();
+        return array_search($value, $this->_items);
+    }
+
+    /**
+     * Get storage key
+     *
+     * @return string
+     * @throws \Magento\Framework\Exception\LocalizedException
+     * @deprecated This method is not being used anymore to get storage key.We use it only to support backward compatibility
+     */
+    protected function _getStorageKey()
+    {
+        if (!$this->_storageId) {
+            throw new LocalizedException(__("The storage key wasn't set. Add the storage key and try again."));
+        }
+
+        return self::STORAGE_PREFIX . $this->_storageId;
     }
 
     /**
