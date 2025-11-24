@@ -8,18 +8,22 @@ declare(strict_types=1);
 namespace Magento\CatalogUrlRewrite\Test\Unit\Model\Map;
 
 use Magento\Catalog\Api\Data\CategoryInterface;
+use Magento\Catalog\Model\Category as CategoryModel;
 use Magento\Catalog\Model\CategoryRepository;
 use Magento\Catalog\Model\ResourceModel\Category;
 use Magento\Catalog\Model\ResourceModel\CategoryFactory;
 use Magento\CatalogUrlRewrite\Model\Map\DataCategoryHashMap;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\DB\Select;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 class DataCategoryHashMapTest extends TestCase
 {
+    use MockCreationTrait;
+
     /** @var CategoryRepository|MockObject */
     private $categoryRepository;
 
@@ -38,8 +42,7 @@ class DataCategoryHashMapTest extends TestCase
         $this->categoryResourceFactory = $this->createPartialMock(CategoryFactory::class, ['create']);
         $this->categoryResource = $this->createPartialMock(Category::class, ['getConnection', 'getEntityTable']);
 
-        $this->categoryResourceFactory->expects($this->any())
-            ->method('create')
+        $this->categoryResourceFactory->method('create')
             ->willReturn($this->categoryResource);
 
         $this->model = (new ObjectManager($this))->getObject(
@@ -59,43 +62,46 @@ class DataCategoryHashMapTest extends TestCase
         $categoryIds = ['1' => [1, 2, 3], '2' => [2, 3], '3' => 3];
         $categoryIdsOther = ['2' => [2, 3, 4]];
 
-        $categoryMock = $this->getMockBuilder(CategoryInterface::class)
-            ->addMethods(['getResource'])
-            ->getMockForAbstractClass();
-        $connectionAdapterMock = $this->getMockForAbstractClass(AdapterInterface::class);
+        $categoryMock = $this->createPartialMockWithReflection(
+            CategoryModel::class,
+            ['getResource']
+        );
+        $connectionAdapterMock = $this->createMock(AdapterInterface::class);
         $selectMock = $this->createMock(Select::class);
 
-        $this->categoryRepository->expects($this->any())
-            ->method('get')
+        $this->categoryRepository->method('get')
             ->willReturn($categoryMock);
-        $categoryMock->expects($this->any())
-            ->method('getResource')
+        $categoryMock->method('getResource')
             ->willReturn($this->categoryResource);
-        $this->categoryResource->expects($this->any())
-            ->method('getConnection')
+        $this->categoryResource->method('getConnection')
             ->willReturn($connectionAdapterMock);
-        $this->categoryResource->expects($this->any())
-            ->method('getEntityTable')
+        $this->categoryResource->method('getEntityTable')
             ->willReturn('category_entity');
-        $connectionAdapterMock->expects($this->any())
-            ->method('select')
+        $connectionAdapterMock->method('select')
             ->willReturn($selectMock);
-        $selectMock->expects($this->any())
-            ->method('from')
+        $selectMock->method('from')
             ->willReturnSelf();
-        $selectMock->expects($this->any())
-            ->method('where')
+        $selectMock->method('where')
             ->willReturnSelf();
-        $connectionAdapterMock->expects($this->any())
-            ->method('fetchCol')
-            ->willReturnOnConsecutiveCalls($categoryIds, $categoryIdsOther, $categoryIds);
+        
+        $callCount = 0;
+        $connectionAdapterMock->method('fetchCol')
+            ->willReturnCallback(function () use (&$callCount, $categoryIds, $categoryIdsOther) {
+                $callCount++;
+                return match ($callCount) {
+                    1 => $categoryIds,
+                    2 => $categoryIdsOther,
+                    3 => $categoryIds,
+                    default => []
+                };
+            });
 
         $this->assertEquals($categoryIds, $this->model->getAllData(1));
-        $this->assertEquals($categoryIds[2], $this->model->getData(1, 2));
+        $this->assertEquals($categoryIds['2'], $this->model->getData(1, '2'));
         $this->assertEquals($categoryIdsOther, $this->model->getAllData(2));
-        $this->assertEquals($categoryIdsOther[2], $this->model->getData(2, 2));
+        $this->assertEquals($categoryIdsOther['2'], $this->model->getData(2, '2'));
         $this->model->resetData(1);
-        $this->assertEquals($categoryIds[2], $this->model->getData(1, 2));
+        $this->assertEquals($categoryIds['2'], $this->model->getData(1, '2'));
         $this->assertEquals($categoryIds, $this->model->getAllData(1));
     }
 }

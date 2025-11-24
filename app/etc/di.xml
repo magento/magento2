@@ -216,6 +216,7 @@
     <preference for="Magento\Framework\Interception\ConfigLoaderInterface" type="Magento\Framework\Interception\PluginListGenerator" />
     <preference for="Magento\Framework\Interception\ConfigWriterInterface" type="Magento\Framework\Interception\PluginListGenerator" />
     <preference for="Magento\Framework\Mview\View\SubscriptionStatementPostprocessorInterface" type="Magento\Framework\Mview\View\CompositeSubscriptionStatementPostprocessor" />
+    <preference for="Magento\Framework\DB\Logger\QueryAnalyzerInterface" type="Magento\Framework\DB\Logger\QueryIndexAnalyzer" />
     <type name="Magento\Framework\Model\ResourceModel\Db\TransactionManager" shared="false" />
     <type name="Magento\Framework\Acl\Data\Cache">
         <arguments>
@@ -1455,6 +1456,7 @@
             <argument name="logAllQueries" xsi:type="init_parameter">Magento\Framework\Config\ConfigOptionsListConstants::CONFIG_PATH_DB_LOGGER_LOG_EVERYTHING</argument>
             <argument name="logQueryTime" xsi:type="init_parameter">Magento\Framework\Config\ConfigOptionsListConstants::CONFIG_PATH_DB_LOGGER_QUERY_TIME_THRESHOLD</argument>
             <argument name="logCallStack" xsi:type="init_parameter">Magento\Framework\Config\ConfigOptionsListConstants::CONFIG_PATH_DB_LOGGER_INCLUDE_STACKTRACE</argument>
+            <argument name="logIndexCheck" xsi:type="init_parameter">Magento\Framework\Config\ConfigOptionsListConstants::CONFIG_PATH_DB_LOGGER_INCLUDE_INDEX_CHECK</argument>
         </arguments>
     </type>
     <type name="Magento\Framework\App\Config\MetadataConfigTypeProcessor">

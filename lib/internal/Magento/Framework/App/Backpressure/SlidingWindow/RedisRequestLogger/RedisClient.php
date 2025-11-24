@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2022 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -68,16 +68,14 @@ class RedisClient
     /**
      * @var Credis_Client
      */
-    private $pipeline;
+    private $client;
 
     /**
      * @param DeploymentConfig $config
-     * @throws FileSystemException
-     * @throws RuntimeException
      */
     public function __construct(DeploymentConfig $config)
     {
-        $credisClient = new Credis_Client(
+        $this->client = new Credis_Client(
             $this->getHost($config),
             $this->getPort($config),
             $this->getTimeout($config),
@@ -86,8 +84,6 @@ class RedisClient
             $this->getPassword($config),
             $this->getUser($config)
         );
-
-        $this->pipeline = $credisClient->pipeline();
     }
 
     /**
@@ -99,7 +95,7 @@ class RedisClient
      */
     public function incrBy(string $key, int $decrement)
     {
-        return $this->pipeline->incrBy($key, $decrement);
+        return $this->client->incrBy($key, $decrement);
     }
 
     /**
@@ -111,7 +107,7 @@ class RedisClient
      */
     public function expireAt(string $key, int $timestamp)
     {
-        return $this->pipeline->expireAt($key, $timestamp);
+        return $this->client->expireAt($key, $timestamp);
     }
 
     /**
@@ -122,7 +118,17 @@ class RedisClient
      */
     public function get(string $key)
     {
-        return $this->pipeline->get($key);
+        return $this->client->get($key);
+    }
+
+    /**
+     * Start pipeline
+     *
+     * @return void
+     */
+    public function pipeline(): void
+    {
+        $this->client->pipeline();
     }
 
     /**
@@ -132,7 +138,7 @@ class RedisClient
      */
     public function exec(): array
     {
-        return $this->pipeline->exec();
+        return $this->client->exec();
     }
 
     /**

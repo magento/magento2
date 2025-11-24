@@ -20,7 +20,6 @@
             <group value="checkout"/>
             <group value="cloud"/>
         </annotations>
-
         <before>
             <magentoCLI command="config:set {{EnableFlatRateConfigData.path}} {{EnableFlatRateConfigData.value}}" stepKey="enableFlatRate"/>
             <createData entity="_defaultCategory" stepKey="createCategory"/>
@@ -29,14 +28,16 @@
             </createData>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
         </before>
-
         <after>
+            <!--Delete customer created during test execution-->
+            <actionGroup ref="AdminDeleteCustomerActionGroup" stepKey="deleteCustomerFromGrid">
+                <argument name="customerEmail" value="CustomerEntityOne.email"/>
+            </actionGroup>
             <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
             <actionGroup ref="AdminOrdersGridClearFiltersActionGroup" stepKey="clearOrdersGridFilter"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin"/>
         </after>
-
         <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="openProductPage">
             <argument name="productUrl" value="$createProduct.custom_attributes[url_key]$"/>
         </actionGroup>

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -27,9 +27,9 @@ class GroupedTest extends TestCase
     {
         parent::setUp();
         $objectManagerHelper = new ObjectManager($this);
-        $this->scopeConfig = $this->getMockForAbstractClass(ScopeConfigInterface::class);
+        $this->scopeConfig = $this->createMock(ScopeConfigInterface::class);
         $this->renderer = $objectManagerHelper->getObject(
-            \Magento\GroupedProduct\Block\Cart\Item\Renderer\Grouped::class,
+            Renderer::class,
             ['scopeConfig' => $this->scopeConfig]
         );
     }

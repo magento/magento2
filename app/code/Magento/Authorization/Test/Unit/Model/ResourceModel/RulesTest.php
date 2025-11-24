@@ -17,7 +17,7 @@ use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Model\ResourceModel\Db\Context;
 use Magento\Framework\Phrase;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
@@ -32,6 +32,8 @@ use Psr\Log\LoggerInterface;
  */
 class RulesTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * Test constants
      */
@@ -87,23 +89,18 @@ class RulesTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->contextMock = $this->getMockBuilder(Context::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['getResources'])
-            ->getMock();
+        $this->contextMock = $this->createPartialMock(Context::class, ['getResources']);
 
-        $this->resourceConnectionMock = $this->getMockBuilder(ResourceConnection::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['getConnection', 'getTableName'])
-            ->getMock();
+        $this->resourceConnectionMock = $this->createPartialMock(
+            ResourceConnection::class,
+            ['getConnection', 'getTableName']
+        );
 
         $this->contextMock->expects($this->once())
             ->method('getResources')
             ->willReturn($this->resourceConnectionMock);
 
-        $this->connectionMock = $this->getMockBuilder(AdapterInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->connectionMock = $this->createMock(AdapterInterface::class);
 
         $this->resourceConnectionMock->expects($this->once())
             ->method('getConnection')
@@ -114,45 +111,35 @@ class RulesTest extends TestCase
             ->with('authorization_rule', 'default')
             ->willReturnArgument(0);
 
-        $this->aclBuilderMock = $this->getMockBuilder(Builder::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['getConfigCache'])
-            ->getMock();
+        $this->aclBuilderMock = $this->createPartialMockWithReflection(
+            Builder::class,
+            ['getConfigCache']
+        );
 
-        $this->loggerMock = $this->getMockBuilder(LoggerInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->loggerMock = $this->createMock(LoggerInterface::class);
 
-        $this->rootResourceMock = $this->getMockBuilder(RootResource::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->rootResourceMock = $this->createMock(RootResource::class);
 
-        $this->aclDataCacheMock = $this->getMockBuilder(CacheInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->aclDataCacheMock = $this->createMock(CacheInterface::class);
 
         $this->aclBuilderMock->method('getConfigCache')
             ->willReturn($this->aclDataCacheMock);
 
-        $this->rulesModelMock = $this->getMockBuilder(RulesModel::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['getRoleId'])
-            ->getMock();
+        $this->rulesModelMock = $this->createPartialMockWithReflection(
+            RulesModel::class,
+            ['getRoleId']
+        );
 
         $this->rulesModelMock->method('getRoleId')
             ->willReturn(self::TEST_ROLE_ID);
 
-        $objectManager = new ObjectManager($this);
-        $this->model = $objectManager->getObject(
-            Rules::class,
-            [
-                'context' => $this->contextMock,
-                'aclBuilder' => $this->aclBuilderMock,
-                'logger' => $this->loggerMock,
-                'rootResource' => $this->rootResourceMock,
-                'aclDataCache' => $this->aclDataCacheMock,
-                'default'
-            ]
+        $this->model = new Rules(
+            $this->contextMock,
+            $this->aclBuilderMock,
+            $this->loggerMock,
+            $this->rootResourceMock,
+            $this->aclDataCacheMock,
+            'default'
         );
     }
 

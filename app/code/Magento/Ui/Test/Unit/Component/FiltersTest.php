@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -63,9 +63,10 @@ class FiltersTest extends TestCase
      *
      * @param string $filterType
      * @param string $filterName
+     * @param bool $userDefined
      * @dataProvider updateDataProvider
      */
-    public function testUpdate(string $filterType, string $filterName)
+    public function testUpdate(string $filterType, string $filterName, bool $userDefined)
     {
         $componentName = 'component_name';
         $componentConfig = [0, 1, 2];
@@ -75,8 +76,12 @@ class FiltersTest extends TestCase
             ->getMockForAbstractClass();
         $columnInterface->expects($this->atLeastOnce())
             ->method('getData')
-            ->with('config/filter')
-            ->willReturn($filterType);
+            ->willReturnOnConsecutiveCalls(
+                $filterType,
+                ['userDefined' => $userDefined],
+                $filterType,
+                ['userDefined' => $userDefined]
+            );
         $columnInterface->expects($this->atLeastOnce())->method('getName')->willReturn($componentName);
         $columnInterface->expects($this->once())->method('getConfiguration')->willReturn($componentConfig);
         $filterComponent = $this->getMockBuilder(UiComponentInterface::class)
@@ -87,7 +92,7 @@ class FiltersTest extends TestCase
             ->willReturnSelf();
         $filterComponent->expects($this->once())->method('prepare')->willReturnSelf();
         $this->uiComponentFactory->expects($this->once())->method('create')
-            ->with($componentName, $filterName, ['context' => $this->context])
+            ->with($componentName, $filterName, ['context' => $this->context, 'userDefined' => $userDefined])
             ->willReturn($filterComponent);
 
         $this->filters->update($columnInterface);
@@ -101,8 +106,8 @@ class FiltersTest extends TestCase
     public static function updateDataProvider(): array
     {
         return [
-            ['text', 'filterInput'],
-            ['datetimeRange', 'filterDate'],
+            ['text', 'filterInput', false],
+            ['datetimeRange', 'filterDate', true],
         ];
     }
 }

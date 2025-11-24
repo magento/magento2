@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Quote\Model;
@@ -51,12 +51,18 @@ class ShippingAddressManagement implements \Magento\Quote\Model\ShippingAddressM
     protected $totalsCollector;
 
     /**
+     * @var QuoteAddressValidationService
+     */
+    private $quoteAddressValidationService;
+
+    /**
      * @param \Magento\Quote\Api\CartRepositoryInterface $quoteRepository
      * @param QuoteAddressValidator $addressValidator
      * @param Logger $logger
      * @param \Magento\Customer\Api\AddressRepositoryInterface $addressRepository
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param Quote\TotalsCollector $totalsCollector
+     * @param QuoteAddressValidationService|null $quoteAddressValidationService
      *
      */
     public function __construct(
@@ -65,7 +71,8 @@ class ShippingAddressManagement implements \Magento\Quote\Model\ShippingAddressM
         Logger $logger,
         \Magento\Customer\Api\AddressRepositoryInterface $addressRepository,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
-        \Magento\Quote\Model\Quote\TotalsCollector $totalsCollector
+        \Magento\Quote\Model\Quote\TotalsCollector $totalsCollector,
+        ?QuoteAddressValidationService $quoteAddressValidationService = null
     ) {
         $this->quoteRepository = $quoteRepository;
         $this->addressValidator = $addressValidator;
@@ -73,6 +80,8 @@ class ShippingAddressManagement implements \Magento\Quote\Model\ShippingAddressM
         $this->addressRepository = $addressRepository;
         $this->scopeConfig = $scopeConfig;
         $this->totalsCollector = $totalsCollector;
+        $this->quoteAddressValidationService = $quoteAddressValidationService ??
+            ObjectManager::getInstance()->get(QuoteAddressValidationService::class);
     }
 
     /**
@@ -97,7 +106,14 @@ class ShippingAddressManagement implements \Magento\Quote\Model\ShippingAddressM
             !$this->scopeConfig->getValue(Customer::XML_PATH_CUSTOMER_ADDRESS_SHOW_COMPANY)) {
             $address->setCompany(null);
         }
+
         $this->addressValidator->validateForCart($quote, $address);
+
+        $this->quoteAddressValidationService->validateAddressesWithRules(
+            $quote,
+            $address
+        );
+
         $quote->setShippingAddress($address);
         $address = $quote->getShippingAddress();
 

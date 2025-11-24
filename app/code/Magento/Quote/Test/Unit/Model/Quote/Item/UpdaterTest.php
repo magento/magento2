@@ -1,26 +1,31 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Quote\Test\Unit\Model\Quote\Item;
 
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\Catalog\Model\Product;
+use Magento\Catalog\Test\Unit\Helper\ProductTestHelper;
 use Magento\Framework\DataObject;
+use Magento\Quote\Test\Unit\Helper\DataObjectTestHelper;
 use Magento\Framework\Locale\Format;
 use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Quote\Model\Quote\Item;
 use Magento\Quote\Model\Quote\Item\Updater;
+use Magento\Quote\Test\Unit\Helper\QuoteItemUpdaterTestHelper;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 /**
  * Tests  for Magento\Quote\Model\Service\Quote\Updater
- *
  */
+#[CoversClass(\Magento\Quote\Model\Quote\Item\Updater::class)]
 class UpdaterTest extends TestCase
 {
     /**
@@ -55,11 +60,10 @@ class UpdaterTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->productMock = $this->getMockBuilder(Product::class)
-            ->addMethods(['getStockItem', 'setIsSuperMode', 'unsSkipCheckRequiredOption'])
-            ->onlyMethods(['__wakeup'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->productMock = $this->createPartialMock(
+            ProductTestHelper::class,
+            ['__wakeup', 'getStockItem', 'setIsSuperMode', 'unsSkipCheckRequiredOption']
+        );
 
         $this->localeFormat = $this->createPartialMock(
             Format::class,
@@ -69,23 +73,23 @@ class UpdaterTest extends TestCase
             ]
         );
 
-        $this->itemMock = $this->getMockBuilder(Item::class)
-            ->addMethods(['updateItem', 'setNoDiscount', 'setOriginalCustomPrice', 'setIsQtyDecimal'])
-            ->onlyMethods(
-                [
-                    'getProduct',
-                    'setQty',
-                    'checkData',
-                    '__wakeup',
-                    'getBuyRequest',
-                    'addOption',
-                    'setCustomPrice',
-                    'setData',
-                    'hasData'
-                ]
-            )
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->itemMock = $this->createPartialMock(
+            QuoteItemUpdaterTestHelper::class,
+            [
+                'setNoDiscount',
+                'setIsQtyDecimal',
+                'setOriginalCustomPrice',
+                'getProduct',
+                'setQty',
+                'checkData',
+                '__wakeup',
+                'getBuyRequest',
+                'addOption',
+                'setCustomPrice',
+                'setData',
+                'hasData'
+            ]
+        );
 
         $this->stockItemMock = $this->createPartialMock(
             \Magento\CatalogInventory\Model\Stock\Item::class,
@@ -94,9 +98,7 @@ class UpdaterTest extends TestCase
                 '__wakeup'
             ]
         );
-        $this->serializer = $this->getMockBuilder(Json::class)
-            ->onlyMethods(['serialize'])
-            ->getMockForAbstractClass();
+        $this->serializer = $this->createMock(Json::class);
 
         $this->object = (new ObjectManager($this))
             ->getObject(
@@ -115,22 +117,16 @@ class UpdaterTest extends TestCase
         $this->object->update($this->itemMock, []);
     }
 
-    /**
-     * @dataProvider qtyProvider
-     */
+    #[DataProvider('qtyProvider')]
     public function testUpdateNotQtyDecimal($qty, $expectedQty)
     {
-        $this->itemMock->expects($this->any())
-            ->method('setNoDiscount')
-            ->willReturn(true);
+        $this->itemMock->method('setNoDiscount')->willReturn(true);
 
         $this->itemMock->expects($this->any())
             ->method('setQty')
             ->with($expectedQty);
 
-        $this->productMock->expects($this->any())
-            ->method('getStockItem')
-            ->willReturn($this->stockItemMock);
+        $this->productMock->method('getStockItem')->willReturn($this->stockItemMock);
 
         $this->productMock->expects($this->any())
             ->method('setIsSuperMode')
@@ -138,9 +134,7 @@ class UpdaterTest extends TestCase
         $this->productMock->expects($this->any())
             ->method('unsSkipCheckRequiredOption');
 
-        $this->itemMock->expects($this->any())
-            ->method('getProduct')
-            ->willReturn($this->productMock);
+        $this->itemMock->method('getProduct')->willReturn($this->productMock);
 
         $result = $this->object->update($this->itemMock, ['qty' => (double) $qty]);
         $this->assertEquals($result, $this->object);
@@ -176,30 +170,20 @@ class UpdaterTest extends TestCase
         ];
     }
 
-    /**
-     * @dataProvider qtyProviderDecimal
-     */
+    #[DataProvider('qtyProviderDecimal')]
     public function testUpdateQtyDecimal($qty, $expectedQty)
     {
-        $this->itemMock->expects($this->any())
-            ->method('setNoDiscount')
-            ->willReturn(true);
+        $this->itemMock->method('setNoDiscount')->willReturn(true);
 
         $this->itemMock->expects($this->any())
             ->method('setQty')
             ->with($expectedQty);
 
-        $this->itemMock->expects($this->any())
-            ->method('setIsQtyDecimal')
-            ->willReturn(true);
+        $this->itemMock->method('setIsQtyDecimal')->willReturn(true);
 
-        $this->stockItemMock->expects($this->any())
-            ->method('getIsQtyDecimal')
-            ->willReturn(true);
+        $this->stockItemMock->method('getIsQtyDecimal')->willReturn(true);
 
-        $this->productMock->expects($this->any())
-            ->method('getStockItem')
-            ->willReturn($this->stockItemMock);
+        $this->productMock->method('getStockItem')->willReturn($this->stockItemMock);
 
         $this->productMock->expects($this->any())
             ->method('setIsSuperMode')
@@ -207,9 +191,7 @@ class UpdaterTest extends TestCase
         $this->productMock->expects($this->any())
             ->method('unsSkipCheckRequiredOption');
 
-        $this->itemMock->expects($this->any())
-            ->method('getProduct')
-            ->willReturn($this->productMock);
+        $this->itemMock->method('getProduct')->willReturn($this->productMock);
 
         $object = $this->object->update($this->itemMock, ['qty' => (double) $qty]);
         $this->assertEquals($this->object, $object);
@@ -221,43 +203,29 @@ class UpdaterTest extends TestCase
             ->method('setIsQtyDecimal')
             ->with(1);
 
-        $this->stockItemMock->expects($this->any())
-            ->method('getIsQtyDecimal')
-            ->willReturn(true);
+        $this->stockItemMock->method('getIsQtyDecimal')->willReturn(true);
 
-        $this->productMock->expects($this->any())
-            ->method('getStockItem')
-            ->willReturn($this->stockItemMock);
+        $this->productMock->method('getStockItem')->willReturn($this->stockItemMock);
 
-        $this->itemMock->expects($this->any())
-            ->method('getProduct')
-            ->willReturn($this->productMock);
+        $this->itemMock->method('getProduct')->willReturn($this->productMock);
 
         $object = $this->object->update($this->itemMock, ['qty' => 3, 'use_discount' => true]);
         $this->assertEquals($this->object, $object);
     }
 
-    /**
-     * @covers \Magento\Quote\Model\Quote\Item\Updater::setCustomPrice()
-     */
     public function testUpdateCustomPrice()
     {
         $customPrice = 9.99;
         $qty = 3;
-        $buyRequestMock = $this->getMockBuilder(DataObject::class)
-            ->addMethods(['setCustomPrice', 'setValue', 'setCode', 'setProduct'])
-            ->onlyMethods(['getData'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $buyRequestMock = $this->createPartialMock(
+            DataObjectTestHelper::class,
+            ['getData', 'setCustomPrice', 'setValue', 'setCode', 'setProduct']
+        );
         $buyRequestMock->expects($this->any())
             ->method('setCustomPrice')
             ->with($customPrice);
-        $buyRequestMock->expects($this->any())
-            ->method('getData')
-            ->willReturn(['custom_price' => $customPrice]);
-        $this->serializer->expects($this->any())
-            ->method('serialize')
-            ->willReturn(json_encode($buyRequestMock->getData()));
+        $buyRequestMock->method('getData')->willReturn(['custom_price' => $customPrice]);
+        $this->serializer->method('serialize')->willReturn(json_encode($buyRequestMock->getData()));
         $buyRequestMock->expects($this->any())
             ->method('setValue')
             ->with('{"custom_price":' . $customPrice . '}');
@@ -272,24 +240,14 @@ class UpdaterTest extends TestCase
         $this->itemMock->expects($this->any())
             ->method('setIsQtyDecimal')
             ->with(1);
-        $this->itemMock->expects($this->any())
-            ->method('getBuyRequest')
-            ->willReturn($buyRequestMock);
+        $this->itemMock->method('getBuyRequest')->willReturn($buyRequestMock);
 
-        $this->stockItemMock->expects($this->any())
-            ->method('getIsQtyDecimal')
-            ->willReturn(true);
+        $this->stockItemMock->method('getIsQtyDecimal')->willReturn(true);
 
-        $this->productMock->expects($this->any())
-            ->method('getStockItem')
-            ->willReturn($this->stockItemMock);
+        $this->productMock->method('getStockItem')->willReturn($this->stockItemMock);
 
-        $this->itemMock->expects($this->any())
-            ->method('getProduct')
-            ->willReturn($this->productMock);
-        $this->itemMock->expects($this->any())
-            ->method('addOption')
-            ->willReturn($buyRequestMock);
+        $this->itemMock->method('getProduct')->willReturn($this->productMock);
+        $this->itemMock->method('addOption')->willReturn($buyRequestMock);
         $this->itemMock->expects($this->any())
             ->method('setQty')
             ->with($qty);
@@ -302,25 +260,17 @@ class UpdaterTest extends TestCase
         $this->assertEquals($this->object, $object);
     }
 
-    /**
-     * @covers \Magento\Quote\Model\Quote\Item\Updater::unsetCustomPrice()
-     */
     public function testUpdateUnsetCustomPrice()
     {
         $qty = 3;
-        $buyRequestMock = $this->getMockBuilder(DataObject::class)
-            ->addMethods(['setCustomPrice', 'setValue', 'setCode', 'setProduct'])
-            ->onlyMethods(['getData', 'unsetData', 'hasData'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $buyRequestMock = $this->createPartialMock(
+            DataObjectTestHelper::class,
+            ['getData', 'unsetData', 'hasData', 'setCustomPrice', 'setValue', 'setCode', 'setProduct']
+        );
         $buyRequestMock->expects($this->never())->method('setCustomPrice');
         $buyRequestMock->expects($this->once())->method('getData')->willReturn([]);
-        $serializer = $this->getMockBuilder(Json::class)
-            ->onlyMethods(['serialize'])
-            ->getMockForAbstractClass();
-        $serializer->expects($this->any())
-            ->method('serialize')
-            ->willReturn('{}');
+        $serializer = $this->createMock(Json::class);
+        $serializer->method('serialize')->willReturn('{}');
         $objectManagerHelper = new ObjectManager($this);
         $objectManagerHelper->setBackwardCompatibleProperty($this->object, 'serializer', $serializer);
         $buyRequestMock->expects($this->once())->method('unsetData')->with('custom_price');
@@ -343,24 +293,14 @@ class UpdaterTest extends TestCase
         $this->itemMock->expects($this->any())
             ->method('setIsQtyDecimal')
             ->with(1);
-        $this->itemMock->expects($this->any())
-            ->method('getBuyRequest')
-            ->willReturn($buyRequestMock);
+        $this->itemMock->method('getBuyRequest')->willReturn($buyRequestMock);
 
-        $this->stockItemMock->expects($this->any())
-            ->method('getIsQtyDecimal')
-            ->willReturn(true);
+        $this->stockItemMock->method('getIsQtyDecimal')->willReturn(true);
 
-        $this->productMock->expects($this->any())
-            ->method('getStockItem')
-            ->willReturn($this->stockItemMock);
+        $this->productMock->method('getStockItem')->willReturn($this->stockItemMock);
 
-        $this->itemMock->expects($this->any())
-            ->method('getProduct')
-            ->willReturn($this->productMock);
-        $this->itemMock->expects($this->any())
-            ->method('addOption')
-            ->willReturn($buyRequestMock);
+        $this->itemMock->method('getProduct')->willReturn($this->productMock);
+        $this->itemMock->method('addOption')->willReturn($buyRequestMock);
 
         $this->itemMock->expects($this->exactly(2))
             ->method('setData')

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2022 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -11,6 +11,7 @@ use Magento\Framework\Event\Observer;
 use Magento\Framework\App\RequestInterface;
 use Magento\Quote\Observer\SubmitObserver;
 use Magento\Quote\Plugin\SendOrderNotification;
+use Magento\Quote\Test\Unit\Helper\EventTestHelper;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Magento\Sales\Model\Order;
@@ -65,11 +66,8 @@ class SendOrderNotificationTest extends TestCase
             ->onlyMethods([])
             ->getMock();
 
-        $event = $this->getMockBuilder(Event::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['getOrder'])
-            ->getMock();
-        $event->expects($this->exactly(2))->method('getOrder')->willReturn($order);
+        $event = new EventTestHelper();
+        $event->setOrder($order);
 
         $this->observer->expects($this->exactly(2))->method('getEvent')->willReturn($event);
 
@@ -96,11 +94,8 @@ class SendOrderNotificationTest extends TestCase
             ->onlyMethods([])
             ->getMock();
 
-        $event = $this->getMockBuilder(Event::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['getOrder'])
-            ->getMock();
-        $event->expects($this->exactly(2))->method('getOrder')->willReturn($order);
+        $event = new EventTestHelper();
+        $event->setOrder($order);
 
         $this->observer->expects($this->exactly(2))->method('getEvent')->willReturn($event);
 

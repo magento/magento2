@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -44,7 +44,7 @@ class DeleteByPathTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->logger = $this->getMockForAbstractClass(LoggerInterface::class);
+        $this->logger = $this->createMock(LoggerInterface::class);
         $resourceConnection = $this->createMock(ResourceConnection::class);
 
         $this->deleteMediaAssetByPath = (new ObjectManager($this))->getObject(
@@ -55,7 +55,7 @@ class DeleteByPathTest extends TestCase
             ]
         );
 
-        $this->adapter = $this->getMockForAbstractClass(AdapterInterface::class);
+        $this->adapter = $this->createMock(AdapterInterface::class);
         $resourceConnection->expects($this->once())
             ->method('getConnection')
             ->willReturn($this->adapter);

@@ -29,5 +29,7 @@
         <element name="productSeeDetailsByName" type="block" selector="//a[contains(text(), '{{productName}}')]/ancestor::div/div[contains(@class, 'product-item-tooltip')]" parameterized="true"/>
         <element name="productSeeDetailsLabelByName" type="block" selector="//a[contains(text(), '{{productName}}')]/ancestor::div/div[contains(@class, 'product-item-tooltip')]//dt[@class='label']" parameterized="true"/>
         <element name="productSeeDetailsValueByName" type="block" selector="//a[contains(text(), '{{productName}}')]/ancestor::div/div[contains(@class, 'product-item-tooltip')]//dd[@class='values']" parameterized="true"/>
+        <element name="wishListLink" type="text" selector="//header[@class='page-header']//li[@class='link wishlist']"/>
+        <element name="wishListCount" type="text" selector="//header[@class='page-header']//div[@class='customer-menu']//span"/>
     </section>
 </sections>

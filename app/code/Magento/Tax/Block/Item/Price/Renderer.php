@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Tax\Block\Item\Price;
 
@@ -18,7 +18,6 @@ use Magento\Tax\Helper\Data as TaxHelper;
  * Item price render block
  *
  * @api
- * @author      Magento Core Team <core@magentocommerce.com>
  * @since 100.0.2
  */
 class Renderer extends \Magento\Framework\View\Element\Template
@@ -106,6 +105,8 @@ class Renderer extends \Magento\Framework\View\Element\Template
     }
 
     /**
+     * Get current store ID
+     *
      * @return int|null|string
      */
     public function getStoreId()
@@ -201,19 +202,13 @@ class Renderer extends \Magento\Framework\View\Element\Template
     }
 
     /**
-     * Get item price in display currency or order currency depending
-     * on item type
+     * Get item price in display currency or order currency
      *
      * @return float
      */
     public function getItemDisplayPriceExclTax()
     {
-        $item = $this->getItem();
-        if ($item instanceof QuoteItem) {
-            return $item->getCalculationPrice();
-        } else {
-            return $item->getPrice();
-        }
+        return $this->getItem()->getPrice();
     }
 
     /**
