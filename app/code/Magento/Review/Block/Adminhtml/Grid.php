@@ -86,7 +86,7 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
     }
 
     /**
-     *  Executes after the collection is loaded.
+     * Executes after the collection is loaded. This method is intentionally overridden to preserve compatibility
      *
      * @return \Magento\Backend\Block\Widget\Grid
      * @deprecated This method is no longer in used.We use it only to support compatibility
