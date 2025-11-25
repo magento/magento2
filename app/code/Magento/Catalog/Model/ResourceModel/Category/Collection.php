@@ -345,12 +345,13 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
             // Find categories missing from the SQL result
             $categoriesIdsAlreadyIndexed = array_keys($categoryProductsCount);
             $missingCategoryIds = array_diff($categoryIds, $categoriesIdsAlreadyIndexed);
-
-            $countFromCategoryTable = $this->getCountFromCategoryTableBulk(
-                $missingCategoryIds,
-                (int) $websiteId
-            );
-
+            $countFromCategoryTable = [];
+            if (count($missingCategoryIds)) {
+                $countFromCategoryTable = $this->getCountFromCategoryTableBulk(
+                    $missingCategoryIds,
+                    (int) $websiteId
+                );
+            }
             foreach ($anchor as $item) {
                 $id = $item->getId();
                 $productsCount = $categoryProductsCount[$id]

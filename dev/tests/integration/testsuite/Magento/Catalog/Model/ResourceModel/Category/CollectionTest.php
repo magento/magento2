@@ -7,8 +7,8 @@ declare(strict_types=1);
 
 namespace Magento\Catalog\Model\ResourceModel\Category;
 
+use Magento\Catalog\Model\Category;
 use Magento\Catalog\Test\Fixture\Category as CategoryFixture;
-use Magento\Catalog\Test\Fixture\CategoryTreeWithProducts as CategoryTreeWithProductsFixture;
 use Magento\Catalog\Test\Fixture\Product as ProductFixture;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\TestFramework\Fixture\AppArea;
@@ -28,7 +28,7 @@ use PHPUnit\Framework\TestCase;
 class CollectionTest extends TestCase
 {
     /**
-     * @var Collection
+     * @var CategoryCollection
      */
     private Collection $collection;
 
@@ -44,7 +44,7 @@ class CollectionTest extends TestCase
     protected function setUp(): void
     {
         $objectManager = Bootstrap::getObjectManager();
-        $this->collection = Bootstrap::getObjectManager()->create(Collection::class);
+        $this->collection = Bootstrap::getObjectManager()->create(CategoryCollection::class);
         $this->categoryCollectionFactory = $objectManager->get(CollectionFactory::class);
     }
 
@@ -65,7 +65,7 @@ class CollectionTest extends TestCase
     {
         $categories = $this->collection->joinUrlRewrite()->addPathFilter('1/2/3');
         $this->assertCount(1, $categories);
-        /** @var $category \Magento\Catalog\Model\Category */
+        /** @var $category Category */
         $category = $categories->getFirstItem();
         $this->assertStringEndsWith('category.html', $category->getUrl());
     }
@@ -82,7 +82,7 @@ class CollectionTest extends TestCase
         $storeId = $store->load('second_category_store', 'code')->getId();
         $categories = $this->collection->setStoreId($storeId)->joinUrlRewrite()->addPathFilter('1/2/3');
         $this->assertCount(1, $categories);
-        /** @var $category \Magento\Catalog\Model\Category */
+        /** @var $category Category */
         $category = $categories->getFirstItem();
         $this->assertStringEndsWith('category-3-on-2.html', $category->getUrl());
     }
@@ -92,15 +92,25 @@ class CollectionTest extends TestCase
         DataFixture(CategoryFixture::class, ['name' => 'TC L2 A', 'parent_id' => '$c1.id$', 'is_anchor' => 1], 'c11'),
         DataFixture(CategoryFixture::class, ['name' => 'TC L2 B', 'parent_id' => '$c1.id$', 'is_anchor' => 1], 'c12'),
         DataFixture(CategoryFixture::class, ['name' => 'TC L2 C', 'parent_id' => '$c1.id$', 'is_anchor' => 0], 'c13'),
-        DataFixture(CategoryFixture::class, ['name' => 'TC L3 A1', 'parent_id' => '$c11.id$', 'is_anchor' => 1], 'c1111'),
-        DataFixture(CategoryFixture::class, ['name' => 'TC L3 A2', 'parent_id' => '$c11.id$', 'is_anchor' => 1], 'c1112'),
-        DataFixture(CategoryFixture::class, ['name' => 'TC L3 C1', 'parent_id' => '$c13.id$', 'is_anchor' => 0], 'c1113'),
-
-        DataFixture(ProductFixture::class, ['sku' => 'TP-1A', 'category_ids' => ['$c12.id$']], as: 'p1'),
-        DataFixture(ProductFixture::class, ['sku' => 'TP-2A', 'category_ids' => ['$c1111.id$']], as: 'p2'),
-        DataFixture(ProductFixture::class, ['sku' => 'TP-3B', 'category_ids' => ['$c1112.id$',  '$c1113.id$']], as: 'p3'),
-        DataFixture(ProductFixture::class, ['sku' => 'TP-4B', 'category_ids' => ['$c1112.id$', '$c1113.id$']], as: 'p4'),
-
+        DataFixture(
+            CategoryFixture::class,
+            ['name' => 'TC L3 A1', 'parent_id' => '$c11.id$', 'is_anchor' => 1],
+            'c1111'
+        ),
+        DataFixture(
+            CategoryFixture::class,
+            ['name' => 'TC L3 A2', 'parent_id' => '$c11.id$', 'is_anchor' => 1],
+            'c1112'
+        ),
+        DataFixture(
+            CategoryFixture::class,
+            ['name' => 'TC L3 C1', 'parent_id' => '$c13.id$', 'is_anchor' => 0],
+            'c1113'
+        ),
+        DataFixture(ProductFixture::class, ['sku' => 'TP-1A', 'category_ids' => ['$c12.id$']], 'p1'),
+        DataFixture(ProductFixture::class, ['sku' => 'TP-2A', 'category_ids' => ['$c1111.id$']], 'p2'),
+        DataFixture(ProductFixture::class, ['sku' => 'TP-3B', 'category_ids' => ['$c1112.id$',  '$c1113.id$']], 'p3'),
+        DataFixture(ProductFixture::class, ['sku' => 'TP-4B', 'category_ids' => ['$c1112.id$', '$c1113.id$']], 'p4'),
         AppArea('adminhtml'),
         DbIsolation(true),
         AppIsolation(true)
