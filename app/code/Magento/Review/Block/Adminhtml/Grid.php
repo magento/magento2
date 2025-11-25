@@ -7,6 +7,8 @@ declare(strict_types=1);
 
 namespace Magento\Review\Block\Adminhtml;
 
+use Magento\Review\Helper\Action\Pager;
+
 /**
  * Adminhtml reviews grid
  *
@@ -87,6 +89,8 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
      *  Executes after the collection is loaded.
      *
      * @return \Magento\Backend\Block\Widget\Grid
+     * @deprecated This method is no longer in used.We use it only to support compatibility
+     * @see Pager::getRelativeReviewId()
      */
     protected function _afterLoadCollection()
     {

@@ -60,7 +60,8 @@ class Pager extends \Magento\Framework\App\Helper\AbstractHelper
         ?CollectionFactory $reviewCollectionFactory = null
     ) {
         $this->_backendSession = $backendSession;
-        $this->reviewCollectionFactory = $reviewCollectionFactory ?: ObjectManager::getInstance()->get(CollectionFactory::class);
+       $this->reviewCollectionFactory = $reviewCollectionFactory
+            ?: ObjectManager::getInstance()->get(CollectionFactory::class);
         parent::__construct($context);
     }
 
