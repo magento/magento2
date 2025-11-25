@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -51,9 +51,8 @@ class CryptographerTest extends TestCase
      * @var array
      */
     private $initializationVectors;
-
     /**
-     * @var
+     * @var string
      */
     private $source;
 
@@ -70,7 +69,7 @@ class CryptographerTest extends TestCase
         $this->analyticsTokenMock = $this->createMock(AnalyticsToken::class);
 
         $this->encodedContextFactoryMock = $this->getMockBuilder(EncodedContextFactory::class)
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -181,7 +180,7 @@ class CryptographerTest extends TestCase
     /**
      * @return array
      */
-    public function encodeNotValidSourceDataProvider()
+    public static function encodeNotValidSourceDataProvider()
     {
         return [
             'Array' => [[]],

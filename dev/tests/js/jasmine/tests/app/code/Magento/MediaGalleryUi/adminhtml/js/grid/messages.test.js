@@ -1,6 +1,6 @@
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 
 define([
@@ -65,7 +65,8 @@ define([
         });
 
         it('prepare message to be rendered as HTML', function () {
-            var escapedMessage = 'escaped message';
+            var escapedMessage = 'escaped message',
+                originalEscapeHtml = escaperInstance.escapeHtml;
 
             // eslint-disable-next-line max-nested-callbacks
             escaperInstance.escapeHtml = jasmine.createSpy().and.callFake(function () {
@@ -73,6 +74,9 @@ define([
             });
 
             expect(messagesInstance.prepareMessageUnsanitizedHtml(messageText)).toEqual(escapedMessage);
+
+            // Restore original function to avoid test interference
+            escaperInstance.escapeHtml = originalEscapeHtml;
         });
     });
 });

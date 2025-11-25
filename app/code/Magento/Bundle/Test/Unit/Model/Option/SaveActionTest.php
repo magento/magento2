@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2022 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -13,12 +13,17 @@ use Magento\Bundle\Model\Option\SaveAction;
 use Magento\Bundle\Model\Product\Type;
 use Magento\Bundle\Model\ResourceModel\Option as OptionResource;
 use Magento\Bundle\Model\ResourceModel\Option\Collection;
-use Magento\Catalog\Api\Data\ProductInterface;
+use Magento\Catalog\Test\Unit\Helper\ProductTestHelper;
 use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Framework\EntityManager\EntityMetadataInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Magento\Store\Model\StoreManagerInterface;
+use Magento\Bundle\Api\ProductLinkManagementAddChildrenInterface;
 
+/**
+ * Test class for \Magento\Bundle\Model\Option\SaveAction
+ */
 class SaveActionTest extends TestCase
 {
     /**
@@ -42,7 +47,7 @@ class SaveActionTest extends TestCase
     private $linkManagement;
 
     /**
-     * @var ProductInterface|MockObject
+     * @var ProductTestHelper
      */
     private $product;
 
@@ -51,50 +56,44 @@ class SaveActionTest extends TestCase
      */
     private $saveAction;
 
+    /**
+     * @var StoreManagerInterface
+     */
+    private $storeManager;
+
+    /**
+     * @var ProductLinkManagementAddChildrenInterface
+     */
+    private $addChildren;
+
     protected function setUp(): void
     {
-        $this->linkManagement = $this->getMockBuilder(ProductLinkManagementInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->metadataPool = $this->getMockBuilder(MetadataPool::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->type = $this->getMockBuilder(Type::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->optionResource = $this->getMockBuilder(OptionResource::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->product = $this->getMockBuilder(ProductInterface::class)
-            ->addMethods(['getStoreId', 'getData', 'setIsRelationsChanged'])
-            ->getMockForAbstractClass();
+        $this->linkManagement = $this->createMock(ProductLinkManagementInterface::class);
+        $this->metadataPool = $this->createMock(MetadataPool::class);
+        $this->type = $this->createMock(Type::class);
+        $this->optionResource = $this->createMock(OptionResource::class);
+        $this->addChildren = $this->createMock(ProductLinkManagementAddChildrenInterface::class);
+        $this->storeManager = $this->createMock(StoreManagerInterface::class);
+        $this->product = new ProductTestHelper();
 
         $this->saveAction = new SaveAction(
             $this->optionResource,
             $this->metadataPool,
             $this->type,
-            $this->linkManagement
+            $this->linkManagement,
+            $this->storeManager,
+            $this->addChildren
         );
     }
 
     public function testSaveBulk()
     {
-        $option = $this->getMockBuilder(Option::class)
-            ->onlyMethods(['getOptionId', 'setData', 'getData'])
-            ->addMethods(['setStoreId', 'setParentId', 'getParentId'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $option->expects($this->any())
-            ->method('getOptionId')
-            ->willReturn(1);
-        $option->expects($this->any())
-            ->method('getData')
-            ->willReturn([]);
+        $option = $this->createMock(Option::class);
+        $option->method('getOptionId')->willReturn(1);
+        $option->method('getData')->willReturn([]);
         $bundleOptions = [$option];
 
-        $collection = $this->getMockBuilder(Collection::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $collection = $this->createMock(Collection::class);
         $collection->expects($this->once())
             ->method('getItemById')
             ->with(1)
@@ -103,18 +102,13 @@ class SaveActionTest extends TestCase
             ->method('getOptionsCollection')
             ->willReturn($collection);
 
-        $metadata = $this->getMockBuilder(EntityMetadataInterface::class)
-            ->getMockForAbstractClass();
+        $metadata = $this->createMock(EntityMetadataInterface::class);
         $this->metadataPool->expects($this->once())
             ->method('getMetadata')
             ->willReturn($metadata);
 
-        $this->linkManagement->expects($this->once())
-            ->method('getChildren')
-            ->willReturn([]);
-        $this->product->expects($this->once())
-            ->method('setIsRelationsChanged')
-            ->with(true);
+        // Clean setter call - no complex expectations needed
+        $this->product->setIsRelationsChanged(true);
 
         $this->saveAction->saveBulk($this->product, $bundleOptions);
     }

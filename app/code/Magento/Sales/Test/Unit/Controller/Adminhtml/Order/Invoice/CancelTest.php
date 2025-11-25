@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -208,8 +208,10 @@ class CancelTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $transactionMock->method('addObject')
-            ->withConsecutive([$invoiceMock], [$orderMock])
-            ->willReturnOnConsecutiveCalls($transactionMock, $transactionMock);
+            ->willReturnCallback(fn($param) => match ([$param]) {
+                [$invoiceMock] => $transactionMock,
+                [$orderMock] => $transactionMock
+            });
 
         $this->messageManagerMock->expects($this->once())
             ->method('addSuccessMessage')

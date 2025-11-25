@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Cms\Model;
 
@@ -34,7 +34,7 @@ class PageTest extends \PHPUnit\Framework\TestCase
      * @param array $pageData
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      * @magentoDbIsolation enabled
-     * @dataProvider testGetByIdentifierDataProvider
+     * @dataProvider pageGetByIdentifierDataProvider
      */
     public function testGetByIdentifier(array $pageData)
     {
@@ -103,7 +103,7 @@ class PageTest extends \PHPUnit\Framework\TestCase
         $this->assertLessThanOrEqual($afterTimestamp, $pageTimestamp);
     }
 
-    public function generateIdentifierFromTitleDataProvider() : array
+    public static function generateIdentifierFromTitleDataProvider() : array
     {
         return [
             ['data' => ['title' => 'Test title', 'stores' => [1]], 'expectedIdentifier' => 'test-title'],
@@ -122,10 +122,10 @@ class PageTest extends \PHPUnit\Framework\TestCase
      * Data provider for "testGetByIdentifier" method
      * @return array
      */
-    public function testGetByIdentifierDataProvider() : array
+    public static function pageGetByIdentifierDataProvider() : array
     {
         return [
-            ['data' => [
+            ['pageData' => [
                 'title' => 'Test title',
                 'identifier' => 'test-identifier',
                 'page_layout' => '1column',

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -51,7 +51,8 @@ class WebsiteTest extends TestCase
 
         $this->websiteFactory = $this->getMockBuilder(WebsiteFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create', 'getCollection', '__wakeup'])
+            ->addMethods(['getCollection', '__wakeup'])
+            ->onlyMethods(['create'])
             ->getMock();
 
         $this->storeManager = $this->getMockForAbstractClass(StoreManagerInterface::class);
@@ -128,9 +129,12 @@ class WebsiteTest extends TestCase
     {
         $this->typeList->expects($this->exactly(2))
             ->method('cleanType')
-            ->withConsecutive(
-                ['full_page'],
-                [Config::TYPE_IDENTIFIER]
+            ->willReturnCallback(
+                function ($arg) {
+                    if ($arg == 'full_page' || $arg == Config::TYPE_IDENTIFIER) {
+                        return null;
+                    }
+                }
             );
 
         $this->model->afterDelete();

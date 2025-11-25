@@ -1,13 +1,14 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 
 declare(strict_types=1);
 
 namespace Magento\Downloadable\Test\Unit\Observer;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\Catalog\Model\Product\Type as ProductType;
 use Magento\Checkout\Model\Session as CheckoutSession;
 use Magento\Downloadable\Model\Product\Type as DownloadableProductType;
@@ -51,10 +52,10 @@ class SetHasDownloadableProductsObserverTest extends TestCase
 
         $this->orderMock = $this->createPartialMock(Order::class, ['getAllItems']);
 
-        $this->checkoutSessionMock = $this->getMockBuilder(CheckoutSession::class)
-            ->addMethods(['getHasDownloadableProducts', 'setHasDownloadableProducts'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->checkoutSessionMock = $this->createPartialMock(
+            \Magento\Checkout\Test\Unit\Helper\CheckoutSessionTestHelper::class,
+            ['getHasDownloadableProducts', 'setHasDownloadableProducts']
+        );
 
         $this->setHasDownloadableProductsObserver = $this->objectManager->getObject(
             SetHasDownloadableProductsObserver::class,
@@ -83,9 +84,8 @@ class SetHasDownloadableProductsObserverTest extends TestCase
 
     /**
      * Test execute with session has no downloadable products with the data provider
-     *
-     * @dataProvider executeWithSessionNoDownloadableProductsDataProvider
      */
+    #[DataProvider('executeWithSessionNoDownloadableProductsDataProvider')]
     public function testExecuteWithSessionNoDownloadableProducts($allItems, $expectedCall)
     {
         $event = new DataObject(['order' => $this->orderMock]);
@@ -100,7 +100,7 @@ class SetHasDownloadableProductsObserverTest extends TestCase
 
         $this->orderMock->method('getAllItems')->willReturn($allOrderItemsMock);
 
-        $this->checkoutSessionMock->expects($expectedCall)
+        $this->checkoutSessionMock->expects($this->$expectedCall())
             ->method('setHasDownloadableProducts')->with(true);
 
         $this->setHasDownloadableProductsObserver->execute($observer);
@@ -124,12 +124,8 @@ class SetHasDownloadableProductsObserverTest extends TestCase
             ['getProductType', 'getRealProductType', 'getProductOptionByCode']
         );
 
-        $item->expects($this->any())
-            ->method('getProductType')
-            ->willReturn($productType);
-        $item->expects($this->any())
-            ->method('getRealProductType')
-            ->willReturn($realProductType);
+        $item->method('getProductType')->willReturn($productType);
+        $item->method('getRealProductType')->willReturn($realProductType);
         $item->expects($this->any())
             ->method('getProductOptionByCode')
             ->with('is_downloadable')
@@ -143,7 +139,7 @@ class SetHasDownloadableProductsObserverTest extends TestCase
      *
      * @return array
      */
-    public function executeWithSessionNoDownloadableProductsDataProvider()
+    public static function executeWithSessionNoDownloadableProductsDataProvider()
     {
         return [
             'Order has one item is downloadable product' => [
@@ -159,7 +155,7 @@ class SetHasDownloadableProductsObserverTest extends TestCase
                         '1'
                     ]
                 ],
-                $this->once()
+                'once'
             ],
             'Order has all items are simple product' => [
                 [
@@ -174,7 +170,7 @@ class SetHasDownloadableProductsObserverTest extends TestCase
                         '0'
                     ]
                 ],
-                $this->never()
+                'never'
             ],
         ];
     }

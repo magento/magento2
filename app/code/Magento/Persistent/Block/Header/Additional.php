@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Persistent\Block\Header;
 
@@ -11,8 +11,6 @@ use Magento\Persistent\Helper\Data;
 
 /**
  * Remember Me block
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Additional extends \Magento\Framework\View\Element\Html\Link
 {
@@ -27,8 +25,6 @@ class Additional extends \Magento\Framework\View\Element\Html\Link
     protected $_persistentSessionHelper;
 
     /**
-     * Customer repository
-     *
      * @var \Magento\Customer\Api\CustomerRepositoryInterface
      */
     protected $customerRepository;
@@ -63,8 +59,8 @@ class Additional extends \Magento\Framework\View\Element\Html\Link
         \Magento\Persistent\Helper\Session $persistentSessionHelper,
         \Magento\Customer\Api\CustomerRepositoryInterface $customerRepository,
         array $data = [],
-        Json $jsonSerializer = null,
-        Data $persistentHelper = null
+        ?Json $jsonSerializer = null,
+        ?Data $persistentHelper = null
     ) {
         $this->_isScopePrivate = true;
         $this->_customerViewHelper = $customerViewHelper;

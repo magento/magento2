@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -19,6 +19,7 @@ use Magento\SalesRule\Model\Rule;
 use Magento\SalesRule\Model\Rule\Action\Discount\CartFixed;
 use Magento\SalesRule\Model\Rule\Action\Discount\Data;
 use Magento\SalesRule\Model\Rule\Action\Discount\DataFactory;
+use Magento\SalesRule\Model\Rule\Action\Discount\ExistingDiscountRuleCollector;
 use Magento\SalesRule\Model\Validator;
 use Magento\Store\Model\Store;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -82,12 +83,18 @@ class CartFixedTest extends TestCase
     protected $cartFixedDiscountHelper;
 
     /**
+     * @var ExistingDiscountRuleCollector|MockObject
+     */
+    private ExistingDiscountRuleCollector $existingDiscountRuleCollector;
+
+    /**
      * @inheritdoc
      */
     protected function setUp(): void
     {
         $this->rule = $this->getMockBuilder(Rule::class)
-            ->setMethods(['getId', 'getApplyToShipping'])
+            ->addMethods([ 'getApplyToShipping'])
+            ->onlyMethods(['getId'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->item = $this->createMock(AbstractItem::class);
@@ -115,10 +122,10 @@ class CartFixedTest extends TestCase
         $dataFactory->method('create')->willReturn($this->data);
         $this->priceCurrency = $this->getMockBuilder(PriceCurrencyInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['roundPrice'])
+            ->addMethods(['roundPrice'])
             ->getMockForAbstractClass();
         $this->deltaPriceRound = $this->getMockBuilder(DeltaPriceRound::class)
-            ->setMethods(['round'])
+            ->onlyMethods(['round'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->cartFixedDiscountHelper = $this->getMockBuilder(CartFixedDiscount::class)
@@ -135,11 +142,16 @@ class CartFixedTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
+        $this->existingDiscountRuleCollector = $this->createMock(ExistingDiscountRuleCollector::class);
+        $this->existingDiscountRuleCollector->expects($this->any())
+            ->method('getExistingRuleDiscount')
+            ->willReturn(0.00);
         $this->model = new CartFixed(
             $this->validator,
             $dataFactory,
             $this->priceCurrency,
             $this->deltaPriceRound,
+            $this->existingDiscountRuleCollector,
             $this->cartFixedDiscountHelper
         );
     }
@@ -149,7 +161,7 @@ class CartFixedTest extends TestCase
      * @dataProvider dataProviderActions
      * @param array $shipping
      * @param array $ruleDetails
-     * @throws LocalizedException
+     * @throws LocalizedException|\PHPUnit\Framework\MockObject\Exception
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function testCalculate(array $shipping, array $ruleDetails): void
@@ -184,22 +196,22 @@ class CartFixedTest extends TestCase
             ->willReturn(true);
         $cartExtensionMock = $this->getMockBuilder(CartExtensionInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getShippingAssignments'])
+            ->addMethods(['getShippingAssignments'])
             ->getMockForAbstractClass();
         $this->quote->expects($this->any())->method('getCartFixedRules')->will($this->returnValue([]));
         $store = $this->createMock(Store::class);
         $this->priceCurrency
             ->expects($this->atLeastOnce())
             ->method('convert')
-            ->willReturnArgument($ruleDetails['rounded_amount']);
+            ->willReturnArgument((int)$ruleDetails['rounded_amount']);
         $this->priceCurrency
             ->expects($this->atLeastOnce())
             ->method('roundPrice')
-            ->willReturnArgument($ruleDetails['rounded_amount']);
+            ->willReturnArgument((int)$ruleDetails['rounded_amount']);
         $this->deltaPriceRound
             ->expects($this->any())
             ->method('round')
-            ->willReturnArgument($ruleDetails['base_items_price']);
+            ->willReturnArgument((int)$ruleDetails['base_items_price']);
         $this->quote->expects($this->any())->method('getStore')->will($this->returnValue($store));
         $this->quote->method('isVirtual')
             ->willReturn(false);
@@ -278,7 +290,8 @@ class CartFixedTest extends TestCase
                     'items_count' => 1,
                     'rounded_amount' => 0.0,
                     'discounted_amount' => 10.0,
-                    'cart_rules' => 0.0
+                    'cart_rules' => 0.0,
+                    'affected_items' => []
                 ]
             ],
             'regular shipping with two items and single shipping' => [
@@ -293,7 +306,8 @@ class CartFixedTest extends TestCase
                     'items_count' => 2,
                     'rounded_amount' => 0.0,
                     'discounted_amount' => 10.0,
-                    'cart_rules' => 0.0
+                    'cart_rules' => 0.0,
+                    'affected_items' => []
                 ]
             ],
             'regular shipping with two items and multiple shipping' => [
@@ -308,7 +322,8 @@ class CartFixedTest extends TestCase
                     'items_count' => 2,
                     'rounded_amount' => 0.0,
                     'discounted_amount' => 10.0,
-                    'cart_rules' => 0.0
+                    'cart_rules' => 0.0,
+                    'affected_items' => []
                 ]
             ]
 

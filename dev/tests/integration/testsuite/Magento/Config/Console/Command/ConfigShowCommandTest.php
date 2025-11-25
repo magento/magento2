@@ -175,7 +175,7 @@ class ConfigShowCommandTest extends TestCase
      * @return array
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function executeDataProvider()
+    public static function executeDataProvider()
     {
         return [
             [

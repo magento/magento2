@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -133,7 +133,7 @@ class FreeTest extends TestCase
     /**
      * @return array
      */
-    public function getIsAvailableProvider(): array
+    public static function getIsAvailableProvider(): array
     {
         return [
             [0, true, true, true],
@@ -147,7 +147,7 @@ class FreeTest extends TestCase
     /**
      * @return array
      */
-    public function getConfigPaymentActionProvider(): array
+    public static function getConfigPaymentActionProvider(): array
     {
         return [
             ['pending', 'action', null],

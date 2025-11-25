@@ -427,7 +427,7 @@ class MediaGalleryTest extends ResolverCacheAbstract
                     $imageContentFactory = $objectManager->get(ImageContentInterfaceFactory::class);
                     $imageContent = $imageContentFactory->create();
                     $imageContent->setBase64EncodedData(
-                        // black 1x1 image
+                    // black 1x1 image
                         'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNk+A8AAQUBAScY42YAAAAASUVORK5CYII='
                     );
                     $imageContent->setType("image/png");

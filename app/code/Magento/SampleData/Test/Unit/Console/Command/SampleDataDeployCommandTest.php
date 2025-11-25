@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -13,7 +13,7 @@ use Magento\SampleData\Console\Command\SampleDataDeployCommand;
 use Magento\Setup\Model\PackagesAuth;
 use Symfony\Component\Console\Tester\CommandTester;
 
-class SampleDataDeployCommandTest extends AbstractSampleDataCommandTest
+class SampleDataDeployCommandTest extends AbstractSampleDataCommandTestCase
 {
     /**
      * Sets mocks for auth file
@@ -104,7 +104,7 @@ class SampleDataDeployCommandTest extends AbstractSampleDataCommandTest
      *
      * @return array
      */
-    public function processDataProvider(): array
+    public static function processDataProvider(): array
     {
         return [
             'No sample data found' => [

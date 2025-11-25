@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -86,10 +86,8 @@ class GridTest extends TestCase
                 ->onlyMethods(['create'])
                 ->getMock();
         $this->joinAttributeProcessorMock =
-            $this->getMockBuilder(JoinProcessorInterface::class)
-                ->getMockForAbstractClass();
-        $this->scopeConfigMock = $this->getMockBuilder(ScopeConfigInterface::class)
-            ->getMockForAbstractClass();
+            $this->createMock(JoinProcessorInterface::class);
+        $this->scopeConfigMock = $this->createMock(ScopeConfigInterface::class);
         $this->checkoutSessionMock = $this->getMockBuilder(Session::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -99,13 +97,12 @@ class GridTest extends TestCase
             ->onlyMethods(['getAllVisibleItems', 'getItemsCount'])
             ->disableOriginalConstructor()
             ->getMock();
-        $this->layoutMock = $this->getMockBuilder(LayoutInterface::class)
-            ->getMockForAbstractClass();
+        $this->layoutMock = $this->createMock(LayoutInterface::class);
         $this->pagerBlockMock = $this->getMockBuilder(Pager::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->checkoutSessionMock->expects($this->any())->method('getQuote')->willReturn($this->quoteMock);
-        $this->quoteMock->expects($this->any())->method('getAllVisibleItems')->willReturn([]);
+        $this->checkoutSessionMock->method('getQuote')->willReturn($this->quoteMock);
+        $this->quoteMock->method('getAllVisibleItems')->willReturn([]);
         $this->block = $objectManagerHelper->getObject(
             Grid::class,
             [
@@ -148,11 +145,10 @@ class GridTest extends TestCase
         $this->quoteMock->expects($this->once())->method('getItemsCount')->willReturn($itemsCount);
         $this->scopeConfigMock
             ->method('getValue')
-            ->withConsecutive(
-                [Grid::XPATH_CONFIG_NUMBER_ITEMS_TO_DISPLAY_PAGER, ScopeInterface::SCOPE_STORE, null],
-                [Grid::XPATH_CONFIG_NUMBER_ITEMS_TO_DISPLAY_PAGER, ScopeInterface::SCOPE_STORE, null]
-            )
-            ->willReturnOnConsecutiveCalls(20, $availableLimit);
+            ->willReturnCallback(fn($operation) => match ([$operation]) {
+                [Grid::XPATH_CONFIG_NUMBER_ITEMS_TO_DISPLAY_PAGER] => 20,
+                [Grid::XPATH_CONFIG_NUMBER_ITEMS_TO_DISPLAY_PAGER] => $availableLimit
+            });
         $this->layoutMock
             ->expects($this->once())
             ->method('createBlock')
@@ -195,7 +191,7 @@ class GridTest extends TestCase
             ->expects($this->once())
             ->method('create')
             ->willReturn($this->itemCollectionMock);
-        $this->checkoutSessionMock->expects($this->any())->method('getQuote')->willReturn($this->quoteMock);
+        $this->checkoutSessionMock->method('getQuote')->willReturn($this->quoteMock);
         $this->itemCollectionMock->expects($this->once())->method('setQuote')->with($this->quoteMock)->willReturnSelf();
         $this->itemCollectionMock
             ->expects($this->once())
@@ -214,10 +210,8 @@ class GridTest extends TestCase
         $itemMock = $this->getMockBuilder(Item::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $storeManager = $this->getMockBuilder(StoreManagerInterface::class)
-            ->getMockForAbstractClass();
-        $storeMock = $this->getMockBuilder(StoreInterface::class)
-            ->getMockForAbstractClass();
+        $storeManager = $this->createMock(StoreManagerInterface::class);
+        $storeMock = $this->createMock(StoreInterface::class);
         $storeManager->expects($this->once())->method('getStore')->willReturn($storeMock);
         $objectManagerHelper = new ObjectManagerHelper($this);
         $this->block = $objectManagerHelper->getObject(

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -33,7 +33,17 @@ class AllowspecificTest extends TestCase
     protected function setUp(): void
     {
         $testHelper = new ObjectManager($this);
-
+        $objects = [
+            [
+                SecureHtmlRenderer::class,
+                $this->createMock(SecureHtmlRenderer::class)
+            ],
+            [
+                Random::class,
+                $this->createMock(Random::class)
+            ]
+        ];
+        $testHelper->prepareObjectManager($objects);
         $randomMock = $this->createMock(Random::class);
         $randomMock->method('getRandomString')->willReturn('some-rando-string');
         $secureRendererMock = $this->createMock(SecureHtmlRenderer::class);
@@ -129,7 +139,7 @@ class AllowspecificTest extends TestCase
     /**
      * @return array
      */
-    public function getHtmlWhenValueIsEmptyDataProvider()
+    public static function getHtmlWhenValueIsEmptyDataProvider()
     {
         return [
             'zero' => ['1' => 0],

@@ -90,7 +90,7 @@ class AttributeSearchWeightTest extends TestCase
      *
      * @return array
      */
-    public function attributeSearchWeightDataProvider(): array
+    public static function attributeSearchWeightDataProvider(): array
     {
         return [
             'name_order_more_than_sku' => [

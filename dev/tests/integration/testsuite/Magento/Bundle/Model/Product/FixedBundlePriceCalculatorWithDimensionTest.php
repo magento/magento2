@@ -98,11 +98,11 @@ class FixedBundlePriceCalculatorWithDimensionTest extends BundlePriceAbstract
      * @return array
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function getTestCases()
+    public static function getTestCases()
     {
         return [
             '#1 Testing price for fixed bundle product with one simple' => [
-                'strategy' => $this->getProductWithOneSimple(),
+                'strategyModifiers' => self::getProductWithOneSimple(),
                 'expectedResults' => [
                     //  110 + 10 (price from simple1)
                     'minimalPrice' => 120,
@@ -112,7 +112,7 @@ class FixedBundlePriceCalculatorWithDimensionTest extends BundlePriceAbstract
             ],
 
             '#2 Testing price for fixed bundle product with three simples and different qty' => [
-                'strategy' => $this->getProductWithDifferentQty(),
+                'strategyModifiers' => self::getProductWithDifferentQty(),
                 'expectedResults' => [
                     // 110 + 10 (min price from simples)
                     'minimalPrice' => 120,
@@ -122,7 +122,7 @@ class FixedBundlePriceCalculatorWithDimensionTest extends BundlePriceAbstract
             ],
 
             '#3 Testing price for fixed bundle product with three simples and different price' => [
-                'strategy' => $this->getProductWithDifferentPrice(),
+                'strategyModifiers' => self::getProductWithDifferentPrice(),
                 'expectedResults' => [
                     //  110 + 10
                     'minimalPrice' => 120,
@@ -132,7 +132,7 @@ class FixedBundlePriceCalculatorWithDimensionTest extends BundlePriceAbstract
             ],
 
             '#4 Testing price for fixed bundle product with three simples' => [
-                'strategy' => $this->getProductWithSamePrice(),
+                'strategyModifiers' => self::getProductWithSamePrice(),
                 'expectedResults' => [
                     //  110 + 10
                     'minimalPrice' => 120,
@@ -142,10 +142,10 @@ class FixedBundlePriceCalculatorWithDimensionTest extends BundlePriceAbstract
             ],
 
             '
-                #5 Testing price for fixed bundle product 
+                #5 Testing price for fixed bundle product
                 with fixed sub items, fixed options and without any discounts
             ' => [
-                'strategy' => $this->getBundleConfiguration3(
+                'strategyModifiers' => self::getBundleConfiguration3(
                     LinkInterface::PRICE_TYPE_FIXED,
                     self::CUSTOM_OPTION_PRICE_TYPE_FIXED
                 ),
@@ -159,10 +159,10 @@ class FixedBundlePriceCalculatorWithDimensionTest extends BundlePriceAbstract
             ],
 
             '
-                #6 Testing price for fixed bundle product 
+                #6 Testing price for fixed bundle product
                 with percent sub items, percent options and without any discounts
             ' => [
-                'strategy' => $this->getBundleConfiguration3(
+                'strategyModifiers' => self::getBundleConfiguration3(
                     LinkInterface::PRICE_TYPE_PERCENT,
                     self::CUSTOM_OPTION_PRICE_TYPE_PERCENT
                 ),
@@ -176,10 +176,10 @@ class FixedBundlePriceCalculatorWithDimensionTest extends BundlePriceAbstract
             ],
 
             '
-                #7 Testing price for fixed bundle product 
+                #7 Testing price for fixed bundle product
                 with fixed sub items, percent options and without any discounts
             ' => [
-                'strategy' => $this->getBundleConfiguration3(
+                'strategyModifiers' => self::getBundleConfiguration3(
                     LinkInterface::PRICE_TYPE_FIXED,
                     self::CUSTOM_OPTION_PRICE_TYPE_PERCENT
                 ),
@@ -193,10 +193,10 @@ class FixedBundlePriceCalculatorWithDimensionTest extends BundlePriceAbstract
             ],
 
             '
-                #8 Testing price for fixed bundle product 
+                #8 Testing price for fixed bundle product
                 with percent sub items, fixed options and without any discounts
             ' => [
-                'strategy' => $this->getBundleConfiguration3(
+                'strategyModifiers' => self::getBundleConfiguration3(
                     LinkInterface::PRICE_TYPE_PERCENT,
                     self::CUSTOM_OPTION_PRICE_TYPE_FIXED
                 ),
@@ -215,7 +215,7 @@ class FixedBundlePriceCalculatorWithDimensionTest extends BundlePriceAbstract
      * Fixed bundle product with one simple
      * @return array
      */
-    private function getProductWithOneSimple()
+    private static function getProductWithOneSimple()
     {
         $optionsData = [
             [
@@ -245,7 +245,7 @@ class FixedBundlePriceCalculatorWithDimensionTest extends BundlePriceAbstract
      * Fixed bundle product with three simples and different qty
      * @return array
      */
-    private function getProductWithDifferentQty()
+    private static function getProductWithDifferentQty()
     {
         $optionsData = [
             [
@@ -287,7 +287,7 @@ class FixedBundlePriceCalculatorWithDimensionTest extends BundlePriceAbstract
      * Fixed bundle product with three simples and different price
      * @return array
      */
-    private function getProductWithSamePrice()
+    private static function getProductWithSamePrice()
     {
         $optionsData = [
             [
@@ -329,7 +329,7 @@ class FixedBundlePriceCalculatorWithDimensionTest extends BundlePriceAbstract
      * Fixed bundle product with three simples
      * @return array
      */
-    private function getProductWithDifferentPrice()
+    private static function getProductWithDifferentPrice()
     {
         $optionsData = [
             [
@@ -373,7 +373,7 @@ class FixedBundlePriceCalculatorWithDimensionTest extends BundlePriceAbstract
      * @param string $customOptionsPriceType
      * @return array
      */
-    private function getBundleConfiguration3($selectionsPriceType, $customOptionsPriceType)
+    private static function getBundleConfiguration3($selectionsPriceType, $customOptionsPriceType)
     {
         $optionsData = [
             [

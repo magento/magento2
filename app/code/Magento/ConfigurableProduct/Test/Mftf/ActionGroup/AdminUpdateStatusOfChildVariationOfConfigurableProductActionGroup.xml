@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright 2024 Adobe
+  * All Rights Reserved.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminUpdateStatusOfChildVariationOfConfigurableProductActionGroup">
+        <annotations>
+            <description>Admin update status of  child  variation of configurable product and save it</description>
+        </annotations>
+        <arguments>
+            <argument name="index" type="string" defaultValue="0"/>
+            <argument name="status" type="string" defaultValue="Out of Stock"/>
+        </arguments>
+        <selectOption selector="{{AdminProductSourcesGrid.rowStatus(index)}}" userInput="{{status}}" stepKey="setWhiteConfigurableVariationToOutOfStock"/>
+        <waitForElementClickable selector="{{AdminProductFormActionSection.saveButton}}" stepKey="waitToClickOnSaveSimpleProduct"/>
+        <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="saveSimpleProduct"/>
+    </actionGroup>
+</actionGroups>

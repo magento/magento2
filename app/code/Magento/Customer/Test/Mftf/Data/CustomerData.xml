@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
-  */
+/**
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
+ */
 -->
 
 <entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -502,5 +502,52 @@
         <data key="website_id">0</data>
         <data key="group">General</data>
         <requiredEntity type="address">US_Address_CA_CC</requiredEntity>
+    </entity>
+    <entity name="Simple_Customer_With_Multiple_Address" type="customer">
+        <data key="group_id">1</data>
+        <data key="default_billing">false</data>
+        <data key="default_shipping">false</data>
+        <data key="email" unique="prefix">John.Doe@example.com</data>
+        <data key="firstname">John</data>
+        <data key="lastname">Doe</data>
+        <data key="fullname">John Doe</data>
+        <data key="password">pwdTest123!</data>
+        <data key="store_id">0</data>
+        <data key="website_id">0</data>
+        <requiredEntity type="address">DE_Berlin_State</requiredEntity>
+        <requiredEntity type="address">UK_State_Address</requiredEntity>
+        <requiredEntity type="address">US_Address_NY_Not_Default_Address</requiredEntity>
+        <requiredEntity type="address">US_California_State</requiredEntity>
+    </entity>
+    <entity name="Simple_US_Customer_With_Brisbane_Address" type="customer">
+        <data key="group_id">1</data>
+        <data key="default_billing">true</data>
+        <data key="default_shipping">true</data>
+        <data key="email" unique="prefix">John.Doe@example.com</data>
+        <data key="firstname">John</data>
+        <data key="lastname">Doe</data>
+        <data key="fullname">John Doe</data>
+        <data key="password">pwdTest123!</data>
+        <data key="store_id">0</data>
+        <data key="website_id">0</data>
+        <data key="group">General</data>
+        <requiredEntity type="address">US_Address_Bris</requiredEntity>
+    </entity>
+    <entity name="Simple_Customer_Multiple_Addresses" type="customer" extends="Simple_US_Customer_With_Brisbane_Address">
+        <requiredEntity type="address">US_Address_CA</requiredEntity>
+        <requiredEntity type="address">US_Address_NY_Not_Default_Address</requiredEntity>
+    </entity>
+    <entity name="Customer_Address" type="customer">
+        <data key="ny_address">John Doe, 368 Broadway St. Apt. 113, New York, New York 10001, United States</data>
+        <data key="ca_address">John Doe, 7700 West Parmer Lane 113, Los Angeles, California 90001, United States</data>
+        <data key="br_address">John Doe, 3976 Thunder Road, Brisbane, California 94005, United States</data>
+    </entity>
+    <entity name="Special_Characters_City" type="customer">
+        <data key="city1">St. Moritz</data>
+        <data key="city2">St. Petersburg</data>
+        <data key="city3">Brighton &amp; Hove</data>
+        <data key="city4">St. Davids</data>
+        <data key="city5">29 Palms</data>
+        <data key="city6">New York</data>
     </entity>
 </entities>

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -205,8 +205,19 @@ class ConfigTest extends TestCase
     {
         $this->cacheState
             ->method('isEnabled')
-            ->withConsecutive([Type::TYPE_IDENTIFIER], [Type::TYPE_IDENTIFIER])
-            ->willReturnOnConsecutiveCalls(true, false);
+            ->willReturnCallback(
+                function ($arg) {
+                    static $callCount = 0;
+                    if ($callCount == 0 && $arg == Type::TYPE_IDENTIFIER) {
+                        $callCount++;
+                        return true;
+                    } elseif ($callCount == 1 && $arg == Type::TYPE_IDENTIFIER) {
+                        $callCount++;
+                        return false;
+                    }
+                }
+            );
+
         $this->assertTrue($this->config->isEnabled());
         $this->assertFalse($this->config->isEnabled());
     }

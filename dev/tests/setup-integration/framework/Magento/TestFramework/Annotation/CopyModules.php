@@ -44,10 +44,7 @@ class CopyModules
      */
     public function startTest(\PHPUnit\Framework\TestCase $test)
     {
-        $annotations = TestUtil::parseTestMethodAnnotations(
-            get_class($test),
-            $test->getName(false)
-        );
+        $annotations = TestCaseAnnotation::getInstance()->getAnnotations($test);
         //This annotation can be declared only on method level
         if (isset($annotations['method']['moduleName'])) {
             $moduleNames = $annotations['method']['moduleName'];
@@ -68,10 +65,7 @@ class CopyModules
      */
     public function endTest(\PHPUnit\Framework\TestCase $test)
     {
-        $annotations = TestUtil::parseTestMethodAnnotations(
-            get_class($test),
-            $test->getName(false)
-        );
+        $annotations = TestCaseAnnotation::getInstance()->getAnnotations($test);
         //This annotation can be declared only on method level
         if (!empty($annotations['method']['moduleName'])) {
             foreach ($annotations['method']['moduleName'] as $moduleName) {

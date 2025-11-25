@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -95,10 +95,14 @@ class TemporaryTableStrategyTest extends TestCase
             ->method('getConnection')
             ->with('indexer')
             ->willReturn($connectionMock);
+
         $this->resourceMock
             ->method('getTableName')
-            ->withConsecutive([$expectedResult], [$tempTableName])
-            ->willReturnOnConsecutiveCalls($expectedResult, $tempTableName);
+            ->willReturnCallback(fn($param) => match ([$param]) {
+                [$expectedResult] => $expectedResult,
+                [$tempTableName] => $tempTableName,
+            });
+
         $connectionMock->expects($this->once())
             ->method('createTemporaryTableLike')
             ->with($expectedResult, $tempTableName, true);

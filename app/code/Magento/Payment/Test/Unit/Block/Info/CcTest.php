@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -78,7 +78,7 @@ class CcTest extends TestCase
     /**
      * @return array
      */
-    public function getCcTypeNameDataProvider()
+    public static function getCcTypeNameDataProvider()
     {
         return [
             [['VS', 'MC', 'JCB'], 'JCB', 'JCB'],
@@ -109,7 +109,7 @@ class CcTest extends TestCase
     /**
      * @return array
      */
-    public function hasCcExpDateDataProvider()
+    public static function hasCcExpDateDataProvider()
     {
         return [
             [0, 1, true],
@@ -137,7 +137,7 @@ class CcTest extends TestCase
     /**
      * @return array
      */
-    public function ccExpMonthDataProvider()
+    public static function ccExpMonthDataProvider()
     {
         return [
             [2, '02'],
@@ -176,7 +176,7 @@ class CcTest extends TestCase
     /**
      * @return array
      */
-    public function getCcExpDateDataProvider()
+    public static function getCcExpDateDataProvider()
     {
         return [
             [3, 2015],

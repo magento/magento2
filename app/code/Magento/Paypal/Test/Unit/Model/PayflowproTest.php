@@ -1,19 +1,21 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Paypal\Test\Unit\Model;
 
 use Laminas\Http\Exception\RuntimeException;
+use Magento\Directory\Helper\Data as DirectoryHelper;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\DataObject;
 use Magento\Framework\Event\ManagerInterface;
 use Magento\Framework\HTTP\LaminasClient;
 use Magento\Framework\HTTP\LaminasClientFactory;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\TestFramework\Unit\Matcher\MethodInvokedAtIndex;
 use Magento\Payment\Model\Info;
 use Magento\Payment\Model\InfoInterface;
 use Magento\Payment\Model\Method\ConfigInterface;
@@ -105,6 +107,13 @@ class PayflowproTest extends TestCase
             ->getMockForAbstractClass();
 
         $this->helper = new ObjectManager($this);
+        $objects = [
+            [
+                DirectoryHelper::class,
+                $this->createMock(DirectoryHelper::class)
+            ]
+        ];
+        $this->helper->prepareObjectManager($objects);
         $this->payflowpro = $this->helper->getObject(
             Payflowpro::class,
             [
@@ -142,7 +151,7 @@ class PayflowproTest extends TestCase
     /**
      * @return array
      */
-    public function canVoidDataProvider(): array
+    public static function canVoidDataProvider(): array
     {
         return [
             ["Can void transaction if order's paid amount not set", null, true],
@@ -208,7 +217,7 @@ class PayflowproTest extends TestCase
     /**
      * @return array
      */
-    public function setTransStatusDataProvider(): array
+    public static function setTransStatusDataProvider(): array
     {
         return [
             [
@@ -266,8 +275,14 @@ class PayflowproTest extends TestCase
         }
         $this->scopeConfigMock
             ->method('getValue')
-            ->withConsecutive(...$withArgs)
-            ->willReturnOnConsecutiveCalls(...$willReturnArs);
+            ->willReturnCallback(function ($withArgs) use ($willReturnArs) {
+                if (!empty($withArgs)) {
+                    static $callCount = 0;
+                    $returnValue = $willReturnArs[$callCount] ?? null;
+                    $callCount++;
+                    return $returnValue;
+                }
+            });
 
         $this->assertEquals($result, $this->payflowpro->isActive($storeId));
     }
@@ -304,7 +319,7 @@ class PayflowproTest extends TestCase
     /**
      * @return array
      */
-    public function dataProviderCaptureAmountRounding(): array
+    public static function dataProviderCaptureAmountRounding(): array
     {
         return [
             [
@@ -417,7 +432,7 @@ class PayflowproTest extends TestCase
     /**
      * @return array
      */
-    public function dataProviderForTestIsActive(): array
+    public static function dataProviderForTestIsActive(): array
     {
         return [
             [
@@ -467,16 +482,17 @@ class PayflowproTest extends TestCase
      */
     protected function initStoreMock(): void
     {
-        $storeId = 27;
-        $storeMock = $this->getMockBuilder(Store::class)->disableOriginalConstructor()
-            ->onlyMethods(['getId'])
-            ->getMock();
-        $this->storeManagerMock->expects(static::once())
+        $this->storeManagerMock->expects(static::any())
             ->method('getStore')
-            ->willReturn($storeMock);
-        $storeMock->expects(static::once())
-            ->method('getId')
-            ->willReturn($storeId);
+            ->willReturnCallback(
+                function ($storeId) {
+                    $storeMock = $this->createPartialMock(Store::class, ['getId']);
+                    $storeMock->expects(static::once())
+                        ->method('getId')
+                        ->willReturn($storeId === null ? 1 : $storeId);
+                    return $storeMock;
+                }
+            );
     }
 
     /**
@@ -718,7 +734,7 @@ class PayflowproTest extends TestCase
     /**
      * @return array
      */
-    public function dataProviderMapGatewayResponse(): array
+    public static function dataProviderMapGatewayResponse(): array
     {
         return [
             [
@@ -791,5 +807,21 @@ class PayflowproTest extends TestCase
                 ])
             ]
         ];
+    }
+
+    public function testSetStore(): void
+    {
+        $storeId = 2;
+        $this->initStoreMock();
+        $this->configMock->expects($this->exactly(2))
+            ->method('setStoreId');
+        $this->configMock->expects(new MethodInvokedAtIndex(0))
+            ->method('setStoreId')
+            ->with(1);
+        $this->configMock->expects(new MethodInvokedAtIndex(1))
+            ->method('setStoreId')
+            ->with($storeId);
+        $this->payflowpro->getConfig();
+        $this->payflowpro->setStore($storeId);
     }
 }

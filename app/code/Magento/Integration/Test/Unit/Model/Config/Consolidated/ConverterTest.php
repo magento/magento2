@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -30,7 +30,6 @@ class ConverterTest extends TestCase
     {
         $this->resourceProviderMock = $this->getMockBuilder(ProviderInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods([])
             ->getMockForAbstractClass();
         $objectManagerHelper = new ObjectManager($this);
         $this->model = $objectManagerHelper->getObject(

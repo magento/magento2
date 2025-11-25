@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -31,14 +31,10 @@ class CanUseCheckoutTest extends TestCase
     public function testIsApplicable($expectation)
     {
         $quote = $this->getMockBuilder(Quote::class)
-            ->disableOriginalConstructor()
-            ->setMethods(
-                []
-            )->getMock();
+            ->disableOriginalConstructor()->getMock();
         $paymentMethod = $this->getMockBuilder(
             MethodInterface::class
-        )->disableOriginalConstructor()
-            ->setMethods([])->getMock();
+        )->disableOriginalConstructor()->getMock();
         $paymentMethod->expects($this->once())->method('canUseCheckout')->willReturn(
             $expectation
         );
@@ -48,7 +44,7 @@ class CanUseCheckoutTest extends TestCase
     /**
      * @return array
      */
-    public function paymentMethodDataProvider()
+    public static function paymentMethodDataProvider()
     {
         return [[true], [false]];
     }

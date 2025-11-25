@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -11,7 +11,6 @@ use Magento\Checkout\Helper\Data;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Locale\ResolverInterface;
 use Magento\Store\Model\ScopeInterface;
-use Magento\Store\Model\StoreManagerInterface;
 use Magento\Paypal\Model\Config as PaypalConfig;
 
 /**
@@ -92,7 +91,8 @@ class SmartButtonConfig
             'isGuestCheckoutAllowed'  => $isGuestCheckoutAllowed,
             'sdkUrl' => $this->sdkUrl->getUrl(),
             'dataAttributes' => [
-                'data-partner-attribution-id' => $this->paypalConfig->getBuildNotationCode()
+                'data-partner-attribution-id' => $this->paypalConfig->getBuildNotationCode(),
+                'data-csp-nonce' => $this->paypalConfig->getCspNonce(),
             ]
         ];
     }

@@ -26,8 +26,6 @@ class IndexersStatesApplyFixture extends Fixture
             return;
         }
 
-        $this->fixtureModel->resetObjectManager();
-
         /** @var $indexerRegistry \Magento\Framework\Indexer\IndexerRegistry */
         $indexerRegistry = $this->fixtureModel->getObjectManager()
             ->create(\Magento\Framework\Indexer\IndexerRegistry::class);

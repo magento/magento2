@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2025 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -133,7 +133,7 @@ namespace Magento\Framework\Stdlib\Test\Unit\Cookie
             self::$isSetCookieInvoked = false;
             $this->objectManager = new ObjectManager($this);
             $this->scopeMock = $this->getMockBuilder(CookieScopeInterface::class)
-                ->setMethods(['getPublicCookieMetadata', 'getCookieMetadata', 'getSensitiveCookieMetadata'])
+                ->onlyMethods(['getPublicCookieMetadata', 'getCookieMetadata', 'getSensitiveCookieMetadata'])
                 ->disableOriginalConstructor()
                 ->getMockForAbstractClass();
             $this->readerMock = $this->getMockForAbstractClass(CookieReaderInterface::class);
@@ -287,7 +287,7 @@ namespace Magento\Framework\Stdlib\Test\Unit\Cookie
         /**
          * @return array
          */
-        public function isCurrentlySecureDataProvider()
+        public static function isCurrentlySecureDataProvider()
         {
             return [
                 [self::SENSITIVE_COOKIE_NAME_NO_METADATA_HTTPS, true],
@@ -566,7 +566,7 @@ namespace Magento\Framework\Stdlib\Test\Unit\Cookie
                 ->with(
                     new Phrase('Unable to send the cookie. Maximum number of cookies would be exceeded.'),
                     [
-                        'cookies' => $_COOKIE,
+                        'cookies' => array_keys($_COOKIE),
                         'user-agent' => $userAgent
                     ]
                 );

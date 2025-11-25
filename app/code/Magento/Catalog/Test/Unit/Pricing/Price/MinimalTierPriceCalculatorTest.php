@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -92,8 +92,10 @@ class MinimalTierPriceCalculatorTest extends TestCase
 
         $this->priceInfo->expects($this->atLeastOnce())
             ->method('getPrice')
-            ->withConsecutive([TierPrice::PRICE_CODE], [FinalPrice::PRICE_CODE])
-            ->willReturnOnConsecutiveCalls($this->price, $notMinAmount);
+            ->willReturnCallback(fn($param) => match ([$param]) {
+                [TierPrice::PRICE_CODE] => $this->price,
+                [FinalPrice::PRICE_CODE] => $notMinAmount
+            });
 
         $this->saleable->expects($this->atLeastOnce())->method('getPriceInfo')->willReturn($this->priceInfo);
         return $minPrice;

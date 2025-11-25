@@ -1,14 +1,12 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Customer\Model\ResourceModel\Form\Attribute;
 
 /**
  * Customer Form Attribute Resource Collection
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Collection extends \Magento\Eav\Model\ResourceModel\Form\Attribute\Collection
 {

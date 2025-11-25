@@ -2,15 +2,6 @@
 /**
  * Copyright 2023 Adobe
  * All Rights Reserved.
- *
- * NOTICE: All information contained herein is, and remains
- * the property of Adobe and its suppliers, if any. The intellectual
- * and technical concepts contained herein are proprietary to Adobe
- * and its suppliers and are protected by all applicable intellectual
- * property laws, including trade secret and copyright laws.
- * Dissemination of this information or reproduction of this material
- * is strictly forbidden unless prior written permission is obtained
- * from Adobe.
  */
 declare(strict_types=1);
 
@@ -21,6 +12,7 @@ use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\DB\Select;
 use Magento\Framework\Exception\CouldNotDeleteException;
 use Magento\MediaGallery\Model\ResourceModel\DeleteAssetsByPaths;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
@@ -52,9 +44,9 @@ class DeleteAssetsByPathsTest extends TestCase
     /**
      * When deleting an asset by path with mixed case, the asset with exact same path should be deleted
      *
-     * @dataProvider assetDeleteByPathDataProvider
      * @throws CouldNotDeleteException
      */
+    #[DataProvider('assetDeleteByPathDataProvider')]
     public function testDeleteCorrectAssetByPathWithCaseSensitiveMatches(
         array  $assets,
         string $assetPathToDelete,
@@ -79,7 +71,7 @@ class DeleteAssetsByPathsTest extends TestCase
 
     protected function setUp(): void
     {
-        $logger = $this->getMockForAbstractClass(LoggerInterface::class);
+        $logger = $this->createMock(LoggerInterface::class);
         $resourceConnection = $this->createMock(ResourceConnection::class);
 
         $this->deleteAssetsByPaths = new DeleteAssetsByPaths(
@@ -87,7 +79,7 @@ class DeleteAssetsByPathsTest extends TestCase
             $logger
         );
 
-        $this->adapter = $this->getMockForAbstractClass(AdapterInterface::class);
+        $this->adapter = $this->createMock(AdapterInterface::class);
         $this->select = $this->createMock(Select::class);
         $this->statement = $this->createMock(\Zend_Db_Statement_Interface::class);
 
@@ -100,33 +92,33 @@ class DeleteAssetsByPathsTest extends TestCase
             ->willReturn(self::TABLE_NAME);
     }
 
-    public function assetDeleteByPathDataProvider(): array
+    public static function assetDeleteByPathDataProvider(): array
     {
         return [
             [
-                'assets' => $this->getAssets(),
-                'pathToDelete' => 'catalog/category/folder/image.jpg',
-                'assetIdToAssertDelete' => 1
+                'assets' => self::getAssets(),
+                'assetPathToDelete' => 'catalog/category/folder/image.jpg',
+                'assetIdToAssert' => 1
             ],
             [
-                'assets' => $this->getAssets(),
-                'pathToDelete' => 'catalog/category/folder/Image.jpg',
-                'assetIdToAssertDelete' => 2
+                'assets' => self::getAssets(),
+                'assetPathToDelete' => 'catalog/category/folder/Image.jpg',
+                'assetIdToAssert' => 2
             ],
             [
-                'assets' => $this->getAssets(),
-                'pathToDelete' => 'catalog/category/folder/IMAGE.JPG',
-                'assetIdToAssertDelete' => 3
+                'assets' => self::getAssets(),
+                'assetPathToDelete' => 'catalog/category/folder/IMAGE.JPG',
+                'assetIdToAssert' => 3
             ],
             [
-                'assets' => $this->getAssets(),
-                'pathToDelete' => 'catalog/category/FOLDER',
-                'assetIdToAssertDelete' => 4
+                'assets' => self::getAssets(),
+                'assetPathToDelete' => 'catalog/category/FOLDER',
+                'assetIdToAssert' => 4
             ],
         ];
     }
 
-    private function getAssets(): array
+    private static function getAssets(): array
     {
         return [
             [

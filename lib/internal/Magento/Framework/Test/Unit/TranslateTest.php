@@ -207,7 +207,7 @@ class TranslateTest extends TestCase
     /**
      * @return array
      */
-    public function dataProviderLoadDataCachedTranslation(): array
+    public static function dataProviderLoadDataCachedTranslation(): array
     {
         $cachedData = ['cached 1' => 'translated 1', 'cached 2' => 'translated 2'];
         return [
@@ -316,7 +316,7 @@ class TranslateTest extends TestCase
     /**
      * @return array
      */
-    public function dataProviderForTestLoadData(): array
+    public static function dataProviderForTestLoadData(): array
     {
         return [
             ['adminhtml', true],
@@ -348,7 +348,7 @@ class TranslateTest extends TestCase
     /**
      * @return array
      */
-    public function dataProviderForTestGetData(): array
+    public static function dataProviderForTestGetData(): array
     {
         $data = ['original 1' => 'translated 1', 'original 2' => 'translated 2'];
         return [
@@ -392,8 +392,18 @@ class TranslateTest extends TestCase
         $requestTheme = ['theme_title' => 'Theme Title'];
         $this->request
             ->method('getParam')
-            ->withConsecutive(['theme'], ['theme'])
-            ->willReturnOnConsecutiveCalls('', $requestTheme);
+            ->willReturnCallback(
+                function ($arg1) use ($requestTheme) {
+                    static $callCount = 0;
+                    if ($callCount == 0 && $arg1 == 'theme') {
+                        $callCount++;
+                        return '';
+                    } elseif ($callCount == 1 && $arg1 == 'theme') {
+                        $callCount++;
+                        return $requestTheme;
+                    }
+                }
+            );
 
         $this->assertEquals('theme', $this->translate->getTheme());
         $this->assertEquals('themeTheme Title', $this->translate->getTheme());

@@ -1,6 +1,6 @@
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2021 Adobe
+ * All Rights Reserved.
  */
 
 define([
@@ -9,13 +9,15 @@ define([
     'uiElement',
     'uiLayout',
     'Magento_Paypal/js/in-context/paypal-sdk',
+    'Magento_Customer/js/customer-data',
     'domReady!'
 ], function (
     $,
     ko,
     Component,
     layout,
-    paypalSdk
+    paypalSdk,
+    customerData
 ) {
     'use strict';
 
@@ -37,6 +39,7 @@ define([
         },
         paypal: null,
         amount: null,
+        buyerCountry: null,
 
         /**
          * Initialize
@@ -44,6 +47,16 @@ define([
          * @returns {*}
          */
         initialize: function () {
+            let customer = customerData.get('customer'),
+                buyerCountry = customerData.get('paypal-buyer-country');
+
+            this.buyerCountry = buyerCountry().code;
+
+            if (customer().firstname && !this.buyerCountry) {
+                customerData.reload(['paypal-buyer-country'], false);
+                this.buyerCountry = customerData.get('paypal-buyer-country')().code;
+            }
+
             this._super()
                 .observe(['amount']);
 

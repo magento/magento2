@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Wishlist\Model\ResourceModel\Item\Collection;
@@ -64,7 +64,7 @@ class Grid extends \Magento\Wishlist\Model\ResourceModel\Item\Collection
         \Magento\Wishlist\Model\ResourceModel\Item $resource,
         \Magento\Framework\App\State $appState,
         \Magento\Framework\Registry $registry,
-        \Magento\Framework\DB\Adapter\AdapterInterface $connection = null
+        ?\Magento\Framework\DB\Adapter\AdapterInterface $connection = null
     ) {
         $this->_registryManager = $registry;
         parent::__construct(

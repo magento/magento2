@@ -1,16 +1,18 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Cms\Test\Unit\Block\Adminhtml\Block\Widget;
 
 use Magento\Backend\Block\Template\Context;
+use Magento\Backend\Helper\Data;
 use Magento\Cms\Block\Adminhtml\Block\Widget\Chooser;
 use Magento\Cms\Model\Block;
 use Magento\Cms\Model\BlockFactory;
+use Magento\Cms\Model\ResourceModel\Block\CollectionFactory;
 use Magento\Framework\Data\Form\Element\AbstractElement;
 use Magento\Framework\Escaper;
 use Magento\Framework\Math\Random;
@@ -77,6 +79,16 @@ class ChooserTest extends TestCase
      */
     protected $chooserMock;
 
+    /**
+     * @var Data|MockObject
+     */
+    protected $backendHelperMock;
+
+    /**
+     * @var CollectionFactory|MockObject
+     */
+    protected $collectionFactoryMock;
+
     protected function setUp(): void
     {
         $this->layoutMock = $this->getMockBuilder(LayoutInterface::class)
@@ -90,14 +102,15 @@ class ChooserTest extends TestCase
             ->getMockForAbstractClass();
         $this->escaper = $this->getMockBuilder(Escaper::class)
             ->disableOriginalConstructor()
-            ->setMethods(
+            ->onlyMethods(
                 [
                     'escapeHtml',
+                    'escapeJs'
                 ]
             )
             ->getMock();
         $this->blockFactoryMock = $this->getMockBuilder(BlockFactory::class)
-            ->setMethods(
+            ->onlyMethods(
                 [
                     'create',
                 ]
@@ -106,17 +119,17 @@ class ChooserTest extends TestCase
             ->getMock();
         $this->elementMock = $this->getMockBuilder(AbstractElement::class)
             ->disableOriginalConstructor()
-            ->setMethods(
+            ->addMethods(['getValue'])
+            ->onlyMethods(
                 [
                     'getId',
-                    'getValue',
                     'setData',
                 ]
             )
             ->getMock();
         $this->modelBlockMock = $this->getMockBuilder(Block::class)
             ->disableOriginalConstructor()
-            ->setMethods(
+            ->onlyMethods(
                 [
                     'getTitle',
                     'load',
@@ -126,20 +139,28 @@ class ChooserTest extends TestCase
             ->getMock();
         $this->chooserMock = $this->getMockBuilder(BlockInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(
+            ->addMethods(
                 [
                     'setElement',
                     'setConfig',
                     'setFieldsetId',
                     'setSourceUrl',
                     'setUniqId',
-                    'setLabel',
-                    'toHtml',
+                    'setLabel'
                 ]
             )
+            ->onlyMethods(['toHtml'])
             ->getMockForAbstractClass();
+        $this->backendHelperMock = $this->getMockBuilder(Data::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->collectionFactoryMock = $this->getMockBuilder(CollectionFactory::class)
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $objectManager = new ObjectManager($this);
+        $objectManager->prepareObjectManager();
         $this->context = $objectManager->getObject(
             Context::class,
             [
@@ -253,7 +274,7 @@ class ChooserTest extends TestCase
     /**
      * @return array
      */
-    public function prepareElementHtmlDataProvider()
+    public static function prepareElementHtmlDataProvider()
     {
         return [
             'elementValue NOT EMPTY, modelBlockId NOT EMPTY' => [
@@ -284,5 +305,34 @@ class ChooserTest extends TestCase
             ->willReturn($url);
 
         $this->assertEquals($url, $this->this->getGridUrl());
+    }
+
+    /**
+     * @covers \Magento\Cms\Block\Adminhtml\Block\Widget\Chooser::testGetRowClickCallback
+     */
+    public function testGetRowClickCallback(): void
+    {
+        $chooserBlock = new Chooser(
+            $this->context,
+            $this->backendHelperMock,
+            $this->blockFactoryMock,
+            $this->collectionFactoryMock
+        );
+        $this->escaper->expects($this->once())
+            ->method('escapeJs')
+            ->willReturnCallback(function ($input) {
+                return $input;
+            });
+        $jsCallback = $chooserBlock->getRowClickCallback();
+
+        $this->assertStringContainsString(
+            'blockId = trElement.down("td").innerHTML.replace(/^\s+|\s+$/g,"")',
+            $jsCallback,
+            'JavaScript callback should use first TD cell for block ID'
+        );
+
+        $this->assertStringContainsString('setElementValue(blockId)', $jsCallback);
+        $this->assertStringContainsString('setElementLabel(blockTitle)', $jsCallback);
+        $this->assertStringContainsString('close()', $jsCallback);
     }
 }

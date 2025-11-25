@@ -43,7 +43,7 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
         $this->assertCount($expectedCount, $items);
     }
 
-    public function filtersDataProvider()
+    public static function filtersDataProvider()
     {
         return [
             [['name' => ['like' => 'shorts'], 'description' => ['like' => 'green']], 1],

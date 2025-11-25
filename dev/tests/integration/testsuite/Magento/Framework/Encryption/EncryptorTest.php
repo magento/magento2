@@ -34,7 +34,7 @@ class EncryptorTest extends \PHPUnit\Framework\TestCase
         $this->encryptor->validateKey($key);
     }
 
-    public function validEncryptionKeyDataProvider()
+    public static function validEncryptionKeyDataProvider()
     {
         return [
             '32 numbers' => ['12345678901234567890123456789012'],
@@ -57,7 +57,7 @@ class EncryptorTest extends \PHPUnit\Framework\TestCase
         $this->encryptor->validateKey($key);
     }
 
-    public function invalidEncryptionKeyDataProvider()
+    public static function invalidEncryptionKeyDataProvider()
     {
         return [
             'empty string' => [''],

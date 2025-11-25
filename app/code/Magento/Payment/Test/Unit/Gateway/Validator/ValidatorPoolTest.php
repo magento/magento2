@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -25,7 +25,7 @@ class ValidatorPoolTest extends TestCase
             ->getMock();
         $tMapFactory = $this->getMockBuilder(TMapFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
 
         $tMapFactory->expects(static::once())
@@ -60,7 +60,7 @@ class ValidatorPoolTest extends TestCase
 
         $tMapFactory = $this->getMockBuilder(TMapFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
         $tMap = $this->getMockBuilder(TMap::class)
             ->disableOriginalConstructor()

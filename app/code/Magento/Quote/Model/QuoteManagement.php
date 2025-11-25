@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -53,10 +53,6 @@ use Magento\Store\Model\StoreManagerInterface;
  */
 class QuoteManagement implements CartManagementInterface, ResetAfterRequestInterface
 {
-    private const LOCK_PREFIX = 'PLACE_ORDER_';
-
-    private const LOCK_TIMEOUT = 0;
-
     /**
      * @var EventManager
      */
@@ -158,11 +154,6 @@ class QuoteManagement implements CartManagementInterface, ResetAfterRequestInter
     protected $quoteFactory;
 
     /**
-     * @var LockManagerInterface
-     */
-    private $lockManager;
-
-    /**
      * @var QuoteIdMaskFactory
      */
     private $quoteIdMaskFactory;
@@ -188,6 +179,11 @@ class QuoteManagement implements CartManagementInterface, ResetAfterRequestInter
     private $remoteAddress;
 
     /**
+     * @var CartMutexInterface
+     */
+    private $cartMutex;
+
+    /**
      * @param EventManager $eventManager
      * @param SubmitQuoteValidator $submitQuoteValidator
      * @param OrderFactory $orderFactory
@@ -211,9 +207,11 @@ class QuoteManagement implements CartManagementInterface, ResetAfterRequestInter
      * @param QuoteIdMaskFactory|null $quoteIdMaskFactory
      * @param AddressRepositoryInterface|null $addressRepository
      * @param RequestInterface|null $request
-     * @param RemoteAddress $remoteAddress
+     * @param RemoteAddress|null $remoteAddress
      * @param LockManagerInterface $lockManager
+     * @param CartMutexInterface|null $cartMutex
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function __construct(
         EventManager $eventManager,
@@ -236,11 +234,12 @@ class QuoteManagement implements CartManagementInterface, ResetAfterRequestInter
         CustomerSession $customerSession,
         AccountManagementInterface $accountManagement,
         QuoteFactory $quoteFactory,
-        QuoteIdMaskFactory $quoteIdMaskFactory = null,
-        AddressRepositoryInterface $addressRepository = null,
-        RequestInterface $request = null,
-        RemoteAddress $remoteAddress = null,
-        LockManagerInterface $lockManager = null
+        ?QuoteIdMaskFactory $quoteIdMaskFactory = null,
+        ?AddressRepositoryInterface $addressRepository = null,
+        ?RequestInterface $request = null,
+        ?RemoteAddress $remoteAddress = null,
+        ?LockManagerInterface $lockManager = null,
+        ?CartMutexInterface $cartMutex = null
     ) {
         $this->eventManager = $eventManager;
         $this->submitQuoteValidator = $submitQuoteValidator;
@@ -270,8 +269,8 @@ class QuoteManagement implements CartManagementInterface, ResetAfterRequestInter
             ->get(RequestInterface::class);
         $this->remoteAddress = $remoteAddress ?: ObjectManager::getInstance()
             ->get(RemoteAddress::class);
-        $this->lockManager = $lockManager ?: ObjectManager::getInstance()
-            ->get(LockManagerInterface::class);
+        $this->cartMutex = $cartMutex
+            ?? ObjectManager::getInstance()->get(CartMutexInterface::class);
     }
 
     /**
@@ -397,10 +396,28 @@ class QuoteManagement implements CartManagementInterface, ResetAfterRequestInter
 
     /**
      * @inheritdoc
+     */
+    public function placeOrder($cartId, ?PaymentInterface $paymentMethod = null)
+    {
+        return $this->cartMutex->execute(
+            (int)$cartId,
+            \Closure::fromCallable([$this, 'placeOrderRun']),
+            [$cartId, $paymentMethod]
+        );
+    }
+
+    /**
+     * Places an order for a specified cart.
+     *
+     * @param int $cartId The cart ID.
+     * @param PaymentInterface|null $paymentMethod
+     * @throws CouldNotSaveException
+     * @return int Order ID.
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @SuppressWarnings(PHPMD.UnusedPrivateMethod)
      */
-    public function placeOrder($cartId, PaymentInterface $paymentMethod = null)
+    private function placeOrderRun($cartId, ?PaymentInterface $paymentMethod = null)
     {
         $quote = $this->quoteRepository->getActive($cartId);
         $customer = $quote->getCustomer();
@@ -436,7 +453,7 @@ class QuoteManagement implements CartManagementInterface, ResetAfterRequestInter
             ) {
                 $quote->setCustomerFirstname($billingAddress->getFirstname());
                 $quote->setCustomerLastname($billingAddress->getLastname());
-                if ($billingAddress->getMiddlename() === null) {
+                if ($billingAddress->getMiddlename() !== null) {
                     $quote->setCustomerMiddlename($billingAddress->getMiddlename());
                 }
             }
@@ -548,10 +565,10 @@ class QuoteManagement implements CartManagementInterface, ResetAfterRequestInter
         if (!$quote->getCustomerIsGuest()) {
             if ($quote->getCustomerId()) {
                 $this->_prepareCustomerQuote($quote);
-                $this->customerManagement->validateAddresses($quote);
             }
             $this->customerManagement->populateCustomerInfo($quote);
         }
+        $this->customerManagement->validateAddresses($quote);
         $addresses = [];
         $quote->reserveOrderId();
         if ($quote->isVirtual()) {
@@ -614,12 +631,6 @@ class QuoteManagement implements CartManagementInterface, ResetAfterRequestInter
             ]
         );
 
-        $lockedName = self::LOCK_PREFIX . $quote->getId();
-        if (!$this->lockManager->lock($lockedName, self::LOCK_TIMEOUT)) {
-            throw new LocalizedException(__(
-                'A server error stopped your order from being placed. Please try to place your order again.'
-            ));
-        }
         try {
             $order = $this->orderManagement->place($order);
             $quote->setIsActive(false);
@@ -632,7 +643,6 @@ class QuoteManagement implements CartManagementInterface, ResetAfterRequestInter
             );
             $this->quoteRepository->save($quote);
         } catch (\Exception $e) {
-            $this->lockManager->unlock($lockedName);
             $this->rollbackAddresses($quote, $order, $e);
             throw $e;
         }
@@ -684,12 +694,14 @@ class QuoteManagement implements CartManagementInterface, ResetAfterRequestInter
                         $hasDefaultBilling = true;
                     }
                 }
-                //save here new customer address
-                $shippingAddress->setCustomerId($quote->getCustomerId());
-                $this->addressRepository->save($shippingAddress);
-                $quote->addCustomerAddress($shippingAddress);
+                if (!$shippingAddress->getId()) {
+                    //save here new customer address
+                    $shippingAddress->setCustomerId($quote->getCustomerId());
+                    $this->addressRepository->save($shippingAddress);
+                    $quote->addCustomerAddress($shippingAddress);
+                    $this->addressesToSync[] = $shippingAddress->getId();
+                }
                 $shipping->setCustomerAddressData($shippingAddress);
-                $this->addressesToSync[] = $shippingAddress->getId();
                 $shipping->setCustomerAddressId($shippingAddress->getId());
             }
         }
@@ -717,11 +729,13 @@ class QuoteManagement implements CartManagementInterface, ResetAfterRequestInter
                     }
                     $billingAddress->setIsDefaultBilling(true);
                 }
-                $billingAddress->setCustomerId($quote->getCustomerId());
-                $this->addressRepository->save($billingAddress);
-                $quote->addCustomerAddress($billingAddress);
+                if (!$billingAddress->getId()) {
+                    $billingAddress->setCustomerId($quote->getCustomerId());
+                    $this->addressRepository->save($billingAddress);
+                    $quote->addCustomerAddress($billingAddress);
+                    $this->addressesToSync[] = $billingAddress->getId();
+                }
                 $billing->setCustomerAddressData($billingAddress);
-                $this->addressesToSync[] = $billingAddress->getId();
                 $billing->setCustomerAddressId($billingAddress->getId());
 
                 // Admin order: `Same As Billing Address`- when new billing address saved in address book

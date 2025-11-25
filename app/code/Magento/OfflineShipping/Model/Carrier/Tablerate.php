@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\OfflineShipping\Model\Carrier;
@@ -151,9 +151,6 @@ class Tablerate extends \Magento\Shipping\Model\Carrier\AbstractCarrier implemen
                     $freeWeight += (int) $item->getWeight();
                 }
             }
-
-            $request->setPackageValue($request->getPackageValue() - $freePackageValue);
-            $request->setPackageValueWithDiscount($request->getPackageValueWithDiscount() - $freePackageValue);
         }
 
         if ($freeWeight > 0) {

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\MediaStorage\Model\File;
@@ -70,7 +70,7 @@ class Uploader extends \Magento\Framework\File\Uploader
         \Magento\MediaStorage\Helper\File\Storage\Database $coreFileStorageDb,
         \Magento\MediaStorage\Helper\File\Storage $coreFileStorage,
         \Magento\MediaStorage\Model\File\Validator\NotProtectedExtension $validator,
-        \Magento\Framework\Filesystem $filesystem = null
+        ?\Magento\Framework\Filesystem $filesystem = null
     ) {
         $this->_coreFileStorageDb = $coreFileStorageDb;
         $this->_coreFileStorage = $coreFileStorage;
@@ -205,7 +205,9 @@ class Uploader extends \Magento\Framework\File\Uploader
         parent::_validateFile();
 
         if (!$this->getImageValidator()->isValid($this->_file['tmp_name'])) {
-            throw new ValidationException(__('File validation failed.'));
+            throw new ValidationException(
+                __('File validation failed. Check Image Processing Settings in the Store Configuration.')
+            );
         }
     }
 

@@ -45,8 +45,8 @@ class Column extends GenericElement implements
         string $name,
         string $type,
         Table $table,
-        string $comment = null,
-        string $onCreate = null
+        ?string $comment = null,
+        ?string $onCreate = null
     ) {
         parent::__construct($name, $type);
         $this->table = $table;

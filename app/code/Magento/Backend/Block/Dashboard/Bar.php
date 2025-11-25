@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Backend\Block\Dashboard;
 
@@ -10,8 +10,6 @@ use Magento\Store\Model\Store;
 
 /**
  * Adminhtml dashboard bar block
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Bar extends \Magento\Backend\Block\Dashboard\AbstractDashboard
 {

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2023 Adobe
+ * All Rights Reserved.
  */
 
 declare(strict_types=1);
@@ -98,17 +98,17 @@ class IsSubscribedTest extends TestCase
 
         $this->contextExtensionMock = $this->getMockBuilder(ContextExtensionInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getStore'])
+            ->addMethods(['getStore'])
             ->getMockForAbstractClass();
 
         $this->customerMock = $this->getMockBuilder(CustomerInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getId'])
+            ->onlyMethods(['getId'])
             ->getMockForAbstractClass();
 
         $this->storeMock = $this->getMockBuilder(StoreInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getWebsiteId'])
+            ->onlyMethods(['getWebsiteId'])
             ->getMockForAbstractClass();
 
         $this->fieldMock = $this->getMockBuilder(Field::class)

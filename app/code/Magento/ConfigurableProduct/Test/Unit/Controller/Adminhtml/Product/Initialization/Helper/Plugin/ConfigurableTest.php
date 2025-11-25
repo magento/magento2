@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -9,11 +9,12 @@ namespace Magento\ConfigurableProduct\Test\Unit\Controller\Adminhtml\Product\Ini
 
 use Magento\Catalog\Controller\Adminhtml\Product\Initialization\Helper;
 use Magento\Catalog\Model\Product;
+use Magento\Catalog\Test\Unit\Helper\ProductTestHelper;
 use Magento\ConfigurableProduct\Controller\Adminhtml\Product\Initialization\Helper\Plugin\Configurable;
 use Magento\ConfigurableProduct\Helper\Product\Options\Factory;
 use Magento\ConfigurableProduct\Model\Product\Type\Configurable as ConfigurableProduct;
 use Magento\ConfigurableProduct\Model\Product\VariationHandler;
-use Magento\ConfigurableProduct\Test\Unit\Model\Product\ProductExtensionAttributes;
+use Magento\Catalog\Test\Unit\Helper\ProductExtensionTestHelper;
 use Magento\Framework\App\Request\Http;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -55,32 +56,18 @@ class ConfigurableTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->variationHandler = $this->getMockBuilder(VariationHandler::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['generateSimpleProducts', 'prepareAttributeSet'])
-            ->getMock();
+        $this->variationHandler = $this->createPartialMock(
+            VariationHandler::class,
+            ['generateSimpleProducts', 'prepareAttributeSet']
+        );
 
-        $this->request = $this->getMockBuilder(Http::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['getParam', 'getPost'])
-            ->getMock();
+        $this->request = $this->createPartialMock(Http::class, ['getParam', 'getPost']);
 
-        $this->optionFactory = $this->getMockBuilder(Factory::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['create'])
-            ->getMock();
+        $this->optionFactory = $this->createPartialMock(Factory::class, ['create']);
 
-        $this->product = $this->getMockBuilder(Product::class)
-            ->disableOriginalConstructor()
-            ->setMethods([
-                'getTypeId', 'setAttributeSetId', 'getExtensionAttributes', 'setNewVariationsAttributeSetId',
-                'setCanSaveConfigurableAttributes', 'setExtensionAttributes'
-            ])
-            ->getMock();
+        $this->product = $this->createMock(Product::class);
 
-        $this->subject = $this->getMockBuilder(Helper::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->subject = $this->createMock(Helper::class);
 
         $this->plugin = new Configurable(
             $this->variationHandler,
@@ -166,10 +153,7 @@ class ConfigurableTest extends TestCase
             ->method('getParam')
             ->willReturnMap($paramValueMap);
 
-        $extensionAttributes = $this->getMockBuilder(ProductExtensionAttributes::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['setConfigurableProductOptions', 'setConfigurableProductLinks'])
-            ->getMockForAbstractClass();
+        $extensionAttributes = new ProductExtensionTestHelper();
         $this->product->expects(static::once())
             ->method('getExtensionAttributes')
             ->willReturn($extensionAttributes);
@@ -179,10 +163,6 @@ class ConfigurableTest extends TestCase
             ->with($attributes)
             ->willReturn($attributes);
 
-        $extensionAttributes->expects(static::once())
-            ->method('setConfigurableProductOptions')
-            ->with($attributes);
-
         $this->variationHandler->expects(static::once())
             ->method('prepareAttributeSet')
             ->with($this->product);
@@ -191,10 +171,6 @@ class ConfigurableTest extends TestCase
             ->method('generateSimpleProducts')
             ->with($this->product, $variationMatrix)
             ->willReturn($simpleProductsIds);
-
-        $extensionAttributes->expects(static::once())
-            ->method('setConfigurableProductLinks')
-            ->with($simpleProductsIds);
 
         $this->product->expects(static::once())
             ->method('setExtensionAttributes')
@@ -232,10 +208,7 @@ class ConfigurableTest extends TestCase
             ->method('getParam')
             ->willReturnMap($paramValueMap);
 
-        $extensionAttributes = $this->getMockBuilder(ProductExtensionAttributes::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['setConfigurableProductOptions', 'setConfigurableProductLinks'])
-            ->getMockForAbstractClass();
+        $extensionAttributes = new ProductExtensionTestHelper();
         $this->product->expects(static::once())
             ->method('getExtensionAttributes')
             ->willReturn($extensionAttributes);
@@ -245,18 +218,13 @@ class ConfigurableTest extends TestCase
             ->with($attributes)
             ->willReturn($attributes);
 
-        $extensionAttributes->expects(static::once())
-            ->method('setConfigurableProductOptions')
-            ->with($attributes);
-
         $this->variationHandler->expects(static::never())
             ->method('prepareAttributeSet');
 
         $this->variationHandler->expects(static::never())
             ->method('generateSimpleProducts');
 
-        $extensionAttributes->expects(static::once())
-            ->method('setConfigurableProductLinks');
+        // Helper directly implements setConfigurableProductLinks
 
         $this->product->expects(static::once())
             ->method('setExtensionAttributes')

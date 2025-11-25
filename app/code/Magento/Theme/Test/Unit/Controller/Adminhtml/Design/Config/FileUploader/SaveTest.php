@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -41,7 +41,7 @@ class SaveTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $this->resultPage = $this->getMockBuilder(ResultInterface::class)
-            ->setMethods(['setData'])
+            ->addMethods(['setData'])
             ->getMockForAbstractClass();
         $this->fileProcessor = $this->getMockBuilder(
             FileProcessor::class

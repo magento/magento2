@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -78,7 +78,8 @@ class TaxRuleCollectionTest extends TestCase
         $this->searchResultsMock = $this->getMockForAbstractClass(TaxRateSearchResultsInterface::class);
         $this->taxRuleMock = $this->getMockBuilder(Rule::class)
             ->disableOriginalConstructor()
-            ->setMethods([
+            ->addMethods(['getTaxRatesCodes'])
+            ->onlyMethods([
                 'getId',
                 'getCode',
                 'getPriority',
@@ -87,7 +88,6 @@ class TaxRuleCollectionTest extends TestCase
                 'getCustomerTaxClassIds',
                 'getProductTaxClassIds',
                 'getTaxRateIds',
-                'getTaxRatesCodes'
             ])
             ->getMock();
 

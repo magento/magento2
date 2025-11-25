@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -40,7 +40,7 @@ class AccountTokensTest extends TestCase
 
         $this->tokenManagement = $this->getMockBuilder(CustomerTokenManagement::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getCustomerSessionTokens'])
+            ->onlyMethods(['getCustomerSessionTokens'])
             ->getMock();
 
         $this->block = $this->objectManager->getObject(AccountTokens::class, [

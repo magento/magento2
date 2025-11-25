@@ -1,13 +1,11 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 
 /**
  * Customer country with website specified attribute source
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\Customer\Model\ResourceModel\Address\Attribute\Source;
 

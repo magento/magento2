@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Vault\Model\Method;
 
@@ -25,7 +25,7 @@ use Magento\Vault\Model\VaultPaymentInterface;
 use Magento\Framework\Serialize\Serializer\Json;
 
 /**
- * Class Vault
+ * Vault payment method
  *
  * @SuppressWarnings(PHPMD.ExcessivePublicCount)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -38,7 +38,7 @@ class Vault implements VaultPaymentInterface
     /**
      * @deprecated
      */
-    const TOKEN_METADATA_KEY = 'token_metadata';
+    public const TOKEN_METADATA_KEY = 'token_metadata';
 
     /**
      * @var string
@@ -138,7 +138,7 @@ class Vault implements VaultPaymentInterface
         PaymentTokenManagementInterface $tokenManagement,
         OrderPaymentExtensionInterfaceFactory $paymentExtensionFactory,
         $code,
-        Json $jsonSerializer = null
+        ?Json $jsonSerializer = null
     ) {
         $this->config = $config;
         $this->configFactory = $configFactory;
@@ -202,6 +202,7 @@ class Vault implements VaultPaymentInterface
     public function setStore($storeId)
     {
         $this->storeId = (int)$storeId;
+        $this->vaultProvider->setStore($storeId);
     }
 
     /**
@@ -488,6 +489,7 @@ class Vault implements VaultPaymentInterface
         );
 
         $payment->setMethod($this->vaultProvider->getCode());
+        return $this;
     }
 
     /**
@@ -656,7 +658,7 @@ class Vault implements VaultPaymentInterface
      * @inheritdoc
      * @since 100.1.0
      */
-    public function isAvailable(\Magento\Quote\Api\Data\CartInterface $quote = null)
+    public function isAvailable(?\Magento\Quote\Api\Data\CartInterface $quote = null)
     {
         return $this->vaultProvider->isAvailable($quote)
             && $this->config->getValue(self::$activeKey, $this->getStore() ?: ($quote ? $quote->getStoreId() : null));

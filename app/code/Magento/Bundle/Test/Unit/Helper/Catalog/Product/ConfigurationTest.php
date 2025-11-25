@@ -1,12 +1,13 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Bundle\Test\Unit\Helper\Catalog\Product;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\Bundle\Model\Product\Price;
 use Magento\Bundle\Model\Product\Type;
 use Magento\Bundle\Model\ResourceModel\Option\Collection;
@@ -15,12 +16,14 @@ use Magento\Catalog\Helper\Product\Configuration;
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\Product\Configuration\Item\ItemInterface;
 use Magento\Catalog\Model\Product\Configuration\Item\Option\OptionInterface;
-use Magento\Catalog\Model\Product\Option;
 use Magento\Framework\Escaper;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Pricing\Helper\Data;
 use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Wishlist\Test\Unit\Helper\ItemTestHelper;
+use Magento\Catalog\Test\Unit\Helper\ProductTestHelper;
+use Magento\Catalog\Test\Unit\Helper\OptionTestHelper;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -72,13 +75,9 @@ class ConfigurationTest extends TestCase
         $this->pricingHelper = $this->createPartialMock(Data::class, ['currency']);
         $this->productConfiguration = $this->createMock(Configuration::class);
         $this->escaper = $this->createPartialMock(Escaper::class, ['escapeHtml']);
-        $this->item = $this->getMockBuilder(ItemInterface::class)
-            ->addMethods(['getQty'])
-            ->onlyMethods(['getProduct', 'getOptionByCode', 'getFileDownloadParams'])
-            ->getMockForAbstractClass();
-        $this->serializer = $this->getMockBuilder(Json::class)
-            ->onlyMethods(['unserialize'])
-            ->getMockForAbstractClass();
+        /** @var ItemTestHelper */
+        $this->item = new ItemTestHelper();
+        $this->serializer = $this->createMock(Json::class);
         $this->taxHelper = $this->createPartialMock(TaxPrice::class, ['displayCartPricesBoth', 'getTaxPrice']);
 
         $this->serializer->expects($this->any())
@@ -109,19 +108,14 @@ class ConfigurationTest extends TestCase
         $selectionId = 15;
         $selectionQty = 35;
         $product = $this->createMock(Product::class);
-        $option = $this->getMockBuilder(Option::class)
-            ->addMethods(['getValue'])
-            ->onlyMethods(['__wakeup'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        /** @var OptionTestHelper $option */
+        $option = new OptionTestHelper();
 
         $product->expects($this->once())
             ->method('getCustomOption')
             ->with('selection_qty_' . $selectionId)
             ->willReturn($option);
-        $option->expects($this->once())
-            ->method('getValue')
-            ->willReturn($selectionQty);
+        $option->setValue($selectionQty);
 
         $this->assertEquals($selectionQty, $this->helper->getSelectionQty($product, $selectionId));
     }
@@ -152,8 +146,8 @@ class ConfigurationTest extends TestCase
         $selectionProduct = $this->createMock(Product::class);
 
         $selectionProduct->expects($this->once())->method('unsetData')->with('final_price');
-        $this->item->expects($this->once())->method('getProduct')->willReturn($product);
-        $this->item->expects($this->once())->method('getQty')->willReturn($itemQty);
+        $this->item->setProduct($product);
+        $this->item->setQty($itemQty);
         $product->expects($this->once())->method('getPriceModel')->willReturn($price);
         $price->expects($this->once())->method('getSelectionFinalTotalPrice')
             ->with($product, $selectionProduct, $itemQty, 0, false, true);
@@ -170,9 +164,8 @@ class ConfigurationTest extends TestCase
         $product = $this->createPartialMock(Product::class, ['getTypeInstance', '__wakeup']);
 
         $product->expects($this->once())->method('getTypeInstance')->willReturn($typeInstance);
-        $this->item->expects($this->once())->method('getProduct')->willReturn($product);
-        $this->item->expects($this->once())->method('getOptionByCode')->with('bundle_option_ids')
-            ->willReturn(null);
+        $this->item->setProduct($product);
+        $this->item->setOptionByCode(null);
 
         $this->assertEquals([], $this->helper->getBundleOptions($this->item));
     }
@@ -212,13 +205,16 @@ class ConfigurationTest extends TestCase
         $product->expects($this->once())
             ->method('getTypeInstance')
             ->willReturn($typeInstance);
-        $this->item->expects($this->once())
-            ->method('getProduct')
-            ->willReturn($product);
-        $this->item
-            ->method('getOptionByCode')
-            ->withConsecutive(['bundle_option_ids'], ['bundle_selection_ids'])
-            ->willReturnOnConsecutiveCalls($itemOption, $selectionOption);
+        $this->item->setProduct($product);
+        $this->item->setOptionByCode(
+            function ($arg1) use ($itemOption, $selectionOption) {
+                if ($arg1 == 'bundle_option_ids') {
+                    return $itemOption;
+                } elseif ($arg1 == 'bundle_selection_ids') {
+                    return $selectionOption;
+                }
+            }
+        );
 
         $this->assertEquals([], $this->helper->getBundleOptions($this->item));
     }
@@ -227,19 +223,16 @@ class ConfigurationTest extends TestCase
      * @param $includingTax
      * @param $displayCartPriceBoth
      * @return void
-     * @dataProvider getTaxConfiguration
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
+    #[DataProvider('getTaxConfiguration')]
     public function testGetOptions($includingTax, $displayCartPriceBoth): void
     {
         $optionIds = '{"0":"1"}';
         $selectionIds =  '{"0":"2"}';
-        $selectionId = '2';
-        $product = $this->getMockBuilder(Product::class)
-            ->addMethods(['getSelectionId'])
-            ->onlyMethods(['getTypeInstance', '__wakeup', 'getCustomOption', 'getName', 'getPriceModel'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $selectionId = 2;
+        /** @var ProductTestHelper $product */
+        $product = new ProductTestHelper();
         $typeInstance = $this->createPartialMock(
             Type::class,
             ['getOptionsByIds', 'getSelectionsByIds']
@@ -252,10 +245,8 @@ class ConfigurationTest extends TestCase
             \Magento\Quote\Model\Quote\Item\Option::class,
             ['getValue', '__wakeup']
         );
-        $bundleOption = $this->getMockBuilder(\Magento\Bundle\Model\Option::class)->addMethods(['getSelections'])
-            ->onlyMethods(['getTitle', '__wakeup'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        /** @var OptionTestHelper $bundleOption */
+        $bundleOption = new OptionTestHelper();
         $selectionOption = $this->createPartialMock(
             OptionInterface::class,
             ['getValue']
@@ -277,23 +268,27 @@ class ConfigurationTest extends TestCase
         if ($displayCartPriceBoth) {
             $this->taxHelper->expects($this->any())
                 ->method('getTaxPrice')
-                ->withConsecutive([$product, 15.00, !$includingTax], [$product, 15.00, $includingTax])
-                ->willReturnOnConsecutiveCalls(15.00, 15.00);
+                ->willReturnCallback(
+                    function ($product, $amount, $includingTax) {
+                        if ($product && $amount == 15.00 && ($includingTax || !$includingTax)) {
+                            return 15.00;
+                        }
+                    }
+                );
+
         } else {
             $this->taxHelper->expects($this->any())
                 ->method('getTaxPrice')
                 ->with($product, 15.00, $includingTax)
                 ->willReturn(15.00);
         }
-        $this->taxHelper->expects($this->any())
-            ->method('displayCartPricesBoth')
-            ->willReturn((bool)$displayCartPriceBoth);
+        $this->taxHelper->method('displayCartPricesBoth')->willReturn((bool)$displayCartPriceBoth);
         $this->pricingHelper->expects($this->atLeastOnce())->method('currency')->with(15.00)
             ->willReturn('<span class="price">$15.00</span>');
         $priceModel->expects($this->once())->method('getSelectionFinalTotalPrice')->willReturn(15.00);
-        $selectionQty->expects($this->any())->method('getValue')->willReturn(1);
-        $bundleOption->expects($this->any())->method('getSelections')->willReturn([$product]);
-        $bundleOption->expects($this->once())->method('getTitle')->willReturn('title');
+        $selectionQty->method('getValue')->willReturn(1);
+        $bundleOption->setSelections([$product]);
+        $bundleOption->setTitle('title');
         $selectionOption->expects($this->once())->method('getValue')->willReturn($selectionIds);
         $collection->expects($this->once())->method('appendSelections')->with($collection2, true)
             ->willReturn([$bundleOption]);
@@ -309,17 +304,16 @@ class ConfigurationTest extends TestCase
             ->method('getSelectionsByIds')
             ->with(json_decode($selectionIds, true), $product)
             ->willReturn($collection2);
-        $product->expects($this->once())->method('getTypeInstance')->willReturn($typeInstance);
-        $product->expects($this->any())->method('getCustomOption')->with('selection_qty_' . $selectionId)
-            ->willReturn($selectionQty);
-        $product->expects($this->any())->method('getSelectionId')->willReturn($selectionId);
-        $product->expects($this->once())->method('getName')->willReturn('name');
-        $product->expects($this->once())->method('getPriceModel')->willReturn($priceModel);
-        $this->item->expects($this->any())->method('getProduct')->willReturn($product);
-        $this->item
-            ->method('getOptionByCode')
-            ->withConsecutive(['bundle_option_ids'], ['bundle_selection_ids'])
-            ->willReturnOnConsecutiveCalls($itemOption, $selectionOption);
+        $product->setTypeInstance($typeInstance);
+        $product->setCustomOption($selectionQty);
+        $product->setSelectionId($selectionId);
+        $product->setName('name');
+        $product->setPriceModel($priceModel);
+        $this->item->setProduct($product);
+        $this->item->setOptionByCode(fn($param) => match ([$param]) {
+            ['bundle_option_ids'] => $itemOption,
+            ['bundle_selection_ids'] => $selectionOption
+        });
         $this->productConfiguration->expects($this->once())->method('getCustomOptions')->with($this->item)
             ->willReturn([0 => ['label' => 'title', 'value' => 'value']]);
 
@@ -346,7 +340,7 @@ class ConfigurationTest extends TestCase
      *
      * @return array
      */
-    public function getTaxConfiguration(): array
+    public static function getTaxConfiguration(): array
     {
         return [
             [null, false],

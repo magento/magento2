@@ -218,11 +218,14 @@ class ConfigTest extends TestCase
         $this->model->setContentType('auto');
         $this->scopeConfig
             ->method('getValue')
-            ->withConsecutive(
-                ['design/head/default_media_type', 'store'],
-                ['design/head/default_charset', 'store']
-            )
-            ->willReturnOnConsecutiveCalls('default_media_type', 'default_charset');
+            ->willReturnCallback(function ($arg1, $arg2) {
+                if ($arg1 == 'design/head/default_media_type' && $arg2 == 'store') {
+                    return 'default_media_type';
+                } elseif ($arg1 == 'design/head/default_charset' && $arg2 == 'store') {
+                    return 'default_charset';
+                }
+            });
+
         $this->assertEquals($expectedData, $this->model->getContentType());
     }
 
@@ -386,7 +389,7 @@ class ConfigTest extends TestCase
     /**
      * @return array
      */
-    public function pageAssetDataProvider(): array
+    public static function pageAssetDataProvider(): array
     {
         return [
             [
@@ -429,7 +432,7 @@ class ConfigTest extends TestCase
     /**
      * @return array
      */
-    public function remotePageAssetDataProvider(): array
+    public static function remotePageAssetDataProvider(): array
     {
         return [
             [
@@ -495,7 +498,7 @@ class ConfigTest extends TestCase
     /**
      * @return array
      */
-    public function elementAttributeDataProvider(): array
+    public static function elementAttributeDataProvider(): array
     {
         return [
             [
@@ -534,7 +537,7 @@ class ConfigTest extends TestCase
     /**
      * @return array
      */
-    public function elementAttributeExceptionDataProvider(): array
+    public static function elementAttributeExceptionDataProvider(): array
     {
         return [
             [
@@ -573,7 +576,7 @@ class ConfigTest extends TestCase
     /**
      * @return array
      */
-    public function elementAttributesDataProvider(): array
+    public static function elementAttributesDataProvider(): array
     {
         return [
             [
@@ -601,7 +604,7 @@ class ConfigTest extends TestCase
     /**
      * @return array
      */
-    public function pageLayoutDataProvider(): array
+    public static function pageLayoutDataProvider(): array
     {
         return [
             [
@@ -672,7 +675,7 @@ class ConfigTest extends TestCase
     /**
      * @return array
      */
-    public function getIncludesDataProvider(): array
+    public static function getIncludesDataProvider(): array
     {
         return [
             [

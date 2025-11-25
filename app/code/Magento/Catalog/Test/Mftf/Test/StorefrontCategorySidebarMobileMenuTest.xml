@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
-  */
+/**
+ * Copyright 2022 Adobe
+ * All Rights Reserved.
+ */
 -->
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -26,6 +26,12 @@
             <createData entity="NewSubCategoryWithParent" stepKey="createSubCategory">
                 <requiredEntity createDataKey="createParentCategory"/>
             </createData>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindexToReflectNewCategory">
+                <argument name="indices" value=""/>
+            </actionGroup>
+            <actionGroup ref="CliCacheCleanActionGroup" stepKey="flushCacheToReflectNewCategory">
+                <argument name="tags" value="config full_page"/>
+            </actionGroup>
         </before>
         <after>
             <!-- Reset the window size to its original state -->

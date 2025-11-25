@@ -62,7 +62,7 @@ class PageCacheStateTest extends TestCase
      *
      * @return array
      */
-    public function saveStateProvider(): array
+    public static function saveStateProvider(): array
     {
         return [[true], [false]];
     }

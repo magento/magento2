@@ -2,15 +2,6 @@
 /**
  * Copyright 2023 Adobe
  * All Rights Reserved.
- *
- * NOTICE: All information contained herein is, and remains
- * the property of Adobe and its suppliers, if any. The intellectual
- * and technical concepts contained herein are proprietary to Adobe
- * and its suppliers and are protected by all applicable intellectual
- * property laws, including trade secret and copyright laws.
- * Dissemination of this information or reproduction of this material
- * is strictly forbidden unless prior written permission is obtained from
- * Adobe.
  */
 declare(strict_types=1);
 
@@ -30,6 +21,7 @@ use Magento\Quote\Api\ShipmentEstimationInterface;
 use Magento\Quote\Model\MaskedQuoteIdToQuoteIdInterface;
 use Magento\Quote\Model\Quote\AddressFactory;
 use Magento\Quote\Model\Cart\ShippingMethodConverter;
+use Magento\QuoteGraphQl\Model\ErrorMapper;
 use Magento\QuoteGraphQl\Model\FormatMoneyTypeData;
 
 /**
@@ -46,6 +38,7 @@ class EstimateShippingMethods implements ResolverInterface
      * @param ExtensibleDataObjectConverter $dataObjectConverter
      * @param ShippingMethodConverter $shippingMethodConverter
      * @param FormatMoneyTypeData $formatMoneyTypeData
+     * @param ErrorMapper $errorMapper
      */
     public function __construct(
         private MaskedQuoteIdToQuoteIdInterface $maskedQuoteIdToQuoteId,
@@ -55,13 +48,14 @@ class EstimateShippingMethods implements ResolverInterface
         private ExtensibleDataObjectConverter $dataObjectConverter,
         private ShippingMethodConverter $shippingMethodConverter,
         private FormatMoneyTypeData $formatMoneyTypeData,
+        private ErrorMapper $errorMapper
     ) {
     }
 
     /**
      * @inheritdoc
      */
-    public function resolve(Field $field, $context, ResolveInfo $info, array $value = null, array $args = null)
+    public function resolve(Field $field, $context, ResolveInfo $info, ?array $value = null, ?array $args = null)
     {
         $this->validateInput($args);
         try {
@@ -73,7 +67,9 @@ class EstimateShippingMethods implements ResolverInterface
                     [
                         'masked_id' => $args['input']['cart_id']
                     ]
-                )
+                ),
+                $ex,
+                $this->errorMapper->getErrorMessageId('Could not find a cart with ID')
             );
         }
         return $this->getAvailableShippingMethodsForAddress($args['input']['address'], $cart);
@@ -120,7 +116,7 @@ class EstimateShippingMethods implements ResolverInterface
         /** @var $address AddressInterface */
         $address = $this->addressFactory->create(['data' => array_filter($data)]);
         $shippingMethods = [];
-        
+
         foreach ($this->shipmentEstimation->estimateByExtendedAddress($cart->getId(), $address) as $method) {
             $shippingMethods[] = $this->formatMoneyTypeData->execute(
                 $this->dataObjectConverter->toFlatArray($method, [], ShippingMethodInterface::class),

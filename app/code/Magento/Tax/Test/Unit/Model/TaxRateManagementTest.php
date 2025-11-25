@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -73,22 +73,29 @@ class TaxRateManagementTest extends TestCase
         $taxRuleMock = $this->getMockForAbstractClass(TaxRuleInterface::class);
         $taxRateMock = $this->getMockForAbstractClass(TaxRateInterface::class);
 
-        $this->filterBuilderMock->expects($this->exactly(2))->method('setField')->withConsecutive(
-            ['customer_tax_class_ids'],
-            ['product_tax_class_ids']
-        )->willReturnSelf();
-        $this->filterBuilderMock->expects($this->exactly(2))->method('setValue')->withConsecutive(
-            [$this->equalTo([$customerTaxClassId])],
-            [$this->equalTo([$productTaxClassId])]
-        )->willReturnSelf();
+        $this->filterBuilderMock->expects($this->exactly(2))->method('setField')
+            ->willReturnCallback(function ($arg1) {
+                if ($arg1 == 'customer_tax_class_ids' || $arg1 == 'product_tax_class_ids') {
+                    return $this->filterBuilderMock;
+                }
+            });
+
+        $this->filterBuilderMock->expects($this->exactly(2))->method('setValue')
+            ->willReturnCallback(function ($arg1) use ($customerTaxClassId, $productTaxClassId) {
+                if ($arg1 == [$customerTaxClassId] || $arg1 == [$productTaxClassId]) {
+                    return $this->filterBuilderMock;
+                }
+            });
         $this->filterBuilderMock->expects($this->exactly(2))->method('create')->willReturnOnConsecutiveCalls(
             $customerFilterMock,
             $productFilterMock
         );
-        $this->searchCriteriaBuilderMock->expects($this->exactly(2))->method('addFilters')->withConsecutive(
-            [[$customerFilterMock]],
-            [[$productFilterMock]]
-        );
+        $this->searchCriteriaBuilderMock->expects($this->exactly(2))->method('addFilters')
+            ->willReturnCallback(function ($arg1) use ($customerFilterMock, $productFilterMock) {
+                if ($arg1 == [$customerFilterMock] || $arg1 == [$productFilterMock]) {
+                    return $this->filterBuilderMock;
+                }
+            });
         $this->searchCriteriaBuilderMock->expects($this->once())->method('create')->willReturn($searchCriteriaMock);
         $this->taxRuleRepositoryMock->expects($this->once())->method('getList')->with($searchCriteriaMock)
             ->willReturn($searchResultsMock);

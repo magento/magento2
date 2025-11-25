@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -214,7 +214,7 @@ class SessionTest extends TestCase
      *
      * @return array
      */
-    public function renewPersistentCookieDataProvider()
+    public static function renewPersistentCookieDataProvider()
     {
         return [
             'no duration' => [0, 0, null ],

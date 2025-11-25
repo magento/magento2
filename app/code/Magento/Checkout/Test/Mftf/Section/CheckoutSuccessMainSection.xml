@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
-  */
+/**
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
+ */
 -->
 
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -18,9 +18,11 @@
         <element name="orderNumberText" type="text" selector=".checkout-success > p:nth-child(1)"/>
         <element name="continueShoppingButton" type="button" selector=".action.primary.continue" timeout="30"/>
         <element name="createAnAccount" type="button" selector="a[class='action primary'] [data-bind*=&quot;i18n: 'Create an Account'&quot;]" timeout="30"/>
+        <element name="orderEmailAddress" type="text" selector="span[data-bind*=&quot;text: getEmailAddress()&quot;]" timeout="30"/>
         <element name="printLink" type="button" selector=".print" timeout="30"/>
         <element name="orderNumberWithoutLink" type="text" selector="//div[contains(@class, 'checkout-success')]//p/span"/>
         <element name="orderLinkByOrderNumber" type="text" selector="//div[contains(@class,'success')]//a[contains(.,'{{orderNumber}}')]" parameterized="true" timeout="30"/>
         <element name="purchaseOrderNumber" type="text" selector="div.checkout-success > p:nth-child(1) > a span"/>
+        <element name="billingAgreement" type="text" selector="//div[contains(@class, 'checkout-success')]/p[contains(text(), 'Your billing agreement # is:')]"/>
     </section>
 </sections>

@@ -1,8 +1,7 @@
 <?php
 /**
- *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Tax\Model\Calculation;
@@ -102,7 +101,7 @@ class RateRepository implements TaxRateRepositoryInterface
         RegionFactory $regionFactory,
         \Magento\Tax\Model\ResourceModel\Calculation\Rate $rateResource,
         JoinProcessorInterface $joinProcessor,
-        CollectionProcessorInterface $collectionProcessor = null
+        ?CollectionProcessorInterface $collectionProcessor = null
     ) {
         $this->converter = $converter;
         $this->rateRegistry = $rateRegistry;

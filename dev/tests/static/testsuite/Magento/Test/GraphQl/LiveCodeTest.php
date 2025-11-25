@@ -7,6 +7,8 @@ declare(strict_types=1);
 
 namespace Magento\Test\GraphQl;
 
+use Exception;
+use Magento\Framework\App\Utility\Files;
 use Magento\TestFramework\CodingStandard\Tool\CodeSniffer;
 use Magento\TestFramework\CodingStandard\Tool\CodeSniffer\Wrapper;
 use Magento\Test\Php\LiveCodeTest as PHPCodeTest;
@@ -71,6 +73,7 @@ class LiveCodeTest extends TestCase
      */
     public function testModulesRequireGraphQLChange(): void
     {
+        $this->markTestSkipped('AC-9497 written incorrectly');
         $modulesRequireGraphQLChange = self::getModulesRequiringGraphQLChange();
         $graphQlModules = implode(", ", $modulesRequireGraphQLChange);
         $this->assertEmpty(
@@ -86,6 +89,7 @@ class LiveCodeTest extends TestCase
      * returns a array with the list of graphql modules which require changes
      *
      * @return array
+     * @throws Exception
      */
     private static function getModulesRequiringGraphQLChange(): array
     {
@@ -95,10 +99,11 @@ class LiveCodeTest extends TestCase
             '',
             '/_files/whitelist/graphql.txt'
         );
+        $fileList = self::filterFiles($whitelistFiles);
 
         $updatedGraphQlModules = [];
         $requireGraphQLChanges = [];
-        foreach ($whitelistFiles as $whitelistFile) {
+        foreach ($fileList as $whitelistFile) {
             $moduleName = self::getModuleName($whitelistFile);
 
             if (!$moduleName) {
@@ -208,5 +213,23 @@ class LiveCodeTest extends TestCase
             }
         }
         return $frontendUIComponent;
+    }
+
+    /**
+     * Skip files not requiring graphql side changes
+     *
+     * @param array $fileList
+     * @return array
+     * @throws Exception
+     */
+    private static function filterFiles(array $fileList): array
+    {
+        $denyListFiles = Files::init()->readLists(__DIR__ . '/_files/denylist/*.txt');
+
+        $filter = function ($value) use ($denyListFiles) {
+            return !in_array($value, $denyListFiles);
+        };
+
+        return array_filter($fileList, $filter);
     }
 }

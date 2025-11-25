@@ -31,7 +31,7 @@ class Config extends \Magento\Framework\Config\Data
         Reader $reader,
         CacheInterface $cache,
         $cacheId = self::CACHE_ID,
-        SerializerInterface $serializer = null
+        ?SerializerInterface $serializer = null
     ) {
         parent::__construct($reader, $cache, $cacheId, $serializer);
     }

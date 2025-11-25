@@ -1,12 +1,13 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\ConfigurableProduct\Test\Unit\Model\Product;
 
+use PHPUnit\Framework\Attributes\CoversClass;
 use Magento\Catalog\Model\Product;
 use Magento\ConfigurableProduct\Helper\Product\Options\Loader;
 use Magento\ConfigurableProduct\Model\Product\ReadHandler;
@@ -14,6 +15,7 @@ use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
+#[CoversClass(\Magento\ConfigurableProduct\Model\Product\ReadHandler::class)]
 class ReadHandlerTest extends TestCase
 {
     /**
@@ -31,23 +33,14 @@ class ReadHandlerTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->optionLoader = $this->getMockBuilder(Loader::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['load'])
-            ->getMock();
+        $this->optionLoader = $this->createPartialMock(Loader::class, ['load']);
 
         $this->readHandler = new ReadHandler($this->optionLoader);
     }
 
-    /**
-     * @covers \Magento\ConfigurableProduct\Model\Product\ReadHandler::execute
-     */
     public function testExecuteWithInvalidProductType()
     {
-        $product = $this->getMockBuilder(Product::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['getTypeId', 'getExtensionAttributes'])
-            ->getMock();
+        $product = $this->createPartialMock(Product::class, ['getTypeId', 'getExtensionAttributes']);
 
         $product->expects(static::once())
             ->method('getTypeId')
@@ -60,9 +53,6 @@ class ReadHandlerTest extends TestCase
         static::assertSame($product, $entity);
     }
 
-    /**
-     * @covers \Magento\ConfigurableProduct\Model\Product\ReadHandler::execute
-     */
     public function testExecute()
     {
         $options = [
@@ -72,21 +62,15 @@ class ReadHandlerTest extends TestCase
         $entityId = 1;
         $ids = [1, 2, 3];
 
-        $product = $this->getMockBuilder(Product::class)
-            ->disableOriginalConstructor()
-            ->setMethods([
+        $product = $this->createPartialMock(Product::class, [
                 'getTypeId', 'getId', 'getExtensionAttributes', 'setExtensionAttributes', 'getTypeInstance'
-            ])
-            ->getMock();
+            ]);
 
         $product->expects(static::once())
             ->method('getTypeId')
             ->willReturn(Configurable::TYPE_CODE);
 
-        $extensionAttributes = $this->getMockBuilder(ProductExtensionAttributes::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['setConfigurableProductOptions', 'setConfigurableProductLinks'])
-            ->getMockForAbstractClass();
+        $extensionAttributes = new \Magento\Catalog\Test\Unit\Helper\ProductExtensionTestHelper();
 
         $product->expects(static::once())
             ->method('getExtensionAttributes')
@@ -97,10 +81,7 @@ class ReadHandlerTest extends TestCase
             ->with($product)
             ->willReturn($options);
 
-        $typeInstance = $this->getMockBuilder(Configurable::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['getChildrenIds'])
-            ->getMock();
+        $typeInstance = $this->createPartialMock(Configurable::class, ['getChildrenIds']);
 
         $product->expects(static::once())
             ->method('getTypeInstance')

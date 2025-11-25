@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -13,7 +13,7 @@ use Symfony\Component\Console\Tester\CommandTester;
 /**
  * Tests for command `sampledata:remove`
  */
-class SampleDataRemoveCommandTest extends AbstractSampleDataCommandTest
+class SampleDataRemoveCommandTest extends AbstractSampleDataCommandTestCase
 {
     /**
      * @param array $sampleDataPackages
@@ -77,7 +77,7 @@ class SampleDataRemoveCommandTest extends AbstractSampleDataCommandTest
      *
      * @return array
      */
-    public function processDataProvider(): array
+    public static function processDataProvider(): array
     {
         return [
             'No sample data found in require' => [

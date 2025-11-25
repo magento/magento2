@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -48,12 +48,12 @@ class CronEventTest extends TestCase
     protected function setUp(): void
     {
         $this->httpClientFactoryMock = $this->getMockBuilder(LaminasClientFactory::class)
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
 
         $this->httpClientMock = $this->getMockBuilder(LaminasClient::class)
-            ->setMethods(['send', 'setUri', 'setMethod', 'setHeaders', 'setRawBody'])
+            ->onlyMethods(['send', 'setUri', 'setMethod', 'setHeaders', 'setRawBody'])
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -62,7 +62,7 @@ class CronEventTest extends TestCase
             ->getMockForAbstractClass();
 
         $this->configMock = $this->getMockBuilder(Config::class)
-            ->setMethods([
+            ->onlyMethods([
                 'getNewRelicAccountId',
                 'getInsightsApiUrl',
                 'getInsightsInsertKey',

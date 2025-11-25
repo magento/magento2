@@ -71,7 +71,7 @@ class IndexTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $this->forwardFactoryMock = $this->getMockBuilder(ForwardFactory::class)
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->forwardMock = $this->getMockBuilder(Forward::class)

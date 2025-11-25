@@ -25,6 +25,7 @@ class StoreConfigResolverTest extends GraphQlAbstract
         ConfigFixture(Config::XML_PATH_DISPLAY_CART_GRANDTOTAL, 1, ScopeInterface::SCOPE_STORE, 'default'),
         ConfigFixture(Config::XML_PATH_DISPLAY_CART_FULL_SUMMARY, 1, ScopeInterface::SCOPE_STORE, 'default'),
         ConfigFixture(Config::XML_PATH_DISPLAY_CART_ZERO_TAX, 1, ScopeInterface::SCOPE_STORE, 'default'),
+        ConfigFixture('tax/cart_display/gift_wrapping', 3, ScopeInterface::SCOPE_STORE, 'default'),
     ]
     public function testGetStoreConfig(): void
     {
@@ -38,6 +39,7 @@ class StoreConfigResolverTest extends GraphQlAbstract
     shopping_cart_display_grand_total,
     shopping_cart_display_full_summary,
     shopping_cart_display_zero_tax,
+    shopping_cart_display_tax_gift_wrapping,
   }
 }
 QUERY;
@@ -60,5 +62,6 @@ QUERY;
         $this->assertEquals(1, $responseConfig['shopping_cart_display_grand_total']);
         $this->assertEquals(1, $responseConfig['shopping_cart_display_full_summary']);
         $this->assertEquals(1, $responseConfig['shopping_cart_display_zero_tax']);
+        $this->assertEquals('DISPLAY_TYPE_BOTH', $responseConfig['shopping_cart_display_tax_gift_wrapping']);
     }
 }

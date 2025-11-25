@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -66,14 +66,10 @@ class CommentTest extends TestCase
             ->willReturn($directoryReadMock);
         $this->placeholderMock->expects($this->any())
             ->method('restore')
-            ->withConsecutive(
-                ['CONFIG__DEFAULT__SOME__PAYMENT__PASSWORD'],
-                ['CONFIG__DEFAULT__SOME__PAYMENT__TOKEN']
-            )
-            ->willReturnOnConsecutiveCalls(
-                'some/payment/password',
-                'some/payment/token'
-            );
+            ->willReturnCallback(fn($param) => match ([$param]) {
+                ['CONFIG__DEFAULT__SOME__PAYMENT__PASSWORD'] => 'some/payment/password',
+                ['CONFIG__DEFAULT__SOME__PAYMENT__TOKEN'] => 'some/payment/token'
+            });
 
         $this->assertEquals(
             $this->model->execute($fileName),

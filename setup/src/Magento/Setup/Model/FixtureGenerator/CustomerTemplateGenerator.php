@@ -49,7 +49,7 @@ class CustomerTemplateGenerator implements TemplateEntityGeneratorInterface
         CustomerFactory $customerFactory,
         AddressFactory $addressFactory,
         StoreManagerInterface $storeManager,
-        RegionCollectionFactory $regionsCollectionFactory = null
+        ?RegionCollectionFactory $regionsCollectionFactory = null
     ) {
         $this->customerFactory = $customerFactory;
         $this->addressFactory = $addressFactory;

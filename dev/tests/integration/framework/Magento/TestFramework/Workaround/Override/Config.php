@@ -184,7 +184,7 @@ class Config implements ConfigInterface
      */
     public function getMethodConfig(TestCase $test, ?string $fixtureType = null): array
     {
-        $config = $this->getClassConfig($test)[$test->getName(false)] ?? [];
+        $config = $this->getClassConfig($test)[$test->name()] ?? [];
 
         if ($fixtureType) {
             $config = $config[$fixtureType] ?? [];
@@ -198,7 +198,7 @@ class Config implements ConfigInterface
      */
     public function getDataSetConfig(TestCase $test, ?string $fixtureType = null): array
     {
-        $config = $this->getClassConfig($test)[$test->getName(false)][(string)$test->dataName()] ?? [];
+        $config = $this->getClassConfig($test)[$test->name()][(string)$test->dataName()] ?? [];
         if ($fixtureType) {
             $config = $config[$fixtureType] ?? [];
         }

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -105,7 +105,7 @@ class CollectionTest extends TestCase
         $snapshotClassName = Snapshot::class;
         $this->entitySnapshotMock = $this->getMockBuilder($snapshotClassName)
             ->disableOriginalConstructor()
-            ->setMethods(['registerSnapshot'])
+            ->onlyMethods(['registerSnapshot'])
             ->getMock();
 
         $helper = new ObjectManager($this);

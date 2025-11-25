@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright 2024 Adobe
+  * All Rights Reserved.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminCreateOrderWithSimpleProductWithoutPaymentTest">
+        <annotations>
+            <title value="Create Order in Admin with simple product"/>
+            <stories value="ACP2E-3233: Admin can still place order even without payment method."/>
+            <description value="Create order with simple product and assert if it gets out of stock after ordering it."/>
+            <features value="Sales"/>
+            <testCaseId value="AC-13220"/>
+            <severity value="AVERAGE"/>
+        </annotations>
+        <before>
+            <!-- Disable payment method one of "Check/Money Order" and  "Zero Subtotal Checkout" -->
+            <magentoCLI command="config:set payment/checkmo/active 0" stepKey="disabledCheckMoneyOrderValue"/>
+            <magentoCLI command="config:set payment/free/active 0" stepKey="disableZeroSubtotalCheckoutConfigData"/>
+            <magentoCLI command="config:set payment/cashondelivery/max_order_total 100" stepKey="cashOnDeliveryMaximumOrderTotalConfigData"/>
+            <magentoCLI command="config:set payment/cashondelivery/min_order_total 1" stepKey="cashOnDeliveryMinimumOrderTotalConfigData"/>
+
+            <createData entity="FlatRateShippingMethodDefault" stepKey="setDefaultFlatRateShippingMethod"/>
+            <createData entity="CashOnDeliveryPaymentMethodDefault" stepKey="cashOnDeliveryPaymentMethod"/>
+            <createData entity="Simple_US_Customer_CA" stepKey="simpleCustomer"/>
+            <createData entity="SimpleProduct_25" stepKey="simpleProduct">
+                <field key="price">10</field>
+            </createData>
+
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+        </before>
+        <actionGroup ref="AdminNavigateToNewOrderPageExistingCustomerActionGroup" stepKey="navigateToNewOrderWithExistingCustomer">
+            <argument name="customer" value="$$simpleCustomer$$"/>
+        </actionGroup>
+        <actionGroup ref="AddSimpleProductToOrderActionGroup" stepKey="addSimpleProductToOrder">
+            <argument name="product" value="$$simpleProduct$$"/>
+            <argument name="productQty" value="1"/>
+        </actionGroup>
+
+        <!--Click *Custom Price* link, enter 0 and click *Update Items and Quantities* button-->
+        <waitForPageLoad stepKey="waitForProductLoad"/>
+        <fillField selector="{{AdminCustomerCreateNewOrderSection.productQty}}" userInput="{{ApiSimpleProduct.quantity}}" stepKey="fillProductQty"/>
+        <click selector="{{AdminOrderFormItemsSection.updateItemsAndQuantities}}" stepKey="clickUpdateItemsAndQuantitiesButton"/>
+
+        <actionGroup ref="SelectCashOnDeliveryPaymentMethodActionGroup" stepKey="selectPaymentMethod"/>
+        <actionGroup ref="OrderSelectFlatRateShippingActionGroup" stepKey="orderSelectFlatRateShippingMethod"/>
+        <actionGroup ref="AdminCheckoutSelectCheckMoneyOrderBillingMethodActionGroup" stepKey="selectBillingMethod"/>
+
+        <actionGroup ref="AdminOrderClickSubmitOrderActionGroup" stepKey="submitOrder"/>
+        <see selector="{{AdminOrderFormMessagesSection.error}}" userInput="This payment method is not available." stepKey="seeErrorMessage"/>
+        <after>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+            <!-- Enable payment method one of "Check/Money Order" and  "Zero Subtotal Checkout" -->
+            <magentoCLI command="config:set payment/checkmo/active 1" stepKey="enabledCheckMoneyOrderValue"/>
+            <magentoCLI command="config:set payment/free/active 1" stepKey="enabledZeroSubtotalCheckoutConfigData"/>
+            <magentoCLI command="config:set payment/cashondelivery/max_order_total 0" stepKey="cashOnDeliveryMaximumOrderTotalConfigData"/>
+            <magentoCLI command="config:set payment/cashondelivery/min_order_total 0" stepKey="cashOnDeliveryMinimumOrderTotalConfigData"/>
+            <magentoCLI command="config:set payment/cashondelivery/active 0" stepKey="disableCashOnDeliveryMethod"/>
+            <deleteData createDataKey="simpleCustomer" stepKey="deleteSimpleCustomer"/>
+            <deleteData createDataKey="simpleProduct" stepKey="deleteSimpleProduct"/>
+        </after>
+    </test>
+</tests>

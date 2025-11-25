@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -35,7 +35,7 @@ class AbstractCollectionTest extends TestCase
 
         $resource = $this->getMockBuilder(AbstractDb::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getConnection'])
+            ->onlyMethods(['getConnection'])
             ->getMockForAbstractClass();
         $resource->method('getConnection')->willReturn($connection);
 

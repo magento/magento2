@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -77,7 +77,7 @@ class InvoiceRefundCreationArgumentsTest extends TestCase
             ->getMockForAbstractClass();
 
         $this->extensionAttributesMock = $this->getMockBuilder(CreditmemoCreationArgumentsExtensionInterface::class)
-            ->setMethods(['getReturnToStockItems'])
+            ->addMethods(['getReturnToStockItems'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
 
@@ -144,7 +144,7 @@ class InvoiceRefundCreationArgumentsTest extends TestCase
     /**
      * @return array
      */
-    public function dataProvider()
+    public static function dataProvider()
     {
         return [
             'withErrors' => ['Error!'],

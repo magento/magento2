@@ -35,6 +35,6 @@ class CommandRendererBackground extends CommandRenderer
 
         return $this->osInfo->isWindows() ?
             'start /B "magento background task" ' . $command
-            : str_replace('2>&1', '> /dev/null &', $command);
+            : str_replace('2>&1', '2>/dev/null >/dev/null &', $command);
     }
 }

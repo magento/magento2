@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -170,7 +170,7 @@ class CustomerTest extends TestCase
      *
      * @return array
      */
-    public function dataProviderGetAllOptions()
+    public static function dataProviderGetAllOptions()
     {
         return [
             ['isEmpty' => false, 'expected' => [['value' => 10, 'label' => 'class-name']]],
@@ -251,7 +251,7 @@ class CustomerTest extends TestCase
      *
      * @return array
      */
-    public function dataProviderGetAllOptionsNameIntegrity()
+    public static function dataProviderGetAllOptionsNameIntegrity()
     {
         return [
             [

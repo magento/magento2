@@ -9,7 +9,7 @@ use Magento\Framework\Module\Setup\Migration;
  * See COPYING.txt for license details.
  */
 return [
-    '$replaceRules' => [
+    'replaceRules' => [
         [
             'table',
             'field',
@@ -17,12 +17,12 @@ return [
             Migration::FIELD_CONTENT_TYPE_XML,
         ],
     ],
-    '$tableData' => [
+    'tableData' => [
         ['field' => '<reference><block class="catalog/product_newProduct" /></reference>'],
         ['field' => '<reference><block class="catalogSearch/result" /></reference>'],
         ['field' => '<reference></reference>'],
     ],
-    '$expected' => [
+    'expected' => [
         'updates' => [
             [
                 'table' => 'table',

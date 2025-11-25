@@ -1,12 +1,13 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Quote\Test\Unit\Model\ResourceModel;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\Framework\DB\Sequence\SequenceInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Quote\Model\Quote;
@@ -49,7 +50,7 @@ class QuoteTest extends TestCase
         $objectManagerHelper = new ObjectManager($this);
         $this->quoteMock = $this->createMock(Quote::class);
         $this->sequenceManagerMock = $this->createMock(Manager::class);
-        $this->sequenceMock = $this->getMockForAbstractClass(SequenceInterface::class);
+        $this->sequenceMock = $this->createMock(SequenceInterface::class);
         $this->model = $objectManagerHelper->getObject(
             QuoteResource::class,
             [
@@ -63,8 +64,8 @@ class QuoteTest extends TestCase
      * @param int $storeId
      * @param string $reservedOrderId
      * @return void
-     * @dataProvider getReservedOrderIdDataProvider
      */
+    #[DataProvider('getReservedOrderIdDataProvider')]
     public function testGetReservedOrderId(string $entityType, int $storeId, string $reservedOrderId): void
     {
         $this->sequenceManagerMock->expects($this->once())
@@ -84,7 +85,7 @@ class QuoteTest extends TestCase
     /**
      * @return array
      */
-    public function getReservedOrderIdDataProvider(): array
+    public static function getReservedOrderIdDataProvider(): array
     {
         return [
             [Order::ENTITY, 1, '1000000001'],

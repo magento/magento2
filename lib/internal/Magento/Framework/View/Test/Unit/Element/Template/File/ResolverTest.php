@@ -43,7 +43,7 @@ class ResolverTest extends TestCase
     {
         $this->_viewFileSystemMock = $this->createMock(FileSystem::class);
         $this->serializerMock = $this->getMockBuilder(Json::class)
-            ->setMethods(['serialize'])
+            ->onlyMethods(['serialize'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->serializerMock->expects($this->any())

@@ -464,7 +464,7 @@ class AddressRepositoryTest extends TestCase
      *
      * @return array
      */
-    public function searchAddressDataProvider(): array
+    public static function searchAddressDataProvider(): array
     {
         /**
          * @var FilterBuilder $filterBuilder

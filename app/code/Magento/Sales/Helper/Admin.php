@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -53,7 +53,7 @@ class Admin extends \Magento\Framework\App\Helper\AbstractHelper
         \Magento\Sales\Model\Config $salesConfig,
         \Magento\Framework\Pricing\PriceCurrencyInterface $priceCurrency,
         \Magento\Framework\Escaper $escaper,
-        \DOMDocumentFactory $domDocumentFactory = null
+        ?\DOMDocumentFactory $domDocumentFactory = null
     ) {
         $this->priceCurrency = $priceCurrency;
         $this->_storeManager = $storeManager;
@@ -154,90 +154,12 @@ class Admin extends \Magento\Framework\App\Helper\AbstractHelper
     /**
      * Escape string preserving links
      *
-     * @param string $data
+     * @param string|int|float|\Stringable|array<string|int|float|\Stringable> $data
      * @param null|array $allowedTags
-     * @return string
+     * @return ($data is array ? string[] : string)
      */
     public function escapeHtmlWithLinks($data, $allowedTags = null)
     {
-        if (!empty($data) && is_array($allowedTags) && in_array('a', $allowedTags)) {
-            $wrapperElementId = uniqid();
-            $domDocument = $this->domDocumentFactory->create();
-
-            $internalErrors = libxml_use_internal_errors(true);
-
-            $convmap = [0x80, 0x10FFFF, 0, 0x1FFFFF];
-            $data = mb_encode_numericentity(
-                $data,
-                $convmap,
-                'UTF-8'
-            );
-
-            $domDocument->loadHTML(
-                '<html><body id="' . $wrapperElementId . '">' . $data . '</body></html>'
-            );
-
-            libxml_use_internal_errors($internalErrors);
-
-            $linkTags = $domDocument->getElementsByTagName('a');
-
-            foreach ($linkTags as $linkNode) {
-                $linkAttributes = [];
-                foreach ($linkNode->attributes as $attribute) {
-                    $linkAttributes[$attribute->name] = $attribute->value;
-                }
-
-                foreach ($linkAttributes as $attributeName => $attributeValue) {
-                    if ($attributeName === 'href') {
-                        $url = $this->filterUrl($attributeValue ?? '');
-                        $url = $this->escaper->escapeUrl($url);
-                        $linkNode->setAttribute('href', $url);
-                    } else {
-                        $linkNode->removeAttribute($attributeName);
-                    }
-                }
-            }
-
-            $result = mb_decode_numericentity(
-                // phpcs:ignore Magento2.Functions.DiscouragedFunction
-                html_entity_decode(
-                    $domDocument->saveHTML(),
-                    ENT_QUOTES|ENT_SUBSTITUTE,
-                    'UTF-8'
-                ),
-                $convmap,
-                'UTF-8'
-            );
-
-            preg_match('/<body id="' . $wrapperElementId . '">(.+)<\/body><\/html>$/si', $result, $matches);
-            $data = !empty($matches) ? $matches[1] : '';
-        }
-
         return $this->escaper->escapeHtml($data, $allowedTags);
-    }
-
-    /**
-     * Filter the URL for allowed protocols.
-     *
-     * @param string $url
-     * @return string
-     */
-    private function filterUrl(string $url): string
-    {
-        if ($url) {
-            //Revert the sprintf escaping
-            // phpcs:ignore Magento2.Functions.DiscouragedFunction
-            $urlScheme = parse_url($url, PHP_URL_SCHEME);
-            $urlScheme = $urlScheme ? strtolower($urlScheme) : '';
-            if ($urlScheme !== 'http' && $urlScheme !== 'https') {
-                $url = null;
-            }
-        }
-
-        if (!$url) {
-            $url = '#';
-        }
-
-        return $url;
     }
 }

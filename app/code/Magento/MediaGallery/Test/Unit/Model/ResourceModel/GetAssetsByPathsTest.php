@@ -2,15 +2,6 @@
 /**
  * Copyright 2023 Adobe
  * All Rights Reserved.
- *
- * NOTICE: All information contained herein is, and remains
- * the property of Adobe and its suppliers, if any. The intellectual
- * and technical concepts contained herein are proprietary to Adobe
- * and its suppliers and are protected by all applicable intellectual
- * property laws, including trade secret and copyright laws.
- * Dissemination of this information or reproduction of this material
- * is strictly forbidden unless prior written permission is obtained
- * from Adobe.
  */
 declare(strict_types=1);
 
@@ -21,6 +12,7 @@ use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\DB\Select;
 use Magento\MediaGallery\Model\ResourceModel\GetAssetsByPaths;
 use Magento\MediaGalleryApi\Api\Data\AssetInterfaceFactory;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
@@ -56,7 +48,7 @@ class GetAssetsByPathsTest extends TestCase
 
     protected function setUp(): void
     {
-        $logger = $this->getMockForAbstractClass(LoggerInterface::class);
+        $logger = $this->createMock(LoggerInterface::class);
         $resourceConnection = $this->createMock(ResourceConnection::class);
         $this->assetInterfaceFactory = $this->createMock(AssetInterfaceFactory::class);
 
@@ -66,7 +58,7 @@ class GetAssetsByPathsTest extends TestCase
             $logger
         );
 
-        $this->adapter = $this->getMockForAbstractClass(AdapterInterface::class);
+        $this->adapter = $this->createMock(AdapterInterface::class);
         $this->select = $this->createMock(Select::class);
         $this->statement = $this->createMock(\Zend_Db_Statement_Interface::class);
 
@@ -81,9 +73,8 @@ class GetAssetsByPathsTest extends TestCase
 
     /**
      * When getting an asset by path with mixed case, the asset with exact same path should be loaded
-     *
-     * @dataProvider assetDeleteByPathDataProvider
      */
+    #[DataProvider('assetDeleteByPathDataProvider')]
     public function testGetCorrectAssetByPathWithCaseSensitiveMatches(
         array $assets,
         int $assetIndex,
@@ -124,7 +115,7 @@ class GetAssetsByPathsTest extends TestCase
         $this->getAssetsByPaths->execute([$asset['path']]);
     }
 
-    private function getAssets(): array
+    private static function getAssets(): array
     {
         return [
             [
@@ -185,11 +176,11 @@ class GetAssetsByPathsTest extends TestCase
             ]
         ];
     }
-    public function assetDeleteByPathDataProvider(): array
+    public static function assetDeleteByPathDataProvider(): array
     {
         return [
             [
-                'assets' => $this->getAssets(),
+                'assets' => self::getAssets(),
                 'assetIndex' => 0,
                 'resultsCount' => 1
             ],

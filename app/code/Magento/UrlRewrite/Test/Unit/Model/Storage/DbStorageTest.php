@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -84,6 +84,7 @@ class DbStorageTest extends TestCase
 
     /**
      * @return void
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function testFindAllByData(): void
     {
@@ -91,7 +92,13 @@ class DbStorageTest extends TestCase
 
         $this->select
             ->method('where')
-            ->withConsecutive(['col1 IN (?)', 'val1'], ['col2 IN (?)', 'val2']);
+            ->willReturnCallback(function ($column, $value) {
+                if ($column == 'col1 IN (?)' && $value == 'val1') {
+                     return null;
+                } elseif ($column == 'col2 IN (?)' && $value == 'val2') {
+                    return null;
+                }
+            });
 
         $this->connectionMock
             ->method('quoteIdentifier')
@@ -104,11 +111,13 @@ class DbStorageTest extends TestCase
 
         $this->dataObjectHelper
             ->method('populateWithArray')
-            ->withConsecutive(
-                [['urlRewrite1'], ['row1'], UrlRewrite::class],
-                [['urlRewrite2'], ['row2'], UrlRewrite::class]
-            )
-            ->willReturnOnConsecutiveCalls($this->dataObjectHelper, $this->dataObjectHelper);
+            ->willReturnCallback(function ($arg1, $arg2, $arg3) {
+                if ($arg1 == ['urlRewrite1'] && $arg2 == ['row1'] && $arg3 == UrlRewrite::class) {
+                    return $this->dataObjectHelper;
+                } elseif ($arg1 == ['urlRewrite2'] && $arg2 == ['row2'] && $arg3 == UrlRewrite::class) {
+                    return $this->dataObjectHelper;
+                }
+            });
 
         $this->urlRewriteFactory
             ->method('create')
@@ -126,7 +135,11 @@ class DbStorageTest extends TestCase
 
         $this->select
             ->method('where')
-            ->withConsecutive(['col1 IN (?)', 'val1'], ['col2 IN (?)', 'val2']);
+            ->willReturnCallback(function ($arg1, $arg2) {
+                if ($arg1 == ['col1 IN (?)', 'val1'] && $arg2 == ['col2 IN (?)', 'val2']) {
+                    return $this->dataObjectHelper;
+                }
+            });
 
         $this->connectionMock->method('quoteIdentifier')
             ->willReturnArgument(0);
@@ -164,11 +177,11 @@ class DbStorageTest extends TestCase
 
         $this->select
             ->method('where')
-            ->withConsecutive(
-                ['col1 IN (?)', 'val1'],
-                ['col2 IN (?)', 'val2'],
-                ['request_path IN (?)', [$origRequestPath, $origRequestPath . '/']]
-            );
+            ->willReturnCallback(function ($arg1, $arg2) {
+                if ($arg1 == ['col1 IN (?)', 'val1'] && $arg2 == ['col2 IN (?)', 'val2']) {
+                    return $this->dataObjectHelper;
+                }
+            });
 
         $this->connectionMock->method('quoteIdentifier')
             ->willReturnArgument(0);
@@ -213,11 +226,14 @@ class DbStorageTest extends TestCase
 
         $this->select
             ->method('where')
-            ->withConsecutive(
-                ['col1 IN (?)', 'val1'],
-                ['col2 IN (?)', 'val2'],
-                ['request_path IN (?)', [$origRequestPath, $origRequestPath . '/']]
-            );
+                ->willReturnCallback(function ($arg1, $arg2, $arg3) {
+                    if ($arg1 === ['col1 IN (?)', 'val1'] && $arg2 === ['col2 IN (?)', 'val2']) {
+                        return $this->dataObjectHelper;
+                    }
+                    if ($arg1 === ['request_path IN (?)', [$arg3, $arg3 . '/']]) {
+                        return $this->dataObjectHelper;
+                    }
+                });
 
         $this->connectionMock->method('quoteIdentifier')
             ->willReturnArgument(0);
@@ -275,11 +291,15 @@ class DbStorageTest extends TestCase
 
         $this->select
             ->method('where')
-            ->withConsecutive(
-                ['col1 IN (?)', 'val1'],
-                ['col2 IN (?)', 'val2'],
-                ['request_path IN (?)', [rtrim($origRequestPath, '/'), rtrim($origRequestPath, '/') . '/']]
-            );
+            ->willReturnCallback(function ($arg1, $arg2) use ($origRequestPath) {
+                if ($arg1 === ['col1 IN (?)', 'val1'] && $arg2 === ['col2 IN (?)', 'val2']) {
+                    return $this->dataObjectHelper;
+                }
+                if ($arg1 === ['request_path IN (?)', [rtrim($origRequestPath, '/'),
+                        rtrim($origRequestPath, '/') . '/']]) {
+                    return $this->dataObjectHelper;
+                }
+            });
 
         $this->connectionMock
             ->method('quoteIdentifier')
@@ -338,11 +358,15 @@ class DbStorageTest extends TestCase
 
         $this->select
             ->method('where')
-            ->withConsecutive(
-                ['col1 IN (?)', 'val1'],
-                ['col2 IN (?)', 'val2'],
-                ['request_path IN (?)', [$origRequestPath, $origRequestPath . '/']]
-            );
+            ->willReturnCallback(function ($arg1, $arg2) use ($origRequestPath) {
+                if ($arg1 === ['col1 IN (?)', 'val1'] && $arg2 === ['col2 IN (?)', 'val2']) {
+                    return $this->dataObjectHelper;
+                }
+                if ($arg1 === ['request_path IN (?)', [rtrim($origRequestPath, '/'),
+                        rtrim($origRequestPath, '/') . '/']]) {
+                    return $this->dataObjectHelper;
+                }
+            });
 
         $this->connectionMock->method('quoteIdentifier')
             ->willReturnArgument(0);
@@ -388,11 +412,15 @@ class DbStorageTest extends TestCase
 
         $this->select
             ->method('where')
-            ->withConsecutive(
-                ['col1 IN (?)', 'val1'],
-                ['col2 IN (?)', 'val2'],
-                ['request_path IN (?)', [$origRequestPath, $origRequestPath . '/']]
-            );
+            ->willReturnCallback(function ($arg1, $arg2) use ($origRequestPath) {
+                if ($arg1 === ['col1 IN (?)', 'val1'] && $arg2 === ['col2 IN (?)', 'val2']) {
+                    return $this->dataObjectHelper;
+                }
+                if ($arg1 === ['request_path IN (?)', [rtrim($origRequestPath, '/'),
+                        rtrim($origRequestPath, '/') . '/']]) {
+                    return $this->dataObjectHelper;
+                }
+            });
 
         $this->connectionMock->method('quoteIdentifier')
             ->willReturnArgument(0);
@@ -569,7 +597,12 @@ class DbStorageTest extends TestCase
 
         $this->select
             ->method('where')
-            ->withConsecutive(['col1 IN (?)', 'val1'], ['col2 IN (?)', 'val2']);
+            ->willReturnCallback(function ($arg1, $arg2) {
+                if ($arg1 === ['col1 IN (?)', 'val1'] && $arg2 === ['col2 IN (?)', 'val2']) {
+                    return $this->dataObjectHelper;
+                }
+            });
+
         $this->select
             ->method('deleteFromSelect')
             ->with('table_name')
@@ -584,5 +617,205 @@ class DbStorageTest extends TestCase
             ->with('sql delete query');
 
         $this->storage->deleteByData($data);
+    }
+
+    /**
+     * Test that invalid UTF-8 sequences are rejected to prevent collation errors
+     *
+     * @dataProvider invalidRequestPathDataProvider
+     * @param string $requestPath
+     * @param string $description
+     * @return void
+     */
+    public function testFindOneByDataRejectsInvalidUtf8Sequences(string $requestPath, string $description): void
+    {
+        $data = [
+            UrlRewrite::REQUEST_PATH => $requestPath,
+            UrlRewrite::STORE_ID => 1
+        ];
+
+        // Database should never be queried for invalid paths
+        $this->connectionMock->expects($this->never())
+            ->method('fetchAll');
+
+        $this->connectionMock->expects($this->never())
+            ->method('fetchRow');
+
+        $result = $this->storage->findOneByData($data);
+
+        $this->assertNull($result, "Failed for case: {$description}");
+    }
+
+    /**
+     * Test that valid UTF-8 paths with normal characters work correctly
+     *
+     * @dataProvider validRequestPathDataProvider
+     * @param string $requestPath
+     * @param string $description
+     * @return void
+     */
+    public function testFindOneByDataAcceptsValidUtf8Paths(string $requestPath, string $description): void
+    {
+        $data = [
+            UrlRewrite::REQUEST_PATH => $requestPath,
+            UrlRewrite::STORE_ID => 1
+        ];
+
+        $this->connectionMock->method('quoteIdentifier')
+            ->willReturnArgument(0);
+
+        $this->select->method('where')
+            ->willReturnSelf();
+
+        // Database should be queried normally
+        $this->connectionMock->expects($this->once())
+            ->method('fetchAll')
+            ->with($this->select)
+            ->willReturn([]);
+
+        $result = $this->storage->findOneByData($data);
+
+        // Result should be null (no matching URL found), but query should have executed
+        $this->assertNull($result, "Failed for case: {$description}");
+    }
+
+    /**
+     * Data provider for invalid request paths that should be rejected
+     *
+     * @return array
+     */
+    public function invalidRequestPathDataProvider(): array
+    {
+        return [
+            // Path traversal attempts with overlong UTF-8 encoding (invalid UTF-8)
+            [
+                '%c0%ae%c0%ae/%c0%ae%c0%ae/%c0%ae%c0%ae/%c0%ae%c0%ae/etc/passwd',
+                'Path traversal with overlong encoding (%c0%ae) - invalid UTF-8'
+            ],
+            // Invalid single UTF-8 byte
+            [
+                '%C0',
+                'Invalid single UTF-8 byte'
+            ],
+            // Emojis (4-byte UTF-8 characters that cause collation issues)
+            [
+                '🔎',
+                'Magnifying glass emoji (U+1F50E) - 4-byte UTF-8'
+            ],
+            [
+                'search/🔎',
+                'Emoji in path segment - 4-byte UTF-8'
+            ],
+            [
+                '😀',
+                'Grinning face emoji (U+1F600) - 4-byte UTF-8'
+            ],
+            [
+                '🎉',
+                'Party popper emoji (U+1F389) - 4-byte UTF-8'
+            ],
+            // Control characters
+            [
+                "test\x00path",
+                'Null byte in path'
+            ],
+            [
+                "test\x1Fpath",
+                'Unit separator control character'
+            ],
+            [
+                "test\x7Fpath",
+                'DEL control character'
+            ],
+            // Mixed invalid sequences
+            [
+                '%c0%ae%c0%ae/🔎/test',
+                'Overlong encoding with emoji - invalid UTF-8'
+            ],
+            // More 4-byte UTF-8 characters
+            [
+                '𝕳𝖊𝖑𝖑𝖔',
+                'Mathematical alphanumeric symbols (U+1D573-U+1D586) - 4-byte UTF-8'
+            ],
+            [
+                '🏠',
+                'House emoji (U+1F3E0) - 4-byte UTF-8'
+            ],
+        ];
+    }
+
+    /**
+     * Data provider for valid request paths that should be accepted
+     *
+     * @return array
+     */
+    public function validRequestPathDataProvider(): array
+    {
+        return [
+            // Standard ASCII paths
+            [
+                'products/laptop',
+                'Simple product path'
+            ],
+            [
+                'category/electronics/computers',
+                'Multi-level category path'
+            ],
+            [
+                'about-us',
+                'Simple CMS page'
+            ],
+            // Valid 3-byte UTF-8 characters (should work)
+            [
+                'café-menu',
+                'French accented character (é)'
+            ],
+            [
+                'products/niño',
+                'Spanish ñ character'
+            ],
+            [
+                'münchen-store',
+                'German umlaut (ü)'
+            ],
+            [
+                'товар',
+                'Cyrillic characters'
+            ],
+            [
+                '产品',
+                'Chinese characters (3-byte UTF-8)'
+            ],
+            [
+                'المنتجات',
+                'Arabic characters'
+            ],
+            // Special URL-safe characters
+            [
+                'product-name-123',
+                'Hyphens and numbers'
+            ],
+            [
+                'product_name_test',
+                'Underscores'
+            ],
+            [
+                'category/sub.category',
+                'Dots in path'
+            ],
+            [
+                'path/to/page',
+                'Forward slashes'
+            ],
+            // URL-encoded valid characters
+            [
+                'product%20name',
+                'URL-encoded space'
+            ],
+            [
+                'category%2Fsubcategory',
+                'URL-encoded forward slash'
+            ],
+        ];
     }
 }

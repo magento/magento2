@@ -1,8 +1,7 @@
 <?php
-
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -84,7 +83,7 @@ class SaveTest extends TestCase
     private $pageId = 1;
 
     /**
-     * @inheirtDoc
+     * @inheritDoc
      */
     protected function setUp(): void
     {
@@ -105,7 +104,8 @@ class SaveTest extends TestCase
         $this->dataPersistorMock = $this->getMockBuilder(DataPersistorInterface::class)
             ->getMock();
         $this->requestMock = $this->getMockBuilder(RequestInterface::class)
-            ->setMethods(['getParam', 'getPostValue'])
+            ->addMethods(['getPostValue'])
+            ->onlyMethods(['getParam'])
             ->getMockForAbstractClass();
         $this->messageManagerMock = $this->getMockBuilder(ManagerInterface::class)
             ->getMockForAbstractClass();

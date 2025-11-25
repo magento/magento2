@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -377,7 +377,7 @@ class RouterTest extends TestCase
     /**
      * @return array
      */
-    public function customInternalRedirectDataProvider()
+    public static function customInternalRedirectDataProvider()
     {
         return [
             ['request-path', 'target-path', true],
@@ -420,7 +420,7 @@ class RouterTest extends TestCase
     /**
      * @return array
      */
-    public function externalRedirectTargetPathDataProvider()
+    public static function externalRedirectTargetPathDataProvider()
     {
         return [
             ['http://example.com'],

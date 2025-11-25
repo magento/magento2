@@ -1,20 +1,20 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\CatalogUrlRewrite\Test\Unit\Ui\DataProvider\Product\Form\Modifier;
 
 use Magento\Catalog\Api\Data\ProductAttributeInterface;
-use Magento\Catalog\Test\Unit\Ui\DataProvider\Product\Form\Modifier\AbstractModifierTest;
+use Magento\Catalog\Test\Unit\Ui\DataProvider\Product\Form\Modifier\AbstractModifierTestCase;
 use Magento\CatalogUrlRewrite\Ui\DataProvider\Product\Form\Modifier\ProductUrlRewrite;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Ui\DataProvider\Modifier\ModifierInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 
-class ProductUrlRewriteTest extends AbstractModifierTest
+class ProductUrlRewriteTest extends AbstractModifierTestCase
 {
     /**
      * @var ScopeConfigInterface|MockObject
@@ -24,8 +24,7 @@ class ProductUrlRewriteTest extends AbstractModifierTest
     protected function setUp(): void
     {
         parent::setUp();
-        $this->scopeConfigMock = $this->getMockBuilder(ScopeConfigInterface::class)
-            ->getMockForAbstractClass();
+        $this->scopeConfigMock = $this->createMock(ScopeConfigInterface::class);
     }
 
     /**
@@ -44,9 +43,7 @@ class ProductUrlRewriteTest extends AbstractModifierTest
     {
         $this->assertSame([], $this->getModel()->modifyMeta([]));
 
-        $this->productMock->expects($this->any())
-            ->method('getId')
-            ->willReturn(1);
+        $this->productMock->setId(1);
 
         $this->assertNotEmpty($this->getModel()->modifyMeta([
             'test_group_code' => [

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Eav\Model\ResourceModel\Entity\Attribute;
@@ -56,8 +56,8 @@ class Collection extends AbstractCollection
         FetchStrategyInterface $fetchStrategy,
         ManagerInterface $eventManager,
         Config $eavConfig,
-        AdapterInterface $connection = null,
-        AbstractDb $resource = null
+        ?AdapterInterface $connection = null,
+        ?AbstractDb $resource = null
     ) {
         $this->eavConfig = $eavConfig;
         parent::__construct($entityFactory, $logger, $fetchStrategy, $eventManager, $connection, $resource);

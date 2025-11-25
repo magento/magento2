@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -63,7 +63,7 @@ class AbstractCarrierOnlineTest extends TestCase
         );
         $this->carrier = $this->getMockBuilder(AbstractCarrierOnline::class)
             ->setConstructorArgs($carrierArgs)
-            ->setMethods(['getConfigData', '_doShipmentRequest', 'collectRates'])
+            ->onlyMethods(['getConfigData', '_doShipmentRequest', 'collectRates'])
             ->getMock();
     }
 
@@ -85,7 +85,8 @@ class AbstractCarrierOnlineTest extends TestCase
 
         $item = $this->getMockBuilder(\Magento\Quote\Model\Quote\Item::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getProduct', 'getQty', 'getWeight', '__wakeup', 'getStore'])
+            ->addMethods(['getWeight'])
+            ->onlyMethods(['getProduct', 'getQty', '__wakeup', 'getStore'])
             ->getMock();
         $item->expects($this->any())->method('getProduct')->willReturn($product);
 

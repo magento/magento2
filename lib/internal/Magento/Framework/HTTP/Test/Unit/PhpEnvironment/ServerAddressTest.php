@@ -30,7 +30,7 @@ class ServerAddressTest extends TestCase
         $this->_request = $this->getMockBuilder(
             Http::class
         )->disableOriginalConstructor()
-            ->setMethods(
+            ->onlyMethods(
                 ['getServer']
             )->getMock();
 
@@ -61,7 +61,7 @@ class ServerAddressTest extends TestCase
     /**
      * @return array
      */
-    public function getServerAddressProvider()
+    public static function getServerAddressProvider()
     {
         return [
             [null, false, false],

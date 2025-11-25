@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -57,7 +57,7 @@ class RelationTest extends TestCase
             Item::class
         )
             ->disableOriginalConstructor()
-            ->setMethods(
+            ->onlyMethods(
                 [
                     'save'
                 ]
@@ -66,7 +66,7 @@ class RelationTest extends TestCase
         $this->invoiceCommentResourceMock =
             $this->getMockBuilder(Comment::class)
                 ->disableOriginalConstructor()
-                ->setMethods(
+                ->onlyMethods(
                     [
                         'save'
                     ]
@@ -74,7 +74,7 @@ class RelationTest extends TestCase
                 ->getMock();
         $this->invoiceMock = $this->getMockBuilder(Invoice::class)
             ->disableOriginalConstructor()
-            ->setMethods(
+            ->onlyMethods(
                 [
                     'getId',
                     'getItems',
@@ -84,15 +84,12 @@ class RelationTest extends TestCase
             ->getMock();
         $this->invoiceItemMock = $this->getMockBuilder(\Magento\Sales\Model\Order\Invoice\Item::class)
             ->disableOriginalConstructor()
-            ->setMethods([])
             ->getMock();
         $this->invoiceCommentMock = $this->getMockBuilder(\Magento\Sales\Model\Order\Invoice\Comment::class)
             ->disableOriginalConstructor()
-            ->setMethods([])
             ->getMock();
         $this->orderItemMock = $this->getMockBuilder(\Magento\Sales\Model\Order\Item::class)
             ->disableOriginalConstructor()
-            ->setMethods([])
             ->getMock();
         $this->relationProcessor = new Relation(
             $this->invoiceItemResourceMock,

@@ -1,12 +1,13 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2021 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Bundle\Test\Unit\Model\ResourceModel\Indexer;
 
+use Magento\Framework\DB\Select;
 use Magento\Bundle\Model\ResourceModel\Indexer\Price;
 use Magento\Catalog\Model\Indexer\Product\Price\TableMaintainer;
 use Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\BasePriceModifier;
@@ -18,8 +19,10 @@ use Magento\Framework\EntityManager\EntityMetadataInterface;
 use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Framework\Event\ManagerInterface;
 use Magento\Framework\Module\Manager;
+use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use ReflectionException;
 
 /**
  * Class to test Bundle products Price indexer resource model
@@ -98,8 +101,9 @@ class PriceTest extends TestCase
     }
 
     /**
-     * @throws \ReflectionException
+     * @throws ReflectionException|Exception
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function testCalculateDynamicBundleSelectionPrice(): void
     {
@@ -177,32 +181,44 @@ class PriceTest extends TestCase
         //@codingStandardsIgnoreEnd
         $this->connectionMock->expects($this->exactly(3))
             ->method('getCheckSql')
-            ->withConsecutive(
-                [
-                    'i.special_price > 0 AND i.special_price < 100',
-                    'ROUND(' . $price . ' * (i.special_price / 100), 4)',
-                    $price
-                ],
-                [
-                    'i.tier_percent IS NOT NULL',
-                    'ROUND((1 - i.tier_percent / 100) * ' . $price . ', 4)',
-                    'NULL'
-                ],
-                ["bo.type = 'select' OR bo.type = 'radio'", '0', '1']
-            );
+        ->willReturnCallback(function ($arg1, $arg2, $arg3) use ($price) {
+            static $callCount = 0;
+            $callCount++;
+            switch ($callCount) {
+                case 1:
+                    if ($arg1 === 'i.special_price > 0 AND i.special_price < 100' &&
+                        $arg2 === 'ROUND(' . $price . ' * (i.special_price / 100), 4)' &&
+                        $arg3 === $price) {
+                        return null;
+                    }
+                    break;
+                case 2:
+                    if ($arg1 === 'i.tier_percent IS NOT NULL' &&
+                        $arg2 === 'ROUND((1 - i.tier_percent / 100) * ' . $price . ', 4)' &&
+                        $arg3 === 'NULL') {
+                        return null;
+                    }
+                    break;
+                case 3:
+                    if ($arg1 === "bo.type = 'select' OR bo.type = 'radio'" &&
+                        $arg2 === '0' &&
+                        $arg3 === '1') {
+                        return null;
+                    }
+                    break;
+            }
+        });
 
-        $select = $this->createMock(\Magento\Framework\DB\Select::class);
+        $select = $this->createMock(Select::class);
         $select->expects($this->once())->method('from')->willReturn($select);
         $select->expects($this->exactly(5))->method('join')->willReturn($select);
         $select->expects($this->exactly(2))->method('where')->willReturn($select);
         $select->expects($this->once())->method('columns')->willReturn($select);
-        $select->expects($this->any())->method('__toString')->willReturn($selectQuery);
+        $select->method('__toString')->willReturn($selectQuery);
 
         $this->connectionMock->expects($this->once())->method('getIfNullSql');
         $this->connectionMock->expects($this->once())->method('getLeastSql');
-        $this->connectionMock->expects($this->any())
-            ->method('select')
-            ->willReturn($select);
+        $this->connectionMock->method('select')->willReturn($select);
         $this->connectionMock->expects($this->exactly(9))->method('quoteIdentifier');
         $this->connectionMock->expects($this->once())->method('query')->with($processedQuery);
 
@@ -275,7 +291,7 @@ class PriceTest extends TestCase
      * @param string $methodName
      * @param array $args
      * @return string
-     * @throws \ReflectionException
+     * @throws ReflectionException
      */
     private function invokeMethodViaReflection(string $methodName, array $args = []): string
     {

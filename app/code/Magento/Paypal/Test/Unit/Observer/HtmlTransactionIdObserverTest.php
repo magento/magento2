@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -61,23 +61,23 @@ class HtmlTransactionIdObserverTest extends TestCase
     public function testObserveHtmlTransactionId()
     {
         $observerMock = $this->getMockBuilder(Observer::class)
-            ->setMethods(['getDataObject'])
+            ->addMethods(['getDataObject'])
             ->disableOriginalConstructor()
             ->getMock();
         $transactionMock = $this->getMockBuilder(Transaction::class)
-            ->setMethods(['getOrder', 'getTxnId', 'setData'])
+            ->onlyMethods(['getOrder', 'getTxnId', 'setData'])
             ->disableOriginalConstructor()
             ->getMock();
         $orderMock = $this->getMockBuilder(Order::class)
-            ->setMethods(['getPayment'])
+            ->onlyMethods(['getPayment'])
             ->disableOriginalConstructor()
             ->getMock();
         $paymentMock = $this->getMockBuilder(Payment::class)
-            ->setMethods(['getMethodInstance'])
+            ->onlyMethods(['getMethodInstance'])
             ->disableOriginalConstructor()
             ->getMock();
         $methodInstanceMock = $this->getMockBuilder(MethodInterface::class)
-            ->setMethods(['getCode'])
+            ->onlyMethods(['getCode'])
             ->getMockForAbstractClass();
 
         $observerMock->expects($this->once())

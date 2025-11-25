@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -65,7 +65,7 @@ class RouterTest extends TestCase
 
         $this->pageFactoryMock = $this->getMockBuilder(PageFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
 
         $this->storeMock = $this->getMockBuilder(StoreInterface::class)
@@ -102,13 +102,15 @@ class RouterTest extends TestCase
 
         /** @var RequestInterface|MockObject $requestMock */
         $requestMock = $this->getMockBuilder(RequestInterface::class)
-            ->setMethods([
+            ->addMethods([
                 'getPathInfo',
-                'setModuleName',
                 'setControllerName',
-                'setActionName',
                 'setParam',
                 'setAlias',
+            ])
+            ->onlyMethods([
+                'setModuleName',
+                'setActionName'
             ])
             ->getMockForAbstractClass();
         $requestMock->expects($this->once())

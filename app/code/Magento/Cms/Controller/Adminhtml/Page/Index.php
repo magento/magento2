@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Cms\Controller\Adminhtml\Page;
 
@@ -41,7 +41,7 @@ class Index extends \Magento\Backend\App\Action implements HttpGetActionInterfac
     public function __construct(
         Context $context,
         PageFactory $resultPageFactory,
-        DataPersistorInterface $dataPersistor = null
+        ?DataPersistorInterface $dataPersistor = null
     ) {
         parent::__construct($context);
         $this->resultPageFactory = $resultPageFactory;

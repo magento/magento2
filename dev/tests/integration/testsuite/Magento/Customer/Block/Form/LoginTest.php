@@ -52,7 +52,7 @@ class LoginTest extends TestCase
         $buttonLock = $this->getMockBuilder(\Magento\ReCaptchaUi\Model\ButtonLock::class)
             ->disableOriginalConstructor()
             ->disableAutoload()
-            ->setMethods(['isDisabled', 'getCode'])
+            ->onlyMethods(['isDisabled', 'getCode'])
             ->getMock();
         $buttonLock->expects($this->any())->method('getCode')->willReturn($code);
         $buttonLock->expects($this->any())->method('isDisabled')->willReturn(false);

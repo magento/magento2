@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -26,8 +26,8 @@ class IframeConfigProviderTest extends TestCase
         $urlBuilder->expects($this->atLeastOnce())->method('getUrl')->willReturn('http://iframe.url');
 
         $payment = $this->getMockBuilder(Payflowpro::class)
-            ->setMethods(['isAvailable', 'getFrameActionUrl'])
-            ->setMockClassName('paymentInstance')
+            ->addMethods(['getFrameActionUrl'])
+            ->onlyMethods(['isAvailable'])
             ->disableOriginalConstructor()
             ->getMock();
 

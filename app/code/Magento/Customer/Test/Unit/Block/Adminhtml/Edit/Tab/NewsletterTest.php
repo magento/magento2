@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -111,7 +111,7 @@ class NewsletterTest extends TestCase
         $this->contextMock = $this->createMock(Context::class);
         $this->localeDateMock = $this->getMockBuilder(TimezoneInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['formatDateTime'])
+            ->onlyMethods(['formatDateTime'])
             ->getMockForAbstractClass();
         $this->contextMock->expects($this->any())->method('getLocaleDate')->willReturn($this->localeDateMock);
         $this->registryMock = $this->createMock(Registry::class);
@@ -124,7 +124,7 @@ class NewsletterTest extends TestCase
         $this->urlBuilderMock = $this->getMockForAbstractClass(UrlInterface::class);
         $this->storeManager = $this->getMockForAbstractClass(StoreManagerInterface::class);
         $this->backendSessionMock = $this->getMockBuilder(Session::class)
-            ->setMethods(['getCustomerFormData'])
+            ->addMethods(['getCustomerFormData'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->contextMock->expects($this->once())
@@ -140,6 +140,7 @@ class NewsletterTest extends TestCase
         $this->shareConfig = $this->createMock(Share::class);
 
         $objectManager = new ObjectManager($this);
+        $objectManager->prepareObjectManager();
         $this->model = $objectManager->getObject(
             Newsletter::class,
             [
@@ -191,7 +192,8 @@ class NewsletterTest extends TestCase
 
         $subscriberMock = $this->getMockBuilder(Subscriber::class)
             ->disableOriginalConstructor()
-            ->setMethods(['loadByCustomer', 'getChangeStatusAt', 'isSubscribed', 'getData'])
+            ->addMethods(['getChangeStatusAt'])
+            ->onlyMethods(['loadByCustomer', 'isSubscribed', 'getData'])
             ->getMock();
         $statusDate = new \DateTime($statusDate);
         $this->localeDateMock->method('formatDateTime')->with($statusDate)->willReturn($dateExpected);
@@ -209,7 +211,7 @@ class NewsletterTest extends TestCase
      *
      * @return array
      */
-    public function getChangeStatusAtDataProvider()
+    public static function getChangeStatusAtDataProvider()
     {
         return
             [

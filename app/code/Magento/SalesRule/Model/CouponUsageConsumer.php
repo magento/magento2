@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -80,7 +80,6 @@ class CouponUsageConsumer
             $data = $this->serializer->unserialize($serializedData);
             $updateInfo = $this->updateInfoFactory->create();
             $updateInfo->setData($data);
-            $this->processor->updateCouponUsages($updateInfo);
             $this->processor->updateRuleUsages($updateInfo);
         } catch (NotFoundException $e) {
             $this->logger->critical($e->getMessage());

@@ -1,19 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- /************************************************************************
-  *
+ /**
   * Copyright 2023 Adobe
   * All Rights Reserved.
-  *
-  * NOTICE: All information contained herein is, and remains
-  * the property of Adobe and its suppliers, if any. The intellectual
-  * and technical concepts contained herein are proprietary to Adobe
-  * and its suppliers and are protected by all applicable intellectual
-  * property laws, including trade secret and copyright laws.
-  * Dissemination of this information or reproduction of this material
-  * is strictly forbidden unless prior written permission is obtained
-  * from Adobe.
-  * ************************************************************************
   */
 -->
 
@@ -68,10 +57,10 @@
            <magentoCLI command="config:set shipping/origin/country_id US" stepKey="setOriginCountryToUS"/>
 
             <!-- Display product price excluding tax in shopping cart -->
-            <magentoCLI command="config:set tax/cart_display/price 0" stepKey="disableShowIncludingTaxInCart"/>
+            <magentoCLI command="config:set tax/cart_display/price 1" stepKey="disableShowIncludingTaxInCart"/>
 
             <!-- Display product price excluding tax in catalog -->
-            <magentoCLI command="config:set tax/display/type 0" stepKey="disableShowIncludingTax"/>
+            <magentoCLI command="config:set tax/display/type 1" stepKey="disableShowIncludingTax"/>
 
             <!-- Set up catalog to store product price excluding tax -->
             <magentoCLI command="config:set tax/calculation/price_includes_tax 0" stepKey="disableCatalogIncludingTax"/>

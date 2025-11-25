@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Tax\Model\Calculation;
@@ -55,8 +55,8 @@ class CalculatorFactory
     public function create(
         $type,
         $storeId,
-        CustomerAddress $billingAddress = null,
-        CustomerAddress $shippingAddress = null,
+        ?CustomerAddress $billingAddress = null,
+        ?CustomerAddress $shippingAddress = null,
         $customerTaxClassId = null,
         $customerId = null
     ) {

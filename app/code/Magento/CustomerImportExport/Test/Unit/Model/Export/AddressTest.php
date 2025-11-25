@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -148,7 +148,7 @@ class AddressTest extends TestCase
 
         /** @var Collection|TestCase $attributeCollection */
         $attributeCollection = $this->getMockBuilder(Collection::class)
-            ->setMethods(['getEntityTypeCode'])
+            ->addMethods(['getEntityTypeCode'])
             ->setConstructorArgs([$entityFactory])
             ->getMock();
 

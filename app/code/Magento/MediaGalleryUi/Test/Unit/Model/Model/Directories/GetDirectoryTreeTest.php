@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2022 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -13,6 +13,8 @@ use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Directory\ReadInterface;
 use Magento\MediaGalleryApi\Api\IsPathExcludedInterface;
 use Magento\MediaGalleryUi\Model\Directories\GetDirectoryTree;
+use Magento\Framework\Filesystem\Directory\Read;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -89,8 +91,8 @@ class GetDirectoryTreeTest extends TestCase
     {
         parent::setUp();
         $this->filesystem = $this->createMock(Filesystem::class);
-        $this->isPathExcluded = $this->getMockForAbstractClass(IsPathExcludedInterface::class);
-        $this->coreConfig = $this->getMockForAbstractClass(ScopeConfigInterface::class);
+        $this->isPathExcluded = $this->createMock(IsPathExcludedInterface::class);
+        $this->coreConfig = $this->createMock(ScopeConfigInterface::class);
         $this->model = new GetDirectoryTree(
             $this->filesystem,
             $this->isPathExcluded,
@@ -102,11 +104,11 @@ class GetDirectoryTreeTest extends TestCase
      * @param array $allowedFolders
      * @param array $expected
      * @throws ValidatorException
-     * @dataProvider executeDataProvider
      */
+    #[DataProvider('executeDataProvider')]
     public function testExecute(array $allowedFolders, array $expected): void
     {
-        $directory = $this->getMockForAbstractClass(ReadInterface::class);
+        $directory = $this->createMock(ReadInterface::class);
         $directory->method('isDirectory')->willReturn(true);
         $directory->method('getAbsolutePath')->willReturnArgument(0);
         $directory->method('getRelativePath')->willReturnArgument(0);
@@ -114,17 +116,19 @@ class GetDirectoryTreeTest extends TestCase
         $this->filesystem->method('getDirectoryReadByPath')
             ->willReturnCallback(
                 function (string $path) {
-                    $directory = $this->getMockBuilder(ReadInterface::class)
-                        ->addMethods(['readRecursively'])
-                        ->getMockForAbstractClass();
+                    $directory = $this->createPartialMock(
+                        Read::class,
+                        ['readRecursively', 'isDirectory', 'getAbsolutePath', 'getRelativePath']
+                    );
                     $directory->method('isDirectory')->willReturn(true);
+                    $directory->method('getAbsolutePath')->willReturnArgument(0);
+                    $directory->method('getRelativePath')->willReturnArgument(0);
                     $result = $this->foldersStruture;
                     $prefix = '';
                     foreach (explode('/', $path) as $folder) {
                         $prefix .= $folder . '/';
                         $result = $result[$folder] ?? [];
                     }
-                    $directory->method('getAbsolutePath')->willReturnArgument(0);
                     $directory->method('readRecursively')->willReturn($this->flattenFoldersStructure($result, $prefix));
                     return $directory;
                 }
@@ -137,7 +141,7 @@ class GetDirectoryTreeTest extends TestCase
      * @return array
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function executeDataProvider(): array
+    public static function executeDataProvider(): array
     {
         return [
             [

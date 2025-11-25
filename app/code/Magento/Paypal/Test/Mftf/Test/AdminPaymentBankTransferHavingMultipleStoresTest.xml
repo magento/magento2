@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    /**
+     * Copyright 2024 Adobe
+     * All Rights Reserved.
+     */
+   -->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminPaymentBankTransferHavingMultipleStoresTest">
+        <annotations>
+            <features value="Payments"/>
+            <stories value="Bank Transfer Payment  in Admin"/>
+            <title value="Checking Bank Transfer Payment store label is  being displayed on order/invoice/shipping/creditmemo details"/>
+            <description value="Checking Bank Transfer Payment store label is  being displayed on order/invoice/shipping/creditmemo details"/>
+            <severity value="AVERAGE"/>
+            <testCaseId value="AC-5671"/>
+            <group value="Payments"/>
+        </annotations>
+      <before>
+            <magentoCLI command="config:set {{EnablePaymentBankTransferConfigData.path}} {{EnablePaymentBankTransferConfigData.value}}" stepKey="enableBankTransferPayment"/>
+            <createData entity="defaultSimpleProduct" stepKey="createProduct"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <actionGroup ref="CreateCustomStoreActionGroup" stepKey="createCustomStore">
+                <argument name="website" value="Main Website"/>
+                <argument name="store" value="{{customStoreGroup.name}}"/>
+                <argument name="rootCategory" value="Default Category"/>
+            </actionGroup>
+            <actionGroup ref="AdminCreateStoreViewActionGroup" stepKey="createCustomStoreView">
+                <argument name="StoreGroup" value="customStoreGroup"/>
+                <argument name="customStore" value="customStoreEN"/>
+            </actionGroup>
+            <actionGroup ref="AdminChangeWebsiteDefaultStoreActionGroup" stepKey="changeDefaultStoreToCustomStore">
+                <argument name="website" value="Main Website"/>
+                <argument name="storeGroupName" value="{{customStoreGroup.name}}"/>
+                <argument name="defaultStoreName" value="{{customStoreGroup.name}}"/>
+            </actionGroup>
+        </before>
+        <after>
+            <magentoCLI command="config:set {{DisablePaymentBankTransferConfigData.path}} {{DisablePaymentBankTransferConfigData.value}}" stepKey="disableBankTransferPayment"/>
+            <deleteData stepKey="deleteProduct" createDataKey="createProduct"/>
+            <actionGroup ref="DeleteCustomStoreActionGroup" stepKey="deleteCustomStore">
+                <argument name="storeGroupName" value="customStoreGroup.name"/>
+            </actionGroup>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+        <actionGroup ref="AdminNavigateToConfigurationPaymentMethodSectionActionGroup" stepKey="navigateToPaymentConfigurationPage"/>
+        <actionGroup ref="AdminSwitchSecondStoreViewActionGroup" stepKey="AdminSwitchSecondStoreView">
+            <argument name="secondStoreView" value="customStoreEN"/>
+        </actionGroup>
+        <conditionalClick selector="{{CatalogSection.expandedTab}}" dependentSelector="{{CatalogSection.productsPerPageOnGridBankTransferPaymentDefaultValueUseConfigCheckbox}}" visible="false" stepKey="expandOtherPaypalConfigButton"/>
+        <uncheckOption selector="{{CatalogSection.productsPerPageOnGridBankTransferPaymentDefaultValueUseConfigCheckbox}}" stepKey="uncheckUseSystemValue"/>
+        <waitForElementVisible selector="{{CatalogSection.productsPerPageOnGridAllowedBankTransferPaymentValues}}" stepKey="waitForContentHeading"/>
+        <fillField selector="{{CatalogSection.productsPerPageOnGridAllowedBankTransferPaymentValues}}" userInput="Bank Transfer Payment(Second)" stepKey="fillProductQuantity"/>
+        <actionGroup ref="AdminSavePaymentConfigActionGroup" stepKey="clickSaveConfigBtn"/>
+        <actionGroup ref="CliCacheCleanActionGroup" stepKey="cleanInvalidatedCaches">
+            <argument name="tags" value="config full_page"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontOpenProductEntityPageActionGroup" stepKey="openProductPage">
+            <argument name="product" value="$createProduct$"/>
+        </actionGroup>
+        <actionGroup ref="AddProductWithQtyToCartFromStorefrontProductPageActionGroup" stepKey="cartAddSimpleProductToCart">
+            <argument name="productName" value="$createProduct.name$"/>
+            <argument name="productQty" value="1"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontOpenCheckoutPageActionGroup" stepKey="navigateToCheckoutPage"/>
+        <actionGroup ref="GuestCheckoutFillingShippingSectionActionGroup" stepKey="guestCheckoutFillingShipping"/>
+        <waitForElementClickable selector="{{StorefrontCheckoutPaymentMethodsSection.bankTransfer}}" stepKey="waitForBankTransferMethod" />
+        <click selector="{{StorefrontCheckoutPaymentMethodsSection.bankTransfer}}" stepKey="selectBankTransferMethod"/>
+        <actionGroup ref="ClickPlaceOrderActionGroup" stepKey="checkoutPlaceOrder"/>
+        <grabTextFrom selector="{{CheckoutSuccessMainSection.orderNumberWithoutLink}}" stepKey="grabOrderNumber"/>
+        <actionGroup ref="AdminOrdersPageOpenActionGroup" stepKey="goToOrders"/>
+        <actionGroup ref="OpenOrderByIdActionGroup" stepKey="openOrder">
+            <argument name="orderId" value="{$grabOrderNumber}"/>
+        </actionGroup>
+        <actionGroup ref="AdminClickInvoiceButtonOrderViewActionGroup" stepKey="clickInvoiceButton"/>
+        <actionGroup ref="AdminInvoiceClickSubmitActionGroup" stepKey="clickSubmitInvoice"/>
+        <scrollTo selector="{{CatalogSection.paymentInformation}}" stepKey="scrollToPaymentAndShippingInformation"/>
+        <waitForText selector="{{AdminOrderPaymentInformationSection.paymentMethod}}" userInput="Bank Transfer Payment(Second)" stepKey="seePaymentMethodNameU"/>
+        <waitForElementClickable selector="{{AdminOrderDetailsMainActionsSection.ship}}" stepKey="waitForShipActionClickable" />
+        <click selector="{{AdminOrderDetailsMainActionsSection.ship}}" stepKey="clickShipAction"/>
+        <waitForElementClickable selector="{{AdminShipmentMainActionsSection.submitShipment}}" stepKey="waitForSubmitShipmentButtonClickable" />
+        <click selector="{{AdminShipmentMainActionsSection.submitShipment}}" stepKey="clickSubmitShipment"/>
+        <scrollTo selector="{{CatalogSection.paymentInformation}}" stepKey="scrollToPaymentAndShippingInformationUnderShipmentPage"/>
+        <waitForText selector="{{AdminOrderPaymentInformationSection.paymentMethod}}" userInput="Bank Transfer Payment(Second)" stepKey="seePaymentMethodNameUnderShipmentPage"/>
+        <actionGroup ref="AdminStartToCreateCreditMemoFromOrderPageActionGroup" stepKey="startCreatingCreditMemo"/>
+        <actionGroup ref="SubmitCreditMemoActionGroup" stepKey="submitCreditMemo"/>
+        <scrollTo selector="{{CatalogSection.paymentInformation}}" stepKey="scrollToPaymentAndShippingInformationUnderCreditMemoPage"/>
+        <waitForText selector="{{AdminOrderPaymentInformationSection.paymentMethod}}" userInput="Bank Transfer Payment(Second)" stepKey="seePaymentMethodNameUnderCreditMemoPage"/>
+    </test>
+</tests>

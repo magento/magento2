@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -233,8 +233,10 @@ class ViewTest extends TestCase
 
         $this->requestMock
             ->method('getParam')
-            ->withConsecutive(['invoice_id'], ['come_from'])
-            ->willReturnOnConsecutiveCalls($invoiceId, 'anything');
+            ->willReturnCallback(fn($param) => match ([$param]) {
+                ['invoice_id'] => $invoiceId,
+                ['come_from'] => 'anything'
+            });
 
         $menuBlockMock = $this->getMockBuilder(Menu::class)->disableOriginalConstructor()
             ->onlyMethods(['getMenuModel'])

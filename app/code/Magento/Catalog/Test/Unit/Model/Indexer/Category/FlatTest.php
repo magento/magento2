@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -128,8 +128,11 @@ class FlatTest extends TestCase
         );
         $rowMock
             ->method('reindex')
-            ->withConsecutive([$ids, true], [$ids, false])
-            ->willReturnOnConsecutiveCalls($rowMock, $rowMock);
+            ->willReturnCallback(function ($arg1, $arg2) use ($ids, $rowMock) {
+                if ($arg1 == $ids && ($arg2 == true || $arg2 == false)) {
+                    return $rowMock;
+                }
+            });
 
         $this->rowsMock->expects($this->once())->method('create')->willReturn($rowMock);
 

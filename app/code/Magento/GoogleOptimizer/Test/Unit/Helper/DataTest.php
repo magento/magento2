@@ -1,8 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
- *
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -68,20 +67,14 @@ class DataTest extends TestCase
             $this->any()
         )->method(
             'isSetFlag'
-        )->withConsecutive(
-            [
-                self::XML_PATH_ENABLED,
-                ScopeInterface::SCOPE_STORE,
-                $store
-            ],
-            [
-                self::XML_PATH_ENABLED_GA4,
-                ScopeInterface::SCOPE_STORE,
-                $store
-            ]
-        )->willReturn(
-            $isExperimentsEnabled
-        );
+        )
+        ->willReturnCallback(function ($arg1, $arg2, $arg3) use ($isExperimentsEnabled, $store) {
+            if ($arg1 == self::XML_PATH_ENABLED && $arg2 == ScopeInterface::SCOPE_STORE && $arg3 == $store) {
+                return $isExperimentsEnabled;
+            } elseif ($arg1 == self::XML_PATH_ENABLED_GA4 && $arg2 == ScopeInterface::SCOPE_STORE && $arg3 == $store) {
+                return $isExperimentsEnabled;
+            }
+        });
 
         $this->assertEquals($isExperimentsEnabled, $this->_helper->isGoogleExperimentEnabled($store));
     }
@@ -89,7 +82,7 @@ class DataTest extends TestCase
     /**
      * @return array
      */
-    public function dataProviderBoolValues()
+    public static function dataProviderBoolValues()
     {
         return [[true], [false]];
     }
@@ -107,20 +100,14 @@ class DataTest extends TestCase
             $this->any()
         )->method(
             'isSetFlag'
-        )->withConsecutive(
-            [
-                self::XML_PATH_ENABLED,
-                ScopeInterface::SCOPE_STORE,
-                $store
-            ],
-            [
-                self::XML_PATH_ENABLED_GA4,
-                ScopeInterface::SCOPE_STORE,
-                $store
-            ]
-        )->willReturn(
-            $isExperimentsEnabled
-        );
+        )
+        ->willReturnCallback(function ($arg1, $arg2, $arg3) use ($isExperimentsEnabled, $store) {
+            if ($arg1 == self::XML_PATH_ENABLED && $arg2 == ScopeInterface::SCOPE_STORE && $arg3 == $store) {
+                return $isExperimentsEnabled;
+            } elseif ($arg1 == self::XML_PATH_ENABLED_GA4 && $arg2 == ScopeInterface::SCOPE_STORE && $arg3 == $store) {
+                return $isExperimentsEnabled;
+            }
+        });
 
         $this->_googleAnalyticsHelperMock->expects(
             $this->any()
@@ -138,7 +125,7 @@ class DataTest extends TestCase
     /**
      * @return array
      */
-    public function dataProviderForTestGoogleExperimentIsActive()
+    public static function dataProviderForTestGoogleExperimentIsActive()
     {
         return [
             [true, true, true],

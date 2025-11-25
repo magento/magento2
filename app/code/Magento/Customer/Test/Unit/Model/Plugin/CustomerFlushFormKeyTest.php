@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -49,7 +49,7 @@ class CustomerFlushFormKeyTest extends TestCase
         /** @var Session | MockObject */
         $this->customerSession = $this->getMockBuilder(Session::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getBeforeRequestParams', 'setBeforeRequestParams'])
+            ->addMethods(['getBeforeRequestParams', 'setBeforeRequestParams'])
             ->getMock();
     }
 
@@ -96,7 +96,7 @@ class CustomerFlushFormKeyTest extends TestCase
      *
      * @return array
      */
-    public function aroundFlushFormKeyProvider()
+    public static function aroundFlushFormKeyProvider()
     {
         return [
             ['form_key_value', 'form_key_value', 2, 1],

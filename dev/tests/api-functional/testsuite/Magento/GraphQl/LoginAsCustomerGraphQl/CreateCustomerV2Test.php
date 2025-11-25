@@ -1,13 +1,15 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\GraphQl\LoginAsCustomerGraphQl;
 
+use Exception;
 use Magento\Customer\Api\CustomerRepositoryInterface;
+use Magento\Framework\GraphQl\Query\Uid;
 use Magento\Framework\Registry;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
@@ -27,162 +29,172 @@ class CreateCustomerV2Test extends GraphQlAbstract
      */
     private $customerRepository;
 
+    /**
+     * @var Uid
+     */
+    private $uidEncoder;
+
+    /**
+     * @var array
+     */
+    private $createdEmails = [];
+
     protected function setUp(): void
     {
-        parent::setUp();
-
         $this->registry = Bootstrap::getObjectManager()->get(Registry::class);
         $this->customerRepository = Bootstrap::getObjectManager()->get(CustomerRepositoryInterface::class);
+        $this->uidEncoder = Bootstrap::getObjectManager()->get(Uid::class);
     }
 
     /**
-     * Test setting allow_remote_shopping_assistance to true
+     * Data provider for testCreateCustomerAccountWithAllowRemoteShoppingAssistance
      *
-     * @throws \Exception
+     * @return array
      */
-    public function testCreateCustomerAccountWithAllowTrue()
+    public static function allowRemoteShoppingAssistanceDataProvider(): array
     {
-        $newFirstname = 'Richard';
-        $newLastname = 'Rowe';
-        $currentPassword = 'test123#';
-        $newEmail = 'new_customer@example.com';
-
-        $query = <<<QUERY
-mutation {
-    createCustomerV2(
-        input: {
-            firstname: "{$newFirstname}"
-            lastname: "{$newLastname}"
-            email: "{$newEmail}"
-            password: "{$currentPassword}"
-            is_subscribed: true
-            allow_remote_shopping_assistance: true
-        }
-    ) {
-        customer {
-            id
-            firstname
-            lastname
-            email
-            is_subscribed
-            allow_remote_shopping_assistance
-        }
-    }
-}
-QUERY;
-        $response = $this->graphQlMutation($query);
-
-        $this->assertNull($response['createCustomerV2']['customer']['id']);
-        $this->assertEquals($newFirstname, $response['createCustomerV2']['customer']['firstname']);
-        $this->assertEquals($newLastname, $response['createCustomerV2']['customer']['lastname']);
-        $this->assertEquals($newEmail, $response['createCustomerV2']['customer']['email']);
-        $this->assertTrue($response['createCustomerV2']['customer']['is_subscribed']);
-        $this->assertTrue($response['createCustomerV2']['customer']['allow_remote_shopping_assistance']);
+        return [
+            'with_allow_remote_shopping_assistance_true' => [
+                'allowValue' => true,
+                'expectedValue' => true
+            ],
+            'with_allow_remote_shopping_assistance_false' => [
+                'allowValue' => false,
+                'expectedValue' => false
+            ],
+            'without_allow_remote_shopping_assistance' => [
+                'allowValue' => null,
+                'expectedValue' => false
+            ]
+        ];
     }
 
     /**
-     * Test setting allow_remote_shopping_assistance to false
+     * Test creating customer account with various allow_remote_shopping_assistance scenarios
      *
-     * @throws \Exception
+     * @dataProvider allowRemoteShoppingAssistanceDataProvider
+     * @param bool|null $allowValue
+     * @param bool $expectedValue
+     * @throws Exception
      */
-    public function testCreateCustomerAccountWithAllowFalse()
-    {
-        $newFirstname = 'Richard';
-        $newLastname = 'Rowe';
-        $currentPassword = 'test123#';
-        $newEmail = 'new_customer@example.com';
+    public function testCreateCustomerAccountWithAllowRemoteShoppingAssistance(
+        ?bool $allowValue,
+        bool $expectedValue
+    ): void {
+        $email = $this->generateDynamicEmail();
 
-        $query = <<<QUERY
-mutation {
-    createCustomerV2(
-        input: {
-            firstname: "{$newFirstname}"
-            lastname: "{$newLastname}"
-            email: "{$newEmail}"
-            password: "{$currentPassword}"
-            is_subscribed: true
-            allow_remote_shopping_assistance: false
-        }
-    ) {
-        customer {
-            id
-            firstname
-            lastname
-            email
-            is_subscribed
-            allow_remote_shopping_assistance
-        }
-    }
-}
-QUERY;
-        $response = $this->graphQlMutation($query);
+        $response = $this->graphQlMutation($this->getCreateCustomerQuery($email, $allowValue));
 
-        $this->assertNull($response['createCustomerV2']['customer']['id']);
-        $this->assertEquals($newFirstname, $response['createCustomerV2']['customer']['firstname']);
-        $this->assertEquals($newLastname, $response['createCustomerV2']['customer']['lastname']);
-        $this->assertEquals($newEmail, $response['createCustomerV2']['customer']['email']);
-        $this->assertTrue($response['createCustomerV2']['customer']['is_subscribed']);
-        $this->assertFalse($response['createCustomerV2']['customer']['allow_remote_shopping_assistance']);
+        $customer = $this->customerRepository->get($email);
+        $encodedCustomerId = $this->uidEncoder->encode((string)$customer->getId());
+
+        $this->assertEquals([
+            'createCustomerV2' => [
+                'customer' => [
+                    'id' => $encodedCustomerId,
+                    'firstname' => 'Richard',
+                    'lastname' => 'Rowe',
+                    'email' => $email,
+                    'is_subscribed' => true,
+                    'allow_remote_shopping_assistance' => $expectedValue
+                ]
+            ]
+        ], $response);
     }
 
     /**
-     * Test omitting allow_remote_shopping_assistance
+     * Generate a dynamic customer email
      *
-     * @throws \Exception
+     * @return string
      */
-    public function testCreateCustomerAccountWithoutAllow()
+    private function generateDynamicEmail(): string
     {
-        $newFirstname = 'Richard';
-        $newLastname = 'Rowe';
-        $currentPassword = 'test123#';
-        $newEmail = 'new_customer@example.com';
-
-        $query = <<<QUERY
-mutation {
-    createCustomerV2(
-        input: {
-            firstname: "{$newFirstname}"
-            lastname: "{$newLastname}"
-            email: "{$newEmail}"
-            password: "{$currentPassword}"
-            is_subscribed: true,
-        }
-    ) {
-        customer {
-            id
-            firstname
-            lastname
-            email
-            is_subscribed
-            allow_remote_shopping_assistance
-        }
-    }
-}
-QUERY;
-        $response = $this->graphQlMutation($query);
-
-        $this->assertNull($response['createCustomerV2']['customer']['id']);
-        $this->assertEquals($newFirstname, $response['createCustomerV2']['customer']['firstname']);
-        $this->assertEquals($newLastname, $response['createCustomerV2']['customer']['lastname']);
-        $this->assertEquals($newEmail, $response['createCustomerV2']['customer']['email']);
-        $this->assertTrue($response['createCustomerV2']['customer']['is_subscribed']);
-        $this->assertFalse($response['createCustomerV2']['customer']['allow_remote_shopping_assistance']);
+        return $this->createdEmails[] = 'test_customer_' . uniqid() . '@example.com';
     }
 
+    /**
+     * Get the create customer mutation query
+     *
+     * @param string $email
+     * @param bool|null $allowRemoteShoppingAssistance
+     * @return string
+     */
+    private function getCreateCustomerQuery(string $email, ?bool $allowRemoteShoppingAssistance): string
+    {
+        $input = [
+            'firstname' => 'Richard',
+            'lastname' => 'Rowe',
+            'email' => $email,
+            'password' => 'test123#',
+            'is_subscribed' => true
+        ];
+
+        if ($allowRemoteShoppingAssistance !== null) {
+            $input['allow_remote_shopping_assistance'] = $allowRemoteShoppingAssistance;
+        }
+
+        $inputJson = json_encode($input);
+        // Convert JSON to GraphQL format (replace quotes around keys and boolean values)
+        $inputGraphQL = str_replace(
+            [
+                '"firstname":',
+                '"lastname":',
+                '"email":',
+                '"password":',
+                '"is_subscribed":',
+                '"allow_remote_shopping_assistance":',
+                ':true',
+                ':false'
+            ],
+            [
+                'firstname:',
+                'lastname:',
+                'email:',
+                'password:',
+                'is_subscribed:',
+                'allow_remote_shopping_assistance:',
+                ': true',
+                ': false'
+            ],
+            $inputJson
+        );
+
+        return <<<MUTATION
+            mutation {
+                createCustomerV2(
+                    input: {$inputGraphQL}
+                ) {
+                    customer {
+                        id
+                        firstname
+                        lastname
+                        email
+                        is_subscribed
+                        allow_remote_shopping_assistance
+                    }
+                }
+            }
+        MUTATION;
+    }
+
+    /**
+     * Clean up created customers after each test
+     */
     protected function tearDown(): void
     {
-        $newEmail = 'new_customer@example.com';
-        try {
-            $customer = $this->customerRepository->get($newEmail);
-        } catch (\Exception $exception) {
-            return;
+        foreach ($this->createdEmails as $email) {
+            try {
+                $customer = $this->customerRepository->get($email);
+                $this->registry->unregister('isSecureArea');
+                $this->registry->register('isSecureArea', true);
+                $this->customerRepository->delete($customer);
+                $this->registry->unregister('isSecureArea');
+                $this->registry->register('isSecureArea', false);
+            } catch (Exception $exception) {
+                // Customer may not exist, continue with cleanup
+            }
         }
-
-        $this->registry->unregister('isSecureArea');
-        $this->registry->register('isSecureArea', true);
-        $this->customerRepository->delete($customer);
-        $this->registry->unregister('isSecureArea');
-        $this->registry->register('isSecureArea', false);
+        $this->createdEmails = [];
         parent::tearDown();
     }
 }

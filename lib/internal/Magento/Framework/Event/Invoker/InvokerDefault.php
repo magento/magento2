@@ -44,7 +44,7 @@ class InvokerDefault implements \Magento\Framework\Event\InvokerInterface
     public function __construct(
         \Magento\Framework\Event\ObserverFactory $observerFactory,
         State $appState,
-        LoggerInterface $logger = null
+        ?LoggerInterface $logger = null
     ) {
         $this->_observerFactory = $observerFactory;
         $this->_appState = $appState;

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2023 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -34,7 +34,7 @@ class ReportException
     public function beforeCheck(
         ExceptionFormatter $subject,
         \Throwable $exception,
-        string $internalErrorMessage = null
+        ?string $internalErrorMessage = null
     ) {
         $this->newRelicWrapper->reportError($exception);
         return null;

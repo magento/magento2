@@ -1,12 +1,13 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\CatalogUrlRewrite\Test\Unit\Model;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\Catalog\Api\CategoryRepositoryInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\Category;
@@ -114,17 +115,17 @@ class ProductScopeRewriteGeneratorTest extends TestCase
         $this->objectRegistryFactory = $this->getMockBuilder(
             ObjectRegistryFactory::class
         )->disableOriginalConstructor()
-            ->setMethods(['create'])->getMock();
+            ->onlyMethods(['create'])->getMock();
         $this->storeViewService = $this->getMockBuilder(StoreViewService::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->storeManager = $this->getMockForAbstractClass(StoreManagerInterface::class);
+        $this->storeManager = $this->createMock(StoreManagerInterface::class);
         $storeRootCategoryId = 2;
         $store = $this->getMockBuilder(Store::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $store->expects($this->any())->method('getRootCategoryId')->willReturn($storeRootCategoryId);
-        $this->storeManager->expects($this->any())->method('getStore')->willReturn($store);
+        $store->method('getRootCategoryId')->willReturn($storeRootCategoryId);
+        $this->storeManager->method('getStore')->willReturn($store);
         $mergeDataProviderFactory = $this->createPartialMock(
             MergeDataProviderFactory::class,
             ['create']
@@ -134,8 +135,8 @@ class ProductScopeRewriteGeneratorTest extends TestCase
         $this->configMock = $this->getMockBuilder(ScopeConfigInterface::class)
             ->getMock();
 
-        $this->categoryRepositoryMock = $this->getMockForAbstractClass(CategoryRepositoryInterface::class);
-        $this->productRepositoryMock = $this->getMockForAbstractClass(ProductRepositoryInterface::class);
+        $this->categoryRepositoryMock = $this->createMock(CategoryRepositoryInterface::class);
+        $this->productRepositoryMock = $this->createMock(ProductRepositoryInterface::class);
 
         $this->productScopeGenerator = (new ObjectManager($this))->getObject(
             ProductScopeRewriteGenerator::class,
@@ -160,42 +161,35 @@ class ProductScopeRewriteGeneratorTest extends TestCase
 
     public function testGenerationForGlobalScope()
     {
-        $this->configMock->expects($this->any())->method('getValue')
-            ->with('catalog/seo/generate_category_product_rewrites')
-            ->willReturn('1');
+        $this->configMock->method('getValue')->willReturn('1');
         $product = $this->createMock(Product::class);
-        $product->expects($this->any())->method('getStoreId')->willReturn(null);
-        $product->expects($this->any())->method('getStoreIds')->willReturn([1]);
+        $product->method('getStoreId')->willReturn(null);
+        $product->method('getStoreIds')->willReturn([1]);
         $store = $this->getMockBuilder(Store::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $store->expects($this->any())->method('getStoreGroupId')->willReturn(1);
-        $this->storeManager->expects($this->any())->method('getStores')->willReturn([$store]);
+        $store->method('getStoreGroupId')->willReturn(1);
+        $this->storeManager->method('getStores')->willReturn([$store]);
         $this->storeViewService->expects($this->once())->method('doesEntityHaveOverriddenUrlKeyForStore')
             ->willReturn(true);
         $this->initObjectRegistryFactory([]);
         $canonical = new UrlRewrite([], $this->serializer);
         $canonical->setRequestPath('category-1')
             ->setStoreId(1);
-        $this->canonicalUrlRewriteGenerator->expects($this->any())->method('generate')
-            ->willReturn([$canonical]);
+        $this->canonicalUrlRewriteGenerator->method('generate')->willReturn([$canonical]);
         $categories = new UrlRewrite([], $this->serializer);
         $categories->setRequestPath('category-2')
             ->setStoreId(2);
-        $this->categoriesUrlRewriteGenerator->expects($this->any())->method('generate')
-            ->willReturn([$categories]);
+        $this->categoriesUrlRewriteGenerator->method('generate')->willReturn([$categories]);
         $current = new UrlRewrite([], $this->serializer);
         $current->setRequestPath('category-3')
             ->setStoreId(3);
-        $this->currentUrlRewritesRegenerator->expects($this->any())->method('generate')
-            ->willReturn([$current]);
-        $this->currentUrlRewritesRegenerator->expects($this->any())->method('generateAnchor')
-            ->willReturn([$current]);
+        $this->currentUrlRewritesRegenerator->method('generate')->willReturn([$current]);
+        $this->currentUrlRewritesRegenerator->method('generateAnchor')->willReturn([$current]);
         $anchorCategories = new UrlRewrite([], $this->serializer);
         $anchorCategories->setRequestPath('category-4')
             ->setStoreId(4);
-        $this->anchorUrlRewriteGenerator->expects($this->any())->method('generate')
-            ->willReturn([$anchorCategories]);
+        $this->anchorUrlRewriteGenerator->method('generate')->willReturn([$anchorCategories]);
         $this->productRepositoryMock->expects($this->once())->method('getById')->willReturn($product);
 
         $this->assertEquals(
@@ -214,32 +208,27 @@ class ProductScopeRewriteGeneratorTest extends TestCase
         $storeRootCategoryId = 2;
         $category_id = 4;
         $product = $this->createMock(Product::class);
-        $product->expects($this->any())->method('getStoreId')->willReturn(1);
+        $product->method('getStoreId')->willReturn(1);
         $product->expects($this->never())->method('getStoreIds');
         $store = $this->getMockBuilder(Store::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $store->expects($this->any())->method('getStoreGroupId')->willReturn(1);
-        $this->storeManager->expects($this->any())->method('getStores')->willReturn([$store]);
-        $this->categoryMock->expects($this->any())->method('getParentIds')
-            ->willReturn(['root-id', $storeRootCategoryId]);
-        $this->categoryMock->expects($this->any())->method('getId')->willReturn($category_id);
+        $store->method('getStoreGroupId')->willReturn(1);
+        $this->storeManager->method('getStores')->willReturn([$store]);
+        $this->categoryMock->method('getParentIds')->willReturn(['root-id', $storeRootCategoryId]);
+        $this->categoryMock->method('getId')->willReturn($category_id);
         $this->initObjectRegistryFactory([$this->categoryMock]);
         $canonical = new UrlRewrite([], $this->serializer);
         $canonical->setRequestPath('category-1')
             ->setStoreId(1);
-        $this->canonicalUrlRewriteGenerator->expects($this->any())->method('generate')
-            ->willReturn([$canonical]);
-        $this->categoriesUrlRewriteGenerator->expects($this->any())->method('generate')
-            ->willReturn([]);
-        $this->currentUrlRewritesRegenerator->expects($this->any())->method('generate')
-            ->willReturn([]);
-        $this->currentUrlRewritesRegenerator->expects($this->any())->method('generateAnchor')
-            ->willReturn([]);
-        $this->anchorUrlRewriteGenerator->expects($this->any())->method('generate')
-            ->willReturn([]);
+        $this->canonicalUrlRewriteGenerator->method('generate')->willReturn([$canonical]);
+        $this->categoriesUrlRewriteGenerator->method('generate')->willReturn([]);
+        $this->currentUrlRewritesRegenerator->method('generate')->willReturn([]);
+        $this->currentUrlRewritesRegenerator->method('generateAnchor')->willReturn([]);
+        $this->anchorUrlRewriteGenerator->method('generate')->willReturn([]);
 
         $this->categoryRepositoryMock->expects($this->once())->method('get')->willReturn($this->categoryMock);
+        $this->configMock->method('getValue')->willReturn('1');
 
         $this->assertEquals(
             ['category-1_1' => $canonical],
@@ -265,8 +254,8 @@ class ProductScopeRewriteGeneratorTest extends TestCase
      *
      * @param array $parentIds
      * @param bool $expectedResult
-     * @dataProvider isCategoryProperForGeneratingDataProvider
      */
+    #[DataProvider('isCategoryProperForGeneratingDataProvider')]
     public function testIsCategoryProperForGenerating($parentIds, $expectedResult)
     {
         $storeId = 1;
@@ -286,7 +275,7 @@ class ProductScopeRewriteGeneratorTest extends TestCase
      *
      * @return array
      */
-    public function isCategoryProperForGeneratingDataProvider()
+    public static function isCategoryProperForGeneratingDataProvider()
     {
         return [
             [['0'], false],

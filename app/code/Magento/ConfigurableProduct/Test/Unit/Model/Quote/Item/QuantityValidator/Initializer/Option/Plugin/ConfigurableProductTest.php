@@ -1,14 +1,15 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\ConfigurableProduct\Test\Unit\Model\Quote\Item\QuantityValidator\Initializer\Option\Plugin;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\CatalogInventory\Model\Quote\Item\QuantityValidator\Initializer\Option;
-use Magento\CatalogInventory\Model\Stock\Item as StockItemModel;
+use Magento\CatalogInventory\Test\Unit\Helper\ItemTestHelper;
 use Magento\ConfigurableProduct\Model\Quote\Item\QuantityValidator\Initializer\Option\Plugin\ConfigurableProduct
     as InitializerOptionPlugin;
 use Magento\Quote\Model\Quote\Item;
@@ -18,8 +19,8 @@ class ConfigurableProductTest extends TestCase
 {
     /**
      * @param array $data
-     * @dataProvider afterGetStockItemDataProvider
      */
+    #[DataProvider('afterGetStockItemDataProvider')]
     public function testAfterGetStockItem(array $data)
     {
         $subjectMock = $this->createMock(
@@ -34,13 +35,7 @@ class ConfigurableProductTest extends TestCase
             ->method('getProductType')
             ->willReturn($data['product_type']);
 
-        $stockItemMock = $this->getMockBuilder(StockItemModel::class)
-            ->addMethods(['setProductName'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $matcherMethod = $data['matcher_method'];
-        $stockItemMock->expects($this->$matcherMethod())
-            ->method('setProductName');
+        $stockItemMock = new ItemTestHelper();
 
         $optionMock = $this->createPartialMock(
             \Magento\Quote\Model\Quote\Item\Option::class,
@@ -54,7 +49,7 @@ class ConfigurableProductTest extends TestCase
     /**
      * @return array
      */
-    public function afterGetStockItemDataProvider()
+    public static function afterGetStockItemDataProvider()
     {
         return [
             [

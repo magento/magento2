@@ -9,7 +9,6 @@ namespace Magento\Framework\ObjectManager\Resetter;
 
 use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 use Magento\Framework\ObjectManagerInterface;
-use WeakMap;
 
 /**
  * Interface that keeps track of the instances that need to be reset, and resets them

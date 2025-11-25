@@ -132,7 +132,7 @@ class FactoryOptions
      *
      * @return void
      */
-    public function setVirtualHost(string $virtualHost = null)
+    public function setVirtualHost(?string $virtualHost = null)
     {
         $this->virtualHost = $virtualHost;
     }
@@ -168,7 +168,7 @@ class FactoryOptions
      *
      * @return void
      */
-    public function setSslOptions(array $sslOptions = null)
+    public function setSslOptions(?array $sslOptions = null)
     {
         $this->sslOptions = $sslOptions;
     }

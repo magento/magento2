@@ -1,6 +1,6 @@
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 define([
     'jquery',
@@ -149,7 +149,7 @@ define([
         _.each(watchers.selectors, function (listeners, selector) {
             for (let data of listeners) {
                 if (!data.ctx.contains(node) || !$(node, data.ctx).is(selector)) {
-                    return;
+                    continue;
                 }
 
                 if (data.type === 'add') {

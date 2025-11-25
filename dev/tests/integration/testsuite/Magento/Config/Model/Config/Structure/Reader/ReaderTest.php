@@ -77,11 +77,11 @@ class ReaderTest extends \PHPUnit\Framework\TestCase
         $this->fileUtility = Files::init();
 
         $this->validationStateMock = $this->getMockBuilder(ValidationStateInterface::class)
-            ->setMethods(['isValidationRequired'])
+            ->onlyMethods(['isValidationRequired'])
             ->getMockForAbstractClass();
         $this->schemaLocatorMock = $this->getMockBuilder(SchemaLocator::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getPerFileSchema'])
+            ->onlyMethods(['getPerFileSchema'])
             ->getMock();
         $this->fileResolverMock = $this->getMockBuilder(FileResolverInterface::class)
             ->getMockForAbstractClass();
@@ -98,7 +98,7 @@ class ReaderTest extends \PHPUnit\Framework\TestCase
         //Isolate test from actual configuration, and leave only sample data.
         $this->compiler = $this->getMockBuilder(CompilerInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['compile'])
+            ->onlyMethods(['compile'])
             ->getMockForAbstractClass();
 
         $this->reader = $this->objectManager->create(

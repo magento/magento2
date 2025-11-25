@@ -74,12 +74,12 @@ class DecimalFilterTest extends AbstractFiltersTest
     /**
      * @return array
      */
-    public function getFiltersWithCustomAttributeDataProvider(): array
+    public static function getFiltersWithCustomAttributeDataProvider(): array
     {
         return [
             'not_used_in_navigation' => [
-                'products_data' => [],
-                'attribute_data' => ['is_filterable' => 0],
+                'products' => [],
+                'attributeData' => ['is_filterable' => 0],
                 'expectation' => [],
             ],
 

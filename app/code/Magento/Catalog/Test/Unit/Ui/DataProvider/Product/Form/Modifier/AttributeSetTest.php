@@ -1,25 +1,27 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Catalog\Test\Unit\Ui\DataProvider\Product\Form\Modifier;
 
+use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\ResourceModel\Product as ProductResource;
 use Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\AbstractModifier;
 use Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\AttributeSet;
 use Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\Collection;
 use Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\CollectionFactory;
 use Magento\Framework\UrlInterface;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 
 /**
  * @method \Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\AttributeSet getModel
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class AttributeSetTest extends AbstractModifierTest
+class AttributeSetTest extends AbstractModifierTestCase
 {
     /**
      * @var CollectionFactory|MockObject
@@ -44,32 +46,31 @@ class AttributeSetTest extends AbstractModifierTest
     protected function setUp(): void
     {
         parent::setUp();
-        $this->attributeSetCollectionFactoryMock = $this->getMockBuilder(CollectionFactory::class)
-            ->setMethods(['create'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->attributeSetCollectionMock = $this->getMockBuilder(Collection::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->urlBuilderMock = $this->getMockBuilder(UrlInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-        $this->productResourceMock = $this->getMockBuilder(ProductResource::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        
+        // Use the ProductTestHelper from parent, just configure the resource mock
+        $this->productResourceMock = $this->createMock(ProductResource::class);
+        $this->productResourceMock->method('getTypeId')->willReturn(4);
+        
+        // Set the resource on the helper using the new setResource method
+        $this->productMock->setResource($this->productResourceMock);
+        
+        $this->attributeSetCollectionFactoryMock = $this->createPartialMock(
+            CollectionFactory::class,
+            ['create']
+        );
+        $this->attributeSetCollectionMock = $this->createMock(Collection::class);
+        $this->urlBuilderMock = $this->createMock(UrlInterface::class);
 
-        $this->attributeSetCollectionFactoryMock->expects($this->any())
-            ->method('create')
+        $this->attributeSetCollectionFactoryMock->method('create')
             ->willReturn($this->attributeSetCollectionMock);
-        $this->productMock->expects($this->any())
-            ->method('getResource')
-            ->willReturn($this->productResourceMock);
-        $this->attributeSetCollectionMock->expects($this->any())
-            ->method('setEntityTypeFilter')
+        $this->attributeSetCollectionMock->method('setEntityTypeFilter')
             ->willReturnSelf();
-        $this->attributeSetCollectionMock->expects($this->any())
-            ->method('addFieldToSelect')
+        $this->attributeSetCollectionMock->method('addFieldToSelect')
             ->willReturnSelf();
+        $this->attributeSetCollectionMock->method('setOrder')
+            ->willReturnSelf();
+        $this->attributeSetCollectionMock->method('getData')
+            ->willReturn([]);
     }
 
     /**
@@ -90,15 +91,10 @@ class AttributeSetTest extends AbstractModifierTest
         $this->assertNotEmpty($modifyMeta);
     }
 
-    /**
-     * @param bool $locked
-     * @dataProvider modifyMetaLockedDataProvider
-     */
+    #[DataProvider('modifyMetaLockedDataProvider')]
     public function testModifyMetaLocked($locked)
     {
-        $this->productMock->expects($this->any())
-            ->method('isLockedAttribute')
-            ->willReturn($locked);
+        $this->productMock->setLockedAttribute('attribute_set_id', $locked);
         $modifyMeta = $this->getModel()->modifyMeta([AbstractModifier::DEFAULT_GENERAL_PANEL => []]);
         $children = $modifyMeta[AbstractModifier::DEFAULT_GENERAL_PANEL]['children'];
         $this->assertEquals(
@@ -110,7 +106,7 @@ class AttributeSetTest extends AbstractModifierTest
     /**
      * @return array
      */
-    public function modifyMetaLockedDataProvider()
+    public static function modifyMetaLockedDataProvider()
     {
         return [[true], [false]];
     }
@@ -132,11 +128,16 @@ class AttributeSetTest extends AbstractModifierTest
     public function testModifyData()
     {
         $productId = 1;
+        $attributeSetId = 4;
 
-        $this->productMock->expects($this->once())
-            ->method('getId')
-            ->willReturn($productId);
+        $this->productMock->setId($productId);
+        $this->productMock->setAttributeSetId($attributeSetId);
 
-        $this->assertArrayHasKey($productId, $this->getModel()->modifyData([]));
+        $result = $this->getModel()->modifyData([]);
+        $this->assertArrayHasKey($productId, $result);
+        $this->assertEquals(
+            $attributeSetId,
+            $result[$productId][AttributeSet::DATA_SOURCE_DEFAULT]['attribute_set_id']
+        );
     }
 }

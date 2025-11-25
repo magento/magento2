@@ -83,7 +83,7 @@ class Data implements \Magento\Framework\Config\DataInterface
         ReaderInterface $reader,
         CacheInterface $cache,
         $cacheId,
-        SerializerInterface $serializer = null,
+        ?SerializerInterface $serializer = null,
         ?array $cacheTags = null,
     ) {
         $this->reader = $reader;

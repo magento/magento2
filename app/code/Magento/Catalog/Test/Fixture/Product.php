@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2021 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -36,7 +36,8 @@ class Product implements RevertibleDataFixtureInterface
         'visibility' => Visibility::VISIBILITY_BOTH,
         'status' => Status::STATUS_ENABLED,
         'custom_attributes' => [
-            'tax_class_id' => '2'
+            'tax_class_id' => '2',
+            'special_price' => null,
         ],
         'extension_attributes' => [
             'website_ids' => [1],

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -28,6 +28,9 @@ class SerializedTest extends TestCase
     /** @var LoggerInterface|MockObject */
     private $loggerMock;
 
+    /**
+     * @var ScopeConfigInterface|MockObject
+     */
     private $scopeConfigMock;
 
     protected function setUp(): void
@@ -72,7 +75,7 @@ class SerializedTest extends TestCase
     /**
      * @return array
      */
-    public function afterLoadDataProvider()
+    public static function afterLoadDataProvider()
     {
         return [
             'empty value' => [
@@ -124,7 +127,7 @@ class SerializedTest extends TestCase
     /**
      * @return array
      */
-    public function beforeSaveDataProvider()
+    public static function beforeSaveDataProvider()
     {
         return [
             'string' => [

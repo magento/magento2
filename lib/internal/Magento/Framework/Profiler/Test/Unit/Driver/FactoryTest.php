@@ -1,9 +1,9 @@
 <?php declare(strict_types=1);
 /**
- * Test class for \Magento\Framework\Profiler\Driver\Factory
+ *  Copyright © Magento, Inc. All rights reserved.
+ *  See COPYING.txt for license details.
  *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Test class for \Magento\Framework\Profiler\Driver\Factory
  */
 namespace Magento\Framework\Profiler\Test\Unit\Driver;
 
@@ -60,6 +60,12 @@ class FactoryTest extends TestCase
      */
     public function testCreate($config, $expectedClass)
     {
+        if (isset($config['type']) && is_callable($config['type'])) {
+            $config['type'] = $config['type']($this);
+        }
+        if (is_callable($expectedClass)) {
+            $expectedClass = $expectedClass($this);
+        }
         $driver = $this->_factory->create($config);
         $this->assertInstanceOf($expectedClass, $driver);
         $this->assertInstanceOf(DriverInterface::class, $driver);
@@ -68,25 +74,40 @@ class FactoryTest extends TestCase
     /**
      * @return array
      */
-    public function createDataProvider()
+    public static function createDataProvider()
     {
-        $defaultDriverClass = $this->getMockClass(
-            DriverInterface::class,
-            [],
-            [],
-            'Magento_Framework_Profiler_Driver_Test_Default'
-        );
-        $testDriverClass = $this->getMockClass(
-            DriverInterface::class,
-            [],
-            [],
-            'Magento_Framework_Profiler_Driver_Test_Test'
-        );
         return [
-            'Prefix and concrete type' => [['type' => 'test'], $testDriverClass],
-            'Prefix and default type' => [[], $defaultDriverClass],
-            'Concrete class' => [['type' => $testDriverClass], $testDriverClass]
+            'Prefix and concrete type' => [
+                ['type' => 'test'],
+                static fn (self $testCase) => $testCase->getTestDriverClassMock()
+            ],
+            'Prefix and default type' => [
+                [],
+                static fn (self $testCase) => $testCase->getDefaultDriverClassMock()
+            ],
+            'Concrete class' => [
+                ['type' => 'Magento_Framework_Profiler_Driver_Test_Foo'],
+                static fn (self $testCase) => $testCase->getTestDriverClassMock(
+                    'Magento_Framework_Profiler_Driver_Test_Foo'
+                )
+            ]
         ];
+    }
+
+    protected function getDefaultDriverClassMock($mockClass = 'Magento_Framework_Profiler_Driver_Test_Default')
+    {
+        $defaultDriverClassMock = $this->getMockBuilder(DriverInterface::class)
+            ->setMockClassName($mockClass)
+            ->getMock();
+        return get_class($defaultDriverClassMock);
+    }
+
+    protected function getTestDriverClassMock($mockClass = 'Magento_Framework_Profiler_Driver_Test_Test')
+    {
+        $testDriverClassMock = $this->getMockBuilder(DriverInterface::class)
+            ->setMockClassName($mockClass)
+            ->getMock();
+        return get_class($testDriverClassMock);
     }
 
     public function testCreateUndefinedClass()

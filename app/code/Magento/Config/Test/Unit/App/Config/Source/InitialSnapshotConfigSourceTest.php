@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -48,7 +48,7 @@ class InitialSnapshotConfigSourceTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $this->dataObjectFactoryMock = $this->getMockBuilder(DataObjectFactory::class)
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->dataObjectMock = $this->getMockBuilder(DataObject::class)

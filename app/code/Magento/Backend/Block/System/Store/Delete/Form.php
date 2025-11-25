@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Backend\Block\System\Store\Delete;
 
@@ -10,8 +10,6 @@ use Magento\Framework\App\ObjectManager;
 
 /**
  * Adminhtml cms block edit form
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Form extends \Magento\Backend\Block\Widget\Form\Generic
 {

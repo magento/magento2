@@ -40,7 +40,7 @@ class ConsumerInstanceTest extends TestCase
     /**
      * @return array
      */
-    public function validConfigDataProvider()
+    public static function validConfigDataProvider()
     {
         return [
             'valid' => [
@@ -79,7 +79,7 @@ class ConsumerInstanceTest extends TestCase
     /**
      * @return array
      */
-    public function invalidConfigDataProvider()
+    public static function invalidConfigDataProvider()
     {
         return [
             'invalid, consumerInstance not implementing consumer interface' => [

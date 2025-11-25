@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2023 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -10,10 +10,12 @@ namespace Magento\GraphQl\App\State;
 use Magento\Customer\Api\AccountManagementInterface;
 use Magento\Customer\Model\AccountManagement;
 use Magento\Customer\Model\CustomerRegistry;
+use Magento\Framework\App\Area;
 use Magento\Framework\App\Http as HttpApp;
 use Magento\Framework\App\ObjectManager as AppObjectManager;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\App\Response\Http as HttpResponse;
+use Magento\Framework\App\State;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\ObjectManagerInterface;
@@ -56,6 +58,16 @@ class GraphQlStateDiff
     private readonly Comparator $comparator;
 
     /**
+     * @var State
+     */
+    private State $appState;
+
+    /**
+     * @var string|null
+     */
+    private ?string $currentArea;
+
+    /**
      * Constructor
      */
     public function __construct()
@@ -66,6 +78,9 @@ class GraphQlStateDiff
         AppObjectManager::setInstance($this->objectManagerForTest);
         Bootstrap::setObjectManager($this->objectManagerForTest);
         $this->comparator = $this->objectManagerForTest->create(Comparator::class);
+        $this->appState = $this->objectManagerForTest->get(State::class);
+        $this->currentArea = $this->appState->getAreaCode();
+        $this->appState->setAreaCode(Area::AREA_GRAPHQL);
         $this->objectManagerForTest->_resetState();
     }
 
@@ -86,6 +101,7 @@ class GraphQlStateDiff
      */
     public function tearDown(): void
     {
+        $this->appState->setAreaCode($this->currentArea);
         $this->objectManagerBeforeTest->getFactory()->setObjectManager($this->objectManagerBeforeTest);
         AppObjectManager::setInstance($this->objectManagerBeforeTest);
         Bootstrap::setObjectManager($this->objectManagerBeforeTest);
@@ -137,7 +153,7 @@ class GraphQlStateDiff
         } elseif ($operationName==='applyCouponToCart') {
             $this->removeCouponFromCart($variables);
         } elseif ($operationName==='resetPassword') {
-            $variables2['resetPasswordToken'] = $this->getResetPasswordToken($variables['email']);
+            $variables2['resetPasswordToken'] = $variables['resetPasswordToken'];
             $variables2['email'] = $variables['email'];
             $variables2['newPassword'] = $variables['newPassword'];
         }
@@ -177,7 +193,7 @@ class GraphQlStateDiff
         $response = $this->doRequest($query, $authInfo);
         $this->objectManagerForTest->_resetState();
         $this->comparator->rememberObjectsStateAfter($firstRequest);
-        $result = $this->comparator->compareBetweenRequests($operationName);
+        $result = $this->handleRequestProperties($this->comparator->compareBetweenRequests($operationName));
         $test->assertEmpty(
             $result,
             sprintf(
@@ -186,7 +202,7 @@ class GraphQlStateDiff
                 var_export($result, true)
             )
         );
-        $result = $this->comparator->compareConstructedAgainstCurrent($operationName);
+        $result = $this->handleRequestProperties($this->comparator->compareConstructedAgainstCurrent($operationName));
         $test->assertEmpty(
             $result,
             sprintf(
@@ -308,5 +324,19 @@ class GraphQlStateDiff
 
         $customerSecure = $customerRegistry->retrieveSecureData(1);
         return $customerSecure->getRpToken();
+    }
+
+    /**
+     * Handle request properties for sslOffloadHeader
+     *
+     * @param array $result
+     * @return array
+     */
+    public function handleRequestProperties(array $result): array
+    {
+        if (isset($result['Magento\Framework\Webapi\Request']['properties']['sslOffloadHeader'])) {
+            unset($result['Magento\Framework\Webapi\Request']);
+        }
+        return $result;
     }
 }

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -59,17 +59,20 @@ class GeneralTest extends TestCase
         $addressMock = $this
             ->getMockBuilder(AbstractAddress::class)
             ->disableOriginalConstructor()
-            ->setMethods(
+            ->addMethods(
                 [
                     'getFirstname',
                     'getLastname',
-                    'getStreetLine',
                     'getCity',
                     'getTelephone',
                     'getFax',
                     'getCompany',
                     'getPostcode',
                     'getCountryId',
+                ]
+            )->onlyMethods(
+                [
+                    'getStreetLine'
                 ]
             )->getMock();
 
@@ -103,7 +106,7 @@ class GeneralTest extends TestCase
     /**
      * @return array
      */
-    public function validateDataProvider()
+    public static function validateDataProvider()
     {
         $countryId = 1;
         $data = [

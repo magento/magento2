@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -89,21 +89,20 @@ class RegistrationTest extends TestCase
 
         $themeFromConfigMock = $this->getMockBuilder(Theme::class)
             ->disableOriginalConstructor()
-            ->setMethods([
+            ->addMethods(['getThemeTitle'])
+            ->onlyMethods([
                 'getArea',
                 'getThemePath',
                 'getParentTheme',
-                'getThemeTitle',
             ])
             ->getMock();
 
         $themeFromDbMock = $this->getMockBuilder(Theme::class)
             ->disableOriginalConstructor()
-            ->setMethods([
-                'setParentId',
-                'setThemeTitle',
+            ->onlyMethods([
                 'save',
             ])
+            ->addMethods(['setParentId', 'setThemeTitle'])
             ->getMock();
 
         $parentThemeFromDbMock = $this->getMockBuilder(Theme::class)
@@ -171,7 +170,7 @@ class RegistrationTest extends TestCase
     /**
      * @return array
      */
-    public function dataProviderBeforeExecute()
+    public static function dataProviderBeforeExecute()
     {
         return [
             [true],

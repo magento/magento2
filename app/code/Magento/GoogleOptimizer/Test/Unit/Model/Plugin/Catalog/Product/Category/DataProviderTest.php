@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -35,7 +35,7 @@ class DataProviderTest extends TestCase
     {
         $objectManager = new ObjectManager($this);
         $this->helper = $this->getMockBuilder(Data::class)
-            ->setMethods(['isGoogleExperimentActive'])
+            ->onlyMethods(['isGoogleExperimentActive'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->subject = $this->createMock(

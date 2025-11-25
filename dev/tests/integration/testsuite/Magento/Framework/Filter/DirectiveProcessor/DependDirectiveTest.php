@@ -63,7 +63,7 @@ class DependDirectiveTest extends TestCase
         self::assertEquals($isTrue ? 'blah' : '', $result);
     }
 
-    public function useCasesProvider()
+    public static function useCasesProvider()
     {
         return [
             ['foo',['foo' => true], true],

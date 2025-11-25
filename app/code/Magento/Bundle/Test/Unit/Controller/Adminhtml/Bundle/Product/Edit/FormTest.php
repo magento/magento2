@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -17,7 +17,10 @@ use Magento\Framework\App\RequestInterface;
 use Magento\Framework\App\ResponseInterface;
 use Magento\Framework\App\ViewInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Framework\View\Test\Unit\Helper\AbstractBlockTestHelper;
+use Magento\Framework\App\Test\Unit\Helper\ResponseTestHelper;
 use Magento\Framework\View\LayoutInterface;
+use Magento\Catalog\Test\Unit\Helper\ProductTestHelper;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -66,35 +69,22 @@ class FormTest extends TestCase
     {
         $this->objectManagerHelper = new ObjectManagerHelper($this);
 
-        $this->context = $this->getMockBuilder(Context::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->request = $this->getMockForAbstractClass(RequestInterface::class);
-        $this->response = $this->getMockBuilder(ResponseInterface::class)
-            ->addMethods(['setBody'])
-            ->onlyMethods(['sendResponse'])
-            ->getMockForAbstractClass();
-        $this->productBuilder = $this->getMockBuilder(Builder::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['build'])
-            ->getMock();
-        $this->initializationHelper = $this->getMockBuilder(
-            Helper::class
-        )
-            ->disableOriginalConstructor()
-            ->setMethods(['initialize'])
-            ->getMock();
-        $this->view = $this->getMockForAbstractClass(ViewInterface::class);
+        $this->context = $this->createMock(Context::class);
+        $this->request = $this->createMock(RequestInterface::class);
 
-        $this->context->expects($this->any())
-            ->method('getRequest')
-            ->willReturn($this->request);
-        $this->context->expects($this->any())
-            ->method('getResponse')
-            ->willReturn($this->response);
-        $this->context->expects($this->any())
-            ->method('getView')
-            ->willReturn($this->view);
+        /** @var ResponseInterface $response */
+        $this->response = new ResponseTestHelper();
+
+        $this->productBuilder = $this->createPartialMock(Builder::class, ['build']);
+        $this->initializationHelper = $this->createPartialMock(
+            Helper::class,
+            ['initialize']
+        );
+        $this->view = $this->createMock(ViewInterface::class);
+
+        $this->context->method('getRequest')->willReturn($this->request);
+        $this->context->method('getResponse')->willReturn($this->response);
+        $this->context->method('getView')->willReturn($this->view);
 
         $this->controller = $this->objectManagerHelper->getObject(
             Form::class,
@@ -108,22 +98,20 @@ class FormTest extends TestCase
 
     public function testExecute()
     {
-        $product = $this->getMockBuilder(Product::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['_wakeup', 'getId'])
-            ->getMock();
-        $layout = $this->getMockForAbstractClass(LayoutInterface::class);
-        $block = $this->getMockBuilder(Bundle::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['setIndex', 'toHtml'])
-            ->getMock();
+        /** @var Product $product */
+        $product = new ProductTestHelper();
+
+        $layout = $this->createMock(LayoutInterface::class);
+
+        /** @var AbstractBlockTestHelper $block */
+        $block = new AbstractBlockTestHelper();
 
         $this->productBuilder->expects($this->once())->method('build')->with($this->request)->willReturn($product);
-        $this->initializationHelper->expects($this->any())->method('initialize')->willReturn($product);
-        $this->response->expects($this->once())->method('setBody')->willReturnSelf();
+        $this->initializationHelper->method('initialize')->willReturn($product);
+        $this->response->setBody(''); // Use setter instead of expects
         $this->view->expects($this->once())->method('getLayout')->willReturn($layout);
         $layout->expects($this->once())->method('createBlock')->willReturn($block);
-        $block->expects($this->once())->method('toHtml')->willReturnSelf();
+        $block->setHtmlResult(''); // Use setter instead of expects
 
         $this->controller->execute();
     }

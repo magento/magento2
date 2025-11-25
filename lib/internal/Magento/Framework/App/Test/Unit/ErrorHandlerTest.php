@@ -1,8 +1,9 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
+
 declare(strict_types=1);
 
 namespace Magento\Framework\App\Test\Unit;
@@ -37,7 +38,7 @@ class ErrorHandlerTest extends TestCase
     /**
      * @return array
      */
-    public function handlerProvider()
+    public static function handlerProvider()
     {
         return [
             [0, 'DateTimeZone::__construct', 0, false],
@@ -68,7 +69,7 @@ class ErrorHandlerTest extends TestCase
     /**
      * @return array
      */
-    public function handlerProviderException()
+    public static function handlerProviderException()
     {
         return [
             [E_ERROR, 'Error'],
@@ -82,7 +83,6 @@ class ErrorHandlerTest extends TestCase
             [E_USER_ERROR, 'User Error'],
             [E_USER_WARNING, 'User Warning'],
             [E_USER_NOTICE, 'User Notice'],
-            [E_STRICT, 'Strict Notice'],
             [E_RECOVERABLE_ERROR, 'Recoverable Error'],
             [E_DEPRECATED, 'Deprecated Functionality'],
             [E_USER_DEPRECATED, 'User Deprecated Functionality'],

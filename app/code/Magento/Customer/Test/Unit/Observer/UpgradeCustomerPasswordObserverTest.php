@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -75,15 +75,15 @@ class UpgradeCustomerPasswordObserverTest extends TestCase
         $passwordHash = 'hash:salt:999';
         $model = $this->getMockBuilder(Customer::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getId'])
+            ->onlyMethods(['getId'])
             ->getMock();
         $customer = $this->getMockBuilder(CustomerInterface::class)
-            ->setMethods(['setData'])
+            ->addMethods(['setData'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $customerSecure = $this->getMockBuilder(CustomerSecure::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getPasswordHash', 'setPasswordHash'])
+            ->addMethods(['getPasswordHash', 'setPasswordHash'])
             ->getMock();
         $model->expects($this->exactly(2))
             ->method('getId')

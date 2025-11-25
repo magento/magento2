@@ -1,20 +1,16 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Sales\Block\Adminhtml\Order\Create\Search\Grid\Renderer;
 
 /**
  * Renderer for Qty field in sales create new order search grid
- *
- * @author     Magento Core Team <core@magentocommerce.com>
  */
 class Qty extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Input
 {
     /**
-     * Type config
-     *
      * @var \Magento\Catalog\Model\ProductTypes\ConfigInterface
      */
     protected $typeConfig;

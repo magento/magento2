@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -57,12 +57,12 @@ class ScheduleTest extends TestCase
 
         $this->resourceJobMock = $this->getMockBuilder(SchoduleResourceModel::class)
             ->disableOriginalConstructor()
-            ->setMethods(
+            ->addMethods(['trySetJobStatuses'])
+            ->onlyMethods(
                 [
                     'trySetJobStatusAtomic',
                     '__wakeup',
                     'getIdFieldName',
-                    'trySetJobStatuses',
                     'getConnection',
                     'getTable'
                 ]
@@ -74,11 +74,11 @@ class ScheduleTest extends TestCase
             ->willReturn('id');
 
         $this->timezoneConverterMock = $this->getMockBuilder(TimezoneInterface::class)
-            ->setMethods(['date'])
+            ->onlyMethods(['date'])
             ->getMockForAbstractClass();
 
         $this->dateTimeFactoryMock = $this->getMockBuilder(DateTimeFactory::class)
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
 
         $this->retrierMock = $this->getMockForAbstractClass(DeadlockRetrierInterface::class);
@@ -115,7 +115,7 @@ class ScheduleTest extends TestCase
      *
      * @return array
      */
-    public function setCronExprDataProvider(): array
+    public static function setCronExprDataProvider(): array
     {
         return [
             ['1 2 3 4 5', [1, 2, 3, 4, 5]],
@@ -208,7 +208,7 @@ class ScheduleTest extends TestCase
      *
      * @return array
      */
-    public function setCronExprExceptionDataProvider(): array
+    public static function setCronExprExceptionDataProvider(): array
     {
         return [
             [''],
@@ -298,7 +298,7 @@ class ScheduleTest extends TestCase
      *
      * @return array
      */
-    public function tryScheduleDataProvider(): array
+    public static function tryScheduleDataProvider(): array
     {
         $date = '2011-12-13 14:15:16';
         $timestamp = (new \DateTime($date))->getTimestamp();
@@ -347,7 +347,7 @@ class ScheduleTest extends TestCase
      *
      * @return array
      */
-    public function matchCronExpressionDataProvider(): array
+    public static function matchCronExpressionDataProvider(): array
     {
         return [
             ['*', 0, true],
@@ -419,7 +419,7 @@ class ScheduleTest extends TestCase
      *
      * @return array
      */
-    public function matchCronExpressionExceptionDataProvider(): array
+    public static function matchCronExpressionExceptionDataProvider(): array
     {
         return [
             ['1/2/3'],    //Invalid cron expression, expecting 'match/modulus': 1/2/3
@@ -457,7 +457,7 @@ class ScheduleTest extends TestCase
      *
      * @return array
      */
-    public function getNumericDataProvider(): array
+    public static function getNumericDataProvider(): array
     {
         return [
             [null, false],

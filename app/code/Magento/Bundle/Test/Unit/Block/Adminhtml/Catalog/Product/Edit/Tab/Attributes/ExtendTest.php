@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -9,8 +9,10 @@ namespace Magento\Bundle\Test\Unit\Block\Adminhtml\Catalog\Product\Edit\Tab\Attr
 
 use Magento\Bundle\Block\Adminhtml\Catalog\Product\Edit\Tab\Attributes\Extend;
 use Magento\Catalog\Model\Product;
+use Magento\Directory\Helper\Data as DirectoryHelper;
 use Magento\Framework\Data\Form;
 use Magento\Framework\Data\FormFactory;
+use Magento\Framework\Json\Helper\Data as JsonHelper;
 use Magento\Framework\Registry;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\Constraint\ArrayHasKey;
@@ -33,14 +35,22 @@ class ExtendTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->registry = $this->getMockBuilder(Registry::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->formFactory = $this->getMockBuilder(
+        $this->registry = $this->createMock(Registry::class);
+        $this->formFactory = $this->createMock(
             FormFactory::class
-        )->disableOriginalConstructor()
-            ->getMock();
+        );
         $this->objectManagerHelper = new ObjectManager($this);
+        $objects = [
+            [
+                JsonHelper::class,
+                $this->createMock(JsonHelper::class)
+            ],
+            [
+                DirectoryHelper::class,
+                $this->createMock(DirectoryHelper::class)
+            ]
+        ];
+        $this->objectManagerHelper->prepareObjectManager($objects);
         $this->object = $this->objectManagerHelper->getObject(
             Extend::class,
             ['registry' => $this->registry, 'formFactory' => $this->formFactory]
@@ -52,9 +62,7 @@ class ExtendTest extends TestCase
      */
     public function getProduct()
     {
-        $product = $this->getMockBuilder(Product::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $product = $this->createMock(Product::class);
         $this->registry->expects($this->once())
             ->method('registry')
             ->with('product')
@@ -67,9 +75,7 @@ class ExtendTest extends TestCase
     public function testGetExtendedElement()
     {
         $switchAttributeCode = 'test_code';
-        $form = $this->getMockBuilder(Form::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $form = $this->createMock(Form::class);
         $hasKey = new ArrayHasKey('value');
         $form->expects($this->once())->method('addField')->with(
             $switchAttributeCode,

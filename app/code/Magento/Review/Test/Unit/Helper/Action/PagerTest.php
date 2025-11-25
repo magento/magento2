@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -25,8 +25,9 @@ class PagerTest extends TestCase
         $sessionMock = $this->getMockBuilder(
             Session::class
         )->disableOriginalConstructor()
-            ->setMethods(
-                ['setData', 'getData']
+            ->addMethods(['setData'])
+            ->onlyMethods(
+                ['getData']
             )->getMock();
         $sessionMock->expects(
             $this->any()

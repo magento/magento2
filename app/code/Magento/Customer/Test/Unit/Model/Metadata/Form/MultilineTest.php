@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -47,7 +47,7 @@ class MultilineTest extends TextTest
     /**
      * @return array
      */
-    public function validateValueRequiredDataProvider()
+    public static function validateValueRequiredDataProvider()
     {
         return array_merge(
             parent::validateValueRequiredDataProvider(),
@@ -74,7 +74,7 @@ class MultilineTest extends TextTest
     /**
      * @return array
      */
-    public function validateValueLengthDataProvider()
+    public static function validateValueLengthDataProvider()
     {
         return array_merge(
             parent::validateValueLengthDataProvider(),
@@ -109,7 +109,7 @@ class MultilineTest extends TextTest
     /**
      * @return array
      */
-    public function compactValueDataProvider()
+    public static function compactValueDataProvider()
     {
         return [
             [

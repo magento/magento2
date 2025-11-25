@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2022 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -42,7 +42,7 @@ class EditTest extends TestCase
     private $customerSession;
 
     /**
-     * @inheirtDoc
+     * @inheritDoc
      */
     protected function setUp(): void
     {
@@ -63,7 +63,7 @@ class EditTest extends TestCase
         $buttonLock = $this->getMockBuilder(\Magento\ReCaptchaUi\Model\ButtonLock::class)
             ->disableOriginalConstructor()
             ->disableAutoload()
-            ->setMethods(['isDisabled', 'getCode'])
+            ->onlyMethods(['isDisabled', 'getCode'])
             ->getMock();
         $buttonLock->expects($this->atLeastOnce())->method('getCode')->willReturn($code);
         $buttonLock->expects($this->atLeastOnce())->method('isDisabled')->willReturn(false);

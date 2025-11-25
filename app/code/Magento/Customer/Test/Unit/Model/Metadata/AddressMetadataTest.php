@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -123,7 +123,7 @@ class AddressMetadataTest extends TestCase
         /** @var AbstractAttribute|MockObject $attributeMock */
         $attributeMock = $this->getMockBuilder(AbstractAttribute::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getId'])
+            ->onlyMethods(['getId'])
             ->getMockForAbstractClass();
 
         $this->attributeProviderMock->expects($this->once())
@@ -258,7 +258,7 @@ class AddressMetadataTest extends TestCase
         /** @var AbstractAttribute|MockObject $attributeMock */
         $attributeMock = $this->getMockBuilder(AbstractAttribute::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getId'])
+            ->onlyMethods(['getId'])
             ->getMockForAbstractClass();
 
         $this->attributeProviderMock->expects($this->once())
@@ -305,7 +305,7 @@ class AddressMetadataTest extends TestCase
         /** @var AbstractAttribute|MockObject $attributeMock */
         $attributeMock = $this->getMockBuilder(AbstractAttribute::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getId'])
+            ->onlyMethods(['getId'])
             ->getMockForAbstractClass();
 
         $this->attributeProviderMock->expects($this->once())

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -91,8 +91,8 @@ class CustomerOrders implements ResolverInterface
         Field $field,
         $context,
         ResolveInfo $info,
-        array $value = null,
-        array $args = null
+        ?array $value = null,
+        ?array $args = null
     ) {
         if (false === $context->getExtensionAttributes()->getIsCustomer()) {
             throw new GraphQlAuthorizationException(__('The current customer isn\'t authorized.'));
@@ -129,7 +129,8 @@ class CustomerOrders implements ResolverInterface
                 'page_size' => $searchResult->getPageSize(),
                 'current_page' => $searchResult->getCurPage(),
                 'total_pages' => $maxPages,
-            ]
+            ],
+            'store_ids' => $storeIds,
         ];
     }
 

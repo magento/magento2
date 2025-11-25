@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -67,7 +67,7 @@ class AfterAddressSaveObserverTest extends TestCase
         $this->objectManager = new ObjectManager($this);
         $this->observerMock = $this->getMockBuilder(Observer::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getCustomerAddress'])
+            ->addMethods(['getCustomerAddress'])
             ->getMock();
 
         $this->moduleManagerMock = $this->getMockBuilder(Manager::class)
@@ -79,12 +79,12 @@ class AfterAddressSaveObserverTest extends TestCase
             ->getMock();
 
         $this->taxHelperMock = $this->getMockBuilder(Data::class)
-            ->setMethods(['isCatalogPriceDisplayAffectedByTax'])
+            ->onlyMethods(['isCatalogPriceDisplayAffectedByTax'])
             ->disableOriginalConstructor()
             ->getMock();
 
         $this->addressManagerMock = $this->getMockBuilder(TaxAddressManagerInterface::class)
-            ->setMethods(['setDefaultAddressAfterSave', 'setDefaultAddressAfterLogIn'])
+            ->onlyMethods(['setDefaultAddressAfterSave', 'setDefaultAddressAfterLogIn'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
 
@@ -146,7 +146,7 @@ class AfterAddressSaveObserverTest extends TestCase
     /**
      * @return array
      */
-    public function getExecuteDataProvider()
+    public static function getExecuteDataProvider()
     {
         return [
             [false, false, false, false],

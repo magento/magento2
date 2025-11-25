@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -26,7 +26,7 @@ class ShortcutTest extends TestCase
     public function testGetAlias()
     {
         $paypalConfigFactoryMock = $this->getMockBuilder(ConfigFactory::class)
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $configMock = $this->getMockBuilder(Config::class)

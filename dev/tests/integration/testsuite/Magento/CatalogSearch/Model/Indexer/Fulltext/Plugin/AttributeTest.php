@@ -112,7 +112,7 @@ class AttributeTest extends TestCase
     /**
      * @return array
      */
-    public function searchableAttributesDataProvider(): array
+    public static function searchableAttributesDataProvider(): array
     {
         return [
             [EavAttributeInterface::IS_SEARCHABLE],

@@ -87,7 +87,7 @@ class OutputTest extends TestCase
      *
      * @return array
      */
-    public function isDirectiveDataProvider(): array
+    public static function isDirectiveDataProvider(): array
     {
         return [
             'attribute_html_without_directive' => ['Test string', false],

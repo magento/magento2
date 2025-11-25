@@ -210,7 +210,7 @@ class CrosssellTest extends AbstractLinksTest
      *
      * @return array
      */
-    public function positionWithLastAddedProductProvider(): array
+    public static function positionWithLastAddedProductProvider(): array
     {
         return [
             'less_four_linked_products_to_last_added_product' => [

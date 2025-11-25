@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2023 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -147,7 +147,7 @@ class MediaGalleryProcessorTest extends TestCase
         //verify new entries
         $contentDataObject = $this->getMockBuilder(ImageContent::class)
             ->disableOriginalConstructor()
-            ->setMethods(null)
+            ->onlyMethods([])
             ->getMock();
         $this->contentFactoryMock->expects($this->once())->method('create')->willReturn($contentDataObject);
         $this->imageProcessorMock->expects($this->once())->method('processImageContent')->willReturn($absolutePath);

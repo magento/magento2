@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -42,12 +42,16 @@ class CalendarTest extends TestCase
     /**
      * @return array
      */
-    public function localesDataProvider()
+    public static function localesDataProvider()
     {
         return [
             ['en_US'],
             ['ja_JP'],
             ['ko_KR'],
+            ['lv_LV'],
+            ['sv_SE'],
+            ['de_AT'],
+            ['ar_SA'],
         ];
     }
 

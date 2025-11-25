@@ -195,8 +195,11 @@ class RendererTest extends TestCase
 
         $this->stringMock
             ->method('upperCaseWords')
-            ->withConsecutive(['charset', '_', ''])
-            ->willReturnOnConsecutiveCalls('Charset');
+            ->willReturnCallback(function ($arg1, $arg2, $arg3) {
+                if ($arg1 == 'charset' && $arg2 == '_' && $arg3 == '') {
+                    return 'Charset';
+                }
+            });
 
         $this->pageConfigMock->expects($this->once())
             ->method('getCharset')
@@ -278,20 +281,19 @@ class RendererTest extends TestCase
 
         $this->pageConfigMock->expects($this->exactly(2))
             ->method('addRemotePageAsset')
-            ->withConsecutive(
-                [
-                    $filePath,
-                    Head::VIRTUAL_CONTENT_TYPE_LINK,
-                    ['attributes' => ['rel' => 'icon', 'type' => 'image/x-icon']],
-                    'icon'
-                ],
-                [
-                    $filePath,
-                    Head::VIRTUAL_CONTENT_TYPE_LINK,
-                    ['attributes' => ['rel' => 'shortcut icon', 'type' => 'image/x-icon']],
-                    'shortcut-icon'
-                ]
-            );
+            ->willReturnCallback(function ($arg1, $arg2, $arg3, $arg4) use ($filePath) {
+                if ($arg1 == $filePath &&
+                    $arg2 == Head::VIRTUAL_CONTENT_TYPE_LINK &&
+                    $arg3 == ['attributes' => ['rel' => 'icon', 'type' => 'image/x-icon']] &&
+                    $arg4 == 'icon') {
+                    return null;
+                } elseif ($arg1 == $filePath &&
+                    $arg2 == Head::VIRTUAL_CONTENT_TYPE_LINK &&
+                    $arg3 == ['attributes' => ['rel' => 'shortcut icon', 'type' => 'image/x-icon']] &&
+                    $arg4 == 'shortcut-icon') {
+                    return null;
+                }
+            });
 
         $this->renderer->prepareFavicon();
     }
@@ -311,18 +313,17 @@ class RendererTest extends TestCase
 
         $this->pageConfigMock->expects($this->exactly(2))
             ->method('addPageAsset')
-            ->withConsecutive(
-                [
-                    $defaultFilePath,
-                    ['attributes' => ['rel' => 'icon', 'type' => 'image/x-icon']],
-                    'icon',
-                ],
-                [
-                    $defaultFilePath,
-                    ['attributes' => ['rel' => 'shortcut icon', 'type' => 'image/x-icon']],
-                    'shortcut-icon'
-                ]
-            );
+            ->willReturnCallback(function ($arg1, $arg2, $arg3) use ($defaultFilePath) {
+                if ($arg1 == $defaultFilePath &&
+                    $arg2 == ['attributes' => ['rel' => 'icon', 'type' => 'image/x-icon']] &&
+                    $arg3 == 'icon') {
+                    return null;
+                } elseif ($arg1 == $defaultFilePath &&
+                    $arg2 == ['attributes' => ['rel' => 'shortcut icon', 'type' => 'image/x-icon']] &&
+                    $arg3 == 'shortcut-icon') {
+                    return null;
+                }
+            });
         $this->renderer->prepareFavicon();
     }
 
@@ -421,46 +422,46 @@ class RendererTest extends TestCase
     /**
      * @return array
      */
-    public function dataProviderRenderAssets(): array
+    public static function dataProviderRenderAssets(): array
     {
         return [
             [
                 ['type' => 'css', 'attributes' => '', 'condition' => null],
                 ['type' => 'js', 'attributes' => 'attr="value"', 'condition' => null],
-                '<link  rel="stylesheet" type="text/css"  media="all" href="url" />' . "\n"
-                    . '<link  rel="stylesheet" type="text/css"  media="all" href="url" />' . "\n"
-                    . '<script  type="text/javascript"  attr="value" src="no_route_url"></script>' . "\n"
+                '<link rel="stylesheet" type="text/css" media="all" href="url" />' . "\n"
+                    . '<link rel="stylesheet" type="text/css" media="all" href="url" />' . "\n"
+                    . '<script type="text/javascript" attr="value" src="no_route_url"></script>' . "\n"
             ],
             [
                 ['type' => 'js', 'attributes' => ['attr' => 'value'], 'condition' => 'lt IE 7'],
                 ['type' => 'css', 'attributes' => 'attr="value"', 'condition' => null],
-                '<link  rel="stylesheet" type="text/css"  attr="value" href="no_route_url" />' . "\n"
+                '<link rel="stylesheet" type="text/css" attr="value" href="no_route_url" />' . "\n"
                     . '<!--[if lt IE 7]>' . "\n"
-                    . '<script  type="text/javascript"  attr="value" src="url"></script>' . "\n"
-                    . '<script  type="text/javascript"  attr="value" src="url"></script>' . "\n"
+                    . '<script type="text/javascript" attr="value" src="url"></script>' . "\n"
+                    . '<script type="text/javascript" attr="value" src="url"></script>' . "\n"
                     . '<![endif]-->' . "\n"
             ],
             [
                 ['type' => 'ico', 'attributes' => 'attr="value"', 'condition' => null],
                 ['type' => 'css', 'attributes' => '', 'condition' => null],
-                '<link  rel="stylesheet" type="text/css"  media="all" href="no_route_url" />' . "\n"
-                    . '<link  attr="value" href="url" />' . "\n"
-                    . '<link  attr="value" href="url" />' . "\n"
+                '<link rel="stylesheet" type="text/css" media="all" href="no_route_url" />' . "\n"
+                    . '<link attr="value" href="url" />' . "\n"
+                    . '<link attr="value" href="url" />' . "\n"
             ],
             [
                 ['type' => 'js', 'attributes' => '', 'condition' => null],
                 ['type' => 'ico', 'attributes' => ['attr' => 'value'], 'condition' => null],
-                '<link  attr="value" href="no_route_url" />' . "\n"
-                    . '<script  type="text/javascript"  src="url"></script>' . "\n"
-                    . '<script  type="text/javascript"  src="url"></script>' . "\n"
+                '<link attr="value" href="no_route_url" />' . "\n"
+                    . '<script type="text/javascript" src="url"></script>' . "\n"
+                    . '<script type="text/javascript" src="url"></script>' . "\n"
             ],
             [
                 ['type' => 'non', 'attributes' => ['attr' => 'value'], 'condition' => null],
                 ['type' => 'ico', 'attributes' => '', 'condition' => null],
-                '<link  href="no_route_url" />' . "\n"
-                    . '<link  attr="value" href="url" />' . "\n"
-                    . '<link  attr="value" href="url" />' . "\n"
-            ]
+                '<link href="no_route_url" />' . "\n"
+                    . '<link attr="value" href="url" />' . "\n"
+                    . '<link attr="value" href="url" />' . "\n"
+            ],
         ];
     }
 
@@ -506,7 +507,7 @@ class RendererTest extends TestCase
             ->willReturn([$groupMockOne]);
 
         $this->assertEquals(
-            '<link  rel="some-rel" href="url" />' . "\n",
+            '<link rel="some-rel" href="url" />' . "\n",
             $this->renderer->renderAssets($this->renderer->getAvailableResultGroups())
         );
     }

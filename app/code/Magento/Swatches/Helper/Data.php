@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Swatches\Helper;
 
@@ -116,9 +116,9 @@ class Data
         StoreManagerInterface $storeManager,
         SwatchCollectionFactory $swatchCollectionFactory,
         UrlBuilder $urlBuilder,
-        Json $serializer = null,
-        SwatchAttributesProvider $swatchAttributesProvider = null,
-        SwatchAttributeType $swatchTypeChecker = null
+        ?Json $serializer = null,
+        ?SwatchAttributesProvider $swatchAttributesProvider = null,
+        ?SwatchAttributeType $swatchTypeChecker = null
     ) {
         $this->productCollectionFactory = $productCollectionFactory;
         $this->productRepository = $productRepository;
@@ -583,7 +583,8 @@ class Data
      * Get product metadata pool.
      *
      * @return \Magento\Framework\EntityManager\MetadataPool
-     * @deprecared
+     * @deprecated
+     * @see Nothing
      */
     protected function getMetadataPool()
     {

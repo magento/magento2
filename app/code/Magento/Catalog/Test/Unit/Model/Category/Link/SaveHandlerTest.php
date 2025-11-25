@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -99,7 +99,12 @@ class SaveHandlerTest extends TestCase
             ->onlyMethods(['getExtensionAttributes', 'getCategoryIds'])
             ->addMethods(['setAffectedCategoryIds', 'setIsChangedCategories'])
             ->getMock();
-        $product->method('setIsChangedCategories')->withConsecutive([false]);
+        $product->method('setIsChangedCategories')
+            ->willReturnCallback(function ($arg) {
+                if ($arg === false) {
+                    return null;
+                }
+            });
         $product->expects(static::once())
             ->method('getExtensionAttributes')
             ->willReturn($extensionAttributes);
@@ -131,7 +136,7 @@ class SaveHandlerTest extends TestCase
     /**
      * @return array
      */
-    public function getCategoryDataProvider(): array
+    public static function getCategoryDataProvider(): array
     {
         return [
             [

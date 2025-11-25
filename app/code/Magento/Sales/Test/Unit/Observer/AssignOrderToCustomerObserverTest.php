@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -60,7 +60,7 @@ class AssignOrderToCustomerObserverTest extends TestCase
         /** @var Event|MockObject $eventMock */
         $eventMock = $this->getMockBuilder(Event::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getData'])
+            ->onlyMethods(['getData'])
             ->getMock();
         /** @var CustomerInterface|MockObject $customerMock */
         $customerMock = $this->getMockForAbstractClass(CustomerInterface::class);
@@ -96,7 +96,7 @@ class AssignOrderToCustomerObserverTest extends TestCase
      *
      * @return array
      */
-    public function getCustomerIds()
+    public static function getCustomerIds()
     {
         return [
             [null, 1],

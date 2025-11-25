@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -278,8 +278,13 @@ class RollbackTest extends TestCase
             ->willReturn($this->backupManagerMock);
         $this->objectManagerMock
             ->method('create')
-            ->withConsecutive([Db::class, []], [Backup::class, []])
-            ->willReturnOnConsecutiveCalls($this->backupResourceModelMock, $this->backupModelMock);
+            ->willReturnCallback(function ($arg1, $arg2) {
+                if ($arg1 == Db::class && empty($arg2)) {
+                    return $this->backupResourceModelMock;
+                } elseif ($arg1 == Backup::class && empty($arg2)) {
+                    return $this->backupModelMock;
+                }
+            });
         $this->backupModelMock->expects($this->once())
             ->method('validateUserPassword')
             ->willReturn($passwordValid);

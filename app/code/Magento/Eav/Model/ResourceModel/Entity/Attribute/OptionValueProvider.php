@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 
 declare(strict_types=1);
@@ -22,11 +22,19 @@ class OptionValueProvider
     private $connection;
 
     /**
-     * @param ResourceConnection $connection
+     * @var \Magento\Store\Model\StoreManagerInterface
      */
-    public function __construct(ResourceConnection $connection)
-    {
+    private $storeManager;
+    /**
+     * @param ResourceConnection $connection
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     */
+    public function __construct(
+        ResourceConnection $connection,
+        \Magento\Store\Model\StoreManagerInterface $storeManager
+    ) {
         $this->connection = $connection->getConnection();
+        $this->storeManager = $storeManager;
     }
 
     /**
@@ -37,16 +45,16 @@ class OptionValueProvider
      */
     public function get(int $optionId): ?string
     {
+        $storeId = $this->storeManager->getStore()->getId();
         $select = $this->connection->select()
-            ->from($this->connection->getTableName('eav_attribute_option_value'), 'value')
+            ->from($this->connection->getTableName('eav_attribute_option_value'), ['store_id', 'value'])
             ->where('option_id = ?', $optionId);
 
-        $result = $this->connection->fetchOne($select);
-
-        if ($result !== false) {
-            return $result;
+        $records = $this->connection->fetchAssoc($select);
+        if (empty($records)) {
+            return null;
         }
 
-        return null;
+        return $records[$storeId]['value'] ?? $records[0]['value'];
     }
 }

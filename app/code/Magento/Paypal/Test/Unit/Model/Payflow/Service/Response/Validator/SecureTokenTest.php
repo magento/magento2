@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -40,7 +40,6 @@ class SecureTokenTest extends TestCase
         $this->validator = new SecureToken();
         $this->payflowFacade = $this->getMockBuilder(Transparent::class)
             ->disableOriginalConstructor()
-            ->setMethods([])
             ->getMock();
     }
 
@@ -58,7 +57,7 @@ class SecureTokenTest extends TestCase
     /**
      * @return array
      */
-    public function validationDataProvider()
+    public static function validationDataProvider()
     {
         return [
             [

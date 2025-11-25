@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -46,7 +46,7 @@ class CustomerRegistryTest extends TestCase
     protected function setUp(): void
     {
         $this->customerFactory = $this->getMockBuilder(CustomerFactory::class)
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
         $objectManager = new ObjectManager($this);
@@ -56,15 +56,18 @@ class CustomerRegistryTest extends TestCase
         );
         $this->customer = $this->getMockBuilder(Customer::class)
             ->disableOriginalConstructor()
-            ->setMethods(
+            ->addMethods(
+                [
+                    'getEmail',
+                    'getWebsiteId',
+                    'setEmail',
+                    'setWebsiteId'
+                ]
+            )->onlyMethods(
                 [
                     'load',
                     'getId',
-                    'getEmail',
-                    'getWebsiteId',
                     '__wakeup',
-                    'setEmail',
-                    'setWebsiteId',
                     'loadByEmail',
                 ]
             )

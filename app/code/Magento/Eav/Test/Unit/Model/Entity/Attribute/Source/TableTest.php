@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -91,7 +91,7 @@ class TableTest extends TestCase
             ->getMock();
 
         $this->attributeOptionCollectionMock = $this->getMockBuilder(AttributeOptionCollection::class)
-            ->setMethods(['toOptionArray'])
+            ->onlyMethods(['toOptionArray'])
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -105,9 +105,10 @@ class TableTest extends TestCase
             ->getMockForAbstractClass();
 
         $this->abstractAttributeMock = $this->getMockBuilder(AbstractAttribute::class)
-            ->setMethods(
+            ->addMethods(['getStoreId'])
+            ->onlyMethods(
                 [
-                    'getFrontend', 'getAttributeCode', '__wakeup', 'getStoreId',
+                    'getFrontend', 'getAttributeCode', '__wakeup',
                     'getId', 'getIsRequired', 'getEntity', 'getBackend'
                 ]
             )
@@ -212,7 +213,7 @@ class TableTest extends TestCase
     /**
      * @return array
      */
-    public function specificOptionsProvider()
+    public static function specificOptionsProvider()
     {
         return [
             [['1', '2'], true],
@@ -270,7 +271,7 @@ class TableTest extends TestCase
     /**
      * @return array
      */
-    public function getOptionTextProvider()
+    public static function getOptionTextProvider()
     {
         return [
             [
@@ -289,25 +290,26 @@ class TableTest extends TestCase
         $attributeCode = 'attribute_code';
         $dir = Select::SQL_ASC;
         $collection = $this->getMockBuilder(AbstractCollection::class)
-            ->setMethods([ 'getSelect', 'getStoreId'])
+            ->addMethods(['getStoreId'])
+            ->onlyMethods(['getSelect'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
 
         $this->abstractAttributeMock->expects($this->any())->method('getAttributeCode')->willReturn($attributeCode);
         $entity = $this->getMockBuilder(AbstractEntity::class)
-            ->setMethods(['getLinkField'])
+            ->onlyMethods(['getLinkField'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $this->abstractAttributeMock->expects($this->once())->method('getEntity')->willReturn($entity);
         $entity->expects($this->once())->method('getLinkField')->willReturn('entity_id');
         $select = $this->getMockBuilder(Select::class)
-            ->setMethods(['joinLeft', 'getConnection', 'order'])
+            ->onlyMethods(['joinLeft', 'getConnection', 'order'])
             ->disableOriginalConstructor()
             ->getMock();
         $collection->expects($this->any())->method('getSelect')->willReturn($select);
         $select->expects($this->any())->method('joinLeft')->willReturnSelf();
         $backend = $this->getMockBuilder(AbstractBackend::class)
-            ->setMethods(['getTable'])
+            ->onlyMethods(['getTable'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $this->abstractAttributeMock->expects($this->any())->method('getBackend')->willReturn($backend);
@@ -394,7 +396,7 @@ class TableTest extends TestCase
     /**
      * @return array
      */
-    public function getAllOptionsDataProvider()
+    public static function getAllOptionsDataProvider()
     {
         return [
             [
@@ -416,6 +418,17 @@ class TableTest extends TestCase
                 false,
                 [['value' => '16', 'label' => 'black'], ['value' => '17', 'label' => 'white']],
                 [['value' => '16', 'label' => 'blck'], ['value' => '17', 'label' => 'wht']],
+                [
+                    ['label' => ' ', 'value' => ''],
+                    ['value' => '16', 'label' => 'black'],
+                    ['value' => '17', 'label' => 'white']
+                ]
+            ],
+            [
+                true,
+                true,
+                [['value' => '16', 'label' => 'default sv black'], ['value' => '17', 'label' => 'default sv white']],
+                [['value' => '16', 'label' => 'black'], ['value' => '17', 'label' => 'white']],
                 [
                     ['label' => ' ', 'value' => ''],
                     ['value' => '16', 'label' => 'black'],

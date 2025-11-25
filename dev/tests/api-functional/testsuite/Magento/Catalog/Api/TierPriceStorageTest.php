@@ -9,6 +9,9 @@ use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Api\Data\TierPriceInterface;
 use Magento\Framework\Webapi\Rest\Request;
 use Magento\TestFramework\TestCase\WebapiAbstract;
+use Magento\TestFramework\Fixture\DataFixture;
+use Magento\Catalog\Test\Fixture\Product as ProductFixture;
+use Magento\Customer\Model\Group;
 
 /**
  * Test all API calls for tier price storage.
@@ -298,6 +301,104 @@ class TierPriceStorageTest extends WebapiAbstract
         $this->assertEmpty($response);
         $this->assertCount(1, $tierPrices);
         $this->assertEquals($pricesToStore, $tierPrice);
+    }
+
+    /**
+     * Test to validate the incorrect website id.
+     */
+    #[
+        DataFixture(
+            ProductFixture::class,
+            [
+                'sku' => 'simple',
+                'website_id' => 0,
+                'tier_prices' => [
+                    [
+                        'customer_group_id' => Group::NOT_LOGGED_IN_ID,
+                        'qty' => 3.2,
+                        'value' => 6
+                    ]
+                ]
+            ]
+        )
+    ]
+    public function testCheckWebsite()
+    {
+        $serviceInfo = [
+            'rest' => [
+                'resourcePath' => '/V1/products/tier-prices',
+                'httpMethod' => Request::HTTP_METHOD_POST
+            ],
+            'soap' => [
+                'service' => self::SERVICE_NAME,
+                'serviceVersion' => self::SERVICE_VERSION,
+                'operation' => self::SERVICE_NAME . 'Update',
+            ],
+        ];
+        $tierPriceWithInvalidWebsiteId = [
+            'price' => 38.97,
+            'price_type' => TierPriceInterface::PRICE_TYPE_FIXED,
+            'website_id' => 1,
+            'sku' => self::SIMPLE_PRODUCT_SKU,
+            'customer_group' => 'ALL GROUPS',
+            'quantity' => 3,
+            'extension_attributes' => []
+        ];
+        $response = $this->_webApiCall($serviceInfo, ['prices' => [$tierPriceWithInvalidWebsiteId]]);
+        if (is_array($response) && count($response) > 0) {
+            $this->assertNotEmpty($response);
+            // phpcs:disable Generic.Files.LineLength.TooLong
+            $message = 'Invalid attribute Website ID = %websiteId. Row ID: SKU = %SKU, Website ID: %websiteId, Customer Group: %customerGroup, Quantity: %qty.';
+            $this->assertEquals($message, $response[0]['message']);
+            $this->assertEquals(['simple', '1', 'ALL GROUPS', '3'], $response[0]['parameters']);
+        }
+    }
+
+    /**
+     * Test replace method.
+     *
+     * @magentoApiDataFixture Magento/Catalog/_files/product_simple.php
+     */
+    public function testCheckNewRecords()
+    {
+        $serviceInfo = [
+            'rest' => [
+                'resourcePath' => '/V1/products/tier-prices',
+                'httpMethod' => Request::HTTP_METHOD_POST
+            ],
+            'soap' => [
+                'service' => self::SERVICE_NAME,
+                'serviceVersion' => self::SERVICE_VERSION,
+                'operation' => self::SERVICE_NAME . 'Update',
+            ],
+        ];
+
+        $newPrices = [
+            [
+                'price' => 10.31,
+                'price_type' => TierPriceInterface::PRICE_TYPE_FIXED,
+                'website_id' => 0,
+                'sku' => self::SIMPLE_PRODUCT_SKU,
+                'customer_group' => self::CUSTOMER_ALL_GROUPS_NAME,
+                'quantity' => 2
+            ],
+            [
+                'price' => 20.62,
+                'price_type' => TierPriceInterface::PRICE_TYPE_FIXED,
+                'website_id' => 1,
+                'sku' => self::SIMPLE_PRODUCT_SKU,
+                'customer_group' => self::CUSTOMER_ALL_GROUPS_NAME,
+                'quantity' => 2
+            ]
+        ];
+
+        $response = $this->_webApiCall($serviceInfo, ['prices' => $newPrices]);
+        $this->assertNotEmpty($response);
+        $message = 'We found a duplicate website, tier price, customer group and quantity: '
+            . 'Customer Group = %customerGroup, Website ID = %websiteId, Quantity = %qty. '
+            . 'Row ID: SKU = %SKU, Website ID: %websiteId, Customer Group: %customerGroup, Quantity: %qty.';
+        $this->assertEquals($message, $response[0]['message']);
+        $this->assertEquals('simple', $response[0]['parameters'][0]);
     }
 
     /**

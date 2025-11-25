@@ -131,7 +131,7 @@ class FlagManagerTest extends TestCase
      *
      * @return array
      */
-    public function flagExistDataProvider()
+    public static function flagExistDataProvider()
     {
         return [
             [true],

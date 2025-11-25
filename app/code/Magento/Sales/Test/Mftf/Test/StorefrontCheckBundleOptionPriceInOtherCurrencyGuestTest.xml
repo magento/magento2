@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright 2024 Adobe
+ * All Rights Reserved.
+ */
+ -->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontCheckBundleOptionPriceInOtherCurrencyGuestTest">
+        <annotations>
+            <stories value="Order bundle"/>
+            <title value="Bundle option price in order on Storefront"/>
+            <description value="Checks bundle option price in other currency in order on Storefront"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="AC-11749"/>
+            <useCaseId value="ACP2E-2950"/>
+        </annotations>
+        <before>
+            <!-- Set currency -->
+            <magentoCLI command="config:set currency/options/allow EUR,PLN,USD" stepKey="setCurrencyAllow"/>
+            <magentoCLI command="config:set currency/options/default PLN" stepKey="setCurrencyDisplay"/>
+
+            <actionGroup ref="AdminLoginActionGroup" stepKey="LoginAsAdmin"/>
+
+            <actionGroup ref="AdminOpenCurrencyRatesPageActionGroup" stepKey="gotToCurrencyRatesPage"/>
+            <actionGroup ref="AdminSetCurrencyRatesActionGroup" stepKey="setCurrencyRate">
+                <argument name="firstCurrency" value="USD"/>
+                <argument name="secondCurrency" value="PLN"/>
+                <argument name="rate" value="5"/>
+            </actionGroup>
+
+            <!-- Create Category -->
+            <createData entity="ApiCategory" stepKey="createCategory"/>
+
+            <!-- Create bundle Product -->
+            <createData entity="SimpleSubCategory" stepKey="createSubCategory"/>
+            <createData entity="SimpleProduct2" stepKey="simpleProduct1">
+                <field key="price">100.00</field>
+            </createData>
+            <createData entity="SimpleProduct2" stepKey="simpleProduct2">
+                <field key="price">560.00</field>
+            </createData>
+            <createData entity="BundleProductPriceViewRange" stepKey="createBundleProduct">
+                <requiredEntity createDataKey="createSubCategory"/>
+            </createData>
+            <createData entity="DropDownBundleOption" stepKey="createBundleOption1_1">
+                <requiredEntity createDataKey="createBundleProduct"/>
+                <field key="required">True</field>
+            </createData>
+            <createData entity="ApiBundleLink" stepKey="linkOptionToProduct">
+                <requiredEntity createDataKey="createBundleProduct"/>
+                <requiredEntity createDataKey="createBundleOption1_1"/>
+                <requiredEntity createDataKey="simpleProduct1"/>
+            </createData>
+            <createData entity="ApiBundleLink" stepKey="linkOptionToProduct2">
+                <requiredEntity createDataKey="createBundleProduct"/>
+                <requiredEntity createDataKey="createBundleOption1_1"/>
+                <requiredEntity createDataKey="simpleProduct2"/>
+            </createData>
+
+            <!-- Grab bundle option name for Bundle Product -->
+            <actionGroup ref="NavigateToCreatedProductEditPageActionGroup" stepKey="goToBundleProduct">
+                <argument name="product" value="$createBundleProduct$"/>
+            </actionGroup>
+            <grabTextFrom selector="{{AdminProductFormBundleSection.currentBundleOption}}" stepKey="grabBundleOption"/>
+            <assertNotEmpty stepKey="assertBundleOptionNotEmpty">
+                <actualResult type="const">$grabBundleOption</actualResult>
+            </assertNotEmpty>
+
+            <actionGroup ref="AdminClearFiltersActionGroup" stepKey="clearProductGridFilters"/>
+
+            <!-- Create Customer Account -->
+            <createData entity="Simple_US_Customer" stepKey="createCustomer"/>
+
+            <!-- Place order with bundle -->
+            <actionGroup ref="AdminNavigateToNewOrderPageExistingCustomerActionGroup" stepKey="newOrder">
+                <argument name="customer" value="$createCustomer$"/>
+            </actionGroup>
+
+            <actionGroup ref="AdminFilterProductInCreateOrderActionGroup" stepKey="filterBundleProduct">
+                <argument name="productSKU" value="$createBundleProduct.sku$"/>
+            </actionGroup>
+            <actionGroup ref="AdminAddToOrderBundleProductActionGroup" stepKey="addBundleProduct">
+                <argument name="option" value="{$grabBundleOption}"/>
+                <argument name="selectedProductName" value="$simpleProduct1.name$"/>
+                <argument name="quantity" value="2"/>
+            </actionGroup>
+
+            <actionGroup ref="FillOrderCustomerInformationActionGroup" stepKey="fillOrder">
+                <argument name="customer" value="$createCustomer$"/>
+                <argument name="address" value="US_Address_TX"/>
+            </actionGroup>
+
+            <actionGroup ref="OrderSelectFlatRateShippingActionGroup" stepKey="selectFlatRate"/>
+            <actionGroup ref="SelectCheckMoneyPaymentMethodActionGroup" stepKey="selectCheckMoneyPayment"/>
+        </before>
+        <after>
+            <deleteData createDataKey="createSubCategory" stepKey="deleteCategory1"/>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+
+            <deleteData createDataKey="simpleProduct1" stepKey="deleteProduct1"/>
+            <deleteData createDataKey="simpleProduct2" stepKey="deleteProduct2"/>
+            <deleteData createDataKey="createBundleProduct" stepKey="deleteBundleProduct"/>
+
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer" />
+            <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+
+            <magentoCLI command="config:set currency/options/default USD" stepKey="unsetCurrencyDisplay"/>
+            <magentoCLI command="config:set currency/options/allow EUR,USD" stepKey="unsetCurrencyAllow"/>
+        </after>
+
+        <!-- Submit the Order -->
+        <actionGroup ref="AdminSubmitOrderActionGroup" stepKey="submitOrder"/>
+
+        <grabTextFrom selector="|Order # (\d+)|" stepKey="orderNumber"/>
+        <grabFromCurrentUrl regex="~/order_id/(\d+)/~" stepKey="orderId"/>
+        <assertNotEmpty stepKey="assertOrderIdIsNotEmpty">
+            <actualResult type="const">$orderNumber</actualResult>
+        </assertNotEmpty>
+
+        <!-- Find the Order on frontend > Navigate to: Orders and Returns -->
+        <amOnPage url="{{StorefrontGuestOrderSearchPage.url}}" stepKey="amOnOrdersAndReturns"/>
+        <waitForPageLoad stepKey="waiForStorefrontPage"/>
+
+        <!-- Fill the form with correspondent Order data -->
+        <actionGroup ref="StorefrontFillOrdersAndReturnsFormActionGroup" stepKey="fillOrder">
+            <argument name="orderNumber" value="{$orderNumber}"/>
+            <argument name="customer" value="$createCustomer$"/>
+        </actionGroup>
+
+        <!-- Click on the "Continue" button -->
+        <click selector="{{StorefrontGuestOrderSearchSection.continue}}" stepKey="clickContinue"/>
+        <waitForPageLoad stepKey="waitForPageLoad"/>
+
+        <!-- Assert Bundle Options Price -->
+        <see userInput="PLN 500.00" selector="{{StorefrontOrderDetailsSection.bundleOptionPrice}}" stepKey="seeBundleOptionPrice"/>
+
+        <!-- Assert Order Grand Total -->
+        <see userInput="PLN 1,050.00" selector="{{StorefrontOrderDetailsSection.grandTotalPrice}}" stepKey="assertSalesOrderGrandTotal"/>
+    </test>
+</tests>

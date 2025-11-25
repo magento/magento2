@@ -125,7 +125,7 @@ class AddressAttributeFilterTest extends TestCase
      *
      * @return array
      */
-    public function addressesDataProvider(): array
+    public static function addressesDataProvider(): array
     {
         return [
             'address_in_single_allowed_country' => [1, ['US']],

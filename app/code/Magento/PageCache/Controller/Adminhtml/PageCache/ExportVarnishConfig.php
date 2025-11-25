@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\PageCache\Controller\Adminhtml\PageCache;
 
@@ -53,6 +53,9 @@ class ExportVarnishConfig extends \Magento\Backend\App\Action implements HttpGet
         $fileName = 'varnish.vcl';
         $varnishVersion = $this->getRequest()->getParam('varnish');
         switch ($varnishVersion) {
+            case 7:
+                $content = $this->config->getVclFile(\Magento\PageCache\Model\Config::VARNISH_7_CONFIGURATION_PATH);
+                break;
             case 6:
                 $content = $this->config->getVclFile(\Magento\PageCache\Model\Config::VARNISH_6_CONFIGURATION_PATH);
                 break;

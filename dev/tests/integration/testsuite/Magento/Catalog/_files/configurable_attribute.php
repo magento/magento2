@@ -7,7 +7,7 @@
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\Eav\Api\AttributeRepositoryInterface;
 
-$eavConfig = Bootstrap::getObjectManager()->get(\Magento\Eav\Model\Config::class);
+$eavConfig = Bootstrap::getObjectManager()->create(\Magento\Eav\Model\Config::class);
 $attribute = $eavConfig->getAttribute('catalog_product', 'test_configurable');
 
 $eavConfig->clear();

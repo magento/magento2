@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -67,7 +67,7 @@ class UploadTest extends TestCase
 
         $this->fileUploaderFactory = $this->getMockBuilder(FileUploaderFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
 
         $this->addressMetadataService = $this->getMockBuilder(AddressMetadataInterface::class)

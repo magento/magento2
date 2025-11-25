@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -49,7 +49,7 @@ class BundleItems implements ResolverInterface
         Collection $bundleOptionCollection,
         ValueFactory $valueFactory,
         MetadataPool $metadataPool,
-        CollectionFactory $bundleOptionCollectionFactory = null
+        ?CollectionFactory $bundleOptionCollectionFactory = null
     ) {
         $this->bundleOptionCollectionFactory = $bundleOptionCollectionFactory
             ?: ObjectManager::getInstance()->get(CollectionFactory::class);
@@ -60,7 +60,7 @@ class BundleItems implements ResolverInterface
     /**
      * @inheritDoc
      */
-    public function resolve(Field $field, $context, ResolveInfo $info, array $value = null, array $args = null)
+    public function resolve(Field $field, $context, ResolveInfo $info, ?array $value = null, ?array $args = null)
     {
         $linkField = $this->metadataPool->getMetadata(ProductInterface::class)->getLinkField();
         if ($value['type_id'] !== Type::TYPE_CODE

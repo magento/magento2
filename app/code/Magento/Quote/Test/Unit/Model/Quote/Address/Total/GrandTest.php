@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -13,6 +13,7 @@ use Magento\Quote\Api\Data\ShippingAssignmentInterface;
 use Magento\Quote\Model\Quote;
 use Magento\Quote\Model\Quote\Address\Total;
 use Magento\Quote\Model\Quote\Address\Total\Grand;
+use Magento\Quote\Test\Unit\Helper\TotalTestHelper;
 use PHPUnit\Framework\MockObject\MockObject as ObjectMock;
 use PHPUnit\Framework\TestCase;
 
@@ -36,10 +37,7 @@ class GrandTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->priceRounder = $this->getMockBuilder(PriceRounder::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['roundPrice'])
-            ->getMockForAbstractClass();
+        $this->priceRounder = $this->createPartialMock(\Magento\Directory\Model\PriceCurrency::class, ['roundPrice']);
 
         $helper = new ObjectManager($this);
         $this->model = $helper->getObject(
@@ -64,22 +62,21 @@ class GrandTest extends TestCase
             ->method('roundPrice')
             ->willReturnOnConsecutiveCalls($grandTotal + 2, $grandTotalBase + 2);
 
-        $totalMock = $this->getMockBuilder(Total::class)
-            ->addMethods(['setGrandTotal', 'setBaseGrandTotal', 'getGrandTotal', 'getBaseGrandTotal'])
-            ->onlyMethods(['getAllTotalAmounts', 'getAllBaseTotalAmounts'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $totalMock->expects($this->once())->method('getGrandTotal')->willReturn(2);
-        $totalMock->expects($this->once())->method('getBaseGrandTotal')->willReturn(2);
-        $totalMock->expects($this->once())->method('getAllTotalAmounts')->willReturn($totals);
-        $totalMock->expects($this->once())->method('getAllBaseTotalAmounts')->willReturn($totalsBase);
-        $totalMock->expects($this->once())->method('setGrandTotal')->with($grandTotal + 2);
-        $totalMock->expects($this->once())->method('setBaseGrandTotal')->with($grandTotalBase + 2);
+        $totalMock = new TotalTestHelper();
+        $totalMock->setGrandTotal(2);
+        $totalMock->setBaseGrandTotal(2);
+        // Inject amounts via data to be read by getAllTotalAmounts methods
+        foreach ($totals as $i => $val) {
+            $totalMock->setTotalAmount('t' . $i, $val);
+            $totalMock->setBaseTotalAmount('t' . $i, $totalsBase[$i]);
+        }
 
         $this->model->collect(
             $this->createMock(Quote::class),
-            $this->getMockForAbstractClass(ShippingAssignmentInterface::class),
+            $this->createMock(ShippingAssignmentInterface::class),
             $totalMock
         );
+        $this->assertEquals($grandTotal + 2, $totalMock->getGrandTotal());
+        $this->assertEquals($grandTotalBase + 2, $totalMock->getBaseGrandTotal());
     }
 }

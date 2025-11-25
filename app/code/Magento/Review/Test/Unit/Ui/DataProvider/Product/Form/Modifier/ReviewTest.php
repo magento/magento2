@@ -1,20 +1,20 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Review\Test\Unit\Ui\DataProvider\Product\Form\Modifier;
 
-use Magento\Catalog\Test\Unit\Ui\DataProvider\Product\Form\Modifier\AbstractModifierTest;
+use Magento\Catalog\Test\Unit\Ui\DataProvider\Product\Form\Modifier\AbstractModifierTestCase;
 use Magento\Framework\Module\Manager as ModuleManager;
 use Magento\Framework\UrlInterface;
 use Magento\Review\Ui\DataProvider\Product\Form\Modifier\Review;
 use Magento\Ui\DataProvider\Modifier\ModifierInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 
-class ReviewTest extends AbstractModifierTest
+class ReviewTest extends AbstractModifierTestCase
 {
     /**
      * @var UrlInterface|MockObject
@@ -29,8 +29,7 @@ class ReviewTest extends AbstractModifierTest
     protected function setUp(): void
     {
         parent::setUp();
-        $this->urlBuilderMock = $this->getMockBuilder(UrlInterface::class)
-            ->getMockForAbstractClass();
+        $this->urlBuilderMock = $this->createMock(UrlInterface::class);
         $this->moduleManagerMock = $this->createMock(ModuleManager::class);
     }
 
@@ -60,17 +59,13 @@ class ReviewTest extends AbstractModifierTest
 
     public function testModifyMetaDoesNotAddReviewSectionForNewProduct()
     {
-        $this->productMock->expects($this->once())
-            ->method('getId');
-
+        // productMock->getId() will return null by default
         $this->assertSame([], $this->getModel()->modifyMeta([]));
     }
 
     public function testModifyMetaDoesNotAddReviewSectionIfReviewModuleOutputIsDisabled()
     {
-        $this->productMock->expects($this->once())
-            ->method('getId')
-            ->willReturn(1);
+        $this->productMock->setId(1);
 
         $this->moduleManagerMock->expects($this->any())
             ->method('isOutputEnabled')
@@ -82,9 +77,7 @@ class ReviewTest extends AbstractModifierTest
 
     public function testModifyMetaAddsReviewSectionForExistingProductIfReviewModuleOutputIsEnabled()
     {
-        $this->productMock->expects($this->once())
-            ->method('getId')
-            ->willReturn(1);
+        $this->productMock->setId(1);
 
         $this->moduleManagerMock->expects($this->any())
             ->method('isOutputEnabled')
@@ -98,9 +91,7 @@ class ReviewTest extends AbstractModifierTest
     {
         $productId = 1;
 
-        $this->productMock->expects($this->exactly(3))
-            ->method('getId')
-            ->willReturn($productId);
+        $this->productMock->setId($productId);
 
         $this->assertArrayHasKey($productId, $this->getModel()->modifyData([]));
         $this->assertArrayHasKey(Review::DATA_SOURCE_DEFAULT, $this->getModel()->modifyData([])[$productId]);

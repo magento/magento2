@@ -1,9 +1,7 @@
 <?php
 /**
- * Scoped config data collection
- *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Store\Model\ResourceModel\Config\Collection;
 
@@ -40,7 +38,7 @@ class Scoped extends \Magento\Framework\Model\ResourceModel\Db\Collection\Abstra
         \Magento\Framework\Event\ManagerInterface $eventManager,
         \Magento\Config\Model\ResourceModel\Config\Data $resource,
         $scope,
-        \Magento\Framework\DB\Adapter\AdapterInterface $connection = null,
+        ?\Magento\Framework\DB\Adapter\AdapterInterface $connection = null,
         $scopeId = null
     ) {
         $this->_scope = $scope;

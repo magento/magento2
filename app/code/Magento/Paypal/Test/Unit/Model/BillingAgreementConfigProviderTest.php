@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -35,12 +35,12 @@ class BillingAgreementConfigProviderTest extends TestCase
     protected function setUp(): void
     {
         $this->currentCustomerMock = $this->getMockBuilder(CurrentCustomer::class)
-            ->setMethods(['getCustomerId'])
+            ->onlyMethods(['getCustomerId'])
             ->disableOriginalConstructor()
             ->getMock();
 
         $this->agreementFactoryMock = $this->getMockBuilder(AgreementFactory::class)
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
 

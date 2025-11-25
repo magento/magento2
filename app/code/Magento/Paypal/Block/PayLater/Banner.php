@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2021 Adobe
+ * All Rights Reserved.
  */
 
 declare(strict_types=1);
@@ -57,7 +57,7 @@ class Banner extends Template
         PayLaterConfig $payLaterConfig,
         SdkUrl $sdkUrl,
         array $data = [],
-        PaypalConfig $paypalConfig = null
+        ?PaypalConfig $paypalConfig = null
     ) {
         parent::__construct($context, $data);
         $this->payLaterConfig = $payLaterConfig;
@@ -97,7 +97,8 @@ class Banner extends Template
         $config['displayAmount'] = !$displayAmount || $this->payLaterConfig->isPPBillingAgreementEnabled()
             ? false : true;
         $config['dataAttributes'] = [
-            'data-partner-attribution-id' => $this->paypalConfig->getBuildNotationCode()
+            'data-partner-attribution-id' => $this->paypalConfig->getBuildNotationCode(),
+            'data-csp-nonce' => $this->paypalConfig->getCspNonce(),
         ];
 
         //Extend block component attributes with defaults

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -73,7 +73,7 @@ class FilterFactoryTest extends TestCase
     {
         $contextMock = $this->getMockForAbstractClass(ContextInterface::class);
         $attributeMock = $this->getMockBuilder(ProductAttributeInterface::class)
-            ->setMethods(['usesSource', 'getSource'])
+            ->addMethods(['usesSource', 'getSource'])
             ->getMockForAbstractClass();
         $attributeMock->method('getAttributeCode')->willReturn(self::STUB_ATTRIBUTE['attribute_code']);
         $attributeMock->method('getDefaultFrontendLabel')

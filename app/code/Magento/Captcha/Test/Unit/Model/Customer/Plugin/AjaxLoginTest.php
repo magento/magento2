@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -13,13 +13,18 @@ use Magento\Captcha\Model\DefaultModel;
 use Magento\Checkout\Model\Session;
 use Magento\Customer\Controller\Ajax\Login;
 use Magento\Framework\App\Request\Http;
+use Magento\Framework\Controller\Result\Json as ResultJson;
 use Magento\Framework\Controller\Result\JsonFactory;
 use Magento\Framework\Serialize\Serializer\Json;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 class AjaxLoginTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var MockObject|Session
      */
@@ -63,7 +68,7 @@ class AjaxLoginTest extends TestCase
     /**
      * @var array
      */
-    protected $formIds = ['user_login'];
+    protected static $formIds = ['user_login'];
 
     /**
      * @var AjaxLogin
@@ -75,17 +80,14 @@ class AjaxLoginTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->sessionManagerMock = $this->getMockBuilder(Session::class)
-            ->addMethods(['setUsername'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->sessionManagerMock = $this->createPartialMockWithReflection(Session::class, ['setUsername']);
         $this->captchaHelperMock = $this->createMock(Data::class);
         $this->captchaMock = $this->createMock(DefaultModel::class);
         $this->jsonFactoryMock = $this->createPartialMock(
             JsonFactory::class,
             ['create']
         );
-        $this->resultJsonMock = $this->createMock(\Magento\Framework\Controller\Result\Json::class);
+        $this->resultJsonMock = $this->createMock(ResultJson::class);
         $this->requestMock = $this->createMock(Http::class);
         $this->loginControllerMock = $this->createMock(Login::class);
 
@@ -103,7 +105,7 @@ class AjaxLoginTest extends TestCase
             $this->captchaHelperMock,
             $this->sessionManagerMock,
             $this->jsonFactoryMock,
-            $this->formIds,
+            self::$formIds,
             $this->serializerMock
         );
     }
@@ -118,7 +120,7 @@ class AjaxLoginTest extends TestCase
         $requestData = [
             'username' => $username,
             'captcha_string' => $captchaString,
-            'captcha_form_id' => $this->formIds[0]
+            'captcha_form_id' => self::$formIds[0]
         ];
         $requestContent = json_encode($requestData);
 
@@ -153,7 +155,7 @@ class AjaxLoginTest extends TestCase
         $requestData = [
             'username' => $username,
             'captcha_string' => $captchaString,
-            'captcha_form_id' => $this->formIds[0]
+            'captcha_form_id' => self::$formIds[0]
         ];
         $requestContent = json_encode($requestData);
 
@@ -180,10 +182,10 @@ class AjaxLoginTest extends TestCase
     }
 
     /**
-     * @dataProvider aroundExecuteCaptchaIsNotRequired
      * @param string $username
      * @param array $requestContent
      */
+    #[DataProvider('aroundExecuteCaptchaIsNotRequired')]
     public function testAroundExecuteCaptchaIsNotRequired($username, $requestContent)
     {
         $this->requestMock->expects($this->once())->method('getContent')
@@ -208,32 +210,32 @@ class AjaxLoginTest extends TestCase
     /**
      * @return array
      */
-    public function aroundExecuteCaptchaIsNotRequired(): array
+    public static function aroundExecuteCaptchaIsNotRequired(): array
     {
         return [
             [
                 'username' => 'name',
-                'requestData' => ['username' => 'name', 'captcha_string' => 'string'],
+                'requestContent' => ['username' => 'name', 'captcha_string' => 'string'],
             ],
             [
                 'username' => 'name',
-                'requestData' => [
+                'requestContent' => [
                     'username' => 'name',
                     'captcha_string' => 'string',
-                    'captcha_form_id' => $this->formIds[0]
+                    'captcha_form_id' => self::$formIds[0]
                 ],
             ],
             [
                 'username' => null,
-                'requestData' => [
+                'requestContent' => [
                     'username' => null,
                     'captcha_string' => 'string',
-                    'captcha_form_id' => $this->formIds[0]
+                    'captcha_form_id' => self::$formIds[0]
                 ],
             ],
             [
                 'username' => 'name',
-                'requestData' => [
+                'requestContent' => [
                     'username' => 'name',
                     'captcha_string' => 'string',
                     'captcha_form_id' => null

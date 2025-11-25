@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -149,19 +149,26 @@ class FilesystemTest extends TestCase
         $this->shell
             ->expects($this->exactly(4))
             ->method('execute')
-            ->withConsecutive([$cacheFlushCmd], [$setupDiCompileCmd], [$cacheFlushCmd], [$staticContentDeployCmd])
-            ->willReturn("Compilation complete");
+            ->willReturnCallback(function ($arg) use ($cacheFlushCmd, $setupDiCompileCmd, $staticContentDeployCmd) {
+                if ($arg == $cacheFlushCmd ||
+                    $arg == $setupDiCompileCmd ||
+                    $arg == $staticContentDeployCmd) {
+                    return "Compilation complete";
+                }
+            });
 
         $this->output
             ->method('writeln')
-            ->withConsecutive(
-                ['Starting compilation'],
-                [],
-                ['Compilation complete'],
-                ['Starting deployment of static content'],
-                [],
-                ['Deployment of static content complete']
-            );
+            ->willReturnCallback(function ($arg) {
+                if ($arg == 'Starting compilation' ||
+                    $arg == 'Compilation complete' ||
+                    $arg == 'Starting deployment of static content' ||
+                    $arg == 'Deployment of static content complete' ||
+                    empty($arg)
+                ) {
+                    return null;
+                }
+            });
 
         $this->deployFilesystem->regenerateStatic($this->output);
     }
@@ -187,8 +194,13 @@ class FilesystemTest extends TestCase
         $this->shell
             ->expects($this->exactly(3))
             ->method('execute')
-            ->withConsecutive([$cacheFlushCmd], [$setupDiCompileCmd], [$cacheFlushCmd], [$staticContentDeployCmd])
-            ->willReturn("Compilation complete");
+            ->willReturnCallback(function ($arg) use ($cacheFlushCmd, $setupDiCompileCmd, $staticContentDeployCmd) {
+                if ($arg == $cacheFlushCmd ||
+                    $arg == $setupDiCompileCmd ||
+                    $arg == $staticContentDeployCmd) {
+                    return "Compilation complete";
+                }
+            });
 
         $this->initAdminLocaleMock('en_US');
 
@@ -216,8 +228,13 @@ class FilesystemTest extends TestCase
         $this->shell
             ->expects($this->exactly(3))
             ->method('execute')
-            ->withConsecutive([$cacheFlushCmd], [$setupDiCompileCmd], [$cacheFlushCmd], [$staticContentDeployCmd])
-            ->willReturn("Compilation complete");
+            ->willReturnCallback(function ($arg) use ($cacheFlushCmd, $setupDiCompileCmd, $staticContentDeployCmd) {
+                if ($arg == $cacheFlushCmd ||
+                    $arg == $setupDiCompileCmd ||
+                    $arg == $staticContentDeployCmd) {
+                    return "Compilation complete";
+                }
+            });
 
         $this->initAdminLocaleMock(';echo');
 

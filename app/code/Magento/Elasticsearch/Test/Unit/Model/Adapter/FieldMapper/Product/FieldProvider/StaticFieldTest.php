@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -10,6 +10,7 @@ namespace Magento\Elasticsearch\Test\Unit\Model\Adapter\FieldMapper\Product\Fiel
 use Magento\Eav\Model\Config;
 use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
 use Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\AttributeAdapter;
+use Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\AttributeFieldsMappingProcessorInterface;
 use Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\AttributeProvider;
 use Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider\FieldIndex\ConverterInterface
     as IndexTypeConverterInterface;
@@ -25,6 +26,7 @@ use Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider\Static
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Unit tests for \Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider\StaticField class.
@@ -72,36 +74,41 @@ class StaticFieldTest extends TestCase
     private $fieldNameResolver;
 
     /**
+     * @var AttributeFieldsMappingProcessorInterface|MockObject
+     */
+    private $attributeFieldsMappingProcessorMock;
+
+    /**
      * @inheritdoc
      */
     protected function setUp(): void
     {
         $this->eavConfig = $this->getMockBuilder(Config::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getEntityAttributes'])
+            ->onlyMethods(['getEntityAttributes'])
             ->getMock();
-        $this->fieldTypeConverter = $this->getMockBuilder(FieldTypeConverterInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-        $this->indexTypeConverter = $this->getMockBuilder(IndexTypeConverterInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->fieldTypeConverter = $this->createMock(FieldTypeConverterInterface::class);
+        $this->indexTypeConverter = $this->createMock(IndexTypeConverterInterface::class);
         $this->attributeAdapterProvider = $this->getMockBuilder(AttributeProvider::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getByAttributeCode'])
+            ->onlyMethods(['getByAttributeCode'])
             ->getMock();
         $this->fieldTypeResolver = $this->getMockBuilder(FieldTypeResolver::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getFieldType'])
+            ->onlyMethods(['getFieldType'])
             ->getMock();
         $this->fieldIndexResolver = $this->getMockBuilder(FieldIndexResolver::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getFieldIndex'])
+            ->onlyMethods(['getFieldIndex'])
             ->getMock();
         $this->fieldNameResolver = $this->getMockBuilder(FieldNameResolver::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getFieldName'])
+            ->onlyMethods(['getFieldName'])
             ->getMock();
+        
+        $this->attributeFieldsMappingProcessorMock = $this->createMock(
+            AttributeFieldsMappingProcessorInterface::class
+        );
 
         $objectManager = new ObjectManagerHelper($this);
 
@@ -116,6 +123,7 @@ class StaticFieldTest extends TestCase
                 'fieldTypeResolver' => $this->fieldTypeResolver,
                 'fieldNameResolver' => $this->fieldNameResolver,
                 'excludedAttributes' => ['price'],
+                'attributeFieldsMappingProcessor' => $this->attributeFieldsMappingProcessorMock
             ]
         );
     }
@@ -132,12 +140,13 @@ class StaticFieldTest extends TestCase
      * @param string $compositeFieldName
      * @param string $sortFieldName
      * @param array $expected
+     * @param bool $isProcessed
      * @return void
-     * @dataProvider attributeProvider
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
+    #[DataProvider('attributeProvider')]
     public function testGetAllAttributesTypes(
         string $attributeCode,
         string $inputType,
@@ -149,8 +158,12 @@ class StaticFieldTest extends TestCase
         string $fieldName,
         string $compositeFieldName,
         string $sortFieldName,
-        array $expected
+        array $expected,
+        bool $isProcessed = true
     ): void {
+        $this->attributeFieldsMappingProcessorMock->expects($isProcessed ? $this->once() : $this->never())
+            ->method('process')
+            ->willReturnArgument(1);
         $this->fieldTypeResolver->expects($this->any())
             ->method('getFieldType')
             ->willReturn($inputType);
@@ -184,10 +197,7 @@ class StaticFieldTest extends TestCase
                 }
             );
 
-        $productAttributeMock = $this->getMockBuilder(AbstractAttribute::class)
-            ->setMethods(['getAttributeCode'])
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $productAttributeMock = $this->createPartialMock(AbstractAttribute::class, ['getAttributeCode']);
         $productAttributeMock->expects($this->any())
             ->method('getAttributeCode')
             ->willReturn($attributeCode);
@@ -196,7 +206,7 @@ class StaticFieldTest extends TestCase
 
         $attributeMock = $this->getMockBuilder(AttributeAdapter::class)
             ->disableOriginalConstructor()
-            ->setMethods(['isComplexType', 'getAttributeCode', 'isSortable', 'isTextType'])
+            ->onlyMethods(['isComplexType', 'getAttributeCode', 'isSortable', 'isTextType'])
             ->getMock();
         $attributeMock->expects($this->any())
             ->method('isComplexType')
@@ -244,7 +254,7 @@ class StaticFieldTest extends TestCase
      * @return array
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function attributeProvider(): array
+    public static function attributeProvider(): array
     {
         return [
             [
@@ -403,6 +413,7 @@ class StaticFieldTest extends TestCase
                         'index' => 'no',
                     ],
                 ],
+                false
             ],
         ];
     }

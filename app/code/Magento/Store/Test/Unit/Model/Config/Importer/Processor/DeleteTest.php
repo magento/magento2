@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -124,7 +124,7 @@ class DeleteTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $this->groupCollectionMock = $this->getMockBuilder(Collection::class)
-            ->setMethods(['getIterator', 'addFieldToFilter'])
+            ->onlyMethods(['getIterator', 'addFieldToFilter'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->groupMock = $this->getMockBuilder(Group::class)

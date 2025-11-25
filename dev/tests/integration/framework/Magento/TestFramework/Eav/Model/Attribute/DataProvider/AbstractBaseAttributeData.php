@@ -20,7 +20,7 @@ abstract class AbstractBaseAttributeData
      *
      * @var array
      */
-    protected $defaultAttributePostData = [
+    protected static $defaultAttributePostData = [
         'active_tab' => 'main',
         'frontend_label' => [
             Store::DEFAULT_STORE_ID => 'Test attribute name',
@@ -51,7 +51,7 @@ abstract class AbstractBaseAttributeData
      */
     public function __construct()
     {
-        $this->defaultAttributePostData['frontend_input'] = $this->getFrontendInput();
+        static::$defaultAttributePostData['frontend_input'] = static::getFrontendInput();
     }
 
     /**
@@ -59,47 +59,48 @@ abstract class AbstractBaseAttributeData
      *
      * @return array
      */
-    public function getAttributeData(): array
+    public static function getAttributeData(): array
     {
+        static::$defaultAttributePostData['frontend_input'] = static::getFrontendInput();
         return [
-            "{$this->getFrontendInput()}_with_required_fields" => [
-                $this->defaultAttributePostData,
+            "{static::getFrontendInput()}_with_required_fields" => [
+                static::$defaultAttributePostData,
             ],
-            "{$this->getFrontendInput()}_with_store_view_scope" => [
-                $this->defaultAttributePostData,
+            "{static::getFrontendInput()}_with_store_view_scope" => [
+                static::$defaultAttributePostData,
             ],
-            "{$this->getFrontendInput()}_with_global_scope" => [
-                array_merge($this->defaultAttributePostData, ['is_global' => ScopedAttributeInterface::SCOPE_GLOBAL]),
+            "{static::getFrontendInput()}_with_global_scope" => [
+                array_merge(static::$defaultAttributePostData, ['is_global' => ScopedAttributeInterface::SCOPE_GLOBAL]),
             ],
-            "{$this->getFrontendInput()}_with_website_scope" => [
-                array_merge($this->defaultAttributePostData, ['is_global' => ScopedAttributeInterface::SCOPE_WEBSITE]),
+            "{static::getFrontendInput()}_with_website_scope" => [
+                array_merge(static::$defaultAttributePostData, ['is_global' => ScopedAttributeInterface::SCOPE_WEBSITE]),
             ],
-            "{$this->getFrontendInput()}_with_attribute_code" => [
-                array_merge($this->defaultAttributePostData, ['attribute_code' => 'test_custom_attribute_code']),
+            "{static::getFrontendInput()}_with_attribute_code" => [
+                array_merge(static::$defaultAttributePostData, ['attribute_code' => 'test_custom_attribute_code']),
             ],
-            "{$this->getFrontendInput()}_with_default_value" => [
-                array_merge($this->defaultAttributePostData, ['default_value_text' => 'Default attribute value']),
+            "{static::getFrontendInput()}_with_default_value" => [
+                array_merge(static::$defaultAttributePostData, ['default_value_text' => 'Default attribute value']),
             ],
-            "{$this->getFrontendInput()}_without_default_value" => [
-                $this->defaultAttributePostData,
+            "{static::getFrontendInput()}_without_default_value" => [
+                static::$defaultAttributePostData,
             ],
-            "{$this->getFrontendInput()}_with_unique_value" => [
-                array_merge($this->defaultAttributePostData, ['is_unique' => '1']),
+            "{static::getFrontendInput()}_with_unique_value" => [
+                array_merge(static::$defaultAttributePostData, ['is_unique' => '1']),
             ],
-            "{$this->getFrontendInput()}_without_unique_value" => [
-                $this->defaultAttributePostData,
+            "{static::getFrontendInput()}_without_unique_value" => [
+                static::$defaultAttributePostData,
             ],
-            "{$this->getFrontendInput()}_with_enabled_add_to_column_options" => [
-                array_merge($this->defaultAttributePostData, ['is_used_in_grid' => '1']),
+            "{static::getFrontendInput()}_with_enabled_add_to_column_options" => [
+                array_merge(static::$defaultAttributePostData, ['is_used_in_grid' => '1']),
             ],
-            "{$this->getFrontendInput()}_without_enabled_add_to_column_options" => [
-                array_merge($this->defaultAttributePostData, ['is_used_in_grid' => '0']),
+            "{static::getFrontendInput()}_without_enabled_add_to_column_options" => [
+                array_merge(static::$defaultAttributePostData, ['is_used_in_grid' => '0']),
             ],
-            "{$this->getFrontendInput()}_with_enabled_use_in_filter_options" => [
-                $this->defaultAttributePostData,
+            "{static::getFrontendInput()}_with_enabled_use_in_filter_options" => [
+                static::$defaultAttributePostData,
             ],
-            "{$this->getFrontendInput()}_without_enabled_use_in_filter_options" => [
-                array_merge($this->defaultAttributePostData, ['is_filterable_in_grid' => '0']),
+            "{static::getFrontendInput()}_without_enabled_use_in_filter_options" => [
+                array_merge(static::$defaultAttributePostData, ['is_filterable_in_grid' => '0']),
             ],
         ];
     }
@@ -109,18 +110,19 @@ abstract class AbstractBaseAttributeData
      *
      * @return array
      */
-    public function getAttributeDataWithErrorMessage(): array
+    public static function getAttributeDataWithErrorMessage(): array
     {
+        static::$defaultAttributePostData['frontend_input'] = static::getFrontendInput();
         $wrongAttributeCode = 'Attribute code "????" is invalid. Please use only letters (a-z or A-Z), numbers ';
         $wrongAttributeCode .= '(0-9) or underscore (_) in this field, and the first character should be a letter.';
 
         return [
-            "{$this->getFrontendInput()}_with_wrong_frontend_input" => [
-                array_merge($this->defaultAttributePostData, ['frontend_input' => 'wrong_input_type']),
+            "{static::getFrontendInput()}_with_wrong_frontend_input" => [
+                array_merge(static::$defaultAttributePostData, ['frontend_input' => 'wrong_input_type']),
                 (string)__('Input type "wrong_input_type" not found in the input types list.')
             ],
-            "{$this->getFrontendInput()}_with_wrong_attribute_code" => [
-                array_merge($this->defaultAttributePostData, ['attribute_code' => '????']),
+            "{static::getFrontendInput()}_with_wrong_attribute_code" => [
+                array_merge(static::$defaultAttributePostData, ['attribute_code' => '????']),
                 (string)__($wrongAttributeCode)
             ],
         ];
@@ -131,82 +133,83 @@ abstract class AbstractBaseAttributeData
      *
      * @return array
      */
-    public function getAttributeDataWithCheckArray(): array
+    public static function getAttributeDataWithCheckArray(): array
     {
+        static::$defaultAttributePostData['frontend_input'] = static::getFrontendInput();
         return array_merge_recursive(
-            $this->getAttributeData(),
+            static::getAttributeData(),
             [
-                "{$this->getFrontendInput()}_with_required_fields" => [
+                "{static::getFrontendInput()}_with_required_fields" => [
                     [
                         'attribute_code' => 'test_attribute_name',
                     ],
                 ],
-                "{$this->getFrontendInput()}_with_store_view_scope" => [
+                "{static::getFrontendInput()}_with_store_view_scope" => [
                     [
                         'attribute_code' => 'test_attribute_name',
                         'is_global' => ScopedAttributeInterface::SCOPE_STORE,
                     ],
                 ],
-                "{$this->getFrontendInput()}_with_global_scope" => [
+                "{static::getFrontendInput()}_with_global_scope" => [
                     [
                         'attribute_code' => 'test_attribute_name',
                         'is_global' => ScopedAttributeInterface::SCOPE_GLOBAL,
                     ],
                 ],
-                "{$this->getFrontendInput()}_with_website_scope" => [
+                "{static::getFrontendInput()}_with_website_scope" => [
                     [
                         'attribute_code' => 'test_attribute_name',
                         'is_global' => ScopedAttributeInterface::SCOPE_WEBSITE,
                     ],
                 ],
-                "{$this->getFrontendInput()}_with_attribute_code" => [
+                "{static::getFrontendInput()}_with_attribute_code" => [
                     [
                         'attribute_code' => 'test_custom_attribute_code',
                     ],
                 ],
-                "{$this->getFrontendInput()}_with_default_value" => [
+                "{static::getFrontendInput()}_with_default_value" => [
                     [
                         'attribute_code' => 'test_attribute_name',
                         'default_value' => 'Default attribute value',
                     ],
                 ],
-                "{$this->getFrontendInput()}_without_default_value" => [
+                "{static::getFrontendInput()}_without_default_value" => [
                     [
                         'attribute_code' => 'test_attribute_name',
                         'default_value_text' => '',
                     ],
                 ],
-                "{$this->getFrontendInput()}_with_unique_value" => [
+                "{static::getFrontendInput()}_with_unique_value" => [
                     [
                         'attribute_code' => 'test_attribute_name',
                         'is_unique' => '1',
                     ],
                 ],
-                "{$this->getFrontendInput()}_without_unique_value" => [
+                "{static::getFrontendInput()}_without_unique_value" => [
                     [
                         'attribute_code' => 'test_attribute_name',
                         'is_unique' => '0',
                     ],
                 ],
-                "{$this->getFrontendInput()}_with_enabled_add_to_column_options" => [
+                "{static::getFrontendInput()}_with_enabled_add_to_column_options" => [
                     [
                         'attribute_code' => 'test_attribute_name',
                         'is_used_in_grid' => '1',
                     ],
                 ],
-                "{$this->getFrontendInput()}_without_enabled_add_to_column_options" => [
+                "{static::getFrontendInput()}_without_enabled_add_to_column_options" => [
                     [
                         'attribute_code' => 'test_attribute_name',
                         'is_used_in_grid' => false,
                     ],
                 ],
-                "{$this->getFrontendInput()}_with_enabled_use_in_filter_options" => [
+                "{static::getFrontendInput()}_with_enabled_use_in_filter_options" => [
                     [
                         'attribute_code' => 'test_attribute_name',
                         'is_filterable_in_grid' => '1',
                     ],
                 ],
-                "{$this->getFrontendInput()}_without_enabled_use_in_filter_options" => [
+                "{static::getFrontendInput()}_without_enabled_use_in_filter_options" => [
                     [
                         'attribute_code' => 'test_attribute_name',
                         'is_filterable_in_grid' => false,
@@ -221,49 +224,50 @@ abstract class AbstractBaseAttributeData
      *
      * @return array
      */
-    public function getUpdateProvider(): array
+    public static function getUpdateProvider(): array
     {
-        $frontendInput = $this->getFrontendInput();
+        static::$defaultAttributePostData['frontend_input'] = static::getFrontendInput();
+        $frontendInput = static::getFrontendInput();
         return [
             "{$frontendInput}_update_all_fields" => [
-                'post_data' => $this->getUpdatePostData(),
-                'expected_data' => $this->getUpdateExpectedData(),
+                'postData' => static::getUpdatePostData(),
+                'expectedData' => static::getUpdateExpectedData(),
             ],
             "{$frontendInput}_other_is_user_defined" => [
-                'post_data' => [
+                'postData' => [
                     'is_user_defined' => '2',
                 ],
-                'expected_data' => [
+                'expectedData' => [
                     'is_user_defined' => '1',
                 ],
             ],
             "{$frontendInput}_with_is_global_null" => [
-                'post_data' => [
+                'postData' => [
                     'is_global' => null,
                 ],
-                'expected_data' => [
+                'expectedData' => [
                     'is_global' => ScopedAttributeInterface::SCOPE_GLOBAL,
                 ],
             ],
             "{$frontendInput}_is_visible_in_advanced_search" => [
-                'post_data' => [
+                'postData' => [
                     'is_searchable' => '0',
                     'is_visible_in_advanced_search' => '1',
                 ],
-                'expected_data' => [
+                'expectedData' => [
                     'is_searchable' => '0',
                     'is_visible_in_advanced_search' => '0',
                 ],
             ],
             "{$frontendInput}_update_with_attribute_set" => [
-                'post_data' => [
+                'postData' => [
                     'set' => '4',
                     'new_attribute_set_name' => 'Text Attribute Set',
                     'group' => 'text_attribute_group',
                     'groupName' => 'Text Attribute Group',
                     'groupSortOrder' => '1',
                 ],
-                'expected_data' => [],
+                'expectedData' => [],
             ],
         ];
     }
@@ -273,35 +277,36 @@ abstract class AbstractBaseAttributeData
      *
      * @return array
      */
-    public function getUpdateProviderWithErrorMessage(): array
+    public static function getUpdateProviderWithErrorMessage(): array
     {
-        $frontendInput = $this->getFrontendInput();
+        static::$defaultAttributePostData['frontend_input'] = static::getFrontendInput();
+        $frontendInput = static::getFrontendInput();
         return [
             "{$frontendInput}_same_attribute_set_name" => [
-                'post_data' => [
+                'postData' => [
                     'set' => '4',
                     'new_attribute_set_name' => 'Default',
                 ],
-                'error_message' => (string)__('An attribute set named \'Default\' already exists.'),
+                'errorMessage' => (string)__('An attribute set named \'Default\' already exists.'),
             ],
             "{$frontendInput}_empty_set_id" => [
-                'post_data' => [
+                'postData' => [
                     'set' => '',
                     'new_attribute_set_name' => 'Text Attribute Set',
                 ],
-                'error_message' => (string)__('Something went wrong while saving the attribute.'),
+                'errorMessage' => (string)__('Something went wrong while saving the attribute.'),
             ],
             "{$frontendInput}_nonexistent_attribute_id" => [
-                'post_data' => [
+                'postData' => [
                     'attribute_id' => 9999,
                 ],
-                'error_message' => (string)__('This attribute no longer exists.'),
+                'errorMessage' => (string)__('This attribute no longer exists.'),
             ],
             "{$frontendInput}_attribute_other_entity_type" => [
-                'post_data' => [
+                'postData' => [
                     'attribute_id' => 45,
                 ],
-                'error_message' => (string)__('We can\'t update the attribute.'),
+                'errorMessage' => (string)__('We can\'t update the attribute.'),
             ],
         ];
     }
@@ -311,12 +316,13 @@ abstract class AbstractBaseAttributeData
      *
      * @return array
      */
-    public function getUpdateFrontendLabelsProvider(): array
+    public static function getUpdateFrontendLabelsProvider(): array
     {
-        $frontendInput = $this->getFrontendInput();
+        static::$defaultAttributePostData['frontend_input'] = static::getFrontendInput();
+        $frontendInput = static::getFrontendInput();
         return [
             "{$frontendInput}_update_frontend_label" => [
-                'post_data' => [
+                'postData' => [
                     'frontend_label' => [
                         Store::DEFAULT_STORE_ID => 'Test Attribute Update',
                         'default' => 'Default Store Update',
@@ -324,7 +330,7 @@ abstract class AbstractBaseAttributeData
                         'fixture_third_store' => 'Third Store Update',
                     ]
                 ],
-                'expected_data' => [
+                'expectedData' => [
                     'frontend_label' => 'Test Attribute Update',
                     'store_labels' => [
                         'default' => 'Default Store Update',
@@ -334,7 +340,7 @@ abstract class AbstractBaseAttributeData
                 ],
             ],
             "{$frontendInput}_remove_frontend_label" => [
-                'post_data' => [
+                'postData' => [
                     'frontend_label' => [
                         Store::DEFAULT_STORE_ID => 'Test Attribute Update',
                         'default' => 'Default Store Update',
@@ -342,7 +348,7 @@ abstract class AbstractBaseAttributeData
                         'fixture_third_store' => '',
                     ]
                 ],
-                'expected_data' => [
+                'expectedData' => [
                     'frontend_label' => 'Test Attribute Update',
                     'store_labels' => [
                         'default' => 'Default Store Update',
@@ -350,10 +356,10 @@ abstract class AbstractBaseAttributeData
                 ],
             ],
             "{$frontendInput}_with_frontend_label_string" => [
-                'post_data' => [
+                'postData' => [
                     'frontend_label' => 'Test Attribute Update',
                 ],
-                'expected_data' => [
+                'expectedData' => [
                     'frontend_label' => 'Test Attribute Update',
                     'store_labels' => [
                         'default' => 'Default Store View',
@@ -370,19 +376,19 @@ abstract class AbstractBaseAttributeData
      *
      * @return string
      */
-    abstract protected function getFrontendInput(): string;
+    abstract protected static function getFrontendInput(): string;
 
     /**
      * Return post data for attribute update.
      *
      * @return array
      */
-    abstract protected function getUpdatePostData(): array;
+    abstract protected static function getUpdatePostData(): array;
 
     /**
      * Return expected data for attribute update.
      *
      * @return array
      */
-    abstract protected function getUpdateExpectedData(): array;
+    abstract protected static function getUpdateExpectedData(): array;
 }

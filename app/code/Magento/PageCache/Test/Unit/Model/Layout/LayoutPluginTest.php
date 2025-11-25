@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -102,7 +102,7 @@ class LayoutPluginTest extends TestCase
     /**
      * @return array
      */
-    public function afterGenerateElementsDataProvider(): array
+    public static function afterGenerateElementsDataProvider(): array
     {
         return [
             'Full_cache state is true, Layout is cache-able' => [true, true, false],
@@ -149,7 +149,7 @@ class LayoutPluginTest extends TestCase
     /**
      * @return array
      */
-    public function afterGetOutputDataProvider(): array
+    public static function afterGetOutputDataProvider(): array
     {
         $tags = 'identity1,identity2';
         return [

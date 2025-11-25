@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -73,7 +73,7 @@ class NvpTest extends TestCase
         $this->logger = $this->getMockForAbstractClass(LoggerInterface::class);
         $this->customLoggerMock = $this->getMockBuilder(Logger::class)
             ->setConstructorArgs([$this->getMockForAbstractClass(LoggerInterface::class)])
-            ->setMethods(['debug'])
+            ->onlyMethods(['debug'])
             ->getMock();
         $this->resolver = $this->getMockForAbstractClass(ResolverInterface::class);
         $this->regionFactory = $this->createMock(RegionFactory::class);
@@ -171,7 +171,7 @@ class NvpTest extends TestCase
     /**
      * @return array
      */
-    public function callDataProvider()
+    public static function callDataProvider()
     {
         return [
             ['', [], null],
@@ -236,7 +236,7 @@ class NvpTest extends TestCase
      *
      * @return array
      */
-    public function callGetExpressCheckoutDetailsDataProvider()
+    public static function callGetExpressCheckoutDetailsDataProvider()
     {
         return [
             [

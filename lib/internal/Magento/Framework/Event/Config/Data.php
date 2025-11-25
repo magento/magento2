@@ -33,7 +33,7 @@ class Data extends \Magento\Framework\Config\Data\Scoped
         \Magento\Framework\Config\ScopeInterface $configScope,
         \Magento\Framework\Config\CacheInterface $cache,
         $cacheId = 'event_config_cache',
-        SerializerInterface $serializer = null
+        ?SerializerInterface $serializer = null
     ) {
         parent::__construct($reader, $configScope, $cache, $cacheId, $serializer);
     }

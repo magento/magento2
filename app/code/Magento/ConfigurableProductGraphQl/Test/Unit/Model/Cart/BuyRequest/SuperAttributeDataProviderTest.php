@@ -1,12 +1,15 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2021 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\ConfigurableProductGraphQl\Test\Unit\Model\Cart\BuyRequest;
 
+use Magento\Framework\DataObject;
+use Magento\Catalog\Test\Unit\Helper\ProductTestHelper;
+use Magento\Catalog\Test\Unit\Helper\ProductExtensionTestHelper;
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\Product;
@@ -83,6 +86,8 @@ class SuperAttributeDataProviderTest extends TestCase
 
     /**
      * Check that website id is correctly retrieved
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function testExecute(): void
     {
@@ -97,18 +102,33 @@ class SuperAttributeDataProviderTest extends TestCase
         ];
 
         $this->arrayManager->method('get')
-            ->withConsecutive(
-                ['parent_sku', $cartItemData],
-                ['data/sku', $cartItemData],
-                ['data/quantity', $cartItemData],
-                ['model', $cartItemData],
-            )
-            ->willReturnOnConsecutiveCalls(
-                'configurable',
-                'simple1',
-                2.0,
-                $quoteMock,
-            );
+            ->willReturnCallback(function ($arg1, $arg2) use ($cartItemData, $quoteMock) {
+                static $callCount = 0;
+                $callCount++;
+
+                switch ($callCount) {
+                    case 1:
+                        if ($arg1 == 'parent_sku' && $arg2 == $cartItemData) {
+                            return 'configurable';
+                        }
+                        break;
+                    case 2:
+                        if ($arg1 == 'data/sku' && $arg2 == $cartItemData) {
+                            return 'simple1';
+                        }
+                        break;
+                    case 3:
+                        if ($arg1 == 'data/quantity' && $arg2 == $cartItemData) {
+                            return 2.0;
+                        }
+                        break;
+                    case 4:
+                        if ($arg1 == 'model' && $arg2 == $cartItemData) {
+                            return $quoteMock;
+                        }
+                        break;
+                }
+            });
 
         $websiteId = 1;
         $storeMock = $this->createMock(Store::class);
@@ -120,24 +140,43 @@ class SuperAttributeDataProviderTest extends TestCase
             ->method('getStore')
             ->willReturn($storeMock);
 
-        $productMock = $this->getMockBuilder(Product::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['getId', 'getExtensionAttributes', 'getData', 'getWebsiteIds'])
-            ->addMethods(['getConfigurableProductLinks'])
-            ->getMock();
-        $productMock->method('getId')
-            ->willReturn(1);
-        $productMock->method('getExtensionAttributes')
-            ->willReturnSelf();
-        $productMock->method('getConfigurableProductLinks')
-            ->willReturn([1]);
-        $productMock->method('getData')
-            ->willReturn(1);
-        $productMock->method('getWebsiteIds')
-            ->willReturn([$websiteId]);
+        $productMock = new ProductTestHelper();
+        $productMock->setWebsiteIds([$websiteId]);
+        $productMock->setId(1);
+        $productMock->setData('entity_id', 1);
+
+        // Use existing helper for extension attributes
+        $extensionAttributes = new ProductExtensionTestHelper();
+        $extensionAttributes->setConfigurableProductLinks([1]);
+        $productMock->setExtensionAttributes($extensionAttributes);
+
+        // Create child product mock
+        $childProductMock = new ProductTestHelper();
+        $childProductMock->setId(1);
+        $childProductMock->setData('code', 1); // Set the attribute value that matches the option
+
         $this->productRepository->method('get')
-            ->willReturn($productMock);
-        $checkResult = new \Magento\Framework\DataObject();
+            ->willReturnCallback(
+                /** @param mixed $editMode @param mixed $storeId @param mixed $forceReload */
+                function (
+                    $sku,
+                    $editMode = false,
+                    $storeId = null,
+                    $forceReload = false
+                ) use (
+                    $productMock,
+                    $childProductMock
+                ) {
+                    unset($editMode, $storeId, $forceReload);
+                    if ($sku === 'configurable') {
+                        return $productMock;
+                    } elseif ($sku === 'simple1') {
+                        return $childProductMock;
+                    }
+                    return null;
+                }
+            );
+        $checkResult = new DataObject();
         $checkResult->setHasError(false);
         $this->stockState->method('checkQuoteItemQty')
             ->willReturn($checkResult);

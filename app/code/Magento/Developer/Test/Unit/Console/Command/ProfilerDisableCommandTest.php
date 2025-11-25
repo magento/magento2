@@ -1,7 +1,7 @@
 <?php declare(strict_types=1);
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Developer\Test\Unit\Console\Command;
@@ -58,7 +58,7 @@ class ProfilerDisableCommandTest extends TestCase
      *
      * @return array
      */
-    public function commandDataProvider()
+    public static function commandDataProvider()
     {
         return [
             [true, 'Something went wrong while disabling the profiler.'],

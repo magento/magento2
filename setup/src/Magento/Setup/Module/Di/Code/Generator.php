@@ -32,9 +32,9 @@ class Generator extends FrameworkGenerator
      */
     public function __construct(
         ObjectManagerInterface $objectManagerInterface,
-        \Magento\Framework\Code\Generator\Io $ioObject = null,
+        ?\Magento\Framework\Code\Generator\Io $ioObject = null,
         array $generatedEntities = [],
-        DefinedClasses $definedClasses = null
+        ?DefinedClasses $definedClasses = null
     ) {
         parent::__construct($ioObject, $generatedEntities, $definedClasses);
         $this->setObjectManager($objectManagerInterface);

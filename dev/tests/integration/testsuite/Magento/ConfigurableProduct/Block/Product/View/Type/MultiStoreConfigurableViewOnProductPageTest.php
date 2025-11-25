@@ -82,11 +82,11 @@ class MultiStoreConfigurableViewOnProductPageTest extends TestCase
     /**
      * @return array
      */
-    public function expectedLabelsDataProvider(): array
+    public static function expectedLabelsDataProvider(): array
     {
         return [
             [
-                'options_first_store' => [
+                'expectedStoreData' => [
                     'simple_option_1_default_store' => [
                         'label' => 'Option 1 Default Store',
                     ],
@@ -97,7 +97,7 @@ class MultiStoreConfigurableViewOnProductPageTest extends TestCase
                         'label' => 'Option 3 Default Store',
                     ],
                 ],
-                'options_second_store' => [
+                'expectedSecondStoreData' => [
                     'simple_option_1_default_store' => [
                         'label' => 'Option 1 Second Store',
                     ],
@@ -149,12 +149,12 @@ class MultiStoreConfigurableViewOnProductPageTest extends TestCase
     /**
      * @return array
      */
-    public function expectedProductDataProvider(): array
+    public static function expectedProductDataProvider(): array
     {
         return [
             [
-                'expected_store_products' => ['simple_option_1', 'simple_option_2'],
-                'expected_second_store_products' => ['simple_option_2'],
+                'expectedProducts' => ['simple_option_1', 'simple_option_2'],
+                'expectedSecondStoreProducts' => ['simple_option_2'],
             ],
         ];
     }

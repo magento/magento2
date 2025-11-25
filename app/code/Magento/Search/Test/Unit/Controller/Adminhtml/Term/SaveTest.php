@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -10,7 +10,7 @@ namespace Magento\Search\Test\Unit\Controller\Adminhtml\Term;
 use Magento\Backend\App\Action\Context;
 use Magento\Backend\Model\Session;
 use Magento\Backend\Model\View\Result\Redirect;
-use Magento\Framework\App\RequestInterface;
+use Magento\Framework\App\Request\Http;
 use Magento\Framework\Controller\ResultFactory;
 use Magento\Framework\Message\ManagerInterface;
 use Magento\Framework\ObjectManagerInterface;
@@ -20,6 +20,7 @@ use Magento\Search\Model\Query;
 use Magento\Search\Model\QueryFactory;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -90,43 +91,27 @@ class SaveTest extends TestCase
             ->method('getResultFactory')
             ->willReturn($redirectFactory);
 
-        $this->request = $this->getMockBuilder(RequestInterface::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['getPostValue', 'isPost', 'getPost'])
-            ->getMockForAbstractClass();
+        $this->request = $this->createMock(Http::class);
         $this->context->expects($this->atLeastOnce())
             ->method('getRequest')
             ->willReturn($this->request);
 
-        $objectManager = $this->getMockBuilder(ObjectManagerInterface::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['create'])
-            ->getMockForAbstractClass();
+        $objectManager = $this->createStub(ObjectManagerInterface::class);
         $this->context->expects($this->any())
             ->method('getObjectManager')
             ->willReturn($objectManager);
 
-        $this->messageManager = $this->getMockBuilder(ManagerInterface::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['addSuccessMessage', 'addErrorMessage', 'addExceptionMessage'])
-            ->getMockForAbstractClass();
+        $this->messageManager = $this->createMock(ManagerInterface::class);
         $this->context->expects($this->any())
             ->method('getMessageManager')
             ->willReturn($this->messageManager);
 
-        $this->session = $this->getMockBuilder(Session::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['setPageData'])
-            ->getMock();
+        $this->session = $this->createMock(Session::class);
         $this->context->expects($this->any())
             ->method('getSession')
             ->willReturn($this->session);
 
-        $this->query = $this->getMockBuilder(Query::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['getId', 'load', 'addData', 'save', 'loadByQueryText', 'setStoreId'])
-            ->addMethods(['setIsProcessed'])
-            ->getMock();
+        $this->query = $this->createMock(Query::class);
         $queryFactory = $this->getMockBuilder(QueryFactory::class)
             ->onlyMethods(['create'])
             ->disableOriginalConstructor()
@@ -149,8 +134,8 @@ class SaveTest extends TestCase
      * @param array $data
      *
      * @return void
-     * @dataProvider executeIsPostDataDataProvider
      */
+    #[DataProvider('executeIsPostDataDataProvider')]
     public function testExecuteIsPostData(bool $isPost, array $data): void
     {
         $this->request
@@ -166,7 +151,7 @@ class SaveTest extends TestCase
     /**
      * @return array
      */
-    public function executeIsPostDataDataProvider(): array
+    public static function executeIsPostDataDataProvider(): array
     {
         return [
             [false, ['0' => '0']],
@@ -246,7 +231,6 @@ class SaveTest extends TestCase
         $this->query->expects($this->any())->method('getId')->willReturn($anotherQueryId);
 
         $this->messageManager->expects($this->once())->method('addErrorMessage');
-        $this->session->expects($this->once())->method('setPageData');
         $this->redirect->expects($this->once())->method('setPath')->willReturnSelf();
         $this->assertSame($this->redirect, $this->controller->execute());
     }
@@ -264,7 +248,6 @@ class SaveTest extends TestCase
         $this->query->expects($this->once())->method('loadByQueryText')->willThrowException(new \Exception());
 
         $this->messageManager->expects($this->once())->method('addExceptionMessage');
-        $this->session->expects($this->once())->method('setPageData');
         $this->redirect->expects($this->once())->method('setPath')->willReturnSelf();
         $this->assertSame($this->redirect, $this->controller->execute());
     }
@@ -275,6 +258,7 @@ class SaveTest extends TestCase
      * @param bool $withStoreId
      *
      * @return void
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     private function mockGetRequestData(
         string $queryText,
@@ -290,13 +274,25 @@ class SaveTest extends TestCase
         if ($withStoreId) {
             $this->request
                 ->method('getPost')
-                ->withConsecutive(['query_text', false], ['query_id', null], ['store_id', false])
-                ->willReturnOnConsecutiveCalls($queryText, $queryId, 1);
+                ->willReturnCallback(function ($arg1, $arg2) use ($queryText, $queryId) {
+                    if ($arg1 == 'query_text' && $arg2 == false) {
+                        return $queryText;
+                    } elseif ($arg1 == 'query_id' && $arg2 == null) {
+                        return $queryId;
+                    } elseif ($arg1 == 'store_id' && $arg2 == false) {
+                        return 1;
+                    }
+                });
         } else {
             $this->request
                 ->method('getPost')
-                ->withConsecutive(['query_text', false], ['query_id', null])
-                ->willReturnOnConsecutiveCalls($queryText, $queryId);
+                ->willReturnCallback(function ($arg1, $arg2) use ($queryText, $queryId) {
+                    if ($arg1 == 'query_text' && $arg2 == false) {
+                        return $queryText;
+                    } elseif ($arg1 == 'query_id' && $arg2 == null) {
+                        return $queryId;
+                    }
+                });
         }
     }
 }

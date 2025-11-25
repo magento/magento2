@@ -1,8 +1,7 @@
 <?php
 /**
- *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -218,7 +217,7 @@ class CreatePostTest extends TestCase
         $this->resultRedirectFactoryMock = $this->getMockBuilder(
             RedirectFactory::class
         )
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->resultRedirectFactoryMock->expects($this->any())
@@ -419,7 +418,7 @@ class CreatePostTest extends TestCase
     /**
      * @return array
      */
-    public function getSuccessMessageDataProvider()
+    public static function getSuccessMessageDataProvider()
     {
         return [
             [
@@ -571,7 +570,7 @@ class CreatePostTest extends TestCase
     /**
      * @return array
      */
-    public function getSuccessRedirectDataProvider()
+    public static function getSuccessRedirectDataProvider()
     {
         return [
             [

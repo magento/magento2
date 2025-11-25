@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -100,7 +100,8 @@ class AdminTest extends TestCase
 
         $this->magentoObjectMock = $this->getMockBuilder(DataObject::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getOrder', 'getData'])
+            ->addMethods(['getOrder'])
+            ->onlyMethods(['getData'])
             ->getMock();
 
         $this->orderMock = $this->getMockBuilder(Order::class)
@@ -217,7 +218,7 @@ class AdminTest extends TestCase
     /**
      * @return array
      */
-    public function displayPricesDataProvider()
+    public static function displayPricesDataProvider()
     {
         return [
             [
@@ -297,7 +298,7 @@ class AdminTest extends TestCase
             ->willReturn($type);
         $orderMock = $this->getMockBuilder(Item::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getProductType'])
+            ->onlyMethods(['getProductType'])
             ->getMock();
         $orderMock->expects($this->any())
             ->method('getProductType')
@@ -332,7 +333,7 @@ class AdminTest extends TestCase
     /**
      * @return array
      */
-    public function applySalableProductTypesFilterDataProvider()
+    public static function applySalableProductTypesFilterDataProvider()
     {
         return [
             ['product', 'validProductType', 0],

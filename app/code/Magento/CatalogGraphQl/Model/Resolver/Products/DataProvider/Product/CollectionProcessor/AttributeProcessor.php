@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -48,7 +48,7 @@ class AttributeProcessor implements CollectionProcessorInterface
         Collection $collection,
         SearchCriteriaInterface $searchCriteria,
         array $attributeNames,
-        ContextInterface $context = null
+        ?ContextInterface $context = null
     ): Collection {
         foreach ($attributeNames as $name) {
             $this->addAttribute($collection, $name);

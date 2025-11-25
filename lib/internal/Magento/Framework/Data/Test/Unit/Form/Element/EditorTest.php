@@ -192,7 +192,7 @@ class EditorTest extends TestCase
     /**
      * @return array
      */
-    public function isEnabledDataProvider()
+    public static function isEnabledDataProvider()
     {
         return [
             'Global disabled, attribute isnt set' => [false, false],
@@ -236,7 +236,14 @@ class EditorTest extends TestCase
             return json_encode($params);
         };
 
-        $this->configMock->expects($this->any())->method('getData')->withConsecutive(['enabled'])->willReturn(true);
+        $this->configMock->expects($this->any())->method('getData')
+            ->willReturnCallback(
+                function ($arg1) {
+                    if ($arg1 == 'enabled') {
+                        return true;
+                    }
+                }
+            );
         $this->serializer->expects($this->any())
             ->method('serialize')
             ->willReturnCallback($callback);

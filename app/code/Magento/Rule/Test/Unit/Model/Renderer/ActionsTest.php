@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -45,7 +45,7 @@ class ActionsTest extends TestCase
     public function testRender()
     {
         $rule = $this->getMockBuilder(AbstractModel::class)
-            ->setMethods(['getActions', '__sleep', '__wakeup'])
+            ->onlyMethods(['getActions', '__sleep', '__wakeup'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $actions = $this->createPartialMock(Collection::class, ['asHtmlRecursive']);

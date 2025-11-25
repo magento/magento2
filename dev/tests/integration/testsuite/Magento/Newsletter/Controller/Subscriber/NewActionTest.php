@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -90,7 +90,7 @@ class NewActionTest extends AbstractController
     }
 
     /**
-     * @magentoConfigFixture newsletter/general/active 1
+     * @magentoConfigFixture current_store newsletter/general/active 1
      *
      * @return void
      */
@@ -107,7 +107,7 @@ class NewActionTest extends AbstractController
     }
 
     /**
-     * @magentoConfigFixture newsletter/general/active 0
+     * @magentoConfigFixture current_store newsletter/general/active 0
      *
      * @return void
      */
@@ -124,20 +124,20 @@ class NewActionTest extends AbstractController
     /**
      * @return array
      */
-    public function subscribersDataProvider(): array
+    public static function subscribersDataProvider(): array
     {
         return [
             'without_email' => [
                 'email' => '',
-                'message' => '',
+                'expectedMessage' => '',
             ],
             'with_unused_email' => [
                 'email' => 'not_used@example.com',
-                'message' => 'Thank you for your subscription.',
+                'expectedMessage' => 'Thank you for your subscription.',
             ],
             'with_invalid_email' => [
                 'email' => 'invalid_email.com',
-                'message' => 'Please enter a valid email address.'
+                'expectedMessage' => 'Please enter a valid email address.'
             ],
         ];
     }
@@ -163,11 +163,11 @@ class NewActionTest extends AbstractController
     /**
      * @return array
      */
-    public function emailAndStatusDataProvider()
+    public static function emailAndStatusDataProvider()
     {
         return [
-            'customer' => ['new_customer@example.com', 2],
-            'not_a_customer' => ['not_a_customer@gmail.com', 1],
+            'email' => ['new_customer@example.com', 2],
+            'subscriptionType' => ['not_a_customer@gmail.com', 1],
         ];
     }
 

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -151,10 +151,10 @@ class PrintActionTest extends TestCase
 
         $this->objectManagerMock
             ->method('create')
-            ->withConsecutive(
-                [InvoiceRepositoryInterface::class],
-                [\Magento\Sales\Model\Order\Pdf\Invoice::class]
-            )->willReturnOnConsecutiveCalls($invoiceRepository, $pdfMock);
+            ->willReturnCallback(fn($param) => match ([$param]) {
+                [InvoiceRepositoryInterface::class] => $invoiceRepository,
+                [\Magento\Sales\Model\Order\Pdf\Invoice::class] => $pdfMock
+            });
         $this->objectManagerMock
             ->method('get')
             ->with(DateTime::class)

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -48,6 +48,13 @@ class BillingAgreementTest extends TestCase
     protected function setUp(): void
     {
         $helper = new ObjectManager($this);
+        $objects = [
+            [
+                \Magento\Framework\Translate\InlineInterface::class,
+                $this->createMock(\Magento\Framework\Translate\InlineInterface::class)
+            ]
+        ];
+        $helper->prepareObjectManager($objects);
         $this->paypalConfig = $this->createMock(Config::class);
         $this->escaperMock = $helper->getObject(Escaper::class);
         $this->paypalConfig

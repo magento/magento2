@@ -74,7 +74,7 @@ class ProductMetadataTest extends TestCase
     /**
      * @return array
      */
-    public function testGetVersionGitInstallationDataProvider()
+    public static function testGetVersionGitInstallationDataProvider()
     {
         return [
             [

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -39,15 +39,15 @@ class ConfigurableTest extends TestCase
     {
         parent::setUp();
         $objectManagerHelper = new ObjectManager($this);
-        $this->configManager = $this->getMockForAbstractClass(ConfigInterface::class);
+        $this->configManager = $this->createMock(ConfigInterface::class);
         $this->imageHelper = $this->createPartialMock(
             Image::class,
             ['init', 'resize']
         );
-        $this->scopeConfig = $this->getMockForAbstractClass(ScopeConfigInterface::class);
+        $this->scopeConfig = $this->createMock(ScopeConfigInterface::class);
         $this->productConfigMock = $this->createMock(Configuration::class);
         $this->renderer = $objectManagerHelper->getObject(
-            \Magento\ConfigurableProduct\Block\Cart\Item\Renderer\Configurable::class,
+            Renderer::class,
             [
                 'viewConfig' => $this->configManager,
                 'imageHelper' => $this->imageHelper,

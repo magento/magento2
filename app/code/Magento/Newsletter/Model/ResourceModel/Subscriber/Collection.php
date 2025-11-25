@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Newsletter\Model\ResourceModel\Subscriber;
 
@@ -9,8 +9,6 @@ use Magento\Newsletter\Model\Queue as ModelQueue;
 
 /**
  * Newsletter subscribers collection
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  *
  * @api
  * @since 100.0.2
@@ -74,8 +72,8 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
         \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy,
         \Magento\Framework\Event\ManagerInterface $eventManager,
         \Magento\Eav\Helper\Data $customerHelperData,
-        \Magento\Framework\DB\Adapter\AdapterInterface $connection = null,
-        \Magento\Framework\Model\ResourceModel\Db\AbstractDb $resource = null
+        ?\Magento\Framework\DB\Adapter\AdapterInterface $connection = null,
+        ?\Magento\Framework\Model\ResourceModel\Db\AbstractDb $resource = null
     ) {
         $this->_customerHelperData = $customerHelperData;
         parent::__construct($entityFactory, $logger, $fetchStrategy, $eventManager, $connection, $resource);

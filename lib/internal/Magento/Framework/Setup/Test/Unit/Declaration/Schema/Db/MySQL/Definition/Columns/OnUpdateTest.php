@@ -42,7 +42,7 @@ class OnUpdateTest extends TestCase
         /** @var Timestamp|MockObject $column */
         $column = $this->getMockBuilder(Timestamp::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getOnUpdate'])
+            ->onlyMethods(['getOnUpdate'])
             ->getMock();
         $column->expects($this->any())
             ->method('getOnUpdate')
@@ -61,7 +61,7 @@ class OnUpdateTest extends TestCase
         /** @var Timestamp|MockObject $column */
         $column = $this->getMockBuilder(Timestamp::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getOnUpdate'])
+            ->onlyMethods(['getOnUpdate'])
             ->getMock();
         $column->expects($this->any())
             ->method('getOnUpdate')

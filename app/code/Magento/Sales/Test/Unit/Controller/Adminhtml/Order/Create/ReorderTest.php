@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -245,8 +245,10 @@ class ReorderTest extends TestCase
             ->willReturnSelf();
         $this->objectManagerMock
             ->method('get')
-            ->withConsecutive([Quote::class], [Quote::class], [Create::class])
-            ->willReturnOnConsecutiveCalls($this->quoteSessionMock, $this->quoteSessionMock, $this->orderCreateMock);
+            ->willReturnCallback(fn($param) => match ([$param]) {
+                [Quote::class] => $this->quoteSessionMock,
+                [Create::class] => $this->orderCreateMock
+            });
         $this->orderCreateMock->expects($this->once())
             ->method('initFromOrder')
             ->with($this->orderMock)
@@ -365,8 +367,9 @@ class ReorderTest extends TestCase
     {
         $this->objectManagerMock
             ->method('get')
-            ->withConsecutive([Quote::class])
-            ->willReturnOnConsecutiveCalls($this->quoteSessionMock);
+            ->willReturnCallback(fn($param) => match ([$param]) {
+                [Quote::class] => $this->quoteSessionMock
+            });
         $this->quoteSessionMock->expects($this->once())->method('clearStorage')->willReturnSelf();
     }
 

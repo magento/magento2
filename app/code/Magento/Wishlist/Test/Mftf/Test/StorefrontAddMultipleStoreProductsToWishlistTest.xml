@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
-  */
+/**
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
+ */
 -->
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
@@ -57,6 +57,7 @@
             <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="navigateToProductIndex"/>
             <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearProductsFilters"/>
             <!--Logout everywhere-->
+            <deleteData createDataKey="categoryHandle" stepKey="deletecategoryHandle"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="adminLogout"/>
             <comment userInput="BIC workaround" stepKey="customerLogout"/>
         </after>
@@ -105,7 +106,7 @@
         </actionGroup>
         <click selector="{{StorefrontProductPageSection.addToWishlist}}" stepKey="addFirstProductToWishlist"/>
         <waitForPageLoad stepKey="waitForPageLoad"/>
-        <see userInput="$$product.name$$" selector="{{StorefrontCustomerWishlistSection.productItemNameText}}" stepKey="seeProduct1InWishlistOnSecondStore"/>
+        <see userInput="$$product.name$$" selector="{{StorefrontCustomerWishlistSection.wishListProductName('1')}}" stepKey="seeProduct1InWishlistOnSecondStore"/>
         <!-- Switch to second store and add second product (visible on second store) to wishlist -->
         <click selector="{{StorefrontFooterSection.switchStoreButton}}" stepKey="clickSwitchStoreButtonOnDefaultStore"/>
         <click selector="{{StorefrontFooterSection.storeLink($$storeGroup.group[name]$$)}}" stepKey="selectSecondStoreToSwitchOn"/>
@@ -122,6 +123,6 @@
         <click selector="{{StorefrontFooterSection.switchStoreButton}}" stepKey="clickSwitchStoreButtonOnSecondStore"/>
         <click selector="{{StorefrontFooterSection.storeLink('Main Website Store')}}" stepKey="selectDefaultStoreToSwitchOn"/>
         <waitForPageLoad stepKey="waitForPageLoad3"/>
-        <see userInput="$$product.name$$" selector="{{StorefrontCustomerWishlistSection.productItemNameText}}" stepKey="seeProduct1InWishlistOnDefaultStore"/>
+        <see userInput="$$product.name$$" selector="{{StorefrontCustomerWishlistSection.wishListProductName('1')}}" stepKey="seeProduct1InWishlistOnDefaultStore"/>
     </test>
 </tests>

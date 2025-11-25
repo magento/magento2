@@ -27,10 +27,17 @@ class GridTest extends \PHPUnit\Framework\TestCase
     protected function setUp(): void
     {
         /** @var \PHPUnit\Framework\MockObject\MockObject $blockMock */
+//        $blockMock = $this->getMockBuilder(
+//            \Magento\Framework\View\Element\BlockInterface::class
+//        )->disableOriginalConstructor()->onlyMethods(
+//            ['setTitle', 'toHtml']
+//        )->getMock();
         $blockMock = $this->getMockBuilder(
             \Magento\Framework\View\Element\BlockInterface::class
-        )->disableOriginalConstructor()->setMethods(
-            ['setTitle', 'toHtml']
+        )->disableOriginalConstructor()->addMethods(
+            ['setTitle']
+        )->onlyMethods(
+            ['toHtml']
         )->getMock();
         $blockMock->expects($this->any())->method('setTitle');
 
@@ -92,7 +99,7 @@ class GridTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expected, $gridBlock->getAdditionalAddresses());
     }
 
-    public function getAdditionalAddressesDataProvider()
+    public static function getAdditionalAddressesDataProvider()
     {
         return ['5' => [5, []]];
     }

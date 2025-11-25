@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -131,10 +131,10 @@ class ServiceInputProcessor implements ServicePayloadConverterInterface, ResetAf
         AttributeValueFactory $attributeValueFactory,
         CustomAttributeTypeLocatorInterface $customAttributeTypeLocator,
         MethodsMap $methodsMap,
-        ServiceTypeToEntityTypeMap $serviceTypeToEntityTypeMap = null,
-        ConfigInterface $config = null,
+        ?ServiceTypeToEntityTypeMap $serviceTypeToEntityTypeMap = null,
+        ?ConfigInterface $config = null,
         array $customAttributePreprocessors = [],
-        ServiceInputValidatorInterface $serviceInputValidator = null,
+        ?ServiceInputValidatorInterface $serviceInputValidator = null,
         int $defaultPageSize = 20,
         ?DefaultPageSizeSetter $defaultPageSizeSetter = null
     ) {
@@ -246,6 +246,13 @@ class ServiceInputProcessor implements ServicePayloadConverterInterface, ResetAf
             if (isset($data[$parameter->getName()])) {
                 $parameterType = $this->typeProcessor->getParamType($parameter);
 
+                // Allow only simple types or Api Data Objects
+                if (!($this->typeProcessor->isTypeSimple($parameterType)
+                    || preg_match('~\\\\?\w+\\\\\w+\\\\Api\\\\Data\\\\~', $parameterType) === 1
+                )) {
+                    continue;
+                }
+
                 try {
                     $res[$parameter->getName()] = $this->convertValue($data[$parameter->getName()], $parameterType);
                 } catch (\ReflectionException $e) {
@@ -278,6 +285,12 @@ class ServiceInputProcessor implements ServicePayloadConverterInterface, ResetAf
         // convert to string directly to avoid situations when $className is object
         // which implements __toString method like \ReflectionObject
         $className = (string) $className;
+        if (is_subclass_of($className, \SimpleXMLElement::class)
+            || is_subclass_of($className, \DOMElement::class)) {
+            throw new SerializationException(
+                new Phrase('Invalid data type')
+            );
+        }
         $class = new ClassReflection($className);
         if (is_subclass_of($className, self::EXTENSION_ATTRIBUTES_TYPE)) {
             $className = substr($className, 0, -strlen('Interface'));
@@ -327,6 +340,14 @@ class ServiceInputProcessor implements ServicePayloadConverterInterface, ResetAf
                             )
                         );
                     }
+                    if (is_string($setterValue) && $this->validateParamsValue($setterValue)) {
+                        throw new InputException(
+                            new Phrase(
+                                '"%field_name" does not contains valid value.',
+                                ['field_name' => $propertyName]
+                            )
+                        );
+                    }
                     $this->serviceInputValidator->validateEntityValue($object, $propertyName, $setterValue);
                     $object->{$setterName}($setterValue);
                 }
@@ -340,6 +361,17 @@ class ServiceInputProcessor implements ServicePayloadConverterInterface, ResetAf
         }
 
         return $object;
+    }
+
+    /**
+     * Validate input param value
+     *
+     * @param string $value
+     * @return bool
+     */
+    private function validateParamsValue(string $value)
+    {
+        return preg_match('/<script\b[^>]*>(.*?)<\/script>/is', $value);
     }
 
     /**

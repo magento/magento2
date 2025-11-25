@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -51,8 +51,7 @@ class CctypeTest extends TestCase
     {
         $this->_paymentConfig = $this->getMockBuilder(
             Config::class
-        )->disableOriginalConstructor()
-            ->setMethods([])->getMock();
+        )->disableOriginalConstructor()->getMock();
 
         $this->_model = new Cctype($this->_paymentConfig);
     }

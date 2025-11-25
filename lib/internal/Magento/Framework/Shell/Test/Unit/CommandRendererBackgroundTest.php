@@ -19,7 +19,7 @@ class CommandRendererBackgroundTest extends TestCase
      *
      * @var string
      */
-    protected $testCommand = 'php -r test.php';
+    protected static $testCommand = 'php -r test.php';
 
     /**
      * @var OsInfo|MockObject
@@ -46,7 +46,7 @@ class CommandRendererBackgroundTest extends TestCase
         $commandRenderer = new CommandRendererBackground($this->osInfo);
         $this->assertEquals(
             $expectedResults,
-            $commandRenderer->render($this->testCommand)
+            $commandRenderer->render(self::$testCommand)
         );
     }
 
@@ -55,11 +55,11 @@ class CommandRendererBackgroundTest extends TestCase
      *
      * @return array
      */
-    public function commandPerOsTypeDataProvider()
+    public static function commandPerOsTypeDataProvider()
     {
         return [
-            'windows' => [true, 'start /B "magento background task" ' . $this->testCommand . ' 2>&1'],
-            'unix'    => [false, $this->testCommand . ' > /dev/null &'],
+            'windows' => [true, 'start /B "magento background task" ' . self::$testCommand . ' 2>&1'],
+            'unix'    => [false, self::$testCommand . ' 2>/dev/null >/dev/null &'],
         ];
     }
 }

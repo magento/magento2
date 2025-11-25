@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -67,7 +67,7 @@ class BuilderTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->objectManager = $this->getMockForAbstractClass(ObjectManagerInterface::class);
+        $this->objectManager = $this->createMock(ObjectManagerInterface::class);
 
         $this->requestMapper = $this->getMockBuilder(Mapper::class)
             ->onlyMethods(['getRootQuery', 'getBuckets'])
@@ -205,8 +205,9 @@ class BuilderTest extends TestCase
         $this->requestBuilder->bindDimension('scope', 'default');
         $this->binder->expects($this->once())
             ->method('bind')
-            ->withConsecutive([$data, $bindData])
-            ->willReturn($data);
+            ->willReturnCallback(function ($data, $bindData) {
+                  return $data;
+            });
         $this->cleaner->expects($this->once())
             ->method('clean')
             ->willReturn($data);

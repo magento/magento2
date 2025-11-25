@@ -1,12 +1,13 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Quote\Test\Unit\Model;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\Customer\Api\AddressRepositoryInterface;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Exception\InputException;
@@ -16,9 +17,11 @@ use Magento\Quote\Api\Data\AddressInterface;
 use Magento\Quote\Model\Quote;
 use Magento\Quote\Model\Quote\TotalsCollector;
 use Magento\Quote\Model\QuoteAddressValidator;
+use Magento\Quote\Model\QuoteAddressValidationService;
 use Magento\Quote\Model\ShippingAddressManagement;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
+use Magento\Quote\Test\Unit\Helper\QuoteAddressTestHelper;
 
 class ShippingAddressManagementTest extends TestCase
 {
@@ -63,6 +66,11 @@ class ShippingAddressManagementTest extends TestCase
     private $quoteMock;
 
     /**
+     * @var QuoteAddressValidationService
+     */
+    private $quoteAddressValidationServiceMock;
+
+    /**
      * @inheritdoc
      */
     protected function setUp(): void
@@ -74,28 +82,40 @@ class ShippingAddressManagementTest extends TestCase
         $this->scopeConfigMock = $this->createMock(ScopeConfigInterface::class);
         $this->totalsCollectorMock = $this->createMock(TotalsCollector::class);
         $this->quoteMock = $this->createMock(Quote::class);
+        $this->quoteAddressValidationServiceMock = $this->createMock(QuoteAddressValidationService::class);
         $this->model = new ShippingAddressManagement(
             $this->quoteRepositoryMock,
             $this->addressValidatorMock,
             $this->loggerMock,
             $this->addressRepositoryMock,
             $this->scopeConfigMock,
-            $this->totalsCollectorMock
+            $this->totalsCollectorMock,
+            $this->quoteAddressValidationServiceMock
         );
     }
 
     /**
      * @throws InputException
      * @throws NoSuchEntityException
-     * @dataProvider assignDataProvider
      */
+    #[DataProvider('assignDataProvider')]
     public function testAssign(bool $saveInAddressBook, bool $showCompany): void
     {
         $cartId = $customerId = 123;
-        $addressMock = $this->getMockBuilder(AddressInterface::class)
-            ->addMethods(['setCollectShippingRates', 'save', 'importCustomerAddressData'])
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $addressMock = $this->createPartialMock(
+            QuoteAddressTestHelper::class,
+            [
+                'importCustomerAddressData',
+                'getSaveInAddressBook',
+                'getSameAsBilling',
+                'getCustomerAddressId',
+                'setCompany',
+                'setSameAsBilling',
+                'setSaveInAddressBook',
+                'setCollectShippingRates',
+                'save'
+            ]
+        );
         $this->quoteMock
             ->expects($this->once())
             ->method('isVirtual')
@@ -122,7 +142,6 @@ class ShippingAddressManagementTest extends TestCase
             ->method('setCompany')
             ->with(null);
         $addressMock
-            ->expects($this->once())
             ->method('importCustomerAddressData')
             ->willReturn($addressMock);
         $addressMock
@@ -149,13 +168,21 @@ class ShippingAddressManagementTest extends TestCase
         $this->quoteMock
             ->method('getShippingAddress')
             ->willReturn($addressMock);
+        $this->quoteAddressValidationServiceMock
+            ->expects($this->once())
+            ->method('validateAddressesWithRules')
+            ->with(
+                $this->isInstanceOf(Quote::class),
+                $addressMock,
+                null
+            );
         $this->model->assign($cartId, $addressMock);
     }
 
     /**
      * @return array
      */
-    public function assignDataProvider(): array
+    public static function assignDataProvider(): array
     {
         return [
             [true, true],

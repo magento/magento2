@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -13,6 +13,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Quote\Model\Quote\Item;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Magento\Quote\Test\Unit\Helper\QuoteItemIsVirtualTestHelper;
 
 class GenericTest extends TestCase
 {
@@ -36,9 +37,7 @@ class GenericTest extends TestCase
         /**
          * @var Item|MockObject $itemMock
          */
-        $itemMock = $this->getMockBuilder(Item::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $itemMock = $this->createMock(Item::class);
 
         $this->assertEquals($this->model, $this->model->setItem($itemMock));
         $this->assertEquals($itemMock, $this->model->getItem());
@@ -49,16 +48,12 @@ class GenericTest extends TestCase
         /**
          * @var Item|MockObject $itemMock
          */
-        $itemMock = $this->getMockBuilder(Item::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $itemMock = $this->createMock(Item::class);
 
         /**
          * @var Product|MockObject $productMock
          */
-        $productMock = $this->getMockBuilder(Product::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $productMock = $this->createMock(Product::class);
 
         $itemMock->expects($this->once())
             ->method('getProduct')
@@ -77,14 +72,7 @@ class GenericTest extends TestCase
         /**
          * @var Item|MockObject $itemMock
          */
-        $itemMock = $this->getMockBuilder(Item::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['getIsVirtual'])
-            ->getMock();
-
-        $itemMock->expects($this->once())
-            ->method('getIsVirtual')
-            ->willReturn(true);
+        $itemMock = new QuoteItemIsVirtualTestHelper();
 
         $this->assertEquals($this->model, $this->model->setItem($itemMock));
         $this->assertTrue($this->model->isVirtual());
