@@ -984,9 +984,16 @@ class MappableConditionProcessorTest extends TestCase
     {
         $this->expectException('Magento\Framework\Exception\InputException');
         $this->expectExceptionMessage('Undefined condition type "olo-lo" passed in.');
-        $simpleCondition = $this->getMockForSimpleCondition('field');
-        $simpleCondition->setType('olo-lo');
-        $inputCondition = $this->getMockForCombinedCondition([$simpleCondition], 'any');
+        
+        // Create a mock that doesn't extend SimpleCondition or CombinedCondition
+        // This tests the instanceof logic at line 82 and 70 - if neither match, throw exception
+        $invalidCondition = $this->getMockBuilder(\Magento\Rule\Model\Condition\AbstractCondition::class)
+            ->disableOriginalConstructor()
+            ->addMethods(['getType'])
+            ->getMockForAbstractClass();
+        $invalidCondition->method('getType')->willReturn('olo-lo');
+        
+        $inputCondition = $this->getMockForCombinedCondition([$invalidCondition], 'any');
 
         $this->mappableConditionProcessor->rebuildConditionsTree($inputCondition);
     }
@@ -1025,5 +1032,116 @@ class MappableConditionProcessorTest extends TestCase
         $mock->setType(SimpleCondition::class);
 
         return $mock;
+    }
+
+    /**
+     * Test that conditions with EAV attributes (with backend type) are valid
+     *
+     * Tests line 138: if ($attribute && $attribute->getBackendType() !== null)
+     */
+    public function testValidateSimpleConditionWithEavAttribute()
+    {
+        // Create a simple condition with an EAV attribute
+        $simpleCondition = $this->getMockForSimpleCondition('sku');
+        
+        // Mock attribute with backend type (valid EAV attribute)
+        $attributeMock = $this->getMockBuilder(\Magento\Eav\Model\Entity\Attribute\AbstractAttribute::class)
+            ->disableOriginalConstructor()
+            ->onlyMethods(['getBackendType'])
+            ->getMockForAbstractClass();
+        $attributeMock->method('getBackendType')->willReturn('varchar');
+
+        // No custom processor for this field
+        $this->customConditionProcessorBuilderMock
+            ->expects($this->once())
+            ->method('hasProcessorForField')
+            ->with('sku')
+            ->willReturn(false);
+
+        // EAV config returns the attribute
+        $this->eavConfigMock
+            ->expects($this->once())
+            ->method('getAttribute')
+            ->with(\Magento\Catalog\Model\Product::ENTITY, 'sku')
+            ->willReturn($attributeMock);
+
+        $inputCondition = $this->getMockForCombinedCondition([$simpleCondition], 'all');
+        
+        // The condition should be valid (kept in validConditions)
+        $result = $this->mappableConditionProcessor->rebuildConditionsTree($inputCondition);
+        
+        // Should have 1 valid condition
+        $this->assertCount(1, $result->getConditions());
+    }
+
+    /**
+     * Test that conditions with non-EAV attributes (null backend type) are invalid
+     *
+     * Tests line 138 negative case and line 143: return false
+     */
+    public function testValidateSimpleConditionWithNonEavAttribute()
+    {
+        // Create a simple condition with a non-EAV field
+        $simpleCondition = $this->getMockForSimpleCondition('non_existent_field');
+        
+        // Mock attribute with null backend type (invalid/non-existent EAV attribute)
+        $attributeMock = $this->getMockBuilder(\Magento\Eav\Model\Entity\Attribute\AbstractAttribute::class)
+            ->disableOriginalConstructor()
+            ->onlyMethods(['getBackendType'])
+            ->getMockForAbstractClass();
+        $attributeMock->method('getBackendType')->willReturn(null);
+
+        // No custom processor for this field
+        $this->customConditionProcessorBuilderMock
+            ->expects($this->once())
+            ->method('hasProcessorForField')
+            ->with('non_existent_field')
+            ->willReturn(false);
+
+        // EAV config returns the attribute (but with null backend type)
+        $this->eavConfigMock
+            ->expects($this->once())
+            ->method('getAttribute')
+            ->with(\Magento\Catalog\Model\Product::ENTITY, 'non_existent_field')
+            ->willReturn($attributeMock);
+
+        $inputCondition = $this->getMockForCombinedCondition([$simpleCondition], 'all');
+        
+        // The condition should be invalid (removed from conditions)
+        $result = $this->mappableConditionProcessor->rebuildConditionsTree($inputCondition);
+        
+        // Should have 0 valid conditions
+        $this->assertCount(0, $result->getConditions());
+    }
+
+    /**
+     * Test that conditions with custom processor are valid
+     *
+     * Tests line 128-130: if ($this->customConditionProvider->hasProcessorForField($fieldName))
+     */
+    public function testValidateSimpleConditionWithCustomProcessor()
+    {
+        // Create a simple condition with a custom field
+        $simpleCondition = $this->getMockForSimpleCondition('custom_field');
+        
+        // Has custom processor for this field
+        $this->customConditionProcessorBuilderMock
+            ->expects($this->once())
+            ->method('hasProcessorForField')
+            ->with('custom_field')
+            ->willReturn(true);
+
+        // EAV config should not be called since custom processor exists
+        $this->eavConfigMock
+            ->expects($this->never())
+            ->method('getAttribute');
+
+        $inputCondition = $this->getMockForCombinedCondition([$simpleCondition], 'all');
+        
+        // The condition should be valid (kept in validConditions)
+        $result = $this->mappableConditionProcessor->rebuildConditionsTree($inputCondition);
+        
+        // Should have 1 valid condition
+        $this->assertCount(1, $result->getConditions());
     }
 }

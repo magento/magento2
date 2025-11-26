@@ -82,9 +82,9 @@ class ConditionsToSearchCriteriaMapper
      */
     private function mapConditionToFilterGroup(ConditionInterface $condition)
     {
-        if ($condition->getType() === CombinedCondition::class) {
+        if ($condition instanceof CombinedCondition) {
             return $this->mapCombinedConditionToFilterGroup($condition);
-        } elseif ($condition->getType() === SimpleCondition::class) {
+        } elseif ($condition instanceof SimpleCondition) {
             return $this->mapSimpleConditionToFilterGroup($condition);
         }
 
