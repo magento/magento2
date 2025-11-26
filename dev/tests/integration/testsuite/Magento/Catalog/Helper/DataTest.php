@@ -243,6 +243,7 @@ class DataTest extends \PHPUnit\Framework\TestCase
      * @param float $expectOutputPrice
      * @param string[] $configs
      * @param string $productClassName
+     * @param string|null $customerClassName
      *
      * @magentoDataFixture Magento/Catalog/_files/products.php
      * @magentoDataFixture Magento/Customer/_files/customer.php
@@ -255,7 +256,8 @@ class DataTest extends \PHPUnit\Framework\TestCase
         $input,
         $expectOutputPrice,
         $configs = [],
-        $productClassName = 'DefaultProductClass'
+        $productClassName = 'DefaultProductClass',
+        $customerClassName = null
     ) {
         $this->setUpDefaultRules();
         /** @var \Magento\Catalog\Api\ProductRepositoryInterface $productRepository */
@@ -269,13 +271,18 @@ class DataTest extends \PHPUnit\Framework\TestCase
             $this->scopeConfig->setValue($config['path'], $config['value'], ScopeInterface::SCOPE_STORE, 'default');
         }
 
+        // Use the customer class from data provider if specified, otherwise default
+        $customerTaxClassId = $customerClassName !== null
+            ? $this->taxClasses[$customerClassName]
+            : $this->taxClasses['DefaultCustomerClass'];
+
         $price = $this->helper->getTaxPrice(
             $product,
             $input->getPrice(),
             $input->getIncludingTax(),
             $shippingAddress,
             $billingAddress,
-            $this->taxClasses['DefaultCustomerClass'],
+            $customerTaxClassId,
             $input->getStore(),
             $input->getPriceIncludesTax(),
             $input->getRoundPrice()
@@ -430,6 +437,46 @@ class DataTest extends \PHPUnit\Framework\TestCase
                 ],
                 'HigherProductClass',
             ],
+            // Test cases for NOT_LOGGED_IN customer group (guest users)
+            'guest customer, no price conversion, round' => [
+                (new \Magento\Framework\DataObject())->setPrice(3.256)->setRoundPrice(true),
+                '3.26',
+                [],
+                'DefaultProductClass',
+                'NotLoggedInCustomerClass',
+            ],
+            'guest customer, price conversion, display including tax, round' => [
+                (new \Magento\Framework\DataObject())->setPrice(3.256)->setRoundPrice(true),
+                '3.5',
+                [
+                    [
+                        'path' => Config::CONFIG_XML_PATH_PRICE_INCLUDES_TAX,
+                        'value' => '0',
+                    ],
+                    [
+                        'path' => Config::CONFIG_XML_PATH_PRICE_DISPLAY_TYPE,
+                        'value' => Config::DISPLAY_TYPE_INCLUDING_TAX,
+                    ],
+                ],
+                'DefaultProductClass',
+                'NotLoggedInCustomerClass',
+            ],
+            'guest customer, price include tax, display excluding tax, round' => [
+                (new \Magento\Framework\DataObject())->setPrice(3.256)->setRoundPrice(true),
+                '3.03',
+                [
+                    [
+                        'path' => Config::CONFIG_XML_PATH_PRICE_INCLUDES_TAX,
+                        'value' => '1',
+                    ],
+                    [
+                        'path' => Config::CONFIG_XML_PATH_PRICE_DISPLAY_TYPE,
+                        'value' => Config::DISPLAY_TYPE_EXCLUDING_TAX,
+                    ],
+                ],
+                'DefaultProductClass',
+                'NotLoggedInCustomerClass',
+            ],
         ];
     }
 
@@ -439,39 +486,48 @@ class DataTest extends \PHPUnit\Framework\TestCase
     private function setUpDefaultRules()
     {
         $this->taxClasses = $this->taxRuleFixtureFactory->createTaxClasses([
-                ['name' => 'DefaultCustomerClass', 'type' => ClassModel::TAX_CLASS_TYPE_CUSTOMER],
-                ['name' => 'DefaultProductClass', 'type' => ClassModel::TAX_CLASS_TYPE_PRODUCT],
-                ['name' => 'HigherProductClass', 'type' => ClassModel::TAX_CLASS_TYPE_PRODUCT],
-            ]);
+            ['name' => 'DefaultCustomerClass', 'type' => ClassModel::TAX_CLASS_TYPE_CUSTOMER],
+            ['name' => 'NotLoggedInCustomerClass', 'type' => ClassModel::TAX_CLASS_TYPE_CUSTOMER],
+            ['name' => 'DefaultProductClass', 'type' => ClassModel::TAX_CLASS_TYPE_PRODUCT],
+            ['name' => 'HigherProductClass', 'type' => ClassModel::TAX_CLASS_TYPE_PRODUCT],
+        ]);
 
         $this->taxRates = $this->taxRuleFixtureFactory->createTaxRates([
-                ['percentage' => 7.5, 'country' => 'US', 'region' => 42],
-                ['percentage' => 7.5, 'country' => 'US', 'region' => 12], // Default store rate
-            ]);
+            ['percentage' => 7.5, 'country' => 'US', 'region' => 42],
+            ['percentage' => 7.5, 'country' => 'US', 'region' => 12], // Default store rate
+        ]);
 
         $higherRates = $this->taxRuleFixtureFactory->createTaxRates([
-                ['percentage' => 22, 'country' => 'US', 'region' => 42],
-                ['percentage' => 10, 'country' => 'US', 'region' => 12], // Default store rate
-            ]);
+            ['percentage' => 22, 'country' => 'US', 'region' => 42],
+            ['percentage' => 10, 'country' => 'US', 'region' => 12], // Default store rate
+        ]);
 
         $this->taxRules = $this->taxRuleFixtureFactory->createTaxRules([
-                [
-                    'code' => 'Default Rule',
-                    'customer_tax_class_ids' => [$this->taxClasses['DefaultCustomerClass'], 3],
-                    'product_tax_class_ids' => [$this->taxClasses['DefaultProductClass']],
-                    'tax_rate_ids' => array_values($this->taxRates),
-                    'sort_order' => 0,
-                    'priority' => 0,
-                ],
-                [
-                    'code' => 'Higher Rate Rule',
-                    'customer_tax_class_ids' => [$this->taxClasses['DefaultCustomerClass'], 3],
-                    'product_tax_class_ids' => [$this->taxClasses['HigherProductClass']],
-                    'tax_rate_ids' => array_values($higherRates),
-                    'sort_order' => 0,
-                    'priority' => 0,
-                ],
-            ]);
+            [
+                'code' => 'Default Rule',
+                'customer_tax_class_ids' => [$this->taxClasses['DefaultCustomerClass'], 3],
+                'product_tax_class_ids' => [$this->taxClasses['DefaultProductClass']],
+                'tax_rate_ids' => array_values($this->taxRates),
+                'sort_order' => 0,
+                'priority' => 0,
+            ],
+            [
+                'code' => 'Higher Rate Rule',
+                'customer_tax_class_ids' => [$this->taxClasses['DefaultCustomerClass'], 3],
+                'product_tax_class_ids' => [$this->taxClasses['HigherProductClass']],
+                'tax_rate_ids' => array_values($higherRates),
+                'sort_order' => 0,
+                'priority' => 0,
+            ],
+            [
+                'code' => 'Guest Customer Rule',
+                'customer_tax_class_ids' => [$this->taxClasses['NotLoggedInCustomerClass']],
+                'product_tax_class_ids' => [$this->taxClasses['DefaultProductClass']],
+                'tax_rate_ids' => array_values($this->taxRates),
+                'sort_order' => 0,
+                'priority' => 0,
+            ],
+        ]);
 
         // For cleanup
         $this->taxRates = array_merge($this->taxRates, $higherRates);
