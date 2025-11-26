@@ -447,8 +447,7 @@ class DobTest extends TestCase
             $validationRule->expects($this->any())
                 ->method('getValue')
                 ->willReturn(strtotime(self::MIN_DATE));
-        }
-        elseif ($type=="MAX") {
+        } elseif ($type=="MAX") {
             $validationRule->expects($this->any())
                 ->method('getName')
                 ->willReturn(Dob::MAX_DATE_RANGE_KEY);
@@ -456,8 +455,6 @@ class DobTest extends TestCase
                 ->method('getValue')
                 ->willReturn(strtotime(self::MAX_DATE));
         }
-
-
         return $validationRule;
     }
 
@@ -711,6 +708,25 @@ class DobTest extends TestCase
                 ],
                 // phpcs:disable Generic.Files.LineLength.TooLong
                 'expectedJson' => '{"closeText":"Done","prevText":"Prev","nextText":"Next","currentText":"Today","monthNames":["Januar","Februar","M\u00e4rz","April","Mai","Juni","Juli","August","September","Oktober","November","Dezember"],"monthNamesShort":["Jan.","Feb.","M\u00e4rz","Apr.","Mai","Juni","Juli","Aug.","Sept.","Okt.","Nov.","Dez."],"dayNames":["Sonntag","Montag","Dienstag","Mittwoch","Donnerstag","Freitag","Samstag"],"dayNamesShort":["So.","Mo.","Di.","Mi.","Do.","Fr.","Sa."],"dayNamesMin":["So.","Mo.","Di.","Mi.","Do.","Fr.","Sa."]}'
+                // phpcs:enable Generic.Files.LineLength.TooLong
+            ],
+            [
+                'locale' => 'ar_SA',
+                'expectedArray' => [
+                    'closeText' => 'Done',
+                    'prevText' => 'Prev',
+                    'nextText' => 'Next',
+                    'currentText' => 'Today',
+                    'monthNames' => ['يناير', 'فبراير', 'مارس', 'أبريل', 'مايو', 'يونيو', 'يوليو', 'أغسطس', 'سبتمبر',
+                        'أكتوبر', 'نوفمبر', 'ديسمبر'],
+                    'monthNamesShort' => ['يناير', 'فبراير', 'مارس', 'أبريل', 'مايو', 'يونيو', 'يوليو', 'أغسطس',
+                        'سبتمبر', 'أكتوبر', 'نوفمبر', 'ديسمبر'],
+                    'dayNames' => ['الأحد', 'الاثنين', 'الثلاثاء', 'الأربعاء', 'الخميس', 'الجمعة', 'السبت'],
+                    'dayNamesShort' => ['الأحد', 'الاثنين', 'الثلاثاء', 'الأربعاء', 'الخميس', 'الجمعة', 'السبت'],
+                    'dayNamesMin' => ['أحد', 'إثنين', 'ثلاثاء', 'أربعاء', 'خميس', 'جمعة', 'سبت'],
+                ],
+                // phpcs:disable Generic.Files.LineLength.TooLong
+                'expectedJson' => '{"closeText":"Done","prevText":"Prev","nextText":"Next","currentText":"Today","monthNames":["\u064a\u0646\u0627\u064a\u0631","\u0641\u0628\u0631\u0627\u064a\u0631","\u0645\u0627\u0631\u0633","\u0623\u0628\u0631\u064a\u0644","\u0645\u0627\u064a\u0648","\u064a\u0648\u0646\u064a\u0648","\u064a\u0648\u0644\u064a\u0648","\u0623\u063a\u0633\u0637\u0633","\u0633\u0628\u062a\u0645\u0628\u0631","\u0623\u0643\u062a\u0648\u0628\u0631","\u0646\u0648\u0641\u0645\u0628\u0631","\u062f\u064a\u0633\u0645\u0628\u0631"],"monthNamesShort":["\u064a\u0646\u0627\u064a\u0631","\u0641\u0628\u0631\u0627\u064a\u0631","\u0645\u0627\u0631\u0633","\u0623\u0628\u0631\u064a\u0644","\u0645\u0627\u064a\u0648","\u064a\u0648\u0646\u064a\u0648","\u064a\u0648\u0644\u064a\u0648","\u0623\u063a\u0633\u0637\u0633","\u0633\u0628\u062a\u0645\u0628\u0631","\u0623\u0643\u062a\u0648\u0628\u0631","\u0646\u0648\u0641\u0645\u0628\u0631","\u062f\u064a\u0633\u0645\u0628\u0631"],"dayNames":["\u0627\u0644\u0623\u062d\u062f","\u0627\u0644\u0627\u062b\u0646\u064a\u0646","\u0627\u0644\u062b\u0644\u0627\u062b\u0627\u0621","\u0627\u0644\u0623\u0631\u0628\u0639\u0627\u0621","\u0627\u0644\u062e\u0645\u064a\u0633","\u0627\u0644\u062c\u0645\u0639\u0629","\u0627\u0644\u0633\u0628\u062a"],"dayNamesShort":["\u0627\u0644\u0623\u062d\u062f","\u0627\u0644\u0627\u062b\u0646\u064a\u0646","\u0627\u0644\u062b\u0644\u0627\u062b\u0627\u0621","\u0627\u0644\u0623\u0631\u0628\u0639\u0627\u0621","\u0627\u0644\u062e\u0645\u064a\u0633","\u0627\u0644\u062c\u0645\u0639\u0629","\u0627\u0644\u0633\u0628\u062a"],"dayNamesMin":["\u0623\u062d\u062f","\u0625\u062b\u0646\u064a\u0646","\u062b\u0644\u0627\u062b\u0627\u0621","\u0623\u0631\u0628\u0639\u0627\u0621","\u062e\u0645\u064a\u0633","\u062c\u0645\u0639\u0629","\u0633\u0628\u062a"]}'
                 // phpcs:enable Generic.Files.LineLength.TooLong
             ],
         ];
