@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright 2025 Adobe
+ * All Rights Reserved.
+ */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminCreateProductWithTextSwatchInCustomAttributeSetTest">
+        <annotations>
+            <features value="Swatches"/>
+            <stories value="Create product with text swatch attribute in custom attribute set"/>
+            <title value="Admin can create product with text swatch attribute in custom attribute set and verify single selection behavior"/>
+            <description value="Admin creates text swatch attribute, adds it to custom attribute set, creates product with that set, selects swatch option, changes selection to verify previous option is deselected, saves and edits product to change option again"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="AC-3894"/>
+            <group value="swatches"/>
+        </annotations>
+        <before>
+            <!-- Precondition1: Login as Admin -->
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <!-- Precondition2,3,4,5,6: Create text swatch attribute with 3 options -->
+            <actionGroup ref="AddTextSwatchToProductActionGroup" stepKey="createTextSwatchAttribute">
+                <argument name="attributeName" value="{{textSwatchAttribute.default_label}}"/>
+                <argument name="attributeCode" value="{{textSwatchAttribute.attribute_code}}"/>
+                <argument name="option1" value="{{textSwatchOption1.admin_label}}"/>
+                <argument name="option2" value="{{textSwatchOption2.admin_label}}"/>
+                <argument name="option3" value="{{textSwatchOption3.admin_label}}"/>
+            </actionGroup>
+            <waitForElementVisible selector="{{AdminProductMessagesSection.successMessage}}" stepKey="waitForAttributeSuccessMessage"/>
+            <!-- Precondition7,8: Create new attribute set based on Default -->
+            <actionGroup ref="CreateDefaultAttributeSetActionGroup" stepKey="createAttributeSet">
+                <argument name="label" value="newattrset"/>
+            </actionGroup>
+            <waitForElementVisible selector="{{AdminProductMessagesSection.successMessage}}" stepKey="waitForAttributeSetSuccessMessage"/>
+            <!-- Precondition9: Drag and drop text swatch attribute to Product Details group -->
+            <actionGroup ref="AssignAttributeToGroupActionGroup" stepKey="assignSwatchToProductDetails">
+                <argument name="group" value="Product Details"/>
+                <argument name="attribute" value="{{textSwatchAttribute.attribute_code}}"/>
+            </actionGroup>
+            <!-- Precondition10: Save attribute set -->
+            <actionGroup ref="SaveAttributeSetActionGroup" stepKey="saveAttributeSet"/>
+        </before>
+        <after>
+            <!-- Delete created product -->
+            <actionGroup ref="DeleteProductBySkuActionGroup" stepKey="deleteProduct">
+                <argument name="sku" value="{{SimpleProduct.sku}}"/>
+            </actionGroup>
+            <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="clearFilters"/>
+            <!-- Delete text swatch attribute -->
+            <actionGroup ref="DeleteProductAttributeActionGroup" stepKey="deleteSwatchAttribute">
+                <argument name="ProductAttribute" value="textSwatchAttribute"/>
+            </actionGroup>
+            <!-- Delete custom attribute set -->
+            <actionGroup ref="AdminOpenAttributeSetGridPageActionGroup" stepKey="openAttributeSetPage"/>
+            <actionGroup ref="DeleteAttributeSetByLabelActionGroup" stepKey="deleteAttributeSet">
+                <argument name="label" value="newattrset"/>
+            </actionGroup>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutAdmin"/>
+        </after>
+        <!-- Step 1,2: Navigate to Products - Catalog -->
+        <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="navigateToProductIndex"/>
+        <!-- Step 3: Click Add Product button -->
+        <actionGroup ref="GoToCreateProductPageActionGroup" stepKey="goToCreateProductPage">
+            <argument name="product" value="SimpleProduct"/>
+        </actionGroup>
+        <!-- Step 4: Select custom attribute set 'newattrset' -->
+        <actionGroup ref="AdminProductPageSelectAttributeSetActionGroup" stepKey="selectCustomAttributeSet">
+            <argument name="attributeSetName" value="newattrset"/>
+        </actionGroup>
+        <waitForPageLoad stepKey="waitForAttributeSetToLoad"/>
+        <!-- Step 5: Fill out required fields -->
+        <actionGroup ref="FillMainProductFormNoWeightActionGroup" stepKey="fillMainProductForm">
+            <argument name="product" value="SimpleProduct"/>
+        </actionGroup>
+        <!-- Step 6: Verify text swatch attribute is present in Product Details tab and select first option of text swatch attribute -->
+        <waitForElementVisible selector="{{AdminProductAttributesSection.attributeDropdownByCode(textSwatchAttribute.attribute_code)}}" stepKey="waitForTextSwatchAttribute"/>
+        <actionGroup ref="AdminSelectTextSwatchAttributeOptionActionGroup" stepKey="selectFirstOption">
+            <argument name="attributeCode" value="{{textSwatchAttribute.attribute_code}}"/>
+            <argument name="optionValue" value="{{textSwatchOption1.admin_label}}"/>
+        </actionGroup>
+        <!-- Step 7: Select second option - this should deselect the first option automatically -->
+        <actionGroup ref="AdminSelectTextSwatchAttributeOptionActionGroup" stepKey="selectSecondOption">
+            <argument name="attributeCode" value="{{textSwatchAttribute.attribute_code}}"/>
+            <argument name="optionValue" value="{{textSwatchOption2.admin_label}}"/>
+        </actionGroup>
+        <!-- Verify second option is selected -->
+        <seeOptionIsSelected selector="{{AdminProductAttributesSection.attributeDropdownByCode(textSwatchAttribute.attribute_code)}}" userInput="{{textSwatchOption2.admin_label}}" stepKey="verifySecondOptionSelected"/>
+        <!-- Step 8: Save product -->
+        <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProduct"/>
+        <!-- Step 9: Edit product and verify second option is still selected -->
+        <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="navigateToProductIndexForEdit"/>
+        <actionGroup ref="FilterProductGridBySkuActionGroup" stepKey="filterProductGrid">
+            <argument name="product" value="SimpleProduct"/>
+        </actionGroup>
+        <actionGroup ref="OpenEditProductOnBackendActionGroup" stepKey="openProductForEdit">
+            <argument name="product" value="SimpleProduct"/>
+        </actionGroup>
+        <waitForElementVisible selector="{{AdminProductAttributesSection.attributeDropdownByCode(textSwatchAttribute.attribute_code)}}" stepKey="waitForSwatchAttributeAfterEdit"/>
+        <seeOptionIsSelected selector="{{AdminProductAttributesSection.attributeDropdownByCode(textSwatchAttribute.attribute_code)}}" userInput="{{textSwatchOption2.admin_label}}" stepKey="verifySecondOptionStillSelected"/>
+        <!-- Change option to third option - previous option should be deselected -->
+        <actionGroup ref="AdminSelectTextSwatchAttributeOptionActionGroup" stepKey="selectThirdOption">
+            <argument name="attributeCode" value="{{textSwatchAttribute.attribute_code}}"/>
+            <argument name="optionValue" value="{{textSwatchOption3.admin_label}}"/>
+        </actionGroup>
+        <!-- Verify third option is selected -->
+        <seeOptionIsSelected selector="{{AdminProductAttributesSection.attributeDropdownByCode(textSwatchAttribute.attribute_code)}}" userInput="{{textSwatchOption3.admin_label}}" stepKey="verifyThirdOptionSelected"/>
+        <!-- Step 10: Save product again -->
+        <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProductAgain"/>
+        <!-- Verify third option persisted after save -->
+        <waitForElementVisible selector="{{AdminProductAttributesSection.attributeDropdownByCode(textSwatchAttribute.attribute_code)}}" stepKey="waitForSwatchAttributeAfterSecondSave"/>
+        <seeOptionIsSelected selector="{{AdminProductAttributesSection.attributeDropdownByCode(textSwatchAttribute.attribute_code)}}" userInput="{{textSwatchOption3.admin_label}}" stepKey="verifyThirdOptionPersisted"/>
+    </test>
+</tests>
