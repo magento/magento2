@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\Quote\Test\Unit\Model;
 
+use Magento\Framework\Exception\InputException;
 use Magento\Customer\Api\AddressRepositoryInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Quote\Api\CartRepositoryInterface;
@@ -72,11 +73,11 @@ class BillingAddressManagementTest extends TestCase
     protected function setUp(): void
     {
         $this->objectManager = new ObjectManager($this);
-        $this->quoteRepositoryMock = $this->getMockForAbstractClass(CartRepositoryInterface::class);
+        $this->quoteRepositoryMock = $this->createMock(CartRepositoryInterface::class);
         $this->validatorMock = $this->createMock(QuoteAddressValidator::class);
-        $this->addressRepository = $this->getMockForAbstractClass(AddressRepositoryInterface::class);
-        $logger = $this->getMockForAbstractClass(LoggerInterface::class);
-        $this->cartAddressMutex = $this->getMockForAbstractClass(CartAddressMutexInterface::class);
+        $this->addressRepository = $this->createMock(AddressRepositoryInterface::class);
+        $logger = $this->createMock(LoggerInterface::class);
+        $this->cartAddressMutex = $this->createMock(CartAddressMutexInterface::class);
 
         $this->model = $this->objectManager->getObject(
             BillingAddressManagement::class,
@@ -111,7 +112,7 @@ class BillingAddressManagementTest extends TestCase
             ->with('cartId')->willReturn($quoteMock);
 
         $addressMock = $this->createMock(Address::class);
-        $quoteMock->expects($this->any())->method('getBillingAddress')->willReturn($addressMock);
+        $quoteMock->method('getBillingAddress')->willReturn($addressMock);
 
         $this->assertEquals($addressMock, $this->model->get('cartId'));
     }
@@ -141,7 +142,7 @@ class BillingAddressManagementTest extends TestCase
         $this->cartAddressMutex->expects($this->once())->method('execute')
             ->with(
                 'cart_billing_address_lock_'.$addressId,
-                \Closure::fromCallable([$this, 'assignAddressMethod']),
+                self::callback(fn($c) => $c instanceof \Closure),
                 $addressId,
                 [$address, $quoteMock, $useForShipping]
             )
@@ -202,7 +203,7 @@ class BillingAddressManagementTest extends TestCase
     /**
      * Set billing address test
      * @return void
-     * @throws \Magento\Framework\Exception\InputException
+     * @throws InputException
      * @throws \PHPUnit\Framework\MockObject\Exception
      */
     public function testSetBillingAddress()

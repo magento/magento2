@@ -7,11 +7,16 @@ declare(strict_types=1);
 
 namespace Magento\Bundle\Test\Unit\Model\Sales\Order;
 
+use Magento\Sales\Model\Order;
+use Magento\Sales\Api\Data\ShipmentItemInterface;
+use Magento\Sales\Model\Order\Item;
 use Laminas\Uri\Http as HttpUri;
 use Magento\Bundle\Model\Sales\Order\BundleOrderTypeValidator;
 use Magento\Catalog\Model\Product;
+use Magento\Catalog\Test\Unit\Helper\ProductTestHelper;
 use Magento\Framework\Webapi\Request;
 use Magento\Sales\Model\Order\Shipment;
+use Magento\Sales\Test\Unit\Helper\ItemTestHelper;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Magento\Catalog\Model\Product\Type;
@@ -35,8 +40,8 @@ class BundleOrderTypeValidatorTest extends TestCase
     {
         $this->request = $this->createMock(Request::class);
         $uri = $this->createMock(HttpUri::class);
-        $uri->expects($this->any())->method('getPath')->willReturn('V1/shipment/');
-        $this->request->expects($this->any())->method('getUri')->willReturn($uri);
+        $uri->method('getPath')->willReturn('V1/shipment/');
+        $this->request->method('getUri')->willReturn($uri);
 
         $this->validator = new BundleOrderTypeValidator($this->request);
 
@@ -48,25 +53,20 @@ class BundleOrderTypeValidatorTest extends TestCase
      */
     public function testIsValidSuccessShipmentTypeTogether(): void
     {
-        $bundleProduct = $this->getMockBuilder(Product::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['getShipmentType'])
-            ->getMock();
-        $bundleProduct->expects($this->any())
-            ->method('getShipmentType')
-            ->willReturn(BundleOrderTypeValidator::SHIPMENT_TYPE_TOGETHER);
+        $bundleProduct = new ProductTestHelper();
+        $bundleProduct->setShipmentType(BundleOrderTypeValidator::SHIPMENT_TYPE_TOGETHER);
 
         $bundleOrderItem = $this->getBundleOrderItemMock();
-        $bundleOrderItem->expects($this->any())->method('getProductType')->willReturn(Type::TYPE_BUNDLE);
-        $bundleOrderItem->expects($this->any())->method('getProduct')->willReturn($bundleProduct);
+        $bundleOrderItem->setProductType(Type::TYPE_BUNDLE);
+        $bundleOrderItem->setProduct($bundleProduct);
 
-        $order = $this->createMock(\Magento\Sales\Model\Order::class);
+        $order = $this->createMock(Order::class);
         $order->expects($this->once())
             ->method('getItemById')
             ->willReturn($bundleOrderItem);
 
-        $bundleShipmentItem = $this->createMock(\Magento\Sales\Api\Data\ShipmentItemInterface::class);
-        $bundleShipmentItem->expects($this->any())->method('getOrderItemId')->willReturn(1);
+        $bundleShipmentItem = $this->createMock(ShipmentItemInterface::class);
+        $bundleShipmentItem->method('getOrderItemId')->willReturn(1);
 
         $shipment = $this->createMock(Shipment::class);
         $shipment->expects($this->once())
@@ -84,33 +84,27 @@ class BundleOrderTypeValidatorTest extends TestCase
 
     public function testIsValidSuccessShipmentTypeSeparately()
     {
-        $bundleProduct = $this->getMockBuilder(Product::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['getShipmentType'])
-            ->getMock();
-        $bundleProduct->expects($this->any())
-            ->method('getShipmentType')
-            ->willReturn(BundleOrderTypeValidator::SHIPMENT_TYPE_SEPARATELY);
+        $bundleProduct = new ProductTestHelper();
+        $bundleProduct->setShipmentType(BundleOrderTypeValidator::SHIPMENT_TYPE_SEPARATELY);
 
         $bundleOrderItem = $this->getBundleOrderItemMock();
-        $bundleOrderItem->expects($this->any())->method('getProductType')->willReturn(Type::TYPE_BUNDLE);
-        $bundleOrderItem->expects($this->any())->method('getProduct')->willReturn($bundleProduct);
+        $bundleOrderItem->setProductType(Type::TYPE_BUNDLE);
+        $bundleOrderItem->setProduct($bundleProduct);
 
-        $childOrderItem = $this->createMock(\Magento\Sales\Model\Order\Item::class);
-        $childOrderItem->expects($this->any())->method('getParentItemId')
-            ->willReturn(1);
+        $childOrderItem = $this->createMock(Item::class);
+        $childOrderItem->method('getParentItemId')->willReturn(1);
 
-        $order = $this->createMock(\Magento\Sales\Model\Order::class);
+        $order = $this->createMock(Order::class);
         $order->expects($this->any())
             ->method('getItemById')
             ->willReturnOnConsecutiveCalls($bundleOrderItem, $childOrderItem);
 
-        $bundleShipmentItem = $this->createMock(\Magento\Sales\Api\Data\ShipmentItemInterface::class);
-        $bundleShipmentItem->expects($this->any())->method('getOrderItemId')->willReturn(1);
+        $bundleShipmentItem = $this->createMock(ShipmentItemInterface::class);
+        $bundleShipmentItem->method('getOrderItemId')->willReturn(1);
         $bundleShipmentItem->expects($this->exactly(3))->method('getOrderItemId')->willReturn(1);
 
-        $childShipmentItem = $this->createMock(\Magento\Sales\Api\Data\ShipmentItemInterface::class);
-        $childShipmentItem->expects($this->any())->method('getOrderItemId')->willReturn(2);
+        $childShipmentItem = $this->createMock(ShipmentItemInterface::class);
+        $childShipmentItem->method('getOrderItemId')->willReturn(2);
 
         $shipment = $this->createMock(Shipment::class);
         $shipment->expects($this->once())
@@ -131,31 +125,23 @@ class BundleOrderTypeValidatorTest extends TestCase
      */
     public function testIsValidFailSeparateShipmentType(): void
     {
-        $bundleProduct = $this->getMockBuilder(Product::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['getShipmentType'])
-            ->getMock();
-        $bundleProduct->expects($this->any())
-            ->method('getShipmentType')
-            ->willReturn(BundleOrderTypeValidator::SHIPMENT_TYPE_SEPARATELY);
+        $bundleProduct = new ProductTestHelper();
+        $bundleProduct->setShipmentType(BundleOrderTypeValidator::SHIPMENT_TYPE_SEPARATELY);
 
         $bundleOrderItem = $this->getBundleOrderItemMock();
-        $bundleOrderItem->expects($this->any())->method('getProductType')->willReturn(Type::TYPE_BUNDLE);
-        $bundleOrderItem->expects($this->any())->method('getProduct')->willReturn($bundleProduct);
-        $bundleOrderItem->expects($this->any())->method('getSku')->willReturn('sku');
+        $bundleOrderItem->setProductType(Type::TYPE_BUNDLE);
+        $bundleOrderItem->setProduct($bundleProduct);
+        $bundleOrderItem->setSku('sku');
 
-        $childOrderItem = $this->createMock(\Magento\Sales\Model\Order\Item::class);
-        $childOrderItem->expects($this->any())->method('getParentItemId')
-            ->willReturn(1);
-        $childOrderItem->expects($this->any())->method('getParentItem')->willReturn($bundleOrderItem);
+        $childOrderItem = $this->createMock(Item::class);
+        $childOrderItem->method('getParentItemId')->willReturn(1);
+        $childOrderItem->method('getParentItem')->willReturn($bundleOrderItem);
 
-        $order = $this->createMock(\Magento\Sales\Model\Order::class);
-        $order->expects($this->any())
-            ->method('getItemById')
-            ->willReturn($childOrderItem);
+        $order = $this->createMock(Order::class);
+        $order->method('getItemById')->willReturn($childOrderItem);
 
-        $childShipmentItem = $this->createMock(\Magento\Sales\Api\Data\ShipmentItemInterface::class);
-        $childShipmentItem->expects($this->any())->method('getOrderItemId')->willReturn(2);
+        $childShipmentItem = $this->createMock(ShipmentItemInterface::class);
+        $childShipmentItem->method('getOrderItemId')->willReturn(2);
 
         $shipment = $this->createMock(Shipment::class);
         $shipment->expects($this->once())
@@ -182,31 +168,25 @@ class BundleOrderTypeValidatorTest extends TestCase
      */
     public function testIsValidFailTogetherShipmentType(): void
     {
-        $bundleProduct = $this->getMockBuilder(Product::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['getShipmentType'])
-            ->getMock();
-        $bundleProduct->expects($this->any())
-            ->method('getShipmentType')
-            ->willReturn(BundleOrderTypeValidator::SHIPMENT_TYPE_TOGETHER);
+        $bundleProduct = new ProductTestHelper();
+        $bundleProduct->setShipmentType(BundleOrderTypeValidator::SHIPMENT_TYPE_TOGETHER);
 
         $bundleOrderItem = $this->getBundleOrderItemMock();
-        $bundleOrderItem->expects($this->any())->method('getProductType')->willReturn(Type::TYPE_BUNDLE);
-        $bundleOrderItem->expects($this->any())->method('getProduct')->willReturn($bundleProduct);
-        $bundleOrderItem->expects($this->any())->method('getSku')->willReturn('sku');
+        $bundleOrderItem->setProductType(Type::TYPE_BUNDLE);
+        $bundleOrderItem->setProduct($bundleProduct);
+        $bundleOrderItem->setSku('sku');
 
-        $bundleShipmentItem = $this->createMock(\Magento\Sales\Api\Data\ShipmentItemInterface::class);
-        $bundleShipmentItem->expects($this->any())->method('getOrderItemId')->willReturn(1);
+        $bundleShipmentItem = $this->createMock(ShipmentItemInterface::class);
+        $bundleShipmentItem->method('getOrderItemId')->willReturn(1);
         $bundleShipmentItem->expects($this->exactly(3))->method('getOrderItemId')->willReturn(1);
 
-        $childShipmentItem = $this->createMock(\Magento\Sales\Api\Data\ShipmentItemInterface::class);
-        $childShipmentItem->expects($this->any())->method('getOrderItemId')->willReturn(2);
+        $childShipmentItem = $this->createMock(ShipmentItemInterface::class);
+        $childShipmentItem->method('getOrderItemId')->willReturn(2);
 
-        $childOrderItem = $this->createMock(\Magento\Sales\Model\Order\Item::class);
-        $childOrderItem->expects($this->any())->method('getParentItemId')
-            ->willReturn(1);
+        $childOrderItem = $this->createMock(Item::class);
+        $childOrderItem->method('getParentItemId')->willReturn(1);
 
-        $order = $this->createMock(\Magento\Sales\Model\Order::class);
+        $order = $this->createMock(Order::class);
         $order->expects($this->any())
             ->method('getItemById')
             ->willReturnOnConsecutiveCalls($bundleOrderItem, $childOrderItem);
@@ -233,14 +213,10 @@ class BundleOrderTypeValidatorTest extends TestCase
     }
 
     /**
-     * @return MockObject
+     * @return ItemTestHelper
      */
-    private function getBundleOrderItemMock(): MockObject
+    private function getBundleOrderItemMock(): ItemTestHelper
     {
-        return $this->getMockBuilder(\Magento\Sales\Model\Order\Item::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['getHasChildren'])
-            ->onlyMethods(['getItemId', 'isDummy', 'getProductType', 'getSku', 'getParentItem', 'getProduct'])
-            ->getMock();
+        return new ItemTestHelper();
     }
 }

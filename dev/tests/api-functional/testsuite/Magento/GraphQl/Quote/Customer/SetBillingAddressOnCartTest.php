@@ -457,7 +457,8 @@ mutation {
 QUERY;
 
         self::expectExceptionMessage(
-            'The billing address cannot contain "customer_address_id" and "address" at the same time.'
+            'The billing address cannot contain "customer_address_id" or '
+            . '"customer_address_uid" together with "address".'
         );
         $this->graphQlMutation($query, [], '', $this->getHeaderMap());
     }
@@ -494,7 +495,8 @@ mutation {
 QUERY;
 
         self::expectExceptionMessage(
-            'The billing address must contain either "customer_address_id", "address", or "same_as_shipping".'
+            'The billing address must contain either "customer_address_id", "customer_address_uid",'
+            . ' "address", or "same_as_shipping"'
         );
         $this->graphQlMutation($query, [], '', $this->getHeaderMap());
     }

@@ -30,7 +30,7 @@ class FileTest extends TestCase
     private $coreFileStorageDatabase;
 
     /**
-     * @var \Magento\Framework\Filesystem|MockObject
+     * @var Filesystem|MockObject
      */
     private $filesystem;
 
@@ -56,49 +56,38 @@ class FileTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->mediaDirectory = $this->getMockBuilder(WriteInterface::class)
-            ->getMockForAbstractClass();
+        $this->mediaDirectory = $this->createMock(WriteInterface::class);
 
-        $this->filesystem = $this->getMockBuilder(Filesystem::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->filesystem = $this->createMock(Filesystem::class);
         $this->filesystem->expects($this->any())
             ->method('getDirectoryWrite')
             ->with(DirectoryList::MEDIA)
             ->willReturn($this->mediaDirectory);
 
-        $this->coreFileStorageDatabase =
-            $this->getMockBuilder(Database::class)
-                ->addMethods(['create'])
-                ->disableOriginalConstructor()
-                ->getMock();
-        $this->appContext = $this->getMockBuilder(Context::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(
-                [
-                    'getModuleManager',
-                    'getLogger',
-                    'getRequest',
-                    'getUrlBuilder',
-                    'getHttpHeader',
-                    'getEventManager',
-                    'getRemoteAddress',
-                    'getCacheConfig',
-                    'getUrlEncoder',
-                    'getUrlDecoder',
-                    'getScopeConfig'
-                ]
-            )
-            ->getMock();
+        $this->coreFileStorageDatabase = $this->createMock(Database::class);
+        $this->appContext = $this->createPartialMock(
+            Context::class,
+            [
+                'getModuleManager',
+                'getLogger',
+                'getRequest',
+                'getUrlBuilder',
+                'getHttpHeader',
+                'getEventManager',
+                'getRemoteAddress',
+                'getCacheConfig',
+                'getUrlEncoder',
+                'getUrlDecoder',
+                'getScopeConfig'
+            ]
+        );
         $this->file = new File(
             $this->appContext,
             $this->coreFileStorageDatabase,
             $this->filesystem
         );
 
-        $this->uploader = $this->getMockBuilder(Uploader::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->uploader = $this->createMock(Uploader::class);
     }
 
     /**

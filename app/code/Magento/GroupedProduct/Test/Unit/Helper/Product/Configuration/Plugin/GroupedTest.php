@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\GroupedProduct\Test\Unit\Helper\Product\Configuration\Plugin;
 
+use PHPUnit\Framework\Attributes\CoversClass;
 use Magento\Catalog\Helper\Product\Configuration;
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\Product\Configuration\Item\ItemInterface;
@@ -14,6 +15,7 @@ use Magento\GroupedProduct\Helper\Product\Configuration\Plugin\Grouped;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
+#[CoversClass(\Magento\GroupedProduct\Helper\Product\Configuration\Plugin\Grouped::class)]
 class GroupedTest extends TestCase
 {
     /**
@@ -49,26 +51,19 @@ class GroupedTest extends TestCase
     protected function setUp(): void
     {
         $this->groupedConfigPlugin = new Grouped();
-        $this->itemMock = $this->getMockForAbstractClass(ItemInterface::class);
+        $this->itemMock = $this->createMock(ItemInterface::class);
         $this->productMock = $this->createMock(Product::class);
         $this->typeInstanceMock = $this->createMock(\Magento\GroupedProduct\Model\Product\Type\Grouped::class);
 
-        $this->itemMock->expects($this->any())->method('getProduct')->willReturn($this->productMock);
+        $this->itemMock->method('getProduct')->willReturn($this->productMock);
 
-        $this->productMock->expects(
-            $this->any()
-        )->method(
-            'getTypeInstance'
-        )->willReturn(
+        $this->productMock->method('getTypeInstance')->willReturn(
             $this->typeInstanceMock
         );
 
         $this->subjectMock = $this->createMock(Configuration::class);
     }
 
-    /**
-     * @covers \Magento\GroupedProduct\Helper\Product\Configuration\Plugin\Grouped::aroundGetOptions
-     */
     public function testAroundGetOptionsGroupedProductWithAssociated()
     {
         $associatedProductId = 'associatedId';
@@ -98,12 +93,8 @@ class GroupedTest extends TestCase
             \Magento\GroupedProduct\Model\Product\Type\Grouped::TYPE_CODE
         );
 
-        $quantityItemMock = $this->getMockBuilder(ItemInterface::class)
-            ->addMethods(['getValue'])
-            ->onlyMethods(['getProduct', 'getOptionByCode', 'getFileDownloadParams'])
-            ->getMockForAbstractClass();
-
-        $quantityItemMock->expects($this->any())->method('getValue')->willReturn(1);
+        $quantityItemMock = new \Magento\Wishlist\Test\Unit\Helper\ItemTestHelper();
+        $quantityItemMock->setValue(1);
 
         $this->itemMock->expects(
             $this->once()
@@ -132,9 +123,6 @@ class GroupedTest extends TestCase
         $this->assertEquals($expectedResult, $result);
     }
 
-    /**
-     * @covers \Magento\GroupedProduct\Helper\Product\Configuration\Plugin\Grouped::aroundGetOptions
-     */
     public function testAroundGetOptionsGroupedProductWithoutAssociated()
     {
         $this->typeInstanceMock->expects(
@@ -169,9 +157,6 @@ class GroupedTest extends TestCase
         $this->assertEquals($chainCallResult, $result);
     }
 
-    /**
-     * @covers \Magento\GroupedProduct\Helper\Product\Configuration\Plugin\Grouped::aroundGetOptions
-     */
     public function testAroundGetOptionsAnotherProductType()
     {
         $chainCallResult = ['result'];

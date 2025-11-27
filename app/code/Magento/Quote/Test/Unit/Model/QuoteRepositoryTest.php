@@ -7,6 +7,8 @@ declare(strict_types=1);
 
 namespace Magento\Quote\Test\Unit\Model;
 
+use PHPUnit\Framework\Attributes\DataProvider;
+use Magento\Quote\Test\Unit\Helper\QuoteTestHelper;
 use Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface;
 use Magento\Framework\Api\SearchCriteria;
 use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
@@ -106,13 +108,12 @@ class QuoteRepositoryTest extends TestCase
     {
         $objectManager = new ObjectManager($this);
 
-        $this->objectManagerMock = $this->getMockForAbstractClass(ObjectManagerInterface::class);
+        $this->objectManagerMock = $this->createMock(ObjectManagerInterface::class);
         \Magento\Framework\App\ObjectManager::setInstance($this->objectManagerMock);
 
         $this->cartFactoryMock = $this->createPartialMock(CartInterfaceFactory::class, ['create']);
-        $this->storeManagerMock = $this->getMockForAbstractClass(StoreManagerInterface::class);
-        $this->quoteMock = $this->getMockBuilder(Quote::class)
-            ->addMethods(['setSharedStoreIds', 'getCustomerId'])
+        $this->storeManagerMock = $this->createMock(StoreManagerInterface::class);
+        $this->quoteMock = $this->getMockBuilder(QuoteTestHelper::class)
             ->onlyMethods(
                 [
                     'load',
@@ -121,10 +122,12 @@ class QuoteRepositoryTest extends TestCase
                     'loadByCustomer',
                     'getIsActive',
                     'getId',
+                    'getCustomerId',
                     'save',
                     'delete',
                     'getStoreId',
-                    'getData'
+                    'getData',
+                    'setSharedStoreIds'
                 ]
             )
             ->disableOriginalConstructor()
@@ -229,18 +232,12 @@ class QuoteRepositoryTest extends TestCase
      * @param int $quoteId
      * @param int $customerQuoteId
      * @param bool $isSame
-     * @dataProvider getForCustomerAfterGetDataProvider
      */
+    #[DataProvider('getForCustomerAfterGetDataProvider')]
     public function testGetForCustomerAfterGet(int $quoteId, int $customerQuoteId, bool $isSame)
     {
         $customerId = 23;
-        $customerQuote = $this->getMockBuilder(Quote::class)
-            ->addMethods(
-                [
-                    'setSharedStoreIds',
-                    'getCustomerId'
-                ]
-            )
+        $customerQuote = $this->getMockBuilder(QuoteTestHelper::class)
             ->onlyMethods(
                 [
                     'load',
@@ -249,10 +246,12 @@ class QuoteRepositoryTest extends TestCase
                     'loadByCustomer',
                     'getIsActive',
                     'getId',
+                    'getCustomerId',
                     'save',
                     'delete',
                     'getStoreId',
-                    'getData'
+                    'getData',
+                    'setSharedStoreIds'
                 ]
             )
             ->disableOriginalConstructor()
@@ -335,9 +334,9 @@ class QuoteRepositoryTest extends TestCase
      *
      * @param InvokedCountMatch $invokeTimes
      * @param array $sharedStoreIds
-     * @dataProvider getForCustomerDataProvider
      */
-    public function testGetForCustomer(InvokedCountMatch $invokeTimes, array $sharedStoreIds)
+    #[DataProvider('getForCustomerDataProvider')]
+    public function testGetForCustomer(string $invokeTimes, array $sharedStoreIds)
     {
         $cartId = 17;
         $customerId = 23;
@@ -351,7 +350,7 @@ class QuoteRepositoryTest extends TestCase
         $this->storeMock->expects(static::once())
             ->method('getId')
             ->willReturn(1);
-        $this->quoteMock->expects($invokeTimes)
+        $this->quoteMock->expects($this->$invokeTimes())
             ->method('setSharedStoreIds');
         $this->quoteMock->expects(static::once())
             ->method('loadByCustomer')
@@ -378,11 +377,11 @@ class QuoteRepositoryTest extends TestCase
     {
         return [
             [
-                'invokeTimes' => static::never(),
+                'invokeTimes' => 'never',
                 'sharedStoreIds' => []
             ],
             [
-                'invokeTimes' => static::once(),
+                'invokeTimes' => 'once',
                 'sharedStoreIds' => [1]
             ]
         ];
@@ -516,9 +515,8 @@ class QuoteRepositoryTest extends TestCase
     public function testSave()
     {
         $cartId = 100;
-        $quoteMock = $this->getMockBuilder(Quote::class)
-            ->addMethods(['getCustomerId'])
-            ->onlyMethods(['getId', 'getStoreId', 'hasData', 'setData'])
+        $quoteMock = $this->getMockBuilder(QuoteTestHelper::class)
+            ->onlyMethods(['getId', 'getStoreId', 'hasData', 'setData', 'getCustomerId'])
             ->disableOriginalConstructor()
             ->getMock();
         $quoteMock->expects($this->exactly(3))->method('getId')->willReturn($cartId);
@@ -564,12 +562,12 @@ class QuoteRepositoryTest extends TestCase
         $this->quoteCollectionFactoryMock->expects($this->once())
             ->method('create')
             ->willReturn($this->quoteCollectionMock);
-        $cartMock = $this->getMockForAbstractClass(CartInterface::class);
+        $cartMock = $this->createMock(CartInterface::class);
         $this->loadHandlerMock->expects($this->once())
             ->method('load')
             ->with($cartMock);
 
-        $searchResult = $this->getMockForAbstractClass(CartSearchResultsInterface::class);
+        $searchResult = $this->createMock(CartSearchResultsInterface::class);
         $searchCriteriaMock = $this->createMock(SearchCriteria::class);
         $this->searchResultsDataFactory
             ->expects($this->once())

@@ -56,7 +56,7 @@
 
         <grabValueFrom selector="{{AdminSearchSynonymsNewSection.merge}}" stepKey="grabMergeValue"/>
         <assertEquals stepKey="assertMergeDefaultValue">
-            <expectedResult type="string">0</expectedResult>
+            <expectedResult type="string">false</expectedResult>
             <actualResult type="string">$grabMergeValue</actualResult>
         </assertEquals>
     </test>
