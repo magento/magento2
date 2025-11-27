@@ -19,7 +19,7 @@ use Magento\Review\Model\ResourceModel\Review\CollectionFactory;
  */
 class Pager extends \Magento\Framework\App\Helper\AbstractHelper
 {
-    protected const STORAGE_PREFIX = 'search_result_ids';
+    public const STORAGE_PREFIX = 'search_result_ids';
 
     /**
      * Key identifier for session storage id

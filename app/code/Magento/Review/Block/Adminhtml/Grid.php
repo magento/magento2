@@ -21,6 +21,13 @@ use Magento\Review\Helper\Action\Pager;
 class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
 {
     /**
+     * Review action pager
+     *
+     * @var \Magento\Review\Helper\Action\Pager
+     */
+    protected $_reviewActionPager = null;
+
+    /**
      * Review helper data
      *
      * @var \Magento\Review\Helper\Data
@@ -54,6 +61,7 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
      * @param \Magento\Review\Model\ReviewFactory $reviewFactory
      * @param \Magento\Review\Model\ResourceModel\Review\Product\CollectionFactory $productsFactory
      * @param \Magento\Review\Helper\Data $reviewData
+     * @param \Magento\Review\Helper\Action\Pager $reviewActionPager
      * @param \Magento\Framework\Registry $coreRegistry
      * @param array $data
      */
@@ -63,12 +71,14 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
         \Magento\Review\Model\ReviewFactory $reviewFactory,
         \Magento\Review\Model\ResourceModel\Review\Product\CollectionFactory $productsFactory,
         \Magento\Review\Helper\Data $reviewData,
+        \Magento\Review\Helper\Action\Pager $reviewActionPager,
         \Magento\Framework\Registry $coreRegistry,
         array $data = []
     ) {
         $this->_productsFactory = $productsFactory;
         $this->_coreRegistry = $coreRegistry;
         $this->_reviewData = $reviewData;
+        $this->_reviewActionPager = $reviewActionPager;
         $this->_reviewFactory = $reviewFactory;
         parent::__construct($context, $backendHelper, $data);
     }
@@ -94,6 +104,10 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
      */
     protected function _afterLoadCollection()
     {
+         /** @var $actionPager \Magento\Review\Helper\Action\Pager */
+        $actionPager = $this->_reviewActionPager;
+        $actionPager->setStorageId('reviews');
+
         return parent::_afterLoadCollection();
     }
 
