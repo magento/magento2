@@ -11,6 +11,7 @@ use Magento\Customer\Api\ConfirmationEmailLogManagementInterface;
 use Magento\Customer\Api\Data\ConfirmationLogInterface;
 use Magento\Customer\Model\ResourceModel\ConfirmationLog as ResourceModel;
 use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Stdlib\DateTime\DateTime;
 use Magento\Store\Model\ScopeInterface;
 
@@ -65,10 +66,14 @@ class ConfirmationEmailLogManagement implements ConfirmationEmailLogManagementIn
      */
     public function getByCustomerId(int $customerId): ?ConfirmationLogInterface
     {
-        $log = $this->confirmationLogFactory->create();
-        $this->resource->load($log, $customerId, 'customer_id');
+        try {
+            $log = $this->confirmationLogFactory->create();
+            $this->resource->load($log, $customerId, 'customer_id');
 
-        return $log->getId() ? $log : null;
+            return $log->getId() ? $log : null;
+        } catch (NoSuchEntityException $ex) {
+            return null;
+        }
     }
 
     /**
@@ -159,8 +164,11 @@ class ConfirmationEmailLogManagement implements ConfirmationEmailLogManagementIn
     private function handleMaxLimitReached(ConfirmationLogInterface $log, int $minTimeBetweenEmails): bool
     {
         $lastEmailTimestamp = strtotime($log->getLastEmailSentAt());
-        $currentTimestamp = $this->dateTime->timestamp();
 
+        if ($lastEmailTimestamp === false) {
+            $lastEmailTimestamp = 0;
+        }
+        $currentTimestamp = $this->dateTime->timestamp();
         $timeDifference = $currentTimestamp - $lastEmailTimestamp;
 
         if ($timeDifference >= $minTimeBetweenEmails) {
