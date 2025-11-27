@@ -104,7 +104,7 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
      */
     protected function _afterLoadCollection()
     {
-         /** @var $actionPager \Magento\Review\Helper\Action\Pager */
+        /** @var $actionPager \Magento\Review\Helper\Action\Pager */
         $actionPager = $this->_reviewActionPager;
         $actionPager->setStorageId('reviews');
 
