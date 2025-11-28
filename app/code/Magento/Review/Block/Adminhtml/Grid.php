@@ -21,7 +21,7 @@ use Magento\Review\Helper\Action\Pager;
 class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
 {
     /**
-     * Review action pager
+     * Magento Review action pager
      *
      * @var \Magento\Review\Helper\Action\Pager
      */
