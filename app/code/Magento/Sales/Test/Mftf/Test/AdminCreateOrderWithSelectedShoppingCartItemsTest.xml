@@ -58,6 +58,10 @@
             <argument name="customer" value="$$simpleCustomer$$"/>
         </actionGroup>
 
+        <!--Step 3.1: Select Default Store View if store selector appears-->
+        <conditionalClick selector="{{AdminOrderFormStoreSelectorSection.defaultStoreViewButton}}" dependentSelector="{{AdminOrderFormStoreSelectorSection.storeSelectorContainer}}" visible="true" stepKey="selectDefaultStoreView"/>
+        <waitForPageLoad stepKey="waitForStoreViewSelected"/>
+
         <!--Step 4: Add product2 to the order-->
         <actionGroup ref="AddSimpleProductToOrderActionGroup" stepKey="addSimpleProductToOrder">
             <argument name="product" value="$$product2$$"/>
