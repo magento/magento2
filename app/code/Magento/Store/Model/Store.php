@@ -904,6 +904,7 @@ class Store extends AbstractExtensibleModel implements
     {
         $code = is_string($code) && '' !== $code ? strtoupper($code) : '';
         if (in_array($code, $this->getAvailableCurrencyCodes())) {
+            $this->unsetData('current_currency');
             $this->_getSession()->setCurrencyCode($code);
 
             $defaultCode = ($this->_storeManager->getStore() !== null)
