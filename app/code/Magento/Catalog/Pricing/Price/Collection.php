@@ -48,7 +48,7 @@ class Collection extends \Magento\Framework\Pricing\Price\Collection
     {
         $customerGroupId = $this->saleableItem->getCustomerGroupId() ?? '';
         $websiteId = $this->storeManager->getStore($this->saleableItem->getStoreId())->getWebsiteId();
-        $codeKey = $code . '-' . $customerGroupId . '-' . $websiteId;
+        $codeKey = $code . '-' . $this->saleableItem->getId() .'-'. $customerGroupId . '-' . $websiteId;
 
         if (!isset($this->priceModels[$codeKey])) {
             $this->priceModels[$codeKey] = $this->priceFactory->create(
