@@ -133,7 +133,8 @@ class FileLock implements LockManagerInterface
                 continue;
             }
 
-            if ($this->isLocked(basename($lockFile))) {
+            $filename = basename($lockFile);
+            if ($this->isLocked(rawurldecode($filename))) {
                 continue;
             }
 
@@ -204,7 +205,7 @@ class FileLock implements LockManagerInterface
      */
     private function getLockPath(string $name): string
     {
-        return $this->path . $name;
+        return $this->path . rawurlencode($name);
     }
 
     /**
