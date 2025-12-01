@@ -199,7 +199,7 @@ class ObjectManager
             $method = $reflection->getMethod('getMockBuilder');
             $method->setAccessible(true);
             $mockBuilder = $method->invoke($this->_testObject, \Magento\Framework\Api\ObjectFactory::class);
-            
+
             // Use onlyMethods() with methods that actually exist in ObjectFactory
             $objectFactory = $mockBuilder->onlyMethods(['create', 'get'])
                 ->disableOriginalConstructor()
@@ -208,7 +208,7 @@ class ObjectManager
             $reflection = new \ReflectionClass($this->_testObject);
             $anyMethod = $reflection->getMethod('any');
             $anyMethod->setAccessible(true);
-            
+
             // Only configure methods that actually exist in ObjectFactory
             $objectFactory->expects($anyMethod->invoke($this->_testObject))
                 ->method('create')
@@ -237,7 +237,7 @@ class ObjectManager
                         return new $className(...array_values($args));
                     }
                 );
-            
+
             $objectFactory->expects($anyMethod->invoke($this->_testObject))
                 ->method('get')
                 ->willReturnCallback(
@@ -407,12 +407,12 @@ class ObjectManager
         $getMockBuilderMethod = $reflection->getMethod('getMockBuilder');
         $getMockBuilderMethod->setAccessible(true);
         $mockBuilder = $getMockBuilderMethod->invoke($this->_testObject, $className);
-        
+
         $builderReflection = new \ReflectionClass($mockBuilder);
         $methodsProperty = $builderReflection->getProperty('methods');
         $methodsProperty->setAccessible(true);
         $methodsProperty->setValue($mockBuilder, $methods);
-        
+
         $mockBuilder->disableOriginalConstructor();
         return $mockBuilder->getMock();
     }

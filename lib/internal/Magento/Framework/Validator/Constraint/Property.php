@@ -2,8 +2,8 @@
 /**
  * Validator constraint delegates validation of value's property to wrapped validator.
  *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Framework\Validator\Constraint;

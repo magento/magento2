@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+ * Copyright 2025 Adobe
+ * All Rights Reserved.
+ */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminVerifySalesRuleProductSubselectionWithQuantityConditionTest">
+        <annotations>
+            <features value="SalesRule"/>
+            <stories value="Cart price rule with product subselection"/>
+            <title value="Verify cart price rule with product subselection quantity condition applies discount"/>
+            <description value="Verify that cart price rule with product subselection condition Qty >= 1 successfully applies discount at checkout"/>
+            <severity value="MINOR"/>
+            <testCaseId value="AC-15273"/>
+            <group value="salesRule"/>
+        </annotations>
+        <before>
+            <!-- Admin login -->
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <createData entity="_defaultProduct" stepKey="createSimpleProduct"/>
+        </before>
+        <after>
+            <!-- Delete created cart price rule -->
+            <actionGroup ref="DeleteCartPriceRuleByName" stepKey="deleteCartPriceRule">
+                <argument name="ruleName" value="{{TestSalesRule.name}}"/>
+            </actionGroup>
+            <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearFilters"/>
+            <!-- Delete created product -->
+            <deleteData createDataKey="createSimpleProduct" stepKey="deleteSimpleProduct"/>
+            <!-- Admin logout -->
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+        <!-- Step 1-2: Create cart price rule with product subselection (Qty >= 1) -->
+        <actionGroup ref="AdminCreateCartPriceRuleWithProductSubselectionActionGroup" stepKey="createRule">
+            <argument name="ruleName" value="TestSalesRule"/>
+        </actionGroup>
+        <!-- Step 3: Run cron job -->
+        <actionGroup ref="CliIndexerReindexActionGroup" stepKey="runCronReindex">
+            <argument name="indices" value=""/>
+        </actionGroup>
+        <!-- Step 4: Navigate to storefront and add product to cart -->
+        <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="goToStorefront"/>
+        <!-- Open product page -->
+        <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="openProductPage">
+            <argument name="productUrl" value="$$createSimpleProduct.custom_attributes[url_key]$$"/>
+        </actionGroup>
+        <!-- Add product to cart -->
+        <actionGroup ref="StorefrontAddProductToCartActionGroup" stepKey="addProductToCart">
+            <argument name="product" value="$$createSimpleProduct$$"/>
+            <argument name="productCount" value="1"/>
+        </actionGroup>
+        <!-- Go to shopping cart page and assert discount was successfully applied -->
+        <actionGroup ref="StorefrontCartPageOpenActionGroup" stepKey="openShoppingCartPage"/>
+        <actionGroup ref="AssertStorefrontCartDiscountActionGroup" stepKey="seeDiscountTotal">
+            <argument name="discount" value="61.50"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontClickProceedToCheckoutActionGroup" stepKey="clickProceedToCheckout"/>
+        <actionGroup ref="GuestCheckoutFillingShippingSectionActionGroup" stepKey="guestCheckoutFillingShippingSection">
+            <argument name="customerVar" value="CustomerEntityOne" />
+            <argument name="customerAddressVar" value="CustomerAddressSimple" />
+        </actionGroup>
+        <!-- Step 5: Verify discount was successfully applied -->
+        <actionGroup ref="StorefrontAssertDiscountAmountOnPaymentPageActionGroup" stepKey="verifyDiscountFirstTime">
+            <argument name="discountPrice" value="-$61.50" />
+        </actionGroup>
+    </test>
+</tests>
