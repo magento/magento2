@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -39,9 +39,14 @@ class LikeQueryModifierTest extends TestCase
             ->getMock();
         $selectMock
             ->method('where')
-            ->withConsecutive(
-                ['field1 LIKE (?)', 'pattern1'],
-                ['field2 LIKE (?)', 'pattern2']
+            ->willReturnCallback(
+                function ($arg1, $arg2) {
+                    if ($arg1 == 'field1 LIKE (?)' && $arg2 == 'pattern1') {
+                        return null;
+                    } elseif ($arg1 == 'field2 LIKE (?)' && $arg2 == 'pattern2') {
+                        return null;
+                    }
+                }
             );
         $likeQueryModifier = $this->objectManager->getObject(
             LikeQueryModifier::class,

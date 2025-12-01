@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -108,7 +108,7 @@ class Configurable implements DimensionalIndexerInterface
         BasePriceModifier $basePriceModifier,
         $fullReindexAction = false,
         $connectionName = 'indexer',
-        ScopeConfigInterface $scopeConfig = null,
+        ?ScopeConfigInterface $scopeConfig = null,
         ?BaseSelectProcessorInterface $baseSelectProcessor = null,
         ?OptionsIndexerInterface $optionsIndexer = null
     ) {

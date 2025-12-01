@@ -1,16 +1,18 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Customer\Model;
 
+use Magento\Eav\Model\Cache\Type as EavCacheType;
 use Magento\Framework\App\PageCache\FormKey;
 use Magento\Framework\App\Response\Http as HttpResponse;
 use Magento\Framework\App\ResponseInterface;
 use Magento\Framework\Session\SidResolverInterface;
 use Magento\Framework\Stdlib\Cookie\CookieMetadataFactory;
 use Magento\Framework\Stdlib\Cookie\PublicCookieMetadata;
+use Magento\TestFramework\Fixture\Cache as CacheAlias;
 use Magento\TestFramework\Helper\Bootstrap;
 
 /**
@@ -64,6 +66,42 @@ class SessionTest extends \PHPUnit\Framework\TestCase
         $this->assertTrue($this->_customerSession->loginById(1));
         // fixture
         $this->assertTrue($this->_customerSession->isLoggedIn());
+    }
+
+    /**
+     * @param bool $expectedResult
+     * @param bool $isCustomerIdValid
+     * @param bool $isCustomerEmulated
+     *
+     * @return void
+     * @dataProvider getIsLoggedInDataProvider
+     */
+    public function testIsLoggedIn(
+        bool $expectedResult,
+        bool $isCustomerIdValid,
+        bool $isCustomerEmulated
+    ): void {
+        if ($isCustomerIdValid) {
+            $this->_customerSession->loginById(1);
+        } else {
+            $this->_customerSession->setCustomerId(1);
+            $this->_customerSession->setId(2);
+        }
+        $this->_customerSession->setIsCustomerEmulated($isCustomerEmulated);
+        $this->assertEquals($expectedResult, $this->_customerSession->isLoggedIn());
+    }
+
+    /**
+     * @return array
+     */
+    public static function getIsLoggedInDataProvider(): array
+    {
+        return [
+            ['expectedResult' => true, 'isCustomerIdValid' => true, 'isCustomerEmulated' => false],
+            ['expectedResult' => false, 'isCustomerIdValid' => true, 'isCustomerEmulated' => true],
+            ['expectedResult' => false, 'isCustomerIdValid' => false, 'isCustomerEmulated' => false],
+            ['expectedResult' => false, 'isCustomerIdValid' => false, 'isCustomerEmulated' => true]
+        ];
     }
 
     public function testLoginByIdCustomerDataLoadedCorrectly()
@@ -130,5 +168,14 @@ class SessionTest extends \PHPUnit\Framework\TestCase
         $location = (string)$this->response->getHeader('Location');
         $this->assertNotEmpty($location);
         $this->assertStringNotContainsString(SidResolverInterface::SESSION_ID_QUERY_PARAM . '=', $location);
+    }
+
+    #[
+        CacheAlias(EavCacheType::TYPE_IDENTIFIER, false),
+    ]
+    public function testCheckCustomerId(): void
+    {
+        $result = $this->_customerSession->checkCustomerId(1);
+        $this->assertTrue($result);
     }
 }

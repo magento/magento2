@@ -1,8 +1,8 @@
 <?php
 /**
  *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Catalog\Api;
@@ -62,7 +62,7 @@ class CategoryManagementTest extends WebapiAbstract
     /**
      * @return array
      */
-    public function treeDataProvider(): array
+    public static function treeDataProvider(): array
     {
         return [
             [
@@ -183,7 +183,7 @@ class CategoryManagementTest extends WebapiAbstract
         $this->assertEquals($parentId, $model->getParentId());
     }
 
-    public function updateMoveDataProvider()
+    public static function updateMoveDataProvider()
     {
         return [
             [402, 400, null, 2],

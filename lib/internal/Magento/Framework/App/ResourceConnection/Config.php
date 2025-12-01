@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework\App\ResourceConnection;
 
@@ -47,7 +47,7 @@ class Config extends \Magento\Framework\Config\Data\Scoped implements ConfigInte
         \Magento\Framework\Config\CacheInterface $cache,
         \Magento\Framework\App\DeploymentConfig $deploymentConfig,
         $cacheId = 'resourcesCache',
-        SerializerInterface $serializer = null
+        ?SerializerInterface $serializer = null
     ) {
         parent::__construct($reader, $configScope, $cache, $cacheId, $serializer);
         $this->deploymentConfig = $deploymentConfig;

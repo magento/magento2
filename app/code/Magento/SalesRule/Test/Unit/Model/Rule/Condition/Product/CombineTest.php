@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2022 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -34,7 +34,8 @@ class CombineTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $this->ruleConditionMock = $this->getMockBuilder(SalesRuleProduct::class)
-            ->setMethods(['loadAttributeOptions', 'getAttributeOption'])
+            ->onlyMethods(['loadAttributeOptions'])
+            ->addMethods(['getAttributeOption'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->model = new Combine(

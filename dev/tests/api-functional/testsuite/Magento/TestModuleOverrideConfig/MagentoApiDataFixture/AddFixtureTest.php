@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -52,7 +52,7 @@ class AddFixtureTest extends AbstractOverridesTest
     /**
      * @return array
      */
-    public function addedFixturesProvider(): array
+    public static function addedFixturesProvider(): array
     {
         return [
             'first_data_set' => [

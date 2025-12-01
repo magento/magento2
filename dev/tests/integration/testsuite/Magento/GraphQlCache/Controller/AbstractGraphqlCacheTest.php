@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -71,7 +71,7 @@ abstract class AbstractGraphqlCacheTest extends TestCase
      *
      * @inheritdoc
      */
-    protected function runTest()
+    protected function runTest(): mixed
     {
         /** @var Reader $reader */
         if (!$this->envConfigPath) {

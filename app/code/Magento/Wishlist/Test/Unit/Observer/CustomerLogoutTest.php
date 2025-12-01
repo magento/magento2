@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -28,7 +28,8 @@ class CustomerLogoutTest extends TestCase
     {
         $this->customerSession = $this->getMockBuilder(Session::class)
             ->disableOriginalConstructor()
-            ->setMethods(['setWishlistItemCount', 'isLoggedIn', 'getCustomerId'])
+            ->addMethods(['setWishlistItemCount'])
+            ->onlyMethods(['isLoggedIn', 'getCustomerId'])
             ->getMock();
 
         $this->observer = new Observer(

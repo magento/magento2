@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -149,7 +149,7 @@ class MethodsMapTest extends TestCase
     /**
      * @return array
      */
-    public function isMethodValidForDataFieldProvider()
+    public static function isMethodValidForDataFieldProvider()
     {
         return [
             'MethodsMap#isMethodValidForDataField' => [MethodsMap::class,
@@ -181,7 +181,7 @@ class MethodsMapTest extends TestCase
     /**
      * @return array
      */
-    public function isMethodReturnValueRequiredProvider()
+    public static function isMethodReturnValueRequiredProvider()
     {
         return [
             'DataObject#getAttrName' => [DataObject::class,

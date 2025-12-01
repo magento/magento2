@@ -224,6 +224,7 @@ dummy,dummy
 "The ""%1"" field name is unknown. Verify the field name and try again.","The ""%1"" field name is unknown. Verify the field name and try again."
 "Enum type ""%1"" not defined","Enum type ""%1"" not defined"
 "Max query complexity should be %1 but got %2.","Max query complexity should be %1 but got %2."
+"Max Aliases in query should be %1 but got %2.","Max Aliases in query should be %1 but got %2."
 "%1 operator not supported","%1 operator not supported"
 "Can't support nested operators","Can't support nested operators"
 "Nesting ""OR"" node type not supported","Nesting ""OR"" node type not supported"
@@ -547,3 +548,6 @@ Dashboard,Dashboard
 "Web Section","Web Section"
 "Store Email Addresses Section","Store Email Addresses Section"
 "Email to a Friend","Email to a Friend"
+"Invalid data type","Invalid data type"
+"Invalid value provided for attribute %1","Invalid value provided for attribute %1"
+

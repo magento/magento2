@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Fedex\Plugin\Block\Tracking;
@@ -28,7 +28,7 @@ class PopupDeliveryDate
     public function afterFormatDeliveryDateTime(Popup $subject, $result, $date, $time)
     {
         if ($this->getCarrier($subject) === Carrier::CODE) {
-            $result = $subject->formatDeliveryDate($date);
+            $result = $subject->formatDeliveryDate($date. ' ' . $time);
         }
         return $result;
     }

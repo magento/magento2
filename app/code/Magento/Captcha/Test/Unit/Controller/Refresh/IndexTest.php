@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -11,10 +11,11 @@ use Magento\Captcha\Controller\Refresh\Index;
 use Magento\Captcha\Helper\Data as CaptchaHelper;
 use Magento\Captcha\Model\CaptchaInterface;
 use Magento\Framework\App\Action\Context;
-use Magento\Framework\App\RequestInterface;
+use Magento\Framework\App\Request\Http as HttpRequest;
 use Magento\Framework\Controller\Result\Json as ResultJson;
 use Magento\Framework\Controller\Result\JsonFactory as ResultJsonFactory;
 use Magento\Framework\Serialize\Serializer\Json as JsonSerializer;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\View\Element\BlockInterface;
 use Magento\Framework\View\LayoutInterface;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -22,10 +23,12 @@ use PHPUnit\Framework\TestCase;
 
 class IndexTest extends TestCase
 {
+    use MockCreationTrait;
+
     private const STUB_FORM_ID = 'StubFormId';
     private const STUB_CAPTCHA_SOURCE = '/stub-captcha-source.jpg';
 
-    /** @var MockObject|RequestInterface */
+    /** @var MockObject|HttpRequest */
     private $requestMock;
 
     /** @var MockObject|ResultJsonFactory */
@@ -54,15 +57,12 @@ class IndexTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->requestMock = $this->getMockBuilder(RequestInterface::class)
-            ->setMethods(['getPost', 'getContent'])
-            ->getMockForAbstractClass();
-        $this->layoutMock = $this->getMockBuilder(LayoutInterface::class)
-            ->setMethods(['createBlock'])
-            ->getMockForAbstractClass();
-        $this->blockMock = $this->getMockBuilder(BlockInterface::class)
-            ->setMethods(['setFormId', 'setIsAjax', 'toHtml'])
-            ->getMockForAbstractClass();
+        $this->requestMock = $this->createPartialMock(HttpRequest::class, ['getPost', 'getContent']);
+        $this->layoutMock = $this->createMock(LayoutInterface::class);
+        $this->blockMock = $this->createPartialMockWithReflection(
+            BlockInterface::class,
+            ['setFormId', 'setIsAjax', 'toHtml']
+        );
         $this->jsonResultFactoryMock = $this->createMock(ResultJsonFactory::class);
         $this->jsonResultMock = $this->createMock(ResultJson::class);
         $this->jsonResultFactoryMock->method('create')
@@ -72,6 +72,10 @@ class IndexTest extends TestCase
 
         $this->contextMock = $this->createMock(Context::class);
 
+        $this->blockMock->method('toHtml')
+            ->willReturn('');
+        $this->blockMock->method('setFormId')
+            ->willReturnSelf();
         $this->blockMock->method('setIsAjax')
             ->willReturnSelf();
 
@@ -141,9 +145,10 @@ class IndexTest extends TestCase
      */
     private function getCaptchaModelMock(string $imageSource): CaptchaInterface
     {
-        $modelMock = $this->getMockBuilder(CaptchaInterface::class)
-            ->setMethods(['generate', 'getBlockName', 'getImgSrc'])
-            ->getMockForAbstractClass();
+        $modelMock = $this->createPartialMockWithReflection(
+            CaptchaInterface::class,
+            ['generate', 'getBlockName', 'getImgSrc', 'isCorrect']
+        );
 
         $modelMock->method('getImgSrc')
             ->willReturn($imageSource);

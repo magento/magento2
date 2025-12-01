@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -73,7 +73,7 @@ class HeaderTest extends TestCase
     /**
      * @return array
      */
-    public function methodsDataProvider()
+    public static function methodsDataProvider()
     {
         return [
             'getHttpHost clean true' => [
@@ -154,7 +154,7 @@ class HeaderTest extends TestCase
     /**
      * @return array
      */
-    public function getRequestUriDataProvider()
+    public static function getRequestUriDataProvider()
     {
         return [
             'getRequestUri clean true' => ['clean' => true, 'expectedValue' => 'converted value'],

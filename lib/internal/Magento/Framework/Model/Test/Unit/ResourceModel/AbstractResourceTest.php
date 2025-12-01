@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -79,7 +79,7 @@ class AbstractResourceTest extends TestCase
      *
      * @return array
      */
-    public function serializeFieldsDataProvider(): array
+    public static function serializeFieldsDataProvider(): array
     {
         $array = ['a', 'b', 'c'];
         $string = 'i am string';
@@ -150,7 +150,7 @@ class AbstractResourceTest extends TestCase
      *
      * @return array
      */
-    public function unserializeFieldsDataProvider(): array
+    public static function unserializeFieldsDataProvider(): array
     {
         $dataObject = new DataObject(
             [

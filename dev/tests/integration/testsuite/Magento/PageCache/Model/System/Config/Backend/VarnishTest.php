@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\PageCache\Model\System\Config\Backend;
 
@@ -57,7 +57,7 @@ class VarnishTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($value, $expected);
     }
 
-    public function beforeSaveDataProvider()
+    public static function beforeSaveDataProvider()
     {
         return [
             ['localhost', 'access_list', 'localhost', false],
@@ -92,7 +92,7 @@ class VarnishTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($value, $expected);
     }
 
-    public function afterLoadDataProvider()
+    public static function afterLoadDataProvider()
     {
         return [
             ['access_list', 'localhost', true],

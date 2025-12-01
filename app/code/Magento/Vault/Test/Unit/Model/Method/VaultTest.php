@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -93,7 +93,7 @@ class VaultTest extends TestCase
      * Get list of additional information variations
      * @return array
      */
-    public function additionalInfoDataProvider()
+    public static function additionalInfoDataProvider()
     {
         return [
             ['additionalInfo' => []],
@@ -148,7 +148,7 @@ class VaultTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $extensionAttributes = $this->getMockBuilder(OrderPaymentExtensionInterface::class)
-            ->setMethods(['setVaultPaymentToken', 'getVaultPaymentToken'])
+            ->addMethods(['setVaultPaymentToken', 'getVaultPaymentToken'])
             ->getMockForAbstractClass();
 
         $commandManagerPool = $this->getMockForAbstractClass(CommandManagerPoolInterface::class);
@@ -294,13 +294,13 @@ class VaultTest extends TestCase
      * List of variations for testing isAvailable method
      * @return array
      */
-    public function isAvailableDataProvider()
+    public static function isAvailableDataProvider()
     {
         return [
-            ['isAvailableProvider' => true, 'isActiveVault' => false, 'expected' => false],
-            ['isAvailableProvider' => false, 'isActiveVault' => false, 'expected' => false],
-            ['isAvailableProvider' => false, 'isActiveVault' => true, 'expected' => false],
-            ['isAvailableProvider' => true, 'isActiveVault' => true, 'expected' => true],
+            ['isAvailableProvider' => true, 'isActive' => false, 'expected' => false],
+            ['isAvailableProvider' => false, 'isActive' => false, 'expected' => false],
+            ['isAvailableProvider' => false, 'isActive' => true, 'expected' => false],
+            ['isAvailableProvider' => true, 'isActive' => true, 'expected' => true],
         ];
     }
 
@@ -380,7 +380,7 @@ class VaultTest extends TestCase
      * Get list of variations for testing canUseInternal method
      * @return array
      */
-    public function internalUsageDataProvider()
+    public static function internalUsageDataProvider()
     {
         return [
             ['configValue' => true, 'paymentValue' => true, 'expected' => true],
@@ -392,5 +392,21 @@ class VaultTest extends TestCase
             ['configValue' => null, 'paymentValue' => false, 'expected' => false],
             ['configValue' => null, 'paymentValue' => null, 'expected' => false],
         ];
+    }
+
+    public function testSetStore(): void
+    {
+        $storeId = 2;
+        /** @var Vault $model */
+        $model = $this->objectManager->getObject(
+            Vault::class,
+            [
+                'vaultProvider' => $this->vaultProvider,
+            ]
+        );
+        $this->vaultProvider->expects($this->once())
+            ->method('setStore')
+            ->willReturn($storeId);
+        $model->setStore($storeId);
     }
 }

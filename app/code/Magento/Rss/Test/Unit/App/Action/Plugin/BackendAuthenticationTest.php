@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -63,8 +63,10 @@ class BackendAuthenticationTest extends TestCase
         $authorization = $this->getMockForAbstractClass(AuthorizationInterface::class);
         $authorization
             ->method('isAllowed')
-            ->withConsecutive(['Magento_Rss::rss'], ['Magento_Catalog::catalog_inventory'])
-            ->willReturnOnConsecutiveCalls(true, false);
+            ->willReturnCallback(fn($param) => match ([$param]) {
+                ['Magento_Rss::rss'] => true,
+                ['Magento_Catalog::catalog_inventory'] => false
+            });
 
         $aclResources = [
             'feed' => 'Magento_Rss::rss',

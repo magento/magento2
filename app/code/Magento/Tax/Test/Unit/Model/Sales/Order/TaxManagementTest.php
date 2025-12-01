@@ -1,15 +1,14 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Tax\Test\Unit\Model\Sales\Order;
 
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-use Magento\Sales\Model\Order;
-use Magento\Sales\Model\OrderFactory;
 use Magento\Sales\Model\ResourceModel\Order\Tax\Item;
 use Magento\Sales\Model\ResourceModel\Order\Tax\ItemFactory;
 use Magento\Tax\Api\Data\OrderTaxDetailsAppliedTaxInterface;
@@ -41,11 +40,6 @@ class TaxManagementTest extends TestCase
     /**
      * @var MockObject
      */
-    private $orderMock;
-
-    /**
-     * @var MockObject
-     */
     private $taxItemResourceMock;
 
     /**
@@ -60,13 +54,6 @@ class TaxManagementTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->orderMock = $this->createPartialMock(Order::class, ['load']);
-
-        $orderFactoryMock = $this->createPartialMock(OrderFactory::class, ['create']);
-        $orderFactoryMock->expects($this->atLeastOnce())
-            ->method('create')
-            ->willReturn($this->orderMock);
-
         $this->taxItemResourceMock = $this->getMockBuilder(Item::class)
             ->disableOriginalConstructor()
             ->onlyMethods(['getTaxItemsByOrderId'])
@@ -108,7 +95,6 @@ class TaxManagementTest extends TestCase
         $this->taxManagement = $objectManager->getObject(
             TaxManagement::class,
             [
-                'orderFactory' => $orderFactoryMock,
                 'orderItemTaxFactory' => $taxItemFactoryMock,
                 'orderTaxDetailsDataObjectFactory' => $orderTaxDetailsDataObjectFactoryMock,
                 'itemDataObjectFactory' => $itemDataObjectFactoryMock,
@@ -122,13 +108,11 @@ class TaxManagementTest extends TestCase
      * @param array $expected
      * @return void
      * @dataProvider getOrderTaxDetailsDataProvider
+     * @throws NoSuchEntityException
      */
-    public function testGetOrderTaxDetails($orderItemAppliedTaxes, $expected)
+    public function testGetOrderTaxDetails($orderItemAppliedTaxes, $expected): void
     {
         $orderId = 1;
-        $this->orderMock->expects($this->once())
-            ->method('load')
-            ->with($orderId)->willReturnSelf();
         $this->taxItemResourceMock->expects($this->once())
             ->method('getTaxItemsByOrderId')
             ->with($orderId)
@@ -155,7 +139,7 @@ class TaxManagementTest extends TestCase
      * @return array
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function getOrderTaxDetailsDataProvider()
+    public static function getOrderTaxDetailsDataProvider()
     {
         $data = [
             'one_item' => [

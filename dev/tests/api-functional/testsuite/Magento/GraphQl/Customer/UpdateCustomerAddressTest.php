@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -159,7 +159,7 @@ MUTATION;
     public function testUpdateCustomerAddressWithMissingAttribute()
     {
         $this->expectException(\Exception::class);
-        $this->expectExceptionMessage('Required parameters are missing: firstname');
+        $this->expectExceptionMessage('"firstname" is required. Enter and try again.');
 
         $userName = 'customer@example.com';
         $password = 'password';
@@ -424,7 +424,7 @@ MUTATION;
     /**
      * @return array
      */
-    public function invalidInputDataProvider()
+    public static function invalidInputDataProvider()
     {
         return [
             ['', '"input" value must be specified'],

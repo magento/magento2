@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Webapi\Model\Authorization;
@@ -61,13 +61,17 @@ class TokenUserContext implements UserContextInterface, ResetAfterRequestInterfa
 
     /**
      * @var UserTokenReaderInterface
+     *
+     * phpcs:disable Magento2.Commenting.ClassPropertyPHPDocFormatting
      */
-    private $userTokenReader;
+    private readonly UserTokenReaderInterface $userTokenReader;
 
     /**
      * @var UserTokenValidatorInterface
+     *
+     * phpcs:disable Magento2.Commenting.ClassPropertyPHPDocFormatting
      */
-    private $userTokenValidator;
+    private readonly UserTokenValidatorInterface $userTokenValidator;
 
     /**
      * Initialize dependencies.
@@ -85,9 +89,9 @@ class TokenUserContext implements UserContextInterface, ResetAfterRequestInterfa
         \Magento\Framework\App\RequestInterface $request,
         TokenFactory $tokenFactory,
         IntegrationServiceInterface $integrationService,
-        DateTime $dateTime = null,
-        Date $date = null,
-        OauthHelper $oauthHelper = null,
+        ?DateTime $dateTime = null,
+        ?Date $date = null,
+        ?OauthHelper $oauthHelper = null,
         ?UserTokenReaderInterface $tokenReader = null,
         ?UserTokenValidatorInterface $tokenValidator = null
     ) {

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Customer\Block\Widget;
 
@@ -23,9 +23,9 @@ class Dob extends AbstractWidget
     /**
      * Constants for borders of date-type customer attributes
      */
-    const MIN_DATE_RANGE_KEY = 'date_range_min';
+    public const MIN_DATE_RANGE_KEY = 'date_range_min';
 
-    const MAX_DATE_RANGE_KEY = 'date_range_max';
+    public const MAX_DATE_RANGE_KEY = 'date_range_max';
 
     /**
      * @var array
@@ -303,6 +303,7 @@ class Dob extends AbstractWidget
     public function getDateFormat()
     {
         $dateFormat = $this->setTwoDayPlaces($this->_localeDate->getDateFormatWithLongYear());
+        $dateFormat = $this->setTwoMonthPlaces($dateFormat);
         /** Escape RTL characters which are present in some locales and corrupt formatting */
         $escapedDateFormat = preg_replace('/[^MmDdYy\/\.\-]/', '', $dateFormat);
 
@@ -409,19 +410,25 @@ class Dob extends AbstractWidget
         $localeData = (new DataBundle())->get($this->localeResolver->getLocale());
         $monthsData = $localeData['calendar']['gregorian']['monthNames'];
         $daysData = $localeData['calendar']['gregorian']['dayNames'];
-
+        $monthsFormat = $monthsData['format'];
+        $daysFormat = $daysData['format'];
+        $monthsAbbreviated = $monthsFormat['abbreviated'];
+        $monthsShort = $monthsAbbreviated ?? $monthsFormat['wide'];
+        $daysAbbreviated = $daysFormat['abbreviated'];
+        $daysShort = $daysAbbreviated ?? $daysFormat['wide'];
+        $daysShortFormat = $daysFormat['short'];
+        $daysMin = $daysShortFormat ?? $daysShort;
         return $this->encoder->encode(
             [
                 'closeText' => __('Done'),
                 'prevText' => __('Prev'),
                 'nextText' => __('Next'),
                 'currentText' => __('Today'),
-                'monthNames' => array_values(iterator_to_array($monthsData['format']['wide'])),
-                'monthNamesShort' => array_values(iterator_to_array($monthsData['format']['abbreviated'])),
-                'dayNames' => array_values(iterator_to_array($daysData['format']['wide'])),
-                'dayNamesShort' => array_values(iterator_to_array($daysData['format']['abbreviated'])),
-                'dayNamesMin' =>
-                 array_values(iterator_to_array(($daysData['format']['short']) ?: $daysData['format']['abbreviated'])),
+                'monthNames' => array_values(iterator_to_array($monthsFormat['wide'])),
+                'monthNamesShort' => array_values(iterator_to_array($monthsShort)),
+                'dayNames' => array_values(iterator_to_array($daysFormat['wide'])),
+                'dayNamesShort' => array_values(iterator_to_array($daysShort)),
+                'dayNamesMin' => array_values(iterator_to_array($daysMin)),
             ]
         );
     }
@@ -437,6 +444,21 @@ class Dob extends AbstractWidget
         return preg_replace(
             '/(?<!d)d(?!d)/',
             'dd',
+            $format
+        );
+    }
+
+    /**
+     * Set 2 places for month value in format string
+     *
+     * @param string $format
+     * @return string
+     */
+    private function setTwoMonthPlaces(string $format): string
+    {
+        return preg_replace(
+            '/(?<!M)M(?!M)/',
+            'MM',
             $format
         );
     }

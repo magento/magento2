@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -75,7 +75,7 @@ class EnabledTest extends TestCase
      *
      * @return array
      */
-    public function methodsDataProvider()
+    public static function methodsDataProvider()
     {
         return [
             [['allow_multiple_address' => 1], true],

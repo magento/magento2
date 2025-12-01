@@ -1,16 +1,16 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\GroupedProduct\Test\Unit\Ui\DataProvider\Product\Form\Modifier;
 
-use Magento\Catalog\Test\Unit\Ui\DataProvider\Product\Form\Modifier\AbstractModifierTest;
+use Magento\Catalog\Test\Unit\Ui\DataProvider\Product\Form\Modifier\AbstractModifierTestCase;
 use Magento\GroupedProduct\Ui\DataProvider\Product\Form\Modifier\CustomOptions as CustomOptionsModifier;
 
-class CustomOptionsTest extends AbstractModifierTest
+class CustomOptionsTest extends AbstractModifierTestCase
 {
     /**
      * {@inheritdoc}
@@ -30,9 +30,7 @@ class CustomOptionsTest extends AbstractModifierTest
     {
         $data = ['data'];
 
-        $this->productMock->expects($this->once())
-            ->method('getTypeId')
-            ->willReturn('simple');
+        $this->productMock->setTypeId('simple');
         $this->arrayManagerMock->expects($this->never())
             ->method('findPath');
 
@@ -43,9 +41,7 @@ class CustomOptionsTest extends AbstractModifierTest
     {
         $data = ['data'];
 
-        $this->productMock->expects($this->once())
-            ->method('getTypeId')
-            ->willReturn(CustomOptionsModifier::PRODUCT_TYPE_GROUPED);
+        $this->productMock->setTypeId(CustomOptionsModifier::PRODUCT_TYPE_GROUPED);
         $this->arrayManagerMock->expects($this->once())
             ->method('findPath');
 

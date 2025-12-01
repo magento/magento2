@@ -1,12 +1,13 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\ConfigurableProduct\Test\Unit\Model\Product;
 
+use PHPUnit\Framework\Attributes\CoversClass;
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\ProductRepository;
 use Magento\ConfigurableProduct\Api\Data\OptionInterface;
@@ -23,6 +24,7 @@ use PHPUnit\Framework\TestCase;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
+#[CoversClass(\Magento\ConfigurableProduct\Model\Product\SaveHandler::class)]
 class SaveHandlerTest extends TestCase
 {
     /**
@@ -55,17 +57,11 @@ class SaveHandlerTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->optionRepository = $this->getMockBuilder(OptionRepository::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['save', 'getList', 'deleteById'])
-            ->getMock();
+        $this->optionRepository = $this->createPartialMock(OptionRepository::class, ['save', 'getList', 'deleteById']);
 
         $this->initConfigurableFactoryMock();
 
-        $this->productRepository = $this->getMockBuilder(ProductRepository::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['get'])
-            ->getMock();
+        $this->productRepository = $this->createPartialMock(ProductRepository::class, ['get']);
 
         $this->saveHandler = new SaveHandler(
             $this->configurable,
@@ -74,15 +70,9 @@ class SaveHandlerTest extends TestCase
         );
     }
 
-    /**
-     * @covers \Magento\ConfigurableProduct\Model\Product\SaveHandler::execute
-     */
     public function testExecuteWithInvalidProductType()
     {
-        $product = $this->getMockBuilder(Product::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['getTypeId', 'getExtensionAttributes'])
-            ->getMock();
+        $product = $this->createPartialMock(Product::class, ['getTypeId', 'getExtensionAttributes']);
 
         $product->expects(static::once())
             ->method('getTypeId')
@@ -95,17 +85,11 @@ class SaveHandlerTest extends TestCase
         static::assertSame($product, $entity);
     }
 
-    /**
-     * @covers \Magento\ConfigurableProduct\Model\Product\SaveHandler::execute
-     */
     public function testExecuteWithEmptyExtensionAttributes()
     {
         $sku = 'test';
         $configurableProductLinks = [1, 2, 3];
-        $product = $this->getMockBuilder(Product::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['getTypeId', 'getExtensionAttributes', 'getSku'])
-            ->getMock();
+        $product = $this->createPartialMock(Product::class, ['getTypeId', 'getExtensionAttributes', 'getSku']);
 
         $product->expects(static::once())
             ->method('getTypeId')
@@ -114,21 +98,14 @@ class SaveHandlerTest extends TestCase
             ->method('getSku')
             ->willReturn($sku);
 
-        $extensionAttributes = $this->getMockBuilder(ProductExtensionAttributes::class)
-            ->setMethods(['getConfigurableProductOptions', 'getConfigurableProductLinks'])
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $extensionAttributes = new \Magento\Catalog\Test\Unit\Helper\ProductExtensionTestHelper();
 
         $product->expects(static::atLeastOnce())
             ->method('getExtensionAttributes')
             ->willReturn($extensionAttributes);
 
-        $extensionAttributes->expects(static::atLeastOnce())
-            ->method('getConfigurableProductOptions')
-            ->willReturn([]);
-        $extensionAttributes->expects(static::atLeastOnce())
-            ->method('getConfigurableProductLinks')
-            ->willReturn($configurableProductLinks);
+        $extensionAttributes->setConfigurableProductOptions([]);
+        $extensionAttributes->setConfigurableProductLinks($configurableProductLinks);
 
         $this->optionRepository->expects(static::once())
             ->method('getList')
@@ -141,9 +118,6 @@ class SaveHandlerTest extends TestCase
         static::assertSame($product, $entity);
     }
 
-    /**
-     * @covers \Magento\ConfigurableProduct\Model\Product\SaveHandler::execute
-     */
     public function testExecute()
     {
         $sku = 'config-1';
@@ -153,10 +127,10 @@ class SaveHandlerTest extends TestCase
         $attributeIdNew = 22;
         $configurableProductLinks = [1, 2, 3];
 
-        $product = $this->getMockBuilder(Product::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['getTypeId', 'getSku', 'getData', 'getExtensionAttributes'])
-            ->getMock();
+        $product = $this->createPartialMock(
+            Product::class,
+            ['getTypeId', 'getSku', 'getData', 'getExtensionAttributes']
+        );
         $product->expects(static::once())
             ->method('getTypeId')
             ->willReturn(ConfigurableModel::TYPE_CODE);
@@ -164,28 +138,26 @@ class SaveHandlerTest extends TestCase
             ->method('getSku')
             ->willReturn($sku);
 
-        $extensionAttributes = $this->getMockBuilder(ProductExtensionAttributes::class)
-            ->setMethods(['getConfigurableProductOptions', 'getConfigurableProductLinks'])
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $extensionAttributes = new \Magento\Catalog\Test\Unit\Helper\ProductExtensionTestHelper();
 
         $product->expects(static::atLeastOnce())
             ->method('getExtensionAttributes')
             ->willReturn($extensionAttributes);
 
         $this->productRepository->expects($this->once())
-            ->method('get')->with($sku, false, null, true);
+            ->method('get')
+            ->with($sku, false, null, true);
 
-        $attributeNew = $this->getMockBuilder(Attribute::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['getAttributeId', 'loadByProductAndAttribute', 'setId', 'getId'])
-            ->getMock();
+        $attributeNew = $this->createPartialMock(
+            Attribute::class,
+            ['getAttributeId', 'loadByProductAndAttribute', 'setId', 'getId']
+        );
         $attributeNew->expects(static::atLeastOnce())
             ->method('getAttributeId')
             ->willReturn($attributeIdNew);
         $this->processSaveOptions($attributeNew, $sku, $idNew);
 
-        $optionOld = $this->getMockForAbstractClass(OptionInterface::class);
+        $optionOld = $this->createMock(OptionInterface::class);
         $optionOld->expects(static::atLeastOnce())
             ->method('getAttributeId')
             ->willReturn($attributeIdOld);
@@ -205,13 +177,8 @@ class SaveHandlerTest extends TestCase
         $configurableAttributes = [
             $attributeNew
         ];
-        $extensionAttributes->expects(static::atLeastOnce())
-            ->method('getConfigurableProductOptions')
-            ->willReturn($configurableAttributes);
-
-        $extensionAttributes->expects(static::once())
-            ->method('getConfigurableProductLinks')
-            ->willReturn($configurableProductLinks);
+        $extensionAttributes->setConfigurableProductOptions($configurableAttributes);
+        $extensionAttributes->setConfigurableProductLinks($configurableProductLinks);
 
         $this->configurable->expects(static::once())
             ->method('saveProducts')
@@ -228,15 +195,9 @@ class SaveHandlerTest extends TestCase
      */
     private function initConfigurableFactoryMock()
     {
-        $this->configurable = $this->getMockBuilder(Configurable::class)
-            ->disableOriginalConstructor()
-            ->setMethods([])
-            ->getMock();
+        $this->configurable = $this->createMock(Configurable::class);
 
-        $this->configurableFactory = $this->getMockBuilder(ConfigurableFactory::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['create'])
-            ->getMock();
+        $this->configurableFactory = $this->createPartialMock(ConfigurableFactory::class, ['create']);
 
         $this->configurableFactory->expects(static::any())
             ->method('create')

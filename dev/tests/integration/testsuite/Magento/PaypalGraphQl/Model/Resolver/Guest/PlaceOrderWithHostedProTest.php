@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -55,12 +55,12 @@ class PlaceOrderWithHostedProTest extends TestCase
 
         $this->nvpMock = $this->getMockBuilder(Nvp::class)
             ->disableOriginalConstructor()
-            ->setMethods(['call'])
+            ->onlyMethods(['call'])
             ->getMock();
 
         $apiFactoryMock = $this->getMockBuilder(ApiFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
         $apiFactoryMock->method('create')->willReturn($this->nvpMock);
 
@@ -198,8 +198,7 @@ QUERY;
 
         $exceptionMessage = 'Declined response message from PayPal gateway';
         $exception = new LocalizedException(__($exceptionMessage));
-        $expectedExceptionMessage = 'Unable to place order: A server error stopped your order from being placed. ' .
-            'Please try to place your order again';
+        $expectedErrorCode = 'UNABLE_TO_PLACE_ORDER';
 
         $this->nvpMock->method('call')->willThrowException($exception);
 
@@ -207,8 +206,7 @@ QUERY;
         $responseData = $this->json->unserialize($response->getContent());
         $this->assertArrayHasKey('errors', $responseData);
         $actualError = $responseData['errors'][0];
-        $this->assertEquals($expectedExceptionMessage, $actualError['message']);
-        $this->assertEquals(GraphQlInputException::EXCEPTION_CATEGORY, $actualError['extensions']['category']);
+        $this->assertEquals($expectedErrorCode, $actualError['extensions']['error_code']);
     }
 
     /**

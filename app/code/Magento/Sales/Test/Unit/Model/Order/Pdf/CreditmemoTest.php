@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Sales\Test\Unit\Model\Order\Pdf;
 
@@ -184,10 +184,17 @@ class CreditmemoTest extends TestCase
 
         $this->scopeConfigMock
             ->method('getValue')
-            ->withConsecutive(
-                ['sales/identity/logo', \Magento\Store\Model\ScopeInterface::SCOPE_STORE, null],
-                ['sales/identity/address', \Magento\Store\Model\ScopeInterface::SCOPE_STORE, null]
-            )->willReturnOnConsecutiveCalls($this->returnValue($filename), $this->returnValue(''));
+            ->willReturnCallback(
+                function ($arg1, $arg2, $arg3) use ($filename) {
+                    if ($arg1 === 'sales/identity/logo' &&
+                        $arg2 === \Magento\Store\Model\ScopeInterface::SCOPE_STORE && $arg3 === null) {
+                        return $filename;
+                    } elseif ($arg1 === 'sales/identity/address' &&
+                        $arg2 === \Magento\Store\Model\ScopeInterface::SCOPE_STORE && $arg3 === null) {
+                        return '';
+                    }
+                }
+            );
 
         $this->directoryMock->expects($this->any())
             ->method('isFile')

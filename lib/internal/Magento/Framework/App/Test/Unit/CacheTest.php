@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -81,7 +81,7 @@ class CacheTest extends TestCase
         ];
         foreach ($cacheTypes as $type) {
             $this->_cacheTypeMocks[$type] = $this->getMockBuilder($type)
-                ->setMethods(['clean'])
+                ->onlyMethods(['clean'])
                 ->setConstructorArgs(
                     [
                         $this->getMockForAbstractClass(FrontendInterface::class), '
@@ -161,7 +161,7 @@ class CacheTest extends TestCase
     /**
      * @return array
      */
-    public function saveDataProvider()
+    public static function saveDataProvider()
     {
         $configTag = Config::CACHE_TAG;
         return [
@@ -207,7 +207,7 @@ class CacheTest extends TestCase
     /**
      * @return array
      */
-    public function successFailureDataProvider()
+    public static function successFailureDataProvider()
     {
         return ['success' => [true], 'failure' => [false]];
     }

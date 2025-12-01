@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -63,7 +63,8 @@ class AdminConfigTest extends TestCase
             ->willReturn('init.host');
         $this->objectManager =  new ObjectManager($this);
         $this->validatorFactory = $this->getMockBuilder(ValidatorFactory::class)
-            ->setMethods(['setInstanceName', 'create'])
+            ->addMethods(['setInstanceName'])
+            ->onlyMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
         $backendUrl = $this->createMock(Url::class);
@@ -154,7 +155,7 @@ class AdminConfigTest extends TestCase
     /**
      * @return array
      */
-    public function requestSecureDataProvider()
+    public static function requestSecureDataProvider()
     {
         return [[true], [false]];
     }

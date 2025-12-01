@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -13,6 +13,8 @@ use Magento\Eav\Api\Data\AttributeInterface as EavAttributeInterface;
 use Magento\Eav\Api\Data\AttributeOptionInterface;
 use Magento\Eav\Model\AttributeRepository;
 use Magento\Eav\Model\ResourceModel\Entity\Attribute;
+use Magento\Eav\Model\ResourceModel\Entity\Attribute\Option as AttributeOptionResource;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Exception\StateException;
@@ -33,16 +35,24 @@ class OptionManagement implements AttributeOptionManagementInterface, AttributeO
     protected $resourceModel;
 
     /**
+     * @var AttributeOptionResource
+     */
+    protected $optionResource;
+
+    /**
      * @param AttributeRepository $attributeRepository
      * @param Attribute $resourceModel
+     * @param AttributeOptionResource|null $optionResource
      * @codeCoverageIgnore
      */
     public function __construct(
         AttributeRepository $attributeRepository,
-        Attribute $resourceModel
+        Attribute $resourceModel,
+        ?AttributeOptionResource $optionResource = null
     ) {
         $this->attributeRepository = $attributeRepository;
         $this->resourceModel = $resourceModel;
+        $this->optionResource = $optionResource ?: ObjectManager::getInstance()->get(AttributeOptionResource::class);
     }
 
     /**
@@ -140,6 +150,12 @@ class OptionManagement implements AttributeOptionManagementInterface, AttributeO
         $options['value'][$optionId][0] = $optionLabel;
         $options['order'][$optionId] = $option->getSortOrder();
         $options['is_default'][$optionId] = $option->getIsDefault();
+
+        $existingLabels = $this->optionResource->getStoreLabelsByOptionId((int)$optionId);
+        foreach ($existingLabels as $storeId => $labelText) {
+            $options['value'][$optionId][$storeId] ??= $labelText;
+        }
+
         if (is_array($option->getStoreLabels())) {
             foreach ($option->getStoreLabels() as $label) {
                 $options['value'][$optionId][$label->getStoreId()] = $label->getLabel();

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -40,7 +40,7 @@ class IdentityTest extends TestCase
         $this->objectManager = new ObjectManager($this);
         $this->columnMock = $this->getMockBuilder(Column::class)
             ->disableOriginalConstructor()
-            ->setMethods(['isIdentity'])
+            ->addMethods(['isIdentity'])
             ->getMock();
         $this->identity = $this->objectManager->getObject(
             Identity::class

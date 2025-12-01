@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -97,6 +97,7 @@ class ExceptionHandler implements ExceptionHandlerInterface
                     $exception = $e;
                 }
             }
+            $response->clearHeader('Location');
             $response->setHttpResponseCode(500);
             $response->setHeader('Content-Type', 'text/plain');
             $response->setBody($this->buildContentFromException($exception));

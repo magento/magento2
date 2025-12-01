@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -71,7 +71,7 @@ class AttributeValueProviderTest extends TestCase
     {
         $this->productMock = $this->getMockBuilder(Product::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getData'])
+            ->onlyMethods(['getData'])
             ->getMock();
 
         $this->productMock->expects($this->any())
@@ -81,7 +81,7 @@ class AttributeValueProviderTest extends TestCase
 
         $productCollection = $this->getMockBuilder(Collection::class)
             ->disableOriginalConstructor()
-            ->setMethods([
+            ->onlyMethods([
                 'addIdFilter', 'addStoreFilter', 'addAttributeToSelect', 'isEnabledFlat', 'getFirstItem'
             ])->getMock();
 
@@ -130,7 +130,7 @@ class AttributeValueProviderTest extends TestCase
             ]);
         $this->productMock = $this->getMockBuilder(Product::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getData'])
+            ->onlyMethods(['getData'])
             ->getMock();
         $this->productMock->expects($this->any())
             ->method('getData')
@@ -139,7 +139,7 @@ class AttributeValueProviderTest extends TestCase
 
         $productCollection = $this->getMockBuilder(Collection::class)
             ->disableOriginalConstructor()
-            ->setMethods([
+            ->onlyMethods([
                 'addIdFilter', 'addStoreFilter', 'addAttributeToSelect', 'isEnabledFlat', 'getConnection'
             ])->getMock();
 
@@ -171,7 +171,7 @@ class AttributeValueProviderTest extends TestCase
     /**
      * @return array
      */
-    public function attributeDataProvider(): array
+    public static function attributeDataProvider(): array
     {
         return [
             [1, 'attribute_code', 'Attribute Text']

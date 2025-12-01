@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -159,7 +159,11 @@ class ImporterTest extends TestCase
             ->with([]);
         $this->scopeMock
             ->method('setCurrentScope')
-            ->withConsecutive([Area::AREA_ADMINHTML], ['oldScope'], ['oldScope']);
+            ->willReturnCallback(function ($arg1) {
+                if ($arg1 == Area::AREA_ADMINHTML || $arg1 == 'oldScope') {
+                    return null;
+                }
+            });
         $this->flagManagerMock->expects($this->once())
             ->method('saveFlag')
             ->with(Importer::FLAG_CODE, $data);

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2021 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Eav\Model\ResourceModel\UpdateHandler;
@@ -62,7 +62,7 @@ class ExecuteProcessForCustomStoreTest extends UpdateHandlerAbstract
     /**
      * @return array
      */
-    public function getCustomStoreDataProvider()
+    public static function getCustomStoreDataProvider()
     {
         return [
             ['description', '', 'not_empty_value', 'not_empty_value'],                  //0

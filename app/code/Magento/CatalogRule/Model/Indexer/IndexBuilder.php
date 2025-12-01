@@ -1,11 +1,12 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\CatalogRule\Model\Indexer;
 
+use Exception;
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\ProductFactory;
 use Magento\Catalog\Model\ResourceModel\Indexer\ActiveTableSwitcher;
@@ -16,7 +17,10 @@ use Magento\CatalogRule\Model\Indexer\IndexBuilder\ProductLoader;
 use Magento\CatalogRule\Model\Indexer\IndexerTableSwapperInterface as TableSwapper;
 use Magento\CatalogRule\Model\ResourceModel\Rule\Collection as RuleCollection;
 use Magento\CatalogRule\Model\ResourceModel\Rule\CollectionFactory as RuleCollectionFactory;
+use Magento\CatalogRule\Model\ResourceModel\Rule\RuleIdProvider;
 use Magento\CatalogRule\Model\Rule;
+use Magento\CatalogRule\Model\RuleFactory;
+use Magento\Customer\Api\GroupExcludedWebsiteRepositoryInterface;
 use Magento\Eav\Model\Config;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\ResourceConnection;
@@ -28,6 +32,7 @@ use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
 use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\StoreManagerInterface;
 use Psr\Log\LoggerInterface;
+use Zend_Db_Statement_Exception;
 
 /**
  * Catalog rule index builder
@@ -182,6 +187,40 @@ class IndexBuilder
     private $productCollectionFactory;
 
     /**
+     * @var ReindexRuleProductsPrice
+     */
+    private $reindexRuleProductsPrice;
+
+    /**
+     * @var int
+     */
+    private $productBatchSize;
+    /**
+     * @var DynamicBatchSizeCalculator
+     */
+    private $batchSizeCalculator;
+
+    /**
+     * @var CatalogRuleInsertBatchSizeCalculator
+     */
+    private $insertBatchSizeCalculator;
+
+    /**
+     * @var RuleIdProvider
+     */
+    private $ruleIdProvider;
+
+    /**
+     * @var RuleFactory
+     */
+    private $ruleFactory;
+
+    /**
+     * @var GroupExcludedWebsiteRepositoryInterface
+     */
+    private $groupExcludedWebsiteRepository;
+
+    /**
      * @param RuleCollectionFactory $ruleCollectionFactory
      * @param PriceCurrencyInterface $priceCurrency
      * @param ResourceConnection $resource
@@ -204,6 +243,13 @@ class IndexBuilder
      * @param TimezoneInterface|null $localeDate
      * @param ProductCollectionFactory|null $productCollectionFactory
      * @param IndexerRegistry|null $indexerRegistry
+     * @param ReindexRuleProductsPrice|null $reindexRuleProductsPrice
+     * @param int $productBatchSize
+     * @param DynamicBatchSizeCalculator|null $batchSizeCalculator
+     * @param CatalogRuleInsertBatchSizeCalculator|null $insertBatchSizeCalculator
+     * @param RuleIdProvider|null $ruleIdProvider
+     * @param RuleFactory|null $ruleFactory
+     * @param GroupExcludedWebsiteRepositoryInterface|null $groupExcludedWebsiteRepository
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
@@ -218,18 +264,25 @@ class IndexBuilder
         DateTime\DateTime $dateTime,
         ProductFactory $productFactory,
         $batchCount = 1000,
-        ProductPriceCalculator $productPriceCalculator = null,
-        ReindexRuleProduct $reindexRuleProduct = null,
-        ReindexRuleGroupWebsite $reindexRuleGroupWebsite = null,
-        RuleProductsSelectBuilder $ruleProductsSelectBuilder = null,
-        ReindexRuleProductPrice $reindexRuleProductPrice = null,
-        RuleProductPricesPersistor $pricesPersistor = null,
-        ActiveTableSwitcher $activeTableSwitcher = null,
-        ProductLoader $productLoader = null,
-        TableSwapper $tableSwapper = null,
-        TimezoneInterface $localeDate = null,
-        ProductCollectionFactory $productCollectionFactory = null,
-        IndexerRegistry $indexerRegistry = null
+        ?ProductPriceCalculator $productPriceCalculator = null,
+        ?ReindexRuleProduct $reindexRuleProduct = null,
+        ?ReindexRuleGroupWebsite $reindexRuleGroupWebsite = null,
+        ?RuleProductsSelectBuilder $ruleProductsSelectBuilder = null,
+        ?ReindexRuleProductPrice $reindexRuleProductPrice = null,
+        ?RuleProductPricesPersistor $pricesPersistor = null,
+        ?ActiveTableSwitcher $activeTableSwitcher = null,
+        ?ProductLoader $productLoader = null,
+        ?TableSwapper $tableSwapper = null,
+        ?TimezoneInterface $localeDate = null,
+        ?ProductCollectionFactory $productCollectionFactory = null,
+        ?IndexerRegistry $indexerRegistry = null,
+        ?ReindexRuleProductsPrice $reindexRuleProductsPrice = null,
+        int $productBatchSize = 1000,
+        ?DynamicBatchSizeCalculator $batchSizeCalculator = null,
+        ?CatalogRuleInsertBatchSizeCalculator $insertBatchSizeCalculator = null,
+        ?RuleIdProvider $ruleIdProvider = null,
+        ?RuleFactory $ruleFactory = null,
+        ?GroupExcludedWebsiteRepositoryInterface $groupExcludedWebsiteRepository = null
     ) {
         $this->resource = $resource;
         $this->connection = $resource->getConnection();
@@ -242,6 +295,7 @@ class IndexBuilder
         $this->dateTime = $dateTime;
         $this->productFactory = $productFactory;
         $this->batchCount = $batchCount;
+        $this->productBatchSize = $productBatchSize;
 
         $this->productPriceCalculator = $productPriceCalculator ?? ObjectManager::getInstance()->get(
             ProductPriceCalculator::class
@@ -275,6 +329,18 @@ class IndexBuilder
             ObjectManager::getInstance()->get(IndexerRegistry::class);
         $this->productCollectionFactory = $productCollectionFactory ??
             ObjectManager::getInstance()->get(ProductCollectionFactory::class);
+        $this->reindexRuleProductsPrice = $reindexRuleProductsPrice ??
+            ObjectManager::getInstance()->get(ReindexRuleProductsPrice::class);
+        $this->batchSizeCalculator = $batchSizeCalculator ??
+            ObjectManager::getInstance()->get(DynamicBatchSizeCalculator::class);
+        $this->insertBatchSizeCalculator = $insertBatchSizeCalculator ??
+            ObjectManager::getInstance()->get(CatalogRuleInsertBatchSizeCalculator::class);
+        $this->ruleIdProvider = $ruleIdProvider ??
+            ObjectManager::getInstance()->get(RuleIdProvider::class);
+        $this->ruleFactory = $ruleFactory ??
+            ObjectManager::getInstance()->get(RuleFactory::class);
+        $this->groupExcludedWebsiteRepository = $groupExcludedWebsiteRepository ??
+            ObjectManager::getInstance()->get(GroupExcludedWebsiteRepositoryInterface::class);
     }
 
     /**
@@ -296,7 +362,7 @@ class IndexBuilder
             }
 
             $this->reindexRuleGroupWebsite->execute();
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $this->critical($e);
             throw new LocalizedException(
                 __('Catalog rule indexing failed. See details in exception log.')
@@ -315,7 +381,7 @@ class IndexBuilder
     {
         try {
             $this->doReindexByIds($ids);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $this->critical($e);
             throw new LocalizedException(
                 __("Catalog rule indexing failed. See details in exception log.")
@@ -328,6 +394,8 @@ class IndexBuilder
      *
      * @param array $ids
      * @return void
+     * @throws LocalizedException
+     * @throws Zend_Db_Statement_Exception
      */
     protected function doReindexByIds($ids)
     {
@@ -340,9 +408,10 @@ class IndexBuilder
             $this->reindexRuleProduct->execute($rule, $this->batchCount);
         }
 
-        foreach ($ids as $productId) {
-            $this->cleanProductPriceIndex([$productId]);
-            $this->reindexRuleProductPrice->execute($this->batchCount, $productId);
+        // batch products together, using configurable batch size parameter
+        foreach (array_chunk($ids, $this->productBatchSize) as $productIds) {
+            $this->cleanProductPriceIndex($productIds);
+            $this->reindexRuleProductsPrice->execute($this->batchCount, $productIds);
         }
 
         //the case was not handled via indexer dependency decorator or via mview configuration
@@ -367,7 +436,7 @@ class IndexBuilder
     {
         try {
             $this->doReindexFull();
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $this->critical($e);
             throw new LocalizedException(
                 __("Catalog rule indexing failed. See details in exception log.")
@@ -382,11 +451,32 @@ class IndexBuilder
      */
     protected function doReindexFull()
     {
-        foreach ($this->getAllRules() as $rule) {
-            $this->reindexRuleProduct->execute($rule, $this->batchCount, true);
+        $dynamicBatchCount = $this->insertBatchSizeCalculator->getInsertBatchSize($this->connection);
+        $ruleIds = $this->getActiveRuleIds();
+
+        $allExcludedWebsites = $this->groupExcludedWebsiteRepository->getAllExcludedWebsites();
+
+        foreach ($ruleIds as $ruleId) {
+
+            $rule = $this->loadRuleById($ruleId);
+            if (!$rule) {
+                $this->logger->warning("Rule ID {$ruleId} not found, skipping");
+                continue;
+            }
+
+            $ruleExcludedWebsites = $this->filterExcludedWebsitesForRule($rule, $allExcludedWebsites);
+            $rule->setData('excluded_website_ids', $ruleExcludedWebsites);
+
+            $this->reindexRuleProduct->execute($rule, $dynamicBatchCount, true);
+
+            $rule->clearInstance();
+            unset($rule);
         }
 
-        $this->reindexRuleProductPrice->execute($this->batchCount, null, true);
+        $priceBatchSize = $this->insertBatchSizeCalculator->getInsertBatchSize($this->connection);
+
+        $this->reindexRuleProductPrice->execute($priceBatchSize, null, true);
+
         $this->reindexRuleGroupWebsite->execute(true);
 
         $this->tableSwapper->swapIndexTables(
@@ -441,6 +531,7 @@ class IndexBuilder
      * @param int $productEntityId
      * @param array $websiteIds
      * @return void
+     * @throws Exception
      */
     private function assignProductToRule(Rule $rule, int $productEntityId, array $websiteIds): void
     {
@@ -502,7 +593,7 @@ class IndexBuilder
      * @param Rule $rule
      * @param Product $product
      * @return $this
-     * @throws \Exception
+     * @throws Exception
      * @deprecated 101.1.5
      * @see ReindexRuleProduct::execute
      * @SuppressWarnings(PHPMD.NPathComplexity)
@@ -525,6 +616,7 @@ class IndexBuilder
      * @param RuleCollection $ruleCollection
      * @param Product $product
      * @return void
+     * @throws LocalizedException
      */
     private function applyRules(RuleCollection $ruleCollection, Product $product): void
     {
@@ -590,13 +682,13 @@ class IndexBuilder
      * Apply all rules
      *
      * @param Product|null $product
-     * @throws \Exception
+     * @throws Exception
      * @return $this
      * @deprecated 101.0.0
      * @see ReindexRuleProductPrice::execute
      * @see ReindexRuleGroupWebsite::execute
      */
-    protected function applyAllRules(Product $product = null)
+    protected function applyAllRules(?Product $product = null)
     {
         $this->reindexRuleProductPrice->execute($this->batchCount, $product->getId());
         $this->reindexRuleGroupWebsite->execute();
@@ -651,7 +743,7 @@ class IndexBuilder
      * @deprecated 101.0.0
      * @see RuleProductsSelectBuilder::build
      */
-    protected function getRuleProductsStmt($websiteId, Product $product = null)
+    protected function getRuleProductsStmt($websiteId, ?Product $product = null)
     {
         return $this->ruleProductsSelectBuilder->build((int) $websiteId, (int) $product->getId());
     }
@@ -661,7 +753,7 @@ class IndexBuilder
      *
      * @param array $arrData
      * @return $this
-     * @throws \Exception
+     * @throws Exception
      * @deprecated 101.0.0
      * @see RuleProductPricesPersistor::execute
      */
@@ -679,6 +771,55 @@ class IndexBuilder
     protected function getActiveRules()
     {
         return $this->ruleCollectionFactory->create()->addFieldToFilter('is_active', 1);
+    }
+
+    /**
+     * Get active rule IDs only (lightweight)
+     *
+     * @return array
+     */
+    protected function getActiveRuleIds()
+    {
+        return $this->ruleIdProvider->getActiveRuleIds();
+    }
+
+    /**
+     * Load a single rule by ID
+     *
+     * @param int $ruleId
+     * @return Rule|null
+     */
+    protected function loadRuleById($ruleId)
+    {
+        $rule = $this->ruleFactory->create();
+        $rule->load($ruleId);
+
+        return $rule->getId() ? $rule : null;
+    }
+
+    /**
+     * Filter excluded websites for a specific rule based on its customer groups
+     *
+     * @param Rule $rule
+     * @param array $allExcludedWebsites
+     * @return array
+     */
+    private function filterExcludedWebsitesForRule(Rule $rule, array $allExcludedWebsites): array
+    {
+        $ruleExcludedWebsites = [];
+        $customerGroupIds = $rule->getCustomerGroupIds();
+
+        if (empty($customerGroupIds) || empty($allExcludedWebsites)) {
+            return $ruleExcludedWebsites;
+        }
+
+        foreach ($customerGroupIds as $customerGroupId) {
+            if (isset($allExcludedWebsites[$customerGroupId])) {
+                $ruleExcludedWebsites[$customerGroupId] = $allExcludedWebsites[$customerGroupId];
+            }
+        }
+
+        return $ruleExcludedWebsites;
     }
 
     /**
@@ -708,7 +849,7 @@ class IndexBuilder
     /**
      * Log critical exception
      *
-     * @param \Exception $e
+     * @param Exception $e
      * @return void
      */
     protected function critical($e)

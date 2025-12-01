@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework\Api\ExtensionAttribute;
 
@@ -106,7 +106,7 @@ class JoinProcessorTest extends \PHPUnit\Framework\TestCase
 
         $collection = $this->getMockBuilder(\Magento\Framework\Data\Collection\AbstractDb::class)
             ->disableOriginalConstructor()
-            ->setMethods(['joinExtensionAttribute'])
+            ->onlyMethods(['joinExtensionAttribute'])
             ->getMockForAbstractClass();
 
         $extensionAttributeJoinData = new JoinData();

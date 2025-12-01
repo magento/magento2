@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 /**
@@ -27,6 +27,12 @@ class Sender extends \Magento\Framework\App\Config\Value
         if ($value === null || !preg_match("/^[\S ]+$/", $value)) {
             throw new \Magento\Framework\Exception\LocalizedException(
                 __('The sender name "%1" is not valid. Please use only visible characters and spaces.', $value)
+            );
+        }
+
+        if (str_contains($value, ":")) {
+            throw new \Magento\Framework\Exception\LocalizedException(
+                __('The sender name "%1" is not valid. The colon character is not allowed.', $value)
             );
         }
 

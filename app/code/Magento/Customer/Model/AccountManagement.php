@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -16,6 +16,7 @@ use Magento\Customer\Api\Data\CustomerInterface;
 use Magento\Customer\Api\Data\ValidationResultsInterfaceFactory;
 use Magento\Customer\Api\SessionCleanerInterface;
 use Magento\Customer\Helper\View as CustomerViewHelper;
+use Magento\Customer\Model\AccountManagement\Authenticate;
 use Magento\Customer\Model\Config\Share as ConfigShare;
 use Magento\Customer\Model\Customer as CustomerModel;
 use Magento\Customer\Model\Customer\CredentialsValidator;
@@ -36,7 +37,6 @@ use Magento\Framework\Encryption\EncryptorInterface as Encryptor;
 use Magento\Framework\Encryption\Helper\Security;
 use Magento\Framework\Event\ManagerInterface;
 use Magento\Framework\Exception\AlreadyExistsException;
-use Magento\Framework\Exception\EmailNotConfirmedException;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\InvalidEmailOrPasswordException;
 use Magento\Framework\Exception\LocalizedException;
@@ -55,6 +55,7 @@ use Magento\Framework\Session\SaveHandlerInterface;
 use Magento\Framework\Session\SessionManagerInterface;
 use Magento\Framework\Stdlib\DateTime;
 use Magento\Framework\Stdlib\StringUtils as StringHelper;
+use Magento\Framework\Validator\Factory as ValidatorFactory;
 use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\StoreManagerInterface;
 use Psr\Log\LoggerInterface as PsrLogger;
@@ -401,6 +402,11 @@ class AccountManagement implements AccountManagementInterface
     private CustomerLogger $customerLogger;
 
     /**
+     * @var Authenticate
+     */
+    private Authenticate $authenticate;
+
+    /**
      * @param CustomerFactory $customerFactory
      * @param ManagerInterface $eventManager
      * @param StoreManagerInterface $storeManager
@@ -439,6 +445,9 @@ class AccountManagement implements AccountManagementInterface
      * @param AuthenticationInterface|null $authentication
      * @param Backend|null $eavValidator
      * @param CustomerLogger|null $customerLogger
+     * @param Authenticate|null $authenticate
+     * @param AddressFactory|null $addressFactory
+     * @param ValidatorFactory|null $validatorFactory
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      * @SuppressWarnings(PHPMD.NPathComplexity)
@@ -469,21 +478,24 @@ class AccountManagement implements AccountManagementInterface
         CustomerModel $customerModel,
         ObjectFactory $objectFactory,
         ExtensibleDataObjectConverter $extensibleDataObjectConverter,
-        CredentialsValidator $credentialsValidator = null,
-        DateTimeFactory $dateTimeFactory = null,
-        AccountConfirmation $accountConfirmation = null,
-        SessionManagerInterface $sessionManager = null,
-        SaveHandlerInterface $saveHandler = null,
-        CollectionFactory $visitorCollectionFactory = null,
-        SearchCriteriaBuilder $searchCriteriaBuilder = null,
-        AddressRegistry $addressRegistry = null,
-        GetCustomerByToken $getByToken = null,
-        AllowedCountries $allowedCountriesReader = null,
-        SessionCleanerInterface $sessionCleaner = null,
-        AuthorizationInterface $authorization = null,
-        AuthenticationInterface $authentication = null,
-        Backend $eavValidator = null,
-        ?CustomerLogger $customerLogger = null
+        ?CredentialsValidator $credentialsValidator = null,
+        ?DateTimeFactory $dateTimeFactory = null,
+        ?AccountConfirmation $accountConfirmation = null,
+        ?SessionManagerInterface $sessionManager = null,
+        ?SaveHandlerInterface $saveHandler = null,
+        ?CollectionFactory $visitorCollectionFactory = null,
+        ?SearchCriteriaBuilder $searchCriteriaBuilder = null,
+        ?AddressRegistry $addressRegistry = null,
+        ?GetCustomerByToken $getByToken = null,
+        ?AllowedCountries $allowedCountriesReader = null,
+        ?SessionCleanerInterface $sessionCleaner = null,
+        ?AuthorizationInterface $authorization = null,
+        ?AuthenticationInterface $authentication = null,
+        ?Backend $eavValidator = null,
+        ?CustomerLogger $customerLogger = null,
+        ?Authenticate $authenticate = null,
+        private ?AddressFactory $addressFactory = null,
+        private ?ValidatorFactory $validatorFactory = null,
     ) {
         $this->customerFactory = $customerFactory;
         $this->eventManager = $eventManager;
@@ -527,6 +539,9 @@ class AccountManagement implements AccountManagementInterface
         $this->authentication = $authentication ?? $objectManager->get(AuthenticationInterface::class);
         $this->eavValidator = $eavValidator ?? $objectManager->get(Backend::class);
         $this->customerLogger = $customerLogger ?? $objectManager->get(CustomerLogger::class);
+        $this->authenticate = $authenticate ?? $objectManager->get(Authenticate::class);
+        $this->addressFactory = $addressFactory ?? $objectManager->get(AddressFactory::class);
+        $this->validatorFactory = $validatorFactory ?? $objectManager->get(ValidatorFactory::class);
     }
 
     /**
@@ -620,51 +635,7 @@ class AccountManagement implements AccountManagementInterface
      */
     public function authenticate($username, $password)
     {
-        try {
-            $customer = $this->customerRepository->get($username);
-        } catch (NoSuchEntityException $e) {
-            throw new InvalidEmailOrPasswordException(__('Invalid login or password.'));
-        }
-
-        $customerId = $customer->getId();
-        if ($this->authentication->isLocked($customerId)) {
-            throw new UserLockedException(__('The account is locked.'));
-        }
-        try {
-            $this->authentication->authenticate($customerId, $password);
-        } catch (InvalidEmailOrPasswordException $e) {
-            throw new InvalidEmailOrPasswordException(__('Invalid login or password.'));
-        }
-
-        if ($customer->getConfirmation()
-            && ($this->isConfirmationRequired($customer) || $this->isEmailChangedConfirmationRequired($customer))) {
-            throw new EmailNotConfirmedException(__("This account isn't confirmed. Verify and try again."));
-        }
-
-        $customerModel = $this->customerFactory->create()->updateData($customer);
-        $this->eventManager->dispatch(
-            'customer_customer_authenticated',
-            ['model' => $customerModel, 'password' => $password]
-        );
-
-        $this->eventManager->dispatch('customer_data_object_login', ['customer' => $customer]);
-
-        return $customer;
-    }
-
-    /**
-     * Checks if account confirmation is required if the email address has been changed
-     *
-     * @param CustomerInterface $customer
-     * @return bool
-     */
-    private function isEmailChangedConfirmationRequired(CustomerInterface $customer): bool
-    {
-        return $this->accountConfirmation->isEmailChangedConfirmationRequired(
-            (int)$customer->getWebsiteId(),
-            (int)$customer->getId(),
-            $customer->getEmail()
-        );
+        return $this->authenticate->execute((string) $username, (string) $password);
     }
 
     /**
@@ -882,9 +853,14 @@ class AccountManagement implements AccountManagementInterface
      */
     public function createAccount(CustomerInterface $customer, $password = null, $redirectUrl = '')
     {
+        $customerEmail = $customer->getEmail();
+        if ($customerEmail === null) {
+            throw new LocalizedException(
+                __("The email address is required to create a customer account.")
+            );
+        }
         if ($password !== null) {
             $this->checkPasswordStrength($password);
-            $customerEmail = $customer->getEmail();
             try {
                 $this->credentialsValidator->checkPasswordDifferentFromEmail($customerEmail, $password);
             } catch (InputException $e) {
@@ -951,6 +927,24 @@ class AccountManagement implements AccountManagementInterface
 
         $customerAddresses = $customer->getAddresses() ?: [];
         $customer->setAddresses(null);
+        $customerAddresses = array_filter(
+            $customerAddresses,
+            fn ($address) => $this->isAddressAllowedForWebsite($address, $customer->getStoreId())
+        );
+        $addressValidator = $this->validatorFactory->createValidator('customer_address', 'save');
+        foreach ($customerAddresses as $address) {
+            $addressModel = $this->addressFactory->create()->updateData($address);
+            if ($this->configShare->isWebsiteScope()) {
+                $addressModel->setStoreId($customer->getStoreId());
+            }
+            if (!$addressValidator->isValid($addressModel)) {
+                $exception = new InputException();
+                $messages = $addressValidator->getMessages();
+                array_walk_recursive($messages, [$exception, 'addError']);
+                throw $exception;
+            }
+        }
+
         try {
             // If customer exists existing hash will be used by Repository
             $customer = $this->customerRepository->save($customer, $hash);
@@ -958,14 +952,9 @@ class AccountManagement implements AccountManagementInterface
             throw new InputMismatchException(
                 __('A customer with the same email address already exists in an associated website.')
             );
-        } catch (LocalizedException $e) {
-            throw $e;
         }
         try {
             foreach ($customerAddresses as $address) {
-                if (!$this->isAddressAllowedForWebsite($address, $customer->getStoreId())) {
-                    continue;
-                }
                 if ($address->getId()) {
                     $newAddress = clone $address;
                     $newAddress->setId(null);
@@ -978,7 +967,8 @@ class AccountManagement implements AccountManagementInterface
             }
             $this->customerRegistry->remove($customer->getId());
         } catch (InputException $e) {
-            $this->customerRepository->delete($customer);
+            $this->deleteCustomerInSecureArea($customer);
+
             throw $e;
         }
         $customer = $this->customerRepository->getById($customer->getId());
@@ -1688,5 +1678,24 @@ class AccountManagement implements AccountManagementInterface
         $allowedCountries = $this->allowedCountriesReader->getAllowedCountries(ScopeInterface::SCOPE_STORE, $storeId);
 
         return in_array($address->getCountryId(), $allowedCountries);
+    }
+
+    /**
+     * Set isSecureArea to true, then delete the customer and revert isSecureArea to original value
+     *
+     * @param  CustomerInterface  $customer
+     * @return void
+     * @throws LocalizedException
+     */
+    private function deleteCustomerInSecureArea(CustomerInterface $customer): void
+    {
+        $originalValue = $this->registry->registry('isSecureArea');
+        $this->registry->unregister('isSecureArea');
+        $this->registry->register('isSecureArea', true);
+
+        $this->customerRepository->delete($customer);
+
+        $this->registry->unregister('isSecureArea');
+        $this->registry->register('isSecureArea', $originalValue);
     }
 }

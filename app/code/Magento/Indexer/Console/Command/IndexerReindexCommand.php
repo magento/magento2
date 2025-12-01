@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Indexer\Console\Command;
@@ -17,6 +17,7 @@ use Magento\Framework\Indexer\IndexerRegistry;
 use Magento\Framework\Indexer\StateInterface;
 use Magento\Indexer\Model\Processor\MakeSharedIndexValid;
 use Psr\Log\LoggerInterface;
+use Symfony\Component\Console\Helper\HelperSet;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
@@ -65,9 +66,9 @@ class IndexerReindexCommand extends AbstractIndexerManageCommand
      */
     public function __construct(
         ObjectManagerFactory $objectManagerFactory,
-        IndexerRegistry $indexerRegistry = null,
-        DependencyInfoProvider $dependencyInfoProvider = null,
-        MakeSharedIndexValid $makeSharedValid = null,
+        ?IndexerRegistry $indexerRegistry = null,
+        ?DependencyInfoProvider $dependencyInfoProvider = null,
+        ?MakeSharedIndexValid $makeSharedValid = null,
         ?LoggerInterface $logger = null
     ) {
         $this->indexerRegistry = $indexerRegistry;
@@ -92,7 +93,7 @@ class IndexerReindexCommand extends AbstractIndexerManageCommand
     /**
      * @inheritdoc
      */
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output):int
     {
         $returnValue = Cli::RETURN_SUCCESS;
         foreach ($this->getIndexers($input) as $indexer) {

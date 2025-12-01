@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework\View\Design\FileResolution\Fallback;
 
@@ -26,5 +26,5 @@ interface ResolverInterface
      * @param string|null $module
      * @return string|bool
      */
-    public function resolve($type, $file, $area = null, ThemeInterface $theme = null, $locale = null, $module = null);
+    public function resolve($type, $file, $area = null, ?ThemeInterface $theme = null, $locale = null, $module = null);
 }

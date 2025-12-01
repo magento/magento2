@@ -1,13 +1,15 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Cms\Test\Unit\Model\Template;
 
 use Magento\Cms\Model\Template\Filter;
+use Magento\Framework\Filter\Template\FilteringDepthMeter;
+use Magento\Framework\Filter\Template\SignatureProvider;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
@@ -45,6 +47,18 @@ class FilterTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $objectManager = new ObjectManager($this);
+        $objects = [
+            [
+                SignatureProvider::class,
+                $this->createMock(SignatureProvider::class)
+            ],
+            [
+                FilteringDepthMeter::class,
+                $this->createMock(FilteringDepthMeter::class)
+            ]
+        ];
+        $objectManager->prepareObjectManager($objects);
+
         $this->filter = $objectManager->getObject(
             Filter::class,
             ['storeManager' => $this->storeManagerMock]

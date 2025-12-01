@@ -1,10 +1,8 @@
 <?php
-
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2023 Adobe
+ * All Rights Reserved.
  */
-
 declare(strict_types=1);
 
 namespace Magento\EavGraphQl\Model\Output;
@@ -25,11 +23,18 @@ class GetAttributeData implements GetAttributeDataInterface
     private EnumLookup $enumLookup;
 
     /**
-     * @param EnumLookup $enumLookup
+     * @var array
      */
-    public function __construct(EnumLookup $enumLookup)
+    private array $skipOptionsForAttributeCodes;
+
+    /**
+     * @param EnumLookup $enumLookup
+     * @param array $skipOptionsForAttributeCodes
+     */
+    public function __construct(EnumLookup $enumLookup, array $skipOptionsForAttributeCodes = [])
     {
         $this->enumLookup = $enumLookup;
+        $this->skipOptionsForAttributeCodes = $skipOptionsForAttributeCodes;
     }
 
     /**
@@ -91,7 +96,7 @@ class GetAttributeData implements GetAttributeDataInterface
      */
     private function getOptions(AttributeInterface $attribute): array
     {
-        if (!$attribute->getOptions()) {
+        if (!$attribute->getOptions() || $this->skipOptions($attribute)) {
             return [];
         }
         return array_filter(
@@ -132,5 +137,19 @@ class GetAttributeData implements GetAttributeDataInterface
         }
 
         return in_array($value, explode(',', $defaultValue));
+    }
+
+    /**
+     * Skip attributes options for region_id and country_id
+     *
+     * Attributes region_id and country_id returns large datasets that is also not related between each other and
+     * not filterable. DirectoryGraphQl contains queries that allow to retrieve this information in a meaningful way
+     *
+     * @param AttributeInterface $attribute
+     * @return bool
+     */
+    private function skipOptions(AttributeInterface $attribute): bool
+    {
+        return in_array($attribute->getAttributeCode(), $this->skipOptionsForAttributeCodes);
     }
 }

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Backend\App;
 
@@ -116,7 +116,7 @@ class AbstractActionTest extends \Magento\TestFramework\TestCase\AbstractBackend
      *
      * @return array
      */
-    public function nodesWithAcl()
+    public static function nodesWithAcl()
     {
         return [
             ['notification_window', 'Magento_AdminNotification::show_toolbar', true],

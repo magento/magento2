@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2021 Adobe
+ * All Rights Reserved.
  */
 
 declare(strict_types=1);
@@ -73,7 +73,7 @@ class SearchCriteriaValidatorTest extends TestCase
     public function testFailsPageSizeWhenAboveMaxLimit()
     {
         $this->expectException(InvalidArgumentException::class);
-        $this->expectErrorMessage('Maximum SearchCriteria pageSize is 3');
+        $this->expectExceptionMessage('Maximum SearchCriteria pageSize is 3');
 
         $this->config->method('isInputLimitingEnabled')
             ->willReturn(true);
@@ -83,7 +83,7 @@ class SearchCriteriaValidatorTest extends TestCase
     public function testFailsPageSizeWhenAboveMaxLimitUsingConfig()
     {
         $this->expectException(InvalidArgumentException::class);
-        $this->expectErrorMessage('Maximum SearchCriteria pageSize is 50');
+        $this->expectExceptionMessage('Maximum SearchCriteria pageSize is 50');
 
         $this->config->method('isInputLimitingEnabled')
             ->willReturn(true);

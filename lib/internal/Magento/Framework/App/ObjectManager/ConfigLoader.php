@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework\App\ObjectManager;
 
@@ -43,7 +43,7 @@ class ConfigLoader implements ConfigLoaderInterface
     public function __construct(
         \Magento\Framework\Config\CacheInterface $cache,
         \Magento\Framework\ObjectManager\Config\Reader\DomFactory $readerFactory,
-        Serialize $serializer = null
+        ?Serialize $serializer = null
     ) {
         $this->_cache = $cache;
         $this->_readerFactory = $readerFactory;

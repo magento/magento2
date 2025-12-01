@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -158,8 +158,10 @@ class ReviewPaymentTest extends TestCase
 
         $this->requestMock
             ->method('getParam')
-            ->withConsecutive(['order_id'], ['action'])
-            ->willReturnOnConsecutiveCalls($orderId, $action);
+            ->willReturnCallback(fn($param) => match ([$param]) {
+                ['order_id'] => $orderId,
+                ['action'] => $action
+            });
 
         $this->resultRedirectFactoryMock->expects($this->once())->method('create')
             ->willReturn($this->resultRedirectMock);

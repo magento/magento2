@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -43,12 +43,14 @@ class DeleteRelationTest extends TestCase
         /** @var AbstractModel|MockObject $addressModel  */
         $addressModel = $this->getMockBuilder(AbstractModel::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getIsCustomerSaveTransaction', 'getId', 'getResource'])
+            ->addMethods(['getIsCustomerSaveTransaction'])
+            ->onlyMethods(['getId', 'getResource'])
             ->getMock();
         /** @var Customer|MockObject $customerModel */
         $customerModel = $this->getMockBuilder(Customer::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getDefaultBilling', 'getDefaultShipping', 'getId'])
+            ->addMethods(['getDefaultBilling', 'getDefaultShipping'])
+            ->onlyMethods(['getId'])
             ->getMock();
 
         $addressResource = $this->getMockForAbstractClass(
@@ -109,7 +111,7 @@ class DeleteRelationTest extends TestCase
      *
      * @return array
      */
-    public function getRelationDataProvider()
+    public static function getRelationDataProvider()
     {
         return [
             [null, true, true],

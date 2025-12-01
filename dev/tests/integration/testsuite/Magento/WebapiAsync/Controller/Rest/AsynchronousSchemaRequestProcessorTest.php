@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\WebapiAsync\Controller\Rest;
@@ -47,7 +47,7 @@ class AsynchronousSchemaRequestProcessorTest extends AbstractController
     /**
      * @return array
      */
-    public function schemaRequestProvider()
+    public static function schemaRequestProvider()
     {
         return [
             ['rest/async/schema'],

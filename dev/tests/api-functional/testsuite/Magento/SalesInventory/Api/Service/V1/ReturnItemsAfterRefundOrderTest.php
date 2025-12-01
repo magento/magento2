@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\SalesInventory\Api\Service\V1;
 
@@ -155,7 +155,7 @@ class ReturnItemsAfterRefundOrderTest extends WebapiAbstract
     /**
      * @return array
      */
-    public function refundWithReturnItemsToStockUnshippedOrderDataProvider()
+    public static function refundWithReturnItemsToStockUnshippedOrderDataProvider()
     {
         return [
             [false, 99],
@@ -166,7 +166,7 @@ class ReturnItemsAfterRefundOrderTest extends WebapiAbstract
     /**
      * @return array
      */
-    public function dataProvider()
+    public static function dataProvider()
     {
         return [
             'refundAllOrderItems' => [2],

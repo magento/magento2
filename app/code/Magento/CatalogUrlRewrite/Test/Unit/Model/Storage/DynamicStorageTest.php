@@ -1,12 +1,13 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2021 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\CatalogUrlRewrite\Test\Unit\Model\Storage;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\Catalog\Model\ResourceModel\Product;
 use Magento\Catalog\Model\ResourceModel\ProductFactory;
 use Magento\CatalogUrlRewrite\Model\CategoryUrlPathGenerator;
@@ -16,13 +17,18 @@ use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\DB\Select;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\UrlRewrite\Model\OptionProvider;
 use Magento\Store\Model\ScopeInterface;
 use Magento\UrlRewrite\Service\V1\Data\UrlRewriteFactory;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use ReflectionMethod;
+use Psr\Log\LoggerInterface;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class DynamicStorageTest extends TestCase
 {
     /**
@@ -69,6 +75,16 @@ class DynamicStorageTest extends TestCase
      * @var ProductFactory|MockObject
      */
     private $productFactoryMock;
+
+    /**
+     * @var LoggerInterface
+     */
+    private $logger;
+
+    /**
+     * @var string
+     */
+    private $requestPath;
 
     /**
      * @inheritdoc
@@ -118,17 +134,30 @@ class DynamicStorageTest extends TestCase
             ->method('create')
             ->willReturn($this->productResourceMock);
 
+        $this->logger = $this->getMockBuilder(LoggerInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $objectManager = new ObjectManager($this);
+        $objects = [
+            [
+                LoggerInterface::class,
+                $this->createMock(LoggerInterface::class)
+            ]
+        ];
+        $objectManager->prepareObjectManager($objects);
+
         $this->object = new DynamicStorage(
             $this->urlRewriteFactoryMock,
             $this->dataObjectHelperMock,
             $this->resourceConnectionMock,
             $this->scopeConfigMock,
-            $this->productFactoryMock
+            $this->productFactoryMock,
+            $this->logger
         );
     }
 
     /**
-     * @dataProvider findProductRewriteByRequestPathDataProvider
      * @param array $data
      * @param array|false $productFromDb
      * @param string $categorySuffix
@@ -137,6 +166,7 @@ class DynamicStorageTest extends TestCase
      * @param array|null $expectedProductRewrite
      * @throws \ReflectionException
      */
+    #[DataProvider('findProductRewriteByRequestPathDataProvider')]
     public function testFindProductRewriteByRequestPath(
         array $data,
         $productFromDb,
@@ -145,9 +175,7 @@ class DynamicStorageTest extends TestCase
         bool $canBeShownInCategory,
         ?array $expectedProductRewrite
     ): void {
-        $this->connectionMock->expects($this->any())
-            ->method('fetchRow')
-            ->will($this->onConsecutiveCalls($productFromDb, $categoryFromDb));
+        $this->fetchDataMock($productFromDb, $categoryFromDb);
 
         $scopeConfigMap = [
             [
@@ -174,8 +202,9 @@ class DynamicStorageTest extends TestCase
 
     /**
      * @return array
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function findProductRewriteByRequestPathDataProvider(): array
+    public static function findProductRewriteByRequestPathDataProvider(): array
     {
         return [
             [
@@ -322,6 +351,68 @@ class DynamicStorageTest extends TestCase
                     'redirect_type' => OptionProvider::PERMANENT,
                 ]
             ],
+            [
+                // Category has product url key at the beginning of its url key
+                [
+                    'request_path' => 'test-category/test-sub-category/test',
+                    'store_id' => 1
+                ],
+                [
+                    'entity_type' => 'product',
+                    'entity_id' => '1',
+                    'request_path' => 'test',
+                    'target_path' => 'catalog/product/view/id/1',
+                    'redirect_type' => '0',
+                ],
+                '',
+                [
+                    'entity_type' => 'category',
+                    'entity_id' => '38',
+                    'request_path' => 'test-category/test-sub-category',
+                    'target_path' => 'catalog/category/view/id/38',
+                    'redirect_type' => '0',
+                ],
+                true,
+                [
+                    'entity_type' => 'product',
+                    'entity_id' => '1',
+                    'request_path' => 'test-category/test-sub-category/test',
+                    'target_path' => 'catalog/product/view/id/1/category/38',
+                    'redirect_type' => '0',
+                ]
+            ],
         ];
+    }
+
+    /**
+     * @param array|false $productFromDb
+     * @param array|false $categoryFromDb
+     *
+     * @return void
+     */
+    private function fetchDataMock($productFromDb, $categoryFromDb): void
+    {
+        $selectMock = $this->selectMock;
+        $this->selectMock->expects($this->any())
+            ->method('where')
+            ->willReturnCallback(function ($string, $value) use ($selectMock) {
+                if ($string == 'url_rewrite.request_path IN (?)') {
+                    $this->requestPath = array_shift($value);
+                }
+                return $selectMock;
+            });
+        $this->connectionMock->expects($this->any())
+            ->method('fetchRow')
+            ->willReturnCallback(function () use ($productFromDb, $categoryFromDb) {
+                switch (true) {
+                    case $productFromDb && $productFromDb['request_path'] == $this->requestPath:
+                        return $productFromDb;
+                    case $categoryFromDb && $categoryFromDb['request_path'] == $this->requestPath:
+                        return $categoryFromDb;
+                    default:
+                        return false;
+                }
+            })
+        ;
     }
 }

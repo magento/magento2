@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -146,7 +146,7 @@ class GenerateLoginCustomerTokenTest extends GraphQlAbstract
      *
      * @return array
      */
-    public function dataProviderInvalidInfo(): array
+    public static function dataProviderInvalidInfo(): array
     {
         return [
             'invalid_admin_user_name' => [

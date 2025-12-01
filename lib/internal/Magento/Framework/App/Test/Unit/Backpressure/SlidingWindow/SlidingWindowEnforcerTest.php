@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2021 Adobe
+ * All Rights Reserved.
  */
 
 declare(strict_types=1);
@@ -132,7 +132,7 @@ class SlidingWindowEnforcerTest extends TestCase
      *
      * @return array
      */
-    public function getSlidingCases(): array
+    public static function getSlidingCases(): array
     {
         return [
             'prev-lt-50%' => [999, false],

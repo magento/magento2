@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Framework\Locale;
@@ -213,7 +213,7 @@ class TranslatedLists implements ListsInterface
             $locale = $this->localeResolver->getLocale();
         }
 
-        $translation = (new RegionBundle())->get($locale)['Countries'][$value];
+        $translation = $value ? (new RegionBundle())->get($locale)['Countries'][$value] : null;
 
         return $translation ? (string)__($translation) : $translation;
     }

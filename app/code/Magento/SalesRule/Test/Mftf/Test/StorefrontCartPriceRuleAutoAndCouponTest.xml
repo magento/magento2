@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright 2025 Adobe
+  * All Rights Reserved.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontCartPriceRuleAutoAndCouponTest">
+        <annotations>
+            <features value="SalesRule"/>
+            <title value="Verify auto and coupon cart price rules apply together in cart"/>
+            <stories value="Verifies that both an automatic 50% discount and a $10 coupon discount are applied correctly in the shopping cart."/>
+            <description value="Checks 50% auto discount, $10 off with '1234' coupon, correct totals, and 'Discount Subsequent Rules' disabled in Cart Price Rule settings."/>
+            <testCaseId value="AC-5133"/>
+            <severity value="MAJOR"/>
+            <group value="SalesRule"/>
+        </annotations>
+        <before>
+            <!-- Precondition1: Create simple product with price $100 -->
+            <createData entity="SimpleProduct2" stepKey="createSimpleProduct">
+                <field key="price">100</field>
+            </createData>
+            <!-- Precondition 2: Create two cart price rules -->
+            <createData entity="TenDollarDiscount" stepKey="createCouponRule"/>
+            <createData entity="ApiSalesRuleCoupon" stepKey="createCartPriceRuleCoupon">
+                <requiredEntity createDataKey="createCouponRule"/>
+            </createData>
+            <createData entity="AutoRule50Percent" stepKey="createCouponRule2"/>
+        </before>
+        <after>
+            <deleteData createDataKey="createSimpleProduct" stepKey="deleteSimpleProduct"/>
+            <deleteData createDataKey="createCouponRule" stepKey="deleteCartPriceRule"/>
+            <deleteData createDataKey="createCouponRule2" stepKey="deleteCartPriceRule2"/>
+        </after>
+        <!-- Step 1 and Step 2: Go to storefront and add simple product to the cart -->
+        <actionGroup ref="OpenStoreFrontProductPageActionGroup" stepKey="navigateToSimpleProductPage">
+            <argument name="productUrlKey" value="$$createSimpleProduct.custom_attributes[url_key]$$"/>
+        </actionGroup>
+        <actionGroup ref="AddToCartFromStorefrontProductPageActionGroup" stepKey="addProductToCart">
+            <argument name="productName" value="$$createSimpleProduct.name$$"/>
+            <argument name="productCount" value="1"/>
+        </actionGroup>
+        <!-- Step 3: Go to shopping cart page -->
+        <actionGroup ref="StorefrontCartPageOpenActionGroup" stepKey="goToCartPage"/>
+        <!-- Validate auto 50% discount is applied -->
+        <waitForText selector="{{CheckoutCartSummarySection.subtotal}}" userInput="$100.00" stepKey="seeSubtotalBeforeCoupon"/>
+        <waitForText selector="{{CheckoutCartSummarySection.discountAmount}}" userInput="-$50.00" stepKey="seeDiscountBeforeCoupon"/>
+        <waitForText selector="{{CheckoutCartSummarySection.total}}" userInput="$50.00" stepKey="seeOrderTotalBeforeCoupon"/>
+        <!-- Step 4: Apply discount code from second rule -->
+        <actionGroup ref="StorefrontApplyCouponActionGroup" stepKey="applyCoupon">
+            <argument name="coupon" value="$$createCartPriceRuleCoupon$$"/>
+        </actionGroup>
+        <!-- Validate both discounts are applied correctly -->
+        <waitForText selector="{{CheckoutCartSummarySection.subtotal}}" userInput="$100.00" stepKey="seeSubtotalAfterCoupon"/>
+        <waitForText selector="{{CheckoutCartSummarySection.discountAmount}}" userInput="-$60.00" stepKey="seeDiscountAfterCoupon"/>
+        <waitForText selector="{{CheckoutCartSummarySection.total}}" userInput="$40.00" stepKey="seeOrderTotalAfterCoupon"/>
+    </test>
+</tests>

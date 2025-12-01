@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Catalog\Api;
 
@@ -57,7 +57,7 @@ class ProductSwatchAttributeOptionManagementInterfaceTest extends WebapiAbstract
     /**
      * @return array
      */
-    public function addDataProvider()
+    public static function addDataProvider()
     {
         $optionPayload = [
             AttributeOptionInterface::LABEL => 'new color',

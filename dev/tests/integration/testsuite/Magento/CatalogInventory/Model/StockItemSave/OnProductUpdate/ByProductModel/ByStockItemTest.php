@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\CatalogInventory\Model\StockItemSave\OnProductUpdate\ByProductModel;
 
@@ -76,7 +76,7 @@ class ByStockItemTest extends \PHPUnit\Framework\TestCase
      * product model (deprecated)
      *
      * @magentoDataFixture Magento/Catalog/_files/product_simple.php
-     * @magentoDbIsolation disabled
+     * @magentoDbIsolation enabled
      */
     public function testSaveManuallyCreatedStockItem()
     {
@@ -97,7 +97,7 @@ class ByStockItemTest extends \PHPUnit\Framework\TestCase
      * product repository (deprecated)
      *
      * @magentoDataFixture Magento/Catalog/_files/product_simple.php
-     * @magentoDbIsolation disabled
+     * @magentoDbIsolation enabled
      */
     public function testSaveManuallyUpdatedStockItem()
     {
@@ -116,7 +116,7 @@ class ByStockItemTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @magentoDataFixture Magento/Catalog/_files/product_simple.php
-     * @magentoDbIsolation disabled
+     * @magentoDbIsolation enabled
      */
     public function testAutomaticIsInStockUpdate(): void
     {

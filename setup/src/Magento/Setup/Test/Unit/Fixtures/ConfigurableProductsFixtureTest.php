@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -51,7 +51,8 @@ class ConfigurableProductsFixtureTest extends TestCase
     {
         $this->fixtureModelMock = $this->getMockBuilder(FixtureModel::class)
             ->disableOriginalConstructor()
-            ->setMethods(['createAttributeSet', 'getValue', 'getObjectManager'])
+            ->onlyMethods(['getValue', 'getObjectManager'])
+            ->addMethods(['createAttributeSet'])
             ->getMock();
 
         $this->attributeSetsFixtureMock = $this->getMockBuilder(AttributeSetFixture::class)
@@ -120,7 +121,7 @@ class ConfigurableProductsFixtureTest extends TestCase
             ]);
 
         $attributeCollectionFactoryMock = $this->getMockBuilder(CollectionFactory::class)
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
 

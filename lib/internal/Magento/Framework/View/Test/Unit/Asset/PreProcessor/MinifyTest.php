@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -46,7 +46,7 @@ class MinifyTest extends TestCase
     protected function setUp(): void
     {
         $this->adapterMock = $this->getMockBuilder(AdapterInterface::class)
-            ->setMethods(['minify'])
+            ->onlyMethods(['minify'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $this->minificationMock = $this->getMockBuilder(Minification::class)
@@ -122,7 +122,7 @@ class MinifyTest extends TestCase
     /**
      * @return array
      */
-    public function processDataProvider()
+    public static function processDataProvider()
     {
         return [
             ['test.min.css', 'test.css', 1, 1, true],

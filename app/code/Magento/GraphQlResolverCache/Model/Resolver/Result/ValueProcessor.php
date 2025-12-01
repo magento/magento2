@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2023 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -9,6 +9,7 @@ namespace Magento\GraphQlResolverCache\Model\Resolver\Result;
 
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\GraphQlResolverCache\Model\Resolver\Result\ValueProcessor\FlagSetter\FlagSetterInterface;
 use Magento\GraphQlResolverCache\Model\Resolver\Result\ValueProcessor\FlagGetter\FlagGetterInterface;
@@ -16,7 +17,7 @@ use Magento\GraphQlResolverCache\Model\Resolver\Result\ValueProcessor\FlagGetter
 /**
  * Value processor for cached resolver value.
  */
-class ValueProcessor implements ValueProcessorInterface
+class ValueProcessor implements ValueProcessorInterface, ResetAfterRequestInterface
 {
     /**
      * @var HydratorProviderInterface
@@ -160,5 +161,14 @@ class ValueProcessor implements ValueProcessorInterface
         if ($dehydrator) {
             $dehydrator->dehydrate($value);
         }
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        $this->hydrators = [];
+        $this->processedValues = [];
     }
 }

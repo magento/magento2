@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 
 use Magento\Sales\Api\Data\OrderInterfaceFactory;
@@ -54,7 +54,7 @@ $transactions = [
 /** @var array $transactionData */
 foreach ($transactions as $transactionData) {
     $payment->addData($transactionData);
-    $payment->addTransaction(\Magento\Sales\Model\Order\Payment\Transaction::TYPE_CAPTURE);
+    $payment->addTransaction(\Magento\Sales\Model\Order\Payment\Transaction::TYPE_AUTH);
 }
 
 $order->save();

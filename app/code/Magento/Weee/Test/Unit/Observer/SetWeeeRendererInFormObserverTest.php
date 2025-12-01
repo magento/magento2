@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -59,7 +59,7 @@ class SetWeeeRendererInFormObserverTest extends TestCase
         /** @var Event|MockObject $eventMock */
         $eventMock = $this->getMockBuilder(Event::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getForm'])
+            ->addMethods(['getForm'])
             ->getMock();
 
         /** @var Observer|MockObject $observerMock */

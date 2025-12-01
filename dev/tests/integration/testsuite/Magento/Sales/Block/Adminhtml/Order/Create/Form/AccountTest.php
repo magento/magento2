@@ -2,8 +2,8 @@
 /**
  * Test class for \Magento\Sales\Block\Adminhtml\Order\Create\Form\Account
  *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -71,7 +71,8 @@ class AccountTest extends TestCase
 
         $this->session = $this->getMockBuilder(SessionQuote::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getCustomerId','getQuote'])
+            ->addMethods(['getCustomerId'])
+            ->onlyMethods(['getQuote'])
             ->getMock();
         $this->session->method('getQuote')
             ->willReturn($quote);
@@ -177,7 +178,8 @@ class AccountTest extends TestCase
 
         $this->session = $this->getMockBuilder(SessionQuote::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getCustomerId', 'getQuote'])
+            ->addMethods(['getCustomerId'])
+            ->onlyMethods(['getQuote'])
             ->getMock();
         $this->session->method('getQuote')
             ->willReturn($quote);
@@ -240,7 +242,8 @@ class AccountTest extends TestCase
 
         $this->session = $this->getMockBuilder(SessionQuote::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getCustomerId', 'getQuote'])
+            ->addMethods(['getCustomerId'])
+            ->onlyMethods(['getQuote'])
             ->getMock();
         $this->session->method('getQuote')
             ->willReturn($quote);
@@ -276,7 +279,7 @@ class AccountTest extends TestCase
      * @return array
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function getDataForVatValidatedCustomer(): array
+    public static function getDataForVatValidatedCustomer(): array
     {
         return [
             'Validated customer group id when its set in quote' => [

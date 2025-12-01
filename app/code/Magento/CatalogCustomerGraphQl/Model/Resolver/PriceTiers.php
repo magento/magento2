@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -107,8 +107,8 @@ class PriceTiers implements ResolverInterface, ResetAfterRequestInterface
         Field $field,
         $context,
         ResolveInfo $info,
-        array $value = null,
-        array $args = null
+        ?array $value = null,
+        ?array $args = null
     ) {
         if (!isset($value['model'])) {
             throw new LocalizedException(__('"model" value should be specified'));
@@ -122,10 +122,6 @@ class PriceTiers implements ResolverInterface, ResetAfterRequestInterface
         $product = $value['model'];
 
         if ($product->hasData('can_show_price') && $product->getData('can_show_price') === false) {
-            return [];
-        }
-
-        if (!$product->getTierPrices()) {
             return [];
         }
 
@@ -186,7 +182,7 @@ class PriceTiers implements ResolverInterface, ResetAfterRequestInterface
             "discount" => $discount,
             "quantity" => $tierPrice->getQty(),
             "final_price" => [
-                "value" => $tierPrice->getValue() * $tierPrice->getQty(),
+                "value" => $tierPrice->getValue(),
                 "currency" => $currencyCode
             ]
         ];

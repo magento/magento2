@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -58,7 +58,7 @@ class CategoryLinkRepositoryTest extends TestCase
     {
         $this->productResourceMock = $this->getMockBuilder(Product::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getProductsIdsBySkus'])
+            ->onlyMethods(['getProductsIdsBySkus'])
             ->getMock();
         $this->categoryRepositoryMock = $this->getMockForAbstractClass(CategoryRepositoryInterface::class);
         $this->productRepositoryMock = $this->getMockForAbstractClass(ProductRepositoryInterface::class);

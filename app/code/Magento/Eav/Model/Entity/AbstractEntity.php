@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Eav\Model\Entity;
@@ -56,7 +56,7 @@ abstract class AbstractEntity extends AbstractResource implements
     /**
      * Entity type configuration
      *
-     * @var Type
+     * @var Type|null
      */
     protected $_type;
 
@@ -89,7 +89,7 @@ abstract class AbstractEntity extends AbstractResource implements
     protected $_staticAttributes = [];
 
     /**
-     * @var string
+     * @var string|null
      */
     protected $_entityTable;
 
@@ -103,7 +103,7 @@ abstract class AbstractEntity extends AbstractResource implements
     /**
      * Entity table identification field name
      *
-     * @var string
+     * @var string|null
      */
     protected $_entityIdField;
 
@@ -233,8 +233,8 @@ abstract class AbstractEntity extends AbstractResource implements
     public function __construct(
         Context $context,
         $data = [],
-        UniqueValidationInterface $uniqueValidator = null,
-        AttributeLoaderInterface $attributeLoader = null
+        ?UniqueValidationInterface $uniqueValidator = null,
+        ?AttributeLoaderInterface $attributeLoader = null
     ) {
         $this->_eavConfig = $context->getEavConfig();
         $this->_resource = $context->getResource();

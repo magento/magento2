@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Catalog\Model\Layer\Filter\Price;
 
@@ -110,10 +110,10 @@ class AlgorithmBaseTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function pricesSegmentationDataProvider()
+    public static function pricesSegmentationDataProvider()
     {
         $testCases = include __DIR__ . '/_files/_algorithm_base_data.php';
-        $testCasesNew = $this->getUnSkippedTestCases($testCases);
+        $testCasesNew = self::getUnSkippedTestCases($testCases);
         $result = [];
         foreach ($testCasesNew as $index => $testCase) {
             $result[] = [
@@ -131,7 +131,7 @@ class AlgorithmBaseTest extends \PHPUnit\Framework\TestCase
      * @param array $testCases
      * @return array
      */
-    private function getUnSkippedTestCases(array $testCases) : array
+    private static function getUnSkippedTestCases(array $testCases) : array
     {
         // TO DO UnSkip skipped test cases and remove this function
         $SkippedTestCases = [];

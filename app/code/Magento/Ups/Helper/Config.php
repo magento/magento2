@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Ups\Helper;
 
@@ -115,6 +115,7 @@ class Config
                     '03' => __('UPS Ground'),
                     '07' => __('UPS Worldwide Express'),
                     '08' => __('UPS Worldwide Expedited'),
+                    '12' => __('UPS Three-Day Select'),
                     '14' => __('UPS Next Day Air Early A.M.'),
                     '54' => __('UPS Worldwide Express Plus'),
                     '65' => __('UPS Saver'),

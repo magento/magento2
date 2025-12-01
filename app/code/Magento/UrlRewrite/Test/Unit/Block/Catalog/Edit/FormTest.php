@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -116,22 +116,25 @@ class FormTest extends TestCase
             ->getMockForAbstractClass();
         $fieldset
             ->method('addField')
-            ->withConsecutive(
-                [],
-                [],
-                [
-                    'store_id',
-                    'select',
-                    [
-                        'label' => 'Store',
-                        'title' => 'Store',
-                        'name' => 'store_id',
-                        'required' => true,
-                        'value' => 0
-                    ]
-                ]
-            )
-            ->willReturnOnConsecutiveCalls(null, null, $storeElement);
+            ->willReturnCallback(function ($arg1, $arg2, $arg3) use ($storeElement) {
+                static $callCount = 0;
+                $callCount++;
+                switch ($callCount) {
+                    case 1:
+                    case 2:
+                        return null;
+                    case 3:
+                        if ($arg1 == 'store_id' && $arg2 == 'select' && $arg3 == [
+                                'label' => 'Store',
+                                'title' => 'Store',
+                                'name' => 'store_id',
+                                'required' => true,
+                                'value' => 0
+                            ]) {
+                            return $storeElement;
+                        }
+                }
+            });
 
         $product = $this->createMock(Product::class);
         $product->expects($this->any())->method('getId')->willReturn('product_id');

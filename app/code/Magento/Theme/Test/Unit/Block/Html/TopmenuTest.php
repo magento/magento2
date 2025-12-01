@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -77,17 +77,10 @@ class TopmenuTest extends TestCase
     private $requestMock;
 
     // @codingStandardsIgnoreStart
-
     /** @var string  */
-    protected $htmlWithoutCategory = <<<HTML
-<li  class="level0 nav-1 first"><a href="http://magento2/category-0.html" ><span></span></a></li><li  class="level0 nav-2"><a href="http://magento2/category-1.html" ><span></span></a></li><li  class="level0 nav-3"><a href="http://magento2/category-2.html" ><span></span></a></li><li  class="level0 nav-4"><a href="http://magento2/category-3.html" ><span></span></a></li><li  class="level0 nav-5"><a href="http://magento2/category-4.html" ><span></span></a></li><li  class="level0 nav-6"><a href="http://magento2/category-5.html" ><span></span></a></li><li  class="level0 nav-7"><a href="http://magento2/category-6.html" ><span></span></a></li><li  class="level0 nav-8"><a href="http://magento2/category-7.html" ><span></span></a></li><li  class="level0 nav-9"><a href="http://magento2/category-8.html" ><span></span></a></li><li  class="level0 nav-10 last"><a href="http://magento2/category-9.html" ><span></span></a></li>
+    private $navigationMenuHtml = <<<HTML
+<li  class="level0 nav-1 first" role="presentation"><a href="http://magento2/category-0.html" role="menuitem"><span></span></a></li><li  class="level0 nav-2" role="presentation"><a href="http://magento2/category-1.html" role="menuitem"><span></span></a></li><li  class="level0 nav-3" role="presentation"><a href="http://magento2/category-2.html" role="menuitem"><span></span></a></li><li  class="level0 nav-4" role="presentation"><a href="http://magento2/category-3.html" role="menuitem"><span></span></a></li><li  class="level0 nav-5" role="presentation"><a href="http://magento2/category-4.html" role="menuitem"><span></span></a></li><li  class="level0 nav-6" role="presentation"><a href="http://magento2/category-5.html" role="menuitem"><span></span></a></li><li  class="level0 nav-7" role="presentation"><a href="http://magento2/category-6.html" role="menuitem"><span></span></a></li><li  class="level0 nav-8" role="presentation"><a href="http://magento2/category-7.html" role="menuitem"><span></span></a></li><li  class="level0 nav-9" role="presentation"><a href="http://magento2/category-8.html" role="menuitem"><span></span></a></li><li  class="level0 nav-10 last" role="presentation"><a href="http://magento2/category-9.html" role="menuitem"><span></span></a></li>
 HTML;
-
-    /** @var string  */
-    protected $htmlWithCategory = <<<HTML
-<li  class="level0 nav-1 first active"><a href="http://magento2/category-0.html" ><span></span></a></li><li  class="level0 nav-2"><a href="http://magento2/category-1.html" ><span></span></a></li><li  class="level0 nav-3"><a href="http://magento2/category-2.html" ><span></span></a></li><li  class="level0 nav-4"><a href="http://magento2/category-3.html" ><span></span></a></li><li  class="level0 nav-5"><a href="http://magento2/category-4.html" ><span></span></a></li><li  class="level0 nav-6"><a href="http://magento2/category-5.html" ><span></span></a></li><li  class="level0 nav-7"><a href="http://magento2/category-6.html" ><span></span></a></li><li  class="level0 nav-8"><a href="http://magento2/category-7.html" ><span></span></a></li><li  class="level0 nav-9"><a href="http://magento2/category-8.html" ><span></span></a></li><li  class="level0 nav-10 last"><a href="http://magento2/category-9.html" ><span></span></a></li>
-HTML;
-
     // @codingStandardsIgnoreEnd
 
     /**
@@ -143,7 +136,7 @@ HTML;
 
         $treeNode = $this->buildTree(false);
 
-        $transportObject = new DataObject(['html' => $this->htmlWithoutCategory]);
+        $transportObject = new DataObject(['html' => $this->navigationMenuHtml]);
 
         $this->eventManagerMock->expects($this->exactly(2))
             ->method('dispatch')
@@ -167,7 +160,7 @@ HTML;
                 ],
             ]);
 
-        $this->assertEquals($this->htmlWithoutCategory, $topmenuBlock->getHtml());
+        $this->assertEquals($this->navigationMenuHtml, $topmenuBlock->getHtml());
     }
 
     /**
@@ -179,7 +172,7 @@ HTML;
 
         $treeNode = $this->buildTree(true);
 
-        $transportObject = new DataObject(['html' => $this->htmlWithCategory]);
+        $transportObject = new DataObject(['html' => $this->navigationMenuHtml]);
 
         $this->eventManagerMock->expects($this->exactly(2))
             ->method('dispatch')
@@ -203,7 +196,7 @@ HTML;
                 ],
             ]);
 
-        $this->assertEquals($this->htmlWithCategory, $topmenuBlock->getHtml());
+        $this->assertEquals($this->navigationMenuHtml, $topmenuBlock->getHtml());
     }
 
     /**
@@ -220,7 +213,7 @@ HTML;
             ->onlyMethods(['getCode'])
             ->getMock();
         $store->expects($this->once())->method('getCode')->willReturn('321');
-        $this->storeManager->expects($this->once())->method('getStore')->willReturn($store);
+        $this->storeManager->expects($this->exactly(2))->method('getStore')->willReturn($store);
 
         $this->assertEquals(
             ['BLOCK_TPL', '321', null, 'base_url' => 'baseUrl', 'template' => null],
@@ -236,7 +229,7 @@ HTML;
      * @param bool $isCurrentItem
      * @return MockObject
      */
-    private function buildTree($isCurrentItem): MockObject
+    private function buildTree(bool $isCurrentItem): MockObject
     {
         $treeMock = $this->getMockBuilder(Tree::class)
             ->disableOriginalConstructor()
@@ -281,9 +274,14 @@ HTML;
             ->willReturn($children);
         $nodeMock
             ->method('__call')
-            ->withConsecutive(['setOutermostClass'], [], ['getLevel', []])
-            ->willReturnOnConsecutiveCalls(null, [], null);
-
+            ->willReturnCallback(function ($arg1, $arg2) {
+                if ($arg1 == 'setOutermostClass') {
+                    return null;
+                } elseif ($arg1 == 'getLevel' && empty($arg2)) {
+                    return null;
+                }
+                return [];
+            });
         $nodeMockData = [
             'data' => [],
             'idField' => 'root',

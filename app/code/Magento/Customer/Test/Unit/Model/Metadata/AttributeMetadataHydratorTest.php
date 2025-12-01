@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -126,13 +126,26 @@ class AttributeMetadataHydratorTest extends TestCase
         $optionFive = new Option($optionTwoDataPartiallyConverted);
         $this->optionFactoryMock
             ->method('create')
-            ->withConsecutive(
-                [['data' => $optionOneData]],
-                [['data' => $optionThreeData]],
-                [['data' => $optionFourData]],
-                [['data' => $optionTwoDataPartiallyConverted]]
-            )
-            ->willReturnOnConsecutiveCalls($optionOne, $optionThree, $optionFour, $optionFive);
+            ->willReturnCallback(function ($arg1) use (
+                $optionOneData,
+                $optionOne,
+                $optionThreeData,
+                $optionThree,
+                $optionFourData,
+                $optionFour,
+                $optionTwoDataPartiallyConverted,
+                $optionFive
+) {
+                if ($arg1 == ['data' => $optionOneData]) {
+                    return $optionOne;
+                } elseif ($arg1 == ['data' => $optionThreeData]) {
+                    return $optionThree;
+                } elseif ($arg1 == ['data' => $optionFourData]) {
+                    return $optionFour;
+                } elseif ($arg1 == ['data' => $optionTwoDataPartiallyConverted]) {
+                    return $optionFive;
+                }
+            });
 
         $validationRuleOne = new ValidationRule($validationRuleOneData);
         $this->validationRuleFactoryMock->expects($this->once())

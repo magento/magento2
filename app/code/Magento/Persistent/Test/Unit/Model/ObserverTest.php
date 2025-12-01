@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -75,7 +75,7 @@ class ObserverTest extends TestCase
             ->getMockForAbstractClass();
         $this->sessionMock = $this->getMockBuilder(Session::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getCustomerId'])
+            ->addMethods(['getCustomerId'])
             ->getMock();
         $this->observer = $objectManagerHelper->getObject(
             Observer::class,
@@ -97,7 +97,7 @@ class ObserverTest extends TestCase
         $welcomeMessage =  __('&nbsp;');
         $block = $this->getMockBuilder(AbstractBlock::class)
             ->disableOriginalConstructor()
-            ->setMethods(['setWelcome'])
+            ->addMethods(['setWelcome'])
             ->getMock();
         $block->expects($this->once())->method('setWelcome')->with($welcomeMessage);
 

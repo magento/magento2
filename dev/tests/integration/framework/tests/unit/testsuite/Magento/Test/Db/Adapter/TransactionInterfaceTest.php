@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2012 Adobe
+ * All Rights Reserved.
  */
 
 /**
@@ -60,7 +60,7 @@ class TransactionInterfaceTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function transparentTransactionDataProvider()
+    public static function transparentTransactionDataProvider()
     {
         $result = [];
         $path = '/../../../../../../../Magento/TestFramework/Db/Adapter';

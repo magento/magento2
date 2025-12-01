@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -27,10 +27,8 @@ class IndexStructureFactoryTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->objectManagerMock = $this->getMockBuilder(ObjectManagerInterface::class)
-            ->getMockForAbstractClass();
-        $this->engineResolverMock = $this->getMockBuilder(EngineResolverInterface::class)
-            ->getMockForAbstractClass();
+        $this->objectManagerMock = $this->createMock(ObjectManagerInterface::class);
+        $this->engineResolverMock = $this->createMock(EngineResolverInterface::class);
     }
 
     public function testCreate()
@@ -46,8 +44,7 @@ class IndexStructureFactoryTest extends TestCase
             ->method('getCurrentSearchEngine')
             ->willReturn($currentStructure);
 
-        $indexerStructureMock = $this->getMockBuilder($currentStructureClass)
-            ->getMockForAbstractClass();
+        $indexerStructureMock = $this->createMock($currentStructureClass);
 
         $this->objectManagerMock->expects($this->once())
             ->method('create')
@@ -99,8 +96,7 @@ class IndexStructureFactoryTest extends TestCase
             ->method('getCurrentSearchEngine')
             ->willReturn($currentStructure);
 
-        $indexerStructureMock = $this->getMockBuilder($currentStructureClass)
-            ->getMockForAbstractClass();
+        $indexerStructureMock = $this->createMock($currentStructureClass);
 
         $this->objectManagerMock->expects($this->once())
             ->method('create')

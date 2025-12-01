@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -393,7 +393,7 @@ string',
     /**
      * @return array
      */
-    public function underscoreDataProvider()
+    public static function underscoreDataProvider()
     {
         return [
             'Test 1' => ['GetStone1Color', 'stone_1_color'],

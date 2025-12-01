@@ -1,9 +1,7 @@
 <?php declare(strict_types=1);
 /**
- * Unit Test for \Magento\Framework\Filesystem\Directory\PathValidator
- *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework\Filesystem\Test\Unit\Directory;
 
@@ -72,11 +70,12 @@ class PathValidatorTest extends TestCase
     /**
      * @return array
      */
-    public function validateDataProvider()
+    public static function validateDataProvider()
     {
         return [
             ['/directory/path/', '/directory/path/', '/', false, '/://'],
             ['/directory/path/', '/var/.regenerate', null, false, ''],
+            ['/directory/path/', '/var/image - 1.jpg', null, false, ''],
         ];
     }
 }

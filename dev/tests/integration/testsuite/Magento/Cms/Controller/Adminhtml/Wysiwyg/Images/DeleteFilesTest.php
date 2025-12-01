@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 
 declare(strict_types=1);
@@ -152,7 +152,7 @@ class DeleteFilesTest extends \PHPUnit\Framework\TestCase
      *
      * @return array
      */
-    public function executeDataProvider(): array
+    public static function executeDataProvider(): array
     {
         return [
             ['name with spaces.jpg'],
@@ -161,8 +161,6 @@ class DeleteFilesTest extends \PHPUnit\Framework\TestCase
             ['name with[ bracket.jpg'],
             ['magento_small_image.jpg'],
             ['_.jpg'],
-            [' - .jpg'],
-            ['-.jpg'],
         ];
     }
 

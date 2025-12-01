@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -131,7 +131,7 @@ class ConsumerFactoryTest extends TestCase
         $consumerInstanceMock = $this->getMockBuilder($consumerTypeValue)
             ->getMock();
         $consumerMock = $this->getMockBuilder(ConsumerInterface::class)
-            ->setMethods(['configure'])
+            ->addMethods(['configure'])
             ->getMockForAbstractClass();
 
         $consumerConfigurationMock =
@@ -141,7 +141,7 @@ class ConsumerFactoryTest extends TestCase
         $consumerConfigurationMock->expects($this->any())->method('getType')->willReturn($consumerType);
 
         $objectManagerMock = $this->getMockBuilder(ObjectManagerInterface::class)
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMockForAbstractClass();
 
         $objectManagerMock->expects($this->any())

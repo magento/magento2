@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Catalog\Model\Product\Attribute\Backend;
 
@@ -424,12 +424,12 @@ class PriceTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array[]
      */
-    public function saveCustomPriceAttributeDataProvider(): array
+    public static function saveCustomPriceAttributeDataProvider(): array
     {
         return [
             [
                 'attributes' => ['attr1', 'attr2', 'attr3'],
-                'set' => [
+                'updates' => [
                     'attr1' => [
                         'admin' => 9,
                     ],

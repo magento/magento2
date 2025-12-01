@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -71,7 +71,7 @@ class TokenTest extends TestCase
     /**
      * @return array
      */
-    public function testIsNewDataProvider()
+    public static function testIsNewDataProvider()
     {
         return [
             'new' => ['name' => T_NEW, 'value' => 'new', 'result' => true],
@@ -83,7 +83,7 @@ class TokenTest extends TestCase
     /**
      * @return array
      */
-    public function testIsNamespaceSeparatorDataProvider()
+    public static function testIsNamespaceSeparatorDataProvider()
     {
         return [
             'new' => ['name' => T_NEW, 'value' => 'new', 'result' => false],
@@ -95,7 +95,7 @@ class TokenTest extends TestCase
     /**
      * @return array
      */
-    public function testIsIdentifierDataProvider()
+    public static function testIsIdentifierDataProvider()
     {
         return [
             'new' => ['name' => T_NEW, 'value' => 'new', 'result' => false],

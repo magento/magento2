@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -78,7 +78,7 @@ class FileInfoTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $this->storeManager = $this->getMockBuilder(StoreManagerInterface::class)
-            ->setMethods(['getStore'])
+            ->onlyMethods(['getStore'])
             ->getMockForAbstractClass();
         $this->storeManager->expects($this->any())
             ->method('getStore')
@@ -191,7 +191,7 @@ class FileInfoTest extends TestCase
     /**
      * @return array
      */
-    public function isExistProvider()
+    public static function isExistProvider()
     {
         return [
             ['/filename.ext1', '/catalog/category/filename.ext1'],
@@ -216,7 +216,7 @@ class FileInfoTest extends TestCase
     /**
      * @return array
      */
-    public function isBeginsWithMediaDirectoryPathProvider()
+    public static function isBeginsWithMediaDirectoryPathProvider()
     {
         return [
             ['/pub/media/test/filename.ext1', true],

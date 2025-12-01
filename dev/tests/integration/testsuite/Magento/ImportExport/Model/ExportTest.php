@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\ImportExport\Model;
 
@@ -48,20 +48,20 @@ class ExportTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function getEntityDataProvider()
+    public static function getEntityDataProvider()
     {
         return [
             'product' => [
-                '$entity' => 'catalog_product',
-                '$expectedEntityType' => \Magento\CatalogImportExport\Model\Export\Product::class,
+                'entity' => 'catalog_product',
+                'expectedEntityType' => \Magento\CatalogImportExport\Model\Export\Product::class,
             ],
             'customer main data' => [
-                '$entity' => 'customer',
-                '$expectedEntityType' => \Magento\CustomerImportExport\Model\Export\Customer::class,
+                'entity' => 'customer',
+                'expectedEntityType' => \Magento\CustomerImportExport\Model\Export\Customer::class,
             ],
             'customer address' => [
-                '$entity' => 'customer_address',
-                '$expectedEntityType' => \Magento\CustomerImportExport\Model\Export\Address::class,
+                'entity' => 'customer_address',
+                'expectedEntityType' => \Magento\CustomerImportExport\Model\Export\Address::class,
             ]
         ];
     }

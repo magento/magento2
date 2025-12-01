@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2023 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -43,7 +43,7 @@ class UpsAuth extends AbstractCarrier
      * @param ErrorFactory $rateErrorFactory
      */
     public function __construct(
-        AsyncClientInterface $asyncHttpClient = null,
+        ?AsyncClientInterface $asyncHttpClient,
         Cache $cacheManager,
         ErrorFactory $rateErrorFactory
     ) {
@@ -115,6 +115,6 @@ class UpsAuth extends AbstractCarrier
      */
     public function collectRates(RateRequest $request)
     {
-        return ''; // This method has kept empty as not required.
+        return ''; // This block is empty as not required.
     }
 }

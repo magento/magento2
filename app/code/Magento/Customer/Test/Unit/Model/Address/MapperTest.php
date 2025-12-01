@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -82,11 +82,10 @@ class MapperTest extends TestCase
         $regionMock->expects($this->any())->method('getRegionId')->willReturn(1);
         $regionMock->expects($this->any())->method('getRegionCode')->willReturn('TX');
         $addressMock = $this->getMockBuilder(AddressInterface::class)
-            ->setMethods(
+            ->addMethods(['getDefaultBilling', 'getDefaultShipping'])
+            ->onlyMethods(
                 [
                     'getId',
-                    'getDefaultBilling',
-                    'getDefaultShipping',
                     'getCity',
                     'getFirstname',
                     'getLastname',

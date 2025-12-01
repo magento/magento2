@@ -1,12 +1,13 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\ProductAlert\Test\Unit\Block\Email;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\Catalog\Block\Product\Image;
 use Magento\Catalog\Block\Product\ImageBuilder;
 use Magento\Catalog\Model\Product;
@@ -55,10 +56,10 @@ class StockTest extends TestCase
     }
 
     /**
-     * @dataProvider getFilteredContentDataProvider
      * @param $contentToFilter
      * @param $contentFiltered
      */
+    #[DataProvider('getFilteredContentDataProvider')]
     public function testGetFilteredContent($contentToFilter, $contentFiltered)
     {
         $this->_filter->expects($this->once())->method('filter')->with($contentToFilter)
@@ -69,7 +70,7 @@ class StockTest extends TestCase
     /**
      * @return array
      */
-    public function getFilteredContentDataProvider()
+    public static function getFilteredContentDataProvider()
     {
         return [
             'normal desc' => ['<b>Howdy!</b>', '<b>Howdy!</b>'],

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -48,7 +48,7 @@ class RequestTest extends TestCase
     /**
      * @return array
      */
-    public function providerTestGetRequestedServicesSuccess()
+    public static function providerTestGetRequestedServicesSuccess()
     {
         $testModuleA = 'testModule1AllSoapAndRestV1';
         $testModuleB = 'testModule1AllSoapAndRestV2';

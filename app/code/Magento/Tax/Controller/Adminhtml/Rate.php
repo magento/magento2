@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Tax\Controller\Adminhtml;
@@ -10,8 +10,6 @@ use Magento\Framework\Controller\ResultFactory;
 
 /**
  * Adminhtml tax rate controller
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 abstract class Rate extends \Magento\Backend\App\Action
 {

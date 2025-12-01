@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -47,7 +47,7 @@ class GenericTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $this->productMock = $this->getMockBuilder(ProductInterface::class)
-            ->setMethods(['isReadonly', 'isDuplicable'])
+            ->addMethods(['isReadonly', 'isDuplicable'])
             ->getMockForAbstractClass();
 
         $this->registryMock->expects($this->any())

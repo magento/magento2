@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Catalog\Model\Product\Gallery;
 
@@ -64,7 +64,7 @@ class ReadHandler implements ExtensionInterface
 
         $this->addMediaDataToProduct(
             $entity,
-            $this->sortMediaEntriesByPosition($mediaEntries)
+            $mediaEntries
         );
 
         return $entity;
@@ -80,6 +80,7 @@ class ReadHandler implements ExtensionInterface
      */
     public function addMediaDataToProduct(Product $product, array $mediaEntries)
     {
+        $mediaEntries = $this->sortMediaEntriesByPosition($mediaEntries);
         $product->setData(
             $this->getAttribute()->getAttributeCode(),
             [
@@ -111,6 +112,7 @@ class ReadHandler implements ExtensionInterface
      * @param string[] $image
      * @return string
      * @deprecated 101.0.1
+     * @see \Magento\Catalog\Model\Product\Gallery\ReadHandler::addMediaDataToProduct
      * @since 101.0.0
      */
     protected function findDefaultValue($key, &$image)

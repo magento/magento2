@@ -1,8 +1,8 @@
 <?php
 
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -264,14 +264,14 @@ class MagentoStyleTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $input = $this->getMockBuilder(InputInterface::class)
-            ->setMethods(['isInteractive'])
+            ->onlyMethods(['isInteractive'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $input->expects($this->exactly(2))
             ->method('isInteractive')
             ->willReturn(false);
         $output = $this->getMockBuilder(OutputInterface::class)
-            ->setMethods(['getVerbosity', 'getFormatter'])
+            ->onlyMethods(['getVerbosity', 'getFormatter'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $output->expects($this->once())

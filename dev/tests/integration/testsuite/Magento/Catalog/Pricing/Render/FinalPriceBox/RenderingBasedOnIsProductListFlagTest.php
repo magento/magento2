@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Catalog\Pricing\Render\FinalPriceBox;
 
@@ -102,6 +102,7 @@ class RenderingBasedOnIsProductListFlagTest extends \PHPUnit\Framework\TestCase
     public function testRenderingAccordingToIsProductListFlag($flag)
     {
         $this->finalPriceBox->setData('is_product_list', $flag);
+        $this->finalPriceBox->setData('special_price_map', [$this->product->getId() => true]);
         $html = $this->finalPriceBox->toHtml();
         self::assertStringContainsString('5.99', $html);
         $this->assertGreaterThanOrEqual(
@@ -123,7 +124,7 @@ class RenderingBasedOnIsProductListFlagTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function isProductListDataProvider()
+    public static function isProductListDataProvider()
     {
         return [
             'is_not_product_list' => [false],

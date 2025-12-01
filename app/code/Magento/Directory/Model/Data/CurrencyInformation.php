@@ -1,9 +1,7 @@
 <?php
 /**
- * Data Model implementing the Address interface
- *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Directory\Model\Data;
 
@@ -97,7 +95,7 @@ class CurrencyInformation extends \Magento\Framework\Api\AbstractExtensibleObjec
     /**
      * @inheritDoc
      */
-    public function setAvailableCurrencyCodes(array $codes = null)
+    public function setAvailableCurrencyCodes(?array $codes = null)
     {
         return $this->setData(self::KEY_AVAILABLE_CURRENCY_CODES, $codes);
     }
@@ -113,7 +111,7 @@ class CurrencyInformation extends \Magento\Framework\Api\AbstractExtensibleObjec
     /**
      * @inheritDoc
      */
-    public function setExchangeRates(array $exchangeRates = null)
+    public function setExchangeRates(?array $exchangeRates = null)
     {
         return $this->setData(self::KEY_EXCHANGE_RATES, $exchangeRates);
     }

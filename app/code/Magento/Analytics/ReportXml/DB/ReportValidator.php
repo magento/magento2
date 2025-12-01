@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Analytics\ReportXml\DB;
 
@@ -46,7 +46,7 @@ class ReportValidator
      * @return array
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function validate($name, SearchCriteriaInterface $criteria = null)
+    public function validate($name, ?SearchCriteriaInterface $criteria = null)
     {
         $query = $this->queryFactory->create($name);
         $connection = $this->connectionFactory->getConnection($query->getConnectionName());

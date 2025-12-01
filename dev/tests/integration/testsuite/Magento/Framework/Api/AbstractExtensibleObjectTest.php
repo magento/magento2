@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework\Api;
 
@@ -74,7 +74,7 @@ class AbstractExtensibleObjectTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($regionCode, $region->getRegionCode());
     }
 
-    public function extensionAttributesDataProvider()
+    public static function extensionAttributesDataProvider()
     {
         return [
             'boolean' => [

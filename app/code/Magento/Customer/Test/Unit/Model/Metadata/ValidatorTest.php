@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -93,7 +93,7 @@ class ValidatorTest extends TestCase
     /**
      * @return array
      */
-    public function trueFalseDataProvider()
+    public static function trueFalseDataProvider()
     {
         return [[true], [false]];
     }
@@ -103,12 +103,11 @@ class ValidatorTest extends TestCase
      */
     protected function getMockAttribute()
     {
-        $attribute = $this->getMockBuilder(
-            AttributeMetadata::class
-        )->disableOriginalConstructor()
-            ->setMethods(
-                ['__wakeup', 'getAttributeCode', 'getDataModel']
-            )->getMock();
+        $attribute = $this->getMockBuilder(AttributeMetadata::class)
+            ->disableOriginalConstructor()
+            ->addMethods(['__wakeup'])
+            ->onlyMethods(['getAttributeCode', 'getDataModel'])
+            ->getMock();
         $attribute->expects($this->any())->method('getAttributeCode')->willReturn('ATTR_CODE');
         $attribute->expects($this->any())->method('getDataModel')->willReturn('DATA_MODEL');
         return $attribute;

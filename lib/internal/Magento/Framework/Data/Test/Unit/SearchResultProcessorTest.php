@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -39,7 +39,7 @@ class SearchResultProcessorTest extends TestCase
 
         $this->searchResultCollectionMock = $this->getMockBuilder(AbstractSearchResult::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getSearchCriteria', 'getItems', 'getItemId'])
+            ->onlyMethods(['getSearchCriteria', 'getItems', 'getItemId'])
             ->getMockForAbstractClass();
         $this->searchResultCollectionMock->expects($this->any())
             ->method('getSearchCriteria')

@@ -1,12 +1,11 @@
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2021 Adobe
+ * All Rights Reserved.
  */
 
-/* global popups, tinyMceEditors, MediabrowserUtility, Base64 */
 /* eslint-disable strict */
 define([
-    'mage/adminhtml/wysiwyg/tiny_mce/tinymce5Adapter'
+    'mage/adminhtml/wysiwyg/tiny_mce/tinymceAdapter'
 ], function (tinyMCE) {
     'use strict';
 

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -54,11 +54,11 @@ class ReportProductDeletedTest extends TestCase
     {
         $this->config = $this->getMockBuilder(Config::class)
             ->disableOriginalConstructor()
-            ->setMethods(['isNewRelicEnabled'])
+            ->onlyMethods(['isNewRelicEnabled'])
             ->getMock();
         $this->systemFactory = $this->getMockBuilder(SystemFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
         $this->systemModel = $this->getMockBuilder(System::class)
             ->disableOriginalConstructor()
@@ -112,14 +112,14 @@ class ReportProductDeletedTest extends TestCase
             ->method('isNewRelicEnabled')
             ->willReturn(true);
         $event = $this->getMockBuilder(Event::class)
-            ->setMethods(['getProduct'])
+            ->addMethods(['getProduct'])
             ->disableOriginalConstructor()
             ->getMock();
         $eventObserver->expects($this->once())
             ->method('getEvent')
             ->willReturn($event);
         $product = $this->getMockBuilder(Product::class)
-            ->setMethods(['getId'])
+            ->onlyMethods(['getId'])
             ->disableOriginalConstructor()
             ->getMock();
         $event->expects($this->once())

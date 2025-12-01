@@ -1,9 +1,8 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
-
 namespace Magento\Framework\App;
 
 use Magento\Framework\Config\ConfigOptionsListConstants;
@@ -62,11 +61,6 @@ class DeploymentConfig
     private $readerLoad = [];
 
     /**
-     * @var array
-     */
-    private $noConfigData = [];
-
-    /**
      * Constructor
      *
      * Data can be optionally injected in the constructor. This object's public interface is intentionally immutable
@@ -99,16 +93,8 @@ class DeploymentConfig
         }
         $result = $this->getByKey($key);
         if ($result === null) {
-            if (empty($this->flatData)
-                || !isset($this->flatData[$key]) && !isset($this->noConfigData[$key])
-                || count($this->getAllEnvOverrides())
-            ) {
-                $this->resetData();
+            if (empty($this->flatData) || count($this->getAllEnvOverrides())) {
                 $this->reloadData();
-            }
-
-            if (!isset($this->flatData[$key])) {
-                $this->noConfigData[$key] = $key;
             }
             $result = $this->getByKey($key);
         }
@@ -239,7 +225,11 @@ class DeploymentConfig
                 ) {
                     // convert MAGENTO_DC_DB__CONNECTION__DEFAULT__HOST into db/connection/default/host
                     $flatKey = strtolower(str_replace([self::MAGENTO_ENV_PREFIX, '__'], ['', '/'], $key));
-                    $this->envOverrides[$flatKey] = $value;
+                    $this->envOverrides[$flatKey] = match ($value) {
+                        'true', 'TRUE' => true,
+                        'false', 'FALSE' => false,
+                        default => $value,
+                    };
                 }
             }
         }
@@ -258,7 +248,7 @@ class DeploymentConfig
      * @return array
      * @throws RuntimeException
      */
-    private function flattenParams(array $params, ?string $path = null, array &$flattenResult = null): array
+    private function flattenParams(array $params, ?string $path = null, ?array &$flattenResult = null): array
     {
         if (null === $flattenResult) {
             $flattenResult = [];

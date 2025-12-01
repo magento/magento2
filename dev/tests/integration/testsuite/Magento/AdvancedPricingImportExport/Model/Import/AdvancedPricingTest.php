@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\AdvancedPricingImportExport\Model\Import;
 
@@ -312,7 +312,7 @@ class AdvancedPricingTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array[]
      */
-    public function importValidationDuplicateWithSameBaseCurrencyDataProvider(): array
+    public static function importValidationDuplicateWithSameBaseCurrencyDataProvider(): array
     {
         return require __DIR__ . '/_files/import_validation_duplicate_same_currency_data_provider.php';
     }
@@ -320,7 +320,7 @@ class AdvancedPricingTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array[]
      */
-    public function importValidationDuplicateWithDifferentBaseCurrencyDataProvider(): array
+    public static function importValidationDuplicateWithDifferentBaseCurrencyDataProvider(): array
     {
         return require __DIR__ . '/_files/import_validation_duplicate_diff_currency_data_provider.php';
     }
@@ -469,7 +469,6 @@ class AdvancedPricingTest extends \PHPUnit\Framework\TestCase
             true,
             'catalog_product'
         );
-        print_r($errors->getAllErrors());
         $this->assertEquals(0, $errors->getErrorsCount(), 'Product import validation error');
         $this->model->importData();
 

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -47,7 +47,7 @@ class UrlFinderInterfaceTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function findOneDataProvider(): array
+    public static function findOneDataProvider(): array
     {
         return [
             ['string', 'test_page1', 0],

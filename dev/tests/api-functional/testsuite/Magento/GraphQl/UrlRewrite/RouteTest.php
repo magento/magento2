@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -382,7 +382,7 @@ QUERY;
         $urlRewriteResourceModel->save($urlRewrite);
     }
 
-    public function urlRewriteEntitiesDataProvider(): array
+    public static function urlRewriteEntitiesDataProvider(): array
     {
         return [
             [
@@ -515,5 +515,28 @@ QUERY;
         $urlRewrite->load($urlRewriteService->getUrlRewriteId());
 
         return $urlRewrite;
+    }
+
+    #[
+        DataFixture(UrlRewriteFixture::class, ['request_path' => 'test-same-path', 'target_path' => 'test-same-path'])
+    ]
+    public function testCustomUrlRewriteRedirectToSameUrl(): void
+    {
+        $urlPath = 'test-same-path';
+        $query = <<<QUERY
+{
+  route(url:"{$urlPath}")
+  {
+   relative_url
+   type
+   redirect_code
+  }
+}
+QUERY;
+
+        $this->expectExceptionMessage(
+            "No such entity found with matching URL key: " . $urlPath
+        );
+        $this->graphQlQuery($query);
     }
 }

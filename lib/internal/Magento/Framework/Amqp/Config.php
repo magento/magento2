@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework\Amqp;
 
@@ -9,6 +9,7 @@ use Magento\Framework\Amqp\Connection\Factory as ConnectionFactory;
 use Magento\Framework\Amqp\Connection\FactoryOptions;
 use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 use PhpAmqpLib\Channel\AMQPChannel;
 use PhpAmqpLib\Connection\AbstractConnection;
 
@@ -18,7 +19,7 @@ use PhpAmqpLib\Connection\AbstractConnection;
  * @api
  * @since 103.0.0
  */
-class Config
+class Config implements ResetAfterRequestInterface
 {
     /**
      * Queue config key
@@ -100,7 +101,7 @@ class Config
     public function __construct(
         DeploymentConfig $config,
         $connectionName = 'amqp',
-        ConnectionFactory $connectionFactory = null
+        ?ConnectionFactory $connectionFactory = null
     ) {
         $this->deploymentConfig = $config;
         $this->connectionName = $connectionName;
@@ -121,6 +122,14 @@ class Config
         } catch (\Throwable $e) {
             error_log($e->getMessage());
         }
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        $this->closeConnection();
     }
 
     /**
@@ -169,11 +178,19 @@ class Config
      */
     public function getChannel()
     {
-        if (!isset($this->connection) || !isset($this->channel)) {
+        if (!isset($this->connection)) {
             $this->connection = $this->createConnection();
-
+        }
+        if (!isset($this->channel)
+            || !$this->channel->getConnection()
+            || !$this->channel->getConnection()->isConnected()
+        ) {
+            if (!$this->connection->isConnected()) {
+                $this->connection->reconnect();
+            }
             $this->channel = $this->connection->channel();
         }
+
         return $this->channel;
     }
 
@@ -216,5 +233,15 @@ class Config
             $this->connection->close();
             unset($this->connection);
         }
+    }
+
+    /**
+     * Get connection name
+     *
+     * @return string
+     */
+    public function getConnectionName(): string
+    {
+        return $this->connectionName;
     }
 }

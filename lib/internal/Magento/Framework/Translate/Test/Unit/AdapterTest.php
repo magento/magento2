@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -23,7 +23,7 @@ class AdapterTest extends TestCase
     public function testTranslate($strToTranslate, $translatedStr)
     {
         $translatorMock = $this->getMockBuilder(Translator::class)
-            ->setMethods(['translate'])->getMock();
+            ->onlyMethods(['translate'])->getMock();
         $translatorMock->expects(
             $this->once()
         )->method(
@@ -42,7 +42,7 @@ class AdapterTest extends TestCase
     /**
      * @return array
      */
-    public function translateDataProvider()
+    public static function translateDataProvider()
     {
         return [['Translate me!', 'Translated string']];
     }

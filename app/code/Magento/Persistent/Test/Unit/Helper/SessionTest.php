@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 
 declare(strict_types=1);
@@ -77,7 +77,7 @@ class SessionTest extends TestCase
             ->getMockForAbstractClass();
         $this->sessionFactory = $this->getMockBuilder(SessionFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
         $this->session = $this->getMockBuilder(Session::class)
             ->disableOriginalConstructor()
@@ -85,7 +85,7 @@ class SessionTest extends TestCase
         $this->sessionFactory->expects($this->any())->method('create')->willReturn($this->session);
 
         $this->helper = $this->getMockBuilder(SessionHelper::class)
-            ->setMethods(['getSession'])
+            ->onlyMethods(['getSession'])
             ->setConstructorArgs(
                 [
                     'context' => $this->context,
@@ -122,7 +122,7 @@ class SessionTest extends TestCase
      *
      * @return array
      */
-    public function isPersistentDataProvider()
+    public static function isPersistentDataProvider()
     {
         return [
             'session_id_and_enable_persistent' => [
@@ -171,7 +171,7 @@ class SessionTest extends TestCase
      *
      * @return array
      */
-    public function isRememberMeCheckedProvider()
+    public static function isRememberMeCheckedProvider()
     {
         return [
             'enable_all_config' => [

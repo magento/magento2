@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -71,11 +71,11 @@ class ProcessUrlRewriteSavingObserverTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $this->pageMock = $this->getMockBuilder(Page::class)
-            ->setMethods(['getId', 'dataHasChangedFor'])
+            ->onlyMethods(['getId', 'dataHasChangedFor'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->eventMock = $this->getMockBuilder(Event::class)
-            ->setMethods(['getObject'])
+            ->addMethods(['getObject'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->eventObserverMock = $this->getMockBuilder(EventObserver::class)
@@ -138,12 +138,12 @@ class ProcessUrlRewriteSavingObserverTest extends TestCase
     /**
      * return array
      */
-    public function executeDataProvider()
+    public static function executeDataProvider()
     {
         return  [
-            ['identifier' => true, 'storeIdChanged' => true],
-            ['identifier' => true, 'storeIdChanged' => false],
-            ['identifier' => false, 'storeIdChanged' => true],
+            ['identifierChanged' => true, 'storeIdChanged' => true],
+            ['identifierChanged' => true, 'storeIdChanged' => false],
+            ['identifierChanged' => false, 'storeIdChanged' => true],
         ];
     }
 

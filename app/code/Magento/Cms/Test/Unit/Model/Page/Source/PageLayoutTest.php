@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -45,11 +45,11 @@ class PageLayoutTest extends TestCase
         $this->builderMock = $this->getMockBuilder(
             BuilderInterface::class
         )->disableOriginalConstructor()
-            ->setMethods(['getPageLayoutsConfig'])
+            ->onlyMethods(['getPageLayoutsConfig'])
             ->getMock();
         $this->pageLayoutConfigMock = $this->getMockBuilder(Config::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getOptions'])
+            ->onlyMethods(['getOptions'])
             ->getMock();
 
         $this->builderMock->expects($this->any())
@@ -87,7 +87,7 @@ class PageLayoutTest extends TestCase
     /**
      * @return array
      */
-    public function getOptionsDataProvider()
+    public static function getOptionsDataProvider()
     {
         return [
             [

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Test\Integrity\Magento\Widget;
 
@@ -23,7 +23,7 @@ class SkinFilesTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function widgetPlaceholderImagesDataProvider()
+    public static function widgetPlaceholderImagesDataProvider()
     {
         $result = [];
         /** @var $model \Magento\Widget\Model\Widget */

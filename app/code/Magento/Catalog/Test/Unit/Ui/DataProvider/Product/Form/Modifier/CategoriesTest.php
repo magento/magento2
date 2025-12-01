@@ -1,28 +1,30 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Catalog\Test\Unit\Ui\DataProvider\Product\Form\Modifier;
 
-use Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\Categories;
-use Magento\Catalog\Model\ResourceModel\Category\CollectionFactory as CategoryCollectionFactory;
+use Magento\Authorization\Model\Role;
+use Magento\Backend\Model\Auth\Session;
 use Magento\Catalog\Model\ResourceModel\Category\Collection as CategoryCollection;
+use Magento\Catalog\Model\ResourceModel\Category\CollectionFactory as CategoryCollectionFactory;
+use Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\Categories;
+use Magento\Framework\App\CacheInterface;
 use Magento\Framework\AuthorizationInterface;
 use Magento\Framework\DB\Helper as DbHelper;
 use Magento\Framework\UrlInterface;
 use Magento\Store\Model\Store;
-use Magento\Backend\Model\Auth\Session;
-use Magento\Authorization\Model\Role;
 use Magento\User\Model\User;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class CategoriesTest extends AbstractModifierTest
+class CategoriesTest extends AbstractModifierTestCase
 {
     /**
      * @var CategoryCollectionFactory|MockObject
@@ -55,40 +57,35 @@ class CategoriesTest extends AbstractModifierTest
     private $authorizationMock;
 
     /**
-     * @var Session|MockObject
+     * @var Session
      */
     private $sessionMock;
 
     protected function setUp(): void
     {
         parent::setUp();
-        $this->categoryCollectionFactoryMock = $this->getMockBuilder(CategoryCollectionFactory::class)
-            ->setMethods(['create'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->dbHelperMock = $this->getMockBuilder(DbHelper::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->urlBuilderMock = $this->getMockBuilder(UrlInterface::class)
-            ->getMockForAbstractClass();
-        $this->storeMock = $this->getMockBuilder(Store::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->categoryCollectionMock = $this->getMockBuilder(CategoryCollection::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->authorizationMock = $this->getMockBuilder(AuthorizationInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-        $this->sessionMock = $this->getMockBuilder(Session::class)
-            ->setMethods(['getUser'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->categoryCollectionFactoryMock = $this->createPartialMock(
+            CategoryCollectionFactory::class,
+            ['create']
+        );
+        $this->dbHelperMock = $this->createMock(DbHelper::class);
+        $this->urlBuilderMock = $this->createMock(UrlInterface::class);
+        $this->storeMock = $this->createMock(Store::class);
+        $this->categoryCollectionMock = $this->createMock(CategoryCollection::class);
+        $this->authorizationMock = $this->createMock(AuthorizationInterface::class);
+        $this->sessionMock = $this->createPartialMock(Session::class, []);
+        $reflection = new \ReflectionClass($this->sessionMock);
+        $storageProperty = $reflection->getProperty('storage');
+        $storageProperty->setAccessible(true);
+        $storageProperty->setValue($this->sessionMock, new \Magento\Framework\DataObject());
         $this->categoryCollectionFactoryMock->expects($this->any())
             ->method('create')
             ->willReturn($this->categoryCollectionMock);
         $this->categoryCollectionMock->expects($this->any())
             ->method('addAttributeToSelect')
+            ->willReturnSelf();
+        $this->categoryCollectionMock->expects($this->any())
+            ->method('addAttributeToSort')
             ->willReturnSelf();
         $this->categoryCollectionMock->expects($this->any())
             ->method('addAttributeToFilter')
@@ -100,25 +97,17 @@ class CategoriesTest extends AbstractModifierTest
             ->method('getIterator')
             ->willReturn(new \ArrayIterator([]));
 
-        $roleAdmin = $this->getMockBuilder(Role::class)
-            ->setMethods(['getId'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $roleAdmin = $this->createPartialMock(Role::class, ['getId']);
         $roleAdmin->expects($this->any())
             ->method('getId')
             ->willReturn(0);
 
-        $userAdmin = $this->getMockBuilder(User::class)
-            ->setMethods(['getRole'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $userAdmin = $this->createPartialMock(User::class, ['getRole']);
         $userAdmin->expects($this->any())
             ->method('getRole')
             ->willReturn($roleAdmin);
 
-        $this->sessionMock->expects($this->any())
-            ->method('getUser')
-            ->willReturn($userAdmin);
+        $this->sessionMock->setUser($userAdmin);
     }
 
     /**
@@ -126,6 +115,13 @@ class CategoriesTest extends AbstractModifierTest
      */
     protected function createModel()
     {
+        $objects = [
+            [
+                CacheInterface::class,
+                $this->createMock(CacheInterface::class)
+            ]
+        ];
+        $this->objectManager->prepareObjectManager($objects);
         return $this->objectManager->getObject(
             Categories::class,
             [
@@ -175,10 +171,7 @@ class CategoriesTest extends AbstractModifierTest
         $this->assertArrayHasKey($groupCode, $this->getModel()->modifyMeta($meta));
     }
 
-    /**
-     * @param bool $locked
-     * @dataProvider modifyMetaLockedDataProvider
-     */
+    #[DataProvider('modifyMetaLockedDataProvider')]
     public function testModifyMetaLocked($locked)
     {
         $groupCode = 'test_group_code';
@@ -198,9 +191,7 @@ class CategoriesTest extends AbstractModifierTest
             ->method('findPath')
             ->willReturn('path');
 
-        $this->productMock->expects($this->any())
-            ->method('isLockedAttribute')
-            ->willReturn($locked);
+        $this->productMock->setLockedAttribute('category_ids', $locked);
 
         $this->arrayManagerMock->expects($this->any())
             ->method('merge')
@@ -220,7 +211,7 @@ class CategoriesTest extends AbstractModifierTest
     /**
      * @return array
      */
-    public function modifyMetaLockedDataProvider()
+    public static function modifyMetaLockedDataProvider()
     {
         return [[true], [false]];
     }
@@ -236,28 +227,23 @@ class CategoriesTest extends AbstractModifierTest
         $categoriesAdmin = $this->createModel();
         $cacheIdAdmin = $this->invokeMethod($categoriesAdmin, 'getCategoriesTreeCacheId', [0]);
 
-        $roleAclUser = $this->getMockBuilder(Role::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $roleAclUser = $this->createMock(Role::class);
         $roleAclUser->expects($this->any())
             ->method('getId')
             ->willReturn(1);
 
-        $userAclUser = $this->getMockBuilder(User::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $userAclUser = $this->createMock(User::class);
         $userAclUser->expects($this->any())
             ->method('getRole')
-            ->will($this->returnValue($roleAclUser));
+            ->willReturn($roleAclUser);
 
-        $this->sessionMock = $this->getMockBuilder(Session::class)
-            ->setMethods(['getUser'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->sessionMock = $this->createPartialMock(Session::class, []);
+        $reflection = new \ReflectionClass($this->sessionMock);
+        $storageProperty = $reflection->getProperty('storage');
+        $storageProperty->setAccessible(true);
+        $storageProperty->setValue($this->sessionMock, new \Magento\Framework\DataObject());
 
-        $this->sessionMock->expects($this->any())
-            ->method('getUser')
-            ->will($this->returnValue($userAclUser));
+        $this->sessionMock->setUser($userAclUser);
 
         $categoriesAclUser = $this->createModel();
         $cacheIdAclUser = $this->invokeMethod($categoriesAclUser, 'getCategoriesTreeCacheId', [0]);

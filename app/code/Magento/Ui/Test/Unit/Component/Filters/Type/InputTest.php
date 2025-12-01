@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2025 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -172,9 +172,12 @@ class InputTest extends TestCase
     }
 
     /**
+     * SuppressWarnings was added due to the big size of data provider
+     *
      * @return array
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function getPrepareDataProvider(): array
+    public static function getPrepareDataProvider(): array
     {
         return [
             [
@@ -219,6 +222,16 @@ class InputTest extends TestCase
                 [
                     'setConditionType' => 'like',
                     'setValue' => '%\%%',
+                ],
+            ],
+            [
+                [
+                    'name' => 'test_date',
+                ],
+                ['test_date' => 'some\\value'],
+                [
+                    'setConditionType' => 'like',
+                    'setValue' => '%some\\\\value%',
                 ],
             ],
             [

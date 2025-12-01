@@ -1,21 +1,25 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Catalog\Model\Product\Price\Validation;
 
 use Magento\Catalog\Api\Data\TierPriceInterface;
-use Magento\Catalog\Model\Product\Price\TierPricePersistence;
+use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\Product\Type;
 use Magento\Catalog\Model\ProductIdLocatorInterface;
-use Magento\Customer\Api\GroupRepositoryInterface;
-use Magento\Framework\Api\FilterBuilder;
-use Magento\Framework\Api\SearchCriteriaBuilder;
+use Magento\Directory\Model\Currency;
+use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 use Magento\Store\Api\WebsiteRepositoryInterface;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Catalog\Helper\Data;
+use Magento\Store\Model\ScopeInterface;
+use Magento\Framework\Exception\NoSuchEntityException;
 
 /**
  * Validate Tier Price and check duplication
@@ -30,21 +34,6 @@ class TierPriceValidator implements ResetAfterRequestInterface
     private $productIdLocator;
 
     /**
-     * @var SearchCriteriaBuilder
-     */
-    private $searchCriteriaBuilder;
-
-    /**
-     * @var FilterBuilder
-     */
-    private $filterBuilder;
-
-    /**
-     * @var GroupRepositoryInterface
-     */
-    private $customerGroupRepository;
-
-    /**
      * @var WebsiteRepositoryInterface
      */
     private $websiteRepository;
@@ -53,18 +42,6 @@ class TierPriceValidator implements ResetAfterRequestInterface
      * @var Result
      */
     private $validationResult;
-
-    /**
-     * @var TierPricePersistence
-     */
-    private $tierPricePersistence;
-
-    /**
-     * Groups by code cache.
-     *
-     * @var array
-     */
-    private $customerGroupsByCode = [];
 
     /**
      * @var InvalidSkuProcessor
@@ -87,38 +64,61 @@ class TierPriceValidator implements ResetAfterRequestInterface
     private $allowedProductTypes = [];
 
     /**
+     * @var ProductRepositoryInterface
+     */
+    private $productRepository;
+
+    /**
+     * @var array
+     */
+    private $productsCacheBySku = [];
+
+    /**
+     * @var ResourceConnection
+     */
+    private $resourceConnection;
+
+    /**
+     * @var array Customer group check cache
+     */
+    private $customerGroupCheck = [];
+
+    /**
+     * @var ScopeConfigInterface
+     */
+    private $scopeConfig;
+
+    /**
      * TierPriceValidator constructor.
      *
      * @param ProductIdLocatorInterface $productIdLocator
-     * @param SearchCriteriaBuilder $searchCriteriaBuilder
-     * @param FilterBuilder $filterBuilder
-     * @param GroupRepositoryInterface $customerGroupRepository
      * @param WebsiteRepositoryInterface $websiteRepository
-     * @param TierPricePersistence $tierPricePersistence
      * @param Result $validationResult
      * @param InvalidSkuProcessor $invalidSkuProcessor
+     * @param ProductRepositoryInterface $productRepository
      * @param array $allowedProductTypes [optional]
+     * @param ResourceConnection|null $resourceConnection
+     * @param ScopeConfigInterface|null $scopeConfig
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
-        ProductIdLocatorInterface          $productIdLocator,
-        SearchCriteriaBuilder              $searchCriteriaBuilder,
-        FilterBuilder                      $filterBuilder,
-        GroupRepositoryInterface            $customerGroupRepository,
-        WebsiteRepositoryInterface             $websiteRepository,
-        TierPricePersistence $tierPricePersistence,
-        Result                                                    $validationResult,
-        InvalidSkuProcessor                                       $invalidSkuProcessor,
-        array                                                     $allowedProductTypes = []
+        ProductIdLocatorInterface $productIdLocator,
+        WebsiteRepositoryInterface $websiteRepository,
+        Result $validationResult,
+        InvalidSkuProcessor $invalidSkuProcessor,
+        ProductRepositoryInterface $productRepository,
+        array $allowedProductTypes = [],
+        ?ResourceConnection $resourceConnection = null,
+        ?ScopeConfigInterface $scopeConfig = null
     ) {
         $this->productIdLocator = $productIdLocator;
-        $this->searchCriteriaBuilder = $searchCriteriaBuilder;
-        $this->filterBuilder = $filterBuilder;
-        $this->customerGroupRepository = $customerGroupRepository;
         $this->websiteRepository = $websiteRepository;
-        $this->tierPricePersistence = $tierPricePersistence;
         $this->validationResult = $validationResult;
         $this->invalidSkuProcessor = $invalidSkuProcessor;
+        $this->productRepository = $productRepository;
         $this->allowedProductTypes = $allowedProductTypes;
+        $this->resourceConnection = $resourceConnection ?: ObjectManager::getInstance()->get(ResourceConnection::class);
+        $this->scopeConfig = $scopeConfig ?: ObjectManager::getInstance()->get(ScopeConfigInterface::class);
     }
 
     /**
@@ -310,7 +310,16 @@ class TierPriceValidator implements ResetAfterRequestInterface
      */
     private function checkQuantity(TierPriceInterface $price, $key, Result $validationResult)
     {
-        if ($price->getQuantity() < 1) {
+        $sku = $price->getSku();
+        if (isset($this->productsCacheBySku[$sku])) {
+            $product = $this->productsCacheBySku[$sku];
+        } else {
+            $product = $this->productRepository->get($price->getSku());
+            $this->productsCacheBySku[$sku] = $product;
+        }
+
+        $canUseQtyDecimals = $product->getTypeInstance()->canUseQtyDecimals();
+        if ($price->getQuantity() <= 0 || $price->getQuantity() < 1 && !$canUseQtyDecimals) {
             $validationResult->addFailedItem(
                 $key,
                 __(
@@ -341,10 +350,19 @@ class TierPriceValidator implements ResetAfterRequestInterface
      * @param Result $validationResult
      * @return void
      */
-    private function checkWebsite(TierPriceInterface $price, $key, Result $validationResult)
+    private function checkWebsite(TierPriceInterface $price, $key, Result $validationResult): void
     {
         try {
             $this->websiteRepository->getById($price->getWebsiteId());
+            $isWebsiteScope = $this->scopeConfig
+                ->isSetFlag(
+                    Data::XML_PATH_PRICE_SCOPE,
+                    ScopeInterface::SCOPE_STORE,
+                    ScopeConfigInterface::SCOPE_TYPE_DEFAULT
+                );
+            if (!$isWebsiteScope && (int) $this->allWebsitesValue !== $price->getWebsiteId()) {
+                throw NoSuchEntityException::singleField('website_id', $price->getWebsiteId());
+            }
         } catch (\Magento\Framework\Exception\NoSuchEntityException $e) {
             $validationResult->addFailedItem(
                 $key,
@@ -389,7 +407,7 @@ class TierPriceValidator implements ResetAfterRequestInterface
             foreach ($prices[$tierPrice->getSku()] as $price) {
                 if ($price !== $tierPrice) {
                     $checkWebsiteValue = $isExistingPrice ? $this->compareWebsiteValue($price, $tierPrice)
-                        : ($price->getWebsiteId() == $tierPrice->getWebsiteId());
+                        : $this->compareWebsiteValueNewPrice($price, $tierPrice);
                     if (strtolower($price->getCustomerGroup()) === strtolower($tierPrice->getCustomerGroup())
                         && $price->getQuantity() == $tierPrice->getQuantity()
                         && $checkWebsiteValue
@@ -466,32 +484,19 @@ class TierPriceValidator implements ResetAfterRequestInterface
      */
     private function retrieveGroupValue(string $code)
     {
-        if (!isset($this->customerGroupsByCode[$code])) {
-            $searchCriteria = $this->searchCriteriaBuilder->addFilters(
-                [
-                    $this->filterBuilder->setField('customer_group_code')->setValue($code)->create()
-                ]
+        if (!isset($this->customerGroupCheck[$code])) {
+            $connection = $this->resourceConnection->getConnection();
+            $select = $connection->select()->from(
+                $this->resourceConnection->getTableName('customer_group'),
+                'customer_group_id'
+            )->where(
+                'customer_group_code = ?',
+                $code
             );
-            $items = $this->customerGroupRepository->getList($searchCriteria->create())->getItems();
-            $item = array_shift($items);
-
-            if (!$item) {
-                $this->customerGroupsByCode[$code] = false;
-                return false;
-            }
-
-            $itemCode = $item->getCode();
-            $itemId = $item->getId();
-
-            if (strtolower($itemCode) !== $code) {
-                $this->customerGroupsByCode[$code] = false;
-                return false;
-            }
-
-            $this->customerGroupsByCode[strtolower($itemCode)] = $itemId;
+            $this->customerGroupCheck[$code] = $connection->fetchOne($select);
         }
 
-        return $this->customerGroupsByCode[$code];
+        return $this->customerGroupCheck[$code];
     }
 
     /**
@@ -511,10 +516,33 @@ class TierPriceValidator implements ResetAfterRequestInterface
     }
 
     /**
+     * Compare Website Values between for new price records
+     *
+     * @param TierPriceInterface $price
+     * @param TierPriceInterface $tierPrice
+     * @return bool
+     */
+    private function compareWebsiteValueNewPrice(TierPriceInterface $price, TierPriceInterface $tierPrice): bool
+    {
+        if ($price->getWebsiteId() == $this->allWebsitesValue ||
+            $tierPrice->getWebsiteId() == $this->allWebsitesValue
+        ) {
+            $baseCurrency = $this->scopeConfig->getValue(Currency::XML_PATH_CURRENCY_BASE, 'default');
+            $websiteId = max($price->getWebsiteId(), $tierPrice->getWebsiteId());
+            $website = $this->websiteRepository->getById($websiteId);
+            $websiteCurrency = $website->getBaseCurrencyCode();
+
+            return $baseCurrency == $websiteCurrency;
+        }
+
+        return $price->getWebsiteId() == $tierPrice->getWebsiteId();
+    }
+
+    /**
      * @inheritDoc
      */
     public function _resetState(): void
     {
-        $this->customerGroupsByCode = [];
+        $this->customerGroupCheck = [];
     }
 }

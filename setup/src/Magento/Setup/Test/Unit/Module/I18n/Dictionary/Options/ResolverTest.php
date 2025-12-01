@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -52,7 +52,7 @@ class ResolverTest extends TestCase
     /**
      * @return array
      */
-    public function getOptionsDataProvider()
+    public static function getOptionsDataProvider()
     {
         $sourceFirst = __DIR__ . '/_files/source';
         $sourceSecond = __DIR__ . '/_files/source';
@@ -147,7 +147,7 @@ class ResolverTest extends TestCase
     /**
      * @return array
      */
-    public function getOptionsWrongDirDataProvider()
+    public static function getOptionsWrongDirDataProvider()
     {
         return [
             ['not_exist', true, 'Specified path is not a Magento root directory'],

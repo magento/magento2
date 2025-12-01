@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2012 Adobe
+ * All Rights Reserved.
  */
 
 /**
@@ -24,7 +24,7 @@ class MagentoTest extends \PHPUnit\Framework\TestCase
     protected function setUp(): void
     {
         $this->_eventManager = $this->getMockBuilder(\Magento\TestFramework\EventManager::class)
-            ->setMethods(['fireEvent'])
+            ->onlyMethods(['fireEvent'])
             ->setConstructorArgs([[]])
             ->getMock();
         $this->_object = new \Magento\TestFramework\Event\Magento($this->_eventManager);
@@ -53,7 +53,7 @@ class MagentoTest extends \PHPUnit\Framework\TestCase
         new \Magento\TestFramework\Event\Magento($eventManager);
     }
 
-    public function constructorExceptionDataProvider()
+    public static function constructorExceptionDataProvider()
     {
         return ['no event manager' => [null], 'not an event manager' => [new \stdClass()]];
     }

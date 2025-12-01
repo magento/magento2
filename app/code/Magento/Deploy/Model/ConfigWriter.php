@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Deploy\Model;
 
@@ -44,7 +44,7 @@ class ConfigWriter
     public function __construct(
         Writer $writer,
         ArrayManager $arrayManager,
-        PreparedValueFactory $valueFactory = null
+        ?PreparedValueFactory $valueFactory = null
     ) {
         $this->writer = $writer;
         $this->arrayManager = $arrayManager;

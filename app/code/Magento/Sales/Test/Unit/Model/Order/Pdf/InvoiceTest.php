@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -223,10 +223,13 @@ class InvoiceTest extends TestCase
 
         $this->scopeConfigMock
             ->method('getValue')
-            ->withConsecutive(
-                ['sales/identity/logo', ScopeInterface::SCOPE_STORE, null],
-                ['sales/identity/address', ScopeInterface::SCOPE_STORE, null]
-            )->willReturnOnConsecutiveCalls($filename, '');
+            ->willReturnCallback(function ($arg1, $arg2, $arg3) use ($filename) {
+                if ($arg1 == 'sales/identity/logo' && $arg2 == ScopeInterface::SCOPE_STORE && is_null($arg3)) {
+                    return $filename;
+                } elseif ($arg1 == 'sales/identity/address' && $arg2 == ScopeInterface::SCOPE_STORE && is_null($arg3)) {
+                    return '';
+                }
+            });
 
         $this->directoryMock->expects($this->any())
             ->method('isFile')

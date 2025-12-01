@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 
 declare(strict_types=1);
@@ -47,7 +47,7 @@ class WysiwygRestrictCommandTest extends TestCase
      *
      * @return array
      */
-    public function getExecuteCases(): array
+    public static function getExecuteCases(): array
     {
         return [
             'yes' => ['y', true],

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -126,7 +126,7 @@ class DocumentTest extends TestCase
      * Data provider for testGetGenderAttribute
      * @return array
      */
-    public function getGenderAttributeDataProvider()
+    public static function getGenderAttributeDataProvider()
     {
         return [
             'with valid gender label and value' => [
@@ -257,7 +257,7 @@ class DocumentTest extends TestCase
     {
         $this->attributeValueFactory = $this->getMockBuilder(AttributeValueFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
 
         $attributeValue = new AttributeValue();

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -25,7 +25,7 @@ class IgnoreTaxNotificationTest extends TestCase
         $objectManager = new ObjectManager($this);
         $cacheTypeList = $this->getMockBuilder(TypeList::class)
             ->disableOriginalConstructor()
-            ->setMethods(['cleanType'])
+            ->onlyMethods(['cleanType'])
             ->getMock();
         $cacheTypeList->expects($this->once())
             ->method('cleanType')
@@ -34,7 +34,7 @@ class IgnoreTaxNotificationTest extends TestCase
 
         $request = $this->getMockBuilder(Http::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getParam'])
+            ->onlyMethods(['getParam'])
             ->getMock();
         $request->expects($this->once())
             ->method('getParam')
@@ -49,7 +49,7 @@ class IgnoreTaxNotificationTest extends TestCase
 
         $resultFactory = $this->getMockBuilder(ResultFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
         $resultFactory->expects($this->once())
             ->method('create')
@@ -58,7 +58,7 @@ class IgnoreTaxNotificationTest extends TestCase
 
         $config = $this->getMockBuilder(Config::class)
             ->disableOriginalConstructor()
-            ->setMethods(['saveConfig'])
+            ->onlyMethods(['saveConfig'])
             ->getMock();
         $config->expects($this->once())
             ->method('saveConfig')
@@ -67,7 +67,7 @@ class IgnoreTaxNotificationTest extends TestCase
 
         $manager = $this->getMockBuilder(ObjectManagerInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['get', 'create', 'configure'])
+            ->onlyMethods(['get', 'create', 'configure'])
             ->getMockForAbstractClass();
         $manager->expects($this->any())
             ->method('get')

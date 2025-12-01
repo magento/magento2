@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Paypal\Model;
@@ -317,8 +317,8 @@ class Payflowpro extends \Magento\Payment\Model\Method\Cc implements GatewayInte
         ConfigInterfaceFactory $configFactory,
         Gateway $gateway,
         HandlerInterface $errorHandler,
-        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
-        \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
+        ?\Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
+        ?\Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
     ) {
         $this->storeManager = $storeManager;
@@ -348,7 +348,7 @@ class Payflowpro extends \Magento\Payment\Model\Method\Cc implements GatewayInte
      * @return bool
      * @throws \Magento\Framework\Exception\LocalizedException
      */
-    public function isAvailable(\Magento\Quote\Api\Data\CartInterface $quote = null)
+    public function isAvailable(?\Magento\Quote\Api\Data\CartInterface $quote = null)
     {
         return parent::isAvailable($quote) && $this->getConfig()->isMethodAvailable($this->getCode());
     }
@@ -602,6 +602,18 @@ class Payflowpro extends \Magento\Payment\Model\Method\Cc implements GatewayInte
         }
 
         return $this->config;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function setStore($storeId)
+    {
+        parent::setStore($storeId);
+        if ($this->config) {
+            $storeId = $this->storeManager->getStore($this->getStore())->getId();
+            $this->config->setStoreId($storeId);
+        }
     }
 
     /**

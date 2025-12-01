@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Eav\Model\Entity\Attribute\Backend;
 
@@ -64,6 +64,12 @@ class ArrayBackend extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractB
      */
     private function prepare(array $data): string
     {
-        return implode(',', array_filter(array_unique($data), 'is_numeric'));
+        return implode(
+            ',',
+            array_filter(
+                array_unique($data),
+                fn($value) => is_numeric($value) || !empty($value)
+            )
+        );
     }
 }

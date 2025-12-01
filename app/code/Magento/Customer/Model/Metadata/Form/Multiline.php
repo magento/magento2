@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Customer\Model\Metadata\Form;
 
@@ -82,6 +82,7 @@ class Multiline extends Text
     public function compactValue($value)
     {
         if (is_array($value)) {
+            ksort($value);
             $value = trim(implode("\n", $value));
         }
         $value = [$value];

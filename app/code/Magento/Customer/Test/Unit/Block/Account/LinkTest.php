@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -21,16 +21,17 @@ class LinkTest extends TestCase
         $helper = $this->getMockBuilder(
             Url::class
         )->disableOriginalConstructor()
-            ->setMethods(
+            ->onlyMethods(
                 ['getAccountUrl']
             )->getMock();
         $layout = $this->getMockBuilder(
             Layout::class
         )->disableOriginalConstructor()
-            ->setMethods(
+            ->addMethods(
                 ['helper']
             )->getMock();
 
+        $objectManager->prepareObjectManager();
         $block = $objectManager->getObject(
             Link::class,
             ['layout' => $layout, 'customerUrl' => $helper]

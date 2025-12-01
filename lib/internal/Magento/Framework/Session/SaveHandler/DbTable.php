@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Framework\Session\SaveHandler;
@@ -45,7 +45,7 @@ class DbTable extends \SessionHandler
      */
     public function __construct(
         ResourceConnection $resource,
-        EncryptorInterface $encryptor = null
+        ?EncryptorInterface $encryptor = null
     ) {
         $this->_sessionTable = $resource->getTableName('session');
         $this->connection = $resource->getConnection();

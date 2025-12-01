@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 
 declare(strict_types=1);
@@ -68,7 +68,7 @@ class CheckoutCartAddProductObserverTest extends TestCase
         $this->quoteItemMock = $this->createMock(QuoteItem::class);
         $this->eventMock = $this->getMockBuilder(Event::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getItem'])
+            ->addMethods(['getItem'])
             ->getMock();
 
         $objectManager = new ObjectManager($this);

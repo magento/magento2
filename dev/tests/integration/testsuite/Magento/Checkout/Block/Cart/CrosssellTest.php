@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -210,7 +210,7 @@ class CrosssellTest extends AbstractLinksTest
      *
      * @return array
      */
-    public function positionWithLastAddedProductProvider(): array
+    public static function positionWithLastAddedProductProvider(): array
     {
         return [
             'less_four_linked_products_to_last_added_product' => [

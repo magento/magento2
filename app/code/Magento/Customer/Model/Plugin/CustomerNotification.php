@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -85,7 +85,7 @@ class CustomerNotification
         CustomerRepositoryInterface $customerRepository,
         LoggerInterface $logger,
         RequestInterface $request,
-        StorageInterface $storage = null
+        ?StorageInterface $storage = null
     ) {
         $this->session = $session;
         $this->notificationStorage = $notificationStorage;
@@ -110,6 +110,7 @@ class CustomerNotification
 
         if (!$this->isFrontendRequest()
             || !$this->isPostRequest()
+            || $this->isLogoutRequest()
             || !$this->isSessionUpdateRegisteredFor($customerId)) {
             return;
         }
@@ -144,6 +145,18 @@ class CustomerNotification
     private function isPostRequest(): bool
     {
         return $this->request instanceof HttpRequestInterface && $this->request->isPost();
+    }
+
+    /**
+     * Checks if the current request is a logout request.
+     *
+     * @return bool
+     */
+    private function isLogoutRequest(): bool
+    {
+        return $this->request->getRouteName() === 'customer'
+            && $this->request->getControllerName() === 'account'
+            && $this->request->getActionName() === 'logout';
     }
 
     /**

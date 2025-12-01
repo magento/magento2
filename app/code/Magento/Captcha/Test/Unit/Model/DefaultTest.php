@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -18,8 +18,10 @@ use Magento\Framework\Math\Random;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Session\Storage;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\Session\SessionStartChecker;
 use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManager;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -31,7 +33,7 @@ class DefaultTest extends TestCase
     /**
      * Expiration frame
      */
-    const EXPIRE_FRAME = 86400;
+    private const EXPIRE_FRAME = 86400;
 
     /**
      * Captcha default config data
@@ -104,11 +106,17 @@ class DefaultTest extends TestCase
     private $userContextMock;
 
     /**
+     * @var ObjectManager
+     */
+    private $objectManagerHelper;
+
+    /**
      * Sets up the fixture, for example, opens a network connection.
      * This method is called before a test is executed.
      */
     protected function setUp(): void
     {
+        $this->objectManagerHelper = new ObjectManager($this);
         $this->session = $this->_getSessionStub();
 
         $this->_storeManager = $this->createPartialMock(StoreManager::class, ['getStore']);
@@ -118,19 +126,6 @@ class DefaultTest extends TestCase
             'getStore'
         )->willReturn(
             $this->_getStoreStub()
-        );
-
-        // \Magento\Customer\Model\Session
-        $this->_objectManager = $this->getMockForAbstractClass(ObjectManagerInterface::class);
-        $this->_objectManager->expects(
-            $this->any()
-        )->method(
-            'get'
-        )->willReturnMap(
-            [
-                Data::class => $this->_getHelperStub(),
-                Session::class => $this->session,
-            ]
         );
 
         $this->_resLogFactory = $this->createPartialMock(
@@ -148,7 +143,7 @@ class DefaultTest extends TestCase
         $randomMock = $this->createMock(Random::class);
         $randomMock->method('getRandomString')->willReturn('random-string');
 
-        $this->userContextMock = $this->getMockForAbstractClass(UserContextInterface::class);
+        $this->userContextMock = $this->createMock(UserContextInterface::class);
 
         $this->_object = new DefaultModel(
             $this->session,
@@ -283,13 +278,19 @@ class DefaultTest extends TestCase
      */
     protected function _getSessionStub()
     {
-        $helper = new ObjectManager($this);
-        $sessionArgs = $helper->getConstructArguments(
+        $objects = [
+            [
+                SessionStartChecker::class,
+                $this->createMock(SessionStartChecker::class)
+            ]
+        ];
+        $this->objectManagerHelper->prepareObjectManager($objects);
+        $sessionArgs = $this->objectManagerHelper->getConstructArguments(
             Session::class,
             ['storage' => new Storage()]
         );
         $session = $this->getMockBuilder(Session::class)
-            ->setMethods(['isLoggedIn', 'getUserCreateWord'])
+            ->onlyMethods(['isLoggedIn'])
             ->setConstructorArgs($sessionArgs)
             ->getMock();
         $session->expects($this->any())->method('isLoggedIn')->willReturn(false);
@@ -312,12 +313,10 @@ class DefaultTest extends TestCase
      */
     protected function _getHelperStub()
     {
-        $helper = $this->getMockBuilder(
-            Data::class
-        )->disableOriginalConstructor()
-            ->setMethods(
-                ['getConfig', 'getFonts', '_getWebsiteCode', 'getImgUrl']
-            )->getMock();
+        $helper = $this->createPartialMock(
+            Data::class,
+            ['getConfig', 'getFonts', '_getWebsiteCode', 'getImgUrl']
+        );
 
         $helper->expects(
             $this->any()
@@ -387,20 +386,18 @@ class DefaultTest extends TestCase
     protected function _getStoreStub()
     {
         $store = $this->getMockBuilder(Store::class)
-            ->addMethods(['isAdmin'])
             ->onlyMethods(['getBaseUrl'])
             ->disableOriginalConstructor()
             ->getMock();
         $store->expects($this->any())->method('getBaseUrl')->willReturn('http://localhost/media/');
-        $store->expects($this->any())->method('isAdmin')->willReturn(false);
         return $store;
     }
 
     /**
      * @param boolean $expectedResult
      * @param string $formId
-     * @dataProvider isShownToLoggedInUserDataProvider
      */
+    #[DataProvider('isShownToLoggedInUserDataProvider')]
     public function testIsShownToLoggedInUser($expectedResult, $formId)
     {
         $captcha = new DefaultModel(
@@ -415,7 +412,7 @@ class DefaultTest extends TestCase
     /**
      * @return array
      */
-    public function isShownToLoggedInUserDataProvider()
+    public static function isShownToLoggedInUserDataProvider()
     {
         return [
             [true, 'contact_us'],
@@ -426,9 +423,9 @@ class DefaultTest extends TestCase
 
     /**
      * @param string $string
-     * @dataProvider generateWordProvider
      * @throws \ReflectionException
      */
+    #[DataProvider('generateWordProvider')]
     public function testGenerateWord($string)
     {
         $randomMock = $this->createMock(Random::class);
@@ -449,7 +446,7 @@ class DefaultTest extends TestCase
     /**
      * @return array
      */
-    public function generateWordProvider()
+    public static function generateWordProvider()
     {
         return [
             ['ABC123'],

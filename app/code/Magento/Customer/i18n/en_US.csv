@@ -137,6 +137,7 @@ Download,Download
 "Something went wrong while saving the new password.","Something went wrong while saving the new password."
 "You deleted the address.","You deleted the address."
 "We can't delete the address right now.","We can't delete the address right now."
+"Invalid file path.","Invalid file path."
 "You saved the address.","You saved the address."
 "We can't save the address.","We can't save the address."
 "No customer ID defined.","No customer ID defined."
@@ -546,3 +547,6 @@ Addresses,Addresses
 "Partial Match","Partial Match"
 "Full Match","Full Match"
 "Prefix Match","Prefix Match"
+T,T
+F,F
+VAT,VAT

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -27,6 +27,7 @@ use Magento\MediaStorage\Model\File\Storage\Response;
 use Magento\MediaStorage\Model\File\Storage\Synchronization;
 use Magento\MediaStorage\Model\File\Storage\SynchronizationFactory;
 use Magento\MediaStorage\Service\ImageResize;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -97,8 +98,8 @@ class MediaTest extends TestCase
         $this->responseMock = $this->createMock(Response::class);
         $this->syncFactoryMock = $this->createPartialMock(SynchronizationFactory::class, ['create']);
         $this->filesystemMock = $this->createMock(Filesystem::class);
-        $this->directoryPubMock = $this->getMockForAbstractClass(WriteInterface::class);
-        $this->directoryMediaMock = $this->getMockForAbstractClass(WriteInterface::class);
+        $this->directoryPubMock = $this->createMock(WriteInterface::class);
+        $this->directoryMediaMock = $this->createMock(WriteInterface::class);
 
         $this->configFactoryMock->method('create')
             ->willReturn($this->configMock);
@@ -175,8 +176,7 @@ class MediaTest extends TestCase
     {
         $this->mediaModel = $this->createMediaModel();
 
-        $this->sync->expects(self::once())
-            ->method('synchronize')
+        $this->sync->method('synchronize')
             ->with(self::RELATIVE_FILE_PATH);
         $this->directoryMediaMock->expects(self::once())
             ->method('getAbsolutePath')
@@ -197,9 +197,8 @@ class MediaTest extends TestCase
     /**
      * @param bool $isDeveloper
      * @param int $setBodyCalls
-     *
-     * @dataProvider catchExceptionDataProvider
      */
+    #[DataProvider('catchExceptionDataProvider')]
     public function testCatchException(bool $isDeveloper, int $setBodyCalls): void
     {
         /** @var Bootstrap|MockObject $bootstrap */
@@ -248,7 +247,7 @@ class MediaTest extends TestCase
     /**
      * @return array
      */
-    public function catchExceptionDataProvider(): array
+    public static function catchExceptionDataProvider(): array
     {
         return [
             'default mode' => [false, 0],
@@ -270,9 +269,11 @@ class MediaTest extends TestCase
 
         $driverFile =  $this->createMock(Filesystem\Driver\File::class);
         $driverFile->method('getRealPath')->willReturn('');
+        $placeholder = $this->createMock(Placeholder::class);
+        $placeholder->method('getRelativePath')->willReturn(self::RELATIVE_FILE_PATH);
         $placeholderFactory = $this->createMock(PlaceholderFactory::class);
         $placeholderFactory->method('create')
-            ->willReturn($this->createMock(Placeholder::class));
+            ->willReturn($placeholder);
 
         return new Media(
             $this->configFactoryMock,

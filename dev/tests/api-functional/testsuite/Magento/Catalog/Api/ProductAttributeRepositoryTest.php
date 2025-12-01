@@ -1,8 +1,8 @@
 <?php
 /**
  *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Catalog\Api;
 
@@ -127,7 +127,7 @@ class ProductAttributeRepositoryTest extends \Magento\TestFramework\TestCase\Web
     /**
      * @return array
      */
-    public function attributeCodeDataProvider(): array
+    public static function attributeCodeDataProvider(): array
     {
         return [
             [str_repeat('az_7', 15)],

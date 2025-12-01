@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -44,7 +44,7 @@ class BooleanUtilsTest extends TestCase
     /**
      * @return array
      */
-    public function toBooleanDataProvider()
+    public static function toBooleanDataProvider()
     {
         return [
             'boolean "true"' => [true, true],
@@ -73,7 +73,7 @@ class BooleanUtilsTest extends TestCase
     /**
      * @return array
      */
-    public function toBooleanExceptionDataProvider()
+    public static function toBooleanExceptionDataProvider()
     {
         return [
             'boolean string "on"' => ['on'],

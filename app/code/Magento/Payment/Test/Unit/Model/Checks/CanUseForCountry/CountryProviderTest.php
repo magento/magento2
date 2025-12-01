@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -38,12 +38,12 @@ class CountryProviderTest extends TestCase
     {
         $this->directory = $this->getMockBuilder(Data::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getDefaultCountry'])
+            ->onlyMethods(['getDefaultCountry'])
             ->getMock();
 
         $this->quote = $this->getMockBuilder(Quote::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getBillingAddress', 'getShippingAddress'])
+            ->onlyMethods(['getBillingAddress', 'getShippingAddress'])
             ->getMock();
 
         $this->countryProvider = new CountryProvider($this->directory);
@@ -56,7 +56,7 @@ class CountryProviderTest extends TestCase
     {
         $address = $this->getMockBuilder(Address::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getCountry'])
+            ->onlyMethods(['getCountry'])
             ->getMock();
 
         $this->quote->expects(static::once())
@@ -82,7 +82,7 @@ class CountryProviderTest extends TestCase
     {
         $address = $this->getMockBuilder(Address::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getCountry'])
+            ->onlyMethods(['getCountry'])
             ->getMock();
 
         $this->quote->expects(static::never())
@@ -107,7 +107,7 @@ class CountryProviderTest extends TestCase
     {
         $address = $this->getMockBuilder(Address::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getCountry'])
+            ->onlyMethods(['getCountry'])
             ->getMock();
 
         $this->quote->expects(static::once())

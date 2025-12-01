@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -18,6 +18,7 @@ use Magento\MediaGalleryApi\Api\Data\AssetInterfaceFactory;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
+use Zend_Db_Statement_Interface;
 
 /**
  * Test the GetById command with exception thrown in case when there is no such entity
@@ -58,7 +59,7 @@ class GetByIdExceptionNoSuchEntityTest extends TestCase
     {
         $resourceConnection = $this->createMock(ResourceConnection::class);
         $this->assetFactory = $this->createMock(AssetInterfaceFactory::class);
-        $logger = $this->getMockForAbstractClass(LoggerInterface::class);
+        $logger = $this->createMock(LoggerInterface::class);
 
         $this->getMediaAssetById = (new ObjectManager($this))->getObject(
             GetById::class,
@@ -68,7 +69,7 @@ class GetByIdExceptionNoSuchEntityTest extends TestCase
                 'logger' =>  $logger,
             ]
         );
-        $this->adapter = $this->getMockForAbstractClass(AdapterInterface::class);
+        $this->adapter = $this->createMock(AdapterInterface::class);
         $resourceConnection->method('getConnection')->willReturn($this->adapter);
 
         $this->selectStub = $this->createMock(Select::class);
@@ -76,7 +77,7 @@ class GetByIdExceptionNoSuchEntityTest extends TestCase
         $this->selectStub->method('where')->willReturnSelf();
         $this->adapter->method('select')->willReturn($this->selectStub);
 
-        $this->statementMock = $this->getMockBuilder(\Zend_Db_Statement_Interface::class)->getMock();
+        $this->statementMock = $this->createMock(Zend_Db_Statement_Interface::class);
     }
 
     /**

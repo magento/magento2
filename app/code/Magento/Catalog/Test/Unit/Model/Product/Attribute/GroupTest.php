@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -48,7 +48,7 @@ class GroupTest extends TestCase
         $mockBuilder = $this->getMockBuilder(
             CollectionFactory::class
         );
-        $mock = $mockBuilder->setMethods(['create'])
+        $mock = $mockBuilder->onlyMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
 

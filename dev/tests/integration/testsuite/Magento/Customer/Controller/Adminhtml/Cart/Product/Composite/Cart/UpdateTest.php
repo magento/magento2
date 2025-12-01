@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -143,19 +143,19 @@ class UpdateTest extends AbstractBackendController
      *
      * @return array
      */
-    public function updateWithQuoteProvider(): array
+    public static function updateWithQuoteProvider(): array
     {
         return [
             'with_quote_item_id' => [
-                'has_quote_item' => true,
-                'expected_update_result' => [
+                'hasQuoteItem' => true,
+                'expectedUpdateResult' => [
                     'ok' => true,
                     'js_var_name' => 'iFrameResponse',
                 ],
             ],
             'without_quote_item_id' => [
-                'has_quote_item' => false,
-                'expected_update_result' => [
+                'hasQuoteItem' => false,
+                'expectedUpdateResult' => [
                     'error' => true,
                     'message' => (string)__('The quote items are incorrect. Verify the quote items and try again.'),
                     'js_var_name' => 'iFrameResponse',
@@ -257,7 +257,7 @@ class UpdateTest extends AbstractBackendController
     /**
      * @return array
      */
-    public function bundleOptionQuantityProvider(): array
+    public static function bundleOptionQuantityProvider(): array
     {
         return [
             'Quantity, less than allowed in the Shopping Cart' => [
@@ -270,7 +270,7 @@ class UpdateTest extends AbstractBackendController
             ],
             'Quantity, greater than available' => [
                 '1000',
-                'The requested qty is not available',
+                'Not enough items for sale',
             ],
             'Quantity, greater than allowed in the Shopping Cart' => [
                 '100000',

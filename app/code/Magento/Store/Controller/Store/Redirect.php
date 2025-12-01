@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -80,7 +80,7 @@ class Redirect extends Action implements HttpGetActionInterface, HttpPostActionI
         Generic $session,
         SidResolverInterface $sidResolver,
         HashGenerator $hashGenerator,
-        StoreManagerInterface $storeManager = null,
+        ?StoreManagerInterface $storeManager = null,
         ?RedirectDataGenerator $redirectDataGenerator = null,
         ?ContextInterfaceFactory $contextFactory = null
     ) {

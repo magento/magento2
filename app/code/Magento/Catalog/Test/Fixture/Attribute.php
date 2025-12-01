@@ -1,13 +1,12 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2021 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Catalog\Test\Fixture;
 
-use Magento\Catalog\Api\Data\ProductAttributeInterface;
 use Magento\Catalog\Api\ProductAttributeManagementInterface;
 use Magento\Catalog\Api\ProductAttributeRepositoryInterface;
 use Magento\Catalog\Model\Product;
@@ -97,6 +96,11 @@ class Attribute implements RevertibleDataFixtureInterface
     private ResourceModelAttribute $resourceModelAttribute;
 
     /**
+     * @var ProductAttributeRepositoryInterface
+     */
+    private ProductAttributeRepositoryInterface $productAttributeRepository;
+
+    /**
      * @param ServiceFactory $serviceFactory
      * @param ProcessorInterface $dataProcessor
      * @param EavSetup $eavSetup
@@ -104,6 +108,7 @@ class Attribute implements RevertibleDataFixtureInterface
      * @param AttributeFactory $attributeFactory
      * @param DataMerger $dataMerger
      * @param ResourceModelAttribute $resourceModelAttribute
+     * @param ProductAttributeRepositoryInterface $productAttributeRepository
      */
     public function __construct(
         ServiceFactory $serviceFactory,
@@ -112,7 +117,8 @@ class Attribute implements RevertibleDataFixtureInterface
         ProductAttributeManagementInterface $productAttributeManagement,
         AttributeFactory $attributeFactory,
         DataMerger $dataMerger,
-        ResourceModelAttribute $resourceModelAttribute
+        ResourceModelAttribute $resourceModelAttribute,
+        ProductAttributeRepositoryInterface $productAttributeRepository
     ) {
         $this->serviceFactory = $serviceFactory;
         $this->dataProcessor = $dataProcessor;
@@ -121,6 +127,7 @@ class Attribute implements RevertibleDataFixtureInterface
         $this->attributeFactory = $attributeFactory;
         $this->dataMerger = $dataMerger;
         $this->resourceModelAttribute = $resourceModelAttribute;
+        $this->productAttributeRepository = $productAttributeRepository;
     }
 
     /**
@@ -134,16 +141,11 @@ class Attribute implements RevertibleDataFixtureInterface
             return $this->applyAttributeWithAdditionalData($data);
         }
 
-        $service = $this->serviceFactory->create(ProductAttributeRepositoryInterface::class, 'save');
-
-        /**
-         * @var ProductAttributeInterface $attribute
-         */
-        $attribute = $service->execute(
-            [
-                'attribute' => $this->prepareData(array_diff_key($data, self::DEFAULT_ATTRIBUTE_SET_DATA))
-            ]
+        $attribute = $this->attributeFactory->createAttribute(
+            EavAttribute::class,
+            $this->prepareData(array_diff_key($data, self::DEFAULT_ATTRIBUTE_SET_DATA))
         );
+        $attribute = $this->productAttributeRepository->save($attribute);
 
         $attributeSetData = $this->prepareAttributeSetData(
             array_intersect_key($data, self::DEFAULT_ATTRIBUTE_SET_DATA)
@@ -201,6 +203,7 @@ class Attribute implements RevertibleDataFixtureInterface
     private function prepareData(array $data): array
     {
         $data = array_merge(self::DEFAULT_DATA, $data);
+        $data['frontend_label'] ??= $data['default_frontend_label'];
 
         return $this->dataProcessor->process($this, $data);
     }

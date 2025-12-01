@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -21,6 +21,7 @@ use Magento\Framework\Exception\NoSuchEntityException;
 
 /**
  * Bundle product save handler
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class SaveHandler implements ExtensionInterface
 {
@@ -95,7 +96,9 @@ class SaveHandler implements ExtensionInterface
         /** @var OptionInterface[] $bundleProductOptions */
         $bundleProductOptions = $entity->getExtensionAttributes()->getBundleProductOptions() ?: [];
         //Only processing bundle products.
-        if ($entity->getTypeId() !== Type::TYPE_CODE || empty($bundleProductOptions)) {
+        if ($entity->getTypeId() !== Type::TYPE_CODE
+            || (empty($bundleProductOptions) && !$entity->getDropOptions())
+        ) {
             return $entity;
         }
 
@@ -107,8 +110,7 @@ class SaveHandler implements ExtensionInterface
 
         if (!$entity->getCopyFromView()) {
             $this->processRemovedOptions($entity, $existingOptionsIds, $optionIds);
-            $newOptionsIds = array_diff($optionIds, $existingOptionsIds);
-            $this->saveOptions($entity, $bundleProductOptions, $newOptionsIds);
+            $this->saveOptions($entity, $bundleProductOptions, $existingBundleProductOptions);
         } else {
             //save only labels and not selections + product links
             $this->saveOptions($entity, $bundleProductOptions);
@@ -139,10 +141,7 @@ class SaveHandler implements ExtensionInterface
         $links = $option->getProductLinks();
         if (!empty($links)) {
             foreach ($links as $link) {
-                $linkCanBeDeleted = $this->checkOptionLinkIfExist->execute($entitySku, $option, $link);
-                if ($linkCanBeDeleted) {
-                    $this->productLinkManagement->removeChild($entitySku, $option->getId(), $link->getSku());
-                }
+                $this->productLinkManagement->removeChild($entitySku, $option->getId(), $link->getSku());
             }
         }
     }
@@ -150,20 +149,20 @@ class SaveHandler implements ExtensionInterface
     /**
      * Perform save for all options entities.
      *
-     * @param object $entity
+     * @param ProductInterface $entity
      * @param array $options
-     * @param array $newOptionsIds
-     *
+     * @param array $existingBundleProductOptions
      * @return void
+     * @throws InputException
+     * @throws NoSuchEntityException
+     * @throws \Magento\Framework\Exception\CouldNotSaveException
      */
-    private function saveOptions($entity, array $options, array $newOptionsIds = []): void
-    {
-        foreach ($options as $option) {
-            if (in_array($option->getOptionId(), $newOptionsIds)) {
-                $option->setOptionId(null);
-            }
-        }
-        $this->optionSave->saveBulk($entity, $options);
+    private function saveOptions(
+        ProductInterface $entity,
+        array $options,
+        array $existingBundleProductOptions = []
+    ): void {
+        $this->optionSave->saveBulk($entity, $options, $existingBundleProductOptions);
     }
 
     /**

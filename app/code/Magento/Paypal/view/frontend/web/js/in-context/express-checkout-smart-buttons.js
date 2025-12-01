@@ -1,6 +1,6 @@
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 /* eslint-disable max-nested-callbacks */
 define([
@@ -56,6 +56,10 @@ define([
             clientConfig.rendererComponent.beforeOnAuthorize(deferred.resolve, deferred.reject, actions)
                 .then(function () {
                     $.post(clientConfig.onAuthorizeUrl, params).done(function (res) {
+                        if (res.success === false) {
+                            clientConfig.rendererComponent.catchOnAuthorize(res, deferred.resolve, deferred.reject);
+                            return;
+                        }
                         clientConfig.rendererComponent
                             .afterOnAuthorize(res, deferred.resolve, deferred.reject, actions);
                         customerData.set('paypal-funding-source', '');

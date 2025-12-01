@@ -1,6 +1,6 @@
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2012 Adobe
+ * All Rights Reserved.
  */
 /**
  * @api
@@ -22,6 +22,11 @@ define([
         options: {
             superSelector: '.super-attribute-select',
             selectSimpleProduct: '[name="selected_configurable_option"]',
+
+            /**
+             * @deprecated Not used anymore
+             * @see selectorProductPrice
+             */
             priceHolderSelector: '.price-box',
             spConfig: {},
             state: {},
@@ -86,7 +91,7 @@ define([
         _initializeOptions: function () {
             var options = this.options,
                 gallery = $(options.mediaGallerySelector),
-                priceBoxOptions = $(this.options.priceHolderSelector).priceBox('option').priceConfig || null;
+                priceBoxOptions = this._getPriceBoxElement().priceBox('option').priceConfig || null;
 
             if (priceBoxOptions && priceBoxOptions.optionTemplate) {
                 options.optionTemplate = priceBoxOptions.optionTemplate;
@@ -100,7 +105,7 @@ define([
 
             options.settings = options.spConfig.containerId ?
                 $(options.spConfig.containerId).find(options.superSelector) :
-                $(options.superSelector);
+                this.element.parents(this.options.selectorProduct).find(options.superSelector);
 
             options.values = options.spConfig.defaultValues || {};
             options.parentImage = $('[data-role=base-image-container] img').attr('src');
@@ -351,7 +356,13 @@ define([
          * @private
          */
         _addFotoramaVideoEvents: function (isInitial) {
-            if (_.isUndefined($.mage.AddFotoramaVideoEvents)) {
+            if (_.isUndefined($.mage.AddFotoramaVideoEvents)
+                || !$(this.options.mediaGallerySelector).AddFotoramaVideoEvents('instance')
+            ) {
+                $(this.options.mediaGallerySelector).on('addfotoramavideoeventscreate', function () {
+                    this._addFotoramaVideoEvents(isInitial);
+                }.bind(this));
+
                 return;
             }
 
@@ -516,7 +527,7 @@ define([
 
                         if (this.options.spConfig.canDisplayShowOutOfStockStatus) {
                             filteredSalableProducts = $(this.options.spConfig.salable[attributeId][options[i].id]).
-                            filter(options[i].allowedProducts);
+                                filter(options[i].allowedProducts);
                             canDisplayOutOfStockProducts = filteredSalableProducts.length === 0;
                         }
 
@@ -580,7 +591,7 @@ define([
          * configurable product's option selections.
          */
         _reloadPrice: function () {
-            $(this.options.priceHolderSelector).trigger('updatePrice', this._getPrices());
+            this._getPriceBoxElement().trigger('updatePrice', this._getPrices());
         },
 
         /**
@@ -654,7 +665,7 @@ define([
          * @private
          */
         _calculatePrice: function (config) {
-            var displayPrices = $(this.options.priceHolderSelector).priceBox('option').prices,
+            var displayPrices = this._getPriceBoxElement().priceBox('option').prices,
                 newPrices = this.options.spConfig.optionPrices[_.first(config.allowedProducts)] || {};
 
             _.each(displayPrices, function (price, code) {
@@ -702,8 +713,7 @@ define([
          */
         _displayRegularPriceBlock: function (optionId) {
             var shouldBeShown = true,
-                $priceBox = this.element.parents(this.options.selectorProduct)
-                    .find(this.options.selectorProductPrice);
+                $priceBox = this._getPriceBoxElement();
 
             _.each(this.options.settings, function (element) {
                 if (element.value === '') {
@@ -785,6 +795,18 @@ define([
             } else {
                 $(this.options.tierPriceBlockSelector).hide();
             }
+        },
+
+        /**
+         * Returns the price container element
+         *
+         * @returns {*}
+         * @private
+         */
+        _getPriceBoxElement: function () {
+            return this.element
+                .parents(this.options.selectorProduct)
+                .find(this.options.selectorProductPrice);
         }
     });
 

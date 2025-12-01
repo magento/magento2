@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 
 declare(strict_types=1);
@@ -64,12 +64,12 @@ class UpdateElementTypesObserverTest extends TestCase
 
         $this->eventMock = $this->getMockBuilder(Event::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getResponse'])
+            ->addMethods(['getResponse'])
             ->getMock();
 
         $this->responseMock = $this->getMockBuilder(DataObject::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getTypes', 'setTypes'])
+            ->addMethods(['getTypes', 'setTypes'])
             ->getMock();
 
         $this->observer = $this->objectManager->getObject(UpdateElementTypesObserver::class);

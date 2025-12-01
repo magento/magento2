@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -533,17 +533,17 @@ class PageRepositoryTest extends WebapiAbstract
      *
      * @return array
      */
-    public function byStoresProvider(): array
+    public static function byStoresProvider(): array
     {
         return [
             'default_store' => [
-                'request_store' => 'default',
+                'requestStore' => 'default',
             ],
             'second_store' => [
-                'request_store' => 'fixture_second_store',
+                'requestStore' => 'fixture_second_store',
             ],
             'all' => [
-                'request_store' => 'all',
+                'requestStore' => 'all',
             ],
         ];
     }

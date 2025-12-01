@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -38,17 +38,17 @@ class MultiactionTest extends AbstractMultiactionTest
      *
      * @return array
      */
-    public function renderEmptyProvider(): array
+    public static function renderEmptyProvider(): array
     {
         return [
             'empty_actions' => [
-                'column_data' => ['actions' => []],
+                'columnData' => ['actions' => []],
             ],
             'not_array_actions' => [
-                'column_data' => ['actions' => 'actions'],
+                'columnData' => ['actions' => 'actions'],
             ],
             'empty_actions_element' => [
-                'column_data' => [
+                'columnData' => [
                     'actions' => [
                         'action_1' => 'actions',
                     ],

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
-  */
+/**
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
+ */
 -->
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
@@ -50,7 +50,7 @@
         <element name="variationLabel" type="text" selector="//div[@data-index='configurable-matrix']/label"/>
         <element name="stepsWizardTitle" type="text" selector="div.content:not([style='display: none;']) .steps-wizard-title"/>
         <element name="attributeEntityByName" type="text" selector="//div[@class='attribute-entity']//div[normalize-space(.)='{{attributeLabel}}']" parameterized="true"/>
-        <element name="fileUploaderInput" type="file" selector="//input[@type='file' and @class='file-uploader-input']"/>
+        <element name="fileUploaderInput" type="file" selector="//input[@type='file' and @class='uppy-Dashboard-input']"/>
         <element name="variationImageSource" type="text" selector="[data-index='configurable-matrix'] [data-index='thumbnail_image_container'] img[src*='{{imageName}}']" parameterized="true"/>
         <element name="variationProductLinkByName" type="text" selector="//div[@data-index='configurable-matrix']//*[@data-index='name_container']//a[contains(text(), '{{productName}}')]" parameterized="true"/>
         <element name="unAssignSource" type="button" selector="//span[text()='{{source_name}}']/../../..//button[@class='action-delete']//span[text()='Unassign']" parameterized="true"/>
@@ -60,5 +60,9 @@
         <element name="searchBySource" type="input" selector="//div[contains(@data-bind,'inventory_source_listing.inventory_source_listing')]/div[2]//input[@placeholder='Search by keyword']"/>
         <element name="clickSearch" type="button" selector="//div[contains(@data-bind,'inventory_source_listing.inventory_source_listing')]/div[2]//button[@aria-label='Search']"/>
         <element name="btnDoneAdvancedInventory" type="button" selector="//aside[@class='modal-slide product_form_product_form_advanced_inventory_modal _show']//button[@class='action-primary']//span[text()='Done']/.." />
+        <element name="paginationDropDropdown" type="button" selector="//*[@data-index='configurable-matrix'][1]//div[@class='admin__control-table-pagination']//select"/>
+        <element name="evenProduct" type="text" selector="//tr[@class='data-row'][{{row}}]/td[{{column}}]//a" parameterized="true"/>
+        <element name="oddProduct" type="text" selector="//tr[@class='data-row _odd-row'][{{row}}]/td[{{column}}]//a" parameterized="true"/>
+        <element name="nextPageArrow" type="text" selector="(//*[@class='action-next'])[2]"/>
     </section>
 </sections>

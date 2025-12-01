@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -44,7 +44,7 @@ class AbstractAgreementTest extends TestCase
     {
         $paymentMethodInstance = $this->getMockBuilder(AbstractMethod::class)
             ->disableOriginalConstructor()
-            ->setMethods(['setStore'])
+            ->onlyMethods(['setStore'])
             ->getMockForAbstractClass();
 
         $paymentMethodInstance->expects($this->once())

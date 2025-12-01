@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -41,7 +41,7 @@ class IndexTest extends TestCase
 
         $this->productMetadataMock = $this->getMockBuilder(ProductMetadataInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getName', 'getEdition', 'getVersion'])
+            ->onlyMethods(['getName', 'getEdition', 'getVersion'])
             ->getMockForAbstractClass();
 
         $this->rawResponseFactoryMock = $this->createPartialMock(RawFactory::class, ['create']);

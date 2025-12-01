@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Deploy\Console\Command\App;
 
@@ -48,7 +48,7 @@ class ApplicationDumpCommand extends Command
     public function __construct(
         Writer $writer,
         array $sources,
-        Hash $configHash = null
+        ?Hash $configHash = null
     ) {
         $this->writer = $writer;
         $this->sources = $sources;

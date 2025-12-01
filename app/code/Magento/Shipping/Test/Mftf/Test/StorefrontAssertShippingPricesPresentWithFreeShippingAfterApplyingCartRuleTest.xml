@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  /**
+   * Copyright 2024 Adobe
+   * All Rights Reserved.
+   */
+ -->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontAssertShippingPricesPresentWithFreeShippingAfterApplyingCartRuleTest">
+        <annotations>
+            <features value="Shipping"/>
+            <stories value="Cart price rules"/>
+            <title value="Assert that table rate shipping price will be correct after cart price rule for free shipping applied"/>
+            <description value="Table rate price should be displayed correctly on checkout after applied free shipment cart price rule"/>
+            <severity value="AVERAGE"/>
+            <testCaseId value="AC-11402"/>
+            <useCaseId value="ACP2E-2763"/>
+            <group value="shipping"/>
+            <group value="SalesRule"/>
+            <group value="cloud"/>
+        </annotations>
+        <before>
+            <createData entity="ApiSimpleProductWithCustomPrice" stepKey="createProduct"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <!-- Enable free shipping method -->
+            <createData entity="FreeShippinMethodConfig" stepKey="enableFreeShippingMethod"/>
+            <createData entity="setFreeShippingSubtotal" stepKey="setFreeShippingSubtotal"/>
+
+            <!-- Turn on and configure table rates shipping method -->
+            <actionGroup ref="AdminOpenShippingMethodsConfigPageActionGroup" stepKey="openShippingMethodConfigPage"/>
+            <actionGroup ref="AdminSwitchWebsiteActionGroup" stepKey="switchDefaultWebsite">
+                <argument name="website" value="_defaultWebsite"/>
+            </actionGroup>
+            <actionGroup ref="AdminChangeTableRatesShippingMethodStatusActionGroup" stepKey="enableTableRatesShippingMethodForDefaultWebsite">
+                <argument name="status" value="1"/>
+            </actionGroup>
+            <actionGroup ref="AdminChangeTableRatesShippingMethodConditionActionGroup" stepKey="selectPriceVsDestinationCondition">
+                <argument name="condition" value="{{TableRateShippingMethodConfig.package_value_with_discount}}"/>
+            </actionGroup>
+            <actionGroup ref="AdminImportFileTableRatesShippingMethodActionGroup" stepKey="importCSVFile">
+                <argument name="file" value="price_tablerates.csv"/>
+            </actionGroup>
+            <actionGroup ref="AdminSaveConfigActionGroup" stepKey="saveConfig"/>
+
+            <!-- Create cart price rule for free shipping -->
+            <actionGroup ref="AdminCartPriceRuleDeleteAllActionGroup" stepKey="deleteAllExistingCartPriceRules"/>
+
+            <actionGroup ref="AdminOpenNewCartPriceRuleFormPageActionGroup" stepKey="createCartPriceRule"/>
+            <actionGroup ref="AdminCartPriceRuleFillMainInfoActionGroup" stepKey="fillCartPriceRuleMainInfo">
+                <argument name="name" value="{{CartPriceRuleFreeShippingWithCouponAppliedOnly.name}}"/>
+                <argument name="description" value="{{CartPriceRuleFreeShippingWithCouponAppliedOnly.description}}"/>
+            </actionGroup>
+            <actionGroup ref="AdminCartPriceRuleFillCouponInfoActionGroup" stepKey="fillCartPriceRuleCouponInfo"/>
+            <actionGroup ref="AdminCreateCartPriceRuleActionsSectionDiscountFieldsActionGroup" stepKey="fillCartPriceRuleActionsSection">
+                <argument name="rule" value="CartPriceRuleFreeShippingWithCouponAppliedOnly"/>
+            </actionGroup>
+            <actionGroup ref="AdminCreateCartPriceRuleActionsSectionFreeShippingActionGroup" stepKey="fillCartPriceRuleFreeShippingActionsSection">
+                <argument name="freeShippingOption" value="{{CartPriceRuleFreeShippingWithCouponAppliedOnly.simple_free_shipping}}"/>
+            </actionGroup>
+            <actionGroup ref="AdminCartPriceRuleSaveActionGroup" stepKey="saveCartPriceRule"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutAsAdmin"/>
+        </before>
+        <after>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin2"/>
+
+            <!-- Delete product -->
+            <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
+
+            <!-- Delete cart price rule for free shipping -->
+            <actionGroup ref="AdminCartPriceRuleDeleteAllActionGroup" stepKey="deleteAllCartPriceRules"/>
+
+            <!-- Disable free shipping method -->
+            <actionGroup ref="AdminOpenShippingMethodsConfigPageActionGroup" stepKey="openShippingMethodConfigPage2"/>
+            <createData entity="FreeShippinMethodDefault" stepKey="disableFreeShippingMethod"/>
+            <createData entity="setFreeShippingSubtotalToDefault" stepKey="setFreeShippingSubtotalToDefault"/>
+
+            <!-- Turn off table rates shipping method -->
+            <actionGroup ref="AdminSwitchWebsiteActionGroup" stepKey="switchDefaultWebsite2">
+                <argument name="website" value="_defaultWebsite"/>
+            </actionGroup>
+            <actionGroup ref="AdminChangeTableRatesShippingMethodStatusActionGroup" stepKey="disableTableRatesShippingMethodForDefaultWebsite">
+                <argument name="status" value="0"/>
+            </actionGroup>
+            <checkOption selector="{{AdminShippingMethodTableRatesSection.carriersTableRateConditionName}}" stepKey="disableUseDefaultCondition"/>
+            <actionGroup ref="AdminSaveConfigActionGroup" stepKey="saveConfig2"/>
+
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout2"/>
+        </after>
+
+        <!-- Add product to cart and check shipping prices -->
+        <actionGroup ref="OpenStoreFrontProductPageActionGroup" stepKey="navigateToProductPage">
+            <argument name="productUrlKey" value="$createProduct.custom_attributes[url_key]$"/>
+        </actionGroup>
+
+        <actionGroup ref="StorefrontAddProductToCartActionGroup" stepKey="addProductToCart">
+            <argument name="product" value="$createProduct$" />
+            <argument name="productCount" value="1" />
+        </actionGroup>
+
+        <actionGroup ref="GoToCheckoutFromMinicartActionGroup" stepKey="goToCheckoutFromMinicart"/>
+
+        <actionGroup ref="GuestCheckoutFillNewShippingAddressActionGroup" stepKey="guestCheckoutFillingShippingSection">
+            <argument name="customer" value="CustomerEntityOne" />
+            <argument name="address" value="CustomerAddressSimple" />
+        </actionGroup>
+        <see selector="{{CheckoutShippingMethodsSection.shippingRatePriceByName('Fixed')}}" userInput="$5.00" stepKey="assertFlatRatedMethodPrice"/>
+        <see selector="{{CheckoutShippingMethodsSection.shippingRatePriceByName('Table Rate')}}" userInput="$0.00" stepKey="assertTableRatedMethodPrice"/>
+        <dontSee selector="{{CheckoutShippingMethodsSection.shippingRatePriceByName('Free Shipping')}}" userInput="$0.00" stepKey="assertFreeShippingMethodNotAvailable"/>
+        <waitForElementClickable selector="{{CheckoutShippingMethodsSection.shippingMethodFlatRate}}" stepKey="waitForFlatRateShippingMethod"/>
+
+        <!-- Apply cart price rule for free shipping -->
+        <click selector="{{CheckoutShippingMethodsSection.checkShippingMethodByName('Flat Rate')}}" stepKey="selectFlatRateShippingMethod"/>
+        <actionGroup ref="StorefrontCheckoutClickNextButtonActionGroup" stepKey="goToPaymentStep"/>
+        <actionGroup ref="StorefrontApplyDiscountCodeActionGroup" stepKey="applyCoupon">
+            <argument name="discountCode" value="{{_defaultCoupon.code}}"/>
+        </actionGroup>
+
+        <!-- Check shipping prices after applying cart price rule -->
+        <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="amOnHomePageAfterCartRuleApplied"/>
+        <actionGroup ref="GoToCheckoutFromMinicartActionGroup" stepKey="goToCheckoutFromMinicart2"/>
+        <see selector="{{CheckoutShippingMethodsSection.shippingRatePriceByName('Fixed')}}" userInput="$5.00" stepKey="assertFlatRatedMethodPriceAfterCartRule"/>
+        <see selector="{{CheckoutShippingMethodsSection.shippingRatePriceByName('Table Rate')}}" userInput="$15.95" stepKey="assertTableRatedMethodPriceAfterCartRule"/>
+        <see selector="{{CheckoutShippingMethodsSection.shippingRatePriceByName('Free Shipping')}}" userInput="$0.00" stepKey="assertFreeShippingMethodAvailable"/>
+    </test>
+</tests>

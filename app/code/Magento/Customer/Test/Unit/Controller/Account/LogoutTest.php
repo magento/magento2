@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -55,7 +55,8 @@ class LogoutTest extends TestCase
             ->getMock();
         $this->sessionMock = $this->getMockBuilder(Session::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getId', 'logout', 'setBeforeAuthUrl', 'setLastCustomerId'])
+            ->addMethods(['setLastCustomerId'])
+            ->onlyMethods(['getId', 'logout', 'setBeforeAuthUrl'])
             ->getMock();
 
         $this->cookieMetadataFactory = $this->getMockBuilder(CookieMetadataFactory::class)

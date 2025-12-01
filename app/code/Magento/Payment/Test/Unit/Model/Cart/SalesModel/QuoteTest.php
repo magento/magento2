@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -96,7 +96,7 @@ class QuoteTest extends TestCase
     /**
      * @return array
      */
-    public function getAllItemsDataProvider()
+    public static function getAllItemsDataProvider()
     {
         return [
             ['parent item 1', 'name 1', 1, 0.1],
@@ -150,7 +150,7 @@ class QuoteTest extends TestCase
     /**
      * @return array
      */
-    public function getterDataProvider()
+    public static function getterDataProvider()
     {
         return [
             [0, 'getBaseTaxAmount'],

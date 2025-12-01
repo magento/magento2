@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -41,7 +41,7 @@ class IndexTest extends AbstractController
      *
      * @return array
      */
-    public function searchStringDataProvider(): array
+    public static function searchStringDataProvider(): array
     {
         return [
             'search_product_by_name' => ['Simple product name'],

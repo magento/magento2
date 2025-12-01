@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 
 declare(strict_types=1);
@@ -47,7 +47,8 @@ class CarrierResultTest extends TestCase
     {
         $rate1 = $this->getMockBuilder(Method::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getMethod', 'getPrice', 'setPrice'])
+            ->addMethods(['getMethod', 'getPrice'])
+            ->onlyMethods(['setPrice'])
             ->getMock();
         $price1 = 3;
         $rate1->method('getMethod')->willReturn('method');
@@ -67,7 +68,8 @@ class CarrierResultTest extends TestCase
 
         $rate2 = $this->getMockBuilder(Method::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getMethod', 'getPrice', 'setPrice'])
+            ->addMethods(['getMethod', 'getPrice'])
+            ->onlyMethods(['setPrice'])
             ->getMock();
         $price2 = 4;
         $rate2->method('getMethod')->willReturn('method');

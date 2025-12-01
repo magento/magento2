@@ -1,6 +1,6 @@
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 
 var config = {
@@ -11,7 +11,6 @@ var config = {
             'knockout': 'knockoutjs/knockout',
             'mageUtils': 'mage/utils/main',
             'rjsResolver': 'mage/requirejs/resolver',
-            'jquery-ui-modules/core': 'jquery/ui-modules/core',
             'jquery-ui-modules/accordion': 'jquery/ui-modules/widgets/accordion',
             'jquery-ui-modules/autocomplete': 'jquery/ui-modules/widgets/autocomplete',
             'jquery-ui-modules/button': 'jquery/ui-modules/widgets/button',
@@ -66,7 +65,7 @@ var config = {
     },
     paths: {
         'jquery/validate': 'jquery/jquery.validate',
-        'jquery/file-uploader': 'jquery/fileUploader/jquery.fileuploader',
+        'jquery/uppy-core': 'jquery/uppy/dist/uppy.min',
         'prototype': 'legacy-build.min',
         'jquery/jquery-storageapi': 'js-storage/storage-wrapper',
         'text': 'mage/requirejs/text',

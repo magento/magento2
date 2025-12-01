@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -68,8 +68,8 @@ class TrackRepository implements ShipmentTrackRepositoryInterface
         ShipmentTrackInterfaceFactory $trackFactory,
         ShipmentTrackSearchResultInterfaceFactory $searchResultFactory,
         CollectionProcessorInterface $collectionProcessor,
-        CollectionFactory $shipmentCollection = null,
-        LoggerInterface $logger = null
+        ?CollectionFactory $shipmentCollection = null,
+        ?LoggerInterface $logger = null
     ) {
         $this->trackResource = $trackResource;
         $this->trackFactory = $trackFactory;

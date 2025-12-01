@@ -1,18 +1,18 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Review\Block\Adminhtml\Rating\Edit;
 
 /**
  * Admin rating left menu
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Tabs extends \Magento\Backend\Block\Widget\Tabs
 {
     /**
+     * Initialise the block
+     *
      * @return void
      */
     protected function _construct()
@@ -24,6 +24,8 @@ class Tabs extends \Magento\Backend\Block\Widget\Tabs
     }
 
     /**
+     * Add rating information tab
+     *
      * @return $this
      */
     protected function _beforeToHtml()

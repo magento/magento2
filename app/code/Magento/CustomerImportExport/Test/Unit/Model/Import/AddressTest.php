@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2012 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -12,7 +12,7 @@ use Magento\Customer\Model\AddressFactory;
 use Magento\Customer\Model\CustomerFactory;
 use Magento\Customer\Model\Indexer\Processor;
 use Magento\Customer\Model\ResourceModel\Address\Attribute as AddressAttribute;
-use Magento\Customer\Model\ResourceModel\Address\Attribute\Source\CountryWithWebsites;
+use Magento\CustomerImportExport\Model\Import\CountryWithWebsites;
 use Magento\CustomerImportExport\Model\Import\Address;
 use Magento\CustomerImportExport\Model\ResourceModel\Import\Customer\Storage;
 use Magento\CustomerImportExport\Model\ResourceModel\Import\Customer\StorageFactory;
@@ -145,7 +145,7 @@ class AddressTest extends TestCase
     protected $errorAggregator;
 
     /**
-     * @var AddressAttribute\Source\CountryWithWebsites|MockObject
+     * @var CountryWithWebsites|MockObject
      */
     private $countryWithWebsites;
 
@@ -158,7 +158,7 @@ class AddressTest extends TestCase
         $this->_stringLib = new StringUtils();
         $this->_storeManager = $this->getMockBuilder(StoreManager::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getWebsites'])
+            ->onlyMethods(['getWebsites'])
             ->getMock();
         $this->_storeManager
             ->method('getWebsites')
@@ -168,8 +168,7 @@ class AddressTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $this->countryWithWebsites
-
-            ->method('getAllOptions')
+            ->method('getCountiesPerWebsite')
             ->willReturn([]);
         $this->_model = $this->_getModelMock();
         $this->errorAggregator = $this->createPartialMock(
@@ -241,7 +240,7 @@ class AddressTest extends TestCase
     {
         $entityFactory = $this->createMock(EntityFactory::class);
         $attributeCollection = $this->getMockBuilder(Collection::class)
-            ->setMethods(['getEntityTypeCode'])
+            ->addMethods(['getEntityTypeCode'])
             ->setConstructorArgs([$entityFactory])
             ->getMock();
         foreach ($this->_attributes as $attributeData) {
@@ -365,6 +364,7 @@ class AddressTest extends TestCase
     protected function _getModelMock()
     {
         $scopeConfig = $this->getMockForAbstractClass(ScopeConfigInterface::class);
+        $this->_objectManagerMock->prepareObjectManager();
         $modelMock = new Address(
             $this->_stringLib,
             $scopeConfig,
@@ -402,18 +402,18 @@ class AddressTest extends TestCase
      *
      * @return array
      */
-    public function validateRowForUpdateDataProvider()
+    public static function validateRowForUpdateDataProvider()
     {
         return [
             'valid' => [
-                '$rowData' => include __DIR__ . '/_files/row_data_address_update_valid.php',
-                '$errors' => [],
-                '$isValid' => true,
+                'rowData' => include __DIR__ . '/_files/row_data_address_update_valid.php',
+                'errors' => [],
+                'isValid' => true,
             ],
             'empty address id' => [
-                '$rowData' => include __DIR__ . '/_files/row_data_address_update_empty_address_id.php',
-                '$errors' => [],
-                '$isValid' => true,
+                'rowData' => include __DIR__ . '/_files/row_data_address_update_empty_address_id.php',
+                'errors' => [],
+                'isValid' => true,
             ],
         ];
     }
@@ -423,13 +423,13 @@ class AddressTest extends TestCase
      *
      * @return array
      */
-    public function validateRowForDeleteDataProvider()
+    public static function validateRowForDeleteDataProvider()
     {
         return [
             'valid' => [
-                '$rowData' => include __DIR__ . '/_files/row_data_address_update_valid.php',
-                '$errors' => [],
-                '$isValid' => true,
+                'rowData' => include __DIR__ . '/_files/row_data_address_update_valid.php',
+                'errors' => [],
+                'isValid' => true,
             ],
         ];
     }
@@ -446,6 +446,23 @@ class AddressTest extends TestCase
     {
         $this->_model->setParameters(['behavior' => Import::BEHAVIOR_ADD_UPDATE]);
 
+        if ($isValid) {
+            $this->assertTrue($this->_model->validateRow($rowData, 0));
+        } else {
+            $this->assertFalse($this->_model->validateRow($rowData, 0));
+        }
+    }
+
+    /**
+     * @dataProvider validateRowForUpdateDataProvider
+     *
+     * @param array $rowData
+     * @param array $errors
+     * @param boolean $isValid
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     */
+    public function testValidateRowForUpdateGlobalCustomer(array $rowData, array $errors, $isValid = false)
+    {
         if ($isValid) {
             $this->assertTrue($this->_model->validateRow($rowData, 0));
         } else {

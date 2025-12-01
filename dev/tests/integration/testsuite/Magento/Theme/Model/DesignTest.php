@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Theme\Model;
 
@@ -211,7 +211,7 @@ class DesignTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expectedDesign, $actualDesign);
     }
 
-    public function loadChangeTimezoneDataProvider()
+    public static function loadChangeTimezoneDataProvider()
     {
         /**
          * Depending on the current UTC time, either UTC-12:00, or UTC+12:00 timezone points to the different date.

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 
 declare(strict_types=1);
@@ -12,6 +12,7 @@ use Magento\Framework\App\CacheInterface;
 use Magento\Framework\App\FeedFactoryInterface;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\Rss\DataProviderInterface;
+use Magento\Framework\DataObject\IdentityInterface;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\RuntimeException;
 use Magento\Framework\Serialize\SerializerInterface;
@@ -53,8 +54,8 @@ class Rss
      */
     public function __construct(
         CacheInterface $cache,
-        SerializerInterface $serializer = null,
-        FeedFactoryInterface $feedFactory = null
+        ?SerializerInterface $serializer = null,
+        ?FeedFactoryInterface $feedFactory = null
     ) {
         $this->cache = $cache;
         $this->serializer = $serializer ?: ObjectManager::getInstance()->get(SerializerInterface::class);
@@ -83,10 +84,24 @@ class Rss
         $serializedData = $this->serializer->serialize($this->dataProvider->getRssData());
 
         if ($cacheKey && $cacheLifeTime) {
-            $this->cache->save($serializedData, $cacheKey, ['rss'], $cacheLifeTime);
+            $this->cache->save($serializedData, $cacheKey, $this->getCacheTags(), $cacheLifeTime);
         }
 
         return $this->serializer->unserialize($serializedData);
+    }
+
+    /**
+     * Returns cache tags
+     *
+     * @return array|string[]
+     */
+    private function getCacheTags()
+    {
+        $tags = ['rss'];
+        if ($this->dataProvider instanceof IdentityInterface) {
+            $tags = array_merge($tags, $this->dataProvider->getIdentities());
+        }
+        return $tags;
     }
 
     /**

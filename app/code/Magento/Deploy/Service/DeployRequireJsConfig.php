@@ -1,12 +1,13 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Deploy\Service;
 
 use Magento\Framework\Locale\ResolverInterfaceFactory;
 use Magento\Framework\Locale\ResolverInterface;
+use Magento\Framework\View\Asset\ConfigInterface;
 use Magento\RequireJs\Model\FileManagerFactory;
 use Magento\Framework\View\DesignInterfaceFactory;
 use Magento\Framework\View\Design\Theme\ListInterface;
@@ -18,10 +19,7 @@ use Magento\Framework\RequireJs\ConfigFactory;
  */
 class DeployRequireJsConfig
 {
-    /**
-     * Default jobs amount
-     */
-    const DEFAULT_JOBS_AMOUNT = 4;
+    public const DEFAULT_JOBS_AMOUNT = 4;
 
     /**
      * @var ListInterface
@@ -54,6 +52,11 @@ class DeployRequireJsConfig
     private $localeFactory;
 
     /**
+     * @var ConfigInterface
+     */
+    private $bundleConfig;
+
+    /**
      * DeployRequireJsConfig constructor
      *
      * @param ListInterface $themeList
@@ -62,6 +65,7 @@ class DeployRequireJsConfig
      * @param FileManagerFactory $fileManagerFactory
      * @param ConfigFactory $requireJsConfigFactory
      * @param ResolverInterfaceFactory $localeFactory
+     * @param ConfigInterface $bundleConfig
      */
     public function __construct(
         ListInterface $themeList,
@@ -69,7 +73,8 @@ class DeployRequireJsConfig
         RepositoryFactory $assetRepoFactory,
         FileManagerFactory $fileManagerFactory,
         ConfigFactory $requireJsConfigFactory,
-        ResolverInterfaceFactory $localeFactory
+        ResolverInterfaceFactory $localeFactory,
+        ConfigInterface $bundleConfig
     ) {
         $this->themeList = $themeList;
         $this->designFactory = $designFactory;
@@ -77,9 +82,12 @@ class DeployRequireJsConfig
         $this->fileManagerFactory = $fileManagerFactory;
         $this->requireJsConfigFactory = $requireJsConfigFactory;
         $this->localeFactory = $localeFactory;
+        $this->bundleConfig = $bundleConfig;
     }
 
     /**
+     * Deploy RequireJS configuration for a specific theme and locale
+     *
      * @param string $areaCode
      * @param string $themePath
      * @param string $localeCode
@@ -110,8 +118,11 @@ class DeployRequireJsConfig
             ]
         );
 
+        if ($this->bundleConfig->isBundlingJsFiles()) {
+            $fileManager->createStaticJsAsset();
+            $fileManager->createRequireJsMixinsAsset();
+        }
         $fileManager->createRequireJsConfigAsset();
-
         $fileManager->createMinResolverAsset();
 
         return true;

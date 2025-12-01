@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Sales\Block\Adminhtml\Order\Create;
 
@@ -39,7 +39,7 @@ class HeaderTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expectedResult, $this->_block->toHtml());
     }
 
-    public function toHtmlDataProvider()
+    public static function toHtmlDataProvider()
     {
         $customerIdFromFixture = 1;
         $defaultStoreView = 1;

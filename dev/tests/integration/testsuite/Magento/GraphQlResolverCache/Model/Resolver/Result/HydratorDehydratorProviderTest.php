@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2023 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -187,8 +187,6 @@ class HydratorDehydratorProviderTest extends TestCase
             . 'Magento\GraphQlResolverCache\Model\Resolver\Result\HydratorInterface.');
         $testModelDehydrator = $this->getMockBuilder(DehydratorInterface::class)
             ->disableOriginalConstructor()
-            ->setMockClassName('TestResolverModelDehydrator')
-            ->onlyMethods(['dehydrate'])
             ->getMock();
         $this->objectManager->addSharedInstance($testModelDehydrator, 'TestResolverModelDehydrator');
 
@@ -223,7 +221,6 @@ class HydratorDehydratorProviderTest extends TestCase
             . 'Magento\GraphQlResolverCache\Model\Resolver\Result\DehydratorInterface.');
         $hydrator = $this->getMockBuilder(HydratorInterface::class)
             ->disableOriginalConstructor()
-            ->setMockClassName('TestResolverModelHydrator')
             ->getMock();
         $this->objectManager->addSharedInstance($hydrator, 'TestResolverModelHydrator');
 

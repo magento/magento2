@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -42,7 +42,7 @@ class RouterTest extends TestCase
     {
         $this->actionFactoryMock = $this->getMockBuilder(ActionFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
 
         $this->actionListMock = $this->getMockBuilder(ActionList::class)
@@ -67,7 +67,7 @@ class RouterTest extends TestCase
         $identifier = 'test';
 
         $requestMock = $this->getMockBuilder(RequestInterface::class)
-            ->setMethods(['getPathInfo'])
+            ->addMethods(['getPathInfo'])
             ->getMockForAbstractClass();
         $requestMock->expects($this->once())
             ->method('getPathInfo')
@@ -84,7 +84,7 @@ class RouterTest extends TestCase
         $identifier = 'robots.txt';
 
         $requestMock = $this->getMockBuilder(RequestInterface::class)
-            ->setMethods(['getPathInfo'])
+            ->addMethods(['getPathInfo'])
             ->getMockForAbstractClass();
         $requestMock->expects($this->once())
             ->method('getPathInfo')
@@ -108,7 +108,7 @@ class RouterTest extends TestCase
         $actionClassName = Index::class;
 
         $requestMock = $this->getMockBuilder(RequestInterface::class)
-            ->setMethods(['getPathInfo'])
+            ->addMethods(['getPathInfo'])
             ->getMockForAbstractClass();
         $requestMock->expects($this->once())
             ->method('getPathInfo')

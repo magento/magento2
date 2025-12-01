@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2021 Adobe
+ * All Rights Reserved.
  */
 
 declare(strict_types=1);
@@ -14,13 +14,17 @@ class JwtUserContext implements UserContextInterface
 {
     /**
      * @var int|null
+     *
+     * phpcs:disable Magento2.Commenting.ClassPropertyPHPDocFormatting
      */
-    private $userId;
+    private readonly ?int $userId;
 
     /**
      * @var int|null
+     *
+     * phpcs:disable Magento2.Commenting.ClassPropertyPHPDocFormatting
      */
-    private $userType;
+    private readonly ?int $userType;
 
     /**
      * @param int|null $userId

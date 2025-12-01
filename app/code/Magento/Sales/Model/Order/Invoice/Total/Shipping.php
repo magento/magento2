@@ -1,14 +1,12 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Sales\Model\Order\Invoice\Total;
 
 /**
  * Order invoice shipping total calculation model
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Shipping extends AbstractTotal
 {

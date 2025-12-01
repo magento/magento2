@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -68,10 +68,8 @@ class CollectionTest extends TestCase
     protected function setUp(): void
     {
         $this->entityFactoryMock = $this->createMock(EntityFactory::class);
-        $this->fetchStrategyMock = $this->getMockForAbstractClass(
-            FetchStrategyInterface::class
-        );
-        $this->eventManagerMock = $this->getMockForAbstractClass(ManagerInterface::class);
+        $this->fetchStrategyMock = $this->createMock(FetchStrategyInterface::class);
+        $this->eventManagerMock = $this->createMock(ManagerInterface::class);
 
         $this->selectMock = $this->createMock(Select::class);
         $this->connectionMock = $this->createMock(Mysql::class);
@@ -80,7 +78,7 @@ class CollectionTest extends TestCase
             ->willReturn($this->selectMock);
 
         $this->resourceMock = $this->createMock(AbstractDb::class);
-        $this->resourceMock->expects($this->any())->method('getConnection')->willReturn(
+        $this->resourceMock->method('getConnection')->willReturn(
             $this->connectionMock
         );
 

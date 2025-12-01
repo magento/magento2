@@ -1,12 +1,14 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2023 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\ImportExport\Test\Unit\Plugin;
 
+use Magento\Framework\App\Cache\TypeListInterface;
+use Magento\Framework\App\RequestInterface;
 use Magento\Framework\Indexer\DeferredCacheCleanerInterface;
 use Magento\ImportExport\Model\Import;
 use Magento\ImportExport\Plugin\DeferCacheCleaningUntilImportIsComplete;
@@ -26,13 +28,29 @@ class DeferCacheCleaningUntilImportIsCompleteTest extends TestCase
     private $cacheCleaner;
 
     /**
+     * @var TypeListInterface|MockObject
+     */
+    private $cacheTypeList;
+
+    /**
+     * @var RequestInterface|MockObject
+     */
+    private $request;
+
+    /**
      * @inheritdoc
      */
     protected function setUp(): void
     {
         parent::setUp();
         $this->cacheCleaner = $this->getMockForAbstractClass(DeferredCacheCleanerInterface::class);
-        $this->plugin = new DeferCacheCleaningUntilImportIsComplete($this->cacheCleaner);
+        $this->cacheTypeList = $this->getMockForAbstractClass(TypeListInterface::class);
+        $this->request = $this->createMock(RequestInterface::class);
+        $this->plugin = new DeferCacheCleaningUntilImportIsComplete(
+            $this->cacheCleaner,
+            $this->cacheTypeList,
+            $this->request
+        );
     }
 
     /**
@@ -52,6 +70,11 @@ class DeferCacheCleaningUntilImportIsCompleteTest extends TestCase
     {
         $this->cacheCleaner->expects($this->once())->method('flush');
         $subject = $this->createMock(Import::class);
+        // Assuming 'behavior' and 'entity' are the parameter names
+        $this->request->expects($this->any())->method('getParam')->willReturnMap([
+            ['behavior', null, 'add_update'],
+            ['entity', null, 'customer'],
+        ]);
         $result = $this->plugin->afterImportSource($subject, true);
         $this->assertTrue($result);
     }

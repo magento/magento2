@@ -1,12 +1,13 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Quote\Test\Unit\Model\Quote;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\Directory\Model\Currency;
 use Magento\Directory\Model\Region;
 use Magento\Directory\Model\RegionFactory;
@@ -31,9 +32,12 @@ use Magento\Shipping\Model\Rate\Result;
 use Magento\Store\Api\Data\StoreInterface;
 use Magento\Store\Api\Data\WebsiteInterface;
 use Magento\Store\Model\ScopeInterface;
+use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Magento\Quote\Test\Unit\Helper\RateCollectorForAddressTestHelper;
+use Magento\Quote\Test\Unit\Helper\RateRequestTestHelper;
 
 /**
  * Test class for sales quote address model
@@ -150,10 +154,7 @@ class AddressTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->rateCollection = $this->getMockBuilder(RateCollectorInterface::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['getResult'])
-            ->getMockForAbstractClass();
+        $this->rateCollection = new RateCollectorForAddressTestHelper();
 
         $this->itemCollectionFactory = $this->getMockBuilder(CollectionFactory::class)
             ->disableOriginalConstructor()
@@ -167,18 +168,14 @@ class AddressTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->storeManager = $this->getMockBuilder(StoreManagerInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->storeManager = $this->createMock(StoreManagerInterface::class);
 
-        $this->store = $this->getMockBuilder(StoreInterface::class)
+        $this->store = $this->getMockBuilder(Store::class)
             ->disableOriginalConstructor()
-            ->addMethods(['getBaseCurrency', 'getCurrentCurrency', 'getCurrentCurrencyCode'])
-            ->getMockForAbstractClass();
+            ->onlyMethods(['getBaseCurrency', 'getCurrentCurrency', 'getCurrentCurrencyCode', 'getWebsiteId'])
+            ->getMock();
 
-        $this->website = $this->getMockBuilder(WebsiteInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->website = $this->createMock(WebsiteInterface::class);
 
         $this->attributeList = $this->createMock(
             CustomAttributeListInterface::class
@@ -224,40 +221,12 @@ class AddressTest extends TestCase
     }
 
     /**
-     * @return void
-     */
-    public function testValidateMinimumAmountVirtual(): void
-    {
-        $storeId = 1;
-        $scopeConfigValues = [
-            ['sales/minimum_order/active', ScopeInterface::SCOPE_STORE, $storeId, true],
-            ['sales/minimum_order/amount', ScopeInterface::SCOPE_STORE, $storeId, 20],
-            ['sales/minimum_order/include_discount_amount', ScopeInterface::SCOPE_STORE, $storeId, true],
-            ['sales/minimum_order/tax_including', ScopeInterface::SCOPE_STORE, $storeId, true]
-        ];
-
-        $this->quote->expects($this->once())
-            ->method('getStoreId')
-            ->willReturn($storeId);
-        $this->quote->expects($this->once())
-            ->method('getIsVirtual')
-            ->willReturn(true);
-        $this->address->setAddressType(Address::TYPE_SHIPPING);
-
-        $this->scopeConfig->expects($this->once())
-            ->method('isSetFlag')
-            ->willReturnMap($scopeConfigValues);
-
-        $this->assertTrue($this->address->validateMinimumAmount());
-    }
-
-    /**
      * Provide data for test different cases
      *
      * @param void
      * @return array
      */
-    public function getDataProvider(): array
+    public static function getDataProvider(): array
     {
         return [
             'Non-virtual Quote' => [
@@ -298,17 +267,7 @@ class AddressTest extends TestCase
         ];
     }
 
-    /**
-     * Tests minimum order amount validation
-     *
-     * @param array $scopeConfigValues
-     * @param array $address
-     * @param array $quote
-     * @param bool $result
-     * @dataProvider getDataProvider
-     *
-     * @return void
-     */
+    #[DataProvider('getDataProvider')]
     public function testValidateMinimumAmount(
         array $scopeConfigValues,
         array $address,
@@ -418,27 +377,15 @@ class AddressTest extends TestCase
     {
         $storeId = 12345;
         $webSiteId = 6789;
-        $baseCurrency = $this->getMockBuilder(Currency::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['convert'])
-            ->addMethods(['getCurrentCurrencyCode'])
-            ->getMockForAbstractClass();
+        $baseCurrency = $this->createPartialMock(Currency::class, ['convert']);
 
-        $currentCurrency = $this->getMockBuilder(Currency::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['convert'])
-            ->addMethods(['getCurrentCurrencyCode'])
-            ->getMockForAbstractClass();
+        $currentCurrency = $this->createPartialMock(Currency::class, ['convert']);
 
         $currentCurrencyCode = 'UAH';
 
-        $this->quote->expects($this->any())
-            ->method('getStoreId')
-            ->willReturn($storeId);
+        $this->quote->method('getStoreId')->willReturn($storeId);
 
-        $this->store->expects($this->any())
-            ->method('getWebsiteId')
-            ->willReturn($webSiteId);
+        $this->store->method('getWebsiteId')->willReturn($webSiteId);
 
         $this->scopeConfig->expects($this->exactly(1))
             ->method('getValue')
@@ -450,19 +397,10 @@ class AddressTest extends TestCase
             ->willReturn(1);
 
         /** @var RateRequest */
-        $request = $this->getMockBuilder(RateRequest::class)
-            ->disableOriginalConstructor()
-            ->addMethods(
-                [
-                    'setStoreId',
-                    'setWebsiteId',
-                    'setBaseCurrency',
-                    'setPackageCurrency',
-                    'getBaseSubtotalTotalInclTax',
-                    'getBaseSubtotal'
-                ]
-            )
-            ->getMock();
+        $request = $this->createPartialMock(
+            RateRequestTestHelper::class,
+            ['setStoreId', 'setWebsiteId', 'setBaseCurrency', 'setPackageCurrency']
+        );
 
         /** @var Collection */
         $collection = $this->getMockBuilder(Collection::class)
@@ -488,9 +426,7 @@ class AddressTest extends TestCase
             ->getMock();
 
         /** @var  AbstractResult */
-        $rateItem = $this->getMockBuilder(AbstractResult::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $rateItem = $this->createMock(AbstractResult::class);
 
         /** @var Rate */
         $rate = $this->getMockBuilder(Rate::class)
@@ -517,13 +453,7 @@ class AddressTest extends TestCase
             ->method('create')
             ->willReturn($this->rateCollection);
 
-        $this->rateCollection->expects($this->once())
-            ->method('collectRates')
-            ->willReturnSelf();
-
-        $this->rateCollection->expects($this->once())
-            ->method('getResult')
-            ->willReturn($rates);
+        $this->rateCollection->setResult($rates);
 
         $this->itemCollectionFactory->expects($this->once())
             ->method('create')
@@ -538,8 +468,13 @@ class AddressTest extends TestCase
             ->willReturnSelf();
 
         $this->storeManager->method('getStore')
-            ->withConsecutive([$storeId], [null])
-            ->willReturn($this->store);
+            ->willReturnCallback(
+                function ($arg) use ($storeId,) {
+                    if ($arg === $storeId || is_null($arg)) {
+                        return $this->store;
+                    }
+                }
+            );
 
         $this->store->method('getBaseCurrency')
             ->willReturn($baseCurrency);

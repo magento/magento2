@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -88,18 +88,13 @@ class PageTest extends TestCase
     {
         $this->_factoryMock
             ->method('create')
-            ->withConsecutive(
-                [
-                    ['iterator' => $this->_menuModel->getIterator()]
-                ],
-                [
-                    ['iterator' => $this->_menuSubModel->getIterator()]
-                ]
-            )
-            ->willReturnOnConsecutiveCalls(
-                new Iterator($this->_menuModel->getIterator()),
-                new Iterator($this->_menuSubModel->getIterator())
-            );
+            ->willReturnCallback(function ($arg1) {
+                if ($arg1['iterator'] == $this->_menuModel->getIterator()) {
+                    return new Iterator($this->_menuModel->getIterator());
+                } elseif ($arg1['iterator'] == $this->_menuSubModel->getIterator()) {
+                    return new Iterator($this->_menuSubModel->getIterator());
+                }
+            });
 
         $nonEscapableNbspChar = html_entity_decode('&#160;', ENT_NOQUOTES, 'UTF-8');
         $paddingString = str_repeat($nonEscapableNbspChar, 4);

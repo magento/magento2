@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Review\Model\ResourceModel\Review;
@@ -10,8 +10,6 @@ use Magento\Framework\Model\AbstractModel;
 
 /**
  * Review summary resource model
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Summary extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Config\Console\Command;
 
@@ -126,8 +126,7 @@ class ConfigShowCommand extends Command
             ?: ObjectManager::getInstance()->get(PathValidatorFactory::class);
         $this->emulatedAreaProcessor = $emulatedAreaProcessor
             ?: ObjectManager::getInstance()->get(EmulatedAdminhtmlAreaProcessor::class);
-        $this->localeEmulator = $localeEmulator
-            ?: ObjectManager::getInstance()->get(LocaleEmulatorInterface::class);
+        $this->localeEmulator = $localeEmulator;
     }
 
     /**
@@ -239,7 +238,7 @@ class ConfigShowCommand extends Command
     {
         if (!is_array($configValue)) {
             $value = $this->valueProcessor->process($this->scope, $this->scopeCode, $configValue, $configPath);
-            $output->writeln($this->inputPath === $configPath ? $value : sprintf("%s - %s", $configPath, $value));
+            $output->writeln($this->inputPath === $configPath ? [$value] : sprintf("%s - %s", $configPath, $value));
         } elseif (is_array($configValue)) {
             foreach ($configValue as $name => $value) {
                 $childPath = empty($configPath) ? $name : ($configPath . '/' . $name);

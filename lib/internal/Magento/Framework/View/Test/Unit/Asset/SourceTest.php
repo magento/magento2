@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -207,7 +207,7 @@ class SourceTest extends TestCase
     /**
      * @return array
      */
-    public function getContentTypeDataProvider(): array
+    public static function getContentTypeDataProvider(): array
     {
         return [
             ['', ''],
@@ -232,7 +232,7 @@ class SourceTest extends TestCase
     /**
      * @return array
      */
-    public function getFileDataProvider(): array
+    public static function getFileDataProvider(): array
     {
         return [
             ['/root/some/file.ext', 'file.ext', 'processed', false, true],

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -14,9 +14,6 @@ use Magento\Quote\Model\ResourceModel\Quote\CollectionFactory;
 use Magento\Store\Api\Data\StoreInterface;
 use Magento\Store\Model\ScopeInterface;
 
-/**
- * Class ExpiredQuotesCollection
- */
 class ExpiredQuotesCollection
 {
     /**
@@ -71,8 +68,8 @@ class ExpiredQuotesCollection
 
         /** @var $quotes Collection */
         $quotes = $this->quoteCollectionFactory->create();
-        $quotes->addFieldToFilter('store_id', $store->getId());
-        $quotes->addFieldToFilter('updated_at', ['to' => date("Y-m-d", time() - $lifetime)]);
+        $quotes->addFieldToFilter('main_table.store_id', $store->getId());
+        $quotes->addFieldToFilter('main_table.updated_at', ['to' => date("Y-m-d", time() - $lifetime)]);
 
         return $quotes;
     }

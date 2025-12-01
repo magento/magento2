@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -189,7 +189,7 @@ class AmountTest extends TestCase
     /**
      * @return array
      */
-    public function dataProviderToHtmlSkipAdjustments()
+    public static function dataProviderToHtmlSkipAdjustments()
     {
         return [
             [false, null, 'html'],

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright 2024 Adobe
+ * All Rights Reserved.
+ */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <!--Insert image from Media Gallery -->
+    <actionGroup name="InsertImageFromMediaGalleryFromCmsActionGroup">
+        <arguments>
+            <argument name="imageFileName" defaultValue="magento.jpg" type="string"/>
+            <argument name="imageFilePath" defaultValue="magento.jpg" type="string"/>
+        </arguments>
+        <!--Insert image-->
+        <waitForElementVisible selector="{{MediaGallerySection.UploadImageSelector}}" stepKey="waitAttacheButton"/>
+        <attachFile selector="{{MediaGallerySection.UploadImageWithUploaderId}}" userInput="{{imageFilePath}}" stepKey="attachFile"/>
+        <waitForPageLoad stepKey="waitFileUpload"/>
+        <waitForElementVisible selector="{{MediaGallerySection.imageBlockByName(imageFileName)}}" stepKey="waitImage"/>
+        <conditionalClick selector="{{MediaGallerySection.imageBlockByName(imageFileName)}}" dependentSelector="{{MediaGallerySection.imageSelected(imageFileName)}}" visible="false" stepKey="clickOnImage"/>
+        <waitForElementVisible selector="{{MediaGallerySection.InsertFile}}" stepKey="waitForAddSelectButton"/>
+        <click selector="{{MediaGallerySection.InsertFile}}" stepKey="clickSelectImage"/>
+        <waitForPageLoad time="30" stepKey="waitForPageLoad"/>
+    </actionGroup>
+</actionGroups>

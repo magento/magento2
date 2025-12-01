@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Theme\Model\Design\Backend;
 
@@ -88,7 +88,7 @@ class ExceptionsTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function saveExceptionDataProvider()
+    public static function saveExceptionDataProvider()
     {
         $result = [
             [['search' => 'Opera', 'value' => 'Magento/blank'], '/Opera/i'],
@@ -119,7 +119,7 @@ class ExceptionsTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function saveWrongExceptionDataProvider()
+    public static function saveWrongExceptionDataProvider()
     {
         $result = [
             [

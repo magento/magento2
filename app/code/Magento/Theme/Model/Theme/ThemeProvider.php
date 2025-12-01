@@ -1,19 +1,21 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Theme\Model\Theme;
 
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Framework\View\Design\Theme\ListInterface;
 use Magento\Framework\App\DeploymentConfig;
+use Magento\Framework\View\Design\Theme\ThemeProviderInterface;
 
 /**
  * Provide data for theme grid and for theme edit page
  */
-class ThemeProvider implements \Magento\Framework\View\Design\Theme\ThemeProviderInterface
+class ThemeProvider implements ThemeProviderInterface, ResetAfterRequestInterface
 {
     /**
      * @var \Magento\Theme\Model\ResourceModel\Theme\CollectionFactory
@@ -31,24 +33,28 @@ class ThemeProvider implements \Magento\Framework\View\Design\Theme\ThemeProvide
     protected $cache;
 
     /**
-     * @var \Magento\Framework\View\Design\ThemeInterface[]
+     * @var \Magento\Framework\View\Design\ThemeInterface[]|null
      */
     private $themes;
 
     /**
-     * @var ListInterface
+     * @var ListInterface|null
      */
     private $themeList;
 
     /**
      * @var DeploymentConfig
+     *
+     * phpcs:disable Magento2.Commenting.ClassPropertyPHPDocFormatting
      */
-    private $deploymentConfig;
+    private readonly DeploymentConfig $deploymentConfig;
 
     /**
      * @var Json
+     *
+     * phpcs:disable Magento2.Commenting.ClassPropertyPHPDocFormatting
      */
-    private $serializer;
+    private readonly Json $serializer;
 
     /**
      * ThemeProvider constructor.
@@ -63,8 +69,8 @@ class ThemeProvider implements \Magento\Framework\View\Design\Theme\ThemeProvide
         \Magento\Theme\Model\ResourceModel\Theme\CollectionFactory $collectionFactory,
         \Magento\Theme\Model\ThemeFactory $themeFactory,
         \Magento\Framework\App\CacheInterface $cache,
-        Json $serializer = null,
-        DeploymentConfig $deploymentConfig = null
+        ?Json $serializer = null,
+        ?DeploymentConfig $deploymentConfig = null
     ) {
         $this->collectionFactory = $collectionFactory;
         $this->themeFactory = $themeFactory;
@@ -182,5 +188,14 @@ class ThemeProvider implements \Magento\Framework\View\Design\Theme\ThemeProvide
             $this->themeList = ObjectManager::getInstance()->get(ListInterface::class);
         }
         return $this->themeList;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        $this->themeList = null;
+        $this->themes = null;
     }
 }

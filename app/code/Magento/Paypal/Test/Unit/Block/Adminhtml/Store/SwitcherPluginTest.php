@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -71,7 +71,7 @@ class SwitcherPluginTest extends TestCase
     /**
      * @return array
      */
-    public function beforeGetUrlDataProvider()
+    public static function beforeGetUrlDataProvider()
     {
         return [
             ['any value', [ConfigStructurePlugin::REQUEST_PARAM_COUNTRY => null]],

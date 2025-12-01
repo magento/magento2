@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 
 declare(strict_types=1);
@@ -95,7 +95,7 @@ class SalesEventOrderItemToQuoteItemObserverTest extends TestCase
     {
         $this->messageFactoryMock = $this->getMockBuilder(MessageFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
         $this->giftMessageHelperMock = $this->createMock(MessageHelper::class);
         $this->observerMock = $this->createMock(Observer::class);

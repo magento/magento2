@@ -2,8 +2,8 @@
 /**
  * \Magento\Framework\DB\Helper\AbstractHelper test case
  *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework\DB\Test\Unit\Helper;
 
@@ -85,7 +85,7 @@ class AbstractHelperTest extends TestCase
     /**
      * @return array
      */
-    public function escapeLikeValueDataProvider()
+    public static function escapeLikeValueDataProvider()
     {
         return [
             [

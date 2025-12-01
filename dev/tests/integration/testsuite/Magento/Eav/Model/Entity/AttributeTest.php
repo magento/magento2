@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -89,7 +89,7 @@ class AttributeTest extends TestCase
      *
      * @return array
      */
-    public function beforeSaveDataProvider()
+    public static function beforeSaveDataProvider()
     {
         return [
             ['21/07/18', 'datetime', 'date', 'en_AU', '2018-07-21 00:00:00'],
@@ -128,7 +128,7 @@ class AttributeTest extends TestCase
      *
      * @return array
      */
-    public function beforeSaveErrorDataDataProvider()
+    public static function beforeSaveErrorDataDataProvider()
     {
         return [
             'wrong date for Australia' => ['32/38', 'datetime', 'en_AU', 'Invalid default date'],

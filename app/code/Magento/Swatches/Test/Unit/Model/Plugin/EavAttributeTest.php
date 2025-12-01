@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -21,6 +21,7 @@ use Magento\Swatches\Model\SwatchAttributeType;
 use Magento\Swatches\Model\SwatchFactory;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\Framework\Exception\InputException;
 
 /**
@@ -29,6 +30,7 @@ use Magento\Framework\Exception\InputException;
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.TooManyPublicMethods)
  * @SuppressWarnings(PHPMD.ExcessiveClassLength)
+ * @SuppressWarnings(PHPMD.CyclomaticComplexity)
  */
 class EavAttributeTest extends TestCase
 {
@@ -287,7 +289,7 @@ class EavAttributeTest extends TestCase
     /**
      * @return array
      */
-    public function visualSwatchProvider()
+    public static function visualSwatchProvider()
     {
         return [
             [Swatch::SWATCH_TYPE_EMPTY, 'black', 'white'],
@@ -302,9 +304,8 @@ class EavAttributeTest extends TestCase
      * @param int $swatchType
      * @param string $swatch1
      * @param string $swatch2
-     *
-     * @dataProvider visualSwatchProvider
      */
+    #[DataProvider('visualSwatchProvider')]
     public function testAfterAfterSaveVisualSwatch(int $swatchType, string $swatch1, string $swatch2)
     {
         $options = self::VISUAL_SWATCH_OPTIONS;
@@ -330,30 +331,35 @@ class EavAttributeTest extends TestCase
 
         $this->collectionMock->expects($this->exactly(4))
             ->method('addFieldToFilter')
-            ->withConsecutive(
-                ['option_id', self::OPTION_1_ID],
-                ['store_id', self::ADMIN_STORE_ID],
-                ['option_id', self::OPTION_2_ID],
-                ['store_id', self::ADMIN_STORE_ID]
-            )
-            ->willReturnSelf();
+            ->willReturnCallback(function ($arg1, $arg2) {
+                if ($arg1 == 'option_id' && $arg2 === self::OPTION_1_ID || $arg2 == self::OPTION_2_ID) {
+                    return $this->collectionMock;
+                } elseif ($arg1 == 'store_id' && $arg2 == self::ADMIN_STORE_ID) {
+                    return $this->collectionMock;
+                }
+            });
 
+        $callCount = 0;
         $this->collectionMock->expects($this->exactly(2))
             ->method('getFirstItem')
-            ->willReturnOnConsecutiveCalls(
-                $this->createSwatchMock(
-                    (string)$swatchType,
-                    $swatch1 ?: null,
-                    1
-                ),
-                $this->createSwatchMock(
-                    (string)$swatchType,
-                    $swatch2 ?: null,
-                    null,
-                    self::OPTION_2_ID,
-                    self::ADMIN_STORE_ID
-                )
-            );
+            ->willReturnCallback(function () use (&$callCount, $swatchType, $swatch1, $swatch2) {
+                $callCount++;
+                if ($callCount === 1) {
+                    return $this->createSwatchMock(
+                        (string)$swatchType,
+                        $swatch1 ?: null,
+                        1
+                    );
+                } else {
+                    return $this->createSwatchMock(
+                        (string)$swatchType,
+                        $swatch2 ?: null,
+                        null,
+                        self::OPTION_2_ID,
+                        self::ADMIN_STORE_ID
+                    );
+                }
+            });
         $this->collectionFactoryMock->expects($this->exactly(2))
             ->method('create')
             ->willReturn($this->collectionMock);
@@ -387,62 +393,75 @@ class EavAttributeTest extends TestCase
 
         $this->collectionMock->expects($this->exactly(12))
             ->method('addFieldToFilter')
-            ->withConsecutive(
-                ['option_id', self::OPTION_1_ID],
-                ['store_id', self::ADMIN_STORE_ID],
-                ['option_id', self::OPTION_1_ID],
-                ['store_id', self::DEFAULT_STORE_ID],
-                ['option_id', self::OPTION_1_ID],
-                ['store_id', self::SECOND_STORE_ID],
-                ['option_id', self::OPTION_2_ID],
-                ['store_id', self::ADMIN_STORE_ID],
-                ['option_id', self::OPTION_2_ID],
-                ['store_id', self::DEFAULT_STORE_ID],
-                ['option_id', self::OPTION_2_ID],
-                ['store_id', self::SECOND_STORE_ID]
-            )
-            ->willReturnSelf();
+            ->willReturnCallback(function ($arg1, $arg2) {
+                switch ($arg1) {
+                    case 'option_id':
+                        if ($arg2 == self::OPTION_1_ID || $arg2 == self::OPTION_2_ID) {
+                            return $this->collectionMock;
+                        }
+                        break;
+                    case 'store_id':
+                        if ($arg2 == self::ADMIN_STORE_ID ||
+                            $arg2 == self::DEFAULT_STORE_ID ||
+                            $arg2 == self::SECOND_STORE_ID) {
+                            return $this->collectionMock;
+                        }
+                        break;
+                }
+            });
 
+        $callCount = 0;
         $this->collectionMock->expects($this->exactly(6))
             ->method('getFirstItem')
-            ->willReturnOnConsecutiveCalls(
-                $this->createSwatchMock(
-                    (string)Swatch::SWATCH_TYPE_TEXTUAL,
-                    self::TEXT_SWATCH_OPTIONS['value'][self::OPTION_1_ID][self::ADMIN_STORE_ID],
-                    1
-                ),
-                $this->createSwatchMock(
-                    (string)Swatch::SWATCH_TYPE_TEXTUAL,
-                    self::TEXT_SWATCH_OPTIONS['value'][self::OPTION_1_ID][self::DEFAULT_STORE_ID],
-                    1
-                ),
-                $this->createSwatchMock(
-                    (string)Swatch::SWATCH_TYPE_TEXTUAL,
-                    self::TEXT_SWATCH_OPTIONS['value'][self::OPTION_1_ID][self::SECOND_STORE_ID],
-                    1
-                ),
-                $this->createSwatchMock(
-                    (string)Swatch::SWATCH_TYPE_TEXTUAL,
-                    self::TEXT_SWATCH_OPTIONS['value'][self::NEW_OPTION_KEY][self::ADMIN_STORE_ID],
-                    null,
-                    self::OPTION_2_ID,
-                    self::ADMIN_STORE_ID
-                ),
-                $this->createSwatchMock(
-                    (string)Swatch::SWATCH_TYPE_TEXTUAL,
-                    self::TEXT_SWATCH_OPTIONS['value'][self::NEW_OPTION_KEY][self::DEFAULT_STORE_ID],
-                    null,
-                    self::OPTION_2_ID,
-                    self::DEFAULT_STORE_ID
-                ),
-                $this->createSwatchMock(
-                    (string)Swatch::SWATCH_TYPE_TEXTUAL,
-                    self::TEXT_SWATCH_OPTIONS['value'][self::NEW_OPTION_KEY][self::SECOND_STORE_ID],
-                    null,
-                    self::OPTION_2_ID,
-                    self::SECOND_STORE_ID
-                )
-            );
+            ->willReturnCallback(function () use (&$callCount) {
+                $callCount++;
+                switch ($callCount) {
+                    case 1:
+                        return $this->createSwatchMock(
+                            (string)Swatch::SWATCH_TYPE_TEXTUAL,
+                            self::TEXT_SWATCH_OPTIONS['value'][self::OPTION_1_ID][self::ADMIN_STORE_ID],
+                            1
+                        );
+                    case 2:
+                        return $this->createSwatchMock(
+                            (string)Swatch::SWATCH_TYPE_TEXTUAL,
+                            self::TEXT_SWATCH_OPTIONS['value'][self::OPTION_1_ID][self::DEFAULT_STORE_ID],
+                            1
+                        );
+                    case 3:
+                        return $this->createSwatchMock(
+                            (string)Swatch::SWATCH_TYPE_TEXTUAL,
+                            self::TEXT_SWATCH_OPTIONS['value'][self::OPTION_1_ID][self::SECOND_STORE_ID],
+                            1
+                        );
+                    case 4:
+                        return $this->createSwatchMock(
+                            (string)Swatch::SWATCH_TYPE_TEXTUAL,
+                            self::TEXT_SWATCH_OPTIONS['value'][self::NEW_OPTION_KEY][self::ADMIN_STORE_ID],
+                            null,
+                            self::OPTION_2_ID,
+                            self::ADMIN_STORE_ID
+                        );
+                    case 5:
+                        return $this->createSwatchMock(
+                            (string)Swatch::SWATCH_TYPE_TEXTUAL,
+                            self::TEXT_SWATCH_OPTIONS['value'][self::NEW_OPTION_KEY][self::DEFAULT_STORE_ID],
+                            null,
+                            self::OPTION_2_ID,
+                            self::DEFAULT_STORE_ID
+                        );
+                    case 6:
+                        return $this->createSwatchMock(
+                            (string)Swatch::SWATCH_TYPE_TEXTUAL,
+                            self::TEXT_SWATCH_OPTIONS['value'][self::NEW_OPTION_KEY][self::SECOND_STORE_ID],
+                            null,
+                            self::OPTION_2_ID,
+                            self::SECOND_STORE_ID
+                        );
+                    default:
+                        return null;
+                }
+            });
         $this->collectionFactoryMock->expects($this->exactly(6))
             ->method('create')
             ->willReturn($this->collectionMock);
@@ -477,15 +496,17 @@ class EavAttributeTest extends TestCase
 
         $this->collectionMock->expects($this->exactly(2))
             ->method('addFieldToFilter')
-            ->withConsecutive(
-                ['option_id', self::OPTION_2_ID],
-                ['store_id', self::ADMIN_STORE_ID]
-            )
-            ->willReturnSelf();
+            ->willReturnCallback(function ($arg1, $arg2) {
+                if ($arg1 == 'option_id' && $arg2 == self::OPTION_2_ID) {
+                    return $this->collectionMock;
+                } elseif ($arg1 == 'store_id' && $arg2 == self::ADMIN_STORE_ID) {
+                    return $this->collectionMock;
+                }
+            });
 
         $this->collectionMock->expects($this->exactly(1))
             ->method('getFirstItem')
-            ->willReturnOnConsecutiveCalls(
+            ->willReturn(
                 $this->createSwatchMock(
                     (string)Swatch::SWATCH_TYPE_VISUAL_COLOR,
                     self::VISUAL_SWATCH_OPTIONS['value'][self::NEW_OPTION_KEY],
@@ -529,41 +550,49 @@ class EavAttributeTest extends TestCase
 
         $this->collectionMock->expects($this->exactly(6))
             ->method('addFieldToFilter')
-            ->withConsecutive(
-                ['option_id', self::OPTION_2_ID],
-                ['store_id', self::ADMIN_STORE_ID],
-                ['option_id', self::OPTION_2_ID],
-                ['store_id', self::DEFAULT_STORE_ID],
-                ['option_id', self::OPTION_2_ID],
-                ['store_id', self::SECOND_STORE_ID]
-            )
-            ->willReturnSelf();
+            ->willReturnCallback(function ($arg1, $arg2) {
+                if ($arg1 == 'option_id' && $arg2 == self::OPTION_2_ID) {
+                    return $this->collectionMock;
+                } elseif ($arg1 == 'store_id' && ($arg2 == self::ADMIN_STORE_ID || $arg2 == self::DEFAULT_STORE_ID ||
+                        $arg2 == self::SECOND_STORE_ID)) {
+                    return $this->collectionMock;
+                }
+            });
 
+        $callCount = 0;
         $this->collectionMock->expects($this->exactly(3))
             ->method('getFirstItem')
-            ->willReturnOnConsecutiveCalls(
-                $this->createSwatchMock(
-                    (string)Swatch::SWATCH_TYPE_TEXTUAL,
-                    self::TEXT_SWATCH_OPTIONS['value'][self::NEW_OPTION_KEY][self::ADMIN_STORE_ID],
-                    null,
-                    self::OPTION_2_ID,
-                    self::ADMIN_STORE_ID
-                ),
-                $this->createSwatchMock(
-                    (string)Swatch::SWATCH_TYPE_TEXTUAL,
-                    self::TEXT_SWATCH_OPTIONS['value'][self::NEW_OPTION_KEY][self::DEFAULT_STORE_ID],
-                    null,
-                    self::OPTION_2_ID,
-                    self::DEFAULT_STORE_ID
-                ),
-                $this->createSwatchMock(
-                    (string)Swatch::SWATCH_TYPE_TEXTUAL,
-                    self::TEXT_SWATCH_OPTIONS['value'][self::NEW_OPTION_KEY][self::SECOND_STORE_ID],
-                    null,
-                    self::OPTION_2_ID,
-                    self::SECOND_STORE_ID
-                )
-            );
+            ->willReturnCallback(function () use (&$callCount) {
+                $callCount++;
+                switch ($callCount) {
+                    case 1:
+                        return $this->createSwatchMock(
+                            (string)Swatch::SWATCH_TYPE_TEXTUAL,
+                            self::TEXT_SWATCH_OPTIONS['value'][self::NEW_OPTION_KEY][self::ADMIN_STORE_ID],
+                            null,
+                            self::OPTION_2_ID,
+                            self::ADMIN_STORE_ID
+                        );
+                    case 2:
+                        return $this->createSwatchMock(
+                            (string)Swatch::SWATCH_TYPE_TEXTUAL,
+                            self::TEXT_SWATCH_OPTIONS['value'][self::NEW_OPTION_KEY][self::DEFAULT_STORE_ID],
+                            null,
+                            self::OPTION_2_ID,
+                            self::DEFAULT_STORE_ID
+                        );
+                    case 3:
+                        return $this->createSwatchMock(
+                            (string)Swatch::SWATCH_TYPE_TEXTUAL,
+                            self::TEXT_SWATCH_OPTIONS['value'][self::NEW_OPTION_KEY][self::SECOND_STORE_ID],
+                            null,
+                            self::OPTION_2_ID,
+                            self::SECOND_STORE_ID
+                        );
+                    default:
+                        return null;
+                }
+            });
         $this->collectionFactoryMock->expects($this->exactly(3))
             ->method('create')
             ->willReturn($this->collectionMock);
@@ -604,62 +633,65 @@ class EavAttributeTest extends TestCase
 
         $this->collectionMock->expects($this->exactly(12))
             ->method('addFieldToFilter')
-            ->withConsecutive(
-                ['option_id', self::OPTION_1_ID],
-                ['store_id', self::ADMIN_STORE_ID],
-                ['option_id', self::OPTION_1_ID],
-                ['store_id', self::DEFAULT_STORE_ID],
-                ['option_id', self::OPTION_1_ID],
-                ['store_id', self::SECOND_STORE_ID],
-                ['option_id', self::OPTION_2_ID],
-                ['store_id', self::ADMIN_STORE_ID],
-                ['option_id', self::OPTION_2_ID],
-                ['store_id', self::DEFAULT_STORE_ID],
-                ['option_id', self::OPTION_2_ID],
-                ['store_id', self::SECOND_STORE_ID]
-            )
-            ->willReturnSelf();
+            ->willReturnCallback(function ($arg1, $arg2) {
+                switch ($arg1) {
+                    case 'option_id':
+                        if ($arg2 == self::OPTION_1_ID || $arg2 == self::OPTION_2_ID) {
+                            return $this->collectionMock;
+                        }
+                        break;
+                    case 'store_id':
+                        if ($arg2 == self::ADMIN_STORE_ID ||
+                            $arg2 == self::DEFAULT_STORE_ID ||
+                            $arg2 == self::SECOND_STORE_ID) {
+                            return $this->collectionMock;
+                        }
+                        break;
+                }
+            });
 
+        $callCount = 0;
         $this->collectionMock->expects($this->exactly(6))
             ->method('getFirstItem')
-            ->willReturnOnConsecutiveCalls(
-                $this->createSwatchMock(
-                    (string)Swatch::SWATCH_TYPE_TEXTUAL,
-                    null,
-                    1
-                ),
-                $this->createSwatchMock(
-                    (string)Swatch::SWATCH_TYPE_TEXTUAL,
-                    null,
-                    1
-                ),
-                $this->createSwatchMock(
-                    (string)Swatch::SWATCH_TYPE_TEXTUAL,
-                    null,
-                    1
-                ),
-                $this->createSwatchMock(
-                    (string)Swatch::SWATCH_TYPE_TEXTUAL,
-                    null,
-                    null,
-                    self::OPTION_2_ID,
-                    self::ADMIN_STORE_ID
-                ),
-                $this->createSwatchMock(
-                    (string)Swatch::SWATCH_TYPE_TEXTUAL,
-                    null,
-                    null,
-                    self::OPTION_2_ID,
-                    self::DEFAULT_STORE_ID
-                ),
-                $this->createSwatchMock(
-                    (string)Swatch::SWATCH_TYPE_TEXTUAL,
-                    null,
-                    null,
-                    self::OPTION_2_ID,
-                    self::SECOND_STORE_ID
-                )
-            );
+            ->willReturnCallback(function () use (&$callCount) {
+                $callCount++;
+                switch ($callCount) {
+                    case 1:
+                    case 2:
+                    case 3:
+                        return $this->createSwatchMock(
+                            (string)Swatch::SWATCH_TYPE_TEXTUAL,
+                            null,
+                            1
+                        );
+                    case 4:
+                        return $this->createSwatchMock(
+                            (string)Swatch::SWATCH_TYPE_TEXTUAL,
+                            null,
+                            null,
+                            self::OPTION_2_ID,
+                            self::ADMIN_STORE_ID
+                        );
+                    case 5:
+                        return $this->createSwatchMock(
+                            (string)Swatch::SWATCH_TYPE_TEXTUAL,
+                            null,
+                            null,
+                            self::OPTION_2_ID,
+                            self::DEFAULT_STORE_ID
+                        );
+                    case 6:
+                        return $this->createSwatchMock(
+                            (string)Swatch::SWATCH_TYPE_TEXTUAL,
+                            null,
+                            null,
+                            self::OPTION_2_ID,
+                            self::SECOND_STORE_ID
+                        );
+                    default:
+                        return null;
+                }
+            });
         $this->collectionFactoryMock->expects($this->exactly(6))
             ->method('create')
             ->willReturn($this->collectionMock);
@@ -676,6 +708,7 @@ class EavAttributeTest extends TestCase
      * @param int|null $optionId
      * @param int|null $storeId
      * @return MockObject
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     private function createSwatchMock(
         string $type,
@@ -694,19 +727,27 @@ class EavAttributeTest extends TestCase
         if ($id) {
             $swatch->expects($this->exactly(2))
                 ->method('setData')
-                ->withConsecutive(
-                    ['type', $type],
-                    ['value', $value]
-                );
+                ->willReturnCallback(function ($arg1, $arg2) use ($type, $value) {
+                    if ($arg1 == 'type' && $arg2 == $type || $arg1 == 'value' && $arg2 == $value) {
+                        return null;
+                    }
+                });
         } else {
             $swatch->expects($this->exactly(4))
                 ->method('setData')
-                ->withConsecutive(
-                    ['option_id', $optionId],
-                    ['store_id', $storeId],
-                    ['type', $type],
-                    ['value', $value]
-                );
+                ->willReturnCallback(function ($arg1, $arg2) use ($optionId, $storeId, $type, $value) {
+                    if ($arg1 === 'option_id' && $arg2 === $optionId) {
+                        return null;
+                    } elseif ($arg1 === 'store_id' && $arg2 === $storeId) {
+                        return null;
+                    } elseif ($arg1 === 'type' && $arg2 === $type) {
+                        return null;
+                    } elseif ($arg1 === 'value' && $arg2 === $value) {
+                        return null;
+                    } else {
+                         return null;
+                    }
+                });
         }
         return $swatch;
     }

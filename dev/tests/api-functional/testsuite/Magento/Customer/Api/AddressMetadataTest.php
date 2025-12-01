@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Customer\Api;
@@ -84,7 +84,7 @@ class AddressMetadataTest extends WebapiAbstract
      * @return array
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function getAttributeMetadataDataProvider()
+    public static function getAttributeMetadataDataProvider()
     {
         return [
             Address::POSTCODE => [
@@ -289,9 +289,9 @@ class AddressMetadataTest extends WebapiAbstract
      *
      * @return array
      */
-    public function getAttributesDataProvider()
+    public static function getAttributesDataProvider()
     {
-        $attributeMetadata = $this->getAttributeMetadataDataProvider();
+        $attributeMetadata = self::getAttributeMetadataDataProvider();
         return [
             [
                 'customer_address_edit',

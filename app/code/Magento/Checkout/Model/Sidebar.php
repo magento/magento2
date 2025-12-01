@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Checkout\Model;
 
@@ -10,6 +10,7 @@ use Magento\Checkout\Model\Cart;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Filter\LocalizedToNormalized;
 use Magento\Framework\Locale\ResolverInterface;
+use Magento\Framework\NumberFormatter;
 use Magento\Quote\Api\Data\CartItemInterface;
 use Magento\Quote\Model\Quote\Address\Total;
 
@@ -129,8 +130,12 @@ class Sidebar
     protected function normalize($itemQty)
     {
         if ($itemQty) {
+            if (is_string($itemQty) && str_contains($itemQty, ',')) {
+                $itemQty = (double)str_replace(',', '.', $itemQty);
+            }
+
             $filter = new LocalizedToNormalized(
-                ['locale' => $this->resolver->getLocale()]
+                ['locale' => $this->resolver->getLocale(), 'decimal_style' => NumberFormatter::DECIMAL]
             );
             return $filter->filter((string)$itemQty);
         }

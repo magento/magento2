@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -40,11 +40,9 @@ class DefinitionAggregatorTest extends TestCase
         $this->objectManager = new ObjectManager($this);
         $intDefProcessor = $this->getMockBuilder(DbDefinitionProcessorInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods([])
             ->getMockForAbstractClass();
         $varcharDefProcessor = $this->getMockBuilder(DbDefinitionProcessorInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods([])
             ->getMockForAbstractClass();
 
         $this->definitonProcessors = [

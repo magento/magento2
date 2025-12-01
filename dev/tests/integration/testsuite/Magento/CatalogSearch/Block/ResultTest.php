@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\CatalogSearch\Block;
 
@@ -74,7 +74,7 @@ class ResultTest extends \PHPUnit\Framework\TestCase
         /** @var Template $searchBlock */
         $searchQueryParams = $this->getMockBuilder(\Magento\Search\ViewModel\AdditionalSearchFormData::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getFormData'])
+            ->onlyMethods(['getFormData'])
             ->getMock();
         $searchQueryParams->expects($this->any())
             ->method('getFormData')
@@ -104,7 +104,7 @@ class ResultTest extends \PHPUnit\Framework\TestCase
      *
      * @return array
      */
-    public function toEscapeSearchTextDataProvider(): array
+    public static function toEscapeSearchTextDataProvider(): array
     {
         return [
             'less_than_sign_escaped' => ['<', '&lt;', '&amp;lt&#x3B;'],

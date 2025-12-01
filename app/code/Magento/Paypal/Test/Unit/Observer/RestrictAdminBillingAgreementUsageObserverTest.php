@@ -1,8 +1,7 @@
 <?php
 /**
- *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -53,12 +52,12 @@ class RestrictAdminBillingAgreementUsageObserverTest extends TestCase
     /**
      * @return array
      */
-    public function restrictAdminBillingAgreementUsageDataProvider()
+    public static function restrictAdminBillingAgreementUsageDataProvider()
     {
         return [
             [new \stdClass(), false, true],
             [
-                $this->getMockForAbstractClass(
+                static fn (self $testCase) => $testCase->getMockForAbstractClass(
                     AbstractAgreement::class,
                     [],
                     '',
@@ -68,7 +67,7 @@ class RestrictAdminBillingAgreementUsageObserverTest extends TestCase
                 true
             ],
             [
-                $this->getMockForAbstractClass(
+                static fn (self $testCase) => $testCase->getMockForAbstractClass(
                     AbstractAgreement::class,
                     [],
                     '',
@@ -88,6 +87,9 @@ class RestrictAdminBillingAgreementUsageObserverTest extends TestCase
      */
     public function testExecute($methodInstance, $isAllowed, $isAvailable)
     {
+        if (is_callable($methodInstance)) {
+            $methodInstance = $methodInstance($this);
+        }
         $this->_event->setMethodInstance($methodInstance);
         $this->_authorization->expects(
             $this->any()

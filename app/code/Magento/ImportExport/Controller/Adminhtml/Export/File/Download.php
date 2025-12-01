@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -16,6 +16,8 @@ use Magento\ImportExport\Controller\Adminhtml\Export as ExportController;
 use Magento\Framework\Filesystem;
 use Magento\ImportExport\Model\LocalizedFileName;
 use Throwable;
+use Magento\Framework\Controller\Result\Redirect;
+use Magento\Framework\App\ResponseInterface;
 
 /**
  * Controller that download file by name.
@@ -25,7 +27,7 @@ class Download extends ExportController implements HttpGetActionInterface
     /**
      * Url to this controller
      */
-    const URL = 'adminhtml/export_file/download/';
+    public const URL = 'adminhtml/export_file/download/';
 
     /**
      * @var FileFactory
@@ -64,17 +66,26 @@ class Download extends ExportController implements HttpGetActionInterface
     /**
      * Controller basic method implementation.
      *
-     * @return \Magento\Framework\Controller\Result\Redirect | \Magento\Framework\App\ResponseInterface
+     * @return Redirect|ResponseInterface
      */
     public function execute()
     {
         $resultRedirect = $this->resultRedirectFactory->create();
         $resultRedirect->setPath('adminhtml/export/index');
+
         $fileName = $this->getRequest()->getParam('filename');
-        $exportDirectory = $this->filesystem->getDirectoryRead(DirectoryList::VAR_IMPORT_EXPORT);
+
+        if (empty($fileName)) {
+            $this->messageManager->addErrorMessage(__('Please provide valid export file name'));
+
+            return $resultRedirect;
+        }
+
+        $exportDirectory = $this->filesystem->getDirectoryWrite(DirectoryList::VAR_IMPORT_EXPORT);
 
         try {
-            $fileExist = $exportDirectory->isExist('export/' . $fileName);
+            $fileName  = $exportDirectory->getDriver()->getRealPathSafety(DIRECTORY_SEPARATOR . $fileName);
+            $fileExist = $exportDirectory->isExist('export' . $fileName);
         } catch (Throwable $e) {
             $fileExist = false;
         }
@@ -86,7 +97,7 @@ class Download extends ExportController implements HttpGetActionInterface
         }
 
         try {
-            $path = 'export/' . $fileName;
+            $path = 'export' . $fileName;
             $directory = $this->filesystem->getDirectoryRead(DirectoryList::VAR_IMPORT_EXPORT);
             if ($directory->isFile($path)) {
                 return $this->fileFactory->create(

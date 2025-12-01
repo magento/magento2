@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -65,7 +65,7 @@ class ButtonTest extends TestCase
             ->getMockForAbstractClass();
         $productRendererExtensionMock = $this->getMockBuilder(ProductRenderExtensionInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['setWishlistButton'])
+            ->addMethods(['setWishlistButton'])
             ->getMockForAbstractClass();
         $buttonInterfaceMock = $this->getMockBuilder(ButtonInterface::class)
             ->disableOriginalConstructor()
@@ -104,7 +104,7 @@ class ButtonTest extends TestCase
             ->getMockForAbstractClass();
         $productRendererExtensionMock = $this->getMockBuilder(ProductRenderExtensionInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['setWishlistButton'])
+            ->addMethods(['setWishlistButton'])
             ->getMockForAbstractClass();
 
         $productRendererMock->expects($this->once())

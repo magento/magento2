@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
  /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
+   * Copyright 2024 Adobe
+  * All Rights Reserved.
   */
 -->
 
@@ -34,6 +34,8 @@
             </actionGroup>
             <!-- Login as Admin -->
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminTaxRateGridOpenPageActionGroup" stepKey="navigateToTaxRatesPage"/>
+            <actionGroup ref="AdminDeleteMultipleTaxRatesActionGroup" stepKey="deleteAllNonDefaultTaxRates"/>
             <!-- change tax classes configuration -->
             <actionGroup ref="SetTaxClassForShippingActionGroup" stepKey="setTaxClass"/>
             <actionGroup ref="AdminChangeTaxAndFptConfigActionGroup" stepKey="changeTaxConfigs"/>
@@ -121,32 +123,16 @@
             <!-- delete created Two Tax Rates & Rules -->
             <!-- delete first tax rule and rate -->
             <!--Go to the tax rule page and delete the row created-->
-            <actionGroup ref="AdminTaxRuleGridOpenPageActionGroup" stepKey="goToTaxRulesPage"/>
-            <actionGroup ref="deleteEntitySecondaryGrid" stepKey="deleteFirstRule">
-                <argument name="name" value="Canada-GST-5%"/>
-                <argument name="searchInput" value="{{AdminSecondaryGridSection.taxIdentifierSearch}}"/>
+            <actionGroup ref="AdminDeleteTaxRule" stepKey="deleteTaxRule">
+                <argument name="taxRuleCode" value="Canada-GST-5%" />
             </actionGroup>
-            <!-- Go to the tax rate page -->
-            <actionGroup ref="AdminTaxRateGridOpenPageActionGroup" stepKey="goToTaxRatesPage"/>
-            <!-- Delete the tax rate that was created -->
-            <actionGroup ref="deleteEntitySecondaryGrid" stepKey="deleteTaxRate">
-                <argument name="name" value="Canada-GST-5%"/>
-                <argument name="searchInput" value="{{AdminSecondaryGridSection.taxIdentifierSearch}}"/>
+            <actionGroup ref="AdminDeleteTaxRule" stepKey="deleteSecondRule">
+                <argument name="taxRuleCode" value="Canada-GST-PST-5%" />
             </actionGroup>
-            <!-- delete second tax rule and rate -->
-            <!--Go to the tax rule page and delete the row created-->
-            <actionGroup ref="AdminTaxRuleGridOpenPageActionGroup" stepKey="goToSecondTaxRulesPage"/>
-            <actionGroup ref="deleteEntitySecondaryGrid" stepKey="deleteSecondRule">
-                <argument name="name" value="Canada-GST-PST-5%"/>
-                <argument name="searchInput" value="{{AdminSecondaryGridSection.taxIdentifierSearch}}"/>
+            <actionGroup ref="AdminDeleteMultipleTaxRatesActionGroup" stepKey="deleteAllNonDefaultTaxRates">
+                <argument name="expectedRemainingRows" value="0"/>
             </actionGroup>
-            <!-- Go to the tax rate page -->
-            <actionGroup ref="AdminTaxRateGridOpenPageActionGroup" stepKey="goToSecondTaxRatesPage"/>
-            <!-- Delete the tax rate that was created -->
-            <actionGroup ref="deleteEntitySecondaryGrid" stepKey="deleteSecondTaxRate">
-                <argument name="name" value="Canada-GST-PST-5%"/>
-                <argument name="searchInput" value="{{AdminSecondaryGridSection.taxIdentifierSearch}}"/>
-            </actionGroup>
+
             <!-- Reset shipping origin -->
             <actionGroup ref="AdminResetShippingOriginConfigurationActionGroup" stepKey="ResetCaliforniaShippingOrigin"/>
             <!-- delete created attribute category and simple product -->
@@ -186,7 +172,7 @@
         <see selector="{{CheckoutCartSummarySection.taxAmount}}" userInput="$11.50" stepKey="assertTaxAmount"/>
         <see selector="{{CheckoutCartSummarySection.fptAmount}}" userInput="$10.00" stepKey="assertFptAmount"/>
         <click selector="{{CheckoutCartSummarySection.taxAmount}}" stepKey="clickTaxAmount"/>
-        <see selector="{{CheckoutCartSummarySection.canadaTaxAmount}}" userInput="$5.75" stepKey="assertGstAmount"/>
+        <waitForText selector="{{CheckoutCartSummarySection.canadaTaxAmount}}" userInput="$5.75" stepKey="assertGstAmount"/>
         <see selector="{{CheckoutCartSummarySection.canadaPstTaxAmount}}" userInput="$5.75" stepKey="assertPstAmount"/>
         <!--Assert Shopping Cart Summary-->
         <actionGroup ref="AssertStorefrontShoppingCartSummaryWithShippingActionGroup" stepKey="AssertCartSummary" >

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -65,7 +65,8 @@ class CustomerGroupsFixtureTest extends TestCase
 
         //Mock for customer groups collection
         $this->groupCollectionFactoryMock = $this->getMockBuilder(CollectionFactory::class)
-            ->setMethods(['create', 'getSize'])
+            ->addMethods(['getSize'])
+            ->onlyMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -81,13 +82,14 @@ class CustomerGroupsFixtureTest extends TestCase
 
         //Mock customer groups data object
         $this->groupDataObjectMock = $this->getMockBuilder(GroupInterface::class)
-            ->setMethods(['setCode', 'setTaxClassId', 'save'])
+            ->addMethods(['save'])
+            ->onlyMethods(['setCode', 'setTaxClassId'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
 
         //Mock customer groups factory
         $this->groupFactoryMock = $this->getMockBuilder(GroupInterfaceFactory::class)
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
 

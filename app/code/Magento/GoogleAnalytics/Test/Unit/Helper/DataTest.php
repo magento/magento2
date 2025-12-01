@@ -1,8 +1,8 @@
 <?php
 
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 
 declare(strict_types=1);
@@ -37,7 +37,7 @@ class DataTest extends TestCase
     protected function setUp(): void
     {
         $this->scopeConfigMock = $this->getMockBuilder(ScopeConfigInterface::class)
-            ->setMethods(['getValue', 'isSetFlag'])
+            ->onlyMethods(['getValue', 'isSetFlag'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
 
@@ -79,7 +79,7 @@ class DataTest extends TestCase
      *
      * @return array
      */
-    public function gaDataProvider(): array
+    public static function gaDataProvider(): array
     {
         return [
             ['GA-XXXX', true, true],
@@ -110,11 +110,11 @@ class DataTest extends TestCase
      *
      * @return array
      */
-    public function yesNoDataProvider(): array
+    public static function yesNoDataProvider(): array
     {
         return [
-            ['Yes' => '1', 'result' => true],
-            ['No' => '0', 'result' => false]
+            ['value' => '1', 'result' => true],
+            ['value' => '0', 'result' => false]
         ];
     }
 }

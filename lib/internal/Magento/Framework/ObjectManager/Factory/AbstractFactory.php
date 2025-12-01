@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework\ObjectManager\Factory;
 
@@ -59,8 +59,8 @@ abstract class AbstractFactory implements \Magento\Framework\ObjectManager\Facto
      */
     public function __construct(
         \Magento\Framework\ObjectManager\ConfigInterface $config,
-        ObjectManagerInterface $objectManager = null,
-        \Magento\Framework\ObjectManager\DefinitionInterface $definitions = null,
+        ?ObjectManagerInterface $objectManager = null,
+        ?\Magento\Framework\ObjectManager\DefinitionInterface $definitions = null,
         $globalArguments = []
     ) {
         $this->config = $config;

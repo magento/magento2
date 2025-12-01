@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -40,7 +40,7 @@ class Label implements ResolverInterface
     public function __construct(
         ValueFactory $valueFactory,
         ProductDataProvider $product,
-        ProductDataProviderFactory $productFactory = null
+        ?ProductDataProviderFactory $productFactory = null
     ) {
         $this->valueFactory = $valueFactory;
         $this->productFactory = $productFactory
@@ -54,8 +54,8 @@ class Label implements ResolverInterface
         Field $field,
         $context,
         ResolveInfo $info,
-        array $value = null,
-        array $args = null
+        ?array $value = null,
+        ?array $args = null
     ) {
         if (!isset($value['sku'])) {
             throw new LocalizedException(__('"sku" value should be specified'));

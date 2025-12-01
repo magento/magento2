@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -49,7 +49,7 @@ class AbstractParserTest extends TestCase
     /**
      * @return array
      */
-    public function dataProviderForValidateOptions()
+    public static function dataProviderForValidateOptions()
     {
         return [
             [[['paths' => []]], 'Missed "type" in parser options.'],

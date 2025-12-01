@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -74,7 +74,7 @@ class AwsS3 implements RemoteDriverInterface
         FilesystemAdapter $adapter,
         LoggerInterface $logger,
         string $objectUrl,
-        MetadataProviderInterface $metadataProvider = null
+        ?MetadataProviderInterface $metadataProvider = null
     ) {
         $this->adapter = $adapter;
         $this->logger = $logger;
@@ -188,7 +188,9 @@ class AwsS3 implements RemoteDriverInterface
         $parentDir = dirname($path);
 
         while (!$this->isDirectory($parentDir)) {
-            $this->createDirectoryRecursively($parentDir);
+            if (!$this->createDirectoryRecursively($parentDir)) {
+                return false;
+            }
         }
 
         if (!$this->isDirectory($path)) {
@@ -207,7 +209,7 @@ class AwsS3 implements RemoteDriverInterface
     /**
      * @inheritDoc
      */
-    public function copy($source, $destination, DriverInterface $targetDriver = null): bool
+    public function copy($source, $destination, ?DriverInterface $targetDriver = null): bool
     {
         try {
             $this->adapter->copy(
@@ -526,7 +528,7 @@ class AwsS3 implements RemoteDriverInterface
     /**
      * @inheritDoc
      */
-    public function rename($oldPath, $newPath, DriverInterface $targetDriver = null): bool
+    public function rename($oldPath, $newPath, ?DriverInterface $targetDriver = null): bool
     {
         if ($oldPath === $newPath) {
             return true;
@@ -636,7 +638,7 @@ class AwsS3 implements RemoteDriverInterface
     /**
      * @inheritDoc
      */
-    public function symlink($source, $destination, DriverInterface $targetDriver = null): bool
+    public function symlink($source, $destination, ?DriverInterface $targetDriver = null): bool
     {
         return $this->copy($source, $destination, $targetDriver);
     }
@@ -777,7 +779,7 @@ class AwsS3 implements RemoteDriverInterface
     public function filePutCsv($resource, array $data, $delimiter = ',', $enclosure = '"')
     {
         //phpcs:ignore Magento2.Functions.DiscouragedFunction
-        return fputcsv($resource, $data, $delimiter, $enclosure);
+        return fputcsv($resource, $data, $delimiter, $enclosure, '\\');
     }
 
     /**
@@ -893,16 +895,24 @@ class AwsS3 implements RemoteDriverInterface
      */
     public function fileOpen($path, $mode)
     {
+        $_mode = str_replace(['b', '+'], '', strtolower($mode));
+        if (!in_array($_mode, ['r', 'w', 'a'], true)) {
+            throw new FileSystemException(new Phrase('Invalid file open mode "%1".', [$mode]));
+        }
         $path = $this->normalizeRelativePath($path, true);
 
         if (!isset($this->streams[$path])) {
             $this->streams[$path] = tmpfile();
             try {
                 if ($this->adapter->fileExists($path)) {
-                    //phpcs:ignore Magento2.Functions.DiscouragedFunction
-                    fwrite($this->streams[$path], $this->adapter->read($path));
-                    //phpcs:ignore Magento2.Functions.DiscouragedFunction
-                    rewind($this->streams[$path]);
+                    if ($_mode !== 'w') {
+                        //phpcs:ignore Magento2.Functions.DiscouragedFunction
+                        fwrite($this->streams[$path], $this->adapter->read($path));
+                        //phpcs:ignore Magento2.Functions.DiscouragedFunction
+                        if ($_mode !== 'a') {
+                            rewind($this->streams[$path]);
+                        }
+                    }
                 }
             } catch (FlysystemFilesystemException $e) {
                 $this->logger->error($e->getMessage());

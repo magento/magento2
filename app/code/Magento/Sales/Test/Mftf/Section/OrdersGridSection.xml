@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
-  */
+/**
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
+ */
 -->
 
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -36,5 +36,7 @@
         <element name="selectProductPreviousPage" type="button" selector="//button[@class='action-previous']"/>
         <element name="displayedProducts" type="text" selector="//input[@class='checkbox admin__control-checkbox']/../../..//td[contains(@class,'col-sku') and contains(text(),'test')]"/>
         <element name="pageNumber" type="input" selector="//input[@id='sales_order_create_search_grid_page-current' and @value='{{page_index}}']" parameterized="true"/>
+        <element name="grandTotal" type="text" selector="//div[@data-role='grid-wrapper']//tr//td[contains(.,'{{value}}')]" parameterized="true"/>
+        <element name="viewOrder" type="button" selector="//table[@id='my-orders-table']//tbody//tr[td[contains(@class,'col id') and contains(text(),'{{orderNumber}}')]]//a[@class='action view']"  parameterized="true"/>
     </section>
 </sections>

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -49,7 +49,8 @@ class SubscriptionStatusLabelTest extends TestCase
         $this->subscriptionStatusProviderMock = $this->createMock(SubscriptionStatusProvider::class);
         $this->contextMock = $this->createMock(Context::class);
         $this->abstractElementMock = $this->getMockBuilder(AbstractElement::class)
-            ->setMethods(['getComment', 'getElementHtml'])
+            ->addMethods(['getComment'])
+            ->onlyMethods(['getElementHtml'])
             ->disableOriginalConstructor()
             ->getMock();
 

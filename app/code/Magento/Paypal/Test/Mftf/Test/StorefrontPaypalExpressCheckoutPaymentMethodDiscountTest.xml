@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright 2024 Adobe
+  * All Rights Reserved.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontPaypalExpressCheckoutPaymentMethodDiscountTest">
+        <annotations>
+            <features value="PayPal"/>
+            <stories value="Paypal express checkout with discount"/>
+            <title value="Paypal Express Checkout with payment method discount"/>
+            <description value="Place an order with discount for using paypal express checkout as payment method applied"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="AC-12676"/>
+            <useCaseId value="ACP2E-3163"/>
+            <group value="3rd_party_integration"/>
+            <group value="paypalExpress"/>
+            <group value="pr_exclude"/>
+        </annotations>
+        <before>
+            <!-- Simple product is created -->
+            <createData entity="SimpleProduct" stepKey="createProduct"/>
+            <!-- US Customer is created -->
+            <createData entity="Simple_US_Customer" stepKey="createCustomer"/>
+            <!-- Create new cart price rule -->
+            <createData entity="SalesRuleDiscountOnPayPalExpressCheckoutAsPaymentMethod" stepKey="createCartPriceRule"/>
+            <!-- Admin login -->
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <!-- Search Cart Price Rule and go to edit Cart Price Rule -->
+            <actionGroup ref="AdminOpenCartPriceRulesPageActionGroup" stepKey="amOnCartPriceList"/>
+            <fillField selector="{{AdminCartPriceRulesSection.filterByNameInput}}" userInput="$$createCartPriceRule.name$$"
+                       stepKey="fillFieldFilterByName"/>
+            <click selector="{{AdminCartPriceRulesSection.searchButton}}" stepKey="clickSearchButton"/>
+            <see selector="{{AdminCartPriceRulesSection.nameColumns}}" userInput="$$createCartPriceRule.name$$"
+                 stepKey="seeRuleName"/>
+            <click selector="{{AdminCartPriceRulesSection.rowContainingText($$createCartPriceRule.name$$)}}"
+                   stepKey="goToEditRule"/>
+            <actionGroup ref="AdminCartPriceRuleFillPaymentConditionActionGroup" stepKey="setCartAttributeConditionForCartPriceRule">
+                <argument name="paymentMethodName" value="PayPal Express Checkout"/>
+            </actionGroup>
+            <actionGroup ref="AdminCartPriceRuleSaveActionGroup" stepKey="saveCartPriceRule"/>
+        </before>
+        <after>
+            <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
+            <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
+            <!-- Delete Cart Price Rule -->
+            <deleteData createDataKey="createCartPriceRule" stepKey="deleteCartPriceRule"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+        <!-- Login to StoreFront -->
+        <actionGroup ref="LoginToStorefrontActionGroup" stepKey="storefrontCustomerLogin">
+            <argument name="Customer" value="$$createCustomer$$"/>
+        </actionGroup>
+        <!-- Add product to cart -->
+        <actionGroup ref="AddSimpleProductToCartActionGroup" stepKey="addProductToCart">
+            <argument name="product" value="$$createProduct$$"/>
+        </actionGroup>
+        <!-- Goto Checkout Page -->
+        <actionGroup ref="StorefrontOpenCheckoutPageActionGroup" stepKey="goToCheckout"/>
+        <actionGroup ref="CheckoutSelectFlatRateShippingMethodActionGroup" stepKey="selectFlatRateShipping" />
+        <actionGroup ref="StorefrontCheckoutClickNextOnShippingStepActionGroup" stepKey="clickNext"/>
+        <!-- Assert order total before applying selecting payment method -->
+        <actionGroup ref="AssertStorefrontCheckoutPaymentSummaryTotalActionGroup" stepKey="assertSummaryTotalBeforeDiscount">
+            <argument name="orderTotal" value="$128.00"/>
+        </actionGroup>
+        <!-- Click on PayPal payment radio button -->
+        <waitForElementClickable selector="{{CheckoutPaymentSection.PayPalPaymentRadio}}" stepKey="waitForPayPalRadioButton"/>
+        <click selector="{{CheckoutPaymentSection.PayPalPaymentRadio}}" stepKey="selectPaypalPayment"/>
+        <!-- Assert order total before applying selecting payment method -->
+        <actionGroup ref="AssertStorefrontCheckoutPaymentSummaryTotalActionGroup" stepKey="assertSummaryTotalAfterDiscount">
+            <argument name="orderTotal" value="$91.10"/>
+        </actionGroup>
+        <actionGroup ref="SwitchToPayPalGroupBtnActionGroup" stepKey="clickPayPalBtn"/>
+        <!-- Login to Paypal in-context and verify order total on paypal page-->
+        <actionGroup ref="StorefrontLoginToPayPalPaymentAccountTwoStepActionGroup" stepKey="loginToPayPal"/>
+        <waitForText selector="{{PayPalPaymentSection.orderTotalOnPaypalCheckout}}" userInput="$91.10" stepKey="verifyOrderTotalOnPaypalPage"/>
+        <!-- Click PayPal button and go back to Magento site -->
+        <actionGroup ref="StorefrontPaypalSwitchBackToMagentoFromCheckoutPageActionGroup" stepKey="confirmPaymentAndGoBackToMagento"/>
+        <!-- I see order successful Page -->
+        <actionGroup ref="AssertStorefrontCheckoutSuccessActionGroup" stepKey="assertOrderSuccess"/>
+        <grabTextFrom selector="{{CheckoutSuccessMainSection.orderNumber22}}" stepKey="orderNumber"/>
+        <assertNotEmpty stepKey="assertOrderIdIsNotEmpty">
+            <actualResult type="const">$orderNumber</actualResult>
+        </assertNotEmpty>
+    </test>
+</tests>

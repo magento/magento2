@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -47,18 +47,18 @@ class AgreementTest extends TestCase
         $paypalConfigMock = $this->getMockBuilder(
             Config::class
         )->disableOriginalConstructor()
-            ->setMethods(
+            ->onlyMethods(
                 []
             )->getMock();
         $this->_apiNvpMock = $this->getMockBuilder(
             Nvp::class
         )->disableOriginalConstructor()
-            ->setMethods(
+            ->onlyMethods(
                 ['callDoReferenceTransaction', 'callGetTransactionDetails']
             )->getMock();
         $proMock = $this->getMockBuilder(
             Pro::class
-        )->setMethods(
+        )->onlyMethods(
             ['getApi', 'setMethod', 'getConfig', 'importPaymentInfo']
         )->disableOriginalConstructor()
             ->getMock();
@@ -68,7 +68,7 @@ class AgreementTest extends TestCase
         $billingAgreementMock = $this->getMockBuilder(
             \Magento\Paypal\Model\Billing\Agreement::class
         )->disableOriginalConstructor()
-            ->setMethods(
+            ->onlyMethods(
                 ['load', '__wakeup']
             )->getMock();
         $billingAgreementMock->expects($this->any())->method('load')->willReturn($billingAgreementMock);
@@ -76,7 +76,7 @@ class AgreementTest extends TestCase
         $agreementFactoryMock = $this->getMockBuilder(
             AgreementFactory::class
         )->disableOriginalConstructor()
-            ->setMethods(
+            ->onlyMethods(
                 ['create']
             )->getMock();
         $agreementFactoryMock->expects(
@@ -93,7 +93,7 @@ class AgreementTest extends TestCase
         $cartFactoryMock = $this->getMockBuilder(
             CartFactory::class
         )->disableOriginalConstructor()
-            ->setMethods(
+            ->onlyMethods(
                 ['create']
             )->getMock();
         $cartFactoryMock->expects($this->any())->method('create')->willReturn($cartMock);
@@ -112,13 +112,13 @@ class AgreementTest extends TestCase
         $payment = $this->getMockBuilder(
             Payment::class
         )->disableOriginalConstructor()
-            ->setMethods(
+            ->onlyMethods(
                 ['__wakeup']
             )->getMock();
         $order = $this->getMockBuilder(
             Order::class
         )->disableOriginalConstructor()
-            ->setMethods(
+            ->onlyMethods(
                 ['__wakeup']
             )->getMock();
         $order->setBaseCurrencyCode('USD');

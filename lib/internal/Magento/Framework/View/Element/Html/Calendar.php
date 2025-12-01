@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework\View\Element\Html;
 
@@ -74,7 +74,11 @@ class Calendar extends \Magento\Framework\View\Element\Template
             [
                 'wide' => $this->encoder->encode(array_values(iterator_to_array($daysData['format']['wide']))),
                 'abbreviated' => $this->encoder->encode(
-                    array_values(iterator_to_array($daysData['format']['abbreviated']))
+                    array_values(
+                        iterator_to_array(
+                            $daysData['format']['abbreviated'] ?? $daysData['format']['wide']
+                        )
+                    )
                 ),
             ]
         );
@@ -109,10 +113,7 @@ class Calendar extends \Magento\Framework\View\Element\Template
         );
 
         $this->assignFieldsValues($localeData);
-
-        // get "am" & "pm" words
-        $this->assign('am', $this->encoder->encode($localeData['calendar']['gregorian']['AmPmMarkers']['0']));
-        $this->assign('pm', $this->encoder->encode($localeData['calendar']['gregorian']['AmPmMarkers']['1']));
+        $this->assignAmPmWords($localeData);
 
         // get first day of week and weekend days
         $this->assign(
@@ -208,5 +209,24 @@ class Calendar extends \Magento\Framework\View\Element\Template
             $this->assign('today', $this->encoder->encode($localeData['fields']['day']['relative']['0']));
             $this->assign('week', $this->encoder->encode($localeData['fields']['week']['dn']));
         }
+    }
+
+    /**
+     * Assign "am" & "pm" words from the ICU data
+     *
+     * @param \ResourceBundle $localeData
+     */
+    private function assignAmPmWords(\ResourceBundle $localeData): void
+    {
+        // AmPmMarkers and AmPmMarkersAbbr aren't guaranteed to exist, so fallback to null if neither exist
+        $amWord = $localeData['calendar']['gregorian']['AmPmMarkers'][0] ??
+                  $localeData['calendar']['gregorian']['AmPmMarkersAbbr'][0] ??
+                  null;
+        $pmWord = $localeData['calendar']['gregorian']['AmPmMarkers'][1] ??
+                  $localeData['calendar']['gregorian']['AmPmMarkersAbbr'][1] ??
+                  null;
+
+        $this->assign('am', $this->encoder->encode($amWord));
+        $this->assign('pm', $this->encoder->encode($pmWord));
     }
 }

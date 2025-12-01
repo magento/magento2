@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -92,7 +92,7 @@ class SendTest extends TestCase
     /**
      * @return array
      */
-    public function formDataProvider(): array
+    public static function formDataProvider(): array
     {
         return [
             ['name', 'Customer Form Name'],
@@ -121,7 +121,7 @@ class SendTest extends TestCase
     /**
      * @return array
      */
-    public function customerSessionDataProvider(): array
+    public static function customerSessionDataProvider(): array
     {
         return [
             ['name', 'John Smith'],

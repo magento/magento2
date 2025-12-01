@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Developer\Model\Config\Backend;
 
@@ -31,7 +31,7 @@ class AllowedIpsTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function fieldDataProvider()
+    public static function fieldDataProvider()
     {
         return [
             ['<'.'script>alert(\'XSS\')</script>', '' ],

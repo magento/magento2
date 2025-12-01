@@ -1,12 +1,13 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\ConfigurableProduct\Test\Unit\Helper;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Helper\Image;
 use Magento\Catalog\Model\Product;
@@ -19,7 +20,13 @@ use Magento\Framework\DataObject;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Magento\Catalog\Test\Unit\Helper\ProductTestHelper;
+use Magento\Framework\DataObject\Test\Unit\Helper\DataObjectTestHelper;
 
+/**
+ * @SuppressWarnings(PHPMD.UnusedLocalVariable)
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class DataTest extends TestCase
 {
     /**
@@ -50,13 +57,11 @@ class DataTest extends TestCase
     protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
-        $this->imageUrlBuilder = $this->getMockBuilder(UrlBuilder::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->scopeConfigMock = $this->getMockForAbstractClass(ScopeConfigInterface::class);
+        $this->imageUrlBuilder = $this->createMock(UrlBuilder::class);
+        $this->scopeConfigMock = $this->createMock(ScopeConfigInterface::class);
         $this->_imageHelperMock = $this->createMock(Image::class);
         $this->_productMock = $this->createMock(Product::class);
-        $this->_productMock->setTypeId(Configurable::TYPE_CODE);
+        $this->_productMock->method('getTypeId')->willReturn(Configurable::TYPE_CODE);
         $this->_model = $objectManager->getObject(
             Data::class,
             [
@@ -88,24 +93,22 @@ class DataTest extends TestCase
     /**
      * @param array $expected
      * @param array $data
-     * @dataProvider getOptionsDataProvider
      */
+    #[DataProvider('getOptionsDataProvider')]
     public function testGetOptions(array $expected, array $data)
     {
+        if (!empty($data['allowed_products']) && is_callable($data['allowed_products'])) {
+            $data['allowed_products'] = $data['allowed_products']($this);
+        }
+        if (!empty($data['current_product_mock']) && is_callable($data['current_product_mock'])) {
+            $data['current_product_mock'] = $data['current_product_mock']($this);
+        }
         if (count($data['allowed_products'])) {
-            $imageHelper1 = $this->getMockBuilder(Image::class)
-                ->disableOriginalConstructor()
-                ->getMock();
-            $imageHelper1->expects($this->any())
-                ->method('getUrl')
-                ->willReturn('http://example.com/base_img_url');
+            $imageHelper1 = $this->createMock(Image::class);
+            $imageHelper1->method('getUrl')->willReturn('http://example.com/base_img_url');
 
-            $imageHelper2 = $this->getMockBuilder(Image::class)
-                ->disableOriginalConstructor()
-                ->getMock();
-            $imageHelper2->expects($this->any())
-                ->method('getUrl')
-                ->willReturn('http://example.com/base_img_url_2');
+            $imageHelper2 = $this->createMock(Image::class);
+            $imageHelper2->method('getUrl')->willReturn('http://example.com/base_img_url_2');
 
             $this->_imageHelperMock->expects($this->any())
                 ->method('init')
@@ -124,11 +127,7 @@ class DataTest extends TestCase
         );
     }
 
-    /**
-     * @return array
-     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
-     */
-    public function getOptionsDataProvider(): array
+    protected function getMockForProductClass()
     {
         $currentProductMock = $this->createPartialMock(
             Product::class,
@@ -151,35 +150,24 @@ class DataTest extends TestCase
         $attributesCount = 3;
         $attributes = [];
         for ($i = 1; $i < $attributesCount; $i++) {
-            $attribute = $this->getMockBuilder(DataObject::class)
-                ->addMethods(['getProductAttribute'])
-                ->disableOriginalConstructor()
-                ->getMock();
-            $productAttribute = $this->getMockBuilder(DataObject::class)
-                ->addMethods(['getId', 'getAttributeCode'])
-                ->disableOriginalConstructor()
-                ->getMock();
-            $productAttribute->expects($this->any())
-                ->method('getId')
-                ->willReturn('attribute_id_' . $i);
-            $productAttribute->expects($this->any())
-                ->method('getAttributeCode')
-                ->willReturn('attribute_code_' . $i);
-            $attribute->expects($this->any())
-                ->method('getProductAttribute')
-                ->willReturn($productAttribute);
+            $productAttribute = new DataObjectTestHelper();
+            $productAttribute->setId('attribute_id_' . $i);
+            $productAttribute->setAttributeCode('attribute_code_' . $i);
+
+            $attribute = new DataObjectTestHelper();
+            $attribute->setProductAttribute($productAttribute);
             $attributes[] = $attribute;
         }
         $typeInstanceMock = $this->createMock(Configurable::class);
-        $typeInstanceMock->expects($this->any())
-            ->method('getConfigurableAttributes')
-            ->willReturn($attributes);
-        $currentProductMock->expects($this->any())
-            ->method('getTypeId')
-            ->willReturn(Configurable::TYPE_CODE);
-        $currentProductMock->expects($this->any())
-            ->method('getTypeInstance')
-            ->willReturn($typeInstanceMock);
+        $typeInstanceMock->method('getConfigurableAttributes')->willReturn($attributes);
+        $currentProductMock->method('getTypeId')->willReturn(Configurable::TYPE_CODE);
+        $currentProductMock->method('getTypeInstance')->willReturn($typeInstanceMock);
+
+        return $currentProductMock;
+    }
+
+    protected function getMockForAllowProductClass()
+    {
         $allowedProducts = [];
         for ($i = 1; $i <= 2; $i++) {
             $productMock = $this->createPartialMock(
@@ -189,20 +177,26 @@ class DataTest extends TestCase
             $productMock->expects($this->any())
                 ->method('getData')
                 ->willReturnCallback([$this, 'getDataCallback']);
-            $productMock->expects($this->any())
-                ->method('getId')
-                ->willReturn('product_id_' . $i);
+            $productMock->method('getId')->willReturn('product_id_' . $i);
             $productMock
-                ->expects($this->any())
-                ->method('isSalable')
-                ->willReturn(true);
+                ->method('isSalable')->willReturn(true);
             if ($i == 2) {
-                $productMock->expects($this->any())
-                    ->method('getImage')
-                    ->willReturn(true);
+                $productMock->method('getImage')->willReturn(true);
             }
             $allowedProducts[] = $productMock;
         }
+
+        return $allowedProducts;
+    }
+
+    /**
+     * @return array
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     */
+    public static function getOptionsDataProvider(): array
+    {
+        $currentProductMock = static fn (self $testCase) => $testCase->getMockForProductClass();
+        $allowedProducts = static fn (self $testCase) => $testCase->getMockForAllowProductClass();
         $provider[] = [
             [
                 'attribute_id_1' => [
@@ -248,36 +242,21 @@ class DataTest extends TestCase
 
     public function testGetGalleryImages()
     {
-        $productMock = $this->getMockBuilder(ProductInterface::class)
-            ->setMethods(['getMediaGalleryImages'])
-            ->getMockForAbstractClass();
-        $productMock->expects($this->once())
-            ->method('getMediaGalleryImages')
-            ->willReturn($this->getImagesCollection());
+        $productMock = new ProductTestHelper();
+        $productMock->setMediaGalleryImages($this->getImagesCollection());
 
         $this->imageUrlBuilder->expects($this->exactly(3))
             ->method('getUrl')
-            ->withConsecutive(
-                [
-                    self::identicalTo('test_file'),
-                    self::identicalTo('product_page_image_small')
-                ],
-                [
-                    self::identicalTo('test_file'),
-                    self::identicalTo('product_page_image_medium')
-                ],
-                [
-                    self::identicalTo('test_file'),
-                    self::identicalTo('product_page_image_large')
-                ]
-            )
-            ->will(
-                self::onConsecutiveCalls(
-                    'testSmallImageUrl',
-                    'testMediumImageUrl',
-                    'testLargeImageUrl'
-                )
-            );
+            ->willReturnCallback(function ($arg1, $arg2) {
+                if ($arg1 == 'test_file' && $arg2 == 'product_page_image_small') {
+                    return 'testSmallImageUrl';
+                } elseif ($arg1 == 'test_file' && $arg2 == 'product_page_image_medium') {
+                    return 'testMediumImageUrl';
+                } elseif ($arg1 == 'test_file' && $arg2 == 'product_page_image_large') {
+                    return 'testLargeImageUrl';
+                }
+            });
+
         $this->_imageHelperMock->expects(self::never())
             ->method('setImageFile')
             ->with('test_file')
@@ -303,9 +282,7 @@ class DataTest extends TestCase
      */
     private function getImagesCollection(): MockObject
     {
-        $collectionMock = $this->getMockBuilder(Collection::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $collectionMock = $this->createMock(Collection::class);
 
         $items = [
             new DataObject(
@@ -313,9 +290,7 @@ class DataTest extends TestCase
             ),
         ];
 
-        $collectionMock->expects($this->any())
-            ->method('getIterator')
-            ->willReturn(new \ArrayIterator($items));
+        $collectionMock->method('getIterator')->willReturn(new \ArrayIterator($items));
 
         return $collectionMock;
     }

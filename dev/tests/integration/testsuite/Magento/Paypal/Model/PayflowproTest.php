@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Paypal\Model;
@@ -43,11 +43,20 @@ class PayflowproTest extends TestCase
     {
         $this->_objectManager = Bootstrap::getObjectManager();
         $httpClientFactoryMock = $this->getMockBuilder(LaminasClientFactory::class)
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
-        $this->_httpClientMock = $this->getMockBuilder(LaminasClient::class)->setMethods([])
-            ->disableOriginalConstructor()->getMock();
+        $this->_httpClientMock = $this->getMockBuilder(LaminasClient::class)
+            ->disableOriginalConstructor()
+            ->onlyMethods([
+                'setUri',
+                'setOptions',
+                'setMethod',
+                'setParameterPost',
+                'setHeaders',
+                'setUrlEncodeBody',
+                'send'
+            ])->getMock();
         $this->_httpClientMock->expects($this->any())->method('setUri')->willReturnSelf();
         $this->_httpClientMock->expects($this->any())->method('setOptions')->willReturnSelf();
         $this->_httpClientMock->expects($this->any())->method('setMethod')->willReturnSelf();

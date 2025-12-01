@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\CustomerImportExport\Model\ResourceModel\Import\CustomerComposite;
 
@@ -81,7 +81,7 @@ class Data extends \Magento\ImportExport\Model\ResourceModel\Import\Data
     {
         $entityCustomer = CustomerComposite::COMPONENT_ENTITY_CUSTOMER;
         if ($this->_entityType == $entityCustomer) {
-            if ($rowData['_scope'] == CustomerComposite::SCOPE_DEFAULT) {
+            if ((isset($rowData['_scope'])) && $rowData['_scope'] == CustomerComposite::SCOPE_DEFAULT) {
                 return $rowData;
             } else {
                 return null;

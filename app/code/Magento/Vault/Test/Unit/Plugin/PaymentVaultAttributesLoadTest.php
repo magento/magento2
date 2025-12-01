@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 
 declare(strict_types=1);
@@ -55,17 +55,17 @@ class PaymentVaultAttributesLoadTest extends TestCase
     {
         $this->paymentMock = $this->getMockBuilder(OrderPaymentInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getEntityId', 'setExtensionAttributes'])
+            ->onlyMethods(['getEntityId', 'setExtensionAttributes'])
             ->getMockForAbstractClass();
         $this->paymentExtensionMock = $this->getMockBuilder(OrderPaymentExtensionInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getVaultPaymentToken', 'setVaultPaymentToken'])
+            ->addMethods(['getVaultPaymentToken', 'setVaultPaymentToken'])
             ->getMockForAbstractClass();
 
         $this->paymentExtensionFactoryMock = $this->createMock(OrderPaymentExtensionFactory::class);
         $this->paymentTokenManagementMock = $this->getMockBuilder(PaymentTokenManagementInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getByPaymentId'])
+            ->onlyMethods(['getByPaymentId'])
             ->getMockForAbstractClass();
 
         $this->plugin = (new ObjectManagerHelper($this))->getObject(

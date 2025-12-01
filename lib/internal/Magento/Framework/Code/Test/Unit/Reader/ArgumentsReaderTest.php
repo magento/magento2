@@ -1,8 +1,8 @@
 <?php
 /**
  *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework\Code\Test\Unit\Reader;
 
@@ -408,7 +408,7 @@ class ArgumentsReaderTest extends TestCase
     /**
      * @return array
      */
-    public function testIsCompatibleTypeDataProvider()
+    public static function testIsCompatibleTypeDataProvider()
     {
         return [
             ['array', 10, false],

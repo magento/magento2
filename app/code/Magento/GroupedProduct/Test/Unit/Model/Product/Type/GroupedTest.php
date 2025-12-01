@@ -1,12 +1,13 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\GroupedProduct\Test\Unit\Model\Product\Type;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\Product\Attribute\Source\Status;
 use Magento\Catalog\Model\Product\Type\AbstractType;
@@ -68,18 +69,16 @@ class GroupedTest extends TestCase
     protected function setUp(): void
     {
         $this->objectHelper = new ObjectManager($this);
-        $eventManager = $this->getMockForAbstractClass(ManagerInterface::class);
+        $eventManager = $this->createMock(ManagerInterface::class);
         $fileStorageDbMock = $this->createMock(Database::class);
         $filesystem = $this->createMock(Filesystem::class);
         $coreRegistry = $this->createMock(Registry::class);
         $this->product = $this->createMock(Product::class);
-        $logger = $this->getMockForAbstractClass(LoggerInterface::class);
+        $logger = $this->createMock(LoggerInterface::class);
         $productFactoryMock = $this->createMock(ProductFactory::class);
         $this->catalogProductLink = $this->createMock(Link::class);
         $this->productStatusMock = $this->createMock(Status::class);
-        $this->serializer = $this->getMockBuilder(Json::class)
-            ->setMethods(['serialize'])
-            ->getMockForAbstractClass();
+        $this->serializer = $this->createMock(Json::class);
 
         $this->_model = $this->objectHelper->getObject(
             Grouped::class,
@@ -171,8 +170,8 @@ class GroupedTest extends TestCase
      * @param int $status
      * @param array $filters
      * @param array $result
-     * @dataProvider addStatusFilterDataProvider
      */
+    #[DataProvider('addStatusFilterDataProvider')]
     public function testAddStatusFilter($status, $filters, $result): void
     {
         $this->product->expects($this->once())->method('getData')->willReturn($filters);
@@ -185,7 +184,7 @@ class GroupedTest extends TestCase
      *
      * @return array
      */
-    public function addStatusFilterDataProvider(): array
+    public static function addStatusFilterDataProvider(): array
     {
         return [[1, [], [1]], [1, false, [1]]];
     }
@@ -266,16 +265,9 @@ class GroupedTest extends TestCase
      */
     public function testGetAssociatedProductIdsNonCached(): void
     {
-        $args = $this->objectHelper->getConstructArguments(
-            Grouped::class,
-            []
-        );
 
         /** @var Grouped $model */
-        $model = $this->getMockBuilder(Grouped::class)
-            ->setMethods(['getAssociatedProducts'])
-            ->setConstructorArgs($args)
-            ->getMock();
+        $model = $this->createPartialMock(Grouped::class, ['getAssociatedProducts']);
 
         $associatedProduct = $this->createMock(Product::class);
         $model->expects(
@@ -315,10 +307,10 @@ class GroupedTest extends TestCase
      */
     public function testGetAssociatedProductCollection(): void
     {
-        $link = $this->getMockBuilder(\Magento\Catalog\Model\Product\Link::class)->addMethods(['setLinkTypeId'])
-            ->onlyMethods(['getProductCollection'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $link = $this->createPartialMock(
+            \Magento\Catalog\Test\Unit\Helper\ProductLinkTestHelper::class,
+            ['getProductCollection', 'setLinkTypeId']
+        );
         $this->product->expects($this->once())->method('getLinkInstance')->willReturn($link);
         $link->expects(
             $this->any()
@@ -332,7 +324,7 @@ class GroupedTest extends TestCase
             ['setFlag', 'setIsStrongMode', 'setProduct']
         );
         $link->expects($this->once())->method('getProductCollection')->willReturn($collection);
-        $collection->expects($this->any())->method('setFlag')->willReturn($collection);
+        $collection->method('setFlag')->willReturn($collection);
         $collection->expects($this->once())->method('setIsStrongMode')->willReturn($collection);
         $this->assertEquals($collection, $this->_model->getAssociatedProductCollection($this->product));
     }
@@ -342,15 +334,12 @@ class GroupedTest extends TestCase
      *
      * @param array $superGroup
      * @param array $result
-     * @dataProvider processBuyRequestDataProvider
      */
+    #[DataProvider('processBuyRequestDataProvider')]
     public function testProcessBuyRequest($superGroup, $result)
     {
-        $buyRequest = $this->getMockBuilder(DataObject::class)
-            ->addMethods(['getSuperGroup'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $buyRequest->expects($this->any())->method('getSuperGroup')->willReturn($superGroup);
+        $buyRequest = new \Magento\Framework\DataObject\Test\Unit\Helper\DataObjectTestHelper();
+        $buyRequest->setSuperGroup($superGroup);
 
         $this->assertEquals($result, $this->_model->processBuyRequest($this->product, $buyRequest));
     }
@@ -360,7 +349,7 @@ class GroupedTest extends TestCase
      *
      * @return array
      */
-    public function processBuyRequestDataProvider(): array
+    public static function processBuyRequestDataProvider(): array
     {
         return [
             'positive' => [[1, 2, 3], ['super_group' => [1, 2, 3]]],
@@ -439,10 +428,10 @@ class GroupedTest extends TestCase
             ->method('getIterator')
             ->willReturn(new \ArrayIterator($items));
 
-        $link = $this->getMockBuilder(\Magento\Catalog\Model\Product\Link::class)->addMethods(['setLinkTypeId'])
-            ->onlyMethods(['getProductCollection'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $link = $this->createPartialMock(
+            \Magento\Catalog\Test\Unit\Helper\ProductLinkTestHelper::class,
+            ['getProductCollection', 'setLinkTypeId']
+        );
         $link
             ->expects($this->any())
             ->method('setLinkTypeId');
@@ -457,9 +446,7 @@ class GroupedTest extends TestCase
             ->willReturn($link);
 
         $this->product
-            ->expects($this->any())
-            ->method('getData')
-            ->willReturn($items);
+            ->method('getData')->willReturn($items);
 
         $this->assertEquals(
             $expectedMsg,
@@ -521,9 +508,7 @@ class GroupedTest extends TestCase
             ->expects($this->atLeastOnce())
             ->method('getData')
             ->willReturn($associatedProducts);
-        $this->serializer->expects($this->any())
-            ->method('serialize')
-            ->willReturn(json_encode($buyRequest->getData()));
+        $this->serializer->method('serialize')->willReturn(json_encode($buyRequest->getData()));
 
         $this->assertEquals(
             [0 => $this->product],
@@ -626,10 +611,7 @@ class GroupedTest extends TestCase
             ['_prepareProduct', 'deleteTypeSpecificData']
         );
         $associatedPrepareResult = [
-            $this->getMockBuilder(Product::class)
-                ->setMockClassName('resultProduct')
-                ->disableOriginalConstructor()
-                ->getMock()
+            $this->createMock(Product::class)
         ];
         $typeMock->expects($this->once())->method('_prepareProduct')->willReturn($associatedPrepareResult);
 
@@ -638,9 +620,7 @@ class GroupedTest extends TestCase
         $buyRequest = new DataObject();
         $buyRequest->setSuperGroup([$associatedId => 1]);
 
-        $this->serializer->expects($this->any())
-            ->method('serialize')
-            ->willReturn(json_encode($buyRequest->getData()));
+        $this->serializer->method('serialize')->willReturn(json_encode($buyRequest->getData()));
 
         $cached = true;
         $this->product
@@ -661,11 +641,11 @@ class GroupedTest extends TestCase
     /**
      * Test prepareForCartAdvanced() method in full mode
      *
-     * @dataProvider prepareForCartAdvancedWithProductsStrictTrueDataProvider
      * @param array $subProducts
      * @param array $buyRequest
      * @param mixed $expectedResult
      */
+    #[DataProvider('prepareForCartAdvancedWithProductsStrictTrueDataProvider')]
     public function testPrepareForCartAdvancedWithProductsStrictTrue(
         array $subProducts,
         array $buyRequest,
@@ -736,7 +716,7 @@ class GroupedTest extends TestCase
     /**
      * @return array
      */
-    public function prepareForCartAdvancedWithProductsStrictTrueDataProvider(): array
+    public static function prepareForCartAdvancedWithProductsStrictTrueDataProvider(): array
     {
         return [
             [

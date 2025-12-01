@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -83,19 +83,19 @@ class StructureTest extends TestCase
     /**
      * @return array
      */
-    public function reorderChildElementLogDataProvider()
+    public static function reorderChildElementLogDataProvider()
     {
         return [
             [
-                'loggerExpects' => $this->once(),
+                'loggerExpects' => self::once(),
                 'stateMode' => State::MODE_DEVELOPER
             ],
             [
-                'loggerExpects' => $this->never(),
+                'loggerExpects' => self::never(),
                 'stateMode' => State::MODE_DEFAULT
             ],
             [
-                'loggerExpects' => $this->never(),
+                'loggerExpects' => self::never(),
                 'stateMode' => State::MODE_PRODUCTION
             ]
         ];

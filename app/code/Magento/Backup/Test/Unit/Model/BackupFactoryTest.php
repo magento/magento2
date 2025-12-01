@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -63,8 +63,13 @@ class BackupFactoryTest extends TestCase
         $this->objectManager = $this->getMockForAbstractClass(ObjectManagerInterface::class);
         $this->objectManager
             ->method('create')
-            ->withConsecutive([Collection::class], [Backup::class])
-            ->willReturnOnConsecutiveCalls($this->fsCollection, $this->backupModel);
+            ->willReturnCallback(function ($arg1, $arg2) {
+                if ($arg1 == Collection::class) {
+                    return $this->fsCollection;
+                } elseif ($arg1 == Backup::class) {
+                    return $this->backupModel;
+                }
+            });
 
         $this->instance = new BackupFactory($this->objectManager);
     }

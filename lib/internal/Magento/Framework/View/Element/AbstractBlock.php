@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -12,6 +12,7 @@ use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Cache\LockGuardedCacheLoader;
 use Magento\Framework\Config\ConfigOptionsListConstants;
 use Magento\Framework\DataObject\IdentityInterface;
+use Magento\Framework\Exception\RuntimeException;
 
 /**
  * Base class for all blocks.
@@ -40,6 +41,11 @@ abstract class AbstractBlock extends \Magento\Framework\DataObject implements Bl
      * Prefix for cache key of block
      */
     public const CACHE_KEY_PREFIX = 'BLOCK_';
+
+    /**
+     * Prefix for custom cache key of block
+     */
+    public const CUSTOM_CACHE_KEY_PREFIX = 'CUSTOM_BLOCK_';
 
     /**
      * @var \Magento\Framework\View\DesignInterface
@@ -886,9 +892,9 @@ abstract class AbstractBlock extends \Magento\Framework\DataObject implements Bl
     /**
      * Escape HTML entities
      *
-     * @param string|array $data
+     * @param string|int|float|\Stringable|array<string|int|float|\Stringable> $data
      * @param array|null $allowedTags
-     * @return string
+     * @return ($data is array ? string[] : string)
      * @deprecated 103.0.0 Use $escaper directly in templates and in blocks.
      * @see Escaper Usage
      */
@@ -900,7 +906,7 @@ abstract class AbstractBlock extends \Magento\Framework\DataObject implements Bl
     /**
      * Escape string for the JavaScript context
      *
-     * @param string $string
+     * @param string|int|float|\Stringable $string
      * @return string
      * @since 101.0.0
      * @deprecated 103.0.0 Use $escaper directly in templates and in blocks.
@@ -914,7 +920,7 @@ abstract class AbstractBlock extends \Magento\Framework\DataObject implements Bl
     /**
      * Escape a string for the HTML attribute context
      *
-     * @param string $string
+     * @param string|int|float|\Stringable $string
      * @param boolean $escapeSingleQuote
      * @return string
      * @since 101.0.0
@@ -952,7 +958,7 @@ abstract class AbstractBlock extends \Magento\Framework\DataObject implements Bl
     {
         $params = ['allowableTags' => $allowableTags, 'escape' => $allowHtmlEntities];
 
-        return $data ? $this->filterManager->stripTags($data, $params) : '';
+        return $data ? $this->filterManager->stripTags($data, $params) : $data;
     }
 
     /**
@@ -1038,11 +1044,16 @@ abstract class AbstractBlock extends \Magento\Framework\DataObject implements Bl
      * Get Key for caching block content
      *
      * @return string
+     * @throws RuntimeException
      */
     public function getCacheKey()
     {
         if ($this->hasData('cache_key')) {
-            return static::CACHE_KEY_PREFIX . $this->getData('cache_key');
+            if (preg_match('/[^a-z0-9\-\_]/i', $this->getData('cache_key'))) {
+                throw new RuntimeException(__('Please enter cache key with only alphanumeric or hash string.'));
+            }
+
+            return static::CUSTOM_CACHE_KEY_PREFIX . $this->getData('cache_key');
         }
 
         /**

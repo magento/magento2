@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -115,7 +115,7 @@ class RowBaseAndTotalBaseCalculatorTestCase extends TestCase
 
         $this->mockCalculationTool = $this->getMockBuilder(Calculation::class)
             ->disableOriginalConstructor()
-            ->setMethods(
+            ->onlyMethods(
                 ['__wakeup', 'round', 'getRate', 'getStoreRate', 'getRateRequest', 'getAppliedRates']
             )
             ->getMock();
@@ -125,11 +125,11 @@ class RowBaseAndTotalBaseCalculatorTestCase extends TestCase
 
         $this->mockItem = $this->getMockBuilder(QuoteDetailsItemInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getExtensionAttributes', 'getUnitPrice'])
+            ->onlyMethods(['getExtensionAttributes', 'getUnitPrice'])
             ->getMockForAbstractClass();
         $this->quoteDetailsItemExtension = $this->getMockBuilder(QuoteDetailsItemExtensionInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getPriceForTaxCalculation'])
+            ->addMethods(['getPriceForTaxCalculation'])
             ->getMockForAbstractClass();
         $this->mockItem->expects($this->any())->method('getExtensionAttributes')
             ->willReturn($this->quoteDetailsItemExtension);

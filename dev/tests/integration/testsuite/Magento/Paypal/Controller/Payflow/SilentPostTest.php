@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Paypal\Controller\Payflow;
 
@@ -94,7 +94,7 @@ class SilentPostTest extends AbstractController
      *
      * @return array
      */
-    public function responseCodeDataProvider()
+    public static function responseCodeDataProvider()
     {
         return [
             [Payflowlink::RESPONSE_CODE_APPROVED, Order::STATE_COMPLETE, Order::STATE_COMPLETE],

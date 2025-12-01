@@ -1,13 +1,11 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 
 /**
  * Configuration paths storage
- *
- * @author     Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\Tax\Model;
 
@@ -923,7 +921,9 @@ class Config implements ResetAfterRequestInterface
         $res = false;
         $priceIncludesTax = $this->priceIncludesTax($store)
             || $this->getNeedUseShippingExcludeTax()
-            || $this->shippingPriceIncludesTax($store);
+            || $this->shippingPriceIncludesTax($store)
+            || $this->displayCartShippingInclTax()
+            || $this->displayCartShippingBoth();
         if ($priceIncludesTax) {
             switch ($this->getPriceDisplayType($store)) {
                 case self::DISPLAY_TYPE_EXCLUDING_TAX:

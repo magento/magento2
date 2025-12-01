@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\ConfigurableImportExport\Model\Import\Product\Type;
 
@@ -98,7 +98,7 @@ class ConfigurableTest extends TestCase
         $this->assertTrue($stockItem->getIsInStock());
     }
 
-    public function configurableImportDataProvider()
+    public static function configurableImportDataProvider()
     {
         return [
             'Configurable 1' => [

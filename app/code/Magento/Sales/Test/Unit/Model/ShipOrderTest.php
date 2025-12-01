@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -194,7 +194,7 @@ class ShipOrderTest extends TestCase
             ->getMockForAbstractClass();
         $this->validationMessagesMock = $this->getMockBuilder(ValidatorResultInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['hasMessages', 'getMessages', 'addMessage'])
+            ->onlyMethods(['hasMessages', 'getMessages', 'addMessage'])
             ->getMockForAbstractClass();
         $helper = new ObjectManager($this);
 
@@ -437,7 +437,7 @@ class ShipOrderTest extends TestCase
     /**
      * @return array
      */
-    public function dataProvider()
+    public static function dataProvider()
     {
         return [
             'TestWithNotifyTrue' => [1, [1 => 2], true, true],

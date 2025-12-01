@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -48,7 +48,8 @@ class DataTest extends TestCase
         $this->priceCurrencyMock = $this->getMockForAbstractClass(PriceCurrencyInterface::class);
         $this->productMock = $this->getMockBuilder(Product::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getMsrp', 'getPriceInfo', '__wakeup'])
+            ->addMethods(['getMsrp'])
+            ->onlyMethods(['getPriceInfo', '__wakeup'])
             ->getMock();
         $this->msrpPriceCalculator = $this->getMockBuilder(MsrpPriceCalculatorInterface::class)
             ->getMockForAbstractClass();

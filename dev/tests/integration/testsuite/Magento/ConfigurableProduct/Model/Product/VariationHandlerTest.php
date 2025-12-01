@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -126,7 +126,7 @@ class VariationHandlerTest extends TestCase
     /**
      * @return array
      */
-    public function generateSimpleProductsDataProvider(): array
+    public static function generateSimpleProductsDataProvider(): array
     {
         return [
             [
@@ -163,7 +163,7 @@ class VariationHandlerTest extends TestCase
     /**
      * @return array
      */
-    public function generateSimpleProductsWithPartialDataDataProvider(): array
+    public static function generateSimpleProductsWithPartialDataDataProvider(): array
     {
         return [
             [

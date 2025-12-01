@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -17,6 +17,8 @@ use Magento\Directory\Model\Region;
 use Magento\Directory\Model\RegionFactory;
 use Magento\Directory\Model\ResourceModel\Region\Collection;
 use Magento\Eav\Model\Config;
+use Magento\Framework\Api\AttributeInterface;
+use Magento\Framework\Api\AttributeValue;
 use Magento\Framework\Data\Collection\AbstractDb;
 use Magento\Framework\DataObject;
 use Magento\Framework\Model\Context;
@@ -24,6 +26,8 @@ use Magento\Framework\Registry;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Magento\Customer\Model\Address\AbstractAddress\RegionModelsCache;
+use Magento\Customer\Model\Address\AbstractAddress\CountryModelsCache;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -109,6 +113,8 @@ class AbstractAddressTest extends TestCase
                 'resource' => $this->resourceMock,
                 'resourceCollection' => $this->resourceCollectionMock,
                 'compositeValidator' => $this->compositeValidatorMock,
+                'countryModelsCache' => new CountryModelsCache,
+                'regionModelsCache' => new RegionModelsCache,
             ]
         );
     }
@@ -349,7 +355,7 @@ class AbstractAddressTest extends TestCase
     /**
      * @return array
      */
-    public function validateDataProvider()
+    public static function validateDataProvider()
     {
         $countryId = 1;
         $data = [
@@ -422,7 +428,7 @@ class AbstractAddressTest extends TestCase
     /**
      * @return array
      */
-    public function getStreetFullDataProvider()
+    public static function getStreetFullDataProvider()
     {
         return [
             [null, null],
@@ -432,6 +438,57 @@ class AbstractAddressTest extends TestCase
             ['single line', 'single line'],
             ['single line', ['single line', null]],
         ];
+    }
+
+    /**
+     * @return void
+     */
+    public function testSetCustomerAttributes(): void
+    {
+        $model = $this->getMockBuilder(AbstractAddress::class)
+            ->onlyMethods(['getCustomAttributesCodes'])
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
+        $customAttributeFactory = $this->createMock(\Magento\Customer\Model\AttributeFactory::class);
+        $customAttributeFactory->method('create')
+            ->willReturnCallback(
+                function ($data) {
+                    return new AttributeValue($data);
+                }
+            );
+        $data = [
+            'customer_attribute1' => new AttributeValue([
+                'attribute_code' => 'customer_attribute1',
+                'value' => 'customer_attribute1_value'
+            ]),
+            'customer_attribute2' => new AttributeValue([
+                'attribute_code' => 'customer_attribute2',
+                'value' => ['customer_attribute2_value1', 'customer_attribute2_value2']
+            ])
+        ];
+        $model->method('getCustomAttributesCodes')->willReturn(array_keys($data));
+        $this->objectManager->setBackwardCompatibleProperty(
+            $model,
+            'customAttributeFactory',
+            $customAttributeFactory
+        );
+        $model->setData('custom_attributes', $data);
+        $this->assertEquals(
+            [
+                [
+                    'attribute_code' => 'customer_attribute1',
+                    'value' => 'customer_attribute1_value'
+                ],
+                [
+                    'attribute_code' => 'customer_attribute2',
+                    'value' => "customer_attribute2_value1\ncustomer_attribute2_value2"
+                ]
+            ],
+            array_map(
+                fn ($attr) => ['attribute_code' => $attr->getAttributeCode(), 'value' => $attr->getValue()],
+                $model->getCustomAttributes()
+            )
+        );
     }
 
     protected function tearDown(): void

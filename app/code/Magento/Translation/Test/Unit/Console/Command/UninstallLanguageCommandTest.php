@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -98,7 +98,8 @@ class UninstallLanguageCommandTest extends TestCase
             ->method('create')
             ->willReturn($backupRollback);
 
-        $this->remove->expects($this->once())->method('remove');
+        $this->remove->expects($this->once())->method('remove')
+            ->willReturn('vendor/language-ua_ua');
         $this->cache->expects($this->once())->method('clean');
 
         $this->tester->execute(['package' => ['vendor/language-ua_ua'], '--backup-code' => true]);
@@ -122,7 +123,8 @@ class UninstallLanguageCommandTest extends TestCase
             );
 
         $this->backupRollbackFactory->expects($this->never())->method('create');
-        $this->remove->expects($this->once())->method('remove');
+        $this->remove->expects($this->once())->method('remove')
+            ->willReturn('vendor/language-ua_ua');
         $this->cache->expects($this->once())->method('clean');
 
         $this->tester->execute(['package' => ['vendor/language-ua_ua']]);

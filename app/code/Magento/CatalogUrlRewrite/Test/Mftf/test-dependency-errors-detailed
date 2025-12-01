@@ -1,0 +1,5 @@
+
+File "/var/www/html/app/code/Magento/CatalogUrlRewrite/Test/Mftf/Test/AdminUrlForProductRewrittenCorrectlyTest.xml"
+contains entity references that violate dependency constraints:
+		
+	 CliConsumerStartActionGroup from module(s): magento/module-message-queue

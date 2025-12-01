@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -50,7 +50,7 @@ class InteractiveCollectorTest extends TestCase
     {
         $this->questionFactoryMock = $this->getMockBuilder(QuestionFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
         $this->questionHelperMock = $this->getMockBuilder(QuestionHelper::class)
             ->disableOriginalConstructor()
@@ -83,12 +83,17 @@ class InteractiveCollectorTest extends TestCase
             ->willReturn('someValue');
         $this->questionFactoryMock->expects($this->exactly(3))
             ->method('create')
-            ->withConsecutive(
-                [['question' => $configPaths[0] . ': ']],
-                [['question' => $configPaths[1] . ': ']],
-                [['question' => $configPaths[2] . ': ']]
-            )
-            ->willReturn($questionMock);
+            ->willReturnCallback(
+                function ($arg) use ($configPaths, $questionMock) {
+                    if ($arg == ['question' => $configPaths[0] . ': ']) {
+                        return $questionMock;
+                    } elseif ($arg == ['question' => $configPaths[1] . ': ']) {
+                        return $questionMock;
+                    } elseif ($arg == ['question' => $configPaths[2] . ': ']) {
+                        return $questionMock;
+                    }
+                }
+            );
 
         $this->assertEquals(
             [

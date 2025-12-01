@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework\View\Page\Config\Generator;
 
@@ -72,7 +72,7 @@ class Head implements Layout\GeneratorInterface
      */
     public function __construct(
         \Magento\Framework\View\Page\Config $pageConfig,
-        \Magento\Framework\UrlInterface $url = null
+        ?\Magento\Framework\UrlInterface $url = null
     ) {
         $this->pageConfig = $pageConfig;
         $this->url = $url ?: ObjectManager::getInstance()->get(\Magento\Framework\UrlInterface::class);

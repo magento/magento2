@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -142,11 +142,9 @@ class CreditmemoDocumentFactoryTest extends TestCase
 
         $this->commentMock = $this->getMockBuilder(CreditmemoCommentInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(
-                array_merge(
-                    get_class_methods(CreditmemoCommentInterface::class),
-                    ['setStoreId', 'setCreditmemo']
-                )
+            ->addMethods(['setStoreId', 'setCreditmemo'])
+            ->onlyMethods(
+                    get_class_methods(CreditmemoCommentInterface::class)
             )
             ->getMock();
         $this->factory = $this->objectManager->getObject(

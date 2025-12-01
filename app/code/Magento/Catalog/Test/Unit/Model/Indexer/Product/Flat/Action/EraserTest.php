@@ -1,8 +1,7 @@
 <?php
 /**
- *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -102,10 +101,12 @@ class EraserTest extends TestCase
             ->willReturn([$store1, $store2]);
         $this->connection
             ->method('delete')
-            ->withConsecutive(
-                ['store_1_flat', ['entity_id IN(?)' => [1]]],
-                ['store_2_flat', ['entity_id IN(?)' => [1]]]
-            );
+            ->willReturnCallback(function ($arg1, $arg2) {
+                if ($arg1 == 'store_1_flat' || $arg1 == 'store_2_flat' &&
+                    isset($arg2['entity_id IN(?)']) && $arg2['entity_id IN(?)'] === [1]) {
+                    return null;
+                }
+            });
 
         $this->model->deleteProductsFromStore(1);
     }

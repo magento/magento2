@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2021 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -47,9 +47,11 @@ class CollectionTest extends TestCase
                 'resourceModel' => Page::class
             ]
         );
+        $filterDate = new \DateTime($filterDate);
+        $filterDate->setTimezone(new \DateTimeZone($timeZone->getConfigTimezone()));
         $convertedDate = $timeZone->convertConfigTimeToUtc($filterDate);
 
-        $collection = $gridCollection->addFieldToFilter($field, ['qteq' => $filterDate]);
+        $collection = $gridCollection->addFieldToFilter($field, ['qteq' => $filterDate->format('Y-m-d H:i:s')]);
         $expectedSelectCondition = "`{$field}` = '{$convertedDate}'";
 
         $this->assertStringContainsString($expectedSelectCondition, $collection->getSelectSql(true));
@@ -58,7 +60,7 @@ class CollectionTest extends TestCase
     /**
      * @return array
      */
-    public function getCollectionFiltersDataProvider(): array
+    public static function getCollectionFiltersDataProvider(): array
     {
         return [
             'cms_page_collection_for_creation_time' => [

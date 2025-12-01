@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -115,7 +115,7 @@ class UseConfigSettingsTest extends TestCase
     /**
      * @return array
      */
-    public function prepareSourceDataProvider()
+    public static function prepareSourceDataProvider()
     {
         return [
             'valid' => [
@@ -132,7 +132,7 @@ class UseConfigSettingsTest extends TestCase
                     'unserialized' => true
                 ],
                 'sourceValue' => '{"32000":3}',
-                'serialziedCalledNum' => 1,
+                'serializedCalledNum' => 1,
                 'isValidCalledNum' => 1
             ]
         ];

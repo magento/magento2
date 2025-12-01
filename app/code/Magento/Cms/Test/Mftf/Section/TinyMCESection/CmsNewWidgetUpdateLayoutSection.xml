@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
-  */
+/**
+ * Copyright 2022 Adobe
+ * All Rights Reserved.
+ */
 -->
 
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -14,7 +14,8 @@
         <element name="Template" type="button" selector="#all_pages_0 > table > tbody > tr > td:nth-child(2) > div > div > select"/>
         <element name="SpecificCategories" type="button" selector="//input[@id='specific_anchor_categories_0']"/>
         <element name="CategoryChooserButton" type="button" selector="//*[@id='anchor_categories_ids_0']/p/a[1]/img"/>
-        <element name="BranchCat" type="button" selector="//a/span[contains(text(),'{{var}}')]/../..//img[@class='x-tree-ec-icon x-tree-elbow-end-plus']" parameterized="true"/>
-        <element name="CountAllNestedCat" type="button" selector="//*[@class='x-tree-ec-icon x-tree-elbow-end-minus' or @class='x-tree-ec-icon x-tree-elbow-end']"/>
+        <element name="BranchCat" type="button" selector="//a[contains(text(),'{{var}}')]/..//i[contains(@class,'jstree-ocl')]" parameterized="true"/>
+        <element name="CountAllNestedCat" type="button" selector="//*[@class='jstree-node jstree-last jstree-open' or @class='jstree-node  jstree-leaf jstree-last']//*[@class='jstree-icon jstree-ocl']"/>
+        <element name="CategoryName" type="text" selector="(//*[contains(@class, 'jstree-node') and contains(@class, 'jstree-last')])//a[contains(@class, 'jstree-anchor') and contains(normalize-space(text()), concat('{{CategoryName}}', ' '))]" parameterized="true"/>
     </section>
 </sections>

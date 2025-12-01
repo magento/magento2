@@ -1,13 +1,11 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 
 /**
  * Products in grouped grid
- *
- * @author     Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\GroupedProduct\Block\Product\Grouped\AssociatedProducts;
 
@@ -18,7 +16,7 @@ namespace Magento\GroupedProduct\Block\Product\Grouped\AssociatedProducts;
 class ListAssociatedProducts extends \Magento\Backend\Block\Template
 {
     /**
-     * Registry
+     * Registry variable
      *
      * @var \Magento\Framework\Registry
      */

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -78,12 +78,12 @@ class ImportResultTest extends \Magento\TestFramework\TestCase\AbstractBackendCo
     /**
      * @return array
      */
-    public function validationDataProvider(): array
+    public static function validationDataProvider(): array
     {
         return [
             [
-                'file_name' => 'invalid_catalog_products.csv',
-                'mime-type' => 'text/csv',
+                'fileName' => 'invalid_catalog_products.csv',
+                'mimeType' => 'text/csv',
                 'delimiter' => ',',
             ],
         ];

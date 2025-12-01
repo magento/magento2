@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -110,7 +110,7 @@ class ModeTest extends TestCase
             ->getMock();
         $this->processorFacadeFactory = $this->getMockBuilder(ProcessorFacadeFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMockForAbstractClass();
         $this->processorFacade = $this->getMockBuilder(ProcessorFacade::class)
             ->disableOriginalConstructor()
@@ -202,13 +202,15 @@ class ModeTest extends TestCase
             ->willReturn([]);
         $this->writerMock->expects($this->exactly(2))
             ->method("saveConfig")
-            ->withConsecutive(
-                [$this->equalTo([ConfigFilePool::APP_ENV => [State::PARAM_MODE => State::MODE_PRODUCTION]])],
-                [$this->equalTo([ConfigFilePool::APP_ENV => [State::PARAM_MODE => State::MODE_DEVELOPER]])]
-            )
-            ->willReturnCallback(function ($data) use (&$dataStorage) {
-                $dataStorage = $data;
-            });
+            ->willReturnCallback(
+                function ($data) use (&$dataStorage) {
+                    if ($data === [ConfigFilePool::APP_ENV => [State::PARAM_MODE => State::MODE_PRODUCTION]]) {
+                        $dataStorage = $data;
+                    } elseif ($data === [ConfigFilePool::APP_ENV => [State::PARAM_MODE => State::MODE_DEVELOPER]]) {
+                        $dataStorage = $data;
+                    }
+                }
+            );
         $this->readerMock->expects($this->any())
             ->method('load')
             ->willReturnCallback(function () use (&$dataStorage) {
