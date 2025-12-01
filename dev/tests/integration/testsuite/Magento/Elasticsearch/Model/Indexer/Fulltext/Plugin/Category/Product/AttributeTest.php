@@ -129,7 +129,7 @@ class AttributeTest extends TestCase
         $this->assertTrue($this->indexerProcessor->getIndexer()->isInvalid());
 
         $this->assertEquals($mappedAttributesAfter, $this->getMappingProperties());
-        
+
         $this->indexerProcessor->getIndexer()->reindexAll();
 
         $expectedResultAfterReindex = [
