@@ -28,6 +28,8 @@
         <after>
             <!--Delete customer-->
             <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
+            <!--Delete created customer while generating Order-->
+            <actionGroup ref="AdminDeleteAllCustomerActionGroup" stepKey="deleteAllCustomers"/>
             <!--Delete product-->
             <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
             <!--Logout as Admin-->
