@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -21,6 +21,10 @@ use Magento\Sales\Model\Service\InvoiceService;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
+/**
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class InvoiceServiceTest extends TestCase
 {
     /**
@@ -211,5 +215,60 @@ class InvoiceServiceTest extends TestCase
             ->willReturn($returnValue);
 
         $this->assertTrue($this->invoiceService->setVoid($id));
+    }
+
+    public function testPrepareInvoiceSetsHistoryEntityNameWhenOriginalEntityTypePresent(): void
+    {
+        $orderRepository   = $this->createMock(\Magento\Sales\Api\OrderRepositoryInterface::class);
+        $orderConverter    = $this->getMockBuilder(\Magento\Sales\Model\Convert\Order::class)
+            ->disableOriginalConstructor()->getMock();
+        $serializer   = $this->createMock(\Magento\Framework\Serialize\Serializer\Json::class);
+
+        $service = new InvoiceService(
+            $this->repositoryMock,
+            $this->commentRepositoryMock,
+            $this->searchCriteriaBuilderMock,
+            $this->filterBuilderMock,
+            $this->invoiceNotifierMock,
+            $orderRepository,
+            $orderConverter,
+            $serializer
+        );
+
+        $order = $this->getMockBuilder(\Magento\Sales\Model\Order::class)
+            ->disableOriginalConstructor()
+            ->onlyMethods(['getAllItems', 'getEntityType', 'setHistoryEntityName', 'getInvoiceCollection'])
+            ->getMock();
+
+        $invoice = $this->getMockBuilder(\Magento\Sales\Model\Order\Invoice::class)
+            ->disableOriginalConstructor()
+            ->onlyMethods(['setTotalQty', 'collectTotals'])
+            ->getMock();
+
+        $invoiceCollection = $this->getMockBuilder(\Magento\Framework\Data\Collection::class)
+            ->disableOriginalConstructor()
+            ->onlyMethods(['addItem'])
+            ->getMock();
+
+        $order->method('getAllItems')->willReturn([]);
+        $order->method('getEntityType')->willReturn('order');
+        $order->method('getInvoiceCollection')->willReturn($invoiceCollection);
+
+        $order->expects($this->once())
+            ->method('setHistoryEntityName')
+            ->with('order');
+
+        $orderConverter->expects($this->once())
+            ->method('toInvoice')
+            ->with($order)
+            ->willReturn($invoice);
+
+        $invoice->expects($this->once())->method('setTotalQty')->with(0);
+        $invoice->expects($this->once())->method('collectTotals');
+
+        $invoiceCollection->expects($this->once())->method('addItem')->with($invoice);
+
+        $result = $service->prepareInvoice($order, []);
+        $this->assertInstanceOf(\Magento\Sales\Api\Data\InvoiceInterface::class, $result);
     }
 }

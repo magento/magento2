@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework\Acl\Loader;
 
@@ -60,7 +60,7 @@ class ResourceLoader implements \Magento\Framework\Acl\LoaderInterface
      * @throws \InvalidArgumentException
      * @throws AclInvalidArgumentException
      */
-    protected function _addResourceTree(Acl $acl, array $resources, AclResource $parent = null)
+    protected function _addResourceTree(Acl $acl, array $resources, ?AclResource $parent = null)
     {
         foreach ($resources as $resourceConfig) {
             if (!isset($resourceConfig['id'])) {

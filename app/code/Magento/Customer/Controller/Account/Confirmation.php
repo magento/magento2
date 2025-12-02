@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -67,7 +67,7 @@ class Confirmation extends AbstractAccount implements HttpGetActionInterface, Ht
         PageFactory $resultPageFactory,
         StoreManagerInterface $storeManager,
         AccountManagementInterface $customerAccountManagement,
-        Url $customerUrl = null
+        ?Url $customerUrl = null
     ) {
         $this->session = $customerSession;
         $this->resultPageFactory = $resultPageFactory;
@@ -99,10 +99,7 @@ class Confirmation extends AbstractAccount implements HttpGetActionInterface, Ht
                 );
                 $this->messageManager->addSuccessMessage(__('Please check your email for confirmation key.'));
                 return $this->getRedirect('*/*/index', ['_secure' => true]);
-            } catch (InvalidTransitionException $e) {
-                $this->messageManager->addSuccessMessage(__('This email does not require confirmation.'));
-                return $this->getRedirect('*/*/index', ['_secure' => true]);
-            } catch (NoSuchEntityException $e) {
+            } catch (InvalidTransitionException | NoSuchEntityException $e) {
                 $this->messageManager->addErrorMessage(__('Wrong email.'));
             }
         }

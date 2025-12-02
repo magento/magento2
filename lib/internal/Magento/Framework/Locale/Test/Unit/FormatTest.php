@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -119,7 +119,7 @@ class FormatTest extends TestCase
      * @param string $locale
      * @dataProvider provideNumbers
      */
-    public function testGetNumber(string $value, float $expected, string $locale = null): void
+    public function testGetNumber(string $value, float $expected, ?string $locale = null): void
     {
         if ($locale !== null) {
             $this->localeResolver->method('getLocale')->willReturn($locale);

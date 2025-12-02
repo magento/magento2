@@ -1,15 +1,13 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Reports\Model\ResourceModel\Product\Downloads;
 
 /**
  * Product Downloads Report collection
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  *
  * @api
  * @since 100.0.2

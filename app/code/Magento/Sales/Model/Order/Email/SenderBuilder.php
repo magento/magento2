@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Sales\Model\Order\Email;
 
@@ -42,7 +42,7 @@ class SenderBuilder
         Template $templateContainer,
         IdentityInterface $identityContainer,
         TransportBuilder $transportBuilder,
-        TransportBuilderByStore $transportBuilderByStore = null
+        ?TransportBuilderByStore $transportBuilderByStore = null
     ) {
         $this->templateContainer = $templateContainer;
         $this->identityContainer = $identityContainer;

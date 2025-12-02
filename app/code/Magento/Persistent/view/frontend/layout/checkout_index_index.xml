@@ -1,0 +1,55 @@
+<?xml version="1.0"?>
+<!--
+ /**
+  * Copyright 2024 Adobe
+  * All Rights Reserved.
+  */
+-->
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <body>
+        <referenceBlock name="checkout.root">
+            <arguments>
+                <argument name="jsLayout" xsi:type="array">
+                    <item name="components" xsi:type="array">
+                        <item name="checkout" xsi:type="array">
+                            <item name="children" xsi:type="array">
+                                <item name="authentication" xsi:type="array">
+                                    <item name="children" xsi:type="array">
+                                        <item name="remember-me" xsi:type="array">
+                                            <item name="component" xsi:type="string">Magento_Persistent/js/view/remember-me</item>
+                                            <item name="displayArea" xsi:type="string">additional-login-form-fields</item>
+                                        </item>
+                                    </item>
+                                </item>
+                                <item name="steps" xsi:type="array">
+                                    <item name="children" xsi:type="array">
+                                        <item name="shipping-step" xsi:type="array">
+                                            <item name="children" xsi:type="array">
+                                                <item name="shippingAddress" xsi:type="array">
+                                                    <item name="children" xsi:type="array">
+                                                        <item name="customer-email" xsi:type="array">
+                                                            <item name="children" xsi:type="array">
+                                                                <item name="additional-login-form-fields" xsi:type="array">
+                                                                    <item name="children" xsi:type="array">
+                                                                        <item name="remember-me" xsi:type="array">
+                                                                            <item name="component" xsi:type="string">Magento_Persistent/js/view/remember-me</item>
+                                                                            <item name="displayArea" xsi:type="string">additional-login-form-fields</item>
+                                                                        </item>
+                                                                    </item>
+                                                                </item>
+                                                            </item>
+                                                        </item>
+                                                    </item>
+                                                </item>
+                                            </item>
+                                        </item>
+                                    </item>
+                                </item>
+                            </item>
+                        </item>
+                    </item>
+                </argument>
+            </arguments>
+        </referenceBlock>
+    </body>
+</page>

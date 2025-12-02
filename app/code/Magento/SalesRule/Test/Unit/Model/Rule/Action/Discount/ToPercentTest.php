@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -221,8 +221,8 @@ class ToPercentTest extends TestCase
                 'expectedRuleDiscountQty' => 100,
                 'expectedDiscountData' => [
                     'amount' => 98,
-                    'baseAmount' => 59.49999999999999,
-                    'originalAmount' => 118.99999999999999,
+                    'baseAmount' => 59.50,
+                    'originalAmount' => 119,
                     'baseOriginalAmount' => 80.5,
                 ],
             ]

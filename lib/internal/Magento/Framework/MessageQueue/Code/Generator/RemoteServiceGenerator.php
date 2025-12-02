@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework\MessageQueue\Code\Generator;
 
@@ -58,9 +58,9 @@ class RemoteServiceGenerator extends \Magento\Framework\Code\Generator\EntityAbs
         RemoteServiceReader $communicationRemoteServiceReader,
         $sourceClassName = null,
         $resultClassName = null,
-        Io $ioObject = null,
-        \Magento\Framework\Code\Generator\CodeGeneratorInterface $classGenerator = null,
-        DefinedClasses $definedClasses = null
+        ?Io $ioObject = null,
+        ?\Magento\Framework\Code\Generator\CodeGeneratorInterface $classGenerator = null,
+        ?DefinedClasses $definedClasses = null
     ) {
         $this->communicationConfig = $communicationConfig;
         $this->serviceMethodsMap = $serviceMethodsMap;

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
  /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
+  * Copyright 2024 Adobe
+  * All Rights Reserved.
   */
 -->
 
@@ -93,5 +93,20 @@
         <data key="path">carriers/dhl/unit_of_measure</data>
         <data key="label">Pounds</data>
         <data key="value">L</data>
+    </entity>
+    <entity name="AdminCarriersDHLEUId">
+        <data key="path">carriers/dhl/id</data>
+        <data key="scope_id">1</data>
+        <data key="value">EvgeniyDE</data>
+    </entity>
+    <entity name="AdminCarriersDHLEUPassword">
+        <data key="path">carriers/dhl/password</data>
+        <data key="scope_id">1</data>
+        <data key="value">aplNb6Rop</data>
+    </entity>
+    <entity name="AdminCarriersDHLEUAccount">
+        <data key="path">carriers/dhl/account</data>
+        <data key="scope_id">1</data>
+        <data key="value">130000279</data>
     </entity>
 </entities>

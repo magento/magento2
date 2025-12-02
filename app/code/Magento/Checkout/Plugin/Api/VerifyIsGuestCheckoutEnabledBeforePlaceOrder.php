@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2022 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -59,7 +59,7 @@ class VerifyIsGuestCheckoutEnabledBeforePlaceOrder
     public function beforePlaceOrder(
         GuestCartManagementInterface $subject,
         $cartId,
-        PaymentInterface $paymentMethod = null
+        ?PaymentInterface $paymentMethod = null
     ): void {
         /** @var $quoteIdMask QuoteIdMask */
         $quoteIdMask = $this->quoteIdMaskFactory->create()->load($cartId, 'masked_id');

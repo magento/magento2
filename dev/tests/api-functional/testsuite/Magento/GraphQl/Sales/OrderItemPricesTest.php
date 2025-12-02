@@ -1,18 +1,7 @@
 <?php
-/************************************************************************
- *
+/**
  * Copyright 2024 Adobe
  * All Rights Reserved.
- *
- * NOTICE: All information contained herein is, and remains
- * the property of Adobe and its suppliers, if any. The intellectual
- * and technical concepts contained herein are proprietary to Adobe
- * and its suppliers and are protected by all applicable intellectual
- * property laws, including trade secret and copyright laws.
- * Dissemination of this information or reproduction of this material
- * is strictly forbidden unless prior written permission is obtained
- * from Adobe.
- * ************************************************************************
  */
 declare(strict_types=1);
 
@@ -123,7 +112,7 @@ class OrderItemPricesTest extends GraphQlAbstract
             $this->getQuery(
                 $order->getIncrementId(),
                 $order->getBillingAddress()->getEmail(),
-                $order->getBillingAddress()->getPostcode()
+                $order->getBillingAddress()->getLastname()
             )
         );
 
@@ -181,7 +170,7 @@ class OrderItemPricesTest extends GraphQlAbstract
             $this->getQuery(
                 $order->getIncrementId(),
                 $order->getBillingAddress()->getEmail(),
-                $order->getBillingAddress()->getPostcode()
+                $order->getBillingAddress()->getLastname()
             )
         );
 
@@ -203,17 +192,17 @@ class OrderItemPricesTest extends GraphQlAbstract
      *
      * @param string $number
      * @param string $email
-     * @param string $postcode
+     * @param string $lastname
      * @return string
      */
-    private function getQuery(string $number, string $email, string $postcode): string
+    private function getQuery(string $number, string $email, string $lastname): string
     {
         return <<<QUERY
 {
   guestOrder(input: {
       number: "{$number}",
       email: "{$email}",
-      postcode: "{$postcode}"
+      lastname: "{$lastname}"
   }) {
     items {
       prices {

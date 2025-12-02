@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Sales\Block\Adminhtml\Transactions;
@@ -12,7 +12,6 @@ use Magento\Sales\Api\OrderPaymentRepositoryInterface;
  * Adminhtml transaction detail
  *
  * @api
- * @author     Magento Core Team <core@magentocommerce.com>
  * @since 100.0.2
  */
 class Detail extends \Magento\Backend\Block\Widget\Container
@@ -25,8 +24,6 @@ class Detail extends \Magento\Backend\Block\Widget\Container
     protected $_txn;
 
     /**
-     * Core registry
-     *
      * @var \Magento\Framework\Registry
      */
     protected $_coreRegistry = null;

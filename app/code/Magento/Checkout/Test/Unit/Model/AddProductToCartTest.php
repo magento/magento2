@@ -81,7 +81,7 @@ class AddProductToCartTest extends \PHPUnit\Framework\TestCase
         array $currentQuoteData,
         array $updatedQuoteData,
         bool $isQuoteReloaded,
-        callable $mutex = null
+        ?callable $mutex = null
     ): void {
         $cart = $this->createMock(Cart::class);
         $checkoutSession = $this->createMock(Session::class);

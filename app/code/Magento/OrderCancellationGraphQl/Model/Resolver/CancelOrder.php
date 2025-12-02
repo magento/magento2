@@ -1,16 +1,7 @@
 <?php
 /**
- * Copyright 2024 Adobe
+ * Copyright 2023 Adobe
  * All Rights Reserved.
- *
- * NOTICE: All information contained herein is, and remains
- * the property of Adobe and its suppliers, if any. The intellectual
- * and technical concepts contained herein are proprietary to Adobe
- * and its suppliers and are protected by all applicable intellectual
- * property laws, including trade secret and copyright laws.
- * Dissemination of this information or reproduction of this material
- * is strictly forbidden unless prior written permission is obtained
- * from Adobe.
  */
 declare(strict_types=1);
 
@@ -20,6 +11,7 @@ use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Exception\GraphQlAuthorizationException;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
+use Magento\Framework\GraphQl\Query\Uid;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\OrderCancellation\Model\CancelOrder as CancelOrderAction;
 use Magento\OrderCancellationGraphQl\Model\Validator\ValidateOrder;
@@ -40,13 +32,15 @@ class CancelOrder implements ResolverInterface
      * @param OrderRepositoryInterface $orderRepository
      * @param CancelOrderAction $cancelOrderAction
      * @param ValidateOrder $validateOrder
+     * @param Uid $idEncoder
      */
     public function __construct(
         private readonly ValidateRequest          $validateRequest,
         private readonly OrderFormatter           $orderFormatter,
         private readonly OrderRepositoryInterface $orderRepository,
         private readonly CancelOrderAction        $cancelOrderAction,
-        private readonly ValidateOrder            $validateOrder
+        private readonly ValidateOrder            $validateOrder,
+        private readonly Uid                      $idEncoder
     ) {
     }
 
@@ -57,13 +51,13 @@ class CancelOrder implements ResolverInterface
         Field $field,
         $context,
         ResolveInfo $info,
-        array $value = null,
-        array $args = null
+        ?array $value = null,
+        ?array $args = null
     ) {
         $this->validateRequest->execute($context, $args['input'] ?? []);
 
         try {
-            $order = $this->orderRepository->get($args['input']['order_id']);
+            $order = $this->orderRepository->get($this->idEncoder->decode($args['input']['order_id']));
 
             if ((int)$order->getCustomerId() !== $context->getUserId()) {
                 throw new GraphQlAuthorizationException(__('Current user is not authorized to cancel this order'));

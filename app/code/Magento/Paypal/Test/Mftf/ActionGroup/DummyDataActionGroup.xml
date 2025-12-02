@@ -16,6 +16,7 @@
         <waitForPageLoad stepKey="waitForPayPalPageToLoad"/>
         <waitForElementVisible selector="{{PayPalPaymentSection.email}}" stepKey="waitForEmailField" />
         <fillField selector="{{PayPalPaymentSection.email}}" userInput="orykh@adobe.com" stepKey="fillEmail"/>
+        <click selector="{{PayPalPaymentSection.nextButton}}" stepKey="clickNext"/>
         <waitForElementVisible selector="{{PayPalPaymentSection.password}}" stepKey="waitForPasswordFieldToBeVisible" />
         <fillField selector="{{PayPalPaymentSection.password}}" userInput="123123qQ1" stepKey="fillPassword"/>
         <waitForElementClickable selector="{{PayPalPaymentSection.loginBtn}}" stepKey="waitForLoginField"/>

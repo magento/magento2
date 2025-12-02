@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\PageCache\Model;
@@ -114,7 +114,7 @@ class Config
         \Magento\Framework\App\Cache\StateInterface $cacheState,
         \Magento\Framework\Module\Dir\Reader $reader,
         VclGeneratorFactory $vclGeneratorFactory,
-        Json $serializer = null
+        ?Json $serializer = null
     ) {
         $this->readFactory = $readFactory;
         $this->_scopeConfig = $scopeConfig;

@@ -1,6 +1,6 @@
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2012 Adobe
+ * All Rights Reserved.
  */
 /**
  * @api
@@ -356,7 +356,13 @@ define([
          * @private
          */
         _addFotoramaVideoEvents: function (isInitial) {
-            if (_.isUndefined($.mage.AddFotoramaVideoEvents)) {
+            if (_.isUndefined($.mage.AddFotoramaVideoEvents)
+                || !$(this.options.mediaGallerySelector).AddFotoramaVideoEvents('instance')
+            ) {
+                $(this.options.mediaGallerySelector).on('addfotoramavideoeventscreate', function () {
+                    this._addFotoramaVideoEvents(isInitial);
+                }.bind(this));
+
                 return;
             }
 
@@ -521,7 +527,7 @@ define([
 
                         if (this.options.spConfig.canDisplayShowOutOfStockStatus) {
                             filteredSalableProducts = $(this.options.spConfig.salable[attributeId][options[i].id]).
-                            filter(options[i].allowedProducts);
+                                filter(options[i].allowedProducts);
                             canDisplayOutOfStockProducts = filteredSalableProducts.length === 0;
                         }
 

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -24,7 +24,7 @@ class ConstructorIntegrity implements ValidatorInterface
     /**
      * @param \Magento\Framework\Code\Reader\ArgumentsReader $argumentsReader
      */
-    public function __construct(\Magento\Framework\Code\Reader\ArgumentsReader $argumentsReader = null)
+    public function __construct(?\Magento\Framework\Code\Reader\ArgumentsReader $argumentsReader = null)
     {
         $this->_argumentsReader = $argumentsReader ?: new \Magento\Framework\Code\Reader\ArgumentsReader();
     }

@@ -32,8 +32,8 @@ class Compare
      * @param JsonValidator|null $jsonValidator
      */
     public function __construct(
-        Json $serializer = null,
-        JsonValidator $jsonValidator = null
+        ?Json $serializer = null,
+        ?JsonValidator $jsonValidator = null
     ) {
         $this->serializer = $serializer ?: ObjectManager::getInstance()->get(Json::class);
         $this->jsonValidator = $jsonValidator ?: ObjectManager::getInstance()->get(JsonValidator::class);

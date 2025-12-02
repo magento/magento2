@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -154,7 +154,7 @@ class CreateHandler implements ExtensionInterface
         Config $mediaConfig,
         Filesystem $filesystem,
         Database $fileStorageDb,
-        StoreManagerInterface $storeManager = null,
+        ?StoreManagerInterface $storeManager = null,
         ?DeleteValidator $deleteValidator = null,
         ?MediaGalleryValue $mediaGalleryValue = null,
         ?AttributeValue $attributeValue = null,
@@ -219,9 +219,18 @@ class CreateHandler implements ExtensionInterface
                     $clearImages[] = $image['file'];
                 } elseif (empty($image['value_id']) || !empty($image['recreate'])) {
                     $newFile = $this->moveImageFromTmp($image['file'] ?? '');
-                    $image['new_file'] = $newFile;
-                    $newImages[$image['file']] = $image;
-                    $image['file'] = $newFile;
+                    if (!empty($image['recreate']) && $newFile !== $image['file']) {
+                        //delete old image
+                        $this->mediaDirectory->renameFile(
+                            $this->mediaConfig->getMediaPath($newFile),
+                            $this->mediaConfig->getMediaPath($image['file'])
+                        );
+                        $existImages[$image['file']] = $image;
+                    } else {
+                        $image['new_file'] = $newFile;
+                        $newImages[$image['file']] = $image;
+                        $image['file'] = $newFile;
+                    }
                 } else {
                     $existImages[$image['file']] = $image;
                 }
@@ -736,7 +745,7 @@ class CreateHandler implements ExtensionInterface
     private function getMediaAttributeStoreValue(
         Product $product,
         string $attributeCode,
-        int $storeId = null
+        ?int $storeId = null
     ): mixed {
         $attributes = $this->eavConfig->getEntityAttributes(Product::ENTITY);
         $attributeId = $attributes[$attributeCode]->getAttributeId();

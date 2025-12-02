@@ -1,7 +1,7 @@
 <?php declare(strict_types=1);
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework\Validator\Test\Unit;
 
@@ -61,7 +61,7 @@ class ConfigTest extends TestCase
      *
      * @param array|null $files
      */
-    protected function _initConfig(array $files = null)
+    protected function _initConfig(?array $files = null)
     {
         if (null === $files) {
             $files = glob(__DIR__ . '/_files/validation/positive/*/validation.xml', GLOB_NOSORT);

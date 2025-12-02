@@ -1,8 +1,7 @@
 <?php
 /**
- *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Customer\Model;
@@ -91,7 +90,7 @@ class GroupManagement implements \Magento\Customer\Api\GroupManagementInterface
         GroupInterfaceFactory $groupDataFactory,
         SearchCriteriaBuilder $searchCriteriaBuilder,
         FilterBuilder $filterBuilder,
-        SortOrderBuilder $sortOrderBuilder = null
+        ?SortOrderBuilder $sortOrderBuilder = null
     ) {
         $this->storeManager = $storeManager;
         $this->scopeConfig = $scopeConfig;

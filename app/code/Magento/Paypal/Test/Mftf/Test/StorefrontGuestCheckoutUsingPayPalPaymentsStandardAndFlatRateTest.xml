@@ -129,7 +129,7 @@
         <!-- Click on PayPal payment radio button and click on continue btn -->
         <actionGroup ref="AdminSelectPaypalStandardPaymentInPaymentPageGuestCheckoutActionGroup" stepKey="selectPaypalStandardPaymentAndClickOnContinuebtn"/>
         <!-- Login to Paypal in-context and verify order total on paypal page-->
-        <actionGroup ref="StorefrontLoginToPayPalStandardPaymentGuestCheckoutActionGroup" stepKey="loginToPayPal"/>
+        <actionGroup ref="StorefrontLoginToPayPalPaymentAccountTwoStepActionGroup" stepKey="loginToPayPal"/>
         <actionGroup ref="StorefrontPaypalSwitchBackToMagentoFromCheckoutPageActionGroup" stepKey="confirmPaymentAndGoBackToMagento"/>
         <waitForElementVisible selector="{{CheckoutSuccessMainSection.orderNumber}}" stepKey="waitForOrderNumberToBeGrabbed"/>
         <grabTextFrom selector="{{CheckoutSuccessMainSection.orderNumber}}" stepKey="grabOrderNumber"/>

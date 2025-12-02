@@ -8,8 +8,10 @@ declare(strict_types=1);
 namespace Magento\GraphQl\Sales;
 
 use Magento\Checkout\Test\Fixture\SetGuestEmail as SetGuestEmailFixture;
-use Magento\Framework\Stdlib\DateTime;
-use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
+use Magento\Framework\Exception\AlreadyExistsException;
+use Magento\Framework\Exception\InputException;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Quote\Test\Fixture\GuestCart;
 use Magento\Sales\Api\Data\OrderInterface;
 use Magento\Sales\Model\Order;
@@ -69,28 +71,29 @@ class OrderStatusChangeDateTest extends GraphQlAbstract
      * @param OrderInterface $order
      * @param string $status
      * @return void
+     * @throws AlreadyExistsException
+     * @throws InputException
+     * @throws LocalizedException
+     * @throws NoSuchEntityException
      */
     private function assertOrderStatusChangeDate(OrderInterface $order, string $status): void
     {
-        $orderRepo = Bootstrap::getObjectManager()->get(OrderRepository::class);
-        $timeZone = Bootstrap::getObjectManager()->get(TimezoneInterface::class);
-
         //Update order status
         $order->setStatus($status);
         $order->setState($status);
-        $orderRepo->save($order);
+        Bootstrap::getObjectManager()->get(OrderRepository::class)->save($order);
 
         $updatedGuestOrder = $this->graphQlMutation($this->getQuery(
             $order->getIncrementId(),
             $order->getBillingAddress()->getEmail(),
-            $order->getBillingAddress()->getPostcode()
+            $order->getBillingAddress()->getLastname()
         ));
         self::assertEquals(
             self::STATUS_MAPPER[$status],
             $updatedGuestOrder['guestOrder']['status']
         );
         self::assertEquals(
-            $timeZone->convertConfigTimeToUtc($order->getCreatedAt(), DateTime::DATE_PHP_FORMAT),
+            $order->getUpdatedAt(),
             $updatedGuestOrder['guestOrder']['order_status_change_date']
         );
     }
@@ -100,23 +103,23 @@ class OrderStatusChangeDateTest extends GraphQlAbstract
      *
      * @param string $number
      * @param string $email
-     * @param string $postcode
+     * @param string $lastname
      * @return string
      */
-    private function getQuery(string $number, string $email, string $postcode): string
+    private function getQuery(string $number, string $email, string $lastname): string
     {
         return <<<QUERY
-{
-  guestOrder(input: {
-    number: "{$number}",
-    email: "{$email}",
-    postcode: "{$postcode}"
-  }) {
-    created_at
-    status
-    order_status_change_date
-  }
-}
-QUERY;
+            {
+              guestOrder(input: {
+                number: "{$number}",
+                email: "{$email}",
+                lastname: "{$lastname}"
+              }) {
+                created_at
+                status
+                order_status_change_date
+              }
+            }
+        QUERY;
     }
 }

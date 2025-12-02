@@ -2,7 +2,7 @@
     "name": "magento/module-media-gallery-catalog-ui",
     "description": "Magento module that implement category grid for media gallery.",
     "require": {
-        "php": "~8.2.0||~8.3.0",
+        "php": "~8.2.0||~8.3.0||~8.4.0",
         "magento/framework": "*",
         "magento/module-cms": "*",
         "magento/module-backend": "*",

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -386,17 +386,137 @@ class SaveTest extends TestCase
     }
 
     /**
+     * Test that canSendNewShipmentEmail is called with correct store ID
+     *
+     * @dataProvider storeIdDataProvider
+     */
+    public function testCanSendNewShipmentEmailWithStoreId(
+        int $storeId,
+        bool $sendEmailRequested,
+        bool $emailEnabledForStore,
+        bool $shouldSendEmail
+    ): void {
+        $this->formKeyValidator->expects($this->once())
+            ->method('validate')
+            ->willReturn(true);
+
+        $this->request->expects($this->once())
+            ->method('isPost')
+            ->willReturn(true);
+
+        $shipmentId = 1000012;
+        $orderId = 10003;
+        $shipmentData = ['items' => [], 'send_email' => $sendEmailRequested ? 'on' : ''];
+
+        $this->request->expects($this->any())
+            ->method('getParam')
+            ->willReturnMap([
+                ['order_id', null, $orderId],
+                ['shipment_id', null, $shipmentId],
+                ['shipment', null, $shipmentData],
+                ['tracking', null, []]
+            ]);
+
+        $order = $this->createPartialMock(Order::class, ['setCustomerNoteNotify', 'getStoreId', '__wakeup']);
+        $order->expects($this->any())
+            ->method('getStoreId')
+            ->willReturn($storeId);
+
+        $shipment = $this->createPartialMock(
+            Shipment::class,
+            ['load', 'save', 'register', 'getOrder', 'getOrderId', '__wakeup']
+        );
+        $shipment->expects($this->any())
+            ->method('getOrder')
+            ->willReturn($order);
+        $shipment->expects($this->any())
+            ->method('getOrderId')
+            ->willReturn($orderId);
+
+        if ($sendEmailRequested) {
+            $this->salesData->expects($this->once())
+                ->method('canSendNewShipmentEmail')
+                ->with($storeId)
+                ->willReturn($emailEnabledForStore);
+        } else {
+            $this->salesData->expects($this->never())
+                ->method('canSendNewShipmentEmail');
+        }
+
+        if ($shouldSendEmail) {
+            $this->shipmentSender->expects($this->once())
+                ->method('send')
+                ->with($shipment);
+        } else {
+            $this->shipmentSender->expects($this->never())
+                ->method('send');
+        }
+
+        $this->shipmentLoader->expects($this->once())
+            ->method('load')
+            ->willReturn($shipment);
+
+        $this->setupCommonMocks($shipment, $order, $orderId);
+
+        $this->saveAction->execute();
+    }
+
+    /**
+     * Test that email is not sent when disabled for specific store but enabled globally
+     */
+    public function testEmailNotSentWhenDisabledForSpecificStore(): void
+    {
+        $storeId = 2;
+        $this->testCanSendNewShipmentEmailWithStoreId(
+            $storeId,
+            true,
+            false,
+            false
+        );
+    }
+
+    /**
+     * Test that email is sent when enabled for specific store even if disabled globally
+     */
+    public function testEmailSentWhenEnabledForSpecificStore(): void
+    {
+        $storeId = 2;
+        $this->testCanSendNewShipmentEmailWithStoreId(
+            $storeId,
+            true,
+            true,
+            true
+        );
+    }
+
+    /**
+     * @return array
+     */
+    public static function storeIdDataProvider(): array
+    {
+        return [
+            'default_store_email_requested_enabled' => [1, true, true, true],
+            'default_store_email_requested_disabled' => [1, true, false, false],
+            'custom_store_email_requested_enabled' => [2, true, true, true],
+            'custom_store_email_requested_disabled' => [2, true, false, false],
+            'custom_store_email_not_requested' => [2, false, true, false],
+            'multistore_environment_store_3' => [3, true, true, true],
+            'multistore_environment_store_5_disabled' => [5, true, false, false],
+        ];
+    }
+
+    /**
      * @return array
      */
     public static function executeDataProvider(): array
     {
         /**
-        * bool $formKeyIsValid
-        * bool $isPost
-        * string $sendEmail
-        * bool $emailEnabled
-        * bool $shouldEmailBeSent
-        */
+         * bool $formKeyIsValid
+         * bool $isPost
+         * string $sendEmail
+         * bool $emailEnabled
+         * bool $shouldEmailBeSent
+         */
         return [
             [false, false, '', false, false],
             [true, false, '', false, false],
@@ -407,6 +527,52 @@ class SaveTest extends TestCase
             [true, true, 'on', true, true],
 
         ];
+    }
+
+    /**
+     * Setup common mocks needed for successful execution
+     */
+    private function setupCommonMocks(MockObject $shipment, MockObject $order, int $orderId): void
+    {
+        $shipment->expects($this->once())
+            ->method('register')
+            ->willReturnSelf();
+
+        $order->expects($this->once())
+            ->method('setCustomerNoteNotify');
+
+        $this->labelGenerator->expects($this->any())
+            ->method('create')
+            ->willReturn(true);
+
+        $saveTransaction = $this->getMockBuilder(Transaction::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $saveTransaction->method('addObject')->willReturnSelf();
+
+        $this->objectManager->expects($this->once())
+            ->method('create')
+            ->with(Transaction::class)
+            ->willReturn($saveTransaction);
+
+        $this->objectManager->expects($this->once())
+            ->method('get')
+            ->with(Session::class)
+            ->willReturn($this->session);
+
+        $this->session->expects($this->once())
+            ->method('getCommentText')
+            ->with(true);
+
+        $this->shipmentValidatorMock->expects($this->once())
+            ->method('validate')
+            ->willReturn($this->validationResult);
+
+        $this->validationResult->expects($this->once())
+            ->method('hasMessages')
+            ->willReturn(false);
+
+        $this->prepareRedirect(['order_id' => $orderId]);
     }
 
     /**

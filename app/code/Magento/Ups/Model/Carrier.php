@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -2844,7 +2844,7 @@ XMLAuth;
      * @return array|bool
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
-    public function getContainerTypes(DataObject $params = null)
+    public function getContainerTypes(?DataObject $params = null)
     {
         if ($params === null) {
             return $this->_getAllowedContainers($params);
@@ -2925,7 +2925,7 @@ XMLAuth;
      * @param DataObject|null $params
      * @return array|bool
      */
-    public function getDeliveryConfirmationTypes(DataObject $params = null)
+    public function getDeliveryConfirmationTypes(?DataObject $params = null)
     {
         $countryRecipient = $params != null ? $params->getCountryRecipient() : null;
         $deliveryConfirmationTypes = [];

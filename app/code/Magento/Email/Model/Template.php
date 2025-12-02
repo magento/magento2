@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Email\Model;
 
@@ -139,7 +139,7 @@ class Template extends AbstractTemplate implements \Magento\Framework\Mail\Templ
         \Magento\Framework\UrlInterface $urlModel,
         \Magento\Email\Model\Template\FilterFactory $filterFactory,
         array $data = [],
-        \Magento\Framework\Serialize\Serializer\Json $serializer = null
+        ?\Magento\Framework\Serialize\Serializer\Json $serializer = null
     ) {
         $this->filterFactory = $filterFactory;
         $this->serializer = $serializer ?: \Magento\Framework\App\ObjectManager::getInstance()

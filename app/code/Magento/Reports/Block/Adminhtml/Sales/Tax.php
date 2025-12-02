@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Reports\Block\Adminhtml\Sales;
 
@@ -9,7 +9,6 @@ namespace Magento\Reports\Block\Adminhtml\Sales;
  * Adminhtml tax report page content block
  *
  * @api
- * @author      Magento Core Team <core@magentocommerce.com>
  * @since 100.0.2
  */
 class Tax extends \Magento\Backend\Block\Widget\Grid\Container
@@ -22,7 +21,7 @@ class Tax extends \Magento\Backend\Block\Widget\Grid\Container
     protected $_template = 'Magento_Reports::report/grid/container.phtml';
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected function _construct()
     {

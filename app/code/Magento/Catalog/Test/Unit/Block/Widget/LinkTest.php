@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -195,10 +195,17 @@ class LinkTest extends TestCase
                 [
                     [Store::XML_PATH_USE_REWRITES, ReinitableConfigInterface::SCOPE_TYPE_DEFAULT, null, true],
                     [Store::XML_PATH_UNSECURE_BASE_LINK_URL, ScopeConfigInterface::SCOPE_TYPE_DEFAULT, null, ''],
+                ]
+            );
+        $config->expects($this->any())
+            ->method('isSetFlag')
+            ->willReturnMap(
+                [
                     [
                         Store::XML_PATH_STORE_IN_URL,
                         ReinitableConfigInterface::SCOPE_TYPE_DEFAULT,
-                        null, $includeStoreCode
+                        null,
+                        $includeStoreCode
                     ]
                 ]
             );
@@ -239,6 +246,7 @@ class LinkTest extends TestCase
                     UrlRewrite::ENTITY_ID => 'entity_id',
                     UrlRewrite::ENTITY_TYPE => 'entity_type',
                     UrlRewrite::STORE_ID => $this->storeManager->getStore($storeId)->getStoreId(),
+                    UrlRewrite::REDIRECT_TYPE => 0,
                 ]
             )
             ->willReturn($rewrite);
@@ -318,6 +326,7 @@ class LinkTest extends TestCase
                     UrlRewrite::ENTITY_TYPE => ProductUrlRewriteGenerator::ENTITY_TYPE,
                     UrlRewrite::STORE_ID => $storeId,
                     UrlRewrite::METADATA => ['category_id' => 'category_id'],
+                    UrlRewrite::REDIRECT_TYPE => 0,
                 ]
             )
             ->willReturn(false);

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2023 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -41,9 +41,9 @@ class RequestAwareErrorProcessor extends ErrorProcessor
         \Magento\Framework\App\State $appState,
         \Psr\Log\LoggerInterface $logger,
         \Magento\Framework\Filesystem $filesystem,
-        Json $serializer = null,
-        Request $request = null,
-        Response $response = null
+        ?Json $serializer = null,
+        ?Request $request = null,
+        ?Response $response = null
     ) {
         $this->request = $request ?: ObjectManager::getInstance()->get(Request::class);
         $this->response = $response ?: ObjectManager::getInstance()->get(Response::class);

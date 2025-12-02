@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework\View\Element\Template\File;
 
@@ -40,7 +40,7 @@ class Resolver
      */
     public function __construct(
         \Magento\Framework\View\FileSystem $viewFileSystem,
-        Json $serializer = null
+        ?Json $serializer = null
     ) {
         $this->_viewFileSystem = $viewFileSystem;
         $this->serializer = $serializer ?: ObjectManager::getInstance()->get(Json::class);

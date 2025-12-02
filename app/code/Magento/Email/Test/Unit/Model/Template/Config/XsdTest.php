@@ -1,11 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
- */
-
-/**
- * Test for validation rules implemented by XSD schemas for email templates configuration
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -14,8 +10,12 @@ namespace Magento\Email\Test\Unit\Model\Template\Config;
 use Magento\Framework\Config\Dom;
 use Magento\Framework\Config\Dom\UrnResolver;
 use Magento\Framework\Config\ValidationStateInterface;
+use PHPUnit\Framework\AssertionFailedError;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * Test for validation rules implemented by XSD schemas for email templates configuration
+ */
 class XsdTest extends TestCase
 {
     /**
@@ -50,23 +50,32 @@ class XsdTest extends TestCase
             'empty root node' => [
                 '<config/>',
                 [
-                    "Element 'config': Missing child element(s). Expected is ( template ).The xml was: \n" .
-                    "0:<?xml version=\"1.0\"?>\n1:<config/>\n2:\n"
+                    [
+                        "Element 'config': Missing child element(s). Expected is ( template ).The xml was: \n" .
+                        "0:<?xml version=\"1.0\"?>\n1:<config/>\n2:\n",
+                        false,
+                    ],
                 ],
             ],
             'irrelevant root node' => [
                 '<template id="test" label="Test" file="test.txt" type="text" module="Module" area="frontend"/>',
                 [
-                    "Element 'template': No matching global declaration available for the validation root." .
-                    "The xml was: \n0:<?xml version=\"1.0\"?>\n1:<template id=\"test\" label=\"Test\" " .
-                    "file=\"test.txt\" type=\"text\" module=\"Module\" area=\"frontend\"/>\n2:\n"
+                    [
+                        "Element 'template': No matching global declaration available for the validation root." .
+                        "The xml was: \n0:<?xml version=\"1.0\"?>\n1:<template id=\"test\" label=\"Test\" " .
+                        "file=\"test.txt\" type=\"text\" module=\"Module\" area=\"frontend\"/>\n2:\n",
+                        false,
+                    ],
                 ],
             ],
             'invalid node' => [
                 '<config><invalid/></config>',
                 [
-                    "Element 'invalid': This element is not expected. Expected is ( template ).The xml was: \n" .
-                    "0:<?xml version=\"1.0\"?>\n1:<config><invalid/></config>\n2:\n"
+                    [
+                        "Element 'invalid': This element is not expected. Expected is ( template ).The xml was: \n" .
+                        "0:<?xml version=\"1.0\"?>\n1:<config><invalid/></config>\n2:\n",
+                        false,
+                    ],
                 ],
             ],
             'node "template" with value' => [
@@ -74,10 +83,13 @@ class XsdTest extends TestCase
                     <template id="test" label="Test" file="test.txt" type="text" module="Module" area="frontend">invalid</template>
                 </config>',
                 [
-                    "Element 'template': Character content is not allowed, because the content type is empty." .
-                    "The xml was: \n0:<?xml version=\"1.0\"?>\n1:<config>\n2:                    <template " .
-                    "id=\"test\" label=\"Test\" file=\"test.txt\" type=\"text\" module=\"Module\" " .
-                    "area=\"frontend\">invalid</template>\n3:                </config>\n4:\n"
+                    [
+                        "Element 'template': Character content is not allowed, because the content type is empty." .
+                        "The xml was: \n0:<?xml version=\"1.0\"?>\n1:<config>\n2:                    <template " .
+                        "id=\"test\" label=\"Test\" file=\"test.txt\" type=\"text\" module=\"Module\" " .
+                        "area=\"frontend\">invalid</template>\n3:                </config>\n4:\n",
+                        false,
+                    ],
                 ],
             ],
             'node "template" with children' => [
@@ -85,68 +97,89 @@ class XsdTest extends TestCase
                     <template id="test" label="Test" file="test.txt" type="text" module="Module" area="frontend"><invalid/></template>
                 </config>',
                 [
-                    "Element 'template': Element content is not allowed, because the content type is empty.The xml " .
-                    "was: \n0:<?xml version=\"1.0\"?>\n1:<config>\n2:                    <template id=\"test\" " .
-                    "label=\"Test\" file=\"test.txt\" type=\"text\" module=\"Module\" area=\"frontend\"><invalid/>" .
-                    "</template>\n3:                </config>\n4:\n"
+                    [
+                        "Element 'template': Element content is not allowed, because the content type is empty.The xml " .
+                        "was: \n0:<?xml version=\"1.0\"?>\n1:<config>\n2:                    <template id=\"test\" " .
+                        "label=\"Test\" file=\"test.txt\" type=\"text\" module=\"Module\" area=\"frontend\"><invalid/>" .
+                        "</template>\n3:                </config>\n4:\n",
+                        false,
+                    ],
                 ],
             ],
             'node "template" without attribute "id"' => [
                 '<config><template label="Test" file="test.txt" type="text" module="Module" area="frontend"/></config>',
                 [
-                    "Element 'template': The attribute 'id' is required but missing.The xml was: \n" .
-                    "0:<?xml version=\"1.0\"?>\n1:<config><template label=\"Test\" file=\"test.txt\" type=\"text\" " .
-                    "module=\"Module\" area=\"frontend\"/></config>\n2:\n"
+                    [
+                        "Element 'template': The attribute 'id' is required but missing.The xml was: \n" .
+                        "0:<?xml version=\"1.0\"?>\n1:<config><template label=\"Test\" file=\"test.txt\" type=\"text\" " .
+                        "module=\"Module\" area=\"frontend\"/></config>\n2:\n",
+                        false,
+                    ],
                 ],
             ],
             'node "template" without attribute "label"' => [
                 '<config><template id="test" file="test.txt" type="text" module="Module" area="frontend"/></config>',
                 [
-                    "Element 'template': The attribute 'label' is required but missing.The xml was: \n" .
-                    "0:<?xml version=\"1.0\"?>\n1:<config><template id=\"test\" file=\"test.txt\" type=\"text\" " .
-                    "module=\"Module\" area=\"frontend\"/></config>\n2:\n"
+                    [
+                        "Element 'template': The attribute 'label' is required but missing.The xml was: \n" .
+                        "0:<?xml version=\"1.0\"?>\n1:<config><template id=\"test\" file=\"test.txt\" type=\"text\" " .
+                        "module=\"Module\" area=\"frontend\"/></config>\n2:\n",
+                        false,
+                    ],
                 ],
             ],
             'node "template" without attribute "file"' => [
                 '<config><template id="test" label="Test" type="text" module="Module" area="frontend"/></config>',
                 [
-                    "Element 'template': The attribute 'file' is required but missing.The xml was: \n" .
-                    "0:<?xml version=\"1.0\"?>\n1:<config><template id=\"test\" label=\"Test\" type=\"text\" " .
-                    "module=\"Module\" area=\"frontend\"/></config>\n2:\n"
+                    [
+                        "Element 'template': The attribute 'file' is required but missing.The xml was: \n" .
+                        "0:<?xml version=\"1.0\"?>\n1:<config><template id=\"test\" label=\"Test\" type=\"text\" " .
+                        "module=\"Module\" area=\"frontend\"/></config>\n2:\n",
+                        false,
+                    ],
                 ],
             ],
             'node "template" without attribute "type"' => [
                 '<config><template id="test" label="Test" file="test.txt" module="Module" area="frontend"/></config>',
                 [
-                    "Element 'template': The attribute 'type' is required but missing.The xml was: \n" .
-                    "0:<?xml version=\"1.0\"?>\n1:<config><template id=\"test\" label=\"Test\" file=\"test.txt\" " .
-                    "module=\"Module\" area=\"frontend\"/></config>\n2:\n"
+                    [
+                        "Element 'template': The attribute 'type' is required but missing.The xml was: \n" .
+                        "0:<?xml version=\"1.0\"?>\n1:<config><template id=\"test\" label=\"Test\" file=\"test.txt\" " .
+                        "module=\"Module\" area=\"frontend\"/></config>\n2:\n",
+                        false,
+                    ],
                 ],
             ],
             'node "template" with invalid attribute "type"' => [
                 '<config><template id="test" label="Test" file="test.txt" type="invalid" module="Module" area="frontend"/></config>',
                 [
-                    "Element 'template', attribute 'type': [facet 'enumeration'] The value 'invalid' is not an " .
-                    "element of the set {'html', 'text'}.The xml was: \n0:<?xml version=\"1.0\"?>\n" .
-                    "1:<config><template id=\"test\" label=\"Test\" file=\"test.txt\" type=\"invalid\" " .
-                    "module=\"Module\" area=\"frontend\"/></config>\n2:\n"
+                    [
+                        "Element 'template', attribute 'type': [facet 'enumeration'] The value 'invalid' is not an " .
+                        "element of the set {'html', 'text'}.The xml was: \n0:<?xml version=\"1.0\"?>\n" .
+                        "1:<config><template id=\"test\" label=\"Test\" file=\"test.txt\" type=\"invalid\" " .
+                        "module=\"Module\" area=\"frontend\"/></config>\n2:\n",
+                        false,
+                    ],
                 ],
             ],
             'node "template" without attribute "area"' => [
                 '<config><template id="test" label="Test" file="test.txt" type="text" module="Module"/></config>',
                 [
-                    "Element 'template': The attribute 'area' is required but missing.The xml was: \n" .
-                    "0:<?xml version=\"1.0\"?>\n1:<config><template id=\"test\" label=\"Test\" file=\"test.txt\" " .
-                    "type=\"text\" module=\"Module\"/></config>\n2:\n"
+                    [
+                        "Element 'template': The attribute 'area' is required but missing.The xml was: \n" .
+                        "0:<?xml version=\"1.0\"?>\n1:<config><template id=\"test\" label=\"Test\" file=\"test.txt\" " .
+                        "type=\"text\" module=\"Module\"/></config>\n2:\n",
+                        false,
+                    ],
                 ],
             ],
             'node "template" with invalid attribute "area"' => [
                 '<config><template id="test" label="Test" file="test.txt" type="text" module="Module" area="invalid"/></config>',
                 [
-                    "Element 'template', attribute 'area': 'invalid' is not a valid value of the atomic type " .
-                    "'areaType'.The xml was: \n0:<?xml version=\"1.0\"?>\n1:<config><template id=\"test\" " .
-                    "label=\"Test\" file=\"test.txt\" type=\"text\" module=\"Module\" area=\"invalid\"/>" .
-                    "</config>\n2:\n",
+                    [
+                        "/Element \'template\', attribute \'area\': .*\'invalid\' is not (a valid value|an element of the set).*/",
+                        true,
+                    ],
                 ],
             ],
             'node "template" with unknown attribute' => [
@@ -154,10 +187,13 @@ class XsdTest extends TestCase
                     <template id="test" label="Test" file="test.txt" type="text" module="Module" area="frontend" unknown="true"/>
                 </config>',
                 [
-                    "Element 'template', attribute 'unknown': The attribute 'unknown' is not allowed.The xml was: \n" .
-                    "0:<?xml version=\"1.0\"?>\n1:<config>\n2:                    <template id=\"test\" " .
-                    "label=\"Test\" file=\"test.txt\" type=\"text\" module=\"Module\" area=\"frontend\" " .
-                    "unknown=\"true\"/>\n3:                </config>\n4:\n"
+                    [
+                        "Element 'template', attribute 'unknown': The attribute 'unknown' is not allowed.The xml was: \n" .
+                        "0:<?xml version=\"1.0\"?>\n1:<config>\n2:                    <template id=\"test\" " .
+                        "label=\"Test\" file=\"test.txt\" type=\"text\" module=\"Module\" area=\"frontend\" " .
+                        "unknown=\"true\"/>\n3:                </config>\n4:\n",
+                        false,
+                    ],
                 ],
             ]
         ];
@@ -179,8 +215,22 @@ class XsdTest extends TestCase
         $dom = new Dom($fixtureXml, $validationStateMock, [], null, null, '%message%');
         $actualResult = $dom->validate($schemaFile, $actualErrors);
         $this->assertEquals(empty($expectedErrors), $actualResult);
-        foreach ($expectedErrors as $error) {
-            $this->assertContains($error, $actualErrors);
+        $this->assertEquals(empty($expectedErrors), empty($actualErrors));
+        foreach ($expectedErrors as [$error, $isRegex]) {
+            if ($isRegex) {
+                $matched = false;
+                foreach ($actualErrors as $actualError) {
+                    try {
+                        $this->assertMatchesRegularExpression($error, $actualError);
+                        $matched = true;
+                        break;
+                    } catch (AssertionFailedError) {
+                    }
+                }
+                $this->assertTrue($matched, "None of the errors matched: $error");
+            } else {
+                $this->assertContains($error, $actualErrors);
+            }
         }
     }
 }

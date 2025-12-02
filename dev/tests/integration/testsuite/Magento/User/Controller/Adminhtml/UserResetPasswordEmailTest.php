@@ -1,8 +1,9 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
+
 declare(strict_types=1);
 
 namespace Magento\User\Controller\Adminhtml;
@@ -67,7 +68,7 @@ class UserResetPasswordEmailTest extends AbstractBackendController
      * @var CoreConfig
      */
     protected $resourceConfig;
-    
+
     /**
      * @var \Magento\Framework\Mail\MessageInterfaceFactory
      */
@@ -121,8 +122,7 @@ class UserResetPasswordEmailTest extends AbstractBackendController
     private function getResetPasswordUri(EmailMessage $message): string
     {
         $store = $this->_objectManager->get(Store::class);
-        $emailParts = $message->getBody()->getParts();
-        $messageContent = current($emailParts)->getRawContent();
+        $messageContent = quoted_printable_decode($message->getBody()->bodyToString());
         $pattern = '#\bhttps?://[^,\s()<>]+(?:\([\w\d]+\)|([^,[:punct:]\s]|/))#';
         preg_match_all($pattern, $messageContent, $match);
         $urlString = trim($match[0][0], $store->getBaseUrl('web'));
@@ -209,7 +209,7 @@ class UserResetPasswordEmailTest extends AbstractBackendController
         $transportMock = Bootstrap::getObjectManager()->get(
             TransportBuilderMock::class
         );
-        $sendMessage = $transportMock->getSentMessage()->getBody()->getParts()[0]->getRawContent();
+        $sendMessage = quoted_printable_decode($transportMock->getSentMessage()->getBody()->bodyToString());
 
         $this->assertStringContainsString(
             'There was recently a request to change the password for your account',
@@ -239,13 +239,13 @@ class UserResetPasswordEmailTest extends AbstractBackendController
         $this->getRequest()->setPostValue('email', $adminEmail);
         $this->dispatch('backend/admin/auth/forgotpassword');
 
-        $sendMessage = $transportMock->getSentMessage()->getBody()->getParts()[0]->getRawContent();
+        $sendMessage = quoted_printable_decode($transportMock->getSentMessage()->getBody()->bodyToString());
         $this->assertStringContainsString(
             'There was recently a request to change the password for your account',
             $sendMessage
         );
     }
-    
+
     /**
      * @return void
      * @throws LocalizedException
@@ -298,7 +298,7 @@ class UserResetPasswordEmailTest extends AbstractBackendController
         $transportMock = Bootstrap::getObjectManager()->get(
             TransportBuilderMock::class
         );
-        $sendMessage = $transportMock->getSentMessage()->getBody()->getParts()[0]->getRawContent();
+        $sendMessage = quoted_printable_decode($transportMock->getSentMessage()->getBody()->bodyToString());
 
         $this->assertStringContainsString(
             'There was recently a request to change the password for your account',
@@ -345,7 +345,7 @@ class UserResetPasswordEmailTest extends AbstractBackendController
         $this->assertEquals(0, $connection->fetchOne("SELECT COUNT(*) FROM $tableName"));
 
         $this->resetPassword($adminEmail);
-        $sendMessage = $transportMock->getSentMessage()->getBody()->getParts()[0]->getRawContent();
+        $sendMessage = quoted_printable_decode($transportMock->getSentMessage()->getBody()->bodyToString());
         $this->assertStringContainsString(
             'There was recently a request to change the password for your account',
             $sendMessage

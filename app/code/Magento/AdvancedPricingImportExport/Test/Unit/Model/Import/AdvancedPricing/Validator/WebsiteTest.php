@@ -1,12 +1,13 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\AdvancedPricingImportExport\Test\Unit\Model\Import\AdvancedPricing\Validator;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\AdvancedPricingImportExport\Model\CurrencyResolver;
 use Magento\AdvancedPricingImportExport\Model\Import\AdvancedPricing as AdvancedPricing;
 use Magento\AdvancedPricingImportExport\Model\Import\AdvancedPricing\Validator\Website as WebsiteValidator;
@@ -69,13 +70,13 @@ class WebsiteTest extends TestCase
     }
 
     /**
-     * @dataProvider isValidReturnDataProvider
      *
      * @param array  $value
      * @param string $allWebsites
      * @param string $colTierPriceWebsite
      * @param bool   $expectedResult
      */
+    #[DataProvider('isValidReturnDataProvider')]
     public function testIsValidReturn(
         $value,
         $allWebsites,

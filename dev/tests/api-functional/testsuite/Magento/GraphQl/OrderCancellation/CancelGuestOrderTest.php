@@ -2,15 +2,6 @@
 /**
  * Copyright 2024 Adobe
  * All Rights Reserved.
- *
- * NOTICE: All information contained herein is, and remains
- * the property of Adobe and its suppliers, if any. The intellectual
- * and technical concepts contained herein are proprietary to Adobe
- * and its suppliers and are protected by all applicable intellectual
- * property laws, including trade secret and copyright laws.
- * Dissemination of this information or reproduction of this material
- * is strictly forbidden unless prior written permission is obtained
- * from Adobe.
  */
 declare(strict_types=1);
 
@@ -77,7 +68,7 @@ class CancelGuestOrderTest extends GraphQlAbstract
         mutation {
             requestGuestOrderCancel(
               input: {
-                reason: "Cancel sample reason"
+                reason: "Other"
               }
             ){
                 error
@@ -127,7 +118,7 @@ MUTATION;
             requestGuestOrderCancel(
               input: {
                 token: "TestToken"
-                reason: "Cancel sample reason"
+                reason: "Other"
               }
             ){
                 error
@@ -202,13 +193,13 @@ MUTATION;
         $this->assertEquals(
             [
                 'requestGuestOrderCancel' => [
-                        'errorV2' => [
-                            'message' => 'Order already closed, complete, cancelled or on hold'
-                        ],
-                        'order' => [
-                            'status' => $expectedStatus
-                        ]
+                    'errorV2' => [
+                        'message' => 'Order already closed, complete, cancelled or on hold'
+                    ],
+                    'order' => [
+                        'status' => $expectedStatus
                     ]
+                ]
             ],
             $this->graphQlMutation($query)
         );
@@ -245,13 +236,13 @@ MUTATION;
         $this->assertEquals(
             [
                 'requestGuestOrderCancel' => [
-                        'errorV2' => [
-                            'message' => 'Order already closed, complete, cancelled or on hold'
-                        ],
-                        'order' => [
-                            'status' => 'Complete'
-                        ]
+                    'errorV2' => [
+                        'message' => 'Order already closed, complete, cancelled or on hold'
+                    ],
+                    'order' => [
+                        'status' => 'Complete'
                     ]
+                ]
             ],
             $this->graphQlMutation($query)
         );
@@ -301,13 +292,13 @@ MUTATION;
         $this->assertEquals(
             [
                 'requestGuestOrderCancel' => [
-                        'errorV2' => [
-                            'message' => 'Order with one or more items shipped cannot be cancelled'
-                        ],
-                        'order' => [
-                            'status' => 'Processing'
-                        ]
+                    'errorV2' => [
+                        'message' => 'Order with one or more items shipped cannot be cancelled'
+                    ],
+                    'order' => [
+                        'status' => 'Processing'
                     ]
+                ]
             ],
             $this->graphQlMutation($query)
         );
@@ -344,13 +335,13 @@ MUTATION;
         $this->assertEquals(
             [
                 'requestGuestOrderCancel' => [
-                        'errorV2' => [
-                            'message' => 'Order already closed, complete, cancelled or on hold'
-                        ],
-                        'order' => [
-                            'status' => 'Closed'
-                        ]
+                    'errorV2' => [
+                        'message' => 'Order already closed, complete, cancelled or on hold'
+                    ],
+                    'order' => [
+                        'status' => 'Closed'
                     ]
+                ]
             ],
             $this->graphQlMutation($query)
         );
@@ -382,11 +373,11 @@ MUTATION;
         $this->assertEquals(
             [
                 'requestGuestOrderCancel' => [
-                        'errorV2' => null,
-                        'order' => [
-                            'status' => 'Pending'
-                        ]
+                    'errorV2' => null,
+                    'order' => [
+                        'status' => 'Pending'
                     ]
+                ]
             ],
             $this->graphQlMutation($query)
         );
@@ -451,7 +442,7 @@ MUTATION;
             requestGuestOrderCancel(
               input: {
                 token: "{$this->getOrderToken($order)}",
-                reason: "Sample reason"
+                reason: "Other"
               }
             ){
                 errorV2 {
@@ -476,7 +467,7 @@ MUTATION;
         return Bootstrap::getObjectManager()->create(Token::class)->encrypt(
             $order->getIncrementId(),
             $order->getBillingAddress()->getEmail(),
-            $order->getBillingAddress()->getPostcode()
+            $order->getBillingAddress()->getLastname()
         );
     }
 

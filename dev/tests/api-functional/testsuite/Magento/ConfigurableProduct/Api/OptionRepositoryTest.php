@@ -1,8 +1,8 @@
 <?php
 /**
  *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -100,13 +100,21 @@ class OptionRepositoryTest extends \Magento\TestFramework\TestCase\WebapiAbstrac
      */
     public function testGetUndefinedProduct(): void
     {
-        $this->expectException(\Exception::class);
-        $this->expectExceptionMessage(
-            'The product that was requested doesn\'t exist. Verify the product and try again.'
-        );
-
         $productSku = 'product_not_exist';
-        $this->getList($productSku);
+        $expectedMessage = 'The product with SKU "%1" does not exist.';
+
+        try {
+            $this->getList($productSku);
+        } catch (\SoapFault $e) {
+            $this->assertStringContainsString(
+                $expectedMessage,
+                $e->getMessage(),
+                'SoapFault does not contain expected message.'
+            );
+        } catch (\Exception $e) {
+            $errorObj = $this->processRestExceptionResult($e);
+            $this->assertEquals($expectedMessage, $errorObj['message']);
+        }
     }
 
     /**

@@ -78,9 +78,9 @@ class Rule extends AbstractResource
         \Magento\Framework\Stdlib\StringUtils $string,
         \Magento\SalesRule\Model\ResourceModel\Coupon $resourceCoupon,
         $connectionName = null,
-        \Magento\Framework\DataObject $associatedEntityMapInstance = null,
-        Json $serializer = null,
-        MetadataPool $metadataPool = null
+        ?\Magento\Framework\DataObject $associatedEntityMapInstance = null,
+        ?Json $serializer = null,
+        ?MetadataPool $metadataPool = null
     ) {
         $this->string = $string;
         $this->_resourceCoupon = $resourceCoupon;

@@ -117,7 +117,7 @@ class Snapshot implements ResetAfterRequestInterface
      *
      * @param DataObject|null $entity
      */
-    public function clear(DataObject $entity = null)
+    public function clear(?DataObject $entity = null)
     {
         if ($entity !== null) {
             $this->snapshotData[get_class($entity)] = [];

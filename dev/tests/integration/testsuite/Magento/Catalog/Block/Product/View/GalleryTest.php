@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -502,7 +502,7 @@ class GalleryTest extends \PHPUnit\Framework\TestCase
      * @param int|null $storeId
      * @return void
      */
-    private function setGalleryImages(ProductInterface $product, array $images, int $storeId = null): void
+    private function setGalleryImages(ProductInterface $product, array $images, ?int $storeId = null): void
     {
         $product->setImage(null);
         foreach ($images as $file => $data) {

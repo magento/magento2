@@ -2,8 +2,8 @@
 /**
  * Unit Test for \Magento\Framework\Profiler
  *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework\Test\Unit;
 
@@ -360,7 +360,7 @@ class ProfilerTest extends TestCase
      * @return void
      * @dataProvider skippedFilterDataProvider
      */
-    public function testTagFilterSkip($timerName, array $tags = null): void
+    public function testTagFilterSkip($timerName, ?array $tags = null): void
     {
         $driver = $this->_getDriverMock();
         $driver->expects($this->never())->method('start');
@@ -389,7 +389,7 @@ class ProfilerTest extends TestCase
      * @return void
      * @dataProvider passedFilterDataProvider
      */
-    public function testTagFilterPass($timerName, array $tags = null): void
+    public function testTagFilterPass($timerName, ?array $tags = null): void
     {
         $driver = $this->_getDriverMock();
         $driver->expects($this->once())->method('start')->with($timerName, $tags);

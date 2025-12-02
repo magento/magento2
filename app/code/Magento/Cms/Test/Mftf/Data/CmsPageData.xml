@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
-  */
+/**
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
+ */
 -->
 
 <entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -118,5 +118,11 @@
         <data key="title" unique="suffix">Test CMS Block</data>
         <data key="identifier" unique="suffix" >block</data>
         <data key="active">true</data>
+    </entity>
+    <entity name="PageBuilderHtmlCmsHomePageContent" type="pagebuilder_html_property">
+        <data key="name">HTML</data>
+        <data key="section">general</data>
+        <data key="value">CMS homepage content goes here</data>
+        <data key="fieldName">html</data>
     </entity>
 </entities>

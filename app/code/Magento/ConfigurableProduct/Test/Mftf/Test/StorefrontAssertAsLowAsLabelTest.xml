@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
  /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
+   * Copyright 2024 Adobe
+  * All Rights Reserved.
   */
 -->
 
@@ -272,6 +272,8 @@
             <deleteData createDataKey="createConfigurableProductP5" stepKey="deleteConfigurableProductP5"/>
             <deleteData createDataKey="createConfigurableProductP6" stepKey="deleteConfigurableProductP6"/>
             <deleteData createDataKey="createConfigurableProductP7" stepKey="deleteConfigurableProductP7"/>
+            <!-- Delete all configurable products variants via API using ProductApiHelper -->
+            <helper class="Magento\Catalog\Test\Mftf\Helper\ProductApiHelper" method="deleteAllProductsApi" stepKey="deleteAllProductsViaApi"/>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
             <!-- Delete color attribute -->
             <actionGroup ref="DeleteProductAttributeActionGroup" stepKey="deleteColorAttribute">

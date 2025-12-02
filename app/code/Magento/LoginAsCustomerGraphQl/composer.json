@@ -2,7 +2,7 @@
     "name": "magento/module-login-as-customer-graph-ql",
     "description": "Flexible login as a customer so a merchant or merchant admin can log into an end customer's account to assist them with their account.",
     "require": {
-        "php": "~8.2.0||~8.3.0",
+        "php": "~8.2.0||~8.3.0||~8.4.0",
         "magento/framework": "*",
         "magento/module-login-as-customer-api": "*",
         "magento/module-login-as-customer-assistance": "*",

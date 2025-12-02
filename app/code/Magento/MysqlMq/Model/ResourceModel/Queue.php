@@ -30,7 +30,7 @@ class Queue extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param string|null $connectionName
      * @param int|null $chunkSize
      */
-    public function __construct(Context $context, $connectionName = null, int $chunkSize = null)
+    public function __construct(Context $context, $connectionName = null, ?int $chunkSize = null)
     {
         parent::__construct($context, $connectionName);
         if ($chunkSize) {

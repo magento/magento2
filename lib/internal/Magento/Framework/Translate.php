@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -160,7 +160,7 @@ class Translate implements \Magento\Framework\TranslateInterface, ResetAfterRequ
         \Magento\Framework\App\RequestInterface $request,
         \Magento\Framework\File\Csv $csvParser,
         \Magento\Framework\App\Language\Dictionary $packDictionary,
-        DriverInterface $fileDriver = null
+        ?DriverInterface $fileDriver = null
     ) {
         $this->_viewDesign = $viewDesign;
         $this->_cache = $cache;

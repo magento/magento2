@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework\MessageQueue;
 
@@ -24,7 +24,7 @@ class MessageValidator
     /**
      * @param CommunicationConfig|null $communicationConfig
      */
-    public function __construct(CommunicationConfig $communicationConfig = null)
+    public function __construct(?CommunicationConfig $communicationConfig = null)
     {
         $this->communicationConfig = $communicationConfig
             ?? ObjectManager::getInstance()->get(CommunicationConfig::class);

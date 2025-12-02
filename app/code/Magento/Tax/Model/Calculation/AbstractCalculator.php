@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Tax\Model\Calculation;
 
@@ -145,7 +145,7 @@ abstract class AbstractCalculator
         Calculation $calculationTool,
         \Magento\Tax\Model\Config $config,
         $storeId,
-        \Magento\Framework\DataObject $addressRateRequest = null
+        ?\Magento\Framework\DataObject $addressRateRequest = null
     ) {
         $this->taxClassManagement = $taxClassService;
         $this->taxDetailsItemDataObjectFactory = $taxDetailsItemDataObjectFactory;

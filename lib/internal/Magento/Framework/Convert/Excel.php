@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework\Convert;
 
@@ -57,7 +57,7 @@ class Excel
     public function __construct(
         \Iterator $iterator,
         $rowCallback = [],
-        Escaper $escaper = null
+        ?Escaper $escaper = null
     ) {
         $this->_iterator = $iterator;
         $this->_rowCallback = $rowCallback;

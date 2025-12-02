@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Framework\Filter;
@@ -122,9 +122,9 @@ class Template implements FilterInterface
         StringUtils $string,
         $variables = [],
         $directiveProcessors = [],
-        VariableResolverInterface $variableResolver = null,
-        SignatureProvider $signatureProvider = null,
-        FilteringDepthMeter $filteringDepthMeter = null
+        ?VariableResolverInterface $variableResolver = null,
+        ?SignatureProvider $signatureProvider = null,
+        ?FilteringDepthMeter $filteringDepthMeter = null
     ) {
         $this->string = $string;
         $this->setVariables($variables);

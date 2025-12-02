@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -16,6 +16,7 @@ use Magento\Framework\View\Element\UiComponentFactory;
 use Magento\Ui\Component\Filters\FilterModifier;
 use Magento\Ui\Component\Filters\Type\Date;
 use Magento\Ui\Component\Form\Element\DataType\Date as FormDate;
+use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -210,9 +211,10 @@ class DateTest extends TestCase
      * @param bool $showsTime
      * @param array $filterData
      * @param array $expectedCondition
-     * @param MockObject $uiComponent
+     * @param FormDate $uiComponent
      *
      * @return void
+     * @throws Exception
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     private function processFilters(
@@ -224,7 +226,7 @@ class DateTest extends TestCase
     ): void {
         if (is_string($filterData[$name])) {
             $uiComponent->expects(static::once())
-                ->method($showsTime ? 'convertDatetime' : 'convertDate')
+                ->method($showsTime ? 'convertDatetime' : 'convertDateWithTimezone')
                 ->with($filterData[$name])
                 ->willReturn(new \DateTime($filterData[$name]));
         } else {
@@ -241,11 +243,11 @@ class DateTest extends TestCase
             } else {
                 $from = new \DateTime($filterData[$name]['from'] ?? 'now');
                 $to = new \DateTime($filterData[$name]['to'] ? $filterData[$name]['to'] . ' 23:59:59' : 'now');
-                $uiComponent->method('convertDate')
+                $uiComponent->method('convertDateWithTimezone')
                     ->willReturnMap(
                         [
-                            [$filterData[$name]['from'], 0, 0, 0, true, $from],
-                            [$filterData[$name]['to'], 23, 59, 59, true, $to],
+                            [$filterData[$name]['from'], 0, 0, 0, true, true, $from],
+                            [$filterData[$name]['to'], 23, 59, 59, true, true, $to],
                         ]
                     );
             }

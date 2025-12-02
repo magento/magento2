@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -52,7 +52,7 @@ class Context implements ResetAfterRequestInterface
      * @param array $default
      * @param Json|null $serializer
      */
-    public function __construct(array $data = [], array $default = [], Json $serializer = null)
+    public function __construct(array $data = [], array $default = [], ?Json $serializer = null)
     {
         $this->data = $data;
         $this->default = $default;

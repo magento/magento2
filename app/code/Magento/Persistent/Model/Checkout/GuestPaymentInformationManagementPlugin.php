@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Persistent\Model\Checkout;
@@ -83,7 +83,7 @@ class GuestPaymentInformationManagementPlugin
         $cartId,
         $email,
         \Magento\Quote\Api\Data\PaymentInterface $paymentMethod,
-        \Magento\Quote\Api\Data\AddressInterface $billingAddress = null
+        ?\Magento\Quote\Api\Data\AddressInterface $billingAddress = null
     ) {
         if ($this->persistenceSessionHelper->isPersistent()
             && !$this->customerSession->isLoggedIn()

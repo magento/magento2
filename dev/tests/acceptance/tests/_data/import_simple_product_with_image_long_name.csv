@@ -1,2 +1,2 @@
-sku,base_image
-"test_image_long_name_sku","adobe-base-image-long-name-image-long-name-image-long-name-image-long-name-image-long-name-image-long-name-image-long-name-image-long-name-image-long-name.jpg"
+sku,base_image,name
+test_image_long_name_sku,adobe-base-image-long-name-image-long-name-image-long-name-image-long-name-image-long-name-image-long-name-image-long-name-image-long-name-image-long-name.jpg,test

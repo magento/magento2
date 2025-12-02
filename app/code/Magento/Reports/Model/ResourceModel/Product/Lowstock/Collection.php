@@ -1,13 +1,11 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
  */
 
 /**
  * Product Low Stock Report Collection
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\Reports\Model\ResourceModel\Product\Lowstock;
 
@@ -110,7 +108,7 @@ class Collection extends \Magento\Reports\Model\ResourceModel\Product\Collection
         \Magento\CatalogInventory\Api\StockRegistryInterface $stockRegistry,
         \Magento\CatalogInventory\Api\StockConfigurationInterface $stockConfiguration,
         \Magento\CatalogInventory\Model\ResourceModel\Stock\Item $itemResource,
-        \Magento\Framework\DB\Adapter\AdapterInterface $connection = null
+        ?\Magento\Framework\DB\Adapter\AdapterInterface $connection = null
     ) {
         parent::__construct(
             $entityFactory,
@@ -229,6 +227,7 @@ class Collection extends \Magento\Reports\Model\ResourceModel\Product\Collection
         }
 
         if (!is_array($fields)) {
+            // phpstan:ignore
             if (empty($fields)) {
                 $fields = [];
             } else {

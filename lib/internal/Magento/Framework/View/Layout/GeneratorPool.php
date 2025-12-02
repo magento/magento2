@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework\View\Layout;
 
@@ -54,7 +54,7 @@ class GeneratorPool
         ScheduledStructure\Helper $helper,
         ConditionFactory $conditionFactory,
         LoggerInterface $logger,
-        array $generators = null,
+        ?array $generators = null,
         ?State $state = null
     ) {
         $this->helper = $helper;

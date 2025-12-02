@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2022 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -11,6 +11,7 @@ use Magento\Checkout\Model\Backpressure\WebapiRequestTypeExtractor;
 use Magento\Quote\Model\Backpressure\OrderLimitConfigManager;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Tests the WebapiRequestTypeExtractor class
@@ -41,8 +42,8 @@ class WebapiRequestTypeExtractorTest extends TestCase
      * @param bool $isEnforcementEnabled
      * @param string $method
      * @param string|null $expected
-     * @dataProvider dataProvider
      */
+    #[DataProvider('dataProvider')]
     public function testExtract(bool $isEnforcementEnabled, string $method, $expected)
     {
         $this->orderLimitConfigManagerMock->method('isEnforcementEnabled')->willReturn($isEnforcementEnabled);

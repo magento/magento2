@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Framework\View;
@@ -56,7 +56,7 @@ class File
      * @param ThemeInterface $theme
      * @param bool $isBase
      */
-    public function __construct($filename, $module, ThemeInterface $theme = null, $isBase = false)
+    public function __construct($filename, $module, ?ThemeInterface $theme = null, $isBase = false)
     {
         $this->filename = $filename;
         $this->module = $module;

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework\Intl;
 
@@ -14,7 +14,7 @@ class DateTimeFactory
      * @param \DateTimeZone $timezone
      * @return \DateTime
      */
-    public function create($time = 'now', \DateTimeZone $timezone = null)
+    public function create($time = 'now', ?\DateTimeZone $timezone = null)
     {
         return new \DateTime($time, $timezone);
     }

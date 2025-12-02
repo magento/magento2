@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -237,8 +237,8 @@ class Image
      */
     private function prepareDestination(
         AbstractAdapter $image,
-        string $destination = null,
-        string $newName = null
+        ?string $destination = null,
+        ?string $newName = null
     ): string {
         if (empty($destination)) {
             $destination = $image->getFileSrcPath();

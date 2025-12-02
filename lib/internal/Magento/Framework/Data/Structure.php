@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Framework\Data;
@@ -33,7 +33,7 @@ class Structure implements ResetAfterRequestInterface
      *
      * @param array $elements
      */
-    public function __construct(array $elements = null)
+    public function __construct(?array $elements = null)
     {
         if (null !== $elements) {
             $this->importElements($elements);

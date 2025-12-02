@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -37,10 +37,8 @@ class ParamOverriderCartIdTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->userContext = $this->getMockBuilder(UserContextInterface::class)
-            ->getMockForAbstractClass();
-        $this->cartManagement = $this->getMockBuilder(CartManagementInterface::class)
-            ->getMockForAbstractClass();
+        $this->userContext = $this->createMock(UserContextInterface::class);
+        $this->cartManagement = $this->createMock(CartManagementInterface::class);
         $this->model = (new ObjectManager($this))->getObject(
             ParamOverriderCartId::class,
             [
@@ -62,8 +60,7 @@ class ParamOverriderCartIdTest extends TestCase
             ->method('getUserId')
             ->willReturn($customerId);
 
-        $cart = $this->getMockBuilder(CartInterface::class)
-            ->getMockForAbstractClass();
+        $cart = $this->createMock(CartInterface::class);
         $this->cartManagement->expects($this->once())
             ->method('getCartForCustomer')
             ->with($customerId)

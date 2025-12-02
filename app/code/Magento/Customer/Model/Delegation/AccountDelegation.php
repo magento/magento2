@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -44,7 +44,7 @@ class AccountDelegation implements AccountDelegationInterface
      */
     public function createRedirectForNew(
         CustomerInterface $customer,
-        array $mixedData = null
+        ?array $mixedData = null
     ): Redirect {
         $this->storage->storeNewOperation($customer, $mixedData);
 

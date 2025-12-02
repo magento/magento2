@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework\Code\Validator;
 
@@ -24,8 +24,8 @@ class ConstructorArgumentTypes implements ValidatorInterface
      * @param \Magento\Framework\Code\Reader\SourceArgumentsReader $sourceArgumentsReader
      */
     public function __construct(
-        \Magento\Framework\Code\Reader\ArgumentsReader $argumentsReader = null,
-        \Magento\Framework\Code\Reader\SourceArgumentsReader $sourceArgumentsReader = null
+        ?\Magento\Framework\Code\Reader\ArgumentsReader $argumentsReader = null,
+        ?\Magento\Framework\Code\Reader\SourceArgumentsReader $sourceArgumentsReader = null
     ) {
         $this->argumentsReader = $argumentsReader ?: new \Magento\Framework\Code\Reader\ArgumentsReader();
         $this->sourceArgumentsReader =

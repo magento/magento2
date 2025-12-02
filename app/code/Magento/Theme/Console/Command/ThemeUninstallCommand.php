@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Theme\Console\Command;
@@ -145,7 +145,7 @@ class ThemeUninstallCommand extends Command
         ThemePackageInfo $themePackageInfo,
         ThemeUninstaller $themeUninstaller,
         ThemeDependencyChecker $themeDependencyChecker,
-        MaintenanceModeEnabler $maintenanceModeEnabler = null
+        ?MaintenanceModeEnabler $maintenanceModeEnabler = null
     ) {
         $this->cache = $cache;
         $this->cleanupFiles = $cleanupFiles;

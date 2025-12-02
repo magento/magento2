@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -63,22 +63,14 @@ class QueryFactoryTest extends TestCase
         $this->queryHelper = $this->getMockBuilder(Data::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->request = $this->getMockBuilder(RequestInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->request = $this->createMock(RequestInterface::class);
         $this->string = $this->getMockBuilder(StringUtils::class)
             ->onlyMethods(['substr', 'strlen', 'cleanString'])
             ->disableOriginalConstructor()
             ->getMock();
-        $this->query = $this->getMockBuilder(Query::class)
-            ->addMethods(['setIsQueryTextExceeded', 'setIsQueryTextShort'])
-            ->onlyMethods(['loadByQueryText', 'getId'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->query = $this->createPartialMock(Query::class, ['loadByQueryText', 'getId']);
 
-        $this->objectManager = $this->getMockBuilder(ObjectManagerInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->objectManager = $this->createMock(ObjectManagerInterface::class);
 
         /** @var Context|MockObject $context */
         $context = $this->getMockBuilder(Context::class)
@@ -370,13 +362,14 @@ class QueryFactoryTest extends TestCase
      * @param bool $isQueryTextShort
      * @param string $matchedQueryText
      * @return void
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     private function mockSimpleQuery(
         string $cleanedRawText,
         ?int $queryId,
         bool $isQueryTextExceeded,
         bool $isQueryTextShort,
-        string $matchedQueryText = null
+        ?string $matchedQueryText = null
     ) {
         if (null === $matchedQueryText) {
             $matchedQueryText = $cleanedRawText;
@@ -394,24 +387,6 @@ class QueryFactoryTest extends TestCase
         $this->query->expects($this->any())
             ->method('getId')
             ->willReturn($queryId);
-        $this->query->expects($this->once())
-            ->method('setIsQueryTextExceeded')
-            ->willReturnCallback(
-                function ($arg) use ($isQueryTextExceeded) {
-                    if ($arg == $isQueryTextExceeded) {
-                        return null;
-                    }
-                }
-            );
-        $this->query->expects($this->once())
-            ->method('setIsQueryTextShort')
-            ->willReturnCallback(
-                function ($arg) use ($isQueryTextShort) {
-                    if ($arg == $isQueryTextShort) {
-                        return null;
-                    }
-                }
-            );
     }
 
     /**

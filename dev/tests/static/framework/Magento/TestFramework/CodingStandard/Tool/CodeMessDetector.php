@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 
 /**
@@ -52,7 +52,7 @@ class CodeMessDetector implements ToolInterface
     public function run(array $whiteList)
     {
         if (empty($whiteList)) {
-            return \PHPMD\TextUI\Command::EXIT_SUCCESS;
+            return \PHPMD\TextUI\ExitCode::Success;
         }
 
         $commandLineArguments = [

@@ -173,3 +173,8 @@ Apply,Apply
 "Coupon quantity should be less than or equal to the coupon quantity in the store configuration.","Coupon quantity should be less than or equal to the coupon quantity in the store configuration."
 "Code Quantity Limit","Code Quantity Limit"
 "For better performance max value allowed is 250,000. Set 0 to disable it.","For better performance max value allowed is 250,000. Set 0 to disable it."
+"coupon exceeds usage limit.","coupon exceeds usage limit."
+"Category (Parent Only)","Category (Parent Only)"
+"Category (Children Only)","Category (Children Only)"
+"%1 (Parent Only)","%1 (Parent Only)"
+"%1 (Children Only)","%1 (Children Only)"

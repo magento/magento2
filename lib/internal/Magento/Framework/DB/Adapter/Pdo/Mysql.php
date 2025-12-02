@@ -286,7 +286,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface, Rese
         LoggerInterface $logger,
         SelectFactory $selectFactory,
         array $config = [],
-        SerializerInterface $serializer = null,
+        ?SerializerInterface $serializer = null,
         ?DtoFactoriesTable $dtoFactoriesTable = null
     ) {
         $this->pid = getmypid();
@@ -658,6 +658,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface, Rese
         $connectionErrors = [
             2006, // SQLSTATE[HY000]: General error: 2006 MySQL server has gone away
             2013,  // SQLSTATE[HY000]: General error: 2013 Lost connection to MySQL server during query
+            4031, // SQLSTATE[HY000]: General error: 4031 The client was disconnected by server because of inactivity.
         ];
         $triesCount = 0;
         do {
@@ -4224,7 +4225,10 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface, Rese
     public function __destruct()
     {
         if ($this->_transactionLevel > 0) {
-            trigger_error('Some transactions have not been committed or rolled back', E_USER_ERROR);
+            while ($this->_transactionLevel) {
+                $this->rollBack();
+            }
+            $this->logger->log('Some transactions have not been committed or rolled back');
         }
     }
 

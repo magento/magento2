@@ -49,8 +49,8 @@ class Text extends Column implements
         string $type,
         Table $table,
         bool $nullable = true,
-        string $comment = null,
-        string $onCreate = null,
+        ?string $comment = null,
+        ?string $onCreate = null,
         ?string $charset = 'utf8mb4',
         ?string $collation = 'utf8mb4_general_ci'
     ) {
