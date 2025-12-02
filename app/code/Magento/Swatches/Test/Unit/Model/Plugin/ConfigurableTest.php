@@ -51,8 +51,7 @@ class ConfigurableTest extends TestCase
 
     public function testAfterGetUsedProductCollection()
     {
-        $product = $this->getMockBuilder(ProductInterface::class)
-            ->getMock();
+        $product = $this->createMock(ProductInterface::class);
 
         $subject = $this->createPartialMock(
             \Magento\ConfigurableProduct\Model\Product\Type\Configurable::class,

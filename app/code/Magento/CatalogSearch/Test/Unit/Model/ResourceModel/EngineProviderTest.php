@@ -11,11 +11,13 @@ use Magento\CatalogSearch\Model\ResourceModel\EngineInterface;
 use Magento\CatalogSearch\Model\ResourceModel\EngineProvider;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Search\EngineResolverInterface;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 class EngineProviderTest extends TestCase
 {
+    use MockCreationTrait;
     /** @var EngineProvider */
     private $model;
 
@@ -27,10 +29,8 @@ class EngineProviderTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->objectManagerMock = $this->getMockBuilder(ObjectManagerInterface::class)
-            ->getMockForAbstractClass();
-        $this->engineResolverMock = $this->getMockBuilder(EngineResolverInterface::class)
-            ->getMockForAbstractClass();
+        $this->objectManagerMock = $this->createMock(ObjectManagerInterface::class);
+        $this->engineResolverMock = $this->createMock(EngineResolverInterface::class);
     }
 
     public function testGet()
@@ -45,9 +45,10 @@ class EngineProviderTest extends TestCase
             ->method('getCurrentSearchEngine')
             ->willReturn($currentEngine);
 
-        $engineMock = $this->getMockBuilder($currentEngineClass)
-            ->addMethods(['isAvailable'])
-            ->getMockForAbstractClass();
+        $engineMock = $this->createPartialMockWithReflection(
+            $currentEngineClass,
+            ['isAvailable', 'getAllowedVisibility', 'allowAdvancedIndex', 'processAttributeValue', 'prepareEntityIndex']
+        );
 
         $this->objectManagerMock->expects($this->once())
             ->method('create')
@@ -105,8 +106,7 @@ class EngineProviderTest extends TestCase
             ->method('getCurrentSearchEngine')
             ->willReturn($currentEngine);
 
-        $engineMock = $this->getMockBuilder($currentEngineClass)
-            ->getMockForAbstractClass();
+        $engineMock = $this->createMock($currentEngineClass);
 
         $this->objectManagerMock->expects($this->once())
             ->method('create')
@@ -136,9 +136,10 @@ class EngineProviderTest extends TestCase
             ->method('getCurrentSearchEngine')
             ->willReturn($currentEngine);
 
-        $engineMock = $this->getMockBuilder($currentEngineClass)
-            ->addMethods(['isAvailable'])
-            ->getMockForAbstractClass();
+        $engineMock = $this->createPartialMockWithReflection(
+            $currentEngineClass,
+            ['isAvailable', 'getAllowedVisibility', 'allowAdvancedIndex', 'processAttributeValue', 'prepareEntityIndex']
+        );
 
         $this->objectManagerMock->expects($this->once())
             ->method('create')

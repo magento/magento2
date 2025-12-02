@@ -2,8 +2,8 @@
 namespace Magento\Framework\Code\GeneratorTest\SourceClassWithNamespace;
 
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 class Interceptor extends \Magento\Framework\Code\GeneratorTest\SourceClassWithNamespace implements \Magento\Framework\Interception\InterceptorInterface
 {

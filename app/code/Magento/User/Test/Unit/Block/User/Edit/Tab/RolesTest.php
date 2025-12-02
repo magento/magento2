@@ -34,13 +34,8 @@ class RolesTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->jsonEncoderMock = $this->getMockBuilder(EncoderInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-
-        $this->requestInterfaceMock = $this->getMockBuilder(RequestInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->jsonEncoderMock = $this->createMock(EncoderInterface::class);
+        $this->requestInterfaceMock = $this->createMock(RequestInterface::class);
 
         $objectManagerHelper = new ObjectManager($this);
         $objects = [

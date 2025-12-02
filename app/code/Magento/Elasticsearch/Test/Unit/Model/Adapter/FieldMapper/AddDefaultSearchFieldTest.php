@@ -10,6 +10,7 @@ namespace Magento\Elasticsearch\Test\Unit\Model\Adapter\FieldMapper;
 use Magento\Elasticsearch\Model\Adapter\FieldMapper\AddDefaultSearchField;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Test mapping preprocessor AddDefaultSearchField
@@ -19,10 +20,10 @@ class AddDefaultSearchFieldTest extends TestCase
     /**
      * Test default search field "_search" should be prepended and overwrite if exist.
      *
-     * @dataProvider processDataProvider
      * @param array $mappingBefore
      * @param array $mappingAfter
      */
+    #[DataProvider('processDataProvider')]
     public function testProcess(array $mappingBefore, array $mappingAfter)
     {
         $objectManager = new ObjectManager($this);

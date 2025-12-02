@@ -25,10 +25,7 @@ class ConfigTest extends TestCase
         $fileStorageMock = $this->createMock(Storage::class);
         $fileStorageMock->expects($this->once())->method('getScriptConfig')->willReturn($config);
 
-        $file = $this->getMockBuilder(Write::class)
-            ->onlyMethods(['lock', 'write', 'unlock', 'close'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $file = $this->createPartialMock(Write::class, ['lock', 'write', 'unlock', 'close']);
         $file->expects($this->once())->method('lock');
         $file->expects($this->once())->method('write')->with(json_encode($config));
         $file->expects($this->once())->method('unlock');

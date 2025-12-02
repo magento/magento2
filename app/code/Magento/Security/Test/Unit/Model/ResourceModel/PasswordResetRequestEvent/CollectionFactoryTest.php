@@ -13,6 +13,7 @@ use Magento\Security\Model\Config\Source\ResetMethod;
 use Magento\Security\Model\ConfigInterface;
 use Magento\Security\Model\ResourceModel\PasswordResetRequestEvent\Collection;
 use Magento\Security\Model\ResourceModel\PasswordResetRequestEvent\CollectionFactory;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -33,12 +34,8 @@ class CollectionFactoryTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->objectManagerMock = $this->getMockBuilder(ObjectManagerInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-        $this->securityConfigMock = $this->getMockBuilder(ConfigInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->objectManagerMock = $this->createMock(ObjectManagerInterface::class);
+        $this->securityConfigMock = $this->createMock(ConfigInterface::class);
         $this->model = (new ObjectManager($this))->getObject(
             CollectionFactory::class,
             [
@@ -53,17 +50,15 @@ class CollectionFactoryTest extends TestCase
      * @param int $securityEventType
      * @param string $accountReference
      * @param string $longIp
-     * @dataProvider createDataProvider
      */
+    #[DataProvider('createDataProvider')]
     public function testCreate(
         $limitMethod,
         $securityEventType = null,
         $accountReference = null,
         $longIp = null
     ) {
-        $collectionMcok = $this->getMockBuilder(Collection::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $collectionMcok = $this->createMock(Collection::class);
         $this->objectManagerMock->expects($this->once())
             ->method('create')
             ->willReturn($collectionMcok);

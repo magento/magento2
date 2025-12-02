@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\CatalogUrlRewrite\Test\Unit\Model\Storage;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\Catalog\Model\ResourceModel\Product;
 use Magento\Catalog\Model\ResourceModel\ProductFactory;
 use Magento\CatalogUrlRewrite\Model\CategoryUrlPathGenerator;
@@ -157,7 +158,6 @@ class DynamicStorageTest extends TestCase
     }
 
     /**
-     * @dataProvider findProductRewriteByRequestPathDataProvider
      * @param array $data
      * @param array|false $productFromDb
      * @param string $categorySuffix
@@ -166,6 +166,7 @@ class DynamicStorageTest extends TestCase
      * @param array|null $expectedProductRewrite
      * @throws \ReflectionException
      */
+    #[DataProvider('findProductRewriteByRequestPathDataProvider')]
     public function testFindProductRewriteByRequestPath(
         array $data,
         $productFromDb,
