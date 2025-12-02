@@ -34,4 +34,18 @@
         <data key="container">Main Content Area</data>
         <data key="display_on">All Pages</data>
     </entity>
+    <entity name="SampleCatalogProductsListWidget" type="widget">
+        <data key="type">Catalog Products List</data>
+        <data key="design_theme">Magento Luma</data>
+        <data key="name" unique="suffix">Catalog Products List</data>
+        <array key="store_ids">
+            <item>All Store Views</item>
+        </array>
+        <data key="sort_order">0</data>
+        <data key="display_on">Configurable Product</data>
+        <data key="container">Main Content Area</data>
+        <data key="widget_options_title">Catalog Products List</data>
+        <data key="products_per_page">1</data>
+        <data key="products_to_display">1</data>
+    </entity>
 </entities>
