@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Store:etc/config.xsd">
@@ -11,6 +11,9 @@
             <dashboard>
                 <enable_charts>0</enable_charts>
             </dashboard>
+            <security>
+                <minimum_password_length>7</minimum_password_length>
+            </security>
         </admin>
         <dev>
             <template>

@@ -144,9 +144,10 @@ input SetShippingAddressesOnCartInput @doc(description: "Specifies an array of a
 }
 
 input ShippingAddressInput @doc(description: "Defines a single shipping address.") {
-    customer_address_id: Int @doc(description: "An ID from the customer's address book that uniquely identifies the address to be used for shipping.")
+    customer_address_id: Int @doc(description: "An ID from the customer's address book that uniquely identifies the address to be used for shipping.") @deprecated(reason: "Use `customer_address_uid` instead.")
     address: CartAddressInput @doc(description: "Defines a shipping address.")
     customer_notes: String @doc(description: "Text provided by the shopper.")
+    customer_address_uid: ID @doc(description: "The unique ID from the customer's address book that uniquely identifies the address to be used for shipping.")
 }
 
 input SetBillingAddressOnCartInput @doc(description: "Sets the billing address.") {
@@ -155,10 +156,11 @@ input SetBillingAddressOnCartInput @doc(description: "Sets the billing address."
 }
 
 input BillingAddressInput @doc(description: "Defines the billing address.") {
-    customer_address_id: Int @doc(description: "An ID from the customer's address book that uniquely identifies the address to be used for billing.")
+    customer_address_id: Int @doc(description: "An ID from the customer's address book that uniquely identifies the address to be used for billing.") @deprecated(reason: "Use `customer_address_uid` instead.")
     address: CartAddressInput @doc(description: "Defines a billing address.")
     use_for_shipping: Boolean @doc(description: "Indicates whether to set the shipping address to be the same as this billing address.")
     same_as_shipping: Boolean @doc(description: "Indicates whether to set the billing address to be the same as the existing shipping address on the cart.")
+    customer_address_uid: ID @doc(description: "The unique ID from the customer's address book that uniquely identifies the address to be used for billing.")
 }
 
 input CartAddressInput @doc(description: "Defines the billing or shipping address to be applied to the cart.") {
@@ -171,7 +173,7 @@ input CartAddressInput @doc(description: "Defines the billing or shipping addres
     region_id: Int @doc(description: "An integer that defines the state or province of the billing or shipping address.")
     postcode: String @doc(description: "The ZIP or postal code of the billing or shipping address.")
     country_code: String! @doc(description: "The country code and label for the billing or shipping address.")
-    telephone: String @doc(description: "The telephone number for the billing or shipping address.")
+    telephone: String! @doc(description: "The telephone number for the billing or shipping address.")
     vat_id: String @doc(description: "The VAT company number for billing or shipping address.")
     save_in_address_book: Boolean @doc(description: "Determines whether to save the address in the customer's address book. The default value is true.")
     fax: String @doc(description: "The customer's fax number.")
@@ -262,6 +264,20 @@ type ApplyCouponToCartOutput @doc(description: "Contains details about the cart 
 type PlaceOrderOutput @doc(description: "Contains the results of the request to place an order.") {
     order: Order @deprecated(reason: "Use `orderV2` instead.") @doc(description: "The ID of the order.")
     orderV2: CustomerOrder @doc(description: "Full order information.")
+    errors: [PlaceOrderError!] @doc(description:"An array of place order errors.")
+}
+
+type PlaceOrderError @doc(description:"An error encountered while placing an order."){
+    message: String! @doc(description: "A localized error message.")
+    code: PlaceOrderErrorCodes! @doc(description: "An error code that is specific to place order.")
+}
+
+enum PlaceOrderErrorCodes {
+    CART_NOT_FOUND
+    CART_NOT_ACTIVE
+    GUEST_EMAIL_MISSING
+    UNABLE_TO_PLACE_ORDER
+    UNDEFINED
 }
 
 type Cart @doc(description: "Contains the contents and other details about a guest or customer cart.") {
@@ -287,8 +303,9 @@ type CartItems {
 }
 
 interface CartAddressInterface @typeResolver(class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\CartAddressTypeResolver") {
-    uid: String! @doc(description: "The unique id of the customer address.")
-    id: Int @doc(description: "Id of the customer address.")
+    uid: ID! @doc(description: "The unique id of the customer cart address.")
+    id: Int @doc(description: "Id of the customer address.") @deprecated(reason: "Use `customer_address_uid` instead.")
+    customer_address_uid: ID @doc(description: "The unique ID from the customer's address book that uniquely identifies the address.")
     firstname: String! @doc(description: "The first name of the customer or guest.")
     lastname: String! @doc(description: "The last name of the customer or guest.")
     company: String @doc(description: "The company specified for the billing or shipping address.")
@@ -523,6 +540,7 @@ type StoreConfig {
     grouped_product_image: ProductImageThumbnail! @doc(description: "checkout/cart/grouped_product_image: which image to use for grouped products.") @resolver(class: "Magento\\QuoteGraphQl\\Model\\Resolver\\StoreConfig")
     configurable_product_image: ProductImageThumbnail! @doc(description: "checkout/cart/configurable_product_image: which image to use for configurable products.") @resolver(class: "Magento\\QuoteGraphQl\\Model\\Resolver\\StoreConfig")
     is_checkout_agreements_enabled: Boolean! @doc(description: "Configuration data from checkout/options/enable_agreements")
+    cart_merge_preference: String! @doc(description: "Configuration data from checkout/cart/cart_merge_preference")
 }
 
 enum ProductImageThumbnail {

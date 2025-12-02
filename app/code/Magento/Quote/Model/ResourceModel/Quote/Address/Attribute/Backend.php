@@ -1,14 +1,12 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Quote\Model\ResourceModel\Quote\Address\Attribute;
 
 /**
  * Quote address attribute backend resource model
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Backend extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
 {

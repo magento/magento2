@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -16,6 +16,7 @@ use Magento\Eav\Model\Entity\Attribute\OptionManagement;
 use Magento\Eav\Model\Entity\Attribute\Source\SourceInterface;
 use Magento\Eav\Model\Entity\Attribute\Source\Table as EavAttributeSource;
 use Magento\Eav\Model\ResourceModel\Entity\Attribute;
+use Magento\Eav\Model\ResourceModel\Entity\Attribute\Option as AttributeOptionResource;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Exception\StateException;
@@ -45,16 +46,22 @@ class OptionManagementTest extends TestCase
     protected $resourceModelMock;
 
     /**
+     * @var MockObject|AttributeOptionResource
+     */
+    protected $optionResourceMock;
+
+    /**
      * @inheritdoc
      */
     protected function setUp(): void
     {
         $this->attributeRepositoryMock = $this->createMock(AttributeRepository::class);
-        $this->resourceModelMock =
-            $this->createMock(Attribute::class);
+        $this->resourceModelMock = $this->createMock(Attribute::class);
+        $this->optionResourceMock =  $this->createMock(AttributeOptionResource::class);
         $this->model = new OptionManagement(
             $this->attributeRepositoryMock,
-            $this->resourceModelMock
+            $this->resourceModelMock,
+            $this->optionResourceMock
         );
     }
 
@@ -255,6 +262,7 @@ class OptionManagementTest extends TestCase
                 $optionId => [
                     0 => $label,
                     $storeId => $storeLabel,
+                    5 => 'otherLabelLabel'
                 ],
             ],
             'order' => [
@@ -265,8 +273,17 @@ class OptionManagementTest extends TestCase
             ]
         ];
 
+        $this->optionResourceMock->expects($this->once())
+            ->method('getStoreLabelsByOptionId')
+            ->with($optionId)
+            ->willReturn([
+                4 => 'oldLabelLabel',
+                5 => 'otherLabelLabel'
+            ]);
+
         $optionMock = $this->getAttributeOption();
-        $labelMock = $this->getAttributeOptionLabel();
+        $labelMock1 = $this->getAttributeOptionLabel();
+        $labelMock2 = $this->getAttributeOptionLabel();
         /** @var SourceInterface|MockObject $sourceMock */
         $sourceMock = $this->createMock(EavAttributeSource::class);
 
@@ -297,9 +314,11 @@ class OptionManagementTest extends TestCase
         $optionMock->method('getLabel')->willReturn($label);
         $optionMock->method('getSortOrder')->willReturn($sortOder);
         $optionMock->method('getIsDefault')->willReturn(true);
-        $optionMock->method('getStoreLabels')->willReturn([$labelMock]);
-        $labelMock->method('getStoreId')->willReturn($storeId);
-        $labelMock->method('getLabel')->willReturn($storeLabel);
+        $optionMock->method('getStoreLabels')->willReturn([$labelMock1, $labelMock2]);
+        $labelMock1->method('getStoreId')->willReturn($storeId);
+        $labelMock1->method('getLabel')->willReturn($storeLabel);
+        $labelMock2->method('getStoreId')->willReturn(5);
+        $labelMock2->method('getLabel')->willReturn('otherLabelLabel');
         $this->resourceModelMock->expects($this->once())->method('save')->with($attributeMock);
 
         $this->assertEquals(

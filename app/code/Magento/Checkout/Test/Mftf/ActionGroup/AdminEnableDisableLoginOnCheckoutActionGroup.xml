@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright 2025 Adobe
+ * All Rights Reserved.
+ */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminEnableDisableLoginOnCheckoutActionGroup">
+        <annotations>
+            <description>Enable or disable customer login on the checkout page by passing the value 1 to enable and 0 to disable.</description>
+        </annotations>
+        <arguments>
+            <argument name="enableDisableValue" type="string"/>
+        </arguments>
+        <magentoCLI command="config:set checkout/options/enable_guest_checkout_login {{enableDisableValue}}" stepKey="disableGuestCheckoutLogin"/>
+    </actionGroup>
+</actionGroups>

@@ -1,18 +1,18 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Sales\Block\Adminhtml;
 
 /**
  * Adminhtml sales creditmemos block
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Creditmemo extends \Magento\Backend\Block\Widget\Grid\Container
 {
     /**
+     * Initialize
+     *
      * @return void
      */
     protected function _construct()

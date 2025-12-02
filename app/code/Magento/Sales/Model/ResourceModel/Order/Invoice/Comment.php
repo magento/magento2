@@ -21,7 +21,6 @@ use Magento\SalesSequence\Model\Manager;
 
 /**
  * Flat sales order invoice comment resource
- *
  */
 class Comment extends EntityAbstract implements InvoiceCommentResourceInterface
 {

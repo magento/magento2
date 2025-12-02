@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 
 return [
@@ -29,7 +29,7 @@ return [
             'product_sku'    => 'sku1',
             'max_characters' => 10,
         ],
-        'The product that was requested doesn\'t exist. Verify the product and try again.',
+        'The product with SKU "%1" does not exist.',
         404,
     ],
 ];

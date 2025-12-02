@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -19,6 +19,7 @@ use Magento\Framework\Indexer\IndexStructureInterface;
 use Magento\Framework\Indexer\SaveHandler\Batch;
 use Magento\Framework\Search\Request\Dimension;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Magento\Framework\App\DeploymentConfig;
@@ -30,6 +31,7 @@ use Magento\Framework\Indexer\CacheContext;
  */
 class IndexerHandlerTest extends TestCase
 {
+    use MockCreationTrait;
     /**
      * @var IndexerHandler
      */
@@ -115,57 +117,30 @@ class IndexerHandlerTest extends TestCase
             ->method('create')
             ->willReturn($this->adapter);
 
-        $this->batch = $this->getMockBuilder(Batch::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->batch = $this->createMock(Batch::class);
 
-        $this->indexStructure = $this->getMockBuilder(IndexStructureInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->indexStructure = $this->createMock(IndexStructureInterface::class);
 
-        $this->indexNameResolver = $this->getMockBuilder(
-            IndexNameResolver::class
-        )
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->indexNameResolver = $this->createMock(IndexNameResolver::class);
 
-        $this->client = $this->getMockBuilder(ClientInterface::class)
-            ->addMethods(['ping', 'prepareDocsPerStore','addDocs', 'cleanIndex'])
-            ->onlyMethods(['testConnection'])
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-
-        $this->scopeResolver = $this->getMockForAbstractClass(
-            ScopeResolverInterface::class,
-            [],
-            '',
-            false
+        $this->client = $this->createPartialMockWithReflection(
+            ClientInterface::class,
+            ['ping', 'testConnection']
         );
 
-        $this->processor = $this->getMockBuilder(Processor::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->indexer = $this->getMockBuilder(IndexerInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->scopeResolver = $this->createMock(ScopeResolverInterface::class);
+
+        $this->processor = $this->createMock(Processor::class);
+        $this->indexer = $this->createMock(IndexerInterface::class);
         $this->processor->expects($this->any())
             ->method('getIndexer')
             ->willReturn($this->indexer);
 
-        $this->deploymentConfig = $this->getMockBuilder(DeploymentConfig::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->deploymentConfig = $this->createMock(DeploymentConfig::class);
 
-        $this->cacheContext = $this->getMockBuilder(CacheContext::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->cacheContext = $this->createMock(CacheContext::class);
 
-        $this->scopeInterface = $this->getMockForAbstractClass(
-            ScopeInterface::class,
-            [],
-            '',
-            false
-        );
+        $this->scopeInterface = $this->createMock(ScopeInterface::class);
 
         $this->model = new IndexerHandler(
             $this->indexStructure,
@@ -208,9 +183,7 @@ class IndexerHandlerTest extends TestCase
             ->method('ping')
             ->willReturn(true);
 
-        $this->client->expects($this->any())
-            ->method('ping')
-            ->willReturn(true);
+        $this->client->method('ping')->willReturn(true);
 
         $result = $this->model->isAvailable();
 

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
-  */
+/**
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
+ */
 -->
 
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -23,8 +23,13 @@
         <element name="defaultLabel" type="text" selector="//div[contains(text(), '{{arg}}')]/ancestor::tr//td[3]/div[@class='data-grid-cell-content']" parameterized="true"/>
 
         <element name="selectAll" type="button" selector=".action-select-all"/>
+        <element name="deSelectAllByAttribute" type="button" selector="//div[@data-attribute-title='{{attr}}']//button[contains(@class, 'action-deselect-all')]" parameterized="true"/>
         <element name="selectAllByAttribute" type="button" selector="//div[@data-attribute-title='{{attr}}']//button[contains(@class, 'action-select-all')]" parameterized="true"/>
         <element name="createNewValue" type="input" selector=".action-create-new" timeout="30"/>
+        <element name="createNewValueForAttribute" type="button"
+                 selector="//div[contains(@class,'attribute-entity') and @data-attribute-title='{{attrLabel}}']//button[contains(@class,'action-create-new')]"
+                 parameterized="true"
+                 timeout="30"/>
         <element name="attributeNameInTitle" type="input" selector="//div[contains(@class,'attribute-entity-title-block')]/div[contains(@class,'attribute-entity-title')]"/>
         <element name="attributeName" type="input" selector="li[data-attribute-option-title=''] .admin__field-create-new .admin__control-text"/>
         <element name="attributeNameWithError" type="text" selector="//li[@data-attribute-option-title='']/div[contains(@class,'admin__field admin__field-create-new _error')]"/>

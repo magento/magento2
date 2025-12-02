@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 
 declare(strict_types=1);
@@ -143,6 +143,34 @@ class GenerateRenditionsTest extends TestCase
             $modifiableFilePath,
             file_get_contents($imagePath)
         );
+    }
+
+    /**
+     * Test getImageFileNamePattern method returns correct regex pattern
+     */
+    public function testGetImageFileNamePattern(): void
+    {
+        $pattern = $this->generateRenditions->getImageFileNamePattern();
+        // Assert the pattern is the expected string
+        $this->assertEquals('#\.(jpg|jpeg|gif|png)$# i', $pattern);
+        // Test that the pattern correctly validates supported file types
+        $validExtensions = ['test.jpg', 'test.jpeg', 'test.gif', 'test.png', 'TEST.JPG', 'TEST.PNG'];
+        foreach ($validExtensions as $filename) {
+            $this->assertEquals(
+                1,
+                preg_match($pattern, $filename),
+                "Pattern should match valid image file: $filename"
+            );
+        }
+        // Test that the pattern correctly rejects unsupported file types
+        $invalidExtensions = ['test.txt', 'test.pdf', 'test.webp', 'test.bmp', 'test'];
+        foreach ($invalidExtensions as $filename) {
+            $this->assertEquals(
+                0,
+                preg_match($pattern, $filename),
+                "Pattern should not match invalid image file: $filename"
+            );
+        }
     }
 
     /**

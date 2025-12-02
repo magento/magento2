@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -27,6 +27,7 @@ use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -110,11 +111,11 @@ class CartTest extends TestCase
     {
         $this->checkoutSessionMock = $this->createMock(Session::class);
         $this->customerSessionMock = $this->createMock(\Magento\Customer\Model\Session::class);
-        $this->scopeConfigMock = $this->getMockForAbstractClass(ScopeConfigInterface::class);
+        $this->scopeConfigMock = $this->createMock(ScopeConfigInterface::class);
         $this->quoteMock = $this->createMock(Quote::class);
-        $this->eventManagerMock = $this->getMockForAbstractClass(ManagerInterface::class);
-        $this->storeManagerMock = $this->getMockForAbstractClass(StoreManagerInterface::class);
-        $this->productRepository = $this->getMockForAbstractClass(ProductRepositoryInterface::class);
+        $this->eventManagerMock = $this->createMock(ManagerInterface::class);
+        $this->storeManagerMock = $this->createMock(StoreManagerInterface::class);
+        $this->productRepository = $this->createMock(ProductRepositoryInterface::class);
         $this->stockRegistry = $this->getMockBuilder(StockRegistry::class)
             ->disableOriginalConstructor()
             ->onlyMethods(['getStockItem'])
@@ -133,18 +134,10 @@ class CartTest extends TestCase
             RequestInfoFilterInterface::class
         );
 
-        $this->stockRegistry->expects($this->any())
-            ->method('getStockItem')
-            ->willReturn($this->stockItemMock);
-        $this->storeMock->expects($this->any())
-            ->method('getWebsiteId')
-            ->willReturn(10);
-        $this->storeMock->expects($this->any())
-            ->method('getId')
-            ->willReturn(10);
-        $this->storeManagerMock->expects($this->any())
-            ->method('getStore')
-            ->willReturn($this->storeMock);
+        $this->stockRegistry->method('getStockItem')->willReturn($this->stockItemMock);
+        $this->storeMock->method('getWebsiteId')->willReturn(10);
+        $this->storeMock->method('getId')->willReturn(10);
+        $this->storeManagerMock->method('getStore')->willReturn($this->storeMock);
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->cart = $this->objectManagerHelper->getObject(
@@ -184,9 +177,7 @@ class CartTest extends TestCase
             ->method('suggestQty')
             ->willReturnOnConsecutiveCalls(3.0, 3.5);
 
-        $this->checkoutSessionMock->expects($this->any())
-            ->method('getQuote')
-            ->willReturn($this->quoteMock);
+        $this->checkoutSessionMock->method('getQuote')->willReturn($this->quoteMock);
 
         $this->assertSame(
             [
@@ -241,15 +232,9 @@ class CartTest extends TestCase
     public function prepareQuoteItemMock($itemId)
     {
         $store = $this->createPartialMock(Store::class, ['getId', 'getWebsiteId']);
-        $store->expects($this->any())
-            ->method('getWebsiteId')
-            ->willReturn(10);
-        $store->expects($this->any())
-            ->method('getId')
-            ->willReturn(10);
-        $this->storeManagerMock->expects($this->any())
-            ->method('getStore')
-            ->willReturn($store);
+        $store->method('getWebsiteId')->willReturn(10);
+        $store->method('getId')->willReturn(10);
+        $this->storeManagerMock->method('getStore')->willReturn($store);
 
         switch ($itemId) {
             case 2:
@@ -294,8 +279,8 @@ class CartTest extends TestCase
      * @param boolean $useQty
      *
      * @return void
-     * @dataProvider useQtyDataProvider
      */
+    #[DataProvider('useQtyDataProvider')]
     public function testGetSummaryQty(bool $useQty): void
     {
         $quoteId = 1;
@@ -305,11 +290,11 @@ class CartTest extends TestCase
             ['getItemsCount', 'getItemsQty']
         );
 
-        $this->checkoutSessionMock->expects($this->any())->method('getQuote')->willReturn($quoteMock);
+        $this->checkoutSessionMock->method('getQuote')->willReturn($quoteMock);
         $this->checkoutSessionMock
             ->method('getQuoteId')
             ->willReturn($quoteId);
-        $this->customerSessionMock->expects($this->any())->method('isLoggedIn')->willReturn(true);
+        $this->customerSessionMock->method('isLoggedIn')->willReturn(true);
 
         $this->scopeConfigMock->expects($this->once())->method('getValue')
             ->with('checkout/cart_link/use_qty', ScopeInterface::SCOPE_STORE)
@@ -339,8 +324,8 @@ class CartTest extends TestCase
      * @param DataObject|int|array|\Closure $requestInfo
      *
      * @return void
-     * @dataProvider addProductDataProvider
      */
+    #[DataProvider('addProductDataProvider')]
     public function testAddProduct(int|Product|null $productInfo, DataObject|int|array|\Closure $requestInfo): void
     {
         if (is_callable($requestInfo)) {
@@ -350,21 +335,13 @@ class CartTest extends TestCase
             Product::class,
             ['getStore', 'getWebsiteIds', 'getProductUrl', 'getId']
         );
-        $product->expects($this->any())
-            ->method('getId')
-            ->willReturn(4);
+        $product->method('getId')->willReturn(4);
         $product->expects($this->once())
             ->method('getStore')
             ->willReturn($this->storeMock);
-        $product->expects($this->any())
-            ->method('getWebsiteIds')
-            ->willReturn([10]);
-        $product->expects($this->any())
-            ->method('getProductUrl')
-            ->willReturn('url');
-        $this->productRepository->expects($this->any())
-            ->method('getById')
-            ->willReturn($product);
+        $product->method('getWebsiteIds')->willReturn([10]);
+        $product->method('getProductUrl')->willReturn('url');
+        $this->productRepository->method('getById')->willReturn($product);
 
         $this->quoteMock->expects($this->once())
             ->method('addProduct')
@@ -405,21 +382,13 @@ class CartTest extends TestCase
             Product::class,
             ['getStore', 'getWebsiteIds', 'getProductUrl', 'getId']
         );
-        $product->expects($this->any())
-            ->method('getId')
-            ->willReturn(4);
+        $product->method('getId')->willReturn(4);
         $product->expects($this->once())
             ->method('getStore')
             ->willReturn($this->storeMock);
-        $product->expects($this->any())
-            ->method('getWebsiteIds')
-            ->willReturn([10]);
-        $product->expects($this->any())
-            ->method('getProductUrl')
-            ->willReturn('url');
-        $this->productRepository->expects($this->any())
-            ->method('getById')
-            ->willReturn($product);
+        $product->method('getWebsiteIds')->willReturn([10]);
+        $product->method('getProductUrl')->willReturn('url');
+        $this->productRepository->method('getById')->willReturn($product);
 
         $this->eventManagerMock->expects($this->once())->method('dispatch')->with(
             'checkout_cart_product_add_before',
@@ -448,15 +417,9 @@ class CartTest extends TestCase
             Product::class,
             ['getWebsiteIds', 'getId']
         );
-        $product->expects($this->any())
-            ->method('getId')
-            ->willReturn(4);
-        $product->expects($this->any())
-            ->method('getWebsiteIds')
-            ->willReturn([10]);
-        $this->productRepository->expects($this->any())
-            ->method('getById')
-            ->willReturn($product);
+        $product->method('getId')->willReturn(4);
+        $product->method('getWebsiteIds')->willReturn([10]);
+        $this->productRepository->method('getById')->willReturn($product);
 
         $this->eventManagerMock->expects($this->never())->method('dispatch')->with(
             'checkout_cart_product_add_before',

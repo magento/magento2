@@ -128,6 +128,12 @@
     <type name="Magento\RequireJs\Model\FileManager">
         <plugin name="addResourceIntegrityAfterAssetCreate" type="Magento\Csp\Plugin\GenerateAssetIntegrity"/>
     </type>
+    <type name="Magento\Deploy\Service\Bundle">
+        <plugin name="addResourceIntegrityAfterBundleDeploy" type="Magento\Csp\Plugin\GenerateBundleAssetIntegrity" />
+    </type>
+    <type name="Magento\Framework\View\Asset\MergeStrategy\FileExists">
+        <plugin name="addResourceIntegrityAfterMergeFile" type="Magento\Csp\Plugin\GenerateMergedAssetIntegrity" />
+    </type>
     <preference for="Magento\Deploy\Package\Processor\PostProcessor\Map" type="Magento\Csp\Model\Deploy\Package\Processor\PostProcessor\Map" />
     <type name="Magento\Csp\Model\Deploy\Package\Processor\PostProcessor\Map">
         <arguments>

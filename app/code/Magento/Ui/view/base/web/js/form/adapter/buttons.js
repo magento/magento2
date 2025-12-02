@@ -1,6 +1,6 @@
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 
 /**
@@ -10,7 +10,7 @@ define(function () {
     'use strict';
 
     return {
-        'reset': '#reset_ui_form',
+        'reset': '#reset',
         'save': '#save',
         'saveAndContinue': '#save_and_continue'
     };

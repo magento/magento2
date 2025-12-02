@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright 2024 Adobe
+ * All Rights Reserved.
+ */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AssertElementVisibleOnScreenActionGroup">
+        <annotations>
+            <description>Asserts that an element is fully visible on screen within viewport bounds, not just present in DOM</description>
+        </annotations>
+        <arguments>
+            <argument name="selector" type="string"/>
+        </arguments>
+
+        <executeJS function="
+            var element = document.querySelector('{{selector}}');
+            if (!element) {
+                return 'Element not found in DOM';
+            }
+
+            var rect = element.getBoundingClientRect();
+            var windowHeight = window.innerHeight;
+            var windowWidth = window.innerWidth;
+
+            var isVisible = rect.top &gt;= 0 &amp;&amp;
+                           rect.left &gt;= 0 &amp;&amp;
+                           rect.bottom &lt;= windowHeight &amp;&amp;
+                           rect.right &lt;= windowWidth;
+
+            return isVisible ? 'Element is visible on screen' : 'Element is positioned off-screen';
+        " stepKey="checkElementVisibility"/>
+
+        <assertStringContainsString stepKey="assertElementIsVisible">
+            <expectedResult type="string">Element is visible on screen</expectedResult>
+            <actualResult type="variable">$checkElementVisibility</actualResult>
+        </assertStringContainsString>
+    </actionGroup>
+</actionGroups>

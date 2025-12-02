@@ -1,12 +1,13 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\ConfigurableProduct\Test\Unit\Model\ResourceModel\Product;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\Catalog\Model\ResourceModel\Product\BaseSelectProcessorInterface;
 use Magento\CatalogInventory\Api\StockConfigurationInterface;
 use Magento\CatalogInventory\Model\ResourceModel\Stock\Status as StockStatusResource;
@@ -41,16 +42,10 @@ class StockStatusBaseSelectProcessorTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->stockConfigMock = $this->getMockBuilder(StockConfigurationInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->stockConfigMock = $this->createMock(StockConfigurationInterface::class);
 
-        $this->stockStatusResourceMock = $this->getMockBuilder(StockStatusResource::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->stockStatusResourceMock->expects($this->any())
-            ->method('getMainTable')
-            ->willReturn($this->stockStatusTable);
+        $this->stockStatusResourceMock = $this->createMock(StockStatusResource::class);
+        $this->stockStatusResourceMock->method('getMainTable')->willReturn($this->stockStatusTable);
 
         $this->subject = (new ObjectManager($this))->getObject(
             StockStatusBaseSelectProcessor::class,
@@ -63,19 +58,14 @@ class StockStatusBaseSelectProcessorTest extends TestCase
 
     /**
      * @param bool $isShowOutOfStock
-     *
-     * @dataProvider processDataProvider
      */
+    #[DataProvider('processDataProvider')]
     public function testProcess($isShowOutOfStock)
     {
-        $this->stockConfigMock->expects($this->any())
-            ->method('isShowOutOfStock')
-            ->willReturn($isShowOutOfStock);
+        $this->stockConfigMock->method('isShowOutOfStock')->willReturn($isShowOutOfStock);
 
         /** @var Select|MockObject $selectMock */
-        $selectMock = $this->getMockBuilder(Select::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $selectMock = $this->createMock(Select::class);
 
         if ($isShowOutOfStock) {
             $selectMock->expects($this->once())

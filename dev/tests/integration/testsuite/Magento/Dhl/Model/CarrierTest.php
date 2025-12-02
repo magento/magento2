@@ -803,9 +803,9 @@ class CarrierTest extends TestCase
         }
         $requestRest = $this->httpClient->getLastRequest()->getBody();
         self::assertStringContainsString('"weight": 18', $requestRest);
-        self::assertStringContainsString('"height": 0.63', $requestRest);
-        self::assertStringContainsString('"width": 0.63', $requestRest);
-        self::assertStringContainsString('"length": 0', $requestRest);
+        self::assertStringContainsString('"height": 1.181', $requestRest);
+        self::assertStringContainsString('"width": 1.181', $requestRest);
+        self::assertStringContainsString('"length": 1.181', $requestRest);
     }
 
     /**

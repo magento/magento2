@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright 2021 Adobe
+ * All Rights Reserved.
+ */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontCaptchaOnEmailToFriendFormTest">
+        <annotations>
+            <features value="Captcha"/>
+            <stories value="Sending email about products in store with enabled captcha"/>
+            <title value="Captcha on email to friend form"/>
+            <description value="Customer should be able send email to friend about product with enabled captcha"/>
+            <severity value="MINOR"/>
+            <group value="captcha"/>
+        </annotations>
+        <before>
+            <createData entity="SimpleSubCategory" stepKey="createCategory"/>
+            <createData entity="SimpleProduct" stepKey="createProduct">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <createData entity="Simple_US_Customer" stepKey="createCustomer"/>
+            <magentoCLI command="config:set {{StorefrontCustomerCaptchaLength3ConfigData.path}} {{StorefrontCustomerCaptchaLength3ConfigData.value}}" stepKey="setCaptchaLength"/>
+            <magentoCLI command="config:set {{StorefrontCustomerCaptchaSymbols1ConfigData.path}} {{StorefrontCustomerCaptchaSymbols1ConfigData.value}}" stepKey="setCaptchaSymbols"/>
+            <magentoCLI command="config:set {{StorefrontCaptchaOnEmailToFriendFormConfigData.path}} {{StorefrontCaptchaOnEmailToFriendFormConfigData.value}}" stepKey="enableEmailToFriendCaptcha"/>
+            <magentoCLI command="config:set {{StorefrontCustomerCaptchaModeAlwaysConfigData.path}} {{StorefrontCustomerCaptchaModeAlwaysConfigData.value}}" stepKey="setCaptchaAlwaysVisible"/>
+            <magentoCLI command="config:set {{EnableCatalogEmailToFriendOptionConfigData.path}} {{EnableCatalogEmailToFriendOptionConfigData.value}}" stepKey="enableSendToFriend"/>
+            <actionGroup ref="CliCacheCleanActionGroup" stepKey="cleanInvalidatedCaches">
+                <argument name="tags" value="config full_page"/>
+            </actionGroup>
+        </before>
+        <after>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer"/>
+            <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
+            <magentoCLI command="config:set {{StorefrontCustomerCaptchaDefaultLengthConfigData.path}} {{StorefrontCustomerCaptchaDefaultLengthConfigData.value}}" stepKey="setDefaultCaptchaLength"/>
+            <magentoCLI command="config:set {{StorefrontCustomerCaptchaDefaultSymbolsConfigData.path}} {{StorefrontCustomerCaptchaDefaultSymbolsConfigData.value}}" stepKey="setDefaultCaptchaSymbols"/>
+            <magentoCLI command="config:set {{StorefrontCustomerCaptchaModeAfterFailConfigData.path}} {{StorefrontCustomerCaptchaModeAfterFailConfigData.value}}" stepKey="setCaptchaDefaultVisibility"/>
+            <magentoCLI command="config:set {{StorefrontCaptchaOnCustomerLoginConfigData.path}} {{StorefrontCaptchaOnCustomerLoginConfigData.value}},{{StorefrontCaptchaOnCustomerForgotPasswordConfigData.value}}" stepKey="enableCaptchaOnDefaultForms"/>
+            <magentoCLI command="config:set {{DisableCatalogEmailToFriendOptionConfigData.path}} {{DisableCatalogEmailToFriendOptionConfigData.value}}" stepKey="disableSendToFriend"/>
+            <actionGroup ref="CliCacheCleanActionGroup" stepKey="cleanInvalidatedCaches">
+                <argument name="tags" value="config full_page"/>
+            </actionGroup>
+        </after>
+
+        <actionGroup ref="LoginToStorefrontActionGroup" stepKey="loginToStorefrontAccount">
+            <argument name="Customer" value="$createCustomer$"/>
+        </actionGroup>
+        <actionGroup ref="OpenProductFromCategoryPageActionGroup" stepKey="openProductFromCategory">
+            <argument name="category" value="$createCategory$"/>
+            <argument name="product" value="$createProduct$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontClickEmailToFriendButtonOnProductPageActionGroup" stepKey="clickEmailButton"/>
+        <actionGroup ref="AssertCaptchaVisibleOnEmailToFriendFormActionGroup" stepKey="seeCaptchaOnEmailToFriendForm"/>
+        <actionGroup ref="StorefrontFillFieldsOnEmailToFriendFormActionGroup" stepKey="fillFieldsOnForm">
+            <argument name="senderName" value="{{Simple_US_Customer.firstname}}"/>
+            <argument name="senderEmail" value="{{Simple_US_Customer.email}}"/>
+            <argument name="message" value="{{EmailToFriendValidValues.shareInfo_message}}"/>
+            <argument name="recipientName" value="{{EmailToFriendValidValues.recipient_name}}"/>
+            <argument name="recipientEmail" value="{{EmailToFriendValidValues.shareInfo_email}}"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontFillCaptchaOnEmailToFriendFormActionGroup" stepKey="fillCaptchaFieldWithIncorrectValues">
+            <argument name="captcha" value="{{WrongCaptcha.value}}"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontClickSendEmailButtonOnEmailToFriendFormActionGroup" stepKey="submitEmailToFriendForm"/>
+        <actionGroup ref="AssertMessageCustomerChangeAccountInfoActionGroup" stepKey="assertErrorMessage">
+            <argument name="message" value="Incorrect CAPTCHA"/>
+            <argument name="messageType" value="error"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontFillFieldsOnEmailToFriendFormActionGroup" stepKey="fillFieldsOnEmailToFriendForm">
+            <argument name="senderName" value="{{Simple_US_Customer.firstname}}"/>
+            <argument name="senderEmail" value="{{Simple_US_Customer.email}}"/>
+            <argument name="message" value="{{EmailToFriendValidValues.shareInfo_message}}"/>
+            <argument name="recipientName" value="{{EmailToFriendValidValues.recipient_name}}"/>
+            <argument name="recipientEmail" value="{{EmailToFriendValidValues.shareInfo_email}}"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontFillCaptchaOnEmailToFriendFormActionGroup" stepKey="fillCaptchaFieldWithCorrectValues">
+            <argument name="captcha" value="{{PreconfiguredCaptcha.value}}"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontClickSendEmailButtonOnEmailToFriendFormActionGroup" stepKey="submitEmailToFriendFormWithValidValues"/>
+        <actionGroup ref="AssertMessageCustomerChangeAccountInfoActionGroup" stepKey="assertSuccessMessage">
+            <argument name="message" value="The link to a friend was sent."/>
+        </actionGroup>
+    </test>
+</tests>

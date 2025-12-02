@@ -28,7 +28,7 @@ class PhpCookieManager implements CookieManagerInterface
 {
     /**#@+
      * Constants for Cookie manager.
-     * RFC 2109 - Page 15
+     * RFC 2109 - Page 26
      * http://www.ietf.org/rfc/rfc6265.txt
      */
     public const MAX_NUM_COOKIES = 50;
@@ -211,7 +211,7 @@ class PhpCookieManager implements CookieManagerInterface
 
         $sizeOfCookie = $this->sizeOfCookie($name, $value);
 
-        if ($numCookies > self::MAX_NUM_COOKIES) {
+        if ($numCookies > static::MAX_NUM_COOKIES) {
             $this->logger->warning(
                 new Phrase('Unable to send the cookie. Maximum number of cookies would be exceeded.'),
                 [
@@ -221,7 +221,7 @@ class PhpCookieManager implements CookieManagerInterface
             );
         }
 
-        if ($sizeOfCookie > self::MAX_COOKIE_SIZE) {
+        if ($sizeOfCookie > static::MAX_COOKIE_SIZE) {
             throw new CookieSizeLimitReachedException(
                 new Phrase(
                     'Unable to send the cookie. Size of \'%name\' is %size bytes.',

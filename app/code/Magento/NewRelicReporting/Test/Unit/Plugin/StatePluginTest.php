@@ -1,13 +1,14 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\NewRelicReporting\Test\Unit\Plugin;
 
 use Magento\Framework\App\State;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\NewRelicReporting\Model\Config as NewRelicConfig;
 use Magento\NewRelicReporting\Model\NewRelicWrapper;
@@ -106,6 +107,30 @@ class StatePluginTest extends TestCase
         $this->newRelicWrapperMock->expects($this->never())->method('setAppName');
 
         $this->statePlugin->afterSetAreaCode($this->stateMock, static::STUB_APP_NAME);
+    }
+
+    /**
+     * Tests not being able to set the New Relic app name
+     */
+    public function testExceptionSettingAreaCode(): void
+    {
+        $this->configMock->expects($this->any())->method('isSeparateApps')->willReturn(true);
+        $this->configMock->expects($this->any())->method('getNewRelicAppName')->willReturn(self::STUB_APP_NAME);
+        $this->configMock->expects($this->any())->method('isNewRelicEnabled')->willReturn(true);
+        $exception = new LocalizedException(__('Test Exception'));
+
+        $this->newRelicWrapperMock
+            ->expects($this->once())
+            ->method('setAppName')
+            ->willThrowException($exception);
+
+        $this->loggerMock
+            ->expects($this->once())
+            ->method('critical')
+            ->with($this->isInstanceOf(LocalizedException::class));
+
+        $result = $this->statePlugin->afterSetAreaCode($this->stateMock, 'result');
+        $this->assertSame('result', $result);
     }
 
     /**
