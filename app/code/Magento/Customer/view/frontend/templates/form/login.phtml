@@ -35,7 +35,7 @@ $buttonLockManager = $block->getData('button_lock_manager');
                     </div>
                 </div>
                 <div class="field password required">
-                    <label for="pass" class="label"><span><?= $escaper->escapeHtml(__('Password')) ?></span></label>
+                    <label for="password" class="label"><span><?= $escaper->escapeHtml(__('Password')) ?></span></label>
                     <div class="control">
                         <input name="login[password]" type="password"
                             <?php if ($block->isAutocompleteDisabled()): ?> autocomplete="off"<?php endif; ?>
