@@ -96,7 +96,7 @@
 {{depend street2}}{{var street2}}|{{/depend}}
 {{depend street3}}{{var street3}}|{{/depend}}
 {{depend street4}}{{var street4}}|{{/depend}}
-{{depend city}}{{var city}},|{{/depend}} {{if region}}{{var region}}, {{/if}}{{if postcode}}{{var postcode}}{{/if}}|
+{{depend city}}{{var city}},{{/depend}} {{if region}}{{var region}}, {{/if}}{{if postcode}}{{var postcode}}{{/if}}|
 {{var country}}|
 {{depend telephone}}T: {{var telephone}}|{{/depend}}
 {{depend fax}}F: {{var fax}}|{{/depend}}|
