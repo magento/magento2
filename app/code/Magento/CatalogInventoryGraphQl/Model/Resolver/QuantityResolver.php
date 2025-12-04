@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2024 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -9,7 +9,6 @@ namespace Magento\CatalogInventoryGraphQl\Model\Resolver;
 
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\Product;
-use Magento\CatalogInventory\Model\StockState;
 use Magento\CatalogInventory\Model\Config\Source\NotAvailableMessage;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Exception\LocalizedException;
@@ -36,16 +35,16 @@ class QuantityResolver implements ResolverInterface
     private const CONFIG_PATH_NOT_AVAILABLE_MESSAGE = "cataloginventory/options/not_available_message";
 
     /**
+     * QuantityResolver Constructor
+     *
      * @param ProductRepositoryInterface $productRepositoryInterface
      * @param ScopeConfigInterface $scopeConfig
-     * @param StockState $stockState
      * @param ProductStock $productStock
      */
     public function __construct(
         private readonly ProductRepositoryInterface $productRepositoryInterface,
         private readonly ScopeConfigInterface $scopeConfig,
-        private readonly StockState $stockState,
-        private readonly ProductStock $productStock,
+        private readonly ProductStock $productStock
     ) {
     }
 
@@ -69,7 +68,7 @@ class QuantityResolver implements ResolverInterface
         }
 
         if (isset($value['cart_item']) && $value['cart_item'] instanceof Item) {
-            return $this->productStock->getProductAvailableStock($value['cart_item']);
+            return $this->productStock->getSaleableQtyByCartItem($value['cart_item'], null);
         }
 
         if (!isset($value['model'])) {
@@ -82,6 +81,7 @@ class QuantityResolver implements ResolverInterface
         if ($product->getTypeId() === self::PRODUCT_TYPE_CONFIGURABLE) {
             $product = $this->productRepositoryInterface->get($product->getSku());
         }
-        return $this->stockState->getStockQty($product->getId());
+
+        return $this->productStock->getSaleableQty($product, null);
     }
 }

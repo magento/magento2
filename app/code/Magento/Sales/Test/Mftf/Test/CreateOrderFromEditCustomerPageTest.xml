@@ -182,8 +182,10 @@
         <actionGroup ref="AdminClickUpdateChangesOnCreateOrderPageActionGroup" stepKey="clickOnUpdateButton1"/>
         <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForAdminCreateOrderShoppingCartSectionPageLoad1"/>
 
-        <dontSee selector="{{AdminCreateOrderShoppingCartSection.shoppingCartBlock}}" userInput="$$simpleProduct.name$$" stepKey="donSeeProductInShoppingCart"/>
-        <dontSee selector="{{AdminCreateOrderShoppingCartSection.shoppingCartBlock}}" userInput="$$simpleProduct1.name$$" stepKey="dontSeeSecondProductInShoppingCart"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="donSeeProductInShoppingCart"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="dontSeeSecondProductInShoppingCart"/>
+        <see selector="{{AdminCreateOrderShoppingCartSection.shoppingCartBlock}}" userInput="$$simpleProduct.name$$" stepKey="seeProductInShoppingCart2"/>
+        <see selector="{{AdminCreateOrderShoppingCartSection.shoppingCartBlock}}" userInput="$$simpleProduct1.name$$" stepKey="seeSecondProductInShoppingCart2"/>
 
         <dontSee selector="{{AdminCreateOrderWishListSection.wishListBlock}}" userInput="$$simpleProduct.name$$" stepKey="seeSimpleProductInWishList1"/>
         <dontSee selector="{{AdminCreateOrderWishListSection.wishListBlock}}" userInput="$$createConfigProduct.name$$" stepKey="seeConfigurableProductInWishList1"/>
@@ -222,7 +224,7 @@
         </actionGroup>
         <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForOrderPageToOpen"/>
         <actionGroup ref="AdminOpenOrderByIdFromOrdersGridOnCustomerEditPageActionGroup" stepKey="selectOnOrderID">
-            <argument name="orderId" value="$orderId"/>
+            <argument name="orderId" value="$orderNumber"/>
         </actionGroup>
 
         <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForOrderInformationToLoad"/>

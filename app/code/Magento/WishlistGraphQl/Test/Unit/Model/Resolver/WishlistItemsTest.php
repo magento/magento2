@@ -8,11 +8,12 @@ declare(strict_types=1);
 namespace Magento\WishlistGraphQl\Test\Unit\Model\Resolver;
 
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
+use Magento\GraphQl\Model\Query\ContextExtensionInterface;
 use Magento\GraphQl\Model\Query\ContextInterface;
 use Magento\Framework\GraphQl\Config\Element\Field;
-use Magento\GraphQl\Model\Query\ContextExtensionInterface;
 use Magento\Store\Api\Data\StoreInterface;
 use Magento\Store\Model\StoreManagerInterface;
+use Magento\Store\Model\Website;
 use Magento\Wishlist\Model\ResourceModel\Item;
 use Magento\Wishlist\Model\ResourceModel\Item\Collection as WishlistItemCollection;
 use Magento\Wishlist\Model\ResourceModel\Item\CollectionFactory as WishlistItemCollectionFactory;
@@ -21,6 +22,9 @@ use Magento\WishlistGraphQl\Model\Resolver\WishlistItems;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class WishlistItemsTest extends TestCase
 {
     /**
@@ -49,14 +53,13 @@ class WishlistItemsTest extends TestCase
      */
     public function testResolve(): void
     {
-        $storeId = $itemId = 1;
+        $webId = $storeId = $itemId = 1;
 
         $field = $this->createMock(Field::class);
-        $context = $this->getMockBuilder(ContextInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $context = $this->createMock(ContextInterface::class);
         $store = $this->createMock(StoreInterface::class);
-        $store->expects($this->once())->method('getId')->willReturn($storeId);
+        $store->expects($this->once())->method('getWebsiteId')->willReturn($webId);
+        $store->expects($this->any())->method('getId')->willReturn($storeId);
 
         $extensionAttributes = $this->getMockBuilder(ContextExtensionInterface::class)
             ->disableOriginalConstructor()
@@ -87,7 +90,7 @@ class WishlistItemsTest extends TestCase
             ->willReturnSelf();
         $wishlistCollection->expects($this->once())
             ->method('addStoreFilter')
-            ->with($storeId)
+            ->with([$storeId])
             ->willReturnSelf();
         $wishlistCollection->expects($this->once())->method('setVisibilityFilter')->willReturnSelf();
         $wishlistCollection->expects($this->once())->method('setCurPage')->willReturnSelf();
@@ -99,6 +102,10 @@ class WishlistItemsTest extends TestCase
         $this->wishlistItemCollectionFactory->expects($this->once())
             ->method('create')
             ->willReturn($wishlistCollection);
+
+        $website = $this->createMock(Website::class);
+        $website->expects($this->any())->method('getStores')->willReturn([$store]);
+        $this->storeManager->expects($this->once())->method('getWebsite')->with($webId)->willReturn($website);
 
         $resolver = new WishlistItems($this->wishlistItemCollectionFactory, $this->storeManager);
         $resolver->resolve($field, $context, $info, ['model' => $wishlist]);

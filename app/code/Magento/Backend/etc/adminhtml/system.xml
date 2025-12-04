@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
@@ -460,6 +460,12 @@
                     <comment>Please enter a number 1 or greater in this field.</comment>
                     <validate>required-entry integer validate-greater-than-zero</validate>
                     <backend_model>Magento\Config\Model\Config\Backend\Admin\Password\Link\Expirationperiod</backend_model>
+                </field>
+                <field id="minimum_password_length" translate="label comment" type="text" sortOrder="8" showInDefault="1" canRestore="1">
+                    <label>Minimum Admin Password Length</label>
+                    <comment>Minimum number of characters required for admin user passwords. Values below 7 are not allowed.</comment>
+                    <validate>required-entry validate-digits validate-digits-range digits-range-7-65535</validate>
+                    <backend_model>Magento\Backend\Model\Config\Password\MinimumLength</backend_model>
                 </field>
                 <field id="use_form_key" translate="label" type="select" sortOrder="10" showInDefault="1" canRestore="1">
                     <label>Add Secret Key to URLs</label>

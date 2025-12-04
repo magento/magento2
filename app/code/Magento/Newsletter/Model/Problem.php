@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Newsletter\Model;
 
@@ -17,8 +17,6 @@ namespace Magento\Newsletter\Model;
  * @method string getProblemErrorText()
  * @method \Magento\Newsletter\Model\Problem setProblemErrorText(string $value)
  *
- * @author     Magento Core Team <core@magentocommerce.com>
- *
  * @api
  * @since 100.0.2
  */
@@ -32,7 +30,7 @@ class Problem extends \Magento\Framework\Model\AbstractModel
     protected $_subscriber = null;
 
     /**
-     * Subscriber factory
+     * Subscriber factory variable
      *
      * @var \Magento\Newsletter\Model\SubscriberFactory
      */

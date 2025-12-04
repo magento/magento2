@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -46,13 +46,11 @@ class UrlRewriteFinderTest extends TestCase
     {
         $this->serializerMock = $this->createMock(Json::class);
         $this->databaseMapPoolMock = $this->createMock(DatabaseMapPool::class);
-        $this->urlFinderMock = $this->getMockForAbstractClass(UrlFinderInterface::class);
+        $this->urlFinderMock = $this->createMock(UrlFinderInterface::class);
         $this->urlRewriteFactoryMock = $this->createPartialMock(UrlRewriteFactory::class, ['create']);
         $this->urlRewritePrototypeMock = new UrlRewrite([], $this->serializerMock);
 
-        $this->urlRewriteFactoryMock->expects($this->any())
-            ->method('create')
-            ->willReturn($this->urlRewritePrototypeMock);
+        $this->urlRewriteFactoryMock->method('create')->willReturn($this->urlRewritePrototypeMock);
 
         $urlRewriteClassesNamesArray = [
             UrlRewriteFinder::ENTITY_TYPE_PRODUCT => DataProductUrlRewriteDatabaseMap::class,

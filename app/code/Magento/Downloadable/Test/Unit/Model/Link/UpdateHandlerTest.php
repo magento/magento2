@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -52,17 +52,16 @@ class UpdateHandlerTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->linkRepositoryMock = $this->getMockBuilder(LinkRepositoryInterface::class)
-            ->getMockForAbstractClass();
-        $this->linkMock = $this->getMockBuilder(LinkInterface::class)
-            ->getMock();
+        $this->linkRepositoryMock = $this->createMock(LinkRepositoryInterface::class);
+        $this->linkMock = $this->createMock(LinkInterface::class);
         $this->productExtensionMock = $this->getProductExtensionMock();
         $this->productExtensionMock->expects($this->once())
             ->method('getDownloadableProductLinks')
             ->willReturn([$this->linkMock]);
-        $this->entityMock = $this->getMockBuilder(ProductInterface::class)
-            ->addMethods(['getStoreId'])
-            ->getMockForAbstractClass();
+        $this->entityMock = $this->createPartialMock(
+            \Magento\Catalog\Test\Unit\Helper\ProductTestHelper::class,
+            ['getStoreId', 'getTypeId', 'getExtensionAttributes', 'getSku']
+        );
 
         $this->model = new UpdateHandler(
             $this->linkRepositoryMock
@@ -85,8 +84,7 @@ class UpdateHandlerTest extends TestCase
             ->willReturn(1);
 
         /** @var LinkInterface|MockObject $linkToDeleteMock */
-        $linkToDeleteMock = $this->getMockBuilder(LinkInterface::class)
-            ->getMock();
+        $linkToDeleteMock = $this->createMock(LinkInterface::class);
         $linkToDeleteMock->expects($this->exactly(2))
             ->method('getId')
             ->willReturn($linkToDeleteId);
@@ -153,14 +151,9 @@ class UpdateHandlerTest extends TestCase
      */
     private function getProductExtensionMock(): MockObject
     {
-        $mockBuilder = $this->getMockBuilder(ProductExtensionInterface::class)
-            ->disableOriginalConstructor();
-        try {
-            $mockBuilder->addMethods(['getDownloadableProductLinks']);
-        } catch (RuntimeException $e) {
-            // ProductExtension already generated.
-        }
-
-        return $mockBuilder->getMockForAbstractClass();
+        return $this->createPartialMock(
+            \Magento\Catalog\Test\Unit\Helper\ProductExtensionTestHelper::class,
+            ['getDownloadableProductLinks']
+        );
     }
 }

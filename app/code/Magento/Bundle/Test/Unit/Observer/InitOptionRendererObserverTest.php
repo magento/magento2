@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -39,7 +39,7 @@ class InitOptionRendererObserverTest extends TestCase
     private $observer;
 
     /**
-     * @var Observer|MockObject
+     * @var Observer
      */
     private $observerMock;
 
@@ -49,15 +49,10 @@ class InitOptionRendererObserverTest extends TestCase
     protected function setUp(): void
     {
         $this->objectManager = new ObjectManager($this);
-        $this->observerMock = $this->getMockBuilder(Observer::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['getBlock'])
-            ->getMock();
 
-        $this->blockMock = $this->getMockBuilder(Options::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['addOptionsRenderCfg'])
-            ->getMock();
+        $this->observerMock = new Observer();
+
+        $this->blockMock = $this->createPartialMock(Options::class, ['addOptionsRenderCfg']);
 
         $this->observer = $this->objectManager->getObject(InitOptionRendererObserver::class);
     }
@@ -67,10 +62,7 @@ class InitOptionRendererObserverTest extends TestCase
      */
     public function testProductOptionRendererInit()
     {
-        $this->observerMock
-            ->expects($this->once())
-            ->method('getBlock')
-            ->willReturn($this->blockMock);
+        $this->observerMock->setBlock($this->blockMock);
 
         $this->blockMock
             ->expects($this->once())

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Sales\Block\Adminhtml\Order\Create;
 
@@ -11,14 +11,11 @@ use Magento\Framework\Pricing\PriceCurrencyInterface;
  * Order create data
  *
  * @api
- * @author      Magento Core Team <core@magentocommerce.com>
  * @since 100.0.2
  */
 class Data extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreate
 {
     /**
-     * Currency factory
-     *
      * @var \Magento\Directory\Model\CurrencyFactory
      */
     protected $_currencyFactory;

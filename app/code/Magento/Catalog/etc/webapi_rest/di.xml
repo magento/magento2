@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright 2014 Adobe
+ * Copyright 2015 Adobe
  * All Rights Reserved.
  */
 -->
@@ -46,5 +46,18 @@
     </type>
     <type name="Magento\Catalog\Model\CategoryRepository">
         <plugin name="format_category_url_key_rest_api" type="Magento\Catalog\Plugin\Model\CategoryRepositoryPlugin" />
+    </type>
+    <type name="Magento\Catalog\Model\Product\Price\SpecialPriceStorage">
+        <plugin name="vendor_special_price_rest_plugin"
+                type="Magento\Catalog\Model\Plugin\SpecialPricePluginForREST\SpecialPriceStoragePlugin" />
+    </type>
+    <!-- Essential performance optimizations for category tree operations -->
+    <type name="Magento\Catalog\Api\CategoryManagementInterface">
+        <plugin name="categoryManagementPerformanceOptimizer"
+                type="Magento\Catalog\Plugin\CategoryManagementPerformanceOptimizer" />
+    </type>
+    <type name="Magento\Catalog\Model\ProductRenderList">
+        <plugin name="customerGroupContextForPricing"
+                type="Magento\Catalog\Plugin\Model\ProductRenderListPlugin" />
     </type>
 </config>

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -65,35 +65,21 @@ class LowestPriceOptionsProviderTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->connection = $this
-            ->getMockBuilder(AdapterInterface::class)
-            ->getMock();
-        $this->resourceConnection = $this
-            ->getMockBuilder(ResourceConnection::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['getConnection'])
-            ->getMock();
+        $this->connection = $this->createMock(AdapterInterface::class);
+        $this->resourceConnection = $this->createPartialMock(ResourceConnection::class, ['getConnection']);
         $this->resourceConnection->expects($this->once())->method('getConnection')->willReturn($this->connection);
-        $this->linkedProductSelectBuilder = $this
-            ->getMockBuilder(LinkedProductSelectBuilderInterface::class)
-            ->onlyMethods(['build'])
-            ->getMockForAbstractClass();
-        $this->productCollection = $this
-            ->getMockBuilder(Collection::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['addAttributeToSelect', 'addIdFilter', 'getItems'])
-            ->getMock();
-        $this->collectionFactory = $this
-            ->getMockBuilder(CollectionFactory::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['create'])
-            ->getMock();
+        $this->linkedProductSelectBuilder = $this->createPartialMock(
+            LinkedProductSelectBuilderInterface::class,
+            ['build']
+        );
+        $this->productCollection = $this->createPartialMock(
+            Collection::class,
+            ['addAttributeToSelect', 'addIdFilter', 'getItems']
+        );
+        $this->collectionFactory = $this->createPartialMock(CollectionFactory::class, ['create']);
         $this->collectionFactory->expects($this->once())->method('create')->willReturn($this->productCollection);
-        $this->storeManagerMock = $this->getMockBuilder(StoreManagerInterface::class)
-            ->getMockForAbstractClass();
-        $this->storeMock = $this->getMockBuilder(StoreInterface::class)
-            ->onlyMethods(['getId'])
-            ->getMockForAbstractClass();
+        $this->storeManagerMock = $this->createMock(StoreManagerInterface::class);
+        $this->storeMock = $this->createMock(StoreInterface::class);
 
         $objectManager = new ObjectManager($this);
         $this->model = $objectManager->getObject(
@@ -113,8 +99,8 @@ class LowestPriceOptionsProviderTest extends TestCase
         $storeId = 1;
         $linkedProducts = ['some', 'linked', 'products', 'dataobjects'];
         $product = $this->createMock(Product::class);
-        $product->expects($this->any())->method('getId')->willReturn($productId);
-        $product->expects($this->any())->method('getStoreId')->willReturn($storeId);
+        $product->method('getId')->willReturn($productId);
+        $product->method('getStoreId')->willReturn($storeId);
         $this->linkedProductSelectBuilder->expects($this->any())->method('build')->with($productId)->willReturn([]);
         $this->productCollection
             ->expects($this->once())
@@ -127,9 +113,7 @@ class LowestPriceOptionsProviderTest extends TestCase
             ->method('getStore')
             ->with(Store::DEFAULT_STORE_ID)
             ->willReturn($this->storeMock);
-        $this->storeMock->expects($this->any())
-            ->method('getId')
-            ->willReturn(Store::DEFAULT_STORE_ID);
+        $this->storeMock->method('getId')->willReturn(Store::DEFAULT_STORE_ID);
 
         $this->assertEquals($linkedProducts, $this->model->getProducts($product));
     }

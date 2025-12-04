@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -11,6 +11,7 @@ use Magento\Framework\Stdlib\DateTime\DateTime;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Security\Model\AdminSessionInfo;
 use Magento\Security\Model\ConfigInterface;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -46,12 +47,8 @@ class AdminSessionInfoTest extends TestCase
     protected function setUp(): void
     {
         $this->objectManager = new ObjectManager($this);
-        $this->securityConfigMock =  $this->getMockBuilder(ConfigInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-        $this->dateTimeMock =  $this->getMockBuilder(DateTime::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->securityConfigMock = $this->createMock(ConfigInterface::class);
+        $this->dateTimeMock = $this->createMock(DateTime::class);
 
         $this->model = $this->objectManager->getObject(
             AdminSessionInfo::class,
@@ -94,8 +91,8 @@ class AdminSessionInfoTest extends TestCase
     /**
      * @param bool $expectedResult
      * @param string $sessionLifetime
-     * @dataProvider dataProviderSessionLifetime
      */
+    #[DataProvider('dataProviderSessionLifetime')]
     public function testSessionExpired($expectedResult, $sessionLifetime)
     {
         $timestamp = time();
@@ -167,8 +164,8 @@ class AdminSessionInfoTest extends TestCase
 
     /**
      * @param bool $isOtherSessionsTerminated
-     * @dataProvider dataProviderIsOtherSessionsTerminated
      */
+    #[DataProvider('dataProviderIsOtherSessionsTerminated')]
     public function testSetIsOtherSessionsTerminated($isOtherSessionsTerminated)
     {
         $this->assertInstanceOf(

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Customer\Model\ResourceModel;
 
@@ -164,6 +164,7 @@ class AddressRepository implements \Magento\Customer\Api\AddressRepositoryInterf
      * @param int $addressId
      * @return \Magento\Customer\Api\Data\AddressInterface
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     public function getById($addressId)
     {

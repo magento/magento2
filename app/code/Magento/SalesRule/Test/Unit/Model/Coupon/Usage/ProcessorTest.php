@@ -120,7 +120,7 @@ class ProcessorTest extends TestCase
         $searchResult->method('getItems')
             ->willReturn([$couponMock]);
         $this->couponRepository->method('getList')->willReturn($searchResult);
-        $couponMock->expects($this->atLeastOnce())->method('getId')->willReturn($couponId);
+        $couponMock->expects($this->exactly(4))->method('getId')->willReturn($couponId);
         $this->couponRepository->method('getById')->with($couponId)->willReturn($couponMock);
         $couponMock->expects($this->atLeastOnce())->method('getTimesUsed')->willReturn($timesUsed);
         $couponMock->expects($this->any())->method('setTimesUsed')->with($setTimesUsed)->willReturnSelf();

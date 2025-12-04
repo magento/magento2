@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -56,7 +56,13 @@ class ValidatorTest extends TestCase
         $entityTypeModel->expects($this->any())->method('retrieveAttributeFromCache')->willReturn([]);
         $this->context = $this->createPartialMock(
             Product::class,
-            ['retrieveProductTypeByName', 'retrieveMessageTemplate', 'getBehavior', 'getMultipleValueSeparator']
+            [
+                'retrieveProductTypeByName',
+                'retrieveMessageTemplate',
+                'getBehavior',
+                'getMultipleValueSeparator',
+                'getEmptyAttributeValueConstant'
+            ]
         );
         $this->context->expects($this->any())->method('retrieveProductTypeByName')->willReturn($entityTypeModel);
         $this->context->expects($this->any())->method('retrieveMessageTemplate')->willReturn('error message');
@@ -250,7 +256,14 @@ class ValidatorTest extends TestCase
                 false,
                 'unique_attribute',
                 false
-            ]
+            ],
+            [
+                'any_behavior',
+                ['type' => 'text', 'is_required' => false],
+                ['product_type' => 'any', 'text_attribute' => str_repeat('a', 65536)],
+                true,
+                'text_attribute',
+            ],
         ];
     }
 
@@ -280,5 +293,39 @@ class ValidatorTest extends TestCase
         $this->validatorOne->expects($this->once())->method('init');
         $this->validatorTwo->expects($this->once())->method('init');
         $this->validator->init(null);
+    }
+
+    /**
+     * Test required multi-select attribute validation with array values.
+     *
+     * @return void
+     */
+    public function testIsRequiredAttributeValidWithMultiSelectArray()
+    {
+        $this->context->expects($this->any())->method('getBehavior')->willReturn(Import::BEHAVIOR_APPEND);
+        $this->context->expects($this->any())->method('getEmptyAttributeValueConstant')->willReturn('__EMPTY__');
+        $attrCode = 'required_multiselect_attribute';
+        $attributeParams = ['is_required' => true];
+        $rowData = [
+            'product_type' => 'simple',
+            'required_multiselect_attribute' => ['option1', 'option2']
+        ];
+        $result = $this->validator->isRequiredAttributeValid($attrCode, $attributeParams, $rowData);
+        $this->assertTrue($result);
+        $rowData['required_multiselect_attribute'] = [];
+        $result = $this->validator->isRequiredAttributeValid($attrCode, $attributeParams, $rowData);
+        $this->assertFalse($result);
+        $rowData['required_multiselect_attribute'] = ['option1', '', 'option2'];
+        $result = $this->validator->isRequiredAttributeValid($attrCode, $attributeParams, $rowData);
+        $this->assertTrue($result);
+        $rowData['required_multiselect_attribute'] = ['option1', '   ', 'option2'];
+        $result = $this->validator->isRequiredAttributeValid($attrCode, $attributeParams, $rowData);
+        $this->assertTrue($result);
+        $rowData['required_multiselect_attribute'] = ['option1', '__EMPTY__', 'option2'];
+        $result = $this->validator->isRequiredAttributeValid($attrCode, $attributeParams, $rowData);
+        $this->assertFalse($result);
+        unset($rowData['required_multiselect_attribute']);
+        $result = $this->validator->isRequiredAttributeValid($attrCode, $attributeParams, $rowData);
+        $this->assertFalse($result);
     }
 }

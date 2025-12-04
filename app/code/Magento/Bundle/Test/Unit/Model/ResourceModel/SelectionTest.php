@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2022 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -47,16 +47,8 @@ class SelectionTest extends TestCase
 
     public function testSaveSelectionPrice()
     {
-        $item = $this->getMockBuilder(Selection::class)
-            ->disableOriginalConstructor()
-            ->addMethods([
-                'getSelectionId',
-                'getWebsiteId',
-                'getSelectionPriceType',
-                'getSelectionPriceValue',
-                'getParentProductId',
-                'getDefaultPriceScope'])
-            ->getMock();
+        // Use parent Selection class - all setters work via magic methods (DataObject)
+        $item = $this->createPartialMock(\Magento\Bundle\Model\Selection::class, []);
         $values = [
             'selection_id' => 1,
             'website_id' => 1,
@@ -64,12 +56,12 @@ class SelectionTest extends TestCase
             'selection_price_value' => null,
             'parent_product_id' => 1,
         ];
-        $item->expects($this->once())->method('getDefaultPriceScope')->willReturn(false);
-        $item->expects($this->once())->method('getSelectionId')->willReturn($values['selection_id']);
-        $item->expects($this->once())->method('getWebsiteId')->willReturn($values['website_id']);
-        $item->expects($this->once())->method('getSelectionPriceType')->willReturn($values['selection_price_type']);
-        $item->expects($this->once())->method('getSelectionPriceValue')->willReturn($values['selection_price_value']);
-        $item->expects($this->once())->method('getParentProductId')->willReturn($values['parent_product_id']);
+        $item->setDefaultPriceScope(false);
+        $item->setSelectionId($values['selection_id']);
+        $item->setWebsiteId($values['website_id']);
+        $item->setSelectionPriceType($values['selection_price_type']);
+        $item->setSelectionPriceValue($values['selection_price_value']);
+        $item->setParentProductId($values['parent_product_id']);
 
         $connection = $this->createMock(AdapterInterface::class);
         $connection->expects($this->once())

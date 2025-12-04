@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -58,23 +58,16 @@ class PriceTest extends TestCase
         $qty = 1;
 
         /** @var Product|MockObject $configurableProduct */
-        $configurableProduct = $this->getMockBuilder(Product::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['getCustomOption', 'getPriceInfo', 'setFinalPrice'])
-            ->getMock();
+        $configurableProduct = $this->createPartialMock(
+            Product::class,
+            ['getCustomOption', 'getPriceInfo', 'setFinalPrice']
+        );
         /** @var PriceInfoBase|MockObject $priceInfo */
-        $priceInfo = $this->getMockBuilder(PriceInfoBase::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['getPrice'])
-            ->getMock();
+        $priceInfo = $this->createPartialMock(PriceInfoBase::class, ['getPrice']);
         /** @var PriceInterface|MockObject $price */
-        $price = $this->getMockBuilder(PriceInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $price = $this->createMock(PriceInterface::class);
         /** @var AmountInterface|MockObject $amount */
-        $amount = $this->getMockBuilder(AmountInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $amount = $this->createMock(AmountInterface::class);
 
         $configurableProduct->expects($this->any())
             ->method('getCustomOption')
@@ -95,46 +88,24 @@ class PriceTest extends TestCase
         $customerGroupId = 1;
 
         /** @var Product|MockObject $configurableProduct */
-        $configurableProduct = $this->getMockBuilder(Product::class)
-            ->addMethods(['getCustomerGroupId'])
-            ->onlyMethods(['getCustomOption', 'setFinalPrice'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $configurableProduct = new \Magento\Catalog\Test\Unit\Helper\ProductTestHelper();
         /** @var Option|MockObject $customOption */
-        $customOption = $this->getMockBuilder(Option::class)
-            ->addMethods(['getProduct'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        // Use parent Option class - setProduct and getProduct work via DataObject magic methods
+        $customOption = $this->createPartialMock(Option::class, []);
         /** @var Product|MockObject $simpleProduct */
-        $simpleProduct = $this->getMockBuilder(Product::class)
-            ->addMethods(['setCustomerGroupId'])
-            ->onlyMethods(['setFinalPrice', 'getPrice', 'getTierPrice', 'getData', 'getCustomOption'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $simpleProduct = new \Magento\Catalog\Test\Unit\Helper\ProductTestHelper();
 
-        $configurableProduct->method('getCustomOption')
-            ->willReturnMap([
-                ['simple_product', $customOption],
-                ['option_ids', false]
-            ]);
-        $configurableProduct->method('getCustomerGroupId')->willReturn($customerGroupId);
-        $configurableProduct->expects($this->atLeastOnce())
-            ->method('setFinalPrice')
-            ->with($finalPrice)
-            ->willReturnSelf();
-        $customOption->method('getProduct')->willReturn($simpleProduct);
-        $simpleProduct->expects($this->atLeastOnce())
-            ->method('setCustomerGroupId')
-            ->with($customerGroupId)
-            ->willReturnSelf();
-        $simpleProduct->method('getPrice')->willReturn($finalPrice);
-        $simpleProduct->method('getTierPrice')->with($qty)->willReturn($finalPrice);
-        $simpleProduct->expects($this->atLeastOnce())
-            ->method('setFinalPrice')
-            ->with($finalPrice)
-            ->willReturnSelf();
-        $simpleProduct->method('getData')->with('final_price')->willReturn($finalPrice);
-        $simpleProduct->method('getCustomOption')->with('option_ids')->willReturn(false);
+        // Configure helpers with expected values
+        $configurableProduct->setCustomOption('simple_product', $customOption);
+        $configurableProduct->setCustomOption('option_ids', false);
+        $configurableProduct->setCustomerGroupId($customerGroupId);
+
+        $customOption->setProduct($simpleProduct);
+
+        $simpleProduct->setCustomerGroupId($customerGroupId);
+        $simpleProduct->setPrice($finalPrice);
+        $simpleProduct->setData('final_price', $finalPrice);
+        $simpleProduct->setCustomOption('option_ids', false);
         $this->eventManagerMock->expects($this->once())
             ->method('dispatch')
             ->with('catalog_product_get_final_price', ['product' => $simpleProduct, 'qty' => $qty]);

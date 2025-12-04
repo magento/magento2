@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -58,22 +58,17 @@ class CatalogPriceTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->storeManagerMock = $this->getMockForAbstractClass(StoreManagerInterface::class);
+        $this->storeManagerMock = $this->createMock(StoreManagerInterface::class);
         $this->commonPriceMock = $this->createMock(Product\CatalogPrice::class);
-        $this->productMock = $this->getMockBuilder(Product::class)
-            ->addMethods(['getWebsiteId', 'getCustomerGroupId', 'setTaxClassId'])
-            ->onlyMethods(['__wakeup', 'getTypeInstance'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->associatedProductMock = $this->getMockBuilder(Product::class)
-            ->addMethods(['setWebsiteId', 'setCustomerGroupId', 'getTaxClassId'])
-            ->onlyMethods(['isSalable', '__wakeup'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->priceModelMock = $this->getMockBuilder(Price::class)
-            ->addMethods(['getTotalPrices'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->productMock = $this->createPartialMock(
+            \Magento\Catalog\Test\Unit\Helper\ProductTestHelper::class,
+            ['getTypeInstance', 'getWebsiteId', 'getCustomerGroupId', 'setTaxClassId']
+        );
+        $this->associatedProductMock = $this->createPartialMock(
+            \Magento\Catalog\Test\Unit\Helper\ProductTestHelper::class,
+            ['isSalable', 'setWebsiteId', 'setCustomerGroupId', 'getTaxClassId']
+        );
+        $this->priceModelMock = new \Magento\Catalog\Test\Unit\Helper\PriceTestHelper();
         $this->productTypeMock = $this->createMock(Grouped::class);
 
         $this->catalogPrice = new CatalogPrice(
@@ -159,9 +154,9 @@ class CatalogPriceTest extends TestCase
      */
     public function testGetCatalogPriceWithCustomStoreAndSubProductIsSalable(): void
     {
-        $storeMock = $this->getMockForAbstractClass(StoreInterface::class);
+        $storeMock = $this->createMock(StoreInterface::class);
         $storeMock->expects($this->once())->method('getId')->willReturn('store_id');
-        $currentStoreMock = $this->getMockForAbstractClass(StoreInterface::class);
+        $currentStoreMock = $this->createMock(StoreInterface::class);
         $currentStoreMock->expects($this->once())->method('getId')->willReturn('current_store_id');
 
         $this->productMock->expects(

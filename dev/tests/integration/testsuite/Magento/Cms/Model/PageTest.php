@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Cms\Model;
 
@@ -34,7 +34,7 @@ class PageTest extends \PHPUnit\Framework\TestCase
      * @param array $pageData
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      * @magentoDbIsolation enabled
-     * @dataProvider testGetByIdentifierDataProvider
+     * @dataProvider pageGetByIdentifierDataProvider
      */
     public function testGetByIdentifier(array $pageData)
     {
@@ -122,7 +122,7 @@ class PageTest extends \PHPUnit\Framework\TestCase
      * Data provider for "testGetByIdentifier" method
      * @return array
      */
-    public static function testGetByIdentifierDataProvider() : array
+    public static function pageGetByIdentifierDataProvider() : array
     {
         return [
             ['pageData' => [

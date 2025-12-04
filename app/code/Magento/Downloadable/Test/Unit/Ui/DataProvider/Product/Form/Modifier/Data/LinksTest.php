@@ -1,12 +1,13 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Downloadable\Test\Unit\Ui\DataProvider\Product\Form\Modifier\Data;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Model\Locator\LocatorInterface;
 use Magento\Catalog\Model\Product\Type as ProductType;
@@ -80,17 +81,15 @@ class LinksTest extends TestCase
     protected function setUp(): void
     {
         $this->objectManagerHelper = new ObjectManagerHelper($this);
-        $this->productMock = $this->getMockBuilder(ProductInterface::class)
-            ->onlyMethods(['getId', 'getTypeId'])
-            ->addMethods(['getLinksTitle', 'getTypeInstance', 'getStoreId'])
-            ->getMockForAbstractClass();
-        $this->locatorMock = $this->getMockForAbstractClass(LocatorInterface::class);
-        $this->scopeConfigMock = $this->getMockForAbstractClass(ScopeConfigInterface::class);
-        $this->escaperMock = $this->getMockBuilder(Escaper::class)
-            ->onlyMethods(['escapeHtml'])
-            ->getMockForAbstractClass();
+        $this->productMock = $this->createPartialMock(
+            \Magento\Catalog\Test\Unit\Helper\ProductTestHelper::class,
+            ['getId', 'getTypeId', 'getLinksTitle', 'getTypeInstance', 'getStoreId']
+        );
+        $this->locatorMock = $this->createMock(LocatorInterface::class);
+        $this->scopeConfigMock = $this->createMock(ScopeConfigInterface::class);
+        $this->escaperMock = $this->createMock(Escaper::class);
         $this->downloadableFileMock = $this->createMock(DownloadableFile::class);
-        $this->urlBuilderMock = $this->getMockForAbstractClass(UrlInterface::class);
+        $this->urlBuilderMock = $this->createMock(UrlInterface::class);
         $this->linkModelMock = $this->createMock(LinkModel::class);
         $this->links = $this->objectManagerHelper->getObject(
             Links::class,
@@ -113,24 +112,20 @@ class LinksTest extends TestCase
      * @param InvokedCount $expectedGetTitle
      * @param InvokedCount $expectedGetValue
      * @return void
-     * @dataProvider getLinksTitleDataProvider
      */
+    #[DataProvider('getLinksTitleDataProvider')]
     public function testGetLinksTitle($id, $typeId, $expectedGetTitle, $expectedGetValue)
     {
         $title = 'My Title';
-        $this->locatorMock->expects($this->any())
-            ->method('getProduct')
-            ->willReturn($this->productMock);
+        $this->locatorMock->method('getProduct')->willReturn($this->productMock);
         $this->productMock->expects($this->once())
             ->method('getId')
             ->willReturn($id);
-        $this->productMock->expects($this->any())
-            ->method('getTypeId')
-            ->willReturn($typeId);
-        $this->productMock->expects($expectedGetTitle)
+        $this->productMock->method('getTypeId')->willReturn($typeId);
+        $this->productMock->expects($this->$expectedGetTitle())
             ->method('getLinksTitle')
             ->willReturn($title);
-        $this->scopeConfigMock->expects($expectedGetValue)
+        $this->scopeConfigMock->expects($this->$expectedGetValue())
             ->method('getValue')
             ->willReturn($title);
 
@@ -146,26 +141,26 @@ class LinksTest extends TestCase
             [
                 'id' => 1,
                 'typeId' => Type::TYPE_DOWNLOADABLE,
-                'expectedGetTitle' => self::once(),
-                'expectedGetValue' => self::never(),
+                'expectedGetTitle' => 'once',
+                'expectedGetValue' => 'never',
             ],
             [
                 'id' => null,
                 'typeId' => Type::TYPE_DOWNLOADABLE,
-                'expectedGetTitle' => self::never(),
-                'expectedGetValue' => self::once(),
+                'expectedGetTitle' => 'never',
+                'expectedGetValue' => 'once',
             ],
             [
                 'id' => 1,
                 'typeId' => 'someType',
-                'expectedGetTitle' => self::never(),
-                'expectedGetValue' => self::once(),
+                'expectedGetTitle' => 'never',
+                'expectedGetValue' => 'once',
             ],
             [
                 'id' => null,
                 'typeId' => 'someType',
-                'expectedGetTitle' => self::never(),
-                'expectedGetValue' => self::once(),
+                'expectedGetTitle' => 'never',
+                'expectedGetValue' => 'once',
             ],
         ];
     }
@@ -179,8 +174,8 @@ class LinksTest extends TestCase
      * @param array $links
      * @param array $expectedLinksData
      * @return void
-     * @dataProvider getLinksDataProvider
      */
+    #[DataProvider('getLinksDataProvider')]
     public function testGetLinksData(
         $productTypeMock,
         string $typeId,
@@ -190,26 +185,14 @@ class LinksTest extends TestCase
     ): void {
         $productTypeMock = $productTypeMock($this);
         $links[0] = $links[0]($this);
-        $this->locatorMock->expects($this->any())
-            ->method('getProduct')
-            ->willReturn($this->productMock);
+        $this->locatorMock->method('getProduct')->willReturn($this->productMock);
         if (!empty($expectedLinksData)) {
-            $this->escaperMock->expects($this->any())
-                ->method('escapeHtml')
-                ->willReturn($expectedLinksData['title']);
+            $this->escaperMock->method('escapeHtml')->willReturn($expectedLinksData['title']);
         }
-        $this->productMock->expects($this->any())
-            ->method('getTypeId')
-            ->willReturn($typeId);
-        $this->productMock->expects($this->any())
-            ->method('getTypeInstance')
-            ->willReturn($productTypeMock);
-        $this->productMock->expects($this->any())
-            ->method('getStoreId')
-            ->willReturn($storeId);
-        $productTypeMock->expects($this->any())
-            ->method('getLinks')
-            ->willReturn($links);
+        $this->productMock->method('getTypeId')->willReturn($typeId);
+        $this->productMock->method('getTypeInstance')->willReturn($productTypeMock);
+        $this->productMock->method('getStoreId')->willReturn($storeId);
+        $productTypeMock->method('getLinks')->willReturn($links);
         $getLinksData = $this->links->getLinksData();
         if (!empty($getLinksData)) {
             $actualResult = current($getLinksData);
@@ -308,46 +291,25 @@ class LinksTest extends TestCase
         string $useDefaultPrice,
         string $useDefaultTitle
     ): MockObject {
-        $linkMock = $this->getMockBuilder(LinkInterface::class)
-            ->onlyMethods(['getId'])
-            ->addMethods(['getWebsitePrice', 'getStoreTitle'])
-            ->getMockForAbstractClass();
-        $linkMock->expects($this->any())
-            ->method('getId')
-            ->willReturn($productData['link_id']);
-        $linkMock->expects($this->any())
-            ->method('getTitle')
-            ->willReturn($productData['title']);
-        $linkMock->expects($this->any())
-            ->method('getPrice')
-            ->willReturn($productData['price']);
-        $linkMock->expects($this->any())
-            ->method('getNumberOfDownloads')
-            ->willReturn($productData['number_of_downloads']);
-        $linkMock->expects($this->any())
-            ->method('getIsShareable')
-            ->willReturn($productData['is_shareable']);
-        $linkMock->expects($this->any())
-            ->method('getLinkUrl')
-            ->willReturn($productData['link_url']);
-        $linkMock->expects($this->any())
-            ->method('getLinkType')
-            ->willReturn($productData['type']);
-        $linkMock->expects($this->any())
-            ->method('getSampleUrl')
-            ->willReturn($productData['sample']['url']);
-        $linkMock->expects($this->any())
-            ->method('getSampleType')
-            ->willReturn($productData['sample']['type']);
-        $linkMock->expects($this->any())
-            ->method('getSortOrder')
-            ->willReturn($productData['sort_order']);
-        $linkMock->expects($this->any())
-            ->method('getWebsitePrice')
-            ->willReturn($useDefaultPrice);
-        $linkMock->expects($this->any())
-            ->method('getStoreTitle')
-            ->willReturn($useDefaultTitle);
+        $linkMock = $this->createPartialMock(
+            \Magento\Downloadable\Test\Unit\Helper\LinkTestHelper::class,
+            [
+                'getId', 'getTitle', 'getPrice', 'getNumberOfDownloads', 'getIsShareable', 'getSortOrder',
+                'getLinkType', 'getLinkUrl', 'getSampleType', 'getSampleUrl', 'getWebsitePrice', 'getStoreTitle'
+            ]
+        );
+        $linkMock->method('getId')->willReturn($productData['link_id']);
+        $linkMock->method('getTitle')->willReturn($productData['title']);
+        $linkMock->method('getPrice')->willReturn($productData['price']);
+        $linkMock->method('getNumberOfDownloads')->willReturn($productData['number_of_downloads']);
+        $linkMock->method('getIsShareable')->willReturn($productData['is_shareable']);
+        $linkMock->method('getLinkUrl')->willReturn($productData['link_url']);
+        $linkMock->method('getLinkType')->willReturn($productData['type']);
+        $linkMock->method('getSampleUrl')->willReturn($productData['sample']['url']);
+        $linkMock->method('getSampleType')->willReturn($productData['sample']['type']);
+        $linkMock->method('getSortOrder')->willReturn($productData['sort_order']);
+        $linkMock->method('getWebsitePrice')->willReturn($useDefaultPrice);
+        $linkMock->method('getStoreTitle')->willReturn($useDefaultTitle);
         return $linkMock;
     }
 }

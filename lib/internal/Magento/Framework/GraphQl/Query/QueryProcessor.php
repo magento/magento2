@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -38,6 +38,11 @@ class QueryProcessor
     private $errorHandler;
 
     /**
+     * @var QueryDataFormatter
+     */
+    private QueryDataFormatter $formatter;
+
+    /**
      * @var QueryParser
      */
     private $queryParser;
@@ -46,6 +51,7 @@ class QueryProcessor
      * @param ExceptionFormatter $exceptionFormatter
      * @param QueryComplexityLimiter $queryComplexityLimiter
      * @param ErrorHandlerInterface $errorHandler
+     * @param QueryDataFormatter $formatter
      * @param QueryParser|null $queryParser
      * @SuppressWarnings(PHPMD.LongVariable)
      */
@@ -53,11 +59,13 @@ class QueryProcessor
         ExceptionFormatter $exceptionFormatter,
         QueryComplexityLimiter $queryComplexityLimiter,
         ErrorHandlerInterface $errorHandler,
+        QueryDataFormatter $formatter,
         ?QueryParser $queryParser = null
     ) {
         $this->exceptionFormatter = $exceptionFormatter;
         $this->queryComplexityLimiter = $queryComplexityLimiter;
         $this->errorHandler = $errorHandler;
+        $this->formatter = $formatter;
         $this->queryParser = $queryParser ?: ObjectManager::getInstance()->get(QueryParser::class);
     }
 
@@ -83,12 +91,13 @@ class QueryProcessor
             $source = $this->queryParser->parse($source);
         }
         if (!$this->exceptionFormatter->shouldShowDetail()) {
+            $this->queryComplexityLimiter->validateAliasCount($source);
             $this->queryComplexityLimiter->validateFieldCount($source);
             $this->queryComplexityLimiter->execute();
         }
 
         $rootValue = null;
-        return GraphQL::executeQuery(
+        $executionResult = GraphQL::executeQuery(
             $schema,
             $source,
             $rootValue,
@@ -100,5 +109,7 @@ class QueryProcessor
         )->toArray(
             (int) ($this->exceptionFormatter->shouldShowDetail() ? DebugFlag::INCLUDE_DEBUG_MESSAGE : false)
         );
+
+        return $this->formatter->formatResponse($executionResult);
     }
 }

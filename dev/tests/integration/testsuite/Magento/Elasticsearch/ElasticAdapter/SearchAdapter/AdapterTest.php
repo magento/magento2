@@ -1,12 +1,13 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Elasticsearch\ElasticAdapter\SearchAdapter;
 
+use Magento\AdvancedSearch\Model\Client\ClientException;
 use Magento\TestFramework\Helper\Bootstrap;
 
 /**
@@ -87,12 +88,11 @@ class AdapterTest extends \PHPUnit\Framework\TestCase
         $this->requestBuilder->bind('fulltext_search_query', 'socks');
         $this->requestBuilder->setRequestName('one_match');
         $queryRequest = $this->requestBuilder->create();
-        $exception = new \Exception('Test Message');
+        $exception = new \Exception('Test message.');
         $this->loggerMock->expects($this->once())->method('critical')->with($exception);
         $this->clientMock->expects($this->once())->method('query')->willThrowException($exception);
-        $actualResponse = $this->adapter->query($queryRequest);
-        $this->assertEmpty($actualResponse->getAggregations()->getBuckets());
-        $this->assertEquals(0, $actualResponse->count());
+        $this->expectException(ClientException::class);
+        $this->adapter->query($queryRequest);
     }
 
     /**

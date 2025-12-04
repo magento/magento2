@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright 2025 Adobe
+ * All Rights Reserved.
+ */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminVerifyCustomerGroupNotLoggedInForGuestOrderTest">
+        <annotations>
+            <features value="Checkout"/>
+            <stories value="Order view shows customer group for guest orders"/>
+            <title value="Admin sees 'NOT LOGGED IN' customer group on guest order view"/>
+            <description value="Place a guest order on storefront and verify the customer group is NOT LOGGED IN"/>
+            <severity value="AVERAGE"/>
+            <testCaseId value="AC-6430"/>
+            <group value="checkout"/>
+        </annotations>
+        <before>
+            <!-- Precondition Step 1:Create Simple Product and Customer -->
+            <createData entity="SimpleProduct_100" stepKey="simpleProductOne"/>
+        </before>
+        <after>
+            <!-- Admin log out -->
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+            <!-- Delete created product -->
+            <deleteData createDataKey="simpleProductOne" stepKey="deleteSimpleProduct"/>
+        </after>
+        <!-- Step 1: Navigate to Frontend > place an order through check money with guest checkout. -->
+        <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="openStorefrontPage"/>
+        <!-- Add Simple Product to cart -->
+        <actionGroup ref="OpenStoreFrontProductPageActionGroup" stepKey="openProductFromCategory">
+            <argument name="productUrlKey" value="$simpleProductOne.custom_attributes[url_key]$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontAddProductToCartActionGroup" stepKey="addProductToCart">
+            <argument name="product" value="$$simpleProductOne$$"/>
+            <argument name="productCount" value="1"/>
+        </actionGroup>
+        <actionGroup ref="GoToCheckoutFromMinicartActionGroup" stepKey="goToCheckoutFromMinicart"/>
+        <!-- Guest Checkout Process-->
+        <actionGroup ref="GuestCheckoutFillingShippingSectionActionGroup" stepKey="guestCheckoutFillingShippingSection">
+            <argument name="customerVar" value="CustomerEntityOne"/>
+            <argument name="customerAddressVar" value="CustomerAddressSimple"/>
+        </actionGroup>
+        <actionGroup ref="CheckoutSelectCheckMoneyOrderPaymentActionGroup" stepKey="guestSelectCheckMoneyOrderPayment"/>
+        <actionGroup ref="ClickPlaceOrderActionGroup" stepKey="checkoutPlaceOrder"/>
+        <grabTextFrom selector="{{CheckoutSuccessMainSection.orderNumber}}" stepKey="grabOrderNumber"/>
+        <!-- Step 2: Navigate to admin panel > sales > orders > check customer group -->
+        <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+        <actionGroup ref="FilterOrderGridByIdActionGroup" stepKey="filterOrderById">
+            <argument name="orderId" value="$grabOrderNumber"/>
+        </actionGroup>
+        <actionGroup ref="AdminOrderGridClickFirstRowActionGroup" stepKey="clickOrderRow"/>
+        <waitForElementVisible selector="{{AdminOrderDetailsInformationSection.customerGroup}}" stepKey="waitForCustomerGroupFieldOnOrderView"/>
+        <waitForText selector="{{AdminOrderDetailsInformationSection.customerGroup}}" userInput="{{SimpleCatalogPriceRule.customerGroups}}" stepKey="assertCustomerGroupIsNotLoggedIn"/>
+    </test>
+</tests>

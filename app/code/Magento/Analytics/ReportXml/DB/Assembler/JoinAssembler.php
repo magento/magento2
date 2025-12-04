@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Analytics\ReportXml\DB\Assembler;
@@ -89,6 +89,7 @@ class JoinAssembler implements AssemblerInterface
                 )
             ];
             if (isset($join['filter'])) {
+                // phpcs:ignore Magento2.Performance.ForeachArrayMerge
                 $filters = array_merge(
                     $filters,
                     [
@@ -102,6 +103,7 @@ class JoinAssembler implements AssemblerInterface
                 );
             }
             $columns = $this->columnsResolver->getColumns($selectBuilder, isset($join['attribute']) ? $join : []);
+            // phpcs:ignore Magento2.Performance.ForeachArrayMerge
             $selectBuilder->setColumns(array_merge($selectBuilder->getColumns(), $columns));
         }
         $selectBuilder->setFilters($filters);

@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright 2025 Adobe
+  * All Rights Reserved.
+  */
+-->
+
+<tests
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StoreFrontUseEmptyFileAsACustomOptionOfFileTypeTest">
+        <annotations>
+            <features value="Catalog"/>
+            <stories value="Empty file as a custom option for the file type"/>
+            <title value="Product custom options"/>
+            <description value="Verify the validation of an empty file as a custom option for the file type."/>
+            <severity value="MAJOR"/>
+            <testCaseId value="AC-3848"/>
+            <group value="catalog"/>
+        </annotations>
+        <before>
+            <!-- Pre-condition 1:Create Simple Product -->
+            <createData entity="defaultSimpleProduct" stepKey="initialSimpleProduct"/>
+        </before>
+        <after>
+            <!-- Delete product, Logout from Admin -->
+            <deleteData createDataKey="initialSimpleProduct" stepKey="deleteSimpleProduct"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+        <!-- Login As Admin -->
+        <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+        <!-- Step1: Open a product page in Admin and Open Customizable options tab.-->
+        <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="openProductForEdit">
+            <argument name="productId" value="$initialSimpleProduct.id$"/>
+        </actionGroup>
+        <!-- Open custom option panel -->
+        <click selector="{{AdminProductCustomizableOptionsSection.customizableOptions}}" stepKey="openCustomizableOptions"/>
+        <waitForPageLoad stepKey="waitForCustomOptionsOpen"/>
+        <!-- Step2: Add Custom file option -->
+        <actionGroup ref="AddProductCustomOptionFileActionGroup" stepKey="addFileOption">
+            <argument name="option" value="ProductOptionTextFile"/>
+        </actionGroup>
+        <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProduct"/>
+        <!-- Step3: Open the product on Storefront -->
+        <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="openProductPage">
+            <argument name="productUrl" value="$$initialSimpleProduct.custom_attributes[url_key]$$"/>
+        </actionGroup>
+        <!-- Step4: Upload an empty file -->
+        <actionGroup ref="StorefrontAttachOptionFileActionGroup" stepKey="selectAndAttachFile">
+            <argument name="file" value="EmptyFiles.file1" />
+        </actionGroup>
+        <!--Step4 Assertion: Verify An error should be displayed when adding to cart -->
+        <actionGroup ref="StorefrontVerifyErrorMessageDisplayedWhileAddingProductWithEmptyFileToCartActionGroup" stepKey="addProductToCart">
+            <argument name="productName" value="$initialSimpleProduct.name$"/>
+        </actionGroup>
+        <!-- Open product in admin and delete existing custom option-->
+        <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="openProductEditPage">
+            <argument name="productId" value="$initialSimpleProduct.id$"/>
+        </actionGroup>
+        <!-- Open custom option panel -->
+        <click selector="{{AdminProductCustomizableOptionsSection.customizableOptions}}" stepKey="openCustomizableOption"/>
+        <waitForPageLoad stepKey="waitForCustomOptionOpen"/>
+        <actionGroup ref="AdminDeleteProductCustomOptionActionGroup" stepKey="deleteCustomOptionFile">
+            <argument name="option" value="ProductOptionTextFile"/>
+        </actionGroup>
+        <!-- Step5: Add a new custom option of File type that accepts only images-->
+        <actionGroup ref="AddProductCustomOptionFileActionGroup" stepKey="addFileOptions">
+            <argument name="option" value="ProductOptionFile"/>
+        </actionGroup>
+        <actionGroup ref="SaveProductFormActionGroup" stepKey="saveTheProduct"/>
+        <!-- Step6: Open Product page in storeFront -->
+        <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="openTheProductPage">
+            <argument name="productUrl" value="$$initialSimpleProduct.custom_attributes[url_key]$$"/>
+        </actionGroup>
+        <!--Step7: Upload an empty image  -->
+        <actionGroup ref="StorefrontAttachOptionFileActionGroup" stepKey="selectAndAttachTheFile">
+            <argument name="file" value="EmptyFiles.file2" />
+        </actionGroup>
+        <!-- Step7 Assertion: Verify An error should be displayed when adding to cart  -->
+        <actionGroup ref="StorefrontVerifyErrorMessageDisplayedWhileAddingProductWithEmptyFileToCartActionGroup" stepKey="addTheProductToCart">
+            <argument name="productName" value="$initialSimpleProduct.name$"/>
+        </actionGroup>
+    </test>
+</tests>

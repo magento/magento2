@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Paypal\Model;
@@ -602,6 +602,18 @@ class Payflowpro extends \Magento\Payment\Model\Method\Cc implements GatewayInte
         }
 
         return $this->config;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function setStore($storeId)
+    {
+        parent::setStore($storeId);
+        if ($this->config) {
+            $storeId = $this->storeManager->getStore($this->getStore())->getId();
+            $this->config->setStoreId($storeId);
+        }
     }
 
     /**

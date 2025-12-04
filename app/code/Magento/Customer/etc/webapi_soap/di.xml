@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
@@ -20,4 +20,12 @@
     </type>
     <preference for="Magento\Customer\Api\AccountManagementInterface"
                 type="Magento\Customer\Model\AccountManagementApi" />
+    <type name="Magento\Customer\Model\Group\Retriever">
+        <plugin name="customerGroupRetrieverApiPlugin"
+                type="Magento\Customer\Plugin\Model\Group\RetrieverPlugin" />
+    </type>
+    <type name="Magento\Customer\Model\Session">
+        <plugin name="customerSessionApiPlugin"
+                type="Magento\Customer\Plugin\Model\SessionPlugin" />
+    </type>
 </config>

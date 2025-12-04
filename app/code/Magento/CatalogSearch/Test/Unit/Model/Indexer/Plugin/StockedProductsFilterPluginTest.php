@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -52,12 +52,8 @@ class StockedProductsFilterPluginTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->stockConfigurationMock = $this->getMockBuilder(StockConfigurationInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-        $this->stockStatusRepositoryMock = $this->getMockBuilder(StockStatusRepositoryInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->stockConfigurationMock = $this->createMock(StockConfigurationInterface::class);
+        $this->stockStatusRepositoryMock = $this->createMock(StockStatusRepositoryInterface::class);
         $this->stockStatusCriteriaFactoryMock = $this->getMockBuilder(StockStatusCriteriaInterfaceFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -106,16 +102,16 @@ class StockedProductsFilterPluginTest extends TestCase
         $stockStatusMock->expects($this->atLeastOnce())
             ->method('getStockStatus')
             ->willReturnOnConsecutiveCalls(Stock::STOCK_IN_STOCK, Stock::STOCK_OUT_OF_STOCK);
-        $stockStatusCollectionMock = $this->getMockBuilder(StockStatusCollectionInterface::class)
+        $stockStatusCollectionTestHelper = $this->getMockBuilder(StockStatusCollectionInterface::class)
             ->getMock();
-        $stockStatusCollectionMock
+        $stockStatusCollectionTestHelper
             ->expects($this->once())
             ->method('getItems')
             ->willReturn([1 => $stockStatusMock, 2 => $stockStatusMock]);
         $this->stockStatusRepositoryMock
             ->expects($this->once())
             ->method('getList')
-            ->willReturn($stockStatusCollectionMock);
+            ->willReturn($stockStatusCollectionTestHelper);
 
         list($indexData, $productData, $storeId) = $this->plugin->beforePrepareProductIndex(
             $dataProviderMock,

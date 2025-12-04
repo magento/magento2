@@ -1,12 +1,13 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Bundle\Model\ResourceModel\Indexer;
 
+use Magento\Bundle\Model\Product\Type;
 use Magento\Catalog\Model\ResourceModel\Indexer\ActiveTableSwitcher;
 use Magento\CatalogInventory\Model\Indexer\Stock\Action\Full;
 use Magento\CatalogInventory\Model\ResourceModel\Indexer\Stock\DefaultStock;
@@ -45,6 +46,7 @@ class Stock extends DefaultStock
      * @param ActiveTableSwitcher $activeTableSwitcher
      * @param StockStatusSelectBuilder $stockStatusSelectBuilder
      * @param BundleOptionStockDataSelectBuilder $bundleOptionStockDataSelectBuilder
+     * @param OptionQtyExpressionProvider $optionQtyExpressionProvider
      * @param string $connectionName
      */
     public function __construct(
@@ -55,9 +57,13 @@ class Stock extends DefaultStock
         ActiveTableSwitcher $activeTableSwitcher,
         StockStatusSelectBuilder $stockStatusSelectBuilder,
         BundleOptionStockDataSelectBuilder $bundleOptionStockDataSelectBuilder,
+        private readonly OptionQtyExpressionProvider $optionQtyExpressionProvider,
         $connectionName = null
     ) {
         parent::__construct($context, $tableStrategy, $eavConfig, $scopeConfig, $connectionName);
+
+        $this->_typeId = Type::TYPE_CODE;
+        $this->_isComposite = true;
 
         $this->activeTableSwitcher = $activeTableSwitcher;
         $this->stockStatusSelectBuilder = $stockStatusSelectBuilder;
@@ -198,11 +204,14 @@ class Stock extends DefaultStock
     private function getOptionsStatusExpression(): \Zend_Db_Expr
     {
         $connection = $this->getConnection();
+
+        $qtyExpr = $this->optionQtyExpressionProvider->getExpression();
         $isAvailableExpr = $connection->getCheckSql(
-            'bs.selection_can_change_qty = 0 AND bs.selection_qty > i.qty',
+            'bs.selection_can_change_qty = 0 AND bs.selection_qty > ' . $qtyExpr,
             '0',
             'i.stock_status'
         );
+
         if ($this->stockConfiguration->getBackorders()) {
             $backordersExpr = $connection->getCheckSql(
                 'cisi.use_config_backorders = 0 AND cisi.backorders = 0',
@@ -216,6 +225,7 @@ class Stock extends DefaultStock
                 $isAvailableExpr
             );
         }
+
         if ($this->stockConfiguration->getManageStock()) {
             $statusExpr = $connection->getCheckSql(
                 'cisi.use_config_manage_stock = 0 AND cisi.manage_stock = 0',

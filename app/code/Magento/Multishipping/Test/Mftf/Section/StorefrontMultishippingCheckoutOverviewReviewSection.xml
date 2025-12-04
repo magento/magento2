@@ -1,14 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
-  */
+/**
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
+ */
 -->
 
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
           xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
     <section name="StorefrontMultishippingCheckoutOverviewReviewSection">
         <element name="placeOrder" type="button" selector="button.action.primary.submit"/>
+        <element name="shippingMethodForCity" type="block" selector="//form[contains(@id, 'review-order-form')]//address[contains(., '{{city}}')]/ancestor::div[contains(@class, 'block-content')]//div[contains(@class, 'box-shipping-method')]" parameterized="true" timeout="30"/>
     </section>
 </sections>
