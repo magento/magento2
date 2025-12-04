@@ -13,6 +13,7 @@ use Magento\Catalog\Model\Product\Attribute\Backend\Media\EntryConverterPool;
 use Magento\Catalog\Model\Product\Attribute\Source\Status;
 use Magento\Catalog\Model\Product\Configuration\Item\Option\OptionInterface;
 use Magento\Framework\Api\AttributeValueFactory;
+use Magento\Framework\App\Area;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\DataObject\IdentityInterface;
@@ -156,6 +157,12 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      * @var array
      */
     protected $_links = null;
+
+    /**
+     * Adds the default Cache Tag in Frontend
+     * @var bool
+     */
+    protected $_addDefaultCacheTag = true;
 
     /**
      * Flag for available duplicate function
@@ -988,7 +995,6 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
     {
         $identities = $this->getIdentities();
         $cacheTags = !empty($identities) ? (array) $identities : parent::getCacheTags();
-
         return $cacheTags;
     }
 
@@ -2405,7 +2411,11 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
             }
         }
 
-        if ($this->_appState->getAreaCode() == \Magento\Framework\App\Area::AREA_FRONTEND) {
+        if ($this->hasDataChanges()) {
+            $this->_addDefaultCacheTag = false;
+        }
+
+        if ($this->_appState->getAreaCode() == Area::AREA_FRONTEND && $this->_addDefaultCacheTag) {
             $identities[] = self::CACHE_TAG;
         }
 
@@ -2417,6 +2427,15 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
         }
 
         return array_unique($identities);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function afterCommitCallback()
+    {
+        $this->_addDefaultCacheTag = false;
+        return parent::afterCommitCallback();
     }
 
     /**
