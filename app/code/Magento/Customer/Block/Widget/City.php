@@ -1,7 +1,7 @@
 <?php
 /**
  * Copyright 2025 Adobe
- * All Rights Reserved
+ * All Rights Reserved.
  */
 
 declare(strict_types=1);
