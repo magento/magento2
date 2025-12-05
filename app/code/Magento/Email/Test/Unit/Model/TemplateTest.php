@@ -368,7 +368,7 @@ class TemplateTest extends TestCase
             ],
             'copyright in Plain Text Removed' => [
                 'templateType' => 'text',
-                'templateText' => '<!-- Copyright © Magento, Inc. All rights reserved. -->',
+                'templateText' => '<!-- Copyright 2024 Adobe All Rights Reserved. -->',
                 'parsedTemplateText' => '',
                 'expectedTemplateSubject' => null,
                 'expectedOrigTemplateVariables' => null,
@@ -376,7 +376,7 @@ class TemplateTest extends TestCase
             ],
             'copyright in HTML Removed' => [
                 'templateType' => 'html',
-                'templateText' => '<!-- Copyright © Magento, Inc. All rights reserved. -->',
+                'templateText' => '<!-- Copyright 2024 Adobe All Rights Reserved. -->',
                 'parsedTemplateText' => '',
                 'expectedTemplateSubject' => null,
                 'expectedOrigTemplateVariables' => null,

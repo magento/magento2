@@ -17,6 +17,7 @@ use Magento\Framework\Exception\InputException;
 use Magento\Framework\Serialize\Serializer\Json as JsonSerializer;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Magento\Framework\Locale\ResolverInterface;
 
 /**
  * Unit test for validate date of birth plugin
@@ -42,10 +43,13 @@ class ValidateDobOnSaveTest extends TestCase
         $this->eavConfig = $this->createMock(EavConfig::class);
         $this->json = $this->createMock(JsonSerializer::class);
         $this->repo = $this->createMock(CustomerRepositoryInterface::class);
+        $localeResolver = $this->createMock(ResolverInterface::class);
+        $localeResolver->method('getLocale')->willReturn('en_US');
 
         $this->plugin = new ValidateDobOnSave(
             $this->eavConfig,
-            $this->json
+            $this->json,
+            $localeResolver
         );
     }
 
@@ -320,6 +324,21 @@ class ValidateDobOnSaveTest extends TestCase
         $this->plugin->aroundSave($this->repo, $proceed, $customer, null);
 
         $this->assertFalse($called);
+    }
+
+    public function testDobIsNormalized(): void
+    {
+        $dob = '2005-12-01';
+        $customer = $this->createMock(CustomerInterface::class);
+        $customer->method('getDob')->willReturn($dob);
+        $customer->expects($this->once())
+            ->method('setDob')
+            ->with('2005-12-01');
+        $this->mockAttributeRulesArray(['date_range_min' => '1980-01-01', 'date_range_max' => '2010-12-31']);
+        $called = false;
+        $proceed = $this->proceedPlugin($called, $customer);
+        $this->plugin->aroundSave($this->repo, $proceed, $customer);
+        $this->assertTrue($called);
     }
 
     /**
