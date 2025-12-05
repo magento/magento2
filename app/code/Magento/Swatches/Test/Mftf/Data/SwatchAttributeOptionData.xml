@@ -32,4 +32,61 @@
         <requiredEntity type="StoreLabel">Option3Store0</requiredEntity>
         <requiredEntity type="StoreLabel">Option3Store1</requiredEntity>
     </entity>
+    <!-- Visual Swatch Options: A, B, C -->
+    <entity name="VisualSwatchOptionA" type="ProductSwatchAttributeOption">
+        <var key="attribute_code" entityKey="attribute_code" entityType="ProductAttribute"/>
+        <data key="label">A</data>
+        <data key="is_default">false</data>
+        <data key="sort_order">0</data>
+    </entity>
+    <entity name="VisualSwatchOptionB" type="ProductSwatchAttributeOption">
+        <var key="attribute_code" entityKey="attribute_code" entityType="ProductAttribute"/>
+        <data key="label">B</data>
+        <data key="is_default">false</data>
+        <data key="sort_order">1</data>
+    </entity>
+    <entity name="VisualSwatchOptionC" type="ProductSwatchAttributeOption">
+        <var key="attribute_code" entityKey="attribute_code" entityType="ProductAttribute"/>
+        <data key="label">C</data>
+        <data key="is_default">false</data>
+        <data key="sort_order">2</data>
+    </entity>
+    <!-- Text Swatch Attribute 1 Options: 1, 2, 3 -->
+    <entity name="TextSwatchOption1" type="ProductSwatchAttributeOption">
+        <var key="attribute_code" entityKey="attribute_code" entityType="ProductAttribute"/>
+        <data key="label">1</data>
+        <data key="is_default">false</data>
+        <data key="sort_order">0</data>
+    </entity>
+    <entity name="TextSwatchOption2" type="ProductSwatchAttributeOption">
+        <var key="attribute_code" entityKey="attribute_code" entityType="ProductAttribute"/>
+        <data key="label">2</data>
+        <data key="is_default">false</data>
+        <data key="sort_order">1</data>
+    </entity>
+    <entity name="TextSwatchOption3" type="ProductSwatchAttributeOption">
+        <var key="attribute_code" entityKey="attribute_code" entityType="ProductAttribute"/>
+        <data key="label">3</data>
+        <data key="is_default">false</data>
+        <data key="sort_order">2</data>
+    </entity>
+    <!-- Text Swatch Attribute 2 Options: X, Y, Z -->
+    <entity name="TextSwatchOptionX" type="ProductSwatchAttributeOption">
+        <var key="attribute_code" entityKey="attribute_code" entityType="ProductAttribute"/>
+        <data key="label">X</data>
+        <data key="is_default">false</data>
+        <data key="sort_order">0</data>
+    </entity>
+    <entity name="TextSwatchOptionY" type="ProductSwatchAttributeOption">
+        <var key="attribute_code" entityKey="attribute_code" entityType="ProductAttribute"/>
+        <data key="label">Y</data>
+        <data key="is_default">false</data>
+        <data key="sort_order">1</data>
+    </entity>
+    <entity name="TextSwatchOptionZ" type="ProductSwatchAttributeOption">
+        <var key="attribute_code" entityKey="attribute_code" entityType="ProductAttribute"/>
+        <data key="label">Z</data>
+        <data key="is_default">false</data>
+        <data key="sort_order">2</data>
+    </entity>
 </entities>
