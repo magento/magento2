@@ -15,6 +15,7 @@ use Magento\Framework\App\ActionFactory;
 use Magento\Framework\App\Request\Http;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\App\ResponseInterface;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\UrlInterface;
 use Magento\Store\Model\Store;
@@ -22,6 +23,7 @@ use Magento\Store\Model\StoreManagerInterface;
 use Magento\UrlRewrite\Controller\Router;
 use Magento\UrlRewrite\Model\UrlFinderInterface;
 use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -32,6 +34,8 @@ use PHPUnit\Framework\TestCase;
  */
 class RouterTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var Router
      */
@@ -84,24 +88,20 @@ class RouterTest extends TestCase
     {
         $objectManager = new ObjectManager($this);
         $this->actionFactory = $this->createMock(ActionFactory::class);
-        $this->url = $this->getMockForAbstractClass(UrlInterface::class);
-        $this->storeManager = $this->getMockForAbstractClass(StoreManagerInterface::class);
-        $this->response = $this->getMockBuilder(ResponseInterface::class)
-            ->addMethods(['setRedirect'])
-            ->onlyMethods(['sendResponse'])
-            ->getMockForAbstractClass();
-        $this->requestQuery = $this->getMockBuilder(Parameters::class)
-            ->onlyMethods(['__serialize', '__unserialize'])
-            ->getMock();
-        $this->request = $this->getMockBuilder(Http::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->url = $this->createMock(UrlInterface::class);
+        $this->storeManager = $this->createMock(StoreManagerInterface::class);
+        $this->response = $this->createPartialMockWithReflection(
+            ResponseInterface::class,
+            ['sendResponse', 'setRedirect']
+        );
+        $this->requestQuery = $this->createPartialMock(
+            Parameters::class,
+            ['__serialize', '__unserialize']
+        );
+        $this->request = $this->createMock(Http::class);
         $this->request->method('getQuery')->willReturn($this->requestQuery);
-        $this->urlFinder = $this->getMockForAbstractClass(UrlFinderInterface::class);
-        $this->store = $this->getMockBuilder(
-            Store::class
-        )->disableOriginalConstructor()
-            ->getMock();
+        $this->urlFinder = $this->createMock(UrlFinderInterface::class);
+        $this->store = $this->createMock(Store::class);
 
         $this->router = $objectManager->getObject(
             Router::class,
@@ -154,27 +154,21 @@ class RouterTest extends TestCase
             ->willReturn($initialRequestPath);
         $this->request->method('getRequestString')
             ->willReturn($initialRequestPath);
-        $oldStore = $this->getMockBuilder(Store::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $oldStore = $this->createMock(Store::class);
         $oldStore->method('getId')
             ->willReturn($oldStoreId);
         $this->store->method('getId')
             ->willReturn($currentStoreId);
         $this->storeManager->method('getStore')
             ->willReturnMap([[$oldStoreAlias, $oldStore], [null, $this->store]]);
-        $oldUrlRewrite = $this->getMockBuilder(UrlRewrite::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $oldUrlRewrite = $this->createMock(UrlRewrite::class);
         $oldUrlRewrite->method('getEntityType')
             ->willReturn($rewriteEntityType);
         $oldUrlRewrite->method('getEntityId')
             ->willReturn($rewriteEntityId);
         $oldUrlRewrite->method('getRedirectType')
             ->willReturn(0);
-        $urlRewrite = $this->getMockBuilder(UrlRewrite::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $urlRewrite = $this->createMock(UrlRewrite::class);
         $urlRewrite->method('getRequestPath')
             ->willReturn($newRequestPath);
         $urlRewrite->method('getTargetPath')
@@ -207,22 +201,16 @@ class RouterTest extends TestCase
         $this->request->method('getRequestString')->willReturn('request-path');
         $this->request->method('getParam')->with('___from_store')
             ->willReturn('old-store');
-        $oldStore = $this->getMockBuilder(Store::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $oldStore = $this->createMock(Store::class);
         $this->storeManager->method('getStore')
             ->willReturnMap([['old-store', $oldStore], [null, $this->store]]);
         $oldStore->method('getId')->willReturn('old-store-id');
         $this->store->method('getId')->willReturn('current-store-id');
-        $oldUrlRewrite = $this->getMockBuilder(UrlRewrite::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $oldUrlRewrite = $this->createMock(UrlRewrite::class);
         $oldUrlRewrite->method('getEntityType')->willReturn('entity-type');
         $oldUrlRewrite->method('getEntityId')->willReturn('entity-id');
         $oldUrlRewrite->method('getRequestPath')->willReturn('request-path');
-        $urlRewrite = $this->getMockBuilder(UrlRewrite::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $urlRewrite = $this->createMock(UrlRewrite::class);
         $urlRewrite->method('getRequestPath')->willReturn('request-path');
 
         $this->assertNull($this->router->match($this->request));
@@ -237,22 +225,16 @@ class RouterTest extends TestCase
         $this->request->method('getRequestString')->willReturn('request-path');
         $this->request->method('getParam')->with('___from_store')
             ->willReturn('old-store');
-        $oldStore = $this->getMockBuilder(Store::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $oldStore = $this->createMock(Store::class);
         $this->storeManager->method('getStore')
             ->willReturnMap([['old-store', $oldStore], [null, $this->store]]);
         $oldStore->method('getId')->willReturn('old-store-id');
         $this->store->method('getId')->willReturn('current-store-id');
-        $oldUrlRewrite = $this->getMockBuilder(UrlRewrite::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $oldUrlRewrite = $this->createMock(UrlRewrite::class);
         $oldUrlRewrite->method('getEntityType')->willReturn('entity-type');
         $oldUrlRewrite->method('getEntityId')->willReturn('entity-id');
         $oldUrlRewrite->method('getRequestPath')->willReturn('old-request-path');
-        $urlRewrite = $this->getMockBuilder(UrlRewrite::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $urlRewrite = $this->createMock(UrlRewrite::class);
         $urlRewrite->method('getRequestPath')->willReturn('old-request-path');
 
         $this->urlFinder->method('findOneByData')->willReturnMap(
@@ -292,9 +274,7 @@ class RouterTest extends TestCase
             ->willReturn($requestPath);
         $this->request->method('getRequestString')
             ->willReturn($requestPath);
-        $urlRewrite = $this->getMockBuilder(UrlRewrite::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $urlRewrite = $this->createMock(UrlRewrite::class);
         $urlRewrite->method('getRedirectType')->willReturn($redirectType);
         $urlRewrite->method('getRequestPath')->willReturn($requestPath);
         $urlRewrite->method('getTargetPath')->willReturn($targetPath);
@@ -326,8 +306,8 @@ class RouterTest extends TestCase
      * @param string $requestPath
      * @param string $targetPath
      * @param bool $shouldRedirect
-     * @dataProvider customInternalRedirectDataProvider
      */
+    #[DataProvider('customInternalRedirectDataProvider')]
     public function testMatchWithCustomInternalRedirect($requestPath, $targetPath, $shouldRedirect)
     {
         $queryParams = [];
@@ -338,9 +318,7 @@ class RouterTest extends TestCase
             ->willReturn($requestPath);
         $this->request->method('getRequestString')
             ->willReturn($requestPath);
-        $urlRewrite = $this->getMockBuilder(UrlRewrite::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $urlRewrite = $this->createMock(UrlRewrite::class);
         $urlRewrite->method('getEntityType')->willReturn('custom');
         $urlRewrite->method('getRedirectType')->willReturn($redirectType);
         $urlRewrite->method('getRequestPath')->willReturn($requestPath);
@@ -387,8 +365,8 @@ class RouterTest extends TestCase
 
     /**
      * @param string $targetPath
-     * @dataProvider externalRedirectTargetPathDataProvider
      */
+    #[DataProvider('externalRedirectTargetPathDataProvider')]
     public function testMatchWithCustomExternalRedirect($targetPath)
     {
         $requestPath = 'request-path';
@@ -397,9 +375,7 @@ class RouterTest extends TestCase
             ->willReturn($requestPath);
         $this->request->method('getRequestString')
             ->willReturn($requestPath);
-        $urlRewrite = $this->getMockBuilder(UrlRewrite::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $urlRewrite = $this->createMock(UrlRewrite::class);
         $urlRewrite->method('getEntityType')->willReturn('custom');
         $urlRewrite->method('getRedirectType')->willReturn('redirect-code');
         $urlRewrite->method('getRequestPath')->willReturn($requestPath);
@@ -439,9 +415,7 @@ class RouterTest extends TestCase
             ->willReturn($requestPath);
         $this->request->method('getRequestString')
             ->willReturn($requestPath);
-        $urlRewrite = $this->getMockBuilder(UrlRewrite::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $urlRewrite = $this->createMock(UrlRewrite::class);
         $urlRewrite->method('getRedirectType')->willReturn(0);
         $urlRewrite->method('getRequestPath')->willReturn($requestPath);
         $urlRewrite->method('getTargetPath')->willReturn('target-path');

@@ -13,6 +13,7 @@ use Magento\Customer\Model\ResourceModel\Customer\Collection;
 use Magento\Customer\Model\Config\Share;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\DB\Select;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -63,9 +64,9 @@ class StorageTest extends TestCase
     /**
      * Test prepareCustomers when the scope is set to global.
      *
-     * @dataProvider customerDataProvider
      * @throws Exception
      */
+    #[DataProvider('customerDataProvider')]
     public function testPrepareCustomers(array $customersToFind, array $customersData, array $expectedResults): void
     {
         $this->mockCustomerCollection($customersData);

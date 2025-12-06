@@ -64,44 +64,31 @@ class MassDisableTest extends TestCase
     {
         $objectManagerHelper = new ObjectManagerHelper($this);
 
-        $this->stateMock = $this->getMockBuilder(State::class)
-            ->disableOriginalConstructor()
-            ->disableOriginalClone()
-            ->getMock();
+        $this->stateMock = $this->createMock(State::class);
 
-        $this->messageManagerMock = $this->getMockBuilder(MessageManager::class)
-            ->getMockForAbstractClass();
+        $this->messageManagerMock = $this->createMock(MessageManager::class);
 
-        $this->requestMock = $this->getMockBuilder(Request::class)
-            ->getMockForAbstractClass();
+        $this->requestMock = $this->createMock(Request::class);
 
-        $this->cacheTypeListMock = $this->getMockBuilder(CacheTypeList::class)
-            ->getMockForAbstractClass();
+        $this->cacheTypeListMock = $this->createMock(CacheTypeList::class);
 
-        $this->cacheStateMock = $this->getMockBuilder(CacheState::class)
-            ->getMockForAbstractClass();
+        $this->cacheStateMock = $this->createMock(CacheState::class);
 
-        $this->redirectMock = $this->getMockBuilder(Redirect::class)
-            ->disableOriginalConstructor()
-            ->disableOriginalClone()
-            ->getMock();
+        $this->redirectMock = $this->createMock(Redirect::class);
+
         $this->redirectMock->expects($this->once())
             ->method('setPath')
             ->with('adminhtml/*')
             ->willReturnSelf();
-        $resultFactoryMock = $this->getMockBuilder(ResultFactory::class)
-            ->disableOriginalConstructor()
-            ->disableOriginalClone()
-            ->getMock();
+        $resultFactoryMock = $this->createMock(ResultFactory::class);
+
         $resultFactoryMock->expects($this->once())
             ->method('create')
             ->with(ResultFactory::TYPE_REDIRECT)
             ->willReturn($this->redirectMock);
 
-        $contextMock = $this->getMockBuilder(Context::class)
-            ->disableOriginalConstructor()
-            ->disableOriginalClone()
-            ->getMock();
+        $contextMock = $this->createMock(Context::class);
+
         $contextMock->expects($this->once())
             ->method('getMessageManager')
             ->willReturn($this->messageManagerMock);

@@ -22,9 +22,9 @@ class SerializerTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->_layoutMock = $this->getMockBuilder(
+        $this->_layoutMock = $this->createMock(
             LayoutInterface::class
-        )->getMockForAbstractClass();
+        );
     }
 
     public function testPrepareLayout()

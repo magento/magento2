@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright 2015 Adobe
+ * Copyright 2012 Adobe
  * All Rights Reserved.
  */
 declare(strict_types=1);
@@ -16,10 +16,16 @@ use Magento\Framework\Data\Collection\EntityFactory;
 use Magento\Framework\DataObject;
 use Magento\ImportExport\Model\Import;
 use Magento\ImportExport\Test\Unit\Model\Import\AbstractImportTestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 
+/**
+ * @phpstan-ignore-next-line
+ */
 class AbstractCustomerTest extends AbstractImportTestCase
 {
+    use MockCreationTrait;
     /**
      * Abstract customer export model
      *
@@ -82,17 +88,22 @@ class AbstractCustomerTest extends AbstractImportTestCase
             $customerCollection->addItem(new DataObject($customer));
         }
 
-        $modelMock = $this->getMockBuilder(AbstractCustomer::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['_getCustomerCollection'])
-            ->onlyMethods(
-                [
-                    'getErrorAggregator',
-                    '_validateRowForUpdate',
-                    '_validateRowForDelete'
-                ]
-            )->getMockForAbstractClass();
+        $modelMock = $this->createPartialMockWithReflection(
+            AbstractCustomer::class,
+            [
+                'getErrorAggregator',
+                '_validateRowForUpdate',
+                '_validateRowForDelete',
+                '_importData',
+                'getEntityTypeCode',
+                'setCustomerCollection'
+            ]
+        );
         $modelMock->method('getErrorAggregator')->willReturn($this->getErrorAggregatorObject());
+        
+        // Set customer collection using the helper's setter
+        $modelMock->method('setCustomerCollection')->willReturnSelf();
+        $modelMock->setCustomerCollection($customerCollection);
 
         $property = new \ReflectionProperty($modelMock, '_websiteCodeToId');
         $property->setAccessible(true);
@@ -101,10 +112,6 @@ class AbstractCustomerTest extends AbstractImportTestCase
         $property = new \ReflectionProperty($modelMock, '_availableBehaviors');
         $property->setAccessible(true);
         $property->setValue($modelMock, $this->_availableBehaviors);
-
-        $modelMock->expects($this->any())
-            ->method('_getCustomerCollection')
-            ->willReturn($customerCollection);
 
         return $modelMock;
     }
@@ -174,14 +181,13 @@ class AbstractCustomerTest extends AbstractImportTestCase
     }
 
     /**
-     * @dataProvider checkUniqueKeyDataProvider
-     *
      * @param array $rowData
      * @param array $errors
-     * @param boolean $isValid
+     * @param bool $isValid
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function testCheckUniqueKey(array $rowData, array $errors, $isValid = false)
+    #[DataProvider('checkUniqueKeyDataProvider')]
+    public function testCheckUniqueKey(array $rowData, array $errors, bool $isValid = false): void
     {
         $checkUniqueKey = new \ReflectionMethod(
             AbstractCustomer::class,
@@ -196,7 +202,7 @@ class AbstractCustomerTest extends AbstractImportTestCase
         }
     }
 
-    public function testValidateRowForUpdate()
+    public function testValidateRowForUpdate(): void
     {
         // _validateRowForUpdate should be called only once
         $this->_model->expects($this->once())->method('_validateRowForUpdate');
@@ -212,7 +218,7 @@ class AbstractCustomerTest extends AbstractImportTestCase
         $this->assertTrue($this->_model->validateRow([], 1));
     }
 
-    public function testValidateRowForDelete()
+    public function testValidateRowForDelete(): void
     {
         // _validateRowForDelete should be called only once
         $this->_model->expects($this->once())->method('_validateRowForDelete');
@@ -227,9 +233,11 @@ class AbstractCustomerTest extends AbstractImportTestCase
     }
 
     /**
+     * Clear validated rows and reset counter
+     *
      * @return void
      */
-    protected function _clearValidatedRows()
+    protected function _clearValidatedRows(): void
     {
         // clear array
         $validatedRows = new \ReflectionProperty(

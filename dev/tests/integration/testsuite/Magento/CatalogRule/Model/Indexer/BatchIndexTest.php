@@ -6,7 +6,13 @@
 
 namespace Magento\CatalogRule\Model\Indexer;
 
+use Magento\TestFramework\Fixture\AppArea;
+use Magento\TestFramework\Fixture\AppIsolation;
+use Magento\TestFramework\Fixture\DataFixture;
+use Magento\TestFramework\Fixture\DataFixtureBeforeTransaction;
+use Magento\TestFramework\Fixture\DbIsolation;
 use Magento\TestFramework\Helper\Bootstrap;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * @magentoAppIsolation enabled
@@ -59,14 +65,14 @@ class BatchIndexTest extends \PHPUnit\Framework\TestCase
         parent::tearDown();
     }
 
-    /**
-     * @magentoDbIsolation disabled
-     * @dataProvider dataProvider
-     * @magentoAppIsolation enabled
-     * @magentoAppArea adminhtml
-     * @magentoDataFixtureBeforeTransaction Magento/CatalogRule/_files/two_rules.php
-     * @magentoDataFixture Magento/Catalog/_files/product_simple.php
-     */
+    #[
+        DbIsolation(false),
+        AppIsolation(true),
+        AppArea('adminhtml'),
+        DataProvider('dataProvider'),
+        DataFixtureBeforeTransaction('Magento/CatalogRule/_files/two_rules.php'),
+        DataFixture('Magento/Catalog/_files/product_simple.php'),
+    ]
     public function testPriceForSmallBatch($batchCount, $price, $expectedPrice)
     {
         $productIds = $this->prepareProducts($price);
@@ -103,18 +109,16 @@ class BatchIndexTest extends \PHPUnit\Framework\TestCase
             ->setSku(uniqid($this->product->getSku() . '-'))
             ->setName(uniqid($this->product->getName() . '-'))
             ->setWebsiteIds([1])
+            ->setPrice($price)
             ->save();
-        $productSecond->setPrice($price);
-        $this->productRepository->save($productSecond);
         $productThird = clone $this->product;
         $productThird->setId(null)
             ->setUrlKey(null)
             ->setSku(uniqid($this->product->getSku() . '--'))
             ->setName(uniqid($this->product->getName() . '--'))
             ->setWebsiteIds([1])
+            ->setPrice($price)
             ->save();
-        $productThird->setPrice($price);
-        $this->productRepository->save($productThird);
 
         return [
             $productSecond->getEntityId(),

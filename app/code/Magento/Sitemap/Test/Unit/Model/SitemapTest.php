@@ -30,6 +30,8 @@ use Magento\Sitemap\Model\SitemapConfigReaderInterface;
 use Magento\Sitemap\Model\SitemapItem;
 use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -38,6 +40,7 @@ use PHPUnit\Framework\TestCase;
  */
 class SitemapTest extends TestCase
 {
+    use MockCreationTrait;
     /**
      * @var SitemapResource|MockObject
      */
@@ -107,10 +110,7 @@ class SitemapTest extends TestCase
             'commit',
             '__wakeup',
         ];
-        $this->resourceMock = $this->getMockBuilder(SitemapResource::class)
-            ->onlyMethods($resourceMethods)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->resourceMock = $this->createPartialMock(SitemapResource::class, $resourceMethods);
         $this->resourceMock->method('addCommitCallback')
             ->willReturnSelf();
 
@@ -247,8 +247,8 @@ class SitemapTest extends TestCase
      * @param int $maxFileSize
      * @param array $expectedFile
      * @param int $expectedWrites
-     * @dataProvider sitemapDataProvider
      */
+    #[DataProvider('sitemapDataProvider')]
     public function testGenerateXml($maxLines, $maxFileSize, $expectedFile, $expectedWrites)
     {
         $actualData = [];
@@ -354,8 +354,8 @@ class SitemapTest extends TestCase
      * @param array $expectedFile
      * @param int $expectedWrites
      * @param array $robotsInfo
-     * @dataProvider robotsDataProvider
      */
+    #[DataProvider('robotsDataProvider')]
     public function testAddSitemapToRobotsTxt($maxLines, $maxFileSize, $expectedFile, $expectedWrites, $robotsInfo)
     {
         $actualData = [];
@@ -463,7 +463,7 @@ class SitemapTest extends TestCase
 
         $this->store->expects($this->atLeastOnce())
             ->method('getBaseUrl')
-            ->with($this->isType('string'), false)
+            ->with($this->callback('is_string'), false)
             ->willReturn('http://store.com/');
 
         return $model;
@@ -530,11 +530,9 @@ class SitemapTest extends TestCase
             );
 
         /** @var Sitemap $model */
-        $model = $this->getMockBuilder(Sitemap::class)
-            ->addMethods($addMethods)
-            ->onlyMethods($methods)
-            ->setConstructorArgs($this->getModelConstructorArgs())
-            ->getMock();
+        $model = $this->createPartialMockWithReflection(Sitemap::class, array_merge($addMethods, $methods));
+        $constructorArgs = $this->getModelConstructorArgs();
+        $model->__construct(...$constructorArgs);
 
         $model->method('_getResource')
             ->willReturn($this->resourceMock);
@@ -598,22 +596,22 @@ class SitemapTest extends TestCase
      * @param string $sitemapPath
      * @param string $sitemapFileName
      * @param string $result
-     * @dataProvider siteUrlDataProvider
      */
+    #[DataProvider('siteUrlDataProvider')]
     public function testGetSitemapUrl($storeBaseUrl, $documentRoot, $baseDir, $sitemapPath, $sitemapFileName, $result)
     {
         /** @var Sitemap $model */
-        $model = $this->getMockBuilder(Sitemap::class)
-            ->onlyMethods(
-                [
-                    '_getStoreBaseUrl',
-                    '_getDocumentRoot',
-                    '_getBaseDir',
-                    '_construct',
-                ]
-            )
-            ->setConstructorArgs($this->getModelConstructorArgs())
-            ->getMock();
+        $model = $this->createPartialMock(
+            Sitemap::class,
+            [
+                '_getStoreBaseUrl',
+                '_getDocumentRoot',
+                '_getBaseDir',
+                '_construct',
+            ]
+        );
+        $constructorArgs = $this->getModelConstructorArgs();
+        $model->__construct(...$constructorArgs);
 
         $model->method('_getStoreBaseUrl')
             ->willReturn($storeBaseUrl);
@@ -701,8 +699,8 @@ class SitemapTest extends TestCase
      * @param string $storeBaseUrl
      * @param string $baseDir
      * @param string $documentRoot
-     * @dataProvider getDocumentRootFromBaseDirUrlDataProvider
      */
+    #[DataProvider('getDocumentRootFromBaseDirUrlDataProvider')]
     public function testGetDocumentRootFromBaseDir(
         string $storeBaseUrl,
         string $baseDir,
@@ -712,10 +710,9 @@ class SitemapTest extends TestCase
         $this->store->method('getBaseUrl')->willReturn($storeBaseUrl);
         $this->directoryMock->method('getAbsolutePath')->willReturn($baseDir);
         /** @var Sitemap $model */
-        $model = $this->getMockBuilder(Sitemap::class)
-            ->onlyMethods(['_construct'])
-            ->setConstructorArgs($this->getModelConstructorArgs())
-            ->getMock();
+        $model = $this->createPartialMock(Sitemap::class, ['_construct']);
+        $constructorArgs = $this->getModelConstructorArgs();
+        $model->__construct(...$constructorArgs);
 
         $method = new \ReflectionMethod($model, 'getDocumentRootFromBaseDir');
         $method->setAccessible(true);

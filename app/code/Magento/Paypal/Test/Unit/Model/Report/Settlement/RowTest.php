@@ -9,6 +9,7 @@ namespace Magento\Paypal\Test\Unit\Model\Report\Settlement;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\Paypal\Model\Report\Settlement\Row;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 class RowTest extends TestCase
@@ -27,8 +28,8 @@ class RowTest extends TestCase
     /**
      * @param string $code
      * @param string $expectation
-     * @dataProvider getReferenceTypeDataProvider
      */
+    #[DataProvider('getReferenceTypeDataProvider')]
     public function testGetReferenceType($code, $expectation)
     {
         $this->assertEquals($expectation, $this->row->getReferenceType($code));
@@ -37,8 +38,8 @@ class RowTest extends TestCase
     /**
      * @param string $code
      * @param string $expectation
-     * @dataProvider getTransactionEventDataProvider
      */
+    #[DataProvider('getTransactionEventDataProvider')]
     public function testGetTransactionEvent($code, $expectation)
     {
         $this->assertEquals($expectation, $this->row->getTransactionEvent($code));
@@ -47,8 +48,8 @@ class RowTest extends TestCase
     /**
      * @param string $code
      * @param string $expectation
-     * @dataProvider getDebitCreditTextDataProvider
      */
+    #[DataProvider('getDebitCreditTextDataProvider')]
     public function testGetDebitCreditText($code, $expectation)
     {
         $this->assertEquals($expectation, $this->row->getDebitCreditText($code));
@@ -58,8 +59,8 @@ class RowTest extends TestCase
      * @param string $code
      * @param array $modelData
      * @param int $expectation
-     * @dataProvider getCastedAmountDataProvider
      */
+    #[DataProvider('getCastedAmountDataProvider')]
     public function testGetCastedAmount($code, $modelData, $expectation)
     {
         $this->row->setData($modelData);
