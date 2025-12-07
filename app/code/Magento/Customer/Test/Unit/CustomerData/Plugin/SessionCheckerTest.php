@@ -13,6 +13,7 @@ use Magento\Framework\Session\SessionManager;
 use Magento\Framework\Stdlib\Cookie\CookieMetadata;
 use Magento\Framework\Stdlib\Cookie\CookieMetadataFactory;
 use Magento\Framework\Stdlib\Cookie\PhpCookieManager;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -64,9 +65,8 @@ class SessionCheckerTest extends TestCase
     /**
      * @param bool $result
      * @param string $callCount
-     * @return void
-     * @dataProvider beforeStartDataProvider
-     */
+     * @return void */
+    #[DataProvider('beforeStartDataProvider')]
     public function testBeforeStart($result, $callCount)
     {
         $phpSessionCookieName = 'PHPSESSID';

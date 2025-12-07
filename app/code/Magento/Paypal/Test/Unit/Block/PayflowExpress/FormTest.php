@@ -46,15 +46,13 @@ class FormTest extends TestCase
             ->method('setTemplate')->willReturnSelf();
         $mark->expects($this->any())
             ->method('__call')->willReturnSelf();
-        $layout = $this->getMockForAbstractClass(
-            LayoutInterface::class
-        );
+        $layout = $this->createMock(LayoutInterface::class);
         $layout->expects($this->once())
             ->method('createBlock')
             ->with(Template::class)
             ->willReturn($mark);
 
-        $localeResolver = $this->getMockForAbstractClass(ResolverInterface::class);
+        $localeResolver = $this->createMock(ResolverInterface::class);
 
         $helper = new ObjectManager($this);
         $this->_model = $helper->getObject(

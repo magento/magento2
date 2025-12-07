@@ -18,6 +18,7 @@ use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory;
 use Magento\Catalog\Pricing\Price\FinalPrice;
 use Magento\Catalog\ViewModel\Product\OptionsData;
 use Magento\CatalogWidget\Model\Rule;
+use Magento\CatalogWidget\Model\Rule\Condition\Product\CategoryConditionProcessor;
 use Magento\Framework\App\ActionInterface;
 use Magento\Framework\App\Http\Context as HttpContext;
 use Magento\Framework\App\ObjectManager;
@@ -138,6 +139,11 @@ class ProductsList extends AbstractProduct implements BlockInterface, IdentityIn
     private OptionsData $optionsData;
 
     /**
+     * @var CategoryConditionProcessor
+     */
+    private CategoryConditionProcessor $categoryConditionProcessor;
+
+    /**
      * @param Context $context
      * @param CollectionFactory $productCollectionFactory
      * @param Visibility $catalogProductVisibility
@@ -151,6 +157,7 @@ class ProductsList extends AbstractProduct implements BlockInterface, IdentityIn
      * @param EncoderInterface|null $urlEncoder
      * @param CategoryRepositoryInterface|null $categoryRepository
      * @param OptionsData|null $optionsData
+     * @param CategoryConditionProcessor|null $categoryConditionProcessor
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -167,7 +174,8 @@ class ProductsList extends AbstractProduct implements BlockInterface, IdentityIn
         ?LayoutFactory $layoutFactory = null,
         ?EncoderInterface $urlEncoder = null,
         ?CategoryRepositoryInterface $categoryRepository = null,
-        ?OptionsData $optionsData = null
+        ?OptionsData $optionsData = null,
+        ?CategoryConditionProcessor $categoryConditionProcessor = null
     ) {
         $this->productCollectionFactory = $productCollectionFactory;
         $this->catalogProductVisibility = $catalogProductVisibility;
@@ -181,6 +189,8 @@ class ProductsList extends AbstractProduct implements BlockInterface, IdentityIn
         $this->categoryRepository = $categoryRepository ?? ObjectManager::getInstance()
                 ->get(CategoryRepositoryInterface::class);
         $this->optionsData = $optionsData ?: ObjectManager::getInstance()->get(OptionsData::class);
+        $this->categoryConditionProcessor = $categoryConditionProcessor ?: ObjectManager::getInstance()
+                ->get(CategoryConditionProcessor::class);
         parent::__construct(
             $context,
             $data
@@ -391,34 +401,6 @@ class ProductsList extends AbstractProduct implements BlockInterface, IdentityIn
     }
 
     /**
-     * Update conditions if the category is an anchor category
-     *
-     * @param array $condition
-     * @return array
-     */
-    private function updateAnchorCategoryConditions(array $condition): array
-    {
-        if (array_key_exists('value', $condition)) {
-            $categoryId = $condition['value'];
-
-            try {
-                $category = $this->categoryRepository->get($categoryId, $this->_storeManager->getStore()->getId());
-            } catch (NoSuchEntityException $e) {
-                return $condition;
-            }
-
-            $children = $category->getIsAnchor() ? $category->getChildren(true) : [];
-            if ($children) {
-                $children = explode(',', $children);
-                $condition['operator'] = "()";
-                $condition['value'] = array_merge([$categoryId], $children);
-            }
-        }
-
-        return $condition;
-    }
-
-    /**
      * Get conditions
      *
      * @return Combine
@@ -440,7 +422,10 @@ class ProductsList extends AbstractProduct implements BlockInterface, IdentityIn
                 }
 
                 if ($condition['attribute'] == 'category_ids') {
-                    $conditions[$key] = $this->updateAnchorCategoryConditions($condition);
+                    $conditions[$key] = $this->categoryConditionProcessor->process(
+                        $condition,
+                        $this->_storeManager->getStore()->getId()
+                    );
                 }
             }
         }

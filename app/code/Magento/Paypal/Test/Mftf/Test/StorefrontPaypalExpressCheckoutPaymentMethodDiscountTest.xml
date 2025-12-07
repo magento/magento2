@@ -44,7 +44,11 @@
             <actionGroup ref="AdminCartPriceRuleSaveActionGroup" stepKey="saveCartPriceRule"/>
         </before>
         <after>
-            <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
+            <!-- Delete customer -->
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer" />
+            <actionGroup ref="AdminDeleteCustomerActionGroup" stepKey="deleteCustomer">
+                <argument name="customerEmail" value="Simple_US_Customer.email"/>
+            </actionGroup>
             <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
             <!-- Delete Cart Price Rule -->
             <deleteData createDataKey="createCartPriceRule" stepKey="deleteCartPriceRule"/>

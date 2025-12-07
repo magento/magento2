@@ -27,8 +27,7 @@ class RobotsTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->scopeConfigMock = $this->getMockBuilder(ScopeConfigInterface::class)
-            ->getMockForAbstractClass();
+        $this->scopeConfigMock = $this->createMock(ScopeConfigInterface::class);
 
         $this->model = new Robots(
             $this->scopeConfigMock
