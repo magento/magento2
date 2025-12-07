@@ -19,7 +19,7 @@ use PHPUnit\Framework\TestCase;
 
 class ConsumerRunnerTest extends TestCase
 {
-    const STUB_SLEEP_INTERVAL = 0;
+    private const STUB_SLEEP_INTERVAL = 0;
 
     /**
      * @var ObjectManager
@@ -48,12 +48,8 @@ class ConsumerRunnerTest extends TestCase
     {
         $this->objectManager = new ObjectManager($this);
 
-        $this->consumerFactoryMock = $this->getMockBuilder(ConsumerFactory::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->maintenanceModeMock = $this->getMockBuilder(MaintenanceMode::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->consumerFactoryMock = $this->createMock(ConsumerFactory::class);
+        $this->maintenanceModeMock = $this->createMock(MaintenanceMode::class);
 
         $this->consumerRunner = $this->objectManager->getObject(
             ConsumerRunner::class,
@@ -74,8 +70,7 @@ class ConsumerRunnerTest extends TestCase
     {
         $isMaintenanceModeOn = false;
         /** @var ConsumerInterface|MockObject $consumerMock */
-        $consumerMock = $this->getMockBuilder(ConsumerInterface::class)
-            ->getMock();
+        $consumerMock = $this->createMock(ConsumerInterface::class);
         $consumerMock->expects($this->once())->method('process');
         $consumerName = 'someConsumerName';
         $this->consumerFactoryMock
@@ -118,8 +113,7 @@ class ConsumerRunnerTest extends TestCase
         $isMaintenanceModeOn = true;
 
         /** @var ConsumerInterface|MockObject $consumerMock */
-        $consumerMock = $this->getMockBuilder(ConsumerInterface::class)
-            ->getMock();
+        $consumerMock = $this->createMock(ConsumerInterface::class);
         $consumerMock->expects($this->never())->method('process');
         $consumerName = 'someConsumerName';
         $this->consumerFactoryMock

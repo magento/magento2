@@ -475,6 +475,7 @@ class Vault implements VaultPaymentInterface
         }
 
         $this->attachTokenExtensionAttribute($payment);
+        $this->attachCreditCardInfo($payment);
 
         $commandExecutor = $this->commandManagerPool->get(
             $this->vaultProvider->getCode()

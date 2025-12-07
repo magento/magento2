@@ -19,9 +19,12 @@ use Magento\Framework\View\Result\Page;
 use Magento\Framework\View\Result\PageFactory;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 
 class ConfirmationTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var Confirmation
      */
@@ -54,30 +57,17 @@ class ConfirmationTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->customerSessionMock = $this->getMockBuilder(Session::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['isLoggedIn'])
-            ->getMock();
-        $this->contextMock = $this->getMockBuilder(Context::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['getRequest'])
-            ->getMock();
-        $this->requestMock = $this->getMockBuilder(Http::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['getPost', 'getParam'])
-            ->getMock();
+        $this->customerSessionMock = $this->createPartialMock(Session::class, ['isLoggedIn']);
+        $this->contextMock = $this->createPartialMock(Context::class, ['getRequest']);
+        $this->requestMock = $this->createPartialMock(Http::class, ['getPost', 'getParam']);
+        
         $this->contextMock->expects($this->any())
             ->method('getRequest')
             ->willReturn($this->requestMock);
 
-        $this->resultPageFactoryMock = $this->getMockBuilder(PageFactory::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['create'])
-            ->getMock();
-        $this->customerUrlMock = $this->getMockBuilder(Url::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['getLoginUrl'])
-            ->getMock();
+        $this->resultPageFactoryMock = $this->createPartialMock(PageFactory::class, ['create']);
+        $this->customerUrlMock = $this->createPartialMock(Url::class, ['getLoginUrl']);
+        
         $this->model = (new ObjectManagerHelper($this))->getObject(
             Confirmation::class,
             [
@@ -97,24 +87,18 @@ class ConfirmationTest extends TestCase
 
         $this->requestMock->expects($this->once())->method('getPost')->with('email')->willReturn(null);
 
-        $resultPageMock = $this->getMockBuilder(Page::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['getLayout'])
-            ->getMock();
+        $resultPageMock = $this->createPartialMock(Page::class, ['getLayout']);
 
         $this->resultPageFactoryMock->expects($this->once())->method('create')->willReturn($resultPageMock);
 
-        $layoutMock = $this->getMockBuilder(Layout::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['getBlock'])
-            ->getMock();
+        $layoutMock = $this->createPartialMock(Layout::class, ['getBlock']);
 
         $resultPageMock->expects($this->once())->method('getLayout')->willReturn($layoutMock);
 
-        $blockMock = $this->getMockBuilder(Template::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['setEmail', 'setLoginUrl'])
-            ->getMock();
+        $blockMock = $this->createPartialMockWithReflection(
+            Template::class,
+            ['setEmail', 'setLoginUrl']
+        );
 
         $layoutMock->expects($this->once())->method('getBlock')->with('accountConfirmation')->willReturn($blockMock);
 

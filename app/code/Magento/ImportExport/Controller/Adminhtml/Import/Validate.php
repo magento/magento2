@@ -51,6 +51,7 @@ class Validate extends ImportResultController implements HttpPostActionInterface
             $import = $this->getImport()->setData($data);
             try {
                 $source = $import->uploadFileAndGetSource();
+                $this->_eventManager->dispatch('log_admin_import');
                 $this->processValidationResult($import->validateSource($source), $resultBlock);
                 $ids = $import->getValidatedIds();
                 if (count($ids) > 0) {

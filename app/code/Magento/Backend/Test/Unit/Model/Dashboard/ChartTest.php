@@ -15,6 +15,7 @@ use Magento\Framework\DataObject;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Reports\Model\ResourceModel\Order\Collection;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 class ChartTest extends TestCase
@@ -51,17 +52,11 @@ class ChartTest extends TestCase
     {
         $this->objectManagerHelper = new ObjectManager($this);
 
-        $this->dateRetrieverMock = $this->getMockBuilder(DateRetriever::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->dateRetrieverMock = $this->createMock(DateRetriever::class);
 
-        $this->orderHelperMock = $this->getMockBuilder(OrderHelper::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->orderHelperMock = $this->createMock(OrderHelper::class);
 
-        $this->collectionMock = $this->getMockBuilder(Collection::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->collectionMock = $this->createMock(Collection::class);
         $this->orderHelperMock->method('getCollection')
             ->willReturn($this->collectionMock);
 
@@ -83,8 +78,8 @@ class ChartTest extends TestCase
      * @param array $result
      *
      * @return void
-     * @dataProvider getByPeriodDataProvider
      */
+    #[DataProvider('getByPeriodDataProvider')]
     public function testGetByPeriod(string $period, string $chartParam, array $result): void
     {
         $this->orderHelperMock
@@ -109,9 +104,7 @@ class ChartTest extends TestCase
 
         $valueMap = [];
         foreach ($result as $resultItem) {
-            $dataObjectMock = $this->getMockBuilder(DataObject::class)
-                ->disableOriginalConstructor()
-                ->getMock();
+            $dataObjectMock = $this->createMock(DataObject::class);
             $dataObjectMock->method('getData')
                 ->with($chartParam)
                 ->willReturn($resultItem['y']);

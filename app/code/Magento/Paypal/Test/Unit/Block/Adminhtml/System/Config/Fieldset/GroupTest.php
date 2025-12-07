@@ -11,10 +11,11 @@ use Magento\Backend\Model\Auth\Session;
 use Magento\Config\Model\Config\Structure\Element\Group;
 use Magento\Framework\Data\Form\Element\AbstractElement;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\View\Helper\SecureHtmlRenderer;
 use Magento\User\Model\User;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use Magento\Framework\View\Helper\SecureHtmlRenderer;
 
 class GroupTest extends TestCase
 {
@@ -50,13 +51,8 @@ class GroupTest extends TestCase
     {
         $helper = new ObjectManager($this);
         $this->_group = $this->createMock(Group::class);
-        $this->_element = $this->getMockForAbstractClass(
+        $this->_element = $this->createPartialMock(
             AbstractElement::class,
-            [],
-            '',
-            false,
-            true,
-            true,
             ['getHtmlId', 'getElementHtml', 'getName', 'getElements', 'getId']
         );
         $this->_element->expects($this->any())
@@ -94,9 +90,13 @@ class GroupTest extends TestCase
                 }
             );
 
+        $helper->prepareObjectManager([
+            [SecureHtmlRenderer::class, $secureRendererMock]
+        ]);
+
         $this->_model = $helper->getObject(
             \Magento\Paypal\Block\Adminhtml\System\Config\Fieldset\Group::class,
-            ['authSession' => $this->_authSession, 'secureRenderer' => $secureRendererMock]
+            ['authSession' => $this->_authSession]
         );
         $this->_model->setGroup($this->_group);
     }
@@ -104,8 +104,8 @@ class GroupTest extends TestCase
     /**
      * @param mixed $expanded
      * @param int $expected
-     * @dataProvider isCollapseStateDataProvider
      */
+    #[DataProvider('isCollapseStateDataProvider')]
     public function testIsCollapseState($expanded, $expected)
     {
         $this->_user->setExtra(['configState' => []]);

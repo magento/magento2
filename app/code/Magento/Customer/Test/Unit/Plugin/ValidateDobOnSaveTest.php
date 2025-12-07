@@ -18,6 +18,7 @@ use Magento\Framework\Serialize\Serializer\Json as JsonSerializer;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Magento\Framework\Locale\ResolverInterface;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 
 /**
  * Unit test for validate date of birth plugin
@@ -26,6 +27,8 @@ use Magento\Framework\Locale\ResolverInterface;
  */
 class ValidateDobOnSaveTest extends TestCase
 {
+    use MockCreationTrait;
+
     /** @var EavConfig&MockObject */
     private $eavConfig;
 
@@ -215,7 +218,7 @@ class ValidateDobOnSaveTest extends TestCase
         $attribute = $this->getMockBuilder(AbstractAttribute::class)
             ->disableOriginalConstructor()
             ->onlyMethods(['getData'])
-            ->getMockForAbstractClass();
+            ->getMock();
 
         $attribute->method('getData')->with($key)->willReturn($value);
         return $attribute;
@@ -286,11 +289,10 @@ class ValidateDobOnSaveTest extends TestCase
      */
     private function mockAttributeRulesViaGetValidateRules(array $rules): void
     {
-        $attribute = $this->getMockBuilder(\Magento\Eav\Model\Entity\Attribute\AbstractAttribute::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['getData'])
-            ->addMethods(['getValidateRules'])
-            ->getMockForAbstractClass();
+        $attribute = $this->createPartialMockWithReflection(
+            \Magento\Eav\Model\Entity\Attribute\AbstractAttribute::class,
+            ['getData', 'getValidateRules']
+        );
 
         // Force non-array rules to trigger the fallback
         $attribute->method('getData')->with('validate_rules')->willReturn(null);

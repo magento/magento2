@@ -21,7 +21,6 @@ use Magento\Bundle\Model\ResourceModel\Option\Collection;
 use Magento\Bundle\Pricing\Price\BundleOptionPrice;
 use Magento\Bundle\Pricing\Price\TierPrice;
 use Magento\Catalog\Helper\Product;
-use Magento\Catalog\Pricing\Price\BasePrice;
 use Magento\Catalog\Pricing\Price\FinalPrice;
 use Magento\Catalog\Pricing\Price\RegularPrice;
 use Magento\CatalogRule\Model\ResourceModel\Product\CollectionProcessor;
@@ -29,7 +28,6 @@ use Magento\Framework\DataObject;
 use Magento\Framework\Escaper;
 use Magento\Framework\Event\ManagerInterface;
 use Magento\Framework\Json\Encoder;
-use Magento\Framework\Pricing\Amount\AmountInterface;
 use Magento\Framework\Pricing\PriceInfo\Base;
 use Magento\Framework\Registry;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
@@ -78,6 +76,11 @@ class BundleTest extends TestCase
     private $escaperMock;
 
     /**
+     * @var \Magento\Directory\Model\PriceCurrency|MockObject
+     */
+    private $priceCurrency;
+
+    /**
      * @inheritDoc
      */
     protected function setUp(): void
@@ -93,6 +96,8 @@ class BundleTest extends TestCase
         $this->jsonEncoder = $this->createMock(Encoder::class);
         $this->catalogProduct = $this->createMock(Product::class);
         $this->escaperMock = $this->createMock(Escaper::class);
+        $this->priceCurrency = $this->createMock(\Magento\Directory\Model\PriceCurrency::class);
+
         /** @var BundleBlock $bundleBlock */
         $this->bundleBlock = $objectHelper->getObject(
             BundleBlock::class,
@@ -102,7 +107,8 @@ class BundleTest extends TestCase
                 'jsonEncoder' => $this->jsonEncoder,
                 'productPrice' => $this->bundleProductPriceFactory,
                 'catalogProduct' => $this->catalogProduct,
-                'escaper' => $this->escaperMock
+                'escaper' => $this->escaperMock,
+                'priceCurrency' => $this->priceCurrency
             ]
         );
 
@@ -252,6 +258,11 @@ class BundleTest extends TestCase
                 )
             ]
         );
+
+        $this->priceCurrency->expects($this->exactly(3))
+            ->method('roundPrice')
+            ->willReturn($basePriceValue);
+
         $bundleOptionPriceMock = $this->getBundleOptionPriceMock(
             $baseAmount,
             $baseAmount,

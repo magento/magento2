@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\Paypal\Test\Unit\Model;
 
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\UrlInterface;
 use Magento\Payment\Helper\Data;
 use Magento\Paypal\Model\IframeConfigProvider;
@@ -15,21 +16,17 @@ use PHPUnit\Framework\TestCase;
 
 class IframeConfigProviderTest extends TestCase
 {
+    use MockCreationTrait;
+
     public function testGetConfig()
     {
-        $urlBuilder = $this->getMockForAbstractClass(
-            UrlInterface::class,
-            ['getUrl'],
-            '',
-            false
-        );
+        $urlBuilder = $this->createMock(UrlInterface::class);
         $urlBuilder->expects($this->atLeastOnce())->method('getUrl')->willReturn('http://iframe.url');
 
-        $payment = $this->getMockBuilder(Payflowpro::class)
-            ->addMethods(['getFrameActionUrl'])
-            ->onlyMethods(['isAvailable'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $payment = $this->createPartialMockWithReflection(
+            Payflowpro::class,
+            ['getFrameActionUrl', 'isAvailable']
+        );
 
         $paymentHelper= $this->createMock(Data::class);
 

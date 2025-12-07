@@ -23,23 +23,33 @@ trait MockCreationTrait
      * Use this when you need to mock methods that don't exist in the class/interface
      * and cannot use standard createPartialMock() which would throw CannotUseOnlyMethodsException.
      *
+     * Note: setAccessible() calls removed for PHP 8.5+ compatibility.
+     * Since PHP 8.1, properties and methods are always accessible via reflection.
+     *
      * @param string $className
      * @param array $methods Methods to mock
+     * @param array $constructorArgs Optional constructor arguments (enables constructor if provided)
      * @return MockObject
      */
-    protected function createPartialMockWithReflection(string $className, array $methods): MockObject
-    {
+    protected function createPartialMockWithReflection(
+        string $className,
+        array $methods,
+        array $constructorArgs = []
+    ): MockObject {
         $reflection = new ReflectionClass($this);
         $getMockBuilderMethod = $reflection->getMethod('getMockBuilder');
-        $getMockBuilderMethod->setAccessible(true);
         $mockBuilder = $getMockBuilderMethod->invoke($this, $className);
 
         $builderReflection = new ReflectionClass($mockBuilder);
         $methodsProperty = $builderReflection->getProperty('methods');
-        $methodsProperty->setAccessible(true);
         $methodsProperty->setValue($mockBuilder, $methods);
 
-        $mockBuilder->disableOriginalConstructor();
+        if (empty($constructorArgs)) {
+            $mockBuilder->disableOriginalConstructor();
+        } else {
+            $mockBuilder->setConstructorArgs($constructorArgs);
+        }
+        
         return $mockBuilder->getMock();
     }
 }
