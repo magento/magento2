@@ -820,6 +820,107 @@ class StoreTest extends TestCase
     }
 
     /**
+     * Test that setCurrentCurrencyCode clears cached currency
+     *
+     * @return void
+     */
+    public function testSetCurrentCurrencyCodeClearsCachedCurrency(): void
+    {
+        $currencyCodeFirst = 'USD';
+        $currencyCodeSecond = 'EUR';
+        
+        $sessionMock = $this->getMockBuilder(SessionManagerInterface::class)
+            ->getMockForAbstractClass();
+        $sessionMock->expects($this->exactly(2))
+            ->method('setCurrencyCode')
+            ->willReturnCallback(function ($code) use ($currencyCodeFirst, $currencyCodeSecond) {
+                static $callCount = 0;
+                $callCount++;
+                if ($callCount === 1) {
+                    $this->assertEquals($currencyCodeFirst, $code);
+                } else {
+                    $this->assertEquals($currencyCodeSecond, $code);
+                }
+            });
+        
+        $httpContextMock = $this->getMockBuilder(\Magento\Framework\App\Http\Context::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        
+        $currencyFactoryMock = $this->getMockBuilder(CurrencyFactory::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        
+        $currencyMockFirst = $this->getMockBuilder(Currency::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $currencyMockFirst->expects($this->any())
+            ->method('getCode')
+            ->willReturn($currencyCodeFirst);
+            
+        $currencyMockSecond = $this->getMockBuilder(Currency::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $currencyMockSecond->expects($this->any())
+            ->method('getCode')
+            ->willReturn($currencyCodeSecond);
+        
+        $storeManagerMock = $this->getMockBuilder(StoreManagerInterface::class)
+            ->getMockForAbstractClass();
+        $storeManagerMock->expects($this->any())
+            ->method('getStore')
+            ->willReturn(null);
+            
+        $websiteMock = $this->getMockBuilder(WebsiteInterface::class)
+            ->getMockForAbstractClass();
+        $websiteMock->expects($this->any())
+            ->method('getDefaultStore')
+            ->willReturnSelf();
+        $websiteMock->expects($this->any())
+            ->method('getDefaultCurrency')
+            ->willReturn($currencyMockFirst);
+            
+        $storeManagerMock->expects($this->any())
+            ->method('getWebsite')
+            ->willReturn($websiteMock);
+        
+        $storeMock = $this->getMockBuilder(Store::class)
+            ->setConstructorArgs([
+                $this->createMock(\Magento\Framework\Model\Context::class),
+                $this->createMock(\Magento\Framework\Registry::class),
+                $this->createMock(\Magento\Framework\App\Cache\Type\Config::class),
+                $this->createMock(\Magento\Framework\Url::class),
+                $this->requestMock,
+                $this->createMock(\Magento\Config\Model\ResourceModel\Config\Data::class),
+                $this->configMock,
+                $storeManagerMock,
+                $this->filesystemMock,
+                $this->createMock(\Magento\Framework\Url\ModifierInterface::class),
+                $sessionMock,
+                $httpContextMock,
+                $this->createMock(\Magento\Framework\App\Config::class),
+                $currencyFactoryMock
+            ])
+            ->onlyMethods(['getAvailableCurrencyCodes', 'getData', 'unsetData', 'setData'])
+            ->getMock();
+        
+        $storeMock->expects($this->any())
+            ->method('getAvailableCurrencyCodes')
+            ->willReturn([$currencyCodeFirst, $currencyCodeSecond]);
+        
+        // Expect unsetData to be called when currency code changes
+        $storeMock->expects($this->exactly(2))
+            ->method('unsetData')
+            ->with('current_currency');
+        
+        // First currency change
+        $storeMock->setCurrentCurrencyCode($currencyCodeFirst);
+        
+        // Second currency change - should clear cached currency
+        $storeMock->setCurrentCurrencyCode($currencyCodeSecond);
+    }
+
+    /**
      * @param Store $model
      */
     private function setUrlModifier(Store $model)
