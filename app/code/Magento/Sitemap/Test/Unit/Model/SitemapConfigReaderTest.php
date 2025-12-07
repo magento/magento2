@@ -29,7 +29,7 @@ class SitemapConfigReaderTest extends TestCase
      */
     private function getScopeConfigMock(): MockObject
     {
-        $scopeConfigMock = $this->getMockForAbstractClass(ScopeConfigInterface::class);
+        $scopeConfigMock = $this->createMock(ScopeConfigInterface::class);
         $scopeConfigMock->expects($this->any())
             ->method('getValue')
             ->willReturnMap([

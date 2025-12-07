@@ -48,7 +48,7 @@ class PolicyRendererPoolTest extends TestCase
             SimplePolicyHeaderRenderer::class,
             ['canRender']
         );
-        $this->policyMock = $this->getMockForAbstractClass(PolicyInterface::class);
+        $this->policyMock = $this->createMock(PolicyInterface::class);
 
         $this->model = $objectManager->getObject(
             PolicyRendererPool::class,

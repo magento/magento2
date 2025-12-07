@@ -12,13 +12,14 @@ use Magento\Framework\App\Cache\Frontend\Pool;
 use Magento\Framework\Cache\FrontendInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\TestCase;
+use Zend_Cache_Backend_Interface;
 
 class CleanCacheTest extends TestCase
 {
     public function testCleanCache()
     {
-        $cacheBackendMock = $this->getMockForAbstractClass(\Zend_Cache_Backend_Interface::class);
-        $cacheFrontendMock = $this->getMockForAbstractClass(FrontendInterface::class);
+        $cacheBackendMock = $this->createMock(Zend_Cache_Backend_Interface::class);
+        $cacheFrontendMock = $this->createMock(FrontendInterface::class);
         $frontendPoolMock = $this->createMock(Pool::class);
 
         $cacheBackendMock->expects(
@@ -38,13 +39,15 @@ class CleanCacheTest extends TestCase
             $cacheBackendMock
         );
 
+        $callCount = 0;
         $frontendPoolMock->expects(
             $this->any()
         )->method(
             'valid'
-        )->will(
-            $this->onConsecutiveCalls(true, false)
-        );
+        )->willReturnCallback(function () use (&$callCount) {
+            $callCount++;
+            return $callCount === 1; // true on first call, false on second
+        });
 
         $frontendPoolMock->expects(
             $this->any()

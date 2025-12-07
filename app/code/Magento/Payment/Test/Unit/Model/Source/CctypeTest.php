@@ -49,9 +49,7 @@ class CctypeTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->_paymentConfig = $this->getMockBuilder(
-            Config::class
-        )->disableOriginalConstructor()->getMock();
+        $this->_paymentConfig = $this->createMock(Config::class);
 
         $this->_model = new Cctype($this->_paymentConfig);
     }

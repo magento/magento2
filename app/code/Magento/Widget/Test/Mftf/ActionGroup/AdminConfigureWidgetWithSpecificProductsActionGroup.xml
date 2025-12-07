@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright 2025 Adobe
+ * All Rights Reserved.
+ */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminConfigureWidgetWithSpecificProductsActionGroup">
+        <annotations>
+            <description>Create and configure a widget with specific products by selecting display type, container, and products via chooser.</description>
+        </annotations>
+        <arguments>
+            <argument name="widget" type="entity" defaultValue="SampleCatalogProductsListWidget"/>
+            <argument name="productId" type="string"/>
+            <argument name="widgetOptionsTitle" type="string" defaultValue="{{SampleCatalogProductsListWidget.widget_options_title}}"/>
+            <argument name="productsPerPage" type="string" defaultValue="{{SampleCatalogProductsListWidget.products_per_page}}"/>
+            <argument name="productsToDisplay" type="string" defaultValue="{{SampleCatalogProductsListWidget.products_to_display}}"/>
+        </arguments>
+        <!-- Navigate to new widget page and select type -->
+        <amOnPage url="{{AdminNewWidgetPage.url}}" stepKey="amOnAdminNewWidgetPage"/>
+        <selectOption selector="{{AdminNewWidgetSection.widgetType}}" userInput="{{widget.type}}" stepKey="setWidgetType"/>
+        <selectOption selector="{{AdminNewWidgetSection.widgetDesignTheme}}" userInput="{{widget.design_theme}}" stepKey="setWidgetDesignTheme"/>
+        <click selector="{{AdminNewWidgetSection.continue}}" stepKey="clickContinue"/>
+        <waitForPageLoad stepKey="waitForContinue"/>
+        <!-- Fill widget title and select store view -->
+        <waitForElementVisible selector="{{AdminNewWidgetSection.widgetTitle}}" stepKey="waitForTitle"/>
+        <fillField selector="{{AdminNewWidgetSection.widgetTitle}}" userInput="{{widget.name}}" stepKey="fillWidgetTitle"/>
+        <selectOption selector="{{AdminNewWidgetSection.widgetStoreIds}}" userInput="{{widget.store_ids[0]}}" stepKey="setWidgetStoreIds"/>
+        <!-- Configure widget layout updates -->
+        <click selector="{{AdminNewWidgetSection.addLayoutUpdate}}" stepKey="clickAddLayoutUpdate"/>
+        <waitForElementVisible selector="{{AdminNewWidgetSection.selectDisplayOn}}" stepKey="waitForLayoutUpdate"/>
+        <selectOption selector="{{AdminNewWidgetSection.selectDisplayOn}}" userInput="{{widget.display_on}}" stepKey="setDisplayOn"/>
+        <waitForPageLoad stepKey="waitForLoad"/>
+        <!-- Select container for configurable products -->
+        <waitForElementVisible selector="{{AdminNewWidgetSection.configurableProductsContainer}}" stepKey="waitForContainerDropdown"/>
+        <selectOption selector="{{AdminNewWidgetSection.configurableProductsContainer}}" userInput="{{widget.container}}" stepKey="setContainer"/>
+        <waitForPageLoad stepKey="waitForPageLoad"/>
+        <!-- Select Specific Products -->
+        <waitForElementVisible selector="{{AdminNewWidgetSection.specificConfigurableProductsRadio}}" stepKey="waitForProductsRadio"/>
+        <click selector="{{AdminNewWidgetSection.specificConfigurableProductsRadio}}" stepKey="selectSpecificProducts"/>
+        <waitForElementVisible selector="{{AdminNewWidgetSection.configurableProductsChooser}}" stepKey="waitForChooserButton"/>
+        <!-- Open product chooser and select product -->
+        <click selector="{{AdminNewWidgetSection.configurableProductsChooser}}" stepKey="clickOpenChooser"/>
+        <waitForElementVisible selector="{{AdminNewWidgetSection.chooserProductIdFilter}}" stepKey="waitForChooserGrid"/>
+        <fillField selector="{{AdminNewWidgetSection.chooserProductIdFilter}}" userInput="{{productId}}" stepKey="fillProductIdInFilter"/>
+        <click selector="{{AdminNewWidgetSection.chooserSearchButton}}" stepKey="clickSearchInChooser"/>
+        <waitForPageLoad stepKey="waitForSearchResults"/>
+        <click selector="{{AdminNewWidgetSection.chooserProductCheckboxById(productId)}}" stepKey="selectProduct1InChooser"/>
+        <waitForPageLoad stepKey="waitAfterProductSelection"/>
+        <!-- Configure widget options -->
+        <scrollToTopOfPage stepKey="scrollToTopOfPage"/>
+        <click selector="{{AdminNewWidgetSection.widgetOptions}}" stepKey="clickWidgetOptions"/>
+        <waitForElementVisible selector="{{AdminNewWidgetSection.title}}" stepKey="waitForWidgetOptionsSection"/>
+        <fillField selector="{{AdminNewWidgetSection.title}}" userInput="{{widgetOptionsTitle}}" stepKey="setWidgetOptionsTitle"/>
+        <fillField selector="{{AdminNewWidgetSection.numberOfProductsPerPage}}" userInput="{{productsPerPage}}" stepKey="setNumberOfProductsPerPage"/>
+        <fillField selector="{{AdminNewWidgetSection.numberOfProductsToDisplay}}" userInput="{{productsToDisplay}}" stepKey="setNumberOfProductsToDisplay"/>
+    </actionGroup>
+</actionGroups>

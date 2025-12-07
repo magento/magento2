@@ -15,11 +15,15 @@ use Magento\Framework\Json\Helper\Data;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\UrlInterface;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 class FormTest extends TestCase
 {
+    use MockCreationTrait;
+
     /** @var  Form */
     protected $model;
 
@@ -38,25 +42,23 @@ class FormTest extends TestCase
     /** @var  ElementCreator */
     protected $creatorStub;
 
+    /** @var ObjectManagerHelper */
+    private $objectManagerHelper;
+
     protected function setUp(): void
     {
+        $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->prepareContext();
 
-        $this->dataForm = $this->getMockBuilder(\Magento\Framework\Data\Form::class)
-            ->disableOriginalConstructor()
-            ->addMethods([
-                'setParent',
-                'setBaseUrl'
-            ])
-            ->onlyMethods(['addCustomAttribute'])
-            ->getMock();
+        $this->dataForm = $this->createPartialMockWithReflection(
+            \Magento\Framework\Data\Form::class,
+            ['setParent', 'setBaseUrl', 'addCustomAttribute']
+        );
 
-        $this->jsonHelperMock = $this->getMockBuilder(Data::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->jsonHelperMock = $this->createMock(Data::class);
 
         /** @var ObjectManagerInterface|MockObject $objectManagerMock */
-        $objectManagerMock = $this->getMockForAbstractClass(ObjectManagerInterface::class);
+        $objectManagerMock = $this->createMock(ObjectManagerInterface::class);
         $objectManagerMock->expects($this->exactly(3))
             ->method('get')
             ->willReturn($this->jsonHelperMock);
@@ -71,12 +73,9 @@ class FormTest extends TestCase
 
     protected function prepareContext()
     {
-        $this->urlBuilder = $this->getMockBuilder(UrlInterface::class)
-            ->getMock();
+        $this->urlBuilder = $this->createMock(UrlInterface::class);
 
-        $this->context = $this->getMockBuilder(Context::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->context = $this->createMock(Context::class);
         $this->context->expects($this->any())
             ->method('getUrlBuilder')
             ->willReturn($this->urlBuilder);

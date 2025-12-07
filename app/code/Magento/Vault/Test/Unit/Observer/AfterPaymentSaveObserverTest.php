@@ -12,6 +12,7 @@ use Magento\Framework\Encryption\Encryptor;
 use Magento\Framework\Encryption\KeyValidator;
 use Magento\Framework\Event\Observer;
 use Magento\Framework\Math\Random;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Sales\Api\Data\OrderPaymentExtension;
 use Magento\Sales\Model\Order;
@@ -21,6 +22,7 @@ use Magento\Vault\Model\PaymentToken;
 use Magento\Vault\Model\PaymentTokenManagement;
 use Magento\Vault\Model\Ui\VaultConfigProvider;
 use Magento\Vault\Observer\AfterPaymentSaveObserver;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -29,6 +31,8 @@ use PHPUnit\Framework\TestCase;
  */
 class AfterPaymentSaveObserverTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var \Magento\Framework\Event\Observer|MockObject
      */
@@ -97,44 +101,29 @@ class AfterPaymentSaveObserverTest extends TestCase
             ->willReturn('g9mY9KLrcuAVJfsmVUSRkKFLDdUPVkaZ');
         $this->encryptorModel = new Encryptor($encryptorRandomGenerator, $deploymentConfigMock);
 
-        $this->paymentExtension = $this->getMockBuilder(OrderPaymentExtension::class)
-            ->addMethods(['__wakeup', 'setVaultPaymentToken', 'getVaultPaymentToken'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->paymentExtension = $this->createPartialMockWithReflection(
+            OrderPaymentExtension::class,
+            ['__wakeup', 'setVaultPaymentToken', 'getVaultPaymentToken']
+        );
 
-        $this->paymentTokenManagementMock = $this->getMockBuilder(PaymentTokenManagement::class)
-            ->onlyMethods(['saveTokenWithPaymentLink'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->paymentTokenManagementMock = $this->createMock(PaymentTokenManagement::class);
 
-        $this->paymentTokenMock = $this->getMockBuilder(PaymentToken::class)
-            ->onlyMethods([])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->paymentTokenMock = $this->createPartialMock(PaymentToken::class, []);
 
         $this->paymentExtension->setVaultPaymentToken($this->paymentTokenMock);
 
         // Sales Order Model
         $this->salesOrderMock = $this->createMock(Order::class);
 
-        $this->storeMock = $this->getMockBuilder(Store::class)
-            ->onlyMethods(['getWebsiteId'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->storeMock = $this->createMock(Store::class);
 
         // Sales Order Payment Model
-        $this->salesOrderPaymentMock = $this->getMockBuilder(Payment::class)
-            ->onlyMethods(['getAdditionalInformation'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->salesOrderPaymentMock = $this->createPartialMock(Payment::class, ['getAdditionalInformation']);
         $this->salesOrderPaymentMock->setOrder($this->salesOrderMock);
         $this->salesOrderPaymentMock->setExtensionAttributes($this->paymentExtension);
 
         // Arguments to observer container
-        $this->eventObserverArgMock = $this->getMockBuilder(Observer::class)
-            ->onlyMethods(['getDataByKey'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->eventObserverArgMock = $this->createMock(Observer::class);
         $this->eventObserverArgMock->expects($this->any())
             ->method('getDataByKey')
             ->with(AfterPaymentSaveObserver::PAYMENT_OBJECT_DATA_KEY)
@@ -156,8 +145,8 @@ class AfterPaymentSaveObserverTest extends TestCase
      * @param bool $isActive
      * @param string $method
      * @param array $additionalInfo
-     * @dataProvider positiveCaseDataProvider
      */
+    #[DataProvider('positiveCaseDataProvider')]
     public function testPositiveCase($customerId, $createdAt, $token, $isActive, $method, $websiteId, $additionalInfo)
     {
         $this->paymentTokenMock->setGatewayToken($token);

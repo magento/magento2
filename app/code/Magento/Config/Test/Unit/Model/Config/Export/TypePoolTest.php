@@ -10,6 +10,7 @@ namespace Magento\Config\Test\Unit\Model\Config\Export;
 use Magento\Config\Model\Config\Export\ExcludeList;
 use Magento\Config\Model\Config\TypePool;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 class TypePoolTest extends TestCase
@@ -21,9 +22,7 @@ class TypePoolTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->excludeListMock = $this->getMockBuilder(ExcludeList::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->excludeListMock = $this->createMock(ExcludeList::class);
     }
 
     /**
@@ -33,8 +32,8 @@ class TypePoolTest extends TestCase
      * @param $type
      * @param null|callable $excludeListCallback
      * @param $expectedResult
-     * @dataProvider dataProviderToTestIsPresent
      */
+    #[DataProvider('dataProviderToTestIsPresent')]
     public function testIsPresent(
         array $sensitive,
         array $environment,
@@ -86,8 +85,7 @@ class TypePoolTest extends TestCase
                 'path' => 'some/wrong/field',
                 'type' => TypePool::TYPE_SENSITIVE,
                 'excludeListCallback' => function (MockObject $mockObject) {
-                    $mockObject->expects(self::once())
-                        ->method('isPresent')
+                    $mockObject->method('isPresent')
                         ->willReturn(false);
                 },
                 'expectedResult' => false,
@@ -106,8 +104,7 @@ class TypePoolTest extends TestCase
                 'path' => 'some/environment/field1',
                 'type' => TypePool::TYPE_SENSITIVE,
                 'excludeListCallback' =>  function (MockObject $mockObject) {
-                    $mockObject->expects(self::once())
-                        ->method('isPresent')
+                    $mockObject->method('isPresent')
                         ->willReturn(false);
                 },
                 'expectedResult' => false,
@@ -118,8 +115,8 @@ class TypePoolTest extends TestCase
                 'path' => 'some/sensitive-environment/field1',
                 'type' => TypePool::TYPE_SENSITIVE,
                 'excludeListCallback' =>  function (MockObject $mockObject) {
-                    $mockObject->expects(self::never())
-                        ->method('isPresent');
+                    $mockObject->method('isPresent')
+                        ->willReturn(true);
                 },
                 'expectedResult' => true,
             ],

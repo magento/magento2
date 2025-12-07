@@ -34,18 +34,14 @@ class ActionsTest extends TestCase
 
     protected function setup(): void
     {
-        $this->context = $this->getMockBuilder(ContextInterface::class)
-            ->getMockForAbstractClass();
+        $this->context = $this->createMock(ContextInterface::class);
         $processor = $this->getMockBuilder(Processor::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->context->expects($this->never())->method('getProcessor')->willReturn($processor);
         $this->uiComponentFactory = $this->createMock(UiComponentFactory::class);
-        $this->urlBuilder = $this->getMockForAbstractClass(
-            UrlInterface::class,
-            [],
-            '',
-            false
+        $this->urlBuilder = $this->createMock(
+            UrlInterface::class
         );
         $this->component = new Actions(
             $this->context,

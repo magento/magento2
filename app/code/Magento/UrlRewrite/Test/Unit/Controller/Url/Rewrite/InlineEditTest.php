@@ -84,12 +84,7 @@ class InlineEditTest extends TestCase
     {
         $this->objectManager = new ObjectManager($this);
 
-        $this->request = $this->getMockForAbstractClass(
-            RequestInterface::class,
-            [],
-            '',
-            false
-        );
+        $this->request = $this->createMock(RequestInterface::class);
 
         $this->contextMock = $this->objectManager->getObject(
             Context::class,

@@ -68,7 +68,7 @@ class ConfigManagerTest extends TestCase
     {
         $objectManager = new ObjectManager($this);
 
-        $this->scopeConfigMock = $this->getMockForAbstractClass(ScopeConfigInterface::class);
+        $this->scopeConfigMock = $this->createMock(ScopeConfigInterface::class);
         $this->storeMock = $this->createMock(Store::class);
         $this->stateMock = $this->createMock(State::class);
         $this->requestMock = $this->createMock(Http::class);

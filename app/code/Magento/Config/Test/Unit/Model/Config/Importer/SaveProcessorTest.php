@@ -59,21 +59,11 @@ class SaveProcessorTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->arrayUtilsMock = $this->getMockBuilder(ArrayUtils::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->valueFactoryMock = $this->getMockBuilder(PreparedValueFactory::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->valueMock = $this->getMockBuilder(Value::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->currencyValueMock = $this->getMockBuilder(Base::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['beforeSave', 'afterSave'])
-            ->getMock();
-        $this->scopeConfigMock = $this->getMockBuilder(ScopeConfigInterface::class)
-            ->getMockForAbstractClass();
+        $this->arrayUtilsMock = $this->createMock(ArrayUtils::class);
+        $this->valueFactoryMock = $this->createMock(PreparedValueFactory::class);
+        $this->valueMock = $this->createMock(Value::class);
+        $this->currencyValueMock = $this->createPartialMock(Base::class, ['beforeSave', 'afterSave']);
+        $this->scopeConfigMock = $this->createMock(ScopeConfigInterface::class);
 
         $this->model = new SaveProcessor(
             $this->arrayUtilsMock,

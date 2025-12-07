@@ -19,8 +19,10 @@ use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\DB\Select;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Store\Api\Data\StoreInterface;
 use Magento\Store\Api\Data\WebsiteInterface;
 use Magento\Store\Api\WebsiteRepositoryInterface;
+use Magento\Store\Model\StoreManagerInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -77,6 +79,11 @@ class TierPriceValidatorTest extends TestCase
     private $adapterInterface;
 
     /**
+     * @var StoreManagerInterface|MockObject
+     */
+    private StoreManagerInterface $storeManager;
+
+    /**
      * {@inheritdoc}
      */
     protected function setUp(): void
@@ -107,6 +114,7 @@ class TierPriceValidatorTest extends TestCase
         $this->adapterInterface = $this->getMockBuilder(AdapterInterface::class)
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
+        $this->storeManager = $this->createMock(StoreManagerInterface::class);
 
         $objectManagerHelper = new ObjectManager($this);
         $this->tierPriceValidator = $objectManagerHelper->getObject(
@@ -117,7 +125,8 @@ class TierPriceValidatorTest extends TestCase
                 'validationResult' => $this->validationResult,
                 'invalidSkuProcessor' => $this->invalidSkuProcessor,
                 'productRepository' => $this->productRepository,
-                'resourceConnection' => $this->resourceConnectionMock
+                'resourceConnection' => $this->resourceConnectionMock,
+                'storeManager' => $this->storeManager
             ]
         );
     }
@@ -237,8 +246,12 @@ class TierPriceValidatorTest extends TestCase
     public function testRetrieveValidationResult(array $returned)
     {
         $sku = 'ASDF234234';
+        $defaultStoreViewCode = 'default';
         $prices = [$this->tierPrice];
         $existingPrices = [$this->tierPrice];
+        $defaultStoreView = $this->createMock(StoreInterface::class);
+        $defaultStoreView->expects($this->once())->method('getCode')->willReturn($defaultStoreViewCode);
+        $this->storeManager->expects($this->once())->method('getDefaultStoreView')->willReturn($defaultStoreView);
         $this->prepareRetrieveValidationResultMethod($sku, $returned);
         $website = $this->getMockBuilder(WebsiteInterface::class)
             ->disableOriginalConstructor()

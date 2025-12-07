@@ -37,6 +37,6 @@ abstract class AbstractFormTestCase extends TestCase
             ->getMock();
         $this->loggerMock = $this->getMockBuilder(LoggerInterface::class)
             ->getMock();
-        $this->attributeMetadataMock = $this->getMockForAbstractClass(AttributeMetadataInterface::class);
+        $this->attributeMetadataMock = $this->createMock(AttributeMetadataInterface::class);
     }
 }

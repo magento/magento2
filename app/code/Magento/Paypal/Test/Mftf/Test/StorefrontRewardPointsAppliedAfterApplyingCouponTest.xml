@@ -53,9 +53,13 @@
         <after>
             <magentoCLI command="config:set payment/paypal_express/active 0" stepKey="disablePayPalExpress"/>
             <magentoCLI command="config:set {{StorefrontPaypalExpressAuthorizationPaymentActionOptionConfigData.path}} {{StorefrontPaypalExpressAuthorizationPaymentActionOptionConfigData.value}}" stepKey="setPaymentAction"/>
+            <!-- Logout customer first -->
             <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer"/>
-            <actionGroup ref="AdminDeleteAllCustomerActionGroup" stepKey="deleteCustomer"/>
-            <actionGroup ref="DeleteAllProductsUsingProductGridActionGroup" stepKey="deleteProduct"/>
+            <!-- Delete via Admin UI instead of API -->
+            <actionGroup ref="AdminDeleteCustomerActionGroup" stepKey="deleteCustomer">
+                <argument name="customerEmail" value="$$createCustomer.email$$"/>
+            </actionGroup>
+            <actionGroup ref="DeleteAllProductsUsingProductGridActionGroup" stepKey="deleteProduct" />
             <!--Delete cart price rule-->
             <actionGroup ref="DeleteCartPriceRuleByName" stepKey="deleteCartPriceRule">
                 <argument name="ruleName" value="{{_defaultCoupon.code}}"/>

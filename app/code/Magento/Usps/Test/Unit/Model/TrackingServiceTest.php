@@ -20,6 +20,7 @@ use Magento\Shipping\Model\Tracking\Result\ErrorFactory;
 use Magento\Shipping\Model\Tracking\Result\StatusFactory;
 use Magento\Usps\Model\Carrier;
 use Magento\Usps\Model\TrackingService;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -84,13 +85,13 @@ class TrackingServiceTest extends TestCase
     }
 
     /**
-     * @dataProvider getTrackingNumbersDataProviderSuccess
      * @param string $tackingData
      * @return void
      * @throws \Magento\Framework\Exception\LocalizedException
      * @throws \PHPUnit\Framework\MockObject\Exception
      * @throws \Throwable
      */
+    #[DataProvider('getTrackingNumbersDataProviderSuccess')]
     public function testGetRestTrackingSuccess(string $tackingData): void
     {
         $apiUrl = 'tracking_url_api';
@@ -211,13 +212,13 @@ class TrackingServiceTest extends TestCase
     }
 
     /**
-     * @dataProvider getTrackingNumbersDataProviderError
      * @param string|null $trackingData
      * @return void
      * @throws LocalizedException
      * @throws Exception
      * @throws \Throwable
      */
+    #[DataProvider('getTrackingNumbersDataProviderError')]
     public function testGetRestTrackingError(?string $trackingData): void
     {
         $accessToken = 'test_token';
