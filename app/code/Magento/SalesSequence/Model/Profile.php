@@ -11,6 +11,10 @@ use Magento\Framework\Model\AbstractModel;
  * Class Profile
  *
  * @api
+ * @method string getPrefix()
+ * @method string getSuffix()
+ * @method int getStartValue()
+ * @method int getStep()
  * @since 100.0.2
  */
 class Profile extends AbstractModel

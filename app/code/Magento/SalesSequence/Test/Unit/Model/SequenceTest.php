@@ -49,7 +49,7 @@ class SequenceTest extends TestCase
     protected function setUp(): void
     {
         $this->meta = $this->getMockBuilder(Meta::class)
-            ->addMethods(['getSequenceTable', 'getActiveProfile'])
+            ->addMethods(['getSequenceTable', 'getActiveProfile', 'getStoreId', 'getEntityType'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->profile = $this->getMockBuilder(Profile::class)
@@ -83,6 +83,30 @@ class SequenceTest extends TestCase
     public function testSequenceInitialNull(): void
     {
         $this->assertNull($this->sequence->getCurrentValue());
+    }
+
+    /**
+     * Test that the meta getters return values as expected
+     *
+     * @return void
+     */
+    public function testMetaGetters(): void
+    {
+        $exampleEntityType = 'order';
+        $exampleStoreId = 0;
+        $this->meta->expects($this->atLeastOnce())
+            ->method('getActiveProfile')
+            ->willReturn($this->profile);
+
+        $this->meta->expects($this->atLeastOnce())
+            ->method('getStoreId')
+            ->willReturn($exampleStoreId);
+        $this->meta->expects($this->atLeastOnce())
+            ->method('getEntityType')
+            ->willReturn($exampleEntityType);
+
+        $this->assertEquals($exampleEntityType, $this->sequence->getEntityType());
+        $this->assertEquals($exampleStoreId, $this->sequence->getStoreId());
     }
 
     /**

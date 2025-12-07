@@ -36,8 +36,8 @@ class Sequence implements SequenceInterface
      */
     public function __construct(
         ResourceConnection $resource,
-        $connectionName,
-        $sequenceTable
+        string $connectionName,
+        string $sequenceTable
     ) {
         $this->resource = $resource;
         $this->connectionName = $connectionName;
@@ -47,7 +47,7 @@ class Sequence implements SequenceInterface
     /**
      * @inheritdoc
      */
-    public function getNextValue()
+    public function getNextValue(): string
     {
         $this->resource->getConnection($this->connectionName)
             ->insert($this->resource->getTableName($this->sequenceTable), []);
@@ -58,7 +58,7 @@ class Sequence implements SequenceInterface
     /**
      * @inheritdoc
      */
-    public function getCurrentValue()
+    public function getCurrentValue(): string
     {
         $select = $this->resource->getConnection($this->connectionName)->select();
         $select->from($this->resource->getTableName($this->sequenceTable));
