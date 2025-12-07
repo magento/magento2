@@ -3,7 +3,6 @@
  * Copyright 2017 Adobe
  * All Rights Reserved.
  */
-
 declare(strict_types=1);
 
 namespace Magento\Config\Test\Unit\Console\Command;
@@ -206,14 +205,6 @@ class ConfigShowCommandTest extends TestCase
      */
     public function testConfigPathNotExist(): void
     {
-        $exception = new LocalizedException(
-            __('The  "%1" path doesn\'t exist. Verify and try again.', self::CONFIG_PATH)
-        );
-
-        $this->pathValidatorMock->expects($this->once())
-            ->method('validate')
-            ->with(self::CONFIG_PATH)
-            ->willThrowException($exception);
         $this->emulatedAreProcessorMock->expects($this->once())
             ->method('process')
             ->willReturnCallback(function ($function) {
@@ -233,7 +224,7 @@ class ConfigShowCommandTest extends TestCase
             $tester->getStatusCode()
         );
         $this->assertStringContainsString(
-            __('The  "%1" path doesn\'t exist. Verify and try again.', self::CONFIG_PATH)->render(),
+            __('The "%1" path doesn\'t exist. Verify and try again.', self::CONFIG_PATH)->render(),
             $tester->getDisplay()
         );
     }
