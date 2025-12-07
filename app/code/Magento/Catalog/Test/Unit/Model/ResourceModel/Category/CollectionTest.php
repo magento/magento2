@@ -280,8 +280,7 @@ class CollectionTest extends TestCase
         $this->select->expects($this->atLeastOnce())
             ->method('joinInner')
             ->willReturnSelf();
-        $this->select->expects($this->atLeastOnce())
-            ->method('join')
+        $this->select->method('join')
             ->willReturnSelf();
         $this->connection->expects($this->once())
             ->method('fetchOne')
