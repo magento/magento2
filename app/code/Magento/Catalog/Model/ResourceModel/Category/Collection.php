@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright 2015 Adobe
+ * Copyright 2011 Adobe
  * All Rights Reserved.
  */
 namespace Magento\Catalog\Model\ResourceModel\Category;
@@ -9,7 +9,6 @@ use Magento\Catalog\Model\Category;
 use Magento\Catalog\Model\Product\Visibility;
 use Magento\CatalogUrlRewrite\Model\CategoryUrlRewriteGenerator;
 use Magento\Framework\App\Config\ScopeConfigInterface;
-use Magento\Framework\DB\Select;
 use Magento\Store\Model\ScopeInterface;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\DB\Ddl\Table;
@@ -93,7 +92,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Framework\DB\Adapter\AdapterInterface $connection
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
-     * @param Visibility|null $catalogProductVisibility
+     * @param Visibility|null $catalogProductVisibility @deprecated Parameter no longer used.
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -340,8 +339,6 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
         if ($countAnchor) {
             // Retrieve Anchor categories product counts
             $categoryIds = array_keys($anchor);
-            $countSelect = $this->getProductsCountQuery($categoryIds, (bool)$websiteId);
-            $categoryProductsCount = $this->_conn->fetchPairs($countSelect);
             $countFromCategoryTable = [];
             if (count($categoryIds) > self::BULK_PROCESSING_LIMIT) {
                 $countFromCategoryTable = $this->getCountFromCategoryTableBulk($categoryIds, (int)$websiteId);
@@ -350,15 +347,11 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
             foreach ($anchor as $item) {
                 $productsCount = 0;
                 if (count($categoryIds) > self::BULK_PROCESSING_LIMIT) {
-                    if (isset($categoryProductsCount[$item->getId()])) {
-                        $productsCount = (int)$categoryProductsCount[$item->getId()];
-                    } elseif (isset($countFromCategoryTable[$item->getId()])) {
+                    if (isset($countFromCategoryTable[$item->getId()])) {
                         $productsCount = (int)$countFromCategoryTable[$item->getId()];
                     }
                 } else {
-                    $productsCount = isset($categoryProductsCount[$item->getId()])
-                        ? (int)$categoryProductsCount[$item->getId()]
-                        : $this->getProductsCountFromCategoryTable($item, $websiteId);
+                    $productsCount = $this->getProductsCountFromCategoryTable($item, (int)$websiteId);
                 }
                 $item->setProductCount($productsCount);
             }
@@ -455,7 +448,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
      * @param string $websiteId
      * @return int
      */
-    private function getProductsCountFromCategoryTable(Category $item, string $websiteId): int
+    private function getProductsCountFromCategoryTable(Category $item, int $websiteId): int
     {
         $productCount = 0;
 
@@ -659,29 +652,4 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
         return $this->_productTable;
     }
 
-    /**
-     * Get query for retrieve count of products per category
-     *
-     * @param array $categoryIds
-     * @param bool $addVisibilityFilter
-     * @return Select
-     */
-    private function getProductsCountQuery(array $categoryIds, $addVisibilityFilter = true): Select
-    {
-        $categoryTable = $this->_resource->getTableName('catalog_category_product_index');
-        $select = $this->_conn->select()
-            ->from(
-                ['cat_index' => $categoryTable],
-                ['category_id' => 'cat_index.category_id', 'count' => 'count(cat_index.product_id)']
-            )
-            ->where('cat_index.category_id in (?)', \array_map('\intval', $categoryIds));
-        if (true === $addVisibilityFilter) {
-            $select->where('cat_index.visibility in (?)', $this->catalogProductVisibility->getVisibleInSiteIds());
-        }
-        if (count($categoryIds) > 1) {
-            $select->group('cat_index.category_id');
-        }
-
-        return $select;
-    }
 }

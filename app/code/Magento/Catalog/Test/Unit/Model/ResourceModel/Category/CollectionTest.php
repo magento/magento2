@@ -203,19 +203,93 @@ class CollectionTest extends TestCase
         );
     }
 
-    public function testLoadProductCount() : void
+    /**
+     * Test that loadProductCount works correctly for regular (non-anchor) categories
+     */
+    public function testLoadProductCountForRegularCategories() : void
     {
-        $this->select->expects($this->exactly(1))
+        $categoryId = 1;
+        $websiteId = 1;
+        $storeId = 1;
+
+        $category = $this->getMockBuilder(Category::class)
+            ->addMethods(['getIsAnchor'])
+            ->onlyMethods(['getId', 'setProductCount'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $category->method('getId')->willReturn($categoryId);
+        $category->method('getIsAnchor')->willReturn(false);
+        $category->expects($this->once())->method('setProductCount')->with(5);
+
+        $items = [$categoryId => $category];
+
+        $storeMock = $this->createMock(Store::class);
+        $storeMock->method('getWebsiteId')->willReturn($websiteId);
+        $this->storeManager->method('getStore')->with($storeId)->willReturn($storeMock);
+
+        $this->select->expects($this->once())
             ->method('from')
             ->willReturnSelf();
-        $this->select->expects($this->exactly(1))
+        $this->select->expects($this->atLeastOnce())
             ->method('where')
             ->willReturnSelf();
-        $this->connection->expects($this->exactly(1))
+        $this->select->expects($this->once())
+            ->method('group')
+            ->willReturnSelf();
+        $this->connection->expects($this->once())
             ->method('fetchPairs')
             ->with($this->select)
-            ->willReturn([]);
-        $this->collection->loadProductCount([]);
+            ->willReturn([$categoryId => 5]);
+
+        $this->collection->setProductStoreId($storeId);
+        $this->collection->loadProductCount($items, true, false);
+    }
+
+    /**
+     * Test that loadProductCount works correctly for anchor categories (small count)
+     */
+    public function testLoadProductCountForAnchorCategories() : void
+    {
+        $categoryId = 1;
+        $websiteId = 1;
+        $storeId = 1;
+
+        $category = $this->getMockBuilder(Category::class)
+            ->addMethods(['getIsAnchor'])
+            ->onlyMethods(['getId', 'setProductCount', 'getAllChildren', 'getPath'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $category->method('getId')->willReturn($categoryId);
+        $category->method('getIsAnchor')->willReturn(true);
+        $category->method('getAllChildren')->willReturn('1');
+        $category->method('getPath')->willReturn('1/2');
+        $category->expects($this->once())->method('setProductCount')->with(3);
+
+        $items = [$categoryId => $category];
+
+        $storeMock = $this->createMock(Store::class);
+        $storeMock->method('getWebsiteId')->willReturn($websiteId);
+        $this->storeManager->method('getStore')->with($storeId)->willReturn($storeMock);
+
+        $this->select->expects($this->atLeastOnce())
+            ->method('from')
+            ->willReturnSelf();
+        $this->select->expects($this->atLeastOnce())
+            ->method('where')
+            ->willReturnSelf();
+        $this->select->expects($this->atLeastOnce())
+            ->method('joinInner')
+            ->willReturnSelf();
+        $this->select->expects($this->atLeastOnce())
+            ->method('join')
+            ->willReturnSelf();
+        $this->connection->expects($this->once())
+            ->method('fetchOne')
+            ->with($this->select)
+            ->willReturn(3);
+
+        $this->collection->setProductStoreId($storeId);
+        $this->collection->loadProductCount($items, false, true);
     }
 
     /**
