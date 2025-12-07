@@ -423,7 +423,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
                 'cp.category_id = t.descendant_id',
                 ['product_count' => 'COUNT(DISTINCT cp.product_id)']
             );
-        if ($websiteId !== null) {
+        if ($websiteId) {
             $select->join(
                 ['w' => $this->getProductWebsiteTable()],
                 'cp.product_id = w.product_id',
@@ -465,7 +465,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
             )->where(
                 '(e.entity_id = :entity_id OR e.path LIKE :c_path)'
             );
-            if ($websiteId !== null) {
+            if ($websiteId) {
                 $select->join(
                     ['w' => $this->getProductWebsiteTable()],
                     'main_table.product_id = w.product_id',
