@@ -14,6 +14,9 @@
                     <resource id="Magento_LoginAsCustomerApi::token"
                               title="Generate Login As Customer Token"
                               sortOrder="60"/>
+                    <resource id="Magento_LoginAsCustomerApi::delete"
+                              title="Delete Login As Customer Authentication Data"
+                              sortOrder="70"/>
                 </resource>
             </resource>
         </resources>

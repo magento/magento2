@@ -1,7 +1,11 @@
 <?php
+/**
+ * Copyright 2025 Adobe
+ * All Rights Reserved.
+ */
 declare(strict_types=1);
 
-namespace Magento\LoginAsCustomerApi\Test\Unit\Model;
+namespace Magento\LoginAsCustomer\Test\Unit\Model;
 
 use Magento\Framework\Exception\AuthenticationException;
 use Magento\Framework\Exception\LocalizedException;
@@ -9,8 +13,8 @@ use Magento\Integration\Api\TokenManager;
 use Magento\Integration\Model\CustomUserContext;
 use Magento\Integration\Model\UserToken\UserTokenParameters;
 use Magento\LoginAsCustomerApi\Api\ConfigInterface as LoginAsCustomerConfig;
-use Magento\LoginAsCustomerApi\Api\GetAuthenticationDataBySecretInterface;
 use Magento\LoginAsCustomerApi\Api\Data\AuthenticationDataInterface;
+use Magento\LoginAsCustomerApi\Api\GetAuthenticationDataBySecretInterface;
 use Magento\LoginAsCustomerApi\Model\GenerateLoginCustomerToken;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;

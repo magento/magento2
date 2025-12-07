@@ -21,6 +21,9 @@ This module provides API for ability to login into customer account for an admin
 - `\Magento\LoginAsCustomerApi\Api\DeleteAuthenticationDataForUserInterface`:
     - delete authentication data by user id
 
+- `\Magento\LoginAsCustomerApi\Api\DeleteAuthenticationDataForCustomerInterface`:
+    - delete authentication data by customer id
+
 - `\Magento\LoginAsCustomerApi\Api\GenerateAuthenticationSecretInterface`:
     - generate authentication secret
 

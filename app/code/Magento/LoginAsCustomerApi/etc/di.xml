@@ -9,6 +9,4 @@
         xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
     <preference for="Magento\LoginAsCustomerApi\Api\IsLoginAsCustomerEnabledForCustomerInterface"
                 type="Magento\LoginAsCustomerApi\Model\IsLoginAsCustomerEnabledForCustomerChain"/>
-    <preference for="Magento\LoginAsCustomerApi\Api\GenerateLoginCustomerTokenInterface"
-                type="Magento\LoginAsCustomerApi\Model\GenerateLoginCustomerToken"/>
 </config>

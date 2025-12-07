@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\LoginAsCustomerApi\Model;
+namespace Magento\LoginAsCustomer\Model;
 
 use Magento\Framework\Exception\AuthenticationException;
 use Magento\Framework\Exception\LocalizedException;

@@ -14,4 +14,11 @@
             <resource ref="Magento_LoginAsCustomerApi::token"/>
         </resources>
     </route>
+    <route url="/V1/login-as-customer/authentication/:secret" method="DELETE">
+        <service class="Magento\LoginAsCustomerApi\Api\DeleteAuthenticationDataForCustomerInterface"
+                 method="execute"/>
+        <resources>
+            <resource ref="Magento_LoginAsCustomerApi::delete"/>
+        </resources>
+    </route>
 </routes>
