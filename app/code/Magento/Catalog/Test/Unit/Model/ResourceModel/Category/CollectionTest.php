@@ -289,7 +289,7 @@ class CollectionTest extends TestCase
             ->willReturn(3);
 
         $this->collection->setProductStoreId($storeId);
-        $this->collection->loadProductCount($items, false, true);
+        $this->collection->loadProductCount($items, false);
     }
 
     /**
@@ -348,6 +348,6 @@ class CollectionTest extends TestCase
             ->with($this->isInstanceOf(Select::class))
             ->willReturn($counts);
         $this->collection->setProductStoreId($storeId);
-        $this->collection->loadProductCount($items, false, true);
+        $this->collection->loadProductCount($items, false);
     }
 }

@@ -341,7 +341,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
             $categoryIds = array_keys($anchor);
             $countFromCategoryTable = [];
             if (count($categoryIds) > self::BULK_PROCESSING_LIMIT) {
-                $countFromCategoryTable = $this->getCountFromCategoryTableBulk($categoryIds, (int)$websiteId);
+                $countFromCategoryTable = $this->getCountFromCategoryTableBulk($categoryIds, $websiteId);
             }
 
             foreach ($anchor as $item) {
@@ -351,7 +351,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
                         $productsCount = (int)$countFromCategoryTable[$item->getId()];
                     }
                 } else {
-                    $productsCount = $this->getProductsCountFromCategoryTable($item, (int)$websiteId);
+                    $productsCount = $this->getProductsCountFromCategoryTable($item, $websiteId);
                 }
                 $item->setProductCount($productsCount);
             }
@@ -363,13 +363,13 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
      * Get products number for each category with bulk query
      *
      * @param array $categoryIds
-     * @param int $websiteId
+     * @param string|int|null $websiteId
      * @return array
      * @throws \Zend_Db_Exception
      */
     private function getCountFromCategoryTableBulk(
         array $categoryIds,
-        int $websiteId
+        string|int|null $websiteId
     ) : array {
         $connection = $this->_conn;
         $tempTableName = 'temp_category_descendants_' . uniqid();
@@ -423,7 +423,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
                 'cp.category_id = t.descendant_id',
                 ['product_count' => 'COUNT(DISTINCT cp.product_id)']
             );
-        if ($websiteId) {
+        if ($websiteId !== null) {
             $select->join(
                 ['w' => $this->getProductWebsiteTable()],
                 'cp.product_id = w.product_id',
@@ -445,10 +445,10 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
      * Get products count using catalog_category_entity table
      *
      * @param Category $item
-     * @param string $websiteId
+     * @param string|int|null $websiteId
      * @return int
      */
-    private function getProductsCountFromCategoryTable(Category $item, int $websiteId): int
+    private function getProductsCountFromCategoryTable(Category $item, string|int|null $websiteId): int
     {
         $productCount = 0;
 
@@ -465,7 +465,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
             )->where(
                 '(e.entity_id = :entity_id OR e.path LIKE :c_path)'
             );
-            if ($websiteId) {
+            if ($websiteId !== null) {
                 $select->join(
                     ['w' => $this->getProductWebsiteTable()],
                     'main_table.product_id = w.product_id',
@@ -651,5 +651,4 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
         }
         return $this->_productTable;
     }
-
 }
