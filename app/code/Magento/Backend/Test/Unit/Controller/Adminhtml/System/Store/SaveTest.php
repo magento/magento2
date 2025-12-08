@@ -16,8 +16,11 @@ use Magento\Backend\Model\View\Result\Redirect;
 use Magento\Framework\App\Cache\TypeListInterface;
 use Magento\Framework\App\Request\Http;
 use Magento\Framework\App\RequestInterface;
+use Magento\Framework\App\Response\Http as ResponseHttp;
 use Magento\Framework\App\ResponseInterface;
 use Magento\Framework\Controller\Result\RedirectFactory;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as HelperObjectManager;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\Filter\FilterManager;
 use Magento\Framework\Message\ManagerInterface;
 use Magento\Framework\ObjectManager\ObjectManager;
@@ -35,6 +38,8 @@ use PHPUnit\Framework\TestCase;
  */
 class SaveTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var Save
      */
@@ -106,79 +111,53 @@ class SaveTest extends TestCase
     private $resultPageFactoryMock;
 
     /**
+     * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
+     */
+    private $objectManagerHelper;
+
+    /**
      * @inheritDoc
      */
     public function setUp(): void
     {
-        $this->requestMock = $this->getMockBuilder(Http::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['isPost', 'getPostValue'])
-            ->getMock();
-        $this->responseMock = $this->getMockBuilder(\Magento\Framework\App\Response\Http::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->objectManagerMock = $this->getMockBuilder(ObjectManager::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['get', 'create'])
-            ->getMock();
-        $this->messagesMock = $this->getMockBuilder(ManagerInterface::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['addSuccessMessage', 'addErrorMessage'])
-            ->getMockForAbstractClass();
-        $this->helperMock = $this->getMockBuilder(Data::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['getUrl'])
-            ->getMock();
-        $this->sessionMock = $this->getMockBuilder(Session::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['setPostData'])
-            ->getMock();
-        $this->storeModelMock = $this->getMockBuilder(Store::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['load', 'setData', 'setId', 'getGroupId', 'setWebsiteId', 'isActive', 'isDefault', 'save'])
-            ->getMock();
-        $this->groupModelMock = $this->getMockBuilder(Group::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['load', 'getWebsiteId'])
-            ->getMock();
-        $this->filterManagerMock = $this->getMockBuilder(FilterManager::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['removeTags'])
-            ->getMock();
-        $this->cacheTypeListMock = $this->getMockBuilder(TypeListInterface::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['cleanType'])
-            ->getMockForAbstractClass();
-        $this->registryMock = $this->getMockBuilder(Registry::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->resultForwardFactoryMock = $this->getMockBuilder(ForwardFactory::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->resultPageFactoryMock = $this->getMockBuilder(PageFactory::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $redirectFactory = $this->getMockBuilder(RedirectFactory::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['create'])
-            ->getMock();
-        $resultRedirect = $this->getMockBuilder(Redirect::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['setPath', 'setUrl'])
-            ->getMock();
+        $this->objectManagerHelper = new HelperObjectManager($this);
+        $this->requestMock = $this->createPartialMock(Http::class, ['isPost', 'getPostValue']);
+        $this->responseMock = $this->createMock(ResponseHttp::class);
+        $this->objectManagerMock = $this->createPartialMock(ObjectManager::class, ['get', 'create']);
+        $this->messagesMock = $this->createMock(ManagerInterface::class);
+        $this->helperMock = $this->createPartialMock(Data::class, ['getUrl']);
+        $this->sessionMock = $this->createPartialMockWithReflection(
+            Session::class,
+            ['setPostData']
+        );
+        $this->storeModelMock = $this->createPartialMock(
+            Store::class,
+            ['load', 'setData', 'setId', 'getGroupId', 'setWebsiteId', 'isActive', 'isDefault', 'save']
+        );
+        $this->groupModelMock = $this->createPartialMock(Group::class, ['load', 'getWebsiteId']);
+        $this->filterManagerMock = $this->createPartialMockWithReflection(
+            FilterManager::class,
+            ['removeTags']
+        );
+        $this->cacheTypeListMock = $this->createMock(TypeListInterface::class);
+        $this->registryMock = $this->createMock(Registry::class);
+        $this->resultForwardFactoryMock = $this->createMock(ForwardFactory::class);
+        $this->resultPageFactoryMock = $this->createMock(PageFactory::class);
+        $redirectFactory = $this->createPartialMock(RedirectFactory::class, ['create']);
+        $resultRedirect = $this->createPartialMock(Redirect::class, ['setPath', 'setUrl']);
         $resultRedirect->expects($this->once())->method('setPath')->willReturnSelf();
         $redirectFactory->expects($this->atLeastOnce())->method('create')->willReturn($resultRedirect);
-        $contextMock = $this->getMockBuilder(Context::class)
-            ->onlyMethods([
+        $contextMock = $this->createPartialMock(
+            Context::class,
+            [
                 'getRequest',
                 'getResponse',
                 'getObjectManager',
                 'getHelper',
                 'getMessageManager',
                 'getResultRedirectFactory'
-            ])
-            ->disableOriginalConstructor()
-            ->getMock();
+            ]
+        );
         $contextMock->expects($this->once())->method('getRequest')->willReturn($this->requestMock);
         $contextMock->expects($this->once())->method('getResponse')->willReturn($this->responseMock);
         $contextMock->expects($this->once())->method('getObjectManager')->willReturn($this->objectManagerMock);

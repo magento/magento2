@@ -60,20 +60,10 @@ class SubresourceIntegrityRepositoryTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $this->cacheMock = $this->getMockBuilder(CacheInterface::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['save', 'load'])
-            ->getMockForAbstractClass();
-        $this->serializerMock = $this->getMockBuilder(SerializerInterface::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['serialize', 'unserialize'])
-            ->getMockForAbstractClass();
-        $this->integrityFactoryMock = $this->getMockBuilder(SubresourceIntegrityFactory::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->storage = $this->getMockBuilder(StorageInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->cacheMock = $this->createMock(CacheInterface::class);
+        $this->serializerMock = $this->createMock(SerializerInterface::class);
+        $this->integrityFactoryMock = $this->createMock(SubresourceIntegrityFactory::class);
+        $this->storage = $this->createMock(StorageInterface::class);
 
         $this->subresourceIntegrityRepository = new SubresourceIntegrityRepository(
             $this->cacheMock,
