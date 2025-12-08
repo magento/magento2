@@ -13,11 +13,14 @@ use Magento\Config\Model\Config\Structure\Element\Group;
 use Magento\Framework\App\Config\ValueInterface;
 use Magento\Framework\Data\Form\Element\Fieldset;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 class GroupTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var Group
      */
@@ -33,15 +36,20 @@ class GroupTest extends TestCase
      */
     protected $_depMapperMock;
 
+    /**
+     * @var ObjectManager
+     */
+    private $objectManager;
+
     protected function setUp(): void
     {
-        $objectManager = new ObjectManager($this);
+        $this->objectManager = new ObjectManager($this);
         $this->_cloneFactoryMock = $this->createMock(Factory::class);
         $this->_depMapperMock = $this->createMock(
             Mapper::class
         );
 
-        $this->_model = $objectManager->getObject(
+        $this->_model = $this->objectManager->getObject(
             Group::class,
             [
                 'cloneModelFactory' => $this->_cloneFactoryMock,
@@ -76,7 +84,7 @@ class GroupTest extends TestCase
 
     public function testGetCloneModelCreatesCloneModel()
     {
-        $cloneModel = $this->getMockForAbstractClass(ValueInterface::class);
+        $cloneModel = $this->createMock(ValueInterface::class);
         $this->_depMapperMock = $this->createMock(
             Mapper::class
         );
@@ -95,10 +103,10 @@ class GroupTest extends TestCase
 
     public function testGetFieldsetSetsOnlyNonArrayValuesToFieldset()
     {
-        $fieldsetMock = $this->getMockBuilder(Fieldset::class)
-            ->addMethods(['setOriginalData'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $fieldsetMock = $this->createPartialMockWithReflection(
+            Fieldset::class,
+            ['setOriginalData']
+        );
         $fieldsetMock->expects(
             $this->once()
         )->method(

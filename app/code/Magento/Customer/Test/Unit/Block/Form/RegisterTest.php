@@ -21,6 +21,10 @@ use Magento\Framework\Json\EncoderInterface;
 use Magento\Framework\Module\Manager;
 use Magento\Framework\View\Element\Template\Context;
 use Magento\Newsletter\Model\Config;
+use Magento\Framework\App\Cache\Type\Config as CacheConfig;
+use Magento\Directory\Model\ResourceModel\Country\CollectionFactory as CountryCollectionFactory;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -31,20 +35,22 @@ use PHPUnit\Framework\TestCase;
  */
 class RegisterTest extends TestCase
 {
+    use MockCreationTrait;
+
     /** Constants used by the various unit tests */
-    const POST_ACTION_URL = 'http://localhost/index.php/customer/account/createpost';
+    private const POST_ACTION_URL = 'http://localhost/index.php/customer/account/createpost';
 
-    const LOGIN_URL = 'http://localhost/index.php/customer/account/login';
+    private const LOGIN_URL = 'http://localhost/index.php/customer/account/login';
 
-    const COUNTRY_ID = 'US';
+    private const COUNTRY_ID = 'US';
 
-    const FORM_DATA = 'form_data';
+    private const FORM_DATA = 'form_data';
 
-    const REGION_ATTRIBUTE_VALUE = 'California';
+    private const REGION_ATTRIBUTE_VALUE = 'California';
 
-    const REGION_ID_ATTRIBUTE_CODE = 'region_id';
+    private const REGION_ID_ATTRIBUTE_CODE = 'region_id';
 
-    const REGION_ID_ATTRIBUTE_VALUE = '12';
+    private const REGION_ID_ATTRIBUTE_VALUE = '12';
 
     /** @var MockObject|Data */
     private $directoryHelperMock;
@@ -69,14 +75,11 @@ class RegisterTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->_scopeConfig = $this->getMockForAbstractClass(ScopeConfigInterface::class);
+        $this->_scopeConfig = $this->createMock(ScopeConfigInterface::class);
         $this->_moduleManager = $this->createMock(Manager::class);
         $this->directoryHelperMock = $this->createMock(Data::class);
         $this->_customerUrl = $this->createMock(Url::class);
-        $this->_customerSession = $this->getMockBuilder(Session::class)
-            ->addMethods(['getCustomerFormData'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->_customerSession = $this->createPartialMockWithReflection(Session::class, ['getCustomerFormData']);
         $this->newsletterConfig = $this->createMock(Config::class);
         $context = $this->createMock(Context::class);
         $context->expects($this->any())->method('getScopeConfig')->willReturn($this->_scopeConfig);
@@ -84,10 +87,10 @@ class RegisterTest extends TestCase
         $this->_block = new Register(
             $context,
             $this->directoryHelperMock,
-            $this->getMockForAbstractClass(EncoderInterface::class, [], '', false),
-            $this->createMock(\Magento\Framework\App\Cache\Type\Config::class),
+            $this->createMock(EncoderInterface::class),
+            $this->createMock(CacheConfig::class),
             $this->createMock(CollectionFactory::class),
-            $this->createMock(\Magento\Directory\Model\ResourceModel\Country\CollectionFactory::class),
+            $this->createMock(CountryCollectionFactory::class),
             $this->_moduleManager,
             $this->_customerSession,
             $this->_customerUrl,
@@ -99,9 +102,8 @@ class RegisterTest extends TestCase
     /**
      * @param string $path
      * @param mixed $configValue
-     *
-     * @dataProvider getConfigProvider
-     */
+     * */
+    #[DataProvider('getConfigProvider')]
     public function testGetConfig($path, $configValue)
     {
         $this->_scopeConfig->expects($this->once())->method('getValue')->willReturn($configValue);
@@ -299,9 +301,8 @@ class RegisterTest extends TestCase
      * @param boolean $isNewsletterEnabled
      * @param string $isNewsletterActive
      * @param boolean $expectedValue
-     *
-     * @dataProvider isNewsletterEnabledProvider
-     */
+     * */
+    #[DataProvider('isNewsletterEnabledProvider')]
     public function testIsNewsletterEnabled($isNewsletterEnabled, $isNewsletterActive, $expectedValue)
     {
         $this->_moduleManager->expects(
@@ -352,7 +353,7 @@ class RegisterTest extends TestCase
             $customerFormData
         );
         $form = $this->createMock(Form::class);
-        $request = $this->getMockForAbstractClass(RequestInterface::class, [], '', false);
+        $request = $this->createMock(RequestInterface::class);
         $formData = $this->_block->getFormData();
         $form->expects(
             $this->once()

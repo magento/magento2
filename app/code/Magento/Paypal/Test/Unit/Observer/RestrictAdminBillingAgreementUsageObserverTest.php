@@ -12,6 +12,7 @@ use Magento\Framework\DataObject;
 use Magento\Framework\Event\Observer;
 use Magento\Paypal\Model\Payment\Method\Billing\AbstractAgreement;
 use Magento\Paypal\Observer\RestrictAdminBillingAgreementUsageObserver;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -44,7 +45,7 @@ class RestrictAdminBillingAgreementUsageObserverTest extends TestCase
         $this->_observer = new Observer();
         $this->_observer->setEvent($this->_event);
 
-        $this->_authorization = $this->getMockForAbstractClass(AuthorizationInterface::class);
+        $this->_authorization = $this->createMock(AuthorizationInterface::class);
 
         $this->_model = new RestrictAdminBillingAgreementUsageObserver($this->_authorization);
     }
@@ -57,22 +58,12 @@ class RestrictAdminBillingAgreementUsageObserverTest extends TestCase
         return [
             [new \stdClass(), false, true],
             [
-                static fn (self $testCase) => $testCase->getMockForAbstractClass(
-                    AbstractAgreement::class,
-                    [],
-                    '',
-                    false
-                ),
+                static fn (self $testCase) => $testCase->createMock(AbstractAgreement::class),
                 true,
                 true
             ],
             [
-                static fn (self $testCase) => $testCase->getMockForAbstractClass(
-                    AbstractAgreement::class,
-                    [],
-                    '',
-                    false
-                ),
+                static fn (self $testCase) => $testCase->createMock(AbstractAgreement::class),
                 false,
                 false
             ]
@@ -83,8 +74,8 @@ class RestrictAdminBillingAgreementUsageObserverTest extends TestCase
      * @param object $methodInstance
      * @param bool $isAllowed
      * @param bool $isAvailable
-     * @dataProvider restrictAdminBillingAgreementUsageDataProvider
      */
+    #[DataProvider('restrictAdminBillingAgreementUsageDataProvider')]
     public function testExecute($methodInstance, $isAllowed, $isAvailable)
     {
         if (is_callable($methodInstance)) {

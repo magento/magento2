@@ -40,12 +40,8 @@ class IncludeElementTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->moduleReaderMock = $this->getMockBuilder(Reader::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->readFactoryMock = $this->getMockBuilder(ReadFactory::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->moduleReaderMock = $this->createMock(Reader::class);
+        $this->readFactoryMock = $this->createMock(ReadFactory::class);
 
         $this->includeElement = new IncludeElement(
             $this->moduleReaderMock,
@@ -63,11 +59,8 @@ class IncludeElementTest extends TestCase
         $document = new \DOMDocument();
         $document->loadXML($xmlContent);
 
-        $compilerMock = $this->getMockBuilder(CompilerInterface::class)
-            ->getMockForAbstractClass();
-        $processedObjectMock = $this->getMockBuilder(DataObject::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $compilerMock = $this->createMock(CompilerInterface::class);
+        $processedObjectMock = $this->createMock(DataObject::class);
 
         $this->getContentStep();
 
@@ -97,11 +90,8 @@ class IncludeElementTest extends TestCase
         $document = new \DOMDocument();
         $document->loadXML($xmlContent);
 
-        $compilerMock = $this->getMockBuilder(CompilerInterface::class)
-            ->getMockForAbstractClass();
-        $processedObjectMock = $this->getMockBuilder(DataObject::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $compilerMock = $this->createMock(CompilerInterface::class);
+        $processedObjectMock = $this->createMock(DataObject::class);
 
         $this->getContentStep(false);
 
@@ -125,8 +115,7 @@ class IncludeElementTest extends TestCase
         $resultPath = 'adminhtml/path/to/file.xml';
         $includeXmlContent = '<config><item id="1"><test/></item><item id="2"></item></config>';
 
-        $modulesDirectoryMock = $this->getMockBuilder(ReadInterface::class)
-            ->getMockForAbstractClass();
+        $modulesDirectoryMock = $this->createMock(ReadInterface::class);
 
         $this->readFactoryMock->expects($this->once())
             ->method('create')

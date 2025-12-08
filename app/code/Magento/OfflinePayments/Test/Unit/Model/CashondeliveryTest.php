@@ -32,10 +32,10 @@ class CashondeliveryTest extends TestCase
     {
         $helper = new ObjectManager($this);
 
-        $eventManager = $this->getMockForAbstractClass(ManagerInterface::class);
+        $eventManager = $this->createMock(ManagerInterface::class);
         $paymentDataMock = $this->createMock(Data::class);
 
-        $this->scopeConfigMock = $this->getMockForAbstractClass(ScopeConfigInterface::class);
+        $this->scopeConfigMock = $this->createMock(ScopeConfigInterface::class);
         $this->object = $helper->getObject(
             Cashondelivery::class,
             [

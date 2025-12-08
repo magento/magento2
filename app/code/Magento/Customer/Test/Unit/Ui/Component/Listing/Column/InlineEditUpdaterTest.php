@@ -35,13 +35,9 @@ class InlineEditUpdaterTest extends TestCase
         )->disableOriginalConstructor()
             ->getMock();
 
-        $this->validationRule = $this->getMockBuilder(ValidationRuleInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->validationRule = $this->createMock(ValidationRuleInterface::class);
 
-        $this->column = $this->getMockBuilder(UiComponentInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->column = $this->createMock(UiComponentInterface::class);
 
         $this->component = new InlineEditUpdater($this->validationRules);
     }
