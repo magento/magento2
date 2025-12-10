@@ -165,7 +165,7 @@ class General implements ValidatorInterface
      * @return bool
      * @throws LocalizedException
      */
-    private function isCityRequired()
+    private function isCityRequired(): bool
     {
         return $this->eavConfig->getAttribute('customer_address', 'city')->getIsRequired();
     }

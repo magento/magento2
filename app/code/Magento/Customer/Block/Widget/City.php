@@ -68,7 +68,7 @@ class City extends AbstractWidget
      * @return bool
      * @throws LocalizedException
      */
-    public function showCity()
+    public function showCity(): bool
     {
         return $this->isAttributeVisible(self::ATTRIBUTE_CODE);
     }
@@ -82,7 +82,7 @@ class City extends AbstractWidget
      * @throws LocalizedException
      */
     //@codingStandardsIgnoreStart
-    protected function _getAttribute($attributeCode)
+    protected function _getAttribute($attributeCode): ?AttributeMetadataInterface
     {
         //@codingStandardsIgnoreEnd
         if ($this->getForceUseCustomerAttributes() || $this->getObject() instanceof CustomerInterface) {
@@ -113,7 +113,7 @@ class City extends AbstractWidget
      * @return string
      * @throws LocalizedException
      */
-    public function getStoreLabel(string $attributeCode)
+    public function getStoreLabel(string $attributeCode): string
     {
         $attribute = $this->_getAttribute($attributeCode);
         return $attribute ? __($attribute->getStoreLabel()) : '';
@@ -127,7 +127,7 @@ class City extends AbstractWidget
      * @return string
      * @throws LocalizedException
      */
-    public function getAttributeValidationClass(string $attributeCode)
+    public function getAttributeValidationClass(string $attributeCode): string
     {
         return $this->_addressHelper->getAttributeValidationClass($attributeCode);
     }
@@ -140,7 +140,7 @@ class City extends AbstractWidget
      * @return bool
      * @throws LocalizedException
      */
-    private function isAttributeVisible(string $attributeCode)
+    private function isAttributeVisible(string $attributeCode): bool
     {
         $attributeMetadata = $this->_getAttribute($attributeCode);
         return $attributeMetadata ? (bool)$attributeMetadata->isVisible() : false;
@@ -152,7 +152,7 @@ class City extends AbstractWidget
      * @return bool
      * @throws LocalizedException
      */
-    public function isEnabled()
+    public function isEnabled(): bool
     {
         return $this->_getAttribute(self::ATTRIBUTE_CODE)
             ? (bool)$this->_getAttribute(self::ATTRIBUTE_CODE)->isVisible() : false;
