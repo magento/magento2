@@ -97,7 +97,7 @@ class DeleteExpiredImages
         $imageDirectory = $this->_mediaDirectory->getRelativePath($helper->getImgDir($website));
         foreach ($this->_mediaDirectory->read($imageDirectory) as $filePath) {
             if ($this->_mediaDirectory->isFile($filePath)
-                && $this->_fileInfo->getPathInfo($filePath, PATHINFO_EXTENSION) == 'png'
+                && $this->_fileInfo->getPathInfo($filePath)['extension'] == 'png'
                 && $this->_mediaDirectory->stat($filePath)['mtime'] < $expire
             ) {
                 $this->_mediaDirectory->delete($filePath);

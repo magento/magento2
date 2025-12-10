@@ -150,6 +150,77 @@ class DeleteExpiredImagesTest extends TestCase
         $this->_deleteExpiredImages->execute();
     }
 
+    /**
+     * Test that getPathInfo is called with correct parameters for PNG file detection
+     *
+     * @return void
+     */
+    public function testGetPathInfoIsCalledCorrectlyForPngExtension()
+    {
+        $filename = 'test.png';
+        $website = $this->getMockForWebsiteClass();
+        
+        $this->_storeManager->expects($this->once())
+            ->method('getWebsites')
+            ->willReturn([$website]);
+            
+        $this->_helper->expects($this->once())
+            ->method('getConfig')
+            ->with('timeout', $website->getDefaultStore())
+            ->willReturn(20);
+            
+        $this->_adminHelper->expects($this->once())
+            ->method('getConfig')
+            ->with('timeout', null)
+            ->willReturn(20);
+            
+        $this->_helper->expects($this->once())
+            ->method('getImgDir')
+            ->with($website)
+            ->willReturn('captcha/base');
+            
+        $this->_adminHelper->expects($this->once())
+            ->method('getImgDir')
+            ->with(null)
+            ->willReturn('captcha/admin');
+            
+        $this->_directory->expects($this->exactly(2))
+            ->method('getRelativePath')
+            ->willReturnOnConsecutiveCalls('captcha/base', 'captcha/admin');
+            
+        $this->_directory->expects($this->exactly(2))
+            ->method('read')
+            ->willReturnOnConsecutiveCalls([$filename], [$filename]);
+            
+        $this->_directory->expects($this->exactly(2))
+            ->method('isFile')
+            ->with($filename)
+            ->willReturn(true);
+            
+        // This is the key test - verify getPathInfo is called with only the filename
+        // and returns the proper array structure
+        $this->_fileInfo->expects($this->exactly(2))
+            ->method('getPathInfo')
+            ->with($filename)
+            ->willReturn([
+                'dirname' => 'captcha/base',
+                'basename' => 'test.png', 
+                'extension' => 'png',
+                'filename' => 'test'
+            ]);
+            
+        $this->_directory->expects($this->exactly(2))
+            ->method('stat')
+            ->with($filename)
+            ->willReturn(['mtime' => time() - 1500]); // Expired
+            
+        $this->_directory->expects($this->exactly(2))
+            ->method('delete')
+            ->with($filename);
+            
+        $this->_deleteExpiredImages->execute();
+    }
+
     protected function getMockForWebsiteClass()
     {
         $website = $this->createPartialMock(Website::class, ['__wakeup', 'getDefaultStore']);
