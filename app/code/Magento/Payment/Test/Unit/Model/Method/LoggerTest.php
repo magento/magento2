@@ -22,7 +22,7 @@ class LoggerTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->loggerMock = $this->getMockForAbstractClass(LoggerInterface::class);
+        $this->loggerMock = $this->createMock(LoggerInterface::class);
         $this->logger = new Logger($this->loggerMock);
     }
 

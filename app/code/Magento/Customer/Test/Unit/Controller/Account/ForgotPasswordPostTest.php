@@ -75,16 +75,11 @@ class ForgotPasswordPostTest extends TestCase
     {
         $this->prepareContext();
 
-        $this->session = $this->getMockBuilder(Session::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->session = $this->createMock(Session::class);
 
-        $this->accountManagement = $this->getMockBuilder(AccountManagementInterface::class)
-            ->getMockForAbstractClass();
+        $this->accountManagement = $this->createMock(AccountManagementInterface::class);
 
-        $this->escaper = $this->getMockBuilder(Escaper::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->escaper = $this->createMock(Escaper::class);
 
         $this->controller = new ForgotPasswordPost(
             $this->context,
@@ -232,15 +227,12 @@ class ForgotPasswordPostTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->request = $this->getMockBuilder(\Magento\Framework\App\Request\Http::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods([
-                'getPost',
-            ])
-            ->getMock();
+        $this->request = $this->createPartialMock(
+            \Magento\Framework\App\Request\Http::class,
+            ['getPost']
+        );
 
-        $this->messageManager = $this->getMockBuilder(ManagerInterface::class)
-            ->getMockForAbstractClass();
+        $this->messageManager = $this->createMock(ManagerInterface::class);
 
         $this->resultRedirectFactory->expects($this->any())
             ->method('create')

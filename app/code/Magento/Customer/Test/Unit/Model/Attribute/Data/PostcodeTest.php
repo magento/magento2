@@ -13,12 +13,16 @@ use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
 use Magento\Framework\Locale\ResolverInterface;
 use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
 use Magento\Framework\Stdlib\StringUtils;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 
 class PostcodeTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var DirectoryHelper|MockObject
      */
@@ -51,22 +55,15 @@ class PostcodeTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->localeMock = $this->getMockBuilder(TimezoneInterface::class)
-            ->getMock();
-        $this->localeResolverMock = $this->getMockBuilder(ResolverInterface::class)
-            ->getMock();
-        $this->loggerMock = $this->getMockBuilder(LoggerInterface::class)
-            ->getMock();
-        $this->directoryHelperMock = $this->getMockBuilder(\Magento\Directory\Helper\Data::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->stringHelperMock = $this->getMockBuilder(StringUtils::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->attributeMock = $this->getMockBuilder(AbstractAttribute::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['getStoreLabel', 'getValidateRules'])
-            ->getMock();
+        $this->localeMock = $this->createMock(TimezoneInterface::class);
+        $this->localeResolverMock = $this->createMock(ResolverInterface::class);
+        $this->loggerMock = $this->createMock(LoggerInterface::class);
+        $this->directoryHelperMock = $this->createMock(\Magento\Directory\Helper\Data::class);
+        $this->stringHelperMock = $this->createMock(StringUtils::class);
+        $this->attributeMock = $this->createPartialMockWithReflection(
+            AbstractAttribute::class,
+            ['getStoreLabel', 'getValidateRules']
+        );
     }
 
     /**
@@ -74,9 +71,8 @@ class PostcodeTest extends TestCase
      * @param bool $expected text output
      * @param string $countryId
      * @param bool $isOptional
-     *
-     * @dataProvider validateValueDataProvider
-     */
+     * */
+    #[DataProvider('validateValueDataProvider')]
     public function testValidateValue($value, $expected, $countryId, $isOptional)
     {
         $storeLabel = 'Zip/Postal Code';
@@ -125,9 +121,8 @@ class PostcodeTest extends TestCase
      * @param array $validateRules
      * @param string $countryId
      * @param bool $isOptional
-     *
-     * @dataProvider validateValueWithRulesDataProvider
-     */
+     * */
+    #[DataProvider('validateValueWithRulesDataProvider')]
     public function testValidateValueWithRules(
         string $value,
         bool|array $expected,

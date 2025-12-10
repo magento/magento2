@@ -16,6 +16,7 @@ use Magento\Payment\Model\Config;
 use Magento\Payment\Model\Method\Factory;
 use Magento\Payment\Model\MethodInterface;
 use Magento\Store\Model\ScopeInterface;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -102,10 +103,10 @@ class ConfigTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->scopeConfig = $this->getMockForAbstractClass(ScopeConfigInterface::class);
+        $this->scopeConfig = $this->createMock(ScopeConfigInterface::class);
         $this->paymentMethodFactory = $this->createMock(Factory::class);
-        $this->localeResolver = $this->getMockForAbstractClass(ResolverInterface::class);
-        $this->dataStorage = $this->getMockForAbstractClass(DataInterface::class);
+        $this->localeResolver = $this->createMock(ResolverInterface::class);
+        $this->dataStorage = $this->createMock(DataInterface::class);
         $this->date = $this->createMock(DateTime::class);
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
@@ -124,11 +125,11 @@ class ConfigTest extends TestCase
     /**
      * @covers \Magento\Payment\Model\Config::getActiveMethods
      * @param bool $isActive
-     * @dataProvider getActiveMethodsDataProvider
      */
+    #[DataProvider('getActiveMethodsDataProvider')]
     public function testGetActiveMethods($isActive)
     {
-        $adapter = $this->getMockForAbstractClass(MethodInterface::class);
+        $adapter = $this->createMock(MethodInterface::class);
         $this->scopeConfig->expects(static::once())
             ->method('getValue')
             ->with('payment', ScopeInterface::SCOPE_STORE, null)

@@ -29,16 +29,19 @@ use Magento\ImportExport\Model\ResourceModel\CollectionByPagesIteratorFactory;
 use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManager;
 use PHPUnit\Framework\TestCase;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @phpstan-ignore-next-line
  */
 class AddressTest extends TestCase
 {
+    use MockCreationTrait;
     /**
      * Test attribute code
      */
-    public const ATTRIBUTE_CODE = 'code1';
+    private const ATTRIBUTE_CODE = 'code1';
 
     /**
      * Websites array (website id => code)
@@ -112,11 +115,11 @@ class AddressTest extends TestCase
 
         $this->_objectManager = new ObjectManager($this);
         $this->_model = new Address(
-            $this->getMockForAbstractClass(ScopeConfigInterface::class),
+            $this->createMock(ScopeConfigInterface::class),
             $storeManager,
             $this->createMock(Factory::class),
             $this->createMock(CollectionByPagesIteratorFactory::class),
-            $this->getMockForAbstractClass(TimezoneInterface::class),
+            $this->createMock(TimezoneInterface::class),
             $this->createMock(Config::class),
             $this->createMock(CollectionFactory::class),
             $this->createMock(CustomerFactory::class),
@@ -144,41 +147,34 @@ class AddressTest extends TestCase
         $pageSize = 1;
 
         $translator = $this->createMock(\stdClass::class);
-        $entityFactory = $this->createMock(EntityFactory::class);
 
-        /** @var Collection|TestCase $attributeCollection */
-        $attributeCollection = $this->getMockBuilder(Collection::class)
-            ->addMethods(['getEntityTypeCode'])
-            ->setConstructorArgs([$entityFactory])
-            ->getMock();
-
-        $attributeCollection->expects(
-            $this->once()
-        )->method(
-            'getEntityTypeCode'
-        )->willReturn(
-            'customer_address'
+        /** @var Collection $attributeCollection */
+        $attributeCollection = $this->createPartialMockWithReflection(
+            Collection::class,
+            ['setEntityTypeCode', 'addItem', 'getIterator', 'getEntityTypeCode']
         );
+        $attributeCollection->method('setEntityTypeCode')->with('customer_address')->willReturnSelf();
+        $attributeCollection->method('getEntityTypeCode')->willReturn('customer_address');
+        
+        $attributes = [];
         foreach ($this->_attributes as $attributeData) {
-            $arguments = $this->_objectManager->getConstructArguments(
+            $attribute = $this->createPartialMock(
                 AbstractAttribute::class,
-                ['eavTypeFactory' => $this->createMock(TypeFactory::class)]
-            );
-            $arguments['data'] = $attributeData;
-            $attribute = $this->getMockForAbstractClass(
-                AbstractAttribute::class,
-                $arguments,
-                '',
-                true,
-                true,
-                true,
-                ['_construct', 'getSource']
+                ['_construct', 'getSource', 'getAttributeCode', 'getAttributeId', 'getFrontendInput']
             );
 
             $attributeSource = $this->createMock(\Magento\Eav\Model\Entity\Attribute\Source\AbstractSource::class);
             $attribute->expects($this->once())->method('getSource')->willReturn($attributeSource);
-            $attributeCollection->addItem($attribute);
+            
+            // Configure attribute methods to return the test data
+            $attribute->method('getAttributeCode')->willReturn($attributeData['attribute_code']);
+            $attribute->method('getAttributeId')->willReturn($attributeData['attribute_id']);
+            $attribute->method('getFrontendInput')->willReturn($attributeData['frontend_input']);
+            
+            $attributes[] = $attribute;
         }
+        $attributeCollection->method('addItem')->willReturnSelf();
+        $attributeCollection->method('getIterator')->willReturn(new \ArrayIterator($attributes));
 
         $connection = $this->createMock(AdapterInterface::class);
         $customerCollection = $this->createMock(CustomerCollection::class);
@@ -198,12 +194,12 @@ class AddressTest extends TestCase
         $connection->method('select')->willReturn($customerSelect);
         $connection->method('fetchAssoc')->with($customerSelect)->willReturn([1 => $this->_customerData]);
 
-        $customerEntity = $this->getMockBuilder(\stdClass::class)
-            ->addMethods(['filterEntityCollection', 'setParameters'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $customerEntity = $this->createPartialMockWithReflection(
+            \Magento\Framework\Model\AbstractModel::class,
+            ['filterEntityCollection']
+        );
+        // filterEntityCollection should return the collection as-is
         $customerEntity->method('filterEntityCollection')->willReturnArgument(0);
-        $customerEntity->method('setParameters')->willReturnSelf();
 
         $data = [
             'translator' => $translator,
@@ -249,13 +245,8 @@ class AddressTest extends TestCase
      */
     public function testExportItem()
     {
-        $writer = $this->getMockForAbstractClass(
+        $writer = $this->createPartialMock(
             AbstractAdapter::class,
-            [],
-            '',
-            false,
-            false,
-            true,
             ['writeRow']
         );
 
@@ -270,9 +261,29 @@ class AddressTest extends TestCase
         $this->_model->setWriter($writer);
         $this->_model->setParameters([]);
 
-        $arguments = $this->_objectManager->getConstructArguments(AbstractModel::class);
-        $arguments['data'] = $this->_addressData;
-        $item = $this->getMockForAbstractClass(AbstractModel::class, $arguments);
+        $item = $this->createPartialMockWithReflection(
+            AbstractModel::class,
+            ['getData', 'offsetGet', 'getParentId', 'getId', 'getRegionId']
+        );
+        
+        // Support getData() for general data access
+        $item->method('getData')->willReturnCallback(function ($key = null) {
+            if ($key === null) {
+                return $this->_addressData;
+            }
+            return $this->_addressData[$key] ?? null;
+        });
+        
+        // Support array access: $item['key']
+        $item->method('offsetGet')->willReturnCallback(function ($key) {
+            return $this->_addressData[$key] ?? null;
+        });
+        
+        // Support specific getter methods
+        $item->method('getParentId')->willReturn($this->_addressData['parent_id']);
+        $item->method('getId')->willReturn($this->_addressData['id']);
+        $item->method('getRegionId')->willReturn(null);
+        
         $this->_model->exportItem($item);
     }
 
