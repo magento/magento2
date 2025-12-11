@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\ConfigurableProductGraphQl\Model\Options;
@@ -60,7 +60,8 @@ class SelectionUidFormatter
     {
         $attributeOption = [];
         foreach ($selectionUids as $uid) {
-            $optionData = explode(self::UID_SEPARATOR, $this->idEncoder->decode($uid));
+            $decodedUid = $this->idEncoder->decode($uid);
+            $optionData = $decodedUid !== null ? explode(self::UID_SEPARATOR, $decodedUid) : [];
             if (count($optionData) === 3) {
                 $attributeOption[(int)$optionData[1]]  = (int)$optionData[2];
             }

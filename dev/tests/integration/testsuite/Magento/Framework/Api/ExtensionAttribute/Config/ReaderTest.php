@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework\Api\ExtensionAttribute\Config;
 
@@ -50,7 +50,7 @@ class ReaderTest extends \PHPUnit\Framework\TestCase
 
         $this->_fileResolverMock = $this->getMockBuilder(\Magento\Framework\App\Arguments\FileResolver\Primary::class)
             ->disableOriginalConstructor()
-            ->setMethods(['get'])
+            ->onlyMethods(['get'])
             ->getMock();
         $this->_fileResolverMock->expects($this->once())
             ->method('get')

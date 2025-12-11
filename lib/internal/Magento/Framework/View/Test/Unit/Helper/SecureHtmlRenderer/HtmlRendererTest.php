@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2021 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -11,9 +11,13 @@ use Magento\Framework\Escaper;
 use Magento\Framework\View\Helper\SecureHtmlRender\HtmlRenderer;
 use Magento\Framework\View\Helper\SecureHtmlRender\TagData;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\MockObject\MockObject;
 
 class HtmlRendererTest extends TestCase
 {
+    /** @var Escaper|MockObject */
+    protected $escaperMock;
+
     /**
      * @return void
      */

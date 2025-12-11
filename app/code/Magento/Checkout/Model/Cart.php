@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Checkout\Model;
@@ -19,6 +19,7 @@ use Magento\Framework\Exception\NoSuchEntityException;
  * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
+ * @SuppressWarnings(PHPMD.TooManyPublicMethods)
  * @deprecated 100.1.0 Use \Magento\Quote\Model\Quote instead
  * @see \Magento\Quote\Api\Data\CartInterface
  * @since 100.0.2
@@ -522,6 +523,7 @@ class Cart extends DataObject implements CartInterface
         );
 
         $qtyRecalculatedFlag = false;
+        $itemErrors = [];
         foreach ($data as $itemId => $itemInfo) {
             $item = $this->getQuote()->getItemById($itemId);
             if (!$item) {
@@ -535,10 +537,12 @@ class Cart extends DataObject implements CartInterface
 
             $qty = isset($itemInfo['qty']) ? (double)$itemInfo['qty'] : false;
             if ($qty > 0) {
+                $item->clearMessage();
+                $item->setHasError(false);
                 $item->setQty($qty);
 
                 if ($item->getHasError()) {
-                    throw new \Magento\Framework\Exception\LocalizedException(__($item->getMessage()));
+                    $itemErrors[$item->getId()] = __($item->getMessage());
                 }
 
                 if (isset($itemInfo['before_suggest_qty']) && $itemInfo['before_suggest_qty'] != $qty) {
@@ -561,6 +565,10 @@ class Cart extends DataObject implements CartInterface
             'checkout_cart_update_items_after',
             ['cart' => $this, 'info' => $infoDataObject]
         );
+
+        if (count($itemErrors)) {
+            throw new \Magento\Framework\Exception\LocalizedException(current($itemErrors));
+        }
 
         return $this;
     }
@@ -707,6 +715,9 @@ class Cart extends DataObject implements CartInterface
      */
     public function updateItem($itemId, $requestInfo = null, $updatingParams = null)
     {
+        $product = null;
+        $productId = null;
+
         try {
             $item = $this->getQuote()->getItemById($itemId);
             if (!$item) {
@@ -757,6 +768,7 @@ class Cart extends DataObject implements CartInterface
      * Getter for RequestInfoFilter
      *
      * @deprecated 100.1.2
+     * @see MAGETWO-60073
      * @return \Magento\Checkout\Model\Cart\RequestInfoFilterInterface
      */
     private function getRequestInfoFilter()

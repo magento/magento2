@@ -1,12 +1,15 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Framework\Stdlib\Test\Unit\DateTime\Filter;
 
+use DateTime;
+use Exception;
+use IntlDateFormatter;
 use Magento\Framework\Stdlib\DateTime\Filter\Date;
 use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
 use PHPUnit\Framework\TestCase;
@@ -27,12 +30,12 @@ class DateTest extends TestCase
         )->method(
             'getDateFormat'
         )->with(
-            \IntlDateFormatter::SHORT
+            IntlDateFormatter::SHORT
         )->willReturn(
             'MM-dd-yyyy'
         );
         $model = new Date($localeMock);
-        $localeMock->expects($this->once())->method('date')->willReturn(new \DateTime($inputData));
+        $localeMock->expects($this->once())->method('date')->willReturn(new DateTime($inputData));
 
         $this->assertEquals($expectedDate, $model->filter($inputData));
     }
@@ -40,7 +43,7 @@ class DateTest extends TestCase
     /**
      * @return array
      */
-    public function dateFilterDataProvider()
+    public static function dateFilterDataProvider()
     {
         return [
             ['2000-01-01', '2000-01-01'],
@@ -54,7 +57,7 @@ class DateTest extends TestCase
      */
     public function testFilterWithException($inputData)
     {
-        $this->expectException('\Exception');
+        $this->expectException(Exception::class);
 
         $localeMock = $this->getMockForAbstractClass(TimezoneInterface::class);
         $localeMock->expects(
@@ -62,12 +65,12 @@ class DateTest extends TestCase
         )->method(
             'getDateFormat'
         )->with(
-            \IntlDateFormatter::SHORT
+            IntlDateFormatter::SHORT
         )->willReturn(
             'MM-dd-yyyy'
         );
         $model = new Date($localeMock);
-        $localeMock->expects($this->any())->method('date')->willReturn(new \DateTime($inputData));
+        $localeMock->expects($this->any())->method('date')->willReturn(new DateTime($inputData));
 
         $model->filter($inputData);
     }
@@ -75,7 +78,7 @@ class DateTest extends TestCase
     /**
      * @return array
      */
-    public function dateFilterWithExceptionDataProvider()
+    public static function dateFilterWithExceptionDataProvider()
     {
         return [
             ['12-31-2000'],

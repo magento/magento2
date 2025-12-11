@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 /**
@@ -29,7 +29,7 @@ class UrnResolver
      */
     public function getRealPath($schema)
     {
-        if (strpos($schema, 'urn:') !== 0) {
+        if ($schema && strpos($schema, 'urn:') !== 0) {
             return $schema;
         }
 
@@ -75,7 +75,7 @@ class UrnResolver
      */
     public function registerEntityLoader($public, $system, $context)
     {
-        if (strpos($system, 'urn:') === 0) {
+        if ($system && strpos($system, 'urn:') === 0) {
             $filePath = $this->getRealPath($system);
         } else {
             if (file_exists($system)) {

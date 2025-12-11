@@ -1,14 +1,9 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 
-/**
- * Simple product data view
- *
- * @author     Magento Core Team <core@magentocommerce.com>
- */
 namespace Magento\Catalog\Block\Product\View;
 
 use Magento\Catalog\Block\Product\Context;
@@ -69,9 +64,9 @@ class Gallery extends AbstractView
         ArrayUtils $arrayUtils,
         EncoderInterface $jsonEncoder,
         array $data = [],
-        ImagesConfigFactoryInterface $imagesConfigFactory = null,
+        ?ImagesConfigFactoryInterface $imagesConfigFactory = null,
         array $galleryImagesConfig = [],
-        UrlBuilder $urlBuilder = null
+        ?UrlBuilder $urlBuilder = null
     ) {
         parent::__construct($context, $arrayUtils, $data);
         $this->jsonEncoder = $jsonEncoder;
@@ -137,15 +132,16 @@ class Gallery extends AbstractView
         $imagesItems = [];
         /** @var DataObject $image */
         foreach ($this->getGalleryImages() as $image) {
+            $mediaType = $image->getMediaType();
             $imageItem = new DataObject(
                 [
                     'thumb' => $image->getData('small_image_url'),
                     'img' => $image->getData('medium_image_url'),
                     'full' => $image->getData('large_image_url'),
-                    'caption' => ($image->getLabel() ?: $this->getProduct()->getName()),
+                    'caption' => $image->getLabel() ?: $this->getProduct()->getName(),
                     'position' => $image->getData('position'),
-                    'isMain'   => $this->isMainImage($image),
-                    'type' => str_replace('external-', '', $image->getMediaType()),
+                    'isMain' => $this->isMainImage($image),
+                    'type' => $mediaType !== null ? str_replace('external-', '', $mediaType) : '',
                     'videoUrl' => $image->getVideoUrl(),
                 ]
             );

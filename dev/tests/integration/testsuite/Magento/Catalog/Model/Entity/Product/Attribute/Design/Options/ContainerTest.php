@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2021 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -50,16 +50,16 @@ class ContainerTest extends TestCase
     /**
      * @return array
      */
-    public function getOptionTextDataProvider(): array
+    public static function getOptionTextDataProvider(): array
     {
         return [
             'with_value' => [
                 'value' => 'container2',
-                'expected_value' => __('Block after Info Column'),
+                'expectedValue' => __('Block after Info Column'),
             ],
             'with_not_valid_value' => [
                 'value' => 'container3',
-                'expected_value' => false,
+                'expectedValue' => false,
             ],
         ];
     }

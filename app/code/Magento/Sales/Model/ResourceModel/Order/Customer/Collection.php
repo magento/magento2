@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Sales\Model\ResourceModel\Order\Customer;
 
@@ -15,6 +15,7 @@ use Magento\Framework\DataObject;
 use Magento\Framework\DataObject\Copy\Config;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\Event\ManagerInterface;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Model\ResourceModel\Db\VersionControl\Snapshot;
 use Magento\Framework\Validator\UniversalFactory;
 use Magento\Store\Model\StoreManagerInterface;
@@ -64,7 +65,7 @@ class Collection extends \Magento\Customer\Model\ResourceModel\Customer\Collecti
         Snapshot $entitySnapshot,
         Config $fieldsetConfig,
         StoreManagerInterface $storeManager,
-        AdapterInterface $connection = null,
+        ?AdapterInterface $connection = null,
         $modelName = self::CUSTOMER_MODEL_NAME
     ) {
         $this->storeManager = $storeManager;
@@ -153,5 +154,37 @@ class Collection extends \Magento\Customer\Model\ResourceModel\Customer\Collecti
         $item->setWebsiteName($websiteName);
 
         return parent::beforeAddLoadedItem($item);
+    }
+
+    /**
+     * @inheritDoc
+     *
+     * @throws LocalizedException
+     */
+    public function addFieldToFilter($field, $condition = null)
+    {
+        if ($field === 'store_name') {
+            $this->joinField(
+                'store_name',
+                'store',
+                'name',
+                'store_id=store_id',
+                null,
+                'left'
+            );
+        }
+
+        if ($field === 'website_name') {
+            $this->joinField(
+                'website_name',
+                'store_website',
+                'name',
+                'website_id=website_id',
+                null,
+                'left'
+            );
+        }
+
+        return parent::addFieldToFilter($field, $condition);
     }
 }

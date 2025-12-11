@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -62,8 +62,8 @@ class PathTest extends TestCase
 
         $this->mediaDirectory->expects($this->any())
             ->method('getRelativePath')
-            ->with('/theme/origin')
-            ->willReturn('/theme/origin');
+            ->with('theme/origin')
+            ->willReturn('theme/origin');
 
         $this->filesystem->expects($this->any())->method('getDirectoryRead')
             ->with(DirectoryList::MEDIA)
@@ -150,8 +150,11 @@ class PathTest extends TestCase
      */
     public function testTemporaryDirectoryGetter()
     {
+        $this->mediaDirectory->expects($this->any())
+            ->method('getAbsolutePath')
+            ->willReturn('/foo/theme/origin');
         $this->assertEquals(
-            '/theme/origin',
+            '/foo/theme/origin',
             $this->model->getTemporaryDirectory()
         );
     }

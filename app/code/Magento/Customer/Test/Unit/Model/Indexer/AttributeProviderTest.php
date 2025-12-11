@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -31,9 +31,7 @@ class AttributeProviderTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->eavConfig = $this->getMockBuilder(Config::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->eavConfig = $this->createMock(Config::class);
         $this->object = new AttributeProvider(
             $this->eavConfig
         );
@@ -59,21 +57,15 @@ class AttributeProviderTest extends TestCase
         $attrFrontendInput = 'int';
 
         /** @var Type|MockObject $collectionMock $entityType */
-        $entityType = $this->getMockBuilder(Type::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $entityType = $this->createMock(Type::class);
         /** @var Collection|MockObject $collectionMock */
-        $collectionMock = $this->getMockBuilder(Collection::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $collectionMock = $this->createMock(Collection::class);
         /** @var \Magento\Customer\Model\ResourceModel\Customer|MockObject $entity */
-        $entity = $this->getMockBuilder(\Magento\Customer\Model\ResourceModel\Customer::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $entity = $this->createMock(\Magento\Customer\Model\ResourceModel\Customer::class);
         /** @var Attribute|MockObject $attribute */
         $attribute = $this->getMockBuilder(Attribute::class)
             ->disableOriginalConstructor()
-            ->setMethods(
+            ->onlyMethods(
                 [
                     'setEntity',
                     'getName',
@@ -137,6 +129,7 @@ class AttributeProviderTest extends TestCase
                     'dataType' => $attrBackendType,
                     'entity' => Customer::ENTITY,
                     'bind' => null,
+                    'index' => false
                 ],
             ],
             ],
@@ -161,21 +154,15 @@ class AttributeProviderTest extends TestCase
         $attrFrontendInput = 'text';
 
         /** @var Type|MockObject $collectionMock $entityType */
-        $entityType = $this->getMockBuilder(Type::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $entityType = $this->createMock(Type::class);
         /** @var Collection|MockObject $collectionMock */
-        $collectionMock = $this->getMockBuilder(Collection::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $collectionMock = $this->createMock(Collection::class);
         /** @var \Magento\Customer\Model\ResourceModel\Customer|MockObject $entity */
-        $entity = $this->getMockBuilder(\Magento\Customer\Model\ResourceModel\Customer::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $entity = $this->createMock(\Magento\Customer\Model\ResourceModel\Customer::class);
         /** @var Attribute|MockObject $attribute */
         $attribute = $this->getMockBuilder(Attribute::class)
             ->disableOriginalConstructor()
-            ->setMethods(
+            ->onlyMethods(
                 [
                     'setEntity',
                     'getName',
@@ -213,8 +200,12 @@ class AttributeProviderTest extends TestCase
         $attribute->expects($this->any())
             ->method('canBeSearchableInGrid')
             ->willReturn(true);
-        $attribute->expects($this->never())
-            ->method('canBeFilterableInGrid');
+        $attribute->expects($this->once())
+            ->method('canBeFilterableInGrid')
+            ->willReturn(false);
+        $attribute->expects($this->once())
+            ->method('getName')
+            ->willReturn($attrName);
 
         $this->assertEquals(
             ['fields' => [
@@ -225,6 +216,7 @@ class AttributeProviderTest extends TestCase
                     'type' => 'searchable',
                     'filters' => ['filter'],
                     'dataType' => 'data_type',
+                    'index' => false
                 ],
             ],
             ],
@@ -259,21 +251,15 @@ class AttributeProviderTest extends TestCase
         $attrFrontendInput = 'text';
 
         /** @var Type|MockObject $collectionMock $entityType */
-        $entityType = $this->getMockBuilder(Type::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $entityType = $this->createMock(Type::class);
         /** @var Collection|MockObject $collectionMock */
-        $collectionMock = $this->getMockBuilder(Collection::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $collectionMock = $this->createMock(Collection::class);
         /** @var \Magento\Customer\Model\ResourceModel\Customer|MockObject $entity */
-        $entity = $this->getMockBuilder(\Magento\Customer\Model\ResourceModel\Customer::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $entity = $this->createMock(\Magento\Customer\Model\ResourceModel\Customer::class);
         /** @var Attribute|MockObject $attribute */
         $attribute = $this->getMockBuilder(Attribute::class)
             ->disableOriginalConstructor()
-            ->setMethods(
+            ->onlyMethods(
                 [
                     'setEntity',
                     'getName',
@@ -336,6 +322,7 @@ class AttributeProviderTest extends TestCase
                     'dataType' => 'varchar',
                     'entity' => Customer::ENTITY,
                     'bind' => 'to_field',
+                    'index' => false
                 ],
             ],
                 'references' => [

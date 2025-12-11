@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -40,7 +40,7 @@ class Hydrator
     public function __construct(
         CustomAttributesFlattener $flattener,
         DataObjectProcessor $dataObjectProcessor,
-        Uid $uidEncoder = null
+        ?Uid $uidEncoder = null
     ) {
         $this->flattener = $flattener;
         $this->dataObjectProcessor = $dataObjectProcessor;
@@ -60,8 +60,12 @@ class Hydrator
         if ($basicFieldsOnly) {
             $categoryData = $category->getData();
         } else {
-            $categoryData = $this->dataObjectProcessor->buildOutputDataArray($category, CategoryInterface::class);
+            $categoryData = $this->dataObjectProcessor->buildOutputDataArray(
+                $category,
+                CategoryInterface::class
+            );
         }
+
         $categoryData['id'] = $category->getId();
         $categoryData['uid'] = $this->uidEncoder->encode((string) $category->getId());
         $categoryData['children'] = [];

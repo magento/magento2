@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Ui\Component\Listing\Columns;
 
@@ -16,17 +16,17 @@ use Magento\Ui\Component\AbstractComponent;
  */
 class Column extends AbstractComponent implements ColumnInterface
 {
-    const NAME = 'column';
+    public const NAME = 'column';
 
     /**
-     * Wrapped component
+     * UI component
      *
      * @var UiComponentInterface
      */
     protected $wrappedComponent;
 
     /**
-     * UI component factory
+     * Factory for UI Component
      *
      * @var UiComponentFactory
      */
@@ -87,7 +87,8 @@ class Column extends AbstractComponent implements ColumnInterface
                 'config',
                 array_replace_recursive(
                     (array)$this->wrappedComponent->getData('config'),
-                    (array)$this->getData('config')
+                    (array)$this->getData('config'),
+                    ['__disableTmpl' => ['label' => true]]
                 )
             );
         }

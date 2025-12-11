@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
  /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
+  * Copyright 2020 Adobe
+  * All Rights Reserved.
   */
 -->
 
@@ -16,7 +16,6 @@
             <testCaseId value="MC-26040"/>
             <severity value="MAJOR"/>
         </annotations>
-
         <remove keyForRemoval="filterCustomer"/>
         <actionGroup ref="ClearFiltersAdminDataGridActionGroup" before="selectCustomer" stepKey="clearFilters"/>
         <actionGroup ref="AdminSelectAllCustomers" stepKey="selectCustomer"/>

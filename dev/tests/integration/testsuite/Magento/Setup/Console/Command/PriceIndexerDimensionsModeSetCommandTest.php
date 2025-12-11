@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Setup\Console\Command;
 
@@ -95,7 +95,7 @@ class PriceIndexerDimensionsModeSetCommandTest extends \Magento\TestFramework\In
      * Modes data provider
      * @return array
      */
-    public function modesDataProvider()
+    public static function modesDataProvider()
     {
         return [
             [DimensionModeConfiguration::DIMENSION_NONE, DimensionModeConfiguration::DIMENSION_WEBSITE],

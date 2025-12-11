@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
  /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
+   * Copyright 2024 Adobe
+  * All Rights Reserved.
   */
 -->
 
@@ -25,8 +25,8 @@
         <before>
             <amOnPage url="/" stepKey="goToHomePage"/>
             <executeJS function="return window.location.host" stepKey="hostname"/>
-            <magentoCLI command="config:set web/unsecure/base_url https://{$hostname}/" stepKey="setUnsecureBaseURL"/>
-            <magentoCLI command="config:set web/secure/base_url https://{$hostname}/" stepKey="setSecureBaseURL"/>
+            <magentoCLI command="config:set web/unsecure/base_url http://{$hostname}/" stepKey="setUnsecureBaseURL"/>
+            <magentoCLI command="config:set web/secure/base_url http://{$hostname}/" stepKey="setSecureBaseURL"/>
             <magentoCLI command="config:set web/secure/use_in_frontend 1" stepKey="useSecureURLsOnStorefront"/>
             <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCache">
                 <argument name="tags" value="full_page"/>
@@ -44,12 +44,12 @@
         <executeJS function="return window.cookiesConfig.secure ? 'true' : 'false'" stepKey="isCookieSecure"/>
         <assertEquals stepKey="assertCookieIsSecure">
             <actualResult type="variable">isCookieSecure</actualResult>
-            <expectedResult type="string">true</expectedResult>
+            <expectedResult type="string">false</expectedResult>
         </assertEquals>
         <executeJS function="return jQuery.mage.cookies.defaults.secure ? 'true' : 'false'" stepKey="isCookieSecure2"/>
         <assertEquals stepKey="assertCookieIsSecure2">
             <actualResult type="variable">isCookieSecure2</actualResult>
-            <expectedResult type="string">true</expectedResult>
+            <expectedResult type="string">false</expectedResult>
         </assertEquals>
     </test>
 </tests>

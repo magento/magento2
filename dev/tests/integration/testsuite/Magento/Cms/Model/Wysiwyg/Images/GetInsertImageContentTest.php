@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 
 declare(strict_types=1);
@@ -94,7 +94,7 @@ class GetInsertImageContentTest extends TestCase
      *
      * @return array[]
      */
-    public function imageDataProvider(): array
+    public static function imageDataProvider(): array
     {
         return [
             [

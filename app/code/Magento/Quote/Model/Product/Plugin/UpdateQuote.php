@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2021 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Quote\Model\Product\Plugin;
@@ -18,15 +18,11 @@ class UpdateQuote
 {
 
     /**
-     * Quote Resource
-     *
      * @var Quote
      */
     private $resource;
 
     /**
-     * Product ID locator.
-     *
      * @var ProductIdLocatorInterface
      */
     private $productIdLocator;
@@ -49,8 +45,8 @@ class UpdateQuote
      * Update the quote trigger_recollect column is 1 when product price is changed through API.
      *
      * @param TierPriceStorageInterface $subject
-     * @param $result
-     * @param $prices
+     * @param array $result
+     * @param array $prices
      * @return array
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
@@ -61,7 +57,6 @@ class UpdateQuote
     ): array {
         $this->resource->markQuotesRecollect($this->retrieveAffectedProductIdsForPrices($prices));
         return $result;
-
     }
 
     /**

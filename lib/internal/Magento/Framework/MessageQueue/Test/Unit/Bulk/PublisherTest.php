@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -75,7 +75,7 @@ class PublisherTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $this->envelopeFactory = $this->getMockBuilder(EnvelopeFactory::class)
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->messageEncoder = $this->getMockBuilder(MessageEncoder::class)

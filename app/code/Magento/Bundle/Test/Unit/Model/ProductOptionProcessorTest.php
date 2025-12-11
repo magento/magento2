@@ -1,12 +1,13 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Bundle\Test\Unit\Model;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\Bundle\Api\Data\BundleOptionInterface;
 use Magento\Bundle\Api\Data\BundleOptionInterfaceFactory;
 use Magento\Bundle\Model\BundleOption;
@@ -15,7 +16,9 @@ use Magento\Catalog\Api\Data\ProductOptionExtensionInterface;
 use Magento\Catalog\Api\Data\ProductOptionInterface;
 use Magento\Framework\DataObject;
 use Magento\Framework\DataObject\Factory as DataObjectFactory;
+use Magento\Framework\DataObject\Test\Unit\Helper\DataObjectTestHelper;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Quote\Test\Unit\Helper\ProductOptionExtensionTestHelper;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -48,38 +51,18 @@ class ProductOptionProcessorTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->dataObject = $this->getMockBuilder(DataObject::class)
-            ->setMethods([
-                'getBundleOption',
-                'getBundleOptionQty',
-                'create',
-                'addData'
-            ])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->dataObject = new DataObjectTestHelper();
 
-        $this->dataObjectFactory = $this->getMockBuilder(\Magento\Framework\DataObject\Factory::class)
-            ->setMethods(['create'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->dataObjectFactory->expects($this->any())
-            ->method('create')
-            ->willReturn($this->dataObject);
+        $this->dataObjectFactory = $this->createPartialMock(DataObjectFactory::class, ['create']);
+        $this->dataObjectFactory->method('create')->willReturn($this->dataObject);
 
-        $this->bundleOption = $this->getMockBuilder(
-            BundleOptionInterface::class
-        )
-            ->getMockForAbstractClass();
+        $this->bundleOption = $this->createMock(BundleOptionInterface::class);
 
-        $this->bundleOptionInterfaceFactory = $this->getMockBuilder(
-            BundleOptionInterfaceFactory::class
-        )
-            ->setMethods(['create'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->bundleOptionInterfaceFactory->expects($this->any())
-            ->method('create')
-            ->willReturn($this->bundleOption);
+        $this->bundleOptionInterfaceFactory = $this->createPartialMock(
+            BundleOptionInterfaceFactory::class,
+            ['create']
+        );
+        $this->bundleOptionInterfaceFactory->method('create')->willReturn($this->bundleOption);
 
         $this->processor = new ProductOptionProcessor(
             $this->dataObjectFactory,
@@ -90,39 +73,28 @@ class ProductOptionProcessorTest extends TestCase
     /**
      * @param array|string $options
      * @param array $requestData
-     * @dataProvider dataProviderConvertToBuyRequest
      */
+    #[DataProvider('dataProviderConvertToBuyRequest')]
     public function testConvertToBuyRequest(
         $options,
         $requestData
     ) {
-        $productOptionMock = $this->getMockBuilder(ProductOptionInterface::class)
-            ->getMockForAbstractClass();
+        if (!empty($options) && is_callable($options[0])) {
+            $options[0] = $options[0]($this);
+        }
+        $productOptionMock = $this->createMock(ProductOptionInterface::class);
 
-        $productOptionExtensionMock = $this->getMockBuilder(
-            ProductOptionExtensionInterface::class
-        )->setMethods(['getBundleOptions'])->getMockForAbstractClass();
+        $productOptionExtensionMock = new ProductOptionExtensionTestHelper();
+        $productOptionExtensionMock->setBundleOptions($options);
 
-        $productOptionMock->expects($this->any())
-            ->method('getExtensionAttributes')
-            ->willReturn($productOptionExtensionMock);
+        $productOptionMock->method('getExtensionAttributes')->willReturn($productOptionExtensionMock);
 
-        $productOptionExtensionMock->expects($this->any())
-            ->method('getBundleOptions')
-            ->willReturn($options);
-
-        $this->dataObject->expects($this->any())
-            ->method('addData')
-            ->with($requestData)
-            ->willReturnSelf();
+        $this->dataObject->addData($requestData);
 
         $this->assertEquals($this->dataObject, $this->processor->convertToBuyRequest($productOptionMock));
     }
 
-    /**
-     * @return array
-     */
-    public function dataProviderConvertToBuyRequest()
+    protected function getObjectForBundleOptionClass()
     {
         $objectManager = new ObjectManager($this);
 
@@ -131,7 +103,15 @@ class ProductOptionProcessorTest extends TestCase
         $option->setOptionId(1);
         $option->setOptionQty(1);
         $option->setOptionSelections(['selection']);
+        return $option;
+    }
 
+    /**
+     * @return array
+     */
+    public static function dataProviderConvertToBuyRequest()
+    {
+        $option = static fn (self $testCase) => $testCase->getObjectForBundleOptionClass();
         return [
             [
                 [$option],
@@ -153,19 +133,15 @@ class ProductOptionProcessorTest extends TestCase
      * @param array|string $options
      * @param array|int $optionsQty
      * @param string|null $expected
-     * @dataProvider dataProviderConvertToProductOption
      */
+    #[DataProvider('dataProviderConvertToProductOption')]
     public function testConvertToProductOption(
         $options,
         $optionsQty,
         $expected
     ) {
-        $this->dataObject->expects($this->any())
-            ->method('getBundleOption')
-            ->willReturn($options);
-        $this->dataObject->expects($this->any())
-            ->method('getBundleOptionQty')
-            ->willReturn($optionsQty);
+        $this->dataObject->setBundleOption($options);
+        $this->dataObject->setBundleOptionQty($optionsQty);
 
         if (!empty($options) && is_array($options)) {
             $this->bundleOption->expects($this->any())
@@ -200,7 +176,7 @@ class ProductOptionProcessorTest extends TestCase
     /**
      * @return array
      */
-    public function dataProviderConvertToProductOption()
+    public static function dataProviderConvertToProductOption()
     {
         return [
             [
@@ -210,19 +186,19 @@ class ProductOptionProcessorTest extends TestCase
                     3 => [],
                     4 => '',
                 ],
-                'options_qty' => [
+                'optionsQty' => [
                     1 => 1,
                 ],
                 'expected' => 'bundle_options',
             ],
             [
                 'options' => [],
-                'options_qty' => 0,
+                'optionsQty' => 0,
                 'expected' => null,
             ],
             [
                 'options' => 'is not array',
-                'options_qty' => 0,
+                'optionsQty' => 0,
                 'expected' => null,
             ],
         ];

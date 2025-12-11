@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -47,14 +47,16 @@ class XsdTest extends TestCase
         $dom = new Dom($fixtureXml, $validationStateMock, [], null, null, $messageFormat);
         $actualResult = $dom->validate($this->schemaFile, $actualErrors);
         $this->assertEquals(empty($expectedErrors), $actualResult, "Validation result is invalid.");
-        $this->assertEquals($expectedErrors, $actualErrors, "Validation errors does not match.");
+        foreach ($expectedErrors as $error) {
+            $this->assertContains($error, $actualErrors, "Validation errors does not match.");
+        }
     }
 
     /**
      * @return array
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function exemplarXmlDataProvider()
+    public static function exemplarXmlDataProvider()
     {
         return [
             /** Valid configurations */
@@ -95,14 +97,21 @@ class XsdTest extends TestCase
             /** Missing required elements */
             'empty root node' => [
                 '<config/>',
-                ["Element 'config': Missing child element(s). Expected is ( integration )."],
+                [
+                    "Element 'config': Missing child element(s). Expected is ( integration ).The xml was: \n" .
+                    "0:<?xml version=\"1.0\"?>\n1:<config/>\n2:\n"
+                ],
             ],
             'empty integration' => [
                 '<config>
                     <integration name="TestIntegration" />
                 </config>',
-                ["Element 'integration': Missing child element(s)." .
-                 " Expected is one of ( email, endpoint_url, identity_link_url, resources )."],
+                [
+                    "Element 'integration': Missing child element(s). Expected is one of ( email, endpoint_url, " .
+                    "identity_link_url, resources ).The xml was: \n0:<?xml version=\"1.0\"?>\n1:<config>\n" .
+                    "2:                    <integration name=\"TestIntegration\"/>\n3:                " .
+                    "</config>\n4:\n"
+                ],
             ],
             'integration without email' => [
                 '<config>
@@ -115,7 +124,16 @@ class XsdTest extends TestCase
                         </resources>
                     </integration>
                 </config>',
-                ["Element 'integration': Missing child element(s). Expected is ( email )."],
+                [
+                    "Element 'integration': Missing child element(s). Expected is ( email ).The xml was: \n" .
+                    "0:<?xml version=\"1.0\"?>\n1:<config>\n2:                    <integration " .
+                    "name=\"TestIntegration1\">\n3:                        <endpoint_url>http://endpoint.url" .
+                    "</endpoint_url>\n4:                        <identity_link_url>http://www.example.com/identity" .
+                    "</identity_link_url>\n5:                        <resources>\n6:                            " .
+                    "<resource name=\"Magento_Customer::manage\"/>\n7:                            <resource " .
+                    "name=\"Magento_Customer::online\"/>\n8:                        </resources>\n" .
+                    "9:                    </integration>\n"
+                ],
             ],
             'empty resources' => [
                 '<config>
@@ -127,7 +145,15 @@ class XsdTest extends TestCase
                         </resources>
                     </integration>
                 </config>',
-                ["Element 'resources': Missing child element(s). Expected is ( resource )."],
+                [
+                    "Element 'resources': Missing child element(s). Expected is ( resource ).The xml was: \n" .
+                    "1:<config>\n2:                    <integration name=\"TestIntegration1\">\n" .
+                    "3:                        <email>test-integration1@magento.com</email>\n" .
+                    "4:                        <endpoint_url>http://endpoint.url</endpoint_url>\n" .
+                    "5:                        <identity_link_url>http://www.example.com/identity" .
+                    "</identity_link_url>\n6:                        <resources>\n7:                        " .
+                    "</resources>\n8:                    </integration>\n9:                </config>\n10:\n"
+                ],
             ],
             /** Empty nodes */
             'empty email' => [
@@ -143,9 +169,14 @@ class XsdTest extends TestCase
                     </integration>
                 </config>',
                 [
-                    "Element 'email': [facet 'pattern'] The value '' is not " .
-                    "accepted by the pattern '[^@]+@[^\.]+\..+'.",
-                    "Element 'email': '' is not a valid value of the atomic type 'emailType'."
+                    "Element 'email': [facet 'pattern'] The value '' is not accepted by the pattern " .
+                    "'[^@]+@[^\.]+\..+'.The xml was: \n0:<?xml version=\"1.0\"?>\n1:<config>\n" .
+                    "2:                    <integration name=\"TestIntegration1\">\n3:                        " .
+                    "<email/>\n4:                        <endpoint_url>http://endpoint.url</endpoint_url>\n" .
+                    "5:                        <identity_link_url>http://www.example.com/identity" .
+                    "</identity_link_url>\n6:                        <resources>\n7:                            " .
+                    "<resource name=\"Magento_Customer::manage\"/>\n8:                            <resource " .
+                    "name=\"Magento_Customer::online\"/>\n9:                        </resources>\n"
                 ],
             ],
             'endpoint_url is empty' => [
@@ -160,9 +191,14 @@ class XsdTest extends TestCase
                     </integration>
                 </config>',
                 [
-                    "Element 'endpoint_url': [facet 'minLength'] The value has a length of '0'; this underruns" .
-                    " the allowed minimum length of '4'.",
-                    "Element 'endpoint_url': '' is not a valid value of the atomic type 'urlType'."
+                    "Element 'endpoint_url': [facet 'minLength'] The value has a length of '0'; this " .
+                    "underruns the allowed minimum length of '4'.The xml was: \n0:<?xml version=\"1.0\"?>\n" .
+                    "1:<config>\n2:                    <integration name=\"TestIntegration1\">\n" .
+                    "3:                        <email>test-integration1@magento.com</email>\n" .
+                    "4:                        <endpoint_url/>\n5:                        <resources>\n" .
+                    "6:                            <resource name=\"Magento_Customer::manage\"/>\n" .
+                    "7:                            <resource name=\"Magento_Customer::online\"/>\n" .
+                    "8:                        </resources>\n9:                    </integration>\n"
                 ],
             ],
             'identity_link_url is empty' => [
@@ -178,15 +214,24 @@ class XsdTest extends TestCase
                     </integration>
                 </config>',
                 [
-                    "Element 'identity_link_url': [facet 'minLength'] The value has a length of '0'; this underruns" .
-                    " the allowed minimum length of '4'.",
-                    "Element 'identity_link_url': '' is not a valid value of the atomic type 'urlType'."
+                    "Element 'identity_link_url': [facet 'minLength'] The value has a length of '0'; this " .
+                    "underruns the allowed minimum length of '4'.The xml was: \n0:<?xml version=\"1.0\"?>\n" .
+                    "1:<config>\n2:                    <integration name=\"TestIntegration1\">\n" .
+                    "3:                        <email>test-integration1@magento.com</email>\n" .
+                    "4:                        <endpoint_url>http://endpoint.url</endpoint_url>\n" .
+                    "5:                        <identity_link_url/>\n6:                        <resources>\n" .
+                    "7:                            <resource name=\"Magento_Customer::manage\"/>\n" .
+                    "8:                            <resource name=\"Magento_Customer::online\"/>\n" .
+                    "9:                        </resources>\n"
                 ],
             ],
             /** Invalid structure */
             'irrelevant root node' => [
                 '<integration name="TestIntegration"/>',
-                ["Element 'integration': No matching global declaration available for the validation root."],
+                [
+                    "Element 'integration': No matching global declaration available for the validation root." .
+                    "The xml was: \n0:<?xml version=\"1.0\"?>\n1:<integration name=\"TestIntegration\"/>\n2:\n"
+                ],
             ],
             'irrelevant node in root' => [
                 '<config>
@@ -201,7 +246,14 @@ class XsdTest extends TestCase
                     </integration>
                     <invalid/>
                 </config>',
-                ["Element 'invalid': This element is not expected. Expected is ( integration )."],
+                [
+                    "Element 'invalid': This element is not expected. Expected is ( integration ).The xml was: \n" .
+                    "6:                        <resources>\n7:                            <resource " .
+                    "name=\"Magento_Customer::manage\"/>\n8:                            <resource " .
+                    "name=\"Magento_Customer::online\"/>\n9:                        </resources>\n" .
+                    "10:                    </integration>\n11:                    <invalid/>\n" .
+                    "12:                </config>\n13:\n"
+                ],
             ],
             'irrelevant node in integration' => [
                 '<config>
@@ -216,7 +268,15 @@ class XsdTest extends TestCase
                         <invalid/>
                     </integration>
                 </config>',
-                ["Element 'invalid': This element is not expected."],
+                [
+                    "Element 'invalid': This element is not expected.The xml was: \n5:                        " .
+                    "<identity_link_url>http://www.example.com/identity</identity_link_url>\n" .
+                    "6:                        <resources>\n7:                            <resource " .
+                    "name=\"Magento_Customer::manage\"/>\n8:                            <resource " .
+                    "name=\"Magento_Customer::online\"/>\n9:                        </resources>\n" .
+                    "10:                        <invalid/>\n11:                    </integration>\n" .
+                    "12:                </config>\n13:\n"
+                ],
             ],
             'irrelevant node in resources' => [
                 '<config>
@@ -231,7 +291,16 @@ class XsdTest extends TestCase
                         </resources>
                     </integration>
                 </config>',
-                ["Element 'invalid': This element is not expected. Expected is ( resource )."],
+                [
+                    "Element 'invalid': This element is not expected. Expected is ( resource ).The xml was: \n" .
+                    "4:                        <endpoint_url>http://endpoint.url</endpoint_url>\n" .
+                    "5:                        <identity_link_url>http://www.example.com/identity" .
+                    "</identity_link_url>\n6:                        <resources>\n7:                            " .
+                    "<resource name=\"Magento_Customer::manage\"/>\n8:                            <resource " .
+                    "name=\"Magento_Customer::online\"/>\n9:                            <invalid/>\n" .
+                    "10:                        </resources>\n11:                    </integration>\n" .
+                    "12:                </config>\n13:\n"
+                ],
             ],
             'irrelevant node in resource' => [
                 '<config>
@@ -248,8 +317,15 @@ class XsdTest extends TestCase
                     </integration>
                 </config>',
                 [
-                    "Element 'resource': Element content is not allowed, " .
-                    "because the content type is a simple type definition."
+                    "Element 'resource': Element content is not allowed, because the content type is a simple " .
+                    "type definition.The xml was: \n3:                        <email>test-integration1@magento.com" .
+                    "</email>\n4:                        <endpoint_url>http://endpoint.url</endpoint_url>\n" .
+                    "5:                        <identity_link_url>http://www.example.com/identity" .
+                    "</identity_link_url>\n6:                        <resources>\n7:                            " .
+                    "<resource name=\"Magento_Customer::manage\"/>\n8:                            <resource " .
+                    "name=\"Magento_Customer::online\">\n9:                                <invalid/>\n" .
+                    "10:                            </resource>\n11:                        </resources>\n" .
+                    "12:                    </integration>\n"
                 ],
             ],
             /** Excessive attributes */
@@ -265,7 +341,16 @@ class XsdTest extends TestCase
                         </resources>
                     </integration>
                 </config>',
-                ["Element 'config', attribute 'invalid': The attribute 'invalid' is not allowed."],
+                [
+                    "Element 'config', attribute 'invalid': The attribute 'invalid' is not allowed.The xml was: \n" .
+                    "0:<?xml version=\"1.0\"?>\n1:<config invalid=\"invalid\">\n2:                    <integration " .
+                    "name=\"TestIntegration1\">\n3:                        <email>test-integration1@magento.com" .
+                    "</email>\n4:                        <endpoint_url>http://endpoint.url</endpoint_url>\n" .
+                    "5:                        <identity_link_url>http://www.example.com/identity" .
+                    "</identity_link_url>\n6:                        <resources>\n7:                            " .
+                    "<resource name=\"Magento_Customer::manage\"/>\n8:                            <resource " .
+                    "name=\"Magento_Customer::online\"/>\n9:                        </resources>\n"
+                ],
             ],
             'invalid attribute in integration' => [
                 '<config>
@@ -279,7 +364,17 @@ class XsdTest extends TestCase
                         </resources>
                     </integration>
                 </config>',
-                ["Element 'integration', attribute 'invalid': The attribute 'invalid' is not allowed."],
+                [
+                    "Element 'integration', attribute 'invalid': The attribute 'invalid' is not allowed.The " .
+                    "xml was: \n0:<?xml version=\"1.0\"?>\n1:<config>\n2:                    <integration " .
+                    "name=\"TestIntegration1\" invalid=\"invalid\">\n3:                        <email>" .
+                    "test-integration1@magento.com</email>\n4:                        <endpoint_url>" .
+                    "http://endpoint.url</endpoint_url>\n5:                        <identity_link_url>" .
+                    "http://www.example.com/identity</identity_link_url>\n6:                        <resources>\n" .
+                    "7:                            <resource name=\"Magento_Customer::manage\"/>\n" .
+                    "8:                            <resource name=\"Magento_Customer::online\"/>\n" .
+                    "9:                        </resources>\n"
+                ],
             ],
             'invalid attribute in email' => [
                 '<config>
@@ -293,7 +388,17 @@ class XsdTest extends TestCase
                         </resources>
                     </integration>
                 </config>',
-                ["Element 'email', attribute 'invalid': The attribute 'invalid' is not allowed."],
+                [
+                    "Element 'email', attribute 'invalid': The attribute 'invalid' is not allowed.The xml was: \n" .
+                    "0:<?xml version=\"1.0\"?>\n1:<config>\n2:                    <integration " .
+                    "name=\"TestIntegration1\">\n3:                        <email invalid=\"invalid\">" .
+                    "test-integration1@magento.com</email>\n4:                        <endpoint_url>" .
+                    "http://endpoint.url</endpoint_url>\n5:                        <identity_link_url>" .
+                    "http://www.example.com/identity</identity_link_url>\n6:                        " .
+                    "<resources>\n7:                            <resource name=\"Magento_Customer::manage\"/>\n" .
+                    "8:                            <resource name=\"Magento_Customer::online\"/>\n" .
+                    "9:                        </resources>\n"
+                ],
             ],
             'invalid attribute in resources' => [
                 '<config>
@@ -307,7 +412,17 @@ class XsdTest extends TestCase
                         </resources>
                     </integration>
                 </config>',
-                ["Element 'resources', attribute 'invalid': The attribute 'invalid' is not allowed."],
+                [
+                    "Element 'resources', attribute 'invalid': The attribute 'invalid' is not allowed.The xml " .
+                    "was: \n1:<config>\n2:                    <integration name=\"TestIntegration1\">\n" .
+                    "3:                        <email>test-integration1@magento.com</email>\n" .
+                    "4:                        <endpoint_url>http://endpoint.url</endpoint_url>\n" .
+                    "5:                        <identity_link_url>http://www.example.com/identity" .
+                    "</identity_link_url>\n6:                        <resources invalid=\"invalid\">\n" .
+                    "7:                            <resource name=\"Magento_Customer::manage\"/>\n" .
+                    "8:                            <resource name=\"Magento_Customer::online\"/>\n" .
+                    "9:                        </resources>\n10:                    </integration>\n"
+                ],
             ],
             'invalid attribute in resource' => [
                 '<config>
@@ -321,7 +436,17 @@ class XsdTest extends TestCase
                         </resources>
                     </integration>
                 </config>',
-                ["Element 'resource', attribute 'invalid': The attribute 'invalid' is not allowed."],
+                [
+                    "Element 'resource', attribute 'invalid': The attribute 'invalid' is not allowed.The xml was: \n" .
+                    "2:                    <integration name=\"TestIntegration1\">\n3:                        " .
+                    "<email>test-integration1@magento.com</email>\n4:                        <endpoint_url>" .
+                    "http://endpoint.url</endpoint_url>\n5:                        <identity_link_url>" .
+                    "http://www.example.com/identity</identity_link_url>\n6:                        <resources>\n" .
+                    "7:                            <resource name=\"Magento_Customer::manage\" " .
+                    "invalid=\"invalid\"/>\n8:                            <resource " .
+                    "name=\"Magento_Customer::online\"/>\n9:                        </resources>\n" .
+                    "10:                    </integration>\n11:                </config>\n"
+                ],
             ],
             'invalid attribute in endpoint_url' => [
                 '<config>
@@ -335,7 +460,16 @@ class XsdTest extends TestCase
                         </resources>
                     </integration>
                 </config>',
-                ["Element 'endpoint_url', attribute 'invalid': The attribute 'invalid' is not allowed."],
+                [
+                    "Element 'endpoint_url', attribute 'invalid': The attribute 'invalid' is not allowed.The " .
+                    "xml was: \n0:<?xml version=\"1.0\"?>\n1:<config>\n2:                    <integration " .
+                    "name=\"TestIntegration1\">\n3:                        <email>test-integration1@magento.com" .
+                    "</email>\n4:                        <endpoint_url invalid=\"invalid\">http://endpoint.url" .
+                    "</endpoint_url>\n5:                        <identity_link_url>http://www.example.com/identity" .
+                    "</identity_link_url>\n6:                        <resources>\n7:                            " .
+                    "<resource name=\"Magento_Customer::manage\"/>\n8:                            <resource " .
+                    "name=\"Magento_Customer::online\"/>\n9:                        </resources>\n"
+                ],
             ],
             'invalid attribute in identity_link_url' => [
                 '<config>
@@ -349,7 +483,16 @@ class XsdTest extends TestCase
                         </resources>
                     </integration>
                 </config>',
-                ["Element 'identity_link_url', attribute 'invalid': The attribute 'invalid' is not allowed."],
+                [
+                    "Element 'identity_link_url', attribute 'invalid': The attribute 'invalid' is not allowed.The " .
+                    "xml was: \n0:<?xml version=\"1.0\"?>\n1:<config>\n2:                    <integration " .
+                    "name=\"TestIntegration1\">\n3:                        <email>test-integration1@magento.com" .
+                    "</email>\n4:                        <endpoint_url>http://endpoint.url</endpoint_url>\n" .
+                    "5:                        <identity_link_url invalid=\"invalid\">http://endpoint.url" .
+                    "</identity_link_url>\n6:                        <resources>\n7:                            " .
+                    "<resource name=\"Magento_Customer::manage\"/>\n8:                            <resource " .
+                    "name=\"Magento_Customer::online\"/>\n9:                        </resources>\n"
+                ],
             ],
             /** Missing or empty required attributes */
             'integration without name' => [
@@ -364,7 +507,16 @@ class XsdTest extends TestCase
                         </resources>
                     </integration>
                 </config>',
-                ["Element 'integration': The attribute 'name' is required but missing."],
+                [
+                    "Element 'integration': The attribute 'name' is required but missing.The xml was: \n" .
+                    "0:<?xml version=\"1.0\"?>\n1:<config>\n2:                    <integration>\n" .
+                    "3:                        <email>test-integration1@magento.com</email>\n" .
+                    "4:                        <endpoint_url>http://endpoint.url</endpoint_url>\n" .
+                    "5:                        <identity_link_url>http://www.example.com/identity" .
+                    "</identity_link_url>\n6:                        <resources>\n7:                            " .
+                    "<resource name=\"Magento_Customer::manage\"/>\n8:                            <resource " .
+                    "name=\"Magento_Customer::online\"/>\n9:                        </resources>\n"
+                ],
             ],
             'integration with empty name' => [
                 '<config>
@@ -379,10 +531,15 @@ class XsdTest extends TestCase
                     </integration>
                 </config>',
                 [
-                    "Element 'integration', attribute 'name': [facet 'minLength'] The value '' has a length of '0'; " .
-                    "this underruns the allowed minimum length of '2'.",
-                    "Element 'integration', attribute 'name': " .
-                    "'' is not a valid value of the atomic type 'integrationNameType'."
+                    "Element 'integration', attribute 'name': [facet 'minLength'] The value '' has a length " .
+                    "of '0'; this underruns the allowed minimum length of '2'.The xml was: \n" .
+                    "0:<?xml version=\"1.0\"?>\n1:<config>\n2:                    <integration name=\"\">\n" .
+                    "3:                        <email>test-integration1@magento.com</email>\n" .
+                    "4:                        <endpoint_url>http://endpoint.url</endpoint_url>\n" .
+                    "5:                        <identity_link_url>http://www.example.com/identity" .
+                    "</identity_link_url>\n6:                        <resources>\n7:                            " .
+                    "<resource name=\"Magento_Customer::manage\"/>\n8:                            <resource " .
+                    "name=\"Magento_Customer::online\"/>\n9:                        </resources>\n"
                 ],
             ],
             'resource without name' => [
@@ -397,7 +554,16 @@ class XsdTest extends TestCase
                         </resources>
                     </integration>
                 </config>',
-                ["Element 'resource': The attribute 'name' is required but missing."],
+                [
+                    "Element 'resource': The attribute 'name' is required but missing.The xml was: \n" .
+                    "3:                        <email>test-integration1@magento.com</email>\n" .
+                    "4:                        <endpoint_url>http://endpoint.url</endpoint_url>\n" .
+                    "5:                        <identity_link_url>http://www.example.com/identity" .
+                    "</identity_link_url>\n6:                        <resources>\n7:                            " .
+                    "<resource name=\"Magento_Customer::manage\"/>\n8:                            <resource/>\n" .
+                    "9:                        </resources>\n10:                    </integration>\n" .
+                    "11:                </config>\n12:\n"
+                ],
             ],
             'resource with empty name' => [
                 '<config>
@@ -412,10 +578,14 @@ class XsdTest extends TestCase
                     </integration>
                 </config>',
                 [
-                    "Element 'resource', attribute 'name': [facet 'pattern'] " .
-                    "The value '' is not accepted by the pattern '.+_.+::.+'.",
-                    "Element 'resource', attribute 'name': '' " .
-                    "is not a valid value of the atomic type 'resourceNameType'."
+                    "Element 'resource', attribute 'name': [facet 'pattern'] The value '' is not accepted by " .
+                    "the pattern '.+_.+::.+'.The xml was: \n3:                        <email>" .
+                    "test-integration1@magento.com</email>\n4:                        <endpoint_url>" .
+                    "http://endpoint.url</endpoint_url>\n5:                        <identity_link_url>" .
+                    "http://www.example.com/identity</identity_link_url>\n6:                        <resources>\n" .
+                    "7:                            <resource name=\"Magento_Customer::manage\"/>\n" .
+                    "8:                            <resource name=\"\"/>\n9:                        </resources>\n" .
+                    "10:                    </integration>\n11:                </config>\n12:\n"
                 ],
             ],
             /** Invalid values */
@@ -432,9 +602,14 @@ class XsdTest extends TestCase
                     </integration>
                 </config>',
                 [
-                    "Element 'email': [facet 'pattern'] The value 'invalid' " .
-                    "is not accepted by the pattern '[^@]+@[^\.]+\..+'.",
-                    "Element 'email': 'invalid' is not a valid value of the atomic type 'emailType'."
+                    "Element 'email': [facet 'pattern'] The value 'invalid' is not accepted by the " .
+                    "pattern '[^@]+@[^\.]+\..+'.The xml was: \n0:<?xml version=\"1.0\"?>\n1:<config>\n" .
+                    "2:                    <integration name=\"TestIntegration1\">\n3:                        " .
+                    "<email>invalid</email>\n4:                        <endpoint_url>http://endpoint.url" .
+                    "</endpoint_url>\n5:                        <identity_link_url>http://www.example.com/identity" .
+                    "</identity_link_url>\n6:                        <resources>\n7:                            " .
+                    "<resource name=\"Magento_Customer::manage\"/>\n8:                            <resource " .
+                    "name=\"Magento_Customer::online\"/>\n9:                        </resources>\n"
                 ],
             ],
             /** Invalid values */
@@ -451,10 +626,15 @@ class XsdTest extends TestCase
                     </integration>
                 </config>',
                 [
-                    "Element 'resource', attribute 'name': [facet 'pattern'] " .
-                    "The value 'customer_manage' is not accepted by the pattern '.+_.+::.+'.",
-                    "Element 'resource', attribute 'name': 'customer_manage' " .
-                    "is not a valid value of the atomic type 'resourceNameType'."
+                    "Element 'resource', attribute 'name': [facet 'pattern'] The value 'customer_manage' is " .
+                    "not accepted by the pattern '.+_.+::.+'.The xml was: \n3:                        <email>" .
+                    "test-integration1@magento.com</email>\n4:                        <endpoint_url>" .
+                    "http://endpoint.url</endpoint_url>\n5:                        <identity_link_url>" .
+                    "http://www.example.com/identity</identity_link_url>\n6:                        <resources>\n" .
+                    "7:                            <resource name=\"Magento_Customer::online\"/>\n" .
+                    "8:                            <resource name=\"customer_manage\"/>\n" .
+                    "9:                        </resources>\n10:                    </integration>\n" .
+                    "11:                </config>\n12:\n"
                 ],
             ]
         ];

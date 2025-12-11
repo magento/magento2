@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Indexer\Model\Message;
@@ -75,7 +75,7 @@ class Invalid implements \Magento\Framework\Notification\MessageInterface
         return __(
             'One or more <a href="%1">indexers are invalid</a>. Make sure your <a href="%2" target="_blank">Magento cron job</a> is running.',
             $url,
-            'https://devdocs.magento.com/guides/v2.4/config-guide/cli/config-cli-subcommands-cron.html#create-or-remove-the-magento-crontab'
+            'https://experienceleague.adobe.com/en/docs/commerce-operations/configuration-guide/cli/configure-cron-jobs#create-or-remove-the-commerce-crontab'
         );
         //@codingStandardsIgnoreEnd
     }

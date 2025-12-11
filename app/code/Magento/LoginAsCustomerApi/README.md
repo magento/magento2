@@ -2,12 +2,12 @@
 
 This module provides API for ability to login into customer account for an admin user.
 
-### Public APIs
+## Public APIs
 
 - `\Magento\LoginAsCustomerApi\Api\Data\AuthenticationDataInterface`:
     - contains authentication data
-    
--`\Magento\LoginAsCustomerApi\Api\Data\IsLoginAsCustomerEnabledForCustomerResultInterface`:
+
+- `\Magento\LoginAsCustomerApi\Api\Data\IsLoginAsCustomerEnabledForCustomerResultInterface`:
     - contains the result of the check whether the login as customer is enabled
 
 - `\Magento\LoginAsCustomerApi\Api\AuthenticateCustomerBySecretInterface`:
@@ -26,7 +26,7 @@ This module provides API for ability to login into customer account for an admin
 
 - `\Magento\LoginAsCustomerApi\Api\GetAuthenticationDataBySecretInterface`:
     - get authentication data by secret
-    
+
 - `\Magento\LoginAsCustomerApi\Api\GetLoggedAsCustomerAdminIdInterface`:
     - get id of admin logged as customer
 
@@ -48,10 +48,10 @@ This module provides API for ability to login into customer account for an admin
 - `\Magento\LoginAsCustomerApi\Api\SetLoggedAsCustomerCustomerIdInterface`:
     - set id of customer admin is logged as
 
-For information about a public API in Magento 2, see [Public interfaces & APIs](http://devdocs.magento.com/guides/v2.4/extension-dev-guide/api-concepts.html).
+For information about a public API, see [Public interfaces & APIs](https://developer.adobe.com/commerce/php/development/components/api-concepts/).
 
 ## Additional information
 
 This module is a part of Login As Customer feature.
 
-[Learn more about Login As Customer feature](https://docs.magento.com/user-guide/customers/login-as-customer.html).
+[Learn more about Login As Customer feature](https://experienceleague.adobe.com/en/docs/commerce-admin/customers/customer-accounts/manage/login-as-customer).

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -33,7 +33,6 @@ class OperationFactoryTest extends TestCase
     protected function setUp(): void
     {
         $this->objectManagerMock = $this->getMockBuilder(ObjectManagerInterface::class)
-            ->setMethods([])
             ->getMockForAbstractClass();
         $objectManagerProviderMock = $this->createMock(ObjectManagerProvider::class);
         $objectManagerProviderMock->expects($this->once())->method('get')->willReturn($this->objectManagerMock);
@@ -73,7 +72,7 @@ class OperationFactoryTest extends TestCase
     /**
      * @return array
      */
-    public function aliasesDataProvider()
+    public static function aliasesDataProvider()
     {
         return  [
             [OperationFactory::AREA_CONFIG_GENERATOR, [], Area::class],

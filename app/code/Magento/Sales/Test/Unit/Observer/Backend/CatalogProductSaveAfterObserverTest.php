@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -70,7 +70,7 @@ class CatalogProductSaveAfterObserverTest extends TestCase
     /**
      * @return array
      */
-    public function statusUpdateDataProvider()
+    public static function statusUpdateDataProvider()
     {
         return [[125, 1], [100, 0]];
     }

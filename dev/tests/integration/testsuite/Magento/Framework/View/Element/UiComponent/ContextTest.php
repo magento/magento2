@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 
 declare(strict_types=1);
@@ -92,7 +92,10 @@ class ContextTest extends TestCase
                     'dataScope' => null,
                     'config' => [
                         'data' => ['some_field' => '${\'some_value\'}', '__disableTmpl' => ['some_field' => true]],
-                        'params' => ['namespace' => null]]
+                        'params' => [
+                            'namespace' => null,
+                            'id' => 'id'
+                        ]]
                 ]
             ],
             $data

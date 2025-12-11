@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
@@ -126,5 +126,14 @@
                 <item name="customer_session" xsi:type="object">Magento\Customer\Model\StoreSwitcher\RedirectDataPostprocessor</item>
             </argument>
         </arguments>
+    </type>
+    <type name="Magento\Customer\Model\Session">
+        <plugin name="afterLogout" type="Magento\Customer\Model\Plugin\ClearSessionsAfterLogoutPlugin"/>
+    </type>
+    <type name="Magento\Customer\Api\CustomerRepositoryInterface">
+        <plugin name="customer_dobvalidation_plugin" type="Magento\Customer\Plugin\ValidateDobOnSave" sortOrder="10"/>
+    </type>
+    <type name="Magento\Customer\Model\Vat">
+        <plugin name="cache_vat_validation_result" type="Magento\Customer\Plugin\Model\VatPlugin"/>
     </type>
 </config>

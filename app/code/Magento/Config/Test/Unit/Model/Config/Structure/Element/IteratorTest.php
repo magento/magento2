@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -11,6 +11,7 @@ use Magento\Config\Model\Config\Structure\Element\Field;
 use Magento\Config\Model\Config\Structure\Element\Group;
 use Magento\Config\Model\Config\Structure\Element\Iterator;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 class IteratorTest extends TestCase
@@ -53,7 +54,16 @@ class IteratorTest extends TestCase
     {
         $this->_flyweightMock
             ->method('setData')
-            ->withConsecutive([['id' => 1], 'scope'], [['id' => 2], 'scope'], [['id' => 3], 'scope']);
+            ->willReturnCallback(function ($arg1, $arg2) {
+                if ($arg1['id'] == 1 && $arg2 == 'scope') {
+                    return null;
+                } elseif ($arg1['id'] == 2 && $arg2 == 'scope') {
+                    return null;
+                } elseif ($arg1['id'] == 3 && $arg2 == 'scope') {
+                    return null;
+                }
+            });
+
         $this->_flyweightMock->expects($this->any())->method('isVisible')->willReturn(true);
         $counter = 0;
         foreach ($this->_model as $item) {
@@ -76,8 +86,8 @@ class IteratorTest extends TestCase
     /**
      * @param string $elementId
      * @param bool $result
-     * @dataProvider isLastDataProvider
      */
+    #[DataProvider('isLastDataProvider')]
     public function testIsLast($elementId, $result): void
     {
         $elementMock = $this->createMock(Field::class);
@@ -88,7 +98,7 @@ class IteratorTest extends TestCase
     /**
      * @return array
      */
-    public function isLastDataProvider(): array
+    public static function isLastDataProvider(): array
     {
         return [[1, false], [2, false], [3, true]];
     }

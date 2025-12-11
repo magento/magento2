@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Reports\Block\Adminhtml;
 
@@ -77,7 +77,7 @@ class GridTest extends \PHPUnit\Framework\TestCase
      *
      * @return array
      */
-    public function getSalesRepresentativeIdDataProvider()
+    public static function getSalesRepresentativeIdDataProvider()
     {
         return [
             'Data for US locale' =>             ['08/15/2018', '08/20/2018', 'day', 'en_US', 6],

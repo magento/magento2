@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -71,7 +71,7 @@ class CustomerSharingOptionsTest extends WebapiAbstract
             ['customerRegistry' => $this->customerRegistry]
         );
 
-        $this->customerHelper = new CustomerHelper();
+        $this->customerHelper = new CustomerHelper($this->name());
         $this->customerData = $this->customerHelper->createSampleCustomer();
         $this->tokenService = Bootstrap::getObjectManager()->get(CustomerTokenServiceInterface::class);
 
@@ -158,16 +158,16 @@ class CustomerSharingOptionsTest extends WebapiAbstract
      *
      * @return array
      */
-    public function getCustomerDataWebsiteScopeDataProvider(): array
+    public static function getCustomerDataWebsiteScopeDataProvider(): array
     {
         return [
             'Default Store View' => [
-                'store_code' => 'default',
-                'exception' => false
+                'storeCode' => 'default',
+                'expectingException' => false
             ],
             'Custom Store View' => [
-                'store_code' => 'fixture_second_store',
-                'exception' => true
+                'storeCode' => 'fixture_second_store',
+                'expectingException' => true
             ]
         ];
     }
@@ -177,16 +177,16 @@ class CustomerSharingOptionsTest extends WebapiAbstract
      *
      * @return array
      */
-    public function getCustomerDataGlobalScopeDataProvider(): array
+    public static function getCustomerDataGlobalScopeDataProvider(): array
     {
         return [
             'Default Store View' => [
-                'store_code' => 'default',
-                'exception' => false
+                'storeCode' => 'default',
+                'expectingException' => false
             ],
             'Custom Store View' => [
-                'store_code' => 'fixture_second_store',
-                'exception' => false
+                'storeCode' => 'fixture_second_store',
+                'expectingException' => false
             ]
         ];
     }

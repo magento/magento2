@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Sales\Model\Order\Creditmemo;
 
@@ -33,7 +33,7 @@ class Notifier implements \Magento\Sales\Model\Order\Creditmemo\NotifierInterfac
     public function notify(
         \Magento\Sales\Api\Data\OrderInterface $order,
         \Magento\Sales\Api\Data\CreditmemoInterface $creditmemo,
-        \Magento\Sales\Api\Data\CreditmemoCommentCreationInterface $comment = null,
+        ?\Magento\Sales\Api\Data\CreditmemoCommentCreationInterface $comment = null,
         $forceSyncMode = false
     ) {
         foreach ($this->senders as $sender) {

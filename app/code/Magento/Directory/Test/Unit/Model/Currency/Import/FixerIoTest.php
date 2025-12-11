@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -12,8 +12,8 @@ use Magento\Directory\Model\Currency\Import\FixerIo;
 use Magento\Directory\Model\CurrencyFactory;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\DataObject;
-use Magento\Framework\HTTP\ZendClient;
-use Magento\Framework\HTTP\ZendClientFactory;
+use Magento\Framework\HTTP\LaminasClient;
+use Magento\Framework\HTTP\LaminasClientFactory;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -30,7 +30,7 @@ class FixerIoTest extends TestCase
     private $currencyFactory;
 
     /**
-     * @var ZendClientFactory|MockObject
+     * @var LaminasClientFactory|MockObject
      */
     private $httpClientFactory;
 
@@ -46,15 +46,14 @@ class FixerIoTest extends TestCase
     {
         $this->currencyFactory = $this->getMockBuilder(CurrencyFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
-        $this->httpClientFactory = $this->getMockBuilder(ZendClientFactory::class)
+        $this->httpClientFactory = $this->getMockBuilder(LaminasClientFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
         $this->scopeConfig = $this->getMockBuilder(ScopeConfigInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods([])
             ->getMockForAbstractClass();
 
         $this->model = new FixerIo($this->currencyFactory, $this->scopeConfig, $this->httpClientFactory);
@@ -75,24 +74,28 @@ class FixerIoTest extends TestCase
             . "http://data.fixer.io for UAH.";
 
         $this->scopeConfig->method('getValue')
-            ->withConsecutive(
-                ['currency/fixerio/api_key', 'store'],
-                ['currency/fixerio/timeout', 'store']
-            )
-            ->willReturnOnConsecutiveCalls('api_key', 100);
+            ->willReturnCallback(
+                function ($arg1, $arg2) {
+                    if ($arg1 === 'currency/fixerio/api_key' && $arg2 === 'store') {
+                        return 'api_key';
+                    } elseif ($arg1 === 'currency/fixerio/timeout' && $arg2 === 'store') {
+                        return 100;
+                    }
+                }
+            );
 
         /** @var Currency|MockObject $currency */
         $currency = $this->getMockBuilder(Currency::class)
             ->disableOriginalConstructor()
             ->getMock();
-        /** @var ZendClient|MockObject $httpClient */
-        $httpClient = $this->getMockBuilder(ZendClient::class)
+        /** @var LaminasClient|MockObject $httpClient */
+        $httpClient = $this->getMockBuilder(LaminasClient::class)
             ->disableOriginalConstructor()
             ->getMock();
         /** @var DataObject|MockObject $currencyMock */
         $httpResponse = $this->getMockBuilder(DataObject::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getBody'])
+            ->addMethods(['getBody'])
             ->getMock();
 
         $this->currencyFactory->method('create')
@@ -106,9 +109,11 @@ class FixerIoTest extends TestCase
             ->willReturn($httpClient);
         $httpClient->method('setUri')
             ->willReturnSelf();
-        $httpClient->method('setConfig')
+        $httpClient->method('setOptions')
             ->willReturnSelf();
-        $httpClient->method('request')
+        $httpClient->method('setMethod')
+            ->willReturnSelf();
+        $httpClient->method('send')
             ->willReturn($httpResponse);
         $httpResponse->method('getBody')
             ->willReturn($responseBody);

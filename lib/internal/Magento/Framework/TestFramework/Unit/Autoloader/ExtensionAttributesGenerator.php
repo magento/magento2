@@ -1,7 +1,7 @@
 <?php
 /**
- *  Copyright © Magento, Inc. All rights reserved.
- *  See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Framework\TestFramework\Unit\Autoloader;
@@ -45,7 +45,7 @@ class ExtensionAttributesGenerator implements GeneratorInterface
     private function isExtension($className)
     {
         $suffix = "Extension";
-        $sourceName = rtrim(substr($className, 0, -strlen($suffix)), '\\');
+        $sourceName = $className !== null ? rtrim(substr($className, 0, -strlen($suffix)), '\\') : '';
         return $sourceName . $suffix == $className;
     }
 }

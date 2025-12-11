@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -44,18 +44,11 @@ class InStockOptionSelectBuilderTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->stockStatusResourceMock = $this->getMockBuilder(Status::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->stockStatusResourceMock = $this->createMock(Status::class);
 
-        $this->selectMock = $this->getMockBuilder(Select::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->selectMock = $this->createMock(Select::class);
 
-        $this->optionSelectBuilderMock = $this->getMockBuilder(OptionSelectBuilder::class)
-            ->setMethods([])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->optionSelectBuilderMock = $this->createMock(OptionSelectBuilder::class);
 
         $this->objectManagerHelper = new ObjectManager($this);
         $this->model = $this->objectManagerHelper->getObject(

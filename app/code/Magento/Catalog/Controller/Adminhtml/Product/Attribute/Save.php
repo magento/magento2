@@ -1,8 +1,7 @@
 <?php
 /**
- *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Catalog\Controller\Adminhtml\Product\Attribute;
@@ -112,8 +111,8 @@ class Save extends Attribute implements HttpPostActionInterface
         FilterManager $filterManager,
         Product $productHelper,
         LayoutFactory $layoutFactory,
-        Presentation $presentation = null,
-        FormData $formDataSerializer = null
+        ?Presentation $presentation = null,
+        ?FormData $formDataSerializer = null
     ) {
         parent::__construct($context, $attributeLabelCache, $coreRegistry, $resultPageFactory);
         $this->buildFactory = $buildFactory;
@@ -135,7 +134,6 @@ class Save extends Attribute implements HttpPostActionInterface
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
-     * @throws \Zend_Validate_Exception
      */
     public function execute()
     {
@@ -270,6 +268,21 @@ class Save extends Attribute implements HttpPostActionInterface
 
             unset($data['entity_type_id']);
 
+            if (array_key_exists('reset_is-default_option', $data) && $data['reset_is-default_option']) {
+                unset($data['reset_is-default_option']);
+                $data['default_value'] = null;
+            } elseif (isset($data['default'])) {
+                $defaultOptions = [];
+                foreach ((array)$data['default'] as $defaultValue) {
+                    if ((int)$defaultValue > 0) {
+                        $defaultOptions[] = $defaultValue;
+                    }
+                }
+                if (!empty($defaultOptions)) {
+                    $data['default_value'] = implode(",", $defaultOptions);
+                }
+            }
+
             $model->addData($data);
 
             if (!$attributeId) {
@@ -327,6 +340,9 @@ class Save extends Attribute implements HttpPostActionInterface
                 return $this->returnResult('catalog/*/', [], ['error' => false]);
             } catch (\Exception $e) {
                 $this->messageManager->addErrorMessage($e->getMessage());
+                if ($attributeId === null) {
+                    unset($data['frontend_input']);
+                }
                 $this->_session->setAttributeData($data);
                 return $this->returnResult(
                     'catalog/*/edit',

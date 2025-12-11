@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Theme\Model\Wysiwyg;
@@ -115,8 +115,8 @@ class Storage
         \Magento\Framework\Image\AdapterFactory $imageFactory,
         \Magento\Framework\Url\EncoderInterface $urlEncoder,
         \Magento\Framework\Url\DecoderInterface $urlDecoder,
-        \Magento\Framework\Filesystem\Io\File $file = null,
-        DriverInterface $filesystemDriver = null
+        ?\Magento\Framework\Filesystem\Io\File $file = null,
+        ?DriverInterface $filesystemDriver = null
     ) {
         $this->mediaWriteDirectory = $filesystem->getDirectoryWrite(DirectoryList::MEDIA);
         $this->_helper = $helper;
@@ -206,7 +206,7 @@ class Storage
      */
     public function createFolder($name, $path)
     {
-        if (!preg_match(self::DIRECTORY_NAME_REGEXP, $name)) {
+        if ($name === null || !preg_match(self::DIRECTORY_NAME_REGEXP, $name)) {
             throw new LocalizedException(
                 __('Use only standard alphanumeric, dashes and underscores.')
             );
@@ -342,7 +342,7 @@ class Storage
     public function deleteDirectory($path)
     {
         $rootCmp = rtrim($this->_helper->getStorageRoot(), '/');
-        $pathCmp = rtrim($path, '/');
+        $pathCmp = $path !== null ? rtrim($path, '/') : '';
         $absolutePath = rtrim(
             $this->filesystemDriver->getRealPathSafety($this->mediaWriteDirectory->getAbsolutePath($path)),
             '/'

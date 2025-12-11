@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Framework\View\Asset\NotationResolver;
@@ -40,7 +40,7 @@ class Module
      */
     public function convertModuleNotationToPath(Asset\LocalInterface $thisAsset, $relatedFileId)
     {
-        if (false === strpos($relatedFileId, Asset\Repository::FILE_ID_SEPARATOR)) {
+        if (!$relatedFileId || false === strpos($relatedFileId, Asset\Repository::FILE_ID_SEPARATOR)) {
             return $relatedFileId;
         }
         $thisPath = $thisAsset->getPath();

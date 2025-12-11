@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -538,7 +538,7 @@ QUERY;
     /**
      * @return array
      */
-    public function filterSingleCategoryDataProvider(): array
+    public static function filterSingleCategoryDataProvider(): array
     {
         return [
             [
@@ -607,7 +607,7 @@ QUERY;
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      * @return array
      */
-    public function filterMultipleCategoriesDataProvider(): array
+    public static function filterMultipleCategoriesDataProvider(): array
     {
         return[
             //Filter by multiple IDs
@@ -918,5 +918,119 @@ QUERY;
         $result = $this->graphQlQuery($query, [], '', ['store' => 'test_store_1']);
         $this->assertArrayNotHasKey('errors', $result);
         $this->assertCount(1, $result['categoryList']);
+    }
+
+    /**
+     * @magentoApiDataFixture Magento/Catalog/_files/categories.php
+     */
+    public function testQueryParentCategoriesProductCount()
+    {
+        $query = <<<QUERY
+{
+    categoryList(filters: {ids: {eq: "3"}}){
+        id
+        name
+        product_count
+        level
+        children{
+          name
+          product_count
+          level
+          children{
+            name
+            product_count
+            level
+            children{
+                name
+                product_count
+                level
+                children {
+                    name
+                    product_count
+                    level
+                }
+            }
+          }
+        }
+    }
+}
+QUERY;
+        $response = $this->graphQlQuery($query);
+        $this->assertArrayNotHasKey('errors', $response);
+        $this->assertArrayHasKey('categoryList', $response);
+        $baseCategory = $response['categoryList'][0];
+        $this->assertEquals(3, $baseCategory['product_count']);
+    }
+
+    /**
+     * Get categoryList query for page.
+     *
+     * @param int $page
+     * @return string
+     */
+    private function getQueryForPage(int $page)
+    {
+        return <<<QUERY
+{
+    categoryList(
+        filters: {parent_id: {in: ["2"]}}
+        pageSize: 1
+        currentPage: {$page}
+    ){
+        id
+        name
+        level
+        children{
+          name
+          level
+          children{
+            name
+            level
+            children{
+                name
+                level
+                children {
+                    name
+                    level
+                }
+            }
+          }
+        }
+    }
+}
+QUERY;
+    }
+
+    /**
+     * @magentoApiDataFixture Magento/Catalog/_files/categories.php
+     */
+    public function testCategoryListPaginationLimitsNotAppliedToChildren()
+    {
+        $response = $this->graphQlQuery($this->getQueryForPage(1));
+        $this->assertArrayNotHasKey('errors', $response);
+        $this->assertArrayHasKey('categoryList', $response);
+        $this->assertCount(1, $response['categoryList']);
+        $baseCategory = $response['categoryList'][0];
+        $this->assertEquals('Category 1', $baseCategory['name']);
+        $this->assertCount(2, $baseCategory['children']);
+        $this->assertEquals('Category 1.1', $baseCategory['children'][0]['name']);
+        $this->assertEquals('Category 1.2', $baseCategory['children'][1]['name']);
+        $this->assertEquals('Category 1.1.1', $baseCategory['children'][0]['children'][0]['name']);
+
+        $response = $this->graphQlQuery($this->getQueryForPage(2));
+        $this->assertArrayNotHasKey('errors', $response);
+        $this->assertArrayHasKey('categoryList', $response);
+        $this->assertCount(1, $response['categoryList']);
+        $baseCategory = $response['categoryList'][0];
+        $this->assertEquals('Category 2', $baseCategory['name']);
+        $this->assertCount(0, $baseCategory['children']);
+
+        $response = $this->graphQlQuery($this->getQueryForPage(3));
+        $this->assertArrayNotHasKey('errors', $response);
+        $this->assertArrayHasKey('categoryList', $response);
+        $this->assertCount(1, $response['categoryList']);
+        $baseCategory = $response['categoryList'][0];
+        $this->assertEquals('Movable', $baseCategory['name']);
+        $this->assertCount(0, $baseCategory['children']);
     }
 }

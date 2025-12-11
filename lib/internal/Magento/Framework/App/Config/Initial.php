@@ -1,21 +1,22 @@
 <?php
 /**
- * Initial configuration data container. Provides interface for reading initial config values
- *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework\App\Config;
 
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Serialize\SerializerInterface;
 
+/**
+ * Initial configuration data container. Provides interface for reading initial config values
+ */
 class Initial
 {
     /**
      * Cache identifier used to store initial config
      */
-    const CACHE_ID = 'initial_config';
+    public const CACHE_ID = 'initial_config';
 
     /**
      * Config data
@@ -46,7 +47,7 @@ class Initial
     public function __construct(
         \Magento\Framework\App\Config\Initial\Reader $reader,
         \Magento\Framework\App\Cache\Type\Config $cache,
-        SerializerInterface $serializer = null
+        ?SerializerInterface $serializer = null
     ) {
         $this->serializer = $serializer ?: \Magento\Framework\App\ObjectManager::getInstance()
             ->get(SerializerInterface::class);
@@ -69,7 +70,7 @@ class Initial
      */
     public function getData($scope)
     {
-        list($scopeType, $scopeCode) = array_pad(explode('|', $scope), 2, null);
+        [$scopeType, $scopeCode] = array_pad(explode('|', (string)$scope), 2, null);
 
         if (ScopeConfigInterface::SCOPE_TYPE_DEFAULT == $scopeType) {
             return $this->_data[$scopeType] ?? [];

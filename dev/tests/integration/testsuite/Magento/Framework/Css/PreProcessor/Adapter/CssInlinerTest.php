@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework\Css\PreProcessor\Adapter;
 
@@ -45,18 +45,18 @@ class CssInlinerTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function getFilesDataProvider()
+    public static function getFilesDataProvider()
     {
         $fixtureDir = dirname(dirname(__DIR__));
         return [
             'noSpacesCss'=>[
-                'resultHtml' => $fixtureDir . "/_files/css/test-input.html",
-                'cssWithoutSpaces' => $fixtureDir . "/_files/css/test-css-no-spaces.css",
+                'htmlFilePath' => $fixtureDir . "/_files/css/test-input.html",
+                'cssFilePath' => $fixtureDir . "/_files/css/test-css-no-spaces.css",
                 'vertical-align: top; padding: 10px 10px 10px 0; width: 50%;'
             ],
             'withSpacesCss'=>[
-                'resultHtml' => $fixtureDir . "/_files/css/test-input.html",
-                'cssWithSpaces' => $fixtureDir . "/_files/css/test-css-with-spaces.css",
+                'htmlFilePath' => $fixtureDir . "/_files/css/test-input.html",
+                'cssFilePath' => $fixtureDir . "/_files/css/test-css-with-spaces.css",
                 'vertical-align: top; padding: 10px 10px 10px 0; width: 50%;'
             ],
         ];
@@ -84,13 +84,13 @@ class CssInlinerTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function getFilesDataProviderEmogrifier()
+    public static function getFilesDataProviderEmogrifier()
     {
         $fixtureDir = dirname(dirname(__DIR__));
         return [
             'noSpacesCss'=>[
-                'resultHtml' => $fixtureDir . "/_files/css/test-input.html",
-                'cssWithoutSpaces' => $fixtureDir . "/_files/css/test-css-no-spaces.css",
+                'htmlFilePath' => $fixtureDir . "/_files/css/test-input.html",
+                'cssFilePath' => $fixtureDir . "/_files/css/test-css-no-spaces.css",
                 'vertical-align: top; padding: 10px 10px 10px 0; width: 50%;'
             ]
         ];

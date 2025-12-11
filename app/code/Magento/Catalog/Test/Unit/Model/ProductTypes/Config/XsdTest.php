@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -37,12 +37,23 @@ class XsdTest extends TestCase
     /**
      * @param string $xmlString
      * @param array $expectedError
+     * @param bool $isRegex
      * @dataProvider schemaCorrectlyIdentifiesInvalidXmlDataProvider
      */
-    public function testSchemaCorrectlyIdentifiesInvalidXml($xmlString, $expectedError)
+    public function testSchemaCorrectlyIdentifiesInvalidXml($xmlString, $expectedError, $isRegex = false)
     {
-        $actualError = $this->_xsdValidator->validate($this->_xsdSchema, $xmlString);
-        $this->assertEquals($expectedError, $actualError);
+        $actualErrors = $this->_xsdValidator->validate($this->_xsdSchema, $xmlString);
+        $this->assertEquals(false, empty($actualErrors));
+
+        foreach ($expectedError as $error) {
+            if ($isRegex) {
+                foreach ($actualErrors as $actualError) {
+                    $this->assertMatchesRegularExpression($error, $actualError);
+                }
+            } else {
+                $this->assertContains($error, $actualErrors);
+            }
+        }
     }
 
     public function testSchemaCorrectlyIdentifiesValidXml()
@@ -56,7 +67,7 @@ class XsdTest extends TestCase
     /**
      * Data provider with invalid xml array according to product_types.xsd
      */
-    public function schemaCorrectlyIdentifiesInvalidXmlDataProvider()
+    public static function schemaCorrectlyIdentifiesInvalidXmlDataProvider()
     {
         return include __DIR__ . '/_files/invalidProductTypesXmlArray.php';
     }

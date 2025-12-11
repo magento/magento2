@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Framework\Composer;
@@ -79,7 +79,7 @@ class ComposerInformationTest extends \PHPUnit\Framework\TestCase
             ['composerFactory' => $this->composerFactory]
         );
 
-        $this->assertEquals("~7.1.3||~7.2.0", $composerInfo->getRequiredPhpVersion());
+        $this->assertEquals("~8.1.0", $composerInfo->getRequiredPhpVersion());
     }
 
     /**
@@ -146,7 +146,7 @@ class ComposerInformationTest extends \PHPUnit\Framework\TestCase
      *
      * @return array
      */
-    public function getRequiredPhpVersionDataProvider()
+    public static function getRequiredPhpVersionDataProvider()
     {
         return [
             'Skeleton Composer' => ['testSkeleton'],

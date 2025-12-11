@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
  */
 
 /**
@@ -13,31 +13,21 @@ if (in_array('phar', \stream_get_wrappers())) {
 }
 #ini_set('display_errors', 1);
 
-/* PHP version validation */
-if (!defined('PHP_VERSION_ID') || PHP_VERSION_ID < 70400) {
-    if (PHP_SAPI == 'cli') {
-        echo 'Magento supports PHP 7.4.0 or later. ' .
-            'Please read https://devdocs.magento.com/guides/v2.4/install-gde/system-requirements-tech.html';
+if (PHP_VERSION_ID < 80100) {
+    if (PHP_SAPI === 'cli') {
+        echo 'Magento supports PHP 8.1.0 or later. ' .
+            'Please read https://experienceleague.adobe.com/docs/commerce-operations/installation-guide/system-requirements.html';
     } else {
         echo <<<HTML
 <div style="font:12px/1.35em arial, helvetica, sans-serif;">
-    <p>Magento supports PHP 7.4.0 or later. Please read
-    <a target="_blank" href="https://devdocs.magento.com/guides/v2.4/install-gde/system-requirements-tech.html">
+    <p>Magento supports PHP 8.1.0 or later. Please read
+    <a target="_blank" href="https://experienceleague.adobe.com/docs/commerce-operations/installation-guide/system-requirements.html">
     Magento System Requirements</a>.
 </div>
 HTML;
     }
+    http_response_code(503);
     exit(1);
-}
-
-// PHP 8 compatibility. Define constants that are not present in PHP < 8.0
-if (!defined('PHP_VERSION_ID') || PHP_VERSION_ID < 80000) {
-    if (!defined('T_NAME_QUALIFIED')) {
-        define('T_NAME_QUALIFIED', 24001);
-    }
-    if (!defined('T_NAME_FULLY_QUALIFIED')) {
-        define('T_NAME_FULLY_QUALIFIED', 24002);
-    }
 }
 
 require_once __DIR__ . '/autoload.php';
@@ -48,17 +38,6 @@ require_once __DIR__ . '/autoload.php';
 $umaskFile = BP . '/magento_umask';
 $mask = file_exists($umaskFile) ? octdec(file_get_contents($umaskFile)) : 002;
 umask($mask);
-
-if (empty($_SERVER['ENABLE_IIS_REWRITES']) || ($_SERVER['ENABLE_IIS_REWRITES'] != 1)) {
-    /*
-     * Unset headers used by IIS URL rewrites.
-     */
-    unset($_SERVER['HTTP_X_REWRITE_URL']);
-    unset($_SERVER['HTTP_X_ORIGINAL_URL']);
-    unset($_SERVER['IIS_WasUrlRewritten']);
-    unset($_SERVER['UNENCODED_URL']);
-    unset($_SERVER['ORIG_PATH_INFO']);
-}
 
 if (
     (!empty($_SERVER['MAGE_PROFILER']) || file_exists(BP . '/var/profiler.flag'))

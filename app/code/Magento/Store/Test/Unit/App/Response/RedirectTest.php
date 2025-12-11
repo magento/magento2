@@ -1,9 +1,7 @@
 <?php
 /**
- * Response redirector tests
- *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 declare(strict_types=1);
@@ -130,7 +128,7 @@ class RedirectTest extends TestCase
      *
      * @return array
      */
-    public function urlAddresses(): array
+    public static function urlAddresses(): array
     {
         return [
             [self::STUB_CUSTOM_ADMIN_URL, Area::AREA_ADMINHTML, true, self::STUB_CUSTOM_ADMIN_URL],

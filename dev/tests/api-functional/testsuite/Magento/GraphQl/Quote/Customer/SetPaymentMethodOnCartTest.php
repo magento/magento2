@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -234,7 +234,7 @@ QUERY;
     /**
      * @return array
      */
-    public function dataProviderSetPaymentMethodWithoutRequiredParameters(): array
+    public static function dataProviderSetPaymentMethodWithoutRequiredParameters(): array
     {
         return [
             'missed_cart_id' => [

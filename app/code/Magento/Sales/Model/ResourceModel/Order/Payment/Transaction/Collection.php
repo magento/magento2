@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Sales\Model\ResourceModel\Order\Payment\Transaction;
 
@@ -10,8 +10,6 @@ use Magento\Sales\Model\ResourceModel\Order\Collection\AbstractCollection;
 
 /**
  * Payment transactions collection
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Collection extends AbstractCollection implements TransactionSearchResultInterface
 {
@@ -87,6 +85,21 @@ class Collection extends AbstractCollection implements TransactionSearchResultIn
     }
 
     /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        $this->_orderId = null;
+        $this->_addOrderInformation = [];
+        $this->_addPaymentInformation = [];
+        $this->_storeIds = [];
+        $this->_paymentId = null;
+        $this->_parentId = null;
+        $this->_txnTypes = null;
+        parent::_resetState();
+    }
+
+    /**
      * Join order information
      *
      * @param string[] $keys
@@ -124,6 +137,7 @@ class Collection extends AbstractCollection implements TransactionSearchResultIn
 
     /**
      * Payment ID filter setter
+     *
      * Can take either the integer id or the payment instance
      *
      * @param \Magento\Sales\Model\Order\Payment|int $payment

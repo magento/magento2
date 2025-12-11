@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -18,6 +18,8 @@ use Magento\Framework\App\Config\Value;
 use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\DB\Adapter\TableNotFoundException;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -28,6 +30,8 @@ use PHPUnit\Framework\TestCase;
  */
 class RuntimeConfigSourceTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var RuntimeConfigSource
      */
@@ -70,23 +74,17 @@ class RuntimeConfigSourceTest extends TestCase
     {
         $objectManager = new ObjectManager($this);
 
-        $this->collectionFactoryMock = $this->getMockBuilder(CollectionFactory::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->scopeCodeResolverMock = $this->getMockBuilder(ScopeCodeResolver::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->converterMock = $this->getMockBuilder(Converter::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->configItemMock = $this->getMockBuilder(Value::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['getScope', 'getPath', 'getValue'])
-            ->getMock();
-        $this->configItemMockTwo = $this->getMockBuilder(Value::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['getScope', 'getPath', 'getValue', 'getScopeId'])
-            ->getMock();
+        $this->collectionFactoryMock = $this->createMock(CollectionFactory::class);
+        $this->scopeCodeResolverMock = $this->createMock(ScopeCodeResolver::class);
+        $this->converterMock = $this->createMock(Converter::class);
+        $this->configItemMock = $this->createPartialMockWithReflection(
+            Value::class,
+            ['getScope', 'getPath', 'getValue']
+        );
+        $this->configItemMockTwo = $this->createPartialMockWithReflection(
+            Value::class,
+            ['getScope', 'getPath', 'getValue', 'getScopeId']
+        );
         $this->deploymentConfigMock = $this->createPartialMock(
             DeploymentConfig::class,
             ['isDbAvailable']
@@ -134,32 +132,31 @@ class RuntimeConfigSourceTest extends TestCase
             ->method('getValue')
             ->willReturn(true);
 
-        $this->configItemMockTwo->expects($this->exactly(3))
+        $this->configItemMockTwo->expects($this->exactly(4))
             ->method('getScope')
             ->willReturn($scope);
         $this->configItemMockTwo->expects($this->once())
             ->method('getScopeId')
             ->willReturn($scopeCode);
-        $this->configItemMockTwo->expects($this->once())
+        $this->configItemMockTwo->expects($this->exactly(2))
             ->method('getPath')
             ->willReturn('dev/test/setting2');
-        $this->configItemMockTwo->expects($this->once())
+        $this->configItemMockTwo->expects($this->exactly(2))
             ->method('getValue')
             ->willReturn(false);
         $this->scopeCodeResolverMock->expects($this->once())
             ->method('resolve')
             ->with($scope, $scopeCode)
             ->willReturnArgument(1);
-        $this->converterMock->expects($this->exactly(2))
+        $this->converterMock->expects($this->exactly(3))
             ->method('convert')
-            ->withConsecutive(
-                [['dev/test/setting' => true]],
-                [['dev/test/setting2' => false]]
-            )
-            ->willReturnOnConsecutiveCalls(
-                ['dev/test/setting' => true],
-                ['dev/test/setting2' => false]
-            );
+            ->willReturnCallback(function ($args) {
+                if ($args === ['dev/test/setting' => true]) {
+                    return ['dev/test/setting' => true];
+                } elseif ($args === ['dev/test/setting2' => false]) {
+                    return ['dev/test/setting2' => false];
+                }
+            });
 
         $this->assertEquals(
             [
@@ -168,6 +165,9 @@ class RuntimeConfigSourceTest extends TestCase
                 ],
                 'websites' => [
                     'myWebsites' => [
+                        'dev/test/setting2' => false
+                    ],
+                    'mywebsites' => [
                         'dev/test/setting2' => false
                     ]
                 ]
@@ -213,13 +213,12 @@ class RuntimeConfigSourceTest extends TestCase
     /**
      * Test get value for specified config
      *
-     * @dataProvider configDataProvider
-     *
      * @param string $path
      * @param array $configData
      * @param string $expectedResult
      * @return void
      */
+    #[DataProvider('configDataProvider')]
     public function testGetConfigValue(string $path, array $configData, string $expectedResult): void
     {
         $this->deploymentConfigMock->expects($this->once())
@@ -257,7 +256,7 @@ class RuntimeConfigSourceTest extends TestCase
      *
      * @return array
      */
-    public function configDataProvider(): array
+    public static function configDataProvider(): array
     {
         return [
             'config value 0' => ['default/test/option', ['test' => ['option' => 0]], '0'],

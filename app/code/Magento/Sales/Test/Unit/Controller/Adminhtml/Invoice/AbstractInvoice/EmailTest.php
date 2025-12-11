@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -207,8 +207,10 @@ class EmailTest extends TestCase
             ->willReturn($order);
         $this->objectManager
             ->method('create')
-            ->withConsecutive([InvoiceRepositoryInterface::class], [$cmNotifierClassName])
-            ->willReturnOnConsecutiveCalls($invoiceRepository, $this->invoiceManagement);
+            ->willReturnCallback(fn($param) => match ([$param]) {
+                [InvoiceRepositoryInterface::class] => $invoiceRepository,
+                [$cmNotifierClassName] => $this->invoiceManagement
+            });
 
         $this->invoiceManagement->expects($this->once())
             ->method('notify')

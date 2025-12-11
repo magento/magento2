@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -22,11 +22,11 @@ use Magento\Framework\App\Response\Http;
  */
 class Processor
 {
-    const MAGE_ERRORS_LOCAL_XML = 'local.xml';
-    const MAGE_ERRORS_DESIGN_XML = 'design.xml';
-    const DEFAULT_SKIN = 'default';
-    const ERROR_DIR = 'pub/errors';
-    const NUMBER_SYMBOLS_IN_SUBDIR_NAME = 2;
+    public const MAGE_ERRORS_LOCAL_XML = 'local.xml';
+    public const MAGE_ERRORS_DESIGN_XML = 'design.xml';
+    public const DEFAULT_SKIN = 'default';
+    public const ERROR_DIR = 'pub/errors';
+    public const NUMBER_SYMBOLS_IN_SUBDIR_NAME = 2;
 
     /**
      * Page title
@@ -111,6 +111,21 @@ class Processor
     public $reportUrl;
 
     /**
+     * @var string
+     */
+    public $_reportDir;
+
+    /**
+     * @var string
+     */
+    public $_indexDir;
+
+    /**
+     * @var string
+     */
+    public $_errorDir;
+
+    /**
      * Server script name
      *
      * @var string
@@ -163,9 +178,9 @@ class Processor
      */
     public function __construct(
         Http $response,
-        Json $serializer = null,
-        Escaper $escaper = null,
-        DocumentRoot $documentRoot = null
+        ?Json $serializer = null,
+        ?Escaper $escaper = null,
+        ?DocumentRoot $documentRoot = null
     ) {
         $this->_response = $response;
         $this->_errorDir  = __DIR__ . '/';
@@ -173,7 +188,6 @@ class Processor
         $this->serializer = $serializer ?: ObjectManager::getInstance()->get(Json::class);
         $this->escaper = $escaper ?: ObjectManager::getInstance()->get(Escaper::class);
         $this->documentRoot = $documentRoot ?? ObjectManager::getInstance()->get(DocumentRoot::class);
-
         if (!empty($_SERVER['SCRIPT_NAME'])) {
             if (in_array(basename($_SERVER['SCRIPT_NAME'], '.php'), ['404', '503', 'report'])) {
                 $this->_scriptName = dirname($_SERVER['SCRIPT_NAME']);
@@ -181,10 +195,8 @@ class Processor
                 $this->_scriptName = $_SERVER['SCRIPT_NAME'];
             }
         }
-
         $this->_indexDir = $this->_getIndexDir();
         $this->_root  = is_dir($this->_indexDir . 'app');
-
         $this->_prepareConfig();
         if (isset($_GET['skin'])) {
             $this->_setSkin($_GET['skin']);
@@ -192,6 +204,7 @@ class Processor
         if (isset($_GET['id'])) {
             $this->loadReport($_GET['id']);
         }
+        $response->setMetadata("NotCacheable", true);
     }
 
     /**
@@ -434,7 +447,7 @@ class Processor
         $html = '';
         if ($baseTemplate && $contentTemplate) {
             ob_start();
-            require_once $baseTemplate;
+            require $baseTemplate;
             $html = ob_get_clean();
         }
         return $html;
@@ -595,7 +608,7 @@ class Processor
      */
     private function isReportIdValid(string $reportId): bool
     {
-        return (bool)preg_match('/[a-fA-F0-9]{64}/', $reportId);
+        return (bool)preg_match('/^[a-fA-F0-9]{64}$/', $reportId);
     }
 
     /**
@@ -726,7 +739,7 @@ class Processor
      * @param \stdClass $config
      * @return void
      */
-    protected function _setSkin($value, \stdClass $config = null)
+    protected function _setSkin($value, ?\stdClass $config = null)
     {
         if (preg_match('/^[a-z0-9_]+$/i', $value) && is_dir($this->_errorDir . $value)) {
             if (!$config) {

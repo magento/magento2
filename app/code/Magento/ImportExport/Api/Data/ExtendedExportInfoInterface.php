@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -9,6 +9,8 @@ namespace Magento\ImportExport\Api\Data;
 
 /**
  * Extended export interface for implementation of Skipped Attributes which are missing from the basic interface
+ *
+ * @api
  */
 interface ExtendedExportInfoInterface extends ExportInfoInterface
 {

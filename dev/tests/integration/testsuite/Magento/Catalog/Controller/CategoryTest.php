@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -94,7 +94,7 @@ class CategoryTest extends AbstractController
     /**
      * @return array
      */
-    public function getViewActionDataProvider(): array
+    public static function getViewActionDataProvider(): array
     {
         return [
             'category without children' => [

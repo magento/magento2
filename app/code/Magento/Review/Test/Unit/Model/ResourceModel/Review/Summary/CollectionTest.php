@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -75,7 +75,7 @@ class CollectionTest extends TestCase
         );
         $this->loggerMock = $this->getMockForAbstractClass(LoggerInterface::class);
         $this->resourceMock = $this->getMockBuilder(AbstractDb::class)
-            ->setMethods(['getConnection', 'getMainTable', 'getTable'])
+            ->onlyMethods(['getConnection', 'getMainTable', 'getTable'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $this->connectionMock = $this->createPartialMock(
@@ -86,7 +86,7 @@ class CollectionTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $this->selectMock = $this->getMockBuilder(Select::class)
-            ->setMethods(['from'])
+            ->onlyMethods(['from'])
             ->setConstructorArgs(['adapter' => $this->connectionMock, 'selectRenderer' => $selectRenderer])
             ->getMock();
 

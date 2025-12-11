@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Framework\Translate;
@@ -96,7 +96,7 @@ class InlineTest extends \PHPUnit\Framework\TestCase
     {
         $actualText = $originalText;
         $this->_model->processResponseBody($actualText, false);
-        $this->markTestIncomplete('Bug MAGE-2494');
+        $this->markTestSkipped('Bug MAGE-2494');
 
         $expected = new \DOMDocument();
         $expected->preserveWhiteSpace = false;
@@ -112,7 +112,7 @@ class InlineTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function processResponseBodyDataProvider()
+    public static function processResponseBodyDataProvider()
     {
         $originalText = file_get_contents(__DIR__ . '/_files/_inline_page_original.html');
         $expectedText = file_get_contents(__DIR__ . '/_files/_inline_page_expected.html');

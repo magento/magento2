@@ -1,6 +1,6 @@
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 
 /*eslint max-nested-callbacks: 0*/
@@ -33,7 +33,13 @@ define([
             },
             component,
             dataScope = 'dataScope',
-            originalJQuery = jQuery.fn;
+            originalJQuery = jQuery.fn,
+            params = {
+                provider: 'provName',
+                name: '',
+                index: '',
+                dataScope: dataScope
+            };
 
         beforeEach(function (done) {
             injector.mock(mocks);
@@ -41,12 +47,7 @@ define([
                 'Magento_Ui/js/form/element/file-uploader',
                 'knockoutjs/knockout-es5'
             ], function (Constr) {
-                component = new Constr({
-                    provider: 'provName',
-                    name: '',
-                    index: '',
-                    dataScope: dataScope
-                });
+                component = new Constr(params);
 
                 done();
             });
@@ -57,15 +58,69 @@ define([
         });
 
         describe('initUploader method', function () {
+            let uppyMock;
+
+            beforeEach(function () {
+                uppyMock = {
+                    use: jasmine.createSpy('uppy.use'),
+                    on: jasmine.createSpy('uppy.on'),
+                    fileInput: jasmine.createSpyObj('fileInput', ['closest']),
+                    Dashboard: jasmine.createSpy('Dashboard'),
+                    DropTarget: jasmine.createSpy('DropTarget'),
+                    XHRUpload: jasmine.createSpy('XHRUpload')
+                };
+
+                window.Uppy = { Uppy: function () { return uppyMock; } };
+            });
+
             it('creates instance of file uploader', function () {
-                var elem = document.createElement('input');
+                let fileInputMock = document.createElement('input');
 
-                spyOn(jQuery.fn, 'fileupload');
+                spyOn(component, 'initUploader').and.callThrough();
+                spyOn(component, 'replaceInputTypeFile');
 
-                component.initUploader(elem);
+                component.initUploader(fileInputMock);
 
-                expect(jQuery.fn.fileupload).toHaveBeenCalled();
+                expect(component.initUploader).toHaveBeenCalledWith(fileInputMock);
+                expect(component.replaceInputTypeFile).toHaveBeenCalledWith(fileInputMock);
 
+                expect(uppyMock.use).toHaveBeenCalledWith(window.Uppy.Dashboard, jasmine.any(Object));
+                expect(uppyMock.use).toHaveBeenCalledWith(window.Uppy.DropTarget, jasmine.any(Object));
+                expect(uppyMock.use).toHaveBeenCalledWith(window.Uppy.XHRUpload, jasmine.any(Object));
+            });
+        });
+
+        describe('setInitialValue method', function () {
+
+            it('check for chainable', function () {
+                expect(component.setInitialValue()).toEqual(component);
+            });
+            it('check for set value', function () {
+                var initialValue = [
+                        {
+                            'name': 'test.png',
+                            'size': 0,
+                            'type': 'image/png',
+                            'url': 'http://localhost:8000/media/wysiwyg/test.png'
+                        }
+                    ], expectedValue = [
+                        {
+                            'name': 'test.png',
+                            'size': 2000,
+                            'type': 'image/png',
+                            'url': 'http://localhost:8000/media/wysiwyg/test.png'
+                        }
+                    ];
+
+                spyOn(component, 'setImageSize').and.callFake(function () {
+                    component.value().size = 2000;
+                });
+                spyOn(component, 'getInitialValue').and.returnValue(initialValue);
+                component.service = true;
+                expect(component.setInitialValue()).toEqual(component);
+                expect(component.getInitialValue).toHaveBeenCalled();
+                component.setImageSize(initialValue);
+                expect(component.value().size).toEqual(expectedValue[0].size);
             });
         });
 
@@ -347,14 +402,51 @@ define([
         });
 
         describe('onElementRender handler', function () {
-            it('invokes initUploader method', function () {
-                var input = document.createElement('input');
+            it('invokes initUploader and bindFileBrowserTriggers methods', function () {
+                let input = document.createElement('input');
+
+                input.id = 'test-file-input';
+                input.name = 'test-file-name';
+
+                const $dropZone = $('<div data-role="drop-zone"></div>'),
+                    $fileUploaderArea = $('<div class="file-uploader-area" upload-area-id="' + input.id + '">' +
+                        '<button class="file-uploader-button"></button></div>'),
+                    $placeholder = $('<div class="file-uploader-placeholder"></div>'),
+                    button = $fileUploaderArea.find('.file-uploader-button')[0],
+                    clickEvent = new MouseEvent('click', {bubbles: true, cancelable: true}),
+                    placeholder = $placeholder[0],
+                    clickEvent2 = new MouseEvent('click', {bubbles: true, cancelable: true});
+
+                $dropZone.append($fileUploaderArea);
+                $dropZone.append($placeholder);
+                $('body').append($dropZone);
 
                 spyOn(component, 'initUploader');
+                spyOn(component, 'bindFileBrowserTriggers').and.callThrough();
+                spyOn(component, 'triggerFileBrowser');
 
                 component.onElementRender(input);
 
                 expect(component.initUploader).toHaveBeenCalledWith(input);
+                expect(component.bindFileBrowserTriggers).toHaveBeenCalledWith(input.id);
+
+                button.dispatchEvent(clickEvent);
+                expect(component.triggerFileBrowser).toHaveBeenCalled();
+
+                // eslint-disable-next-line one-var
+                const arg1 = component.triggerFileBrowser.calls.first().args[0];
+
+                expect(arg1[0]).toBe($fileUploaderArea[0]);
+
+                placeholder.dispatchEvent(clickEvent2);
+                expect(component.triggerFileBrowser.calls.count()).toBe(2);
+
+                // eslint-disable-next-line one-var
+                const arg2 = component.triggerFileBrowser.calls.mostRecent().args[0];
+
+                expect(arg2[0]).toBe($fileUploaderArea[0]);
+
+                $dropZone.remove();
             });
         });
 

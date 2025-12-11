@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Sales\Model\Order;
 
@@ -38,7 +38,7 @@ class ShipmentFactory
     protected $instanceName;
 
     /**
-     * Serializer
+     * Serializer data
      *
      * @var Json
      */
@@ -54,7 +54,7 @@ class ShipmentFactory
     public function __construct(
         \Magento\Sales\Model\Convert\OrderFactory $convertOrderFactory,
         \Magento\Sales\Model\Order\Shipment\TrackFactory $trackFactory,
-        Json $serializer = null
+        ?Json $serializer = null
     ) {
         $this->converter = $convertOrderFactory->create();
         $this->trackFactory = $trackFactory;
@@ -165,7 +165,7 @@ class ShipmentFactory
 
         // Remove from shipment items without qty or with qty=0
         if (!$orderItem->isDummy(true)
-            && (!isset($items[$orderItem->getId()]) || (int) $items[$orderItem->getId()] <= 0)
+            && (!isset($items[$orderItem->getId()]) || (float) $items[$orderItem->getId()] <= 0)
         ) {
             return false;
         }

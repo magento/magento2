@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Deploy\Package;
 
@@ -11,6 +11,8 @@ use Magento\Framework\View\Asset\PreProcessor\FileNameResolver;
 
 /**
  * Deployment Package
+ *
+ * @api
  */
 class Package
 {
@@ -346,7 +348,7 @@ class Package
      * @param Package $parentPackage
      * @return bool true on success
      */
-    public function aggregate(Package $parentPackage = null)
+    public function aggregate(?Package $parentPackage = null)
     {
         $inheritedFiles = $this->getParentFiles();
         foreach ($inheritedFiles as $fileId => $file) {
@@ -536,7 +538,7 @@ class Package
         $theme,
         $locale,
         array &$result = [],
-        ThemeInterface $themeModel = null
+        ?ThemeInterface $themeModel = null
     ) {
         if (($package->getArea() != $area) || ($package->getTheme() != $theme) || ($package->getLocale() != $locale)) {
             $result[] = $area . '/' . $theme . '/' . $locale;

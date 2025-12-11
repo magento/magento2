@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -105,7 +105,7 @@ class GetterSetterTest extends TestCase
      * @return array
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function dataProviderGettersSetters()
+    public static function dataProviderGettersSetters()
     {
         // Test each class that implements the Tax Api Data Interfaces
         return [

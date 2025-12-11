@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -39,7 +39,7 @@ class SimpleProductsFixture extends Fixture
     /**
      * Simple product sku pattern
      */
-    const SKU_PATTERN = 'product_dynamic_%s';
+    public const SKU_PATTERN = 'product_dynamic_%s';
 
     /**
      * @var int
@@ -256,6 +256,12 @@ class SimpleProductsFixture extends Fixture
             },
             'category_ids' => function ($index, $entityNumber) {
                 return $this->websiteCategoryProvider->getCategoryId($index);
+            },
+            'meta_keyword' => function ($productId) {
+                return sprintf($this->getSkuPattern(), $productId);
+            },
+            'meta_title' => function ($productId) {
+                return sprintf($this->getSkuPattern(), $productId);
             },
             'attribute_set_id' => $attributeSet,
             'additional_attributes' => $additionalAttributes,

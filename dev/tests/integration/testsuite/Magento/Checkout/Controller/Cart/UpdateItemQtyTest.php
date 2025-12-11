@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -112,28 +112,28 @@ class UpdateItemQtyTest extends \Magento\TestFramework\TestCase\AbstractControll
      * Variations of request data.
      * @returns array
      */
-    public function requestDataProvider(): array
+    public static function requestDataProvider(): array
     {
         return [
             [
-                'request' => [],
-                'response' => [
+                'requestQuantity' => [],
+                'expectedResponse' => [
                     'success' => false,
                     'error_message' => 'Something went wrong while saving the page.'.
                         ' Please refresh the page and try again.'
                 ]
             ],
             [
-                'request' => ['qty' => 2],
-                'response' => [
+                'requestQuantity' => ['qty' => 2],
+                'expectedResponse' => [
                     'success' => true,
                 ]
             ],
             [
-                'request' => ['qty' => 230],
-                'response' => [
+                'requestQuantity' => ['qty' => 230],
+                'expectedResponse' => [
                     'success' => false,
-                    'error_message' => '[{"error":"The requested qty is not available","itemId":3}]']
+                    'error_message' => '[{"error":"Not enough items for sale","itemId":3}]']
             ],
         ];
     }

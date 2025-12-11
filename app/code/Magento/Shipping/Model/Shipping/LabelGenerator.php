@@ -1,16 +1,17 @@
 <?php
 /**
- *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Shipping\Model\Shipping;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\App\RequestInterface;
+use Magento\Sales\Model\Order\Shipment;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * phpcs:disable Magento2.Functions.DiscouragedFunction
  */
 class LabelGenerator
 {
@@ -61,12 +62,14 @@ class LabelGenerator
     }
 
     /**
-     * @param \Magento\Sales\Model\Order\Shipment $shipment
+     * Creates a shipping label
+     *
+     * @param Shipment $shipment
      * @param RequestInterface $request
      * @return void
      * @throws \Magento\Framework\Exception\LocalizedException
      */
-    public function create(\Magento\Sales\Model\Order\Shipment $shipment, RequestInterface $request)
+    public function create(Shipment $shipment, RequestInterface $request)
     {
         $order = $shipment->getOrder();
         $carrier = $this->carrierFactory->create($order->getShippingMethod(true)->getCarrierCode());
@@ -76,7 +79,8 @@ class LabelGenerator
         $shipment->setPackages($request->getParam('packages'));
         $response = $this->labelFactory->create()->requestToShipment($shipment);
         if ($response->hasErrors()) {
-            throw new \Magento\Framework\Exception\LocalizedException(__($response->getErrors()));
+            $firstError = $response->getErrors()[0];
+            throw new \Magento\Framework\Exception\LocalizedException(__($firstError));
         }
         if (!$response->hasInfo()) {
             throw new \Magento\Framework\Exception\LocalizedException(__('Response info is not exist.'));
@@ -104,7 +108,9 @@ class LabelGenerator
     }
 
     /**
-     * @param \Magento\Sales\Model\Order\Shipment $shipment
+     * Adds tracking number to a shipment
+     *
+     * @param Shipment $shipment
      * @param array $trackingNumbers
      * @param string $carrierCode
      * @param string $carrierTitle
@@ -112,7 +118,7 @@ class LabelGenerator
      * @return void
      */
     private function addTrackingNumbersToShipment(
-        \Magento\Sales\Model\Order\Shipment $shipment,
+        Shipment $shipment,
         $trackingNumbers,
         $carrierCode,
         $carrierTitle
@@ -168,9 +174,11 @@ class LabelGenerator
         $directory = $this->filesystem->getDirectoryWrite(
             DirectoryList::TMP
         );
-        $directory->create();
-        $image = @imagecreatefromstring($imageString);
-        if (!$image) {
+
+        try {
+            $directory->create();
+            $image = imagecreatefromstring($imageString);
+        } catch (\Exception $e) {
             return false;
         }
 

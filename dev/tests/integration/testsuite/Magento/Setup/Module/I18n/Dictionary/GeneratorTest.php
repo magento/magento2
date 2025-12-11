@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Setup\Module\I18n\Dictionary;
 
@@ -47,7 +47,7 @@ class GeneratorTest extends \PHPUnit\Framework\TestCase
         $paths = $reflection->getProperty('paths');
         $paths->setAccessible(true);
         $this->backupRegistrar = $paths->getValue();
-        $paths->setValue(['module' => [], 'theme' => []]);
+        $paths->setValue(null, ['module' => [], 'theme' => []]);
         $paths->setAccessible(false);
 
         $this->testDir = realpath(__DIR__ . '/_files');
@@ -84,13 +84,13 @@ class GeneratorTest extends \PHPUnit\Framework\TestCase
         }
         $property = new \ReflectionProperty(\Magento\Setup\Module\I18n\ServiceLocator::class, '_dictionaryGenerator');
         $property->setAccessible(true);
-        $property->setValue(null);
+        $property->setValue(null, null);
         $property->setAccessible(false);
 
         $reflection = new \ReflectionClass(\Magento\Framework\Component\ComponentRegistrar::class);
         $paths = $reflection->getProperty('paths');
         $paths->setAccessible(true);
-        $paths->setValue($this->backupRegistrar);
+        $paths->setValue(null, $this->backupRegistrar);
         $paths->setAccessible(false);
     }
 

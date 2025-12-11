@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2021 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Eav\Model\ResourceModel\UpdateHandler;
@@ -103,7 +103,7 @@ class ExecuteProcessForCustomAttributeInCustomStoreTest extends UpdateHandlerAbs
     /**
      * @return array
      */
-    public function getCustomAttributeDataProvider()
+    public static function getCustomAttributeDataProvider()
     {
         return [
             ['dropdown_attribute', 0, '', 1, 1],        //0

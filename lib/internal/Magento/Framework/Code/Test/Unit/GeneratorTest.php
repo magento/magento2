@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -331,7 +331,7 @@ class GeneratorTest extends TestCase
     /**
      * @return array
      */
-    public function trueFalseDataProvider(): array
+    public static function trueFalseDataProvider(): array
     {
         return [[true], [false]];
     }
@@ -341,14 +341,19 @@ class GeneratorTest extends TestCase
      *
      * @return array
      */
-    public function generateValidClassDataProvider(): array
+    public static function generateValidClassDataProvider(): array
     {
+        $expectedEntities = [
+            'factory' => Factory::ENTITY_TYPE,
+            'proxy' => Proxy::ENTITY_TYPE,
+            'interceptor' => Interceptor::ENTITY_TYPE,
+        ];
         $data = [];
-        foreach ($this->expectedEntities as $generatedEntity) {
+        foreach ($expectedEntities as $generatedEntity) {
             $generatedEntity = ucfirst($generatedEntity);
             $data['test class for ' . $generatedEntity] = [
-                'class name' => self::SOURCE_CLASS,
-                'entity type' => $generatedEntity,
+                'className' => self::SOURCE_CLASS,
+                'entityType' => $generatedEntity,
             ];
         }
         return $data;

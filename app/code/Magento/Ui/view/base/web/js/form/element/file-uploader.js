@@ -1,12 +1,13 @@
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 
 /**
  * @api
  */
 /* global Base64 */
+/* eslint-disable no-undef */
 define([
     'jquery',
     'underscore',
@@ -16,7 +17,8 @@ define([
     'Magento_Ui/js/form/element/abstract',
     'mage/backend/notification',
     'mage/translate',
-    'jquery/file-uploader',
+    'jquery/jquery.cookie',
+    'jquery/uppy-core',
     'mage/adminhtml/tools'
 ], function ($, _, utils, uiAlert, validator, Element, notification, $t) {
     'use strict';
@@ -51,8 +53,6 @@ define([
          * @returns {FileUploader} Chainable.
          */
         initUploader: function (fileInput) {
-            this.$fileInput = fileInput;
-
             _.extend(this.uploaderConfig, {
                 dropZone: $(fileInput).closest(this.dropZone),
                 change: this.onFilesChoosed.bind(this),
@@ -64,9 +64,166 @@ define([
                 stop: this.onLoadingStop.bind(this)
             });
 
-            $(fileInput).fileupload(this.uploaderConfig);
+            // uppy implementation
+            if (fileInput !== undefined) {
+                let targetElement = $(fileInput).closest('.file-uploader-area')[0],
+                    dropTargetElement = $(fileInput).closest(this.dropZone)[0],
+                    formKey = window.FORM_KEY !== undefined ? window.FORM_KEY : $.cookie('form_key'),
+                    fileInputName = this.fileInputName,
+                    arrayFromObj = Array.from,
+                    options = {
+                        proudlyDisplayPoweredByUppy: false,
+                        target: targetElement,
+                        hideUploadButton: true,
+                        hideRetryButton: true,
+                        hideCancelButton: true,
+                        inline: true,
+                        showRemoveButtonAfterComplete: true,
+                        showProgressDetails: false,
+                        showSelectedFiles: false,
+                        allowMultipleUploads: false,
+                        hideProgressAfterFinish: true
+                    };
 
+                if (fileInputName === undefined) {
+                    fileInputName = $(fileInput).attr('name');
+                }
+                // handle input type file
+                this.replaceInputTypeFile(fileInput);
+
+                const uppy = new Uppy.Uppy({
+                    autoProceed: true,
+
+                    onBeforeFileAdded: (currentFile) => {
+                        let file = currentFile,
+                            allowed = this.isFileAllowed(file);
+
+                        if (this.disabled()) {
+                            this.notifyError($t('The file upload field is disabled.'));
+                            return false;
+                        }
+
+                        if (!allowed.passed)  {
+                            this.aggregateError(file.name, allowed.message);
+                            this.uploaderConfig.stop();
+                            return false;
+                        }
+
+                        // code to allow duplicate files from same folder
+                        const modifiedFile = Object.assign({}, currentFile, {
+                            id: currentFile.id + '-' + Date.now()
+                        });
+
+                        this.onLoadingStart();
+                        return modifiedFile;
+                    },
+
+                    meta: {
+                        'form_key': formKey,
+                        'param_name': fileInputName,
+                        isAjax : true
+                    }
+                });
+
+                // initialize Uppy upload
+                uppy.use(Uppy.Dashboard, options);
+
+                // drop area for file upload
+                uppy.use(Uppy.DropTarget, {
+                    target: dropTargetElement,
+                    onDragOver: () => {
+                        // override Array.from method of legacy-build.min.js file
+                        Array.from = null;
+                    },
+                    onDragLeave: () => {
+                        Array.from = arrayFromObj;
+                    }
+                });
+
+                // upload files on server
+                uppy.use(Uppy.XHRUpload, {
+                    endpoint: this.uploaderConfig.url,
+                    fieldName: fileInputName
+                });
+
+                uppy.on('upload-success', (file, response) => {
+                    let data = {
+                        files : [response.body],
+                        result : response.body
+                    };
+
+                    this.onFileUploaded('', data);
+                });
+
+                uppy.on('upload-error', (file, error) => {
+                    console.error(error.message);
+                    console.error(error.status);
+                });
+
+                uppy.on('complete', () => {
+                    this.onLoadingStop();
+                    Array.from = arrayFromObj;
+                });
+            }
             return this;
+        },
+
+        /**
+         * Replace Input type File with Span
+         * and bind click event
+         */
+        replaceInputTypeFile: function (fileInput) {
+            let fileId = fileInput.id, fileName = fileInput.name,
+                spanElement = '<span id=\'' + fileId + '\'></span>';
+
+            $(fileInput).closest('.file-uploader-area').attr('upload-area-id', fileName);
+            $(fileInput).replaceWith(spanElement);
+        },
+
+        /**
+         * Trigger the file browser dialog
+         *
+         * @param {jQuery} $area
+         */
+        triggerFileBrowser: function ($area) {
+            const $browseBtn = $area.find('.uppy-Dashboard-browse').first();
+
+            if ($browseBtn.length > 0) {
+                $browseBtn[0].click();
+                return;
+            }
+
+            let $dashboard = $area.find('.uppy-Dashboard-inner'),
+                $fileInput = $dashboard.find('input[type="file"]:visible').first();
+
+            if ($fileInput.length > 0) {
+                $fileInput[0].click();
+            }
+        },
+
+        /**
+         * Binds click events for file browser triggers using event delegation
+         *
+         * @param {String} fileId
+         */
+        bindFileBrowserTriggers: function (fileId) {
+            let self = this,
+                $area = $('[upload-area-id="' + fileId + '"]').closest('.file-uploader-area'),
+                $dropZone = $area.closest('[data-role=drop-zone]');
+
+            if (!$area.length) {
+                $area = $('span[id="' + fileId + '"]').closest('.file-uploader-area');
+                $dropZone = $area.closest('[data-role=drop-zone]');
+            }
+
+            $area.off('click.fileUploader').on('click.fileUploader', '.file-uploader-button:first', function (e) {
+                e.preventDefault();
+                self.triggerFileBrowser($area);
+            });
+            $dropZone.off('click.fileUploader').on('click.fileUploader', '.file-uploader-placeholder', function (e) {
+                e.preventDefault();
+                self.triggerFileBrowser($area);
+            });
         },
 
         /**
@@ -75,7 +232,14 @@ define([
          * @returns {FileUploader} Chainable.
          */
         setInitialValue: function () {
-            var value = this.getInitialValue();
+            var value = this.getInitialValue(),
+                imageSize = this.setImageSize;
+
+            _.each(value, function (val) {
+                if (val.type !== undefined && val.type.indexOf('image') >= 0) {
+                    imageSize(val);
+                }
+            }, this);
 
             value = value.map(this.processFile, this);
 
@@ -86,6 +250,22 @@ define([
             this.isUseDefault(this.disabled());
 
             return this;
+        },
+
+        /**
+         * Set image size for already loaded image
+         *
+         * @param value
+         * @returns {Promise<void>}
+         */
+        setImageSize: function (value) {
+            return fetch(value.url)
+                .then(function (response) {
+                    return response.blob();
+                })
+                .then(function (blob) {
+                    value.size = blob.size;
+                });
         },
 
         /**
@@ -172,7 +352,7 @@ define([
             file.previewType = this.getFilePreviewType(file);
 
             if (!file.id && file.name) {
-                file.id = Base64.mageEncode(file.name);
+                file.id = Base64.idEncode(file.name);
             }
 
             this.observe.call(file, true, [
@@ -263,6 +443,11 @@ define([
 
             if (!file.type) {
                 return 'document';
+            }
+
+            if (file.name.indexOf('?rand') !== -1 && file.type.indexOf('?rand') !== -1) {
+                file.name = file.name.split('?')[0];
+                file.type = file.type.split('?')[0];
             }
 
             type = file.type.split('/')[0];
@@ -474,6 +659,7 @@ define([
          */
         onElementRender: function (fileInput) {
             this.initUploader(fileInput);
+            this.bindFileBrowserTriggers(fileInput.id);
         },
 
         /**
@@ -484,6 +670,11 @@ define([
          */
         onPreviewLoad: function (file, event) {
             var img = event.currentTarget;
+
+            if (img.alt === file.name && /gif|png|jpe?g|webp/.test(file.url) && file.url.indexOf('?rand') === -1) {
+                file.url += '?rand=' + Date.now();
+                img.src = file.url;
+            }
 
             file.previewWidth = img.naturalWidth;
             file.previewHeight = img.naturalHeight;

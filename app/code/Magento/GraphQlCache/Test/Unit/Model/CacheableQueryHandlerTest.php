@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -59,7 +59,7 @@ class CacheableQueryHandlerTest extends TestCase
             'cacheTag' => 'cat_p'
         ];
         $mockIdentity = $this->getMockBuilder($cacheData['cacheIdentity'])
-            ->setMethods(['getIdentities'])
+            ->onlyMethods(['getIdentities'])
             ->getMockForAbstractClass();
 
         $this->requestMock->expects($this->once())->method('isGet')->willReturn(true);
@@ -78,7 +78,7 @@ class CacheableQueryHandlerTest extends TestCase
     /**
      * @return array
      */
-    public function resolvedDataProvider(): array
+    public static function resolvedDataProvider(): array
     {
         return [
             [

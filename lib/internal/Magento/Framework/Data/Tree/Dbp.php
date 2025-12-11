@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework\Data\Tree;
 
@@ -12,18 +12,16 @@ use Magento\Framework\DB\Select;
  *
  * Data model:
  * id  |  path  |  order
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Dbp extends \Magento\Framework\Data\Tree
 {
-    const ID_FIELD = 'id';
+    public const ID_FIELD = 'id';
 
-    const PATH_FIELD = 'path';
+    public const PATH_FIELD = 'path';
 
-    const ORDER_FIELD = 'order';
+    public const ORDER_FIELD = 'order';
 
-    const LEVEL_FIELD = 'level';
+    public const LEVEL_FIELD = 'level';
 
     /**
      * DB connection
@@ -101,6 +99,7 @@ class Dbp extends \Magento\Framework\Data\Tree
         parent::__construct();
 
         if (!$connection) {
+            // phpcs:ignore Magento2.Exceptions.DirectThrow
             throw new \Exception('Wrong "$connection" parametr');
         }
 
@@ -117,6 +116,7 @@ class Dbp extends \Magento\Framework\Data\Tree
             $fields[self::ORDER_FIELD]
         )
         ) {
+            // phpcs:ignore Magento2.Exceptions.DirectThrow
             throw new \Exception('"$fields" tree configuratin array');
         }
 
@@ -198,7 +198,7 @@ class Dbp extends \Magento\Framework\Data\Tree
             $childrenItems = [];
 
             foreach ($arrNodes as $nodeInfo) {
-                $pathToParent = explode('/', $nodeInfo[$this->_pathField]);
+                $pathToParent = explode('/', $nodeInfo[$this->_pathField] ?? '');
                 array_pop($pathToParent);
                 $pathToParent = implode('/', $pathToParent);
                 $childrenItems[$pathToParent][] = $nodeInfo;
@@ -318,7 +318,7 @@ class Dbp extends \Magento\Framework\Data\Tree
         $newPath = $newParent->getData($this->_pathField);
 
         $newPath = $newPath . '/' . $node->getId();
-        $oldPathLength = strlen($oldPath);
+        $oldPathLength = $oldPath !== null ? strlen($oldPath) : 0;
 
         $newLevel = $newParent->getLevel() + 1;
         $levelDisposition = $newLevel - $node->getLevel();
@@ -363,6 +363,7 @@ class Dbp extends \Magento\Framework\Data\Tree
             $this->_conn->commit();
         } catch (\Exception $e) {
             $this->_conn->rollBack();
+            // phpcs:ignore Magento2.Exceptions.DirectThrow
             throw new \Exception("Can't move tree node due to error: " . $e->getMessage());
         }
     }
@@ -398,7 +399,7 @@ class Dbp extends \Magento\Framework\Data\Tree
                     continue;
                 }
 
-                $pathToParent = explode('/', $nodeInfo[$this->_pathField]);
+                $pathToParent = explode('/', $nodeInfo[$this->_pathField] ?? '');
                 array_pop($pathToParent);
                 $pathToParent = implode('/', $pathToParent);
                 $childrenItems[$pathToParent][] = $nodeInfo;

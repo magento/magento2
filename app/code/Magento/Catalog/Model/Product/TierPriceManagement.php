@@ -1,8 +1,7 @@
 <?php
 /**
- *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Catalog\Model\Product;
@@ -14,6 +13,8 @@ use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\TemporaryStateExceptionInterface;
+use Magento\Framework\Validator\FloatUtils;
+use Magento\Framework\Validator\ValidatorChain;
 use Magento\Store\Api\Data\WebsiteInterface;
 use Magento\Store\Model\ScopeInterface;
 
@@ -91,8 +92,8 @@ class TierPriceManagement implements \Magento\Catalog\Api\ProductTierPriceManage
      */
     public function add($sku, $customerGroupId, $price, $qty)
     {
-        if (!is_float($price) && !is_int($price) && !\Zend_Validate::is((string)$price, 'Float')
-            || !is_float($qty) && !is_int($qty) && !\Zend_Validate::is((string)$qty, 'Float')
+        if (!is_float($price) && !is_int($price) && !ValidatorChain::is((string)$price, FloatUtils::class)
+            || !is_float($qty) && !is_int($qty) && !ValidatorChain::is((string)$qty, FloatUtils::class)
             || $price <= 0
             || $qty <= 0
         ) {

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -127,24 +127,24 @@ class SetTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function addAttributeToSetDataProvider(): array
+    public static function addAttributeToSetDataProvider(): array
     {
         return [
             'add_to_existing_group' => [
-                'group_name' => 'Content',
-                'attribute_code' => 'zzz',
+                'groupName' => 'Content',
+                'attributeCode' => 'zzz',
             ],
             'add_to_new_group' => [
-                'group_name' => 'Test',
-                'attribute_code' => 'zzz',
+                'groupName' => 'Test',
+                'attributeCode' => 'zzz',
             ],
             'move_to_existing_group' => [
-                'group_name' => 'Images',
-                'attribute_code' => 'description',
+                'groupName' => 'Images',
+                'attributeCode' => 'description',
             ],
             'move_to_new_group' => [
-                'group_name' => 'Test',
-                'attribute_code' => 'description',
+                'groupName' => 'Test',
+                'attributeCode' => 'description',
             ],
         ];
     }

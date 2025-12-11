@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -153,7 +153,7 @@ class ReadHandlerTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function executeWithTwoImagesDataProvider(): array
+    public static function executeWithTwoImagesDataProvider(): array
     {
         return [
             'with_two_images' => [
@@ -237,7 +237,7 @@ class ReadHandlerTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function executeOnStoreViewDataProvider(): array
+    public static function executeOnStoreViewDataProvider(): array
     {
         return [
             'with_store_label' => [

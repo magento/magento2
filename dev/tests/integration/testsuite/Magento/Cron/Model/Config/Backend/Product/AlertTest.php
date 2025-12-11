@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2021 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -75,7 +75,7 @@ class AlertTest extends TestCase
     /**
      * @return array
      */
-    public function frequencyDataProvider(): array
+    public static function frequencyDataProvider(): array
     {
         return [
             'daily' => [Frequency::CRON_DAILY, '0 0 * * *'],

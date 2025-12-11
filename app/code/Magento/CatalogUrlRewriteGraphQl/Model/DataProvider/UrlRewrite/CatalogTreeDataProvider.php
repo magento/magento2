@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2021 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -59,15 +59,15 @@ class CatalogTreeDataProvider implements EntityDataProviderInterface
     public function getData(
         string $entity_type,
         int $id,
-        ResolveInfo $info = null,
-        int $storeId = null
+        ?ResolveInfo $info = null,
+        ?int $storeId = null
     ): array {
         $categoryId = (int)$id;
-        $categoriesTree = $this->categoryTree->getTree($info, $categoryId, $storeId);
-        if (empty($categoriesTree) || ($categoriesTree->count() == 0)) {
+        $categoriesTree = $this->categoryTree->getTreeCollection($info, $categoryId, $storeId);
+        if ($categoriesTree->count() == 0) {
             throw new GraphQlNoSuchEntityException(__('Category doesn\'t exist'));
         }
-        $result = current($this->extractDataFromCategoryTree->execute($categoriesTree));
+        $result = current($this->extractDataFromCategoryTree->buildTree($categoriesTree, [$categoryId]));
         $result['type_id'] = $entity_type;
         return $result;
     }

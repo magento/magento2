@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Checkout\Controller\Cart;
 
@@ -20,8 +20,6 @@ class CouponPost extends \Magento\Checkout\Controller\Cart implements HttpPostAc
     protected $quoteRepository;
 
     /**
-     * Coupon factory
-     *
      * @var \Magento\SalesRule\Model\CouponFactory
      */
     protected $couponFactory;
@@ -70,10 +68,10 @@ class CouponPost extends \Magento\Checkout\Controller\Cart implements HttpPostAc
     {
         $couponCode = $this->getRequest()->getParam('remove') == 1
             ? ''
-            : trim($this->getRequest()->getParam('coupon_code'));
+            : trim($this->getRequest()->getParam('coupon_code', ''));
 
         $cartQuote = $this->cart->getQuote();
-        $oldCouponCode = $cartQuote->getCouponCode();
+        $oldCouponCode = $cartQuote->getCouponCode() ?? '';
 
         $codeLength = strlen($couponCode);
         if (!$codeLength && !strlen($oldCouponCode)) {

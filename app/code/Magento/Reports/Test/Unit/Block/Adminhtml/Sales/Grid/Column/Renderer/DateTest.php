@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -75,7 +75,7 @@ class DateTest extends TestCase
     {
         $columnMock = $this->getMockBuilder(Column::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getIndex', 'getPeriodType'])
+            ->addMethods(['getIndex', 'getPeriodType'])
             ->getMock();
         $columnMock->expects($this->once())->method('getIndex')->willReturn($objectDataIndex);
         $columnMock->expects($this->atLeastOnce())->method('getPeriodType')->willReturn($periodType);
@@ -150,7 +150,7 @@ class DateTest extends TestCase
         $this->mockGridDateColumnConfig($index, $period);
 
         $objectMock = $this->getMockBuilder(DataObject::class)
-            ->setMethods(['getData'])
+            ->onlyMethods(['getData'])
             ->getMock();
         $objectMock->expects($this->once())->method('getData')->willReturn($data);
 
@@ -165,7 +165,7 @@ class DateTest extends TestCase
     /**
      * @return array
      */
-    public function datesDataProvider()
+    public static function datesDataProvider()
     {
         return [
             [
@@ -215,7 +215,7 @@ class DateTest extends TestCase
         $this->mockGridDateColumnConfig('period', 'day');
 
         $objectMock = $this->getMockBuilder(DataObject::class)
-            ->setMethods(['getData'])
+            ->onlyMethods(['getData'])
             ->getMock();
         $objectMock->expects($this->any())->method('getData')->willReturn('2014-06-25');
 

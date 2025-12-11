@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Catalog\Ui\DataProvider\Product\Form\Modifier;
 
@@ -27,7 +27,6 @@ use Magento\Framework\App\Request\DataPersistorInterface;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\AuthorizationInterface;
 use Magento\Framework\Filter\Translit;
-use Magento\Framework\Locale\CurrencyInterface;
 use Magento\Framework\Stdlib\ArrayManager;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Ui\Component\Form\Element\Wysiwyg as WysiwygElement;
@@ -192,11 +191,6 @@ class Eav extends AbstractModifier
     private $prevSetAttributes;
 
     /**
-     * @var CurrencyInterface
-     */
-    private $localeCurrency;
-
-    /**
      * @var array
      */
     private $attributesCache = [];
@@ -268,9 +262,9 @@ class Eav extends AbstractModifier
         DataPersistorInterface $dataPersistor,
         $attributesToDisable = [],
         $attributesToEliminate = [],
-        CompositeConfigProcessor $wysiwygConfigProcessor = null,
-        ScopeConfigInterface $scopeConfig = null,
-        AttributeCollectionFactory $attributeCollectionFactory = null,
+        ?CompositeConfigProcessor $wysiwygConfigProcessor = null,
+        ?ScopeConfigInterface $scopeConfig = null,
+        ?AttributeCollectionFactory $attributeCollectionFactory = null,
         ?AuthorizationInterface $auth = null
     ) {
         $this->locator = $locator;
@@ -1097,39 +1091,5 @@ class Eav extends AbstractModifier
         }
 
         return $attributeGroupCode;
-    }
-
-    /**
-     * The getter function to get the locale currency for real application code
-     *
-     * @return \Magento\Framework\Locale\CurrencyInterface
-     *
-     * @deprecated 101.0.0
-     */
-    private function getLocaleCurrency()
-    {
-        if ($this->localeCurrency === null) {
-            $this->localeCurrency = \Magento\Framework\App\ObjectManager::getInstance()->get(CurrencyInterface::class);
-        }
-        return $this->localeCurrency;
-    }
-
-    /**
-     * Format price according to the locale of the currency
-     *
-     * @param mixed $value
-     * @return string
-     */
-    protected function formatPrice($value)
-    {
-        if (!is_numeric($value)) {
-            return null;
-        }
-
-        $store = $this->storeManager->getStore();
-        $currency = $this->getLocaleCurrency()->getCurrency($store->getBaseCurrencyCode());
-        $value = $currency->toCurrency($value, ['display' => \Magento\Framework\Currency::NO_SYMBOL]);
-
-        return $value;
     }
 }

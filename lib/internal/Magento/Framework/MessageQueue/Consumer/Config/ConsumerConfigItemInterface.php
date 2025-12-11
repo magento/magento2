@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework\MessageQueue\Consumer\Config;
 
@@ -9,6 +9,7 @@ use Magento\Framework\MessageQueue\Consumer\Config\ConsumerConfigItem\HandlerInt
 
 /**
  * Items of this class represent config items declared in etc/queue_consumer.xsd
+ * @api
  */
 interface ConsumerConfigItemInterface
 {

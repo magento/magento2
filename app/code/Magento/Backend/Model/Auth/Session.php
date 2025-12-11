@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -18,8 +18,6 @@ use Magento\Framework\Message\ManagerInterface;
  * @api
  * @method \Magento\User\Model\User|null getUser()
  * @method \Magento\Backend\Model\Auth\Session setUser(\Magento\User\Model\User $value)
- * @method \Magento\Framework\Acl|null getAcl()
- * @method \Magento\Backend\Model\Auth\Session setAcl(\Magento\Framework\Acl $value)
  * @method int getUpdatedAt()
  * @method \Magento\Backend\Model\Auth\Session setUpdatedAt(int $value)
  *
@@ -63,6 +61,11 @@ class Session extends \Magento\Framework\Session\SessionManager implements \Mage
     private $messageManager;
 
     /**
+     * @var \Magento\Framework\Acl|null
+     */
+    private $acl = null;
+
+    /**
      * @param \Magento\Framework\App\Request\Http $request
      * @param \Magento\Framework\Session\SidResolverInterface $sidResolver
      * @param \Magento\Framework\Session\Config\ConfigInterface $sessionConfig
@@ -92,7 +95,7 @@ class Session extends \Magento\Framework\Session\SessionManager implements \Mage
         \Magento\Framework\Acl\Builder $aclBuilder,
         \Magento\Backend\Model\UrlInterface $backendUrl,
         \Magento\Backend\App\ConfigInterface $config,
-        ManagerInterface $messageManager = null
+        ?ManagerInterface $messageManager = null
     ) {
         $this->_config = $config;
         $this->_aclBuilder = $aclBuilder;
@@ -109,6 +112,16 @@ class Session extends \Magento\Framework\Session\SessionManager implements \Mage
             $cookieMetadataFactory,
             $appState
         );
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        parent::_resetState();
+        $this->_isFirstAfterLogin = null;
+        $this->acl = null;
     }
 
     /**
@@ -130,7 +143,7 @@ class Session extends \Magento\Framework\Session\SessionManager implements \Mage
         }
         if ($user->getReloadAclFlag()) {
             $user->unsetData('password');
-            $user->setReloadAclFlag('0')->save();
+            $user->setReloadAclFlag(0)->save();
         }
         return $this;
     }
@@ -152,7 +165,7 @@ class Session extends \Magento\Framework\Session\SessionManager implements \Mage
                 return $acl->isAllowed($user->getAclRole(), $resource, $privilege);
             } catch (\Exception $e) {
                 try {
-                    if (!$acl->has($resource)) {
+                    if (!$acl->hasResource($resource)) {
                         return $acl->isAllowed($user->getAclRole(), null, $privilege);
                     }
                 } catch (\Exception $e) {
@@ -283,5 +296,34 @@ class Session extends \Magento\Framework\Session\SessionManager implements \Mage
     public function isValidForPath($path)
     {
         return true;
+    }
+
+    /**
+     * Set Acl model
+     *
+     * @return \Magento\Framework\Acl
+     */
+    public function getAcl()
+    {
+        return $this->acl;
+    }
+
+    /**
+     * Retrieve Acl
+     *
+     * @param \Magento\Framework\Acl $acl
+     * @return void
+     */
+    public function setAcl(\Magento\Framework\Acl $acl)
+    {
+        $this->acl = $acl;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getData($key = '', $clear = false)
+    {
+        return $key === 'acl' ? $this->getAcl() : parent::getData($key, $clear);
     }
 }

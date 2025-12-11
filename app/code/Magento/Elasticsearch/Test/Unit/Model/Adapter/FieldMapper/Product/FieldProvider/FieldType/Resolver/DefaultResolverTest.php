@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -13,6 +13,7 @@ use Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider\FieldT
 use Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider\FieldType\Resolver\DefaultResolver;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * @SuppressWarnings(PHPMD)
@@ -36,10 +37,7 @@ class DefaultResolverTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->fieldTypeConverter = $this->getMockBuilder(FieldTypeConverterInterface::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['convert'])
-            ->getMockForAbstractClass();
+        $this->fieldTypeConverter = $this->createPartialMock(FieldTypeConverterInterface::class, ['convert']);
 
         $objectManager = new ObjectManagerHelper($this);
 
@@ -52,10 +50,10 @@ class DefaultResolverTest extends TestCase
     }
 
     /**
-     * @dataProvider getFieldTypeProvider
      * @param $expected
      * @return void
      */
+    #[DataProvider('getFieldTypeProvider')]
     public function testGetFieldType($expected)
     {
         $attributeMock = $this->getMockBuilder(AttributeAdapter::class)
@@ -74,7 +72,7 @@ class DefaultResolverTest extends TestCase
     /**
      * @return array
      */
-    public function getFieldTypeProvider()
+    public static function getFieldTypeProvider()
     {
         return [
             ['something'],

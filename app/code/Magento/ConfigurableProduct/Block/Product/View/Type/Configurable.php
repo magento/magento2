@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\ConfigurableProduct\Block\Product\View\Type;
 
@@ -34,6 +34,7 @@ class Configurable extends \Magento\Catalog\Block\Product\View\AbstractView
      * Current customer
      *
      * @deprecated 100.2.0 as unused property
+     * @see Nothing
      * @var CurrentCustomer
      */
     protected $currentCustomer;
@@ -49,7 +50,7 @@ class Configurable extends \Magento\Catalog\Block\Product\View\AbstractView
     protected $jsonEncoder;
 
     /**
-     * @var \Magento\ConfigurableProduct\Helper\Data $imageHelper
+     * @var \Magento\ConfigurableProduct\Helper\Data
      */
     protected $helper;
 
@@ -103,9 +104,9 @@ class Configurable extends \Magento\Catalog\Block\Product\View\AbstractView
         PriceCurrencyInterface $priceCurrency,
         ConfigurableAttributeData $configurableAttributeData,
         array $data = [],
-        Format $localeFormat = null,
-        Session $customerSession = null,
-        \Magento\ConfigurableProduct\Model\Product\Type\Configurable\Variations\Prices $variationPrices = null
+        ?Format $localeFormat = null,
+        ?Session $customerSession = null,
+        ?\Magento\ConfigurableProduct\Model\Product\Type\Configurable\Variations\Prices $variationPrices = null
     ) {
         $this->priceCurrency = $priceCurrency;
         $this->helper = $helper;
@@ -202,7 +203,7 @@ class Configurable extends \Magento\Catalog\Block\Product\View\AbstractView
     }
 
     /**
-     * Returns additional values for js config, con be overridden by descendants
+     * Returns additional values for js config, can be overridden by descendants
      *
      * @return array
      */
@@ -268,7 +269,7 @@ class Configurable extends \Magento\Catalog\Block\Product\View\AbstractView
                         'caption' => $image->getLabel(),
                         'position' => $image->getPosition(),
                         'isMain' => $image->getFile() == $product->getImage(),
-                        'type' => str_replace('external-', '', $image->getMediaType()),
+                        'type' =>  $image->getMediaType() ? str_replace('external-', '', $image->getMediaType()) : '',
                         'videoUrl' => $image->getVideoUrl(),
                     ];
             }
@@ -332,23 +333,23 @@ class Configurable extends \Magento\Catalog\Block\Product\View\AbstractView
         $tierPrices = [];
         $tierPriceModel = $product->getPriceInfo()->getPrice('tier_price');
         foreach ($tierPriceModel->getTierPriceList() as $tierPrice) {
+            $price = $this->_taxData->displayPriceExcludingTax() ?
+                $tierPrice['price']->getBaseAmount() : $tierPrice['price']->getValue();
+
             $tierPriceData = [
                 'qty' => $this->localeFormat->getNumber($tierPrice['price_qty']),
-                'price' => $this->localeFormat->getNumber($tierPrice['price']->getValue()),
+                'price' => $this->localeFormat->getNumber($price),
                 'percentage' => $this->localeFormat->getNumber(
                     $tierPriceModel->getSavePercent($tierPrice['price'])
                 ),
             ];
 
-            if (isset($tierPrice['excl_tax_price'])) {
-                $exclTax = $tierPrice['excl_tax_price'];
-                $tierPriceData['excl_tax_price'] = $this->localeFormat->getNumber($exclTax->getBaseAmount());
+            if ($this->_taxData->displayBothPrices()) {
+                $tierPriceData['basePrice'] = $this->localeFormat->getNumber(
+                    $tierPrice['price']->getBaseAmount()
+                );
             }
 
-            if (isset($tierPrice['incl_excl_tax_price'])) {
-                $inclExclTax = $tierPrice['incl_excl_tax_price'];
-                $tierPriceData['incl_excl_tax_price'] = $this->localeFormat->getNumber($inclExclTax->getBaseAmount());
-            }
             $tierPrices[] = $tierPriceData;
         }
 
@@ -359,6 +360,7 @@ class Configurable extends \Magento\Catalog\Block\Product\View\AbstractView
      * Replace ',' on '.' for js
      *
      * @deprecated 100.1.10 Will be removed in major release
+     * @see Nothing
      * @param float $price
      * @return string
      */

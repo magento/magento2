@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
-  */
+/**
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
+ */
 -->
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
@@ -18,5 +18,12 @@
         <element name="productLink" type="button" selector="(//form[@id='checkout_multishipping_form']//a[contains(text(),'{{productName}}')])[{{sequenceNumber}}]" parameterized="true"/>
         <element name="removeItemButton" type="button" selector="//a[contains(@title, 'Remove Item')][{{var}}]" parameterized="true"/>
         <element name="back" type="button" selector=".action.back"/>
+        <element name="addressSection" type="text" selector="//div[@class='block-title']/strong[text()='Address {{var}} ']" parameterized="true"/>
+        <element name="flatRateCharge" type="text" selector="//span[@class='price' and text()='${{price}}']/../../label[contains(text(),'Fixed')]" parameterized="true"/>
+        <element name="enterNewAddress" type="button" selector=".action.add"/>
+        <element name="updateQtyAndAddress" type="button" selector="//button[@type='submit' and @class='action update']"/>
+        <element name="attentionMessage" type="text" selector="//div[@class='modal-inner-wrap']//div[contains(text(),'Maximum qty allowed for Shipping to multiple addresses is 10')]"/>
+        <element name="acceptAttention" type="button" selector="//button[@class='action-primary action-accept']//span[contains(text(),'OK')]"/>
+        <element name="removeItemLink" type="select" selector="//tr[position()={{sequenceNumber}}]//a[@class='action delete']" parameterized="true"/>
     </section>
 </sections>

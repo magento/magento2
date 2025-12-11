@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 
 declare(strict_types=1);
@@ -202,11 +202,11 @@ class AsyncScheduleTest extends WebapiAbstract
     /**
      * @return array
      */
-    public function productCreationProvider()
+    public static function productCreationProvider()
     {
         $productBuilder = function ($data) {
             return array_replace_recursive(
-                $this->getSimpleProductData(),
+                self::getSimpleProductData(),
                 $data
             );
         };
@@ -235,7 +235,7 @@ class AsyncScheduleTest extends WebapiAbstract
     /**
      * @return array
      */
-    public function productGetDataProvider()
+    public static function productGetDataProvider()
     {
         return [
             ['psku-test-1', null],
@@ -248,7 +248,7 @@ class AsyncScheduleTest extends WebapiAbstract
      * @param array $productData
      * @return array
      */
-    private function getSimpleProductData($productData = [])
+    private static function getSimpleProductData($productData = [])
     {
         return [
             ProductInterface::SKU              => isset($productData[ProductInterface::SKU])

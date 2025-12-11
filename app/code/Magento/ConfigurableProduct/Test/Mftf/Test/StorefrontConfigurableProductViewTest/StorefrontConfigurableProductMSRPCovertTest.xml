@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
-  */
+/**
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
+ */
 -->
+
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
     <test name="StorefrontConfigurableProductMSRPCovertTest">
@@ -80,6 +81,9 @@
             <deleteData createDataKey="createConfigProductAttribute" stepKey="deleteConfigProductAttribute"/>
             <createData entity="MsrpDisableMAP" stepKey="disableMAP"/>
             <magentoCLI command="config:set currency/options/allow USD" stepKey="setCurrencyAllow"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutOfAdmin"/>
         </after>
 
@@ -109,6 +113,7 @@
         </actionGroup>
 
         <selectOption selector="{{StorefrontProductInfoMainSection.productAttributeOptionsSelectButton}}" userInput="$$getConfigAttributeOption1.value$$" stepKey="selectFirstOption"/>
+        <waitForAjaxLoad stepKey="waitForAjaxload"/>
         <waitForElement selector="{{StorefrontProductInfoMainSection.mapPrice}}" stepKey="waitForLoad"/>
         <grabTextFrom selector="{{StorefrontProductInfoMainSection.mapPrice}}" stepKey="grabProductMapPrice"/>
         <assertNotEquals stepKey="assertProductMapPrice">

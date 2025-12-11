@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Eav\Model\Entity;
 
@@ -39,7 +39,7 @@ class AttributeLoaderTest extends \PHPUnit\Framework\TestCase
         $context = $this->objectManager->get(\Magento\Eav\Model\Entity\Context::class);
         $this->resource = $this->getMockBuilder(\Magento\Eav\Model\Entity\AbstractEntity::class)
             ->setConstructorArgs([$context])
-            ->setMethods(['getEntityType', 'getLinkField'])
+            ->onlyMethods(['getEntityType', 'getLinkField'])
             ->getMock();
         $this->resource->method('getEntityType')
             ->willReturn($entityType);
@@ -75,7 +75,7 @@ class AttributeLoaderTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expectedNumOfAttributesByTable, count($attributesByTable2));
     }
 
-    public function loadAllAttributesDataProvider()
+    public static function loadAllAttributesDataProvider()
     {
         /** @var \Magento\Eav\Model\Entity\Type $entityType */
         $entityType = Bootstrap::getObjectManager()->create(\Magento\Eav\Model\Entity\Type::class)

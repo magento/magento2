@@ -1,8 +1,9 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
  */
+
 declare(strict_types=1);
 
 namespace Magento\Quote\Model\ResourceModel\Quote\Item;
@@ -92,10 +93,10 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\VersionContro
         \Magento\Quote\Model\ResourceModel\Quote\Item\Option\CollectionFactory $itemOptionCollectionFactory,
         \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory $productCollectionFactory,
         \Magento\Quote\Model\Quote\Config $quoteConfig,
-        \Magento\Framework\DB\Adapter\AdapterInterface $connection = null,
-        \Magento\Framework\Model\ResourceModel\Db\AbstractDb $resource = null,
-        \Magento\Store\Model\StoreManagerInterface $storeManager = null,
-        \Magento\Quote\Model\Config $config = null
+        ?\Magento\Framework\DB\Adapter\AdapterInterface $connection = null,
+        ?\Magento\Framework\Model\ResourceModel\Db\AbstractDb $resource = null,
+        ?\Magento\Store\Model\StoreManagerInterface $storeManager = null,
+        ?\Magento\Quote\Model\Config $config = null
     ) {
         parent::__construct(
             $entityFactory,
@@ -125,6 +126,16 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\VersionContro
     protected function _construct()
     {
         $this->_init(QuoteItem::class, ResourceQuoteItem::class);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        parent::_resetState();
+        $this->_productIds = [];
+        $this->_quote = null;
     }
 
     /**
@@ -193,7 +204,10 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\VersionContro
     {
         parent::_afterLoad();
 
-        $productIds = [];
+        /** @var QuoteItem $item */
+        $productIds = array_map(fn ($item) => (int) $item->getProductId(), $this->getItems());
+        $this->_productIds = array_merge($this->_productIds, $productIds);
+        $this->removeItemsWithAbsentProducts();
         foreach ($this as $item) {
             // Assign parent items
             if ($item->getParentItemId()) {
@@ -202,11 +216,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\VersionContro
             if ($this->_quote) {
                 $item->setQuote($this->_quote);
             }
-            // Collect quote products ids
-            $productIds[] = (int)$item->getProductId();
         }
-        $this->_productIds = array_merge($this->_productIds, $productIds);
-        $this->removeItemsWithAbsentProducts();
         /**
          * Assign options and products
          */
@@ -382,7 +392,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\VersionContro
 
         $productCollection = $this->_productCollectionFactory->create()->addIdFilter($this->_productIds);
         $existingProductsIds = $productCollection->getAllIds();
-        $absentProductsIds = array_diff($this->_productIds, $existingProductsIds);
+        $absentProductsIds = array_unique(array_diff($this->_productIds, $existingProductsIds));
         // Remove not existing products from items collection
         if (!empty($absentProductsIds)) {
             foreach ($absentProductsIds as $productIdToExclude) {

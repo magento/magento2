@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -109,7 +109,7 @@ class Write extends Read implements WriteInterface
      * @throws FileSystemException
      * @throws ValidatorException
      */
-    public function renameFile($path, $newPath, WriteInterface $targetDirectory = null)
+    public function renameFile($path, $newPath, WriteInterface|null $targetDirectory = null)
     {
         $this->validatePath($path);
         $this->validatePath($newPath);
@@ -128,12 +128,12 @@ class Write extends Read implements WriteInterface
      *
      * @param string $path
      * @param string $destination
-     * @param WriteInterface $targetDirectory
+     * @param WriteInterface|null $targetDirectory
      * @return bool
      * @throws FileSystemException
      * @throws ValidatorException
      */
-    public function copyFile($path, $destination, WriteInterface $targetDirectory = null)
+    public function copyFile($path, $destination, WriteInterface|null $targetDirectory = null)
     {
         $this->validatePath($path);
         $this->validatePath($destination);
@@ -154,12 +154,12 @@ class Write extends Read implements WriteInterface
      *
      * @param string $path
      * @param string $destination
-     * @param WriteInterface $targetDirectory [optional]
+     * @param WriteInterface|null $targetDirectory [optional]
      * @return bool
      * @throws FileSystemException
      * @throws ValidatorException
      */
-    public function createSymlink($path, $destination, WriteInterface $targetDirectory = null)
+    public function createSymlink($path, $destination, WriteInterface|null $targetDirectory = null)
     {
         $this->validatePath($path);
         $this->validatePath($destination);
@@ -171,7 +171,7 @@ class Write extends Read implements WriteInterface
         $absolutePath = $this->driver->getAbsolutePath($this->path, $path);
         $absoluteDestination = $targetDirectory->getAbsolutePath($destination);
 
-        return $this->driver->symlink($absolutePath, $absoluteDestination, $targetDirectory->driver);
+        return $this->driver->symlink($absolutePath, $absoluteDestination, $this->driver);
     }
 
     /**

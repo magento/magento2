@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -52,22 +52,21 @@ class PaymentDataObjectFactoryTest extends TestCase
     protected function setUp(): void
     {
         $this->objectManagerMock = $this->getMockBuilder(ObjectManagerInterface::class)
-            ->getMockForAbstractClass();
+            ->getMock();
 
         $this->orderAdapterFactoryMock =
             $this->getMockBuilder(OrderAdapterFactory::class)
-                ->setMethods(['create'])
+                ->onlyMethods(['create'])
                 ->disableOriginalConstructor()
                 ->getMock();
 
         $this->quoteAdapterFactoryMock =
             $this->getMockBuilder(QuoteAdapterFactory::class)
-                ->setMethods(['create'])
+                ->onlyMethods(['create'])
                 ->disableOriginalConstructor()
                 ->getMock();
 
-        $this->paymentDataObjectMock =
-            $this->getMockForAbstractClass(PaymentDataObjectInterface::class);
+        $this->paymentDataObjectMock = $this->createMock(PaymentDataObjectInterface::class);
 
         $this->model = new PaymentDataObjectFactory(
             $this->objectManagerMock,

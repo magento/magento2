@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -11,7 +11,7 @@ use Magento\Bundle\Ui\DataProvider\Product\Form\Modifier\BundlePrice;
 use Magento\Catalog\Api\Data\ProductAttributeInterface;
 use Magento\Framework\Stdlib\ArrayManager;
 
-class BundlePriceTest extends AbstractModifierTest
+class BundlePriceTest extends AbstractModifierTestCase
 {
     /**
      * @return BundlePrice
@@ -32,12 +32,8 @@ class BundlePriceTest extends AbstractModifierTest
      */
     public function testModifyMeta()
     {
-        $this->productMock->expects($this->any())
-            ->method('getId')
-            ->willReturn(true);
-        $this->productMock->expects($this->any())
-            ->method('getPriceType')
-            ->willReturn(0);
+        $this->productMock->setId(true);
+        $this->productMock->setPriceType(0);
         $priceTypePath = 'bundle-items/children/' . BundlePrice::CODE_PRICE_TYPE;
         $priceTypeConfigPath = $priceTypePath . BundlePrice::META_CONFIG_PATH;
         $pricePath = 'product-details/children/' . ProductAttributeInterface::CODE_PRICE;

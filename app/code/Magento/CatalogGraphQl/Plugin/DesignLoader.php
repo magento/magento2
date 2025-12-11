@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2022 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -9,9 +9,10 @@ namespace Magento\CatalogGraphQl\Plugin;
 
 use Magento\Catalog\Model\Product;
 use Magento\Framework\Message\MessageInterface;
-use Magento\Framework\View\DesignLoader as ViewDesignLoader;
 use Magento\Framework\Message\ManagerInterface;
 use Magento\Catalog\Block\Product\ImageFactory;
+use Magento\Framework\App\AreaList;
+use Magento\Framework\App\State;
 
 /**
  * Load necessary design files for GraphQL
@@ -19,25 +20,37 @@ use Magento\Catalog\Block\Product\ImageFactory;
 class DesignLoader
 {
     /**
-     * @var DesignLoader
-     */
-    private $designLoader;
-
-    /**
      * @var ManagerInterface
      */
     private $messageManager;
 
     /**
-     * @param ViewDesignLoader $designLoader
+     * Application arealist
+     *
+     * @var AreaList
+     */
+    private $areaList;
+
+    /**
+     * Application State
+     *
+     * @var State
+     */
+    private $appState;
+
+    /**
      * @param ManagerInterface $messageManager
+     * @param AreaList $areaList
+     * @param State $appState
      */
     public function __construct(
-        ViewDesignLoader $designLoader,
-        ManagerInterface $messageManager
+        ManagerInterface $messageManager,
+        AreaList $areaList,
+        State $appState
     ) {
-        $this->designLoader = $designLoader;
         $this->messageManager = $messageManager;
+        $this->areaList = $areaList;
+        $this->appState = $appState;
     }
 
     /**
@@ -54,10 +67,11 @@ class DesignLoader
         ImageFactory $subject,
         Product $product,
         string $imageId,
-        array $attributes = null
+        ?array $attributes = null
     ) {
         try {
-            $this->designLoader->load();
+            $area = $this->areaList->getArea($this->appState->getAreaCode());
+            $area->load(\Magento\Framework\App\Area::PART_DESIGN);
         } catch (\Magento\Framework\Exception\LocalizedException $e) {
             if ($e->getPrevious() instanceof \Magento\Framework\Config\Dom\ValidationException) {
                 /** @var MessageInterface $message */

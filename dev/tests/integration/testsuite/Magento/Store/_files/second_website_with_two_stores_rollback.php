@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 
 /** @var \Magento\Framework\Registry $registry */
@@ -24,6 +24,5 @@ $store = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(\Ma
 if ($store->load('fixture_third_store', 'code')->getId()) {
     $store->delete();
 }
-
 $registry->unregister('isSecureArea');
 $registry->register('isSecureArea', false);

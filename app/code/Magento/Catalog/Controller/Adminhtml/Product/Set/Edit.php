@@ -1,8 +1,7 @@
 <?php
 /**
- *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Catalog\Controller\Adminhtml\Product\Set;
 
@@ -42,7 +41,7 @@ class Edit extends Set implements HttpGetActionInterface
         Context $context,
         Registry $coreRegistry,
         PageFactory $resultPageFactory,
-        AttributeSetRepositoryInterface $attributeSetRepository = null
+        ?AttributeSetRepositoryInterface $attributeSetRepository = null
     ) {
         parent::__construct($context, $coreRegistry);
         $this->resultPageFactory = $resultPageFactory;
@@ -56,7 +55,15 @@ class Edit extends Set implements HttpGetActionInterface
     public function execute()
     {
         $this->_setTypeId();
-        $attributeSet = $this->attributeSetRepository->get($this->getRequest()->getParam('id'));
+
+        try {
+            $attributeSetId = $this->getRequest()->getParam('id');
+            $attributeSet = $this->attributeSetRepository->get($attributeSetId);
+        } catch (NoSuchEntityException $e) {
+            $this->messageManager->addErrorMessage(__('Attribute set %1 does not exist.', $attributeSetId));
+            return $this->resultRedirectFactory->create()->setPath('catalog/*/index');
+        }
+
         if (!$attributeSet->getId()) {
             return $this->resultRedirectFactory->create()->setPath('catalog/*/index');
         }

@@ -1,8 +1,7 @@
 <?php
 /**
- *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -41,7 +40,7 @@ class GuestCartRepositoryTest extends TestCase
 
         $this->quoteIdMaskFactoryMock = $this->getMockBuilder(QuoteIdMaskFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMockForAbstractClass();
 
         $this->model = new GuestItemRepository(
@@ -58,7 +57,8 @@ class GuestCartRepositoryTest extends TestCase
 
         /** @var QuoteIdMask|MockObject $quoteIdMaskMock */
         $quoteIdMaskMock = $this->getMockBuilder(QuoteIdMask::class)
-            ->setMethods(['getQuoteId', 'load'])
+            ->addMethods(['getQuoteId'])
+            ->onlyMethods(['load'])
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -94,7 +94,8 @@ class GuestCartRepositoryTest extends TestCase
 
         /** @var QuoteIdMask|MockObject $quoteIdMaskMock */
         $quoteIdMaskMock = $this->getMockBuilder(QuoteIdMask::class)
-            ->setMethods(['getQuoteId', 'load'])
+            ->addMethods(['getQuoteId'])
+            ->onlyMethods(['load'])
             ->disableOriginalConstructor()
             ->getMock();
 

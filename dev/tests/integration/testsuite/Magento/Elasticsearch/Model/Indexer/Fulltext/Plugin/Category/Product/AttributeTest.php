@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -22,7 +22,7 @@ use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
 
 /**
- * Check Elasticsearch indexer mapping when working with attributes.
+ * Check Search engine indexer mapping when working with attributes.
  */
 class AttributeTest extends TestCase
 {
@@ -97,10 +97,9 @@ class AttributeTest extends TestCase
     }
 
     /**
-     * Check Elasticsearch indexer mapping is updated after creating attribute.
+     * Check Search engine indexer mapping is updated after creating attribute.
      *
      * @return void
-     * @magentoConfigFixture default/catalog/search/engine elasticsearch7
      * @magentoDataFixture Magento/CatalogSearch/_files/full_reindex.php
      */
     public function testCheckElasticsearchMappingAfterUpdateAttributeToSearchable(): void
@@ -112,8 +111,7 @@ class AttributeTest extends TestCase
                 'index' => false,
             ],
             'dropdown_attribute_value' => [
-                'type' => 'text',
-                'copy_to' => ['_search'],
+                'type' => 'text'
             ],
         ];
 
@@ -131,10 +129,28 @@ class AttributeTest extends TestCase
         $this->assertTrue($this->indexerProcessor->getIndexer()->isInvalid());
 
         $this->assertEquals($mappedAttributesAfter, $this->getMappingProperties());
+
+        $this->indexerProcessor->getIndexer()->reindexAll();
+
+        $expectedResultAfterReindex = [
+            'dropdown_attribute' => [
+                'type' => 'integer',
+            ],
+            'dropdown_attribute_value' => [
+                'type' => 'text',
+                'copy_to' => ['_search'],
+            ],
+        ];
+
+        $mappedAttributesAfterReindex = $this->getMappingProperties();
+        $this->assertEquals(
+            $expectedResultAfterReindex,
+            array_diff_key($mappedAttributesAfterReindex, $mappedAttributesBefore)
+        );
     }
 
     /**
-     * Retrieve Elasticsearch indexer mapping.
+     * Retrieve Search engine indexer mapping.
      *
      * @return array
      */

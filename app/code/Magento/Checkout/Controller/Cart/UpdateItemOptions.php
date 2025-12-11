@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Checkout\Controller\Cart;
@@ -12,6 +12,7 @@ use Magento\Framework\App\Action\HttpPostActionInterface as HttpPostActionInterf
 use Magento\Framework\Controller\Result\Redirect;
 use Magento\Framework\DataObject;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Filter\LocalizedToNormalized;
 use Magento\Framework\Locale\ResolverInterface;
 use Psr\Log\LoggerInterface;
 
@@ -37,7 +38,7 @@ class UpdateItemOptions extends Cart implements HttpPostActionInterface
         }
         try {
             if (isset($params['qty'])) {
-                $inputFilter = new \Zend_Filter_LocalizedToNormalized(
+                $inputFilter = new LocalizedToNormalized(
                     [
                         'locale' => $this->_objectManager->get(ResolverInterface::class)->getLocale(),
                     ]

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -306,6 +306,7 @@ class CarrierTest extends TestCase
      *
      * @magentoConfigFixture default_store carriers/usps/active 1
      * @magentoConfigFixture default_store carriers/usps/free_method 1
+     * @magentoConfigFixture default_store carriers/usps/debug 1
      * @magentoDataFixture Magento/Catalog/_files/products_list.php
      * @magentoDataFixture Magento/Usps/Fixtures/cart_rule_coupon_free_shipping.php
      * @magentoDataFixture setFreeShippingForProduct1

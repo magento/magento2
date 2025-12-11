@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Deploy\Collector;
 
@@ -11,6 +11,8 @@ use Magento\Deploy\Package\Package;
  * Interface CollectorInterface
  *
  * Collector returns packages with files which share same properties (e.g. area, theme, locale, etc)
+ *
+ * @api
  */
 interface CollectorInterface
 {

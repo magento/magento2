@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 
 use Magento\TestFramework\Workaround\Override\Fixture\Resolver;
@@ -56,7 +56,7 @@ $product->setTypeId('bundle')
                     'selection_qty' => 1,
                     'selection_can_change_qty' => 1,
                     'delete' => '',
-
+                    'selection_price_type' => 0
                 ],
             ],
         ]
@@ -86,6 +86,8 @@ if ($product->getBundleOptionsData()) {
                         if (isset($linkData['selection_can_change_qty'])) {
                             $link->setCanChangeQuantity($linkData['selection_can_change_qty']);
                         }
+                        $link->setPriceType($linkData['selection_price_type']);
+                        $link->setPrice($linkData['selection_price_value']);
                         $links[] = $link;
                     }
                 }

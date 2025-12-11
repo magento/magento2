@@ -1,39 +1,38 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Customer\Model\ResourceModel\Online\Grid;
 
-use Magento\Framework\View\Element\UiComponent\DataProvider\SearchResult;
 use Magento\Customer\Model\Visitor;
-use Magento\Framework\Api;
-use Magento\Framework\Event\ManagerInterface as EventManager;
 use Magento\Framework\Data\Collection\Db\FetchStrategyInterface as FetchStrategy;
 use Magento\Framework\Data\Collection\EntityFactoryInterface as EntityFactory;
+use Magento\Framework\Event\ManagerInterface as EventManager;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Stdlib\DateTime\DateTime;
+use Magento\Framework\View\Element\UiComponent\DataProvider\SearchResult;
 use Psr\Log\LoggerInterface as Logger;
 
 /**
  * Flat customer online grid collection
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Collection extends SearchResult
 {
     /**
      * Value of seconds in one minute
      */
-    const SECONDS_IN_MINUTE = 60;
+    public const SECONDS_IN_MINUTE = 60;
 
     /**
-     * @var \Magento\Framework\Stdlib\DateTime\DateTime
+     * @var DateTime
      */
-    protected $date;
+    protected DateTime $date;
 
     /**
      * @var Visitor
      */
-    protected $visitorModel;
+    protected Visitor $visitorModel;
 
     /**
      * @param EntityFactory $entityFactory
@@ -43,7 +42,8 @@ class Collection extends SearchResult
      * @param string $mainTable
      * @param string $resourceModel
      * @param Visitor $visitorModel
-     * @param \Magento\Framework\Stdlib\DateTime\DateTime $date
+     * @param DateTime $date
+     * @throws LocalizedException
      */
     public function __construct(
         EntityFactory $entityFactory,
@@ -53,7 +53,7 @@ class Collection extends SearchResult
         $mainTable,
         $resourceModel,
         Visitor $visitorModel,
-        \Magento\Framework\Stdlib\DateTime\DateTime $date
+        DateTime $date
     ) {
         $this->date = $date;
         $this->visitorModel = $visitorModel;
@@ -65,7 +65,7 @@ class Collection extends SearchResult
      *
      * @return $this
      */
-    protected function _initSelect()
+    protected function _initSelect(): Collection
     {
         parent::_initSelect();
         $connection = $this->getConnection();
@@ -78,6 +78,7 @@ class Collection extends SearchResult
             'main_table.last_visit_at >= ?',
             $connection->formatDate($lastDate)
         );
+        $this->addFilterToMap('customer_id', 'main_table.customer_id');
         $expression = $connection->getCheckSql(
             'main_table.customer_id IS NOT NULL AND main_table.customer_id != 0',
             $connection->quote(Visitor::VISITOR_TYPE_CUSTOMER),
@@ -92,9 +93,9 @@ class Collection extends SearchResult
      *
      * @param string|array $field
      * @param string|int|array|null $condition
-     * @return \Magento\Cms\Model\ResourceModel\Block\Collection
+     * @return Collection
      */
-    public function addFieldToFilter($field, $condition = null)
+    public function addFieldToFilter($field, $condition = null): Collection
     {
         if ($field == 'visitor_type') {
             $field = 'customer_id';

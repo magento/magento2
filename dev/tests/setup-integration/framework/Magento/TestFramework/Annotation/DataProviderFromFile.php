@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\TestFramework\Annotation;
@@ -20,14 +20,18 @@ class DataProviderFromFile
     /**
      * @var string
      */
-    const FALLBACK_VALUE = 'default';
+    public const FALLBACK_VALUE = 'default';
 
     /**
      * @var array
      */
-    const POSSIBLE_SUFFIXES = [
+    public const POSSIBLE_SUFFIXES = [
         SqlVersionProvider::MYSQL_8_0_VERSION => 'mysql8',
-        SqlVersionProvider::MARIA_DB_10_VERSION => 'mariadb10',
+        SqlVersionProvider::MARIA_DB_10_4_VERSION => 'mariadb10',
+        SqlVersionProvider::MARIA_DB_10_6_VERSION => 'mariadb106',
+        SqlVersionProvider::MYSQL_8_0_29_VERSION => 'mysql829',
+        SqlVersionProvider::MARIA_DB_10_4_27_VERSION => 'mariadb10427',
+        SqlVersionProvider::MARIA_DB_10_6_11_VERSION => 'mariadb10611'
     ];
 
     /**
@@ -39,6 +43,11 @@ class DataProviderFromFile
      * @var CliCommand
      */
     private $cliCommand;
+
+    /**
+     * @var \PHPUnit\Framework\TestCase|[]
+     */
+    private static $testObj;
 
     /**
      * CopyModules constructor.
@@ -57,18 +66,38 @@ class DataProviderFromFile
      */
     public function startTest(\PHPUnit\Framework\TestCase $test)
     {
-        $annotations = TestUtil::parseTestMethodAnnotations(
-            get_class($test),
-            $test->getName(false)
-        );
+        $annotations = TestCaseAnnotation::getInstance()->getAnnotations($test);
         //This annotation can be declared only on method level
         if (isset($annotations['method']['dataProviderFromFile']) && $test instanceof MutableDataInterface) {
             $test->setData(
+                $test->name(),
                 $this->loadAllFiles(TESTS_MODULES_PATH . "/" . $annotations['method']['dataProviderFromFile'][0])
             );
+
+            self::setTestObject($test);
         } elseif (!$test instanceof MutableDataInterface) {
             throw new \Exception("Test type do not supports @dataProviderFromFile annotation");
         }
+    }
+
+    /**
+     * Set test Object.
+     *
+     * @param \PHPUnit\Framework\TestCase|[] $test
+     */
+    public static function setTestObject($test)
+    {
+        self::$testObj = $test;
+    }
+
+    /**
+     * Get test Object.
+     *
+     * @param \PHPUnit\Framework\TestCase $test
+     */
+    public static function getTestObject()
+    {
+        return self::$testObj;
     }
 
     /**

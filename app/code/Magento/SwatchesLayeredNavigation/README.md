@@ -1,20 +1,22 @@
-# The Magento SwatchesLayeredNavigation Module
+# Magento_SwatchesLayeredNavigation module
 
-## Overview
-
-The **Magento_SwatchesLayeredNavigation** module enables LayeredNavigation functionality for Swatch attributes
+This module enables LayeredNavigation functionality for Swatch attributes.
 
 ## Backward incompatible changes
-No backward incompatible changes
+
+No backward incompatible changes.
 
 ## Dependencies
-The **Magento_SwatchesLayeredNavigation** is dependent on the following modules:
+
+This module is dependent on the following modules:
 
 - Magento_Swatches
 - Magento_LayeredNavigation
 
 ## Specific Settings
-The **Magento_SwatchesLayeredNavigation** module does not provide any specific settings.
+
+This module does not provide any specific settings.
 
 ## Specific Extension Points
-The **Magento_SwatchesLayeredNavigation** module does not provide any specific extension points. You can extend it using the Magento extension mechanism.
+
+This module does not provide any specific extension points. You can extend it using the Magento extension mechanism.

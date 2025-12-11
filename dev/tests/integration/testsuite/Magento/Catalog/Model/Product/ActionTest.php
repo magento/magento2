@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Catalog\Model\Product;
 
@@ -138,16 +138,16 @@ class ActionTest extends \PHPUnit\Framework\TestCase
      *
      * @return array
      */
-    public function updateAttributesDataProvider()
+    public static function updateAttributesDataProvider()
     {
         return [
             [
                 'status' => 2,
-                'expected_count' => 0
+                'productsCount' => 0
             ],
             [
                 'status' => 1,
-                'expected_count' => 1
+                'productsCount' => 1
             ],
         ];
     }

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+ * Copyright 2023 Adobe
+ * All Rights Reserved.
+ */
+-->
+
+<entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:DataGenerator/etc/dataProfileSchema.xsd">
+    <entity name="DisableSearchSuggestions">
+        <data key="path">catalog/search/search_suggestion_enabled</data>
+        <data key="value">0</data>
+    </entity>
+    <entity name="EnableSearchSuggestions">
+        <data key="path">catalog/search/search_suggestion_enabled</data>
+        <data key="value">1</data>
+    </entity>
+</entities>

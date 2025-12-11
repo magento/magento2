@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 
 declare(strict_types=1);
@@ -11,6 +11,8 @@ namespace Magento\Customer\Model\Plugin;
 use Magento\Framework\Webapi\Rest\Request as RestRequest;
 use Magento\Customer\Api\Data\CustomerInterface;
 use Magento\Customer\Api\CustomerRepositoryInterface;
+use Magento\Authorization\Model\UserContextInterface;
+use Magento\Framework\App\ObjectManager;
 
 /**
  * Update customer by id from request param
@@ -23,11 +25,18 @@ class UpdateCustomer
     private $request;
 
     /**
-     * @param RestRequest $request
+     * @var UserContextInterface
      */
-    public function __construct(RestRequest $request)
+    private $userContext;
+
+    /**
+     * @param RestRequest $request
+     * @param UserContextInterface|null $userContext
+     */
+    public function __construct(RestRequest $request, ?UserContextInterface $userContext = null)
     {
         $this->request = $request;
+        $this->userContext = $userContext ?? ObjectManager::getInstance()->get(UserContextInterface::class);
     }
 
     /**
@@ -43,9 +52,20 @@ class UpdateCustomer
         CustomerInterface $customer,
         ?string $passwordHash = null
     ): array {
-        $customerId = $this->request->getParam('customerId');
+        $userType = $this->userContext->getUserType();
+        $customerSessionId = (int)$this->userContext->getUserId();
+        $customerId = (int)$this->request->getParam('customerId');
         $bodyParams = $this->request->getBodyParams();
-        if (!isset($bodyParams['customer']['Id']) && $customerId) {
+
+        if ($userType === UserContextInterface::USER_TYPE_CUSTOMER &&
+            !isset($bodyParams['customer']['Id']) &&
+            $customerId &&
+            $customerId === $customerSessionId
+        ) {
+            $customer = $this->getUpdatedCustomer($customerRepository->getById($customerId), $customer);
+        } elseif ($customerId && in_array($userType, [UserContextInterface::USER_TYPE_ADMIN,
+                    UserContextInterface::USER_TYPE_INTEGRATION], true)
+        ) {
             $customer = $this->getUpdatedCustomer($customerRepository->getById($customerId), $customer);
         }
 

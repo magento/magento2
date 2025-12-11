@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 /**
@@ -50,7 +50,7 @@ class Iterator extends \Magento\Framework\DataObject
      * @return \Zend_Db_Statement_Interface
      * @throws LocalizedException
      */
-    protected function _getStatement($query, AdapterInterface $connection = null)
+    protected function _getStatement($query, ?AdapterInterface $connection = null)
     {
         if ($query instanceof \Zend_Db_Statement_Interface) {
             return $query;

@@ -1,12 +1,12 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework\Mview\Config;
 
 use Magento\Framework\Mview\View\AdditionalColumnsProcessor\DefaultProcessor;
-use Magento\Framework\Mview\View\ChangeLogBatchWalker;
+use Magento\Framework\Mview\View\ChangelogBatchWalker;
 use Magento\Framework\Mview\View\SubscriptionInterface;
 
 class Converter implements \Magento\Framework\Config\ConverterInterface
@@ -27,7 +27,7 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
      */
     public function __construct(
         string $defaultProcessor = DefaultProcessor::class,
-        string $defaultIterator = ChangeLogBatchWalker::class
+        string $defaultIterator = ChangelogBatchWalker::class
     ) {
         $this->defaultProcessor = $defaultProcessor;
         $this->defaultIterator = $defaultIterator;

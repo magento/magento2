@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Catalog\Model\Product;
 
@@ -37,7 +37,7 @@ class TypeTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function factoryDataProvider()
+    public static function factoryDataProvider()
     {
         return [
             [null, \Magento\Catalog\Model\Product\Type\Simple::class],
@@ -70,7 +70,7 @@ class TypeTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function factoryReturnsSingletonDataProvider()
+    public static function factoryReturnsSingletonDataProvider()
     {
         return [
             [null],
@@ -92,7 +92,7 @@ class TypeTest extends \PHPUnit\Framework\TestCase
         $this->assertInstanceOf($expectedClass, $type);
     }
 
-    public function priceFactoryDataProvider()
+    public static function priceFactoryDataProvider()
     {
         return [
             [null, \Magento\Catalog\Model\Product\Type\Price::class],
@@ -145,7 +145,7 @@ class TypeTest extends \PHPUnit\Framework\TestCase
         $this->assertNotEmpty($this->_productType->getOptionText($typeId));
     }
 
-    public function getOptionTextDataProvider()
+    public static function getOptionTextDataProvider()
     {
         return [
             [\Magento\Catalog\Model\Product\Type::TYPE_SIMPLE],

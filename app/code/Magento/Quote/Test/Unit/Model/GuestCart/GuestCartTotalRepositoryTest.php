@@ -1,8 +1,7 @@
 <?php
 /**
- *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -55,9 +54,7 @@ class GuestCartTotalRepositoryTest extends TestCase
     {
         $this->objectManager = new ObjectManager($this);
 
-        $this->cartTotalRepository = $this->getMockBuilder(CartTotalRepositoryInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->cartTotalRepository = $this->createMock(CartTotalRepositoryInterface::class);
 
         $this->maskedCartId = 'f216207248d65c789b17be8545e0aa73';
         $this->cartId = 123;

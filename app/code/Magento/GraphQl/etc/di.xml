@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2024 Adobe
+ * All Rights Reserved.
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
@@ -35,6 +35,7 @@
                 <item name="graphql_type" xsi:type="object">Magento\Framework\GraphQl\Config\Element\TypeFactory</item>
                 <item name="graphql_input" xsi:type="object">Magento\Framework\GraphQl\Config\Element\InputFactory</item>
                 <item name="graphql_enum" xsi:type="object">Magento\Framework\GraphQl\Config\Element\EnumFactory</item>
+                <item name="graphql_scalar" xsi:type="object">Magento\Framework\GraphQl\Config\Element\ScalarFactory</item>
             </argument>
         </arguments>
     </type>
@@ -69,6 +70,7 @@
                 <item name="Magento\Framework\GraphQl\Config\Element\InterfaceType" xsi:type="string">Magento\Framework\GraphQl\Schema\Type\Output\OutputInterfaceObject</item>
                 <item name="Magento\Framework\GraphQl\Config\Element\UnionType" xsi:type="string">Magento\Framework\GraphQl\Schema\Type\Output\OutputUnionObject</item>
                 <item name="Magento\Framework\GraphQl\Config\Element\Enum" xsi:type="string">Magento\Framework\GraphQl\Schema\Type\Enum\Enum</item>
+                <item name="Magento\Framework\GraphQl\Config\Element\Scalar" xsi:type="string">Magento\Framework\GraphQl\Schema\Type\Scalar\Scalar</item>
             </argument>
         </arguments>
     </type>
@@ -95,20 +97,25 @@
                 <item name="object_type" xsi:type="object">Magento\Framework\GraphQlSchemaStitching\GraphQlReader\Reader\ObjectType</item>
                 <item name="input_object_type" xsi:type="object">Magento\Framework\GraphQlSchemaStitching\GraphQlReader\Reader\InputObjectType</item>
                 <item name="interface_type" xsi:type="object">Magento\Framework\GraphQlSchemaStitching\GraphQlReader\Reader\InterfaceType</item>
+                <item name="scalar_type" xsi:type="object">Magento\Framework\GraphQlSchemaStitching\GraphQlReader\Reader\ScalarType</item>
             </argument>
         </arguments>
     </type>
     <type name="Magento\Framework\GraphQl\Query\QueryComplexityLimiter">
         <arguments>
             <argument name="queryDepth" xsi:type="number">20</argument>
-            <argument name="queryComplexity" xsi:type="number">300</argument>
+            <argument name="queryComplexity" xsi:type="number">1000</argument>
         </arguments>
     </type>
-    <type name="Magento\GraphQl\Model\Query\Logger\LoggerPool">
+    <type name="Magento\Framework\GraphQl\Query\Resolver\Argument\Validator\CompositeValidator">
         <arguments>
-            <argument name="loggers" xsi:type="array">
-                <item name="newRelic" xsi:type="object">Magento\GraphQl\Model\Query\Logger\NewRelic</item>
+            <argument name="validators" xsi:type="array">
+                <item name="backpressureValidator" xsi:type="object">
+                    Magento\GraphQl\Model\Backpressure\BackpressureFieldValidator
+                </item>
             </argument>
         </arguments>
     </type>
+    <preference for="Magento\GraphQl\Model\Backpressure\RequestTypeExtractorInterface"
+                type="Magento\GraphQl\Model\Backpressure\CompositeRequestTypeExtractor"/>
 </config>

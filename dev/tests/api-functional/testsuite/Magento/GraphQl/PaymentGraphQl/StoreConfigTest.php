@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2021 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -12,11 +12,10 @@ use Magento\TestFramework\TestCase\GraphQlAbstract;
 /**
  * Test coverage for zero subtotal and check/money order payment methods in the store config
  *
- * @magentoDbIsolation enabled
  */
 class StoreConfigTest extends GraphQlAbstract
 {
-    const STORE_CONFIG_QUERY = <<<QUERY
+    public const STORE_CONFIG_QUERY = <<<QUERY
 {
     storeConfig {
         zero_subtotal_enabled

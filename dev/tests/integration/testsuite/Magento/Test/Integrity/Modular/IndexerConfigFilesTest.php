@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Test\Integrity\Modular;
 
@@ -51,7 +51,7 @@ class IndexerConfigFilesTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function indexerConfigFileDataProvider()
+    public static function indexerConfigFileDataProvider()
     {
         return \Magento\Framework\App\Utility\Files::init()->getConfigFiles('indexer.xml');
     }

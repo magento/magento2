@@ -1,10 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
- * \Magento\Widget\Model\Widget\Instance
- *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2024 Adobe
+ * All Rights Reserved.
  */
+declare(strict_types=1);
+
 namespace Magento\Widget\Test\Unit\Model\Widget;
 
 use Magento\Cms\Block\Adminhtml\Page\Widget\Chooser;
@@ -22,6 +22,7 @@ use Magento\Widget\Model\Widget;
 use Magento\Widget\Model\Widget\Instance;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use ReflectionProperty;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -93,6 +94,7 @@ class InstanceTest extends TestCase
         );
         $this->_directoryMock->expects($this->any())->method('isReadable')->willReturnArgument(0);
         $this->_directoryMock->expects($this->any())->method('getRelativePath')->willReturnArgument(0);
+
         $objectManagerHelper = new ObjectManager($this);
         $this->serializer = $this->createMock(Json::class);
         $args = $objectManagerHelper->getConstructArguments(
@@ -110,7 +112,7 @@ class InstanceTest extends TestCase
 
         /** @var Instance _model */
         $this->_model = $this->getMockBuilder(Instance::class)
-            ->setMethods(['_construct'])
+            ->onlyMethods(['_construct'])
             ->setConstructorArgs($args)
             ->getMock();
     }
@@ -398,5 +400,131 @@ class InstanceTest extends TestCase
 
         $this->_model->setData('widget_parameters', $widgetParameters);
         $this->_model->beforeSave();
+    }
+
+    /**
+     * Test case for beforeSave method with updated page groups with layout handles
+     *
+     * @dataProvider beforeSavePageGroupDataProvider
+     * @param array $pageGroups
+     * @param array $expectedData
+     * @return void
+     */
+    public function testBeforeSaveWithUpdatedLayoutHandles(array $pageGroups, array $expectedData): void
+    {
+        $this->setLayoutHandles();
+        $this->setSpecificEntitiesLayoutHandles();
+        $this->_model->setData('page_groups', $pageGroups);
+
+        $actualResult = $this->_model->beforeSave();
+        $actualPageGroups = $actualResult->getData('page_groups');
+        $this->assertNotEmpty($actualPageGroups);
+        $this->assertEquals($expectedData, $actualPageGroups[0]['layout_handle_updates']);
+    }
+
+    /**
+     * Set layout handles
+     *
+     * @return void
+     */
+    private function setLayoutHandles(): void
+    {
+        $layoutHandles = [
+            'anchor_categories' => 'catalog_category_view_type_layered',
+            'notanchor_categories' => 'catalog_category_view_type_default',
+            'all_products' => 'catalog_product_view',
+            'all_pages' => 'default',
+            'simple_products' => 'catalog_product_view_type_simple',
+            'virtual_products' => 'catalog_product_view_type_virtual',
+            'bundle_products' => 'catalog_product_view_type_bundle',
+            'downloadable_products' => 'catalog_product_view_type_downloadable',
+            'configurable_products' => 'catalog_product_view_type_configurable',
+            'grouped_products' => 'catalog_product_view_type_grouped',
+        ];
+
+        $reflection = new ReflectionProperty(Instance::class, '_layoutHandles');
+        $reflection->setAccessible(true);
+        $reflection->setValue($this->_model, $layoutHandles);
+    }
+
+    /**
+     * Set specific entities layout handles
+     *
+     * @return void
+     */
+    private function setSpecificEntitiesLayoutHandles(): void
+    {
+        $specificEntitiesLayoutHandles = [
+            'anchor_categories' => 'catalog_category_view_id_{{ID}}',
+            'notanchor_categories' => 'catalog_category_view_id_{{ID}}',
+            'all_products' => 'catalog_product_view_id_{{ID}}',
+            'simple_products' => 'catalog_product_view_id_{{ID}}',
+            'virtual_products' => 'catalog_product_view_id_{{ID}}',
+            'bundle_products' => 'catalog_product_view_id_{{ID}}',
+            'downloadable_products' => 'catalog_product_view_id_{{ID}}',
+            'configurable_products' => 'catalog_product_view_id_{{ID}}',
+            'grouped_products' => 'catalog_product_view_id_{{ID}}',
+        ];
+        $reflection = new ReflectionProperty(Instance::class, '_specificEntitiesLayoutHandles');
+        $reflection->setAccessible(true);
+        $reflection->setValue($this->_model, $specificEntitiesLayoutHandles);
+    }
+
+    /**
+     * Data provider for beforeSave method with updated page groups with layout handles
+     *
+     * @return array
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     */
+    public static function beforeSavePageGroupDataProvider()
+    {
+        return [
+            'test case for anchor categories layout handles' => [
+                'pageGroups' => [
+                    [
+                        'page_group' => 'anchor_categories',
+                        'anchor_categories' =>
+                            [
+                                'page_id' => '2',
+                                'layout_handle' => 'catalog_category_view_type_layered',
+                                'for' => 'specific',
+                                'block' => 'page.bottom',
+                                'template' => 'default',
+                                'is_anchor_only' => 'Test',
+                                'entities' => '3, 5, 6, 7',
+                            ],
+                        'pages' => ['layout_handle' => ''],
+                        'page_layouts' => ['layout_handle' => ''],
+                    ]
+                ],
+                'expectedData' =>
+                [
+                    'catalog_category_view_id_3',
+                    'catalog_category_view_id_5',
+                    'catalog_category_view_id_6',
+                    'catalog_category_view_id_7'
+                ]
+            ],
+            'test case for page layouts handles' => [
+                'pageGroups' => [
+                    [
+                        'page_group' => 'page_layouts',
+                        'pages' => ['layout_handle' => ''],
+                        'page_layouts' => [
+                            'page_id' => '3',
+                            'for' => 'page_layouts',
+                            'block' => 'page.bottom',
+                            'template' => 'default',
+                            'is_anchor_only' => '0',
+                            'layout_handle' => 'catalog_category_view_id_3'
+                        ]
+                    ]
+                ],
+                'expectedData' =>
+                [
+                    'catalog_category_view_id_3'
+                ]
+            ]
+        ];
     }
 }

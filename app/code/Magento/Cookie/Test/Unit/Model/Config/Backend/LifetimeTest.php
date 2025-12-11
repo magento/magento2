@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -33,13 +33,8 @@ class LifetimeTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->validatorMock = $this->getMockBuilder(CookieLifetimeValidator::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $this->resourceMock = $this->getMockBuilder(ModuleResource::class)
-            ->disableOriginalConstructor('delete')
-            ->getMock();
+        $this->validatorMock = $this->createMock(CookieLifetimeValidator::class);
+        $this->resourceMock = $this->createMock(ModuleResource::class);
 
         $objectManager = new ObjectManager($this);
         $this->model = $objectManager->getObject(

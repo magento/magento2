@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\SalesRule\Model;
 
@@ -38,7 +38,6 @@ use Magento\Quote\Model\Quote\Address;
  * @method \Magento\SalesRule\Model\Rule setProductIds(string $value)
  * @method int getSortOrder()
  * @method \Magento\SalesRule\Model\Rule setSortOrder(int $value)
- * @method string getSimpleAction()
  * @method \Magento\SalesRule\Model\Rule setSimpleAction(string $value)
  * @method float getDiscountAmount()
  * @method \Magento\SalesRule\Model\Rule setDiscountAmount(float $value)
@@ -205,12 +204,12 @@ class Rule extends \Magento\Rule\Model\AbstractModel
         \Magento\SalesRule\Model\Rule\Condition\Product\CombineFactory $condProdCombineF,
         \Magento\SalesRule\Model\ResourceModel\Coupon\Collection $couponCollection,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
-        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
-        \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
+        ?\Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
+        ?\Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = [],
-        ExtensionAttributesFactory $extensionFactory = null,
-        AttributeValueFactory $customAttributeFactory = null,
-        \Magento\Framework\Serialize\Serializer\Json $serializer = null
+        ?ExtensionAttributesFactory $extensionFactory = null,
+        ?AttributeValueFactory $customAttributeFactory = null,
+        ?\Magento\Framework\Serialize\Serializer\Json $serializer = null
     ) {
         $this->_couponFactory = $couponFactory;
         $this->_codegenFactory = $codegenFactory;
@@ -423,7 +422,8 @@ class Rule extends \Magento\Rule\Model\AbstractModel
     public function getStoreLabels()
     {
         if (!$this->hasStoreLabels()) {
-            $labels = $this->_getResource()->getStoreLabels($this->getId());
+            $linkedField = $this->_getResource()->getLinkField();
+            $labels = $this->_getResource()->getStoreLabels($this->getData($linkedField));
             $this->setStoreLabels($labels);
         }
 
@@ -544,6 +544,17 @@ class Rule extends \Magento\Rule\Model\AbstractModel
     public function getFromDate()
     {
         return $this->getData('from_date');
+    }
+
+    /**
+     * Get from date.
+     *
+     * @return string
+     * @since 100.1.0
+     */
+    public function getSimpleAction()
+    {
+        return $this->_getData('simple_action');
     }
 
     /**

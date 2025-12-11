@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Multishipping\Block\Checkout;
@@ -19,7 +19,6 @@ use Magento\Store\Model\ScopeInterface;
  * Multishipping checkout overview information
  *
  * @api
- * @author Magento Core Team <core@magentocommerce.com>
  * @since  100.0.2
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
@@ -28,7 +27,7 @@ class Overview extends \Magento\Sales\Block\Items\AbstractItems
     /**
      * Block alias fallback
      */
-    const DEFAULT_TYPE = 'default';
+    public const DEFAULT_TYPE = 'default';
 
     /**
      * @var \Magento\Multishipping\Model\Checkout\Type\Multishipping
@@ -235,9 +234,18 @@ class Overview extends \Magento\Sales\Block\Items\AbstractItems
     public function getShippingPriceInclTax($address)
     {
         $rate = $address->getShippingRateByCode($address->getShippingMethod());
-        $exclTax = $rate->getPrice();
-        $taxAmount = $address->getShippingTaxAmount();
-        return $this->formatPrice($exclTax + $taxAmount);
+        $store = $this->getQuote()->getStore();
+        $baseCode = $store->getBaseCurrencyCode();
+        $currentCode = $store->getCurrentCurrencyCode();
+        if ($baseCode === $currentCode) {
+            $displayAmount = (float)$rate->getPrice() + (float)$address->getShippingTaxAmount();
+            return $this->formatPrice($displayAmount);
+        }
+        $baseAmount = (float)$rate->getPrice();
+        $baseTaxAmount = $address->getBaseShippingTaxAmount();
+        $baseTaxAmount = $baseTaxAmount !== null ? (float)$baseTaxAmount : 0.0;
+        $converted = $store->getBaseCurrency()->convert($baseAmount + $baseTaxAmount, $currentCode);
+        return $this->formatPrice($converted);
     }
 
     /**
@@ -249,8 +257,15 @@ class Overview extends \Magento\Sales\Block\Items\AbstractItems
     public function getShippingPriceExclTax($address)
     {
         $rate = $address->getShippingRateByCode($address->getShippingMethod());
-        $shippingAmount = $rate->getPrice();
-        return $this->formatPrice($shippingAmount);
+        $store = $this->getQuote()->getStore();
+        $baseCode = $store->getBaseCurrencyCode();
+        $currentCode = $store->getCurrentCurrencyCode();
+        if ($baseCode === $currentCode) {
+            return $this->formatPrice((float)$rate->getPrice());
+        }
+        $baseAmount = (float)$rate->getPrice();
+        $converted = $store->getBaseCurrency()->convert($baseAmount, $currentCode);
+        return $this->formatPrice($converted);
     }
 
     /**
@@ -418,8 +433,9 @@ class Overview extends \Magento\Sales\Block\Items\AbstractItems
     /**
      * Get billin address totals
      *
-     * @return     mixed
+     * @return mixed
      * @deprecated 100.2.3
+     * @see nothing
      * typo in method name, see getBillingAddressTotals()
      */
     public function getBillinAddressTotals()

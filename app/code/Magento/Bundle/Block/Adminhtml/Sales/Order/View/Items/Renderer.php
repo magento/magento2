@@ -1,14 +1,14 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Bundle\Block\Adminhtml\Sales\Order\View\Items;
 
+use Magento\Catalog\Helper\Data as CatalogHelper;
 use Magento\Catalog\Model\Product\Type\AbstractType;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Serialize\Serializer\Json;
-use Magento\Catalog\Helper\Data as CatalogHelper;
 
 /**
  * Adminhtml sales order item renderer
@@ -42,7 +42,7 @@ class Renderer extends \Magento\Sales\Block\Adminhtml\Order\View\Items\Renderer\
         \Magento\GiftMessage\Helper\Message $messageHelper,
         \Magento\Checkout\Helper\Data $checkoutHelper,
         array $data = [],
-        Json $serializer = null,
+        ?Json $serializer = null,
         ?CatalogHelper $catalogHelper = null
     ) {
         $this->serializer = $serializer ?? ObjectManager::getInstance()->get(Json::class);
@@ -203,7 +203,7 @@ class Renderer extends \Magento\Sales\Block\Adminhtml\Order\View\Items\Renderer\
         if (!$this->isShipmentSeparately($item)) {
             $attributes = $this->getSelectionAttributes($item);
             if ($attributes) {
-                $result = sprintf('%d', $attributes['qty']) . ' x ' . $result;
+                $result = (float) $attributes['qty'] . ' x ' . $result;
             }
         }
         if (!$this->isChildCalculated($item)) {

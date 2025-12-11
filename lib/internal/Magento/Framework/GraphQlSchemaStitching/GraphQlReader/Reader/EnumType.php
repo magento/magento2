@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -44,7 +44,7 @@ class EnumType implements TypeMetaReaderInterface
             ];
             foreach ($typeMeta->getValues() as $enumValueMeta) {
                 $result['items'][$enumValueMeta->value] = [
-                    'name' => strtolower($enumValueMeta->name),
+                    'name' => $enumValueMeta->name !== null ? strtolower($enumValueMeta->name) : '',
                     '_value' => $enumValueMeta->value,
                     'description' => $enumValueMeta->description,
                     'deprecationReason' =>$enumValueMeta->deprecationReason

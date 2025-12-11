@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -39,7 +39,7 @@ class NoRouteHandlerTest extends TestCase
     protected function setUp(): void
     {
         $this->_requestMock = $this->createMock(Http::class);
-        $this->_routeConfigMock = $this->getMockForAbstractClass(ConfigInterface::class);
+        $this->_routeConfigMock = $this->createMock(ConfigInterface::class);
         $this->_helperMock = $this->createMock(Data::class);
         $this->_helperMock->expects($this->any())->method('getAreaFrontName')->willReturn('backend');
         $this->_model = new NoRouteHandler($this->_helperMock, $this->_routeConfigMock);

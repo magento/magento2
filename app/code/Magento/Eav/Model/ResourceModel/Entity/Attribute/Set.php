@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Eav\Model\ResourceModel\Entity\Attribute;
@@ -14,7 +14,7 @@ class Set extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     /**
      * EAV cache id
      */
-    const ATTRIBUTES_CACHE_ID = 'EAV_ENTITY_ATTRIBUTES_BY_SET_ID';
+    public const ATTRIBUTES_CACHE_ID = 'EAV_ENTITY_ATTRIBUTES_BY_SET_ID';
 
     /**
      * @var \Magento\Eav\Model\ResourceModel\Entity\Attribute\GroupFactory
@@ -121,7 +121,10 @@ class Set extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     public function validate($object, $attributeSetName)
     {
         $connection = $this->getConnection();
-        $bind = ['attribute_set_name' => trim($attributeSetName), 'entity_type_id' => $object->getEntityTypeId()];
+        $bind = [
+            'attribute_set_name' => $attributeSetName === null ? '' : trim($attributeSetName),
+            'entity_type_id' => $object->getEntityTypeId()
+        ];
         $select = $connection->select()->from(
             $this->getMainTable()
         )->where(

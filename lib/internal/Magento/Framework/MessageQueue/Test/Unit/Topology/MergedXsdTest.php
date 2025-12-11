@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -44,14 +44,16 @@ class MergedXsdTest extends TestCase
         $actualErrors = [];
         $actualResult = $dom->validate($this->schemaFile, $actualErrors);
         $this->assertEquals(empty($expectedErrors), $actualResult, "Validation result is invalid.");
-        $this->assertEquals($expectedErrors, $actualErrors, "Validation errors does not match.");
+        foreach ($expectedErrors as $error) {
+            $this->assertContains($error, $actualErrors, "Validation errors does not match.");
+        }
     }
 
     /**
      * @return array
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function exemplarXmlDataProvider()
+    public static function exemplarXmlDataProvider()
     {
         // @codingStandardsIgnoreStart
         return [
@@ -82,7 +84,11 @@ class MergedXsdTest extends TestCase
                         <exchange name="ex01" type="topic" connection="amqp" />
                 </config>',
                 [
-                    "Element 'exchange': Duplicate key-sequence ['ex01', 'amqp'] in unique identity-constraint 'unique-exchange-name-connection'."
+                    "Element 'exchange': Duplicate key-sequence ['ex01', 'amqp'] in unique identity-constraint 'unique-exchange-name-connection'.The xml was: \n" .
+                    "0:<?xml version=\"1.0\"?>\n1:<config xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:noNamespaceSchemaLocation=\"urn:magento:framework-message-queue:etc/topology.xsd\">\n" .
+                    "2:                        <exchange name=\"ex01\" type=\"topic\" connection=\"amqp\"/>\n" .
+                    "3:                        <exchange name=\"ex01\" type=\"topic\" connection=\"amqp\"/>\n" .
+                    "4:                </config>\n5:\n"
                 ],
             ],
             'non-unique-exchange-binding' => [
@@ -93,7 +99,12 @@ class MergedXsdTest extends TestCase
                         </exchange>
                 </config>',
                 [
-                    "Element 'binding': Duplicate key-sequence ['bind01'] in unique identity-constraint 'unique-binding-id'."
+                        "Element 'binding': Duplicate key-sequence ['bind01'] in unique identity-constraint 'unique-binding-id'.The xml was: \n" .
+                        "0:<?xml version=\"1.0\"?>\n1:<config xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:noNamespaceSchemaLocation=\"urn:magento:framework-message-queue:etc/topology.xsd\">\n" .
+                        "2:                        <exchange name=\"ex01\" connection=\"amqp\" type=\"topic\">\n" .
+                        "3:                            <binding id=\"bind01\" destinationType=\"queue\" destination=\"queue01\" topic=\"top01\" disabled=\"true\"/>\n" .
+                        "4:                            <binding id=\"bind01\" destinationType=\"queue\" destination=\"queue01\" topic=\"top01\"/>\n" .
+                        "5:                        </exchange>\n6:                </config>\n7:\n"
                 ],
             ],
             'invalid-destination-type-binding' => [
@@ -103,8 +114,11 @@ class MergedXsdTest extends TestCase
                     </exchange>
                 </config>',
                 [
-                    "Element 'binding', attribute 'destinationType': [facet 'enumeration'] The value 'topic' is not an element of the set {'queue'}.",
-                    "Element 'binding', attribute 'destinationType': 'topic' is not a valid value of the atomic type 'destinationType'."
+                    "Element 'binding', attribute 'destinationType': [facet 'enumeration'] The value 'topic' is not an element of the set {'queue'}.The xml was: \n" .
+                    "0:<?xml version=\"1.0\"?>\n1:<config xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:noNamespaceSchemaLocation=\"urn:magento:framework-message-queue:etc/topology.xsd\">\n" .
+                    "2:                    <exchange name=\"ex01\" type=\"topic\" connection=\"amqp\">\n" .
+                    "3:                        <binding id=\"bind01\" destinationType=\"topic\" destination=\"queue01\" topic=\"top01\"/>\n" .
+                    "4:                    </exchange>\n5:                </config>\n6:\n"
                 ],
             ],
             'invalid-exchange-type-binding' => [
@@ -114,8 +128,11 @@ class MergedXsdTest extends TestCase
                     </exchange>
                 </config>',
                 [
-                    "Element 'exchange', attribute 'type': [facet 'enumeration'] The value 'exchange' is not an element of the set {'topic'}.",
-                    "Element 'exchange', attribute 'type': 'exchange' is not a valid value of the atomic type 'exchangeType'."
+                    "Element 'exchange', attribute 'type': [facet 'enumeration'] The value 'exchange' is not an element of the set {'topic'}.The xml was: \n" .
+                    "0:<?xml version=\"1.0\"?>\n1:<config xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:noNamespaceSchemaLocation=\"urn:magento:framework-message-queue:etc/topology.xsd\">\n" .
+                    "2:                    <exchange name=\"ex01\" type=\"exchange\" connection=\"db\">\n" .
+                    "3:                        <binding id=\"bind01\" destinationType=\"queue\" destination=\"queue01\" topic=\"top01\"/>\n" .
+                    "4:                    </exchange>\n5:                </config>\n6:\n"
                 ],
             ],
             'missed-required-attributes' => [

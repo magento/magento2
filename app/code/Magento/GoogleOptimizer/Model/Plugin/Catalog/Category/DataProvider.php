@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\GoogleOptimizer\Model\Plugin\Catalog\Category;
@@ -34,6 +34,8 @@ class DataProvider
     }
 
     /**
+     * Updates metadata.
+     *
      * @param \Magento\Catalog\Model\Category\DataProvider $subject
      * @param array $result
      * @return array
@@ -45,6 +47,7 @@ class DataProvider
             !$this->_helper->isGoogleExperimentActive();
         $result['category_view_optimization']['arguments']['data']['config']['componentType'] =
             \Magento\Ui\Component\Form\Fieldset::NAME;
+        $result['category_view_optimization']['arguments']['data']['config']['label'] = '';
 
         return $result;
     }

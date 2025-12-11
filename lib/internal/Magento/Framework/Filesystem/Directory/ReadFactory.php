@@ -1,14 +1,18 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\Filesystem\Directory;
 
 use Magento\Framework\Filesystem\DriverPool;
 
 /**
  * The factory of the filesystem directory instances for read operations.
+ *
+ * @api
  */
 class ReadFactory
 {

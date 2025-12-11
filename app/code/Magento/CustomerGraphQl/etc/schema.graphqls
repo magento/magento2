@@ -1,10 +1,12 @@
-# Copyright © Magento, Inc. All rights reserved.
-# See COPYING.txt for license details.
+#  Copyright 2024 Adobe
+#  All Rights Reserved.
 
 type StoreConfig {
     required_character_classes_number : String @doc(description: "The number of different character classes (lowercase, uppercase, digits, special characters) required in a password.")
     minimum_password_length : String @doc(description: "The minimum number of characters required for a valid password.")
     autocomplete_on_storefront : Boolean @doc(description: "Indicates whether to enable autocomplete on login and forgot password forms.")
+    create_account_confirmation: Boolean @doc(description: "Indicates if the new accounts need confirmation.")
+    graphql_share_customer_group: Boolean @doc(description: "Configuration data from customer/account_information/graphql_share_customer_group")
 }
 
 type Query {
@@ -12,22 +14,33 @@ type Query {
     isEmailAvailable (
         email: String! @doc(description: "The email address to check.")
     ): IsEmailAvailableOutput @resolver(class: "Magento\\CustomerGraphQl\\Model\\Resolver\\IsEmailAvailable") @doc(description: "Check whether the specified email has already been used to create a customer account.")
+    customerGroup: CustomerGroupStorefront! @doc(description: "Provides Customer Group assigned to the Customer or Guest.") @resolver(class: "\\Magento\\CustomerGraphQl\\Model\\Resolver\\Visitor")
 }
 
 type Mutation {
     generateCustomerToken(email: String! @doc(description: "The customer's email address."), password: String! @doc(description: "The customer's password.")): CustomerToken @resolver(class: "\\Magento\\CustomerGraphQl\\Model\\Resolver\\GenerateCustomerToken") @doc(description:"Generate a token for specified customer.")
     changeCustomerPassword(currentPassword: String! @doc(description: "The customer's original password."), newPassword: String! @doc(description: "The customer's updated password.")): Customer @resolver(class: "\\Magento\\CustomerGraphQl\\Model\\Resolver\\ChangePassword") @doc(description:"Change the password for the logged-in customer.")
-    createCustomer (input: CustomerInput! @doc(description: "An input object that defines the customer to be created.")): CustomerOutput @resolver(class: "\\Magento\\CustomerGraphQl\\Model\\Resolver\\CreateCustomer") @doc(description:"Use `createCustomerV2` instead.")
+    createCustomer (input: CustomerInput! @doc(description: "An input object that defines the customer to be created.")): CustomerOutput @resolver(class: "\\Magento\\CustomerGraphQl\\Model\\Resolver\\CreateCustomer") @deprecated(reason:"Use `createCustomerV2` instead.")
     createCustomerV2 (input: CustomerCreateInput! @doc(description: "An input object that defines the customer to be created.")): CustomerOutput @resolver(class: "\\Magento\\CustomerGraphQl\\Model\\Resolver\\CreateCustomer") @doc(description:"Create a customer account.")
-    updateCustomer (input: CustomerInput! @doc(description: "An input object that defines the customer characteristics to update.")): CustomerOutput @resolver(class: "\\Magento\\CustomerGraphQl\\Model\\Resolver\\UpdateCustomer") @doc(description:"Use `updateCustomerV2` instead.")
+    updateCustomer (input: CustomerInput! @doc(description: "An input object that defines the customer characteristics to update.")): CustomerOutput @resolver(class: "\\Magento\\CustomerGraphQl\\Model\\Resolver\\UpdateCustomer") @deprecated(reason:"Use `updateCustomerV2` instead.")
     updateCustomerV2 (input: CustomerUpdateInput! @doc(description: "An input object that defines the customer characteristics to update.")): CustomerOutput @resolver(class: "\\Magento\\CustomerGraphQl\\Model\\Resolver\\UpdateCustomer") @doc(description:"Update the customer's personal information.")
+    deleteCustomer: Boolean @resolver(class: "\\Magento\\CustomerGraphQl\\Model\\Resolver\\DeleteCustomer") @doc(description:"Delete customer account")
     revokeCustomerToken: RevokeCustomerTokenOutput @resolver(class: "\\Magento\\CustomerGraphQl\\Model\\Resolver\\RevokeCustomerToken") @doc(description:"Revoke the customer token.")
     createCustomerAddress(input: CustomerAddressInput!): CustomerAddress @resolver(class: "Magento\\CustomerGraphQl\\Model\\Resolver\\CreateCustomerAddress") @doc(description: "Create a billing or shipping address for a customer or guest.")
-    updateCustomerAddress(id: Int! @doc(description: "The ID assigned to the customer address."), input: CustomerAddressInput @doc(description: "An input object that contains changes to the customer address.")): CustomerAddress @resolver(class: "Magento\\CustomerGraphQl\\Model\\Resolver\\UpdateCustomerAddress") @doc(description: "Update the billing or shipping address of a customer or guest.")
-    deleteCustomerAddress(id: Int! @doc(description: "The ID of the customer address to be deleted.")): Boolean @resolver(class: "Magento\\CustomerGraphQl\\Model\\Resolver\\DeleteCustomerAddress") @doc(description: "Delete the billing or shipping address of a customer.")
+    updateCustomerAddress(id: Int! @doc(description: "The ID assigned to the customer address."), input: CustomerAddressInput @doc(description: "An input object that contains changes to the customer address.")): CustomerAddress @resolver(class: "Magento\\CustomerGraphQl\\Model\\Resolver\\UpdateCustomerAddress") @doc(description: "Update the billing or shipping address of a customer or guest.") @deprecated(reason:"Use `updateCustomerAddressV2` instead.")
+    deleteCustomerAddress(id: Int! @doc(description: "The ID of the customer address to be deleted.")): Boolean @resolver(class: "Magento\\CustomerGraphQl\\Model\\Resolver\\DeleteCustomerAddress") @doc(description: "Delete the billing or shipping address of a customer.") @deprecated(reason:"Use `deleteCustomerAddressV2` instead.")
     requestPasswordResetEmail(email: String! @doc(description: "The customer's email address.")): Boolean  @resolver(class: "\\Magento\\CustomerGraphQl\\Model\\Resolver\\RequestPasswordResetEmail") @doc(description: "Request an email with a reset password token for the registered customer identified by the specified email.")
     resetPassword(email: String! @doc(description: "The customer's email address."), resetPasswordToken: String! @doc(description: "A runtime token generated by the `requestPasswordResetEmail` mutation."), newPassword: String! @doc(description: "The customer's new password.")): Boolean  @resolver(class: "\\Magento\\CustomerGraphQl\\Model\\Resolver\\ResetPassword") @doc(description: "Reset a customer's password using the reset password token that the customer received in an email after requesting it using `requestPasswordResetEmail`.")
     updateCustomerEmail(email: String! @doc(description: "The customer's email address."), password: String! @doc(description: "The customer's password.")): CustomerOutput @resolver(class: "\\Magento\\CustomerGraphQl\\Model\\Resolver\\UpdateCustomerEmail") @doc(description: "Change the email address for the logged-in customer.")
+    confirmEmail(input: ConfirmEmailInput! @doc(description: "An input object to identify the customer to confirm the email.")): CustomerOutput @resolver(class: "\\Magento\\CustomerGraphQl\\Model\\Resolver\\ConfirmEmail") @doc(description: "Confirms the email address for a customer.")
+    resendConfirmationEmail(email: String! @doc(description: "The email address to send the confirmation email to.")): Boolean @resolver(class: "\\Magento\\CustomerGraphQl\\Model\\Resolver\\ResendConfirmationEmail") @doc(description: "Resends the confirmation email to a customer.")
+    updateCustomerAddressV2(uid: ID! @doc(description: "The unique ID of the customer address.") input: CustomerAddressInput @doc(description: "An input object that contains changes to the customer address.")): CustomerAddress @resolver(class: "Magento\\CustomerGraphQl\\Model\\Resolver\\UpdateCustomerAddressV2") @doc(description: "Update the billing or shipping address of a customer or guest.")
+    deleteCustomerAddressV2(uid: ID! @doc(description: "The unique ID of the customer address to be deleted.")): Boolean @resolver(class: "Magento\\CustomerGraphQl\\Model\\Resolver\\DeleteCustomerAddressV2") @doc(description: "Delete the billing or shipping address of a customer.")
+}
+
+input ConfirmEmailInput @doc(description: "Contains details about a customer email address to confirm.") {
+    email: String! @doc(description: "The email address to be confirmed.")
+    confirmation_key: String! @doc(description: "The key to confirm the email address.")
 }
 
 input CustomerAddressInput @doc(description: "Contains details about a billing or shipping address."){
@@ -39,7 +52,7 @@ input CustomerAddressInput @doc(description: "Contains details about a billing o
     city: String @doc(description: "The customer's city or town.")
     region: CustomerAddressRegionInput @doc(description: "An object containing the region name, region code, and region ID.")
     postcode: String @doc(description: "The customer's ZIP or postal code.")
-    country_id: CountryCodeEnum @doc(description: "Deprecated: use `country_code` instead.")
+    country_id: CountryCodeEnum @deprecated(reason: "Use `country_code` instead.")
     country_code: CountryCodeEnum @doc(description: "The two-letter code representing the customer's country.")
     default_shipping: Boolean @doc(description: "Indicates whether the address is the default shipping address.")
     default_billing: Boolean @doc(description: "Indicates whether the address is the default billing address.")
@@ -48,7 +61,8 @@ input CustomerAddressInput @doc(description: "Contains details about a billing o
     prefix: String @doc(description: "An honorific, such as Dr., Mr., or Mrs.")
     suffix: String @doc(description: "A value such as Sr., Jr., or III.")
     vat_id: String @doc(description: "The customer's Tax/VAT number (for corporate customers).")
-    custom_attributes: [CustomerAddressAttributeInput] @doc(description: "Deprecated: Custom attributes should not be put into container.")
+    custom_attributes: [CustomerAddressAttributeInput] @deprecated(reason: "Use custom_attributesV2 instead.")
+    custom_attributesV2: [AttributeValueInput] @doc(description: "Custom attributes assigned to the customer address.")
 }
 
 input CustomerAddressRegionInput @doc(description: "Defines the customer's state or province.") {
@@ -73,7 +87,7 @@ input CustomerInput @doc(description: "An input object that assigns or updates c
     lastname: String @doc(description: "The customer's family name.")
     suffix: String @doc(description: "A value such as Sr., Jr., or III.")
     email: String @doc(description: "The customer's email address. Required when creating a customer.")
-    dob: String @doc(description: "Deprecated: Use `date_of_birth` instead.")
+    dob: String @deprecated(reason: "Use `date_of_birth` instead.")
     date_of_birth: String @doc(description: "The customer's date of birth.")
     taxvat: String @doc(description: "The customer's Tax/VAT number (for corporate customers).")
     gender: Int @doc(description: "The customer's gender (Male - 1, Female - 2).")
@@ -88,17 +102,18 @@ input CustomerCreateInput  @doc(description: "An input object for creating a cus
     lastname: String! @doc(description: "The customer's family name.")
     suffix: String @doc(description: "A value such as Sr., Jr., or III.")
     email: String! @doc(description: "The customer's email address.")
-    dob: String @doc(description: "Deprecated: Use `date_of_birth` instead.")
+    dob: String @deprecated(reason: "Use `date_of_birth` instead.")
     date_of_birth: String @doc(description: "The customer's date of birth.")
     taxvat: String @doc(description: "The customer's Tax/VAT number (for corporate customers).")
     gender: Int @doc(description: "The customer's gender (Male - 1, Female - 2).")
     password: String @doc(description: "The customer's password.")
     is_subscribed: Boolean @doc(description: "Indicates whether the customer is subscribed to the company's newsletter.")
+    custom_attributes: [AttributeValueInput!] @doc(description: "The customer's custom attributes.")
 }
 
 input CustomerUpdateInput @doc(description: "An input object for updating a customer.") {
     date_of_birth: String @doc(description: "The customer's date of birth.")
-    dob: String @doc(description: "Deprecated: Use `date_of_birth` instead.")
+    dob: String @deprecated(reason: "Use `date_of_birth` instead.")
     firstname: String @doc(description: "The customer's first name.")
     gender: Int @doc(description: "The customer's gender (Male - 1, Female - 2).")
     is_subscribed: Boolean @doc(description: "Indicates whether the customer is subscribed to the company's newsletter.")
@@ -107,6 +122,7 @@ input CustomerUpdateInput @doc(description: "An input object for updating a cust
     prefix: String @doc(description: "An honorific, such as Dr., Mr., or Mrs.")
     suffix: String @doc(description: "A value such as Sr., Jr., or III.")
     taxvat: String @doc(description: "The customer's Tax/VAT number (for corporate customers).")
+    custom_attributes: [AttributeValueInput!] @doc(description: "The customer's custom attributes.")
 }
 
 type CustomerOutput @doc(description: "Contains details about a newly-created or updated customer.") {
@@ -131,14 +147,28 @@ type Customer @doc(description: "Defines the customer name, addresses, and other
     dob: String @doc(description: "The customer's date of birth.") @deprecated(reason: "Use `date_of_birth` instead.")
     date_of_birth: String @doc(description: "The customer's date of birth.")
     taxvat: String @doc(description: "The customer's Value-added tax (VAT) number (for corporate customers).")
-    id: Int @doc(description: "The ID assigned to the customer.") @deprecated(reason: "`id` is not needed as part of `Customer`, because on the server side, it can be identified based on the customer token used for authentication. There is no need to know customer ID on the client side.")
-    is_subscribed: Boolean @doc(description: "Indicates whether the customer is subscribed to the company's newsletter.") @resolver(class: "\\Magento\\CustomerGraphQl\\Model\\Resolver\\IsSubscribed")
+    id: ID! @doc(description: "The unique ID assigned to the customer.")
+    is_subscribed: Boolean @doc(description: "Indicates whether the customer is subscribed to the company's newsletter.") @resolver(class: "\\Magento\\NewsletterGraphQl\\Model\\Resolver\\IsSubscribed")
     addresses: [CustomerAddress] @doc(description: "An array containing the customer's shipping and billing addresses.") @resolver(class: "\\Magento\\CustomerGraphQl\\Model\\Resolver\\CustomerAddresses")
+    addressesV2(
+        currentPage: Int = 1 @doc(description: "Specifies which page of results to return. The default value is 1."),
+        pageSize: Int = 5 @doc(description: "Specifies the maximum number of results to return at once. The default value is 5."),
+    ): CustomerAddresses @doc(description: "An array containing the customer's shipping and billing addresses.") @resolver(class: "\\Magento\\CustomerGraphQl\\Model\\Resolver\\CustomerAddressesV2")
     gender: Int @doc(description: "The customer's gender (Male - 1, Female - 2).")
+    custom_attributes(attributeCodes: [ID!]): [AttributeValueInterface] @doc(description: "Customer's custom attributes.") @resolver(class: "Magento\\CustomerGraphQl\\Model\\Resolver\\CustomAttributeFilter")
+    confirmation_status: ConfirmationStatusEnum! @doc(description: "The customer's confirmation status.") @resolver(class: "Magento\\CustomerGraphQl\\Model\\Resolver\\ConfirmationStatus")
+    group: CustomerGroupStorefront @doc(description: "Customer group assigned to the customer") @resolver(class: "\\Magento\\CustomerGraphQl\\Model\\Resolver\\CustomerGroup")
+}
+
+type CustomerAddresses {
+    items: [CustomerAddress] @doc(description: "An array containing the customer's shipping and billing addresses.")
+    page_info: SearchResultPageInfo @doc(description: "Contains pagination metadata.")
+    total_count: Int @doc(description: "The total count of customer addresses.")
 }
 
 type CustomerAddress @doc(description: "Contains detailed information about a customer's billing or shipping address."){
-    id: Int @doc(description: "The ID of a `CustomerAddress` object.")
+    id: Int @doc(description: "The ID of a `CustomerAddress` object.") @deprecated(reason: "Use `uid` instead.")
+    uid: ID @doc(description: "The unique ID for a `CustomerAddress` object.")  @resolver(class: "\\Magento\\CustomerGraphQl\\Model\\Resolver\\CustomerAddressUid")
     customer_id: Int @doc(description: "The customer ID") @deprecated(reason: "`customer_id` is not needed as part of `CustomerAddress`. The `id` is a unique identifier for the addresses.")
     region: CustomerAddressRegion @doc(description: "An object containing the region name, region code, and region ID.")
     region_id: Int @doc(description: "The unique ID for a pre-defined region.")
@@ -158,7 +188,8 @@ type CustomerAddress @doc(description: "Contains detailed information about a cu
     vat_id: String @doc(description: "The customer's Value-added tax (VAT) number (for corporate customers).")
     default_shipping: Boolean @doc(description: "Indicates whether the address is the customer's default shipping address.")
     default_billing: Boolean @doc(description: "Indicates whether the address is the customer's default billing address.")
-    custom_attributes: [CustomerAddressAttribute] @deprecated(reason: "Custom attributes should not be put into a container.")
+    custom_attributes: [CustomerAddressAttribute] @deprecated(reason: "Use custom_attributesV2 instead.")
+    custom_attributesV2(attributeCodes: [ID!]): [AttributeValueInterface!]! @doc(description: "Custom attributes assigned to the customer address.") @resolver(class: "Magento\\CustomerGraphQl\\Model\\Resolver\\CustomerAddressCustomAttributeFilter")
     extension_attributes: [CustomerAddressAttribute] @doc(description: "Contains any extension attributes for the address.")
 }
 
@@ -170,7 +201,7 @@ type CustomerAddressRegion @doc(description: "Defines the customer's state or pr
 
 type CustomerAddressAttribute @doc(description: "Specifies the attribute code and value of a customer address attribute.") {
      attribute_code: String @doc(description: "The name assigned to the customer address attribute.")
-     value: String @doc(description: "The valuue assigned to the customer address attribute.")
+     value: String @doc(description: "The value assigned to the customer address attribute.")
 }
 
 type IsEmailAvailableOutput @doc(description: "Contains the result of the `isEmailAvailable` query.") {
@@ -247,6 +278,7 @@ enum CountryCodeEnum @doc(description: "The list of country codes.") {
     GQ @doc(description: "Equatorial Guinea")
     ER @doc(description: "Eritrea")
     EE @doc(description: "Estonia")
+    SZ @doc(description: "Eswatini")
     ET @doc(description: "Ethiopia")
     FK @doc(description: "Falkland Islands")
     FO @doc(description: "Faroe Islands")
@@ -387,7 +419,6 @@ enum CountryCodeEnum @doc(description: "The list of country codes.") {
     SD @doc(description: "Sudan")
     SR @doc(description: "Suriname")
     SJ @doc(description: "Svalbard & Jan Mayen")
-    SZ @doc(description: "Swaziland")
     SE @doc(description: "Sweden")
     CH @doc(description: "Switzerland")
     SY @doc(description: "Syria")
@@ -423,4 +454,50 @@ enum CountryCodeEnum @doc(description: "The list of country codes.") {
     YE @doc(description: "Yemen")
     ZM @doc(description: "Zambia")
     ZW @doc(description: "Zimbabwe")
+}
+
+enum AttributeEntityTypeEnum {
+    CUSTOMER
+    CUSTOMER_ADDRESS
+}
+
+type CustomerAttributeMetadata implements CustomAttributeMetadataInterface @doc(description: "Customer attribute metadata.") {
+    input_filter: InputFilterEnum @doc(description: "The template used for the input of the attribute (e.g., 'date').")
+    multiline_count: Int @doc(description: "The number of lines of the attribute value.")
+    sort_order: Int @doc(description: "The position of the attribute in the form.")
+    validate_rules: [ValidationRule] @doc(description: "The validation rules of the attribute value.")
+}
+
+enum InputFilterEnum @doc(description: "List of templates/filters applied to customer attribute input.") {
+    NONE @doc(description: "There are no templates or filters to be applied.")
+    DATE @doc(description: "Forces attribute input to follow the date format.")
+    TRIM @doc(description: "Strip whitespace (or other characters) from the beginning and end of the input.")
+    STRIPTAGS @doc(description: "Strip HTML Tags.")
+    ESCAPEHTML @doc(description: "Escape HTML Entities.")
+}
+
+type ValidationRule @doc(description: "Defines a customer attribute validation rule.") {
+    name: ValidationRuleEnum @doc(description: "Validation rule name applied to a customer attribute.")
+    value: String @doc(description: "Validation rule value.")
+}
+
+enum ValidationRuleEnum @doc(description: "List of validation rule names applied to a customer attribute.") {
+    DATE_RANGE_MAX
+    DATE_RANGE_MIN
+    FILE_EXTENSIONS
+    INPUT_VALIDATION
+    MAX_TEXT_LENGTH
+    MIN_TEXT_LENGTH
+    MAX_FILE_SIZE
+    MAX_IMAGE_HEIGHT
+    MAX_IMAGE_WIDTH
+}
+
+enum ConfirmationStatusEnum @doc(description: "List of account confirmation statuses.") {
+    ACCOUNT_CONFIRMED @doc(description: "Account confirmed")
+    ACCOUNT_CONFIRMATION_NOT_REQUIRED @doc(description: "Account confirmation not required")
+}
+
+type CustomerGroupStorefront @doc(description: "Data of customer group.") {
+    uid: ID! @doc(description: "The unique ID for a `CustomerGroup` object.")
 }

@@ -1,6 +1,6 @@
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 define([
@@ -102,6 +102,7 @@ define([
             });
             it('Check call "beforeSave" method without parameters', function () {
                 $.ajax = jasmine.createSpy();
+                utils.submit = jasmine.createSpy();
                 obj.urls.beforeSave = null;
                 obj.save();
 
@@ -113,6 +114,7 @@ define([
                 $.ajax = jasmine.createSpy().and.callFake(function (req) {
                     request = req.success;
                 });
+                utils.submit = jasmine.createSpy();
                 jQueryMethods.notification = $.fn.notification;
                 $.fn.notification = jasmine.createSpy();
                 obj.urls.beforeSave = 'requestPath';

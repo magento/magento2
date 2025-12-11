@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -56,7 +56,7 @@ class AbstractBuilderTest extends TestCase
     /**
      * @return array
      */
-    public function dataProviderWrongParseOptions()
+    public static function dataProviderWrongParseOptions()
     {
         return [[['write' => [1, 2]]], [['parse' => [], 'write' => [1, 2]]]];
     }
@@ -75,7 +75,7 @@ class AbstractBuilderTest extends TestCase
     /**
      * @return array
      */
-    public function dataProviderWrongWriteOptions()
+    public static function dataProviderWrongWriteOptions()
     {
         return [[['parse' => [1, 2]]], [['parse' => [1, 2], 'write' => []]]];
     }

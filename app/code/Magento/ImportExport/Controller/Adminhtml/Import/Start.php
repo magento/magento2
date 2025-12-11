@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\ImportExport\Controller\Adminhtml\Import;
 
@@ -124,6 +124,7 @@ class Start extends ImportResultController implements HttpPostActionInterface
 
                 $this->addErrorMessages($resultBlock, $errorAggregator);
                 $resultBlock->addSuccess(__('Import successfully done'));
+                $this->_eventManager->dispatch('log_admin_import');
             }
 
             return $resultLayout;

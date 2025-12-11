@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 
 declare(strict_types=1);
@@ -155,7 +155,7 @@ class ConfigurableObjectTest extends TestCase
         self::assertSame('an object yay!', $actualResult);
     }
 
-    public function validDataProvider()
+    public static function validDataProvider()
     {
         return [
             // Test most basic syntax with no arguments
@@ -230,7 +230,7 @@ class ConfigurableObjectTest extends TestCase
         ];
     }
 
-    public function invalidDataProvider()
+    public static function invalidDataProvider()
     {
         return [
             [

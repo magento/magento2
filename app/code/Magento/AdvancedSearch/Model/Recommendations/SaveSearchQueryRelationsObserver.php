@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\AdvancedSearch\Model\Recommendations;
 
@@ -35,7 +35,7 @@ class SaveSearchQueryRelationsObserver implements ObserverInterface
     {
         $searchQueryModel = $observer->getEvent()->getDataObject();
         $queryId = $searchQueryModel->getId();
-        $relatedQueries = $searchQueryModel->getSelectedQueriesGrid();
+        $relatedQueries = $searchQueryModel->getSelectedQueriesGrid() ?? '';
 
         if (strlen($relatedQueries) == 0) {
             $relatedQueries = [];

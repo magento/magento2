@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 
 declare(strict_types=1);
@@ -295,7 +295,7 @@ class UpdateHandlerTest extends TestCase
     /**
      * @return array
      */
-    public function executeWithTwoImagesAndRolesDataProvider(): array
+    public static function executeWithTwoImagesAndRolesDataProvider(): array
     {
         return [
             'unassign_all_roles' => [
@@ -631,7 +631,7 @@ class UpdateHandlerTest extends TestCase
     /**
      * @return array[]
      */
-    public function updateImageDataProvider(): array
+    public static function updateImageDataProvider(): array
     {
         return [
             [
@@ -699,7 +699,7 @@ class UpdateHandlerTest extends TestCase
     /**
      * @return array[]
      */
-    public function addImagesDataProvider(): array
+    public static function addImagesDataProvider(): array
     {
         return [
             [

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -137,8 +137,12 @@ class CreateLabelTest extends TestCase
 
         $this->requestMock
             ->method('getParam')
-            ->withConsecutive(['order_id'], ['shipment_id'], ['shipment'], ['tracking'])
-            ->willReturnOnConsecutiveCalls($orderId, $shipmentId, $shipment, $tracking);
+            ->willReturnCallback(fn($param) => match ([$param]) {
+                ['order_id'] => $orderId,
+                ['shipment_id'] => $shipmentId,
+                ['shipment'] => $shipment,
+                ['tracking'] => $tracking
+            });
         $this->shipmentLoaderMock->expects($this->once())
             ->method('setOrderId')
             ->with($orderId);

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
  /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
+  * Copyright 2018 Adobe
+  * All Rights Reserved.
   */
 -->
 
@@ -17,6 +17,7 @@
             <severity value="BLOCKER"/>
             <testCaseId value="MC-3082"/>
             <group value="Swatches"/>
+            <group value="cloud"/>
         </annotations>
 
         <before>
@@ -30,6 +31,8 @@
         <after>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
             <deleteData createDataKey="createSimpleProduct" stepKey="deleteSimpleProduct"/>
+            <!-- Delete configurable product variants via API using ProductApiHelper -->
+            <helper class="Magento\Catalog\Test\Mftf\Helper\ProductApiHelper" method="deleteAllProductsApi" stepKey="deleteAllProductsViaApi"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="adminLogout"/>
         </after>
 
@@ -104,7 +107,7 @@
         <grabAttributeFrom selector="{{StorefrontCategorySidebarSection.attributeNthOption(ProductAttributeFrontendLabel.label, '1')}}" userInput="style" stepKey="grabSwatch1"/>
         <grabAttributeFrom selector="{{StorefrontCategorySidebarSection.attributeNthOption(ProductAttributeFrontendLabel.label, '2')}}" userInput="style" stepKey="grabSwatch2"/>
         <assertStringContainsString stepKey="assertSwatch1">
-            <expectedResult type="string">rgb(231, 77, 60)</expectedResult>
+            <expectedResult type="string">rgb(231, 76, 60)</expectedResult>
             <actualResult type="string">{$grabSwatch1}</actualResult>
         </assertStringContainsString>
         <assertStringContainsString stepKey="assertSwatch2">

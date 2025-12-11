@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -115,7 +115,16 @@ class CollectionByPagesIteratorTest extends TestCase
         }
         $callbackMock
             ->method('callback')
-            ->withConsecutive(...$withArgs);
+            ->willReturnCallback(function () use ($withArgs) {
+                static $callCount = 0;
+                if ($callCount < count($withArgs)) {
+                    $args = $withArgs[$callCount];
+                    if ($args) {
+                        $callCount++;
+                        return null;
+                    }
+                }
+            });
 
         $this->_resourceModel->iterate($collectionMock, $pageSize, [[$callbackMock, 'callback']]);
     }

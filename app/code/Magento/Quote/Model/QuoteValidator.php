@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Quote\Model;
@@ -51,9 +51,9 @@ class QuoteValidator
      * @param QuoteValidationRuleInterface|null $quoteValidationRule
      */
     public function __construct(
-        AllowedCountries $allowedCountryReader = null,
-        OrderAmountValidationMessage $minimumAmountMessage = null,
-        QuoteValidationRuleInterface $quoteValidationRule = null
+        ?AllowedCountries $allowedCountryReader = null,
+        ?OrderAmountValidationMessage $minimumAmountMessage = null,
+        ?QuoteValidationRuleInterface $quoteValidationRule = null
     ) {
         $this->allowedCountryReader = $allowedCountryReader ?: ObjectManager::getInstance()
             ->get(AllowedCountries::class);

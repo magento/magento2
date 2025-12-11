@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -79,6 +79,7 @@ class AdaptUrlRewritesToVisibilityAttribute
                     [
                         UrlRewrite::ENTITY_ID => $product->getId(),
                         UrlRewrite::ENTITY_TYPE => ProductUrlRewriteGenerator::ENTITY_TYPE,
+                        UrlRewrite::STORE_ID => $storeId,
                     ]
                 );
             } elseif ($visibility !== Visibility::VISIBILITY_NOT_VISIBLE) {

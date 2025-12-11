@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -48,7 +48,7 @@ class MySQLSearchRemovalNotification implements DataPatchInterface
         if ($this->scopeConfig->getValue('catalog/search/engine') === 'mysql') {
             $message = <<<MESSAGE
 Catalog Search is currently configured to use the MySQL engine, which has been deprecated and removed.
-Migrate to an Elasticsearch engine to ensure there are no service interruptions.
+Migrate to an Elasticsearch/OpenSearch engine to ensure there are no service interruptions.
 MESSAGE;
 
             $this->notifier->addNotice(__('Disable Notice'), __($message));

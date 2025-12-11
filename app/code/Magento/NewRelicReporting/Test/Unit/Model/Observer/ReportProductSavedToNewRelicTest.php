@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -42,11 +42,11 @@ class ReportProductSavedToNewRelicTest extends TestCase
     {
         $this->config = $this->getMockBuilder(Config::class)
             ->disableOriginalConstructor()
-            ->setMethods(['isNewRelicEnabled'])
+            ->onlyMethods(['isNewRelicEnabled'])
             ->getMock();
         $this->newRelicWrapper = $this->getMockBuilder(NewRelicWrapper::class)
             ->disableOriginalConstructor()
-            ->setMethods(['addCustomParameter'])
+            ->onlyMethods(['addCustomParameter'])
             ->getMock();
 
         $this->model = new ReportProductSavedToNewRelic(
@@ -88,7 +88,7 @@ class ReportProductSavedToNewRelicTest extends TestCase
             ->method('isNewRelicEnabled')
             ->willReturn(true);
         $event = $this->getMockBuilder(Event::class)
-            ->setMethods(['getProduct'])
+            ->addMethods(['getProduct'])
             ->disableOriginalConstructor()
             ->getMock();
         $eventObserver->expects($this->once())
@@ -123,7 +123,7 @@ class ReportProductSavedToNewRelicTest extends TestCase
             ->method('isNewRelicEnabled')
             ->willReturn(true);
         $event = $this->getMockBuilder(Event::class)
-            ->setMethods(['getProduct'])
+            ->addMethods(['getProduct'])
             ->disableOriginalConstructor()
             ->getMock();
         $eventObserver->expects($this->once())
@@ -148,7 +148,7 @@ class ReportProductSavedToNewRelicTest extends TestCase
     /**
      * @return array
      */
-    public function actionDataProvider()
+    public static function actionDataProvider()
     {
         return [[true], [false]];
     }

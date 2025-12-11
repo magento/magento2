@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -11,8 +11,8 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Exception\FileSystemException;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Filesystem;
+use Magento\ImportExport\Api\Data\LocalizedExportInfoInterface;
 use Magento\ImportExport\Api\ExportManagementInterface;
-use Magento\ImportExport\Api\Data\ExportInfoInterface;
 use Magento\Framework\Notification\NotifierInterface;
 
 /**
@@ -62,10 +62,10 @@ class Consumer
     /**
      * Consumer logic.
      *
-     * @param ExportInfoInterface $exportInfo
+     * @param LocalizedExportInfoInterface $exportInfo
      * @return void
      */
-    public function process(ExportInfoInterface $exportInfo)
+    public function process(LocalizedExportInfoInterface $exportInfo)
     {
         try {
             $data = $this->exportManager->export($exportInfo);

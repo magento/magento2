@@ -1,8 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
- *
+ * Copyright 2021 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Cms\Model\Wysiwyg\Images;
 
@@ -136,7 +135,7 @@ class GetThumbnailUrlsTest extends \PHPUnit\Framework\TestCase
      *
      * @return array
      */
-    public function getThumbnailUrlDataProvider(): array
+    public static function getThumbnailUrlDataProvider(): array
     {
         return [
             [

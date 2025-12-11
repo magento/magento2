@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -11,12 +11,21 @@ use Magento\Catalog\Api\CategoryRepositoryInterface;
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Block\Product\ListProduct;
+use Magento\Catalog\Model\Product\Visibility;
+use Magento\Catalog\Test\Fixture\AssignProducts as AssignProductsFixture;
+use Magento\Catalog\Test\Fixture\Category as CategoryFixture;
+use Magento\Catalog\Test\Fixture\Product as ProductFixture;
+use Magento\ConfigurableProduct\Test\Fixture\Attribute as AttributeFixture;
+use Magento\ConfigurableProduct\Test\Fixture\Product as ConfigurableProductFixture;
 use Magento\Eav\Model\Entity\Collection\AbstractCollection;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Registry;
 use Magento\Framework\View\Result\Page;
 use Magento\Framework\View\Result\PageFactory;
 use Magento\Store\Model\StoreManagerInterface;
+use Magento\TestFramework\Fixture\AppIsolation;
+use Magento\TestFramework\Fixture\DataFixture;
+use Magento\TestFramework\Fixture\DataFixtureStorageManager;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\Store\ExecuteInStoreContext;
 use PHPUnit\Framework\TestCase;
@@ -121,12 +130,113 @@ class ConfigurableViewOnCategoryPageTest extends TestCase
     {
         $this->executeInStoreContext->execute(
             'fixture_second_store',
-            [$this, 'assertProductPrice'],
+            [$this, 'assertProductPriceContains'],
             'configurable',
             __('As low as') . ' $10.00'
         );
         $this->resetPageLayout();
-        $this->assertProductPrice('configurable', __('As low as') . ' $150.00');
+        $this->assertProductPrice('configurable', '$150.00');
+    }
+
+    #[
+        AppIsolation(true),
+        DataFixture(CategoryFixture::class, [], 'category'),
+        DataFixture(ProductFixture::class, [
+            'price' => 10.0,
+            'visibility' => Visibility::VISIBILITY_NOT_VISIBLE
+        ], 'p1'),
+        DataFixture(AttributeFixture::class, as: 'attr'),
+        DataFixture(
+            ConfigurableProductFixture::class,
+            [
+                '_options' => ['$attr$'],
+                '_links' => ['$p1$']
+            ],
+            'configurable'
+        ),
+        DataFixture(
+            AssignProductsFixture::class,
+            ['products' => ['$configurable$', '$p1$'], 'category' => '$category$'],
+            as: 'assignProducts'
+        )
+    ]
+    public function testCheckConfigurablePriceOnOneSimple(): void
+    {
+        $this->resetPageLayout();
+        $fixtures = DataFixtureStorageManager::getStorage();
+        $configurableSku = $fixtures->get('configurable')->getSku();
+
+        $this->registry->unregister('current_category');
+        $this->registry->register(
+            'current_category',
+            $fixtures->get('category')
+        );
+        $this->page->addHandle(['default', 'catalog_category_view']);
+        $this->page->getLayout()->generateXml();
+
+        $this->assertCollectionSize(1, $this->getListingBlock()->getLoadedProductCollection());
+        $priceHtml = $this->getListingBlock()->getProductPrice($this->getProduct($configurableSku));
+        $this->assertStringContainsString('$10.00', $this->clearPriceHtml($priceHtml));
+        $this->assertStringNotContainsString('As low as', $this->clearPriceHtml($priceHtml));
+    }
+
+    #[
+        AppIsolation(true),
+        DataFixture(CategoryFixture::class, [], 'category'),
+        DataFixture(ProductFixture::class, [
+            'price' => 10.0,
+            'visibility' => Visibility::VISIBILITY_NOT_VISIBLE
+        ], 'p1'),
+        DataFixture(ProductFixture::class, [
+            'price' => 12.0,
+            'visibility' => Visibility::VISIBILITY_NOT_VISIBLE
+        ], 'p2'),
+        DataFixture(AttributeFixture::class, as: 'attr'),
+        DataFixture(
+            ConfigurableProductFixture::class,
+            [
+                '_options' => ['$attr$'],
+                '_links' => ['$p1$', '$p2$']
+            ],
+            'configurable'
+        ),
+        DataFixture(
+            AssignProductsFixture::class,
+            ['products' => ['$configurable$', '$p1$', '$p2$'], 'category' => '$category$'],
+            as: 'assignProducts'
+        )
+    ]
+    public function testCheckConfigurablePriceOnTwoSimple(): void
+    {
+        $this->resetPageLayout();
+        $fixtures = DataFixtureStorageManager::getStorage();
+        $configurableSku = $fixtures->get('configurable')->getSku();
+
+        $this->registry->unregister('current_category');
+        $this->registry->register(
+            'current_category',
+            $fixtures->get('category')
+        );
+        $this->page->addHandle(['default', 'catalog_category_view']);
+        $this->page->getLayout()->generateXml();
+
+        $this->assertCollectionSize(1, $this->getListingBlock()->getLoadedProductCollection());
+        $priceHtml = $this->getListingBlock()->getProductPrice($this->getProduct($configurableSku));
+        $this->assertStringContainsString('$10.00', $this->clearPriceHtml($priceHtml));
+        $this->assertStringContainsString('As low as', $this->clearPriceHtml($priceHtml));
+    }
+
+    /**
+     * @param string $sku
+     * @param string $priceString
+     * @return void
+     */
+    public function assertProductPriceContains(string $sku, string $priceString): void
+    {
+        $this->preparePageLayout();
+        $this->assertCollectionSize(1, $this->getListingBlock()->getLoadedProductCollection());
+        $priceHtml = $this->getListingBlock()->getProductPrice($this->getProduct($sku));
+        $this->assertStringContainsString($priceString, $this->clearPriceHtml($priceHtml));
     }
 
     /**

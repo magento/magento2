@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\ImportExport\Model;
 
@@ -95,6 +95,7 @@ class ImportTest extends \PHPUnit\Framework\TestCase
             Import::FIELD_NAME_VALIDATION_STRATEGY,
             ProcessingErrorAggregatorInterface::VALIDATION_STRATEGY_SKIP_ERRORS
         );
+        $this->_model->setEntity('catalog_product');
         $this->_model->setData(Import::FIELD_NAME_IMG_FILE_DIR, '../_files');
         $this->_model->importSource();
     }
@@ -113,7 +114,7 @@ class ImportTest extends \PHPUnit\Framework\TestCase
 
         $customersCollection->resetData();
         $customersCollection->clear();
-
+        $this->_model->setEntity('customer');
         $this->_model->setData(
             Import::FIELD_NAME_VALIDATION_STRATEGY,
             ProcessingErrorAggregatorInterface::VALIDATION_STRATEGY_SKIP_ERRORS
@@ -141,7 +142,7 @@ class ImportTest extends \PHPUnit\Framework\TestCase
             [['sku', 'name']]
         );
         $source->expects($this->any())->method('_getNextRow')->willReturn(false);
-        $this->assertTrue($this->_model->validateSource($source));
+        $this->assertFalse($this->_model->validateSource($source));
     }
 
     /**

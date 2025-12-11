@@ -1,8 +1,8 @@
-# CMS Module
+# Magento_Cms module
 
-The CMS module provides the create, edit, and manage functionality on pages for different content types.
+This module provides the create, edit, and manage functionality on pages for different content types.
 
-### Wysiwyg
+## Wysiwyg
 
 The Wysiwyg UI component is a customizable and configurable TinyMCE editor.
 
@@ -10,37 +10,42 @@ The default implementation has the following customizations:
 
 * Magento Media Library support
 
-### Layouts
+## Layouts
 
 The module interacts with the following layout handles:
 
-`view/base/layout` directory:
-The module interacts with the following layout handles:
+* `view/adminhtml/layout` directory:
+  * `cms_block_edit.xml`
+  * `cms_block_index.xml`
+  * `cms_block_new.xml`
+  * `cms_page_edit.xml`
+  * `cms_page_index.xml`
+  * `cms_page_new.xml`
+  * `cms_wysiwyg_images_contents.xml`
+  * `cms_wysiwyg_images_index.xml`
+* `view/frontend/layout` directory:
+  * `cms_index_defaultindex.xml`
+  * `cms_index_defaultnoroute.xml`
+  * `cms_index_index.xml`
+  * `cms_index_nocookies.xml`
+  * `cms_noroute_index.xml`
+  * `cms_page_view.xml`
+  * `default.xml`
+  * `print.xml`
 
-`view/adminhtml/layout` directory:
- - `cms_block_edit.xml`
- - `cms_block_index.xml`
- - `cms_block_new.xml`
- - `cms_page_edit.xml`
- - `cms_page_index.xml`
- - `cms_page_new.xml`
- - `cms_wysiwyg_images_contents.xml`
- - `cms_wysiwyg_images_index.xml`
+## UI components
 
-The module interacts with the following layout handles in the `view/frontend/layout` directory:
- - `cms_index_defaultindex.xml`
- - `cms_index_defaultnoroute.xml`
- - `cms_index_index.xml`
- - `cms_index_nocookies.xml`
- - `cms_noroute_index.xml`
- - `cms_page_view.xml`
- - `default.xml`
- - `print.xml`
+This module extends the following UI components:
 
-### UI components
-This module extends following ui components located in the `view/base/ui_component` directory:
-This module extends following ui components located in the `view/adminhtml/ui_component` directory:
- - `cms_block_form.xml`
- - `cms_block_listing.xml`
- - `cms_page_form.xml`
- - `cms_page_listing.xml`
+* `view/adminhtml/ui_component` directory:
+  * `cms_block_form.xml`
+  * `cms_block_listing.xml`
+  * `cms_page_form.xml`
+  * `cms_page_listing.xml`
+
+## Observers
+
+This module observes the following events:
+
+* `cms_block_save_after` event in `Magento\Cms\Observer\BlockSaveAfterObserver` file.
+* `cms_page_save_after` event in `Magento\Cms\Observer\PageSaveAfterObserver` file.

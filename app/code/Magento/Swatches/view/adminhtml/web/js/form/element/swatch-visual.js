@@ -1,6 +1,6 @@
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 
 /* global FORM_KEY */
@@ -240,7 +240,7 @@ define([
                     };
 
                 swatchComponents.iframe.off('load');
-                swatchComponents.iframe.load(iframeHandler);
+                swatchComponents.iframe.on('load', iframeHandler);
                 swatchComponents.form.submit();
                 $(this).val('');
             });

@@ -1,14 +1,13 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Reports\Block\Adminhtml\Sales\Coupons;
 
 /**
  * Adminhtml coupons report grid block
  *
- * @author      Magento Core Team <core@magentocommerce.com>
  * @SuppressWarnings(PHPMD.DepthOfInheritance)
  */
 class Grid extends \Magento\Reports\Block\Adminhtml\Grid\AbstractGrid
@@ -211,9 +210,11 @@ class Grid extends \Magento\Reports\Block\Adminhtml\Grid\AbstractGrid
     {
         if ($filterData->getPriceRuleType()) {
             $rulesList = $filterData->getData('rules_list');
-            if (isset($rulesList[0])) {
-                $rulesIds = explode(',', $rulesList[0]);
-                $collection->addRuleFilter($rulesIds);
+            if (is_array($rulesList) && count($rulesList) > 0) {
+                if (count($rulesList) === 1) {
+                    $rulesList = explode(',', reset($rulesList));
+                }
+                $collection->addRuleFilter($rulesList);
             }
         }
 

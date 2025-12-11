@@ -1,14 +1,15 @@
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 /* eslint-disable max-nested-callbacks */
 define([
     'underscore',
     'jquery',
     'Magento_Paypal/js/in-context/paypal-sdk',
+    'Magento_Customer/js/customer-data',
     'domReady!'
-], function (_, $, paypalSdk) {
+], function (_, $, paypalSdk, customerData) {
     'use strict';
 
     /**
@@ -47,6 +48,7 @@ define([
         var params = {
             paymentToken: data.orderID,
             payerId: data.payerID,
+            paypalFundingSource: customerData.get('paypal-funding-source'),
             'form_key': clientConfig.formKey
         };
 
@@ -54,10 +56,16 @@ define([
             clientConfig.rendererComponent.beforeOnAuthorize(deferred.resolve, deferred.reject, actions)
                 .then(function () {
                     $.post(clientConfig.onAuthorizeUrl, params).done(function (res) {
+                        if (res.success === false) {
+                            clientConfig.rendererComponent.catchOnAuthorize(res, deferred.resolve, deferred.reject);
+                            return;
+                        }
                         clientConfig.rendererComponent
                             .afterOnAuthorize(res, deferred.resolve, deferred.reject, actions);
+                        customerData.set('paypal-funding-source', '');
                     }).fail(function (jqXHR, textStatus, err) {
                         clientConfig.rendererComponent.catchOnAuthorize(err, deferred.resolve, deferred.reject);
+                        customerData.set('paypal-funding-source', '');
                     });
                 });
         }).promise();
@@ -97,7 +105,8 @@ define([
                 /**
                  * Execute logic on Paypal button click
                  */
-                onClick: function () {
+                onClick: function (data) {
+                    customerData.set('paypal-funding-source', data.fundingSource);
                     clientConfig.rendererComponent.validate();
                     clientConfig.rendererComponent.onClick();
                 },

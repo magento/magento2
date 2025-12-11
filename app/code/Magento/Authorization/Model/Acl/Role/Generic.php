@@ -1,13 +1,15 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Authorization\Model\Acl\Role;
+
+use Laminas\Permissions\Acl\Role\GenericRole;
 
 /**
  * Generic acl role
  */
-class Generic extends \Zend_Acl_Role
+class Generic extends GenericRole
 {
 }

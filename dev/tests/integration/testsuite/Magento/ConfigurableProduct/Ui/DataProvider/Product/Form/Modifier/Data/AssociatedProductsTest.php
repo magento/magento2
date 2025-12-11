@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\ConfigurableProduct\Ui\DataProvider\Product\Form\Modifier\Data;
 
@@ -60,7 +60,7 @@ class AssociatedProductsTest extends TestCase
         $this->registry->register('current_store', $store);
         /** @var \Magento\Framework\Locale\ResolverInterface|\PHPUnit\Framework\MockObject\MockObject $localeResolver */
         $localeResolver = $this->getMockBuilder(\Magento\Framework\Locale\ResolverInterface::class)
-            ->setMethods(['getLocale'])
+            ->onlyMethods(['getLocale'])
             ->getMockForAbstractClass();
         $localeResolver->expects($this->any())->method('getLocale')->willReturn($interfaceLocale);
         $localeCurrency = $this->objectManager->create(
@@ -127,9 +127,48 @@ class AssociatedProductsTest extends TestCase
     }
 
     /**
+     * Test that ASSOCIATED_PRODUCT_LISTING component uses POST to retrieve data
+     *
+     * @return void
+     * @magentoDataFixture Magento/ConfigurableProduct/_files/product_configurable.php
+     * @magentoAppArea adminhtml
+     */
+    public function testUiComponentAssociatedProductListingConfig()
+    {
+        /** @var RequestInterface $request */
+        $request = $this->objectManager->get(RequestInterface::class);
+        $request->setParams([
+            FilterModifier::FILTER_MODIFIER => [
+                'test_configurable' => [
+                    'condition_type' => 'notnull',
+                ],
+            ],
+            'attributes_codes' => [
+                'test_configurable'
+            ],
+        ]);
+        $context = $this->objectManager->create(ContextInterface::class, ['request' => $request]);
+        /** @var UiComponentFactory $uiComponentFactory */
+        $uiComponentFactory = $this->objectManager->get(UiComponentFactory::class);
+        $uiComponent = $uiComponentFactory->create(
+            ConfigurablePanel::ASSOCIATED_PRODUCT_LISTING,
+            null,
+            ['context' => $context]
+        );
+
+        foreach ($uiComponent->getChildComponents() as $childUiComponent) {
+            $childUiComponent->prepare();
+        }
+        $dataSourceConfig = $uiComponent->getContext()->getDataProvider()->getConfigData();
+        $dataSourceRequestConfig = $dataSourceConfig['storageConfig']['requestConfig'];
+        $this->assertIsArray($dataSourceRequestConfig);
+        $this->assertEquals('POST', $dataSourceRequestConfig['method']);
+    }
+
+    /**
      * @return array
      */
-    public function getProductMatrixDataProvider()
+    public static function getProductMatrixDataProvider()
     {
         return [
             ['en_US'],

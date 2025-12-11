@@ -1,9 +1,11 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Backend\App;
+
+use Magento\TestFramework\Bootstrap;
 
 /**
  * Test class for \Magento\Backend\App\AbstractAction.
@@ -91,7 +93,7 @@ class AbstractActionTest extends \Magento\TestFramework\TestCase\AbstractBackend
             ->get(\Magento\Framework\Acl\Builder::class)
             ->getAcl();
         if ($isLimitedAccess) {
-            $acl->deny(null, $resource);
+            $acl->deny(Bootstrap::ADMIN_ROLE_ID, $resource);
         }
 
         $this->dispatch('backend/admin/dashboard');
@@ -114,7 +116,7 @@ class AbstractActionTest extends \Magento\TestFramework\TestCase\AbstractBackend
      *
      * @return array
      */
-    public function nodesWithAcl()
+    public static function nodesWithAcl()
     {
         return [
             ['notification_window', 'Magento_AdminNotification::show_toolbar', true],

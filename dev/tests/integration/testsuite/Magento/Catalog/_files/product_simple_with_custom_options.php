@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 
 \Magento\TestFramework\Helper\Bootstrap::getInstance()->reinitialize();
@@ -35,7 +35,7 @@ $product->setTypeId(\Magento\Catalog\Model\Product\Type::TYPE_SIMPLE)
             'use_config_manage_stock' => 1,
             'qty' => 100,
             'is_qty_decimal' => 0,
-            'is_in_stock' => 1,
+            'is_in_stock' => 2,
         ]
     )->setCanSaveCustomOptions(true)
     ->setHasOptions(true);

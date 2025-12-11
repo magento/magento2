@@ -1,12 +1,13 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Dhl\Test\Unit\Model;
 
+use Laminas\Http\Response;
 use Magento\Dhl\Model\Carrier;
 use Magento\Dhl\Model\Validator\XmlValidator;
 use Magento\Framework\App\Config\ScopeConfigInterface;
@@ -14,8 +15,8 @@ use Magento\Framework\App\ProductMetadataInterface;
 use Magento\Framework\DataObject;
 use Magento\Framework\Filesystem\Directory\Read;
 use Magento\Framework\Filesystem\Directory\ReadFactory;
-use Magento\Framework\HTTP\ZendClient;
-use Magento\Framework\HTTP\ZendClientFactory;
+use Magento\Framework\HTTP\LaminasClient;
+use Magento\Framework\HTTP\LaminasClientFactory;
 use Magento\Framework\Locale\ResolverInterface;
 use Magento\Framework\Module\Dir\Reader;
 use Magento\Framework\Stdlib\DateTime\DateTime;
@@ -48,7 +49,7 @@ class CarrierTest extends TestCase
     private $objectManager;
 
     /**
-     * @var \Zend_Http_Response|MockObject
+     * @var Response|MockObject
      */
     private $httpResponse;
 
@@ -73,7 +74,7 @@ class CarrierTest extends TestCase
     private $scope;
 
     /**
-     * @var ZendClient|MockObject
+     * @var LaminasClient|MockObject
      */
     private $httpClient;
 
@@ -98,6 +99,11 @@ class CarrierTest extends TestCase
     private $productMetadataMock;
 
     /**
+     * @var mixed
+     */
+    private mixed $responseData;
+
+    /**
      * @inheritdoc
      */
     protected function setUp(): void
@@ -107,11 +113,11 @@ class CarrierTest extends TestCase
         $this->scope = $this->getMockForAbstractClass(ScopeConfigInterface::class);
 
         $this->error = $this->getMockBuilder(Error::class)
-            ->setMethods(['setCarrier', 'setCarrierTitle', 'setErrorMessage'])
+            ->addMethods(['setCarrier', 'setCarrierTitle', 'setErrorMessage'])
             ->getMock();
         $this->errorFactory = $this->getMockBuilder(ErrorFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
         $this->errorFactory->method('create')
             ->willReturn($this->error);
@@ -172,9 +178,12 @@ class CarrierTest extends TestCase
             'carriers/dhl/intl_shipment_days' => 'Mon,Tue,Wed,Thu,Fri,Sat',
             'carriers/dhl/allowed_methods' => 'IE',
             'carriers/dhl/international_service' => 'IE',
-            'carriers/dhl/gateway_url' => 'https://xmlpi-ea.dhl.com/XMLShippingServlet',
+            'carriers/dhl/gateway_xml_url' => 'https://xmlpi-ea.dhl.com/XMLShippingServlet',
+            'carriers/dhl/gateway_rest_url' => 'https://express.api.dhl.com/mydhlapi',
             'carriers/dhl/id' => 'some ID',
             'carriers/dhl/password' => 'some password',
+            'carriers/dhl/api_key' => 'some key',
+            'carriers/dhl/api_secret' => 'some secret key',
             'carriers/dhl/content_type' => 'N',
             'carriers/dhl/nondoc_methods' => '1,3,4,8,P,Q,E,F,H,J,M,V,Y',
             'carriers/dhl/showmethod' => 1,
@@ -223,7 +232,7 @@ class CarrierTest extends TestCase
      *
      * @return array
      */
-    public function prepareShippingLabelContentExceptionDataProvider()
+    public static function prepareShippingLabelContentExceptionDataProvider()
     {
         $filesPath = __DIR__ . DIRECTORY_SEPARATOR . '_files' . DIRECTORY_SEPARATOR;
         $empty = $billingNumberOnly = $outputImageOnly = simplexml_load_file(
@@ -291,7 +300,7 @@ class CarrierTest extends TestCase
      *
      * @return array
      */
-    public function dhlProductsDataProvider(): array
+    public static function dhlProductsDataProvider(): array
     {
         return [
             'doc' => [
@@ -363,7 +372,7 @@ class CarrierTest extends TestCase
      *
      * @return array
      */
-    public function buildMessageReferenceDataProvider()
+    public static function buildMessageReferenceDataProvider()
     {
         return [
             'quote_prefix' => ['QUOT'],
@@ -408,7 +417,7 @@ class CarrierTest extends TestCase
      *
      * @return array
      */
-    public function buildSoftwareNameDataProvider()
+    public static function buildSoftwareNameDataProvider()
     {
         return [
             'valid_length' => ['Magento'],
@@ -439,7 +448,7 @@ class CarrierTest extends TestCase
      *
      * @return array
      */
-    public function buildSoftwareVersionProvider()
+    public static function buildSoftwareVersionProvider()
     {
         return [
             'valid_length' => ['2.3.1'],
@@ -452,15 +461,19 @@ class CarrierTest extends TestCase
      *
      * @dataProvider getGatewayURLProvider
      * @param $sandboxMode
+     * @param string $type
      * @param $expectedURL
      * @throws \ReflectionException
      */
-    public function testGetGatewayURL($sandboxMode, $expectedURL)
+    public function testGetGatewayURL($sandboxMode, $type, $expectedURL)
     {
         $scopeConfigValueMap = [
-            ['carriers/dhl/gateway_url', 'store', null, 'https://xmlpi-ea.dhl.com/XMLShippingServlet'],
-            ['carriers/dhl/sandbox_url', 'store', null, 'https://xmlpitest-ea.dhl.com/XMLShippingServlet'],
-            ['carriers/dhl/sandbox_mode', 'store', null, $sandboxMode]
+            ['carriers/dhl/sandbox_mode', 'store', null, $sandboxMode],
+            ['carriers/dhl/type', 'store', null, $type],
+            ['carriers/dhl/sandbox_xml_url', 'store', null, 'https://xmlpitest-ea.dhl.com/XMLShippingServlet'],
+            ['carriers/dhl/sandbox_rest_url', 'store', null, 'https://express.api.dhl.com/mydhlapi/test'],
+            ['carriers/dhl/gateway_xml_url', 'store', null, 'https://xmlpi-ea.dhl.com/XMLShippingServlet'],
+            ['carriers/dhl/gateway_rest_url', 'store', null, 'https://express.api.dhl.com/mydhlapi']
         ];
 
         $this->scope->method('getValue')
@@ -483,11 +496,13 @@ class CarrierTest extends TestCase
      *
      * @return array
      */
-    public function getGatewayURLProvider()
+    public static function getGatewayURLProvider()
     {
         return [
-            'standard_url' => [0, 'https://xmlpi-ea.dhl.com/XMLShippingServlet'],
-            'sandbox_url' => [1, 'https://xmlpitest-ea.dhl.com/XMLShippingServlet']
+            'standard_xml_url' => [0, 'DHL_XML', 'https://xmlpi-ea.dhl.com/XMLShippingServlet'],
+            'sandbox_xml_url' => [1, 'DHL_XML', 'https://xmlpitest-ea.dhl.com/XMLShippingServlet'],
+            'standard_rest_url' => [0, 'DHL_REST', 'https://express.api.dhl.com/mydhlapi'],
+            'sandbox_rest_url' => [1, 'DHL_REST', 'https://express.api.dhl.com/mydhlapi/test']
         ];
     }
 
@@ -500,7 +515,7 @@ class CarrierTest extends TestCase
     {
         $xmlElFactory = $this->getMockBuilder(ElementFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
         $xmlElFactory->method('create')
             ->willReturnCallback(
@@ -526,11 +541,10 @@ class CarrierTest extends TestCase
     {
         $rateFactory = $this->getMockBuilder(ResultFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
         $rateResult = $this->getMockBuilder(Result::class)
             ->disableOriginalConstructor()
-            ->setMethods(null)
             ->getMock();
         $rateFactory->method('create')
             ->willReturn($rateResult);
@@ -547,7 +561,7 @@ class CarrierTest extends TestCase
     {
         $rateMethodFactory = $this->getMockBuilder(MethodFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
 
         $rateMethodFactory->method('create')
@@ -555,7 +569,7 @@ class CarrierTest extends TestCase
                 function () {
                     $rateMethod = $this->getMockBuilder(Method::class)
                         ->disableOriginalConstructor()
-                        ->setMethods(['setPrice'])
+                        ->onlyMethods(['setPrice'])
                         ->getMock();
                     $rateMethod->method('setPrice')
                         ->willReturnSelf();
@@ -592,7 +606,7 @@ class CarrierTest extends TestCase
     {
         $modulesDirectory = $this->getMockBuilder(Read::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getRelativePath', 'readFile'])
+            ->onlyMethods(['getRelativePath', 'readFile'])
             ->getMock();
         $modulesDirectory->method('readFile')
             ->willReturn(file_get_contents(__DIR__ . '/_files/countries.xml'));
@@ -612,11 +626,11 @@ class CarrierTest extends TestCase
     {
         $storeManager = $this->getMockBuilder(StoreManager::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getWebsite'])
+            ->onlyMethods(['getWebsite'])
             ->getMock();
         $website = $this->getMockBuilder(Website::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getBaseCurrencyCode', '__wakeup'])
+            ->onlyMethods(['getBaseCurrencyCode', '__wakeup'])
             ->getMock();
         $website->method('getBaseCurrencyCode')
             ->willReturn('USD');
@@ -653,21 +667,54 @@ class CarrierTest extends TestCase
      */
     private function getHttpClientFactory(): MockObject
     {
-        $this->httpResponse = $this->getMockBuilder(\Zend_Http_Response::class)
+        $this->httpResponse = $this->getMockBuilder(Response::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->httpClient = $this->getMockBuilder(ZendClient::class)
+        $this->httpClient = $this->getMockBuilder(LaminasClient::class)
             ->disableOriginalConstructor()
-            ->setMethods(['request'])
+            ->onlyMethods(['send'])
             ->getMock();
-        $this->httpClient->method('request')
+        $this->httpClient->method('send')
             ->willReturn($this->httpResponse);
-        $httpClientFactory = $this->getMockBuilder(ZendClientFactory::class)
+        $httpClientFactory = $this->getMockBuilder(LaminasClientFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
         $httpClientFactory->method('create')
             ->willReturn($this->httpClient);
 
         return $httpClientFactory;
+    }
+
+    public function testSuccessfulLabelGeneration()
+    {
+        $this->responseData = json_decode(file_get_contents(__DIR__ . '/_files/response_shipping_label.json'), true);
+        $result = new DataObject();
+
+        // Extract label content from response and decode it
+        $labelContent = base64_decode($this->responseData['documents'][0]['content']);
+
+        $result->setData('shipping_label_content', $labelContent);
+
+        // Assert that the label was correctly set
+        $this->assertEquals($labelContent, $result->getData('shipping_label_content'));
+    }
+
+    public function testLabelGenerationException()
+    {
+        $this->responseData = json_decode(file_get_contents(__DIR__ . '/_files/response_shipping_label.json'), true);
+        $this->expectException(\Exception::class);
+
+        $result = new DataObject();
+
+        // Simulate a failure (e.g., missing document content)
+        $invalidResponse = $this->responseData;
+        unset($invalidResponse['documents'][0]['content']);
+
+        if (!isset($invalidResponse['documents'][0]['content'])) {
+            throw new \Exception("Shipping label content is missing");
+        }
+
+        $labelContent = base64_decode($invalidResponse['documents'][0]['content']);
+        $result->setData('shipping_label_content', $labelContent);
     }
 }

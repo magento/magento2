@@ -1,8 +1,10 @@
 <?php
+
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
+
 declare(strict_types=1);
 
 namespace Magento\CatalogUrlRewrite\Model\Storage;
@@ -49,7 +51,7 @@ class DynamicStorage extends BaseDbStorage
         ResourceConnection $resource,
         ScopeConfigInterface $config,
         ProductFactory $productFactory,
-        LoggerInterface $logger = null
+        ?LoggerInterface $logger = null
     ) {
         parent::__construct($urlRewriteFactory, $dataObjectHelper, $resource, $logger);
         $this->config = $config;
@@ -159,7 +161,7 @@ class DynamicStorage extends BaseDbStorage
      */
     private function findProductRewriteByRequestPath(array $data): ?array
     {
-        $requestPath = $data[UrlRewrite::REQUEST_PATH] ?? null;
+        $requestPath = $data[UrlRewrite::REQUEST_PATH] ?? '';
 
         $productUrl = $this->getBaseName($requestPath);
         $data[UrlRewrite::REQUEST_PATH] = [$productUrl];
@@ -170,7 +172,7 @@ class DynamicStorage extends BaseDbStorage
         }
         $categorySuffix = $this->getCategoryUrlSuffix($data[UrlRewrite::STORE_ID]);
         $productResource = $this->productFactory->create();
-        $categoryPath = str_replace('/' . $productUrl, '', $requestPath);
+        $categoryPath = substr($requestPath, 0, -1 * strlen('/' . $productUrl));
         if ($productFromDb[UrlRewrite::REDIRECT_TYPE]) {
             $productUrl = $productFromDb[UrlRewrite::TARGET_PATH];
         }
@@ -185,13 +187,13 @@ class DynamicStorage extends BaseDbStorage
 
             if ($categoryFromDb[UrlRewrite::REDIRECT_TYPE]) {
                 $productFromDb[UrlRewrite::REDIRECT_TYPE] = OptionProvider::PERMANENT;
-                $categoryPath = str_replace($categorySuffix, '', $categoryFromDb[UrlRewrite::TARGET_PATH]);
+                $categoryPath = str_replace($categorySuffix, '', $categoryFromDb[UrlRewrite::TARGET_PATH] ?? '');
             }
 
             if (!$productResource->canBeShowInCategory(
-                    $productFromDb[UrlRewrite::ENTITY_ID],
-                    $categoryFromDb[UrlRewrite::ENTITY_ID]
-                )
+                $productFromDb[UrlRewrite::ENTITY_ID],
+                $categoryFromDb[UrlRewrite::ENTITY_ID]
+            )
             ) {
                 return null;
             }
@@ -237,7 +239,7 @@ class DynamicStorage extends BaseDbStorage
                 $productFromDb[UrlRewrite::REQUEST_PATH] = str_replace(
                     $this->getCategoryUrlSuffix($data[UrlRewrite::STORE_ID]),
                     '',
-                    $categoryFromDb[UrlRewrite::REQUEST_PATH]
+                    $categoryFromDb[UrlRewrite::REQUEST_PATH] ?? ''
                 )
                     . '/' . $productUrl;
                 $rewrites[] = $productFromDb;

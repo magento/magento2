@@ -1,8 +1,7 @@
 <?php
 /**
- *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -157,8 +156,8 @@ class ListActionTest extends TestCase
             ->addMethods(['getTitle'])
             ->disableOriginalConstructor()
             ->getMock();
-        $this->title = $this->getMockBuilder('Title')
-            ->setMethods(['prepend'])
+        $this->title = $this->getMockBuilder(\stdClass::class)
+            ->addMethods(['prepend'])
             ->getMock();
 
         $this->block->expects($this->any())->method('setActive')->willReturn(1);

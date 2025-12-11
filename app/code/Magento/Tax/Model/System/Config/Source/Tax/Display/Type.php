@@ -1,13 +1,11 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 
 /**
  * Price display type source model
- *
- * @author Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\Tax\Model\System\Config\Source\Tax\Display;
 
@@ -19,7 +17,7 @@ class Type implements \Magento\Framework\Option\ArrayInterface
     protected $_options;
 
     /**
-     * @return array
+     * @inheritDoc
      */
     public function toOptionArray()
     {

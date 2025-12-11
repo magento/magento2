@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -54,7 +54,7 @@ class WhereRendererTest extends TestCase
      * Data provider for testRenderNoPart
      * @return array
      */
-    public function renderNoPartDataProvider()
+    public static function renderNoPartDataProvider()
     {
         return [
             [[[Select::FROM, false], [Select::WHERE, false]]],

@@ -1,16 +1,17 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\CatalogRuleConfigurable\Test\Unit\Plugin\CatalogRule\Model\Rule;
 
+use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\Catalog\Model\Product;
 use Magento\CatalogRule\Model\Rule;
 use Magento\CatalogRuleConfigurable\Plugin\CatalogRule\Model\Rule\Validation;
 use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
-use Magento\Framework\DataObject;
 use Magento\Rule\Model\Condition\Combine;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -30,13 +31,18 @@ class ValidationTest extends TestCase
      */
     private $configurableMock;
 
+    /**
+     * @var ProductRepositoryInterface|MockObject
+     */
+    private $productRepositoryMock;
+
     /** @var Rule|MockObject */
     private $ruleMock;
 
     /** @var Combine|MockObject */
     private $ruleConditionsMock;
 
-    /** @var DataObject|MockObject */
+    /** @var Product|MockObject */
     private $productMock;
 
     /**
@@ -48,16 +54,41 @@ class ValidationTest extends TestCase
             Configurable::class,
             ['getParentIdsByChild']
         );
+        $this->productRepositoryMock = $this->createMock(ProductRepositoryInterface::class);
 
         $this->ruleMock = $this->createMock(Rule::class);
         $this->ruleConditionsMock = $this->createMock(Combine::class);
-        $this->productMock = $this->getMockBuilder(DataObject::class)
-            ->addMethods(['getId'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->productMock = $this->createMock(Product::class);
 
         $this->validation = new Validation(
-            $this->configurableMock
+            $this->configurableMock,
+            $this->productRepositoryMock
+        );
+    }
+
+    /**
+     * @return void
+     */
+    public function testAfterValidateConfigurableProductException(): void
+    {
+        $validationResult = false;
+        $parentsIds = [2];
+        $productId = 1;
+
+        $this->productMock->expects($this->once())
+            ->method('getId')
+            ->willReturn($productId);
+        $this->configurableMock->expects($this->once())
+            ->method('getParentIdsByChild')
+            ->with($productId)
+            ->willReturn($parentsIds);
+        $this->productRepositoryMock->expects($this->once())
+            ->method('getById')
+            ->willThrowException(new \Exception('Faulty configurable product'));
+
+        $this->assertSame(
+            $validationResult,
+            $this->validation->afterValidate($this->ruleMock, $validationResult, $this->productMock)
         );
     }
 
@@ -75,13 +106,48 @@ class ValidationTest extends TestCase
         $runValidateAmount,
         $result
     ) {
-        $this->productMock->expects($this->once())->method('getId')->willReturn('product_id');
-        $this->configurableMock->expects($this->once())->method('getParentIdsByChild')->with('product_id')
+        $storeId = 1;
+        $this->productMock->expects($this->once())
+            ->method('getId')
+            ->willReturn(10);
+        $this->configurableMock->expects($this->once())
+            ->method('getParentIdsByChild')
+            ->with(10)
             ->willReturn($parentsIds);
-        $this->ruleMock->expects($this->exactly($runValidateAmount))->method('getConditions')
+        $this->productMock->expects($this->exactly($runValidateAmount))
+            ->method('getStoreId')
+            ->willReturn($storeId);
+        $parentsProducts = array_map(
+            function ($parentsId) {
+                $parent = $this->createMock(Product::class);
+                $parent->method('getId')->willReturn($parentsId);
+                return $parent;
+            },
+            $parentsIds
+        );
+        $this->productRepositoryMock->expects($this->exactly($runValidateAmount))
+            ->method('getById')
+            ->willReturnCallback(
+                function ($arg1) use ($parentsIds, $parentsProducts) {
+                    $key = array_search($arg1, $parentsIds);
+                    if ($key !== false) {
+                        return $parentsProducts[$key];
+                    }
+                }
+            );
+        $this->ruleMock->expects($this->exactly($runValidateAmount))
+            ->method('getConditions')
             ->willReturn($this->ruleConditionsMock);
-        $this->ruleConditionsMock->expects($this->exactly($runValidateAmount))->method('validateByEntityId')
-            ->willReturnMap($validationResult);
+        $this->ruleConditionsMock->expects($this->exactly($runValidateAmount))
+              ->method('validate')
+                ->willReturnCallback(
+                    function ($arg1) use ($parentsProducts, $validationResult) {
+                        $key = array_search($arg1, $parentsProducts);
+                        if ($key !== false) {
+                            return $validationResult[$key];
+                        }
+                    }
+                );
 
         $this->assertEquals(
             $result,
@@ -92,36 +158,24 @@ class ValidationTest extends TestCase
     /**
      * @return array
      */
-    public function dataProviderForValidateWithValidConfigurableProduct()
+    public static function dataProviderForValidateWithValidConfigurableProduct()
     {
         return [
             [
                 [1, 2, 3],
-                [
-                    [1, false],
-                    [2, true],
-                    [3, true],
-                ],
+                [false, true, true],
                 2,
                 true,
             ],
             [
                 [1, 2, 3],
-                [
-                    [1, true],
-                    [2, false],
-                    [3, true],
-                ],
+                [true, false, true],
                 1,
                 true,
             ],
             [
                 [1, 2, 3],
-                [
-                    [1, false],
-                    [2, false],
-                    [3, false],
-                ],
+                [false, false, false],
                 3,
                 false,
             ],

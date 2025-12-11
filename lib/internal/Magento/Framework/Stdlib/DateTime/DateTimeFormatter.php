@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Framework\Stdlib\DateTime;
@@ -32,7 +32,7 @@ class DateTimeFormatter implements DateTimeFormatterInterface
      */
     public function __construct(
         $useIntlFormatObject = null,
-        ResolverInterface $localeResolver = null
+        ?ResolverInterface $localeResolver = null
     ) {
         $this->useIntlFormatObject = $useIntlFormatObject ?? !\defined('HHVM_VERSION');
         $this->localeResolver = $localeResolver
@@ -67,7 +67,8 @@ class DateTimeFormatter implements DateTimeFormatterInterface
         if (is_array($format)) {
             list($dateFormat, $timeFormat) = $format;
         } elseif (is_numeric($format)) {
-            $dateFormat = $timeFormat = $format;
+            $dateFormat = $format;
+            $timeFormat = \IntlDateFormatter::FULL;
         } elseif (is_string($format) || null === $format) {
             $dateFormat = $timeFormat = \IntlDateFormatter::MEDIUM;
             $pattern = $format;

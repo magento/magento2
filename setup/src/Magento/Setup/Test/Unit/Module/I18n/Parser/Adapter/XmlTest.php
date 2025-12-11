@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -47,7 +47,7 @@ class XmlTest extends TestCase
      *
      * @return array
      */
-    public function parseDataProvider()
+    public static function parseDataProvider()
     {
         $default = str_replace('\\', '/', realpath(dirname(__FILE__))) . '/_files/default.xml';
         $defaultDi = str_replace('\\', '/', realpath(dirname(__FILE__))) . '/_files/default_di.xml';
@@ -60,6 +60,7 @@ class XmlTest extends TestCase
                     ['phrase' => 'Phrase 3', 'file' => $default, 'line' => '', 'quote' => ''],
                     ['phrase' => 'Phrase 1', 'file' => $default, 'line' => '', 'quote' => ''],
                     ['phrase' => 'Comment from new line.', 'file' => $default, 'line' => '', 'quote' => ''],
+                    ['phrase' => 'Title', 'file' => $default, 'line' => '', 'quote' => ''],
                 ],
             ],
             [

@@ -1,38 +1,35 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\AsynchronousOperations\Model\BulkStatus;
 
 use Magento\AsynchronousOperations\Api\Data\BulkSummaryInterface;
 
-/**
- * Class Options
- */
 class Options implements \Magento\Framework\Data\OptionSourceInterface
 {
     /**
-     * @return array
+     * @inheritDoc
      */
     public function toOptionArray()
     {
         return [
             [
                 'value' => BulkSummaryInterface::NOT_STARTED,
-                'label' => 'Not Started'
+                'label' => __('Not Started')
             ],
             [
                 'value' => BulkSummaryInterface::IN_PROGRESS,
-                'label' => 'In Progress'
+                'label' => __('In Progress')
             ],
             [
                 'value' => BulkSummaryInterface::FINISHED_SUCCESSFULLY,
-                'label' => 'Finished Successfully'
+                'label' => __('Finished Successfully')
             ],
             [
                 'value' => BulkSummaryInterface::FINISHED_WITH_FAILURE,
-                'label' => 'Finished with Failure'
+                'label' => __('Finished with Failure')
             ]
         ];
     }

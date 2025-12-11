@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -57,7 +57,7 @@ class InvoiceQuantityValidatorTest extends TestCase
 
         $this->invoiceMock = $this->getMockBuilder(InvoiceInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getTotalQty', 'getItems'])
+            ->onlyMethods(['getTotalQty', 'getItems'])
             ->getMockForAbstractClass();
         $this->orderRepositoryMock = $this->getMockBuilder(
             OrderRepositoryInterface::class
@@ -174,7 +174,7 @@ class InvoiceQuantityValidatorTest extends TestCase
     {
         $invoiceItemMock = $this->getMockBuilder(InvoiceItemInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getOrderItemId', 'getQty'])
+            ->onlyMethods(['getOrderItemId', 'getQty'])
             ->getMockForAbstractClass();
         $invoiceItemMock->expects($this->once())->method('getOrderItemId')->willReturn($orderItemId);
         $invoiceItemMock->expects($this->once())->method('getQty')->willReturn($qty);
@@ -191,7 +191,8 @@ class InvoiceQuantityValidatorTest extends TestCase
     {
         $orderItemMock = $this->getMockBuilder(OrderItemInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getId', 'getQtyToInvoice', 'isDummy', 'getSku'])
+            ->onlyMethods(['getSku'])
+            ->addMethods(['getId', 'getQtyToInvoice', 'isDummy'])
             ->getMockForAbstractClass();
         $orderItemMock->expects($this->any())->method('getId')->willReturn($id);
         $orderItemMock->expects($this->any())->method('getQtyToInvoice')->willReturn($qtyToInvoice);

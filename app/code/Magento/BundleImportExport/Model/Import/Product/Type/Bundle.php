@@ -1,15 +1,14 @@
 <?php
-
 /**
- * Import entity of bundle product type
- *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
+declare(strict_types=1);
 
 namespace Magento\BundleImportExport\Model\Import\Product\Type;
 
 use Magento\Bundle\Model\Product\Price as BundlePrice;
+use Magento\Catalog\Helper\Data as CatalogData;
 use Magento\Catalog\Model\Product\Type\AbstractType;
 use Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory as AttributeCollectionFactory;
 use Magento\CatalogImportExport\Model\Import\Product;
@@ -17,37 +16,43 @@ use Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\CollectionFactory as At
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\EntityManager\MetadataPool;
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
+use Magento\ImportExport\Model\Import;
+use Magento\Store\Model\Store;
+use Magento\CatalogImportExport\Model\Import\Product\Type\AbstractType as CatalogImportExportAbstractType;
 use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * Import entity Bundle product type.
  *
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class Bundle extends \Magento\CatalogImportExport\Model\Import\Product\Type\AbstractType
+class Bundle extends CatalogImportExportAbstractType implements
+    ResetAfterRequestInterface
 {
     /**
      * Delimiter before product option value.
      */
-    const BEFORE_OPTION_VALUE_DELIMITER = ';';
+    public const BEFORE_OPTION_VALUE_DELIMITER = ';';
 
-    const PAIR_VALUE_SEPARATOR = '=';
+    public const PAIR_VALUE_SEPARATOR = '=';
 
     /**
      * Dynamic value.
      */
-    const VALUE_DYNAMIC = 'dynamic';
+    public const VALUE_DYNAMIC = 'dynamic';
 
     /**
      * Fixed value.
      */
-    const VALUE_FIXED = 'fixed';
+    public const VALUE_FIXED = 'fixed';
 
-    const NOT_FIXED_DYNAMIC_ATTRIBUTE = 'price_view';
+    public const NOT_FIXED_DYNAMIC_ATTRIBUTE = 'price_view';
 
-    const SELECTION_PRICE_TYPE_FIXED = 0;
+    public const SELECTION_PRICE_TYPE_FIXED = 0;
 
-    const SELECTION_PRICE_TYPE_PERCENT = 1;
+    public const SELECTION_PRICE_TYPE_PERCENT = 1;
 
     /**
      * Array of cached options.
@@ -89,9 +94,9 @@ class Bundle extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abst
     ];
 
     /**
-     * Custom fields mapping.
+     * Custom fields mapping for bundle product.
      *
-     * @inherited
+     * @var array
      */
     protected $_customFieldsMapping = [
         'price_type' => 'bundle_price_type',
@@ -102,7 +107,7 @@ class Bundle extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abst
     ];
 
     /**
-     * Bundle field mapping.
+     * Bundle field mapping for bundle product with selection.
      *
      * @var array
      */
@@ -113,7 +118,7 @@ class Bundle extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abst
     ];
 
     /**
-     * Option type mapping.
+     * Option type mapping for bundle product.
      *
      * @var array
      */
@@ -140,6 +145,16 @@ class Bundle extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abst
     private $storeCodeToId = [];
 
     /**
+     * @var array
+     */
+    private array $websiteCodeToId = [];
+
+    /**
+     * @var CatalogData
+     */
+    private $catalogData;
+
+    /**
      * @param AttributeSetCollectionFactory $attrSetColFac
      * @param AttributeCollectionFactory $prodAttrColFac
      * @param ResourceConnection $resource
@@ -147,15 +162,17 @@ class Bundle extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abst
      * @param MetadataPool|null $metadataPool
      * @param Bundle\RelationsDataSaver|null $relationsDataSaver
      * @param StoreManagerInterface|null $storeManager
+     * @param CatalogData|null $catalogData
      */
     public function __construct(
         AttributeSetCollectionFactory $attrSetColFac,
         AttributeCollectionFactory $prodAttrColFac,
         ResourceConnection $resource,
         array $params,
-        MetadataPool $metadataPool = null,
-        Bundle\RelationsDataSaver $relationsDataSaver = null,
-        StoreManagerInterface $storeManager = null
+        ?MetadataPool $metadataPool = null,
+        ?Bundle\RelationsDataSaver $relationsDataSaver = null,
+        ?StoreManagerInterface $storeManager = null,
+        ?CatalogData $catalogData = null
     ) {
         parent::__construct($attrSetColFac, $prodAttrColFac, $resource, $params, $metadataPool);
 
@@ -163,6 +180,7 @@ class Bundle extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abst
             ?: ObjectManager::getInstance()->get(Bundle\RelationsDataSaver::class);
         $this->storeManager = $storeManager
             ?: ObjectManager::getInstance()->get(StoreManagerInterface::class);
+        $this->catalogData = $catalogData ?? ObjectManager::getInstance()->get(CatalogData::class);
     }
 
     /**
@@ -179,34 +197,34 @@ class Bundle extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abst
             return [];
         }
 
-        $rowData['bundle_values'] = str_replace(
-            self::BEFORE_OPTION_VALUE_DELIMITER,
-            $this->_entityModel->getMultipleValueSeparator(),
-            $rowData['bundle_values']
-        );
-        $selections = explode(
-            Product::PSEUDO_MULTI_LINE_SEPARATOR,
-            $rowData['bundle_values']
-        );
+        if (is_string($rowData['bundle_values'])) {
+            $rowData['bundle_values'] = str_replace(
+                self::BEFORE_OPTION_VALUE_DELIMITER,
+                $this->_entityModel->getMultipleValueSeparator(),
+                $rowData['bundle_values']
+            );
+            $selections = explode(
+                Product::PSEUDO_MULTI_LINE_SEPARATOR,
+                $rowData['bundle_values']
+            );
+        } else {
+            $selections = $rowData['bundle_values'];
+        }
+
         foreach ($selections as $selection) {
-            $values = explode($this->_entityModel->getMultipleValueSeparator(), $selection);
-            $option = $this->parseOption($values);
-            if (isset($option['sku']) && isset($option['name'])) {
-                if (!isset($this->_cachedOptions[$entityId])) {
-                    $this->_cachedOptions[$entityId] = [];
-                }
+            $option = is_string($selection)
+                ? $this->parseOption(explode($this->_entityModel->getMultipleValueSeparator(), $selection))
+                : $selection;
+
+            if (isset($option['sku'], $option['name'])) {
                 $this->_cachedSkus[] = $option['sku'];
                 if (!isset($this->_cachedOptions[$entityId][$option['name']])) {
                     $this->_cachedOptions[$entityId][$option['name']] = [];
                     $this->_cachedOptions[$entityId][$option['name']] = $option;
                     $this->_cachedOptions[$entityId][$option['name']]['selections'] = [];
                 }
-                $this->_cachedOptions[$entityId][$option['name']]['selections'][] = $option;
-                $this->_cachedOptionSelectQuery[] =
-                    $this->connection->quoteInto(
-                        '(parent_id = ' . (int)$entityId . ' AND title = ?)',
-                        $option['name']
-                    );
+                $this->_cachedOptions[$entityId][$option['name']]['selections'][$option['sku']] = $option;
+                $this->_cachedOptionSelectQuery[] = [(int)$entityId, $option['name']];
             }
         }
         return $selections;
@@ -223,7 +241,7 @@ class Bundle extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abst
     {
         $option = [];
         foreach ($values as $keyValue) {
-            $keyValue = trim($keyValue);
+            $keyValue = $keyValue ? trim($keyValue) : '';
             $pos = strpos($keyValue, self::PAIR_VALUE_SEPARATOR);
             if ($pos !== false) {
                 $key = substr($keyValue, 0, $pos);
@@ -337,6 +355,31 @@ class Bundle extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abst
     }
 
     /**
+     * Set cache option selection
+     *
+     * @param array $existingSelection
+     * @param string $optionTitle
+     * @param string $selectIndex
+     * @param string $key
+     * @param string $origKey
+     * @return void
+     */
+    private function setCacheOptionSelection(
+        array $existingSelection,
+        string $optionTitle,
+        string $selectIndex,
+        string $key,
+        string $origKey
+    ): void {
+        if (!isset($this->_cachedOptions[$existingSelection['parent_product_id']]
+                [$optionTitle]['selections'][$selectIndex][$key])
+        ) {
+            $this->_cachedOptions[$existingSelection['parent_product_id']]
+            [$optionTitle]['selections'][$selectIndex][$key] = $existingSelection[$origKey];
+        }
+    }
+
+    /**
      * Deprecated method for retrieving mapping between skus and products.
      *
      * @deprecated 100.3.0 Misspelled method
@@ -350,7 +393,7 @@ class Bundle extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abst
     /**
      * Retrieve mapping between skus and products.
      *
-     * @return \Magento\CatalogImportExport\Model\Import\Product\Type\AbstractType
+     * @return CatalogImportExportAbstractType
      */
     protected function retrieveProductsByCachedSkus()
     {
@@ -369,16 +412,16 @@ class Bundle extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abst
     /**
      * Save product type specific data.
      *
-     * @return \Magento\CatalogImportExport\Model\Import\Product\Type\AbstractType
+     * @return CatalogImportExportAbstractType
      */
     public function saveData()
     {
-        if ($this->_entityModel->getBehavior() == \Magento\ImportExport\Model\Import::BEHAVIOR_DELETE) {
+        if ($this->_entityModel->getBehavior() == Import::BEHAVIOR_DELETE) {
             $productIds = [];
             $newSku = $this->_entityModel->getNewSku();
             while ($bunch = $this->_entityModel->getNextBunch()) {
-                foreach ($bunch as $rowNum => $rowData) {
-                    $productData = $newSku[strtolower($rowData[Product::COL_SKU])];
+                foreach ($bunch as $rowData) {
+                    $productData = $newSku[strtolower($rowData[Product::COL_SKU] ?? '')];
                     $productIds[] = $productData[$this->getProductEntityLinkField()];
                 }
                 $this->deleteOptionsAndSelections($productIds);
@@ -390,7 +433,7 @@ class Bundle extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abst
                     if (!$this->_entityModel->isRowAllowedToImport($rowData, $rowNum)) {
                         continue;
                     }
-                    $productData = $newSku[strtolower($rowData[Product::COL_SKU])];
+                    $productData = $newSku[strtolower($rowData[Product::COL_SKU] ?? '')];
                     if ($this->_type != $productData['type_id']) {
                         continue;
                     }
@@ -473,22 +516,28 @@ class Bundle extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abst
     /**
      * Populates existing options.
      *
-     * @return \Magento\CatalogImportExport\Model\Import\Product\Type\AbstractType
+     * @return CatalogImportExportAbstractType
      */
     protected function populateExistingOptions()
     {
-        $existingOptions = $this->connection->fetchAssoc(
-            $this->connection->select()->from(
-                ['bo' => $this->_resource->getTableName('catalog_product_bundle_option')],
-                ['option_id', 'parent_id', 'required', 'position', 'type']
-            )->joinLeft(
-                ['bov' => $this->_resource->getTableName('catalog_product_bundle_option_value')],
-                'bo.option_id = bov.option_id',
-                ['value_id', 'title']
-            )->where(
-                implode(' OR ', $this->_cachedOptionSelectQuery)
-            )
+        $select = $this->connection->select()->from(
+            ['bo' => $this->_resource->getTableName('catalog_product_bundle_option')],
+            ['option_id', 'parent_id', 'required', 'position', 'type']
+        )->joinLeft(
+            ['bov' => $this->_resource->getTableName('catalog_product_bundle_option_value')],
+            'bo.option_id = bov.option_id',
+            ['value_id', 'title']
         );
+        $orWhere = false;
+        foreach ($this->_cachedOptionSelectQuery as $item) {
+            if ($orWhere) {
+                $select->orWhere('parent_id = ' . $item[0] . ' AND title = ?', $item[1]);
+            } else {
+                $select->where('parent_id = ' . $item[0] . ' AND title = ?', $item[1]);
+                $orWhere = true;
+            }
+        }
+        $existingOptions = $this->connection->fetchAssoc($select);
         foreach ($existingOptions as $optionId => $option) {
             $this->_cachedOptions[$option['parent_id']][$option['title']]['option_id'] = $optionId;
             foreach ($option as $key => $value) {
@@ -506,7 +555,9 @@ class Bundle extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abst
      *
      * @param array $existingOptions
      *
-     * @return \Magento\CatalogImportExport\Model\Import\Product\Type\AbstractType
+     * @return CatalogImportExportAbstractType
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     protected function populateExistingSelections($existingOptions)
     {
@@ -521,22 +572,18 @@ class Bundle extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abst
         );
         foreach ($existingSelections as $existingSelection) {
             $optionTitle = $existingOptions[$existingSelection['option_id']]['title'];
-            $cachedOptionsSelections = $this->_cachedOptions[$existingSelection['parent_product_id']][$optionTitle]['selections'];
-            foreach ($cachedOptionsSelections as $selectIndex => $selection) {
-                $productId = $this->_cachedSkuToProducts[$selection['sku']];
-                if ($productId == $existingSelection['product_id']) {
-                    foreach (array_keys($existingSelection) as $origKey) {
-                        $key = isset($this->_bundleFieldMapping[$origKey])
-                            ? $this->_bundleFieldMapping[$origKey]
-                            : $origKey;
-                        if (
-                        !isset($this->_cachedOptions[$existingSelection['parent_product_id']][$optionTitle]['selections'][$selectIndex][$key])
-                        ) {
-                            $this->_cachedOptions[$existingSelection['parent_product_id']][$optionTitle]['selections'][$selectIndex][$key] =
-                                $existingSelection[$origKey];
+            if (array_key_exists($existingSelection['parent_product_id'], $this->_cachedOptions)) {
+                $cachedOptionsSelections = $this->_cachedOptions[$existingSelection['parent_product_id']][$optionTitle]['selections'];
+                foreach ($cachedOptionsSelections as $selectIndex => $selection) {
+                    $productId = $this->_cachedSkuToProducts[$selection['sku']];
+                    if ($productId == $existingSelection['product_id']) {
+                        foreach (array_keys($existingSelection) as $origKey) {
+                            $key = $this->_bundleFieldMapping[$origKey] ?? $origKey;
+                            $this->setCacheOptionSelection($existingSelection, (string) $optionTitle,
+                                (string) $selectIndex, (string) $key, (string) $origKey);
                         }
+                        break;
                     }
-                    break;
                 }
             }
         }
@@ -547,7 +594,7 @@ class Bundle extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abst
     /**
      * Insert options.
      *
-     * @return \Magento\CatalogImportExport\Model\Import\Product\Type\AbstractType
+     * @return CatalogImportExportAbstractType
      */
     protected function insertOptions()
     {
@@ -623,11 +670,12 @@ class Bundle extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abst
     /**
      * Insert selections.
      *
-     * @return \Magento\CatalogImportExport\Model\Import\Product\Type\AbstractType
+     * @return CatalogImportExportAbstractType
      */
     protected function insertSelections()
     {
         $selections = [];
+        $optionIds = [];
 
         foreach ($this->_cachedOptions as $productId => $options) {
             foreach ($options as $option) {
@@ -636,6 +684,7 @@ class Bundle extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abst
                     if (isset($selection['position'])) {
                         $index = $selection['position'];
                     }
+                    $optionIds[$option['option_id']] = $option['option_id'];
                     if ($tmpArray = $this->populateSelectionTemplate(
                         $selection,
                         $option['option_id'],
@@ -651,13 +700,122 @@ class Bundle extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abst
 
         $this->relationsDataSaver->saveSelections($selections);
 
+        if (!empty($optionIds) && !$this->catalogData->isPriceGlobal()) {
+            $this->saveSelectionsPrices($optionIds);
+        }
+
         return $this;
+    }
+
+    /**
+     * Insert selections prices for websites.
+     *
+     * @param array $optionIds
+     * @return void
+     */
+    private function saveSelectionsPrices(array $optionIds): void
+    {
+        $selectionPrices = $this->getSelectionsPrices();
+        if (empty($selectionPrices)) {
+            return;
+        }
+        $select = $this->connection->select()
+            ->from($this->_resource->getTableName('catalog_product_bundle_selection'))
+            ->where('option_id IN (?)', array_keys($optionIds));
+        $existingSelections = $this->connection->fetchAll($select);
+        $selectionPricesToInsert = [];
+        foreach ($existingSelections as $selection) {
+            $prices = $selectionPrices[$selection['parent_product_id']][$selection['option_id']]
+            [$selection['product_id']] ?? [];
+            foreach ($prices as $websiteId => $data) {
+                $selectionPricesToInsert[] = [
+                    'selection_id' => $selection['selection_id'],
+                    'parent_product_id' => $selection['parent_product_id'],
+                    'website_id' => $websiteId,
+                    'selection_price_type' => $data['selection_price_type']
+                        ?? $selection['selection_price_type'],
+                    'selection_price_value' => $data['selection_price_value'],
+                ];
+            }
+        }
+        if (!empty($selectionPricesToInsert)) {
+            $this->relationsDataSaver->saveSelectionPrices($selectionPricesToInsert);
+        }
+    }
+
+    /**
+     * Returns selections prices by parentProductId, optionId, productId, and websiteId.
+     *
+     * @return array
+     */
+    private function getSelectionsPrices(): array
+    {
+        $selectionPrices = [];
+        foreach ($this->_cachedOptions as $parentProductId => $options) {
+            foreach ($options as $option) {
+                foreach ($option['selections'] as $selection) {
+                    $productId = $this->_cachedSkuToProducts[$selection['sku']] ?? null;
+                    if (!$productId) {
+                        continue;
+                    }
+                    $selectionPrices[$parentProductId][$option['option_id']][$productId] =
+                        $this->getSelectionPrices($selection);
+                }
+            }
+        }
+        
+        return $selectionPrices;
+    }
+
+    /**
+     * Returns selection prices by websiteId.
+     *
+     * @param array $selection
+     * @return array
+     */
+    private function getSelectionPrices(array $selection): array
+    {
+        $prices = [];
+        foreach ($selection as $key => $value) {
+            $value = trim($value);
+            if (is_numeric($value) && str_starts_with($key, 'price_website_')) {
+                $websiteCode = str_replace('price_website_', '', $key);
+                $websiteId = $this->getWebsiteIdByCode($websiteCode);
+                $priceType = $selection['price_type_website_' . $websiteCode] ?? $selection['price_type'] ?? null;
+                $prices[$websiteId] = [
+                    'selection_price_value' => (float) $value,
+                    'selection_price_type' => match ($priceType) {
+                        self::VALUE_FIXED => self::SELECTION_PRICE_TYPE_FIXED,
+                        default => self::SELECTION_PRICE_TYPE_PERCENT,
+                    }
+                ];
+            }
+        }
+        return $prices;
+    }
+
+    /**
+     * Get website id by website code.
+     *
+     * @param string $websiteCode
+     * @return int
+     */
+    private function getWebsiteIdByCode(string $websiteCode): int
+    {
+        if (!isset($this->websiteCodeToId[$websiteCode])) {
+            $this->websiteCodeToId = [];
+            foreach ($this->storeManager->getWebsites() as $website) {
+                $this->websiteCodeToId[$website->getCode()] = (int)$website->getId();
+            }
+        }
+
+        return $this->websiteCodeToId[$websiteCode] ?? Store::DEFAULT_STORE_ID;
     }
 
     /**
      * Insert parent/child product relations
      *
-     * @return \Magento\CatalogImportExport\Model\Import\Product\Type\AbstractType
+     * @return CatalogImportExportAbstractType
      */
     private function insertParentChildRelations()
     {
@@ -713,7 +871,7 @@ class Bundle extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abst
      *
      * @param array $productIds
      *
-     * @return \Magento\CatalogImportExport\Model\Import\Product\Type\AbstractType
+     * @return CatalogImportExportAbstractType
      */
     protected function deleteOptionsAndSelections($productIds)
     {
@@ -755,7 +913,7 @@ class Bundle extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abst
     /**
      * Clear cached values between bunches
      *
-     * @return \Magento\CatalogImportExport\Model\Import\Product\Type\AbstractType
+     * @return CatalogImportExportAbstractType
      */
     protected function clear()
     {
@@ -775,12 +933,23 @@ class Bundle extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abst
     private function getStoreIdByCode(string $storeCode): int
     {
         if (!isset($this->storeCodeToId[$storeCode])) {
-            /** @var $store \Magento\Store\Model\Store */
+            /** @var $store Store */
             foreach ($this->storeManager->getStores() as $store) {
-                $this->storeCodeToId[$store->getCode()] = $store->getId();
+                $this->storeCodeToId[$store->getCode()] = (int)$store->getId();
             }
         }
 
         return $this->storeCodeToId[$storeCode];
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        $this->_cachedOptions = [];
+        $this->_cachedSkus = [];
+        $this->_cachedOptionSelectQuery = [];
+        $this->_cachedSkuToProducts = [];
     }
 }

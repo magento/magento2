@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Integration\Model\Oauth;
 
@@ -51,15 +51,17 @@ class Token extends \Magento\Framework\Model\AbstractModel
     /**#@+
      * Token types
      */
-    const TYPE_REQUEST = 'request';
+    public const TYPE_REQUEST = 'request';
 
-    const TYPE_ACCESS = 'access';
+    public const TYPE_ACCESS = 'access';
 
-    const TYPE_VERIFIER = 'verifier';
-
-    /**#@- */
+    public const TYPE_VERIFIER = 'verifier';
 
     /**#@- */
+
+    /**
+     * @var OauthHelper
+     */
     protected $_oauthHelper;
 
     /**
@@ -123,8 +125,8 @@ class Token extends \Magento\Framework\Model\AbstractModel
         \Magento\Integration\Model\Oauth\ConsumerFactory $consumerFactory,
         \Magento\Integration\Helper\Oauth\Data $oauthData,
         OauthHelper $oauthHelper,
-        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
-        \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
+        ?\Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
+        ?\Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = [],
         ?UserTokenReaderInterface $reader = null,
         ?UserTokenIssuerInterface $issuer = null,
@@ -136,9 +138,10 @@ class Token extends \Magento\Framework\Model\AbstractModel
         $this->_consumerFactory = $consumerFactory;
         $this->_oauthData = $oauthData;
         $this->_oauthHelper = $oauthHelper;
-        $this->reader = ObjectManager::getInstance()->get(UserTokenReaderInterface::class);
-        $this->issuer = ObjectManager::getInstance()->get(UserTokenIssuerInterface::class);
-        $this->tokenParamsFactory = ObjectManager::getInstance()->get(UserTokenParametersInterfaceFactory::class);
+        $this->reader = $reader ?? ObjectManager::getInstance()->get(UserTokenReaderInterface::class);
+        $this->issuer = $issuer ?? ObjectManager::getInstance()->get(UserTokenIssuerInterface::class);
+        $this->tokenParamsFactory = $paramsFactory ??
+            ObjectManager::getInstance()->get(UserTokenParametersInterfaceFactory::class);
     }
 
     /**
@@ -360,6 +363,7 @@ class Token extends \Magento\Framework\Model\AbstractModel
     {
         $tokenData = $this->getResource()->selectTokenByConsumerIdAndUserType($consumerId, $userType);
         $this->setData($tokenData ? $tokenData : []);
+        $this->getResource()->afterLoad($this);
         return $this;
     }
 

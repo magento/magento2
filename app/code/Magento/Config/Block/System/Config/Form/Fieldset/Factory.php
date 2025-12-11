@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Config\Block\System\Config\Form\Fieldset;
@@ -9,6 +9,7 @@ namespace Magento\Config\Block\System\Config\Form\Fieldset;
 /**
  * Magento\Config\Block\System\Config\Form\Fieldset Class Factory
  *
+ * @api
  * @codeCoverageIgnore
  */
 class Factory

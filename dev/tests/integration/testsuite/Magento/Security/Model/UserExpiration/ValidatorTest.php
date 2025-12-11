@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2021 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -71,17 +71,17 @@ class ValidatorTest extends TestCase
      *
      * @return array
      */
-    public function validateUserExpiresAtDataProvider(): array
+    public static function validateUserExpiresAtDataProvider(): array
     {
         return [
             'default' => [
-                'locale_code' => 'en_US',
+                'locale' => 'en_US',
             ],
             'non_default_english_textual' => [
-                'locale_code' => 'de_DE',
+                'locale' => 'de_DE',
             ],
             'non_default_non_english_textual' => [
-                'locale_code' => 'uk_UA',
+                'locale' => 'uk_UA',
             ],
         ];
     }

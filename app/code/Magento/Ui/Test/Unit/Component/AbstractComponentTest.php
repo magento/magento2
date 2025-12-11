@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -35,7 +35,7 @@ class AbstractComponentTest extends TestCase
         $this->contextMock->expects($this->never())->method('getProcessor');
         $this->abstractComponent = $this->getMockBuilder(AbstractComponent::class)
             ->enableOriginalConstructor()
-            ->setMethods(['getComponentName'])
+            ->onlyMethods(['getComponentName'])
             ->setConstructorArgs(['context' => $this->contextMock])
             ->getMock();
     }
@@ -183,7 +183,7 @@ class AbstractComponentTest extends TestCase
     /**
      * @return array
      */
-    public function getConfigurationDataProvider()
+    public static function getConfigurationDataProvider()
     {
         return [
             ['config' => null, 'expectedResult' => []],
@@ -203,7 +203,7 @@ class AbstractComponentTest extends TestCase
         $namespace = 'my_namespace';
         /** @var UiComponentInterface|MockObject $uiComponentMock */
         $uiComponentMock = $this->getMockBuilder(UiComponentInterface::class)
-            ->setMethods(['getData'])
+            ->onlyMethods(['getData'])
             ->getMockForAbstractClass();
         $uiComponentMock->expects($this->once())
             ->method('getData')
@@ -222,7 +222,7 @@ class AbstractComponentTest extends TestCase
     /**
      * @return array
      */
-    public function getJsConfigDataProvider()
+    public static function getJsConfigDataProvider()
     {
         return [
             [

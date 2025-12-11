@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -52,8 +52,9 @@ class GetSpecifiedShippingAddressTest extends GraphQlAbstract
         $response = $this->graphQlQuery($query, [], '', $this->getHeaderMap());
         self::assertArrayHasKey('cart', $response);
         self::assertArrayHasKey('shipping_addresses', $response['cart']);
-
+        $uid = $response['cart']['shipping_addresses'][0]['uid'];
         $expectedShippingAddressData = [
+            'uid' => $uid,
             'firstname' => 'John',
             'lastname' => 'Smith',
             'company' => 'CompanyName',
@@ -160,18 +161,19 @@ class GetSpecifiedShippingAddressTest extends GraphQlAbstract
 {
   cart(cart_id: "$maskedQuoteId") {
     shipping_addresses {
+      uid
       firstname
       lastname
       company
       street
       city
-      region 
+      region
       {
         code
         label
       }
       postcode
-      country 
+      country
       {
         code
         label

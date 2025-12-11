@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Persistent\Model\Persistent;
 
@@ -106,7 +106,7 @@ class Config
     protected function _getConfigDomXPath()
     {
         if ($this->_configDomXPath === null) {
-            $dir = explode("/", $this->_configFilePath);
+            $dir = $this->_configFilePath !== null ? explode("/", $this->_configFilePath) : [];
             array_pop($dir);
             $dir = implode("/", $dir);
             $directoryRead = $this->readFactory->create($dir);

@@ -1,13 +1,17 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\Setup\Declaration\Schema\Dto\Columns;
 
 /**
  * Provides nullable flag for element.
  * If column element implement this interface, then it will have NULL or NOT NULL flag in column definition.
+ *
+ * @api
  */
 interface ColumnNullableAwareInterface
 {

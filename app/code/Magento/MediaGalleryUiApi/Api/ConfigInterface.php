@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 
 declare(strict_types=1);
@@ -10,6 +10,7 @@ namespace Magento\MediaGalleryUiApi\Api;
 
 /**
  * Class responsible to provide API access to system configuration related to the Media Gallery
+ * @api
  */
 interface ConfigInterface
 {

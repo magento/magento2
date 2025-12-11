@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Tax\Model\Calculation;
@@ -81,8 +81,8 @@ class Rate extends \Magento\Framework\Model\AbstractExtensibleModel implements T
         \Magento\Directory\Model\RegionFactory $regionFactory,
         \Magento\Tax\Model\Calculation\Rate\TitleFactory $taxTitleFactory,
         Region $directoryRegion,
-        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
-        \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
+        ?\Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
+        ?\Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
     ) {
         $this->_regionFactory = $regionFactory;
@@ -142,7 +142,7 @@ class Rate extends \Magento\Framework\Model\AbstractExtensibleModel implements T
             $zipFrom = $this->getZipFrom();
             $zipTo = $this->getZipTo();
 
-            if (strlen($zipFrom) > 9 || strlen($zipTo) > 9) {
+            if (($zipFrom && strlen($zipFrom) > 9) || ($zipTo && strlen($zipTo) > 9)) {
                 throw new \Magento\Framework\Exception\LocalizedException(
                     __(
                         'The ZIP Code length is invalid. '
@@ -508,7 +508,7 @@ class Rate extends \Magento\Framework\Model\AbstractExtensibleModel implements T
      * @param TaxRateTitleInterface[] $titles
      * @return $this
      */
-    public function setTitles(array $titles = null)
+    public function setTitles(?array $titles = null)
     {
         return $this->setData(self::KEY_TITLES, $titles);
     }

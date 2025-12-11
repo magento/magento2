@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -19,12 +19,15 @@ use Magento\Sales\Api\OrderRepositoryInterface;
 use Magento\Sales\Model\ResourceModel\Order\Collection;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 
 /**
  * For testing upgrade order customer email
  */
 class UpgradeOrderCustomerEmailObserverTest extends TestCase
 {
+    use MockCreationTrait;
+
     private const NEW_CUSTOMER_EMAIL = "test@test.com";
     private const ORIGINAL_CUSTOMER_EMAIL = "origtest@test.com";
 
@@ -70,10 +73,10 @@ class UpgradeOrderCustomerEmailObserverTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->eventMock = $this->getMockBuilder(Event::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['getCustomerDataObject', 'getOrigCustomerDataObject'])
-            ->getMock();
+        $this->eventMock = $this->createPartialMockWithReflection(
+            Event::class,
+            ['getCustomerDataObject', 'getOrigCustomerDataObject']
+        );
 
         $this->observerMock = $this->getMockBuilder(Observer::class)
             ->disableOriginalConstructor()
@@ -180,7 +183,7 @@ class UpgradeOrderCustomerEmailObserverTest extends TestCase
     {
         $searchCriteriaMock = $this->getMockBuilder(SearchCriteria::class)
             ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+            ->getMock();
 
         $this->searchCriteriaBuilderMock->expects($this->once())
             ->method('create')

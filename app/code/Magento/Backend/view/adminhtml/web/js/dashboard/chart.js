@@ -1,6 +1,6 @@
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 
 /*global FORM_KEY*/
@@ -9,6 +9,7 @@ define([
     'chartJs',
     'jquery-ui-modules/widget',
     'chartjs/chartjs-adapter-moment',
+    'chartjs/es6-shim.min',
     'moment'
 ], function ($, Chart) {
     'use strict';
@@ -16,6 +17,8 @@ define([
     $.widget('mage.dashboardChart', {
         options: {
             updateUrl: '',
+            responsive: true,
+            maintainAspectRatio: false,
             periodSelect: null,
             periodUnits: [],
             precision: 0,

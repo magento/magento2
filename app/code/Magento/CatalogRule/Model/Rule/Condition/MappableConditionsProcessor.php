@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -44,6 +44,8 @@ class MappableConditionsProcessor
     }
 
     /**
+     * Method to rebuild conditions tree.
+     *
      * @param Combine $conditions
      * @return Combine
      */
@@ -53,6 +55,8 @@ class MappableConditionsProcessor
     }
 
     /**
+     * Method to rebuild combined condition.
+     *
      * @param Combine $originalConditions
      * @return Combine
      * @throws InputException
@@ -63,7 +67,7 @@ class MappableConditionsProcessor
         $invalidConditions = [];
 
         foreach ($originalConditions->getConditions() as $condition) {
-            if ($condition->getType() === CombinedCondition::class) {
+            if ($condition instanceof CombinedCondition) {
                 $rebuildSubCondition = $this->rebuildCombinedCondition($condition);
 
                 if (count($rebuildSubCondition->getConditions()) > 0) {
@@ -75,7 +79,7 @@ class MappableConditionsProcessor
                 continue;
             }
 
-            if ($condition->getType() === SimpleCondition::class) {
+            if ($condition instanceof SimpleCondition) {
                 if ($this->validateSimpleCondition($condition)) {
                     $validConditions[] = $condition;
                 } else {
@@ -89,9 +93,9 @@ class MappableConditionsProcessor
                 __('Undefined condition type "%1" passed in.', $condition->getType())
             );
         }
-
+        $aggregator = $originalConditions->getAggregator() ? strtolower($originalConditions->getAggregator()) : '';
         // if resulted condition group has left no mappable conditions - we can remove it at all
-        if (count($invalidConditions) > 0 && strtolower($originalConditions->getAggregator()) === 'any') {
+        if (count($invalidConditions) > 0 && $aggregator === 'any') {
             $validConditions = [];
         }
 
@@ -102,6 +106,8 @@ class MappableConditionsProcessor
     }
 
     /**
+     * Method to validate simple condition.
+     *
      * @param Product $originalConditions
      * @return bool
      */

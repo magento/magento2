@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Framework\Api\ExtensionAttribute;
@@ -9,6 +9,8 @@ namespace Magento\Framework\Api\ExtensionAttribute;
 /**
  * Factory class for @see
  * \Magento\Framework\Api\ExtensionAttribute\JoinDataInterface
+ *
+ * @api
  */
 class JoinDataInterfaceFactory
 {

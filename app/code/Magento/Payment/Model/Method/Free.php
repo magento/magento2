@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Payment\Model\Method;
 
@@ -20,16 +20,16 @@ use Magento\Framework\Pricing\PriceCurrencyInterface;
  */
 class Free extends \Magento\Payment\Model\Method\AbstractMethod
 {
-    const PAYMENT_METHOD_FREE_CODE = 'free';
+    public const PAYMENT_METHOD_FREE_CODE = 'free';
 
     /**
      * XML Paths for configuration constants
      */
-    const XML_PATH_PAYMENT_FREE_ACTIVE = 'payment/free/active';
+    public const XML_PATH_PAYMENT_FREE_ACTIVE = 'payment/free/active';
 
-    const XML_PATH_PAYMENT_FREE_ORDER_STATUS = 'payment/free/order_status';
+    public const XML_PATH_PAYMENT_FREE_ORDER_STATUS = 'payment/free/order_status';
 
-    const XML_PATH_PAYMENT_FREE_PAYMENT_ACTION = 'payment/free/payment_action';
+    public const XML_PATH_PAYMENT_FREE_PAYMENT_ACTION = 'payment/free/payment_action';
 
     /**
      * Payment Method features
@@ -49,6 +49,11 @@ class Free extends \Magento\Payment\Model\Method\AbstractMethod
      * @var PriceCurrencyInterface
      */
     protected $priceCurrency;
+
+    /**
+     * @var bool
+     */
+    protected $_isOffline = true;
 
     /**
      * @param \Magento\Framework\Model\Context $context
@@ -73,8 +78,8 @@ class Free extends \Magento\Payment\Model\Method\AbstractMethod
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Payment\Model\Method\Logger $logger,
         PriceCurrencyInterface $priceCurrency,
-        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
-        \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
+        ?\Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
+        ?\Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
     ) {
         parent::__construct(
@@ -98,7 +103,7 @@ class Free extends \Magento\Payment\Model\Method\AbstractMethod
      * @param \Magento\Quote\Api\Data\CartInterface|\Magento\Quote\Model\Quote|null $quote
      * @return bool
      */
-    public function isAvailable(\Magento\Quote\Api\Data\CartInterface $quote = null)
+    public function isAvailable(?\Magento\Quote\Api\Data\CartInterface $quote = null)
     {
         return parent::isAvailable(
             $quote

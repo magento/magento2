@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
-  */
+/**
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
+ */
 -->
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -59,6 +59,7 @@
 
             <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="customerLogout"/>
 
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer" />
             <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
 
             <deleteData createDataKey="createBundleProduct" stepKey="deleteProduct"/>
@@ -92,7 +93,7 @@
         </actionGroup>
         <actionGroup ref="AdminSelectDropdownOptionOnConfigureProductSlidingModalActionGroup" stepKey="selectProductOption">
             <argument name="optionName" value="$$createFirstProduct.name$$"/>
-        </actionGroup>    
+        </actionGroup>
 
         <actionGroup ref="AdminClickOkOnConfigureProductSlidingModalActionGroup" stepKey="clickOkBtn"/>
         <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForAddingConfigure"/>

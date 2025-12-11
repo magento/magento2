@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -11,6 +11,8 @@ use Magento\Framework\Api\Search\AggregationInterface;
 
 /**
  * Container for a product search holding the item result and the array in the GraphQL-readable product type format.
+ *
+ * @api
  */
 class SearchResult
 {

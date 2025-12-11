@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\CatalogImportExport\Model\Import\Product;
@@ -389,7 +389,7 @@ class MediaGalleryProcessor
             $storeId = $image['store_id'];
             unset($image['store_id']);
             $sku = mb_strtolower($image['sku']);
-            $value = ltrim($image['value'], '/\\');
+            $value = isset($image['value']) ? ltrim($image['value'], '/\\') : '';
             $result[$storeId][$sku][$value] = $image;
         }
 

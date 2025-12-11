@@ -1,12 +1,14 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\CatalogGraphQl\Model\Resolver;
 
+use Magento\Catalog\Api\Data\CategoryInterface;
+use Magento\CatalogGraphQl\Model\Category\Filter\SearchCriteria;
 use Magento\Store\Api\Data\StoreInterface;
 use Magento\GraphQl\Model\Query\ContextInterface;
 use Magento\CatalogGraphQl\Model\Category\CategoryFilter;
@@ -46,27 +48,35 @@ class CategoryList implements ResolverInterface
     private $argsSelection;
 
     /**
+     * @var SearchCriteria
+     */
+    private $searchCriteria;
+
+    /**
      * @param CategoryTree $categoryTree
      * @param ExtractDataFromCategoryTree $extractDataFromCategoryTree
      * @param CategoryFilter $categoryFilter
      * @param ArgumentsProcessorInterface $argsSelection
+     * @param SearchCriteria $searchCriteria
      */
     public function __construct(
         CategoryTree $categoryTree,
         ExtractDataFromCategoryTree $extractDataFromCategoryTree,
         CategoryFilter $categoryFilter,
-        ArgumentsProcessorInterface $argsSelection
+        ArgumentsProcessorInterface $argsSelection,
+        SearchCriteria $searchCriteria
     ) {
         $this->categoryTree = $categoryTree;
         $this->extractDataFromCategoryTree = $extractDataFromCategoryTree;
         $this->categoryFilter = $categoryFilter;
         $this->argsSelection = $argsSelection;
+        $this->searchCriteria = $searchCriteria;
     }
 
     /**
      * @inheritdoc
      */
-    public function resolve(Field $field, $context, ResolveInfo $info, array $value = null, array $args = null)
+    public function resolve(Field $field, $context, ResolveInfo $info, ?array $value = null, ?array $args = null)
     {
         if (isset($value[$field->getName()])) {
             return $value[$field->getName()];
@@ -80,49 +90,45 @@ class CategoryList implements ResolverInterface
             $processedArgs = $this->argsSelection->process($info->fieldName, $args);
             $filterResults = $this->categoryFilter->getResult($processedArgs, $store, [], $context);
 
-            $rootCategoryIds = $filterResults['category_ids'];
+            $topLevelCategoryIds = $filterResults['category_ids'];
         } catch (InputException $e) {
             throw new GraphQlInputException(__($e->getMessage()));
         }
-        return $this->fetchCategories($rootCategoryIds, $info, $processedArgs, $store, [], $context);
+
+        return $this->fetchCategoriesByTopLevelIds($topLevelCategoryIds, $info, $processedArgs, [], $context);
     }
 
     /**
      * Fetch category tree data
      *
-     * @param array $categoryIds
+     * @param array $topLevelCategoryIds
      * @param ResolveInfo $info
-     * @param array $criteria
-     * @param StoreInterface $store
+     * @param array $processedArgs
      * @param array $attributeNames
      * @param ContextInterface $context
      * @return array
      * @throws LocalizedException
      */
-    private function fetchCategories(
-        array $categoryIds,
+    private function fetchCategoriesByTopLevelIds(
+        array $topLevelCategoryIds,
         ResolveInfo $info,
-        array $criteria,
-        StoreInterface $store,
+        array $processedArgs,
         array $attributeNames,
-        $context
+        ContextInterface $context
     ) : array {
-        $fetchedCategories = [];
-        foreach ($categoryIds as $categoryId) {
-            $categoryTree = $this->categoryTree->getFilteredTree(
-                $info,
-                $categoryId,
-                $criteria,
-                $store,
-                $attributeNames,
-                $context
-            );
-            if (empty($categoryTree)) {
-                continue;
-            }
-            $fetchedCategories[] = current($this->extractDataFromCategoryTree->execute($categoryTree));
-        }
-
-        return $fetchedCategories;
+        // pagination must be applied to top level category results, children categories are not paginated
+        $processedArgs['pageSize'] = 0;
+        $searchCriteria = $this->searchCriteria->buildCriteria(
+            $processedArgs,
+            $context->getExtensionAttributes()->getStore()
+        );
+        $categoryCollection = $this->categoryTree->getFlatCategoriesByRootIds(
+            $info,
+            $topLevelCategoryIds,
+            $searchCriteria,
+            $attributeNames,
+            $context
+        );
+        return $this->extractDataFromCategoryTree->buildTree($categoryCollection, $topLevelCategoryIds);
     }
 }

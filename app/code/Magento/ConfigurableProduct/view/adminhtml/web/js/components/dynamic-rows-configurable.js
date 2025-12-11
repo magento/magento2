@@ -1,6 +1,6 @@
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 
 define([
@@ -412,7 +412,7 @@ define([
             product = {
                 'id': row.productId,
                 'product_link': row.productUrl,
-                'name': $('<i></i>').text(row.name).html(),
+                'name': row.name,
                 'sku': row.sku,
                 'status': row.status,
                 'price': row.price,

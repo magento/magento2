@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -87,12 +87,12 @@ class SaveImageInformation
     {
         $mediaFolder = $this->filesystem->getDirectoryRead(DirectoryList::MEDIA)->getAbsolutePath();
 
-        if (!$this->config->isEnabled() || substr($result['path'], 0, strlen($mediaFolder)) !== $mediaFolder) {
+        if (!$this->config->isEnabled() || substr($result['path'] ?? '', 0, strlen($mediaFolder)) !== $mediaFolder) {
             return $result;
         }
 
         $path = $this->filesystem->getDirectoryRead(DirectoryList::MEDIA)
-            ->getRelativePath(rtrim($result['path'], '/') . '/' . ltrim($result['file'], '/'));
+            ->getRelativePath(rtrim($result['path'] ?? '', '/') . '/' . ltrim($result['file'] ?? '', '/'));
 
         if (!$this->isApplicable($path)) {
             return $result;

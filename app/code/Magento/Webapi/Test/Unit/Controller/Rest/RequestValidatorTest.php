@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -20,9 +20,11 @@ use PHPUnit\Framework\TestCase;
 
 class RequestValidatorTest extends TestCase
 {
-    const SERVICE_METHOD = 'testMethod';
+    public const SERVICE_METHOD = 'testMethod';
 
-    const SERVICE_ID = 'Magento\Webapi\Controller\Rest\TestService';
+    public const SERVICE_ID = 'Magento\Webapi\Controller\Rest\TestService';
+
+    public const SERVICE_PATH = '/V1/test-service';
 
     /**
      * @var RequestValidator
@@ -53,7 +55,7 @@ class RequestValidatorTest extends TestCase
     protected function setUp(): void
     {
         $this->requestMock = $this->getMockBuilder(Request::class)
-            ->setMethods(
+            ->onlyMethods(
                 [
                     'isSecure',
                     'getRequestData',
@@ -70,11 +72,10 @@ class RequestValidatorTest extends TestCase
             ->method('getHttpHost')
             ->willReturn('testHostName.com');
         $routerMock = $this->getMockBuilder(Router::class)
-            ->setMethods(['match'])
+            ->onlyMethods(['match'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->routeMock = $this->getMockBuilder(Route::class)
-            ->setMethods(['isSecure', 'getServiceMethod', 'getServiceClass', 'getAclResources', 'getParameters'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->authorizationMock = $this->getMockBuilder(Authorization::class)
@@ -100,6 +101,7 @@ class RequestValidatorTest extends TestCase
         $this->routeMock->expects($this->any())->method('getServiceClass')->willReturn(self::SERVICE_ID);
         $this->routeMock->expects($this->any())->method('getServiceMethod')
             ->willReturn(self::SERVICE_METHOD);
+        $this->routeMock->expects($this->any())->method('getRoutePath')->willReturn(self::SERVICE_PATH);
         $routerMock->expects($this->any())->method('match')->willReturn($this->routeMock);
 
         parent::setUp();
@@ -125,7 +127,7 @@ class RequestValidatorTest extends TestCase
      *
      * @return array
      */
-    public function dataProviderSecureRequestSecureRoute()
+    public static function dataProviderSecureRequestSecureRoute()
     {
         // Each array contains return type for isSecure method of route and request objects.
         return [[true, true], [false, true], [false, false]];

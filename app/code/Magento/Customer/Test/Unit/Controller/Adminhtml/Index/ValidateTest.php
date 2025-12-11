@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -14,6 +14,7 @@ use Magento\Customer\Api\Data\ValidationResultsInterface;
 use Magento\Customer\Controller\Adminhtml\Index\Validate;
 use Magento\Customer\Model\Metadata\Form;
 use Magento\Customer\Model\Metadata\FormFactory;
+use Magento\Customer\Model\SetCustomerStore;
 use Magento\Framework\Api\DataObjectHelper;
 use Magento\Framework\Api\ExtensibleDataObjectConverter;
 use Magento\Framework\App\RequestInterface;
@@ -31,6 +32,7 @@ use PHPUnit\Framework\TestCase;
  */
 class ValidateTest extends TestCase
 {
+
     /**
      * @var MockObject|RequestInterface
      */
@@ -90,13 +92,8 @@ class ValidateTest extends TestCase
         if (!function_exists('libxml_set_external_entity_loader')) {
             $this->markTestSkipped('Skipped on HHVM. Will be fixed in MAGETWO-45033');
         }
-        $this->customer = $this->getMockForAbstractClass(
-            CustomerInterface::class,
-            [],
-            '',
-            false,
-            true,
-            true
+        $this->customer = $this->createMock(
+            CustomerInterface::class
         );
         $this->customer->expects($this->once())->method('getWebsiteId')->willReturn(2);
         $this->customerDataFactory = $this->createPartialMock(
@@ -105,20 +102,11 @@ class ValidateTest extends TestCase
         );
         $this->customerDataFactory->expects($this->once())->method('create')->willReturn($this->customer);
         $this->form = $this->createMock(Form::class);
-        $this->request = $this->getMockForAbstractClass(
-            RequestInterface::class,
-            [],
-            '',
-            false,
-            true,
-            true,
-            ['getPost', 'getParam']
+        $this->request = $this->createMock(
+            RequestInterface::class
         );
-        $this->response = $this->getMockForAbstractClass(
-            ResponseInterface::class,
-            [],
-            '',
-            false
+        $this->response = $this->createMock(
+            ResponseInterface::class
         );
         $this->formFactory = $this->createPartialMock(FormFactory::class, ['create']);
         $this->formFactory->expects($this->atLeastOnce())->method('create')->willReturn($this->form);
@@ -127,13 +115,8 @@ class ValidateTest extends TestCase
         );
         $this->dataObjectHelper = $this->createMock(DataObjectHelper::class);
         $this->dataObjectHelper->expects($this->once())->method('populateWithArray');
-        $this->customerAccountManagement = $this->getMockForAbstractClass(
-            AccountManagementInterface::class,
-            [],
-            '',
-            false,
-            true,
-            true
+        $this->customerAccountManagement = $this->createMock(
+            AccountManagementInterface::class
         );
         $this->resultJson = $this->createMock(Json::class);
         $this->resultJson->expects($this->once())->method('setData');
@@ -142,6 +125,9 @@ class ValidateTest extends TestCase
             ['create']
         );
         $this->resultJsonFactory->expects($this->once())->method('create')->willReturn($this->resultJson);
+
+        $customerStoreMock = $this->createMock(SetCustomerStore::class);
+        $customerStoreMock->expects($this->once())->method('setStore');
 
         $objectHelper = new ObjectManager($this);
         $this->controller = $objectHelper->getObject(
@@ -155,6 +141,7 @@ class ValidateTest extends TestCase
                 'customerAccountManagement' => $this->customerAccountManagement,
                 'resultJsonFactory' => $this->resultJsonFactory,
                 'dataObjectHelper' => $this->dataObjectHelper,
+                'customerStore' => $customerStoreMock
             ]
         );
     }
@@ -162,11 +149,12 @@ class ValidateTest extends TestCase
     public function testExecute()
     {
         $customerEntityId = 2;
-        $this->request->expects($this->once())
+        $this->request->expects($this->exactly(2))
             ->method('getParam')
             ->with('customer')
             ->willReturn([
-                'entity_id' => $customerEntityId
+                'entity_id' => $customerEntityId,
+                'website_id' => 1
             ]);
 
         $this->customer->expects($this->once())
@@ -176,13 +164,8 @@ class ValidateTest extends TestCase
         $this->form->expects($this->once())->method('setInvisibleIgnored');
         $this->form->expects($this->atLeastOnce())->method('extractData')->willReturn([]);
 
-        $validationResult = $this->getMockForAbstractClass(
-            ValidationResultsInterface::class,
-            [],
-            '',
-            false,
-            true,
-            true
+        $validationResult = $this->createMock(
+            ValidationResultsInterface::class
         );
         $validationResult->expects($this->once())
             ->method('getMessages')
@@ -208,13 +191,8 @@ class ValidateTest extends TestCase
             ->method('validateData')
             ->willReturn([$error]);
 
-        $validationResult = $this->getMockForAbstractClass(
-            ValidationResultsInterface::class,
-            [],
-            '',
-            false,
-            true,
-            true
+        $validationResult = $this->createMock(
+            ValidationResultsInterface::class
         );
         $validationResult->expects($this->once())
             ->method('getMessages')
@@ -238,13 +216,8 @@ class ValidateTest extends TestCase
         $this->form->expects($this->never())
             ->method('validateData');
 
-        $validationResult = $this->getMockForAbstractClass(
-            ValidationResultsInterface::class,
-            [],
-            '',
-            false,
-            true,
-            true
+        $validationResult = $this->createMock(
+            ValidationResultsInterface::class
         );
         $error = $this->createMock(Error::class);
         $error->expects($this->once())
@@ -268,7 +241,7 @@ class ValidateTest extends TestCase
 
     public function testExecuteWithNewCustomerAndNoEntityId()
     {
-        $this->request->expects($this->once())
+        $this->request->expects($this->exactly(2))
             ->method('getParam')
             ->with('customer')
             ->willReturn([]);
@@ -279,13 +252,8 @@ class ValidateTest extends TestCase
         $this->form->expects($this->once())->method('setInvisibleIgnored');
         $this->form->expects($this->atLeastOnce())->method('extractData')->willReturn([]);
 
-        $validationResult = $this->getMockForAbstractClass(
-            ValidationResultsInterface::class,
-            [],
-            '',
-            false,
-            true,
-            true
+        $validationResult = $this->createMock(
+            ValidationResultsInterface::class
         );
         $validationResult->expects($this->once())
             ->method('getMessages')

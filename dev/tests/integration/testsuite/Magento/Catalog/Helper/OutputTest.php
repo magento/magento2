@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Catalog\Helper;
 
@@ -87,7 +87,7 @@ class OutputTest extends TestCase
      *
      * @return array
      */
-    public function isDirectiveDataProvider(): array
+    public static function isDirectiveDataProvider(): array
     {
         return [
             'attribute_html_without_directive' => ['Test string', false],

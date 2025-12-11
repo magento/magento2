@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework\Filter\Template\Tokenizer;
 
@@ -33,7 +33,8 @@ abstract class AbstractTokenizer
      */
     public function next()
     {
-        if ($this->_currentIndex + 1 >= strlen($this->_string)) {
+        $stringLength = $this->_string !== null ? strlen($this->_string) : 0;
+        if ($this->_currentIndex + 1 >= $stringLength) {
             return false;
         }
 
@@ -115,7 +116,7 @@ abstract class AbstractTokenizer
      */
     public function isWhiteSpace()
     {
-        return $this->_string === '' ?: trim($this->char()) !== $this->char();
+        return $this->_string === '' ?: trim((string)$this->char()) !== $this->char();
     }
 
     /**

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
-  */
+/**
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
+ */
 -->
 
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -23,6 +23,7 @@
         <element name="setQuantity" type="checkbox" selector="//td[contains(., '{{arg}}')]/following-sibling::td[contains(@class, 'col-qty')]/input" parameterized="true"/>
         <element name="addProductsToOrder" type="button" selector="//span[text()='Add Selected Product(s) to Order']"/>
         <element name="customPrice" type="checkbox" selector="//span[.='{{arg}}']/parent::td/following-sibling::td/div//span[contains(text(),'Custom Price')]" parameterized="true"/>
+        <element name="customPriceInput" type="input" selector="//span[.='{{arg}}']/parent::td/following-sibling::td/input[@class='input-text item-price admin__control-text']" parameterized="true"/>
         <element name="customQuantity" type="input" selector="//span[.='{{arg}}']/parent::td/following-sibling::td[@class='col-qty']/input" parameterized="true"/>
         <element name="update" type="button" selector="//span[text()='Update Items and Quantities']"/>
         <element name="discount" type="text" selector="//span[.='{{arg}}']/parent::td/following-sibling::td[@class='col-discount col-price']/span" parameterized="true"/>
@@ -30,5 +31,12 @@
         <element name="removeItems" type="select" selector="//span[.='{{arg}}']/parent::td/following-sibling::td/select[@class='admin__control-select']" parameterized="true"/>
         <element name="applyCoupon" type="input" selector="#coupons:code"/>
         <element name="submitOrder" type="button" selector="#submit_order_top_button" timeout="60"/>
+        <element name="orderID" type="text" selector="|Order # (\d+)|"/>
+        <element name="selectProductNextPage" type="button" selector="//button[@title='Next page']"/>
+        <element name="selectProductPreviousPage" type="button" selector="//button[@class='action-previous']"/>
+        <element name="displayedProducts" type="text" selector="//input[@class='checkbox admin__control-checkbox']/../../..//td[contains(@class,'col-sku') and contains(text(),'test')]"/>
+        <element name="pageNumber" type="input" selector="//input[@id='sales_order_create_search_grid_page-current' and @value='{{page_index}}']" parameterized="true"/>
+        <element name="grandTotal" type="text" selector="//div[@data-role='grid-wrapper']//tr//td[contains(.,'{{value}}')]" parameterized="true"/>
+        <element name="viewOrder" type="button" selector="//table[@id='my-orders-table']//tbody//tr[td[contains(@class,'col id') and contains(text(),'{{orderNumber}}')]]//a[@class='action view']"  parameterized="true"/>
     </section>
 </sections>

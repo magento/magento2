@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Catalog\Model\Product\Option\Type;
@@ -47,8 +47,6 @@ class File extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
     private $mediaDirectory;
 
     /**
-     * Core file storage database
-     *
      * @var \Magento\MediaStorage\Helper\File\Storage\Database
      */
     protected $_coreFileStorageDatabase = null;
@@ -66,8 +64,6 @@ class File extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
     protected $_urlBuilder;
 
     /**
-     * Item option factory
-     *
      * @var \Magento\Quote\Model\Quote\Item\OptionFactory
      */
     protected $_itemOptionFactory;
@@ -122,9 +118,9 @@ class File extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
         \Magento\Catalog\Model\Product\Option\UrlBuilder $urlBuilder,
         \Magento\Framework\Escaper $escaper,
         array $data = [],
-        Filesystem $filesystem = null,
-        Json $serializer = null,
-        ProductHelper $productHelper = null
+        ?Filesystem $filesystem = null,
+        ?Json $serializer = null,
+        ?ProductHelper $productHelper = null
     ) {
         $this->_itemOptionFactory = $itemOptionFactory;
         $this->_urlBuilder = $urlBuilder;
@@ -425,7 +421,7 @@ class File extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
      */
     public function getPrintableOptionValue($optionValue)
     {
-        return strip_tags($this->getFormattedOptionValue($optionValue));
+        return strip_tags($this->getFormattedOptionValue($optionValue) ?? '');
     }
 
     /**
@@ -435,6 +431,7 @@ class File extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
      * @return string
      *
      * @deprecated 102.0.0
+     * @see Updated deprecation doc annotations
      */
     public function getEditableOptionValue($optionValue)
     {
@@ -459,11 +456,12 @@ class File extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      *
      * @deprecated 102.0.0
+     * @see Updated deprecation doc annotations
      */
     public function parseOptionValue($optionValue, $productOptionValues)
     {
         // search quote item option Id in option value
-        if (preg_match('/\[([0-9]+)\]/', $optionValue, $matches)) {
+        if ($optionValue !== null && preg_match('/\[([0-9]+)\]/', $optionValue, $matches)) {
             $confItemOptionId = $matches[1];
             $option = $this->_itemOptionFactory->create()->load($confItemOptionId);
             if ($this->serializer->unserialize($option->getValue()) !== null) {

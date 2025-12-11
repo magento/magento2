@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
-  */
+/**
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
+ */
 -->
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
@@ -22,7 +22,7 @@
         <see selector="{{AdminDataGridTableSection.row('1')}}" userInput="{{roleName}}" stepKey="seeUserRole"/>
         <click selector="{{AdminDataGridTableSection.row('1')}}" stepKey="openRoleEditPage"/>
         <waitForPageLoad stepKey="waitForRoleEditPageLoad"/>
-        <fillField selector="{{AdminEditRoleInfoSection.password}}" userInput="{{_ENV.MAGENTO_ADMIN_PASSWORD}}" stepKey="enterThePassword" />
+        <fillField selector="{{AdminEditRoleInfoSection.password}}" userInput="{{_CREDS.magento/MAGENTO_ADMIN_PASSWORD}}" stepKey="enterThePassword" />
         <click selector="{{AdminCreateRoleSection.roleResources}}" stepKey="clickToOpenRoleResources"/>
         <waitForPageLoad stepKey="waitForRoleResourceTab"/>
         <selectOption userInput="Custom" selector="{{AdminCreateRoleSection.resourceAccess}}"

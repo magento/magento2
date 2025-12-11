@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Setup\Console\Command;
 
@@ -180,7 +180,7 @@ class DeployStaticContentCommandTest extends \PHPUnit\Framework\TestCase
     {
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $consoleLoggerFactoryMock = $this->getMockBuilder(ConsoleLoggerFactory::class)
-            ->setMethods(['getLogger'])
+            ->onlyMethods(['getLogger'])
             ->disableOriginalConstructor()
             ->getMock();
         $consoleLoggerFactoryMock
@@ -191,7 +191,7 @@ class DeployStaticContentCommandTest extends \PHPUnit\Framework\TestCase
                 }
             );
         $objectManagerProviderMock = $this->getMockBuilder(ObjectManagerProvider::class)
-            ->setMethods(['get'])
+            ->onlyMethods(['get'])
             ->disableOriginalConstructor()
             ->getMock();
         $objectManagerProviderMock

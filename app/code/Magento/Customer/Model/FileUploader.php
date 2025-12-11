@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Customer\Model;
 
@@ -129,10 +129,10 @@ class FileUploader
         $result = $fileProcessor->saveTemporaryFile($fileId);
 
         // Update tmp_name param. Required for attribute validation!
-        $result['tmp_name'] = ltrim($result['file'], '/');
+        $result['tmp_name'] = ltrim($result['file'] ?? '', '/');
 
         $result['url'] = $fileProcessor->getViewUrl(
-            FileProcessor::TMP_DIR . '/' . ltrim($result['name'], '/'),
+            FileProcessor::TMP_DIR . '/' . ltrim($result['name'] ?? '', '/'),
             $this->attributeMetadata->getFrontendInput()
         );
 
@@ -191,7 +191,7 @@ class FileUploader
         $validationRules = $this->attributeMetadata->getValidationRules();
         foreach ($validationRules as $validationRule) {
             if ($validationRule->getName() == 'file_extensions') {
-                $allowedExtensions = explode(',', $validationRule->getValue());
+                $allowedExtensions = explode(',', $validationRule->getValue() ?? '');
                 array_walk(
                     $allowedExtensions,
                     function (&$value) {

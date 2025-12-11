@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -46,7 +46,7 @@ class ArrayTypeTest extends TestCase
     /**
      * @return array
      */
-    public function evaluateExceptionDataProvider()
+    public static function evaluateExceptionDataProvider()
     {
         return [
             'non-array item' => [['item' => 'non-array']],
@@ -73,7 +73,7 @@ class ArrayTypeTest extends TestCase
     /**
      * @return array
      */
-    public function evaluateDataProvider()
+    public static function evaluateDataProvider()
     {
         return [
             'empty array items' => [

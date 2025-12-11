@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 
 declare(strict_types=1);
@@ -10,6 +10,8 @@ namespace Magento\Ui\Model\ColorPicker;
 
 /**
  * Mode interface for color modes
+ *
+ * @api
  */
 interface ModeInterface
 {
@@ -18,5 +20,5 @@ interface ModeInterface
      *
      * @return array
      */
-    public function getConfig() : array ;
+    public function getConfig(): array ;
 }

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Newsletter\Block\Adminhtml\Queue;
 
@@ -14,7 +14,7 @@ namespace Magento\Newsletter\Block\Adminhtml\Queue;
 class Preview extends \Magento\Newsletter\Block\Adminhtml\Template\Preview
 {
     /**
-     * {@inheritdoc}
+     * @var string
      */
     protected $profilerName = "newsletter_queue_proccessing";
 
@@ -56,7 +56,6 @@ class Preview extends \Magento\Newsletter\Block\Adminhtml\Template\Preview
         $template->setTemplateType($queue->getNewsletterType());
         $template->setTemplateText($queue->getNewsletterText());
         $template->setTemplateStyles($queue->getNewsletterStyles());
-        $template->setData('is_legacy', false);
 
         return $this;
     }

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -17,8 +17,12 @@ use Magento\Framework\Data\Collection\AbstractDb as Collection;
 use Magento\Framework\DataObject;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\DB\Select;
+use Magento\Framework\Json\Helper\Data;
+use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\View\Layout;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -29,6 +33,8 @@ use PHPUnit\Framework\TestCase;
  */
 class MassactionTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var Massaction
      */
@@ -84,22 +90,27 @@ class MassactionTest extends TestCase
      */
     private $connectionMock;
 
+    /** @var Data */
+    protected $jsonHelperMock;
+
+    /** @var ObjectManager */
+    private $objectManagerHelper;
+
     protected function setUp(): void
     {
-        $this->_gridMock = $this->getMockBuilder(Grid::class)
-            ->disableOriginalConstructor()
-            ->disableOriginalClone()
-            ->setMethods(['getId', 'getCollection'])
-            ->getMock();
+        $this->objectManagerHelper = new ObjectManager($this);
+        $this->_gridMock = $this->createPartialMock(
+            Grid::class,
+            ['getId', 'getCollection']
+        );
         $this->_gridMock->expects($this->any())
             ->method('getId')
             ->willReturn('test_grid');
 
-        $this->_layoutMock = $this->getMockBuilder(Layout::class)
-            ->disableOriginalConstructor()
-            ->disableOriginalClone()
-            ->setMethods(['getParentName', 'getBlock', 'helper'])
-            ->getMock();
+        $this->_layoutMock = $this->createPartialMockWithReflection(
+            Layout::class,
+            ['helper', 'getParentName', 'getBlock']
+        );
         $this->_layoutMock->expects($this->any())
             ->method('getParentName')
             ->with('test_grid_massaction')
@@ -109,27 +120,20 @@ class MassactionTest extends TestCase
             ->with('test_grid')
             ->willReturn($this->_gridMock);
 
-        $this->_requestMock = $this->getMockBuilder(Http::class)
-            ->disableOriginalConstructor()
-            ->disableOriginalClone()
-            ->getMock();
+        $this->_requestMock = $this->createMock(Http::class);
 
-        $this->_urlModelMock = $this->getMockBuilder(Url::class)
-            ->disableOriginalConstructor()
-            ->disableOriginalClone()
-            ->getMock();
+        $this->_urlModelMock = $this->createMock(Url::class);
 
-        $this->visibilityCheckerMock = $this->getMockBuilder(VisibilityChecker::class)
-            ->getMockForAbstractClass();
+        $this->visibilityCheckerMock = $this->createMock(VisibilityChecker::class);
 
-        $this->_authorizationMock = $this->getMockBuilder(Authorization::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['isAllowed'])
-            ->getMock();
+        $this->_authorizationMock = $this->createPartialMock(
+            Authorization::class,
+            ['isAllowed']
+        );
 
         $this->gridCollectionMock = $this->createMock(Collection::class);
         $this->gridCollectionSelectMock = $this->createMock(Select::class);
-        $this->connectionMock = $this->getMockForAbstractClass(AdapterInterface::class);
+        $this->connectionMock = $this->createMock(AdapterInterface::class);
 
         $this->gridCollectionMock->expects($this->any())
             ->method('getSelect')
@@ -147,8 +151,16 @@ class MassactionTest extends TestCase
             'authorization' => $this->_authorizationMock,
         ];
 
-        $objectManagerHelper = new ObjectManager($this);
-        $this->_block = $objectManagerHelper->getObject(
+        $this->jsonHelperMock = $this->createMock(Data::class);
+
+        /** @var ObjectManagerInterface|MockObject $objectManagerMock */
+        $objectManagerMock = $this->createMock(ObjectManagerInterface::class);
+        $objectManagerMock->expects($this->any())
+            ->method('get')
+            ->willReturn($this->jsonHelperMock);
+        \Magento\Framework\App\ObjectManager::setInstance($objectManagerMock);
+
+        $this->_block = $this->objectManagerHelper->getObject(
             Massaction::class,
             $arguments
         );
@@ -183,8 +195,8 @@ class MassactionTest extends TestCase
      * @param string $itemId
      * @param DataObject $item
      * @param $expectedItem \Magento\Framework\DataObject
-     * @dataProvider itemsProcessingDataProvider
      */
+    #[DataProvider('itemsProcessingDataProvider')]
     public function testItemsProcessing($itemId, $item, $expectedItem)
     {
         $this->_urlModelMock->expects($this->any())
@@ -218,7 +230,7 @@ class MassactionTest extends TestCase
     /**
      * @return array
      */
-    public function itemsProcessingDataProvider()
+    public static function itemsProcessingDataProvider()
     {
         return [
             [
@@ -272,8 +284,8 @@ class MassactionTest extends TestCase
      * @param string $param
      * @param string $expectedJson
      * @param array $expected
-     * @dataProvider selectedDataProvider
      */
+    #[DataProvider('selectedDataProvider')]
     public function testSelected($param, $expectedJson, $expected)
     {
         $this->_requestMock->expects($this->any())
@@ -288,7 +300,7 @@ class MassactionTest extends TestCase
     /**
      * @return array
      */
-    public function selectedDataProvider()
+    public static function selectedDataProvider()
     {
         return [
             ['', '', []],
@@ -324,11 +336,18 @@ class MassactionTest extends TestCase
 
         $this->gridCollectionSelectMock->expects($this->exactly(4))
             ->method('reset')
-            ->withConsecutive(
-                [Select::ORDER],
-                [Select::LIMIT_COUNT],
-                [Select::LIMIT_OFFSET],
-                [Select::COLUMNS]
+            ->willReturnCallback(
+                function ($arg) {
+                    if ($arg == Select::ORDER) {
+                        return null;
+                    } elseif ($arg == Select::LIMIT_COUNT) {
+                        return null;
+                    } elseif ($arg == Select::LIMIT_OFFSET) {
+                        return null;
+                    } elseif ($arg == Select::COLUMNS) {
+                        return null;
+                    }
+                }
             );
 
         $this->gridCollectionSelectMock->expects($this->once())
@@ -353,9 +372,8 @@ class MassactionTest extends TestCase
      * @param bool $withVisibilityChecker
      * @param bool $isVisible
      * @param bool $isAllowed
-     *
-     * @dataProvider addItemDataProvider
      */
+    #[DataProvider('addItemDataProvider')]
     public function testAddItem($itemId, $item, $count, $withVisibilityChecker, $isVisible, $isAllowed)
     {
         $this->visibilityCheckerMock->expects($this->any())
@@ -385,7 +403,7 @@ class MassactionTest extends TestCase
     /**
      * @return array
      */
-    public function addItemDataProvider()
+    public static function addItemDataProvider()
     {
         return [
             [

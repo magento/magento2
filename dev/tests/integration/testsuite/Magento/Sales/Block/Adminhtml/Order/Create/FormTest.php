@@ -2,8 +2,8 @@
 /**
  * Test class for Form
  *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Sales\Block\Adminhtml\Order\Create;
 
@@ -47,7 +47,8 @@ class FormTest extends \PHPUnit\Framework\TestCase
 
         $this->session = $this->getMockBuilder(QuoteSession::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getCustomerId', 'getQuote', 'getStoreId', 'getStore', 'getQuoteId'])
+            ->addMethods(['getCustomerId', 'getStoreId', 'getQuoteId'])
+            ->onlyMethods(['getQuote', 'getStore'])
             ->getMock();
         $this->session->method('getCustomerId')
             ->willReturn(1);
@@ -57,7 +58,7 @@ class FormTest extends \PHPUnit\Framework\TestCase
 
         $store = $this->getMockBuilder(Store::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getCurrentCurrencyCode'])
+            ->onlyMethods(['getCurrentCurrencyCode'])
             ->getMock();
         $store->method('getCurrentCurrencyCode')
             ->willReturn('USD');

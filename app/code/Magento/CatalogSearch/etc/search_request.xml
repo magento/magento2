@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 -->
 <requests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -67,7 +67,7 @@
         <queries>
             <query xsi:type="boolQuery" name="advanced_search_container" boost="1">
                 <queryReference clause="should" ref="sku_query"/>
-                <queryReference clause="should" ref="price_query"/>
+                <queryReference clause="must" ref="price_query"/>
                 <queryReference clause="should" ref="category_query"/>
                 <queryReference clause="must" ref="visibility_query"/>
             </query>

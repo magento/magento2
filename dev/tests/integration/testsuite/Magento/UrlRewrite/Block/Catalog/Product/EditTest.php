@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -382,7 +382,7 @@ class EditTest extends TestCase
      * @return array
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function prepareLayoutDataProvider(): array
+    public static function prepareLayoutDataProvider(): array
     {
         /** @var $urlRewrite UrlRewrite */
         $urlRewrite = Bootstrap::getObjectManager()->create(

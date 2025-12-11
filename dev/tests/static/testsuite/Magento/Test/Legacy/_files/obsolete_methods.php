@@ -2,8 +2,9 @@
 /**
  * Obsolete methods
  * Format: array(<method_name = ''>[, <class_scope> = ''[, <replacement>[, <is_deprecated>]]])
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ *
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 
 // @codingStandardsIgnoreFile
@@ -1108,7 +1109,7 @@ return [
         '\Magento\Checkout\Helper\Data',
         '\Magento\CheckoutAgreements\Model\AgreementsProvider::getRequiredAgreementIds',
     ],
-    ['validateIpAddr', '\Magento\Core\Helper\Http', '\Zend_Validate_Ip::isValid'],
+    ['validateIpAddr', '\Magento\Core\Helper\Http', '\Laminas\Validator\Ip::isValid'],
     [
         'getRemoteAddr',
         '\Magento\Core\Helper\Http',

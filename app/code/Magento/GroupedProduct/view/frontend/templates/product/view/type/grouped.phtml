@@ -1,63 +1,70 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 /**
  * Grouped product data template
  *
- * @var $block \Magento\Catalog\Block\Product\View\BaseImage
  * @var $block \Magento\GroupedProduct\Block\Product\View\Type\Grouped
+ * @var $escaper \Magento\Framework\Escaper
  */
 ?>
-<?php $block->setPreconfiguredValue(); ?>
-<?php $_product = $block->getProduct(); ?>
-<?php $_associatedProducts = $block->getAssociatedProducts(); ?>
-<?php $_hasAssociatedProducts = count($_associatedProducts) > 0; ?>
+<?php
+    $block->setPreconfiguredValue();
+    $_product = $block->getProduct();
+    $_associatedProducts = $block->getAssociatedProducts();
+    $_hasAssociatedProducts = count($_associatedProducts) > 0;
+    $viewModel = $block->getData('validateQuantityViewModel');
+?>
 
 <div class="table-wrapper grouped">
     <table class="table data grouped"
            id="super-product-table"
            data-mage-init='{ "Magento_GroupedProduct/js/product-ids-resolver": {} }'>
-        <caption class="table-caption"><?= $block->escapeHtml(__('Grouped product items')) ?></caption>
+        <caption class="table-caption"><?= $escaper->escapeHtml(__('Grouped product items')) ?></caption>
         <thead>
         <tr>
-            <th class="col item" scope="col"><?= $block->escapeHtml(__('Product Name')) ?></th>
-            <?php if ($_product->isSaleable()) : ?>
-                <th class="col qty" scope="col"><?= $block->escapeHtml(__('Qty')) ?></th>
+            <th class="col item" scope="col"><?= $escaper->escapeHtml(__('Product Name')) ?></th>
+            <?php if ($_product->isSaleable()): ?>
+                <th class="col qty" scope="col"><?= $escaper->escapeHtml(__('Qty')) ?></th>
             <?php endif; ?>
         </tr>
         </thead>
 
-        <?php if ($_hasAssociatedProducts) : ?>
+        <?php if ($_hasAssociatedProducts): ?>
         <tbody>
-            <?php foreach ($_associatedProducts as $_item) : ?>
+            <?php foreach ($_associatedProducts as $_item): ?>
             <tr>
-                <td data-th="<?= $block->escapeHtml(__('Product Name')) ?>" class="col item">
-                    <strong class="product-item-name"><?= $block->escapeHtml($_item->getName()) ?></strong>
-                    <?php if ($block->getCanShowProductPrice($_product)) : ?>
-                        <?php if ($block->getCanShowProductPrice($_item)) : ?>
+                <td data-th="<?= $escaper->escapeHtml(__('Product Name')) ?>" class="col item">
+                    <strong class="product-item-name"><?= $escaper->escapeHtml($_item->getName()) ?></strong>
+                    <?php if ($block->getCanShowProductPrice($_product)): ?>
+                        <?php if ($block->getCanShowProductPrice($_item)): ?>
                             <?= /* @noEscape */ $block->getProductPrice($_item) ?>
                         <?php endif; ?>
                         <?php endif; ?>
                 </td>
-                <?php if ($_product->isSaleable()) : ?>
-                <td data-th="<?= $block->escapeHtml(__('Qty')) ?>" class="col qty">
-                    <?php if ($_item->isSaleable()) : ?>
+                <?php if ($_product->isSaleable()): ?>
+                <td data-th="<?= $escaper->escapeHtml(__('Qty')) ?>" class="col qty">
+                    <?php if ($_item->isSaleable()): ?>
                     <div class="control qty">
                         <input type="number"
-                               name="super_group[<?= $block->escapeHtmlAttr($_item->getId()) ?>]"
-                               data-selector="super_group[<?= $block->escapeHtmlAttr($_item->getId()) ?>]"
-                               value="<?= $block->escapeHtmlAttr($_item->getQty() * 1) ?>"
-                               title="<?= $block->escapeHtmlAttr(__('Qty')) ?>"
+                               name="super_group[<?= $escaper->escapeHtmlAttr($_item->getId()) ?>]"
+                               data-selector="super_group[<?= $escaper->escapeHtmlAttr($_item->getId()) ?>]"
+                               value="<?= $escaper->escapeHtmlAttr($_item->getQty() * 1) ?>"
+                               title="<?= $escaper->escapeHtmlAttr(__('Qty')) ?>"
                                class="input-text qty"
-                               data-validate="{'validate-grouped-qty':'#super-product-table'}"
+                               data-validate="<?= $escaper->escapeHtmlAttr($viewModel->getQuantityValidators(
+                                   $_item->getId(),
+                                   $_item->getWebsiteId()
+                               )) ?>"
+                               data-no-validation-for-zero-qty="true"
                                data-errors-message-box="#validation-message-box"/>
                     </div>
-                <?php else : ?>
-                    <div class="stock unavailable" title="<?= $block->escapeHtmlAttr(__('Availability')) ?>">
-                        <span><?= $block->escapeHtml(__('Out of stock')) ?></span>
+                <?php else: ?>
+                    <div class="stock unavailable" title="<?= $escaper->escapeHtmlAttr(__('Availability')) ?>">
+                        <span><?= $escaper->escapeHtml(__('Out of stock')) ?></span>
                     </div>
                 <?php endif; ?>
                 </td>
@@ -68,7 +75,7 @@
                 && trim($block->getProductPriceHtml(
                     $_item,
                     \Magento\Catalog\Pricing\Price\TierPrice::PRICE_CODE
-                ))) : ?>
+                ))): ?>
                 <tr class="row-tier-price">
                     <td colspan="2">
                         <?= $block->getProductPriceHtml(
@@ -80,12 +87,12 @@
             <?php endif; ?>
         <?php endforeach; ?>
         </tbody>
-        <?php else : ?>
+        <?php else: ?>
         <tbody>
             <tr>
                 <td class="unavailable"
-                    colspan="<?php if ($_product->isSaleable()) : ?>4<?php else : ?>3<?php endif; ?>">
-                    <?= $block->escapeHtml(__('No options of this product are available.')) ?>
+                    colspan="<?php if ($_product->isSaleable()): ?>4<?php else: ?>3<?php endif; ?>">
+                    <?= $escaper->escapeHtml(__('No options of this product are available.')) ?>
                 </td>
             </tr>
         </tbody>
@@ -93,3 +100,11 @@
     </table>
 </div>
 <div id="validation-message-box"></div>
+<script type="text/x-magento-init">
+    {
+        "#product_addtocart_form": {
+            "groupedProduct": {
+            }
+        }
+    }
+</script>

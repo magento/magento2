@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Setup;
@@ -136,7 +136,7 @@ class DiffOldSchemaTest extends SetupTestCase
     /**
      * @return array
      */
-    public function oldSchemaUpgradeDataProvider(): array
+    public static function oldSchemaUpgradeDataProvider(): array
     {
         return [
             'Without db prefix' => [

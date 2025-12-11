@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Sales\Block\Adminhtml\Order\View;
 
@@ -31,8 +31,6 @@ class Info extends \Magento\Sales\Block\Adminhtml\Order\AbstractOrder
     protected $groupRepository;
 
     /**
-     * Metadata element factory
-     *
      * @var \Magento\Customer\Model\Metadata\ElementFactory
      */
     protected $_metadataElementFactory;
@@ -161,8 +159,7 @@ class Info extends \Magento\Sales\Block\Adminhtml\Order\AbstractOrder
     }
 
     /**
-     * Find sort order for account data
-     * Sort Order used as array key
+     * Find sort order for account data. Sort Order used as array key
      *
      * @param array $data
      * @param int $sortOrder
@@ -178,10 +175,10 @@ class Info extends \Magento\Sales\Block\Adminhtml\Order\AbstractOrder
     }
 
     /**
-     * Return array of additional account data
-     * Value is option style array
+     * Return array of additional account data. Value is option style array
      *
      * @return array
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function getCustomerAccountData()
     {
@@ -286,6 +283,7 @@ class Info extends \Magento\Sales\Block\Adminhtml\Order\AbstractOrder
      *
      * @param string $createdAt
      * @return \DateTime
+     * @throws \Exception
      */
     public function getOrderAdminDate($createdAt)
     {

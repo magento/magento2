@@ -1,20 +1,16 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Paypal\Model\Config\Rules;
 
 use Magento\Framework\Config\FileResolverInterface;
+use Magento\Framework\Config\Reader\Filesystem;
 use Magento\Framework\Config\SchemaLocatorInterface;
 use Magento\Framework\Config\ValidationStateInterface;
-use Magento\Framework\DataObject;
-use Magento\Framework\Config\Reader\Filesystem;
 use Magento\Paypal\Helper\Backend;
 
-/**
- * Class Reader
- */
 class Reader extends Filesystem
 {
     /**
@@ -51,7 +47,12 @@ class Reader extends Filesystem
         $domDocumentClass = \Magento\Framework\Config\Dom::class,
         $defaultScope = 'primary'
     ) {
-        $fileName = str_replace('{country}', strtolower($helper->getConfigurationCountryCode()), $fileName);
+        $configurationCountryCode = $helper->getConfigurationCountryCode();
+        $fileName = str_replace(
+            '{country}',
+            $configurationCountryCode !== null ? strtolower($configurationCountryCode) : '',
+            (string)$fileName
+        );
         parent::__construct(
             $fileResolver,
             $converter,

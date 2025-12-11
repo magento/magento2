@@ -1,12 +1,12 @@
 <?php
 /**
- * Not empty validator
- *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework\Validator;
 
-class NotEmpty extends \Zend_Validate_NotEmpty implements \Magento\Framework\Validator\ValidatorInterface
+use Laminas\Validator\NotEmpty as LaminasNotEmpty;
+
+class NotEmpty extends LaminasNotEmpty implements ValidatorInterface
 {
 }

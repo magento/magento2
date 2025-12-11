@@ -1,15 +1,19 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\CatalogSearch\Test\Unit\Model\Indexer;
 
+use Magento\Framework\Registry;
 use Magento\CatalogSearch\Model\Indexer\Fulltext;
 use Magento\CatalogSearch\Model\Indexer\Fulltext\Action\Full;
 use Magento\CatalogSearch\Model\Indexer\Fulltext\Action\FullFactory;
+use Magento\CatalogSearch\Model\ResourceModel\Fulltext as FulltextResource;
+use Magento\Elasticsearch\Model\Indexer\IndexerHandler;
+use Magento\Framework\Amqp\ConfigPool as AmqpConfigPool;
 use Magento\Framework\Indexer\SaveHandler\IndexerInterface;
 use Magento\CatalogSearch\Model\Indexer\IndexerHandlerFactory;
 use Magento\CatalogSearch\Model\Indexer\Scope\State;
@@ -20,6 +24,9 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHe
 use Magento\Indexer\Model\ProcessManager;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Psr\Log\LoggerInterface;
+use ArrayObject;
+use Exception;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -42,7 +49,7 @@ class FulltextTest extends TestCase
     protected $saveHandler;
 
     /**
-     * @var \Magento\CatalogSearch\Model\ResourceModel\Fulltext|MockObject
+     * @var FulltextResource|MockObject
      */
     protected $fulltextResource;
 
@@ -63,15 +70,15 @@ class FulltextTest extends TestCase
             FullFactory::class,
             ['create']
         );
-        $fullActionFactory->expects($this->any())->method('create')->willReturn($this->fullAction);
-        $this->saveHandler = $this->getClassMock(IndexerInterface::class);
+        $fullActionFactory->method('create')->willReturn($this->fullAction);
+        $this->saveHandler = $this->getClassMock(IndexerHandler::class);
         $indexerHandlerFactory = $this->createPartialMock(
             IndexerHandlerFactory::class,
             ['create']
         );
-        $indexerHandlerFactory->expects($this->any())->method('create')->willReturn($this->saveHandler);
+        $indexerHandlerFactory->method('create')->willReturn($this->saveHandler);
 
-        $this->fulltextResource = $this->getClassMock(\Magento\CatalogSearch\Model\ResourceModel\Fulltext::class);
+        $this->fulltextResource = $this->getClassMock(FulltextResource::class);
 
         $this->dimensionProviderMock = $this->getMockBuilder(DimensionProviderInterface::class)
             ->getMock();
@@ -79,8 +86,30 @@ class FulltextTest extends TestCase
             ->getMock();
         $objectManagerHelper = new ObjectManagerHelper($this);
 
-        $this->processManager = new ProcessManager(
-            $this->getClassMock(ResourceConnection::class)
+        $objects = [
+            [
+                Registry::class,
+                $this->createMock(Registry::class)
+            ],
+            [
+                LoggerInterface::class,
+                $this->createMock(LoggerInterface::class)
+            ],
+            [
+                AmqpConfigPool::class,
+                $this->createMock(AmqpConfigPool::class)
+            ]
+        ];
+        $objectManagerHelper->prepareObjectManager($objects);
+
+        $this->processManager = $this->createMock(ProcessManager::class);
+        $this->processManager->method('execute')->willReturnCallback(
+            function ($userFunctions) {
+                // Execute each function in the array
+                foreach ($userFunctions as $callback) {
+                    $callback();
+                }
+            }
         );
 
         $this->model = $objectManagerHelper->getObject(
@@ -112,10 +141,13 @@ class FulltextTest extends TestCase
         $stores = [0 => 'Store 1', 1 => 'Store 2'];
         $this->setupDataProvider($stores);
 
-        $indexData = new \ArrayObject([]);
+        $indexData = new ArrayObject([]);
         $this->fulltextResource->expects($this->exactly(2))
             ->method('getRelationsByChild')
             ->willReturn($ids);
+        $this->saveHandler->expects($this->exactly(count($stores)))->method('enableStackedActions');
+        $this->saveHandler->expects($this->exactly(count($stores)))->method('triggerStackedActions');
+        $this->saveHandler->expects($this->exactly(count($stores)))->method('disableStackedActions');
         $this->saveHandler->expects($this->exactly(count($stores)))->method('deleteIndex');
         $this->saveHandler->expects($this->exactly(2))->method('saveIndex');
         $this->saveHandler->expects($this->exactly(2))->method('isAvailable')->willReturn(true);
@@ -127,8 +159,52 @@ class FulltextTest extends TestCase
         );
         $this->fullAction->expects($this->exactly(2))
             ->method('rebuildStoreIndex')
-            ->withConsecutive(...$consecutiveStoreRebuildArguments)
-            ->willReturn(new \ArrayObject([$indexData, $indexData]));
+            ->willReturnCallback(function ($arg1, $arg2) use ($consecutiveStoreRebuildArguments, $indexData) {
+                if ($arg1 == $consecutiveStoreRebuildArguments[0][0] &&
+                    $arg2 == $consecutiveStoreRebuildArguments[0][1]) {
+                    return new ArrayObject([$indexData, $indexData]);
+                } elseif ($arg1 == $consecutiveStoreRebuildArguments[1][0] &&
+                    $arg2 == $consecutiveStoreRebuildArguments[1][1]) {
+                    return new ArrayObject([$indexData, $indexData]);
+                }
+            });
+
+        $this->model->execute($ids);
+    }
+
+    public function testExecuteWithStackedQueriesException()
+    {
+        $ids = [1, 2, 3];
+        $stores = [0 => 'Store 1'];
+        $this->setupDataProvider($stores);
+
+        $indexData = new ArrayObject([]);
+        $this->fulltextResource->expects($this->exactly(1))
+            ->method('getRelationsByChild')
+            ->willReturn($ids);
+        $this->saveHandler->expects($this->exactly(count($stores)))->method('enableStackedActions');
+        $this->saveHandler->expects($this->exactly(count($stores) + 1))->method('deleteIndex');
+        $this->saveHandler->expects($this->exactly(count($stores) + 1))->method('saveIndex');
+        $this->saveHandler->expects($this->exactly(count($stores)))
+            ->method('triggerStackedActions')
+            ->willThrowException(new Exception('error'));
+        $this->saveHandler->expects($this->exactly(count($stores)))->method('disableStackedActions');
+
+        $this->saveHandler->expects($this->exactly(2))->method('saveIndex');
+        $this->saveHandler->expects($this->exactly(1))->method('isAvailable')->willReturn(true);
+        $consecutiveStoreRebuildArguments = array_map(
+            function ($store) use ($ids) {
+                return [$store, $ids];
+            },
+            $stores
+        );
+        $this->fullAction->expects($this->exactly(2))
+            ->method('rebuildStoreIndex')
+            ->willReturnCallback(function (...$consecutiveStoreRebuildArguments) use ($indexData) {
+                if (!empty($consecutiveStoreRebuildArguments)) {
+                    return new ArrayObject([$indexData, $indexData]);
+                }
+            });
 
         $this->model->execute($ids);
     }
@@ -144,9 +220,7 @@ class FulltextTest extends TestCase
                     $dimension = $this->getMockBuilder(Dimension::class)
                         ->disableOriginalConstructor()
                         ->getMock();
-                    $dimension->expects($this->any())
-                        ->method('getValue')
-                        ->willReturn($storeId);
+                    $dimension->method('getValue')->willReturn($storeId);
 
                     yield ['scope' => $dimension];
                 }
@@ -157,7 +231,7 @@ class FulltextTest extends TestCase
     public function testExecuteFull()
     {
         $stores = [0 => 'Store 1', 1 => 'Store 2'];
-        $indexData = new \ArrayObject([new \ArrayObject([]), new \ArrayObject([])]);
+        $indexData = new ArrayObject([new ArrayObject([]), new ArrayObject([])]);
         $this->setupDataProvider($stores);
 
         $this->saveHandler->expects($this->exactly(count($stores)))->method('cleanIndex');
@@ -170,8 +244,11 @@ class FulltextTest extends TestCase
         );
         $this->fullAction->expects($this->exactly(2))
             ->method('rebuildStoreIndex')
-            ->withConsecutive(...$consecutiveStoreRebuildArguments)
-            ->willReturn($indexData);
+            ->willReturnCallback(function (...$consecutiveStoreRebuildArguments) use ($indexData) {
+                if (!empty($consecutiveStoreRebuildArguments)) {
+                    return $indexData;
+                }
+            });
 
         $this->fulltextResource->expects($this->exactly(2))->method('resetSearchResultsByStore');
 
@@ -183,7 +260,7 @@ class FulltextTest extends TestCase
         $ids = [1, 2, 3];
         $stores = [0 => 'Store 1', 1 => 'Store 2'];
         $this->setupDataProvider($stores);
-        $indexData = new \ArrayObject([]);
+        $indexData = new ArrayObject([]);
         $this->fulltextResource->expects($this->exactly(2))
             ->method('getRelationsByChild')
             ->willReturn($ids);
@@ -192,7 +269,7 @@ class FulltextTest extends TestCase
         $this->saveHandler->expects($this->exactly(2))->method('isAvailable')->willReturn(true);
         $this->fullAction->expects($this->exactly(2))
             ->method('rebuildStoreIndex')
-            ->willReturn(new \ArrayObject([$indexData, $indexData]));
+            ->willReturn(new ArrayObject([$indexData, $indexData]));
 
         $this->model->executeList($ids);
     }
@@ -202,7 +279,7 @@ class FulltextTest extends TestCase
         $id = 1;
         $stores = [0 => 'Store 1', 1 => 'Store 2'];
         $this->setupDataProvider($stores);
-        $indexData = new \ArrayObject([]);
+        $indexData = new ArrayObject([]);
         $this->fulltextResource->expects($this->exactly(2))
             ->method('getRelationsByChild')
             ->willReturn([$id]);
@@ -211,7 +288,7 @@ class FulltextTest extends TestCase
         $this->saveHandler->expects($this->exactly(2))->method('isAvailable')->willReturn(true);
         $this->fullAction->expects($this->exactly(2))
             ->method('rebuildStoreIndex')
-            ->willReturn(new \ArrayObject([$indexData, $indexData]));
+            ->willReturn(new ArrayObject([$indexData, $indexData]));
 
         $this->model->executeRow($id);
     }

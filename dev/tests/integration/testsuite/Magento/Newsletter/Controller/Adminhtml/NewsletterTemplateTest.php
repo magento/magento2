@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Newsletter\Controller\Adminhtml;
 
@@ -62,7 +62,6 @@ class NewsletterTemplateTest extends \Magento\TestFramework\TestCase\AbstractBac
     public function testSaveActionCreateNewTemplateAndVerifySuccessMessage()
     {
         $this->getRequest()->setParam('id', $this->model->getId());
-        $this->getRequest()->setParam('is_legacy', 1);
 
         $this->dispatch('backend/newsletter/template/save');
 
@@ -98,7 +97,6 @@ class NewsletterTemplateTest extends \Magento\TestFramework\TestCase\AbstractBac
         $this->assertEquals('some_unique_code', $this->model->getTemplateCode());
 
         $this->getRequest()->setParam('id', $this->model->getId());
-        $this->getRequest()->setParam('is_legacy', 1);
 
         $this->dispatch('backend/newsletter/template/save');
 

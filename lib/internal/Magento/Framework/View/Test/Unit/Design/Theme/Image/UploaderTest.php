@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -10,6 +10,7 @@ declare(strict_types=1);
  */
 namespace Magento\Framework\View\Test\Unit\Design\Theme\Image;
 
+use Magento\Framework\File\Http;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\File\UploaderFactory;
 use Magento\Framework\Filesystem;
@@ -48,7 +49,7 @@ class UploaderTest extends TestCase
     protected function setUp(): void
     {
         $this->_filesystemMock = $this->createMock(Filesystem::class);
-        $this->_transferAdapterMock = $this->createMock(\Zend_File_Transfer_Adapter_Http::class);
+        $this->_transferAdapterMock = $this->createMock(Http::class);
         $this->_fileUploader = $this->createMock(\Magento\Framework\File\Uploader::class);
 
         $adapterFactory = $this->createMock(FileTransferFactory::class);
@@ -80,13 +81,13 @@ class UploaderTest extends TestCase
     /**
      * @return array
      */
-    public function uploadDataProvider()
+    public static function uploadDataProvider()
     {
         return [
             [
                 'isUploaded' => true,
                 'isValid' => true,
-                'checkAllowedExtension' => true,
+                'checkExtension' => true,
                 'save' => true,
                 'result' => '/tmp/test_filename',
                 'exception' => null,
@@ -94,7 +95,7 @@ class UploaderTest extends TestCase
             [
                 'isUploaded' => false,
                 'isValid' => true,
-                'checkAllowedExtension' => true,
+                'checkExtension' => true,
                 'save' => true,
                 'result' => false,
                 'exception' => null
@@ -102,7 +103,7 @@ class UploaderTest extends TestCase
             [
                 'isUploaded' => true,
                 'isValid' => false,
-                'checkAllowedExtension' => true,
+                'checkExtension' => true,
                 'save' => true,
                 'result' => false,
                 'exception' => LocalizedException::class
@@ -110,7 +111,7 @@ class UploaderTest extends TestCase
             [
                 'isUploaded' => true,
                 'isValid' => true,
-                'checkAllowedExtension' => false,
+                'checkExtension' => false,
                 'save' => true,
                 'result' => false,
                 'exception' => LocalizedException::class
@@ -118,7 +119,7 @@ class UploaderTest extends TestCase
             [
                 'isUploaded' => true,
                 'isValid' => true,
-                'checkAllowedExtension' => true,
+                'checkExtension' => true,
                 'save' => false,
                 'result' => false,
                 'exception' => LocalizedException::class

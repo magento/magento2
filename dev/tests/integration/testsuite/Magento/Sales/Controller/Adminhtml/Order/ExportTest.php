@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -42,7 +42,7 @@ class ExportTest extends ExportBase
     /**
      * @return array
      */
-    public function exportOrderDataProvider(): array
+    public static function exportOrderDataProvider(): array
     {
         return [
             'order_grid_in_csv' => ['format' => ExportBase::CSV_FORMAT],

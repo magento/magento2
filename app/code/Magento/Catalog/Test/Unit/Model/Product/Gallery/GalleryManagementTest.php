@@ -1,26 +1,38 @@
 <?php
 /**
- *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Catalog\Test\Unit\Model\Product\Gallery;
 
 use Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryInterface;
+use Magento\Catalog\Api\Data\ProductInterface;
+use Magento\Catalog\Api\Data\ProductInterfaceFactory;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\Product;
+use Magento\Catalog\Model\Product\Gallery\DeleteValidator;
 use Magento\Catalog\Model\Product\Gallery\GalleryManagement;
 use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
 use Magento\Framework\Api\AttributeValue;
 use Magento\Framework\Api\Data\ImageContentInterface;
+use Magento\Framework\Api\Data\ImageContentInterfaceFactory;
 use Magento\Framework\Api\ImageContentValidatorInterface;
+use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\Filesystem;
+use Magento\Framework\Filesystem\Directory\WriteInterface;
+use Magento\Framework\Filesystem\Driver\File\Mime;
+use Magento\Framework\Filesystem\DriverInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Magento\Framework\Filesystem\Io\File;
+use Magento\Catalog\Model\Product\Media\ConfigInterface as MediaConfig;
 
 /**
  * Tests for \Magento\Catalog\Model\Product\Gallery\GalleryManagement.
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class GalleryManagementTest extends TestCase
 {
@@ -55,12 +67,55 @@ class GalleryManagementTest extends TestCase
     protected $attributeValueMock;
 
     /**
+     * @var ProductInterfaceFactory|MockObject
+     */
+    private $productInterfaceFactory;
+
+    /**
+     * @var DeleteValidator|MockObject
+     */
+    private $deleteValidator;
+
+    /**
+     * @var ProductInterface|MockObject
+     */
+    private $newProductMock;
+
+    /**
+     * @var ImageContentInterface|MockObject
+     */
+    private $imageContentInterface;
+
+    /**
+     * @var Filesystem|MockObject
+     */
+    private $filesystem;
+
+    /**
+     * @var Mime|MockObject
+     */
+    private $mime;
+
+    /**
+     * @var File|MockObject
+     */
+    private $file;
+
+    /**
      * @inheritDoc
      */
     protected function setUp(): void
     {
         $this->productRepositoryMock = $this->getMockForAbstractClass(ProductRepositoryInterface::class);
         $this->contentValidatorMock = $this->getMockForAbstractClass(ImageContentValidatorInterface::class);
+        $this->productInterfaceFactory = $this->createMock(ProductInterfaceFactory::class);
+        $this->deleteValidator = $this->createMock(DeleteValidator::class);
+        $this->imageContentInterface = $this->getMockBuilder(ImageContentInterfaceFactory::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->filesystem = $this->createMock(Filesystem::class);
+        $this->mime = $this->createMock(Mime::class);
+        $this->file = $this->createMock(File::class);
         $this->productMock = $this->createPartialMock(
             Product::class,
             [
@@ -71,18 +126,30 @@ class GalleryManagementTest extends TestCase
                 'getCustomAttribute',
                 'getMediaGalleryEntries',
                 'setMediaGalleryEntries',
-                'getMediaAttributes'
+                'getMediaAttributes',
+                'getMediaConfig'
             ]
         );
         $this->mediaGalleryEntryMock =
             $this->getMockForAbstractClass(ProductAttributeMediaGalleryEntryInterface::class);
         $this->model = new GalleryManagement(
             $this->productRepositoryMock,
-            $this->contentValidatorMock
+            $this->contentValidatorMock,
+            $this->productInterfaceFactory,
+            $this->deleteValidator,
+            $this->imageContentInterface,
+            $this->filesystem,
+            $this->mime,
+            $this->file,
         );
         $this->attributeValueMock = $this->getMockBuilder(AttributeValue::class)
             ->disableOriginalConstructor()
             ->getMock();
+
+        $this->newProductMock = $this->getMockForAbstractClass(ProductInterface::class);
+
+        $this->productInterfaceFactory->method('create')
+            ->willReturn($this->newProductMock);
     }
 
     /**
@@ -130,7 +197,7 @@ class GalleryManagementTest extends TestCase
             ->method('getMediaAttributes')
             ->willReturn(['small_image' => $attributeMock]);
 
-        $this->productRepositoryMock->expects($this->once())->method('save')->with($this->productMock)
+        $this->productRepositoryMock->expects($this->once())->method('save')->with($this->newProductMock)
             ->willThrowException(new \Exception());
         $this->model->create($productSku, $this->mediaGalleryEntryMock);
     }
@@ -152,7 +219,7 @@ class GalleryManagementTest extends TestCase
             ->willReturn($this->productMock);
         $this->productRepositoryMock->expects($this->once())
             ->method('save')
-            ->with($this->productMock)
+            ->with($this->newProductMock)
             ->willReturn($this->productMock);
 
         $this->contentValidatorMock->expects($this->once())->method('isValid')->with($entryContentMock)
@@ -165,7 +232,7 @@ class GalleryManagementTest extends TestCase
         $this->productMock
             ->method('getMediaGalleryEntries')
             ->willReturnOnConsecutiveCalls([], [$newEntryMock]);
-        $this->productMock->expects($this->once())->method('setMediaGalleryEntries')
+        $this->newProductMock->expects($this->once())->method('setMediaGalleryEntries')
             ->with([$this->mediaGalleryEntryMock]);
 
         $this->assertEquals(42, $this->model->create($productSku, $this->mediaGalleryEntryMock));
@@ -216,7 +283,7 @@ class GalleryManagementTest extends TestCase
         $existingEntryMock->expects($this->once())->method('getTypes')->willReturn([]);
         $entryMock->expects($this->once())->method('getTypes')->willReturn([]);
         $entryMock->expects($this->once())->method('getId')->willReturn($entryId);
-        $this->productRepositoryMock->expects($this->once())->method('save')->with($this->productMock)
+        $this->productRepositoryMock->expects($this->once())->method('save')->with($this->newProductMock)
             ->willThrowException(new \Exception());
         $this->model->update($productSku, $entryMock);
     }
@@ -253,10 +320,10 @@ class GalleryManagementTest extends TestCase
         $entryMock->expects($this->exactly(2))->method('getId')->willReturn($entryId);
         $entryMock->expects($this->once())->method('getTypes')->willReturn(['image']);
 
-        $this->productMock->expects($this->once())->method('setMediaGalleryEntries')
+        $this->newProductMock->expects($this->once())->method('setMediaGalleryEntries')
             ->with([$entryMock, $existingSecondEntryMock])
             ->willReturnSelf();
-        $this->productRepositoryMock->expects($this->once())->method('save')->with($this->productMock);
+        $this->productRepositoryMock->expects($this->once())->method('save')->with($this->newProductMock);
 
         $this->assertTrue($this->model->update($productSku, $entryMock));
     }
@@ -294,11 +361,12 @@ class GalleryManagementTest extends TestCase
             ProductAttributeMediaGalleryEntryInterface::class
         );
         $existingEntryMock->expects($this->once())->method('getId')->willReturn(42);
+        $existingEntryMock->expects($this->once())->method('getFile')->willReturn('path/to/file');
         $this->productMock->expects($this->once())->method('getMediaGalleryEntries')
             ->willReturn([$existingEntryMock]);
-        $this->productMock->expects($this->once())->method('setMediaGalleryEntries')
+        $this->newProductMock->expects($this->once())->method('setMediaGalleryEntries')
             ->with([]);
-        $this->productRepositoryMock->expects($this->once())->method('save')->with($this->productMock);
+        $this->productRepositoryMock->expects($this->once())->method('save')->with($this->newProductMock);
         $this->assertTrue($this->model->remove($productSku, $entryId));
     }
 
@@ -351,6 +419,55 @@ class GalleryManagementTest extends TestCase
         $existingEntryMock->expects($this->once())->method('getId')->willReturn(42);
         $this->productMock->expects($this->once())->method('getMediaGalleryEntries')
             ->willReturn([$existingEntryMock]);
+        $mediaConfigMock = $this->getMockBuilder(MediaConfig::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $mediaConfigMock->expects($this->once())
+            ->method('getMediaPath')
+            ->willReturn("base/path/test123.jpg");
+        $this->productMock->expects($this->once())
+            ->method('getMediaConfig')
+            ->willReturn($mediaConfigMock);
+        $mediaDirectoryMock = $this->getMockBuilder(WriteInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->filesystem->expects($this->once())
+            ->method('getDirectoryWrite')
+            ->with(DirectoryList::MEDIA)
+            ->willReturn($mediaDirectoryMock);
+        $mediaDirectoryMock->expects($this->once())
+            ->method('getAbsolutePath')
+            ->with('base/path/test123.jpg')
+            ->willReturn('absolute/path/base/path/test123.jpg');
+        $this->file->expects($this->any())
+            ->method('getPathInfo')
+            ->willReturnCallback(
+                function ($path) {
+                    return pathinfo($path);
+                }
+            );
+        $driverMock = $this->getMockBuilder(DriverInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $mediaDirectoryMock->expects($this->any())->method('getDriver')->willReturn($driverMock);
+        $driverMock->expects($this->once())
+            ->method('fileGetContents')
+            ->willReturn('0123456789abcdefghijklmnopqrstuvwxyz');
+        $ImageContentInterface = $this->getMockBuilder(ImageContentInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $ImageContentInterface->expects($this->once())
+            ->method('setName')
+            ->willReturnSelf();
+        $ImageContentInterface->expects($this->once())
+            ->method('setBase64EncodedData')
+            ->willReturnSelf();
+        $ImageContentInterface->expects($this->once())
+            ->method('setType')
+            ->willReturnSelf();
+        $this->imageContentInterface->expects($this->once())
+            ->method('create')
+            ->willReturn($ImageContentInterface);
         $this->assertEquals($existingEntryMock, $this->model->get($productSku, $imageId));
     }
 
@@ -365,6 +482,57 @@ class GalleryManagementTest extends TestCase
         $entryMock = $this->getMockForAbstractClass(ProductAttributeMediaGalleryEntryInterface::class);
         $this->productMock->expects($this->once())->method('getMediaGalleryEntries')
             ->willReturn([$entryMock]);
+        $this->productMock->expects($this->once())->method('getMediaGalleryEntries')
+            ->willReturn([$entryMock]);
+        $mediaConfigMock = $this->getMockBuilder(MediaConfig::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $mediaConfigMock->expects($this->once())
+            ->method('getMediaPath')
+            ->willReturn("base/path/test123.jpg");
+        $this->productMock->expects($this->once())
+            ->method('getMediaConfig')
+            ->willReturn($mediaConfigMock);
+        $mediaDirectoryMock = $this->getMockBuilder(WriteInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->filesystem->expects($this->once())
+            ->method('getDirectoryWrite')
+            ->with(DirectoryList::MEDIA)
+            ->willReturn($mediaDirectoryMock);
+        $mediaDirectoryMock->expects($this->once())
+            ->method('getAbsolutePath')
+            ->with('base/path/test123.jpg')
+            ->willReturn('absolute/path/base/path/test123.jpg');
+        $this->file->expects($this->any())
+            ->method('getPathInfo')
+            ->willReturnCallback(
+                function ($path) {
+                    return pathinfo($path);
+                }
+            );
+        $driverMock = $this->getMockBuilder(DriverInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $mediaDirectoryMock->expects($this->any())->method('getDriver')->willReturn($driverMock);
+        $driverMock->expects($this->once())
+            ->method('fileGetContents')
+            ->willReturn('0123456789abcdefghijklmnopqrstuvwxyz');
+        $ImageContentInterface = $this->getMockBuilder(ImageContentInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $ImageContentInterface->expects($this->once())
+            ->method('setName')
+            ->willReturnSelf();
+        $ImageContentInterface->expects($this->once())
+            ->method('setBase64EncodedData')
+            ->willReturnSelf();
+        $ImageContentInterface->expects($this->once())
+            ->method('setType')
+            ->willReturnSelf();
+        $this->imageContentInterface->expects($this->once())
+            ->method('create')
+            ->willReturn($ImageContentInterface);
         $this->assertEquals([$entryMock], $this->model->getList($productSku));
     }
 }

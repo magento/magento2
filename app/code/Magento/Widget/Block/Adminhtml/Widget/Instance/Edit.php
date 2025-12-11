@@ -1,13 +1,11 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 
 /**
  * Widget Instance edit container
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\Widget\Block\Adminhtml\Widget\Instance;
 
@@ -18,8 +16,6 @@ namespace Magento\Widget\Block\Adminhtml\Widget\Instance;
 class Edit extends \Magento\Backend\Block\Widget\Form\Container
 {
     /**
-     * Core registry
-     *
      * @var \Magento\Framework\Registry
      */
     protected $_coreRegistry = null;
@@ -63,6 +59,7 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
 
     /**
      * Prepare layout.
+     *
      * Adding save_and_continue button
      *
      * @return $this

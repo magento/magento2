@@ -1,8 +1,10 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
+declare(strict_types=1);
+
 namespace Magento\Analytics\Model;
 
 use Magento\Framework\Filesystem\Directory\WriteInterface;
@@ -14,6 +16,8 @@ use Magento\Framework\Filesystem\Directory\WriteInterface;
  * Executes export of collected data
  * Iterates registered providers @see etc/analytics.xml
  * Collects data (to TMP folder)
+ *
+ * @api
  */
 interface ReportWriterInterface
 {

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -11,6 +11,7 @@ use Exception;
 use Magento\Framework\Filesystem\DriverInterface;
 use Magento\Framework\Logger\Handler\Exception as ExceptionHandler;
 use Monolog\Logger;
+use Monolog\LogRecord;
 
 /**
  * System stream handler
@@ -53,7 +54,7 @@ class System extends Base
      * @param array $record The record metadata
      * @return void
      */
-    public function write(array $record): void
+    public function write(LogRecord $record): void
     {
         if (isset($record['context']['exception'])) {
             $this->exceptionHandler->handle($record);

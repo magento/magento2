@@ -1,45 +1,56 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Customer\Model\ResourceModel;
 
 use Magento\Customer\Api\AccountManagementInterface;
 use Magento\Customer\Api\CustomerRepositoryInterface;
-use Magento\Customer\Api\Data\CustomerInterfaceFactory;
-use Magento\Customer\Api\Data\AddressInterfaceFactory;
-use Magento\Customer\Api\Data\RegionInterfaceFactory;
-use Magento\Framework\Api\ExtensibleDataObjectConverter;
-use Magento\Framework\Api\DataObjectHelper;
-use Magento\Framework\Encryption\EncryptorInterface;
-use Magento\Customer\Api\Data\CustomerInterface;
-use Magento\Customer\Model\CustomerRegistry;
-use Magento\Framework\Api\SortOrder;
-use Magento\Framework\Config\CacheInterface;
-use Magento\Framework\ObjectManagerInterface;
-use Magento\Sales\Api\Data\InvoiceInterface;
-use Magento\Sales\Api\Data\OrderInterface;
-use Magento\Sales\Api\InvoiceOrderInterface;
-use Magento\Sales\Api\InvoiceRepositoryInterface;
-use Magento\Sales\Api\OrderRepositoryInterface;
-use Magento\TestFramework\Helper\Bootstrap;
 use Magento\Customer\Api\Data\AddressInterface;
-use Magento\Framework\Api\SearchCriteriaBuilder;
-use Magento\Framework\Api\FilterBuilder;
-use Magento\Framework\Api\SortOrderBuilder;
-use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Customer\Api\Data\AddressInterfaceFactory;
+use Magento\Customer\Api\Data\CustomerInterface;
+use Magento\Customer\Api\Data\CustomerInterfaceFactory;
 use Magento\Customer\Model\Customer;
+use Magento\Catalog\Test\Fixture\Product as ProductFixture;
+use Magento\Framework\Api\Filter;
+use Magento\Framework\App\ResourceConnection;
+use Magento\Sales\Test\Fixture\PlaceOrderWithCustomerOrGuest as OrderFixture;
+use Magento\Customer\Model\CustomerRegistry;
+use Magento\Customer\Test\Fixture\Customer as CustomerFixture;
+use Magento\Framework\Api\DataObjectHelper;
+use Magento\Framework\Api\ExtensibleDataObjectConverter;
+use Magento\Framework\Api\FilterBuilder;
+use Magento\Framework\Api\SearchCriteriaBuilder;
+use Magento\Framework\Api\SortOrder;
+use Magento\Framework\Api\SortOrderBuilder;
+use Magento\Framework\Config\CacheInterface;
+use Magento\Framework\Encryption\EncryptorInterface;
+use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\ObjectManagerInterface;
+use Magento\Framework\Validator\Exception as ValidatorException;
+use Magento\Sales\Api\Data\OrderInterface;
+use Magento\Sales\Api\OrderRepositoryInterface;
+use Magento\TestFramework\Fixture\DataFixture;
+use Magento\TestFramework\Fixture\DataFixtureStorage;
+use Magento\TestFramework\Fixture\DataFixtureStorageManager;
+use Magento\TestFramework\Helper\Bootstrap;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Checks Customer insert, update, search with repository
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class CustomerRepositoryTest extends \PHPUnit\Framework\TestCase
+class CustomerRepositoryTest extends TestCase
 {
     private const NEW_CUSTOMER_EMAIL = 'new.customer@example.com';
+
+    private const TEST_CUSTOMER_EMAIL = 'test@gmail.com';
+
+    private const CUSTOM_ORDER_EMAIL = 'custom.order@example.com';
+
     private const CUSTOMER_ID = 1;
 
     /** @var AccountManagementInterface */
@@ -60,9 +71,6 @@ class CustomerRepositoryTest extends \PHPUnit\Framework\TestCase
     /** @var AddressInterfaceFactory */
     private $addressFactory;
 
-    /** @var RegionInterfaceFactory */
-    private $regionFactory;
-
     /** @var ExtensibleDataObjectConverter */
     private $converter;
 
@@ -76,6 +84,16 @@ class CustomerRepositoryTest extends \PHPUnit\Framework\TestCase
     protected $customerRegistry;
 
     /**
+     * @var DataFixtureStorage
+     */
+    private $fixtures;
+
+    /**
+     * @var SearchCriteriaBuilder
+     */
+    private $searchCriteriaBuilder;
+
+    /**
      * @inheritdoc
      */
     protected function setUp(): void
@@ -85,12 +103,14 @@ class CustomerRepositoryTest extends \PHPUnit\Framework\TestCase
         $this->orderRepository = $this->objectManager->create(OrderRepositoryInterface::class);
         $this->customerFactory = $this->objectManager->create(CustomerInterfaceFactory::class);
         $this->addressFactory = $this->objectManager->create(AddressInterfaceFactory::class);
-        $this->regionFactory = $this->objectManager->create(RegionInterfaceFactory::class);
         $this->accountManagement = $this->objectManager->create(AccountManagementInterface::class);
         $this->converter = $this->objectManager->create(ExtensibleDataObjectConverter::class);
         $this->dataObjectHelper = $this->objectManager->create(DataObjectHelper::class);
         $this->encryptor = $this->objectManager->create(EncryptorInterface::class);
         $this->customerRegistry = $this->objectManager->create(CustomerRegistry::class);
+        $this->searchCriteriaBuilder = $this->objectManager->create(SearchCriteriaBuilder::class);
+
+        $this->fixtures = DataFixtureStorageManager::getStorage();
 
         /** @var CacheInterface $cache */
         $cache = $this->objectManager->create(CacheInterface::class);
@@ -103,9 +123,22 @@ class CustomerRepositoryTest extends \PHPUnit\Framework\TestCase
     protected function tearDown(): void
     {
         $objectManager = Bootstrap::getObjectManager();
-        /** @var \Magento\Customer\Model\CustomerRegistry $customerRegistry */
+        /** @var CustomerRegistry $customerRegistry */
         $customerRegistry = $objectManager->get(CustomerRegistry::class);
-        $customerRegistry->remove(1);
+        /** @var ResourceConnection $resource */
+        $resource = $objectManager->get(ResourceConnection::class);
+        $connection = $resource->getConnection();
+        $customerTable = $resource->getTableName('customer_entity');
+        $customerIds = $connection->fetchCol(
+            $connection->select()->from($customerTable, ['entity_id'])
+        );
+        foreach ($customerIds as $customerId) {
+            try {
+                $customerRegistry->remove((int)$customerId);
+            } catch (\Exception $e) {
+                // Continue cleanup even if removal fails
+            }
+        }
     }
 
     /**
@@ -192,15 +225,15 @@ class CustomerRepositoryTest extends \PHPUnit\Framework\TestCase
         $newPasswordHash = $this->encryptor->getHash($newPassword, true);
         $customerBefore = $this->customerRepository->getById($existingCustomerId);
         $customerData = array_merge($customerBefore->__toArray(), [
-                'id' => 1,
-                'email' => $email,
-                'firstname' => $firstName,
-                'lastname' => $lastName,
-                'created_in' => 'Admin',
-                'password' => 'notsaved',
-                'default_billing' => $defaultBilling,
-                'default_shipping' => $defaultShipping
-            ]);
+            'id' => 1,
+            'email' => $email,
+            'firstname' => $firstName,
+            'lastname' => $lastName,
+            'created_in' => 'Admin',
+            'password' => 'notsaved',
+            'default_billing' => $defaultBilling,
+            'default_shipping' => $defaultShipping
+        ]);
         $customerDetails = $this->customerFactory->create();
         $this->dataObjectHelper->populateWithArray(
             $customerDetails,
@@ -249,6 +282,37 @@ class CustomerRepositoryTest extends \PHPUnit\Framework\TestCase
         $this->assertContains('lastname', array_keys($inAfterOnly));
         $this->assertContains('email', array_keys($inAfterOnly));
         $this->assertNotContains('password_hash', array_keys($inAfterOnly));
+    }
+
+    /**
+     * Test update customer custom attributes
+     *
+     * @magentoDataFixture Magento/Customer/_files/attribute_user_defined_custom_attribute.php
+     * @return void
+     */
+    #[
+        DataFixture(CustomerFixture::class, ['email' => 'customer@mail.com'])
+    ]
+
+    public function testUpdateCustomerAttributesAutoIncrement()
+    {
+        $newAttributeValue = 'value1';
+        $updateAttributeValue = 'value2';
+        $customer = $this->customerRepository->get('customer@mail.com');
+        $customer->setCustomAttribute('custom_attribute1', $newAttributeValue);
+        $savedCustomer = $this->customerRepository->save($customer);
+        $savedCustomer->setCustomAttribute('custom_attribute1', $updateAttributeValue);
+        $this->customerRepository->save($savedCustomer);
+        $customer = $this->customerRepository->get('customer@mail.com');
+
+        $this->assertSame(
+            $customer->getCustomAttribute('custom_attribute1')->getValue(),
+            $updateAttributeValue
+        );
+        $resource = $this->objectManager->get(ResourceConnection::class);
+        $connection = $resource->getConnection();
+        $tableStatus = $connection->showTableStatus('customer_entity_varchar');
+        $this->assertSame($tableStatus['Auto_increment'], '2');
     }
 
     /**
@@ -394,8 +458,8 @@ class CustomerRepositoryTest extends \PHPUnit\Framework\TestCase
     /**
      * Test search customers
      *
-     * @param \Magento\Framework\Api\Filter[] $filters
-     * @param \Magento\Framework\Api\Filter[] $filterGroup
+     * @param Filter[] $filters
+     * @param Filter[] $filterGroup
      * @param array $expectedResult array of expected results indexed by ID
      *
      * @dataProvider searchCustomersDataProvider
@@ -510,7 +574,7 @@ class CustomerRepositoryTest extends \PHPUnit\Framework\TestCase
      *
      * @return array
      */
-    public function updateCustomerDataProvider()
+    public static function updateCustomerDataProvider()
     {
         return [
             'Customer remove default shipping and billing' => [
@@ -529,7 +593,7 @@ class CustomerRepositoryTest extends \PHPUnit\Framework\TestCase
      *
      * @return array
      */
-    public function searchCustomersDataProvider()
+    public static function searchCustomersDataProvider()
     {
         $builder = Bootstrap::getObjectManager()->create(FilterBuilder::class);
         return [
@@ -584,7 +648,7 @@ class CustomerRepositoryTest extends \PHPUnit\Framework\TestCase
          * @var Customer $customer
          */
         $customer = $this->objectManager->create(Customer::class);
-        /** @var \Magento\Customer\Model\Customer $customer */
+        /** @var Customer $customer */
         $customer->load($customerId);
         $this->assertEquals(
             $defaultBilling,
@@ -687,5 +751,135 @@ class CustomerRepositoryTest extends \PHPUnit\Framework\TestCase
         foreach ($customerOrders as $customerOrder) {
             $this->assertEquals('customer@example.com', $customerOrder->getCustomerEmail());
         }
+    }
+
+    public function testSaveCustomerWithInvalidAttrValue(): void
+    {
+        $customerData = [
+            'website_id' => 1,
+            'email' => 'email1@example.com',
+            'firstname' => 'Firstname',
+            'lastname' => 'Lastname',
+            'gender' => 123,
+        ];
+        $customer = $this->customerFactory->create(['data' => $customerData]);
+
+        $this->expectException(ValidatorException::class);
+        $this->expectExceptionMessage('Attribute gender does not contain option with Id 123');
+        $this->customerRepository->save($customer);
+    }
+
+    #[
+        DataFixture(
+            CustomerFixture::class,
+            [
+                'email' => 'émâíl123@example.com',
+                'rp_token' => 'random_token_123'
+            ],
+            as: 'customer'
+        )
+    ]
+    public function testSaveCustomerWithEmailWithDiacritics(): void
+    {
+        $customer = $this->fixtures->get('customer');
+        $this->assertEquals('émâíl123@example.com', $customer->getEmail());
+        $this->assertNotEquals('random_token_123', $customer->getRpToken());
+    }
+
+    /**
+     * Ensures UpgradeOrderCustomerEmailObserver updates only orders that still
+     * carry the original customer email and leaves custom addresses untouched.
+     *
+     * @magentoDbIsolation enabled
+     */
+    #[
+        DataFixture(
+            CustomerFixture::class,
+            ['email' => self::TEST_CUSTOMER_EMAIL, 'firstname' => 'Jane', 'lastname' => 'Doe', 'website_id' => 1],
+            as: 'customer'
+        ),
+        DataFixture(
+            ProductFixture::class,
+            [
+                'sku' => 'simple-order-product',
+                'type_id' => 'simple',
+                'price' => 50,
+                'status' => 1,
+                'website_ids' => [1]
+            ],
+            as: 'product'
+        ),
+        DataFixture(
+            OrderFixture::class,
+            [
+                'increment_id'       => '100000001',
+                'customer_id'        => '$customer.id$',
+                'customer_email'     => '$customer.email$',
+                'customer_firstname' => '$customer.firstname$',
+                'customer_lastname'  => '$customer.lastname$',
+                'customer_is_guest'  => false,
+                'items'              => [
+                    ['sku' => '$product.sku$', 'qty' => 1, 'price' => 50, 'base_price' => 50],
+                ],
+            ],
+            as: 'order_with_default_email'
+        ),
+        DataFixture(
+            OrderFixture::class,
+            [
+                'increment_id'       => '100000010',
+                'customer_id'        => '$customer.id$',
+                'customer_email'     => self::CUSTOM_ORDER_EMAIL,
+                'customer_firstname' => '$customer.firstname$',
+                'customer_lastname'  => '$customer.lastname$',
+                'customer_is_guest'  => false,
+                'items'              => [
+                    ['sku' => '$product.sku$', 'qty' => 1, 'price' => 50, 'base_price' => 50],
+                ],
+            ],
+            as: 'order_with_custom_email'
+        ),
+    ]
+    public function testCustomerEmailChangeUpdatesOnlyDefaultOrder(): void
+    {
+        // Step 1: Customer exists
+        $customer = $this->fixtures->get('customer');
+        $this->assertSame(self::TEST_CUSTOMER_EMAIL, $customer->getEmail());
+
+        // Step 2: Order created with unchanged email
+        $defaultOrder = $this->fixtures->get('order_with_default_email');
+        $this->assertSame(self::TEST_CUSTOMER_EMAIL, $defaultOrder->getCustomerEmail());
+
+        // Step 3: Second order created with custom email
+        $customOrder = $this->fixtures->get('order_with_custom_email');
+        $this->assertSame(self::CUSTOM_ORDER_EMAIL, $customOrder->getCustomerEmail());
+
+        // Step 4: Reload customer from repository to verify email hasn't been changed yet
+        // (orders created above should not have affected customer entity)
+        $reloadedCustomer = $this->customerRepository->getById($customer->getId());
+        $this->assertSame(self::TEST_CUSTOMER_EMAIL, $reloadedCustomer->getEmail());
+
+        // Step 5: Change customer email via repository (admin edit simulation)
+        $reloadedCustomer->setEmail(self::NEW_CUSTOMER_EMAIL);
+        $this->customerRepository->save($reloadedCustomer);
+
+        // Reset search criteria builder to prevent filter accumulation from other tests
+        $this->searchCriteriaBuilder = Bootstrap::getObjectManager()
+            ->create(SearchCriteriaBuilder::class);
+
+        $criteria = $this->searchCriteriaBuilder
+            ->addFilter(OrderInterface::CUSTOMER_ID, $reloadedCustomer->getId())
+            ->create();
+        $orders = $this->orderRepository->getList($criteria);
+
+        $updatedDefaultOrder = $orders->getItemById((int)$defaultOrder->getEntityId());
+        $unchangedCustomOrder = $orders->getItemById((int)$customOrder->getEntityId());
+
+        // Assert orders were found in the result
+        $this->assertNotNull($updatedDefaultOrder, 'Default order should be found in results');
+        $this->assertNotNull($unchangedCustomOrder, 'Custom order should be found in results');
+
+        $this->assertSame(self::NEW_CUSTOMER_EMAIL, $updatedDefaultOrder->getCustomerEmail());
+        $this->assertSame(self::CUSTOM_ORDER_EMAIL, $unchangedCustomOrder->getCustomerEmail());
     }
 }

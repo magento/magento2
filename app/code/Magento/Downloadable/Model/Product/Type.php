@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Downloadable\Model\Product;
 
@@ -18,11 +18,9 @@ use Magento\Framework\File\UploaderFactory;
  */
 class Type extends \Magento\Catalog\Model\Product\Type\Virtual
 {
-    const TYPE_DOWNLOADABLE = 'downloadable';
+    public const TYPE_DOWNLOADABLE = 'downloadable';
 
     /**
-     * Downloadable file
-     *
      * @var \Magento\Downloadable\Helper\File
      */
     protected $_downloadableFile = null;
@@ -107,8 +105,8 @@ class Type extends \Magento\Catalog\Model\Product\Type\Virtual
         \Magento\Downloadable\Model\LinkFactory $linkFactory,
         \Magento\Downloadable\Model\Product\TypeHandler\TypeHandlerInterface $typeHandler,
         JoinProcessorInterface $extensionAttributesJoinProcessor,
-        \Magento\Framework\Serialize\Serializer\Json $serializer = null,
-        UploaderFactory $uploaderFactory = null
+        ?\Magento\Framework\Serialize\Serializer\Json $serializer = null,
+        ?UploaderFactory $uploaderFactory = null
     ) {
         $this->_sampleResFactory = $sampleResFactory;
         $this->_linkResource = $linkResource;
@@ -275,8 +273,7 @@ class Type extends \Magento\Catalog\Model\Product\Type\Virtual
     }
 
     /**
-     * Prepare additional options/information for order item which will be
-     * created from this product
+     * Prepare additional options/information for order item which will be created from this product
      *
      * @param \Magento\Catalog\Model\Product $product
      * @return array
@@ -287,7 +284,7 @@ class Type extends \Magento\Catalog\Model\Product\Type\Virtual
         if ($linkIds = $product->getCustomOption('downloadable_link_ids')) {
             $linkOptions = [];
             $links = $this->getLinks($product);
-            foreach (explode(',', $linkIds->getValue()) as $linkId) {
+            foreach (explode(',', $linkIds->getValue() ?? '') as $linkId) {
                 if (isset($links[$linkId])) {
                     $linkOptions[] = $linkId;
                 }
@@ -303,6 +300,7 @@ class Type extends \Magento\Catalog\Model\Product\Type\Virtual
 
     /**
      * Retrieve additional searchable data from type instance
+     *
      * Using based on product id and store_id data
      *
      * @param \Magento\Catalog\Model\Product $product
@@ -408,6 +406,7 @@ class Type extends \Magento\Catalog\Model\Product\Type\Virtual
 
     /**
      * Prepare product and its configuration to be added to some products list.
+     *
      * Perform standard preparation process and then prepare options for downloadable links.
      *
      * @param \Magento\Framework\DataObject $buyRequest
@@ -458,6 +457,8 @@ class Type extends \Magento\Catalog\Model\Product\Type\Virtual
     }
 
     /**
+     * Method to create link.
+     *
      * @return \Magento\Downloadable\Model\Link
      */
     protected function _createLink()
@@ -466,6 +467,8 @@ class Type extends \Magento\Catalog\Model\Product\Type\Virtual
     }
 
     /**
+     * Method to create sample.
+     *
      * @return \Magento\Downloadable\Model\Sample
      */
     protected function _createSample()

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -11,6 +11,7 @@ use Magento\Framework\Exception\InvalidArgumentException;
 
 /**
  * Interface used to return Asset id by content field.
+ * @api
  */
 interface GetAssetIdsByContentFieldInterface
 {

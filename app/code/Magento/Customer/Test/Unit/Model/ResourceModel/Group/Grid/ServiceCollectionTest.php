@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -19,6 +19,7 @@ use Magento\Framework\Api\SortOrder;
 use Magento\Framework\Api\SortOrderBuilder;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -61,10 +62,9 @@ class ServiceCollectionTest extends TestCase
         $this->sortOrderBuilder = $this->objectManager->getObject(
             SortOrderBuilder::class
         );
-        $this->groupRepositoryMock = $this->getMockBuilder(GroupRepositoryInterface::class)
-            ->getMock();
+        $this->groupRepositoryMock = $this->createMock(GroupRepositoryInterface::class);
 
-        $this->searchResults = $this->getMockForAbstractClass(SearchResultsInterface::class);
+        $this->searchResults = $this->createMock(SearchResultsInterface::class);
 
         $this->searchResults
             ->expects($this->any())
@@ -72,7 +72,7 @@ class ServiceCollectionTest extends TestCase
         $this->searchResults
             ->expects($this->any())
             ->method('getItems')
-            ->willReturn($this->returnValue([]));
+            ->willReturn([]);
 
         $this->serviceCollection = $this->objectManager
             ->getObject(
@@ -225,9 +225,8 @@ class ServiceCollectionTest extends TestCase
     /**
      * @param string[] $fields
      * @param array $conditions
-     *
-     * @dataProvider addFieldToFilterInconsistentArraysDataProvider
-     */
+     * */
+    #[DataProvider('addFieldToFilterInconsistentArraysDataProvider')]
     public function testAddFieldToFilterInconsistentArrays($fields, $conditions)
     {
         $this->expectException(LocalizedException::class);
@@ -241,7 +240,7 @@ class ServiceCollectionTest extends TestCase
     /**
      * @return array
      */
-    public function addFieldToFilterInconsistentArraysDataProvider()
+    public static function addFieldToFilterInconsistentArraysDataProvider()
     {
         return [
             'missingCondition' => [
@@ -255,14 +254,15 @@ class ServiceCollectionTest extends TestCase
         ];
     }
 
-    /**
-     * @dataProvider addFieldToFilterInconsistentArraysDataProvider
-     */
-    public function testAddFieldToFilterEmptyArrays()
+    /** */
+    #[DataProvider('addFieldToFilterInconsistentArraysDataProvider')]
+    public function testAddFieldToFilterEmptyArrays($fields, $conditions)
     {
         $this->expectException(LocalizedException::class);
-        $this->expectExceptionMessage('The array of fields failed to pass. The array must include at one field.');
+        $this->expectExceptionMessage(
+            'The field array failed to pass. The array must have a matching condition array.'
+        );
 
-        $this->serviceCollection->addFieldToFilter([], []);
+        $this->serviceCollection->addFieldToFilter($fields, $conditions);
     }
 }

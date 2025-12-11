@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -39,8 +39,8 @@ class CanonicalUrl implements ResolverInterface
         Field $field,
         $context,
         ResolveInfo $info,
-        array $value = null,
-        array $args = null
+        ?array $value = null,
+        ?array $args = null
     ) {
         if (!isset($value['model'])) {
             throw new LocalizedException(__('"model" value should be specified'));
@@ -52,7 +52,7 @@ class CanonicalUrl implements ResolverInterface
         $store = $context->getExtensionAttributes()->getStore();
         if ($this->categoryHelper->canUseCanonicalTag($store)) {
             $baseUrl = $category->getUrlInstance()->getBaseUrl();
-            return str_replace($baseUrl, '', $category->getUrl());
+            return $category->getUrl() !== null ? str_replace($baseUrl, '', $category->getUrl()) : '';
         }
         return null;
     }

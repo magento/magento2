@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -258,7 +258,7 @@ class CartPriceRulesFixtureTest extends TestCase
     /**
      * @return array
      */
-    public function dataProviderGenerateAdvancedCondition()
+    public static function dataProviderGenerateAdvancedCondition()
     {
         return [
             [1, [[0]], 1],

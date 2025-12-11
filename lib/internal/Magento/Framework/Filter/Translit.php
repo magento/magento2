@@ -1,16 +1,18 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework\Filter;
+
+use Laminas\Filter\FilterInterface;
 
 /**
  * Translit filter
  *
  * Process string based on convertation table
  */
-class Translit implements \Zend_Filter_Interface
+class Translit implements FilterInterface
 {
     /**
      * Symbol convert table
@@ -497,7 +499,9 @@ class Translit implements \Zend_Filter_Interface
         '্' => 'h',
         'ং' => 'ng',
         'ৢ' => 'n',
-        'ৣ' => 'nn'
+        'ৣ' => 'nn',
+        'ñ' => 'n',
+        'Ñ' => 'n',
     ];
 
     /**

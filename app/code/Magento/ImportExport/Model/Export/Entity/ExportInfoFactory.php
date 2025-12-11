@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -10,6 +10,7 @@ namespace Magento\ImportExport\Model\Export\Entity;
 use Magento\Framework\Serialize\SerializerInterface;
 use Magento\ImportExport\Api\Data\ExportInfoInterface;
 use Magento\Framework\ObjectManagerInterface;
+use Magento\ImportExport\Api\Data\FieldsEnclosureAwareExportInfoInterface;
 use \Psr\Log\LoggerInterface;
 use Magento\ImportExport\Model\Export\ConfigInterface;
 use Magento\ImportExport\Model\Export\Entity\Factory as EntityFactory;
@@ -18,12 +19,12 @@ use Magento\ImportExport\Model\Export\AbstractEntity;
 
 /**
  * Factory for Export Info
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class ExportInfoFactory
 {
     /**
-     * Object Manager
-     *
      * @var \Magento\Framework\ObjectManagerInterface
      */
     private $objectManager;
@@ -54,7 +55,6 @@ class ExportInfoFactory
     private $logger;
 
     /**
-     * ExportInfoFactory constructor.
      * @param ObjectManagerInterface $objectManager
      * @param ConfigInterface $exportConfig
      * @param Factory $entityFactory
@@ -85,11 +85,19 @@ class ExportInfoFactory
      * @param string $entity
      * @param string $exportFilter
      * @param array $skipAttr
+     * @param string|null $locale
+     * @param bool|null $fieldsEnclosure
      * @return ExportInfoInterface
      * @throws \Magento\Framework\Exception\LocalizedException
      */
-    public function create($fileFormat, $entity, $exportFilter, $skipAttr)
-    {
+    public function create(
+        $fileFormat,
+        $entity,
+        $exportFilter,
+        $skipAttr = [],
+        ?string $locale = null,
+        ?bool $fieldsEnclosure = null
+    ) {
         $writer = $this->getWriter($fileFormat);
         $entityAdapter = $this->getEntityAdapter(
             $entity,
@@ -99,14 +107,20 @@ class ExportInfoFactory
             $writer->getContentType()
         );
         $fileName = $this->generateFileName($entity, $entityAdapter, $writer->getFileExtension());
-        /** @var ExportInfoInterface $exportInfo */
-        $exportInfo = $this->objectManager->create(ExportInfoInterface::class);
+        /** @var FieldsEnclosureAwareExportInfoInterface $exportInfo */
+        $exportInfo = $this->objectManager->create(FieldsEnclosureAwareExportInfoInterface::class);
         $exportInfo->setExportFilter($this->serializer->serialize($exportFilter));
         $exportInfo->setSkipAttr($skipAttr);
         $exportInfo->setFileName($fileName);
         $exportInfo->setEntity($entity);
         $exportInfo->setFileFormat($fileFormat);
         $exportInfo->setContentType($writer->getContentType());
+        if ($locale) {
+            $exportInfo->setLocale($locale);
+        }
+        if ($fieldsEnclosure !== null) {
+            $exportInfo->setFieldsEnclosure($fieldsEnclosure);
+        }
 
         return $exportInfo;
     }
@@ -137,7 +151,7 @@ class ExportInfoFactory
      *
      * @param string $entity
      * @param string $fileFormat
-     * @param string $exportFilter
+     * @param array $exportFilter
      * @param array $skipAttr
      * @param string $contentType
      * @return \Magento\ImportExport\Model\Export\AbstractEntity|AbstractEntity

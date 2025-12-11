@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -53,7 +53,7 @@ class ExtensionAttributesInterfaceGeneratorTest extends TestCase
             );
         $typeProcessorMock = $this->getMockBuilder(TypeProcessor::class)
             ->disableOriginalConstructor()
-            ->setMethods(null)
+            ->addMethods([])
             ->getMock();
 
         /** @var ExtensionAttributesInterfaceGenerator $model */

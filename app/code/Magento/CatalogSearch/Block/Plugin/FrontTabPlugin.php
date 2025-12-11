@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\CatalogSearch\Block\Plugin;
 
@@ -45,6 +45,7 @@ class FrontTabPlugin
             [
                 'name' => 'search_weight',
                 'label' => __('Search Weight'),
+                'note' => __('10 is the highest priority/heaviest weighting.'),
                 'values' => $this->weightSource->getOptions()
             ],
             'is_searchable'

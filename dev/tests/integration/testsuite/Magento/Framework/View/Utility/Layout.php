@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 
 /**
@@ -76,7 +76,7 @@ class Layout
     public function getLayoutFromFixture($layoutUpdatesFile, array $args = [])
     {
         $layout = $this->_testCase->getMockBuilder(\Magento\Framework\View\Layout::class)
-            ->setMethods(['getUpdate'])
+            ->onlyMethods(['getUpdate'])
             ->setConstructorArgs($args)
             ->getMock();
         $layoutUpdate = $this->getLayoutUpdateFromFixture($layoutUpdatesFile);

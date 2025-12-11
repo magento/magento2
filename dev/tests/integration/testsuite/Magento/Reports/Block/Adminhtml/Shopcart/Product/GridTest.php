@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Reports\Block\Adminhtml\Shopcart\Product;
 
@@ -22,7 +22,6 @@ class GridTest extends \Magento\Reports\Block\Adminhtml\Shopcart\GridTestAbstrac
      */
     public function testGridContent()
     {
-        $this->markTestSkipped('MC-40448: Product\GridTest failure on 2.4-develop');
         /** @var \Magento\Framework\View\LayoutInterface $layout */
         $layout = Bootstrap::getObjectManager()->get(\Magento\Framework\View\LayoutInterface::class);
         /** @var Grid $grid */

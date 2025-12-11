@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -40,7 +40,7 @@ class TruncateFilterTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expectedRemainder, $result->getRemainder());
     }
 
-    public function truncateDataProvider() : array
+    public static function truncateDataProvider() : array
     {
         return [
             '1' => [

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Framework\Data\Form\Element;
@@ -48,7 +48,7 @@ class DateTest extends \PHPUnit\Framework\TestCase
      *
      * @return array
      */
-    public function getValueDataProvider(): array
+    public static function getValueDataProvider(): array
     {
         $stringDates = ['2020-05-18 12:08:16', '1920-10-25 10:10:10', '2122-01-11 10:30:00'];
         $testTimestamps = [strtotime($stringDates[0]), strtotime($stringDates[1]), strtotime($stringDates[2])];

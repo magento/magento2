@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 
 declare(strict_types=1);
@@ -17,9 +17,16 @@ use Magento\Catalog\Model\Product\Url;
 use Magento\Catalog\Model\ResourceModel\Product\Compare\Item\Collection;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Framework\UrlInterface;
+use Magento\Store\Model\StoreManagerInterface;
+use Magento\Store\Model\Website;
+use Magento\Store\Model\Store;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class CompareProductsTest extends TestCase
 {
     /**
@@ -53,6 +60,21 @@ class CompareProductsTest extends TestCase
     private $scopeConfigMock;
 
     /**
+     * @var StoreManagerInterface
+     */
+    private $storeManagerMock;
+
+    /**
+     * @var Store|MockObject
+     */
+    private $storeMock;
+
+    /**
+     * @var UrlInterface|MockObject
+     */
+    private $urlBuilder;
+
+    /**
      * @var array
      */
     private $productValueMap = [
@@ -76,6 +98,21 @@ class CompareProductsTest extends TestCase
         $this->scopeConfigMock = $this->getMockBuilder(ScopeConfigInterface::class)
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
+        $this->urlBuilder = $this->getMockBuilder(UrlInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->storeManagerMock = $this->getMockBuilder(
+            StoreManagerInterface::class
+        )->disableOriginalConstructor()
+            ->getMockForAbstractClass();
+
+        $this->storeMock= $this->getMockBuilder(
+            Store::class
+        )->onlyMethods(
+            ['getId']
+        )->disableOriginalConstructor()
+            ->getMock();
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
 
@@ -85,7 +122,9 @@ class CompareProductsTest extends TestCase
                 'helper' => $this->helperMock,
                 'productUrl' => $this->productUrlMock,
                 'outputHelper' => $this->outputHelperMock,
-                'scopeConfig'  => $this->scopeConfigMock
+                'scopeConfig'  => $this->scopeConfigMock,
+                'storeManager' => $this->storeManagerMock,
+                'urlBuilder' => $this->urlBuilder
             ]
         );
     }
@@ -193,10 +232,12 @@ class CompareProductsTest extends TestCase
             ->method('getItemCollection')
             ->willReturn($itemCollectionMock);
 
-        $this->helperMock->expects($this->once())
-            ->method('getListUrl')
+        $this->urlBuilder->expects($this->once())
+            ->method('getUrl')
             ->willReturn('http://list.url');
 
+        $this->storeManagerMock->expects($this->any())->method('getStore')->willReturn($this->storeMock);
+        $this->storeMock->expects($this->any())->method('getId')->willReturn(1);
         $this->assertEquals(
             [
                 'count' => $count,
@@ -224,7 +265,8 @@ class CompareProductsTest extends TestCase
                         'remove_url' => 'http://remove.url/3',
                         'productScope' => null
                     ]
-                ]
+                ],
+                'storeId' => 1
             ],
             $this->model->getSectionData()
         );
@@ -241,16 +283,20 @@ class CompareProductsTest extends TestCase
         $this->helperMock->expects($this->never())
             ->method('getItemCollection');
 
-        $this->helperMock->expects($this->once())
-            ->method('getListUrl')
+        $this->urlBuilder->expects($this->once())
+            ->method('getUrl')
             ->willReturn('http://list.url');
+
+        $this->storeManagerMock->expects($this->any())->method('getStore')->willReturn($this->storeMock);
+        $this->storeMock->expects($this->any())->method('getId')->willReturn(1);
 
         $this->assertEquals(
             [
                 'count' => $count,
                 'countCaption' =>  __('%1 items', $count),
                 'listUrl' => 'http://list.url',
-                'items' => []
+                'items' => [],
+                'storeId' => 1
             ],
             $this->model->getSectionData()
         );
@@ -263,6 +309,9 @@ class CompareProductsTest extends TestCase
         $this->helperMock->expects($this->once())
             ->method('getItemCount')
             ->willReturn($count);
+
+        $this->storeManagerMock->expects($this->any())->method('getStore')->willReturn($this->storeMock);
+        $this->storeMock->expects($this->any())->method('getId')->willReturn(1);
 
         $items = $this->prepareProductsWithCorrespondingMocks(
             [
@@ -279,8 +328,8 @@ class CompareProductsTest extends TestCase
             ->method('getItemCollection')
             ->willReturn($itemCollectionMock);
 
-        $this->helperMock->expects($this->once())
-            ->method('getListUrl')
+        $this->urlBuilder->expects($this->once())
+            ->method('getUrl')
             ->willReturn('http://list.url');
 
         $this->assertEquals(
@@ -296,7 +345,8 @@ class CompareProductsTest extends TestCase
                         'remove_url' => 'http://remove.url/12345',
                         'productScope' => null
                     ]
-                ]
+                ],
+                'storeId' => 1
             ],
             $this->model->getSectionData()
         );

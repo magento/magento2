@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -78,12 +78,12 @@ class GrandTotalDetailsPluginTest extends TestCase
             GrandTotalDetailsInterfaceFactory::class
         )
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
 
         $this->ratesFactoryMock = $this->getMockBuilder(GrandTotalRatesInterfaceFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
 
         $this->taxConfigMock = $this->getMockBuilder(Config::class)
@@ -228,7 +228,7 @@ class GrandTotalDetailsPluginTest extends TestCase
 
         $extensionAttributeMock = $this->getMockBuilder(
             TotalSegmentExtensionInterface::class
-        )->setMethods(
+        )->addMethods(
             [
                 'setTaxGrandtotalDetails',
 

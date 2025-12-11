@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -11,12 +11,13 @@ use Magento\Bundle\Model\OptionFactory;
 use Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\GraphQl\Query\Uid;
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * Collection to fetch bundle option data at resolution time.
  */
-class Collection
+class Collection implements ResetAfterRequestInterface
 {
     /**
      * Option type name
@@ -61,7 +62,7 @@ class Collection
         OptionFactory $bundleOptionFactory,
         JoinProcessorInterface $extensionAttributesJoinProcessor,
         StoreManagerInterface $storeManager,
-        Uid $uidEncoder = null
+        ?Uid $uidEncoder = null
     ) {
         $this->bundleOptionFactory = $bundleOptionFactory;
         $this->extensionAttributesJoinProcessor = $extensionAttributesJoinProcessor;
@@ -112,13 +113,15 @@ class Collection
 
         $productTable = $optionsCollection->getTable('catalog_product_entity');
         $linkField = $optionsCollection->getConnection()->getAutoIncrementField($productTable);
+        $entityIds = array_column($this->skuMap, 'entity_id');
+
         $optionsCollection->getSelect()->join(
             ['cpe' => $productTable],
             'cpe.' . $linkField . ' = main_table.parent_id',
             []
         )->where(
             "cpe.entity_id IN (?)",
-            $this->skuMap
+            $entityIds
         );
         $optionsCollection->setPositionOrder();
 
@@ -142,5 +145,14 @@ class Collection
         }
 
         return $this->optionMap;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        $this->optionMap = [];
+        $this->skuMap = [];
     }
 }

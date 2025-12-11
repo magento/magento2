@@ -1,13 +1,11 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
  */
 
 /**
  * Event regex observer object
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\Framework\Event\Observer;
 
@@ -21,6 +19,6 @@ class Regex extends \Magento\Framework\Event\Observer
      */
     public function isValidFor(\Magento\Framework\Event $event)
     {
-        return preg_match($this->getEventRegex(), $event->getName());
+        return $event->getName() !== null ? preg_match($this->getEventRegex(), $event->getName()) : false;
     }
 }

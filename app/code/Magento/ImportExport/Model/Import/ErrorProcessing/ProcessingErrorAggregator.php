@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\ImportExport\Model\Import\ErrorProcessing;
@@ -25,6 +25,11 @@ class ProcessingErrorAggregator implements ProcessingErrorAggregatorInterface
      * @var ProcessingError[]
      */
     protected $items = [];
+
+    /**
+     * @var ProcessingError[]
+     */
+    private $itemsByRowColumnAndCode = [];
 
     /**
      * @var int[]
@@ -87,13 +92,13 @@ class ProcessingErrorAggregator implements ProcessingErrorAggregatorInterface
             $this->processInvalidRow($rowNumber);
         }
         $errorMessage = $this->getErrorMessage($errorCode, $errorMessage, $columnName);
-
         /** @var ProcessingError $newError */
         $newError = $this->errorFactory->create();
         $newError->init($errorCode, $errorLevel, $rowNumber, $columnName, $errorMessage, $errorDescription);
         $this->items['rows'][$rowNumber][] = $newError;
         $this->items['codes'][$errorCode][] = $newError;
         $this->items['messages'][$errorMessage][] = $newError;
+        $this->itemsByRowColumnAndCode[$rowNumber][$columnName][$errorCode] = $newError;
         return $this;
     }
 
@@ -356,7 +361,7 @@ class ProcessingErrorAggregator implements ProcessingErrorAggregatorInterface
         $this->errorStatistics = [];
         $this->invalidRows = [];
         $this->skippedRows = [];
-
+        $this->itemsByRowColumnAndCode = [];
         return $this;
     }
 
@@ -370,13 +375,7 @@ class ProcessingErrorAggregator implements ProcessingErrorAggregatorInterface
      */
     protected function isErrorAlreadyAdded($rowNum, $errorCode, $columnName = null)
     {
-        $errors = $this->getErrorsByCode([$errorCode]);
-        foreach ($errors as $error) {
-            if ($rowNum == $error->getRowNumber() && $columnName == $error->getColumnName()) {
-                return true;
-            }
-        }
-        return false;
+        return isset($this->itemsByRowColumnAndCode[$rowNum][$columnName][$errorCode]);
     }
 
     /**

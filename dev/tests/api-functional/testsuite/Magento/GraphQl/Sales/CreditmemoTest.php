@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -477,7 +477,7 @@ class CreditmemoTest extends GraphQlAbstract
      * @param string $orderNumber
      * @param int|null $qty
      */
-    private function prepareInvoice(string $orderNumber, int $qty = null)
+    private function prepareInvoice(string $orderNumber, ?int $qty = null)
     {
         /** @var \Magento\Sales\Model\Order $order */
         $order = Bootstrap::getObjectManager()

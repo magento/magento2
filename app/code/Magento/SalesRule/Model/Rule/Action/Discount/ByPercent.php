@@ -1,13 +1,15 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\SalesRule\Model\Rule\Action\Discount;
 
 class ByPercent extends AbstractDiscount
 {
     /**
+     * Calculate discount by percent
+     *
      * @param \Magento\SalesRule\Model\Rule $rule
      * @param \Magento\Quote\Model\Quote\Item\AbstractItem $item
      * @param float $qty
@@ -22,6 +24,8 @@ class ByPercent extends AbstractDiscount
     }
 
     /**
+     * Fix quantity depending on discount step
+     *
      * @param float $qty
      * @param \Magento\SalesRule\Model\Rule $rule
      * @return float
@@ -37,6 +41,8 @@ class ByPercent extends AbstractDiscount
     }
 
     /**
+     * Calculate discount by rule percent
+     *
      * @param \Magento\SalesRule\Model\Rule $rule
      * @param \Magento\Quote\Model\Quote\Item\AbstractItem $item
      * @param float $qty
@@ -54,14 +60,18 @@ class ByPercent extends AbstractDiscount
         $baseItemOriginalPrice = $this->validator->getItemBaseOriginalPrice($item);
 
         $_rulePct = $rulePercent / 100;
-        $discountData->setAmount(($qty * $itemPrice - $item->getDiscountAmount()) * $_rulePct);
-        $discountData->setBaseAmount(($qty * $baseItemPrice - $item->getBaseDiscountAmount()) * $_rulePct);
-        $discountData->setOriginalAmount(($qty * $itemOriginalPrice - $item->getDiscountAmount()) * $_rulePct);
-        $discountData->setBaseOriginalAmount(
-            ($qty * $baseItemOriginalPrice - $item->getBaseDiscountAmount()) * $_rulePct
-        );
 
-        if (!$rule->getDiscountQty() || $rule->getDiscountQty() > $qty) {
+        $amount = ($qty * $itemPrice - $item->getDiscountAmount()) * $_rulePct;
+        $baseAmount = ($qty * $baseItemPrice - $item->getBaseDiscountAmount()) * $_rulePct;
+        $originalAmount = ($qty * $itemOriginalPrice - $item->getDiscountAmount()) * $_rulePct;
+        $baseOriginalAmount = ($qty * $baseItemOriginalPrice - $item->getBaseDiscountAmount()) * $_rulePct;
+
+        $discountData->setAmount(round(floatval((string) $amount), 2));
+        $discountData->setBaseAmount(round(floatval((string) $baseAmount), 2));
+        $discountData->setOriginalAmount(round(floatval((string) $originalAmount), 2));
+        $discountData->setBaseOriginalAmount(round(floatval((string) $baseOriginalAmount), 2));
+
+        if (!$rule->getDiscountQty() || $rule->getDiscountQty() >= $qty) {
             $discountPercent = min(100, $item->getDiscountPercent() + $rulePercent);
             $item->setDiscountPercent($discountPercent);
         }

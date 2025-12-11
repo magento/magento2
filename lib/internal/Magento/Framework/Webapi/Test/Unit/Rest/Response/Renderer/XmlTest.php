@@ -2,8 +2,8 @@
 /**
  * Test XML Renderer for REST.
  *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -59,7 +59,7 @@ class XmlTest extends TestCase
      *
      * @return array
      */
-    public function providerXmlRender()
+    public static function providerXmlRender()
     {
         return [
             // Each array consists of data to render, expected XML and assert message

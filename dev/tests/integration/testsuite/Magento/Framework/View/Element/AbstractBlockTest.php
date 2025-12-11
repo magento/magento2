@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework\View\Element;
 
@@ -26,6 +26,9 @@ class AbstractBlockTest extends \PHPUnit\Framework\TestCase
      */
     protected $_layout = null;
 
+    /**
+     * @var array
+     */
     protected static $_mocks = [];
 
     /**
@@ -513,7 +516,7 @@ class AbstractBlockTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function escapeHtmlDataProvider()
+    public static function escapeHtmlDataProvider()
     {
         return [
             'array data' => [
@@ -573,7 +576,7 @@ class AbstractBlockTest extends \PHPUnit\Framework\TestCase
         $this->assertNotEquals($name, $key);
 
         $block->setCacheKey('key');
-        $this->assertEquals(AbstractBlock::CACHE_KEY_PREFIX . 'key', $block->getCacheKey());
+        $this->assertEquals(AbstractBlock::CUSTOM_CACHE_KEY_PREFIX . 'key', $block->getCacheKey());
     }
 
     /**

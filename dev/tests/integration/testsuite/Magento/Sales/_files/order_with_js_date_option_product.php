@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -36,15 +36,14 @@ $optionValuesByType = [
         'minute' => '15',
         'day_part' => 'am',
         'date_internal' => '2020-09-30 02:15:00'
-    ],
-    'drop_down' => '3-1-select',
-    'radio' => '4-1-radio',
+    ]
 ];
 
 $requestInfo = ['options' => []];
 $productOptions = $product->getOptions();
 foreach ($productOptions as $option) {
-    $requestInfo['options'][$option->getOptionId()] = $optionValuesByType[$option->getType()];
+    $requestInfo['options'][$option->getOptionId()] = $optionValuesByType[$option->getType()]
+        ?? current($option->getValues())->getOptionTypeId();
 }
 
 /** @var \Magento\Sales\Model\Order\Item $orderItem */

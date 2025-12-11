@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -34,7 +34,7 @@ class SetupInfoTest extends TestCase
     /**
      * @return array
      */
-    public function constructorExceptionsDataProvider()
+    public static function constructorExceptionsDataProvider()
     {
         $docRootErr = 'DOCUMENT_ROOT variable is unavailable.';
         $projectRootErr = 'Project root cannot be automatically detected.';
@@ -60,7 +60,7 @@ class SetupInfoTest extends TestCase
     /**
      * @return array
      */
-    public function getUrlDataProvider()
+    public static function getUrlDataProvider()
     {
         return [
             [
@@ -92,7 +92,7 @@ class SetupInfoTest extends TestCase
     /**
      * @return array
      */
-    public function getProjectUrlDataProvider()
+    public static function getProjectUrlDataProvider()
     {
         return [
             [self::$fixture, ''],
@@ -124,7 +124,7 @@ class SetupInfoTest extends TestCase
     /**
      * @return array
      */
-    public function getDirDataProvider()
+    public static function getDirDataProvider()
     {
         return [
             [
@@ -159,7 +159,7 @@ class SetupInfoTest extends TestCase
     /**
      * @return array
      */
-    public function isAvailableDataProvider()
+    public static function isAvailableDataProvider()
     {
         $server = ['DOCUMENT_ROOT' => __DIR__, 'SCRIPT_FILENAME' => __FILE__];
         return [

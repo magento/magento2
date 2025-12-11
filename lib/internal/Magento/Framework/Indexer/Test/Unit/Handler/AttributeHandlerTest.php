@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -35,7 +35,7 @@ class AttributeHandlerTest extends TestCase
     {
         $this->source = $this->getMockBuilder(SourceProviderInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['joinAttribute'])
+            ->addMethods(['joinAttribute'])
             ->getMockForAbstractClass();
 
         $objectManager = new ObjectManager($this);

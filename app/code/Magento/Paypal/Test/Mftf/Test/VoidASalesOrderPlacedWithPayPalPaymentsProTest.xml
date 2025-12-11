@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright 2024 Adobe
+  * All Rights Reserved.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="VoidASalesOrderPlacedWithPayPalPaymentsProTest">
+        <annotations>
+            <features value="PayPal"/>
+            <stories value="Paypal Payments Pro"/>
+            <title value="Void a Sales Order placed with PayPal Payments Pro"/>
+            <description value="Void a Sales Order placed with PayPal Payments Pro and validate message in trasaction tab from backend "/>
+            <severity value="MAJOR"/>
+            <testCaseId value="AC-5461"/>
+            <group value="paypalPaymentsPro"/>
+            <group value="3rd_party_integration"/>
+            <group value="pr_exclude"/>
+        </annotations>
+        <before>
+            <createData entity="SimpleProduct" stepKey="createSimpleProduct"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <!-- Go to product 1 and add it to cart -->
+            <actionGroup ref="StorefrontOpenProductEntityPageActionGroup" stepKey="goToProductOnStorefront">
+                <argument name="product" value="$$createSimpleProduct$$"/>
+            </actionGroup>
+            <actionGroup ref="AddToCartFromStorefrontProductPageActionGroup" stepKey="addToCartFromStorefrontProductPage">
+                <argument name="productName" value="$createSimpleProduct.name$"/>
+            </actionGroup>
+            <actionGroup ref="StorefrontCartPageOpenActionGroup" stepKey="goToCheckoutCartPage"/>
+            <actionGroup ref="StorefrontClickProceedToCheckoutActionGroup" stepKey="clickProceedToCheckout"/>
+            <!--Place order-->
+            <actionGroup ref="GuestCheckoutFillingShippingSectionActionGroup" stepKey="guestCheckoutFillingShipping">
+                <argument name="shippingMethod" value="Flat Rate"/>
+            </actionGroup>
+            <actionGroup ref="StorefrontCheckoutSelectPaypalPaymentMethodActionGroup" stepKey="selectPaypalPaymentMethod"/>
+            <waitForPageLoad stepKey="waitForLoadingMaskAfterPaymentMethodSelection"/>
+            <actionGroup ref="StorefrontPaypalFillCardDataActionGroup" stepKey="fillCardDataPaypal">
+                <argument name="cardData" value="VisaDefaultCard"/>
+            </actionGroup>
+            <actionGroup ref="ClickPlaceOrderActionGroup" stepKey="placeOrder"/>
+            <waitForText selector="{{CheckoutSuccessMainSection.successTitle}}" userInput="Thank you for your purchase!" stepKey="waitForLoadSuccessPage"/>
+            <waitForText selector="{{CheckoutSuccessMainSection.success}}" userInput="We'll email you an order confirmation with details and tracking info." stepKey="seeSuccessMessage"/>
+            <waitForElementVisible selector="{{CheckoutSuccessMainSection.orderNumber}}" stepKey="waitForOrderNumber"/>
+        </before>
+        <after>
+            <actionGroup ref="AdminOrdersPageOpenActionGroup" stepKey="navigateToSalesOrderPage"/>
+            <actionGroup ref="AdminClearFiltersActionGroup" stepKey="clickOnRemoveButtonToUnFiltersIfPresent"/>
+            <deleteData createDataKey="createSimpleProduct" stepKey="deleteSimpleProduct"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+        <!--Open order in sales -->
+        <grabTextFrom selector="{{CheckoutSuccessMainSection.orderNumber}}" stepKey="grabOrderNumber"/>
+        <actionGroup ref="OpenOrderByIdActionGroup" stepKey="openOrder">
+            <argument name="orderId" value="{$grabOrderNumber}"/>
+        </actionGroup>
+        <actionGroup ref="AdminAssertTotalsOnOrderViewPageActionGroup" stepKey="checkSubtotal">
+            <argument name="subtotal" value="$123.00"/>
+            <argument name="shippingAndHandling" value="$5.00"/>
+            <argument name="grandTotal" value="$128.00"/>
+        </actionGroup>
+        <!--Void created order -->
+        <actionGroup ref="AdminVoidPendingOrderActionGroup" stepKey="voidPendingOrder"/>
+        <actionGroup ref="AdminOrderViewCheckStatusActionGroup" stepKey="checkOrderStatus">
+            <argument name="status" value="Processing"/>
+        </actionGroup>
+        <!--Grab transaction ids -->
+        <waitForElementVisible selector="{{AdminOrderDetailsInformationSection.paymentInformationField('Last Transaction ID')}}" stepKey="waitForGrabLastTransactionID"/>
+        <grabTextFrom selector="{{AdminOrderDetailsInformationSection.paymentInformationField('Last Transaction ID')}}" stepKey="grabLastTransactionID"/>
+        <waitForElementVisible selector="{{AdminOrderNotesSection.voidAuthorizationNotes('$grabLastTransactionID')}}" stepKey="waitForVoidAuthorizationNotesWithID"/>
+        <grabTextFrom selector="{{AdminOrderNotesSection.voidAuthorizationNotes('$grabLastTransactionID')}}" stepKey="getVoidAuthorizationNotesWithID"/>
+        <actionGroup ref="AdminOpenOrderCommentsHistoryActionGroup" stepKey="clickOnCommentsHistoryTab"/>
+        <waitForText selector="{{AdminOrderCommentsTabSection.authorizationNotes('Voided')}}" userInput="$getVoidAuthorizationNotesWithID" stepKey="seeOrderHistoryNotes"/>
+        <!-- Check the last transaction of the order and validate the details for Void and Authorization-->
+        <actionGroup ref="AdminAssertTransactionIdOfVoidOrderActionGroup" stepKey="validateVoidTransaction"/>
+        <waitForText selector="{{AdminTransactionsGridSection.transactionData('Is Closed')}}" userInput="Yes" stepKey="seeIfClosedHeaderIsSetAsYesForVoid"/>
+        <waitForElementClickable selector="{{AdminProductFormActionSection.backButton}}" stepKey="waitForBackButtonToBeClicked"/>
+        <click selector="{{AdminProductFormActionSection.backButton}}" stepKey="clickBackButton"/>
+        <actionGroup ref="AdminViewAuthorizationTransactionsInOrderActionGroup" stepKey="validateAuthTransaction"/>
+        <waitForText selector="{{AdminTransactionsGridSection.transactionData('Is Closed')}}" userInput="Yes" stepKey="seeIfClosedHeaderIsSetAsYesForAuthorization"/>
+    </test>
+</tests>

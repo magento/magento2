@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -21,6 +21,9 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHe
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class MenuTest extends TestCase
 {
     /**
@@ -50,29 +53,17 @@ class MenuTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->activeItemMock = $this->getMockBuilder(Item::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $urlMock = $this->getMockBuilder(UrlInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-        $iteratorFactoryMock = $this->getMockBuilder(IteratorFactory::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $authSessionMock = $this->getMockBuilder(Session::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->menuConfigMock = $this->getMockBuilder(Config::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $localeResolverMock = $this->getMockBuilder(ResolverInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-        $anchorRendererMock = $this->getMockBuilder(AnchorRenderer::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->activeItemMock = $this->createMock(Item::class);
+        $urlMock = $this->createMock(UrlInterface::class);
+        $iteratorFactoryMock = $this->createMock(IteratorFactory::class);
+        $authSessionMock = $this->createMock(Session::class);
+        $this->menuConfigMock = $this->createMock(Config::class);
+        $localeResolverMock = $this->createMock(ResolverInterface::class);
+        $anchorRendererMock = $this->createMock(AnchorRenderer::class);
 
         $objectManagerHelper = new ObjectManagerHelper($this);
+        $objectManagerHelper->prepareObjectManager();
+
         $this->menu =  $objectManagerHelper->getObject(
             Menu::class,
             [
@@ -89,9 +80,7 @@ class MenuTest extends TestCase
 
     public function testGetActiveItemModelMenuIsNotNull()
     {
-        $this->menuModelMock = $this->getMockBuilder(MenuModel::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->menuModelMock = $this->createMock(MenuModel::class);
         $this->menu->setActive($this->activeItemMock);
         $this->menuConfigMock->expects($this->once())->method('getMenu')->willReturn($this->menuModelMock);
         $this->menuModelMock->expects($this->once())
@@ -103,9 +92,7 @@ class MenuTest extends TestCase
 
     public function testGetActiveItemModelMenuIsNull()
     {
-        $this->menuModelMock = $this->getMockBuilder(MenuModel::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->menuModelMock = $this->createMock(MenuModel::class);
         $this->menu->setActive(null);
         $this->menuConfigMock->expects($this->once())->method('getMenu')->willReturn($this->menuModelMock);
         $this->menuModelMock->expects($this->once())

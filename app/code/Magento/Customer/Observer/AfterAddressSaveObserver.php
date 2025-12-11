@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -34,7 +34,7 @@ class AfterAddressSaveObserver implements ObserverInterface
     /**
      * VAT ID validation processed flag code
      */
-    const VIV_PROCESSED_FLAG = 'viv_after_address_save_processed';
+    public const VIV_PROCESSED_FLAG = 'viv_after_address_save_processed';
 
     /**
      * @var HelperAddress
@@ -141,8 +141,7 @@ class AfterAddressSaveObserver implements ObserverInterface
             if ($customerAddress->getVatId() == ''
                 || !$this->_customerVat->isCountryInEU($customerAddress->getCountry())
             ) {
-                $defaultGroupId = $customer->getGroupId() ? $customer->getGroupId() :
-                    $this->_groupManagement->getDefaultGroup($customer->getStore())->getId();
+                $defaultGroupId = $this->_groupManagement->getDefaultGroup($customer->getStore())->getId();
                 if (!$customer->getDisableAutoGroupChange() && $customer->getGroupId() != $defaultGroupId) {
                     $customer->setGroupId($defaultGroupId);
                     $customer->save();
@@ -160,7 +159,10 @@ class AfterAddressSaveObserver implements ObserverInterface
                     $customer->getStore()
                 );
 
-                if (!$customer->getDisableAutoGroupChange() && $customer->getGroupId() != $newGroupId) {
+                if (!$customer->getDisableAutoGroupChange() &&
+                    $newGroupId !== null &&
+                    $customer->getGroupId() != $newGroupId
+                ) {
                     $customer->setGroupId($newGroupId);
                     $customer->save();
                     $this->customerSession->setCustomerGroupId($newGroupId);

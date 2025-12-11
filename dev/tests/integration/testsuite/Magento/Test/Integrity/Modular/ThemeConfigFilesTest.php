@@ -2,8 +2,8 @@
 /**
  * Tests that existing page_layouts.xml files are valid to schema individually and merged.
  *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Test\Integrity\Modular;
 
@@ -26,7 +26,7 @@ class ThemeConfigFilesTest extends \Magento\TestFramework\TestCase\AbstractConfi
      *
      * @return string
      */
-    protected function _getConfigFilePathGlob()
+    protected static function _getConfigFilePathGlob()
     {
         return 'view/*/layouts.xml';
     }
@@ -36,9 +36,9 @@ class ThemeConfigFilesTest extends \Magento\TestFramework\TestCase\AbstractConfi
      *
      * @return string
      */
-    protected function _getXsdPath()
+    protected static function _getXsdPath()
     {
-        return $this->componentRegistrar->getPath(ComponentRegistrar::LIBRARY, 'magento/framework')
+        return self::$componentRegistrar->getPath(ComponentRegistrar::LIBRARY, 'magento/framework')
             . '/View/PageLayout/etc/layouts.xsd';
     }
 }

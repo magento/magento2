@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -55,8 +55,8 @@ class Price extends Column
         PriceCurrencyInterface $priceFormatter,
         array $components = [],
         array $data = [],
-        Currency $currency = null,
-        StoreManagerInterface $storeManager = null
+        ?Currency $currency = null,
+        ?StoreManagerInterface $storeManager = null
     ) {
         $this->priceFormatter = $priceFormatter;
         $this->currency = $currency ?: ObjectManager::getInstance()
@@ -76,13 +76,13 @@ class Price extends Column
     {
         if (isset($dataSource['data']['items'])) {
             foreach ($dataSource['data']['items'] as & $item) {
-                $currencyCode = isset($item['base_currency_code']) ? $item['base_currency_code'] : null;
+                $currencyCode = $item['base_currency_code'] ?? null;
+
                 if (!$currencyCode) {
-                    $storeId = isset($item['store_id']) && (int)$item['store_id'] !== 0 ? $item['store_id'] :
+                    $itemStoreId = $item['store_id'] ?? '';
+                    $storeId = $itemStoreId && is_numeric($itemStoreId) ? $itemStoreId :
                         $this->context->getFilterParam('store_id', Store::DEFAULT_STORE_ID);
-                    $store = $this->storeManager->getStore(
-                        $storeId
-                    );
+                    $store = $this->storeManager->getStore($storeId);
                     $currencyCode = $store->getBaseCurrency()->getCurrencyCode();
                 }
                 $basePurchaseCurrency = $this->currency->load($currencyCode);

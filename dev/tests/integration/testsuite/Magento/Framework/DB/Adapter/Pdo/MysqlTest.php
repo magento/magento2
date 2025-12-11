@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2012 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework\DB\Adapter\Pdo;
 
@@ -280,16 +280,16 @@ class MysqlTest extends \PHPUnit\Framework\TestCase
         $adapter->dropTable($tableName);
     }
 
-    public function getAutoIncrementFieldDataProvider()
+    public static function getAutoIncrementFieldDataProvider()
     {
         return [
             'auto increment field' => [
-                'field options' => ['identity' => true, 'unsigned' => true, 'nullable' => false, 'primary' => true],
-                'expected result' => 'row_id',
+                'options' => ['identity' => true, 'unsigned' => true, 'nullable' => false, 'primary' => true],
+                'expected' => 'row_id',
             ],
             'non auto increment field' => [
-                'field options' => ['unsigned' => true, 'nullable' => false,],
-                'expected result' => false,
+                'options' => ['unsigned' => true, 'nullable' => false,],
+                'expected' => false,
             ]
         ];
     }

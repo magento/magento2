@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -49,7 +49,7 @@ class PluginTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->itemMock = $this->getMockForAbstractClass(ItemInterface::class);
+        $this->itemMock = $this->createMock(ItemInterface::class);
         $this->productMock = $this->createMock(Product::class);
         $this->typeInstanceMock = $this->createPartialMock(
             Configurable::class,

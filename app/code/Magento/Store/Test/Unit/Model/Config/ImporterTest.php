@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -107,15 +107,12 @@ class ImporterTest extends TestCase
 
         $this->processorFactoryMock->expects($this->exactly(3))
             ->method('create')
-            ->withConsecutive(
-                [ProcessorFactory::TYPE_CREATE],
-                [ProcessorFactory::TYPE_DELETE],
-                [ProcessorFactory::TYPE_UPDATE]
-            )->willReturnOnConsecutiveCalls(
-                $createProcessorMock,
-                $deleteProcessorMock,
-                $updateProcessorMock
-            );
+            ->willReturnCallback(fn($param) => match ([$param]) {
+                [ProcessorFactory::TYPE_CREATE] => $createProcessorMock,
+                [ProcessorFactory::TYPE_DELETE] => $deleteProcessorMock,
+                [ProcessorFactory::TYPE_UPDATE] => $updateProcessorMock
+            });
+
         $this->resourceMock->expects($this->once())
             ->method('beginTransaction');
         $createProcessorMock->expects($this->once())

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -140,10 +140,11 @@ class FilterProcessorTest extends TestCase
 
         $collectionMock->expects($this->exactly(2))
             ->method('addFieldToFilter')
-            ->withConsecutive(
-                [$resultOne],
-                [$resultTwo]
-            )->willReturnSelf();
+            ->willReturnCallback(function ($arg1) use ($resultOne, $resultTwo, $collectionMock) {
+                if ($arg1 == $resultOne || $arg1 == $resultTwo) {
+                    return $collectionMock;
+                }
+            });
 
         $model->process($searchCriteriaMock, $collectionMock);
     }

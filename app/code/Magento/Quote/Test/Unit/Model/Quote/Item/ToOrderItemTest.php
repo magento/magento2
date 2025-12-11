@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -56,7 +56,7 @@ class ToOrderItemTest extends TestCase
     protected $orderItemMock;
 
     /**
-     * @inheriDoc
+     * @inheritDoc
      */
     protected function setUp(): void
     {
@@ -97,11 +97,14 @@ class ToOrderItemTest extends TestCase
             ->willReturn(['option']);
         $this->objectCopyServiceMock
             ->method('getDataFromFieldset')
-            ->withConsecutive(
-                ['quote_convert_item', 'to_order_item', $this->quoteItemMock],
-                ['quote_convert_item', 'to_order_item_discount', $this->quoteItemMock]
-            )
-            ->willReturnOnConsecutiveCalls([], []);
+            ->willReturnCallback(function ($arg1, $arg2, $arg3) {
+                if ($arg1 === 'quote_convert_item' && $arg2 === 'to_order_item' && $arg3 == $this->quoteItemMock) {
+                    return [];
+                } elseif ($arg1 === 'quote_convert_item' && $arg2 === 'to_order_item_discount' &&
+                    $arg3 == $this->quoteItemMock) {
+                    return [];
+                }
+            });
         $this->orderItemFactoryMock->expects($this->once())
             ->method('create')
             ->willReturn($this->orderItemMock);

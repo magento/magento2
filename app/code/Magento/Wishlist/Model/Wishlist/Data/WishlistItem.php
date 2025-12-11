@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -9,6 +9,8 @@ namespace Magento\Wishlist\Model\Wishlist\Data;
 
 /**
  * DTO represents Wishlist Item data
+ *
+ * @api
  */
 class WishlistItem
 {
@@ -58,12 +60,12 @@ class WishlistItem
      */
     public function __construct(
         float $quantity,
-        string $sku = null,
-        string $parentSku = null,
-        int $id = null,
-        string $description = null,
-        array $selectedOptions = null,
-        array $enteredOptions = null
+        ?string $sku = null,
+        ?string $parentSku = null,
+        ?int $id = null,
+        ?string $description = null,
+        ?array $selectedOptions = null,
+        ?array $enteredOptions = null
     ) {
         $this->quantity = $quantity;
         $this->sku = $sku;

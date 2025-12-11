@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -25,6 +25,7 @@ class CategoryFilter implements ProductFilterInterface
         $value = trim($filters[self::NAME] ?? '');
         if ($value) {
             $collection->addCategoriesFilter(['in' => explode(',', $value)]);
+            $collection->setFlag(self::NAME . '_filter_applied');
         }
         return $collection;
     }

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Framework\Filesystem\Driver;
@@ -320,7 +320,7 @@ class File implements DriverInterface
         if (!$this->stateful) {
             clearstatcache();
         }
-        $globPattern = rtrim($path, '/') . '/' . ltrim($pattern, '/');
+        $globPattern = rtrim((string)$path, '/') . '/' . ltrim((string)$pattern, '/');
         $result = Glob::glob($globPattern, Glob::GLOB_BRACE);
         return is_array($result) ? $result : [];
     }
@@ -334,7 +334,7 @@ class File implements DriverInterface
      * @return bool
      * @throws FileSystemException
      */
-    public function rename($oldPath, $newPath, DriverInterface $targetDriver = null)
+    public function rename($oldPath, $newPath, ?DriverInterface $targetDriver = null)
     {
         $result = false;
         $targetDriver = $targetDriver ?: $this;
@@ -371,7 +371,7 @@ class File implements DriverInterface
      * @return bool
      * @throws FileSystemException
      */
-    public function copy($source, $destination, DriverInterface $targetDriver = null)
+    public function copy($source, $destination, ?DriverInterface $targetDriver = null)
     {
         $targetDriver = $targetDriver ?: $this;
         if (get_class($targetDriver) === get_class($this)) {
@@ -407,7 +407,7 @@ class File implements DriverInterface
      * @return bool
      * @throws FileSystemException
      */
-    public function symlink($source, $destination, DriverInterface $targetDriver = null)
+    public function symlink($source, $destination, ?DriverInterface $targetDriver = null)
     {
         $result = false;
         if ($targetDriver === null || get_class($targetDriver) == get_class($this)) {
@@ -440,11 +440,12 @@ class File implements DriverInterface
      */
     public function deleteFile($path)
     {
-        $result = @unlink($this->getScheme() . $path);
+        @unlink($this->getScheme() . $path);
         if ($this->stateful) {
             clearstatcache(true, $this->getScheme() . $path);
         }
-        if (!$result) {
+
+        if ($this->isFile($path)) {
             throw new FileSystemException(
                 new Phrase(
                     'The "%1" file can\'t be deleted. %2',
@@ -452,7 +453,7 @@ class File implements DriverInterface
                 )
             );
         }
-        return $result;
+        return true;
     }
 
     /**
@@ -819,6 +820,7 @@ class File implements DriverInterface
      */
     public function fileWrite($resource, $data)
     {
+        $data = $data !== null ? $data : '';
         $lenData = strlen($data);
         for ($result = 0; $result < $lenData; $result += $fwrite) {
             $fwrite = @fwrite($resource, substr($data, $result));
@@ -969,7 +971,7 @@ class File implements DriverInterface
         // basepath. so if the basepath starts at position 0 in the path, we
         // must not concatinate them again because path is already absolute.
         $path = $path !== null ? $path : '';
-        if ('' !== $basePath && strpos($path, $basePath) === 0) {
+        if ('' !== $basePath && strpos($path, (string)$basePath) === 0) {
             return $this->getScheme($scheme) . $path;
         }
 
@@ -986,7 +988,7 @@ class File implements DriverInterface
     public function getRelativePath($basePath, $path = null)
     {
         $path = $path !== null ? $this->fixSeparator($path) : '';
-        if (strpos($path, $basePath) === 0 || $basePath == $path . '/') {
+        if ($basePath === null || strpos($path, $basePath) === 0 || $basePath == $path . '/') {
             $result = substr($path, strlen($basePath));
         } else {
             $result = $path;

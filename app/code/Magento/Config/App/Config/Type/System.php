@@ -1,27 +1,28 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Config\App\Config\Type;
 
+use Magento\Config\App\Config\Type\System\Reader;
+use Magento\Framework\App\Cache\StateInterface;
+use Magento\Framework\App\Cache\Type\Config;
 use Magento\Framework\App\Config\ConfigSourceInterface;
 use Magento\Framework\App\Config\ConfigTypeInterface;
 use Magento\Framework\App\Config\Spi\PostProcessorInterface;
 use Magento\Framework\App\Config\Spi\PreProcessorInterface;
 use Magento\Framework\App\ObjectManager;
-use Magento\Config\App\Config\Type\System\Reader;
 use Magento\Framework\App\ScopeInterface;
 use Magento\Framework\Cache\FrontendInterface;
 use Magento\Framework\Cache\LockGuardedCacheLoader;
+use Magento\Framework\Encryption\Encryptor;
 use Magento\Framework\Lock\LockManagerInterface;
 use Magento\Framework\Serialize\SerializerInterface;
 use Magento\Store\Model\Config\Processor\Fallback;
-use Magento\Framework\Encryption\Encryptor;
 use Magento\Store\Model\ScopeInterface as StoreScope;
-use Magento\Framework\App\Cache\StateInterface;
-use Magento\Framework\App\Cache\Type\Config;
+use Psr\Log\LoggerInterface;
 
 /**
  * System configuration type
@@ -36,12 +37,12 @@ class System implements ConfigTypeInterface
     /**
      * Config cache tag.
      */
-    const CACHE_TAG = 'config_scopes';
+    public const CACHE_TAG = 'config_scopes';
 
     /**
      * System config type.
      */
-    const CONFIG_TYPE = 'system';
+    public const CONFIG_TYPE = 'system';
 
     /**
      * @var string
@@ -105,6 +106,10 @@ class System implements ConfigTypeInterface
     private $cacheState;
 
     /**
+     * @var LoggerInterface
+     */
+    private $logger;
+    /**
      * System constructor.
      * @param ConfigSourceInterface $source
      * @param PostProcessorInterface $postProcessor
@@ -119,6 +124,7 @@ class System implements ConfigTypeInterface
      * @param LockManagerInterface|null $locker
      * @param LockGuardedCacheLoader|null $lockQuery
      * @param StateInterface|null $cacheState
+     * @param LoggerInterface $logger
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -131,11 +137,12 @@ class System implements ConfigTypeInterface
         PreProcessorInterface $preProcessor,
         $cachingNestedLevel = 1,
         $configType = self::CONFIG_TYPE,
-        Reader $reader = null,
-        Encryptor $encryptor = null,
-        LockManagerInterface $locker = null,
-        LockGuardedCacheLoader $lockQuery = null,
-        StateInterface $cacheState = null
+        ?Reader $reader = null,
+        ?Encryptor $encryptor = null,
+        ?LockManagerInterface $locker = null,
+        ?LockGuardedCacheLoader $lockQuery = null,
+        ?StateInterface $cacheState = null,
+        ?LoggerInterface $logger = null
     ) {
         $this->postProcessor = $postProcessor;
         $this->cache = $cache;
@@ -148,6 +155,8 @@ class System implements ConfigTypeInterface
             ?: ObjectManager::getInstance()->get(LockGuardedCacheLoader::class);
         $this->cacheState = $cacheState
             ?: ObjectManager::getInstance()->get(StateInterface::class);
+        $this->logger = $logger
+            ?: ObjectManager::getInstance()->get(LoggerInterface::class);
     }
 
     /**
@@ -173,8 +182,7 @@ class System implements ConfigTypeInterface
     public function get($path = '')
     {
         if ($path === '') {
-            $this->data = array_replace_recursive($this->loadAllData(), $this->data);
-
+            $this->data = $this->loadAllData();
             return $this->data;
         }
 
@@ -193,8 +201,7 @@ class System implements ConfigTypeInterface
 
         if (count($pathParts) === 1 && $pathParts[0] !== ScopeInterface::SCOPE_DEFAULT) {
             if (!isset($this->data[$pathParts[0]])) {
-                $data = $this->readData();
-                $this->data = array_replace_recursive($data, $this->data);
+                $this->readData();
             }
 
             return $this->data[$pathParts[0]];
@@ -204,7 +211,8 @@ class System implements ConfigTypeInterface
 
         if ($scopeType === ScopeInterface::SCOPE_DEFAULT) {
             if (!isset($this->data[$scopeType])) {
-                $this->data = array_replace_recursive($this->loadDefaultScopeData($scopeType), $this->data);
+                $scopeData = $this->loadDefaultScopeData() ?? [];
+                $this->setDataByScopeType($scopeType, $scopeData);
             }
 
             return $this->getDataByPathParts($this->data[$scopeType], $pathParts);
@@ -213,11 +221,8 @@ class System implements ConfigTypeInterface
         $scopeId = array_shift($pathParts);
 
         if (!isset($this->data[$scopeType][$scopeId])) {
-            $scopeData = $this->loadScopeData($scopeType, $scopeId);
-
-            if (!isset($this->data[$scopeType][$scopeId])) {
-                $this->data = array_replace_recursive($scopeData, $this->data);
-            }
+            $scopeData = $this->loadScopeData($scopeType, $scopeId) ?? [];
+            $this->setDataByScopeId($scopeType, $scopeId, $scopeData);
         }
 
         return isset($this->data[$scopeType][$scopeId])
@@ -256,20 +261,25 @@ class System implements ConfigTypeInterface
     /**
      * Load configuration data for default scope.
      *
-     * @param string $scopeType
      * @return array
      */
-    private function loadDefaultScopeData($scopeType)
+    private function loadDefaultScopeData()
     {
         if (!$this->cacheState->isEnabled(Config::TYPE_IDENTIFIER)) {
             return $this->readData();
         }
 
-        $loadAction = function () use ($scopeType) {
+        $loadAction = function () {
+            $scopeType = ScopeInterface::SCOPE_DEFAULT;
             $cachedData = $this->cache->load($this->configType . '_' . $scopeType);
             $scopeData = false;
             if ($cachedData !== false) {
-                $scopeData = [$scopeType => $this->serializer->unserialize($this->encryptor->decrypt($cachedData))];
+                try {
+                    $scopeData = [$scopeType => $this->serializer->unserialize($this->encryptor->decrypt($cachedData))];
+                } catch (\InvalidArgumentException $e) {
+                    $this->logger->warning($e->getMessage());
+                    $scopeData = false;
+                }
             }
             return $scopeData;
         };
@@ -296,11 +306,13 @@ class System implements ConfigTypeInterface
         }
 
         $loadAction = function () use ($scopeType, $scopeId) {
+            /* Note: configType . '_scopes' needs to be loaded first to avoid race condition where cache finishes
+               saving after configType . '_' . $scopeType . '_' . $scopeId but before configType . '_scopes'. */
+            $cachedScopeData = $this->cache->load($this->configType . '_scopes');
             $cachedData = $this->cache->load($this->configType . '_' . $scopeType . '_' . $scopeId);
             $scopeData = false;
             if ($cachedData === false) {
                 if ($this->availableDataScopes === null) {
-                    $cachedScopeData = $this->cache->load($this->configType . '_scopes');
                     if ($cachedScopeData !== false) {
                         $serializedCachedData = $this->encryptor->decrypt($cachedScopeData);
                         $this->availableDataScopes = $this->serializer->unserialize($serializedCachedData);
@@ -323,6 +335,35 @@ class System implements ConfigTypeInterface
             \Closure::fromCallable([$this, 'readData']),
             \Closure::fromCallable([$this, 'cacheData'])
         );
+    }
+
+    /**
+     * Sets data according to scope type.
+     *
+     * @param string|null $scopeType
+     * @param array $scopeData
+     * @return void
+     */
+    private function setDataByScopeType(?string $scopeType, array $scopeData): void
+    {
+        if (!isset($this->data[$scopeType]) && isset($scopeData[$scopeType])) {
+            $this->data[$scopeType] = $scopeData[$scopeType];
+        }
+    }
+
+    /**
+     * Sets data according to scope type and id.
+     *
+     * @param string|null $scopeType
+     * @param string|null $scopeId
+     * @param array $scopeData
+     * @return void
+     */
+    private function setDataByScopeId(?string $scopeType, ?string $scopeId, array $scopeData): void
+    {
+        if (!isset($this->data[$scopeType][$scopeId]) && isset($scopeData[$scopeType][$scopeId])) {
+            $this->data[$scopeType][$scopeId] = $scopeData[$scopeType][$scopeId];
+        }
     }
 
     /**
@@ -412,18 +453,113 @@ class System implements ConfigTypeInterface
      */
     public function clean()
     {
-        $this->data = [];
         $cleanAction = function () {
-            $this->cache->clean(\Zend_Cache::CLEANING_MODE_MATCHING_TAG, [self::CACHE_TAG]);
+            $this->cacheData($this->readData()); // Note: If cache is enabled, pre-load the new config data.
         };
-
+        $this->data = [];
         if (!$this->cacheState->isEnabled(Config::TYPE_IDENTIFIER)) {
-            return $cleanAction();
+            // Note: If cache is disabled, we still clean cache in case it will be enabled later
+            $this->cache->clean(\Zend_Cache::CLEANING_MODE_MATCHING_TAG, [self::CACHE_TAG]);
+            return;
         }
+        $this->lockQuery->lockedCleanData(self::$lockName, $cleanAction);
+    }
 
-        $this->lockQuery->lockedCleanData(
-            self::$lockName,
-            $cleanAction
-        );
+    /**
+     * Prepares data for cache by serializing and encrypting them
+     *
+     * Prepares data per scope to avoid reading data for all scopes on every request
+     *
+     * @param array $data
+     * @return array
+     */
+    private function prepareDataForCache(array $data) :array
+    {
+        $dataToSave = [];
+        $dataToSave[] = [
+            $this->encryptor->encryptWithFastestAvailableAlgorithm($this->serializer->serialize($data)),
+            $this->configType,
+            [System::CACHE_TAG]
+        ];
+        $dataToSave[] = [
+            $this->encryptor->encryptWithFastestAvailableAlgorithm($this->serializer->serialize($data['default'])),
+            $this->configType . '_default',
+            [System::CACHE_TAG]
+        ];
+        $scopes = [];
+        foreach ([StoreScope::SCOPE_WEBSITES, StoreScope::SCOPE_STORES] as $curScopeType) {
+            foreach ($data[$curScopeType] ?? [] as $curScopeId => $curScopeData) {
+                $scopes[$curScopeType][$curScopeId] = 1;
+                $dataToSave[] = [
+                    $this->encryptor->encryptWithFastestAvailableAlgorithm($this->serializer->serialize($curScopeData)),
+                    $this->configType . '_' . $curScopeType . '_' . $curScopeId,
+                    [System::CACHE_TAG]
+                ];
+            }
+        }
+        $dataToSave[] = [
+            $this->encryptor->encryptWithFastestAvailableAlgorithm($this->serializer->serialize($scopes)),
+            $this->configType . '_scopes',
+            [System::CACHE_TAG]
+        ];
+        return $dataToSave;
+    }
+
+    /**
+     * Cache prepared configuration data.
+     *
+     * Takes data prepared by prepareDataForCache
+     *
+     * @param array $dataToSave
+     * @return void
+     */
+    private function cachePreparedData(array $dataToSave) : void
+    {
+        foreach ($dataToSave as $datumToSave) {
+            $this->cache->save($datumToSave[0], $datumToSave[1], $datumToSave[2]);
+        }
+    }
+
+    /**
+     * Gets configuration then cleans and warms it while locked
+     *
+     * This is to reduce the lock time after flushing config cache.
+     *
+     * @param callable $cleaner
+     * @return void
+     */
+    public function cleanAndWarmDefaultScopeData(callable $cleaner)
+    {
+        if (!$this->cacheState->isEnabled(Config::TYPE_IDENTIFIER)) {
+            $cleaner();
+            return;
+        }
+        $loadAction = function () {
+            return false;
+        };
+        $dataCollector = function () use ($cleaner) {
+            /* Note: call to readData() needs to be inside lock to avoid race conditions such as multiple
+               saves at the same time. */
+            $newData = $this->readData();
+            $preparedData = $this->prepareDataForCache($newData);
+            unset($newData);
+            $cleaner(); // Note: This is where other readers start waiting for us to finish saving cache.
+            return $preparedData;
+        };
+        $dataSaver = function (array $preparedData) {
+            $this->cachePreparedData($preparedData);
+        };
+        $this->lockQuery->lockedLoadData(self::$lockName, $loadAction, $dataCollector, $dataSaver);
+    }
+
+    /**
+     * Disable show internals with var_dump
+     *
+     * @see https://www.php.net/manual/en/language.oop5.magic.php#object.debuginfo
+     * @return array
+     */
+    public function __debugInfo()
+    {
+        return [];
     }
 }

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -108,6 +108,7 @@ class ShippingTest extends TestCase
     {
         $storeId = 1;
         $this->quoteMock->expects($this->once())->method('getStoreId')->willReturn($storeId);
+        $this->quoteMock->expects($this->never())->method('getShippingAddress');
 
         $addressMock = $this->getMockObject(Address::class, [
             'all_items' => [],
@@ -134,7 +135,7 @@ class ShippingTest extends TestCase
 
     public function testCollect()
     {
-        $this->markTestIncomplete('Target code is not unit testable. Refactoring is required.');
+        $this->markTestSkipped('Target code is not unit testable. Refactoring is required.');
     }
 
     /**
@@ -168,6 +169,7 @@ class ShippingTest extends TestCase
 
     public function testFetch()
     {
+        $this->quoteMock->expects($this->never())->method('getShippingAddress');
         $value = 42;
         $total = new Total();
         $total->setShippingInclTax($value);
@@ -181,6 +183,8 @@ class ShippingTest extends TestCase
 
     public function testFetchWithZeroShipping()
     {
+        $this->quoteMock->expects($this->never())->method('getShippingAddress');
+
         $value = 0;
         $total = new Total();
         $total->setShippingInclTax($value);

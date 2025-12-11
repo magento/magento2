@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
-  */
+/**
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
+ */
 -->
 
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -25,6 +25,7 @@
         <fillField selector="{{AdminNewWebsiteSection.name}}" userInput="{{newWebsiteName}}" stepKey="enterWebsiteName"/>
         <fillField selector="{{AdminNewWebsiteSection.code}}" userInput="{{websiteCode}}" stepKey="enterWebsiteCode"/>
         <click selector="{{AdminNewWebsiteActionsSection.saveWebsite}}" stepKey="clickSaveWebsite"/>
+        <waitForPageLoad stepKey="waitForSuccess"/>
         <waitForElementVisible selector="{{AdminStoresGridSection.websiteFilterTextField}}" stepKey="waitForStoreGridToReload"/>
         <see userInput="You saved the website." stepKey="seeSavedMessage"/>
     </actionGroup>

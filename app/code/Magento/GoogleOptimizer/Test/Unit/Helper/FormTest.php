@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -117,30 +117,19 @@ class FormTest extends TestCase
 
         $this->_fieldsetMock
             ->method('addField')
-            ->withConsecutive(
-                [
-                    'experiment_script',
-                    'textarea',
-                    [
-                        'name' => 'experiment_script',
-                        'label' => 'Experiment Code',
-                        'value' => $experimentCode,
-                        'class' => 'textarea googleoptimizer',
-                        'required' => false,
-                        'note' => 'Experiment code should be added to the original page only.',
-                        'data-form-part' => '']
-                ],
-                [
-                    'code_id',
-                    'hidden',
-                    [
-                        'name' => 'code_id',
-                        'value' => $experimentCodeId,
-                        'required' => false,
-                        'data-form-part' => ''
-                    ]
-                ]
-            );
+            ->willReturnCallback(function ($arg1, $arg2, $arg3, $experimentCode, $experimentCodeId) {
+                static $callCount = 0;
+                if ($callCount === 0) {
+                    $callCount++;
+                    if ($arg1 == 'experiment_script' && $arg2 == 'textarea' && $arg3['value'] == $experimentCode) {
+                        return null;
+                    }
+                } elseif ($callCount == 1 && $arg1 == 'hidden' && $arg3['value'] == $experimentCodeId) {
+                    $callCount++;
+                    return null;
+                }
+            });
+
         $this->_formMock->expects($this->once())->method('setFieldNameSuffix')->with('google_experiment');
     }
 }

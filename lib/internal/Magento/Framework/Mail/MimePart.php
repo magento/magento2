@@ -1,14 +1,15 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Framework\Mail;
 
 use Magento\Framework\Mail\Exception\InvalidArgumentException;
-use Laminas\Mime\Part as LaminasMimePart;
+use Symfony\Component\Mime\Part\DataPart;
+use Symfony\Component\Mime\Part\TextPart;
 
 /**
  * @inheritDoc
@@ -21,7 +22,7 @@ class MimePart implements MimePartInterface
     public const CHARSET_UTF8 = 'utf-8';
 
     /**
-     * @var LaminasMimePart
+     * @var TextPart | DataPart
      */
     private $mimePart;
 
@@ -44,6 +45,7 @@ class MimePart implements MimePartInterface
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      * @throws InvalidArgumentException
      */
     public function __construct(
@@ -61,36 +63,34 @@ class MimePart implements MimePartInterface
         ?bool $isStream = null
     ) {
         try {
-            $this->mimePart = new LaminasMimePart($content);
+            if ($type === MimeInterface::TYPE_HTML) {
+                $this->mimePart = new TextPart($content, $charset, 'html', $encoding);
+            } elseif ($type === MimeInterface::TYPE_TEXT) {
+                $this->mimePart = new TextPart($content, $charset, 'plain', $encoding);
+            } else {
+                $this->mimePart = new DataPart($content, $fileName, $type, $encoding);
+            }
         } catch (\Exception $e) {
             throw new InvalidArgumentException($e->getMessage());
         }
-        $this->mimePart->setType($type);
-        $this->mimePart->setEncoding($encoding);
-        $this->mimePart->setFilters($filters);
-        if ($charset) {
-            $this->mimePart->setBoundary($boundary);
+        if ($boundary) {
+            $contentTypeHeader = $this->mimePart->getHeaders()->get('Content-Type');
+            if ($contentTypeHeader) {
+                $contentTypeHeader->setParameter('boundary', $boundary);
+            }
         }
-        if ($charset) {
-            $this->mimePart->setCharset($charset);
-        }
+
         if ($disposition) {
             $this->mimePart->setDisposition($disposition);
         }
         if ($description) {
-            $this->mimePart->setDescription($description);
-        }
-        if ($fileName) {
-            $this->mimePart->setFileName($fileName);
+            $this->mimePart->getHeaders()->addTextHeader('Content-Description', $description);
         }
         if ($location) {
-            $this->mimePart->setLocation($location);
+            $this->mimePart->getHeaders()->addTextHeader('Content-Location', $location);
         }
         if ($language) {
-            $this->mimePart->setLanguage($language);
-        }
-        if ($isStream) {
-            $this->mimePart->setIsStream($isStream);
+            $this->mimePart->getHeaders()->addTextHeader('Content-Language', $language);
         }
     }
 
@@ -99,7 +99,7 @@ class MimePart implements MimePartInterface
      */
     public function getType(): string
     {
-        return $this->mimePart->getType();
+        return $this->mimePart->getMediaSubtype();
     }
 
     /**
@@ -107,7 +107,7 @@ class MimePart implements MimePartInterface
      */
     public function getEncoding(): string
     {
-        return $this->mimePart->getEncoding();
+        return $this->mimePart->getHeaders()->getHeaderBody('Content-Transfer-Encoding');
     }
 
     /**
@@ -115,7 +115,7 @@ class MimePart implements MimePartInterface
      */
     public function getDisposition(): string
     {
-        return $this->mimePart->getDisposition();
+        return $this->mimePart->getDisposition() ?? '';
     }
 
     /**
@@ -123,7 +123,7 @@ class MimePart implements MimePartInterface
      */
     public function getDescription(): string
     {
-        return $this->mimePart->getDescription();
+        return $this->mimePart->getHeaders()->getHeaderBody('Content-Description') ?? '';
     }
 
     /**
@@ -131,7 +131,7 @@ class MimePart implements MimePartInterface
      */
     public function getFileName(): string
     {
-        return $this->mimePart->getFileName();
+        return $this->mimePart->getFileName() ?? '';
     }
 
     /**
@@ -139,7 +139,8 @@ class MimePart implements MimePartInterface
      */
     public function getCharset(): string
     {
-        return $this->mimePart->getCharset();
+        $contentTypeHeader = $this->mimePart->getHeaders()->get('Content-Type');
+        return $contentTypeHeader ? $contentTypeHeader->getCharset() : '';
     }
 
     /**
@@ -147,7 +148,7 @@ class MimePart implements MimePartInterface
      */
     public function getBoundary(): string
     {
-        return $this->mimePart->getBoundary();
+        return $this->mimePart->getHeaders()->getHeaderParameter('Content-Type', 'boundary') ?? '';
     }
 
     /**
@@ -155,7 +156,7 @@ class MimePart implements MimePartInterface
      */
     public function getLocation(): string
     {
-        return $this->mimePart->getLocation();
+        return $this->mimePart->getHeaders()->getHeaderBody('Content-Location') ?? '';
     }
 
     /**
@@ -163,7 +164,7 @@ class MimePart implements MimePartInterface
      */
     public function getLanguage(): string
     {
-        return $this->mimePart->getLanguage();
+        return $this->mimePart->getHeaders()->getHeaderBody('Content-Language') ?? '';
     }
 
     /**
@@ -171,7 +172,7 @@ class MimePart implements MimePartInterface
      */
     public function getFilters(): array
     {
-        return $this->mimePart->getFilters();
+        return [];
     }
 
     /**
@@ -179,7 +180,7 @@ class MimePart implements MimePartInterface
      */
     public function isStream(): bool
     {
-        return $this->mimePart->isStream();
+        return is_resource($this->mimePart->getBody());
     }
 
     /**
@@ -187,7 +188,47 @@ class MimePart implements MimePartInterface
      */
     public function getEncodedStream($endOfLine = MimeInterface::LINE_END)
     {
-        return $this->mimePart->getEncodedStream($endOfLine);
+        if (!$this->isStream()) {
+            return null;
+        }
+
+        try {
+            $stream = $this->mimePart->getBody();
+            switch ($this->getEncoding()) {
+                case MimeInterface::ENCODING_QUOTED_PRINTABLE:
+                    $filter = stream_filter_append(
+                        $stream,
+                        'convert.quoted-printable-encode',
+                        STREAM_FILTER_READ,
+                        [
+                            'line-length' => MimeInterface::LINE_LENGTH,
+                            'line-break-chars' => $endOfLine,
+                        ]
+                    );
+                    if (!is_resource($filter)) {
+                        throw new InvalidArgumentException('Failed to append quoted-printable filter');
+                    }
+                    break;
+                case MimeInterface::ENCODING_BASE64:
+                    $filter = stream_filter_append(
+                        $stream,
+                        'convert.base64-encode',
+                        STREAM_FILTER_READ,
+                        [
+                            'line-length' => MimeInterface::LINE_LENGTH,
+                            'line-break-chars' => $endOfLine,
+                        ]
+                    );
+                    if (!is_resource($filter)) {
+                        throw new InvalidArgumentException('Failed to append base64 filter');
+                    }
+                    break;
+            }
+        } catch (\Exception $e) {
+            throw new InvalidArgumentException($e->getMessage());
+        }
+
+        return $stream;
     }
 
     /**
@@ -195,7 +236,15 @@ class MimePart implements MimePartInterface
      */
     public function getContent($endOfLine = MimeInterface::LINE_END)
     {
-        return $this->mimePart->getContent($endOfLine);
+        try {
+            if ($this->isStream()) {
+                return stream_get_contents($this->getEncodedStream($endOfLine));
+            }
+        } catch (\Exception $e) {
+            throw new InvalidArgumentException($e->getMessage());
+        }
+
+        return $this->mimePart->getBodyAsString();
     }
 
     /**
@@ -203,7 +252,15 @@ class MimePart implements MimePartInterface
      */
     public function getRawContent(): string
     {
-        return $this->mimePart->getRawContent();
+        try {
+            if ($this->isStream()) {
+                return stream_get_contents($this->mimePart->getBody());
+            }
+        } catch (\Exception $e) {
+            throw new InvalidArgumentException($e->getMessage());
+        }
+
+        return $this->mimePart->getBody();
     }
 
     /**
@@ -211,7 +268,7 @@ class MimePart implements MimePartInterface
      */
     public function getHeadersArray($endOfLine = MimeInterface::LINE_END): array
     {
-        return $this->mimePart->getHeadersArray($endOfLine);
+        return $this->mimePart->getPreparedHeaders()->toArray();
     }
 
     /**
@@ -219,6 +276,19 @@ class MimePart implements MimePartInterface
      */
     public function getHeaders($endOfLine = MimeInterface::LINE_END): string
     {
-        return $this->mimePart->getHeaders($endOfLine);
+        $headers = $this->mimePart->getHeaders();
+        $headersString = $headers->toString();
+
+        return str_replace("\r\n", $endOfLine, $headersString);
+    }
+
+    /**
+     * Get the MimePart object
+     *
+     * @return TextPart | DataPart
+     */
+    public function getMimePart(): TextPart | DataPart
+    {
+        return $this->mimePart;
     }
 }

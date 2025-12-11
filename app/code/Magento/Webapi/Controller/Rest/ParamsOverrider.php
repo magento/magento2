@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Webapi\Controller\Rest;
@@ -40,7 +40,7 @@ class ParamsOverrider
      */
     public function __construct(
         array $paramOverriders = [],
-        SimpleDataObjectConverter $dataObjectConverter = null
+        ?SimpleDataObjectConverter $dataObjectConverter = null
     ) {
         $this->paramOverriders = $paramOverriders;
         $this->dataObjectConverter = $dataObjectConverter

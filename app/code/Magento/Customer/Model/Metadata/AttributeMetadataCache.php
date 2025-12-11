@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Customer\Model\Metadata;
 
@@ -11,18 +11,20 @@ use Magento\Eav\Model\Cache\Type;
 use Magento\Eav\Model\Entity\Attribute;
 use Magento\Framework\App\Cache\StateInterface;
 use Magento\Framework\App\CacheInterface;
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 use Magento\Framework\Serialize\SerializerInterface;
+use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * Cache for attribute metadata
  */
-class AttributeMetadataCache
+class AttributeMetadataCache implements ResetAfterRequestInterface
 {
     /**
      * Cache prefix
      */
-    const ATTRIBUTE_METADATA_CACHE_PREFIX = 'ATTRIBUTE_METADATA_INSTANCES_CACHE';
+    public const ATTRIBUTE_METADATA_CACHE_PREFIX = 'ATTRIBUTE_METADATA_INSTANCES_CACHE';
 
     /**
      * @var CacheInterface
@@ -35,7 +37,7 @@ class AttributeMetadataCache
     private $state;
 
     /**
-     * @var AttributeMetadataInterface[]
+     * @var AttributeMetadataInterface[]|null
      */
     private $attributes;
 
@@ -73,7 +75,7 @@ class AttributeMetadataCache
         StateInterface $state,
         SerializerInterface $serializer,
         AttributeMetadataHydrator $attributeMetadataHydrator,
-        StoreManagerInterface $storeManager = null
+        ?StoreManagerInterface $storeManager = null
     ) {
         $this->cache = $cache;
         $this->state = $state;
@@ -137,7 +139,8 @@ class AttributeMetadataCache
                 [
                     Type::CACHE_TAG,
                     Attribute::CACHE_TAG,
-                    System::CACHE_TAG
+                    System::CACHE_TAG,
+                    Store::CACHE_TAG
                 ]
             );
         }
@@ -155,7 +158,7 @@ class AttributeMetadataCache
             $this->cache->clean(
                 [
                     Type::CACHE_TAG,
-                    Attribute::CACHE_TAG,
+                    Attribute::CACHE_TAG
                 ]
             );
         }
@@ -172,5 +175,13 @@ class AttributeMetadataCache
             $this->isAttributeCacheEnabled = $this->state->isEnabled(Type::TYPE_IDENTIFIER);
         }
         return $this->isAttributeCacheEnabled;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        $this->attributes = null;
     }
 }

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -38,7 +38,7 @@ class NodePathMatcherTest extends TestCase
     /**
      * @return array
      */
-    public function getNodeInfoDataProvider()
+    public static function getNodeInfoDataProvider()
     {
         return [
             'no match' => ['/root/node', '/root', false],

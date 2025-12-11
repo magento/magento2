@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Framework\Setup\Declaration\Schema\Db\MySQL\Definition\Columns;
@@ -38,7 +38,7 @@ class OnUpdate implements DbDefinitionProcessorInterface
     public function fromDefinition(array $data)
     {
         $matches = [];
-        if (preg_match('/(?:on update)\s([\_\-\s\w\d]+)/', $data['extra'], $matches)) {
+        if (preg_match('/(?:on update)\s([\_\-\s\w\d]+)/', $data['extra'] ?? '', $matches)) {
             $data['on_update'] = true;
         }
 

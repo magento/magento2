@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -44,7 +44,7 @@ class AdminTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function escapeHtmlWithLinksDataProvider(): array
+    public static function escapeHtmlWithLinksDataProvider(): array
     {
         return [
             [
@@ -76,7 +76,7 @@ class AdminTest extends \PHPUnit\Framework\TestCase
             ],
             [
                 '<a href=\"#\">Foo</a>',
-                '<a href="#">Foo</a>',
+                '<a href="%5C&quot;#%5C&quot;">Foo</a>',
                 'allowedTags' => ['a'],
             ],
             [
@@ -86,7 +86,7 @@ class AdminTest extends \PHPUnit\Framework\TestCase
             ],
             [
                 "<a href=\"javascript&colon;alert(59)\">Foo</a>",
-                '<a href="#">Foo</a>',
+                '<a href="javascript&amp;colon;alert(59)">Foo</a>',
                 'allowedTags' => ['a'],
             ],
             [

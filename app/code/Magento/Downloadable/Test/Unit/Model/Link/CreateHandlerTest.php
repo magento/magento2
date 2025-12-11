@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -26,8 +26,7 @@ class CreateHandlerTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->linkRepositoryMock = $this->getMockBuilder(LinkRepositoryInterface::class)
-            ->getMockForAbstractClass();
+        $this->linkRepositoryMock = $this->createMock(LinkRepositoryInterface::class);
 
         $this->model = new CreateHandler(
             $this->linkRepositoryMock
@@ -40,24 +39,25 @@ class CreateHandlerTest extends TestCase
         $entityStoreId = 0;
 
         /** @var LinkInterface|MockObject $linkMock */
-        $linkMock = $this->getMockBuilder(LinkInterface::class)
-            ->getMock();
+        $linkMock = $this->createMock(LinkInterface::class);
         $linkMock->expects($this->once())
             ->method('setId')
             ->with(null);
 
         /** @var ProductExtensionInterface|MockObject $productExtensionMock */
-        $productExtensionMock = $this->getMockBuilder(ProductExtensionInterface::class)
-            ->setMethods(['getDownloadableProductLinks'])
-            ->getMockForAbstractClass();
+        $productExtensionMock = $this->createPartialMock(
+            \Magento\Catalog\Test\Unit\Helper\ProductExtensionTestHelper::class,
+            ['getDownloadableProductLinks']
+        );
         $productExtensionMock->expects($this->once())
             ->method('getDownloadableProductLinks')
             ->willReturn([$linkMock]);
 
         /** @var ProductInterface|MockObject $entityMock */
-        $entityMock = $this->getMockBuilder(ProductInterface::class)
-            ->setMethods(['getTypeId', 'getExtensionAttributes', 'getSku', 'getStoreId'])
-            ->getMockForAbstractClass();
+        $entityMock = $this->createPartialMock(
+            \Magento\Catalog\Test\Unit\Helper\ProductTestHelper::class,
+            ['getStoreId', 'getTypeId', 'getExtensionAttributes', 'getSku']
+        );
         $entityMock->expects($this->once())
             ->method('getTypeId')
             ->willReturn(Type::TYPE_DOWNLOADABLE);
@@ -85,9 +85,10 @@ class CreateHandlerTest extends TestCase
     public function testExecuteNonDownloadable()
     {
         /** @var ProductInterface|MockObject $entityMock */
-        $entityMock = $this->getMockBuilder(ProductInterface::class)
-            ->setMethods(['getTypeId', 'getExtensionAttributes', 'getSku', 'getStoreId'])
-            ->getMockForAbstractClass();
+        $entityMock = $this->createPartialMock(
+            \Magento\Catalog\Test\Unit\Helper\ProductTestHelper::class,
+            ['getStoreId', 'getTypeId', 'getExtensionAttributes', 'getSku']
+        );
         $entityMock->expects($this->once())
             ->method('getTypeId')
             ->willReturn(Type::TYPE_DOWNLOADABLE . 'some');

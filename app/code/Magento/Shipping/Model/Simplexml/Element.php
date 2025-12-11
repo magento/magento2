@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Shipping\Model\Simplexml;
@@ -52,8 +52,13 @@ class Element extends \Magento\Framework\Simplexml\Element
      */
     public function xmlentities($value = null)
     {
+        if ($value === null) {
+            return '';
+        }
+
         $value = str_replace('&amp;', '&', $value);
         $value = str_replace('&', '&amp;', $value);
+
         return $value;
     }
 }

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -32,7 +32,7 @@ class ReadHandlerTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $this->extensionAttributesMock = $this->getMockBuilder(ProductExtensionInterface::class)
-            ->setMethods(['setWebsiteIds', 'getWebsiteIds'])
+            ->addMethods(['setWebsiteIds', 'getWebsiteIds'])
             ->disableArgumentCloning()
             ->getMockForAbstractClass();
         $this->readHandler = new ReadHandler($this->websiteLinkMock);

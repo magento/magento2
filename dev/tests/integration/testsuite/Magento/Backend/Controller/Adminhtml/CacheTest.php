@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Backend\Controller\Adminhtml;
@@ -81,7 +81,7 @@ class CacheTest extends \Magento\TestFramework\TestCase\AbstractBackendControlle
     /**
      * @return array
      */
-    public function massActionsInvalidTypesDataProvider()
+    public static function massActionsInvalidTypesDataProvider()
     {
         return [
             'enable' => ['massEnable'],

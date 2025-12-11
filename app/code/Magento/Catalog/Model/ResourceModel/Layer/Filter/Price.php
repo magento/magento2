@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Catalog\Model\ResourceModel\Layer\Filter;
 
@@ -20,13 +20,14 @@ use Magento\Store\Model\Indexer\WebsiteDimensionProvider;
  * @api
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @since 100.0.2
+ * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
  */
 class Price extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
     /**
      * Minimal possible price
      */
-    const MIN_POSSIBLE_PRICE = .01;
+    public const MIN_POSSIBLE_PRICE = .01;
 
     /**
      * Core event manager proxy
@@ -71,7 +72,7 @@ class Price extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param \Magento\Catalog\Model\Layer\Resolver $layerResolver
      * @param \Magento\Customer\Model\Session $session
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
-     * @param null $connectionName
+     * @param string|null $connectionName
      * @param IndexScopeResolverInterface|null $priceTableResolver
      * @param Context|null $httpContext
      * @param DimensionFactory|null $dimensionFactory
@@ -83,9 +84,9 @@ class Price extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         \Magento\Customer\Model\Session $session,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         $connectionName = null,
-        IndexScopeResolverInterface $priceTableResolver = null,
-        Context $httpContext = null,
-        DimensionFactory $dimensionFactory = null
+        ?IndexScopeResolverInterface $priceTableResolver = null,
+        ?Context $httpContext = null,
+        ?DimensionFactory $dimensionFactory = null
     ) {
         $this->layer = $layerResolver->get();
         $this->session = $session;
@@ -160,7 +161,8 @@ class Price extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 
         // processing FROM part
         $priceIndexJoinPart = $fromPart[\Magento\Catalog\Model\ResourceModel\Product\Collection::INDEX_TABLE_ALIAS];
-        $priceIndexJoinConditions = explode('AND', $priceIndexJoinPart['joinCondition']);
+        $priceIndexJoinConditions = $priceIndexJoinPart['joinCondition'] ?? '';
+        $priceIndexJoinConditions = explode('AND', $priceIndexJoinConditions);
         $priceIndexJoinPart['joinType'] = \Magento\Framework\DB\Select::FROM;
         $priceIndexJoinPart['joinCondition'] = null;
         $fromPart[\Magento\Catalog\Model\ResourceModel\Product\Collection::MAIN_TABLE_ALIAS] = $priceIndexJoinPart;
@@ -179,7 +181,7 @@ class Price extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         $select->setPart(\Magento\Framework\DB\Select::WHERE, $wherePart);
         $excludeJoinPart = \Magento\Catalog\Model\ResourceModel\Product\Collection::MAIN_TABLE_ALIAS . '.entity_id';
         foreach ($priceIndexJoinConditions as $condition) {
-            if (strpos($condition, $excludeJoinPart) !== false) {
+            if ($condition && strpos($condition, $excludeJoinPart) !== false) {
                 continue;
             }
             $select->where($this->_replaceTableAlias($condition));
@@ -408,7 +410,8 @@ class Price extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
+     *
      * @return string
      * @since 102.0.6
      */

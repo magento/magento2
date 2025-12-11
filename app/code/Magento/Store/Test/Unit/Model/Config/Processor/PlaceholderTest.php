@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -31,13 +31,14 @@ class PlaceholderTest extends TestCase
             $this->any()
         )->method(
             'process'
-        )->withConsecutive(
-            [['key1' => 'value1']],
-            [['key2' => 'value2']]
-        )->willReturnOnConsecutiveCalls(
-            ['key1' => 'value1-processed'],
-            ['key2' => 'value2-processed']
-        );
+        )
+        ->willReturnCallback(function ($arg1) {
+            if ($arg1 == ['key1' => 'value1']) {
+                return ['key1' => 'value1-processed'];
+            } elseif ($arg1 == ['key2' => 'value2']) {
+                return ['key2' => 'value2-processed'];
+            }
+        });
 
         $this->model = new Placeholder($this->configPlaceholderMock);
     }

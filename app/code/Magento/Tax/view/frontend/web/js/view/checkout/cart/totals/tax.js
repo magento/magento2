@@ -1,6 +1,6 @@
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 /**
@@ -21,7 +21,7 @@ define([
          * @override
          */
         ifShowValue: function () {
-            if (this.getPureValue() === 0) {
+            if (this.isFullMode() && this.getPureValue() == 0) { //eslint-disable-line eqeqeq
                 return isZeroTaxDisplayed;
             }
 

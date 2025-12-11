@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Integration\Model\Oauth;
 
@@ -11,7 +11,6 @@ use Magento\Framework\Oauth\ConsumerInterface;
  * Consumer model
  *
  * @api
- * @author Magento Core Team <core@magentocommerce.com>
  * @method string getName()
  * @method Consumer setName(string $name)
  * @method Consumer setKey(string $key)
@@ -23,6 +22,7 @@ use Magento\Framework\Oauth\ConsumerInterface;
  * @method string getRejectedCallbackUrl()
  * @method Consumer setRejectedCallbackUrl(string $rejectedCallbackUrl)
  * @since 100.0.2
+ * @SuppressWarnings(PHPMD.NPathComplexity)
  */
 class Consumer extends \Magento\Framework\Model\AbstractModel implements ConsumerInterface
 {
@@ -62,8 +62,8 @@ class Consumer extends \Magento\Framework\Model\AbstractModel implements Consume
         \Magento\Integration\Model\Oauth\Consumer\Validator\KeyLength $keyLength,
         \Magento\Framework\Url\Validator $urlValidator,
         \Magento\Integration\Helper\Oauth\Data $dataHelper,
-        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
-        \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
+        ?\Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
+        ?\Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
     ) {
         $this->keyLengthValidator = $keyLength;
@@ -89,6 +89,7 @@ class Consumer extends \Magento\Framework\Model\AbstractModel implements Consume
      * @return \Magento\Framework\Stdlib\DateTime\DateTime
      *
      * @deprecated 100.0.6
+     * @see we don't recommend this approach anymore
      */
     private function getDateHelper()
     {
@@ -113,12 +114,16 @@ class Consumer extends \Magento\Framework\Model\AbstractModel implements Consume
 
     /**
      * @inheritDoc
+     *
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function validate()
     {
         if ($this->getCallbackUrl() || $this->getRejectedCallbackUrl()) {
-            $this->setCallbackUrl(trim($this->getCallbackUrl()));
-            $this->setRejectedCallbackUrl(trim($this->getRejectedCallbackUrl()));
+            $this->setCallbackUrl($this->getCallbackUrl() !== null ? trim($this->getCallbackUrl()) : '');
+            $this->setRejectedCallbackUrl(
+                $this->getRejectedCallbackUrl() !== null ? trim($this->getRejectedCallbackUrl()) : ''
+            );
 
             if ($this->getCallbackUrl() && !$this->urlValidator->isValid($this->getCallbackUrl())) {
                 throw new \Magento\Framework\Exception\LocalizedException(__('Invalid Callback URL'));

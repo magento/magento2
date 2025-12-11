@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Setup\Validator;
@@ -40,6 +40,9 @@ class RedisConnectionValidator
                 $config['password']
             );
             $redisClient->setMaxConnectRetries(1);
+            if (isset($config['password']) && $config['password'] !== '') {
+                $redisClient->auth($config['password']);
+            }
             $redisClient->connect();
         } catch (\CredisException $e) {
             return false;

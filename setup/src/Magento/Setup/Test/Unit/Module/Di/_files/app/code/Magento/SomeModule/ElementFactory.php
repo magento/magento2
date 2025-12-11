@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -9,7 +9,6 @@ namespace Magento\SomeModule;
 
 use Magento\Framework\ObjectManagerInterface;
 
-require_once __DIR__ . '/Element.php';
 class ElementFactory
 {
     /**
@@ -26,13 +25,11 @@ class ElementFactory
     }
 
     /**
-     * @param string $className
      * @param array $data
      * @return mixed
      */
-    public function create($className, array $data = [])
+    public function create(array $data = [])
     {
-        $instance = $this->_objectManager->create($className, $data);
-        return $instance;
+        return $this->_objectManager->create(\Magento\SomeModule\Element::class, ['data' => $data]);
     }
 }

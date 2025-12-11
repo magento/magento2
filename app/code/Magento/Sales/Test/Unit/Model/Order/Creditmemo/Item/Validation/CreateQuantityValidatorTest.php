@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -46,7 +46,7 @@ class CreateQuantityValidatorTest extends TestCase
     {
         $this->orderItemRepositoryMock = $this->getMockBuilder(OrderItemRepositoryInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['get'])
+            ->onlyMethods(['get'])
             ->getMockForAbstractClass();
 
         $this->orderItemMock = $this->getMockBuilder(Item::class)
@@ -55,7 +55,7 @@ class CreateQuantityValidatorTest extends TestCase
 
         $this->entity = $this->getMockBuilder(\stdClass::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getOrderItemId', 'getQty'])
+            ->addMethods(['getOrderItemId', 'getQty'])
             ->getMock();
     }
 
@@ -101,7 +101,7 @@ class CreateQuantityValidatorTest extends TestCase
     /**
      * @return array
      */
-    public function dataProvider()
+    public static function dataProvider()
     {
         return [
             'testValidateCreditMemoProductItems' => [

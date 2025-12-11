@@ -1,14 +1,13 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\GiftMessage\Block\Adminhtml\Product\Helper\Form;
 
 /**
  * Adminhtml additional helper block for product configuration
  *
- * @author     Magento Core Team <core@magentocommerce.com>
  * @codeCoverageIgnore
  */
 class Config extends \Magento\Catalog\Block\Adminhtml\Product\Helper\Form\Config

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -307,7 +307,8 @@ class AbstractEntityTest extends TestCase
         /** @var AbstractEntity|MockObject $model */
         $model = $this->getMockBuilder(AbstractEntity::class)
             ->setConstructorArgs($arguments)
-            ->setMethods(['_getValue', 'beginTransaction', 'commit', 'rollback', 'getConnection'])
+            ->addMethods(['_getValue'])
+            ->onlyMethods(['beginTransaction', 'commit', 'rollback', 'getConnection'])
             ->getMock();
         $model->expects($this->any())->method('_getValue')->willReturn($eavConfig);
         $model->expects($this->any())->method('getConnection')->willReturn($this->_getConnectionMock());
@@ -324,7 +325,7 @@ class AbstractEntityTest extends TestCase
     /**
      * @return array
      */
-    public function productAttributesDataProvider()
+    public static function productAttributesDataProvider()
     {
         $attributeSetId = 10;
         return [
@@ -368,7 +369,7 @@ class AbstractEntityTest extends TestCase
         /** @var AbstractEntity|MockObject $model */
         $model = $this->getMockBuilder(AbstractEntity::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getConnection'])
+            ->onlyMethods(['getConnection'])
             ->getMockForAbstractClass();
         $model->expects($this->any())->method('getConnection')->willReturn($connection);
 

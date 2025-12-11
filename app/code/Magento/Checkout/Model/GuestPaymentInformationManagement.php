@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -11,14 +11,18 @@ use Magento\Checkout\Api\Exception\PaymentProcessingRateLimitExceededException;
 use Magento\Checkout\Api\PaymentProcessingRateLimiterInterface;
 use Magento\Checkout\Api\PaymentSavingRateLimiterInterface;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Quote\Api\CartRepositoryInterface;
 use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Quote\Model\Quote;
+use Magento\Quote\Model\QuoteAddressValidationService;
+use Psr\Log\LoggerInterface as Logger;
 
 /**
  * Guest payment information management model.
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.ExcessiveParameterList)
  */
 class GuestPaymentInformationManagement implements \Magento\Checkout\Api\GuestPaymentInformationManagementInterface
 {
@@ -54,7 +58,7 @@ class GuestPaymentInformationManagement implements \Magento\Checkout\Api\GuestPa
     protected $cartRepository;
 
     /**
-     * @var \Psr\Log\LoggerInterface
+     * @var Logger
      */
     private $logger;
 
@@ -74,15 +78,29 @@ class GuestPaymentInformationManagement implements \Magento\Checkout\Api\GuestPa
     private $saveRateLimitDisabled = false;
 
     /**
+     * @var AddressComparatorInterface
+     */
+    private $addressComparator;
+
+    /**
+     * @var QuoteAddressValidationService
+     */
+    private $quoteAddressValidationService;
+
+    /**
      * @param \Magento\Quote\Api\GuestBillingAddressManagementInterface $billingAddressManagement
      * @param \Magento\Quote\Api\GuestPaymentMethodManagementInterface $paymentMethodManagement
      * @param \Magento\Quote\Api\GuestCartManagementInterface $cartManagement
      * @param \Magento\Checkout\Api\PaymentInformationManagementInterface $paymentInformationManagement
      * @param \Magento\Quote\Model\QuoteIdMaskFactory $quoteIdMaskFactory
      * @param CartRepositoryInterface $cartRepository
+     * @param Logger $logger
      * @param PaymentProcessingRateLimiterInterface|null $paymentsRateLimiter
      * @param PaymentSavingRateLimiterInterface|null $savingRateLimiter
+     * @param AddressComparatorInterface|null $addressComparator
+     * @param QuoteAddressValidationService|null $quoteAddressValidationService
      * @codeCoverageIgnore
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Quote\Api\GuestBillingAddressManagementInterface $billingAddressManagement,
@@ -91,8 +109,11 @@ class GuestPaymentInformationManagement implements \Magento\Checkout\Api\GuestPa
         \Magento\Checkout\Api\PaymentInformationManagementInterface $paymentInformationManagement,
         \Magento\Quote\Model\QuoteIdMaskFactory $quoteIdMaskFactory,
         CartRepositoryInterface $cartRepository,
+        Logger $logger,
         ?PaymentProcessingRateLimiterInterface $paymentsRateLimiter = null,
-        ?PaymentSavingRateLimiterInterface $savingRateLimiter = null
+        ?PaymentSavingRateLimiterInterface $savingRateLimiter = null,
+        ?AddressComparatorInterface $addressComparator = null,
+        ?QuoteAddressValidationService $quoteAddressValidationService = null
     ) {
         $this->billingAddressManagement = $billingAddressManagement;
         $this->paymentMethodManagement = $paymentMethodManagement;
@@ -104,6 +125,11 @@ class GuestPaymentInformationManagement implements \Magento\Checkout\Api\GuestPa
             ?? ObjectManager::getInstance()->get(PaymentProcessingRateLimiterInterface::class);
         $this->savingRateLimiter = $savingRateLimiter
             ?? ObjectManager::getInstance()->get(PaymentSavingRateLimiterInterface::class);
+        $this->addressComparator = $addressComparator
+            ?? ObjectManager::getInstance()->get(AddressComparatorInterface::class);
+        $this->quoteAddressValidationService = $quoteAddressValidationService
+            ?? ObjectManager::getInstance()->get(QuoteAddressValidationService::class);
+        $this->logger = $logger;
     }
 
     /**
@@ -113,7 +139,7 @@ class GuestPaymentInformationManagement implements \Magento\Checkout\Api\GuestPa
         $cartId,
         $email,
         \Magento\Quote\Api\Data\PaymentInterface $paymentMethod,
-        \Magento\Quote\Api\Data\AddressInterface $billingAddress = null
+        ?\Magento\Quote\Api\Data\AddressInterface $billingAddress = null
     ) {
         $this->paymentsRateLimiter->limit();
         try {
@@ -125,16 +151,21 @@ class GuestPaymentInformationManagement implements \Magento\Checkout\Api\GuestPa
         }
         try {
             $orderId = $this->cartManagement->placeOrder($cartId);
-        } catch (\Magento\Framework\Exception\LocalizedException $e) {
-            $this->getLogger()->critical(
-                'Placing an order with quote_id ' . $cartId . ' is failed: ' . $e->getMessage()
+        } catch (LocalizedException $e) {
+            $this->logger->critical(
+                'Placing an Order failed (reason: '.  $e->getMessage() .')',
+                [
+                    'quote_id' => $cartId,
+                    'exception' => (string)$e,
+                    'is_guest_checkout' => true
+                ]
             );
             throw new CouldNotSaveException(
                 __($e->getMessage()),
                 $e
             );
         } catch (\Exception $e) {
-            $this->getLogger()->critical($e);
+            $this->logger->critical($e);
             throw new CouldNotSaveException(
                 __('An error occurred on the server. Please try to place the order again.'),
                 $e
@@ -151,7 +182,7 @@ class GuestPaymentInformationManagement implements \Magento\Checkout\Api\GuestPa
         $cartId,
         $email,
         \Magento\Quote\Api\Data\PaymentInterface $paymentMethod,
-        \Magento\Quote\Api\Data\AddressInterface $billingAddress = null
+        ?\Magento\Quote\Api\Data\AddressInterface $billingAddress = null
     ) {
         if (!$this->saveRateLimitDisabled) {
             try {
@@ -166,6 +197,12 @@ class GuestPaymentInformationManagement implements \Magento\Checkout\Api\GuestPa
         /** @var Quote $quote */
         $quote = $this->cartRepository->getActive($quoteIdMask->getQuoteId());
 
+        $this->quoteAddressValidationService->validateAddressesWithRules($quote, null, $billingAddress);
+
+        $shippingAddress = $quote->getShippingAddress();
+        if ($this->addressComparator->isEqual($shippingAddress, $billingAddress)) {
+            $shippingAddress->setSameAsBilling(1);
+        }
         if ($billingAddress) {
             $billingAddress->setEmail($email);
             $quote->removeAddress($quote->getBillingAddress()->getId());
@@ -176,7 +213,7 @@ class GuestPaymentInformationManagement implements \Magento\Checkout\Api\GuestPa
         }
         $this->limitShippingCarrier($quote);
 
-        if (!(int)$quote->getItemsQty()) {
+        if (!(float)$quote->getItemsQty()) {
             throw new CouldNotSaveException(__('Some of the products are disabled.'));
         }
 
@@ -191,20 +228,6 @@ class GuestPaymentInformationManagement implements \Magento\Checkout\Api\GuestPa
     {
         $quoteIdMask = $this->quoteIdMaskFactory->create()->load($cartId, 'masked_id');
         return $this->paymentInformationManagement->getPaymentInformation($quoteIdMask->getQuoteId());
-    }
-
-    /**
-     * Get logger instance
-     *
-     * @return \Psr\Log\LoggerInterface
-     * @deprecated 100.1.8
-     */
-    private function getLogger()
-    {
-        if (!$this->logger) {
-            $this->logger = \Magento\Framework\App\ObjectManager::getInstance()->get(\Psr\Log\LoggerInterface::class);
-        }
-        return $this->logger;
     }
 
     /**

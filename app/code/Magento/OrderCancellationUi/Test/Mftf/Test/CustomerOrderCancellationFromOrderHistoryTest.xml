@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+   * Copyright 2024 Adobe
+  * All Rights Reserved.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="CustomerOrderCancellationFromOrderHistoryTest">
+        <annotations>
+            <features value="Customer Order Cancellation from Order History page."/>
+            <stories value="Customer cancels an order from order history page."/>
+            <title value="Customer cancels an order from order history page."/>
+            <description value="Customer cancels an order from order history page."/>
+            <severity value="AVERAGE"/>
+            <testCaseId value="LYNX-180"/>
+            <!-- Will be fixed in the scope of ACQE-7314 -->
+            <group value="pr_exclude"/>
+        </annotations>
+        <before>
+            <magentoCLI command="config:set sales/cancellation/enabled 1" stepKey="EnablingSalesCancellation"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <createData entity="_defaultCategory" stepKey="createCategory"/>
+            <createData entity="_defaultProduct" stepKey="createSimpleProduct">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <createData entity="Simple_US_Customer" stepKey="createCustomer"/>
+            <createData entity="CustomerCart" stepKey="createCustomerCart">
+                <requiredEntity createDataKey="createCustomer"/>
+            </createData>
+            <createData entity="CustomerCartItem" stepKey="addCartItemOne">
+                <requiredEntity createDataKey="createCustomerCart"/>
+                <requiredEntity createDataKey="createSimpleProduct"/>
+            </createData>
+            <createData entity="CustomerAddressInformation" stepKey="addCustomerOrderAddress">
+                <requiredEntity createDataKey="createCustomerCart"/>
+            </createData>
+            <updateData createDataKey="createCustomerCart" entity="CustomerOrderPaymentMethod" stepKey="sendCustomerPaymentInformationOne">
+                <requiredEntity createDataKey="createCustomerCart"/>
+            </updateData>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
+        </before>
+        <after>
+            <!-- Disable configuration -->
+            <magentoCLI command="config:set sales/cancellation/enabled 0" stepKey="DisablingSalesCancellation"/>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <deleteData createDataKey="createSimpleProduct" stepKey="deleteSimpleProduct"/>
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutStorefront"/>
+            <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+
+        <!--Login to storefront from customer-->
+        <actionGroup ref="LoginToStorefrontActionGroup" stepKey="loginCustomer">
+            <argument name="Customer" value="$$createCustomer$$"/>
+        </actionGroup>
+
+        <!--Go to Order History page-->
+        <amOnPage url="{{CustomerOrderCancellationFromOrderHistoryPage.url}}" stepKey="navigateToOrderHistoryPage"/>
+        <waitForPageLoad stepKey="waitForOrderHistoryPageLoad"/>
+
+        <!--Cancel order -->
+        <click selector="{{CustomerOrderCancellationSection.linkToOpenModal}}" stepKey="clickOnLinkToOpenModal"/>
+        <waitForElementVisible selector="{{CustomerOrderCancellationSection.valueForOrderCancellationReason}}" stepKey="waitForSelectVisible"/>
+        <selectOption selector="{{CustomerOrderCancellationSection.valueForOrderCancellationReason}}" userInput="Other" stepKey="valueForSalesCancellation"/>
+        <click selector="{{CustomerOrderCancellationSection.confirmOrderCancellation}}" stepKey="clickOnConfirmButton"/>
+
+        <!--Confirm order is cancelled-->
+        <waitForPageLoad stepKey="waitForOrderHistoryPageReload"/>
+        <dontSee selector="{{CustomerOrderCancellationSection.linkToOpenModal}}" stepKey="dontSeeLinkToModal"/>
+        <grabTextFrom selector="{{CustomerOrderCancellationSection.referenceToLatestOrderStatus}}" stepKey="getLatestOrderStatus"/>
+        <assertEquals message="Order should have status Canceled" stepKey="assertOrderStatusIsCanceled" after="getLatestOrderStatus">
+            <expectedResult type="string">Canceled</expectedResult>
+            <actualResult type="variable">$getLatestOrderStatus</actualResult>
+        </assertEquals>
+
+        <!--Grab Order Id for later usage-->
+        <waitForElementVisible selector="{{CustomerOrderCancellationSection.referenceToLatestOrderId}}" stepKey="waitForOrderId"/>
+        <grabTextFrom selector="{{CustomerOrderCancellationSection.referenceToLatestOrderId}}" stepKey="getOrderId"/>
+
+        <!--Go to Admin Sales Order View Page-->
+        <amOnPage url="{{AdminOrdersPage.url}}" stepKey="onOrdersPage"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForLoadingMaskToDisappearOnOrdersPage"/>
+        <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearGridFilter"/>
+        <fillField selector="{{AdminOrdersGridSection.search}}" userInput="{$getOrderId}" stepKey="fillOrderNum"/>
+        <click selector="{{AdminOrdersGridSection.submitSearch}}" stepKey="submitSearchOrderNum"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForLoadingMaskToDisappearOnSearch"/>
+        <actionGroup ref="AdminOrderGridClickFirstRowActionGroup" stepKey="navigateToSalesOrderViewPage"/>
+        <waitForPageLoad stepKey="waitForAdminSalesOrderViewPageLoad"/>
+        <!--Check Order History block-->
+        <waitForElementVisible selector="{{AdminSalesOrderViewSection.orderHistoryNoteListFirstComment}}" stepKey="waitForReteriveOrderCancellationReason"/>
+        <grabTextFrom selector="{{AdminSalesOrderViewSection.orderHistoryNoteListFirstComment}}" stepKey="getOrderCancellationReason"/>
+        <assertEquals message="Order cancellation reason should be Other." stepKey="assertOrderCancellationReason" after="getOrderCancellationReason">
+            <expectedResult type="string">Other</expectedResult>
+            <actualResult type="variable">getOrderCancellationReason</actualResult>
+        </assertEquals>
+
+        <grabTextFrom selector="{{AdminSalesOrderViewSection.orderHistoryNoteListLastComment}}" stepKey="getOrderCancellationNotification"/>
+        <assertEquals message="Order cancellation notification should be sent." stepKey="assertOrderCancellationNotification" after="getOrderCancellationNotification">
+            <expectedResult type="string">Order cancellation notification email was sent.</expectedResult>
+            <actualResult type="variable">getOrderCancellationNotification</actualResult>
+        </assertEquals>
+    </test>
+</tests>

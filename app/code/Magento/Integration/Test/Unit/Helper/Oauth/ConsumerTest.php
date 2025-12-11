@@ -1,13 +1,13 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Integration\Test\Unit\Helper\Oauth;
 
-use Magento\Framework\HTTP\ZendClient;
+use Magento\Framework\HTTP\LaminasClient;
 use Magento\Framework\Oauth\Helper\Oauth;
 use Magento\Framework\Stdlib\DateTime\DateTime;
 use Magento\Integration\Api\OauthServiceInterface;
@@ -39,7 +39,7 @@ class ConsumerTest extends TestCase
     /** @var Consumer */
     protected $_consumerMock;
 
-    /** @var ZendClient */
+    /** @var LaminasClient */
     protected $_httpClientMock;
 
     /** @var TokenFactory */
@@ -64,7 +64,7 @@ class ConsumerTest extends TestCase
     {
         $this->_consumerFactory = $this->getMockBuilder(ConsumerFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
         $this->_consumerMock = $this->getMockBuilder(
             Consumer::class
@@ -81,7 +81,7 @@ class ConsumerTest extends TestCase
         $this->_tokenFactory = $this->getMockBuilder(
             TokenFactory::class
         )->disableOriginalConstructor()
-            ->setMethods(['create'])->getMock();
+            ->onlyMethods(['create'])->getMock();
         $this->_tokenMock = $this->getMockBuilder(
             Token::class
         )->disableOriginalConstructor()
@@ -120,7 +120,7 @@ class ConsumerTest extends TestCase
             ->getMock();
 
         $this->_httpClientMock = $this->getMockBuilder(
-            ZendClient::class
+            LaminasClient::class
         )->disableOriginalConstructor()
             ->getMock();
         $this->_loggerMock = $this->getMockBuilder(

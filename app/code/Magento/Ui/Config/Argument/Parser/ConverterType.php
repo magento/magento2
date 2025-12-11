@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Ui\Config\Argument\Parser;
 
@@ -34,7 +34,7 @@ class ConverterType implements ParserInterface
     {
         $result = [];
         $domXPath = new \DOMXPath($node->ownerDocument);
-        $nodeList = $domXPath->query(trim($data['value']), $node);
+        $nodeList = $domXPath->query(trim($data['value'] ?? ''), $node);
         foreach ($nodeList as $itemNode) {
             $result = $this->converter->convert($itemNode, $data);
         }

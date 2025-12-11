@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework\Interception\PluginList;
 
@@ -121,9 +121,9 @@ class PluginList extends Scoped implements InterceptionPluginList
         ClassDefinitions $classDefinitions,
         array $scopePriorityScheme = ['global'],
         $cacheId = 'plugins',
-        SerializerInterface $serializer = null,
-        ConfigLoaderInterface $configLoader = null,
-        PluginListGenerator $pluginListGenerator = null
+        ?SerializerInterface $serializer = null,
+        ?ConfigLoaderInterface $configLoader = null,
+        ?PluginListGenerator $pluginListGenerator = null
     ) {
         $this->serializer = $serializer ?: $objectManager->get(Serialize::class);
         parent::__construct($reader, $configScope, $cache, $cacheId, $this->serializer);
@@ -291,5 +291,16 @@ class PluginList extends Scoped implements InterceptionPluginList
     public function merge(array $config)
     {
         $this->_data = $this->pluginListGenerator->merge($config, $this->_data);
+    }
+
+    /**
+     * Disable show PluginList internals with var_dump
+     *
+     * @see https://www.php.net/manual/en/language.oop5.magic.php#object.debuginfo
+     * @return array
+     */
+    public function __debugInfo()
+    {
+        return [];
     }
 }

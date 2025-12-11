@@ -1,9 +1,11 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Bundle\Model;
+
+use Magento\Framework\App\ObjectManager;
 
 /**
  * Bundle Selection Model
@@ -36,8 +38,6 @@ namespace Magento\Bundle\Model;
 class Selection extends \Magento\Framework\Model\AbstractModel
 {
     /**
-     * Catalog data
-     *
      * @var \Magento\Catalog\Helper\Data
      */
     protected $_catalogData;
@@ -55,7 +55,7 @@ class Selection extends \Magento\Framework\Model\AbstractModel
         \Magento\Framework\Registry $registry,
         \Magento\Catalog\Helper\Data $catalogData,
         \Magento\Bundle\Model\ResourceModel\Selection $resource,
-        \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
+        ?\Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
     ) {
         $this->_catalogData = $catalogData;
@@ -82,7 +82,9 @@ class Selection extends \Magento\Framework\Model\AbstractModel
     {
         if (!$this->_catalogData->isPriceGlobal() && $this->getWebsiteId()) {
             $this->setData('tmp_selection_price_value', $this->getSelectionPriceValue());
+            $this->setData('tmp_selection_price_type', $this->getSelectionPriceType());
             $this->setSelectionPriceValue($this->getOrigData('selection_price_value'));
+            $this->setSelectionPriceType($this->getOrigData('selection_price_type'));
         }
         parent::beforeSave();
     }
@@ -97,6 +99,9 @@ class Selection extends \Magento\Framework\Model\AbstractModel
         if (!$this->_catalogData->isPriceGlobal() && $this->getWebsiteId()) {
             if (null !== $this->getData('tmp_selection_price_value')) {
                 $this->setSelectionPriceValue($this->getData('tmp_selection_price_value'));
+            }
+            if (null !== $this->getData('tmp_selection_price_type')) {
+                $this->setSelectionPriceType($this->getData('tmp_selection_price_type'));
             }
             $this->getResource()->saveSelectionPrice($this);
 

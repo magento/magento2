@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -125,7 +125,7 @@ class ResourceConnectionTest extends TestCase
             ResourceConnection::class,
             [
                 'deploymentConfig' => $this->deploymentConfigMock,
-                'connections' => ['default_process_' . getmypid() => 'existing_connection']
+                'connections' => ['default' => 'existing_connection']
             ]
         );
         $this->deploymentConfigMock->expects($this->never())->method('get');
@@ -149,11 +149,15 @@ class ResourceConnectionTest extends TestCase
     {
         $this->deploymentConfigMock
             ->method('get')
-            ->withConsecutive(
-                [ConfigOptionsListConstants::CONFIG_PATH_DB_PREFIX],
-                ['db/connection/default']
-            )
-            ->willReturnOnConsecutiveCalls('pref_', ['config']);
+            ->willReturnCallback(
+                function ($arg1) {
+                    if ($arg1 == ConfigOptionsListConstants::CONFIG_PATH_DB_PREFIX) {
+                        return 'pref_';
+                    } elseif ($arg1 == 'db/connection/default') {
+                        return ['config'];
+                    }
+                }
+            );
         $this->configMock->expects($this->atLeastOnce())
             ->method('getConnectionName')
             ->with('default')

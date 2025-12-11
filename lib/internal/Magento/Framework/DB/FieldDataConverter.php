@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework\DB;
 
@@ -21,12 +21,12 @@ class FieldDataConverter
     /**
      * Batch size env variable name
      */
-    const BATCH_SIZE_VARIABLE_NAME = 'DATA_CONVERTER_BATCH_SIZE';
+    public const BATCH_SIZE_VARIABLE_NAME = 'DATA_CONVERTER_BATCH_SIZE';
 
     /**
      * Default batch size for data converter
      */
-    const DEFAULT_BATCH_SIZE = 50000;
+    public const DEFAULT_BATCH_SIZE = 50000;
 
     /**
      * @var Generator
@@ -93,9 +93,9 @@ class FieldDataConverter
         $table,
         $identifier,
         $field,
-        QueryModifierInterface $queryModifier = null
+        ?QueryModifierInterface $queryModifier = null
     ) {
-        $identifiers = explode(',', $identifier);
+        $identifiers = explode(',', (string)$identifier);
         if (count($identifiers) > 1) {
             $this->processTableWithCompositeIdentifier($connection, $table, $identifiers, $field, $queryModifier);
         } else {
@@ -118,7 +118,7 @@ class FieldDataConverter
         $table,
         $identifier,
         $field,
-        QueryModifierInterface $queryModifier = null
+        ?QueryModifierInterface $queryModifier = null
     ): void {
         $select = $this->selectFactory->create($connection)
             ->from($table, [$identifier, $field])
@@ -173,7 +173,7 @@ class FieldDataConverter
         $table,
         $identifiers,
         $field,
-        QueryModifierInterface $queryModifier = null
+        ?QueryModifierInterface $queryModifier = null
     ): void {
         $columns = $identifiers;
         $columns[] = $field;

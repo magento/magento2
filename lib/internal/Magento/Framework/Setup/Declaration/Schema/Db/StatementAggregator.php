@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Framework\Setup\Declaration\Schema\Db;
@@ -10,6 +10,8 @@ namespace Magento\Framework\Setup\Declaration\Schema\Db;
  * Statement aggregator.
  *
  * Statements are concatenated conditionally, decides which statements go separately and which may be concatenated.
+ *
+ * @api
  */
 class StatementAggregator
 {

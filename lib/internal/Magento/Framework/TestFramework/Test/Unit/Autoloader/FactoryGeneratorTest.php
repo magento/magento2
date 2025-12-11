@@ -1,7 +1,7 @@
 <?php
 /**
- *  Copyright © Magento, Inc. All rights reserved.
- *  See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -42,7 +42,7 @@ class FactoryGeneratorTest extends TestCase
     /**
      * @return array
      */
-    public function generateNonFactoryDataProvider()
+    public static function generateNonFactoryDataProvider()
     {
         return [
             'non-factory class' => ['\My\SimpleClass'],

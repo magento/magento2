@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 
 /**
@@ -25,11 +25,19 @@ class TestCaseProperties
             $properties = $reflectionClass->getProperties();
             foreach ($properties as $property) {
                 $property->setAccessible(true);
-                $value = $property->getValue($test);
-                if (is_object($value) && method_exists($value, '__destruct') && is_callable([$value, '__destruct'])) {
-                    $value->__destruct();
+                if ($property->isInitialized($test)) {
+                    $value = $property->getValue($test);
+                    if (is_object($value) && method_exists($value, '__destruct') &&
+                        is_callable([$value, '__destruct'])) {
+                        $value->__destruct();
+                    }
                 }
-                $property->setValue($test, null);
+
+                if (is_array($property->getDefaultValue())) {
+                    $property->setValue($test, []);
+                } else {
+                    $property->setValue($test, null);
+                }
             }
         }
     }

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -145,10 +145,22 @@ class FilterProcessorTest extends TestCase
 
         $collectionMock->expects($this->exactly(2))
             ->method('addFieldToFilter')
-            ->withConsecutive(
-                [$resultFieldsOne, $resultConditionsOne],
-                [$resultFieldsTwo, $resultConditionsTwo]
-            )->willReturnSelf();
+            ->willReturnCallback(function (
+                $arg1,
+                $arg2
+            ) use (
+                $collectionMock,
+                $resultFieldsOne,
+                $resultConditionsOne,
+                $resultFieldsTwo,
+                $resultConditionsTwo
+            ) {
+                if ($arg1 == $resultFieldsOne && $arg2 == $resultConditionsOne) {
+                    return $collectionMock;
+                } elseif ($arg1 == $resultFieldsTwo && $arg2 == $resultConditionsTwo) {
+                    return $collectionMock;
+                }
+            });
 
         $model->process($searchCriteriaMock, $collectionMock);
     }
@@ -158,7 +170,7 @@ class FilterProcessorTest extends TestCase
         $this->expectException('InvalidArgumentException');
         /** @var \stdClass|MockObject $customFilterMock */
         $customFilterMock = $this->getMockBuilder(\stdClass::class)
-            ->setMethods(['apply'])
+            ->addMethods(['apply'])
             ->getMock();
 
         $customFilterField = 'customFilterField';

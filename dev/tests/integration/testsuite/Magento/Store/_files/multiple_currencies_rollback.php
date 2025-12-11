@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2021 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -36,5 +36,5 @@ if ($storeId) {
     $reflectionClass = new \ReflectionClass(CurrencyResource::class);
     $staticProperty = $reflectionClass->getProperty('_rateCache');
     $staticProperty->setAccessible(true);
-    $staticProperty->setValue(null);
+    $staticProperty->setValue(null, null);
 }

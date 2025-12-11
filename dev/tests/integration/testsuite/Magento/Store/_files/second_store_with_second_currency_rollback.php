@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -35,4 +35,4 @@ Resolver::getInstance()->requireDataFixture('Magento/Store/_files/second_store_r
 $reflectionClass = new \ReflectionClass(ResourceCurrency::class);
 $staticProperty = $reflectionClass->getProperty('_rateCache');
 $staticProperty->setAccessible(true);
-$staticProperty->setValue(null);
+$staticProperty->setValue(null, null);

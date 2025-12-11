@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -22,6 +22,7 @@ use Magento\Paypal\Model\Api\ProcessableException;
 use Magento\Paypal\Model\Api\ProcessableExceptionFactory;
 use Magento\Paypal\Model\Config;
 use Magento\Paypal\Model\Info;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
@@ -70,12 +71,9 @@ class NvpTest extends TestCase
     protected function setUp(): void
     {
         $this->customerAddressHelper = $this->createMock(Address::class);
-        $this->logger = $this->getMockForAbstractClass(LoggerInterface::class);
-        $this->customLoggerMock = $this->getMockBuilder(Logger::class)
-            ->setConstructorArgs([$this->getMockForAbstractClass(LoggerInterface::class)])
-            ->setMethods(['debug'])
-            ->getMock();
-        $this->resolver = $this->getMockForAbstractClass(ResolverInterface::class);
+        $this->logger = $this->createMock(LoggerInterface::class);
+        $this->customLoggerMock = $this->createMock(Logger::class);
+        $this->resolver = $this->createMock(ResolverInterface::class);
         $this->regionFactory = $this->createMock(RegionFactory::class);
         $this->countryFactory = $this->createMock(CountryFactory::class);
         $processableExceptionFactory = $this->createPartialMock(
@@ -86,9 +84,9 @@ class NvpTest extends TestCase
             ->method('create')
             ->willReturnCallback(
                 function ($arguments) {
-                    $this->processableException = $this->getMockBuilder(
-                        ProcessableException::class
-                    )->setConstructorArgs([$arguments['phrase'], null, $arguments['code']])->getMock();
+                    $this->processableException = $this->getMockBuilder(ProcessableException::class)
+                        ->setConstructorArgs([$arguments['phrase'], null, $arguments['code']])
+                        ->getMock();
                     return $this->processableException;
                 }
             );
@@ -149,8 +147,8 @@ class NvpTest extends TestCase
      * @param null|string $exception
      * @param string $exceptionMessage
      * @param null|int $exceptionCode
-     * @dataProvider callDataProvider
      */
+    #[DataProvider('callDataProvider')]
     public function testCall($response, $processableErrors, $exception, $exceptionMessage = '', $exceptionCode = null)
     {
         if (isset($exception)) {
@@ -161,6 +159,7 @@ class NvpTest extends TestCase
         $this->curl->expects($this->once())
             ->method('read')
             ->willReturn($response);
+        $this->curl->method('getInfo')->with(CURLINFO_HTTP_CODE)->willReturn(200);
         $this->model->setProcessableErrors($processableErrors);
         $this->customLoggerMock->expects($this->once())
             ->method('debug');
@@ -170,7 +169,7 @@ class NvpTest extends TestCase
     /**
      * @return array
      */
-    public function callDataProvider()
+    public static function callDataProvider()
     {
         return [
             ['', [], null],
@@ -211,13 +210,14 @@ class NvpTest extends TestCase
      *
      * @param $input
      * @param $expected
-     * @dataProvider callGetExpressCheckoutDetailsDataProvider
      */
+    #[DataProvider('callGetExpressCheckoutDetailsDataProvider')]
     public function testCallGetExpressCheckoutDetails($input, $expected)
     {
         $this->curl->expects($this->once())
             ->method('read')
             ->willReturn($input);
+        $this->curl->method('getInfo')->with(CURLINFO_HTTP_CODE)->willReturn(200);
         $this->model->callGetExpressCheckoutDetails();
         $address = $this->model->getExportedShippingAddress();
         $this->assertEquals($expected['firstName'], $address->getData('firstname'));
@@ -234,7 +234,7 @@ class NvpTest extends TestCase
      *
      * @return array
      */
-    public function callGetExpressCheckoutDetailsDataProvider()
+    public static function callGetExpressCheckoutDetailsDataProvider()
     {
         return [
             [
@@ -281,6 +281,7 @@ class NvpTest extends TestCase
                 . '&PROTECTIONELIGIBILITYTYPE=' . $protectionEligibilityType
             );
 
+        $this->curl->method('getInfo')->with(CURLINFO_HTTP_CODE)->willReturn(200);
         $this->model->callDoReauthorization();
 
         $expectedImportedData = [
@@ -315,10 +316,25 @@ class NvpTest extends TestCase
         $this->curl->expects($this->once())
             ->method('read')
             ->willReturn($response);
+        $this->curl->method('getInfo')->with(CURLINFO_HTTP_CODE)->willReturn(200);
         $this->model->setProcessableErrors($processableErrors);
 
         $this->expectExceptionMessageMatches('/PayPal gateway has rejected request/');
         $this->expectException(ProcessableException::class);
+
+        $this->model->call('DoExpressCheckout', ['data' => 'some data']);
+    }
+
+    /**
+     * Test handling error response
+     */
+    public function testCallTransactionOnError()
+    {
+        $response = 'HTTP/1.1 502 Bad Gateway';
+        $this->curl->expects($this->once())
+            ->method('read')
+            ->willReturn($response);
+        $this->expectExceptionMessageMatches('/Something went wrong while processing your order/');
 
         $this->model->call('DoExpressCheckout', ['data' => 'some data']);
     }

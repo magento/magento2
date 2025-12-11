@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -38,7 +38,7 @@ class CodeTest extends TestCase
     /**
      * @return array
      */
-    public function dataProviderWrongOptionFilesForParse()
+    public static function dataProviderWrongOptionFilesForParse()
     {
         return [
             [['files_for_parse' => [], 'declared_namespaces' => [1, 2]]],
@@ -61,7 +61,7 @@ class CodeTest extends TestCase
     /**
      * @return array
      */
-    public function dataProviderWrongOptionDeclaredNamespace()
+    public static function dataProviderWrongOptionDeclaredNamespace()
     {
         return [
             [['declared_namespaces' => [], 'files_for_parse' => [1, 2]]],

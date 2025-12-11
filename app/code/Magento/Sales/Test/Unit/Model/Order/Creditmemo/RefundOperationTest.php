@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -124,7 +124,7 @@ class RefundOperationTest extends TestCase
      *
      * @return array
      */
-    public function executeNotRefundedCreditmemoDataProvider(): array
+    public static function executeNotRefundedCreditmemoDataProvider(): array
     {
         return [
             [Creditmemo::STATE_OPEN],
@@ -286,7 +286,7 @@ class RefundOperationTest extends TestCase
      * @return array
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function baseAmountsDataProvider(): array
+    public static function baseAmountsDataProvider(): array
     {
         return [
             [[
@@ -423,8 +423,11 @@ class RefundOperationTest extends TestCase
         $item2->expects($this->once())->method('getQty')->willReturn(0);
         $item2
             ->method('isDeleted')
-            ->withConsecutive([], [true])
-            ->willReturnOnConsecutiveCalls(false, null);
+            ->willReturnCallback(
+                function () {
+                    return false;
+                }
+            );
 
         $item2->expects($this->never())->method('register');
 

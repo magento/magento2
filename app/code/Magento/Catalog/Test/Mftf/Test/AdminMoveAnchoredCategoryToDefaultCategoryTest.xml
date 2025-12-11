@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
-  */
+/**
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
+ */
 -->
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
@@ -16,6 +16,7 @@
             <severity value="CRITICAL"/>
             <group value="mtf_migrated"/>
             <features value="Catalog"/>
+            <group value="cloud"/>
         </annotations>
         <before>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginToAdminPanel"/>
@@ -23,6 +24,12 @@
             <createData entity="defaultSimpleProduct" stepKey="simpleProduct"/>
         </before>
         <after>
+            <actionGroup ref="AdminDeleteCategoryByNameActionGroup" stepKey="deleteSimpleSubCategory">
+                <argument name="categoryName" value="{{SimpleSubCategory.name}}"/>
+            </actionGroup>
+            <actionGroup ref="AdminDeleteCategoryByNameActionGroup" stepKey="deleteFirstLevelSubCategory">
+                <argument name="categoryName" value="{{FirstLevelSubCat.name}}"/>
+            </actionGroup>
             <deleteData createDataKey="createDefaultCategory" stepKey="deleteDefaultCategory"/>
             <deleteData  createDataKey="simpleProduct" stepKey="deleteSimpleProduct"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>

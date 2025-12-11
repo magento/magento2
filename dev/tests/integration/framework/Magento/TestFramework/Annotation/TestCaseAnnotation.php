@@ -1,14 +1,15 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2021 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\TestFramework\Annotation;
 
 use PHPUnit\Framework\TestCase;
-use PHPUnit\Util\Test as TestUtil;
+use PHPUnit\Util\Exception;
+use PHPUnit\Metadata\Annotation\Parser\Registry;
 
 /**
  * Returns annotations for given testcase.
@@ -39,9 +40,13 @@ class TestCaseAnnotation
      */
     public function getAnnotations(TestCase $testCase): array
     {
-        return TestUtil::parseTestMethodAnnotations(
-            get_class($testCase),
-            $testCase->getName(false)
-        );
+        $registry = Registry::getInstance();
+        $className = get_class($testCase);
+        $methodName = $testCase->name();
+
+        return [
+            'method' => $methodName ? $registry->forMethod($className, $methodName)->symbolAnnotations() : null,
+            'class'  => $registry->forClassName($className)->symbolAnnotations(),
+        ];
     }
 }

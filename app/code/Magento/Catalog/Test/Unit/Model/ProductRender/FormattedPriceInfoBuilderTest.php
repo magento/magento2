@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -53,11 +53,11 @@ class FormattedPriceInfoBuilderTest extends TestCase
 
         $formattedPriceInfoInterfaceMock = $this->getMockBuilder(FormattedPriceInfoInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['setData'])
+            ->addMethods(['setData'])
             ->getMockForAbstractClass();
         $priceInfoMock = $this->getMockBuilder(PriceInfoInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getData'])
+            ->addMethods(['getData'])
             ->getMockForAbstractClass();
         $priceInfoMock->expects($this->any())
             ->method('getData')

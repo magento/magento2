@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -62,7 +62,7 @@ class FileInfoManagerTest extends TestCase
         $this->flagManagerMock = $this->createMock(FlagManager::class);
 
         $this->fileInfoFactoryMock = $this->getMockBuilder(FileInfoFactory::class)
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -140,7 +140,7 @@ class FileInfoManagerTest extends TestCase
     /**
      * @return array
      */
-    public function saveWithLocalizedExceptionDataProvider()
+    public static function saveWithLocalizedExceptionDataProvider()
     {
         return [
             'Empty FileInfo' => [null, null],
@@ -178,7 +178,7 @@ class FileInfoManagerTest extends TestCase
     /**
      * @return array
      */
-    public function loadDataProvider()
+    public static function loadDataProvider()
     {
         return [
             'Empty flag data' => [null],

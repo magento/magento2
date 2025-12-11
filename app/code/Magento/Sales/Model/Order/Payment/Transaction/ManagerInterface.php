@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Sales\Model\Order\Payment\Transaction;
@@ -11,6 +11,7 @@ use Magento\Sales\Model\Order\Payment\Transaction;
 
 /**
  * Manage payment transaction
+ * @api
  */
 interface ManagerInterface
 {

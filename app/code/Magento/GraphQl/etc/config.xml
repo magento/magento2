@@ -1,0 +1,26 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Store:etc/config.xsd">
+    <default>
+        <web_api>
+            <graphql>
+                <include_dynamic_attributes_as_entity_type_fields>1</include_dynamic_attributes_as_entity_type_fields>
+            </graphql>
+        </web_api>
+        <graphql>
+            <session>
+                <disable>0</disable>
+            </session>
+            <validation>
+                <alias_limit_enabled>1</alias_limit_enabled>
+                <maximum_alias_allowed>10</maximum_alias_allowed>
+            </validation>
+        </graphql>
+    </default>
+</config>

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -14,6 +14,7 @@ use Magento\CatalogWidget\Model\Rule\Condition\ProductFactory;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use ReflectionClass;
 
 class CombineTest extends TestCase
 {
@@ -36,7 +37,7 @@ class CombineTest extends TestCase
 
         $this->conditionFactory = $this->getMockBuilder(
             ProductFactory::class
-        )->setMethods(['create'])
+        )->onlyMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
         $arguments['conditionFactory'] = $this->conditionFactory;
@@ -66,12 +67,16 @@ class CombineTest extends TestCase
             'excluded_attribute' => 'Excluded attribute',
         ];
         $productCondition = $this->getMockBuilder(Product::class)
-            ->setMethods(['loadAttributeOptions', 'getAttributeOption'])
+            ->onlyMethods(['loadAttributeOptions'])
             ->disableOriginalConstructor()
             ->getMock();
         $productCondition->expects($this->any())->method('loadAttributeOptions')->willReturnSelf();
-        $productCondition->expects($this->any())->method('getAttributeOption')
-            ->willReturn($attributeOptions);
+        
+        // Set attribute options via reflection since getAttributeOption uses magic methods
+        $reflection = new ReflectionClass($productCondition);
+        $property = $reflection->getProperty('_data');
+        $property->setAccessible(true);
+        $property->setValue($productCondition, ['attribute_option' => $attributeOptions]);
 
         $this->conditionFactory->expects($this->atLeastOnce())->method('create')->willReturn($productCondition);
 
@@ -85,7 +90,7 @@ class CombineTest extends TestCase
             ->getMock();
         $condition = $this->getMockBuilder(Combine::class)
             ->disableOriginalConstructor()
-            ->setMethods(['collectValidatedAttributes'])
+            ->onlyMethods(['collectValidatedAttributes'])
             ->getMock();
         $condition->expects($this->any())->method('collectValidatedAttributes')->with($collection)->willReturnSelf();
 

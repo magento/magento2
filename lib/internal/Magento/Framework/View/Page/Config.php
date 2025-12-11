@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Framework\View\Page;
@@ -184,7 +184,7 @@ class Config
         Title $title,
         \Magento\Framework\Locale\ResolverInterface $localeResolver,
         $isIncludesAvailable = true,
-        Escaper $escaper = null
+        ?Escaper $escaper = null
     ) {
         $this->assetRepo = $assetRepo;
         $this->pageAssets = $pageAssets;
@@ -545,7 +545,7 @@ class Config
      */
     public function addBodyClass($className)
     {
-        $className = preg_replace('#[^a-z0-9-_]+#', '-', strtolower($className));
+        $className = preg_replace('#[^a-z0-9-_]+#', '-', strtolower((string)$className));
         $bodyClasses = $this->getElementAttribute(self::ELEMENT_TYPE_BODY, self::BODY_ATTRIBUTE_CLASS);
         $bodyClasses = $bodyClasses ? explode(' ', $bodyClasses) : [];
         $bodyClasses[] = $className;

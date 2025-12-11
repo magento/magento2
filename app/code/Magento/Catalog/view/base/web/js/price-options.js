@@ -1,6 +1,6 @@
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 
 define([
@@ -182,7 +182,7 @@ define([
                             }, 0);
                             toTemplate.data[type] = {
                                 value: value,
-                                formatted: utils.formatPrice(value, format)
+                                formatted: utils.formatPriceLocale(value, format)
                             };
                         });
 

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -10,6 +10,8 @@ namespace Magento\Catalog\Test\Unit\Model\Product\Price;
 use Magento\Catalog\Api\Data\BasePriceInterface;
 use Magento\Catalog\Api\Data\BasePriceInterfaceFactory;
 use Magento\Catalog\Api\Data\PriceUpdateResultInterface;
+use Magento\Catalog\Api\Data\ProductAttributeInterface;
+use Magento\Catalog\Api\ProductAttributeRepositoryInterface;
 use Magento\Catalog\Model\Product\Price\BasePriceStorage;
 use Magento\Catalog\Model\Product\Price\PricePersistence;
 use Magento\Catalog\Model\Product\Price\PricePersistenceFactory;
@@ -19,6 +21,7 @@ use Magento\Catalog\Model\ProductIdLocatorInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Store\Api\Data\StoreInterface;
+use Magento\Store\Api\Data\WebsiteInterface;
 use Magento\Store\Api\StoreRepositoryInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -74,6 +77,11 @@ class BasePriceStorageTest extends TestCase
     private $model;
 
     /**
+     * @var ProductAttributeRepositoryInterface
+     */
+    private $productAttributeRepository;
+
+    /**
      * Set up.
      *
      * @return void
@@ -84,7 +92,7 @@ class BasePriceStorageTest extends TestCase
             PricePersistenceFactory::class
         )
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
         $this->pricePersistence = $this->getMockBuilder(PricePersistence::class)
             ->disableOriginalConstructor()
@@ -93,7 +101,7 @@ class BasePriceStorageTest extends TestCase
             BasePriceInterfaceFactory::class
         )
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
         $this->basePriceInterface = $this->getMockBuilder(BasePriceInterface::class)
             ->disableOriginalConstructor()
@@ -111,6 +119,10 @@ class BasePriceStorageTest extends TestCase
         $this->validationResult = $this->getMockBuilder(Result::class)
             ->disableOriginalConstructor()
             ->getMock();
+        $this->productAttributeRepository = $this
+            ->getMockBuilder(ProductAttributeRepositoryInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $objectManager = new ObjectManager($this);
         $this->model = $objectManager->getObject(
@@ -123,6 +135,7 @@ class BasePriceStorageTest extends TestCase
                 'invalidSkuProcessor' => $this->invalidSkuProcessor,
                 'validationResult' => $this->validationResult,
                 'allowedProductTypes' => ['simple', 'virtual', 'bundle', 'downloadable'],
+                'productAttributeRepository' => $this->productAttributeRepository
             ]
         );
     }
@@ -170,18 +183,27 @@ class BasePriceStorageTest extends TestCase
         $this->basePriceInterface
             ->expects($this->atLeastOnce())
             ->method('setSku')
-            ->withConsecutive(['sku_1'], ['sku_2'])
-            ->willReturnSelf();
+            ->willReturnCallback(function ($arg) {
+                if ($arg == 'sku_1' || $arg == 'sku_2') {
+                    return $this->basePriceInterface;
+                }
+            });
         $this->basePriceInterface
             ->expects($this->atLeastOnce())
             ->method('setPrice')
-            ->withConsecutive([15], [35])
-            ->willReturnSelf();
+            ->willReturnCallback(function ($arg) {
+                if ($arg == 15 || $arg == 35) {
+                    return $this->basePriceInterface;
+                }
+            });
         $this->basePriceInterface
             ->expects($this->atLeastOnce())
             ->method('setStoreId')
-            ->withConsecutive([1], [1])
-            ->willReturnSelf();
+            ->willReturnCallback(function ($arg) {
+                if ($arg == 1 || $arg == 1) {
+                    return $this->basePriceInterface;
+                }
+            });
 
         $this->model->get($skus);
     }
@@ -189,13 +211,28 @@ class BasePriceStorageTest extends TestCase
     /**
      * Test update method.
      *
+     * @param bool $isScopeWebsite
+     * @param bool $isScopeGlobal
+     * @param array $formattedPrices
      * @return void
+     * @dataProvider updateProvider
      */
-    public function testUpdate()
+    public function testUpdate(bool $isScopeWebsite, bool $isScopeGlobal, array $formattedPrices)
     {
-        $store = $this->getMockBuilder(StoreInterface::class)
+        $website = $this->getMockBuilder(WebsiteInterface::class)
+            ->addMethods([
+                'getStoreIds',
+            ])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
+        $website->method('getStoreIds')->willReturn([1 => 1, 2 => 2]);
+        $store = $this->getMockBuilder(StoreInterface::class)
+            ->addMethods([
+                'getWebsite',
+            ])
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
+        $store->method('getWebsite')->willReturn($website);
         $sku = 'sku_1';
         $idsBySku = [
             'sku_1' => [
@@ -205,15 +242,15 @@ class BasePriceStorageTest extends TestCase
             ]
         ];
         $this->basePriceInterface->expects($this->atLeastOnce())->method('getSku')->willReturn($sku);
-        $this->invalidSkuProcessor->expects($this->once())
+        $this->invalidSkuProcessor->expects($this->any())
             ->method('retrieveInvalidSkuList')
             ->with([1 => $sku], ['simple', 'virtual', 'bundle', 'downloadable'], 1)
             ->willReturn([]);
         $this->basePriceInterface->expects($this->atLeastOnce())->method('getPrice')->willReturn(15);
         $this->basePriceInterface->expects($this->atLeastOnce())->method('getStoreId')->willReturn(1);
-        $this->validationResult->expects($this->once())->method('getFailedRowIds')->willReturn([]);
+        $this->validationResult->expects($this->any())->method('getFailedRowIds')->willReturn([]);
         $this->productIdLocator
-            ->expects($this->once())
+            ->expects($this->any())
             ->method('retrieveProductIdsBySkus')->with([$sku])
             ->willReturn($idsBySku);
         $this->pricePersistenceFactory
@@ -222,16 +259,22 @@ class BasePriceStorageTest extends TestCase
             ->with(['attributeCode' => 'price'])
             ->willReturn($this->pricePersistence);
         $this->pricePersistence->expects($this->atLeastOnce())->method('getEntityLinkField')->willReturn('row_id');
-        $this->storeRepository->expects($this->once())->method('getById')->with(1)->willReturn($store);
-        $formattedPrices = [
-            [
-                'store_id' => 1,
-                'row_id' => 1,
-                'value' => 15
-            ]
-        ];
-        $this->pricePersistence->expects($this->once())->method('update')->with($formattedPrices);
+        $this->storeRepository->expects($this->any())->method('getById')->with(1)->willReturn($store);
+        $this->pricePersistence->expects($this->any())->method('update')->with($formattedPrices);
         $this->validationResult->expects($this->any())->method('getFailedItems')->willReturn([]);
+        $attribute = $this->getMockBuilder(ProductAttributeInterface::class)
+            ->addMethods([
+                'isScopeWebsite',
+                'isScopeGlobal'
+            ])
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
+        $attribute->method('isScopeWebsite')->willReturn($isScopeWebsite);
+        $attribute->method('isScopeGlobal')->willReturn($isScopeGlobal);
+        $this->productAttributeRepository
+            ->method('get')
+            ->willReturn($attribute);
+
         $this->assertEquals([], $this->model->update([1 => $this->basePriceInterface]));
     }
 
@@ -239,6 +282,7 @@ class BasePriceStorageTest extends TestCase
      * Test update method without SKU and with negative price.
      *
      * @return void
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function testUpdateWithoutSkuAndWithNegativePrice()
     {
@@ -259,32 +303,30 @@ class BasePriceStorageTest extends TestCase
             ->getMockForAbstractClass();
         $this->validationResult->expects($this->atLeastOnce())
             ->method('addFailedItem')
-            ->withConsecutive(
-                [
-                    0,
-                    __(
+            ->willReturnCallback(function ($arg1, $arg2, $arg3) {
+                if ($arg1 === 0 &&
+                    $arg2 == __(
                         'Invalid attribute %fieldName = %fieldValue.',
                         ['fieldName' => '%fieldName', 'fieldValue' => '%fieldValue']
-                    ),
-                    ['fieldName' => 'SKU', 'fieldValue' => null]
-                ],
-                [
-                    0,
-                    __(
+                    ) &&
+                    $arg3 == ['fieldName' => 'SKU', 'fieldValue' => null]) {
+                    return $this->validationResult;
+                } elseif ($arg1 === 0 &&
+                    $arg2 == __(
                         'Invalid attribute %fieldName = %fieldValue.',
                         ['fieldName' => '%fieldName', 'fieldValue' => '%fieldValue']
-                    ),
-                    ['fieldName' => 'Price', 'fieldValue' => -10]
-                ],
-                [
-                    0,
-                    __(
+                    ) &&
+                    $arg3 == ['fieldName' => 'Price', 'fieldValue' => -10]) {
+                    return $this->validationResult;
+                } elseif ($arg1 === 0 &&
+                    $arg2 == __(
                         'Requested store is not found. Row ID: SKU = %SKU, Store ID: %storeId.',
                         ['SKU' => null, 'storeId' => 10]
-                    ),
-                    ['SKU' => null, 'storeId' => 10]
-                ]
-            );
+                    ) &&
+                    $arg3 == ['SKU' => null, 'storeId' => 10]) {
+                    return $this->validationResult;
+                }
+            });
         $this->basePriceInterface->expects($this->atLeastOnce())->method('getStoreId')->willReturn(10);
         $this->storeRepository->expects($this->once())->method('getById')->with(10)->willThrowException($exception);
         $this->validationResult->expects($this->once())->method('getFailedRowIds')->willReturn([0 => 0]);
@@ -295,5 +337,55 @@ class BasePriceStorageTest extends TestCase
             [$priceUpdateResult],
             $this->model->update([$this->basePriceInterface])
         );
+    }
+
+    /**
+     * Data provider for update.
+     *
+     * @return array
+     */
+    public static function updateProvider(): array
+    {
+        return
+            [
+                [
+                    'isScopeWebsite' => false,
+                    'isScopeGlobal' => false,
+                    'formattedPrices' => [
+                        [
+                            'store_id' => 1,
+                            'row_id' => 1,
+                            'value' => 15
+                        ]
+                    ]
+                ],
+                [
+                    'isScopeWebsite' => true,
+                    'isScopeGlobal' => false,
+                    'formattedPrices' => [
+                        [
+                            'store_id' => 1,
+                            'row_id' => 1,
+                            'value' => 15
+                        ],
+                        [
+                            'store_id' => 2,
+                            'row_id' => 1,
+                            'value' => 15
+                        ]
+                    ]
+                ],
+                [
+                    'isScopeWebsite' => false,
+                    'isScopeGlobal' => true,
+                    'formattedPrices' => [
+                        [
+                            'store_id' => 0,
+                            'row_id' => 1,
+                            'value' => 15
+                        ]
+                    ]
+                ]
+            ];
     }
 }

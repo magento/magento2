@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\CatalogInventory\Ui\DataProvider\Product\Form\Modifier;
 
@@ -73,8 +73,8 @@ class AdvancedInventory extends AbstractModifier
         StockRegistryInterface $stockRegistry,
         ArrayManager $arrayManager,
         StockConfigurationInterface $stockConfiguration,
-        Json $serializer = null,
-        JsonValidator $jsonValidator = null
+        ?Json $serializer = null,
+        ?JsonValidator $jsonValidator = null
     ) {
         $this->locator = $locator;
         $this->stockRegistry = $stockRegistry;

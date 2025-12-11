@@ -1,16 +1,18 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2021 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Newsletter\Model;
 
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
+
 /**
  * This service provides caching Subscriber by Customer id.
  */
-class CustomerSubscriberCache
+class CustomerSubscriberCache implements ResetAfterRequestInterface
 {
     /**
      * @var array
@@ -42,5 +44,13 @@ class CustomerSubscriberCache
     public function setCustomerSubscriber(int $customerId, ?Subscriber $subscriber): void
     {
         $this->customerSubscriber[$customerId] = $subscriber;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        $this->customerSubscriber = [];
     }
 }

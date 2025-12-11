@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\SalesRule\Model\ResourceModel\Rule;
@@ -28,6 +28,20 @@ class Collection extends \Magento\Rule\Model\ResourceModel\Rule\Collection\Abstr
      * @var array
      */
     protected $_associatedEntitiesMap;
+
+    /**
+     * SaleRule Event prefix
+     *
+     * @var string
+     */
+    protected $_eventPrefix = 'salesrule_rule_collection';
+
+    /**
+     * SaleRule Event object
+     *
+     * @var string
+     */
+    protected $_eventObject = 'rule_collection';
 
     /**
      * @var \Magento\SalesRule\Model\ResourceModel\Rule\DateApplier
@@ -61,9 +75,9 @@ class Collection extends \Magento\Rule\Model\ResourceModel\Rule\Collection\Abstr
         \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy,
         \Magento\Framework\Event\ManagerInterface $eventManager,
         \Magento\Framework\Stdlib\DateTime\TimezoneInterface $date,
-        \Magento\Framework\DB\Adapter\AdapterInterface $connection = null,
-        \Magento\Framework\Model\ResourceModel\Db\AbstractDb $resource = null,
-        Json $serializer = null
+        ?\Magento\Framework\DB\Adapter\AdapterInterface $connection = null,
+        ?\Magento\Framework\Model\ResourceModel\Db\AbstractDb $resource = null,
+        ?Json $serializer = null
     ) {
         parent::__construct($entityFactory, $logger, $fetchStrategy, $eventManager, $connection, $resource);
         $this->_date = $date;
@@ -99,26 +113,29 @@ class Collection extends \Magento\Rule\Model\ResourceModel\Rule\Collection\Abstr
 
         $entityInfo = $this->_getAssociatedEntityInfo($entityType);
         $ruleIdField = $entityInfo['rule_id_field'];
-        $entityIds = $this->getColumnValues($ruleIdField);
+
+        $items = [];
+        foreach ($this->getItems() as $item) {
+            $items[$item->getData($ruleIdField)] = $item;
+        }
 
         $select = $this->getConnection()->select()->from(
             $this->getTable($entityInfo['associations_table'])
         )->where(
             $ruleIdField . ' IN (?)',
-            $entityIds
+            array_keys($items)
         );
 
         $associatedEntities = $this->getConnection()->fetchAll($select);
 
-        array_map(
-            function ($associatedEntity) use ($entityInfo, $ruleIdField, $objectField) {
-                $item = $this->getItemByColumnValue($ruleIdField, $associatedEntity[$ruleIdField]);
-                $itemAssociatedValue = $item->getData($objectField) ?? [];
-                $itemAssociatedValue[] = $associatedEntity[$entityInfo['entity_id_field']];
-                $item->setData($objectField, $itemAssociatedValue);
-            },
-            $associatedEntities
-        );
+        $dataToAdd = [];
+        foreach ($associatedEntities as $associatedEntity) {
+            //group data
+            $dataToAdd[$associatedEntity[$ruleIdField]][] = $associatedEntity[$entityInfo['entity_id_field']];
+        }
+        foreach ($dataToAdd as $id => $value) {
+            $items[$id]->setData($objectField, $value);
+        }
     }
 
     /**
@@ -147,6 +164,7 @@ class Collection extends \Magento\Rule\Model\ResourceModel\Rule\Collection\Abstr
      * @param string $couponCode
      * @param string|null $now
      * @param Address $address allow extensions to further filter out rules based on quote address
+     * @param string[] $couponCodes
      * @throws \Zend_Db_Select_Exception
      * @use $this->addWebsiteGroupDateFilter()
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
@@ -157,30 +175,37 @@ class Collection extends \Magento\Rule\Model\ResourceModel\Rule\Collection\Abstr
         $customerGroupId,
         $couponCode = '',
         $now = null,
-        Address $address = null
+        ?Address $address = null,
+        array $couponCodes = []
     ) {
-        if (!$this->getFlag('validation_filter')) {
-            $this->prepareSelect($websiteId, $customerGroupId, $now);
-
-            $noCouponRules = $this->getNoCouponCodeSelect();
-
-            if ($couponCode) {
-                $couponRules = $this->getCouponCodeSelect($couponCode);
-
-                $allAllowedRules = $this->getConnection()->select();
-                $allAllowedRules->union([$noCouponRules, $couponRules], Select::SQL_UNION_ALL);
-
-                $wrapper = $this->getConnection()->select();
-                $wrapper->from($allAllowedRules);
-
-                $this->_select = $wrapper;
-            } else {
-                $this->_select = $noCouponRules;
-            }
-
-            $this->setOrder('sort_order', self::SORT_ORDER_ASC);
-            $this->setFlag('validation_filter', true);
+        if ($this->getFlag('validation_filter')) {
+            return $this;
         }
+
+        $this->prepareSelect($websiteId, $customerGroupId, $now);
+
+        $noCouponRules = $this->getNoCouponCodeSelect();
+
+        if ($couponCode && !in_array($couponCode, $couponCodes)) {
+            $couponCodes[] = $couponCode;
+        }
+
+        if (!empty($couponCodes)) {
+            $couponRules = $this->getCouponCodeSelect($couponCodes);
+
+            $allAllowedRules = $this->getConnection()->select();
+            $allAllowedRules->union([$noCouponRules, $couponRules], Select::SQL_UNION_ALL);
+
+            $wrapper = $this->getConnection()->select();
+            $wrapper->from($allAllowedRules);
+
+            $this->_select = $wrapper;
+        } else {
+            $this->_select = $noCouponRules;
+        }
+
+        $this->setOrder('sort_order', self::SORT_ORDER_ASC);
+        $this->setFlag('validation_filter', true);
 
         return $this;
     }
@@ -222,14 +247,14 @@ class Collection extends \Magento\Rule\Model\ResourceModel\Rule\Collection\Abstr
     /**
      * Determine all active rules that are valid for the given coupon code.
      *
-     * @param string $couponCode
+     * @param string[] $couponCodes
      * @return Select
      */
-    private function getCouponCodeSelect($couponCode)
+    private function getCouponCodeSelect(array $couponCodes)
     {
         $couponSelect = clone $this->getSelect();
 
-        $this->joinCouponTable($couponCode, $couponSelect);
+        $this->joinCouponTable($couponCodes, $couponSelect);
 
         $isAutogenerated =
             $this->getConnection()->quoteInto('main_table.coupon_type = ?', Rule::COUPON_TYPE_AUTO)
@@ -254,19 +279,19 @@ class Collection extends \Magento\Rule\Model\ResourceModel\Rule\Collection\Abstr
     }
 
     /**
-     * Join coupong table to select.
+     * Join coupon table to select.
      *
-     * @param string $couponCode
+     * @param string[] $couponCodes
      * @param Select $couponSelect
      */
-    private function joinCouponTable($couponCode, Select $couponSelect)
+    private function joinCouponTable(array $couponCodes, Select $couponSelect)
     {
         $couponJoinCondition =
             'main_table.rule_id = rule_coupons.rule_id'
             . ' AND ' .
             $this->getConnection()->quoteInto('main_table.coupon_type <> ?', Rule::COUPON_TYPE_NO_COUPON)
             . ' AND ' .
-            $this->getConnection()->quoteInto('rule_coupons.code = ?', $couponCode);
+            $this->getConnection()->quoteInto('rule_coupons.code IN(?)', $couponCodes);
 
         $couponSelect->joinInner(
             ['rule_coupons' => $this->getTable('salesrule_coupon')],
@@ -427,6 +452,7 @@ class Collection extends \Magento\Rule\Model\ResourceModel\Rule\Collection\Abstr
         return $this;
     }
 
+    // phpcs:disable
     /**
      * Getter for _associatedEntitiesMap property
      *
@@ -437,6 +463,7 @@ class Collection extends \Magento\Rule\Model\ResourceModel\Rule\Collection\Abstr
     {
         if (!$this->_associatedEntitiesMap) {
             $this->_associatedEntitiesMap = \Magento\Framework\App\ObjectManager::getInstance()
+                // @phpstan-ignore-next-line - this is a virtual type defined in di.xml
                 ->get(\Magento\SalesRule\Model\ResourceModel\Rule\AssociatedEntityMap::class)
                 ->getData();
         }
@@ -458,4 +485,5 @@ class Collection extends \Magento\Rule\Model\ResourceModel\Rule\Collection\Abstr
 
         return $this->dateApplier;
     }
+    // phpcs:enable
 }

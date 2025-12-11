@@ -1,12 +1,13 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Downloadable\Test\Unit\Observer;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\Catalog\Model\Product;
 use Magento\Downloadable\Model\Product\Type;
 use Magento\Downloadable\Observer\IsAllowedGuestCheckoutObserver;
@@ -69,28 +70,26 @@ class IsAllowedGuestCheckoutObserverTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->scopeConfigMock = $this->getMockBuilder(Config::class)->disableOriginalConstructor()
-            ->onlyMethods(['isSetFlag', 'getValue'])
-            ->getMock();
+        $this->scopeConfigMock = $this->createPartialMock(Config::class, ['isSetFlag', 'getValue']);
 
-        $this->resultMock = $this->getMockBuilder(DataObject::class)->disableOriginalConstructor()
-            ->addMethods(['setIsAllowed'])
-            ->getMock();
+        $this->resultMock = $this->createPartialMock(
+            \Magento\Framework\DataObject\Test\Unit\Helper\DataObjectTestHelper::class,
+            ['setIsAllowed']
+        );
 
-        $this->eventMock = $this->getMockBuilder(Event::class)->disableOriginalConstructor()
-            ->addMethods(['getStore', 'getResult', 'getQuote', 'getOrder'])
-            ->getMock();
+        $this->eventMock = $this->createPartialMock(
+            \Magento\Framework\Event\Test\Unit\Helper\EventTestHelper::class,
+            ['getStore', 'getResult', 'getQuote', 'getOrder']
+        );
 
-        $this->observerMock = $this->getMockBuilder(Observer::class)->disableOriginalConstructor()
-            ->onlyMethods(['getEvent'])
-            ->getMock();
+        $this->observerMock = $this->createPartialMock(Observer::class, ['getEvent']);
 
-        $this->storeMock = $this->getMockBuilder(DataObject::class)
-            ->addMethods(['getId'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->storeMock = $this->createPartialMock(
+            \Magento\Framework\DataObject\Test\Unit\Helper\DataObjectTestHelper::class,
+            ['getId']
+        );
 
-        $this->storeManagerMock = $this->getMockForAbstractClass(StoreManagerInterface::class);
+        $this->storeManagerMock = $this->createMock(StoreManagerInterface::class);
         $this->storeManagerMock->method('getStore')
             ->with($this->storeMock)
             ->willReturn($this->storeMock);
@@ -110,8 +109,8 @@ class IsAllowedGuestCheckoutObserverTest extends TestCase
      * @param $isAllowed
      *
      * @return void
-     * @dataProvider dataProviderForTestisAllowedGuestCheckoutConfigSetToTrue
      */
+    #[DataProvider('dataProviderForTestisAllowedGuestCheckoutConfigSetToTrue')]
     public function testIsAllowedGuestCheckoutConfigSetToTrue($productType, $isAllowed): void
     {
         if ($isAllowed) {
@@ -120,25 +119,19 @@ class IsAllowedGuestCheckoutObserverTest extends TestCase
                 ->with(false);
         }
 
-        $product = $this->getMockBuilder(Product::class)->disableOriginalConstructor()
-            ->onlyMethods(['getTypeId'])
-            ->getMock();
+        $product = $this->createPartialMock(Product::class, ['getTypeId']);
 
         $product->expects($this->once())
             ->method('getTypeId')
             ->willReturn($productType);
 
-        $item = $this->getMockBuilder(QuoteItem::class)->disableOriginalConstructor()
-            ->onlyMethods(['getProduct'])
-            ->getMock();
+        $item = $this->createPartialMock(QuoteItem::class, ['getProduct']);
 
         $item->expects($this->once())
             ->method('getProduct')
             ->willReturn($product);
 
-        $quote = $this->getMockBuilder(Quote::class)->disableOriginalConstructor()
-            ->onlyMethods(['getAllItems'])
-            ->getMock();
+        $quote = $this->createPartialMock(Quote::class, ['getAllItems']);
 
         $quote->expects($this->once())
             ->method('getAllItems')
@@ -148,9 +141,7 @@ class IsAllowedGuestCheckoutObserverTest extends TestCase
             ->method('getStore')
             ->willReturn($this->storeMock);
 
-        $this->storeMock->expects($this->any())
-            ->method('getId')
-            ->willReturn(self::STUB_STORE_ID);
+        $this->storeMock->method('getId')->willReturn(self::STUB_STORE_ID);
 
         $this->eventMock->expects($this->once())
             ->method('getResult')
@@ -182,7 +173,7 @@ class IsAllowedGuestCheckoutObserverTest extends TestCase
     /**
      * @return array
      */
-    public function dataProviderForTestisAllowedGuestCheckoutConfigSetToTrue(): array
+    public static function dataProviderForTestisAllowedGuestCheckoutConfigSetToTrue(): array
     {
         return [
             1 => [Type::TYPE_DOWNLOADABLE, true],
@@ -195,28 +186,19 @@ class IsAllowedGuestCheckoutObserverTest extends TestCase
      */
     public function testIsAllowedGuestCheckoutConfigSetToFalse(): void
     {
-        $product = $this->getMockBuilder(Product::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['getTypeId'])
-            ->getMock();
+        $product = $this->createPartialMock(Product::class, ['getTypeId']);
 
         $product->expects($this->once())
             ->method('getTypeId')
             ->willReturn(Type::TYPE_DOWNLOADABLE);
 
-        $item = $this->getMockBuilder(QuoteItem::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['getProduct'])
-            ->getMock();
+        $item = $this->createPartialMock(QuoteItem::class, ['getProduct']);
 
         $item->expects($this->once())
             ->method('getProduct')
             ->willReturn($product);
 
-        $quote = $this->getMockBuilder(Quote::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['getAllItems'])
-            ->getMock();
+        $quote = $this->createPartialMock(Quote::class, ['getAllItems']);
 
         $quote->expects($this->once())
             ->method('getAllItems')
@@ -226,9 +208,7 @@ class IsAllowedGuestCheckoutObserverTest extends TestCase
             ->method('getStore')
             ->willReturn($this->storeMock);
 
-        $this->storeMock->expects($this->any())
-            ->method('getId')
-            ->willReturn(self::STUB_STORE_ID);
+        $this->storeMock->method('getId')->willReturn(self::STUB_STORE_ID);
 
         $this->eventMock->expects($this->once())
             ->method('getResult')
@@ -236,7 +216,7 @@ class IsAllowedGuestCheckoutObserverTest extends TestCase
 
         $this->eventMock->expects($this->once())
             ->method('getQuote')
-            ->will($this->returnValue($quote));
+            ->willReturn($quote);
 
         $this->scopeConfigMock->expects($this->once())
             ->method('isSetFlag')

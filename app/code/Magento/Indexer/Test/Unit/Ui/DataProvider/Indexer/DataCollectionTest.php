@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -121,11 +121,11 @@ class DataCollectionTest extends TestCase
     /**
      * @return array
      */
-    public function loadDataDataProvider()
+    public static function loadDataDataProvider()
     {
         return [
             [
-                'indexers' => [
+                'indexersData' => [
                     'indexer_2' => [
                         'getId' => 'indexer_2',
                         'getTitle' => 'Title_2',

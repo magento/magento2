@@ -1,8 +1,7 @@
 <?php
 /**
- *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\ConfigurableProduct\Model;
@@ -227,6 +226,10 @@ class OptionRepository implements \Magento\ConfigurableProduct\Api\OptionReposit
         }
 
         try {
+            if ($product->getTypeId() === ProductType::TYPE_SIMPLE) {
+                $product->setTypeId(ConfigurableType::TYPE_CODE);
+                $product->save();
+            }
             $option->save();
         } catch (\Exception $e) {
             throw new CouldNotSaveException(__('An error occurred while saving the option. Please try to save again.'));

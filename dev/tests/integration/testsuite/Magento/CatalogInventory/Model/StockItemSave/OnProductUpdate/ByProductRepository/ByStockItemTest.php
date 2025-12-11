@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\CatalogInventory\Model\StockItemSave\OnProductUpdate\ByProductRepository;
 
@@ -65,7 +65,7 @@ class ByStockItemTest extends \PHPUnit\Framework\TestCase
      * Test saving of stock item by product data via product repository
      *
      * @magentoDataFixture Magento/Catalog/_files/product_simple.php
-     * @magentoDbIsolation disabled
+     * @magentoDbIsolation enabled
      */
     public function testSave()
     {
@@ -83,7 +83,7 @@ class ByStockItemTest extends \PHPUnit\Framework\TestCase
      * product repository
      *
      * @magentoDataFixture Magento/Catalog/_files/product_simple.php
-     * @magentoDbIsolation disabled
+     * @magentoDbIsolation enabled
      */
     public function testSaveManuallyCreatedStockItem()
     {
@@ -104,7 +104,7 @@ class ByStockItemTest extends \PHPUnit\Framework\TestCase
      * product repository
      *
      * @magentoDataFixture Magento/Catalog/_files/product_simple.php
-     * @magentoDbIsolation disabled
+     * @magentoDbIsolation enabled
      */
     public function testSaveManuallyUpdatedStockItem()
     {

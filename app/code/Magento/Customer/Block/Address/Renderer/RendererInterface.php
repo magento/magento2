@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Customer\Block\Address\Renderer;
 
@@ -11,7 +11,7 @@ use Magento\Customer\Model\Address\AddressModelInterface;
 /**
  * Address renderer interface
  *
- * @author      Magento Core Team <core@magentocommerce.com>
+ * @api
  */
 interface RendererInterface
 {

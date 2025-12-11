@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
  /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
+  * Copyright 2024 Adobe
+  * All Rights Reserved.
   */
 -->
 
@@ -57,5 +57,28 @@
         <data key="sort_order">0</data>
         <data key="display_on">All Pages</data>
         <data key="container">Sidebar Main</data>
+    </entity>
+    <entity name="CatalogProductsListWidget" type="widget">
+        <data key="type">Catalog Products List</data>
+        <data key="design_theme">Magento Luma</data>
+        <data key="name" unique="suffix">Some Title</data>
+        <array key="store_ids">
+            <item>All Store Views</item>
+        </array>
+        <data key="sort_order">0</data>
+        <data key="display_on">All Pages</data>
+        <data key="container">Main Content Area</data>
+    </entity>
+    <entity name="CmsPageLinkWidget" type="widget">
+        <data key="type">CMS Page Link</data>
+        <data key="design_theme">Magento Luma</data>
+        <data key="name" unique="suffix">TestWidget</data>
+        <data key="sort_order">0</data>
+        <array key="store_ids">
+            <item>All Store Views</item>
+        </array>
+        <data key="display_on">All Pages</data>
+        <data key="container">Main Content Area</data>
+        <data key="template">CMS Page Link Block template</data>
     </entity>
 </entities>

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -59,7 +59,7 @@ class ContentsTest extends TestCase
     protected $storage;
 
     /**
-     * @inheirtDoc
+     * @inheritDoc
      */
     protected function setUp(): void
     {
@@ -124,9 +124,10 @@ class ContentsTest extends TestCase
 
         $this->objectManager
             ->method('get')
-            ->withConsecutive([WysiwygStorage::class], [Data::class])
-            ->willReturnOnConsecutiveCalls($storage, $jsonData);
-
+            ->willReturnCallback(fn($param) => match ([$param]) {
+                [WysiwygStorage::class] => $storage,
+                [Data::class] => $jsonData
+            });
         $this->response->expects($this->once())
             ->method('representJson');
 

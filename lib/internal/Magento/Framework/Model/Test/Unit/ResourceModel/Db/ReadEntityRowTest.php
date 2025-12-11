@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -110,8 +110,15 @@ class ReadEntityRowTest extends TestCase
 
         $this->select
             ->method('where')
-            ->withConsecutive(['identifier = ?', $identifier], ['store_id = ?', 1])
-            ->willReturnOnConsecutiveCalls($this->select, $this->select);
+            ->willReturnCallback(
+                function ($arg1, $arg2) use ($identifier) {
+                    if ($arg1 == 'identifier = ?' && $arg2 == $identifier) {
+                        return $this->select;
+                    } elseif ($arg1 == 'store_id = ?' && $arg2 == 1) {
+                        return $this->select;
+                    }
+                }
+            );
 
         $this->connection->expects($this->once())
             ->method('fetchRow')

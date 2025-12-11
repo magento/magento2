@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
  /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
+   * Copyright 2025 Adobe
+  * All Rights Reserved.
   */
 -->
 
@@ -17,9 +17,8 @@
             <severity value="AVERAGE"/>
             <testCaseId value="MC-32333"/>
             <skip>
-                <issueId value="MQE-2288" />
+                <issueId value="AC-15827"/>
             </skip>
-            <group value="pr_exclude"/>
         </annotations>
         <before>
             <!--Login-->

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework\Oauth;
 
@@ -21,7 +21,7 @@ interface NonceGeneratorInterface
      * @param ConsumerInterface $consumer
      * @return string The generated nonce value.
      */
-    public function generateNonce(ConsumerInterface $consumer = null);
+    public function generateNonce(?ConsumerInterface $consumer = null);
 
     /**
      * Generate a current timestamp.

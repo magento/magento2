@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
  /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
+  * Copyright 2025 Adobe
+  * All Rights Reserved.
   */
 -->
 
@@ -14,6 +14,8 @@
             <title value="Create Search Term Entity With Redirect. Check How Redirect is Working on Storefront"/>
             <description value="Storefront search by created search term with redirect. Verifying if created redirect is working"/>
             <severity value="CRITICAL"/>
+            <group value="cloud"/>
+            <group value="pr_exclude"/>
         </annotations>
 
         <before>

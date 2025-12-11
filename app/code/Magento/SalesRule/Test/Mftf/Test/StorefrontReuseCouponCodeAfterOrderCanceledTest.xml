@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright 2024 Adobe
+  * All Rights Reserved.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontReuseCouponCodeAfterOrderCanceledTest">
+        <annotations>
+            <features value="SalesRule"/>
+            <stories value="One-time use coupon per customer becomes invalid even when order was cancelled"/>
+            <title value="[Magento Cloud] - One-time use coupon per customer becomes invalid even when order was cancelled"/>
+            <description value="[Magento Cloud] - One-time use coupon per customer becomes invalid even when order was cancelled."/>
+            <severity value="AVERAGE"/>
+            <testCaseId value="AC-7591"/>
+            <useCaseId value="ACP2E-1496"/>
+            <group value="salesRule"/>
+        </annotations>
+
+        <before>
+            <!-- Create customer -->
+            <createData entity="Simple_US_Customer" stepKey="createCustomer"/>
+            <!-- Create simple product-->
+            <createData entity="SimpleProduct2" stepKey="createSimpleProduct"/>
+            <!-- Login as Admin -->
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+        </before>
+
+        <after>
+            <!-- Delete the cart price rule we made during the test -->
+            <actionGroup ref="DeleteCartPriceRuleByName" stepKey="deleteCartPriceRule">
+                <argument name="ruleName" value="{{CatPriceRule.name}}"/>
+            </actionGroup>
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer" />
+            <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
+            <deleteData createDataKey="createSimpleProduct" stepKey="deleteSimpleProduct"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+
+        <!-- Add new cart price rule -->
+        <actionGroup ref="CreateCartPriceRuleActionGroup" stepKey="createCartRule">
+            <argument name="ruleName" value="{{CatPriceRule.name}}"/>
+            <argument name="websiteName" value="{{CatPriceRule.websites}}"/>
+        </actionGroup>
+
+        <!-- Select custom customer group -->
+        <actionGroup ref="CatalogSelectCustomerGroupActionGroup" stepKey="selectCustomCustomerGroup">
+            <argument name="customerGroupName" value="{{GeneralCustomerGroup.code}}"/>
+        </actionGroup>
+
+        <!-- Cart Price Rule coupon info -->
+        <actionGroup ref="AdminCartPriceRuleFillCouponInfoActionGroup" stepKey="fillCartPriceRuleCouponInfo">
+            <argument name="couponCode" value="{{CatPriceRule.coupon_code}}"/>
+            <argument name="userPerCoupon" value="1"/>
+            <argument name="userPerCustomer" value="1"/>
+        </actionGroup>
+
+        <scrollTo selector="{{AdminCartPriceRulesFormSection.actionsHeader}}" stepKey="scrollToActionsHeader"/>
+        <!--Fill values for Action Section-->
+        <actionGroup ref="AdminCreateCartPriceRuleActionsSectionDiscountFieldsActionGroup" stepKey="createActiveCartPriceRuleActionsSection">
+            <argument name="rule" value="CartPriceRuleConditionAndFreeShippingApplied"/>
+        </actionGroup>
+
+        <scrollTo selector="{{AdminCartPriceRulesFormSection.labelsHeader}}" stepKey="scrollToLabelsHeader"/>
+        <!--Save Cart Price Rule-->
+        <actionGroup ref="AssertCartPriceRuleSuccessSaveMessageActionGroup" stepKey="seeAssertCartPriceRuleSuccessSaveMessage"/>
+
+        <!--Login to Frontend-->
+        <actionGroup ref="LoginToStorefrontActionGroup" stepKey="customerLogin">
+            <argument name="Customer" value="$$createCustomer$$" />
+        </actionGroup>
+
+        <!-- Open the Product Page, add the product to Cart, go to Shopping Cart and Apply the same coupon code -->
+        <amOnPage url="{{StorefrontProductPage.url($$createSimpleProduct.custom_attributes[url_key]$$)}}" stepKey="openProductPage"/>
+        <waitForPageLoad stepKey="waitForPageLoad2"/>
+        <actionGroup ref="ApplyCartRuleOnStorefrontActionGroup" stepKey="applyCartPriceRule">
+            <argument name="product" value="$$createSimpleProduct$$"/>
+            <argument name="couponCode" value="{{CatPriceRule.coupon_code}}"/>
+        </actionGroup>
+        <waitForText userInput='You used coupon code "{{CatPriceRule.coupon_code}}"' stepKey="waitForText"/>
+        <see selector="{{StorefrontMessagesSection.success}}" userInput='You used coupon code "{{CatPriceRule.coupon_code}}"' stepKey="seeSuccessMessage1"/>
+        <waitForElementVisible selector="{{CheckoutCartSummarySection.discountAmount}}" time="30" stepKey="waitForElementDiscountVisible"/>
+
+        <!--Proceed to checkout for customer details-->
+        <actionGroup ref="StorefrontClickProceedToCheckoutActionGroup" stepKey="clickProceedToCheckout"/>
+        <waitForElement selector="{{CheckoutShippingSection.shippingTab}}" stepKey="waitForCheckoutPage"/>
+        <actionGroup ref="CheckoutSelectFlatRateShippingMethodActionGroup" stepKey="selectFlatRate"/>
+        <actionGroup ref="StorefrontCheckoutClickNextOnShippingStepActionGroup" stepKey="goToReview"/>
+        <actionGroup ref="CheckoutSelectCheckMoneyOrderPaymentActionGroup" stepKey="selectCheckMoneyOrder"/>
+        <actionGroup ref="CheckoutPlaceOrderActionGroup" stepKey="clickOnPlaceOrder">
+            <argument name="orderNumberMessage" value="CONST.successCheckoutOrderNumberMessage"/>
+            <argument name="emailYouMessage" value="CONST.successCheckoutEmailYouMessage"/>
+        </actionGroup>
+        <magentoCron groups="default" stepKey="runCronAfterPlacingOrder"/>
+
+        <!-- Get Order id -->
+        <grabTextFrom selector="{{CheckoutSuccessMainSection.orderNumber22}}" stepKey="grabOrderNumber"/>
+        <!-- Assert Cart is Empty -->
+        <actionGroup ref="AssertShoppingCartIsEmptyActionGroup" stepKey="seeEmptyShoppingCartForFirstCustomer"/>
+
+        <!--Assert Order is In Orders Grid -->
+        <actionGroup ref="AdminOrderFilterByOrderIdAndStatusActionGroup" stepKey="seeFirstOrder">
+            <argument name="orderId" value="$grabOrderNumber"/>
+            <argument name="orderStatus" value="Pending"/>
+        </actionGroup>
+
+        <!-- Navigate to admin order detail page -->
+        <amOnPage url="{{AdminOrderPage.url({$grabOrderNumber})}}" stepKey="navigateToOrderPage1"/>
+        <seeInCurrentUrl url="{{AdminOrderDetailsPage.url}}" stepKey="seeViewOrderPage" after="navigateToOrderPage1"/>
+        <see selector="{{AdminOrderDetailsInformationSection.orderStatus}}" userInput="Pending" stepKey="seeOrderPendingStatus" after="seeViewOrderPage"/>
+        <!-- Cancel order -->
+        <actionGroup ref="CancelPendingOrderActionGroup" stepKey="cancelOrder"/>
+        <waitForPageLoad stepKey="waitForOrderDetailsToLoad"/>
+        <magentoCron groups="default" stepKey="runCronAfterCancelingOrder"/>
+
+        <!-- Open My Account Page from Customer dropdown -->
+        <actionGroup ref="StorefrontOpenMyAccountPageActionGroup" stepKey="goToMyAccountPage"/>
+
+        <!-- Goto Orders tab from Sidebar menu in Storefront page -->
+        <actionGroup ref="StorefrontCustomerGoToSidebarMenu" stepKey="goToSidebarMenu">
+            <argument name="menu" value="My Orders"/>
+        </actionGroup>
+
+        <!-- Clicking View Order from My Orders Grid -->
+        <actionGroup ref="StorefrontClickViewOrderLinkOnMyOrdersPageActionGroup" stepKey="clickViewOrder"/>
+
+        <!-- Clicking on Reorder link from Order Details Tab -->
+        <click selector="{{StorefrontCustomerOrderViewSection.reorder}}" stepKey="clickReorder"/>
+        <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindexInvalidatedIndices">
+            <argument name="indices" value=""/>
+        </actionGroup>
+            
+        <!-- Reuse coupon code -->
+        <click selector="{{DiscountSection.DiscountTab}}" stepKey="clickToDiscountTab"/>
+        <fillField selector="{{DiscountSection.CouponInput}}" userInput="{{CatPriceRule.coupon_code}}" stepKey="fillCouponCode"/>
+        <click selector="{{DiscountSection.ApplyCodeBtn}}" stepKey="applyCode"/>
+        <waitForPageLoad stepKey="waitForPageLoad"/>
+        <waitForText userInput='You used coupon code "{{CatPriceRule.coupon_code}}"' stepKey="waitForText2"/>
+        <see selector="{{StorefrontMessagesSection.success}}" userInput='You used coupon code "{{CatPriceRule.coupon_code}}"' stepKey="seeSuccessMessage2"/>
+        <waitForElementVisible selector="{{CheckoutCartSummarySection.discountAmount}}" time="30" stepKey="waitForElementDiscountVisible1"/>
+    </test>
+</tests>

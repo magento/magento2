@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework\Search\Dynamic\Algorithm;
 
@@ -33,7 +33,7 @@ class Manual implements AlgorithmInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getItems(
         BucketInterface $bucket,
@@ -49,10 +49,18 @@ class Manual implements AlgorithmInterface
         $dbRanges = $this->processRange($dbRanges, $options['max_intervals_number']);
         $data = $this->dataProvider->prepareData($range, $dbRanges);
 
+        $aggregations = $this->dataProvider->getAggregations($entityStorage);
+        if ($aggregations['max']) {
+            $lastKey = array_key_last($data);
+            $data[$lastKey]['to'] = max($data[$lastKey]['to'], $aggregations['max'] + 0.01);
+        }
+
         return $data;
     }
 
     /**
+     * Fix ranges according to maximum ranges number
+     *
      * @param array $items
      * @param int $maxIntervalsNumber
      * @return array

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -54,16 +54,10 @@ class UpdateConfigurationsTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->requestMock = $this->getMockBuilder(RequestInterface::class)
-            ->getMockForAbstractClass();
-        $this->productRepositoryMock = $this->getMockBuilder(ProductRepositoryInterface::class)
-            ->getMockForAbstractClass();
-        $this->variationHandlerMock = $this->getMockBuilder(VariationHandler::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->subjectMock = $this->getMockBuilder(ProductInitializationHelper::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->requestMock = $this->createMock(RequestInterface::class);
+        $this->productRepositoryMock = $this->createMock(ProductRepositoryInterface::class);
+        $this->variationHandlerMock = $this->createMock(VariationHandler::class);
+        $this->subjectMock = $this->createMock(ProductInitializationHelper::class);
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->updateConfigurations = $this->objectManagerHelper->getObject(
@@ -224,11 +218,9 @@ class UpdateConfigurationsTest extends TestCase
      * @param bool $wasChanged
      * @return Product|MockObject
      */
-    protected function getProductMock(array $expectedData = null, $hasDataChanges = false, $wasChanged = false)
+    protected function getProductMock(?array $expectedData = null, $hasDataChanges = false, $wasChanged = false)
     {
-        $productMock = $this->getMockBuilder(Product::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $productMock = $this->createMock(Product::class);
 
         if ($wasChanged !== false) {
             if ($expectedData !== null) {

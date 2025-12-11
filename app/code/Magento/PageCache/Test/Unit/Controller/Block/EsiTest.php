@@ -1,8 +1,7 @@
 <?php
 /**
- *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -18,6 +17,8 @@ use Magento\Framework\Translate\InlineInterface;
 use Magento\Framework\View\Element\AbstractBlock;
 use Magento\Framework\View\Layout;
 use Magento\Framework\View\Layout\LayoutCacheKeyInterface;
+use Magento\Framework\Validator\Regex;
+use Magento\Framework\Validator\RegexFactory;
 use Magento\PageCache\Controller\Block;
 use Magento\PageCache\Controller\Block\Esi;
 use Magento\PageCache\Test\Unit\Block\Controller\StubBlock;
@@ -65,6 +66,11 @@ class EsiTest extends TestCase
     protected $translateInline;
 
     /**
+     * Validation pattern for handles array
+     */
+    private const VALIDATION_RULE_PATTERN = '/^[a-z0-9]+[a-z0-9_]*$/i';
+
+    /**
      * Set up before test
      */
     protected function setUp(): void
@@ -98,6 +104,16 @@ class EsiTest extends TestCase
 
         $this->translateInline = $this->getMockForAbstractClass(InlineInterface::class);
 
+        $regexFactoryMock = $this->getMockBuilder(RegexFactory::class)
+            ->disableOriginalConstructor()
+            ->onlyMethods(['create'])
+            ->getMock();
+
+        $regexObject = new Regex(self::VALIDATION_RULE_PATTERN);
+
+        $regexFactoryMock->expects($this->any())->method('create')
+            ->willReturn($regexObject);
+
         $helperObjectManager = new ObjectManager($this);
         $this->action = $helperObjectManager->getObject(
             Esi::class,
@@ -106,7 +122,8 @@ class EsiTest extends TestCase
                 'translateInline' => $this->translateInline,
                 'jsonSerializer' => new Json(),
                 'base64jsonSerializer' => new Base64Json(),
-                'layoutCacheKey' => $this->layoutCacheKeyMock
+                'layoutCacheKey' => $this->layoutCacheKeyMock,
+                'regexValidatorFactory' => $regexFactoryMock
             ]
         );
     }
@@ -171,7 +188,7 @@ class EsiTest extends TestCase
     /**
      * @return array
      */
-    public function executeDataProvider()
+    public static function executeDataProvider()
     {
         return [
             [StubBlock::class, true],

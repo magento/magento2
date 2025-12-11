@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -12,9 +12,12 @@ use Magento\Framework\DataObject;
 use Magento\Store\Model\StoreManagerInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 
 class WebsiteTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var Website
      */
@@ -27,18 +30,17 @@ class WebsiteTest extends TestCase
 
     protected function setUp(): void
     {
-        $storeManager = $this->storeManager = $this->getMockBuilder(StoreManagerInterface::class)
-            ->getMock();
+        $storeManager = $this->storeManager = $this->createMock(StoreManagerInterface::class);
         /** @var StoreManagerInterface $storeManager */
         $this->testable = new Website($storeManager);
     }
 
     public function testBeforeSaveWithId()
     {
-        $object = $this->getMockBuilder(DataObject::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['getId'])
-            ->getMock();
+        $object = $this->createPartialMockWithReflection(
+            DataObject::class,
+            ['getId']
+        );
 
         $object->expects($this->once())->method('getId')->willReturn(1);
         /** @var DataObject $object */
@@ -53,11 +55,10 @@ class WebsiteTest extends TestCase
         $websiteId = 1;
         $object = $this->getMockBuilder(DataObject::class)
             ->disableOriginalConstructor()
-            ->setMethods(['hasData', 'setData'])
+            ->onlyMethods(['hasData', 'setData'])
             ->getMock();
 
-        $store = $this->getMockBuilder(DataObject::class)
-            ->setMethods(['getWebsiteId'])->getMock();
+        $store = $this->createPartialMockWithReflection(DataObject::class, ['getWebsiteId']);
         $store->expects($this->once())->method('getWebsiteId')->willReturn($websiteId);
 
         $this->storeManager->expects($this->once())

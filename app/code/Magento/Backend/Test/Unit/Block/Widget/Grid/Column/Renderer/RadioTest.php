@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -12,11 +12,16 @@ use Magento\Backend\Block\Widget\Grid\Column;
 use Magento\Backend\Block\Widget\Grid\Column\Renderer\Options\Converter;
 use Magento\Backend\Block\Widget\Grid\Column\Renderer\Radio;
 use Magento\Framework\DataObject;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 class RadioTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var Radio
      */
@@ -32,17 +37,23 @@ class RadioTest extends TestCase
      */
     protected $_column;
 
+    /**
+     * @var ObjectManager
+     */
+    private $objectManager;
+
     protected function setUp(): void
     {
+        $this->objectManager = new ObjectManager($this);
         $context = $this->createMock(Context::class);
         $this->_converter = $this->createPartialMock(
             Converter::class,
             ['toFlatArray']
         );
-        $this->_column = $this->getMockBuilder(Column::class)
-            ->addMethods(['getValues', 'getIndex', 'getHtmlName'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->_column = $this->createPartialMockWithReflection(
+            Column::class,
+            ['getValues', 'getIndex', 'getHtmlName']
+        );
         $this->_object = new Radio($context, $this->_converter);
         $this->_object->setColumn($this->_column);
     }
@@ -50,8 +61,8 @@ class RadioTest extends TestCase
     /**
      * @param array $rowData
      * @param string $expectedResult
-     * @dataProvider renderDataProvider
      */
+    #[DataProvider('renderDataProvider')]
     public function testRender(array $rowData, $expectedResult)
     {
         $selectedTreeArray = [['value' => 1, 'label' => 'One']];
@@ -74,7 +85,7 @@ class RadioTest extends TestCase
     /**
      * @return array
      */
-    public function renderDataProvider()
+    public static function renderDataProvider()
     {
         return [
             'checked' => [

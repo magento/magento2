@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -84,7 +84,7 @@ class ProductCategoryCondition implements CustomConditionInterface
      */
     private function getCategoryIds(Filter $filter): array
     {
-        $categoryIds = explode(',', $filter->getValue());
+        $categoryIds = $filter->getValue() !== null ? explode(',', $filter->getValue()) : [];
         $childCategoryIds = [];
 
         foreach ($categoryIds as $categoryId) {

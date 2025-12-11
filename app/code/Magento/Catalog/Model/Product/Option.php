@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Catalog\Model\Product;
@@ -16,10 +16,8 @@ use Magento\Catalog\Model\Product\Option\Type\DefaultType;
 use Magento\Catalog\Model\Product\Option\Type\File;
 use Magento\Catalog\Model\Product\Option\Type\Select;
 use Magento\Catalog\Model\Product\Option\Type\Text;
-use Magento\Catalog\Model\Product\Option\Value;
 use Magento\Catalog\Model\ResourceModel\Product\Option\Value\Collection;
 use Magento\Catalog\Pricing\Price\BasePrice;
-use Magento\Catalog\Pricing\Price\CalculateCustomOptionCatalogRule;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Framework\Exception\LocalizedException;
@@ -32,7 +30,6 @@ use Magento\Framework\Model\AbstractExtensibleModel;
  * @method int getProductId()
  * @method \Magento\Catalog\Model\Product\Option setProductId(int $value)
  *
- * @author      Magento Core Team <core@magentocommerce.com>
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.ExcessivePublicCount)
  * @since 100.0.2
@@ -131,11 +128,6 @@ class Option extends AbstractExtensibleModel implements ProductCustomOptionInter
     private $customOptionValuesFactory;
 
     /**
-     * @var CalculateCustomOptionCatalogRule
-     */
-    private $calculateCustomOptionCatalogRule;
-
-    /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory
@@ -150,7 +142,6 @@ class Option extends AbstractExtensibleModel implements ProductCustomOptionInter
      * @param ProductCustomOptionValuesInterfaceFactory|null $customOptionValuesFactory
      * @param array $optionGroups
      * @param array $optionTypesToGroups
-     * @param CalculateCustomOptionCatalogRule|null $calculateCustomOptionCatalogRule
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -162,13 +153,12 @@ class Option extends AbstractExtensibleModel implements ProductCustomOptionInter
         \Magento\Catalog\Model\Product\Option\Type\Factory $optionFactory,
         \Magento\Framework\Stdlib\StringUtils $string,
         Option\Validator\Pool $validatorPool,
-        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
-        \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
+        ?\Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
+        ?\Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = [],
-        ProductCustomOptionValuesInterfaceFactory $customOptionValuesFactory = null,
+        ?ProductCustomOptionValuesInterfaceFactory $customOptionValuesFactory = null,
         array $optionGroups = [],
-        array $optionTypesToGroups = [],
-        CalculateCustomOptionCatalogRule $calculateCustomOptionCatalogRule = null
+        array $optionTypesToGroups = []
     ) {
         $this->productOptionValue = $productOptionValue;
         $this->optionTypeFactory = $optionFactory;
@@ -176,8 +166,6 @@ class Option extends AbstractExtensibleModel implements ProductCustomOptionInter
         $this->validatorPool = $validatorPool;
         $this->customOptionValuesFactory = $customOptionValuesFactory ?:
             ObjectManager::getInstance()->get(ProductCustomOptionValuesInterfaceFactory::class);
-        $this->calculateCustomOptionCatalogRule = $calculateCustomOptionCatalogRule ??
-            ObjectManager::getInstance()->get(CalculateCustomOptionCatalogRule::class);
         $this->optionGroups = $optionGroups ?: [
             self::OPTION_GROUP_DATE => Date::class,
             self::OPTION_GROUP_FILE => File::class,
@@ -212,7 +200,8 @@ class Option extends AbstractExtensibleModel implements ProductCustomOptionInter
      * Get resource instance
      *
      * @return \Magento\Framework\Model\ResourceModel\Db\AbstractDb
-     * @deprecated 102.0.0 because resource models should be used directly
+     * @deprecated 102.0.0
+     * @see resource models should be used directly
      */
     protected function _getResource()
     {
@@ -350,7 +339,7 @@ class Option extends AbstractExtensibleModel implements ProductCustomOptionInter
      * @param Product $product
      * @return $this
      */
-    public function setProduct(Product $product = null)
+    public function setProduct(?Product $product = null)
     {
         $this->product = $product;
         return $this;
@@ -478,21 +467,10 @@ class Option extends AbstractExtensibleModel implements ProductCustomOptionInter
      */
     public function getPrice($flag = false)
     {
-        if ($flag && $this->getPriceType() === self::$typePercent) {
-            $price = $this->calculateCustomOptionCatalogRule->execute(
-                $this->getProduct(),
-                (float)$this->getData(self::KEY_PRICE),
-                $this->getPriceType() === Value::TYPE_PERCENT
-            );
-
-            if ($price === null) {
-                $basePrice = $this->getProduct()->getPriceInfo()->getPrice(BasePrice::PRICE_CODE)->getValue();
-                $price = $basePrice * ($this->_getData(self::KEY_PRICE) / 100);
-            }
-
-            return $price;
+        if ($flag && $this->getPriceType() == self::$typePercent) {
+            $basePrice = $this->getProduct()->getPriceInfo()->getPrice(BasePrice::PRICE_CODE)->getValue();
+            return $basePrice * ($this->_getData(self::KEY_PRICE) / 100);
         }
-
         return $this->_getData(self::KEY_PRICE);
     }
 
@@ -894,7 +872,7 @@ class Option extends AbstractExtensibleModel implements ProductCustomOptionInter
      * @param ProductCustomOptionValuesInterface[] $values
      * @return $this
      */
-    public function setValues(array $values = null)
+    public function setValues(?array $values = null)
     {
         $this->values = $values;
         return $this;
@@ -1011,7 +989,7 @@ class Option extends AbstractExtensibleModel implements ProductCustomOptionInter
         $matches = [];
         preg_match_all('/(?<extensions>[a-z0-9]+)/i', strtolower($rawExtensions), $matches);
 
-        if (!empty($matches)) {
+        if (!empty($matches['extensions'])) {
             $extensions = implode(', ', array_unique($matches['extensions']));
             $this->setFileExtension($extensions);
         }

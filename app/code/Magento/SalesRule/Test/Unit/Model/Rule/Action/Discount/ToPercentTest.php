@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -41,14 +41,14 @@ class ToPercentTest extends TestCase
         $this->validator = $this->getMockBuilder(
             Validator::class
         )->disableOriginalConstructor()
-            ->setMethods(
+            ->onlyMethods(
                 ['getItemPrice', 'getItemBasePrice', 'getItemOriginalPrice', 'getItemBaseOriginalPrice']
             )->getMock();
 
         $this->discountDataFactory = $this->getMockBuilder(
             DataFactory::class
         )->disableOriginalConstructor()
-            ->setMethods(
+            ->onlyMethods(
                 ['create']
             )->getMock();
 
@@ -79,7 +79,7 @@ class ToPercentTest extends TestCase
         $discountData = $this->getMockBuilder(
             Data::class
         )->disableOriginalConstructor()
-            ->setMethods(
+            ->onlyMethods(
                 ['setAmount', 'setBaseAmount', 'setOriginalAmount', 'setBaseOriginalAmount']
             )->getMock();
 
@@ -88,19 +88,17 @@ class ToPercentTest extends TestCase
         $rule = $this->getMockBuilder(
             Rule::class
         )->disableOriginalConstructor()
-            ->setMethods(
+            ->addMethods(
                 ['getDiscountAmount', 'getDiscountQty']
             )->getMock();
 
         $item = $this->getMockBuilder(
             AbstractItem::class
         )->disableOriginalConstructor()
-            ->setMethods(
+            ->addMethods(['getDiscountAmount', 'getBaseDiscountAmount',
+                'getDiscountPercent', 'setDiscountPercent',])
+            ->onlyMethods(
                 [
-                    'getDiscountAmount',
-                    'getBaseDiscountAmount',
-                    'getDiscountPercent',
-                    'setDiscountPercent',
                     'getQuote',
                     'getAddress',
                     'getOptionByCode',
@@ -207,7 +205,7 @@ class ToPercentTest extends TestCase
     /**
      * @return array
      */
-    public function calculateDataProvider()
+    public static function calculateDataProvider()
     {
         return [
             [
@@ -223,7 +221,7 @@ class ToPercentTest extends TestCase
                 'expectedRuleDiscountQty' => 100,
                 'expectedDiscountData' => [
                     'amount' => 98,
-                    'baseAmount' => 59.5,
+                    'baseAmount' => 59.50,
                     'originalAmount' => 119,
                     'baseOriginalAmount' => 80.5,
                 ],

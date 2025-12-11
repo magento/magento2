@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -12,7 +12,7 @@ namespace Magento\Customer\Block\Adminhtml\Edit\Tab\View\Grid\Renderer;
  *
  * @see \Magento\Customer\Block\Adminhtml\Edit\Tab\View\Grid\Renderer\Item
  */
-class ItemTest extends AbstractItemTest
+class ItemTest extends AbstractItemTestCase
 {
     /**
      * @magentoDataFixture Magento/Checkout/_files/customer_quote_with_items_simple_product_options.php

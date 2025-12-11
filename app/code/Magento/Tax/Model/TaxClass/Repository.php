@@ -1,8 +1,7 @@
 <?php
 /**
- *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Tax\Model\TaxClass;
@@ -16,6 +15,9 @@ use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\CouldNotDeleteException;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\LocalizedException as ModelException;
+use Magento\Framework\Validator\NotEmpty;
+use Magento\Framework\Validator\ValidateException;
+use Magento\Framework\Validator\ValidatorChain;
 use Magento\Tax\Api\TaxClassManagementInterface;
 use Magento\Tax\Model\ClassModel;
 use Magento\Tax\Model\ClassModelRegistry;
@@ -87,7 +89,7 @@ class Repository implements \Magento\Tax\Api\TaxClassRepositoryInterface
         ClassModelRegistry $classModelRegistry,
         \Magento\Tax\Model\ResourceModel\TaxClass $taxClassResource,
         \Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface $joinProcessor,
-        CollectionProcessorInterface $collectionProcessor = null
+        ?CollectionProcessorInterface $collectionProcessor = null
     ) {
         $this->searchCriteriaBuilder = $searchCriteriaBuilder;
         $this->filterBuilder = $filterBuilder;
@@ -171,20 +173,20 @@ class Repository implements \Magento\Tax\Api\TaxClassRepositoryInterface
      *
      * @param \Magento\Tax\Api\Data\TaxClassInterface $taxClass
      * @return void
-     * @throws InputException
+     * @throws InputException|ValidateException
      */
     protected function validateTaxClassData(\Magento\Tax\Api\Data\TaxClassInterface $taxClass)
     {
         $exception = new InputException();
 
-        if (!\Zend_Validate::is(trim($taxClass->getClassName() ?? ''), 'NotEmpty')) {
+        if (!ValidatorChain::is(trim($taxClass->getClassName() ?? ''), NotEmpty::class)) {
             $exception->addError(
                 __('"%fieldName" is required. Enter and try again.', ['fieldName' => ClassModel::KEY_NAME])
             );
         }
 
         $classType = $taxClass->getClassType();
-        if (!\Zend_Validate::is(trim($classType), 'NotEmpty')) {
+        if (!ValidatorChain::is($classType !== null ? trim($classType) : '', NotEmpty::class)) {
             $exception->addError(
                 __('"%fieldName" is required. Enter and try again.', ['fieldName' => ClassModel::KEY_TYPE])
             );
@@ -228,6 +230,7 @@ class Repository implements \Magento\Tax\Api\TaxClassRepositoryInterface
      *
      * @return void
      * @deprecated 100.2.0
+     * @see we don't recommend this approach anymore
      */
     protected function addFilterGroupToCollection(FilterGroup $filterGroup, TaxClassCollection $collection)
     {

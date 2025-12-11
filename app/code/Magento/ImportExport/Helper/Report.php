@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\ImportExport\Helper;
@@ -61,7 +61,7 @@ class Report extends \Magento\Framework\App\Helper\AbstractHelper
      */
     public function getExecutionTime($time)
     {
-        $reportTime = $this->timeZone->date($time);
+        $reportTime = $this->timeZone->date(new \DateTime($time));
         $timeDiff = $reportTime->diff($this->timeZone->date());
         return $timeDiff->format('%H:%I:%S');
     }

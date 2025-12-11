@@ -1,18 +1,18 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Downloadable\Model\System\Config\Source;
 
 /**
  * Downloadable Content Disposition Source
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Contentdisposition implements \Magento\Framework\Option\ArrayInterface
 {
     /**
+     * Return option array
+     *
      * @return array
      */
     public function toOptionArray()

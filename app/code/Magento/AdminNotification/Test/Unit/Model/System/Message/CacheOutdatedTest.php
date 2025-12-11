@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -10,13 +10,17 @@ namespace Magento\AdminNotification\Test\Unit\Model\System\Message;
 use Magento\AdminNotification\Model\System\Message\CacheOutdated;
 use Magento\Framework\App\Cache\TypeListInterface;
 use Magento\Framework\AuthorizationInterface;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\UrlInterface;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 class CacheOutdatedTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var MockObject
      */
@@ -39,9 +43,9 @@ class CacheOutdatedTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->_authorizationMock = $this->getMockForAbstractClass(AuthorizationInterface::class);
-        $this->_urlInterfaceMock = $this->getMockForAbstractClass(UrlInterface::class);
-        $this->_cacheTypeListMock = $this->getMockForAbstractClass(TypeListInterface::class);
+        $this->_authorizationMock = $this->createMock(AuthorizationInterface::class);
+        $this->_urlInterfaceMock = $this->createMock(UrlInterface::class);
+        $this->_cacheTypeListMock = $this->createMock(TypeListInterface::class);
 
         $objectManagerHelper = new ObjectManager($this);
         $arguments = [
@@ -58,32 +62,37 @@ class CacheOutdatedTest extends TestCase
     /**
      * @param string $expectedSum
      * @param array $cacheTypes
-     * @dataProvider getIdentityDataProvider
      */
-    public function testGetIdentity($expectedSum, $cacheTypes)
+    #[DataProvider('getIdentityDataProvider')]
+    public function testGetIdentity($expectedSum, $types)
     {
+        $cacheType = [];
+        foreach ($types as $type) {
+            $cacheType[] = $type($this);
+        }
+
         $this->_cacheTypeListMock->method(
             'getInvalidated'
         )->willReturn(
-            $cacheTypes
+            $cacheType
         );
         $this->assertEquals($expectedSum, $this->_messageModel->getIdentity());
+    }
+
+    protected function getMockForStdClass($mockReturn)
+    {
+        $cacheTypeMock = $this->createPartialMockWithReflection(\stdClass::class, ['getCacheType']);
+        $cacheTypeMock->method('getCacheType')->willReturn($mockReturn);
+        return $cacheTypeMock;
     }
 
     /**
      * @return array
      */
-    public function getIdentityDataProvider()
+    public static function getIdentityDataProvider()
     {
-        $cacheTypeMock1 = $this->getMockBuilder(\stdClass::class)->addMethods(['getCacheType'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $cacheTypeMock1->method('getCacheType')->willReturn('Simple');
-
-        $cacheTypeMock2 = $this->getMockBuilder(\stdClass::class)->addMethods(['getCacheType'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $cacheTypeMock2->method('getCacheType')->willReturn('Advanced');
+        $cacheTypeMock1 = static fn (self $testCase) => $testCase->getMockForStdClass('Simple');
+        $cacheTypeMock2 = static fn (self $testCase) => $testCase->getMockForStdClass('Advanced');
 
         return [
             ['c13cfaddc2c53e8d32f59bfe89719beb', [$cacheTypeMock1]],
@@ -95,15 +104,19 @@ class CacheOutdatedTest extends TestCase
      * @param bool $expected
      * @param bool $allowed
      * @param array $cacheTypes
-     * @dataProvider isDisplayedDataProvider
      */
+    #[DataProvider('isDisplayedDataProvider')]
     public function testIsDisplayed($expected, $allowed, $cacheTypes)
     {
+        $cacheType1 = [];
+        foreach ($cacheTypes as $cacheType) {
+            $cacheType1[] = $cacheType($this);
+        }
         $this->_authorizationMock->expects($this->once())->method('isAllowed')->willReturn($allowed);
         $this->_cacheTypeListMock->method(
             'getInvalidated'
         )->willReturn(
-            $cacheTypes
+            $cacheType1
         );
         $this->assertEquals($expected, $this->_messageModel->isDisplayed());
     }
@@ -111,12 +124,9 @@ class CacheOutdatedTest extends TestCase
     /**
      * @return array
      */
-    public function isDisplayedDataProvider()
+    public static function isDisplayedDataProvider()
     {
-        $cacheTypesMock = $this->getMockBuilder(\stdClass::class)->addMethods(['getCacheType'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $cacheTypesMock->method('getCacheType')->willReturn('someVal');
+        $cacheTypesMock = static fn (self $testCase) => $testCase->getMockForStdClass('someVal');
         $cacheTypes = [$cacheTypesMock, $cacheTypesMock];
         return [
             [false, false, []],

@@ -4,7 +4,7 @@ This component contains Magento Cli and can be extended via DI configuration.
 
 For example we can introduce new command in module using di.xml:
 
-```
+```xml
 <type name="Magento\Framework\Console\CommandListInterface">
     <arguments>
         <argument name="commands" xsi:type="array">
@@ -13,4 +13,3 @@ For example we can introduce new command in module using di.xml:
     </arguments>
 </type>
 ```
-

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -15,6 +15,8 @@ use Magento\Framework\Api\SearchCriteria\CollectionProcessor\ConditionProcessor\
  *
  * Used to store processors as mapping attributeName => CustomConditionInterface
  * You can use di.xml to configure with any custom conditions you need
+ *
+ * @api
  */
 interface CustomConditionProviderInterface
 {

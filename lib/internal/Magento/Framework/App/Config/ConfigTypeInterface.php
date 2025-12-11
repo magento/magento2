@@ -2,13 +2,15 @@
 /**
  * Application configuration object. Used to access configuration when application is initialized and installed.
  *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework\App\Config;
 
 /**
  * Interface ConfigTypeInterface
+ *
+ * @api
  */
 interface ConfigTypeInterface
 {

@@ -1,20 +1,21 @@
 # Magento_GroupedImportExport module
 
 This module implements Grouped products import/export functionality.
-This module is designed to extend existing functionality of Magento_CatalogImportExport module by adding new product type.
+This module extends the existing functionality of the Magento_CatalogImportExport module by adding a new product type.
 
 ## Installation
 
-For information about a module installation in Magento 2, see [Enable or disable modules](https://devdocs.magento.com/guides/v2.4/install-gde/install/cli/install-cli-subcommands-enable.html).
+For information about a module installation, see [Enable or disable modules](https://experienceleague.adobe.com/en/docs/commerce-operations/installation-guide/tutorials/manage-modules).
 
 ## Extensibility
 
-Extension developers can interact with the Magento_GroupedImportExport module. For more information about the Magento extension mechanism, see [Magento plugins](https://devdocs.magento.com/guides/v2.4/extension-dev-guide/plugins.html).
+Extension developers can interact with the Magento_GroupedImportExport module. For more information about the extension mechanism, see [Plugins](https://developer.adobe.com/commerce/php/development/components/plugins/).
 
-[The Magento dependency injection mechanism](https://devdocs.magento.com/guides/v2.4/extension-dev-guide/depend-inj.html) enables you to override the functionality of the Magento_GroupedImportExport module.
+[The dependency injection mechanism](https://developer.adobe.com/commerce/php/development/components/dependency-injection/) enables you to override the functionality of the Magento_GroupedImportExport module.
 
 ## Additional information
 
-You can get more information about import/export processes in magento at the articles:
-- [Import](https://docs.magento.com/user-guide/system/data-import.html)
-- [Export](https://docs.magento.com/user-guide/system/data-export.html)
+You can get more information about import/export processes at the following articles:
+
+- [Import](https://experienceleague.adobe.com/en/docs/commerce-admin/systems/data-transfer/import/data-import)
+- [Export](https://experienceleague.adobe.com/en/docs/commerce-admin/systems/data-transfer/data-export)

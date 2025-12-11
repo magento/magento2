@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -26,17 +26,11 @@ class AbstractSwatchTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->source = $this->getMockBuilder(AbstractSource::class)
-            ->getMockForAbstractClass();
+        $this->source = $this->createMock(AbstractSource::class);
 
-        $this->attribute = $this->getMockBuilder(Attribute::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->attribute = $this->createMock(Attribute::class);
 
-        $this->swatch = $this->getMockBuilder(AbstractSwatch::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['getData'])
-            ->getMockForAbstractClass();
+        $this->swatch = $this->createPartialMock(AbstractSwatch::class, ['getData']);
     }
 
     public function testGetValues()

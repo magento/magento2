@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Customer\Helper;
 
@@ -26,7 +26,7 @@ class AddressTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expectedClass, $this->helper->getAttributeValidationClass($attributeCode));
     }
 
-    public function getAttributeValidationClass()
+    public static function getAttributeValidationClass()
     {
         return [
             ['bad-code', ''],

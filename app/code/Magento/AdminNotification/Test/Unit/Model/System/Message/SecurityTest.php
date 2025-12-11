@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -13,6 +13,7 @@ use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\HTTP\Adapter\Curl;
 use Magento\Framework\HTTP\Adapter\CurlFactory;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -41,8 +42,8 @@ class SecurityTest extends TestCase
     protected function setUp(): void
     {
         //Prepare objects for constructor
-        $this->cacheMock = $this->getMockForAbstractClass(CacheInterface::class);
-        $this->scopeConfigMock = $this->getMockForAbstractClass(ScopeConfigInterface::class);
+        $this->cacheMock = $this->createMock(CacheInterface::class);
+        $this->scopeConfigMock = $this->createMock(ScopeConfigInterface::class);
         $this->curlFactoryMock = $this->createPartialMock(
             CurlFactory::class,
             ['create']
@@ -66,8 +67,8 @@ class SecurityTest extends TestCase
      * @param $cached
      * @param $response
      * @return void
-     * @dataProvider isDisplayedDataProvider
      */
+    #[DataProvider('isDisplayedDataProvider')]
     public function testIsDisplayed($expectedResult, $cached, $response)
     {
         $this->cacheMock->method('load')->willReturn($cached);
@@ -85,7 +86,7 @@ class SecurityTest extends TestCase
     /**
      * @return array
      */
-    public function isDisplayedDataProvider()
+    public static function isDisplayedDataProvider()
     {
         return [
             'cached_case' => [false, true, ''],

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Framework\Filesystem\Filter;
@@ -46,7 +46,7 @@ class ExcludeFilter extends \FilterIterator
         }
 
         foreach ($this->_filters as $filter) {
-            $filter = str_replace('\\', '/', $filter);
+            $filter = $filter !== null ? str_replace('\\', '/', $filter) : '';
             if (false !== strpos($current, $filter)) {
                 return false;
             }

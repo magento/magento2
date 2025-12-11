@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 declare(strict_types=1);
@@ -217,8 +217,10 @@ class AddCommentTest extends TestCase
 
         $this->requestMock
             ->method('getParam')
-            ->withConsecutive(['id'], ['invoice_id'])
-            ->willReturnOnConsecutiveCalls($invoiceId, $invoiceId);
+            ->willReturnCallback(fn($param) => match ([$param]) {
+                ['id'] => $invoiceId,
+                ['invoice_id'] => $invoiceId
+            });
         $this->requestMock
             ->method('getPost')
             ->with('comment')

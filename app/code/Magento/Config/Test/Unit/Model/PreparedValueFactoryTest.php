@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -18,8 +18,11 @@ use Magento\Framework\App\Config\Value;
 use Magento\Framework\App\ScopeInterface;
 use Magento\Framework\App\ScopeResolver;
 use Magento\Framework\App\ScopeResolverPool;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Store\Model\ScopeInterface as StoreScopeInterface;
 use Magento\Store\Model\ScopeTypeNormalizer;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject as Mock;
 use PHPUnit\Framework\TestCase;
 
@@ -30,6 +33,8 @@ use PHPUnit\Framework\TestCase;
  */
 class PreparedValueFactoryTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var StructureFactory|Mock
      */
@@ -86,44 +91,38 @@ class PreparedValueFactoryTest extends TestCase
     private $preparedValueFactory;
 
     /**
+     * @var ObjectManager
+     */
+    private $objectManager;
+
+    /**
      * @inheritdoc
      */
     protected function setUp(): void
     {
-        $this->structureFactoryMock = $this->getMockBuilder(StructureFactory::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['create'])
-            ->getMock();
-        $this->valueFactoryMock = $this->getMockBuilder(BackendFactory::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['create'])
-            ->getMock();
-        $this->structureMock = $this->getMockBuilder(Structure::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->fieldMock = $this->getMockBuilder(Field::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->valueMock = $this->getMockBuilder(Value::class)
-            ->disableOriginalConstructor()
-            ->setMethods([
+        $this->objectManager = new ObjectManager($this);
+        $this->structureFactoryMock = $this->createPartialMock(
+            StructureFactory::class,
+            ['create']
+        );
+        $this->valueFactoryMock = $this->createPartialMock(
+            BackendFactory::class,
+            ['create']
+        );
+        $this->structureMock = $this->createMock(Structure::class);
+        $this->fieldMock = $this->createMock(Field::class);
+        $this->valueMock = $this->createPartialMockWithReflection(
+            Value::class,
+            [
                 'setPath', 'setScope', 'setScopeId', 'setValue', 'setField',
                 'setGroupId', 'setFieldConfig', 'setScopeCode'
-            ])
-            ->getMock();
-        $this->configMock = $this->getMockBuilder(ScopeConfigInterface::class)
-            ->getMockForAbstractClass();
-        $this->scopeResolverPoolMock = $this->getMockBuilder(ScopeResolverPool::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->scopeResolverMock = $this->getMockBuilder(ScopeResolver::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->scopeMock = $this->getMockBuilder(ScopeInterface::class)
-            ->getMockForAbstractClass();
-        $this->scopeTypeNormalizer = $this->getMockBuilder(ScopeTypeNormalizer::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+            ]
+        );
+        $this->configMock = $this->createMock(ScopeConfigInterface::class);
+        $this->scopeResolverPoolMock = $this->createMock(ScopeResolverPool::class);
+        $this->scopeResolverMock = $this->createMock(ScopeResolver::class);
+        $this->scopeMock = $this->createMock(ScopeInterface::class);
+        $this->scopeTypeNormalizer = $this->createMock(ScopeTypeNormalizer::class);
 
         $this->preparedValueFactory = new PreparedValueFactory(
             $this->scopeResolverPoolMock,
@@ -141,8 +140,8 @@ class PreparedValueFactoryTest extends TestCase
      * @param string $scope
      * @param string|int|null $scopeCode
      * @param int $scopeId
-     * @dataProvider createDataProvider
      */
+    #[DataProvider('createDataProvider')]
     public function testCreate(
         $path,
         $configPath,
@@ -170,9 +169,7 @@ class PreparedValueFactoryTest extends TestCase
                 ->willReturn($scopeId);
         }
         /** @var Group|Mock $groupMock */
-        $groupMock = $this->getMockBuilder(Group::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $groupMock = $this->createMock(Group::class);
         $groupMock->expects($this->once())
             ->method('getId')
             ->willReturn($groupId);
@@ -251,7 +248,7 @@ class PreparedValueFactoryTest extends TestCase
     /**
      * @return array
      */
-    public function createDataProvider()
+    public static function createDataProvider()
     {
         return [
             'standard flow' => [
@@ -267,7 +264,6 @@ class PreparedValueFactoryTest extends TestCase
                 '/custom/config_path',
                 'someValue',
                 'someScope',
-                'someScope',
                 'someScopeCode',
                 1,
             ],
@@ -276,38 +272,37 @@ class PreparedValueFactoryTest extends TestCase
                 null,
                 'someValue',
                 ScopeInterface::SCOPE_DEFAULT,
-                ScopeInterface::SCOPE_DEFAULT,
                 null,
                 0,
             ],
             'website scope flow' => [
                 '/some/path',
+                null,
                 'someValue',
-                StoreScopeInterface::SCOPE_WEBSITE,
                 StoreScopeInterface::SCOPE_WEBSITES,
                 null,
                 0,
             ],
             'websites scope flow' => [
                 '/some/path',
+                null,
                 'someValue',
-                StoreScopeInterface::SCOPE_WEBSITES,
                 StoreScopeInterface::SCOPE_WEBSITES,
                 null,
                 0,
             ],
             'store scope flow' => [
                 '/some/path',
+                null,
                 'someValue',
-                StoreScopeInterface::SCOPE_STORE,
                 StoreScopeInterface::SCOPE_STORES,
                 null,
                 0,
             ],
             'stores scope flow' => [
                 '/some/path',
+                null,
                 'someValue',
-                StoreScopeInterface::SCOPE_STORES,
                 StoreScopeInterface::SCOPE_STORES,
                 null,
                 0,
@@ -319,8 +314,8 @@ class PreparedValueFactoryTest extends TestCase
      * @param string $path
      * @param string $scope
      * @param string|int|null $scopeCode
-     * @dataProvider createDataProvider
      */
+    #[DataProvider('createNotInstanceOfValueDataProvider')]
     public function testCreateNotInstanceOfValue(
         $path,
         $scope,
@@ -367,14 +362,13 @@ class PreparedValueFactoryTest extends TestCase
     /**
      * @return array
      */
-    public function createNotInstanceOfValueDataProvider()
+    public static function createNotInstanceOfValueDataProvider()
     {
         return [
             'standard flow' => [
                 '/some/path',
                 'someScope',
                 'someScopeCode',
-                1,
             ],
             'default scope flow' => [
                 '/some/path',

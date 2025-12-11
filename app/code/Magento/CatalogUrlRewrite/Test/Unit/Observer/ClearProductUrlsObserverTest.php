@@ -1,14 +1,16 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\CatalogUrlRewrite\Test\Unit\Observer;
 
 use Magento\CatalogImportExport\Model\Import\Product;
+use Magento\CatalogImportExport\Model\Import\Product\SkuStorage;
 use Magento\CatalogUrlRewrite\Observer\ClearProductUrlsObserver;
+use Magento\Framework\Event\Test\Unit\Helper\EventTestHelper;
 use Magento\Framework\Event;
 use Magento\Framework\Event\Observer;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
@@ -43,11 +45,6 @@ class ClearProductUrlsObserverTest extends TestCase
     protected $event;
 
     /**
-     * @var Product|MockObject
-     */
-    protected $importProduct;
-
-    /**
      * @var ObjectManagerHelper
      */
     protected $objectManagerHelper;
@@ -71,37 +68,35 @@ class ClearProductUrlsObserverTest extends TestCase
             'url_key' => 'value5',
         ]
     ];
+    /**
+     * @var SkuStorage|MockObject
+     */
+    private $skuStorage;
 
     /**
      * @SuppressWarnings(PHPMD.TooManyFields)
      */
     protected function setUp(): void
     {
-        $this->importProduct = $this->getMockBuilder(Product::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->event = $this->getMockBuilder(Event::class)
-            ->setMethods(['getBunch', 'getAdapter'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->event->expects($this->once())
-            ->method('getAdapter')
-            ->willReturn($this->importProduct);
+        $objectManager = new ObjectManagerHelper($this);
+        $this->skuStorage = $this->createMock(SkuStorage::class);
+        $this->event = $objectManager->createPartialMockWithReflection(
+            EventTestHelper::class,
+            ['getBunch']
+        );
         $this->event->expects($this->once())
             ->method('getBunch')
             ->willReturn($this->products);
-        $this->observer = $this->getMockBuilder(Observer::class)
-            ->setMethods(['getEvent'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->observer->expects($this->exactly(2))
+        $this->observer = $this->createPartialMock(
+            Observer::class,
+            ['getEvent']
+        );
+        $this->observer->expects($this->exactly(1))
             ->method('getEvent')
             ->willReturn($this->event);
-        $this->urlPersist = $this->getMockBuilder(UrlPersistInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->urlPersist = $this->createMock(UrlPersistInterface::class);
 
-        $this->clearProductUrlsObserver = new ClearProductUrlsObserver($this->urlPersist);
+        $this->clearProductUrlsObserver = new ClearProductUrlsObserver($this->urlPersist, $this->skuStorage);
     }
 
     /**
@@ -113,9 +108,17 @@ class ClearProductUrlsObserverTest extends TestCase
             'sku' => ['entity_id' => 1],
             'sku5' => ['entity_id' => 5],
         ];
-        $this->importProduct->expects($this->once())
-            ->method('getOldSku')
-            ->willReturn($oldSKus);
+
+        $this->skuStorage->method('has')
+            ->willReturnCallback(function ($sku) use ($oldSKus) {
+                return isset($oldSKus[strtolower($sku)]);
+            });
+
+        $this->skuStorage->method('get')
+            ->willReturnCallback(function ($sku) use ($oldSKus) {
+                return $oldSKus[strtolower($sku)] ?? null;
+            });
+
         $this->urlPersist->expects($this->once())
             ->method('deleteByData')
             ->with([

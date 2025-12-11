@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -12,11 +12,13 @@ use Magento\Catalog\Helper\Data;
 use Magento\Catalog\Model\ResourceModel\Product\Option\Value\Collection;
 use Magento\CatalogImportExport\Model\Import\Product;
 use Magento\CatalogImportExport\Model\Import\Product\Option;
+use Magento\CatalogImportExport\Model\Import\Product\SkuStorage;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\Data\Collection\AbstractDb;
 use Magento\Framework\Data\Collection\Db\FetchStrategyInterface;
 use Magento\Framework\Data\Collection\EntityFactory;
+use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\DB\Select;
 use Magento\Framework\EntityManager\EntityMetadata;
 use Magento\Framework\EntityManager\MetadataPool;
@@ -40,7 +42,7 @@ class OptionTest extends AbstractImportTestCase
     /**
      * Path to csv file to import
      */
-    const PATH_TO_CSV_FILE = '/_files/product_with_custom_options.csv';
+    public const PATH_TO_CSV_FILE = '/_files/product_with_custom_options.csv';
 
     /**
      * Parameters for Test stores.
@@ -141,7 +143,7 @@ class OptionTest extends AbstractImportTestCase
      */
     protected $_expectedOptions = [
         [
-            'option_id' => 1,
+            'option_id' => 2,
             'sku' => '1-text',
             'max_characters' => '100',
             'file_extension' => null,
@@ -150,10 +152,10 @@ class OptionTest extends AbstractImportTestCase
             'product_id' => 1,
             'type' => 'field',
             'is_require' => 1,
-            'sort_order' => 0
+            'sort_order' => 1
         ],
         [
-            'option_id' => 2,
+            'option_id' => 3,
             'sku' => '2-date',
             'max_characters' => 0,
             'file_extension' => null,
@@ -162,19 +164,7 @@ class OptionTest extends AbstractImportTestCase
             'product_id' => 1,
             'type' => 'date_time',
             'is_require' => 1,
-            'sort_order' => 0
-        ],
-        [
-            'option_id' => 3,
-            'sku' => '',
-            'max_characters' => 0,
-            'file_extension' => null,
-            'image_size_x' => 0,
-            'image_size_y' => 0,
-            'product_id' => 1,
-            'type' => 'drop_down',
-            'is_require' => 1,
-            'sort_order' => 0
+            'sort_order' => 2
         ],
         [
             'option_id' => 4,
@@ -184,9 +174,21 @@ class OptionTest extends AbstractImportTestCase
             'image_size_x' => 0,
             'image_size_y' => 0,
             'product_id' => 1,
+            'type' => 'drop_down',
+            'is_require' => 1,
+            'sort_order' => 3
+        ],
+        [
+            'option_id' => 5,
+            'sku' => '',
+            'max_characters' => 0,
+            'file_extension' => null,
+            'image_size_x' => 0,
+            'image_size_y' => 0,
+            'product_id' => 1,
             'type' => 'radio',
             'is_require' => 1,
-            'sort_order' => 0
+            'sort_order' => 4
         ]
     ];
 
@@ -234,6 +236,11 @@ class OptionTest extends AbstractImportTestCase
     protected $metadataPoolMock;
 
     /**
+     * @var SkuStorage
+     */
+    private $skuStorageMock;
+
+    /**
      * Init entity adapter model
      *
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
@@ -244,10 +251,10 @@ class OptionTest extends AbstractImportTestCase
 
         $addExpectations = false;
         $deleteBehavior = false;
-        $testName = $this->getName(true);
+        $testName = $this->name() . $this->dataSetAsString();
         if ($testName == 'testImportDataAppendBehavior' || $testName == 'testImportDataDeleteBehavior') {
             $addExpectations = true;
-            $deleteBehavior = $this->getName() == 'testImportDataDeleteBehavior' ? true : false;
+            $deleteBehavior = $this->name() == 'testImportDataDeleteBehavior' ? true : false;
         }
 
         $doubleOptions = false;
@@ -282,6 +289,9 @@ class OptionTest extends AbstractImportTestCase
             ->willReturn($this->createMock(\Traversable::class));
         $optionValueCollectionFactoryMock->expects($this->any())
             ->method('create')->willReturn($optionValueCollectionMock);
+
+        $this->skuStorageMock = $this->createMock(SkuStorage::class);
+
         $modelClassArgs = [
             $this->createMock(\Magento\ImportExport\Model\ResourceModel\Import\Data::class),
             $this->createMock(ResourceConnection::class),
@@ -297,7 +307,9 @@ class OptionTest extends AbstractImportTestCase
                 ProcessingErrorAggregatorInterface::class
             ),
             $this->_getModelDependencies($addExpectations, $deleteBehavior, $doubleOptions),
-            $optionValueCollectionFactoryMock
+            $optionValueCollectionFactoryMock,
+            $this->createMock(\Magento\Framework\Model\ResourceModel\Db\TransactionManagerInterface::class),
+            $this->skuStorageMock
         ];
 
         $modelClassName = Option::class;
@@ -305,7 +317,7 @@ class OptionTest extends AbstractImportTestCase
         // Create model mock with rewritten _getMultiRowFormat method to support test data with the old format.
         $this->modelMock = $this->getMockBuilder($modelClassName)
             ->setConstructorArgs($modelClassArgs)
-            ->setMethods(['_getMultiRowFormat'])
+            ->onlyMethods(['_getMultiRowFormat'])
             ->getMock();
         $reflection = new \ReflectionClass(Option::class);
         $reflectionProperty = $reflection->getProperty('metadataPool');
@@ -337,22 +349,20 @@ class OptionTest extends AbstractImportTestCase
         bool $deleteBehavior = false,
         bool $doubleOptions = false
     ): array {
-        $connection = $this->getMockBuilder(\stdClass::class)->addMethods(
-            ['delete', 'quoteInto', 'insertMultiple', 'insertOnDuplicate']
-        )
+        $connection = $this->getMockBuilder(AdapterInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         if ($addExpectations) {
             if ($deleteBehavior) {
                 $connection->expects(
-                    $this->exactly(2)
+                    $this->exactly(1)
                 )->method(
                     'quoteInto'
                 )->willReturnCallback(
                     [$this, 'stubQuoteInto']
                 );
                 $connection->expects(
-                    $this->exactly(2)
+                    $this->exactly(1)
                 )->method(
                     'delete'
                 )->willReturnCallback(
@@ -360,14 +370,7 @@ class OptionTest extends AbstractImportTestCase
                 );
             } else {
                 $connection->expects(
-                    $this->once()
-                )->method(
-                    'insertMultiple'
-                )->willReturnCallback(
-                    [$this, 'verifyInsertMultiple']
-                );
-                $connection->expects(
-                    $this->exactly(6)
+                    $this->exactly(7)
                 )->method(
                     'insertOnDuplicate'
                 )->willReturnCallback(
@@ -409,12 +412,12 @@ class OptionTest extends AbstractImportTestCase
     {
         $csvData = $this->_loadCsvFile();
 
-        $dataSourceModel = $this->getMockBuilder(\stdClass::class)->addMethods(['getNextBunch'])
+        $dataSourceModel = $this->getMockBuilder(\stdClass::class)->addMethods(['getNextUniqueBunch'])
             ->disableOriginalConstructor()
             ->getMock();
         if ($addExpectations) {
             $dataSourceModel
-                ->method('getNextBunch')
+                ->method('getNextUniqueBunch')
                 ->willReturnOnConsecutiveCalls($csvData['data'], null);
         }
 
@@ -454,6 +457,18 @@ class OptionTest extends AbstractImportTestCase
         )->willReturn(
             $products
         );
+
+        $this->skuStorageMock->method('get')->willReturnCallback(function ($sku) use ($products) {
+            $skuLowered = strtolower($sku);
+
+            return $products[$skuLowered] ?? null;
+        });
+
+        $this->skuStorageMock->method('has')->willReturnCallback(function ($sku) use ($products) {
+            $skuLowered = strtolower($sku);
+
+            return isset($products[$skuLowered]);
+        });
 
         $fetchStrategy = $this->getMockForAbstractClass(
             FetchStrategyInterface::class
@@ -618,6 +633,12 @@ class OptionTest extends AbstractImportTestCase
     public function verifyInsertOnDuplicate(string $table, array $data, array $fields = []): void
     {
         switch ($table) {
+            case $this->_tables['catalog_product_option']:
+                $this->assertEquals($this->_expectedOptions, $data);
+                break;
+            case $this->_tables['catalog_product_option_type_value']:
+                $this->assertEquals($this->_expectedTypeValues, $data);
+                break;
             case $this->_tables['catalog_product_option_title']:
                 $this->assertEquals($this->_expectedTitles, $data);
                 $this->assertEquals(['title'], $fields);
@@ -712,12 +733,12 @@ class OptionTest extends AbstractImportTestCase
     {
         $data = ['header' => [], 'data' => []];
 
-        $lines = str_getcsv($content, "\n");
+        $lines = str_getcsv($content, "\n", '"', '\\');
         foreach ($lines as $index => $line) {
             if ($index == 0) {
-                $data['header'] = str_getcsv($line);
+                $data['header'] = str_getcsv($line, ',', '"', '\\');
             } else {
-                $row = array_combine($data['header'], str_getcsv($line));
+                $row = array_combine($data['header'], str_getcsv($line, ',', '"', '\\'));
                 if ($entityId !== null && !empty($row[$entityId])) {
                     $data['data'][$row[$entityId]] = $row;
                 } else {
@@ -854,16 +875,16 @@ class OptionTest extends AbstractImportTestCase
      *
      * @return array
      */
-    public function validateRowStoreViewCodeFieldDataProvider(): array
+    public static function validateRowStoreViewCodeFieldDataProvider(): array
     {
         return [
             'with_store_view_code' => [
-                '$rowData' => [
+                'rowData' => [
                     'store_view_code' => '',
                     'custom_options' => 'name=Test Field Title,type=field,required=1'
                         . ';sku=1-text,price=0,price_type=fixed'
                 ],
-                '$responseData' => [
+                'responseData' => [
                     'store_view_code' => '',
                     'custom_options' => [
                         'Test Field Title' => [
@@ -881,11 +902,11 @@ class OptionTest extends AbstractImportTestCase
                 ]
             ],
             'without_store_view_code' => [
-                '$rowData' => [
+                'rowData' => [
                     'custom_options' => 'name=Test Field Title,type=field,required=1'
                         . ';sku=1-text,price=0,price_type=fixed'
                 ],
-                '$responseData' => [
+                'responseData' => [
                     'custom_options' => [
                         'Test Field Title' => [
                             [
@@ -904,97 +925,211 @@ class OptionTest extends AbstractImportTestCase
     }
 
     /**
+     * Test parsing different option's type with _parseCustomOptions() method.
+     *
+     * @param array $rowData
+     * @param array $responseData
+     *
+     * @return void
+     * @dataProvider validateParseCustomOptionsDataProvider
+     * @throws \ReflectionException
+     */
+    public function testValidateParseCustomOptions(array $rowData, array $responseData): void
+    {
+        $reflection = new \ReflectionClass(Option::class);
+        $reflectionMethod = $reflection->getMethod('_parseCustomOptions');
+        $result = $reflectionMethod->invoke($this->model, $rowData);
+        $this->assertEquals($responseData, $result);
+    }
+
+    /**
+     * Data provider for testValidateParseCustomOptions.
+     *
+     * @return array
+     */
+    public static function validateParseCustomOptionsDataProvider(): array
+    {
+        return [
+            'file_type' => [
+                'rowData' => [
+                    'custom_options' => 'name=Test Field Title,type=file,required=1,'
+                        . 'sku=1-text,price=12,file_extension=png,jpeg,jpg,gif,image_size_x=1024,'
+                        . 'image_size_y=1024,price_type=fixed'
+                ],
+                'responseData' => [
+                    'custom_options' => [
+                        'Test Field Title' => [
+                            [
+                                'name' => 'Test Field Title',
+                                'type' => 'file',
+                                'required' => '1',
+                                'sku' => '1-text',
+                                'price' => '12',
+                                'file_extension' => 'png,jpeg,jpg,gif',
+                                'image_size_x' => '1024',
+                                'image_size_y' => '1024',
+                                'price_type' => 'fixed'
+                            ]
+                        ]
+                    ]
+                ]
+            ],
+            'drop_down' => [
+                'rowData' => [
+                    'custom_options' => 'name=Test Field Title,type=drop_down,required=0,'
+                        . 'sku=1-text,price=10,price_type=fixed'
+                ],
+                'responseData' => [
+                    'custom_options' => [
+                        'Test Field Title' => [
+                            [
+                                'name' => 'Test Field Title',
+                                'type' => 'drop_down',
+                                'required' => '0',
+                                'sku' => '1-text',
+                                'price' => '10',
+                                'price_type' => 'fixed'
+                            ]
+                        ]
+                    ]
+                ]
+            ],
+            'area' => [
+                'rowData' => [
+                    'custom_options' => 'name=Test Field Title,type=area,required=1,'
+                        . 'sku=1-text,price=20,max_characters=150,price_type=fixed'
+                ],
+                'responseData' => [
+                    'custom_options' => [
+                        'Test Field Title' => [
+                            [
+                                'name' => 'Test Field Title',
+                                'type' => 'area',
+                                'required' => '1',
+                                'sku' => '1-text',
+                                'price' => '20',
+                                'max_characters' => '150',
+                                'price_type' => 'fixed'
+                            ]
+                        ]
+                    ]
+                ]
+            ],
+            'date_time' => [
+                'rowData' => [
+                    'custom_options' => 'name=Test Field Title,type=date_time,required=0,'
+                        . 'sku=1-text,price=30,price_type=fixed'
+                ],
+                'responseData' => [
+                    'custom_options' => [
+                        'Test Field Title' => [
+                            [
+                                'name' => 'Test Field Title',
+                                'type' => 'date_time',
+                                'required' => '0',
+                                'sku' => '1-text',
+                                'price' => '30',
+                                'price_type' => 'fixed'
+                            ]
+                        ]
+                    ]
+                ]
+            ]
+        ];
+    }
+
+    /**
      * Data provider of row data and errors.
      *
      * @return array
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function validateRowDataProvider(): array
+    public static function validateRowDataProvider(): array
     {
         return [
             'main_valid' => [
-                '$rowData' => include __DIR__ . '/_files/row_data_main_valid.php',
-                '$errors' => []
+                'rowData' => include __DIR__ . '/_files/row_data_main_valid.php',
+                'errors' => []
             ],
             'main_invalid_store' => [
-                '$rowData' => include __DIR__ . '/_files/row_data_main_invalid_store.php',
-                '$errors' => [
+                'rowData' => include __DIR__ . '/_files/row_data_main_invalid_store.php',
+                'errors' => [
                     Option::ERROR_INVALID_STORE => [1]
                 ]
             ],
             'main_incorrect_type' => [
-                '$rowData' => include __DIR__ . '/_files/row_data_main_incorrect_type.php',
-                '$errors' => [
+                'rowData' => include __DIR__ . '/_files/row_data_main_incorrect_type.php',
+                'errors' => [
                     Option::ERROR_INVALID_TYPE => [1]
                 ]
             ],
             'main_no_title' => [
-                '$rowData' => include __DIR__ . '/_files/row_data_main_no_title.php',
-                '$errors' => [
+                'rowData' => include __DIR__ . '/_files/row_data_main_no_title.php',
+                'errors' => [
                     Option::ERROR_EMPTY_TITLE => [1]
                 ]
             ],
             'main_empty_title' => [
-                '$rowData' => include __DIR__ . '/_files/row_data_main_empty_title.php',
-                '$errors' => [
+                'rowData' => include __DIR__ . '/_files/row_data_main_empty_title.php',
+                'errors' => [
                     Option::ERROR_EMPTY_TITLE => [1]
                 ]
             ],
             'main_invalid_price' => [
-                '$rowData' => include __DIR__ . '/_files/row_data_main_invalid_price.php',
-                '$errors' => [
+                'rowData' => include __DIR__ . '/_files/row_data_main_invalid_price.php',
+                'errors' => [
                     Option::ERROR_INVALID_PRICE => [1]
                 ]
             ],
             'main_invalid_max_characters' => [
-                '$rowData' => include __DIR__ . '/_files/row_data_main_invalid_max_characters.php',
-                '$errors' => [
+                'rowData' => include __DIR__ . '/_files/row_data_main_invalid_max_characters.php',
+                'errors' => [
                     Option::ERROR_INVALID_MAX_CHARACTERS => [1]
                 ]
             ],
             'main_max_characters_less_zero' => [
-                '$rowData' => include __DIR__ . '/_files/row_data_main_max_characters_less_zero.php',
-                '$errors' => [
+                'rowData' => include __DIR__ . '/_files/row_data_main_max_characters_less_zero.php',
+                'errors' => [
                     Option::ERROR_INVALID_MAX_CHARACTERS => [1]
                 ]
             ],
             'main_invalid_sort_order' => [
-                '$rowData' => include __DIR__ . '/_files/row_data_main_invalid_sort_order.php',
-                '$errors' => [
+                'rowData' => include __DIR__ . '/_files/row_data_main_invalid_sort_order.php',
+                'errors' => [
                     Option::ERROR_INVALID_SORT_ORDER => [1]
                 ]
             ],
             'main_sort_order_less_zero' => [
-                '$rowData' => include __DIR__ . '/_files/row_data_main_sort_order_less_zero.php',
-                '$errors' => [
+                'rowData' => include __DIR__ . '/_files/row_data_main_sort_order_less_zero.php',
+                'errors' => [
                     Option::ERROR_INVALID_SORT_ORDER => [1]
                 ]
             ],
             'secondary_valid' => [
-                '$rowData' => include __DIR__ . '/_files/row_data_secondary_valid.php',
-                '$errors' => []
+                'rowData' => include __DIR__ . '/_files/row_data_secondary_valid.php',
+                'errors' => []
             ],
             'secondary_invalid_store' => [
-                '$rowData' => include __DIR__ . '/_files/row_data_secondary_invalid_store.php',
-                '$errors' => [
+                'rowData' => include __DIR__ . '/_files/row_data_secondary_invalid_store.php',
+                'errors' => [
                     Option::ERROR_INVALID_STORE => [1]
                 ]
             ],
             'secondary_incorrect_price' => [
-                '$rowData' => include __DIR__ . '/_files/row_data_secondary_incorrect_price.php',
-                '$errors' => [
+                'rowData' => include __DIR__ . '/_files/row_data_secondary_incorrect_price.php',
+                'errors' => [
                     Option::ERROR_INVALID_ROW_PRICE => [1]
                 ]
             ],
             'secondary_incorrect_row_sort' => [
-                '$rowData' => include __DIR__ . '/_files/row_data_secondary_incorrect_row_sort.php',
-                '$errors' => [
+                'rowData' => include __DIR__ . '/_files/row_data_secondary_incorrect_row_sort.php',
+                'errors' => [
                     Option::ERROR_INVALID_ROW_SORT => [1]
                 ]
             ],
             'secondary_row_sort_less_zero' => [
-                '$rowData' => include __DIR__ . '/_files/row_data_secondary_row_sort_less_zero.php',
-                '$errors' => [
+                'rowData' => include __DIR__ . '/_files/row_data_secondary_row_sort_less_zero.php',
+                'errors' => [
                     Option::ERROR_INVALID_ROW_SORT => [1]
                 ]
             ]
@@ -1006,30 +1141,30 @@ class OptionTest extends AbstractImportTestCase
      *
      * @return array
      */
-    public function validateAmbiguousDataDataProvider(): array
+    public static function validateAmbiguousDataDataProvider(): array
     {
         return [
             'ambiguity_several_input_rows' => [
-                '$rowData' => include __DIR__ . '/_files/row_data_main_valid.php',
-                '$errors' => [
+                'rowData' => include __DIR__ . '/_files/row_data_main_valid.php',
+                'errors' => [
                     Option::ERROR_AMBIGUOUS_NEW_NAMES => [2, 2]
                 ],
-                '$behavior' => null,
-                '$numberOfValidations' => 2
+                'behavior' => null,
+                'numberOfValidations' => 2
             ],
             'ambiguity_different_type' => [
-                '$rowData' => include __DIR__ . '/_files/row_data_ambiguity_different_type.php',
-                '$errors' => [
+                'rowData' => include __DIR__ . '/_files/row_data_ambiguity_different_type.php',
+                'errors' => [
                     Option::ERROR_AMBIGUOUS_TYPES => [1]
                 ],
-                '$behavior' => Import::BEHAVIOR_APPEND
+                'behavior' => Import::BEHAVIOR_APPEND
             ],
             'ambiguity_several_db_rows' => [
-                '$rowData' => include __DIR__ . '/_files/row_data_ambiguity_several_db_rows.php',
-                '$errors' => [
+                'rowData' => include __DIR__ . '/_files/row_data_ambiguity_several_db_rows.php',
+                'errors' => [
                     Option::ERROR_AMBIGUOUS_OLD_NAMES => [1]
                 ],
-                '$behavior' => Import::BEHAVIOR_APPEND
+                'behavior' => Import::BEHAVIOR_APPEND
             ]
         ];
     }
@@ -1039,11 +1174,11 @@ class OptionTest extends AbstractImportTestCase
      */
     public function testParseRequiredData(): void
     {
-        $modelData = $this->getMockBuilder(\stdClass::class)->addMethods(['getNextBunch'])
+        $modelData = $this->getMockBuilder(\stdClass::class)->addMethods(['getNextUniqueBunch'])
             ->disableOriginalConstructor()
             ->getMock();
         $modelData
-            ->method('getNextBunch')
+            ->method('getNextUniqueBunch')
             ->willReturnOnConsecutiveCalls(
                 [
                     [

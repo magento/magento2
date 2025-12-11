@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -11,19 +11,15 @@ use Magento\Framework\ObjectManager\TMap;
 use Magento\Framework\ObjectManager\TMapFactory;
 use Magento\Payment\Gateway\Request\BuilderComposite;
 use Magento\Payment\Gateway\Request\BuilderInterface;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 class BuilderCompositeTest extends TestCase
 {
     public function testBuildEmpty()
     {
-        $tMapFactory = $this->getMockBuilder(TMapFactory::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['create'])
-            ->getMock();
-        $tMap = $this->getMockBuilder(TMap::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $tMapFactory = $this->createPartialMock(TMapFactory::class, ['create']);
+        $tMap = $this->createMock(TMap::class);
 
         $tMapFactory->expects(static::once())
             ->method('create')
@@ -45,23 +41,15 @@ class BuilderCompositeTest extends TestCase
     /**
      * @param array $expected
      * @covers \Magento\Payment\Gateway\Request\BuilderComposite::build
-     * @dataProvider buildDataProvider
      */
+    #[DataProvider('buildDataProvider')]
     public function testBuild(array $expected)
     {
-        $tMapFactory = $this->getMockBuilder(TMapFactory::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['create'])
-            ->getMock();
-        $tMap = $this->getMockBuilder(TMap::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $customerBuilder = $this->getMockBuilder(BuilderInterface::class)
-            ->getMockForAbstractClass();
-        $productBuilder = $this->getMockBuilder(BuilderInterface::class)
-            ->getMockForAbstractClass();
-        $magentoBuilder = $this->getMockBuilder(BuilderInterface::class)
-            ->getMockForAbstractClass();
+        $tMapFactory = $this->createPartialMock(TMapFactory::class, ['create']);
+        $tMap = $this->createMock(TMap::class);
+        $customerBuilder = $this->createMock(BuilderInterface::class);
+        $productBuilder = $this->createMock(BuilderInterface::class);
+        $magentoBuilder = $this->createMock(BuilderInterface::class);
 
         $customerBuilder->expects(static::once())
             ->method('build')
@@ -123,7 +111,7 @@ class BuilderCompositeTest extends TestCase
     /**
      * Get list of variations
      */
-    public function buildDataProvider()
+    public static function buildDataProvider()
     {
         return [
             [[

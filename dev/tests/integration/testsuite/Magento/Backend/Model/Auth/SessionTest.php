@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Backend\Model\Auth;
@@ -64,7 +64,7 @@ class SessionTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($loggedIn, $this->authSession->isLoggedIn());
     }
 
-    public function loginDataProvider()
+    public static function loginDataProvider()
     {
         return [[false], [true]];
     }

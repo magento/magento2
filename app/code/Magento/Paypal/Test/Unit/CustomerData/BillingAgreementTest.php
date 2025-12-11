@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -10,6 +10,7 @@ namespace Magento\Paypal\Test\Unit\CustomerData;
 use Magento\Customer\Helper\Session\CurrentCustomer;
 use Magento\Framework\Escaper;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\Translate\InlineInterface;
 use Magento\Paypal\CustomerData\BillingAgreement;
 use Magento\Paypal\Helper\Data;
 use Magento\Paypal\Model\Config;
@@ -48,6 +49,13 @@ class BillingAgreementTest extends TestCase
     protected function setUp(): void
     {
         $helper = new ObjectManager($this);
+        $objects = [
+            [
+                InlineInterface::class,
+                $this->createMock(InlineInterface::class)
+            ]
+        ];
+        $helper->prepareObjectManager($objects);
         $this->paypalConfig = $this->createMock(Config::class);
         $this->escaperMock = $helper->getObject(Escaper::class);
         $this->paypalConfig

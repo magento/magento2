@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Framework\Convert;
@@ -13,6 +13,7 @@ class DataSize
 {
     /**
      * Converts a size value to bytes
+     *
      * Example input: 100 (bytes), 10K (kilobytes), 13M (megabytes), 2G (gigabytes)
      *
      * @param string $size
@@ -20,7 +21,7 @@ class DataSize
      */
     public function convertSizeToBytes($size)
     {
-        if (!is_numeric($size)) {
+        if ($size && !is_numeric($size)) {
             $type = strtoupper(substr($size, -1));
             $size = (int)$size;
 

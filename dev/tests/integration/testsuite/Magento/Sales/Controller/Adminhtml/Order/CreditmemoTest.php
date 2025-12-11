@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Sales\Controller\Adminhtml\Order;
 
@@ -16,7 +16,7 @@ class CreditmemoTest extends \Magento\TestFramework\TestCase\AbstractBackendCont
      */
     public function testAddCommentAction()
     {
-        $this->markTestIncomplete('https://github.com/magento-engcom/msi/issues/393');
+        $this->markTestSkipped('https://github.com/magento-engcom/msi/issues/393');
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         /** @var \Magento\CatalogInventory\Api\StockIndexInterface $stockIndex */
         $stockIndex = $objectManager->get(\Magento\CatalogInventory\Api\StockIndexInterface::class);

@@ -1,8 +1,7 @@
 <?php
 /**
- *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Cms\Controller\Adminhtml\Page;
 
@@ -11,6 +10,7 @@ use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Config\Dom\ValidationException;
 use Magento\Framework\Config\Dom\ValidationSchemaException;
 use Magento\Cms\Model\Page\CustomLayout\CustomLayoutValidator;
+use Magento\Framework\Filter\FilterInput;
 
 /**
  * Controller helper for user input.
@@ -53,8 +53,8 @@ class PostDataProcessor
         \Magento\Framework\Stdlib\DateTime\Filter\Date $dateFilter,
         \Magento\Framework\Message\ManagerInterface $messageManager,
         \Magento\Framework\View\Model\Layout\Update\ValidatorFactory $validatorFactory,
-        DomValidationState $validationState = null,
-        CustomLayoutValidator $customLayoutValidator = null
+        ?DomValidationState $validationState = null,
+        ?CustomLayoutValidator $customLayoutValidator = null
     ) {
         $this->dateFilter = $dateFilter;
         $this->messageManager = $messageManager;
@@ -81,15 +81,16 @@ class PostDataProcessor
             }
         }
 
-        return (new \Zend_Filter_Input($filterRules, [], $data))->getUnescaped();
+        return (new FilterInput($filterRules, [], $data))->getUnescaped();
     }
 
     /**
      * Validate post data
      *
      * @param array $data
-     * @return bool     Return FALSE if some item is invalid
+     * @return bool Return FALSE if some item is invalid
      * @deprecated 103.0.2
+     * @see no alternatives
      */
     public function validate($data)
     {
@@ -159,9 +160,7 @@ class PostDataProcessor
             if (!$this->customLayoutValidator->validate($data)) {
                 return false;
             }
-        } catch (ValidationException $e) {
-            return false;
-        } catch (ValidationSchemaException $e) {
+        } catch (ValidationException | ValidationSchemaException $e) {
             return false;
         } catch (\Exception $e) {
             $this->messageManager->addExceptionMessage($e);

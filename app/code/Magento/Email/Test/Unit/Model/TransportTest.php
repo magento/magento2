@@ -1,16 +1,19 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Email\Test\Unit\Model;
 
-use Laminas\Mail\Transport\Exception\RuntimeException;
+use PHPUnit\Framework\MockObject\Exception;
+use Symfony\Component\Mime\Message as SymfonyMessage;
+use Symfony\Component\Mime\Exception\RfcComplianceException;
+use Symfony\Component\Mime\Header\Headers;
 use Magento\Email\Model\Transport;
 use Magento\Framework\App\Config\ScopeConfigInterface;
-use Magento\Framework\Mail\Message;
+use Magento\Framework\Mail\EmailMessage;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
@@ -26,6 +29,16 @@ class TransportTest extends TestCase
     private $loggerMock;
 
     /**
+     * @var MockObject|SymfonyMessage
+     */
+    private $symfonyMessageMock;
+
+    /**
+     * @var MockObject|EmailMessage
+     */
+    private $emailMessageMock;
+
+    /**
      * @var Transport
      */
     private $transport;
@@ -37,6 +50,7 @@ class TransportTest extends TestCase
 
     /**
      * @inheridoc
+     * @throws Exception
      */
     protected function setUp(): void
     {
@@ -47,10 +61,17 @@ class TransportTest extends TestCase
         $this->scopeConfigMock = $this->getMockBuilder(ScopeConfigInterface::class)
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
+        $this->symfonyMessageMock = $this->createMock(SymfonyMessage::class);
+        $headersMock = new Headers();
+        $this->symfonyMessageMock->method('getHeaders')->willReturn($headersMock);
+        $this->emailMessageMock = $this->getMockBuilder(EmailMessage::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->emailMessageMock->method('getSymfonyMessage')->willReturn($this->symfonyMessageMock);
+
         $this->transport = new Transport(
-            new Message(),
+            $this->emailMessageMock,
             $this->scopeConfigMock,
-            null,
             $this->loggerMock
         );
     }
@@ -59,10 +80,12 @@ class TransportTest extends TestCase
      * Verify exception is properly handled in case one occurred when message sent.
      *
      * @return void
+     * @throws Exception
+     * @throws \ReflectionException
      */
     public function testSendMessageBrokenMessage(): void
     {
-        $exception = new RuntimeException('Invalid email; contains no at least one of "To", "Cc", and "Bcc" header');
+        $exception = new RfcComplianceException('Email "" does not comply with addr-spec of RFC 2822.');
         $this->loggerMock->expects(self::once())->method('error')->with($exception);
         $this->expectException('Magento\Framework\Exception\MailException');
         $this->expectExceptionMessage('Unable to send mail. Please try again later.');

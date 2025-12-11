@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -106,17 +106,17 @@ class ConfigureTest extends AbstractBackendController
      *
      * @return array
      */
-    public function configureWithQuoteProvider(): array
+    public static function configureWithQuoteProvider(): array
     {
         return [
             'with_quote_item_id' => [
-                'has_quote_item' => true,
-                'expected_response_body' => '<input id="product_composite_configure_input_qty"'
+                'hasQuoteItem' => true,
+                'expectedResponseBody' => '<input id="product_composite_configure_input_qty"'
                     . ' class="input-text admin__control-text qty" type="text" name="qty" value="1">',
             ],
             'without_quote_item_id' => [
-                'has_quote_item' => false,
-                'expected_response_body' => '{"error":true,"message":"The quote items are incorrect.'
+                'hasQuoteItem' => false,
+                'expectedResponseBody' => '{"error":true,"message":"The quote items are incorrect.'
                     . ' Verify the quote items and try again."}',
             ],
         ];

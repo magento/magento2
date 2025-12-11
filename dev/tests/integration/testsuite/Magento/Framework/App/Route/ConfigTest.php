@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework\App\Route;
 
@@ -28,13 +28,13 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetRouteFrontName($route, $scope)
     {
-        $this->assertEquals(
-            $this->objectManager->create(Config::class)->getRouteFrontName($route, $scope),
-            $this->objectManager->create(Config::class)->getRouteFrontName($route, $scope)
+        self::assertEquals(
+            Bootstrap::getObjectManager()->create(Config::class)->getRouteFrontName($route, $scope),
+            Bootstrap::getObjectManager()->create(Config::class)->getRouteFrontName($route, $scope)
         );
     }
 
-    public function getRouteFrontNameDataProvider()
+    public static function getRouteFrontNameDataProvider()
     {
         return [
             ['adminhtml', 'adminhtml'],

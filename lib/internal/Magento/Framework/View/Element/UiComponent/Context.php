@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework\View\Element\UiComponent;
 
@@ -127,9 +127,9 @@ class Context implements ContextInterface
         UrlInterface $urlBuilder,
         Processor $processor,
         UiComponentFactory $uiComponentFactory,
-        DataProviderInterface $dataProvider = null,
+        ?DataProviderInterface $dataProvider = null,
         $namespace = null,
-        AuthorizationInterface $authorization = null,
+        ?AuthorizationInterface $authorization = null,
         ?Sanitizer $sanitizer = null
     ) {
         $this->namespace = $namespace;
@@ -253,6 +253,15 @@ class Context implements ContextInterface
         //Dynamic UI component data should not contain templates.
         $config = $this->sanitizer->sanitize(array_merge($dataSource, $dataProviderConfig));
 
+        $params = [
+            'namespace' => $this->getNamespace()
+        ];
+
+        $providerRequestFieldName = $this->getDataProvider()->getRequestFieldName();
+        $providerRequestFieldValue = $this->request->getParam($providerRequestFieldName);
+        if ($providerRequestFieldValue) {
+            $params[$providerRequestFieldName] = $providerRequestFieldValue;
+        }
         return [
             $this->getDataProvider()->getName() => [
                 'type' => 'dataSource',
@@ -261,9 +270,7 @@ class Context implements ContextInterface
                 'config' => array_replace_recursive(
                     $config,
                     [
-                        'params' => [
-                            'namespace' => $this->getNamespace()
-                        ],
+                        'params' => $params,
                     ]
                 )
             ]

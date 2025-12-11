@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 declare(strict_types=1);
@@ -40,6 +40,7 @@ class ConfigOptionsListConstants
     public const CONFIG_PATH_DB_LOGGER_LOG_EVERYTHING = 'db_logger/log_everything';
     public const CONFIG_PATH_DB_LOGGER_QUERY_TIME_THRESHOLD = 'db_logger/query_time_threshold';
     public const CONFIG_PATH_DB_LOGGER_INCLUDE_STACKTRACE = 'db_logger/include_stacktrace';
+    public const CONFIG_PATH_DB_LOGGER_INCLUDE_INDEX_CHECK = 'db_logger/include_index_check';
     /**#@-*/
 
     /**
@@ -104,6 +105,7 @@ class ConfigOptionsListConstants
     public const SESSION_SAVE_FILES = 'files';
     public const SESSION_SAVE_DB = 'db';
     public const SESSION_SAVE_REDIS = 'redis';
+    public const SESSION_SAVE_VALKEY = 'valkey';
     /**#@-*/
 
     /**
@@ -167,4 +169,9 @@ class ConfigOptionsListConstants
      */
     public const STORE_KEY_RANDOM_STRING_SIZE = SODIUM_CRYPTO_AEAD_CHACHA20POLY1305_KEYBYTES;
     //phpcs:enable
+
+    /**
+     * Prefix of encoded random string
+     */
+    public const STORE_KEY_ENCODED_RANDOM_STRING_PREFIX = 'base64';
 }

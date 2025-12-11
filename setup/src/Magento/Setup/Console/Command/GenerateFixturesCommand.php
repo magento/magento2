@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Setup\Console\Command;
@@ -25,6 +25,8 @@ class GenerateFixturesCommand extends Command
 
     public const SKIP_REINDEX_OPTION = 'skip-reindex';
 
+    public const NAME = 'setup:performance:generate-fixtures';
+
     /**
      * @var FixtureModel
      */
@@ -44,7 +46,7 @@ class GenerateFixturesCommand extends Command
      */
     protected function configure()
     {
-        $this->setName('setup:performance:generate-fixtures')
+        $this->setName(self::NAME)
             ->setDescription('Generates fixtures')
             ->setDefinition([
                 new InputArgument(
@@ -65,7 +67,7 @@ class GenerateFixturesCommand extends Command
     /**
      * @inheritdoc
      */
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         try {
             $totalStartTime = microtime(true);
@@ -111,6 +113,8 @@ class GenerateFixturesCommand extends Command
                 $indexer = $indexerRegistry->get($indexerId['indexer_id']);
                 $indexer->setScheduled($indexersState[$indexerId['indexer_id']]);
             }
+
+            $this->optimizeTables($fixtureModel->getObjectManager(), $output);
 
             /** @var \Magento\Setup\Fixtures\IndexersStatesApplyFixture $indexerFixture */
             $indexerFixture = $fixtureModel
@@ -167,5 +171,23 @@ class GenerateFixturesCommand extends Command
         $endTime = microtime(true);
         $resultTime = (int) ($endTime - $startTime);
         $output->writeln('<info> done in ' . gmdate('H:i:s', $resultTime) . '</info>');
+    }
+
+    /**
+     * Optimize tables after entities generation.
+     *
+     * @param \Magento\Framework\ObjectManagerInterface $objectManager
+     * @param OutputInterface $output
+     * @return void
+     */
+    private function optimizeTables(
+        \Magento\Framework\ObjectManagerInterface $objectManager,
+        OutputInterface $output
+    ): void {
+        $connect = $objectManager->get(ResourceConnection::class)->getConnection();
+        $output->writeln("<info>Optimize tables</info>");
+        foreach ($connect->getTables() as $tableName) {
+            $connect->query("OPTIMIZE TABLE `$tableName`");
+        }
     }
 }

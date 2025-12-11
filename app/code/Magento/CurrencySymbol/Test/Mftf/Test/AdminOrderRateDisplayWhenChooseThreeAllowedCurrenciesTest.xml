@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
-  */
+/**
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
+ */
 -->
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -66,8 +66,12 @@
         <actionGroup ref="OpenOrderByIdActionGroup" stepKey="openNewOrderById">
             <argument name="orderId" value="$grabNewOrderNumber"/>
         </actionGroup>
-        <see selector="{{AdminOrderDetailsInformationSection.orderInformationTable}}" userInput="EUR / USD rate" stepKey="seeUSDandEURRate"/>
-        <see selector="{{AdminOrderDetailsInformationSection.orderInformationTable}}" userInput="RUB / USD rate:" stepKey="seeRUBandEURRate"/>
+        <actionGroup ref="AdminAssertCurrencyInOrderActionGroup" stepKey="seeUSDandEURRate">
+            <argument name="rate" value="EUR / USD rate"/>
+        </actionGroup>
+        <actionGroup ref="AdminAssertCurrencyInOrderActionGroup" stepKey="seeRUBandEURRate">
+            <argument name="rate" value="RUB / USD rate:"/>
+        </actionGroup>
         <grabMultiple selector="{{AdminOrderDetailsInformationSection.rate}}" stepKey="grabRates" />
         <assertEquals stepKey="assertRates">
             <actualResult type="variable">grabRates</actualResult>

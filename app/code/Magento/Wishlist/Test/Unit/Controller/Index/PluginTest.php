@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -14,6 +14,8 @@ use Magento\Framework\App\Config;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\Request\Http;
 use Magento\Framework\App\Response\RedirectInterface;
+use Magento\Framework\Data\Form\FormKey;
+use Magento\Framework\Data\Form\FormKey\Validator;
 use Magento\Framework\Message\ManagerInterface;
 use Magento\Store\App\Response\Redirect;
 use Magento\Store\Model\ScopeInterface;
@@ -21,6 +23,7 @@ use Magento\Wishlist\Controller\Index\Index;
 use Magento\Wishlist\Controller\Index\Plugin;
 use Magento\Wishlist\Model\AuthenticationState;
 use Magento\Wishlist\Model\AuthenticationStateInterface;
+use Magento\Wishlist\Model\DataSerializer;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -62,15 +65,30 @@ class PluginTest extends TestCase
     protected $request;
 
     /**
+     * @var DataSerializer|MockObject
+     */
+    private $dataSerializer;
+
+    /**
+     * @var FormKey|MockObject
+     */
+    private $formKey;
+
+    /**
+     * @var Validator|MockObject
+     */
+    private $formKeyValidator;
+
+    /**
      * @inheritdoc
      */
     protected function setUp(): void
     {
         $this->customerSession = $this->getMockBuilder(Session::class)
             ->disableOriginalConstructor()
-            ->setMethods(
+            ->onlyMethods(['authenticate'])
+            ->addMethods(
                 [
-                    'authenticate',
                     'getBeforeWishlistUrl',
                     'setBeforeWishlistUrl',
                     'setBeforeWishlistRequest',
@@ -87,21 +105,9 @@ class PluginTest extends TestCase
         $this->redirector = $this->createMock(Redirect::class);
         $this->messageManager = $this->getMockForAbstractClass(ManagerInterface::class);
         $this->request = $this->createMock(Http::class);
-    }
-
-    /**
-     * @inheritdoc
-     */
-    protected function tearDown(): void
-    {
-        unset(
-            $this->customerSession,
-            $this->authenticationState,
-            $this->config,
-            $this->redirector,
-            $this->messageManager,
-            $this->request
-        );
+        $this->dataSerializer = $this->createMock(DataSerializer::class);
+        $this->formKey = $this->createMock(FormKey::class);
+        $this->formKeyValidator = $this->createMock(Validator::class);
     }
 
     /**
@@ -114,7 +120,10 @@ class PluginTest extends TestCase
             $this->authenticationState,
             $this->config,
             $this->redirector,
-            $this->messageManager
+            $this->messageManager,
+            $this->dataSerializer,
+            $this->formKey,
+            $this->formKeyValidator
         );
     }
 
@@ -155,6 +164,11 @@ class PluginTest extends TestCase
             ->expects($this->once())
             ->method('getParams')
             ->willReturn($params);
+
+        $this->request
+            ->expects($this->exactly(2))
+            ->method('getActionName')
+            ->willReturn('add');
 
         $this->customerSession->expects($this->once())
             ->method('authenticate')

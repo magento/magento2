@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -90,7 +90,7 @@ class GridTest extends TestCase
         $websiteId = 1;
 
         $websiteMock = $this->getMockBuilder(Website::class)
-            ->setMethods(['getId'])
+            ->onlyMethods(['getId'])
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -113,7 +113,7 @@ class GridTest extends TestCase
 
         $websiteMock = $this->getMockBuilder(Website::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getId'])
+            ->onlyMethods(['getId'])
             ->getMock();
 
         $websiteMock->expects($this->once())

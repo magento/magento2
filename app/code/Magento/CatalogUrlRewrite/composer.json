@@ -5,8 +5,9 @@
         "sort-packages": true
     },
     "require": {
-        "php": "~7.4.0||~8.1.0",
+        "php": "~8.2.0||~8.3.0||~8.4.0",
         "magento/framework": "*",
+        "magento/framework-bulk": "*",
         "magento/module-backend": "*",
         "magento/module-catalog": "*",
         "magento/module-catalog-import-export": "*",
@@ -14,6 +15,7 @@
         "magento/module-import-export": "*",
         "magento/module-store": "*",
         "magento/module-ui": "*",
+        "magento/module-asynchronous-operations": "*",
         "magento/module-url-rewrite": "*"
     },
     "suggest": {

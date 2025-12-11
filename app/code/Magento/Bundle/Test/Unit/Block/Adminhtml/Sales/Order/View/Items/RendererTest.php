@@ -1,14 +1,18 @@
 <?php
 
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Bundle\Test\Unit\Block\Adminhtml\Sales\Order\View\Items;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\Bundle\Block\Adminhtml\Sales\Order\View\Items\Renderer;
+use Magento\Sales\Test\Unit\Helper\ItemTestHelper;
+use Magento\Directory\Helper\Data as DirectoryHelper;
+use Magento\Framework\Json\Helper\Data as JsonHelper;
 use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Sales\Model\Order\Item;
@@ -17,7 +21,7 @@ use PHPUnit\Framework\TestCase;
 
 class RendererTest extends TestCase
 {
-    /** @var Item|MockObject */
+    /** @var ItemTestHelper */
     protected $orderItem;
 
     /** @var Renderer $model */
@@ -28,26 +32,31 @@ class RendererTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->orderItem = $this->getMockBuilder(Item::class)
-            ->addMethods(['getOrderItem'])
-            ->onlyMethods(['getProductOptions', 'getParentItem'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->orderItem = new ItemTestHelper();
         $this->serializer = $this->createMock(Json::class);
         $objectManager = new ObjectManager($this);
+        $objects = [
+            [
+                JsonHelper::class,
+                $this->createMock(JsonHelper::class)
+            ],
+            [
+                DirectoryHelper::class,
+                $this->createMock(DirectoryHelper::class)
+            ]
+        ];
+        $objectManager->prepareObjectManager($objects);
         $this->model = $objectManager->getObject(
             Renderer::class,
             ['serializer' => $this->serializer]
         );
     }
 
-    /**
-     * @dataProvider isShipmentSeparatelyWithoutItemDataProvider
-     */
+    #[DataProvider('isShipmentSeparatelyWithoutItemDataProvider')]
     public function testIsShipmentSeparatelyWithoutItem($productOptions, $result)
     {
+        $this->orderItem->setProductOptions($productOptions);
         $this->model->setItem($this->orderItem);
-        $this->orderItem->expects($this->any())->method('getProductOptions')->willReturn($productOptions);
 
         $this->assertSame($result, $this->model->isShipmentSeparately());
     }
@@ -55,7 +64,7 @@ class RendererTest extends TestCase
     /**
      * @return array
      */
-    public function isShipmentSeparatelyWithoutItemDataProvider()
+    public static function isShipmentSeparatelyWithoutItemDataProvider()
     {
         return [
             [['shipment_type' => 1], true],
@@ -64,20 +73,17 @@ class RendererTest extends TestCase
         ];
     }
 
-    /**
-     * @dataProvider isShipmentSeparatelyWithItemDataProvider
-     */
+    #[DataProvider('isShipmentSeparatelyWithItemDataProvider')]
     public function testIsShipmentSeparatelyWithItem($productOptions, $result, $parentItem)
     {
         if ($parentItem) {
             $parentItem = $this->createPartialMock(Item::class, ['getProductOptions']);
-            $parentItem->expects($this->any())->method('getProductOptions')->willReturn($productOptions);
+            $parentItem->method('getProductOptions')->willReturn($productOptions);
+            $this->orderItem->setParentItem($parentItem);
         } else {
-            $this->orderItem->expects($this->any())->method('getProductOptions')
-                ->willReturn($productOptions);
+            $this->orderItem->setProductOptions($productOptions);
+            $this->orderItem->setParentItem(null);
         }
-        $this->orderItem->expects($this->any())->method('getParentItem')->willReturn($parentItem);
-        $this->orderItem->expects($this->any())->method('getOrderItem')->willReturnSelf();
 
         $this->assertSame($result, $this->model->isShipmentSeparately($this->orderItem));
     }
@@ -85,7 +91,7 @@ class RendererTest extends TestCase
     /**
      * @return array
      */
-    public function isShipmentSeparatelyWithItemDataProvider()
+    public static function isShipmentSeparatelyWithItemDataProvider()
     {
         return [
             [['shipment_type' => 1], false, false],
@@ -95,13 +101,11 @@ class RendererTest extends TestCase
         ];
     }
 
-    /**
-     * @dataProvider isChildCalculatedWithoutItemDataProvider
-     */
+    #[DataProvider('isChildCalculatedWithoutItemDataProvider')]
     public function testIsChildCalculatedWithoutItem($productOptions, $result)
     {
+        $this->orderItem->setProductOptions($productOptions);
         $this->model->setItem($this->orderItem);
-        $this->orderItem->expects($this->any())->method('getProductOptions')->willReturn($productOptions);
 
         $this->assertSame($result, $this->model->isChildCalculated());
     }
@@ -109,7 +113,7 @@ class RendererTest extends TestCase
     /**
      * @return array
      */
-    public function isChildCalculatedWithoutItemDataProvider()
+    public static function isChildCalculatedWithoutItemDataProvider()
     {
         return [
             [['product_calculations' => 0], true],
@@ -118,27 +122,17 @@ class RendererTest extends TestCase
         ];
     }
 
-    /**
-     * @dataProvider isChildCalculatedWithItemDataProvider
-     */
+    #[DataProvider('isChildCalculatedWithItemDataProvider')]
     public function testIsChildCalculatedWithItem($productOptions, $result, $parentItem)
     {
         if ($parentItem) {
-            $parentItem =
-                $this->createPartialMock(
-                    Item::class,
-                    [
-                        'getProductOptions',
-                        '__wakeup'
-                    ]
-                );
-            $parentItem->expects($this->any())->method('getProductOptions')->willReturn($productOptions);
+            $parentItem = $this->createPartialMock(Item::class, ['getProductOptions']);
+            $parentItem->method('getProductOptions')->willReturn($productOptions);
+            $this->orderItem->setParentItem($parentItem);
         } else {
-            $this->orderItem->expects($this->any())->method('getProductOptions')
-                ->willReturn($productOptions);
+            $this->orderItem->setProductOptions($productOptions);
+            $this->orderItem->setParentItem(null);
         }
-        $this->orderItem->expects($this->any())->method('getParentItem')->willReturn($parentItem);
-        $this->orderItem->expects($this->any())->method('getOrderItem')->willReturnSelf();
 
         $this->assertSame($result, $this->model->isChildCalculated($this->orderItem));
     }
@@ -146,7 +140,7 @@ class RendererTest extends TestCase
     /**
      * @return array
      */
-    public function isChildCalculatedWithItemDataProvider()
+    public static function isChildCalculatedWithItemDataProvider()
     {
         return [
             [['product_calculations' => 0], false, false],
@@ -158,7 +152,7 @@ class RendererTest extends TestCase
 
     public function testGetSelectionAttributes()
     {
-        $this->orderItem->expects($this->any())->method('getProductOptions')->willReturn([]);
+        $this->orderItem->setProductOptions([]);
         $this->assertNull($this->model->getSelectionAttributes($this->orderItem));
     }
 
@@ -173,7 +167,7 @@ class RendererTest extends TestCase
             ->with($bundleAttributes)
             ->willReturn($unserializedResult);
 
-        $this->orderItem->expects($this->any())->method('getProductOptions')->willReturn($options);
+        $this->orderItem->setProductOptions($options);
         $this->assertEquals($unserializedResult, $this->model->getSelectionAttributes($this->orderItem));
     }
 
@@ -195,20 +189,17 @@ class RendererTest extends TestCase
             'additional_options' => ['additional_options'],
             'attributes_info' => ['attributes_info'],
         ];
+        $this->orderItem->setProductOptions($productOptions);
         $this->model->setItem($this->orderItem);
-        $this->orderItem->expects($this->any())->method('getProductOptions')->willReturn($productOptions);
         $this->assertEquals(['attributes_info', 'options', 'additional_options'], $this->model->getOrderOptions());
     }
 
-    /**
-     * @dataProvider canShowPriceInfoDataProvider
-     */
+    #[DataProvider('canShowPriceInfoDataProvider')]
     public function testCanShowPriceInfo($parentItem, $productOptions, $result)
     {
+        $this->orderItem->setParentItem($parentItem);
+        $this->orderItem->setProductOptions($productOptions);
         $this->model->setItem($this->orderItem);
-        $this->orderItem->expects($this->any())->method('getOrderItem')->willReturnSelf();
-        $this->orderItem->expects($this->any())->method('getParentItem')->willReturn($parentItem);
-        $this->orderItem->expects($this->any())->method('getProductOptions')->willReturn($productOptions);
 
         $this->assertSame($result, $this->model->canShowPriceInfo($this->orderItem));
     }
@@ -216,12 +207,39 @@ class RendererTest extends TestCase
     /**
      * @return array
      */
-    public function canShowPriceInfoDataProvider()
+    public static function canShowPriceInfoDataProvider()
     {
         return [
             [true, ['product_calculations' => 0], true],
             [false, [], true],
             [false, ['product_calculations' => 0], false],
+        ];
+    }
+
+    #[DataProvider('getValueHtmlWithoutShipmentSeparatelyDataProvider')]
+    public function testGetValueHtmlWithoutShipmentSeparately($qty)
+    {
+        $model = $this->createPartialMock(Renderer::class, [
+            'escapeHtml',
+            'isShipmentSeparately',
+            'getSelectionAttributes',
+            'isChildCalculated'
+        ]);
+        $model->method('escapeHtml')->willReturn('Test');
+        $model->method('isShipmentSeparately')->willReturn(false);
+        $model->method('isChildCalculated')->willReturn(true);
+        $model->method('getSelectionAttributes')->willReturn(['qty' => $qty]);
+        $this->assertSame($qty . ' x Test', $model->getValueHtml($this->orderItem));
+    }
+
+    /**
+     * @return array
+     */
+    public static function getValueHtmlWithoutShipmentSeparatelyDataProvider()
+    {
+        return [
+            [1],
+            [1.5],
         ];
     }
 }

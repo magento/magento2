@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework\EntityManager;
 
@@ -54,7 +54,7 @@ class TypeResolver
         $interfaceNames = $reflectionClass->getInterfaceNames();
         $dataInterfaces = [];
         foreach ($interfaceNames as $interfaceName) {
-            if (strpos($interfaceName, '\Api\Data\\') !== false) {
+            if ($interfaceName && strpos($interfaceName, '\Api\Data\\') !== false) {
                 $dataInterfaces[] = $interfaceName;
             }
         }

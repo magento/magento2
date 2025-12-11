@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Tax\Model\ResourceModel\Calculation\Rule;
 
@@ -35,7 +35,7 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
         $this->assertMatchesRegularExpression($expected, (string)$collection->getSelect());
     }
 
-    public function setClassTypeFilterDataProvider()
+    public static function setClassTypeFilterDataProvider()
     {
         return [
             [

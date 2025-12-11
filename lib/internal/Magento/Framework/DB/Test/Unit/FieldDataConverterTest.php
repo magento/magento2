@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -144,7 +144,7 @@ class FieldDataConverterTest extends TestCase
     /**
      * @return array
      */
-    public function convertDataProvider()
+    public static function convertDataProvider()
     {
         return [
             [false, 0],
@@ -201,7 +201,7 @@ class FieldDataConverterTest extends TestCase
     /**
      * @return array
      */
-    public function convertBatchSizeFromEnvDataProvider()
+    public static function convertBatchSizeFromEnvDataProvider()
     {
         return [
             [null, FieldDataConverter::DEFAULT_BATCH_SIZE],
@@ -261,7 +261,7 @@ class FieldDataConverterTest extends TestCase
     /**
      * @return array
      */
-    public function convertBatchSizeFromEnvInvalidDataProvider()
+    public static function convertBatchSizeFromEnvInvalidDataProvider()
     {
         return [
             ['value'],

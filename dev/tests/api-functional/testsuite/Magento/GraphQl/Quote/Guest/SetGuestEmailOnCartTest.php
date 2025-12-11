@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -124,7 +124,7 @@ class SetGuestEmailOnCartTest extends GraphQlAbstract
     /**
      * @return array
      */
-    public function incorrectEmailDataProvider(): array
+    public static function incorrectEmailDataProvider(): array
     {
         return [
             'wrong_email' => ['some', 'Invalid email format'],

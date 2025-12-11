@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\User\Controller\Adminhtml;
@@ -190,7 +190,7 @@ class UserTest extends \Magento\TestFramework\TestCase\AbstractBackendController
      *
      * @return array
      */
-    public function saveActionPasswordChangeDataProvider()
+    public static function saveActionPasswordChangeDataProvider()
     {
         $password = uniqid('123q');
         $passwordPairs = [

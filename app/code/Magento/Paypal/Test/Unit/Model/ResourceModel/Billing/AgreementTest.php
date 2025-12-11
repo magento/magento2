@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -48,17 +48,9 @@ class AgreementTest extends TestCase
     protected function setUp(): void
     {
         $objectManager = new ObjectManagerHelper($this);
-        $contextMock = $this->getMockBuilder(Context::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->resourceConnectionMock = $this->createPartialMock(ResourceConnection::class, [
-            'getConnection',
-            'getTableName'
-        ]);
-        $this->collectionMock = $this->getMockBuilder(AbstractDb::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['getSelect'])
-            ->getMockForAbstractClass();
+        $contextMock = $this->createMock(Context::class);
+        $this->resourceConnectionMock = $this->createMock(ResourceConnection::class);
+        $this->collectionMock = $this->createMock(AbstractDb::class);
         $this->connectionMock = $this->createMock(Mysql::class);
         $this->selectMock = $this->createMock(Select::class);
         $contextMock->expects($this->once())->method('getResources')->willReturn($this->resourceConnectionMock);
@@ -88,11 +80,15 @@ class AgreementTest extends TestCase
             ->willReturnSelf();
         $this->selectMock->expects($this->exactly(2))
             ->method('where')
-            ->withConsecutive(
-                ['pbao.agreement_id IN(?)', [100]],
-                ['main_table.entity_id IN (?)', [500]]
-            )
-            ->willReturnSelf();
+            ->willReturnCallback(
+                function ($arg1, $arg2) {
+                    if ($arg1 == 'pbao.agreement_id IN(?)' && $arg2 == [100]) {
+                        return $this->selectMock;
+                    } elseif ($arg1 == 'main_table.entity_id IN (?)' && $arg2 == [500]) {
+                        return $this->selectMock;
+                    }
+                }
+            );
         $this->connectionMock->expects($this->once())
             ->method('fetchCol')
             ->with($this->selectMock, [])

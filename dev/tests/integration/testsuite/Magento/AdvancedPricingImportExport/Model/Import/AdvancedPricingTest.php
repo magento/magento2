@@ -1,11 +1,12 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\AdvancedPricingImportExport\Model\Import;
 
 use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\Catalog\Test\Fixture\SelectAttribute;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Filesystem;
 use Magento\ImportExport\Model\Import;
@@ -15,6 +16,8 @@ use Magento\Store\Model\StoreManagerInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\Catalog\Api\Data\ProductTierPriceInterfaceFactory;
 use Magento\Catalog\Api\Data\ProductTierPriceExtensionFactory;
+use Magento\TestFramework\Fixture\DataFixture;
+use Magento\TestFramework\Fixture\AppArea;
 
 /**
  * @magentoAppArea adminhtml
@@ -309,7 +312,7 @@ class AdvancedPricingTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array[]
      */
-    public function importValidationDuplicateWithSameBaseCurrencyDataProvider(): array
+    public static function importValidationDuplicateWithSameBaseCurrencyDataProvider(): array
     {
         return require __DIR__ . '/_files/import_validation_duplicate_same_currency_data_provider.php';
     }
@@ -317,7 +320,7 @@ class AdvancedPricingTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array[]
      */
-    public function importValidationDuplicateWithDifferentBaseCurrencyDataProvider(): array
+    public static function importValidationDuplicateWithDifferentBaseCurrencyDataProvider(): array
     {
         return require __DIR__ . '/_files/import_validation_duplicate_diff_currency_data_provider.php';
     }
@@ -335,7 +338,8 @@ class AdvancedPricingTest extends \PHPUnit\Framework\TestCase
         string $file,
         string $directoryCode = DirectoryList::ROOT,
         string $behavior = Import::BEHAVIOR_APPEND,
-        bool $validateOnly = false
+        bool $validateOnly = false,
+        string $entity = 'advanced_pricing'
     ): ProcessingErrorAggregatorInterface {
         /** @var Filesystem $filesystem */
         $filesystem = $this->objectManager->create(Filesystem::class);
@@ -351,7 +355,7 @@ class AdvancedPricingTest extends \PHPUnit\Framework\TestCase
             ->setParameters(
                 [
                     'behavior' => $behavior,
-                    'entity' => 'advanced_pricing'
+                    'entity' => $entity
                 ]
             )
             ->validateData();
@@ -425,5 +429,72 @@ class AdvancedPricingTest extends \PHPUnit\Framework\TestCase
         $stream->unlock();
         $stream->close();
         return $varDir->getAbsolutePath($tmpFilename);
+    }
+
+    /**
+     * For checking if correct add and update count are being displayed after importing file having 100+ records
+     */
+    #[
+        DataFixture(
+            SelectAttribute::class,
+            [
+                'attribute_code' => 'size',
+                'default_frontend_label' => 'Size',
+                'scope' => 'global',
+                'options' => [28,29,30,31,32,33,34,36,38]
+            ],
+            'attr1'
+        ),
+        DataFixture(
+            SelectAttribute::class,
+            [
+                'attribute_code' => 'colors',
+                'default_frontend_label' => 'Colors',
+                'scope' => 'global',
+                'options' => ["Red","Green","Yellow","Blue","Orange"]
+            ]
+        ),
+        AppArea('adminhtml')
+    ]
+    public function testImportAddUpdateCounts()
+    {
+        $this->model = $this->objectManager->create(\Magento\CatalogImportExport\Model\Import\Product::class);
+
+        // Import product data from CSV file
+        $productFilePath = __DIR__ . '/_files/import_catalog_product.csv';
+        $errors = $this->doImport(
+            $productFilePath,
+            DirectoryList::ROOT,
+            Import::BEHAVIOR_ADD_UPDATE,
+            true,
+            'catalog_product'
+        );
+        $this->assertEquals(0, $errors->getErrorsCount(), 'Product import validation error');
+        $this->model->importData();
+
+        $this->assertEquals(64, $this->model->getCreatedItemsCount(), 'Products create item count');
+        $this->assertEquals(0, $this->model->getUpdatedItemsCount(), 'Products update item count');
+
+        // Import advance pricing data from CSV file
+        $this->model = $this->objectManager->create(
+            \Magento\AdvancedPricingImportExport\Model\Import\AdvancedPricing::class
+        );
+        $pathToFile = __DIR__ . '/_files/import_advanced_pricing_for_additional_attributes_products.csv';
+        $errors = $this->doImport($pathToFile, DirectoryList::ROOT, Import::BEHAVIOR_APPEND, true);
+        print_r($errors->getAllErrors());
+        $this->assertEquals(0, $errors->getErrorsCount(), 'Advanced pricing import validation error');
+        $this->model->importData();
+
+        $this->assertEquals(127, $this->model->getCreatedItemsCount(), 'Advance pricing create count1');
+        $this->assertEquals(0, $this->model->getUpdatedItemsCount(), 'Advance pricing update count1');
+
+        // Initializing again, since old model object holds old count
+        // Import advance pricing data from CSV file
+        $this->model = $this->objectManager->create(
+            \Magento\AdvancedPricingImportExport\Model\Import\AdvancedPricing::class
+        );
+        $this->doImport($pathToFile, DirectoryList::ROOT, Import::BEHAVIOR_APPEND);
+        $this->assertEquals(0, $this->model->getCreatedItemsCount(), 'Advance pricing create count2');
+        $this->assertEquals(127, $this->model->getUpdatedItemsCount(), 'Advance pricing update count2');
     }
 }

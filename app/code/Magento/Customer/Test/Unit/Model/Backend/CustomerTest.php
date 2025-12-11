@@ -1,9 +1,7 @@
 <?php
 /**
- * Unit test for customer adminhtml model
- *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -16,6 +14,7 @@ use Magento\Customer\Model\Backend\Customer;
 use Magento\Framework\DataObject;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Store\Model\StoreManager;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -41,12 +40,12 @@ class CustomerTest extends TestCase
     }
 
     /**
-     * @dataProvider getStoreDataProvider
      * @param $websiteId
      * @param $websiteStoreId
      * @param $storeId
      * @param $result
      */
+    #[DataProvider('getStoreDataProvider')]
     public function testGetStoreId($websiteId, $websiteStoreId, $storeId, $result)
     {
         if ($websiteId * 1) {
@@ -64,7 +63,7 @@ class CustomerTest extends TestCase
      * Data provider for testGetStoreId
      * @return array
      */
-    public function getStoreDataProvider()
+    public static function getStoreDataProvider()
     {
         return [[1, 10, 5, 10], [0, 10, 5, 5]];
     }

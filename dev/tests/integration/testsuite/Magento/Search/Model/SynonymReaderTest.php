@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Search\Model;
 
@@ -25,7 +25,7 @@ class SynonymReaderTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function loadByPhraseDataProvider(): array
+    public static function loadByPhraseDataProvider(): array
     {
         return [
             [

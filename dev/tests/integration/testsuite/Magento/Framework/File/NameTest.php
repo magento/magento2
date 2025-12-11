@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2021 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -58,7 +58,7 @@ class NameTest extends \PHPUnit\Framework\TestCase
      * Data provider for testGetNewFileName
      * @return array
      */
-    public function getNewFileNameDataProvider()
+    public static function getNewFileNameDataProvider()
     {
         return [
             [DirectoryList::VAR_DIR, 'image.jpg', 'image.jpg'],

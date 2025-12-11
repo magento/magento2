@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -45,25 +45,16 @@ class FilterTest extends TestCase
     protected function setUp(): void
     {
         $this->resource = $this->createMock(ResourceConnection::class);
-        $this->connection = $this->getMockForAbstractClass(
-            AdapterInterface::class,
-            [],
-            '',
-            false
+        $this->connection = $this->createMock(
+            AdapterInterface::class
         );
         $this->flatScopeResolver = $this->createMock(FlatScopeResolver::class);
         $this->indexerRegistry = $this->createMock(IndexerRegistry::class);
-        $this->indexer = $this->getMockForAbstractClass(
-            IndexerInterface::class,
-            [],
-            '',
-            false
+        $this->indexer = $this->createMock(
+            IndexerInterface::class
         );
-        $this->indexerState = $this->getMockForAbstractClass(
-            StateInterface::class,
-            [],
-            '',
-            false
+        $this->indexerState = $this->createMock(
+            StateInterface::class
         );
 
         $this->model = new Filter(

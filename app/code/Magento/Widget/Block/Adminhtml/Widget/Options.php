@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Widget\Block\Adminhtml\Widget;
 
@@ -193,7 +193,7 @@ class Options extends \Magento\Backend\Block\Widget\Form\Generic
         // hidden element
         if (!$parameter->getVisible()) {
             $fieldType = 'hidden';
-            // just an element renderer
+        // just an element renderer
         } elseif ($fieldType && $this->_isClassName($fieldType)) {
             $fieldRenderer = $this->getLayout()->createBlock($fieldType);
             $fieldType = $this->_defaultElementType;
@@ -244,6 +244,6 @@ class Options extends \Magento\Backend\Block\Widget\Form\Generic
      */
     protected function _isClassName($fieldType)
     {
-        return preg_match('/[A-Z]/', $fieldType) > 0;
+        return $fieldType && preg_match('/[A-Z]/', $fieldType) > 0;
     }
 }

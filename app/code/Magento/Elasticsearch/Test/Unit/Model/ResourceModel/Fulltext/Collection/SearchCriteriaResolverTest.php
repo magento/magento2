@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -13,6 +13,7 @@ use Magento\Framework\Api\Search\SearchCriteriaBuilder;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Unit test for SearchCriteriaResolver
@@ -31,15 +32,15 @@ class SearchCriteriaResolverTest extends TestCase
     {
         $this->searchCriteriaBuilder = $this->getMockBuilder(SearchCriteriaBuilder::class)
             ->disableOriginalConstructor()
-            ->setMethods(['setPageSize', 'create'])
+            ->onlyMethods(['setPageSize', 'create'])
             ->getMock();
     }
 
     /**
      * @param array $params
      * @param array $expected
-     * @dataProvider resolveSortOrderDataProvider
      */
+    #[DataProvider('resolveSortOrderDataProvider')]
     public function testResolve($params, $expected)
     {
         $searchRequestName = 'test';
@@ -51,7 +52,7 @@ class SearchCriteriaResolverTest extends TestCase
 
         $searchCriteria = $this->getMockBuilder(SearchCriteria::class)
             ->disableOriginalConstructor()
-            ->setMethods(['setRequestName', 'setSortOrders', 'setCurrentPage'])
+            ->onlyMethods(['setRequestName', 'setSortOrders', 'setCurrentPage'])
             ->getMock();
         $searchCriteria->expects($this->once())
             ->method('setRequestName')
@@ -99,7 +100,7 @@ class SearchCriteriaResolverTest extends TestCase
     /**
      * @return array
      */
-    public function resolveSortOrderDataProvider()
+    public static function resolveSortOrderDataProvider()
     {
         return [
             [

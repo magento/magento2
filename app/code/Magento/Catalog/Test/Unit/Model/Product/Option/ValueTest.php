@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -16,7 +16,7 @@ use Magento\Framework\Pricing\Price\PriceInterface;
 use Magento\Framework\Pricing\PriceInfoInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\TestCase;
-use Magento\Catalog\Pricing\Price\CalculateCustomOptionCatalogRule;
+use Magento\Catalog\Pricing\Price\CustomOptionPriceCalculator;
 use PHPUnit\Framework\MockObject\MockObject;
 
 /**
@@ -30,9 +30,9 @@ class ValueTest extends TestCase
     private $model;
 
     /**
-     * @var CalculateCustomOptionCatalogRule|MockObject
+     * @var CustomOptionPriceCalculator|MockObject
      */
-    private $calculateCustomOptionCatalogRule;
+    private $customOptionPriceCalculatorMock;
 
     /**
      * @inheritDoc
@@ -42,8 +42,8 @@ class ValueTest extends TestCase
         $mockedResource = $this->getMockedResource();
         $mockedCollectionFactory = $this->getMockedValueCollectionFactory();
 
-        $this->calculateCustomOptionCatalogRule = $this->createMock(
-            CalculateCustomOptionCatalogRule::class
+        $this->customOptionPriceCalculatorMock = $this->createMock(
+            CustomOptionPriceCalculator::class
         );
 
         $helper = new ObjectManager($this);
@@ -52,7 +52,7 @@ class ValueTest extends TestCase
             [
                 'resource' => $mockedResource,
                 'valueCollectionFactory' => $mockedCollectionFactory,
-                'calculateCustomOptionCatalogRule' => $this->calculateCustomOptionCatalogRule
+                'customOptionPriceCalculator' => $this->customOptionPriceCalculatorMock
             ]
         );
         $this->model->setOption($this->getMockedOption());
@@ -80,8 +80,8 @@ class ValueTest extends TestCase
         $this->assertEquals($price, $this->model->getPrice(false));
 
         $percentPrice = 100.0;
-        $this->calculateCustomOptionCatalogRule->expects($this->atLeastOnce())
-            ->method('execute')
+        $this->customOptionPriceCalculatorMock->expects($this->atLeastOnce())
+            ->method('getOptionPriceByPriceCode')
             ->willReturn($percentPrice);
         $this->assertEquals($percentPrice, $this->model->getPrice(true));
     }
@@ -131,7 +131,7 @@ class ValueTest extends TestCase
 
         $mockBuilder =
             $this->getMockBuilder(CollectionFactory::class)
-                ->setMethods(['create'])
+                ->onlyMethods(['create'])
                 ->disableOriginalConstructor();
         $mock = $mockBuilder->getMock();
 
@@ -149,7 +149,7 @@ class ValueTest extends TestCase
     {
         $mockBuilder = $this->getMockBuilder(
             Collection::class
-        )->setMethods(['addFieldToFilter', 'getValuesByOption', 'getValues'])->disableOriginalConstructor();
+        )->onlyMethods(['addFieldToFilter', 'getValuesByOption', 'getValues'])->disableOriginalConstructor();
         $mock = $mockBuilder->getMock();
 
         $mock->expects($this->any())
@@ -191,7 +191,7 @@ class ValueTest extends TestCase
     private function getMockedProduct()
     {
         $mockBuilder = $this->getMockBuilder(Product::class)
-            ->setMethods(['getPriceInfo'])
+            ->onlyMethods(['getPriceInfo'])
             ->disableOriginalConstructor();
         $mock = $mockBuilder->getMock();
 
@@ -222,7 +222,7 @@ class ValueTest extends TestCase
     private function getMockedResource()
     {
         $mockBuilder = $this->getMockBuilder(\Magento\Catalog\Model\ResourceModel\Product\Option\Value::class)
-            ->setMethods(
+            ->onlyMethods(
                 [
                     'duplicate',
                     'getIdFieldName',

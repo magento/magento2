@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -25,19 +25,19 @@ use Magento\TestFramework\TestCase\GraphQlAbstract;
  * | FEDEX_2_DAY            | 2 Day
  * | FIRST_OVERNIGHT        | First Overnight
  * | INTERNATIONAL_ECONOMY  |International Economy
- * | INTERNATIONAL_PRIORITY | International Priority
+ * | FEDEX_INTERNATIONAL_PRIORITY | International Priority
  */
 class SetFedExShippingMethodsOnCartTest extends GraphQlAbstract
 {
     /**
      * Defines carrier label for "FedEx" shipping method
      */
-    const CARRIER_LABEL = 'Federal Express';
+    protected const CARRIER_LABEL = 'Federal Express';
 
     /**
      * Defines carrier code for "FedEx" shipping method
      */
-    const CARRIER_CODE = 'fedex';
+    protected const CARRIER_CODE = 'fedex';
 
     /**
      * @var CustomerTokenServiceInterface
@@ -67,6 +67,8 @@ class SetFedExShippingMethodsOnCartTest extends GraphQlAbstract
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/set_new_shipping_address.php
      * @magentoApiDataFixture Magento/GraphQl/FedEx/_files/enable_fedex_shipping_method.php
+     * @magentoConfigFixture carriers/fedex/api_key TESTAPIKEY
+     * @magentoConfigFixture carriers/fedex/secret_key TESTSECRETKEY
      *
      * @dataProvider dataProviderShippingMethods
      * @param string $methodCode
@@ -104,7 +106,7 @@ class SetFedExShippingMethodsOnCartTest extends GraphQlAbstract
     /**
      * @return array
      */
-    public function dataProviderShippingMethods(): array
+    public static function dataProviderShippingMethods(): array
     {
         return [
             'Ground' => ['FEDEX_GROUND', 'Ground'],
@@ -124,6 +126,8 @@ class SetFedExShippingMethodsOnCartTest extends GraphQlAbstract
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/set_new_shipping_canada_address.php
      * @magentoApiDataFixture Magento/GraphQl/FedEx/_files/enable_fedex_shipping_method.php
+     * @magentoConfigFixture carriers/fedex/api_key TESTAPIKEY
+     * @magentoConfigFixture carriers/fedex/secret_key TESTSECRETKEY
      *
      * @dataProvider dataProviderShippingMethodsBasedOnCanadaAddress
      * @param string $methodCode
@@ -161,12 +165,12 @@ class SetFedExShippingMethodsOnCartTest extends GraphQlAbstract
     /**
      * @return array
      */
-    public function dataProviderShippingMethodsBasedOnCanadaAddress(): array
+    public static function dataProviderShippingMethodsBasedOnCanadaAddress(): array
     {
         return [
-            'Ground' => ['FEDEX_GROUND', 'Ground'],
-            'International Economy' => ['INTERNATIONAL_ECONOMY', 'International Economy'],
-            'International Priority' => ['INTERNATIONAL_PRIORITY', 'International Priority'],
+           'Ground' => ['FEDEX_GROUND', 'Ground'],
+           'International Economy' => ['INTERNATIONAL_ECONOMY', 'International Economy'],
+           'International Priority' => ['FEDEX_INTERNATIONAL_PRIORITY', 'International Priority'],
         ];
     }
 
@@ -203,9 +207,9 @@ mutation {
           method_title
         }
       }
-    } 
+    }
   }
-}        
+}
 QUERY;
     }
 

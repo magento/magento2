@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\SalesRule\Model\Rule\Action\Discount;
 
@@ -22,11 +22,14 @@ class ByFixed extends AbstractDiscount
 
         $baseDiscountAmount = (float) $rule->getDiscountAmount();
         $discountAmount = $this->priceCurrency->convert($baseDiscountAmount, $item->getQuote()->getStore());
+        $itemDiscountAmount = $item->getDiscountAmount();
+        $itemBaseDiscountAmount = $item->getBaseDiscountAmount();
         $itemPrice = $this->validator->getItemPrice($item);
         $baseItemPrice = $this->validator->getItemBasePrice($item);
 
-        $discountAmountMin = min($itemPrice * $qty, $discountAmount * $qty);
-        $baseDiscountAmountMin = min($baseItemPrice * $qty, $baseDiscountAmount * $qty);
+        $discountAmountMin = min(($itemPrice * $item->getQty()) - $itemDiscountAmount, $discountAmount * $qty);
+        $baseDiscountAmountMin =
+            min(($baseItemPrice * $item->getQty()) - $itemBaseDiscountAmount, $baseDiscountAmount * $qty);
 
         $discountData->setAmount($discountAmountMin);
         $discountData->setBaseAmount($baseDiscountAmountMin);

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -112,7 +112,6 @@ class HttpTest extends TestCase
                 'sessionConfig' => $this->sessionConfigMock
             ]
         );
-        $this->model->headersSentThrowsException = false;
         $this->model->setHeader('Name', 'Value');
     }
 
@@ -339,7 +338,7 @@ class HttpTest extends TestCase
         $objectManagerClass = new ReflectionClass(AppObjectManager::class);
         $instanceProperty = $objectManagerClass->getProperty('_instance');
         $instanceProperty->setAccessible(true);
-        $instanceProperty->setValue(null);
+        $instanceProperty->setValue(null, null);
 
         $this->model->__wakeup();
         $this->assertNull($this->cookieMetadataFactoryMock);

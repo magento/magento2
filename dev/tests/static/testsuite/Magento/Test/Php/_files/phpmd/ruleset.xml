@@ -1,8 +1,8 @@
 <?xml version='1.0' encoding="UTF-8"?>
 <!--
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 -->
 <ruleset name="Magento PHPMD rule set" xmlns="http://pmd.sf.net/ruleset/1.0.0"
@@ -26,7 +26,9 @@
     </rule>
 
     <!-- Unused code rules -->
-    <rule ref="rulesets/unusedcode.xml" />
+    <rule ref="rulesets/unusedcode.xml">
+        <exclude name="UnusedFormalParameter"/>
+    </rule>
 
     <!-- Code design rules -->
     <rule ref="rulesets/design.xml/NumberOfChildren" />
@@ -45,5 +47,6 @@
     <!-- Magento Specific Rules -->
     <rule ref="Magento/CodeMessDetector/resources/rulesets/design.xml/AllPurposeAction" />
     <rule ref="Magento/CodeMessDetector/resources/rulesets/design.xml/CookieAndSessionMisuse" />
+    <rule ref="Magento/CodeMessDetector/resources/rulesets/unusedcode.xml/UnusedFormalParameter" />
 
 </ruleset>

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -11,6 +11,7 @@ use Magento\Catalog\Model\ResourceModel\Product\Link;
 use Magento\CatalogImportExport\Model\Import\Product;
 use Magento\CatalogImportExport\Model\Import\Product\LinkProcessor;
 use Magento\CatalogImportExport\Model\Import\Product\SkuProcessor;
+use Magento\CatalogImportExport\Model\Import\Product\SkuStorage;
 use Magento\CatalogImportExport\Model\Import\Product\Type\AbstractType;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\DB\Select;
@@ -70,6 +71,11 @@ class LinkProcessorTest extends TestCase
      */
     protected $logger;
 
+    /**
+     * @var SkuStorage|MockObject
+     */
+    private $skuStorage;
+
     protected function setUp(): void
     {
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
@@ -90,6 +96,7 @@ class LinkProcessorTest extends TestCase
             SkuProcessor::class
         );
         $this->logger = $this->getMockForAbstractClass(LoggerInterface::class);
+        $this->skuStorage = $this->createMock(SkuStorage::class);
     }
 
     /**
@@ -106,7 +113,8 @@ class LinkProcessorTest extends TestCase
                 $this->resourceHelper,
                 $this->skuProcessor,
                 $this->logger,
-                $linkToNameId
+                $linkToNameId,
+                $this->skuStorage
             );
 
         $importEntity = $this->createMock(Product::class);
@@ -121,13 +129,13 @@ class LinkProcessorTest extends TestCase
 
         $dataSourceModel = $this->createMock(Data::class);
 
-        $this->linkProcessor->saveLinks($importEntity, $dataSourceModel, '_related_');
+        $this->linkProcessor->saveLinks($importEntity, $dataSourceModel, '_related_', []);
     }
 
     /**
      * @return array
      */
-    public function diConfigDataProvider()
+    public static function diConfigDataProvider()
     {
         return [
             [3, [

@@ -1,18 +1,21 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Downloadable\Test\Unit\Controller\Adminhtml\Downloadable\Product\Edit;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\Downloadable\Controller\Adminhtml\Downloadable\Product\Edit\Link;
 use Magento\Downloadable\Helper\Download;
 use Magento\Downloadable\Helper\File;
+use Magento\Downloadable\Test\Unit\Helper\LinkTestHelper;
 use Magento\Framework\App\Request\Http;
 use Magento\Framework\App\ResponseInterface;
 use Magento\Framework\ObjectManager\ObjectManager;
+use Magento\Framework\App\Test\Unit\Helper\ResponseTestHelper;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -64,13 +67,17 @@ class LinkTest extends TestCase
     {
         $this->objectManagerHelper = new ObjectManagerHelper($this);
 
-        $this->request = $this->getMockBuilder(Http::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->response = $this->getMockBuilder(ResponseInterface::class)
-            ->addMethods(['setHttpResponseCode', 'clearBody', 'sendHeaders', 'setHeader'])
-            ->onlyMethods(['sendResponse'])
-            ->getMockForAbstractClass();
+        $this->request = $this->createMock(Http::class);
+        $this->response = $this->createPartialMock(
+            ResponseTestHelper::class,
+            [
+                'setHttpResponseCode',
+                'clearBody',
+                'setHeader',
+                'sendHeaders',
+                'sendResponse'
+            ]
+        );
         $this->fileHelper = $this->createPartialMock(
             File::class,
             ['getFilePath']
@@ -86,23 +93,21 @@ class LinkTest extends TestCase
                 'getContentDisposition'
             ]
         );
-        $this->linkModel = $this->getMockBuilder(Link::class)
-            ->addMethods(
-                [
-                    'load',
-                    'getId',
-                    'getLinkType',
-                    'getLinkUrl',
-                    'getSampleUrl',
-                    'getSampleType',
-                    'getBasePath',
-                    'getBaseSamplePath',
-                    'getLinkFile',
-                    'getSampleFile'
-                ]
-            )
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->linkModel = $this->createPartialMock(
+            LinkTestHelper::class,
+            [
+                'load',
+                'getId',
+                'getLinkType',
+                'getLinkUrl',
+                'getSampleUrl',
+                'getSampleType',
+                'getBasePath',
+                'getBaseSamplePath',
+                'getLinkFile',
+                'getSampleFile'
+            ]
+        );
         $this->objectManager = $this->createPartialMock(
             ObjectManager::class,
             [
@@ -125,37 +130,70 @@ class LinkTest extends TestCase
      * @param string $fileType
      *
      * @return void
-     * @dataProvider executeDataProvider
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
+    #[DataProvider('executeDataProvider')]
     public function testExecuteFile(string $fileType): void
     {
         $fileSize = 58493;
         $fileName = 'link.jpg';
         $this->request
             ->method('getParam')
-            ->withConsecutive(['id', 0], ['type', 0])
-            ->willReturnOnConsecutiveCalls(1, $fileType);
+            ->willReturnCallback(function ($arg1, $arg2) use ($fileType) {
+                if ($arg1 == 'id' && $arg2 == 0) {
+                    return 1;
+                } elseif ($arg1 == 'type' && $arg2 == 0) {
+                    return $fileType;
+                }
+            });
         $this->response->expects($this->once())->method('setHttpResponseCode')->willReturnSelf();
         $this->response->expects($this->once())->method('clearBody')->willReturnSelf();
         $this->response
             ->expects($this->any())
             ->method('setHeader')
-            ->withConsecutive(
-                ['Pragma', 'public', true],
-                [
-                    'Cache-Control',
-                    'must-revalidate, post-check=0, pre-check=0',
-                    true
-                ],
-                ['Content-type', 'text/html'],
-                ['Content-Length', $fileSize],
-                ['Content-Disposition', 'attachment; filename=' . $fileName]
-            )->willReturnSelf();
+            ->willReturnCallback(function ($arg1, $arg2 = null, $arg3 = null) use ($fileSize, $fileName) {
+                static $callCount = 0;
+                $callCount++;
+                switch ($callCount) {
+                    case 1:
+                        if ($arg1 == 'Pragma' && $arg2 == 'public' && $arg3 == true) {
+                            return $this->response;
+                        }
+                        break;
+                    case 2:
+                        if ($arg1 == 'Cache-Control' && $arg2 == 'must-revalidate, post-check=0, pre-check=0' &&
+                            $arg3 == true) {
+                            return $this->response;
+                        }
+                        break;
+                    case 3:
+                        if ($arg1 == 'Content-type' && $arg2 == 'text/html' && $arg3 === null) {
+                            return $this->response;
+                        }
+                        break;
+                    case 4:
+                        if ($arg1 === 'Content-Length' && $arg2 === $fileSize && $arg3 === null) {
+                            return $this->response;
+                        }
+                        break;
+                    case 5:
+                        if ($arg1 == 'Content-Disposition' && $arg2 == 'attachment; filename=' . $fileName &&
+                            $arg3 === null) {
+                            return $this->response;
+                        }
+                        break;
+                }
+
+                return $this->response;
+            });
         $this->response->expects($this->once())->method('sendHeaders')->willReturnSelf();
         $this->objectManager
             ->method('get')
-            ->withConsecutive([File::class], [\Magento\Downloadable\Model\Link::class], [Download::class])
-            ->willReturnOnConsecutiveCalls($this->fileHelper, $this->linkModel, $this->downloadHelper);
+            ->willReturnCallback(fn ($param) => match ([$param]) {
+                [File::class] => $this->fileHelper,
+                [\Magento\Downloadable\Model\Link::class] => $this->linkModel,
+                [Download::class] => $this->downloadHelper,
+            });
         $this->fileHelper->expects($this->once())->method('getFilePath')
             ->willReturn('filepath/' . $fileType . '.jpg');
         $this->downloadHelper->expects($this->once())->method('setResource')
@@ -186,14 +224,19 @@ class LinkTest extends TestCase
      * @param string $fileType
      *
      * @return void
-     * @dataProvider executeDataProvider
      */
+    #[DataProvider('executeDataProvider')]
     public function testExecuteUrl(string $fileType): void
     {
         $this->request
             ->method('getParam')
-            ->withConsecutive(['id', 0], ['type', 0])
-            ->willReturnOnConsecutiveCalls(1, $fileType);
+            ->willReturnCallback(function ($arg1, $arg2) use ($fileType) {
+                if ($arg1 == 'id' && $arg2 == 0) {
+                    return 1;
+                } elseif ($arg1 == 'type' && $arg2 == 0) {
+                    return $fileType;
+                }
+            });
         $this->response->expects($this->once())->method('setHttpResponseCode')->willReturnSelf();
         $this->response->expects($this->once())->method('clearBody')->willReturnSelf();
         $this->response->expects($this->any())->method('setHeader')->willReturnSelf();
@@ -231,7 +274,7 @@ class LinkTest extends TestCase
     /**
      * @return array
      */
-    public function executeDataProvider(): array
+    public static function executeDataProvider(): array
     {
         return [
             ['link'],

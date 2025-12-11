@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework\Config\Data;
 
@@ -23,27 +23,6 @@ class Scoped extends \Magento\Framework\Config\Data
     protected $_configScope;
 
     /**
-     * Configuration reader
-     *
-     * @var \Magento\Framework\Config\ReaderInterface
-     */
-    protected $_reader;
-
-    /**
-     * Configuration cache
-     *
-     * @var \Magento\Framework\Config\CacheInterface
-     */
-    protected $_cache;
-
-    /**
-     * Cache tag
-     *
-     * @var string
-     */
-    protected $_cacheId;
-
-    /**
      * Scope priority loading scheme
      *
      * @var string[]
@@ -51,8 +30,6 @@ class Scoped extends \Magento\Framework\Config\Data
     protected $_scopePriorityScheme = [];
 
     /**
-     * Loaded scopes
-     *
      * @var array
      */
     protected $_loadedScopes = [];
@@ -76,7 +53,7 @@ class Scoped extends \Magento\Framework\Config\Data
         \Magento\Framework\Config\ScopeInterface $configScope,
         \Magento\Framework\Config\CacheInterface $cache,
         $cacheId,
-        SerializerInterface $serializer = null
+        ?SerializerInterface $serializer = null
     ) {
         $this->_reader = $reader;
         $this->_configScope = $configScope;

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -15,6 +15,7 @@ use Magento\Framework\Exception\FileSystemException;
 use Magento\Framework\Exception\RuntimeException;
 use Magento\Framework\Filesystem\DriverInterface;
 use Magento\Framework\Logger\Handler\Debug as DebugHandler;
+use Monolog\LogRecord;
 
 /**
  * Enable/disable debug logging based on the store config setting
@@ -53,7 +54,7 @@ class Debug extends DebugHandler
     /**
      * @inheritdoc
      */
-    public function isHandling(array $record): bool
+    public function isHandling(LogRecord $record): bool
     {
         if ($this->deploymentConfig->isAvailable()) {
             return parent::isHandling($record) && $this->isLoggingEnabled();

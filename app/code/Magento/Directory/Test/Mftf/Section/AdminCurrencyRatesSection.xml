@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright 2024 Adobe
+  * All Rights Reserved.
+  */
+-->
+
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="AdminCurrencyRatesSection">
+        <element name="import" type="button" selector="//button[@title='Import']"/>
+        <element name="oldRateLabel" type="text" selector="//div[contains(@class, 'admin__field-note') and contains(text(), 'Old rate:')]"/>
+        <element name="rateService" type="select" selector="#rate_services"/>
+    </section>
+</sections>

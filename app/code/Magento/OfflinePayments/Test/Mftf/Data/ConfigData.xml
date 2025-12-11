@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
-  */
+/**
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
+ */
 -->
 
 <entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -18,6 +18,15 @@
         <data key="path">payment/checkmo/active</data>
         <data key="label">Yes</data>
         <data key="value">1</data>
+    </entity>
+    <!--    Check / Money Order    -->
+    <entity name="ChangeDefaultCheckMoneyOrderTitle">
+        <data key="path">payment/checkmo/title</data>
+        <data key="value">Test</data>
+    </entity>
+    <entity name="DefaultCheckMoneyOrderTitle">
+        <data key="path">payment/checkmo/title</data>
+        <data key="value">'Check / Money Order'</data>
     </entity>
     <entity name="DisableCashOnDeliveryPaymentMethod">
         <!-- Magento default value -->

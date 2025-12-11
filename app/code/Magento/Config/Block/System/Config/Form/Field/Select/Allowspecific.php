@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 /**
@@ -100,6 +100,8 @@ HTML;
      */
     protected function _getSpecificCountryElementId()
     {
-        return substr($this->getId(), 0, strrpos($this->getId(), 'allowspecific')) . 'specificcountry';
+        $id = $this->getId();
+        $element = $id !== null ? substr($id, 0, strrpos($id, 'allowspecific')) : '';
+        return $element . 'specificcountry';
     }
 }

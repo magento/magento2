@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -35,7 +35,7 @@ class ConditionManagerTest extends TestCase
 
         $this->connectionMock = $this->getMockBuilder(AdapterInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['quote', 'quoteIdentifier'])
+            ->onlyMethods(['quote', 'quoteIdentifier'])
             ->getMockForAbstractClass();
         $this->connectionMock->expects($this->any())
             ->method('quote')
@@ -83,7 +83,7 @@ class ConditionManagerTest extends TestCase
      *
      * @return array
      */
-    public function wrapBracketsDataProvider()
+    public static function wrapBracketsDataProvider()
     {
         return [
             'validQuery' => [
@@ -133,7 +133,7 @@ class ConditionManagerTest extends TestCase
     /**
      * @return array
      */
-    public function generateConditionDataProvider()
+    public static function generateConditionDataProvider()
     {
         return [
             [

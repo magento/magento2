@@ -1,11 +1,12 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Paypal\Model;
 
+use Laminas\Http\Exception\RuntimeException;
 use Magento\Framework\DataObject;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\State\InvalidTransitionException;
@@ -316,8 +317,8 @@ class Payflowpro extends \Magento\Payment\Model\Method\Cc implements GatewayInte
         ConfigInterfaceFactory $configFactory,
         Gateway $gateway,
         HandlerInterface $errorHandler,
-        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
-        \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
+        ?\Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
+        ?\Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
     ) {
         $this->storeManager = $storeManager;
@@ -347,7 +348,7 @@ class Payflowpro extends \Magento\Payment\Model\Method\Cc implements GatewayInte
      * @return bool
      * @throws \Magento\Framework\Exception\LocalizedException
      */
-    public function isAvailable(\Magento\Quote\Api\Data\CartInterface $quote = null)
+    public function isAvailable(?\Magento\Quote\Api\Data\CartInterface $quote = null)
     {
         return parent::isAvailable($quote) && $this->getConfig()->isMethodAvailable($this->getCode());
     }
@@ -605,6 +606,18 @@ class Payflowpro extends \Magento\Payment\Model\Method\Cc implements GatewayInte
 
     /**
      * @inheritdoc
+     */
+    public function setStore($storeId)
+    {
+        parent::setStore($storeId);
+        if ($this->config) {
+            $storeId = $this->storeManager->getStore($this->getStore())->getId();
+            $this->config->setStoreId($storeId);
+        }
+    }
+
+    /**
+     * @inheritdoc
      *
      * @throws ClientException
      */
@@ -612,7 +625,7 @@ class Payflowpro extends \Magento\Payment\Model\Method\Cc implements GatewayInte
     {
         try {
             return $this->gateway->postRequest($request, $config);
-        } catch (\Zend_Http_Client_Exception $e) {
+        } catch (RuntimeException $e) {
             throw new ClientException(
                 __('Payment Gateway is unreachable at the moment. Please use another payment option.'),
                 $e
@@ -632,7 +645,8 @@ class Payflowpro extends \Magento\Payment\Model\Method\Cc implements GatewayInte
         $request = $this->buildBasicRequest();
         $request->setAmt($this->formatPrice($amount));
         $request->setAcct($payment->getCcNumber());
-        $request->setExpdate(sprintf('%02d', $payment->getCcExpMonth()) . substr($payment->getCcExpYear(), -2, 2));
+        $expYear = $payment->getCcExpYear() !== null ? substr($payment->getCcExpYear(), -2, 2) : '';
+        $request->setExpdate(sprintf('%02d', $payment->getCcExpMonth()) . $expYear);
         $request->setCvv2($payment->getCcCid());
 
         $order = $payment->getOrder();

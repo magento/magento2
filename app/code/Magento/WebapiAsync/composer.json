@@ -5,11 +5,11 @@
         "sort-packages": true
     },
     "require": {
-        "php": "~7.4.0||~8.1.0",
+        "php": "~8.2.0||~8.3.0||~8.4.0",
         "magento/framework": "*",
-        "magento/framework-message-queue": "*",
         "magento/module-webapi": "*",
-        "magento/module-asynchronous-operations": "*"
+        "magento/module-asynchronous-operations": "*",
+        "magento/module-store": "*"
     },
     "suggest": {
         "magento/module-user": "*",

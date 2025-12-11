@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\CatalogInventory\Api;
@@ -127,7 +127,7 @@ class StockItemTest extends WebapiAbstract
     /**
      * @return array
      */
-    public function saveStockItemBySkuWithWrongInputDataProvider()
+    public static function saveStockItemBySkuWithWrongInputDataProvider()
     {
         return [
             [

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -77,7 +77,7 @@ class TabAbstractTest extends TestCase
     /**
      * @return array
      */
-    public function canShowTabDataProvider()
+    public static function canShowTabDataProvider()
     {
         return [[true, 1, true], [true, 0, false], [false, 1, false]];
     }

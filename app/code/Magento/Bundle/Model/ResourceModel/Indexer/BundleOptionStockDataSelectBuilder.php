@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Bundle\Model\ResourceModel\Indexer;
@@ -40,6 +40,8 @@ class BundleOptionStockDataSelectBuilder
     }
 
     /**
+     * Build bundle options select
+     *
      * @param string $idxTable
      * @return Select
      */
@@ -66,6 +68,10 @@ class BundleOptionStockDataSelectBuilder
         )->joinLeft(
             ['i' => $idxTable],
             'i.product_id = bs.product_id AND i.website_id = cis.website_id AND i.stock_id = cis.stock_id',
+            []
+        )->joinLeft(
+            ['cisi' => $this->resourceConnection->getTableName('cataloginventory_stock_item')],
+            'cisi.product_id = i.product_id AND cisi.stock_id = i.stock_id',
             []
         )->joinLeft(
             ['e' => $this->resourceConnection->getTableName('catalog_product_entity')],

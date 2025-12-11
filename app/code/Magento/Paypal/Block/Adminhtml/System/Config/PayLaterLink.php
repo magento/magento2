@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2021 Adobe
+ * All Rights Reserved.
  */
 
 declare(strict_types=1);
@@ -29,7 +29,7 @@ class PayLaterLink extends Field
     /**
      * @var array.
      */
-    private const ARRAY_PAYLATER_SUPPORTED_COUNTRIES = ['US','GB','DE','FR','AU'];
+    private const ARRAY_PAYLATER_SUPPORTED_COUNTRIES = ['US','GB','DE','FR','AU','IT','ES'];
 
     /**
      * @var ScopeConfigInterface

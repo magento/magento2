@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 -->
 <form xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Ui:etc/ui_configuration.xsd">
@@ -120,7 +120,7 @@
                 </validation>
                 <dataType>number</dataType>
                 <tooltip>
-                    <link>https://docs.magento.com/user-guide/configuration/scope.html</link>
+                    <link>https://experienceleague.adobe.com/docs/commerce-admin/start/setup/websites-stores-views.html#scope-settings</link>
                     <description>What is this?</description>
                 </tooltip>
                 <label translate="true">Websites</label>
@@ -199,7 +199,7 @@
                                 </action>
                                 <action name="2">
                                     <target>sales_rule_form.sales_rule_form.rule_information.uses_per_coupon</target>
-                                    <callback>hide</callback>
+                                    <callback>show</callback>
                                 </action>
                             </actions>
                         </rule>
@@ -472,6 +472,9 @@
                         <item name="0" xsi:type="string" translate="true">Discount amount is applied to subtotal only</item>
                         <item name="1" xsi:type="string" translate="true">Discount amount is applied to subtotal and shipping amount separately</item>
                     </item>
+                    <item name="noticePerSimpleAction" xsi:type="array">
+                        <item name="cart_fixed" xsi:type="string" translate="true">Discount amount is distributed among subtotal and shipping amount. Cases when multiple discounts applied to shipping amount are not supported. The option is going to be removed in future releases.</item>
+                    </item>
                 </item>
             </argument>
             <settings>
@@ -538,7 +541,11 @@
         </field>
         <container name="store_view_labels" sortOrder="40">
             <htmlContent name="html_content">
-                <block name="store_view_labels" class="Magento\SalesRule\Block\Adminhtml\Promo\Quote\Edit\Tab\Labels"/>
+                <block name="store_view_labels" class="Magento\SalesRule\Block\Adminhtml\Promo\Quote\Edit\Tab\Labels">
+                    <arguments>
+                        <argument name="target_form" xsi:type="string">sales_rule_form</argument>
+                    </arguments>
+                </block>
             </htmlContent>
         </container>
     </fieldset>

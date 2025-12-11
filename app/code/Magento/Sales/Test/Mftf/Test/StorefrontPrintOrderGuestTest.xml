@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
  /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
+  * Copyright 2019 Adobe
+  * All Rights Reserved.
   */
 -->
 
@@ -174,7 +174,7 @@
             <comment userInput="Adding the comment to replace CliCacheFlushActionGroup action group ('cache:flush' command) for preserving Backward Compatibility" stepKey="flushCache"/>
 
             <!-- Place order with options according to dataset -->
-            <actionGroup ref="NavigateToNewOrderPageExistingCustomerActionGroup" stepKey="newOrder">
+            <actionGroup ref="AdminNavigateToNewOrderPageExistingCustomerActionGroup" stepKey="newOrder">
                 <argument name="customer" value="$createCustomer$"/>
             </actionGroup>
 
@@ -235,11 +235,14 @@
             <deleteData createDataKey="createSubCategory" stepKey="deleteCategory1"/>
 
             <deleteData createDataKey="createCartPriceRule" stepKey="deleteCartPriceRule"/>
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer" />
             <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
 
             <!-- Reindex invalidated indices after product attribute has been created/deleted -->
-            <magentoCron groups="index" stepKey="reindexInvalidatedIndices"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindexInvalidatedIndices">
+                <argument name="indices" value=""/>
+            </actionGroup>
         </after>
 
         <actionGroup ref="AdminSubmitOrderActionGroup" stepKey="submitOrder"/>
@@ -267,17 +270,7 @@
 
         <!--  Click on the "Print Order" button -->
         <click selector="{{StorefrontGuestOrderViewSection.printOrder}}" stepKey="printOrder"/>
-        <helper class="Magento\Sales\Test\Mftf\Helper\SalesHelper" method="switchToWindowWithUrlAndClosePrintDialogIfEncountered" stepKey="switchToWindowWithUrlAndClosePrintDialogIfEncountered">
-            <argument name="expectedUrl">sales/guest/print/order_id/</argument>
-            <argument name="expectedUrlComparisonType">COMPARISON_PATH_SUBSET_MATCH</argument>
-        </helper>
-
-        <comment userInput="Step key preserved for backwards compatibility" stepKey="waitForPrintWindowToOpen" />
-        <comment userInput="Step key preserved for backwards compatibility" stepKey="switchToWindow"/>
-        <comment userInput="Step key preserved for backwards compatibility" stepKey="waitForPrintTabToOpen"/>
-        <comment userInput="Step key preserved for backwards compatibility" stepKey="switchToTab"/>
-        <comment userInput="Step key preserved for backwards compatibility" stepKey="waitForPrintPreviewToLoad"/>
-        <comment userInput="Step key preserved for backwards compatibility" stepKey="seePrintPage"/>
+        <waitForPageLoad stepKey="waitForPrintOrderPageLoad"/>
 
         <!-- AssertSalesPrintOrderProducts -->
         <see userInput="$createBundleProduct.name$" selector="{{StorefrontOrderDetailsSection.productNameCell}}" stepKey="seeBundleProduct"/>
@@ -301,6 +294,5 @@
 
         <!-- AssertShippingMethodOnPrintOrder -->
         <see userInput="Flat Rate - Fixed" selector="{{StorefrontOrderDetailsSection.shippingMethod}}" stepKey="assertShippingMethodOnPrintOrder"/>
-        <switchToPreviousTab stepKey="switchToPreviousTab"/>
     </test>
 </tests>

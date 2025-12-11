@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Framework\Model\ResourceModel\Db\Collection;
@@ -125,8 +125,8 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
         \Psr\Log\LoggerInterface $logger,
         \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy,
         ManagerInterface $eventManager,
-        \Magento\Framework\DB\Adapter\AdapterInterface $connection = null,
-        \Magento\Framework\Model\ResourceModel\Db\AbstractDb $resource = null
+        ?\Magento\Framework\DB\Adapter\AdapterInterface $connection = null,
+        ?\Magento\Framework\Model\ResourceModel\Db\AbstractDb $resource = null
     ) {
         $this->_eventManager = $eventManager;
         parent::__construct($entityFactory, $logger, $fetchStrategy, $connection);
@@ -143,6 +143,22 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
      */
     protected function _construct() //phpcs:ignore Magento2.CodeAnalysis.EmptyBlock
     {
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        parent::_resetState();
+        $this->_fieldsToSelect = null;
+        $this->expressionFieldsToSelect = [];
+        $this->_initialFieldsToSelect = null;
+        $this->_fieldsToSelectChanged = false;
+        $this->_joinedTables = [];
+        $this->_resetItemsDataChanged = false;
+        $this->_construct();
+        $this->_initSelect();
     }
 
     /**

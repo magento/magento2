@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 
 declare(strict_types=1);
@@ -79,7 +79,7 @@ class MassPublisher implements PublisherInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function publish($topicName, $data)
     {
@@ -91,6 +91,7 @@ class MassPublisher implements PublisherInterface
                 [
                     'body' => $message,
                     'properties' => [
+                        'topic_name' => $topicName,
                         'delivery_mode' => 2,
                         'message_id' => $this->messageIdGenerator->generate($topicName),
                     ]

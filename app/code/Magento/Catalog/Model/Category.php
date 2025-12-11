@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Catalog\Model;
 
@@ -109,6 +109,7 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
      *
      * @var \Magento\UrlRewrite\Model\UrlRewrite
      * @deprecated 102.0.0
+     * @see \Magento\UrlRewrite\Model\UrlFinderInterface
      */
     protected $_urlRewrite;
 
@@ -251,8 +252,8 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
         UrlFinderInterface $urlFinder,
         \Magento\Framework\Indexer\IndexerRegistry $indexerRegistry,
         CategoryRepositoryInterface $categoryRepository,
-        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
-        \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
+        ?\Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
+        ?\Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
     ) {
         $this->metadataService = $metadataService;
@@ -315,6 +316,7 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
      * @throws \Magento\Framework\Exception\LocalizedException
      * @return \Magento\Catalog\Model\ResourceModel\Category
      * @deprecated 102.0.6 because resource models should be used directly
+     * @see \Magento\Catalog\Model\ResourceModel\Category
      * phpcs:disable Generic.CodeAnalysis.UselessOverridingMethod
      * @since 102.0.6
      */
@@ -615,6 +617,7 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
                     UrlRewrite::ENTITY_ID => $this->getId(),
                     UrlRewrite::ENTITY_TYPE => CategoryUrlRewriteGenerator::ENTITY_TYPE,
                     UrlRewrite::STORE_ID => $this->getStoreId(),
+                    UrlRewrite::REDIRECT_TYPE => 0
                 ]
             );
             if ($rewrite) {
@@ -1481,7 +1484,7 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
      * @param \Magento\Catalog\Api\Data\CategoryTreeInterface[] $childrenData
      * @return $this
      */
-    public function setChildrenData(array $childrenData = null)
+    public function setChildrenData(?array $childrenData = null)
     {
         return $this->setData(self::KEY_CHILDREN_DATA, $childrenData);
     }

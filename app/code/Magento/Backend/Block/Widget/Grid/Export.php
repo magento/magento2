@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Backend\Block\Widget\Grid;
@@ -15,6 +15,7 @@ use Magento\Framework\App\Filesystem\DirectoryList;
  * @deprecated 100.2.0 in favour of UI component implementation
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @since 100.0.2
+ * @see MAGETWO-67718
  */
 class Export extends \Magento\Backend\Block\Widget implements \Magento\Backend\Block\Widget\Grid\ExportInterface
 {
@@ -343,6 +344,7 @@ class Export extends \Magento\Backend\Block\Widget implements \Magento\Backend\B
      * Retrieve Grid data as CSV
      *
      * @return string
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function getCsv()
     {
@@ -364,7 +366,7 @@ class Export extends \Magento\Backend\Block\Widget implements \Magento\Backend\B
                     $data[] = '"' . str_replace(
                         ['"', '\\'],
                         ['""', '\\\\'],
-                        $column->getRowFieldExport($item)
+                        $column->getRowFieldExport($item) ?: ''
                     ) . '"';
                 }
             }
@@ -378,7 +380,7 @@ class Export extends \Magento\Backend\Block\Widget implements \Magento\Backend\B
                     $data[] = '"' . str_replace(
                         ['"', '\\'],
                         ['""', '\\\\'],
-                        $column->getRowFieldExport($this->_getTotals())
+                        $column->getRowFieldExport($this->_getTotals()) ?: ''
                     ) . '"';
                 }
             }
@@ -517,7 +519,7 @@ class Export extends \Magento\Backend\Block\Widget implements \Magento\Backend\B
      * @param \Magento\Framework\Data\Collection $baseCollection
      * @return \Magento\Framework\Data\Collection
      */
-    protected function _getRowCollection(\Magento\Framework\Data\Collection $baseCollection = null)
+    protected function _getRowCollection(?\Magento\Framework\Data\Collection $baseCollection = null)
     {
         if (null === $baseCollection) {
             $baseCollection = $this->getParentBlock()->getPreparedCollection();

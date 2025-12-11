@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -19,6 +19,7 @@ use Magento\Framework\Data\Form\FormKey;
 use Magento\Framework\Encryption\Encryptor;
 use Magento\Framework\Encryption\EncryptorInterface;
 use Magento\Framework\Serialize\Serializer\Json;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\Url\HostChecker;
 use Magento\Framework\Url\RouteParamsResolver;
@@ -32,6 +33,7 @@ use PHPUnit\Framework\TestCase;
  */
 class UrlTest extends TestCase
 {
+    use MockCreationTrait;
     /**
      * @var Url
      */
@@ -93,17 +95,21 @@ class UrlTest extends TestCase
     private $serializerMock;
 
     /**
+     * @var ObjectManager
+     */
+    private $objectManager;
+
+    /**
      * @inheritDoc
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     protected function setUp(): void
     {
-        $objectManager = new ObjectManager($this);
-        $this->menuMock = $this->getMockBuilder(Menu::class)
-            ->addMethods(['getFirstAvailableChild'])
-            ->onlyMethods(['get', 'getFirstAvailable'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->objectManager = new ObjectManager($this);
+        $this->menuMock = $this->createPartialMockWithReflection(
+            Menu::class,
+            ['getFirstAvailableChild', 'get', 'getFirstAvailable']
+        );
 
         $this->menuConfigMock = $this->createMock(Config::class);
         $this->menuConfigMock->expects($this->any())->method('getMenu')->willReturn($this->menuMock);
@@ -141,7 +147,7 @@ class UrlTest extends TestCase
         )->willReturn(
             $this->areaFrontName
         );
-        $this->scopeConfigMock = $this->getMockForAbstractClass(ScopeConfigInterface::class);
+        $this->scopeConfigMock = $this->createMock(ScopeConfigInterface::class);
         $this->scopeConfigMock->expects(
             $this->any()
         )->method(
@@ -166,10 +172,7 @@ class UrlTest extends TestCase
             ->willReturn($routeParamsResolver);
         /** @var HostChecker|MockObject $hostCheckerMock */
         $hostCheckerMock = $this->createMock(HostChecker::class);
-        $this->serializerMock = $this->getMockBuilder(Json::class)
-            ->onlyMethods(['serialize'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->serializerMock = $this->createPartialMock(Json::class, ['serialize']);
 
         $this->serializerMock->expects($this->any())
             ->method('serialize')
@@ -178,7 +181,7 @@ class UrlTest extends TestCase
                     return json_encode($value);
                 }
             );
-        $this->model = $objectManager->getObject(
+        $this->model = $this->objectManager->getObject(
             Url::class,
             [
                 'scopeConfig' => $this->scopeConfigMock,
@@ -203,11 +206,10 @@ class UrlTest extends TestCase
     {
         $user = $this->createMock(User::class);
         $user->expects($this->once())->method('setHasAvailableResources')->with(false);
-        $mockSession = $this->getMockBuilder(Session::class)
-            ->addMethods(['getUser'])
-            ->onlyMethods(['isAllowed'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $mockSession = $this->createPartialMockWithReflection(
+            Session::class,
+            ['getUser', 'isAllowed']
+        );
 
         $mockSession->expects($this->any())->method('getUser')->willReturn($user);
 
@@ -224,11 +226,10 @@ class UrlTest extends TestCase
     public function testFindFirstAvailableMenu(): void
     {
         $user = $this->createMock(User::class);
-        $mockSession = $this->getMockBuilder(Session::class)
-            ->addMethods(['getUser'])
-            ->onlyMethods(['isAllowed'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $mockSession = $this->createPartialMockWithReflection(
+            Session::class,
+            ['getUser', 'isAllowed']
+        );
 
         $mockSession->expects($this->any())->method('getUser')->willReturn($user);
 
@@ -363,22 +364,11 @@ class UrlTest extends TestCase
 
         $this->requestMock
             ->method('getBeforeForwardInfo')
-            ->withConsecutive(
-                ['route_name'],
-                ['route_name'],
-                ['controller_name'],
-                ['controller_name'],
-                ['action_name'],
-                ['action_name']
-            )
-            ->willReturnOnConsecutiveCalls(
-                'adminhtml',
-                'adminhtml',
-                'catalog',
-                'catalog',
-                'index',
-                'index'
-            );
+            ->willReturnCallback(fn($param) => match ([$param]) {
+                ['route_name'] => 'adminhtml',
+                ['controller_name'] => 'catalog',
+                ['action_name'] => 'index'
+            });
 
         $this->model->setRequest($this->requestMock);
         $keyFromRequest = $this->model->getSecretKey();

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -77,16 +77,16 @@ class SaveTest extends AbstractController
     /**
      * @return array
      */
-    public function subscriptionDataProvider(): array
+    public static function subscriptionDataProvider(): array
     {
         return [
             'subscribe_customer' => [
-                'is_subscribed' => true,
-                'expected_message' => 'We have saved your subscription.',
+                'isSubscribed' => true,
+                'expectedMessage' => 'We have saved your subscription.',
             ],
             'unsubscribe_customer' => [
-                'is_subscribed' => false,
-                'expected_message' => 'We have updated your subscription.',
+                'isSubscribed' => false,
+                'expectedMessage' => 'We have updated your subscription.',
             ],
         ];
     }

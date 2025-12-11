@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Elasticsearch\Model\ResourceModel\Fulltext\Collection;
@@ -11,6 +11,8 @@ use Magento\Framework\Api\Search\SearchResultInterface;
 
 /**
  * Resolve total records count.
+ * @deprecated Elasticsearch is no longer supported by Adobe
+ * @see this class will be responsible for ES only
  */
 class TotalRecordsResolver implements TotalRecordsResolverInterface
 {

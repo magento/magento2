@@ -1,6 +1,6 @@
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 define([
     'jquery',
@@ -371,25 +371,11 @@ define([
     describe('Testing validate-emailSender', function () {
         it('validate-emailSender', function () {
             expect($.validator.methods['validate-emailSender']
-                .call($.validator.prototype, '')).toEqual(true);
+                .call($.validator.prototype, 'Sender Name')).toEqual(true);
             expect($.validator.methods['validate-emailSender']
-                .call($.validator.prototype, null)).toEqual(true);
+                .call($.validator.prototype, 'Sender & Name')).toEqual(true);
             expect($.validator.methods['validate-emailSender']
-                .call($.validator.prototype, undefined)).toEqual(true);
-            expect($.validator.methods['validate-emailSender']
-                .call($.validator.prototype, '   ')).toEqual(true);
-            expect($.validator.methods['validate-emailSender']
-                .call($.validator.prototype, '123@123.com')).toEqual(true);
-            expect($.validator.methods['validate-emailSender']
-                .call($.validator.prototype, 'abc@124.en')).toEqual(true);
-            expect($.validator.methods['validate-emailSender']
-                .call($.validator.prototype, 'abc@abc.commmmm')).toEqual(true);
-            expect($.validator.methods['validate-emailSender']
-                .call($.validator.prototype, 'abc.abc.abc@abc.commmmm')).toEqual(true);
-            expect($.validator.methods['validate-emailSender']
-                .call($.validator.prototype, 'abc.abc-abc@abc.commmmm')).toEqual(true);
-            expect($.validator.methods['validate-emailSender']
-                .call($.validator.prototype, 'abc.abc_abc@abc.commmmm')).toEqual(true);
+                .call($.validator.prototype, 'Sender: Name')).toEqual(false);
         });
     });
 
@@ -418,24 +404,113 @@ define([
 
     describe('Testing validate-admin-password', function () {
         it('validate-admin-password', function () {
+            var mockElement = $('<input data-password-min-length="7" />');
+
             expect($.validator.methods['validate-admin-password']
-                .call($.validator.prototype, '')).toEqual(true);
+                .call($.validator.prototype, '', mockElement[0])).toEqual(true);
             expect($.validator.methods['validate-admin-password']
-                .call($.validator.prototype, null)).toEqual(false);
+                .call($.validator.prototype, null, mockElement[0])).toEqual(false);
             expect($.validator.methods['validate-admin-password']
-                .call($.validator.prototype, undefined)).toEqual(false);
+                .call($.validator.prototype, undefined, mockElement[0])).toEqual(false);
             expect($.validator.methods['validate-admin-password']
-                .call($.validator.prototype, '   ')).toEqual(true);
+                .call($.validator.prototype, '   ', mockElement[0])).toEqual(true);
             expect($.validator.methods['validate-admin-password']
-                .call($.validator.prototype, '123@123.com')).toEqual(true);
+                .call($.validator.prototype, '123@123.com', mockElement[0])).toEqual(true);
             expect($.validator.methods['validate-admin-password']
-                .call($.validator.prototype, 'abc')).toEqual(false);
+                .call($.validator.prototype, 'abc', mockElement[0])).toEqual(false);
             expect($.validator.methods['validate-admin-password']
-                .call($.validator.prototype, 'abc       ')).toEqual(false);
+                .call($.validator.prototype, 'abc       ', mockElement[0])).toEqual(false);
             expect($.validator.methods['validate-admin-password']
-                .call($.validator.prototype, '     abc      ')).toEqual(false);
+                .call($.validator.prototype, '     abc      ', mockElement[0])).toEqual(false);
             expect($.validator.methods['validate-admin-password']
-                .call($.validator.prototype, 'dddd')).toEqual(false);
+                .call($.validator.prototype, 'dddd', mockElement[0])).toEqual(false);
+        });
+
+        it('validate-admin-password with class-based minimum length', function () {
+            var mockElementDefault = $('<input />')[0],
+                mockElement8 = $('<input class="admin-password-min-8" />')[0],
+                mockElement10 = $('<input class="admin-password-min-10" />')[0],
+                mockElement12 = $('<input class="admin-password-min-12" />')[0],
+                mockElement15 = $('<input class="admin-password-min-15" />')[0],
+                mockElementMultiple = $('<input class="some-class admin-password-min-9 other-class" />')[0],
+                mockElementInvalid = $('<input class="admin-password-min-invalid" />')[0],
+                mockElementNoClass = $('<input />')[0];
+
+            // Test default behavior (7 characters minimum)
+            expect($.validator.methods['validate-admin-password']
+                .call($.validator.prototype, 'abc1234', mockElementDefault)).toEqual(true);
+
+            // Test that 7-character password fails with min length 12
+            expect($.validator.methods['validate-admin-password']
+                .call($.validator.prototype, 'abc1234', mockElement12)).toEqual(false);
+
+            // Test that 12-character password passes with min length 12
+            expect($.validator.methods['validate-admin-password']
+                .call($.validator.prototype, 'abc123456789', mockElement12)).toEqual(true);
+
+            // Test 11-character password fails with min length 12
+            expect($.validator.methods['validate-admin-password']
+                .call($.validator.prototype, 'abc12345678', mockElement12)).toEqual(false);
+
+            // Test 12-character password with different content passes with min length 12
+            expect($.validator.methods['validate-admin-password']
+                .call($.validator.prototype, 'password1234', mockElement12)).toEqual(true);
+
+            // Test 12-character password without digits fails
+            expect($.validator.methods['validate-admin-password']
+                .call($.validator.prototype, 'abcdefghijkl', mockElement12)).toEqual(false);
+
+            // Test 12-character password without letters fails
+            expect($.validator.methods['validate-admin-password']
+                .call($.validator.prototype, '123456789012', mockElement12)).toEqual(false);
+
+            // Test 8-character password passes with min length 8
+            expect($.validator.methods['validate-admin-password']
+                .call($.validator.prototype, 'abc12345', mockElement8)).toEqual(true);
+
+            // Test 7-character password fails with min length 8
+            expect($.validator.methods['validate-admin-password']
+                .call($.validator.prototype, 'abc1234', mockElement8)).toEqual(false);
+
+            // Test 10-character password passes with min length 10
+            expect($.validator.methods['validate-admin-password']
+                .call($.validator.prototype, 'abc1234567', mockElement10)).toEqual(true);
+
+            // Test 9-character password fails with min length 10
+            expect($.validator.methods['validate-admin-password']
+                .call($.validator.prototype, 'abc123456', mockElement10)).toEqual(false);
+
+            // Test 15-character password passes with min length 15
+            expect($.validator.methods['validate-admin-password']
+                .call($.validator.prototype, 'abc123456789012', mockElement15)).toEqual(true);
+
+            // Test 14-character password fails with min length 15
+            expect($.validator.methods['validate-admin-password']
+                .call($.validator.prototype, 'abc12345678901', mockElement15)).toEqual(false);
+
+            // Test 9-character password passes with multiple classes containing min-9
+            expect($.validator.methods['validate-admin-password']
+                .call($.validator.prototype, 'abc123456', mockElementMultiple)).toEqual(true);
+
+            // Test 8-character password fails with multiple classes containing min-9
+            expect($.validator.methods['validate-admin-password']
+                .call($.validator.prototype, 'abc12345', mockElementMultiple)).toEqual(false);
+
+            // Test 7-character password passes with invalid class pattern (falls back to default 7)
+            expect($.validator.methods['validate-admin-password']
+                .call($.validator.prototype, 'abc1234', mockElementInvalid)).toEqual(true);
+
+            // Test 6-character password fails with invalid class pattern (falls back to default 7)
+            expect($.validator.methods['validate-admin-password']
+                .call($.validator.prototype, 'abc123', mockElementInvalid)).toEqual(false);
+
+            // Test 7-character password passes with no class (uses default 7)
+            expect($.validator.methods['validate-admin-password']
+                .call($.validator.prototype, 'abc1234', mockElementNoClass)).toEqual(true);
+
+            // Test 6-character password fails with no class (uses default 7)
+            expect($.validator.methods['validate-admin-password']
+                .call($.validator.prototype, 'abc123', mockElementNoClass)).toEqual(false);
         });
     });
 

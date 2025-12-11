@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -198,17 +198,21 @@ class TreeTest extends TestCase
             ->will($this->onConsecutiveCalls($treeNodeMock1, $treeNodeMock2));
         $node = $this->getMockBuilder(Node::class)
             ->disableOriginalConstructor()
-            ->setMethods(
+            ->addMethods(
+                [
+                    'getParentId',
+                    'getPosition',
+                    'getLevel',
+                    'getProductCount',
+                ]
+            )
+            ->onlyMethods(
                 [
                     'hasChildren',
                     'getChildren',
                     'getId',
-                    'getParentId',
                     'getName',
-                    'getPosition',
-                    'getLevel',
-                    'getIsActive',
-                    'getProductCount',
+                    'getIsActive'
                 ]
             )
             ->getMock();
@@ -241,17 +245,21 @@ class TreeTest extends TestCase
 
         $node = $this->getMockBuilder(Node::class)
             ->disableOriginalConstructor()
-            ->setMethods(
+            ->addMethods(
+                [
+                    'getParentId',
+                    'getPosition',
+                    'getLevel',
+                    'getProductCount'
+                ]
+            )
+            ->onlyMethods(
                 [
                     'hasChildren',
                     'getChildren',
                     'getId',
-                    'getParentId',
                     'getName',
-                    'getPosition',
-                    'getLevel',
-                    'getIsActive',
-                    'getProductCount',
+                    'getIsActive'
                 ]
             )
             ->getMock();

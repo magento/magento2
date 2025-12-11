@@ -1,18 +1,17 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2012 Adobe
+ * All Rights Reserved.
  */
 
 /**
  * Admin abstract reports controller
- *
- * @author     Magento Core Team <core@magentocommerce.com>
  */
 
 namespace Magento\Reports\Controller\Adminhtml\Report;
 
 use Magento\Backend\Helper\Data as BackendHelper;
+use Magento\Framework\Filter\FilterInput;
 use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
 
 /**
@@ -64,7 +63,7 @@ abstract class AbstractReport extends \Magento\Backend\App\Action
         \Magento\Framework\App\Response\Http\FileFactory $fileFactory,
         \Magento\Framework\Stdlib\DateTime\Filter\Date $dateFilter,
         TimezoneInterface $timezone,
-        BackendHelper $backendHelperData = null
+        ?BackendHelper $backendHelperData = null
     ) {
         parent::__construct($context);
         $this->_fileFactory = $fileFactory;
@@ -183,7 +182,7 @@ abstract class AbstractReport extends \Magento\Backend\App\Action
         );
 
         $filterRules = ['from' => $this->_dateFilter, 'to' => $this->_dateFilter];
-        $inputFilter = new \Zend_Filter_Input($filterRules, [], $requestData);
+        $inputFilter = new FilterInput($filterRules, [], $requestData);
 
         $requestData = $inputFilter->getUnescaped();
         $requestData['store_ids'] = $this->getRequest()->getParam('store_ids');

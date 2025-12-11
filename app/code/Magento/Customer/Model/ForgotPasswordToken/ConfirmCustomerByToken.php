@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -64,5 +64,20 @@ class ConfirmCustomerByToken
         $customer->setConfirmation(null);
 
         $this->customerRepository->save($customer);
+    }
+
+    /**
+     * Check if customer confirmation needs to be reset
+     *
+     * @param int $customerId
+     * @return void
+     */
+    public function resetCustomerConfirmation(int $customerId): void
+    {
+        $customer = $this->customerRepository->getById($customerId);
+
+        if ($customer) {
+            $this->resetConfirmation($customer);
+        }
     }
 }

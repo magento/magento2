@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -14,9 +14,12 @@ use Magento\Framework\Event;
 use Magento\Framework\Event\Observer;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 
 class LogLastLogoutAtObserverTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var LogLastLogoutAtObserver
      */
@@ -44,10 +47,10 @@ class LogLastLogoutAtObserverTest extends TestCase
         $id = 1;
 
         $observerMock = $this->createMock(Observer::class);
-        $eventMock = $this->getMockBuilder(Event::class)
-            ->addMethods(['getCustomer'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $eventMock = $this->createPartialMockWithReflection(
+            Event::class,
+            ['getCustomer']
+        );
         $customerMock = $this->createMock(Customer::class);
 
         $observerMock->expects($this->once())

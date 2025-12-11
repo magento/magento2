@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2012 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -110,7 +110,7 @@ class ValidatorTest extends TestCase
         $this->helper = new ObjectManager($this);
         $this->rulesApplier = $this->createPartialMock(
             RulesApplier::class,
-            ['setAppliedRuleIds', 'applyRules', 'addDiscountDescription']
+            ['setAppliedRuleIds', 'applyRules', 'addDiscountDescription', 'addShippingDiscountDescription']
         );
 
         $this->addressMock = $this->getMockBuilder(Address::class)
@@ -313,7 +313,6 @@ class ValidatorTest extends TestCase
             ->with(
                 $this->item,
                 [$rule],
-                $this->anything(),
                 $this->anything()
             )
             ->willReturn($expectedRuleIds);
@@ -375,8 +374,7 @@ class ValidatorTest extends TestCase
     public function testInitTotalsCanApplyDiscount(): void
     {
         $rule = $this->getMockBuilder(Rule::class)
-            ->addMethods(['getSimpleAction'])
-            ->onlyMethods(['getActions', 'getId'])
+            ->onlyMethods(['getActions', 'getId', 'getSimpleAction'])
             ->disableOriginalConstructor()
             ->getMock();
         $item1 = $this->getMockForAbstractClass(
@@ -413,9 +411,13 @@ class ValidatorTest extends TestCase
         $this->validators->expects($this->atLeastOnce())->method('getValidators')->with('discount')
             ->willReturn([$validator]);
         $validator->method('isValid')
-            ->withConsecutive([$item1], [$item2])
-            ->willReturnOnConsecutiveCalls(false, true);
-
+            ->willReturnCallback(function ($arg1) use ($item1, $item2) {
+                if ($arg1 == $item1) {
+                    return false;
+                } elseif ($arg1 == $item2) {
+                    return true;
+                }
+            });
         $item1->expects($this->any())->method('getParentItemId')->willReturn(null);
         $item1->expects($this->any())->method('getParentItem')->willReturn(null);
         $item1->expects($this->never())->method('getDiscountCalculationPrice');
@@ -440,8 +442,13 @@ class ValidatorTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $actionsCollection->method('validate')
-            ->withConsecutive([$item1], [$item2])
-            ->willReturnOnConsecutiveCalls(true, true);
+            ->willReturnCallback(function ($arg1) use ($item1, $item2) {
+                if ($arg1 == $item1) {
+                    return true;
+                } elseif ($arg1 == $item2) {
+                    return true;
+                }
+            });
         $rule->expects($this->any())->method('getActions')->willReturn($actionsCollection);
         $rule->expects($this->any())->method('getId')->willReturn(1);
 
@@ -454,6 +461,7 @@ class ValidatorTest extends TestCase
         $this->assertArrayHasKey('items_price', $this->model->getRuleItemTotalsInfo($rule->getId()));
         $this->assertArrayHasKey('base_items_price', $this->model->getRuleItemTotalsInfo($rule->getId()));
         $this->assertArrayHasKey('items_count', $this->model->getRuleItemTotalsInfo($rule->getId()));
+        $this->assertArrayHasKey('affected_items', $this->model->getRuleItemTotalsInfo($rule->getId()));
         $this->assertEquals(1, $this->model->getRuleItemTotalsInfo($rule->getId())['items_count']);
     }
 
@@ -561,14 +569,14 @@ class ValidatorTest extends TestCase
 
         $ruleMock = $this->getMockBuilder(Rule::class)
             ->disableOriginalConstructor()
-            ->addMethods(['getApplyToShipping', 'getSimpleAction', 'getDiscountAmount'])
+            ->addMethods(['getApplyToShipping', 'getDiscountAmount'])
+            ->onlyMethods(['getSimpleAction'])
             ->getMock();
         $ruleMock->method('getApplyToShipping')
             ->willReturn(true);
         $ruleMock->method('getDiscountAmount')
             ->willReturn($ruleDiscount);
-        $ruleMock->method('getSimpleAction')
-            ->willReturn($action);
+        $ruleMock->expects($this->any())->method('getSimpleAction')->willReturn($action);
 
         $iterator = new \ArrayIterator([$ruleMock]);
         $this->ruleCollection->method('getIterator')
@@ -632,7 +640,8 @@ class ValidatorTest extends TestCase
     ): void {
         $ruleMock = $this->getMockBuilder(Rule::class)
             ->disableOriginalConstructor()
-            ->addMethods(['getApplyToShipping', 'getSimpleAction', 'getDiscountAmount'])
+            ->addMethods(['getApplyToShipping', 'getDiscountAmount'])
+            ->onlyMethods(['getSimpleAction'])
             ->getMock();
         $ruleMock->method('getApplyToShipping')
             ->willReturn(true);
@@ -671,7 +680,7 @@ class ValidatorTest extends TestCase
      *
      * @return array
      */
-    public function dataProviderForFullShippingDiscount(): array
+    public static function dataProviderForFullShippingDiscount(): array
     {
         return [
             'verify shipping discount when shipping amount is greater than zero' => [

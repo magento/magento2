@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -26,7 +26,6 @@ use Magento\TestFramework\TestCase\AbstractController;
  * Checks category availability on storefront by url rewrite
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @magentoConfigFixture default/catalog/seo/generate_category_product_rewrites 1
  * @magentoDbIsolation enabled
  */
 class CategoryUrlRewriteTest extends AbstractController
@@ -73,6 +72,7 @@ class CategoryUrlRewriteTest extends AbstractController
 
     /**
      * @magentoDataFixture Magento/Catalog/_files/category_tree.php
+     * @magentoConfigFixture default/catalog/seo/generate_category_product_rewrites 1
      * @dataProvider categoryRewriteProvider
      * @param int $categoryId
      * @param string $urlPath
@@ -95,20 +95,20 @@ class CategoryUrlRewriteTest extends AbstractController
     /**
      * @return array
      */
-    public function categoryRewriteProvider(): array
+    public static function categoryRewriteProvider(): array
     {
         return [
             [
-                'category_id' => 400,
-                'url_path' => '/category-1%s',
+                'categoryId' => 400,
+                'urlPath' => '/category-1%s',
             ],
             [
-                'category_id' => 401,
-                'url_path' => '/category-1/category-1-1%s',
+                'categoryId' => 401,
+                'urlPath' => '/category-1/category-1-1%s',
             ],
             [
-                'category_id' => 402,
-                'url_path' => '/category-1/category-1-1/category-1-1-1%s',
+                'categoryId' => 402,
+                'urlPath' => '/category-1/category-1-1/category-1-1-1%s',
             ],
         ];
     }
@@ -118,6 +118,7 @@ class CategoryUrlRewriteTest extends AbstractController
      *
      * @magentoDataFixture Magento/Catalog/_files/category.php
      * @magentoDataFixture Magento/Store/_files/store.php
+     * @magentoConfigFixture default/catalog/seo/generate_category_product_rewrites 1
      * @return void
      */
     public function testCategoryUrlOnStoreView(): void

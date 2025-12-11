@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\CurrencySymbol\Model\System;
 
@@ -27,14 +27,14 @@ class Currencysymbol
     protected $_symbolsData = [];
 
     /**
-     * Store id
+     * Current store id
      *
      * @var string|null
      */
     protected $_storeId;
 
     /**
-     * Website id
+     * Current website id
      *
      * @var string|null
      */
@@ -55,19 +55,19 @@ class Currencysymbol
     /**
      * Config path to custom currency symbol value
      */
-    const XML_PATH_CUSTOM_CURRENCY_SYMBOL = 'currency/options/customsymbol';
+    public const XML_PATH_CUSTOM_CURRENCY_SYMBOL = 'currency/options/customsymbol';
 
-    const XML_PATH_ALLOWED_CURRENCIES = \Magento\Directory\Model\Currency::XML_PATH_CURRENCY_ALLOW;
+    public const XML_PATH_ALLOWED_CURRENCIES = \Magento\Directory\Model\Currency::XML_PATH_CURRENCY_ALLOW;
 
     /*
      * Separator used in config in allowed currencies list
      */
-    const ALLOWED_CURRENCIES_CONFIG_SEPARATOR = ',';
+    public const ALLOWED_CURRENCIES_CONFIG_SEPARATOR = ',';
 
     /**
      * Config currency section
      */
-    const CONFIG_SECTION = 'currency';
+    public const CONFIG_SECTION = 'currency';
 
     /**
      * Core event manager proxy
@@ -138,7 +138,7 @@ class Currencysymbol
         \Magento\Framework\Locale\ResolverInterface $localeResolver,
         \Magento\Store\Model\System\Store $systemStore,
         \Magento\Framework\Event\ManagerInterface $eventManager,
-        Json $serializer = null
+        ?Json $serializer = null
     ) {
         $this->_coreConfig = $coreConfig;
         $this->_configFactory = $configFactory;
@@ -174,11 +174,11 @@ class Currencysymbol
 
             if (isset($currentSymbols[$code]) && !empty($currentSymbols[$code])) {
                 $this->_symbolsData[$code]['displaySymbol'] = $currentSymbols[$code];
+                $this->_symbolsData[$code]['inherited'] = false;
             } else {
                 $this->_symbolsData[$code]['displaySymbol'] = $this->_symbolsData[$code]['parentSymbol'];
+                $this->_symbolsData[$code]['inherited'] = true;
             }
-            $this->_symbolsData[$code]['inherited'] =
-                ($this->_symbolsData[$code]['parentSymbol'] == $this->_symbolsData[$code]['displaySymbol']);
         }
 
         return $this->_symbolsData;
@@ -193,8 +193,8 @@ class Currencysymbol
     public function setCurrencySymbolsData($symbols = [])
     {
         if (!$this->_storeManager->isSingleStoreMode()) {
-            foreach ($this->getCurrencySymbolsData() as $code => $values) {
-                if (isset($symbols[$code]) && ($symbols[$code] == $values['parentSymbol'] || empty($symbols[$code]))) {
+            foreach (array_keys($this->getCurrencySymbolsData()) as $code) {
+                if (isset($symbols[$code]) && empty($symbols[$code])) {
                     unset($symbols[$code]);
                 }
             }

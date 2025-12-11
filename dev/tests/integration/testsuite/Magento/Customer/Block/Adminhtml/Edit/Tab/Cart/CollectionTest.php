@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -84,6 +84,25 @@ class CollectionTest extends TestCase
             [$this->layout->createBlock(Cart::class), 'getPreparedCollection']
         );
         $this->assertCollection($collectionSecondWebsite, 'Simple Product on second website');
+    }
+
+    /**
+     * Test case to check active quote on non default website
+     *
+     * @magentoDataFixture Magento/Checkout/_files/quote_with_address_saved.php
+     * @magentoDataFixture Magento/Checkout/_files/active_quote_not_default_website.php
+     *
+     * @return void
+     */
+    public function testCollectionOnNonDefaultStores(): void
+    {
+        $this->registry->unregister(RegistryConstants::CURRENT_CUSTOMER_ID);
+        $this->registry->register(RegistryConstants::CURRENT_CUSTOMER_ID, 1);
+        $collection = $this->executeInStoreContext->execute(
+            'fixture_second_store',
+            [$this->layout->createBlock(Cart::class), 'getPreparedCollection']
+        );
+        $this->assertCount(0, $collection);
     }
 
     /**

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
-  */
+/**
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
+ */
 -->
 
 <entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -29,5 +29,9 @@
         <data key="value">US</data>
         <data key="scope">websites</data>
         <data key="scope_code">base</data>
+    </entity>
+    <entity name="SetEuropeanUnionCountries">
+        <data key="path">general/country/eu_countries</data>
+        <data key="value">GB,DE,FR</data>
     </entity>
 </entities>

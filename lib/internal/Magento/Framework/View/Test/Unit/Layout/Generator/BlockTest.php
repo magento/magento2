@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -190,7 +190,7 @@ class BlockTest extends TestCase
     /**
      * @return array
      */
-    public function provider()
+    public static function provider()
     {
         return [
             [
@@ -200,10 +200,10 @@ class BlockTest extends TestCase
                 ['argument' => ['name' => 'argument', 'xsi:type' => 'type', 'value' => 'value']],
                 true,
                 true,
-                $this->once(),
-                $this->never(),
-                $this->once(),
-                $this->once(),
+                self::once(),
+                self::never(),
+                self::once(),
+                self::once(),
             ],
             [
                 '',
@@ -212,10 +212,10 @@ class BlockTest extends TestCase
                 ['argument' => 'value'],
                 false,
                 false,
-                $this->never(),
-                $this->once(),
-                $this->never(),
-                $this->never(),
+                self::never(),
+                self::once(),
+                self::never(),
+                self::never(),
             ],
         ];
     }

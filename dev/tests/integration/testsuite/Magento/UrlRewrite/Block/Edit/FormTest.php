@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\UrlRewrite\Block\Edit;
 
@@ -159,7 +159,7 @@ class FormTest extends \PHPUnit\Framework\TestCase
     /**
      * Data provider for checking fields state
      */
-    public function fieldsStateDataProvider()
+    public static function fieldsStateDataProvider()
     {
         return [
             [

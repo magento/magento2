@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -60,8 +60,10 @@ class AddDirtyRulesNoticeTest extends TestCase
         $flagMock->expects($this->once())->method('getState')->willReturn(1);
         $eventObserverMock
             ->method('getData')
-            ->withConsecutive(['dirty_rules'], ['message'])
-            ->willReturnOnConsecutiveCalls($flagMock, $message);
+            ->willReturnCallback(fn($param) => match ([$param]) {
+                ['dirty_rules'] => $flagMock,
+                ['message'] => $message
+            });
         $this->messageManagerMock->expects($this->once())->method('addNoticeMessage')->with($message);
         $this->observer->execute($eventObserverMock);
     }
