@@ -23,12 +23,12 @@ class SetModeCommand extends Command
     /**
      * Name of "target application mode" input argument
      */
-    const MODE_ARGUMENT = 'mode';
+    public const MODE_ARGUMENT = 'mode';
 
     /**
      * Name of "skip compilation" input option
      */
-    const SKIP_COMPILATION_OPTION = 'skip-compilation';
+    public const SKIP_COMPILATION_OPTION = 'skip-compilation';
 
     /**
      * Object manager factory
@@ -77,7 +77,7 @@ class SetModeCommand extends Command
     /**
      * @inheritdoc
      */
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         try {
             /** @var \Magento\Deploy\Model\Mode $modeController */
