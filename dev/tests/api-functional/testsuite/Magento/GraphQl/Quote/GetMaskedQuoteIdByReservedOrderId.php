@@ -48,18 +48,18 @@ class GetMaskedQuoteIdByReservedOrderId
      * Get masked quote id by reserved order id
      *
      * @param string $reservedOrderId
-     * @param bool $forceCollectTotal
+     * @param bool $shouldCollectTotals
      * @return string
      * @throws NoSuchEntityException
      */
-    public function execute(string $reservedOrderId, bool $forceCollectTotal = false): string
+    public function execute(string $reservedOrderId, bool $shouldCollectTotals = false): string
     {
         $quote = $this->quoteFactory->create();
         $quote->setSharedStoreIds(['*']);
         $this->quoteResource->load($quote, $reservedOrderId, 'reserved_order_id');
 
         // If dataprovider is used, we need to collect totals manually and save quote
-        if ($forceCollectTotal) {
+        if ($shouldCollectTotals) {
             $this->quoteResource->save($quote->collectTotals());
         }
 

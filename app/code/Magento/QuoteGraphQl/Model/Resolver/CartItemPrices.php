@@ -31,6 +31,13 @@ class CartItemPrices implements ResolverInterface, ResetAfterRequestInterface
     private $totals;
 
     /**
+     * Fields that require totals to be collected.
+     * @var array
+     */
+    private const FIELDS_REQUIRE_TOTALS_COLLECTION = ['discounts', 'original_item_price',
+        'original_row_total', 'catalog_discount', 'row_catalog_discount'];
+
+    /**
      * CartItemPrices constructor.
      *
      * @param TotalsCollector $totalsCollector
@@ -65,14 +72,10 @@ class CartItemPrices implements ResolverInterface, ResetAfterRequestInterface
         /** @var Item $cartItem */
         $cartItem = $value['model'];
 
-        // Collect totals only if discount, original item price and original rowtotal is there in the request
-        // avoid retrieve totals with the below keys if its not absolutely required
-        // except discounts can be removed if original_item_price and original_row_total is saved in db
+        // Collect totals only if the fields in the request match any one of FIELDS_REQUIRE_TOTALS_COLLECTION array,
+        // except discounts the rest can be removed if the field values saved in db
         if (!$this->totals && !empty(array_intersect(
-            [
-                    'discounts', 'original_item_price', 'original_row_total',
-                    'catalog_discount', 'row_catalog_discount'
-                ],
+            self::FIELDS_REQUIRE_TOTALS_COLLECTION,
             array_keys($info->getFieldSelection(1))
         ))
         ) {
