@@ -439,4 +439,289 @@ class ProductTest extends TestCase
         $this->model->setAttribute($attributeCode);
         $this->model->validate($item);
     }
+
+    /**
+     * Ensure price comes from parent item for configurables.
+     */
+    public function testQuoteItemPriceUsesParentItemPriceWhenPresent(): void
+    {
+        $parentUnitPrice = 100.0;
+        $childUnitPrice = 0.0;
+
+        $attr = $this->createPartialMock(Product::class, ['getAttribute']);
+        $attr->method('getAttribute')->willReturn(
+            new DataObject(
+                ['frontend_input' => 'text', 'backend_type' => 'varchar']
+            )
+        );
+
+        $product = $this->getMockBuilder(\Magento\Catalog\Model\Product::class)
+            ->disableOriginalConstructor()
+            ->onlyMethods(['getResource', 'hasData', 'getData'])
+            ->addMethods(['setQuoteItemQty', 'setQuoteItemPrice', 'setQuoteItemRowTotal'])
+            ->getMock();
+        $product->method('getResource')->willReturn($attr);
+        $product->method('hasData')->willReturn(true);
+        $product->method('getData')->with('quote_item_price')->willReturn($parentUnitPrice);
+        $product->method('setQuoteItemQty')->willReturnSelf();
+        $product->expects($this->once())
+            ->method('setQuoteItemPrice')
+            ->with($this->equalTo($parentUnitPrice))
+            ->willReturnSelf();
+        $product->method('setQuoteItemRowTotal')->willReturnSelf();
+
+        $parentItem = $this->getMockBuilder(AbstractItem::class)
+            ->disableOriginalConstructor()
+            ->onlyMethods(['getQty', 'getPrice', 'getParentItem', 'getProduct'])
+            ->addMethods(['getBaseRowTotal'])
+            ->getMockForAbstractClass();
+        $parentItem->method('getQty')->willReturn(1);
+        $parentItem->method('getPrice')->willReturn($parentUnitPrice);
+        $parentItem->method('getBaseRowTotal')->willReturn($parentUnitPrice);
+        $parentItem->method('getParentItem')->willReturn(null);
+        $parentItem->method('getProduct')->willReturn($product);
+
+        $childItem = $this->getMockBuilder(AbstractItem::class)
+            ->disableOriginalConstructor()
+            ->onlyMethods(['getQty', 'getPrice', 'getParentItem', 'getProduct'])
+            ->addMethods(['getBaseRowTotal'])
+            ->getMockForAbstractClass();
+        $childItem->method('getQty')->willReturn(1);
+        $childItem->method('getPrice')->willReturn($childUnitPrice);
+        $childItem->method('getBaseRowTotal')->willReturn($childUnitPrice);
+        $childItem->method('getParentItem')->willReturn($parentItem);
+        $childItem->method('getProduct')->willReturn($product);
+
+        $this->model->setAttribute('quote_item_price');
+        $this->model->setData('operator', '<');
+        $this->model->setValue(50);
+
+        $this->assertFalse(
+            $this->model->validate($childItem),
+            'Coupon should not apply when parent price is 100 and condition is < 50'
+        );
+    }
+
+    /**
+     * Ensure price comes from the item itself when no parent exists.
+     */
+    public function testQuoteItemPriceUsesOwnItemPriceWhenNoParent(): void
+    {
+        $unitPrice = 100.0;
+
+        $attr = $this->createPartialMock(Product::class, ['getAttribute']);
+        $attr->method('getAttribute')->willReturn(
+            new DataObject(['frontend_input' => 'text', 'backend_type' => 'varchar'])
+        );
+
+        $product = $this->getMockBuilder(\Magento\Catalog\Model\Product::class)
+            ->disableOriginalConstructor()
+            ->onlyMethods(['getResource', 'hasData', 'getData'])
+            ->addMethods(['setQuoteItemQty', 'setQuoteItemPrice', 'setQuoteItemRowTotal'])
+            ->getMock();
+        $product->method('getResource')->willReturn($attr);
+        $product->method('hasData')->willReturn(true);
+        $product->method('getData')->with('quote_item_price')->willReturn($unitPrice);
+        $product->method('setQuoteItemQty')->willReturnSelf();
+        $product->expects($this->once())
+            ->method('setQuoteItemPrice')
+            ->with($this->equalTo($unitPrice))
+            ->willReturnSelf();
+        $product->method('setQuoteItemRowTotal')->willReturnSelf();
+
+        $item = $this->getMockBuilder(AbstractItem::class)
+            ->disableOriginalConstructor()
+            ->onlyMethods(['getQty', 'getPrice', 'getParentItem', 'getProduct'])
+            ->addMethods(['getBaseRowTotal'])
+            ->getMockForAbstractClass();
+        $item->method('getQty')->willReturn(1);
+        $item->method('getPrice')->willReturn($unitPrice);
+        $item->method('getBaseRowTotal')->willReturn($unitPrice);
+        $item->method('getParentItem')->willReturn(null);
+        $item->method('getProduct')->willReturn($product);
+
+        $this->model->setAttribute('quote_item_price');
+        $this->model->setData('operator', '<');
+        $this->model->setValue(50);
+
+        $this->assertFalse(
+            $this->model->validate($item),
+            'Coupon should not apply when price is 100 and condition is < 50'
+        );
+    }
+
+    /**
+     * Validates setAttribute parsing of scope and related getters.
+     */
+    public function testSetAttributeParsesScopeAndGetters(): void
+    {
+        $this->model->setAttribute('parent::quote_item_qty');
+        $this->assertSame('quote_item_qty', $this->model->getAttribute());
+        $this->assertSame('parent', $this->model->getAttributeScope());
+    }
+
+    /**
+     * Ensures getAttributeName resolves label correctly when scope is set.
+     */
+    public function testGetAttributeNameReturnsSpecialLabelWithScope(): void
+    {
+        // load options so special attributes are available
+        $this->model->loadAttributeOptions();
+        $this->model->setAttribute('parent::quote_item_qty');
+        $this->assertSame('Quantity in cart', (string)$this->model->getAttributeName());
+    }
+
+    /**
+     * Ensures attribute_scope is preserved via asArray/loadArray.
+     */
+    public function testAsArrayAndLoadArrayIncludeAttributeScope(): void
+    {
+        $this->model->setAttribute('children::category_ids');
+        $array = $this->model->asArray();
+        $this->assertArrayHasKey('attribute_scope', $array);
+
+        $this->model->loadArray([
+            'type' => SalesRuleProduct::class,
+            'attribute_scope' => 'parent'
+        ]);
+        $this->assertSame('parent', $this->model->getAttributeScope());
+    }
+
+    /**
+     * Confirms special attributes are available after loadAttributeOptions.
+     */
+    public function testLoadAttributeOptionsAddsSpecialAttributes(): void
+    {
+        $this->model->loadAttributeOptions();
+        $options = $this->model->getAttributeOption();
+        $this->assertArrayHasKey('quote_item_price', $options);
+        $this->assertArrayHasKey('parent::quote_item_qty', $options);
+        $this->assertArrayHasKey('quote_item_row_total', $options);
+    }
+
+    /**
+     * Ensures missing attribute is set/unset around validation.
+     */
+    public function testValidateSetsAndUnsetsMissingAttributeOnProduct(): void
+    {
+        $attrCode = 'nonexistent_attr';
+        $this->model->setAttribute($attrCode);
+        $this->model->setData('operator', '==');
+        $this->model->setValue('x');
+
+        $eavAttr = new DataObject(['frontend_input' => 'text', 'backend_type' => 'varchar']);
+        $resource = $this->createPartialMock(Product::class, ['getAttribute']);
+        $resource->method('getAttribute')->with($attrCode)->willReturn($eavAttr);
+
+        $product = $this->getMockBuilder(\Magento\Catalog\Model\Product::class)
+            ->disableOriginalConstructor()
+            ->onlyMethods(['getResource', 'hasData', 'getData', 'setData', 'unsetData'])
+            ->addMethods(['setQuoteItemQty', 'setQuoteItemPrice', 'setQuoteItemRowTotal'])
+            ->getMock();
+        $product->method('getResource')->willReturn($resource);
+        $product->method('hasData')->with($attrCode)->willReturnOnConsecutiveCalls(false, true);
+        $product->method('getData')->with($attrCode)->willReturn(null);
+        $product->expects($this->once())->method('setData')->with($attrCode, null)->willReturnSelf();
+        $product->expects($this->once())->method('unsetData')->with($attrCode)->willReturnSelf();
+        $product->method('setQuoteItemQty')->willReturnSelf();
+        $product->method('setQuoteItemPrice')->willReturnSelf();
+        $product->method('setQuoteItemRowTotal')->willReturnSelf();
+
+        $item = $this->getMockBuilder(AbstractItem::class)
+            ->disableOriginalConstructor()
+            ->onlyMethods(['getQty', 'getPrice', 'getParentItem', 'getProduct'])
+            ->addMethods(['getBaseRowTotal', 'getProductId'])
+            ->getMockForAbstractClass();
+        $item->method('getQty')->willReturn(1);
+        $item->method('getPrice')->willReturn(10.0);
+        $item->method('getBaseRowTotal')->willReturn(10.0);
+        $item->method('getParentItem')->willReturn(null);
+        $item->method('getProduct')->willReturn($product);
+        $item->method('getProductId')->willReturn(1);
+
+        // We only assert that no exceptions occur and our expectations on product are met.
+        $this->model->validate($item);
+    }
+
+    /**
+     * Ensures hidden scope field is appended to attribute element HTML.
+     */
+    public function testGetAttributeElementHtmlAppendsHiddenScopeField(): void
+    {
+        // Ensure scope is set to "parent" so it should be passed as hidden field value
+        $this->model->setAttribute('parent::quote_item_qty');
+
+        $elementHidden = $this->getMockBuilder(\Magento\Framework\Data\Form\Element\AbstractElement::class)
+            ->disableOriginalConstructor()
+            ->onlyMethods(['getHtml'])
+            ->getMockForAbstractClass();
+        $elementHidden->method('getHtml')->willReturn('HIDDEN_HTML');
+        $elementSelect = $this->getMockBuilder(\Magento\Framework\Data\Form\Element\AbstractElement::class)
+            ->disableOriginalConstructor()
+            ->onlyMethods(['getHtml'])
+            ->getMockForAbstractClass();
+        $elementSelect->method('getHtml')->willReturn('ATTR_HTML');
+
+        $capturedConfig = null;
+        $form = $this->getMockBuilder(\Magento\Framework\Data\Form::class)
+            ->disableOriginalConstructor()
+            ->onlyMethods(['addField'])
+            ->getMock();
+        $form->method('addField')
+            ->willReturnCallback(function ($id, $type, $cfg) use (&$capturedConfig, $elementHidden, $elementSelect) {
+                if (strpos((string)$id, '__attribute_scope') !== false && $type === 'hidden') {
+                    $capturedConfig = $cfg;
+                    return $elementHidden;
+                }
+                return $elementSelect;
+            });
+
+        $rule = $this->getMockBuilder(\Magento\SalesRule\Model\Rule::class)
+            ->disableOriginalConstructor()
+            ->onlyMethods(['getForm'])
+            ->getMock();
+        $rule->method('getForm')->willReturn($form);
+        $this->model->setRule($rule);
+        $this->model->setFormName('form-name');
+        // Inject a layout so getBlockSingleton() calls succeed
+        $layout = $this->getMockBuilder(\Magento\Framework\View\LayoutInterface::class)
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
+        $editable = $this->getMockBuilder(\Magento\Rule\Block\Editable::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $layout->method('getBlockSingleton')->willReturn($editable);
+        $ref = new \ReflectionProperty(\Magento\Rule\Model\Condition\AbstractCondition::class, '_layout');
+        $ref->setAccessible(true);
+        $ref->setValue($this->model, $layout);
+        $html = $this->model->getAttributeElementHtml();
+
+        $this->assertStringContainsString('HIDDEN_HTML', $html);
+        $this->assertIsArray($capturedConfig);
+        $this->assertArrayHasKey('value', $capturedConfig);
+        $this->assertSame('parent', $capturedConfig['value']);
+        $this->assertArrayHasKey('no_span', $capturedConfig);
+        $this->assertTrue($capturedConfig['no_span']);
+        $this->assertArrayHasKey('class', $capturedConfig);
+        $this->assertSame('hidden', $capturedConfig['class']);
+    }
+
+    /**
+     * Ensures getAttribute strips the scope delimiter.
+     */
+    public function testGetAttributeStripsScopeDelimiter(): void
+    {
+        // Simulate legacy/raw storage where attribute includes scope delimiter
+        $this->model->setData('attribute', 'parent::category_ids');
+        $this->assertSame('category_ids', $this->model->getAttribute());
+    }
+
+    /**
+     * Ensures getAttribute returns value unchanged without delimiter.
+     */
+    public function testGetAttributeWithoutDelimiterReturnsAsIs(): void
+    {
+        $this->model->setData('attribute', 'sku');
+        $this->assertSame('sku', $this->model->getAttribute());
+    }
 }

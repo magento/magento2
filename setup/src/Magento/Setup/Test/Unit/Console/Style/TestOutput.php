@@ -14,9 +14,14 @@ use Symfony\Component\Console\Output\Output;
  */
 class TestOutput extends Output
 {
+    /**
+     * Captured output content for testing purposes
+     *
+     * @var string
+     */
     public $output = '';
 
-    public function clear()
+    public function clear(): void
     {
         $this->output = '';
     }
@@ -25,7 +30,7 @@ class TestOutput extends Output
      * @param string $message
      * @param bool $newline
      */
-    protected function doWrite($message, $newline)
+    protected function doWrite($message, $newline): void
     {
         $this->output .= $message . ($newline ? "\n" : '');
     }

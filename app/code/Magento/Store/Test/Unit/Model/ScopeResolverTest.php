@@ -47,7 +47,7 @@ class ScopeResolverTest extends TestCase
      * @param string $requestedScope
      * @param int $requestedScopeId
      * @param bool $isBelong
-     * @dataProvider testIsBelongsToScopeDataProvider
+     * @dataProvider isBelongsToScopeDataProvider
      */
     public function testIsBelongsToScope(
         string $baseScope,
@@ -72,7 +72,7 @@ class ScopeResolverTest extends TestCase
      *
      * @return array[]
      */
-    public static function testIsBelongsToScopeDataProvider()
+    public static function isBelongsToScopeDataProvider()
     {
         return [
             'All scopes belongs to Default' => [
