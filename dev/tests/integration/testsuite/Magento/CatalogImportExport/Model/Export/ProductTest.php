@@ -10,6 +10,7 @@ namespace Magento\CatalogImportExport\Model\Export;
 
 use Magento\Catalog\Api\CategoryRepositoryInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\Catalog\Model\Product\Visibility;
 use Magento\Catalog\Model\ResourceModel\Product\Attribute\Collection as ProductAttributeCollection;
 use Magento\Catalog\Observer\SwitchPriceAttributeScopeOnConfigChange;
 use Magento\Catalog\Test\Fixture\Attribute as AttributeFixture;
@@ -20,6 +21,7 @@ use Magento\CatalogInventory\Api\StockConfigurationInterface;
 use Magento\CatalogInventory\Api\StockItemRepositoryInterface;
 use Magento\CatalogInventory\Model\Stock\Item;
 use Magento\Directory\Helper\Data as DirectoryData;
+use Magento\Framework\App\Area;
 use Magento\Framework\App\Config\ReinitableConfigInterface;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
@@ -748,6 +750,43 @@ class ProductTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * @magentoDataFixture Magento/Catalog/_files/product_simple.php
+     * @magentoDataFixture Magento/Store/_files/second_website_with_two_stores.php
+     * @magentoDbIsolation disabled
+     * @magentoAppArea adminhtml
+     *
+     * @return void
+     */
+    public function testFilterForNonDefaultStore(): void
+    {
+        $secondStoreCode = 'fixture_second_store';
+
+        /** @var \Magento\Store\Model\Store $store */
+        $store = $this->objectManager->create(\Magento\Store\Model\Store::class);
+        $secondStore = $store->load($secondStoreCode);
+
+        /** @var \Magento\Catalog\Model\Product\Action $productAction */
+        $productAction = $this->objectManager->create(\Magento\Catalog\Model\Product\Action::class);
+
+        $this->model->setWriter(
+            $this->objectManager->create(
+                \Magento\ImportExport\Model\Export\Adapter\Csv::class
+            )
+        );
+
+        $product = $this->productRepository->get('simple');
+        $productId = $product->getId();
+        $productAction->updateWebsites([$productId], [$secondStore->getWebsiteId()], 'add');
+        $product->setStoreId($secondStore->getId());
+        $product->setVisibility(Visibility::VISIBILITY_NOT_VISIBLE);
+        $product->setName($product->getName() . ' ' . $secondStoreCode);
+        $this->productRepository->save($product);
+
+        $exportData = $this->doExport(['visibility' => Visibility::VISIBILITY_BOTH]);
+        $this->assertStringNotContainsString($product->getName(), $exportData);
+    }
+
+    /**
      * Verify that "stock status" filter correctly applies to export result
      *
      * @magentoDataFixture Magento/Catalog/_files/multiple_products_with_few_out_of_stock.php
@@ -818,16 +857,25 @@ class ProductTest extends \PHPUnit\Framework\TestCase
      *
      * @magentoDataFixture Magento/Catalog/_files/product_simple_with_options.php
      * @magentoDataFixture Magento/Catalog/_files/product_with_two_websites.php
+     * @dataProvider websiteIdFilterDataProvider
      */
-    public function testExportProductWithRestrictedWebsite(): void
+    public function testFilterByWebsiteId(string $websiteIdFilter): void
     {
         $websiteRepository = $this->objectManager->get(\Magento\Store\Api\WebsiteRepositoryInterface::class);
         $website = $websiteRepository->get('second_website');
 
-        $exportData = $this->doExport(['website_id' => $website->getId()]);
+        $exportData = $this->doExport([$websiteIdFilter => $website->getId()]);
 
         $this->assertStringContainsString('"Simple Product"', $exportData);
         $this->assertStringNotContainsString('"Virtual Product With Custom Options"', $exportData);
+    }
+
+    public static function websiteIdFilterDataProvider(): array
+    {
+        return [
+            ['website_id'],
+            ['website_ids'],
+        ];
     }
 
     public function testFilterAttributeCollection(): void
@@ -950,5 +998,23 @@ class ProductTest extends \PHPUnit\Framework\TestCase
         $csv = $this->doExport(['sku' => $sku]);
         $this->assertMatchesRegularExpression('#datetime_attr=7/19/15,\p{Zs}3:30\p{Zs}AM#u', $csv);
         $this->assertMatchesRegularExpression('#date_attr=2/7/17("|(,\w+=))#', $csv);
+    }
+
+    #[
+        AppArea(Area::AREA_ADMINHTML),
+        DataFixture(
+            AttributeFixture::class,
+            ['frontend_input' => 'boolean', 'backend_type' => 'int', 'attribute_code' => 'yesno_attr']
+        ),
+        DataFixture(ProductFixture::class, ['sku' => 'prod1']),
+        DataFixture(ProductFixture::class, ['sku' => 'prod2', 'yesno_attr' => '0']),
+        DataFixture(ProductFixture::class, ['sku' => 'prod3', 'yesno_attr' => '1']),
+    ]
+    public function testExportProductWithYesNoAttribute(): void
+    {
+        $csv = $this->doExport(['yesno_attr' => '0']);
+        self::assertStringContainsString('prod2', $csv);
+        self::assertStringNotContainsString('prod1', $csv);
+        self::assertStringNotContainsString('prod3', $csv);
     }
 }

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright 2025 Adobe
+  * All Rights Reserved.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="StorefrontValidateThreeGroupedProductQtyErrorMessageActionGroup">
+        <annotations>
+            <description>Validates Child Products Quantities Input Error Messages are displaying</description>
+        </annotations>
+        <arguments>
+            <argument name="firstProductId" type="string"/>
+            <argument name="secondProductId" type="string"/>
+            <argument name="thirdProductId" type="string" />
+        </arguments>
+        <dontSeeElement selector="{{StorefrontProductInfoMainSection.groupedProductOptionQtyError(firstProductId)}}" stepKey="checkingInputValidationErrorMessageForFirstProduct"/>
+        <seeElement selector="{{StorefrontProductInfoMainSection.groupedProductOptionQtyError(secondProductId)}}" stepKey="checkingInputValidationErrorMessageForSecondProduct"/>
+        <dontSeeElement selector="{{StorefrontProductInfoMainSection.groupedProductOptionQtyError(thirdProductId)}}" stepKey="checkingInputValidationErrorMessageForThirdProduct"/>
+    </actionGroup>
+</actionGroups>

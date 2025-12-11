@@ -1,9 +1,9 @@
 <?xml version="1.0"?>
 <!--
-/**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
- */
+ /**
+  * Copyright 2011 Adobe
+  * All Rights Reserved.
+  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
     <type name="Magento\Framework\Module\Setup\Migration">
@@ -19,5 +19,8 @@
                 <item name="catalog/productalert_cron/error_email" xsi:type="string">1</item>
             </argument>
         </arguments>
+    </type>
+    <type name="Magento\Framework\View\Element\Template\File\Resolver">
+        <plugin name="updateThemeParams" type="Magento\ProductAlert\Model\UpdateThemeParams"/>
     </type>
 </config>

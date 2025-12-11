@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+   * Copyright 2025 Adobe
+   * All Rights Reserved.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontCartSidebarSynchronizationWithCustomerDataLifetimeTest">
+        <annotations>
+            <features value="Checkout"/>
+            <stories value="Cart Sidebar Synchronization"/>
+            <title value="Cart sidebar synchronization with Customer Data Lifetime and product changes"/>
+            <description value="Verify cart sidebar shows cached values until Customer Data Lifetime expires or cart is updated, with multi-tab admin product changes"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="AC-4753"/>
+            <group value="checkout"/>
+        </annotations>
+        <before>
+            <!-- Create Simple product with price $10 -->
+            <createData entity="SimpleProduct2" stepKey="createSimpleProduct">
+                <field key="name">Apple</field>
+                <field key="price">10</field>
+            </createData>
+            <!-- Create customer account -->
+            <createData entity="Simple_US_Customer" stepKey="createCustomer"/>
+            <!-- Admin login -->
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <!-- Set Customer Data Lifetime to 2 minutes -->
+            <actionGroup ref="SetCustomerDataLifetimeActionGroup" stepKey="setCustomerDataLifetimeToTwoMinutes">
+                <argument name="minutes" value="2"/>
+            </actionGroup>
+        </before>
+        <after>
+            <!-- Reset Customer Data Lifetime to default -->
+            <actionGroup ref="SetCustomerDataLifetimeActionGroup" stepKey="resetCustomerDataLifetime"/>
+            <!-- Logout customer -->
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer"/>
+            <!-- Delete test data -->
+            <deleteData createDataKey="createSimpleProduct" stepKey="deleteSimpleProduct"/>
+            <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
+            <!-- Admin logout -->
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="adminLogout"/>
+        </after>
+        <!-- Step 1: Open browser tab A - Login to storefront, open simple product page and add to cart -->
+        <actionGroup ref="LoginToStorefrontActionGroup" stepKey="loginToStorefrontTabA">
+            <argument name="Customer" value="$createCustomer$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontOpenProductEntityPageActionGroup" stepKey="openSimpleProductPage">
+            <argument name="product" value="$createSimpleProduct$"/>
+        </actionGroup>
+        <actionGroup ref="AddToCartFromStorefrontProductPageActionGroup" stepKey="addSimpleProductToCart">
+            <argument name="productName" value="$createSimpleProduct.name$"/>
+        </actionGroup>
+        <!-- Step 2: Reload product page several times to validate caching -->
+        <actionGroup ref="ReloadPageActionGroup" stepKey="reloadProductPageFirst"/>
+        <waitForPageLoad stepKey="waitForFirstReload"/>
+        <actionGroup ref="ReloadPageActionGroup" stepKey="reloadProductPageSecond"/>
+        <waitForPageLoad stepKey="waitForSecondReload"/>
+        <actionGroup ref="ReloadPageActionGroup" stepKey="reloadProductPageThird"/>
+        <waitForPageLoad stepKey="waitForThirdReload"/>
+        <!-- Step 3: Open Cart Sidebar (minicart) and verify initial values -->
+        <actionGroup ref="StorefrontClickOnMiniCartActionGroup" stepKey="openCartSidebarInitial"/>
+        <waitForElementVisible selector="{{StorefrontMinicartSection.productLinkByName($createSimpleProduct.name$)}}" stepKey="waitForAppleProductInMiniCart"/>
+        <waitForText userInput="$10.00" selector="{{StorefrontMinicartSection.productPriceByName($createSimpleProduct.name$)}}" stepKey="verifyInitialProductPrice"/>
+        <actionGroup ref="StorefrontClickOnMiniCartActionGroup" stepKey="closeCartSidebarInitial"/>
+        <!-- Step 4: Open additional browser tab B - Admin product changes -->
+        <openNewTab stepKey="openAdminTabB"/>
+        <!-- Navigate to admin product edit page -->
+        <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="openAppleProductForFirstEdit">
+            <argument name="productId" value="$createSimpleProduct.id$"/>
+        </actionGroup>
+        <!-- Change product name to Apple-X and price to $20 -->
+        <fillField userInput="Apple-X" selector="{{AdminProductFormSection.productName}}" stepKey="changeProductNameToAppleX"/>
+        <fillField userInput="20" selector="{{AdminProductFormSection.productPrice}}" stepKey="changeProductPriceTo20"/>
+        <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProductWithFirstChanges"/>
+        <!-- Step 5: Return to browser tab A - Storefront -->
+        <switchToPreviousTab stepKey="switchBackToStorefrontTabA"/>
+        <!-- Reload product page and open Cart Sidebar -->
+        <actionGroup ref="StorefrontOpenProductEntityPageActionGroup" stepKey="openSimpleProductPageAfterFirstAdminChange">
+            <argument name="product" value="$createSimpleProduct$"/>
+        </actionGroup>
+        <actionGroup ref="ReloadPageActionGroup" stepKey="reloadProductPageAfterFirstAdminChange"/>
+        <waitForPageLoad stepKey="waitForReloadAfterFirstChange"/>
+        <actionGroup ref="StorefrontClickOnMiniCartActionGroup" stepKey="openCartSidebarAfterFirstChange"/>
+        <!-- Verify Cart Sidebar still shows OLD values (cached) -->
+        <waitForElementVisible selector="{{StorefrontMinicartSection.productLinkByName('Apple')}}" stepKey="verifyProductNameStillApple"/>
+        <waitForText userInput="$10.00" selector="{{StorefrontMinicartSection.productPriceByName('Apple')}}" stepKey="verifyProductPriceStill10"/>
+        <actionGroup ref="StorefrontClickOnMiniCartActionGroup" stepKey="closeCartSidebarAfterFirstChange"/>
+        <!-- Step 6: Open Shopping Cart and update quantity to 3 -->
+        <actionGroup ref="StorefrontCartPageOpenActionGroup" stepKey="openShoppingCartPage"/>
+        <waitForElementVisible selector="{{CheckoutCartProductSection.ProductQuantityByName('Apple-X')}}" stepKey="waitForQuantityField"/>
+        <clearField selector="{{CheckoutCartProductSection.ProductQuantityByName('Apple-X')}}" stepKey="clearQuantityField"/>
+        <fillField userInput="3" selector="{{CheckoutCartProductSection.ProductQuantityByName('Apple-X')}}" stepKey="updateQuantityToThree"/>
+        <click selector="{{CheckoutCartProductSection.updateShoppingCartButton}}" stepKey="clickUpdateShoppingCart"/>
+        <waitForPageLoad stepKey="waitForCartUpdate"/>
+        <!-- Step 7: Open Cart Sidebar and verify it shows UPDATED values -->
+        <actionGroup ref="StorefrontClickOnMiniCartActionGroup" stepKey="openCartSidebarAfterQuantityUpdate"/>
+        <waitForElementVisible selector="{{StorefrontMinicartSection.productLinkByName('Apple-X')}}" stepKey="verifyProductNameUpdatedToAppleX"/>
+        <waitForText userInput="$20.00" selector="{{StorefrontMinicartSection.productPriceByName('Apple-X')}}" stepKey="verifyProductPriceUpdatedTo20"/>
+        <actionGroup ref="StorefrontClickOnMiniCartActionGroup" stepKey="closeCartSidebarAfterQuantityUpdate"/>
+        <!-- Step 8: Reload page several times to validate caching again -->
+        <actionGroup ref="ReloadPageActionGroup" stepKey="reloadCartPageFirst"/>
+        <waitForPageLoad stepKey="waitForFirstCartReload"/>
+        <actionGroup ref="ReloadPageActionGroup" stepKey="reloadCartPageSecond"/>
+        <waitForPageLoad stepKey="waitForSecondCartReload"/>
+        <!-- Step 9: Open browser tab B - Second admin product change -->
+        <openNewTab stepKey="openAdminTabBSecond"/>
+        <!-- Navigate to admin product edit page again -->
+        <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="openAppleProductForSecondEdit">
+            <argument name="productId" value="$createSimpleProduct.id$"/>
+        </actionGroup>
+        <!-- Change product name to Apple-X-Y and price to $30 -->
+        <fillField userInput="Apple-X-Y" selector="{{AdminProductFormSection.productName}}" stepKey="changeProductNameToAppleXY"/>
+        <fillField userInput="30" selector="{{AdminProductFormSection.productPrice}}" stepKey="changeProductPriceTo30"/>
+        <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProductWithSecondChanges"/>
+        <!-- Step 10: Return to browser tab A - Storefront -->
+        <switchToPreviousTab stepKey="switchBackToStorefrontTabASecond"/>
+        <!-- Reload product page and open Cart Sidebar -->
+        <actionGroup ref="StorefrontOpenProductEntityPageActionGroup" stepKey="openSimpleProductPageAfterSecondAdminChange">
+            <argument name="product" value="$createSimpleProduct$"/>
+        </actionGroup>
+        <actionGroup ref="ReloadPageActionGroup" stepKey="reloadProductPageAfterSecondAdminChange"/>
+        <waitForPageLoad stepKey="waitForReloadAfterSecondChange"/>
+        <actionGroup ref="StorefrontClickOnMiniCartActionGroup" stepKey="openCartSidebarAfterSecondChange"/>
+        <!-- Verify Cart Sidebar still shows PREVIOUS values (Apple-X, $20) - cached -->
+        <waitForElementVisible selector="{{StorefrontMinicartSection.productLinkByName('Apple-X')}}" stepKey="verifyProductNameStillAppleX"/>
+        <waitForText userInput="$20.00" selector="{{StorefrontMinicartSection.productPriceByName('Apple-X')}}" stepKey="verifyProductPriceStill20"/>
+        <actionGroup ref="StorefrontClickOnMiniCartActionGroup" stepKey="closeCartSidebarAfterSecondChange"/>
+        <!-- Step 11: Wait 2 minutes for Customer Data Lifetime -->
+        <wait time="120" stepKey="waitTwoMinutesForDataLifetimeExpiration"/>
+        <!-- Step 12: Reload page and verify Cart Sidebar shows UPDATED values -->
+        <actionGroup ref="ReloadPageActionGroup" stepKey="reloadPageAfterDataLifetimeExpiration"/>
+        <waitForPageLoad stepKey="waitForReloadAfterExpiration"/>
+        <actionGroup ref="StorefrontClickOnMiniCartActionGroup" stepKey="openCartSidebarAfterExpiration"/>
+        <!-- Verify Cart Sidebar now shows LATEST values (Apple-X-Y, $30) -->
+        <waitForElementVisible selector="{{StorefrontMinicartSection.productLinkByName('Apple-X-Y')}}" stepKey="verifyProductNameUpdatedToAppleXY"/>
+        <waitForText userInput="$30.00" selector="{{StorefrontMinicartSection.productPriceByName('Apple-X-Y')}}" stepKey="verifyProductPriceUpdatedTo30"/>
+        <actionGroup ref="StorefrontClickOnMiniCartActionGroup" stepKey="closeCartSidebarFinal"/>
+    </test>
+</tests>

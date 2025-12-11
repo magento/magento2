@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 -->
 
@@ -29,8 +29,8 @@
         </before>
 
         <after>
-            <deleteData createDataKey="simpleProduct1" stepKey="deleteSimpleProduct1"/>
-            <deleteData createDataKey="simpleProduct2" stepKey="deleteSimpleProduct2"/>
+            <!-- Delete all products via API -->
+            <helper class="Magento\Catalog\Test\Mftf\Helper\ProductApiHelper" method="deleteAllProductsApi" stepKey="deleteAllProductsViaApi"/>
         </after>
 
         <!-- A Cms page containing the New Products Widget gets created here via extends -->

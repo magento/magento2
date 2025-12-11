@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -11,6 +11,7 @@ use Magento\Cms\Model\Page\Source\PageLayout;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\View\Model\PageLayout\Config\BuilderInterface;
 use Magento\Framework\View\PageLayout\Config;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -73,8 +74,8 @@ class PageLayoutTest extends TestCase
      * @param array $options
      * @param array $expected
      * @return void
-     * @dataProvider getOptionsDataProvider
      */
+    #[DataProvider('getOptionsDataProvider')]
     public function testToOptionArray(array $options, array $expected)
     {
         $this->pageLayoutConfigMock->expects($this->once())

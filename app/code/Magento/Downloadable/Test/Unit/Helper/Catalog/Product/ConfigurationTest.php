@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -50,13 +50,9 @@ class ConfigurationTest extends TestCase
     {
         $this->objectManagerHelper = new ObjectManagerHelper($this);
 
-        $this->context = $this->getMockBuilder(Context::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->scopeConfig = $this->getMockForAbstractClass(ScopeConfigInterface::class);
-        $this->productConfig = $this->getMockBuilder(\Magento\Catalog\Helper\Product\Configuration::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->context = $this->createMock(Context::class);
+        $this->scopeConfig = $this->createMock(ScopeConfigInterface::class);
+        $this->productConfig = $this->createMock(\Magento\Catalog\Helper\Product\Configuration::class);
         $this->context->expects($this->once())->method('getScopeConfig')->willReturn($this->scopeConfig);
         $this->helper = $this->objectManagerHelper->getObject(
             Configuration::class,
@@ -69,10 +65,10 @@ class ConfigurationTest extends TestCase
 
     public function testGetLinksTitle()
     {
-        $product = $this->getMockBuilder(Product::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['_wakeup', 'getLinksTitle'])
-            ->getMock();
+        $product = $this->createPartialMock(
+            \Magento\Catalog\Test\Unit\Helper\ProductTestHelper::class,
+            ['__wakeup', 'getLinksTitle']
+        );
 
         $product->expects($this->once())->method('getLinksTitle')->willReturn('links_title');
 
@@ -81,10 +77,10 @@ class ConfigurationTest extends TestCase
 
     public function testGetLinksTitleWithoutTitle()
     {
-        $product = $this->getMockBuilder(Product::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['_wakeup', 'getLinksTitle'])
-            ->getMock();
+        $product = $this->createPartialMock(
+            \Magento\Catalog\Test\Unit\Helper\ProductTestHelper::class,
+            ['__wakeup', 'getLinksTitle']
+        );
 
         $product->expects($this->once())->method('getLinksTitle')->willReturn(null);
         $this->scopeConfig->expects($this->once())->method('getValue')->with(
@@ -97,24 +93,17 @@ class ConfigurationTest extends TestCase
 
     public function testGetOptions()
     {
-        $item = $this->getMockForAbstractClass(ItemInterface::class);
-        $product = $this->getMockBuilder(Product::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['_wakeup', 'getLinksTitle'])
-            ->onlyMethods(['getTypeInstance'])
-            ->getMock();
-        $option = $this->getMockForAbstractClass(OptionInterface::class);
-        $productType = $this->getMockBuilder(Type::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['getLinks'])
-            ->getMock();
-        $productLink = $this->getMockBuilder(Link::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['getTitle'])
-            ->getMock();
+        $item = $this->createMock(ItemInterface::class);
+        $product = $this->createPartialMock(
+            \Magento\Catalog\Test\Unit\Helper\ProductTestHelper::class,
+            ['__wakeup', 'getLinksTitle', 'getTypeInstance']
+        );
+        $option = $this->createMock(OptionInterface::class);
+        $productType = $this->createPartialMock(Type::class, ['getLinks']);
+        $productLink = $this->createPartialMock(Link::class, ['getTitle']);
 
         $this->productConfig->expects($this->once())->method('getOptions')->with($item);
-        $item->expects($this->any())->method('getProduct')->willReturn($product);
+        $item->method('getProduct')->willReturn($product);
         $item->expects($this->once())->method('getOptionByCode')->willReturn($option);
         $product->expects($this->once())->method('getTypeInstance')->willReturn($productType);
         $productType->expects($this->once())->method('getLinks')->with($product)->willReturn([1 => $productLink]);

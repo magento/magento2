@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -12,6 +12,7 @@ use Magento\Config\Model\Config\Structure\Element\Group;
 use Magento\Framework\Data\Form\Element\AbstractElement;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Paypal\Block\Adminhtml\System\Config\Fieldset\Payment;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -20,8 +21,8 @@ class PaymentTest extends TestCase
     /**#@+
      * Activity config path
      */
-    const CONFIG_PATH_ACTIVE = 'payment/path/active';
-    const CONFIG_PATH_NOT_ACTIVE = 'payment/path/not-active';
+    private const CONFIG_PATH_ACTIVE = 'payment/path/active';
+    private const CONFIG_PATH_NOT_ACTIVE = 'payment/path/not-active';
     /**#@-*/
 
     /**
@@ -48,13 +49,8 @@ class PaymentTest extends TestCase
     {
         $helper = new ObjectManager($this);
         $this->_group = $this->createMock(Group::class);
-        $this->_element = $this->getMockForAbstractClass(
+        $this->_element = $this->createPartialMock(
             AbstractElement::class,
-            [],
-            '',
-            false,
-            true,
-            true,
             ['getHtmlId', 'getElementHtml', 'getName', 'getElements', 'getId']
         );
         $this->_element->expects($this->any())
@@ -80,9 +76,7 @@ class PaymentTest extends TestCase
         $this->_model->setGroup($this->_group);
     }
 
-    /**
-     * @dataProvider isPaymentEnabledDataProvider
-     */
+    #[DataProvider('isPaymentEnabledDataProvider')]
     public function testIsPaymentEnabled($groupConfig, $expected)
     {
         $this->_element->setGroup($groupConfig);

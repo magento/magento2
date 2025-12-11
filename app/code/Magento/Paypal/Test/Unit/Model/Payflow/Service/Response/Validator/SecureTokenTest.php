@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -10,6 +10,7 @@ namespace Magento\Paypal\Test\Unit\Model\Payflow\Service\Response\Validator;
 use Magento\Framework\DataObject;
 use Magento\Paypal\Model\Payflow\Service\Response\Validator\SecureToken;
 use Magento\Paypal\Model\Payflow\Transparent;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -38,17 +39,14 @@ class SecureTokenTest extends TestCase
     protected function setUp(): void
     {
         $this->validator = new SecureToken();
-        $this->payflowFacade = $this->getMockBuilder(Transparent::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->payflowFacade = $this->createMock(Transparent::class);
     }
 
     /**
      * @param bool $result
      * @param DataObject $response
-     *
-     * @dataProvider validationDataProvider
      */
+    #[DataProvider('validationDataProvider')]
     public function testValidation($result, DataObject $response)
     {
         $this->assertEquals($result, $this->validator->validate($response, $this->payflowFacade));

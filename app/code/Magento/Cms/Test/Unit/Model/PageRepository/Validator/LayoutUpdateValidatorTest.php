@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 
 declare(strict_types=1);
@@ -16,6 +16,7 @@ use Magento\Framework\Config\ValidationStateInterface;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\View\Model\Layout\Update\Validator;
 use Magento\Framework\View\Model\Layout\Update\ValidatorFactory;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -38,7 +39,7 @@ class LayoutUpdateValidatorTest extends TestCase
     {
         $layoutValidatorFactory = $this->createMock(ValidatorFactory::class);
         $this->layoutValidator = $this->createMock(Validator::class);
-        $layoutValidatorState = $this->getMockForAbstractClass(ValidationStateInterface::class);
+        $layoutValidatorState = $this->createMock(ValidationStateInterface::class);
 
         $layoutValidatorFactory
             ->method('create')
@@ -49,8 +50,8 @@ class LayoutUpdateValidatorTest extends TestCase
     }
 
     /**
-     * @dataProvider validationSetDataProvider
      */
+    #[DataProvider('validationSetDataProvider')]
     public function testValidate($data, $expectedExceptionMessage, $layoutValidatorException, $isLayoutValid = false)
     {
         if ($expectedExceptionMessage) {
@@ -75,7 +76,7 @@ class LayoutUpdateValidatorTest extends TestCase
                 ->willReturn($isLayoutValid);
         }
 
-        $page = $this->getMockForAbstractClass(PageInterface::class);
+        $page = $this->createMock(PageInterface::class);
         foreach ($data as $method => $value) {
             $page
                 ->method($method)

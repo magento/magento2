@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -196,7 +196,7 @@ class SaveTest extends TestCase
     /**
      * @return array
      */
-    public static function testExecuteEmailsDataProvider(): array
+    public static function executeEmailsDataProvider(): array
     {
         /**
         * string $sendEmail
@@ -218,7 +218,7 @@ class SaveTest extends TestCase
      *
      * @return void
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
-     * @dataProvider testExecuteEmailsDataProvider
+     * @dataProvider executeEmailsDataProvider
      */
     public function testExecuteEmails(
         string $sendEmail,

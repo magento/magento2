@@ -12,6 +12,7 @@ use Magento\Framework\App\Bootstrap;
 use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\App\ProductMetadata;
+use Magento\Framework\App\State as AppState;
 use Magento\Framework\Composer\ComposerJsonFinder;
 use Magento\Framework\Config\ConfigOptionsListConstants;
 use Magento\Framework\Console\CommandLoader\Aggregate;
@@ -115,7 +116,7 @@ class Cli extends Console\Application
      *
      * @throws \Exception The exception in case of unexpected error
      */
-    public function doRun(Console\Input\InputInterface $input, Console\Output\OutputInterface $output)
+    public function doRun(Console\Input\InputInterface $input, Console\Output\OutputInterface $output): int
     {
         $exitCode = null;
         try {
@@ -177,10 +178,15 @@ class Cli extends Console\Application
         $params = (new ComplexParameter(self::INPUT_KEY_BOOTSTRAP))->mergeFromArgv($_SERVER, $_SERVER);
         $params[Bootstrap::PARAM_REQUIRE_MAINTENANCE] = null;
         $requestParams = $this->serviceManager->get('magento-init-params');
-        $appBootstrapKey = Bootstrap::INIT_PARAM_FILESYSTEM_DIR_PATHS;
+        $appBootstrapKeys = [
+            Bootstrap::INIT_PARAM_FILESYSTEM_DIR_PATHS,
+            AppState::PARAM_MODE,
+        ];
 
-        if (isset($requestParams[$appBootstrapKey]) && !isset($params[$appBootstrapKey])) {
-            $params[$appBootstrapKey] = $requestParams[$appBootstrapKey];
+        foreach ($appBootstrapKeys as $appBootstrapKey) {
+            if (isset($requestParams[$appBootstrapKey]) && !isset($params[$appBootstrapKey])) {
+                $params[$appBootstrapKey] = $requestParams[$appBootstrapKey];
+            }
         }
 
         $this->objectManager = Bootstrap::create(BP, $params)->getObjectManager();

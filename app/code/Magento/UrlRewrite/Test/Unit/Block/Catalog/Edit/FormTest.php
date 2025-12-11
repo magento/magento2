@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -16,6 +16,8 @@ use Magento\Framework\Data\Form\Element\AbstractElement;
 use Magento\Framework\Data\Form\Element\Fieldset;
 use Magento\Framework\Data\Form\Element\Renderer\RendererInterface;
 use Magento\Framework\Data\FormFactory;
+use Magento\Framework\Json\Helper\Data as JsonHelper;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\View\LayoutInterface;
 use Magento\UrlRewrite\Block\Catalog\Edit\Form as CatalogEditForm;
@@ -30,6 +32,8 @@ use PHPUnit\Framework\TestCase;
  */
 class FormTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var EditFormBlock
      */
@@ -65,7 +69,7 @@ class FormTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->layout = $this->getMockForAbstractClass(LayoutInterface::class);
+        $this->layout = $this->createMock(LayoutInterface::class);
         $this->formFactory = $this->createPartialMock(FormFactory::class, ['create']);
         $this->urlRewriteFactory = $this->createPartialMock(
             UrlRewriteFactory::class,
@@ -76,7 +80,16 @@ class FormTest extends TestCase
         $this->categoryFactory = $this->createPartialMock(CategoryFactory::class, ['create']);
         $this->productFactory = $this->createPartialMock(ProductFactory::class, ['create']);
 
-        $this->form = (new ObjectManager($this))->getObject(
+        $objectManagerHelper = new ObjectManager($this);
+        $objects = [
+            [
+                JsonHelper::class,
+                $this->createMock(JsonHelper::class)
+            ]
+        ];
+        $objectManagerHelper->prepareObjectManager($objects);
+        
+        $this->form = $objectManagerHelper->getObject(
             CatalogEditForm::class,
             [
                 'layout' => $this->layout,
@@ -96,12 +109,7 @@ class FormTest extends TestCase
     {
         $form = $this->createMock(Form::class);
         $form->expects($this->any())->method('getElement')->willReturn(
-            $this->getMockForAbstractClass(
-                AbstractElement::class,
-                [],
-                '',
-                false
-            )
+            $this->createMock(AbstractElement::class)
         );
         $this->formFactory->expects($this->once())
             ->method('create')
@@ -110,10 +118,10 @@ class FormTest extends TestCase
         $form->expects($this->once())
             ->method('addFieldset')
             ->willReturn($fieldset);
-        $storeElement = $this->getMockBuilder(AbstractElement::class)
-            ->addMethods(['setAfterElementHtml', 'setValues'])
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $storeElement = $this->createPartialMockWithReflection(
+            AbstractElement::class,
+            ['setAfterElementHtml', 'setValues']
+        );
         $fieldset
             ->method('addField')
             ->willReturnCallback(function ($arg1, $arg2, $arg3) use ($storeElement) {
@@ -147,7 +155,7 @@ class FormTest extends TestCase
         $storeElement->expects($this->once())->method('setValues')->with([]);
 
         $this->layout->expects($this->once())->method('createBlock')
-            ->willReturn($this->getMockForAbstractClass(RendererInterface::class));
+            ->willReturn($this->createMock(RendererInterface::class));
 
         $this->form->toHtml();
     }

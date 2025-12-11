@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright 2025 Adobe
+ * All Rights Reserved.
+ */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminVerifyBehaviorOfDefaultStatusForProcessingStateTest">
+        <annotations>
+            <features value="Sales"/>
+            <stories value="Validate Auto-Assignment of Custom Status for Processing State"/>
+            <title value="Verify default Status Behavior for Processing State When Custom Status Is Set as Default"/>
+            <description value="Default order status for the Processing state is correctly updated when a custom status is assigned as default and reverts when the custom status is unassigned"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="AC-15125"/>
+            <group value="Sales"/>
+        </annotations>
+        <before>
+            <!-- Precondition: Login as admin -->
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+        </before>
+        <after>
+            <!--Logout from admin-->
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+        <!--Step 1: Go to admin Stores => Order Status -->
+        <actionGroup ref="AdminGoToOrderStatusPageActionGroup" stepKey="goToOrderStatusPageToAssertChanges"/>
+        <!--Step 2: Verify the default status for the order status Processing -->
+        <actionGroup ref="FilterOrderStatusByLabelAndCodeActionGroup" stepKey="filterOrderStatusGrid">
+            <argument name="statusLabel" value="{{OrderStatus.processing}}"/>
+            <argument name="statusCode" value="{{orderStatus.value}}"/>
+        </actionGroup>
+        <!-- Default Status for processing should be displayed as Yes -->
+        <waitForText selector="{{AdminOrderStatusGridSection.gridCell('1', 'Default Status')}}" userInput="{{EnableClearShoppingCart.textValue}}" stepKey="seeOrderStatusInOrderGrid"/>
+        <!--Step 3: Create a status  "Ready To Pickup" and bind it to "Processing" state-->
+        <actionGroup ref="AdminClickCreateNewStatusButtonOnOrderStatusPageActionGroup" stepKey="clickAgainCreateNewStatus"/>
+        <actionGroup ref="AdminOrderStatusFormFillAndSave" stepKey="fillFormAgainAndClickSave">
+            <argument name="status" value="{{readyToPickup.code}}"/>
+            <argument name="label" value="{{readyToPickup.label}}"/>
+        </actionGroup>
+        <actionGroup ref="AssertOrderStatusFormSaveSuccess" stepKey="seeAgainFormSaveSuccess"/>
+        <!--Step 4: Select Use Order Status As Default checkbox and click on Save Status Assignment -->
+        <actionGroup ref="AdminOrderStatusToStateAssignActionGroup" stepKey="resetDefaultStatusToState">
+            <argument name="orderStatus" value="{{readyToPickup.label}}"/>
+            <argument name="orderState" value="{{OrderStatus.processing}}"/>
+        </actionGroup>
+        <!--Step 5: Verify the default status for the order status Ready To Pickup -->
+        <actionGroup ref="FilterOrderStatusByLabelAndCodeActionGroup" stepKey="filterOrderStatusGridForReadyToPickup">
+            <argument name="statusLabel" value="{{readyToPickup.label}}"/>
+            <argument name="statusCode" value="{{readyToPickup.code}}"/>
+        </actionGroup>
+        <!-- Default Status for Ready To Pickup should be displayed as Yes -->
+        <waitForText selector="{{AdminOrderStatusGridSection.gridCell('1', 'Default Status')}}" userInput="{{EnableClearShoppingCart.textValue}}" stepKey="seeOrderStatus"/>
+        <!--Step 6: Verify the default status for the order status Processing -->
+        <actionGroup ref="FilterOrderStatusByLabelAndCodeActionGroup" stepKey="filterOrderStatusGridAfterDefaultChange">
+            <argument name="statusLabel" value="{{OrderStatus.processing}}"/>
+            <argument name="statusCode" value="{{orderStatus.value}}"/>
+        </actionGroup>
+        <!-- Default Status for processing should be displayed as No -->
+        <waitForText selector="{{AdminOrderStatusGridSection.gridCell('1', 'Default Status')}}" userInput="{{DisableClearShoppingCart.textValue}}" stepKey="seeOrderStatusInGrid"/>
+        <!--Step 7: Click on Unassign for the order status Ready To Pickup -->
+        <actionGroup ref="FilterOrderStatusByLabelAndCodeActionGroup" stepKey="filterOrderStatusGridForUnassign">
+            <argument name="statusLabel" value="{{readyToPickup.label}}"/>
+            <argument name="statusCode" value="{{readyToPickup.code}}"/>
+        </actionGroup>
+        <actionGroup ref="AdminUnassignOrderStatusActionGroup" stepKey="unassignOrderStatus"/>
+        <!--Step 8: Verify the default status for the order status Processing -->
+        <actionGroup ref="FilterOrderStatusByLabelAndCodeActionGroup" stepKey="filterStatusForOrderInGrid">
+            <argument name="statusLabel" value="{{OrderStatus.processing}}"/>
+            <argument name="statusCode" value="{{orderStatus.value}}"/>
+        </actionGroup>
+        <!-- Default Status for processing should be displayed as Yes -->
+        <waitForText selector="{{AdminOrderStatusGridSection.gridCell('1', 'Default Status')}}" userInput="{{EnableClearShoppingCart.textValue}}" stepKey="seeStatusForOrderInOrderGrid"/>
+    </test>
+</tests>

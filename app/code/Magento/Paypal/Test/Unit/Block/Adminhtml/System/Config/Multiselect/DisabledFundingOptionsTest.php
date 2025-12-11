@@ -1,19 +1,22 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Paypal\Test\Unit\Block\Adminhtml\System\Config\Multiselect;
 
+use Magento\Directory\Helper\Data as DirectoryHelper;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\Data\Form\Element\AbstractElement;
+use Magento\Framework\Json\Helper\Data as JsonHelper;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\View\Helper\Js;
 use Magento\Paypal\Block\Adminhtml\System\Config\MultiSelect\DisabledFundingOptions;
 use Magento\Paypal\Model\Config;
 use Magento\Paypal\Model\Config\StructurePlugin;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -47,19 +50,20 @@ class DisabledFundingOptionsTest extends TestCase
     protected function setUp(): void
     {
         $helper = new ObjectManager($this);
-        $this->element = $this->getMockForAbstractClass(
+        $this->element = $this->createPartialMock(
             AbstractElement::class,
-            [],
-            '',
-            false,
-            true,
-            true,
             ['getHtmlId', 'getElementHtml', 'getName']
         );
-        $this->request = $this->getMockForAbstractClass(RequestInterface::class);
+        $this->request = $this->createMock(RequestInterface::class);
         $this->jsHelper = $this->createMock(Js::class);
         $this->config = $this->createMock(Config::class);
         $this->element->setValues($this->getDefaultFundingOptions());
+        
+        $helper->prepareObjectManager([
+            [JsonHelper::class, $this->createMock(JsonHelper::class)],
+            [DirectoryHelper::class, $this->createMock(DirectoryHelper::class)]
+        ]);
+        
         $this->model = $helper->getObject(
             DisabledFundingOptions::class,
             ['request' => $this->request, 'jsHelper' => $this->jsHelper, 'config' => $this->config]
@@ -70,8 +74,8 @@ class DisabledFundingOptionsTest extends TestCase
      * @param null|string $requestCountry
      * @param null|string $merchantCountry
      * @param bool $shouldContainPaypalCredit
-     * @dataProvider isPaypalCreditAvailableDataProvider
      */
+    #[DataProvider('isPaypalCreditAvailableDataProvider')]
     public function testIsPaypalCreditAvailable(
         ?string $requestCountry,
         ?string $merchantCountry,
@@ -90,11 +94,9 @@ class DisabledFundingOptionsTest extends TestCase
         $this->config->expects($this->any())
             ->method('getMerchantCountry')
             ->willReturnCallback(
-
-                    function () use ($merchantCountry) {
-                        return $merchantCountry;
-                    }
-
+                function () use ($merchantCountry) {
+                    return $merchantCountry;
+                }
             );
         $this->model->render($this->element);
         $payPalCreditOption = [

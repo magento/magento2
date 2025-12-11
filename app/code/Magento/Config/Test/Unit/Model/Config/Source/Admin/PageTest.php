@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -47,7 +47,7 @@ class PageTest extends TestCase
      */
     protected function setUp(): void
     {
-        $logger = $this->getMockForAbstractClass(LoggerInterface::class);
+        $logger = $this->createMock(LoggerInterface::class);
         $this->_menuModel = new Menu($logger);
         $this->_menuSubModel = new Menu($logger);
 

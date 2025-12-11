@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -13,6 +13,7 @@ use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\Config\Data\ConfigData;
 use Magento\Framework\Setup\Option\TextConfigOption;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -56,13 +57,8 @@ class ConfigOptionsListTest extends TestCase
         ];
 
         $this->objectManager = new ObjectManager($this);
-        $this->connectionValidatorMock = $this->getMockBuilder(ConnectionValidator::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $this->deploymentConfigMock = $this->getMockBuilder(DeploymentConfig::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->connectionValidatorMock = $this->createMock(ConnectionValidator::class);
+        $this->deploymentConfigMock = $this->createMock(DeploymentConfig::class);
 
         $this->model = $this->objectManager->getObject(
             ConfigOptionsList::class,
@@ -131,8 +127,8 @@ class ConfigOptionsListTest extends TestCase
     /**
      * @param array $options
      * @param array $expectedConfigData
-     * @dataProvider getCreateConfigDataProvider
      */
+    #[DataProvider('getCreateConfigDataProvider')]
     public function testCreateConfig($options, $expectedConfigData)
     {
         $result = $this->model->createConfig($options, $this->deploymentConfigMock);

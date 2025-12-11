@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -9,14 +9,18 @@ namespace Magento\CatalogSearch\Test\Unit\Model\Layer\Filter;
 
 use Magento\Catalog\Model\Category;
 use Magento\Catalog\Model\Layer;
+use Magento\Catalog\Model\Layer\Filter\DataProvider\Category as CategoryDataProvider;
 use Magento\Catalog\Model\Layer\Filter\DataProvider\CategoryFactory;
 use Magento\Catalog\Model\Layer\Filter\Item;
 use Magento\Catalog\Model\Layer\Filter\Item\DataBuilder;
 use Magento\Catalog\Model\Layer\Filter\ItemFactory;
+use Magento\CatalogSearch\Model\Layer\Filter\Category as CategoryFilter;
 use Magento\CatalogSearch\Model\ResourceModel\Fulltext\Collection;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\Escaper;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -26,6 +30,7 @@ use PHPUnit\Framework\TestCase;
  */
 class CategoryTest extends TestCase
 {
+    use MockCreationTrait;
     /**
      * @var DataBuilder|MockObject
      */
@@ -47,7 +52,7 @@ class CategoryTest extends TestCase
     private $layer;
 
     /**
-     * @var \Magento\Catalog\Model\Layer\Filter\DataProvider\Category|MockObject
+     * @var CategoryDataProvider|MockObject
      */
     private $dataProvider;
 
@@ -71,78 +76,71 @@ class CategoryTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->request = $this->getMockBuilder(RequestInterface::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['getParam'])
-            ->getMockForAbstractClass();
+        $this->request = $this->createMock(RequestInterface::class);
 
-        $dataProviderFactory = $this->getMockBuilder(CategoryFactory::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['create'])->getMock();
+        $dataProviderFactory = $this->createPartialMock(
+            CategoryFactory::class,
+            ['create']
+        );
 
-        $this->dataProvider = $this->getMockBuilder(\Magento\Catalog\Model\Layer\Filter\DataProvider\Category::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['setCategoryId', 'getCategory'])
-            ->getMock();
+        $this->dataProvider = $this->createPartialMock(
+            CategoryDataProvider::class,
+            ['setCategoryId', 'getCategory']
+        );
 
         $dataProviderFactory->expects($this->once())
             ->method('create')
             ->willReturn($this->dataProvider);
 
-        $this->category = $this->getMockBuilder(Category::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['getId', 'getChildrenCategories', 'getIsActive'])
-            ->getMock();
+        $this->category = $this->createPartialMock(
+            Category::class,
+            ['getId', 'getChildrenCategories', 'getIsActive']
+        );
 
-        $this->dataProvider->expects($this->any())
-            ->method('getCategory')
+        $this->dataProvider->method('getCategory')
             ->willReturn($this->category);
 
-        $this->layer = $this->getMockBuilder(Layer::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['getState', 'getProductCollection'])
-            ->getMock();
+        $this->layer = $this->createPartialMock(
+            Layer::class,
+            ['getState', 'getProductCollection']
+        );
 
-        $this->fulltextCollection = $this->getMockBuilder(Collection::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['addCategoryFilter', 'getFacetedData', 'getSize'])
-            ->getMock();
+        $this->fulltextCollection = $this->createPartialMock(
+            Collection::class,
+            ['addCategoryFilter', 'getFacetedData', 'getSize']
+        );
 
-        $this->layer->expects($this->any())
-            ->method('getProductCollection')
+        $this->layer->method('getProductCollection')
             ->willReturn($this->fulltextCollection);
 
-        $this->itemDataBuilder = $this->getMockBuilder(DataBuilder::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['addItemData', 'build'])
-            ->getMock();
+        $this->itemDataBuilder = $this->createPartialMock(
+            DataBuilder::class,
+            ['addItemData', 'build']
+        );
 
-        $this->filterItemFactory = $this->getMockBuilder(ItemFactory::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['create'])
-            ->getMock();
+        $this->filterItemFactory = $this->createPartialMock(
+            ItemFactory::class,
+            ['create']
+        );
 
-        $filterItem = $this->getMockBuilder(Item::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['setFilter', 'setLabel', 'setValue', 'setCount'])
-            ->getMock();
-        $filterItem->expects($this->any())
-            ->method($this->anything())->willReturnSelf();
-        $this->filterItemFactory->expects($this->any())
-            ->method('create')
+        $filterItem = $this->createPartialMockWithReflection(
+            Item::class,
+            ['setFilter', 'setLabel', 'setValue', 'setCount']
+        );
+        $filterItem->method($this->anything())->willReturnSelf();
+        $this->filterItemFactory->method('create')
             ->willReturn($filterItem);
 
-        $escaper = $this->getMockBuilder(Escaper::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['escapeHtml'])
-            ->getMock();
-        $escaper->expects($this->any())
-            ->method('escapeHtml')
+        $escaper = $this->createPartialMock(
+            Escaper::class,
+            ['escapeHtml']
+        );
+        $escaper->method('escapeHtml')
             ->willReturnArgument(0);
 
         $objectManagerHelper = new ObjectManagerHelper($this);
         $this->target = $objectManagerHelper->getObject(
-            \Magento\CatalogSearch\Model\Layer\Filter\Category::class,
+            CategoryFilter::class,
             [
                 'categoryDataProviderFactory' => $dataProviderFactory,
                 'layer' => $this->layer,
@@ -159,8 +157,8 @@ class CategoryTest extends TestCase
      * @param $isIdUsed
      *
      * @return void
-     * @dataProvider applyWithEmptyRequestDataProvider
      */
+    #[DataProvider('applyWithEmptyRequestDataProvider')]
     public function testApplyWithEmptyRequest($requestValue, $idValue): void
     {
         $requestField = 'test_request_var';
@@ -250,14 +248,13 @@ class CategoryTest extends TestCase
      */
     public function testGetItems(): void
     {
-        $this->category->expects($this->any())
-            ->method('getIsActive')
+        $this->category->method('getIsActive')
             ->willReturn(true);
 
-        $category1 = $this->getMockBuilder(Category::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['getId', 'getName', 'getIsActive'])
-            ->getMock();
+        $category1 = $this->createPartialMock(
+            Category::class,
+            ['getId', 'getName', 'getIsActive']
+        );
         $category1->expects($this->atLeastOnce())
             ->method('getId')
             ->willReturn(120);
@@ -268,10 +265,10 @@ class CategoryTest extends TestCase
             ->method('getIsActive')
             ->willReturn(true);
 
-        $category2 = $this->getMockBuilder(Category::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['getId', 'getName', 'getIsActive'])
-            ->getMock();
+        $category2 = $this->createPartialMock(
+            Category::class,
+            ['getId', 'getName', 'getIsActive']
+        );
         $category2->expects($this->atLeastOnce())
             ->method('getId')
             ->willReturn(5641);
@@ -282,10 +279,10 @@ class CategoryTest extends TestCase
             ->method('getIsActive')
             ->willReturn(true);
 
-        $category3 = $this->getMockBuilder(Category::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['getId', 'getName', 'getIsActive'])
-            ->getMock();
+        $category3 = $this->createPartialMock(
+            Category::class,
+            ['getId', 'getName', 'getIsActive']
+        );
         $category3->expects($this->atLeastOnce())
             ->method('getId')
             ->willReturn(777);

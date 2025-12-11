@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -19,6 +19,7 @@ use Magento\Framework\View\Element\Template\Context;
 use Magento\Framework\View\LayoutInterface;
 use Magento\Newsletter\Model\Subscriber;
 use Magento\Newsletter\Model\SubscriberFactory;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -29,11 +30,11 @@ use PHPUnit\Framework\TestCase;
 class InfoTest extends TestCase
 {
     /** Constant values used for testing */
-    const CUSTOMER_ID = 1;
+    private const CUSTOMER_ID = 1;
 
-    const CHANGE_PASSWORD_URL = 'http://localhost/index.php/account/edit/changepass/1';
+    private const CHANGE_PASSWORD_URL = 'http://localhost/index.php/account/edit/changepass/1';
 
-    const EMAIL_ADDRESS = 'john.doe@example.com';
+    private const EMAIL_ADDRESS = 'john.doe@example.com';
 
     /** @var MockObject|Context */
     private $_context;
@@ -70,10 +71,10 @@ class InfoTest extends TestCase
     {
         $this->currentCustomer = $this->createMock(CurrentCustomer::class);
 
-        $urlBuilder = $this->getMockForAbstractClass(UrlInterface::class, [], '', false);
+        $urlBuilder = $this->createMock(UrlInterface::class);
         $urlBuilder->expects($this->any())->method('getUrl')->willReturn(self::CHANGE_PASSWORD_URL);
 
-        $layout = $this->getMockForAbstractClass(LayoutInterface::class, [], '', false);
+        $layout = $this->createMock(LayoutInterface::class);
         $this->_formRegister = $this->createMock(Register::class);
         $layout->expects($this->any())
             ->method('getBlockSingleton')
@@ -89,7 +90,7 @@ class InfoTest extends TestCase
         $this->_customerSession = $this->createMock(Session::class);
         $this->_customerSession->expects($this->any())->method('getId')->willReturn(self::CUSTOMER_ID);
 
-        $this->_customer = $this->getMockForAbstractClass(CustomerInterface::class);
+        $this->_customer = $this->createMock(CustomerInterface::class);
         $this->_customer->expects($this->any())->method('getEmail')->willReturn(self::EMAIL_ADDRESS);
         $this->_helperView = $this->getMockBuilder(
             View::class
@@ -168,9 +169,8 @@ class InfoTest extends TestCase
     /**
      * @param bool $isSubscribed Is the subscriber subscribed?
      * @param bool $expectedValue The expected value - Whether the subscriber is subscribed or not.
-     *
-     * @dataProvider getIsSubscribedProvider
-     */
+     * */
+    #[DataProvider('getIsSubscribedProvider')]
     public function testGetIsSubscribed($isSubscribed, $expectedValue)
     {
         $this->_subscriber->expects($this->once())->method('isSubscribed')->willReturn($isSubscribed);
@@ -188,9 +188,8 @@ class InfoTest extends TestCase
     /**
      * @param bool $isNewsletterEnabled Determines if the newsletter is enabled
      * @param bool $expectedValue The expected value - Whether the newsletter is enabled or not
-     *
-     * @dataProvider isNewsletterEnabledProvider
-     */
+     * */
+    #[DataProvider('isNewsletterEnabledProvider')]
     public function testIsNewsletterEnabled($isNewsletterEnabled, $expectedValue)
     {
         $this->_formRegister->expects($this->once())

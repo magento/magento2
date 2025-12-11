@@ -14,6 +14,7 @@ use Magento\Framework\Authorization;
 use Magento\Framework\Exception\AuthorizationException;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Customer\Plugin\AsyncRequestCustomerGroupAuthorization;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -53,7 +54,7 @@ class AsyncRequestCustomerGroupAuthorizationTest extends TestCase
             'authorization' => $this->authorizationMock
         ]);
         $this->massScheduleMock = $this->createMock(MassSchedule::class);
-        $this->customerRepository = $this->getMockForAbstractClass(CustomerRepositoryInterface::class);
+        $this->customerRepository = $this->createMock(CustomerRepositoryInterface::class);
     }
 
     /**
@@ -64,9 +65,8 @@ class AsyncRequestCustomerGroupAuthorizationTest extends TestCase
      * @param bool $isAllowed
      * @param int $willThrowException
      * @return void
-     * @throws AuthorizationException
-     * @dataProvider customerDataProvider
-     */
+     * @throws AuthorizationException */
+    #[DataProvider('customerDataProvider')]
     public function testBeforePublishMass(
         int $groupId,
         int $customerId,
@@ -75,10 +75,8 @@ class AsyncRequestCustomerGroupAuthorizationTest extends TestCase
     ): void {
         if ($willThrowException) {
             $this->expectException(AuthorizationException::class);
-        } else {
-            $this->expectNotToPerformAssertions();
         }
-        $customer = $this->getMockForAbstractClass(CustomerInterface::class);
+        $customer = $this->createMock(CustomerInterface::class);
         $customer->method('getGroupId')->willReturn($groupId);
         $customer->method('getId')->willReturn($customerId);
         $this->customerRepository->method('getById')->with($customerId)->willReturn($customer);

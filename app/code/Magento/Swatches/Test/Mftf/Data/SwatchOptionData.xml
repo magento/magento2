@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
-  */
+/**
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
+ */
 -->
 
 <entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -16,5 +16,17 @@
     <entity name="visualSwatchOption2" type="SwatchOption">
         <data key="admin_label" unique="suffix">VisualOpt2</data>
         <data key="default_label" unique="suffix">VisualOpt2</data>
+    </entity>
+    <entity name="textSwatchOption1" type="SwatchOption">
+        <data key="admin_label">textSwatchOption1</data>
+        <data key="default_label">textSwatchOption1</data>
+    </entity>
+    <entity name="textSwatchOption2" type="SwatchOption">
+        <data key="admin_label">textSwatchOption2</data>
+        <data key="default_label">textSwatchOption2</data>
+    </entity>
+    <entity name="textSwatchOption3" type="SwatchOption">
+        <data key="admin_label">textSwatchOption3</data>
+        <data key="default_label">textSwatchOption3</data>
     </entity>
 </entities>

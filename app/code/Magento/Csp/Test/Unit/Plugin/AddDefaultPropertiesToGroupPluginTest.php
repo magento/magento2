@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2024 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -10,12 +10,15 @@ namespace Magento\Csp\Test\Unit\Plugin;
 use Magento\Csp\Model\SubresourceIntegrity;
 use Magento\Csp\Model\SubresourceIntegrityRepository;
 use Magento\Csp\Model\SubresourceIntegrityRepositoryPool;
+use Magento\Framework\Exception\LocalizedException;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Magento\Csp\Plugin\AddDefaultPropertiesToGroupPlugin;
 use Magento\Framework\View\Asset\File;
 use Magento\Framework\View\Asset\GroupedCollection;
 use Magento\Framework\App\State;
+use Magento\Framework\App\Request\Http;
+use Magento\Csp\Model\SubresourceIntegrity\SriEnabledActions;
 
 /**
  * Test for class Magento\Csp\Plugin\AddDefaultPropertiesToGroupPlugin
@@ -40,6 +43,16 @@ class AddDefaultPropertiesToGroupPluginTest extends TestCase
     private MockObject $stateMock;
 
     /**
+     * @var MockObject
+     */
+    private MockObject $httpMock;
+
+    /**
+     * @var MockObject
+     */
+    private MockObject $sriEnabledActionsMock;
+
+    /**
      * @var AddDefaultPropertiesToGroupPlugin
      */
     private AddDefaultPropertiesToGroupPlugin $plugin;
@@ -52,21 +65,22 @@ class AddDefaultPropertiesToGroupPluginTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $this->integrityRepositoryPoolMock = $this->getMockBuilder(SubresourceIntegrityRepositoryPool::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['get'])
-            ->getMock();
-        $this->assetInterfaceMock = $this->getMockBuilder(File::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['getPath'])
-            ->getMockForAbstractClass();
-        $this->stateMock = $this->getMockBuilder(State::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['getAreaCode'])
-            ->getMock();
+        $this->integrityRepositoryPoolMock = $this->createPartialMock(
+            SubresourceIntegrityRepositoryPool::class,
+            ['get']
+        );
+        $this->assetInterfaceMock = $this->createPartialMock(File::class, ['getPath']);
+        $this->stateMock = $this->createPartialMock(State::class, ['getAreaCode']);
+        $this->httpMock = $this->createPartialMock(Http::class, ['getFullActionName']);
+        $this->sriEnabledActionsMock = $this->createPartialMock(
+            SriEnabledActions::class,
+            ['isPaymentPageAction']
+        );
         $this->plugin = new AddDefaultPropertiesToGroupPlugin(
             $this->stateMock,
-            $this->integrityRepositoryPoolMock
+            $this->integrityRepositoryPoolMock,
+            $this->httpMock,
+            $this->sriEnabledActionsMock
         );
     }
 
@@ -74,16 +88,18 @@ class AddDefaultPropertiesToGroupPluginTest extends TestCase
      * Test for plugin with Js assets
      *
      * @return void
+     * @throws LocalizedException
      */
     public function testBeforeGetFilteredProperties(): void
     {
-        $integrityRepositoryMock = $this->getMockBuilder(SubresourceIntegrityRepository::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['getByPath'])
-            ->getMock();
-        $groupedCollectionMock = $this->getMockBuilder(GroupedCollection::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $actionName = "sales_order_create_index";
+        $this->sriEnabledActionsMock->expects($this->once())->method('isPaymentPageAction')->willReturn(true);
+        $this->httpMock->expects($this->once())->method('getFullActionName')->willReturn($actionName);
+        $integrityRepositoryMock = $this->createPartialMock(
+            SubresourceIntegrityRepository::class,
+            ['getByPath']
+        );
+        $groupedCollectionMock = $this->createMock(GroupedCollection::class);
         $path = 'jquery.js';
         $area = 'base';
 

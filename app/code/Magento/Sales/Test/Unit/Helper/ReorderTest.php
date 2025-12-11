@@ -1,13 +1,12 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Sales\Test\Unit\Helper;
 
-use Magento\Customer\Model\Session;
 use Magento\Framework\App\Config;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\Helper\Context;
@@ -41,11 +40,6 @@ class ReorderTest extends TestCase
     protected $orderMock;
 
     /**
-     * @var MockObject|Session
-     */
-    protected $customerSessionMock;
-
-    /**
      * @var OrderRepositoryInterface|MockObject
      */
     protected $repositoryMock;
@@ -66,15 +60,10 @@ class ReorderTest extends TestCase
             ->method('getScopeConfig')
             ->willReturn($this->scopeConfigMock);
 
-        $this->customerSessionMock = $this->getMockBuilder(Session::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-
         $this->repositoryMock = $this->getMockBuilder(OrderRepositoryInterface::class)
             ->getMockForAbstractClass();
         $this->helper = new Reorder(
             $contextMock,
-            $this->customerSessionMock,
             $this->repositoryMock
         );
 
@@ -157,38 +146,15 @@ class ReorderTest extends TestCase
     }
 
     /**
-     * Tests what happens if the customer is not logged in and the store does allow re-orders.
-     *
-     * @return void
-     */
-    public function testCanReorderCustomerNotLoggedIn()
-    {
-        $this->setupOrderMock(true);
-
-        $this->customerSessionMock->expects($this->once())
-            ->method('isLoggedIn')
-            ->willReturn(false);
-        $this->repositoryMock->expects($this->once())
-            ->method('get')
-            ->with(1)
-            ->willReturn($this->orderMock);
-        $this->assertTrue($this->helper->canReorder(1));
-    }
-
-    /**
      * Tests what happens if the customer is logged in and the order does or does not allow reorders.
      *
      * @param bool $orderCanReorder
      * @return void
      * @dataProvider getOrderCanReorder
      */
-    public function testCanReorderCustomerLoggedInAndOrderCanReorder($orderCanReorder)
+    public function testCanReorder($orderCanReorder)
     {
         $this->setupOrderMock(true);
-
-        $this->customerSessionMock->expects($this->once())
-            ->method('isLoggedIn')
-            ->willReturn(true);
 
         $this->orderMock->expects($this->once())
             ->method('canReorder')

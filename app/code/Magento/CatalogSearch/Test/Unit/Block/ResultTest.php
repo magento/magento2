@@ -1,12 +1,13 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\CatalogSearch\Test\Unit\Block;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\Catalog\Block\Product\ListProduct;
 use Magento\Catalog\Model\Layer;
 use Magento\Catalog\Model\Layer\Resolver;
@@ -85,8 +86,8 @@ class ResultTest extends TestCase
     /**
      * @param bool $isMinQueryLength
      * @param string $expectedResult
-     * @dataProvider getNoResultTextDataProvider
      */
+    #[DataProvider('getNoResultTextDataProvider')]
     public function testGetNoResultText($isMinQueryLength, $expectedResult)
     {
         $this->dataMock->expects(

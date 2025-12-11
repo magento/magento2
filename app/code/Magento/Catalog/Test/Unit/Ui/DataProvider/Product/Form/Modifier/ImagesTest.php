@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -26,7 +26,7 @@ class ImagesTest extends AbstractModifierTestCase
 
     public function testModifyData()
     {
-        $this->productMock->expects($this->once())->method('getId')->willReturn(2051);
+        $this->productMock->setId(2051);
         $actualResult = $this->getModel()->modifyData($this->getSampleData());
         $this->assertSame("", $actualResult[2051]['product']['media_gallery']['images'][0]['label']);
     }

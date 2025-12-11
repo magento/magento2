@@ -14,6 +14,8 @@ use Magento\Bundle\Test\Fixture\Option as BundleOptionFixture;
 use Magento\Bundle\Test\Fixture\Product as BundleProductFixture;
 use Magento\Catalog\Test\Fixture\Category as CategoryFixture;
 use Magento\Catalog\Test\Fixture\Product as ProductFixture;
+use Magento\Checkout\Test\Fixture\SetDeliveryMethod;
+use Magento\Checkout\Test\Fixture\SetShippingAddress;
 use Magento\ConfigurableProduct\Test\Fixture\AddProductToCart as AddConfigurableProductToCartFixture;
 use Magento\ConfigurableProduct\Test\Fixture\Attribute as AttributeFixture;
 use Magento\ConfigurableProduct\Test\Fixture\Product as ConfigurableProductFixture;
@@ -861,5 +863,244 @@ class DiscountTest extends TestCase
 
         $this->assertEquals(-123, $this->total->getDiscountAmount());
         $this->assertEqualsCanonicalizing([$rule1Id], explode(',', $quote1->getAppliedRuleIds()));
+    }
+
+    #[
+        DataFixture(ProductFixture::class, ['price' => 100], 'p1'),
+        DataFixture(
+            RuleFixture::class,
+            [
+                'coupon_code' => '%uniqid%',
+                'stop_rules_processing'=> 0,
+                'discount_amount' => 30,
+                'simple_action' => Rule::BY_PERCENT_ACTION,
+                'sort_order' => 1
+            ],
+            'rule1'
+        ),
+        DataFixture(
+            RuleFixture::class,
+            [
+                'stop_rules_processing'=> 0,
+                'discount_amount' => 10,
+                'simple_action' => Rule::BY_FIXED_ACTION,
+                'sort_order' => 2,
+                'apply_to_shipping' => 1,
+                'conditions' => [
+                    ['attribute' => 'base_subtotal_with_discount', 'operator' => '>', 'value' => 75]
+                ],
+            ],
+            'rule2'
+        ),
+        DataFixture(GuestCartFixture::class, as: 'cart1'),
+        DataFixture(AddProductToCartFixture::class, ['cart_id' => '$cart1.id$', 'product_id' => '$p1.id$']),
+        DataFixture(SetShippingAddress::class, ['cart_id' => '$cart1.id$']),
+        DataFixture(SetDeliveryMethod::class, ['cart_id' => '$cart1.id$']),
+    ]
+    public function testSubtotalWithDiscountShouldReflectPreviouslyAppliedRules(): void
+    {
+        $rule1Id = (int)$this->fixtures->get('rule1')->getId();
+        $rule2Id = (int)$this->fixtures->get('rule2')->getId();
+        $coupon = $this->fixtures->get('rule1')->getCouponCode();
+        $cart = $this->quoteRepository->get((int)$this->fixtures->get('cart1')->getId());
+
+        // Check that rule2 is applied before the coupon code is applied
+        // Note: the subtotal with discount includes the shipping discount
+        $this->assertEquals(85, $cart->getSubtotalWithDiscount());
+        $this->assertEquals(85, $cart->getBaseSubtotalWithDiscount());
+        // Bypass getter methods for subtotal_with_discount and base_subtotal_with_discount to retrieve stored values
+        $this->assertEquals(85, $cart->getShippingAddress()->getData('subtotal_with_discount'));
+        $this->assertEquals(85, $cart->getShippingAddress()->getData('base_subtotal_with_discount'));
+        $this->assertEquals(-15, $cart->getShippingAddress()->getBaseDiscountAmount());
+        $this->assertEquals(-15, $cart->getShippingAddress()->getDiscountAmount());
+        $this->assertEquals(5, $cart->getShippingAddress()->getShippingDiscountAmount());
+        $this->assertEquals(5, $cart->getShippingAddress()->getBaseShippingDiscountAmount());
+        $this->assertEquals([$rule2Id], explode(',', $cart->getAppliedRuleIds()));
+        $this->assertEquals([$rule2Id], explode(',', current($cart->getItems())->getAppliedRuleIds()));
+
+        // Now apply the coupon code to ensure that the subtotal with discount is recalculated correctly
+        $cart->setCouponCode($coupon);
+        // This is needed because applied_rule_ids is not properly reset in the code for subsequent recollect.
+        $cart->setAppliedRuleIds('');
+        $cart->collectTotals();
+
+        // Check that rule1 is applied after the coupon code is applied and rule2 is no longer applied
+        $this->assertEquals(70, $cart->getSubtotalWithDiscount());
+        $this->assertEquals(70, $cart->getBaseSubtotalWithDiscount());
+        $this->assertEquals(70, $cart->getShippingAddress()->getData('subtotal_with_discount'));
+        $this->assertEquals(70, $cart->getShippingAddress()->getData('base_subtotal_with_discount'));
+        $this->assertEquals(-30, $cart->getShippingAddress()->getBaseDiscountAmount());
+        $this->assertEquals(-30, $cart->getShippingAddress()->getDiscountAmount());
+        $this->assertEquals(0, $cart->getShippingAddress()->getShippingDiscountAmount());
+        $this->assertEquals(0, $cart->getShippingAddress()->getBaseShippingDiscountAmount());
+        $this->assertEquals([$rule1Id], explode(',', $cart->getAppliedRuleIds()));
+        $this->assertEquals([$rule1Id], explode(',', current($cart->getItems())->getAppliedRuleIds()));
+    }
+
+    #[
+        DataFixture(ProductFixture::class, ['price' => 100], 'p1'),
+        DataFixture(
+            RuleFixture::class,
+            [
+                'coupon_code' => '%uniqid%',
+                'stop_rules_processing'=> 0,
+                'discount_amount' => 30,
+                'simple_action' => Rule::BY_PERCENT_ACTION,
+                'sort_order' => 1,
+            ],
+            'rule1'
+        ),
+        DataFixture(
+            RuleFixture::class,
+            [
+                'stop_rules_processing'=> 0,
+                'discount_amount' => 10,
+                'simple_action' => Rule::BY_FIXED_ACTION,
+                'sort_order' => 2,
+                'apply_to_shipping' => 1,
+                'conditions' => [
+                    ['attribute' => 'base_subtotal_with_discount', 'operator' => '>', 'value' => 75]
+                ],
+                'actions' => [
+                    // Ensures that the discount is applied to shipping only
+                    ['attribute' => 'quote_item_price', 'operator' => '<', 'value' => 0],
+                ],
+            ],
+            'rule2'
+        ),
+        DataFixture(GuestCartFixture::class, as: 'cart1'),
+        DataFixture(AddProductToCartFixture::class, ['cart_id' => '$cart1.id$', 'product_id' => '$p1.id$']),
+        DataFixture(SetShippingAddress::class, ['cart_id' => '$cart1.id$']),
+        DataFixture(SetDeliveryMethod::class, ['cart_id' => '$cart1.id$']),
+    ]
+    public function testSubtotalWithDiscountShouldReflectPreviouslyAppliedRulesForShippingDiscountOnlyRule(): void
+    {
+        $rule1Id = (int)$this->fixtures->get('rule1')->getId();
+        $rule2Id = (int)$this->fixtures->get('rule2')->getId();
+        $coupon = $this->fixtures->get('rule1')->getCouponCode();
+        $cart = $this->quoteRepository->get((int)$this->fixtures->get('cart1')->getId());
+
+        // Check that rule2 is applied before the coupon code is applied
+        // Note: the subtotal with discount includes the shipping discount
+        $this->assertEquals(95, $cart->getSubtotalWithDiscount());
+        $this->assertEquals(95, $cart->getBaseSubtotalWithDiscount());
+        // Bypass getter methods for subtotal_with_discount and base_subtotal_with_discount to retrieve stored values
+        $this->assertEquals(95, $cart->getShippingAddress()->getData('subtotal_with_discount'));
+        $this->assertEquals(95, $cart->getShippingAddress()->getData('base_subtotal_with_discount'));
+        $this->assertEquals(-5, $cart->getShippingAddress()->getBaseDiscountAmount());
+        $this->assertEquals(-5, $cart->getShippingAddress()->getDiscountAmount());
+        $this->assertEquals(5, $cart->getShippingAddress()->getShippingDiscountAmount());
+        $this->assertEquals(5, $cart->getShippingAddress()->getBaseShippingDiscountAmount());
+        $this->assertEquals([$rule2Id], explode(',', $cart->getAppliedRuleIds()));
+        // rule2 is applied shipping only
+        $this->assertEmpty(current($cart->getItems())->getAppliedRuleIds());
+
+        // Now apply the coupon code to ensure that the subtotal with discount is recalculated correctly
+        $cart->setCouponCode($coupon);
+        // This is needed because applied_rule_ids is not properly reset in the code for subsequent recollect.
+        $cart->setAppliedRuleIds('');
+        $cart->collectTotals();
+
+        // Check that rule1 is applied after the coupon code is applied and rule2 is no longer applied
+        $this->assertEquals(70, $cart->getSubtotalWithDiscount());
+        $this->assertEquals(70, $cart->getBaseSubtotalWithDiscount());
+        $this->assertEquals(70, $cart->getShippingAddress()->getData('subtotal_with_discount'));
+        $this->assertEquals(70, $cart->getShippingAddress()->getData('base_subtotal_with_discount'));
+        $this->assertEquals(-30, $cart->getShippingAddress()->getBaseDiscountAmount());
+        $this->assertEquals(-30, $cart->getShippingAddress()->getDiscountAmount());
+        $this->assertEquals(0, $cart->getShippingAddress()->getShippingDiscountAmount());
+        $this->assertEquals(0, $cart->getShippingAddress()->getBaseShippingDiscountAmount());
+        $this->assertEquals([$rule1Id], explode(',', $cart->getAppliedRuleIds()));
+        $this->assertEquals([$rule1Id], explode(',', current($cart->getItems())->getAppliedRuleIds()));
+    }
+
+    #[
+        DataFixture(ProductFixture::class, ['price' => 100], 'p1'),
+        DataFixture(ProductFixture::class, ['price' => 100], 'p2'),
+        DataFixture(ProductFixture::class, ['price' => 100], 'p3'),
+        DataFixture(
+            RuleFixture::class,
+            [
+                'stop_rules_processing'=> 1,
+                'discount_amount' => 50,
+                'simple_action' => Rule::BY_PERCENT_ACTION,
+                'sort_order' => 1,
+                'actions' => [
+                    ['attribute' => 'sku', 'value' => '$p1.sku$']
+                ],
+            ],
+            'rule1'
+        ),
+        DataFixture(
+            RuleFixture::class,
+            [
+                'stop_rules_processing'=> 0,
+                'discount_amount' => 25,
+                'simple_action' => Rule::BY_PERCENT_ACTION,
+                'sort_order' => 2,
+                'apply_to_shipping' => 0,
+                'conditions' => [
+                    ['attribute' => 'base_subtotal_with_discount', 'operator' => '<', 'value' => 300]
+                ],
+                'actions' => [
+                    ['attribute' => 'sku', 'value' => '$p2.sku$']
+                ],
+            ],
+            'rule2'
+        ),
+        DataFixture(
+            RuleFixture::class,
+            [
+                'stop_rules_processing'=> 0,
+                'discount_amount' => 30,
+                'simple_action' => Rule::BY_FIXED_ACTION,
+                'sort_order' => 3,
+                'conditions' => [
+                    ['attribute' => 'base_subtotal_with_discount', 'operator' => '>', 'value' => 250]
+                ],
+            ],
+            'rule3'
+        ),
+        DataFixture(GuestCartFixture::class, as: 'cart1'),
+        DataFixture(AddProductToCartFixture::class, ['cart_id' => '$cart1.id$', 'product_id' => '$p1.id$']),
+        DataFixture(AddProductToCartFixture::class, ['cart_id' => '$cart1.id$', 'product_id' => '$p2.id$']),
+        DataFixture(AddProductToCartFixture::class, ['cart_id' => '$cart1.id$', 'product_id' => '$p3.id$']),
+    ]
+    public function testSubtotalWithDiscountShouldReflectPreviouslyAppliedRulesWithStopRulesProcessing(): void
+    {
+        $rule1Id = (int)$this->fixtures->get('rule1')->getId();
+        $rule2Id = (int)$this->fixtures->get('rule2')->getId();
+        $p1Id = (int)$this->fixtures->get('p1')->getId();
+        $p2Id = (int)$this->fixtures->get('p2')->getId();
+        $p3Id = (int)$this->fixtures->get('p3')->getId();
+        // Reset the state of the rule validator to ensure that it does not cache any previous state
+        $this->objectManager->get(\Magento\SalesRule\Model\Validator::class)->_resetState();
+        $cart = $this->quoteRepository->get((int)$this->fixtures->get('cart1')->getId());
+        $cart->collectTotals();
+
+        $this->assertEquals(225, $cart->getSubtotalWithDiscount());
+        $this->assertEquals(225, $cart->getBaseSubtotalWithDiscount());
+        // Bypass getter methods for subtotal_with_discount and base_subtotal_with_discount to retrieve stored values
+        $this->assertEquals(225, $cart->getShippingAddress()->getData('subtotal_with_discount'));
+        $this->assertEquals(225, $cart->getShippingAddress()->getData('base_subtotal_with_discount'));
+        $this->assertEquals(-75, $cart->getShippingAddress()->getBaseDiscountAmount());
+        $this->assertEquals(-75, $cart->getShippingAddress()->getDiscountAmount());
+        $this->assertEquals(0, $cart->getShippingAddress()->getShippingDiscountAmount());
+        $this->assertEquals(0, $cart->getShippingAddress()->getBaseShippingDiscountAmount());
+        // Check that rule3 is not applied because it requires subtotal with discount to be greater than 250
+        $this->assertEquals([$rule1Id, $rule2Id], explode(',', $cart->getAppliedRuleIds()));
+        // rule2 is applied shipping only
+        $items= [];
+        foreach ($cart->getAllItems() as $item) {
+            $items[$item->getProductId()] = $item;
+        }
+        $this->assertEquals([$rule1Id], explode(',', $items[$p1Id]->getAppliedRuleIds()));
+        $this->assertEquals(50, $items[$p1Id]->getBaseDiscountAmount());
+
+        $this->assertEquals([$rule2Id], explode(',', $items[$p2Id]->getAppliedRuleIds()));
+        $this->assertEquals(25, $items[$p2Id]->getBaseDiscountAmount());
+
+        $this->assertEmpty($items[$p3Id]->getAppliedRuleIds());
+        $this->assertEquals(0, $items[$p3Id]->getBaseDiscountAmount());
     }
 }

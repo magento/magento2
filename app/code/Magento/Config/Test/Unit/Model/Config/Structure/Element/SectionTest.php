@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -41,10 +41,9 @@ class SectionTest extends TestCase
     protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
-        $this->elementVisibilityMock = $this->getMockBuilder(ElementVisibilityInterface::class)
-            ->getMockForAbstractClass();
+        $this->elementVisibilityMock = $this->createMock(ElementVisibilityInterface::class);
         $this->_storeManagerMock = $this->createMock(StoreManager::class);
-        $this->_authorizationMock = $this->getMockForAbstractClass(AuthorizationInterface::class);
+        $this->_authorizationMock = $this->createMock(AuthorizationInterface::class);
 
         $this->_model = $objectManager->getObject(
             Section::class,

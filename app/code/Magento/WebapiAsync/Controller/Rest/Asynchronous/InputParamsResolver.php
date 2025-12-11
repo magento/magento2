@@ -1,8 +1,7 @@
 <?php
 /**
- * Copyright 2025 Adobe
- * All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 
 declare(strict_types=1);
@@ -72,6 +71,11 @@ class InputParamsResolver
     private $methodsMap;
 
     /**
+     * @var array
+     */
+    private array $inputData = [];
+
+    /**
      * Initialize dependencies.
      *
      * @param RestRequest $request
@@ -133,6 +137,12 @@ class InputParamsResolver
         $routeServiceMethod = $route->getServiceMethod();
         $this->inputArraySizeLimitValue->set($route->getInputArraySizeLimit());
 
+        if (!array_is_list($inputData)) {
+            throw new Exception(
+                __('Request body must be an array'),
+            );
+        }
+
         $this->validateParameters($routeServiceClass, $routeServiceMethod, array_keys($route->getParameters()));
 
         foreach ($inputData as $key => $singleEntityParams) {
@@ -157,8 +167,14 @@ class InputParamsResolver
      */
     public function getInputData()
     {
+        if (!empty($this->inputData)) {
+            return $this->inputData;
+        }
+
         if ($this->isBulk === false) {
-            return [$this->inputParamsResolver->getInputData()];
+            $this->inputData = [$this->inputParamsResolver->getInputData()];
+
+            return $this->inputData;
         }
         $inputData = $this->request->getRequestData();
 
@@ -168,7 +184,7 @@ class InputParamsResolver
             $inputData = array_merge($requestBodyParams, $inputData);
         }
 
-        return array_map(function ($singleEntityParams) {
+        $this->inputData = array_map(function ($singleEntityParams) {
             if (is_array($singleEntityParams)) {
                 $singleEntityParams = $this->filterInputData($singleEntityParams);
                 $singleEntityParams = $this->paramsOverrider->override(
@@ -179,6 +195,8 @@ class InputParamsResolver
 
             return $singleEntityParams;
         }, $inputData);
+
+        return $this->inputData;
     }
 
     /**

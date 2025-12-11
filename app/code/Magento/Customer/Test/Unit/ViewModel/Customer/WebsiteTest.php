@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 
 declare(strict_types=1);
@@ -12,6 +12,7 @@ use Magento\Customer\ViewModel\Customer\Website as CustomerWebsite;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\Store\Model\System\Store as SystemStore;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Magento\Store\Model\Website;
 use Magento\Store\Model\Store;
@@ -42,7 +43,7 @@ class WebsiteTest extends TestCase
     protected function setUp(): void
     {
         $this->systemStore = $this->createMock(SystemStore::class);
-        $this->scopeConfig = $this->getMockForAbstractClass(ScopeConfigInterface::class);
+        $this->scopeConfig = $this->createMock(ScopeConfigInterface::class);
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->customerWebsite = $this->objectManagerHelper->getObject(
             CustomerWebsite::class,
@@ -71,9 +72,9 @@ class WebsiteTest extends TestCase
      * Test that method return correct array of options
      *
      * @param array $options
-     * @dataProvider dataProviderOptionsArray
      * @return void
      */
+    #[DataProvider('dataProviderOptionsArray')]
     public function testToOptionArray(array $options): void
     {
         $this->scopeConfig->method('getValue')

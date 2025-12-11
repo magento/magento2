@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Quote\Model\Quote\Address;
 
@@ -87,7 +87,6 @@ use Magento\Quote\Model\Quote;
  * @method float getBaseDiscountTaxCompensationAmount()
  * @method \Magento\Quote\Model\Quote\Address\Item setBaseDiscountTaxCompensationAmount(float $value)
  *
- * @author      Magento Core Team <core@magentocommerce.com>
  * @since 100.0.2
  */
 class Item extends \Magento\Quote\Model\Quote\Item\AbstractItem

@@ -1,9 +1,9 @@
 <?php
 /**
- *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
+
 namespace Magento\CatalogSearch\Controller\Result;
 
 use Magento\Framework\App\Action\HttpGetActionInterface;
@@ -14,6 +14,8 @@ use Magento\Framework\App\Action\HttpPostActionInterface;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Search\Model\QueryFactory;
 use Magento\Search\Model\PopularSearchTerms;
+use Magento\Catalog\Model\Product\ProductList\ToolbarMemorizer;
+use Magento\Catalog\Model\Product\ProductList\Toolbar;
 
 /**
  * Search result.
@@ -23,10 +25,10 @@ class Index extends \Magento\Framework\App\Action\Action implements HttpGetActio
     /**
      * No results default handle.
      */
-    const DEFAULT_NO_RESULT_HANDLE = 'catalogsearch_result_index_noresults';
+    public const DEFAULT_NO_RESULT_HANDLE = 'catalogsearch_result_index_noresults';
 
     /**
-     * Catalog session
+     * Catalog session for storing catalog-related data
      *
      * @var Session
      */
@@ -50,24 +52,33 @@ class Index extends \Magento\Framework\App\Action\Action implements HttpGetActio
     private $layerResolver;
 
     /**
+     * @var ToolbarMemorizer
+     */
+    private $toolbarMemorizer;
+
+    /**
      * @param Context $context
      * @param Session $catalogSession
      * @param StoreManagerInterface $storeManager
      * @param QueryFactory $queryFactory
      * @param Resolver $layerResolver
+     * @param ToolbarMemorizer|null $toolbarMemorizer
      */
     public function __construct(
         Context $context,
         Session $catalogSession,
         StoreManagerInterface $storeManager,
         QueryFactory $queryFactory,
-        Resolver $layerResolver
+        Resolver $layerResolver,
+        ?ToolbarMemorizer $toolbarMemorizer = null
     ) {
         parent::__construct($context);
         $this->_storeManager = $storeManager;
         $this->_catalogSession = $catalogSession;
         $this->_queryFactory = $queryFactory;
         $this->layerResolver = $layerResolver;
+        $this->toolbarMemorizer = $toolbarMemorizer ?:
+            \Magento\Framework\App\ObjectManager::getInstance()->get(ToolbarMemorizer::class);
     }
 
     /**
@@ -89,28 +100,42 @@ class Index extends \Magento\Framework\App\Action\Action implements HttpGetActio
 
         $queryText = $query->getQueryText();
 
-        if ($queryText != '') {
-            $catalogSearchHelper = $this->_objectManager->get(\Magento\CatalogSearch\Helper\Data::class);
-
-            $getAdditionalRequestParameters = $this->getRequest()->getParams();
-            unset($getAdditionalRequestParameters[QueryFactory::QUERY_VAR_NAME]);
-
-            $handles = null;
-            if ($query->getNumResults() == 0) {
-                $this->_view->getPage()->initLayout();
-                $handles = $this->_view->getLayout()->getUpdate()->getHandles();
-                $handles[] = static::DEFAULT_NO_RESULT_HANDLE;
-            }
-
-            if (empty($getAdditionalRequestParameters) &&
-                $this->_objectManager->get(PopularSearchTerms::class)->isCacheable($queryText, $storeId)
-            ) {
-                $this->getCacheableResult($catalogSearchHelper, $query, $handles);
-            } else {
-                $this->getNotCacheableResult($catalogSearchHelper, $query, $handles);
-            }
-        } else {
+        if (empty($queryText)) {
             $this->getResponse()->setRedirect($this->_redirect->getRedirectUrl());
+            return;
+        }
+
+        // Negative ?p= value is not supported, redirect to a base version of category page.
+        if ($this->_request->getParam(Toolbar::PAGE_PARM_NAME) < 0) {
+            $this->getResponse()->setRedirect(
+                $this->_url->getUrl('*/*', ['_current' => true, '_query' => [Toolbar::PAGE_PARM_NAME => null]])
+            );
+            return;
+        }
+
+        $catalogSearchHelper = $this->_objectManager->get(\Magento\CatalogSearch\Helper\Data::class);
+
+        $getAdditionalRequestParameters = $this->getRequest()->getParams();
+        unset($getAdditionalRequestParameters[QueryFactory::QUERY_VAR_NAME]);
+
+        $handles = null;
+        if ($query->getNumResults() == 0) {
+            $this->_view->getPage()->initLayout();
+            $handles = $this->_view->getLayout()->getUpdate()->getHandles();
+            $handles[] = static::DEFAULT_NO_RESULT_HANDLE;
+        }
+
+        if ($this->shouldRedirectOnToolbarAction()) {
+            $this->getResponse()->setRedirect($this->_redirect->getRedirectUrl());
+            return;
+        }
+
+        if (empty($getAdditionalRequestParameters) &&
+            $this->_objectManager->get(PopularSearchTerms::class)->isCacheable($queryText, $storeId)
+        ) {
+            $this->getCacheableResult($catalogSearchHelper, $query, $handles);
+        } else {
+            $this->getNotCacheableResult($catalogSearchHelper, $query, $handles);
         }
     }
 
@@ -166,5 +191,22 @@ class Index extends \Magento\Framework\App\Action\Action implements HttpGetActio
         $this->_view->loadLayout($handles);
         $this->getResponse()->setNoCacheHeaders();
         $this->_view->renderLayout();
+    }
+
+    /**
+     * Checks for toolbar actions
+     *
+     * @return bool
+     */
+    private function shouldRedirectOnToolbarAction(): bool
+    {
+        $params = $this->getRequest()->getParams();
+
+        return $this->toolbarMemorizer->isMemorizingAllowed() && empty(array_intersect([
+                Toolbar::ORDER_PARAM_NAME,
+                Toolbar::DIRECTION_PARAM_NAME,
+                Toolbar::MODE_PARAM_NAME,
+                Toolbar::LIMIT_PARAM_NAME
+            ], array_keys($params))) === false;
     }
 }

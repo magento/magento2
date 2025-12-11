@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -14,6 +14,7 @@ use Magento\Framework\GraphQl\Exception\GraphQlNoSuchEntityException;
 use Magento\Quote\Api\CartRepositoryInterface;
 use Magento\Quote\Model\MaskedQuoteIdToQuoteIdInterface;
 use Magento\Quote\Model\Quote;
+use Magento\QuoteGraphQl\Model\ErrorMapper;
 
 /**
  * Get cart
@@ -23,39 +24,47 @@ class GetCartForUser
     /**
      * @var MaskedQuoteIdToQuoteIdInterface
      */
-    private $maskedQuoteIdToQuoteId;
+    private MaskedQuoteIdToQuoteIdInterface $maskedQuoteIdToQuoteId;
 
     /**
      * @var CartRepositoryInterface
      */
-    private $cartRepository;
+    private CartRepositoryInterface $cartRepository;
 
     /**
      * @var IsActive
      */
-    private $isActive;
+    private IsActive $isActive;
 
     /**
      * @var UpdateCartCurrency
      */
-    private $updateCartCurrency;
+    private UpdateCartCurrency $updateCartCurrency;
+
+    /**
+     * @var ErrorMapper
+     */
+    private ErrorMapper $errorMapper;
 
     /**
      * @param MaskedQuoteIdToQuoteIdInterface $maskedQuoteIdToQuoteId
      * @param CartRepositoryInterface $cartRepository
      * @param IsActive $isActive
      * @param UpdateCartCurrency $updateCartCurrency
+     * @param ErrorMapper $errorMapper
      */
     public function __construct(
         MaskedQuoteIdToQuoteIdInterface $maskedQuoteIdToQuoteId,
         CartRepositoryInterface $cartRepository,
         IsActive $isActive,
-        UpdateCartCurrency $updateCartCurrency
+        UpdateCartCurrency $updateCartCurrency,
+        ErrorMapper $errorMapper
     ) {
         $this->maskedQuoteIdToQuoteId = $maskedQuoteIdToQuoteId;
         $this->cartRepository = $cartRepository;
         $this->isActive = $isActive;
         $this->updateCartCurrency = $updateCartCurrency;
+        $this->errorMapper = $errorMapper;
     }
 
     /**
@@ -78,12 +87,18 @@ class GetCartForUser
             $cart = $this->cartRepository->get($cartId);
         } catch (NoSuchEntityException $exception) {
             throw new GraphQlNoSuchEntityException(
-                __('Could not find a cart with ID "%masked_cart_id"', ['masked_cart_id' => $cartHash])
+                __('Could not find a cart with ID "%masked_cart_id"', ['masked_cart_id' => $cartHash]),
+                $exception,
+                $this->errorMapper->getErrorMessageId('Could not find a cart with ID')
             );
         }
 
         if (false === (bool)$this->isActive->execute($cart)) {
-            throw new GraphQlNoSuchEntityException(__('The cart isn\'t active.'));
+            throw new GraphQlNoSuchEntityException(
+                __('The cart isn\'t active.'),
+                null,
+                $this->errorMapper->getErrorMessageId('The cart isn\'t active')
+            );
         }
 
         $cart = $this->updateCartCurrency->execute($cart, $storeId);

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -28,8 +28,10 @@ use Magento\Framework\Message\Collection;
 use Magento\Framework\Message\ManagerInterface;
 use Magento\Framework\Message\MessageInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Customer\Model\Customer\Mapper as CustomerMapper;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -40,6 +42,8 @@ use Psr\Log\LoggerInterface;
  */
 class InlineEditTest extends TestCase
 {
+
+    use MockCreationTrait;
     /**
      * @var InlineEdit
      */
@@ -91,7 +95,7 @@ class InlineEditTest extends TestCase
     private $addressMapper;
 
     /**
-     * @var \Magento\Customer\Model\Customer\Mapper|MockObject
+     * @var CustomerMapper|MockObject
      */
     private $customerMapper;
 
@@ -153,67 +157,44 @@ class InlineEditTest extends TestCase
     {
         $objectManager = new ObjectManager($this);
         $this->escaper = new Escaper();
-        $this->request = $this->getMockForAbstractClass(
-            RequestInterface::class,
-            [],
-            '',
-            false
+        $this->request = $this->createMock(
+            RequestInterface::class
         );
-        $this->messageManager = $this->getMockForAbstractClass(
-            ManagerInterface::class,
-            [],
-            '',
-            false
+        $this->messageManager = $this->createMock(
+            ManagerInterface::class
         );
-        $this->customerData = $this->getMockForAbstractClass(
-            CustomerInterface::class,
-            [],
-            '',
-            false
+        $this->customerData = $this->createMock(
+            CustomerInterface::class
         );
 
         $this->address = $this->getMock(AddressInterface::class, 'address');
 
         $this->addressMapper = $this->createMock(Mapper::class);
-        $this->customerMapper = $this->createMock(\Magento\Customer\Model\Customer\Mapper::class);
+        $this->customerMapper = $this->createMock(CustomerMapper::class);
         $this->resultJsonFactory = $this->createPartialMock(
             JsonFactory::class,
             ['create']
         );
         $this->resultJson = $this->createMock(Json::class);
-        $this->customerRepository = $this->getMockForAbstractClass(
-            CustomerRepositoryInterface::class,
-            [],
-            '',
-            false
+        $this->customerRepository = $this->createMock(
+            CustomerRepositoryInterface::class
         );
         $this->dataObjectHelper = $this->createMock(DataObjectHelper::class);
         $this->addressDataFactory = $this->createPartialMock(
             AddressInterfaceFactory::class,
             ['create']
         );
-        $this->addressRepository = $this->getMockForAbstractClass(
-            AddressRepositoryInterface::class,
-            [],
-            '',
-            false
+        $this->addressRepository = $this->createMock(
+            AddressRepositoryInterface::class
         );
         $this->messageCollection = $this->createMock(Collection::class);
-        $this->message = $this->getMockForAbstractClass(
-            MessageInterface::class,
-            [],
-            '',
-            false
+        $this->message = $this->createMock(
+            MessageInterface::class
         );
-        $this->logger = $this->getMockForAbstractClass(
-            LoggerInterface::class,
-            [],
-            '',
-            false
+        $this->logger = $this->createMock(
+            LoggerInterface::class
         );
-        $this->emailNotification = $this->getMockBuilder(EmailNotificationInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->emailNotification = $this->createMock(EmailNotificationInterface::class);
 
         $this->context = $objectManager->getObject(
             Context::class,
@@ -263,9 +244,7 @@ class InlineEditTest extends TestCase
             return new $mockClassName();
         }
 
-        $mockBuilder = $this->getMockBuilder($class);
-        $mockBuilder->setMockClassName($mockClassName);
-        return $mockBuilder->getMockForAbstractClass();
+        return $this->createMock($class);
     }
 
     /**

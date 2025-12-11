@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Theme\Console\Command;
@@ -36,9 +36,9 @@ class ThemeUninstallCommand extends Command
     /**
      * Names of input arguments or options
      */
-    const INPUT_KEY_BACKUP_CODE = 'backup-code';
-    const INPUT_KEY_THEMES = 'theme';
-    const INPUT_KEY_CLEAR_STATIC_CONTENT = 'clear-static-content';
+    public const INPUT_KEY_BACKUP_CODE = 'backup-code';
+    public const INPUT_KEY_THEMES = 'theme';
+    public const INPUT_KEY_CLEAR_STATIC_CONTENT = 'clear-static-content';
 
     /**
      * Composer general dependency checker
@@ -76,35 +76,35 @@ class ThemeUninstallCommand extends Command
     private $cleanupFiles;
 
     /**
-     * BackupRollback factory
+     * Factory for creating backup and rollback operations
      *
      * @var BackupRollbackFactory
      */
     private $backupRollbackFactory;
 
     /**
-     * Theme Validator
+     * Service for validating theme configurations and dependencies
      *
      * @var ThemeValidator
      */
     private $themeValidator;
 
     /**
-     * Package name finder
+     * Service for retrieving theme package information and names
      *
      * @var ThemePackageInfo
      */
     private $themePackageInfo;
 
     /**
-     * Theme Uninstaller
+     * Service for performing theme uninstallation operations
      *
      * @var ThemeUninstaller
      */
     private $themeUninstaller;
 
     /**
-     * Theme Dependency Checker
+     * Checks theme dependencies
      *
      * @var ThemeDependencyChecker
      */
@@ -163,7 +163,7 @@ class ThemeUninstallCommand extends Command
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected function configure()
     {
@@ -191,9 +191,9 @@ class ThemeUninstallCommand extends Command
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $messages = [];
         $themePaths = $input->getArgument(self::INPUT_KEY_THEMES);

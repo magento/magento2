@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -16,11 +16,15 @@ use Magento\Framework\Data\Form\Element\AbstractElement;
 use Magento\Framework\DataObject;
 use Magento\Framework\Escaper;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\MockObject\MockObject;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 
 class RegionTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * Simulate "serialize" method of a form element.
      *
@@ -43,8 +47,9 @@ class RegionTest extends TestCase
 
     /**
      * @param array $regionCollection
-     * @dataProvider renderDataProvider
-     */
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     **/
+    #[DataProvider('renderDataProvider')]
     public function testRender($regionCollection)
     {
         $countryFactoryMock = $this->createMock(
@@ -65,11 +70,10 @@ class RegionTest extends TestCase
                 return $this->mockSerialize($attributes, $elementMock->getData());
             }
         );
-        $countryMock = $this->getMockBuilder(AbstractElement::class)
-            ->onlyMethods(['serialize'])
-            ->addMethods(['getValue'])
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $countryMock = $this->createPartialMockWithReflection(
+            AbstractElement::class,
+            ['serialize', 'getValue']
+        );
         $countryMock->method('serialize')->willReturnCallback(
             function (array $attributes) use ($countryMock): string {
                 return $this->mockSerialize($attributes, $countryMock->getData());
@@ -78,11 +82,15 @@ class RegionTest extends TestCase
         $regionMock = $this->createMock(
             AbstractElement::class
         );
-        $countryModelMock = $this->getMockBuilder(Country::class)
-            ->addMethods(['toOptionArray'])
-            ->onlyMethods(['setId', 'getLoadedRegionCollection', '__wakeup'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $countryModelMock = $this->createPartialMockWithReflection(
+            Country::class,
+            [
+                'toOptionArray',
+                'setId',
+                'getLoadedRegionCollection',
+                '__wakeup'
+            ]
+        );
         $formMock = $this->createPartialMock(Form::class, ['getElement']);
 
         $elementMock->expects($this->any())->method('getForm')->willReturn($formMock);

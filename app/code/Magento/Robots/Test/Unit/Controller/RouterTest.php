@@ -1,16 +1,17 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Robots\Test\Unit\Controller;
 
 use Magento\Framework\App\ActionFactory;
-use Magento\Framework\App\RequestInterface;
+use Magento\Framework\App\Request\Http;
 use Magento\Framework\App\Route\ConfigInterface;
 use Magento\Framework\App\Router\ActionList;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Robots\Controller\Index\Index;
 use Magento\Robots\Controller\Router;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -18,6 +19,8 @@ use PHPUnit\Framework\TestCase;
 
 class RouterTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var ActionFactory|MockObject
      */
@@ -40,17 +43,11 @@ class RouterTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->actionFactoryMock = $this->getMockBuilder(ActionFactory::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['create'])
-            ->getMock();
+        $this->actionFactoryMock = $this->createPartialMock(ActionFactory::class, ['create']);
 
-        $this->actionListMock = $this->getMockBuilder(ActionList::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->actionListMock = $this->createMock(ActionList::class);
 
-        $this->routeConfigMock = $this->getMockBuilder(ConfigInterface::class)
-            ->getMockForAbstractClass();
+        $this->routeConfigMock = $this->createMock(ConfigInterface::class);
 
         $this->router = new Router(
             $this->actionFactoryMock,
@@ -66,9 +63,7 @@ class RouterTest extends TestCase
     {
         $identifier = 'test';
 
-        $requestMock = $this->getMockBuilder(RequestInterface::class)
-            ->addMethods(['getPathInfo'])
-            ->getMockForAbstractClass();
+        $requestMock = $this->createPartialMockWithReflection(Http::class, ['getPathInfo']);
         $requestMock->expects($this->once())
             ->method('getPathInfo')
             ->willReturn($identifier);
@@ -83,9 +78,7 @@ class RouterTest extends TestCase
     {
         $identifier = 'robots.txt';
 
-        $requestMock = $this->getMockBuilder(RequestInterface::class)
-            ->addMethods(['getPathInfo'])
-            ->getMockForAbstractClass();
+        $requestMock = $this->createPartialMockWithReflection(Http::class, ['getPathInfo']);
         $requestMock->expects($this->once())
             ->method('getPathInfo')
             ->willReturn($identifier);
@@ -107,9 +100,7 @@ class RouterTest extends TestCase
         $moduleName = 'Magento_Robots';
         $actionClassName = Index::class;
 
-        $requestMock = $this->getMockBuilder(RequestInterface::class)
-            ->addMethods(['getPathInfo'])
-            ->getMockForAbstractClass();
+        $requestMock = $this->createPartialMockWithReflection(Http::class, ['getPathInfo']);
         $requestMock->expects($this->once())
             ->method('getPathInfo')
             ->willReturn($identifier);
@@ -124,9 +115,7 @@ class RouterTest extends TestCase
             ->with($moduleName, null, 'index', 'index')
             ->willReturn($actionClassName);
 
-        $actionClassMock = $this->getMockBuilder(Index::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $actionClassMock = $this->createMock(Index::class);
 
         $this->actionFactoryMock->expects($this->once())
             ->method('create')

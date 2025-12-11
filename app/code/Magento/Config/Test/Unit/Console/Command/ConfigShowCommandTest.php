@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 
 declare(strict_types=1);
@@ -81,32 +81,19 @@ class ConfigShowCommandTest extends TestCase
     {
         $objectManager = new ObjectManager($this);
 
-        $this->valueProcessorMock = $this->getMockBuilder(ValueProcessor::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->pathResolverMock = $this->getMockBuilder(ConfigPathResolver::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->scopeValidatorMock = $this->getMockBuilder(ValidatorInterface::class)
-            ->getMockForAbstractClass();
-        $this->configSourceMock = $this->getMockBuilder(ConfigSourceInterface::class)
-            ->getMockForAbstractClass();
-        $this->pathValidatorMock = $this->getMockBuilder(PathValidator::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $pathValidatorFactoryMock = $this->getMockBuilder(PathValidatorFactory::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->valueProcessorMock = $this->createMock(ValueProcessor::class);
+        $this->pathResolverMock = $this->createMock(ConfigPathResolver::class);
+        $this->scopeValidatorMock = $this->createMock(ValidatorInterface::class);
+        $this->configSourceMock = $this->createMock(ConfigSourceInterface::class);
+        $this->pathValidatorMock = $this->createMock(PathValidator::class);
+        $pathValidatorFactoryMock = $this->createMock(PathValidatorFactory::class);
         $pathValidatorFactoryMock->expects($this->atMost(1))
             ->method('create')
             ->willReturn($this->pathValidatorMock);
 
-        $this->emulatedAreProcessorMock = $this->getMockBuilder(EmulatedAdminhtmlAreaProcessor::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->emulatedAreProcessorMock = $this->createMock(EmulatedAdminhtmlAreaProcessor::class);
 
-        $this->localeEmulatorMock = $this->getMockBuilder(LocaleEmulatorInterface::class)
-            ->getMockForAbstractClass();
+        $this->localeEmulatorMock = $this->createMock(LocaleEmulatorInterface::class);
 
         $this->model = $objectManager->getObject(
             ConfigShowCommand::class,

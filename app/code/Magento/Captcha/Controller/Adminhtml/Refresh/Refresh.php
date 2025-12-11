@@ -1,10 +1,7 @@
 <?php
 /**
- * Refreshes captcha and returns JSON encoded URL to image (AJAX action)
- * Example: {'imgSrc': 'http://example.com/media/captcha/67842gh187612ngf8s.png'}
- *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Captcha\Controller\Adminhtml\Refresh;
 

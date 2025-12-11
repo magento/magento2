@@ -1,13 +1,14 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Config\Test\Unit\Model\Config\Structure\Element\Dependency;
 
 use Magento\Config\Model\Config\Structure\Element\Dependency\Field;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 class FieldTest extends TestCase
@@ -74,8 +75,8 @@ class FieldTest extends TestCase
     /**
      * @param array $data
      * @param bool $isNegative
-     * @dataProvider dataProvider
      */
+    #[DataProvider('dataProvider')]
     public function testGetId($data, $isNegative)
     {
         $fieldObject = $this->_getFieldObject($data, $isNegative);
@@ -88,8 +89,8 @@ class FieldTest extends TestCase
     /**
      * @param array $data
      * @param bool $isNegative
-     * @dataProvider dataProvider
      */
+    #[DataProvider('dataProvider')]
     public function testIsNegative($data, $isNegative)
     {
         $this->assertEquals($isNegative, $this->_getFieldObject($data, $isNegative)->isNegative());
@@ -113,8 +114,8 @@ class FieldTest extends TestCase
      * @param bool $isNegative
      * @param string $value
      * @param bool $expected
-     * @dataProvider isValueSatisfyDataProvider
      */
+    #[DataProvider('isValueSatisfyDataProvider')]
     public function testIsValueSatisfy($data, $isNegative, $value, $expected)
     {
         $this->assertEquals($expected, $this->_getFieldObject($data, $isNegative)->isValueSatisfy($value));
@@ -141,8 +142,8 @@ class FieldTest extends TestCase
      * @param array $data
      * @param bool $isNegative
      * @param array $expected
-     * @dataProvider getValuesDataProvider
      */
+    #[DataProvider('getValuesDataProvider')]
     public function testGetValues($data, $isNegative, $expected)
     {
         $this->assertEquals($expected, $this->_getFieldObject($data, $isNegative)->getValues());

@@ -1,9 +1,7 @@
 <?php
 /**
- * Adminhtml AdminNotification inbox grid
- *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\AdminNotification\Block;
 
@@ -14,7 +12,7 @@ namespace Magento\AdminNotification\Block;
 class Inbox extends \Magento\Backend\Block\Widget\Grid\Container
 {
     /**
-     * @return void
+     * @inheritdoc
      */
     protected function _construct()
     {

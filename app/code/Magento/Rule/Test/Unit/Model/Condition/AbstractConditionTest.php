@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -9,6 +9,7 @@ namespace Magento\Rule\Test\Unit\Model\Condition;
 
 use Magento\Framework\Model\AbstractModel;
 use Magento\Rule\Model\Condition\AbstractCondition;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -21,15 +22,7 @@ class AbstractConditionTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->_condition = $this->getMockForAbstractClass(
-            AbstractCondition::class,
-            [],
-            '',
-            false,
-            false,
-            true,
-            ['getInputType']
-        );
+        $this->_condition = $this->createPartialMock(AbstractCondition::class, ['getInputType']);
     }
 
     public function testGetjointTables()
@@ -64,6 +57,18 @@ class AbstractConditionTest extends TestCase
             ['x', '==', 0, false],
             [null, '==', 0, false],
             [null, '==', 0.00, false],
+
+            // Test cases for strict equality with leading zeros
+            ['0123', '===', '123', false],
+            ['000123', '===', '123', false],
+            ['123', '===', '0123', false],
+            ['123', '===', '000123', false],
+            ['0123', '===', '0123', true],
+
+            // Test cases for strict equality with different numeric types
+            [0123, '===', '0123', false],
+            ['123', '===', 0123, false],
+            [0123, '===', 0123, true],
 
             [1, '!=', 1, false],
             [0, '!=', 1, true],
@@ -105,9 +110,8 @@ class AbstractConditionTest extends TestCase
      * @param $operator
      * @param $valueForValidate
      * @param $expectedResult
-     *
-     * @dataProvider validateAttributeDataProvider
      */
+    #[DataProvider('validateAttributeDataProvider')]
     public function testValidateAttribute($existingValue, $operator, $valueForValidate, $expectedResult)
     {
         $this->_condition->setOperator($operator);
@@ -127,9 +131,8 @@ class AbstractConditionTest extends TestCase
      * @param $operator
      * @param $valueForValidate
      * @param $expectedResult
-     *
-     * @dataProvider validateAttributeDataProvider
      */
+    #[DataProvider('validateAttributeDataProvider')]
     public function testValidate($existingValue, $operator, $valueForValidate, $expectedResult)
     {
         $objectMock = $this->createPartialMock(
@@ -206,9 +209,8 @@ class AbstractConditionTest extends TestCase
      * @param $valueForValidate
      * @param $expectedResult
      * @param $inputType
-     *
-     * @dataProvider validateAttributeArrayInputTypeDataProvider
      */
+    #[DataProvider('validateAttributeArrayInputTypeDataProvider')]
     public function testValidateArrayOperatorType(
         $existingValue,
         $operator,

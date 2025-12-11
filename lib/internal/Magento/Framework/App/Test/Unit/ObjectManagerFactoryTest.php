@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -22,10 +22,14 @@ class ObjectManagerFactoryTest extends TestCase
     /** @var string */
     protected static $originalIncludePath;
 
+    /** @var File */
+    private static $fileIo;
+
     public static function setUpBeforeClass(): void
     {
         self::$originalAutoloadFunctions = spl_autoload_functions();
         self::$originalIncludePath = get_include_path();
+        self::$fileIo = new File();
     }
 
     /**
@@ -41,6 +45,7 @@ class ObjectManagerFactoryTest extends TestCase
         }
         set_include_path(self::$originalIncludePath);
         File::rmdirRecursive(__DIR__ . '/_files/var/');
+        self::$fileIo->rm(__DIR__ . '/_files/app/etc/env.php');
     }
 
     public function testCreateObjectManagerFactoryCouldBeOverridden()

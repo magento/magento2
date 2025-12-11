@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright 2025 Adobe
+  * All Rights Reserved.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontVerifyRecentlyViewedWidgetTaxPricesTest">
+        <annotations>
+            <features value="Tax"/>
+            <stories value="Recently Viewed Widget Tax Price Display"/>
+            <title value="Display tax inclusive and exclusive prices in Recently Viewed Widget"/>
+            <description value="Verify that Recently Viewed Widget displays correct prices including and excluding tax based on tax configuration"/>
+            <severity value="AVERAGE"/>
+            <testCaseId value="AC-8327"/>
+            <group value="Tax"/>
+        </annotations>
+        <before>
+            <!-- Pre-Condition 1:- Create Bundle Product -->
+            <createData entity="_defaultCategory" stepKey="category"/>
+            <createData entity="SimpleProduct2" stepKey="createYogaStrap6Foot">
+                <field key="name">Sprite Yoga Strap 6 Foot</field>
+                <field key="sku" unique="suffix">24-WG085</field>
+                <field key="price">14.00</field>
+                <requiredEntity createDataKey="category"/>
+            </createData>
+            <createData entity="SimpleProduct2" stepKey="createYogaStrap8Foot">
+                <field key="name">Sprite Yoga Strap 8 Foot</field>
+                <field key="sku" unique="suffix">24-WG086</field>
+                <field key="price">17.00</field>
+                <requiredEntity createDataKey="category"/>
+            </createData>
+            <createData entity="SimpleProduct2" stepKey="createYogaStrap10Foot">
+                <field key="name">Sprite Yoga Strap 10 Foot</field>
+                <field key="sku" unique="suffix">24-WG087</field>
+                <field key="price">21.00</field>
+                <requiredEntity createDataKey="category"/>
+            </createData>
+            <createData entity="ApiBundleProduct" stepKey="createSpriteYogaStrapsBundle">
+                <field key="name">Set of Sprite Yoga Straps</field>
+                <field key="sku" unique="suffix">24-WG085-bundle-dynamic</field>
+                <field key="price">52.00</field>
+                <requiredEntity createDataKey="category"/>
+            </createData>
+            <createData entity="MultipleSelectOption" stepKey="createBundleOption1">
+                <requiredEntity createDataKey="createSpriteYogaStrapsBundle"/>
+                <field key="title">Choose Your Yoga Straps</field>
+                <field key="required">true</field>
+                <field key="type">multi</field>
+            </createData>
+            <createData entity="ApiBundleLink" stepKey="linkYogaStrap6Foot">
+                <requiredEntity createDataKey="createSpriteYogaStrapsBundle"/>
+                <requiredEntity createDataKey="createBundleOption1"/>
+                <requiredEntity createDataKey="createYogaStrap6Foot"/>
+                <field key="qty">1</field>
+                <field key="is_default">true</field>
+                <field key="price_type">0</field>
+            </createData>
+            <createData entity="ApiBundleLink" stepKey="linkYogaStrap8Foot">
+                <requiredEntity createDataKey="createSpriteYogaStrapsBundle"/>
+                <requiredEntity createDataKey="createBundleOption1"/>
+                <requiredEntity createDataKey="createYogaStrap8Foot"/>
+                <field key="qty">1</field>
+                <field key="is_default">false</field>
+                <field key="price_type">0</field>
+            </createData>
+            <createData entity="ApiBundleLink" stepKey="linkYogaStrap10Foot">
+                <requiredEntity createDataKey="createSpriteYogaStrapsBundle"/>
+                <requiredEntity createDataKey="createBundleOption1"/>
+                <requiredEntity createDataKey="createYogaStrap10Foot"/>
+                <field key="qty">1</field>
+                <field key="is_default">false</field>
+                <field key="price_type">0</field>
+            </createData>
+            <!-- Pre-Condition 2:- Taxable Goods has Tax Class configured (20%) -->
+            <createData entity="US_All_Rate_20" stepKey="createUSAllTaxRate20"/>
+            <!-- Step 1:- Login as admin -->
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminCreateTaxRuleActionGroup" stepKey="createDefaultTaxRule">
+                <argument name="taxRate" value="$$createUSAllTaxRate20$$"/>
+                <argument name="taxRule" value="defaultTaxRule"/>
+            </actionGroup>
+            <!-- Pre-Condition 3:- Price Display is set to show both prices including and excluding from Stores >> Configuration >> Sales >> Tax >> Price Display Settings. -->
+            <magentoCLI command="config:set {{CustomDisplayProductPricesInCatalog.path}} {{CustomDisplayProductPricesInCatalog.value}}" stepKey="setPriceDisplayToBothPrices"/>
+        </before>
+        <after>
+            <magentoCLI command="config:set {{DisplayProductPricesInCatalog.path}} {{DisplayProductPricesInCatalog.value}}" stepKey="resetTaxDisplayToDefault"/>
+            <deleteData createDataKey="createSpriteYogaStrapsBundle" stepKey="deleteBundleProduct"/>
+            <deleteData createDataKey="createYogaStrap6Foot" stepKey="deleteYogaStrap6Foot"/>
+            <deleteData createDataKey="createYogaStrap8Foot" stepKey="deleteYogaStrap8Foot"/>
+            <deleteData createDataKey="createYogaStrap10Foot" stepKey="deleteYogaStrap10Foot"/>
+            <actionGroup ref="AdminDeleteTaxRule" stepKey="deleteTaxRule">
+                <argument name="taxRuleCode" value="{{defaultTaxRule.code}}"/>
+            </actionGroup>
+            <deleteData createDataKey="createUSAllTaxRate20" stepKey="deleteTaxRate"/>
+            <deleteData createDataKey="category" stepKey="deleteCategory"/>
+            <actionGroup ref="AdminOpenCmsPageActionGroup" stepKey="navigateToEditHomePageToReset">
+                <argument name="page_id" value="{{CmsHomePageContent.page_id}}"/>
+            </actionGroup>
+            <conditionalClick selector="{{CmsNewPagePageActionsSection.contentSectionName}}" dependentSelector="{{CmsNewPagePageActionsSection.showHideEditor}}" visible="false" stepKey="expandContentSectionIfNotVisibleToReset"/>
+            <waitForPageLoad stepKey="waitForPageLoadContentSectionToReset"/>
+            <actionGroup ref="ClickEditWithPageBuilderButtonActionGroup" stepKey="clickEditWithPageBuilderButtonActionGroupToReset"/>
+            <actionGroup ref="openPageBuilderEditPanel" stepKey="openEditMenuOnStageToReset">
+                <argument name="contentType" value="PageBuilderHtmlContentType"/>
+            </actionGroup>
+            <actionGroup ref="fillSlideOutPanelTextArea" stepKey="clearRecentlyViewedWidgetsFromCMSContent">
+                <argument name="property" value="PageBuilderHtmlCmsHomePageContent"/>
+            </actionGroup>
+            <actionGroup ref="saveEditPanelSettings" stepKey="saveEditPanelSettingsBlockAfterReset"/>
+            <actionGroup ref="exitPageBuilderFullScreen" stepKey="exitPageBuilderFullScreenAfterReset"/>
+            <actionGroup ref="AdminSaveAndContinueEditCmsPageActionGroup" stepKey="saveAndContinueEditCmsPageAfterReset"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin"/>
+        </after>
+        <!-- Step 2:- Create "Recently Viewed Widget" and add it to the home page -->
+        <actionGroup ref="AdminOpenCmsPageActionGroup" stepKey="navigateToEditHomePage">
+            <argument name="page_id" value="{{CmsHomePageContent.page_id}}"/>
+        </actionGroup>
+        <conditionalClick selector="{{CmsNewPagePageActionsSection.contentSectionName}}" dependentSelector="{{CmsNewPagePageActionsSection.showHideEditor}}" visible="false" stepKey="expandContentSectionIfNotVisible"/>
+        <waitForPageLoad stepKey="waitForPageLoadContentSection"/>
+        <actionGroup ref="ClickEditWithPageBuilderButtonActionGroup" stepKey="clickEditWithPageBuilderButtonActionGroup"/>
+        <actionGroup ref="openPageBuilderEditPanel" stepKey="openEditMenuOnStage">
+            <argument name="contentType" value="PageBuilderHtmlContentType"/>
+        </actionGroup>
+        <actionGroup ref="AdminSelectRecentlyViewedProductWidgetFromInsertWidgetSlideOutActionGroup" stepKey="insertRecentlyViewedWidget">
+            <argument name="attributeSelector1" value="show_attributes"/>
+            <argument name="attributeSelector2" value="show_buttons"/>
+            <argument name="productAttributeSection1" value="1"/>
+            <argument name="productAttributeSection2" value="4"/>
+            <argument name="buttonToShowSection2" value="3"/>
+        </actionGroup>
+        <actionGroup ref="saveEditPanelSettings" stepKey="saveEditPanelSettingsBlock"/>
+        <actionGroup ref="exitPageBuilderFullScreen" stepKey="exitPageBuilderFullScreen"/>
+        <actionGroup ref="AdminSaveAndContinueEditCmsPageActionGroup" stepKey="saveAndContinueEditCmsPage"/>
+        <!-- Step 3:- Create "Catalog Product List Widget" and add it to the home page (for comparison), limit the visible SKU to created bundle product sku -->
+        <conditionalClick selector="{{CmsNewPagePageActionsSection.contentSectionName}}" dependentSelector="{{CmsNewPagePageActionsSection.showHideEditor}}" visible="false" stepKey="expandContentSectionIfNotVisibleAgain"/>
+        <waitForPageLoad stepKey="waitForPageLoadContentSectionAgain"/>
+        <actionGroup ref="ClickEditWithPageBuilderButtonActionGroup" stepKey="clickEditWithPageBuilderButtonActionGroupAgain"/>
+        <actionGroup ref="openPageBuilderEditPanel" stepKey="openEditMenuOnStageAgain">
+            <argument name="contentType" value="PageBuilderHtmlContentType"/>
+        </actionGroup>
+        <actionGroup ref="AdminInsertWidgetToCmsPageContentActionGroup" stepKey="insertCatalogProductsListWidget">
+            <argument name="widgetType" value="{{CatalogProductsListWidget.type}}"/>
+        </actionGroup>
+        <actionGroup ref="AdminFillCatalogProductsListWidgetSkuActionGroup" stepKey="addSkuCondition">
+            <argument name="sku" value="$$createSpriteYogaStrapsBundle.sku$$"/>
+        </actionGroup>
+        <actionGroup ref="AdminClickInsertWidgetActionGroup" stepKey="insertWidget"/>
+        <actionGroup ref="saveEditPanelSettings" stepKey="saveEditPanelSettingsBlockAgain"/>
+        <actionGroup ref="exitPageBuilderFullScreen" stepKey="exitPageBuilderFullScreenAgain"/>
+        <actionGroup ref="AdminSaveAndContinueEditCmsPageActionGroup" stepKey="saveHomePageAfterCatalogProductListWidgetCreation"/>
+        <!-- Step 4:- Search for "Set of Sprite Yoga Straps" product (the sample grouped product) and add to the cart -->
+        <actionGroup ref="CliCacheCleanActionGroup" stepKey="flushCache">
+            <argument name="tags" value="full_page"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="goToHomepage"/>
+        <waitForElementVisible selector="{{StorefrontCategoryProductSection.widgetProduct($$createSpriteYogaStrapsBundle.name$$)}}" stepKey="waitForProductListWidget"/>
+        <click selector="{{StorefrontCategoryProductSection.widgetProduct($$createSpriteYogaStrapsBundle.name$$)}}" stepKey="clickOnBundleProductFromWidget"/>
+        <actionGroup ref="StorefrontAddBundleProductFromProductToCartActionGroup" stepKey="addBundleProductToCart">
+            <argument name="productName" value="$$createSpriteYogaStrapsBundle.name$$"/>
+        </actionGroup>
+        <!-- Step 4 Result:- Verify the price of the "Set of Sprite Yoga Straps" both including and excluding price should be displayed correctly.(including : 15.16 and excluding 14) -->
+        <waitForElementVisible selector="{{StorefrontProductInfoMainSection.includingTaxPrice}}" stepKey="waitForIncludingTaxPrice"/>
+        <waitForText selector="{{StorefrontProductInfoMainSection.includingTaxPrice}}" userInput="$16.80" stepKey="seeIncludingTaxPrice"/>
+        <waitForElementVisible selector="{{StorefrontProductInfoMainSection.excludingTaxPrice}}" stepKey="waitForExcludingTaxPrice"/>
+        <waitForText selector="{{StorefrontProductInfoMainSection.excludingTaxPrice}}" userInput="$14.00" stepKey="seeExcludingTaxPrice"/>
+    </test>
+</tests>

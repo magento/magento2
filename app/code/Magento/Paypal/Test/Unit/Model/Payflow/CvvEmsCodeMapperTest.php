@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -11,6 +11,7 @@ use Magento\Paypal\Model\Config;
 use Magento\Paypal\Model\Info;
 use Magento\Paypal\Model\Payflow\CvvEmsCodeMapper;
 use Magento\Sales\Api\Data\OrderPaymentInterface;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -35,14 +36,12 @@ class CvvEmsCodeMapperTest extends TestCase
      * @covers \Magento\Paypal\Model\Payflow\CvvEmsCodeMapper::getCode
      * @param string $cvvCode
      * @param string $expected
-     * @dataProvider getCodeDataProvider
      */
+    #[DataProvider('getCodeDataProvider')]
     public function testGetCode($cvvCode, $expected)
     {
         /** @var OrderPaymentInterface|MockObject $orderPayment */
-        $orderPayment = $this->getMockBuilder(OrderPaymentInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $orderPayment = $this->createMock(OrderPaymentInterface::class);
 
         $orderPayment->expects(self::once())
             ->method('getMethod')
@@ -65,9 +64,7 @@ class CvvEmsCodeMapperTest extends TestCase
         $this->expectException('InvalidArgumentException');
         $this->expectExceptionMessage('The "some_payment" does not supported by Payflow CVV mapper.');
         /** @var OrderPaymentInterface|MockObject $orderPayment */
-        $orderPayment = $this->getMockBuilder(OrderPaymentInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $orderPayment = $this->createMock(OrderPaymentInterface::class);
 
         $orderPayment->expects(self::exactly(2))
             ->method('getMethod')

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -49,17 +49,9 @@ class ExchangeTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->messageQueueConfig = $this->getMockBuilder(
-            TopologyConfigInterface::class
-        )
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->queueManagement = $this->getMockBuilder(QueueManagement::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->connnectionTypeResolver = $this->getMockBuilder(ConnectionTypeResolver::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->messageQueueConfig = $this->createMock(TopologyConfigInterface::class);
+        $this->queueManagement = $this->createMock(QueueManagement::class);
+        $this->connnectionTypeResolver = $this->createMock(ConnectionTypeResolver::class);
 
         $objectManager = new ObjectManager($this);
         $this->exchange = $objectManager->getObject(
@@ -128,9 +120,7 @@ class ExchangeTest extends TestCase
         $envelopeBody = 'serializedMessage';
         $this->messageQueueConfig->expects($this->once())
             ->method('getExchanges')->willReturn([$exchange1, $exchange2]);
-        $envelope = $this->getMockBuilder(EnvelopeInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $envelope = $this->createMock(EnvelopeInterface::class);
         $envelope->expects($this->once())->method('getBody')->willReturn($envelopeBody);
         $this->queueManagement->expects($this->once())
             ->method('addMessagesToQueues')->with($topicName, [$envelopeBody], $queueNames);

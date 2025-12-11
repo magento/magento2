@@ -1,8 +1,8 @@
 <?php
 
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -14,6 +14,7 @@ use Magento\Payment\Model\InfoInterface;
 use Magento\Paypal\Model\Info;
 use Magento\Paypal\Model\Payflow\Service\Response\Handler\FraudHandler;
 use Magento\Paypal\Model\Payflowpro;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -41,14 +42,9 @@ class FraudHandlerTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->paymentMock = $this->getMockBuilder(InfoInterface::class)
-            ->getMock();
-        $this->responseMock = $this->getMockBuilder(DataObject::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->paypalInfoManagerMock = $this->getMockBuilder(Info::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->paymentMock = $this->createMock(InfoInterface::class);
+        $this->responseMock = $this->createMock(DataObject::class);
+        $this->paypalInfoManagerMock = $this->createMock(Info::class);
 
         $this->fraudHandler = new FraudHandler(
             $this->paypalInfoManagerMock,
@@ -69,9 +65,7 @@ class FraudHandlerTest extends TestCase
         $this->fraudHandler->handle($this->paymentMock, $this->responseMock);
     }
 
-    /**
-     * @dataProvider handleMessagesDataProvider
-     */
+    #[DataProvider('handleMessagesDataProvider')]
     public function testHandle($message, $rulesString, $existingFrauds, $expectedMessage)
     {
         $this->responseMock->expects($this->atLeastOnce())

@@ -1,9 +1,7 @@
 <?php declare(strict_types=1);
 /**
- * Tests for \Magento\Webapi\Model\Soap\Wsdl\Generator.
- *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Webapi\Test\Unit\Model\Soap\Wsdl;
 

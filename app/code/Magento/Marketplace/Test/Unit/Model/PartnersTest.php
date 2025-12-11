@@ -1,13 +1,14 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Marketplace\Test\Unit\Model;
 
 use Magento\Framework\HTTP\Client\Curl;
+use Magento\Marketplace\Block\Partners as PartnersBlock;
 use Magento\Marketplace\Helper\Cache;
 use Magento\Marketplace\Model\Partners;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -20,6 +21,9 @@ class PartnersTest extends TestCase
      */
     private $partnersModelMock;
 
+    /**
+     * @var string
+     */
     private $returnPackages = '
                  {
                     "partners": {
@@ -126,11 +130,11 @@ class PartnersTest extends TestCase
     /**
      * Gets partners block mock
      *
-     * @return MockObject|\Magento\Marketplace\Block\Partners
+     * @return MockObject|PartnersBlock
      */
     public function getPartnersBlockMock($methods = null)
     {
-        return $this->createPartialMock(\Magento\Marketplace\Block\Partners::class, $methods);
+        return $this->createPartialMock(PartnersBlock::class, $methods);
     }
 
     /**

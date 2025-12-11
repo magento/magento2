@@ -1,9 +1,16 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Review\Block\Adminhtml;
+
+use Magento\Review\Helper\Action\Pager;
+use Magento\Review\Model\ReviewFactory;
+use Magento\Framework\Registry;
+use Magento\Backend\Block\Widget\Context;
+use Magento\Framework\Escaper;
+use Magento\Framework\App\ObjectManager;
 
 /**
  * Review edit form.
@@ -11,43 +18,53 @@ namespace Magento\Review\Block\Adminhtml;
 class Edit extends \Magento\Backend\Block\Widget\Form\Container
 {
     /**
-     * Review action pager
+     * Helper for managing pagination
      *
-     * @var \Magento\Review\Helper\Action\Pager
+     * @var Pager
      */
     protected $_reviewActionPager = null;
 
     /**
-     * Core registry
+     * Application data storage
      *
-     * @var \Magento\Framework\Registry
+     * @var Registry
      */
     protected $_coreRegistry = null;
 
     /**
      * Review model factory
      *
-     * @var \Magento\Review\Model\ReviewFactory
+     * @var ReviewFactory
      */
     protected $_reviewFactory;
 
     /**
-     * @param \Magento\Backend\Block\Widget\Context $context
-     * @param \Magento\Review\Model\ReviewFactory $reviewFactory
-     * @param \Magento\Review\Helper\Action\Pager $reviewActionPager
-     * @param \Magento\Framework\Registry $registry
+     * Escaper for secure output rendering
+     *
+     * @var Escaper
+     */
+    private $escaper;
+
+    /**
+     * @param Context $context
+     * @param ReviewFactory $reviewFactory
+     * @param Pager $reviewActionPager
+     * @param Registry $registry
      * @param array $data
+     * @param Escaper|null $escaper
      */
     public function __construct(
-        \Magento\Backend\Block\Widget\Context $context,
-        \Magento\Review\Model\ReviewFactory $reviewFactory,
-        \Magento\Review\Helper\Action\Pager $reviewActionPager,
-        \Magento\Framework\Registry $registry,
-        array $data = []
+        Context $context,
+        ReviewFactory $reviewFactory,
+        Pager $reviewActionPager,
+        Registry $registry,
+        array $data = [],
+        ?Escaper $escaper = null
     ) {
         $this->_coreRegistry = $registry;
         $this->_reviewActionPager = $reviewActionPager;
         $this->_reviewFactory = $reviewFactory;
+        $this->escaper = $escaper ?? ObjectManager::getInstance()->get(Escaper::class);
         parent::__construct($context, $data);
     }
 
@@ -178,12 +195,13 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
 
         if ($this->getRequest()->getParam('ret', false) == 'pending') {
             $this->buttonList->update('back', 'onclick', 'setLocation(\'' . $this->getUrl('review/*/pending') . '\')');
+            $confirmMessage = $this->escaper->escapeJs(
+                $this->escaper->escapeHtml(__('Are you sure you want to do this?'))
+            );
             $this->buttonList->update(
                 'delete',
                 'onclick',
-                'deleteConfirm(' . '\'' . __(
-                    'Are you sure you want to do this?'
-                ) . '\', ' . '\'' . $this->getUrl(
+                'deleteConfirm(' . '\'' . $confirmMessage . '\', ' . '\'' . $this->getUrl(
                     '*/*/delete',
                     [$this->_objectId => $this->getRequest()->getParam($this->_objectId), 'ret' => 'pending']
                 ) . '\', {data: {}})'
