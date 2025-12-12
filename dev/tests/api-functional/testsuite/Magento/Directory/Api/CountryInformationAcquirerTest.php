@@ -9,12 +9,12 @@ use Magento\TestFramework\TestCase\WebapiAbstract;
 
 class CountryInformationAcquirerTest extends WebapiAbstract
 {
-    const SERVICE_NAME = 'directoryCountryInformationAcquirerV1';
-    const RESOURCE_COUNTRIES_PATH = '/V1/directory/countries';
-    const RESOURCE_COUNTRY = 'US';
-    const SERVICE_VERSION = 'V1';
+    private const SERVICE_NAME = 'directoryCountryInformationAcquirerV1';
+    private const RESOURCE_COUNTRIES_PATH = '/V1/directory/countries';
+    private const RESOURCE_COUNTRY = 'US';
+    private const SERVICE_VERSION = 'V1';
 
-    const STORE_CODE_FROM_FIXTURE = 'fixturestore';
+    private const STORE_CODE_FROM_FIXTURE = 'fixturestore';
 
     /**
      * @magentoApiDataFixture Magento/Store/_files/core_fixturestore.php
@@ -39,6 +39,14 @@ class CountryInformationAcquirerTest extends WebapiAbstract
         $this->assertSame('AD', $result[0]['two_letter_abbreviation']);
         $this->assertSame('AND', $result[0]['three_letter_abbreviation']);
         $this->assertSame('Andorra', $result[0]['full_name_english']);
+
+        $emptyFullNameLocaleCount = 0;
+        foreach ($result as $country) {
+            if (empty($country['full_name_locale'])) {
+                $emptyFullNameLocaleCount++;
+            }
+        }
+        $this->assertEquals(0, $emptyFullNameLocaleCount);
     }
 
     /**
@@ -65,6 +73,29 @@ class CountryInformationAcquirerTest extends WebapiAbstract
         $this->assertSame('US', $result['two_letter_abbreviation']);
         $this->assertSame('USA', $result['three_letter_abbreviation']);
         $this->assertSame('United States', $result['full_name_english']);
+    }
+
+    /**
+     * @magentoApiDataFixture Magento/Store/_files/core_fixturestore.php
+     */
+    public function testGetObsoleteCountry()
+    {
+        /** @var $store \Magento\Store\Model\Group   */
+        $store = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(\Magento\Store\Model\Store::class);
+        $store->load(self::STORE_CODE_FROM_FIXTURE);
+        $this->assertNotEmpty($store->getId(), 'Precondition failed: fixture store was not created.');
+
+        try {
+            $this->getCountryInfo(self::STORE_CODE_FROM_FIXTURE, 'AN');
+        } catch (\Exception $e) {
+            // Parse JSON error response if present
+            $errorMessage = json_decode($e->getMessage(), true);
+            if ($errorMessage && isset($errorMessage['message'])) {
+                $errorMessage = $errorMessage['message'];
+            }
+
+            $this->assertEquals('The country isn\'t available.', $errorMessage);
+        }
     }
 
     /**
@@ -95,13 +126,14 @@ class CountryInformationAcquirerTest extends WebapiAbstract
      * Retrieve existing country information for the store
      *
      * @param string $storeCode
+     * @param string $countryId
      * @return \Magento\Directory\Api\Data\CountryInformationInterface
      */
-    protected function getCountryInfo($storeCode = 'default')
+    protected function getCountryInfo($storeCode = 'default', $countryId = self::RESOURCE_COUNTRY)
     {
         $serviceInfo = [
             'rest' => [
-                'resourcePath' => self::RESOURCE_COUNTRIES_PATH . '/' . self::RESOURCE_COUNTRY,
+                'resourcePath' => self::RESOURCE_COUNTRIES_PATH . '/' . $countryId,
                 'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_GET,
             ],
             'soap' => [
