@@ -13,6 +13,7 @@ use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\Config;
 use Magento\Catalog\Model\Product\Gallery\ReadHandler as GalleryReadHandler;
 use Magento\ConfigurableProduct\Model\Product\Type\Collection\SalableProcessor;
+use Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable\Product\Collection;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Framework\Api\SearchCriteriaBuilder;
@@ -807,14 +808,15 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType impl
     {
         if (is_array($attributesInfo) && !empty($attributesInfo)) {
             $productCollection = $this->getUsedProductCollection($product)->addAttributeToSelect('name');
-            foreach ($attributesInfo as $attributeId => $attributeValue) {
-                $productCollection->addAttributeToFilter($attributeId, $attributeValue);
-            }
+            $this->addAttributesToFilter($productCollection, $attributesInfo);
             /** @var \Magento\Catalog\Model\Product $productObject */
             $productObject = $productCollection->getFirstItem();
             $productLinkFieldId = $productObject->getId();
             if ($productLinkFieldId) {
-                return $this->productRepository->getById($productLinkFieldId);
+                return $this->productRepository->getById(
+                    $productLinkFieldId,
+                    storeId: $product->hasStoreId() ? $product->getStoreId() : null
+                );
             }
 
             foreach ($productCollection as $productObject) {
@@ -831,6 +833,20 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType impl
             }
         }
         return null;
+    }
+
+    /**
+     * Add attributes to product collection filter
+     *
+     * @param Collection $collection
+     * @param array $attributesInfo
+     * @return void
+     */
+    private function addAttributesToFilter(Collection $collection, array $attributesInfo): void
+    {
+        foreach ($attributesInfo as $attributeId => $attributeValue) {
+            $collection->addAttributeToFilter($attributeId, $attributeValue);
+        }
     }
 
     /**

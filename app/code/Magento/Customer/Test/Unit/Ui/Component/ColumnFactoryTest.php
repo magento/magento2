@@ -45,33 +45,21 @@ class ColumnFactoryTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->context = $this->getMockForAbstractClass(
-            ContextInterface::class,
-            [],
-            '',
-            false
+        $this->context = $this->createMock(
+            ContextInterface::class
         );
         $this->componentFactory = $this->createPartialMock(
             UiComponentFactory::class,
             ['create']
         );
-        $this->attributeMetadata = $this->getMockForAbstractClass(
-            AttributeMetadataInterface::class,
-            [],
-            '',
-            false
+        $this->attributeMetadata = $this->createMock(
+            AttributeMetadataInterface::class
         );
-        $this->column = $this->getMockForAbstractClass(
-            ColumnInterface::class,
-            [],
-            '',
-            false
+        $this->column = $this->createMock(
+            ColumnInterface::class
         );
-        $this->attributeOption = $this->getMockForAbstractClass(
-            OptionInterface::class,
-            [],
-            '',
-            false
+        $this->attributeOption = $this->createMock(
+            OptionInterface::class
         );
 
         $this->inlineEditUpdater = $this->getMockBuilder(

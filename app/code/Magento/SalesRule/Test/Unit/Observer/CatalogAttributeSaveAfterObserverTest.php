@@ -10,6 +10,7 @@ namespace Magento\SalesRule\Test\Unit\Observer;
 use Magento\Catalog\Model\ResourceModel\Eav\Attribute;
 use Magento\Framework\Event;
 use Magento\Framework\Event\Observer;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\SalesRule\Observer\CatalogAttributeSaveAfterObserver;
 use Magento\SalesRule\Observer\CheckSalesRulesAvailability;
@@ -18,6 +19,8 @@ use PHPUnit\Framework\TestCase;
 
 class CatalogAttributeSaveAfterObserverTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var CatalogAttributeSaveAfterObserver|MockObject
      */
@@ -52,10 +55,7 @@ class CatalogAttributeSaveAfterObserverTest extends TestCase
     {
         $attributeCode = 'attributeCode';
         $observer = $this->createMock(Observer::class);
-        $event = $this->getMockBuilder(Event::class)
-            ->addMethods(['getAttribute'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $event = $this->createPartialMockWithReflection(Event::class, ['getAttribute']);
         $attribute = $this->createPartialMock(
             Attribute::class,
             ['dataHasChangedFor', 'getIsUsedForPromoRules', 'getAttributeCode']

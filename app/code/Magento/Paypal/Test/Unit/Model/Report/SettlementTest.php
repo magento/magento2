@@ -35,9 +35,7 @@ class SettlementTest extends TestCase
     protected function setUp(): void
     {
         $objectManagerHelper = new ObjectManagerHelper($this);
-        $this->tmpDirectory = $this->getMockBuilder(WriteInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->tmpDirectory = $this->createMock(WriteInterface::class);
         $this->settlement = $objectManagerHelper->getObject(
             Settlement::class,
             [
@@ -56,10 +54,7 @@ class SettlementTest extends TestCase
         $this->tmpDirectory->method('getAbsolutePath')
             ->willReturn('');
         /** @var Sftp|MockObject $connection */
-        $connection = $this->getMockBuilder(Sftp::class)
-            ->onlyMethods(['rawls', 'read'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $connection = $this->createMock(Sftp::class);
         $connection->method('rawls')
             ->willReturn(
                 [

@@ -9,6 +9,7 @@ namespace Magento\Paypal\Test\Unit\Controller\Express;
 
 use Magento\Paypal\Model\Express\Checkout;
 use Magento\Paypal\Test\Unit\Controller\ExpressTestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class StartTest extends ExpressTestCase
 {
@@ -21,8 +22,8 @@ class StartTest extends ExpressTestCase
      * @param null|bool $buttonParam
      *
      * @return void
-     * @dataProvider startActionDataProvider
      */
+    #[DataProvider('startActionDataProvider')]
     public function testStartAction($buttonParam): void
     {
         $this->checkout->expects($this->once())

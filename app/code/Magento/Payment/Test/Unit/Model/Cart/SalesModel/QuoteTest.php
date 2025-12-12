@@ -11,6 +11,7 @@ use Magento\Framework\DataObject;
 use Magento\Payment\Model\Cart\SalesModel\Quote;
 use Magento\Quote\Model\Quote\Address;
 use Magento\Quote\Model\Quote\Item\AbstractItem;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -69,8 +70,8 @@ class QuoteTest extends TestCase
      * @param string $name
      * @param int $qty
      * @param float $price
-     * @dataProvider getAllItemsDataProvider
      */
+    #[DataProvider('getAllItemsDataProvider')]
     public function testGetAllItems($pItem, $name, $qty, $price)
     {
         $itemMock = $this->createMock(AbstractItem::class);
@@ -122,8 +123,8 @@ class QuoteTest extends TestCase
     /**
      * @param int $isVirtual
      * @param string $getterMethod
-     * @dataProvider getterDataProvider
      */
+    #[DataProvider('getterDataProvider')]
     public function testGetter($isVirtual, $getterMethod)
     {
         $address = $this->createMock(Address::class);

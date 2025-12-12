@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -50,7 +50,7 @@ class ProductMetadataTest extends TestCase
     /**
      * @param array $packageList
      * @param string $expectedVersion
-     * @dataProvider testGetVersionGitInstallationDataProvider
+     * @dataProvider getVersionGitInstallationDataProvider
      */
     public function testGetVersion($packageList, $expectedVersion)
     {
@@ -74,7 +74,7 @@ class ProductMetadataTest extends TestCase
     /**
      * @return array
      */
-    public static function testGetVersionGitInstallationDataProvider()
+    public static function getVersionGitInstallationDataProvider()
     {
         return [
             [

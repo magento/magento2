@@ -1,5 +1,5 @@
-# Copyright © Magento, Inc. All rights reserved.
-# See COPYING.txt for license details.
+# Copyright 2018 Adobe
+# All Rights Reserved.
 
 type Query {
     urlResolver(url: String! @doc(description: "A `url_key` appended by the `url_suffix, if one exists.")): EntityUrl @resolver(class: "Magento\\UrlRewriteGraphQl\\Model\\Resolver\\EntityUrl") @doc(description: "Return the relative URL for a specified product, category or CMS page.") @deprecated(reason: "Use the `route` query instead.") @cache(cacheIdentity: "Magento\\UrlRewriteGraphQl\\Model\\Resolver\\UrlRewrite\\UrlResolverIdentity")

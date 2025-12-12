@@ -36,9 +36,7 @@ class SchemaLocatorTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->readerMock = $this->getMockBuilder(Reader::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->readerMock = $this->createMock(Reader::class);
 
         $this->readerMock->expects($this->once())
             ->method('getModuleDir')

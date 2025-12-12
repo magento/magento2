@@ -1,8 +1,7 @@
 <?php
 /**
- * Copyright 2025 Adobe.
- * All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Customer\Controller\Adminhtml\Index;
@@ -41,6 +40,8 @@ use Magento\Framework\Exception\AbstractAggregateException;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Math\Random;
+use Magento\Customer\Model\ValidatorExceptionProcessor;
+use Magento\Framework\Message\AbstractMessage;
 use Magento\Framework\Reflection\DataObjectProcessor;
 use Magento\Framework\Registry;
 use Magento\Framework\Validator\Exception;
@@ -81,6 +82,11 @@ class Save extends \Magento\Customer\Controller\Adminhtml\Index implements HttpP
      * @var SetCustomerStore|null
      */
     private $customerStore;
+
+    /**
+     * @var ValidatorExceptionProcessor
+     */
+    private $validatorExceptionProcessor;
 
     /**
      * Constructor
@@ -148,6 +154,10 @@ class Save extends \Magento\Customer\Controller\Adminhtml\Index implements HttpP
         ?StoreManagerInterface $storeManager = null,
         ?SetCustomerStore $customerStore = null
     ) {
+        $this->validatorExceptionProcessor = ObjectManager::getInstance()->get(ValidatorExceptionProcessor::class);
+        if ($this->validatorExceptionProcessor !== null) {
+            $this->validatorExceptionProcessor->setMessageManager($context->getMessageManager());
+        }
         parent::__construct(
             $context,
             $coreRegistry,
@@ -411,11 +421,19 @@ class Save extends \Magento\Customer\Controller\Adminhtml\Index implements HttpP
                 );
                 $returnToEdit = false;
             } catch (Exception $exception) {
-                $messages = $exception->getMessages();
-                if (empty($messages)) {
-                    $messages = $exception->getMessage();
+                $validatorMessages = $exception->getMessages();
+                if (!empty($validatorMessages)) {
+                    $translatedMessages = [];
+                    foreach ($validatorMessages as $message) {
+                        $messageText = $message instanceof AbstractMessage
+                            ? $message->getText()
+                            : (string)$message;
+                        $translatedMessages[] = (string)__($messageText);
+                    }
+                    $this->_addSessionErrorMessages($translatedMessages);
+                } else {
+                    $this->_addSessionErrorMessages($exception->getMessage());
                 }
-                $this->_addSessionErrorMessages($messages);
                 $this->_getSession()->setCustomerFormData($this->retrieveFormattedFormData($customer));
                 $returnToEdit = true;
             } catch (AbstractAggregateException $exception) {

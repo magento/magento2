@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -57,7 +57,7 @@ class PhraseCollectorTest extends TestCase
      * @param array $getFunctionArgumentsTokensReturnValues
      * @param array $isMatchingClassReturnValues
      * @param array $result
-     * @dataProvider testParseDataProvider
+     * @dataProvider parseDataProvider
      */
     public function testParse(
         $file,
@@ -121,7 +121,7 @@ class PhraseCollectorTest extends TestCase
     /**
      * @return array
      */
-    public static function testParseDataProvider()
+    public static function parseDataProvider()
     {
         $file = 'path/to/file.php';
         $line = 110;

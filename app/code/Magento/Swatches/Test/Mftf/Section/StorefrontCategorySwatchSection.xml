@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright 2025 Adobe
+ * All Rights Reserved.
+ */
+-->
+
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="StorefrontCategorySwatchSection">
+        <element name="swatchOptionByLabel" type="button" selector=".products-grid .swatch-option[data-option-label='{{label}}']" parameterized="true"/>
+        <element name="productImageInGrid" type="block" selector=".products-grid .product-item-photo img"/>
+    </section>
+</sections>

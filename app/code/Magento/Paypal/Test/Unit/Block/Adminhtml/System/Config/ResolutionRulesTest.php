@@ -8,9 +8,12 @@ declare(strict_types=1);
 namespace Magento\Paypal\Test\Unit\Block\Adminhtml\System\Config;
 
 use Magento\Backend\Block\Template\Context;
+use Magento\Directory\Helper\Data as DirectoryHelper;
+use Magento\Framework\Json\Helper\Data as JsonHelper;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Paypal\Block\Adminhtml\System\Config\ResolutionRules;
 use Magento\Paypal\Model\Config\Rules\Reader;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -45,9 +48,12 @@ class ResolutionRulesTest extends TestCase
 
         $this->context = $objectManager->getObject(Context::class);
 
-        $this->readerMock = $this->getMockBuilder(Reader::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->readerMock = $this->createMock(Reader::class);
+
+        $objectManager->prepareObjectManager([
+            [JsonHelper::class, $this->createMock(JsonHelper::class)],
+            [DirectoryHelper::class, $this->createMock(DirectoryHelper::class)]
+        ]);
 
         $this->resolutionRules = new ResolutionRules(
             $this->context,
@@ -60,8 +66,8 @@ class ResolutionRulesTest extends TestCase
      *
      * @param array $incoming
      * @param string $outgoing
-     * @dataProvider getJsonDataProvider
      */
+    #[DataProvider('getJsonDataProvider')]
     public function testGetJson($incoming, $outgoing)
     {
         $this->readerMock->expects($this->once())

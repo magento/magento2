@@ -62,14 +62,12 @@ class TokensConfigProviderTest extends TestCase
     protected function setUp(): void
     {
         $this->objectManager = new ObjectManager($this);
-        $this->vaultPaymentList = $this->getMockForAbstractClass(PaymentMethodListInterface::class);
-        $this->vaultPayment = $this->getMockForAbstractClass(VaultPaymentInterface::class);
-        $this->storeManager = $this->getMockForAbstractClass(StoreManagerInterface::class);
-        $this->store = $this->getMockForAbstractClass(StoreInterface::class);
+        $this->vaultPaymentList = $this->createMock(PaymentMethodListInterface::class);
+        $this->vaultPayment = $this->createMock(VaultPaymentInterface::class);
+        $this->storeManager = $this->createMock(StoreManagerInterface::class);
+        $this->store = $this->createMock(StoreInterface::class);
 
-        $this->customerTokenManagement = $this->getMockBuilder(CustomerTokenManagement::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->customerTokenManagement = $this->createMock(CustomerTokenManagement::class);
     }
 
     public function testGetConfig()
@@ -88,9 +86,9 @@ class TokensConfigProviderTest extends TestCase
             ]
         ];
 
-        $token = $this->getMockForAbstractClass(PaymentTokenInterface::class);
-        $tokenUiComponentProvider = $this->getMockForAbstractClass(TokenUiComponentProviderInterface::class);
-        $tokenUiComponent = $this->getMockForAbstractClass(TokenUiComponentInterface::class);
+        $token = $this->createMock(PaymentTokenInterface::class);
+        $tokenUiComponentProvider = $this->createMock(TokenUiComponentProviderInterface::class);
+        $tokenUiComponent = $this->createMock(TokenUiComponentInterface::class);
 
         $this->storeManager->expects(static::once())
             ->method('getStore')
