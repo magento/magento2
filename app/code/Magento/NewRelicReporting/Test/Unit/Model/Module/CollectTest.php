@@ -17,12 +17,17 @@ use Magento\NewRelicReporting\Model\ResourceModel\Module\Collection;
 use Magento\NewRelicReporting\Model\ResourceModel\Module\CollectionFactory;
 use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\MockObject\MockObject;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
 use ReflectionException;
 
 class CollectTest extends TestCase
 {
+
+    use MockCreationTrait;
+    
     /**
      * @var Collect
      */
@@ -58,7 +63,7 @@ class CollectTest extends TestCase
         $this->moduleListMock = $this->getMockBuilder(ModuleListInterface::class)
             ->onlyMethods(['getNames', 'has', 'getAll', 'getOne'])
             ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+            ->getMock();
 
         $this->fullModuleListMock = $this->getMockBuilder(FullModuleList::class)
             ->onlyMethods(['getNames', 'getAll'])
@@ -175,9 +180,9 @@ class CollectTest extends TestCase
     /**
      * Tests modules data returns array and saving in DB
      *
-     * @dataProvider itemDataProvider
      * @return void
      */
+    #[DataProvider('itemDataProvider')]
     public function testGetModuleDataRefresh($data)
     {
         $moduleCollectionMock = $this->getMockBuilder(
@@ -186,11 +191,10 @@ class CollectTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
         /** @var Module|MockObject $itemMock */
-        $itemMock = $this->getMockBuilder(Module::class)
-            ->addMethods(['getName', 'getState'])
-            ->onlyMethods(['getData', 'setData', 'save'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $itemMock = $this->createPartialMockWithReflection(
+            Module::class,
+            ['getName', 'getState', 'getData', 'setData', 'save']
+        );
         $modulesMockArray = [
             'Module_Name1' => [
                 'name' => 'Module_Name1',
@@ -263,9 +267,9 @@ class CollectTest extends TestCase
     /**
      * Tests modules data returns array and saving in DB
      *
-     * @dataProvider itemDataProvider
      * @return void
      */
+    #[DataProvider('itemDataProvider')]
     public function testGetModuleDataRefreshOrStatement($data)
     {
         $moduleCollectionMock = $this->getMockBuilder(
@@ -274,11 +278,10 @@ class CollectTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
         /** @var Module|MockObject $itemMock */
-        $itemMock = $this->getMockBuilder(Module::class)
-            ->addMethods(['getName', 'getState'])
-            ->onlyMethods(['getData', 'setData', 'save'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $itemMock = $this->createPartialMockWithReflection(
+            Module::class,
+            ['getName', 'getState', 'getData', 'setData', 'save']
+        );
         $modulesMockArray = [
             'Module_Name1' => [
                 'name' => 'Module_Name1',
@@ -458,9 +461,9 @@ class CollectTest extends TestCase
      * @param bool $isOutputEnabled
      * @param string $expectedState
      * @return void
-     * @dataProvider getStateDataProvider
      * @throws ReflectionException
      */
+    #[DataProvider('getStateDataProvider')]
     public function testGetStateWithDataProvider(string $moduleName, bool $isOutputEnabled, string $expectedState)
     {
         // Mock isOutputEnabled with the provided return value

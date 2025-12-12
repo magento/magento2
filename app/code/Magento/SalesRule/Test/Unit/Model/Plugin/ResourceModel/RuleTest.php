@@ -10,6 +10,7 @@ namespace Magento\SalesRule\Test\Unit\Model\Plugin\ResourceModel;
 use Magento\Framework\Model\AbstractModel;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\SalesRule\Model\Plugin\ResourceModel\Rule;
+use Magento\SalesRule\Model\ResourceModel\Rule as RuleResource;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -38,15 +39,10 @@ class RuleTest extends TestCase
     protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
-        $this->ruleResource = $this->getMockBuilder(\Magento\SalesRule\Model\ResourceModel\Rule::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->ruleResource = $this->createMock(RuleResource::class);
         $this->genericClosure = function () {
-            return;
         };
-        $this->abstractModel = $this->getMockBuilder(AbstractModel::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->abstractModel = $this->createMock(AbstractModel::class);
 
         $this->plugin = $objectManager->getObject(Rule::class);
     }

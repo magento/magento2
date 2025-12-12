@@ -115,7 +115,7 @@ class GeneratorTest extends TestCase
                     return json_encode($value);
                 }
             );
-        $objectManagerMock = $this->getMockForAbstractClass(ObjectManagerInterface::class);
+        $objectManagerMock = $this->createMock(ObjectManagerInterface::class);
         $objectManagerMock->expects($this->any())
             ->method('get')
             ->willReturnMap([
