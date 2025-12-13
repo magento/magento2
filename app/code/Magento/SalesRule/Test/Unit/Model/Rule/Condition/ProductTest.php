@@ -9,6 +9,7 @@ namespace Magento\SalesRule\Test\Unit\Model\Rule\Condition;
 
 use Magento\Backend\Helper\Data;
 use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\Catalog\Model\Product as CatalogProduct;
 use Magento\Catalog\Model\ProductCategoryList;
 use Magento\Catalog\Model\ProductFactory;
 use Magento\Catalog\Model\ResourceModel\Eav\Attribute;
@@ -27,8 +28,10 @@ use Magento\Framework\Locale\FormatInterface;
 use Magento\Framework\Locale\ResolverInterface;
 use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
 use Magento\Quote\Model\Quote\Item\AbstractItem;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Rule\Model\Condition\Context;
 use Magento\SalesRule\Model\Rule\Condition\Product as SalesRuleProduct;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -37,6 +40,7 @@ use PHPUnit\Framework\TestCase;
  */
 class ProductTest extends TestCase
 {
+    use MockCreationTrait;
     private const STUB_CATEGORY_ID = 5;
     /** @var SalesRuleProduct */
     protected $model;
@@ -94,8 +98,7 @@ class ProductTest extends TestCase
         $this->productFactoryMock = $this->getMockBuilder(ProductFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->productRepositoryMock = $this->getMockBuilder(ProductRepositoryInterface::class)
-            ->getMockForAbstractClass();
+        $this->productRepositoryMock = $this->createMock(ProductRepositoryInterface::class);
         $this->attributeLoaderInterfaceMock = $this->getMockBuilder(AbstractEntity::class)
             ->disableOriginalConstructor()
             ->onlyMethods(['getAttributesByCode'])
@@ -117,10 +120,7 @@ class ProductTest extends TestCase
             ->method('from')
             ->with($this->anything(), $this->anything())
             ->willReturnSelf();
-        $this->adapterInterfaceMock = $this->getMockBuilder(AdapterInterface::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['fetchCol', 'select'])
-            ->getMockForAbstractClass();
+        $this->adapterInterfaceMock = $this->createMock(AdapterInterface::class);
         $this->adapterInterfaceMock
             ->expects($this->any())
             ->method('select')
@@ -150,15 +150,9 @@ class ProductTest extends TestCase
             ->onlyMethods(['getCategoryIds'])
             ->getMock();
         $this->format = new Format(
-            $this->getMockBuilder(ScopeResolverInterface::class)
-                ->disableOriginalConstructor()
-                ->getMockForAbstractClass(),
-            $this->getMockBuilder(ResolverInterface::class)
-                ->disableOriginalConstructor()
-                ->getMockForAbstractClass(),
-            $this->getMockBuilder(CurrencyFactory::class)
-                ->disableOriginalConstructor()
-                ->getMock()
+            $this->createMock(ScopeResolverInterface::class),
+            $this->createMock(ResolverInterface::class),
+            $this->createMock(CurrencyFactory::class)
         );
 
         $this->model = new SalesRuleProduct(
@@ -211,8 +205,8 @@ class ProductTest extends TestCase
      * @param string $attribute
      * @param string $url
      * @param string $jsObject
-     * @dataProvider getValueElementChooserUrlDataProvider
      */
+    #[DataProvider('getValueElementChooserUrlDataProvider')]
     public function testGetValueElementChooserUrl($attribute, $url, $jsObject = '')
     {
         $this->model->setJsFormObject($jsObject);
@@ -235,12 +229,11 @@ class ProductTest extends TestCase
      */
     public function testValidateCategoriesIgnoresVisibility(): void
     {
-        /* @var \Magento\Catalog\Model\Product|MockObject $product */
-        $product = $this->getMockBuilder(\Magento\Catalog\Model\Product::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['getId'])
-            ->addMethods(['getAttribute', 'setQuoteItemQty', 'setQuoteItemPrice'])
-            ->getMock();
+        /* @var CatalogProduct|MockObject $product */
+        $product = $this->createPartialMockWithReflection(
+            CatalogProduct::class,
+            ['getId', 'getAttribute', 'setQuoteItemQty', 'setQuoteItemPrice']
+        );
         $product
             ->method('setQuoteItemQty')
             ->willReturnSelf();
@@ -248,10 +241,7 @@ class ProductTest extends TestCase
             ->method('setQuoteItemPrice')
             ->willReturnSelf();
         /* @var AbstractItem|MockObject $item */
-        $item = $this->getMockBuilder(AbstractItem::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['getProduct'])
-            ->getMockForAbstractClass();
+        $item = $this->createMock(AbstractItem::class);
         $item->expects($this->any())
             ->method('getProduct')
             ->willReturn($product);
@@ -266,25 +256,21 @@ class ProductTest extends TestCase
      * @param string $conditionValue
      * @param string $operator
      * @param string $productPrice
-     * @dataProvider localisationProvider
      */
+    #[DataProvider('localisationProvider')]
     public function testQuoteLocaleFormatPrice($isValid, $conditionValue, $operator = '>=', $productPrice = '2000.00')
     {
-        $attr = $this->getMockBuilder(AbstractDb::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['getAttribute'])
-            ->getMockForAbstractClass();
+        $attr = $this->createPartialMock(
+            Product::class,
+            ['getAttribute']
+        );
+        $attr->method('getAttribute')->willReturn(null);
 
-        $attr->expects($this->any())
-            ->method('getAttribute')
-            ->willReturn('');
-
-        /* @var \Magento\Catalog\Model\Product|MockObject $product */
-        $product = $this->getMockBuilder(\Magento\Catalog\Model\Product::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['setQuoteItemPrice'])
-            ->onlyMethods(['getResource', 'hasData', 'getData'])
-            ->getMock();
+        /* @var CatalogProduct|MockObject $product */
+        $product = $this->createPartialMockWithReflection(
+            CatalogProduct::class,
+            ['setQuoteItemPrice', 'getResource', 'hasData', 'getData']
+        );
 
         $product->expects($this->any())
             ->method('setQuoteItemPrice')
@@ -304,10 +290,7 @@ class ProductTest extends TestCase
             ->willReturn($productPrice);
 
         /* @var AbstractItem|MockObject $item */
-        $item = $this->getMockBuilder(AbstractItem::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['getPrice', 'getProduct'])
-            ->getMockForAbstractClass();
+        $item = $this->createMock(AbstractItem::class);
 
         $item->expects($this->any())
             ->method('getPrice')
@@ -341,11 +324,10 @@ class ProductTest extends TestCase
             ->with('is_used_for_promo_rules')
             ->willReturn(false);
 
-        $attributeSecond = $this->getMockBuilder(Attribute::class)
-            ->onlyMethods(['getDataUsingMethod', 'isAllowedForRuleCondition', 'getAttributeCode'])
-            ->addMethods(['getFrontendLabel'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $attributeSecond = $this->createPartialMockWithReflection(
+            Attribute::class,
+            ['getDataUsingMethod', 'isAllowedForRuleCondition', 'getAttributeCode', 'getFrontendLabel']
+        );
         $attributeSecond->expects($this->atLeastOnce())
             ->method('getDataUsingMethod')
             ->with('is_used_for_promo_rules')

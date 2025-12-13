@@ -16,6 +16,7 @@ use Magento\NewRelicReporting\Model\CronEvent;
 use Magento\NewRelicReporting\Model\CronEventFactory;
 use Magento\NewRelicReporting\Model\Module\Collect;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
 use ReflectionException;
@@ -381,10 +382,9 @@ class ReportNewRelicCronTest extends TestCase
      * @param string $changeType
      * @param string $moduleName
      * @param string $version
-     * @return void
-     * @dataProvider moduleChangeTypesDataProvider
-     * @throws ReflectionException
+     * @return void     * @throws ReflectionException
      */
+    #[DataProvider('moduleChangeTypesDataProvider')]
     public function testReportModulesHandlesChangeTypes(string $changeType, string $moduleName, string $version)
     {
         $moduleData = [

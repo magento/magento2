@@ -17,6 +17,7 @@ use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Directory\WriteInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 class FileRecorderTest extends TestCase
@@ -87,7 +88,7 @@ class FileRecorderTest extends TestCase
 
         $this->fileInfoMock = $this->createMock(FileInfo::class);
 
-        $this->directoryMock = $this->getMockForAbstractClass(WriteInterface::class);
+        $this->directoryMock = $this->createMock(WriteInterface::class);
 
         $this->encodedContextMock = $this->createMock(EncodedContext::class);
 
@@ -107,8 +108,8 @@ class FileRecorderTest extends TestCase
 
     /**
      * @param string $pathToExistingFile
-     * @dataProvider recordNewFileDataProvider
      */
+    #[DataProvider('recordNewFileDataProvider')]
     public function testRecordNewFile($pathToExistingFile)
     {
         $content = openssl_random_pseudo_bytes(200);

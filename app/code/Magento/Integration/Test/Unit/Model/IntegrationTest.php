@@ -12,6 +12,7 @@ use Magento\Framework\Event\ManagerInterface;
 use Magento\Framework\Model\Context;
 use Magento\Framework\Model\ResourceModel\AbstractResource;
 use Magento\Framework\Registry;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Integration\Model\Integration;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -21,6 +22,7 @@ use PHPUnit\Framework\TestCase;
  */
 class IntegrationTest extends TestCase
 {
+    use MockCreationTrait;
     /**
      * @var \Magento\Integration\Model\Integration
      */
@@ -49,27 +51,14 @@ class IntegrationTest extends TestCase
     protected function setUp(): void
     {
         $this->contextMock = $this->createPartialMock(Context::class, ['getEventDispatcher']);
-        $eventManagerMock = $this->getMockForAbstractClass(
-            ManagerInterface::class,
-            [],
-            '',
-            false,
-            true,
-            true,
-            ['dispatch']
-        );
+        $eventManagerMock = $this->createMock(ManagerInterface::class);
         $this->contextMock->expects($this->once())
             ->method('getEventDispatcher')
             ->willReturn($eventManagerMock);
         $this->registryMock = $this->createMock(Registry::class);
-        $this->resourceMock = $this->getMockForAbstractClass(
+        $this->resourceMock = $this->createPartialMockWithReflection(
             AbstractResource::class,
-            [],
-            '',
-            false,
-            true,
-            true,
-            ['getIdFieldName', 'load', 'selectActiveIntegrationByConsumerId']
+            ['getIdFieldName', 'load', 'selectActiveIntegrationByConsumerId', '_construct', 'getConnection']
         );
         $this->resourceCollectionMock = $this->createMock(AbstractDb::class);
         $this->integrationModel = new Integration(
@@ -80,7 +69,7 @@ class IntegrationTest extends TestCase
         );
     }
 
-    public function testLoadByConsumerId()
+    public function testLoadByConsumerId(): void
     {
         $consumerId = 1;
         $this->resourceMock->expects($this->once())
@@ -91,7 +80,7 @@ class IntegrationTest extends TestCase
         $this->assertFalse($this->integrationModel->hasDataChanges());
     }
 
-    public function testLoadActiveIntegrationByConsumerId()
+    public function testLoadActiveIntegrationByConsumerId(): void
     {
         $consumerId = 1;
         $integrationData = [
@@ -108,7 +97,7 @@ class IntegrationTest extends TestCase
         $this->assertEquals($integrationData, $this->integrationModel->getData());
     }
 
-    public function testGetStatus()
+    public function testGetStatus(): void
     {
         $this->integrationModel->setStatus(1);
         $this->assertEquals(1, $this->integrationModel->getStatus());

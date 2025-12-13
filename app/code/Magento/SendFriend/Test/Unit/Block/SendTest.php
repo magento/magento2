@@ -12,6 +12,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\UrlInterface;
 use Magento\SendFriend\Block\Send;
 use Magento\SendFriend\Model\SendFriend;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -41,15 +42,9 @@ class SendTest extends TestCase
     {
         $objectManager = new ObjectManager($this);
 
-        $this->sendfriendMock = $this->getMockBuilder(SendFriend::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->urlBuilderMock = $this->getMockBuilder(UrlInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-        $this->requestMock = $this->getMockBuilder(RequestInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->sendfriendMock = $this->createMock(SendFriend::class);
+        $this->urlBuilderMock = $this->createMock(UrlInterface::class);
+        $this->requestMock = $this->createMock(RequestInterface::class);
 
         $this->model = $objectManager->getObject(
             Send::class,
@@ -83,9 +78,8 @@ class SendTest extends TestCase
     /**
      * @param bool $isExceedLimit
      * @param bool $result
-     *
-     * @dataProvider dataProviderCanSend
      */
+    #[DataProvider('dataProviderCanSend')]
     public function testCanSend($isExceedLimit, $result)
     {
         $this->sendfriendMock->expects($this->once())

@@ -43,7 +43,7 @@ class SelectBuilderTest extends TestCase
     {
         $this->resourceConnectionMock = $this->createMock(ResourceConnection::class);
 
-        $this->connectionMock = $this->getMockForAbstractClass(AdapterInterface::class);
+        $this->connectionMock = $this->createMock(AdapterInterface::class);
 
         $this->selectMock = $this->createMock(Select::class);
 

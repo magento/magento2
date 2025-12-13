@@ -9,6 +9,7 @@ namespace Magento\Webapi\Test\Unit;
 
 use Magento\Framework\Webapi\Exception;
 use Magento\Webapi\Model\Soap\Fault;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 class ExceptionTest extends TestCase
@@ -42,9 +43,8 @@ class ExceptionTest extends TestCase
 
     /**
      * Test Webapi exception construct with invalid data.
-     *
-     * @dataProvider providerForTestConstructInvalidHttpCode
      */
+    #[DataProvider('providerForTestConstructInvalidHttpCode')]
     public function testConstructInvalidHttpCode($httpCode)
     {
         $this->expectException('InvalidArgumentException');

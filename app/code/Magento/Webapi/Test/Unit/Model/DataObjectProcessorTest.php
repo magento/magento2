@@ -41,7 +41,7 @@ class DataObjectProcessorTest extends TestCase
                 'typeProcessor' => $objectManager->getObject(TypeProcessor::class),
             ]
         );
-        $serializerMock = $this->getMockForAbstractClass(SerializerInterface::class);
+        $serializerMock = $this->createMock(SerializerInterface::class);
         $serializerMock->method('serialize')
             ->willReturn('serializedData');
         $serializerMock->method('unserialize')

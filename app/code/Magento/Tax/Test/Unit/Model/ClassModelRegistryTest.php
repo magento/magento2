@@ -35,7 +35,7 @@ class ClassModelRegistryTest extends TestCase
      */
     private $classModelMock;
 
-    const CLASS_MODEL = 1;
+    private const CLASS_MODEL = 1;
 
     protected function setUp(): void
     {

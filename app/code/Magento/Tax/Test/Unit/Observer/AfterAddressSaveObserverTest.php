@@ -10,11 +10,13 @@ namespace Magento\Tax\Test\Unit\Observer;
 use Magento\Customer\Model\Address;
 use Magento\Framework\Event\Observer;
 use Magento\Framework\Module\Manager;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\PageCache\Model\Config;
 use Magento\Tax\Api\TaxAddressManagerInterface;
 use Magento\Tax\Helper\Data;
 use Magento\Tax\Observer\AfterAddressSaveObserver;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -23,6 +25,8 @@ use PHPUnit\Framework\TestCase;
  */
 class AfterAddressSaveObserverTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var Observer|MockObject
      */
@@ -65,10 +69,10 @@ class AfterAddressSaveObserverTest extends TestCase
     protected function setUp(): void
     {
         $this->objectManager = new ObjectManager($this);
-        $this->observerMock = $this->getMockBuilder(Observer::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['getCustomerAddress'])
-            ->getMock();
+        $this->observerMock = $this->createPartialMockWithReflection(
+            Observer::class,
+            ['getCustomerAddress']
+        );
 
         $this->moduleManagerMock = $this->getMockBuilder(Manager::class)
             ->disableOriginalConstructor()
@@ -83,10 +87,7 @@ class AfterAddressSaveObserverTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->addressManagerMock = $this->getMockBuilder(TaxAddressManagerInterface::class)
-            ->onlyMethods(['setDefaultAddressAfterSave', 'setDefaultAddressAfterLogIn'])
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->addressManagerMock = $this->createMock(TaxAddressManagerInterface::class);
 
         $this->session = $this->objectManager->getObject(
             AfterAddressSaveObserver::class,
@@ -101,19 +102,14 @@ class AfterAddressSaveObserverTest extends TestCase
 
     /**
      * @test
-     * @dataProvider getExecuteDataProvider
-     *
-     * @param bool $isEnabledPageCache
-     * @param bool $isEnabledConfigCache
-     * @param bool $isCatalogPriceDisplayAffectedByTax
-     * @param bool $isNeedSetAddress
      */
+    #[DataProvider('getExecuteDataProvider')]
     public function testExecute(
-        $isEnabledPageCache,
-        $isEnabledConfigCache,
-        $isCatalogPriceDisplayAffectedByTax,
-        $isNeedSetAddress
-    ) {
+        bool $isEnabledPageCache,
+        bool $isEnabledConfigCache,
+        bool $isCatalogPriceDisplayAffectedByTax,
+        bool $isNeedSetAddress
+    ): void {
         $this->moduleManagerMock->expects($this->any())
             ->method('isEnabled')
             ->with('Magento_PageCache')
@@ -146,7 +142,7 @@ class AfterAddressSaveObserverTest extends TestCase
     /**
      * @return array
      */
-    public static function getExecuteDataProvider()
+    public static function getExecuteDataProvider(): array
     {
         return [
             [false, false, false, false],
