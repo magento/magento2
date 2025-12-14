@@ -40,11 +40,9 @@ class PlaceOrderFactoryTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->objectManager = $this->getMockForAbstractClass(ObjectManagerInterface::class);
+        $this->objectManager = $this->createMock(ObjectManagerInterface::class);
 
-        $this->placeOrderPool = $this->getMockBuilder(PlaceOrderPool::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->placeOrderPool = $this->createMock(PlaceOrderPool::class);
 
         $this->placeOrderFactory = new PlaceOrderFactory($this->objectManager, $this->placeOrderPool);
     }
@@ -58,7 +56,7 @@ class PlaceOrderFactoryTest extends TestCase
     {
         $paymentProviderCode = 'code';
 
-        $placeOrder = $this->getMockForAbstractClass(PlaceOrderInterface::class);
+        $placeOrder = $this->createMock(PlaceOrderInterface::class);
         $this->placeOrderPool->method('get')
             ->with($paymentProviderCode)
             ->willReturn($placeOrder);
@@ -80,9 +78,7 @@ class PlaceOrderFactoryTest extends TestCase
         $this->placeOrderPool->method('get')
             ->with($paymentProviderCode)
             ->willReturn(null);
-        $placeOrder = $this->getMockBuilder(PlaceOrderDefault::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $placeOrder = $this->createMock(PlaceOrderDefault::class);
         $this->objectManager->method('get')
             ->with(PlaceOrderDefault::class)
             ->willReturn($placeOrder);

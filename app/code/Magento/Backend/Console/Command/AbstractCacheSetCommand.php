@@ -27,7 +27,7 @@ abstract class AbstractCacheSetCommand extends AbstractCacheManageCommand
     /**
      * @inheritdoc
      */
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $isEnable = $this->isEnable();
         $types = $this->getRequestedTypes($input);

@@ -22,6 +22,7 @@ class ViewedTest extends TestCase
     protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
+        $objectManager->prepareObjectManager();
         $this->block = $objectManager->getObject(Viewed::class);
     }
 

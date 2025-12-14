@@ -11,6 +11,7 @@ use Magento\Customer\Api\AccountManagementInterface;
 use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Customer\Api\Data\CustomerInterface;
 use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Newsletter\Model\Subscriber;
 use Magento\Newsletter\Model\SubscriberFactory;
@@ -18,6 +19,7 @@ use Magento\Newsletter\Model\SubscriptionManager;
 use Magento\Store\Api\Data\StoreInterface;
 use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\StoreManagerInterface;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
@@ -29,6 +31,8 @@ use Psr\Log\LoggerInterface;
  */
 class SubscriptionManagerTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var SubscriberFactory|MockObject
      */
@@ -70,11 +74,11 @@ class SubscriptionManagerTest extends TestCase
     protected function setUp(): void
     {
         $this->subscriberFactory = $this->createMock(SubscriberFactory::class);
-        $this->logger = $this->getMockForAbstractClass(LoggerInterface::class);
-        $this->storeManager = $this->getMockForAbstractClass(StoreManagerInterface::class);
-        $this->scopeConfig = $this->getMockForAbstractClass(ScopeConfigInterface::class);
-        $this->customerAccountManagement = $this->getMockForAbstractClass(AccountManagementInterface::class);
-        $this->customerRepository = $this->getMockForAbstractClass(CustomerRepositoryInterface::class);
+        $this->logger = $this->createMock(LoggerInterface::class);
+        $this->storeManager = $this->createMock(StoreManagerInterface::class);
+        $this->scopeConfig = $this->createMock(ScopeConfigInterface::class);
+        $this->customerAccountManagement = $this->createMock(AccountManagementInterface::class);
+        $this->customerRepository = $this->createMock(CustomerRepositoryInterface::class);
 
         $objectManager = new ObjectManager($this);
         $this->subscriptionManager = $objectManager->getObject(
@@ -98,8 +102,8 @@ class SubscriptionManagerTest extends TestCase
      * @param int $storeId
      * @param bool $isConfirmNeed
      * @param array $expectedData
-     * @dataProvider subscribeDataProvider
      */
+    #[DataProvider('subscribeDataProvider')]
     public function testSubscribe(
         array $subscriberData,
         string $email,
@@ -108,7 +112,7 @@ class SubscriptionManagerTest extends TestCase
         array $expectedData
     ): void {
         $websiteId = 1;
-        $store = $this->getMockForAbstractClass(StoreInterface::class);
+        $store = $this->createMock(StoreInterface::class);
         $store->method('getWebsiteId')->willReturn($websiteId);
         $this->storeManager->method('getStore')->with($storeId)->willReturn($store);
         /** @var Subscriber|MockObject $subscriber */
@@ -204,16 +208,15 @@ class SubscriptionManagerTest extends TestCase
         $email = 'email@example.com';
         $storeId = 2;
         $websiteId = 1;
-        $store = $this->getMockForAbstractClass(StoreInterface::class);
+        $store = $this->createMock(StoreInterface::class);
         $store->method('getWebsiteId')->willReturn($websiteId);
         $this->storeManager->method('getStore')->with($storeId)->willReturn($store);
         $confirmCode = 'confirm code';
         /** @var Subscriber|MockObject $subscriber */
-        $subscriber = $this->getMockBuilder(Subscriber::class)
-            ->addMethods(['setCheckCode'])
-            ->onlyMethods(['loadBySubscriberEmail', 'getId', 'unsubscribe'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $subscriber = $this->createPartialMockWithReflection(
+            Subscriber::class,
+            ['loadBySubscriberEmail', 'getId', 'unsubscribe', 'setCheckCode']
+        );
         $subscriber->expects($this->once())
             ->method('loadBySubscriberEmail')
             ->with($email, $websiteId)
@@ -238,8 +241,8 @@ class SubscriptionManagerTest extends TestCase
      * @param bool $isConfirmNeed
      * @param array $expectedData
      * @param bool $needToSendEmail
-     * @dataProvider subscribeCustomerDataProvider
      */
+    #[DataProvider('subscribeCustomerDataProvider')]
     public function testSubscribeCustomer(
         array $subscriberData,
         array $customerData,
@@ -250,11 +253,11 @@ class SubscriptionManagerTest extends TestCase
     ): void {
         $websiteId = 1;
         $customerId = $customerData['id'];
-        $store = $this->getMockForAbstractClass(StoreInterface::class);
+        $store = $this->createMock(StoreInterface::class);
         $store->method('getWebsiteId')->willReturn($websiteId);
         $this->storeManager->method('getStore')->with($storeId)->willReturn($store);
         /** @var CustomerInterface|MockObject $customer */
-        $customer = $this->getMockForAbstractClass(CustomerInterface::class);
+        $customer = $this->createMock(CustomerInterface::class);
         $customer->method('getId')->willReturn($customerId);
         $customer->method('getEmail')->willReturn($customerData['email']);
         $this->customerRepository->method('getById')->with($customerId)->willReturn($customer);
@@ -493,8 +496,8 @@ class SubscriptionManagerTest extends TestCase
      * @param int $storeId
      * @param array $expectedData
      * @param bool $needToSendEmail
-     * @dataProvider unsubscribeCustomerDataProvider
      */
+    #[DataProvider('unsubscribeCustomerDataProvider')]
     public function testUnsubscribeCustomer(
         array $subscriberData,
         array $customerData,
@@ -504,11 +507,11 @@ class SubscriptionManagerTest extends TestCase
     ): void {
         $websiteId = 1;
         $customerId = $customerData['id'];
-        $store = $this->getMockForAbstractClass(StoreInterface::class);
+        $store = $this->createMock(StoreInterface::class);
         $store->method('getWebsiteId')->willReturn($websiteId);
         $this->storeManager->method('getStore')->with($storeId)->willReturn($store);
         /** @var CustomerInterface|MockObject $customer */
-        $customer = $this->getMockForAbstractClass(CustomerInterface::class);
+        $customer = $this->createMock(CustomerInterface::class);
         $customer->method('getId')->willReturn($customerId);
         $customer->method('getEmail')->willReturn($customerData['email']);
         $this->customerRepository->method('getById')->with($customerId)->willReturn($customer);

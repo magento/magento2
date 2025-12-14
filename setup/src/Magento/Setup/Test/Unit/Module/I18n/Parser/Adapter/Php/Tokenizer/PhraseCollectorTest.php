@@ -57,7 +57,7 @@ class PhraseCollectorTest extends TestCase
      * @param array $getFunctionArgumentsTokensReturnValues
      * @param array $isMatchingClassReturnValues
      * @param array $result
-     * @dataProvider testParseDataProvider
+     * @dataProvider parseDataProvider
      */
     public function testParse(
         $file,
@@ -121,7 +121,7 @@ class PhraseCollectorTest extends TestCase
     /**
      * @return array
      */
-    public static function testParseDataProvider()
+    public static function parseDataProvider()
     {
         $file = 'path/to/file.php';
         $line = 110;

@@ -74,7 +74,7 @@ class RandomTest extends TestCase
      * @param $min
      * @param $max
      *
-     * @dataProvider testGetRandomNumberProvider
+     * @dataProvider getRandomNumberProvider
      */
     public function testGetRandomNumber($min, $max)
     {
@@ -86,7 +86,7 @@ class RandomTest extends TestCase
     /**
      * @return array
      */
-    public static function testGetRandomNumberProvider()
+    public static function getRandomNumberProvider()
     {
         return [
             [0, 100],

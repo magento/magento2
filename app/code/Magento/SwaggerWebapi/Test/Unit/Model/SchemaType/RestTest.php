@@ -10,6 +10,7 @@ namespace Magento\SwaggerWebapi\Test\Unit\Model\SchemaType;
 
 use Magento\Swagger\Api\Data\SchemaTypeInterface;
 use Magento\SwaggerWebapi\Model\SchemaType\Rest;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -33,9 +34,8 @@ class RestTest extends TestCase
      *
      * @param $expected
      * @param null|string $store
-     *
-     * @dataProvider getSchemaUrlPathProvider
      */
+    #[DataProvider('getSchemaUrlPathProvider')]
     public function testGetSchemaUrlPath($expected, $store = null)
     {
         $this->assertEquals($expected, $this->rest->getSchemaUrlPath($store));

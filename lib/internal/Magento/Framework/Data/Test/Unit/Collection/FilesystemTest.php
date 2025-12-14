@@ -28,7 +28,7 @@ class FilesystemTest extends TestCase
      * @param $row
      * @param $expected
      *
-     * @dataProvider testFilterCallbackLikeDataProvider
+     * @dataProvider filterCallbackLikeDataProvider
      */
     public function testFilterCallbackLike($field, $filterValue, $row, $expected)
     {
@@ -40,7 +40,7 @@ class FilesystemTest extends TestCase
     /**
      * @return array
      */
-    public static function testFilterCallbackLikeDataProvider()
+    public static function filterCallbackLikeDataProvider()
     {
         $field     = 'field';
         $testValue = '\'\'\'test\'\'\'Filter\'\'\'Value\'\'\'';

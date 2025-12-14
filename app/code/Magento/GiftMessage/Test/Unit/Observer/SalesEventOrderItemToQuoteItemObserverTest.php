@@ -11,6 +11,7 @@ namespace Magento\GiftMessage\Test\Unit\Observer;
 use Magento\Framework\Event;
 use Magento\Framework\Event\Observer;
 use Magento\Framework\Message\MessageInterface;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\GiftMessage\Helper\Message as MessageHelper;
 use Magento\GiftMessage\Model\Message as MessageModel;
@@ -28,6 +29,8 @@ use PHPUnit\Framework\TestCase;
  */
 class SalesEventOrderItemToQuoteItemObserverTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * Stub message id
      */
@@ -99,23 +102,22 @@ class SalesEventOrderItemToQuoteItemObserverTest extends TestCase
             ->getMock();
         $this->giftMessageHelperMock = $this->createMock(MessageHelper::class);
         $this->observerMock = $this->createMock(Observer::class);
-        $this->eventMock = $this->getMockBuilder(Event::class)
-            ->addMethods(['getOrderItem', 'getQuoteItem'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->orderItemMock = $this->getMockBuilder(OrderItem::class)
-            ->addMethods(['getGiftMessageId'])
-            ->onlyMethods(['getOrder', 'getStoreId'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->quoteItemMock = $this->getMockBuilder(QuoteItem::class)
-            ->addMethods(['setGiftMessageId'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->orderMock = $this->getMockBuilder(Order::class)
-            ->addMethods(['getReordered'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->eventMock = $this->createPartialMockWithReflection(
+            Event::class,
+            ['getOrderItem', 'getQuoteItem']
+        );
+        $this->orderItemMock = $this->createPartialMockWithReflection(
+            OrderItem::class,
+            ['getGiftMessageId', 'getOrder', 'getStoreId']
+        );
+        $this->quoteItemMock = $this->createPartialMockWithReflection(
+            QuoteItem::class,
+            ['setGiftMessageId']
+        );
+        $this->orderMock = $this->createPartialMockWithReflection(
+            Order::class,
+            ['getReordered']
+        );
         $this->storeMock = $this->createMock(Store::class);
         $this->messageMock = $this->createMock(MessageModel::class);
 

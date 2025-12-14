@@ -15,12 +15,15 @@ use Magento\Catalog\Model\Product;
 use Magento\Framework\Pricing\Adjustment\CalculatorInterface;
 use Magento\Framework\Pricing\Amount\AmountInterface;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Framework\Pricing\PriceInfo\Base as BasePriceInfo;
 use Magento\Msrp\Api\Data\ProductRender\MsrpPriceInfoInterface;
 use Magento\Msrp\Api\Data\ProductRender\MsrpPriceInfoInterfaceFactory;
 use Magento\Msrp\Helper\Data;
 use Magento\Msrp\Model\Config;
 use Magento\Msrp\Ui\DataProvider\Product\Listing\Collector\MsrpPrice;
+use Magento\Msrp\Pricing\Price\MsrpPrice as MsrpPriceModel;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -29,6 +32,8 @@ use PHPUnit\Framework\TestCase;
  */
 class MsrpPriceTest extends TestCase
 {
+    use MockCreationTrait;
+
     /** @var MsrpPrice */
     protected $model;
 
@@ -64,8 +69,7 @@ class MsrpPriceTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->priceCurrencyMock = $this->getMockBuilder(PriceCurrencyInterface::class)
-            ->getMockForAbstractClass();
+        $this->priceCurrencyMock = $this->createMock(PriceCurrencyInterface::class);
         $this->msrpHelperMock = $this->getMockBuilder(Data::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -83,7 +87,7 @@ class MsrpPriceTest extends TestCase
             ->disableOriginalConstructor()
             ->onlyMethods(['create'])
             ->getMock();
-        $this->adjustmentCalculator = $this->getMockForAbstractClass(CalculatorInterface::class);
+        $this->adjustmentCalculator = $this->createMock(CalculatorInterface::class);
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->model = $this->objectManagerHelper->getObject(
             MsrpPrice::class,
@@ -100,29 +104,53 @@ class MsrpPriceTest extends TestCase
 
     /**
      * @return void
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function testCollect()
+    public function testCollect(): void
     {
         $product = $this->getMockBuilder(Product::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $productRenderInfoDto = $this->getMockForAbstractClass(ProductRenderInterface::class);
-        $productPriceInfo = $this->getMockForAbstractClass(PriceInfoInterface::class);
+        $productRenderInfoDto = $this->createMock(ProductRenderInterface::class);
+        $productPriceInfo = $this->createMock(PriceInfoInterface::class);
 
         $productRenderInfoDto->expects($this->once())
             ->method('getPriceInfo')
             ->willReturn($productPriceInfo);
-        $extensionAttributes = $this->getMockBuilder(
-            PriceInfoExtensionInterface::class
-        )
-            ->addMethods(['setMsrp'])
-            ->getMockForAbstractClass();
+        // PriceInfoExtensionInterface is a generated interface - use createPartialMockWithReflection
+        $extensionAttributes = $this->createPartialMockWithReflection(
+            PriceInfoExtensionInterface::class,
+            [
+                'setMsrp',
+                'getMsrp',
+                'getTaxAdjustments',
+                'setTaxAdjustments',
+                'getWeeeAttributes',
+                'setWeeeAttributes',
+                'getWeeeAdjustment',
+                'setWeeeAdjustment'
+            ]
+        );
 
-        $priceInfo = $this->getMockBuilder(MsrpPriceInfoInterface::class)
-            ->addMethods(['getPrice'])
-            ->onlyMethods(['getExtensionAttributes'])
-            ->getMockForAbstractClass();
-        $amountInterface = $this->getMockForAbstractClass(AmountInterface::class);
+        // MsrpPriceInfoInterface is a generated interface - use createPartialMockWithReflection
+        $msrpPriceInfo = $this->createPartialMockWithReflection(
+            MsrpPriceInfoInterface::class,
+            [
+                'setIsApplicable',
+                'getIsApplicable',
+                'setExplanationMessage',
+                'getExplanationMessage',
+                'setMsrpMessage',
+                'getMsrpMessage',
+                'setIsShownPriceOnGesture',
+                'getIsShownPriceOnGesture',
+                'setMsrpPrice',
+                'getMsrpPrice',
+                'getExtensionAttributes',
+                'setExtensionAttributes'
+            ]
+        );
+        $amountInterface = $this->createMock(AmountInterface::class);
         $amountInterface->expects($this->once())
             ->method('getValue')
             ->willReturn(20);
@@ -133,13 +161,19 @@ class MsrpPriceTest extends TestCase
             ->method('setMsrp');
         $this->msrpPriceInfoFactory->expects($this->once())
             ->method('create')
-            ->willReturn($priceInfo);
+            ->willReturn($msrpPriceInfo);
         $this->priceInfoExtensionFactory->expects($this->once())
             ->method('create')
             ->willReturn($extensionAttributes);
-        $price = $this->getMockBuilder(\Magento\Msrp\Pricing\Price\MsrpPrice::class)
+        $price = $this->getMockBuilder(MsrpPriceModel::class)
             ->disableOriginalConstructor()
             ->getMock();
+        
+        // Product's PriceInfo needs getPrice method
+        $priceInfo = $this->createPartialMockWithReflection(
+            BasePriceInfo::class,
+            ['getPrice']
+        );
         $priceInfo->expects($this->once())
             ->method('getPrice')
             ->with('msrp_price')

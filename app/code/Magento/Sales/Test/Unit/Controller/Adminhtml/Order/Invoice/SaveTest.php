@@ -196,7 +196,7 @@ class SaveTest extends TestCase
     /**
      * @return array
      */
-    public static function testExecuteEmailsDataProvider(): array
+    public static function executeEmailsDataProvider(): array
     {
         /**
         * string $sendEmail
@@ -218,7 +218,7 @@ class SaveTest extends TestCase
      *
      * @return void
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
-     * @dataProvider testExecuteEmailsDataProvider
+     * @dataProvider executeEmailsDataProvider
      */
     public function testExecuteEmails(
         string $sendEmail,

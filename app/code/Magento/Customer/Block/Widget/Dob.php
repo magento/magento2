@@ -10,6 +10,7 @@ use Magento\Framework\Api\ArrayObjectSearch;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Json\EncoderInterface;
 use Magento\Framework\Locale\Bundle\DataBundle;
+use Magento\Framework\Locale\Resolver;
 use Magento\Framework\Locale\ResolverInterface;
 
 /**
@@ -171,6 +172,8 @@ class Dob extends AbstractWidget
     /**
      * Apply output filter to value
      *
+     * Normalizes date to display format with standard numerals to avoid localized numerals (e.g., Arabic)
+     *
      * @param string $value
      * @return string
      */
@@ -181,7 +184,7 @@ class Dob extends AbstractWidget
             $value = date('Y-m-d', $this->getTime());
             $value = $filter->outputFilter($value);
         }
-        return $value;
+        return $this->normalizedDobOutput($value);
     }
 
     /**
@@ -461,5 +464,32 @@ class Dob extends AbstractWidget
             'MM',
             $format
         );
+    }
+
+    /**
+     * Normalize the dob for a proper output on the frontend
+     *
+     * Converts localized date format (with potentially localized numerals like Arabic) to standard numerals
+     *
+     * @param mixed $value
+     * @return mixed
+     */
+    private function normalizedDobOutput(mixed $value): mixed
+    {
+        if (empty($value)) {
+            return $value;
+        }
+        $locale = $this->localeResolver->getLocale();
+        $dateFormat = $this->getDateFormat();
+        $dateTime = $this->_localeDate->date($value, $locale, false, false);
+        $formatter = new \IntlDateFormatter(
+            Resolver::DEFAULT_LOCALE,
+            \IntlDateFormatter::NONE,
+            \IntlDateFormatter::NONE,
+            $dateTime->getTimezone(),
+            null,
+            $dateFormat
+        );
+        return $formatter->format($dateTime);
     }
 }

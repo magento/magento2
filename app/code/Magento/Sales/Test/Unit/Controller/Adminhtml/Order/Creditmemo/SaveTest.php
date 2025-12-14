@@ -318,7 +318,7 @@ class SaveTest extends TestCase
     /**
      * @return array
      */
-    public static function testExecuteEmailsDataProvider()
+    public static function executeEmailsDataProvider()
     {
         /**
         * string $sendEmail
@@ -337,7 +337,7 @@ class SaveTest extends TestCase
      * @param string $sendEmail
      * @param bool $emailEnabled
      * @param bool $shouldEmailBeSent
-     * @dataProvider testExecuteEmailsDataProvider
+     * @dataProvider executeEmailsDataProvider
      */
     public function testExecuteEmails(
         $sendEmail,
