@@ -13,6 +13,7 @@ use Laminas\Soap\Wsdl;
 use Magento\Framework\Reflection\TypeProcessor;
 use Magento\Webapi\Model\Soap\Wsdl as WebapiWsdl;
 use Magento\Webapi\Model\Soap\Wsdl\ComplexTypeStrategy;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -89,8 +90,8 @@ class ComplexTypeStrategyTest extends TestCase
      * @param array $data
      *
      * @return void
-     * @dataProvider addComplexTypeDataProvider
      */
+    #[DataProvider('addComplexTypeDataProvider')]
     public function testAddComplexTypeSimpleParameters($type, $data): void
     {
         $this->wsdl->expects($this->any())->method('getTypes')->willReturn([]);

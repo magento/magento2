@@ -80,12 +80,53 @@ class AggregateCountTest extends TestCase
             ->method('getConnection')
             ->willReturn($this->connectionMock);
         $this->connectionMock->expects($this->once())
+            ->method('fetchOne')
+            ->willReturn(1);
+        $this->connectionMock->expects($this->once())
             ->method('update')
             ->with(
                 $table,
                 ['children_count' => new \Zend_Db_Expr('children_count - 1')],
                 ['entity_id IN(?)' => $parentIds]
             );
+        $this->aggregateCount->processDelete($this->categoryMock);
+    }
+
+    /**
+     * Subcategory with multiple scheduled updates:
+     * getCategoryRowCount() returns >1, so we decrement by that count.
+     */
+    public function testProcessDeleteWithMultipleScheduledUpdates(): void
+    {
+        $parentIds = [1, 2]; // e.g. root and default category as parents
+        $table = 'catalog_category_entity';
+
+        $this->categoryMock->expects($this->once())
+            ->method('getResource')
+            ->willReturn($this->resourceCategoryMock);
+        $this->categoryMock->expects($this->once())
+            ->method('getParentIds')
+            ->willReturn($parentIds);
+        $this->resourceCategoryMock->expects($this->any())
+            ->method('getEntityTable')
+            ->willReturn($table);
+        $this->resourceCategoryMock->expects($this->once())
+            ->method('getConnection')
+            ->willReturn($this->connectionMock);
+
+        // Case: base row + 2 scheduled updates = 3 rows → decrement by 3
+        $this->connectionMock->expects($this->once())
+            ->method('fetchOne')
+            ->willReturn(3);
+
+        $this->connectionMock->expects($this->once())
+            ->method('update')
+            ->with(
+                $table,
+                ['children_count' => new \Zend_Db_Expr('children_count - 3')],
+                ['entity_id IN(?)' => $parentIds]
+            );
+
         $this->aggregateCount->processDelete($this->categoryMock);
     }
 }

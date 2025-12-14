@@ -15,6 +15,6 @@
         <arguments>
             <argument name="number" type="string" defaultValue="1"/>
         </arguments>
-        <see userInput="{{number}} records found" selector="{{AdminGridHeaders.totalRecords}}" stepKey="seeRecords"/>
+        <waitForText userInput="{{number}} records found" selector="{{AdminGridHeaders.totalRecords}}" stepKey="seeRecords"/>
     </actionGroup>
 </actionGroups>

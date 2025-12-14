@@ -104,24 +104,14 @@ class ValidateTest extends TestCase
         ];
         $objectManagerHelper->prepareObjectManager($objects);
 
-        $this->requestMock = $this->getMockBuilder(Http::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods([
-                'getPostValue',
-                'isPost',
-            ])
-            ->getMock();
+        $this->requestMock = $this->createPartialMock(
+            Http::class,
+            ['getPostValue', 'isPost']
+        );
 
-        $this->resultFactoryMock = $this->getMockBuilder(ResultFactory::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $this->messageManagerMock = $this->getMockBuilder(ManagerInterface::class)
-            ->getMockForAbstractClass();
-
-        $this->contextMock = $this->getMockBuilder(Context::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->resultFactoryMock = $this->createMock(ResultFactory::class);
+        $this->messageManagerMock = $this->createMock(ManagerInterface::class);
+        $this->contextMock = $this->createMock(Context::class);
         $this->contextMock->expects($this->any())
             ->method('getRequest')
             ->willReturn($this->requestMock);
@@ -132,26 +122,11 @@ class ValidateTest extends TestCase
             ->method('getMessageManager')
             ->willReturn($this->messageManagerMock);
 
-        $this->reportProcessorMock = $this->getMockBuilder(
-            ReportProcessorInterface::class
-        )
-            ->getMockForAbstractClass();
-
-        $this->historyMock = $this->getMockBuilder(History::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $this->reportHelperMock = $this->getMockBuilder(Report::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $this->importMock = $this->getMockBuilder(import::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $this->abstractSourceMock = $this->getMockBuilder(AbstractSource::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->reportProcessorMock = $this->createMock(ReportProcessorInterface::class);
+        $this->historyMock = $this->createMock(History::class);
+        $this->reportHelperMock = $this->createMock(Report::class);
+        $this->importMock = $this->createMock(Import::class);
+        $this->abstractSourceMock = $this->createMock(AbstractSource::class);
 
         $this->eventManagerMock = $this->getMockBuilder(EventManagerInterface::class)
             ->getMockForAbstractClass();
@@ -185,27 +160,20 @@ class ValidateTest extends TestCase
             ->method('getPostValue')
             ->willReturn($data);
 
-        $resultBlock = $this->getMockBuilder(Result::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $resultBlock = $this->createMock(Result::class);
 
-        $layoutMock = $this->getMockBuilder(LayoutInterface::class)
-            ->getMockForAbstractClass();
+        $layoutMock = $this->createMock(LayoutInterface::class);
         $layoutMock->expects($this->once())
             ->method('getBlock')
             ->with('import.frame.result')
             ->willReturn($resultBlock);
 
-        $resultLayoutMock = $this->getMockBuilder(Layout::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $resultLayoutMock = $this->createMock(Layout::class);
         $resultLayoutMock->expects($this->once())
             ->method('getLayout')
             ->willReturn($layoutMock);
 
-        $resultRedirectMock = $this->getMockBuilder(Redirect::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $resultRedirectMock = $this->createMock(Redirect::class);
         $resultRedirectMock->expects($this->once())
             ->method('setPath')
             ->with('adminhtml/*/index');
@@ -240,23 +208,18 @@ class ValidateTest extends TestCase
             ->method('isPost')
             ->willReturn(true);
 
-        $resultBlock = $this->getMockBuilder(Result::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $resultBlock = $this->createMock(Result::class);
         $resultBlock->expects($this->once())
             ->method('addError')
             ->with(__('The file was not uploaded.'));
 
-        $layoutMock = $this->getMockBuilder(LayoutInterface::class)
-            ->getMockForAbstractClass();
+        $layoutMock = $this->createMock(LayoutInterface::class);
         $layoutMock->expects($this->once())
             ->method('getBlock')
             ->with('import.frame.result')
             ->willReturn($resultBlock);
 
-        $resultLayoutMock = $this->getMockBuilder(Layout::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $resultLayoutMock = $this->createMock(Layout::class);
         $resultLayoutMock->expects($this->once())
             ->method('getLayout')
             ->willReturn($layoutMock);
@@ -282,23 +245,18 @@ class ValidateTest extends TestCase
             ->method('getPostValue')
             ->willReturn($data);
 
-        $resultBlock = $this->getMockBuilder(Result::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $resultBlock = $this->createMock(Result::class);
         $resultBlock->expects($this->once())
             ->method('addSuccess')
             ->with(__('File is valid! To start import process press "Import" button'));
 
-        $layoutMock = $this->getMockBuilder(LayoutInterface::class)
-            ->getMockForAbstractClass();
+        $layoutMock = $this->createMock(LayoutInterface::class);
         $layoutMock->expects($this->once())
             ->method('getBlock')
             ->with('import.frame.result')
             ->willReturn($resultBlock);
 
-        $resultLayoutMock = $this->getMockBuilder(Layout::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $resultLayoutMock = $this->createMock(Layout::class);
         $resultLayoutMock->expects($this->once())
             ->method('getLayout')
             ->willReturn($layoutMock);

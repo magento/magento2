@@ -64,7 +64,7 @@ class AwsS3FactoryTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->objectManagerMock = $this->getMockForAbstractClass(ObjectManagerInterface::class);
+        $this->objectManagerMock = $this->createMock(ObjectManagerInterface::class);
         $this->remoteStorageConfigMock = $this->createMock(Config::class);
         $this->metadataFactoryMock = $this->createMock(MetadataProviderInterfaceFactory::class);
         $this->remoteStorageCacheMock = $this->createMock(CacheInterfaceFactory::class);

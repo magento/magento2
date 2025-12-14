@@ -24,14 +24,43 @@ class AggregateCount
     {
         /** @var \Magento\Catalog\Model\ResourceModel\Category $resourceModel */
         $resourceModel = $category->getResource();
+        $connection = $resourceModel->getConnection();
+        $entityTable = $resourceModel->getEntityTable();
         /**
          * Update children count for all parent categories
          */
         $parentIds = $category->getParentIds();
+        $childrenCount = $this->getCategoryRowCount(
+            $connection,
+            $entityTable,
+            $category->getId()
+        );
         if ($parentIds) {
-            $data = ['children_count' => new \Zend_Db_Expr('children_count - 1')];
+            $data = ['children_count' => new \Zend_Db_Expr('children_count - '.$childrenCount)];
             $where = ['entity_id IN(?)' => $parentIds];
-            $resourceModel->getConnection()->update($resourceModel->getEntityTable(), $data, $where);
+            $connection->update($entityTable, $data, $where);
         }
+    }
+
+    /**
+     * To get count of rows (category count) for a specific entity ID
+     *
+     * @param \Magento\Framework\DB\Adapter\AdapterInterface $connection
+     * @param string $table
+     * @param int $categoryId
+     * @return int
+     */
+    private function getCategoryRowCount(
+        \Magento\Framework\DB\Adapter\AdapterInterface $connection,
+        string $table,
+        $categoryId
+    ): int {
+        // staging preview modifiers (created_in/updated_in) are not applied.
+        $sql = sprintf(
+            'SELECT COUNT(*) FROM %s WHERE entity_id = ?',
+            $connection->quoteIdentifier($table)
+        );
+
+        return (int)$connection->fetchOne($sql, [(int)$categoryId]);
     }
 }

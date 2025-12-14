@@ -19,6 +19,7 @@ use Magento\Tax\Api\Data\OrderTaxDetailsItemInterface;
 use Magento\Tax\Api\OrderTaxManagementInterface;
 use Magento\Tax\Helper\Data;
 use Magento\Tax\Model\Config;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -59,12 +60,8 @@ class DataTest extends TestCase
     {
         $objectManager = new ObjectManager($this);
 
-        $this->orderTaxManagementMock = $this->getMockBuilder(OrderTaxManagementInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-        $this->priceCurrencyMock = $this->getMockBuilder(PriceCurrencyInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->orderTaxManagementMock = $this->createMock(OrderTaxManagementInterface::class);
+        $this->priceCurrencyMock = $this->createMock(PriceCurrencyInterface::class);
         $this->taxConfigMock = $this->getMockBuilder(Config::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -121,9 +118,7 @@ class DataTest extends TestCase
         $expectedAmount = $itemAmount + 1;
         $expectedBaseAmount = $itemBaseAmount + 1;
 
-        $orderDetailsItem = $this->getMockBuilder(OrderTaxDetailsAppliedTaxInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $orderDetailsItem = $this->createMock(OrderTaxDetailsAppliedTaxInterface::class);
         $orderDetailsItem->expects($this->once())
             ->method('getCode')
             ->willReturn($itemCode);
@@ -150,9 +145,7 @@ class DataTest extends TestCase
 
         $appliedTaxes = [$orderDetailsItem];
 
-        $orderDetails = $this->getMockBuilder(OrderTaxDetailsInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $orderDetails = $this->createMock(OrderTaxDetailsInterface::class);
         $orderDetails->expects($this->once())
             ->method('getAppliedTaxes')
             ->willReturn($appliedTaxes);
@@ -241,11 +234,16 @@ class DataTest extends TestCase
     }
 
     /**
-     * @return void
-     * @dataProvider getCalculatedTaxesForOrderItemsDataProvider
+     * @param array $orderData
+     * @param array|null $invoiceData
+     * @param array $expectedResults
      */
-    public function testGetCalculatedTaxesForOrderItems($orderData, $invoiceData, $expectedResults): void
-    {
+    #[DataProvider('getCalculatedTaxesForOrderItemsDataProvider')]
+    public function testGetCalculatedTaxesForOrderItems(
+        array $orderData,
+        ?array $invoiceData,
+        array $expectedResults
+    ): void {
         $orderId = $orderData['order_id'];
         $orderShippingTaxAmount = $orderData['shipping_tax_amount'] ?? 0;
         $orderTaxDetails = $orderData['order_tax_details'];
@@ -504,16 +502,14 @@ class DataTest extends TestCase
      * @param bool $priceIncludesTax
      * @param bool $isCrossBorderTradeEnabled
      * @param bool $displayPriceIncludingTax
-     *
-     * @return void
-     * @dataProvider dataProviderIsCatalogPriceDisplayAffectedByTax
      */
+    #[DataProvider('dataProviderIsCatalogPriceDisplayAffectedByTax')]
     public function testIsCatalogPriceDisplayAffectedByTax(
-        $expected,
-        $displayBothPrices,
-        $priceIncludesTax,
-        $isCrossBorderTradeEnabled,
-        $displayPriceIncludingTax
+        bool $expected,
+        bool $displayBothPrices,
+        bool $priceIncludesTax,
+        bool $isCrossBorderTradeEnabled,
+        bool $displayPriceIncludingTax
     ): void {
         $willReturnArgs = [];
 

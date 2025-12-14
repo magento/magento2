@@ -15,6 +15,7 @@ use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Directory\WriteInterface;
 use Magento\Framework\Filesystem\DriverInterface;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\HTTP\Adapter\FileTransferFactory;
 use Magento\Framework\Indexer\IndexerInterface;
 use Magento\Framework\Indexer\IndexerRegistry;
@@ -33,9 +34,11 @@ use Magento\ImportExport\Model\Import\Entity\Factory;
 use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregatorInterface;
 use Magento\ImportExport\Model\Import\Source\Csv;
 use Magento\ImportExport\Model\LocaleEmulatorInterface;
+use Magento\ImportExport\Model\ResourceModel\Import\Data as ImportData;
 use Magento\ImportExport\Model\Source\Upload;
 use Magento\ImportExport\Test\Unit\Model\Import\AbstractImportTestCase;
 use Magento\MediaStorage\Model\File\UploaderFactory;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use Psr\Log\LoggerInterface;
 
@@ -45,6 +48,7 @@ use Psr\Log\LoggerInterface;
  */
 class ImportTest extends AbstractImportTestCase
 {
+    use MockCreationTrait;
 
     /**
      * @var AbstractEntity|MockObject
@@ -67,7 +71,7 @@ class ImportTest extends AbstractImportTestCase
     protected $_entityFactory;
 
     /**
-     * @var \Magento\ImportExport\Model\ResourceModel\Import\Data|MockObject
+     * @var ImportData|MockObject
      */
     protected $_importData;
 
@@ -165,26 +169,15 @@ class ImportTest extends AbstractImportTestCase
     {
         parent::setUp();
 
-        $logger = $this->getMockBuilder(LoggerInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-        $this->_filesystem = $this->getMockBuilder(Filesystem::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->_importExportData = $this->getMockBuilder(Data::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->_coreConfig = $this->getMockBuilder(ScopeConfigInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-        $this->_importConfig = $this->getMockBuilder(Config::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['getEntityTypeCode', 'getBehavior'])
-            ->onlyMethods(['getEntities', 'getRelatedIndexers'])
-            ->getMockForAbstractClass();
-        $this->_entityFactory = $this->getMockBuilder(Factory::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $logger = $this->createMock(LoggerInterface::class);
+        $this->_filesystem = $this->createMock(Filesystem::class);
+        $this->_importExportData = $this->createMock(Data::class);
+        $this->_coreConfig = $this->createMock(ScopeConfigInterface::class);
+        $this->_importConfig = $this->createPartialMockWithReflection(
+            Config::class,
+            ['getEntities', 'getRelatedIndexers', 'getEntityTypeCode', 'getBehavior']
+        );
+        $this->_entityFactory = $this->createMock(Factory::class);
 
         $this->errorAggregatorMock = $this->getErrorAggregatorObject(
             [
@@ -192,56 +185,40 @@ class ImportTest extends AbstractImportTestCase
                 'getErrorsCount',
             ]
         );
-        $this->_entityAdapter = $this->getMockBuilder(AbstractEntity::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(
-                [
-                    'importData',
-                    '_saveValidatedBunches',
-                    'getErrorAggregator',
-                    'setSource',
-                    'validateData',
-                ]
-            )
-            ->getMockForAbstractClass();
+        $this->_entityAdapter = $this->createPartialMock(
+            AbstractEntity::class,
+            [
+                'importData',
+                '_saveValidatedBunches',
+                'getErrorAggregator',
+                'setSource',
+                'validateData',
+                '_importData',
+                'getEntityTypeCode',
+                'validateRow'
+            ]
+        );
         $this->_entityAdapter->method('getErrorAggregator')
             ->willReturn($this->errorAggregatorMock);
 
         $this->_entityFactory->method('create')->willReturn($this->_entityAdapter);
 
-        $this->_importData = $this->getMockBuilder(\Magento\ImportExport\Model\ResourceModel\Import\Data::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->_csvFactory = $this->getMockBuilder(CsvFactory::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->_httpFactory = $this->getMockBuilder(FileTransferFactory::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->_uploaderFactory = $this->getMockBuilder(UploaderFactory::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->_behaviorFactory = $this->getMockBuilder(
+        $this->_importData = $this->createMock(ImportData::class);
+        $this->_csvFactory = $this->createMock(CsvFactory::class);
+        $this->_httpFactory = $this->createMock(FileTransferFactory::class);
+        $this->_uploaderFactory = $this->createMock(UploaderFactory::class);
+        $this->_behaviorFactory = $this->createMock(
             \Magento\ImportExport\Model\Source\Import\Behavior\Factory::class
-        )->disableOriginalConstructor()
-            ->getMock();
-        $this->indexerRegistry = $this->getMockBuilder(IndexerRegistry::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->historyModel = $this->getMockBuilder(History::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['updateReport', 'invalidateReport', 'addReport'])
-            ->getMock();
+        );
+        $this->indexerRegistry = $this->createMock(IndexerRegistry::class);
+        $this->historyModel = $this->createPartialMock(
+            History::class,
+            ['updateReport', 'invalidateReport', 'addReport']
+        );
         $this->historyModel->expects($this->any())->method('updateReport')->willReturnSelf();
-        $this->dateTime = $this->getMockBuilder(DateTime::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->_varDirectory = $this->getMockBuilder(WriteInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-        $this->_driver = $this->getMockBuilder(DriverInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->dateTime = $this->createMock(DateTime::class);
+        $this->_varDirectory = $this->createMock(WriteInterface::class);
+        $this->_driver = $this->createMock(DriverInterface::class);
         $this->_driver
             ->expects($this->any())
             ->method('fileGetContents')
@@ -250,49 +227,46 @@ class ImportTest extends AbstractImportTestCase
             ->expects($this->any())
             ->method('getDriver')
             ->willReturn($this->_driver);
-        $this->managerInterfaceMock = $this->getMockForAbstractClass(ManagerInterface::class);
-        $this->randomMock = $this->getMockForAbstractClass(Random::class);
+        $this->managerInterfaceMock = $this->createMock(ManagerInterface::class);
+        $this->randomMock = $this->createMock(Random::class);
         $this->upload = $this->createMock(Upload::class);
-        $this->localeEmulator = $this->getMockForAbstractClass(LocaleEmulatorInterface::class);
-        $this->import = $this->getMockBuilder(Import::class)
-            ->setConstructorArgs(
-                [
-                    $logger,
-                    $this->_filesystem,
-                    $this->_importExportData,
-                    $this->_coreConfig,
-                    $this->_importConfig,
-                    $this->_entityFactory,
-                    $this->_importData,
-                    $this->_csvFactory,
-                    $this->_httpFactory,
-                    $this->_uploaderFactory,
-                    $this->_behaviorFactory,
-                    $this->indexerRegistry,
-                    $this->historyModel,
-                    $this->dateTime,
-                    [],
-                    $this->managerInterfaceMock,
-                    $this->randomMock,
-                    $this->upload,
-                    $this->localeEmulator
-                ]
-            )
-            ->addMethods(['getBehavior'])
-            ->onlyMethods(
-                [
-                    'getDataSourceModel',
-                    'setData',
-                    'getData',
-                    'getProcessedEntitiesCount',
-                    'getProcessedRowsCount',
-                    'getEntity',
-                    'isReportEntityType',
-                    '_getEntityAdapter'
-                ]
-            )
-            ->addMethods(['getForceImport'])
-            ->getMock();
+        $this->localeEmulator = $this->createMock(LocaleEmulatorInterface::class);
+        $this->import = $this->createPartialMockWithReflection(
+            Import::class,
+            [
+                'getDataSourceModel',
+                'setData',
+                'getData',
+                'getProcessedEntitiesCount',
+                'getProcessedRowsCount',
+                'getEntity',
+                'isReportEntityType',
+                '_getEntityAdapter',
+                'getBehavior',
+                'getForceImport'
+            ]
+        );
+        $this->import->__construct(
+            $logger,
+            $this->_filesystem,
+            $this->_importExportData,
+            $this->_coreConfig,
+            $this->_importConfig,
+            $this->_entityFactory,
+            $this->_importData,
+            $this->_csvFactory,
+            $this->_httpFactory,
+            $this->_uploaderFactory,
+            $this->_behaviorFactory,
+            $this->indexerRegistry,
+            $this->historyModel,
+            $this->dateTime,
+            [],
+            $this->managerInterfaceMock,
+            $this->randomMock,
+            $this->upload,
+            $this->localeEmulator
+        );
         $this->setPropertyValue($this->import, '_varDirectory', $this->_varDirectory);
     }
 
@@ -582,12 +556,9 @@ class ImportTest extends AbstractImportTestCase
             'indexer_1' => 'indexer_1',
             'indexer_2' => 'indexer_2'
         ];
-        $indexer1 = $this->getMockBuilder(IndexerInterface::class)
-            ->getMockForAbstractClass();
+        $indexer1 = $this->createMock(IndexerInterface::class);
         $indexer2 = clone $indexer1;
-        $logger = $this->getMockBuilder(LoggerInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $logger = $this->createMock(LoggerInterface::class);
 
         $indexer1->expects($this->once())
             ->method('isScheduled')
@@ -648,9 +619,7 @@ class ImportTest extends AbstractImportTestCase
         $this->_importConfig->method('getEntities')
             ->willReturn(['test' => []]);
 
-        $logger = $this->getMockBuilder(LoggerInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $logger = $this->createMock(LoggerInterface::class);
 
         $import = new Import(
             $logger,
@@ -683,9 +652,7 @@ class ImportTest extends AbstractImportTestCase
         $this->_importConfig->method('getEntities')
             ->willReturn(['test' => []]);
 
-        $logger = $this->getMockBuilder(LoggerInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $logger = $this->createMock(LoggerInterface::class);
 
         $import = new Import(
             $logger,
@@ -715,8 +682,8 @@ class ImportTest extends AbstractImportTestCase
     }
 
     /**
-     * @dataProvider unknownEntitiesProvider
      */
+    #[DataProvider('unknownEntitiesProvider')]
     public function testGetUnknownEntity($entity)
     {
         $this->expectException(LocalizedException::class);
@@ -724,9 +691,7 @@ class ImportTest extends AbstractImportTestCase
         $this->_importConfig->method('getEntities')
             ->willReturn(['test' => []]);
 
-        $logger = $this->getMockBuilder(LoggerInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $logger = $this->createMock(LoggerInterface::class);
 
         $import = new Import(
             $logger,
@@ -775,16 +740,14 @@ class ImportTest extends AbstractImportTestCase
 
     /**
      * Cover isReportEntityType().
-     *
-     * @dataProvider isReportEntityTypeDataProvider
      */
+    #[DataProvider('isReportEntityTypeDataProvider')]
     public function testIsReportEntityType($entity, $getEntityResult, $expectedResult)
     {
-        $importMock = $this->getMockBuilder(Import::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['getEntityTypeCode', 'isNeedToLogInHistory'])
-            ->onlyMethods(['getEntity', '_getEntityAdapter'])
-            ->getMock();
+        $importMock = $this->createPartialMockWithReflection(
+            Import::class,
+            ['getEntity', '_getEntityAdapter', 'getEntityTypeCode', 'isNeedToLogInHistory']
+        );
         $importMock->expects($this->any())->method('_getEntityAdapter')->willReturnSelf();
         $importMock->expects($this->any())->method('getEntityTypeCode')->willReturn('catalog_product');
         $this->_importConfig
@@ -811,17 +774,15 @@ class ImportTest extends AbstractImportTestCase
 
     /**
      * Cover isReportEntityType().
-     *
-     * @dataProvider isReportEntityTypeExceptionDataProvider
      */
+    #[DataProvider('isReportEntityTypeExceptionDataProvider')]
     public function testIsReportEntityTypeException($entity, $getEntitiesResult, $getEntityResult, $expectedResult)
     {
         $this->expectException(LocalizedException::class);
-        $importMock = $this->getMockBuilder(Import::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['getEntityTypeCode', 'isNeedToLogInHistory'])
-            ->onlyMethods(['getEntity', '_getEntityAdapter'])
-            ->getMock();
+        $importMock = $this->createPartialMockWithReflection(
+            Import::class,
+            ['getEntity', '_getEntityAdapter', 'getEntityTypeCode', 'isNeedToLogInHistory']
+        );
         $importMock->expects($this->any())->method('_getEntityAdapter')->willReturnSelf();
         $importMock->expects($this->any())->method('getEntityTypeCode')->willReturn('catalog_product');
         $this->_importConfig

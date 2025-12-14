@@ -20,5 +20,7 @@
         <element name="pageCurrent" type="text" selector="//label[@for='promo_quote_grid_page-current']"/>
         <element name="totalCount" type="text" selector="span[data-ui-id*='grid-total-count']"/>
         <element name="emptyText" type="text" selector="//tr[@class='data-grid-tr-no-data even']/td"/>
+        <element name="gridStartDateByRuleName" type="text" selector="//*[@id='promo_quote_grid_table']/tbody/tr[td//text()[contains(., '{{ruleName}}')]]/td[@data-column='from_date']" parameterized="true"/>
+        <element name="gridEndDateByRuleName" type="text" selector="//*[@id='promo_quote_grid_table']/tbody/tr[td//text()[contains(., '{{ruleName}}')]]/td[@data-column='to_date']" parameterized="true"/>
     </section>
 </sections>
