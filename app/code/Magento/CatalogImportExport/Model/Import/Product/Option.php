@@ -619,10 +619,15 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                     if (isset($oldCustomOptions[$productId][$customOption->getId()])) {
                         $oldCustomOptions[$productId][$customOption->getId()]['titles'][$storeId] = $customOption
                             ->getTitle();
+                        // Ensure sort_order is set for existing options
+                        if (!isset($oldCustomOptions[$productId][$customOption->getId()]['sort_order'])) {
+                            $oldCustomOptions[$productId][$customOption->getId()]['sort_order'] = $customOption->getSortOrder();
+                        }
                     } else {
                         $oldCustomOptions[$productId][$customOption->getId()] = [
                             'titles' => [$storeId => $customOption->getTitle()],
                             'type' => $customOption->getType(),
+                            'sort_order' => $customOption->getSortOrder(),
                         ];
                     }
                 };
@@ -836,6 +841,15 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
             $existingOptions = $this->getOldCustomOptions()[$productId];
             foreach ($existingOptions as $optionId => $optionData) {
                 if ($optionData['type'] == $newOptionData['type']) {
+                    // Primary matching: by sort_order if both are available and non-zero
+                    if (isset($optionData['sort_order']) && isset($newOptionData['sort_order'])
+                        && $optionData['sort_order'] > 0 && $newOptionData['sort_order'] > 0
+                        && $optionData['sort_order'] == $newOptionData['sort_order']
+                    ) {
+                        return $optionId;
+                    }
+                    
+                    // Fallback matching: by exact title match (original behavior for backward compatibility)
                     foreach ($newOptionTitles as $storeId => $title) {
                         if (isset($optionData['titles'][$storeId]) && $optionData['titles'][$storeId] === $title) {
                             return $optionId;
