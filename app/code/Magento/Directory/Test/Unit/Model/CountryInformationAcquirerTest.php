@@ -176,4 +176,36 @@ class CountryInformationAcquirerTest extends TestCase
         $countryCollection->expects($this->once())->method('getItemById')->willReturn(null);
         $this->model->getCountryInfo('AE');
     }
+
+    /**
+     * Test that getCountryInfo throws exception for obsolete country without locale name
+     */
+    public function testGetCountryInfoThrowsExceptionForObsoleteCountry()
+    {
+        $this->expectException('Magento\Framework\Exception\NoSuchEntityException');
+        $this->expectExceptionMessage('The country isn\'t available.');
+
+        /** @var Store $store */
+        $store = $this->createMock(Store::class);
+        $this->storeManager->expects($this->once())->method('getStore')->willReturn($store);
+
+        // Obsolete country without name (e.g., Netherlands Antilles)
+        $obsoleteCountry = $this->objectManager->getObject(Country::class);
+        $obsoleteCountry->setData('country_id', 'AN');
+        $obsoleteCountry->setData('iso2_code', 'AN');
+        $obsoleteCountry->setData('iso3_code', 'ANT');
+        // No name_default or name_en_US - simulating obsolete country with no translation
+
+        $countryCollection = $this->createMock(Collection::class);
+        $countryCollection->expects($this->once())->method('load')->willReturnSelf();
+        $countryCollection->expects($this->once())->method('getItemById')->with('AN')->willReturn($obsoleteCountry);
+
+        $this->directoryHelper->expects($this->once())->method('getCountryCollection')->willReturn($countryCollection);
+        $this->directoryHelper->expects($this->once())->method('getRegionData')->willReturn([]);
+
+        $countryInfo = $this->objectManager->getObject(CountryInformation::class);
+        $this->countryInformationFactory->expects($this->once())->method('create')->willReturn($countryInfo);
+
+        $this->model->getCountryInfo('AN');
+    }
 }
