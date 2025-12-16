@@ -116,7 +116,7 @@ class City extends AbstractWidget
     public function getStoreLabel(string $attributeCode): string
     {
         $attribute = $this->_getAttribute($attributeCode);
-        return $attribute ? __($attribute->getStoreLabel()) : '';
+        return $attribute ? (string)__($attribute->getStoreLabel()) : '';
     }
 
     /**
