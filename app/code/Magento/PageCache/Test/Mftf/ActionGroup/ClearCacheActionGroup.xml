@@ -10,7 +10,7 @@
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="ClearCacheActionGroup">
         <annotations>
-            <description>Goes to the Admin Cache Management page. Clicks on 'Flush Magento Cache'.</description>
+            <description>Goes to the Admin Cache Management page. Clicks on 'Clean Magento Cache'.</description>
         </annotations>
 
         <amOnPage url="{{AdminCacheManagementPage.url}}" stepKey="goToCacheManagement"/>

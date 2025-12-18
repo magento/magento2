@@ -27,7 +27,7 @@ class Cache extends \Magento\Backend\Block\Widget\Grid\Container
             $this->buttonList->add(
                 'flush_magento',
                 [
-                    'label' => __('Flush Magento Cache'),
+                    'label' => __('Clean Magento Cache'),
                     'onclick' => 'setLocation(\'' . $this->getFlushSystemUrl() . '\')',
                     'class' => 'primary flush-cache-magento'
                 ]

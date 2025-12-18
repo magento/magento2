@@ -3,7 +3,7 @@
 "Cache Storage Management","Cache Storage Management"
 "Flush Magento Cache","Flush Magento Cache"
 "The cache storage may contain additional data. Are you sure that you want to flush it?","The cache storage may contain additional data. Are you sure that you want to flush it?"
-"Flush Cache Storage","Flush Cache Storage"
+"Clean Cache Storage","Clean Cache Storage"
 Invalidated,Invalidated
 Orders,Orders
 Amounts,Amounts
