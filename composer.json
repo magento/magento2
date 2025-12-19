@@ -66,7 +66,7 @@
         "laminas/laminas-view": "^2.36",
         "league/flysystem": "^3.0",
         "league/flysystem-aws-s3-v3": "^3.0",
-        "magento/composer": "dev-develop",
+        "magento/composer": "^1.10.2-beta2",
         "magento/composer-dependency-version-audit-plugin": "^0.1",
         "magento/magento-composer-installer": ">=0.4.0",
         "magento/zend-cache": "^1.16",
@@ -80,16 +80,17 @@
         "phpseclib/phpseclib": "^3.0",
         "psr/log": "^2 || ^3",
         "ramsey/uuid": "^4.2",
+        "spomky-labs/aes-key-wrap": "^7.0",
         "stomp-php/stomp-php": "^5.1",
-        "symfony/console": "^7.0",
-        "symfony/intl": "^7.0",
-        "symfony/process": "^7.0",
-        "symfony/string": "^7.0",
-        "symfony/mailer": "^7.0",
-        "symfony/mime": "^7.0",
+        "symfony/console": "^7.4",
+        "symfony/intl": "^7.4",
+        "symfony/process": "^7.4",
+        "symfony/string": "^7.4",
+        "symfony/mailer": "^7.4",
+        "symfony/mime": "^7.4",
         "tedivm/jshrink": "^1.4",
         "tubalmartin/cssmin": "^4.1",
-        "web-token/jwt-framework": "^3.4",
+        "web-token/jwt-framework": "^4.0",
         "webonyx/graphql-php": "^15.0",
         "wikimedia/less.php": "^5.0"
     },
@@ -104,7 +105,7 @@
         "phpmd/phpmd": "^3@dev",
         "phpstan/phpstan": "^1.9",
         "phpunit/phpunit": "^10.5",
-        "symfony/finder": "^7.0"
+        "symfony/finder": "^7.4"
     },
     "suggest": {
         "ext-pcntl": "Need for run processes in parallel mode"

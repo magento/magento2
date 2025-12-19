@@ -127,7 +127,7 @@ class Proxy extends \Magento\Framework\Code\GeneratorTest\SourceClassWithNamespa
     /**
      * {@inheritdoc}
      */
-    public function public71($arg1, string $arg2, ?int $arg3, ?int $arg4 = null) : void
+    public function public71($arg1, string $arg2, ?int $arg3, ?int $arg4 = null): void
     {
         $this->_getSubject()->public71($arg1, $arg2, $arg3, $arg4);
     }
@@ -135,7 +135,7 @@ class Proxy extends \Magento\Framework\Code\GeneratorTest\SourceClassWithNamespa
     /**
      * {@inheritdoc}
      */
-    public function public71Another(?\DateTime $arg1, $arg2 = false) : ?string
+    public function public71Another(?\DateTime $arg1, $arg2 = false): ?string
     {
         return $this->_getSubject()->public71Another($arg1, $arg2);
     }
@@ -143,7 +143,7 @@ class Proxy extends \Magento\Framework\Code\GeneratorTest\SourceClassWithNamespa
     /**
      * {@inheritdoc}
      */
-    public function publicWithSelf($arg = false) : \Magento\Framework\Code\GeneratorTest\SourceClassWithNamespace
+    public function publicWithSelf($arg = false): \Magento\Framework\Code\GeneratorTest\SourceClassWithNamespace
     {
         return $this->_getSubject()->publicWithSelf($arg);
     }
