@@ -253,7 +253,7 @@ class KernelTest extends TestCase
      * @param $httpCode
      *
      * @return void
-     * @dataProvider testProcessSaveCacheDataProvider
+     * @dataProvider processSaveCacheDataProvider
      */
     public function testProcessSaveCache($httpCode): void
     {
@@ -303,7 +303,7 @@ class KernelTest extends TestCase
     /**
      * @return array
      */
-    public static function testProcessSaveCacheDataProvider(): array
+    public static function processSaveCacheDataProvider(): array
     {
         return [
             [200],

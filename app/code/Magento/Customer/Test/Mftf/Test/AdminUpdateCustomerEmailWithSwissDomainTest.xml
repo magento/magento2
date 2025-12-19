@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright 2025 Adobe
+ * All Rights Reserved.
+ */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminUpdateCustomerEmailWithSwissDomainTest">
+        <annotations>
+            <features value="Customer"/>
+            <stories value="Updating customer email in admin panel with ö and .swiss domain"/>
+            <title value="Update a customer email in admin to an internationalized address"/>
+            <description value="This test case verifies updating the customer email in the admin panel with an ö character and a .swiss domain"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="AC-13409"/>
+            <group value="customer"/>
+        </annotations>
+        <before>
+            <!-- Step 1: Create customer and login to admin -->
+            <createData entity="Simple_US_Customer" stepKey="createCustomer"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="adminLogin"/>
+        </before>
+        <after>
+            <!-- Delete customer and logout from admin -->
+            <actionGroup ref="AdminClearCustomersFiltersActionGroup" stepKey="clearCustomersFilter"/>
+            <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="adminLogout"/>
+        </after>
+        <!--Step 2: Go to customers grid and open the created customer for editing -->
+        <actionGroup ref="AdminOpenCustomersGridActionGroup" stepKey="openCustomersGrid"/>
+        <actionGroup ref="OpenEditCustomerFromAdminActionGroup" stepKey="openEditCustomerPage">
+            <argument name="customer" value="Simple_US_Customer"/>
+        </actionGroup>
+        <!-- Open account information tab -->
+        <actionGroup ref="AdminOpenAccountInformationTabFromCustomerEditPageActionGroup" stepKey="openAccountInformationTab"/>
+        <!-- Step 3,4: Update email to internationalized address and save -->
+        <waitForElementVisible selector="{{AdminCustomerAccountInformationSection.email}}" stepKey="waitToUpdateEmail"/>
+        <fillField selector="{{AdminCustomerAccountInformationSection.email}}" userInput="max@möstermann.swiss" stepKey="updateEmail"/>
+        <actionGroup ref="AdminSaveCustomerAndAssertSuccessMessage" stepKey="saveCustomer"/>
+    </test>
+</tests>

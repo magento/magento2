@@ -10,6 +10,7 @@ namespace Magento\NewRelicReporting\Test\Unit\Model\Observer;
 use Magento\Backend\Model\Auth\Session;
 use Magento\Framework\Event\Observer;
 use Magento\Framework\Json\EncoderInterface;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\NewRelicReporting\Model\Config;
 use Magento\NewRelicReporting\Model\Observer\ReportConcurrentAdmins;
 use Magento\NewRelicReporting\Model\Users;
@@ -20,6 +21,8 @@ use PHPUnit\Framework\TestCase;
 
 class ReportConcurrentAdminsTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var ReportConcurrentAdmins
      */
@@ -61,11 +64,7 @@ class ReportConcurrentAdminsTest extends TestCase
             ->disableOriginalConstructor()
             ->onlyMethods(['isNewRelicEnabled'])
             ->getMock();
-        $this->backendAuthSession = $this->getMockBuilder(Session::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['getUser'])
-            ->onlyMethods(['isLoggedIn'])
-            ->getMock();
+        $this->backendAuthSession = $this->createPartialMockWithReflection(Session::class, ['getUser', 'isLoggedIn']);
         $this->usersFactory = $this->getMockBuilder(UsersFactory::class)
             ->disableOriginalConstructor()
             ->onlyMethods(['create'])

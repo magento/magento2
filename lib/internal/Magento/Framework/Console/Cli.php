@@ -116,7 +116,7 @@ class Cli extends Console\Application
      *
      * @throws \Exception The exception in case of unexpected error
      */
-    public function doRun(Console\Input\InputInterface $input, Console\Output\OutputInterface $output)
+    public function doRun(Console\Input\InputInterface $input, Console\Output\OutputInterface $output): int
     {
         $exitCode = null;
         try {

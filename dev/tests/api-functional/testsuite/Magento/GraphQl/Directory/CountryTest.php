@@ -93,6 +93,17 @@ class CountryTest extends GraphQlAbstract
         $this->graphQlQuery($this->getQuery('DE'));
     }
 
+    /**
+     * Test that getCountryInfo throws exception for obsolete country
+     */
+    public function testGetObsoleteDECountryNotFoundException()
+    {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('GraphQL response contains errors: The country isn\'t available.');
+
+        $this->graphQlQuery($this->getQuery('AN'));
+    }
+
     public function testMissedInputParameterException()
     {
         $this->expectException(\Exception::class);

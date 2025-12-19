@@ -1,6 +1,5 @@
 <?php
 /**
- *
  * Copyright 2019 Adobe
  * All Rights Reserved.
  */

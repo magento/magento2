@@ -46,15 +46,9 @@ class SendFriendTest extends TestCase
     protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
-        $this->sendfriendDataMock = $this->getMockBuilder(Data::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->cookieManagerMock = $this->getMockForAbstractClass(CookieManagerInterface::class);
-        $this->cookieMetadataFactoryMock = $this->getMockBuilder(
-            CookieMetadataFactory::class
-        )
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->sendfriendDataMock = $this->createMock(Data::class);
+        $this->cookieManagerMock = $this->createMock(CookieManagerInterface::class);
+        $this->cookieMetadataFactoryMock = $this->createMock(CookieMetadataFactory::class);
 
         $this->model = $objectManager->getObject(
             SendFriend::class,
@@ -83,11 +77,7 @@ class SendFriendTest extends TestCase
     public function testSentCountByCookies()
     {
         $cookieName = 'testCookieName';
-        $sensitiveCookieMetadataMock = $this->getMockBuilder(
-            SensitiveCookieMetadata::class
-        )
-            ->disableOriginalConstructor()
-            ->getMock();
+        $sensitiveCookieMetadataMock = $this->createMock(SensitiveCookieMetadata::class);
         $this->sendfriendDataMock->expects($this->once())->method('getCookieName')->with()->willReturn(
             $cookieName
         );

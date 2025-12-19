@@ -93,7 +93,7 @@ class ReportProviderTest extends TestCase
             ->method('getIterator')
             ->willReturn($this->iteratorMock);
 
-        $this->connectionMock = $this->getMockForAbstractClass(AdapterInterface::class);
+        $this->connectionMock = $this->createMock(AdapterInterface::class);
 
         $this->queryFactoryMock = $this->createMock(QueryFactory::class);
 

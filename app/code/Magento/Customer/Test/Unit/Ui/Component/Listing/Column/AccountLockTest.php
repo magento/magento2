@@ -43,7 +43,7 @@ class AccountLockTest extends TestCase
     /**
      * @param string $lockExpirationDate
      * @param Phrase $expectedResult */
-    #[DataProvider('testPrepareDataSourceDataProvider')]
+    #[DataProvider('prepareDataSourceDataProvider')]
     public function testPrepareDataSource($lockExpirationDate, $expectedResult)
     {
         $dataSource = $this->component->prepareDataSource($lockExpirationDate);
@@ -54,7 +54,7 @@ class AccountLockTest extends TestCase
     /**
      * @return array
      */
-    public static function testPrepareDataSourceDataProvider()
+    public static function prepareDataSourceDataProvider()
     {
         return [
             [

@@ -60,7 +60,7 @@ class TemplateCheckCommand extends DatabaseTemplateCompatibilityCommand
      * @param OutputInterface $output
      * @return int|null
      */
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $collection = $this->templateCollection->create();
         $collection->load();

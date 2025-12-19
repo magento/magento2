@@ -14,6 +14,7 @@ use Magento\Reports\Model\Item;
 use Magento\Reports\Model\ResourceModel\Report\Collection\Factory;
 use Magento\Store\Api\Data\StoreInterface;
 use Magento\Store\Model\StoreManagerInterface;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -53,6 +54,7 @@ class GridTest extends TestCase
         $aggregatedColumns = [1 => 'SUM(value)'];
 
         $objectManager = new ObjectManager($this);
+        $objectManager->prepareObjectManager();
         $this->model = $objectManager->getObject(
             Grid::class,
             [
@@ -64,8 +66,6 @@ class GridTest extends TestCase
     }
 
     /**
-     * @dataProvider getCountTotalsDataProvider
-     *
      * @param string $reportType
      * @param array|null $rulesList
      * @param int $collectionSize
@@ -73,6 +73,7 @@ class GridTest extends TestCase
      * @param array|null $expectedRuleFilter
      * @return void
      */
+    #[DataProvider('getCountTotalsDataProvider')]
     public function testGetCountTotals(
         string $reportType,
         ?array $rulesList,
