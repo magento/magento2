@@ -7,7 +7,7 @@
     "require": {
         "php": "~8.2.0||~8.3.0||~8.4.0",
         "magento/framework": "*",
-        "web-token/jwt-framework": "^3.1.2"
+        "web-token/jwt-framework": "^4.0"
     },
     "type": "magento2-module",
     "license": [
