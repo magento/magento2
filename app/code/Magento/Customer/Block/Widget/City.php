@@ -80,6 +80,7 @@ class City extends AbstractWidget
      *
      * @return AttributeMetadataInterface|null
      * @throws LocalizedException
+     * @SuppressWarnings(PHPMD.ProtectedModifier)
      */
     //@codingStandardsIgnoreStart
     protected function _getAttribute($attributeCode): ?AttributeMetadataInterface
