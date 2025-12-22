@@ -41,11 +41,11 @@ class City extends AbstractWidget
      * @param array $data
      */
     public function __construct(
-        protected readonly Context $context,
-        protected readonly AddressHelper $addressHelper,
+        Context $context,
+        AddressHelper $addressHelper,
         CustomerMetadataInterface $customerMetadata,
         private readonly AddressMetadataInterface $addressMetadata,
-        protected readonly array $data = []
+        array $data = []
     ) {
         parent::__construct($context, $addressHelper, $customerMetadata, $data);
         $this->_isScopePrivate = true;
