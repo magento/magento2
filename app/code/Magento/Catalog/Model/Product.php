@@ -159,12 +159,6 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
     protected $_links = null;
 
     /**
-     * Adds the default Cache Tag in Frontend
-     * @var bool
-     */
-    protected $_addDefaultCacheTag = true;
-
-    /**
      * Flag for available duplicate function
      *
      * @var boolean
@@ -2411,11 +2405,12 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
             }
         }
 
+        $this->setAddDefaultCacheTag(true);
         if ($this->hasDataChanges()) {
-            $this->_addDefaultCacheTag = false;
+            $this->setAddDefaultCacheTag(false);
         }
 
-        if ($this->_appState->getAreaCode() == Area::AREA_FRONTEND && $this->_addDefaultCacheTag) {
+        if ($this->_appState->getAreaCode() == Area::AREA_FRONTEND && $this->getAddDefaultCacheTag()) {
             $identities[] = self::CACHE_TAG;
         }
 
@@ -2434,7 +2429,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      */
     public function afterCommitCallback()
     {
-        $this->_addDefaultCacheTag = false;
+        $this->setAddDefaultCacheTag(false);
         return parent::afterCommitCallback();
     }
 
