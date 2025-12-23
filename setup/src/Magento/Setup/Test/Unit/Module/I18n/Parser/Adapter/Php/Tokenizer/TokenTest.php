@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -32,7 +32,7 @@ class TokenTest extends TestCase
      * @param int $name
      * @param string $value
      * @param bool $result
-     * @dataProvider testIsNewDataProvider
+     * @dataProvider isNewDataProvider
      */
     public function testIsNew($name, $value, $result)
     {
@@ -46,7 +46,7 @@ class TokenTest extends TestCase
      * @param int $name
      * @param string $value
      * @param bool $result
-     * @dataProvider testIsNamespaceSeparatorDataProvider
+     * @dataProvider isNamespaceSeparatorDataProvider
      */
     public function testIsNamespaceSeparator($name, $value, $result)
     {
@@ -60,7 +60,7 @@ class TokenTest extends TestCase
      * @param int $name
      * @param string $value
      * @param bool $result
-     * @dataProvider testIsIdentifierDataProvider
+     * @dataProvider isIdentifierDataProvider
      */
     public function testIsIdentifier($name, $value, $result)
     {
@@ -71,7 +71,7 @@ class TokenTest extends TestCase
     /**
      * @return array
      */
-    public function testIsNewDataProvider()
+    public static function isNewDataProvider()
     {
         return [
             'new' => ['name' => T_NEW, 'value' => 'new', 'result' => true],
@@ -83,7 +83,7 @@ class TokenTest extends TestCase
     /**
      * @return array
      */
-    public function testIsNamespaceSeparatorDataProvider()
+    public static function isNamespaceSeparatorDataProvider()
     {
         return [
             'new' => ['name' => T_NEW, 'value' => 'new', 'result' => false],
@@ -95,7 +95,7 @@ class TokenTest extends TestCase
     /**
      * @return array
      */
-    public function testIsIdentifierDataProvider()
+    public static function isIdentifierDataProvider()
     {
         return [
             'new' => ['name' => T_NEW, 'value' => 'new', 'result' => false],

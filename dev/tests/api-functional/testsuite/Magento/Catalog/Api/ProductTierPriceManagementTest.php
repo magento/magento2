@@ -1,8 +1,7 @@
 <?php
 /**
- *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Catalog\Api;
@@ -49,7 +48,7 @@ class ProductTierPriceManagementTest extends WebapiAbstract
         }
     }
 
-    public function getListDataProvider()
+    public static function getListDataProvider()
     {
         return [
             [0, 3, 5, 3],
@@ -83,7 +82,7 @@ class ProductTierPriceManagementTest extends WebapiAbstract
         $this->assertTrue($this->_webApiCall($serviceInfo, $requestData, null, "all"));
     }
 
-    public function deleteDataProvider()
+    public static function deleteDataProvider()
     {
         return [
             'delete_tier_price_for_specific_customer_group' => [0, 3],

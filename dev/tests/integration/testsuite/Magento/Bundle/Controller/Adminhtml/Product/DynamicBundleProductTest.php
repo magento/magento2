@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -35,7 +35,7 @@ class DynamicBundleProductTest extends AbstractBundleProductSaveTest
     /**
      * @return array
      */
-    public function bundleProductDataProvider(): array
+    public static function bundleProductDataProvider(): array
     {
         return [
             'with_dropdown_option' => [
@@ -128,7 +128,7 @@ class DynamicBundleProductTest extends AbstractBundleProductSaveTest
     /**
      * @return array
      */
-    public function multiOptionsDataProvider(): array
+    public static function multiOptionsDataProvider(): array
     {
         return [
             'with_two_options_few_selections' => [
@@ -183,7 +183,7 @@ class DynamicBundleProductTest extends AbstractBundleProductSaveTest
     /**
      * @return array
      */
-    public function emptyOptionTitleDataProvider(): array
+    public static function emptyOptionTitleDataProvider(): array
     {
         return [
             'empty_option_title' => [
@@ -227,7 +227,7 @@ class DynamicBundleProductTest extends AbstractBundleProductSaveTest
     /**
      * @return array
      */
-    public function updateProductDataProvider(): array
+    public static function updateProductDataProvider(): array
     {
         return [
             'update_existing_product' => [

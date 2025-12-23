@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Backend\Controller\Adminhtml;
 
@@ -216,7 +216,7 @@ class AuthTest extends \Magento\TestFramework\TestCase\AbstractController
         $this->assertRedirect($this->stringStartsWith($url));
     }
 
-    public function incorrectLoginDataProvider()
+    public static function incorrectLoginDataProvider()
     {
         return [
             'login dummy user' => [

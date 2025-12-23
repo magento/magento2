@@ -1,6 +1,6 @@
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2021 Adobe
+ * All Rights Reserved.
  */
 
 define([
@@ -40,6 +40,10 @@ define([
             $(this.options.regionListId).on('change', $.proxy(function (e) {
                 this.setOption = false;
                 this.currentRegionOption = $(e.target).val();
+
+                if (!this.currentRegionOption) {
+                    $(this.options.regionListId).add(this.options.regionInputId).val('');
+                }
             }, this));
 
             $(this.options.regionInputId).on('focusout', $.proxy(function () {

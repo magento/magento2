@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -71,7 +71,7 @@ class InvalidSkuProcessorTest extends TestCase
         $this->productIdLocator->expects($this->atLeastOnce())->method('retrieveProductIdsBySkus')
             ->willReturn($idsBySku);
         $product = $this->getMockBuilder(ProductInterface::class)
-            ->setMethods(['getPriceType'])
+            ->addMethods(['getPriceType'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $productPriceType = 0;

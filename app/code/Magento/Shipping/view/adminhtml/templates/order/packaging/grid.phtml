@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 //phpcs:disable Squiz.PHP.NonExecutableCode.Unreachable
 /**
@@ -60,7 +60,7 @@
                 <?php endif; ?>
                 <tr class="data-grid-controls-row data-row <?= ($i++ % 2 != 0) ? '_odd-row' : '' ?>">
                     <td class="data-grid-checkbox-cell">
-                        <?php $id = $item->getId() ?? $item->getOrderItemId(); ?>
+                        <?php $id = $item->getOrderItemId(); ?>
                         <label class="data-grid-checkbox-cell-inner">
                             <input type="checkbox"
                                    name=""

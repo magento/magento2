@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 
 /**
@@ -40,7 +40,7 @@ class AbstractEavTest extends \PHPUnit\Framework\TestCase
         );
 
         $this->_model = $this->getMockBuilder(\Magento\ImportExport\Model\Export\Entity\AbstractEav::class)
-            ->setMethods(['getEntityTypeCode', 'getAttributeCollection'])
+            ->onlyMethods(['getEntityTypeCode', 'getAttributeCollection'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
 

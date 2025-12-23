@@ -1,13 +1,13 @@
 <?php
 /**
- *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Quote\Test\Unit\Model\GuestCart;
 
+use PHPUnit\Framework\Attributes\CoversClass;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Quote\Api\Data\AddressInterface;
 use Magento\Quote\Api\Data\ShippingMethodInterface;
@@ -18,6 +18,7 @@ use Magento\Quote\Model\ShippingMethodManagement;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
+#[CoversClass(\Magento\Quote\Model\GuestCart\GuestShippingMethodManagement::class)]
 class GuestShippingMethodManagementTest extends TestCase
 {
     /**
@@ -68,7 +69,7 @@ class GuestShippingMethodManagementTest extends TestCase
             $this->cartId
         );
 
-        $this->shipmentEstimationManagement = $this->getMockForAbstractClass(ShipmentEstimationInterface::class);
+        $this->shipmentEstimationManagement = $this->createMock(ShipmentEstimationInterface::class);
 
         $this->model = $objectManager->getObject(
             GuestShippingMethodManagement::class,
@@ -120,14 +121,11 @@ class GuestShippingMethodManagementTest extends TestCase
         $this->assertEquals($retValue, $this->model->get($this->maskedCartId));
     }
 
-    /**
-     * @covers \Magento\Quote\Model\GuestCart\GuestShippingMethodManagement::getShipmentEstimationManagement
-     */
     public function testEstimateByExtendedAddress()
     {
-        $address = $this->getMockForAbstractClass(AddressInterface::class);
+        $address = $this->createMock(AddressInterface::class);
 
-        $methodObject = $this->getMockForAbstractClass(ShippingMethodInterface::class);
+        $methodObject = $this->createMock(ShippingMethodInterface::class);
         $expectedRates = [$methodObject];
 
         $this->shipmentEstimationManagement->expects(static::once())

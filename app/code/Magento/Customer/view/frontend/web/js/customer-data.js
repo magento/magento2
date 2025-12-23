@@ -1,6 +1,6 @@
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 /**
@@ -16,6 +16,8 @@ define([
     'jquery/jquery-storageapi'
 ], function ($, _, ko, sectionConfig, url) {
     'use strict';
+
+    const GLOBAL_SHARE = '0';
 
     var options = {},
         storage,
@@ -47,7 +49,22 @@ define([
      * Invalidate Cache By Close Cookie Session
      */
     invalidateCacheByCloseCookieSession = function () {
+        var isLoggedIn = parseInt(options.isLoggedIn, 10) || 0,
+            loginStorage = $.localStorage;
+
         if (!$.cookieStorage.isSet('mage-cache-sessid')) {
+            storage.removeAll();
+        }
+
+        if (options.customerShare === GLOBAL_SHARE) {
+            loginStorage = $.cookieStorage;
+        }
+
+        if (!loginStorage.isSet('mage-customer-login')) {
+            loginStorage.set('mage-customer-login', isLoggedIn);
+        }
+        if (loginStorage.get('mage-customer-login') !== isLoggedIn) {
+            loginStorage.set('mage-customer-login', isLoggedIn);
             storage.removeAll();
         }
 
@@ -85,7 +102,10 @@ define([
             parameters['force_new_section_timestamp'] = forceNewSectionTimestamp;
 
             return $.getJSON(options.sectionLoadUrl, parameters).fail(function (jqXHR) {
-                throw new Error(jqXHR);
+                // don't throw error if the request is cancelled or blocked
+                if (jqXHR.status !== 0) {
+                    throw new Error(jqXHR);
+                }
             });
         }
     };
@@ -222,6 +242,13 @@ define([
                 path: '/',
                 expires: new Date(Date.now() + parseInt(options.cookieLifeTime, 10) * 1000)
             });
+
+            if (options.cookieDomain) {
+                $.cookieStorage.setConf({
+                    domain: options.cookieDomain
+                });
+            }
+
             storage = $.initNamespaceStorage('mage-cache-storage').localStorage;
             storageInvalidation = $.initNamespaceStorage('mage-cache-storage-section-invalidation').localStorage;
         },
@@ -252,7 +279,9 @@ define([
 
             // process sections that can expire due to storage information inconsistency
             _.each(cookieSectionTimestamps, function (cookieSectionTimestamp, sectionName) {
-                sectionData = storage.get(sectionName);
+                if (storage !== undefined) {
+                    sectionData = storage.get(sectionName);
+                }
 
                 if (typeof sectionData === 'undefined' ||
                     typeof sectionData === 'object' &&
@@ -410,7 +439,7 @@ define([
     $(document).on('submit', function (event) {
         var sections;
 
-        if (event.target.method.match(/post|put|delete/i)) {
+        if (event.target.hasAttribute('method') && event.target.getAttribute('method').match(/post|put|delete/i)) {
             sections = sectionConfig.getAffectedSections(event.target.action);
 
             if (sections) {

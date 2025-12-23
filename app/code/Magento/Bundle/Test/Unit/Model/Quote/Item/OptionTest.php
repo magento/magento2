@@ -1,12 +1,13 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2021 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Bundle\Test\Unit\Model\Quote\Item;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\Bundle\Model\Option as BundleOption;
 use Magento\Bundle\Model\Product\Price;
 use Magento\Bundle\Model\Product\Type;
@@ -15,11 +16,15 @@ use Magento\Bundle\Model\ResourceModel\Option\Collection as OptionsCollection;
 use Magento\Bundle\Model\ResourceModel\Selection\Collection as SelectionsCollection;
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\Product\Configuration\Item\Option\OptionInterface;
+use Magento\Catalog\Test\Unit\Helper\ProductTestHelper;
 use Magento\Framework\Serialize\Serializer\Json;
+use Magento\Framework\Pricing\PriceCurrencyInterface;
+use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
 
 /**
  * Test bundle product options model
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class OptionTest extends TestCase
 {
@@ -34,22 +39,26 @@ class OptionTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
+        $priceCurrency = $this->createMock(PriceCurrencyInterface::class);
+
+        $priceCurrency->method('convert')
+            ->willReturnArgument(0);
+
         $this->model = new Option(
-            new Json()
+            new Json(),
+            $priceCurrency
         );
     }
 
     /**
      * @param array $customOptions
      * @param array $expected
-     * @dataProvider getSelectionOptionsDataProvider
+     * @throws Exception
      */
+    #[DataProvider('getSelectionOptionsDataProvider')]
     public function testGetSelectionOptions(array $customOptions, array $expected): void
     {
-        $bundleProduct = $this->getMockBuilder(Product::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['getTypeInstance', 'getPriceModel'])
-            ->getMock();
+        $bundleProduct = $this->createPartialMock(Product::class, ['getTypeInstance', 'getPriceModel', 'getStore']);
 
         $typeInstance = $this->createMock(Type::class);
         $typeInstance->method('getOptionsByIds')
@@ -77,7 +86,7 @@ class OptionTest extends TestCase
     /**
      * @return array
      */
-    public function getSelectionOptionsDataProvider(): array
+    public static function getSelectionOptionsDataProvider(): array
     {
         return [
             [
@@ -124,6 +133,7 @@ class OptionTest extends TestCase
     /**
      * @param array $configuration
      * @return OptionInterface[]
+     * @throws Exception
      */
     private function getCustomOptions(array $configuration): array
     {
@@ -147,17 +157,11 @@ class OptionTest extends TestCase
      */
     public function getOptionsCollectionMock(array $ids): OptionsCollection
     {
-        $optionsCollection = $this->getMockBuilder(OptionsCollection::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['load'])
-            ->getMock();
+        $optionsCollection = $this->createPartialMock(OptionsCollection::class, ['load']);
 
         $options = [];
         foreach ($ids as $id) {
-            $option = $this->getMockBuilder(BundleOption::class)
-                ->disableOriginalConstructor()
-                ->onlyMethods(['getId', 'getTitle'])
-                ->getMock();
+            $option = $this->createPartialMock(BundleOption::class, ['getId', 'getTitle']);
 
             $option->method('getId')
                 ->willReturn($id);
@@ -181,23 +185,13 @@ class OptionTest extends TestCase
      */
     public function getSelectionsCollectionMock(array $ids): SelectionsCollection
     {
-        $selectionsCollection = $this->getMockBuilder(SelectionsCollection::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['load'])
-            ->getMock();
+        $selectionsCollection = $this->createPartialMock(SelectionsCollection::class, ['load']);
 
         $selections = [];
         foreach ($ids as $id) {
-            $selection = $this->getMockBuilder(Product::class)
-                ->disableOriginalConstructor()
-                ->addMethods(['getSelectionId', 'getOptionId'])
-                ->getMock();
-
-            $selection->method('getSelectionId')
-                ->willReturn($id);
-
-            $selection->method('getOptionId')
-                ->willReturn(intdiv($id, 10));
+            $selection = new ProductTestHelper();
+            $selection->setSelectionId($id);
+            $selection->setOptionId(intdiv($id, 10));
 
             $selections[$id] = $selection;
         }

@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
@@ -26,6 +26,11 @@
     <type name="Magento\ImportExport\Ui\DataProvider\ExportFileDataProvider">
         <arguments>
             <argument name="file" xsi:type="object">Magento\Framework\Filesystem\Driver\File</argument>
+        </arguments>
+    </type>
+    <type name="Magento\ImportExport\Model\LocaleEmulator">
+        <arguments>
+            <argument name="defaultLocaleResolver" xsi:type="object">Magento\Backend\Model\Locale\Resolver</argument>
         </arguments>
     </type>
 </config>

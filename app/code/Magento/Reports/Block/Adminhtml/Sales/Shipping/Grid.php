@@ -1,15 +1,16 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Reports\Block\Adminhtml\Sales\Shipping;
 
+use Magento\Reports\Block\Adminhtml\Grid\Column\Renderer\Currency;
+
 /**
  * Adminhtml shipping report grid block
  *
- * @author     Magento Core Team <core@magentocommerce.com>
  * @SuppressWarnings(PHPMD.DepthOfInheritance)
  */
 class Grid extends \Magento\Reports\Block\Adminhtml\Grid\AbstractGrid
@@ -102,7 +103,8 @@ class Grid extends \Magento\Reports\Block\Adminhtml\Grid\AbstractGrid
                 'sortable' => false,
                 'rate' => $rate,
                 'header_css_class' => 'col-total-sales-shipping',
-                'column_css_class' => 'col-total-sales-shipping'
+                'column_css_class' => 'col-total-sales-shipping',
+                'renderer' => Currency::class
             ]
         );
 
@@ -117,7 +119,8 @@ class Grid extends \Magento\Reports\Block\Adminhtml\Grid\AbstractGrid
                 'sortable' => false,
                 'rate' => $rate,
                 'header_css_class' => 'col-total-shipping',
-                'column_css_class' => 'col-total-shipping'
+                'column_css_class' => 'col-total-shipping',
+                'renderer' => Currency::class
             ]
         );
 

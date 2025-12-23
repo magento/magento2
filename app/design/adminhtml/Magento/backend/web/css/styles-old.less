@@ -1,6 +1,6 @@
 // /**
-//  * Copyright © Magento, Inc. All rights reserved.
-//  * See COPYING.txt for license details.
+//  * Copyright 2015 Adobe
+//  * All Rights Reserved.
 //  */
 
 @import 'source/lib/_lib.less'; // Global lib
@@ -1829,6 +1829,28 @@
 
     .x-tree-node .x-tree-node-el input[type=checkbox] {
         margin-left: 3px;
+    }
+
+    //
+    //  Js-tree styles
+    //  --------------------------------------
+
+    .jstree-children {
+        .leaf .jstree-themeicon {
+            background: transparent url(../images/fam_leaf.png) no-repeat 0 50%;
+            width: 18px;
+        }
+
+        .system-leaf .jstree-themeicon {
+            background: transparent url(../images/fam_application_form_delete.png) no-repeat 0 50%;
+            width: 18px;
+        }
+    }
+
+    .jstree-disabled {
+        .jstree-checkbox {
+            display: none;
+        }
     }
 
     //

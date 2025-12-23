@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -403,6 +403,7 @@ class BundlePanel extends AbstractModifier
                                                     'selection_price_type' => '',
                                                     'selection_price_value' => '',
                                                     'selection_qty' => '',
+                                                    'selection_qty_is_integer'=> 'selection_qty_is_integer',
                                                 ],
                                                 'links' => [
                                                     'insertData' => '${ $.provider }:${ $.dataProvider }',

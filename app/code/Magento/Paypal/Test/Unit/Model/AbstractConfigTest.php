@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -13,6 +13,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHe
 use Magento\Payment\Model\MethodInterface;
 use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\ScopeInterface as ModelScopeInterface;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -34,9 +35,7 @@ class AbstractConfigTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->scopeConfigMock = $this->getMockBuilder(ScopeConfigInterface::class)
-            ->setMethods(['getValue', 'isSetFlag'])
-            ->getMockForAbstractClass();
+        $this->scopeConfigMock = $this->createMock(ScopeConfigInterface::class);
 
         $this->config = new AbstractConfigTesting($this->scopeConfigMock);
     }
@@ -44,10 +43,13 @@ class AbstractConfigTest extends TestCase
     /**
      * @param string|MethodInterface $method
      * @param $expected
-     * @dataProvider setMethodDataProvider
      */
+    #[DataProvider('setMethodDataProvider')]
     public function testSetMethod($method, $expected)
     {
+        if (is_callable($method)) {
+            $method = $method($this);
+        }
         $this->assertSame($this->config, $this->config->setMethod($method));
         $this->assertEquals($expected, $this->config->getMethodCode());
     }
@@ -55,9 +57,17 @@ class AbstractConfigTest extends TestCase
     public function testSetMethodInstance()
     {
         /** @var MethodInterface $methodInterfaceMock */
-        $methodInterfaceMock = $this->getMockBuilder(MethodInterface::class)
-            ->getMockForAbstractClass();
+        $methodInterfaceMock = $this->createMock(MethodInterface::class);
         $this->assertSame($this->config, $this->config->setMethodInstance($methodInterfaceMock));
+    }
+
+    protected function getMockForMethodInterface()
+    {
+        $methodInterfaceMock = $this->createMock(MethodInterface::class);
+        $methodInterfaceMock->expects($this->once())
+            ->method('getCode')
+            ->willReturn('payment_code');
+        return $methodInterfaceMock;
     }
 
     /**
@@ -67,14 +77,10 @@ class AbstractConfigTest extends TestCase
      *
      * @return array
      */
-    public function setMethodDataProvider()
+    public static function setMethodDataProvider()
     {
         /** @var MethodInterface $methodInterfaceMock */
-        $methodInterfaceMock = $this->getMockBuilder(MethodInterface::class)
-            ->getMockForAbstractClass();
-        $methodInterfaceMock->expects($this->once())
-            ->method('getCode')
-            ->willReturn('payment_code');
+        $methodInterfaceMock = static fn (self $testCase) => $testCase->getMockForMethodInterface();
         return [
             ['payment_code', 'payment_code'],
             [$methodInterfaceMock, 'payment_code'],
@@ -98,9 +104,8 @@ class AbstractConfigTest extends TestCase
      * @param string $method
      * @param array $returnMap
      * @param string $expectedValue
-     *
-     * @dataProvider getValueDataProvider
      */
+    #[DataProvider('getValueDataProvider')]
     public function testGetValue($key, $method, $returnMap, $expectedValue)
     {
         $this->config->setMethod($method);
@@ -122,7 +127,7 @@ class AbstractConfigTest extends TestCase
      *
      * @return array
      */
-    public function getValueDataProvider()
+    public static function getValueDataProvider()
     {
         return [
             [
@@ -190,9 +195,8 @@ class AbstractConfigTest extends TestCase
     /**
      * @param array $returnMap
      * @param bool $expectedValue
-     *
-     * @dataProvider isWppApiAvailabeDataProvider
      */
+    #[DataProvider('isWppApiAvailabeDataProvider')]
     public function testIsWppApiAvailable($returnMap, $expectedValue)
     {
         $this->config->setMethod('paypal_express');
@@ -206,7 +210,7 @@ class AbstractConfigTest extends TestCase
     /**
      * @return array
      */
-    public function isWppApiAvailabeDataProvider()
+    public static function isWppApiAvailabeDataProvider()
     {
         return [
             [
@@ -264,9 +268,8 @@ class AbstractConfigTest extends TestCase
     /**
      * @param string|null $methodCode
      * @param bool $expectedFlag
-     *
-     * @dataProvider isMethodAvailableDataProvider
      */
+    #[DataProvider('isMethodAvailableDataProvider')]
     public function testIsMethodAvailable($methodCode, $expectedFlag)
     {
         $this->config->setMethod('settedMethod');
@@ -280,7 +283,7 @@ class AbstractConfigTest extends TestCase
     /**
      * @return array
      */
-    public function isMethodAvailableDataProvider()
+    public static function isMethodAvailableDataProvider()
     {
         return [
             [null, 'payment/settedMethod/active'],
@@ -303,9 +306,8 @@ class AbstractConfigTest extends TestCase
      * @param string|null $disableFundingOptions
      * @param int $expressBml
      * @param bool $expectedValue
-     *
-     * @dataProvider isMethodActiveBmlDataProvider
      */
+    #[DataProvider('isMethodActiveBmlDataProvider')]
     public function testIsMethodActiveBml(
         $disableFundingOptions,
         $expressBml,
@@ -335,7 +337,7 @@ class AbstractConfigTest extends TestCase
     /**
      * @return array
      */
-    public function isMethodActiveBmlDataProvider()
+    public static function isMethodActiveBmlDataProvider()
     {
         return [
             ['CREDIT,CARD,ELV', 0, 0, 0, false],
@@ -358,9 +360,7 @@ class AbstractConfigTest extends TestCase
      */
     public function testGetBuildNotationCode()
     {
-        $productMetadata = $this->getMockBuilder(ProductMetadataInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $productMetadata = $this->createMock(ProductMetadataInterface::class);
         $productMetadata->method('getEdition')
             ->willReturn('SomeEdition');
 

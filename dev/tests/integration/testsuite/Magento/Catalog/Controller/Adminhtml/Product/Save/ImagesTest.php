@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -76,11 +76,11 @@ class ImagesTest extends AbstractBackendController
     /**
      * @return array
      */
-    public function simpleProductImagesDataProvider(): array
+    public static function simpleProductImagesDataProvider(): array
     {
         return [
             'simple_product_with_jpg_image' => [
-                'post_data' => [
+                'postData' => [
                     'product' => [
                         'media_gallery' => [
                             'images' => [

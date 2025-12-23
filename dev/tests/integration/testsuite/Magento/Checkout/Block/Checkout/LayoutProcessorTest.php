@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -50,7 +50,7 @@ class LayoutProcessorTest extends TestCase
     /**
      * @return array[]
      */
-    public function defaultCountryDataProvider(): array
+    public static function defaultCountryDataProvider(): array
     {
         return [
             'Default country isn\'t in allowed country list' => [

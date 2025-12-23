@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 
 /**
@@ -86,10 +86,7 @@ class SchemaFixture
         if ($scope === null) {
             $annotations = $this->getAnnotations($test);
         } else {
-            $source = TestUtil::parseTestMethodAnnotations(
-                get_class($test),
-                $test->getName(false)
-            );
+            $source = TestCaseAnnotation::getInstance()->getAnnotations($test);
             $annotations = $source[$scope];
         }
         $result = [];
@@ -120,11 +117,7 @@ class SchemaFixture
      */
     private function getAnnotations(\PHPUnit\Framework\TestCase $test)
     {
-        $annotations = TestUtil::parseTestMethodAnnotations(
-            get_class($test),
-            $test->getName(false)
-        );
-
+        $annotations = TestCaseAnnotation::getInstance()->getAnnotations($test);
         return array_replace($annotations['class'], $annotations['method']);
     }
 

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -29,11 +29,11 @@ class ExecuteTest extends TestCase
     {
         $this->config = $this->getMockBuilder(Config::class)
             ->disableOriginalConstructor()
-            ->setMethods(['isEnabled'])
+            ->onlyMethods(['isEnabled'])
             ->getMock();
         $this->typeList = $this->getMockBuilder(TypeListInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['invalidate'])
+            ->onlyMethods(['invalidate'])
             ->getMockForAbstractClass();
 
         $this->execute = new Execute($this->config, $this->typeList);

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Payment\Block\Transparent;
 
@@ -43,7 +43,7 @@ class IframeTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function xssDataProvider()
+    public static function xssDataProvider()
     {
         return [
             ['</script><script>alert("XSS")</script>'],

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2022 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -38,12 +38,12 @@ class DataFixture implements ParserInterface
         try {
             $reflection = $scope === ParserInterface::SCOPE_CLASS
                 ? new \ReflectionClass($test)
-                : new \ReflectionMethod($test, $test->getName(false));
+                : new \ReflectionMethod($test, $test->name());
         } catch (\ReflectionException $e) {
             throw new LocalizedException(
                 __(
                     'Unable to parse attributes for %1',
-                    get_class($test) . ($scope === ParserInterface::SCOPE_CLASS ? '' : '::' . $test->getName(false))
+                    get_class($test) . ($scope === ParserInterface::SCOPE_CLASS ? '' : '::' . $test->name())
                 ),
                 $e
             );
@@ -58,7 +58,7 @@ class DataFixture implements ParserInterface
             $id = $count > 1 ? 1 : '';
             do {
                 $fixtures[] = [
-                    'name' => $alias !== null ? ($alias.($id++)) : null,
+                    'name' => $alias !== null ? $alias.(!empty($id) ? $id++ : '') : null,
                     'factory' => $args[0],
                     'data' => $args[1] ?? [],
                     'scope' => $args['scope'] ?? $args[3] ?? null,

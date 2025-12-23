@@ -1,12 +1,13 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\ConfigurableProduct\Test\Unit\Block\Product\View\Type;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\Catalog\Block\Product\Context;
 use Magento\Catalog\Helper\Product;
 use Magento\Catalog\Model\Product\Attribute\Source\Status;
@@ -116,48 +117,29 @@ class ConfigurableTest extends TestCase
     {
         $this->mockContextObject();
 
-        $this->arrayUtils = $this->getMockBuilder(ArrayUtils::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->arrayUtils = $this->createMock(ArrayUtils::class);
 
-        $this->jsonEncoder = $this->getMockBuilder(EncoderInterface::class)
-            ->getMockForAbstractClass();
+        $this->jsonEncoder = $this->createMock(EncoderInterface::class);
 
-        $this->helper = $this->getMockBuilder(Data::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->helper = $this->createMock(Data::class);
 
-        $this->product = $this->getMockBuilder(Product::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->product = $this->createMock(Product::class);
 
-        $this->currentCustomer = $this->getMockBuilder(CurrentCustomer::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->currentCustomer = $this->createMock(CurrentCustomer::class);
 
-        $this->priceCurrency = $this->getMockBuilder(PriceCurrencyInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->priceCurrency = $this->createMock(PriceCurrencyInterface::class);
 
-        $appState = $this->getMockBuilder(State::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $appState = $this->createMock(State::class);
         $this->context->expects($this->once())
             ->method('getAppState')
             ->willReturn($appState);
-        $appState->expects($this->any())
-            ->method('getAreaCode')
-            ->willReturn('frontend');
-        $urlBuilder = $this->getMockBuilder(UrlInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $appState->method('getAreaCode')->willReturn('frontend');
+        $urlBuilder = $this->createMock(UrlInterface::class);
         $this->context->expects($this->once())
             ->method('getUrlBuilder')
             ->willReturn($urlBuilder);
         $fileResolverMock = $this
-            ->getMockBuilder(Resolver::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+            ->createMock(Resolver::class);
         $this->context->expects($this->once())
             ->method('getResolver')
             ->willReturn($fileResolverMock);
@@ -165,22 +147,14 @@ class ConfigurableTest extends TestCase
         $this->context->expects($this->once())
             ->method('getTaxData')
             ->willReturn($taxData);
-        $this->currency = $this->getMockBuilder(Currency::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->configurableAttributeData = $this->getMockBuilder(
+        $this->currency = $this->createMock(Currency::class);
+        $this->configurableAttributeData = $this->createMock(
             ConfigurableAttributeData::class
-        )
-            ->disableOriginalConstructor()
-            ->getMock();
+        );
 
-        $this->localeFormat = $this->getMockBuilder(Format::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->localeFormat = $this->createMock(Format::class);
 
-        $this->customerSession = $this->getMockBuilder(Session::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->customerSession = $this->createMock(Session::class);
 
         $this->variationPricesMock = $this->createMock(
             Prices::class
@@ -207,7 +181,7 @@ class ConfigurableTest extends TestCase
      *
      * @return array
      */
-    public function cacheKeyProvider(): array
+    public static function cacheKeyProvider(): array
     {
         return [
             'without_currency_and_customer_group' => [
@@ -254,26 +228,20 @@ class ConfigurableTest extends TestCase
 
     /**
      * Test cache Tags
-     * @dataProvider cacheKeyProvider
      * @param array $expected
      * @param string|null $priceCurrency
      * @param int|null $customerGroupId
      */
+    #[DataProvider('cacheKeyProvider')]
     public function testGetCacheKeyInfo(
         array $expected,
         ?string $priceCurrency = null,
         ?int $customerGroupId = null
     ): void {
-        $storeMock = $this->getMockBuilder(StoreInterface::class)
-            ->setMethods(['getCurrentCurrency'])
-            ->getMockForAbstractClass();
-        $storeMock->expects($this->any())
-            ->method('getCode')
-            ->willReturn('default');
+        $storeMock = $this->createPartialMock(\Magento\Store\Model\Store::class, ['getCurrentCurrency', 'getCode']);
+        $storeMock->method('getCode')->willReturn('default');
 
-        $this->storeManager->expects($this->any())
-            ->method('getStore')
-            ->willReturn($storeMock);
+        $this->storeManager->method('getStore')->willReturn($storeMock);
         $this->priceCurrency->expects($this->once())
             ->method('getCurrency')
             ->willReturn($this->currency);
@@ -299,20 +267,14 @@ class ConfigurableTest extends TestCase
 
         $amountMock = $this->getAmountMock($amount);
 
-        $priceMock = $this->getMockBuilder(PriceInterface::class)
-            ->setMethods(['getAmount'])
-            ->getMockForAbstractClass();
-        $priceMock->expects($this->any())->method('getAmount')->willReturn($amountMock);
+        $priceMock = $this->createMock(PriceInterface::class);
+        $priceMock->method('getAmount')->willReturn($amountMock);
         $tierPriceMock = $this->getTierPriceMock($amountMock, $priceQty, $percentage);
-        $productMock = $this->getMockBuilder(\Magento\Catalog\Model\Product::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $productMock = $this->createMock(\Magento\Catalog\Model\Product::class);
 
         $productTypeMock = $this->getProductTypeMock($productMock);
 
-        $priceInfoMock = $this->getMockBuilder(Base::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $priceInfoMock = $this->createMock(Base::class);
         $priceInfoMock->expects($this->any())
             ->method('getPrice')
             ->willReturnMap(
@@ -323,12 +285,11 @@ class ConfigurableTest extends TestCase
                 ]
             );
 
-        $productMock->expects($this->any())->method('getTypeInstance')->willReturn($productTypeMock);
-        $productMock->expects($this->any())->method('getPriceInfo')->willReturn($priceInfoMock);
-        $productMock->expects($this->any())->method('isSaleable')->willReturn(true);
-        $productMock->expects($this->any())->method('getId')->willReturn($productId);
-        $productMock->expects($this->any())->method('getStatus')
-            ->willReturn(Status::STATUS_ENABLED);
+        $productMock->method('getTypeInstance')->willReturn($productTypeMock);
+        $productMock->method('getPriceInfo')->willReturn($priceInfoMock);
+        $productMock->method('isSaleable')->willReturn(true);
+        $productMock->method('getId')->willReturn($productId);
+        $productMock->method('getStatus')->willReturn(Status::STATUS_ENABLED);
 
         $this->helper->expects($this->any())
             ->method('getOptions')
@@ -455,27 +416,15 @@ class ConfigurableTest extends TestCase
      */
     private function getProductTypeMock(MockObject $productMock): MockObject
     {
-        $currencyMock = $this->getMockBuilder(Currency::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $currencyMock->expects($this->any())
-            ->method('getOutputFormat')
-            ->willReturn('%s');
+        $currencyMock = $this->createMock(Currency::class);
+        $currencyMock->method('getOutputFormat')->willReturn('%s');
 
-        $storeMock = $this->getMockBuilder(StoreInterface::class)
-            ->setMethods(['getCurrentCurrency'])
-            ->getMockForAbstractClass();
-        $storeMock->expects($this->any())
-            ->method('getCurrentCurrency')
-            ->willReturn($currencyMock);
+        $storeMock = $this->createPartialMock(\Magento\Store\Model\Store::class, ['getCurrentCurrency', 'getCode']);
+        $storeMock->method('getCurrentCurrency')->willReturn($currencyMock);
 
-        $this->storeManager->expects($this->any())
-            ->method('getStore')
-            ->willReturn($storeMock);
+        $this->storeManager->method('getStore')->willReturn($storeMock);
 
-        $productTypeMock = $this->getMockBuilder(\Magento\ConfigurableProduct\Model\Product\Type\Configurable::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $productTypeMock = $this->createMock(\Magento\ConfigurableProduct\Model\Product\Type\Configurable::class);
         $productTypeMock->expects($this->any())
             ->method('getStoreFilter')
             ->with($productMock)
@@ -495,15 +444,10 @@ class ConfigurableTest extends TestCase
      */
     protected function mockContextObject()
     {
-        $this->storeManager = $this->getMockBuilder(StoreManagerInterface::class)
-            ->getMockForAbstractClass();
+        $this->storeManager = $this->createMock(StoreManagerInterface::class);
 
-        $this->context = $this->getMockBuilder(Context::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->context->expects($this->any())
-            ->method('getStoreManager')
-            ->willReturn($this->storeManager);
+        $this->context = $this->createMock(Context::class);
+        $this->context->method('getStoreManager')->willReturn($this->storeManager);
     }
 
     /**
@@ -514,15 +458,9 @@ class ConfigurableTest extends TestCase
      */
     protected function getAmountMock($amount): MockObject
     {
-        $amountMock = $this->getMockBuilder(AmountInterface::class)
-            ->setMethods(['getValue', 'getBaseAmount'])
-            ->getMockForAbstractClass();
-        $amountMock->expects($this->any())
-            ->method('getValue')
-            ->willReturn($amount);
-        $amountMock->expects($this->any())
-            ->method('getBaseAmount')
-            ->willReturn($amount);
+        $amountMock = $this->createMock(AmountInterface::class);
+        $amountMock->method('getValue')->willReturn($amount);
+        $amountMock->method('getBaseAmount')->willReturn($amount);
 
         return $amountMock;
     }
@@ -542,15 +480,12 @@ class ConfigurableTest extends TestCase
             'price' => $amountMock,
         ];
 
-        $tierPriceMock = $this->getMockBuilder(TierPriceInterface::class)
-            ->setMethods(['getTierPriceList', 'getSavePercent'])
-            ->getMockForAbstractClass();
-        $tierPriceMock->expects($this->any())
-            ->method('getTierPriceList')
-            ->willReturn([$tierPrice]);
-        $tierPriceMock->expects($this->any())
-            ->method('getSavePercent')
-            ->willReturn($percentage);
+        $tierPriceMock = $this->createPartialMock(
+            \Magento\Catalog\Pricing\Price\TierPrice::class,
+            ['getSavePercent', 'getTierPriceList']
+        );
+        $tierPriceMock->method('getTierPriceList')->willReturn([$tierPrice]);
+        $tierPriceMock->method('getSavePercent')->willReturn($percentage);
 
         return $tierPriceMock;
     }

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Test\Integrity\Magento\Widget;
 
@@ -35,7 +35,7 @@ class TemplateFilesTest extends \PHPUnit\Framework\TestCase
      *
      * @return array
      */
-    public function widgetTemplatesDataProvider()
+    public static function widgetTemplatesDataProvider()
     {
         $result = [];
         /** @var $model \Magento\Widget\Model\Widget */

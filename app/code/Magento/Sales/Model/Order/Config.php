@@ -1,13 +1,14 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Sales\Model\Order;
 
 use Magento\Framework\App\Area;
-use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 
 /**
  * Order configuration model
@@ -15,7 +16,7 @@ use Magento\Framework\App\ObjectManager;
  * @api
  * @since 100.0.2
  */
-class Config
+class Config implements ResetAfterRequestInterface
 {
     /**
      * @var \Magento\Sales\Model\ResourceModel\Order\Status\Collection
@@ -76,12 +77,20 @@ class Config
         \Magento\Sales\Model\Order\StatusFactory $orderStatusFactory,
         \Magento\Sales\Model\ResourceModel\Order\Status\CollectionFactory $orderStatusCollectionFactory,
         \Magento\Framework\App\State $state,
-        StatusLabel $statusLabel = null
+        ?StatusLabel $statusLabel = null
     ) {
         $this->orderStatusFactory = $orderStatusFactory;
         $this->orderStatusCollectionFactory = $orderStatusCollectionFactory;
         $this->state = $state;
         $this->statusLabel = $statusLabel ?: ObjectManager::getInstance()->get(StatusLabel::class);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        $this->collection = null;
     }
 
     /**
@@ -129,7 +138,6 @@ class Config
         }
         return $status;
     }
-
 
     /**
      * Retrieve status label for detected area

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\TestFramework\Annotation;
@@ -44,10 +44,7 @@ class CopyModules
      */
     public function startTest(\PHPUnit\Framework\TestCase $test)
     {
-        $annotations = TestUtil::parseTestMethodAnnotations(
-            get_class($test),
-            $test->getName(false)
-        );
+        $annotations = TestCaseAnnotation::getInstance()->getAnnotations($test);
         //This annotation can be declared only on method level
         if (isset($annotations['method']['moduleName'])) {
             $moduleNames = $annotations['method']['moduleName'];
@@ -68,10 +65,7 @@ class CopyModules
      */
     public function endTest(\PHPUnit\Framework\TestCase $test)
     {
-        $annotations = TestUtil::parseTestMethodAnnotations(
-            get_class($test),
-            $test->getName(false)
-        );
+        $annotations = TestCaseAnnotation::getInstance()->getAnnotations($test);
         //This annotation can be declared only on method level
         if (!empty($annotations['method']['moduleName'])) {
             foreach ($annotations['method']['moduleName'] as $moduleName) {
@@ -100,6 +94,6 @@ class CopyModules
         $reflectionProperty->setAccessible(true);
         $value = $reflectionProperty->getValue();
         unset($value[ComponentRegistrar::MODULE][$moduleName]);
-        $reflectionProperty->setValue($value);
+        $reflectionProperty->setValue(null, $value);
     }
 }

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
-  */
+/**
+ * Copyright 2022 Adobe
+ * All Rights Reserved.
+ */
 -->
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -20,10 +20,13 @@
         </annotations>
 
         <before>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <!-- Delete all products left by prev tests because it sensitive for search-->
+            <actionGroup ref="DeleteAllProductsUsingProductGridActionGroup" stepKey="deleteAllProducts"/>
+
             <magentoCLI stepKey="enableLimitNumberOfProductsInGrid" command="config:set admin/grid/limit_total_number_of_products 1"/>
             <magentoCLI stepKey="setCustomRecordsLimit" command="config:set admin/grid/records_limit 2"/>
             <createData entity="SimpleProduct" stepKey="createSimpleProduct1"/>
-            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
         </before>
 
         <after>

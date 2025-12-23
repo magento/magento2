@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 
 /**
@@ -11,6 +11,7 @@
  */
 namespace Magento\Catalog\Block\Adminhtml\Product\Helper\Form;
 
+use Magento\Catalog\Model\Product\Gallery\DefaultValueProcessor;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\Request\DataPersistorInterface;
 use Magento\Framework\Registry;
@@ -77,12 +78,18 @@ class Gallery extends \Magento\Framework\View\Element\AbstractBlock
     private $dataPersistor;
 
     /**
+     * @var DefaultValueProcessor
+     */
+    private $defaultValueProcessor;
+
+    /**
      * @param \Magento\Framework\View\Element\Context $context
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param Registry $registry
      * @param \Magento\Framework\Data\Form $form
      * @param array $data
      * @param DataPersistorInterface|null $dataPersistor
+     * @param DefaultValueProcessor|null $defaultValueProcessor
      */
     public function __construct(
         \Magento\Framework\View\Element\Context $context,
@@ -90,12 +97,15 @@ class Gallery extends \Magento\Framework\View\Element\AbstractBlock
         Registry $registry,
         \Magento\Framework\Data\Form $form,
         $data = [],
-        DataPersistorInterface $dataPersistor = null
+        ?DataPersistorInterface $dataPersistor = null,
+        ?DefaultValueProcessor $defaultValueProcessor = null
     ) {
         $this->storeManager = $storeManager;
         $this->registry = $registry;
         $this->form = $form;
         $this->dataPersistor = $dataPersistor ?: ObjectManager::getInstance()->get(DataPersistorInterface::class);
+        $this->defaultValueProcessor = $defaultValueProcessor
+            ?: ObjectManager::getInstance()->get(DefaultValueProcessor::class);
         parent::__construct($context, $data);
     }
 
@@ -117,9 +127,16 @@ class Gallery extends \Magento\Framework\View\Element\AbstractBlock
      */
     public function getImages()
     {
-        $images = $this->getDataObject()->getData('media_gallery') ?: null;
+        $product = $this->getDataObject();
+        $images = $this->defaultValueProcessor->process(
+            $product,
+            $product->getData('media_gallery')
+        );
         if ($images === null) {
             $images = ((array)$this->dataPersistor->get('catalog_product'))['product']['media_gallery'] ?? null;
+        } else {
+            // cache processed images in product object to avoid multiple processing
+            $product->setData('media_gallery', $images);
         }
 
         return $images;

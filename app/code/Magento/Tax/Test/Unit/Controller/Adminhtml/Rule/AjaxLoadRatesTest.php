@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -79,7 +79,7 @@ class AjaxLoadRatesTest extends TestCase
     /**
      * Executes the controller action and asserts an exception logic
      */
-    public function testExecute()
+    public function testExecute(): void
     {
         $objectManager = new ObjectManager($this);
 
@@ -96,8 +96,7 @@ class AjaxLoadRatesTest extends TestCase
             ->method('setPageSize')
             ->willReturnSelf();
 
-        $searchCriteria = $this->getMockBuilder(SearchCriteriaInterface::class)
-            ->getMockForAbstractClass();
+        $searchCriteria = $this->createMock(SearchCriteriaInterface::class);
 
         $this->searchCriteriaBuilder->expects($this->once())
             ->method('create')
@@ -110,7 +109,7 @@ class AjaxLoadRatesTest extends TestCase
 
         $jsonObject= $this->getMockBuilder(Json::class)
             ->disableOriginalConstructor()
-            ->setMethods(['setData'])
+            ->onlyMethods(['setData'])
             ->getMock();
 
         $jsonObject->expects($this->once())

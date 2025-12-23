@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Customer\Model\Metadata\Form;
 
@@ -23,6 +23,8 @@ use Magento\Framework\Filesystem\Io\File as IoFile;
  */
 class File extends AbstractData
 {
+    public const UPLOADED_FILE_SUFFIX = '_uploaded';
+
     /**
      * Validator for check not protected extensions
      *
@@ -59,7 +61,8 @@ class File extends AbstractData
 
     /**
      * @var FileProcessorFactory
-     * @deprecated 101.0.0
+     * @deprecated 101.0.0 Call fileProcessor directly from code
+     * @see $this->fileProcessor
      */
     protected $fileProcessorFactory;
 
@@ -98,8 +101,8 @@ class File extends AbstractData
         \Magento\MediaStorage\Model\File\Validator\NotProtectedExtension $fileValidator,
         Filesystem $fileSystem,
         UploaderFactory $uploaderFactory,
-        \Magento\Customer\Model\FileProcessorFactory $fileProcessorFactory = null,
-        IoFile $ioFile = null
+        ?\Magento\Customer\Model\FileProcessorFactory $fileProcessorFactory = null,
+        ?IoFile $ioFile = null
     ) {
         $value = $this->prepareFileValue($value);
         parent::__construct($localeDate, $logger, $attribute, $localeResolver, $value, $entityTypeCode, $isAjax);
@@ -126,7 +129,7 @@ class File extends AbstractData
         $attrCode = $this->getAttribute()->getAttributeCode();
 
         // phpcs:disable Magento2.Security.Superglobal
-        $uploadedFile = $request->getParam($attrCode . '_uploaded');
+        $uploadedFile = $request->getParam($attrCode . static::UPLOADED_FILE_SUFFIX);
         if ($uploadedFile) {
             $value = $uploadedFile;
         } elseif ($this->_requestScope || !isset($_FILES[$attrCode])) {
@@ -311,7 +314,7 @@ class File extends AbstractData
         // Remove outdated file (in the case of file uploader UI component)
         if (!empty($this->_value)
             && (!empty($value['delete'])
-                || ($this->_entityTypeCode == 'customer' && empty($value)))
+                || ($this->_entityTypeCode === 'customer' && empty($value)))
         ) {
             $this->fileProcessor->removeUploadedFile($this->_value);
             return $value;
@@ -424,7 +427,8 @@ class File extends AbstractData
      * Get file processor
      *
      * @return FileProcessor
-     * @deprecated 100.1.3
+     * @deprecated 100.1.3 we don’t use such approach anymore. Call fileProcessor directly
+     * @see $this->fileProcessor
      */
     protected function getFileProcessor()
     {

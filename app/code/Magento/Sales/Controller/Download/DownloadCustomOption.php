@@ -1,8 +1,7 @@
 <?php
 /**
- *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -29,6 +28,8 @@ class DownloadCustomOption extends \Magento\Framework\App\Action\Action implemen
     /**
      * @var \Magento\Framework\Unserialize\Unserialize
      * @deprecated 101.0.0
+     * @deprecated No longer used
+     * @see $serializer
      */
     protected $unserialize;
 
@@ -49,7 +50,7 @@ class DownloadCustomOption extends \Magento\Framework\App\Action\Action implemen
         ForwardFactory $resultForwardFactory,
         \Magento\Sales\Model\Download $download,
         \Magento\Framework\Unserialize\Unserialize $unserialize,
-        \Magento\Framework\Serialize\Serializer\Json $serializer = null
+        ?\Magento\Framework\Serialize\Serializer\Json $serializer = null
     ) {
         parent::__construct($context);
         $this->resultForwardFactory = $resultForwardFactory;
@@ -106,7 +107,7 @@ class DownloadCustomOption extends \Magento\Framework\App\Action\Action implemen
             if ($this->getRequest()->getParam('key') != $info['secret_key']) {
                 return $resultForward->forward('noroute');
             }
-            $this->download->downloadFile($info);
+            return $this->download->createResponse($info);
         } catch (\Exception $e) {
             return $resultForward->forward('noroute');
         }

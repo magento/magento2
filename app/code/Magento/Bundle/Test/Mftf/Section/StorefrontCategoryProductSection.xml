@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
-  */
+/**
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
+ */
 -->
 
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -11,5 +11,9 @@
     <section name="StorefrontCategoryProductSection">
         <element name="priceToByProductId" type="text" selector="div[data-product-id='{{id}}'] .price-to" parameterized="true"/>
         <element name="priceFromByProductId" type="text" selector="div[data-product-id='{{id}}'] .price-from" parameterized="true"/>
+        <element name="priceAsLowAsLabelByProductId" type="text" selector="div[data-product-id='{{id}}'] p.minimal-price span.price-container > span.price-label" parameterized="true"/>
+        <element name="priceAsLowAsFinalPriceByProductId" type="text" selector="div[data-product-id='{{id}}'] p.minimal-price span.price-container > span.price-wrapper > span.price" parameterized="true"/>
+        <element name="oldPriceByProductId" type="text" selector="div[data-product-id='{{id}}'] .old-price" parameterized="true"/>
+        <element name="priceToByProductSku" type="text" selector="//li[.//form[@data-product-sku='{{sku}}']]//p[contains(@class,'price-to')]" parameterized="true"/>
     </section>
 </sections>

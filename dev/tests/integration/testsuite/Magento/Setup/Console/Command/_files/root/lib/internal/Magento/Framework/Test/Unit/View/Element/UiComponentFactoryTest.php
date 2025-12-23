@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework\Test\Unit\View\Element;
 
@@ -40,11 +40,11 @@ class UiComponentFactoryTest extends \PHPUnit\Framework\TestCase
             ->getMockForAbstractClass();
         $this->contextFactoryMock = $this
             ->getMockBuilder(\Magento\Framework\View\Element\UiComponent\ContextFactory::class)
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->dataInterfaceFactoryMock = $this->getMockBuilder(\Magento\Framework\Config\DataInterfaceFactory::class)
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->dataMock = $this->createMock(\Magento\Framework\Config\DataInterface::class);

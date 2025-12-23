@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Framework\DB;
@@ -93,7 +93,7 @@ abstract class AbstractMapper implements MapperInterface
         FetchStrategyInterface $fetchStrategy,
         ObjectFactory $objectFactory,
         MapperFactory $mapperFactory,
-        Select $select = null
+        ?Select $select = null
     ) {
         $this->logger = $logger;
         $this->fetchStrategy = $fetchStrategy;

@@ -1,12 +1,13 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2021 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 use Magento\Customer\Model\GroupManagement;
-use Magento\SalesRule\Model\ResourceModel\Rule as RuleResourceModel;
+use Magento\SalesRule\Api\Data\RuleInterface;
+use Magento\SalesRule\Api\RuleRepositoryInterface;
 use Magento\SalesRule\Model\Rule;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\TestFramework\Helper\Bootstrap;
@@ -35,4 +36,6 @@ $salesRule->setData(
         ]
     ]
 );
-$objectManager->get(RuleResourceModel::class)->save($salesRule);
+
+// Deprecated model save call is required to ensure plugins are executed
+$salesRule->save();

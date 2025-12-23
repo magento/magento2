@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -26,7 +26,6 @@ use Magento\Store\Model\Indexer\WebsiteDimensionProvider;
 use Magento\Store\Model\Store;
 use Magento\Catalog\Model\ResourceModel\Category;
 use Zend_Db_Expr;
-use Magento\Catalog\Model\ResourceModel\Product\Gallery;
 
 /**
  * Product collection
@@ -101,6 +100,11 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
      * @var \Magento\Catalog\Model\ResourceModel\Product\Collection\ProductLimitation
      */
     protected $_productLimitationFilters;
+
+    /**
+     * @var ProductLimitationFactory
+     */
+    private $productLimitationFactory;
 
     /**
      * Category product count select
@@ -333,16 +337,16 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
         \Magento\Customer\Model\Session $customerSession,
         \Magento\Framework\Stdlib\DateTime $dateTime,
         GroupManagementInterface $groupManagement,
-        \Magento\Framework\DB\Adapter\AdapterInterface $connection = null,
-        ProductLimitationFactory $productLimitationFactory = null,
-        MetadataPool $metadataPool = null,
-        TableMaintainer $tableMaintainer = null,
-        PriceTableResolver $priceTableResolver = null,
-        DimensionFactory $dimensionFactory = null,
-        Category $categoryResourceModel = null,
-        DbStorage $urlFinder = null,
-        GalleryReadHandler $productGalleryReadHandler = null,
-        Gallery $mediaGalleryResource = null
+        ?\Magento\Framework\DB\Adapter\AdapterInterface $connection = null,
+        ?ProductLimitationFactory $productLimitationFactory = null,
+        ?MetadataPool $metadataPool = null,
+        ?TableMaintainer $tableMaintainer = null,
+        ?PriceTableResolver $priceTableResolver = null,
+        ?DimensionFactory $dimensionFactory = null,
+        ?Category $categoryResourceModel = null,
+        ?DbStorage $urlFinder = null,
+        ?GalleryReadHandler $productGalleryReadHandler = null,
+        ?Gallery $mediaGalleryResource = null
     ) {
         $this->moduleManager = $moduleManager;
         $this->_catalogProductFlatState = $catalogProductFlatState;
@@ -354,10 +358,10 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
         $this->_resourceHelper = $resourceHelper;
         $this->dateTime = $dateTime;
         $this->_groupManagement = $groupManagement;
-        $productLimitationFactory = $productLimitationFactory ?: ObjectManager::getInstance()->get(
+        $this->productLimitationFactory = $productLimitationFactory ?: ObjectManager::getInstance()->get(
             \Magento\Catalog\Model\ResourceModel\Product\Collection\ProductLimitationFactory::class
         );
-        $this->_productLimitationFilters = $productLimitationFactory->create();
+        $this->_productLimitationFilters = $this->productLimitationFactory->create();
         $this->metadataPool = $metadataPool ?: ObjectManager::getInstance()->get(MetadataPool::class);
         parent::__construct(
             $entityFactory,
@@ -385,6 +389,35 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
             ->get(GalleryReadHandler::class);
         $this->mediaGalleryResource = $mediaGalleryResource ?: ObjectManager::getInstance()
             ->get(Gallery::class);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        $this->_flatEnabled = [];
+        $this->_addUrlRewrite = false;
+        $this->_urlRewriteCategory = '';
+        $this->_addFinalPrice = false;
+        $this->_allIdsCache = null;
+        $this->_addTaxPercents = false;
+        $this->_productLimitationFilters = $this->productLimitationFactory->create();
+        $this->_productCountSelect = null;
+        $this->_isWebsiteFilter = false;
+        $this->_priceDataFieldFilters = [];
+        $this->_priceExpression = null;
+        $this->_additionalPriceExpression = null;
+        $this->_maxPrice = null;
+        $this->_minPrice = null;
+        $this->_priceStandardDeviation = null;
+        $this->_pricesCount = null;
+        $this->_catalogPreparePriceSelect = null;
+        $this->needToAddWebsiteNamesToResult = null;
+        $this->linkField = null;
+        $this->backend = null;
+        $this->emptyItem = null;
+        parent::_resetState();
     }
 
     /**
@@ -688,6 +721,10 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
 
         $this->_prepareUrlDataObject();
         $this->prepareStoreId();
+
+        if (isset($this->_selectAttributes['media_gallery'])) {
+            $this->addMediaGalleryData();
+        }
 
         if (count($this)) {
             $this->_eventManager->dispatch('catalog_product_collection_load_after', ['collection' => $this]);
@@ -2328,7 +2365,9 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
             return $this;
         }
 
-        if (!$this->getSize()) {
+        $size = $this->isLoaded() ? $this->count() : $this->getSize();
+
+        if (!$size) {
             return $this;
         }
 

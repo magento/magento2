@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -16,7 +16,9 @@ use Magento\Eav\Model\Entity\Type;
 use Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\Collection;
 use Magento\Framework\DataObject;
 use Magento\Framework\Model\AbstractModel;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Rule\Model\Condition\Product\AbstractProduct;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -25,6 +27,7 @@ use PHPUnit\Framework\TestCase;
  */
 class AbstractProductTest extends TestCase
 {
+    use MockCreationTrait;
     /**
      * Tested condition
      *
@@ -65,12 +68,7 @@ class AbstractProductTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->_condition = $this->getMockForAbstractClass(
-            AbstractProduct::class,
-            [],
-            '',
-            false
-        );
+        $this->_condition = $this->createPartialMock(AbstractProduct::class, []);
 
         $this->productCategoryListProperty = new \ReflectionProperty(
             AbstractProduct::class,
@@ -96,17 +94,12 @@ class AbstractProductTest extends TestCase
      */
     public function testValidateAttributeEqualCategoryId()
     {
-        $product = $this->getMockBuilder(AbstractModel::class)
-            ->addMethods(["getAttribute"])
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $product = $this->createPartialMockWithReflection(AbstractModel::class, ["getAttribute"]);
         $this->_condition->setAttribute('category_ids');
         $this->_condition->setValueParsed('1');
         $this->_condition->setOperator('{}');
 
-        $productCategoryList = $this->getMockBuilder(ProductCategoryList::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $productCategoryList = $this->createMock(ProductCategoryList::class);
         $productCategoryList->method('getCategoryIds')->willReturn([1, 2]);
         $this->productCategoryListProperty->setValue(
             $this->_condition,
@@ -114,9 +107,7 @@ class AbstractProductTest extends TestCase
         );
         $this->_configProperty->setValue(
             $this->_condition,
-            $this->getMockBuilder(Config::class)
-                ->disableOriginalConstructor()
-                ->getMock()
+            $this->createMock(Config::class)
         );
 
         $this->assertTrue($this->_condition->validate($product));
@@ -127,11 +118,7 @@ class AbstractProductTest extends TestCase
      */
     public function testValidateEmptyEntityAttributeValues()
     {
-        $product = $this->getMockBuilder(AbstractModel::class)
-            ->addMethods(["getAttribute"])
-            ->onlyMethods(['getResource'])
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $product = $this->createPartialMockWithReflection(AbstractModel::class, ['getResource', 'getAttribute']);
         $product->expects($this->once())
             ->method('getResource')
             ->willReturn(null);
@@ -150,11 +137,7 @@ class AbstractProductTest extends TestCase
      */
     public function testValidateEmptyEntityAttributeValuesWithResource()
     {
-        $product = $this->getMockBuilder(AbstractModel::class)
-            ->addMethods(["getAttribute"])
-            ->onlyMethods(['getResource'])
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $product = $this->createPartialMockWithReflection(AbstractModel::class, ['getResource', 'getAttribute']);
         $product->setId(1);
         $time = '04/19/2012 11:59 am';
         $product->setData('someAttribute', $time);
@@ -174,7 +157,6 @@ class AbstractProductTest extends TestCase
             ->method('getAttribute')
             ->with('someAttribute')
             ->willReturn($attribute);
-        $newResource->_config = $this->createMock(Config::class);
         $product->expects($this->atLeastOnce())
             ->method('getResource')
             ->willReturn($newResource);
@@ -190,7 +172,6 @@ class AbstractProductTest extends TestCase
             ->method('getAttribute')
             ->with('someAttribute')
             ->willReturn($attribute);
-        $newResource->_config = $this->createMock(Config::class);
 
         $product->setResource($newResource);
         $this->assertFalse($this->_condition->validate($product));
@@ -202,11 +183,7 @@ class AbstractProductTest extends TestCase
     public function testValidateSetEntityAttributeValuesWithResource()
     {
         $this->_condition->setAttribute('someAttribute');
-        $product = $this->getMockBuilder(AbstractModel::class)
-            ->addMethods(['getAttribute'])
-            ->onlyMethods(['getResource'])
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $product = $this->createPartialMockWithReflection(AbstractModel::class, ['getResource', 'getAttribute']);
         $product->setAtribute('attribute');
         $product->setData('someAttribute', '');
         $product->setId(12);
@@ -228,7 +205,6 @@ class AbstractProductTest extends TestCase
             ->method('getAttribute')
             ->with('someAttribute')
             ->willReturn($attribute);
-        $newResource->_config = $this->createMock(Config::class);
 
         $product->expects($this->atLeastOnce())
             ->method('getResource')
@@ -250,11 +226,7 @@ class AbstractProductTest extends TestCase
      */
     public function testValidateSetEntityAttributeValuesWithoutResource()
     {
-        $product = $this->getMockBuilder(AbstractModel::class)
-            ->addMethods(['someMethod'])
-            ->onlyMethods(['getResource', 'load'])
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $product = $this->createPartialMockWithReflection(AbstractModel::class, ['getResource', 'load', 'someMethod']);
         $this->_condition->setAttribute('someAttribute');
         $product->setAtribute('attribute');
         $product->setId(12);
@@ -277,7 +249,6 @@ class AbstractProductTest extends TestCase
             ->method('getAttribute')
             ->with('someAttribute')
             ->willReturn($attribute);
-        $newResource->_config = $this->createMock(Config::class);
 
         $product->expects($this->atLeastOnce())
             ->method('getResource')
@@ -303,7 +274,6 @@ class AbstractProductTest extends TestCase
             ->method('getAttribute')
             ->with('someAttribute')
             ->willReturn($attribute);
-        $newResource->_config = $this->createMock(Config::class);
 
         $product->setResource($newResource);
         $product->setId(1);
@@ -342,9 +312,9 @@ class AbstractProductTest extends TestCase
      * @param bool $expectedAttrObjSourceAllOptionsParam
      * @param array $expectedValueSelectOptions
      * @param array $expectedValueOption
-     * @dataProvider prepareValueOptionsDataProvider
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
+    #[DataProvider('prepareValueOptionsDataProvider')]
     public function testPrepareValueOptions(
         $setData,
         $attributeObjectFrontendInput,
@@ -358,20 +328,17 @@ class AbstractProductTest extends TestCase
             $this->_condition->setData($key, $value);
         }
 
-        $attrObjectSourceMock = $this->getMockBuilder(AbstractSource::class)
-            ->setMethods(['getAllOptions'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $attrObjectSourceMock = $this->createPartialMock(AbstractSource::class, ['getAllOptions']);
         $attrObjectSourceMock
             ->expects((null === $expectedAttrObjSourceAllOptionsParam) ? $this->never() : $this->once())
             ->method('getAllOptions')
-            ->with($expectedAttrObjSourceAllOptionsParam)
+            ->with($expectedAttrObjSourceAllOptionsParam, true)
             ->willReturn($attrObjectSourceAllOptionsValue);
 
-        $attributeObjectMock = $this->getMockBuilder(Attribute::class)
-            ->setMethods(['usesSource', 'getFrontendInput', 'getSource', 'getAllOptions'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $attributeObjectMock = $this->createPartialMockWithReflection(
+            Attribute::class,
+            ['usesSource', 'getFrontendInput', 'getSource', 'getAllOptions']
+        );
         $attributeObjectMock->method('usesSource')->willReturn(true);
         $attributeObjectMock
             ->expects((null === $attributeObjectFrontendInput) ? $this->never() : $this->once())
@@ -379,10 +346,7 @@ class AbstractProductTest extends TestCase
             ->willReturn($attributeObjectFrontendInput);
         $attributeObjectMock->method('getSource')->willReturn($attrObjectSourceMock);
 
-        $entityTypeMock = $this->getMockBuilder(Type::class)
-            ->setMethods(['getId'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $entityTypeMock = $this->createPartialMock(Type::class, ['getId']);
         $entityTypeMock->method('getId')->willReturn('SomeEntityType');
 
         $configValueMock = $this->createPartialMock(
@@ -399,11 +363,10 @@ class AbstractProductTest extends TestCase
         $configProperty->setAccessible(true);
         $configProperty->setValue($this->_condition, $configValueMock);
 
-        $attrSetCollectionValueMock = $this
-            ->getMockBuilder(Collection::class)
-            ->setMethods(['setEntityTypeFilter', 'load', 'toOptionArray'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $attrSetCollectionValueMock = $this->createPartialMock(
+            Collection::class,
+            ['setEntityTypeFilter', 'load', 'toOptionArray']
+        );
 
         $attrSetCollectionValueMock->method('setEntityTypeFilter')->willReturnSelf();
         $attrSetCollectionValueMock->method('load')->willReturnSelf();
@@ -436,7 +399,7 @@ class AbstractProductTest extends TestCase
      * @return array
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function prepareValueOptionsDataProvider()
+    public static function prepareValueOptionsDataProvider()
     {
         return [
             [

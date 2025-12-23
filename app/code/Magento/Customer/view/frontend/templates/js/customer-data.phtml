@@ -1,25 +1,40 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
+ */
+use Magento\Customer\ViewModel\Customer\Data;
+use Magento\Customer\ViewModel\CookieSettings;
+
+/**
+ * @var \Magento\Customer\Block\CustomerData $block
+ * @var \Magento\Framework\Escaper $escaper
  */
 
-/** @var \Magento\Customer\Block\CustomerData $block */
-
 // phpcs:disable Magento2.Templates.ThisInTemplate.FoundHelper
+/** @var Auth $auth */
+$auth = $block->getAuth();
+/** @var JsonSerializer $jsonSerializer */
+$jsonSerializer = $block->getJsonSerializer();
+$customerDataUrl = $block->getCustomerDataUrl('customer/account/updateSession');
+$expirableSectionNames = $block->getExpirableSectionNames();
+/** @var CookieSettings $cookieSettings */
+$cookieSettings = $block->getCookieSettings();
 ?>
 <script type="text/x-magento-init">
     {
         "*": {
             "Magento_Customer/js/customer-data": {
-                "sectionLoadUrl": "<?= $block->escapeJs($block->getCustomerDataUrl('customer/section/load')) ?>",
+                "sectionLoadUrl": "<?= $escaper->escapeJs($block->getCustomerDataUrl('customer/section/load')) ?>",
                 "expirableSectionLifetime": <?= (int)$block->getExpirableSectionLifetime() ?>,
-                "expirableSectionNames": <?= /* @noEscape */ $this->helper(\Magento\Framework\Json\Helper\Data::class)
-                    ->jsonEncode($block->getExpirableSectionNames()) ?>,
-                "cookieLifeTime": "<?= $block->escapeJs($block->getCookieLifeTime()) ?>",
-                "updateSessionUrl": "<?= $block->escapeJs(
-                    $block->getCustomerDataUrl('customer/account/updateSession')
-                ) ?>"
+                "expirableSectionNames": <?= /* @noEscape */ $jsonSerializer->serialize(
+                    $expirableSectionNames
+                ) ?>,
+                "cookieLifeTime": "<?= $escaper->escapeJs($block->getCookieLifeTime()) ?>",
+                "cookieDomain": "<?= $escaper->escapeJs($cookieSettings->getCookieDomain()) ?>",
+                "updateSessionUrl": "<?= $escaper->escapeJs($customerDataUrl) ?>",
+                "isLoggedIn": "<?= /* @noEscape */ $auth->isLoggedIn() ?>",
+                "customerShare": "<?= $escaper->escapeJs($auth->getCustomerShareScope()) ?>"
             }
         }
     }

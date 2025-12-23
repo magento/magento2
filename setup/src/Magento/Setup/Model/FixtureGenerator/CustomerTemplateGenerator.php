@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Setup\Model\FixtureGenerator;
@@ -49,7 +49,7 @@ class CustomerTemplateGenerator implements TemplateEntityGeneratorInterface
         CustomerFactory $customerFactory,
         AddressFactory $addressFactory,
         StoreManagerInterface $storeManager,
-        RegionCollectionFactory $regionsCollectionFactory = null
+        ?RegionCollectionFactory $regionsCollectionFactory = null
     ) {
         $this->customerFactory = $customerFactory;
         $this->addressFactory = $addressFactory;
@@ -94,7 +94,6 @@ class CustomerTemplateGenerator implements TemplateEntityGeneratorInterface
                 'disable_auto_group_change' => '0',
                 'dob' => '12-10-1991',
                 'firstname' => 'Firstname',
-                'gender' => 1,
                 'group_id' => '1',
                 'lastname' => 'Lastname',
                 'middlename' => '',

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -54,7 +54,7 @@ class WidgetTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $this->conditionsHelper = $this->getMockBuilder(Conditions::class)
-            ->setMethods(['encode'])
+            ->onlyMethods(['encode'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->escaperMock = $this->getMockBuilder(Escaper::class)

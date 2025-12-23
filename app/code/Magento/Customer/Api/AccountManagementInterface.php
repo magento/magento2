@@ -1,13 +1,13 @@
 <?php
 /**
- *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Customer\Api;
 
 use Magento\Framework\Exception\InputException;
+use Magento\Framework\Exception\LocalizedException;
 
 /**
  * Interface for managing customers accounts.
@@ -194,7 +194,7 @@ interface AccountManagementInterface
      * Check if given email is associated with a customer account in given website.
      *
      * @param string $customerEmail
-     * @param int $websiteId If not set, will use the current websiteId
+     * @param int|null $websiteId If not set, will use the current websiteId
      * @return bool
      * @throws \Magento\Framework\Exception\LocalizedException
      */

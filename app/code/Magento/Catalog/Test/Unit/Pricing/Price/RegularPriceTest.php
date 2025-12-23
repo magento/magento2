@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -71,7 +71,7 @@ class RegularPriceTest extends TestCase
      * Test method testGetValue
      *
      * @param float|bool $price
-     * @dataProvider testGetValueDataProvider
+     * @dataProvider getValueDataProvider
      */
     public function testGetValue($price)
     {
@@ -80,7 +80,7 @@ class RegularPriceTest extends TestCase
             ->method('getPrice')
             ->willReturn($price);
         $this->priceCurrencyMock->expects($this->any())
-            ->method('convertAndRound')
+            ->method('convert')
             ->with($price)
             ->willReturn($convertedPrice);
         $this->assertEquals($convertedPrice, $this->regularPrice->getValue());
@@ -93,7 +93,7 @@ class RegularPriceTest extends TestCase
      *
      * @return array
      */
-    public function testGetValueDataProvider()
+    public static function getValueDataProvider()
     {
         return [
             'With price' => [100.00],
@@ -114,7 +114,7 @@ class RegularPriceTest extends TestCase
             ->method('getPrice')
             ->willReturn($priceValue);
         $this->priceCurrencyMock->expects($this->any())
-            ->method('convertAndRound')
+            ->method('convert')
             ->with($priceValue)
             ->willReturn($convertedPrice);
         $this->calculatorMock->expects($this->once())

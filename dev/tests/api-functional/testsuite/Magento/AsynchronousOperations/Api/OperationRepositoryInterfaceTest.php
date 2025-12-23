@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 
 declare(strict_types=1);
@@ -168,7 +168,7 @@ class OperationRepositoryInterfaceTest extends WebapiAbstract
                         'filters' => [
                             [
                                 'field' => 'start_time',
-                                'value' => date('Y-m-d H:i:0'),
+                                'value' => date('Y-m-d H:i:s', strtotime('-1 minute')),
                                 'condition_type' => 'gt',
                             ],
                         ],

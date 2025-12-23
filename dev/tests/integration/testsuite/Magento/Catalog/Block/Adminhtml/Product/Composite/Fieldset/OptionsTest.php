@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -79,7 +79,7 @@ class OptionsTest extends AbstractRenderCustomOptionsTest
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      * @return array
      */
-    public function renderCustomOptionsFromTextGroupProvider(): array
+    public static function renderCustomOptionsFromTextGroupProvider(): array
     {
         return [
             'type_text_required_field' => [
@@ -264,7 +264,7 @@ class OptionsTest extends AbstractRenderCustomOptionsTest
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      * @return array
      */
-    public function renderCustomOptionsFromSelectGroupProvider(): array
+    public static function renderCustomOptionsFromSelectGroupProvider(): array
     {
         return [
             'type_select_required_field' => [

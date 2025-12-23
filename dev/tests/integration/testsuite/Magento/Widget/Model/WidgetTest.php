@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Widget\Model;
 
@@ -55,7 +55,7 @@ class WidgetTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function getPlaceholderImageUrlDataProvider()
+    public static function getPlaceholderImageUrlDataProvider()
     {
         return [
             'custom image' => [\Magento\Catalog\Block\Product\Widget\NewWidget::class,

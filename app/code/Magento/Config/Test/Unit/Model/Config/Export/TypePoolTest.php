@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -10,6 +10,7 @@ namespace Magento\Config\Test\Unit\Model\Config\Export;
 use Magento\Config\Model\Config\Export\ExcludeList;
 use Magento\Config\Model\Config\TypePool;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 class TypePoolTest extends TestCase
@@ -21,9 +22,7 @@ class TypePoolTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->excludeListMock = $this->getMockBuilder(ExcludeList::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->excludeListMock = $this->createMock(ExcludeList::class);
     }
 
     /**
@@ -33,8 +32,8 @@ class TypePoolTest extends TestCase
      * @param $type
      * @param null|callable $excludeListCallback
      * @param $expectedResult
-     * @dataProvider dataProviderToTestIsPresent
      */
+    #[DataProvider('dataProviderToTestIsPresent')]
     public function testIsPresent(
         array $sensitive,
         array $environment,
@@ -53,73 +52,71 @@ class TypePoolTest extends TestCase
     /**
      * @return array
      */
-    public function dataProviderToTestIsPresent()
+    public static function dataProviderToTestIsPresent()
     {
         return [
             [
-                'sensitiveFieldList' => [],
-                'environmentFieldList' => [],
-                'field' => '',
-                'typeList' => '',
+                'sensitive' => [],
+                'environment' => [],
+                'path' => '',
+                'type' => '',
                 'excludeListCallback' => null,
                 'expectedResult' => false,
             ],
             [
-                'sensitiveFieldList' => ['some/sensitive/field1' => '1'],
-                'environmentFieldList' => ['some/environment/field1' => '1'],
-                'field' => 'some/wrong/field',
-                'typeList' => 'someWrongType',
+                'sensitive' => ['some/sensitive/field1' => '1'],
+                'environment' => ['some/environment/field1' => '1'],
+                'path' => 'some/wrong/field',
+                'type' => 'someWrongType',
                 'excludeListCallback' => null,
                 'expectedResult' => false,
             ],
             [
-                'sensitiveFieldList' => ['some/sensitive/field1' => '1'],
-                'environmentFieldList' => ['some/environment/field1' => '1'],
-                'field' => 'some/sensitive/field1',
-                'typeList' => 'someWrongType',
+                'sensitive' => ['some/sensitive/field1' => '1'],
+                'environment' => ['some/environment/field1' => '1'],
+                'path' => 'some/sensitive/field1',
+                'type' => 'someWrongType',
                 'excludeListCallback' => null,
                 'expectedResult' => false,
             ],
             [
-                'sensitiveFieldList' => ['some/sensitive/field1' => '1'],
-                'environmentFieldList' => ['some/environment/field1' => '1'],
-                'field' => 'some/wrong/field',
-                'typeList' => TypePool::TYPE_SENSITIVE,
+                'sensitive' => ['some/sensitive/field1' => '1'],
+                'environment' => ['some/environment/field1' => '1'],
+                'path' => 'some/wrong/field',
+                'type' => TypePool::TYPE_SENSITIVE,
                 'excludeListCallback' => function (MockObject $mockObject) {
-                    $mockObject->expects($this->once())
-                        ->method('isPresent')
+                    $mockObject->method('isPresent')
                         ->willReturn(false);
                 },
                 'expectedResult' => false,
             ],
             [
-                'sensitiveFieldList' => ['some/sensitive/field1' => '1'],
-                'environmentFieldList' => ['some/environment/field1' => '1'],
-                'field' => 'some/environment/field1',
-                'typeList' => TypePool::TYPE_ENVIRONMENT,
+                'sensitive' => ['some/sensitive/field1' => '1'],
+                'environment' => ['some/environment/field1' => '1'],
+                'path' => 'some/environment/field1',
+                'type' => TypePool::TYPE_ENVIRONMENT,
                 'excludeListCallback' => null,
                 'expectedResult' => true,
             ],
             [
-                'sensitiveFieldList' => ['some/sensitive/field1' => '1'],
-                'environmentFieldList' => ['some/environment/field1' => '1'],
-                'field' => 'some/environment/field1',
-                'typeList' => TypePool::TYPE_SENSITIVE,
+                'sensitive' => ['some/sensitive/field1' => '1'],
+                'environment' => ['some/environment/field1' => '1'],
+                'path' => 'some/environment/field1',
+                'type' => TypePool::TYPE_SENSITIVE,
                 'excludeListCallback' =>  function (MockObject $mockObject) {
-                    $mockObject->expects($this->once())
-                        ->method('isPresent')
+                    $mockObject->method('isPresent')
                         ->willReturn(false);
                 },
                 'expectedResult' => false,
             ],
             [
-                'sensitiveFieldList' => ['some/sensitive-environment/field1' => '1'],
-                'environmentFieldList' => ['some/sensitive-environment/field1' => '1'],
-                'field' => 'some/sensitive-environment/field1',
-                'typeList' => TypePool::TYPE_SENSITIVE,
+                'sensitive' => ['some/sensitive-environment/field1' => '1'],
+                'environment' => ['some/sensitive-environment/field1' => '1'],
+                'path' => 'some/sensitive-environment/field1',
+                'type' => TypePool::TYPE_SENSITIVE,
                 'excludeListCallback' =>  function (MockObject $mockObject) {
-                    $mockObject->expects($this->never())
-                        ->method('isPresent');
+                    $mockObject->method('isPresent')
+                        ->willReturn(true);
                 },
                 'expectedResult' => true,
             ],

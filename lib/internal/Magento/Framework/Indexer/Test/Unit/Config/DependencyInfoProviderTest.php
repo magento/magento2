@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -95,12 +95,12 @@ class DependencyInfoProviderTest extends TestCase
     /**
      * @return array
      */
-    public function getDependentIndexerIdsDataProvider()
+    public static function getDependentIndexerIdsDataProvider()
     {
         return [
             [
-                'indexer' => 'indexer_2',
-                'indexers' => [
+                'indexerId' => 'indexer_2',
+                'indexersData' => [
                     'indexer_2' => [
                         'indexer_id' => 'indexer_2',
                         'dependencies' => [],
@@ -129,7 +129,7 @@ class DependencyInfoProviderTest extends TestCase
                         'dependencies' => [],
                     ],
                 ],
-                'dependent_indexers' => ['indexer_4', 'indexer_1'],
+                'dependentIndexerIds' => ['indexer_4', 'indexer_1'],
             ]
         ];
     }

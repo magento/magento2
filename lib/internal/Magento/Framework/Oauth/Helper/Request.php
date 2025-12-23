@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework\Oauth\Helper;
 
@@ -43,6 +43,11 @@ class Request
             $httpRequest->getContent(),
             $this->getRequestUrl($httpRequest)
         );
+        foreach ($oauthParams as $key => $value) {
+            if ($key !== 'oauth_signature') {
+                $oauthParams[$key] = rawurlencode($value);
+            }
+        }
         return $oauthParams;
     }
 
@@ -188,7 +193,7 @@ class Request
      */
     public function prepareErrorResponse(
         \Exception $exception,
-        \Magento\Framework\HTTP\PhpEnvironment\Response $response = null
+        ?\Magento\Framework\HTTP\PhpEnvironment\Response $response = null
     ) {
         $errorMsg = $exception->getMessage();
 

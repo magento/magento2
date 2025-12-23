@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -15,10 +15,14 @@ use Magento\NewRelicReporting\Model\Config;
 use Magento\NewRelicReporting\Model\Observer\ReportSystemCacheFlushToNewRelic;
 use Magento\User\Model\User;
 use PHPUnit\Framework\MockObject\MockObject;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use PHPUnit\Framework\TestCase;
 
 class ReportSystemCacheFlushToNewRelicTest extends TestCase
 {
+
+    use MockCreationTrait;
+    
     /**
      * @var ReportSystemCacheFlushToNewRelic
      */
@@ -53,20 +57,17 @@ class ReportSystemCacheFlushToNewRelicTest extends TestCase
     {
         $this->config = $this->getMockBuilder(Config::class)
             ->disableOriginalConstructor()
-            ->setMethods(['isNewRelicEnabled'])
+            ->onlyMethods(['isNewRelicEnabled'])
             ->getMock();
-        $this->backendAuthSession = $this->getMockBuilder(Session::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['getUser'])
-            ->getMock();
+        $this->backendAuthSession = $this->createPartialMockWithReflection(Session::class, ['getUser']);
         $this->deploymentsFactory = $this->getMockBuilder(
             DeploymentsFactory::class
         )->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
         $this->deploymentsModel = $this->getMockBuilder(Deployments::class)
             ->disableOriginalConstructor()
-            ->setMethods(['setDeployment'])
+            ->onlyMethods(['setDeployment'])
             ->getMock();
         $this->deploymentsFactory->expects($this->any())
             ->method('create')
@@ -127,7 +128,7 @@ class ReportSystemCacheFlushToNewRelicTest extends TestCase
             ->willReturn($this->deploymentsModel);
         $this->deploymentsModel->expects($this->once())
             ->method('setDeployment')
-            ->willReturnSelf();
+            ->willReturn(true);
 
         $this->model->execute($eventObserver);
     }

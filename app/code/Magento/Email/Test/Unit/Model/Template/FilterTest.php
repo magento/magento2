@@ -1,25 +1,26 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 declare(strict_types=1);
 
 namespace Magento\Email\Test\Unit\Model\Template;
 
+use Magento\Backend\Model\Url as BackendModelUrl;
 use Magento\Backend\Model\UrlInterface;
 use Magento\Email\Model\Template\Css\Processor;
 use Magento\Email\Model\Template\Filter;
 use Magento\Framework\App\Area;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\Filesystem\DirectoryList;
-use Magento\Framework\DataObject;
-use Magento\Framework\Exception\MailException;
-use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\App\State;
 use Magento\Framework\Css\PreProcessor\Adapter\CssInliner;
+use Magento\Framework\DataObject;
 use Magento\Framework\Escaper;
+use Magento\Framework\Exception\MailException;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Directory\Read;
 use Magento\Framework\Filter\DirectiveProcessor\DependDirective;
@@ -33,9 +34,10 @@ use Magento\Framework\View\Asset\ContentProcessorInterface;
 use Magento\Framework\View\Asset\File;
 use Magento\Framework\View\Asset\File\FallbackContext;
 use Magento\Framework\View\Asset\Repository;
+use Magento\Framework\View\Element\AbstractBlock;
 use Magento\Framework\View\LayoutFactory;
 use Magento\Framework\View\LayoutInterface;
-use Magento\Store\Api\Data\StoreInterface;
+use Magento\Store\Model\Information as StoreInformation;
 use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Variable\Model\Source\Variables;
@@ -43,7 +45,6 @@ use Magento\Variable\Model\VariableFactory;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
-use Magento\Store\Model\Information as StoreInformation;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -254,8 +255,10 @@ class FilterTest extends TestCase
      * @param array|null $mockedMethods Methods to mock
      * @return Filter|MockObject
      */
-    protected function getModel($mockedMethods = null)
+    protected function getModel($mockedMethods = [])
     {
+        $this->objectManager->prepareObjectManager([]);
+
         return $this->getMockBuilder(Filter::class)
             ->setConstructorArgs(
                 [
@@ -280,7 +283,7 @@ class FilterTest extends TestCase
                     $this->storeInformation
                 ]
             )
-            ->setMethods($mockedMethods)
+            ->onlyMethods($mockedMethods)
             ->getMock();
     }
 
@@ -389,7 +392,7 @@ class FilterTest extends TestCase
     /**
      * @return array
      */
-    public function applyInlineCssDataProvider()
+    public static function applyInlineCssDataProvider()
     {
         return [
             'Ensure styles get inlined' => [
@@ -574,5 +577,128 @@ class FilterTest extends TestCase
             " http=\"https://url\" https=\"http://url\""
         ];
         $model->protocolDirective($data);
+    }
+
+    /**
+     * @dataProvider dataProviderUrlModelCompanyRedirect
+     */
+    public function testStoreDirectiveForCompanyRedirect($className, $backendModelClass)
+    {
+        $this->storeManager->expects($this->any())
+            ->method('getStore')
+            ->willReturn($this->store);
+        $this->store->expects($this->any())->method('getCode')->willReturn('frvw');
+
+        $this->backendUrlBuilder = $this->getMockBuilder($className)
+            ->onlyMethods(['setScope','getUrl'])
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
+
+        $this->backendUrlBuilder->expects($this->once())
+            ->method('getUrl')
+            ->willReturn('http://m246ceeeb2b.test/frvw/');
+
+        if ($backendModelClass) {
+            $this->backendUrlBuilder->expects($this->never())->method('setScope');
+        } else {
+            $this->backendUrlBuilder->expects($this->once())->method('setScope')->willReturnSelf();
+        }
+        $this->assertInstanceOf($className, $this->backendUrlBuilder);
+        $result = $this->getModel()->storeDirective(["{{store url=''}}",'store',"url=''"]);
+        $this->assertEquals('http://m246ceeeb2b.test/frvw/', $result);
+    }
+
+    /**
+     * @return array[]
+     */
+    public static function dataProviderUrlModelCompanyRedirect(): array
+    {
+        return [
+            [
+                UrlInterface::class,
+                0
+            ],
+            [
+                BackendModelUrl::class,
+                1
+            ]
+        ];
+    }
+
+    /**
+     * Test block directive cache key functionality
+     *
+     * @param bool $hasCacheKey
+     * @param bool $expectGetCacheKey
+     * @param bool $expectSetData
+     * @dataProvider blockDirectiveCacheKeyDataProvider
+     */
+    public function testBlockDirectiveCacheKey($hasCacheKey, $expectGetCacheKey, $expectSetData)
+    {
+        $block = $this->getMockBuilder(AbstractBlock::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->layout->expects($this->once())
+            ->method('createBlock')
+            ->willReturn($block);
+
+        $block->expects($this->once())
+            ->method('hasData')
+            ->with('cache_key')
+            ->willReturn($hasCacheKey);
+
+        if ($expectGetCacheKey) {
+            $block->expects($this->once())
+                ->method('getCacheKey')
+                ->willReturn('test_cache_key');
+        } else {
+            $block->expects($this->never())
+                ->method('getCacheKey');
+        }
+
+        if ($expectSetData) {
+            $block->expects($this->once())
+                ->method('setDataUsingMethod')
+                ->with('cache_key', 'test_cache_key');
+        } else {
+            $block->expects($this->never())
+                ->method('setDataUsingMethod');
+        }
+
+        $block->expects($this->once())
+            ->method('toHtml')
+            ->willReturn('block html');
+
+        $construction = [
+            '{{block class="Magento\\Framework\\View\\Element\\AbstractBlock"}}',
+            'block',
+            ' class="Magento\\Framework\\View\\Element\\AbstractBlock"'
+        ];
+
+        $filter = $this->getModel();
+        $result = $filter->blockDirective($construction);
+        $this->assertEquals('block html', $result);
+    }
+
+    /**
+     * Data provider for testBlockDirectiveCacheKey
+     *
+     * @return array
+     */
+    public static function blockDirectiveCacheKeyDataProvider()
+    {
+        return [
+            'block without cache key' => [
+                'hasCacheKey' => false,
+                'expectGetCacheKey' => true,
+                'expectSetData' => true
+            ],
+            'block with existing cache key' => [
+                'hasCacheKey' => true,
+                'expectGetCacheKey' => false,
+                'expectSetData' => false
+            ]
+        ];
     }
 }

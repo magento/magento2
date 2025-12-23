@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -27,6 +27,7 @@ use Magento\Sales\Model\Order;
 use Magento\Sales\Model\Order\Invoice;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Magento\Store\Model\Store;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -183,6 +184,14 @@ class EmailTest extends TestCase
         $invoiceClassName = Invoice::class;
         $cmNotifierClassName = InvoiceManagementInterface::class;
         $invoice = $this->createMock($invoiceClassName);
+        $store = $this->createMock(Store::class);
+        $store->expects($this->once())
+            ->method('getConfig')
+            ->with('sales_email/invoice/enabled')
+            ->willReturn(true);
+        $invoice->expects($this->once())
+            ->method('getStore')
+            ->willReturn($store);
         $invoice->expects($this->once())
             ->method('getEntityId')
             ->willReturn($invoiceId);
@@ -207,8 +216,10 @@ class EmailTest extends TestCase
             ->willReturn($order);
         $this->objectManager
             ->method('create')
-            ->withConsecutive([InvoiceRepositoryInterface::class], [$cmNotifierClassName])
-            ->willReturnOnConsecutiveCalls($invoiceRepository, $this->invoiceManagement);
+            ->willReturnCallback(fn($param) => match ([$param]) {
+                [InvoiceRepositoryInterface::class] => $invoiceRepository,
+                [$cmNotifierClassName] => $this->invoiceManagement
+            });
 
         $this->invoiceManagement->expects($this->once())
             ->method('notify')
@@ -225,6 +236,68 @@ class EmailTest extends TestCase
             ->method('setPath')
             ->with('sales/invoice/view', ['order_id' => $orderId, 'invoice_id' => $invoiceId])
             ->willReturnSelf();
+        $this->assertInstanceOf(Redirect::class, $this->invoiceEmail->execute());
+    }
+
+    /**
+     * @return void
+     */
+    public function testEmailDisabled(): void
+    {
+        $invoiceId = 10000031;
+        $orderId = 100000030;
+        $invoiceClassName = Invoice::class;
+        $invoice = $this->createMock($invoiceClassName);
+
+        // Mock store with disabled config
+        $store = $this->createMock(Store::class);
+        $store->expects($this->once())
+            ->method('getConfig')
+            ->with('sales_email/invoice/enabled')
+            ->willReturn(false);
+
+        $invoice->expects($this->once())
+            ->method('getStore')
+            ->willReturn($store);
+
+        $order = $this->createMock(Order::class);
+        $order->expects($this->once())
+            ->method('getId')
+            ->willReturn($orderId);
+
+        $this->request->expects($this->once())
+            ->method('getParam')
+            ->with('invoice_id')
+            ->willReturn($invoiceId);
+
+        $invoiceRepository = $this->getMockBuilder(InvoiceRepositoryInterface::class)
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
+        $invoiceRepository->expects($this->any())
+            ->method('get')
+            ->willReturn($invoice);
+
+        $invoice->expects($this->once())
+            ->method('getOrder')
+            ->willReturn($order);
+
+        $this->objectManager
+            ->method('create')
+            ->with(InvoiceRepositoryInterface::class)
+            ->willReturn($invoiceRepository);
+
+        $this->messageManager->expects($this->once())
+            ->method('addWarningMessage')
+            ->with('Invoice emails are disabled for this store. No email was sent.');
+
+        $this->resultRedirectFactory->expects($this->atLeastOnce())
+            ->method('create')
+            ->willReturn($this->resultRedirect);
+        $this->resultRedirect->expects($this->once())
+            ->method('setPath')
+            ->with('sales/invoice/view', ['order_id' => $orderId, 'invoice_id' => $invoiceId])
+            ->willReturnSelf();
+
         $this->assertInstanceOf(Redirect::class, $this->invoiceEmail->execute());
     }
 

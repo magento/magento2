@@ -1,20 +1,18 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Cms\Model\ResourceModel\Page\Grid;
 
 use Magento\Framework\Api\Search\SearchResultInterface;
 use Magento\Framework\Api\Search\AggregationInterface;
 use Magento\Cms\Model\ResourceModel\Page\Collection as PageCollection;
-use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Data\Collection\Db\FetchStrategyInterface;
 use Magento\Framework\Data\Collection\EntityFactoryInterface;
 use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Framework\Event\ManagerInterface;
 use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
-use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
 use Magento\Store\Model\StoreManagerInterface;
 use Psr\Log\LoggerInterface;
 
@@ -25,14 +23,15 @@ use Psr\Log\LoggerInterface;
 class Collection extends PageCollection implements SearchResultInterface
 {
     /**
-     * @var TimezoneInterface
-     */
-    private $timeZone;
-
-    /**
      * @var AggregationInterface
      */
     protected $aggregations;
+
+    /** @var mixed */
+    private $model;
+
+    /** @var string */
+    private $resourceModel;
 
     /**
      * @param EntityFactoryInterface $entityFactory
@@ -48,7 +47,6 @@ class Collection extends PageCollection implements SearchResultInterface
      * @param string $model
      * @param mixed|null $connection
      * @param AbstractDb|null $resource
-     * @param TimezoneInterface|null $timeZone
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -65,9 +63,10 @@ class Collection extends PageCollection implements SearchResultInterface
         $resourceModel,
         $model = \Magento\Framework\View\Element\UiComponent\DataProvider\Document::class,
         $connection = null,
-        AbstractDb $resource = null,
-        TimezoneInterface $timeZone = null
+        ?AbstractDb $resource = null
     ) {
+        $this->resourceModel = $resourceModel;
+        $this->model = $model;
         parent::__construct(
             $entityFactory,
             $logger,
@@ -80,25 +79,17 @@ class Collection extends PageCollection implements SearchResultInterface
         );
         $this->_eventPrefix = $eventPrefix;
         $this->_eventObject = $eventObject;
-        $this->_init($model, $resourceModel);
+        $this->_init($this->model, $this->resourceModel);
         $this->setMainTable($mainTable);
-        $this->timeZone = $timeZone ?: ObjectManager::getInstance()->get(TimezoneInterface::class);
     }
 
     /**
      * @inheritDoc
      */
-    public function addFieldToFilter($field, $condition = null)
+    public function _resetState(): void
     {
-        if ($field === 'creation_time' || $field === 'update_time') {
-            if (is_array($condition)) {
-                foreach ($condition as $key => $value) {
-                    $condition[$key] = $this->timeZone->convertConfigTimeToUtc($value);
-                }
-            }
-        }
-
-        return parent::addFieldToFilter($field, $condition);
+        parent::_resetState();
+        $this->_init($this->model, $this->resourceModel);
     }
 
     /**
@@ -140,7 +131,7 @@ class Collection extends PageCollection implements SearchResultInterface
      * @return $this
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function setSearchCriteria(\Magento\Framework\Api\SearchCriteriaInterface $searchCriteria = null)
+    public function setSearchCriteria(?\Magento\Framework\Api\SearchCriteriaInterface $searchCriteria = null)
     {
         return $this;
     }
@@ -174,7 +165,7 @@ class Collection extends PageCollection implements SearchResultInterface
      * @return $this
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function setItems(array $items = null)
+    public function setItems(?array $items = null)
     {
         return $this;
     }

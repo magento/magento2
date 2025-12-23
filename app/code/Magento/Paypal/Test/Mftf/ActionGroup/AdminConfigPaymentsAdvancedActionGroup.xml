@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+   * Copyright 2024 Adobe
+  * All Rights Reserved.
+  */
+-->
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminConfigPaymentsAdvancedActionGroup">
+        <annotations>
+            <description>Goes to the 'Configuration' page for 'Payment Methods'. Fills in the provided Sample PayPal credentials and other details. Clicks on Save.</description>
+        </annotations>
+        <arguments>
+            <argument name="credentials" defaultValue="SamplePaypalPaymentsAdvancedConfig"/>
+            <argument name="countryCode" type="string" defaultValue="us"/>
+        </arguments>
+        <amOnPage url="{{AdminConfigPaymentMethodsPage.url}}" stepKey="navigateToPaymentConfigurationPage"/>
+        <waitForPageLoad stepKey="waitForConfigPageLoad"/>
+        <waitForElementVisible selector="{{OtherPayPalPaymentsConfigSection.expandTab(countryCode)}}" stepKey="waitForOtherPayPalPaymentsSection"/>
+        <conditionalClick selector="{{OtherPayPalPaymentsConfigSection.expandTab(countryCode)}}" dependentSelector="{{OtherPayPalPaymentsConfigSection.expandedTab(countryCode)}}" visible="false" stepKey="expandOtherPaypalConfigButton"/>
+        <waitForElementClickable selector="{{PaymentsAdvancedConfigSection.configBtn(countryCode)}}" stepKey="waitForPayPalPaymentsAdvancedConfigureBtn"/>
+        <click selector ="{{PaymentsAdvancedConfigSection.configBtn(countryCode)}}" stepKey="clickPayPalPaymentsAdvancedConfigureBtn"/>
+        <scrollTo selector="{{PaymentsAdvancedConfigSection.partner(countryCode)}}" stepKey="scrollToBottom"/>
+        <waitForElementVisible selector="{{PaymentsAdvancedConfigSection.partner(countryCode)}}" stepKey="waitForPartner"/>
+        <fillField selector ="{{PaymentsAdvancedConfigSection.partner(countryCode)}}" userInput="{{credentials.payflow_advanced_partner}}" stepKey="inputPartner"/>
+        <waitForElementVisible selector="{{PaymentsAdvancedConfigSection.vendor(countryCode)}}" stepKey="waitForVendor"/>
+        <fillField selector ="{{PaymentsAdvancedConfigSection.vendor(countryCode)}}" userInput="{{credentials.payflow_advanced_vendor}}" stepKey="inputVendor"/>
+        <waitForElementVisible selector="{{AdminConfigurepaymentsAdvancedSection.user(countryCode)}}" stepKey="waitForUser"/>
+        <fillField selector ="{{AdminConfigurepaymentsAdvancedSection.user(countryCode)}}" userInput="{{credentials.payflow_advanced_user}}" stepKey="inputUser"/>
+        <waitForElementVisible selector="{{AdminConfigurepaymentsAdvancedSection.password(countryCode)}}" stepKey="waitForPassword"/>
+        <fillField selector ="{{AdminConfigurepaymentsAdvancedSection.password(countryCode)}}" userInput="{{credentials.payflow_advanced_password}}" stepKey="inputPassword"/>
+        <selectOption selector="{{PaymentsAdvancedConfigSection.testMode(countryCode)}}" userInput="Yes" stepKey="enableTestMode"/>
+        <waitForPageLoad stepKey="waitForPageLoadForEnableSolution"/>
+        <selectOption selector ="{{PaymentsAdvancedConfigSection.enableSolution(countryCode)}}" userInput="Yes" stepKey="enableSolution"/>
+        <selectOption selector ="{{PaymentsAdvancedConfigSection.enablePaypalexp(countryCode)}}" userInput="Yes" stepKey="enablePaypalExperiencelater"/>
+        <waitForPageLoad stepKey="waitForAdvisePageLoad"/>
+        <waitForPageLoad stepKey="waitForAdvisepaylaterExpand"/>
+        <click selector ="{{PaymentsAdvancedConfigSection.advisepaylaterBtn(countryCode)}}" stepKey="clickPayPalPaymentsAdvisepaylatereBtn"/>
+        <selectOption selector ="{{PaymentsAdvancedConfigSection.payLaterConfigDropDown(countryCode)}}" userInput="Yes" stepKey="enablePaypalPaylater"/>
+    </actionGroup>
+</actionGroups>

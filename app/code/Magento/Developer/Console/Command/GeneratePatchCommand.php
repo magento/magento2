@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -183,7 +183,7 @@ BOF;
         $fileWriter->writeFile($patchFile, $patchTemplateData);
 
         $outputPatchFile = str_replace($this->directoryList->getRoot() . '/', '', $patchDir . '/' . $patchFile);
-        $output->writeln(__('Patch %1 has been successfully generated.', $outputPatchFile));
+        $output->writeln(sprintf('Patch 1% has been successfully generated.', $outputPatchFile));
 
         return Cli::RETURN_SUCCESS;
     }

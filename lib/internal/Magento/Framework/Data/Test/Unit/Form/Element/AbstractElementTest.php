@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -328,7 +328,7 @@ class AbstractElementTest extends TestCase
     /**
      * @param array $initialData
      * @param string $expectedValue
-     * @dataProvider testGetDefaultHtmlDataProvider
+     * @dataProvider getDefaultHtmlDataProvider
      * @covers \Magento\Framework\Data\Form\Element\AbstractElement::getDefaultHtml()
      */
     public function testGetDefaultHtml(array $initialData, $expectedValue)
@@ -460,7 +460,7 @@ class AbstractElementTest extends TestCase
     /**
      * @return array
      */
-    public function addElementValuesDataProvider()
+    public static function addElementValuesDataProvider()
     {
         return [
             [
@@ -513,7 +513,7 @@ class AbstractElementTest extends TestCase
     /**
      * @return array
      */
-    public function serializeDataProvider()
+    public static function serializeDataProvider()
     {
         return [
             [
@@ -547,7 +547,7 @@ class AbstractElementTest extends TestCase
     /**
      * @return array
      */
-    public function testGetDefaultHtmlDataProvider()
+    public static function getDefaultHtmlDataProvider()
     {
         return [
             [
@@ -593,7 +593,7 @@ class AbstractElementTest extends TestCase
     /**
      * @return array
      */
-    public function getLabelHtmlDataProvider()
+    public static function getLabelHtmlDataProvider()
     {
         return [
             [
@@ -629,7 +629,7 @@ class AbstractElementTest extends TestCase
     /**
      * @return array
      */
-    public function getElementHtmlDataProvider()
+    public static function getElementHtmlDataProvider()
     {
         return [
             [

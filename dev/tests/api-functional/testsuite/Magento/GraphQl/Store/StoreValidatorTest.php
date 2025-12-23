@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -40,7 +40,7 @@ QUERY;
      *
      * @return array
      */
-    public function dataProviderInvalidStore(): array
+    public static function dataProviderInvalidStore(): array
     {
         return [
             'non_existing' => [

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -93,7 +93,7 @@ class ReportProviderTest extends TestCase
             ->method('getIterator')
             ->willReturn($this->iteratorMock);
 
-        $this->connectionMock = $this->getMockForAbstractClass(AdapterInterface::class);
+        $this->connectionMock = $this->createMock(AdapterInterface::class);
 
         $this->queryFactoryMock = $this->createMock(QueryFactory::class);
 
@@ -154,5 +154,56 @@ class ReportProviderTest extends TestCase
             ->with($this->statementMock, null)
             ->willReturn($this->iteratorMock);
         $this->assertEquals($this->iteratorMock, $this->subject->getReport($reportName));
+    }
+
+    /**
+     * @return void
+     */
+    public function testGetBatchReport()
+    {
+        $reportName = 'test_report';
+        $connectionName = 'sales';
+
+        $this->queryFactoryMock->expects($this->once())
+            ->method('create')
+            ->with($reportName)
+            ->willReturn($this->queryMock);
+
+        $this->connectionFactoryMock->expects($this->once())
+            ->method('getConnection')
+            ->with($connectionName)
+            ->willReturn($this->connectionMock);
+
+        $this->queryMock->expects($this->once())
+            ->method('getConnectionName')
+            ->willReturn($connectionName);
+
+        $this->selectMock->expects($this->once())
+            ->method('limit')
+            ->with(ReportProvider::BATCH_SIZE, 0)
+            ->willReturn($this->selectMock);
+
+        $this->queryMock->expects($this->once())
+            ->method('getConfig')
+            ->willReturn(
+                [
+                    'connection' => $connectionName
+                ]
+            );
+
+        $this->connectionMock->expects($this->once())
+            ->method('query')
+            ->with($this->selectMock)
+            ->willReturn($this->statementMock);
+
+        $this->connectionMock->expects($this->once())
+            ->method('fetchOne')
+            ->willReturn(5);
+
+        $this->iteratorFactoryMock->expects($this->once())
+            ->method('create')
+            ->with($this->statementMock, null)
+            ->willReturn($this->iteratorMock);
+        $this->assertEquals($this->iteratorMock, $this->subject->getBatchReport($reportName));
     }
 }

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -224,7 +224,7 @@ class ControllerAbstractTest extends AbstractController
      *
      * @return array
      */
-    public function assertSessionMessagesDataProvider(): array
+    public static function assertSessionMessagesDataProvider(): array
     {
         return [
             'message warning type filtering' => [

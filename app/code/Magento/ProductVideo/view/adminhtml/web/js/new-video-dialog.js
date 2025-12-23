@@ -1,6 +1,6 @@
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 define([
     'jquery',
@@ -65,10 +65,10 @@ define([
         update: function () {
             var checkVideoID =
                 this.element.find(this.options.container).find('.' + this.options.videoClass).data('code'),
-            eventVideoData = {
-                oldVideoId: checkVideoID ? checkVideoID.toString() : checkVideoID,
-                newVideoId: this.options.videoId ? this.options.videoId.toString() : this.options.videoId
-            };
+                eventVideoData = {
+                    oldVideoId: checkVideoID ? checkVideoID.toString() : checkVideoID,
+                    newVideoId: this.options.videoId ? this.options.videoId.toString() : this.options.videoId
+                };
 
             if (checkVideoID && checkVideoID !== this.options.videoId) {
                 this._doUpdate();
@@ -308,6 +308,7 @@ define([
 
             try {
                 videoForm.validation('clearError');
+                // eslint-disable-next-line no-unused-vars
             } catch (e) {
                 // Do nothing
             }
@@ -350,30 +351,30 @@ define([
                 }
                 self._onlyVideoPlayer = true;
             }, this))
-            .createVideoPlayer({
-                videoId: data.videoId,
-                videoProvider: data.videoProvider,
-                useYoutubeNocookie: data.useYoutubeNocookie,
-                reset: false,
-                metaData: {
-                    DOM: {
-                        title: '.video-information.title span',
-                        uploaded: '.video-information.uploaded span',
-                        uploader: '.video-information.uploader span',
-                        duration: '.video-information.duration span',
-                        all: '.video-information span',
-                        wrapper: '.video-information'
-                    },
-                    data: {
-                        title: data.title,
-                        uploaded: data.uploaded,
-                        uploader: data.channel,
-                        duration: data.duration,
-                        uploaderUrl: data.channelId
+                .createVideoPlayer({
+                    videoId: data.videoId,
+                    videoProvider: data.videoProvider,
+                    useYoutubeNocookie: data.useYoutubeNocookie,
+                    reset: false,
+                    metaData: {
+                        DOM: {
+                            title: '.video-information.title span',
+                            uploaded: '.video-information.uploaded span',
+                            uploader: '.video-information.uploader span',
+                            duration: '.video-information.duration span',
+                            all: '.video-information span',
+                            wrapper: '.video-information'
+                        },
+                        data: {
+                            title: data.title,
+                            uploaded: data.uploaded,
+                            uploader: data.channel,
+                            duration: data.duration,
+                            uploaderUrl: data.channelId
+                        }
                     }
-                }
-            })
-            .off('finish_update_video finish_create_video');
+                })
+                .off('finish_update_video finish_create_video');
 
             this._videoRequestComplete = true;
         },
@@ -558,10 +559,10 @@ define([
          */
         _uploadImage: function (file, oldFile, callback) {
             var url = this.options.saveVideoUrl,
-            data = {
-                files: file,
-                url: url
-            };
+                data = {
+                    files: file,
+                    url: url
+                };
 
             this._blockActionButtons(true, true);
             this._uploadFile(data, $.proxy(function (result) {
@@ -583,6 +584,7 @@ define([
 
             try {
                 data = JSON.parse(result);
+                // eslint-disable-next-line no-unused-vars
             } catch (e) {
                 data = result;
             }
@@ -615,21 +617,19 @@ define([
          * @private
          */
         _uploadFile: function (data, callback) {
-            var fu = this.element.find(this._videoPreviewInputSelector),
-                tmpInput = document.createElement('input'),
-                fileUploader = null;
+            let form = this.element.find(this._videoFormSelector).get(0),
+                formData = new FormData(form);
 
-            $(tmpInput).attr({
-                'name': fu.attr('name'),
-                'value': fu.val(),
-                'type': 'file',
-                'data-ui-ud': fu.attr('data-ui-ud')
-            }).css('display', 'none');
-            fu.parent().append(tmpInput);
-            fileUploader = $(tmpInput).fileupload();
-            fileUploader.fileupload('send', data).done(function (result, textStatus, jqXHR) {
-                tmpInput.remove();
-                callback.call(null, result, textStatus, jqXHR);
+            $.ajax({
+                type: 'post',
+                url: data.url,
+                processData: false,
+                contentType: false,
+                data: formData,
+                success: function (result, textStatus, jqXHR) {
+                    // eslint-disable-next-line no-useless-call
+                    callback.call(null, result, textStatus, jqXHR);
+                }
             });
         },
 
@@ -681,26 +681,26 @@ define([
                 modalClass: 'mage-new-video-dialog form-inline',
                 title: $.mage.__('New Video'),
                 buttons: [
-                {
-                    text: $.mage.__('Save'),
-                    class: 'action-primary video-create-button',
-                    click: $.proxy(widget._onCreate, widget)
-                },
-                {
-                    text: $.mage.__('Cancel'),
-                    class: 'video-cancel-button',
-                    click: $.proxy(widget._onCancel, widget)
-                },
-                {
-                    text: $.mage.__('Delete'),
-                    class: 'video-delete-button',
-                    click: $.proxy(widget._onDelete, widget)
-                },
-                {
-                    text: $.mage.__('Save'),
-                    class: 'action-primary video-edit',
-                    click: $.proxy(widget._onUpdate, widget)
-                }
+                    {
+                        text: $.mage.__('Save'),
+                        class: 'action-primary video-create-button',
+                        click: $.proxy(widget._onCreate, widget)
+                    },
+                    {
+                        text: $.mage.__('Cancel'),
+                        class: 'video-cancel-button',
+                        click: $.proxy(widget._onCancel, widget)
+                    },
+                    {
+                        text: $.mage.__('Delete'),
+                        class: 'video-delete-button',
+                        click: $.proxy(widget._onDelete, widget)
+                    },
+                    {
+                        text: $.mage.__('Save'),
+                        class: 'action-primary video-edit',
+                        click: $.proxy(widget._onUpdate, widget)
+                    }
                 ],
 
                 /**
@@ -893,15 +893,32 @@ define([
                             _tmp = _inputSelector.slice(0, _inputSelector.length - 2) + '[' + fieldName + ']"]';
                             this._gallery.find(_tmp).val(_field.val());
                             imageData[fieldName] = _field.val();
+                            const $useDefaultCheckBox = _field.closest('.field').find('[data-role="use-default"]');
+
+                            if ($useDefaultCheckBox.length > 0) {
+                                fieldName += '_use_default';
+                                _tmp = _inputSelector.slice(0, _inputSelector.length - 2) + '[' + fieldName + ']"]';
+                                imageData[fieldName] = $useDefaultCheckBox.is(':checked') ? 1 : 0;
+                                this._gallery.find(_tmp).val(imageData[fieldName]);
+                            }
                         }
                     }.bind(this));
-                    flagChecked = this.element.find(this._videoDisableinputSelector).prop('checked') ? 1 : 0;
+                    const $disabledCheckBox = this.element.find(this._videoDisableinputSelector),
+                        $useDefaultCheckBox = $disabledCheckBox.closest('.field').find('[data-role="use-default"]');
+
+                    flagChecked = $disabledCheckBox.prop('checked') ? 1 : 0;
                     this._gallery.find('input[name*="' + itemId + '][disabled]"]').val(flagChecked);
                     this._gallery.find(_inputSelector).siblings('.image-fade').css(
                         'visibility',
                         flagChecked ? 'visible' : 'hidden'
                     );
                     imageData.disabled = flagChecked;
+
+                    if ($useDefaultCheckBox.length > 0) {
+                        imageData.disabled_use_default = $useDefaultCheckBox.is(':checked') ? 1 : 0;
+                        this._gallery.find('input[name*="' + itemId + '][disabled_use_default]"]')
+                            .val(imageData.disabled_use_default);
+                    }
 
                     if (this._tempPreviewImageData) {
                         this._onImageLoaded(
@@ -1115,10 +1132,15 @@ define([
 
             try {
                 newVideoForm.validation('clearError');
+                // eslint-disable-next-line no-unused-vars
             } catch (e) {
 
             }
             newVideoForm.trigger('reset');
+            newVideoForm.find('.field')
+                .removeClass('_disabled')
+                .find('input, textarea')
+                .prop('disabled', false);
         },
 
         /**
@@ -1155,6 +1177,10 @@ define([
                         );
 
                     self._changeRole(imageType, imageCheckbox.prop('checked'), imageData);
+                    const $useDefaultCheckBox = imageCheckbox.closest('.field').find('[data-role="use-default"]');
+
+                    self._gallery.find('input[name="use_default[' + imageType + ']"]')
+                        .val($useDefaultCheckBox.is(':checked') ? 1 : 0);
                 });
             }
         },
@@ -1205,7 +1231,14 @@ define([
                 formFields = modal.find(this._videoFormSelector).find('.edited-data');
 
                 $.each(formFields, function (i, field) {
-                    $(field).val(imageData[field.name]);
+                    const $field = $(field);
+
+                    $field.prop('disabled', false).val(imageData[field.name]);
+                    if (imageData[field.name + '_use_default'] !== undefined) {
+                        $field.closest('.field').find('[data-role="use-default"]')
+                            .prop('checked', !!imageData[field.name + '_use_default'])
+                            .trigger('change');
+                    }
                 });
 
                 flagChecked = imageData.disabled > 0;
@@ -1226,6 +1259,17 @@ define([
                         imageRole = this.name.substring(start, end);
                         modal.find('#new_video_form input[value="' + imageRole + '"]').prop('checked', true);
                     }
+                    if (this.name.startsWith('use_default[')) {
+                        start = this.name.indexOf('[') + 1;
+                        end = this.name.length - 1;
+                        imageRole = this.name.substring(start, end);
+                        const $field = modal.find('#new_video_form input[value="' + imageRole + '"]')
+                            .closest('.field');
+
+                        $field.find('[data-role="use-default"]')
+                            .prop('checked', $(this).val() === '1')
+                            .trigger('change');
+                    }
                 });
             }
 
@@ -1237,6 +1281,16 @@ define([
         toggleButtons: function () {
             var self = this,
                 modal = this.element.closest('.mage-new-video-dialog');
+
+            modal.on('change', '[data-role="use-default"]', function (e) {
+                const $target = $(e.target),
+                    isChecked = $target.is(':checked');
+
+                $target.closest('.field')
+                    .toggleClass('_disabled', isChecked)
+                    .find('input:not([data-role="use-default"]), textarea:not([data-role="use-default"])')
+                    .prop('disabled', isChecked);
+            });
 
             modal.find('.video-placeholder, .add-video-button-container > button').click(function () {
                 modal.find('.video-create-button').show();

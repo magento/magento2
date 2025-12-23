@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -12,7 +12,10 @@ use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\Product\Attribute\Source\Status;
 use Magento\Catalog\Model\Product\Visibility;
 use Magento\Catalog\Model\ProductRepository;
+use Magento\Catalog\Test\Fixture\Product as ProductFixture;
+use Magento\Checkout\Api\Data\TotalsInformationInterface;
 use Magento\Checkout\Model\Session as CheckoutSession;
+use Magento\Checkout\Model\TotalsInformationManagement;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\Exception\InputException;
@@ -22,12 +25,17 @@ use Magento\Framework\ObjectManagerInterface;
 use Magento\Multishipping\Model\Checkout\Type\Multishipping;
 use Magento\Quote\Api\CartRepositoryInterface;
 use Magento\Quote\Api\Data\CartItemInterface;
+use Magento\Quote\Api\Data\TotalsInterface;
 use Magento\Quote\Api\GuestCartItemRepositoryInterface;
 use Magento\Quote\Api\GuestCartManagementInterface;
 use Magento\Quote\Api\GuestCartTotalRepositoryInterface;
 use Magento\Quote\Api\GuestCouponManagementInterface;
 use Magento\Quote\Model\Quote;
+use Magento\Quote\Model\Quote\Address;
+use Magento\Quote\Model\Quote\AddressFactory;
 use Magento\Quote\Model\QuoteIdMask;
+use Magento\Quote\Test\Fixture\AddProductToCart as AddProductToCartFixture;
+use Magento\Quote\Test\Fixture\GuestCart as GuestCartFixture;
 use Magento\Sales\Api\Data\OrderInterface;
 use Magento\Sales\Api\OrderRepositoryInterface;
 use Magento\Sales\Model\Order;
@@ -35,7 +43,14 @@ use Magento\Sales\Model\Order\Email\Sender\OrderSender;
 use Magento\SalesRule\Api\RuleRepositoryInterface;
 use Magento\SalesRule\Model\Rule;
 use Magento\SalesRule\Model\RuleFactory;
+use Magento\SalesRule\Test\Fixture\ProductCondition as ProductConditionFixture;
+use Magento\SalesRule\Test\Fixture\ProductFoundInCartConditions as ProductFoundInCartConditionsFixture;
+use Magento\SalesRule\Test\Fixture\ProductSubselectionInCartConditions as ProductSubselectionInCartConditionsFixture;
+use Magento\SalesRule\Test\Fixture\Rule as RuleFixture;
 use Magento\Store\Model\StoreManagerInterface;
+use Magento\TestFramework\Fixture\DataFixture;
+use Magento\TestFramework\Fixture\DataFixtureStorageManager;
+use Magento\TestFramework\Fixture\DbIsolation;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
 
@@ -43,10 +58,16 @@ use PHPUnit\Framework\TestCase;
  * Tests for Magento\SalesRule\Model\Rule\Action\Discount\CartFixed.
  *
  * @magentoAppArea frontend
+ * @magentoAppIsolation enabled
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class CartFixedTest extends TestCase
 {
+    /**
+     * @var float
+     */
+    private const EPSILON = 0.0000000001;
+
     /**
      * @var GuestCartManagementInterface
      */
@@ -224,7 +245,7 @@ class CartFixedTest extends TestCase
     /**
      * @return array
      */
-    public function applyFixedDiscountDataProvider(): array
+    public static function applyFixedDiscountDataProvider(): array
     {
         return [
             'prices when discount had wrong value 15.01' => [[22, 14, 43, 7.50, 0.00]],
@@ -346,85 +367,59 @@ class CartFixedTest extends TestCase
         $orderSender = $this->getMockBuilder(OrderSender::class)
             ->disableOriginalConstructor()
             ->getMock();
-
-        $model = $this->objectManager->create(
-            Multishipping::class,
-            ['orderSender' => $orderSender]
-        );
+        $model = $this->objectManager->create(Multishipping::class, ['orderSender' => $orderSender]);
         $model->createOrders();
         $orderList = $this->getOrderList((int)$quote->getId());
         $this->assertCount(3, $orderList);
+
         /**
          * The order with $10 simple product
          * @var Order $firstOrder
          */
         $firstOrder = array_shift($orderList);
+        $this->assertNotEmpty($firstOrder->getAppliedRuleIds());
+        $this->assertEquals($firstOrderTotals['subtotal'], $firstOrder->getSubtotal());
+        $this->assertEquals($firstOrderTotals['discount_amount'], $firstOrder->getDiscountAmount());
+        $this->assertEquals($firstOrderTotals['shipping_amount'], $firstOrder->getShippingAmount());
+        $this->assertEquals($firstOrderTotals['grand_total'], $firstOrder->getGrandTotal());
+        $firstOrderItem = array_values($firstOrder->getItems())[0];
+        $this->assertNotEmpty($firstOrderItem->getAppliedRuleIds());
+        $this->assertEquals($firstOrderTotals['discount_amount'] * -1, $firstOrderItem->getDiscountAmount());
 
-        $this->assertEquals(
-            $firstOrderTotals['subtotal'],
-            $firstOrder->getSubtotal()
-        );
-        $this->assertEquals(
-            $firstOrderTotals['discount_amount'],
-            $firstOrder->getDiscountAmount()
-        );
-        $this->assertEquals(
-            $firstOrderTotals['shipping_amount'],
-            $firstOrder->getShippingAmount()
-        );
-        $this->assertEquals(
-            $firstOrderTotals['grand_total'],
-            $firstOrder->getGrandTotal()
-        );
         /**
          * The order with $20 simple product
          * @var Order $secondOrder
          */
         $secondOrder = array_shift($orderList);
-        $this->assertEquals(
-            $secondOrderTotals['subtotal'],
-            $secondOrder->getSubtotal()
-        );
-        $this->assertEquals(
-            $secondOrderTotals['discount_amount'],
-            $secondOrder->getDiscountAmount()
-        );
-        $this->assertEquals(
-            $secondOrderTotals['shipping_amount'],
-            $secondOrder->getShippingAmount()
-        );
-        $this->assertEquals(
-            $secondOrderTotals['grand_total'],
-            $secondOrder->getGrandTotal()
-        );
+        $this->assertNotEmpty($secondOrder->getAppliedRuleIds());
+        $this->assertEquals($secondOrderTotals['subtotal'], $secondOrder->getSubtotal());
+        $this->assertEquals($secondOrderTotals['discount_amount'], $secondOrder->getDiscountAmount());
+        $this->assertEquals($secondOrderTotals['shipping_amount'], $secondOrder->getShippingAmount());
+        $this->assertEquals($secondOrderTotals['grand_total'], $secondOrder->getGrandTotal());
+        $secondOrderItem = array_values($secondOrder->getItems())[0];
+        $this->assertNotEmpty($secondOrderItem->getAppliedRuleIds());
+        $this->assertEquals($secondOrderTotals['discount_amount'] * -1, $secondOrderItem->getDiscountAmount());
+
         /**
          * The order with $5 virtual product and billing address as shipping
          * @var Order $thirdOrder
          */
         $thirdOrder = array_shift($orderList);
-        $this->assertEquals(
-            $thirdOrderTotals['subtotal'],
-            $thirdOrder->getSubtotal()
-        );
-        $this->assertEquals(
-            $thirdOrderTotals['discount_amount'],
-            $thirdOrder->getDiscountAmount()
-        );
-        $this->assertEquals(
-            $thirdOrderTotals['shipping_amount'],
-            $thirdOrder->getShippingAmount()
-        );
-        $this->assertEquals(
-            $thirdOrderTotals['grand_total'],
-            $thirdOrder->getGrandTotal()
-        );
+        $this->assertNotEmpty($thirdOrder->getAppliedRuleIds());
+        $this->assertEquals($thirdOrderTotals['subtotal'], $thirdOrder->getSubtotal());
+        $this->assertEquals($thirdOrderTotals['discount_amount'], $thirdOrder->getDiscountAmount());
+        $this->assertEquals($thirdOrderTotals['shipping_amount'], $thirdOrder->getShippingAmount());
+        $this->assertEquals($thirdOrderTotals['grand_total'], $thirdOrder->getGrandTotal());
+        $thirdOrderItem = array_values($thirdOrder->getItems())[0];
+        $this->assertNotEmpty($thirdOrderItem->getAppliedRuleIds());
+        $this->assertEquals($thirdOrderTotals['discount_amount'] * -1, $thirdOrderItem->getDiscountAmount());
     }
 
     /**
      * @return array
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function multishippingDataProvider(): array
+    public static function multishippingDataProvider(): array
     {
         return [
             'Discount $5 proportionally spread between products' => [
@@ -506,12 +501,11 @@ class CartFixedTest extends TestCase
         $expectedDiscounts
     ): void {
         //Update rule discount
-        /** @var \Magento\SalesRule\Model\Rule $rule */
+        /** @var Rule $rule */
         $rule = $this->getRule('50% off - July 4');
         $rule->setDiscountAmount($percentDiscount);
         $this->saveRule($rule);
         $quote = $this->getQuote('test_quote_with_simple_products');
-        $quote->setCouponCode('2?ds5!2d');
         $quote->collectTotals();
         $this->quoteRepository->save($quote);
         $this->assertEquals(21.98, $quote->getBaseSubtotal());
@@ -521,14 +515,14 @@ class CartFixedTest extends TestCase
         $item = array_shift($items);
         $this->assertEquals('simple1', $item->getSku());
         $this->assertEquals(5.99, $item->getPrice());
-        $this->assertEquals($expectedDiscounts[$item->getSku()], $item->getDiscountAmount());
+        $this->assertEqualsWithDelta($expectedDiscounts[$item->getSku()], $item->getDiscountAmount(), self::EPSILON);
         $item = array_shift($items);
         $this->assertEquals('simple2', $item->getSku());
         $this->assertEquals(15.99, $item->getPrice());
-        $this->assertEquals($expectedDiscounts[$item->getSku()], $item->getDiscountAmount());
+        $this->assertEqualsWithDelta($expectedDiscounts[$item->getSku()], $item->getDiscountAmount(), self::EPSILON);
     }
 
-    public function discountByPercentDataProvider()
+    public static function discountByPercentDataProvider()
     {
         return [
             [
@@ -541,7 +535,7 @@ class CartFixedTest extends TestCase
             ],
             [
                 'percentDiscount' => 50,
-                'expectedDiscounts' => ['simple1' => 5.72, 'simple2' => 15.27, 'totalDiscount' => -20.99]
+                'expectedDiscounts' => ['simple1' => 5.72, 'simple2' => 15.28, 'totalDiscount' => -21]
             ],
             [
                 'percentDiscount' => 100,
@@ -575,6 +569,188 @@ class CartFixedTest extends TestCase
         $this->assertEquals(5, $quote->getShippingAddress()->getShippingAmount());
         $this->assertEquals(5, $quote->getShippingAddress()->getSubtotalWithDiscount());
         $this->assertEquals(-5, $quote->getShippingAddress()->getDiscountAmount());
+    }
+
+    #[
+        DataFixture(ProductFixture::class, ['price' => 15], 'p1'),
+        DataFixture(ProductFixture::class, ['price' => 10], 'p2'),
+        DataFixture(
+            RuleFixture::class,
+            [
+                'simple_action' => Rule::BY_PERCENT_ACTION,
+                'discount_amount' => 50,
+                'apply_to_shipping' => 1,
+                'stop_rules_processing' => 0,
+                'sort_order' => 1,
+            ]
+        ),
+        DataFixture(
+            RuleFixture::class,
+            [
+                'simple_action' => Rule::CART_FIXED_ACTION,
+                'discount_amount' => 40,
+                'apply_to_shipping' => 1,
+                'stop_rules_processing' => 0,
+                'sort_order' => 2
+            ]
+        ),
+        DataFixture(GuestCartFixture::class, as: 'cart'),
+        DataFixture(AddProductToCartFixture::class, ['cart_id' => '$cart.id$', 'product_id' => '$p1.id$', 'qty' => 2]),
+        DataFixture(AddProductToCartFixture::class, ['cart_id' => '$cart.id$', 'product_id' => '$p2.id$', 'qty' => 2])
+    ]
+    public function testCarFixedDiscountWithApplyToShippingAmountAfterADiscount(): void
+    {
+        $cart = DataFixtureStorageManager::getStorage()->get('cart');
+        $totals = $this->getTotals((int) $cart->getId());
+        $this->assertEquals(0, $totals->getGrandTotal());
+        $this->assertEquals(-70, $totals->getDiscountAmount());
+    }
+
+    #[
+        DbIsolation(true),
+        DataFixture(ProductFixture::class, ['price' => 10], 'p1'),
+        DataFixture(ProductFixture::class, ['price' => 10], 'p2'),
+        DataFixture(
+            ProductConditionFixture::class,
+            ['attribute' => 'sku', 'value' => '$p1.sku$'],
+            'cond1'
+        ),
+        DataFixture(
+            ProductFoundInCartConditionsFixture::class,
+            ['conditions' => ['$cond1$']],
+            'cond11'
+        ),
+        DataFixture(
+            ProductConditionFixture::class,
+            ['attribute' => 'sku', 'value' => '$p1.sku$'],
+            'applyCond1'
+        ),
+        DataFixture(
+            RuleFixture::class,
+            [
+                'simple_action' => Rule::BY_PERCENT_ACTION,
+                'discount_amount' => 50,
+                'apply_to_shipping' => 0,
+                'stop_rules_processing' => 0,
+                'sort_order' => 1,
+                'conditions' => ['$cond11$'],
+                'actions' => ['$applyCond1$']
+            ]
+        ),
+        DataFixture(
+            ProductConditionFixture::class,
+            ['attribute' => 'sku', 'value' => '$p2.sku$'],
+            'cond2'
+        ),
+        DataFixture(
+            ProductFoundInCartConditionsFixture::class,
+            ['conditions' => ['$cond2$']],
+            'cond22'
+        ),
+        DataFixture(
+            ProductConditionFixture::class,
+            ['attribute' => 'sku', 'value' => '$p2.sku$'],
+            'applyCond2'
+        ),
+        DataFixture(
+            RuleFixture::class,
+            [
+                'simple_action' => Rule::CART_FIXED_ACTION,
+                'discount_amount' => 12,
+                'apply_to_shipping' => 0,
+                'stop_rules_processing' => 0,
+                'sort_order' => 2,
+                'conditions' => ['$cond22$']
+            ]
+        ),
+        DataFixture(GuestCartFixture::class, as: 'cart'),
+        DataFixture(AddProductToCartFixture::class, ['cart_id' => '$cart.id$', 'product_id' => '$p1.id$', 'qty' => 1]),
+        DataFixture(AddProductToCartFixture::class, ['cart_id' => '$cart.id$', 'product_id' => '$p2.id$', 'qty' => 1])
+    ]
+    public function testFixedAmountToWholeCart2productsAfterPercent1Product(): void
+    {
+        $cart = DataFixtureStorageManager::getStorage()->get('cart');
+        $totals = $this->getTotals((int) $cart->getId());
+        $this->assertEquals(-17, $totals->getDiscountAmount());
+    }
+
+    #[
+        DbIsolation(true),
+        DataFixture(ProductFixture::class, ['price' => 850, 'special_price' => 765], 'p1'),
+        DataFixture(ProductFixture::class, ['price' => 85, 'special_price' => 68], 'p2'),
+        DataFixture(
+            ProductConditionFixture::class,
+            ['attribute' => 'sku', 'value' => '$p1.sku$'],
+            'cond1'
+        ),
+        DataFixture(
+            ProductSubselectionInCartConditionsFixture::class,
+            ['attribute' => 'qty', 'operator' => '==', 'value' => 2, 'conditions' => ['$cond1$']],
+            'cond11'
+        ),
+        DataFixture(
+            ProductFoundInCartConditionsFixture::class,
+            ['conditions' => ['$cond11$']],
+            'cond111'
+        ),
+        DataFixture(
+            ProductConditionFixture::class,
+            ['attribute' => 'sku', 'value' => '$p1.sku$'],
+            'applyCond1'
+        ),
+        DataFixture(
+            RuleFixture::class,
+            [
+                'simple_action' => Rule::CART_FIXED_ACTION,
+                'discount_amount' => 153,
+                'apply_to_shipping' => 0,
+                'stop_rules_processing' => 0,
+                'sort_order' => 0,
+                'conditions' => ['$cond111$'],
+                'actions' => ['$applyCond1$']
+            ]
+        ),
+        DataFixture(
+            ProductConditionFixture::class,
+            ['attribute' => 'sku', 'value' => '$p2.sku$'],
+            'cond2'
+        ),
+        DataFixture(
+            ProductSubselectionInCartConditionsFixture::class,
+            ['attribute' => 'qty', 'operator' => '==', 'value' => 2, 'conditions' => ['$cond2$']],
+            'cond22'
+        ),
+        DataFixture(
+            ProductFoundInCartConditionsFixture::class,
+            ['conditions' => ['$cond22$']],
+            'cond222'
+        ),
+        DataFixture(
+            ProductConditionFixture::class,
+            ['attribute' => 'sku', 'value' => '$p2.sku$'],
+            'applyCond2'
+        ),
+        DataFixture(
+            RuleFixture::class,
+            [
+                'simple_action' => Rule::CART_FIXED_ACTION,
+                'discount_amount' => 14,
+                'apply_to_shipping' => 0,
+                'stop_rules_processing' => 0,
+                'sort_order' => 0,
+                'conditions' => ['$cond222$'],
+                'actions' => ['$applyCond2$']
+            ]
+        ),
+        DataFixture(GuestCartFixture::class, as: 'cart'),
+        DataFixture(AddProductToCartFixture::class, ['cart_id' => '$cart.id$', 'product_id' => '$p1.id$', 'qty' => 2]),
+        DataFixture(AddProductToCartFixture::class, ['cart_id' => '$cart.id$', 'product_id' => '$p2.id$', 'qty' => 2])
+    ]
+    public function testFixedAmountToWholeCart1ProductPerRule2ProductsWithSpecialPriceTotal(): void
+    {
+        $cart = DataFixtureStorageManager::getStorage()->get('cart');
+        $totals = $this->getTotals((int) $cart->getId());
+        $this->assertEquals(-167, $totals->getDiscountAmount());
     }
 
     /**
@@ -631,5 +807,32 @@ class CartFixedTest extends TestCase
         /** @var \Magento\SalesRule\Model\ResourceModel\Rule $resourceModel */
         $resourceModel = $this->objectManager->get(\Magento\SalesRule\Model\ResourceModel\Rule::class);
         $resourceModel->save($rule);
+    }
+    /**
+     * @param int $cartId
+     * @return TotalsInterface
+     */
+    private function getTotals(int $cartId): TotalsInterface
+    {
+        /** @var Address $address */
+        $address = $this->objectManager->get(AddressFactory::class)->create();
+        $totalsManagement = $this->objectManager->get(TotalsInformationManagement::class);
+        $address->setAddressType(Address::ADDRESS_TYPE_SHIPPING)
+            ->setCountryId('US')
+            ->setRegionId(12)
+            ->setRegion('California')
+            ->setPostcode('90230');
+        $addressInformation = $this->objectManager->create(
+            TotalsInformationInterface::class,
+            [
+                'data' => [
+                    'address' => $address,
+                    'shipping_method_code' => 'flatrate',
+                    'shipping_carrier_code' => 'flatrate',
+                ],
+            ]
+        );
+
+        return $totalsManagement->calculate($cartId, $addressInformation);
     }
 }

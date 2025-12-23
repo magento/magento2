@@ -1,13 +1,15 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Developer\Console\Command;
 
 use Magento\TestFramework\Helper\Bootstrap;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\Filesystem;
 
 /**
  * Class SourceThemeDeployCommandTest
@@ -47,6 +49,10 @@ class SourceThemeDeployCommandTest extends \PHPUnit\Framework\TestCase
     protected function setUp(): void
     {
         global $installDir;
+
+        $installDir = Bootstrap::getObjectManager()->create(
+            Filesystem::class
+        )->getDirectoryRead(DirectoryList::ROOT)->getAbsolutePath();
 
         $this->pubStatic = $installDir . DIRECTORY_SEPARATOR . self::PUB_STATIC_DIRECTORY;
         $this->command = Bootstrap::getObjectManager()->get(SourceThemeDeployCommand::class);

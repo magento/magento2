@@ -1,12 +1,14 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Elasticsearch\Model\Indexer;
 
 use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\Catalog\Test\Fixture\Product as ProductFixture;
 use Magento\Indexer\Model\Indexer;
+use Magento\TestFramework\Fixture\DataFixture;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Elasticsearch\SearchAdapter\ConnectionManager;
@@ -20,7 +22,7 @@ use Magento\TestModuleCatalogSearch\Model\SearchEngineVersionReader;
  * Important: Please make sure that each integration test file works with unique search index. In order to
  * achieve this, use @magentoConfigFixture to pass unique value for index_prefix for every test
  * method.
- * E.g. '@magentoConfigFixture current_store catalog/search/elasticsearch7_index_prefix indexerhandlertest_configurable'
+ * E.g. '@magentoConfigFixture current_store catalog/search/elasticsearch8_index_prefix indexerhandlertest_configurable'
  *
  * @magentoDbIsolation disabled
  * @magentoAppIsolation enabled
@@ -75,6 +77,7 @@ class ReindexAllTest extends \PHPUnit\Framework\TestCase
     {
         $objectManager = Bootstrap::getObjectManager();
         $currentEngine = $objectManager->get(EngineResolverInterface::class)->getCurrentSearchEngine();
+        // phpstan:ignore "Class Magento\TestModuleCatalogSearch\Model\SearchEngineVersionReader not found."
         $installedEngine = $objectManager->get(SearchEngineVersionReader::class)->getFullVersion();
         $this->assertEquals(
             $installedEngine,
@@ -166,6 +169,29 @@ class ReindexAllTest extends \PHPUnit\Framework\TestCase
         self::assertEquals($productThird->getId(), $fifthInSearchResults);
     }
 
+    #[
+        DataFixture(ProductFixture::class, ['sku' => 'p1', 'name' => 'A']),
+        DataFixture(ProductFixture::class, ['sku' => 'p2', 'name' => 'Ç']),
+        DataFixture(ProductFixture::class, ['sku' => 'p3', 'name' => 'D']),
+        DataFixture(ProductFixture::class, ['sku' => 'p4', 'name' => 'Ü']),
+        DataFixture(ProductFixture::class, ['sku' => 'p5', 'name' => 'Z']),
+    ]
+    public function testSortAccentedCharacters(): void
+    {
+        $expectedOrder = [
+            (int) $this->productRepository->get('p1')->getId(),
+            (int) $this->productRepository->get('p2')->getId(),
+            (int) $this->productRepository->get('p3')->getId(),
+            (int) $this->productRepository->get('p4')->getId(),
+            (int) $this->productRepository->get('p5')->getId(),
+        ];
+        $this->reindexAll();
+
+        $result = $this->sortByName();
+        $actualOrder = array_map(fn ($id) => (int) $id, array_column($result, '_id'));
+        self::assertEquals($expectedOrder, $actualOrder);
+    }
+
     /**
      * Test search of specific product after full reindex
      *
@@ -186,7 +212,7 @@ class ReindexAllTest extends \PHPUnit\Framework\TestCase
         self::assertEquals($specificProduct->getId(), $result[0]['_id']);
     }
 
-    public function searchSpecificProductDataProvider(): array
+    public static function searchSpecificProductDataProvider(): array
     {
         return [
             'search by numeric name' => ['12345', 'configurable_12345', 1],

@@ -1,13 +1,12 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\OfflinePayments\Test\Unit\Block\Form;
 
-use Magento\Framework\View\Element\Template\Context;
 use Magento\OfflinePayments\Block\Form\AbstractInstruction;
 use Magento\Payment\Model\MethodInterface;
 use PHPUnit\Framework\TestCase;
@@ -21,17 +20,15 @@ class AbstractInstructionTest extends TestCase
 
     protected function setUp(): void
     {
-        $context = $this->createMock(Context::class);
-        $this->model = $this->getMockForAbstractClass(
-            AbstractInstruction::class,
-            ['context' => $context]
-        );
+        $this->model = $this->getMockBuilder(AbstractInstruction::class)
+            ->disableOriginalConstructor()
+            ->onlyMethods([])
+            ->getMock();
     }
 
     public function testGetInstructions()
     {
-        $method = $this->getMockBuilder(MethodInterface::class)
-            ->getMockForAbstractClass();
+        $method = $this->createMock(MethodInterface::class);
 
         $method->expects($this->once())
             ->method('getConfigData')

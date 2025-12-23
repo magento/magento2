@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -95,7 +95,7 @@ class UploadTest extends AbstractBackendController
     /**
      * @return array
      */
-    public function uploadActionDataProvider(): array
+    public static function uploadActionDataProvider(): array
     {
         return [
             'upload_image_with_type_jpg' => [
@@ -176,7 +176,7 @@ class UploadTest extends AbstractBackendController
     /**
      * @return array
      */
-    public function uploadActionWithErrorsDataProvider(): array
+    public static function uploadActionWithErrorsDataProvider(): array
     {
         return [
             'upload_image_with_invalid_type' => [

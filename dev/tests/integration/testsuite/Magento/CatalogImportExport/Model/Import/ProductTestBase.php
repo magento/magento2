@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2021 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -84,15 +84,26 @@ class ProductTestBase extends TestCase
         $this->logger = $this->getMockBuilder(LoggerInterface::class)
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
+        $this->createNewModel();
+        $this->importedProducts = [];
+        $this->searchCriteriaBuilder = $this->objectManager->get(SearchCriteriaBuilder::class);
+        $this->productRepository = $this->objectManager->get(ProductRepositoryInterface::class);
+        parent::setUp();
+    }
+
+    /**
+     * Creates a fresh Product Import object
+     *
+     * This is needed because the object has the ids associated to its previous validations.
+     *
+     * @return void
+     */
+    protected function createNewModel()
+    {
         $this->_model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
             \Magento\CatalogImportExport\Model\Import\Product::class,
             ['logger' => $this->logger]
         );
-        $this->importedProducts = [];
-        $this->searchCriteriaBuilder = $this->objectManager->get(SearchCriteriaBuilder::class);
-        $this->productRepository = $this->objectManager->get(ProductRepositoryInterface::class);
-
-        parent::setUp();
     }
 
     /**
@@ -254,12 +265,12 @@ class ProductTestBase extends TestCase
     {
         $data = ['header' => [], 'data' => []];
 
-        $lines = str_getcsv($content, "\n");
+        $lines = str_getcsv($content, "\n",'"', '\\');
         foreach ($lines as $index => $line) {
             if ($index == 0) {
-                $data['header'] = str_getcsv($line);
+                $data['header'] = str_getcsv($line, ',', '"', '\\');
             } else {
-                $row = array_combine($data['header'], str_getcsv($line));
+                $row = array_combine($data['header'], str_getcsv($line, ',', '"', '\\'));
                 if ($entityId !== null && !empty($row[$entityId])) {
                     $data['data'][$row[$entityId]] = $row;
                 } else {
@@ -279,6 +290,7 @@ class ProductTestBase extends TestCase
      */
     protected function importDataForMediaTest(string $fileName, int $expectedErrors = 0)
     {
+        $this->createNewModel();
         $filesystem = $this->objectManager->get(Filesystem::class);
         $directory = $filesystem->getDirectoryWrite(DirectoryList::ROOT);
         $source = $this->objectManager->create(
@@ -294,7 +306,6 @@ class ProductTestBase extends TestCase
         $tmpDir = $mediaDirPath . DIRECTORY_SEPARATOR . 'import' . DIRECTORY_SEPARATOR . 'images';
         $mediaDirectory->create('catalog' . DIRECTORY_SEPARATOR . 'product');
         $mediaDirectory->create('import' . DIRECTORY_SEPARATOR . 'images');
-
         $this->_model->setParameters(
             [
                 'behavior' => \Magento\ImportExport\Model\Import::BEHAVIOR_APPEND,
@@ -305,11 +316,9 @@ class ProductTestBase extends TestCase
         $uploader = $this->_model->getUploader();
         $this->assertTrue($uploader->setDestDir($destDir));
         $this->assertTrue($uploader->setTmpDir($tmpDir));
-        $errors = $this->_model->setSource(
-            $source
-        )->validateData();
+        $this->_model->setSource($source);
+        $errors = $this->_model->validateData();
         $this->assertTrue($errors->getErrorsCount() == 0);
-
         $this->_model->importData();
         $this->assertEquals(
             $expectedErrors,
@@ -377,19 +386,15 @@ class ProductTestBase extends TestCase
         );
         $mediaDirectory = $filesystem->getDirectoryWrite(DirectoryList::MEDIA);
         $mediaDirectory->create('import');
-        $errors = $this->_model->setParameters(
-            [
-                'behavior' => Import::BEHAVIOR_APPEND,
-                'entity' => 'catalog_product',
-                Import::FIELDS_ENCLOSURE => 1,
-                Import::FIELD_NAME_IMG_FILE_DIR => $this->getMediaDirPath($mediaDirectory) . '/import'
-            ]
-        )
-            ->setSource($source)
-            ->validateData();
-
+        $this->_model->setParameters([
+            'behavior' => Import::BEHAVIOR_APPEND,
+            'entity' => 'catalog_product',
+            Import::FIELDS_ENCLOSURE => 1,
+            Import::FIELD_NAME_IMG_FILE_DIR => $this->getMediaDirPath($mediaDirectory) . '/import'
+        ]);
+        $this->_model->setSource($source);
+        $errors = $this->_model->validateData();
         $this->assertTrue($errors->getErrorsCount() === 0);
-
         return $this->_model->importData();
     }
 

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -10,6 +10,7 @@ namespace Magento\Usps\Test\Unit\Helper;
 use Magento\Framework\App\Helper\Context;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Usps\Helper\Data;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 class DataTest extends TestCase
@@ -31,8 +32,8 @@ class DataTest extends TestCase
 
     /**
      * @covers \Magento\Usps\Helper\Data::displayGirthValue
-     * @dataProvider shippingMethodDataProvider
      */
+    #[DataProvider('shippingMethodDataProvider')]
     public function testDisplayGirthValue($shippingMethod)
     {
         $this->assertTrue($this->_helperData->displayGirthValue($shippingMethod));
@@ -49,7 +50,7 @@ class DataTest extends TestCase
     /**
      * @return array shipping method name
      */
-    public function shippingMethodDataProvider()
+    public static function shippingMethodDataProvider()
     {
         return [
             ['usps_0_FCLE'],   // First-Class Mail Large Envelope
@@ -70,6 +71,14 @@ class DataTest extends TestCase
             ['usps_INT_14'],   // First-Class Mail International Large Envelope
             ['usps_INT_16'],   // Priority Mail International Small Flat Rate Box
             ['usps_INT_20'],   // Priority Mail International Small Flat Rate Envelope
+            ['1058'],          // Ground Advantage™
+            ['4058'],          // Ground Advantage™ HAZMAT
+            ['6058'],          // Ground Advantage™ Parcel locker
+            ['2058'],          // Ground Advantage™ Hold for pickup
+            ['4096'],          // Ground Advantage™ Cubic HAZMAT
+            ['1096'],          // Ground Advantage™ Cubic
+            ['2096'],          // Ground Advantage™ Cubic Hold for pickup
+            ['6096'],          // Ground Advantage™ Cubic Parcel locker
         ];
     }
 }

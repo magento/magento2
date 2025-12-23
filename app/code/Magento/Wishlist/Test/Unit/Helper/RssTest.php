@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -175,8 +175,13 @@ class RssTest extends TestCase
 
         $this->requestMock
             ->method('getParam')
-            ->withConsecutive(['wishlist_id', null], ['data', null])
-            ->willReturnOnConsecutiveCalls('', $data);
+            ->willReturnCallback(function ($arg1, $arg2) use ($data) {
+                if ($arg1 == 'wishlist_id' && empty($arg2)) {
+                    return '';
+                } elseif ($arg1 == 'data' && empty($arg2)) {
+                    return $data;
+                }
+            });
 
         $this->customerSessionMock->expects($this->once())
             ->method('getCustomerId')
@@ -271,7 +276,7 @@ class RssTest extends TestCase
     /**
      * @return array
      */
-    public function dataProviderIsRssAllow(): array
+    public static function dataProviderIsRssAllow(): array
     {
         return [
             [false, false, false],

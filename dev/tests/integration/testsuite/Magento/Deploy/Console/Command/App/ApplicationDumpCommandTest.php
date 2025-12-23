@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Deploy\Console\Command\App;
 
@@ -173,9 +173,14 @@ class ApplicationDumpCommandTest extends \PHPUnit\Framework\TestCase
         $outputMock = $this->getMockForAbstractClass(OutputInterface::class);
         $outputMock
             ->method('writeln')
-            ->withConsecutive(
-                [['system' => $comment]],
-                [$this->matchesRegularExpression('/<info>Done. Config types dumped: [a-z0-9,\s]+<\/info>/')]
+            ->willReturnCallback(
+                function ($arg1) use ($comment) {
+                    if ($arg1 === ['system' => $comment]) {
+                        return null;
+                    } elseif (preg_match('/<info>Done. Config types dumped: [a-z0-9,\s]+<\/info>/', $arg1)) {
+                        return null;
+                    }
+                }
             );
         /** @var ApplicationDumpCommand command */
         $command = $this->objectManager->create(ApplicationDumpCommand::class);

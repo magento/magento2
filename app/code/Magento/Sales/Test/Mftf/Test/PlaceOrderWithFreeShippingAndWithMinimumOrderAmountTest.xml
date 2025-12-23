@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
-  */
+/**
+ * Copyright 2022 Adobe
+ * All Rights Reserved.
+ */
 -->
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -18,7 +18,6 @@
             <testCaseId value="MC-26864"/>
             <group value="sales"/>
         </annotations>
-
         <before>
             <!-- create category -->
             <createData entity="_defaultCategory" stepKey="testCategory"/>
@@ -36,41 +35,36 @@
             <!--Enable Cash On Delivery method -->
             <magentoCLI command="config:set {{CashOnDeliveryEnableConfigData.path}} {{CashOnDeliveryEnableConfigData.value}}" stepKey="enableCashOndelivery"/>
         </before>
-
        <after>
              <!-- delete category,product -->
             <deleteData createDataKey="testProduct" stepKey="deleteSimpleProduct"/>
             <deleteData createDataKey="testCategory" stepKey="deleteSimpleCategory"/>
+           <!--Delete created customer while generating Order-->
+           <actionGroup ref="AdminDeleteAllCustomerActionGroup" stepKey="deleteAllCustomers"/>
              <!-- Free Shipping disabled -->
             <magentoCLI command="config:set {{DisableFreeShippingConfigData.path}} {{DisableFreeShippingConfigData.value}}" stepKey="disableFreeShipping"/>
             <magentoCLI command="config:set {{AdminFreeshippingMinimumOrderAmountConfigData.path}} {{AdminFreeshippingMinimumOrderAmountConfigData.default}}" stepKey="setFreeShippingMethodMinimumOrderAmountAsDefault"/>
             <!-- Cash On Delivery Payment method disabled -->
             <magentoCLI command="config:set {{CashOnDeliveryDisabledConfigData.path}} {{CashOnDeliveryDisabledConfigData.value}}" stepKey="disabledCashOnDelivery"/>
         </after>
-
-
         <!-- Login to Admin -->
         <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
-
         <!--Open new order from admin and add product-->
-        <actionGroup ref="NavigateToNewOrderPageNewCustomerActionGroup" stepKey="navigateToNewOrderPageNewCustomerActionGroup"/>
+        <actionGroup ref="AdminNavigateToNewOrderPageNewCustomerActionGroup" stepKey="navigateToNewOrderPageNewCustomerActionGroup"/>
         <actionGroup ref="AddSimpleProductToOrderActionGroup" stepKey="addSimpleProductToOrder">
             <argument name="product" value="$$testProduct$$"/>
         </actionGroup>
-
         <!--Fill customer address -->
         <fillField selector="{{AdminOrderFormAccountSection.email}}" userInput="{{Simple_US_Customer_CA.email}}" stepKey="fillEmailField"/>
         <actionGroup ref="FillOrderCustomerInformationActionGroup" stepKey="fillCustomerInformation">
             <argument name="customer" value="Simple_US_Customer_CA"/>
             <argument name="address" value="US_Address_CA"/>
         </actionGroup>
-
         <!-- Select Free shipping -->
         <actionGroup ref="OrderSelectFreeShippingActionGroup" stepKey="orderSelectFreeShippingMethod"/>
         <conditionalClick selector="{{AdminOrderFormPaymentSection.linkPaymentOptions}}" dependentSelector="{{AdminOrderFormPaymentSection.linkPaymentOptions}}" visible="true" stepKey="openMoneyOption"/>
         <waitForElementVisible selector="{{AdminOrderFormPaymentSection.paymentBlock}}" stepKey="waitForPaymentOptions"/>
         <checkOption selector="{{AdminOrderFormPaymentSection.checkCashOnDelivery}}" stepKey="checkCashOnDelivery"/>
         <actionGroup ref="AdminSubmitOrderActionGroup" stepKey="submitOrder"/>
-
     </test>
 </tests>

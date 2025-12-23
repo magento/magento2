@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -108,7 +108,7 @@ class PayflowproVoidTest extends TestCase
     /**
      * @return array
      */
-    public function orderCancelSuccessDataProvider(): array
+    public static function orderCancelSuccessDataProvider(): array
     {
         return [
             'Authorization has expired' => [
@@ -212,7 +212,7 @@ class PayflowproVoidTest extends TestCase
 
         /** @var Payflowpro|MockObject $instance */
         $instance = $this->getMockBuilder(Payflowpro::class)
-            ->setMethods(['setStore', 'getInfoInstance'])
+            ->onlyMethods(['setStore', 'getInfoInstance'])
             ->setConstructorArgs(
                 [
                     $this->objectManager->get(Context::class),

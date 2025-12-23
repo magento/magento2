@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -42,7 +42,7 @@ class DownloadCustomOption extends \Magento\Wishlist\Controller\AbstractIndex im
     public function __construct(
         Action\Context $context,
         \Magento\Framework\App\Response\Http\FileFactory $fileResponseFactory,
-        Json $json = null
+        ?Json $json = null
     ) {
         $this->_fileResponseFactory = $fileResponseFactory;
         $this->json = $json ?: ObjectManager::getInstance()->get(Json::class);
@@ -97,7 +97,7 @@ class DownloadCustomOption extends \Magento\Wishlist\Controller\AbstractIndex im
             $secretKey = $this->getRequest()->getParam('key');
 
             if ($secretKey == $info['secret_key']) {
-                $this->_fileResponseFactory->create(
+                return $this->_fileResponseFactory->create(
                     $info['title'],
                     ['value' => $info['quote_path'], 'type' => 'filename'],
                     DirectoryList::MEDIA,

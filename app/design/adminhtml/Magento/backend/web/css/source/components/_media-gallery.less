@@ -1,6 +1,6 @@
 // /**
-//  * Copyright © Magento, Inc. All rights reserved.
-//  * See COPYING.txt for license details.
+//  * Copyright 2016 Adobe
+//  * All Rights Reserved.
 //  */
 
 //
@@ -37,6 +37,12 @@
 .gallery {
     &:extend(.abs-clearfix all);
     overflow: hidden;
+
+    &.disabled {
+        .tooltip {
+            display: none;
+        }
+    }
 }
 
 .image {
@@ -84,6 +90,9 @@
         height: @image-gallery-placeholder__height;
 
         .product-image-wrapper {
+            /**
+            * @codingStandardsIgnoreStart
+            */
             .lib-icon-font(
                 @icon-camera__content,
                 @_icon-font: @icons-admin__font-name,
@@ -91,6 +100,7 @@
                 @_icon-font-color: @image-gallery-placeholder-icon__color,
                 @_icon-font-text-hide: true
             );
+            //@codingStandardsIgnoreEnd
 
             &:before {
                 left: 0;
@@ -307,7 +317,7 @@
     padding: @indent__base 1.5rem;
 
     .admin__fieldset {
-        .admin__field:not(.admin__field-inline) {
+        .admin__field:not(.admin__field-inline):not(.field-image-role) {
             &:extend(.abs-field-rows all);
         }
     }

@@ -1,13 +1,13 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Catalog\Model\Product\Type;
 
-use Laminas\File\Transfer\Adapter\Http;
+use Magento\Framework\File\Http;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\Product\Option;
@@ -377,7 +377,7 @@ class AbstractTypeTest extends TestCase
 
     public function testHasOptions()
     {
-        $this->markTestIncomplete('Bug MAGE-2814');
+        $this->markTestSkipped('Bug MAGE-2814');
 
         $product = new DataObject();
         $this->assertFalse($this->_model->hasOptions($product));

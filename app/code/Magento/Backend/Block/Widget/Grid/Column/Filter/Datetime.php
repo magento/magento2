@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Backend\Block\Widget\Grid\Column\Filter;
@@ -9,7 +9,6 @@ namespace Magento\Backend\Block\Widget\Grid\Column\Filter;
 /**
  * Date grid column filter
  *
- * @author      Magento Core Team <core@magentocommerce.com>
  * @todo        date format
  */
 class Datetime extends \Magento\Backend\Block\Widget\Grid\Column\Filter\Date
@@ -17,7 +16,7 @@ class Datetime extends \Magento\Backend\Block\Widget\Grid\Column\Filter\Date
     /**
      * full day is 86400, we need 23 hours:59 minutes:59 seconds = 86399
      */
-    const END_OF_DAY_IN_SECONDS = 86399;
+    public const END_OF_DAY_IN_SECONDS = 86399;
 
     /**
      * @inheritdoc
@@ -123,6 +122,7 @@ class Datetime extends \Magento\Backend\Block\Widget\Grid\Column\Filter\Date
                         timeFormat: "' . $timeFormat . '",
                         showsTime: ' . ($this->getColumn()->getFilterTime() ? 'true' : 'false') . ',
                         buttonText: "' . $this->escapeHtml(__('Date selector')) . '",
+                        buttonImage: "' . $this->getViewFileUrl('Magento_Theme::calendar.png') . '",
                         from: {
                             id: "' . $htmlId . '_from"
                         },

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework\DB\Adapter\Pdo;
 
@@ -46,8 +46,8 @@ class MysqlFactory
     public function create(
         $className,
         array $config,
-        LoggerInterface $logger = null,
-        SelectFactory $selectFactory = null
+        ?LoggerInterface $logger = null,
+        ?SelectFactory $selectFactory = null
     ) {
         if (!in_array(Mysql::class, class_parents($className, true) + [$className => $className])) {
             throw new \InvalidArgumentException('Invalid class, ' . $className . ' must extend ' . Mysql::class . '.');

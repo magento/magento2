@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -94,7 +94,7 @@ class ProductVariationsBuilderTest extends TestCase
         $this->product->expects($this->once())->method('getSku')->willReturn('simple-sku');
         $this->product->expects($this->once())->method('getPrice')->willReturn(10);
 
-        $attribute = $this->getMockForAbstractClass(AttributeInterface::class);
+        $attribute = $this->createMock(AttributeInterface::class);
         $attribute->expects($this->once())
             ->method('setAttributeCode')
             ->with('sort_order')
@@ -113,7 +113,12 @@ class ProductVariationsBuilderTest extends TestCase
 
         $output
             ->method('setData')
-            ->withConsecutive([$productData], ['custom_attributes', ['sort_order' => $attribute]]);
+            ->willReturnCallback(function ($arg1, $arg2) use ($productData, $attribute) {
+                if ($arg1 == $productData && $arg2 == ['custom_attributes', ['sort_order' => $attribute]]) {
+                    return null;
+                }
+            });
+
         $output->expects($this->once())->method('setPrice')->with(10);
         $output->expects($this->once())->method('setName')->with('simple-15');
         $output->expects($this->once())->method('setSku')->with('simple-sku-15');

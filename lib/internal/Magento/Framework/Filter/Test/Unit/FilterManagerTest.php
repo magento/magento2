@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -111,7 +111,7 @@ class FilterManagerTest extends TestCase
     public function testCreateFilterInstance()
     {
         $this->initMocks();
-        $filterMock = $this->getMockBuilder('FactoryInterface')
+        $filterMock = $this->getMockBuilder(\stdClass::class)
             ->getMock();
         $this->configureFactoryMock($filterMock, 'alias', ['123']);
 
@@ -174,8 +174,8 @@ class FilterManagerTest extends TestCase
     {
         $value = 'testValue';
         $this->initMocks();
-        $filterMock = $this->getMockBuilder('FactoryInterface')
-            ->setMethods(['filter'])->getMock();
+        $filterMock = $this->getMockBuilder(\stdClass::class)
+            ->addMethods(['filter'])->getMock();
         $filterMock->expects(
             $this->atLeastOnce()
         )->method(

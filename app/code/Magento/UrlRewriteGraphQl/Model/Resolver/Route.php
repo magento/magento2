@@ -1,12 +1,13 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\UrlRewriteGraphQl\Model\Resolver;
 
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Query\Uid;
@@ -45,8 +46,8 @@ class Route extends AbstractEntityUrl implements ResolverInterface
         Field $field,
         $context,
         ResolveInfo $info,
-        array $value = null,
-        array $args = null
+        ?array $value = null,
+        ?array $args = null
     ) {
         $result = null;
         $resultArray = parent::resolve(
@@ -58,16 +59,23 @@ class Route extends AbstractEntityUrl implements ResolverInterface
         );
         $storeId = (int)$context->getExtensionAttributes()->getStore()->getId();
         if ($resultArray) {
-            $result = $this->entityDataProviderComposite->getData(
-                $resultArray['type'],
-                (int)$resultArray['id'],
-                $info,
-                $storeId
-            );
-            $result['redirect_code'] = $resultArray['redirect_code'];
-            $result['relative_url'] = $resultArray['relative_url'];
-            $result['type'] = $resultArray['type'];
-            return $result;
+            try {
+                $result = [];
+                if (isset($resultArray['type'])) {
+                    $result = $this->entityDataProviderComposite->getData(
+                        $resultArray['type'],
+                        (int)$resultArray['id'],
+                        $info,
+                        $storeId
+                    );
+                }
+                $result['redirect_code'] = $resultArray['redirect_code'];
+                $result['relative_url'] = $resultArray['relative_url'];
+                $result['type'] = $resultArray['type'];
+                return $result;
+            } catch (NoSuchEntityException) {
+                return null;
+            }
         }
         return null;
     }

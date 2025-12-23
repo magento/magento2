@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -45,11 +45,11 @@ class AbstractActionTest extends TestCase
         $this->response = $this->getMockForAbstractClass(ResponseInterface::class);
 
         $this->redirect = $this->getMockBuilder(Redirect::class)
-            ->setMethods(['setRefererOrBaseUrl'])
+            ->onlyMethods(['setRefererOrBaseUrl'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->redirectFactory = $this->getMockBuilder(RedirectFactory::class)
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->redirectFactory->expects($this->any())

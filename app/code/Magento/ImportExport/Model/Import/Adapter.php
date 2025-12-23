@@ -1,17 +1,14 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\ImportExport\Model\Import;
 
 use Magento\Framework\Filesystem\Directory\Write;
-use Magento\ImportExport\Model\Import\Source\Factory;
 
 /**
  * Import adapter model
- * @Deprecated
- * @see \Magento\ImportExport\Model\Import\Source\Factory
  */
 class Adapter
 {

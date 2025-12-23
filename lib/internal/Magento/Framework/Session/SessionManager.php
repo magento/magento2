@@ -1,10 +1,11 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework\Session;
 
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 use Magento\Framework\Session\Config\ConfigInterface;
 
 /**
@@ -13,7 +14,7 @@ use Magento\Framework\Session\Config\ConfigInterface;
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
  */
-class SessionManager implements SessionManagerInterface
+class SessionManager implements SessionManagerInterface, ResetAfterRequestInterface
 {
     /**
      * Default options when a call destroy()
@@ -106,7 +107,7 @@ class SessionManager implements SessionManagerInterface
         \Magento\Framework\Stdlib\CookieManagerInterface $cookieManager,
         \Magento\Framework\Stdlib\Cookie\CookieMetadataFactory $cookieMetadataFactory,
         \Magento\Framework\App\State $appState,
-        SessionStartChecker $sessionStartChecker = null
+        ?SessionStartChecker $sessionStartChecker = null
     ) {
         $this->request = $request;
         $this->sidResolver = $sidResolver;
@@ -193,7 +194,7 @@ class SessionManager implements SessionManagerInterface
                 $this->validator->validate($this);
                 $this->renewCookie(null);
 
-                register_shutdown_function([$this, 'writeClose']);
+                $this->registerShutdown();
 
                 $this->_addHost();
                 \Magento\Framework\Profiler::stop('session_start');
@@ -204,6 +205,16 @@ class SessionManager implements SessionManagerInterface
             $this->storage->init(isset($_SESSION) ? $_SESSION : []);
         }
         return $this;
+    }
+
+    /**
+     * Execute after script terminates
+     *
+     * @return void
+     */
+    public function registerShutdown()
+    {
+        register_shutdown_function([$this, 'writeClose']);
     }
 
     /**
@@ -247,12 +258,8 @@ class SessionManager implements SessionManagerInterface
     protected function registerSaveHandler()
     {
         return session_set_save_handler(
-            [$this->saveHandler, 'open'],
-            [$this->saveHandler, 'close'],
-            [$this->saveHandler, 'read'],
-            [$this->saveHandler, 'write'],
-            [$this->saveHandler, 'destroy'],
-            [$this->saveHandler, 'gc']
+            $this->saveHandler,
+            true
         );
     }
 
@@ -323,7 +330,7 @@ class SessionManager implements SessionManagerInterface
      * @param  array $options
      * @return void
      */
-    public function destroy(array $options = null)
+    public function destroy(?array $options = null)
     {
         $options = $options ?? [];
         $options = array_merge($this->defaultDestroyOptions, $options);
@@ -620,5 +627,13 @@ class SessionManager implements SessionManagerInterface
                 }
             }
         }
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        static::$urlHostCache = [];
     }
 }

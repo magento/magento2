@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright 2024 Adobe
+  * All Rights Reserved.
+  */
+-->
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="AdminCurrencySetupSection">
+        <element name="defaultCurrency" type="select" selector="#currency_options_default"/>
+        <element name="defaultdisplayCurrency" type="select" selector="#currency_options_default_inherit"/>
+    </section>
+</sections>

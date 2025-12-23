@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -9,6 +9,9 @@ namespace Magento\Integration\Test\Unit\Block\Adminhtml\Integration\Edit\Tab;
 
 use Magento\Framework\Acl\AclResource\ProviderInterface;
 use Magento\Framework\Acl\RootResource;
+use Magento\Framework\App\ObjectManager as AppObjectManager;
+use Magento\Framework\Json\Helper\Data as JsonHelper;
+use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Registry;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Integration\Block\Adminhtml\Integration\Edit\Tab\Info;
@@ -17,7 +20,12 @@ use Magento\Integration\Controller\Adminhtml\Integration as IntegrationControlle
 use Magento\Integration\Helper\Data;
 use Magento\Integration\Model\Integration as IntegrationModel;
 use Magento\Integration\Model\IntegrationService;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
+
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 
 class WebapiTest extends TestCase
 {
@@ -27,7 +35,7 @@ class WebapiTest extends TestCase
     private $objectManager;
 
     /**
-     * @var Info
+     * @var Webapi
      */
     private $webapiBlock;
 
@@ -60,6 +68,19 @@ class WebapiTest extends TestCase
     {
         $this->objectManager = new ObjectManager($this);
 
+        // Mock JsonHelper that Backend blocks need
+        $jsonHelperMock = $this->getMockBuilder(JsonHelper::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        // Mock ObjectManager to return mocked dependencies
+        $objectManagerMock = $this->createMock(ObjectManagerInterface::class);
+        $objectManagerMock->method('get')
+            ->willReturn($jsonHelperMock);
+
+        // Set global ObjectManager instance for Backend blocks
+        AppObjectManager::setInstance($objectManagerMock);
+
         $this->registry = $this->getMockBuilder(Registry::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -68,9 +89,7 @@ class WebapiTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->aclResourceProvider = $this->getMockBuilder(ProviderInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->aclResourceProvider = $this->createMock(ProviderInterface::class);
 
         $this->integrationHelper = $this->getMockBuilder(Data::class)
             ->disableOriginalConstructor()
@@ -82,56 +101,60 @@ class WebapiTest extends TestCase
     }
 
     /**
-     * @param array $integrationData
+     * @param array<string, mixed>|null $integrationData
      * @param bool $expectedValue
-     * @dataProvider canShowTabProvider
      */
-    public function testCanShowTab($integrationData, $expectedValue)
+    #[DataProvider('canShowTabProvider')]
+    public function testCanShowTab(?array $integrationData, bool $expectedValue): void
     {
         $this->webapiBlock = $this->getWebapiBlock($integrationData);
         $this->assertEquals($expectedValue, $this->webapiBlock->canShowTab());
     }
 
     /**
-     * @return array
+     * @return array<string, array<string, mixed>>
      */
-    public function canShowTabProvider()
+    public static function canShowTabProvider(): array
     {
         return [
             'null data' => [
-                null,
-                true
+                'integrationData' => null,
+                'expectedValue' => true
             ],
             'empty integration data' => [
-                [],
-                true
+                'integrationData' => [],
+                'expectedValue' => true
             ],
             'manual integration data' => [
-                Info::DATA_SETUP_TYPE => IntegrationModel::TYPE_MANUAL,
-                true
+                'integrationData' => [Info::DATA_SETUP_TYPE => IntegrationModel::TYPE_MANUAL],
+                'expectedValue' => true
             ],
             'config integration data' => [
-                [Info::DATA_SETUP_TYPE => IntegrationModel::TYPE_CONFIG],
-                false
-            ],
+                'integrationData' => [Info::DATA_SETUP_TYPE => IntegrationModel::TYPE_CONFIG],
+                'expectedValue' => false
+            ]
         ];
     }
 
-    public function testIsHidden()
+    public function testIsHidden(): void
     {
         $this->webapiBlock = $this->getWebapiBlock();
         $this->assertFalse($this->webapiBlock->isHidden());
     }
 
     /**
-     * @param string $rootResourceId
-     * @param array $integrationData
-     * @param array $selectedResources
+     * @param int|string $rootResourceId
+     * @param array<string, mixed> $integrationData
+     * @param array<int> $selectedResources
      * @param bool $expectedValue
-     * @dataProvider isEverythingAllowedProvider
      */
-    public function testIsEverythingAllowed($rootResourceId, $integrationData, $selectedResources, $expectedValue)
-    {
+    #[DataProvider('isEverythingAllowedProvider')]
+    public function testIsEverythingAllowed(
+        int|string $rootResourceId,
+        array $integrationData,
+        array $selectedResources,
+        bool $expectedValue
+    ): void {
         $this->webapiBlock = $this->getWebapiBlock($integrationData, $selectedResources);
         $this->rootResource->expects($this->once())
             ->method('getId')
@@ -140,9 +163,9 @@ class WebapiTest extends TestCase
     }
 
     /**
-     * @return array
+     * @return array<string, array{string|int, array<string, mixed>, array<int>, bool}>
      */
-    public function isEverythingAllowedProvider()
+    public static function isEverythingAllowedProvider(): array
     {
         return [
             'root resource in array' => [
@@ -166,7 +189,7 @@ class WebapiTest extends TestCase
         ];
     }
 
-    public function testGetTree()
+    public function testGetTree(): void
     {
         $this->webapiBlock = $this->getWebapiBlock();
         $resources = [
@@ -185,13 +208,16 @@ class WebapiTest extends TestCase
     }
 
     /**
-     * @param string $rootResourceId
-     * @param array $savedData
+     * @param int|string $rootResourceId
+     * @param array<string, mixed> $savedData
      * @param bool $expectedValue
-     * @dataProvider isEverythingAllowedWithSavedFromDataProvider
      */
-    public function testIsEverythingAllowedWithSavedFromData($rootResourceId, $savedData, $expectedValue)
-    {
+    #[DataProvider('isEverythingAllowedWithSavedFromDataProvider')]
+    public function testIsEverythingAllowedWithSavedFromData(
+        int|string $rootResourceId,
+        array $savedData,
+        bool $expectedValue
+    ): void {
         $this->registry->expects($this->once())
             ->method('registry')->with(IntegrationController::REGISTRY_KEY_CURRENT_RESOURCE)
             ->willReturn($savedData);
@@ -206,9 +232,9 @@ class WebapiTest extends TestCase
     }
 
     /**
-     * @return array
+     * @return array<string, array{string|int, array<string, mixed>, bool}>
      */
-    public function isEverythingAllowedWithSavedFromDataProvider()
+    public static function isEverythingAllowedWithSavedFromDataProvider(): array
     {
         return [
             'root resource in array' => [
@@ -225,11 +251,11 @@ class WebapiTest extends TestCase
     }
 
     /**
-     * @param array $integrationData
-     * @param array $selectedResources
+     * @param array<string, mixed>|null $integrationData
+     * @param array<int> $selectedResources
      * @return Webapi
      */
-    private function getWebapiBlock($integrationData = [], array $selectedResources = [])
+    private function getWebapiBlock(?array $integrationData = [], array $selectedResources = []): Webapi
     {
         if ($integrationData) {
             if (isset($integrationData['integration_id'])) {
@@ -241,12 +267,11 @@ class WebapiTest extends TestCase
         }
 
         $this->registry->expects($this->any())
-            ->method('registry')->withConsecutive(
-                [IntegrationController::REGISTRY_KEY_CURRENT_RESOURCE],
-                [IntegrationController::REGISTRY_KEY_CURRENT_INTEGRATION],
-                [IntegrationController::REGISTRY_KEY_CURRENT_INTEGRATION]
-            )
-            ->willReturnOnConsecutiveCalls(false, $integrationData, $integrationData);
+            ->method('registry')
+            ->willReturnCallback(fn($param) => match ([$param]) {
+                [IntegrationController::REGISTRY_KEY_CURRENT_RESOURCE] => false,
+                [IntegrationController::REGISTRY_KEY_CURRENT_INTEGRATION] => $integrationData
+            });
 
         return $this->objectManager->getObject(
             Webapi::class,

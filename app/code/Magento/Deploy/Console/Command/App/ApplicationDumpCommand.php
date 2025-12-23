@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2024 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Deploy\Console\Command\App;
 
@@ -21,7 +21,7 @@ use Symfony\Component\Console\Output\OutputInterface;
  */
 class ApplicationDumpCommand extends Command
 {
-    const INPUT_CONFIG_TYPES = 'config-types';
+    public const INPUT_CONFIG_TYPES = 'config-types';
 
     /**
      * @var Writer
@@ -48,7 +48,7 @@ class ApplicationDumpCommand extends Command
     public function __construct(
         Writer $writer,
         array $sources,
-        Hash $configHash = null
+        ?Hash $configHash = null
     ) {
         $this->writer = $writer;
         $this->sources = $sources;
@@ -81,7 +81,7 @@ class ApplicationDumpCommand extends Command
      * @return boolean
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $this->groupSourcesByPool();
         $dumpedTypes = [];

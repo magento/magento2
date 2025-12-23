@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -33,8 +33,8 @@ class CacheTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->cache = $this->getMockForAbstractClass(CacheInterface::class);
-        $this->serializer = $this->getMockForAbstractClass(SerializerInterface::class);
+        $this->cache = $this->createMock(CacheInterface::class);
+        $this->serializer = $this->createMock(SerializerInterface::class);
         $objectManagerHelper = new ObjectManager($this);
         $this->cacheHelper = $objectManagerHelper->getObject(
             Cache::class,

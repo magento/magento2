@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -94,36 +94,30 @@ class CreditmemoLoaderTest extends TestCase
         $this->creditmemoFactoryMock = $this->createMock(CreditmemoFactory::class);
         $this->orderFactoryMock = $this->getMockBuilder(OrderFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
         $this->invoiceRepositoryMock = $this->getMockBuilder(InvoiceRepositoryInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMockForAbstractClass();
         $this->eventManagerMock = $this->getMockBuilder(Manager::class)
             ->disableOriginalConstructor()
-            ->setMethods([])
             ->getMock();
         $this->sessionMock = $this->getMockBuilder(Session::class)
             ->disableOriginalConstructor()
-            ->setMethods([])
             ->getMock();
         $this->messageManagerMock = $this->getMockBuilder(\Magento\Framework\Message\Manager::class)
             ->disableOriginalConstructor()
-            ->setMethods([])
             ->getMock();
         $this->registryMock = $this->getMockBuilder(Registry::class)
             ->disableOriginalConstructor()
-            ->setMethods([])
             ->getMock();
         $this->helperMock = $this->getMockBuilder(Data::class)
             ->disableOriginalConstructor()
-            ->setMethods([])
             ->getMock();
 
         $this->stockConfiguration = $this->getMockBuilder(Configuration::class)
             ->disableOriginalConstructor()
-            ->setMethods([])
             ->getMock();
 
         $this->loader = new CreditmemoLoader(
@@ -148,7 +142,6 @@ class CreditmemoLoaderTest extends TestCase
 
         $creditmemoMock = $this->getMockBuilder(Creditmemo::class)
             ->disableOriginalConstructor()
-            ->setMethods([])
             ->getMock();
         $this->creditmemoRepositoryMock->expects($this->once())
             ->method('get')
@@ -168,7 +161,6 @@ class CreditmemoLoaderTest extends TestCase
 
         $orderMock = $this->getMockBuilder(Order::class)
             ->disableOriginalConstructor()
-            ->setMethods([])
             ->getMock();
         $orderMock->expects($this->once())
             ->method('load')
@@ -184,7 +176,6 @@ class CreditmemoLoaderTest extends TestCase
             ->willReturn($orderMock);
         $invoiceMock = $this->getMockBuilder(Invoice::class)
             ->disableOriginalConstructor()
-            ->setMethods([])
             ->getMock();
         $invoiceMock->expects($this->any())
             ->method('setOrder')
@@ -213,7 +204,6 @@ class CreditmemoLoaderTest extends TestCase
 
         $orderMock = $this->getMockBuilder(Order::class)
             ->disableOriginalConstructor()
-            ->setMethods([])
             ->getMock();
         $orderMock->expects($this->once())
             ->method('load')
@@ -241,16 +231,13 @@ class CreditmemoLoaderTest extends TestCase
             ->willReturn($invoiceMock);
         $creditmemoMock = $this->getMockBuilder(Creditmemo::class)
             ->disableOriginalConstructor()
-            ->setMethods([])
             ->getMock();
 
         $orderItemMock = $this->getMockBuilder(Item::class)
             ->disableOriginalConstructor()
-            ->setMethods([])
             ->getMock();
         $creditmemoItemMock = $this->getMockBuilder(\Magento\Sales\Model\Order\Creditmemo\Item::class)
             ->disableOriginalConstructor()
-            ->setMethods([])
             ->getMock();
         $creditmemoItemMock->expects($this->any())
             ->method('getOrderItem')
@@ -260,6 +247,295 @@ class CreditmemoLoaderTest extends TestCase
             ->method('getAllItems')
             ->willReturn($items);
         $data['qtys'] = [1 => $qty];
+        $this->creditmemoFactoryMock->expects($this->any())
+            ->method('createByInvoice')
+            ->with($invoiceMock, $data)
+            ->willReturn($creditmemoMock);
+
+        $this->assertEquals($creditmemoMock, $this->loader->load());
+    }
+
+    public function testLoadByOrderWithoutInvoiceCreatesByOrder()
+    {
+        $orderId = 9876;
+        $qty = 2;
+        $data = ['items' => [1 => ['qty' => $qty]]];
+
+        $this->loader->setCreditmemoId(0);
+        $this->loader->setOrderId($orderId);
+        $this->loader->setCreditmemo($data);
+        // intentionally do not set invoice id to force createByOrder path
+
+        $orderMock = $this->getMockBuilder(Order::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $orderMock->expects($this->once())
+            ->method('load')
+            ->willReturnSelf();
+        $orderMock->expects($this->once())
+            ->method('getId')
+            ->willReturn($orderId);
+        $orderMock->expects($this->once())
+            ->method('canCreditmemo')
+            ->willReturn(true);
+        $this->orderFactoryMock->expects($this->once())
+            ->method('create')
+            ->willReturn($orderMock);
+
+        $creditmemoMock = $this->getMockBuilder(Creditmemo::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $creditmemoMock->expects($this->any())
+            ->method('getAllItems')
+            ->willReturn([]); // no items to process back_to_stock in this scenario
+
+        $expectedData = $data;
+        $expectedData['qtys'] = [1 => $qty];
+
+        $this->creditmemoFactoryMock->expects($this->once())
+            ->method('createByOrder')
+            ->with($orderMock, $expectedData)
+            ->willReturn($creditmemoMock);
+
+        $this->assertSame($creditmemoMock, $this->loader->load());
+    }
+
+    public function testLoadByCreditmemoIdNoLongerExists()
+    {
+        $this->loader->setCreditmemoId(123);
+        $this->loader->setOrderId(1);
+        $this->loader->setCreditmemo('test');
+
+        $this->creditmemoRepositoryMock->expects($this->once())
+            ->method('get')
+            ->willThrowException(new \Exception('not found'));
+
+        $this->messageManagerMock->expects($this->once())
+            ->method('addErrorMessage');
+
+        $this->assertFalse($this->loader->load());
+    }
+
+    public function testLoadOrderNoLongerExists()
+    {
+        $orderId = 7777;
+        $this->loader->setCreditmemoId(0);
+        $this->loader->setOrderId($orderId);
+
+        $orderMock = $this->getMockBuilder(Order::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $orderMock->expects($this->once())
+            ->method('load')
+            ->willReturnSelf();
+        $orderMock->expects($this->once())
+            ->method('getId')
+            ->willReturn(null);
+        $orderMock->expects($this->never())
+            ->method('canCreditmemo');
+        $this->orderFactoryMock->expects($this->once())
+            ->method('create')
+            ->willReturn($orderMock);
+
+        $this->messageManagerMock->expects($this->once())
+            ->method('addErrorMessage');
+
+        $this->assertFalse($this->loader->load());
+    }
+
+    public function testLoadAutoReturnBackToStockTrue()
+    {
+        $orderId = 1111;
+        $this->loader->setCreditmemoId(0);
+        $this->loader->setOrderId($orderId);
+        // Do not set creditmemo data to force session form data path
+
+        $orderMock = $this->getMockBuilder(Order::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $orderMock->expects($this->once())
+            ->method('load')
+            ->willReturnSelf();
+        $orderMock->expects($this->once())
+            ->method('getId')
+            ->willReturn($orderId);
+        $orderMock->expects($this->once())
+            ->method('canCreditmemo')
+            ->willReturn(true);
+        $this->orderFactoryMock->expects($this->once())
+            ->method('create')
+            ->willReturn($orderMock);
+
+        $creditmemoItem1 = $this->getMockBuilder(\Magento\Sales\Model\Order\Creditmemo\Item::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $creditmemoItem2 = $this->getMockBuilder(\Magento\Sales\Model\Order\Creditmemo\Item::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $creditmemoItem3 = $this->getMockBuilder(\Magento\Sales\Model\Order\Creditmemo\Item::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $orderItem = $this->getMockBuilder(Item::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $creditmemoItem1->expects($this->any())->method('getOrderItem')->willReturn($orderItem);
+        $creditmemoItem2->expects($this->any())->method('getOrderItem')->willReturn($orderItem);
+        $creditmemoItem3->expects($this->any())->method('getOrderItem')->willReturn($orderItem);
+
+        $this->stockConfiguration->expects($this->any())
+            ->method('isAutoReturnEnabled')
+            ->willReturn(true);
+
+        $creditmemoMock = $this->getMockBuilder(Creditmemo::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $creditmemoMock->expects($this->any())
+            ->method('getAllItems')
+            ->willReturn([$creditmemoItem1, $creditmemoItem2, $creditmemoItem3]);
+
+        $this->creditmemoFactoryMock->expects($this->once())
+            ->method('createByOrder')
+            ->with($orderMock, $this->isType('array'))
+            ->willReturn($creditmemoMock);
+
+        $this->assertSame($creditmemoMock, $this->loader->load());
+    }
+
+    public function testLoadAutoReturnBackToStockFalse()
+    {
+        $orderId = 2222;
+        $this->loader->setCreditmemoId(0);
+        $this->loader->setOrderId($orderId);
+        // Do not set creditmemo data to force session form data path
+
+        $orderMock = $this->getMockBuilder(Order::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $orderMock->expects($this->once())
+            ->method('load')
+            ->willReturnSelf();
+        $orderMock->expects($this->once())
+            ->method('getId')
+            ->willReturn($orderId);
+        $orderMock->expects($this->once())
+            ->method('canCreditmemo')
+            ->willReturn(true);
+        $this->orderFactoryMock->expects($this->once())
+            ->method('create')
+            ->willReturn($orderMock);
+
+        $creditmemoItem1 = $this->getMockBuilder(\Magento\Sales\Model\Order\Creditmemo\Item::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $creditmemoItem2 = $this->getMockBuilder(\Magento\Sales\Model\Order\Creditmemo\Item::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $creditmemoItem3 = $this->getMockBuilder(\Magento\Sales\Model\Order\Creditmemo\Item::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $orderItem = $this->getMockBuilder(Item::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $creditmemoItem1->expects($this->any())->method('getOrderItem')->willReturn($orderItem);
+        $creditmemoItem2->expects($this->any())->method('getOrderItem')->willReturn($orderItem);
+        $creditmemoItem3->expects($this->any())->method('getOrderItem')->willReturn($orderItem);
+
+        $this->stockConfiguration->expects($this->any())
+            ->method('isAutoReturnEnabled')
+            ->willReturn(false);
+
+        $creditmemoMock = $this->getMockBuilder(Creditmemo::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $creditmemoMock->expects($this->any())
+            ->method('getAllItems')
+            ->willReturn([$creditmemoItem1, $creditmemoItem2, $creditmemoItem3]);
+
+        $this->creditmemoFactoryMock->expects($this->once())
+            ->method('createByOrder')
+            ->with($orderMock, $this->isType('array'))
+            ->willReturn($creditmemoMock);
+
+        $this->assertSame($creditmemoMock, $this->loader->load());
+    }
+
+    public function testLoadWithoutIdsDispatchesAndRegisters()
+    {
+        // No creditmemoId and no orderId set
+        $this->eventManagerMock->expects($this->once())
+            ->method('dispatch')
+            ->with(
+                'adminhtml_sales_order_creditmemo_register_before',
+                $this->callback(function ($params) {
+                    return is_array($params)
+                        && array_key_exists('creditmemo', $params)
+                        && array_key_exists('input', $params)
+                        && $params['creditmemo'] === false;
+                })
+            );
+        $this->registryMock->expects($this->once())
+            ->method('register')
+            ->with('current_creditmemo', false);
+
+        $this->assertFalse($this->loader->load());
+    }
+
+    public function testLoadByOrderWithNegativeQty()
+    {
+        $orderId = 1234;
+        $invoiceId = 99;
+        $qty = -1;
+        $data = ['items' => [1 => ['qty' => $qty, 'back_to_stock' => true]]];
+        $this->loader->setCreditmemoId(0);
+        $this->loader->setOrderId($orderId);
+        $this->loader->setCreditmemo($data);
+        $this->loader->setInvoiceId($invoiceId);
+
+        $orderMock = $this->getMockBuilder(Order::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $orderMock->expects($this->once())
+            ->method('load')
+            ->willReturnSelf();
+        $orderMock->expects($this->once())
+            ->method('getId')
+            ->willReturn($orderId);
+        $orderMock->expects($this->once())
+            ->method('canCreditmemo')
+            ->willReturn(true);
+        $this->orderFactoryMock->expects($this->once())
+            ->method('create')
+            ->willReturn($orderMock);
+        $invoiceMock = $this->getMockBuilder(Invoice::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $invoiceMock->expects($this->any())
+            ->method('setOrder')
+            ->willReturnSelf();
+        $invoiceMock->expects($this->any())
+            ->method('getId')
+            ->willReturn(1);
+        $this->invoiceRepositoryMock->expects($this->once())
+            ->method('get')
+            ->willReturn($invoiceMock);
+        $creditmemoMock = $this->getMockBuilder(Creditmemo::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $orderItemMock = $this->getMockBuilder(Item::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $creditmemoItemMock = $this->getMockBuilder(\Magento\Sales\Model\Order\Creditmemo\Item::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $creditmemoItemMock->expects($this->any())
+            ->method('getOrderItem')
+            ->willReturn($orderItemMock);
+        $items = [$creditmemoItemMock, $creditmemoItemMock, $creditmemoItemMock];
+        $creditmemoMock->expects($this->any())
+            ->method('getAllItems')
+            ->willReturn($items);
+        $data['qtys'] = [1 => 0];
         $this->creditmemoFactoryMock->expects($this->any())
             ->method('createByInvoice')
             ->with($invoiceMock, $data)

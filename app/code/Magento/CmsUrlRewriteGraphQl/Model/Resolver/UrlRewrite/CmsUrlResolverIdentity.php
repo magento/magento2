@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -26,9 +26,10 @@ class CmsUrlResolverIdentity implements IdentityInterface
     public function getIdentities(array $resolvedData): array
     {
         $ids = [];
-        if (isset($resolvedData['id'])) {
+        $id = $resolvedData['id'] ?? $resolvedData['page_id'] ?? null;
+        if (isset($id)) {
             $selectedCacheTag = $this->cacheTag;
-            $ids =  [$selectedCacheTag, sprintf('%s_%s', $selectedCacheTag, $resolvedData['id'])];
+            $ids =  [$selectedCacheTag, sprintf('%s_%s', $selectedCacheTag, $id)];
         }
         return $ids;
     }

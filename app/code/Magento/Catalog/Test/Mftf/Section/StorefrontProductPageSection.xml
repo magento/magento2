@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
-  */
+/**
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
+ */
 -->
 
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -13,9 +13,11 @@
         <element name="addToCartBtn" type="button" selector="button.action.tocart.primary" timeout="30"/>
         <element name="successMsg" type="button" selector="div.message-success" timeout="30"/>
         <element name="errorMsg" type="button" selector="div.message-error" timeout="30"/>
+        <element name="errorMsgText" type="button" selector="div.message-error > div" timeout="30"/>
         <element name="alertMessage" type="text" selector=".page.messages [role=alert]"/>
         <element name="messagesBlock" type="text" selector=".page.messages" timeout="30"/>
         <element name="addToWishlist" type="button" selector="//a[@class='action towishlist']" timeout="30"/>
+        <element name="email" type="button" selector=".action.mailto.friend"/>
         <element name="customTextOptionInput" type="input" selector=".input-text.product-custom-option"/>
         <element name="charCounter" type="text" selector=".character-counter"/>
         <element name="tax" type="input" selector=".totals-tax .amount .price"/>
@@ -26,5 +28,8 @@
         <element name="qtyInputWithProduct" type="input" selector="//tr//strong[contains(.,'{{productName}}')]/../../td[@class='col qty']//input" parameterized="true"/>
         <element name="customOptionRadio" type="input" selector="//span[contains(text(),'{{customOption}}')]/../../input" parameterized="true"/>
         <element name="onlyProductsLeft" type="block" selector="//div[@class='product-info-price']//div[@class='product-info-stock-sku']//div[@class='availability only']"/>
+        <element name="qtyErr" type="text" selector="//div[@id='qty-error' and contains(@class, 'mage-error')]"/>
+        <element name="addToCart" type="button" selector="button#product-addtocart-button" />
+        <element name="attributeTypes" type="text" selector="//th[@class='col label' and text()='{{attributeName}}']/following-sibling::td[@class='col data']" parameterized="true"/>
     </section>
 </sections>

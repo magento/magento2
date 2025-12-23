@@ -95,6 +95,12 @@ message,message
 "Items to Ship","Items to Ship"
 "Qty to Ship","Qty to Ship"
 Ship,Ship
+"View Shipment #1","View Shipment #1"
+"Shipment Information","Shipment Information"
+"The shipment confirmation email was sent","The shipment confirmation email was sent"
+"The shipment confirmation email is not sent","The shipment confirmation email is not sent"
+"Shipment # %1","Shipment # %1"
+"Shipment Date","Shipment Date"
 "Shipment Total","Shipment Total"
 "Shipment Comments","Shipment Comments"
 "Comment Text","Comment Text"

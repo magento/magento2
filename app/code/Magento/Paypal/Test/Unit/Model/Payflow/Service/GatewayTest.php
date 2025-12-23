@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -16,6 +16,7 @@ use Magento\Framework\Math\Random;
 use Magento\Payment\Model\Method\ConfigInterface;
 use Magento\Payment\Model\Method\Logger;
 use Magento\Paypal\Model\Payflow\Service\Gateway;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
@@ -56,24 +57,17 @@ class GatewayTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->httpClientFactoryMock = $this->getMockBuilder(LaminasClientFactory::class)
-            ->setMethods(['create'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->httpClientMock = $this->getMockBuilder(LaminasClient::class)
-            ->setMethods(['send', 'setUri'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        /** @phpstan-ignore-next-line */
+        $this->httpClientFactoryMock = $this->createMock(LaminasClientFactory::class);
+        $this->httpClientMock = $this->createPartialMock(
+            LaminasClient::class,
+            ['send', 'setUri']
+        );
         $this->httpClientFactoryMock->expects(static::once())
             ->method('create')
             ->willReturn($this->httpClientMock);
-        $this->mathRandomMock = $this->getMockBuilder(Random::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->loggerMock = $this->getMockBuilder(Logger::class)
-            ->setConstructorArgs([$this->getMockForAbstractClass(LoggerInterface::class)])
-            ->setMethods(['debug'])
-            ->getMock();
+        $this->mathRandomMock = $this->createMock(Random::class);
+        $this->loggerMock = $this->createMock(Logger::class);
 
         $this->object = new Gateway(
             $this->httpClientFactoryMock,
@@ -85,8 +79,8 @@ class GatewayTest extends TestCase
     /**
      * @param string $nvpResponse
      * @param array $expectedResult
-     * @dataProvider postRequestOkDataProvider
      */
+    #[DataProvider('postRequestOkDataProvider')]
     public function testPostRequestOk(string $nvpResponse, array $expectedResult): void
     {
         $configMap = [
@@ -95,12 +89,8 @@ class GatewayTest extends TestCase
         ];
 
         /** @var ConfigInterface|MockObject $configInterfaceMock */
-        $configInterfaceMock = $this->getMockBuilder(ConfigInterface::class)
-            ->getMockForAbstractClass();
-        $responseMock = $this->getMockBuilder(Response::class)
-            ->setMethods(['getBody'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $configInterfaceMock = $this->createMock(ConfigInterface::class);
+        $responseMock = $this->createMock(Response::class);
         $responseMock->expects(static::once())
             ->method('getBody')
             ->willReturn($nvpResponse);
@@ -127,7 +117,7 @@ class GatewayTest extends TestCase
     /**
      * @return array[]
      */
-    public function postRequestOkDataProvider(): array
+    public static function postRequestOkDataProvider(): array
     {
         return [
             [
@@ -175,8 +165,8 @@ class GatewayTest extends TestCase
     /**
      * @param array $requestData
      * @param string $requestBody
-     * @dataProvider requestBodyDataProvider
      */
+    #[DataProvider('requestBodyDataProvider')]
     public function testRequestBody(array $requestData, string $requestBody): void
     {
         $configMap = [
@@ -185,12 +175,8 @@ class GatewayTest extends TestCase
         ];
 
         /** @var ConfigInterface|MockObject $configInterfaceMock */
-        $configInterfaceMock = $this->getMockBuilder(ConfigInterface::class)
-            ->getMockForAbstractClass();
-        $responseMock = $this->getMockBuilder(Response::class)
-            ->setMethods(['getBody'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $configInterfaceMock = $this->createMock(ConfigInterface::class);
+        $responseMock = $this->createMock(Response::class);
         $responseMock->expects(static::once())
             ->method('getBody')
             ->willReturn('RESULT=0&RESPMSG=Approved');
@@ -217,7 +203,7 @@ class GatewayTest extends TestCase
     /**
      * @return array[]
      */
-    public function requestBodyDataProvider(): array
+    public static function requestBodyDataProvider(): array
     {
         return [
             [
@@ -243,12 +229,8 @@ class GatewayTest extends TestCase
     {
         $this->expectException(RuntimeException::class);
         /** @var ConfigInterface|MockObject $configInterfaceMock */
-        $configInterfaceMock = $this->getMockBuilder(ConfigInterface::class)
-            ->getMockForAbstractClass();
-        $responseMock = $this->getMockBuilder(Response::class)
-            ->setMethods(['getBody'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $configInterfaceMock = $this->createMock(ConfigInterface::class);
+        $responseMock = $this->createMock(Response::class);
         $responseMock->expects(static::never())
             ->method('getBody');
         $this->httpClientMock->expects(static::once())

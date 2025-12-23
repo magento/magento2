@@ -2,8 +2,8 @@
 /**
  * Localized Exception
  *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework\Exception;
 
@@ -33,7 +33,7 @@ class LocalizedException extends \Exception
      * @param \Exception $cause
      * @param int $code
      */
-    public function __construct(Phrase $phrase, \Exception $cause = null, $code = 0)
+    public function __construct(Phrase $phrase, ?\Exception $cause = null, $code = 0)
     {
         $this->phrase = $phrase;
         parent::__construct($phrase->render(), (int)$code, $cause);

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -11,7 +11,10 @@ use Magento\Customer\Block\Account\RegisterLink;
 use Magento\Customer\Model\Context;
 use Magento\Customer\Model\Registration;
 use Magento\Customer\Model\Url;
+use Magento\Framework\Math\Random;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\View\Helper\SecureHtmlRenderer;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -27,22 +30,33 @@ class RegisterLinkTest extends TestCase
     protected function setUp(): void
     {
         $this->_objectManager = new ObjectManager($this);
+        $objects = [
+            [
+                SecureHtmlRenderer::class,
+                $this->createMock(SecureHtmlRenderer::class)
+            ],
+            [
+                Random::class,
+                $this->createMock(Random::class)
+            ]
+        ];
+        $this->_objectManager->prepareObjectManager($objects);
     }
 
     /**
      * @param bool $isAuthenticated
      * @param bool $isRegistrationAllowed
      * @param bool $result
-     * @dataProvider dataProviderToHtml
      * @return void
      */
+    #[DataProvider('dataProviderToHtml')]
     public function testToHtml($isAuthenticated, $isRegistrationAllowed, $result)
     {
         $context = $this->_objectManager->getObject(\Magento\Framework\View\Element\Template\Context::class);
 
         $httpContext = $this->getMockBuilder(\Magento\Framework\App\Http\Context::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getValue'])
+            ->onlyMethods(['getValue'])
             ->getMock();
         $httpContext->expects($this->any())
             ->method('getValue')
@@ -51,7 +65,7 @@ class RegisterLinkTest extends TestCase
 
         $registrationMock = $this->getMockBuilder(Registration::class)
             ->disableOriginalConstructor()
-            ->setMethods(['isAllowed'])
+            ->onlyMethods(['isAllowed'])
             ->getMock();
         $registrationMock->expects($this->any())
             ->method('isAllowed')
@@ -73,7 +87,7 @@ class RegisterLinkTest extends TestCase
     /**
      * @return array
      */
-    public function dataProviderToHtml()
+    public static function dataProviderToHtml()
     {
         return [
             [true, true, true],
@@ -89,7 +103,7 @@ class RegisterLinkTest extends TestCase
         $helper = $this->getMockBuilder(
             Url::class
         )->disableOriginalConstructor()
-            ->setMethods(
+            ->onlyMethods(
                 ['getRegisterUrl']
             )->getMock();
 

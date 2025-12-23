@@ -1,5 +1,5 @@
-# Copyright © Magento, Inc. All rights reserved.
-# See COPYING.txt for license details.
+# Copyright 2025 Adobe
+# All Rights Reserved.
 
 type Query {
     products (
@@ -13,10 +13,12 @@ type Query {
     category (
      id: Int @doc(description: "The category ID to use as the root of the search.")
     ): CategoryTree
-    @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\CategoryTree") @doc(description: "Search for categories that match the criteria specified in the `search` and `filter` attributes.") @deprecated(reason: "Use `categoryList` instead.") @cache(cacheIdentity: "Magento\\CatalogGraphQl\\Model\\Resolver\\Category\\CategoryTreeIdentity")
+    @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\CategoryTree") @doc(description: "Search for categories that match the criteria specified in the `search` and `filter` attributes.") @deprecated(reason: "Use `categories` instead.") @cache(cacheIdentity: "Magento\\CatalogGraphQl\\Model\\Resolver\\Category\\CategoryTreeIdentity")
     categoryList(
         filters: CategoryFilterInput @doc(description: "Identifies which Category filter inputs to search for and return.")
-    ): [CategoryTree] @doc(description: "Return an array of categories based on the specified filters.") @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\CategoryList") @cache(cacheIdentity: "Magento\\CatalogGraphQl\\Model\\Resolver\\Category\\CategoriesIdentity")
+        pageSize: Int = 20 @doc(description: "Specifies the maximum number of results to return at once. The default value is 20.")
+        currentPage: Int = 1 @doc(description: "Specifies which page of results to return. The default value is 1.")
+    ): [CategoryTree] @doc(description: "Return an array of categories based on the specified filters.") @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\CategoryList") @cache(cacheIdentity: "Magento\\CatalogGraphQl\\Model\\Resolver\\Category\\CategoriesIdentity") @deprecated(reason: "Use `categories` instead.")
     categories (
         filters: CategoryFilterInput @doc(description: "Identifies which Category filter inputs to search for and return.")
         pageSize: Int = 20 @doc(description: "Specifies the maximum number of results to return at once. The default value is 20.")
@@ -91,7 +93,7 @@ interface ProductLinksInterface @typeResolver(class: "Magento\\CatalogGraphQl\\M
 interface ProductInterface @typeResolver(class: "Magento\\CatalogGraphQl\\Model\\ProductInterfaceTypeResolverComposite") @doc(description: "Contains fields that are common to all types of products.") {
     id: Int @deprecated(reason: "Use the `uid` field instead.") @doc(description: "The ID number assigned to the product.") @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\Product\\EntityIdToId")
     uid: ID! @doc(description: "The unique ID for a `ProductInterface` object.") @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\Product\\EntityIdToUid")
-    name: String @doc(description: "The product name. Customers use this name to identify the product.")
+    name: String @doc(description: "The product name. Customers use this name to identify the product.") @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\Product\\ProductName")
     sku: String @doc(description: "A number or code assigned to a product to identify the product, options, price, and manufacturer.")
     description: ComplexTextValue @doc(description: "Detailed information about the product. The value can include simple HTML tags.") @resolver(class: "\\Magento\\CatalogGraphQl\\Model\\Resolver\\Product\\ProductComplexTextAttribute")
     short_description: ComplexTextValue @doc(description: "A short description of the product. Its use depends on the theme.") @resolver(class: "\\Magento\\CatalogGraphQl\\Model\\Resolver\\Product\\ProductComplexTextAttribute")
@@ -123,6 +125,7 @@ interface ProductInterface @typeResolver(class: "Magento\\CatalogGraphQl\\Model\
     categories: [CategoryInterface] @doc(description: "The categories assigned to a product.") @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\Categories") @cache(cacheIdentity: "Magento\\CatalogGraphQl\\Model\\Resolver\\Category\\CategoriesIdentity")
     canonical_url: String @doc(description: "The relative canonical URL. This value is returned only if the system setting 'Use Canonical Link Meta Tag For Products' is enabled.") @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\Product\\CanonicalUrl")
     media_gallery: [MediaGalleryInterface] @doc(description: "An array of media gallery objects.") @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\Product\\MediaGallery")
+    custom_attributesV2(filters: AttributeFilterInput): ProductCustomAttributes @doc(description: "Product custom attributes.") @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\Product\\ProductCustomAttributes")
 }
 
 interface PhysicalProductInterface @typeResolver(class: "Magento\\CatalogGraphQl\\Model\\ProductInterfaceTypeResolverComposite") @doc(description: "Contains attributes specific to tangible products.") {
@@ -226,6 +229,7 @@ interface MediaGalleryInterface @doc(description: "Contains basic information ab
     label: String @doc(description: "The label of the product image or video.")
     position: Int @doc(description: "The media item's position after it has been sorted.")
     disabled: Boolean @doc(description: "Indicates whether the image is hidden from view.")
+    types: [String] @doc(description: "Array of image types. It can have the following values: image, small_image, thumbnail.")
 }
 
 type ProductImage implements MediaGalleryInterface @doc(description: "Contains product image information, including the image URL and label.") {
@@ -342,6 +346,7 @@ type CategoryProducts @doc(description: "Contains details about the products ass
 input ProductAttributeFilterInput @doc(description: "Defines the filters to be used in the search. A filter contains at least one attribute, a comparison operator, and the value that is being searched for.") {
     category_id: FilterEqualTypeInput @deprecated(reason: "Use `category_uid` instead.") @doc(description: "Deprecated: use `category_uid` to filter product by category ID.")
     category_uid: FilterEqualTypeInput @doc(description: "Filter product by the unique ID for a `CategoryInterface` object.")
+    category_url_path: FilterEqualTypeInput @doc(description: "Filter product by category URL path.")
 }
 
 input CategoryFilterInput  @doc(description: "Defines the filters to be used in the search. A filter contains at least one attribute, a comparison operator, and the value that is being searched for.")
@@ -528,4 +533,39 @@ type SimpleWishlistItem implements WishlistItemInterface @doc(description: "Cont
 }
 
 type VirtualWishlistItem implements WishlistItemInterface @doc(description: "Contains a virtual product wish list item.") {
+}
+
+enum AttributeEntityTypeEnum {
+    CATALOG_PRODUCT
+    CATALOG_CATEGORY
+}
+
+type CatalogAttributeMetadata implements CustomAttributeMetadataInterface @doc(description: "Catalog attribute metadata.") {
+    apply_to: [CatalogAttributeApplyToEnum] @doc(description: "To which catalog types an attribute can be applied.")
+    is_comparable: Boolean @doc(description: "Whether a product or category attribute can be compared against another or not.")
+    is_filterable: Boolean @doc(description: "Whether a product or category attribute can be filtered or not.")
+    is_filterable_in_search: Boolean @doc(description: "Whether a product or category attribute can be filtered in search or not.")
+    is_html_allowed_on_front: Boolean @doc(description: "Whether a product or category attribute can use HTML on front or not.")
+    is_searchable: Boolean @doc(description: "Whether a product or category attribute can be searched or not.")
+    is_used_for_price_rules: Boolean @doc(description: "Whether a product or category attribute can be used for price rules or not.")
+    is_used_for_promo_rules: Boolean @doc(description: "Whether a product or category attribute is used for promo rules or not.")
+    is_visible_in_advanced_search: Boolean @doc(description: "Whether a product or category attribute is visible in advanced search or not.")
+    is_visible_on_front: Boolean @doc(description: "Whether a product or category attribute is visible on front or not.")
+    is_wysiwyg_enabled: Boolean @doc(description: "Whether a product or category attribute has WYSIWYG enabled or not.")
+    used_in_product_listing: Boolean @doc(description: "Whether a product or category attribute is used in product listing or not.")
+}
+
+enum CatalogAttributeApplyToEnum {
+    SIMPLE
+    VIRTUAL
+    BUNDLE
+    DOWNLOADABLE
+    CONFIGURABLE
+    GROUPED
+    CATEGORY
+}
+
+type ProductCustomAttributes @doc(description: "Product custom attributes") {
+    items: [AttributeValueInterface!]! @doc(description: "Requested custom attributes")
+    errors: [AttributeMetadataError!]! @doc(description: "Errors when retrieving custom attributes metadata.")
 }

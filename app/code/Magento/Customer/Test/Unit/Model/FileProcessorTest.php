@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -22,6 +22,7 @@ use Magento\Framework\Url\EncoderInterface;
 use Magento\Framework\UrlInterface;
 use Magento\MediaStorage\Model\File\Uploader;
 use Magento\MediaStorage\Model\File\UploaderFactory;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -65,12 +66,9 @@ class FileProcessorTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->mediaDirectory = $this->getMockBuilder(WriteInterface::class)
-            ->getMockForAbstractClass();
+        $this->mediaDirectory = $this->createMock(WriteInterface::class);
 
-        $this->filesystem = $this->getMockBuilder(Filesystem::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->filesystem = $this->createMock(Filesystem::class);
         $this->filesystem->expects($this->any())
             ->method('getDirectoryWrite')
             ->with(DirectoryList::MEDIA)
@@ -81,15 +79,11 @@ class FileProcessorTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->urlBuilder = $this->getMockBuilder(UrlInterface::class)
-            ->getMockForAbstractClass();
+        $this->urlBuilder = $this->createMock(UrlInterface::class);
 
-        $this->urlEncoder = $this->getMockBuilder(EncoderInterface::class)
-            ->getMockForAbstractClass();
+        $this->urlEncoder = $this->createMock(EncoderInterface::class);
 
-        $this->mime = $this->getMockBuilder(Mime::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->mime = $this->createMock(Mime::class);
     }
 
     /**
@@ -103,8 +97,8 @@ class FileProcessorTest extends TestCase
     private function getModel(
         $entityTypeCode,
         array $allowedExtensions = [],
-        string $customerFileUrlPath = null,
-        string $customerAddressFileUrlPath = null
+        ?string $customerFileUrlPath = null,
+        ?string $customerAddressFileUrlPath = null
     ): FileProcessor {
         $model = new FileProcessor(
             $this->filesystem,
@@ -161,9 +155,8 @@ class FileProcessorTest extends TestCase
      * @param string $filePath
      * @param string $expectedUrl
      *
-     * @return void
-     * @dataProvider getViewUrlDataProvider
-     */
+     * @return void */
+    #[DataProvider('getViewUrlDataProvider')]
     public function testGetViewUrlTest(
         array $params,
         string $filePath,
@@ -197,7 +190,7 @@ class FileProcessorTest extends TestCase
     /**
      * @return array
      */
-    public function getViewUrlDataProvider(): array
+    public static function getViewUrlDataProvider(): array
     {
         return [
             [
@@ -277,9 +270,7 @@ class FileProcessorTest extends TestCase
             'path' => 'filepath'
         ];
 
-        $uploaderMock = $this->getMockBuilder(Uploader::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $uploaderMock = $this->createMock(Uploader::class);
         $uploaderMock->expects($this->once())
             ->method('setFilesDispersion')
             ->with(false)
@@ -334,9 +325,7 @@ class FileProcessorTest extends TestCase
 
         $absolutePath = '/absolute/filepath';
 
-        $uploaderMock = $this->getMockBuilder(Uploader::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $uploaderMock = $this->createMock(Uploader::class);
         $uploaderMock->expects($this->once())
             ->method('setFilesDispersion')
             ->with(false)
@@ -434,7 +423,7 @@ class FileProcessorTest extends TestCase
         $path = CustomerMetadataInterface::ENTITY_TYPE_CUSTOMER . '/' . FileProcessor::TMP_DIR . $filePath;
         $newPath = $destinationPath . $filePath;
 
-        $objectManagerMock = $this->getMockForAbstractClass(ObjectManagerInterface::class);
+        $objectManagerMock = $this->createMock(ObjectManagerInterface::class);
         $mockFileSystem = $this->createMock(Filesystem::class);
         $mockRead = $this->createMock(ReadInterface::class);
         $objectManagerMock->method('get')->willReturn($mockFileSystem);
@@ -472,12 +461,20 @@ class FileProcessorTest extends TestCase
 
         $path = CustomerMetadataInterface::ENTITY_TYPE_CUSTOMER . '/' . FileProcessor::TMP_DIR . $filePath;
 
-        $objectManagerMock = $this->getMockForAbstractClass(ObjectManagerInterface::class);
+        $objectManagerMock = $this->createMock(ObjectManagerInterface::class);
         $mockFileSystem = $this->createMock(Filesystem::class);
         $mockRead = $this->createMock(ReadInterface::class);
         $objectManagerMock->method('get')->willReturn($mockFileSystem);
         $mockFileSystem->method('getDirectoryRead')->willReturn($mockRead);
-        $mockRead->method('isExist')->willReturnOnConsecutiveCalls(true, true, false);
+        $callCount = 0;
+        $mockRead->method('isExist')
+            ->willReturnCallback(function () use (&$callCount) {
+                $callCount++;
+                if ($callCount === 1 || $callCount === 2) {
+                    return true;
+                }
+                return false;
+            });
         ObjectManager::setInstance($objectManagerMock);
 
         $this->mediaDirectory->expects($this->once())
@@ -494,7 +491,7 @@ class FileProcessorTest extends TestCase
      */
     public function testMoveTemporaryFileWithException(): void
     {
-        $objectManagerMock = $this->getMockForAbstractClass(ObjectManagerInterface::class);
+        $objectManagerMock = $this->createMock(ObjectManagerInterface::class);
         $mockFileSystem = $this->createMock(Filesystem::class);
         $mockRead = $this->createMock(ReadInterface::class);
         $objectManagerMock->method($this->logicalOr('get', 'create'))->willReturn($mockFileSystem);
@@ -568,8 +565,10 @@ class FileProcessorTest extends TestCase
     {
         $this->mediaDirectory
             ->method('isExist')
-            ->withConsecutive(['customer/tmp/filename.ext1'], ['customer/filename.ext1'])
-            ->willReturnOnConsecutiveCalls(true, false);
+            ->willReturnCallback(fn($param) => match ([$param]) {
+                ['customer/tmp/filename.ext1'] => true,
+                ['customer/filename.ext1'] => false
+            });
         $this->mediaDirectory->expects($this->once())
             ->method('create')
             ->with($destinationPath)

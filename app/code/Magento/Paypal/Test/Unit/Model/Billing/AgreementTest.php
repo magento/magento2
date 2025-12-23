@@ -1,12 +1,13 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Paypal\Test\Unit\Model\Billing;
 
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Payment\Helper\Data;
 use Magento\Payment\Model\Method\AbstractMethod;
@@ -18,6 +19,8 @@ use PHPUnit\Framework\TestCase;
 
 class AgreementTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var Agreement
      */
@@ -37,24 +40,21 @@ class AgreementTest extends TestCase
     {
         $objectManager = new ObjectManager($this);
 
-        $this->paymentDataMock = $this->getMockBuilder(Data::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['getMethodInstance'])
-            ->getMock();
+        $this->paymentDataMock = $this->createMock(Data::class);
 
-        $this->paymentMethodInstanceMock = $this->getMockBuilder(AbstractMethod::class)
-            ->disableOriginalConstructor()
-            ->setMethods([
+        $this->paymentMethodInstanceMock = $this->createPartialMockWithReflection(
+            AbstractMethod::class,
+            [
+                'initBillingAgreementToken',
+                'getBillingAgreementTokenInfo',
+                'placeBillingAgreement',
                 'setStore',
                 'getCode',
                 'getFormBlockType',
                 'getTitle',
-                'getStore',
-                'initBillingAgreementToken',
-                'getBillingAgreementTokenInfo',
-                'placeBillingAgreement'
-            ])
-            ->getMock();
+                'getStore'
+            ]
+        );
 
         $this->model = $objectManager->getObject(
             Agreement::class,
@@ -112,18 +112,15 @@ class AgreementTest extends TestCase
      */
     private function importOrderPaymentCommonPart($baData)
     {
-        $paymentMock = $this->getMockBuilder(Payment::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['getBillingAgreementData', 'getMethodInstance', 'getOrder'])
-            ->getMock();
+        $paymentMock = $this->createPartialMockWithReflection(
+            Payment::class,
+            ['getBillingAgreementData', 'getMethodInstance', 'getOrder']
+        );
 
         $storeId = null;
         $customerId = 2;
 
-        $order = $this->getMockBuilder(Order::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['getCustomerId'])
-            ->getMock();
+        $order = $this->createMock(Order::class);
 
         $order->expects($this->once())
             ->method('getCustomerId')

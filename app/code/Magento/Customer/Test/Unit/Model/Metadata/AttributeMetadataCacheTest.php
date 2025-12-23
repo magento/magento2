@@ -1,8 +1,8 @@
 <?php
 
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -19,6 +19,7 @@ use Magento\Framework\App\CacheInterface;
 use Magento\Framework\Serialize\SerializerInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Store\Api\Data\StoreInterface;
+use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -69,12 +70,12 @@ class AttributeMetadataCacheTest extends TestCase
     protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
-        $this->cacheMock = $this->getMockForAbstractClass(CacheInterface::class);
-        $this->stateMock = $this->getMockForAbstractClass(StateInterface::class);
-        $this->serializerMock = $this->getMockForAbstractClass(SerializerInterface::class);
+        $this->cacheMock = $this->createMock(CacheInterface::class);
+        $this->stateMock = $this->createMock(StateInterface::class);
+        $this->serializerMock = $this->createMock(SerializerInterface::class);
         $this->attributeMetadataHydratorMock = $this->createMock(AttributeMetadataHydrator::class);
-        $this->storeMock = $this->getMockForAbstractClass(StoreInterface::class);
-        $this->storeManagerMock = $this->getMockForAbstractClass(StoreManagerInterface::class);
+        $this->storeMock = $this->createMock(StoreInterface::class);
+        $this->storeManagerMock = $this->createMock(StoreManagerInterface::class);
         $this->storeManagerMock->method('getStore')->willReturn($this->storeMock);
         $this->storeMock->method('getId')->willReturn(1);
         $this->attributeMetadataCache = $objectManager->getObject(
@@ -155,7 +156,7 @@ class AttributeMetadataCacheTest extends TestCase
             ->with($serializedString)
             ->willReturn($attributesMetadataData);
         /** @var AttributeMetadataInterface|MockObject $attributeMetadataMock */
-        $attributeMetadataMock = $this->getMockForAbstractClass(AttributeMetadataInterface::class);
+        $attributeMetadataMock = $this->createMock(AttributeMetadataInterface::class);
         $this->attributeMetadataHydratorMock
             ->method('hydrate')
             ->with($attributeMetadataOneData)
@@ -205,7 +206,7 @@ class AttributeMetadataCacheTest extends TestCase
             ->willReturn(true);
 
         /** @var AttributeMetadataInterface|MockObject $attributeMetadataMock */
-        $attributeMetadataMock = $this->getMockForAbstractClass(AttributeMetadataInterface::class);
+        $attributeMetadataMock = $this->createMock(AttributeMetadataInterface::class);
         $attributesMetadata = [$attributeMetadataMock];
         $this->attributeMetadataHydratorMock->expects($this->once())
             ->method('extract')
@@ -223,7 +224,8 @@ class AttributeMetadataCacheTest extends TestCase
                 [
                     Type::CACHE_TAG,
                     Attribute::CACHE_TAG,
-                    System::CACHE_TAG
+                    System::CACHE_TAG,
+                    Store::CACHE_TAG
                 ]
             );
         $this->attributeMetadataCache->save($entityType, $attributesMetadata, $suffix);

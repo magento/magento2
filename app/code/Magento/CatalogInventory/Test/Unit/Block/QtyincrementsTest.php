@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -47,7 +47,8 @@ class QtyincrementsTest extends TestCase
         $objectManager = new ObjectManager($this);
         $this->registryMock = $this->createMock(Registry::class);
         $this->stockItem = $this->getMockBuilder(StockItemInterface::class)
-            ->setMethods(['getQtyIncrements', 'getStockItem'])
+            ->addMethods(['getStockItem'])
+            ->onlyMethods(['getQtyIncrements'])
             ->getMockForAbstractClass();
         $this->stockItem->expects($this->any())->method('getStockItem')->willReturn(1);
         $this->stockRegistry = $this->getMockForAbstractClass(
@@ -120,7 +121,7 @@ class QtyincrementsTest extends TestCase
     /**
      * @return array
      */
-    public function getProductQtyIncrementsDataProvider()
+    public static function getProductQtyIncrementsDataProvider()
     {
         return [
             [1, 100, true, 100],

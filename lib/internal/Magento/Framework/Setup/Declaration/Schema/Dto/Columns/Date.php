@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework\Setup\Declaration\Schema\Dto\Columns;
 
@@ -39,8 +39,8 @@ class Date extends Column implements
         string $type,
         Table $table,
         bool $nullable = true,
-        string $comment = null,
-        string $onCreate = null
+        ?string $comment = null,
+        ?string $onCreate = null
     ) {
         parent::__construct($name, $type, $table, $comment, $onCreate);
         $this->nullable = $nullable;

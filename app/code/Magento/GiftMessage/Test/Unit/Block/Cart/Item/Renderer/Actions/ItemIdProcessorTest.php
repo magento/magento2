@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -9,6 +9,7 @@ namespace Magento\GiftMessage\Test\Unit\Block\Cart\Item\Renderer\Actions;
 
 use Magento\GiftMessage\Block\Cart\Item\Renderer\Actions\ItemIdProcessor;
 use Magento\Quote\Model\Quote\Item;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -26,16 +27,14 @@ class ItemIdProcessorTest extends TestCase
      * @param int $itemId
      * @param array $jsLayout
      * @param array $result
-     * @dataProvider dataProviderProcess
      */
+    #[DataProvider('dataProviderProcess')]
     public function testProcess($itemId, array $jsLayout, array $result)
     {
         /**
          * @var Item|MockObject $itemMock
          */
-        $itemMock = $this->getMockBuilder(Item::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $itemMock = $this->createMock(Item::class);
         $itemMock->expects($this->any())
             ->method('getId')
             ->willReturn($itemId);
@@ -46,7 +45,7 @@ class ItemIdProcessorTest extends TestCase
     /**
      * @return array
      */
-    public function dataProviderProcess()
+    public static function dataProviderProcess()
     {
         return [
             [

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -58,7 +58,7 @@ class ImporterTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $this->themecollectionFactoryMock = $this->getMockBuilder(CollectionFactory::class)
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->themeRegistrationMock = $this->getMockBuilder(Registration::class)
@@ -188,7 +188,7 @@ class ImporterTest extends TestCase
     /**
      * @return array
      */
-    public function getWarningMessagesDataProvider()
+    public static function getWarningMessagesDataProvider()
     {
         return [
             [[], [], [], []],

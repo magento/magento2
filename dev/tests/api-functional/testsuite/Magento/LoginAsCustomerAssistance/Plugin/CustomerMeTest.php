@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -145,7 +145,7 @@ class CustomerMeTest extends WebapiAbstract
     /**
      * @return array
      */
-    public function assistanceStatesDataProvider(): array
+    public static function assistanceStatesDataProvider(): array
     {
         return [
             'Assistance Allowed' => [IsAssistanceEnabledInterface::ALLOWED, true],

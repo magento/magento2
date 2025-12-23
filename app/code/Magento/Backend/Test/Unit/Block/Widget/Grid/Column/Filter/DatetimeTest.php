@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -10,20 +10,27 @@ namespace Magento\Backend\Test\Unit\Block\Widget\Grid\Column\Filter;
 use Magento\Backend\Block\Context;
 use Magento\Backend\Block\Widget\Grid\Column;
 use Magento\Backend\Block\Widget\Grid\Column\Filter\Datetime;
+use Magento\Framework\App\Request\Http;
 use Magento\Framework\Escaper;
 use Magento\Framework\Locale\ResolverInterface;
 use Magento\Framework\Math\Random;
 use Magento\Framework\Stdlib\DateTime\DateTimeFormatterInterface;
 use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
+use Magento\Framework\View\Asset\Repository;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 /**
  * Class DateTimeTest to test Magento\Backend\Block\Widget\Grid\Column\Filter\Date
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class DatetimeTest extends TestCase
 {
+    use MockCreationTrait;
+
     /** @var Datetime */
     protected $model;
 
@@ -48,47 +55,63 @@ class DatetimeTest extends TestCase
     /** @var Context|MockObject */
     private $contextMock;
 
+    /**
+     * @var Http|MockObject
+     */
+    private $request;
+
+    /**
+     * @var Repository|MockObject
+     */
+    private $repositoryMock;
+
+    /**
+     * @var ObjectManager
+     */
+    private $objectManagerHelper;
+
     protected function setUp(): void
     {
-        $this->mathRandomMock = $this->getMockBuilder(Random::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['getUniqueHash'])
-            ->getMock();
+        $this->objectManagerHelper = new ObjectManager($this);
+        $this->mathRandomMock = $this->createPartialMock(
+            Random::class,
+            ['getUniqueHash']
+        );
 
-        $this->localeResolverMock = $this->getMockBuilder(ResolverInterface::class)
-            ->disableOriginalConstructor()
-            ->setMethods([])
-            ->getMockForAbstractClass();
+        $this->localeResolverMock = $this->createMock(ResolverInterface::class);
 
-        $this->dateTimeFormatterMock = $this
-            ->getMockBuilder(DateTimeFormatterInterface::class)
-            ->disableOriginalConstructor()
-            ->setMethods([])
-            ->getMockForAbstractClass();
+        $this->dateTimeFormatterMock = $this->createMock(DateTimeFormatterInterface::class);
 
-        $this->columnMock = $this->getMockBuilder(Column::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['getTimezone', 'getHtmlId', 'getId', 'getFilterTime'])
-            ->getMock();
+        $this->columnMock = $this->createPartialMockWithReflection(
+            Column::class,
+            ['getTimezone', 'getFilterTime', 'getHtmlId', 'getId']
+        );
 
-        $this->localeDateMock = $this->getMockBuilder(TimezoneInterface::class)
-            ->disableOriginalConstructor()
-            ->setMethods([])
-            ->getMockForAbstractClass();
+        $this->localeDateMock = $this->createMock(TimezoneInterface::class);
 
-        $this->escaperMock = $this->getMockBuilder(Escaper::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->escaperMock = $this->createMock(Escaper::class);
 
-        $this->contextMock = $this->getMockBuilder(Context::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->contextMock = $this->createMock(Context::class);
 
         $this->contextMock->expects($this->once())->method('getEscaper')->willReturn($this->escaperMock);
         $this->contextMock->expects($this->once())->method('getLocaleDate')->willReturn($this->localeDateMock);
 
-        $objectManagerHelper = new ObjectManager($this);
-        $this->model = $objectManagerHelper->getObject(
+        $this->request = $this->createMock(Http::class);
+
+        $this->contextMock->expects($this->once())
+            ->method('getRequest')
+            ->willReturn($this->request);
+
+        $this->repositoryMock = $this->createPartialMock(
+            Repository::class,
+            ['getUrlWithParams']
+        );
+
+        $this->contextMock->expects($this->once())
+            ->method('getAssetRepository')
+            ->willReturn($this->repositoryMock);
+
+        $this->model = $this->objectManagerHelper->getObject(
             Datetime::class,
             [
                 'mathRandom' => $this->mathRandomMock,
@@ -115,6 +138,14 @@ class DatetimeTest extends TestCase
             'from' => $yesterday->getTimestamp(),
             'to' => $tomorrow->getTimestamp()
         ];
+        $params = ['_secure' => false];
+        $fileId = 'Magento_Theme::calendar.png';
+        $fileUrl = 'file url';
+
+        $this->repositoryMock->expects($this->once())
+            ->method('getUrlWithParams')
+            ->with($fileId, $params)
+            ->willReturn($fileUrl);
 
         $this->mathRandomMock->expects($this->any())->method('getUniqueHash')->willReturn($uniqueHash);
         $this->columnMock->expects($this->once())->method('getHtmlId')->willReturn($id);

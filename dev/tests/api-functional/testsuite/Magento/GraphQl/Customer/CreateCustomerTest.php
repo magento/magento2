@@ -1,16 +1,21 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\GraphQl\Customer;
 
+use Exception;
 use Magento\Customer\Api\CustomerRepositoryInterface;
+use Magento\Customer\Test\Fixture\Customer;
 use Magento\Framework\Registry;
+use Magento\TestFramework\Fixture\Config;
+use Magento\TestFramework\Fixture\DataFixture;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
+use Magento\Framework\GraphQl\Query\Uid;
 
 /**
  * Test for create customer functionality
@@ -27,362 +32,356 @@ class CreateCustomerTest extends GraphQlAbstract
      */
     private $customerRepository;
 
+    /**
+     * @var Uid
+     */
+    private $idEncoder;
+
+    /**
+     * @var array
+     */
+    private $createdCustomerEmails = [];
+
     protected function setUp(): void
     {
-        parent::setUp();
-
+        $this->idEncoder = Bootstrap::getObjectManager()->get(Uid::class);
         $this->registry = Bootstrap::getObjectManager()->get(Registry::class);
         $this->customerRepository = Bootstrap::getObjectManager()->get(CustomerRepositoryInterface::class);
     }
 
     /**
-     * @throws \Exception
+     * Get create customer mutation with custom response fields
+     *
+     * @param array $input
+     * @param array $responseFields
+     * @return string
+     * @throws Exception
      */
-    public function testCreateCustomerAccountWithPassword()
+    private function getCreateCustomerMutation(array $input, array $responseFields): string
     {
-        $newFirstname = 'Richard';
-        $newLastname = 'Rowe';
-        $currentPassword = 'test123#';
-        $newEmail = 'new_customer@example.com';
+        $inputString = $this->getImplode($input);
+        $responseString = implode("\n            ", $responseFields);
 
-        $query = <<<QUERY
-mutation {
-    createCustomer(
-        input: {
-            firstname: "{$newFirstname}"
-            lastname: "{$newLastname}"
-            email: "{$newEmail}"
-            password: "{$currentPassword}"
-            is_subscribed: true
-        }
-    ) {
-        customer {
-            id
-            firstname
-            lastname
-            email
-            is_subscribed
-        }
-    }
-}
-QUERY;
-        $response = $this->graphQlMutation($query);
-
-        $this->assertNull($response['createCustomer']['customer']['id']);
-        $this->assertEquals($newFirstname, $response['createCustomer']['customer']['firstname']);
-        $this->assertEquals($newLastname, $response['createCustomer']['customer']['lastname']);
-        $this->assertEquals($newEmail, $response['createCustomer']['customer']['email']);
-        $this->assertTrue($response['createCustomer']['customer']['is_subscribed']);
+        return <<<MUTATION
+            mutation {
+                createCustomer(
+                    input: {
+            {$inputString}
+                    }
+                ) {
+                    customer {
+                        {$responseString}
+                    }
+                }
+            }
+        MUTATION;
     }
 
     /**
-     * @throws \Exception
+     * Create customer account with valid email addresses
+     *
+     * @dataProvider validEmailAddressDataProvider
+     * @param string $email
+     * @throws Exception
      */
-    public function testCreateCustomerAccountWithoutPassword()
+    public function testCreateCustomerAccountWithPassword(string $email): void
     {
-        $newFirstname = 'Richard';
-        $newLastname = 'Rowe';
-        $newEmail = 'new_customer@example.com';
+        $response = $this->graphQlMutation($this->getCreateCustomerMutation([
+            'firstname' => 'Richard',
+            'lastname' => 'Rowe',
+            'email' => $email,
+            'password' => 'test123#',
+            'is_subscribed' => true
+        ], ['id', 'firstname', 'lastname', 'email', 'is_subscribed']));
 
-        $query = <<<QUERY
-mutation {
-    createCustomer(
-        input: {
-            firstname: "{$newFirstname}"
-            lastname: "{$newLastname}"
-            email: "{$newEmail}"
-            is_subscribed: true
+        // Track email for cleanup if customer was created successfully
+        if (!empty($response['createCustomer']['customer']['email'])) {
+            $this->createdCustomerEmails[] = $email;
         }
-    ) {
-        customer {
-            id
-            firstname
-            lastname
-            email
-            is_subscribed
-        }
-    }
-}
-QUERY;
-        $response = $this->graphQlMutation($query);
 
-        $this->assertEquals($newFirstname, $response['createCustomer']['customer']['firstname']);
-        $this->assertEquals($newLastname, $response['createCustomer']['customer']['lastname']);
-        $this->assertEquals($newEmail, $response['createCustomer']['customer']['email']);
-        $this->assertTrue($response['createCustomer']['customer']['is_subscribed']);
+        $this->assertEquals(
+            [
+                'createCustomer' => [
+                    'customer' => [
+                        'id' => $this->idEncoder->encode((string) $this->customerRepository->get($email)->getId()),
+                        'firstname' => 'Richard',
+                        'lastname' => 'Rowe',
+                        'email' => $email,
+                        'is_subscribed' => true
+                    ]
+                ]
+            ],
+            $response
+        );
     }
 
     /**
+     * Data provider with valid email addresses
+     *
+     * @return array
      */
-    public function testCreateCustomerIfInputDataIsEmpty()
+    public static function validEmailAddressDataProvider(): array
     {
-        $this->expectException(\Exception::class);
+        return [
+            ['customer_' . uniqid() . '@example.com'],
+            ['jørgen_' . uniqid() . '@somedomain.com'],
+            ['email_' . uniqid() . '@example.com']
+        ];
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function testCreateCustomerAccountWithoutPassword(): void
+    {
+        $newEmail = 'customer_' . uniqid() . '@example.com';
+
+        $response = $this->graphQlMutation(
+            $this->getCreateCustomerMutation(
+                [
+                    'firstname' => 'Richard',
+                    'lastname' => 'Rowe',
+                    'email' => $newEmail,
+                    'is_subscribed' => true
+                ],
+                ['id', 'firstname', 'lastname', 'email', 'is_subscribed']
+            )
+        );
+
+        // Track email for cleanup if customer was created successfully
+        if (!empty($response['createCustomer']['customer']['email'])) {
+            $this->createdCustomerEmails[] = $newEmail;
+        }
+
+        $this->assertEquals(
+            [
+                'createCustomer' => [
+                    'customer' => [
+                        'id' => $this->idEncoder->encode((string) $this->customerRepository->get($newEmail)->getId()),
+                        'firstname' => 'Richard',
+                        'lastname' => 'Rowe',
+                        'email' => $newEmail,
+                        'is_subscribed' => true
+                    ]
+                ]
+            ],
+            $response
+        );
+    }
+
+    public function testCreateCustomerIfInputDataIsEmpty(): void
+    {
+        $this->expectException(Exception::class);
         $this->expectExceptionMessage('"input" value should be specified');
 
-        $query = <<<QUERY
-mutation {
-    createCustomer(
-        input: {
-
-        }
-    ) {
-        customer {
-            id
-            firstname
-            lastname
-            email
-            is_subscribed
-        }
-    }
-}
-QUERY;
-        $this->graphQlMutation($query);
+        $this->graphQlMutation(
+            $this->getCreateCustomerMutation(
+                [],
+                ['id', 'firstname', 'lastname', 'email', 'is_subscribed']
+            )
+        );
     }
 
-    /**
-     */
-    public function testCreateCustomerIfEmailMissed()
+    public function testCreateCustomerIfEmailMissed(): void
     {
-        $this->expectException(\Exception::class);
-        $this->expectExceptionMessage('Required parameters are missing: Email');
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('The email address is required to create a customer account.');
 
-        $newFirstname = 'Richard';
-        $newLastname = 'Rowe';
-        $currentPassword = 'test123#';
-
-        $query = <<<QUERY
-mutation {
-    createCustomer(
-        input: {
-            firstname: "{$newFirstname}"
-            lastname: "{$newLastname}"
-            password: "{$currentPassword}"
-            is_subscribed: true
-        }
-    ) {
-        customer {
-            id
-            firstname
-            lastname
-            email
-            is_subscribed
-        }
-    }
-}
-QUERY;
-        $this->graphQlMutation($query);
+        $this->graphQlMutation(
+            $this->getCreateCustomerMutation(
+                [
+                    'firstname' => 'Richard',
+                    'lastname' => 'Rowe',
+                    'password' => 'test123#',
+                    'is_subscribed' => true
+                ],
+                ['id', 'firstname', 'lastname', 'email', 'is_subscribed']
+            )
+        );
     }
 
     /**
      * @dataProvider invalidEmailAddressDataProvider
      *
      * @param string $email
-     * @throws \Exception
+     * @throws Exception
      */
-    public function testCreateCustomerIfEmailIsNotValid(string $email)
+    public function testCreateCustomerIfEmailIsNotValid(string $email): void
     {
-        $firstname = 'Richard';
-        $lastname = 'Rowe';
-        $password = 'test123#';
-
-        $query = <<<QUERY
-mutation {
-    createCustomer(
-        input: {
-            firstname: "{$firstname}"
-            lastname: "{$lastname}"
-            email: "{$email}"
-            password: "{$password}"
-            is_subscribed: true
-        }
-    ) {
-        customer {
-            id
-            firstname
-            lastname
-            email
-            is_subscribed
-        }
-    }
-}
-QUERY;
         $this->expectExceptionMessage('"' . $email . '" is not a valid email address.');
-        $this->graphQlMutation($query);
+        $this->graphQlMutation(
+            $this->getCreateCustomerMutation(
+                [
+                    'firstname' => 'Richard',
+                    'lastname' => 'Rowe',
+                    'email' => $email,
+                    'password' => 'test123#',
+                    'is_subscribed' => true
+                ],
+                ['id', 'firstname', 'lastname', 'email', 'is_subscribed']
+            )
+        );
     }
 
     /**
+     * Data provider with invalid email addresses
+     *
      * @return array
      */
-    public function invalidEmailAddressDataProvider(): array
+    public static function invalidEmailAddressDataProvider(): array
     {
         return [
             ['plainaddress'],
-            ['jØrgen@somedomain.com'],
             ['#@%^%#$@#$@#.com'],
             ['@example.com'],
             ['Joe Smith <email@example.com>'],
             ['email.example.com'],
             ['email@example@example.com'],
             ['email@example.com (Joe Smith)'],
-            ['email@example'],
-            ['“email”@example.com'],
+            ['email@example']
         ];
     }
 
-    /**
-     */
-    public function testCreateCustomerIfPassedAttributeDosNotExistsInCustomerInput()
+    public function testCreateCustomerIfPassedAttributeDosNotExistsInCustomerInput(): void
     {
-        $this->expectException(\Exception::class);
-        $this->expectExceptionMessage('Field "test123" is not defined by type CustomerInput.');
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('Field "test123" is not defined by type "CustomerInput".');
 
-        $newFirstname = 'Richard';
-        $newLastname = 'Rowe';
-        $currentPassword = 'test123#';
-        $newEmail = 'new_customer@example.com';
-
-        $query = <<<QUERY
-mutation {
-    createCustomer(
-        input: {
-            firstname: "{$newFirstname}"
-            lastname: "{$newLastname}"
-            test123: "123test123"
-            email: "{$newEmail}"
-            password: "{$currentPassword}"
-            is_subscribed: true
-        }
-    ) {
-        customer {
-            id
-            firstname
-            lastname
-            email
-            is_subscribed
-        }
-    }
-}
-QUERY;
-        $this->graphQlMutation($query);
+        $this->graphQlMutation(
+            $this->getCreateCustomerMutation(
+                [
+                    'firstname' => 'Richard',
+                    'lastname' => 'Rowe',
+                    'test123' => '123test123',
+                    'email' => 'customer_' . uniqid() . '@example.com',
+                    'password' => 'test123#',
+                    'is_subscribed' => true
+                ],
+                ['id', 'firstname', 'lastname', 'email', 'is_subscribed']
+            )
+        );
     }
 
-    /**
-     */
-    public function testCreateCustomerIfNameEmpty()
+    public function testCreateCustomerIfNameEmpty(): void
     {
-        $this->expectException(\Exception::class);
-        $this->expectExceptionMessage('Required parameters are missing: First Name');
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('"First Name" is a required value.');
 
-        $newEmail = 'customer_created' . rand(1, 2000000) . '@example.com';
-        $newFirstname = '';
-        $newLastname = 'Rowe';
-        $currentPassword = 'test123#';
-        $query = <<<QUERY
-mutation {
-    createCustomer(
-        input: {
-            email: "{$newEmail}"
-            firstname: "{$newFirstname}"
-            lastname: "{$newLastname}"
-            password: "{$currentPassword}"
-          	is_subscribed: true
-        }
-    ) {
-        customer {
-            id
-            firstname
-            lastname
-            email
-            is_subscribed
-        }
-    }
-}
-QUERY;
-        $this->graphQlMutation($query);
+        $this->graphQlMutation(
+            $this->getCreateCustomerMutation(
+                [
+                    'email' => 'customer_' . uniqid() . '@example.com',
+                    'firstname' => '',
+                    'lastname' => 'Rowe',
+                    'password' => 'test123#',
+                    'is_subscribed' => true
+                ],
+                ['id', 'firstname', 'lastname', 'email', 'is_subscribed']
+            )
+        );
     }
 
-    /**
-     * @magentoConfigFixture default_store newsletter/general/active 0
-     */
-    public function testCreateCustomerSubscribed()
+    #[Config('newsletter/general/active', false)]
+    public function testCreateCustomerSubscribed(): void
     {
-        $newFirstname = 'Richard';
-        $newLastname = 'Rowe';
-        $newEmail = 'new_customer@example.com';
+        $email = 'customer_' . uniqid() . '@example.com';
 
-        $query = <<<QUERY
-mutation {
-    createCustomer(
-        input: {
-            firstname: "{$newFirstname}"
-            lastname: "{$newLastname}"
-            email: "{$newEmail}"
-            is_subscribed: true
+        $response = $this->graphQlMutation(
+            $this->getCreateCustomerMutation(
+                [
+                    'firstname' => 'Richard',
+                    'lastname' => 'Rowe',
+                    'email' => $email,
+                    'is_subscribed' => true
+                ],
+                ['email', 'is_subscribed']
+            )
+        );
+
+        // Track email for cleanup if customer was created successfully
+        if (!empty($response['createCustomer']['customer']['email'])) {
+            $this->createdCustomerEmails[] = $email;
         }
-    ) {
-        customer {
-            email
-            is_subscribed
-        }
+
+        $expectedResponse = [
+            'createCustomer' => [
+                'customer' => [
+                    'email' => $email,
+                    'is_subscribed' => false
+                ]
+            ]
+        ];
+
+        $this->assertEquals($expectedResponse, $response);
     }
-}
-QUERY;
 
-        $response = $this->graphQlMutation($query);
-
-        $this->assertFalse($response['createCustomer']['customer']['is_subscribed']);
-    }
-
-    /**
-     * @magentoApiDataFixture Magento/Customer/_files/customer.php
-     */
-    public function testCreateCustomerIfCustomerWithProvidedEmailAlreadyExists()
+    #[DataFixture(Customer::class, ['email' => 'customer@example.com'], 'existing_customer')]
+    public function testCreateCustomerIfCustomerWithProvidedEmailAlreadyExists(): void
     {
-        $this->expectException(\Exception::class);
+        $this->expectException(Exception::class);
         $this->expectExceptionMessage(
             'A customer with the same email address already exists in an associated website.'
         );
 
-        $existedEmail = 'customer@example.com';
-        $password = 'test123#';
-        $firstname = 'John';
-        $lastname = 'Smith';
-
-        $query = <<<QUERY
-mutation {
-    createCustomer(
-        input: {
-            email: "{$existedEmail}"
-            password: "{$password}"
-            firstname: "{$firstname}"
-            lastname: "{$lastname}"
-        }
-    ) {
-        customer {
-            firstname
-            lastname
-            email
-        }
-    }
-}
-QUERY;
-        $this->graphQlMutation($query);
+        $this->graphQlMutation(
+            $this->getCreateCustomerMutation(
+                [
+                    'email' => 'customer@example.com',
+                    'password' => 'test123#',
+                    'firstname' => 'John',
+                    'lastname' => 'Smith'
+                ],
+                ['firstname', 'lastname', 'email']
+            )
+        );
     }
 
+    /**
+     * Clean up created customers
+     *
+     * @return void
+     */
     protected function tearDown(): void
     {
-        $newEmail = 'new_customer@example.com';
-        try {
-            $customer = $this->customerRepository->get($newEmail);
-        } catch (\Exception $exception) {
-            return;
+        // Clean up customers created via GraphQL mutations during tests
+        foreach ($this->createdCustomerEmails as $email) {
+            try {
+                $customer = $this->customerRepository->get($email);
+                $this->registry->unregister('isSecureArea');
+                $this->registry->register('isSecureArea', true);
+                $this->customerRepository->delete($customer);
+                $this->registry->unregister('isSecureArea');
+            } catch (Exception $exception) {
+                // Customer might not exist or already deleted, ignore
+            }
         }
 
-        $this->registry->unregister('isSecureArea');
-        $this->registry->register('isSecureArea', true);
-        $this->customerRepository->delete($customer);
-        $this->registry->unregister('isSecureArea');
-        $this->registry->register('isSecureArea', false);
         parent::tearDown();
+    }
+
+    /**
+     * Helper to format input array to GraphQL input string
+     *
+     * @param array $input
+     * @return string
+     */
+    private function getImplode(array $input): string
+    {
+        $inputFields = [];
+        foreach ($input as $key => $value) {
+            if ($value === null) {
+                continue;
+            }
+
+            if (is_bool($value)) {
+                $inputFields[] = "            {$key}: " . ($value ? 'true' : 'false');
+                continue;
+            }
+
+            $escapedValue = addslashes($value);
+            $inputFields[] = "            {$key}: \"{$escapedValue}\"";
+        }
+
+        return implode("\n", $inputFields);
     }
 }

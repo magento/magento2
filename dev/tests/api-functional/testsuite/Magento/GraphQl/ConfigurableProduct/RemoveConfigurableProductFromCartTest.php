@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -79,7 +79,7 @@ class RemoveConfigurableProductFromCartTest extends GraphQlAbstract
      *
      * @return array
      */
-    public function removeConfigurableProductFromCartDataProvider(): array
+    public static function removeConfigurableProductFromCartDataProvider(): array
     {
         return [
             ['cart_item_id', 'test_cart_with_configurable'],

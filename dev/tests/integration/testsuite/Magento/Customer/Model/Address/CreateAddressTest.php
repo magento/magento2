@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -165,7 +165,7 @@ class CreateAddressTest extends TestCase
      *
      * @return array
      */
-    public function createDefaultAddressesDataProvider(): array
+    public static function createDefaultAddressesDataProvider(): array
     {
         return [
             'any_addresses_are_default' => [self::STATIC_CUSTOMER_ADDRESS_DATA, false, false],
@@ -208,7 +208,7 @@ class CreateAddressTest extends TestCase
      *
      * @return array
      */
-    public function createAddressesDataProvider(): array
+    public static function createAddressesDataProvider(): array
     {
         return [
             'required_fields_valid_data' => [
@@ -298,7 +298,7 @@ class CreateAddressTest extends TestCase
      *
      * @return array
      */
-    public function createWrongAddressesDataProvider(): array
+    public static function createWrongAddressesDataProvider(): array
     {
         return [
             'required_field_empty_telephone' => [
@@ -504,7 +504,7 @@ class CreateAddressTest extends TestCase
                     $this->objectManager->get(PsrLogger::class)
                 ]
             )
-            ->setMethods(['checkVatNumber'])
+            ->onlyMethods(['checkVatNumber'])
             ->getMock();
         $customerVat->method('checkVatNumber')->willReturn($gatewayResponse);
         $this->objectManager->removeSharedInstance(Vat::class);

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -37,7 +37,7 @@ class DomTest extends TestCase
     /**
      * @return array
      */
-    public function convertWithValidDomDataProvider()
+    public static function convertWithValidDomDataProvider()
     {
         return [
             [
@@ -62,12 +62,12 @@ class DomTest extends TestCase
     /**
      * @return array
      */
-    public function convertWithInvalidDomDataProvider()
+    public static function convertWithInvalidDomDataProvider()
     {
         return [
-            [
-                'resource without "id" attribute' => '<?xml version="1.0"?><config><acl>' .
-                '<resources><resource/></resources></acl></config>',
+            'resource without "id" attribute' => [
+                'xml' => '<?xml version="1.0"?><config><acl>' .
+                    '<resources><resource/></resources></acl></config>'
             ]
         ];
     }

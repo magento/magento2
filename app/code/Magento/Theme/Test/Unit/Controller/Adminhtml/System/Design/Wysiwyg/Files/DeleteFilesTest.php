@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -122,8 +122,10 @@ class DeleteFilesTest extends TestCase
             ->willReturn(['files' => 'file']);
         $this->objectManager
             ->method('get')
-            ->withConsecutive([Data::class], [WisiwygStorage::class])
-            ->willReturnOnConsecutiveCalls($jsonData, $this->storage);
+            ->willReturnCallback(fn($param) => match ([$param]) {
+                [Data::class] => $jsonData,
+                [WisiwygStorage::class] => $this->storage
+            });
         $this->storage->expects($this->once())
             ->method('deleteFile')
             ->with('file');

@@ -2,8 +2,8 @@
 /**
  * Set of tests of layout directives handling behavior
  *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Framework\View;
@@ -288,7 +288,7 @@ class LayoutDirectivesTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function sortSpecialCasesDataProvider()
+    public static function sortSpecialCasesDataProvider()
     {
         return [
             'Before element which is after' => ['sort_before_after.xml', '312'],

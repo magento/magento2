@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -60,7 +60,7 @@ class WebsiteTest extends TestCase
         $this->locatorMock = $this->getMockBuilder(LocatorInterface::class)
             ->getMockForAbstractClass();
         $this->storeManagerMock = $this->getMockBuilder(StoreManagerInterface::class)
-            ->setMethods(['hasSingleStore'])
+            ->onlyMethods(['hasSingleStore'])
             ->getMockForAbstractClass();
         $this->directoryHelperMock = $this->getMockBuilder(DirectoryHelper::class)
             ->disableOriginalConstructor()

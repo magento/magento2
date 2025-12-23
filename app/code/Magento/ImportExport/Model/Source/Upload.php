@@ -1,12 +1,14 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\ImportExport\Model\Source;
 
+use Magento\Framework\File\HttpInterface as Http;
+use Laminas\Validator\File\Upload as FileUploadValidator;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Filesystem;
@@ -74,11 +76,13 @@ class Upload
      */
     public function uploadSource(string $entity)
     {
-        /** @var $adapter \Zend_File_Transfer_Adapter_Http */
+        /**
+         * @var $adapter Http
+         */
         $adapter = $this->httpFactory->create();
         if (!$adapter->isValid(Import::FIELD_NAME_SOURCE_FILE)) {
             $errors = $adapter->getErrors();
-            if ($errors[0] == \Zend_Validate_File_Upload::INI_SIZE) {
+            if ($errors[0] == FileUploadValidator::INI_SIZE) {
                 $errorMessage = $this->importExportData->getMaxUploadSizeMessage();
             } else {
                 $errorMessage = __('The file was not uploaded.');
@@ -86,7 +90,9 @@ class Upload
             throw new LocalizedException($errorMessage);
         }
 
-        /** @var $uploader Uploader */
+        /**
+         * @var $uploader Uploader
+         */
         $uploader = $this->uploaderFactory->create(['fileId' => Import::FIELD_NAME_SOURCE_FILE]);
         $uploader->setAllowedExtensions(['csv', 'zip']);
         $uploader->skipDbProcessing(true);

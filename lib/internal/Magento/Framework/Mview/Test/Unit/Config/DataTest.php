@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -108,13 +108,15 @@ class DataTest extends TestCase
         $this->reader->expects($this->once())->method('read')->willReturn($this->views);
 
         $stateExistent = $this->getMockBuilder(StateInterface::class)
-            ->setMethods(['getViewId', '__wakeup', 'delete'])
+            ->addMethods(['__wakeup'])
+            ->onlyMethods(['getViewId', 'delete'])
             ->getMockForAbstractClass();
         $stateExistent->expects($this->once())->method('getViewId')->willReturn('view1');
         $stateExistent->expects($this->never())->method('delete');
 
         $stateNonexistent = $this->getMockBuilder(StateInterface::class)
-            ->setMethods(['getViewId', '__wakeup', 'delete'])
+            ->addMethods(['__wakeup'])
+            ->onlyMethods(['getViewId', 'delete'])
             ->getMockForAbstractClass();
         $stateNonexistent->expects($this->once())->method('getViewId')->willReturn('view2');
         $stateNonexistent->expects($this->once())->method('delete');

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -32,7 +32,7 @@ class DirectoryListTest extends TestCase
     /**
      * @return array
      */
-    public function validateDataProvider()
+    public static function validateDataProvider()
     {
         return [
             ['', 'Unexpected value type.'],
@@ -74,7 +74,7 @@ class DirectoryListTest extends TestCase
     /**
      * @return array
      */
-    public function assertCodeDataProvider()
+    public static function assertCodeDataProvider()
     {
         return [['getPath', 'getUrlPath']];
     }
@@ -93,7 +93,7 @@ class DirectoryListTest extends TestCase
     /**
      * @return array
      */
-    public function getUrlPathDataProvider()
+    public static function getUrlPathDataProvider()
     {
         return [
             [[], false],
@@ -129,7 +129,7 @@ class DirectoryListTest extends TestCase
     /**
      * @return array
      */
-    public function assertUrlPathDataProvider()
+    public static function assertUrlPathDataProvider()
     {
         return [
             ['/'],

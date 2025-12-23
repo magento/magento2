@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\ImportExport\Model\Export\Entity;
 
@@ -286,7 +286,8 @@ abstract class AbstractEav extends \Magento\ImportExport\Model\Export\AbstractEn
 
             if ($this->isMultiselect($attributeCode)) {
                 $values = [];
-                $attributeValue = explode(Import::DEFAULT_GLOBAL_MULTI_VALUE_SEPARATOR, $attributeValue);
+                $attributeValue =
+                    $attributeValue ? explode(Import::DEFAULT_GLOBAL_MULTI_VALUE_SEPARATOR, $attributeValue) : [];
                 foreach ($attributeValue as $value) {
                     $values[] = $this->getAttributeValueById($attributeCode, $value);
                 }

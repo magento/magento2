@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -48,7 +48,7 @@ class PhpTest extends TestCase
     {
         $blockMock = $this->getMockBuilder(
             Template::class
-        )->setMethods(
+        )->addMethods(
             ['testMethod']
         )->disableOriginalConstructor()
             ->getMock();
@@ -75,7 +75,7 @@ class PhpTest extends TestCase
         $this->expectException('PHPUnit\Framework\Exception');
         $blockMock = $this->getMockBuilder(
             Template::class
-        )->setMethods(
+        )->onlyMethods(
             ['testMethod']
         )->disableOriginalConstructor()
             ->getMock();

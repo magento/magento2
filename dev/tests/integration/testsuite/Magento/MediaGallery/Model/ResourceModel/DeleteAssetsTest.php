@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -76,7 +76,7 @@ class DeleteAssetsTest extends TestCase
      *
      * @return array
      */
-    public function matchingPathsProvider(): array
+    public static function matchingPathsProvider(): array
     {
         return [
             [['testDirectory/path.jpg']],
@@ -90,7 +90,7 @@ class DeleteAssetsTest extends TestCase
      *
      * @return array
      */
-    public function notMatchingPathsProvider(): array
+    public static function notMatchingPathsProvider(): array
     {
         return [
             [['testDirectory/path.png']],

@@ -1,8 +1,7 @@
 <?php
 /**
- *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\UrlRewrite\Controller\Adminhtml\Url\Rewrite;
@@ -97,17 +96,51 @@ class Save extends \Magento\UrlRewrite\Controller\Adminhtml\Url\Rewrite implemen
             ];
             $rewrite = $this->urlFinder->findOneByData($data);
             if (!$rewrite) {
-                $message = $model->getEntityType() === self::ENTITY_TYPE_PRODUCT
-                    ? __("The selected product isn't associated with the selected store or category.")
-                    : __("The selected category isn't associated with the selected store.");
-                throw new LocalizedException($message);
+                $model->getEntityType() === self::ENTITY_TYPE_PRODUCT ? $this->checkProductCorrelation($model) :
+                    $this->checkCategoryCorrelation($model);
+            } else {
+                $targetPath = $rewrite->getRequestPath();
             }
-            $targetPath = $rewrite->getRequestPath();
         }
         return $targetPath;
     }
 
     /**
+     * Checks if rewrite details match category properties
+     *
+     * @param \Magento\UrlRewrite\Model\UrlRewrite $model
+     * @return void
+     * @throws LocalizedException
+     */
+    private function checkCategoryCorrelation(\Magento\UrlRewrite\Model\UrlRewrite $model): void
+    {
+        if (false === in_array($model->getStoreId(), $this->_getCategory()->getStoreIds())) {
+            throw new LocalizedException(
+                __("The selected category isn't associated with the selected store.")
+            );
+        }
+    }
+
+    /**
+     * Checks if rewrite details match product properties
+     *
+     * @param \Magento\UrlRewrite\Model\UrlRewrite $model
+     * @return void
+     * @throws LocalizedException
+     */
+    private function checkProductCorrelation(\Magento\UrlRewrite\Model\UrlRewrite $model): void
+    {
+        if (false === ($this->_getProduct()->canBeShowInCategory($this->_getCategory()->getId())) &&
+            in_array($model->getStoreId(), $this->_getProduct()->getStoreIds())) {
+            throw new LocalizedException(
+                __("The selected product isn't associated with the selected store or category.")
+            );
+        }
+    }
+
+    /**
+     * Get rewrite canonical target path
+     *
      * @return string
      */
     protected function getCanonicalTargetPath()
@@ -142,6 +175,8 @@ class Save extends \Magento\UrlRewrite\Controller\Adminhtml\Url\Rewrite implemen
     }
 
     /**
+     * Process save URL rewrite request
+     *
      * @return void
      */
     public function execute()

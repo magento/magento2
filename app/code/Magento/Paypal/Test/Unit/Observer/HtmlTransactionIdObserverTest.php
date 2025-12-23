@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -9,6 +9,7 @@ namespace Magento\Paypal\Test\Unit\Observer;
 
 use Magento\Framework\DataObject;
 use Magento\Framework\Event\Observer;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Payment\Model\MethodInterface;
 use Magento\Paypal\Helper\Data;
@@ -21,6 +22,8 @@ use PHPUnit\Framework\TestCase;
 
 class HtmlTransactionIdObserverTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var HtmlTransactionIdObserver
      */
@@ -48,7 +51,7 @@ class HtmlTransactionIdObserverTest extends TestCase
         $this->_observer = new Observer();
         $this->_observer->setEvent($this->_event);
 
-        $this->paypalDataMock = $this->createPartialMock(Data::class, ['getHtmlTransactionId']);
+        $this->paypalDataMock = $this->createMock(Data::class);
         $objectManagerHelper = new ObjectManager($this);
         $this->_model = $objectManagerHelper->getObject(
             HtmlTransactionIdObserver::class,
@@ -60,25 +63,11 @@ class HtmlTransactionIdObserverTest extends TestCase
 
     public function testObserveHtmlTransactionId()
     {
-        $observerMock = $this->getMockBuilder(Observer::class)
-            ->setMethods(['getDataObject'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $transactionMock = $this->getMockBuilder(Transaction::class)
-            ->setMethods(['getOrder', 'getTxnId', 'setData'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $orderMock = $this->getMockBuilder(Order::class)
-            ->setMethods(['getPayment'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $paymentMock = $this->getMockBuilder(Payment::class)
-            ->setMethods(['getMethodInstance'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $methodInstanceMock = $this->getMockBuilder(MethodInterface::class)
-            ->setMethods(['getCode'])
-            ->getMockForAbstractClass();
+        $observerMock = $this->createPartialMockWithReflection(Observer::class, ['getDataObject']);
+        $transactionMock = $this->createMock(Transaction::class);
+        $orderMock = $this->createMock(Order::class);
+        $paymentMock = $this->createMock(Payment::class);
+        $methodInstanceMock = $this->createMock(MethodInterface::class);
 
         $observerMock->expects($this->once())
             ->method('getDataObject')

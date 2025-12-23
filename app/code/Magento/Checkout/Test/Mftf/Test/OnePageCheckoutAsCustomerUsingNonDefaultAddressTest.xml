@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
-  */
+/**
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
+ */
 -->
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -18,8 +18,10 @@
             <testCaseId value="MC-14739"/>
             <group value="checkout"/>
             <group value="mtf_migrated"/>
+            <group value="cloud"/>
         </annotations>
         <before>
+            <magentoCLI command="config:set checkout/options/enable_guest_checkout_login 1" stepKey="EnablingGuestCheckoutLogin"/>
             <!-- Create Simple Product -->
             <createData entity="SimpleProduct2" stepKey="createSimpleProduct">
                 <field key="price">560</field>
@@ -40,6 +42,7 @@
 
             <!-- Delete customer -->
             <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
+            <magentoCLI command="config:set checkout/options/enable_guest_checkout_login 0" stepKey="DisablingGuestCheckoutLogin"/>
         </after>
 
         <!-- Add Simple Product to cart -->
@@ -65,10 +68,14 @@
 
         <!-- Click next button to open payment section -->
         <actionGroup ref="StorefrontGuestCheckoutProceedToPaymentStepActionGroup" stepKey="clickNext"/>
+        <actionGroup ref="CheckoutSelectCheckMoneyOrderPaymentActionGroup" stepKey="selectPaymentMethod"/>
+        
         <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForShipmentPageLoad"/>
+        <waitForElementClickable selector="{{CheckoutPaymentSection.billingAddressNotSameCheckbox}}" stepKey="waitForElementSelectPaymentSolutionToBeClickable"/>
         <uncheckOption selector="{{CheckoutPaymentSection.billingAddressNotSameCheckbox}}" stepKey="selectPaymentSolution"/>
 
         <!-- Change the address -->
+        <waitForElementClickable selector="{{CheckoutPaymentSection.editAddress}}" stepKey="waitForEditAddressElementToBeClickable"/>
         <click selector="{{CheckoutPaymentSection.editAddress}}" stepKey="editAddress"/>
         <waitForElementVisible selector="{{CheckoutPaymentSection.addressDropdown}}" stepKey="waitForDropDownToBeVisible"/>
         <see selector="{{CheckoutPaymentSection.addressDropdownSelected}}" userInput="{{US_Address_NY.street[0]}}" stepKey="seeDefaultBillingAddressStreet"/>

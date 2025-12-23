@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Indexer\Console\Command;
 
@@ -34,7 +34,7 @@ class IndexerStatusCommand extends AbstractIndexerManageCommand
      * @param InputInterface $input
      * @param OutputInterface $output
      */
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $table = new Table($output);
         $table->setHeaders(['ID', 'Title', 'Status', 'Update On', 'Schedule Status', 'Schedule Updated']);
@@ -94,6 +94,9 @@ class IndexerStatusCommand extends AbstractIndexerManageCommand
                 break;
             case \Magento\Framework\Indexer\StateInterface::STATUS_WORKING:
                 $status = 'Processing';
+                break;
+            case \Magento\Framework\Indexer\StateInterface::STATUS_SUSPENDED:
+                $status = 'Suspended';
                 break;
         }
         return $status;

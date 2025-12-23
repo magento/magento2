@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -26,6 +26,7 @@ use Magento\Store\Model\StoreManagerInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -33,6 +34,8 @@ use Psr\Log\LoggerInterface;
  */
 class SaveTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var Save
      */
@@ -103,19 +106,17 @@ class SaveTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->addressRepositoryMock = $this->getMockForAbstractClass(AddressRepositoryInterface::class);
+        $this->addressRepositoryMock = $this->createMock(AddressRepositoryInterface::class);
         $this->formFactoryMock = $this->createMock(FormFactory::class);
-        $this->customerRepositoryMock = $this->getMockForAbstractClass(CustomerRepositoryInterface::class);
+        $this->customerRepositoryMock = $this->createMock(CustomerRepositoryInterface::class);
         $this->dataObjectHelperMock = $this->createMock(DataObjectHelper ::class);
         $this->addressDataFactoryMock = $this->createMock(AddressInterfaceFactory::class);
-        $this->loggerMock = $this->getMockForAbstractClass(LoggerInterface::class);
-        $this->requestMock = $this->getMockForAbstractClass(RequestInterface::class);
-        $this->address = $this->getMockBuilder(AddressInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->loggerMock = $this->createMock(LoggerInterface::class);
+        $this->requestMock = $this->createMock(RequestInterface::class);
+        $this->address = $this->createMock(AddressInterface::class);
         $this->resultJsonFactory = $this->getMockBuilder(JsonFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
         $this->json = $this->getMockBuilder(Json::class)
             ->disableOriginalConstructor()
@@ -183,12 +184,17 @@ class SaveTest extends TestCase
         ];
 
         $this->requestMock->method('getParam')
-            ->withConsecutive(['parent_id'], ['entity_id'])
-            ->willReturnOnConsecutiveCalls(22, 1);
+            ->willReturnCallback(
+                function ($arg) {
+                    if ($arg == 'parent_id') {
+                        return 22;
+                    } elseif ($arg == 'entity_id') {
+                        return 1;
+                    }
+                }
+            );
 
-        $customerMock = $this->getMockBuilder(CustomerInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $customerMock = $this->createMock(CustomerInterface::class);
 
         $this->customerRepositoryMock->expects($this->atLeastOnce())
             ->method('getById')
@@ -209,9 +215,7 @@ class SaveTest extends TestCase
             ->method('create')
             ->willReturn($customerAddressFormMock);
 
-        $addressMock = $this->getMockBuilder(AddressInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $addressMock = $this->createMock(AddressInterface::class);
 
         $this->addressDataFactoryMock->expects($this->once())->method('create')->willReturn($addressMock);
 
@@ -242,10 +246,10 @@ class SaveTest extends TestCase
                 ]
             )->willReturnSelf();
 
-        $customerModel = $this->getMockBuilder(Customer::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['getStoreId'])
-            ->getMock();
+        $customerModel = $this->createPartialMockWithReflection(
+            Customer::class,
+            ['getStoreId']
+        );
         $customerModel->method('getStoreId')
             ->willReturn(2);
         $this->customerRegistry->expects($this->once())

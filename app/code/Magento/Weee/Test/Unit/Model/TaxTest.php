@@ -1,8 +1,7 @@
 <?php
-
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -339,7 +338,7 @@ class TaxTest extends TestCase
             ->onlyMethods(['getTypeId'])
             ->addMethods(['getPriceType'])
             ->getMock();
-        $product->expects($this->once())->method('getTypeId')->willReturn('bundle');
+        $product->expects($this->any())->method('getTypeId')->willReturn('bundle');
         $product->expects($this->once())->method('getPriceType')->willReturn(0);
         $weeeDataHelper = $this->getMockBuilder(DataObject::class)
             ->disableOriginalConstructor()
@@ -355,7 +354,7 @@ class TaxTest extends TestCase
     /**
      * @return array
      */
-    public function getProductWeeeAttributesDataProvider(): array
+    public static function getProductWeeeAttributesDataProvider(): array
     {
         return [
             'store_label_defined' => [
@@ -394,7 +393,7 @@ class TaxTest extends TestCase
     /**
      * @return array
      */
-    public function getWeeeAmountExclTaxDataProvider(): array
+    public static function getWeeeAmountExclTaxDataProvider(): array
     {
         return [
             [

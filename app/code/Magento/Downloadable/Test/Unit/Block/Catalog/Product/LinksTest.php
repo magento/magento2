@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -19,6 +19,7 @@ use Magento\Framework\Pricing\Amount\AmountInterface;
 use Magento\Framework\Pricing\PriceInfo\Base;
 use Magento\Framework\Pricing\Render;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Catalog\Test\Unit\Helper\ProductTypeSimpleTestHelper;
 use Magento\Framework\View\Layout;
 use Magento\Framework\View\LayoutInterface;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -66,10 +67,8 @@ class LinksTest extends TestCase
             ->willReturn($this->layout);
         $this->priceInfoMock = $this->createMock(Base::class);
         $this->productMock = $this->createMock(Product::class);
-        $this->productMock->expects($this->any())
-            ->method('getPriceInfo')
-            ->willReturn($this->priceInfoMock);
-        $this->jsonEncoder = $this->getMockForAbstractClass(EncoderInterface::class);
+        $this->productMock->method('getPriceInfo')->willReturn($this->priceInfoMock);
+        $this->jsonEncoder = $this->createMock(EncoderInterface::class);
 
         $this->linksBlock = $objectManager->getObject(
             Links::class,
@@ -92,9 +91,7 @@ class LinksTest extends TestCase
         $priceCode = 'link_price';
         $arguments = [];
         $expectedHtml = 'some html';
-        $this->productMock->expects($this->any())
-            ->method('getPriceInfo')
-            ->willReturn($this->priceInfoMock);
+        $this->productMock->method('getPriceInfo')->willReturn($this->priceInfoMock);
         $this->priceInfoMock->expects($this->any())
             ->method('getPrice')
             ->with($priceCode)
@@ -135,7 +132,7 @@ class LinksTest extends TestCase
             ],
         ];
 
-        $linkAmountMock = $this->getMockForAbstractClass(AmountInterface::class);
+        $linkAmountMock = $this->createMock(AmountInterface::class);
         $linkAmountMock->expects($this->once())
             ->method('getValue')
             ->willReturn($linkPrice);
@@ -143,13 +140,9 @@ class LinksTest extends TestCase
             ->method('getBaseAmount')
             ->willReturn($linkPrice);
 
-        $typeInstanceMock = $this->getMockBuilder(Simple::class)
-            ->addMethods(['getLinks'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $typeInstanceMock->expects($this->once())
-            ->method('getLinks')
-            ->willReturn([$this->getLinkMock($linkPrice, $linkId)]);
+        $linkMock = $this->getLinkMock($linkPrice, $linkId);
+        $typeInstanceMock = new ProductTypeSimpleTestHelper();
+        $typeInstanceMock->setLinks([$linkMock]);
         $this->productMock->expects($this->once())
             ->method('getTypeInstance')
             ->willReturn($typeInstanceMock);
@@ -185,12 +178,8 @@ class LinksTest extends TestCase
         $linkMock = $this->createPartialMock(Link::class, ['getPrice',
             'getId',
             '__wakeup']);
-        $linkMock->expects($this->any())
-            ->method('getPrice')
-            ->willReturn($linkPrice);
-        $linkMock->expects($this->any())
-            ->method('getId')
-            ->willReturn($linkId);
+        $linkMock->method('getPrice')->willReturn($linkPrice);
+        $linkMock->method('getId')->willReturn($linkId);
 
         return $linkMock;
     }

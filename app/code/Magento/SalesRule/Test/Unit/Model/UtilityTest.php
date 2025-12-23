@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -9,6 +9,7 @@ namespace Magento\SalesRule\Test\Unit\Model;
 
 use Magento\Framework\DataObject;
 use Magento\Framework\DataObjectFactory;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
 use Magento\Quote\Model\Quote;
 use Magento\Quote\Model\Quote\Address;
@@ -22,7 +23,9 @@ use Magento\SalesRule\Model\Rule\Action\Discount\Data;
 use Magento\SalesRule\Model\Rule\Customer;
 use Magento\SalesRule\Model\Rule\CustomerFactory;
 use Magento\SalesRule\Model\Utility;
+use Magento\SalesRule\Model\ValidateCoupon;
 use Magento\Store\Model\Store;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -31,6 +34,7 @@ use PHPUnit\Framework\TestCase;
  */
 class UtilityTest extends TestCase
 {
+    use MockCreationTrait;
     /**
      * @var UsageFactory|MockObject
      */
@@ -92,6 +96,11 @@ class UtilityTest extends TestCase
     protected $priceCurrency;
 
     /**
+     * @var ValidateCoupon|MockObject
+     */
+    protected $validateCoupon;
+
+    /**
      * @inheritDoc
      */
     protected function setUp(): void
@@ -121,48 +130,45 @@ class UtilityTest extends TestCase
             Customer::class,
             ['loadByCustomerRule']
         );
-        $this->rule = $this->getMockBuilder(Rule::class)
-            ->addMethods(['getDiscountQty'])
-            ->onlyMethods(
-                [
-                    'hasIsValidForAddress',
-                    'getIsValidForAddress',
-                    'setIsValidForAddress',
-                    'validate',
-                    'afterLoad'
-                ]
-            )
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->address = $this->getMockBuilder(Address::class)
-            ->addMethods(['setIsValidForAddress'])
-            ->onlyMethods(['isObjectNew', 'getQuote', 'validate', 'afterLoad'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->rule = $this->createPartialMockWithReflection(
+            Rule::class,
+            [
+                'getDiscountQty',
+                'hasIsValidForAddress',
+                'getIsValidForAddress',
+                'setIsValidForAddress',
+                'validate',
+                'afterLoad'
+            ]
+        );
+        $this->address = $this->createPartialMockWithReflection(
+            Address::class,
+            ['setIsValidForAddress', 'isObjectNew', 'getQuote', 'validate', 'afterLoad']
+        );
         $this->address->setQuote($this->quote);
-        $this->item = $this->getMockBuilder(AbstractItem::class)
-            ->addMethods(['getDiscountCalculationPrice', 'getBaseDiscountCalculationPrice'])
-            ->onlyMethods(
-                [
-                    'getCalculationPrice',
-                    'getBaseCalculationPrice',
-                    'getQuote',
-                    'getAddress',
-                    'getOptionByCode',
-                    'getTotalQty'
-                ]
-            )
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->item = $this->createPartialMockWithReflection(
+            AbstractItem::class,
+            [
+                'getDiscountCalculationPrice',
+                'getBaseDiscountCalculationPrice',
+                'getCalculationPrice',
+                'getBaseCalculationPrice',
+                'getQuote',
+                'getAddress',
+                'getOptionByCode',
+                'getTotalQty'
+            ]
+        );
 
-        $this->priceCurrency = $this->getMockBuilder(PriceCurrencyInterface::class)
-            ->getMock();
+        $this->priceCurrency = $this->createMock(PriceCurrencyInterface::class);
+        $this->validateCoupon = $this->createMock(ValidateCoupon::class);
         $this->utility = new Utility(
             $this->usageFactory,
             $this->couponFactory,
             $this->customerFactory,
             $this->objectFactory,
-            $this->priceCurrency
+            $this->priceCurrency,
+            $this->validateCoupon
         );
     }
 
@@ -195,10 +201,7 @@ class UtilityTest extends TestCase
     public function testCanProcessRuleCouponUsageLimitFail(): void
     {
         $couponCode = 111;
-        $couponId = 4;
         $quoteId = 4;
-        $usageLimit = 1;
-        $timesUsed = 2;
         $this->rule->setCouponType(Rule::COUPON_TYPE_SPECIFIC);
         $this->quote->setCouponCode($couponCode);
         $this->quote->setId($quoteId);
@@ -206,21 +209,9 @@ class UtilityTest extends TestCase
             ->method('getQuote')
             ->willReturn($this->quote);
 
-        $this->coupon->expects($this->atLeastOnce())
-            ->method('getUsageLimit')
-            ->willReturn($usageLimit);
-        $this->coupon->expects($this->once())
-            ->method('getTimesUsed')
-            ->willReturn($timesUsed);
-        $this->coupon->expects($this->once())
-            ->method('load')
-            ->with($couponCode, 'code')->willReturnSelf();
-        $this->couponFactory->expects($this->once())
-            ->method('create')
-            ->willReturn($this->coupon);
-        $this->coupon->expects($this->once())
-            ->method('getId')
-            ->willReturn($couponId);
+        $this->validateCoupon->method('execute')
+            ->willReturn(false);
+
         $this->assertFalse($this->utility->canProcessRule($this->rule, $this->address));
     }
 
@@ -232,11 +223,8 @@ class UtilityTest extends TestCase
     public function testCanProcessRuleCouponUsagePerCustomerFail(): void
     {
         $couponCode = 111;
-        $couponId = 4;
         $quoteId = 4;
         $customerId = 1;
-        $usageLimit = 1;
-        $timesUsed = 2;
 
         $this->rule->setCouponType(Rule::COUPON_TYPE_SPECIFIC);
         $this->quote->setCouponCode($couponCode);
@@ -246,28 +234,9 @@ class UtilityTest extends TestCase
             ->method('getQuote')
             ->willReturn($this->quote);
 
-        $this->coupon->expects($this->atLeastOnce())
-            ->method('getUsagePerCustomer')
-            ->willReturn($usageLimit);
-        $this->coupon->expects($this->once())
-            ->method('load')
-            ->with($couponCode, 'code')->willReturnSelf();
-        $this->coupon->expects($this->atLeastOnce())
-            ->method('getId')
-            ->willReturn($couponId);
-        $this->couponFactory->expects($this->once())
-            ->method('create')
-            ->willReturn($this->coupon);
+        $this->validateCoupon->method('execute')
+            ->willReturn(false);
 
-        $couponUsage = new DataObject();
-        $this->objectFactory->expects($this->once())
-            ->method('create')
-            ->willReturn($couponUsage);
-        $couponUsageModel = $this->createMock(Usage::class);
-        $couponUsage->setData(['coupon_id' => $couponId, 'times_used' => $timesUsed]);
-        $this->usageFactory->expects($this->once())
-            ->method('create')
-            ->willReturn($couponUsageModel);
         $this->assertFalse($this->utility->canProcessRule($this->rule, $this->address));
     }
 
@@ -294,6 +263,9 @@ class UtilityTest extends TestCase
             ->method('create')
             ->willReturn($this->customer);
 
+        $this->validateCoupon->method('execute')
+            ->willReturn(true);
+
         $this->assertFalse($this->utility->canProcessRule($this->rule, $this->address));
     }
 
@@ -304,7 +276,9 @@ class UtilityTest extends TestCase
      */
     public function testCanProcessRuleInvalidConditions(): void
     {
-        $this->rule->setCouponType(Rule::COUPON_TYPE_NO_COUPON);
+        $this->address->expects($this->atLeastOnce())
+            ->method('getQuote')
+            ->willReturn($this->quote);
         $this->assertFalse($this->utility->canProcessRule($this->rule, $this->address));
     }
 
@@ -318,6 +292,11 @@ class UtilityTest extends TestCase
         $this->rule->setCouponType(Rule::COUPON_TYPE_NO_COUPON);
         $this->rule->expects($this->once())
             ->method('validate')
+            ->willReturn(true);
+        $this->address->expects($this->atLeastOnce())
+            ->method('getQuote')
+            ->willReturn($this->quote);
+        $this->validateCoupon->method('execute')
             ->willReturn(true);
         $this->assertTrue($this->utility->canProcessRule($this->rule, $this->address));
     }
@@ -409,8 +388,8 @@ class UtilityTest extends TestCase
      * @param mixed $expected
      *
      * @return void
-     * @dataProvider mergeIdsDataProvider
      */
+    #[DataProvider('mergeIdsDataProvider')]
     public function testMergeIds($a1, $a2, bool $isSting, $expected): void
     {
         $this->assertEquals($expected, $this->utility->mergeIds($a1, $a2, $isSting));
@@ -419,7 +398,7 @@ class UtilityTest extends TestCase
     /**
      * @return array
      */
-    public function mergeIdsDataProvider(): array
+    public static function mergeIdsDataProvider(): array
     {
         return [
             ['id1,id2', '', true, 'id1,id2'],
@@ -445,6 +424,7 @@ class UtilityTest extends TestCase
         $this->getItemBasePrice();
         $this->item->setDiscountAmount($amount);
         $this->item->setBaseDiscountAmount($baseAmount);
+        $this->item->setQty($qty);
         $discountData = $this->createMock(Data::class);
         $discountData->expects($this->atLeastOnce())
             ->method('getAmount')
@@ -496,13 +476,13 @@ class UtilityTest extends TestCase
     }
 
     /**
-     * @dataProvider deltaRoundingFixDataProvider
      * @param $discountAmount
      * @param $baseDiscountAmount
      * @param $percent
      * @param $rowTotal
      * @return void
      */
+    #[DataProvider('deltaRoundingFixDataProvider')]
     public function testDeltaRoundignFix($discountAmount, $baseDiscountAmount, $percent, $rowTotal): void
     {
         $roundedDiscount = round($discountAmount, 2);
@@ -540,16 +520,24 @@ class UtilityTest extends TestCase
         $discountData->method('getAmount')
             ->willReturnOnConsecutiveCalls($discountAmount, $discountAmount);
         $discountData->method('setBaseAmount')
-            ->withConsecutive([$roundedBaseDiscount], [$secondRoundedBaseDiscount]);
+            ->willReturnCallback(function ($arg1) use ($roundedBaseDiscount, $secondRoundedBaseDiscount) {
+                if ($arg1 == $roundedBaseDiscount || $arg1 == $secondRoundedBaseDiscount) {
+                    return null;
+                }
+            });
         $discountData->method('setAmount')
-            ->withConsecutive([$roundedDiscount], [$secondRoundedDiscount]);
+            ->willReturnCallback(function ($arg1) use ($roundedDiscount, $secondRoundedDiscount) {
+                if ($arg1 == $roundedDiscount || $arg1 == $secondRoundedDiscount) {
+                    return null;
+                }
+            });
         $discountData->method('getBaseAmount')
             ->willReturnOnConsecutiveCalls($baseDiscountAmount, $baseDiscountAmount);
 
         $this->assertEquals($this->utility, $this->utility->deltaRoundingFix($discountData, $this->item));
     }
 
-    public function deltaRoundingFixDataProvider()
+    public static function deltaRoundingFixDataProvider()
     {
         return [
             ['discountAmount' => 10.003, 'baseDiscountAmount' => 12.465, 'percent' => 15, 'rowTotal' => 100],

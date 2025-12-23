@@ -1,12 +1,13 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\CatalogSearch\Test\Unit\Model\ResourceModel;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\Catalog\Model\ResourceModel\Eav\Attribute;
 use Magento\CatalogSearch\Model\ResourceModel\Advanced;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
@@ -30,14 +31,12 @@ class AdvancedTest extends TestCase
         $this->model = $helper->getObject(Advanced::class);
     }
 
-    /**
-     * @dataProvider prepareConditionDataProvider
-     */
+    #[DataProvider('prepareConditionDataProvider')]
     public function testPrepareCondition($backendType, $value, $expected)
     {
         /** @var Attribute|MockObject $attributeMock */
         $attributeMock = $this->getMockBuilder(Attribute::class)
-            ->setMethods(['getBackendType'])
+            ->onlyMethods(['getBackendType'])
             ->disableOriginalConstructor()
             ->getMock();
         $attributeMock->expects($this->once())
@@ -55,7 +54,7 @@ class AdvancedTest extends TestCase
      *
      * @return array
      */
-    public function prepareConditionDataProvider()
+    public static function prepareConditionDataProvider()
     {
         return [
             ['string', 'string', 'string'],

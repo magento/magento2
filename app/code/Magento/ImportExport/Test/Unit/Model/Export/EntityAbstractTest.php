@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -24,11 +24,16 @@ class EntityAbstractTest extends TestCase
     public function testGetFileNameAndSetFileName()
     {
         /** @var AbstractEntity $model */
-        $model = $this->getMockForAbstractClass(
+        $model = $this->createPartialMock(
             AbstractEntity::class,
-            [],
-            'Stub_UnitTest_Magento_ImportExport_Model_Export_Entity_TestSetAndGet',
-            false
+            [
+                'export',
+                'exportItem',
+                'getEntityTypeCode',
+                'getAttributeCollection',
+                '_getHeaderColumns',
+                '_getEntityCollection'
+            ]
         );
 
         $testFileName = 'test_file_name';

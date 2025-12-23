@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -57,7 +57,7 @@ class InterceptorTest extends TestCase
     {
         /** @var Interceptor|MockObject $interceptor */
         $interceptor = $this->getMockBuilder(Interceptor::class)
-            ->setMethods(['_validateData'])
+            ->onlyMethods(['_validateData'])
             ->setConstructorArgs([
                 $className,
                 $resultClassName,
@@ -86,7 +86,7 @@ class InterceptorTest extends TestCase
      *
      * @return array
      */
-    public function interceptorDataProvider()
+    public static function interceptorDataProvider()
     {
         return [
             [

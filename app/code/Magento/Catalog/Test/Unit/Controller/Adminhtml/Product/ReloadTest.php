@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -100,7 +100,7 @@ class ReloadTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $this->resultMock = $this->getMockBuilder(ResultInterface::class)
-            ->setMethods(['forward', 'setJsonData', 'getLayout'])
+            ->addMethods(['forward', 'setJsonData', 'getLayout'])
             ->getMockForAbstractClass();
         $this->productMock = $this->getMockBuilder(ProductInterface::class)
             ->getMockForAbstractClass();

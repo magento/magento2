@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Sales\Model\Order\Shipment;
 
@@ -27,7 +27,7 @@ interface NotifierInterface
     public function notify(
         \Magento\Sales\Api\Data\OrderInterface $order,
         \Magento\Sales\Api\Data\ShipmentInterface $shipment,
-        \Magento\Sales\Api\Data\ShipmentCommentCreationInterface $comment = null,
+        ?\Magento\Sales\Api\Data\ShipmentCommentCreationInterface $comment = null,
         $forceSyncMode = false
     );
 }

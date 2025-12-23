@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -10,6 +10,7 @@ namespace Magento\Payment\Test\Unit\Model\Checks;
 use Magento\Payment\Model\Checks\CanUseInternal;
 use Magento\Payment\Model\MethodInterface;
 use Magento\Quote\Model\Quote;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 class CanUseInternalTest extends TestCase
@@ -25,20 +26,13 @@ class CanUseInternalTest extends TestCase
     }
 
     /**
-     * @dataProvider paymentMethodDataProvider
      * @param bool $expectation
      */
+    #[DataProvider('paymentMethodDataProvider')]
     public function testIsApplicable($expectation)
     {
-        $quote = $this->getMockBuilder(Quote::class)
-            ->disableOriginalConstructor()
-            ->setMethods(
-                []
-            )->getMock();
-        $paymentMethod = $this->getMockBuilder(
-            MethodInterface::class
-        )->disableOriginalConstructor()
-            ->setMethods([])->getMock();
+        $quote = $this->createMock(Quote::class);
+        $paymentMethod = $this->createMock(MethodInterface::class);
         $paymentMethod->expects($this->once())->method('canUseInternal')->willReturn(
             $expectation
         );
@@ -48,7 +42,7 @@ class CanUseInternalTest extends TestCase
     /**
      * @return array
      */
-    public function paymentMethodDataProvider()
+    public static function paymentMethodDataProvider()
     {
         return [[true], [false]];
     }

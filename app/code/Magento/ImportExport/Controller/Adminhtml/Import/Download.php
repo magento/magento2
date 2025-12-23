@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -67,7 +67,7 @@ class Download extends ImportController implements HttpGetActionInterface
         RawFactory $resultRawFactory,
         ReadFactory $readFactory,
         ComponentRegistrar $componentRegistrar,
-        SampleFileProvider $sampleFileProvider = null
+        ?SampleFileProvider $sampleFileProvider = null
     ) {
         parent::__construct(
             $context
@@ -106,18 +106,13 @@ class Download extends ImportController implements HttpGetActionInterface
         $fileSize = $this->sampleFileProvider->getSize($entityName);
         $fileName = $entityName . '.csv';
 
-        $this->fileFactory->create(
+        return $this->fileFactory->create(
             $fileName,
-            null,
+            $fileContents,
             DirectoryList::VAR_IMPORT_EXPORT,
             'application/octet-stream',
             $fileSize
         );
-
-        $resultRaw = $this->resultRawFactory->create();
-        $resultRaw->setContents($fileContents);
-
-        return $resultRaw;
     }
 
     /**

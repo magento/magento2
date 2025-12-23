@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -18,9 +18,12 @@ use Magento\Framework\Filter\FilterManager;
 use Magento\Framework\Filter\Template;
 use Magento\Framework\Model\Context;
 use Magento\Framework\Registry;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\Url;
 use Magento\Framework\View\Asset\Repository;
 use Magento\Framework\View\DesignInterface;
+use Magento\MediaStorage\Helper\File\Storage\Database;
 use Magento\Newsletter\Model\Subscriber;
 use Magento\Newsletter\Model\Template as NewsletterTemplateModel;
 use Magento\Newsletter\Model\Template\Filter;
@@ -28,6 +31,7 @@ use Magento\Newsletter\Model\Template\FilterFactory;
 use Magento\Store\Model\App\Emulation;
 use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -38,6 +42,8 @@ use PHPUnit\Framework\TestCase;
  */
 class TemplateTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var Context|MockObject
      */
@@ -115,30 +121,28 @@ class TemplateTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->contextMock = $this->getMockBuilder(Context::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $objectManager = new ObjectManager($this);
+        $objects = [
+            [
+                Database::class,
+                $this->createMock(Database::class)
+            ]
+        ];
+        $objectManager->prepareObjectManager($objects);
+        $this->contextMock = $this->createMock(Context::class);
 
-        $this->designMock = $this->getMockBuilder(DesignInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->designMock = $this->createMock(DesignInterface::class);
 
-        $this->registryMock = $this->getMockBuilder(Registry::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->registryMock = $this->createMock(Registry::class);
 
-        $this->appEmulationMock = $this->getMockBuilder(Emulation::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->appEmulationMock = $this->createMock(Emulation::class);
 
-        $this->storeManagerMock = $this->getMockBuilder(StoreManagerInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->storeManagerMock = $this->createMock(StoreManagerInterface::class);
 
-        $this->storeMock = $this->getMockBuilder(Store::class)
-            ->setMethods(['getFrontendName', 'getId', 'getFormattedAddress'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->storeMock = $this->createPartialMock(
+            Store::class,
+            ['getFrontendName', 'getId', 'getFormattedAddress']
+        );
 
         $this->storeMock->expects($this->any())
             ->method('getFrontendName')
@@ -156,41 +160,23 @@ class TemplateTest extends TestCase
             ->method('getStore')
             ->willReturn($this->storeMock);
 
-        $this->assetRepoMock = $this->getMockBuilder(Repository::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->assetRepoMock = $this->createMock(Repository::class);
 
-        $this->filesystemMock = $this->getMockBuilder(Filesystem::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->filesystemMock = $this->createMock(Filesystem::class);
 
-        $this->scopeConfigMock = $this->getMockBuilder(ScopeConfigInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->scopeConfigMock = $this->createMock(ScopeConfigInterface::class);
 
-        $this->emailConfigMock = $this->getMockBuilder(Config::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->emailConfigMock = $this->createMock(Config::class);
 
-        $this->templateFactoryMock = $this->getMockBuilder(TemplateFactory::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->templateFactoryMock = $this->createMock(TemplateFactory::class);
 
-        $this->filterManagerMock = $this->getMockBuilder(FilterManager::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->filterManagerMock = $this->createMock(FilterManager::class);
 
-        $this->urlModelMock = $this->getMockBuilder(Url::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->urlModelMock = $this->createMock(Url::class);
 
-        $this->requestMock = $this->getMockBuilder(RequestInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->requestMock = $this->createMock(RequestInterface::class);
 
-        $this->filterFactoryMock = $this->getMockBuilder(FilterFactory::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->filterFactoryMock = $this->createMock(FilterFactory::class);
     }
 
     /**
@@ -199,29 +185,39 @@ class TemplateTest extends TestCase
      * @param $mockedMethods array
      * @return NewsletterTemplateModel|MockObject
      */
-    protected function getModelMock(array $mockedMethods = [])
+    protected function getModelMock(array $mockedMethods = [], array $addMockedMethods = [])
     {
-        return $this->getMockBuilder(NewsletterTemplateModel::class)
-            ->setMethods(array_merge($mockedMethods, ['__wakeup', '__sleep', '_init']))
-            ->setConstructorArgs(
-                [
-                    $this->contextMock,
-                    $this->designMock,
-                    $this->registryMock,
-                    $this->appEmulationMock,
-                    $this->storeManagerMock,
-                    $this->assetRepoMock,
-                    $this->filesystemMock,
-                    $this->scopeConfigMock,
-                    $this->emailConfigMock,
-                    $this->templateFactoryMock,
-                    $this->filterManagerMock,
-                    $this->urlModelMock,
-                    $this->requestMock,
-                    $this->filterFactoryMock,
-                ]
-            )
-            ->getMock();
+        if (!empty($addMockedMethods) && !empty($mockedMethods)) {
+            $allMethods = array_merge($mockedMethods, ['__wakeup', '__sleep', '_init'], $addMockedMethods);
+        } elseif (!empty($addMockedMethods)) {
+            $allMethods = array_merge(['__wakeup', '__sleep', '_init'], $addMockedMethods);
+        } else {
+            $allMethods = array_merge($mockedMethods, ['__wakeup', '__sleep', '_init']);
+        }
+
+        $mock = $this->createPartialMockWithReflection(
+            NewsletterTemplateModel::class,
+            $allMethods
+        );
+
+        $mock->__construct(
+            $this->contextMock,
+            $this->designMock,
+            $this->registryMock,
+            $this->appEmulationMock,
+            $this->storeManagerMock,
+            $this->assetRepoMock,
+            $this->filesystemMock,
+            $this->scopeConfigMock,
+            $this->emailConfigMock,
+            $this->templateFactoryMock,
+            $this->filterManagerMock,
+            $this->urlModelMock,
+            $this->requestMock,
+            $this->filterFactoryMock
+        );
+
+        return $mock;
     }
 
     public function testGetProcessedTemplateSubject()
@@ -230,7 +226,9 @@ class TemplateTest extends TestCase
             [
                 'getTemplateFilter',
                 'getDesignConfig',
-                'applyDesignConfig',
+                'applyDesignConfig'
+            ],
+            [
                 'setVariables',
             ]
         );
@@ -270,27 +268,25 @@ class TemplateTest extends TestCase
      * @param $storeId int
      * @param $expectedVariables array
      * @param $expectedResult string
-     * @dataProvider getProcessedTemplateDataProvider
      */
+    #[DataProvider('getProcessedTemplateDataProvider')]
     public function testGetProcessedTemplate($variables, $templateType, $storeId, $expectedVariables, $expectedResult)
     {
         class_exists(Filter::class, true);
-        $filterTemplate = $this->getMockBuilder(Filter::class)
-            ->setMethods(
-                [
-                    'setUseSessionInUrl',
-                    'setPlainTemplateMode',
-                    'setIsChildTemplate',
-                    'setDesignParams',
-                    'setVariables',
-                    'setStoreId',
-                    'filter',
-                    'getStoreId',
-                    'getInlineCssFiles'
-                ]
-            )
-            ->disableOriginalConstructor()
-            ->getMock();
+        $filterTemplate = $this->createPartialMock(
+            Filter::class,
+            [
+                'setUseSessionInUrl',
+                'setPlainTemplateMode',
+                'setIsChildTemplate',
+                'setDesignParams',
+                'setVariables',
+                'setStoreId',
+                'filter',
+                'getStoreId',
+                'getInlineCssFiles'
+            ]
+        );
         $filterTemplate->expects($this->never())
             ->method('setUseSessionInUrl')
             ->with(false)->willReturnSelf();
@@ -309,10 +305,10 @@ class TemplateTest extends TestCase
 
         // The following block of code tests to ensure that the store id of the subscriber will be used, if the
         // 'subscriber' variable is set.
-        $subscriber = $this->getMockBuilder(Subscriber::class)
-            ->setMethods(['getStoreId'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $subscriber = $this->createPartialMockWithReflection(
+            Subscriber::class,
+            ['getStoreId']
+        );
         $subscriber->expects($this->once())
             ->method('getStoreId')
             ->willReturn('3');
@@ -364,7 +360,7 @@ class TemplateTest extends TestCase
     /**
      * @return array
      */
-    public function getProcessedTemplateDataProvider()
+    public static function getProcessedTemplateDataProvider()
     {
         return [
             'default' => [
@@ -410,11 +406,11 @@ class TemplateTest extends TestCase
      * @param $senderName string
      * @param $senderEmail string
      * @param $templateSubject string
-     * @dataProvider isValidForSendDataProvider
      */
+    #[DataProvider('isValidForSendDataProvider')]
     public function testIsValidForSend($senderName, $senderEmail, $templateSubject, $expectedValue)
     {
-        $model = $this->getModelMock(['getTemplateSenderName', 'getTemplateSenderEmail', 'getTemplateSubject']);
+        $model = $this->getModelMock([], ['getTemplateSenderName', 'getTemplateSenderEmail', 'getTemplateSubject']);
         $model->expects($this->any())
             ->method('getTemplateSenderName')
             ->willReturn($senderName);
@@ -430,7 +426,7 @@ class TemplateTest extends TestCase
     /**
      * @return array
      */
-    public function isValidForSendDataProvider()
+    public static function isValidForSendDataProvider()
     {
         return [
             'should be valid' => [

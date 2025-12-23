@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2021 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -59,7 +59,7 @@ class ProductImportImagesTest extends ProductTestBase
     /**
      * @return array[]
      */
-    public function importImagesDataProvider(): array
+    public static function importImagesDataProvider(): array
     {
         return [
             [

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Test;
 
@@ -60,7 +60,7 @@ class EntityTest extends \PHPUnit\Framework\TestCase
         new \Magento\TestFramework\Entity($this->_model, [], 'stdClass');
     }
 
-    public function crudDataProvider()
+    public static function crudDataProvider()
     {
         return [
             'successful CRUD' => ['saveModelSuccessfully'],
@@ -97,7 +97,7 @@ class EntityTest extends \PHPUnit\Framework\TestCase
         $this->_model->expects($this->any())->method('getIdFieldName')->willReturn('id');
 
         $test = $this->getMockBuilder(\Magento\TestFramework\Entity::class)
-            ->setMethods(['_getEmptyModel'])
+            ->onlyMethods(['_getEmptyModel'])
             ->setConstructorArgs([$this->_model, ['test' => 'test']])
             ->getMock();
 

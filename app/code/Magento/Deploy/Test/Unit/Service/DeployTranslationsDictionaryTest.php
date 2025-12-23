@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -66,7 +66,7 @@ class DeployTranslationsDictionaryTest extends TestCase
 
         $this->deployStaticFile = $this->getMockBuilder(DeployStaticFile::class)
             ->disableOriginalConstructor()
-            ->setMethods(['deployFile'])
+            ->onlyMethods(['deployFile'])
             ->getMock();
         $this->deployStaticFile->expects($this->exactly(1))->method('deployFile')
             ->willReturnCallback(
@@ -83,7 +83,7 @@ class DeployTranslationsDictionaryTest extends TestCase
 
         $this->state = $this->getMockBuilder(State::class)
             ->disableOriginalConstructor()
-            ->setMethods(['emulateAreaCode'])
+            ->onlyMethods(['emulateAreaCode'])
             ->getMock();
         $this->state->expects($this->exactly(1))->method('emulateAreaCode')
             ->willReturnCallback(

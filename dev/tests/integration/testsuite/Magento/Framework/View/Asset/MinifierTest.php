@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework\View\Asset;
 
@@ -142,7 +142,7 @@ class MinifierTest extends TestCase
         $request->setParam('resource', $requestedUri);
 
         $response = $this->getMockBuilder(FileInterface::class)
-            ->setMethods(['setFilePath'])
+            ->onlyMethods(['setFilePath'])
             ->getMockForAbstractClass();
         $response
             ->expects($this->any())

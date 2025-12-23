@@ -1,17 +1,21 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Quote\Test\Unit\Model\Quote\Item;
 
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\Quote\Model\Quote\Item;
 use Magento\Quote\Model\Quote\Item\Option;
+use Magento\Quote\Test\Unit\Helper\OptionRelatedProductsTestHelper;
 use Magento\Quote\Model\Quote\Item\RelatedProducts;
 use PHPUnit\Framework\TestCase;
 
+#[CoversClass(\Magento\Quote\Model\Quote\Item\RelatedProducts::class)]
 class RelatedProductsTest extends TestCase
 {
     /**
@@ -34,18 +38,15 @@ class RelatedProductsTest extends TestCase
      * @param string $optionValue
      * @param int|bool $productId
      * @param array $expectedResult
-     *
-     * @covers \Magento\Quote\Model\Quote\Item\RelatedProducts::getRelatedProductIds
-     * @dataProvider getRelatedProductIdsDataProvider
      */
+    #[DataProvider('getRelatedProductIdsDataProvider')]
     public function testGetRelatedProductIds($optionValue, $productId, $expectedResult)
     {
         $quoteItemMock = $this->createMock(Item::class);
-        $itemOptionMock = $this->getMockBuilder(Option::class)
-            ->addMethods(['getProductId'])
-            ->onlyMethods(['getValue', '__wakeup'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $itemOptionMock = $this->createPartialMock(
+            OptionRelatedProductsTestHelper::class,
+            ['getValue', 'getProductId', '__wakeup']
+        );
 
         $quoteItemMock->expects(
             $this->once()
@@ -59,7 +60,7 @@ class RelatedProductsTest extends TestCase
 
         $itemOptionMock->expects($this->once())->method('getValue')->willReturn($optionValue);
 
-        $itemOptionMock->expects($this->any())->method('getProductId')->willReturn($productId);
+        $itemOptionMock->method('getProductId')->willReturn($productId);
 
         $this->assertEquals($expectedResult, $this->model->getRelatedProductIds([$quoteItemMock]));
     }
@@ -72,7 +73,7 @@ class RelatedProductsTest extends TestCase
     /**
      * @return array
      */
-    public function getRelatedProductIdsDataProvider()
+    public static function getRelatedProductIdsDataProvider()
     {
         return [
             ['optionValue' => 'type1', 'productId' => 123, 'expectedResult' => [123]],
@@ -82,9 +83,6 @@ class RelatedProductsTest extends TestCase
         ];
     }
 
-    /**
-     * @covers \Magento\Quote\Model\Quote\Item\RelatedProducts::getRelatedProductIds
-     */
     public function testGetRelatedProductIdsNoOptions()
     {
         $quoteItemMock = $this->createMock(Item::class);

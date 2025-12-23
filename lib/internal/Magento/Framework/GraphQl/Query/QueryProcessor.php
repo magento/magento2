@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -9,6 +9,8 @@ namespace Magento\Framework\GraphQl\Query;
 
 use GraphQL\Error\DebugFlag;
 use GraphQL\GraphQL;
+use GraphQL\Language\AST\DocumentNode;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\GraphQl\Exception\ExceptionFormatter;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Framework\GraphQl\Query\Resolver\ContextInterface;
@@ -16,6 +18,7 @@ use Magento\Framework\GraphQl\Schema;
 
 /**
  * Wrapper for GraphQl execution of a schema
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class QueryProcessor
 {
@@ -35,26 +38,42 @@ class QueryProcessor
     private $errorHandler;
 
     /**
+     * @var QueryDataFormatter
+     */
+    private QueryDataFormatter $formatter;
+
+    /**
+     * @var QueryParser
+     */
+    private $queryParser;
+
+    /**
      * @param ExceptionFormatter $exceptionFormatter
      * @param QueryComplexityLimiter $queryComplexityLimiter
      * @param ErrorHandlerInterface $errorHandler
+     * @param QueryDataFormatter $formatter
+     * @param QueryParser|null $queryParser
      * @SuppressWarnings(PHPMD.LongVariable)
      */
     public function __construct(
         ExceptionFormatter $exceptionFormatter,
         QueryComplexityLimiter $queryComplexityLimiter,
-        ErrorHandlerInterface $errorHandler
+        ErrorHandlerInterface $errorHandler,
+        QueryDataFormatter $formatter,
+        ?QueryParser $queryParser = null
     ) {
         $this->exceptionFormatter = $exceptionFormatter;
         $this->queryComplexityLimiter = $queryComplexityLimiter;
         $this->errorHandler = $errorHandler;
+        $this->formatter = $formatter;
+        $this->queryParser = $queryParser ?: ObjectManager::getInstance()->get(QueryParser::class);
     }
 
     /**
      * Process a GraphQl query according to defined schema
      *
      * @param Schema $schema
-     * @param string $source
+     * @param DocumentNode|string $source
      * @param ContextInterface|null $contextValue
      * @param array|null $variableValues
      * @param string|null $operationName
@@ -63,18 +82,22 @@ class QueryProcessor
      */
     public function process(
         Schema $schema,
-        string $source,
-        ContextInterface $contextValue = null,
-        array $variableValues = null,
-        string $operationName = null
+        DocumentNode|string $source,
+        ?ContextInterface $contextValue = null,
+        ?array $variableValues = null,
+        ?string $operationName = null
     ): array {
+        if (is_string($source)) {
+            $source = $this->queryParser->parse($source);
+        }
         if (!$this->exceptionFormatter->shouldShowDetail()) {
+            $this->queryComplexityLimiter->validateAliasCount($source);
             $this->queryComplexityLimiter->validateFieldCount($source);
             $this->queryComplexityLimiter->execute();
         }
 
         $rootValue = null;
-        return GraphQL::executeQuery(
+        $executionResult = GraphQL::executeQuery(
             $schema,
             $source,
             $rootValue,
@@ -86,5 +109,7 @@ class QueryProcessor
         )->toArray(
             (int) ($this->exceptionFormatter->shouldShowDetail() ? DebugFlag::INCLUDE_DEBUG_MESSAGE : false)
         );
+
+        return $this->formatter->formatResponse($executionResult);
     }
 }

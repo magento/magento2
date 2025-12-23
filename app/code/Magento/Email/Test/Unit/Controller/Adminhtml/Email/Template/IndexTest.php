@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -165,8 +165,10 @@ class IndexTest extends TestCase
             ->with('Email Templates');
         $this->layoutMock
             ->method('getBlock')
-            ->withConsecutive(['menu'], ['breadcrumbs'])
-            ->willReturnOnConsecutiveCalls($this->menuBlockMock, $this->breadcrumbsBlockMock);
+            ->willReturnCallback(fn($param) => match ([$param]) {
+                ['menu'] => $this->menuBlockMock,
+                ['breadcrumbs'] => $this->breadcrumbsBlockMock
+            });
         $this->breadcrumbsBlockMock->expects($this->any())
             ->method('addLink')
             ->willReturnSelf();

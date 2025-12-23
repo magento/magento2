@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Test\Integrity;
 
@@ -58,6 +58,12 @@ class DependencyTest extends \PHPUnit\Framework\TestCase
      * The identifier of dependency for mapping.
      */
     public const MAP_TYPE_REDUNDANT = 'redundant';
+
+    /**
+     * Redundant dependencies error message
+     */
+    public const UNUSED_DEPENDENCY_ERROR_MSG =
+        'Some dependencies required by composer.json are not used in the module and must be removed:';
 
     /**
      * Count of directories in path
@@ -869,7 +875,7 @@ class DependencyTest extends \PHPUnit\Framework\TestCase
             }
         }
         if (!empty($output)) {
-            $this->fail("Redundant dependencies found!\r\n" . implode(' ', $output));
+            $this->fail(self::UNUSED_DEPENDENCY_ERROR_MSG . "\r\n" . implode(' ', $output));
         }
     }
 
@@ -961,7 +967,7 @@ class DependencyTest extends \PHPUnit\Framework\TestCase
                 $area = $matches['area'];
                 self::$_mapLayoutBlocks[$area] = self::$_mapLayoutBlocks[$area] ?? [];
             }
-            if (preg_match('/(?<namespace>[A-Z][a-z]+)[_\/\\\\](?<module>[A-Z][a-zA-Z]+)/', $file, $matches)) {
+            if (preg_match('/(?<namespace>[A-Z][A-Za-z]+)[_\/\\\\](?<module>[A-Z][a-zA-Z]+)/', $file, $matches)) {
                 $module = $matches['namespace'] . '\\' . $matches['module'];
                 $xml = simplexml_load_file($file);
                 foreach ((array)$xml->xpath('//container | //block') as $element) {

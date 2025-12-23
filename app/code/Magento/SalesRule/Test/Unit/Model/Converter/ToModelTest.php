@@ -1,23 +1,27 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\SalesRule\Test\Unit\Model\Converter;
 
 use Magento\Framework\Reflection\DataObjectProcessor;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\SalesRule\Model\Converter\ToModel;
 use Magento\SalesRule\Model\Data\Condition;
 use Magento\SalesRule\Model\Data\Rule;
+use Magento\SalesRule\Model\Rule as SalesRule;
 use Magento\SalesRule\Model\RuleFactory;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 class ToModelTest extends TestCase
 {
+    use MockCreationTrait;
     /**
      * @var RuleFactory|MockObject
      */
@@ -37,12 +41,12 @@ class ToModelTest extends TestCase
     {
         $this->ruleFactory = $this->getMockBuilder(RuleFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
 
         $this->dataObjectProcessor = $this->getMockBuilder(DataObjectProcessor::class)
             ->disableOriginalConstructor()
-            ->setMethods([])
+            ->onlyMethods(['buildOutputDataArray'])
             ->getMock();
 
         $helper = new ObjectManager($this);
@@ -55,6 +59,9 @@ class ToModelTest extends TestCase
         );
     }
 
+    /**
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     */
     public function testDataModelToArray()
     {
         $array = [
@@ -82,11 +89,19 @@ class ToModelTest extends TestCase
         /**
          * @var Condition $dataCondition
          */
-        $dataCondition = $this->getMockBuilder(Condition::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['create', 'load', 'getConditionType', 'getValue', 'getAttributeName', 'getOperator',
-                'getAggregatorType', 'getConditions'])
-            ->getMock();
+        $dataCondition = $this->createPartialMockWithReflection(
+            Condition::class,
+            [
+                'create',
+                'load',
+                'getConditionType',
+                'getValue',
+                'getAttributeName',
+                'getOperator',
+                'getAggregatorType',
+                'getConditions'
+            ]
+        );
 
         $dataCondition
             ->expects($this->atLeastOnce())
@@ -113,17 +128,33 @@ class ToModelTest extends TestCase
             ->method('getAggregatorType')
             ->willReturn('getAggregatorType');
 
-        $dataCondition1 = $this->getMockBuilder(Condition::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['create', 'load', 'getConditionType', 'getValue', 'getAttributeName', 'getOperator',
-                'getAggregatorType', 'getConditions'])
-            ->getMock();
+        $dataCondition1 = $this->createPartialMockWithReflection(
+            Condition::class,
+            [
+                'create',
+                'load',
+                'getConditionType',
+                'getValue',
+                'getAttributeName',
+                'getOperator',
+                'getAggregatorType',
+                'getConditions'
+            ]
+        );
 
-        $dataCondition2 = $this->getMockBuilder(Condition::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['create', 'load', 'getConditionType', 'getValue', 'getAttributeName', 'getOperator',
-                'getAggregatorType', 'getConditions'])
-            ->getMock();
+        $dataCondition2 = $this->createPartialMockWithReflection(
+            Condition::class,
+            [
+                'create',
+                'load',
+                'getConditionType',
+                'getValue',
+                'getAttributeName',
+                'getOperator',
+                'getAggregatorType',
+                'getConditions'
+            ]
+        );
 
         $dataCondition
             ->expects($this->atLeastOnce())
@@ -140,11 +171,18 @@ class ToModelTest extends TestCase
         /**
          * @var Rule $dataModel
          */
-        $dataModel = $this->getMockBuilder(Rule::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['create', 'load', 'getData', 'getRuleId', 'getCondition', 'getActionCondition',
-                'getStoreLabels'])
-            ->getMock();
+        $dataModel = $this->createPartialMockWithReflection(
+            Rule::class,
+            [
+                'create',
+                'load',
+                'getData',
+                'getRuleId',
+                'getCondition',
+                'getActionCondition',
+                'getStoreLabels'
+            ]
+        );
         $dataModel
             ->expects($this->atLeastOnce())
             ->method('getRuleId')
@@ -165,10 +203,10 @@ class ToModelTest extends TestCase
             ->method('getStoreLabels')
             ->willReturn([]);
 
-        $ruleModel = $this->getMockBuilder(\Magento\SalesRule\Model\Rule::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['create', 'load', 'getId', 'getData'])
-            ->getMock();
+        $ruleModel = $this->createPartialMockWithReflection(
+            SalesRule::class,
+            ['create', 'load', 'getId', 'getData']
+        );
 
         $ruleModel
             ->expects($this->atLeastOnce())
@@ -198,32 +236,28 @@ class ToModelTest extends TestCase
         $this->assertEquals($ruleModel, $result);
     }
 
-    /**
-     * @dataProvider expectedDatesProvider
-     */
+    #[DataProvider('expectedDatesProvider')]
     public function testFormattingDate($data)
     {
         /**
          * @var Rule|MockObject $dataModel
          */
-        $dataModel = $this->getMockBuilder(Rule::class)
-            ->disableOriginalConstructor()
-            ->setMethods(
-                [
-                    'create',
-                    'load',
-                    'getData',
-                    'getRuleId',
-                    'getCondition',
-                    'getActionCondition',
-                    'getStoreLabels',
-                    'getFromDate',
-                    'setFromDate',
-                    'getToDate',
-                    'setToDate',
-                ]
-            )
-            ->getMock();
+        $dataModel = $this->createPartialMockWithReflection(
+            Rule::class,
+            [
+                'create',
+                'load',
+                'getData',
+                'getRuleId',
+                'getCondition',
+                'getActionCondition',
+                'getStoreLabels',
+                'getFromDate',
+                'setFromDate',
+                'getToDate',
+                'setToDate',
+            ]
+        );
         $dataModel
             ->expects($this->atLeastOnce())
             ->method('getRuleId')
@@ -242,10 +276,10 @@ class ToModelTest extends TestCase
             ->expects($this->atLeastOnce())
             ->method('getStoreLabels')
             ->willReturn([]);
-        $ruleModel = $this->getMockBuilder(\Magento\SalesRule\Model\Rule::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['create', 'load', 'getId', 'getData'])
-            ->getMock();
+        $ruleModel = $this->createPartialMockWithReflection(
+            SalesRule::class,
+            ['create', 'load', 'getId', 'getData']
+        );
         $ruleModel
             ->expects($this->atLeastOnce())
             ->method('getData')
@@ -287,7 +321,7 @@ class ToModelTest extends TestCase
     /**
      * @return array
      */
-    public function expectedDatesProvider()
+    public static function expectedDatesProvider()
     {
         return [
             'mm/dd/yyyy to yyyy-mm-dd' => [

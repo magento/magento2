@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -68,7 +68,7 @@ class CreateShipmentForOrderTest extends AbstractShipmentControllerTest
      *
      * @return array
      */
-    public function dataForCreateShipmentDataProvider(): array
+    public static function dataForCreateShipmentDataProvider(): array
     {
         return [
             'create_full_shipment' => [

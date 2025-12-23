@@ -1,8 +1,7 @@
 <?php
 /**
- *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -54,9 +53,9 @@ class GuestCouponManagementTest extends TestCase
     protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
-        $this->couponManagementMock = $this->getMockForAbstractClass(CouponManagementInterface::class);
+        $this->couponManagementMock = $this->createMock(CouponManagementInterface::class);
 
-        $this->couponCode = 'test_coupon_code';
+        $this->couponCode = ' test_coupon_code';
         $this->maskedCartId = 'f216207248d65c789b17be8545e0aa73';
         $this->cartId = 123;
 
@@ -83,7 +82,10 @@ class GuestCouponManagementTest extends TestCase
 
     public function testSet()
     {
-        $this->couponManagementMock->expects($this->once())->method('set')->willReturn(true);
+        $this->couponManagementMock->expects($this->once())
+            ->method('set')
+            ->with($this->cartId, trim($this->couponCode))
+            ->willReturn(true);
         $this->assertTrue($this->model->set($this->maskedCartId, $this->couponCode));
     }
 

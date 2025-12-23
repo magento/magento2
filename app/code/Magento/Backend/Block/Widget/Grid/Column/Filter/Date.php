@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Backend\Block\Widget\Grid\Column\Filter;
@@ -109,25 +109,16 @@ class Date extends \Magento\Backend\Block\Widget\Grid\Column\Filter\AbstractFilt
             ' value="' .
             $this->localeResolver->getLocale() .
             '"/>';
-        $scriptString = '
-            require(["jquery", "mage/calendar"], function($){
-                $("#' .
-            $htmlId .
-            '_range").dateRange({
-                    dateFormat: "' .
-            $format .
-            '",
-                        buttonText: "' . $this->escapeHtml(__('Date selector')) .
-            '",
+        $scriptString = 'require(["jquery", "mage/calendar"], function($){
+                $("#' . $htmlId . '_range").dateRange({
+                    dateFormat: "' . $format . '",
+                    buttonText: "' . $this->escapeHtml(__('Date selector')) . '",
+                    buttonImage: "' . $this->getViewFileUrl('Magento_Theme::calendar.png') . '",
                     from: {
-                        id: "' .
-            $htmlId .
-            '_from"
+                        id: "' . $htmlId . '_from"
                     },
                     to: {
-                        id: "' .
-            $htmlId .
-            '_to"
+                        id: "' . $htmlId . '_to"
                     }
                 })
             });';

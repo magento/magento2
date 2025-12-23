@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -83,7 +83,7 @@ class EavVariationsFixtureTest extends TestCase
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $this->attributeFactoryMock = $this->getMockBuilder(AttributeFactory::class)
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -142,9 +142,9 @@ class EavVariationsFixtureTest extends TestCase
         $this->attributeSetMock->expects($this->once())->method('getDefaultGroupId')->willReturn(2);
 
         $attributeMock = $this->getMockBuilder(Attribute::class)
-            ->setMethods([
+            ->addMethods(['setAttributeGroupId'])
+            ->onlyMethods([
                 'setAttributeSetId',
-                'setAttributeGroupId',
                 'save',
             ])
             ->disableOriginalConstructor()

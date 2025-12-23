@@ -1,10 +1,11 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\CustomerImportExport\Model\ResourceModel\Import\Customer;
 
+use Magento\Customer\Model\Config\Share;
 use Magento\Customer\Model\ResourceModel\Customer\Collection as CustomerCollection;
 use Magento\Customer\Model\ResourceModel\Customer\CollectionFactory as CustomerCollectionFactory;
 use Magento\Framework\DataObject;
@@ -61,11 +62,18 @@ class Storage
     private $customerStoreIds = [];
 
     /**
+     * @var Share
+     */
+    private $configShare;
+
+    /**
      * @param CustomerCollectionFactory $collectionFactory
+     * @param Share $configShare
      * @param array $data
      */
     public function __construct(
         CustomerCollectionFactory $collectionFactory,
+        Share $configShare,
         array $data = []
     ) {
         $this->_customerCollection = isset(
@@ -73,6 +81,7 @@ class Storage
         ) ? $data['customer_collection'] : $collectionFactory->create();
         $this->_pageSize = isset($data['page_size']) ? (int) $data['page_size'] : 0;
         $this->customerCollectionFactory = $collectionFactory;
+        $this->configShare = $configShare;
     }
 
     /**
@@ -95,13 +104,76 @@ class Storage
         };
         $offset = 0;
         for ($chunk = $getChuck($offset); !empty($chunk); $offset += $pageSize, $chunk = $getChuck($offset)) {
-            $emails = array_column($chunk, 'email');
+            $customerWebsites = $this->buildCustomerWebsitesMap($chunk);
             $chunkSelect = clone $select;
-            $chunkSelect->where($customerTableId . '.email IN (?)', $emails);
+            $chunkSelect->where($customerTableId . '.email IN (?)', array_keys($customerWebsites));
             $customers = $collection->getConnection()->fetchAll($chunkSelect);
             foreach ($customers as $customer) {
-                $this->addCustomerByArray($customer);
+                $this->processCustomerData($customer, $customerWebsites);
             }
+        }
+    }
+
+    /**
+     * Build customer websites map from chunk of customer identifiers.
+     *
+     * @param array $chunk
+     * @return array
+     */
+    private function buildCustomerWebsitesMap(array $chunk): array
+    {
+        return array_reduce($chunk, function ($customerWebsiteByEmail, $customer) {
+            $email = isset($customer['email']) ? mb_strtolower(trim($customer['email'])) : '';
+            $customerWebsiteByEmail[$email][] = $customer['website_id'];
+            return $customerWebsiteByEmail;
+        }, []);
+    }
+
+    /**
+     * Process customer data from database and handle global scope logic.
+     *
+     * @param array $customer
+     * @param array $customerWebsites
+     * @return void
+     */
+    private function processCustomerData(array $customer, array $customerWebsites): void
+    {
+        $email = isset($customer['email']) ? mb_strtolower(trim($customer['email'])) : '';
+        $customer['email'] = $email;
+        $this->addCustomerByArray($customer);
+
+        if ($this->shouldProcessGlobalScope($email, $customer, $customerWebsites)) {
+            $this->processGlobalScopeCustomer($customer, $customerWebsites[$email]);
+        }
+    }
+
+    /**
+     * Check if customer should be processed for global scope.
+     *
+     * @param string $email
+     * @param array $customer
+     * @param array $customerWebsites
+     * @return bool
+     */
+    private function shouldProcessGlobalScope(string $email, array $customer, array $customerWebsites): bool
+    {
+        return $this->configShare->isGlobalScope()
+            && isset($customerWebsites[$email])
+            && !in_array((int) $customer['website_id'], $customerWebsites[$email], true);
+    }
+
+    /**
+     * Process customer for all websites in global scope.
+     *
+     * @param array $customer
+     * @param array $websiteIds
+     * @return void
+     */
+    private function processGlobalScopeCustomer(array $customer, array $websiteIds): void
+    {
+        foreach ($websiteIds as $websiteId) {
+            $customer['website_id'] = $websiteId;
+            $this->addCustomerByArray($customer);
         }
     }
 
@@ -130,7 +202,8 @@ class Storage
     /**
      * Add customer to array
      *
-     * @deprecated 100.3.0 @see addCustomerByArray
+     * @deprecated 100.3.0
+     * @see addCustomerByArray
      * @param DataObject $customer
      * @return $this
      */

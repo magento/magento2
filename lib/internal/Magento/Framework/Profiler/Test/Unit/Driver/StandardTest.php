@@ -2,8 +2,8 @@
 /**
  * Test class for \Magento\Framework\Profiler\Driver\Standard
  *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -134,11 +134,15 @@ class StandardTest extends TestCase
         $outputTwo = $this->getMockForAbstractClass(OutputInterface::class);
 
         $outputFactory->method('create')
-            ->withConsecutive(
-                [['baseDir' => '/custom/base/dir', 'type' => 'outputTypeOne']],
-                [['type' => 'specificOutputTypeTwo', 'baseDir' => '/base/dir']]
-            )
-            ->willReturnOnConsecutiveCalls($outputOne, $outputTwo);
+            ->willReturnCallback(
+                function ($arg1) use ($outputOne, $outputTwo) {
+                    if ($arg1['baseDir'] == '/custom/base/dir' && $arg1['type'] == 'outputTypeOne') {
+                        return $outputOne;
+                    } elseif ($arg1['type'] == 'specificOutputTypeTwo' && $arg1['baseDir'] == '/base/dir') {
+                        return $outputTwo;
+                    }
+                }
+            );
 
         $driver = new Standard($config);
         $this->assertAttributeCount(2, '_outputs', $driver);

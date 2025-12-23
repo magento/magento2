@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Sales\Model\ResourceModel;
 
@@ -54,7 +54,7 @@ class Grid extends AbstractGrid
     /**
      * Order grid rows batch size
      */
-    const BATCH_SIZE = 100;
+    public const BATCH_SIZE = 100;
 
     /**
      * @param Context $context
@@ -75,8 +75,8 @@ class Grid extends AbstractGrid
         array $joins = [],
         array $columns = [],
         $connectionName = null,
-        NotSyncedDataProviderInterface $notSyncedDataProvider = null,
-        LastUpdateTimeCache $lastUpdateTimeCache = null
+        ?NotSyncedDataProviderInterface $notSyncedDataProvider = null,
+        ?LastUpdateTimeCache $lastUpdateTimeCache = null
     ) {
         $this->mainTableName = $mainTableName;
         $this->gridTableName = $gridTableName;
@@ -130,24 +130,26 @@ class Grid extends AbstractGrid
     public function refreshBySchedule()
     {
         $lastUpdatedAt = null;
-        $notSyncedIds = $this->notSyncedDataProvider->getIds($this->mainTableName, $this->gridTableName);
-        foreach (array_chunk($notSyncedIds, self::BATCH_SIZE) as $bunch) {
-            $select = $this->getGridOriginSelect()->where($this->mainTableName . '.entity_id IN (?)', $bunch);
-            $fetchResult = $this->getConnection()->fetchAll($select);
-            $this->getConnection()->insertOnDuplicate(
-                $this->getTable($this->gridTableName),
-                $fetchResult,
-                array_keys($this->columns)
-            );
-
-            $timestamps = array_column($fetchResult, 'updated_at');
-            if ($timestamps) {
-                $lastUpdatedAt = max(max($timestamps), $lastUpdatedAt);
+        while (true) {
+            $notSyncedIds = $this->notSyncedDataProvider->getIds($this->mainTableName, $this->gridTableName);
+            if (empty($notSyncedIds)) {
+                break;
             }
-        }
+            foreach (array_chunk($notSyncedIds, self::BATCH_SIZE) as $bunch) {
+                $select = $this->getGridOriginSelect()->where($this->mainTableName . '.entity_id IN (?)', $bunch);
+                $fetchResult = $this->getConnection()->fetchAll($select);
+                $this->getConnection()->insertOnDuplicate(
+                    $this->getTable($this->gridTableName),
+                    $fetchResult,
+                    array_keys($this->columns)
+                );
 
-        if ($lastUpdatedAt) {
-            $this->lastUpdateTimeCache->save($this->gridTableName, $lastUpdatedAt);
+                $timestamps = array_column($fetchResult, 'updated_at');
+                if ($timestamps) {
+                    $lastUpdatedAt = max(max($timestamps), $lastUpdatedAt);
+                    $this->lastUpdateTimeCache->save($this->gridTableName, $lastUpdatedAt);
+                }
+            }
         }
     }
 

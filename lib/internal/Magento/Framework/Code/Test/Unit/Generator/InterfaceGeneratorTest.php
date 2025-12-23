@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework\Code\Test\Unit\Generator;
 
@@ -122,7 +122,7 @@ class InterfaceGeneratorTest extends TestCase
     /**
      * @return array
      */
-    public function generateDataProvider()
+    public static function generateDataProvider()
     {
         return [
             'Valid data' => [

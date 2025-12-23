@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -67,7 +67,7 @@ class CategoryFilter
      * @param StoreInterface $store
      * @param array $attributeNames
      * @param ContextInterface $context
-     * @return int[]
+     * @return array
      * @throws InputException
      */
     public function getResult(array $criteria, StoreInterface $store, array $attributeNames, ContextInterface $context)
@@ -84,6 +84,7 @@ class CategoryFilter
             ->columns(
                 'e.entity_id'
             );
+        $collection->setOrder('entity_id');
 
         $categoryIds = $collection->load()->getLoadedIds();
 

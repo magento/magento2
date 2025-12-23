@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2021 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 namespace Magento\Integration\Setup\Patch\Data;
@@ -120,7 +120,7 @@ class UpgradeConsumerSecret implements DataPatchInterface, PatchVersionInterface
      */
     public static function getVersion()
     {
-        return '2.0.0';
+        return '2.2.2';
     }
 
     /**

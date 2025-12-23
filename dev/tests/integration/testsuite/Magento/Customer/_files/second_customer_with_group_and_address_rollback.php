@@ -1,12 +1,14 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2021 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 use Magento\Customer\Api\AddressRepositoryInterface;
 use Magento\Customer\Api\CustomerRepositoryInterface;
+use Magento\Customer\Api\GroupRepositoryInterface;
+use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Registry;
 use Magento\TestFramework\Helper\Bootstrap;
@@ -31,6 +33,16 @@ try {
     // phpcs:ignore Magento2.CodeAnalysis.EmptyBlock
 } catch (NoSuchEntityException $exception) {
     //Already deleted
+}
+/** Remove customer group */
+/** @var GroupRepositoryInterface $groupRepository */
+$groupRepository = $objectManager->create(GroupRepositoryInterface::class);
+/** @var SearchCriteriaBuilder $searchBuilder */
+$searchBuilder = $objectManager->create(SearchCriteriaBuilder::class);
+foreach ($groupRepository->getList($searchBuilder->create())->getItems() as $group) {
+    if ('custom_group_2' === $group->getCode()) {
+        $groupRepository->delete($group);
+    }
 }
 $registry->unregister('isSecureArea');
 $registry->register('isSecureArea', false);

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -50,8 +50,6 @@ class OutOfStockProductsFilterTest extends AbstractFiltersTest
      */
     public function testGetFiltersWithOutOfStockProduct(int $showOutOfStock, array $expectation): void
     {
-        $this->markTestSkipped('Unskip after fixing ACP2E-748.');
-
         $this->updateConfigShowOutOfStockFlag($showOutOfStock);
         $this->getCategoryFiltersAndAssert(
             ['out-of-stock-product' => 'Option 1', 'in-stock-product' => 'Option 2'],
@@ -64,15 +62,15 @@ class OutOfStockProductsFilterTest extends AbstractFiltersTest
     /**
      * @return array
      */
-    public function getFiltersWithOutOfStockProduct(): array
+    public static function getFiltersWithOutOfStockProduct(): array
     {
         return [
             'show_out_of_stock' => [
-                'show_out_of_stock' => 1,
+                'showOutOfStock' => 1,
                 'expectation' => [['label' => 'Option 1', 'count' => 1], ['label' => 'Option 2', 'count' => 1]],
             ],
             'not_show_out_of_stock' => [
-                'show_out_of_stock' => 0,
+                'showOutOfStock' => 0,
                 'expectation' => [['label' => 'Option 2', 'count' => 1]],
             ],
         ];

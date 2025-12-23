@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -44,7 +44,7 @@ class CliProxy implements \Magento\Framework\ObjectManager\NoninterceptableInter
      * @return int|null
      * @throws \Exception
      */
-    public function doRun(InputInterface $input, OutputInterface $output)
+    public function doRun(InputInterface $input, OutputInterface $output): ?int
     {
         return $this->getSubject()->doRun($input, $output);
     }
@@ -58,7 +58,7 @@ class CliProxy implements \Magento\Framework\ObjectManager\NoninterceptableInter
      * @return int
      * @throws \Exception
      */
-    public function run(InputInterface $input = null, OutputInterface $output = null)
+    public function run(?InputInterface $input = null, ?OutputInterface $output = null)
     {
         return $this->getSubject()->run($input, $output);
     }

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -123,7 +123,7 @@ class ModuleEnableDisableCommandTest extends TestCase
     /**
      * @return array
      */
-    public function executeDataProvider()
+    public static function executeDataProvider()
     {
         return [
             'enable, do not clear static content' => [
@@ -222,7 +222,7 @@ class ModuleEnableDisableCommandTest extends TestCase
     /**
      * @return array
      */
-    public function executeAllDataProvider()
+    public static function executeAllDataProvider()
     {
         return [
             'enable'  => [true, '%amodules have been enabled%aMagento_Module1%a'],
@@ -257,7 +257,7 @@ class ModuleEnableDisableCommandTest extends TestCase
     /**
      * @return array
      */
-    public function executeWithConstraintsDataProvider()
+    public static function executeWithConstraintsDataProvider()
     {
         return [
             'enable'  => [true],
@@ -293,7 +293,7 @@ class ModuleEnableDisableCommandTest extends TestCase
     /**
      * @return array
      */
-    public function executeExecuteForceDataProvider()
+    public static function executeExecuteForceDataProvider()
     {
         return [
             'enable'  => [true, '%amodules have been enabled%aMagento_Module1%a'],

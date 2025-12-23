@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\ImportExport\Model;
 
@@ -142,7 +142,7 @@ class ImportTest extends \PHPUnit\Framework\TestCase
             [['sku', 'name']]
         );
         $source->expects($this->any())->method('_getNextRow')->willReturn(false);
-        $this->assertTrue($this->_model->validateSource($source));
+        $this->assertFalse($this->_model->validateSource($source));
     }
 
     /**

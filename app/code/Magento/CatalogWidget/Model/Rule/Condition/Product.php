@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 
 /**
@@ -12,6 +12,7 @@ namespace Magento\CatalogWidget\Model\Rule\Condition;
 use Magento\Catalog\Model\ProductCategoryList;
 use Magento\Catalog\Model\ResourceModel\Product\Collection;
 use Magento\Framework\DB\Select;
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 use Magento\Store\Model\Store;
 
 /**
@@ -19,7 +20,7 @@ use Magento\Store\Model\Store;
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class Product extends \Magento\Rule\Model\Condition\Product\AbstractProduct
+class Product extends \Magento\Rule\Model\Condition\Product\AbstractProduct implements ResetAfterRequestInterface
 {
     /**
      * @var string
@@ -61,7 +62,7 @@ class Product extends \Magento\Rule\Model\Condition\Product\AbstractProduct
         \Magento\Framework\Locale\FormatInterface $localeFormat,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         array $data = [],
-        ProductCategoryList $categoryList = null
+        ?ProductCategoryList $categoryList = null
     ) {
         $this->storeManager = $storeManager;
         parent::__construct(
@@ -177,7 +178,7 @@ class Product extends \Magento\Rule\Model\Condition\Product\AbstractProduct
                 $storeId = $connection->getIfNullSql($alias . '.store_id', $this->storeManager->getStore()->getId());
                 $linkField = $attribute->getEntity()->getLinkField();
 
-                $collection->getSelect()->join(
+                $collection->getSelect()->joinLeft(
                     [$alias => $collection->getTable($attribute->getBackendTable())],
                     "($alias.$linkField = e.$linkField) AND ($alias.store_id = $storeId)" .
                     " AND ($alias.attribute_id = {$attribute->getId()})",
@@ -320,5 +321,13 @@ class Product extends \Magento\Rule\Model\Condition\Product\AbstractProduct
                 $this->_productResource->getConnection()->quoteInto('?', $value, \Zend_Db::INT_TYPE)
             )
             : $value;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        $this->joinedAttributes = [];
     }
 }

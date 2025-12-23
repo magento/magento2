@@ -1,12 +1,13 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\ProductVideo\Model\Plugin\Catalog\Product\Gallery;
 
 use Magento\ProductVideo\Model\Product\Attribute\Media\ExternalVideoEntryConverter;
+use Magento\Store\Model\Store;
 
 /**
  * Plugin for catalog product gallery create/update handlers.
@@ -16,7 +17,7 @@ class CreateHandler extends AbstractHandler
     /**
      * Key to store additional data from other stores
      */
-    const ADDITIONAL_STORE_DATA_KEY = 'additional_store_data';
+    public const ADDITIONAL_STORE_DATA_KEY = 'additional_store_data';
 
     /**
      * Execute before Plugin
@@ -65,11 +66,15 @@ class CreateHandler extends AbstractHandler
             if ($product->getIsDuplicate() === true) {
                 $mediaCollection = $this->makeAllNewVideos($product->getId(), $mediaCollection);
             }
+            $storeId = (int)$product->getStoreId();
+            if ($storeId !== Store::DEFAULT_STORE_ID) {
+                $mediaCollection = $this->prepareUseDefault($mediaCollection);
+            }
             $newVideoCollection = $this->collectNewVideos($mediaCollection);
             $this->saveVideoData($newVideoCollection, 0);
 
             $videoDataCollection = $this->collectVideoData($mediaCollection);
-            $this->saveVideoData($videoDataCollection, $product->getStoreId());
+            $this->saveVideoData($videoDataCollection, $storeId);
             $this->saveAdditionalStoreData($videoDataCollection);
         }
 
@@ -200,6 +205,28 @@ class CreateHandler extends AbstractHandler
         }
 
         return $videoDataCollection;
+    }
+
+    /**
+     * Sets default values for fields marked to use default
+     *
+     * @param array $mediaCollection
+     * @return array
+     */
+    private function prepareUseDefault(array $mediaCollection): array
+    {
+        foreach ($mediaCollection as &$item) {
+            if ($this->isVideoItem($item)) {
+                foreach (['video_title', 'video_description'] as $field) {
+                    $useDefaultKey = $field . '_use_default';
+                    if (isset($item[$useDefaultKey]) && $item[$useDefaultKey]) {
+                        $item[$field] = null;
+                    }
+                }
+            }
+        }
+
+        return $mediaCollection;
     }
 
     /**

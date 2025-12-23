@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 
 declare(strict_types=1);
@@ -37,7 +37,7 @@ class SelectedShippingMethod implements ResolverInterface
     /**
      * @inheritdoc
      */
-    public function resolve(Field $field, $context, ResolveInfo $info, array $value = null, array $args = null)
+    public function resolve(Field $field, $context, ResolveInfo $info, ?array $value = null, ?array $args = null)
     {
         if (!isset($value['model'])) {
             throw new LocalizedException(__('"model" value should be specified'));
@@ -50,11 +50,12 @@ class SelectedShippingMethod implements ResolverInterface
             return null;
         }
 
-        list($carrierCode, $methodCode) = explode('_', $address->getShippingMethod(), 2);
-
         /** @var Rate $rate */
+        $carrierCode = $methodCode = null;
         foreach ($rates as $rate) {
             if ($rate->getCode() === $address->getShippingMethod()) {
+                $carrierCode = $rate->getCarrier();
+                $methodCode = $rate->getMethod();
                 break;
             }
         }

@@ -1,0 +1,10 @@
+
+File "/var/www/html/app/code/Magento/Tax/Test/Mftf/Test/AdminSystemImportExportTaxRatesNavigateMenuTest.xml"
+contains entity references that violate dependency constraints:
+		
+	 AdminMenuSystem from module(s): magento/module-admin-notification
+
+File "/var/www/html/app/code/Magento/Tax/Test/Mftf/Test/ApplyTaxesAndFptForSimpleProductWithCanadianPstOriginTest.xml"
+contains entity references that violate dependency constraints:
+		
+	 AdminProductAddFPTValueActionGroup from module(s): magento/module-weee

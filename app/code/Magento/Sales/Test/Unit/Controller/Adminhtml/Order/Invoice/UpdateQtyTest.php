@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -210,8 +210,13 @@ class UpdateQtyTest extends TestCase
 
         $this->requestMock
             ->method('getParam')
-            ->withConsecutive(['order_id'], ['invoice', []])
-            ->willReturnOnConsecutiveCalls($orderId, $invoiceData);
+            ->willReturnCallback(function ($arg1, $arg2) use ($orderId, $invoiceData) {
+                if ($arg1 == 'order_id') {
+                    return $orderId;
+                } elseif ($arg1 == 'invoice' && empty($arg2)) {
+                    return $invoiceData;
+                }
+            });
 
         $invoiceMock = $this->getMockBuilder(Invoice::class)
             ->disableOriginalConstructor()

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -10,6 +10,7 @@ namespace Magento\GoogleOptimizer\Test\Unit\Observer\CmsPage;
 use Magento\Cms\Model\Page;
 use Magento\Framework\Event;
 use Magento\Framework\Event\Observer;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\GoogleOptimizer\Model\Code;
 use Magento\GoogleOptimizer\Observer\CmsPage\DeleteCmsGoogleExperimentScriptObserver;
@@ -18,6 +19,8 @@ use PHPUnit\Framework\TestCase;
 
 class DeleteCmsGoogleExperimentScriptObserverTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var MockObject
      */
@@ -38,10 +41,10 @@ class DeleteCmsGoogleExperimentScriptObserverTest extends TestCase
         $this->_codeMock = $this->createMock(Code::class);
         $page = $this->createMock(Page::class);
         $page->expects($this->once())->method('getId')->willReturn(3);
-        $event = $this->getMockBuilder(Event::class)
-            ->addMethods(['getObject'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $event = $this->createPartialMockWithReflection(
+            Event::class,
+            ['getObject']
+        );
         $event->expects($this->once())->method('getObject')->willReturn($page);
         $this->_eventObserverMock = $this->createMock(Observer::class);
         $this->_eventObserverMock->expects($this->once())->method('getEvent')->willReturn($event);

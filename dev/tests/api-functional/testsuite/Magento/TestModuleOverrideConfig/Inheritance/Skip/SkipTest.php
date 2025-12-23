@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -46,7 +46,7 @@ class SkipTest extends SkipAbstractClass implements SkipInterface
     /**
      * @return array
      */
-    public function skipDataProvider(): array
+    public static function skipDataProvider(): array
     {
         return [
             'first_data_set' => ['This test should be skipped in data set node inherited from abstract class'],

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -11,15 +11,19 @@ use Magento\Catalog\Model\Category;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\Event;
 use Magento\Framework\Event\Observer;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\GoogleOptimizer\Helper\Data;
 use Magento\GoogleOptimizer\Model\Code;
 use Magento\GoogleOptimizer\Observer\Category\SaveGoogleExperimentScriptObserver;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 class SaveGoogleExperimentScriptObserverTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var MockObject
      */
@@ -67,15 +71,15 @@ class SaveGoogleExperimentScriptObserverTest extends TestCase
         )->willReturn(
             $this->_storeId
         );
-        $event = $this->getMockBuilder(Event::class)
-            ->addMethods(['getCategory'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $event = $this->createPartialMockWithReflection(
+            Event::class,
+            ['getCategory']
+        );
         $event->expects($this->once())->method('getCategory')->willReturn($this->_categoryMock);
         $this->_eventObserverMock = $this->createMock(Observer::class);
         $this->_eventObserverMock->expects($this->once())->method('getEvent')->willReturn($event);
         $this->_codeMock = $this->createMock(Code::class);
-        $this->_requestMock = $this->getMockForAbstractClass(RequestInterface::class);
+        $this->_requestMock = $this->createMock(RequestInterface::class);
 
         $objectManagerHelper = new ObjectManager($this);
         $this->_modelObserver = $objectManagerHelper->getObject(
@@ -129,8 +133,8 @@ class SaveGoogleExperimentScriptObserverTest extends TestCase
 
     /**
      * @param array $params
-     * @dataProvider dataProviderWrongRequestForCreating
      */
+    #[DataProvider('dataProviderWrongRequestForCreating')]
     public function testCreatingCodeIfRequestIsNotValid($params)
     {
         $this->_helperMock->expects(
@@ -159,7 +163,7 @@ class SaveGoogleExperimentScriptObserverTest extends TestCase
     /**
      * @return array
      */
-    public function dataProviderWrongRequestForCreating()
+    public static function dataProviderWrongRequestForCreating()
     {
         return [
             // if param 'google_experiment' is not array

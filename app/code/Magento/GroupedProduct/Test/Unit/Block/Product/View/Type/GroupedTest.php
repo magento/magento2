@@ -1,12 +1,13 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\GroupedProduct\Test\Unit\Block\Product\View\Type;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\Catalog\Model\Product;
 use Magento\Framework\DataObject;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
@@ -50,18 +51,11 @@ class GroupedTest extends TestCase
         ];
         $this->productMock = $this->createPartialMock(Product::class, $methodsProduct);
         $this->typeInstanceMock = $this->createMock(\Magento\GroupedProduct\Model\Product\Type\Grouped::class);
-        $this->productMock->expects(
-            $this->any()
-        )->method(
-            'getTypeInstance'
-        )->willReturn(
+        $this->productMock->method('getTypeInstance')->willReturn(
             $this->typeInstanceMock
         );
-        $this->configuredValueMock = $this->getMockBuilder(DataObject::class)
-            ->addMethods(['getSuperGroup'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $layout = $this->getMockForAbstractClass(LayoutInterface::class);
+        $this->configuredValueMock = new \Magento\Framework\DataObject\Test\Unit\Helper\DataObjectTestHelper();
+        $layout = $this->createMock(LayoutInterface::class);
         $this->groupedView = $helper->getObject(
             Grouped::class,
             [
@@ -88,19 +82,13 @@ class GroupedTest extends TestCase
 
     /**
      * @param string $id
-     * @dataProvider setPreconfiguredValueDataProvider
      */
+    #[DataProvider('setPreconfiguredValueDataProvider')]
     public function testSetPreconfiguredValue($id)
     {
         $configValue = ['id_one' => 2];
         $associatedProduct = ['key' => $this->productMock];
-        $this->configuredValueMock->expects(
-            $this->once()
-        )->method(
-            'getSuperGroup'
-        )->willReturn(
-            $configValue
-        );
+        $this->configuredValueMock->setSuperGroup($configValue);
         $this->productMock->expects(
             $this->once()
         )->method(
@@ -119,7 +107,7 @@ class GroupedTest extends TestCase
             $associatedProduct
         );
 
-        $this->productMock->expects($this->any())->method('getId')->willReturn($id);
+        $this->productMock->method('getId')->willReturn($id);
         $this->productMock->expects($this->any())->method('setQty')->with(2);
         $this->groupedView->setPreconfiguredValue();
     }
@@ -127,7 +115,7 @@ class GroupedTest extends TestCase
     /**
      * @return array
      */
-    public function setPreconfiguredValueDataProvider()
+    public static function setPreconfiguredValueDataProvider()
     {
         return ['item_id_exist_in_config' => ['id_one'], 'item_id_not_exist_in_config' => ['id_two']];
     }
@@ -141,7 +129,7 @@ class GroupedTest extends TestCase
         )->willReturn(
             $this->configuredValueMock
         );
-        $this->configuredValueMock->expects($this->once())->method('getSuperGroup')->willReturn(false);
+        $this->configuredValueMock->setSuperGroup(false);
         $this->typeInstanceMock->expects($this->never())->method('getAssociatedProducts');
         $this->groupedView->setPreconfiguredValue();
     }

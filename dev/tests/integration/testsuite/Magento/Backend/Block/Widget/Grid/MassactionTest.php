@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Backend\Block\Widget\Grid;
 
@@ -101,7 +101,7 @@ class MassactionTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function getCountDataProvider()
+    public static function getCountDataProvider()
     {
         return [
             [
@@ -143,7 +143,7 @@ class MassactionTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function getItemsDataProvider()
+    public static function getItemsDataProvider()
     {
         return [
             [

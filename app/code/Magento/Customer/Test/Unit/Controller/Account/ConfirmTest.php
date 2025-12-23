@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -12,6 +12,8 @@ use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Customer\Api\Data\CustomerInterface;
 use Magento\Customer\Controller\Account\Confirm;
 use Magento\Customer\Helper\Address;
+use Magento\Customer\Model\Logger as CustomerLogger;
+use Magento\Customer\Model\Log;
 use Magento\Customer\Model\Session;
 use Magento\Customer\Model\Url;
 use Magento\Framework\App\Action\Context;
@@ -34,6 +36,7 @@ use Magento\Framework\UrlFactory;
 use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManager;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -124,18 +127,28 @@ class ConfirmTest extends TestCase
     protected $redirectResultMock;
 
     /**
+     * @var CustomerLogger|MockObject
+     */
+    private $customerLoggerMock;
+
+    /**
+     * @var Log|MockObject
+     */
+    private $logMock;
+
+    /**
      * @inheritdoc
      */
     protected function setUp(): void
     {
         $this->customerSessionMock = $this->createMock(Session::class);
-        $this->requestMock = $this->getMockForAbstractClass(RequestInterface::class);
+        $this->requestMock = $this->createMock(\Magento\Framework\App\Request\Http::class);
         $this->responseMock = $this->createPartialMock(
             Http::class,
             ['setRedirect', '__wakeup']
         );
-        $viewMock = $this->getMockForAbstractClass(ViewInterface::class);
-        $this->redirectMock = $this->getMockForAbstractClass(RedirectInterface::class);
+        $viewMock = $this->createMock(ViewInterface::class);
+        $this->redirectMock = $this->createMock(RedirectInterface::class);
 
         $this->urlMock = $this->createMock(\Magento\Framework\Url::class);
         $urlFactoryMock = $this->createMock(UrlFactory::class);
@@ -143,12 +156,15 @@ class ConfirmTest extends TestCase
             ->method('create')
             ->willReturn($this->urlMock);
 
+        $this->customerLoggerMock = $this->createMock(CustomerLogger::class);
+        $this->logMock = $this->createMock(Log::class);
+
         $this->customerAccountManagementMock =
-            $this->getMockForAbstractClass(AccountManagementInterface::class);
-        $this->customerDataMock = $this->getMockForAbstractClass(CustomerInterface::class);
+            $this->createMock(AccountManagementInterface::class);
+        $this->customerDataMock = $this->createMock(CustomerInterface::class);
 
         $this->customerRepositoryMock =
-            $this->getMockForAbstractClass(CustomerRepositoryInterface::class);
+            $this->createMock(CustomerRepositoryInterface::class);
 
         $this->messageManagerMock = $this->createMock(Manager::class);
         $this->addressHelperMock = $this->createMock(Address::class);
@@ -162,7 +178,7 @@ class ConfirmTest extends TestCase
             ->with(ResultFactory::TYPE_REDIRECT)
             ->willReturn($this->redirectResultMock);
 
-        $this->scopeConfigMock = $this->getMockForAbstractClass(ScopeConfigInterface::class);
+        $this->scopeConfigMock = $this->createMock(ScopeConfigInterface::class);
         $this->contextMock = $this->createMock(Context::class);
         $this->contextMock->expects($this->any())
             ->method('getRequest')
@@ -195,7 +211,9 @@ class ConfirmTest extends TestCase
                 'customerAccountManagement' => $this->customerAccountManagementMock,
                 'customerRepository' => $this->customerRepositoryMock,
                 'addressHelper' => $this->addressHelperMock,
-                'urlFactory' => $urlFactoryMock
+                'urlFactory' => $urlFactoryMock,
+                'customerLogger' => $this->customerLoggerMock,
+                'cookieMetadataManager' => $objectManagerHelper->getObject(PhpCookieManager::class),
             ]
         );
     }
@@ -218,9 +236,10 @@ class ConfirmTest extends TestCase
     }
 
     /**
-     * @return void
-     * @dataProvider getParametersDataProvider
-     */
+     * @param $customerId
+     * @param $key
+     * @return void */
+    #[DataProvider('getParametersDataProvider')]
     public function testNoCustomerIdInRequest($customerId, $key): void
     {
         $this->customerSessionMock->expects($this->once())
@@ -229,8 +248,13 @@ class ConfirmTest extends TestCase
 
         $this->requestMock
             ->method('getParam')
-            ->withConsecutive(['id', false], ['key', false])
-            ->willReturnOnConsecutiveCalls($customerId, $key);
+            ->willReturnCallback(function ($arg1, $arg2) use ($customerId, $key) {
+                if ($arg1 == 'id' && $arg2 == false) {
+                    return $customerId;
+                } elseif ($arg1 == 'key ' && $arg2 == false) {
+                    return $key;
+                }
+            });
 
         $this->messageManagerMock->expects($this->once())
             ->method('addErrorMessage')
@@ -258,7 +282,7 @@ class ConfirmTest extends TestCase
     /**
      * @return array
      */
-    public function getParametersDataProvider(): array
+    public static function getParametersDataProvider(): array
     {
         return [
             [true, false],
@@ -271,18 +295,20 @@ class ConfirmTest extends TestCase
      * @param $key
      * @param $vatValidationEnabled
      * @param $addressType
-     * @param Phrase $successMessage
+     * @param $lastLoginAt
+     * @param $successMessage
      *
      * @return void
-     * @dataProvider getSuccessMessageDataProvider
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
+    #[DataProvider('getSuccessMessageDataProvider')]
     public function testSuccessMessage(
         $customerId,
         $key,
         $vatValidationEnabled,
         $addressType,
-        Phrase $successMessage
+        $lastLoginAt,
+        $successMessage
     ): void {
         $this->customerSessionMock->expects($this->once())
             ->method('isLoggedIn')
@@ -292,7 +318,7 @@ class ConfirmTest extends TestCase
             ->method('getParam')
             ->willReturnMap(
                 [
-                    ['id', false, $customerId],
+                    ['id', 0, $customerId],
                     ['key', false, $key]
                 ]
             );
@@ -333,6 +359,14 @@ class ConfirmTest extends TestCase
                 ['*/*/admin', ['_secure' => true], 'http://store.web/back']
             ]);
 
+        $this->logMock->expects($vatValidationEnabled ? $this->never() : $this->once())
+            ->method('getLastLoginAt')
+            ->willReturn($lastLoginAt);
+        $this->customerLoggerMock->expects($vatValidationEnabled ? $this->never() : $this->once())
+            ->method('get')
+            ->with(1)
+            ->willReturn($this->logMock);
+
         $this->addressHelperMock->expects($this->once())
             ->method('isVatValidationEnabled')
             ->willReturn($vatValidationEnabled);
@@ -347,53 +381,23 @@ class ConfirmTest extends TestCase
             ->method('getStore')
             ->willReturn($this->storeMock);
 
-        $cookieMetadataManager = $this->getMockBuilder(PhpCookieManager::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $cookieMetadataManager->expects($this->once())
-            ->method('getCookie')
-            ->with('mage-cache-sessid')
-            ->willReturn(true);
-        $cookieMetadataFactory = $this->getMockBuilder(CookieMetadataFactory::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $cookieMetadata = $this->getMockBuilder(CookieMetadata::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $cookieMetadataFactory->expects($this->once())
-            ->method('createCookieMetadata')
-            ->willReturn($cookieMetadata);
-        $cookieMetadata->expects($this->once())
-            ->method('setPath')
-            ->with('/');
-        $cookieMetadataManager->expects($this->once())
-            ->method('deleteCookie')
-            ->with('mage-cache-sessid', $cookieMetadata);
-
-        $refClass = new \ReflectionClass(Confirm::class);
-        $cookieMetadataManagerProperty = $refClass->getProperty('cookieMetadataManager');
-        $cookieMetadataManagerProperty->setAccessible(true);
-        $cookieMetadataManagerProperty->setValue($this->model, $cookieMetadataManager);
-
-        $cookieMetadataFactoryProperty = $refClass->getProperty('cookieMetadataFactory');
-        $cookieMetadataFactoryProperty->setAccessible(true);
-        $cookieMetadataFactoryProperty->setValue($this->model, $cookieMetadataFactory);
-
         $this->model->execute();
     }
 
     /**
      * @return array
      */
-    public function getSuccessMessageDataProvider(): array
+    public static function getSuccessMessageDataProvider(): array
     {
         return [
-            [1, 1, false, null, __('Thank you for registering with %1.', 'frontend')],
+            [1, 1, false, null, 'some-datetime', null],
+            [1, 1, false, null, null, __('Thank you for registering with %1.', 'frontend')],
             [
                 1,
                 1,
                 true,
                 Address::TYPE_BILLING,
+                null,
                 __(
                     'If you are a registered VAT customer, please click <a href="%1">here</a>'
                     . ' to enter your billing address for proper VAT calculation.',
@@ -405,12 +409,13 @@ class ConfirmTest extends TestCase
                 1,
                 true,
                 Address::TYPE_SHIPPING,
+                null,
                 __(
                     'If you are a registered VAT customer, please click <a href="%1">here</a>'
                     . ' to enter your shipping address for proper VAT calculation.',
                     'http://store.web/customer/address/edit'
                 )
-            ]
+            ],
         ];
     }
 
@@ -421,11 +426,11 @@ class ConfirmTest extends TestCase
      * @param $successUrl
      * @param $resultUrl
      * @param $isSetFlag
-     * @param Phrase $successMessage
+     * @param $successMessage
+     * @param $lastLoginAt
      *
-     * @return void
-     * @dataProvider getSuccessRedirectDataProvider
-     */
+     * @return void */
+    #[DataProvider('getSuccessRedirectDataProvider')]
     public function testSuccessRedirect(
         $customerId,
         $key,
@@ -433,7 +438,8 @@ class ConfirmTest extends TestCase
         $successUrl,
         $resultUrl,
         $isSetFlag,
-        Phrase $successMessage
+        $lastLoginAt,
+        $successMessage
     ): void {
         $this->customerSessionMock->expects($this->once())
             ->method('isLoggedIn')
@@ -443,7 +449,7 @@ class ConfirmTest extends TestCase
             ->method('getParam')
             ->willReturnMap(
                 [
-                    ['id', false, $customerId],
+                    ['id', 0, $customerId],
                     ['key', false, $key],
                     ['back_url', false, $backUrl]
                 ]
@@ -469,22 +475,27 @@ class ConfirmTest extends TestCase
             ->with($this->customerDataMock)
             ->willReturnSelf();
 
-        $this->messageManagerMock
-            ->method('addSuccess')
+        $this->messageManagerMock->method('addSuccess')
             ->with($successMessage)
             ->willReturnSelf();
 
-        $this->messageManagerMock
-            ->expects($this->never())
+        $this->messageManagerMock->expects($this->never())
             ->method('addException');
 
-        $this->urlMock
-            ->method('getUrl')
+        $this->urlMock->method('getUrl')
             ->willReturnMap([
                 ['customer/address/edit', null, 'http://store.web/customer/address/edit'],
                 ['*/*/admin', ['_secure' => true], 'http://store.web/back'],
                 ['*/*/index', ['_secure' => true], $successUrl]
             ]);
+
+        $this->logMock->expects($this->once())
+            ->method('getLastLoginAt')
+            ->willReturn($lastLoginAt);
+        $this->customerLoggerMock->expects($this->once())
+            ->method('get')
+            ->with(1)
+            ->willReturn($this->logMock);
 
         $this->storeMock->expects($this->any())
             ->method('getFrontendName')
@@ -500,24 +511,8 @@ class ConfirmTest extends TestCase
 
         $this->scopeConfigMock->expects($this->any())
             ->method('isSetFlag')
-            ->with(
-                Url::XML_PATH_CUSTOMER_STARTUP_REDIRECT_TO_DASHBOARD,
-                ScopeInterface::SCOPE_STORE
-            )
+            ->with(Url::XML_PATH_CUSTOMER_STARTUP_REDIRECT_TO_DASHBOARD, ScopeInterface::SCOPE_STORE)
             ->willReturn($isSetFlag);
-
-        $cookieMetadataManager = $this->getMockBuilder(PhpCookieManager::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $cookieMetadataManager->expects($this->once())
-            ->method('getCookie')
-            ->with('mage-cache-sessid')
-            ->willReturn(false);
-
-        $refClass = new \ReflectionClass(Confirm::class);
-        $refProperty = $refClass->getProperty('cookieMetadataManager');
-        $refProperty->setAccessible(true);
-        $refProperty->setValue($this->model, $cookieMetadataManager);
 
         $this->model->execute();
     }
@@ -525,7 +520,7 @@ class ConfirmTest extends TestCase
     /**
      * @return array
      */
-    public function getSuccessRedirectDataProvider(): array
+    public static function getSuccessRedirectDataProvider(): array
     {
         return [
             [
@@ -535,6 +530,7 @@ class ConfirmTest extends TestCase
                 null,
                 'http://example.com/back',
                 true,
+                null,
                 __('Thank you for registering with %1.', 'frontend'),
             ],
             [
@@ -544,6 +540,7 @@ class ConfirmTest extends TestCase
                 'http://example.com/success',
                 'http://example.com/success',
                 true,
+                null,
                 __('Thank you for registering with %1.', 'frontend'),
             ],
             [
@@ -553,7 +550,18 @@ class ConfirmTest extends TestCase
                 'http://example.com/success',
                 'http://example.com/success',
                 false,
+                null,
                 __('Thank you for registering with %1.', 'frontend'),
+            ],
+            [
+                1,
+                1,
+                null,
+                'http://example.com/success',
+                'http://example.com/success',
+                false,
+                'some data',
+                null,
             ]
         ];
     }

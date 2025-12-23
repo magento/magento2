@@ -1,7 +1,7 @@
 <?php
-/***
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+/**
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -28,7 +28,7 @@ class FilesystemTest extends TestCase
      * @param $row
      * @param $expected
      *
-     * @dataProvider testFilterCallbackLikeDataProvider
+     * @dataProvider filterCallbackLikeDataProvider
      */
     public function testFilterCallbackLike($field, $filterValue, $row, $expected)
     {
@@ -40,7 +40,7 @@ class FilesystemTest extends TestCase
     /**
      * @return array
      */
-    public function testFilterCallbackLikeDataProvider()
+    public static function filterCallbackLikeDataProvider()
     {
         $field     = 'field';
         $testValue = '\'\'\'test\'\'\'Filter\'\'\'Value\'\'\'';

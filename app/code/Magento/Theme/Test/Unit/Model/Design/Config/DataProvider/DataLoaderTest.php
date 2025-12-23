@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -68,7 +68,7 @@ class DataLoaderTest extends TestCase
             ->getMockForAbstractClass();
         $this->designConfigExtension = $this->getMockBuilder(
             \Magento\Theme\Api\Data\DesignConfigExtensionInterface::class
-        )->setMethods(['getDesignConfigData'])->getMockForAbstractClass();
+        )->addMethods(['getDesignConfigData'])->getMockForAbstractClass();
 
         $this->model = new DataLoader(
             $this->request,

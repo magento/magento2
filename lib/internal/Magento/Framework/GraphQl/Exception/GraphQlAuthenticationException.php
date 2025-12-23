@@ -1,13 +1,14 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Framework\GraphQl\Exception;
 
 use GraphQL\Error\ClientAware;
+use GraphQL\Error\ProvidesExtensions;
 use Magento\Framework\Exception\AuthenticationException;
 use Magento\Framework\Phrase;
 
@@ -16,12 +17,12 @@ use Magento\Framework\Phrase;
  *
  * @api
  */
-class GraphQlAuthenticationException extends AuthenticationException implements ClientAware
+class GraphQlAuthenticationException extends AuthenticationException implements ClientAware, ProvidesExtensions
 {
     /**
      * Describing a category of the error
      */
-    const EXCEPTION_CATEGORY = 'graphql-authentication';
+    public const EXCEPTION_CATEGORY = 'graphql-authentication';
 
     /**
      * @var boolean
@@ -34,7 +35,7 @@ class GraphQlAuthenticationException extends AuthenticationException implements 
      * @param int $code
      * @param boolean $isSafe
      */
-    public function __construct(Phrase $phrase, \Exception $cause = null, $code = 0, $isSafe = true)
+    public function __construct(Phrase $phrase, ?\Exception $cause = null, $code = 0, $isSafe = true)
     {
         $this->isSafe = $isSafe;
         parent::__construct($phrase, $cause, $code);
@@ -54,5 +55,16 @@ class GraphQlAuthenticationException extends AuthenticationException implements 
     public function getCategory(): string
     {
         return self::EXCEPTION_CATEGORY;
+    }
+
+    /**
+     * Get error category
+     *
+     * @return array
+     */
+    public function getExtensions(): array
+    {
+        $exceptionCategory['category'] = $this->getCategory();
+        return $exceptionCategory;
     }
 }

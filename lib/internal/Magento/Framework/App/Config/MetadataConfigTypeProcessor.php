@@ -2,8 +2,8 @@
 /**
  * Configuration metadata processor
  *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework\App\Config;
 
@@ -49,8 +49,8 @@ class MetadataConfigTypeProcessor implements PostProcessorInterface
     public function __construct(
         ProcessorFactory $processorFactory,
         Initial $initialConfig,
-        ConfigSourceInterface $configSource = null,
-        ConfigPathResolver $configPathResolver = null
+        ?ConfigSourceInterface $configSource = null,
+        ?ConfigPathResolver $configPathResolver = null
     ) {
         $this->_processorFactory = $processorFactory;
         $this->_metadata = $initialConfig->getMetadata();

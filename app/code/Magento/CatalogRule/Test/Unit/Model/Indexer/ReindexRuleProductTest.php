@@ -1,13 +1,14 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\CatalogRule\Test\Unit\Model\Indexer;
 
 use Magento\Catalog\Model\ResourceModel\Indexer\ActiveTableSwitcher;
+use Magento\CatalogRule\Model\Indexer\DynamicBatchSizeCalculator;
 use Magento\CatalogRule\Model\Indexer\IndexerTableSwapperInterface;
 use Magento\CatalogRule\Model\Indexer\ReindexRuleProduct;
 use Magento\CatalogRule\Model\Rule;
@@ -53,6 +54,11 @@ class ReindexRuleProductTest extends TestCase
     private $ruleMock;
 
     /**
+     * @var DynamicBatchSizeCalculator|MockObject
+     */
+    private $batchSizeCalculatorMock;
+
+    /**
      * @var string
      */
     private $adminTimeZone;
@@ -73,13 +79,18 @@ class ReindexRuleProductTest extends TestCase
         $this->localeDateMock = $this->getMockForAbstractClass(TimezoneInterface::class);
         $this->connectionMock = $this->getMockForAbstractClass(AdapterInterface::class);
         $this->ruleMock = $this->createMock(Rule::class);
+        $this->batchSizeCalculatorMock = $this->createMock(DynamicBatchSizeCalculator::class);
+
+        $this->batchSizeCalculatorMock->method('getAttributeBatchSize')
+            ->willReturn(1000);
 
         $this->model = new ReindexRuleProduct(
             $this->resourceMock,
             $activeTableSwitcherMock,
             $this->tableSwapperMock,
             $this->localeDateMock,
-            true
+            true,
+            $this->batchSizeCalculatorMock
         );
 
         $this->adminTimeZone = 'America/Chicago';
@@ -178,12 +189,39 @@ class ReindexRuleProductTest extends TestCase
 
         $this->connectionMock
             ->method('insertMultiple')
-            ->withConsecutive(
-                ['catalogrule_product_replica', $batchRows],
-                ['catalogrule_product_replica', $rowsNotInBatch]
+            ->willReturnCallback(
+                function ($table, $rows) use ($batchRows, $rowsNotInBatch) {
+                    if ($table == 'catalogrule_product_replica' && $rows == $batchRows) {
+                        return 2;
+                    } elseif ($table == 'catalogrule_product_replica' && $rows == $rowsNotInBatch) {
+                        return 1;
+                    }
+                }
             );
 
         self::assertTrue($this->model->execute($this->ruleMock, 2, true));
+    }
+
+    public function testExecuteWithCustomBatchSize()
+    {
+        $websiteId = 3;
+        $productIds = [
+            4 => [$websiteId => 1],
+            5 => [$websiteId => 1],
+            6 => [$websiteId => 1]
+        ];
+
+        $this->prepareResourceMock();
+        $this->prepareRuleMock([3], $productIds, [10]);
+
+        $this->localeDateMock->method('getConfigTimezone')
+            ->willReturnMap([
+                [ScopeInterface::SCOPE_WEBSITE, self::ADMIN_WEBSITE_ID, $this->adminTimeZone],
+                [ScopeInterface::SCOPE_WEBSITE, $websiteId, $this->websiteTz]
+            ]);
+
+        $this->connectionMock->expects($this->exactly(2))->method('insertMultiple');
+        self::assertTrue($this->model->execute($this->ruleMock, '2', true));
     }
 
     /**
@@ -226,7 +264,7 @@ class ReindexRuleProductTest extends TestCase
      * @return array
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function executeDataProvider(): array
+    public static function executeDataProvider(): array
     {
         return [
             [
@@ -318,30 +356,6 @@ class ReindexRuleProductTest extends TestCase
                         'action_amount' => 43,
                         'action_stop' => true,
                         'sort_order' => 1
-                    ],
-                    [
-                        'rule_id' => 100,
-                        'from_time' => 1498028400,
-                        'to_time' => 1498892399,
-                        'website_id' => 3,
-                        'customer_group_id' => 10,
-                        'product_id' => 3,
-                        'action_operator' => 'simple_action',
-                        'action_amount' => 43,
-                        'action_stop' => true,
-                        'sort_order' => 1
-                    ],
-                    [
-                        'rule_id' => 100,
-                        'from_time' => 1498028400,
-                        'to_time' => 1498892399,
-                        'website_id' => 3,
-                        'customer_group_id' => 20,
-                        'product_id' => 3,
-                        'action_operator' => 'simple_action',
-                        'action_amount' => 43,
-                        'action_stop' => true,
-                        'sort_order' => 1
                     ]
                 ]
             ],
@@ -412,7 +426,41 @@ class ReindexRuleProductTest extends TestCase
                         'sort_order' => 1
                     ]
                 ]
-            ]
+                ],
+                [
+                    [1, 2, 3],
+                    [
+                        1 => [1 => true],
+                        2 => [2 => true],
+                        3 => [3 => false]
+                    ],
+                    [
+                        [
+                            'rule_id' => 100,
+                            'from_time' => 1498028400,
+                            'to_time' => 1498892399,
+                            'website_id' => 1,
+                            'customer_group_id' => 20,
+                            'product_id' => 1,
+                            'action_operator' => 'simple_action',
+                            'action_amount' => 43,
+                            'action_stop' => true,
+                            'sort_order' => 1
+                        ],
+                        [
+                            'rule_id' => 100,
+                            'from_time' => 1498028400,
+                            'to_time' => 1498892399,
+                            'website_id' => 2,
+                            'customer_group_id' => 20,
+                            'product_id' => 2,
+                            'action_operator' => 'simple_action',
+                            'action_amount' => 43,
+                            'action_stop' => true,
+                            'sort_order' => 1
+                        ]
+                    ]
+                ]
         ];
     }
 
@@ -430,8 +478,10 @@ class ReindexRuleProductTest extends TestCase
             ->willReturn($this->connectionMock);
         $this->resourceMock
             ->method('getTableName')
-            ->withConsecutive(['catalogrule_product'], ['catalogrule_product_replica'])
-            ->willReturnOnConsecutiveCalls('catalogrule_product', 'catalogrule_product_replica');
+            ->willReturnCallback(fn($param) => match ([$param]) {
+                ['catalogrule_product'] => 'catalogrule_product',
+                ['catalogrule_product_replica'] => 'catalogrule_product_replica'
+            });
     }
 
     /**

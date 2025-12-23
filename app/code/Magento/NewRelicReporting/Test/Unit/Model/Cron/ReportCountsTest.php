@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -17,10 +17,14 @@ use Magento\NewRelicReporting\Model\Cron\ReportCounts;
 use Magento\NewRelicReporting\Model\ResourceModel\Counts\Collection;
 use Magento\NewRelicReporting\Model\ResourceModel\Counts\CollectionFactory;
 use PHPUnit\Framework\MockObject\MockObject;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use PHPUnit\Framework\TestCase;
 
 class ReportCountsTest extends TestCase
 {
+
+    use MockCreationTrait;
+    
     /**
      * @var ReportCounts
      */
@@ -73,41 +77,30 @@ class ReportCountsTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->configMock = $this->getMockBuilder(Config::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['isNewRelicEnabled'])
-            ->getMock();
-        $this->productManagementMock = $this->getMockBuilder(ProductManagementInterface::class)
-            ->setMethods(['getCount'])
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-        $this->configurableManagementMock = $this
-            ->getMockBuilder(ConfigurableProductManagementInterface::class)
-            ->setMethods(['getCount'])
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-        $this->categoryManagementMock = $this->getMockBuilder(CategoryManagementInterface::class)
-            ->setMethods(['getCount'])
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-        $this->countsFactoryMock = $this->getMockBuilder(CountsFactory::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['create'])
-            ->getMock();
-        $this->countsModelMock = $this->getMockBuilder(Counts::class)
-            ->setMethods(['getCount', 'load', 'setEntityId', 'setType', 'setCount', 'setUpdatedAt', 'save'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->countsCollectionFactoryMock = $this
-            ->getMockBuilder(CollectionFactory::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['create'])
-            ->getMock();
+        $this->configMock = $this->createPartialMock(
+            Config::class,
+            ['isNewRelicEnabled']
+        );
+        $this->productManagementMock = $this->createMock(ProductManagementInterface::class);
+        $this->configurableManagementMock = $this->createMock(ConfigurableProductManagementInterface::class);
+        $this->categoryManagementMock = $this->createMock(CategoryManagementInterface::class);
+        $this->countsFactoryMock = $this->createPartialMock(
+            CountsFactory::class,
+            ['create']
+        );
+        $this->countsModelMock = $this->createPartialMockWithReflection(
+            Counts::class,
+            ['getCount', 'setType', 'setCount', 'setUpdatedAt', 'load', 'setEntityId', 'save']
+        );
+        $this->countsCollectionFactoryMock = $this->createPartialMock(
+            CollectionFactory::class,
+            ['create']
+        );
         $collectionClassName = Collection::class;
-        $this->countsCollectionMock = $this->getMockBuilder($collectionClassName)
-            ->disableOriginalConstructor()
-            ->setMethods(['addFieldToFilter', 'addOrder', 'setPageSize', 'getFirstItem'])
-            ->getMock();
+        $this->countsCollectionMock = $this->createPartialMock(
+            $collectionClassName,
+            ['addFieldToFilter', 'addOrder', 'setPageSize', 'getFirstItem']
+        );
 
         $this->countsFactoryMock->expects($this->any())
             ->method('create')

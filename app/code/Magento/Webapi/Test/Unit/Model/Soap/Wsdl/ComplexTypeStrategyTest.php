@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -13,6 +13,7 @@ use Laminas\Soap\Wsdl;
 use Magento\Framework\Reflection\TypeProcessor;
 use Magento\Webapi\Model\Soap\Wsdl as WebapiWsdl;
 use Magento\Webapi\Model\Soap\Wsdl\ComplexTypeStrategy;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -89,8 +90,8 @@ class ComplexTypeStrategyTest extends TestCase
      * @param array $data
      *
      * @return void
-     * @dataProvider addComplexTypeDataProvider
      */
+    #[DataProvider('addComplexTypeDataProvider')]
     public function testAddComplexTypeSimpleParameters($type, $data): void
     {
         $this->wsdl->expects($this->any())->method('getTypes')->willReturn([]);
@@ -245,8 +246,13 @@ class ComplexTypeStrategyTest extends TestCase
         $this->wsdl->expects($this->any())->method('getSchema')->willReturn($schemaMock);
         $this->typeProcessor
             ->method('getTypeData')
-            ->withConsecutive([$type], [$parameterType])
-            ->willReturnOnConsecutiveCalls($typeData, $parameterData);
+            ->willReturnCallback(function ($arg1) use ($type, $typeData, $parameterType, $parameterData) {
+                if ($arg1 == $type) {
+                    return $typeData;
+                } elseif ($arg1 == $parameterType) {
+                    return $parameterData;
+                }
+            });
 
         $this->assertEquals(Wsdl::TYPES_NS . ':' . $type, $this->strategy->addComplexType($type));
     }

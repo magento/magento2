@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -95,7 +95,7 @@ class ScopedTest extends TestCase
     /**
      * @return array
      */
-    public function getConfigByPathDataProvider()
+    public static function getConfigByPathDataProvider()
     {
         return [
             ['key_1/key_1.1/key_1.1.1', 'value_1.1.1', 'error'],

@@ -1,8 +1,7 @@
 <?php
 /**
- *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework\ObjectManager\Profiler\Tree;
 
@@ -32,7 +31,7 @@ class Item
      * @param string $class
      * @param Item $parent
      */
-    public function __construct($class, Item $parent = null)
+    public function __construct($class, ?Item $parent = null)
     {
         $this->class = $class;
         $this->parent = $parent;

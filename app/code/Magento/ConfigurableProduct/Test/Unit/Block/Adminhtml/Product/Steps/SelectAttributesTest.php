@@ -1,13 +1,15 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\ConfigurableProduct\Test\Unit\Block\Adminhtml\Product\Steps;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\Backend\Block\Widget\Button;
+use Magento\Backend\Test\Unit\Helper\ButtonTestHelper;
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\ConfigurableProduct\Block\Adminhtml\Product\Steps\SelectAttributes;
 use Magento\Framework\Registry;
@@ -54,28 +56,14 @@ class SelectAttributesTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->contextMock = $this->getMockBuilder(Context::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->registryMock = $this->getMockBuilder(Registry::class)
-            ->getMock();
-        $this->buttonMock = $this->getMockBuilder(Button::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['isAllowed', 'getAuthorization', 'toHtml'])
-            ->getMock();
-        $this->layoutMock = $this->getMockBuilder(LayoutInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-        $this->urlBuilderMock = $this->getMockBuilder(UrlInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->contextMock = $this->createMock(Context::class);
+        $this->registryMock = $this->createMock(Registry::class);
+        $this->buttonMock = new ButtonTestHelper();
+        $this->layoutMock = $this->createMock(LayoutInterface::class);
+        $this->urlBuilderMock = $this->createMock(UrlInterface::class);
 
-        $this->contextMock->expects($this->any())
-            ->method('getLayout')
-            ->willReturn($this->layoutMock);
-        $this->contextMock->expects($this->any())
-            ->method('getUrlBuilder')
-            ->willReturn($this->urlBuilderMock);
+        $this->contextMock->method('getLayout')->willReturn($this->layoutMock);
+        $this->contextMock->method('getUrlBuilder')->willReturn($this->urlBuilderMock);
 
         $this->selectAttributes = new SelectAttributes(
             $this->contextMock,
@@ -87,33 +75,26 @@ class SelectAttributesTest extends TestCase
      * @param bool $isAllowed
      * @param string $result
      *
-     * @dataProvider attributesDataProvider
      *
      * @return void
      */
+    #[DataProvider('attributesDataProvider')]
     public function testGetAddNewAttributeButton($isAllowed, $result)
     {
-        $productMock = $this->getMockBuilder(ProductInterface::class)
-            ->setMethods(['getStoreId'])
-            ->getMockForAbstractClass();
+        $productMock = $this->createPartialMock(\Magento\Catalog\Model\Product::class, ['getStoreId']);
         $this->registryMock->expects($this->any())
             ->method('registry')
             ->with('current_product')
             ->willReturn($productMock);
-        $this->buttonMock->expects($this->any())
-            ->method('toHtml')
-            ->willReturn($result);
+        
+        // Configure the ButtonTestHelper using clean setters
+        $this->buttonMock->setHtml($result);
+        $this->buttonMock->setAuthorization($this->buttonMock);
+        $this->buttonMock->setIsAllowed($isAllowed);
 
         $this->layoutMock->expects($this->once())
             ->method('createBlock')
             ->willReturn($this->buttonMock);
-        $this->buttonMock->expects($this->once())
-            ->method('getAuthorization')
-            ->willReturnSelf();
-        $this->buttonMock->expects($this->once())
-            ->method('isAllowed')
-            ->with('Magento_Catalog::attributes_attributes')
-            ->willReturn($isAllowed);
 
         $this->assertEquals($result, $this->selectAttributes->getAddNewAttributeButton());
     }
@@ -121,7 +102,7 @@ class SelectAttributesTest extends TestCase
     /**
      * @return array
      */
-    public function attributesDataProvider()
+    public static function attributesDataProvider()
     {
         return [
             [false, ''],

@@ -1,16 +1,18 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Bundle\Test\Unit\Model\Plugin;
 
+use Closure;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\Bundle\Model\Plugin\PriceBackend;
 use Magento\Bundle\Model\Product\Price;
-use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\Product\Type;
+use Magento\Catalog\Test\Unit\Helper\ProductTestHelper;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -18,7 +20,7 @@ use PHPUnit\Framework\TestCase;
 
 class PriceBackendTest extends TestCase
 {
-    const CLOSURE_VALUE = 'CLOSURE';
+    private const CLOSURE_VALUE = 'CLOSURE';
 
     /** @var  PriceBackend */
     private $priceBackendPlugin;
@@ -26,10 +28,10 @@ class PriceBackendTest extends TestCase
     /** @var  MockObject */
     private $priceAttributeMock;
 
-    /** @var  \Closure */
+    /** @var  Closure */
     private $closure;
 
-    /** @var  MockObject */
+    /** @var  ProductTestHelper */
     private $productMock;
 
     protected function setUp(): void
@@ -40,26 +42,25 @@ class PriceBackendTest extends TestCase
         $this->closure = function () {
             return static::CLOSURE_VALUE;
         };
-        $this->priceAttributeMock = $this->getMockBuilder(\Magento\Catalog\Model\Product\Attribute\Backend\Price::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->productMock = $this->getMockBuilder(Product::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['getTypeId', 'getPriceType', '__wakeUp'])
-            ->getMock();
+        $this->priceAttributeMock = $this->createMock(
+            \Magento\Catalog\Model\Product\Attribute\Backend\Price::class
+        );
+        $this->productMock = new ProductTestHelper();
     }
 
     /**
-     * @dataProvider aroundValidateDataProvider
      *
      * @param $typeId
      * @param $priceType
      * @param $expectedResult
      */
+    #[DataProvider('aroundValidateDataProvider')]
     public function testAroundValidate($typeId, $priceType, $expectedResult)
     {
-        $this->productMock->expects($this->any())->method('getTypeId')->willReturn($typeId);
-        $this->productMock->expects($this->any())->method('getPriceType')->willReturn($priceType);
+        // Configure test helper with setter methods
+        $this->productMock->setTypeId($typeId);
+        $this->productMock->setPriceType($priceType);
+
         $result = $this->priceBackendPlugin->aroundValidate(
             $this->priceAttributeMock,
             $this->closure,
@@ -73,15 +74,21 @@ class PriceBackendTest extends TestCase
      *
      * @return array
      */
-    public function aroundValidateDataProvider()
+    public static function aroundValidateDataProvider()
     {
         return [
-            ['type' => Type::TYPE_SIMPLE, 'priceType' => Price::PRICE_TYPE_FIXED, 'result' => static::CLOSURE_VALUE],
-            ['type' => Type::TYPE_SIMPLE, 'priceType' => Price::PRICE_TYPE_DYNAMIC, 'result' => static::CLOSURE_VALUE],
-            ['type' => Type::TYPE_BUNDLE, 'priceType' => Price::PRICE_TYPE_FIXED, 'result' => static::CLOSURE_VALUE],
-            ['type' => Type::TYPE_BUNDLE, 'priceType' => Price::PRICE_TYPE_DYNAMIC, 'result' => true],
-            ['type' => Type::TYPE_VIRTUAL, 'priceType' => Price::PRICE_TYPE_FIXED, 'result' => static::CLOSURE_VALUE],
-            ['type' => Type::TYPE_VIRTUAL, 'priceType' => Price::PRICE_TYPE_DYNAMIC, 'result' => static::CLOSURE_VALUE],
+            ['typeId' => Type::TYPE_SIMPLE, 'priceType' => Price::PRICE_TYPE_FIXED,
+                'expectedResult' => static::CLOSURE_VALUE],
+            ['typeId' => Type::TYPE_SIMPLE, 'priceType' => Price::PRICE_TYPE_DYNAMIC,
+                'expectedResult' => static::CLOSURE_VALUE],
+            ['typeId' => Type::TYPE_BUNDLE, 'priceType' => Price::PRICE_TYPE_FIXED,
+                'expectedResult' => static::CLOSURE_VALUE],
+            ['typeId' => Type::TYPE_BUNDLE, 'priceType' => Price::PRICE_TYPE_DYNAMIC,
+                'expectedResult' => true],
+            ['typeId' => Type::TYPE_VIRTUAL, 'priceType' => Price::PRICE_TYPE_FIXED,
+                'expectedResult' => static::CLOSURE_VALUE],
+            ['typeId' => Type::TYPE_VIRTUAL, 'priceType' => Price::PRICE_TYPE_DYNAMIC,
+                'expectedResult' => static::CLOSURE_VALUE],
         ];
     }
 }

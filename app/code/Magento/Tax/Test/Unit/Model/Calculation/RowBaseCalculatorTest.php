@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -13,6 +13,11 @@ use PHPUnit\Framework\MockObject\MockObject;
 
 class RowBaseCalculatorTest extends RowBaseAndTotalBaseCalculatorTestCase
 {
+    /**
+     * @var float
+     */
+    private const EPSILON = 0.0000000001;
+
     /** @var RowBaseCalculator|MockObject */
     protected $rowBaseCalculator;
 
@@ -27,13 +32,21 @@ class RowBaseCalculatorTest extends RowBaseAndTotalBaseCalculatorTestCase
             $this->taxDetailsItem,
             $this->calculate($this->rowBaseCalculator, true)
         );
-        $this->assertEquals(self::UNIT_PRICE_INCL_TAX_ROUNDED, $this->taxDetailsItem->getPriceInclTax());
+        $this->assertEqualsWithDelta(
+            self::UNIT_PRICE_INCL_TAX_ROUNDED,
+            $this->taxDetailsItem->getPriceInclTax(),
+            self::EPSILON
+        );
 
         $this->assertSame(
             $this->taxDetailsItem,
             $this->calculate($this->rowBaseCalculator, false)
         );
-        $this->assertEquals(self::UNIT_PRICE_INCL_TAX, $this->taxDetailsItem->getPriceInclTax());
+        $this->assertEqualsWithDelta(
+            self::UNIT_PRICE_INCL_TAX,
+            $this->taxDetailsItem->getPriceInclTax(),
+            self::EPSILON
+        );
     }
 
     public function testCalculateWithTaxNotInPrice()
@@ -51,9 +64,9 @@ class RowBaseCalculatorTest extends RowBaseAndTotalBaseCalculatorTestCase
 
     private function initRowBaseCalculator()
     {
-        $taxClassService = $this->getMockForAbstractClass(TaxClassManagementInterface::class);
+        $taxClassService = $this->createMock(TaxClassManagementInterface::class);
         $this->rowBaseCalculator = $this->getMockBuilder(RowBaseCalculator::class)
-            ->setMethods(['deltaRound'])
+            ->onlyMethods(['deltaRound'])
             ->setConstructorArgs(
                 [
                     'taxClassService' => $taxClassService,

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -16,6 +16,7 @@ use Magento\Framework\Message\ManagerInterface;
 use Magento\Framework\Phrase;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 class RetryTest extends TestCase
@@ -61,7 +62,7 @@ class RetryTest extends TestCase
 
         $this->subscriptionHandlerMock = $this->createMock(SubscriptionHandler::class);
 
-        $this->messageManagerMock = $this->getMockForAbstractClass(ManagerInterface::class);
+        $this->messageManagerMock = $this->createMock(ManagerInterface::class);
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
 
@@ -102,11 +103,10 @@ class RetryTest extends TestCase
     }
 
     /**
-     * @dataProvider executeExceptionsDataProvider
-     *
      * @param \Exception $exception
      * @param Phrase $message
      */
+    #[DataProvider('executeExceptionsDataProvider')]
     public function testExecuteWithException(\Exception $exception, Phrase $message)
     {
         $this->resultFactoryMock
@@ -138,7 +138,7 @@ class RetryTest extends TestCase
     /**
      * @return array
      */
-    public function executeExceptionsDataProvider()
+    public static function executeExceptionsDataProvider()
     {
         return [
             [new LocalizedException(__('TestMessage')), __('TestMessage')],

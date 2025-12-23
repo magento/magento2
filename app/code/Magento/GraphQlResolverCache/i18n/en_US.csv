@@ -1,0 +1,4 @@
+"GraphQL Query Resolver Results","GraphQL Query Resolver Results"
+"Results from resolvers in GraphQL queries","Results from resolvers in GraphQL queries"
+"Hydrator %1 configured for resolver %2 must implement %3.","Hydrator %1 configured for resolver %2 must implement %3."
+"Deydrator %1 configured for resolver %2 must implement %3.","Dehydrator %1 configured for resolver %2 must implement %3."

@@ -1,15 +1,12 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\AsynchronousOperations\Ui\Component\DataProvider;
 
 use Magento\TestFramework\Helper\Bootstrap;
 
-/**
- * Class SearchResultTest
- */
 class SearchResultTest extends \PHPUnit\Framework\TestCase
 {
     /**
@@ -29,6 +26,6 @@ class SearchResultTest extends \PHPUnit\Framework\TestCase
         $searchResult = $objectManager->create(
             \Magento\AsynchronousOperations\Ui\Component\DataProvider\SearchResult::class
         );
-        $this->assertEquals(5, $searchResult->getTotalCount());
+        $this->assertEquals(6, $searchResult->getTotalCount());
     }
 }

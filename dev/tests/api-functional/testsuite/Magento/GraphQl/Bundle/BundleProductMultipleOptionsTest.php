@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -112,11 +112,11 @@ QUERY;
      * @return array
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function getBundleProductDataProvider(): array
+    public static function getBundleProductDataProvider(): array
     {
         return [
             'products' => [
-                'items' => [
+                'bundleProductDataProvider' => [
                     [
                         'sku' => 'bundle-product',
                         'type_id' => 'bundle',

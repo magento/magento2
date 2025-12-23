@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -27,8 +27,10 @@ use Magento\Framework\Message\ManagerInterface;
 use Magento\Framework\Stdlib\Cookie\CookieMetadata;
 use Magento\Framework\Stdlib\Cookie\CookieMetadataFactory;
 use Magento\Framework\Stdlib\Cookie\PhpCookieManager;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 
 /**
  * Test customer account controller
@@ -37,6 +39,8 @@ use PHPUnit\Framework\TestCase;
  */
 class LoginPostTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var LoginPost
      */
@@ -106,34 +110,25 @@ class LoginPostTest extends TestCase
     {
         $this->prepareContext();
 
-        $this->session = $this->getMockBuilder(Session::class)
-            ->disableOriginalConstructor()
-            ->setMethods(
-                [
-                    'isLoggedIn',
-                    'setCustomerDataAsLoggedIn',
-                    'regenerateId',
-                    'setUsername',
-                ]
-            )->getMock();
+        $this->session = $this->createPartialMockWithReflection(
+            Session::class,
+            [
+                'isLoggedIn',
+                'setCustomerDataAsLoggedIn',
+                'regenerateId',
+                'setUsername'
+            ]
+        );
 
-        $this->accountManagement = $this->getMockBuilder(AccountManagementInterface::class)
-            ->getMockForAbstractClass();
+        $this->accountManagement = $this->createMock(AccountManagementInterface::class);
 
-        $this->url = $this->getMockBuilder(Url::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->url = $this->createMock(Url::class);
 
-        $this->formkeyValidator = $this->getMockBuilder(Validator::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->formkeyValidator = $this->createMock(Validator::class);
 
-        $this->accountRedirect = $this->getMockBuilder(\Magento\Customer\Model\Account\Redirect::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->accountRedirect = $this->createMock(\Magento\Customer\Model\Account\Redirect::class);
 
-        $this->scopeConfig = $this->getMockBuilder(ScopeConfigInterface::class)
-            ->getMockForAbstractClass();
+        $this->scopeConfig = $this->createMock(ScopeConfigInterface::class);
 
         $this->controller = new LoginPost(
             $this->context,
@@ -151,9 +146,8 @@ class LoginPostTest extends TestCase
 
     /**
      * @param boolean $isLoggedIn
-     * @param boolean $isValidFormKey
-     * @dataProvider invalidFormKeyDataProvider
-     */
+     * @param boolean $isValidFormKey */
+    #[DataProvider('invalidFormKeyDataProvider')]
     public function testExecuteInvalidFormKey(
         $isLoggedIn,
         $isValidFormKey
@@ -178,7 +172,7 @@ class LoginPostTest extends TestCase
     /**
      * @return array
      */
-    public function invalidFormKeyDataProvider()
+    public static function invalidFormKeyDataProvider()
     {
         return [
             [
@@ -276,8 +270,7 @@ class LoginPostTest extends TestCase
                 ]
             );
 
-        $customerMock = $this->getMockBuilder(CustomerInterface::class)
-            ->getMockForAbstractClass();
+        $customerMock = $this->createMock(CustomerInterface::class);
 
         $this->scopeConfig->expects($this->once())
             ->method('getValue')
@@ -359,8 +352,7 @@ class LoginPostTest extends TestCase
                 ]
             );
 
-        $customerMock = $this->getMockBuilder(CustomerInterface::class)
-            ->getMockForAbstractClass();
+        $customerMock = $this->createMock(CustomerInterface::class);
 
         $this->scopeConfig->expects($this->once())
             ->method('getValue')
@@ -420,9 +412,8 @@ class LoginPostTest extends TestCase
 
     /**
      * @param array $exceptionData
-     *
-     * @dataProvider exceptionDataProvider
-     */
+     * */
+    #[DataProvider('exceptionDataProvider')]
     public function testExecuteWithException(
         $exceptionData
     ) {
@@ -470,7 +461,7 @@ class LoginPostTest extends TestCase
     /**
      * @return array
      */
-    public function exceptionDataProvider()
+    public static function exceptionDataProvider()
     {
         return [
             [
@@ -508,7 +499,7 @@ class LoginPostTest extends TestCase
 
         $this->request = $this->getMockBuilder(Http::class)
             ->disableOriginalConstructor()
-            ->setMethods(
+            ->onlyMethods(
                 [
                     'isPost',
                     'getPost',
@@ -519,9 +510,7 @@ class LoginPostTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->messageManager = $this->getMockBuilder(ManagerInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->messageManager = $this->createMock(ManagerInterface::class);
 
         $this->redirectFactory = $this->getMockBuilder(RedirectFactory::class)
             ->disableOriginalConstructor()

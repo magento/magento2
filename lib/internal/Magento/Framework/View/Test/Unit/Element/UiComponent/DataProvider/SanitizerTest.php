@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 
 declare(strict_types=1);
@@ -34,7 +34,7 @@ class SanitizerTest extends TestCase
      *
      * @return array
      */
-    public function getSanitizeDataSets(): array
+    public static function getSanitizeDataSets(): array
     {
         return [
             'simpleSet' => [
@@ -118,7 +118,7 @@ class SanitizerTest extends TestCase
      *
      * @return array
      */
-    public function getSanitizeComponentDataSets(): array
+    public static function getSanitizeComponentDataSets(): array
     {
         return [
             'simpleComponent' => [

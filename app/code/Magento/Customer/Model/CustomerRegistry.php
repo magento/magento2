@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -10,6 +10,7 @@ namespace Magento\Customer\Model;
 use Magento\Customer\Model\Data\CustomerSecure;
 use Magento\Customer\Model\Data\CustomerSecureFactory;
 use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 use Magento\Store\Model\StoreManagerInterface;
 
 /**
@@ -17,9 +18,9 @@ use Magento\Store\Model\StoreManagerInterface;
  *
  * @api
  */
-class CustomerRegistry
+class CustomerRegistry implements ResetAfterRequestInterface
 {
-    const REGISTRY_SEPARATOR = ':';
+    public const REGISTRY_SEPARATOR = ':';
 
     /**
      * @var CustomerFactory
@@ -116,9 +117,7 @@ class CustomerRegistry
         /** @var Customer $customer */
         $customer = $this->customerFactory->create();
 
-        if (isset($websiteId)) {
-            $customer->setWebsiteId($websiteId);
-        }
+        $customer->setWebsiteId($websiteId);
 
         $customer->loadByEmail($customerEmail);
         if (!$customer->getEmail()) {
@@ -233,5 +232,15 @@ class CustomerRegistry
         $emailKey = $this->getEmailKey($customer->getEmail(), $customer->getWebsiteId());
         $this->customerRegistryByEmail[$emailKey] = $customer;
         return $this;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        $this->customerRegistryById = [];
+        $this->customerRegistryByEmail = [];
+        $this->customerSecureRegistryById = [];
     }
 }

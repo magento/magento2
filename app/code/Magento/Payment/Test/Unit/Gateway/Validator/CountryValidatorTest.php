@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -11,6 +11,7 @@ use Magento\Payment\Gateway\ConfigInterface;
 use Magento\Payment\Gateway\Validator\CountryValidator;
 use Magento\Payment\Gateway\Validator\Result;
 use Magento\Payment\Gateway\Validator\ResultInterfaceFactory;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -41,15 +42,12 @@ class CountryValidatorTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->configMock = $this->getMockBuilder(ConfigInterface::class)
-            ->getMockForAbstractClass();
-        $this->resultFactoryMock = $this->getMockBuilder(ResultInterfaceFactory::class)
-            ->onlyMethods(['create'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->resultMock = $this->getMockBuilder(Result::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->configMock = $this->createMock(ConfigInterface::class);
+        $this->resultFactoryMock = $this->createPartialMock(
+            ResultInterfaceFactory::class,
+            ['create']
+        );
+        $this->resultMock = $this->createMock(Result::class);
 
         $this->model = new CountryValidator(
             $this->resultFactoryMock,
@@ -65,8 +63,8 @@ class CountryValidatorTest extends TestCase
      * @param $isValid
      *
      * @return void
-     * @dataProvider validateAllowspecificTrueDataProvider
      */
+    #[DataProvider('validateAllowspecificTrueDataProvider')]
     public function testValidateAllowspecificTrue(
         $storeId,
         $country,
@@ -78,8 +76,13 @@ class CountryValidatorTest extends TestCase
 
         $this->configMock
             ->method('getValue')
-            ->withConsecutive(['allowspecific', $storeId], ['specificcountry', $storeId])
-            ->willReturnOnConsecutiveCalls($allowspecific, $specificcountry);
+            ->willReturnCallback(function ($arg1, $arg2) use ($storeId, $allowspecific, $specificcountry) {
+                if ($arg1 == 'allowspecific' && $arg2 == $storeId) {
+                    return $allowspecific;
+                } elseif ($arg1 == 'specificcountry' && $arg2 == $storeId) {
+                    return $specificcountry;
+                }
+            });
 
         $this->resultFactoryMock->expects($this->once())
             ->method('create')
@@ -92,7 +95,7 @@ class CountryValidatorTest extends TestCase
     /**
      * @return array
      */
-    public function validateAllowspecificTrueDataProvider(): array
+    public static function validateAllowspecificTrueDataProvider(): array
     {
         return [
             [1, 'US', 1, 'US,UK,CA', true], //$storeId, $country, $allowspecific, $specificcountry, $isValid
@@ -101,8 +104,8 @@ class CountryValidatorTest extends TestCase
     }
 
     /**
-     * @dataProvider validateAllowspecificFalseDataProvider
      */
+    #[DataProvider('validateAllowspecificFalseDataProvider')]
     public function testValidateAllowspecificFalse($storeId, $allowspecific, $isValid): void
     {
         $validationSubject = ['storeId' => $storeId];
@@ -123,7 +126,7 @@ class CountryValidatorTest extends TestCase
     /**
      * @return array
      */
-    public function validateAllowspecificFalseDataProvider(): array
+    public static function validateAllowspecificFalseDataProvider(): array
     {
         return [
             [1, 0, true] //$storeId, $allowspecific, $isValid

@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright 2025 Adobe
+ * All Rights Reserved.
+ */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontVerifyRegistrationFormValidationMessagesTest">
+        <annotations>
+            <features value="Customer"/>
+            <stories value="Customer Registration Form Validation"/>
+            <title value="Verify validation error messages are displayed on registration form when submitting empty fields"/>
+            <description value="Verify that all required fields on customer registration form display proper mage-error validation messages when form is submitted without filling any data"/>
+            <severity value="MINOR"/>
+            <testCaseId value="AC-15355"/>
+            <group value="customer"/>
+            <group value="customer_registration"/>
+        </annotations>
+        <after>
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="customerLogoutStorefront"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="LoginAdmin"/>
+            <actionGroup ref="AdminDeleteCustomerActionGroup" stepKey="deleteCustomer">
+                <argument name="customerEmail" value="Simple_US_Customer.email"/>
+            </actionGroup>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+        <!-- Step 3: Navigate to customer registration page -->
+        <actionGroup ref="StorefrontOpenCustomerAccountCreatePageActionGroup" stepKey="openCreateAccountPage"/>
+        <!-- Step 4: Submit form without filling any data -->
+        <scrollTo selector="{{StorefrontCustomerCreateFormSection.createAccountButton}}" stepKey="scrollToCreateButton"/>
+        <waitForElementClickable selector="{{StorefrontCustomerCreateFormSection.createAccountButton}}" stepKey="waitForCreateAccountButton"/>
+        <click selector="{{StorefrontCustomerCreateFormSection.createAccountButton}}" stepKey="clickCreateAccountButton"/>
+        <waitForPageLoad stepKey="waitForValidation"/>
+        <!-- Step 5: Verify all required fields display proper error messages -->
+        <waitForText selector="{{StorefrontCustomerCreateFormSection.fieldErrorByFieldId('firstname-error')}}" userInput="{{ProductWarningMessage.require_Message}}" stepKey="assertFirstNameError"/>
+        <waitForText selector="{{StorefrontCustomerCreateFormSection.fieldErrorByFieldId('lastname-error')}}" userInput="{{ProductWarningMessage.require_Message}}" stepKey="assertLastNameError"/>
+        <waitForText selector="{{StorefrontCustomerCreateFormSection.fieldErrorByFieldId('email_address-error')}}" userInput="{{ProductWarningMessage.require_Message}}" stepKey="assertEmailError"/>
+        <waitForText selector="{{StorefrontCustomerCreateFormSection.fieldErrorByFieldId('password-error')}}" userInput="{{ProductWarningMessage.require_Message}}" stepKey="assertPasswordError"/>
+        <waitForText selector="{{StorefrontCustomerCreateFormSection.fieldErrorByFieldId('password-confirmation-error')}}" userInput="{{ProductWarningMessage.require_Message}}" stepKey="assertPasswordConfirmationError"/>
+        <!-- Step 6: Enter all needed data -->
+        <actionGroup ref="StorefrontFillCustomerAccountCreationFormActionGroup" stepKey="fillCreateAccountForm">
+            <argument name="customer" value="Simple_US_Customer"/>
+        </actionGroup>
+        <!-- Step 7: Click on save customer and verify customer is saved successfully -->
+        <actionGroup ref="StorefrontClickCreateAnAccountCustomerAccountCreationFormActionGroup" stepKey="submitCreateAccountForm"/>
+        <actionGroup ref="AssertMessageCustomerCreateAccountActionGroup" stepKey="seeSuccessMessage">
+            <argument name="messageType" value="success"/>
+            <argument name="message" value="{{customerSavedSuccessfullyMessage.value}}"/>
+        </actionGroup>
+    </test>
+</tests>

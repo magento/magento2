@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -14,6 +14,11 @@ use Magento\Framework\Setup\Declaration\Schema\Dto\ElementFactory;
 use Magento\Framework\Setup\Declaration\Schema\Dto\Schema;
 use Magento\Framework\Setup\Declaration\Schema\Dto\Table;
 use Magento\Framework\Setup\Declaration\Schema\Sharding;
+use Magento\Framework\Config\FileResolverByModule;
+use Magento\Framework\Setup\Declaration\Schema\Declaration\ReaderComposite;
+use Psr\Log\LoggerInterface;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\App\ObjectManager;
 
 /**
  * This type of builder is responsible for converting ENTIRE data, that comes from db
@@ -25,6 +30,7 @@ use Magento\Framework\Setup\Declaration\Schema\Sharding;
  *
  * @see        Schema
  * @inheritdoc
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class SchemaBuilder
 {
@@ -49,27 +55,73 @@ class SchemaBuilder
     private $tables;
 
     /**
+     * @var ReaderComposite
+     */
+    private $readerComposite;
+
+    /**
+     * @var LoggerInterface
+     */
+    private $logger;
+
+    /**
      * Constructor.
      *
      * @param ElementFactory $elementFactory
      * @param DbSchemaReaderInterface $dbSchemaReader
      * @param Sharding $sharding
+     * @param ReaderComposite $readerComposite
+     * @param LoggerInterface $logger
      */
     public function __construct(
         ElementFactory $elementFactory,
         DbSchemaReaderInterface $dbSchemaReader,
-        Sharding $sharding
+        Sharding $sharding,
+        ReaderComposite $readerComposite,
+        ?LoggerInterface $logger = null
     ) {
         $this->elementFactory = $elementFactory;
         $this->dbSchemaReader = $dbSchemaReader;
         $this->sharding = $sharding;
+        $this->readerComposite = $readerComposite;
+        $this->logger = $logger ?: ObjectManager::getInstance()->get(LoggerInterface::class);
     }
 
     /**
      * @inheritdoc
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @throws LocalizedException
      */
     public function build(Schema $schema)
     {
+        $data = $this->readerComposite->read(FileResolverByModule::ALL_MODULES);
+        $tablesWithJsonTypeField = [];
+        if (isset($data['table'])) {
+            foreach ($data['table'] as $keyTable => $tableColumns) {
+                $tableColumns['column'] ??= [];
+                foreach ($tableColumns['column'] as $keyColumn => $columnData) {
+                    try {
+                        if ($columnData['type'] == 'json') {
+                            $tablesWithJsonTypeField[$keyTable] = $keyColumn;
+                        }
+                    } catch (\Throwable $e) {
+                        // Create a new exception with extended context message
+                        $errorMessage = sprintf(
+                            "%s\nError processing table %s column %s",
+                            $e->getMessage(),
+                            $keyTable,
+                            $keyColumn
+                        );
+                        $this->logger->error($errorMessage);
+                        // Throw a new exception with the extended message
+                        // This preserves the original error but adds our context
+                        throw new LocalizedException(new Phrase($errorMessage));
+                    }
+                }
+            }
+        }
+
         foreach ($this->sharding->getResources() as $resource) {
             foreach ($this->dbSchemaReader->readTables($resource) as $tableName) {
                 $columns = [];
@@ -98,6 +150,10 @@ class SchemaBuilder
 
                 // Process columns
                 foreach ($columnsData as $columnData) {
+                    if (isset($tablesWithJsonTypeField[$tableName])
+                        && $tablesWithJsonTypeField[$tableName] === $columnData['name']) {
+                        $columnData['type'] = 'json';
+                    }
                     $columnData['table'] = $table;
                     $column = $this->elementFactory->create($columnData['type'], $columnData);
                     $columns[$column->getName()] = $column;

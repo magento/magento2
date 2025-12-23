@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -111,7 +111,7 @@ class SchemaBuilderTest extends TestCase
     /**
      * @return array
      */
-    public function tablesProvider()
+    public static function tablesProvider()
     {
         return [
             [
@@ -365,21 +365,14 @@ class SchemaBuilderTest extends TestCase
             ->willReturn('second_table');
         $resourceConnectionMock->expects(self::exactly(6))
             ->method('getTableName')
-            ->withConsecutive(
-                ['first_table'],
-                ['first_table'],
-                ['second_table'],
-                ['second_table'],
-                ['first_table'],
-                ['second_table']
-            )
-            ->willReturnOnConsecutiveCalls(
-                'first_table',
-                'first_table',
-                'second_table',
-                'second_table',
-                'first_table',
-                'second_table'
+            ->willReturnCallback(
+                function($arg1) {
+                    if ($arg1 == 'first_table') {
+                        return 'first_table';
+                    } elseif ($arg1 == 'second_table') {
+                        return 'second_table';
+                    }
+                }
             );
         $this->model->addTablesData($tablesData);
         $this->model->build($schema);

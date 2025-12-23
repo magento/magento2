@@ -2,8 +2,8 @@
 /**
  * Test case for \Magento\Framework\Profiler\Driver\Standard\Output\Csvfile
  *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework\Profiler\Driver\Standard\Output;
 
@@ -46,16 +46,16 @@ class CsvfileTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function displayDataProvider()
+    public static function displayDataProvider()
     {
         return [
             'Default delimiter & enclosure' => [
                 'statFile' => __DIR__ . '/_files/timers.php',
-                'expectedHtmlFile' => __DIR__ . '/_files/output_default.csv',
+                'expectedFile' => __DIR__ . '/_files/output_default.csv',
             ],
             'Custom delimiter & enclosure' => [
                 'statFile' => __DIR__ . '/_files/timers.php',
-                'expectedHtmlFile' => __DIR__ . '/_files/output_custom.csv',
+                'expectedFile' => __DIR__ . '/_files/output_custom.csv',
                 '.',
                 '`',
             ]

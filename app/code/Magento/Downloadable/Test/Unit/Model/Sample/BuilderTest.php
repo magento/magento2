@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -57,29 +57,15 @@ class BuilderTest extends TestCase
     protected function setUp(): void
     {
         $objectManagerHelper = new ObjectManager($this);
-        $this->downloadFileMock = $this->getMockBuilder(
-            File::class
-        )->disableOriginalConstructor()
-            ->getMock();
+        $this->downloadFileMock = $this->createMock(File::class);
 
-        $this->objectCopyServiceMock = $this->getMockBuilder(
-            Copy::class
-        )->disableOriginalConstructor()
-            ->getMock();
+        $this->objectCopyServiceMock = $this->createMock(Copy::class);
 
-        $this->dataObjectHelperMock = $this->getMockBuilder(
-            DataObjectHelper::class
-        )->disableOriginalConstructor()
-            ->getMock();
+        $this->dataObjectHelperMock = $this->createMock(DataObjectHelper::class);
 
-        $this->mockComponentFactory = $this->getMockBuilder(SampleFactory::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['create'])
-            ->getMock();
+        $this->mockComponentFactory = $this->createPartialMock(SampleFactory::class, ['create']);
 
-        $this->sampleMock = $this->getMockBuilder(SampleInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->sampleMock = $this->createMock(SampleInterface::class);
 
         $this->service = $objectManagerHelper->getObject(
             Builder::class,
@@ -118,21 +104,19 @@ class BuilderTest extends TestCase
                 SampleInterface::class
             )->willReturn($this->sampleMock);
         $this->sampleMock->expects($this->once())->method('getSampleType')->willReturn(Download::LINK_TYPE_FILE);
-        $sampleModel = $this->getMockBuilder(Sample::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $sampleModel = $this->createMock(Sample::class);
         $this->mockComponentFactory->expects($this->once())->method('create')->willReturn($sampleModel);
         $sampleModel->expects($this->once())->method('getBaseTmpPath')->willReturn($baseTmpPath);
         $sampleModel->expects($this->once())->method('getBasePath')->willReturn($basePath);
         $this->downloadFileMock->expects($this->once())
             ->method('moveFileFromTmp')
-            ->withConsecutive(
-                [
-                    $baseTmpPath,
-                    $basePath,
-                    $data['file']
-                ]
-            )->willReturn($fileName);
+            ->willReturnCallback(
+                function ($arg1, $arg2, $arg3) use ($baseTmpPath, $basePath, $data, $fileName) {
+                    if ($arg1 == $baseTmpPath && $arg2 == $basePath && $arg3 == $data['file']) {
+                        return $fileName;
+                    }
+                }
+            );
         $this->sampleMock->expects($this->once())->method('setSampleFile')->with($fileName);
         $this->sampleMock->expects($this->once())->method('setSortOrder')->with(1);
         $useDefaultTitle = $data['use_default_title'] ?? false;

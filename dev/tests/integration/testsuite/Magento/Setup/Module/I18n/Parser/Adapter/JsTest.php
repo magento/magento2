@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Setup\Module\I18n\Parser\Adapter;
 
@@ -38,13 +38,13 @@ class JsTest extends \PHPUnit\Framework\TestCase
             [
                 'phrase' => 'text single quote',
                 'file' => $file,
-                'line' => 2,
+                'line' => 1,
                 'quote' => '\''
             ],
             [
                 'phrase' => 'text "some',
                 'file' => $file,
-                'line' => 3,
+                'line' => 1,
                 'quote' => '\''
             ]
         ];

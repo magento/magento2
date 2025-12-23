@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -98,16 +98,16 @@ class RepositoryTest extends TestCase
     /**
      * @return array
      */
-    public function errorProvider(): array
+    public static function errorProvider(): array
     {
         return [
             'with_invalid_attribute_code' => [
-                'field_name' => 'attribute_code',
-                'field_value' => '****',
+                'fieldName' => 'attribute_code',
+                'fieldValue' => '****',
             ],
             'with_invalid_frontend_input' => [
-                'field_name' => 'frontend_input',
-                'field_value' => 'invalid_input',
+                'fieldName' => 'frontend_input',
+                'fieldValue' => 'invalid_input',
             ],
         ];
     }

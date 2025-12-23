@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -38,7 +38,7 @@ class SeparateAppsTest extends \PHPUnit\Framework\TestCase
     public function testAppNameIsSetWhenConfiguredCorrectly()
     {
         $newRelicWrapper = $this->getMockBuilder(NewRelicWrapper::class)
-            ->setMethods(['setAppName'])
+            ->onlyMethods(['setAppName'])
             ->getMock();
 
         $this->objectManager->configure([NewRelicWrapper::class => ['shared' => true]]);
@@ -61,7 +61,7 @@ class SeparateAppsTest extends \PHPUnit\Framework\TestCase
     public function testAppNameIsNotSetWhenDisabled()
     {
         $newRelicWrapper = $this->getMockBuilder(NewRelicWrapper::class)
-            ->setMethods(['setAppName'])
+            ->onlyMethods(['setAppName'])
             ->getMock();
 
         $this->objectManager->configure([NewRelicWrapper::class => ['shared' => true]]);

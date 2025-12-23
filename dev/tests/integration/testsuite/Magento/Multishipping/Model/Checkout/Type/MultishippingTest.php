@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Multishipping\Model\Checkout\Type;
 
@@ -205,7 +205,7 @@ class MultishippingTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function getCustomerDefaultAddressDataProvider()
+    public static function getCustomerDefaultAddressDataProvider()
     {
         return [
             self::ADDRESS_TYPE_SHIPPING => [self::ADDRESS_TYPE_SHIPPING],

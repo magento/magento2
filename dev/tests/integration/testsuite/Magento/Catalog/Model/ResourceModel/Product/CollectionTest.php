@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -244,15 +244,15 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function addIsSaleableAttributeToSortDataProvider(): array
+    public static function addIsSaleableAttributeToSortDataProvider(): array
     {
         return [
             [
-                'product_sku' => 'simple_saleable',
+                'productSku' => 'simple_saleable',
                 'order' => Collection::SORT_ORDER_DESC,
             ],
             [
-                'product_sku' => 'simple_not_saleable',
+                'productSku' => 'simple_not_saleable',
                 'order' => Collection::SORT_ORDER_ASC,
             ]
         ];
@@ -280,15 +280,15 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function addPriceAttributeToSortDataProvider(): array
+    public static function addPriceAttributeToSortDataProvider(): array
     {
         return [
             [
-                'product_sku' => 'simple',
+                'productSku' => 'simple',
                 'order' => Collection::SORT_ORDER_DESC,
             ],
             [
-                'product_sku' => 'simple-2',
+                'productSku' => 'simple-2',
                 'order' => Collection::SORT_ORDER_ASC,
             ]
         ];
@@ -349,7 +349,7 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function addAttributeTierPriceToFilterDataProvider(): array
+    public static function addAttributeTierPriceToFilterDataProvider(): array
     {
         return [
             'condition is array' => [['eq' => 8]],
@@ -376,7 +376,7 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function addAttributeIsSaleableToFilterDataProvider(): array
+    public static function addAttributeIsSaleableToFilterDataProvider(): array
     {
         return [
             'condition is array' => [['eq' => 1]],

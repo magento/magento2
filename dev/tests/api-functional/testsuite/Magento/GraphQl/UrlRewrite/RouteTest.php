@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -11,6 +11,8 @@ use Magento\Catalog\Api\CategoryRepositoryInterface;
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Framework\Exception\AlreadyExistsException;
+use Magento\TestFramework\Fixture\DataFixture;
+use Magento\TestFramework\Fixture\DataFixtureStorageManager;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\ObjectManager;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
@@ -18,9 +20,11 @@ use Magento\UrlRewrite\Model\ResourceModel\UrlRewrite as UrlRewriteResourceModel
 use Magento\UrlRewrite\Model\UrlFinderInterface;
 use Magento\UrlRewrite\Model\UrlRewrite as UrlRewriteModel;
 use Magento\UrlRewrite\Service\V1\Data\UrlRewrite as UrlRewriteService;
+use Magento\UrlRewrite\Test\Fixture\UrlRewrite as UrlRewriteFixture;
 
 /**
  * Test the GraphQL endpoint's Route query to verify url route information is correctly returned.
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class RouteTest extends GraphQlAbstract
 {
@@ -222,19 +226,16 @@ QUERY;
   route(url:"{$urlKey}")
   {
     __typename
+    relative_url
+    redirect_code
+    type
     ...on SimpleProduct {
-      name
-      sku
-      relative_url
-      redirect_code
-      type
+        name
+        sku
     }
     ...on CategoryTree {
         name
         uid
-        relative_url
-        redirect_code
-        type
     }
     ...on CmsPage {
     	title
@@ -242,9 +243,6 @@ QUERY;
         page_layout
         content
         content_heading
-        relative_url
-        redirect_code
-        type
     }
   }
 }
@@ -384,7 +382,7 @@ QUERY;
         $urlRewriteResourceModel->save($urlRewrite);
     }
 
-    public function urlRewriteEntitiesDataProvider(): array
+    public static function urlRewriteEntitiesDataProvider(): array
     {
         return [
             [
@@ -477,6 +475,21 @@ QUERY;
         $this->assertNull($apiResponse['route']);
     }
 
+    #[
+        DataFixture(UrlRewriteFixture::class, ['redirect_type' => 301, 'target_path' => 'http://example.com'], 'url')
+    ]
+    public function testCustomUrlRewriteRedirectToExternalUrl(): void
+    {
+        $fixtures = DataFixtureStorageManager::getStorage();
+        $urlRewrite = $fixtures->get('url');
+        $response = $this->getRouteQueryResponse($urlRewrite->getRequestPath());
+        $this->assertNotNull($response['route']);
+        $this->assertEquals('RoutableUrl', $response['route']['__typename']);
+        $this->assertEquals($urlRewrite->getTargetPath(), $response['route']['relative_url']);
+        $this->assertEquals($urlRewrite->getRedirectType(), $response['route']['redirect_code']);
+        $this->assertNull($response['route']['type']);
+    }
+
     /**
      * Return UrlRewrite model instance by request_path
      *
@@ -502,5 +515,28 @@ QUERY;
         $urlRewrite->load($urlRewriteService->getUrlRewriteId());
 
         return $urlRewrite;
+    }
+
+    #[
+        DataFixture(UrlRewriteFixture::class, ['request_path' => 'test-same-path', 'target_path' => 'test-same-path'])
+    ]
+    public function testCustomUrlRewriteRedirectToSameUrl(): void
+    {
+        $urlPath = 'test-same-path';
+        $query = <<<QUERY
+{
+  route(url:"{$urlPath}")
+  {
+   relative_url
+   type
+   redirect_code
+  }
+}
+QUERY;
+
+        $this->expectExceptionMessage(
+            "No such entity found with matching URL key: " . $urlPath
+        );
+        $this->graphQlQuery($query);
     }
 }

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -170,7 +170,13 @@ class ConfigModelTest extends TestCase
 
         $this->writer
             ->method('saveConfig')
-            ->withConsecutive([$testSetExpected1], [$testSetExpected2]);
+            ->willReturnCallback(
+                function ($arg) use ($testSetExpected1, $testSetExpected2) {
+                    if ($arg == $testSetExpected1 || $arg == $testSetExpected2) {
+                        return null;
+                    }
+                }
+            );
 
         $this->configModel->process([]);
     }

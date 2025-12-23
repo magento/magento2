@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Catalog\Block\Adminhtml\Product\Helper\Form\Gallery;
@@ -125,7 +125,7 @@ class ContentTest extends \PHPUnit\Framework\TestCase
      *
      * @return array
      */
-    public function getImagesAndImageTypesDataProvider()
+    public static function getImagesAndImageTypesDataProvider()
     {
         return [
             [
@@ -182,7 +182,7 @@ class ContentTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array[]
      */
-    public function imagesPositionStoreViewDataProvider(): array
+    public static function imagesPositionStoreViewDataProvider(): array
     {
         return [
             [

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -69,7 +69,8 @@ class CalculatorTest extends TestCase
 
         $productMock = $this->getMockBuilder(SaleableInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getPriceInfo', '__wakeup'])
+            ->addMethods(['__wakeup'])
+            ->onlyMethods(['getPriceInfo'])
             ->getMockForAbstractClass();
 
         $weeeAdjustmentMock = $this->getMockBuilder(AdjustmentInterface::class)
@@ -136,7 +137,8 @@ class CalculatorTest extends TestCase
 
         $productMock = $this->getMockBuilder(SaleableInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getPriceInfo', '__wakeup'])
+            ->addMethods(['__wakeup'])
+            ->onlyMethods(['getPriceInfo'])
             ->getMockForAbstractClass();
 
         $taxAdjustmentMock = $this->getMockBuilder(AdjustmentInterface::class)

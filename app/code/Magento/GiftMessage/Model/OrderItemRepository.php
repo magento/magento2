@@ -1,8 +1,7 @@
 <?php
 /**
- *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\GiftMessage\Model;
@@ -10,14 +9,15 @@ namespace Magento\GiftMessage\Model;
 use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Exception\State\InvalidTransitionException;
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 
 /**
  * Order item gift message repository object.
  */
-class OrderItemRepository implements \Magento\GiftMessage\Api\OrderItemRepositoryInterface
+class OrderItemRepository implements \Magento\GiftMessage\Api\OrderItemRepositoryInterface, ResetAfterRequestInterface
 {
     /**
-     * Order factory.
+     * Factory for Order instances.
      *
      * @var \Magento\Sales\Model\OrderFactory
      */
@@ -38,7 +38,7 @@ class OrderItemRepository implements \Magento\GiftMessage\Api\OrderItemRepositor
     protected $storeManager;
 
     /**
-     * Gift message save model.
+     * Model for Gift message save.
      *
      * @var \Magento\GiftMessage\Model\Save
      */
@@ -52,8 +52,6 @@ class OrderItemRepository implements \Magento\GiftMessage\Api\OrderItemRepositor
     protected $helper;
 
     /**
-     * Message factory.
-     *
      * @var \Magento\GiftMessage\Model\MessageFactory
      */
     protected $messageFactory;
@@ -174,5 +172,13 @@ class OrderItemRepository implements \Magento\GiftMessage\Api\OrderItemRepositor
             return $item;
         }
         return false;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        $this->orders = null;
     }
 }

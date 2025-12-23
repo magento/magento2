@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Catalog\Model\Product\Attribute\Backend;
@@ -53,6 +53,12 @@ class Sku extends AbstractBackend
         if ($this->getAttribute()->getIsRequired() && strlen($value) === 0) {
             throw new LocalizedException(
                 __('The "%1" attribute value is empty. Set the attribute and try again.', $attrCode)
+            );
+        }
+
+        if (strcasecmp($attrCode, 'sku') >= 0 && strlen($value) === 0) {
+            throw new LocalizedException(
+                __('The "%1" attribute value is empty.', $attrCode)
             );
         }
 

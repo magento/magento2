@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -39,7 +39,7 @@ class ResolveType implements FormatterInterface
     {
         $config = [];
         if ($configElement instanceof InterfaceType || $configElement instanceof UnionType) {
-            $typeResolver = $this->objectManager->create($configElement->getTypeResolver());
+            $typeResolver = $this->objectManager->get($configElement->getTypeResolver());
             $config['resolveType'] = function ($value) use ($typeResolver) {
                 return $typeResolver->resolveType($value);
             };

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
  /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
+   * Copyright 2025 Adobe
+  * All Rights Reserved.
   */
 -->
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -13,10 +13,14 @@
             <argument name="sku" type="string"/>
         </arguments>
         <!--Click on Add New Review -->
+        <waitForElementClickable selector="{{AdminCreateNewReviewSection.addNewReviewButton}}" stepKey="waitForElementClickOnNewReviewToBeClickable"/>
         <click selector="{{AdminCreateNewReviewSection.addNewReviewButton}}" stepKey="clickOnNewReview"/>
-        <waitForElementVisible selector="{{AdminCreateNewReviewSection.addNewReviewBySKU(sku)}}" stepKey="waitForVisibleReviewButton"/>
         <!--Select Product by SKU and Create Review -->
-        <click selector="{{AdminCreateNewReviewSection.addNewReviewBySKU(sku)}}" stepKey="addNewReviewBySKU"/>
+        <fillField selector="{{AdminCreateNewReviewSection.filterName}}" userInput="{{sku}}" stepKey="fillValue"/>
+        <pressKey parameterArray="[\Facebook\WebDriver\WebDriverKeys::ENTER]" selector="{{AdminCreateNewReviewSection.filterName}}" stepKey="pressEnter"/>
+        <waitForElementClickable selector="{{AdminCreateNewReviewSection.firstRowReview}}" stepKey="waitForVisibleReviewButton"/>
+        <executeJS function="jQuery('{{AdminCreateNewReviewSection.firstRowReview}}').click()" stepKey="addNewReviewBySKU"/>
+        <waitForPageLoad stepKey="waitForPageLoad"/>
         <waitForElementVisible selector="{{AdminCreateNewReviewSection.select_stores}}" stepKey="waitForVisibleReviewDetails"/>
         <selectOption selector="{{AdminCreateNewReviewSection.select_stores}}" userInput="{{review.select_stores[0]}}" stepKey="visibilityField"/>
         <fillField selector="{{AdminCreateNewReviewSection.nickname}}" userInput="{{review.nickname}}" stepKey="fillNicknameField"/>

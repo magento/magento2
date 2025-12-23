@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -49,11 +49,11 @@ class ResponseResolverTest extends TestCase
     protected function setUp(): void
     {
         $this->objectManagerHelper = new ObjectManagerHelper($this);
-        $this->converterMock = $this->getMockForAbstractClass(ConverterInterface::class);
+        $this->converterMock = $this->createMock(ConverterInterface::class);
         $this->successResponseHandlerMock = $this->getMockBuilder(ResponseHandlerInterface::class)
-            ->getMockForAbstractClass();
+            ->getMock();
         $this->notFoundResponseHandlerMock = $this->getMockBuilder(ResponseHandlerInterface::class)
-            ->getMockForAbstractClass();
+            ->getMock();
         $this->responseResolver = $this->objectManagerHelper->getObject(
             ResponseResolver::class,
             [

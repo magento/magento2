@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -122,8 +122,13 @@ class GetShippingItemsGridTest extends TestCase
             ->with($result)->willReturnSelf();
         $this->requestMock
             ->method('getParam')
-            ->withConsecutive(['order_id'], ['shipment_id'], ['shipment'], ['tracking'], ['index'])
-            ->willReturnOnConsecutiveCalls($orderId, $shipmentId, $shipment, $tracking);
+            ->willReturnCallback(fn($param) => match ([$param]) {
+                ['order_id'] => $orderId,
+                ['shipment_id'] => $shipmentId,
+                ['shipment'] => $shipment,
+                ['tracking'] =>  $tracking,
+                ['index'] => null
+            });
         $gridMock->expects($this->once())
             ->method('setIndex')->willReturnSelf();
         $gridMock->expects($this->once())

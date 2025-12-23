@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
-  */
+/**
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
+ */
 -->
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -17,10 +17,14 @@
             <severity value="MAJOR"/>
             <testCaseId value="MAGETWO-95028"/>
             <group value="customer"/>
+            <group value="cloud"/>
         </annotations>
         <before>
             <!--Log In-->
             <actionGroup ref="AdminLoginActionGroup" stepKey="logIn"/>
+            <!-- Delete All Non Default Tax Rates-->
+            <actionGroup ref="AdminTaxRateGridOpenPageActionGroup" stepKey="goToTaxRatesPage"/>
+            <actionGroup ref="AdminDeleteMultipleTaxRatesActionGroup" stepKey="deleteAllNonDefaultTaxRates"/>
             <!--Create category-->
             <createData entity="_defaultCategory" stepKey="createCategory"/>
             <!--Create product-->
@@ -47,7 +51,7 @@
             <argument name="taxCode" value="SimpleTaxUKZeroRate"/>
         </actionGroup>
         <actionGroup ref="AddCustomerTaxClassActionGroup" stepKey="addCustomerTaxClass">
-            <argument name="customerTaxClassName" value="UK_zero"/>
+            <argument name="customerTaxClassName" value="{{UkCustomerTaxClass.taxClassName}}"/>
         </actionGroup>
         <click stepKey="disableDefaultProdTaxClass" selector="{{AdminTaxRulesSection.defaultCustomerTaxClass}}"/>
         <wait stepKey="waitForDisableDefaultProdTaxClass" time="2"/>
@@ -57,7 +61,7 @@
         <!--Create a Customer Group (CUSTOMERS > Customer Groups)-->
         <actionGroup ref="AdminCreateCustomerGroupActionGroup" stepKey="createCustomerGroup">
             <argument name="groupName" value="test_UK"/>
-            <argument name="taxClass" value="UK_zero"/>
+            <argument name="taxClass" value="{{UkCustomerTaxClass.taxClassName}}"/>
         </actionGroup>
 
         <!--Set Customer Create New Account Options Config-->
@@ -119,15 +123,9 @@
             <actionGroup ref="AdminTaxRateGridOpenPageActionGroup" stepKey="goToTaxRatesPage"/>
 
             <!-- Delete the two tax rates that were created -->
-            <actionGroup ref="deleteEntitySecondaryGrid" stepKey="deleteNYRate">
-                <argument name="name" value="{{SimpleTaxUK.state}}-{{SimpleTaxUK.rate}}"/>
-                <argument name="searchInput" value="{{AdminSecondaryGridSection.taxIdentifierSearch}}"/>
-            </actionGroup>
-
-            <actionGroup ref="deleteEntitySecondaryGrid" stepKey="deleteCARate">
-                <argument name="name" value="{{SimpleTaxUKZeroRate.state}}-{{SimpleTaxUKZeroRate.rate}}"/>
-                <argument name="searchInput" value="{{AdminSecondaryGridSection.taxIdentifierSearch}}"/>
-            </actionGroup>
+            <actionGroup ref="AdminDeleteMultipleTaxRatesActionGroup" stepKey="deleteAllNonDefaultTaxRates"/>
+            <comment userInput="Preserve BiC" stepKey="deleteNYRate"/>
+            <comment userInput="Preserve BiC" stepKey="deleteCARate"/>
 
             <!--Delete created customer group-->
             <actionGroup ref="AdminDeleteCustomerGroupActionGroup" stepKey="deleteCustomerGroup">
@@ -139,9 +137,10 @@
             <deleteData createDataKey="createCategory" stepKey="deleteCategoryFirst"/>
 
             <actionGroup ref="DeleteProductTaxClassActionGroup" stepKey="deleteFirstProductTaxClass">
-                <argument name="taxClassName" value="UK_zero"/>
+                <argument name="taxClassName" value="{{UkCustomerTaxClass.taxClassName}}"/>
             </actionGroup>
 
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer" />
             <actionGroup ref="DeleteCustomerByEmailActionGroup" stepKey="deleteCustomer">
                 <argument name="email" value="{{CustomerEntityOne.email}}"/>
             </actionGroup>

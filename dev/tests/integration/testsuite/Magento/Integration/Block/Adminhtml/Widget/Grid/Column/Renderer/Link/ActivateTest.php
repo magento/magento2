@@ -1,8 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
- *
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Integration\Block\Adminhtml\Widget\Grid\Column\Renderer\Link;
 
@@ -82,7 +81,7 @@ class ActivateTest extends \PHPUnit\Framework\TestCase
         $this->assertStringContainsString('>Reauthorize</a>', $buttonHtml);
     }
 
-    public function renderTokenExchangeProvider()
+    public static function renderTokenExchangeProvider()
     {
         return [
             ['http://example.com/endpoint', 'http://example.com/identity', 1],

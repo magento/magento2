@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -54,10 +54,10 @@ class CollectionTest extends TestCase
     {
         $this->entityFactory = $this->getMockBuilder(EntityFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
         $this->themeConfigFactory = $this->getMockBuilder(\Magento\Framework\Config\ThemeFactory::class)
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->directory = $this->getMockBuilder(ReadInterface::class)
@@ -196,7 +196,7 @@ class CollectionTest extends TestCase
     /**
      * @return array
      */
-    public function addConstraintDataProvider()
+    public static function addConstraintDataProvider()
     {
         return [
             'area' => [

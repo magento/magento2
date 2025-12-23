@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -11,14 +11,32 @@ use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\Exception\AuthenticationException;
 use Magento\Framework\Registry;
+use Magento\Framework\Stdlib\DateTime;
+use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
 use Magento\GraphQl\GetCustomerAuthenticationHeader;
 use Magento\Sales\Api\OrderRepositoryInterface;
 use Magento\Sales\Model\ResourceModel\Order\Collection;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
+use Magento\Catalog\Test\Fixture\Product as ProductFixture;
+use Magento\TestFramework\Fixture\DataFixture;
+use Magento\Checkout\Test\Fixture\SetDeliveryMethod;
+use Magento\Checkout\Test\Fixture\SetBillingAddress as SetBillingAddress;
+use Magento\Checkout\Test\Fixture\SetShippingAddress as SetShippingAddress;
+use Magento\Checkout\Test\Fixture\SetPaymentMethod as SetPaymentMethod;
+use Magento\Checkout\Test\Fixture\PlaceOrder as PlaceOrder;
+use Magento\Customer\Test\Fixture\Customer;
+use Magento\Quote\Test\Fixture\AddProductToCart as AddProductToCartFixture;
+use Magento\Quote\Test\Fixture\CustomerCart;
+use Magento\TestFramework\Fixture\DataFixtureStorage;
+use Magento\TestFramework\Fixture\DataFixtureStorageManager;
+use Magento\Tax\Model\Config as TaxConfig;
+use Magento\TestFramework\Fixture\Config;
 
 /**
  * Class RetrieveOrdersTest
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class RetrieveOrdersByOrderNumberTest extends GraphQlAbstract
 {
@@ -34,6 +52,14 @@ class RetrieveOrdersByOrderNumberTest extends GraphQlAbstract
     /** @var ProductRepositoryInterface */
     private $productRepository;
 
+    /** @var TimezoneInterface */
+    private $timezone;
+
+    /**
+     * @var DataFixtureStorage
+     */
+    private $fixtures;
+
     protected function setUp():void
     {
         parent::setUp();
@@ -42,6 +68,8 @@ class RetrieveOrdersByOrderNumberTest extends GraphQlAbstract
         $this->orderRepository = $objectManager->get(OrderRepositoryInterface::class);
         $this->searchCriteriaBuilder = $objectManager->get(SearchCriteriaBuilder::class);
         $this->productRepository = $objectManager->get(ProductRepositoryInterface::class);
+        $this->timezone = $objectManager->get(TimezoneInterface::class);
+        $this->fixtures = $objectManager->get(DataFixtureStorageManager::class)->getStorage();
     }
 
     /**
@@ -89,6 +117,9 @@ class RetrieveOrdersByOrderNumberTest extends GraphQlAbstract
         $this->assertEquals($expectedOrderTotal, $actualOrderTotalFromResponse, 'Totals do not match');
     }
 
+    #[
+        Config(TaxConfig::XML_PATH_DISPLAY_SALES_PRICE, TaxConfig::DISPLAY_TYPE_INCLUDING_TAX),
+    ]
     /**
      *  Verify the customer order with tax, discount with shipping tax class set for calculation setting
      *
@@ -150,6 +181,8 @@ class RetrieveOrdersByOrderNumberTest extends GraphQlAbstract
             ]
         ];
         $this->assertResponseFields($customerOrderResponse[0]["payment_methods"], $paymentMethodAssertionMap);
+        $this->assertEquals(10.75, $customerOrderResponse[0]['items'][0]['product_sale_price']['value']);
+        $this->assertEquals(7.5, $customerOrderResponse[0]['total']['taxes'][0]['rate']);
         // Asserting discounts on order item level
         $this->assertEquals(4, $customerOrderResponse[0]['items'][0]['discounts'][0]['amount']['value']);
         $this->assertEquals('USD', $customerOrderResponse[0]['items'][0]['discounts'][0]['amount']['currency']);
@@ -402,6 +435,96 @@ QUERY;
         $this->assertArrayHasKey('total_count', $response['customer']['orders']);
         $this->assertEquals(6, $response['customer']['orders']['total_count']);
         $this->assertCount($response['customer']['orders']['total_count'], $response['customer']['orders']['items']);
+    }
+
+    /**
+     * @return void
+     * @throws AuthenticationException
+     */
+    #[
+        DataFixture(Customer::class, as: 'customer'),
+        DataFixture(ProductFixture::class, as: 'product'),
+
+        DataFixture(CustomerCart::class, ['customer_id' => '$customer.id$'], 'cart1'),
+        DataFixture(AddProductToCartFixture::class, ['cart_id' => '$cart1.id$', 'product_id' => '$product.id$']),
+        DataFixture(SetBillingAddress::class, ['cart_id' => '$cart1.id$']),
+        DataFixture(SetShippingAddress::class, ['cart_id' => '$cart1.id$']),
+        DataFixture(SetDeliveryMethod::class, ['cart_id' => '$cart1.id$']),
+        DataFixture(SetPaymentMethod::class, ['cart_id' => '$cart1.id$']),
+        DataFixture(PlaceOrder::class, ['cart_id' => '$cart1.id$'], 'or1'),
+
+        DataFixture(CustomerCart::class, ['customer_id' => '$customer.id$'], 'cart2'),
+        DataFixture(AddProductToCartFixture::class, ['cart_id' => '$cart2.id$', 'product_id' => '$product.id$']),
+        DataFixture(SetBillingAddress::class, ['cart_id' => '$cart2.id$']),
+        DataFixture(SetShippingAddress::class, ['cart_id' => '$cart2.id$']),
+        DataFixture(SetDeliveryMethod::class, ['cart_id' => '$cart2.id$']),
+        DataFixture(SetPaymentMethod::class, ['cart_id' => '$cart2.id$']),
+        DataFixture(PlaceOrder::class, ['cart_id' => '$cart2.id$'], 'or2'),
+
+        DataFixture(CustomerCart::class, ['customer_id' => '$customer.id$'], 'cart3'),
+        DataFixture(AddProductToCartFixture::class, ['cart_id' => '$cart3.id$', 'product_id' => '$product.id$']),
+        DataFixture(SetBillingAddress::class, ['cart_id' => '$cart3.id$']),
+        DataFixture(SetShippingAddress::class, ['cart_id' => '$cart3.id$']),
+        DataFixture(SetDeliveryMethod::class, ['cart_id' => '$cart3.id$']),
+        DataFixture(SetPaymentMethod::class, ['cart_id' => '$cart3.id$']),
+        DataFixture(PlaceOrder::class, ['cart_id' => '$cart3.id$'], 'or3')
+    ]
+    public function testGetCustomerDescendingSortedOrders()
+    {
+        $customer = $this->fixtures->get('customer');
+
+        $query = <<<QUERY
+{
+  customer {
+    orders(
+      sort: {
+        sort_field: CREATED_AT,
+        sort_direction: DESC
+      }
+    ) {
+      items {
+        id
+        number
+         status
+         order_date
+      }
+    }
+  }
+}
+QUERY;
+
+        $currentEmail = $customer->getEmail();
+        $currentPassword = 'password';
+        $response = $this->graphQlQuery(
+            $query,
+            [],
+            '',
+            $this->customerAuthenticationHeader->execute($currentEmail, $currentPassword)
+        );
+        $this->assertArrayHasKey('orders', $response['customer']);
+        $this->assertArrayHasKey('items', $response['customer']['orders']);
+        $customerOrderItemsInResponse = $response['customer']['orders']['items'];
+
+        $orderNumberCreatedAtExpected = [];
+        for ($i = 1; $i <= 3; $i++) {
+            $orderNumber = $this->fixtures->get('or' . $i)->getIncrementId();
+            $orderCreatedAt = $this->timezone->date($this->fixtures->get('or' . $i)->getCreatedAt())
+                ->format(DateTime::DATETIME_SLASH_PHP_FORMAT);
+            $orderNumberCreatedAtExpected[$orderNumber] = $orderCreatedAt;
+        }
+
+        array_multisort($orderNumberCreatedAtExpected, SORT_DESC);
+
+        $orderNumberCreatedAtResponse = [];
+        foreach ($customerOrderItemsInResponse as $item) {
+            $orderNumberCreatedAtResponse[$item['number']] = $item['order_date'];
+        }
+
+        $this->assertEquals(
+            $orderNumberCreatedAtExpected,
+            $orderNumberCreatedAtResponse,
+            "The order number is different than the expected for order"
+        );
     }
 
     /**
@@ -682,7 +805,7 @@ QUERY;
     /**
      * @return array
      */
-    public function dataProviderIncorrectOrder(): array
+    public static function dataProviderIncorrectOrder(): array
     {
         return [
             'correctFormatNonExistingOrder' => [
@@ -772,7 +895,7 @@ QUERY;
     /**
      * @return array
      */
-    public function dataProviderMultiStores(): array
+    public static function dataProviderMultiStores(): array
     {
         return [
             'firstStoreFirstOrder' => [
@@ -1226,7 +1349,13 @@ QUERY;
            billing_address {
            ... address
            }
-           items{product_name product_sku quantity_ordered discounts {amount{value currency} label}}
+           items{
+             product_name
+             product_sku
+             quantity_ordered
+             product_sale_price {value}
+             discounts {amount{value currency} label}
+           }
            total {
              base_grand_total{value currency}
              grand_total{value currency}

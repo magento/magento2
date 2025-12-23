@@ -3,14 +3,13 @@
 /**
  * Default test suites declaration: run verification of coding standards and code integrity test suites
  *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
  */
 -->
 <phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/9.3/phpunit.xsd"
-         colors="true"
-         columns="max"
+         xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/10.5/phpunit.xsd"
+         colors="true" columns="max"
          beStrictAboutTestsThatDoNotTestAnything="false"
          bootstrap="./framework/bootstrap.php">
     <testsuites>
@@ -40,12 +39,10 @@
         <!-- TESTS_COMPOSER_PATH - specify the path to composer binary, if a relative reference cannot be resolved -->
         <!--<const name="TESTS_COMPOSER_PATH" value="/usr/local/bin/composer"/>-->
     </php>
-    <listeners>
-        <listener class="Yandex\Allure\PhpUnit\AllurePhpUnit">
-            <arguments>
-                <string>var/allure-results</string> <!-- XML files output directory -->
-                <boolean>true</boolean> <!-- Whether to delete previous results on rerun -->
-            </arguments>
-        </listener>
-    </listeners>
+    <extensions>
+        <bootstrap class="Qameta\Allure\PHPUnit\AllureExtension">
+            <!-- Path to config file (default is config/allure.config.php) -->
+            <parameter name="config" value="allure/allure.config.php" />
+        </bootstrap>
+    </extensions>
 </phpunit>

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Setup\Fixtures;
@@ -135,6 +135,7 @@ class CategoriesFixture extends Fixture
                     ->setName($this->getCategoryName($parentCategory, $nestingLevel, $i))
                     ->setParentId($parentCategory->getId())
                     ->setLevel($parentCategory->getLevel() + 1)
+                    ->setPosition($i)
                     ->setAvailableSortBy('name')
                     ->setIsAnchor($nestingLevel <= 2)
                     ->setDefaultSortBy('name')

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\CatalogImportExport\Model\Import\Product\Type;
 
@@ -69,7 +69,7 @@ class AbstractTest extends \PHPUnit\Framework\TestCase
      * @return array
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function prepareAttributesWithDefaultValueForSaveDataProvider(): array
+    public static function prepareAttributesWithDefaultValueForSaveDataProvider(): array
     {
         return [
             'Updating existing product with attributes that do not have default values' => [
@@ -210,7 +210,7 @@ class AbstractTest extends \PHPUnit\Framework\TestCase
      *
      * @return array
      */
-    public function clearEmptyDataDataProvider(): array
+    public static function clearEmptyDataDataProvider(): array
     {
         // We use sku attribute to test static attributes.
         return [

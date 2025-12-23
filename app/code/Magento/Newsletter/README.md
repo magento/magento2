@@ -5,15 +5,18 @@ This module allows clients to subscribe for information about new promotions and
 ## Installation
 
 Before installing this module, note that the Magento_Newsletter is dependent on the following modules:
+
 - `Magento_Store`
 - `Magento_Customer`
 - `Magento_Eav`
 - `Magento_Widget`
 
 Before disabling or uninstalling this module, note that the following modules depends on this module:
+
 - `Magento_NewsletterGraphQl`
 
 This module creates the following tables in the database:
+
 - `newsletter_subscriber`
 - `newsletter_template`
 - `newsletter_queue`
@@ -21,19 +24,20 @@ This module creates the following tables in the database:
 - `newsletter_queue_store_link`
 - `newsletter_problem`
 
-For information about a module installation in Magento 2, see [Enable or disable modules](https://devdocs.magento.com/guides/v2.4/install-gde/install/cli/install-cli-subcommands-enable.html).
+For information about a module installation, see [Enable or disable modules](https://experienceleague.adobe.com/en/docs/commerce-operations/installation-guide/tutorials/manage-modules).
 
 ## Extensibility
 
-Extension developers can interact with the Magento_Newsletter module. For more information about the Magento extension mechanism, see [Magento plug-ins](https://devdocs.magento.com/guides/v2.4/extension-dev-guide/plugins.html).
+Extension developers can interact with the Magento_Newsletter module. For more information about the extension mechanism, see [Plugins](https://developer.adobe.com/commerce/php/development/components/plugins/).
 
-[The Magento dependency injection mechanism](https://devdocs.magento.com/guides/v2.4/extension-dev-guide/depend-inj.html) enables you to override the functionality of the Magento_Newsletter module.
+[The dependency injection mechanism](https://developer.adobe.com/commerce/php/development/components/dependency-injection/) enables you to override the functionality of the Magento_Newsletter module.
 
-A lot of functionality in the module is on JavaScript, use [mixins](https://devdocs.magento.com/guides/v2.4/javascript-dev-guide/javascript/js_mixins.html) to extend it.
+A lot of functionality in the module is on JavaScript, use [mixins](https://developer.adobe.com/commerce/frontend-core/javascript/mixins/) to extend it.
 
 ### Layouts
 
 This module introduces the following layouts in the `view/frontend/layout` and `view/adminhtml/layout` directories:
+
 - `view/adminhtml/layout`:
     - `newsletter_problem_block`
     - `newsletter_problem_grid`
@@ -53,30 +57,31 @@ This module introduces the following layouts in the `view/frontend/layout` and `
     - `newsletter_template_preview`
     - `newsletter_template_preview_popup`
     - `preview`
-    
+
 - `view/frontend/layout`:
     - `customer_account`
     - `customer_account_create`
     - `newsletter_manage_index`
     - `default`
 
-For more information about a layout in Magento 2, see the [Layout documentation](https://devdocs.magento.com/guides/v2.4/frontend-dev-guide/layouts/layout-overview.html).
+For more information about a layout, see the [Layout documentation](https://developer.adobe.com/commerce/frontend-core/guide/layouts/).
 
 ### UI components
 
 This module extends customer form ui component the configuration file located in the `view/base/ui_component` directory:
+
 - `customer_form`
 
-For information about a UI component in Magento 2, see [Overview of UI components](http://devdocs.magento.com/guides/v2.4/ui_comp_guide/bk-ui_comps.html).
+For information about a UI component, see [Overview of UI components](https://developer.adobe.com/commerce/frontend-core/ui-components/).
 
 ## Additional information
 
-[Learn more about newsletter](https://docs.magento.com/user-guide/marketing/newsletters.html).
+[Learn more about newsletter](https://experienceleague.adobe.com/en/docs/commerce-admin/marketing/communications/newsletters/newsletters).
 
 ### Cron options
 
 Cron group configuration can be set at `etc/crontab.xml`:
+
 - `newsletter_send_all` - schedules newsletter sending
 
-[Learn how to configure and run cron in Magento.](http://devdocs.magento.com/guides/v2.4/config-guide/cli/config-cli-subcommands-cron.html).
-
+[Learn how to configure and run cron](https://experienceleague.adobe.com/en/docs/commerce-operations/configuration-guide/cli/configure-cron-jobs).

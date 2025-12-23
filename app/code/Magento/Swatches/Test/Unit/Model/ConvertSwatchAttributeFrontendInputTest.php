@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -11,6 +11,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Swatches\Model\ConvertSwatchAttributeFrontendInput;
 use Magento\Swatches\Model\Swatch;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Tests for \Magento\Swatches\Model\ConvertSwatchAttributeFrontendInput.
@@ -32,9 +33,7 @@ class ConvertSwatchAttributeFrontendInputTest extends TestCase
             $objectManager->getObject(ConvertSwatchAttributeFrontendInput::class);
     }
 
-    /**
-     * @dataProvider attributeData
-     */
+    #[DataProvider('attributeData')]
     public function testExecute($inputData, $outputData)
     {
         $result = $this->convertSwatchAttributeFrontendInput->execute($inputData);
@@ -44,7 +43,7 @@ class ConvertSwatchAttributeFrontendInputTest extends TestCase
     /**
      * @return array
      */
-    public function attributeData()
+    public static function attributeData()
     {
         return [
             [

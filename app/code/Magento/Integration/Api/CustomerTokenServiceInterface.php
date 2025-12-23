@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Integration\Api;
@@ -21,6 +21,7 @@ interface CustomerTokenServiceInterface
      * @param string $password
      * @return string Token created
      * @throws \Magento\Framework\Exception\AuthenticationException
+     * @throws \Magento\Framework\Exception\EmailNotConfirmedException
      */
     public function createCustomerAccessToken($username, $password);
 

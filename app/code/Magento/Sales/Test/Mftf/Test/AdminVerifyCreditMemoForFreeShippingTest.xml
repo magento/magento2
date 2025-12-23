@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+   * Copyright 2024 Adobe
+  * All Rights Reserved.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminVerifyCreditMemoForFreeShippingTest">
+        <annotations>
+            <features value="CreditMemo"/>
+            <stories value="Create credit memo"/>
+            <title value="Verifying Credit Memo For Free Shipping"/>
+            <description value="Checking Credit Memo For Free Shipping related (Division by zero exception)"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="AC-8168"/>
+        </annotations>
+        <before>
+            <createData entity="SimpleProduct2" stepKey="createSimpleProduct"/>
+            <createData entity="Simple_US_CA_Customer" stepKey="createCustomer"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+        </before>
+        <after>
+            <deleteData createDataKey="createSimpleProduct" stepKey="deleteSimpleProduct"/>
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer" />
+            <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
+            <magentoCLI command="config:set {{DisableFreeShippingConfigData.path}} {{DisableFreeShippingConfigData.value}}" stepKey="disableFreeShipping"/>
+            <magentoCLI command="config:set tax/calculation/shipping_includes_tax 0" stepKey="setShippingPricingAsExcludingTax"/>
+            <magentoCLI command="config:set tax/calculation/cross_border_trade_enabled 1" stepKey="setEnableCrossBroadedTradeAsYes"/>
+            <magentoCLI command="config:set tax/display/shipping 1" stepKey="setDispalyShippingPricingAsExcludingTax"/>
+            <magentoCLI command="config:set tax/sales_display/shipping 1" stepKey="setDispalyShippingAmountAsExcludingTax"/>
+            <actionGroup ref="CliCacheCleanActionGroup" stepKey="cleanMagentoCache">
+                <argument name="tags" value=""/>
+            </actionGroup>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+        <magentoCLI command="config:set {{EnableFreeShippingConfigData.path}} {{EnableFreeShippingConfigData.value}}" stepKey="enableFreeShipping"/>
+        <magentoCLI command="config:set tax/calculation/shipping_includes_tax 1" stepKey="setShippingPricingAsIncludingTax"/>
+        <magentoCLI command="config:set tax/calculation/cross_border_trade_enabled 0" stepKey="setEnableCrossBroadedTradeAsNo"/>
+        <magentoCLI command="config:set tax/display/shipping 2" stepKey="setDispalyShippingPricingAsIncludingTax"/>
+        <magentoCLI command="config:set tax/sales_display/shipping 2" stepKey="setDispalyShippingAmountAsIncludingTax"/>
+        <actionGroup ref="CliIndexerReindexActionGroup" stepKey="runIndexCronJob">
+            <argument name="indices" value="cataloginventory_stock"/>
+        </actionGroup>
+        <actionGroup ref="CliCacheCleanActionGroup" stepKey="cacheClean">
+            <argument name="tags" value=""/>
+        </actionGroup>
+        <!-- Login to StoreFront -->
+        <actionGroup ref="LoginToStorefrontActionGroup" stepKey="storefrontCustomerLogin">
+            <argument name="Customer" value="$$createCustomer$$"/>
+        </actionGroup>
+        <!-- Add product to cart -->
+        <actionGroup ref="AddSimpleProductToCartActionGroup" stepKey="addProductToCart">
+            <argument name="product" value="$$createSimpleProduct$$"/>
+        </actionGroup>
+        <!-- Go to Checkout Page -->
+        <actionGroup ref="StorefrontOpenCheckoutPageActionGroup" stepKey="goToCheckout"/>
+        <!-- Select shipping -->
+        <actionGroup ref="StorefrontSetShippingMethodActionGroup" stepKey="selectFreeShipping">
+            <argument name="shippingMethodName" value="Free Shipping"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontCheckoutClickNextOnShippingStepActionGroup" stepKey="clickNext"/>
+        <actionGroup ref="CheckoutSelectCheckMoneyOrderPaymentActionGroup" stepKey="selectDefaultPaymentMethod"/>
+        <actionGroup ref="ClickPlaceOrderActionGroup" stepKey="clickOnPlaceOrder"/>
+        <!-- I see order successful Page -->
+        <actionGroup ref="AssertStorefrontCheckoutSuccessActionGroup" stepKey="assertOrderSuccess"/>
+        <!-- Grab order number-->
+        <waitForElementVisible selector="{{CheckoutSuccessMainSection.orderNumber22}}" stepKey="waitForOderNumber"/>
+        <grabTextFrom selector="{{CheckoutSuccessMainSection.orderNumber22}}" stepKey="grabOrderNumber"/>
+        <!--Go to Admin and check order information-->
+        <actionGroup ref="FilterOrderGridByIdActionGroup" stepKey="filterOrderGrid">
+            <argument name="orderId" value="$grabOrderNumber"/>
+        </actionGroup>
+        <actionGroup ref="AdminOrderGridClickFirstRowActionGroup" stepKey="clickOrderRow"/>
+        <!-- Go to invoice tab and fill data -->
+        <actionGroup ref="AdminClickInvoiceButtonOrderViewActionGroup" stepKey="clickInvoiceAction"/>
+        <actionGroup ref="AdminInvoiceClickSubmitActionGroup" stepKey="clickSubmitInvoice"/>
+        <!--Create credit memo-->
+        <actionGroup ref="AdminStartCreateCreditMemoFromOrderPageActionGroup" stepKey="startToCreateCreditMemo"/>
+        <actionGroup ref="SubmitCreditMemoActionGroup" stepKey="submitCreditMemo"/>
+        <see selector="{{AdminOrderDetailsInformationSection.orderStatus}}" userInput="Closed" stepKey="seeOrderClosed"/>
+    </test>
+</tests>

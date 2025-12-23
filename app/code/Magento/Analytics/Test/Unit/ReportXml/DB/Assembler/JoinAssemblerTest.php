@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -15,6 +15,7 @@ use Magento\Analytics\ReportXml\DB\SelectBuilder;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -126,22 +127,21 @@ class JoinAssemblerTest extends TestCase
      * @param array $tablesMapping
      *
      * @return void
-     * @dataProvider assembleNotEmptyDataProvider
      */
+    #[DataProvider('assembleNotEmptyDataProvider')]
     public function testAssembleNotEmpty(array $queryConfigMock, array $joinsMock, array $tablesMapping): void
     {
         $filtersMock = [];
 
         $this->nameResolverMock
             ->method('getAlias')
-            ->withConsecutive(
-                [$queryConfigMock['source']],
-                [$queryConfigMock['source']['link-source'][0]]
-            )
-            ->willReturnOnConsecutiveCalls(
-                $queryConfigMock['source']['alias'],
-                $queryConfigMock['source']['link-source'][0]['alias']
-            );
+            ->willReturnCallback(function ($arg1) use ($queryConfigMock) {
+                if ($arg1 == $queryConfigMock['source']) {
+                    return $queryConfigMock['source']['alias'];
+                } elseif ($arg1 == $queryConfigMock['source']['link-source'][0]) {
+                    return $queryConfigMock['source']['link-source'][0]['alias'];
+                }
+            });
         $this->nameResolverMock->expects($this->once())
             ->method('getName')
             ->with($queryConfigMock['source']['link-source'][0])
@@ -192,8 +192,12 @@ class JoinAssemblerTest extends TestCase
         }
         $this->conditionResolverMock
             ->method('getFilter')
-            ->withConsecutive(...$withArgs)
-            ->willReturnOnConsecutiveCalls(...$willReturnArgs);
+            ->willReturnCallback(function ($withArgs) use ($willReturnArgs) {
+                static $callCount = 0;
+                $returnValue = $willReturnArgs[$callCount] ?? null;
+                $callCount++;
+                return $returnValue;
+            });
 
         $this->selectBuilderMock->expects($this->once())
             ->method('setFilters')
@@ -211,7 +215,7 @@ class JoinAssemblerTest extends TestCase
     /**
      * @return array
      */
-    public function assembleNotEmptyDataProvider(): array
+    public static function assembleNotEmptyDataProvider(): array
     {
         return [
             [

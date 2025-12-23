@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -18,10 +18,7 @@ class ValueHandlerPoolTest extends TestCase
     public function testConstructorException()
     {
         $this->expectException(\LogicException::class);
-        $tMapFactory = $this->getMockBuilder(TMapFactory::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['create'])
-            ->getMock();
+        $tMapFactory = $this->createPartialMock(TMapFactory::class, ['create']);
 
         $tMapFactory->expects(static::never())
             ->method('create');
@@ -30,19 +27,10 @@ class ValueHandlerPoolTest extends TestCase
 
     public function testGet()
     {
-        $defaultHandler = $this->getMockBuilder(ValueHandlerInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-        $someValueHandler = $this->getMockBuilder(ValueHandlerInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-        $tMapFactory = $this->getMockBuilder(TMapFactory::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['create'])
-            ->getMock();
-        $tMap = $this->getMockBuilder(TMap::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $defaultHandler = $this->createMock(ValueHandlerInterface::class);
+        $someValueHandler = $this->createMock(ValueHandlerInterface::class);
+        $tMapFactory = $this->createPartialMock(TMapFactory::class, ['create']);
+        $tMap = $this->createMock(TMap::class);
 
         $tMapFactory->expects(static::once())
             ->method('create')

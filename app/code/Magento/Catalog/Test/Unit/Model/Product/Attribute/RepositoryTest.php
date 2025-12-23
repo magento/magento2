@@ -1,8 +1,7 @@
 <?php
 /**
- *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -239,6 +238,42 @@ class RepositoryTest extends TestCase
         $attributeMock->expects($this->once())->method('getDefaultFrontendLabel')->willReturn(null);
 
         $this->model->save($attributeMock);
+    }
+
+    /**
+     * @param string $field
+     * @param string $method
+     * @param bool $filterable
+     *
+     * @return void
+     * @dataProvider filterableDataProvider
+     */
+    public function testSaveInputExceptionInvalidIsFilterableFieldValue(
+        string $field,
+        string $method,
+        bool $filterable
+    ) : void {
+        $this->expectException('Magento\Framework\Exception\InputException');
+        $this->expectExceptionMessage('Invalid value of "'.$filterable.'" provided for the '.$field.' field.');
+        $attributeMock = $this->createPartialMock(
+            Attribute::class,
+            ['getFrontendInput', $method]
+        );
+        $attributeMock->expects($this->atLeastOnce())->method('getFrontendInput')->willReturn('text');
+        $attributeMock->expects($this->atLeastOnce())->method($method)->willReturn($filterable);
+
+        $this->model->save($attributeMock);
+    }
+
+    /**
+     * @return array
+     */
+    public static function filterableDataProvider(): array
+    {
+        return [
+            [ProductAttributeInterface::IS_FILTERABLE, 'getIsFilterable', true],
+            [ProductAttributeInterface::IS_FILTERABLE_IN_SEARCH, 'getIsFilterableInSearch', true]
+        ];
     }
 
     public function testSaveInputExceptionInvalidFieldValue()

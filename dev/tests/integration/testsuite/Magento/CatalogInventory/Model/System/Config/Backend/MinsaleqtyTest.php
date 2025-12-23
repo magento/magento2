@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\CatalogInventory\Model\System\Config\Backend;
@@ -52,7 +52,7 @@ class MinsaleqtyTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function saveAndLoadDataProvider()
+    public static function saveAndLoadDataProvider()
     {
         $objectManager = Bootstrap::getObjectManager();
         $groupManagement = $objectManager->create(GroupManagementInterface::class);

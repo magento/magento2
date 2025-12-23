@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -23,7 +23,7 @@ use PHPUnit\Framework\MockObject\MockObject;
  * @method AdvancedPricing getModel
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class AdvancedPricingTest extends AbstractModifierTest
+class AdvancedPricingTest extends AbstractModifierTestCase
 {
     /**
      * @var StoreManagerInterface|MockObject

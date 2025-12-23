@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -102,7 +102,8 @@ class SwitcherTest extends TestCase
         foreach ($storesSortOrder as $storeId => $sortOrder) {
             $storeMock = $this->getMockBuilder(Store::class)
                 ->disableOriginalConstructor()
-                ->setMethods(['getId', 'getGroupId', 'getSortOrder', 'isActive', 'getUrl'])
+                ->addMethods(['getSortOrder'])
+                ->onlyMethods(['getId', 'getGroupId', 'isActive', 'getUrl'])
                 ->getMock();
             $storeMock->method('getId')->willReturn($storeId);
             $storeMock->method('getGroupId')->willReturn($groupId);
@@ -182,7 +183,7 @@ class SwitcherTest extends TestCase
      * @see self::testIsStoreInUrlDataProvider()
      * @return array
      */
-    public function isStoreInUrlDataProvider(): array
+    public static function isStoreInUrlDataProvider(): array
     {
         return [[true], [false]];
     }

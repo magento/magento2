@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Customer\Model;
@@ -17,6 +17,7 @@ use Magento\Framework\Exception\AuthenticationException;
 use Magento\Framework\Exception\EmailNotConfirmedException;
 use Magento\Framework\Exception\InvalidEmailOrPasswordException;
 use Magento\Framework\Indexer\StateInterface;
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 use Magento\Framework\Reflection\DataObjectProcessor;
 use Magento\Store\Model\ScopeInterface;
 use Magento\Framework\App\ObjectManager;
@@ -45,7 +46,7 @@ use Magento\Framework\Indexer\IndexerInterface;
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @since 100.0.2
  */
-class Customer extends \Magento\Framework\Model\AbstractModel
+class Customer extends \Magento\Framework\Model\AbstractModel implements ResetAfterRequestInterface
 {
     /**
      * Configuration paths for email templates and identities
@@ -278,10 +279,10 @@ class Customer extends \Magento\Framework\Model\AbstractModel
         \Magento\Framework\Api\DataObjectHelper $dataObjectHelper,
         \Magento\Customer\Api\CustomerMetadataInterface $metadataService,
         \Magento\Framework\Indexer\IndexerRegistry $indexerRegistry,
-        \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
+        ?\Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = [],
-        AccountConfirmation $accountConfirmation = null,
-        Random $mathRandom = null
+        ?AccountConfirmation $accountConfirmation = null,
+        ?Random $mathRandom = null
     ) {
         $this->metadataService = $metadataService;
         $this->_scopeConfig = $scopeConfig;
@@ -341,13 +342,17 @@ class Customer extends \Magento\Framework\Model\AbstractModel
     public function getDataModel()
     {
         $customerData = $this->getData();
-        $addressesData = [];
+        $regularAddresses = $defaultAddresses = [];
         /** @var \Magento\Customer\Model\Address $address */
         foreach ($this->getAddresses() as $address) {
             if (!isset($this->storedAddress[$address->getId()])) {
                 $this->storedAddress[$address->getId()] = $address->getDataModel();
             }
-            $addressesData[] = $this->storedAddress[$address->getId()];
+            if ($this->storedAddress[$address->getId()]->isDefaultShipping()) {
+                $defaultAddresses[] = $this->storedAddress[$address->getId()];
+            } else {
+                $regularAddresses[] = $this->storedAddress[$address->getId()];
+            }
         }
         $customerDataObject = $this->customerDataFactory->create();
         $this->dataObjectHelper->populateWithArray(
@@ -355,7 +360,7 @@ class Customer extends \Magento\Framework\Model\AbstractModel
             $customerData,
             \Magento\Customer\Api\Data\CustomerInterface::class
         );
-        $customerDataObject->setAddresses($addressesData)
+        $customerDataObject->setAddresses(array_merge($defaultAddresses, $regularAddresses))
             ->setId($this->getId());
         return $customerDataObject;
     }
@@ -1026,6 +1031,7 @@ class Customer extends \Magento\Framework\Model\AbstractModel
      * Validate customer attribute values.
      *
      * @deprecated 100.1.0
+     * @see \Magento\Customer\Model\AccountManagement::validate()
      * @return bool
      */
     public function validate()
@@ -1120,7 +1126,9 @@ class Customer extends \Magento\Framework\Model\AbstractModel
      */
     public function reindex()
     {
-        $this->getIndexer()->reindexRow($this->getId());
+        if (!$this->getIndexer()->isScheduled()) {
+            $this->getIndexer()->reindexRow($this->getId());
+        }
     }
 
     /**
@@ -1286,6 +1294,8 @@ class Customer extends \Magento\Framework\Model\AbstractModel
      * Check if current reset password link token is expired
      *
      * @return boolean
+     * @deprecated
+     * @see \Magento\Customer\Model\AccountManagement::isResetPasswordLinkTokenExpired
      */
     public function isResetPasswordLinkTokenExpired()
     {
@@ -1304,12 +1314,9 @@ class Customer extends \Magento\Framework\Model\AbstractModel
             return true;
         }
 
-        $dayDifference = floor(($currentTimestamp - $tokenTimestamp) / (24 * 60 * 60));
-        if ($dayDifference >= $expirationPeriod) {
-            return true;
-        }
+        $hourDifference = floor(($currentTimestamp - $tokenTimestamp) / (60 * 60));
 
-        return false;
+        return $hourDifference >= $expirationPeriod;
     }
 
     /**
@@ -1402,5 +1409,16 @@ class Customer extends \Magento\Framework\Model\AbstractModel
     public function getPassword()
     {
         return (string) $this->getData('password');
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        $this->_errors = [];
+        $this->_origData = null;
+        $this->storedData = [];
+        $this->_data = [];
     }
 }

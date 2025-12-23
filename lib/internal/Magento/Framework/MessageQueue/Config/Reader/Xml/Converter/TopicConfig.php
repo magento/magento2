@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework\MessageQueue\Config\Reader\Xml\Converter;
 
@@ -58,7 +58,7 @@ class TopicConfig implements \Magento\Framework\Config\ConverterInterface
         MethodsMap $methodsMap,
         Validator $xmlValidator,
         CommunicationConfig $communicationConfig,
-        DefaultValueProvider $defaultValueProvider = null
+        ?DefaultValueProvider $defaultValueProvider = null
     ) {
         $this->methodsMap = $methodsMap;
         $this->xmlValidator = $xmlValidator;

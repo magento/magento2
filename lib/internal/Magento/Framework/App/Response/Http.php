@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Framework\App\Response;
@@ -21,6 +21,7 @@ use Magento\Framework\Session\Config\ConfigInterface;
  * @api
  * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
  */
+#[\AllowDynamicProperties]
 class Http extends \Magento\Framework\HTTP\PhpEnvironment\Response
 {
     /** Cookie to store page vary string */
@@ -76,7 +77,7 @@ class Http extends \Magento\Framework\HTTP\PhpEnvironment\Response
         CookieMetadataFactory $cookieMetadataFactory,
         Context $context,
         DateTime $dateTime,
-        ConfigInterface $sessionConfig = null
+        ?ConfigInterface $sessionConfig = null
     ) {
         $this->request = $request;
         $this->cookieManager = $cookieManager;

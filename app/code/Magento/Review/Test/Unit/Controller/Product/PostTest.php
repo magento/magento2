@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2025 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -25,6 +25,7 @@ use Magento\Review\Model\Rating;
 use Magento\Review\Model\RatingFactory;
 use Magento\Review\Model\Review;
 use Magento\Review\Model\ReviewFactory;
+use Magento\Review\Model\Review\Config;
 use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -122,6 +123,11 @@ class PostTest extends TestCase
     protected $resultRedirectMock;
 
     /**
+     * @var Config|MockObject
+     */
+    protected $reviewsConfig;
+
+    /**
      * @inheritDoc
      *
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
@@ -134,6 +140,10 @@ class PostTest extends TestCase
         $this->formKeyValidator = $this->createPartialMock(
             Validator::class,
             ['validate']
+        );
+        $this->reviewsConfig = $this->createPartialMock(
+            Config::class,
+            ['isEnabled']
         );
         $this->reviewSession = $this->getMockBuilder(Generic::class)
             ->addMethods(['getFormData', 'getRedirectUrl'])
@@ -211,7 +221,8 @@ class PostTest extends TestCase
                 'customerSession' => $this->customerSession,
                 'ratingFactory' => $ratingFactory,
                 'storeManager' => $storeManager,
-                'context' => $this->context
+                'context' => $this->context,
+                'reviewsConfig' => $this->reviewsConfig
             ]
         );
     }
@@ -234,13 +245,21 @@ class PostTest extends TestCase
         $this->formKeyValidator->expects($this->any())->method('validate')
             ->with($this->request)
             ->willReturn(true);
+        $this->reviewsConfig->expects($this->any())->method('isEnabled')
+            ->willReturn(true);
         $this->reviewSession->expects($this->any())->method('getFormData')
             ->with(true)
             ->willReturn($reviewData);
         $this->request
             ->method('getParam')
-            ->withConsecutive(['category', false], ['id'])
-            ->willReturnOnConsecutiveCalls(false, 1);
+            ->willReturnCallback(function ($arg1, $arg2) {
+                if ($arg1 == 'category' && $arg2 == false) {
+                    return false;
+                }
+                if ($arg1 == 'id') {
+                    return 1;
+                }
+            });
         $product = $this->createPartialMock(
             Product::class,
             ['__wakeup', 'isVisibleInCatalog', 'isVisibleInSiteVisibility', 'getId', 'getWebsiteIds']
@@ -265,8 +284,14 @@ class PostTest extends TestCase
             ->willReturn($product);
         $this->coreRegistry
             ->method('register')
-            ->withConsecutive(['current_product', $product], ['product', $product])
-            ->willReturnOnConsecutiveCalls($this->coreRegistry, $this->coreRegistry);
+            ->willReturnCallback(function ($arg1, $arg2) use ($product) {
+                if ($arg1 == 'current_product' && $arg2 == $product) {
+                    return $this->coreRegistry;
+                }
+                if ($arg1 == 'product' && $arg2 == $product) {
+                    return $this->coreRegistry;
+                }
+            });
         $this->review->expects($this->once())->method('setData')
             ->with($reviewData)
             ->willReturnSelf();

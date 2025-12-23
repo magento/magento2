@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -18,6 +18,7 @@ use Magento\Authorization\Model\UserContextInterface;
 use Magento\Framework\Acl\Builder;
 use Magento\Framework\Acl\RootResource;
 use Magento\Integration\Model\AuthorizationService;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
@@ -27,15 +28,17 @@ use Psr\Log\LoggerInterface;
  */
 class AuthorizationServiceTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * Sample role Id
      */
-    const ROLE_ID = 1;
+    private const ROLE_ID = 1;
 
     /**
      * Sample integration id
      */
-    const INTEGRATION_ID = 22;
+    private const INTEGRATION_ID = 22;
 
     /**
      * @var MockObject|Role
@@ -92,11 +95,10 @@ class AuthorizationServiceTest extends TestCase
             ->willReturn($roleCollectionMock);
 
         $rulesFactoryMock = $this->createPartialMock(RulesFactory::class, ['create']);
-        $this->rulesMock = $this->getMockBuilder(AuthorizationRules::class)
-            ->addMethods(['setRoleId', 'setResources'])
-            ->onlyMethods(['saveRel'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->rulesMock = $this->createPartialMockWithReflection(
+            AuthorizationRules::class,
+            ['setRoleId', 'setResources', 'saveRel']
+        );
         $rulesFactoryMock->expects($this->any())
             ->method('create')
             ->willReturn($this->rulesMock);
@@ -109,19 +111,19 @@ class AuthorizationServiceTest extends TestCase
             $roleCollectionFactoryMock,
             $rulesFactoryMock,
             $this->createMock(\Magento\Authorization\Model\ResourceModel\Rules\CollectionFactory::class),
-            $this->getMockForAbstractClass(LoggerInterface::class),
+            $this->createMock(LoggerInterface::class),
             $this->rootAclResourceMock
         );
     }
 
-    public function testRemovePermissions()
+    public function testRemovePermissions(): void
     {
         $roleName = UserContextInterface::USER_TYPE_INTEGRATION . self::INTEGRATION_ID;
         $this->roleMock->expects($this->once())->method('load')->with($roleName)->willReturnSelf();
         $this->integrationAuthorizationService->removePermissions(self::INTEGRATION_ID);
     }
 
-    public function testRemovePermissionsException()
+    public function testRemovePermissionsException(): void
     {
         $this->expectException('Magento\Framework\Exception\LocalizedException');
         $this->expectExceptionMessage('Something went wrong while deleting roles and permissions.');
@@ -133,7 +135,7 @@ class AuthorizationServiceTest extends TestCase
         $this->integrationAuthorizationService->removePermissions(self::INTEGRATION_ID);
     }
 
-    public function testGrantPermissions()
+    public function testGrantPermissions(): void
     {
         $this->resources = [
             'Magento_Sales::sales',
@@ -153,7 +155,7 @@ class AuthorizationServiceTest extends TestCase
         $this->assertNull($result);
     }
 
-    public function testGrantPermissionsNoRole()
+    public function testGrantPermissionsNoRole(): void
     {
         $calculatedRoleId = UserContextInterface::USER_TYPE_INTEGRATION . self::INTEGRATION_ID;
 
@@ -167,7 +169,7 @@ class AuthorizationServiceTest extends TestCase
         //Return invalid role
         $this->roleMock->expects($this->any())
             ->method('getId')
-            ->will($this->onConsecutiveCalls(null, $calculatedRoleId));
+            ->willReturnOnConsecutiveCalls(null, $calculatedRoleId);
         // Verify if the method is called with the newly created role
         $this->rulesMock->expects($this->any())
             ->method('setRoleId')
@@ -182,7 +184,7 @@ class AuthorizationServiceTest extends TestCase
         $this->assertNull($result);
     }
 
-    public function testGrantPermissionsException()
+    public function testGrantPermissionsException(): void
     {
         $this->expectException('Magento\Framework\Exception\LocalizedException');
         $this->resources = [
@@ -206,7 +208,7 @@ class AuthorizationServiceTest extends TestCase
         );
     }
 
-    public function testGrantAllPermissions()
+    public function testGrantAllPermissions(): void
     {
         $rootResource = 'Magento_All:all';
 

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -87,8 +87,10 @@ class TriggerCleaner
         $remainingTriggers = array_diff_key($this->DbTriggers, $this->processedTriggers);
         foreach ($remainingTriggers as $trigger) {
             $view = $this->createViewByTableName($trigger['EVENT_OBJECT_TABLE']);
-            $view->unsubscribe();
-            $view->getState()->delete();
+            if ($view->getActionClass()) {
+                $view->unsubscribe();
+                $view->getState()->delete();
+            }
         }
 
         return true;

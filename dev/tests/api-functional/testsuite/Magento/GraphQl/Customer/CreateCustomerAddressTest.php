@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -340,7 +340,7 @@ MUTATION;
     public function testCreateCustomerAddressWithMissingAttribute()
     {
         $this->expectException(\Exception::class);
-        $this->expectExceptionMessage('Required parameters are missing: firstname');
+        $this->expectExceptionMessage('"firstname" is required. Enter and try again.');
 
         $mutation
             = <<<MUTATION
@@ -466,7 +466,8 @@ MUTATION;
     public function testCreateCustomerAddressWithOptionalZipCode()
     {
         $newAddress = [
-            'country_code' => 'UA',
+            'country_code' => 'VA',
+            'postcode' => '00120',
             'street' => ['Line 1 Street', 'Line 2'],
             'company' => 'Company name',
             'telephone' => '123456789',
@@ -487,6 +488,7 @@ MUTATION;
 mutation {
   createCustomerAddress(input: {
     country_code: {$newAddress['country_code']}
+    postcode: "{$newAddress['postcode']}"
     street: ["{$newAddress['street'][0]}","{$newAddress['street'][1]}"]
     company: "{$newAddress['company']}"
     telephone: "{$newAddress['telephone']}"
@@ -805,12 +807,12 @@ MUTATION;
     /**
      * @return array
      */
-    public function invalidInputDataProvider()
+    public static function invalidInputDataProvider()
     {
         return [
             ['', 'Syntax Error: Expected Name, found )'],
-            ['input: ""', 'requires type CustomerAddressInput!, found "".'],
-            ['input: "foo"', 'requires type CustomerAddressInput!, found "foo".']
+            ['input: ""', 'Expected value of type "CustomerAddressInput", found "".'],
+            ['input: "foo"', 'Expected value of type "CustomerAddressInput", found "foo".']
         ];
     }
 

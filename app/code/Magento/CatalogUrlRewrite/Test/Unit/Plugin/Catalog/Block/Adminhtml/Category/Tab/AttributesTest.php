@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 
 declare(strict_types=1);
@@ -12,8 +12,9 @@ use Magento\Catalog\Model\Category;
 use Magento\Catalog\Model\Category\DataProvider as CategoryDataProvider;
 use Magento\CatalogUrlRewrite\Plugin\Catalog\Block\Adminhtml\Category\Tab\Attributes;
 use Magento\Framework\App\Config\ScopeConfigInterface;
-use PHPUnit\Framework\MockObject\MockObject;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -53,9 +54,7 @@ class AttributesTest extends TestCase
 
         $this->categoryMock = $this->createMock(Category::class);
         $this->dataProviderMock = $this->createMock(CategoryDataProvider::class);
-        $this->dataProviderMock->expects($this->any())
-            ->method('getCurrentCategory')
-            ->willReturn($this->categoryMock);
+        $this->dataProviderMock->method('getCurrentCategory')->willReturn($this->categoryMock);
 
         $this->scopeConfigMock = $this->createMock(ScopeConfigInterface::class);
         $this->model = $objectManager->getObject(Attributes::class, ['scopeConfig' => $this->scopeConfigMock]);
@@ -64,13 +63,13 @@ class AttributesTest extends TestCase
     /**
      * Test get attributes meta
      *
-     * @dataProvider attributesMetaDataProvider
      *
      * @param bool $configEnabled
      * @param string $expectedValue
      * @param string $expectedValueMap
      * @return void
      */
+    #[DataProvider('attributesMetaDataProvider')]
     public function testGetAttributesMeta(bool $configEnabled, string $expectedValue, string $expectedValueMap): void
     {
         $this->categoryMock->expects($this->once())
@@ -109,7 +108,7 @@ class AttributesTest extends TestCase
      *
      * @return array
      */
-    public function attributesMetaDataProvider(): array
+    public static function attributesMetaDataProvider(): array
     {
         return [
             'save rewrite history config enabled' => [true, self::STUB_URL_KEY, self::STUB_URL_KEY],

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Setup\Model\FixtureGenerator;
 
@@ -43,11 +43,11 @@ class BundleProductGenerator
 
     /**
      * @param ProductGeneratorFactory $productGeneratorFactory
-     * @param ResourceConnection $resource|null
+     * @param ResourceConnection|null $resource
      */
     public function __construct(
         ProductGeneratorFactory $productGeneratorFactory,
-        ResourceConnection $resource = null
+        ?ResourceConnection $resource = null
     ) {
         $this->productGeneratorFactory = $productGeneratorFactory;
 
@@ -224,13 +224,9 @@ class BundleProductGenerator
     {
         if (!$this->sequenceValues[$tableName]) {
             $connection = $this->resource->getConnection();
-
-            $this->sequenceValues[$tableName] = $connection->fetchOne(
-                $connection->select()->from(
-                    $this->resource->getTableName($tableName),
-                    'MAX(`sequence_value`)'
-                )
-            );
+            $entityStatus = $connection->showTableStatus($tableName);
+            $this->sequenceValues[$tableName] = $entityStatus['Auto_increment'];
+            return $this->sequenceValues[$tableName];
         }
 
         return ++$this->sequenceValues[$tableName];

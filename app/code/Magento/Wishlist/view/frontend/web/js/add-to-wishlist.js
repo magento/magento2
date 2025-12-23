@@ -1,6 +1,6 @@
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 
 define([
@@ -25,6 +25,7 @@ define([
         /** @inheritdoc */
         _create: function () {
             this._bind();
+            this._triggerWishlistFormUpdate();
         },
 
         /**
@@ -54,10 +55,27 @@ define([
 
             for (key in options.productType) {
                 if (options.productType.hasOwnProperty(key) && options.productType[key] + 'Info' in options) {
-                    events['change ' + options[options.productType[key] + 'Info']] = dataUpdateFunc;
+                    events['addToWishlist ' + options[options.productType[key] + 'Info']] = dataUpdateFunc;
                 }
             }
             this._on(events);
+        },
+
+        /**
+         * Update wishlist on page load and before submit
+         *
+         * @private
+         */
+        _triggerWishlistFormUpdate: function () {
+            var key;
+
+            $(this.options.qtyInfo).trigger('change');
+            for (key in this.options.productType) {
+                if (this.options.productType.hasOwnProperty(key)
+                    && this.options.productType[key] + 'Info' in this.options) {
+                    $(this.options[this.options.productType[key] + 'Info']).trigger('addToWishlist');
+                }
+            }
         },
 
         /**
@@ -226,10 +244,20 @@ define([
         },
 
         /**
+         * Unbind previous form submit listener.
+         */
+        unbindFormSubmit: function () {
+            $('[data-action="add-to-wishlist"]').off('click');
+        },
+
+        /**
          * Bind form submit.
          */
         bindFormSubmit: function () {
             var self = this;
+
+            // Prevents double handlers and duplicate requests to add to Wishlist
+            this.unbindFormSubmit();
 
             $('[data-action="add-to-wishlist"]').on('click', function (event) {
                 var element, params, form, action;
@@ -273,6 +301,8 @@ define([
 
                 return;
             }
+
+            this._triggerWishlistFormUpdate();
         }
     });
 

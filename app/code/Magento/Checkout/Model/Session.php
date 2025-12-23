@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Checkout\Model;
 
@@ -24,7 +24,7 @@ use Psr\Log\LoggerInterface;
  */
 class Session extends \Magento\Framework\Session\SessionManager
 {
-    const CHECKOUT_STATE_BEGIN = 'begin';
+    public const CHECKOUT_STATE_BEGIN = 'begin';
 
     /**
      * Quote instance
@@ -99,12 +99,12 @@ class Session extends \Magento\Framework\Session\SessionManager
     protected $customerRepository;
 
     /**
-     * @param QuoteIdMaskFactory
+     * @var QuoteIdMaskFactory
      */
     protected $quoteIdMaskFactory;
 
     /**
-     * @param bool
+     * @var bool
      */
     protected $isQuoteMasked;
 
@@ -160,7 +160,7 @@ class Session extends \Magento\Framework\Session\SessionManager
         \Magento\Customer\Api\CustomerRepositoryInterface $customerRepository,
         QuoteIdMaskFactory $quoteIdMaskFactory,
         \Magento\Quote\Model\QuoteFactory $quoteFactory,
-        LoggerInterface $logger = null
+        ?LoggerInterface $logger = null
     ) {
         $this->_orderFactory = $orderFactory;
         $this->_customerSession = $customerSession;
@@ -184,6 +184,19 @@ class Session extends \Magento\Framework\Session\SessionManager
         );
         $this->logger = $logger ?: ObjectManager::getInstance()
             ->get(LoggerInterface::class);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        parent::_resetState();
+        $this->_quote = null;
+        $this->_customer = null;
+        $this->_loadInactive = false;
+        $this->isLoading = false;
+        $this->_order = null;
     }
 
     /**

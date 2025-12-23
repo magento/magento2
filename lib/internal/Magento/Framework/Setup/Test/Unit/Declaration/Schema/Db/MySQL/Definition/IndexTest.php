@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -88,7 +88,7 @@ class IndexTest extends TestCase
     /**
      * @return array
      */
-    public function toDefinitionDataProvider()
+    public static function toDefinitionDataProvider()
     {
         return [
             [
@@ -134,7 +134,7 @@ class IndexTest extends TestCase
     /**
      * @return array
      */
-    public function definitionDataProvider()
+    public static function definitionDataProvider()
     {
         return [
             [
@@ -143,7 +143,7 @@ class IndexTest extends TestCase
                     'Key_name' => 'ft_index',
                     'Column_name' => 'text',
                 ],
-                'excpectedDefiniton' => [
+                'expectedDefinition' => [
                     'indexType' => 'fulltext',
                     'name' => 'ft_index',
                     'column' => ['text' => 'text'],
@@ -156,7 +156,7 @@ class IndexTest extends TestCase
                     'Key_name' => 'bt_index',
                     'Column_name' => 'text',
                 ],
-                'excpectedDefiniton' => [
+                'expectedDefinition' => [
                     'indexType' => 'btree',
                     'name' => 'bt_index',
                     'column' => ['text' => 'text'],
@@ -169,7 +169,7 @@ class IndexTest extends TestCase
                     'Key_name' => 'ht_index',
                     'Column_name' => 'text',
                 ],
-                'excpectedDefiniton' => [
+                'expectedDefinition' => [
                     'indexType' => 'hash',
                     'name' => 'ht_index',
                     'column' => ['text' => 'text'],

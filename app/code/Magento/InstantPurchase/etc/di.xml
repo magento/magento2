@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
@@ -20,6 +20,16 @@
         <arguments>
             <argument name="choosers" xsi:type="array">
                 <item name="cheapest" xsi:type="object">Magento\InstantPurchase\Model\ShippingMethodChoose\CheapestMethodDeferredChooser</item>
+            </argument>
+        </arguments>
+    </type>
+
+    <type name="Magento\Framework\App\Request\Backpressure\CompositeRequestTypeExtractor">
+        <arguments>
+            <argument name="extractors" xsi:type="array">
+                <item name="instantpurchase" xsi:type="object">
+                    Magento\InstantPurchase\Model\BackpressureTypeExtractor
+                </item>
             </argument>
         </arguments>
     </type>

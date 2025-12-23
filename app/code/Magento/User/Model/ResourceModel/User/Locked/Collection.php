@@ -1,14 +1,12 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\User\Model\ResourceModel\User\Locked;
 
 /**
  * Admin user collection
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Collection extends \Magento\User\Model\ResourceModel\User\Collection
 {
@@ -22,5 +20,7 @@ class Collection extends \Magento\User\Model\ResourceModel\User\Collection
     {
         parent::_initSelect();
         $this->addFieldToFilter('lock_expires', ['notnull' => true]);
+
+        return $this;
     }
 }

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Framework\Pricing\Price;
@@ -25,7 +25,7 @@ class Pool implements \Iterator, \ArrayAccess
      */
     public function __construct(
         array $prices,
-        \Iterator $target = null
+        ?\Iterator $target = null
     ) {
         $this->prices = $prices;
         foreach ($target ?: [] as $code => $class) {

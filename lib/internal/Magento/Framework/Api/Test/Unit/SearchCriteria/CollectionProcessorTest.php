@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -66,12 +66,12 @@ class CollectionProcessorTest extends TestCase
         $this->expectException('InvalidArgumentException');
         /** @var CollectionProcessorInterface|MockObject $customFilterMock */
         $processorOneMock = $this->getMockBuilder(CollectionProcessorInterface::class)
-            ->setMethods(['process'])
+            ->onlyMethods(['process'])
             ->getMockForAbstractClass();
 
         /** @var \stdClass|MockObject $processorTwoMock */
         $processorTwoMock = $this->getMockBuilder(\stdClass::class)
-            ->setMethods(['process'])
+            ->addMethods(['process'])
             ->getMock();
 
         $processors = [$processorOneMock, $processorTwoMock];

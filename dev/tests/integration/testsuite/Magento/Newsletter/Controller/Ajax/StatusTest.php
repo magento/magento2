@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -54,7 +54,7 @@ class StatusTest extends AbstractController
      * @param void
      * @return array
      */
-    public function ajaxSubscriberDataProvider(): array
+    public static function ajaxSubscriberDataProvider(): array
     {
         return [
             'empty_email_parameter' => [false, ''],

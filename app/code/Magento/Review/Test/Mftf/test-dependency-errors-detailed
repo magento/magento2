@@ -1,0 +1,30 @@
+
+File "/var/www/html/app/code/Magento/Review/Test/Mftf/Test/AdminReportsByCustomersNavigateMenuTest.xml"
+contains entity references that violate dependency constraints:
+		
+	 AdminMenuReports from module(s): magento/module-analytics
+
+File "/var/www/html/app/code/Magento/Review/Test/Mftf/Test/AdminReportsByProductsNavigateMenuTest.xml"
+contains entity references that violate dependency constraints:
+		
+	 AdminMenuReports from module(s): magento/module-analytics
+
+File "/var/www/html/app/code/Magento/Review/Test/Mftf/Test/AdminReviewsByProductsReportTest.xml"
+contains entity references that violate dependency constraints:
+		
+	 AdminMenuReports from module(s): magento/module-analytics
+
+File "/var/www/html/app/code/Magento/Review/Test/Mftf/Test/AdminValidateLastReviewDateForReviewsByProductsReportTest.xml"
+contains entity references that violate dependency constraints:
+		
+	 AdminMenuReports from module(s): magento/module-analytics
+
+File "/var/www/html/app/code/Magento/Review/Test/Mftf/Test/StoreFrontCheckReviewsByCustomerLoadedOnProductPageTest.xml"
+contains entity references that violate dependency constraints:
+		
+	 StoreFrontQuickSearchActionGroup from module(s): magento/module-search
+
+File "/var/www/html/app/code/Magento/Review/Test/Mftf/Test/StoreFrontReviewByCustomerReportTest.xml"
+contains entity references that violate dependency constraints:
+		
+	 AdminMenuReports from module(s): magento/module-analytics

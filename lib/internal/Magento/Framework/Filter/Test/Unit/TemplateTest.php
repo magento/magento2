@@ -1,13 +1,17 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Framework\Filter\Test\Unit;
 
 use Magento\Framework\DataObject;
+use Magento\Framework\Filter\DirectiveProcessor\DependDirective;
+use Magento\Framework\Filter\DirectiveProcessor\IfDirective;
+use Magento\Framework\Filter\DirectiveProcessor\LegacyDirective;
+use Magento\Framework\Filter\DirectiveProcessor\TemplateDirective;
 use Magento\Framework\Filter\Template;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Store\Model\Store;
@@ -28,11 +32,62 @@ class TemplateTest extends TestCase
      */
     private $store;
 
+    /**
+     * @var \Magento\Framework\Filter\Template\SignatureProvider|\PHPUnit\Framework\MockObject\MockObject
+     */
+    protected $signatureProvider;
+
+    /**
+     * @var \Magento\Framework\Filter\Template\FilteringDepthMeter|\PHPUnit\Framework\MockObject\MockObject
+     */
+    protected $filteringDepthMeter;
+
+    /**
+     * @var array
+     */
+    private $listClasses = [
+        DependDirective::class,
+        IfDirective::class,
+        TemplateDirective::class,
+        LegacyDirective::class
+    ];
+
     protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
-        $this->templateFilter = $objectManager->getObject(Template::class);
+        $objects = [];
+        foreach ($this->listClasses as $className) {
+            $classMock = $this->getMockBuilder($className)
+                ->disableOriginalConstructor()
+                ->onlyMethods([])
+                ->getMock();
+            $objects[] = [$className,$classMock];
+        }
+        $objectManager->prepareObjectManager($objects);
+
         $this->store = $objectManager->getObject(Store::class);
+
+        $this->signatureProvider = $this->createPartialMock(
+            \Magento\Framework\Filter\Template\SignatureProvider::class,
+            ['get']
+        );
+
+        $this->signatureProvider->expects($this->any())
+            ->method('get')
+            ->willReturn('Z0FFbeCU2R8bsVGJuTdkXyiiZBzsaceV');
+
+        $this->filteringDepthMeter = $this->createPartialMock(
+            \Magento\Framework\Filter\Template\FilteringDepthMeter::class,
+            ['showMark']
+        );
+
+        $this->templateFilter = $objectManager->getObject(
+            \Magento\Framework\Filter\Template::class,
+            [
+                'signatureProvider' => $this->signatureProvider,
+                'filteringDepthMeter' => $this->filteringDepthMeter
+            ]
+        );
     }
 
     /**
@@ -44,9 +99,13 @@ class TemplateTest extends TestCase
         $value = 'test string';
         $expectedResult = 'TEST STRING';
 
+        $this->filteringDepthMeter->expects($this->any())
+            ->method('showMark')
+            ->willReturn(1);
+
         // Build arbitrary object to pass into the addAfterFilterCallback method
-        $callbackObject = $this->getMockBuilder('stdObject')
-            ->setMethods(['afterFilterCallbackMethod'])
+        $callbackObject = $this->getMockBuilder(\stdClass::class)
+            ->addMethods(['afterFilterCallbackMethod'])
             ->getMock();
 
         $callbackObject->expects($this->once())
@@ -72,9 +131,13 @@ class TemplateTest extends TestCase
         $value = 'test string';
         $expectedResult = 'TEST STRING';
 
+        $this->filteringDepthMeter->expects($this->any())
+            ->method('showMark')
+            ->willReturn(1);
+
         // Build arbitrary object to pass into the addAfterFilterCallback method
-        $callbackObject = $this->getMockBuilder('stdObject')
-            ->setMethods(['afterFilterCallbackMethod'])
+        $callbackObject = $this->getMockBuilder(\stdClass::class)
+            ->addMethods(['afterFilterCallbackMethod'])
             ->getMock();
 
         $callbackObject->expects($this->once())
@@ -127,7 +190,7 @@ TEMPLATE;
 <ul>
 {{for in order.all_visible_items}}
     <li>
-         name: , lastname: , age: 
+         name: , lastname: , age:
     </li>
 {{/for}}
 </ul>
@@ -137,14 +200,14 @@ TEMPLATE;
                 $template = <<<TEMPLATE
 <ul>
 {{for in order.all_visible_items}}
-    
+
 {{/for}}
 </ul>
 TEMPLATE;
                 $expected = <<<TEMPLATE
 <ul>
 {{for in order.all_visible_items}}
-    
+
 {{/for}}
 </ul>
 TEMPLATE;
@@ -153,14 +216,14 @@ TEMPLATE;
                 $template = <<<TEMPLATE
 <ul>
 {{for in }}
-    
+
 {{/for}}
 </ul>
 TEMPLATE;
                 $expected = <<<TEMPLATE
 <ul>
 {{for in }}
-    
+
 {{/for}}
 </ul>
 TEMPLATE;
@@ -178,17 +241,17 @@ TEMPLATE;
 TEMPLATE;
                 $expected = <<<TEMPLATE
 <ul>
-    
+
     <li>
         index: 0 sku: ABC123
         name: Product ABC price: 123 quantity: 2
     </li>
-    
+
     <li>
         index: 1 sku: DOREMI
         name: Product DOREMI price: 456 quantity: 1
     </li>
-    
+
 </ul>
 TEMPLATE;
         }

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -18,8 +18,6 @@ use PHPUnit\Framework\TestCase;
 
 class PriceTest extends TestCase
 {
-    const SUBTOTAL = 10;
-
     /**
      * @var Price
      */
@@ -59,13 +57,9 @@ class PriceTest extends TestCase
         $shippingPrice = 5;
         $convertedPrice = "$5";
 
-        $shippingRateMock = $this->getMockBuilder(Rate::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['getPrice'])
-            ->getMock();
-        $shippingRateMock->expects($this->once())
-            ->method('getPrice')
-            ->willReturn($shippingPrice);
+        $rateReflection = new \ReflectionClass(Rate::class);
+        $shippingRateMock = $rateReflection->newInstanceWithoutConstructor();
+        $shippingRateMock->setData('price', $shippingPrice);
 
         $this->priceCurrency->expects($this->once())
             ->method('convertAndFormat')

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -70,7 +70,7 @@ class ProductCategories
                 ['store_group' => $storeGroupTable],
                 $connection->quoteInto(
                     'store.group_id = store_group.group_id AND NOT EXISTS
-                    (SELECT 1 FROM store_group WHERE cat_index.category_id IN (store_group.root_category_id)
+                    (SELECT 1 FROM '.$storeGroupTable.' WHERE cat_index.category_id IN (store_group.root_category_id)
                     and cat_index.product_id = ?)',
                     $productId,
                     \Zend_Db::INT_TYPE

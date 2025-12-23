@@ -1,14 +1,16 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Theme\Test\Unit\Block\Adminhtml\System\Design\Theme\Edit;
 
+use Magento\Directory\Helper\Data as DirectoryHelper;
 use Magento\Framework\Data\Form;
 use Magento\Framework\Data\FormFactory;
+use Magento\Framework\Json\Helper\Data as JsonHelper;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\UrlInterface;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -35,14 +37,25 @@ class FormTest extends TestCase
 
         /** @var Form|MockObject $customerHelper */
         $formMock = $this->getMockBuilder(Form::class)
-            ->setMethods(['setUseContainer', 'setParent', 'setBaseUrl'])
+            ->addMethods(['setUseContainer', 'setParent', 'setBaseUrl'])
             ->disableOriginalConstructor()
             ->getMock();
 
         /** @var UrlInterface|MockObject $customerHelper */
         $urlBuilderMock = $this->getMockBuilder(UrlInterface::class)
             ->getMockForAbstractClass();
-
+        $objectManager = new ObjectManager($this);
+        $objects = [
+            [
+                JsonHelper::class,
+                $this->createMock(JsonHelper::class)
+            ],
+            [
+                DirectoryHelper::class,
+                $this->createMock(DirectoryHelper::class)
+            ]
+        ];
+        $objectManager->prepareObjectManager($objects);
         /** @var \Magento\Theme\Block\Adminhtml\System\Design\Theme\Edit\Form $block */
         $block = $this->_objectManagerHelper->getObject(
             \Magento\Theme\Block\Adminhtml\System\Design\Theme\Edit\Form::class,

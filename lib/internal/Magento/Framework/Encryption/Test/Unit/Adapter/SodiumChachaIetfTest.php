@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 
 declare(strict_types=1);
@@ -19,7 +19,7 @@ class SodiumChachaIetfTest extends TestCase
     /**
      * @return array
      */
-    public function getCryptData(): array
+    public static function getCryptData(): array
     {
         $result = include __DIR__ . '/../Crypt/_files/_sodium_chachaieft_fixtures.php';
         /* Restore encoded string back to binary */

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\TestFramework\Utility;
 
@@ -24,7 +24,7 @@ class ClassNameExtractorTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function getNameWithNamespaceDataProvider()
+    public static function getNameWithNamespaceDataProvider()
     {
         return [
             [
@@ -75,7 +75,7 @@ class ClassNameExtractorTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function getNameDataProvider()
+    public static function getNameDataProvider()
     {
         return [
             [
@@ -114,7 +114,7 @@ class ClassNameExtractorTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function getNamespaceDataProvider()
+    public static function getNamespaceDataProvider()
     {
         return [
             [

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2021 Adobe
+ * All Rights Reserved.
  */
 
 declare(strict_types=1);
@@ -60,7 +60,7 @@ class ReaderTest extends TestCase
      */
     private $config;
 
-    public function getJwtCases(): array
+    public static function getJwtCases(): array
     {
         return [
             'jws-hs256' => [Jwk::ALGORITHM_HS256, JweEncryptionSettingsInterface::CONTENT_ENCRYPTION_ALGO_A128GCM],

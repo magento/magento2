@@ -1,13 +1,14 @@
 <?php
 
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Customer\Test\Unit\Model\Metadata\Form;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\Customer\Api\Data\OptionInterface;
 use Magento\Customer\Model\Metadata\Form\Select;
 use Magento\Framework\Phrase;
@@ -37,9 +38,8 @@ class SelectTest extends AbstractFormTestCase
 
     /**
      * @param string|int|bool|null $value to assign to Select
-     * @param bool $expected text output
-     * @dataProvider validateValueDataProvider
-     */
+     * @param bool $expected text output */
+    #[DataProvider('validateValueDataProvider')]
     public function testValidateValue($value, $expected)
     {
         $select = $this->getClass($value);
@@ -50,7 +50,7 @@ class SelectTest extends AbstractFormTestCase
     /**
      * @return array
      */
-    public function validateValueDataProvider()
+    public static function validateValueDataProvider()
     {
         return [
             'empty' => ['', true],
@@ -65,9 +65,8 @@ class SelectTest extends AbstractFormTestCase
 
     /**
      * @param string|int|bool|null $value to assign to boolean
-     * @param string|bool $expected text output
-     * @dataProvider validateValueRequiredDataProvider
-     */
+     * @param string|bool $expected text output */
+    #[DataProvider('validateValueRequiredDataProvider')]
     public function testValidateValueRequired($value, $expected)
     {
         $this->attributeMetadataMock->expects($this->any())->method('isRequired')->willReturn(true);
@@ -94,7 +93,7 @@ class SelectTest extends AbstractFormTestCase
     /**
      * @return array
      */
-    public function validateValueRequiredDataProvider()
+    public static function validateValueRequiredDataProvider()
     {
         return [
             'empty' => ['', '"" is a required value.'],
@@ -109,15 +108,11 @@ class SelectTest extends AbstractFormTestCase
 
     /**
      * @param string|int|bool|null $value
-     * @param string|int $expected
-     * @dataProvider outputValueDataProvider
-     */
+     * @param string|int $expected */
+    #[DataProvider('outputValueDataProvider')]
     public function testOutputValue($value, $expected)
     {
-        $option1 = $this->getMockBuilder(OptionInterface::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['getLabel', 'getValue'])
-            ->getMockForAbstractClass();
+        $option1 = $this->createMock(OptionInterface::class);
         $option1->expects($this->any())
             ->method('getLabel')
             ->willReturn('fourteen');
@@ -125,10 +120,7 @@ class SelectTest extends AbstractFormTestCase
             ->method('getValue')
             ->willReturn('14');
 
-        $option2 = $this->getMockBuilder(OptionInterface::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['getLabel', 'getValue'])
-            ->getMockForAbstractClass();
+        $option2 = $this->createMock(OptionInterface::class);
         $option2->expects($this->any())
             ->method('getLabel')
             ->willReturn('some string');
@@ -136,10 +128,7 @@ class SelectTest extends AbstractFormTestCase
             ->method('getValue')
             ->willReturn('some key');
 
-        $option3 = $this->getMockBuilder(OptionInterface::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['getLabel', 'getValue'])
-            ->getMockForAbstractClass();
+        $option3 = $this->createMock(OptionInterface::class);
         $option3->expects($this->any())
             ->method('getLabel')
             ->willReturn('True');
@@ -164,7 +153,7 @@ class SelectTest extends AbstractFormTestCase
     /**
      * @return array
      */
-    public function outputValueDataProvider()
+    public static function outputValueDataProvider()
     {
         return [
             'empty' => ['', ''],

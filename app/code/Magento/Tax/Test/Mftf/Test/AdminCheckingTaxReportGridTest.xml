@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
-  */
+/**
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
+ */
 -->
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -18,6 +18,7 @@
             <testCaseId value="MC-25815"/>
             <useCaseId value="MAGETWO-91521"/>
             <group value="Tax"/>
+            <group value="cloud"/>
         </annotations>
         <before>
             <!-- Create category and product -->
@@ -86,6 +87,10 @@
             <actionGroup ref="ClickSaveButtonActionGroup" stepKey="saveSecondTaxRule">
                 <argument name="message" value="You saved the tax rule."/>
             </actionGroup>
+
+            <!-- Delete custom website as the test was failing due to a data issue related to the website. -->
+            <actionGroup ref="AdminSystemStoreOpenPageActionGroup" stepKey="navigateToStores"/>
+            <actionGroup ref="AdminDeleteMultipleWebsitesActionGroup" stepKey="deleteWebsite"/>
         </before>
         <after>
             <!-- Delete product and category -->
@@ -110,6 +115,7 @@
             <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearFilterProduct"/>
 
             <!-- Delete Customer and clear filter -->
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer" />
             <actionGroup ref="DeleteCustomerByEmailActionGroup" stepKey="deleteCustomer">
                 <argument name="email" value="{{Simple_US_Customer.email}}"/>
             </actionGroup>
@@ -141,7 +147,7 @@
         <actionGroup ref="SaveProductFormActionGroup" stepKey="saveSecondProduct"/>
 
         <!--Create an order with these 2 products in that zip code.-->
-        <actionGroup ref="NavigateToNewOrderPageNewCustomerActionGroup" stepKey="navigateToNewOrder"/>
+        <actionGroup ref="AdminNavigateToNewOrderPageNewCustomerActionGroup" stepKey="navigateToNewOrder"/>
         <!--Check if order can be submitted without the required fields including email address-->
         <scrollToTopOfPage stepKey="scrollToTopOfOrderFormPage"/>
         <waitForElementVisible selector="{{AdminOrderFormItemsSection.addProducts}}" stepKey="waitForAddProductButton"/>

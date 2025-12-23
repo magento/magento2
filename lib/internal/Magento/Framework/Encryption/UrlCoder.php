@@ -1,8 +1,7 @@
 <?php
 /**
- *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework\Encryption;
 
@@ -26,7 +25,7 @@ class UrlCoder
     }
 
     /**
-     * base64_encode() for URLs encoding
+     * The base64_encode() for URLs encoding
      *
      * @param    string $url
      * @return   string
@@ -37,13 +36,13 @@ class UrlCoder
     }
 
     /**
-     *  base64_decode() for URLs decoding
+     *  The base64_decode() for URLs decoding
      *
      * @param    string $url
      * @return   string
      */
     public function decode($url)
     {
-        return $this->_url->sessionUrlVar(base64_decode(strtr($url, '-_,', '+/=')));
+        return $this->_url->sessionUrlVar(base64_decode(strtr($url, '-_~', '+/=')));
     }
 }

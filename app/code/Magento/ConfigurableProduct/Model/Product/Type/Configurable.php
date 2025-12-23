@@ -1,9 +1,8 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
  */
-
 namespace Magento\ConfigurableProduct\Model\Product\Type;
 
 use Magento\Catalog\Api\Data\ProductAttributeInterface;
@@ -14,10 +13,12 @@ use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\Config;
 use Magento\Catalog\Model\Product\Gallery\ReadHandler as GalleryReadHandler;
 use Magento\ConfigurableProduct\Model\Product\Type\Collection\SalableProcessor;
+use Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable\Product\Collection;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\File\UploaderFactory;
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 
 /**
  * Configurable product type implementation
@@ -31,7 +32,7 @@ use Magento\Framework\File\UploaderFactory;
  * @api
  * @since 100.0.2
  */
-class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
+class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType implements ResetAfterRequestInterface
 {
     /**
      * Product type code
@@ -247,14 +248,14 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
         \Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable $catalogProductTypeConfigurable,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface $extensionAttributesJoinProcessor,
-        \Magento\Framework\Cache\FrontendInterface $cache = null,
-        \Magento\Customer\Model\Session $customerSession = null,
-        \Magento\Framework\Serialize\Serializer\Json $serializer = null,
-        ProductInterfaceFactory $productFactory = null,
-        SalableProcessor $salableProcessor = null,
-        ProductAttributeRepositoryInterface $productAttributeRepository = null,
-        SearchCriteriaBuilder $searchCriteriaBuilder = null,
-        UploaderFactory $uploaderFactory = null
+        ?\Magento\Framework\Cache\FrontendInterface $cache = null,
+        ?\Magento\Customer\Model\Session $customerSession = null,
+        ?\Magento\Framework\Serialize\Serializer\Json $serializer = null,
+        ?ProductInterfaceFactory $productFactory = null,
+        ?SalableProcessor $salableProcessor = null,
+        ?ProductAttributeRepositoryInterface $productAttributeRepository = null,
+        ?SearchCriteriaBuilder $searchCriteriaBuilder = null,
+        ?UploaderFactory $uploaderFactory = null
     ) {
         $this->typeConfigurableFactory = $typeConfigurableFactory;
         $this->_eavAttributeFactory = $eavAttributeFactory;
@@ -552,8 +553,8 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
     {
         if (!$product->hasData($this->_usedProductIds)) {
             $usedProductIds = [];
-            foreach ($this->getUsedProducts($product) as $product) {
-                $usedProductIds[] = $product->getId();
+            foreach ($this->getUsedProducts($product) as $childProduct) {
+                $usedProductIds[] = $childProduct->getId();
             }
             $product->setData($this->_usedProductIds, $usedProductIds);
         }
@@ -807,14 +808,15 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
     {
         if (is_array($attributesInfo) && !empty($attributesInfo)) {
             $productCollection = $this->getUsedProductCollection($product)->addAttributeToSelect('name');
-            foreach ($attributesInfo as $attributeId => $attributeValue) {
-                $productCollection->addAttributeToFilter($attributeId, $attributeValue);
-            }
+            $this->addAttributesToFilter($productCollection, $attributesInfo);
             /** @var \Magento\Catalog\Model\Product $productObject */
             $productObject = $productCollection->getFirstItem();
             $productLinkFieldId = $productObject->getId();
             if ($productLinkFieldId) {
-                return $this->productRepository->getById($productLinkFieldId);
+                return $this->productRepository->getById(
+                    $productLinkFieldId,
+                    storeId: $product->hasStoreId() ? $product->getStoreId() : null
+                );
             }
 
             foreach ($productCollection as $productObject) {
@@ -831,6 +833,20 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
             }
         }
         return null;
+    }
+
+    /**
+     * Add attributes to product collection filter
+     *
+     * @param Collection $collection
+     * @param array $attributesInfo
+     * @return void
+     */
+    private function addAttributesToFilter(Collection $collection, array $attributesInfo): void
+    {
+        foreach ($attributesInfo as $attributeId => $attributeValue) {
+            $collection->addAttributeToFilter($attributeId, $attributeValue);
+        }
     }
 
     /**
@@ -1482,7 +1498,8 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
             'thumbnail',
             'status',
             'visibility',
-            'media_gallery'
+            'media_gallery',
+            'special_price',
         ];
 
         $usedAttributes = array_map(
@@ -1494,4 +1511,13 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
 
         return array_unique(array_merge($productAttributes, $requiredAttributes, $usedAttributes));
     }
+
+    /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        $this->isSaleableBySku = [];
+    }
+
 }

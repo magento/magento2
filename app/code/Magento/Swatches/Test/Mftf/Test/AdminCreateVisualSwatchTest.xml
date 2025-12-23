@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
  /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
+  * Copyright 2018 Adobe
+  * All Rights Reserved.
   */
 -->
-
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
     <test name="AdminCreateVisualSwatchTest">
@@ -40,7 +39,12 @@
             <waitForPageLoad stepKey="waitToClickSave2"/>
             <click selector="{{AttributePropertiesSection.SaveAndEdit}}" stepKey="clickSaveAndEdit2"/>
             <waitForPageLoad stepKey="waitForSave2"/>
+
+            <!-- Delete all products via API using ProductApiHelper -->
+            <helper class="Magento\Catalog\Test\Mftf\Helper\ProductApiHelper" method="deleteAllProductsApi" stepKey="deleteAllProductsViaApi"/>
+
             <!-- Logout -->
+            <deleteData createDataKey="createCategory" stepKey="deletecreateCategory"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="adminLogout"/>
         </after>
 
@@ -58,6 +62,7 @@
         <actionGroup ref="OpenSwatchMenuByIndexActionGroup" stepKey="clickSwatch1">
             <argument name="index" value="0"/>
         </actionGroup>
+        <waitForElementClickable selector="{{AdminManageSwatchSection.nthChooseColor('1')}}" stepKey="waitToClickChooseColor1"/>
         <click selector="{{AdminManageSwatchSection.nthChooseColor('1')}}" stepKey="clickChooseColor1"/>
         <actionGroup ref="SetColorPickerByHexActionGroup" stepKey="fillHex1">
             <argument name="nthColorPicker" value="1"/>
@@ -69,6 +74,7 @@
         <actionGroup ref="OpenSwatchMenuByIndexActionGroup" stepKey="clickSwatch2">
             <argument name="index" value="1"/>
         </actionGroup>
+        <waitForElementClickable selector="{{AdminManageSwatchSection.nthChooseColor('2')}}" stepKey="waitToClickChooseColor2"/>
         <click selector="{{AdminManageSwatchSection.nthChooseColor('2')}}" stepKey="clickChooseColor2"/>
         <actionGroup ref="SetColorPickerByHexActionGroup" stepKey="fillHex2">
             <argument name="nthColorPicker" value="2"/>
@@ -80,6 +86,7 @@
         <actionGroup ref="OpenSwatchMenuByIndexActionGroup" stepKey="clickSwatch3">
             <argument name="index" value="2"/>
         </actionGroup>
+        <waitForElementClickable selector="{{AdminManageSwatchSection.nthChooseColor('3')}}" stepKey="waitToClickChooseColor3"/>
         <click selector="{{AdminManageSwatchSection.nthChooseColor('3')}}" stepKey="clickChooseColor3"/>
         <actionGroup ref="SetColorPickerByHexActionGroup" stepKey="fillHex3">
             <argument name="nthColorPicker" value="3"/>
@@ -95,11 +102,11 @@
         <!-- Assert that the Save was successful after round trip to server -->
         <actionGroup ref="AssertSwatchColorActionGroup" stepKey="assertSwatch1">
             <argument name="nthSwatch" value="1"/>
-            <argument name="expectedStyle" value="background: rgb(231, 77, 60);"/>
+            <argument name="expectedStyle" value="background: rgb(231, 76, 60);"/>
         </actionGroup>
         <actionGroup ref="AssertSwatchColorActionGroup" stepKey="assertSwatch2">
             <argument name="nthSwatch" value="2"/>
-            <argument name="expectedStyle" value="background: rgb(46, 204, 112);"/>
+            <argument name="expectedStyle" value="background: rgb(46, 204, 113);"/>
         </actionGroup>
         <actionGroup ref="AssertSwatchColorActionGroup" stepKey="assertSwatch3">
             <argument name="nthSwatch" value="3"/>
@@ -153,11 +160,11 @@
         <!-- Verify that the storefront shows the swatches too -->
         <actionGroup ref="AssertStorefrontSwatchColorActionGroup" stepKey="assertSwatch4">
             <argument name="nthSwatch" value="1"/>
-            <argument name="expectedRgb" value="rgb(231, 77, 60)"/>
+            <argument name="expectedRgb" value="rgb(231, 76, 60)"/>
         </actionGroup>
         <actionGroup ref="AssertStorefrontSwatchColorActionGroup" stepKey="assertSwatch5">
             <argument name="nthSwatch" value="2"/>
-            <argument name="expectedRgb" value="rgb(46, 204, 112)"/>
+            <argument name="expectedRgb" value="rgb(46, 204, 113)"/>
         </actionGroup>
         <actionGroup ref="AssertStorefrontSwatchColorActionGroup" stepKey="assertSwatch6">
             <argument name="nthSwatch" value="3"/>

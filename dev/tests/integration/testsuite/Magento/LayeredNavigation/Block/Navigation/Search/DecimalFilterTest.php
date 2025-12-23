@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -40,7 +40,7 @@ class DecimalFilterTest extends CategoryDecimalFilterTest
     /**
      * @return array
      */
-    public function getFiltersWithCustomAttributeDataProvider(): array
+    public static function getFiltersWithCustomAttributeDataProvider(): array
     {
         $dataProvider = parent::getFiltersWithCustomAttributeDataProvider();
 
@@ -48,7 +48,7 @@ class DecimalFilterTest extends CategoryDecimalFilterTest
             $dataProvider,
             [
                 'not_used_in_navigation' => [
-                    'attribute_data' => ['is_filterable' => 0, 'is_filterable_in_search' => 0],
+                    'attributeData' => ['is_filterable' => 0, 'is_filterable_in_search' => 0],
                 ],
 
                 /* @TODO: Should be uncommented in MC-16650 */

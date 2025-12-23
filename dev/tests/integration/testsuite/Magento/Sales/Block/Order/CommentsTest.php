@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Sales\Block\Order;
 
@@ -37,7 +37,7 @@ class CommentsTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function getCommentsDataProvider()
+    public static function getCommentsDataProvider()
     {
         return [
             [

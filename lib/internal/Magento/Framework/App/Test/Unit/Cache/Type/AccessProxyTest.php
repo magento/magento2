@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -33,8 +33,16 @@ class AccessProxyTest extends TestCase
         $cacheEnabler = $this->getMockForAbstractClass(StateInterface::class);
         $cacheEnabler
             ->method('isEnabled')
-            ->withConsecutive([$identifier], [$identifier])
-            ->willReturnOnConsecutiveCalls(false, true);
+            ->willReturnCallback(function ($arg1) use ($identifier) {
+                static $callCount = 0;
+                if ($callCount == 0 && $arg1 == $identifier) {
+                    $callCount++;
+                    return false;
+                } elseif ($callCount == 1 && $arg1 == $identifier) {
+                    $callCount++;
+                    return true;
+                }
+            });
 
         $object = new AccessProxy($frontendMock, $cacheEnabler, $identifier);
         $helper = new ProxyTesting();

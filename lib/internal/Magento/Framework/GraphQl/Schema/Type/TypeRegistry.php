@@ -1,22 +1,24 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Framework\GraphQl\Schema\Type;
 
+use LogicException;
 use Magento\Framework\GraphQl\ConfigInterface;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Framework\GraphQl\Schema\TypeInterface;
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Phrase;
 
 /**
  * GraphQL type object registry
  */
-class TypeRegistry
+class TypeRegistry implements ResetAfterRequestInterface
 {
     /**
      * @var ObjectManagerInterface
@@ -38,7 +40,7 @@ class TypeRegistry
     /**
      * @var TypeInterface[]
      */
-    private $types;
+    private $types = [];
 
     /**
      * @param ObjectManagerInterface $objectManager
@@ -65,7 +67,13 @@ class TypeRegistry
     public function get(string $typeName): TypeInterface
     {
         if (!isset($this->types[$typeName])) {
-            $configElement = $this->config->getConfigElement($typeName);
+            try {
+                $configElement = $this->config->getConfigElement($typeName);
+            } catch (LogicException) {
+                throw new GraphQlInputException(
+                    new Phrase('Unknown type "%1".', [$typeName])
+                );
+            }
 
             $configElementClass = get_class($configElement);
             if (!isset($this->configToTypeMap[$configElementClass])) {
@@ -91,5 +99,13 @@ class TypeRegistry
             }
         }
         return $this->types[$typeName];
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        $this->types = [];
     }
 }

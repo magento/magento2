@@ -1,7 +1,7 @@
 <?php declare(strict_types=1);
-/***
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+/**
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Developer\Test\Unit\Model\View\Page\Config\ClientSideLessCompilation;
@@ -54,7 +54,7 @@ class RendererTest extends TestCase
         $this->model = $this->getMockBuilder(
             Renderer::class
         )
-            ->setMethods(['renderAssetGroup'])
+            ->onlyMethods(['renderAssetGroup'])
             ->setConstructorArgs($mocks)
             ->getMock();
     }

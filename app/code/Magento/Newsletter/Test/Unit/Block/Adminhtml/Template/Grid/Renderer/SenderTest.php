@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -9,8 +9,10 @@ namespace Magento\Newsletter\Test\Unit\Block\Adminhtml\Template\Grid\Renderer;
 
 use Magento\Framework\DataObject;
 use Magento\Framework\Escaper;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Newsletter\Block\Adminhtml\Template\Grid\Renderer\Sender;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -18,6 +20,8 @@ use PHPUnit\Framework\TestCase;
  */
 class SenderTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var Sender
      */
@@ -46,17 +50,18 @@ class SenderTest extends TestCase
     }
 
     /**
-     * @dataProvider rendererDataProvider
      * @param array $expectedSender
      * @param array $passedSender
      *
      * @return void
      */
+    #[DataProvider('rendererDataProvider')]
     public function testRender(array $passedSender, array $expectedSender)
     {
-        $row = $this->getMockBuilder(DataObject::class)
-            ->setMethods(['getTemplateSenderName', 'getTemplateSenderEmail'])
-            ->getMock();
+        $row = $this->createPartialMockWithReflection(
+            DataObject::class,
+            ['getTemplateSenderName', 'getTemplateSenderEmail']
+        );
         $row->expects($this->atLeastOnce())->method('getTemplateSenderName')
             ->willReturn($passedSender['sender']);
         $row->expects($this->atLeastOnce())->method('getTemplateSenderEmail')
@@ -70,7 +75,7 @@ class SenderTest extends TestCase
     /**
      * @return array
      */
-    public function rendererDataProvider()
+    public static function rendererDataProvider()
     {
         return [
             [

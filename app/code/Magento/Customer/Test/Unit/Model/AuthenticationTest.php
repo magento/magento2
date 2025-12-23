@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -19,14 +19,18 @@ use Magento\Framework\Encryption\EncryptorInterface;
 use Magento\Framework\Exception\InvalidEmailOrPasswordException;
 use Magento\Framework\Stdlib\DateTime;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class AuthenticationTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var ConfigInterface|MockObject
      */
@@ -76,46 +80,33 @@ class AuthenticationTest extends TestCase
     {
         $this->objectManager = new ObjectManagerHelper($this);
 
-        $this->backendConfigMock = $this->getMockBuilder(ConfigInterface::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['getValue'])
-            ->getMockForAbstractClass();
+        $this->backendConfigMock = $this->createMock(ConfigInterface::class);
         $this->customerRegistryMock = $this->createPartialMock(
             CustomerRegistry::class,
             ['retrieveSecureData', 'retrieve']
         );
-        $this->customerRepositoryMock = $this->getMockBuilder(CustomerRepositoryInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-        $this->encryptorMock = $this->getMockBuilder(EncryptorInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-        $this->dateTimeMock = $this->getMockBuilder(DateTime::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->customerRepositoryMock = $this->createMock(CustomerRepositoryInterface::class);
+        $this->encryptorMock = $this->createMock(EncryptorInterface::class);
+        $this->dateTimeMock = $this->createMock(DateTime::class);
         $this->dateTimeMock->expects($this->any())
             ->method('formatDate')
             ->willReturn('formattedDate');
-        $this->customerSecureMock = $this->getMockBuilder(CustomerSecure::class)
-            ->addMethods(
-                [
-                    'getId',
-                    'getPasswordHash',
-                    'isCustomerLocked',
-                    'getFailuresNum',
-                    'getFirstFailure',
-                    'getLockExpires',
-                    'setFirstFailure',
-                    'setFailuresNum',
-                    'setLockExpires'
-                ]
-            )
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->customerSecureMock = $this->createPartialMockWithReflection(
+            CustomerSecure::class,
+            [
+                'getId',
+                'getPasswordHash',
+                'isCustomerLocked',
+                'getFailuresNum',
+                'getFirstFailure',
+                'getLockExpires',
+                'setFirstFailure',
+                'setFailuresNum',
+                'setLockExpires'
+            ]
+        );
 
-        $this->customerAuthUpdate = $this->getMockBuilder(CustomerAuthUpdate::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->customerAuthUpdate = $this->createMock(CustomerAuthUpdate::class);
 
         $this->authentication = $this->objectManager->getObject(
             Authentication::class,
@@ -140,11 +131,10 @@ class AuthenticationTest extends TestCase
         $customerId = 1;
         $this->backendConfigMock->expects($this->exactly(2))
             ->method('getValue')
-            ->withConsecutive(
-                [Authentication::LOCKOUT_THRESHOLD_PATH],
-                [Authentication::MAX_FAILURES_PATH]
-            )
-            ->willReturnOnConsecutiveCalls(0, 0);
+            ->willReturnCallback(fn($param) => match ([$param]) {
+                [Authentication::LOCKOUT_THRESHOLD_PATH] => 0,
+                [Authentication::MAX_FAILURES_PATH] => 0
+            });
         $this->customerRegistryMock->expects($this->once())
             ->method('retrieveSecureData')
             ->with($customerId)
@@ -161,9 +151,8 @@ class AuthenticationTest extends TestCase
      * @param int $setFirstFailureCallCtr
      * @param int $setFirstFailureValue
      * @param int $setLockExpiresCallCtr
-     * @param int $setLockExpiresValue
-     * @dataProvider processAuthenticationFailureDataProvider
-     */
+     * @param int $setLockExpiresValue */
+    #[DataProvider('processAuthenticationFailureDataProvider')]
     public function testProcessAuthenticationFailureFirstAttempt(
         $failureNum,
         $firstFailure,
@@ -177,11 +166,10 @@ class AuthenticationTest extends TestCase
         $customerId = 1;
         $this->backendConfigMock->expects($this->exactly(2))
             ->method('getValue')
-            ->withConsecutive(
-                [Authentication::LOCKOUT_THRESHOLD_PATH],
-                [Authentication::MAX_FAILURES_PATH]
-            )
-            ->willReturnOnConsecutiveCalls(10, 5);
+            ->willReturnCallback(fn($param) => match ([$param]) {
+                [Authentication::LOCKOUT_THRESHOLD_PATH] => 10,
+                [Authentication::MAX_FAILURES_PATH] => 5
+            });
 
         $this->customerRegistryMock->expects($this->once())
             ->method('retrieveSecureData')
@@ -213,7 +201,7 @@ class AuthenticationTest extends TestCase
     /**
      * @return array
      */
-    public function processAuthenticationFailureDataProvider()
+    public static function processAuthenticationFailureDataProvider()
     {
         return [
             'first attempt' => [0, null, null, 1, 1, 1, 1, null],
@@ -255,9 +243,7 @@ class AuthenticationTest extends TestCase
     {
         $customerId = 7;
 
-        $customerModelMock = $this->getMockBuilder(Customer::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $customerModelMock = $this->createMock(Customer::class);
         $customerModelMock->expects($this->once())
             ->method('isCustomerLocked');
         $this->customerRegistryMock->expects($this->once())
@@ -269,16 +255,15 @@ class AuthenticationTest extends TestCase
     }
 
     /**
-     * @param bool $result
-     * @dataProvider validateCustomerPassword
-     */
+     * @param bool $result */
+    #[DataProvider('validateCustomerPassword')]
     public function testAuthenticate($result)
     {
         $customerId = 7;
         $password = '1234567';
         $hash = '1b2af329dd0';
 
-        $customerMock = $this->getMockForAbstractClass(CustomerInterface::class);
+        $customerMock = $this->createMock(CustomerInterface::class);
         $this->customerRepositoryMock->expects($this->any())
             ->method('getById')
             ->willReturn($customerMock);
@@ -306,11 +291,10 @@ class AuthenticationTest extends TestCase
         } else {
             $this->backendConfigMock->expects($this->exactly(2))
                 ->method('getValue')
-                ->withConsecutive(
-                    [Authentication::LOCKOUT_THRESHOLD_PATH],
-                    [Authentication::MAX_FAILURES_PATH]
-                )
-                ->willReturnOnConsecutiveCalls(1, 1);
+                ->willReturnCallback(fn($param) => match ([$param]) {
+                    [Authentication::LOCKOUT_THRESHOLD_PATH] => 1,
+                    [Authentication::MAX_FAILURES_PATH] => 1
+                });
             $this->customerSecureMock->expects($this->once())
                 ->method('isCustomerLocked')
                 ->willReturn(false);
@@ -333,7 +317,7 @@ class AuthenticationTest extends TestCase
     /**
      * @return array
      */
-    public function validateCustomerPassword()
+    public static function validateCustomerPassword()
     {
         return [
             [true],

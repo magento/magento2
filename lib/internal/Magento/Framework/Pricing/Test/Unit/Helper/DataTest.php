@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -58,7 +58,7 @@ class DataTest extends TestCase
     /**
      * @return array
      */
-    public function currencyDataProvider()
+    public static function currencyDataProvider()
     {
         return [
             ['amount' => '100', 'format' => true, 'includeContainer' => true, 'result' => '100grn.'],
@@ -95,7 +95,7 @@ class DataTest extends TestCase
     /**
      * @return array
      */
-    public function currencyByStoreDataProvider()
+    public static function currencyByStoreDataProvider()
     {
         return [
             ['amount' => '10', 'store' => 1, 'format' => true, 'includeContainer' => true, 'result' => '10grn.'],

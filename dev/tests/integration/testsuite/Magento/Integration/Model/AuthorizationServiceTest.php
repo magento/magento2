@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Integration\Model;
@@ -89,7 +89,7 @@ class AuthorizationServiceTest extends \PHPUnit\Framework\TestCase
         $this->_ensurePermissionsAreNotGranted($integrationId, $initialResources);
     }
 
-    public function changePermissionsProvider()
+    public static function changePermissionsProvider()
     {
         return [
             'integration' => [

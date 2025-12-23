@@ -1,12 +1,13 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Tax\Test\Unit\Model\Quote;
 
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Quote\Model\Quote\Address;
 use Magento\Quote\Model\Quote\Address\ToOrder;
@@ -14,6 +15,7 @@ use Magento\Sales\Api\Data\OrderExtensionFactory;
 use Magento\Sales\Api\Data\OrderExtensionInterface;
 use Magento\Sales\Model\Order;
 use Magento\Tax\Model\Quote\ToOrderConverter;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -22,6 +24,7 @@ use PHPUnit\Framework\TestCase;
  */
 class ToOrderConverterTest extends TestCase
 {
+    use MockCreationTrait;
     /**
      * @var OrderExtensionFactory|MockObject
      */
@@ -52,13 +55,13 @@ class ToOrderConverterTest extends TestCase
         $this->orderExtensionFactoryMock = $this->getMockBuilder(
             OrderExtensionFactory::class
         )->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
 
-        $this->quoteAddressMock = $this->getMockBuilder(Address::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['getAppliedTaxes', 'getItemsAppliedTaxes'])
-            ->getMock();
+        $this->quoteAddressMock = $this->createPartialMockWithReflection(
+            Address::class,
+            ['getItemsAppliedTaxes', 'getAppliedTaxes']
+        );
         $this->subjectMock = $this->getMockBuilder(ToOrder::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -77,14 +80,38 @@ class ToOrderConverterTest extends TestCase
      */
     protected function setupOrderExtensionAttributeMock()
     {
-        $orderExtensionAttributeMock = $this->getMockBuilder(OrderExtensionInterface::class)
-            ->setMethods(
-                [
-                    'setAppliedTaxes',
-                    'setConvertingFromQuote',
-                    'setItemAppliedTaxes'
-                ]
-            )->getMockForAbstractClass();
+        // Use createPartialMockWithReflection for extension interface with custom methods - PHPUnit 12 compatible
+        $orderExtensionAttributeMock = $this->createPartialMockWithReflection(
+            OrderExtensionInterface::class,
+            [
+                'setAppliedTaxes',
+                'getAppliedTaxes',
+                'setConvertingFromQuote',
+                'getConvertingFromQuote',
+                'setItemAppliedTaxes',
+                'getItemAppliedTaxes',
+                'getShippingAssignments',
+                'setShippingAssignments',
+                'getPaymentAdditionalInfo',
+                'setPaymentAdditionalInfo',
+                'getGiftCards',
+                'setGiftCards',
+                'getBaseGiftCardsAmount',
+                'setBaseGiftCardsAmount',
+                'getGiftCardsAmount',
+                'setGiftCardsAmount',
+                'getTaxes',
+                'setTaxes',
+                'getAdditionalItemizedTaxes',
+                'setAdditionalItemizedTaxes',
+                'getCustomerBalanceAmount',
+                'setCustomerBalanceAmount',
+                'getBaseCustomerBalanceAmount',
+                'setBaseCustomerBalanceAmount',
+                'getGiftMessage',
+                'setGiftMessage'
+            ]
+        );
 
         return $orderExtensionAttributeMock;
     }
@@ -94,14 +121,14 @@ class ToOrderConverterTest extends TestCase
      * @param array $expectedAppliedTaxes
      * @param array $itemsAppliedTaxes
      * @param array $itemAppliedTaxesExpected
-     * @dataProvider afterConvertDataProvider
      */
+    #[DataProvider('afterConvertDataProvider')]
     public function testAfterConvert(
-        $appliedTaxes,
-        $expectedAppliedTaxes,
-        $itemsAppliedTaxes,
-        $itemAppliedTaxesExpected
-    ) {
+        array $appliedTaxes,
+        array $expectedAppliedTaxes,
+        array $itemsAppliedTaxes,
+        array $itemAppliedTaxesExpected
+    ): void {
         $this->model->beforeConvert($this->subjectMock, $this->quoteAddressMock);
 
         $this->quoteAddressMock->expects($this->once())
@@ -142,14 +169,14 @@ class ToOrderConverterTest extends TestCase
      * @param array $expectedAppliedTaxes
      * @param array $itemsAppliedTaxes
      * @param array $itemAppliedTaxesExpected
-     * @dataProvider afterConvertDataProvider
      */
+    #[DataProvider('afterConvertDataProvider')]
     public function testAfterConvertNullExtensionAttribute(
-        $appliedTaxes,
-        $expectedAppliedTaxes,
-        $itemsAppliedTaxes,
-        $itemAppliedTaxesExpected
-    ) {
+        array $appliedTaxes,
+        array $expectedAppliedTaxes,
+        array $itemsAppliedTaxes,
+        array $itemAppliedTaxesExpected
+    ): void {
         $this->model->beforeConvert($this->subjectMock, $this->quoteAddressMock);
 
         $this->quoteAddressMock->expects($this->once())
@@ -194,11 +221,11 @@ class ToOrderConverterTest extends TestCase
      *
      * @return array
      */
-    public function afterConvertDataProvider()
+    public static function afterConvertDataProvider()
     {
         return [
             'afterConvert' => [
-                'applied_taxes' => [
+                'appliedTaxes' => [
                     'IL' => [
                         'amount' => 0.36,
                         'percent' => 6,
@@ -211,7 +238,7 @@ class ToOrderConverterTest extends TestCase
                         ],
                     ],
                 ],
-                'expected_applied_taxes' => [
+                'expectedAppliedTaxes' => [
                     'IL' => [
                         'amount' => 0.36,
                         'percent' => 6,
@@ -226,7 +253,7 @@ class ToOrderConverterTest extends TestCase
                         ],
                     ],
                 ],
-                'item_applied_taxes' => [
+                'itemsAppliedTaxes' => [
                     'sequence-1' => [
                         [
                             'amount' => 0.06,
@@ -258,7 +285,7 @@ class ToOrderConverterTest extends TestCase
                         ]
                     ],
                 ],
-                'item_applied_taxes_expected' => [
+                'itemAppliedTaxesExpected' => [
                     'sequence-1' => [
                         'item_id' => 146,
                         'type' => 'product',

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework\File;
 
@@ -217,11 +217,11 @@ class Uploader
      */
     public function __construct(
         $fileId,
-        Mime $fileMime = null,
-        DirectoryList $directoryList = null,
-        DriverPool $driverPool = null,
-        TargetDirectory $targetDirectory = null,
-        Filesystem $filesystem = null
+        ?Mime $fileMime = null,
+        ?DirectoryList $directoryList = null,
+        ?DriverPool $driverPool = null,
+        ?TargetDirectory $targetDirectory = null,
+        ?Filesystem $filesystem = null
     ) {
         $this->directoryList = $directoryList ?: ObjectManager::getInstance()->get(DirectoryList::class);
         $this->targetDirectory = $targetDirectory ?: ObjectManager::getInstance()->get(TargetDirectory::class);
@@ -342,6 +342,7 @@ class Uploader
      * @return void
      *
      * @deprecated 100.0.8
+     * @see Nothing
      */
     protected function chmod($file)
     {
@@ -383,8 +384,9 @@ class Uploader
     /**
      * Get logger instance.
      *
-     * @deprecated
      * @return LoggerInterface
+     * @deprecated
+     * @see Nothing
      */
     private function getLogger(): LoggerInterface
     {
@@ -673,7 +675,7 @@ class Uploader
      * @param string|array $fileId
      * @return void
      * @throws \DomainException
-     * @throws \InvalidArgumentException
+     * @throws \InvalidArgumentException|FileSystemException
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     private function _setUploadFileId($fileId)
@@ -688,7 +690,7 @@ class Uploader
             }
 
             $fileId = $fileId !== null ? $fileId : '';
-            preg_match("/^(.*?)\[(.*?)\]$/", $fileId, $file);
+            preg_match("/^(.*?)(\[.+])$/", $fileId, $file);
 
             if (is_array($file) && count($file) > 0 && !empty($file[0]) && !empty($file[1])) {
                 array_shift($file);
@@ -698,7 +700,14 @@ class Uploader
                 $tmpVar = [];
 
                 foreach ($fileAttributes as $attributeName => $attributeValue) {
-                    $tmpVar[$attributeName] = $attributeValue[$file[1]];
+                    $keys = explode('][', trim($file[1], '[]'));
+                    foreach ($keys as $key) {
+                        $key = trim($key, '[]');
+                        if (isset($attributeValue[$key])) {
+                            $attributeValue = $attributeValue[$key];
+                        }
+                    }
+                    $tmpVar[$attributeName] = $attributeValue;
                 }
 
                 $fileAttributes = $tmpVar;
@@ -797,7 +806,7 @@ class Uploader
     }
 
     /**
-     * Get new file name if the same is already exists
+     * Get new file name if the same already exists
      *
      * @param string $destinationFile
      * @return string
@@ -831,6 +840,7 @@ class Uploader
      * @param string $fileName
      * @return string
      * @deprecated 101.0.4
+     * @see Nothing
      */
     public static function getDispretionPath($fileName)
     {
@@ -864,8 +874,9 @@ class Uploader
     /**
      * Get driver for file
      *
-     * @deprecated
      * @return DriverInterface
+     * @deprecated
+     * @see Nothing
      */
     private function getFileDriver(): DriverInterface
     {

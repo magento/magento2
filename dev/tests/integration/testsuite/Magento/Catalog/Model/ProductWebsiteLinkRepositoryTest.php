@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -65,7 +65,7 @@ class ProductWebsiteLinkRepositoryTest extends TestCase
         $productWebsiteLink = $this->productWebsiteLinkFactory->create();
         $productWebsiteLink->setSku('unique-simple-azaza');
         $this->expectException(InputException::class);
-        $this->expectErrorMessage((string)__('There are not websites for assign to product'));
+        $this->expectExceptionMessage((string)__('There are not websites for assign to product'));
         $this->productWebsiteLinkRepository->save($productWebsiteLink);
     }
 

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -64,7 +64,7 @@ class ConsumerTest extends TestCase
     {
         $this->_consumerFactory = $this->getMockBuilder(ConsumerFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
         $this->_consumerMock = $this->getMockBuilder(
             Consumer::class
@@ -81,17 +81,14 @@ class ConsumerTest extends TestCase
         $this->_tokenFactory = $this->getMockBuilder(
             TokenFactory::class
         )->disableOriginalConstructor()
-            ->setMethods(['create'])->getMock();
+            ->onlyMethods(['create'])->getMock();
         $this->_tokenMock = $this->getMockBuilder(
             Token::class
         )->disableOriginalConstructor()
             ->getMock();
         $this->_tokenFactory->expects($this->any())->method('create')->willReturn($this->_tokenMock);
 
-        $this->_storeManagerMock = $this->getMockBuilder(
-            StoreManagerInterface::class
-        )->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->_storeManagerMock = $this->createMock(StoreManagerInterface::class);
         $this->_storeMock = $this->getMockBuilder(
             Store::class
         )->disableOriginalConstructor()
@@ -150,7 +147,7 @@ class ConsumerTest extends TestCase
         unset($this->_oauthService);
     }
 
-    public function testCreateConsumer()
+    public function testCreateConsumer(): void
     {
         $key = $this->_generateRandomString(Oauth::LENGTH_CONSUMER_KEY);
         $secret = $this->_generateRandomString(Oauth::LENGTH_CONSUMER_SECRET);
@@ -165,7 +162,7 @@ class ConsumerTest extends TestCase
         $this->assertEquals($consumer, $this->_consumerMock, 'Consumer object was expected to be returned');
     }
 
-    public function testPostToConsumer()
+    public function testPostToConsumer(): void
     {
         $consumerId = 1;
 

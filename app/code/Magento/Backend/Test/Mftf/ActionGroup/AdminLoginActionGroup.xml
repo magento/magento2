@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
-  */
+/**
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
+ */
 -->
 
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -14,7 +14,8 @@
         </annotations>
         <arguments>
             <argument name="username" type="string" defaultValue="{{_ENV.MAGENTO_ADMIN_USERNAME}}"/>
-            <argument name="password" type="string" defaultValue="{{_CREDS.magento/MAGENTO_ADMIN_PASSWORD}}"/></arguments>
+            <argument name="password" type="string" defaultValue="{{_CREDS.magento/MAGENTO_ADMIN_PASSWORD}}"/>
+        </arguments>
 
         <amOnPage url="{{AdminLoginPage.url}}" stepKey="navigateToAdmin"/>
         <fillField selector="{{AdminLoginFormSection.username}}" userInput="{{username}}" stepKey="fillUsername"/>

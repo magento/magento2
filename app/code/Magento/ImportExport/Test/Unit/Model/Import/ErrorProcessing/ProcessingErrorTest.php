@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -9,6 +9,7 @@ namespace Magento\ImportExport\Test\Unit\Model\Import\ErrorProcessing;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingError;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -34,9 +35,9 @@ class ProcessingErrorTest extends TestCase
     /**
      * Test for method init.
      *
-     * @dataProvider errorMessageInfo
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
+    #[DataProvider('errorMessageInfo')]
     public function testInit($initData)
     {
         $errorLevel = isset($initData['errorLevel']) ? $initData['errorLevel'] : null;
@@ -61,7 +62,7 @@ class ProcessingErrorTest extends TestCase
      *
      * @return array
      */
-    public function errorMessageInfo()
+    public static function errorMessageInfo()
     {
         return [
             [
@@ -89,9 +90,8 @@ class ProcessingErrorTest extends TestCase
 
     /**
      * Test for method getErrorCode
-     *
-     * @dataProvider errorCodeData
      */
+    #[DataProvider('errorCodeData')]
     public function testGetErrorCode($data, $expectedValue)
     {
         $this->testInit($data);
@@ -104,7 +104,7 @@ class ProcessingErrorTest extends TestCase
      *
      * @return array
      */
-    public function errorCodeData()
+    public static function errorCodeData()
     {
         return [
             [
@@ -120,9 +120,8 @@ class ProcessingErrorTest extends TestCase
 
     /**
      * Test for method getErrorMessage
-     *
-     * @dataProvider errorMessageData
      */
+    #[DataProvider('errorMessageData')]
     public function testGetErrorMessage($data, $expectedValue)
     {
         $this->testInit($data);
@@ -135,7 +134,7 @@ class ProcessingErrorTest extends TestCase
      *
      * @return array
      */
-    public function errorMessageData()
+    public static function errorMessageData()
     {
         return [
             [
@@ -151,9 +150,8 @@ class ProcessingErrorTest extends TestCase
 
     /**
      * Test for method getRowNumber
-     *
-     * @dataProvider rowNumberData
      */
+    #[DataProvider('rowNumberData')]
     public function testGetRowNumber($data, $expectedValue)
     {
         $this->testInit($data);
@@ -166,7 +164,7 @@ class ProcessingErrorTest extends TestCase
      *
      * @return array
      */
-    public function rowNumberData()
+    public static function rowNumberData()
     {
         return [
             [
@@ -182,9 +180,8 @@ class ProcessingErrorTest extends TestCase
 
     /**
      * Test for method getColumnName
-     *
-     * @dataProvider columnNameData
      */
+    #[DataProvider('columnNameData')]
     public function testGetColumnName($data, $expectedValue)
     {
         $this->testInit($data);
@@ -197,7 +194,7 @@ class ProcessingErrorTest extends TestCase
      *
      * @return array
      */
-    public function columnNameData()
+    public static function columnNameData()
     {
         return [
             [
@@ -218,9 +215,8 @@ class ProcessingErrorTest extends TestCase
 
     /**
      * Test for method getErrorLevel
-     *
-     * @dataProvider errorLevelData
      */
+    #[DataProvider('errorLevelData')]
     public function testGetErrorLevel($data, $expectedValue)
     {
         $this->testInit($data);
@@ -233,7 +229,7 @@ class ProcessingErrorTest extends TestCase
      *
      * @return array
      */
-    public function errorLevelData()
+    public static function errorLevelData()
     {
         return [
             [
@@ -255,9 +251,8 @@ class ProcessingErrorTest extends TestCase
 
     /**
      * Test for method getErrorDescription
-     *
-     * @dataProvider errorDescriptionData
      */
+    #[DataProvider('errorDescriptionData')]
     public function testGetErrorDescription($data, $expectedValue)
     {
         $this->testInit($data);
@@ -270,7 +265,7 @@ class ProcessingErrorTest extends TestCase
      *
      * @return array
      */
-    public function errorDescriptionData()
+    public static function errorDescriptionData()
     {
         return [
             [

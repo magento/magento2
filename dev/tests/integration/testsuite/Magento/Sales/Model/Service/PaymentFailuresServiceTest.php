@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -47,10 +47,10 @@ class PaymentFailuresServiceTest extends \PHPUnit\Framework\TestCase
         $this->quote = Bootstrap::getObjectManager()->create(Quote::class);
         $this->cartRepositoryMock = $this->getMockBuilder(CartRepositoryInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['get'])
+            ->onlyMethods(['get'])
             ->getMockForAbstractClass();
         $this->localeDateMock = $this->getMockBuilder(TimezoneInterface::class)
-            ->setMethods(['formatDateTime'])
+            ->onlyMethods(['formatDateTime'])
             ->getMockForAbstractClass();
 
         $this->paymentFailures = Bootstrap::getObjectManager()->create(

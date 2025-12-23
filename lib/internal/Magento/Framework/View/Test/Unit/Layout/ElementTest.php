@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -27,7 +27,7 @@ class ElementTest extends TestCase
     /**
      * @return array
      */
-    public function elementNameDataProvider()
+    public static function elementNameDataProvider()
     {
         return [
             ['<block name="name" />', 'name'],
@@ -41,7 +41,7 @@ class ElementTest extends TestCase
     /**
      * @return array
      */
-    public function cacheableDataProvider()
+    public static function cacheableDataProvider()
     {
         return [
             ['<containter name="name" />', true],

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2022 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -106,7 +106,7 @@ class LengthTest extends TestCase
      */
     public function testMeasureSetWithNoLocale()
     {
-        $this->expectError();
+        $this->expectException( \Error::class );
 
         $value = new Length('100', Length::STANDARD, 'en_US');
         $value->setValue('200', Length::STANDARD);

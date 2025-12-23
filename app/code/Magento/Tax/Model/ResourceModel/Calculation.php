@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 /**
@@ -9,7 +9,9 @@
  */
 namespace Magento\Tax\Model\ResourceModel;
 
-class Calculation extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
+
+class Calculation extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb implements ResetAfterRequestInterface
 {
     /**
      * Store ISO 3166-1 alpha-2 USA country code
@@ -472,5 +474,13 @@ class Calculation extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         }
 
         return $result;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        $this->_ratesCache = [];
     }
 }

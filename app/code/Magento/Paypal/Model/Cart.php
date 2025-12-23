@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -120,6 +120,8 @@ class Cart extends \Magento\Payment\Model\Cart
                 continue;
             }
 
+            $isChildItem = $item->getOriginalItem()->getHasChildren();
+            $itemName = $isChildItem ? $item->getName() . ' - ' . $item->getOriginalItem()->getSku() : $item->getName();
             $amount = $item->getPrice();
             $qty = $item->getQty();
 
@@ -141,7 +143,7 @@ class Cart extends \Magento\Payment\Model\Cart
             }
 
             $this->_salesModelItems[] = $this->_createItemFromData(
-                $item->getName() . $subAggregatedLabel,
+                $itemName . $subAggregatedLabel,
                 $qty,
                 $amount
             );

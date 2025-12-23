@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Setup\Model;
@@ -80,9 +80,9 @@ class ConfigGenerator
     public function __construct(
         Random $random,
         DeploymentConfig $deploymentConfig,
-        ConfigDataFactory $configDataFactory = null,
-        CryptKeyGeneratorInterface $cryptKeyGenerator = null,
-        DriverOptions $driverOptions = null
+        ?ConfigDataFactory $configDataFactory = null,
+        ?CryptKeyGeneratorInterface $cryptKeyGenerator = null,
+        ?DriverOptions $driverOptions = null
     ) {
         $this->random = $random;
         $this->deploymentConfig = $deploymentConfig;

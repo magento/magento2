@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
  */
 -->
 <phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/9.3/phpunit.xsd"
+         xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/10.5/phpunit.xsd"
          colors="true"
          columns="max"
          beStrictAboutTestsThatDoNotTestAnything="false"
@@ -20,32 +20,10 @@
     <php>
         <ini name="date.timezone" value="America/Los_Angeles"/>
     </php>
-    <listeners>
-        <listener class="Yandex\Allure\PhpUnit\AllurePhpUnit">
-            <arguments>
-                <string>var/allure-results</string> <!-- XML files output directory -->
-                <boolean>true</boolean> <!-- Whether to delete previous results on rerun -->
-                <array> <!-- A list of custom annotations to ignore (optional) -->
-                    <element key="magentoAdminConfigFixture">
-                        <string>magentoAdminConfigFixture</string>
-                    </element>
-                    <element key="magentoAppIsolation">
-                        <string>magentoAppIsolation</string>
-                    </element>
-                    <element key="magentoComponentsDir">
-                        <string>magentoComponentsDir</string>
-                    </element>
-                    <element key="magentoConfigFixture">
-                        <string>magentoConfigFixture</string>
-                    </element>
-                    <element key="@magentoDataFixture">
-                        <string>magentoDataFixture</string>
-                    </element>
-                    <element key="magentoDbIsolation">
-                        <string>magentoDbIsolation</string>
-                    </element>
-                </array>
-            </arguments>
-        </listener>
-    </listeners>
+    <extensions>
+        <bootstrap class="Qameta\Allure\PHPUnit\AllureExtension">
+            <!-- Path to config file (default is config/allure.config.php) -->
+            <parameter name="config" value="../../../allure/allure.config.php"/>
+        </bootstrap>
+    </extensions>
 </phpunit>

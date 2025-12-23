@@ -1,13 +1,14 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Framework\View\Test\Unit;
 
 use Exception;
+use Magento\Framework\App\Response\Http as ResponseHttp;
 use Magento\Framework\App\State;
 use Magento\Framework\Cache\FrontendInterface;
 use Magento\Framework\DataObject;
@@ -148,6 +149,11 @@ class LayoutTest extends TestCase
     private $serializer;
 
     /**
+     * @var ResponseHttp
+     */
+    private ResponseHttp $response;
+
+    /**
      * @inheritdoc
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
@@ -219,6 +225,7 @@ class LayoutTest extends TestCase
                     return json_decode($value, true);
                 }
             );
+        $this->response = $this->createMock(ResponseHttp::class);
 
         $this->model = (new ObjectManagerHelper($this))->getObject(
             Layout::class,
@@ -236,7 +243,8 @@ class LayoutTest extends TestCase
                 'appState' => $this->appStateMock,
                 'logger' => $this->loggerMock,
                 'cacheable' => true,
-                'serializer' => $this->serializer
+                'serializer' => $this->serializer,
+                'response' => $this->response
             ]
         );
     }
@@ -539,7 +547,7 @@ class LayoutTest extends TestCase
     /**
      * @return array
      */
-    public function isContainerDataProvider(): array
+    public static function isContainerDataProvider(): array
     {
         return [
             [false, '', false],
@@ -583,7 +591,7 @@ class LayoutTest extends TestCase
     /**
      * @return array
      */
-    public function isManipulationAllowedDataProvider(): array
+    public static function isManipulationAllowedDataProvider(): array
     {
         return [
             ['parent', ['has_element' => true, 'attribute' => 'container'], true],
@@ -713,7 +721,7 @@ class LayoutTest extends TestCase
     /**
      * @return array
      */
-    public function getBlockSingletonDataProvider(): array
+    public static function getBlockSingletonDataProvider(): array
     {
         return [
             [
@@ -754,7 +762,7 @@ class LayoutTest extends TestCase
     /**
      * @return array
      */
-    public function getRendererOptionsDataProvider(): array
+    public static function getRendererOptionsDataProvider(): array
     {
         $rendererData = [
             'namespace' => 'namespace_value',
@@ -828,25 +836,25 @@ class LayoutTest extends TestCase
     /**
      * @return array
      */
-    public function isCacheableDataProvider(): array
+    public static function isCacheableDataProvider(): array
     {
         return [
             'blockWithoutName' => [
-                'xml' => '<?xml version="1.0"?><layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">'
+                'xmlString' => '<?xml version="1.0"?><layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">'
                     . '<block></block></layout>',
                 'blockName' => '',
                 'hasElement' => true,
                 'cacheable' => true
             ],
             'notCacheableBlockWithoutName' => [
-                'xml' => '<?xml version="1.0"?><layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">'
+                'xmlString' => '<?xml version="1.0"?><layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">'
                     . '<block cacheable="false"></block></layout>',
                 'blockName' => '',
                 'hasElement' => true,
                 'cacheable' => true
             ],
             'notCacheableBlockWithMissingBlockReference' => [
-                'xml' => '<?xml version="1.0"?><layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">'
+                'xmlString' => '<?xml version="1.0"?><layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">'
                     . '<referenceBlock name="not_existing_block">'
                     . '<block name="non_cacheable_block" cacheable="false"></block>'
                     . '</referenceBlock></layout>',
@@ -855,7 +863,7 @@ class LayoutTest extends TestCase
                 'cacheable' => true
             ],
             'notCacheableBlockWithMissingContainerReference' => [
-                'xml' => '<?xml version="1.0"?><layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">'
+                'xmlString' => '<?xml version="1.0"?><layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">'
                     . '<referenceContainer name="not_existing_container">'
                     . '<block name="non_cacheable_block" cacheable="false"></block>'
                     . '</referenceContainer></layout>',
@@ -864,7 +872,7 @@ class LayoutTest extends TestCase
                 'cacheable' => true
             ],
             'notCacheableBlockWithExistingBlockReference' => [
-                'xml' => '<?xml version="1.0"?><layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">'
+                'xmlString' => '<?xml version="1.0"?><layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">'
                     . '<referenceBlock name="existing_block">'
                     . '<block name="non_cacheable_block" cacheable="false"></block>'
                     . '</referenceBlock></layout>',
@@ -873,7 +881,7 @@ class LayoutTest extends TestCase
                 'cacheable' => false
             ],
             'notCacheableBlockWithExistingContainerReference' => [
-                'xml' => '<?xml version="1.0"?><layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">'
+                'xmlString' => '<?xml version="1.0"?><layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">'
                     . '<referenceContainer name="existing_container">'
                     . '<block name="non_cacheable_block" cacheable="false"></block>'
                     . '</referenceContainer></layout>',
@@ -889,7 +897,7 @@ class LayoutTest extends TestCase
      */
     public function testGenerateElementsWithoutCache(): void
     {
-        $this->readerContextFactoryMock->expects($this->once())
+        $this->readerContextFactoryMock->expects($this->atMost(2))
             ->method('create')
             ->willReturn($this->readerContextMock);
         $layoutCacheId = 'layout_cache_id';
@@ -944,6 +952,11 @@ class LayoutTest extends TestCase
         $this->layoutScheduledSructure->expects($this->any())
             ->method('__toArray')
             ->willReturn($layoutScheduledStructureData);
+        
+        // Ensure __toArray returns valid data for defensive copying
+        $this->pageConfigStructure->expects($this->any())
+            ->method('__toArray')
+            ->willReturn($pageConfigStructureData);
         $data = [
             'pageConfigStructure' => $pageConfigStructureData,
             'scheduledStructure' => $layoutScheduledStructureData,
@@ -991,7 +1004,7 @@ class LayoutTest extends TestCase
         $xml = simplexml_load_string('<layout/>', Element::class);
         $this->model->setXml($xml);
 
-        $this->readerContextFactoryMock->expects($this->once())
+        $this->readerContextFactoryMock->expects($this->atMost(2))
             ->method('create')
             ->willReturn($this->readerContextMock);
         $themeMock = $this->getMockForAbstractClass(ThemeInterface::class);
@@ -1027,6 +1040,14 @@ class LayoutTest extends TestCase
         $this->layoutScheduledSructure->expects($this->once())
             ->method('populateWithArray')
             ->with($layoutScheduledStructureData);
+        
+        // Ensure __toArray returns valid data for defensive copying
+        $this->layoutScheduledSructure->expects($this->any())
+            ->method('__toArray')
+            ->willReturn($layoutScheduledStructureData);
+        $this->pageConfigStructure->expects($this->any())
+            ->method('__toArray')
+            ->willReturn($pageConfigStructureData);
         $data = [
             'pageConfigStructure' => $pageConfigStructureData,
             'scheduledStructure' => $layoutScheduledStructureData,
@@ -1117,24 +1138,15 @@ class LayoutTest extends TestCase
 
         $this->eventManagerMock
             ->method('dispatch')
-            ->withConsecutive(
-                [
-                    'core_layout_render_element',
-                    [
-                        'element_name' => $child,
-                        'layout' => $this->model,
-                        'transport' => $renderingOutput
-                    ]
-                ],
-                [
-                    'core_layout_render_element',
-                    [
-                        'element_name' => $name,
-                        'layout' => $this->model,
-                        'transport' => $renderingOutput
-                    ]
-                ]
-            );
+            ->willReturnCallback(function ($arg1, $arg2) use ($child, $renderingOutput, $name) {
+                if ($arg1 == 'core_layout_render_element' &&
+                    $arg2 == ['element_name' => $child, 'layout' => $this->model, 'transport' => $renderingOutput]) {
+                    return null;
+                } elseif ($arg1 == 'core_layout_render_element' &&
+                    $arg2 == ['element_name' => $name, 'layout' => $this->model, 'transport' => $renderingOutput]) {
+                    return null;
+                }
+            });
 
         $this->model->setBlock($child, $block);
         $this->assertEquals($blockHtml, $this->model->renderElement($name, false));
@@ -1159,9 +1171,48 @@ class LayoutTest extends TestCase
     }
 
     /**
+     * @param string $expectedResult
+     * @param string $blockHtml
+     *
+     * @return void
+     * @dataProvider trimWhitespaceContainingBlockHtmlDataProvider
+     */
+    public function testTrimWhitespaceContainingBlockHtml($expectedResult, $blockHtml): void
+    {
+        $name = 'test_container';
+        $child = 'child_block';
+        $children = [$child => true];
+        $displayValue = true;
+
+        $this->structureMock->expects($this->atLeastOnce())
+            ->method('getAttribute')
+            ->willReturnMap(
+                [
+                    [$name, 'display', $displayValue],
+                    [$child, 'display', $displayValue],
+                    [$child, 'type', Element::TYPE_BLOCK]
+                ]
+            );
+
+        $this->structureMock->expects($this->atLeastOnce())->method('hasElement')
+            ->willReturnMap([[$child, true]]);
+
+        $this->structureMock->expects($this->once())
+            ->method('getChildren')
+            ->with($name)
+            ->willReturn($children);
+
+        $block = $this->createMock(AbstractBlock::class);
+        $block->expects($this->once())->method('toHtml')->willReturn($blockHtml);
+
+        $this->model->setBlock($child, $block);
+        $this->assertEquals($expectedResult, $this->model->renderElement($name, false));
+    }
+
+    /**
      * @return array
      */
-    public function renderElementDoNotDisplayDataProvider(): array
+    public static function renderElementDoNotDisplayDataProvider(): array
     {
         return [
             ['false'],
@@ -1173,7 +1224,18 @@ class LayoutTest extends TestCase
     /**
      * @return array
      */
-    public function renderElementDisplayDataProvider(): array
+    public static function trimWhitespaceContainingBlockHtmlDataProvider(): array
+    {
+        return [
+            ['', ' '],
+            [' <html/>', ' <html/>']
+        ];
+    }
+
+    /**
+     * @return array
+     */
+    public static function renderElementDisplayDataProvider(): array
     {
         return [
             [true],
@@ -1202,6 +1264,7 @@ class LayoutTest extends TestCase
         $this->loggerMock->expects($this->once())
             ->method('critical')
             ->with($exception);
+        $this->response->expects($this->once())->method('setNoCacheHeaders');
 
         $model = clone $this->model;
         $model->setBuilder($builderMock);

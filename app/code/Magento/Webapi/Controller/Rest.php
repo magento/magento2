@@ -1,13 +1,12 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Webapi\Controller;
 
 use Magento\Framework\Exception\AuthorizationException;
-use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\Webapi\Authorization;
 use Magento\Framework\Webapi\ErrorProcessor;
 use Magento\Framework\Webapi\Rest\Request as RestRequest;
@@ -200,10 +199,6 @@ class Rest implements \Magento\Framework\App\FrontControllerInterface
             $this->requestValidator->validate($this->_request);
             $processor = $this->requestProcessorPool->getProcessor($this->_request);
             $processor->process($this->_request);
-        } catch (CouldNotSaveException $e) {
-            $maskedException = $this->_errorProcessor->maskException($e);
-            $this->_response->setException($maskedException);
-            $this->_response->setHeader('errorRedirectAction', '#shipping');
         } catch (\Exception $e) {
             $maskedException = $this->_errorProcessor->maskException($e);
             $this->_response->setException($maskedException);

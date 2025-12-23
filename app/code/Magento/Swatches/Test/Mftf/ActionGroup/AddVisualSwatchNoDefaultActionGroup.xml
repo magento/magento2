@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright 2025 Adobe
+  * All Rights Reserved.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AddVisualSwatchNoDefaultActionGroup" extends="AddVisualSwatchActionGroup">
+        <annotations>
+            <description>Add visual image swatch property attribute without selecting any default option.</description>
+        </annotations>
+        <!-- Do not mark any option as default -->
+        <remove keyForRemoval="scrollToManageSwatchSection"/>
+        <remove keyForRemoval="waitForSetSecondOptionAsDefault"/>
+        <remove keyForRemoval="setSecondOptionAsDefault"/>
+    </actionGroup>
+</actionGroups>

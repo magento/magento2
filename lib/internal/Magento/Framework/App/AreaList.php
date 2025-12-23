@@ -1,16 +1,18 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework\App;
+
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 
 /**
  * Lists router area codes & processes resolves FrontEndNames to area codes
  *
  * @api
  */
-class AreaList
+class AreaList implements ResetAfterRequestInterface
 {
     /**
      * @var array
@@ -126,5 +128,13 @@ class AreaList
             );
         }
         return $this->_areaInstances[$code];
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        $this->_areaInstances = [];
     }
 }

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -49,14 +49,14 @@ class BackendModelFactoryTest extends TestCase
             \Magento\Theme\Model\ResourceModel\Design\Config\CollectionFactory::class
         )
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
         $this->collection = $this->getMockBuilder(Collection::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->backendModel = $this->getMockBuilder(Value::class)
             ->disableOriginalConstructor()
-            ->setMethods(['setValue'])
+            ->addMethods(['setValue'])
             ->getMock();
 
         $this->model = new BackendModelFactory(

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\TestFramework\Inspection;
 
@@ -21,7 +21,7 @@ class WordsFinderTest extends \PHPUnit\Framework\TestCase
         new \Magento\TestFramework\Inspection\WordsFinder($configFile, $baseDir, new ComponentRegistrar());
     }
 
-    public function constructorExceptionDataProvider()
+    public static function constructorExceptionDataProvider()
     {
         $fixturePath = __DIR__ . '/_files/';
         return [
@@ -53,7 +53,7 @@ class WordsFinderTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function findWordsDataProvider()
+    public static function findWordsDataProvider()
     {
         $mainConfig = __DIR__ . '/_files/config.xml';
         $additionalConfig = __DIR__ . '/_files/config_additional.xml';

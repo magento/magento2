@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -19,7 +19,7 @@ class MviewStateTest extends TestCase
     /**
      * @return array
      */
-    public function afterSetStatusSuspendDataProvider()
+    public static function afterSetStatusSuspendDataProvider()
     {
         return [['suspended', 'idle'], ['suspended', 'working']];
     }
@@ -108,7 +108,7 @@ class MviewStateTest extends TestCase
     /**
      * @return array
      */
-    public function afterSetStatusResumeDataProvider()
+    public static function afterSetStatusResumeDataProvider()
     {
         return [['idle', 'suspended'], ['working', 'suspended']];
     }
@@ -178,7 +178,7 @@ class MviewStateTest extends TestCase
     /**
      * @return array
      */
-    public function afterSetStatusSkipDataProvider()
+    public static function afterSetStatusSkipDataProvider()
     {
         return [
             ['idle', 'idle'],
@@ -247,7 +247,7 @@ class MviewStateTest extends TestCase
     /**
      * @return array
      */
-    public function afterSetStatusDisabledDataProvider()
+    public static function afterSetStatusDisabledDataProvider()
     {
         return [['idle'], ['working'], ['suspended']];
     }

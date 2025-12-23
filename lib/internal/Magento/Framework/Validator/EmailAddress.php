@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework\Validator;
 
@@ -54,18 +54,5 @@ class EmailAddress extends LaminasEmailAddress implements ValidatorInterface
     public function setValidateTld(bool $shouldValidate)
     {
         $this->getHostnameValidator()->setOptions(['useTldCheck' => $shouldValidate]);
-    }
-
-    /**
-     * Method to skipped validate internationalized local part.
-     *
-     * @param string $localPart
-     *
-     * @return false
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     */
-    protected function validateInternationalizedLocalPart($localPart)
-    {
-        return false;
     }
 }

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\ImportExport\Model\Import\Entity;
 
@@ -9,11 +9,12 @@ use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Serialize\Serializer\Json;
-use Magento\ImportExport\Model\Import\AbstractSource;
 use Magento\ImportExport\Model\Import as ImportExport;
+use Magento\ImportExport\Model\Import\AbstractSource;
+use Magento\ImportExport\Model\Import\EntityInterface;
 use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingError;
 use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregatorInterface;
-use Magento\ImportExport\Model\Import\Source\Base64EncodedCsvData;
+use Magento\ImportExport\Model\ResourceModel\Import\Data as DataSourceModel;
 
 /**
  * Import entity abstract model
@@ -25,7 +26,7 @@ use Magento\ImportExport\Model\Import\Source\Base64EncodedCsvData;
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @since 100.0.2
  */
-abstract class AbstractEntity
+abstract class AbstractEntity implements EntityInterface
 {
     /**
      * Database constants
@@ -36,7 +37,7 @@ abstract class AbstractEntity
 
     public const DB_MAX_VARCHAR_LENGTH = 256;
 
-    public const DB_MAX_TEXT_LENGTH = 65536;
+    public const DB_MAX_TEXT_LENGTH = 16_777_215;
 
     public const ERROR_CODE_SYSTEM_EXCEPTION = 'systemException';
     public const ERROR_CODE_COLUMN_NOT_FOUND = 'columnNotFound';
@@ -102,7 +103,7 @@ abstract class AbstractEntity
     /**
      * DB data source model.
      *
-     * @var \Magento\ImportExport\Model\ResourceModel\Import\Data
+     * @var DataSourceModel
      */
     protected $_dataSourceModel;
 
@@ -395,10 +396,7 @@ abstract class AbstractEntity
         $skuSet = [];
 
         $source->rewind();
-        if (!$source instanceof Base64EncodedCsvData) {
-            $this->_dataSourceModel->cleanBunches();
-        }
-
+        $this->_dataSourceModel->cleanProcessedBunches();
         while ($source->valid() || $bunchRows) {
             if ($startNewBunch || !$source->valid()) {
                 $this->ids[] =
@@ -905,7 +903,7 @@ abstract class AbstractEntity
      *
      * @return array
      */
-    public function getIds()
+    public function getIds() : array
     {
         return $this->ids;
     }
@@ -919,5 +917,15 @@ abstract class AbstractEntity
     public function setIds(array $ids)
     {
         $this->ids = $ids;
+    }
+
+    /**
+     * Gets the currently used DataSourceModel
+     *
+     * @return DataSourceModel
+     */
+    public function getDataSourceModel() : DataSourceModel
+    {
+        return $this->_dataSourceModel;
     }
 }

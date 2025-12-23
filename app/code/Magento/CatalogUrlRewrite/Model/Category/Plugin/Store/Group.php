@@ -1,10 +1,11 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\CatalogUrlRewrite\Model\Category\Plugin\Store;
 
+use Magento\CatalogUrlRewrite\Model\Scheduler;
 use Magento\Store\Model\ResourceModel\Group as StoreGroup;
 use Magento\UrlRewrite\Model\UrlPersistInterface;
 use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
@@ -54,12 +55,17 @@ class Group
     protected $storeManager;
 
     /**
+     * @var Scheduler
+     */
+    private $scheduler;
+    /**
      * @param UrlPersistInterface $urlPersist
      * @param CategoryFactory $categoryFactory
      * @param ProductFactory $productFactory
      * @param CategoryUrlRewriteGenerator $categoryUrlRewriteGenerator
      * @param ProductUrlRewriteGenerator $productUrlRewriteGenerator
      * @param StoreManagerInterface $storeManager
+     * @param Scheduler $scheduler
      */
     public function __construct(
         UrlPersistInterface $urlPersist,
@@ -67,7 +73,8 @@ class Group
         ProductFactory $productFactory,
         CategoryUrlRewriteGenerator $categoryUrlRewriteGenerator,
         ProductUrlRewriteGenerator $productUrlRewriteGenerator,
-        StoreManagerInterface $storeManager
+        StoreManagerInterface $storeManager,
+        Scheduler $scheduler
     ) {
         $this->urlPersist = $urlPersist;
         $this->categoryFactory = $categoryFactory;
@@ -75,6 +82,7 @@ class Group
         $this->categoryUrlRewriteGenerator = $categoryUrlRewriteGenerator;
         $this->productUrlRewriteGenerator = $productUrlRewriteGenerator;
         $this->storeManager = $storeManager;
+        $this->scheduler = $scheduler;
     }
 
     /**
@@ -105,39 +113,20 @@ class Group
                 $this->generateCategoryUrls($group->getRootCategoryId(), $group->getStoreIds())
             );
 
-            $this->urlPersist->replace(
-                $this->generateProductUrls($group->getWebsiteId(), $group->getOrigData('website_id'))
-            );
+            $websiteId = $group->getWebsiteId();
+            $originWebsiteId = $group->getOrigData('website_id');
+
+            if ($originWebsiteId !== null && $websiteId !== $originWebsiteId) {
+                $websiteIds = [$websiteId, $originWebsiteId];
+            } else {
+                $websiteIds = [$websiteId];
+            }
+            foreach ($websiteIds as $websiteId) {
+                $this->scheduler->execute($websiteId);
+            }
         }
 
         return $result;
-    }
-
-    /**
-     * Generate url rewrites for products assigned to website
-     *
-     * @param int $websiteId
-     * @param int $originWebsiteId
-     * @return array
-     */
-    protected function generateProductUrls($websiteId, $originWebsiteId)
-    {
-        $urls = [];
-        $websiteIds = $websiteId != $originWebsiteId
-            ? [$websiteId, $originWebsiteId]
-            : [$websiteId];
-        $collection = $this->productFactory->create()
-            ->getCollection()
-            ->addCategoryIds()
-            ->addAttributeToSelect(['name', 'url_path', 'url_key', 'visibility'])
-            ->addWebsiteFilter($websiteIds);
-        foreach ($collection as $product) {
-            /** @var \Magento\Catalog\Model\Product $product */
-            $product->setStoreId(Store::DEFAULT_STORE_ID);
-            $urls[] = $this->productUrlRewriteGenerator->generate($product);
-        }
-
-        return array_merge([], ...$urls);
     }
 
     /**

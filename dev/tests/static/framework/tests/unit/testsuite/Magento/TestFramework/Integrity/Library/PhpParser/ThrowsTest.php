@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2021 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\TestFramework\Integrity\Library\PhpParser;
 
@@ -70,7 +70,7 @@ class ThrowsTest extends TestCase
      *
      * @return array
      */
-    public function tokensDataProvider(): array
+    public static function tokensDataProvider(): array
     {
         return [
             'PHP 7' => [

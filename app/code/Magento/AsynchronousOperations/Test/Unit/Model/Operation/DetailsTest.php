@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -27,7 +27,7 @@ class DetailsTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->bulkStatusMock = $this->getMockForAbstractClass(BulkStatusInterface::class);
+        $this->bulkStatusMock = $this->createMock(BulkStatusInterface::class);
         $this->model = new Details($this->bulkStatusMock);
     }
 

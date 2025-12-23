@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
@@ -195,6 +195,9 @@
     <type name="\Magento\Quote\Model\QuoteManagement">
         <plugin name="coupon_uses_increment_plugin" type="Magento\SalesRule\Plugin\CouponUsagesIncrement" sortOrder="20"/>
     </type>
+    <type name="\Magento\Multishipping\Model\Checkout\Type\Multishipping\PlaceOrderDefault">
+        <plugin name="coupon_uses_increment_multishipping_plugin" type="Magento\SalesRule\Plugin\CouponUsagesIncrementMultishipping" sortOrder="30"/>
+    </type>
     <preference
             for="Magento\SalesRule\Model\Spi\CodeLimitManagerInterface"
             type="Magento\SalesRule\Model\Coupon\CodeLimitManager" />
@@ -203,4 +206,10 @@
             <argument name="recollectTotals" xsi:type="object">Magento\SalesRule\Model\Rule\RuleQuoteRecollectTotalsAsync\Proxy</argument>
         </arguments>
     </type>
+    <type name="Magento\SalesRule\Controller\Adminhtml\Promo\Quote\Generate">
+        <arguments>
+            <argument name="scopeConfig" xsi:type="object">Magento\Framework\App\Config\ScopeConfigInterface\Proxy</argument>
+        </arguments>
+    </type>
+    <type name="Magento\SalesRule\Model\Rule\Action\Discount\ExistingDiscountRuleCollector" shared="true" />
 </config>

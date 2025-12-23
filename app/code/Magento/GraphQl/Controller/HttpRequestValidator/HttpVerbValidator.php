@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -9,12 +9,12 @@ namespace Magento\GraphQl\Controller\HttpRequestValidator;
 
 use GraphQL\Language\AST\Node;
 use GraphQL\Language\AST\NodeKind;
-use GraphQL\Language\Parser;
-use GraphQL\Language\Source;
 use GraphQL\Language\Visitor;
 use Magento\Framework\App\HttpRequestInterface;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\Request\Http;
-use Magento\Framework\GraphQl\Exception\GraphQlInputException;
+use Magento\Framework\GraphQl\Exception\MethodNotAllowedException;
+use Magento\Framework\GraphQl\Query\QueryParser;
 use Magento\Framework\Phrase;
 use Magento\GraphQl\Controller\HttpRequestValidatorInterface;
 
@@ -24,11 +24,24 @@ use Magento\GraphQl\Controller\HttpRequestValidatorInterface;
 class HttpVerbValidator implements HttpRequestValidatorInterface
 {
     /**
+     * @var QueryParser
+     */
+    private $queryParser;
+
+    /**
+     * @param QueryParser|null $queryParser
+     */
+    public function __construct(?QueryParser $queryParser = null)
+    {
+        $this->queryParser = $queryParser ?: ObjectManager::getInstance()->get(QueryParser::class);
+    }
+
+    /**
      * Check if request is using correct verb for query or mutation
      *
      * @param HttpRequestInterface $request
      * @return void
-     * @throws GraphQlInputException
+     * @throws MethodNotAllowedException
      */
     public function validate(HttpRequestInterface $request): void
     {
@@ -37,9 +50,9 @@ class HttpVerbValidator implements HttpRequestValidatorInterface
             $query = $request->getParam('query', '');
             if (!empty($query)) {
                 $operationType = '';
-                $queryAst = Parser::parse(new Source($query ?: '', 'GraphQL'));
+                $parsedQuery = $this->queryParser->parse($query);
                 Visitor::visit(
-                    $queryAst,
+                    $parsedQuery,
                     [
                         'leave' => [
                             NodeKind::OPERATION_DEFINITION => function (Node $node) use (&$operationType) {
@@ -50,7 +63,7 @@ class HttpVerbValidator implements HttpRequestValidatorInterface
                 );
 
                 if ($operationType !== null && strtolower($operationType) === 'mutation') {
-                    throw new GraphQlInputException(
+                    throw new MethodNotAllowedException(
                         new Phrase('Mutation requests allowed only for POST requests')
                     );
                 }

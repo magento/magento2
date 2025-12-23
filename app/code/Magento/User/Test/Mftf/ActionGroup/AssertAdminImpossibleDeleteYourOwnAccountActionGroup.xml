@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
-  */
+/**
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
+ */
 -->
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
@@ -12,6 +12,7 @@
             <argument name="currentAdminPassword" type="string" defaultValue="{{_ENV.MAGENTO_ADMIN_PASSWORD}}"/>
         </arguments>
         <fillField selector="{{AdminEditUserSection.currentPasswordField}}" userInput="{{currentAdminPassword}}" stepKey="enterThePassword" />
+        <waitForElementVisible selector="{{AdminMainActionsSection.delete}}" stepKey="waitForDeleteButton"/>
         <click selector="{{AdminMainActionsSection.delete}}" stepKey="deleteUser"/>
         <waitForElementVisible selector="{{AdminConfirmationModalSection.message}}" stepKey="waitForConfirmModal"/>
         <click selector="{{AdminConfirmationModalSection.ok}}" stepKey="confirmDelete"/>

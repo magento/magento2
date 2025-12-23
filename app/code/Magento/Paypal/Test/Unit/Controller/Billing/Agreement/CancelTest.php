@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -15,6 +15,7 @@ use Magento\Framework\App\ResponseInterface;
 use Magento\Framework\Message\ManagerInterface;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Registry;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Paypal\Controller\Billing\Agreement\Cancel;
 use Magento\Paypal\Model\Billing\Agreement as BillingAgreement;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -22,6 +23,8 @@ use PHPUnit\Framework\TestCase;
 
 class CancelTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var \Magento\Paypal\Controller\Billing\Agreement
      */
@@ -61,16 +64,15 @@ class CancelTest extends TestCase
     {
         $this->_session = $this->createMock(Session::class);
 
-        $this->_agreement = $this->getMockBuilder(BillingAgreement::class)
-            ->addMethods(['getCustomerId', 'getReferenceId'])
-            ->onlyMethods(['load', 'getId', 'canCancel', 'cancel', '__wakeup'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->_agreement = $this->createPartialMockWithReflection(
+            BillingAgreement::class,
+            ['getCustomerId', 'getReferenceId', 'load', 'getId', 'canCancel', 'cancel', '__wakeup']
+        );
         $this->_agreement->expects($this->once())->method('load')->with(15)->willReturnSelf();
         $this->_agreement->expects($this->once())->method('getId')->willReturn(15);
         $this->_agreement->expects($this->once())->method('getCustomerId')->willReturn(871);
 
-        $this->_objectManager = $this->getMockForAbstractClass(ObjectManagerInterface::class);
+        $this->_objectManager = $this->createMock(ObjectManagerInterface::class);
         $this->_objectManager->expects(
             $this->atLeastOnce()
         )->method(
@@ -88,14 +90,14 @@ class CancelTest extends TestCase
             $this->_agreement
         );
 
-        $this->_request = $this->getMockForAbstractClass(RequestInterface::class);
+        $this->_request = $this->createMock(RequestInterface::class);
         $this->_request->expects($this->once())->method('getParam')->with('agreement')->willReturn(15);
 
-        $response = $this->getMockForAbstractClass(ResponseInterface::class);
+        $response = $this->createMock(ResponseInterface::class);
 
-        $redirect = $this->getMockForAbstractClass(RedirectInterface::class);
+        $redirect = $this->createMock(RedirectInterface::class);
 
-        $this->_messageManager = $this->getMockForAbstractClass(ManagerInterface::class);
+        $this->_messageManager = $this->createMock(ManagerInterface::class);
 
         $context = $this->createMock(Context::class);
         $context->expects($this->any())->method('getObjectManager')->willReturn($this->_objectManager);

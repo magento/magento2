@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Customer\Controller\Adminhtml\Group;
 
@@ -91,8 +91,7 @@ class Save extends \Magento\Customer\Controller\Adminhtml\Group implements HttpP
                 ? [] : $this->getRequest()->getParam('customer_group_excluded_websites');
             $resultRedirect = $this->resultRedirectFactory->create();
             try {
-                $customerGroupCode = (string)$this->getRequest()->getParam('code');
-
+                $customerGroupCode = trim((string)$this->getRequest()->getParam('code'));
                 if ($id !== null) {
                     $customerGroup = $this->groupRepository->getById((int)$id);
                     $customerGroupCode = $customerGroupCode ?: $customerGroup->getCode();
