@@ -162,6 +162,10 @@ location /media/ {
 #       }
 #       image_filter resize $width $height;
 #       image_filter_jpeg_quality 90;
+#
+#       add_header Cache-Control "public";
+#       add_header X-Frame-Options "SAMEORIGIN";
+#       expires +1y;
 #   }
 
     # try_files $uri $uri/ /get.php$is_args$args;
