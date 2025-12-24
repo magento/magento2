@@ -44,6 +44,12 @@ class Configurable
             $product->setTypeId(\Magento\ConfigurableProduct\Model\Product\Type\Configurable::TYPE_CODE);
             return;
         }
+        
+        // Preserve configurable type if product is already configurable, even when attributes are empty
+        if ($product->getTypeId() === \Magento\ConfigurableProduct\Model\Product\Type\Configurable::TYPE_CODE) {
+            return;
+        }
+        
         $proceed($product);
     }
 }

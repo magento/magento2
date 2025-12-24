@@ -89,4 +89,30 @@ class ConfigurableTest extends TestCase
         $this->productMock->expects($this->never())->method('setTypeId');
         $this->model->aroundProcessProduct($this->subjectMock, $this->closureMock, $this->productMock);
     }
+
+    public function testAroundProcessProductPreservesConfigurableTypeWhenAttributesEmpty()
+    {
+        $this->requestMock->expects(
+            $this->any()
+        )->method(
+            'getParam'
+        )->with(
+            'attributes'
+        )->willReturn(
+            null
+        );
+        
+        $this->productMock->expects(
+            $this->once()
+        )->method(
+            'getTypeId'
+        )->willReturn(
+            \Magento\ConfigurableProduct\Model\Product\Type\Configurable::TYPE_CODE
+        );
+        
+        // setTypeId should NOT be called when product is already configurable
+        $this->productMock->expects($this->never())->method('setTypeId');
+        
+        $this->model->aroundProcessProduct($this->subjectMock, $this->closureMock, $this->productMock);
+    }
 }

@@ -51,7 +51,11 @@ class Plugin
                 $product->setTypeId(\Magento\ConfigurableProduct\Model\Product\Type\Configurable::TYPE_CODE);
                 $this->configurableType->setUsedProductAttributes($product, $attributes);
             } else {
-                $product->setTypeId(\Magento\Catalog\Model\Product\Type::TYPE_SIMPLE);
+                // Preserve the configurable type if product is already configurable
+                // Only convert to simple if the product was not previously a configurable product
+                if ($product->getOrigData('type_id') !== \Magento\ConfigurableProduct\Model\Product\Type\Configurable::TYPE_CODE) {
+                    $product->setTypeId(\Magento\Catalog\Model\Product\Type::TYPE_SIMPLE);
+                }
             }
         }
 

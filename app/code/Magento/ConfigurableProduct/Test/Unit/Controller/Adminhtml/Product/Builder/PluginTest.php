@@ -260,4 +260,30 @@ class PluginTest extends TestCase
             $this->plugin->afterBuild($this->subjectMock, $this->productMock, $this->requestMock)
         );
     }
+
+    public function testAfterBuildPreservesConfigurableTypeWhenAttributesAreEmpty()
+    {
+        $valueMap = [
+            ['attributes', null, null],
+            ['popup', null, false],
+            ['product', null, 'product'],
+            ['id', false, false],
+        ];
+        $this->requestMock->expects($this->once())->method('has')->with('attributes')->willReturn(true);
+        $this->requestMock->expects($this->any())->method('getParam')->willReturnMap($valueMap);
+        
+        // Product is originally configurable
+        $this->productMock->expects($this->once())->method('getOrigData')->with('type_id')
+            ->willReturn(Configurable::TYPE_CODE);
+        
+        // setTypeId should NOT be called when the product is already configurable
+        $this->productMock->expects($this->never())->method('setTypeId');
+        
+        $this->productFactoryMock->expects($this->never())->method('create');
+        
+        $this->assertEquals(
+            $this->productMock,
+            $this->plugin->afterBuild($this->subjectMock, $this->productMock, $this->requestMock)
+        );
+    }
 }
