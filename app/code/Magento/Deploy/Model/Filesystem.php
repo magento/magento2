@@ -32,7 +32,7 @@ class Filesystem
      * @link https://experienceleague.adobe.com/docs/commerce-operations/installation-guide/next-steps/set-umask.html
      * @link https://experienceleague.adobe.com/docs/commerce-operations/installation-guide/prerequisites/file-system/configure-permissions.html
      */
-    const PERMISSIONS_FILE = 0640;
+    public const PERMISSIONS_FILE = 0640;
 
     /**
      * Directory access permissions
@@ -44,12 +44,12 @@ class Filesystem
      * @link https://experienceleague.adobe.com/docs/commerce-operations/installation-guide/next-steps/set-umask.html
      * @link https://experienceleague.adobe.com/docs/commerce-operations/installation-guide/prerequisites/file-system/configure-permissions.html
      */
-    const PERMISSIONS_DIR = 0750;
+    public const PERMISSIONS_DIR = 0750;
 
     /**
      * Default theme when no theme is stored in configuration
      */
-    const DEFAULT_THEME = 'Magento/blank';
+    public const DEFAULT_THEME = 'Magento/blank';
 
     /**
      * @var \Magento\Framework\App\DeploymentConfig\Writer
@@ -186,7 +186,9 @@ class Filesystem
     protected function deployStaticContent(
         OutputInterface $output
     ) {
-        $output->writeln('Starting deployment of static content');
+        $output->writeln(
+            'Starting deployment of static content for locales: ' . implode(', ', $this->getUsedLocales())
+        );
         $cmd = $this->functionCallPath . 'setup:static-content:deploy -f '
             . implode(' ', $this->getUsedLocales());
 
