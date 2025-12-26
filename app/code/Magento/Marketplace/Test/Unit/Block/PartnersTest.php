@@ -8,6 +8,7 @@ declare(strict_types=1);
 namespace Magento\Marketplace\Test\Unit\Block;
 
 use Magento\Marketplace\Block\Partners;
+use Magento\Marketplace\Model\Partners as PartnersModel;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -57,10 +58,10 @@ class PartnersTest extends TestCase
     /**
      * Gets partners model mock
      *
-     * @return MockObject|\Magento\Marketplace\Model\Partners
+     * @return MockObject|PartnersModel
      */
     public function getPartnersModelMock($methods)
     {
-        return $this->createPartialMock(\Magento\Marketplace\Model\Partners::class, $methods);
+        return $this->createPartialMock(PartnersModel::class, $methods);
     }
 }

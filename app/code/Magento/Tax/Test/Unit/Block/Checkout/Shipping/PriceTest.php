@@ -9,6 +9,7 @@ namespace Magento\Tax\Test\Unit\Block\Checkout\Shipping;
 
 use Magento\Checkout\Model\Session;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Quote\Model\Quote;
 use Magento\Quote\Model\Quote\Address\Rate;
@@ -20,6 +21,7 @@ use PHPUnit\Framework\TestCase;
 
 class PriceTest extends TestCase
 {
+    use MockCreationTrait;
     /**
      * @var Price
      */
@@ -66,11 +68,10 @@ class PriceTest extends TestCase
             ->method('getStore')
             ->willReturn($this->store);
 
-        $checkoutSession = $this->getMockBuilder(Session::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['__wakeup'])
-            ->onlyMethods(['getQuote'])
-            ->getMock();
+        $checkoutSession = $this->createPartialMockWithReflection(
+            Session::class,
+            ['__wakeup', 'getQuote']
+        );
 
         $checkoutSession->expects($this->any())
             ->method('getQuote')
@@ -99,18 +100,17 @@ class PriceTest extends TestCase
      */
     protected function setupShippingRate($shippingPrice)
     {
-        $shippingRateMock = $this->getMockBuilder(Rate::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['getPrice'])
-            ->onlyMethods(['__wakeup'])
-            ->getMock();
+        $shippingRateMock = $this->createPartialMockWithReflection(
+            Rate::class,
+            ['getPrice', '__wakeup']
+        );
         $shippingRateMock->expects($this->once())
             ->method('getPrice')
             ->willReturn($shippingPrice);
         return $shippingRateMock;
     }
 
-    public function testGetShippingPriceExclTax()
+    public function testGetShippingPriceExclTax(): void
     {
         $shippingPrice = 5;
         $shippingPriceExclTax = 4.5;
@@ -131,7 +131,7 @@ class PriceTest extends TestCase
         $this->assertEquals($convertedPrice, $this->priceObj->getShippingPriceExclTax());
     }
 
-    public function testGetShippingPriceInclTax()
+    public function testGetShippingPriceInclTax(): void
     {
         $shippingPrice = 5;
         $shippingPriceInclTax = 5.5;
@@ -152,7 +152,7 @@ class PriceTest extends TestCase
         $this->assertEquals($convertedPrice, $this->priceObj->getShippingPriceExclTax());
     }
 
-    public function testDisplayShippingPriceInclTax()
+    public function testDisplayShippingPriceInclTax(): void
     {
         $this->taxHelper->expects($this->once())
             ->method('displayShippingPriceIncludingTax');
@@ -160,7 +160,7 @@ class PriceTest extends TestCase
         $this->priceObj->displayShippingPriceInclTax();
     }
 
-    public function testDisplayShippingBothPrices()
+    public function testDisplayShippingBothPrices(): void
     {
         $this->taxHelper->expects($this->once())
             ->method('displayShippingBothPrices');

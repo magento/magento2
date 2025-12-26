@@ -62,7 +62,7 @@ class ConfigTest extends TestCase
         $this->config = $this->createMock(\Magento\Framework\RequireJs\Config::class);
         $this->fileManager = $this->createMock(FileManager::class);
         $this->pageConfig = $this->createMock(\Magento\Framework\View\Page\Config::class);
-        $this->bundleConfig = $this->getMockForAbstractClass(ConfigInterface::class);
+        $this->bundleConfig = $this->createMock(ConfigInterface::class);
     }
 
     public function testSetLayout()
@@ -72,16 +72,16 @@ class ConfigTest extends TestCase
             ->method('isBundlingJsFiles')
             ->willReturn(true);
         $filePath = 'require_js_fie_path';
-        $asset = $this->getMockForAbstractClass(LocalInterface::class);
+        $asset = $this->createMock(LocalInterface::class);
         $asset->expects($this->atLeastOnce())
             ->method('getFilePath')
             ->willReturn($filePath);
-        $requireJsAsset = $this->getMockForAbstractClass(LocalInterface::class);
+        $requireJsAsset = $this->createMock(LocalInterface::class);
         $requireJsAsset
             ->expects($this->atLeastOnce())
             ->method('getFilePath')
             ->willReturn('/path/to/require/require.js');
-        $minResolverAsset = $this->getMockForAbstractClass(LocalInterface::class);
+        $minResolverAsset = $this->createMock(LocalInterface::class);
         $minResolverAsset
             ->expects($this->atLeastOnce())
             ->method('getFilePath')
@@ -108,11 +108,9 @@ class ConfigTest extends TestCase
             ->method('createMinResolverAsset')
             ->willReturn($minResolverAsset);
 
-        $layout = $this->getMockForAbstractClass(LayoutInterface::class);
+        $layout = $this->createMock(LayoutInterface::class);
 
-        $assetCollection = $this->getMockBuilder(GroupedCollection::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $assetCollection = $this->createMock(GroupedCollection::class);
         $this->pageConfig->expects($this->atLeastOnce())
             ->method('getAssetCollection')
             ->willReturn($assetCollection);
@@ -122,9 +120,7 @@ class ConfigTest extends TestCase
             ->method('insert')
             ->willReturn(true);
 
-        $this->minificationMock = $this->getMockBuilder(Minification::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->minificationMock = $this->createMock(Minification::class);
         $this->minificationMock
             ->expects($this->any())
             ->method('isEnabled')

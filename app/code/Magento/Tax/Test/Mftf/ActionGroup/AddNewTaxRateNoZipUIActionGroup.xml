@@ -14,19 +14,26 @@
         </annotations>
         <arguments>
             <argument name="taxCode"/>
+            <argument name="taxIdentifierSelector" type="string" defaultValue="{{AdminTaxRulesSection.taxIdentifier}}"/>
+            <argument name="zipCodeSelector" type="string" defaultValue="{{AdminTaxRulesSection.zipCode}}"/>
+            <argument name="stateSelector" type="string" defaultValue="{{AdminTaxRulesSection.state}}"/>
+            <argument name="countrySelector" type="string" defaultValue="{{AdminTaxRulesSection.country}}"/>
+            <argument name="rateSelector" type="string" defaultValue="{{AdminTaxRulesSection.rate}}"/>
+            <argument name="addNewTaxRateSelector" type="string" defaultValue="{{AdminTaxRulesSection.addNewTaxRate}}"/>
+            <argument name="saveSelector" type="string" defaultValue="{{AdminTaxRulesSection.save}}"/>
         </arguments>
 
         <!-- Go to the tax rate page -->
-        <click stepKey="addNewTaxRate" selector="{{AdminTaxRulesSection.addNewTaxRate}}"/>
+        <click stepKey="addNewTaxRate" selector="{{addNewTaxRateSelector}}"/>
 
         <!-- Fill out a new tax rate -->
-        <fillField stepKey="fillTaxIdentifier" selector="{{AdminTaxRulesSection.taxIdentifier}}" userInput="{{taxCode.identifier}}-{{taxCode.rate}}"/>
-        <fillField stepKey="fillZipCode" selector="{{AdminTaxRulesSection.zipCode}}" userInput="{{taxCode.zip}}"/>
-        <selectOption stepKey="selectState" selector="{{AdminTaxRulesSection.state}}" userInput="{{taxCode.state}}"/>
-        <selectOption stepKey="selectCountry" selector="{{AdminTaxRulesSection.country}}" userInput="{{taxCode.country}}"/>
-        <fillField stepKey="fillRate" selector="{{AdminTaxRulesSection.rate}}" userInput="{{taxCode.rate}}"/>
+        <fillField stepKey="fillTaxIdentifier" selector="{{taxIdentifierSelector}}" userInput="{{taxCode.identifier}}-{{taxCode.rate}}"/>
+        <fillField stepKey="fillZipCode" selector="{{zipCodeSelector}}" userInput="{{taxCode.zip}}"/>
+        <selectOption stepKey="selectState" selector="{{stateSelector}}" userInput="{{taxCode.state}}"/>
+        <selectOption stepKey="selectCountry" selector="{{countrySelector}}" userInput="{{taxCode.country}}"/>
+        <fillField stepKey="fillRate" selector="{{rateSelector}}" userInput="{{taxCode.rate}}"/>
 
         <!-- Save the tax rate -->
-        <click stepKey="saveTaxRate" selector="{{AdminTaxRulesSection.save}}"/>
+        <click stepKey="saveTaxRate" selector="{{saveSelector}}"/>
     </actionGroup>
 </actionGroups>

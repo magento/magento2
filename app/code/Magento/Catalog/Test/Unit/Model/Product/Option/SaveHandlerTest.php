@@ -50,18 +50,10 @@ class SaveHandlerTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->entity = $this->getMockBuilder(Product::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->optionMock = $this->getMockBuilder(Option::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->optionRepository = $this->getMockBuilder(Repository::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->relationMock = $this->getMockBuilder(Relation::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->entity = $this->createMock(Product::class);
+        $this->optionMock = $this->createMock(Option::class);
+        $this->optionRepository = $this->createMock(Repository::class);
+        $this->relationMock = $this->createMock(Relation::class);
 
         $this->model = new SaveHandler($this->optionRepository, $this->relationMock);
     }
@@ -73,12 +65,10 @@ class SaveHandlerTest extends TestCase
      */
     public function testExecute(): void
     {
-        $this->optionMock->expects($this->any())->method('getOptionId')->willReturn(5);
+        $this->optionMock->method('getOptionId')->willReturn(5);
         $this->entity->expects($this->once())->method('getOptions')->willReturn([$this->optionMock]);
 
-        $secondOptionMock = $this->getMockBuilder(Option::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $secondOptionMock = $this->createMock(Option::class);
         $secondOptionMock->expects($this->once())->method('getOptionId')->willReturn(6);
 
         $this->optionRepository

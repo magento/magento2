@@ -18,6 +18,7 @@ use Magento\Framework\Serialize\SerializerInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\Store\Api\Data\StoreInterface;
 use Magento\Store\Model\StoreManagerInterface;
+use Magento\Store\Model\StoreManager;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -68,9 +69,7 @@ class StopwordsTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->storeManager = $this->getMockBuilder(StoreManagerInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->storeManager = $this->createPartialMock(StoreManager::class, ['getStore']);
         $this->localeResolver = $this->getMockBuilder(\Magento\Framework\Locale\Resolver::class)
             ->disableOriginalConstructor()
             ->onlyMethods([
@@ -90,7 +89,7 @@ class StopwordsTest extends TestCase
         )->disableOriginalConstructor()
             ->getMock();
 
-        $this->serializerMock = $this->getMockForAbstractClass(SerializerInterface::class);
+        $this->serializerMock = $this->createMock(SerializerInterface::class);
 
         $objectManager = new ObjectManagerHelper($this);
         $this->model = $objectManager->getObject(
@@ -125,9 +124,7 @@ class StopwordsTest extends TestCase
             ->willReturn([
                 'default' => 'default.csv',
             ]);
-        $storeInterface = $this->getMockBuilder(StoreInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $storeInterface = $this->createMock(StoreInterface::class);
         $this->storeManager->expects($this->once())
             ->method('getStore')
             ->willReturn($storeInterface);
@@ -184,9 +181,7 @@ class StopwordsTest extends TestCase
             ->willReturn([
                 'default' => 'default.csv',
             ]);
-        $storeInterface = $this->getMockBuilder(StoreInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $storeInterface = $this->createMock(StoreInterface::class);
         $this->storeManager->expects($this->once())
             ->method('getStore')
             ->willReturn($storeInterface);

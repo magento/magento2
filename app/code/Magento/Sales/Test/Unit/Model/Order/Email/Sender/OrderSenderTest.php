@@ -14,6 +14,7 @@ use Magento\Sales\Model\Order\Email\Sender\OrderSender;
 use Magento\Sales\Model\ResourceModel\EntityAbstract;
 use Magento\Sales\Model\ResourceModel\Order;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class OrderSenderTest extends AbstractSenderTestCase
 {
@@ -73,100 +74,101 @@ class OrderSenderTest extends AbstractSenderTestCase
      *
      * @return void
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
-     * @dataProvider sendDataProvider
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
+    #[DataProvider('sendDataProvider')]
     public function testSend(
         int $configValue,
         ?int $forceSyncMode,
         ?bool $emailSendingResult,
         bool $senderSendException
     ): void {
-        $address = 'address_test';
-        $configPath = 'sales_email/general/async_sending';
-        $createdAtFormatted='Oct 14, 2019, 4:11:58 PM';
-        $customerName = 'test customer';
-        $frontendStatusLabel = 'Processing';
-        $isNotVirtual = true;
+         $address = 'address_test';
+         $configPath = 'sales_email/general/async_sending';
+         $createdAtFormatted='Oct 14, 2019, 4:11:58 PM';
+         $customerName = 'test customer';
+         $frontendStatusLabel = 'Processing';
+         $isNotVirtual = true;
 
-        $this->orderMock->expects($this->once())
+         $this->orderMock->expects($this->once())
             ->method('setSendEmail')
             ->with($emailSendingResult);
 
-        $this->globalConfig->expects($this->once())
+         $this->globalConfig->expects($this->once())
             ->method('getValue')
             ->with($configPath)
             ->willReturn($configValue);
 
         if (!$configValue || $forceSyncMode) {
             $this->identityContainerMock->expects($this->exactly(2))
-                ->method('isEnabled')
-                ->willReturn($emailSendingResult);
+               ->method('isEnabled')
+               ->willReturn($emailSendingResult);
 
             if ($emailSendingResult) {
                 $this->identityContainerMock->expects($senderSendException ? $this->never() : $this->once())
-                    ->method('getCopyMethod')
-                    ->willReturn('copy');
+                   ->method('getCopyMethod')
+                   ->willReturn('copy');
 
                 $addressMock = $this->createMock(Address::class);
 
                 $this->addressRenderer->expects($this->any())
-                    ->method('format')
-                    ->with($addressMock, 'html')
-                    ->willReturn($address);
+                   ->method('format')
+                   ->with($addressMock, 'html')
+                   ->willReturn($address);
 
                 $this->orderMock->expects($this->any())
-                    ->method('getBillingAddress')
-                    ->willReturn($addressMock);
+                   ->method('getBillingAddress')
+                   ->willReturn($addressMock);
 
                 $this->orderMock->expects($this->any())
-                    ->method('getShippingAddress')
-                    ->willReturn($addressMock);
+                   ->method('getShippingAddress')
+                   ->willReturn($addressMock);
 
                 $this->orderMock->expects($this->once())
-                    ->method('getCreatedAtFormatted')
-                    ->with(2)
-                    ->willReturn($createdAtFormatted);
+                   ->method('getCreatedAtFormatted')
+                   ->with(2)
+                   ->willReturn($createdAtFormatted);
 
                 $this->orderMock->expects($this->any())
-                    ->method('getCustomerName')
-                    ->willReturn($customerName);
+                   ->method('getCustomerName')
+                   ->willReturn($customerName);
 
                 $this->orderMock->expects($this->once())
-                    ->method('getIsNotVirtual')
-                    ->willReturn($isNotVirtual);
+                   ->method('getIsNotVirtual')
+                   ->willReturn($isNotVirtual);
 
                 $this->orderMock->expects($this->once())
-                    ->method('getEmailCustomerNote')
-                    ->willReturn('');
+                   ->method('getEmailCustomerNote')
+                   ->willReturn('');
 
                 $this->orderMock->expects($this->once())
-                    ->method('getFrontendStatusLabel')
-                    ->willReturn($frontendStatusLabel);
+                   ->method('getFrontendStatusLabel')
+                   ->willReturn($frontendStatusLabel);
 
                 $this->templateContainerMock->expects($this->once())
-                    ->method('setTemplateVars')
-                    ->with(
-                        [
-                            'order' => $this->orderMock,
-                            'order_id' => self::ORDER_ID,
-                            'billing' => $addressMock,
-                            'payment_html' => 'payment',
-                            'store' => $this->storeMock,
-                            'formattedShippingAddress' => $address,
-                            'formattedBillingAddress' => $address,
-                            'created_at_formatted'=>$createdAtFormatted,
-                            'order_data' => [
-                                'customer_name' => $customerName,
-                                'is_not_virtual' => $isNotVirtual,
-                                'email_customer_note' => '',
-                                'frontend_status_label' => $frontendStatusLabel
-                            ]
-                        ]
-                    );
+                   ->method('setTemplateVars')
+                   ->with(
+                       [
+                           'order' => $this->orderMock,
+                           'order_id' => self::ORDER_ID,
+                           'billing' => $addressMock,
+                           'payment_html' => 'payment',
+                           'store' => $this->storeMock,
+                           'formattedShippingAddress' => $address,
+                           'formattedBillingAddress' => $address,
+                           'created_at_formatted'=>$createdAtFormatted,
+                           'order_data' => [
+                               'customer_name' => $customerName,
+                               'is_not_virtual' => $isNotVirtual,
+                               'email_customer_note' => '',
+                               'frontend_status_label' => $frontendStatusLabel
+                           ]
+                       ]
+                   );
 
                 $this->senderBuilderFactoryMock->expects($this->once())
-                    ->method('create')
-                    ->willReturn($this->senderMock);
+                   ->method('create')
+                   ->willReturn($this->senderMock);
 
                 $this->senderMock->expects($this->once())->method('send');
 
@@ -176,12 +178,12 @@ class OrderSenderTest extends AbstractSenderTestCase
                     $this->senderMock->expects($this->once())->method('sendCopyTo');
 
                     $this->orderMock->expects($this->once())
-                        ->method('setEmailSent')
-                        ->with($emailSendingResult);
+                       ->method('setEmailSent')
+                       ->with($emailSendingResult);
 
                     $this->orderResourceMock->expects($this->once())
-                        ->method('saveAttribute')
-                        ->with($this->orderMock, ['send_email', 'email_sent']);
+                       ->method('saveAttribute')
+                       ->with($this->orderMock, ['send_email', 'email_sent']);
 
                     $this->assertTrue(
                         $this->sender->send($this->orderMock)
@@ -189,8 +191,8 @@ class OrderSenderTest extends AbstractSenderTestCase
                 }
             } else {
                 $this->orderResourceMock->expects($this->once())
-                    ->method('saveAttribute')
-                    ->with($this->orderMock, 'send_email');
+                   ->method('saveAttribute')
+                   ->with($this->orderMock, 'send_email');
 
                 $this->assertFalse(
                     $this->sender->send($this->orderMock)
@@ -198,16 +200,14 @@ class OrderSenderTest extends AbstractSenderTestCase
             }
         } else {
             $this->orderResourceMock
-                ->method('saveAttribute')
-                ->willReturnCallback(
-                    function ($arg1, $arg2) {
-                        if ($arg1 === $this->orderMock && $arg2 === 'email_sent') {
-                            return null;
-                        } elseif ($arg1 === $this->orderMock && $arg2 === 'send_email') {
-                            return null;
-                        }
-                    }
-                );
+            ->method('saveAttribute')
+            ->willReturnCallback(function ($arg1, $arg2) {
+                if ($arg1 === $this->orderMock && $arg2 === 'email_sent') {
+                    return null;
+                } elseif ($arg1 === $this->orderMock && $arg2 === 'send_email') {
+                    return null;
+                }
+            });
 
             $this->assertFalse(
                 $this->sender->send($this->orderMock)
@@ -260,68 +260,68 @@ class OrderSenderTest extends AbstractSenderTestCase
      * @param string|null $expectedShippingAddress
      *
      * @return void
-     * @dataProvider sendVirtualOrderDataProvider
      */
+    #[DataProvider('sendVirtualOrderDataProvider')]
     public function testSendVirtualOrder(
         bool $isVirtualOrder,
         int $formatCallCount,
         ?string $expectedShippingAddress
     ): void {
-        $address = 'address_test';
-        $this->orderMock->setData(OrderInterface::IS_VIRTUAL, $isVirtualOrder);
-        $createdAtFormatted='Oct 14, 2019, 4:11:58 PM';
-        $customerName = 'test customer';
-        $frontendStatusLabel = 'Complete';
-        $isNotVirtual = false;
+         $address = 'address_test';
+         $this->orderMock->setData(OrderInterface::IS_VIRTUAL, $isVirtualOrder);
+         $createdAtFormatted='Oct 14, 2019, 4:11:58 PM';
+         $customerName = 'test customer';
+         $frontendStatusLabel = 'Complete';
+         $isNotVirtual = false;
 
-        $this->orderMock->expects($this->once())
+         $this->orderMock->expects($this->once())
             ->method('setSendEmail')
             ->with(true);
 
-        $this->globalConfig->expects($this->once())
+         $this->globalConfig->expects($this->once())
             ->method('getValue')
             ->with('sales_email/general/async_sending')
             ->willReturn(false);
 
-        $this->identityContainerMock->expects($this->exactly(2))
+         $this->identityContainerMock->expects($this->exactly(2))
             ->method('isEnabled')
             ->willReturn(true);
 
-        $this->identityContainerMock->expects($this->once())
+         $this->identityContainerMock->expects($this->once())
             ->method('getCopyMethod')
             ->willReturn('copy');
 
-        $addressMock = $this->createMock(Address::class);
+         $addressMock = $this->createMock(Address::class);
 
-        $this->addressRenderer->expects($this->exactly($formatCallCount))
+         $this->addressRenderer->expects($this->exactly($formatCallCount))
             ->method('format')
             ->with($addressMock, 'html')
             ->willReturn($address);
 
-        $this->stepAddressFormat($addressMock, $isVirtualOrder);
+         $this->stepAddressFormat($addressMock, $isVirtualOrder);
 
-        $this->orderMock->expects($this->once())
+         $this->orderMock->expects($this->once())
             ->method('getCreatedAtFormatted')
             ->with(2)
             ->willReturn($createdAtFormatted);
 
-        $this->orderMock->expects($this->any())
+         $this->orderMock->expects($this->any())
             ->method('getCustomerName')
             ->willReturn($customerName);
 
-        $this->orderMock->expects($this->once())
+         $this->orderMock->expects($this->once())
             ->method('getIsNotVirtual')
             ->willReturn($isNotVirtual);
 
-        $this->orderMock->expects($this->once())
+         $this->orderMock->expects($this->once())
             ->method('getEmailCustomerNote')
             ->willReturn('');
 
-        $this->orderMock->expects($this->once())
+         $this->orderMock->expects($this->once())
             ->method('getFrontendStatusLabel')
             ->willReturn($frontendStatusLabel);
 
-        $this->templateContainerMock->expects($this->once())
+         $this->templateContainerMock->expects($this->once())
             ->method('setTemplateVars')
             ->with(
                 [
@@ -342,23 +342,23 @@ class OrderSenderTest extends AbstractSenderTestCase
                 ]
             );
 
-        $this->senderBuilderFactoryMock->expects($this->once())
+         $this->senderBuilderFactoryMock->expects($this->once())
             ->method('create')
             ->willReturn($this->senderMock);
 
-        $this->senderMock->expects($this->once())->method('send');
+         $this->senderMock->expects($this->once())->method('send');
 
-        $this->senderMock->expects($this->once())->method('sendCopyTo');
+         $this->senderMock->expects($this->once())->method('sendCopyTo');
 
-        $this->orderMock->expects($this->once())
+         $this->orderMock->expects($this->once())
             ->method('setEmailSent')
             ->with(true);
 
-        $this->orderResourceMock->expects($this->once())
+         $this->orderResourceMock->expects($this->once())
             ->method('saveAttribute')
             ->with($this->orderMock, ['send_email', 'email_sent']);
 
-        $this->assertTrue($this->sender->send($this->orderMock));
+         $this->assertTrue($this->sender->send($this->orderMock));
     }
 
     /**

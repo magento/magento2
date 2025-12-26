@@ -26,8 +26,7 @@ class ResolverTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->requestMock = $this->getMockBuilder(RequestInterface::class)
-            ->getMockForAbstractClass();
+        $this->requestMock = $this->createMock(RequestInterface::class);
 
         $this->resolver = new Resolver($this->requestMock);
     }

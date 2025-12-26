@@ -13,10 +13,12 @@ use Magento\Sales\Model\Order;
 use Magento\Sales\Model\Order\Creditmemo;
 use Magento\Sales\Model\Order\Invoice;
 use Magento\Sales\Model\Order\Invoice\Item;
+use Magento\Sales\Model\Order\Item as OrderItem;
 use Magento\Sales\Model\Order\Invoice\Total\Tax;
 use Magento\Weee\Helper\Data;
 use Magento\Weee\Model\Total\Creditmemo\Weee;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 class WeeeTest extends TestCase
@@ -37,7 +39,7 @@ class WeeeTest extends TestCase
     protected $order;
 
     /**
-     * @var  ObjectManager
+     * @var ObjectManager
      */
     protected $objectManager;
 
@@ -58,25 +60,24 @@ class WeeeTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->weeeData = $this->getMockBuilder(Data::class)
-            ->onlyMethods(
-                [
-                    'getRowWeeeTaxInclTax',
-                    'getBaseRowWeeeTaxInclTax',
-                    'getWeeeAmountInvoiced',
-                    'getBaseWeeeAmountInvoiced',
-                    'getWeeeAmountRefunded',
-                    'getBaseWeeeAmountRefunded',
-                    'getWeeeTaxAmountInvoiced',
-                    'getBaseWeeeTaxAmountInvoiced',
-                    'getWeeeTaxAmountRefunded',
-                    'getBaseWeeeTaxAmountRefunded',
-                    'getApplied',
-                    'setApplied',
-                    'includeInSubtotal',
-                ]
-            )->disableOriginalConstructor()
-            ->getMock();
+        $this->weeeData = $this->createPartialMock(
+            Data::class,
+            [
+                'getRowWeeeTaxInclTax',
+                'getBaseRowWeeeTaxInclTax',
+                'getWeeeAmountInvoiced',
+                'getBaseWeeeAmountInvoiced',
+                'getWeeeAmountRefunded',
+                'getBaseWeeeAmountRefunded',
+                'getWeeeTaxAmountInvoiced',
+                'getBaseWeeeTaxAmountInvoiced',
+                'getWeeeTaxAmountRefunded',
+                'getBaseWeeeTaxAmountRefunded',
+                'getApplied',
+                'setApplied',
+                'includeInSubtotal',
+            ]
+        );
 
         $this->objectManager = new ObjectManager($this);
         $serializer = $this->objectManager->getObject(Json::class);
@@ -91,19 +92,22 @@ class WeeeTest extends TestCase
 
         $this->order = $this->createMock(Order::class);
 
-        $this->creditmemo = $this->createPartialMock(Creditmemo::class, [
+        $this->creditmemo = $this->createPartialMock(
+            Creditmemo::class,
+            [
             'getAllItems',
             'getInvoice',
             'roundPrice',
             'getStore',
-        ]);
+            ]
+        );
     }
 
     /**
      * @param array $creditmemoData
      * @param array $expectedResults
-     * @dataProvider collectDataProvider
      */
+    #[DataProvider('collectDataProvider')]
     public function testCollect($creditmemoData, $expectedResults)
     {
         $roundingDelta = [];
@@ -127,15 +131,17 @@ class WeeeTest extends TestCase
         }
         $this->creditmemo->expects($this->any())
             ->method('roundPrice')
-            ->willReturnCallback(function ($price, $type) use (&$roundingDelta) {
-                if (!isset($roundingDelta[$type])) {
-                    $roundingDelta[$type] = 0;
-                }
-                $roundedPrice = round($price + $roundingDelta[$type], 2);
-                $roundingDelta[$type] = $price - $roundedPrice;
+            ->willReturnCallback(
+                function ($price, $type) use (&$roundingDelta) {
+                    if (!isset($roundingDelta[$type])) {
+                        $roundingDelta[$type] = 0;
+                    }
+                    $roundedPrice = round($price + $roundingDelta[$type], 2);
+                    $roundingDelta[$type] = $price - $roundedPrice;
 
-                return $roundedPrice;
-            });
+                    return $roundedPrice;
+                }
+            );
 
         $this->model->collect($this->creditmemo);
 
@@ -174,7 +180,7 @@ class WeeeTest extends TestCase
 
     /**
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
-     * @return array
+     * @return                                        array
      */
     public static function collectDataProvider()
     {
@@ -503,15 +509,18 @@ class WeeeTest extends TestCase
     }
 
     /**
-     * @param $creditmemoItemData array
+     * @param  $creditmemoItemData array
      * @return \Magento\Sales\Model\Order\Creditmemo\Item|MockObject
      */
     protected function getInvoiceItem($creditmemoItemData)
     {
-        /** @var \Magento\Sales\Model\Order\Item|MockObject $orderItem */
-        $orderItem = $this->createPartialMock(\Magento\Sales\Model\Order\Item::class, [
+        /** @var OrderItem|MockObject $orderItem */
+        $orderItem = $this->createPartialMock(
+            OrderItem::class,
+            [
             'isDummy'
-        ]);
+            ]
+        );
         foreach ($creditmemoItemData['order_item'] as $key => $value) {
             $orderItem->setData($key, $value);
         }
@@ -558,10 +567,13 @@ class WeeeTest extends TestCase
             ->willReturn($orderItem->getBaseWeeeTaxAmountRefunded());
 
         /** @var Item|MockObject $invoiceItem */
-        $invoiceItem = $this->createPartialMock(Item::class, [
+        $invoiceItem = $this->createPartialMock(
+            Item::class,
+            [
             'getOrderItem',
             'isLast'
-        ]);
+            ]
+        );
         $invoiceItem->expects($this->any())->method('getOrderItem')->willReturn($orderItem);
         $invoiceItem->expects($this->any())
             ->method('isLast')
@@ -572,15 +584,19 @@ class WeeeTest extends TestCase
 
         $this->weeeData->expects($this->any())
             ->method('getApplied')
-            ->willReturnCallback(function ($item) {
-                return $item->getAppliedWeee();
-            });
+            ->willReturnCallback(
+                function ($item) {
+                    return $item->getAppliedWeee();
+                }
+            );
 
         $this->weeeData->expects($this->any())
             ->method('setApplied')
-            ->willReturnCallback(function ($item, $weee) {
-                return $item->setAppliedWeee($weee);
-            });
+            ->willReturnCallback(
+                function ($item, $weee) {
+                    return $item->setAppliedWeee($weee);
+                }
+            );
 
         return $invoiceItem;
     }

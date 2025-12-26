@@ -27,7 +27,7 @@ class ResetPaymentAttemptsAfterOrderIsPlacedPluginTest extends TestCase
      */
     public function testExecuteExpectsDeleteUserAttemptsCalled()
     {
-        $orderManagementInterfaceMock = $this->getMockForAbstractClass(OrderManagementInterface::class);
+        $orderManagementInterfaceMock = $this->createMock(OrderManagementInterface::class);
         $resultOrderMock = $this->createMock(OrderInterface::class);
         $orderMock = $this->createMock(OrderInterface::class);
         $orderMock->expects($this->once())->method('getCustomerEmail')->willReturn('email@example.com');

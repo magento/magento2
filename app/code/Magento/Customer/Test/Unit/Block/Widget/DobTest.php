@@ -25,6 +25,7 @@ use Magento\Framework\Stdlib\DateTime\Timezone;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\View\Element\Html\Date;
 use Magento\Framework\View\Element\Template\Context;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Zend_Cache_Backend_BlackHole;
@@ -110,18 +111,15 @@ class DobTest extends TestCase
         $zendCacheCore = new Zend_Cache_Core();
         $zendCacheCore->setBackend(new Zend_Cache_Backend_BlackHole());
 
-        $frontendCache = $this->getMockForAbstractClass(
-            FrontendInterface::class,
-            [],
-            '',
-            false
+        $frontendCache = $this->createMock(
+            FrontendInterface::class
         );
         $frontendCache->expects($this->any())->method('getLowLevelFrontend')->willReturn($zendCacheCore);
-        $cache = $this->getMockForAbstractClass(CacheInterface::class);
+        $cache = $this->createMock(CacheInterface::class);
         $cache->expects($this->any())->method('getFrontend')->willReturn($frontendCache);
 
         $objectManager = new ObjectManager($this);
-        $this->localeResolver = $this->getMockForAbstractClass(ResolverInterface::class);
+        $this->localeResolver = $this->createMock(ResolverInterface::class);
         $this->localeResolver->expects($this->any())
             ->method('getLocale')
             ->willReturnCallback(
@@ -144,14 +142,12 @@ class DobTest extends TestCase
             ->getMock();
         $this->context->expects($this->any())->method('getEscaper')->willReturn($this->escaper);
 
-        $this->attribute = $this->getMockBuilder(AttributeMetadataInterface::class)
-            ->getMockForAbstractClass();
+        $this->attribute = $this->createMock(AttributeMetadataInterface::class);
         $this->attribute
             ->expects($this->any())
             ->method('getInputFilter')
             ->willReturn('date');
-        $this->customerMetadata = $this->getMockBuilder(CustomerMetadataInterface::class)
-            ->getMockForAbstractClass();
+        $this->customerMetadata = $this->createMock(CustomerMetadataInterface::class);
         $this->customerMetadata->expects($this->any())
             ->method('getAttributeMetadata')
             ->willReturn($this->attribute);
@@ -169,7 +165,7 @@ class DobTest extends TestCase
                 }
             );
 
-        $this->encoder = $this->getMockForAbstractClass(EncoderInterface::class);
+        $this->encoder = $this->createMock(EncoderInterface::class);
 
         $this->_block = new Dob(
             $this->context,
@@ -186,9 +182,8 @@ class DobTest extends TestCase
     /**
      * @param bool $isVisible Determines whether the 'dob' attribute is visible or enabled
      * @param bool $expectedValue The value we expect from Dob::isEnabled()
-     *
-     * @dataProvider isEnabledDataProvider
-     */
+     * */
+    #[DataProvider('isEnabledDataProvider')]
     public function testIsEnabled($isVisible, $expectedValue)
     {
         $this->attribute->expects($this->once())->method('isVisible')->willReturn($isVisible);
@@ -224,9 +219,8 @@ class DobTest extends TestCase
     /**
      * @param bool $isRequired Determines whether the 'dob' attribute is required
      * @param bool $expectedValue The value we expect from Dob::isRequired()
-     *
-     * @dataProvider isRequiredDataProvider
-     */
+     * */
+    #[DataProvider('isRequiredDataProvider')]
     public function testIsRequired($isRequired, $expectedValue)
     {
         $this->attribute->expects($this->once())->method('isRequired')->willReturn($isRequired);
@@ -260,9 +254,8 @@ class DobTest extends TestCase
      * @param string|bool $date Date (e.g. '01/01/2020' or false for no date)
      * @param int|bool $expectedTime The value we expect from Dob::getTime()
      * @param string|bool $expectedDate The value we expect from Dob::getData('date')
-     * @param string $locale
-     * @dataProvider setDateDataProvider
-     */
+     * @param string $locale */
+    #[DataProvider('setDateDataProvider')]
     public function testSetDate($date, $expectedTime, $expectedDate, $locale = Resolver::DEFAULT_LOCALE)
     {
         $this->_locale = $locale;
@@ -288,15 +281,15 @@ class DobTest extends TestCase
             ['31/12/1999', strtotime('1999-12-31'), '31/12/1999', 'fr_FR'],
             ['1999-12-31', strtotime('1999-12-31'), '31/12/1999', 'fr_FR'],
             ['31 Décembre 1999', strtotime('1999-12-31'), '31/12/1999', 'fr_FR'],
+            ['١٠/١٠/٢٠٠٦', strtotime('2006-10-10'), '10/10/2006', 'ar_SA'],
         ];
     }
 
     /**
      * @param string|bool $date The date (e.g. '01/01/2020' or false for no date)
      * @param string $expectedDay The value we expect from Dob::getDay()
-     *
-     * @dataProvider getDayDataProvider
-     */
+     * */
+    #[DataProvider('getDayDataProvider')]
     public function testGetDay($date, $expectedDay)
     {
         $this->_block->setDate($date);
@@ -314,9 +307,8 @@ class DobTest extends TestCase
     /**
      * @param string|bool $date The date (e.g. '01/01/2020' or false for no date)
      * @param string $expectedMonth The value we expect from Dob::getMonth()
-     *
-     * @dataProvider getMonthDataProvider
-     */
+     * */
+    #[DataProvider('getMonthDataProvider')]
     public function testGetMonth($date, $expectedMonth)
     {
         $this->_block->setDate($date);
@@ -334,9 +326,8 @@ class DobTest extends TestCase
     /**
      * @param string|bool $date The date (e.g. '01/01/2020' or false for no date)
      * @param string $expectedYear The value we expect from Dob::getYear()
-     *
-     * @dataProvider getYearDataProvider
-     */
+     * */
+    #[DataProvider('getYearDataProvider')]
     public function testGetYear($date, $expectedYear)
     {
         $this->_block->setDate($date);
@@ -355,9 +346,8 @@ class DobTest extends TestCase
      * Is used to derive the Locale that is used to determine the value of Dob::getDateFormat() for that Locale
      *
      * @param string $locale
-     * @param string $expectedFormat
-     * @dataProvider getDateFormatDataProvider
-     */
+     * @param string $expectedFormat */
+    #[DataProvider('getDateFormatDataProvider')]
     public function testGetDateFormat(string $locale, string $expectedFormat)
     {
         $this->_locale = $locale;
@@ -420,9 +410,8 @@ class DobTest extends TestCase
     /**
      * @param array $validationRules The date Min/Max validation rules
      * @param int $expectedValue The value we expect from Dob::getMinDateRange()
-     *
-     * @dataProvider getMinDateRangeDataProvider
-     */
+     * */
+    #[DataProvider('getMinDateRangeDataProvider')]
     public function testGetMinDateRange($validationRules, $expectedValue)
     {
         if (!empty($validationRules[0]) && is_callable($validationRules[0])) {
@@ -436,10 +425,7 @@ class DobTest extends TestCase
 
     protected function getValidationRuleClass($type)
     {
-        $validationRule = $this->getMockBuilder(ValidationRuleInterface::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['getName', 'getValue'])
-            ->getMockForAbstractClass();
+        $validationRule = $this->createMock(ValidationRuleInterface::class);
         if ($type=="MIN") {
             $validationRule->expects($this->any())
                 ->method('getName')
@@ -447,8 +433,7 @@ class DobTest extends TestCase
             $validationRule->expects($this->any())
                 ->method('getValue')
                 ->willReturn(strtotime(self::MIN_DATE));
-        }
-        elseif ($type=="MAX") {
+        } elseif ($type=="MAX") {
             $validationRule->expects($this->any())
                 ->method('getName')
                 ->willReturn(Dob::MAX_DATE_RANGE_KEY);
@@ -456,17 +441,13 @@ class DobTest extends TestCase
                 ->method('getValue')
                 ->willReturn(strtotime(self::MAX_DATE));
         }
-
-
+        
         return $validationRule;
     }
 
     protected function getEmptyValidationRuleClass()
     {
-        $emptyValidationRule = $this->getMockBuilder(ValidationRuleInterface::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['getName', 'getValue'])
-            ->getMockForAbstractClass();
+        $emptyValidationRule = $this->createMock(ValidationRuleInterface::class);
 
         return $emptyValidationRule;
     }
@@ -517,9 +498,8 @@ class DobTest extends TestCase
     /**
      * @param array $validationRules The date Min/Max validation rules
      * @param int $expectedValue The value we expect from Dob::getMaxDateRange()
-     *
-     * @dataProvider getMaxDateRangeDataProvider
-     */
+     * */
+    #[DataProvider('getMaxDateRangeDataProvider')]
     public function testGetMaxDateRange($validationRules, $expectedValue)
     {
         if (!empty($validationRules[0]) && is_callable($validationRules[0])) {
@@ -646,9 +626,9 @@ class DobTest extends TestCase
      * @param string $locale
      * @param array $expectedArray
      * @param string $expectedJson
-     * @dataProvider getTranslatedCalendarConfigJsonDataProvider
      * @return void
      */
+    #[DataProvider('getTranslatedCalendarConfigJsonDataProvider')]
     public function testGetTranslatedCalendarConfigJson(
         string $locale,
         array $expectedArray,
@@ -711,6 +691,25 @@ class DobTest extends TestCase
                 ],
                 // phpcs:disable Generic.Files.LineLength.TooLong
                 'expectedJson' => '{"closeText":"Done","prevText":"Prev","nextText":"Next","currentText":"Today","monthNames":["Januar","Februar","M\u00e4rz","April","Mai","Juni","Juli","August","September","Oktober","November","Dezember"],"monthNamesShort":["Jan.","Feb.","M\u00e4rz","Apr.","Mai","Juni","Juli","Aug.","Sept.","Okt.","Nov.","Dez."],"dayNames":["Sonntag","Montag","Dienstag","Mittwoch","Donnerstag","Freitag","Samstag"],"dayNamesShort":["So.","Mo.","Di.","Mi.","Do.","Fr.","Sa."],"dayNamesMin":["So.","Mo.","Di.","Mi.","Do.","Fr.","Sa."]}'
+                // phpcs:enable Generic.Files.LineLength.TooLong
+            ],
+            [
+                'locale' => 'ar_SA',
+                'expectedArray' => [
+                    'closeText' => 'Done',
+                    'prevText' => 'Prev',
+                    'nextText' => 'Next',
+                    'currentText' => 'Today',
+                    'monthNames' => ['يناير', 'فبراير', 'مارس', 'أبريل', 'مايو', 'يونيو', 'يوليو', 'أغسطس', 'سبتمبر',
+                        'أكتوبر', 'نوفمبر', 'ديسمبر'],
+                    'monthNamesShort' => ['يناير', 'فبراير', 'مارس', 'أبريل', 'مايو', 'يونيو', 'يوليو', 'أغسطس',
+                        'سبتمبر', 'أكتوبر', 'نوفمبر', 'ديسمبر'],
+                    'dayNames' => ['الأحد', 'الاثنين', 'الثلاثاء', 'الأربعاء', 'الخميس', 'الجمعة', 'السبت'],
+                    'dayNamesShort' => ['الأحد', 'الاثنين', 'الثلاثاء', 'الأربعاء', 'الخميس', 'الجمعة', 'السبت'],
+                    'dayNamesMin' => ['أحد', 'إثنين', 'ثلاثاء', 'أربعاء', 'خميس', 'جمعة', 'سبت'],
+                ],
+                // phpcs:disable Generic.Files.LineLength.TooLong
+                'expectedJson' => '{"closeText":"Done","prevText":"Prev","nextText":"Next","currentText":"Today","monthNames":["\u064a\u0646\u0627\u064a\u0631","\u0641\u0628\u0631\u0627\u064a\u0631","\u0645\u0627\u0631\u0633","\u0623\u0628\u0631\u064a\u0644","\u0645\u0627\u064a\u0648","\u064a\u0648\u0646\u064a\u0648","\u064a\u0648\u0644\u064a\u0648","\u0623\u063a\u0633\u0637\u0633","\u0633\u0628\u062a\u0645\u0628\u0631","\u0623\u0643\u062a\u0648\u0628\u0631","\u0646\u0648\u0641\u0645\u0628\u0631","\u062f\u064a\u0633\u0645\u0628\u0631"],"monthNamesShort":["\u064a\u0646\u0627\u064a\u0631","\u0641\u0628\u0631\u0627\u064a\u0631","\u0645\u0627\u0631\u0633","\u0623\u0628\u0631\u064a\u0644","\u0645\u0627\u064a\u0648","\u064a\u0648\u0646\u064a\u0648","\u064a\u0648\u0644\u064a\u0648","\u0623\u063a\u0633\u0637\u0633","\u0633\u0628\u062a\u0645\u0628\u0631","\u0623\u0643\u062a\u0648\u0628\u0631","\u0646\u0648\u0641\u0645\u0628\u0631","\u062f\u064a\u0633\u0645\u0628\u0631"],"dayNames":["\u0627\u0644\u0623\u062d\u062f","\u0627\u0644\u0627\u062b\u0646\u064a\u0646","\u0627\u0644\u062b\u0644\u0627\u062b\u0627\u0621","\u0627\u0644\u0623\u0631\u0628\u0639\u0627\u0621","\u0627\u0644\u062e\u0645\u064a\u0633","\u0627\u0644\u062c\u0645\u0639\u0629","\u0627\u0644\u0633\u0628\u062a"],"dayNamesShort":["\u0627\u0644\u0623\u062d\u062f","\u0627\u0644\u0627\u062b\u0646\u064a\u0646","\u0627\u0644\u062b\u0644\u0627\u062b\u0627\u0621","\u0627\u0644\u0623\u0631\u0628\u0639\u0627\u0621","\u0627\u0644\u062e\u0645\u064a\u0633","\u0627\u0644\u062c\u0645\u0639\u0629","\u0627\u0644\u0633\u0628\u062a"],"dayNamesMin":["\u0623\u062d\u062f","\u0625\u062b\u0646\u064a\u0646","\u062b\u0644\u0627\u062b\u0627\u0621","\u0623\u0631\u0628\u0639\u0627\u0621","\u062e\u0645\u064a\u0633","\u062c\u0645\u0639\u0629","\u0633\u0628\u062a"]}'
                 // phpcs:enable Generic.Files.LineLength.TooLong
             ],
         ];

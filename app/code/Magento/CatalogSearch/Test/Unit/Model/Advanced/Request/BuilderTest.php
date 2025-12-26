@@ -67,7 +67,7 @@ class BuilderTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->objectManager = $this->getMockForAbstractClass(ObjectManagerInterface::class);
+        $this->objectManager = $this->createMock(ObjectManagerInterface::class);
 
         $this->requestMapper = $this->getMockBuilder(Mapper::class)
             ->onlyMethods(['getRootQuery', 'getBuckets'])

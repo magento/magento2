@@ -18,6 +18,7 @@
         <element name="orderNumberText" type="text" selector=".checkout-success > p:nth-child(1)"/>
         <element name="continueShoppingButton" type="button" selector=".action.primary.continue" timeout="30"/>
         <element name="createAnAccount" type="button" selector="a[class='action primary'] [data-bind*=&quot;i18n: 'Create an Account'&quot;]" timeout="30"/>
+        <element name="orderEmailAddress" type="text" selector="span[data-bind*=&quot;text: getEmailAddress()&quot;]" timeout="30"/>
         <element name="printLink" type="button" selector=".print" timeout="30"/>
         <element name="orderNumberWithoutLink" type="text" selector="//div[contains(@class, 'checkout-success')]//p/span"/>
         <element name="orderLinkByOrderNumber" type="text" selector="//div[contains(@class,'success')]//a[contains(.,'{{orderNumber}}')]" parameterized="true" timeout="30"/>

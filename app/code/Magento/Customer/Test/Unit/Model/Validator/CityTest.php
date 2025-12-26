@@ -9,14 +9,18 @@ namespace Magento\Customer\Test\Unit\Model\Validator;
 
 use Magento\Customer\Model\Validator\City;
 use Magento\Customer\Model\Customer;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 
 /**
  * Customer city validator tests
  */
 class CityTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var City
      */
@@ -33,11 +37,10 @@ class CityTest extends TestCase
     protected function setUp(): void
     {
         $this->nameValidator = new City;
-        $this->customerMock = $this
-            ->getMockBuilder(Customer::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['getCity'])
-            ->getMock();
+        $this->customerMock = $this->createPartialMockWithReflection(
+            Customer::class,
+            ['getCity']
+        );
     }
 
     /**
@@ -45,9 +48,8 @@ class CityTest extends TestCase
      *
      * @param string $city
      * @param string $message
-     * @return void
-     * @dataProvider expectedPunctuationInNamesDataProvider
-     */
+     * @return void */
+    #[DataProvider('expectedPunctuationInNamesDataProvider')]
     public function testValidateCorrectPunctuationInNames(
         string $city,
         string $message

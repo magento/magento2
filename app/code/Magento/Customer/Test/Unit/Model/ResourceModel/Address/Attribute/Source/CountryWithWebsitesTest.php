@@ -15,6 +15,7 @@ use Magento\Eav\Model\ResourceModel\Entity\Attribute\OptionFactory;
 use Magento\Framework\Data\Collection\AbstractDb;
 use Magento\Store\Api\Data\WebsiteInterface;
 use Magento\Store\Model\StoreManagerInterface;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -52,35 +53,31 @@ class CountryWithWebsitesTest extends TestCase
                 ->onlyMethods(['create'])
                 ->disableOriginalConstructor()
                 ->getMock();
-        $this->allowedCountriesMock = $this->getMockBuilder(AllowedCountries::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->allowedCountriesMock = $this->createMock(AllowedCountries::class);
         $eavCollectionFactoryMock =
-            $this->getMockBuilder(\Magento\Eav\Model\ResourceModel\Entity\Attribute\Option\CollectionFactory::class)
-                ->disableOriginalConstructor()
-                ->getMock();
+            $this->createMock(\Magento\Eav\Model\ResourceModel\Entity\Attribute\Option\CollectionFactory::class);
         $optionsFactoryMock =
-            $this->getMockBuilder(OptionFactory::class)
-                ->disableOriginalConstructor()
-                ->getMock();
-        $this->storeManagerMock = $this->getMockForAbstractClass(StoreManagerInterface::class);
-        $this->shareConfigMock = $this->getMockBuilder(Share::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->countryByWebsite = new CountryWithWebsites(
-            $eavCollectionFactoryMock,
-            $optionsFactoryMock,
-            $this->countriesFactoryMock,
-            $this->allowedCountriesMock,
-            $this->storeManagerMock,
-            $this->shareConfigMock
+            $this->createMock(OptionFactory::class);
+        $this->storeManagerMock = $this->createMock(StoreManagerInterface::class);
+        $this->shareConfigMock = $this->createMock(Share::class);
+        $objectManager = new ObjectManager($this);
+        $this->countryByWebsite = $objectManager->getObject(
+            CountryWithWebsites::class,
+            [
+                'attrOptionCollectionFactory' => $eavCollectionFactoryMock,
+                'attrOptionFactory' => $optionsFactoryMock,
+                'countriesFactory' => $this->countriesFactoryMock,
+                'allowedCountriesReader' => $this->allowedCountriesMock,
+                'storeManager' => $this->storeManagerMock,
+                'shareConfig' => $this->shareConfigMock
+            ]
         );
     }
 
     public function testGetAllOptions()
     {
-        $website1 = $this->getMockForAbstractClass(WebsiteInterface::class);
-        $website2 = $this->getMockForAbstractClass(WebsiteInterface::class);
+        $website1 = $this->createMock(WebsiteInterface::class);
+        $website2 = $this->createMock(WebsiteInterface::class);
 
         $website1->expects($this->atLeastOnce())
             ->method('getId')
@@ -88,23 +85,20 @@ class CountryWithWebsitesTest extends TestCase
         $website2->expects($this->atLeastOnce())
             ->method('getId')
             ->willReturn(2);
+        $this->shareConfigMock->expects($this->once())
+            ->method('isGlobalScope')
+            ->willReturn(false);
         $this->storeManagerMock->expects($this->once())
             ->method('getWebsites')
             ->willReturn([$website1, $website2]);
-        $collectionMock = $this->getMockBuilder(AbstractDb::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $collectionMock = $this->createMock(AbstractDb::class);
 
         $this->allowedCountriesMock->expects($this->exactly(2))
             ->method('getAllowedCountries')
-            ->willReturnCallback(
-                function ($arg1, $arg2) {
-                    if ($arg1 === 'website' && $arg2 === 1) {
-                        return ['AM' => 'AM'];
-                    } elseif ($arg1 === 'website' && $arg2 === 2) {
-                        return ['AM' => 'AM', 'DZ' => 'DZ'];
-                    }
-                }
+            ->with($this->anything(), $this->anything())
+            ->willReturnOnConsecutiveCalls(
+                ['AM' => 'AM'],
+                ['AM' => 'AM', 'DZ' => 'DZ']
             );
         $this->countriesFactoryMock->expects($this->once())
             ->method('create')

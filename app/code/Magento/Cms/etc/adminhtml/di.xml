@@ -68,4 +68,10 @@
             <argument name="frontendUrlBuilder" xsi:type="object">Magento\Framework\Url</argument>
         </arguments>
     </type>
+    <type name="Magento\Cms\Api\PageRepositoryInterface">
+        <plugin name="vendor_cmsvalidate_page_save" type="Magento\Cms\Plugin\PageRepositoryValidatePlugin" sortOrder="10"/>
+    </type>
+    <type name="Magento\Cms\Api\BlockRepositoryInterface">
+        <plugin name="vendor_cmsvalidate_block_save" type="Magento\Cms\Plugin\BlockRepositoryValidatePlugin" sortOrder="10"/>
+    </type>
 </config>

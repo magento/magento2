@@ -14,6 +14,8 @@ use Magento\Framework\Data\Form\Element\Collection;
 use Magento\Framework\Data\FormFactory;
 use Magento\Framework\DataObject;
 use Magento\Framework\Registry;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\UrlInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -21,6 +23,8 @@ use ReflectionClass;
 
 class FormTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var Context|MockObject
      */
@@ -47,11 +51,14 @@ class FormTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
+        $objectManager = new ObjectManager($this);
+        $objectManager->prepareObjectManager();
+        
         $this->context = $this->createMock(Context::class);
         $this->registry = $this->createMock(Registry::class);
         $this->formFactory = $this->createMock(FormFactory::class);
         $this->context->method('getUrlBuilder')
-            ->willReturn($this->getMockForAbstractClass(UrlInterface::class));
+            ->willReturn($this->createMock(UrlInterface::class));
         $this->model = new \Magento\Reports\Block\Adminhtml\Filter\Form(
             $this->context,
             $this->registry,
@@ -66,18 +73,28 @@ class FormTest extends TestCase
     public function testMultiselectInitialValues(): void
     {
         $this->context->method('getUrlBuilder')
-            ->willReturn($this->getMockForAbstractClass(UrlInterface::class));
+            ->willReturn($this->createMock(UrlInterface::class));
         $this->model->setData('filter_data', new DataObject(['multiselect' => ['5', '6']]));
-        $form = $this->getMockBuilder(Form::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['getElements'])
-            ->getMockForAbstractClass();
-        $element = $this->getMockBuilder(AbstractElement::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $form = $this->createPartialMock(Form::class, ['getElements', 'getElement']);
+        $element = $this->createPartialMockWithReflection(
+            AbstractElement::class,
+            ['setValue', 'getValue', 'setId', 'getId']
+        );
 
+        // Simulate element behavior: capture value when setValue is called
+        $capturedValue = null;
+        $element->method('setValue')->willReturnCallback(function ($value) use (&$capturedValue, $element) {
+            $capturedValue = $value;
+            return $element;
+        });
+        $element->method('getValue')->willReturnCallback(function () use (&$capturedValue) {
+            return $capturedValue;
+        });
+        $element->method('getId')->willReturn('multiselect');
+        
         $element->setId('multiselect');
         $form->method('getElements')->willReturn(new Collection($form));
+        $form->method('getElement')->with('multiselect')->willReturn($element);
         $reflection = new ReflectionClass($form);
         $reflectionProp = $reflection->getProperty('_allElements');
         $reflectionProp->setAccessible(true);

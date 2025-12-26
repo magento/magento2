@@ -22,6 +22,7 @@ use Magento\Paypal\Model\Api\ProcessableException;
 use Magento\Paypal\Model\Api\ProcessableExceptionFactory;
 use Magento\Paypal\Model\Config;
 use Magento\Paypal\Model\Info;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
@@ -70,12 +71,9 @@ class NvpTest extends TestCase
     protected function setUp(): void
     {
         $this->customerAddressHelper = $this->createMock(Address::class);
-        $this->logger = $this->getMockForAbstractClass(LoggerInterface::class);
-        $this->customLoggerMock = $this->getMockBuilder(Logger::class)
-            ->setConstructorArgs([$this->getMockForAbstractClass(LoggerInterface::class)])
-            ->onlyMethods(['debug'])
-            ->getMock();
-        $this->resolver = $this->getMockForAbstractClass(ResolverInterface::class);
+        $this->logger = $this->createMock(LoggerInterface::class);
+        $this->customLoggerMock = $this->createMock(Logger::class);
+        $this->resolver = $this->createMock(ResolverInterface::class);
         $this->regionFactory = $this->createMock(RegionFactory::class);
         $this->countryFactory = $this->createMock(CountryFactory::class);
         $processableExceptionFactory = $this->createPartialMock(
@@ -86,9 +84,9 @@ class NvpTest extends TestCase
             ->method('create')
             ->willReturnCallback(
                 function ($arguments) {
-                    $this->processableException = $this->getMockBuilder(
-                        ProcessableException::class
-                    )->setConstructorArgs([$arguments['phrase'], null, $arguments['code']])->getMock();
+                    $this->processableException = $this->getMockBuilder(ProcessableException::class)
+                        ->setConstructorArgs([$arguments['phrase'], null, $arguments['code']])
+                        ->getMock();
                     return $this->processableException;
                 }
             );
@@ -149,8 +147,8 @@ class NvpTest extends TestCase
      * @param null|string $exception
      * @param string $exceptionMessage
      * @param null|int $exceptionCode
-     * @dataProvider callDataProvider
      */
+    #[DataProvider('callDataProvider')]
     public function testCall($response, $processableErrors, $exception, $exceptionMessage = '', $exceptionCode = null)
     {
         if (isset($exception)) {
@@ -212,8 +210,8 @@ class NvpTest extends TestCase
      *
      * @param $input
      * @param $expected
-     * @dataProvider callGetExpressCheckoutDetailsDataProvider
      */
+    #[DataProvider('callGetExpressCheckoutDetailsDataProvider')]
     public function testCallGetExpressCheckoutDetails($input, $expected)
     {
         $this->curl->expects($this->once())

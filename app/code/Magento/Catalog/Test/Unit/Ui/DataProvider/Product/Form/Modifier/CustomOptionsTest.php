@@ -8,18 +8,26 @@ declare(strict_types=1);
 namespace Magento\Catalog\Test\Unit\Ui\DataProvider\Product\Form\Modifier;
 
 use Magento\Catalog\Model\Config\Source\Product\Options\Price as ProductOptionsPrice;
+use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\Product\Option as ProductOption;
 use Magento\Catalog\Model\ProductOptions\ConfigInterface;
 use Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\CustomOptions;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Store\Api\Data\StoreInterface;
+use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
-use Magento\Store\Test\Unit\Helper\StoreTestHelper;
 use PHPUnit\Framework\MockObject\MockObject;
 
 class CustomOptionsTest extends AbstractModifierTestCase
 {
+    use MockCreationTrait;
+    /**
+     * @var ObjectManager
+     */
+    protected $objectManager;
+
     /**
      * @var ConfigInterface|MockObject
      */
@@ -36,7 +44,7 @@ class CustomOptionsTest extends AbstractModifierTestCase
     protected $storeManagerMock;
 
     /**
-     * @var StoreInterface|MockObject
+     * @var Store|MockObject
      */
     protected $storeMock;
 
@@ -48,16 +56,20 @@ class CustomOptionsTest extends AbstractModifierTestCase
     protected function setUp(): void
     {
         parent::setUp();
+        $this->objectManager = new ObjectManager($this);
         $this->productOptionsConfigMock = $this->createMock(ConfigInterface::class);
-        $this->productOptionsPriceMock = $this->getMockBuilder(ProductOptionsPrice::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->productOptionsPriceMock = $this->createMock(ProductOptionsPrice::class);
         $this->storeManagerMock = $this->createMock(StoreManagerInterface::class);
-        $this->storeMock = new StoreTestHelper();
         $this->priceCurrency = $this->createMock(PriceCurrencyInterface::class);
-
+        $this->storeMock = $this->createPartialMock(Store::class, ['getBaseCurrency']);
+        $this->storeMock->method('getBaseCurrency')->willReturn($this->priceCurrency);
         $this->storeManagerMock->method('getStore')->willReturn($this->storeMock);
-        $this->storeMock->setBaseCurrency($this->priceCurrency);
+        
+        // Configure productMock to handle getOptions properly
+        $productState = new \stdClass();
+        $productState->options = [];
+        
+        $this->productMock->productState = $productState;
     }
 
     /**
@@ -127,8 +139,14 @@ class CustomOptionsTest extends AbstractModifierTestCase
             ]
         ];
 
+        // Set product ID and options
         $this->productMock->setId($productId);
-        $this->productMock->setOptions($options);
+        $this->productMock->productState->options = $options;
+        
+        // Configure getOptions to return from state
+        $this->productMock->method('getOptions')->willReturnCallback(function () {
+            return $this->productMock->productState->options;
+        });
 
         $this->assertSame($resultData, $this->getModel()->modifyData($originalData));
     }
@@ -183,10 +201,7 @@ class CustomOptionsTest extends AbstractModifierTestCase
     protected function getProductOptionMock(array $data, array $values = [])
     {
         /** @var ProductOption|MockObject $productOptionMock */
-        $productOptionMock = $this->getMockBuilder(ProductOption::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['getValues'])
-            ->getMock();
+        $productOptionMock = $this->createPartialMock(ProductOption::class, ['getValues']);
 
         $productOptionMock->setData($data);
         $productOptionMock->method('getValues')->willReturn($values);

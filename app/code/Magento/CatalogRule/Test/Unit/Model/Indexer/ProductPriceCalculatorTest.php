@@ -8,6 +8,7 @@ declare(strict_types=1);
 namespace Magento\CatalogRule\Test\Unit\Model\Indexer;
 
 use Magento\CatalogRule\Model\Indexer\ProductPriceCalculator;
+use Magento\Directory\Model\PriceCurrency;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -26,10 +27,10 @@ class ProductPriceCalculatorTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->priceCurrencyMock = $this->getMockBuilder(PriceCurrencyInterface::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['roundPrice'])
-            ->getMockForAbstractClass();
+        $this->priceCurrencyMock = $this->createPartialMock(
+            PriceCurrency::class,
+            ['roundPrice']
+        );
         $this->model = new ProductPriceCalculator($this->priceCurrencyMock);
     }
 

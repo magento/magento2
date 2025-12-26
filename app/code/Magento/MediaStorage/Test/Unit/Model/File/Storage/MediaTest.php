@@ -43,7 +43,7 @@ class MediaTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->_loggerMock = $this->getMockForAbstractClass(LoggerInterface::class);
+        $this->_loggerMock = $this->createMock(LoggerInterface::class);
         $this->_storageHelperMock = $this->createMock(Database::class);
         $this->_mediaHelperMock = $this->createMock(Media::class);
         $this->_fileUtilityMock = $this->createMock(\Magento\MediaStorage\Model\ResourceModel\File\Storage\File::class);

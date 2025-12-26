@@ -19,7 +19,7 @@ class ValidatorPoolTest extends TestCase
     public function testGet()
     {
         $commandI = $this->getMockBuilder(ValidatorInterface::class)
-            ->getMockForAbstractClass();
+            ->getMock();
         $tMap = $this->getMockBuilder(TMap::class)
             ->disableOriginalConstructor()
             ->getMock();

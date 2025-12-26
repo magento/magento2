@@ -46,18 +46,10 @@ class UnavailableProductsProviderTest extends TestCase
     protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
-        $this->salesConfigMock = $this->getMockBuilder(Config::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->checkerMock = $this->getMockBuilder(OrderedProductAvailabilityChecker::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->orderMock = $this->getMockBuilder(Order::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->orderItemMock = $this->getMockBuilder(Item::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->salesConfigMock = $this->createMock(Config::class);
+        $this->checkerMock = $this->createMock(OrderedProductAvailabilityChecker::class);
+        $this->orderMock = $this->createMock(Order::class);
+        $this->orderItemMock = $this->createMock(Item::class);
         $this->unavailableProductsProvider = $objectManager->getObject(
             UnavailableProductsProvider::class,
             [
