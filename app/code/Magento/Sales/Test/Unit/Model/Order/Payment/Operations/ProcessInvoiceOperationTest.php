@@ -22,6 +22,7 @@ use PHPUnit\Framework\TestCase;
 
 class ProcessInvoiceOperationTest extends TestCase
 {
+
     /**
      * @var TransactionManagerInterface|MockObject
      */
@@ -49,10 +50,10 @@ class ProcessInvoiceOperationTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->transactionManager = $this->getMockForAbstractClass(TransactionManagerInterface::class);
-        $this->eventManager = $this->getMockForAbstractClass(EventManagerInterface::class);
-        $this->transactionBuilder = $this->getMockForAbstractClass(BuilderInterface::class);
-        $this->stateCommand = $this->getMockForAbstractClass(CommandInterface::class);
+        $this->transactionManager = $this->createMock(TransactionManagerInterface::class);
+        $this->eventManager = $this->createMock(EventManagerInterface::class);
+        $this->transactionBuilder = $this->createMock(BuilderInterface::class);
+        $this->stateCommand = $this->createMock(CommandInterface::class);
 
         $this->model = new ProcessInvoiceOperation(
             $this->stateCommand,
@@ -70,20 +71,14 @@ class ProcessInvoiceOperationTest extends TestCase
         $transactionId = '1ASD3456';
 
         /** @var Order|MockObject $order */
-        $order = $this->getMockBuilder(Order::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $order = $this->createMock(Order::class);
         $order->method('getStoreId')
             ->willReturn($storeId);
 
         /** @var Adapter|MockObject $paymentMethod */
-        $paymentMethod = $this->getMockBuilder(Adapter::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $paymentMethod = $this->createMock(Adapter::class);
 
-        $orderPayment = $this->getMockBuilder(Payment::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $orderPayment = $this->createMock(Payment::class);
         $orderPayment->method('formatAmount')
             ->with($baseGrandTotal)
             ->willReturnArgument(0);
@@ -121,9 +116,7 @@ class ProcessInvoiceOperationTest extends TestCase
             ->with($orderPayment)
             ->willReturnSelf();
 
-        $invoice = $this->getMockBuilder(Invoice::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $invoice = $this->createMock(Invoice::class);
         $invoice->method('getBaseGrandTotal')
             ->willReturn($baseGrandTotal);
 

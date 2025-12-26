@@ -5,6 +5,8 @@
  */
 namespace Magento\ProductVideo\Model\ResourceModel;
 
+use Magento\Framework\Exception\LocalizedException;
+
 class Video extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
     /**
@@ -18,10 +20,12 @@ class Video extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     }
 
     /**
+     * Insert video data and update on duplicate
+     *
      * @param array $data
      * @param array $fields
      * @return int
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      */
     public function insertOnDuplicate(array $data, array $fields = [])
     {
@@ -29,9 +33,11 @@ class Video extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     }
 
     /**
+     * Load video data by ids
+     *
      * @param array $ids
      * @return array
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      */
     public function loadByIds(array $ids)
     {
@@ -40,6 +46,31 @@ class Video extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         )->where(
             'value_id IN(?)',
             $ids,
+            \Zend_Db::INT_TYPE
+        );
+
+        return $this->getConnection()->fetchAll($select);
+    }
+
+    /**
+     * Load video data by ids and store id
+     *
+     * @param array $ids
+     * @param int $storeId
+     * @return array
+     * @throws LocalizedException
+     */
+    public function loadByIdsAndStoreId(array $ids, int $storeId): array
+    {
+        $select = $this->getConnection()->select()->from(
+            $this->getMainTable()
+        )->where(
+            'value_id IN(?)',
+            $ids,
+            \Zend_Db::INT_TYPE
+        )->where(
+            'store_id = ?',
+            $storeId,
             \Zend_Db::INT_TYPE
         );
 

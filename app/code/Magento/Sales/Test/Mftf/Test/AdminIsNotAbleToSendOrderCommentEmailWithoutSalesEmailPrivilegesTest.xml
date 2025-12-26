@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright 2025 Adobe
+ * All Rights Reserved.
+ */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminIsNotAbleToSendOrderCommentEmailWithoutSalesEmailPrivilegesTest">
+        <annotations>
+            <features value="Sales"/>
+            <stories value="Admin is not able to send order comment email"/>
+            <title value="Admin is not able to send order comment email without sales email privileges"/>
+            <description value="This test case verifies that an admin without sales email privileges cannot send an order comment email"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="AC-5724"/>
+            <group value="sales"/>
+        </annotations>
+        <before>
+            <!-- Pre Condition 1,4: Create product and customer -->
+            <createData entity="SimpleProduct" stepKey="createProduct"/>
+            <createData entity="Simple_US_Customer" stepKey="createCustomer"/>
+            <!-- Pre Condition 5: Create order for the customer -->
+            <createData entity="CustomerCart" stepKey="createCustomerCart">
+                <requiredEntity createDataKey="createCustomer"/>
+            </createData>
+            <createData entity="CustomerCartItem" stepKey="addItemToCart">
+                <requiredEntity createDataKey="createCustomerCart"/>
+                <requiredEntity createDataKey="createProduct"/>
+            </createData>
+            <createData entity="CustomerAddressInformation" stepKey="addAddresses">
+                <requiredEntity createDataKey="createCustomerCart"/>
+            </createData>
+            <updateData createDataKey="createCustomerCart" entity="CustomerOrderPaymentMethod" stepKey="placeOrder">
+                <requiredEntity createDataKey="createCustomerCart"/>
+            </updateData>
+            <!-- Login as default admin to create role and user -->
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsDefaultAdmin"/>
+            <!-- Pre Condition 2: Create new role with required Sales permissions, then revoke 'Send Order Email' -->
+            <actionGroup ref="AdminOpenCreateRolePageActionGroup" stepKey="openCreateRolePage"/>
+            <actionGroup ref="AdminFillUserRoleFormActionGroup" stepKey="fillRoleForm">
+                <argument name="role" value="roleSales"/>
+            </actionGroup>
+            <actionGroup ref="AdminUserClickRoleResourceTabActionGroup" stepKey="openRoleResourceTab"/>
+            <actionGroup ref="AdminAddRestrictedRoleActionGroup" stepKey="grantOrdersMenu">
+                <argument name="User" value="adminRole"/>
+                <argument name="restrictedRole" value="Orders"/>
+            </actionGroup>
+            <actionGroup ref="AdminRevokeRoleResourceActionGroup" stepKey="revokeSendOrderEmailPermission">
+                <argument name="resourceName" value="Send Order Email"/>
+            </actionGroup>
+            <actionGroup ref="AdminUserSaveRoleActionGroup" stepKey="saveRole"/>
+            <!-- Pre Condition 3: Create a new admin user with the above role -->
+            <actionGroup ref="AdminCreateUserWithApiRoleActionGroup" stepKey="createNewAdminUser">
+                <argument name="user" value="NewAdminUser"/>
+                <argument name="role" value="roleSales"/>
+            </actionGroup>
+        </before>
+        <after>
+            <!-- Logout from custom role user -->
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromCustomerRoleUser"/>
+            <!-- Login as default admin, delete created user, role, product, customer and logout from default admin -->
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginBackAsDefaultAdmin"/>
+            <actionGroup ref="AdminDeleteCustomUserActionGroup" stepKey="deleteCreatedUser">
+                <argument name="user" value="NewAdminUser"/>
+            </actionGroup>
+            <actionGroup ref="AdminDeleteUserRoleActionGroup" stepKey="deleteCreatedRole">
+                <argument name="roleName" value="{{roleSales.rolename}}"/>
+            </actionGroup>
+            <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
+            <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromDefaultAdmin"/>
+        </after>
+        <!-- Step 1: Login on backend as created user with custom role -->
+        <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutDefaultAdmin"/>
+        <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsCustomRoleUser">
+            <argument name="username" value="{{NewAdminUser.username}}"/>
+            <argument name="password" value="{{NewAdminUser.password}}"/>
+        </actionGroup>
+        <!-- Step 2: Go to sales, orders, open created order -->
+        <actionGroup ref="AdminOrdersPageOpenActionGroup" stepKey="openOrdersGrid"/>
+        <grabTextFrom selector="{{AdminOrdersGridSection.orderIdByIncrementId($createCustomerCart.return$)}}" stepKey="grabOrderId"/>
+        <actionGroup ref="AdminOpenOrderByEntityIdActionGroup" stepKey="openOrder">
+            <argument name="entityId" value="$grabOrderId"/>
+        </actionGroup>
+        <!-- Step 3: Fill comment field and assert 'Notify Customer by Email' is not shown -->
+        <waitForElementVisible selector="{{AdminSalesOrderCommentsSection.historyComment}}" stepKey="waitForCommentField"/>
+        <fillField selector="{{AdminSalesOrderCommentsSection.historyComment}}" userInput="{{OrderInvoiceComment.sent}}" stepKey="fillOrderComment"/>
+        <waitForElementNotVisible selector="{{AdminShipmentMainActionsSection.notifyCustomerByEmail}}" stepKey="assertNotifyCheckboxNotVisible"/>
+    </test>
+</tests>

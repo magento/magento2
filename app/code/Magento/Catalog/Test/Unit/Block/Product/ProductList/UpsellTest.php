@@ -14,7 +14,7 @@ use PHPUnit\Framework\TestCase;
 
 class UpsellTest extends TestCase
 {
-    const STUB_EMPTY_ARRAY = [];
+    private const STUB_EMPTY_ARRAY = [];
     /**
      * @var UpsellBlock
      */

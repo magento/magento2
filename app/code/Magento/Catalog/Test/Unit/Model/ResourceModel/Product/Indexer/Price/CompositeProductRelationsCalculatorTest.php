@@ -31,9 +31,7 @@ class CompositeProductRelationsCalculatorTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->defaultPriceMock = $this->getMockBuilder(DefaultPrice::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->defaultPriceMock = $this->createMock(DefaultPrice::class);
         $this->model = new CompositeProductRelationsCalculator($this->defaultPriceMock);
     }
 
@@ -45,14 +43,11 @@ class CompositeProductRelationsCalculatorTest extends TestCase
         $tableName = 'catalog_product_relation';
         $maxRelatedProductCount = 200;
 
-        $connectionMock = $this->getMockBuilder(AdapterInterface::class)
-            ->getMock();
+        $connectionMock = $this->createMock(AdapterInterface::class);
         $this->defaultPriceMock->expects($this->once())->method('getConnection')->willReturn($connectionMock);
         $this->defaultPriceMock->expects($this->once())->method('getTable')->with($tableName)->willReturn($tableName);
 
-        $relationSelectMock = $this->getMockBuilder(Select::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $relationSelectMock = $this->createMock(Select::class);
         $relationSelectMock->expects($this->once())
             ->method('from')
             ->with(
@@ -62,9 +57,7 @@ class CompositeProductRelationsCalculatorTest extends TestCase
             ->willReturnSelf();
         $relationSelectMock->expects($this->once())->method('group')->with('parent_id')->willReturnSelf();
 
-        $maxSelectMock = $this->getMockBuilder(Select::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $maxSelectMock = $this->createMock(Select::class);
         $maxSelectMock->expects($this->once())
             ->method('from')
             ->with(

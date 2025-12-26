@@ -8,6 +8,7 @@ declare(strict_types=1);
 namespace Magento\Persistent\Test\Unit\Observer;
 
 use Magento\Framework\Event\Observer;
+use Magento\Customer\Model\Session as CustomerSession;
 use Magento\Persistent\Helper\Data;
 use Magento\Persistent\Helper\Session;
 use Magento\Persistent\Model\Persistent\Config;
@@ -56,7 +57,7 @@ class ApplyPersistentDataObserverTest extends TestCase
     protected function setUp(): void
     {
         $this->sessionMock = $this->createMock(Session::class);
-        $this->customerSessionMock = $this->createMock(\Magento\Customer\Model\Session::class);
+        $this->customerSessionMock = $this->createMock(CustomerSession::class);
         $this->persistentHelperMock = $this->createMock(Data::class);
         $this->observerMock = $this->createMock(Observer::class);
         $this->persistentConfigMock = $this->createMock(Config::class);

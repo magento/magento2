@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\Catalog\Test\Unit\Ui\DataProvider\Product\Form\Modifier;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\Catalog\Api\Data\ProductAttributeInterface;
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Model\Locator\LocatorInterface;
@@ -57,16 +58,14 @@ class GeneralTest extends TestCase
     public function testModifyMeta(): void
     {
         $attribute = $this->createMock(Attribute::class);
-        $this->attributeRepositoryMock->expects($this->any())
-            ->method('get')
-            ->willReturn($attribute);
+        $this->attributeRepositoryMock->method('get')->willReturn($attribute);
         $this->arrayManager->expects($this->any())
             ->method('merge')
             ->willReturnArgument(2);
         $store = $this->createMock(Store::class);
-        $this->locatorMock->expects($this->any())->method('getStore')->willReturn($store);
+        $this->locatorMock->method('getStore')->willReturn($store);
         $product = $this->createMock(ProductInterface::class);
-        $this->locatorMock->expects($this->any())->method('getProduct')->willReturn($product);
+        $this->locatorMock->method('getProduct')->willReturn($product);
 
         $generalModifier = new General($this->locatorMock, $this->arrayManager, $this->attributeRepositoryMock);
         $this->assertNotEmpty(
@@ -93,8 +92,8 @@ class GeneralTest extends TestCase
      * @return void
      * @throws NoSuchEntityException
      * @throws Exception
-     * @dataProvider modifyDataDataProvider
      */
+    #[DataProvider('modifyDataDataProvider')]
     public function testModifyDataNewProduct(array $data, int $defaultStatusValue, array $expectedResult): void
     {
         $attributeMock = $this->createMock(AttributeInterface::class);
@@ -104,9 +103,9 @@ class GeneralTest extends TestCase
         $this->attributeRepositoryMock
             ->method('get')
             ->willReturn($attributeMock);
-        $this->arrayManager->expects($this->any())->method('replace')->willReturn($data);
+        $this->arrayManager->method('replace')->willReturn($data);
         $product = $this->createMock(ProductInterface::class);
-        $this->locatorMock->expects($this->any())->method('getProduct')->willReturn($product);
+        $this->locatorMock->method('getProduct')->willReturn($product);
         $generalModifier = new General($this->locatorMock, $this->arrayManager, $this->attributeRepositoryMock);
         $this->assertSame($expectedResult, $generalModifier->modifyData($data));
     }
@@ -120,8 +119,8 @@ class GeneralTest extends TestCase
      * @param        int    $statusAttributeValue
      * @param        array  $expectedResult
      * @throws       NoSuchEntityException|Exception
-     * @dataProvider modifyDataOfExistingProductDataProvider
      */
+    #[DataProvider('modifyDataOfExistingProductDataProvider')]
     public function testModifyDataOfExistingProduct(
         array $data,
         string $modelId,
@@ -130,21 +129,13 @@ class GeneralTest extends TestCase
         array $expectedResult
     ): void {
         $attributeMock = $this->createMock(AttributeInterface::class);
-        $attributeMock->expects($this->any())
-            ->method('getDefaultValue')
-            ->willReturn($defaultStatus);
-        $this->attributeRepositoryMock->expects($this->any())
-            ->method('get')
-            ->willReturn($attributeMock);
+        $attributeMock->method('getDefaultValue')->willReturn($defaultStatus);
+        $this->attributeRepositoryMock->method('get')->willReturn($attributeMock);
         $product = $this->createMock(ProductInterface::class);
-        $product->expects($this->any())
-            ->method('getId')
-            ->willReturn($modelId);
-        $product->expects($this->any())
-            ->method('getStatus')
-            ->willReturn($statusAttributeValue);
-        $this->locatorMock->expects($this->any())->method('getProduct')->willReturn($product);
-        $this->arrayManager->expects($this->any())->method('replace')->willReturn($data);
+        $product->method('getId')->willReturn($modelId);
+        $product->method('getStatus')->willReturn($statusAttributeValue);
+        $this->locatorMock->method('getProduct')->willReturn($product);
+        $this->arrayManager->method('replace')->willReturn($data);
 
         $generalModifier = new General($this->locatorMock, $this->arrayManager, $this->attributeRepositoryMock);
         $this->assertSame($expectedResult, current($generalModifier->modifyData($data)));

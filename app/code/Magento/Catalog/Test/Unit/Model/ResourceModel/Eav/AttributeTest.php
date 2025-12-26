@@ -16,7 +16,8 @@ use Magento\Framework\DB\Adapter\Pdo\Mysql;
 use Magento\Framework\Event\ManagerInterface;
 use Magento\Framework\Model\ActionValidator\RemoveAction;
 use Magento\Framework\Model\Context;
-use Magento\Framework\Model\ResourceModel\AbstractResource;
+use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
+use Magento\Eav\Model\ResourceModel\Entity\Attribute as AttributeResource;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -62,45 +63,35 @@ class AttributeTest extends TestCase
 
         $this->_eavProcessor = $this->createMock(\Magento\Catalog\Model\Indexer\Product\Eav\Processor::class);
 
-        $eventManagerMock = $this->getMockForAbstractClass(ManagerInterface::class);
+        $eventManagerMock = $this->createMock(ManagerInterface::class);
 
-        $cacheInterfaceMock = $this->getMockForAbstractClass(CacheInterface::class);
+        $cacheInterfaceMock = $this->createMock(CacheInterface::class);
 
         $actionValidatorMock = $this->createMock(RemoveAction::class);
-        $actionValidatorMock->expects($this->any())->method('isAllowed')->willReturn(true);
+        $actionValidatorMock->method('isAllowed')->willReturn(true);
 
         $this->contextMock = $this->createPartialMock(
             Context::class,
             ['getEventDispatcher', 'getCacheManager', 'getActionValidator']
         );
 
-        $this->contextMock->expects($this->any())
-            ->method('getEventDispatcher')
-            ->willReturn($eventManagerMock);
-        $this->contextMock->expects($this->any())
-            ->method('getCacheManager')
-            ->willReturn($cacheInterfaceMock);
-        $this->contextMock->expects($this->any())->method('getActionValidator')
-            ->willReturn($actionValidatorMock);
+        $this->contextMock->method('getEventDispatcher')->willReturn($eventManagerMock);
+        $this->contextMock->method('getCacheManager')->willReturn($cacheInterfaceMock);
+        $this->contextMock->method('getActionValidator')->willReturn($actionValidatorMock);
 
         $dbAdapterMock = $this->createMock(Mysql::class);
 
-        $dbAdapterMock->expects($this->any())->method('getTransactionLevel')->willReturn(1);
+        $dbAdapterMock->method('getTransactionLevel')->willReturn(1);
 
-        $this->resourceMock = $this->getMockBuilder(AbstractResource::class)
-            ->addMethods(['getIdFieldName', 'save', 'saveInSetIncluding', 'isUsedBySuperProducts', 'delete'])
-            ->onlyMethods(['getConnection'])
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->resourceMock = $this->createPartialMock(
+            AttributeResource::class,
+            ['getConnection', '_construct', 'getIdFieldName', 'saveInSetIncluding']
+        );
 
-        $this->eavConfigMock = $this->getMockBuilder(Config::class)
-            ->onlyMethods(['clear'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->eavConfigMock = $this->createPartialMock(Config::class, ['clear']);
 
-        $this->resourceMock->expects($this->any())
-            ->method('getConnection')
-            ->willReturn($dbAdapterMock);
+        $this->resourceMock->method('getConnection')->willReturn($dbAdapterMock);
+        $this->resourceMock->method('getIdFieldName')->willReturn('attribute_id');
 
         $objectManager = new ObjectManager($this);
         $this->_model = $objectManager->getObject(

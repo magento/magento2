@@ -82,37 +82,25 @@ abstract class AbstractContainerTestCase extends TestCase
      */
     protected function setUp(): void
     {
-        $this->eventManagerMock = $this->getMockBuilder(Manager::class)
-            ->onlyMethods(['dispatch'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->scopeConfigMock = $this->getMockBuilder(Config::class)
-            ->onlyMethods(['getValue'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->eventManagerMock = $this->createPartialMock(Manager::class, ['dispatch']);
+        $this->scopeConfigMock = $this->createPartialMock(Config::class, ['getValue']);
 
         $this->themeCollectionFactoryMock = $this->createPartialMock(
             CollectionFactory::class,
             ['create']
         );
-        $this->themeCollectionMock = $this->getMockBuilder(Collection::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['getItemById'])
-            ->getMock();
-        $this->themeMock = $this->getMockBuilder(
-            Theme::class
-        )->disableOriginalConstructor()
-            ->getMock();
+        $this->themeCollectionMock = $this->createPartialMock(Collection::class, ['getItemById']);
+        $this->themeMock = $this->createMock(Theme::class);
 
         $this->layoutProcessorFactoryMock = $this->createPartialMock(
             ProcessorFactory::class,
             ['create']
         );
 
-        $this->layoutMergeMock = $this->getMockBuilder(Merge::class)
-            ->onlyMethods(['addPageHandles', 'load', 'getContainers', 'addHandle'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->layoutMergeMock = $this->createPartialMock(
+            Merge::class,
+            ['addPageHandles', 'load', 'getContainers', 'addHandle']
+        );
 
         $this->escaperMock = $this->createPartialMock(
             Escaper::class,
@@ -120,20 +108,16 @@ abstract class AbstractContainerTestCase extends TestCase
         );
         $this->escaperMock->method('escapeHtmlAttr')->willReturnArgument(0);
 
-        $this->contextMock = $this->getMockBuilder(Context::class)
-            ->onlyMethods(['getEventManager', 'getScopeConfig', 'getEscaper'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->contextMock = $this->createPartialMock(
+            Context::class,
+            ['getEventManager', 'getScopeConfig', 'getEscaper']
+        );
         $this->contextMock->expects($this->once())->method('getEventManager')->willReturn($this->eventManagerMock);
         $this->contextMock->expects($this->once())->method('getScopeConfig')->willReturn($this->scopeConfigMock);
         $this->contextMock->expects($this->once())->method('getEscaper')->willReturn($this->escaperMock);
 
-        $this->pageLayoutConfigBuilderMock = $this->getMockBuilder(PageLayoutConfigBuilder::class)
-            ->getMockForAbstractClass();
-        $pageLayoutConfigMock = $this->getMockBuilder(PageLayoutConfig::class)
-            ->onlyMethods(['getPageLayouts'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->pageLayoutConfigBuilderMock = $this->createMock(PageLayoutConfigBuilder::class);
+        $pageLayoutConfigMock = $this->createPartialMock(PageLayoutConfig::class, ['getPageLayouts']);
         $pageLayoutConfigMock->method('getPageLayouts')
             ->willReturn(['empty' => 'Empty']);
         $this->pageLayoutConfigBuilderMock->method('getPageLayoutsConfig')

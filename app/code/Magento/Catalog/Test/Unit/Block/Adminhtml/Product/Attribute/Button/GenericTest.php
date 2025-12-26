@@ -34,12 +34,8 @@ class GenericTest extends TestCase
     protected function setUp(): void
     {
         $this->objectManager = new ObjectManager($this);
-        $this->contextMock = $this->getMockBuilder(Context::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->registryMock = $this->getMockBuilder(Registry::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->contextMock = $this->createMock(Context::class);
+        $this->registryMock = $this->createMock(Registry::class);
     }
 
     /**

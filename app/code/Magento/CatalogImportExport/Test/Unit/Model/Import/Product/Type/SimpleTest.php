@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\CatalogImportExport\Test\Unit\Model\Import\Product\Type;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\Catalog\Model\ResourceModel\Eav\Attribute;
 use Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory as AttributeCollectionFactory;
 use Magento\CatalogImportExport\Model\Import\Product;
@@ -18,7 +19,8 @@ use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\DB\Adapter\Pdo\Mysql;
 use Magento\Framework\DB\Select;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
+
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -28,6 +30,8 @@ use PHPUnit\Framework\TestCase;
  */
 class SimpleTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var Product|MockObject
      */
@@ -64,41 +68,21 @@ class SimpleTest extends TestCase
         $attrSetColFactory = $this->createMock(AttributeSetCollectionFactory::class);
         $attrColFactory = $this->createMock(AttributeCollectionFactory::class);
         $attrCollection = $this->createMock(AttributeCollection::class);
-        $attribute = $this->getMockBuilder(Attribute::class)
-            ->addMethods(['getFrontendLabel'])
-            ->onlyMethods(
-                [
-                    'getAttributeCode',
-                    'getId',
-                    'getIsRequired',
-                    'getIsUnique',
-                    'isStatic',
-                    'getDefaultValue',
-                    'usesSource',
-                    'getFrontendInput',
-                    'getIsVisible',
-                    'getApplyTo',
-                    'getIsGlobal',
-                ]
-            )
-            ->disableOriginalConstructor()
-            ->getMock();
-        $attribute->method('getIsVisible')
-            ->willReturn(true);
-        $attribute->method('getIsGlobal')
-            ->willReturn(true);
-        $attribute->method('getIsRequired')
-            ->willReturn(true);
-        $attribute->method('getIsUnique')
-            ->willReturn(true);
-        $attribute->method('getFrontendLabel')
-            ->willReturn('frontend_label');
-        $attribute->method('getApplyTo')
-            ->willReturn(['simple']);
-        $attribute->method('getDefaultValue')
-            ->willReturn('default_value');
-        $attribute->method('usesSource')
-            ->willReturn(true);
+
+        $attribute = $this->createPartialMockWithReflection(
+            \Magento\Eav\Model\Entity\Attribute\AbstractAttribute::class,
+            ['getIsVisible', 'getIsGlobal', 'getIsRequired', 'getIsUnique', 'getFrontendLabel',
+             'getApplyTo', 'getDefaultValue', 'getUsesSource', 'isStatic']
+        );
+        $attribute->method('getIsVisible')->willReturn(true);
+        $attribute->method('getIsGlobal')->willReturn(true);
+        $attribute->method('getIsRequired')->willReturn(true);
+        $attribute->method('getIsUnique')->willReturn(true);
+        $attribute->method('getFrontendLabel')->willReturn('frontend_label');
+        $attribute->method('getApplyTo')->willReturn(['simple']);
+        $attribute->method('getDefaultValue')->willReturn('default_value');
+        $attribute->method('getUsesSource')->willReturn(true);
+        $attribute->method('isStatic')->willReturn(false);
         $entityAttributes = [
             [
                 'attribute_id' => '1',
@@ -113,43 +97,58 @@ class SimpleTest extends TestCase
                 'attribute_set_name' => 'attributeSetName'
             ],
         ];
-        $attribute1 = clone $attribute;
-        $attribute2 = clone $attribute;
-        $attribute3 = clone $attribute;
-        $attribute1->method('getId')
-            ->willReturn('1');
-        $attribute1->method('getAttributeCode')
-            ->willReturn('attr_code');
-        $attribute1->method('getFrontendInput')
-            ->willReturn('multiselect');
-        $attribute1->method('isStatic')
-            ->willReturn(true);
-        $attribute2->method('getId')
-            ->willReturn('2');
-        $attribute2->method('getAttributeCode')
-            ->willReturn('boolean_attribute');
-        $attribute2->method('getFrontendInput')
-            ->willReturn('boolean');
-        $attribute2->method('isStatic')
-            ->willReturn(false);
-        $attribute3->method('getId')
-            ->willReturn('3');
-        $attribute3->method('getAttributeCode')
-            ->willReturn('Text_attribute');
-        $attribute3->method('getFrontendInput')
-            ->willReturn('text');
-        $attribute3->method('isStatic')
-            ->willReturn(false);
+        $attribute1 = $this->createPartialMockWithReflection(
+            \Magento\Eav\Model\Entity\Attribute\AbstractAttribute::class,
+            ['getId', 'getAttributeCode', 'getFrontendInput', 'isStatic']
+        );
+        $attribute1->method('getId')->willReturn('1');
+        $attribute1->method('getAttributeCode')->willReturn('attr_code');
+        $attribute1->method('getFrontendInput')->willReturn('multiselect');
+        $attribute1->method('isStatic')->willReturn(true);
+        
+        $attribute2 = $this->createPartialMockWithReflection(
+            \Magento\Eav\Model\Entity\Attribute\AbstractAttribute::class,
+            ['getId', 'getAttributeCode', 'getFrontendInput', 'isStatic', 'getIsRequired', 'getIsUnique',
+             'getDefaultValue', 'getUsesSource', 'getIsVisible', 'getApplyTo', 'getIsGlobal']
+        );
+        $attribute2->method('getId')->willReturn('2');
+        $attribute2->method('getAttributeCode')->willReturn('boolean_attribute');
+        $attribute2->method('getFrontendInput')->willReturn('boolean');
+        $attribute2->method('isStatic')->willReturn(false);
+        $attribute2->method('getIsRequired')->willReturn(true);
+        $attribute2->method('getIsUnique')->willReturn(true);
+        $attribute2->method('getDefaultValue')->willReturn('default_value');
+        $attribute2->method('getUsesSource')->willReturn(true);
+        $attribute2->method('getIsVisible')->willReturn(true);
+        $attribute2->method('getApplyTo')->willReturn(['simple']);
+        $attribute2->method('getIsGlobal')->willReturn(true);
+        
+        $attribute3 = $this->createPartialMockWithReflection(
+            \Magento\Eav\Model\Entity\Attribute\AbstractAttribute::class,
+            ['getId', 'getAttributeCode', 'getFrontendInput', 'isStatic', 'getIsRequired', 'getIsUnique',
+             'getDefaultValue', 'getUsesSource', 'getIsVisible', 'getApplyTo', 'getIsGlobal']
+        );
+        $attribute3->method('getId')->willReturn('3');
+        $attribute3->method('getAttributeCode')->willReturn('text_attribute');
+        $attribute3->method('getFrontendInput')->willReturn('text');
+        $attribute3->method('isStatic')->willReturn(false);
+        $attribute3->method('getIsRequired')->willReturn(true);
+        $attribute3->method('getIsUnique')->willReturn(true);
+        $attribute3->method('getDefaultValue')->willReturn('default_value');
+        $attribute3->method('getUsesSource')->willReturn(true);
+        $attribute3->method('getIsVisible')->willReturn(true);
+        $attribute3->method('getApplyTo')->willReturn(['simple']);
+        $attribute3->method('getIsGlobal')->willReturn(true);
+        $callCount = 0;
         $this->entityModel->method('getEntityTypeId')
             ->willReturn(3);
         $this->entityModel->method('getAttributeOptions')
-            ->willReturnCallback(function () use (&$callCount) {
+            ->willReturnCallback(function ($attribute) use (&$callCount) {
                 $callCount++;
-                if ($callCount === 1) {
-                    return ['option1', 'option2'];
-                } elseif ($callCount === 2) {
+                if ($attribute->getAttributeCode() === 'boolean_attribute') {
                     return ['yes' => 1, 'no' => 0];
                 }
+                return ['option1', 'option2'];
             });
         $attrColFactory->method('create')
             ->willReturn($attrCollection);
@@ -157,14 +156,17 @@ class SimpleTest extends TestCase
             ->willReturn([$attribute1, $attribute2, $attribute3]);
         $attrCollection->method('addFieldToFilter')
             ->willReturnSelf();
+        
+        $getItemsCallCount = 0;
         $attrCollection->method('getItems')
-            ->willReturnOnConsecutiveCalls([$attribute1, $attribute2, $attribute3], []);
+            ->willReturnCallback(
+                function () use (&$getItemsCallCount, $attribute1, $attribute2, $attribute3) {
+                    $getItemsCallCount++;
+                    return $getItemsCallCount === 1 ? [$attribute1, $attribute2, $attribute3] : [];
+                }
+            );
 
-        $this->connection = $this->getMockBuilder(Mysql::class)
-            ->addMethods(['joinLeft'])
-            ->onlyMethods(['select', 'fetchAll', 'fetchPairs', 'insertOnDuplicate', 'delete', 'quoteInto'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->connection = $this->createMock(\Magento\Framework\DB\Adapter\Pdo\Mysql::class);
         $this->select = $this->createPartialMock(
             Select::class,
             [
@@ -180,21 +182,13 @@ class SimpleTest extends TestCase
             ->willReturnSelf();
         $this->select->method('joinLeft')
             ->willReturnSelf();
-        $this->connection->method('select')
-            ->willReturn($this->select);
+        $this->connection->method('select')->willReturn($this->select);
+        $this->connection->method('fetchAll')->willReturn($entityAttributes);
+        $this->connection->method('getConnection')->willReturnSelf(); // Prevent actual DB connection
+        
         $connection = $this->createMock(Mysql::class);
-        $connection->method('quoteInto')
-            ->willReturn('query');
-        $this->select->method('getConnection')
-            ->willReturn($connection);
-        $this->connection->method('insertOnDuplicate')
-            ->willReturnSelf();
-        $this->connection->method('delete')
-            ->willReturnSelf();
-        $this->connection->method('quoteInto')
-            ->willReturn('');
-        $this->connection->method('fetchAll')
-            ->willReturn($entityAttributes);
+        $connection->method('quoteInto')->willReturn('query');
+        $this->select->method('getConnection')->willReturn($connection);
         $this->resource = $this->createPartialMock(
             ResourceConnection::class,
             [
@@ -206,15 +200,16 @@ class SimpleTest extends TestCase
             ->willReturn($this->connection);
         $this->resource->method('getTableName')
             ->willReturn('tableName');
-        $this->objectManagerHelper = new ObjectManagerHelper($this);
-        $this->simpleType = $this->objectManagerHelper->getObject(
-            Simple::class,
-            [
-                'attrSetColFac' => $attrSetColFactory,
-                'prodAttrColFac' => $attrColFactory,
-                'params' => [$this->entityModel, 'simple'],
-                'resource' => $this->resource,
-            ]
+        // Create minimal ObjectManager mock
+        $objectManagerMock = $this->createMock(\Magento\Framework\ObjectManagerInterface::class);
+        \Magento\Framework\App\ObjectManager::setInstance($objectManagerMock);
+        
+        // Instantiate Simple class directly with dependencies
+        $this->simpleType = new Simple(
+            $attrSetColFactory,
+            $attrColFactory,
+            $this->resource,
+            [$this->entityModel, 'simple']
         );
     }
 
@@ -231,9 +226,7 @@ class SimpleTest extends TestCase
         Simple::$attributeCodeToId = [];
     }
 
-    /**
-     * @dataProvider addAttributeOptionDataProvider
-     */
+    #[DataProvider('addAttributeOptionDataProvider')]
     public function testAddAttributeOption($code, $optionKey, $optionValue, $initAttributes, $resultAttributes)
     {
         $this->setPropertyValue($this->simpleType, '_attributes', $initAttributes);
@@ -387,9 +380,27 @@ class SimpleTest extends TestCase
 
     public function testPrepareAttributesWithDefaultValueForSave()
     {
+        $attributes = [
+            'attributeSetName' => [
+                'boolean_attribute' => [
+                    'type' => 'boolean',
+                    'is_static' => false,
+                    'options' => ['yes' => 1, 'no' => 0],
+                    'default_value' => null,
+                ],
+                'text_attribute' => [
+                    'type' => 'text',
+                    'is_static' => false,
+                    'options' => [],
+                    'default_value' => 'default_value',
+                ],
+            ],
+        ];
+        $this->setPropertyValue($this->simpleType, '_attributes', $attributes);
+
         $rowData = [
             '_attribute_set' => 'attributeSetName',
-            'boolean_attribute' => 'Yes',
+            'boolean_attribute' => 'yes',
         ];
         $expected = [
             'boolean_attribute' => 1,

@@ -20,6 +20,7 @@ use Magento\Framework\Validator\UniversalFactory;
 use Magento\Review\Model\ResourceModel\Review\Product\Collection;
 use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -80,7 +81,7 @@ class CollectionTest extends TestCase
         $universalFactory->expects($this->any())->method('create')->willReturn($entity);
         $store = $this->createMock(Store::class);
         $store->expects($this->any())->method('getId')->willReturn(1);
-        $storeManager = $this->getMockForAbstractClass(StoreManagerInterface::class);
+        $storeManager = $this->createMock(StoreManagerInterface::class);
         $storeManager->expects($this->any())->method('getStore')->willReturn($store);
         $fetchStrategy = $this->createMock(
             Query::class
@@ -89,9 +90,7 @@ class CollectionTest extends TestCase
         $productLimitationMock = $this->createMock(
             ProductLimitation::class
         );
-        $productLimitationFactoryMock = $this->getMockBuilder(ProductLimitationFactory::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $productLimitationFactoryMock = $this->createMock(ProductLimitationFactory::class);
         $productLimitationFactoryMock->method('create')
             ->willReturn($productLimitationMock);
         $this->objectManager = new ObjectManager($this);
@@ -111,8 +110,8 @@ class CollectionTest extends TestCase
      * @param $attribute
      *
      * @return void
-     * @dataProvider addAttributeToFilterDataProvider
      */
+    #[DataProvider('addAttributeToFilterDataProvider')]
     public function testAddAttributeToFilter($attribute): void
     {
         $conditionSqlQuery = 'sqlQuery';
@@ -164,8 +163,8 @@ class CollectionTest extends TestCase
      * @param $doubleConditionSqlQuery
      *
      * @return void
-     * @dataProvider addAttributeToFilterWithAttributeTypeDataProvider
      */
+    #[DataProvider('addAttributeToFilterWithAttributeTypeDataProvider')]
     public function testAddAttributeToFilterWithAttributeType(
         $condition,
         $sqlConditionWith,

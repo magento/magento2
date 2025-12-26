@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright 2025 Adobe
+ * All Rights Reserved.
+ */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminProductImagesAssertPositionActionGroup">
+        <annotations>
+            <description>Expands "Images And Videos" section, assert that the provided product image is present and at specific position.</description>
+        </annotations>
+        <arguments>
+            <argument name="image" defaultValue="MagentoLogo"/>
+            <argument name="position" defaultValue="1" type="string"/>
+        </arguments>
+        <waitForElementVisible selector="{{AdminProductImagesSection.productImagesToggle}}" stepKey="waitForProductImagesSection"/>
+        <conditionalClick selector="{{AdminProductImagesSection.productImagesToggle}}" dependentSelector="{{AdminProductImagesSection.imageUploadButton}}" visible="false" stepKey="openProductImagesSection"/>
+        <waitForPageLoad stepKey="waitForPageLoad"/>
+        <waitForElementVisible selector="{{AdminProductImagesSection.nthProductImage(position)}}" stepKey="seeImageAtPosition"/>
+        <grabAttributeFrom selector="{{AdminProductImagesSection.nthProductImage(position)}}" userInput="src" stepKey="getImageSrc"/>
+        <assertStringContainsString stepKey="assertImageAtPosition">
+            <actualResult type="variable">getImageSrc</actualResult>
+            <expectedResult type="string">{{image.fileName}}</expectedResult>
+        </assertStringContainsString>
+    </actionGroup>
+</actionGroups>

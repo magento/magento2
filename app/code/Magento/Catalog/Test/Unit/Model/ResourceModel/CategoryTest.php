@@ -108,53 +108,32 @@ class CategoryTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->selectMock = $this->getMockBuilder(Select::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->selectMock = $this->createMock(Select::class);
         $this->selectMock
             ->method('where')
             ->willReturn($this->selectMock);
         $this->selectMock->expects($this->once())->method('from')->willReturnSelf();
         $this->selectMock->expects($this->once())->method('joinLeft')->willReturnSelf();
-        $this->connectionMock = $this->getMockBuilder(Adapter::class)->getMockForAbstractClass();
+        $this->connectionMock = $this->createMock(Adapter::class);
         $this->connectionMock->expects($this->once())->method('select')->willReturn($this->selectMock);
-        $this->resourceMock = $this->getMockBuilder(ResourceConnection::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->resourceMock->expects($this->any())->method('getConnection')->willReturn($this->connectionMock);
-        $this->connectionMock->expects($this->any())->method('getTableName')->willReturn('TableName');
-        $this->resourceMock->expects($this->any())->method('getTableName')->willReturn('TableName');
-        $this->contextMock = $this->getMockBuilder(Context::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->eavConfigMock = $this->getMockBuilder(Config::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->entityType = $this->getMockBuilder(Type::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->eavConfigMock->expects($this->any())->method('getEntityType')->willReturn($this->entityType);
-        $this->contextMock->expects($this->any())->method('getEavConfig')->willReturn($this->eavConfigMock);
-        $this->contextMock->expects($this->any())->method('getResource')->willReturn($this->resourceMock);
-        $this->storeManagerMock = $this->getMockBuilder(StoreManagerInterface::class)
-            ->getMock();
-        $this->factoryMock = $this->getMockBuilder(Factory::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->managerMock = $this->getMockBuilder(ManagerInterface::class)
-            ->getMock();
-        $this->treeFactoryMock = $this->getMockBuilder(TreeFactory::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->collectionFactoryMock = $this->getMockBuilder(CollectionFactory::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->indexerProcessorMock = $this->getMockBuilder(Processor::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->resourceMock = $this->createMock(ResourceConnection::class);
+        $this->resourceMock->method('getConnection')->willReturn($this->connectionMock);
+        $this->connectionMock->method('getTableName')->willReturn('TableName');
+        $this->resourceMock->method('getTableName')->willReturn('TableName');
+        $this->contextMock = $this->createMock(Context::class);
+        $this->eavConfigMock = $this->createMock(Config::class);
+        $this->entityType = $this->createMock(Type::class);
+        $this->eavConfigMock->method('getEntityType')->willReturn($this->entityType);
+        $this->contextMock->method('getEavConfig')->willReturn($this->eavConfigMock);
+        $this->contextMock->method('getResource')->willReturn($this->resourceMock);
+        $this->storeManagerMock = $this->createMock(StoreManagerInterface::class);
+        $this->factoryMock = $this->createMock(Factory::class);
+        $this->managerMock = $this->createMock(ManagerInterface::class);
+        $this->treeFactoryMock = $this->createMock(TreeFactory::class);
+        $this->collectionFactoryMock = $this->createMock(CollectionFactory::class);
+        $this->indexerProcessorMock = $this->createMock(Processor::class);
 
-        $this->serializerMock = $this->getMockBuilder(Json::class)
-            ->getMock();
+        $this->serializerMock = $this->createMock(Json::class);
 
         $this->category = new Category(
             $this->contextMock,
@@ -176,14 +155,10 @@ class CategoryTest extends TestCase
     {
         $entityIdsFilter = [1, 2];
         $expectedValue = 123;
-        $attribute = $this->getMockBuilder(Attribute::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $backendModel = $this->getMockBuilder(AbstractBackend::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $attribute = $this->createMock(Attribute::class);
+        $backendModel = $this->createMock(AbstractBackend::class);
 
-        $attribute->expects($this->any())->method('getBackend')->willReturn($backendModel);
+        $attribute->method('getBackend')->willReturn($backendModel);
         $this->connectionMock->expects($this->once())->method('fetchCol')->willReturn(['result']);
         $this->serializerMock->expects($this->once())
             ->method('serialize')

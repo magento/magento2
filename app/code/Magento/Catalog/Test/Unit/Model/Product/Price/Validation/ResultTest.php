@@ -36,10 +36,10 @@ class ResultTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->priceUpdateResultFactory = $this->getMockBuilder(PriceUpdateResultInterfaceFactory::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['create'])
-            ->getMock();
+        $this->priceUpdateResultFactory = $this->createPartialMock(
+            PriceUpdateResultInterfaceFactory::class,
+            ['create']
+        );
 
         $this->objectManager = new ObjectManagerHelper($this);
         $this->model = $this->objectManager->getObject(
@@ -70,8 +70,8 @@ class ResultTest extends TestCase
      */
     public function testGetFailedItems(): void
     {
-        $priceUpdateResult1 = $this->getMockForAbstractClass(PriceUpdateResultInterface::class);
-        $priceUpdateResult2 = $this->getMockForAbstractClass(PriceUpdateResultInterface::class);
+        $priceUpdateResult1 = $this->createMock(PriceUpdateResultInterface::class);
+        $priceUpdateResult2 = $this->createMock(PriceUpdateResultInterface::class);
 
         $this->priceUpdateResultFactory
             ->method('create')

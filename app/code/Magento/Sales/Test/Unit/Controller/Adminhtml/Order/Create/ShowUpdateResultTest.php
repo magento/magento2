@@ -15,6 +15,7 @@ use Magento\Catalog\Helper\Product;
 use Magento\Customer\Model\Customer;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\RequestInterface;
+use Magento\Framework\App\Request\Http;
 use Magento\Framework\Controller\Result\Raw;
 use Magento\Framework\Controller\Result\RawFactory;
 use Magento\Framework\Escaper;
@@ -30,6 +31,7 @@ use Magento\Sales\Model\AdminOrder\Create;
 use Magento\Store\Model\Store;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 
 /**
  * Unit test for ShowUpdateResult controller
@@ -40,6 +42,8 @@ use PHPUnit\Framework\TestCase;
  */
 class ShowUpdateResultTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var ShowUpdateResult
      */
@@ -78,27 +82,16 @@ class ShowUpdateResultTest extends TestCase
     protected function setUp(): void
     {
         $this->context = $this->createMock(Context::class);
-        $this->objectManager = $this->getMockForAbstractClass(ObjectManagerInterface::class);
+        $this->objectManager = $this->createMock(ObjectManagerInterface::class);
         $this->resultRawFactory = $this->createMock(RawFactory::class);
-        $this->session = $this->getMockBuilder(Session::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['hasUpdateResult', 'getUpdateResult', 'unsUpdateResult'])
-            ->getMock();
+        $this->session = $this->createPartialMockWithReflection(
+            Session::class,
+            ['hasUpdateResult', 'getUpdateResult', 'unsUpdateResult']
+        );
         $this->resultRaw = $this->createMock(Raw::class);
 
         // Mock required context dependencies
-        $request = $this->getMockBuilder(RequestInterface::class)
-            ->addMethods(['getPost', 'getPostValue', 'has'])
-            ->getMockForAbstractClass();
-        $request->expects($this->any())
-            ->method('getPost')
-            ->willReturn(null);
-        $request->expects($this->any())
-            ->method('getPostValue')
-            ->willReturn(null);
-        $request->expects($this->any())
-            ->method('has')
-            ->willReturn(false);
+        $request = $this->createPartialMock(Http::class, ['getPost', 'getPostValue', 'has', 'getParam']);
 
         $this->context->expects($this->any())
             ->method('getRequest')
@@ -108,7 +101,7 @@ class ShowUpdateResultTest extends TestCase
             ->willReturn($this->objectManager);
 
         // Mock event manager
-        $eventManager = $this->getMockForAbstractClass(ManagerInterface::class);
+        $eventManager = $this->createMock(ManagerInterface::class);
         $eventManager->expects($this->any())
             ->method('dispatch')
             ->willReturn(true);
@@ -117,9 +110,7 @@ class ShowUpdateResultTest extends TestCase
             ->willReturn($eventManager);
 
         // Mock message manager
-        $messageManager = $this->getMockBuilder(MessageManagerInterface::class)
-            ->onlyMethods(['addErrorMessage', 'addExceptionMessage'])
-            ->getMockForAbstractClass();
+        $messageManager = $this->createMock(MessageManagerInterface::class);
         $messageManager->expects($this->any())
             ->method('addErrorMessage')
             ->willReturnSelf();
@@ -135,10 +126,7 @@ class ShowUpdateResultTest extends TestCase
         $registry = $this->createMock(Registry::class);
         $store = $this->createMock(Store::class);
         $quote = $this->createMock(Quote::class);
-        $customer = $this->getMockBuilder(Customer::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['getCustomerGroupId'])
-            ->getMock();
+        $customer = $this->createPartialMockWithReflection(Customer::class, ['getCustomerGroupId']);
 
         $registry->expects($this->any())
             ->method('unregister')
@@ -177,10 +165,7 @@ class ShowUpdateResultTest extends TestCase
             ->method('getQuote')
             ->willReturn($quote);
 
-        $adminOrderCreate = $this->getMockBuilder(Create::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['setStoreId'])
-            ->getMock();
+        $adminOrderCreate = $this->createPartialMockWithReflection(Create::class, ['setStoreId']);
 
         $reflection = new \ReflectionClass($adminOrderCreate);
         $registryProperty = $reflection->getProperty('_coreRegistry');
@@ -243,7 +228,7 @@ class ShowUpdateResultTest extends TestCase
     {
         // Clean up ObjectManager instance
         try {
-            $cleanObjectManager = $this->getMockForAbstractClass(ObjectManagerInterface::class);
+            $cleanObjectManager = $this->createMock(ObjectManagerInterface::class);
             ObjectManager::setInstance($cleanObjectManager);
         } catch (\Exception $e) { // phpcs:ignore Magento2.CodeAnalysis.EmptyBlock
             // Ignore any errors during cleanup
