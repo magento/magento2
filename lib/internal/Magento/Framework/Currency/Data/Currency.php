@@ -50,7 +50,7 @@ class Currency
     /**
      * @var array
      */
-    private $displayLocale = [
+    private array $displayLocale = [
         'AED' => 'ar_AE', 'AFN' => 'fa_AF', 'ALL' => 'sq_AL', 'AMD' => 'hy_AM',
         'AOA' => 'pt_AO', 'ARS' => 'es_AR', 'AUD' => 'en_AU', 'AWG' => 'nl_AW',
         'AZN' => 'az_Latn_AZ', 'BAM' => 'bs_BA', 'BBD' => 'en_BB', 'BDT' => 'bn_BD',
@@ -70,7 +70,7 @@ class Currency
         'KHR' => 'km_KH', 'KMF' => 'ar_KM', 'KPW' => 'ko_KP', 'KRW' => 'ko_KR',
         'KWD' => 'ar_KW', 'KYD' => 'en_KY', 'KZT' => 'ru_KZ', 'LAK' => 'lo_LA',
         'LBP' => 'ar_LB', 'LKR' => 'si_LK', 'LRD' => 'en_LR', 'LYD' => 'ar_LY',
-        'MAD' => 'ar_EH', 'MDL' => 'ro_MD', 'MGA' => 'mg_MG', 'MKD' => 'mk_MK',
+        'MAD' => 'ar_MA', 'MDL' => 'ro_MD', 'MGA' => 'mg_MG', 'MKD' => 'mk_MK',
         'MMK' => 'my_MM', 'MNT' => 'mn_Cyrl_MN', 'MOP' => 'zh_Hant_MO', 'MRU' => 'ar_MR',
         'MUR' => 'mfe_MU', 'MVR' => 'dv_MV', 'MWK' => 'ny_MW', 'MXN' => 'es_MX',
         'MYR' => 'ms_MY', 'MZN' => 'pt_MZ', 'NAD' => 'kj_NA', 'NGN' => 'en_NG',
