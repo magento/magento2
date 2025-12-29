@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 
 /**
@@ -57,7 +57,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
         \Magento\Variable\Model\VariableFactory $variableFactory,
         \Magento\Variable\Model\Source\Variables $variables,
         array $data = [],
-        \Magento\Framework\Serialize\Serializer\Json $serializer = null,
+        ?\Magento\Framework\Serialize\Serializer\Json $serializer = null,
         ?SecureHtmlRenderer $secureRenderer = null
     ) {
         $this->_variableFactory = $variableFactory;

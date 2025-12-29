@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -16,6 +16,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\PageCache\Model\Config;
 use Magento\Store\Model\Store;
 use PHPUnit\Framework\MockObject\MockObject;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -23,6 +24,8 @@ use PHPUnit\Framework\TestCase;
  */
 class InvalidateVarnishObserverTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var InvalidateVarnishObserver
      */
@@ -93,10 +96,7 @@ class InvalidateVarnishObserverTest extends TestCase
             Config::VARNISH
         );
 
-        $eventMock = $this->getMockBuilder(Event::class)
-            ->addMethods(['getObject'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $eventMock = $this->createPartialMockWithReflection(Event::class, ['getObject']);
         $eventMock->expects($this->once())->method('getObject')->willReturn($this->observerObject);
         $this->observerMock->expects($this->once())->method('getEvent')->willReturn($eventMock);
         $this->tagResolverMock->expects($this->once())->method('getTags')->with($this->observerObject)

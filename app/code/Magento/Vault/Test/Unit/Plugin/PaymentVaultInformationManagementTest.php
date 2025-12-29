@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -9,10 +9,13 @@ namespace Magento\Vault\Test\Unit\Plugin;
 
 use Magento\Checkout\Api\PaymentInformationManagementInterface;
 use Magento\Store\Api\Data\StoreInterface;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Vault\Api\PaymentMethodListInterface;
+use Magento\Vault\Model\VaultPaymentInterface;
 use Magento\Vault\Plugin\PaymentVaultInformationManagement;
 use Magento\Quote\Api\Data\PaymentInterface;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -21,6 +24,8 @@ use PHPUnit\Framework\TestCase;
  */
 class PaymentVaultInformationManagementTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var StoreManagerInterface|MockObject
      */
@@ -56,26 +61,11 @@ class PaymentVaultInformationManagementTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->storeManager = $this->getMockBuilder(StoreManagerInterface::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['getStore'])
-            ->getMockForAbstractClass();
-        $this->store = $this->getMockBuilder(StoreInterface::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['getId'])
-            ->getMockForAbstractClass();
-        $this->paymentMethodList = $this->getMockBuilder(PaymentMethodListInterface::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['getActiveList'])
-            ->getMockForAbstractClass();
-        $this->paymentInformationManagement = $this
-            ->getMockBuilder(PaymentInformationManagementInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-        $this->payment = $this->getMockBuilder(PaymentInterface::class)
-            ->onlyMethods(['setMethod'])
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->storeManager = $this->createMock(StoreManagerInterface::class);
+        $this->store = $this->createMock(StoreInterface::class);
+        $this->paymentMethodList = $this->createMock(PaymentMethodListInterface::class);
+        $this->paymentInformationManagement = $this->createMock(PaymentInformationManagementInterface::class);
+        $this->payment = $this->createMock(PaymentInterface::class);
         $this->plugin = new PaymentVaultInformationManagement($this->paymentMethodList, $this->storeManager);
     }
 
@@ -84,20 +74,17 @@ class PaymentVaultInformationManagementTest extends TestCase
      *
      * @param string $requestPaymentMethodCode
      * @param string $methodCode
-     * @dataProvider vaultPaymentMethodDataProvider
      *
      * @return void
      */
+    #[DataProvider('vaultPaymentMethodDataProvider')]
     public function testBeforeSavePaymentInformation($requestPaymentMethodCode, $methodCode): void
     {
         $this->store->method('getId')
             ->willReturn(1);
         $this->storeManager->method('getStore')
             ->willReturn($this->store);
-        $activeVaultMethod = $this->getMockBuilder(PaymentInterface::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['getCode', 'getProviderCode'])
-            ->getMockForAbstractClass();
+        $activeVaultMethod = $this->createMock(VaultPaymentInterface::class);
         $activeVaultMethod->method('getCode')
             ->willReturn($methodCode);
         $this->paymentMethodList->method('getActiveList')
@@ -121,7 +108,7 @@ class PaymentVaultInformationManagementTest extends TestCase
      *
      * @return array
      */
-    public function vaultPaymentMethodDataProvider(): array
+    public static function vaultPaymentMethodDataProvider(): array
     {
         return [
             ['braintree_cc_vault_01', 'braintree_cc_vault'],

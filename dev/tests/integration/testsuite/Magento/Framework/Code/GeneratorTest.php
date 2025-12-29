@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework\Code;
 
@@ -141,17 +141,17 @@ class GeneratorTest extends TestCase
                 'expectedDataPath' => '/_expected/SourceClassWithNamespaceFactory.php.sample'
             ],
             'factory_with_nested_namespace' => [
-                'classToGenerate' => self::CLASS_NAME_WITH_NESTED_NAMESPACE,
+                'className' => self::CLASS_NAME_WITH_NESTED_NAMESPACE,
                 'generateType' => 'Factory',
                 'expectedDataPath' => '/_expected/SourceClassWithNestedNamespaceFactory.php.sample'
             ],
             'ext_interface_factory_with_namespace' => [
-                'classToGenerate' => self::EXTENSION_CLASS_NAME_WITH_NAMESPACE,
+                'className' => self::EXTENSION_CLASS_NAME_WITH_NAMESPACE,
                 'generateType' => 'InterfaceFactory',
                 'expectedDataPath' => '/_expected/SourceClassWithNamespaceExtensionInterfaceFactory.php.sample'
             ],
             'ext_interface_factory_with_nested_namespace' => [
-                'classToGenerate' => self::EXTENSION_CLASS_NAME_WITH_NESTED_NAMESPACE,
+                'className' => self::EXTENSION_CLASS_NAME_WITH_NESTED_NAMESPACE,
                 'generateType' => 'InterfaceFactory',
                 'expectedDataPath' => '/_expected/SourceClassWithNestedNamespaceExtensionInterfaceFactory.php.sample'
             ],

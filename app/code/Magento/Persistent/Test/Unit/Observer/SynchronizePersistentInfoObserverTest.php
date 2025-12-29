@@ -1,8 +1,7 @@
 <?php
 /**
- *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -14,11 +13,17 @@ use Magento\Framework\Event\Observer;
 use Magento\Persistent\Helper\Data;
 use Magento\Persistent\Helper\Session;
 use Magento\Persistent\Observer\SynchronizePersistentInfoObserver;
+use Magento\Customer\Model\Session as CustomerSession;
+use Magento\Persistent\Model\Session as PersistentSession;
 use PHPUnit\Framework\MockObject\MockObject;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use PHPUnit\Framework\TestCase;
 
 class SynchronizePersistentInfoObserverTest extends TestCase
 {
+
+    use MockCreationTrait;
+
     /**
      * @var SynchronizePersistentInfoObserver
      */
@@ -64,13 +69,13 @@ class SynchronizePersistentInfoObserverTest extends TestCase
         $this->requestMock = $this->createMock(Http::class);
         $this->helperMock = $this->createMock(Data::class);
         $this->sessionHelperMock = $this->createMock(Session::class);
-        $this->customerSessionMock = $this->createMock(\Magento\Customer\Model\Session::class);
+        $this->customerSessionMock = $this->createMock(CustomerSession::class);
         $this->observerMock = $this->createMock(Observer::class);
-        $this->eventManagerMock = $this->getMockBuilder(Event::class)
-            ->addMethods(['getRequest'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->sessionMock = $this->createMock(\Magento\Persistent\Model\Session::class);
+        $this->eventManagerMock = $this->createPartialMockWithReflection(
+            Event::class,
+            ['getRequest']
+        );
+        $this->sessionMock = $this->createMock(PersistentSession::class);
         $this->model = new SynchronizePersistentInfoObserver(
             $this->helperMock,
             $this->sessionHelperMock,

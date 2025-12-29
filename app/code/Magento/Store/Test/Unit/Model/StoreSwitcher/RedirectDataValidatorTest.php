@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -93,7 +93,7 @@ class RedirectDataValidatorTest extends TestCase
     /**
      * @return array
      */
-    public function validationDataProvider(): array
+    public static function validationDataProvider(): array
     {
         return [
             [

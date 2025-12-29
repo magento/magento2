@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2024 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -9,14 +9,18 @@ namespace Magento\Customer\Test\Unit\Model\Validator;
 
 use Magento\Customer\Model\Validator\Street;
 use Magento\Customer\Model\Customer;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 
 /**
  * Customer street validator tests
  */
 class StreetTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var Street
      */
@@ -33,11 +37,10 @@ class StreetTest extends TestCase
     protected function setUp(): void
     {
         $this->nameValidator = new Street;
-        $this->customerMock = $this
-            ->getMockBuilder(Customer::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['getStreet'])
-            ->getMock();
+        $this->customerMock = $this->createPartialMockWithReflection(
+            Customer::class,
+            ['getStreet']
+        );
     }
 
     /**
@@ -45,9 +48,8 @@ class StreetTest extends TestCase
      *
      * @param array $street
      * @param string $message
-     * @return void
-     * @dataProvider expectedPunctuationInNamesDataProvider
-     */
+     * @return void */
+    #[DataProvider('expectedPunctuationInNamesDataProvider')]
     public function testValidateCorrectPunctuationInNames(
         array $street,
         string $message
@@ -61,7 +63,7 @@ class StreetTest extends TestCase
     /**
      * @return array
      */
-    public function expectedPunctuationInNamesDataProvider(): array
+    public static function expectedPunctuationInNamesDataProvider(): array
     {
         return [
             [

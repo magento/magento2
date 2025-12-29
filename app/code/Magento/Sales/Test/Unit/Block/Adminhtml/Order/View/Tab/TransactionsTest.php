@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -19,6 +19,7 @@ use Magento\Sales\Model\Order;
 use Magento\Sales\Model\Order\Payment;
 use Magento\Sales\Test\Unit\Block\Adminhtml\Order\View\Tab\Stub\OnlineMethod;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -92,8 +93,8 @@ class TransactionsTest extends TestCase
      * @param string $methodClass
      * @param bool $expectedResult
      * @depends testGetOrder
-     * @dataProvider canShowTabDataProvider
      */
+    #[DataProvider('canShowTabDataProvider')]
     public function testCanShowTab($methodClass, $expectedResult)
     {
         $methodInstance = $this->objectManager->getObject($methodClass);
@@ -107,7 +108,7 @@ class TransactionsTest extends TestCase
     /**
      * @return array
      */
-    public function canShowTabDataProvider()
+    public static function canShowTabDataProvider()
     {
         return [
             [OnlineMethod::class, true],
@@ -121,8 +122,8 @@ class TransactionsTest extends TestCase
     /**
      * @param bool $isAllowed
      * @param bool $expectedResult
-     * @dataProvider isHiddenDataProvider
      */
+    #[DataProvider('isHiddenDataProvider')]
     public function testIsHidden($isAllowed, $expectedResult)
     {
         $this->authorizationMock->expects($this->any())
@@ -136,7 +137,7 @@ class TransactionsTest extends TestCase
     /**
      * @return array
      */
-    public function isHiddenDataProvider()
+    public static function isHiddenDataProvider()
     {
         return [
             [true, false],

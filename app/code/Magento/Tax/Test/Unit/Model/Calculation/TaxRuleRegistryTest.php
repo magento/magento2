@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -36,7 +36,7 @@ class TaxRuleRegistryTest extends TestCase
      */
     private $taxRuleModelMock;
 
-    const TAX_RULE_ID = 1;
+    private const TAX_RULE_ID = 1;
 
     protected function setUp(): void
     {
@@ -54,7 +54,7 @@ class TaxRuleRegistryTest extends TestCase
             ->getMock();
     }
 
-    public function testRemoveTaxRule()
+    public function testRemoveTaxRule(): void
     {
         $this->taxRuleModelMock->expects($this->any())
             ->method('load')
@@ -63,7 +63,7 @@ class TaxRuleRegistryTest extends TestCase
 
         $this->taxRuleModelMock->expects($this->any())
             ->method('getId')
-            ->will($this->onConsecutiveCalls(self::TAX_RULE_ID, null));
+            ->willReturnOnConsecutiveCalls(self::TAX_RULE_ID, null);
 
         $this->taxRuleModelFactoryMock->expects($this->any())
             ->method('create')

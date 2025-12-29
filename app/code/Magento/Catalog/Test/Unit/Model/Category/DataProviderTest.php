@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -117,70 +117,41 @@ class DataProviderTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->eavValidationRules = $this->getMockBuilder(EavValidationRules::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->eavValidationRules = $this->createMock(EavValidationRules::class);
 
-        $this->collection = $this->getMockBuilder(Collection::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->collection = $this->createMock(Collection::class);
         $this->collection->method('addAttributeToSelect')
             ->with('*')
             ->willReturnSelf();
 
-        $this->categoryCollectionFactory = $this->getMockBuilder(CollectionFactory::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['create'])
-            ->getMock();
+        $this->categoryCollectionFactory = $this->createPartialMock(CollectionFactory::class, ['create']);
         $this->categoryCollectionFactory->method('create')
             ->willReturn($this->collection);
 
-        $this->storeManager = $this->getMockBuilder(StoreManagerInterface::class)
-            ->getMockForAbstractClass();
+        $this->storeManager = $this->createMock(StoreManagerInterface::class);
 
-        $this->registry = $this->getMockBuilder(Registry::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->registry = $this->createMock(Registry::class);
 
-        $this->eavEntityMock = $this->getMockBuilder(Type::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->eavEntityMock = $this->createMock(Type::class);
 
-        $this->eavConfig = $this->getMockBuilder(Config::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->eavConfig = $this->createMock(Config::class);
 
-        $this->request = $this->getMockBuilder(RequestInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->request = $this->createMock(RequestInterface::class);
 
-        $this->categoryFactory = $this->getMockBuilder(CategoryFactory::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->categoryFactory = $this->createMock(CategoryFactory::class);
 
-        $dataMock = $this->getMockBuilder(Data::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->uiConfigFactory = $this->getMockBuilder(DataInterfaceFactory::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $dataMock = $this->createMock(Data::class);
+        $this->uiConfigFactory = $this->createMock(DataInterfaceFactory::class);
         $this->uiConfigFactory->method('create')
             ->willReturn($dataMock);
 
-        $this->fileInfo = $this->getMockBuilder(FileInfo::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->fileInfo = $this->createMock(FileInfo::class);
 
-        $this->modifierPool = $this->getMockBuilder(PoolInterface::class)
-            ->getMockForAbstractClass();
+        $this->modifierPool = $this->createMock(PoolInterface::class);
 
-        $this->auth = $this->getMockBuilder(AuthorizationInterface::class)
-            ->getMockForAbstractClass();
+        $this->auth = $this->createMock(AuthorizationInterface::class);
 
-        $this->arrayUtils = $this->getMockBuilder(ArrayUtils::class)
-            ->onlyMethods(['flatten'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->arrayUtils = $this->createPartialMock(ArrayUtils::class, ['flatten']);
 
         $this->categoryImage = $this->createPartialMock(
             CategoryImage::class,
@@ -193,9 +164,7 @@ class DataProviderTest extends TestCase
      */
     private function getModel()
     {
-        $this->eavEntityMock->expects($this->any())
-            ->method('getAttributeCollection')
-            ->willReturn([]);
+        $this->eavEntityMock->method('getAttributeCollection')->willReturn([]);
 
         $this->eavConfig->method('getEntityType')
             ->with('catalog_category')
@@ -251,20 +220,14 @@ class DataProviderTest extends TestCase
             'image' => $fileName,
         ];
 
-        $imageBackendMock = $this->getMockBuilder(Image::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $imageBackendMock = $this->createMock(Image::class);
 
-        $attributeMock = $this->getMockBuilder(Attribute::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $attributeMock = $this->createMock(Attribute::class);
         $attributeMock->expects($this->once())
             ->method('getBackend')
             ->willReturn($imageBackendMock);
 
-        $categoryMock = $this->getMockBuilder(Category::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $categoryMock = $this->createMock(Category::class);
         $categoryMock->expects($this->exactly(2))
             ->method('getData')
             ->willReturnMap(
@@ -325,20 +288,14 @@ class DataProviderTest extends TestCase
             ],
         ];
 
-        $imageBackendMock = $this->getMockBuilder(Image::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $imageBackendMock = $this->createMock(Image::class);
 
-        $attributeMock = $this->getMockBuilder(Attribute::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $attributeMock = $this->createMock(Attribute::class);
         $attributeMock->expects($this->once())
             ->method('getBackend')
             ->willReturn($imageBackendMock);
 
-        $categoryMock = $this->getMockBuilder(Category::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $categoryMock = $this->createMock(Category::class);
         $categoryMock->expects($this->exactly(2))
             ->method('getData')
             ->willReturnMap(
@@ -394,16 +351,12 @@ class DataProviderTest extends TestCase
     {
         $this->arrayUtils->expects($this->atLeastOnce())->method('flatten')->willReturn([1,3,3]);
 
-        $categoryMock = $this->getMockBuilder(Category::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $categoryMock = $this->createMock(Category::class);
         $this->registry->expects($this->atLeastOnce())
             ->method('registry')
             ->with('category')
             ->willReturn($categoryMock);
-        $attributeMock = $this->getMockBuilder(Attribute::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $attributeMock = $this->createMock(Attribute::class);
         $categoryMock->expects($this->once())
             ->method('getAttributes')
             ->willReturn(['image' => $attributeMock]);

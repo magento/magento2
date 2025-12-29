@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -22,6 +22,7 @@ use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Store\Api\Data\WebsiteInterface;
 use Magento\Store\Model\StoreManagerInterface;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
 
@@ -51,31 +52,21 @@ class CollectionTest extends TestCase
         $select = $this->createMock(Select::class);
         $connection->expects($this->once())->method('select')->willReturn($select);
 
-        $resource = $this->getMockForAbstractClass(
-            AbstractDb::class,
-            [],
-            '',
-            false,
-            true,
-            true,
-            ['getConnection', 'getMainTable', 'getTable', '__wakeup']
-        );
+        $resource = $this->createMock(AbstractDb::class);
         $resource->expects($this->any())->method('getConnection')->willReturn($connection);
         $resource->expects($this->any())->method('getTable')->willReturnArgument(0);
 
-        $eventManager = $this->getMockForAbstractClass(ManagerInterface::class);
-        $localeListsMock = $this->getMockForAbstractClass(ListsInterface::class);
+        $eventManager = $this->createMock(ManagerInterface::class);
+        $localeListsMock = $this->createMock(ListsInterface::class);
         $localeListsMock->expects($this->any())->method('getCountryTranslation')->willReturnArgument(0);
 
-        $fetchStrategy = $this->getMockForAbstractClass(
-            FetchStrategyInterface::class
-        );
+        $fetchStrategy = $this->createMock(FetchStrategyInterface::class);
         $entityFactory = $this->createMock(EntityFactory::class);
-        $this->scopeConfigMock = $this->getMockForAbstractClass(ScopeConfigInterface::class);
-        $logger = $this->getMockForAbstractClass(LoggerInterface::class);
+        $this->scopeConfigMock = $this->createMock(ScopeConfigInterface::class);
+        $logger = $this->createMock(LoggerInterface::class);
         $countryFactory = $this->createMock(CountryFactory::class);
         $helperDataMock = $this->createMock(Data::class);
-        $this->storeManagerMock = $this->getMockForAbstractClass(StoreManagerInterface::class);
+        $this->storeManagerMock = $this->createMock(StoreManagerInterface::class);
         $objectManager = new ObjectManager($this);
         $arguments = [
             'logger' => $logger,
@@ -94,15 +85,15 @@ class CollectionTest extends TestCase
     }
 
     /**
-     * @dataProvider toOptionArrayDataProvider
      * @param array $optionsArray
      * @param string|boolean $emptyLabel
      * @param string|array $foregroundCountries
      * @param array $expectedResults
      */
+    #[DataProvider('toOptionArrayDataProvider')]
     public function testToOptionArray($optionsArray, $emptyLabel, $foregroundCountries, $expectedResults)
     {
-        $website1 = $this->getMockForAbstractClass(WebsiteInterface::class);
+        $website1 = $this->createMock(WebsiteInterface::class);
         $website1->expects($this->atLeastOnce())
             ->method('getId')
             ->willReturn(1);
@@ -125,7 +116,7 @@ class CollectionTest extends TestCase
     /**
      * @return array
      */
-    public function toOptionArrayDataProvider()
+    public static function toOptionArrayDataProvider()
     {
         $optionsArray = [
             ['iso2_code' => 'AD', 'country_id' => 'AD', 'name' => ''],

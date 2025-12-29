@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -26,6 +26,7 @@ use Magento\Framework\Registry;
 use Magento\Framework\View\Result\PageFactory;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -33,6 +34,8 @@ use PHPUnit\Framework\TestCase;
  */
 class SaveTest extends TestCase
 {
+    use MockCreationTrait;
+
     /** @var Save */
     private $controller;
 
@@ -92,10 +95,8 @@ class SaveTest extends TestCase
         $this->contextMock = $this->getMockBuilder(Context::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->registryMock = $this->getMockBuilder(Registry::class)
-            ->getMockForAbstractClass();
-        $this->groupRepositoryMock = $this->getMockBuilder(GroupRepositoryInterface::class)
-            ->getMockForAbstractClass();
+        $this->registryMock = $this->createMock(Registry::class);
+        $this->groupRepositoryMock = $this->createMock(GroupRepositoryInterface::class);
         $this->groupInterfaceFactoryMock = $this->getMockBuilder(GroupInterfaceFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -109,34 +110,30 @@ class SaveTest extends TestCase
         $this->dataObjectProcessorMock = $this->getMockBuilder(DataObjectProcessor::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->requestMock = $this->getMockBuilder(RequestInterface::class)
-            ->getMockForAbstractClass();
+        $this->requestMock = $this->createMock(\Magento\Framework\App\Request\Http::class);
         $this->resultRedirectFactoryMock = $this->getMockBuilder(RedirectFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->resultRedirectMock = $this->getMockBuilder(Redirect::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->messageManagerMock = $this->getMockBuilder(ManagerInterface::class)
-            ->getMockForAbstractClass();
+        $this->messageManagerMock = $this->createMock(ManagerInterface::class);
         $this->resultForwardMock = $this->getMockBuilder(Forward::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->groupMock = $this->getMockBuilder(GroupInterface::class)
-            ->onlyMethods(['setExtensionAttributes'])
-            ->getMockForAbstractClass();
-        $this->sessionMock = $this->getMockBuilder(Session::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['setCustomerGroupData'])
-            ->getMock();
-        $this->groupExtensionFactoryMock = $this->getMockBuilder(GroupExtensionInterfaceFactory::class)
-            ->onlyMethods(['create'])
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-        $this->groupExtensionMock = $this->getMockBuilder(GroupExtension::class)
-            ->addMethods(['setExcludeWebsiteIds'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->groupMock = $this->createMock(GroupInterface::class);
+        $this->sessionMock = $this->createPartialMockWithReflection(
+            Session::class,
+            ['setCustomerGroupData']
+        );
+        $this->groupExtensionFactoryMock = $this->createPartialMock(
+            GroupExtensionInterfaceFactory::class,
+            ['create']
+        );
+        $this->groupExtensionMock = $this->createPartialMockWithReflection(
+            GroupExtension::class,
+            ['setExcludeWebsiteIds']
+        );
 
         $this->contextMock->expects(self::once())
             ->method('getMessageManager')

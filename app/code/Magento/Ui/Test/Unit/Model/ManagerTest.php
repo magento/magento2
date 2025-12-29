@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -232,7 +232,7 @@ class ManagerTest extends TestCase
     /**
      * @return array
      */
-    public function getComponentData(): array
+    public static function getComponentData(): array
     {
         $cachedData = new \ArrayObject(
             [
@@ -345,7 +345,7 @@ class ManagerTest extends TestCase
     /**
      * @return array
      */
-    public function getComponentDataProvider(): array
+    public static function getComponentDataProvider(): array
     {
         return [
             [

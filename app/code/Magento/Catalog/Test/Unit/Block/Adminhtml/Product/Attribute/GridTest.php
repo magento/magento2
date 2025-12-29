@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -46,7 +46,7 @@ class GridTest extends TestCase
 
         $filesystem = $this->createMock(Filesystem::class);
 
-        $urlBuilder = $this->getMockForAbstractClass(UrlInterface::class);
+        $urlBuilder = $this->createMock(UrlInterface::class);
         $urlBuilder->expects(
             $this->once()
         )->method(
@@ -60,7 +60,7 @@ class GridTest extends TestCase
 
         $context = $this->createMock(Context::class);
         $context->expects($this->once())->method('getUrlBuilder')->willReturn($urlBuilder);
-        $context->expects($this->any())->method('getFilesystem')->willReturn($filesystem);
+        $context->method('getFilesystem')->willReturn($filesystem);
 
         $data = ['context' => $context];
 

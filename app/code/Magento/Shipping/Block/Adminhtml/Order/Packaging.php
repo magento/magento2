@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Shipping\Block\Adminhtml\Order;
@@ -18,14 +18,14 @@ use Magento\Shipping\Helper\Carrier;
 class Packaging extends \Magento\Backend\Block\Template
 {
     /**
-     * Source size model
+     * Source size model instance
      *
      * @var \Magento\Shipping\Model\Carrier\Source\GenericInterface
      */
     protected $_sourceSizeModel;
 
     /**
-     * Core registry
+     * Core registry instance
      *
      * @var \Magento\Framework\Registry
      */
@@ -87,42 +87,29 @@ class Packaging extends \Magento\Backend\Block\Template
     {
         $shipmentId = $this->getShipment()->getId();
         $orderId = $this->getRequest()->getParam('order_id');
-        $urlParams = [];
-
         $itemsQty = [];
         $itemsPrice = [];
         $itemsName = [];
         $itemsWeight = [];
         $itemsProductId = [];
         $itemsOrderItemId = [];
-        if ($shipmentId) {
-            $urlParams['shipment_id'] = $shipmentId;
-            $createLabelUrl = $this->getUrl('adminhtml/order_shipment/createLabel', $urlParams);
-            $itemsGridUrl = $this->getUrl('adminhtml/order_shipment/getShippingItemsGrid', $urlParams);
-            foreach ($this->getShipment()->getAllItems() as $item) {
-                $itemsQty[$item->getId()] = $item->getQty();
-                $itemsPrice[$item->getId()] = $item->getPrice();
-                $itemsName[$item->getId()] = $item->getName();
-                $itemsWeight[$item->getId()] = $item->getWeight();
-                $itemsProductId[$item->getId()] = $item->getProductId();
-                $itemsOrderItemId[$item->getId()] = $item->getOrderItemId();
-            }
-        } else {
-            if ($orderId) {
-                $urlParams['order_id'] = $orderId;
-                $createLabelUrl = $this->getUrl('adminhtml/order_shipment/save', $urlParams);
-                $itemsGridUrl = $this->getUrl('adminhtml/order_shipment/getShippingItemsGrid', $urlParams);
 
-                foreach ($this->getShipment()->getAllItems() as $item) {
-                    $itemsQty[$item->getOrderItemId()] = $item->getQty() * 1;
-                    $itemsPrice[$item->getOrderItemId()] = $item->getPrice();
-                    $itemsName[$item->getOrderItemId()] = $item->getName();
-                    $itemsWeight[$item->getOrderItemId()] = $item->getWeight();
-                    $itemsProductId[$item->getOrderItemId()] = $item->getProductId();
-                    $itemsOrderItemId[$item->getOrderItemId()] = $item->getOrderItemId();
-                }
-            }
+        $urlParams = $shipmentId ? ['shipment_id' => $shipmentId] : ($orderId ? ['order_id' => $orderId] : []);
+        $createLabelUrl = $this->getUrl(
+            $shipmentId ? 'adminhtml/order_shipment/createLabel' : 'adminhtml/order_shipment/save',
+            $urlParams
+        );
+        $itemsGridUrl = $this->getUrl('adminhtml/order_shipment/getShippingItemsGrid', $urlParams);
+
+        foreach ($this->getShipment()->getAllItems() as $item) {
+            $itemsQty[$item->getOrderItemId()] = $item->getQty() * 1;
+            $itemsPrice[$item->getOrderItemId()] = $item->getPrice();
+            $itemsName[$item->getOrderItemId()] = $item->getName();
+            $itemsWeight[$item->getOrderItemId()] = $item->getWeight();
+            $itemsProductId[$item->getOrderItemId()] = $item->getProductId();
+            $itemsOrderItemId[$item->getOrderItemId()] = $item->getOrderItemId();
         }
+
         $data = [
             'createLabelUrl' => $createLabelUrl,
             'itemsGridUrl' => $itemsGridUrl,

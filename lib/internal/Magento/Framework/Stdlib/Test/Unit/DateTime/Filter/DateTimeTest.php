@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -43,7 +43,7 @@ class DateTimeTest extends TestCase
     /**
      * @return array
      */
-    public function dateTimeFilterDataProvider()
+    public static function dateTimeFilterDataProvider()
     {
         return [
             ['2000-01-01 02:30:00', '2000-01-01 02:30:00'],
@@ -79,7 +79,7 @@ class DateTimeTest extends TestCase
     /**
      * @return array
      */
-    public function dateTimeFilterWithExceptionDataProvider()
+    public static function dateTimeFilterWithExceptionDataProvider()
     {
         return [
             ['12-31-2000 22:22:22'],

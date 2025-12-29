@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -16,6 +16,7 @@ use Magento\Framework\Locale\ResolverInterface as LocalResolverInterface;
 use Magento\Framework\NumberFormatterFactory;
 use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -53,12 +54,11 @@ class CurrencyTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->localeCurrencyMock = $this->getMockForAbstractClass(CurrencyInterface::class);
+        $this->localeCurrencyMock = $this->createMock(CurrencyInterface::class);
         $currencyFilterFactory = $this->getMockBuilder(\Magento\Directory\Model\Currency\FilterFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->localeResolver = $this->getMockBuilder(LocalResolverInterface::class)
-            ->getMockForAbstractClass();
+        $this->localeResolver = $this->createMock(LocalResolverInterface::class);
         $this->numberFormatterFactory = $this->getMockBuilder(NumberFormatterFactory::class)
             ->disableOriginalConstructor()
             ->onlyMethods(['create'])
@@ -102,11 +102,11 @@ class CurrencyTest extends TestCase
     }
 
     /**
-     * @dataProvider getOutputFormatDataProvider
      * @param string $locale
      * @param string $currency
      * @param string $expected
      */
+    #[DataProvider('getOutputFormatDataProvider')]
     public function testGetOutputFormat(string $locale, string $currency, string $expected): void
     {
         $this->localeResolver->expects(self::atLeastOnce())
@@ -136,18 +136,17 @@ class CurrencyTest extends TestCase
      *
      * @return array
      */
-    public function getOutputFormatDataProvider(): array
+    public static function getOutputFormatDataProvider(): array
     {
-        $ar_DZ = "\u{062C}.\u{0645}.\u{200F}\u{00A0}%s";
-        if (version_compare(PHP_VERSION, '8.3', '>=')) {
-            $ar_DZ = "%s\u{00A0}\u{062C}.\u{0645}.\u{200F}";
-        }
+        // Use dynamic detection for problematic locale/currency combinations!
+        $ar_DZ_EGP = self::getExpectedFormatForLocale('ar_DZ', 'EGP');
+
         return [
             'en_US:USD' => ['en_US', 'USD', '$%s'],
             'en_US:PLN' => ['en_US', 'PLN', "PLN\u{00A0}%s"],
             'en_US:PKR' => ['en_US', 'PKR', "PKR\u{00A0}%s"],
             'af_ZA:VND' => ['af_ZA', 'VND', "\u{20AB}%s"],
-            'ar_DZ:EGP' => ['ar_DZ', 'EGP', $ar_DZ],
+            'ar_DZ:EGP' => ['ar_DZ', 'EGP', $ar_DZ_EGP],
             'ar_SA:USD' => ['ar_SA', 'USD', "%s\u{00A0}US$"],
             'ar_SA:LBP' => ['ar_SA', 'LBP', "%s\u{00A0}\u{0644}.\u{0644}.\u{200F}"],
             'fa_IR:USD' => ['fa_IR', 'USD', "\u{200E}$%s"],
@@ -163,13 +162,69 @@ class CurrencyTest extends TestCase
     }
 
     /**
-     * @dataProvider getFormatTxtNumberFormatterDataProvider
+     * Get expected format for a specific locale/currency combination
+     * This handles cases where intl extension version affects formatting
+     *
+     * @param string $locale
+     * @param string $currency
+     * @return string
+     */
+    private static function getExpectedFormatForLocale(string $locale, string $currency): string
+    {
+        // Define known problematic combinations and their expected formats
+        $problematicFormats = [
+            'ar_DZ:EGP' => [
+                'old' => "\u{062C}.\u{0645}.\u{200F}\u{00A0}%s",
+                'new' => "%s\u{00A0}\u{062C}.\u{0645}.\u{200F}"
+            ]
+        ];
+
+        $key = $locale . ':' . $currency;
+
+        if (isset($problematicFormats[$key])) {
+            // Check if we're using a newer intl version that changes formatting
+            if (self::isNewerIntlVersion()) {
+                return $problematicFormats[$key]['new'];
+            }
+            return $problematicFormats[$key]['old'];
+        }
+
+        // For non-problematic combinations, return a default format
+        // This could be enhanced with more specific formats as needed
+        return "%s";
+    }
+
+    /**
+     * Check if the current intl extension version uses newer formatting rules
+     *
+     * @return bool
+     */
+    private static function isNewerIntlVersion(): bool
+    {
+        // Check intl extension version
+        if (extension_loaded('intl')) {
+            $intlVersion = INTL_ICU_VERSION ?? '0.0.0';
+
+            // ICU 72+ (released around 2022) introduced changes to RTL formatting
+            // This is a more reliable indicator than PHP version
+            if (version_compare($intlVersion, '72.0', '>=')) {
+                return true;
+            }
+        }
+
+        // Fallback: Check PHP version as a rough indicator
+        // This is less reliable but provides some backward compatibility
+        return version_compare(PHP_VERSION, '8.3', '>=');
+    }
+
+    /**
      * @param string $locale
      * @param string $currency
      * @param string $price
      * @param array $options
      * @param string $expected
      */
+    #[DataProvider('getFormatTxtNumberFormatterDataProvider')]
     public function testFormatTxtWithNumberFormatter(
         string $locale,
         string $currency,
@@ -203,7 +258,7 @@ class CurrencyTest extends TestCase
      *
      * @return array
      */
-    public function getFormatTxtNumberFormatterDataProvider(): array
+    public static function getFormatTxtNumberFormatterDataProvider(): array
     {
         return [
             ['en_US', 'USD', '9999', [], '$9,999.00'],
@@ -241,16 +296,18 @@ class CurrencyTest extends TestCase
                 ['precision' => 2, 'symbol' => '#', 'display' => CurrencyData::NO_SYMBOL],
                 '9,999.99'
             ],
+            ['he_IL', 'USD', '9999', [], '9,999.00 ‏$'],
+            ['he_IL', 'USD', '9999', ['display' => CurrencyData::NO_SYMBOL], '9,999.00'],
         ];
     }
 
     /**
-     * @dataProvider getFormatTxtZendCurrencyDataProvider
      * @param string $price
      * @param array $options
      * @param string $expected
      * @throws CurrencyException
      */
+    #[DataProvider('getFormatTxtZendCurrencyDataProvider')]
     public function testFormatTxtWithZendCurrency(string $price, array $options, string $expected): void
     {
         $this->localeCurrencyMock
@@ -272,7 +329,7 @@ class CurrencyTest extends TestCase
      *
      * @return array
      */
-    public function getFormatTxtZendCurrencyDataProvider(): array
+    public static function getFormatTxtZendCurrencyDataProvider(): array
     {
         return [
             ['9999', ['display' => Currency::USE_SYMBOL, 'foo' => 'bar'], '$9,999.00'],

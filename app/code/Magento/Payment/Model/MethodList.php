@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Payment\Model;
@@ -67,7 +67,7 @@ class MethodList
      * @param \Magento\Quote\Api\Data\CartInterface $quote
      * @return \Magento\Payment\Model\MethodInterface[]
      */
-    public function getAvailableMethods(\Magento\Quote\Api\Data\CartInterface $quote = null)
+    public function getAvailableMethods(?\Magento\Quote\Api\Data\CartInterface $quote = null)
     {
         $store = $quote ? $quote->getStoreId() : null;
         $availableMethods = [];

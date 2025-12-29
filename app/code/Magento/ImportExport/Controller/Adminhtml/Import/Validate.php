@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -28,6 +28,11 @@ class Validate extends ImportResultController implements HttpPostActionInterface
     private $import;
 
     /**
+     * @var Import
+     */
+    private $_validateRowError = false;
+
+    /**
      * Validate uploaded files action
      *
      * @return ResultInterface
@@ -46,10 +51,16 @@ class Validate extends ImportResultController implements HttpPostActionInterface
             $import = $this->getImport()->setData($data);
             try {
                 $source = $import->uploadFileAndGetSource();
+                $this->_eventManager->dispatch('log_admin_import');
                 $this->processValidationResult($import->validateSource($source), $resultBlock);
                 $ids = $import->getValidatedIds();
                 if (count($ids) > 0) {
                     $resultBlock->addAction('value', Import::FIELD_IMPORT_IDS, $ids);
+                    $resultBlock->addAction(
+                        'value',
+                        '_import_history_id',
+                        $this->historyModel->getId()
+                    );
                 }
             } catch (\Magento\Framework\Exception\LocalizedException $e) {
                 $resultBlock->addError($e->getMessage());
@@ -80,11 +91,11 @@ class Validate extends ImportResultController implements HttpPostActionInterface
     {
         $import = $this->getImport();
         $errorAggregator = $import->getErrorAggregator();
-
         if ($import->getProcessedRowsCount()) {
             if ($validationResult) {
                 $totalError = $errorAggregator->getErrorsCount();
                 $totalRows = $import->getProcessedRowsCount();
+                $this->validateRowError($errorAggregator, $totalRows);
                 $this->addMessageForValidResult($resultBlock, $totalError, $totalRows);
             } else {
                 $resultBlock->addError(
@@ -113,6 +124,26 @@ class Validate extends ImportResultController implements HttpPostActionInterface
                 $resultBlock->addError(__('This file is empty. Please try another one.'));
             }
         }
+    }
+
+    /**
+     * Validate row error.
+     *
+     * @param object $errorAggregator
+     * @param int $totalRows
+     * @return bool
+     */
+    private function validateRowError(object $errorAggregator, int $totalRows): bool
+    {
+        $errors = $errorAggregator->getAllErrors();
+        $rowNumber = [];
+        foreach ($errors as $error) {
+            if ($error->getRowNumber()) {
+                $rowNumber = array_unique([...$rowNumber , ...[$error->getRowNumber()]]);
+            }
+        }
+        (count($rowNumber) < $totalRows)? $this->_validateRowError = true : $this->_validateRowError = false;
+        return $this->_validateRowError;
     }
 
     /**
@@ -163,7 +194,7 @@ class Validate extends ImportResultController implements HttpPostActionInterface
      */
     private function addMessageForValidResult(Result $resultBlock, $totalError, $totalRows)
     {
-        if ($this->getImport()->isImportAllowed() && $totalRows > $totalError) {
+        if ($this->getImport()->isImportAllowed() && ($totalRows > $totalError || $this->_validateRowError)) {
             $resultBlock->addSuccess(__('File is valid! To start import process press "Import" button'), true);
         } else {
             $resultBlock->addError(__('The file is valid, but we can\'t import it for some reason.'));

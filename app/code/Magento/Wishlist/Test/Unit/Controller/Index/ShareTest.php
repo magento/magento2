@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -54,7 +54,7 @@ class ShareTest extends TestCase
 
     public function testExecute()
     {
-        $resultMock = $this->getMockForAbstractClass(ResultInterface::class);
+        $resultMock = $this->createMock(ResultInterface::class);
 
         $this->customerSessionMock->expects($this->once())->method('authenticate')
             ->willReturn(true);

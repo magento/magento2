@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -135,18 +135,18 @@ class PriceBoxTest extends TestCase
     /**
      * @return array
      */
-    public function toHtmlDataProvider()
+    public static function toHtmlDataProvider()
     {
         return [
             [
                 'data' => [],
-                'price_code' => 'test_price',
-                'css_classes' => 'price-test_price',
+                'priceCode' => 'test_price',
+                'cssClasses' => 'price-test_price',
             ],
             [
                 'data' => ['css_classes' => 'some_css_class'],
-                'price_code' => 'test_price',
-                'css_classes' => 'some_css_class price-test_price'
+                'priceCode' => 'test_price',
+                'cssClasses' => 'some_css_class price-test_price'
             ]];
     }
 
@@ -241,7 +241,7 @@ class PriceBoxTest extends TestCase
     /**
      * @return array
      */
-    public function getPriceIdProvider()
+    public static function getPriceIdProvider()
     {
         return [
             ['prefix', 'suffix', 'default_prefix', 'default_suffix'],

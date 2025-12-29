@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -97,9 +97,7 @@ class IndexTest extends TestCase
 
         $this->objectManagerMock = $this->createMock(ObjectManager::class);
 
-        $this->messageManager = $this->getMockBuilder(ManagerInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->messageManager = $this->createMock(ManagerInterface::class);
 
         $context = $this->createMock(Context::class);
         $context->expects($this->once())
@@ -121,9 +119,7 @@ class IndexTest extends TestCase
         $this->cart = $this->getMockBuilder(Cart::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->scopeConfig = $this->getMockBuilder(ScopeConfigInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->scopeConfig = $this->createMock(ScopeConfigInterface::class);
         $this->resultPageFactory = $this->getMockBuilder(PageFactory::class)
             ->disableOriginalConstructor()
             ->onlyMethods(['create'])

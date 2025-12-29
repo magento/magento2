@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -15,6 +15,7 @@ use Magento\Payment\Observer\AbstractDataAssignObserver;
 use Magento\Quote\Api\Data\PaymentInterface;
 use Magento\Vault\Model\Ui\VaultConfigProvider;
 use Magento\Vault\Observer\VaultEnableAssigner;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -38,8 +39,8 @@ class VaultEnableAssignerTest extends TestCase
     /**
      * @param string $activeCode
      * @param boolean $expectedBool
-     * @dataProvider booleanDataProvider
      */
+    #[DataProvider('booleanDataProvider')]
     public function testExecute($activeCode, $expectedBool)
     {
         $dataObject = new DataObject(
@@ -49,7 +50,7 @@ class VaultEnableAssignerTest extends TestCase
                 ]
             ]
         );
-        $paymentModel = $this->getMockForAbstractClass(InfoInterface::class);
+        $paymentModel = $this->createMock(InfoInterface::class);
 
         $paymentModel->expects(static::once())
             ->method('setAdditionalInformation')
@@ -73,7 +74,7 @@ class VaultEnableAssignerTest extends TestCase
     /**
      * @return array
      */
-    public function booleanDataProvider()
+    public static function booleanDataProvider()
     {
         return [
             ['true', true],
@@ -92,7 +93,7 @@ class VaultEnableAssignerTest extends TestCase
                 PaymentInterface::KEY_ADDITIONAL_DATA => []
             ]
         );
-        $paymentModel = $this->getMockForAbstractClass(InfoInterface::class);
+        $paymentModel = $this->createMock(InfoInterface::class);
 
         $paymentModel->expects(static::never())
             ->method('setAdditionalInformation');
@@ -115,12 +116,8 @@ class VaultEnableAssignerTest extends TestCase
      */
     private function getPreparedObserverWithMap(array $returnMap)
     {
-        $observer = $this->getMockBuilder(Observer::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $event = $this->getMockBuilder(Event::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $observer = $this->createMock(Observer::class);
+        $event = $this->createMock(Event::class);
 
         $observer->expects(static::atLeastOnce())
             ->method('getEvent')

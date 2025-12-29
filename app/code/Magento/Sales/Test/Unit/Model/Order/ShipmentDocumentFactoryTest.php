@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -14,6 +14,7 @@ use Magento\Sales\Api\Data\ShipmentInterface;
 use Magento\Sales\Api\Data\ShipmentItemCreationInterface;
 use Magento\Sales\Api\Data\ShipmentTrackCreationInterface;
 use Magento\Sales\Model\Order;
+use Magento\Sales\Model\Order\Shipment;
 use Magento\Sales\Model\Order\Shipment\Track;
 use Magento\Sales\Model\Order\Shipment\TrackFactory;
 use Magento\Sales\Model\Order\ShipmentDocumentFactory;
@@ -21,12 +22,15 @@ use Magento\Sales\Model\Order\ShipmentDocumentFactory\ExtensionAttributesProcess
 use Magento\Sales\Model\Order\ShipmentFactory;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class ShipmentDocumentFactoryTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var MockObject|ShipmentFactory
      */
@@ -84,47 +88,31 @@ class ShipmentDocumentFactoryTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->shipmentFactoryMock = $this->getMockBuilder(ShipmentFactory::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->shipmentFactoryMock = $this->createMock(ShipmentFactory::class);
 
-        $this->orderMock = $this->getMockBuilder(Order::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->orderMock = $this->createMock(Order::class);
 
-        $this->itemMock = $this->getMockBuilder(ShipmentItemCreationInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->itemMock = $this->createMock(ShipmentItemCreationInterface::class);
 
-        $this->commentMock = $this->getMockBuilder(ShipmentCommentCreationInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->commentMock = $this->createMock(ShipmentCommentCreationInterface::class);
 
-        $this->shipmentMock = $this->getMockBuilder(ShipmentInterface::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['addComment', 'addTrack', 'setCustomerNote', 'setCustomerNoteNotify'])
-            ->getMockForAbstractClass();
+        $this->shipmentMock = $this->createPartialMockWithReflection(
+            Shipment::class,
+            ['addComment', 'addTrack', 'setCustomerNote', 'setCustomerNoteNotify']
+        );
 
-        $this->hydratorPoolMock = $this->getMockBuilder(HydratorPool::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->hydratorPoolMock = $this->createMock(HydratorPool::class);
 
         $this->trackFactoryMock = $this->getMockBuilder(TrackFactory::class)
             ->onlyMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->trackMock = $this->getMockBuilder(Track::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->trackMock = $this->createMock(Track::class);
 
-        $this->hydratorMock = $this->getMockBuilder(HydratorInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->hydratorMock = $this->createMock(HydratorInterface::class);
 
-        $this->extensionAttributeProcessorMock = $this->getMockBuilder(ExtensionAttributesProcessor::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->extensionAttributeProcessorMock = $this->createMock(ExtensionAttributesProcessor::class);
 
         $this->shipmentDocumentFactory = new ShipmentDocumentFactory(
             $this->shipmentFactoryMock,

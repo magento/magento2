@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -52,11 +52,11 @@ class AnalyticsTokenTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->reinitableConfigMock = $this->getMockForAbstractClass(ReinitableConfigInterface::class);
+        $this->reinitableConfigMock = $this->createMock(ReinitableConfigInterface::class);
 
-        $this->configMock = $this->getMockForAbstractClass(ScopeConfigInterface::class);
+        $this->configMock = $this->createMock(ScopeConfigInterface::class);
 
-        $this->configWriterMock = $this->getMockForAbstractClass(WriterInterface::class);
+        $this->configWriterMock = $this->createMock(WriterInterface::class);
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
 

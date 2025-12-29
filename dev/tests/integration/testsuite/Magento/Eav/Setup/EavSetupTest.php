@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Eav\Setup;
@@ -51,7 +51,7 @@ class EavSetupTest extends \PHPUnit\Framework\TestCase
      *
      * @return array
      */
-    public function addAttributeDataProvider()
+    public static function addAttributeDataProvider()
     {
         return [
             ['eav_setup_test'],

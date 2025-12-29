@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -13,6 +13,7 @@ use Magento\Framework\Mail\TransportInterface;
 use Magento\Store\Model\ScopeInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Covers \Magento\Email\Model\Transport
@@ -46,8 +47,8 @@ class TransportInterfacePluginTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->transportMock = $this->getMockForAbstractClass(TransportInterface::class);
-        $this->scopeConfigMock = $this->getMockForAbstractClass(ScopeConfigInterface::class);
+        $this->transportMock = $this->createMock(TransportInterface::class);
+        $this->scopeConfigMock = $this->createMock(ScopeConfigInterface::class);
         $this->proceedMock = function () {
             $this->isProceedMockCalled = true;
         };
@@ -56,10 +57,10 @@ class TransportInterfacePluginTest extends TestCase
     }
 
     /**
-     * @dataProvider sendMessageDataProvider
      * @param bool $isDisabled
      * @param bool $shouldProceedRun
      */
+    #[DataProvider('sendMessageDataProvider')]
     public function testAroundSendMessage(bool $isDisabled, bool $shouldProceedRun)
     {
         $this->isProceedMockCalled = false;
@@ -76,7 +77,7 @@ class TransportInterfacePluginTest extends TestCase
      * Data provider for testAroundSendMessage
      * @return array
      */
-    public function sendMessageDataProvider()
+    public static function sendMessageDataProvider()
     {
         return [
             [false, true],

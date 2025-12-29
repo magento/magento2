@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -59,15 +59,11 @@ class DataTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->eventManagerMock = $this->getMockBuilder(ManagerInterface::class)
-            ->getMockForAbstractClass();
+        $this->eventManagerMock = $this->createMock(ManagerInterface::class);
 
-        $this->scopeConfigMock = $this->getMockBuilder(ScopeConfigInterface::class)
-            ->getMockForAbstractClass();
+        $this->scopeConfigMock = $this->createMock(ScopeConfigInterface::class);
 
-        $this->context = $this->getMockBuilder(Context::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->context = $this->createMock(Context::class);
 
         $this->context->expects($this->any())
             ->method('getEventManager')
@@ -77,16 +73,11 @@ class DataTest extends TestCase
             ->method('getScopeConfig')
             ->willReturn($this->scopeConfigMock);
 
-        $this->robots = $this->getMockBuilder(Robots::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->robots = $this->createMock(Robots::class);
 
-        $this->storeResolver = $this->getMockBuilder(StoreResolver::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->storeResolver = $this->createMock(StoreResolver::class);
 
-        $this->storeManager = $this->getMockBuilder(StoreManagerInterface::class)
-            ->getMockForAbstractClass();
+        $this->storeManager = $this->createMock(StoreManagerInterface::class);
 
         $this->block = new Data(
             $this->context,
@@ -121,8 +112,7 @@ class DataTest extends TestCase
     {
         $storeId = 1;
 
-        $storeMock = $this->getMockBuilder(StoreInterface::class)
-            ->getMock();
+        $storeMock = $this->createMock(StoreInterface::class);
 
         $this->storeManager->expects($this->once())
             ->method('getStore')

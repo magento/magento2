@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Sales\Model\Order;
 
@@ -77,7 +77,7 @@ class Config implements ResetAfterRequestInterface
         \Magento\Sales\Model\Order\StatusFactory $orderStatusFactory,
         \Magento\Sales\Model\ResourceModel\Order\Status\CollectionFactory $orderStatusCollectionFactory,
         \Magento\Framework\App\State $state,
-        StatusLabel $statusLabel = null
+        ?StatusLabel $statusLabel = null
     ) {
         $this->orderStatusFactory = $orderStatusFactory;
         $this->orderStatusCollectionFactory = $orderStatusCollectionFactory;

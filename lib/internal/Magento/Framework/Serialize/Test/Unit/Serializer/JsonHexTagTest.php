@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 
 declare(strict_types=1);
@@ -43,7 +43,7 @@ class JsonHexTagTest extends TestCase
     /**
      * @return array
      */
-    public function serializeDataProvider()
+    public static function serializeDataProvider()
     {
         $dataObject = new DataObject(['something']);
         return [
@@ -75,7 +75,7 @@ class JsonHexTagTest extends TestCase
     /**
      * @return array
      */
-    public function unserializeDataProvider(): array
+    public static function unserializeDataProvider(): array
     {
         return [
             ['""', ''],
@@ -110,7 +110,7 @@ class JsonHexTagTest extends TestCase
     /**
      * @return array
      */
-    public function unserializeExceptionDataProvider(): array
+    public static function unserializeExceptionDataProvider(): array
     {
         return [
             [''],

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -20,7 +20,10 @@ use Magento\Framework\View\Element\Html\Date;
 use Magento\Framework\View\Element\Html\Select;
 use Magento\Framework\View\Layout;
 use Magento\ImportExport\Block\Adminhtml\Export\Filter;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\ImportExport\Model\ResourceModel\Export\AttributeGridCollectionFactory;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -29,6 +32,7 @@ use PHPUnit\Framework\TestCase;
  */
 class FilterTest extends TestCase
 {
+    use MockCreationTrait;
     /**
      * @var Filter|MockObject
      */
@@ -44,10 +48,13 @@ class FilterTest extends TestCase
      */
     protected function setUp(): void
     {
-        $context = $this->getMockBuilder(Context::class)
-            ->onlyMethods(['getFileSystem', 'getEscaper', 'getLocaleDate', 'getLayout'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $objectManager = new ObjectManager($this);
+        $objectManager->prepareObjectManager();
+
+        $context = $this->createPartialMock(
+            Context::class,
+            ['getFileSystem', 'getEscaper', 'getLocaleDate', 'getLayout']
+        );
         $filesystem = $this->createMock(Filesystem::class);
         $context->expects($this->any())->method('getFileSystem')->willReturn($filesystem);
         $escaper = $this->createPartialMock(Escaper::class, ['escapeHtml']);
@@ -76,16 +83,12 @@ class FilterTest extends TestCase
      * @param array $attributeData
      * @param array $values
      * @param array $expect
-     * @dataProvider dateFilterDataProvider
      */
+    #[DataProvider('dateFilterDataProvider')]
     public function testDateFilter(array $attributeData, array $values, array $expect): void
     {
         $type = Date::class;
-        $block = $block = $this->getMockBuilder($type)
-            ->addMethods(['setValue'])
-            ->onlyMethods(['getHtml'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $block = $this->createPartialMockWithReflection($type, ['getHtml', 'setValue']);
         $block->expects($this->exactly(2))
             ->method('setValue')
             ->willReturnCallback(function (...$expect) use ($block) {
@@ -134,16 +137,13 @@ class FilterTest extends TestCase
      * @param array $attributeData
      * @param array $values
      * @param array $expect
-     * @dataProvider selectFilterDataProvider
      */
+    #[DataProvider('selectFilterDataProvider')]
     public function testSelectFilter(array $attributeData, array $values, array $expect): void
     {
         $html = '<select></select>';
         $type = Select::class;
-        $block = $block = $this->getMockBuilder($type)
-            ->onlyMethods(['getHtml'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $block = $this->createPartialMock($type, ['getHtml']);
         $block->expects($this->once())
             ->method('getHtml')
             ->willReturn($html);
@@ -228,8 +228,8 @@ class FilterTest extends TestCase
      * @param array $attributeData
      * @param array $values
      * @param array $expect
-     * @dataProvider inputFilterDataProvider
      */
+    #[DataProvider('inputFilterDataProvider')]
     public function testInputFilter(array $attributeData, array $values, array $expect): void
     {
         $this->layout->expects($this->never())
@@ -276,8 +276,8 @@ class FilterTest extends TestCase
      * @param array $attributeData
      * @param array $values
      * @param array $expect
-     * @dataProvider numberFilterDataProvider
      */
+    #[DataProvider('numberFilterDataProvider')]
     public function testNumberFilter(array $attributeData, array $values, array $expect): void
     {
         $this->layout->expects($this->never())
@@ -320,9 +320,7 @@ class FilterTest extends TestCase
      */
     private function getAttributeMock(array $data): Attribute
     {
-        $attribute = $this->getMockBuilder(Attribute::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $attribute = $this->createPartialMock(Attribute::class, []);
 
         $attribute->addData($data);
 

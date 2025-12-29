@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -11,6 +11,7 @@ use Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\AttributeAdapter;
 use Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider\FieldName\Resolver\SpecialAttribute;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * @SuppressWarnings(PHPMD)
@@ -37,11 +38,11 @@ class SpecialAttributeTest extends TestCase
     }
 
     /**
-     * @dataProvider getFieldNameProvider
      * @param $attributeCode
      * @param $expected
      * @return void
      */
+    #[DataProvider('getFieldNameProvider')]
     public function testGetFieldName($attributeCode, $expected)
     {
         $attributeMock = $this->getMockBuilder(AttributeAdapter::class)
@@ -61,7 +62,7 @@ class SpecialAttributeTest extends TestCase
     /**
      * @return array
      */
-    public function getFieldNameProvider()
+    public static function getFieldNameProvider()
     {
         return [
             ['id', 'id'],

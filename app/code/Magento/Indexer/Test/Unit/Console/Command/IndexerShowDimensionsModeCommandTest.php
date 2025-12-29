@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -144,7 +144,7 @@ class IndexerShowDimensionsModeCommandTest extends AbstractIndexerCommandCommonS
         return [
             'get_all'                => [
                 'command' => [],
-                'output'  => sprintf(
+                'consoleOutput'  => sprintf(
                     '%-50s ',
                     'indexer_title1' . ':'
                 ) . 'none' . PHP_EOL .
@@ -158,7 +158,7 @@ class IndexerShowDimensionsModeCommandTest extends AbstractIndexerCommandCommonS
                 'command' => [
                     'indexer' => ['indexer_1'],
                 ],
-                'output'  => sprintf(
+                'consoleOutput'  => sprintf(
                     '%-50s ',
                     'indexer_title1' . ':'
                 ) . 'none' . PHP_EOL
@@ -168,7 +168,7 @@ class IndexerShowDimensionsModeCommandTest extends AbstractIndexerCommandCommonS
                 'command' => [
                     'indexer' => ['indexer_1', 'indexer_2'],
                 ],
-                'output'  => sprintf(
+                'consoleOutput'  => sprintf(
                     '%-50s ',
                     'indexer_title1' . ':'
                 ) . 'none' . PHP_EOL .

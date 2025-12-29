@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -98,7 +98,7 @@ class FindByUrlRewriteTest extends TestCase
      *
      * @return array
      */
-    public function visibilityWithExpectedResultDataProvider(): array
+    public static function visibilityWithExpectedResultDataProvider(): array
     {
         return [
             'visibility_for_both_product_only_catalog' => [

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -39,24 +39,11 @@ class ApplyRulesTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->productRuleProcessor = $this
-            ->getMockBuilder(ProductRuleProcessor::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->productRuleProcessor = $this->createMock(ProductRuleProcessor::class);
 
-        $this->subject = $this->getMockBuilder(Product::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->subject = $this->createMock(Product::class);
 
-        $this->model = $this->getMockForAbstractClass(
-            AbstractModel::class,
-            [],
-            '',
-            false,
-            true,
-            true,
-            ['getIsMassupdate', 'getId']
-        );
+        $this->model = $this->createPartialMock(AbstractModel::class, []);
 
         $this->plugin = (new ObjectManager($this))->getObject(
             ApplyRules::class,
@@ -68,8 +55,8 @@ class ApplyRulesTest extends TestCase
 
     public function testAfterSave()
     {
-        $this->model->expects($this->once())->method('getIsMassupdate')->willReturn(null);
-        $this->model->expects($this->once())->method('getId')->willReturn(1);
+        $this->model->setIsMassupdate(null);
+        $this->model->setId(1);
 
         $this->productRuleProcessor->expects($this->once())->method('reindexRow')->willReturnSelf();
 

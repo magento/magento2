@@ -1,9 +1,7 @@
 <?php declare(strict_types=1);
 /**
- * \Magento\Integration\Controller\Adminhtml
- *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2024 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Integration\Test\Unit\Controller\Adminhtml;
 
@@ -23,6 +21,7 @@ use Magento\Framework\Event\ManagerInterface;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Registry;
 use Magento\Framework\Simplexml\Element;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\Translate;
 use Magento\Framework\TranslateInterface;
@@ -31,6 +30,7 @@ use Magento\Framework\View\Model\Layout\Merge;
 use Magento\Framework\View\Page\Config;
 use Magento\Framework\View\Page\Title;
 use Magento\Framework\View\Result\Page;
+use Magento\Framework\View\Layout as LayoutModel;
 use Magento\Integration\Api\IntegrationServiceInterface;
 use Magento\Integration\Api\OauthServiceInterface;
 use Magento\Integration\Block\Adminhtml\Integration\Edit\Tab\Info;
@@ -49,6 +49,8 @@ use Psr\Log\LoggerInterface;
  */
 abstract class IntegrationTestCase extends TestCase
 {
+    use MockCreationTrait;
+
     /** @var \Magento\Integration\Controller\Adminhtml\Integration */
     protected $_controller;
 
@@ -146,7 +148,7 @@ abstract class IntegrationTestCase extends TestCase
     protected $resultFactory;
 
     /** Sample integration ID */
-    const INTEGRATION_ID = 1;
+    protected const INTEGRATION_ID = 1;
 
     /**
      * Setup object manager and initialize mocks
@@ -155,21 +157,17 @@ abstract class IntegrationTestCase extends TestCase
     {
         /** @var ObjectManager  $objectManagerHelper */
         $this->_objectManagerHelper = new ObjectManager($this);
-        $this->_objectManagerMock = $this->getMockForAbstractClass(ObjectManagerInterface::class);
+        $this->_objectManagerMock = $this->createMock(ObjectManagerInterface::class);
         // Initialize mocks which are used in several test cases
         $this->_configMock = $this->getMockBuilder(
             ScopeConfigInterface::class
         )->disableOriginalConstructor()
             ->getMock();
-        $this->_eventManagerMock = $this->getMockBuilder(ManagerInterface::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['dispatch'])
-            ->getMockForAbstractClass();
-        $this->_backendSessionMock = $this->getMockBuilder(Session::class)
-            ->addMethods(['getIntegrationData'])
-            ->onlyMethods(['__call'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->_eventManagerMock = $this->createPartialMock(ManagerInterface::class, ['dispatch']);
+        $this->_backendSessionMock = $this->createPartialMockWithReflection(
+            Session::class,
+            ['getIntegrationData', '__call']
+        );
 
         $this->_userMock = $this->getMockBuilder(User::class)
             ->disableOriginalConstructor()
@@ -246,9 +244,11 @@ abstract class IntegrationTestCase extends TestCase
         // Mock Layout passed into constructor
         $this->_viewMock = $this->getMockBuilder(ViewInterface::class)
             ->getMock();
-        $this->_layoutMock = $this->getMockBuilder(LayoutInterface::class)
-            ->addMethods(['getNode'])
-            ->getMockForAbstractClass();
+        // Use concrete Layout class since we need getNode() method which isn't in interface
+        $this->_layoutMock = $this->createPartialMockWithReflection(
+            LayoutModel::class,
+            ['getUpdate', 'getNode', 'getMessagesBlock', 'getBlock']
+        );
         $this->_layoutMergeMock = $this->getMockBuilder(
             Merge::class
         )->disableOriginalConstructor()
@@ -268,7 +268,7 @@ abstract class IntegrationTestCase extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $menuMock = $this->getMockBuilder(\Magento\Backend\Model\Menu::class)
-            ->setConstructorArgs([$this->getMockForAbstractClass(LoggerInterface::class)])
+            ->setConstructorArgs([$this->createMock(LoggerInterface::class)])
             ->getMock();
         $loggerMock = $this->getMockBuilder(LoggerInterface::class)
             ->getMock();
@@ -406,16 +406,14 @@ abstract class IntegrationTestCase extends TestCase
     /**
      * Return integration model mock with sample data.
      *
-     * @return \Magento\Integration\Model\Integration|MockObject
+     * @return IntegrationModel|MockObject
      */
     protected function _getIntegrationModelMock()
     {
-        $integrationModelMock = $this->getMockBuilder(\Magento\Integration\Model\Integration::class)->addMethods(
-            ['setStatus']
-        )
-            ->onlyMethods(['save', '__wakeup', 'getData'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $integrationModelMock = $this->createPartialMockWithReflection(
+            IntegrationModel::class,
+            ['setStatus', 'save', '__wakeup', 'getData']
+        );
 
         $integrationModelMock->expects($this->any())->method('setStatus')->willReturnSelf();
         $integrationModelMock->expects(

@@ -1,13 +1,15 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Catalog\Test\Unit\Helper;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\Catalog\Helper\Product;
+use Magento\Catalog\Model\Product as ProductModel;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\TestCase;
 
@@ -34,52 +36,43 @@ class ProductTest extends TestCase
     /**
      * @param mixed $data
      * @param boolean $result
-     * @dataProvider getData
      */
+    #[DataProvider('getData')]
     public function testIsDataForPriceIndexerWasChanged($data, $result)
     {
+        if (is_callable($data)) {
+            $data = $data($this);
+        }
         $this->assertEquals($this->_productHelper->isDataForPriceIndexerWasChanged($data), $result);
     }
 
+    protected function getMockForCatalogProduct($method)
+    {
+        $product = $this->createMock(ProductModel::class);
+        if ($method!=null) {
+            $product->expects(
+                $this->once()
+            )->method(
+                $method
+            )->with(
+                'attribute'
+            )->willReturn(
+                true
+            );
+        }
+        return $product;
+    }
     /**
      * Data provider for testIsDataForPriceIndexerWasChanged
      * @return array
      */
-    public function getData()
+    public static function getData()
     {
-        $product1 = $this->getMockBuilder(
-            \Magento\Catalog\Model\Product::class
-        )->disableOriginalConstructor()
-            ->getMock();
+        $product1 = static fn (self $testCase) => $testCase->getMockForCatalogProduct(null);
 
-        $product2 = $this->getMockBuilder(
-            \Magento\Catalog\Model\Product::class
-        )->disableOriginalConstructor()
-            ->getMock();
+        $product2 = static fn (self $testCase) => $testCase->getMockForCatalogProduct("getData");
 
-        $product2->expects(
-            $this->once()
-        )->method(
-            'getData'
-        )->with(
-            'attribute'
-        )->willReturn(
-            true
-        );
-
-        $product3 = $this->getMockBuilder(
-            \Magento\Catalog\Model\Product::class
-        )->disableOriginalConstructor()
-            ->getMock();
-        $product3->expects(
-            $this->once()
-        )->method(
-            'dataHasChangedFor'
-        )->with(
-            'attribute'
-        )->willReturn(
-            true
-        );
+        $product3 = static fn (self $testCase) => $testCase->getMockForCatalogProduct("dataHasChangedFor");
 
         return [
             [$product1, false],

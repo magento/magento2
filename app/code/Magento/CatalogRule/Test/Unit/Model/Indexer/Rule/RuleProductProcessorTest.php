@@ -1,23 +1,13 @@
 <?php
-/************************************************************************
- *
+/**
  * Copyright 2024 Adobe
  * All Rights Reserved.
- *
- * NOTICE: All information contained herein is, and remains
- * the property of Adobe and its suppliers, if any. The intellectual
- * and technical concepts contained herein are proprietary to Adobe
- * and its suppliers and are protected by all applicable intellectual
- * property laws, including trade secret and copyright laws.
- * Dissemination of this information or reproduction of this material
- * is strictly forbidden unless prior written permission is obtained
- * from Adobe.
- * ************************************************************************
  */
 declare(strict_types=1);
 
 namespace Magento\CatalogRule\Test\Unit\Model\Indexer\Rule;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\Catalog\Model\Indexer\Product\Price\Processor as ProductPriceProcessor;
 use Magento\CatalogRule\Model\Indexer\Product\ProductRuleProcessor;
 use Magento\CatalogRule\Model\Indexer\Rule\GetAffectedProductIds;
@@ -80,8 +70,8 @@ class RuleProductProcessorTest extends TestCase
      * @param bool $isGetAffectedProductIdsInvoked
      * @param bool $isProductRuleProcessorInvoked
      * @param array $affectedProductIds
-     * @dataProvider reindexListDataProvider
      */
+    #[DataProvider('reindexListDataProvider')]
     public function testReindexList(
         array $ids,
         bool $forceReindex,
@@ -91,9 +81,7 @@ class RuleProductProcessorTest extends TestCase
         array $affectedProductIds,
     ): void {
         $indexer = $this->createMock(IndexerInterface::class);
-        $indexer->expects($this->any())
-            ->method('isScheduled')
-            ->willReturn($isScheduled);
+        $indexer->method('isScheduled')->willReturn($isScheduled);
         $this->indexerRegistry->expects($this->any())
             ->method('get')
             ->with(RuleProductProcessor::INDEXER_ID)
@@ -133,8 +121,8 @@ class RuleProductProcessorTest extends TestCase
      * @param bool $isGetAffectedProductIdsInvoked
      * @param bool $isProductRuleProcessorInvoked
      * @param array $affectedProductIds
-     * @dataProvider reindexRowDataProvider
      */
+    #[DataProvider('reindexRowDataProvider')]
     public function testReindexRow(
         int $id,
         bool $forceReindex,
@@ -147,9 +135,7 @@ class RuleProductProcessorTest extends TestCase
             $this->markTestSkipped('Not applicable');
         }
         $indexer = $this->createMock(IndexerInterface::class);
-        $indexer->expects($this->any())
-            ->method('isScheduled')
-            ->willReturn($isScheduled);
+        $indexer->method('isScheduled')->willReturn($isScheduled);
         $this->indexerRegistry->expects($this->any())
             ->method('get')
             ->with(RuleProductProcessor::INDEXER_ID)
@@ -185,7 +171,7 @@ class RuleProductProcessorTest extends TestCase
     /**
      * @return array
      */
-    public function reindexListDataProvider(): array
+    public static function reindexListDataProvider(): array
     {
         return [
             [[1, 2, 3], false, true, false, false, []],
@@ -199,7 +185,7 @@ class RuleProductProcessorTest extends TestCase
     /**
      * @return array
      */
-    public function reindexRowDataProvider(): array
+    public static function reindexRowDataProvider(): array
     {
         return [
             [1, false, true, false, false, []],

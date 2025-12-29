@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Bundle\Pricing\Adjustment;
@@ -173,12 +173,9 @@ class DefaultSelectionPriceListProvider implements SelectionPriceListProviderInt
      */
     private function addMaximumMultiSelectionPriceList(Product $bundleProduct, $selectionsCollection, $useRegularPrice)
     {
-        $websiteId = null;
-        if (!$this->catalogData->isPriceGlobal()) {
-            $websiteId = (int)$this->storeManager->getStore()->getWebsiteId();
-            if ($websiteId === 0) {
-                $websiteId = $this->websiteRepository->getDefault()->getId();
-            }
+        $websiteId = (int)$this->storeManager->getStore()->getWebsiteId();
+        if ($websiteId === 0) {
+            $websiteId = $this->websiteRepository->getDefault()->getId();
         }
         $selectionsCollection->addPriceData(null, $websiteId);
 

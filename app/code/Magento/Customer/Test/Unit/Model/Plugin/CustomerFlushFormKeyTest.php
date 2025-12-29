@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -13,11 +13,15 @@ use Magento\Framework\App\PageCache\FormKey as CookieFormKey;
 use Magento\Framework\Data\Form\FormKey as DataFormKey;
 use Magento\Framework\Event\Observer;
 use Magento\PageCache\Observer\FlushFormKey;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 
 class CustomerFlushFormKeyTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var CookieFormKey | MockObject
      */
@@ -37,29 +41,28 @@ class CustomerFlushFormKeyTest extends TestCase
     {
 
         /** @var CookieFormKey | MockObject */
-        $this->cookieFormKey = $this->getMockBuilder(CookieFormKey::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->cookieFormKey = $this->createMock(CookieFormKey::class);
 
         /** @var DataFormKey | MockObject */
-        $this->dataFormKey = $this->getMockBuilder(DataFormKey::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->dataFormKey = $this->createMock(DataFormKey::class);
 
         /** @var Session | MockObject */
-        $this->customerSession = $this->getMockBuilder(Session::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['getBeforeRequestParams', 'setBeforeRequestParams'])
-            ->getMock();
+        $this->customerSession = $this->createPartialMockWithReflection(
+            Session::class,
+            [
+                'getBeforeRequestParams',
+                'setBeforeRequestParams'
+            ]
+        );
     }
 
     /**
-     * @dataProvider aroundFlushFormKeyProvider
      * @param $beforeFormKey
      * @param $currentFormKey
      * @param $getFormKeyTimes
      * @param $setBeforeParamsTimes
      */
+    #[DataProvider('aroundFlushFormKeyProvider')]
     public function testAroundFlushFormKey(
         $beforeFormKey,
         $currentFormKey,

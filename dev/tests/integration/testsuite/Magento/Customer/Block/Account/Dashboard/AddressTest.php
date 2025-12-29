@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Customer\Block\Account\Dashboard;
@@ -98,7 +98,7 @@ class AddressTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expected, $html);
     }
 
-    public function getPrimaryShippingAddressHtmlDataProvider()
+    public static function getPrimaryShippingAddressHtmlDataProvider()
     {
         $expected = "John Smith<br />\nCompanyName<br />\nGreen str, 67<br />\n\n\n\nCityM,  Alabama, 75477<br />"
             . "\nUnited States<br />\nT: <a href=\"tel:3468676\">3468676</a>\n\n";
@@ -125,7 +125,7 @@ class AddressTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expected, $html);
     }
 
-    public function getPrimaryBillingAddressHtmlDataProvider()
+    public static function getPrimaryBillingAddressHtmlDataProvider()
     {
         $expected = "John Smith<br />\nCompanyName<br />\nGreen str, 67<br />\n\n\n\nCityM,  Alabama, 75477<br />"
             . "\nUnited States<br />\nT: <a href=\"tel:3468676\">3468676</a>\n\n";
@@ -166,7 +166,7 @@ class AddressTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expected, $url);
     }
 
-    public function getPrimaryAddressEditUrlDataProvider()
+    public static function getPrimaryAddressEditUrlDataProvider()
     {
         return [
             '1' => [1, 'http://localhost/index.php/customer/address/edit/id/1/'],

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 
 declare(strict_types=1);
@@ -11,6 +11,7 @@ namespace Magento\Sitemap\Test\Unit\Block;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\DataObject;
 use Magento\Framework\Event\ManagerInterface;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\View\Element\Context;
 use Magento\Robots\Model\Config\Value;
@@ -31,8 +32,10 @@ use PHPUnit\Framework\TestCase;
  */
 class RobotsTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
-     * @var CollectionFactory|MockObject
+     * @var MockObject
      */
     private $sitemapCollectionFactory;
 
@@ -68,8 +71,8 @@ class RobotsTest extends TestCase
     {
         $objectManager = new ObjectManager($this);
 
-        $this->eventManagerMock = $this->getMockForAbstractClass(ManagerInterface::class);
-        $this->scopeConfigMock = $this->getMockForAbstractClass(ScopeConfigInterface::class);
+        $this->eventManagerMock = $this->createMock(ManagerInterface::class);
+        $this->scopeConfigMock = $this->createMock(ScopeConfigInterface::class);
 
         $context = $this->createMock(Context::class);
         $context->expects($this->any())
@@ -80,7 +83,7 @@ class RobotsTest extends TestCase
             ->willReturn($this->scopeConfigMock);
 
         $this->sitemapCollectionFactory = $this->createMock(CollectionFactory::class);
-        $this->storeManager = $this->getMockForAbstractClass(StoreManagerInterface::class);
+        $this->storeManager = $this->createMock(StoreManagerInterface::class);
         $this->siteMapConfigReader = $this->createMock(SitemapConfigReader::class);
 
         $this->model = $objectManager->getObject(
@@ -149,9 +152,7 @@ class RobotsTest extends TestCase
             ->method('getValue')
             ->willReturn(false);
 
-        $websiteMock = $this->getMockBuilder(Website::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $websiteMock = $this->createMock(Website::class);
         $websiteMock->expects($this->once())
             ->method('getStoreIds')
             ->willReturn([$defaultStoreId, $secondStoreId]);
@@ -172,9 +173,7 @@ class RobotsTest extends TestCase
         $sitemapMockTwo = $this->getSitemapMock($sitemapPath, $sitemapFilenameTwo);
         $sitemapMockThree = $this->getSitemapMock($sitemapPath, $sitemapFilenameThree);
 
-        $sitemapCollectionMock = $this->getMockBuilder(Collection::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $sitemapCollectionMock = $this->createMock(Collection::class);
         $sitemapCollectionMock->expects($this->once())
             ->method('addStoreFilter')
             ->with([$defaultStoreId])
@@ -200,7 +199,7 @@ class RobotsTest extends TestCase
     {
         $storeId = 1;
 
-        $storeMock = $this->getMockForAbstractClass(StoreInterface::class);
+        $storeMock = $this->createMock(StoreInterface::class);
 
         $this->storeManager->expects($this->once())
             ->method('getDefaultStoreView')
@@ -245,11 +244,10 @@ class RobotsTest extends TestCase
      */
     protected function getSitemapMock($sitemapPath, $sitemapFilename): MockObject
     {
-        $sitemapMock = $this->getMockBuilder(Sitemap::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['getSitemapUrl'])
-            ->addMethods(['getSitemapFilename', 'getSitemapPath'])
-            ->getMock();
+        $sitemapMock = $this->createPartialMockWithReflection(
+            Sitemap::class,
+            ['getSitemapUrl', 'getSitemapFilename', 'getSitemapPath']
+        );
 
         $sitemapMock->expects($this->any())
             ->method('getSitemapFilename')

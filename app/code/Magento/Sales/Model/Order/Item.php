@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Sales\Model\Order;
 
@@ -126,10 +126,10 @@ class Item extends AbstractModel implements OrderItemInterface
         \Magento\Sales\Model\OrderFactory $orderFactory,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Catalog\Api\ProductRepositoryInterface $productRepository,
-        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
-        \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
+        ?\Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
+        ?\Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = [],
-        \Magento\Framework\Serialize\Serializer\Json $serializer = null
+        ?\Magento\Framework\Serialize\Serializer\Json $serializer = null
     ) {
         parent::__construct(
             $context,
@@ -234,7 +234,7 @@ class Item extends AbstractModel implements OrderItemInterface
      */
     public function getSimpleQtyToShip()
     {
-        $qty = $this->getQtyOrdered() - max($this->getQtyShipped(), $this->getQtyRefunded()) - $this->getQtyCanceled();
+        $qty = $this->getQtyOrdered() - $this->getQtyShipped() - $this->getQtyRefunded() - $this->getQtyCanceled();
         return max(round($qty, 8), 0);
     }
 
@@ -467,7 +467,7 @@ class Item extends AbstractModel implements OrderItemInterface
      * @param array $options
      * @return $this
      */
-    public function setProductOptions(array $options = null)
+    public function setProductOptions(?array $options = null)
     {
         $this->setData('product_options', $options);
         return $this;

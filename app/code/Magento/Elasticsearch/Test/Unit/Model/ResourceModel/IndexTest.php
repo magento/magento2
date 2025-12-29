@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -13,6 +13,7 @@ use Magento\Catalog\Api\Data\ProductAttributeInterface;
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\Indexer\Product\Price\DimensionCollectionFactory;
+use Magento\Catalog\Model\Product;
 use Magento\CatalogSearch\Model\ResourceModel\Fulltext;
 use Magento\Eav\Model\Config;
 use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
@@ -28,11 +29,14 @@ use Magento\Framework\Indexer\ScopeResolver\IndexScopeResolver;
 use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
 use Magento\Framework\Model\ResourceModel\Db\Context;
 use Magento\Framework\Search\Request\IndexScopeResolverInterface;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\Store\Api\Data\StoreInterface;
+use Magento\Store\Model\StoreManager;
 use Magento\Store\Model\StoreManagerInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -40,6 +44,8 @@ use PHPUnit\Framework\TestCase;
  */
 class IndexTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var Index
      */
@@ -133,94 +139,55 @@ class IndexTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->storeManager = $this->getMockBuilder(StoreManagerInterface::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods([
-                'getStore',
-            ])
-            ->getMockForAbstractClass();
+        $this->storeManager = $this->createPartialMock(StoreManager::class, ['getStore']);
 
-        $this->storeInterface = $this->getMockBuilder(StoreInterface::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods([
-                'getWebsiteId',
-            ])
-            ->getMockForAbstractClass();
+        $this->storeInterface = $this->createMock(StoreInterface::class);
 
-        $this->productRepository = $this->getMockBuilder(ProductRepositoryInterface::class)
-            ->getMockForAbstractClass();
+        $this->productRepository = $this->createMock(ProductRepositoryInterface::class);
 
-        $this->categoryRepository = $this->getMockBuilder(CategoryRepositoryInterface::class)
-            ->getMockForAbstractClass();
+        $this->categoryRepository = $this->createMock(CategoryRepositoryInterface::class);
 
-        $this->eavConfig = $this->getMockBuilder(Config::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods([
-                'getEntityAttributeCodes',
-                'getAttribute',
-            ])
-            ->getMock();
+        $this->eavConfig = $this->createPartialMock(Config::class, [
+            'getEntityAttributeCodes',
+            'getAttribute',
+        ]);
 
-        $this->fullText = $this->getMockBuilder(Fulltext::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->fullText = $this->createMock(Fulltext::class);
 
-        $this->context = $this->getMockBuilder(Context::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods([
-                'getTransactionManager',
-                'getResources',
-                'getObjectRelationProcessor',
-            ])
-            ->getMock();
+        $this->context = $this->createPartialMock(Context::class, [
+            'getTransactionManager',
+            'getResources',
+            'getObjectRelationProcessor',
+        ]);
 
-        $this->eventManager = $this->getMockBuilder(ManagerInterface::class)
-            ->onlyMethods(['dispatch'])
-            ->getMockForAbstractClass();
+        $this->eventManager = $this->createMock(ManagerInterface::class);
 
-        $this->product = $this->getMockBuilder(ProductInterface::class)
-            ->disableOriginalConstructor()
-            ->addMethods([
-                'getData',
-            ])
-            ->getMockForAbstractClass();
+        $this->product = $this->createPartialMock(Product::class, ['getData', 'getId']);
 
-        $this->category = $this->getMockBuilder(CategoryInterface::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods([
-                'getName',
-            ])
-            ->getMockForAbstractClass();
+        $this->category = $this->createMock(CategoryInterface::class);
 
-        $this->connection = $this->getMockBuilder(AdapterInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->connection = $this->createMock(AdapterInterface::class);
 
-        $this->select = $this->getMockBuilder(Select::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods([
-                'distinct',
-                'from',
-                'join',
-                'where',
-                'orWhere',
-            ])
-            ->getMock();
+        $this->select = $this->createPartialMock(Select::class, [
+            'distinct',
+            'from',
+            'join',
+            'where',
+            'orWhere',
+        ]);
 
-        $this->resources = $this->getMockBuilder(ResourceConnection::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods([
-                'getConnection',
-                'getTableName',
-                'getTablePrefix',
-            ])
-            ->getMock();
+        $this->resources = $this->createPartialMock(ResourceConnection::class, [
+            'getConnection',
+            'getTableName',
+            'getTablePrefix',
+        ]);
 
-        $this->metadataPool = $this->getMockBuilder(MetadataPool::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['getIdentifierField'])
-            ->onlyMethods(['getMetadata'])
-            ->getMock();
+        $this->metadataPool = $this->createPartialMockWithReflection(
+            MetadataPool::class,
+            ['getMetadata', 'getIdentifierField']
+        );
+        $this->metadataPool->method('getMetadata')->willReturnSelf();
+        $this->metadataPool->method('getIdentifierField')->willReturn('entity_id');
 
         $this->context->expects($this->any())
             ->method('getResources')
@@ -234,24 +201,14 @@ class IndexTest extends TestCase
             ->method('getTablePrefix')
             ->willReturn('');
 
-        $this->metadataPool->method('getMetadata')
-            ->willReturnSelf();
-        $this->metadataPool->method('getIdentifierField')
-            ->willReturn('entity_id');
-
         $objectManager = new ObjectManagerHelper($this);
 
-        $connection = $this->getMockBuilder(AdapterInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $connection = $this->createMock(AdapterInterface::class);
 
-        $resource = $this->getMockBuilder(ResourceConnection::class)
-            ->onlyMethods([
-                'getConnection',
-                'getTableName'
-            ])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $resource = $this->createPartialMock(ResourceConnection::class, [
+            'getConnection',
+            'getTableName'
+        ]);
         $resource->expects($this->any())
             ->method('getConnection')
             ->willReturn($connection);
@@ -464,8 +421,8 @@ class IndexTest extends TestCase
      * @param string $frontendInput
      * @param mixed $indexData
      * @return void
-     * @dataProvider attributeCodeProvider
      */
+    #[DataProvider('attributeCodeProvider')]
     public function testGetFullProductIndexData($frontendInput, $indexData)
     {
         $this->productRepository->expects($this->once())

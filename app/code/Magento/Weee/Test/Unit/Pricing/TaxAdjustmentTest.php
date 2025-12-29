@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -10,10 +10,12 @@ namespace Magento\Weee\Test\Unit\Pricing;
 use Magento\Framework\DataObject;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
 use Magento\Framework\Pricing\SaleableInterface;
+use Magento\Tax\Helper\Data as TaxHelperData;
 use Magento\Weee\Helper\Data;
 use Magento\Weee\Model\Tax;
 use Magento\Weee\Pricing\TaxAdjustment;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 class TaxAdjustmentTest extends TestCase
@@ -29,7 +31,7 @@ class TaxAdjustmentTest extends TestCase
     protected $weeeHelperMock;
 
     /**
-     * @var \Magento\Tax\Helper\Data|MockObject
+     * @var TaxHelperData|MockObject
      */
     protected $taxHelperMock;
 
@@ -46,8 +48,8 @@ class TaxAdjustmentTest extends TestCase
     protected function setUp(): void
     {
         $this->weeeHelperMock = $this->createMock(Data::class);
-        $this->taxHelperMock = $this->createMock(\Magento\Tax\Helper\Data::class);
-        $this->priceCurrencyMock = $this->getMockForAbstractClass(PriceCurrencyInterface::class);
+        $this->taxHelperMock = $this->createMock(TaxHelperData::class);
+        $this->priceCurrencyMock = $this->createMock(PriceCurrencyInterface::class);
         $this->priceCurrencyMock->expects($this->any())
             ->method('convertAndRound')
             ->willReturnCallback(
@@ -86,8 +88,8 @@ class TaxAdjustmentTest extends TestCase
      * @param bool $isWeeeTaxable
      * @param bool $weeeDisplayConfig
      * @param bool $expectedResult
-     * @dataProvider isIncludedInDisplayPriceDataProvider
      */
+    #[DataProvider('isIncludedInDisplayPriceDataProvider')]
     public function testIsIncludedInDisplayPrice(
         $taxDisplayExclTax,
         $isWeeeTaxable,
@@ -118,45 +120,45 @@ class TaxAdjustmentTest extends TestCase
     /**
      * @return array
      */
-    public function isIncludedInDisplayPriceDataProvider()
+    public static function isIncludedInDisplayPriceDataProvider()
     {
         return [
             'display_incl_tax' => [
-                'tax_display_excl_tax' => false,
-                'is_weee_taxable' => true,
-                'weee_display_config' => false,
-                'expected_result' => true,
+                'taxDisplayExclTax' => false,
+                'isWeeeTaxable' => true,
+                'weeeDisplayConfig' => false,
+                'expectedResult' => true,
             ],
             'display_incl_tax_excl_weee' => [
-                'tax_display_excl_tax' => false,
-                'is_weee_taxable' => true,
-                'weee_display_config' => true,
-                'expected_result' => false,
+                'taxDisplayExclTax' => false,
+                'isWeeeTaxable' => true,
+                'weeeDisplayConfig' => true,
+                'expectedResult' => false,
             ],
             'display_excl_tax' => [
-                'tax_display_excl_tax' => true,
-                'is_weee_taxable' => true,
-                'weee_display_config' => true,
-                'expected_result' => false,
+                'taxDisplayExclTax' => true,
+                'isWeeeTaxable' => true,
+                'weeeDisplayConfig' => true,
+                'expectedResult' => false,
             ],
             'display_excl_tax_incl_weee' => [
-                'tax_display_excl_tax' => true,
-                'is_weee_taxable' => true,
-                'weee_display_config' => false,
-                'expected_result' => false,
+                'taxDisplayExclTax' => true,
+                'isWeeeTaxable' => true,
+                'weeeDisplayConfig' => false,
+                'expectedResult' => false,
             ],
         ];
     }
 
     /**
-     * @param float $amount
+     * @param float        $amount
      * @param DataObject[] $weeeAttributes
-     * @param float $expectedResult
-     * @dataProvider applyAdjustmentDataProvider
+     * @param float        $expectedResult
      */
+    #[DataProvider('applyAdjustmentDataProvider')]
     public function testApplyAdjustment($amount, $weeeAttributes, $expectedResult)
     {
-        $object = $this->getMockForAbstractClass(SaleableInterface::class);
+        $object = $this->createMock(SaleableInterface::class);
 
         $this->weeeHelperMock->expects($this->any())
             ->method('getProductWeeeAttributes')
@@ -168,12 +170,12 @@ class TaxAdjustmentTest extends TestCase
     /**
      * @return array
      */
-    public function applyAdjustmentDataProvider()
+    public static function applyAdjustmentDataProvider()
     {
         return [
             [
                 'amount' => 10,
-                'weee_attributes' => [
+                'weeeAttributes' => [
                     new DataObject(
                         [
                             'tax_amount' => 5,
@@ -186,7 +188,7 @@ class TaxAdjustmentTest extends TestCase
                     ),
 
                 ],
-                'expected_result' => 13.75,
+                'expectedResult' => 13.75,
             ],
         ];
     }

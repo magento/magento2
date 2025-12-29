@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -75,22 +75,12 @@ class LinkedProductSelectBuilderByIndexPriceTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->storeManagerMock = $this->getMockBuilder(StoreManagerInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-        $this->resourceMock = $this->getMockBuilder(ResourceConnection::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->customerSessionMock = $this->getMockBuilder(Session::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->metadataPoolMock = $this->getMockBuilder(MetadataPool::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->storeManagerMock = $this->createMock(StoreManagerInterface::class);
+        $this->resourceMock = $this->createMock(ResourceConnection::class);
+        $this->customerSessionMock = $this->createMock(Session::class);
+        $this->metadataPoolMock = $this->createMock(MetadataPool::class);
         $this->baseSelectProcessorMock =
-            $this->getMockBuilder(BaseSelectProcessorInterface::class)
-                ->disableOriginalConstructor()
-                ->getMockForAbstractClass();
+            $this->createMock(BaseSelectProcessorInterface::class);
 
         $this->indexScopeResolverMock = $this->createMock(
             IndexScopeResolverInterface::class
@@ -98,7 +88,7 @@ class LinkedProductSelectBuilderByIndexPriceTest extends TestCase
         $this->dimensionMock = $this->createMock(Dimension::class);
         $this->dimensionFactoryMock = $this->createMock(DimensionFactory::class);
         $this->dimensionFactoryMock->method('create')->willReturn($this->dimensionMock);
-        $storeMock = $this->getMockForAbstractClass(StoreInterface::class);
+        $storeMock = $this->createMock(StoreInterface::class);
         $storeMock->method('getId')->willReturn(1);
         $storeMock->method('getWebsiteId')->willReturn(1);
         $this->storeManagerMock->method('getStore')->willReturn($storeMock);
@@ -118,25 +108,19 @@ class LinkedProductSelectBuilderByIndexPriceTest extends TestCase
     {
         $productId = 10;
         $storeId = 1;
-        $metadata = $this->getMockBuilder(EntityMetadataInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-        $connection = $this->getMockBuilder(AdapterInterface::class)
-            ->getMockForAbstractClass();
-        $select = $this->getMockBuilder(Select::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $storeMock = $this->getMockBuilder(StoreInterface::class)
-            ->getMockForAbstractClass();
+        $metadata = $this->createMock(EntityMetadataInterface::class);
+        $connection = $this->createMock(AdapterInterface::class);
+        $select = $this->createMock(Select::class);
+        $storeMock = $this->createMock(StoreInterface::class);
         $this->storeManagerMock->expects($this->once())->method('getStore')->willReturn($storeMock);
         $this->customerSessionMock->expects($this->once())->method('getCustomerGroupId')->willReturn(1);
-        $connection->expects($this->any())->method('select')->willReturn($select);
+        $connection->method('select')->willReturn($select);
         $select->expects($this->any())->method('from')->willReturnSelf();
         $select->expects($this->any())->method('joinInner')->willReturnSelf();
         $select->expects($this->any())->method('where')->willReturnSelf();
         $select->expects($this->exactly(2))->method('order')->willReturnSelf();
         $select->expects($this->once())->method('limit')->willReturnSelf();
-        $this->resourceMock->expects($this->any())->method('getConnection')->willReturn($connection);
+        $this->resourceMock->method('getConnection')->willReturn($connection);
         $this->metadataPoolMock->expects($this->once())->method('getMetadata')->willReturn($metadata);
         $metadata->expects($this->once())->method('getLinkField')->willReturn('row_id');
         $this->resourceMock->expects($this->any())->method('getTableName');

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Directory\Model;
@@ -107,7 +107,7 @@ class CurrencyConfigTest extends TestCase
      *
      * @return array
      */
-    public function getConfigCurrenciesDataProvider()
+    public static function getConfigCurrenciesDataProvider()
     {
         return [
             [

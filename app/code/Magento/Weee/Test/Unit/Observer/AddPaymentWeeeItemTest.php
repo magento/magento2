@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -14,14 +14,24 @@ use Magento\Payment\Model\Cart\SalesModel\SalesModelInterface;
 use Magento\Quote\Model\Quote\Item;
 use Magento\Store\Api\Data\StoreInterface;
 use Magento\Store\Model\Store;
+use Magento\Store\Model\StoreManager;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Weee\Helper\Data;
 use Magento\Weee\Observer\AddPaymentWeeeItem;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * Unit Tests to cover AddPaymentWeeeItem
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class AddPaymentWeeeItemTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * Testable object
      *
@@ -45,7 +55,7 @@ class AddPaymentWeeeItemTest extends TestCase
     protected function setUp(): void
     {
         $this->weeeHelperMock = $this->createMock(Data::class);
-        $this->storeManagerMock = $this->getMockForAbstractClass(StoreManagerInterface::class);
+        $this->storeManagerMock = $this->createPartialMock(StoreManager::class, ['getStore']);
 
         $this->observer = new AddPaymentWeeeItem(
             $this->weeeHelperMock,
@@ -56,27 +66,21 @@ class AddPaymentWeeeItemTest extends TestCase
     /**
      * Test execute
      *
-     * @dataProvider dataProvider
-     * @param bool $isEnabled
-     * @param bool $includeInSubtotal
+     * @param  bool $isEnabled
+     * @param  bool $includeInSubtotal
      * @return void
      */
+    #[DataProvider('dataProvider')]
     public function testExecute(bool $isEnabled, bool $includeInSubtotal): void
     {
         /** @var Observer|MockObject $observerMock */
         $observerMock = $this->createMock(Observer::class);
         $cartModelMock = $this->createMock(Cart::class);
-        $salesModelMock = $this->getMockForAbstractClass(SalesModelInterface::class);
-        $itemMock = $this->getMockBuilder(Item::class)
-            ->addMethods(['getOriginalItem'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $salesModelMock = $this->createMock(SalesModelInterface::class);
+        $itemMock = $this->createPartialMockWithReflection(Item::class, ['getProduct', 'getOriginalItem']);
         $originalItemMock = $this->createPartialMock(Item::class, ['getParentItem']);
         $parentItemMock = $this->createMock(Item::class);
-        $eventMock = $this->getMockBuilder(Event::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['getCart'])
-            ->getMock();
+        $eventMock = $this->createPartialMockWithReflection(Event::class, ['getCart']);
 
         $asCustomItem = $this->prepareShouldBeAddedAsCustomItem($isEnabled, $includeInSubtotal);
         $toBeCalled = 1;
@@ -109,7 +113,7 @@ class AddPaymentWeeeItemTest extends TestCase
     /**
      * @return array
      */
-    public function dataProvider(): array
+    public static function dataProvider(): array
     {
         return [
             [true, false],
@@ -122,15 +126,13 @@ class AddPaymentWeeeItemTest extends TestCase
     /**
      * Prepare if FPT should be added to payment cart as custom item or not.
      *
-     * @param bool $isEnabled
-     * @param bool $includeInSubtotal
+     * @param  bool $isEnabled
+     * @param  bool $includeInSubtotal
      * @return bool
      */
     private function prepareShouldBeAddedAsCustomItem(bool $isEnabled, bool $includeInSubtotal): bool
     {
-        $storeMock = $this->getMockBuilder(StoreInterface::class)
-            ->onlyMethods(['getId'])
-            ->getMockForAbstractClass();
+        $storeMock = $this->createPartialMock(Store::class, ['getId']);
         $storeMock->expects($this->once())
             ->method('getId')
             ->willReturn(Store::DEFAULT_STORE_ID);

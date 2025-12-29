@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -11,7 +11,9 @@ use Magento\Backend\Block\Template\Context;
 use Magento\Catalog\Block\Adminhtml\Product\Edit\Action\Attribute\Tab\Inventory;
 use Magento\CatalogInventory\Api\StockConfigurationInterface;
 use Magento\CatalogInventory\Model\Source\Backorders;
+use Magento\Directory\Helper\Data as DirectoryHelper;
 use Magento\Framework\App\RequestInterface;
+use Magento\Framework\Json\Helper\Data as JsonHelper;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -39,7 +41,7 @@ class InventoryTest extends TestCase
     protected $requestMock;
 
     /**
-     * @var \Magento\Catalog\Block\Adminhtml\Product\Edit\Action\Attribute\Tab\Inventory
+     * @var Inventory
      */
     protected $inventory;
 
@@ -51,21 +53,24 @@ class InventoryTest extends TestCase
     protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
+        
+        // Prepare ObjectManager with required dependencies
+        $objects = [
+            [
+                JsonHelper::class,
+                $this->createMock(JsonHelper::class)
+            ],
+            [
+                DirectoryHelper::class,
+                $this->createMock(DirectoryHelper::class)
+            ]
+        ];
+        $objectManager->prepareObjectManager($objects);
 
         $this->contextMock = $this->createPartialMock(Context::class, ['getRequest']);
         $this->backordersMock = $this->createMock(Backorders::class);
-        $this->stockConfigurationMock = $this->getMockForAbstractClass(
-            StockConfigurationInterface::class,
-            [],
-            '',
-            false
-        );
-        $this->requestMock = $this->getMockForAbstractClass(
-            RequestInterface::class,
-            ['getParam'],
-            '',
-            false
-        );
+        $this->stockConfigurationMock = $this->createMock(StockConfigurationInterface::class);
+        $this->requestMock = $this->createMock(RequestInterface::class);
 
         $this->contextMock->expects($this->once())
             ->method('getRequest')

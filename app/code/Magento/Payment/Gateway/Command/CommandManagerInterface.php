@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Payment\Gateway\Command;
 
@@ -28,7 +28,7 @@ interface CommandManagerInterface extends CommandPoolInterface
      *
      * @since 100.1.0
      */
-    public function executeByCode($commandCode, InfoInterface $payment = null, array $arguments = []);
+    public function executeByCode($commandCode, ?InfoInterface $payment = null, array $arguments = []);
 
     /**
      * Executes command
@@ -40,5 +40,5 @@ interface CommandManagerInterface extends CommandPoolInterface
      * @throws CommandException
      * @since 100.1.0
      */
-    public function execute(CommandInterface $command, InfoInterface $payment = null, array $arguments = []);
+    public function execute(CommandInterface $command, ?InfoInterface $payment = null, array $arguments = []);
 }

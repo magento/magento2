@@ -1,13 +1,14 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Tax\Test\Unit\Model\Layout;
 
 use Magento\Customer\Model\Session as CustomerSession;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\Framework\View\LayoutInterface;
 use Magento\PageCache\Model\DepersonalizeChecker;
@@ -20,6 +21,7 @@ use PHPUnit\Framework\TestCase;
  */
 class DepersonalizePluginTest extends TestCase
 {
+    use MockCreationTrait;
     /**
      * @var CustomerSession|MockObject
      */
@@ -45,21 +47,19 @@ class DepersonalizePluginTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->customerSessionMock = $this->getMockBuilder(CustomerSession::class)
-            ->addMethods(
-                [
-                    'getDefaultTaxBillingAddress',
-                    'getDefaultTaxShippingAddress',
-                    'getCustomerTaxClassId',
-                    'setDefaultTaxBillingAddress',
-                    'setDefaultTaxShippingAddress',
-                    'setCustomerTaxClassId'
-                ]
-            )
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->customerSessionMock = $this->createPartialMockWithReflection(
+            CustomerSession::class,
+            [
+                'getDefaultTaxBillingAddress',
+                'getDefaultTaxShippingAddress',
+                'getCustomerTaxClassId',
+                'setDefaultTaxBillingAddress',
+                'setDefaultTaxShippingAddress',
+                'setCustomerTaxClassId'
+            ]
+        );
         $this->depersonalizeCheckerMock = $this->createMock(DepersonalizeChecker::class);
-        $this->layoutMock = $this->getMockForAbstractClass(LayoutInterface::class);
+        $this->layoutMock = $this->createMock(LayoutInterface::class);
 
         $this->plugin = (new ObjectManagerHelper($this))->getObject(
             DepersonalizePlugin::class,

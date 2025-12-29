@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -29,8 +29,7 @@ class TranslationTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->source = $this->getMockBuilder(ConfigSourceInterface::class)
-            ->getMockForAbstractClass();
+        $this->source = $this->createMock(ConfigSourceInterface::class);
         $this->configType = new Translation($this->source);
     }
 

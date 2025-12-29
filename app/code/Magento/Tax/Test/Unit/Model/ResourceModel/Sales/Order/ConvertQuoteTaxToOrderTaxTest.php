@@ -1,12 +1,13 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2023 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Tax\Test\Unit\Model\ResourceModel\Sales\Order;
 
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Sales\Api\Data\OrderExtensionInterface;
 use Magento\Sales\Model\Order;
@@ -15,11 +16,14 @@ use Magento\Sales\Model\Order\Tax\ItemFactory;
 use Magento\Tax\Model\ResourceModel\Sales\Order\ConvertQuoteTaxToOrderTax;
 use Magento\Tax\Model\Sales\Order\Tax;
 use Magento\Tax\Model\Sales\Order\TaxFactory;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 class ConvertQuoteTaxToOrderTaxTest extends TestCase
 {
+    use MockCreationTrait;
+
     private const ORDERID = 123;
     private const ITEMID = 151;
     private const ORDER_ITEM_ID = 116;
@@ -74,22 +78,16 @@ class ConvertQuoteTaxToOrderTaxTest extends TestCase
      */
     protected function setupOrderMock(): MockObject
     {
-        $orderMock = $this->getMockBuilder(Order::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(
-                [
-                    'getExtensionAttributes',
-                    'getItemByQuoteItemId',
-                    'getEntityId'
-                ]
-            )
-            ->addMethods(
-                [
-                    'getAppliedTaxIsSaved',
-                    'setAppliedTaxIsSaved'
-                ]
-            )
-            ->getMock();
+        $orderMock = $this->createPartialMockWithReflection(
+            Order::class,
+            [
+                'getExtensionAttributes',
+                'getItemByQuoteItemId',
+                'getEntityId',
+                'getAppliedTaxIsSaved',
+                'setAppliedTaxIsSaved'
+            ]
+        );
 
         return $orderMock;
     }
@@ -99,16 +97,38 @@ class ConvertQuoteTaxToOrderTaxTest extends TestCase
      */
     protected function setupExtensionAttributeMock(): MockObject
     {
-        $orderExtensionAttributeMock = $this->getMockBuilder(OrderExtensionInterface::class)
-            ->disableOriginalConstructor()
-            ->addMethods(
-                [
-                    'getAppliedTaxes',
-                    'getConvertingFromQuote',
-                    'getItemAppliedTaxes'
-                ]
-            )
-            ->getMockForAbstractClass();
+        // Use createPartialMockWithReflection for extension interface with custom methods - PHPUnit 12 compatible
+        $orderExtensionAttributeMock = $this->createPartialMockWithReflection(
+            OrderExtensionInterface::class,
+            [
+                'getConvertingFromQuote',
+                'setConvertingFromQuote',
+                'getAppliedTaxes',
+                'setAppliedTaxes',
+                'getItemAppliedTaxes',
+                'setItemAppliedTaxes',
+                'getShippingAssignments',
+                'setShippingAssignments',
+                'getPaymentAdditionalInfo',
+                'setPaymentAdditionalInfo',
+                'getGiftCards',
+                'setGiftCards',
+                'getBaseGiftCardsAmount',
+                'setBaseGiftCardsAmount',
+                'getGiftCardsAmount',
+                'setGiftCardsAmount',
+                'getTaxes',
+                'setTaxes',
+                'getAdditionalItemizedTaxes',
+                'setAdditionalItemizedTaxes',
+                'getCustomerBalanceAmount',
+                'setCustomerBalanceAmount',
+                'getBaseCustomerBalanceAmount',
+                'setBaseCustomerBalanceAmount',
+                'getGiftMessage',
+                'setGiftMessage'
+            ]
+        );
 
         return $orderExtensionAttributeMock;
     }
@@ -123,10 +143,10 @@ class ConvertQuoteTaxToOrderTaxTest extends TestCase
         $willReturnArgs = [];
 
         foreach ($expectedTaxes as $orderTaxId => $orderTaxData) {
-            $orderTaxMock = $this->getMockBuilder(Tax::class)
-                ->disableOriginalConstructor()
-                ->onlyMethods(['setData', 'save'])
-                ->addMethods(['getTaxId'])->getMock();
+            $orderTaxMock = $this->createPartialMockWithReflection(
+                Tax::class,
+                ['getTaxId', 'setData', 'save']
+            );
             $orderTaxMock->expects($this->once())
                 ->method('setData')
                 ->with($orderTaxData)
@@ -181,8 +201,8 @@ class ConvertQuoteTaxToOrderTaxTest extends TestCase
      * @param int|null $itemId
      *
      * @return void
-     * @dataProvider executeDataProvider
      */
+    #[DataProvider('executeDataProvider')]
     public function testExecute(
         array $appliedTaxes,
         array $itemAppliedTaxes,
@@ -232,14 +252,14 @@ class ConvertQuoteTaxToOrderTaxTest extends TestCase
      * @return array
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function executeDataProvider(): array
+    public static function executeDataProvider(): array
     {
         return [
             //one item with shipping
             //three tax rates: state and national tax rates of 6 and 5 percent with priority 0
             //city tax rate of 3 percent with priority 1
             'item_with_shipping_three_tax' => [
-                'applied_taxes' => [
+                'appliedTaxes' => [
                     [
                         'amount' => 0.66,
                         'base_amount' => 0.66,
@@ -276,7 +296,7 @@ class ConvertQuoteTaxToOrderTaxTest extends TestCase
                         ]
                     ]
                 ],
-                'item_applied_taxes' => [
+                'itemAppliedTaxes' => [
                     //item tax, three tax rates
                     [
                         //first two taxes are combined
@@ -368,7 +388,7 @@ class ConvertQuoteTaxToOrderTaxTest extends TestCase
                         ]
                     ]
                 ],
-                'expected_order_taxes' => [
+                'expectedTaxes' => [
                     //state tax
                     '35' => [
                         'order_id' => self::ORDERID,
@@ -412,7 +432,7 @@ class ConvertQuoteTaxToOrderTaxTest extends TestCase
                         'base_real_amount' => 0.18018018018018017 //this number is meaningless since this is single rate
                     ]
                 ],
-                'expected_item_taxes' => [
+                'expectedItemTaxes' => [
                     [
                         //state tax for item
                         'item_id' => self::ORDER_ITEM_ID,
@@ -486,10 +506,10 @@ class ConvertQuoteTaxToOrderTaxTest extends TestCase
                         'taxable_item_type' => 'shipping'
                     ]
                 ],
-                'item_id' => self::ORDER_ITEM_ID
+                'itemId' => self::ORDER_ITEM_ID
             ],
             'associated_item_with_empty_order_quote_item' => [
-                'applied_taxes' => [
+                'appliedTaxes' => [
                     [
                         'amount' => 0.66,
                         'base_amount' => 0.66,
@@ -526,7 +546,7 @@ class ConvertQuoteTaxToOrderTaxTest extends TestCase
                         ]
                     ]
                 ],
-                'item_applied_taxes' => [
+                'itemAppliedTaxes' => [
                     //item tax, three tax rates
                     [
                         //first two taxes are combined
@@ -618,7 +638,7 @@ class ConvertQuoteTaxToOrderTaxTest extends TestCase
                         ]
                     ]
                 ],
-                'expected_order_taxes' => [
+                'expectedTaxes' => [
                     //state tax
                     '35' => [
                         'order_id' => self::ORDERID,
@@ -662,7 +682,7 @@ class ConvertQuoteTaxToOrderTaxTest extends TestCase
                         'base_real_amount' => 0.18018018018018017 //this number is meaningless since this is single rate
                     ]
                 ],
-                'expected_item_taxes' => [
+                'expectedItemTaxes' => [
                     [
                         //state tax for item
                         'item_id' => null,
@@ -736,7 +756,7 @@ class ConvertQuoteTaxToOrderTaxTest extends TestCase
                         'taxable_item_type' => 'shipping'
                     ]
                 ],
-                'item_id' => null
+                'itemId' => null
             ]
         ];
     }

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -102,19 +102,19 @@ class VisualSwatch extends AbstractSwatchAttributeData
             parent::getUpdateProvider(),
             [
                 "{$frontendInput}_other_attribute_code" => [
-                    'post_data' => [
+                    'postData' => [
                         'attribute_code' => 'text_attribute_update',
                     ],
-                    'expected_data' => [
+                    'expectedData' => [
                         'attribute_code' => 'visual_swatch_attribute',
                     ],
                 ],
                 "{$frontendInput}_change_frontend_input_swatch_text" => [
-                    'post_data' => [
+                    'postData' => [
                         'frontend_input' => Swatch::SWATCH_TYPE_TEXTUAL_ATTRIBUTE_FRONTEND_INPUT,
                         'update_product_preview_image' => '1',
                     ],
-                    'expected_data' => [
+                    'expectedData' => [
                         'frontend_input' => 'select',
                         'swatch_input_type' => Swatch::SWATCH_INPUT_TYPE_TEXT,
                         'update_product_preview_image' => '1',
@@ -122,10 +122,10 @@ class VisualSwatch extends AbstractSwatchAttributeData
                     ],
                 ],
                 "{$frontendInput}_change_frontend_input_dropdown" => [
-                    'post_data' => [
+                    'postData' => [
                         'frontend_input' => 'select',
                     ],
-                    'expected_data' => [
+                    'expectedData' => [
                         'frontend_input' => 'select',
                         'swatch_input_type' => null,
                         'update_product_preview_image' => null,
@@ -146,7 +146,7 @@ class VisualSwatch extends AbstractSwatchAttributeData
             parent::getUpdateOptionsProvider(),
             [
                 "{$frontendInput}_update_options" => [
-                    'post_data' => [
+                    'postData' => [
                         'options_array' => [
                             'option_1' => [
                                 'order' => '4',

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -22,6 +22,7 @@ use Magento\Wishlist\Model\Item\Option;
 use Magento\Wishlist\Pricing\ConfiguredPrice\ConfigurableProduct;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -55,19 +56,16 @@ class ConfigurableProductTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->priceInfoMock = $this->getMockBuilder(PriceInfoInterface::class)
-            ->getMockForAbstractClass();
+        $this->priceInfoMock = $this->createMock(PriceInfoInterface::class);
 
-        $this->saleableItem = $this->getMockBuilder(SaleableInterface::class)
-            ->addMethods(['getCustomOption'])
-            ->onlyMethods(['getPriceInfo'])
-            ->getMockForAbstractClass();
+        $this->saleableItem = $this->createPartialMock(
+            Product::class,
+            ['getCustomOption', 'getPriceInfo']
+        );
 
-        $this->calculator = $this->getMockBuilder(CalculatorInterface::class)
-            ->getMockForAbstractClass();
+        $this->calculator = $this->createMock(CalculatorInterface::class);
 
-        $this->priceCurrency = $this->getMockBuilder(PriceCurrencyInterface::class)
-            ->getMockForAbstractClass();
+        $this->priceCurrency = $this->createMock(PriceCurrencyInterface::class);
 
         $this->model = new ConfigurableProduct(
             $this->saleableItem,
@@ -80,38 +78,31 @@ class ConfigurableProductTest extends TestCase
     /**
      * @param array $options
      *
-     * @dataProvider setOptionsDataProvider
      * @throws \Magento\Framework\Exception\LocalizedException
      */
+    #[DataProvider('setOptionsDataProvider')]
     public function testGetValue(array $options, $optionIds)
     {
         $priceValue = 10;
         $customPrice = 100;
 
-        $priceMock = $this->getMockBuilder(PriceInterface::class)
-            ->getMockForAbstractClass();
+        $priceMock = $this->createMock(PriceInterface::class);
         $priceMock->expects($this->once())
             ->method('getValue')
             ->willReturn($priceValue);
 
-        $this->priceInfoMock = $this->getMockBuilder(Base::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->priceInfoMock = $this->createMock(Base::class);
         $this->priceInfoMock->expects($this->once())
             ->method('getPrice')
             ->with(ConfigurableProduct::PRICE_CODE)
             ->willReturn($priceMock);
 
-        $productMock = $this->getMockBuilder(Product::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $productMock = $this->createMock(Product::class);
         $productMock->expects($this->once())
             ->method('getPriceInfo')
             ->willReturn($this->priceInfoMock);
 
-        $wishlistItemOptionMock = $this->getMockBuilder(Option::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $wishlistItemOptionMock = $this->createMock(Option::class);
         $wishlistItemOptionMock->expects($this->exactly(2))
             ->method('getProduct')->willReturn($productMock);
 
@@ -131,13 +122,9 @@ class ConfigurableProductTest extends TestCase
         $wishlistItemOptionMock->expects($this->exactly(2))
             ->method('getProduct')->willReturn($productMock);
 
-        $productOptionMock = $this->getMockBuilder(ProductOption::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $productOptionMock = $this->createMock(ProductOption::class);
 
-        $defaultTypeMock = $this->getMockBuilder(DefaultType::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $defaultTypeMock = $this->createMock(DefaultType::class);
 
         $productOptionMock->expects($this->any())
             ->method('getId')
@@ -158,10 +145,10 @@ class ConfigurableProductTest extends TestCase
             ->with($productOptionMock)
             ->willReturnSelf();
 
-        $itemMock = $this->getMockForAbstractClass(ItemInterface::class);
+        $itemMock = $this->createMock(ItemInterface::class);
         $this->model->setItem($itemMock);
 
-        $optionInterfaceMock = $this->getMockForAbstractClass(OptionInterface::class);
+        $optionInterfaceMock = $this->createMock(OptionInterface::class);
 
         $itemMock->expects($this->any())
             ->method('getOptionByCode')
@@ -185,8 +172,7 @@ class ConfigurableProductTest extends TestCase
     {
         $priceValue = 100;
 
-        $priceMock = $this->getMockBuilder(PriceInterface::class)
-            ->getMockForAbstractClass();
+        $priceMock = $this->createMock(PriceInterface::class);
         $priceMock->expects($this->once())
             ->method('getValue')
             ->willReturn($priceValue);
@@ -213,33 +199,37 @@ class ConfigurableProductTest extends TestCase
 
     public static function setOptionsDataProvider(): array
     {
-        return ['options' =>
+        return [
+            [
                 [
-                    [
-                        'option_id' => '1',
-                        'product_id' => '2091',
-                        'type' => 'checkbox',
-                        'is_require' => '1',
-                        'default_title' => 'check',
-                        'title' => 'check',
-                        'default_price' => null,
-                        'default_price_type' => null,
-                        'price' => null,
-                        'price_type' => null
-                    ], '1',
-                    [
-                        'option_id' => '2',
-                        'product_id' => '2091',
-                        'type' => 'field',
-                        'is_require' => '1',
-                        'default_title' => 'field',
-                        'title' => 'field',
-                        'default_price' => '100.000000',
-                        'default_price_type' => 'fixed',
-                        'price' => '100.000000',
-                        'price_type' => 'fixed'
-                    ], '2'
+                    'option_id' => '1',
+                    'product_id' => '2091',
+                    'type' => 'checkbox',
+                    'is_require' => '1',
+                    'default_title' => 'check',
+                    'title' => 'check',
+                    'default_price' => null,
+                    'default_price_type' => null,
+                    'price' => null,
+                    'price_type' => null
                 ],
+                '1'
+            ],
+            [
+                [
+                    'option_id' => '2',
+                    'product_id' => '2091',
+                    'type' => 'field',
+                    'is_require' => '1',
+                    'default_title' => 'field',
+                    'title' => 'field',
+                    'default_price' => '100.000000',
+                    'default_price_type' => 'fixed',
+                    'price' => '100.000000',
+                    'price_type' => 'fixed'
+                ],
+                '2'
+            ]
         ];
     }
 }

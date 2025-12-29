@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 
 /**
@@ -371,8 +371,8 @@ class CartTest extends \Magento\TestFramework\TestCase\AbstractController
     public static function addAddProductDataProvider()
     {
         return [
-            'frontend' => ['frontend', 'expected_price' => 10],
-            'adminhtml' => ['adminhtml', 'expected_price' => 1]
+            'frontend' => ['frontend', 'expectedPrice' => 10],
+            'adminhtml' => ['adminhtml', 'expectedPrice' => 1]
         ];
     }
 
@@ -426,20 +426,20 @@ class CartTest extends \Magento\TestFramework\TestCase\AbstractController
     {
         return [
             [
-                'logged_in' => false,
-                'request_type' => Request::METHOD_POST,
+                'loggedIn' => false,
+                'request' => Request::METHOD_POST,
             ],
             [
-                'logged_in' => false,
-                'request_type' => Request::METHOD_GET,
+                'loggedIn' => false,
+                'request' => Request::METHOD_GET,
             ],
             [
-                'logged_in' => true,
-                'request_type' => Request::METHOD_POST,
+                'loggedIn' => true,
+                'request' => Request::METHOD_POST,
             ],
             [
-                'logged_in' => true,
-                'request_type' => Request::METHOD_GET,
+                'loggedIn' => true,
+                'request' => Request::METHOD_GET,
             ],
         ];
     }

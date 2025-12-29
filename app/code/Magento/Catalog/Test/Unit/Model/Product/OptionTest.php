@@ -1,16 +1,18 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Catalog\Test\Unit\Model\Product;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\Product\Option;
 use Magento\Catalog\Model\Product\Option\Value;
 use Magento\Framework\Pricing\Amount\AmountInterface;
+use Magento\Framework\Pricing\Price\PriceInterface;
 use Magento\Framework\Pricing\PriceInfoInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -54,18 +56,12 @@ class OptionTest extends TestCase
 
     public function testGetRegularPrice()
     {
-        $priceInfoMock = $this->getMockForAbstractClass(
-            PriceInfoInterface::class,
-            [],
-            '',
-            false,
-            false,
-            true,
-            ['getAmount', 'getPrice']
-        );
-        $priceInfoMock->expects($this->once())->method('getPrice')->willReturnSelf();
-        $amountMock = $this->getMockForAbstractClass(AmountInterface::class);
-        $priceInfoMock->expects($this->once())->method('getAmount')->willReturn($amountMock);
+        $priceInfoMock = $this->createMock(PriceInfoInterface::class);
+        $priceMock = $this->createMock(PriceInterface::class);
+        $amountMock = $this->createMock(AmountInterface::class);
+        
+        $priceInfoMock->expects($this->once())->method('getPrice')->willReturn($priceMock);
+        $priceMock->expects($this->once())->method('getAmount')->willReturn($amountMock);
 
         $this->productMock->expects($this->once())->method('getPriceInfo')->willReturn($priceInfoMock);
 
@@ -82,8 +78,8 @@ class OptionTest extends TestCase
      *
      * @param string $rawExtensions
      * @param string $expectedExtensions
-     * @dataProvider cleanFileExtensionsDataProvider
      */
+    #[DataProvider('cleanFileExtensionsDataProvider')]
     public function testCleanFileExtensions(string $rawExtensions, string $expectedExtensions)
     {
         $this->model->setType(Option::OPTION_GROUP_FILE);
@@ -98,7 +94,7 @@ class OptionTest extends TestCase
      *
      * @return array
      */
-    public function cleanFileExtensionsDataProvider()
+    public static function cleanFileExtensionsDataProvider()
     {
         return [
             ['JPG, PNG, GIF', 'jpg, png, gif'],

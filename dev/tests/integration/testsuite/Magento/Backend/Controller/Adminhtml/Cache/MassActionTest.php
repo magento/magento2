@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Backend\Controller\Adminhtml\Cache;
 
@@ -178,7 +178,7 @@ class MassActionTest extends \Magento\TestFramework\TestCase\AbstractBackendCont
     /**
      * @return array
      */
-    public function massActionsDataProvider()
+    public static function massActionsDataProvider()
     {
         return [
             'no types' => [[]],

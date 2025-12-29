@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -40,15 +40,13 @@ class DataTest extends TestCase
     protected function setUp(): void
     {
         $this->objectManager = new ObjectManager($this);
-        $this->_readerMock = $this->getMockBuilder(
+        $this->_readerMock = $this->createMock(
             Reader::class
-        )->disableOriginalConstructor()
-            ->getMock();
-        $this->_cacheMock = $this->getMockBuilder(
+        );
+        $this->_cacheMock = $this->createMock(
             Config::class
-        )->disableOriginalConstructor()
-            ->getMock();
-        $this->serializerMock = $this->getMockForAbstractClass(SerializerInterface::class);
+        );
+        $this->serializerMock = $this->createMock(SerializerInterface::class);
     }
 
     public function testGet()

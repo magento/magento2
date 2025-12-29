@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
-  */
+/**
+ * Copyright 2024 Adobe
+ * All Rights Reserved.
+ */
 -->
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -79,6 +79,14 @@
             </actionGroup>
             <waitForLoadingMaskToDisappear stepKey="waitForSearchingOrder"/>
             <actionGroup ref="AdminOrderGridClickFirstRowActionGroup" stepKey="clickOrderRow"/>
+            <!--Check if order is in Payment Review status and get payment update from PayPal-->
+            <conditionalClick selector="{{AdminOrderDetailsMainActionsSection.getPaymentUpdate}}" dependentSelector="{{AdminOrderDetailsMainActionsSection.getPaymentUpdate}}" visible="true" stepKey="clickGetPaymentUpdateIfVisible"/>
+            <waitForPageLoad stepKey="waitForPaymentUpdateResponse"/>
+            <!--If invoice was created, capture it-->
+            <conditionalClick selector="{{AdminOrderDetailsMainActionsSection.invoice}}" dependentSelector="{{AdminOrderDetailsMainActionsSection.invoice}}" visible="true" stepKey="clickInvoiceButtonIfVisible"/>
+            <waitForPageLoad stepKey="waitForInvoicePageIfOpened"/>
+            <conditionalClick selector="{{AdminInvoiceMainActionsSection.submitInvoice}}" dependentSelector="{{AdminInvoiceMainActionsSection.submitInvoice}}" visible="true" stepKey="submitInvoiceIfOnInvoicePage"/>
+            <waitForPageLoad stepKey="waitAfterInvoiceSubmit"/>
             <!-- Filter invoice in invoices grid based on the order id -->
             <actionGroup ref="FilterInvoiceGridByOrderIdWithCleanFiltersActionGroup" stepKey="filterInvoiceGridByOrderId">
                 <argument name="orderId" value="{$grabOrderNumber}"/>
@@ -101,7 +109,9 @@
             <actionGroup ref="AdminClickRefundOfflineOnCreditMemoDetailPageActionGroup" stepKey="clickSubmitInvoice"/>
             <waitForText selector="{{AdminOrderDetailsMessagesSection.successMessage}}" userInput="You created the credit memo." stepKey="seeSuccessMessage"/>
             <waitForText selector="{{AdminCreditMemoOrderInformationSection.orderStatus}}" userInput="Processing" stepKey="waitForTextOrderStatus"/>
-            <scrollTo selector="{{AdminCreditMemosGridSection.memoId}}" stepKey="scrollToMemoId"/>
+            <click selector="{{AdminOrderDetailsOrderViewSection.creditMemos}}" stepKey="clickCreditMemoTab"/>
+            <waitForPageLoad stepKey="waitForTabLoad"/>
+            <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="scrollToMemoId"/>
             <grabTextFrom selector="{{AdminCreditMemosGridSection.memoId}}" stepKey="grabMemoId"/>
             <actionGroup ref="AdminAssertRefundInRefundsGridActionGroup" stepKey="assertRefund">
                 <argument name="orderId" value="{$grabOrderNumber}"/>

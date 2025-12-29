@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Backend\Console\Command;
@@ -27,7 +27,7 @@ abstract class AbstractCacheSetCommand extends AbstractCacheManageCommand
     /**
      * @inheritdoc
      */
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $isEnable = $this->isEnable();
         $types = $this->getRequestedTypes($input);

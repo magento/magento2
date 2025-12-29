@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -13,12 +13,15 @@ use Magento\Backend\Model\Session;
 use Magento\Backend\Model\Url;
 use Magento\Framework\App\Response\Http;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Magento\Framework\App\Response\FileFactory;
 
 class FileFactoryTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var \Magento\Framework\App\Response\Http\FileFactory
      */
@@ -44,16 +47,21 @@ class FileFactoryTest extends TestCase
      */
     protected $_responseMock;
 
+    /**
+     * @var ObjectManager
+     */
+    private $objectManager;
+
     protected function setUp(): void
     {
-        $helper = new ObjectManager($this);
+        $this->objectManager = new ObjectManager($this);
         $objects = [
             [
                 FileFactory::class,
                 $this->createMock(FileFactory::class)
             ]
         ];
-        $helper->prepareObjectManager($objects);
+        $this->objectManager->prepareObjectManager($objects);
 
         $this->_responseMock = $this->createPartialMock(
             Http::class,
@@ -66,13 +74,14 @@ class FileFactoryTest extends TestCase
         )->willReturn(
             $this->_responseMock
         );
-        $this->_sessionMock = $this->getMockBuilder(Session::class)
-            ->addMethods(['setIsUrlNotice'])
-            ->disableOriginalConstructor()
-            ->getMock();
+
+        $this->_sessionMock = $this->createPartialMockWithReflection(
+            Session::class,
+            ['setIsUrlNotice']
+        );
         $this->_backendUrl = $this->createMock(Url::class);
         $this->_authMock = $this->createMock(Auth::class);
-        $this->_model = $helper->getObject(
+        $this->_model = $this->objectManager->getObject(
             HttpFileFactory::class,
             [
                 'response' => $this->_responseMock,

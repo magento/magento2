@@ -1,13 +1,13 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Catalog\Test\Unit\Block\Adminhtml\Product\Edit\Button;
 
-use Magento\Catalog\Api\Data\ProductInterface;
+use Magento\Catalog\Model\Product;
 use Magento\Catalog\Block\Adminhtml\Product\Edit\Button\Generic;
 use Magento\Framework\Registry;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
@@ -33,22 +33,17 @@ class GenericTest extends TestCase
     protected $registryMock;
 
     /**
-     * @var ProductInterface|MockObject
+     * @var Product|MockObject
      */
     protected $productMock;
 
     protected function setUp(): void
     {
         $this->objectManager = new ObjectManager($this);
-        $this->contextMock = $this->getMockBuilder(Context::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->registryMock = $this->getMockBuilder(Registry::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->productMock = $this->getMockBuilder(ProductInterface::class)
-            ->addMethods(['isReadonly', 'isDuplicable'])
-            ->getMockForAbstractClass();
+        $this->contextMock = $this->createMock(Context::class);
+        $this->registryMock = $this->createMock(Registry::class);
+        // Create a mock that implements ProductInterface with the required methods
+        $this->productMock = $this->createPartialMock(Product::class, ['isReadonly', 'isDuplicable']);
 
         $this->registryMock->expects($this->any())
             ->method('registry')
@@ -79,6 +74,6 @@ class GenericTest extends TestCase
 
     public function testGetProduct()
     {
-        $this->assertInstanceOf(ProductInterface::class, $this->getModel()->getProduct());
+        $this->assertInstanceOf(Product::class, $this->getModel()->getProduct());
     }
 }

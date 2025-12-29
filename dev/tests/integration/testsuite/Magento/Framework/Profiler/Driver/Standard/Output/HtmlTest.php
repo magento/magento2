@@ -2,8 +2,8 @@
 /**
  * Test case for \Magento\Framework\Profiler\Driver\Standard\Output\Html
  *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework\Profiler\Driver\Standard\Output;
 
@@ -41,7 +41,7 @@ class HtmlTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function displayDataProvider()
+    public static function displayDataProvider()
     {
         return [
             ['statFile' => __DIR__ . '/_files/timers.php', 'expectedHtmlFile' => __DIR__ . '/_files/output.html']

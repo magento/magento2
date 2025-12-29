@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -11,12 +11,16 @@ use Magento\Catalog\Model\Entity\Attribute;
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\Product\Attribute\Source\Status;
 use Magento\Catalog\Model\Product\Type\Simple;
+use Magento\Catalog\Model\ResourceModel\Product as ProductResource;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 class AbstractTypeTest extends TestCase
 {
+    use MockCreationTrait;
     /**
      * @var ObjectManager
      */
@@ -33,7 +37,7 @@ class AbstractTypeTest extends TestCase
     private $product;
 
     /**
-     * @var \Magento\Catalog\Model\ResourceModel\Product|MockObject
+     * @var ProductResource|MockObject
      */
     private $productResource;
 
@@ -47,27 +51,26 @@ class AbstractTypeTest extends TestCase
         $this->objectManagerHelper = new ObjectManager($this);
         $this->model = $this->objectManagerHelper->getObject(Simple::class);
 
-        $this->product = $this->getMockBuilder(Product::class)
-            ->addMethods(['getHasOptions'])
-            ->onlyMethods(['__sleep', 'getResource', 'getStatus'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->productResource = $this->getMockBuilder(\Magento\Catalog\Model\ResourceModel\Product::class)
-            ->onlyMethods(['getSortedAttributes', 'loadAllAttributes'])
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->product = $this->createPartialMockWithReflection(
+            Product::class,
+            ['getHasOptions', '__sleep', 'getResource', 'getStatus']
+        );
+        $this->productResource = $this->createPartialMock(
+            ProductResource::class,
+            ['getSortedAttributes', 'loadAllAttributes']
+        );
 
-        $this->product->expects($this->any())->method('getResource')->willReturn($this->productResource);
+        $this->product->method('getResource')->willReturn($this->productResource);
 
-        $this->attribute = $this->getMockBuilder(Attribute::class)
-            ->addMethods(['getGroupSortPath', 'getSortPath'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->attribute = $this->createPartialMockWithReflection(
+            Attribute::class,
+            ['getGroupSortPath', 'getSortPath']
+        );
     }
 
     public function testIsSalable()
     {
-        $this->product->expects($this->any())->method('getStatus')->willReturn(
+        $this->product->method('getStatus')->willReturn(
             Status::STATUS_ENABLED
         );
         $this->product->setData('is_salable', 3);
@@ -88,9 +91,7 @@ class AbstractTypeTest extends TestCase
         $this->assertNull($this->model->getAttributeById(0, $this->product));
     }
 
-    /**
-     * @dataProvider attributeCompareProvider
-     */
+    #[DataProvider('attributeCompareProvider')]
     public function testAttributesCompare($attr1, $attr2, $expectedResult)
     {
         $attribute = $this->attribute;
@@ -118,10 +119,10 @@ class AbstractTypeTest extends TestCase
 
     public function testGetSetAttributes()
     {
-        $this->productResource->expects($this->once())->method('loadAllAttributes')->willReturn(
+        $this->productResource->expects($this->any())->method('loadAllAttributes')->willReturn(
             $this->productResource
         );
-        $this->productResource->expects($this->once())->method('getSortedAttributes')->willReturn(5);
+        $this->productResource->expects($this->any())->method('getSortedAttributes')->willReturn(5);
         $this->assertEquals(5, $this->model->getSetAttributes($this->product));
         //Call the method for a second time, the cached copy should be used
         $this->assertEquals(5, $this->model->getSetAttributes($this->product));

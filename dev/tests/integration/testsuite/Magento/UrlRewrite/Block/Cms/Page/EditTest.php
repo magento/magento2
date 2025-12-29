@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\UrlRewrite\Block\Cms\Page;
 
@@ -279,7 +279,7 @@ class EditTest extends TestCase
      *
      * @return array
      */
-    public function prepareLayoutDataProvider()
+    public static function prepareLayoutDataProvider()
     {
         /** @var $urlRewrite \Magento\UrlRewrite\Model\UrlRewrite */
         $urlRewrite = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(

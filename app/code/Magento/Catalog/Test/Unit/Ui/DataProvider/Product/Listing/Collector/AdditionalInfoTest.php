@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -23,7 +23,7 @@ class AdditionalInfoTest extends TestCase
     }
     public function testGet()
     {
-        $productRenderInfo = $this->getMockForAbstractClass(ProductRenderInterface::class);
+        $productRenderInfo = $this->createMock(ProductRenderInterface::class);
         $productRenderInfo->expects($this->once())
             ->method('setIsSalable')
             ->with(true);
@@ -33,9 +33,7 @@ class AdditionalInfoTest extends TestCase
         $productRenderInfo->expects($this->once())
             ->method('setId')
             ->with(1);
-        $productMock = $this->getMockBuilder(Product::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $productMock = $this->createMock(Product::class);
         $productMock->expects($this->once())
             ->method('isSalable')
             ->willReturn(true);

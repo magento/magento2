@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework\Module;
 
@@ -65,7 +65,7 @@ class DependencyChecker
      * @return array
      * @throws \Magento\Framework\Exception\LocalizedException
      */
-    public function checkDependenciesWhenEnableModules(array $toBeEnabledModules, array $currentlyEnabledModules = null)
+    public function checkDependenciesWhenEnableModules(array $toBeEnabledModules, ?array $currentlyEnabledModules = null)
     {
         $masterList = $currentlyEnabledModules ?? $this->list->getNames();
         // assume enable succeeds: union of currently enabled modules and to-be-enabled modules

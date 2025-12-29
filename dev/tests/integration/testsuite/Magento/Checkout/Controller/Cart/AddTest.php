@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -172,7 +172,7 @@ class AddTest extends AbstractController
         $product = $this->productRepository->get('simple-1');
         $postData = ['product' => $product->getId(), 'qty' => '1000'];
         $this->dispatchAddToCartRequest($postData);
-        $message = (string)__('The requested qty is not available');
+        $message = (string)__('Not enough items for sale');
         $this->assertSessionMessages($this->containsEqual($message), MessageInterface::TYPE_ERROR);
         $this->assertRedirect($this->stringContains($product->getProductUrl()));
     }

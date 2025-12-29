@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -38,12 +38,8 @@ class ApplyRulesAfterReindexTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->productRuleProcessorMock = $this->getMockBuilder(ProductRuleProcessor::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->subjectMock = $this->getMockBuilder(Product::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->productRuleProcessorMock = $this->createMock(ProductRuleProcessor::class);
+        $this->subjectMock = $this->createMock(Product::class);
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->plugin = $this->objectManagerHelper->getObject(

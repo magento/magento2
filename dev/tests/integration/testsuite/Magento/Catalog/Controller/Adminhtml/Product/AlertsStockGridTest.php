@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2021 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -43,12 +43,12 @@ class AlertsStockGridTest extends AbstractAlertTest
             'default_limit' => [
                 'email' => 'customer@example.com',
                 'limit' => null,
-                'expected_count' => 2,
+                'expectedCount' => 2,
             ],
             'limit_1' => [
                 'email' => 'customer@example.com',
                 'limit' => 1,
-                'expected_count' => 1,
+                'expectedCount' => 1,
             ],
         ];
     }

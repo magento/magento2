@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -11,6 +11,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Sales\Block\Adminhtml\Order\Comments\View;
 use Magento\Sales\Helper\Admin;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 class ViewTest extends TestCase
@@ -27,9 +28,7 @@ class ViewTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->adminHelperMock = $this->getMockBuilder(Admin::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->adminHelperMock = $this->createMock(Admin::class);
 
         $this->commentsView = (new ObjectManager($this))->getObject(
             View::class,
@@ -43,8 +42,8 @@ class ViewTest extends TestCase
      * @param string $data
      * @param string $expected
      * @param null|array $allowedTags
-     * @dataProvider escapeHtmlDataProvider
      */
+    #[DataProvider('escapeHtmlDataProvider')]
     public function testEscapeHtml($data, $expected, $allowedTags = null)
     {
         $this->adminHelperMock
@@ -58,7 +57,7 @@ class ViewTest extends TestCase
     /**
      * @return array
      */
-    public function escapeHtmlDataProvider()
+    public static function escapeHtmlDataProvider()
     {
         return [
             [

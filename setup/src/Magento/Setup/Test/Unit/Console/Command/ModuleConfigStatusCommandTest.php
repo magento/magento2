@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 
 declare(strict_types=1);
@@ -55,7 +55,7 @@ class ModuleConfigStatusCommandTest extends TestCase
     /**
      * @return array
      */
-    public function executeDataProvider()
+    public static function executeDataProvider()
     {
         $successMessage = 'The modules configuration is up to date.' . PHP_EOL;
         $failureMessage = 'The modules configuration in the \'app/etc/config.php\' '

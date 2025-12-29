@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -15,6 +15,7 @@ use Magento\Sitemap\Model\ResourceModel\Catalog\Product as ProductResource;
 use Magento\Sitemap\Model\ResourceModel\Catalog\ProductFactory;
 use Magento\Sitemap\Model\SitemapItem;
 use Magento\Sitemap\Model\SitemapItemInterfaceFactory;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -33,9 +34,9 @@ class ProductTest extends TestCase
     }
 
     /**
-     * @dataProvider productProvider
      * @param array $products
      */
+    #[DataProvider('productProvider')]
     public function testGetItems(array $products)
     {
         $configReaderMock = $this->getConfigReaderMock();
@@ -59,7 +60,7 @@ class ProductTest extends TestCase
     /**
      * @return array
      */
-    public function productProvider()
+    public static function productProvider()
     {
         $storeBaseMediaUrl = 'http://store.com/media/catalog/product/cache/c9e0b0ef589f3508e5ba515cde53c5ff/';
         return [
@@ -105,10 +106,7 @@ class ProductTest extends TestCase
      */
     private function getProductFactoryMock($returnValue)
     {
-        $cmsPageFactoryMock = $this->getMockBuilder(ProductFactory::class)
-            ->onlyMethods(['create'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $cmsPageFactoryMock = $this->createPartialMock(ProductFactory::class, ['create']);
 
         $cmsPageFactoryMock->expects($this->any())
             ->method('create')
@@ -122,10 +120,7 @@ class ProductTest extends TestCase
      */
     private function getItemFactoryMock()
     {
-        $itemFactoryMock = $this->getMockBuilder(SitemapItemInterfaceFactory::class)
-            ->onlyMethods(['create'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $itemFactoryMock = $this->createPartialMock(SitemapItemInterfaceFactory::class, ['create']);
 
         $itemFactoryMock->expects($this->any())
             ->method('create')
@@ -143,7 +138,7 @@ class ProductTest extends TestCase
      */
     private function getConfigReaderMock()
     {
-        $configReaderMock = $this->getMockForAbstractClass(ConfigReaderInterface::class);
+        $configReaderMock = $this->createMock(ConfigReaderInterface::class);
         $configReaderMock->expects($this->any())
             ->method('getPriority')
             ->willReturn('1.0');
@@ -160,10 +155,7 @@ class ProductTest extends TestCase
      */
     private function getProductCollectionMock($returnValue)
     {
-        $sitemapCmsPageMock = $this->getMockBuilder(ProductResource::class)
-            ->onlyMethods(['getCollection'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $sitemapCmsPageMock = $this->createPartialMock(ProductResource::class, ['getCollection']);
 
         $sitemapCmsPageMock->expects($this->any())
             ->method('getCollection')

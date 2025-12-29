@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2025 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -12,11 +12,13 @@ use Magento\Catalog\Model\Product;
 use Magento\Customer\Model\Session;
 use Magento\Framework\App\Action\Context;
 use Magento\Framework\App\Request\Http;
+use Magento\Framework\App\Response\Http as ResponseHttp;
 use Magento\Framework\App\Response\RedirectInterface;
 use Magento\Framework\Controller\Result\Redirect;
 use Magento\Framework\Controller\ResultFactory;
 use Magento\Framework\Data\Form\FormKey\Validator;
 use Magento\Framework\Event\ManagerInterface;
+use Magento\Framework\Message\ManagerInterface as MessageManagerInterface;
 use Magento\Framework\Registry;
 use Magento\Framework\Session\Generic;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
@@ -25,7 +27,10 @@ use Magento\Review\Model\Rating;
 use Magento\Review\Model\RatingFactory;
 use Magento\Review\Model\Review;
 use Magento\Review\Model\ReviewFactory;
+use Magento\Review\Model\Review\Config;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Store\Model\Store;
+use Magento\Store\Model\StoreManager;
 use Magento\Store\Model\StoreManagerInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -36,6 +41,8 @@ use PHPUnit\Framework\TestCase;
  */
 class PostTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var MockObject
      */
@@ -122,66 +129,65 @@ class PostTest extends TestCase
     protected $resultRedirectMock;
 
     /**
+     * @var Config|MockObject
+     */
+    protected $reviewsConfig;
+
+    /**
      * @inheritDoc
      *
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     protected function setUp(): void
     {
-        $this->redirect = $this->getMockForAbstractClass(RedirectInterface::class);
+        $this->redirect = $this->createMock(RedirectInterface::class);
         $this->request = $this->createPartialMock(Http::class, ['getParam']);
-        $this->response = $this->createPartialMock(\Magento\Framework\App\Response\Http::class, ['setRedirect']);
+        $this->response = $this->createPartialMock(ResponseHttp::class, ['setRedirect']);
         $this->formKeyValidator = $this->createPartialMock(
             Validator::class,
             ['validate']
         );
-        $this->reviewSession = $this->getMockBuilder(Generic::class)
-            ->addMethods(['getFormData', 'getRedirectUrl'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->eventManager = $this->getMockForAbstractClass(ManagerInterface::class);
-        $this->productRepository = $this->getMockForAbstractClass(ProductRepositoryInterface::class);
+        $this->reviewsConfig = $this->createPartialMock(
+            Config::class,
+            ['isEnabled']
+        );
+        $this->reviewSession = $this->createPartialMockWithReflection(
+            Generic::class,
+            ['getFormData', 'getRedirectUrl']
+        );
+        $this->eventManager = $this->createMock(ManagerInterface::class);
+        $this->productRepository = $this->createMock(ProductRepositoryInterface::class);
         $this->coreRegistry = $this->createMock(Registry::class);
-        $this->review = $this->getMockBuilder(Review::class)
-            ->addMethods(['setEntityPkValue', 'setStatusId', 'setCustomerId', 'setStoreId', 'setStores'])
-            ->onlyMethods([
-                'setData',
-                'validate',
-                'setEntityId',
-                'getEntityIdByCode',
-                'save',
-                'getId',
-                'aggregate',
-                'unsetData'
-            ])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->review = $this->createPartialMockWithReflection(
+            Review::class,
+            [
+                'setEntityPkValue', 'setStatusId', 'setCustomerId', 'setStoreId', 'setStores',
+                'setData', 'validate', 'setEntityId', 'getEntityIdByCode', 'save',
+                'getId', 'aggregate', 'unsetData'
+            ]
+        );
+        
         $reviewFactory = $this->createPartialMock(ReviewFactory::class, ['create']);
         $reviewFactory->expects($this->once())->method('create')->willReturn($this->review);
         $this->customerSession = $this->createPartialMock(Session::class, ['getCustomerId']);
-        $this->rating = $this->getMockBuilder(Rating::class)
-            ->addMethods(['setRatingId', 'setReviewId', 'setCustomerId'])
-            ->onlyMethods(['addOptionVote'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->rating = $this->createPartialMockWithReflection(
+            Rating::class,
+            ['setRatingId', 'setReviewId', 'setCustomerId', 'addOptionVote']
+        );
         $ratingFactory = $this->createPartialMock(RatingFactory::class, ['create']);
         $ratingFactory->expects($this->once())->method('create')->willReturn($this->rating);
-        $this->messageManager = $this->createMock(\Magento\Framework\Message\ManagerInterface::class);
+        $this->messageManager = $this->createMock(MessageManagerInterface::class);
 
         $this->store = $this->createPartialMock(
             Store::class,
             ['getId', 'getWebsiteId']
         );
 
-        $storeManager = $this->getMockForAbstractClass(StoreManagerInterface::class);
+        $storeManager = $this->createPartialMock(StoreManager::class, ['getStore']);
         $storeManager->expects($this->any())->method('getStore')->willReturn($this->store);
 
-        $this->resultFactoryMock = $this->getMockBuilder(ResultFactory::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->resultRedirectMock = $this->getMockBuilder(Redirect::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->resultFactoryMock = $this->createMock(ResultFactory::class);
+        $this->resultRedirectMock = $this->createMock(Redirect::class);
 
         $this->resultFactoryMock->expects($this->any())
             ->method('create')
@@ -211,7 +217,8 @@ class PostTest extends TestCase
                 'customerSession' => $this->customerSession,
                 'ratingFactory' => $ratingFactory,
                 'storeManager' => $storeManager,
-                'context' => $this->context
+                'context' => $this->context,
+                'reviewsConfig' => $this->reviewsConfig
             ]
         );
     }
@@ -233,6 +240,8 @@ class PostTest extends TestCase
         $redirectUrl = 'url';
         $this->formKeyValidator->expects($this->any())->method('validate')
             ->with($this->request)
+            ->willReturn(true);
+        $this->reviewsConfig->expects($this->any())->method('isEnabled')
             ->willReturn(true);
         $this->reviewSession->expects($this->any())->method('getFormData')
             ->with(true)

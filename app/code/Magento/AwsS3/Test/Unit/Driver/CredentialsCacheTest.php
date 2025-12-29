@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2023 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -42,8 +42,7 @@ class CredentialsCacheTest extends TestCase
     protected function setUp(): void
     {
         $this->cacheMock = $this->createMock(CacheInterface::class);
-        $this->credentialsFactory =
-            $this->getMockBuilder(CredentialsFactory::class)->disableOriginalConstructor()->getMock();
+        $this->credentialsFactory = $this->createMock(CredentialsFactory::class);
         $this->jsonMock = $this->createMock(Json::class);
         $this->adapter = new CredentialsCache($this->cacheMock, $this->credentialsFactory, $this->jsonMock);
     }

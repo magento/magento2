@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -20,6 +20,7 @@ use Magento\Sales\Controller\Adminhtml\Order\ReviewPayment;
 use Magento\Sales\Model\Order\Payment;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -27,6 +28,8 @@ use Psr\Log\LoggerInterface;
  */
 class ReviewPaymentTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var ReviewPayment|MockObject
      */
@@ -99,14 +102,12 @@ class ReviewPaymentTest extends TestCase
             'getResultRedirectFactory'
         ]);
         $this->orderManagementMock = $this->getMockBuilder(OrderManagementInterface::class)
-            ->getMockForAbstractClass();
+            ->getMock();
         $this->orderRepositoryMock = $this->getMockBuilder(OrderRepositoryInterface::class)
-            ->getMockForAbstractClass();
+            ->getMock();
         $this->loggerMock = $this->getMockBuilder(LoggerInterface::class)
-            ->getMockForAbstractClass();
-        $this->orderMock = $this->getMockBuilder(OrderInterface::class)
-            ->onlyMethods(['getPayment'])
-            ->getMockForAbstractClass();
+            ->getMock();
+        $this->orderMock = $this->createMock(OrderInterface::class);
         $this->messageManagerMock = $this->createPartialMock(
             Manager::class,
             ['addSuccessMessage', 'addErrorMessage']
@@ -117,11 +118,10 @@ class ReviewPaymentTest extends TestCase
             ['create']
         );
 
-        $this->paymentMock = $this->getMockBuilder(Payment::class)
-            ->addMethods(['getIsTransactionApproved'])
-            ->onlyMethods(['update'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->paymentMock = $this->createPartialMockWithReflection(
+            Payment::class,
+            ['getIsTransactionApproved', 'update']
+        );
 
         $this->resultRedirectMock = $this->createPartialMock(
             Redirect::class,

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -18,6 +18,7 @@ use Magento\Review\Model\Rating;
 use Magento\Review\Model\RatingFactory;
 use Magento\Review\Model\Review;
 use Magento\Review\Model\ReviewFactory;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -29,6 +30,8 @@ use PHPUnit\Framework\TestCase;
  */
 class PostTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var Post
      */
@@ -117,30 +120,23 @@ class PostTest extends TestCase
      */
     protected function _prepareMockObjects()
     {
-        $this->requestMock = $this->getMockBuilder(Http::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->objectManagerMock = $this->getMockForAbstractClass(ObjectManagerInterface::class);
-        $this->storeManagerMock = $this->getMockForAbstractClass(StoreManagerInterface::class);
+        $this->requestMock = $this->createMock(Http::class);
+        $this->objectManagerMock = $this->createMock(ObjectManagerInterface::class);
+        $this->storeManagerMock = $this->createMock(StoreManagerInterface::class);
         $this->storeModelMock = $this->createPartialMock(Store::class, ['__wakeup', 'getId']);
-        $this->reviewMock = $this->getMockBuilder(Review::class)
-            ->addMethods(['create'])
-            ->onlyMethods(['__wakeup', 'save', 'getId', 'getResource', 'aggregate', 'getEntityIdByCode'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->reviewMock = $this->createPartialMock(
+            Review::class,
+            ['save', 'getId', 'aggregate', 'getEntityIdByCode']
+        );
         $this->reviewFactoryMock = $this->createPartialMock(ReviewFactory::class, ['create']);
-        $this->ratingMock = $this->getMockBuilder(Rating::class)
-            ->addMethods(['setRatingId', 'setReviewId'])
-            ->onlyMethods(['__wakeup', 'addOptionVote'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->ratingMock = $this->createPartialMockWithReflection(
+            Rating::class,
+            ['setRatingId', 'setReviewId', 'addOptionVote']
+        );
         $this->ratingFactoryMock = $this->createPartialMock(RatingFactory::class, ['create']);
-        $this->resultFactoryMock = $this->getMockBuilder(ResultFactory::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->resultRedirectMock = $this->getMockBuilder(Redirect::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->ratingFactoryMock->expects($this->any())->method('create')->willReturn($this->ratingMock);
+        $this->resultFactoryMock = $this->createMock(ResultFactory::class);
+        $this->resultRedirectMock = $this->createMock(Redirect::class);
 
         $this->resultFactoryMock->expects($this->any())
             ->method('create')

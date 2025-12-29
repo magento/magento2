@@ -3,11 +3,11 @@
 use Magento\Framework\Module\Setup\Migration;
 
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 return [
-    '$replaceRules' => [
+    'replaceRules' => [
         [
             'table',
             'field',
@@ -15,11 +15,11 @@ return [
             Migration::FIELD_CONTENT_TYPE_SERIALIZED,
         ],
     ],
-    '$tableData' => [
+    'tableData' => [
         ['field' => '{"max_text_length":255,"min_text_length":1}'],
         ['field' => '{"model":"some random text"}'],
     ],
-    '$expected' => [
+    'expected' => [
         'updates' => [
             [
                 'table' => 'table',

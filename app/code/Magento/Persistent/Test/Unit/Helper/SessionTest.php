@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 
 declare(strict_types=1);
@@ -15,6 +15,7 @@ use Magento\Persistent\Helper\Data as DataHelper;
 use Magento\Persistent\Helper\Session as SessionHelper;
 use Magento\Persistent\Model\Session;
 use Magento\Persistent\Model\SessionFactory;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -72,9 +73,7 @@ class SessionTest extends TestCase
         $this->checkoutSession = $this->getMockBuilder(CheckoutSession::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->scopeConfig = $this->getMockBuilder(ScopeConfigInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->scopeConfig = $this->createMock(ScopeConfigInterface::class);
         $this->sessionFactory = $this->getMockBuilder(SessionFactory::class)
             ->disableOriginalConstructor()
             ->onlyMethods(['create'])
@@ -103,8 +102,8 @@ class SessionTest extends TestCase
      * @param int|null $id
      * @param boolean $isEnabled
      * @param boolean $expected
-     * @dataProvider isPersistentDataProvider
      */
+    #[DataProvider('isPersistentDataProvider')]
     public function testIsPersistent($id, $isEnabled, $expected)
     {
         $this->session->expects($this->any())->method('getId')
@@ -122,7 +121,7 @@ class SessionTest extends TestCase
      *
      * @return array
      */
-    public function isPersistentDataProvider()
+    public static function isPersistentDataProvider()
     {
         return [
             'session_id_and_enable_persistent' => [
@@ -146,8 +145,8 @@ class SessionTest extends TestCase
      * @param boolean $isRememberMeEnabled
      * @param boolean $isRememberMeCheckedDefault
      * @param boolean $expected
-     * @dataProvider isRememberMeCheckedProvider
      */
+    #[DataProvider('isRememberMeCheckedProvider')]
     public function testIsRememberMeChecked(
         $checked,
         $isEnabled,
@@ -171,7 +170,7 @@ class SessionTest extends TestCase
      *
      * @return array
      */
-    public function isRememberMeCheckedProvider()
+    public static function isRememberMeCheckedProvider()
     {
         return [
             'enable_all_config' => [

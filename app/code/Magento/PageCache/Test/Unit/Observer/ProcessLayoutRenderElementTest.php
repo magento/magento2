@@ -1,8 +1,7 @@
 <?php
 /**
- *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -19,10 +18,14 @@ use Magento\Framework\View\Layout;
 use Magento\PageCache\Model\Config;
 use Magento\PageCache\Observer\ProcessLayoutRenderElement;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\Attributes\DataProvider;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use PHPUnit\Framework\TestCase;
 
 class ProcessLayoutRenderElementTest extends TestCase
 {
+    use MockCreationTrait;
+
     /** @var ProcessLayoutRenderElement */
     private $_model;
 
@@ -59,18 +62,12 @@ class ProcessLayoutRenderElementTest extends TestCase
             new Base64Json()
         );
         $this->_observerMock = $this->createPartialMock(Observer::class, ['getEvent']);
-        $this->_layoutMock = $this->getMockBuilder(Layout::class)
-            ->addMethods(['getHandles'])
-            ->onlyMethods(['isCacheable', 'getBlock', 'getUpdate'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->_blockMock = $this->getMockForAbstractClass(
+        $this->_layoutMock = $this->createPartialMockWithReflection(
+            Layout::class,
+            ['getHandles', 'isCacheable', 'getBlock', 'getUpdate']
+        );
+        $this->_blockMock = $this->createPartialMock(
             AbstractBlock::class,
-            [],
-            '',
-            false,
-            true,
-            true,
             ['getData', 'isScopePrivate', 'getNameInLayout', 'getUrl']
         );
         $this->_transport = new DataObject(['output' => 'test output html']);
@@ -82,8 +79,8 @@ class ProcessLayoutRenderElementTest extends TestCase
      * @param bool $scopeIsPrivate
      * @param int|null $blockTtl
      * @param string $expectedOutput
-     * @dataProvider processLayoutRenderDataProvider
      */
+    #[DataProvider('processLayoutRenderDataProvider')]
     public function testExecute(
         $cacheState,
         $varnishIsEnabled,
@@ -91,10 +88,10 @@ class ProcessLayoutRenderElementTest extends TestCase
         $blockTtl,
         $expectedOutput
     ) {
-        $eventMock = $this->getMockBuilder(Event::class)
-            ->addMethods(['getLayout', 'getElementName', 'getTransport'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $eventMock = $this->createPartialMockWithReflection(
+            Event::class,
+            ['getLayout', 'getElementName', 'getTransport']
+        );
         $this->_observerMock->expects($this->once())->method('getEvent')->willReturn($eventMock);
         $eventMock->expects($this->once())->method('getLayout')->willReturn($this->_layoutMock);
         $this->_configMock->expects($this->any())->method('isEnabled')->willReturn($cacheState);
@@ -161,10 +158,10 @@ class ProcessLayoutRenderElementTest extends TestCase
     public function testExecuteWithBase64Encode()
     {
         $expectedOutput = '<esi:include src="page_cache/block/wrapesi/with/handles/YW5kL290aGVyL3N0dWZm" />';
-        $eventMock = $this->getMockBuilder(Event::class)
-            ->addMethods(['getLayout', 'getElementName', 'getTransport'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $eventMock = $this->createPartialMockWithReflection(
+            Event::class,
+            ['getLayout', 'getElementName', 'getTransport']
+        );
         $expectedUrl = 'page_cache/block/wrapesi/with/handles/' . base64_encode('and/other/stuff');
 
         $this->_observerMock->expects($this->once())->method('getEvent')->willReturn($eventMock);
@@ -222,7 +219,7 @@ class ProcessLayoutRenderElementTest extends TestCase
      *
      * @return array
      */
-    public function processLayoutRenderDataProvider()
+    public static function processLayoutRenderDataProvider()
     {
         return [
             'full_page type and Varnish enabled, public scope, ttl is set' => [

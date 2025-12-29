@@ -1,12 +1,13 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\CatalogRule\Test\Unit\Model\Indexer\Product;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\Catalog\Model\Product;
 use Magento\CatalogRule\Model\Indexer\IndexBuilder;
 use Magento\CatalogRule\Model\Indexer\Product\ProductRuleIndexer;
@@ -56,8 +57,8 @@ class ProductRuleIndexerTest extends TestCase
     /**
      * @param array $ids
      * @param array $idsForIndexer
-     * @dataProvider dataProviderForExecuteList
      */
+    #[DataProvider('dataProviderForExecuteList')]
     public function testDoExecuteList($ids, $idsForIndexer)
     {
         $this->indexBuilder->expects($this->once())
@@ -72,7 +73,7 @@ class ProductRuleIndexerTest extends TestCase
     /**
      * @return array
      */
-    public function dataProviderForExecuteList()
+    public static function dataProviderForExecuteList()
     {
         return [
             [

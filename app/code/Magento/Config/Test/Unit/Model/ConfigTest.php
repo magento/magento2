@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -24,9 +24,12 @@ use Magento\Framework\DB\Transaction;
 use Magento\Framework\DB\TransactionFactory;
 use Magento\Framework\Event\ManagerInterface;
 use Magento\Framework\MessageQueue\PoisonPill\PoisonPillPutInterface;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Store\Model\ScopeTypeNormalizer;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Store\Model\Website;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -35,6 +38,8 @@ use PHPUnit\Framework\TestCase;
  */
 class ConfigTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var Config
      */
@@ -106,15 +111,21 @@ class ConfigTest extends TestCase
     private $scopeTypeNormalizer;
 
     /**
+     * @var ObjectManager
+     */
+    private $objectManager;
+
+    /**
      * @inheritdoc
      */
     protected function setUp(): void
     {
-        $this->eventManagerMock = $this->getMockForAbstractClass(ManagerInterface::class);
-        $this->structureReaderMock = $this->getMockBuilder(Reader::class)
-            ->addMethods(['getConfiguration'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->objectManager = new ObjectManager($this);
+        $this->eventManagerMock = $this->createMock(ManagerInterface::class);
+        $this->structureReaderMock = $this->createPartialMockWithReflection(
+            Reader::class,
+            ['getConfiguration']
+        );
         $this->configStructure = $this->createMock(Structure::class);
 
         $this->structureReaderMock->expects(
@@ -125,34 +136,33 @@ class ConfigTest extends TestCase
             $this->configStructure
         );
 
-        $this->transFactoryMock = $this->getMockBuilder(TransactionFactory::class)
-            ->addMethods(['addObject'])
-            ->onlyMethods(['create'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->appConfigMock = $this->getMockForAbstractClass(ReinitableConfigInterface::class);
+        $this->transFactoryMock = $this->createPartialMockWithReflection(
+            TransactionFactory::class,
+            ['addObject', 'create']
+        );
+        $this->appConfigMock = $this->createMock(ReinitableConfigInterface::class);
         $this->configLoaderMock = $this->createPartialMock(
             Loader::class,
             ['getConfigByPath']
         );
         $this->dataFactoryMock = $this->createMock(ValueFactory::class);
 
-        $this->storeManager = $this->getMockForAbstractClass(StoreManagerInterface::class);
+        $this->storeManager = $this->createMock(StoreManagerInterface::class);
 
         $this->settingsChecker = $this
             ->createMock(SettingChecker::class);
 
         $this->scopeResolverPool = $this->createMock(ScopeResolverPool::class);
-        $this->scopeResolver = $this->getMockForAbstractClass(ScopeResolverInterface::class);
+        $this->scopeResolver = $this->createMock(ScopeResolverInterface::class);
         $this->scopeResolverPool->method('get')
             ->willReturn($this->scopeResolver);
-        $this->scope = $this->getMockForAbstractClass(ScopeInterface::class);
+        $this->scope = $this->createMock(ScopeInterface::class);
         $this->scopeResolver->method('getScope')
             ->willReturn($this->scope);
 
         $this->scopeTypeNormalizer = $this->createMock(ScopeTypeNormalizer::class);
 
-        $stubPillPut = $this->getMockForAbstractClass(PoisonPillPutInterface::class);
+        $stubPillPut = $this->createMock(PoisonPillPutInterface::class);
 
         $this->model = new Config(
             $this->appConfigMock,
@@ -326,11 +336,10 @@ class ConfigTest extends TestCase
         $this->model->setSection('section');
         $this->model->setGroups(['1' => ['fields' => ['key' => ['data']]]]);
 
-        $backendModel = $this->getMockBuilder(Value::class)
-            ->addMethods(['setPath'])
-            ->onlyMethods(['addData', '__sleep', '__wakeup'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $backendModel = $this->createPartialMockWithReflection(
+            Value::class,
+            ['setPath', 'addData', '__sleep', '__wakeup']
+        );
         $backendModel->expects($this->once())
             ->method('addData')
             ->with([
@@ -360,8 +369,8 @@ class ConfigTest extends TestCase
      * @param array $groups
      *
      * @return void
-     * @dataProvider setDataByPathDataProvider
      */
+    #[DataProvider('setDataByPathDataProvider')]
     public function testSetDataByPath(string $path, string $value, string $section, array $groups): void
     {
         $this->model->setDataByPath($path, $value);
@@ -424,8 +433,8 @@ class ConfigTest extends TestCase
      * @param string $path
      *
      * @return void
-     * @dataProvider setDataByPathWrongDepthDataProvider
      */
+    #[DataProvider('setDataByPathWrongDepthDataProvider')]
     public function testSetDataByPathWrongDepth(string $path): void
     {
         $currentDepth = count(explode('/', $path));

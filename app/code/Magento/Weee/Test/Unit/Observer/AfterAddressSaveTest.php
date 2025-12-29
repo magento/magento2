@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -11,15 +11,24 @@ use Magento\Customer\Model\Address;
 use Magento\Framework\Event\Observer;
 use Magento\Framework\Module\Manager;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\PageCache\Model\Config;
 use Magento\Tax\Api\TaxAddressManagerInterface;
 use Magento\Weee\Helper\Data;
 use Magento\Weee\Observer\AfterAddressSave;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * Unit Tests to cover AfterAddressSave
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class AfterAddressSaveTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var ObjectManager
      */
@@ -62,27 +71,18 @@ class AfterAddressSaveTest extends TestCase
     protected function setUp(): void
     {
         $this->objectManager = new ObjectManager($this);
-        $this->observerMock = $this->getMockBuilder(Observer::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['getCustomerAddress'])
-            ->getMock();
+        $this->observerMock = $this->createPartialMockWithReflection(Observer::class, ['getCustomerAddress']);
 
-        $this->moduleManagerMock = $this->getMockBuilder(Manager::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->moduleManagerMock = $this->createMock(Manager::class);
 
-        $this->cacheConfigMock = $this->getMockBuilder(Config::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->cacheConfigMock = $this->createMock(Config::class);
 
-        $this->weeeHelperMock = $this->getMockBuilder(Data::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->weeeHelperMock = $this->createMock(Data::class);
 
-        $this->addressManagerMock = $this->getMockBuilder(TaxAddressManagerInterface::class)
-            ->onlyMethods(['setDefaultAddressAfterSave', 'setDefaultAddressAfterLogIn'])
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->addressManagerMock = $this->createPartialMock(
+            TaxAddressManagerInterface::class,
+            ['setDefaultAddressAfterSave', 'setDefaultAddressAfterLogIn']
+        );
 
         $this->session = $this->objectManager->getObject(
             AfterAddressSave::class,
@@ -97,13 +97,13 @@ class AfterAddressSaveTest extends TestCase
 
     /**
      * @test
-     * @dataProvider getExecuteDataProvider
      *
      * @param $isEnabledPageCache
      * @param $isEnabledConfigCache
      * @param $isEnabledWeee
      * @param $isNeedSetAddress
      */
+    #[DataProvider('getExecuteDataProvider')]
     public function testExecute(
         $isEnabledPageCache,
         $isEnabledConfigCache,
@@ -123,10 +123,8 @@ class AfterAddressSaveTest extends TestCase
             ->method('isEnabled')
             ->willReturn($isEnabledWeee);
 
-        /* @var \Magento\Customer\Model\Address|MockObject $address */
-        $address = $this->getMockBuilder(Address::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        /** @var \Magento\Customer\Model\Address|MockObject $address */
+        $address = $this->createMock(Address::class);
 
         $this->observerMock->expects($this->any())
             ->method('getCustomerAddress')

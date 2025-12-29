@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -88,7 +88,7 @@ class DatetimeTest extends TestCase
      *
      * @return array
      */
-    public function getValueDataProvider(): array
+    public static function getValueDataProvider(): array
     {
         return [
             ['frontendInput' => 'date', 'timeType' => \IntlDateFormatter::NONE],
@@ -118,7 +118,7 @@ class DatetimeTest extends TestCase
     /**
      * @return array
      */
-    public function getLabelDataProvider()
+    public static function getLabelDataProvider()
     {
         return [
             [null, 'test code', 'test code'],

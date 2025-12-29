@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -33,6 +33,7 @@ use Magento\Sales\Model\ShipOrder;
 use Magento\Sales\Model\ValidatorResultInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -44,6 +45,7 @@ use Psr\Log\LoggerInterface;
  */
 class ShipOrderTest extends TestCase
 {
+
     /**
      * @var ResourceConnection|MockObject
      */
@@ -141,61 +143,27 @@ class ShipOrderTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->resourceConnectionMock = $this->getMockBuilder(ResourceConnection::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->orderRepositoryMock = $this->getMockBuilder(OrderRepositoryInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-        $this->shipmentDocumentFactoryMock = $this->getMockBuilder(ShipmentDocumentFactory::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->orderRegistrarMock = $this->getMockBuilder(OrderRegistrarInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-        $this->orderStateResolverMock = $this->getMockBuilder(OrderStateResolverInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-        $this->configMock = $this->getMockBuilder(OrderConfig::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->shipmentRepositoryMock = $this->getMockBuilder(ShipmentRepositoryInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-        $this->notifierInterfaceMock = $this->getMockBuilder(NotifierInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-        $this->loggerMock = $this->getMockBuilder(LoggerInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-        $this->shipmentCommentCreationMock = $this->getMockBuilder(ShipmentCommentCreationInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-        $this->shipmentCreationArgumentsMock = $this->getMockBuilder(ShipmentCreationArgumentsInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-        $this->orderMock = $this->getMockBuilder(OrderInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-        $this->shipmentMock = $this->getMockBuilder(ShipmentInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-        $this->packageMock = $this->getMockBuilder(ShipmentPackageInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-        $this->trackMock = $this->getMockBuilder(ShipmentTrackCreationInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-        $this->adapterMock = $this->getMockBuilder(AdapterInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-        $this->shipOrderValidatorMock = $this->getMockBuilder(ShipOrderInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->resourceConnectionMock = $this->createMock(ResourceConnection::class);
+        $this->orderRepositoryMock = $this->createMock(OrderRepositoryInterface::class);
+        $this->shipmentDocumentFactoryMock = $this->createMock(ShipmentDocumentFactory::class);
+        $this->orderRegistrarMock = $this->createMock(OrderRegistrarInterface::class);
+        $this->orderStateResolverMock = $this->createMock(OrderStateResolverInterface::class);
+        $this->configMock = $this->createMock(OrderConfig::class);
+        $this->shipmentRepositoryMock = $this->createMock(ShipmentRepositoryInterface::class);
+        $this->notifierInterfaceMock = $this->createMock(NotifierInterface::class);
+        $this->loggerMock = $this->createMock(LoggerInterface::class);
+        $this->shipmentCommentCreationMock = $this->createMock(ShipmentCommentCreationInterface::class);
+        $this->shipmentCreationArgumentsMock = $this->createMock(ShipmentCreationArgumentsInterface::class);
+        $this->orderMock = $this->createMock(OrderInterface::class);
+        $this->shipmentMock = $this->createMock(ShipmentInterface::class);
+        $this->packageMock = $this->createMock(ShipmentPackageInterface::class);
+        $this->trackMock = $this->createMock(ShipmentTrackCreationInterface::class);
+        $this->adapterMock = $this->createMock(AdapterInterface::class);
+        $this->shipOrderValidatorMock = $this->createMock(ShipOrderInterface::class);
         $this->validationMessagesMock = $this->getMockBuilder(ValidatorResultInterface::class)
             ->disableOriginalConstructor()
             ->onlyMethods(['hasMessages', 'getMessages', 'addMessage'])
-            ->getMockForAbstractClass();
+            ->getMock();
         $helper = new ObjectManager($this);
 
         $this->model = $helper->getObject(
@@ -223,8 +191,8 @@ class ShipOrderTest extends TestCase
      * @param bool $appendComment
      * @throws CouldNotShipException
      * @throws DocumentValidationException
-     * @dataProvider dataProvider
      */
+    #[DataProvider('dataProvider')]
     public function testExecute($orderId, $items, $notify, $appendComment)
     {
         $this->mockConnection($orderId);
@@ -437,7 +405,7 @@ class ShipOrderTest extends TestCase
     /**
      * @return array
      */
-    public function dataProvider()
+    public static function dataProvider()
     {
         return [
             'TestWithNotifyTrue' => [1, [1 => 2], true, true],

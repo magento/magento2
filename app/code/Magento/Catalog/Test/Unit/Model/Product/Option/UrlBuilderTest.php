@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -39,13 +39,9 @@ class UrlBuilderTest extends TestCase
      */
     private function getMockedFrontendUrlBuilder()
     {
-        $mockBuilder = $this->getMockBuilder(UrlInterface::class)
-            ->disableOriginalConstructor();
-        $mock = $mockBuilder->getMockForAbstractClass();
+        $mock = $this->createMock(UrlInterface::class);
 
-        $mock->expects($this->any())
-            ->method('getUrl')
-            ->willReturn('testResult');
+        $mock->method('getUrl')->willReturn('testResult');
 
         return $mock;
     }

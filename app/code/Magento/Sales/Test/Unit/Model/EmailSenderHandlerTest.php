@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -23,6 +23,8 @@ use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 
 /**
  * Unit test of sales emails sending observer.
@@ -31,6 +33,8 @@ use PHPUnit\Framework\TestCase;
  */
 class EmailSenderHandlerTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * Subject of testing.
      *
@@ -93,30 +97,11 @@ class EmailSenderHandlerTest extends TestCase
     {
         $objectManager = new ObjectManager($this);
 
-        $this->emailSender = $this->getMockBuilder(Sender::class)
-            ->addMethods(['send'])
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->emailSender = $this->createPartialMockWithReflection(Sender::class, ['send']);
 
-        $this->entityResource = $this->getMockForAbstractClass(
-            EntityAbstract::class,
-            [],
-            '',
-            false,
-            false,
-            true,
-            ['saveAttribute']
-        );
+        $this->entityResource = $this->createMock(EntityAbstract::class);
 
-        $this->entityCollection = $this->getMockForAbstractClass(
-            AbstractCollection::class,
-            [],
-            '',
-            false,
-            false,
-            true,
-            ['addFieldToFilter', 'getItems', 'addAttributeToSelect', 'getSelect']
-        );
+        $this->entityCollection = $this->createMock(AbstractCollection::class);
 
         $this->globalConfig = $this->createMock(Config::class);
 
@@ -154,15 +139,20 @@ class EmailSenderHandlerTest extends TestCase
      * @param int|null $expectedIsEmailSent
      *
      * @return void
-     * @dataProvider executeDataProvider
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
+    #[DataProvider('executeDataProvider')]
     public function testExecute(
         int $configValue,
         ?array $collectionItems,
         ?bool $emailSendingResult,
         ?int $expectedIsEmailSent
     ): void {
+        if ($collectionItems !== null && count($collectionItems) > 0) {
+            $collectionItems[0] = $collectionItems[0]($this);
+        }
         $this->globalConfig
             ->method('getValue')
             ->willReturnCallback(function ($path) use ($configValue) {
@@ -176,9 +166,9 @@ class EmailSenderHandlerTest extends TestCase
             });
 
         if ($configValue) {
-            $nowDate = date('Y-m-d H:i:s');
-            $fromDate = date('Y-m-d H:i:s', strtotime($nowDate . ' ' . $this->modifyStartFromDate));
-            $this->entityCollection
+             $nowDate = date('Y-m-d H:i:s');
+             $fromDate = date('Y-m-d H:i:s', strtotime($nowDate . ' ' . $this->modifyStartFromDate));
+             $this->entityCollection
                 ->method('addFieldToFilter')
                 ->willReturnCallback(
                     function ($arg1, $arg2) use ($fromDate) {
@@ -193,100 +183,94 @@ class EmailSenderHandlerTest extends TestCase
                     }
                 );
 
-            $this->entityCollection
+             $this->entityCollection
                 ->expects($this->any())
                 ->method('addAttributeToSelect')
                 ->with('store_id')
                 ->willReturnSelf();
 
-            $selectMock = $this->createMock(Select::class);
+             $selectMock = $this->createMock(Select::class);
 
-            $selectMock
+             $selectMock
                 ->expects($this->atLeastOnce())
                 ->method('group')
                 ->with('store_id')
                 ->willReturnSelf();
 
-            $this->entityCollection
+             $this->entityCollection
                 ->expects($this->any())
                 ->method('getSelect')
                 ->willReturn($selectMock);
 
-            $this->entityCollection
+             $this->entityCollection
                 ->expects($this->any())
                 ->method('getItems')
                 ->willReturn($collectionItems);
 
-            /** @var Value|Encrypted|MockObject $valueMock */
-            $backendModelMock = $this->getMockBuilder(Value::class)
-                ->disableOriginalConstructor()
-                ->onlyMethods(['load', 'getId'])
-                ->addMethods(['getUpdatedAt'])
-                ->getMock();
-            $backendModelMock->expects($this->once())->method('load')->willReturnSelf();
-            $backendModelMock->expects($this->once())->method('getId')->willReturn(1);
-            $backendModelMock->expects($this->once())->method('getUpdatedAt')->willReturn($nowDate);
+             /** @var Value|Encrypted|MockObject $valueMock */
+             $backendModelMock = $this->createPartialMockWithReflection(
+                 Value::class,
+                 ['load', 'getId', 'getUpdatedAt']
+             );
+             $backendModelMock->expects($this->once())->method('load')->willReturnSelf();
+             $backendModelMock->expects($this->once())->method('getId')->willReturn(1);
+             $backendModelMock->expects($this->once())->method('getUpdatedAt')->willReturn($nowDate);
 
-            $this->configValueFactory->expects($this->once())
+             $this->configValueFactory->expects($this->once())
                 ->method('create')
-                ->willReturn($backendModelMock);
+               ->willReturn($backendModelMock);
 
             if ($collectionItems) {
 
-                /** @var AbstractModel|MockObject $collectionItem */
-                $collectionItem = $collectionItems[0];
+                 /** @var AbstractModel|MockObject $collectionItem */
+                 $collectionItem = $collectionItems[0];
 
-                $this->emailSender
+                 $this->emailSender
                     ->expects($this->once())
                     ->method('send')
                     ->with($collectionItem, true)
                     ->willReturn($emailSendingResult);
 
-                $storeMock = $this->createMock(Store::class);
+                 $storeMock = $this->createMock(Store::class);
 
-                $this->storeManagerMock
+                 $this->storeManagerMock
                     ->expects($this->any())
                     ->method('getStore')
                     ->willReturn($storeMock);
 
-                $this->identityContainerMock
+                 $this->identityContainerMock
                     ->expects($this->any())
                     ->method('setStore')
                     ->with($storeMock);
 
-                $this->identityContainerMock
+                 $this->identityContainerMock
                     ->expects($this->any())
                     ->method('isEnabled')
                     ->willReturn(true);
 
-                $collectionItem
+                 $collectionItem
                     ->expects($this->once())
                     ->method('setEmailSent')
                     ->with($expectedIsEmailSent)
                     ->willReturn($collectionItem);
 
-                $this->entityResource
-                    ->expects($this->once())
-                    ->method('saveAttribute')
-                    ->with($collectionItem);
+                 $this->entityResource
+                   ->expects($this->once())
+                   ->method('saveAttribute')
+                   ->with($collectionItem);
             }
         }
 
-        $this->object->sendEmails();
+         $this->object->sendEmails();
     }
 
     /**
      * @return array
      */
-    public function executeDataProvider(): array
+    public static function executeDataProvider(): array
     {
-        $entityModel = $this->getMockForAbstractClass(
+        $entityModel = static fn (self $testCase) => $testCase->createPartialMockWithReflection(
             AbstractModel::class,
-            [],
-            '',
-            false,
-            false,
-            true,
             ['setEmailSent', 'getOrder']
         );
 

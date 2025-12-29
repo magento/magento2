@@ -1,15 +1,19 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 // phpcs:disable PHPCompatibility.Miscellaneous.RemovedAlternativePHPTags.MaybeASPOpenTagFound
 /* @var $block \Magento\ConfigurableProduct\Block\Adminhtml\Product\Steps\Bulk */
 /** @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer */
+/** @var $viewModel uploadResizeConfigValue */
 /** @var \Magento\Framework\Escaper $escaper */
-?>
 
+use Magento\ConfigurableProduct\ViewModel\uploadResizeConfigValue;
+
+$viewModel = $block->getViewModel();
+?>
 <?php
 /** @var \Magento\Framework\Json\Helper\Data $jsonHelper */
 $jsonHelper = $block->getData('jsonHelper');
@@ -226,30 +230,46 @@ $uploadUrl = $block->getUrl('catalog/product_gallery/upload');
                                     </div>
                                 </div>
 
-                                <div class="admin__field field-image-role">
-                                    <label class="admin__field-label">
-                                        <span><?= $escaper->escapeHtml(__('Role')); ?></span>
-                                    </label>
-                                    <div class="admin__field-control">
-                                        <ul class="multiselect-alt">
-                                            <?php
-                                            foreach ($block->getMediaAttributes() as $attribute):
-                                                ?>
-                                                <li class="item">
-                                                    <label>
-                                                        <input class="image-type"
-                                                               data-role="type-selector"
-                                                               type="checkbox"
-                                                               value="<?=
-                                                                $escaper->escapeHtml($attribute->getAttributeCode()) ?>"
-                                                        />
-                                                        <?= $escaper->escapeHtml($attribute->getFrontendLabel()); ?>
-                                                    </label>
-                                                </li>
-                                            <?php endforeach; ?>
-                                        </ul>
+                                <fieldset class="admin__fieldset">
+                                    <legend>
+                                        <strong><?= $escaper->escapeHtml(__('Role')); ?></strong>
+                                    </legend>
+                                    <?php foreach ($block->getMediaAttributes() as $attribute):?>
+                                        <?php
+                                            $attributeCodeEscaped = $escaper->escapeHtmlAttr(
+                                                $attribute->getAttributeCode()
+                                            );
+                                            $roleSelectorIdEscaped = $attributeCodeEscaped
+                                                . '-type-selector-<%- data.file_id %>';
+                                        ?>
+                                    <div class="admin__field field-image-role">
+                                        <div class="admin__field-label">
+                                            <label for="<?= /* @noEscape */ $roleSelectorIdEscaped ?>">
+                                                <span data-config-scope="<?=
+                                                $escaper->escapeHtmlAttr(__('[STORE VIEW]')) ?>">
+                                                    <?= $escaper->escapeHtml($attribute->getFrontendLabel()) ?>
+                                                </span>
+                                            </label>
+                                        </div>
+                                        <div class="admin__field-control">
+                                            <div class="admin__actions-switch" data-role="switcher">
+                                                <input class="admin__actions-switch-checkbox image-type"
+                                                       id="<?= /* @noEscape */ $roleSelectorIdEscaped ?>"
+                                                       data-role="type-selector"
+                                                       type="checkbox"
+                                                       value="<?= /* @noEscape */ $attributeCodeEscaped ?>"/>
+                                                <label class="admin__actions-switch-label"
+                                                       for="<?= /* @noEscape */ $roleSelectorIdEscaped ?>">
+                                                    <span class="admin__actions-switch-text"
+                                                          data-text-on="<?= $escaper->escapeHtmlAttr(__('Yes')) ?>"
+                                                          data-text-off="<?= $escaper->escapeHtmlAttr(__('No')) ?>">
+                                                    </span>
+                                                </label>
+                                            </div>
+                                        </div>
                                     </div>
-                                </div>
+                                    <?php endforeach; ?>
+                                </fieldset>
 
                                 <div class="admin__field admin__field-inline field-image-size" data-role="size">
                                     <label class="admin__field-label">
@@ -269,18 +289,23 @@ $uploadUrl = $block->getUrl('catalog/product_gallery/upload');
                                 </div>
 
                                 <div class="admin__field field-image-hide">
+                                    <label class="admin__field-label" for="hide-from-product-page">
+                                        <span><?= $escaper->escapeHtml(__('Hide from Product Page')); ?></span>
+                                    </label>
                                     <div class="admin__field-control">
-                                        <div class="admin__field admin__field-option">
+                                        <div class="admin__actions-switch" data-role="switcher">
                                             <input type="checkbox"
                                                    id="hide-from-product-page"
                                                    data-role="visibility-trigger"
                                                    value="1"
-                                                   class="admin__control-checkbox"
+                                                   class="admin__actions-switch-checkbox"
                                                    name="product[media_gallery][images][<%- data.file_id %>][disabled]"
                                             <% if (data.disabled == 1) { %>checked="checked"<% } %> />
-
-                                            <label for="hide-from-product-page" class="admin__field-label">
-                                                <?= $escaper->escapeHtml(__('Hide from Product Page')); ?>
+                                            <label class="admin__actions-switch-label" for="hide-from-product-page">
+                                                <span class="admin__actions-switch-text"
+                                                      data-text-on="<?= $escaper->escapeHtmlAttr(__('Yes')) ?>" 
+                                                      data-text-off="<?= $escaper->escapeHtmlAttr(__('No')) ?>">
+                                                </span>
                                             </label>
                                         </div>
                                     </div>
@@ -478,31 +503,47 @@ $uploadUrl = $block->getUrl('catalog/product_gallery/upload');
                                             </div>
                                         </div>
 
-                                        <div class="admin__field field-image-role">
-                                            <label class="admin__field-label">
-                                                <span><?= $escaper->escapeHtml(__('Role'));?></span>
-                                            </label>
-                                            <div class="admin__field-control">
-                                                <ul class="multiselect-alt">
-                                                    <?php foreach ($block->getMediaAttributes() as $attribute):?>
-                                                        <li class="item">
-                                                            <label>
-                                                                <input class="image-type"
-                                                                       data-role="type-selector"
-                                                                       type="checkbox"
-                                                                // @codingStandardsIgnoreLine
-                                                                value="<?=
-                                                                $escaper->escapeHtmlAttr($attribute->getAttributeCode())
-                                                                ?>"
-                                                                />
+                                        <fieldset class="admin__fieldset">
+                                            <legend>
+                                                <strong><?= $escaper->escapeHtml(__('Role')); ?></strong>
+                                            </legend>
+                                            <?php foreach ($block->getMediaAttributes() as $attribute):?>
+                                                <?php
+                                                    $attributeCodeEscaped = $escaper->escapeHtmlAttr(
+                                                        $attribute->getAttributeCode()
+                                                    );
+                                                    $roleSelectorIdEscaped = $attributeCodeEscaped
+                                                            . '-type-selector-<%- data.file_id %>';
+                                                ?>
+                                                <div class="admin__field field-image-role">
+                                                    <div class="admin__field-label">
+                                                        <label for="<?= /* @noEscape */ $roleSelectorIdEscaped ?>">
+                                                            <span data-config-scope="<?=
+                                                            $escaper->escapeHtmlAttr(__('[STORE VIEW]')) ?>">
                                                                 <?=
-                                                                $escaper->escapeHtml($attribute->getFrontendLabel())?>
+                                                                $escaper->escapeHtml($attribute->getFrontendLabel()) ?>
+                                                            </span>
+                                                        </label>
+                                                    </div>
+                                                    <div class="admin__field-control">
+                                                        <div class="admin__actions-switch" data-role="switcher">
+                                                            <input class="admin__actions-switch-checkbox image-type"
+                                                                   id="<?= /* @noEscape */ $roleSelectorIdEscaped ?>"
+                                                                   data-role="type-selector"
+                                                                   type="checkbox"
+                                                                   value="<?=/* @noEscape */ $attributeCodeEscaped ?>"/>
+                                                            <label class="admin__actions-switch-label"
+                                                                   for="<?= /* @noEscape */ $roleSelectorIdEscaped ?>">
+                                                    <span class="admin__actions-switch-text"
+                                                          data-text-on="<?= $escaper->escapeHtmlAttr(__('Yes')) ?>"
+                                                          data-text-off="<?= $escaper->escapeHtmlAttr(__('No')) ?>">
+                                                    </span>
                                                             </label>
-                                                        </li>
-                                                    <?php endforeach; ?>
-                                                </ul>
-                                            </div>
-                                        </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            <?php endforeach; ?>
+                                        </fieldset>
 
                                         <div class="admin__field admin__field-inline field-image-size" data-role="size">
                                             <label class="admin__field-label">
@@ -523,19 +564,25 @@ $uploadUrl = $block->getUrl('catalog/product_gallery/upload');
                                         </div>
 
                                         <div class="admin__field field-image-hide">
+                                            <label class="admin__field-label" for="hide-from-product-page">
+                                                <span><?= $escaper->escapeHtml(__('Hide from Product Page')); ?></span>
+                                            </label>
                                             <div class="admin__field-control">
-                                                <div class="admin__field admin__field-option">
+                                                <div class="admin__actions-switch" data-role="switcher">
                                                     <input type="checkbox"
                                                            id="hide-from-product-page"
                                                            data-role="visibility-trigger"
                                                            value="1"
-                                                           class="admin__control-checkbox"
+                                                           class="admin__actions-switch-checkbox"
                                                     // @codingStandardsIgnoreLine
                                                     name="product[media_gallery][images][<%- data.file_id %>][disabled]"
                                                     <% if (data.disabled == 1) { %>checked="checked"<% } %> />
-
-                                                    <label for="hide-from-product-page" class="admin__field-label">
-                                                        <?= $escaper->escapeHtml(__('Hide from Product Page')); ?>
+                                                    <label class="admin__actions-switch-label"
+                                                           for="hide-from-product-page">
+                                                        <span class="admin__actions-switch-text"
+                                                              data-text-on="<?= $escaper->escapeHtmlAttr(__('Yes')) ?>"
+                                                              data-text-off="<?= $escaper->escapeHtmlAttr(__('No')) ?>">
+                                                        </span>
                                                     </label>
                                                 </div>
                                             </div>
@@ -767,7 +814,11 @@ $uploadUrl = $block->getUrl('catalog/product_gallery/upload');
                     "component": "Magento_ConfigurableProduct/js/variations/steps/bulk",
                     "appendTo": "<?= /* @noEscape */  $block->getParentComponentName() ?>",
                     "noImage": "<?= /* @noEscape */  $block->getNoImageUrl() ?>",
-                    "variationsComponent": "<?= /* @noEscape */ $block->getData('config/form')?>.configurableVariations"
+                    "variationsComponent": "<?= /* @noEscape */ $block->getData('config/form')
+                    ?>.configurableVariations",
+                    "isResizeEnabled": <?= /* @noEscape */  $viewModel->isResizeEnabled() ?>,
+                    "maxWidth": <?= /* @noEscape */  $viewModel->getMaxWidth() ?>,
+                    "maxHeight": <?= /* @noEscape */  $viewModel->getMaxHeight() ?>
                 }
             }
         }

@@ -1,12 +1,13 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\CatalogImportExport\Test\Unit\Model\Import\Product\Validator;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\CatalogImportExport\Model\Import\Product\SkuProcessor;
 use Magento\CatalogImportExport\Model\Import\Product\SkuStorage;
 use Magento\CatalogImportExport\Model\Import\Product\Validator\SuperProductsSku;
@@ -37,9 +38,7 @@ class SuperProductsSkuTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->skuProcessorMock = $this->getMockBuilder(SkuProcessor::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->skuProcessorMock = $this->createMock(SkuProcessor::class);
         $this->skuStorageMock = $this->createMock(SkuStorage::class);
 
         $this->model = new SuperProductsSku($this->skuProcessorMock, $this->skuStorageMock);
@@ -50,8 +49,8 @@ class SuperProductsSkuTest extends TestCase
      * @param array $oldSkus
      * @param bool $hasNewSku
      * @param bool $expectedResult
-     * @dataProvider isValidDataProvider
      */
+    #[DataProvider('isValidDataProvider')]
     public function testIsValid(array $value, array $oldSkus, $hasNewSku = false, $expectedResult = true)
     {
         $this->skuProcessorMock->expects($this->never())
@@ -77,7 +76,7 @@ class SuperProductsSkuTest extends TestCase
     /**
      * @return array
      */
-    public function isValidDataProvider()
+    public static function isValidDataProvider()
     {
         return [
             [

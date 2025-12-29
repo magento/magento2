@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -61,7 +61,7 @@ class RequestTest extends TestCase
     /**
      * @return array
      */
-    public function dataProviderForPrepareErrorResponseTest()
+    public static function dataProviderForPrepareErrorResponseTest()
     {
         return [
             [
@@ -105,7 +105,7 @@ class RequestTest extends TestCase
     /**
      * @return array
      */
-    public function hostsDataProvider()
+    public static function hostsDataProvider()
     {
         return  [
             'hostWithoutPort' => [
@@ -155,7 +155,7 @@ class RequestTest extends TestCase
     /**
      * @return array
      */
-    public function dataProviderForTestPrepareRequestOAuthHeader()
+    public static function dataProviderForTestPrepareRequestOAuthHeader()
     {
         return [
             [

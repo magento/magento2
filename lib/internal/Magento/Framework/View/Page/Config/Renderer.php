@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Framework\View\Page\Config;
@@ -101,7 +101,7 @@ class Renderer implements RendererInterface
         Escaper $escaper,
         StringUtils $string,
         LoggerInterface $logger,
-        MsApplicationTileImage $msApplicationTileImage = null
+        ?MsApplicationTileImage $msApplicationTileImage = null
     ) {
         $this->pageConfig = $pageConfig;
         $this->assetMergeService = $assetMergeService;

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -15,6 +15,7 @@ use Magento\Quote\Api\Data\CartItemInterface;
 use Magento\Quote\Model\Quote;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class SidebarTest extends TestCase
 {
@@ -34,7 +35,7 @@ class SidebarTest extends TestCase
     {
         $this->cartMock = $this->createMock(Cart::class);
         $this->checkoutHelperMock = $this->createMock(Data::class);
-        $this->resolverMock = $this->getMockForAbstractClass(ResolverInterface::class);
+        $this->resolverMock = $this->createMock(ResolverInterface::class);
 
         $this->sidebar = new Sidebar(
             $this->cartMock,
@@ -47,8 +48,8 @@ class SidebarTest extends TestCase
      * @param string $error
      * @param array $result
      *
-     * @dataProvider dataProviderGetResponseData
      */
+    #[DataProvider('dataProviderGetResponseData')]
     public function testGetResponseData($error, $result)
     {
         $this->assertEquals($result, $this->sidebar->getResponseData($error));
@@ -57,7 +58,7 @@ class SidebarTest extends TestCase
     /**
      * @return array
      */
-    public function dataProviderGetResponseData()
+    public static function dataProviderGetResponseData()
     {
         return [
             [
@@ -97,9 +98,7 @@ class SidebarTest extends TestCase
             ->with($itemId)
             ->willReturn($itemMock);
 
-        $this->cartMock->expects($this->any())
-            ->method('getQuote')
-            ->willReturn($quoteMock);
+        $this->cartMock->method('getQuote')->willReturn($quoteMock);
 
         $this->assertEquals($this->sidebar, $this->sidebar->checkQuoteItem($itemId));
     }
@@ -118,9 +117,7 @@ class SidebarTest extends TestCase
             ->with($itemId)
             ->willReturn(null);
 
-        $this->cartMock->expects($this->any())
-            ->method('getQuote')
-            ->willReturn($quoteMock);
+        $this->cartMock->method('getQuote')->willReturn($quoteMock);
 
         $this->sidebar->checkQuoteItem($itemId);
     }
@@ -140,19 +137,29 @@ class SidebarTest extends TestCase
         $this->assertEquals($this->sidebar, $this->sidebar->removeQuoteItem($itemId));
     }
 
-    public function testUpdateQuoteItem()
-    {
-        $itemId = 1;
-        $itemQty = 2;
-
+    /**
+     * @param string $locale
+     * @param int|string $itemId
+     * @param int|string|float $expectedItemQty
+     * @param int|string|float $itemQty
+     *
+     */
+    #[DataProvider('dataProviderUpdateQuoteItem')]
+    public function testUpdateQuoteItem(
+        string $locale,
+        int|string $itemId,
+        int|string|float $expectedItemQty,
+        int|string|float $itemQty
+    ) {
         $this->resolverMock->expects($this->once())
             ->method('getLocale')
-            ->willReturn('en');
+            ->willReturn($locale);
 
         $this->cartMock->expects($this->once())
             ->method('updateItems')
-            ->with([$itemId => ['qty' => $itemQty]])
+            ->with([$itemId => ['qty' => $expectedItemQty]])
             ->willReturnSelf();
+
         $this->cartMock->expects($this->once())
             ->method('save')
             ->willReturnSelf();
@@ -177,5 +184,19 @@ class SidebarTest extends TestCase
             ->willReturnSelf();
 
         $this->assertEquals($this->sidebar, $this->sidebar->updateQuoteItem($itemId, $itemQty));
+    }
+
+    /**
+     * @return array
+     */
+    public static function dataProviderUpdateQuoteItem(): array
+    {
+        return [
+            //locale, itemId, expectedItemQty, ItemQty
+            [ 'en_US', 1, 2, 2],
+            [ 'en_US', 1, 0.5, 0.5],
+            [ 'en_US', 1,"0.5","0.5"],
+            [ 'nl_NL', 1,"0.5","0,5"]
+        ];
     }
 }

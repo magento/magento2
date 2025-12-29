@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -41,7 +41,7 @@ class ConstantTest extends TestCase
     /**
      * @return array
      */
-    public function evaluateBadValueDataProvider()
+    public static function evaluateBadValueDataProvider()
     {
         return [
             [['value' => 'KNOWINGLY_UNDEFINED_CONSTANT']],

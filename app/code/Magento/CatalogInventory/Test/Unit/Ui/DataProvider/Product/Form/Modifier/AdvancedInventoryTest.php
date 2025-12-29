@@ -1,14 +1,15 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\CatalogInventory\Test\Unit\Ui\DataProvider\Product\Form\Modifier;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\Catalog\Test\Unit\Ui\DataProvider\Product\Form\Modifier\AbstractModifierTestCase;
-use Magento\CatalogInventory\Api\Data\StockItemInterface;
+use Magento\CatalogInventory\Model\Stock\Item;
 use Magento\CatalogInventory\Api\StockConfigurationInterface;
 use Magento\CatalogInventory\Api\StockRegistryInterface;
 use Magento\CatalogInventory\Ui\DataProvider\Product\Form\Modifier\AdvancedInventory;
@@ -16,16 +17,19 @@ use Magento\Framework\Serialize\JsonValidator;
 use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Store\Model\Store;
 use PHPUnit\Framework\MockObject\MockObject;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 
 class AdvancedInventoryTest extends AbstractModifierTestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var StockRegistryInterface|MockObject
      */
     private $stockRegistryMock;
 
     /**
-     * @var StockItemInterface|MockObject
+     * @var Item|MockObject
      */
     private $stockItemMock;
 
@@ -47,29 +51,29 @@ class AdvancedInventoryTest extends AbstractModifierTestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $this->stockRegistryMock = $this->getMockBuilder(StockRegistryInterface::class)
-            ->onlyMethods(['getStockItem'])
-            ->getMockForAbstractClass();
-        $this->storeMock = $this->getMockBuilder(Store::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->stockItemMock = $this->getMockBuilder(StockItemInterface::class)
-            ->addMethods(['getData'])
-            ->getMockForAbstractClass();
-        $this->stockConfigurationMock = $this->getMockBuilder(StockConfigurationInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-
+        $this->stockRegistryMock = $this->createMock(StockRegistryInterface::class);
+        $this->storeMock = $this->createMock(Store::class);
+        $this->stockConfigurationMock = $this->createMock(StockConfigurationInterface::class);
+        $this->stockItemMock = $this->createPartialMockWithReflection(
+            Item::class,
+            [
+                'getIsInStock',
+                'setIsInStock',
+                'hasStockStatusChangedAutomaticallyFlag',
+                'setHasStockStatusChangedAutomaticallyFlag'
+            ]
+        );
         $this->stockRegistryMock->expects($this->any())
             ->method('getStockItem')
             ->willReturn($this->stockItemMock);
-        $this->productMock->expects($this->any())
-            ->method('getStore')
-            ->willReturn($this->storeMock);
+        $this->stockConfigurationMock = $this->createMock(StockConfigurationInterface::class);
+        $this->stockRegistryMock->method('getStockItem')->willReturn($this->stockItemMock);
+        $this->storeMock->setWebsiteId(1);
+        $this->productMock->setStore($this->storeMock);
+        // Configure the mocked getStore() to return storeMock
+        $this->productMock->method('getStore')->willReturn($this->storeMock);
         $this->serializerMock = $this->createMock(Json::class);
-        $this->jsonValidatorMock = $this->getMockBuilder(JsonValidator::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->jsonValidatorMock = $this->createMock(JsonValidator::class);
     }
 
     /**
@@ -77,16 +81,13 @@ class AdvancedInventoryTest extends AbstractModifierTestCase
      */
     protected function createModel()
     {
-        return $this->objectManager->getObject(
-            AdvancedInventory::class,
-            [
-                'locator' => $this->locatorMock,
-                'stockRegistry' => $this->stockRegistryMock,
-                'stockConfiguration' => $this->stockConfigurationMock,
-                'arrayManager' => $this->arrayManagerMock,
-                'serializer' => $this->serializerMock,
-                'jsonValidator' => $this->jsonValidatorMock,
-            ]
+        return new AdvancedInventory(
+            $this->locatorMock,
+            $this->stockRegistryMock,
+            $this->arrayManagerMock,
+            $this->stockConfigurationMock,
+            $this->serializerMock,
+            $this->jsonValidatorMock
         );
     }
 
@@ -102,8 +103,8 @@ class AdvancedInventoryTest extends AbstractModifierTestCase
      * @param null|array $unserializedValue
      * @param int $serializeCalledNum
      * @param int $isValidCalledNum
-     * @dataProvider modifyDataProvider
      */
+    #[DataProvider('modifyDataProvider')]
     public function testModifyData(
         $modelId,
         $someData,
@@ -112,13 +113,10 @@ class AdvancedInventoryTest extends AbstractModifierTestCase
         $serializeCalledNum = 0,
         $isValidCalledNum = 0
     ) {
-        $this->productMock->expects($this->any())
-            ->method('getId')
-            ->willReturn($modelId);
+        $this->productMock->setProductId($modelId);
+        $this->productMock->setId($modelId);
 
-        $this->stockConfigurationMock->expects($this->any())
-            ->method('getDefaultConfigValue')
-            ->willReturn($defaultConfigValue);
+        $this->stockConfigurationMock->method('getDefaultConfigValue')->willReturn($defaultConfigValue);
 
         $this->serializerMock->expects($this->exactly($serializeCalledNum))
             ->method('unserialize')
@@ -129,19 +127,19 @@ class AdvancedInventoryTest extends AbstractModifierTestCase
             ->method('isValid')
             ->willReturn(true);
 
-        $this->stockItemMock->expects($this->once())->method('getData')->willReturn(['someData']);
-        $this->stockItemMock->expects($this->once())->method('getManageStock')->willReturn($someData);
-        $this->stockItemMock->expects($this->once())->method('getQty')->willReturn($someData);
-        $this->stockItemMock->expects($this->once())->method('getMinQty')->willReturn($someData);
-        $this->stockItemMock->expects($this->once())->method('getMinSaleQty')->willReturn($someData);
-        $this->stockItemMock->expects($this->once())->method('getMaxSaleQty')->willReturn($someData);
-        $this->stockItemMock->expects($this->once())->method('getIsQtyDecimal')->willReturn($someData);
-        $this->stockItemMock->expects($this->once())->method('getIsDecimalDivided')->willReturn($someData);
-        $this->stockItemMock->expects($this->once())->method('getBackorders')->willReturn($someData);
-        $this->stockItemMock->expects($this->once())->method('getNotifyStockQty')->willReturn($someData);
-        $this->stockItemMock->expects($this->once())->method('getEnableQtyIncrements')->willReturn($someData);
-        $this->stockItemMock->expects($this->once())->method('getQtyIncrements')->willReturn($someData);
-        $this->stockItemMock->expects($this->once())->method('getIsInStock')->willReturn($someData);
+        $this->stockItemMock->setData(['someData']);
+        $this->stockItemMock->setManageStock($someData);
+        $this->stockItemMock->setQty($someData);
+        $this->stockItemMock->setMinQty($someData);
+        $this->stockItemMock->setMinSaleQty($someData);
+        $this->stockItemMock->setMaxSaleQty($someData);
+        $this->stockItemMock->setIsQtyDecimal($someData);
+        $this->stockItemMock->setIsDecimalDivided($someData);
+        $this->stockItemMock->setBackorders($someData);
+        $this->stockItemMock->setNotifyStockQty($someData);
+        $this->stockItemMock->setEnableQtyIncrements($someData);
+        $this->stockItemMock->setQtyIncrements($someData);
+        $this->stockItemMock->setIsInStock($someData);
 
         $this->arrayManagerMock->expects($this->once())
             ->method('set')

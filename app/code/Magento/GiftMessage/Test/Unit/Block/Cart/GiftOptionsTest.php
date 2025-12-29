@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -40,12 +40,7 @@ class GiftOptionsTest extends TestCase
         $this->context = $this->createMock(Context::class);
         $this->jsonEncoderMock = $this->createMock(Encoder::class);
         $this->compositeConfigProvider = $this->createMock(CompositeConfigProvider::class);
-        $this->layoutProcessorMock = $this->getMockForAbstractClass(
-            LayoutProcessorInterface::class,
-            [],
-            '',
-            false
-        );
+        $this->layoutProcessorMock = $this->createMock(LayoutProcessorInterface::class);
         $this->model = new GiftOptions(
             $this->context,
             $this->jsonEncoderMock,

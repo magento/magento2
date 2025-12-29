@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -49,19 +49,10 @@ class ReindexRuleGroupWebsiteTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->dateTimeMock = $this->getMockBuilder(DateTime::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->resourceMock = $this->getMockBuilder(ResourceConnection::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->activeTableSwitcherMock =
-            $this->getMockBuilder(ActiveTableSwitcher::class)
-                ->disableOriginalConstructor()
-                ->getMock();
-        $this->tableSwapperMock = $this->getMockForAbstractClass(
-            IndexerTableSwapperInterface::class
-        );
+        $this->dateTimeMock = $this->createMock(DateTime::class);
+        $this->resourceMock = $this->createMock(ResourceConnection::class);
+        $this->activeTableSwitcherMock = $this->createMock(ActiveTableSwitcher::class);
+        $this->tableSwapperMock = $this->createMock(IndexerTableSwapperInterface::class);
         $this->model = new ReindexRuleGroupWebsite(
             $this->dateTimeMock,
             $this->resourceMock,
@@ -77,8 +68,7 @@ class ReindexRuleGroupWebsiteTest extends TestCase
     {
         $timeStamp = (int)gmdate('U');
         $insertString = 'insert_string';
-        $connectionMock = $this->getMockBuilder(AdapterInterface::class)
-            ->getMock();
+        $connectionMock = $this->createMock(AdapterInterface::class);
         $this->resourceMock
             ->method('getConnection')
             ->willReturn($connectionMock);
@@ -104,9 +94,7 @@ class ReindexRuleGroupWebsiteTest extends TestCase
                 ]
             );
 
-        $selectMock = $this->getMockBuilder(Select::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $selectMock = $this->createMock(Select::class);
 
         $connectionMock->expects($this->once())->method('delete')->with('catalogrule_group_website_replica');
         $connectionMock->expects($this->once())->method('select')->willReturn($selectMock);

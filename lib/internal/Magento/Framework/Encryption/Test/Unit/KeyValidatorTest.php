@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 
 declare(strict_types=1);
@@ -37,7 +37,7 @@ class KeyValidatorTest extends TestCase
     /**
      * @return array
      */
-    public function isValidDataProvider() : array
+    public static function isValidDataProvider() : array
     {
         return [
             '32 numbers' => ['12345678901234567890123456789012'],

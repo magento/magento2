@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -81,7 +81,7 @@ class AuthorizationTest extends TestCase
     /**
      * @return array
      */
-    public function postRequestData(): array
+    public static function postRequestData(): array
     {
         return [
             [
@@ -148,7 +148,7 @@ class AuthorizationTest extends TestCase
     /**
      * @return array
      */
-    public function postRequestDataException(): array
+    public static function postRequestDataException(): array
     {
         return [
             [

@@ -1,12 +1,13 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Quote\Test\Unit\Model;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\Framework\App\ResourceConnection\ConfigInterface;
 use Magento\Framework\Config\CacheInterface;
 use Magento\Framework\Serialize\SerializerInterface;
@@ -38,9 +39,9 @@ class QueryResolverTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->configMock = $this->getMockForAbstractClass(ConfigInterface::class);
-        $this->cacheMock = $this->getMockForAbstractClass(CacheInterface::class);
-        $this->serializer = $this->getMockForAbstractClass(SerializerInterface::class);
+        $this->configMock = $this->createMock(ConfigInterface::class);
+        $this->cacheMock = $this->createMock(CacheInterface::class);
+        $this->serializer = $this->createMock(SerializerInterface::class);
         $this->quoteResolver = new QueryResolver(
             $this->configMock,
             $this->cacheMock,
@@ -68,9 +69,8 @@ class QueryResolverTest extends TestCase
     /**
      * @param string $connectionName
      * @param bool $isSingleQuery
-     *
-     * @dataProvider isSingleQueryWhenDataNotCachedDataProvider
      */
+    #[DataProvider('isSingleQueryWhenDataNotCachedDataProvider')]
     public function testIsSingleQueryWhenDataNotCached($connectionName, $isSingleQuery)
     {
         $data = ['checkout' => $isSingleQuery];
@@ -101,7 +101,7 @@ class QueryResolverTest extends TestCase
     /**
      * @return array
      */
-    public function isSingleQueryWhenDataNotCachedDataProvider()
+    public static function isSingleQueryWhenDataNotCachedDataProvider()
     {
         return [
             ['default', true],

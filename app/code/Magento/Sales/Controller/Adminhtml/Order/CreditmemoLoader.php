@@ -1,8 +1,7 @@
 <?php
 /**
- *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Sales\Controller\Adminhtml\Order;
 
@@ -206,7 +205,7 @@ class CreditmemoLoader extends DataObject
             $backToStock = [];
             foreach ($savedData as $orderItemId => $itemData) {
                 if (isset($itemData['qty'])) {
-                    $qtys[$orderItemId] = $itemData['qty'];
+                    $qtys[$orderItemId] = $itemData['qty'] > 0 ? $itemData['qty'] : 0;
                 }
                 if (isset($itemData['back_to_stock'])) {
                     $backToStock[$orderItemId] = true;

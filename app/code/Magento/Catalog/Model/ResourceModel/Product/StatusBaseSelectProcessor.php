@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Catalog\Model\ResourceModel\Product;
 
@@ -15,9 +15,6 @@ use Magento\Store\Api\StoreResolverInterface;
 use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
 
-/**
- * Class StatusBaseSelectProcessor
- */
 class StatusBaseSelectProcessor implements BaseSelectProcessorInterface
 {
     /**
@@ -47,7 +44,7 @@ class StatusBaseSelectProcessor implements BaseSelectProcessorInterface
         Config $eavConfig,
         MetadataPool $metadataPool,
         StoreResolverInterface $storeResolver,
-        StoreManagerInterface $storeManager = null
+        ?StoreManagerInterface $storeManager = null
     ) {
         $this->eavConfig = $eavConfig;
         $this->metadataPool = $metadataPool;

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -12,10 +12,14 @@ use Magento\Framework\DataObject;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Sales\Block\Adminhtml\Order\Create\Sidebar\AbstractSidebar;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 
 class AbstractSidebarTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var AbstractSidebar
      */
@@ -29,10 +33,7 @@ class AbstractSidebarTest extends TestCase
     protected function setUp(): void
     {
         $helper = new ObjectManager($this);
-        $this->itemMock = $this->getMockBuilder(DataObject::class)
-            ->addMethods(['getQty'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->itemMock = $this->createPartialMockWithReflection(DataObject::class, ['getQty']);
         $this->abstractSidebar = $helper->getObject(
             AbstractSidebar::class,
             []
@@ -43,8 +44,8 @@ class AbstractSidebarTest extends TestCase
      * @param int $itemQty
      * @param int|bool $qty
      * @param int $expectedValue
-     * @dataProvider getItemQtyDataProvider
      */
+    #[DataProvider('getItemQtyDataProvider')]
     public function testGetItemQty($itemQty, $qty, $expectedValue)
     {
         $this->itemMock->expects($this->exactly($itemQty))->method('getQty')->willReturn($qty);
@@ -54,7 +55,7 @@ class AbstractSidebarTest extends TestCase
     /**
      * @return array
      */
-    public function getItemQtyDataProvider()
+    public static function getItemQtyDataProvider()
     {
         return ['whenQtyIsset' => [2, 10, 10], 'whenQtyNotIsset' => [1, false, 1]];
     }

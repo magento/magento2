@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework\View\Layout;
 
@@ -225,7 +225,7 @@ class MergeTest extends \PHPUnit\Framework\TestCase
         $this->assertSame($expectedResult, $this->_model->pageHandleExists($inputPageHandle));
     }
 
-    public function pageHandleExistsDataProvider()
+    public static function pageHandleExistsDataProvider()
     {
         return [
             'non-existing handle' => ['non_existing_handle', false],

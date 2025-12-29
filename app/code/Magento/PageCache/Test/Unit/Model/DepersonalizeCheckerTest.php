@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -13,6 +13,7 @@ use Magento\Framework\View\LayoutInterface;
 use Magento\PageCache\Model\Config;
 use Magento\PageCache\Model\DepersonalizeChecker;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 class DepersonalizeCheckerTest extends TestCase
@@ -44,9 +45,9 @@ class DepersonalizeCheckerTest extends TestCase
      * @param bool $moduleManagerResult
      * @param bool $cacheConfigResult
      * @param bool $layoutResult
-     * @param bool $can Depersonalize
-     * @dataProvider checkIfDepersonalizeDataProvider
+     * @param bool $canDepersonalize
      */
+    #[DataProvider('checkIfDepersonalizeDataProvider')]
     public function testCheckIfDepersonalize(
         array $requestResult,
         $moduleManagerResult,
@@ -64,7 +65,7 @@ class DepersonalizeCheckerTest extends TestCase
             ->willReturn($moduleManagerResult);
 
         $this->cacheConfigMock->expects($this->any())->method('isEnabled')->willReturn($cacheConfigResult);
-        $layoutMock = $this->getMockForAbstractClass(LayoutInterface::class, [], '', false);
+        $layoutMock = $this->createMock(LayoutInterface::class);
         $layoutMock->expects($this->any())->method('isCacheable')->willReturn($layoutResult);
 
         $object = new DepersonalizeChecker($this->requestMock, $this->moduleManagerMock, $this->cacheConfigMock);
@@ -74,7 +75,7 @@ class DepersonalizeCheckerTest extends TestCase
     /**
      * return array
      */
-    public function checkIfDepersonalizeDataProvider()
+    public static function checkIfDepersonalizeDataProvider()
     {
         return [
             [['ajax' => false, 'get' => true, 'head' => false], true, true, true, true],

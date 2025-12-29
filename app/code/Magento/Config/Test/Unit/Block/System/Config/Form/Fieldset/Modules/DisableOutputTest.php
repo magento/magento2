@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -18,9 +18,11 @@ use Magento\Framework\Data\Form\Element\Factory;
 use Magento\Framework\Data\Form\Element\Text;
 use Magento\Framework\Module\ModuleListInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\View\Helper\Js;
 use Magento\Framework\View\Layout;
 use Magento\User\Model\User;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Magento\Framework\View\Helper\SecureHtmlRenderer;
@@ -30,6 +32,8 @@ use Magento\Framework\View\Helper\SecureHtmlRenderer;
  */
 class DisableOutputTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var DisableOutput
      */
@@ -43,7 +47,7 @@ class DisableOutputTest extends TestCase
     /**
      * @var array
      */
-    protected $elementData = [
+    protected static $elementData = [
         'htmlId'      => 'test_field_id',
         'name'        => 'test_name',
         'label'       => 'test_label',
@@ -91,25 +95,19 @@ class DisableOutputTest extends TestCase
     {
         $this->objectManager = new ObjectManager($this);
 
-        $rendererMock = $this->getMockBuilder(Field::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $rendererMock = $this->createMock(Field::class);
 
-        $this->layoutMock = $this->getMockBuilder(Layout::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->layoutMock = $this->createMock(Layout::class);
         $this->layoutMock->expects($this->any())
             ->method('getBlockSingleton')
             ->willReturn($rendererMock);
 
-        $this->jsHelperMock = $this->getMockBuilder(Js::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->jsHelperMock = $this->createMock(Js::class);
 
-        $this->moduleListMock = $this->getMockBuilder(ModuleListInterface::class)
-            ->onlyMethods(['getNames', 'has', 'getAll', 'getOne'])
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->moduleListMock = $this->createPartialMock(
+            ModuleListInterface::class,
+            ['getNames', 'has', 'getAll', 'getOne']
+        );
 
         $this->moduleListMock->expects($this->any())
             ->method('getNames')
@@ -124,32 +122,28 @@ class DisableOutputTest extends TestCase
             ->method('getOne')
             ->willReturn(null);
 
-        $this->authSessionMock = $this->getMockBuilder(Session::class)
-            ->addMethods(['getUser'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->authSessionMock = $this->createPartialMockWithReflection(
+            Session::class,
+            ['getUser']
+        );
 
-        $this->userMock = $this->getMockBuilder(User::class)
-            ->addMethods(['getExtra'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->userMock = $this->createPartialMockWithReflection(
+            User::class,
+            ['getExtra']
+        );
 
         $this->authSessionMock->expects($this->any())
             ->method('getUser')
             ->willReturn($this->userMock);
 
-        $groupMock = $this->getMockBuilder(Group::class)
-            ->onlyMethods(['getFieldsetCss'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $groupMock = $this->createPartialMock(
+            Group::class,
+            ['getFieldsetCss']
+        );
         $groupMock->expects($this->any())->method('getFieldsetCss')->willReturn('test_fieldset_css');
 
-        $factory = $this->getMockBuilder(Factory::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $factoryColl = $this->getMockBuilder(CollectionFactory::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $factory = $this->createMock(Factory::class);
+        $factoryColl = $this->createMock(CollectionFactory::class);
         $formMock = $this->getMockBuilder(AbstractForm::class)
             ->setConstructorArgs([$factory, $factoryColl])
             ->getMock();
@@ -187,40 +181,36 @@ class DisableOutputTest extends TestCase
             $data
         );
 
-        $this->elementMock = $this->getMockBuilder(Text::class)
-            ->addMethods(['getExpanded', 'getLegend', 'getComment', 'getTooltip', 'getIsNested'])
-            ->onlyMethods(
-                [
-                    'getId', 'getHtmlId', 'getName', 'toHtml',
-                    'addField', 'setRenderer', 'getElements'
-                ]
-            )
-            ->disableOriginalConstructor()
-            ->disableOriginalClone()
-            ->enableAutoload()
-            ->getMock();
+        $this->elementMock = $this->createPartialMockWithReflection(
+            Text::class,
+            [
+                'getExpanded', 'getLegend', 'getComment', 'getTooltip', 'getIsNested',
+                'getId', 'getHtmlId', 'getName', 'toHtml',
+                'addField', 'setRenderer', 'getElements'
+            ]
+        );
 
         $this->elementMock->expects($this->any())
             ->method('getId')
-            ->willReturn($this->elementData['htmlId']);
+            ->willReturn(self::$elementData['htmlId']);
         $this->elementMock->expects($this->any())
             ->method('getHtmlId')
-            ->willReturn($this->elementData['htmlId']);
+            ->willReturn(self::$elementData['htmlId']);
         $this->elementMock->expects($this->any())
             ->method('getName')
-            ->willReturn($this->elementData['name']);
+            ->willReturn(self::$elementData['name']);
         $this->elementMock->expects($this->any())
             ->method('getLegend')
-            ->willReturn($this->elementData['legend']);
+            ->willReturn(self::$elementData['legend']);
         $this->elementMock->expects($this->any())
             ->method('getComment')
-            ->willReturn($this->elementData['comment']);
+            ->willReturn(self::$elementData['comment']);
         $this->elementMock->expects($this->any())
             ->method('getTooltip')
-            ->willReturn($this->elementData['tooltip']);
+            ->willReturn(self::$elementData['tooltip']);
         $this->elementMock->expects($this->any())
             ->method('toHtml')
-            ->willReturn($this->elementData['elementHTML']);
+            ->willReturn(self::$elementData['elementHTML']);
         $this->elementMock->expects($this->any())
             ->method('addField')
             ->willReturn($this->elementMock);
@@ -236,8 +226,8 @@ class DisableOutputTest extends TestCase
      * @param $expanded
      * @param $nested
      * @param $extra
-     * @dataProvider renderDataProvider
      */
+    #[DataProvider('renderDataProvider')]
     public function testRender($expanded, $nested, $extra)
     {
         $this->elementMock->expects($this->any())->method('getExpanded')->willReturn($expanded);
@@ -245,11 +235,11 @@ class DisableOutputTest extends TestCase
         $this->userMock->expects($this->any())->method('getExtra')->willReturn($extra);
         $actualHtml = $this->object->render($this->elementMock);
 
-        $this->assertStringContainsString($this->elementData['htmlId'], $actualHtml);
-        $this->assertStringContainsString($this->elementData['legend'], $actualHtml);
-        $this->assertStringContainsString($this->elementData['comment'], $actualHtml);
-        $this->assertStringContainsString($this->elementData['tooltip'], $actualHtml);
-        $this->assertStringContainsString($this->elementData['elementHTML'], $actualHtml);
+        $this->assertStringContainsString(self::$elementData['htmlId'], $actualHtml);
+        $this->assertStringContainsString(self::$elementData['legend'], $actualHtml);
+        $this->assertStringContainsString(self::$elementData['comment'], $actualHtml);
+        $this->assertStringContainsString(self::$elementData['tooltip'], $actualHtml);
+        $this->assertStringContainsString(self::$elementData['elementHTML'], $actualHtml);
         if ($nested) {
             $this->assertStringContainsString('nested', $actualHtml);
         }
@@ -258,7 +248,7 @@ class DisableOutputTest extends TestCase
     /**
      * @return array
      */
-    public function renderDataProvider()
+    public static function renderDataProvider()
     {
         return [
             'expandedNestedExtra' => [
@@ -269,7 +259,7 @@ class DisableOutputTest extends TestCase
             'collapsedNotNestedExtra' => [
                 'expanded' => false,
                 'nested'   => false,
-                'extra'    => ['configState' => [$this->elementData['htmlId'] => true]],
+                'extra'    => ['configState' => [self::$elementData['htmlId'] => true]],
             ],
             'collapsedNotNestedNoExtra' => [
                 'expanded' => false,

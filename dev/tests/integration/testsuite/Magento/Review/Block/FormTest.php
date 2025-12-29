@@ -1,16 +1,21 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Review\Block;
 
+use Magento\Catalog\Test\Fixture\Product as ProductFixture;
 use Magento\Framework\App\Area;
 use Magento\Framework\App\Config\Value;
 use Magento\Framework\App\ReinitableConfig;
+use Magento\Framework\App\Request\Http;
 use Magento\Framework\App\State;
 use Magento\Framework\View\Element\ButtonLockManager;
+use Magento\TestFramework\Fixture\AppArea;
+use Magento\TestFramework\Fixture\DataFixture;
+use Magento\TestFramework\Fixture\DataFixtureStorageManager;
 use Magento\TestFramework\ObjectManager;
 
 class FormTest extends \PHPUnit\Framework\TestCase
@@ -63,7 +68,7 @@ class FormTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($result, $expectedResult);
     }
 
-    public function getCorrectFlagDataProvider()
+    public static function getCorrectFlagDataProvider()
     {
         return [
             [
@@ -81,6 +86,25 @@ class FormTest extends \PHPUnit\Framework\TestCase
                 'expectedResult' => true
             ]
         ];
+    }
+
+    #[
+        AppArea('frontend'),
+        DataFixture(ProductFixture::class, as: 'product'),
+    ]
+    public function testGetProductInfo()
+    {
+        $fixtures = DataFixtureStorageManager::getStorage();
+        $product = $fixtures->get('product');
+
+        $form = $this->objectManager->create(Form::class);
+        $form->getRequest()
+            ->setMethod(Http::METHOD_GET)
+            ->setParams(['id' => $product->getId() . "abc"]);
+
+        $productInfo = $form->getProductInfo();
+        $this->assertEquals($product->getId(), $productInfo->getId());
+        $this->assertEquals($product->getSku(), $productInfo->getSku());
     }
 
     private function getObjectManager()

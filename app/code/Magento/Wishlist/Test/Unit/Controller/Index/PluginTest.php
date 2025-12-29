@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -24,6 +24,7 @@ use Magento\Wishlist\Controller\Index\Plugin;
 use Magento\Wishlist\Model\AuthenticationState;
 use Magento\Wishlist\Model\AuthenticationStateInterface;
 use Magento\Wishlist\Model\DataSerializer;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -34,6 +35,8 @@ use PHPUnit\Framework\TestCase;
  */
 class PluginTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var Session|MockObject
      */
@@ -84,26 +87,25 @@ class PluginTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->customerSession = $this->getMockBuilder(Session::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['authenticate'])
-            ->addMethods(
-                [
-                    'getBeforeWishlistUrl',
-                    'setBeforeWishlistUrl',
-                    'setBeforeWishlistRequest',
-                    'getBeforeWishlistRequest',
-                    'setBeforeRequestParams',
-                    'setBeforeModuleName',
-                    'setBeforeControllerName',
-                    'setBeforeAction',
-                ]
-            )->getMock();
+        $this->customerSession = $this->createPartialMockWithReflection(
+            Session::class,
+            [
+                'authenticate',
+                'getBeforeWishlistUrl',
+                'setBeforeWishlistUrl',
+                'setBeforeWishlistRequest',
+                'getBeforeWishlistRequest',
+                'setBeforeRequestParams',
+                'setBeforeModuleName',
+                'setBeforeControllerName',
+                'setBeforeAction',
+            ]
+        );
 
         $this->authenticationState = $this->createMock(AuthenticationState::class);
         $this->config = $this->createMock(Config::class);
         $this->redirector = $this->createMock(Redirect::class);
-        $this->messageManager = $this->getMockForAbstractClass(ManagerInterface::class);
+        $this->messageManager = $this->createMock(ManagerInterface::class);
         $this->request = $this->createMock(Http::class);
         $this->dataSerializer = $this->createMock(DataSerializer::class);
         $this->formKey = $this->createMock(FormKey::class);

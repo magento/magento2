@@ -1,20 +1,23 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Captcha\Test\Unit\Cron;
 
 use Magento\Captcha\Cron\DeleteExpiredImages;
+use Magento\Captcha\Helper\Adminhtml\Data as AdminhtmlData;
 use Magento\Captcha\Helper\Data;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Directory\Write;
 use Magento\Framework\Filesystem\Directory\WriteInterface;
+use Magento\Framework\Filesystem\Io\File;
 use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManager;
 use Magento\Store\Model\Website;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Constraint\IsIdentical;
 use PHPUnit\Framework\Constraint\IsNull;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -57,6 +60,11 @@ class DeleteExpiredImagesTest extends TestCase
     protected $_directory;
 
     /**
+     * @var File|MockObject
+     */
+    protected $_fileInfo;
+
+    /**
      * @var int
      */
     public static $currentTime;
@@ -67,10 +75,11 @@ class DeleteExpiredImagesTest extends TestCase
     protected function setUp(): void
     {
         $this->_helper = $this->createMock(Data::class);
-        $this->_adminHelper = $this->createMock(\Magento\Captcha\Helper\Adminhtml\Data::class);
+        $this->_adminHelper = $this->createMock(AdminhtmlData::class);
         $this->_filesystem = $this->createMock(Filesystem::class);
         $this->_directory = $this->createMock(Write::class);
         $this->_storeManager = $this->createMock(StoreManager::class);
+        $this->_fileInfo = $this->createMock(File::class);
 
         $this->_filesystem->expects(
             $this->once()
@@ -84,15 +93,17 @@ class DeleteExpiredImagesTest extends TestCase
             $this->_helper,
             $this->_adminHelper,
             $this->_filesystem,
-            $this->_storeManager
+            $this->_storeManager,
+            $this->_fileInfo
         );
     }
 
-    /**
-     * @dataProvider getExpiredImages
-     */
+    #[DataProvider('getExpiredImages')]
     public function testDeleteExpiredImages($website, $isFile, $filename, $mTime, $timeout)
     {
+        if ($website!=null) {
+            $website = $website($this);
+        }
         $this->_storeManager->expects(
             $this->once()
         )->method(
@@ -139,20 +150,26 @@ class DeleteExpiredImagesTest extends TestCase
         $this->_deleteExpiredImages->execute();
     }
 
-    /**
-     * @return array
-     */
-    public function getExpiredImages()
+    protected function getMockForWebsiteClass()
     {
         $website = $this->createPartialMock(Website::class, ['__wakeup', 'getDefaultStore']);
         $store = $this->createPartialMock(Store::class, ['__wakeup']);
         $website->expects($this->any())->method('getDefaultStore')->willReturn($store);
+        return $website;
+    }
+
+    /**
+     * @return array
+     */
+    public static function getExpiredImages()
+    {
+        $website = static fn (self $testCase) => $testCase->getMockForWebsiteClass();
         $time = time();
         return [
-            [null, true, 'test.png', 50, ($time - 60) / 60, true],
-            [$website, false, 'test.png', 50, ($time - 60) / 60, false],
-            [$website, true, 'test.jpg', 50, ($time - 60) / 60, false],
-            [$website, true, 'test.png', 50, ($time - 20) / 60, false]
+            [null, true, 'test.png', 50, ($time - 60) / 60],
+            [$website, false, 'test.png', 50, ($time - 60) / 60],
+            [$website, true, 'test.jpg', 50, ($time - 60) / 60],
+            [$website, true, 'test.png', 50, ($time - 20) / 60]
         ];
     }
 }

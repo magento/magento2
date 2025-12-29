@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Catalog\Model\Product;
 
@@ -81,7 +81,7 @@ class UrlTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function getUrlsWithSecondStoreProvider()
+    public static function getUrlsWithSecondStoreProvider()
     {
         return [
            'case1' => ['fixturestore', 'http://sample-second.com/index.php/simple-product-one.html'],

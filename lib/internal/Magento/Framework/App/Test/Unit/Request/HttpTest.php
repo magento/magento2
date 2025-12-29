@@ -1,8 +1,7 @@
 <?php
 /**
- *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -285,7 +284,7 @@ class HttpTest extends TestCase
     /**
      * @return array
      */
-    public function getDistroBaseUrlPathDataProvider()
+    public static function getDistroBaseUrlPathDataProvider()
     {
         return [
             [null, '/'],
@@ -302,7 +301,7 @@ class HttpTest extends TestCase
     /**
      * @return array
      */
-    public function serverVariablesProvider()
+    public static function serverVariablesProvider()
     {
         $returnValue = [];
         $defaultServerData = [
@@ -426,7 +425,7 @@ class HttpTest extends TestCase
     /**
      * @return array
      */
-    public function httpSafeMethodProvider()
+    public static function httpSafeMethodProvider()
     {
         return [
             'Test 1' => ['GET'],
@@ -439,7 +438,7 @@ class HttpTest extends TestCase
     /**
      * @return array
      */
-    public function httpNotSafeMethodProvider()
+    public static function httpNotSafeMethodProvider()
     {
         return [
             'Test 1' => ['POST'],
@@ -454,7 +453,7 @@ class HttpTest extends TestCase
     /**
      * @return array
      */
-    public function isSecureDataProvider()
+    public static function isSecureDataProvider()
     {
         /**
          * Data structure:
@@ -512,7 +511,7 @@ class HttpTest extends TestCase
     /**
      * @return array
      */
-    public function setPathInfoDataProvider()
+    public static function setPathInfoDataProvider()
     {
         return [
             ['http://svr.com/', '', ''],

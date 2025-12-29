@@ -1,16 +1,18 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Review\Test\Unit\Block\Adminhtml;
 
 use Magento\Catalog\Model\ResourceModel\Product;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\Framework\UrlInterface;
 use Magento\Review\Block\Adminhtml\Rss;
+use Magento\Review\Model\Rss as ReviewRss;
 use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -21,6 +23,8 @@ use PHPUnit\Framework\TestCase;
  */
 class RssTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var Rss
      */
@@ -37,7 +41,7 @@ class RssTest extends TestCase
     protected $storeManagerInterface;
 
     /**
-     * @var \Magento\Review\Model\Rss|MockObject
+     * @var ReviewRss|MockObject
      */
     protected $rss;
 
@@ -51,9 +55,9 @@ class RssTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->storeManagerInterface = $this->getMockForAbstractClass(StoreManagerInterface::class);
-        $this->rss = $this->createPartialMock(\Magento\Review\Model\Rss::class, ['__wakeUp', 'getProductCollection']);
-        $this->urlBuilder = $this->getMockForAbstractClass(UrlInterface::class);
+        $this->storeManagerInterface = $this->createMock(StoreManagerInterface::class);
+        $this->rss = $this->createPartialMock(ReviewRss::class, ['__wakeUp', 'getProductCollection']);
+        $this->urlBuilder = $this->createMock(UrlInterface::class);
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->block = $this->objectManagerHelper->getObject(
             Rss::class,
@@ -89,8 +93,9 @@ class RssTest extends TestCase
                 ],
             ],
         ];
-        $productModel = $this->getMockBuilder(Product::class)
-            ->addMethods([
+        $productModel = $this->createPartialMockWithReflection(
+            Product::class,
+            [
                 'getStoreId',
                 'getId',
                 'getReviewId',
@@ -99,27 +104,24 @@ class RssTest extends TestCase
                 'getTitle',
                 'getNickname',
                 'getProductUrl'
-            ])
-            ->disableOriginalConstructor()
-            ->getMock();
+            ]
+        );
         $storeModel = $this->createMock(Store::class);
         $this->storeManagerInterface->expects($this->once())->method('getStore')->willReturn($storeModel);
         $storeModel->expects($this->once())->method('getName')
             ->willReturn($rssData['entries']['description']['store']);
-        $this->urlBuilder->expects($this->any())->method('getUrl')->willReturn($rssUrl);
+        $this->urlBuilder->method('getUrl')->willReturn($rssUrl);
         $this->urlBuilder->expects($this->once())->method('setScope')->willReturnSelf();
-        $productModel->expects($this->any())->method('getStoreId')->willReturn(1);
-        $productModel->expects($this->any())->method('getId')->willReturn(1);
+        $productModel->method('getStoreId')->willReturn(1);
+        $productModel->method('getId')->willReturn(1);
         $productModel->expects($this->once())->method('getReviewId')->willReturn(1);
-        $productModel->expects($this->any())->method('getNickName')->willReturn('Product Nick');
-        $productModel->expects($this->any())->method('getName')
-            ->willReturn($rssData['entries']['description']['name']);
+        $productModel->method('getNickName')->willReturn('Product Nick');
+        $productModel->method('getName')->willReturn($rssData['entries']['description']['name']);
         $productModel->expects($this->once())->method('getDetail')
             ->willReturn($rssData['entries']['description']['review']);
         $productModel->expects($this->once())->method('getTitle')
             ->willReturn($rssData['entries']['description']['summary']);
-        $productModel->expects($this->any())->method('getProductUrl')
-            ->willReturn('http://product.magento.com');
+        $productModel->method('getProductUrl')->willReturn('http://product.magento.com');
         $this->rss->expects($this->once())->method('getProductCollection')
             ->willReturn([$productModel]);
 

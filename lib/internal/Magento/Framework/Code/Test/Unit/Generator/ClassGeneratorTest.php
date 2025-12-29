@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework\Code\Test\Unit\Generator;
 
@@ -334,7 +334,7 @@ class ClassGeneratorTest extends TestCase
      * DataProvider for testNamespaceName
      * @return array
      */
-    public function providerNamespaces()
+    public static function providerNamespaces()
     {
         return [
             ['Laminas', 'Laminas'],

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -93,10 +93,10 @@ class RssTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->cacheMock = $this->getMockForAbstractClass(CacheInterface::class);
-        $this->serializerMock = $this->getMockForAbstractClass(SerializerInterface::class);
-        $this->feedFactoryMock = $this->getMockForAbstractClass(FeedFactoryInterface::class);
-        $this->feedMock = $this->getMockForAbstractClass(FeedInterface::class);
+        $this->cacheMock = $this->createMock(CacheInterface::class);
+        $this->serializerMock = $this->createMock(SerializerInterface::class);
+        $this->feedFactoryMock = $this->createMock(FeedFactoryInterface::class);
+        $this->feedMock = $this->createMock(FeedInterface::class);
 
         $objectManagerHelper = new ObjectManagerHelper($this);
         $this->rss = $objectManagerHelper->getObject(
@@ -116,7 +116,7 @@ class RssTest extends TestCase
      */
     public function testGetFeeds(): void
     {
-        $dataProvider = $this->getMockForAbstractClass(DataProviderInterface::class);
+        $dataProvider = $this->createMock(DataProviderInterface::class);
         $dataProvider->expects($this->atLeastOnce())
             ->method('getCacheKey')
             ->willReturn('cache_key');
@@ -192,7 +192,7 @@ class RssTest extends TestCase
 
     public function testGetFeedsWithCache()
     {
-        $dataProvider = $this->getMockForAbstractClass(DataProviderInterface::class);
+        $dataProvider = $this->createMock(DataProviderInterface::class);
         $dataProvider->expects($this->any())->method('getCacheKey')->willReturn('cache_key');
         $dataProvider->expects($this->any())->method('getCacheLifetime')->willReturn(100);
         $dataProvider->expects($this->never())->method('getRssData');
@@ -214,7 +214,7 @@ class RssTest extends TestCase
 
     public function testCreateRssXml()
     {
-        $dataProvider = $this->getMockForAbstractClass(DataProviderInterface::class);
+        $dataProvider = $this->createMock(DataProviderInterface::class);
         $dataProvider->expects($this->any())->method('getCacheKey')->willReturn('cache_key');
         $dataProvider->expects($this->any())->method('getCacheLifetime')->willReturn(100);
         $dataProvider->expects($this->any())->method('getRssData')->willReturn($this->feedData);

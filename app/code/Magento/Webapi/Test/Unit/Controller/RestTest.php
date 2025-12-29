@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -12,6 +12,7 @@ use Magento\Framework\App\AreaList;
 use Magento\Framework\Oauth\OauthInterface;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Reflection\DataObjectProcessor;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\View\LayoutInterface;
 use Magento\Framework\Webapi\Authorization;
@@ -40,6 +41,8 @@ use PHPUnit\Framework\TestCase;
  */
 class RestTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var Rest
      */
@@ -110,61 +113,57 @@ class RestTest extends TestCase
      */
     protected $requestProcessorPool;
 
-    const SERVICE_METHOD = 'testMethod';
+    private const SERVICE_METHOD = 'testMethod';
 
-    const SERVICE_ID = Rest::class;
+    private const SERVICE_ID = Rest::class;
 
     protected function setUp(): void
     {
-        $objectManagerMock = $this->getMockForAbstractClass(ObjectManagerInterface::class);
+        $objectManagerMock = $this->createMock(ObjectManagerInterface::class);
         $this->_requestMock = $this->getRequestMock();
         $this->_requestMock->expects($this->any())->method('getHttpHost')->willReturn('testHostName.com');
         $this->_responseMock = $this->getResponseMock();
-        $routerMock = $this->getMockBuilder(Router::class)
-            ->onlyMethods(['match'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $routerMock = $this->createPartialMock(
+            Router::class,
+            ['match']
+        );
 
         $this->_routeMock = $this->getRouteMock();
-        $this->_serviceMock = $this->getMockBuilder(self::SERVICE_ID)
-            ->addMethods([self::SERVICE_METHOD])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->_serviceMock = $this->createPartialMockWithReflection(
+            self::SERVICE_ID,
+            [self::SERVICE_METHOD]
+        );
 
-        $this->_oauthServiceMock = $this->getMockBuilder(OauthInterface::class)
-            ->onlyMethods(['validateAccessTokenRequest'])->getMockForAbstractClass();
-        $this->_authorizationMock = $this->getMockBuilder(Authorization::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->_oauthServiceMock = $this->createStub(OauthInterface::class);
+        $this->_authorizationMock = $this->createMock(Authorization::class);
 
-        $paramsOverriderMock = $this->getMockBuilder(ParamsOverrider::class)
-            ->addMethods(['overrideParams'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $paramsOverriderMock = $this->createPartialMockWithReflection(
+            ParamsOverrider::class,
+            ['overrideParams']
+        );
 
-        $dataObjectProcessorMock = $this->getMockBuilder(DataObjectProcessor::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['getMethodReturnType'])
-            ->getMockForAbstractClass();
+        $dataObjectProcessorMock = $this->createPartialMockWithReflection(
+            DataObjectProcessor::class,
+            ['getMethodReturnType']
+        );
 
-        $layoutMock = $this->getMockBuilder(LayoutInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $layoutMock = $this->createMock(LayoutInterface::class);
 
         $errorProcessorMock = $this->createMock(ErrorProcessor::class);
         $errorProcessorMock->expects($this->any())->method('maskException')->willReturnArgument(0);
 
         $objectManager = new ObjectManager($this);
 
-        $this->serviceInputProcessorMock = $this->getMockBuilder(ServiceInputProcessor::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['process'])->getMock();
+        $this->serviceInputProcessorMock = $this->createPartialMock(
+            ServiceInputProcessor::class,
+            ['process']
+        );
 
         $areaListMock = $this->createMock(AreaList::class);
-        $areaMock = $this->getMockForAbstractClass(AreaInterface::class);
+        $areaMock = $this->createMock(AreaInterface::class);
         $areaListMock->expects($this->any())->method('getArea')->willReturn($areaMock);
-        $this->storeMock = $this->getMockForAbstractClass(StoreInterface::class);
-        $this->storeManagerMock = $this->getMockForAbstractClass(StoreManagerInterface::class);
+        $this->storeMock = $this->createMock(StoreInterface::class);
+        $this->storeManagerMock = $this->createMock(StoreManagerInterface::class);
         $this->storeManagerMock->expects($this->any())->method('getStore')->willReturn($this->storeMock);
         $this->requestProcessorPool = $this->getRequestProccessotPoolMock();
 
@@ -268,10 +267,10 @@ class RestTest extends TestCase
     {
         $objectManager = new ObjectManager($this);
 
-        $this->swaggerGeneratorMock = $this->getMockBuilder(Generator::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['generate', 'getListOfServices'])
-            ->getMockForAbstractClass();
+        $this->swaggerGeneratorMock = $this->createPartialMock(
+            Generator::class,
+            ['generate', 'getListOfServices']
+        );
 
         $this->schemaRequestProcessor = $objectManager->getObject(
             SchemaRequestProcessor::class,
@@ -281,11 +280,10 @@ class RestTest extends TestCase
             ]
         );
 
-        $this->synchronousRequestProcessor =
-            $this->getMockBuilder(SynchronousRequestProcessor::class)
-                ->onlyMethods(['process'])
-                ->disableOriginalConstructor()
-                ->getMock();
+        $this->synchronousRequestProcessor = $this->createPartialMock(
+            SynchronousRequestProcessor::class,
+            ['process']
+        );
 
         return $objectManager->getObject(
             RequestProcessorPool::class,
@@ -303,16 +301,16 @@ class RestTest extends TestCase
      */
     private function getRouteMock()
     {
-        return $this->getMockBuilder(Route::class)
-            ->onlyMethods([
+        return $this->createPartialMock(
+            Route::class,
+            [
                 'isSecure',
                 'getServiceMethod',
                 'getServiceClass',
                 'getAclResources',
                 'getParameters',
-            ])
-            ->disableOriginalConstructor()
-            ->getMock();
+            ]
+        );
     }
 
     /**
@@ -320,20 +318,19 @@ class RestTest extends TestCase
      */
     private function getRequestMock()
     {
-        return $this->getMockBuilder(Request::class)
-            ->onlyMethods(
-                [
-                    'isSecure',
-                    'getRequestData',
-                    'getParams',
-                    'getParam',
-                    'getRequestedServices',
-                    'getPathInfo',
-                    'getHttpHost',
-                    'getMethod',
-                ]
-            )->disableOriginalConstructor()
-            ->getMock();
+        return $this->createPartialMock(
+            Request::class,
+            [
+                'isSecure',
+                'getRequestData',
+                'getParams',
+                'getParam',
+                'getRequestedServices',
+                'getPathInfo',
+                'getHttpHost',
+                'getMethod',
+            ]
+        );
     }
 
     /**
@@ -341,9 +338,9 @@ class RestTest extends TestCase
      */
     private function getResponseMock()
     {
-        return $this->getMockBuilder(Response::class)
-            ->onlyMethods(['sendResponse', 'prepareResponse', 'setHeader'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        return $this->createPartialMock(
+            Response::class,
+            ['sendResponse', 'prepareResponse', 'setHeader']
+        );
     }
 }

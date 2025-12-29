@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -112,7 +112,7 @@ class InitialConfigSourceTest extends TestCase
     /**
      * @return array
      */
-    public function getDefaultDataProvider(): array
+    public static function getDefaultDataProvider(): array
     {
         return [
             [

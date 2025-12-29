@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -17,6 +17,7 @@ use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class CollectionTest extends TestCase
 {
@@ -57,20 +58,15 @@ class CollectionTest extends TestCase
     {
         $store = $this->createPartialMock(Store::class, ['getId']);
         $store->expects($this->any())->method('getId')->willReturn(1);
-        $this->storeManagerMock = $this->getMockForAbstractClass(StoreManagerInterface::class);
+        $this->storeManagerMock = $this->createMock(StoreManagerInterface::class);
         $this->storeManagerMock->expects($this->any())->method('getStore')->willReturn($store);
         $this->objectManager = (new ObjectManager($this));
-        $this->resourceMock = $this->getMockBuilder(AbstractDb::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['getConnection', 'getMainTable', 'getTable'])
-            ->getMockForAbstractClass();
-        $this->readerAdapterMock = $this->getMockBuilder(Mysql::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['select', 'prepareSqlCondition', 'quoteInto'])
-            ->getMockForAbstractClass();
-        $this->selectMock = $this->getMockBuilder(Select::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->resourceMock = $this->createMock(AbstractDb::class);
+        $this->readerAdapterMock = $this->createPartialMock(
+            Mysql::class,
+            ['select', 'prepareSqlCondition', 'quoteInto']
+        );
+        $this->selectMock = $this->createMock(Select::class);
         $this->readerAdapterMock->expects($this->any())
             ->method('select')
             ->willReturn($this->selectMock);
@@ -142,8 +138,8 @@ class CollectionTest extends TestCase
      * @param int $callNum
      *
      * @return void
-     * @dataProvider addEntityFilterDataProvider
      */
+    #[DataProvider('addEntityFilterDataProvider')]
     public function testAddEntityFilter(
         $entity,
         int $pkValue,

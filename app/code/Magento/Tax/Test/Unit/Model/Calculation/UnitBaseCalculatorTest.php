@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -136,7 +136,7 @@ class UnitBaseCalculatorTest extends TestCase
         $this->model = $objectManager->getObject(UnitBaseCalculator::class, $arguments);
     }
 
-    public function testCalculateWithTaxInPrice()
+    public function testCalculateWithTaxInPrice(): void
     {
         $mockItem = $this->getMockItem();
         $mockItem->expects($this->atLeastOnce())
@@ -192,7 +192,7 @@ class UnitBaseCalculatorTest extends TestCase
         );
     }
 
-    public function testCalculateWithTaxNotInPrice()
+    public function testCalculateWithTaxNotInPrice(): void
     {
         $mockItem = $this->getMockItem();
         $mockItem->expects($this->once())
@@ -228,9 +228,7 @@ class UnitBaseCalculatorTest extends TestCase
     protected function getMockItem()
     {
         /** @var MockObject $mockItem */
-        $mockItem = $this->getMockBuilder(QuoteDetailsItemInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $mockItem = $this->createMock(QuoteDetailsItemInterface::class);
         $mockItem->expects($this->atLeastOnce())
             ->method('getDiscountAmount')
             ->willReturn(1);

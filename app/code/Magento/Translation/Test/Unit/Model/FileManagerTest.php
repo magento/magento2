@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -60,15 +60,7 @@ class FileManagerTest extends TestCase
         $path = 'relative path';
         $expectedPath = $path . '/' . FileManager::TRANSLATION_CONFIG_FILE_NAME;
         $fileMock = $this->createMock(\Magento\Framework\View\Asset\File::class);
-        $contextMock = $this->getMockForAbstractClass(
-            ContextInterface::class,
-            [],
-            '',
-            true,
-            true,
-            true,
-            ['getPath']
-        );
+        $contextMock = $this->createMock(ContextInterface::class);
         $this->assetRepoMock->expects($this->once())->method('getStaticViewFileContext')->willReturn($contextMock);
         $contextMock->expects($this->once())->method('getPath')->willReturn($path);
         $this->assetRepoMock
@@ -83,15 +75,7 @@ class FileManagerTest extends TestCase
     public function testGetTranslationFileTimestamp()
     {
         $path = 'path';
-        $contextMock = $this->getMockForAbstractClass(
-            ContextInterface::class,
-            [],
-            '',
-            true,
-            true,
-            true,
-            ['getPath']
-        );
+        $contextMock = $this->createMock(ContextInterface::class);
         $this->assetRepoMock->expects($this->atLeastOnce())
             ->method('getStaticViewFileContext')
             ->willReturn($contextMock);
@@ -108,15 +92,7 @@ class FileManagerTest extends TestCase
     public function testGetTranslationFilePath()
     {
         $path = 'path';
-        $contextMock = $this->getMockForAbstractClass(
-            ContextInterface::class,
-            [],
-            '',
-            true,
-            true,
-            true,
-            ['getPath']
-        );
+        $contextMock = $this->createMock(ContextInterface::class);
         $this->assetRepoMock->expects($this->atLeastOnce())
             ->method('getStaticViewFileContext')
             ->willReturn($contextMock);

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -14,6 +14,7 @@ use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\DataObject;
 use Magento\Framework\HTTP\LaminasClient;
 use Magento\Framework\HTTP\LaminasClientFactory;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -23,6 +24,8 @@ use PHPUnit\Framework\TestCase;
  */
 class CurrencyConverterApiTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var CurrencyConverterApi
      */
@@ -56,9 +59,7 @@ class CurrencyConverterApiTest extends TestCase
             ->disableOriginalConstructor()
             ->onlyMethods(['create'])
             ->getMock();
-        $this->scopeConfig = $this->getMockBuilder(ScopeConfigInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->scopeConfig = $this->createMock(ScopeConfigInterface::class);
 
         $objectManagerHelper = new ObjectManagerHelper($this);
         $this->model = $objectManagerHelper->getObject(
@@ -114,10 +115,10 @@ class CurrencyConverterApiTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
         /** @var DataObject|MockObject $currencyMock */
-        $httpResponse = $this->getMockBuilder(DataObject::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['getBody'])
-            ->getMock();
+        $httpResponse = $this->createPartialMockWithReflection(
+            DataObject::class,
+            ['getBody']
+        );
 
         $this->httpClientFactory->expects($this->once())->method('create')->willReturn($httpClient);
         $httpClient->expects($this->once())->method('setUri')->willReturnSelf();

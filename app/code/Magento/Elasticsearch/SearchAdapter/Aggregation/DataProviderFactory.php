@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Elasticsearch\SearchAdapter\Aggregation;
@@ -56,7 +56,7 @@ class DataProviderFactory
      */
     public function create(
         DataProviderInterface $dataProvider,
-        QueryContainer $query = null,
+        ?QueryContainer $query = null,
         ?string $aggregationFieldName = null
     ) {
         $result = $dataProvider;

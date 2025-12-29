@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -91,12 +91,12 @@ class OrderRepository implements \Magento\Sales\Api\OrderRepositoryInterface, Re
     public function __construct(
         Metadata $metadata,
         SearchResultFactory $searchResultFactory,
-        CollectionProcessorInterface $collectionProcessor = null,
-        OrderTaxManagementInterface $orderTaxManagement = null,
-        PaymentAdditionalInfoInterfaceFactory $paymentAdditionalInfoFactory = null,
-        JsonSerializer $serializer = null,
-        JoinProcessorInterface $extensionAttributesJoinProcessor = null,
-        ShippingAssignmentBuilder $shippingAssignmentBuilder = null
+        ?CollectionProcessorInterface $collectionProcessor = null,
+        ?OrderTaxManagementInterface $orderTaxManagement = null,
+        ?PaymentAdditionalInfoInterfaceFactory $paymentAdditionalInfoFactory = null,
+        ?JsonSerializer $serializer = null,
+        ?JoinProcessorInterface $extensionAttributesJoinProcessor = null,
+        ?ShippingAssignmentBuilder $shippingAssignmentBuilder = null
     ) {
         $this->metadata = $metadata;
         $this->searchResultFactory = $searchResultFactory;

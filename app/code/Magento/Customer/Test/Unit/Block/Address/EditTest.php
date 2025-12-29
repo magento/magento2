@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -24,12 +24,15 @@ use Magento\Framework\View\Page\Config;
 use Magento\Framework\View\Page\Title;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class EditTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var ObjectManager
      */
@@ -88,11 +91,11 @@ class EditTest extends TestCase
         $this->addressRepositoryMock = $this->getMockBuilder(AddressRepositoryInterface::class)
             ->getMock();
 
-        $this->customerSessionMock = $this->getMockBuilder(Session::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['getCustomerId'])
-            ->addMethods(['getAddressFormData'])
-            ->getMock();
+        $this->customerSessionMock = $this->createPartialMockWithReflection(
+            Session::class,
+            ['getAddressFormData', 'getCustomerId'
+                                    ]
+        );
 
         $this->pageConfigMock = $this->getMockBuilder(Config::class)
             ->disableOriginalConstructor()

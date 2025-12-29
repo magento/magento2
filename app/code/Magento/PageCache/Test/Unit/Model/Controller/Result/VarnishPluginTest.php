@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -16,6 +16,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHe
 use Magento\PageCache\Model\Config;
 use Magento\PageCache\Model\Controller\Result\VarnishPlugin;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -77,8 +78,7 @@ class VarnishPluginTest extends TestCase
         $this->registryMock = $this->getMockBuilder(Registry::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->resultMock = $this->getMockBuilder(ResultInterface::class)
-            ->getMockForAbstractClass();
+        $this->resultMock = $this->createMock(ResultInterface::class);
         $this->responseMock = $this->getMockBuilder(ResponseHttp::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -100,9 +100,8 @@ class VarnishPluginTest extends TestCase
      * @param int $setCacheDebugHeaderCount
      * @param int $getModeCount
      * @param int $processCount
-     *
-     * @dataProvider afterRenderResultDataProvider
      */
+    #[DataProvider('afterRenderResultDataProvider')]
     public function testAfterRenderResult($usePlugin, $setCacheDebugHeaderCount, $getModeCount, $processCount)
     {
         $this->responseMock->expects(static::exactly($setCacheDebugHeaderCount))
@@ -133,7 +132,7 @@ class VarnishPluginTest extends TestCase
     /**
      * @return array
      */
-    public function afterRenderResultDataProvider()
+    public static function afterRenderResultDataProvider()
     {
         return [
             [true, 1, 1, 1],

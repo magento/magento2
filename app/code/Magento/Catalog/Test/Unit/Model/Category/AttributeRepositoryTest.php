@@ -1,8 +1,7 @@
 <?php
 /**
- *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -61,15 +60,10 @@ class AttributeRepositoryTest extends TestCase
     {
         $this->searchBuilderMock = $this->createMock(SearchCriteriaBuilder::class);
         $this->filterBuilderMock = $this->createMock(FilterBuilder::class);
-        $this->attributeRepositoryMock = $this->getMockForAbstractClass(AttributeRepositoryInterface::class);
-        $this->searchResultMock = $this->getMockBuilder(SearchResultsInterface::class)
-            ->onlyMethods(
-                ['getItems', 'getSearchCriteria', 'getTotalCount', 'setItems', 'setSearchCriteria', 'setTotalCount']
-            )
-            ->getMockForAbstractClass();
+        $this->attributeRepositoryMock = $this->createMock(AttributeRepositoryInterface::class);
+        $this->searchResultMock = $this->createMock(SearchResultsInterface::class);
         $this->eavConfigMock = $this->createMock(Config::class);
-        $this->eavConfigMock->expects($this->any())->method('getEntityType')
-            ->willReturn(new DataObject(['default_attribute_set_id' => 3]));
+        $this->eavConfigMock->method('getEntityType')->willReturn(new DataObject(['default_attribute_set_id' => 3]));
         $this->model = (new ObjectManager($this))->getObject(
             AttributeRepository::class,
             [
@@ -96,7 +90,7 @@ class AttributeRepositoryTest extends TestCase
     {
         $attributeCode = 'some Attribute Code';
         $dataInterfaceMock =
-            $this->getMockForAbstractClass(CategoryAttributeInterface::class);
+            $this->createMock(CategoryAttributeInterface::class);
         $this->attributeRepositoryMock->expects($this->once())
             ->method('get')
             ->with(CategoryAttributeInterface::ENTITY_TYPE_CODE, $attributeCode)

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Framework\Api;
@@ -10,12 +10,13 @@ use Magento\Framework\Api\Data\ImageContentInterface;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\Filesystem;
+use Magento\Framework\Filesystem\Directory\WriteInterface;
 use Magento\Framework\Phrase;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class ImageProcessor implements ImageProcessorInterface
+class ImageProcessor implements ImageProcessorInterface, ImageContentUploaderInterface
 {
     /**
      * @var array
@@ -85,7 +86,7 @@ class ImageProcessor implements ImageProcessorInterface
     public function save(
         CustomAttributesDataInterface $dataObjectWithCustomAttributes,
         $entityType,
-        CustomAttributesDataInterface $previousCustomerData = null
+        ?CustomAttributesDataInterface $previousCustomerData = null
     ) {
         //Get all Image related custom attributes
         $imageDataObjects = $this->dataObjectHelper->getCustomAttributeValueByType(
@@ -135,7 +136,30 @@ class ImageProcessor implements ImageProcessorInterface
      */
     public function processImageContent($entityType, $imageContent)
     {
-        if (!$this->contentValidator->isValid($imageContent)) {
+        $tmpFileName = $this->saveToTmpDir($imageContent);
+
+        try {
+            return $this->moveFromTmpDir(
+                $imageContent,
+                $tmpFileName,
+                $this->mediaDirectory,
+                (string) $entityType,
+            );
+        } catch (\Exception $e) {
+            $this->logger->critical($e);
+        }
+
+        return '';
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function saveToTmpDir(
+        ImageContentInterface $imageContent,
+        bool $validate = true
+    ): string {
+        if ($validate && !$this->contentValidator->isValid($imageContent)) {
             throw new InputException(new Phrase('The image content is invalid. Verify the content and try again.'));
         }
 
@@ -147,21 +171,33 @@ class ImageProcessor implements ImageProcessorInterface
         $tmpFileName = substr(md5(rand()), 0, 7) . '.' . $fileName;
         $tmpDirectory->writeFile($tmpFileName, $fileContent);
 
-        $fileAttributes = [
-            'tmp_name' => $tmpDirectory->getAbsolutePath() . $tmpFileName,
-            'name' => $imageContent->getName()
-        ];
+        return $tmpFileName;
+    }
 
-        try {
-            $this->uploader->processFileAttributes($fileAttributes);
-            $this->uploader->setFilesDispersion(true);
-            $this->uploader->setFilenamesCaseSensitivity(false);
-            $this->uploader->setAllowRenameFiles(true);
-            $destinationFolder = $entityType;
-            $this->uploader->save($this->mediaDirectory->getAbsolutePath($destinationFolder), $fileName);
-        } catch (\Exception $e) {
-            $this->logger->critical($e);
-        }
+    /**
+     * @inheritDoc
+     */
+    public function moveFromTmpDir(
+        ImageContentInterface $imageContent,
+        string $tmpFileName,
+        WriteInterface $destinationDirectory,
+        ?string $destinationPath = null,
+        ?string $fileName = null,
+        int $flags = 0
+    ): ?string {
+        $flags = $flags ?: (self::CASE_SENSITIVE | self::PATH_DISPERSION | self::RENAME_IF_EXIST);
+        $fileName = $fileName ?? $this->getFileName($imageContent);
+        $tmpDirectory = $this->filesystem->getDirectoryWrite(DirectoryList::SYS_TMP);
+        $this->uploader->processFileAttributes([
+            'tmp_name' => $tmpDirectory->getAbsolutePath() . $tmpFileName,
+            'name' => $fileName
+        ]);
+        $this->uploader->setFilesDispersion((bool)($flags & self::PATH_DISPERSION));
+        // setFilenamesCaseSensitivity is actually setting whether the filenames are case-insensitive,
+        // meaning that passing TRUE makes the filenames case-insensitive and vice versa.
+        $this->uploader->setFilenamesCaseSensitivity(!($flags & self::CASE_SENSITIVE));
+        $this->uploader->setAllowRenameFiles((bool)($flags & self::RENAME_IF_EXIST));
+        $this->uploader->save($this->mediaDirectory->getAbsolutePath($destinationPath), $fileName);
         return $this->uploader->getUploadedFileName();
     }
 

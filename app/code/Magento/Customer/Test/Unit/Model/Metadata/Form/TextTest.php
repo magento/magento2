@@ -1,13 +1,12 @@
 <?php declare(strict_types=1);
 /**
- * test Magento\Customer\Model\Metadata\Form\Text
- *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Customer\Test\Unit\Model\Metadata\Form;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\Customer\Api\Data\ValidationRuleInterface;
 use Magento\Customer\Model\Metadata\Form\Text;
 use Magento\Framework\Phrase;
@@ -49,9 +48,8 @@ class TextTest extends AbstractFormTestCase
 
     /**
      * @param string|int|bool $value to assign to boolean
-     * @param bool $expected text output
-     * @dataProvider validateValueDataProvider
-     */
+     * @param bool $expected text output */
+    #[DataProvider('validateValueDataProvider')]
     public function testValidateValue($value, $expected)
     {
         $sut = $this->getClass($value);
@@ -62,7 +60,7 @@ class TextTest extends AbstractFormTestCase
     /**
      * @return array
      */
-    public function validateValueDataProvider()
+    public static function validateValueDataProvider()
     {
         return [
             'empty' => ['', true],
@@ -77,9 +75,8 @@ class TextTest extends AbstractFormTestCase
 
     /**
      * @param string|int|bool|null $value to assign to boolean
-     * @param string|bool|null $expected text output
-     * @dataProvider validateValueRequiredDataProvider
-     */
+     * @param string|bool|null $expected text output */
+    #[DataProvider('validateValueRequiredDataProvider')]
     public function testValidateValueRequired($value, $expected)
     {
         $this->attributeMetadataMock->expects($this->any())->method('isRequired')->willReturn(true);
@@ -105,7 +102,7 @@ class TextTest extends AbstractFormTestCase
     /**
      * @return array
      */
-    public function validateValueRequiredDataProvider()
+    public static function validateValueRequiredDataProvider()
     {
         return [
             'empty' => ['', '"" is a required value.'],
@@ -121,15 +118,11 @@ class TextTest extends AbstractFormTestCase
 
     /**
      * @param string|int|bool|null $value to assign to boolean
-     * @param string|bool $expected text output
-     * @dataProvider validateValueLengthDataProvider
-     */
+     * @param string|bool $expected text output */
+    #[DataProvider('validateValueLengthDataProvider')]
     public function testValidateValueLength($value, $expected)
     {
-        $minTextLengthRule = $this->getMockBuilder(ValidationRuleInterface::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['getName', 'getValue'])
-            ->getMockForAbstractClass();
+        $minTextLengthRule = $this->createMock(ValidationRuleInterface::class);
         $minTextLengthRule->expects($this->any())
             ->method('getName')
             ->willReturn('min_text_length');
@@ -137,10 +130,7 @@ class TextTest extends AbstractFormTestCase
             ->method('getValue')
             ->willReturn(4);
 
-        $maxTextLengthRule = $this->getMockBuilder(ValidationRuleInterface::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['getName', 'getValue'])
-            ->getMockForAbstractClass();
+        $maxTextLengthRule = $this->createMock(ValidationRuleInterface::class);
         $maxTextLengthRule->expects($this->any())
             ->method('getName')
             ->willReturn('max_text_length');
@@ -148,10 +138,7 @@ class TextTest extends AbstractFormTestCase
             ->method('getValue')
             ->willReturn(8);
 
-        $inputValidationRule = $this->getMockBuilder(ValidationRuleInterface::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['getName', 'getValue'])
-            ->getMockForAbstractClass();
+        $inputValidationRule = $this->createMock(ValidationRuleInterface::class);
         $inputValidationRule->expects($this->any())
             ->method('getName')
             ->willReturn('input_validation');
@@ -191,7 +178,7 @@ class TextTest extends AbstractFormTestCase
     /**
      * @return array
      */
-    public function validateValueLengthDataProvider()
+    public static function validateValueLengthDataProvider()
     {
         return [
             'false' => [false, true],

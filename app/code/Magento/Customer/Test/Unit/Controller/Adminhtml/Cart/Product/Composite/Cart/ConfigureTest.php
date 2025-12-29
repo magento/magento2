@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2021 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -23,12 +23,15 @@ use Magento\Store\Model\StoreManagerInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class ConfigureTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var int
      */
@@ -151,11 +154,10 @@ class ConfigureTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $quote = $this->getMockBuilder(Quote::class)
-            ->onlyMethods(['getItemById'])
-            ->addMethods(['setWebsite'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $quote = $this->createPartialMockWithReflection(
+            Quote::class,
+            ['getItemById', 'setWebsite']
+        );
         $quote->expects($this->once())
             ->method('setWebsite')
             ->willReturnSelf();

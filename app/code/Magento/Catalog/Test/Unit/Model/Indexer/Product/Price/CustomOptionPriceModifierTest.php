@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2023 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -83,25 +83,23 @@ class CustomOptionPriceModifierTest extends TestCase
         $priceTable->expects($this->exactly(2))->method('getTableName')->willReturn('temporary_table_name');
 
         $select = $this->createMock(Select::class);
-        $select->expects($this->any())->method('from')->willReturn($select);
-        $select->expects($this->any())->method('join')->willReturn($select);
-        $select->expects($this->any())->method('group')->willReturn($select);
-        $select->expects($this->any())->method('columns')->willReturn($select);
+        $select->method('from')->willReturn($select);
+        $select->method('join')->willReturn($select);
+        $select->method('group')->willReturn($select);
+        $select->method('columns')->willReturn($select);
 
         $connection = $this->createMock(AdapterInterface::class);
         $connection->expects($this->exactly(2))->method('delete');
-        $connection->expects($this->any())->method('select')->willReturn($select);
-        $connection->expects($this->any())->method('fetchRow')->willReturn(['exists']);
+        $connection->method('select')->willReturn($select);
+        $connection->method('fetchRow')->willReturn(['exists']);
         $connection->expects($this->exactly(4))->method('query');
         $connection->expects($this->exactly(2))->method('dropTemporaryTable');
-        $this->resource->expects($this->any())->method('getConnection')->willReturn($connection);
-        $this->resource->expects($this->any())->method('getTableName')->willReturn('table');
-        $this->tableStrategy->expects($this->any())
-            ->method('getTableName')
-            ->willReturn('table_name');
+        $this->resource->method('getConnection')->willReturn($connection);
+        $this->resource->method('getTableName')->willReturn('table');
+        $this->tableStrategy->method('getTableName')->willReturn('table_name');
 
         $metadata = $this->createMock(EntityMetadataInterface::class);
-        $this->metadataPool->expects($this->any())->method('getMetadata')->willReturn($metadata);
+        $this->metadataPool->method('getMetadata')->willReturn($metadata);
         $this->dataHelper->expects($this->once())->method('isPriceGlobal')->willReturn(true);
 
         $this->priceModifier->modifyPrice($priceTable);

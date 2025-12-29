@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -128,7 +128,7 @@ class HelperTest extends TestCase
     /**
      * @return array
      */
-    public function scheduleStructureDataProvider()
+    public static function scheduleStructureDataProvider()
     {
         return [
             ['current_node', 'current_node', 1, 1],
@@ -201,19 +201,19 @@ class HelperTest extends TestCase
     /**
      * @return array
      */
-    public function scheduleElementLogDataProvider()
+    public static function scheduleElementLogDataProvider()
     {
         return [
             [
-                'loggerExpects' => $this->once(),
+                'loggerExpects' => self::once(),
                 'stateMode' => State::MODE_DEVELOPER
             ],
             [
-                'loggerExpects' => $this->never(),
+                'loggerExpects' => self::never(),
                 'stateMode' => State::MODE_DEFAULT
             ],
             [
-                'loggerExpects' => $this->never(),
+                'loggerExpects' => self::never(),
                 'stateMode' => State::MODE_PRODUCTION
             ]
         ];
@@ -286,7 +286,7 @@ class HelperTest extends TestCase
     /**
      * @return array
      */
-    public function scheduleElementDataProvider()
+    public static function scheduleElementDataProvider()
     {
         return [
             [

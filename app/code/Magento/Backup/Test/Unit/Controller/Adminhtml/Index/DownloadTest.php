@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -24,6 +24,8 @@ use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\ImportExport\Model\ResourceModel\Helper;
 use PHPUnit\Framework\MockObject\MockObject;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -32,6 +34,8 @@ use PHPUnit\Framework\TestCase;
  */
 class DownloadTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var ObjectManager
      */
@@ -119,11 +123,10 @@ class DownloadTest extends TestCase
             ->disableOriginalConstructor()
             ->onlyMethods(['create'])
             ->getMock();
-        $this->backupModelMock = $this->getMockBuilder(Backup::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['getTime', 'getPath'])
-            ->onlyMethods(['exists', 'getSize', 'output', 'getFileName'])
-            ->getMock();
+        $this->backupModelMock = $this->createPartialMockWithReflection(
+            Backup::class,
+            ['getTime', 'getPath', 'exists', 'getSize', 'output', 'getFileName']
+        );
         $this->dataHelperMock = $this->getMockBuilder(Data::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -244,8 +247,8 @@ class DownloadTest extends TestCase
      * @param int $time
      * @param bool $exists
      * @param int $existsCount
-     * @dataProvider executeBackupNotFoundDataProvider
      */
+    #[DataProvider('executeBackupNotFoundDataProvider')]
     public function testExecuteBackupNotFound($time, $exists, $existsCount)
     {
         $type = 'db';

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2025 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -10,6 +10,7 @@ namespace Magento\Cms\Ui\Component;
 use Magento\Cms\Api\Data\BlockInterface;
 use Magento\Cms\Api\Data\PageInterface;
 use Magento\Framework\App\RequestInterface;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\View\Element\UiComponentFactory;
 use Magento\Framework\View\Element\UiComponentInterface;
@@ -93,6 +94,7 @@ class DataProviderTest extends TestCase
      *
      * @param string $namespace
      * @return array
+     * @throws LocalizedException
      */
     private function getComponentProvidedData(string $namespace): array
     {

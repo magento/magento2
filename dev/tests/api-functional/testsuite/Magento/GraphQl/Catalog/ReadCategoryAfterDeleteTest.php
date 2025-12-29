@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -88,12 +88,12 @@ QUERY;
     /**
      * @return array
      */
-    public function categoriesDeleteDataProvider(): array
+    public static function categoriesDeleteDataProvider(): array
     {
         return [
             [
-                'category_to_delete' => 402,
-                'expected_result' => [
+                'categoryToDelete' => 402,
+                'expectedResult' => [
                     'categoryList' => [
                         [
                             'id' => 400,

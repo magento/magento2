@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework\Console\Exception;
 
@@ -17,7 +17,7 @@ class GenerationDirectoryAccessException extends FileSystemException
     /**
      * @inheritdoc
      */
-    public function __construct(Phrase $phrase = null, \Exception $cause = null, $code = 0)
+    public function __construct(?Phrase $phrase = null, ?\Exception $cause = null, $code = 0)
     {
         $phrase = $phrase ?: new Phrase(
             'Command line user does not have read and write permissions on '

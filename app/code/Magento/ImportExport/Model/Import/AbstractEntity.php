@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\ImportExport\Model\Import;
 
@@ -319,7 +319,7 @@ abstract class AbstractEntity implements EntityInterface
         ResourceConnection $resource,
         ProcessingErrorAggregatorInterface $errorAggregator,
         array $data = [],
-        Json $serializer = null
+        ?Json $serializer = null
     ) {
         $this->string = $string;
         $this->_scopeConfig = $scopeConfig;
@@ -580,7 +580,7 @@ abstract class AbstractEntity implements EntityInterface
      * @param array|null $rowData
      * @return string
      */
-    public function getBehavior(array $rowData = null)
+    public function getBehavior(?array $rowData = null)
     {
         if (isset(
             $this->_parameters['behavior']

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Backend\Controller\Adminhtml\System;
 
@@ -70,7 +70,7 @@ class AccountTest extends \Magento\TestFramework\TestCase\AbstractBackendControl
         }
     }
 
-    public function saveDataProvider()
+    public static function saveDataProvider()
     {
         $password = uniqid('123q');
         return [

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Customer\Model\Customer;
 
@@ -30,7 +30,7 @@ class NotificationStorage
      */
     public function __construct(
         FrontendInterface $cache,
-        SerializerInterface $serializer = null
+        ?SerializerInterface $serializer = null
     ) {
         $this->cache = $cache;
         $this->serializer = $serializer ?: ObjectManager::getInstance()->get(SerializerInterface::class);

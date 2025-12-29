@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -208,7 +208,7 @@ class ConfigTest extends TestCase
     /**
      * @return array
      */
-    public function hasPluginsDataProvider()
+    public static function hasPluginsDataProvider()
     {
         return [
             // item container has plugins only in the backend scope

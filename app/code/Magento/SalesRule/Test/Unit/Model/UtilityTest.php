@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -9,6 +9,7 @@ namespace Magento\SalesRule\Test\Unit\Model;
 
 use Magento\Framework\DataObject;
 use Magento\Framework\DataObjectFactory;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
 use Magento\Quote\Model\Quote;
 use Magento\Quote\Model\Quote\Address;
@@ -24,6 +25,7 @@ use Magento\SalesRule\Model\Rule\CustomerFactory;
 use Magento\SalesRule\Model\Utility;
 use Magento\SalesRule\Model\ValidateCoupon;
 use Magento\Store\Model\Store;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -32,6 +34,7 @@ use PHPUnit\Framework\TestCase;
  */
 class UtilityTest extends TestCase
 {
+    use MockCreationTrait;
     /**
      * @var UsageFactory|MockObject
      */
@@ -127,42 +130,37 @@ class UtilityTest extends TestCase
             Customer::class,
             ['loadByCustomerRule']
         );
-        $this->rule = $this->getMockBuilder(Rule::class)
-            ->addMethods(['getDiscountQty'])
-            ->onlyMethods(
-                [
-                    'hasIsValidForAddress',
-                    'getIsValidForAddress',
-                    'setIsValidForAddress',
-                    'validate',
-                    'afterLoad'
-                ]
-            )
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->address = $this->getMockBuilder(Address::class)
-            ->addMethods(['setIsValidForAddress'])
-            ->onlyMethods(['isObjectNew', 'getQuote', 'validate', 'afterLoad'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->rule = $this->createPartialMockWithReflection(
+            Rule::class,
+            [
+                'getDiscountQty',
+                'hasIsValidForAddress',
+                'getIsValidForAddress',
+                'setIsValidForAddress',
+                'validate',
+                'afterLoad'
+            ]
+        );
+        $this->address = $this->createPartialMockWithReflection(
+            Address::class,
+            ['setIsValidForAddress', 'isObjectNew', 'getQuote', 'validate', 'afterLoad']
+        );
         $this->address->setQuote($this->quote);
-        $this->item = $this->getMockBuilder(AbstractItem::class)
-            ->addMethods(['getDiscountCalculationPrice', 'getBaseDiscountCalculationPrice'])
-            ->onlyMethods(
-                [
-                    'getCalculationPrice',
-                    'getBaseCalculationPrice',
-                    'getQuote',
-                    'getAddress',
-                    'getOptionByCode',
-                    'getTotalQty'
-                ]
-            )
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->item = $this->createPartialMockWithReflection(
+            AbstractItem::class,
+            [
+                'getDiscountCalculationPrice',
+                'getBaseDiscountCalculationPrice',
+                'getCalculationPrice',
+                'getBaseCalculationPrice',
+                'getQuote',
+                'getAddress',
+                'getOptionByCode',
+                'getTotalQty'
+            ]
+        );
 
-        $this->priceCurrency = $this->getMockBuilder(PriceCurrencyInterface::class)
-            ->getMock();
+        $this->priceCurrency = $this->createMock(PriceCurrencyInterface::class);
         $this->validateCoupon = $this->createMock(ValidateCoupon::class);
         $this->utility = new Utility(
             $this->usageFactory,
@@ -390,8 +388,8 @@ class UtilityTest extends TestCase
      * @param mixed $expected
      *
      * @return void
-     * @dataProvider mergeIdsDataProvider
      */
+    #[DataProvider('mergeIdsDataProvider')]
     public function testMergeIds($a1, $a2, bool $isSting, $expected): void
     {
         $this->assertEquals($expected, $this->utility->mergeIds($a1, $a2, $isSting));
@@ -426,6 +424,7 @@ class UtilityTest extends TestCase
         $this->getItemBasePrice();
         $this->item->setDiscountAmount($amount);
         $this->item->setBaseDiscountAmount($baseAmount);
+        $this->item->setQty($qty);
         $discountData = $this->createMock(Data::class);
         $discountData->expects($this->atLeastOnce())
             ->method('getAmount')
@@ -477,13 +476,13 @@ class UtilityTest extends TestCase
     }
 
     /**
-     * @dataProvider deltaRoundingFixDataProvider
      * @param $discountAmount
      * @param $baseDiscountAmount
      * @param $percent
      * @param $rowTotal
      * @return void
      */
+    #[DataProvider('deltaRoundingFixDataProvider')]
     public function testDeltaRoundignFix($discountAmount, $baseDiscountAmount, $percent, $rowTotal): void
     {
         $roundedDiscount = round($discountAmount, 2);

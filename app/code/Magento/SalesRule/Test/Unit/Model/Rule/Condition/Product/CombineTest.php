@@ -1,12 +1,13 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2022 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\SalesRule\Test\Unit\Model\Rule\Condition\Product;
 
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Rule\Model\Condition\Context;
 use Magento\SalesRule\Model\Rule\Condition\Product as SalesRuleProduct;
 use Magento\SalesRule\Model\Rule\Condition\Product\Combine;
@@ -15,6 +16,7 @@ use PHPUnit\Framework\TestCase;
 
 class CombineTest extends TestCase
 {
+    use MockCreationTrait;
     /**
      * @var Combine
      */
@@ -33,11 +35,10 @@ class CombineTest extends TestCase
         $contextMock = $this->getMockBuilder(Context::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->ruleConditionMock = $this->getMockBuilder(SalesRuleProduct::class)
-            ->onlyMethods(['loadAttributeOptions'])
-            ->addMethods(['getAttributeOption'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->ruleConditionMock = $this->createPartialMockWithReflection(
+            SalesRuleProduct::class,
+            ['loadAttributeOptions', 'getAttributeOption']
+        );
         $this->model = new Combine(
             $contextMock,
             $this->ruleConditionMock,

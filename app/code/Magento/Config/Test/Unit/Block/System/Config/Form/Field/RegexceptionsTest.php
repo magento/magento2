@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -14,6 +14,7 @@ use Magento\Config\Block\System\Config\Form\Field\Regexceptions;
 use Magento\Framework\Data\Form\Element\AbstractElement;
 use Magento\Framework\Data\Form\Element\Factory;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\View\Design\Theme\Label;
 use Magento\Framework\View\Design\Theme\LabelFactory;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -21,6 +22,8 @@ use PHPUnit\Framework\TestCase;
 
 class RegexceptionsTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var array
      */
@@ -51,6 +54,11 @@ class RegexceptionsTest extends TestCase
      */
     protected $object;
 
+    /**
+     * @var ObjectManager
+     */
+    private $objectManager;
+
     protected function setUp(): void
     {
         $this->cellParameters = [
@@ -59,26 +67,18 @@ class RegexceptionsTest extends TestCase
             'class' => 'testClass',
         ];
 
-        $objectManager = new ObjectManager($this);
+        $this->objectManager = new ObjectManager($this);
 
-        $this->labelFactoryMock = $this->getMockBuilder(LabelFactory::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->labelMock = $this->getMockBuilder(Label::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->elementFactoryMock = $this->getMockBuilder(Factory::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->elementMock = $this->getMockBuilder(AbstractElement::class)
-            ->disableOriginalConstructor()
-            ->addMethods(
-                ['setName', 'setHtmlId', 'setValues', 'getValues']
-            )
-            ->onlyMethods(
-                ['setForm', 'getName', 'getHtmlId', 'getElementHtml']
-            )
-            ->getMock();
+        $this->labelFactoryMock = $this->createMock(LabelFactory::class);
+        $this->labelMock = $this->createMock(Label::class);
+        $this->elementFactoryMock = $this->createMock(Factory::class);
+        $this->elementMock = $this->createPartialMockWithReflection(
+            AbstractElement::class,
+            [
+                'setName', 'setHtmlId', 'setValues', 'getValues',
+                'setForm', 'getName', 'getHtmlId', 'getElementHtml'
+            ]
+        );
 
         $data = [
             'elementFactory' => $this->elementFactoryMock,
@@ -87,8 +87,8 @@ class RegexceptionsTest extends TestCase
                 'element' => $this->elementMock
             ],
         ];
-        $objectManager->prepareObjectManager();
-        $this->object = $objectManager->getObject(
+        $this->objectManager->prepareObjectManager();
+        $this->object = $this->objectManager->getObject(
             Regexceptions::class,
             $data
         );

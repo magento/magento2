@@ -1,6 +1,6 @@
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 /**
@@ -16,6 +16,8 @@ define([
     'jquery/jquery-storageapi'
 ], function ($, _, ko, sectionConfig, url) {
     'use strict';
+
+    const GLOBAL_SHARE = '0';
 
     var options = {},
         storage,
@@ -47,17 +49,22 @@ define([
      * Invalidate Cache By Close Cookie Session
      */
     invalidateCacheByCloseCookieSession = function () {
-        var isLoggedIn = parseInt(options.isLoggedIn, 10) || 0;
+        var isLoggedIn = parseInt(options.isLoggedIn, 10) || 0,
+            loginStorage = $.localStorage;
 
         if (!$.cookieStorage.isSet('mage-cache-sessid')) {
             storage.removeAll();
         }
 
-        if (!$.localStorage.isSet('mage-customer-login')) {
-            $.localStorage.set('mage-customer-login', isLoggedIn);
+        if (options.customerShare === GLOBAL_SHARE) {
+            loginStorage = $.cookieStorage;
         }
-        if ($.localStorage.get('mage-customer-login') !== isLoggedIn) {
-            $.localStorage.set('mage-customer-login', isLoggedIn);
+
+        if (!loginStorage.isSet('mage-customer-login')) {
+            loginStorage.set('mage-customer-login', isLoggedIn);
+        }
+        if (loginStorage.get('mage-customer-login') !== isLoggedIn) {
+            loginStorage.set('mage-customer-login', isLoggedIn);
             storage.removeAll();
         }
 
@@ -95,7 +102,10 @@ define([
             parameters['force_new_section_timestamp'] = forceNewSectionTimestamp;
 
             return $.getJSON(options.sectionLoadUrl, parameters).fail(function (jqXHR) {
-                throw new Error(jqXHR);
+                // don't throw error if the request is cancelled or blocked
+                if (jqXHR.status !== 0) {
+                    throw new Error(jqXHR);
+                }
             });
         }
     };

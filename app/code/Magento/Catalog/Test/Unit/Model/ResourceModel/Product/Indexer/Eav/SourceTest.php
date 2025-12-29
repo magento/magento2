@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2023 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -101,25 +101,25 @@ class SourceTest extends TestCase
             Select::class,
             ['from', 'join', 'where', 'joinLeft', 'group', 'columns']
         );
-        $select->expects($this->any())->method('from')->willReturn($select);
-        $select->expects($this->any())->method('join')->willReturn($select);
-        $select->expects($this->any())->method('where')->willReturn($select);
-        $select->expects($this->any())->method('joinLeft')->willReturn($select);
-        $select->expects($this->any())->method('group')->willReturn($select);
-        $select->expects($this->any())->method('columns')->willReturn($select);
+        $select->method('from')->willReturn($select);
+        $select->method('join')->willReturn($select);
+        $select->method('where')->willReturn($select);
+        $select->method('joinLeft')->willReturn($select);
+        $select->method('group')->willReturn($select);
+        $select->method('columns')->willReturn($select);
         $connection = $this->createMock(AdapterInterface::class);
         $connection->expects($this->once())->method('delete');
-        $connection->expects($this->any())->method('select')->willReturn($select);
+        $connection->method('select')->willReturn($select);
         $resources = $this->createMock(ResourceConnection::class);
         $resources->expects($this->any())
             ->method('getConnection')
             ->with('test_connection_name')
             ->willReturn($connection);
-        $this->context->expects($this->any())->method('getResources')->willReturn($resources);
-        $this->tableStrategy->expects($this->any())->method('getTableName')->willReturn('idx_table');
-        $this->tableStrategy->expects($this->any())->method('getUseIdxTable')->willReturn(true);
+        $this->context->method('getResources')->willReturn($resources);
+        $this->tableStrategy->method('getTableName')->willReturn('idx_table');
+        $this->tableStrategy->method('getUseIdxTable')->willReturn(true);
         $metadata = $this->createMock(EntityMetadataInterface::class);
-        $this->metadataPool->expects($this->any())->method('getMetadata')->willReturn($metadata);
+        $this->metadataPool->method('getMetadata')->willReturn($metadata);
 
         $this->indexer = new Source(
             $this->context,

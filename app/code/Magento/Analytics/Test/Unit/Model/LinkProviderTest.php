@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -17,6 +17,8 @@ use Magento\Framework\UrlInterface;
 use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\Attributes\DataProvider;
+
 use PHPUnit\Framework\TestCase;
 
 class LinkProviderTest extends TestCase
@@ -72,9 +74,9 @@ class LinkProviderTest extends TestCase
             ->getMock();
         $this->fileInfoManagerMock = $this->createMock(FileInfoManager::class);
         $this->storeManagerInterfaceMock = $this->getMockBuilder(StoreManagerInterface::class)
-            ->getMockForAbstractClass();
+            ->getMock();
         $this->linkInterfaceMock = $this->getMockBuilder(LinkInterface::class)
-            ->getMockForAbstractClass();
+            ->getMock();
         $this->fileInfoMock = $this->createMock(FileInfo::class);
         $this->storeMock = $this->createMock(Store::class);
         $this->objectManagerHelper = new ObjectManagerHelper($this);
@@ -125,9 +127,8 @@ class LinkProviderTest extends TestCase
     /**
      * @param string|null $fileInfoPath
      * @param string|null $fileInitializationVector
-     *
-     * @dataProvider fileNotReadyDataProvider
      */
+    #[DataProvider('fileNotReadyDataProvider')]
     public function testFileNotReady($fileInfoPath, $fileInitializationVector)
     {
         $this->expectException('Magento\Framework\Exception\NoSuchEntityException');
@@ -147,7 +148,7 @@ class LinkProviderTest extends TestCase
     /**
      * @return array
      */
-    public function fileNotReadyDataProvider()
+    public static function fileNotReadyDataProvider()
     {
         return [
             [null, 'initVector'],

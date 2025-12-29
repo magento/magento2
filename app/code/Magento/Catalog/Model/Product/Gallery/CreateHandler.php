@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -154,7 +154,7 @@ class CreateHandler implements ExtensionInterface
         Config $mediaConfig,
         Filesystem $filesystem,
         Database $fileStorageDb,
-        StoreManagerInterface $storeManager = null,
+        ?StoreManagerInterface $storeManager = null,
         ?DeleteValidator $deleteValidator = null,
         ?MediaGalleryValue $mediaGalleryValue = null,
         ?AttributeValue $attributeValue = null,
@@ -219,9 +219,18 @@ class CreateHandler implements ExtensionInterface
                     $clearImages[] = $image['file'];
                 } elseif (empty($image['value_id']) || !empty($image['recreate'])) {
                     $newFile = $this->moveImageFromTmp($image['file'] ?? '');
-                    $image['new_file'] = $newFile;
-                    $newImages[$image['file']] = $image;
-                    $image['file'] = $newFile;
+                    if (!empty($image['recreate']) && $newFile !== $image['file']) {
+                        //delete old image
+                        $this->mediaDirectory->renameFile(
+                            $this->mediaConfig->getMediaPath($newFile),
+                            $this->mediaConfig->getMediaPath($image['file'])
+                        );
+                        $existImages[$image['file']] = $image;
+                    } else {
+                        $image['new_file'] = $newFile;
+                        $newImages[$image['file']] = $image;
+                        $image['file'] = $newFile;
+                    }
                 } else {
                     $existImages[$image['file']] = $image;
                 }
@@ -317,12 +326,8 @@ class CreateHandler implements ExtensionInterface
 
                 // Add per store labels, position, disabled
                 $data['value_id'] = (int) $image['value_id'];
-                $data['label'] = !empty($image['label']) ? $image['label'] : null;
-                $data['position'] = isset($image['position']) && $image['position'] !== ''
-                    ? (int)$image['position']
-                    : null;
-                $data['disabled'] = isset($image['disabled']) ? (int)$image['disabled'] : 0;
                 $data['store_id'] = (int)$product->getStoreId();
+                $data = $this->prepareImageData($image, $data['store_id']) + $data;
 
                 $data[$this->metadata->getLinkField()] = (int)$product->getData($this->metadata->getLinkField());
 
@@ -337,6 +342,50 @@ class CreateHandler implements ExtensionInterface
                 $this->saveGalleryStoreValue($data, $isNew);
             }
         }
+    }
+
+    /**
+     * Prepares image data for saving
+     *
+     * @param array $image
+     * @param int $storeId
+     * @return array
+     */
+    private function prepareImageData(array $image, int $storeId): array
+    {
+        $result = [];
+        $fields = [
+            'label' => ['type' => 'string', 'default' => null],
+            'position' => ['type' => 'int', 'default' => null],
+            'disabled' => ['type' => 'int', 'default' => 0],
+        ];
+        
+        foreach ($fields as $field => $meta) {
+            if (!isset($image[$field]) || $image[$field] === '') {
+                $result[$field] = $meta['default'];
+            } else {
+                $result[$field] = match ($meta['type']) {
+                    'int' => (int) $image[$field],
+                    default => (string) $image[$field],
+                };
+            }
+            if ($storeId !== Store::DEFAULT_STORE_ID) {
+                $useDefaultKey = $field . '_use_default';
+                if (isset($image[$useDefaultKey])) {
+                    if ($image[$useDefaultKey]) {
+                        $result[$field] = null;
+                    } elseif ($result[$field] === null) {
+                        $result[$field] = match ($meta['type']) {
+                            // the empty string will allow clearing label in store view scope
+                            // null value is interpreted as "use default"
+                            'string' => '',
+                            default => $result[$field],
+                        };
+                    }
+                }
+            }
+        }
+        return $result;
     }
 
     /**
@@ -657,10 +706,14 @@ class CreateHandler implements ExtensionInterface
         }
 
         if (in_array($attrData, array_keys($newImages))) {
+            $newImages[$attrData] = $this->prepareImageData($newImages[$attrData], $storeId)
+                + $newImages[$attrData];
             $product->setData($mediaAttrCode . '_label', $newImages[$attrData]['label']);
         }
 
         if (in_array($attrData, array_keys($existImages)) && isset($existImages[$attrData]['label'])) {
+            $existImages[$attrData] = $this->prepareImageData($existImages[$attrData], $storeId)
+                + $existImages[$attrData];
             $product->setData($mediaAttrCode . '_label', $existImages[$attrData]['label']);
             if ($existImages[$attrData]['label'] == null) {
                 $resetLabel = true;
@@ -736,7 +789,7 @@ class CreateHandler implements ExtensionInterface
     private function getMediaAttributeStoreValue(
         Product $product,
         string $attributeCode,
-        int $storeId = null
+        ?int $storeId = null
     ): mixed {
         $attributes = $this->eavConfig->getEntityAttributes(Product::ENTITY);
         $attributeId = $attributes[$attributeCode]->getAttributeId();

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 
 declare(strict_types=1);
@@ -462,16 +462,18 @@ class CategoryTest extends TestCase
     public static function categoryFieldsProvider(): array
     {
         return [
-            [
-                'enable_fields' => [
+            'enable_fields' => [
+                'data' => [
                     'is_active' => '1',
                     'include_in_menu' => '1',
-                ],
-                'disable_fields' => [
+                ]
+            ],
+            'disable_fields' => [
+                'data' => [
                     'is_active' => '0',
                     'include_in_menu' => '0',
-                ],
-            ],
+                ]
+            ]
         ];
     }
 

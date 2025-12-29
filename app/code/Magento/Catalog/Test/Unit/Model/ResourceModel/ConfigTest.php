@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -48,7 +48,7 @@ class ConfigTest extends TestCase
         $objectManager = new ObjectManager($this);
 
         $this->resource = $this->createMock(ResourceConnection::class);
-        $this->storeManager = $this->getMockForAbstractClass(StoreManagerInterface::class);
+        $this->storeManager = $this->createMock(StoreManagerInterface::class);
         $this->eavConfig = $this->createMock(\Magento\Eav\Model\Config::class);
 
         $this->model = $objectManager->getObject(
@@ -69,9 +69,9 @@ class ConfigTest extends TestCase
         $storeId = 1;
         $entityTypeId = 4;
 
-        $connectionMock = $this->getMockForAbstractClass(AdapterInterface::class);
+        $connectionMock = $this->createMock(AdapterInterface::class);
         $selectMock = $this->createMock(Select::class);
-        $storeMock = $this->getMockForAbstractClass(StoreInterface::class);
+        $storeMock = $this->createMock(StoreInterface::class);
         $entityTypeMock = $this->createMock(Type::class);
 
         $this->resource->expects($this->atLeastOnce())->method('getConnection')->willReturn($connectionMock);

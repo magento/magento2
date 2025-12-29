@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 
 declare(strict_types=1);
@@ -85,7 +85,7 @@ class CacheManagerTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($testConfig, $config->load(self::CACHE_ID));
     }
 
-    public function interceptionCompiledConfigDataProvider()
+    public static function interceptionCompiledConfigDataProvider()
     {
         return [
             [['classA' => true, 'classB' => false]],
@@ -93,7 +93,7 @@ class CacheManagerTest extends \PHPUnit\Framework\TestCase
         ];
     }
 
-    public function interceptionCacheConfigDataProvider()
+    public static function interceptionCacheConfigDataProvider()
     {
         return [
             [['classC' => true, 'classD' => false]],

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Eav\Model\ResourceModel;
@@ -57,7 +57,7 @@ class AttributeLoaderTest extends \Magento\TestFramework\Indexer\TestCase
         $this->assertEquals($attributes, $attributes2);
     }
 
-    public function getAttributesDataProvider()
+    public static function getAttributesDataProvider()
     {
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $entityType = $objectManager->create(\Magento\Eav\Model\Entity\Type::class)

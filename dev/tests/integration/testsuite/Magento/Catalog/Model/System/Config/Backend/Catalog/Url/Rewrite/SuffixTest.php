@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -115,7 +115,7 @@ class SuffixTest extends TestCase
     /**
      * @return array
      */
-    public function wrongValuesProvider(): array
+    public static function wrongValuesProvider(): array
     {
         return [
             'with_wrong_path' => [

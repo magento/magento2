@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -12,8 +12,10 @@ use Magento\Sales\Model\Order;
 use Magento\Sales\Model\Order\Invoice;
 use Magento\Sales\Model\Order\Invoice\Item;
 use Magento\Sales\Model\Order\Invoice\Total\Tax;
+use Magento\Sales\Model\Order\Item as OrderItem;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class TaxTest extends TestCase
 {
@@ -65,8 +67,8 @@ class TaxTest extends TestCase
      * @param array $orderData
      * @param array $invoiceData
      * @param array $expectedResults
-     * @dataProvider collectDataProvider
      */
+    #[DataProvider('collectDataProvider')]
     public function testCollect($orderData, $invoiceData, $expectedResults)
     {
         $roundingDelta = [];
@@ -135,12 +137,12 @@ class TaxTest extends TestCase
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      * @return array
      */
-    public function collectDataProvider()
+    public static function collectDataProvider()
     {
         $result = [];
         // 3 item_1, 3 item_2, $99 each, 8.19 tax rate
         $result['partial_invoice'] = [
-            'order_data' => [
+            'orderData' => [
                 'previous_invoices' => [
                 ],
                 'data_fields' => [
@@ -152,7 +154,7 @@ class TaxTest extends TestCase
                     'base_tax_amount' => 53.56,
                 ],
             ],
-            'invoice_data' => [
+            'invoiceData' => [
                 'items' => [
                     'item_1' => [
                         'order_item' => [
@@ -189,7 +191,7 @@ class TaxTest extends TestCase
                     'base_grand_total' => 327,
                 ],
             ],
-            'expected_results' => [
+            'expectedResults' => [
                 'invoice_items' => [
                     'item_1' => [
                         'tax_amount' => 8.11,
@@ -212,7 +214,7 @@ class TaxTest extends TestCase
         // 3 item_1, 3 item_2, $99 each, 8.19 tax rate
         // item_1 has 1 already invoiced, item_2 has 2 already invoiced
         $result['partial_invoice_second_invoice'] = [
-            'order_data' => [
+            'orderData' => [
                 'previous_invoices' => [
                     [
                         'shipping_amount' => 30,
@@ -228,7 +230,7 @@ class TaxTest extends TestCase
                     'base_tax_amount' => 53.56,
                 ],
             ],
-            'invoice_data' => [
+            'invoiceData' => [
                 'items' => [
                     'item_1' => [
                         'order_item' => [
@@ -265,7 +267,7 @@ class TaxTest extends TestCase
                     'base_grand_total' => 99,
                 ],
             ],
-            'expected_results' => [
+            'expectedResults' => [
                 'invoice_items' => [
                     'item_1' => [
                         'tax_amount' => 8.11,
@@ -283,7 +285,7 @@ class TaxTest extends TestCase
         // 3 item_1, 3 item_2, $99 each, 8.19 tax rate
         // item_1 has 1 already invoiced, item_2 has 2 already invoiced
         $result['partial_invoice_last_invoice'] = [
-            'order_data' => [
+            'orderData' => [
                 'previous_invoices' => [
                     [
                         'shipping_amount' => 30,
@@ -299,7 +301,7 @@ class TaxTest extends TestCase
                     'base_tax_amount' => 53.56,
                 ],
             ],
-            'invoice_data' => [
+            'invoiceData' => [
                 'items' => [
                     'item_1' => [
                         'order_item' => [
@@ -336,7 +338,7 @@ class TaxTest extends TestCase
                     'base_grand_total' => 198,
                 ],
             ],
-            'expected_results' => [
+            'expectedResults' => [
                 'invoice_items' => [
                     'item_1' => [
                         'tax_amount' => 8.10,
@@ -364,8 +366,8 @@ class TaxTest extends TestCase
      */
     protected function getInvoiceItem($invoiceItemData)
     {
-        /** @var \Magento\Sales\Model\Order\Item|MockObject $orderItem */
-        $orderItem = $this->createPartialMock(\Magento\Sales\Model\Order\Item::class, [
+        /** @var OrderItem|MockObject $orderItem */
+        $orderItem = $this->createPartialMock(OrderItem::class, [
             'isDummy'
         ]);
         foreach ($invoiceItemData['order_item'] as $key => $value) {

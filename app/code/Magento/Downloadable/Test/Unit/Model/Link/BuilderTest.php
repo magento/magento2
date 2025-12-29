@@ -1,12 +1,13 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Downloadable\Test\Unit\Model\Link;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\Downloadable\Api\Data\LinkInterface;
 use Magento\Downloadable\Helper\Download;
 use Magento\Downloadable\Helper\File;
@@ -58,29 +59,15 @@ class BuilderTest extends TestCase
     protected function setUp(): void
     {
         $objectManagerHelper = new ObjectManager($this);
-        $this->downloadFileMock = $this->getMockBuilder(
-            File::class
-        )->disableOriginalConstructor()
-            ->getMock();
+        $this->downloadFileMock = $this->createMock(File::class);
 
-        $this->objectCopyServiceMock = $this->getMockBuilder(
-            Copy::class
-        )->disableOriginalConstructor()
-            ->getMock();
+        $this->objectCopyServiceMock = $this->createMock(Copy::class);
 
-        $this->dataObjectHelperMock = $this->getMockBuilder(
-            DataObjectHelper::class
-        )->disableOriginalConstructor()
-            ->getMock();
+        $this->dataObjectHelperMock = $this->createMock(DataObjectHelper::class);
 
-        $this->mockComponentFactory = $this->getMockBuilder(LinkFactory::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['create'])
-            ->getMock();
+        $this->mockComponentFactory = $this->createPartialMock(LinkFactory::class, ['create']);
 
-        $this->linkMock = $this->getMockBuilder(LinkInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->linkMock = $this->createMock(LinkInterface::class);
 
         $this->service = $objectManagerHelper->getObject(
             Builder::class,
@@ -94,13 +81,13 @@ class BuilderTest extends TestCase
     }
 
     /**
-     * @dataProvider buildProvider
      * @param array $data
      * @param float $expectedPrice
      * @throws LocalizedException
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
+    #[DataProvider('buildProvider')]
     public function testBuild($data, $expectedPrice)
     {
         $downloadableData = ['sort_order' => 1];
@@ -139,9 +126,7 @@ class BuilderTest extends TestCase
                 }
             );
         $this->linkMock->expects($this->once())->method('getLinkType')->willReturn(Download::LINK_TYPE_FILE);
-        $linkModel = $this->getMockBuilder(Link::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $linkModel = $this->createMock(Link::class);
         $this->mockComponentFactory->expects($this->once())->method('create')->willReturn($linkModel);
         $linkModel->expects($this->once())->method('getBaseTmpPath')->willReturn($baseTmpPath);
         $linkModel->expects($this->once())->method('getBaseSampleTmpPath')->willReturn($baseSampleTmpPath);
@@ -239,10 +224,9 @@ class BuilderTest extends TestCase
     public static function buildProvider()
     {
         $expectedPrice = 0;
-        $expectedOrder = 1;
         return [
             'price_0' => [
-                [
+                "data" => [
                     'file' => 'cXVlIHRhbA==',
                     'type' => 'file',
                     'use_default_title' => '1',
@@ -251,11 +235,10 @@ class BuilderTest extends TestCase
                         'type' => 'file'
                     ]
                 ],
-                'expectedPrice' => $expectedPrice,
-                'expectedOrder' => $expectedOrder
+                'expectedPrice' => $expectedPrice
             ],
             'price_declared' => [
-                [
+                "data" => [
                     'file' => 'cXVlIHRhbA==',
                     'type' => 'file',
                     'price' => 150,
@@ -266,8 +249,7 @@ class BuilderTest extends TestCase
                         'type' => 'file'
                     ]
                 ],
-                'expectedPrice' => 150,
-                'expectedOrder' => 2
+                'expectedPrice' => 150
             ]
         ];
     }

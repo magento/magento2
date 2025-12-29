@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -57,7 +57,7 @@ class AgreementsConfigProviderTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->scopeConfigMock = $this->getMockForAbstractClass(ScopeConfigInterface::class);
+        $this->scopeConfigMock = $this->createMock(ScopeConfigInterface::class);
         $agreementsRepositoryMock = $this->createMock(
             CheckoutAgreementsRepositoryInterface::class
         );
@@ -88,7 +88,6 @@ class AgreementsConfigProviderTest extends TestCase
     {
         $content = 'content';
         $checkboxText = 'checkbox_text';
-        $escapedCheckboxText = 'escaped_checkbox_text';
         $mode = AgreementModeOptions::MODE_AUTO;
         $agreementId = 100;
         $contentHeight = '100px';
@@ -98,7 +97,7 @@ class AgreementsConfigProviderTest extends TestCase
                 'agreements' => [
                     [
                         'content' => $content,
-                        'checkboxText' => $escapedCheckboxText,
+                        'checkboxText' => $checkboxText,
                         'mode' => $mode,
                         'agreementId' => $agreementId,
                         'contentHeight' => $contentHeight
@@ -112,7 +111,7 @@ class AgreementsConfigProviderTest extends TestCase
             ->with(AgreementsProvider::PATH_ENABLED, ScopeInterface::SCOPE_STORE)
             ->willReturn(true);
 
-        $agreement = $this->getMockForAbstractClass(AgreementInterface::class);
+        $agreement = $this->createMock(AgreementInterface::class);
         $searchCriteriaMock = $this->createMock(SearchCriteria::class);
         $this->agreementsFilterMock->expects($this->once())
             ->method('buildSearchCriteria')
@@ -121,11 +120,6 @@ class AgreementsConfigProviderTest extends TestCase
             ->method('getList')
             ->with($searchCriteriaMock)
             ->willReturn([$agreement]);
-
-        $this->escaperMock->expects($this->once())
-            ->method('escapeHtml')
-            ->with($checkboxText)
-            ->willReturn($escapedCheckboxText);
 
         $agreement->expects($this->once())->method('getIsHtml')->willReturn(true);
         $agreement->expects($this->once())->method('getContent')->willReturn($content);
@@ -171,7 +165,7 @@ class AgreementsConfigProviderTest extends TestCase
             ->with(AgreementsProvider::PATH_ENABLED, ScopeInterface::SCOPE_STORE)
             ->willReturn(true);
 
-        $agreement = $this->getMockForAbstractClass(AgreementInterface::class);
+        $agreement = $this->createMock(AgreementInterface::class);
         $searchCriteriaMock = $this->createMock(SearchCriteria::class);
         $this->agreementsFilterMock->expects($this->once())
             ->method('buildSearchCriteria')

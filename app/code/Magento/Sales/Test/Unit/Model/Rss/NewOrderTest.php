@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -22,12 +22,15 @@ use Magento\Sales\Model\ResourceModel\Order\Collection;
 use Magento\Sales\Model\Rss\NewOrder;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class NewOrderTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var NewOrder
      */
@@ -98,16 +101,16 @@ class NewOrderTest extends TestCase
     protected function setUp(): void
     {
         $this->orderFactory = $this->createPartialMock(OrderFactory::class, ['create']);
-        $this->urlBuilder = $this->getMockForAbstractClass(UrlInterface::class);
-        $this->timezoneInterface = $this->getMockForAbstractClass(TimezoneInterface::class);
+        $this->urlBuilder = $this->createMock(UrlInterface::class);
+        $this->timezoneInterface = $this->createMock(TimezoneInterface::class);
         $this->dateTime = $this->createMock(DateTime::class);
-        $this->scopeConfigInterface = $this->getMockForAbstractClass(ScopeConfigInterface::class);
-        $this->eventManager = $this->getMockForAbstractClass(ManagerInterface::class);
-        $this->layout = $this->getMockForAbstractClass(LayoutInterface::class);
+        $this->scopeConfigInterface = $this->createMock(ScopeConfigInterface::class);
+        $this->eventManager = $this->createMock(ManagerInterface::class);
+        $this->layout = $this->createMock(LayoutInterface::class);
         $this->rssUrlBuilderInterface = $this->getMockBuilder(UrlBuilderInterface::class)
             ->onlyMethods(['getUrl'])
             ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+            ->getMock();
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->model = $this->objectManagerHelper->getObject(
             NewOrder::class,
@@ -162,11 +165,7 @@ class NewOrderTest extends TestCase
 
         $this->eventManager->expects($this->once())->method('dispatch')->willReturnSelf();
 
-        $block = $this->getMockBuilder(Details::class)
-            ->addMethods(['setOrder'])
-            ->onlyMethods(['toHtml'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $block = $this->createPartialMockWithReflection(Details::class, ['setOrder', 'toHtml']);
         $block->expects($this->once())->method('setOrder')->with($order)->willReturnSelf();
         $block->expects($this->once())->method('toHtml')->willReturn('Order Description');
 

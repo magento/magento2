@@ -1,8 +1,7 @@
 <?php
 /**
- *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -85,12 +84,8 @@ class RenderTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->layoutProcessorMock = $this->getMockForAbstractClass(
-            ProcessorInterface::class
-        );
-        $this->layoutCacheKeyMock = $this->getMockForAbstractClass(
-            LayoutCacheKeyInterface::class
-        );
+        $this->layoutProcessorMock = $this->createMock(ProcessorInterface::class);
+        $this->layoutCacheKeyMock = $this->createMock(LayoutCacheKeyInterface::class);
 
         $contextMock = $this->getMockBuilder(Context::class)
             ->disableOriginalConstructor()
@@ -115,8 +110,8 @@ class RenderTest extends TestCase
         $contextMock->expects($this->any())->method('getRequest')->willReturn($this->requestMock);
         $contextMock->expects($this->any())->method('getResponse')->willReturn($this->responseMock);
         $contextMock->expects($this->any())->method('getView')->willReturn($this->viewMock);
-
-        $this->translateInline = $this->getMockForAbstractClass(InlineInterface::class);
+        
+        $this->translateInline = $this->createMock(InlineInterface::class);
 
         $regexFactoryMock = $this->getMockBuilder(RegexFactory::class)
             ->disableOriginalConstructor()

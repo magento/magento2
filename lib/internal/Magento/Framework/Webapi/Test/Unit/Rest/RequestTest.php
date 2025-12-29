@@ -2,8 +2,8 @@
 /**
  * Test Webapi Request model.
  *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -198,7 +198,7 @@ class RequestTest extends TestCase
      *
      * @return array
      */
-    public function providerAcceptType()
+    public static function providerAcceptType()
     {
         return [
             // Each element is: array(Accept HTTP header value, expected result))
@@ -231,7 +231,7 @@ class RequestTest extends TestCase
      *
      * @return array
      */
-    public function providerContentType()
+    public static function providerContentType()
     {
         return [
             // Each element is: array(Content-Type header value, content-type part[, expected exception message])

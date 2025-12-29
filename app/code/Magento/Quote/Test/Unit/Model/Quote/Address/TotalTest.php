@@ -1,17 +1,20 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Quote\Test\Unit\Model\Quote\Address;
 
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Quote\Model\Quote\Address\Total;
 use PHPUnit\Framework\TestCase;
 
+#[CoversClass(\Magento\Quote\Model\Quote\Address\Total::class)]
 class TotalTest extends TestCase
 {
     /**
@@ -21,10 +24,7 @@ class TotalTest extends TestCase
 
     protected function setUp(): void
     {
-        $serializer = $this->getMockBuilder(Json::class)
-            ->onlyMethods(['unserialize'])
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $serializer = $this->createMock(Json::class);
         $serializer->expects($this->any())
             ->method('unserialize')
             ->willReturnCallback(function ($value) {
@@ -44,8 +44,8 @@ class TotalTest extends TestCase
      * @param string $code
      * @param float $amount
      * @param string $storedCode
-     * @dataProvider setTotalAmountDataProvider
      */
+    #[DataProvider('setTotalAmountDataProvider')]
     public function testSetTotalAmount($code, $amount, $storedCode)
     {
         $result = $this->model->setTotalAmount($code, $amount);
@@ -58,18 +58,18 @@ class TotalTest extends TestCase
     /**
      * @return array
      */
-    public function setTotalAmountDataProvider()
+    public static function setTotalAmountDataProvider()
     {
         return [
             'Subtotal' => [
                 'code' => 'subtotal',
                 'amount' => 42.42,
-                'stored_code' => 'subtotal'
+                'storedCode' => 'subtotal'
             ],
             'Other total' => [
                 'code' => 'other',
                 'amount' => 42.17,
-                'stored_code' => 'other_amount'
+                'storedCode' => 'other_amount'
             ]
         ];
     }
@@ -78,8 +78,8 @@ class TotalTest extends TestCase
      * @param string $code
      * @param float $amount
      * @param string $storedCode
-     * @dataProvider setBaseTotalAmountDataProvider
      */
+    #[DataProvider('setBaseTotalAmountDataProvider')]
     public function testSetBaseTotalAmount($code, $amount, $storedCode)
     {
         $result = $this->model->setBaseTotalAmount($code, $amount);
@@ -92,18 +92,18 @@ class TotalTest extends TestCase
     /**
      * @return array
      */
-    public function setBaseTotalAmountDataProvider()
+    public static function setBaseTotalAmountDataProvider()
     {
         return [
             'Subtotal' => [
                 'code' => 'subtotal',
                 'amount' => 17.42,
-                'stored_code' => 'base_subtotal'
+                'storedCode' => 'base_subtotal'
             ],
             'Other total' => [
                 'code' => 'other',
                 'amount' => 42.17,
-                'stored_code' => 'base_other_amount'
+                'storedCode' => 'base_other_amount'
             ]
         ];
     }
@@ -112,8 +112,8 @@ class TotalTest extends TestCase
      * @param float $initialAmount
      * @param float $delta
      * @param float $updatedAmount
-     * @dataProvider addTotalAmountDataProvider
      */
+    #[DataProvider('addTotalAmountDataProvider')]
     public function testAddTotalAmount($initialAmount, $delta, $updatedAmount)
     {
         $code = 'turbo';
@@ -126,7 +126,7 @@ class TotalTest extends TestCase
     /**
      * @return array
      */
-    public function addTotalAmountDataProvider()
+    public static function addTotalAmountDataProvider()
     {
         return [
             'Zero' => [
@@ -146,8 +146,8 @@ class TotalTest extends TestCase
      * @param float $initialAmount
      * @param float $delta
      * @param float $updatedAmount
-     * @dataProvider addBaseTotalAmountDataProvider
      */
+    #[DataProvider('addBaseTotalAmountDataProvider')]
     public function testAddBaseTotalAmount($initialAmount, $delta, $updatedAmount)
     {
         $code = 'turbo';
@@ -160,7 +160,7 @@ class TotalTest extends TestCase
     /**
      * @return array
      */
-    public function addBaseTotalAmountDataProvider()
+    public static function addBaseTotalAmountDataProvider()
     {
         return [
             'Zero' => [
@@ -205,11 +205,10 @@ class TotalTest extends TestCase
     /**
      * Verify handling of serialized, non-serialized input into and out of getFullInfo()
      *
-     * @covers \Magento\Quote\Model\Quote\Address\Total::getFullInfo()
      * @param $input
      * @param $expected
-     * @dataProvider getFullInfoDataProvider
      */
+    #[DataProvider('getFullInfoDataProvider')]
     public function testGetFullInfo($input, $expected)
     {
         $this->model->setFullInfo($input);
@@ -219,7 +218,7 @@ class TotalTest extends TestCase
     /**
      * @return array
      */
-    public function getFullInfoDataProvider()
+    public static function getFullInfoDataProvider()
     {
         $myArray = ['team' => 'kiwis'];
         $serializedInput = json_encode($myArray);

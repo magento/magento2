@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -14,6 +14,8 @@ use Magento\Catalog\Model\Product;
 use Magento\Eav\Model\Attribute;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Weee\Model\Attribute\Backend\Weee\Tax;
+use Magento\Weee\Model\ResourceModel\Attribute\Backend\Weee\Tax as AttributeTaxResource;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 class TaxTest extends TestCase
@@ -37,35 +39,26 @@ class TaxTest extends TestCase
     }
 
     /**
-     * @dataProvider dataProviderValidate
      * @param $data
      * @param $expected
      */
+    #[DataProvider('dataProviderValidate')]
     public function testValidate($data, $expected)
     {
-        $attributeMock = $this->getMockBuilder(Attribute::class)
-            ->onlyMethods(['getName'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $attributeMock = $this->createPartialMock(Attribute::class, ['getName']);
         $attributeMock
             ->expects($this->any())
             ->method('getName')
             ->willReturn('weeeTax');
 
-        $modelMock = $this->getMockBuilder(Tax::class)
-            ->onlyMethods(['getAttribute'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $modelMock = $this->createPartialMock(Tax::class, ['getAttribute']);
         $modelMock
             ->expects($this->any())
             ->method('getAttribute')
             ->willReturn($attributeMock);
 
         $taxes = [reset($data)];
-        $productMock = $this->getMockBuilder(Product::class)
-            ->onlyMethods(['getData'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $productMock = $this->createPartialMock(Product::class, ['getData']);
         $productMock
             ->expects($this->any())
             ->method('getData')
@@ -75,10 +68,7 @@ class TaxTest extends TestCase
         $modelMock->validate($productMock);
 
         $taxes = $data;
-        $productMock = $this->getMockBuilder(Product::class)
-            ->onlyMethods(['getData'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $productMock = $this->createPartialMock(Product::class, ['getData']);
         $productMock
             ->expects($this->any())
             ->method('getData')
@@ -93,7 +83,7 @@ class TaxTest extends TestCase
     /**
      * @return array
      */
-    public function dataProviderValidate()
+    public static function dataProviderValidate()
     {
         return [
             'withDuplicate' => [
@@ -113,19 +103,13 @@ class TaxTest extends TestCase
     {
         $data = [['website_id' => 1, 'value' => 1]];
 
-        $attributeTaxMock = $this->getMockBuilder(\Magento\Weee\Model\ResourceModel\Attribute\Backend\Weee\Tax::class)
-            ->onlyMethods(['loadProductData'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $attributeTaxMock = $this->createPartialMock(AttributeTaxResource::class, ['loadProductData']);
         $attributeTaxMock
             ->expects($this->any())
             ->method('loadProductData')
             ->willReturn($data);
 
-        $attributeMock = $this->getMockBuilder(Attribute::class)
-            ->onlyMethods(['getName'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $attributeMock = $this->createPartialMock(Attribute::class, ['getName']);
         $attributeMock
             ->expects($this->any())
             ->method('getName')
@@ -140,10 +124,7 @@ class TaxTest extends TestCase
         );
 
         $model->setAttribute($attributeMock);
-        $productMock = $this->getMockBuilder(Product::class)
-            ->onlyMethods(['setData'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $productMock = $this->createPartialMock(Product::class, ['setData']);
 
         $result = $model->afterLoad($productMock);
         $this->assertNotNull($result);
@@ -155,14 +136,11 @@ class TaxTest extends TestCase
      * @param array $origData
      * @param array $currentData
      * @param array $expectedData
-     * @dataProvider dataProviderAfterSaveWithRegion
      */
+    #[DataProvider('dataProviderAfterSaveWithRegion')]
     public function testAfterSaveWithRegion($origData, $currentData, $expectedData)
     {
-        $productMock = $this->getMockBuilder(Product::class)
-            ->onlyMethods(['getOrigData', 'getData'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $productMock = $this->createPartialMock(Product::class, ['getOrigData', 'getData']);
 
         $productMock
             ->expects($this->once())
@@ -173,10 +151,10 @@ class TaxTest extends TestCase
             ->method('getData')
             ->willReturn($currentData);
 
-        $attributeTaxMock = $this->getMockBuilder(\Magento\Weee\Model\ResourceModel\Attribute\Backend\Weee\Tax::class)
-            ->onlyMethods(['deleteProductData', 'insertProductData'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $attributeTaxMock = $this->createPartialMock(
+            AttributeTaxResource::class,
+            ['deleteProductData', 'insertProductData']
+        );
         $attributeTaxMock
             ->expects($this->once())
             ->method('deleteProductData')
@@ -187,10 +165,7 @@ class TaxTest extends TestCase
             ->with($productMock, $expectedData)
             ->willReturn(null);
 
-        $attributeMock = $this->getMockBuilder(Attribute::class)
-            ->onlyMethods(['getName', 'getId'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $attributeMock = $this->createPartialMock(Attribute::class, ['getName', 'getId']);
         $attributeMock
             ->expects($this->any())
             ->method('getName')
@@ -215,7 +190,7 @@ class TaxTest extends TestCase
     /**
      * @return array
      */
-    public function dataProviderAfterSaveWithRegion()
+    public static function dataProviderAfterSaveWithRegion()
     {
         return [
             'withRegion' => [
@@ -233,10 +208,7 @@ class TaxTest extends TestCase
 
     public function testAfterDelete()
     {
-        $attributeTaxMock = $this->getMockBuilder(\Magento\Weee\Model\ResourceModel\Attribute\Backend\Weee\Tax::class)
-            ->onlyMethods(['deleteProductData'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $attributeTaxMock = $this->createPartialMock(AttributeTaxResource::class, ['deleteProductData']);
         $attributeTaxMock
             ->expects($this->once())
             ->method('deleteProductData')
@@ -255,10 +227,7 @@ class TaxTest extends TestCase
 
     public function testGetTable()
     {
-        $attributeTaxMock = $this->getMockBuilder(\Magento\Weee\Model\ResourceModel\Attribute\Backend\Weee\Tax::class)
-            ->onlyMethods(['getTable'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $attributeTaxMock = $this->createPartialMock(AttributeTaxResource::class, ['getTable']);
         $attributeTaxMock
             ->expects($this->once())
             ->method('getTable')
@@ -282,10 +251,7 @@ class TaxTest extends TestCase
      */
     public function testGetEntityIdField() : void
     {
-        $attributeTaxMock = $this->getMockBuilder(\Magento\Weee\Model\ResourceModel\Attribute\Backend\Weee\Tax::class)
-            ->onlyMethods(['getIdFieldName'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $attributeTaxMock = $this->createPartialMock(AttributeTaxResource::class, ['getIdFieldName']);
 
         $attributeTaxMock
             ->expects($this->once())

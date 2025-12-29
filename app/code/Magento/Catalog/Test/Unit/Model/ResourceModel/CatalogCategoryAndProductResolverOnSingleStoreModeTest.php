@@ -1,18 +1,7 @@
 <?php
-/************************************************************************
- *
+/**
  * Copyright 2024 Adobe
  * All Rights Reserved.
- *
- * NOTICE: All information contained herein is, and remains
- * the property of Adobe and its suppliers, if any. The intellectual
- * and technical concepts contained herein are proprietary to Adobe
- * and its suppliers and are protected by all applicable intellectual
- * property laws, including trade secret and copyright laws.
- * Dissemination of this information or reproduction of this material
- * is strictly forbidden unless prior written permission is obtained
- * from Adobe.
- * ************************************************************************
  */
 declare(strict_types=1);
 
@@ -48,9 +37,7 @@ class CatalogCategoryAndProductResolverOnSingleStoreModeTest extends TestCase
     protected function setUp(): void
     {
         $this->resourceConnectionMock = $this->createMock(ResourceConnection::class);
-        $this->metadataPoolMock = $this->getMockBuilder(MetadataPool::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->metadataPoolMock = $this->createMock(MetadataPool::class);
         $this->model = new Resolver(
             $this->resourceConnectionMock,
             $this->metadataPoolMock
@@ -83,7 +70,7 @@ class CatalogCategoryAndProductResolverOnSingleStoreModeTest extends TestCase
             ]
         ];
         $connection = $this->getConnection();
-        $connection->expects($this->any())->method('fetchAll')->willReturn($catalogProducts);
+        $connection->method('fetchAll')->willReturn($catalogProducts);
         $connection->expects($this->any())->method('delete')->willReturnSelf();
         $connection->expects($this->any())->method('update')->willReturnSelf();
         $connection->expects($this->any())->method('commit')->willReturnSelf();
@@ -112,19 +99,13 @@ class CatalogCategoryAndProductResolverOnSingleStoreModeTest extends TestCase
      */
     private function getConnection(): MockObject
     {
-        $connection = $this->getMockForAbstractClass(AdapterInterface::class);
-        $metadata = $this->getMockForAbstractClass(EntityMetadataInterface::class);
-        $this->metadataPoolMock->expects($this->any())
-            ->method('getMetadata')
-            ->willReturn($metadata);
+        $connection = $this->createMock(AdapterInterface::class);
+        $metadata = $this->createMock(EntityMetadataInterface::class);
+        $this->metadataPoolMock->method('getMetadata')->willReturn($metadata);
         $metadata
-            ->expects($this->any())
-            ->method('getLinkField')
-            ->willReturn('row_id');
+            ->method('getLinkField')->willReturn('row_id');
         $this->resourceConnectionMock
-            ->expects($this->any())
-            ->method('getConnection')
-            ->willReturn($connection);
+            ->method('getConnection')->willReturn($connection);
         $connection->expects($this->once())
             ->method('beginTransaction')
             ->willReturnSelf();
@@ -137,7 +118,7 @@ class CatalogCategoryAndProductResolverOnSingleStoreModeTest extends TestCase
         $select->expects($this->any())->method('from')->willReturnSelf();
         $select->expects($this->any())->method('where')->willReturnSelf();
 
-        $connection->expects($this->any())->method('select')->willReturn($select);
+        $connection->method('select')->willReturn($select);
         return $connection;
     }
 }

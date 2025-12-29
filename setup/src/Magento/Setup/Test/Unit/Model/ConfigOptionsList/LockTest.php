@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -87,7 +87,7 @@ class LockTest extends TestCase
      * @return array
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function createConfigDataProvider(): array
+    public static function createConfigDataProvider(): array
     {
         return [
             'Check default values' => [
@@ -219,7 +219,7 @@ class LockTest extends TestCase
      * @return array
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function updateConfigDataProvider(): array
+    public static function updateConfigDataProvider(): array
     {
         return [
             'Check existent value for lock-db-prefix is not erased with no parameter specified' => [
@@ -309,7 +309,7 @@ class LockTest extends TestCase
     /**
      * @return array
      */
-    public function validateDataProvider(): array
+    public static function validateDataProvider(): array
     {
         return [
             'Wrong lock provider' => [

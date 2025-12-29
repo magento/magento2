@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2024 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -46,11 +46,14 @@ class BillingAddressValidationRule implements QuoteValidationRuleInterface
         $billingAddress = $quote->getBillingAddress();
         $billingAddress->setStoreId($quote->getStoreId());
         $validationResult = $billingAddress->validate();
-        if ($validationResult !== true) {
-            $validationErrors = [__($this->generalMessage)];
-        }
         if (is_array($validationResult)) {
             $validationErrors = array_merge($validationErrors, $validationResult);
+        }
+        if ($quote->getCustomerId() === null && $quote->getCustomerId() !== $quote->getOrigData('customer_id')) {
+            return [$this->validationResultFactory->create(['errors' => $validationErrors])];
+        }
+        if ($validationResult !== true) {
+            $validationErrors = array_merge([__($this->generalMessage)], $validationErrors);
         }
 
         return [$this->validationResultFactory->create(['errors' => $validationErrors])];

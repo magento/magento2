@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -63,7 +63,7 @@ class VarDirectiveTest extends TestCase
         self::assertEquals($expect, $result);
     }
 
-    public function useCasesProvider()
+    public static function useCasesProvider()
     {
         return [
             ['foo',['foo' => true], '1'],

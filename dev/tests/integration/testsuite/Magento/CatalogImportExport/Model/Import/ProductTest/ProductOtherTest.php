@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2021 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -464,7 +464,7 @@ class ProductOtherTest extends ProductTestBase
     /**
      * @return array
      */
-    public function importWithJsonAndMarkupTextAttributeDataProvider(): array
+    public static function importWithJsonAndMarkupTextAttributeDataProvider(): array
     {
         return [
             'import of attribute with json' => [

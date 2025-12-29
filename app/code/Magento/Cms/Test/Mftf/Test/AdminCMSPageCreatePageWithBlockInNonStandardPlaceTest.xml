@@ -1,19 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- /************************************************************************
- *
- * Copyright 2023 Adobe
+/**
+ * Copyright 2024 Adobe
  * All Rights Reserved.
- *
- * NOTICE: All information contained herein is, and remains
- * the property of Adobe and its suppliers, if any. The intellectual
- * and technical concepts contained herein are proprietary to Adobe
- * and its suppliers and are protected by all applicable intellectual
- * property laws, including trade secret and copyright laws.
- * Dissemination of this information or reproduction of this material
- * is strictly forbidden unless prior written permission is obtained
- * from Adobe.
- * ************************************************************************
  */
 -->
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -47,7 +36,7 @@
 
         <!-- Add Subscribe block to HomePage -->
         <actionGroup ref="AdminEditCMSPageContentActionGroup" stepKey="addSubscribeBlockToHomePage">
-            <argument name="content" value="{{block class=&apos;Magento\Newsletter\Block\Subscribe&apos; name=&apos;home.form.subscribe&apos; template=&apos;Magento_Newsletter::subscribe.phtml&apos;}}"/>
+            <argument name="content" value="{{block class=&quot;Magento\Newsletter\Block\Subscribe&quot; name=&quot;home.form.subscribe&quot; template=&quot;Magento_Newsletter::subscribe.phtml&quot;}}"/>
             <argument name="pageId" value="{{CmsHomePageContent.page_id}}"/>
         </actionGroup>
 
@@ -59,7 +48,7 @@
 
         <!-- Add Contact block to HomePage -->
         <actionGroup ref="AdminEditCMSPageContentActionGroup" stepKey="addContactBlockToHomePage">
-            <argument name="content" value="{{block class=&apos;Magento\Contact\Block\ContactForm&apos; name=&apos;home.form.contact&apos; template=&apos;Magento_Contact::form.phtml&apos;}}"/>
+            <argument name="content" value="{{block class=&quot;Magento\Contact\Block\ContactForm&quot; name=&quot;home.form.contact&quot; template=&quot;Magento_Contact::form.phtml&quot;}}"/>
             <argument name="pageId" value="{{CmsHomePageContent.page_id}}"/>
         </actionGroup>
 
@@ -71,7 +60,7 @@
 
         <!-- Add Forgot Password block to HomePage -->
         <actionGroup ref="AdminEditCMSPageContentActionGroup" stepKey="addForgotPasswordBlockToHomePage">
-            <argument name="content" value="{{block class=&apos;Magento\Customer\Block\Account\Forgotpassword&apos; name=&apos;home.form.forgotpassword&apos; template=&apos;Magento_Customer::form/forgotpassword.phtml&apos;}}"/>
+            <argument name="content" value="{{block class=&quot;Magento\Customer\Block\Account\Forgotpassword&quot; name=&quot;home.form.forgotpassword&quot; template=&quot;Magento_Customer::form/forgotpassword.phtml&quot;}}"/>
             <argument name="pageId" value="{{CmsHomePageContent.page_id}}"/>
         </actionGroup>
 
@@ -83,7 +72,7 @@
 
         <!-- Add Login block to HomePage -->
         <actionGroup ref="AdminEditCMSPageContentActionGroup" stepKey="addLoginBlockToHomePage">
-            <argument name="content" value="{{block class=&apos;Magento\Customer\Block\Form\Login&apos; name=&apos;home.form.login&apos; template=&apos;Magento_Customer::form/login.phtml&apos;}}"/>
+            <argument name="content" value="{{block class=&quot;Magento\Customer\Block\Form\Login&quot; name=&quot;home.form.login&quot; template=&quot;Magento_Customer::form/login.phtml&quot;}}"/>
             <argument name="pageId" value="{{CmsHomePageContent.page_id}}"/>
         </actionGroup>
 
@@ -95,7 +84,7 @@
 
         <!-- Add Register block to HomePage -->
         <actionGroup ref="AdminEditCMSPageContentActionGroup" stepKey="addRegisterBlockToHomePage">
-            <argument name="content" value="{{block class=&apos;Magento\Customer\Block\Form\Register&apos; name=&apos;home.form.register&apos; template=&apos;Magento_Customer::form/register.phtml&apos;}}"/>
+            <argument name="content" value="{{block class=&quot;Magento\Customer\Block\Form\Register&quot; name=&quot;home.form.register&quot; template=&quot;Magento_Customer::form/register.phtml&quot;}}"/>
             <argument name="pageId" value="{{CmsHomePageContent.page_id}}"/>
         </actionGroup>
 
@@ -107,7 +96,7 @@
 
         <!-- Add Send To Friend block to HomePage -->
         <actionGroup ref="AdminEditCMSPageContentActionGroup" stepKey="addSendToFriendBlockToHomePage">
-            <argument name="content" value="{{block class=&apos;Magento\SendFriend\Block\Send&apos; name=&apos;home.form.send&apos; template=&apos;Magento_SendFriend::send.phtml&apos;}}"/>
+            <argument name="content" value="{{block class=&quot;Magento\SendFriend\Block\Send&quot; name=&quot;home.form.send&quot; template=&quot;Magento_SendFriend::send.phtml&quot;}}"/>
             <argument name="pageId" value="{{CmsHomePageContent.page_id}}"/>
         </actionGroup>
 

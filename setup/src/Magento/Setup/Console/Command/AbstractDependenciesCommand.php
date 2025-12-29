@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Setup\Console\Command;
 
@@ -25,15 +25,17 @@ abstract class AbstractDependenciesCommand extends Command
     /**
      * Input key for directory option
      */
-    const INPUT_KEY_DIRECTORY = 'directory';
+    public const INPUT_KEY_DIRECTORY = 'directory';
 
     /**
      * Input key for output path of report file
      */
-    const INPUT_KEY_OUTPUT = 'output';
+    public const INPUT_KEY_OUTPUT = 'output';
 
     /**
-     * Object Manager
+     *
+     * Magento object manager.
+     * Responsible for creating and managing application objects
      *
      * @var ObjectManager
      */
@@ -51,7 +53,7 @@ abstract class AbstractDependenciesCommand extends Command
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected function configure()
     {
@@ -85,9 +87,9 @@ abstract class AbstractDependenciesCommand extends Command
     abstract protected function getDefaultOutputFilename();
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         try {
             /** @var \Magento\Framework\Component\ComponentRegistrar $componentRegistrar */

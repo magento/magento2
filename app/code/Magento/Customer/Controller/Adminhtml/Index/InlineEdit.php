@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Customer\Controller\Adminhtml\Index;
 
@@ -15,6 +15,10 @@ use Magento\Framework\App\Action\HttpPostActionInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Message\MessageInterface;
 use Magento\Framework\App\ObjectManager;
+use Magento\Customer\Model\ValidatorExceptionProcessor;
+use Magento\Framework\Exception\InputException;
+use Magento\Framework\Message\AbstractMessage;
+use Magento\Framework\Validator\Exception as ValidatorException;
 
 /**
  * Customer inline edit action
@@ -76,6 +80,11 @@ class InlineEdit extends \Magento\Backend\App\Action implements HttpPostActionIn
     private $escaper;
 
     /**
+     * @var ValidatorExceptionProcessor
+     */
+    private $validatorExceptionProcessor;
+
+    /**
      * @param Action\Context $context
      * @param CustomerRepositoryInterface $customerRepository
      * @param \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory
@@ -83,7 +92,8 @@ class InlineEdit extends \Magento\Backend\App\Action implements HttpPostActionIn
      * @param \Magento\Framework\Api\DataObjectHelper $dataObjectHelper
      * @param \Psr\Log\LoggerInterface $logger
      * @param AddressRegistry|null $addressRegistry
-     * @param \Magento\Framework\Escaper $escaper
+     * @param \Magento\Framework\Escaper|null $escaper
+     * @param ValidatorExceptionProcessor|null $validatorExceptionProcessor
      */
     public function __construct(
         Action\Context $context,
@@ -92,8 +102,9 @@ class InlineEdit extends \Magento\Backend\App\Action implements HttpPostActionIn
         \Magento\Customer\Model\Customer\Mapper $customerMapper,
         \Magento\Framework\Api\DataObjectHelper $dataObjectHelper,
         \Psr\Log\LoggerInterface $logger,
-        AddressRegistry $addressRegistry = null,
-        \Magento\Framework\Escaper $escaper = null
+        ?AddressRegistry $addressRegistry = null,
+        ?\Magento\Framework\Escaper $escaper = null,
+        ?ValidatorExceptionProcessor $validatorExceptionProcessor = null
     ) {
         $this->customerRepository = $customerRepository;
         $this->resultJsonFactory = $resultJsonFactory;
@@ -103,6 +114,11 @@ class InlineEdit extends \Magento\Backend\App\Action implements HttpPostActionIn
         $this->addressRegistry = $addressRegistry ?: ObjectManager::getInstance()->get(AddressRegistry::class);
         $this->escaper = $escaper ?: ObjectManager::getInstance()->get(\Magento\Framework\Escaper::class);
         parent::__construct($context);
+        $this->validatorExceptionProcessor = $validatorExceptionProcessor
+            ?? ObjectManager::getInstance()->get(ValidatorExceptionProcessor::class);
+        if ($this->validatorExceptionProcessor !== null) {
+            $this->validatorExceptionProcessor->setMessageManager($context->getMessageManager());
+        }
     }
 
     /**
@@ -110,6 +126,7 @@ class InlineEdit extends \Magento\Backend\App\Action implements HttpPostActionIn
      *
      * @return EmailNotificationInterface
      * @deprecated 100.1.0
+     * @see no alternative
      */
     private function getEmailNotification()
     {
@@ -247,9 +264,17 @@ class InlineEdit extends \Magento\Backend\App\Action implements HttpPostActionIn
             // No need to validate customer address during inline edit action
             $this->disableAddressValidation($customer);
             $this->customerRepository->save($customer);
-        } catch (\Magento\Framework\Exception\InputException $e) {
-            $this->getMessageManager()
-                ->addError($this->getErrorWithCustomerId($this->escaper->escapeHtml($e->getMessage())));
+        } catch (InputException $e) {
+            if ($this->validatorExceptionProcessor !== null) {
+                $this->validatorExceptionProcessor->processInputException(
+                    $e,
+                    fn($message) => $this->getErrorWithCustomerId($this->escaper->escapeHtml($message)),
+                    'addError'
+                );
+            } else {
+                $escapedMessage = $this->escaper->escapeHtml($e->getMessage());
+                $this->messageManager->addError($this->getErrorWithCustomerId($escapedMessage));
+            }
             $this->logger->critical($e);
         } catch (\Magento\Framework\Exception\LocalizedException $e) {
             $this->getMessageManager()

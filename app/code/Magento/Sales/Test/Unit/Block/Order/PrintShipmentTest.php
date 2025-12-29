@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -41,20 +41,12 @@ class PrintShipmentTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->contextMock = $this->getMockBuilder(Context::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->registryMock = $this->getMockBuilder(Registry::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->contextMock = $this->createMock(Context::class);
+        $this->registryMock = $this->createMock(Registry::class);
 
-        $paymentHelperMock = $this->getMockBuilder(Data::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $paymentHelperMock = $this->createMock(Data::class);
 
-        $addressRendererMock = $this->getMockBuilder(Renderer::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $addressRendererMock = $this->createMock(Renderer::class);
 
         $this->block = new PrintShipment(
             $this->contextMock,
@@ -63,9 +55,7 @@ class PrintShipmentTest extends TestCase
             $addressRendererMock
         );
 
-        $this->itemCollectionMock = $this->getMockBuilder(ItemCollection::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->itemCollectionMock = $this->createMock(ItemCollection::class);
     }
 
     public function testIsPagerDisplayed()
@@ -84,9 +74,7 @@ class PrintShipmentTest extends TestCase
 
     public function testGetItemsSuccessful()
     {
-        $orderMock = $this->getMockBuilder(Order::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $orderMock = $this->createMock(Order::class);
         $items = [5, 3, 1];
 
         $this->registryMock->expects($this->exactly(2))

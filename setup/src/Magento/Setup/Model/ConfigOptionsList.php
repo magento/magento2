@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -73,8 +73,8 @@ class ConfigOptionsList implements ConfigOptionsListInterface
     public function __construct(
         ConfigGenerator $configGenerator,
         DbValidator $dbValidator,
-        KeyValidator $encryptionKeyValidator = null,
-        DriverOptions $driverOptions = null
+        ?KeyValidator $encryptionKeyValidator = null,
+        ?DriverOptions $driverOptions = null
     ) {
         $this->configGenerator = $configGenerator;
         $this->dbValidator = $dbValidator;

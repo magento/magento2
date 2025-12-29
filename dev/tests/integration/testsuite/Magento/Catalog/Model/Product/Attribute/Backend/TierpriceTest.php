@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -107,7 +107,7 @@ class TierpriceTest extends TestCase
      *
      * @return array
      */
-    public function validateDuplicateDataProvider(): array
+    public static function validateDuplicateDataProvider(): array
     {
         return [
             [
@@ -222,7 +222,7 @@ class TierpriceTest extends TestCase
     /**
      * @return array
      */
-    public function saveExistingProductDataProvider(): array
+    public static function saveExistingProductDataProvider(): array
     {
         return [
             'same' => [
@@ -329,7 +329,7 @@ class TierpriceTest extends TestCase
     /**
      * @return array
      */
-    public function saveNewProductDataProvider(): array
+    public static function saveNewProductDataProvider(): array
     {
         return [
             [

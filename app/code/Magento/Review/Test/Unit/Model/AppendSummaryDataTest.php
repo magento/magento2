@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2021 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -58,46 +58,29 @@ class AppendSummaryDataTest extends TestCase
     private $model;
 
     /**
-     * @inheriDoc
+     * @inheritDoc
      */
     protected function setUp(): void
     {
-        $this->summaryCollectionFactoryMock = $this->getMockBuilder(SummaryCollectionFactory::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['create'])
-            ->getMock();
+        $this->summaryCollectionFactoryMock = $this->createPartialMock(SummaryCollectionFactory::class, ['create']);
 
-        $this->productMock = $this->getMockBuilder(Product::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['getId', 'addData'])
-            ->getMock();
+        $this->productMock = $this->createPartialMock(Product::class, ['getId', 'addData']);
 
-        $this->summaryMock = $this->getMockBuilder(Summary::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['getData'])
-            ->getMock();
+        $this->summaryMock = $this->createPartialMock(Summary::class, ['getData']);
 
-        $this->summaryCollectionMock = $this->getMockBuilder(SummaryCollection::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(
-                [
-                    'addStoreFilter',
-                    'getSelect',
-                    'getResource',
-                    'getFirstItem',
-                ]
-            )
-            ->getMock();
+        $this->summaryCollectionMock = $this->createPartialMock(
+            SummaryCollection::class,
+            [
+                'addStoreFilter',
+                'getSelect',
+                'getResource',
+                'getFirstItem',
+            ]
+        );
 
-        $this->selectMock = $this->getMockBuilder(Select::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['joinLeft', 'where'])
-            ->getMock();
+        $this->selectMock = $this->createPartialMock(Select::class, ['joinLeft', 'where']);
 
-        $this->resourceSummaryMock = $this->getMockBuilder(ResourceSummary::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['getTable'])
-            ->getMock();
+        $this->resourceSummaryMock = $this->createPartialMock(ResourceSummary::class, ['getTable']);
 
         $this->model = new AppendSummaryData(
             $this->summaryCollectionFactoryMock

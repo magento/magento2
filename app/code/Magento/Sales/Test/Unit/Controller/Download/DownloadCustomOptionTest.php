@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -14,14 +14,19 @@ use Magento\Framework\Controller\Result\Forward;
 use Magento\Framework\Controller\Result\ForwardFactory;
 use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Framework\Unserialize\Unserialize;
+use Magento\Catalog\Model\Product\Option as ProductOption;
 use Magento\Quote\Model\Quote\Item\Option;
 use Magento\Sales\Controller\Download\DownloadCustomOption;
 use Magento\Sales\Model\Download;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 
 class DownloadCustomOptionTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * Option ID Test Value
      */
@@ -116,27 +121,22 @@ class DownloadCustomOptionTest extends TestCase
                 ]
             );
 
-        $this->itemOptionMock = $this->getMockBuilder(Option::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['getCode', 'getProductId'])
-            ->onlyMethods(['load', 'getId', 'getValue'])
-            ->getMock();
+        $this->itemOptionMock = $this->createPartialMockWithReflection(
+            Option::class,
+            ['getCode', 'getProductId', 'load', 'getId', 'getValue']
+        );
 
-        $this->productOptionMock = $this->getMockBuilder(\Magento\Catalog\Model\Product\Option::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['getProductId'])
-            ->onlyMethods(['load', 'getId', 'getType'])
-            ->getMock();
+        $this->productOptionMock = $this->createPartialMockWithReflection(
+            ProductOption::class,
+            ['getProductId', 'load', 'getId', 'getType']
+        );
 
-        $objectManagerMock = $this->getMockBuilder(Download::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['create'])
-            ->getMock();
+        $objectManagerMock = $this->createPartialMockWithReflection(Download::class, ['create']);
         $objectManagerMock->expects($this->any())->method('create')
             ->willReturnMap(
                 [
                     [Option::class, $this->itemOptionMock],
-                    [\Magento\Catalog\Model\Product\Option::class, $this->productOptionMock],
+                    [ProductOption::class, $this->productOptionMock],
                 ]
             );
 
@@ -170,8 +170,8 @@ class DownloadCustomOptionTest extends TestCase
      * @param array $itemOptionValues
      * @param array $productOptionValues
      * @param bool $noRouteOccurs
-     * @dataProvider executeDataProvider
      */
+    #[DataProvider('executeDataProvider')]
     public function testExecute($itemOptionValues, $productOptionValues, $noRouteOccurs)
     {
         if (!empty($itemOptionValues)) {

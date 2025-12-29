@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -15,6 +15,7 @@ use Magento\Framework\MessageQueue\ConsumerFactory;
 use Magento\Framework\MessageQueue\ConsumerInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\MessageQueue\Console\StartConsumerCommand;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Input\InputInterface;
@@ -60,17 +61,10 @@ class StartConsumerCommandTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->lockManagerMock = $this->getMockBuilder(LockManagerInterface::class)
-            ->getMockForAbstractClass();
-        $this->consumerFactory = $this->getMockBuilder(ConsumerFactory::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->appState = $this->getMockBuilder(State::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->writeFactoryMock = $this->getMockBuilder(WriteFactory::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->lockManagerMock = $this->createMock(LockManagerInterface::class);
+        $this->consumerFactory = $this->createMock(ConsumerFactory::class);
+        $this->appState = $this->createMock(State::class);
+        $this->writeFactoryMock = $this->createMock(WriteFactory::class);
 
         $this->objectManager = new ObjectManager($this);
         $this->command = $this->objectManager->getObject(
@@ -98,8 +92,8 @@ class StartConsumerCommandTest extends TestCase
      * @param int $expectedReturn
      * @return void
      * @throws \Exception
-     * @dataProvider executeDataProvider
      */
+    #[DataProvider('executeDataProvider')]
     public function testExecute(
         ?string $pidFilePath,
         bool $singleThread,
@@ -114,12 +108,8 @@ class StartConsumerCommandTest extends TestCase
         $numberOfMessages = 10;
         $batchSize = null;
         $consumerName = 'consumer_name';
-        $input = $this->getMockBuilder(InputInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-        $output = $this->getMockBuilder(OutputInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $input = $this->createMock(InputInterface::class);
+        $output = $this->createMock(OutputInterface::class);
         $input->expects($this->once())->method('getArgument')
             ->with(StartConsumerCommand::ARGUMENT_CONSUMER)
             ->willReturn($consumerName);
@@ -133,9 +123,7 @@ class StartConsumerCommandTest extends TestCase
                 [StartConsumerCommand::OPTION_MULTI_PROCESS] => $multiProcess
             });
         $this->appState->expects($this->exactly($runProcessExpects))->method('setAreaCode')->with($areaCode);
-        $consumer = $this->getMockBuilder(ConsumerInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $consumer = $this->createMock(ConsumerInterface::class);
         $this->consumerFactory->expects($this->exactly($runProcessExpects))
             ->method('get')->with($consumerName, $batchSize)->willReturn($consumer);
         $consumer->expects($this->exactly($runProcessExpects))->method('process')->with($numberOfMessages);

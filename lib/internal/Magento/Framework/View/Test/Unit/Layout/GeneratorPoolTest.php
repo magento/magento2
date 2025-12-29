@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -164,7 +164,7 @@ class GeneratorPoolTest extends TestCase
      *
      * @return array
      */
-    public function processDataProvider()
+    public static function processDataProvider()
     {
         return [
             [
@@ -184,7 +184,7 @@ class GeneratorPoolTest extends TestCase
                         'sort.element' => ['second.element', 'sibling', false, 'alias'],
                     ],
                 ],
-                'expectedScheduledElements' => [
+                'expectedSchedule' => [
                     'first.element' => ['block', []],
                     'second.element' => ['block', []],
                     'third.element' => ['block', []],

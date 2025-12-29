@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2023 Adobe
+ * All Rights Reserved.
  */
 
 /**
@@ -18,7 +18,7 @@ class CodeMessOutput extends Output
     /**
      * @inheritdoc
      */
-    protected function doWrite($message)
+    protected function doWrite(string $message): void
     {
         // TODO: Implement doWrite() method.
     }

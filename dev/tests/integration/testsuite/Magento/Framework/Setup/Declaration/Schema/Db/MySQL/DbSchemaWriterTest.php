@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2021 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework\Setup\Declaration\Schema\Db\MySQL;
 
@@ -101,12 +101,12 @@ class DbSchemaWriterTest extends \PHPUnit\Framework\TestCase
     {
         return [
             'auto increment field' => [
-                'field options' => ['identity' => true, 'unsigned' => true, 'nullable' => false, 'primary' => true],
-                'expected result' => 'AUTO_INCREMENT = 0',
+                'options' => ['identity' => true, 'unsigned' => true, 'nullable' => false, 'primary' => true],
+                'expected' => 'AUTO_INCREMENT = 0',
             ],
             'non auto increment field' => [
-                'field options' => ['unsigned' => true, 'nullable' => false,],
-                'expected result' => 'AUTO_INCREMENT = 1',
+                'options' => ['unsigned' => true, 'nullable' => false,],
+                'expected' => 'AUTO_INCREMENT = 1',
             ]
         ];
     }

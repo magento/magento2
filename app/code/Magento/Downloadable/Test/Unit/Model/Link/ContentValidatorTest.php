@@ -1,12 +1,13 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Downloadable\Test\Unit\Model\Link;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\Downloadable\Api\Data\File\ContentInterface;
 use Magento\Downloadable\Api\Data\LinkInterface;
 use Magento\Downloadable\Helper\File;
@@ -67,8 +68,8 @@ class ContentValidatorTest extends TestCase
         $this->fileValidatorMock = $this->createMock(\Magento\Downloadable\Model\File\ContentValidator::class);
         $this->urlValidatorMock = $this->createMock(Validator::class);
         $this->domainValidatorMock = $this->createMock(DomainValidator::class);
-        $this->linkFileMock = $this->getMockForAbstractClass(ContentInterface::class);
-        $this->sampleFileMock = $this->getMockForAbstractClass(ContentInterface::class);
+        $this->linkFileMock = $this->createMock(ContentInterface::class);
+        $this->sampleFileMock = $this->createMock(ContentInterface::class);
         $this->fileMock = $this->createMock(File::class);
 
         $this->validator = $objectManager->getObject(
@@ -84,8 +85,8 @@ class ContentValidatorTest extends TestCase
 
     public function testIsValid()
     {
-        $linkFileContentMock = $this->getMockForAbstractClass(ContentInterface::class);
-        $sampleFileContentMock = $this->getMockForAbstractClass(ContentInterface::class);
+        $linkFileContentMock = $this->createMock(ContentInterface::class);
+        $sampleFileContentMock = $this->createMock(ContentInterface::class);
         $linkData = [
             'title' => 'Title',
             'sort_order' => 1,
@@ -97,16 +98,16 @@ class ContentValidatorTest extends TestCase
             'link_file_content' => $linkFileContentMock,
             'sample_file_content' => $sampleFileContentMock,
         ];
-        $this->fileValidatorMock->expects($this->any())->method('isValid')->willReturn(true);
-        $this->urlValidatorMock->expects($this->any())->method('isValid')->willReturn(true);
-        $this->domainValidatorMock->expects($this->any())->method('isValid')->willReturn(true);
+        $this->fileValidatorMock->method('isValid')->willReturn(true);
+        $this->urlValidatorMock->method('isValid')->willReturn(true);
+        $this->domainValidatorMock->method('isValid')->willReturn(true);
         $linkMock = $this->getLinkMock($linkData);
         $this->assertTrue($this->validator->isValid($linkMock));
     }
 
     public function testIsValidSkipLinkContent()
     {
-        $sampleFileContentMock = $this->getMockForAbstractClass(ContentInterface::class);
+        $sampleFileContentMock = $this->createMock(ContentInterface::class);
         $linkData = [
             'title' => 'Title',
             'sort_order' => 1,
@@ -127,7 +128,7 @@ class ContentValidatorTest extends TestCase
 
     public function testIsValidSkipSampleContent()
     {
-        $sampleFileContentMock = $this->getMockForAbstractClass(ContentInterface::class);
+        $sampleFileContentMock = $this->createMock(ContentInterface::class);
         $linkData = [
             'title' => 'Title',
             'sort_order' => 1,
@@ -148,8 +149,8 @@ class ContentValidatorTest extends TestCase
 
     /**
      * @param string|int|float $sortOrder
-     * @dataProvider getInvalidSortOrder
      */
+    #[DataProvider('getInvalidSortOrder')]
     public function testIsValidThrowsExceptionIfSortOrderIsInvalid($sortOrder)
     {
         $this->expectException('Magento\Framework\Exception\InputException');
@@ -163,9 +164,9 @@ class ContentValidatorTest extends TestCase
             'link_type' => 'file',
             'sample_type' => 'file',
         ];
-        $this->fileValidatorMock->expects($this->any())->method('isValid')->willReturn(true);
-        $this->urlValidatorMock->expects($this->any())->method('isValid')->willReturn(true);
-        $this->domainValidatorMock->expects($this->any())->method('isValid')->willReturn(true);
+        $this->fileValidatorMock->method('isValid')->willReturn(true);
+        $this->urlValidatorMock->method('isValid')->willReturn(true);
+        $this->domainValidatorMock->method('isValid')->willReturn(true);
         $contentMock = $this->getLinkMock($linkContentData);
         $this->validator->isValid($contentMock);
     }
@@ -184,8 +185,8 @@ class ContentValidatorTest extends TestCase
 
     /**
      * @param string|int|float $price
-     * @dataProvider getInvalidPrice
      */
+    #[DataProvider('getInvalidPrice')]
     public function testIsValidThrowsExceptionIfPriceIsInvalid($price)
     {
         $this->expectException('Magento\Framework\Exception\InputException');
@@ -199,9 +200,9 @@ class ContentValidatorTest extends TestCase
             'link_type' => 'file',
             'sample_type' => 'file',
         ];
-        $this->fileValidatorMock->expects($this->any())->method('isValid')->willReturn(true);
-        $this->urlValidatorMock->expects($this->any())->method('isValid')->willReturn(true);
-        $this->domainValidatorMock->expects($this->any())->method('isValid')->willReturn(true);
+        $this->fileValidatorMock->method('isValid')->willReturn(true);
+        $this->urlValidatorMock->method('isValid')->willReturn(true);
+        $this->domainValidatorMock->method('isValid')->willReturn(true);
         $contentMock = $this->getLinkMock($linkContentData);
         $this->validator->isValid($contentMock);
     }
@@ -219,8 +220,8 @@ class ContentValidatorTest extends TestCase
 
     /**
      * @param string|int|float $numberOfDownloads
-     * @dataProvider getInvalidNumberOfDownloads
      */
+    #[DataProvider('getInvalidNumberOfDownloads')]
     public function testIsValidThrowsExceptionIfNumberOfDownloadsIsInvalid($numberOfDownloads)
     {
         $this->expectException('Magento\Framework\Exception\InputException');
@@ -234,9 +235,9 @@ class ContentValidatorTest extends TestCase
             'link_type' => 'file',
             'sample_type' => 'file',
         ];
-        $this->urlValidatorMock->expects($this->any())->method('isValid')->willReturn(true);
-        $this->domainValidatorMock->expects($this->any())->method('isValid')->willReturn(true);
-        $this->fileValidatorMock->expects($this->any())->method('isValid')->willReturn(true);
+        $this->urlValidatorMock->method('isValid')->willReturn(true);
+        $this->domainValidatorMock->method('isValid')->willReturn(true);
+        $this->fileValidatorMock->method('isValid')->willReturn(true);
         $contentMock = $this->getLinkMock($linkContentData);
         $this->validator->isValid($contentMock);
     }
@@ -259,51 +260,51 @@ class ContentValidatorTest extends TestCase
      */
     protected function getLinkMock(array $linkData)
     {
-        $linkMock = $this->getMockBuilder(LinkInterface::class)
-            ->addMethods(
-                [
-                    'isShareable'
-                ]
-            )
-            ->onlyMethods(
-                [
-                    'getTitle',
-                    'getPrice',
-                    'getSortOrder',
-                    'getNumberOfDownloads',
-                    'getLinkType',
-                    'getLinkFile',
-                ]
-            )
-            ->getMockForAbstractClass();
-        $linkMock->expects($this->any())->method('getTitle')->willReturn($linkData['title']);
-        $linkMock->expects($this->any())->method('getPrice')->willReturn($linkData['price']);
-        $linkMock->expects($this->any())->method('getSortOrder')->willReturn($linkData['sort_order']);
-        $linkMock->expects($this->any())->method('isShareable')->willReturn($linkData['shareable']);
-        $linkMock->expects($this->any())->method('getNumberOfDownloads')->willReturn(
+        $linkMock = $this->createPartialMock(
+            \Magento\Downloadable\Test\Unit\Helper\LinkTestHelper::class,
+            [
+                'isShareable',
+                'getTitle',
+                'getPrice',
+                'getSortOrder',
+                'getNumberOfDownloads',
+                'getLinkType',
+                'getLinkFile',
+                'getLinkUrl',
+                'getLinkFileContent',
+                'getSampleType',
+                'getSampleUrl',
+                'getSampleFile',
+                'getSampleFileContent'
+            ]
+        );
+        $linkMock->method('getTitle')->willReturn($linkData['title']);
+        $linkMock->method('getPrice')->willReturn($linkData['price']);
+        $linkMock->method('getSortOrder')->willReturn($linkData['sort_order']);
+        $linkMock->method('isShareable')->willReturn($linkData['shareable']);
+        $linkMock->method('getNumberOfDownloads')->willReturn(
             $linkData['number_of_downloads']
         );
-        $linkMock->expects($this->any())->method('getLinkType')->willReturn($linkData['link_type']);
-        $linkMock->expects($this->any())->method('getLinkFile')->willReturn($this->linkFileMock);
+        $linkMock->method('getLinkType')->willReturn($linkData['link_type']);
+        $linkMock->method('getLinkFile')->willReturn($this->linkFileMock);
         if (isset($linkData['link_url'])) {
-            $linkMock->expects($this->any())->method('getLinkUrl')->willReturn($linkData['link_url']);
+            $linkMock->method('getLinkUrl')->willReturn($linkData['link_url']);
         }
         if (isset($linkData['sample_url'])) {
-            $linkMock->expects($this->any())->method('getSampleUrl')->willReturn($linkData['sample_url']);
+            $linkMock->method('getSampleUrl')->willReturn($linkData['sample_url']);
         }
         if (isset($linkData['sample_type'])) {
-            $linkMock->expects($this->any())->method('getSampleType')->willReturn(
+            $linkMock->method('getSampleType')->willReturn(
                 $linkData['sample_type']
             );
         }
         if (isset($linkData['link_file_content'])) {
-            $linkMock->expects($this->any())->method('getLinkFileContent')->willReturn($linkData['link_file_content']);
+            $linkMock->method('getLinkFileContent')->willReturn($linkData['link_file_content']);
         }
         if (isset($linkData['sample_file_content'])) {
-            $linkMock->expects($this->any())->method('getSampleFileContent')
-                ->willReturn($linkData['sample_file_content']);
+            $linkMock->method('getSampleFileContent')->willReturn($linkData['sample_file_content']);
         }
-        $linkMock->expects($this->any())->method('getSampleFile')->willReturn($this->sampleFileMock);
+        $linkMock->method('getSampleFile')->willReturn($this->sampleFileMock);
 
         return $linkMock;
     }

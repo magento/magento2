@@ -1,8 +1,9 @@
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 
+/* eslint-disable */
 define([
     'mage/adminhtml/browser',
     'jquery'
@@ -10,9 +11,24 @@ define([
     'use strict';
 
     var obj,
+        originalJQueryAjax,
         openUrl = 'http://example.com/target_element_id/theTargetId/tree_path/wysiwyg&current_tree_path=d3lzaXd5Zw,';
 
     beforeEach(function () {
+        // Store original $.ajax if it exists
+        originalJQueryAjax = $.ajax;
+
+        // Ensure $.ajax exists for testing
+        if (!$.ajax) {
+            $.ajax = function() {
+                return {
+                    done: function() { return this; },
+                    fail: function() { return this; },
+                    always: function() { return this; }
+                };
+            };
+        }
+
         /**
          * Dummy constructor to use for instantiation
          * @constructor
@@ -22,6 +38,15 @@ define([
         Constr.prototype = browser;
 
         obj = new Constr();
+    });
+
+    afterEach(function () {
+        // Restore original $.ajax
+        if (originalJQueryAjax) {
+            $.ajax = originalJQueryAjax;
+        } else {
+            delete $.ajax;
+        }
     });
 
     describe('"openDialog" method', function () {

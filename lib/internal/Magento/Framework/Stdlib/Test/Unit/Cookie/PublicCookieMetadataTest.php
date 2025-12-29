@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -46,7 +46,7 @@ class PublicCookieMetadataTest extends TestCase
     /**
      * @return array
      */
-    public function getMethodData()
+    public static function getMethodData()
     {
         return [
             "getDomain" => ["setDomain", 'getDomain', "example.com"],
@@ -62,7 +62,7 @@ class PublicCookieMetadataTest extends TestCase
     /**
      * @return array
      */
-    public function toArrayDataProvider(): array
+    public static function toArrayDataProvider(): array
     {
         return [
             [

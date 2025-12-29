@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -42,7 +42,7 @@ class CollectionTest extends TestCase
     protected function setUp(): void
     {
         $this->selectMock = $this->createMock(Select::class);
-        $this->adapterMock = $this->getMockForAbstractClass(AdapterInterface::class);
+        $this->adapterMock = $this->createMock(AdapterInterface::class);
         $this->collection = $this->getMockBuilder(Collection::class)
             ->onlyMethods(['getSelect', 'getConnection', 'getTable'])
             ->disableOriginalConstructor()

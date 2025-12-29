@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -251,7 +251,7 @@ class HttpTest extends TestCase
      * Different test content for responseMock with their expected lengths in bytes.
      * @return array
      */
-    public function dataProviderForTestLaunchHeadRequest(): array
+    public static function dataProviderForTestLaunchHeadRequest(): array
     {
         return [
             [

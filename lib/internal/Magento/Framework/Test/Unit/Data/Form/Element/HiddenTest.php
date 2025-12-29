@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -78,7 +78,7 @@ class HiddenTest extends TestCase
     {
         return [
             ['some_value'],
-            ['store_ids[]' => ['1', '2']],
+            ['value' => ['1', '2']],
         ];
     }
 }

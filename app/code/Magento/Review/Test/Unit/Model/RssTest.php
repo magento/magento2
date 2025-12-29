@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -40,7 +40,7 @@ class RssTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->managerInterface = $this->getMockForAbstractClass(ManagerInterface::class);
+        $this->managerInterface = $this->createMock(ManagerInterface::class);
         $this->reviewFactory = $this->createPartialMock(ReviewFactory::class, ['create']);
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);

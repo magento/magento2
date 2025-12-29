@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -62,7 +62,7 @@ class HostCheckerTest extends TestCase
     /**
      * @return array
      */
-    public function isOwnOriginDataProvider()
+    public static function isOwnOriginDataProvider()
     {
         return [
             ['http://www.example.com/some/page/', true],

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2023 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -57,7 +57,7 @@ class ResetAfterRequestTest extends \PHPUnit\Framework\TestCase
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
-    public function resetAfterRequestClassDataProvider()
+    public static function resetAfterRequestClassDataProvider()
     {
         $resetAfterRequestClasses = [];
         foreach (Classes::getVirtualClasses() as $name => $type) {

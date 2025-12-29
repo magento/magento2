@@ -1,6 +1,6 @@
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 define([
@@ -443,9 +443,11 @@ define([
                     listLabel = 'aria-labelledby="' + controlLabelId + '"';
                 }
 
+                let checkIsRequiredAttrClass = 'required';
+
                 // Create new control
                 container.append(
-                    '<div class="' + classes.attributeClass + ' ' + item.code + '" ' +
+                    '<div class="' + classes.attributeClass + ' ' + item.code + ' ' + checkIsRequiredAttrClass + '" ' +
                          'data-attribute-code="' + item.code + '" ' +
                          'data-attribute-id="' + item.id + '">' +
                         label +
@@ -798,7 +800,7 @@ define([
 
             $widget._Rebuild();
 
-            if ($priceBox.is(':data(mage-priceBox)')) {
+            if ($priceBox.data('mage-priceBox') !== undefined) {
                 $widget._UpdatePrice();
             }
 
@@ -1334,7 +1336,13 @@ define([
          * @private
          */
         _addFotoramaVideoEvents: function (isInitial) {
-            if (_.isUndefined($.mage.AddFotoramaVideoEvents)) {
+            if (_.isUndefined($.mage.AddFotoramaVideoEvents)
+                || !$(this.options.mediaGallerySelector).AddFotoramaVideoEvents('instance')
+            ) {
+                $(this.options.mediaGallerySelector).on('addfotoramavideoeventscreate', function () {
+                    this._addFotoramaVideoEvents(isInitial);
+                }.bind(this));
+
                 return;
             }
 

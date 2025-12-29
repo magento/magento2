@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -93,7 +93,7 @@ class TopMenuTest extends TestCase
     /**
      * @return array
      */
-    public function invisibilityDataProvider(): array
+    public static function invisibilityDataProvider(): array
     {
         return [
             'include_in_menu_disable' => [
@@ -141,7 +141,7 @@ class TopMenuTest extends TestCase
     /**
      * @return array
      */
-    public function categoriesVisibleInTreeProvider(): array
+    public static function categoriesVisibleInTreeProvider(): array
     {
         return [
             'add_in_tree_visible' => [
@@ -211,7 +211,7 @@ class TopMenuTest extends TestCase
     /**
      * @return array
      */
-    public function categoriesInTreeInvisibleProvider(): array
+    public static function categoriesInTreeInvisibleProvider(): array
     {
         return [
             'add_in_tree_category_disable' => [
@@ -307,7 +307,7 @@ class TopMenuTest extends TestCase
      * @return array
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function menuStructureProvider(): array
+    public static function menuStructureProvider(): array
     {
         return [
             'move_to_default' => [
@@ -447,7 +447,7 @@ class TopMenuTest extends TestCase
      *
      * @return array
      */
-    public function multipleWebsitesCategoryDisplayProvider(): array
+    public static function multipleWebsitesCategoryDisplayProvider(): array
     {
         return [
             'first_website' => [

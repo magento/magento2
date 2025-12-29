@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -13,6 +13,7 @@ use Magento\Framework\App\Http\Context as HttpContext;
 use Magento\Framework\App\Test\Unit\Action\Stub\ActionStub;
 use Magento\Framework\Module\Manager as ModuleManager;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\PageCache\Model\Config as PageCacheConfig;
 use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\Store;
@@ -30,9 +31,12 @@ use PHPUnit\Framework\TestCase;
  * Unit Tests to cover Context Plugin
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.TooManyFields)
  */
 class ContextPluginTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var TaxHelper|MockObject
      */
@@ -100,50 +104,32 @@ class ContextPluginTest extends TestCase
     {
         $this->objectManager = new ObjectManager($this);
 
-        $this->taxHelperMock = $this->getMockBuilder(TaxHelper::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->taxHelperMock = $this->createMock(TaxHelper::class);
 
-        $this->weeeHelperMock = $this->getMockBuilder(WeeeHelper::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->weeeHelperMock = $this->createMock(WeeeHelper::class);
 
-        $this->weeeTaxMock = $this->getMockBuilder(Tax::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->weeeTaxMock = $this->createMock(Tax::class);
 
-        $this->httpContextMock = $this->getMockBuilder(HttpContext::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->httpContextMock = $this->createMock(HttpContext::class);
 
-        $this->customerSessionMock = $this->getMockBuilder(CustomerSession::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['isLoggedIn'])
-            ->addMethods(
-                [
-                    'getDefaultTaxBillingAddress',
-                    'getDefaultTaxShippingAddress',
-                    'getCustomerTaxClassId',
-                    'getWebsiteId'
-                ]
-            )
-            ->getMock();
+        $this->customerSessionMock = $this->createPartialMockWithReflection(
+            CustomerSession::class,
+            [
+                'isLoggedIn',
+                'getDefaultTaxBillingAddress',
+                'getDefaultTaxShippingAddress',
+                'getCustomerTaxClassId',
+                'getWebsiteId'
+            ]
+        );
 
-        $this->moduleManagerMock = $this->getMockBuilder(ModuleManager::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->moduleManagerMock = $this->createMock(ModuleManager::class);
 
-        $this->cacheConfigMock = $this->getMockBuilder(PageCacheConfig::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->cacheConfigMock = $this->createMock(PageCacheConfig::class);
 
-        $this->storeManagerMock = $this->getMockBuilder(StoreManager::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->storeManagerMock = $this->createMock(StoreManager::class);
 
-        $this->scopeConfigMock = $this->getMockBuilder(Config::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->scopeConfigMock = $this->createMock(Config::class);
 
         $this->contextPlugin = $this->objectManager->getObject(
             ContextPlugin::class,
@@ -187,9 +173,7 @@ class ContextPluginTest extends TestCase
             ->method('getTaxBasedOn')
             ->willReturn('billing');
 
-        $storeMock = $this->getMockBuilder(Store::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $storeMock = $this->createMock(Store::class);
 
         $storeMock->expects($this->once())
             ->method('getWebsiteId')
@@ -293,9 +277,7 @@ class ContextPluginTest extends TestCase
             ->method('getTaxBasedOn')
             ->willReturn('billing');
 
-        $storeMock = $this->getMockBuilder(Store::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $storeMock = $this->createMock(Store::class);
 
         $storeMock->expects($this->once())
             ->method('getWebsiteId')
@@ -371,9 +353,7 @@ class ContextPluginTest extends TestCase
             ->method('getTaxBasedOn')
             ->willReturn('shipping');
 
-        $storeMock = $this->getMockBuilder(Store::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $storeMock = $this->createMock(Store::class);
 
         $storeMock->expects($this->once())
             ->method('getWebsiteId')

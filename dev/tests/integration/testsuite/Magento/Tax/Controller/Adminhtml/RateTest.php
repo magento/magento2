@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Tax\Controller\Adminhtml;
@@ -52,7 +52,7 @@ class RateTest extends \Magento\TestFramework\TestCase\AbstractBackendController
      *
      * @return array
      */
-    public function ajaxSaveActionDataProvider()
+    public static function ajaxSaveActionDataProvider()
     {
         $postData = ['rate' => '10.0000', 'tax_country_id' => 'US', 'tax_region_id' => '1'];
         return [
@@ -108,7 +108,7 @@ class RateTest extends \Magento\TestFramework\TestCase\AbstractBackendController
      *
      * @return array
      */
-    public function ajaxSaveActionDataInvalidDataProvider()
+    public static function ajaxSaveActionDataInvalidDataProvider()
     {
         $expectedData = [
             'success' => false,

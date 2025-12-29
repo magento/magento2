@@ -1,12 +1,14 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2023 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Catalog\Test\Unit\Model\Product\Image;
 
+use PHPUnit\Framework\Attributes\DataProvider;
+use Magento\Framework\App\Area;
 use Magento\Catalog\Model\Product\Image\ConvertImageMiscParamsToReadableFormat;
 use Magento\Catalog\Model\Product\Image\ParamsBuilder;
 use Magento\Catalog\Model\Product\Image\RemoveDeletedImagesFromCache;
@@ -101,8 +103,8 @@ class RemoveDeletedImagesFromCacheTest extends TestCase
     /**
      * @param array $data
      * @return void
-     * @dataProvider createDataProvider
      */
+    #[DataProvider('createDataProvider')]
     public function testRemoveDeletedImagesFromCache(array $data): void
     {
         $this->getRespectiveMethodMockObjForRemoveDeletedImagesFromCache($data);
@@ -117,8 +119,8 @@ class RemoveDeletedImagesFromCacheTest extends TestCase
     /**
      * @param array $data
      * @return void
-     * @dataProvider createDataProvider
      */
+    #[DataProvider('createDataProvider')]
     public function testRemoveDeletedImagesFromCacheWithException(array $data): void
     {
         $this->getRespectiveMethodMockObjForRemoveDeletedImagesFromCache($data);
@@ -156,7 +158,7 @@ class RemoveDeletedImagesFromCacheTest extends TestCase
     {
         $this->presentationConfig->expects($this->once())
             ->method('getViewConfig')
-            ->with(['area' => \Magento\Framework\App\Area::AREA_FRONTEND])
+            ->with(['area' => Area::AREA_FRONTEND])
             ->willReturn($this->viewMock);
 
         $this->viewMock->expects($this->once())
@@ -171,10 +173,6 @@ class RemoveDeletedImagesFromCacheTest extends TestCase
             ->method('convertImageMiscParamsToReadableFormat')
             ->willReturn($data['convertImageParamsToReadableFormat']);
 
-        $this->encryptor->expects($this->once())
-            ->method('hash')
-            ->willReturn('85b0304775df23c13f08dd2c1f9c4c28');
-
         $this->mediaConfig->expects($this->once())
             ->method('getBaseMediaPath')
             ->willReturn('catalog/product');
@@ -183,17 +181,17 @@ class RemoveDeletedImagesFromCacheTest extends TestCase
     /**
      * @return array
      */
-    public function createDataProvider(): array
+    public static function createDataProvider(): array
     {
         return [
-            $this->getTestDataWithAttributes()
+            self::getTestDataWithAttributes()
         ];
     }
 
     /**
      * @return array
      */
-    private function getTestDataWithAttributes(): array
+    private static function getTestDataWithAttributes(): array
     {
         return [
             'data' => [

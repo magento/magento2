@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -96,7 +96,7 @@ class RulePoolTest extends TestCase
     /**
      * @return array
      */
-    public function getRuleDataProvider()
+    public static function getRuleDataProvider()
     {
         return [
             [RulePool::TYPE_LOCALE_FILE],

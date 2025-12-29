@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Setup\Console\Command;
@@ -18,6 +18,7 @@ use Magento\Framework\App\ObjectManager;
  */
 class InfoCurrencyListCommand extends Command
 {
+    public const NAME = 'info:currency:list';
     /**
      * List model provides lists of available options for currency, language locales, timezones
      *
@@ -34,7 +35,7 @@ class InfoCurrencyListCommand extends Command
      * @param Lists $lists
      * @param TableFactory $tableHelperFactory
      */
-    public function __construct(Lists $lists, TableFactory $tableHelperFactory = null)
+    public function __construct(Lists $lists, ?TableFactory $tableHelperFactory = null)
     {
         $this->lists = $lists;
         $this->tableHelperFactory = $tableHelperFactory ?: ObjectManager::getInstance()->create(TableFactory::class);
@@ -42,20 +43,20 @@ class InfoCurrencyListCommand extends Command
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected function configure()
     {
-        $this->setName('info:currency:list')
+        $this->setName(self::NAME)
             ->setDescription('Displays the list of available currencies');
 
         parent::configure();
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $tableHelper = $this->tableHelperFactory->create(['output' => $output]);
         $tableHelper->setHeaders(['Currency', 'Code']);

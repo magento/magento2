@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 
 declare(strict_types=1);
@@ -19,6 +19,7 @@ use Magento\Framework\Model\AbstractModel;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Store\Model\ResourceModel\Store;
 use Magento\UrlRewrite\Model\UrlPersistInterface;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -28,6 +29,8 @@ use PHPUnit\Framework\TestCase;
  */
 class ViewTest extends TestCase
 {
+    use MockCreationTrait;
+
     private const STUB_STORE_ID = 777;
     private const STUB_URL_REWRITE = ['cms/page/view'];
 
@@ -87,15 +90,15 @@ class ViewTest extends TestCase
         $this->searchCriteriaMock = $this->createMock(SearchCriteria::class);
         $this->pageSearchResultMock = $this->createMock(PageSearchResultsInterface::class);
 
-        $this->pageMock = $this->getMockBuilder(Page::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['setStoreId'])
-            ->getMock();
+        $this->pageMock = $this->createPartialMockWithReflection(
+            Page::class,
+            ['setStoreId']
+        );
 
-        $this->abstractModelMock = $this->getMockBuilder(AbstractModel::class)
-            ->onlyMethods(['isObjectNew', 'getId'])
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->abstractModelMock = $this->createPartialMock(
+            AbstractModel::class,
+            ['isObjectNew', 'getId']
+        );
 
         $this->urlPersistMock = $this->createMock(UrlPersistInterface::class);
         $this->pageRepositoryMock = $this->createMock(PageRepositoryInterface::class);

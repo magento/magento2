@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -14,7 +14,7 @@ use PHPUnit\Framework\TestCase;
 
 class UpsellTest extends TestCase
 {
-    const STUB_EMPTY_ARRAY = [];
+    private const STUB_EMPTY_ARRAY = [];
     /**
      * @var UpsellBlock
      */

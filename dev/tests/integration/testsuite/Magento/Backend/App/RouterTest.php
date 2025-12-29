@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Backend\App;
 
@@ -47,7 +47,7 @@ class RouterTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($className, $this->model->getActionClassName($module, $controller));
     }
 
-    public function getControllerClassNameDataProvider()
+    public static function getControllerClassNameDataProvider()
     {
         return [
             ['Magento_TestModule', 'controller', \Magento\TestModule\Controller\Adminhtml\Controller::class],

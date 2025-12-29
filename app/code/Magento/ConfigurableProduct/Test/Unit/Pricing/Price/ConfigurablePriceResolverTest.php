@@ -1,12 +1,13 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\ConfigurableProduct\Test\Unit\Pricing\Price;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\Catalog\Model\Product;
 use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
 use Magento\ConfigurableProduct\Pricing\Price\ConfigurablePriceResolver;
@@ -16,6 +17,9 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * @SuppressWarnings(PHPMD.UnusedLocalVariable)
+ */
 class ConfigurablePriceResolverTest extends TestCase
 {
     /**
@@ -40,16 +44,11 @@ class ConfigurablePriceResolverTest extends TestCase
 
     protected function setUp(): void
     {
-        $className = Configurable::class;
-        $this->configurable = $this->getMockBuilder($className)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['getUsedProducts'])
-            ->getMock();
+        $this->configurable = $this->createPartialMock(Configurable::class, ['getUsedProducts']);
 
-        $className = PriceResolverInterface::class;
-        $this->priceResolver = $this->getMockForAbstractClass($className, [], '', false, true, true, ['resolvePrice']);
+        $this->priceResolver = $this->createPartialMock(PriceResolverInterface::class, ['resolvePrice']);
 
-        $this->lowestPriceOptionsProvider = $this->getMockForAbstractClass(LowestPriceOptionsProviderInterface::class);
+        $this->lowestPriceOptionsProvider = $this->createMock(LowestPriceOptionsProviderInterface::class);
 
         $objectManager = new ObjectManager($this);
         $this->resolver = $objectManager->getObject(
@@ -65,24 +64,21 @@ class ConfigurablePriceResolverTest extends TestCase
     /**
      * situation: one product is supplying the price, which could be a price of zero (0)
      *
-     * @dataProvider resolvePriceDataProvider
      *
      * @param $variantPrices
      * @param $expectedPrice
      */
+    #[DataProvider('resolvePriceDataProvider')]
     public function testResolvePrice($variantPrices, $expectedPrice)
     {
-        $product = $this->getMockBuilder(
+        $product = $this->createMock(
             Product::class
-        )->disableOriginalConstructor()
-            ->getMock();
+        );
 
         $product->expects($this->never())->method('getSku');
 
         $products = array_map(function () {
-            return $this->getMockBuilder(Product::class)
-                ->disableOriginalConstructor()
-                ->getMock();
+            return $this->createMock(Product::class);
         }, $variantPrices);
 
         $this->lowestPriceOptionsProvider->expects($this->once())->method('getProducts')->willReturn($products);
@@ -97,7 +93,7 @@ class ConfigurablePriceResolverTest extends TestCase
     /**
      * @return array
      */
-    public function resolvePriceDataProvider()
+    public static function resolvePriceDataProvider()
     {
         return [
             'Single variant at price 0.00 (float), should return 0.00 (float)' => [

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -27,6 +27,7 @@ use Magento\Sales\Model\Order;
 use Magento\Sales\Model\Order\Reorder\UnavailableProductsProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -37,6 +38,8 @@ use Psr\Log\LoggerInterface;
  */
 class ReorderTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var Reorder
      */
@@ -128,9 +131,9 @@ class ReorderTest extends TestCase
     protected function setUp(): void
     {
         $this->orderId = 111;
-        $this->orderRepositoryMock = $this->getMockForAbstractClass(OrderRepositoryInterface::class);
-        $this->requestMock = $this->getMockForAbstractClass(RequestInterface::class);
-        $this->objectManagerMock = $this->getMockForAbstractClass(ObjectManagerInterface::class);
+        $this->orderRepositoryMock = $this->createMock(OrderRepositoryInterface::class);
+        $this->requestMock = $this->createMock(RequestInterface::class);
+        $this->objectManagerMock = $this->createMock(ObjectManagerInterface::class);
         $this->resultForwardFactoryMock = $this->createMock(ForwardFactory::class);
         $this->resultRedirectFactoryMock = $this->createMock(RedirectFactory::class);
         $this->resultRedirectMock = $this->createMock(Redirect::class);
@@ -138,17 +141,17 @@ class ReorderTest extends TestCase
         $this->reorderHelperMock = $this->createMock(ReorderHelper::class);
         $this->unavailableProductsProviderMock = $this->createMock(UnavailableProductsProvider::class);
         $this->orderCreateMock = $this->createMock(Create::class);
-        $this->orderMock = $this->getMockBuilder(Order::class)->disableOriginalConstructor()
-            ->onlyMethods(['getEntityId', 'getId'])
-            ->addMethods(['setReordered'])
-            ->getMock();
-        $this->quoteSessionMock = $this->getMockBuilder(Quote::class)->disableOriginalConstructor()
-            ->onlyMethods(['clearStorage'])
-            ->addMethods(['setUseOldShippingMethod'])
-            ->getMock();
+        $this->orderMock = $this->createPartialMockWithReflection(
+            Order::class,
+            ['getEntityId', 'getId', 'setReordered']
+        );
+        $this->quoteSessionMock = $this->createPartialMockWithReflection(
+            Quote::class,
+            ['clearStorage', 'setUseOldShippingMethod']
+        );
         $this->messageManagerMock = $this->getMockBuilder(ManagerInterface::class)
-            ->getMockForAbstractClass();
-        $this->loggerMock = $this->getMockForAbstractClass(LoggerInterface::class);
+            ->getMock();
+        $this->loggerMock = $this->createMock(LoggerInterface::class);
 
         $objectManager = new ObjectManager($this);
         $this->context = $objectManager->getObject(

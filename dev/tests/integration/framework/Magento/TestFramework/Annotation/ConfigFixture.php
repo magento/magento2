@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 
 /**
@@ -76,7 +76,7 @@ class ConfigFixture
      * @param string|null $scopeCode
      * @return mixed|null
      */
-    protected function getScopeConfigValue(string $configPath, string $scopeType, string $scopeCode = null)
+    protected function getScopeConfigValue(string $configPath, string $scopeType, ?string $scopeCode = null)
     {
         $result = null;
         if ($scopeCode !== false) {

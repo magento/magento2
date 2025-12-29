@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -71,7 +71,7 @@ class CreateCustomOptionsTest extends AbstractBackendController
      *
      * @return array
      */
-    public function productWithNewOptionsDataProvider(): array
+    public static function productWithNewOptionsDataProvider(): array
     {
         return [
             'required_options' => [

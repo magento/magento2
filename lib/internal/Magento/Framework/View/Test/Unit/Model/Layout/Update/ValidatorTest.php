@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -96,7 +96,7 @@ class ValidatorTest extends TestCase
     }
 
     /**
-     * @dataProvider testIsValidNotSecurityCheckDataProvider
+     * @dataProvider isValidNotSecurityCheckDataProvider
      * @param string $layoutUpdate
      * @param boolean $expectedResult
      * @param array $messages
@@ -118,7 +118,7 @@ class ValidatorTest extends TestCase
     /**
      * @return array
      */
-    public function testIsValidNotSecurityCheckDataProvider()
+    public static function isValidNotSecurityCheckDataProvider()
     {
         return [
             ['test', true, []],
@@ -126,7 +126,7 @@ class ValidatorTest extends TestCase
     }
 
     /**
-     * @dataProvider testIsValidSecurityCheckDataProvider
+     * @dataProvider isValidSecurityCheckDataProvider
      * @param string $layoutUpdate
      * @param boolean $expectedResult
      * @param array $messages
@@ -148,7 +148,7 @@ class ValidatorTest extends TestCase
     /**
      * @return array
      */
-    public function testIsValidSecurityCheckDataProvider()
+    public static function isValidSecurityCheckDataProvider()
     {
         $insecureHelper = <<<XML
 <layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">

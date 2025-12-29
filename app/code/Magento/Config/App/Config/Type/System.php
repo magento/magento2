@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Config\App\Config\Type;
@@ -137,12 +137,12 @@ class System implements ConfigTypeInterface
         PreProcessorInterface $preProcessor,
         $cachingNestedLevel = 1,
         $configType = self::CONFIG_TYPE,
-        Reader $reader = null,
-        Encryptor $encryptor = null,
-        LockManagerInterface $locker = null,
-        LockGuardedCacheLoader $lockQuery = null,
-        StateInterface $cacheState = null,
-        LoggerInterface $logger = null
+        ?Reader $reader = null,
+        ?Encryptor $encryptor = null,
+        ?LockManagerInterface $locker = null,
+        ?LockGuardedCacheLoader $lockQuery = null,
+        ?StateInterface $cacheState = null,
+        ?LoggerInterface $logger = null
     ) {
         $this->postProcessor = $postProcessor;
         $this->cache = $cache;

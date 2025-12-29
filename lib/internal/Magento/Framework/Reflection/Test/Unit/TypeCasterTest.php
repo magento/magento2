@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -77,7 +77,7 @@ class TypeCasterTest extends TestCase
     /**
      * @return array
      */
-    public function typeCastValueProvider()
+    public static function typeCastValueProvider()
     {
         return [
             'null' => [null, 'int', null],
@@ -102,7 +102,7 @@ class TypeCasterTest extends TestCase
      *
      * @return array
      */
-    public function arraysDataProvider()
+    public static function arraysDataProvider()
     {
         return [
             [['type' => 'VI', 'masked' => 1111], 'string', '{"type":"VI","masked":1111}'],

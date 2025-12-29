@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -14,10 +14,12 @@ use Magento\Framework\Pricing\PriceInfo\Base;
 use Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreate;
 use Magento\Wishlist\Model\Item;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 class AbstractCreateTest extends TestCase
 {
+
     /**
      * @var AbstractCreate|MockObject
      */
@@ -43,16 +45,10 @@ class AbstractCreateTest extends TestCase
         $this->model = $this->getMockBuilder(AbstractCreate::class)
             ->onlyMethods(['convertPrice'])
             ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-        $this->priceInfoMock = $this->getMockBuilder(Base::class)
-            ->disableOriginalConstructor()
             ->getMock();
-        $this->productMock = $this->getMockBuilder(Product::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->linkPriceMock = $this->getMockBuilder(LinkPrice::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->priceInfoMock = $this->createMock(Base::class);
+        $this->productMock = $this->createMock(Product::class);
+        $this->linkPriceMock = $this->createMock(LinkPrice::class);
         $this->productMock->expects($this->any())
             ->method('getPriceInfo')
             ->willReturn($this->priceInfoMock);
@@ -80,13 +76,23 @@ class AbstractCreateTest extends TestCase
     /**
      * @param $item
      *
-     * @dataProvider getProductDataProvider
      */
+    #[DataProvider('getProductDataProvider')]
     public function testGetProduct($item)
     {
+        $item = $item($this);
         $product = $this->model->getProduct($item);
 
         self::assertInstanceOf(Product::class, $product);
+    }
+
+    protected function getMockForItemClass()
+    {
+        $productMock = $this->createMock(Product::class);
+        $itemMock = $this->createMock(Item::class);
+        $itemMock->expects($this->once())->method('getProduct')->willReturn($productMock);
+
+        return $itemMock;
     }
 
     /**
@@ -94,12 +100,10 @@ class AbstractCreateTest extends TestCase
      *
      * @return array
      */
-    public function getProductDataProvider()
+    public static function getProductDataProvider()
     {
-        $productMock = $this->createMock(Product::class);
-
-        $itemMock = $this->createMock(Item::class);
-        $itemMock->expects($this->once())->method('getProduct')->willReturn($productMock);
+        $productMock = static fn (self $testCase) => $testCase->createMock(Product::class);
+        $itemMock = static fn (self $testCase) => $testCase->getMockForItemClass();
 
         return [
             [$productMock],

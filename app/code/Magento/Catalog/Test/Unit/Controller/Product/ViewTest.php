@@ -1,12 +1,15 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2021 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Catalog\Test\Unit\Controller\Product;
 
+use Magento\Catalog\Helper\Product;
+use Magento\Framework\Controller\Result\Redirect;
+use Magento\Framework\UrlInterface;
 use Magento\Backend\Model\View\Result\RedirectFactory;
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Controller\Product\View;
@@ -14,6 +17,7 @@ use Magento\Catalog\Helper\Product\View as ViewHelper;
 use Magento\Catalog\Model\Design;
 use Magento\Catalog\Model\ProductRepository;
 use Magento\Framework\App\Action\Context;
+use Magento\Framework\App\Request\Http;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\Controller\Result\ForwardFactory;
 use Magento\Framework\DataObject;
@@ -70,17 +74,17 @@ class ViewTest extends TestCase
     protected $storeManagerMock;
 
     /**
-     * @var \Magento\Catalog\Helper\Product|MockObject
+     * @var Product|MockObject
      */
     protected $helperProduct;
 
     /**
-     * @var Magento\Framework\Controller\Result\Redirect|MockObject
+     * @var Redirect|MockObject
      */
     protected $redirectMock;
 
     /**
-     * @var Magento\Framework\UrlInterface|MockObject
+     * @var UrlInterface|MockObject
      */
     protected $urlBuilder;
 
@@ -99,64 +103,36 @@ class ViewTest extends TestCase
      */
     protected function setUp(): void
     {
-        $contextMock = $this->getMockBuilder(Context::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->requestMock = $this->getMockBuilder(RequestInterface::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['getParam'])
-            ->addMethods(['isAjax', 'isPost'])
-            ->getMockForAbstractClass();
-        $contextMock->expects($this->any())
-            ->method('getRequest')
-            ->willReturn($this->requestMock);
+        $contextMock = $this->createMock(Context::class);
+        $this->requestMock = $this->createPartialMock(
+            Http::class,
+            ['getParam', 'isPost']
+        );
+        $contextMock->method('getRequest')->willReturn($this->requestMock);
         $objectManagerMock = $this->createMock(ObjectManager::class);
-        $this->helperProduct = $this->createMock(\Magento\Catalog\Helper\Product::class);
+        $this->helperProduct = $this->createMock(Product::class);
         $objectManagerMock->expects($this->any())
             ->method('get')
-            ->with(\Magento\Catalog\Helper\Product::class)
+            ->with(Product::class)
             ->willReturn($this->helperProduct);
-        $contextMock->expects($this->any())
-            ->method('getObjectManager')
-            ->willReturn($objectManagerMock);
+        $contextMock->method('getObjectManager')->willReturn($objectManagerMock);
         $resultRedirectFactoryMock = $this->createPartialMock(
             RedirectFactory::class,
             ['create']
         );
-        $this->redirectMock = $this->createMock(\Magento\Framework\Controller\Result\Redirect::class);
+        $this->redirectMock = $this->createMock(Redirect::class);
         $resultRedirectFactoryMock->method('create')->willReturn($this->redirectMock);
-        $contextMock->expects($this->any())
-            ->method('getResultRedirectFactory')
-            ->willReturn($resultRedirectFactoryMock);
-        $this->urlBuilder = $this->getMockBuilder(\Magento\Framework\UrlInterface::class)
-            ->onlyMethods(['getUrl'])
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-        $contextMock->expects($this->any())
-            ->method('getUrl')
-            ->willReturn($this->urlBuilder);
-        $viewHelperMock = $this->getMockBuilder(ViewHelper::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $resultForwardFactoryMock = $this->getMockBuilder(ForwardFactory::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->resultPageFactoryMock = $this->getMockBuilder(PageFactory::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->resultPageFactoryMock = $this->getMockBuilder(PageFactory::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->catalogDesignMock = $this->getMockBuilder(Design::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->productRepositoryMock = $this->getMockBuilder(ProductRepository::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->productInterfaceMock = $this->getMockBuilder(ProductInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->storeManagerMock = $this->getMockForAbstractClass(StoreManagerInterface::class);
+        $contextMock->method('getResultRedirectFactory')->willReturn($resultRedirectFactoryMock);
+        $this->urlBuilder = $this->createMock(UrlInterface::class);
+        $this->urlBuilder->method('getUrl')->willReturn('productUrl');
+        $contextMock->method('getUrl')->willReturn($this->urlBuilder);
+        $viewHelperMock = $this->createMock(ViewHelper::class);
+        $resultForwardFactoryMock = $this->createMock(ForwardFactory::class);
+        $this->resultPageFactoryMock = $this->createMock(PageFactory::class);
+        $this->catalogDesignMock = $this->createMock(Design::class);
+        $this->productRepositoryMock = $this->createMock(ProductRepository::class);
+        $this->productInterfaceMock = $this->createMock(ProductInterface::class);
+        $this->storeManagerMock = $this->createMock(StoreManagerInterface::class);
         $storeMock = $this->createMock(Store::class);
         $this->storeManagerMock->method('getStore')->willReturn($storeMock);
 
@@ -182,24 +158,17 @@ class ViewTest extends TestCase
     public function testExecute(): void
     {
         $themeId = 3;
-        $this->requestMock->method('isPost')
-            ->willReturn(false);
+        $this->requestMock->method('isPost')->willReturn(false);
         $this->productRepositoryMock->method('getById')
             ->willReturn($this->productInterfaceMock);
-        $dataObjectMock = $this->getMockBuilder(DataObject::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['getCustomDesign'])
-            ->getMock();
-        $dataObjectMock->method('getCustomDesign')
-            ->willReturn($themeId);
+        $dataObjectMock = $this->createPartialMock(DataObject::class, []);
+        $dataObjectMock->setData('custom_design', 3);
         $this->catalogDesignMock->method('getDesignSettings')
             ->willReturn($dataObjectMock);
         $this->catalogDesignMock->expects($this->once())
             ->method('applyCustomDesign')
             ->with($themeId);
-        $viewResultPageMock = $this->getMockBuilder(Page::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $viewResultPageMock = $this->createMock(Page::class);
         $this->resultPageFactoryMock->method('create')
             ->willReturn($viewResultPageMock);
         $this->view->execute();
@@ -207,27 +176,26 @@ class ViewTest extends TestCase
 
     public function testExecuteRecentlyViewed(): void
     {
-        $post = [
-            'category' => '1',
-            'id' => 1,
-            'options' => false,
-            View::PARAM_NAME_URL_ENCODED => 'some_param_url_encoded'
-        ];
+        $this->requestMock->method('getParam')->willReturnMap([
+            ['category', null, '1'],
+            ['id', null, 1],
+            ['options', null, false],
+            [View::PARAM_NAME_URL_ENCODED, null, 'some_param_url_encoded'],
+        ]);
 
         // _initProduct
         $this->helperProduct->method('initProduct')
-            ->willReturn('true');
+            ->willReturn($this->productInterfaceMock);
+        $this->productRepositoryMock->method('getById')
+            ->willReturn($this->productInterfaceMock);
+        $dataObjectMock = $this->createPartialMock(DataObject::class, []);
+        $dataObjectMock->setData('custom_design', null);
+        $this->catalogDesignMock->method('getDesignSettings')->willReturn($dataObjectMock);
+        $pageMock = $this->createMock(Page::class);
+        $this->resultPageFactoryMock->method('create')->willReturn($pageMock);
         $this->redirectMock->method('setUrl')->with('productUrl')->willReturnSelf();
 
-        $this->requestMock->method('isPost')
-            ->willReturn(true);
-        $this->requestMock->method('getParam')->willReturnCallback(
-            function ($key) use ($post) {
-                return $post[$key];
-            }
-        );
-
-        $this->urlBuilder->expects($this->any())->method('getCurrentUrl')->willReturn('productUrl');
+        $this->urlBuilder->method('getCurrentUrl')->willReturn('productUrl');
         $this->view->execute();
     }
 }

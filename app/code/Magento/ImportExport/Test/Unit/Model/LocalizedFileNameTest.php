@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2021 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -9,6 +9,7 @@ namespace Magento\ImportExport\Test\Unit\Model;
 
 use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
 use Magento\ImportExport\Model\LocalizedFileName;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -46,8 +47,8 @@ class LocalizedFileNameTest extends TestCase
     /**
      * @param string $filename
      * @param string $displayName
-     * @dataProvider getFileDisplayNameDataProvider
      */
+    #[DataProvider('getFileDisplayNameDataProvider')]
     public function testGetFileDisplayName(string $filename, string $displayName): void
     {
         $this->timezone
@@ -63,7 +64,7 @@ class LocalizedFileNameTest extends TestCase
     /**
      * @return array
      */
-    public function getFileDisplayNameDataProvider(): array
+    public static function getFileDisplayNameDataProvider(): array
     {
         return [
             [

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
-  */
+/**
+ * Copyright 2022 Adobe
+ * All Rights Reserved.
+ */
 -->
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -69,19 +69,23 @@
             </actionGroup>
             <!--Save Product After Assigning Roles and Images-->
             <actionGroup ref="SaveProductFormActionGroup" stepKey="save"/>
+            <!--Clean cache-->
+            <actionGroup ref="CliCacheCleanActionGroup" stepKey="flushCache">
+                <argument name="tags" value=""/>
+            </actionGroup>
             <!-- Go to the admin grid and see the Thumbnail image -->
             <actionGroup ref="SearchForProductOnBackendActionGroup" stepKey="searchProductOnProductGridPage">
                 <argument name="product" value="$$simpleProductOne$$"/>
             </actionGroup>
             <seeElement selector="{{AdminProductGridSection.productThumbnailBySrc('/adobe-thumb')}}" stepKey="seeThumBImageInGrid"/>
-            <!-- Go to the product page on StoreFront and see the Base image -->
-            <amOnPage url="{{StorefrontProductPage.url($simpleProductOne.custom_attributes[url_key]$)}}" stepKey="goToProductPage"/>
-            <waitForPageLoad stepKey="waitForPageLoad"/>
-            <seeElement selector="{{StorefrontProductMediaSection.imageFile('/adobe-base')}}" stepKey="seeBaseImageOnProductPage"/>
             <!-- Go to the category page and see the Small image -->
             <amOnPage url="{{StorefrontCategoryPage.url($testCategory.custom_attributes[url_key]$)}}" stepKey="goToCategoryPage"/>
             <waitForPageLoad stepKey="waitForPageLoadingToFinish"/>
             <seeElement selector="{{StorefrontCategoryProductSection.ProductImageBySrc('/adobe-small')}}" stepKey="seeSmallImageOnCategoryPage"/>
+            <!-- Go to the product page on StoreFront and see the Base image -->
+            <amOnPage url="{{StorefrontProductPage.url($simpleProductOne.custom_attributes[url_key]$)}}" stepKey="goToProductPage"/>
+            <waitForPageLoad stepKey="waitForPageLoad"/>
+            <seeElement selector="{{StorefrontProductMediaSection.imageFile(TestImageAdobe.filename)}}" stepKey="seeBaseImageOnProductPage"/>
         </before>
         <after>
             <deleteData createDataKey="testCategory" stepKey="deleteCategory"/>

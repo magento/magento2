@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -133,7 +133,7 @@ class PathConfigTest extends TestCase
     /**
      * @return array
      */
-    public function urlSchemeProvider()
+    public static function urlSchemeProvider()
     {
         return [
             ['https://base.url', true],

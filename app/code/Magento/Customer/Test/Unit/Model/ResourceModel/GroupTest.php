@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -15,6 +15,7 @@ use Magento\Customer\Model\ResourceModel\Group;
 use Magento\Customer\Model\Vat;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Adapter\AdapterInterface;
+use Magento\Framework\DB\Adapter\Pdo\Mysql;
 use Magento\Framework\DB\Select;
 use Magento\Framework\Model\ResourceModel\Db\Context;
 use Magento\Framework\Model\ResourceModel\Db\ObjectRelationProcessor;
@@ -23,12 +24,15 @@ use Magento\Framework\Model\ResourceModel\Db\VersionControl\Snapshot;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class GroupTest extends TestCase
 {
+    use MockCreationTrait;
+
     /** @var Group */
     protected $groupResourceModel;
 
@@ -68,11 +72,7 @@ class GroupTest extends TestCase
             CollectionFactory::class,
             ['create']
         );
-        $this->groupManagement = $this->getMockBuilder(GroupManagementInterface::class)
-            ->onlyMethods(
-                ['isReadOnly', 'getDefaultGroup', 'getNotLoggedInGroup', 'getLoggedInGroups', 'getAllCustomersGroup']
-            )
-            ->getMockForAbstractClass();
+        $this->groupManagement = $this->createMock(GroupManagementInterface::class);
 
         $this->groupModel = $this->createMock(\Magento\Customer\Model\Group::class);
 
@@ -92,7 +92,7 @@ class GroupTest extends TestCase
         );
         $transactionManagerMock->expects($this->any())
             ->method('start')
-            ->willReturn($this->getMockForAbstractClass(AdapterInterface::class));
+            ->willReturn($this->createStub(AdapterInterface::class));
         $contextMock->expects($this->once())
             ->method('getTransactionManager')
             ->willReturn($transactionManagerMock);
@@ -134,25 +134,35 @@ class GroupTest extends TestCase
         $this->groupModel->expects($this->once())->method('getCode')
             ->willReturn('customer_group_code');
 
-        $dbAdapter = $this->getMockBuilder(AdapterInterface::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['lastInsertId'])
-            ->onlyMethods(
-                [
-                    'describeTable',
-                    'update',
-                    'select'
-                ]
-            )
-            ->getMockForAbstractClass();
-        $dbAdapter->expects($this->any())->method('describeTable')->willReturn(['customer_group_id' => []]);
-        $dbAdapter->expects($this->any())->method('update')->willReturnSelf();
-        $dbAdapter->expects($this->once())->method('lastInsertId')->willReturn($expectedId);
-        $selectMock = $this->getMockBuilder(Select::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $dbAdapter->expects($this->any())->method('select')->willReturn($selectMock);
-        $selectMock->expects($this->any())->method('from')->willReturnSelf();
+        // Using createPartialMockWithReflection with stdClass to add custom methods
+        $dbAdapter = $this->createPartialMockWithReflection(
+            \stdClass::class,
+            [
+                'lastInsertId', 'describeTable', 'update', 'select', 'beginTransaction',
+                'commit', 'rollBack', 'insert', 'fetchRow', 'prepareColumnValue',
+                'quoteIdentifier', 'quote', 'quoteInto', 'insertFromSelect', 'query', 'deleteFromSelect',
+                'getTransactionLevel'
+            ]
+        );
+        $dbAdapter->method('lastInsertId')->willReturn($expectedId);
+        $dbAdapter->method('describeTable')->willReturn(['customer_group_id' => []]);
+        $dbAdapter->method('update')->willReturnSelf();
+        $dbAdapter->method('beginTransaction')->willReturnSelf();
+        $dbAdapter->method('commit')->willReturnSelf();
+        $dbAdapter->method('rollBack')->willReturnSelf();
+        $dbAdapter->method('insert')->willReturnSelf();
+        $dbAdapter->method('fetchRow')->willReturn([]);
+        $dbAdapter->method('prepareColumnValue')->willReturnArgument(2);
+        $dbAdapter->method('quoteIdentifier')->willReturnArgument(0);
+        $dbAdapter->method('quote')->willReturnArgument(0);
+        $dbAdapter->method('quoteInto')->willReturnArgument(0);
+        $dbAdapter->method('insertFromSelect')->willReturnSelf();
+        $dbAdapter->method('query')->willReturnSelf();
+        $dbAdapter->method('deleteFromSelect')->willReturnSelf();
+        $dbAdapter->method('getTransactionLevel')->willReturn(1);
+        $selectMock = $this->createStub(Select::class);
+        $dbAdapter->method('select')->willReturn($selectMock);
+        $selectMock->method('from')->willReturnSelf();
         $this->resource->expects($this->any())->method('getConnection')->willReturn($dbAdapter);
 
         $this->groupResourceModel->save($this->groupModel);
@@ -165,14 +175,13 @@ class GroupTest extends TestCase
      */
     public function testDelete()
     {
-        $dbAdapter = $this->getMockForAbstractClass(AdapterInterface::class);
+        $dbAdapter = $this->createStub(AdapterInterface::class);
         $this->resource->expects($this->any())->method('getConnection')->willReturn($dbAdapter);
 
-        $customer = $this->getMockBuilder(Customer::class)
-            ->addMethods(['getStoreId', 'setGroupId'])
-            ->onlyMethods(['__wakeup', 'load', 'getId', 'save'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $customer = $this->createPartialMockWithReflection(
+            Customer::class,
+            ['getStoreId', 'setGroupId', '__wakeup', 'load', 'getId', 'save']
+        );
         $customerId = 1;
         $customer->expects($this->once())->method('getId')->willReturn($customerId);
         $customer->expects($this->once())->method('load')->with($customerId)->willReturnSelf();
@@ -191,5 +200,159 @@ class GroupTest extends TestCase
         $this->relationProcessorMock->expects($this->once())->method('delete');
         $this->groupModel->expects($this->any())->method('getData')->willReturn(['data' => 'value']);
         $this->groupResourceModel->delete($this->groupModel);
+    }
+
+    /**
+     * Test that _beforeDelete throws exception when trying to delete a default group
+     *
+     * @return void
+     */
+    public function testBeforeDeleteThrowsExceptionWhenGroupUsesAsDefault(): void
+    {
+        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
+        $this->expectExceptionMessage('You can\'t delete group "Default Group".');
+
+        $dbAdapter = $this->getMockForAbstractClass(AdapterInterface::class);
+        $this->resource->expects($this->any())->method('getConnection')->willReturn($dbAdapter);
+
+        // Mock the group to use as default
+        $this->groupModel->expects($this->once())
+            ->method('usesAsDefault')
+            ->willReturn(true);
+        
+        $this->groupModel->expects($this->once())
+            ->method('getCode')
+            ->willReturn('Default Group');
+
+        $this->groupModel->expects($this->any())
+            ->method('getData')
+            ->willReturn(['customer_group_code' => 'Default Group']);
+
+        $this->groupResourceModel->delete($this->groupModel);
+    }
+
+    /**
+     * Test that _beforeDelete allows deletion of non-default groups
+     *
+     * @return void
+     */
+    public function testBeforeDeleteAllowsNonDefaultGroup(): void
+    {
+        $dbAdapter = $this->getMockForAbstractClass(AdapterInterface::class);
+        $this->resource->expects($this->any())->method('getConnection')->willReturn($dbAdapter);
+
+        // Mock the group to NOT use as default
+        $this->groupModel->expects($this->once())
+            ->method('usesAsDefault')
+            ->willReturn(false);
+
+        $this->groupModel->expects($this->any())
+            ->method('getData')
+            ->willReturn(['customer_group_code' => 'Custom Group']);
+
+        // Mock customer collection (for _afterDelete)
+        $customerCollection = $this->createMock(Collection::class);
+        $customerCollection->expects($this->once())
+            ->method('addAttributeToFilter')
+            ->willReturnSelf();
+        $customerCollection->expects($this->once())
+            ->method('load')
+            ->willReturn([]);
+        
+        $this->customersFactory->expects($this->once())
+            ->method('create')
+            ->willReturn($customerCollection);
+
+        $this->relationProcessorMock->expects($this->once())
+            ->method('delete');
+
+        // Should not throw exception
+        $result = $this->groupResourceModel->delete($this->groupModel);
+        
+        $this->assertSame($this->groupResourceModel, $result);
+    }
+
+    /**
+     * Test that _beforeSave correctly truncates multibyte characters
+     *
+     * @dataProvider multibyteCharacterProvider
+     * @param string $input
+     * @param string $expected
+     * @return void
+     */
+    public function testBeforeSaveTruncatesMultibyteCharacters(string $input, string $expected): void
+    {
+        $this->snapshotMock->expects($this->once())->method('isModified')->willReturn(true);
+        $this->snapshotMock->expects($this->once())->method('registerSnapshot')->willReturnSelf();
+
+        $this->groupModel->expects($this->any())->method('getId')->willReturn(1);
+        $this->groupModel->expects($this->any())->method('getData')->willReturn([]);
+        $this->groupModel->expects($this->any())->method('isSaveAllowed')->willReturn(true);
+        $this->groupModel->expects($this->any())->method('getStoredData')->willReturn([]);
+        
+        // Key test: verify that setCode is called with correctly truncated multibyte string
+        $this->groupModel->expects($this->once())
+            ->method('getCode')
+            ->willReturn($input);
+        
+        $this->groupModel->expects($this->once())
+            ->method('setCode')
+            ->with($expected);
+
+        $dbAdapter = $this->getMockBuilder(AdapterInterface::class)
+            ->disableOriginalConstructor()
+            ->onlyMethods(['describeTable', 'update', 'select'])
+            ->getMockForAbstractClass();
+        $dbAdapter->expects($this->any())->method('describeTable')->willReturn(['customer_group_id' => []]);
+        $dbAdapter->expects($this->any())->method('update')->willReturnSelf();
+        
+        $selectMock = $this->getMockBuilder(Select::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $dbAdapter->expects($this->any())->method('select')->willReturn($selectMock);
+        $selectMock->expects($this->any())->method('from')->willReturnSelf();
+        
+        $this->resource->expects($this->any())->method('getConnection')->willReturn($dbAdapter);
+
+        $this->groupResourceModel->save($this->groupModel);
+    }
+
+    /**
+     * Data provider for multibyte character truncation tests
+     *
+     * @return array
+     */
+    public static function multibyteCharacterProvider(): array
+    {
+        return [
+            'ascii_within_limit' => [
+                'input' => str_repeat('a', 32),
+                'expected' => str_repeat('a', 32)
+            ],
+            'ascii_over_limit' => [
+                'input' => str_repeat('a', 40),
+                'expected' => str_repeat('a', 32)
+            ],
+            'multibyte_umlaut_within_limit' => [
+                'input' => str_repeat('ö', 32),
+                'expected' => str_repeat('ö', 32)
+            ],
+            'multibyte_umlaut_over_limit' => [
+                'input' => str_repeat('ö', 40),
+                'expected' => str_repeat('ö', 32)
+            ],
+            'multibyte_chinese_within_limit' => [
+                'input' => str_repeat('中', 32),
+                'expected' => str_repeat('中', 32)
+            ],
+            'multibyte_chinese_over_limit' => [
+                'input' => str_repeat('中', 40),
+                'expected' => str_repeat('中', 32)
+            ],
+            'mixed_multibyte' => [
+                'input' => str_repeat('aö', 20), // 40 characters
+                'expected' => str_repeat('aö', 16) // 32 characters
+            ]
+        ];
     }
 }

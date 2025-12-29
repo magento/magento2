@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -22,11 +22,11 @@ use Magento\Framework\App\Response\Http;
  */
 class Processor
 {
-    const MAGE_ERRORS_LOCAL_XML = 'local.xml';
-    const MAGE_ERRORS_DESIGN_XML = 'design.xml';
-    const DEFAULT_SKIN = 'default';
-    const ERROR_DIR = 'pub/errors';
-    const NUMBER_SYMBOLS_IN_SUBDIR_NAME = 2;
+    public const MAGE_ERRORS_LOCAL_XML = 'local.xml';
+    public const MAGE_ERRORS_DESIGN_XML = 'design.xml';
+    public const DEFAULT_SKIN = 'default';
+    public const ERROR_DIR = 'pub/errors';
+    public const NUMBER_SYMBOLS_IN_SUBDIR_NAME = 2;
 
     /**
      * Page title
@@ -178,9 +178,9 @@ class Processor
      */
     public function __construct(
         Http $response,
-        Json $serializer = null,
-        Escaper $escaper = null,
-        DocumentRoot $documentRoot = null
+        ?Json $serializer = null,
+        ?Escaper $escaper = null,
+        ?DocumentRoot $documentRoot = null
     ) {
         $this->_response = $response;
         $this->_errorDir  = __DIR__ . '/';
@@ -739,7 +739,7 @@ class Processor
      * @param \stdClass $config
      * @return void
      */
-    protected function _setSkin($value, \stdClass $config = null)
+    protected function _setSkin($value, ?\stdClass $config = null)
     {
         if (preg_match('/^[a-z0-9_]+$/i', $value) && is_dir($this->_errorDir . $value)) {
             if (!$config) {

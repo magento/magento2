@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2023 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -82,7 +82,7 @@ class ProductUrlRewriteVisibilityTest extends AbstractUrlRewriteTest
     {
         return [
             [
-                'expected_data' => [
+                'expectedData' => [
                     [
                         'request_path' => 'simple-url-test-product%suffix%',
                         'target_path' => 'catalog/product/view/id/%id%',

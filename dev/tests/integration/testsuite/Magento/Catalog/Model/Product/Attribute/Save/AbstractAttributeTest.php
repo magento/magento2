@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -65,9 +65,9 @@ abstract class AbstractAttributeTest extends TestCase
     public function testRequiredAttribute(string $productSku): void
     {
         $this->expectException(Exception::class);
-        $messageFormat = 'The "%s" attribute value is empty. Set the attribute and try again.';
+        $messageFormat = 'The "%1" attribute value is empty. Set the attribute and try again.';
         $this->expectExceptionMessage(
-            (string)__(sprintf($messageFormat, $this->getAttribute()->getDefaultFrontendLabel()))
+            (string)__($messageFormat, $this->getAttribute()->getDefaultFrontendLabel())
         );
         $this->prepareAttribute(['is_required' => true]);
         $this->unsetAttributeValueAndValidate($productSku);
@@ -95,9 +95,9 @@ abstract class AbstractAttributeTest extends TestCase
     public function testUniqueAttribute(string $firstSku, string $secondSku): void
     {
         $this->expectException(Exception::class);
-        $messageFormat = 'The value of the "%s" attribute isn\'t unique. Set a unique value and try again.';
+        $messageFormat = 'The value of the "%1" attribute isn\'t unique. Set a unique value and try again.';
         $this->expectExceptionMessage(
-            (string)__(sprintf($messageFormat, $this->getAttribute()->getDefaultFrontendLabel()))
+            (string)__($messageFormat, $this->getAttribute()->getDefaultFrontendLabel())
         );
         $this->prepareAttribute(['is_unique' => 1]);
         $product = $this->setAttributeValueAndValidate($firstSku, $this->getDefaultAttributeValue());

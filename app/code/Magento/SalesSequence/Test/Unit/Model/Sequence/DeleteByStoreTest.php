@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -10,6 +10,7 @@ namespace Magento\SalesSequence\Test\Unit\Model\Sequence;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\DB\Select;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\SalesSequence\Model\Meta;
 use Magento\SalesSequence\Model\MetaFactory;
@@ -23,6 +24,8 @@ use PHPUnit\Framework\TestCase;
  */
 class DeleteByStoreTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var DeleteByStore
      */
@@ -60,23 +63,15 @@ class DeleteByStoreTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->connectionMock = $this->getMockForAbstractClass(
-            AdapterInterface::class,
-            [],
-            '',
-            false,
-            false,
-            true,
-            ['delete', 'query']
-        );
+        $this->connectionMock = $this->createMock(AdapterInterface::class);
         $this->resourceSequenceMeta = $this->createPartialMock(
             ResourceMeta::class,
             ['load', 'delete']
         );
-        $this->meta = $this->getMockBuilder(Meta::class)
-            ->addMethods(['getSequenceTable'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->meta = $this->createPartialMockWithReflection(
+            Meta::class,
+            ['getSequenceTable']
+        );
         $this->resourceMock = $this->createMock(ResourceConnection::class);
         $this->select = $this->createMock(Select::class);
         $this->metaFactory = $this->createPartialMock(MetaFactory::class, ['create']);
@@ -96,6 +91,7 @@ class DeleteByStoreTest extends TestCase
     /**
      * @throws \Exception
      * @SuppressWarnings(PHPMD.UnusedLocalVariable)
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function testExecute()
     {

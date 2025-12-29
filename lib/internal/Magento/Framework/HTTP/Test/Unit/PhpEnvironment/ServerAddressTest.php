@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -61,7 +61,7 @@ class ServerAddressTest extends TestCase
     /**
      * @return array
      */
-    public function getServerAddressProvider()
+    public static function getServerAddressProvider()
     {
         return [
             [null, false, false],

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Catalog\Model\Product\Option\Type;
@@ -67,7 +67,7 @@ class TextTest extends TestCase
      *
      * @return array
      */
-    public function optionValueDataProvider()
+    public static function optionValueDataProvider()
     {
         return [
             [self::STUB_OPTION_DATA, 'string string', 'string string'],

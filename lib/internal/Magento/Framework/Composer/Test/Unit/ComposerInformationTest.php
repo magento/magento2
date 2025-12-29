@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -111,7 +111,7 @@ class ComposerInformationTest extends TestCase
     /**
      * @return array
      */
-    public function isMagentoRootDataProvider()
+    public static function isMagentoRootDataProvider()
     {
         return [
             ['magento/magento2ce', true],

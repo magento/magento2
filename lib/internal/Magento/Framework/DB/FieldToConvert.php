@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Framework\DB;
@@ -52,7 +52,7 @@ class FieldToConvert
         $table,
         $identifierField,
         $fieldName,
-        QueryModifierInterface $queryModifier = null
+        ?QueryModifierInterface $queryModifier = null
     ) {
         $this->dataConverterClass = $dataConverter;
         $this->tableName = $table;

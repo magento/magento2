@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -15,6 +15,7 @@ use Magento\Sitemap\Model\ResourceModel\Catalog\Category as CategoryResource;
 use Magento\Sitemap\Model\ResourceModel\Catalog\CategoryFactory;
 use Magento\Sitemap\Model\SitemapItem;
 use Magento\Sitemap\Model\SitemapItemInterfaceFactory;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -33,9 +34,9 @@ class CategoryTest extends TestCase
     }
 
     /**
-     * @dataProvider categoryProvider
      * @param array $categories
      */
+    #[DataProvider('categoryProvider')]
     public function testGetItems(array $categories)
     {
         $configReaderMock = $this->getConfigReaderMock();
@@ -59,7 +60,7 @@ class CategoryTest extends TestCase
     /**
      * @return array
      */
-    public function categoryProvider()
+    public static function categoryProvider()
     {
         return [
             [
@@ -81,10 +82,7 @@ class CategoryTest extends TestCase
      */
     private function getCategoryFactoryMock($returnValue)
     {
-        $cmsPageFactoryMock = $this->getMockBuilder(CategoryFactory::class)
-            ->onlyMethods(['create'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $cmsPageFactoryMock = $this->createPartialMock(CategoryFactory::class, ['create']);
 
         $cmsPageFactoryMock->expects($this->any())
             ->method('create')
@@ -98,10 +96,7 @@ class CategoryTest extends TestCase
      */
     private function getItemFactoryMock()
     {
-        $itemFactoryMock = $this->getMockBuilder(SitemapItemInterfaceFactory::class)
-            ->onlyMethods(['create'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $itemFactoryMock = $this->createPartialMock(SitemapItemInterfaceFactory::class, ['create']);
 
         $itemFactoryMock->expects($this->any())
             ->method('create')
@@ -119,7 +114,7 @@ class CategoryTest extends TestCase
      */
     private function getConfigReaderMock()
     {
-        $configReaderMock = $this->getMockForAbstractClass(ConfigReaderInterface::class);
+        $configReaderMock = $this->createMock(ConfigReaderInterface::class);
         $configReaderMock->expects($this->any())
             ->method('getPriority')
             ->willReturn('1.0');
@@ -136,10 +131,7 @@ class CategoryTest extends TestCase
      */
     private function getCategoryCollectionMock($returnValue)
     {
-        $sitemapCmsPageMock = $this->getMockBuilder(CategoryResource::class)
-            ->onlyMethods(['getCollection'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $sitemapCmsPageMock = $this->createPartialMock(CategoryResource::class, ['getCollection']);
 
         $sitemapCmsPageMock->expects($this->any())
             ->method('getCollection')

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\CustomerImportExport\Model\ResourceModel\Import\Customer;
 
@@ -104,24 +104,76 @@ class Storage
         };
         $offset = 0;
         for ($chunk = $getChuck($offset); !empty($chunk); $offset += $pageSize, $chunk = $getChuck($offset)) {
-            $customerWebsites = array_reduce($chunk, function ($customerWebsiteByEmail, $customer) {
-                $customerWebsiteByEmail[$customer['email']][] = $customer['website_id'];
-                return $customerWebsiteByEmail;
-            }, []);
+            $customerWebsites = $this->buildCustomerWebsitesMap($chunk);
             $chunkSelect = clone $select;
             $chunkSelect->where($customerTableId . '.email IN (?)', array_keys($customerWebsites));
             $customers = $collection->getConnection()->fetchAll($chunkSelect);
             foreach ($customers as $customer) {
-                $this->addCustomerByArray($customer);
-                if ($this->configShare->isGlobalScope() &&
-                    !in_array((int) $customer['website_id'], $customerWebsites[$customer['email']], true)
-                ) {
-                    foreach ($customerWebsites[$customer['email']] as $websiteId) {
-                        $customer['website_id'] = $websiteId;
-                        $this->addCustomerByArray($customer);
-                    }
-                }
+                $this->processCustomerData($customer, $customerWebsites);
             }
+        }
+    }
+
+    /**
+     * Build customer websites map from chunk of customer identifiers.
+     *
+     * @param array $chunk
+     * @return array
+     */
+    private function buildCustomerWebsitesMap(array $chunk): array
+    {
+        return array_reduce($chunk, function ($customerWebsiteByEmail, $customer) {
+            $email = isset($customer['email']) ? mb_strtolower(trim($customer['email'])) : '';
+            $customerWebsiteByEmail[$email][] = $customer['website_id'];
+            return $customerWebsiteByEmail;
+        }, []);
+    }
+
+    /**
+     * Process customer data from database and handle global scope logic.
+     *
+     * @param array $customer
+     * @param array $customerWebsites
+     * @return void
+     */
+    private function processCustomerData(array $customer, array $customerWebsites): void
+    {
+        $email = isset($customer['email']) ? mb_strtolower(trim($customer['email'])) : '';
+        $customer['email'] = $email;
+        $this->addCustomerByArray($customer);
+
+        if ($this->shouldProcessGlobalScope($email, $customer, $customerWebsites)) {
+            $this->processGlobalScopeCustomer($customer, $customerWebsites[$email]);
+        }
+    }
+
+    /**
+     * Check if customer should be processed for global scope.
+     *
+     * @param string $email
+     * @param array $customer
+     * @param array $customerWebsites
+     * @return bool
+     */
+    private function shouldProcessGlobalScope(string $email, array $customer, array $customerWebsites): bool
+    {
+        return $this->configShare->isGlobalScope()
+            && isset($customerWebsites[$email])
+            && !in_array((int) $customer['website_id'], $customerWebsites[$email], true);
+    }
+
+    /**
+     * Process customer for all websites in global scope.
+     *
+     * @param array $customer
+     * @param array $websiteIds
+     * @return void
+     */
+    private function processGlobalScopeCustomer(array $customer, array $websiteIds): void
+    {
+        foreach ($websiteIds as $websiteId) {
+            $customer['website_id'] = $websiteId;
+            $this->addCustomerByArray($customer);
         }
     }
 

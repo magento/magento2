@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -77,22 +77,23 @@ class ExportTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $this->exportConfigMock = $this->getMockForAbstractClass(ConfigInterface::class);
+        $this->exportConfigMock = $this->createMock(ConfigInterface::class);
         $this->exportConfigMock->method('getEntities')
             ->willReturn($this->entities);
         $this->exportConfigMock->method('getFileFormats')
             ->willReturn($this->fileFormats);
 
-        $this->exportAbstractEntityMock = $this->getMockBuilder(AbstractEntity::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->exportAbstractEntityMock = $this->createPartialMock(
+            AbstractEntity::class,
+            ['export', 'getEntityTypeCode', 'exportItem', '_getHeaderColumns', '_getEntityCollection']
+        );
 
-        $this->exportAdapterMock = $this->getMockBuilder(AbstractAdapter::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['getFileExtension'])
-            ->getMockForAbstractClass();
+        $this->exportAdapterMock = $this->createPartialMock(
+            AbstractAdapter::class,
+            ['getFileExtension', 'writeRow']
+        );
 
-        $logger = $this->getMockForAbstractClass(LoggerInterface::class);
+        $logger = $this->createMock(LoggerInterface::class);
         $filesystem = $this->createMock(Filesystem::class);
         $entityFactory = $this->createMock(Factory::class);
         $entityFactory->method('create')
@@ -100,7 +101,7 @@ class ExportTest extends TestCase
         $exportAdapterFac = $this->createMock(Export\Adapter\Factory::class);
         $exportAdapterFac->method('create')
             ->willReturn($this->exportAdapterMock);
-        $this->localeEmulator = $this->getMockForAbstractClass(LocaleEmulatorInterface::class);
+        $this->localeEmulator = $this->createMock(LocaleEmulatorInterface::class);
 
         $this->model = new Export(
             $logger,

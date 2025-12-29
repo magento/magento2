@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -72,10 +72,10 @@ class Date extends AbstractBaseAttributeData
             parent::getUpdateProvider(),
             [
                 "{$frontendInput}_other_attribute_code" => [
-                    'post_data' => [
+                    'postData' => [
                         'attribute_code' => 'text_attribute_update',
                     ],
-                    'expected_data' => [
+                    'expectedData' => [
                         'attribute_code' => 'date_attribute',
                     ],
                 ],
@@ -94,10 +94,10 @@ class Date extends AbstractBaseAttributeData
             parent::getUpdateProviderWithErrorMessage(),
             [
                 "{$frontendInput}_wrong_default_value" => [
-                    'post_data' => [
+                    'postData' => [
                         'default_value_date' => '//2019/12/12',
                     ],
-                    'error_message' => (string)__('The default date is invalid. Verify the date and try again.'),
+                    'errorMessage' => (string)__('The default date is invalid. Verify the date and try again.'),
                 ],
             ]
         );

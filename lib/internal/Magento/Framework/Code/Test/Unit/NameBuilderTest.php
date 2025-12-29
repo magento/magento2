@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework\Code\Test\Unit;
 
@@ -37,7 +37,7 @@ class NameBuilderTest extends TestCase
     /**
      * @return array
      */
-    public function buildClassNameDataProvider()
+    public static function buildClassNameDataProvider()
     {
         return [
             [['Checkout', 'Controller', 'Index'], 'Checkout\Controller\Index'],

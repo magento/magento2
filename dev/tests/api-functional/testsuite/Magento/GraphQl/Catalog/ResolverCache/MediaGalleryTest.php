@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2023 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -427,7 +427,7 @@ class MediaGalleryTest extends ResolverCacheAbstract
                     $imageContentFactory = $objectManager->get(ImageContentInterfaceFactory::class);
                     $imageContent = $imageContentFactory->create();
                     $imageContent->setBase64EncodedData(
-                        // black 1x1 image
+                    // black 1x1 image
                         'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNk+A8AAQUBAScY42YAAAAASUVORK5CYII='
                     );
                     $imageContent->setType("image/png");

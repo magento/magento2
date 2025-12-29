@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -32,14 +32,18 @@ class AbstractEavTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->_model = $this->getMockForAbstractClass(
+        $this->_model = $this->createPartialMock(
             AbstractEav::class,
-            [],
-            '',
-            false,
-            true,
-            true,
-            ['_getExportAttributeCodes', 'getAttributeCollection', 'getAttributeOptions', '__wakeup']
+            [
+                '_getExportAttributeCodes',
+                'getAttributeCollection',
+                'getAttributeOptions',
+                'export',
+                'exportItem',
+                'getEntityTypeCode',
+                '_getHeaderColumns',
+                '_getEntityCollection'
+            ]
         );
 
         $this->_model->expects(
@@ -85,14 +89,7 @@ class AbstractEavTest extends TestCase
         $testAttributeValue = 'value';
         $testAttributeOptions = ['value' => 'option'];
         /** @var $testAttribute \Magento\Eav\Model\Entity\Attribute */
-        $testAttribute = $this->getMockForAbstractClass(
-            AbstractAttribute::class,
-            [],
-            '',
-            false,
-            false,
-            false
-        );
+        $testAttribute = $this->createPartialMock(AbstractAttribute::class, []);
         $testAttribute->setAttributeCode($testAttributeCode);
 
         $this->_model->expects(
@@ -112,15 +109,7 @@ class AbstractEavTest extends TestCase
         );
 
         /** @var AbstractModel|MockObject $item */
-        $item = $this->getMockForAbstractClass(
-            AbstractModel::class,
-            [],
-            '',
-            false,
-            true,
-            true,
-            ['getData', '__wakeup']
-        );
+        $item = $this->createPartialMock(AbstractModel::class, ['getData']);
         $item->expects($this->any())->method('getData')->willReturn($testAttributeValue);
 
         $method = new \ReflectionMethod($this->_model, '_initAttributeValues');

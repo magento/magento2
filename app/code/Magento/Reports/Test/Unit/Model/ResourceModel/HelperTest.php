@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -13,6 +13,7 @@ use Magento\Framework\DB\Select;
 use Magento\Reports\Model\ResourceModel\Helper;
 use Magento\Store\Api\Data\StoreInterface;
 use Magento\Store\Model\StoreManagerInterface;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -77,9 +78,9 @@ class HelperTest extends TestCase
     /**
      * @param string $type
      * @param array $result
-     * @dataProvider typesDataProvider
      * @return void
      */
+    #[DataProvider('typesDataProvider')]
     public function testUpdateReportRatingPos($type, $result)
     {
         $mainTable = 'mainTable';
@@ -125,7 +126,7 @@ class HelperTest extends TestCase
     /**
      * @return array
      */
-    public function typesDataProvider()
+    public static function typesDataProvider()
     {
         $mResult = ['period', 'store_id', 'product_id', 'product_name', 'product_price', 'column', 'rating_pos'];
         $dResult = ['period', 'store_id', 'product_id', 'product_name', 'product_price', 'id', 'column', 'rating_pos'];

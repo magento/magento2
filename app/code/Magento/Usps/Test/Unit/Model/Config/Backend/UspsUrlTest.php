@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2023 Adobe
+ * All Rights Reserved.
  */
 
 declare(strict_types=1);
@@ -19,6 +19,7 @@ use Magento\Framework\Registry;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\Validator\Url;
 use Magento\Usps\Model\Config\Backend\UspsUrl;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -54,7 +55,7 @@ class UspsUrlTest extends TestCase
         $this->url = $this->createMock(Url::class);
         $resource = $this->createMock(AbstractResource::class);
         $resourceCollection = $this->createMock(AbstractDb::class);
-        $eventManagerMock = $this->getMockForAbstractClass(ManagerInterface::class);
+        $eventManagerMock = $this->createMock(ManagerInterface::class);
 
         $eventManagerMock->expects($this->any())->method('dispatch');
         $this->contextMock->expects($this->any())->method('getEventDispatcher')->willReturn($eventManagerMock);
@@ -74,10 +75,10 @@ class UspsUrlTest extends TestCase
     }
 
     /**
-     * @dataProvider validDataProvider
      * @param string $data The valid data
      * @throws ValidatorException
      */
+    #[DataProvider('validDataProvider')]
     public function testBeforeSave(string $data = ""): void
     {
         $this->url->expects($this->any())->method('isValid')->willReturn(true);
@@ -87,9 +88,9 @@ class UspsUrlTest extends TestCase
     }
 
     /**
-     * @dataProvider invalidDataProvider
      * @param string $data The invalid data
      */
+    #[DataProvider('invalidDataProvider')]
     public function testBeforeSaveErrors(string $data): void
     {
         $this->url->expects($this->any())->method('isValid')->willReturn(true);
@@ -99,7 +100,7 @@ class UspsUrlTest extends TestCase
         $this->urlConfig->beforeSave();
     }
 
-    public function validDataProvider(): array
+    public static function validDataProvider(): array
     {
         return [
             [],
@@ -113,7 +114,7 @@ class UspsUrlTest extends TestCase
     /**
      * @return string[][]
      */
-    public function invalidDataProvider(): array
+    public static function invalidDataProvider(): array
     {
         return [
             ['https://shippingapis.com.fake.com'],

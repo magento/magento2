@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -94,7 +94,7 @@ class ProductVariationsBuilderTest extends TestCase
         $this->product->expects($this->once())->method('getSku')->willReturn('simple-sku');
         $this->product->expects($this->once())->method('getPrice')->willReturn(10);
 
-        $attribute = $this->getMockForAbstractClass(AttributeInterface::class);
+        $attribute = $this->createMock(AttributeInterface::class);
         $attribute->expects($this->once())
             ->method('setAttributeCode')
             ->with('sort_order')

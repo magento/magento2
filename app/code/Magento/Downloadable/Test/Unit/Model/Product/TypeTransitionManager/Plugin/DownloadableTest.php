@@ -1,12 +1,13 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Downloadable\Test\Unit\Model\Product\TypeTransitionManager\Plugin;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\Product\Edit\WeightResolver;
 use Magento\Catalog\Model\Product\TypeTransitionManager;
@@ -67,15 +68,15 @@ class DownloadableTest extends TestCase
 
     /**
      * @param string $currentTypeId
-     * @dataProvider compatibleTypeDataProvider
      */
+    #[DataProvider('compatibleTypeDataProvider')]
     public function testAroundProcessProductWithProductThatCanBeTransformedToDownloadable($currentTypeId)
     {
         $this->requestMock->expects($this->any())
             ->method('getPost')
             ->with('downloadable')
             ->willReturn(['link' => [['is_delete' => '']]]);
-        $this->weightResolver->expects($this->any())->method('resolveProductHasWeight')->willReturn(false);
+        $this->weightResolver->method('resolveProductHasWeight')->willReturn(false);
         $this->productMock->expects($this->once())->method('getTypeId')->willReturn($currentTypeId);
         $this->productMock->expects($this->once())
             ->method('setTypeId')
@@ -87,7 +88,7 @@ class DownloadableTest extends TestCase
     /**
      * @return array
      */
-    public function compatibleTypeDataProvider()
+    public static function compatibleTypeDataProvider()
     {
         return [
             [\Magento\Catalog\Model\Product\Type::TYPE_SIMPLE],
@@ -100,8 +101,8 @@ class DownloadableTest extends TestCase
      * @param bool $hasWeight
      * @param string $currentTypeId
      * @param string|null $downloadableData
-     * @dataProvider productThatCannotBeTransformedToDownloadableDataProvider
      */
+    #[DataProvider('productThatCannotBeTransformedToDownloadableDataProvider')]
     public function testAroundProcessProductWithProductThatCannotBeTransformedToDownloadable(
         $hasWeight,
         $currentTypeId,
@@ -111,7 +112,7 @@ class DownloadableTest extends TestCase
             ->method('getPost')
             ->with('downloadable')
             ->willReturn($downloadableData);
-        $this->weightResolver->expects($this->any())->method('resolveProductHasWeight')->willReturn($hasWeight);
+        $this->weightResolver->method('resolveProductHasWeight')->willReturn($hasWeight);
         $this->productMock->expects($this->once())->method('getTypeId')->willReturn($currentTypeId);
         $this->productMock->expects($this->never())->method('setTypeId');
 
@@ -121,7 +122,7 @@ class DownloadableTest extends TestCase
     /**
      * @return array
      */
-    public function productThatCannotBeTransformedToDownloadableDataProvider()
+    public static function productThatCannotBeTransformedToDownloadableDataProvider()
     {
         return [
             [false, 'custom_product_type', ['link' => [['is_delete' => '']]]],

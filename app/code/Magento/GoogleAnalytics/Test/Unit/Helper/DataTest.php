@@ -1,8 +1,8 @@
 <?php
 
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 
 declare(strict_types=1);
@@ -13,6 +13,7 @@ use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\GoogleAnalytics\Helper\Data as HelperData;
 use Magento\Store\Model\ScopeInterface;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -36,10 +37,10 @@ class DataTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->scopeConfigMock = $this->getMockBuilder(ScopeConfigInterface::class)
-            ->onlyMethods(['getValue', 'isSetFlag'])
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->scopeConfigMock = $this->createPartialMock(
+            ScopeConfigInterface::class,
+            ['getValue', 'isSetFlag']
+        );
 
         $objectManager = new ObjectManager($this);
         $this->helper = $objectManager->getObject(
@@ -57,8 +58,8 @@ class DataTest extends TestCase
      * @param bool $flag
      * @param bool $result
      * @return void
-     * @dataProvider gaDataProvider
      */
+    #[DataProvider('gaDataProvider')]
     public function testIsGoogleAnalyticsAvailable($value, $flag, $result): void
     {
         $this->scopeConfigMock->expects($this->once())
@@ -79,7 +80,7 @@ class DataTest extends TestCase
      *
      * @return array
      */
-    public function gaDataProvider(): array
+    public static function gaDataProvider(): array
     {
         return [
             ['GA-XXXX', true, true],
@@ -94,8 +95,8 @@ class DataTest extends TestCase
      * @param string $value
      * @param bool $result
      * @return void
-     * @dataProvider yesNoDataProvider
      */
+    #[DataProvider('yesNoDataProvider')]
     public function testIsAnonymizedIpActive($value, $result): void
     {
         $this->scopeConfigMock->expects($this->once())
@@ -110,11 +111,11 @@ class DataTest extends TestCase
      *
      * @return array
      */
-    public function yesNoDataProvider(): array
+    public static function yesNoDataProvider(): array
     {
         return [
-            ['Yes' => '1', 'result' => true],
-            ['No' => '0', 'result' => false]
+            ['value' => '1', 'result' => true],
+            ['value' => '0', 'result' => false]
         ];
     }
 }

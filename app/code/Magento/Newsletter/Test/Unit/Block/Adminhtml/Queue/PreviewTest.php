@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -15,6 +15,8 @@ use Magento\Framework\App\RequestInterface;
 use Magento\Framework\App\State;
 use Magento\Framework\Escaper;
 use Magento\Framework\Event\ManagerInterface;
+use Magento\Framework\Filter\Input\MaliciousCode;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Newsletter\Block\Adminhtml\Queue\Preview as QueuePreview;
 use Magento\Newsletter\Model\Queue;
@@ -34,6 +36,8 @@ use PHPUnit\Framework\TestCase;
  */
 class PreviewTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var ObjectManager
      */
@@ -69,13 +73,18 @@ class PreviewTest extends TestCase
      */
     private $preview;
 
+    /**
+     * @var MaliciousCode|MockObject
+     */
+    protected $maliciousCode;
+
     protected function setUp(): void
     {
         $context = $this->createMock(Context::class);
-        $eventManager = $this->getMockForAbstractClass(ManagerInterface::class);
+        $eventManager = $this->createMock(ManagerInterface::class);
         $context->expects($this->once())->method('getEventManager')
             ->willReturn($eventManager);
-        $scopeConfig = $this->getMockForAbstractClass(ScopeConfigInterface::class);
+        $scopeConfig = $this->createMock(ScopeConfigInterface::class);
         $context->expects($this->once())->method('getScopeConfig')
             ->willReturn($scopeConfig);
         $this->requestMock = $this->createMock(Http::class);
@@ -91,31 +100,17 @@ class PreviewTest extends TestCase
         $context->expects($this->once())->method('getAppState')
             ->willReturn($appState);
 
-        $backendSession = $this->getMockBuilder(Session::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $backendSession = $this->createMock(Session::class);
 
         $context->expects($this->once())
             ->method('getBackendSession')
             ->willReturn($backendSession);
 
         $templateFactory = $this->createPartialMock(TemplateFactory::class, ['create']);
-        $this->templateMock = $this->getMockBuilder(Template::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(
-                [
-                    'isPlain',
-                    'setId',
-                ]
-            )
-            ->addMethods(
-                [
-                    'setTemplateType',
-                    'setTemplateText',
-                    'setTemplateStyles',
-                ]
-            )
-            ->getMock();
+        $this->templateMock = $this->createPartialMockWithReflection(
+            Template::class,
+            ['isPlain', 'setId', 'setTemplateType', 'setTemplateText', 'setTemplateStyles']
+        );
 
         $templateFactory->expects($this->once())
             ->method('create')
@@ -128,26 +123,14 @@ class PreviewTest extends TestCase
             ->willReturn($this->subscriberMock);
 
         $queueFactory = $this->createPartialMock(QueueFactory::class, ['create']);
-        $this->queueMock = $this->getMockBuilder(Queue::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(
-                [
-                    'load',
-                ]
-            )
-            ->addMethods(
-                [
-                    'getTemplateId',
-                    'getNewsletterType',
-                    'getNewsletterText',
-                    'getNewsletterStyles',
-                ]
-            )
-            ->getMock();
+        $this->queueMock = $this->createPartialMockWithReflection(
+            Queue::class,
+            ['load', 'getTemplateId', 'getNewsletterType', 'getNewsletterText', 'getNewsletterStyles']
+        );
         $queueFactory->expects($this->any())
             ->method('create')
             ->willReturn($this->queueMock);
-
+        $this->maliciousCode = $this->createPartialMock(MaliciousCode::class, ['filter']);
         $this->objectManager = new ObjectManager($this);
 
         $escaper = $this->objectManager->getObject(Escaper::class);
@@ -155,6 +138,7 @@ class PreviewTest extends TestCase
             ->method('getEscaper')
             ->willReturn($escaper);
 
+        $this->objectManager->prepareObjectManager();
         $this->preview = $this->objectManager->getObject(
             QueuePreview::class,
             [
@@ -162,6 +146,7 @@ class PreviewTest extends TestCase
                 'templateFactory' => $templateFactory,
                 'subscriberFactory' => $subscriberFactory,
                 'queueFactory' => $queueFactory,
+                'maliciousCode' => $this->maliciousCode,
             ]
         );
     }
@@ -173,6 +158,9 @@ class PreviewTest extends TestCase
         $this->storeManagerMock->expects($this->once())
             ->method('getDefaultStoreView')
             ->willReturn($store);
+        $this->maliciousCode->expects($this->once())
+            ->method('filter')
+            ->willReturn('');
         $result = $this->preview->toHtml();
         $this->assertEquals('', $result);
     }
@@ -210,7 +198,10 @@ class PreviewTest extends TestCase
         $this->storeManagerMock->expects($this->once())
             ->method('getStores')
             ->willReturn([0 => $store]);
+        $this->maliciousCode->expects($this->once())
+            ->method('filter')
+            ->willReturn($newsletterText);
         $result = $this->preview->toHtml();
-        $this->assertEquals('<pre></pre>', $result);
+        $this->assertEquals('<pre>'. $newsletterText .'</pre>', $result);
     }
 }

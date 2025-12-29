@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -263,15 +263,15 @@ class QuantityValidatorTest extends TestCase
         return [
             [
                 'quantity' => 1,
-                'error_regexp' => '/The fewest you may purchase is 500/'
+                'errorMessageRegexp' => '/The fewest you may purchase is 500/'
             ],
             [
                 'quantity' => 501,
-                'error_regexp' => $qtyRegexp
+                'errorMessageRegexp' => $qtyRegexp
             ],
             [
                 'quantity' => 1000,
-                'error_regexp' => ''
+                'errorMessageRegexp' => ''
             ]
         ];
     }

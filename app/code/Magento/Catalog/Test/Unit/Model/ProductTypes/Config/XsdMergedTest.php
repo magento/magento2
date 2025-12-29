@@ -1,12 +1,13 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Catalog\Test\Unit\Model\ProductTypes\Config;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\Framework\Config\Dom\UrnResolver;
 use Magento\Framework\TestFramework\Unit\Utility\XsdValidator;
 use PHPUnit\Framework\TestCase;
@@ -39,8 +40,8 @@ class XsdMergedTest extends TestCase
     /**
      * @param string $xmlString
      * @param array $expectedError
-     * @dataProvider schemaCorrectlyIdentifiesInvalidXmlDataProvider
      */
+    #[DataProvider('schemaCorrectlyIdentifiesInvalidXmlDataProvider')]
     public function testSchemaCorrectlyIdentifiesInvalidXml($xmlString, $expectedError)
     {
         $actualError = $this->_xsdValidator->validate($this->_xsdSchema, $xmlString);
@@ -58,7 +59,7 @@ class XsdMergedTest extends TestCase
     /**
      * Data provider with invalid xml array according to product_types_merged.xsd
      */
-    public function schemaCorrectlyIdentifiesInvalidXmlDataProvider()
+    public static function schemaCorrectlyIdentifiesInvalidXmlDataProvider()
     {
         return include __DIR__ . '/_files/invalidProductTypesMergedXmlArray.php';
     }

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework\ObjectManager\Definition;
 
@@ -23,7 +23,7 @@ class Runtime implements \Magento\Framework\ObjectManager\DefinitionInterface
     /**
      * @param \Magento\Framework\Code\Reader\ClassReaderInterface $reader
      */
-    public function __construct(\Magento\Framework\Code\Reader\ClassReaderInterface $reader = null)
+    public function __construct(?\Magento\Framework\Code\Reader\ClassReaderInterface $reader = null)
     {
         $this->_reader = $reader ?: new \Magento\Framework\Code\Reader\ClassReader();
     }

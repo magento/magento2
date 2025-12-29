@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -15,6 +15,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHe
 use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\StoreManager;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 class AbstractElementTest extends TestCase
@@ -41,21 +42,20 @@ class AbstractElementTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->elementVisibilityMock = $this->getMockBuilder(ElementVisibilityInterface::class)
-            ->getMockForAbstractClass();
+        $this->elementVisibilityMock = $this->createMock(ElementVisibilityInterface::class);
         $this->storeManagerMock = $this->createMock(StoreManager::class);
         $this->moduleManagerMock = $this->createPartialMock(
             Manager::class,
             ['isOutputEnabled']
         );
 
-        $this->_model = $this->getMockForAbstractClass(
-            AbstractElement::class,
-            [
+        $this->_model = $this->getMockBuilder(AbstractElement::class)
+            ->setConstructorArgs([
                 'storeManager' => $this->storeManagerMock,
                 'moduleManager' => $this->moduleManagerMock,
-            ]
-        );
+            ])
+            ->onlyMethods([])
+            ->getMock();
 
         $objectManagerHelper = new ObjectManagerHelper($this);
         $objectManagerHelper->setBackwardCompatibleProperty(
@@ -141,8 +141,8 @@ class AbstractElementTest extends TestCase
     /**
      * @param array $settings
      * @param string $scope
-     * @dataProvider isVisibleReturnsTrueForProperScopesDataProvider
      */
+    #[DataProvider('isVisibleReturnsTrueForProperScopesDataProvider')]
     public function testIsVisibleReturnsTrueForProperScopes($settings, $scope)
     {
         $this->_model->setData($settings, $scope);
@@ -152,7 +152,7 @@ class AbstractElementTest extends TestCase
     /**
      * @return array
      */
-    public function isVisibleReturnsTrueForProperScopesDataProvider()
+    public static function isVisibleReturnsTrueForProperScopesDataProvider()
     {
         return [
             [
@@ -173,8 +173,8 @@ class AbstractElementTest extends TestCase
     /**
      * @param array $settings
      * @param string $scope
-     * @dataProvider isVisibleReturnsFalseForNonProperScopesDataProvider
      */
+    #[DataProvider('isVisibleReturnsFalseForNonProperScopesDataProvider')]
     public function testIsVisibleReturnsFalseForNonProperScopes($settings, $scope)
     {
         $this->_model->setData($settings, $scope);
@@ -184,7 +184,7 @@ class AbstractElementTest extends TestCase
     /**
      * @return array
      */
-    public function isVisibleReturnsFalseForNonProperScopesDataProvider()
+    public static function isVisibleReturnsFalseForNonProperScopesDataProvider()
     {
         return [
             [

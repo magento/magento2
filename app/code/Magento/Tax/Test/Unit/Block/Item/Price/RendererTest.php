@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -9,18 +9,22 @@ namespace Magento\Tax\Test\Unit\Block\Item\Price;
 
 use Magento\Framework\Pricing\PriceCurrencyInterface;
 use Magento\Framework\Pricing\Render;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Sales\Model\Order;
 use Magento\Sales\Model\Order\Invoice\Item as InvoiceItem;
 use Magento\Sales\Model\Order\Item;
 use Magento\Store\Model\Store;
+use Magento\Quote\Model\Quote\Item as QuoteItem;
 use Magento\Tax\Block\Item\Price\Renderer;
 use Magento\Tax\Helper\Data;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 class RendererTest extends TestCase
 {
+    use MockCreationTrait;
     /**
      * @var Renderer
      */
@@ -90,9 +94,9 @@ class RendererTest extends TestCase
      *
      * @param string $zone
      * @param string $methodName
-     * @dataProvider displayPriceInclTaxDataProvider
      */
-    public function testDisplayPriceInclTax($zone, $methodName)
+    #[DataProvider('displayPriceInclTaxDataProvider')]
+    public function testDisplayPriceInclTax(string $zone, string $methodName): void
     {
         $storeId = 1;
         $flag = true;
@@ -111,24 +115,24 @@ class RendererTest extends TestCase
     /**
      * @return array
      */
-    public function displayPriceInclTaxDataProvider()
+    public static function displayPriceInclTaxDataProvider()
     {
         $data = [
             'cart' => [
                 'zone' => Render::ZONE_CART,
-                'method_name' => 'displayCartPriceInclTax',
+                'methodName' => 'displayCartPriceInclTax',
             ],
             'anythingelse' => [
                 'zone' => 'anythingelse',
-                'method_name' => 'displayCartPriceInclTax',
+                'methodName' => 'displayCartPriceInclTax',
             ],
             'sale' => [
                 'zone' => Render::ZONE_SALES,
-                'method_name' => 'displaySalesPriceInclTax',
+                'methodName' => 'displaySalesPriceInclTax',
             ],
             'email' => [
                 'zone' => Render::ZONE_EMAIL,
-                'method_name' => 'displaySalesPriceInclTax',
+                'methodName' => 'displaySalesPriceInclTax',
             ],
         ];
 
@@ -140,9 +144,9 @@ class RendererTest extends TestCase
      *
      * @param string $zone
      * @param string $methodName
-     * @dataProvider displayPriceExclTaxDataProvider
      */
-    public function testDisplayPriceExclTax($zone, $methodName)
+    #[DataProvider('displayPriceExclTaxDataProvider')]
+    public function testDisplayPriceExclTax(string $zone, string $methodName): void
     {
         $storeId = 1;
         $flag = true;
@@ -161,24 +165,24 @@ class RendererTest extends TestCase
     /**
      * @return array
      */
-    public function displayPriceExclTaxDataProvider()
+    public static function displayPriceExclTaxDataProvider()
     {
         $data = [
             'cart' => [
                 'zone' => Render::ZONE_CART,
-                'method_name' => 'displayCartPriceExclTax',
+                'methodName' => 'displayCartPriceExclTax',
             ],
             'anythingelse' => [
                 'zone' => 'anythingelse',
-                'method_name' => 'displayCartPriceExclTax',
+                'methodName' => 'displayCartPriceExclTax',
             ],
             'sale' => [
                 'zone' => Render::ZONE_SALES,
-                'method_name' => 'displaySalesPriceExclTax',
+                'methodName' => 'displaySalesPriceExclTax',
             ],
             'email' => [
                 'zone' => Render::ZONE_EMAIL,
-                'method_name' => 'displaySalesPriceExclTax',
+                'methodName' => 'displaySalesPriceExclTax',
             ],
         ];
 
@@ -190,9 +194,9 @@ class RendererTest extends TestCase
      *
      * @param string $zone
      * @param string $methodName
-     * @dataProvider displayBothPricesDataProvider
      */
-    public function testDisplayBothPrices($zone, $methodName)
+    #[DataProvider('displayBothPricesDataProvider')]
+    public function testDisplayBothPrices(string $zone, string $methodName): void
     {
         $storeId = 1;
         $flag = true;
@@ -211,47 +215,46 @@ class RendererTest extends TestCase
     /**
      * @return array
      */
-    public function displayBothPricesDataProvider()
+    public static function displayBothPricesDataProvider()
     {
         $data = [
             'cart' => [
                 'zone' => Render::ZONE_CART,
-                'method_name' => 'displayCartBothPrices',
+                'methodName' => 'displayCartBothPrices',
             ],
             'anythingelse' => [
                 'zone' => 'anythingelse',
-                'method_name' => 'displayCartBothPrices',
+                'methodName' => 'displayCartBothPrices',
             ],
             'sale' => [
                 'zone' => Render::ZONE_SALES,
-                'method_name' => 'displaySalesBothPrices',
+                'methodName' => 'displaySalesBothPrices',
             ],
             'email' => [
                 'zone' => Render::ZONE_EMAIL,
-                'method_name' => 'displaySalesBothPrices',
+                'methodName' => 'displaySalesBothPrices',
             ],
         ];
 
         return $data;
     }
 
-    public function testFormatPriceQuoteItem()
+    public function testFormatPriceQuoteItem(): void
     {
         $price = 3.554;
         $formattedPrice = "$3.55";
 
-        $storeMock = $this->getMockBuilder(Store::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['formatPrice'])
-            ->onlyMethods(['__wakeup'])
-            ->getMock();
+        $storeMock = $this->createPartialMockWithReflection(
+            Store::class,
+            ['formatPrice', '__wakeup']
+        );
 
         $this->priceCurrency->expects($this->once())
             ->method('format')
             ->with($price, true)
             ->willReturn($formattedPrice);
 
-        $itemMock = $this->getMockBuilder(\Magento\Quote\Model\Quote\Item::class)
+        $itemMock = $this->getMockBuilder(QuoteItem::class)
             ->disableOriginalConstructor()
             ->onlyMethods(['getStore', '__wakeup'])
             ->getMock();
@@ -264,7 +267,7 @@ class RendererTest extends TestCase
         $this->assertEquals($formattedPrice, $this->renderer->formatPrice($price));
     }
 
-    public function testFormatPriceOrderItem()
+    public function testFormatPriceOrderItem(): void
     {
         $price = 3.554;
         $formattedPrice = "$3.55";
@@ -291,7 +294,7 @@ class RendererTest extends TestCase
         $this->assertEquals($formattedPrice, $this->renderer->formatPrice($price));
     }
 
-    public function testFormatPriceInvoiceItem()
+    public function testFormatPriceInvoiceItem(): void
     {
         $price = 3.554;
         $formattedPrice = "$3.55";
@@ -315,11 +318,10 @@ class RendererTest extends TestCase
             ->method('getOrder')
             ->willReturn($orderMock);
 
-        $invoiceItemMock = $this->getMockBuilder(InvoiceItem::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['getStoreId'])
-            ->onlyMethods(['getOrderItem', '__wakeup'])
-            ->getMock();
+        $invoiceItemMock = $this->createPartialMockWithReflection(
+            InvoiceItem::class,
+            ['getStoreId', 'getOrderItem', '__wakeup']
+        );
 
         $invoiceItemMock->expects($this->once())
             ->method('getOrderItem')
@@ -329,20 +331,19 @@ class RendererTest extends TestCase
         $this->assertEquals($formattedPrice, $this->renderer->formatPrice($price));
     }
 
-    public function testGetZone()
+    public function testGetZone(): void
     {
         $this->assertEquals(Render::ZONE_CART, $this->renderer->getZone());
     }
 
-    public function testGetStoreId()
+    public function testGetStoreId(): void
     {
         $storeId = 'default';
 
-        $itemMock = $this->getMockBuilder(\Magento\Quote\Model\Quote\Item::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['getStoreId'])
-            ->onlyMethods(['__wakeup'])
-            ->getMock();
+        $itemMock = $this->createPartialMockWithReflection(
+            QuoteItem::class,
+            ['getStoreId', '__wakeup']
+        );
 
         $itemMock->expects($this->once())
             ->method('getStoreId')
@@ -352,25 +353,25 @@ class RendererTest extends TestCase
         $this->assertEquals($storeId, $this->renderer->getStoreId());
     }
 
-    public function testGetItemDisplayPriceExclTaxQuoteItem()
+    public function testGetItemDisplayPriceExclTaxQuoteItem(): void
     {
         $price = 10;
 
-        /** @var \Magento\Quote\Model\Quote\Item|MockObject $quoteItemMock */
-        $quoteItemMock = $this->getMockBuilder(\Magento\Quote\Model\Quote\Item::class)
+        /** @var QuoteItem|MockObject $quoteItemMock */
+        $quoteItemMock = $this->getMockBuilder(QuoteItem::class)
             ->disableOriginalConstructor()
-            ->onlyMethods(['getCalculationPrice', '__wakeup'])
+            ->onlyMethods(['getPrice', '__wakeup'])
             ->getMock();
 
         $quoteItemMock->expects($this->once())
-            ->method('getCalculationPrice')
+            ->method('getPrice')
             ->willReturn($price);
 
         $this->renderer->setItem($quoteItemMock);
         $this->assertEquals($price, $this->renderer->getItemDisplayPriceExclTax());
     }
 
-    public function testGetItemDisplayPriceExclTaxOrderItem()
+    public function testGetItemDisplayPriceExclTaxOrderItem(): void
     {
         $price = 10;
 
@@ -388,7 +389,7 @@ class RendererTest extends TestCase
         $this->assertEquals($price, $this->renderer->getItemDisplayPriceExclTax());
     }
 
-    public function testGetTotalAmount()
+    public function testGetTotalAmount(): void
     {
         $rowTotal = 100;
         $taxAmount = 10;
@@ -429,7 +430,7 @@ class RendererTest extends TestCase
         $this->assertEquals($expectedValue, $this->renderer->getTotalAmount($itemMock));
     }
 
-    public function testGetBaseTotalAmount()
+    public function testGetBaseTotalAmount(): void
     {
         $baseRowTotal = 100;
         $baseTaxAmount = 10;

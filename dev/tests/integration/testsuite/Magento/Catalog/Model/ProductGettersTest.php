@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Catalog\Model;
 
@@ -141,7 +141,7 @@ class ProductGettersTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($value, $this->_model->{$method}());
     }
 
-    public function getObsoleteGettersDataProvider()
+    public static function getObsoleteGettersDataProvider()
     {
         return [
             ['calculated_final_price', 'getCalculatedFinalPrice'],

@@ -1,22 +1,37 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\CatalogInventory\Test\Unit\Model\Adminhtml\Stock;
 
+use Magento\CatalogInventory\Api\StockConfigurationInterface;
+use Magento\CatalogInventory\Api\StockItemRepositoryInterface;
+use Magento\CatalogInventory\Api\StockRegistryInterface;
 use Magento\CatalogInventory\Model\Adminhtml\Stock\Item;
 use Magento\Customer\Api\Data\GroupInterface;
 use Magento\Customer\Api\GroupManagementInterface;
-use Magento\Framework\Model\ResourceModel\AbstractResource;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Customer\Model\Session;
+use Magento\Framework\Api\AttributeValueFactory;
+use Magento\Framework\Api\ExtensionAttributesFactory;
+use Magento\Framework\Model\Context;
+use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
+use Magento\Framework\Registry;
+use Magento\Store\Model\StoreManagerInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.UnusedLocalVariable)
+ */
 class ItemTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var Item|MockObject
      */
@@ -27,35 +42,41 @@ class ItemTest extends TestCase
      */
     protected function setUp(): void
     {
-        $resourceMock = $this->getMockBuilder(AbstractResource::class)
-            ->addMethods(['getIdFieldName'])
-            ->onlyMethods(['getConnection'])
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-        $objectHelper = new ObjectManager($this);
+        $resourceMock = $this->createPartialMockWithReflection(
+            AbstractDb::class,
+            ['getConnection', 'getIdFieldName', '_construct']
+        );
 
-        $groupManagement = $this->getMockBuilder(GroupManagementInterface::class)
-            ->onlyMethods(['getAllCustomersGroup'])
-            ->getMockForAbstractClass();
+        $groupManagement = $this->createMock(GroupManagementInterface::class);
 
-        $allGroup = $this->getMockBuilder(GroupInterface::class)
-            ->onlyMethods(['getId'])
-            ->getMockForAbstractClass();
+        $allGroup = $this->createMock(GroupInterface::class);
 
-        $allGroup->expects($this->any())
-            ->method('getId')
-            ->willReturn(32000);
+        $allGroup->method('getId')->willReturn(32000);
 
-        $groupManagement->expects($this->any())
-            ->method('getAllCustomersGroup')
-            ->willReturn($allGroup);
+        $groupManagement->method('getAllCustomersGroup')->willReturn($allGroup);
 
-        $this->_model = $objectHelper->getObject(
-            Item::class,
-            [
-                'resource' => $resourceMock,
-                'groupManagement' => $groupManagement
-            ]
+        $contextMock = $this->createMock(Context::class);
+        $registryMock = $this->createMock(Registry::class);
+        $extensionFactoryMock = $this->createMock(ExtensionAttributesFactory::class);
+        $customAttributeFactoryMock = $this->createMock(AttributeValueFactory::class);
+        $customerSessionMock = $this->createMock(Session::class);
+        $storeManagerMock = $this->createMock(StoreManagerInterface::class);
+        $stockConfigurationMock = $this->createMock(StockConfigurationInterface::class);
+        $stockRegistryMock = $this->createMock(StockRegistryInterface::class);
+        $stockItemRepositoryMock = $this->createMock(StockItemRepositoryInterface::class);
+
+        $this->_model = new Item(
+            $contextMock,
+            $registryMock,
+            $extensionFactoryMock,
+            $customAttributeFactoryMock,
+            $customerSessionMock,
+            $storeManagerMock,
+            $stockConfigurationMock,
+            $stockRegistryMock,
+            $stockItemRepositoryMock,
+            $groupManagement,
+            $resourceMock
         );
     }
 

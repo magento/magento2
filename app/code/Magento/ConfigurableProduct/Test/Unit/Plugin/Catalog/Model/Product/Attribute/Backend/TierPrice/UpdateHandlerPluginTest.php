@@ -1,14 +1,16 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2024 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\ConfigurableProduct\Test\Unit\Plugin\Catalog\Model\Product\Attribute\Backend\TierPrice;
 
+use Magento\Catalog\Model\Product\Type;
 use Magento\Catalog\Api\Data\ProductAttributeInterface;
 use Magento\Catalog\Api\ProductAttributeRepositoryInterface;
+use Magento\Eav\Test\Unit\Helper\AttributeTestHelper;
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\Product\Attribute\Backend\TierPrice\UpdateHandler;
 use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
@@ -52,17 +54,12 @@ class UpdateHandlerPluginTest extends TestCase
         $this->entityMock = $this->createMock(Product::class);
         $this->updateHandlerMock = $this->createMock(UpdateHandler::class);
 
-        $this->attributeMock = $this->getMockBuilder(ProductAttributeInterface::class)
-            ->addMethods(['getName'])
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->attributeMock = new AttributeTestHelper();
+        $this->attributeMock->setName('tier_price');
         $this->attributeRepositoryMock->expects($this->once())
             ->method('get')
             ->with('tier_price')
             ->willReturn($this->attributeMock);
-        $this->attributeMock->expects($this->any())
-            ->method('getName')
-            ->willReturn('tier_price');
 
         $this->updateHandlerPlugin = new UpdateHandlerPlugin($this->attributeRepositoryMock);
     }
@@ -137,7 +134,7 @@ class UpdateHandlerPluginTest extends TestCase
 
         $this->entityMock->expects($this->once())
             ->method('getTypeId')
-            ->willReturn(Product\Type::TYPE_SIMPLE);
+            ->willReturn(Type::TYPE_SIMPLE);
 
         $this->entityMock->expects($this->never())
             ->method('setData')

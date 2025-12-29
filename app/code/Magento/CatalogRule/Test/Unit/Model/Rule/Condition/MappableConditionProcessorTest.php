@@ -1,23 +1,29 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\CatalogRule\Test\Unit\Model\Rule\Condition;
 
+use Magento\Catalog\Model\Product;
 use Magento\CatalogRule\Model\Rule\Condition\Combine as CombinedCondition;
 use Magento\CatalogRule\Model\Rule\Condition\MappableConditionsProcessor;
 use Magento\CatalogRule\Model\Rule\Condition\Product as SimpleCondition;
 use Magento\Eav\Model\Config as EavConfig;
+use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
 use Magento\Framework\Api\SearchCriteria\CollectionProcessor\ConditionProcessor\CustomConditionProviderInterface;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Rule\Model\Condition\AbstractCondition;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 class MappableConditionProcessorTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var MappableConditionsProcessor
      */
@@ -40,16 +46,12 @@ class MappableConditionProcessorTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->eavConfigMock = $this->getMockBuilder(EavConfig::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['getAttribute'])
-            ->getMock();
+        $this->eavConfigMock = $this->createPartialMock(
+            EavConfig::class,
+            ['getAttribute']
+        );
 
-        $this->customConditionProcessorBuilderMock = $this->getMockBuilder(
-            CustomConditionProviderInterface::class
-        )->disableOriginalConstructor()
-            ->onlyMethods(['hasProcessorForField'])
-            ->getMockForAbstractClass();
+        $this->customConditionProcessorBuilderMock = $this->createMock(CustomConditionProviderInterface::class);
 
         $this->objectManagerHelper = new ObjectManager($this);
 
@@ -984,9 +986,15 @@ class MappableConditionProcessorTest extends TestCase
     {
         $this->expectException('Magento\Framework\Exception\InputException');
         $this->expectExceptionMessage('Undefined condition type "olo-lo" passed in.');
-        $simpleCondition = $this->getMockForSimpleCondition('field');
-        $simpleCondition->setType('olo-lo');
-        $inputCondition = $this->getMockForCombinedCondition([$simpleCondition], 'any');
+        
+        // This tests the instanceof logic at line 82 and 70 - if neither match, throw exception
+        $invalidCondition = $this->createPartialMockWithReflection(
+            AbstractCondition::class,
+            ['getType']
+        );
+        $invalidCondition->method('getType')->willReturn('olo-lo');
+        
+        $inputCondition = $this->getMockForCombinedCondition([$invalidCondition], 'any');
 
         $this->mappableConditionProcessor->rebuildConditionsTree($inputCondition);
     }
@@ -998,10 +1006,7 @@ class MappableConditionProcessorTest extends TestCase
      */
     protected function getMockForCombinedCondition($subConditions, $aggregator)
     {
-        $mock = $this->getMockBuilder(CombinedCondition::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods([])
-            ->getMock();
+        $mock = $this->createPartialMock(CombinedCondition::class, []);
 
         $mock->setConditions($subConditions);
         $mock->setAggregator($aggregator);
@@ -1016,14 +1021,119 @@ class MappableConditionProcessorTest extends TestCase
      */
     protected function getMockForSimpleCondition($attribute)
     {
-        $mock = $this->getMockBuilder(SimpleCondition::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods([])
-            ->getMock();
+        $mock = $this->createPartialMock(SimpleCondition::class, []);
 
         $mock->setAttribute($attribute);
         $mock->setType(SimpleCondition::class);
 
         return $mock;
+    }
+
+    /**
+     * Test that conditions with EAV attributes (with backend type) are valid
+     *
+     * Tests line 138: if ($attribute && $attribute->getBackendType() !== null)
+     */
+    public function testValidateSimpleConditionWithEavAttribute()
+    {
+        $simpleCondition = $this->getMockForSimpleCondition('sku');
+        
+        // Mock attribute with backend type (valid EAV attribute)
+        $attributeMock = $this->createPartialMock(
+            AbstractAttribute::class,
+            ['getBackendType']
+        );
+        $attributeMock->method('getBackendType')->willReturn('varchar');
+
+        // No custom processor for this field
+        $this->customConditionProcessorBuilderMock
+            ->expects($this->once())
+            ->method('hasProcessorForField')
+            ->with('sku')
+            ->willReturn(false);
+
+        // EAV config returns the attribute
+        $this->eavConfigMock
+            ->expects($this->once())
+            ->method('getAttribute')
+            ->with(Product::ENTITY, 'sku')
+            ->willReturn($attributeMock);
+
+        $inputCondition = $this->getMockForCombinedCondition([$simpleCondition], 'all');
+        
+        // The condition should be valid (kept in validConditions)
+        $result = $this->mappableConditionProcessor->rebuildConditionsTree($inputCondition);
+        
+        // Should have 1 valid condition
+        $this->assertCount(1, $result->getConditions());
+    }
+
+    /**
+     * Test that conditions with non-EAV attributes (null backend type) are invalid
+     *
+     * Tests line 138 negative case and line 143: return false
+     */
+    public function testValidateSimpleConditionWithNonEavAttribute()
+    {
+        $simpleCondition = $this->getMockForSimpleCondition('non_existent_field');
+        
+        // Mock attribute with null backend type (invalid/non-existent EAV attribute)
+        $attributeMock = $this->createPartialMock(
+            AbstractAttribute::class,
+            ['getBackendType']
+        );
+        $attributeMock->method('getBackendType')->willReturn(null);
+
+        // No custom processor for this field
+        $this->customConditionProcessorBuilderMock
+            ->expects($this->once())
+            ->method('hasProcessorForField')
+            ->with('non_existent_field')
+            ->willReturn(false);
+
+        // EAV config returns the attribute (but with null backend type)
+        $this->eavConfigMock
+            ->expects($this->once())
+            ->method('getAttribute')
+            ->with(Product::ENTITY, 'non_existent_field')
+            ->willReturn($attributeMock);
+
+        $inputCondition = $this->getMockForCombinedCondition([$simpleCondition], 'all');
+        
+        // The condition should be invalid (removed from conditions)
+        $result = $this->mappableConditionProcessor->rebuildConditionsTree($inputCondition);
+        
+        // Should have 0 valid conditions
+        $this->assertCount(0, $result->getConditions());
+    }
+
+    /**
+     * Test that conditions with custom processor are valid
+     *
+     * Tests line 128-130: if ($this->customConditionProvider->hasProcessorForField($fieldName))
+     */
+    public function testValidateSimpleConditionWithCustomProcessor()
+    {
+        $simpleCondition = $this->getMockForSimpleCondition('custom_field');
+        
+        // Has custom processor for this field
+        $this->customConditionProcessorBuilderMock
+            ->expects($this->once())
+            ->method('hasProcessorForField')
+            ->with('custom_field')
+            ->willReturn(true);
+
+        // EAV config should not be called since custom processor exists
+        $this->eavConfigMock
+            ->expects($this->never())
+            ->method('getAttribute');
+
+        $inputCondition = $this->getMockForCombinedCondition([$simpleCondition], 'all');
+        
+        // The condition should be valid (kept in validConditions)
+        $result = $this->mappableConditionProcessor->rebuildConditionsTree($inputCondition);
+        
+        // Should have 1 valid condition
+        $this->assertCount(1, $result->getConditions());
     }
 }

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Customer\Controller\Section;
 
@@ -50,7 +50,7 @@ class Load extends \Magento\Framework\App\Action\Action implements HttpGetAction
         JsonFactory $resultJsonFactory,
         Identifier $sectionIdentifier,
         SectionPoolInterface $sectionPool,
-        \Magento\Framework\Escaper $escaper = null
+        ?\Magento\Framework\Escaper $escaper = null
     ) {
         parent::__construct($context);
         $this->resultJsonFactory = $resultJsonFactory;

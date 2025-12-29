@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -92,7 +92,7 @@ class DataTest extends TestCase
     /**
      * @return array
      */
-    public function getEncodedUrlDataProvider()
+    public static function getEncodedUrlDataProvider()
     {
         return [
             'no url' => [null, 1],
@@ -114,7 +114,7 @@ class DataTest extends TestCase
     /**
      * @return array
      */
-    public function addRequestParamDataProvider()
+    public static function addRequestParamDataProvider()
     {
         return [
             'string' => [
@@ -164,7 +164,7 @@ class DataTest extends TestCase
     /**
      * @return array
      */
-    public function removeRequestParamDataProvider()
+    public static function removeRequestParamDataProvider()
     {
         return [
             'no match' => [

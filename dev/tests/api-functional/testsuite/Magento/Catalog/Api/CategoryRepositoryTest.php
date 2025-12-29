@@ -1,8 +1,7 @@
 <?php
 /**
- *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Catalog\Api;
@@ -213,16 +212,16 @@ class CategoryRepositoryTest extends WebapiAbstract
     /**
      * @return array
      */
-    public function deleteSystemOrRootDataProvider(): array
+    public static function deleteSystemOrRootDataProvider(): array
     {
         return [
             'system_category' => [
-                'category_id' => Category::TREE_ROOT_ID,
-                'exception_message' => $this->buildExceptionMessage(Category::TREE_ROOT_ID),
+                'categoryId' => Category::TREE_ROOT_ID,
+                'exceptionMsg' => self::buildExceptionMessage(Category::TREE_ROOT_ID),
             ],
             'root_category' => [
-                'category_id' => 2,
-                'exception_message' => $this->buildExceptionMessage(2),
+                'categoryId' => 2,
+                'exceptionMsg' => self::buildExceptionMessage(2),
             ],
         ];
     }
@@ -233,7 +232,7 @@ class CategoryRepositoryTest extends WebapiAbstract
      * @param int $categoryId
      * @return string
      */
-    private function buildExceptionMessage(int $categoryId): string
+    private static function buildExceptionMessage(int $categoryId): string
     {
         $translatedMsg = (string)__('Cannot delete category with id %1');
 

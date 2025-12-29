@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Quote\Model\Quote;
 
@@ -243,7 +243,7 @@ class AddressTest extends TestCase
     /**
      * @return array
      */
-    public function unsetAddressIdDataProvider()
+    public static function unsetAddressIdDataProvider()
     {
         return [[true], [false]];
     }
@@ -373,7 +373,7 @@ class AddressTest extends TestCase
      *
      * @return array
      */
-    public function appliedTaxesDataProvider()
+    public static function appliedTaxesDataProvider()
     {
         return [
             ['test', 'test'],

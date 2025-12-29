@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -230,44 +230,44 @@ abstract class AbstractBaseAttributeData
         $frontendInput = static::getFrontendInput();
         return [
             "{$frontendInput}_update_all_fields" => [
-                'post_data' => static::getUpdatePostData(),
-                'expected_data' => static::getUpdateExpectedData(),
+                'postData' => static::getUpdatePostData(),
+                'expectedData' => static::getUpdateExpectedData(),
             ],
             "{$frontendInput}_other_is_user_defined" => [
-                'post_data' => [
+                'postData' => [
                     'is_user_defined' => '2',
                 ],
-                'expected_data' => [
+                'expectedData' => [
                     'is_user_defined' => '1',
                 ],
             ],
             "{$frontendInput}_with_is_global_null" => [
-                'post_data' => [
+                'postData' => [
                     'is_global' => null,
                 ],
-                'expected_data' => [
+                'expectedData' => [
                     'is_global' => ScopedAttributeInterface::SCOPE_GLOBAL,
                 ],
             ],
             "{$frontendInput}_is_visible_in_advanced_search" => [
-                'post_data' => [
+                'postData' => [
                     'is_searchable' => '0',
                     'is_visible_in_advanced_search' => '1',
                 ],
-                'expected_data' => [
+                'expectedData' => [
                     'is_searchable' => '0',
                     'is_visible_in_advanced_search' => '0',
                 ],
             ],
             "{$frontendInput}_update_with_attribute_set" => [
-                'post_data' => [
+                'postData' => [
                     'set' => '4',
                     'new_attribute_set_name' => 'Text Attribute Set',
                     'group' => 'text_attribute_group',
                     'groupName' => 'Text Attribute Group',
                     'groupSortOrder' => '1',
                 ],
-                'expected_data' => [],
+                'expectedData' => [],
             ],
         ];
     }
@@ -283,30 +283,30 @@ abstract class AbstractBaseAttributeData
         $frontendInput = static::getFrontendInput();
         return [
             "{$frontendInput}_same_attribute_set_name" => [
-                'post_data' => [
+                'postData' => [
                     'set' => '4',
                     'new_attribute_set_name' => 'Default',
                 ],
-                'error_message' => (string)__('An attribute set named \'Default\' already exists.'),
+                'errorMessage' => (string)__('An attribute set named \'Default\' already exists.'),
             ],
             "{$frontendInput}_empty_set_id" => [
-                'post_data' => [
+                'postData' => [
                     'set' => '',
                     'new_attribute_set_name' => 'Text Attribute Set',
                 ],
-                'error_message' => (string)__('Something went wrong while saving the attribute.'),
+                'errorMessage' => (string)__('Something went wrong while saving the attribute.'),
             ],
             "{$frontendInput}_nonexistent_attribute_id" => [
-                'post_data' => [
+                'postData' => [
                     'attribute_id' => 9999,
                 ],
-                'error_message' => (string)__('This attribute no longer exists.'),
+                'errorMessage' => (string)__('This attribute no longer exists.'),
             ],
             "{$frontendInput}_attribute_other_entity_type" => [
-                'post_data' => [
+                'postData' => [
                     'attribute_id' => 45,
                 ],
-                'error_message' => (string)__('We can\'t update the attribute.'),
+                'errorMessage' => (string)__('We can\'t update the attribute.'),
             ],
         ];
     }
@@ -322,7 +322,7 @@ abstract class AbstractBaseAttributeData
         $frontendInput = static::getFrontendInput();
         return [
             "{$frontendInput}_update_frontend_label" => [
-                'post_data' => [
+                'postData' => [
                     'frontend_label' => [
                         Store::DEFAULT_STORE_ID => 'Test Attribute Update',
                         'default' => 'Default Store Update',
@@ -330,7 +330,7 @@ abstract class AbstractBaseAttributeData
                         'fixture_third_store' => 'Third Store Update',
                     ]
                 ],
-                'expected_data' => [
+                'expectedData' => [
                     'frontend_label' => 'Test Attribute Update',
                     'store_labels' => [
                         'default' => 'Default Store Update',
@@ -340,7 +340,7 @@ abstract class AbstractBaseAttributeData
                 ],
             ],
             "{$frontendInput}_remove_frontend_label" => [
-                'post_data' => [
+                'postData' => [
                     'frontend_label' => [
                         Store::DEFAULT_STORE_ID => 'Test Attribute Update',
                         'default' => 'Default Store Update',
@@ -348,7 +348,7 @@ abstract class AbstractBaseAttributeData
                         'fixture_third_store' => '',
                     ]
                 ],
-                'expected_data' => [
+                'expectedData' => [
                     'frontend_label' => 'Test Attribute Update',
                     'store_labels' => [
                         'default' => 'Default Store Update',
@@ -356,10 +356,10 @@ abstract class AbstractBaseAttributeData
                 ],
             ],
             "{$frontendInput}_with_frontend_label_string" => [
-                'post_data' => [
+                'postData' => [
                     'frontend_label' => 'Test Attribute Update',
                 ],
-                'expected_data' => [
+                'expectedData' => [
                     'frontend_label' => 'Test Attribute Update',
                     'store_labels' => [
                         'default' => 'Default Store View',

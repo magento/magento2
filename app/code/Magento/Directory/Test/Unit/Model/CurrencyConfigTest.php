@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -15,6 +15,7 @@ use Magento\Framework\App\State;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Store\Api\Data\StoreInterface;
 use Magento\Store\Model\StoreManagerInterface;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -48,13 +49,8 @@ class CurrencyConfigTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->config = $this->getMockBuilder(ScopeConfigInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-        $this->storeManager = $this->getMockBuilder(StoreManagerInterface::class)
-            ->onlyMethods(['getStores', 'getWebsites'])
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->config = $this->createMock(ScopeConfigInterface::class);
+        $this->storeManager = $this->createMock(StoreManagerInterface::class);
         $this->appState = $this->getMockBuilder(State::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -72,28 +68,25 @@ class CurrencyConfigTest extends TestCase
     /**
      * Test get currency config for admin, crontab and storefront areas.
      *
-     * @dataProvider getConfigCurrenciesDataProvider
      * @return void
      */
-    public function testGetConfigCurrencies(string $areCode)
+    #[DataProvider('getConfigCurrenciesDataProvider')]
+    public function testGetConfigCurrencies(string $areaCode)
     {
         $path = 'test/path';
         $expected = ['ARS', 'AUD', 'BZD'];
 
         $this->appState->expects(self::once())
             ->method('getAreaCode')
-            ->willReturn($areCode);
+            ->willReturn($areaCode);
 
         /** @var StoreInterface|MockObject $store */
-        $store = $this->getMockBuilder(StoreInterface::class)
-            ->onlyMethods(['getCode'])
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $store = $this->createMock(StoreInterface::class);
         $store->expects(self::once())
             ->method('getCode')
             ->willReturn('testCode');
 
-        if (in_array($areCode, [Area::AREA_ADMINHTML, Area::AREA_CRONTAB])) {
+        if (in_array($areaCode, [Area::AREA_ADMINHTML, Area::AREA_CRONTAB])) {
             $this->storeManager->expects(self::once())
                 ->method('getStores')
                 ->willReturn([$store]);
@@ -119,7 +112,7 @@ class CurrencyConfigTest extends TestCase
      *
      * @return array
      */
-    public function getConfigCurrenciesDataProvider()
+    public static function getConfigCurrenciesDataProvider()
     {
         return [
             ['areaCode' => Area::AREA_ADMINHTML],

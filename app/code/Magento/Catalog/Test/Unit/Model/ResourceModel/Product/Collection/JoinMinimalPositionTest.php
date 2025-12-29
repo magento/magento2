@@ -1,12 +1,13 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2022 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Catalog\Test\Unit\Model\ResourceModel\Product\Collection;
 
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Catalog\Model\Indexer\Category\Product\TableMaintainer;
 use Magento\Catalog\Model\ResourceModel\Product\Collection;
 use Magento\Catalog\Model\ResourceModel\Product\Collection\JoinMinimalPosition;
@@ -46,7 +47,7 @@ class JoinMinimalPositionTest extends TestCase
      * Test that correct SQL is generated
      *
      * @return void
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      * @throws \Zend_Db_Select_Exception
      */
     public function testExecute(): void
@@ -83,7 +84,7 @@ class JoinMinimalPositionTest extends TestCase
             'cat_index_3' => [
                 'joinType' => 'left join',
                 'schema' => null,
-                'tableName' => null,
+                'tableName' => 'catalog_category_product_index',
                 'joinCondition' => 'cat_index_3.product_id=e.entity_id' .
                     ' AND cat_index_3.store_id=1' .
                     ' AND cat_index_3.category_id=3',
@@ -91,24 +92,16 @@ class JoinMinimalPositionTest extends TestCase
             'cat_index_5' => [
                 'joinType' => 'left join',
                 'schema' => null,
-                'tableName' => null,
+                'tableName' => 'catalog_category_product_index',
                 'joinCondition' => 'cat_index_5.product_id=e.entity_id' .
                     ' AND cat_index_5.store_id=1' .
                     ' AND cat_index_5.category_id=5',
             ]
         ];
         $categoryIds = [3, 5];
-        $collection = $this->getMockBuilder(Collection::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['getConnection', 'getSelect', 'getStoreId'])
-            ->getMockForAbstractClass();
-        $connection = $this->getMockBuilder(Mysql::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['_connect'])
-            ->getMockForAbstractClass();
-        $select = $this->getMockBuilder(Select::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $collection = $this->createMock(Collection::class);
+        $connection = $this->createMock(Mysql::class);
+        $select = $this->createPartialMock(Select::class, []);
 
         $select->reset();
         $select->from(['e' => 'catalog_product_entity']);
@@ -116,13 +109,34 @@ class JoinMinimalPositionTest extends TestCase
         $select->columns(['status' => 'at_status.value_id']);
         $select->columns(['visibility']);
 
-        $collection->addStaticField('entity_id');
         $collection->method('getConnection')
             ->willReturn($connection);
         $collection->method('getSelect')
             ->willReturn($select);
         $collection->method('getStoreId')
             ->willReturn(1);
+        $collection->method('addStaticField')
+            ->with('entity_id')
+            ->willReturnSelf();
+
+        $connection->method('getLeastSql')
+            ->willReturn(
+                new \Zend_Db_Expr('LEAST(IFNULL(cat_index_3.position, ~0), IFNULL(cat_index_5.position, ~0))')
+            );
+
+        $connection->method('quoteInto')
+            ->willReturnCallback(function ($query, $value) {
+                return str_replace('?', (string)$value, $query);
+            });
+
+        $connection->method('getIfNullSql')
+            ->willReturnCallback(function ($field, $default) {
+                return "IFNULL($field, $default)";
+            });
+
+        $this->tableMaintainer->method('getMainTable')
+            ->willReturn('catalog_category_product_index');
+
         $this->model->execute($collection, $categoryIds);
         $this->assertEquals(
             $expectedFromParts,

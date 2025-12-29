@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Framework\Api\Search;
@@ -36,7 +36,7 @@ class FilterGroup extends AbstractSimpleObject
      * @return $this
      * @codeCoverageIgnore
      */
-    public function setFilters(array $filters = null)
+    public function setFilters(?array $filters = null)
     {
         return $this->setData(self::FILTERS, $filters);
     }

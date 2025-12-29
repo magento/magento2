@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 declare(strict_types=1);
@@ -175,7 +175,7 @@ class EncryptorTest extends TestCase
      *
      * @return array
      */
-    public function validateHashDataProvider(): array
+    public static function validateHashDataProvider(): array
     {
         return [
             ['password', 'hash:salt:1', false, 1],
@@ -235,7 +235,7 @@ class EncryptorTest extends TestCase
      *
      * @return array
      */
-    public function emptyKeyDataProvider(): array
+    public static function emptyKeyDataProvider(): array
     {
         return [[null], [0], [''], ['0']];
     }
@@ -356,7 +356,7 @@ class EncryptorTest extends TestCase
      *
      * @return array
      */
-    public function useSpecifiedHashingAlgoDataProvider(): array
+    public static function useSpecifiedHashingAlgoDataProvider(): array
     {
         return [
             [

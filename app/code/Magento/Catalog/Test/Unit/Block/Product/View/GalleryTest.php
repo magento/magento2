@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -86,7 +86,7 @@ class GalleryTest extends TestCase
         );
 
         $this->arrayUtils = $this->createMock(ArrayUtils::class);
-        $this->jsonEncoderMock = $this->getMockForAbstractClass(EncoderInterface::class);
+        $this->jsonEncoderMock = $this->createMock(EncoderInterface::class);
         $this->imagesConfigFactoryMock = $this->getImagesConfigFactory();
         $this->urlBuilder = $this->createMock(UrlBuilder::class);
 
@@ -134,41 +134,27 @@ class GalleryTest extends TestCase
      */
     private function prepareGetGalleryImagesJsonMocks($hasLabel = true): void
     {
-        $storeMock = $this->getMockBuilder(Store::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $storeMock = $this->createMock(Store::class);
 
-        $productMock = $this->getMockBuilder(Product::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $productMock = $this->createMock(Product::class);
 
-        $productTypeMock = $this->getMockBuilder(AbstractType::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $productTypeMock = $this->createMock(AbstractType::class);
         $productTypeMock->expects($this->any())
             ->method('getStoreFilter')
             ->with($productMock)
             ->willReturn($storeMock);
 
-        $productMock->expects($this->any())
-            ->method('getTypeInstance')
-            ->willReturn($productTypeMock);
-        $productMock->expects($this->any())
-            ->method('getMediaGalleryImages')
+        $productMock->method('getTypeInstance')->willReturn($productTypeMock);
+        $productMock->method('getMediaGalleryImages')
             ->willReturn($this->getImagesCollectionWithPopulatedDataObject($hasLabel));
-        $productMock->expects($this->any())
-            ->method('getName')
-            ->willReturn('test_product_name');
+        $productMock->method('getName')->willReturn('test_product_name');
 
         $this->registry->expects($this->any())
             ->method('registry')
             ->with('product')
             ->willReturn($productMock);
 
-        $this->imageHelper = $this->getMockBuilder(Image::class)
-            ->onlyMethods(['init', 'setImageFile', 'getUrl'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->imageHelper = $this->createPartialMock(Image::class, ['init', 'setImageFile', 'getUrl']);
 
         $this->imageHelper->expects($this->any())
             ->method('init')
@@ -276,9 +262,7 @@ class GalleryTest extends TestCase
      */
     private function getImagesCollectionWithPopulatedDataObject($hasLabel): Collection
     {
-        $collectionMock = $this->getMockBuilder(Collection::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $collectionMock = $this->createMock(Collection::class);
 
         $items = [
             new DataObject([
@@ -290,9 +274,7 @@ class GalleryTest extends TestCase
             ]),
         ];
 
-        $collectionMock->expects($this->any())
-            ->method('getIterator')
-            ->willReturn(new \ArrayIterator($items));
+        $collectionMock->method('getIterator')->willReturn(new \ArrayIterator($items));
 
         return $collectionMock;
     }

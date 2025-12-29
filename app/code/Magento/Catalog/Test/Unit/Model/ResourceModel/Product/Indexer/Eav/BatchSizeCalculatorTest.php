@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -28,7 +28,7 @@ class BatchSizeCalculatorTest extends TestCase
             $batchSizes,
             $batchManagers
         );
-        $connectionMock = $this->getMockForAbstractClass(AdapterInterface::class);
+        $connectionMock = $this->createMock(AdapterInterface::class);
 
         $batchManagerMock->expects($this->once())
             ->method('ensureBatchSize')
@@ -43,7 +43,7 @@ class BatchSizeCalculatorTest extends TestCase
             [],
             []
         );
-        $connectionMock = $this->getMockForAbstractClass(AdapterInterface::class);
+        $connectionMock = $this->createMock(AdapterInterface::class);
 
         $model->estimateBatchSize($connectionMock, 'wrong_indexer_id');
     }

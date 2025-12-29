@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -193,7 +193,7 @@ class KernelTest extends TestCase
     /**
      * @return array
      */
-    public function dataProviderForResultWithCachedData(): array
+    public static function dataProviderForResultWithCachedData(): array
     {
         $data = [
             'context' => [
@@ -240,7 +240,7 @@ class KernelTest extends TestCase
     /**
      * @return array
      */
-    public function dataProviderForResultWithoutCachedData(): array
+    public static function dataProviderForResultWithoutCachedData(): array
     {
         return [
             ['existing key', [], false, false],
@@ -253,7 +253,7 @@ class KernelTest extends TestCase
      * @param $httpCode
      *
      * @return void
-     * @dataProvider testProcessSaveCacheDataProvider
+     * @dataProvider processSaveCacheDataProvider
      */
     public function testProcessSaveCache($httpCode): void
     {
@@ -303,7 +303,7 @@ class KernelTest extends TestCase
     /**
      * @return array
      */
-    public function testProcessSaveCacheDataProvider(): array
+    public static function processSaveCacheDataProvider(): array
     {
         return [
             [200],
@@ -344,7 +344,7 @@ class KernelTest extends TestCase
     /**
      * @return array
      */
-    public function processNotSaveCacheProvider(): array
+    public static function processNotSaveCacheProvider(): array
     {
         return [
             ['private, max-age=100', 200, true, false],

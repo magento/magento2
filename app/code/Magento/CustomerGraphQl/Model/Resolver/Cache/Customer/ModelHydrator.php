@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2023 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -10,12 +10,13 @@ namespace Magento\CustomerGraphQl\Model\Resolver\Cache\Customer;
 use Magento\Customer\Model\Data\Customer;
 use Magento\Customer\Model\Data\CustomerFactory;
 use Magento\Framework\EntityManager\HydratorPool;
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 use Magento\GraphQlResolverCache\Model\Resolver\Result\HydratorInterface;
 
 /**
  * Customer resolver data hydrator to rehydrate propagated model.
  */
-class ModelHydrator implements HydratorInterface
+class ModelHydrator implements HydratorInterface, ResetAfterRequestInterface
 {
     /**
      * @var CustomerFactory
@@ -58,5 +59,15 @@ class ModelHydrator implements HydratorInterface
             $this->customerModels[$resolverData['model_id']] = $model;
             $resolverData['model'] = $this->customerModels[$resolverData['model_id']];
         }
+    }
+
+    /**
+     * Reset customerModels
+     *
+     * @return void
+     */
+    public function _resetState(): void
+    {
+        $this->customerModels = [];
     }
 }

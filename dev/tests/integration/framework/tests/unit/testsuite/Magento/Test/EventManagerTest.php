@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2012 Adobe
+ * All Rights Reserved.
  */
 
 /**
@@ -59,7 +59,7 @@ class EventManagerTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expectedSubscribers, $actualSubscribers);
     }
 
-    public function fireEventDataProvider()
+    public static function fireEventDataProvider()
     {
         return [
             'straight order' => [false, ['subscriberOne', 'subscriberTwo']],

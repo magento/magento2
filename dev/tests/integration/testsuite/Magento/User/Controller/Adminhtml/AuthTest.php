@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\User\Controller\Adminhtml;
 
@@ -225,7 +225,7 @@ class AuthTest extends \Magento\TestFramework\TestCase\AbstractBackendController
         }
     }
 
-    public function resetPasswordDataProvider()
+    public static function resetPasswordDataProvider()
     {
         $password = uniqid('123q');
         return [

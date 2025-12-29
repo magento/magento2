@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 
 declare(strict_types=1);
@@ -834,7 +834,7 @@ class ProductTest extends \PHPUnit\Framework\TestCase
      *
      * @return array
      */
-    public function productWithBackordersDataProvider(): array
+    public static function productWithBackordersDataProvider(): array
     {
         return [
             [0, 0, false],
