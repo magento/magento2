@@ -7,8 +7,6 @@ declare(strict_types=1);
 
 namespace Magento\QuoteGraphQl\Model\Resolver;
 
-use Magento\Framework\Exception\CouldNotSaveException;
-use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
@@ -17,17 +15,13 @@ use Magento\Framework\Validator\EmailAddress as EmailAddressValidator;
 use Magento\Quote\Api\CartRepositoryInterface;
 use Magento\QuoteGraphQl\Model\Cart\GetCartForUser;
 use Magento\QuoteGraphQl\Model\Cart\CheckCartCheckoutAllowance;
+use Magento\QuoteGraphQl\Model\Cart\SetGuestEmailOnCart as SetGuestEmailOnCartModel;
 
 /**
  * @inheritdoc
  */
 class SetGuestEmailOnCart implements ResolverInterface
 {
-    /**
-     * @var CartRepositoryInterface
-     */
-    private $cartRepository;
-
     /**
      * @var GetCartForUser
      */
@@ -44,21 +38,27 @@ class SetGuestEmailOnCart implements ResolverInterface
     private $checkCartCheckoutAllowance;
 
     /**
+     * @var SetGuestEmailOnCartModel
+     */
+    private $setGuestEmailOnCartModel;
+
+    /**
      * @param GetCartForUser $getCartForUser
      * @param CartRepositoryInterface $cartRepository
      * @param EmailAddressValidator $emailValidator
      * @param CheckCartCheckoutAllowance $checkCartCheckoutAllowance
+     * @param SetGuestEmailOnCartModel $setGuestEmailOnCartModel
      */
     public function __construct(
         GetCartForUser $getCartForUser,
-        CartRepositoryInterface $cartRepository,
         EmailAddressValidator $emailValidator,
-        CheckCartCheckoutAllowance $checkCartCheckoutAllowance
+        CheckCartCheckoutAllowance $checkCartCheckoutAllowance,
+        SetGuestEmailOnCartModel $setGuestEmailOnCartModel
     ) {
         $this->getCartForUser = $getCartForUser;
-        $this->cartRepository = $cartRepository;
         $this->emailValidator = $emailValidator;
         $this->checkCartCheckoutAllowance = $checkCartCheckoutAllowance;
+        $this->setGuestEmailOnCartModel = $setGuestEmailOnCartModel;
     }
 
     /**
@@ -89,13 +89,8 @@ class SetGuestEmailOnCart implements ResolverInterface
         $storeId = (int)$context->getExtensionAttributes()->getStore()->getId();
         $cart = $this->getCartForUser->execute($maskedCartId, $currentUserId, $storeId);
         $this->checkCartCheckoutAllowance->execute($cart);
-        $cart->setCustomerEmail($email);
 
-        try {
-            $this->cartRepository->save($cart);
-        } catch (CouldNotSaveException $e) {
-            throw new LocalizedException(__($e->getMessage()), $e);
-        }
+        $this->setGuestEmailOnCartModel->execute($context, $cart, $email);
 
         return [
             'cart' => [
