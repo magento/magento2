@@ -80,12 +80,9 @@ class City extends AbstractWidget
      *
      * @return AttributeMetadataInterface|null
      * @throws LocalizedException
-     * @SuppressWarnings(PHPMD.ProtectedModifier)
      */
-    //@codingStandardsIgnoreStart
-    protected function _getAttribute($attributeCode): ?AttributeMetadataInterface
+    public function _getAttribute($attributeCode): ?AttributeMetadataInterface
     {
-        //@codingStandardsIgnoreEnd
         if ($this->getForceUseCustomerAttributes() || $this->getObject() instanceof CustomerInterface) {
             return parent::_getAttribute($attributeCode);
         }
