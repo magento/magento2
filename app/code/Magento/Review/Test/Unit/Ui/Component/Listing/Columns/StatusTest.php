@@ -23,9 +23,7 @@ class StatusTest extends AbstractColumnTestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $this->sourceMock = $this->getMockBuilder(StatusSource::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->sourceMock = $this->createMock(StatusSource::class);
     }
 
     /**

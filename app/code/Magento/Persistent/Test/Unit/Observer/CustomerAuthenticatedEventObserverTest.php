@@ -13,10 +13,13 @@ use Magento\Framework\Event\Observer;
 use Magento\Persistent\Model\QuoteManager;
 use Magento\Persistent\Observer\CustomerAuthenticatedEventObserver;
 use PHPUnit\Framework\MockObject\MockObject;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use PHPUnit\Framework\TestCase;
 
 class CustomerAuthenticatedEventObserverTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var CustomerAuthenticatedEventObserver
      */
@@ -47,7 +50,7 @@ class CustomerAuthenticatedEventObserverTest extends TestCase
         $this->customerSessionMock = $this->createMock(Session::class);
         $this->observerMock = $this->createMock(Observer::class);
         $this->quoteManagerMock = $this->createMock(QuoteManager::class);
-        $this->requestMock = $this->getMockForAbstractClass(RequestInterface::class);
+        $this->requestMock = $this->createMock(RequestInterface::class);
         $this->model = new CustomerAuthenticatedEventObserver(
             $this->customerSessionMock,
             $this->requestMock,

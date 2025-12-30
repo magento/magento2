@@ -155,7 +155,7 @@ class AdminUserCreateCommand extends AbstractSetupCommand
     /**
      * @inheritdoc
      */
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $errors = $this->validate($input);
         if ($errors) {
@@ -221,7 +221,7 @@ class AdminUserCreateCommand extends AbstractSetupCommand
      * @param InputInterface $input
      * @return string[]
      */
-    public function validate(InputInterface $input)
+    public function validate(InputInterface $input): array
     {
         $errors = [];
         $user = new \Magento\Framework\DataObject();

@@ -18,11 +18,14 @@ use Magento\Payment\Helper\Data;
 use Magento\Payment\Model\Info;
 use Magento\Payment\Model\Method\AbstractMethod;
 use Magento\Payment\Model\MethodInterface;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 class DataTest extends TestCase
 {
+    use MockCreationTrait;
     /**
      * @var Data
      */
@@ -69,7 +72,7 @@ class DataTest extends TestCase
         /** @var Context $context */
         $context = $arguments['context'];
         $this->scopeConfig = $context->getScopeConfig();
-        $this->layoutMock = $this->getMockForAbstractClass(LayoutInterface::class);
+        $this->layoutMock = $this->createMock(LayoutInterface::class);
         $this->layoutFactoryMock = $arguments['layoutFactory'];
 
         $this->methodFactory = $arguments['paymentMethodFactory'];
@@ -124,8 +127,8 @@ class DataTest extends TestCase
      * @param array $methodB
      *
      * @return void
-     * @dataProvider getSortMethodsDataProvider
      */
+    #[DataProvider('getSortMethodsDataProvider')]
     public function testSortMethods(array $methodA, array $methodB): void
     {
         $this->initialConfig->expects($this->once())
@@ -156,7 +159,7 @@ class DataTest extends TestCase
             ->willReturn(null);
 
         $methodInstanceMockA = $this->getMockBuilder(MethodInterface::class)
-            ->getMockForAbstractClass();
+            ->getMock();
         $methodInstanceMockA->expects($this->any())
             ->method('isAvailable')
             ->willReturn(true);
@@ -166,7 +169,7 @@ class DataTest extends TestCase
             ->willReturn($methodA['data']['sort_order']);
 
         $methodInstanceMockB = $this->getMockBuilder(MethodInterface::class)
-            ->getMockForAbstractClass();
+            ->getMock();
         $methodInstanceMockB->expects($this->any())
             ->method('isAvailable')
             ->willReturn(true);
@@ -195,14 +198,13 @@ class DataTest extends TestCase
         list($blockType, $methodCode) = ['method_block_type', 'method_code'];
 
         $methodMock = $this->getMockBuilder(MethodInterface::class)
-            ->getMockForAbstractClass();
+            ->getMock();
         $layoutMock = $this->getMockBuilder(LayoutInterface::class)->disableOriginalConstructor()
-            ->addMethods([])
-            ->getMockForAbstractClass();
-        $blockMock = $this->getMockBuilder(BlockInterface::class)->disableOriginalConstructor()
-            ->onlyMethods(['toHtml'])
-            ->addMethods(['setMethod'])
-            ->getMockForAbstractClass();
+            ->getMock();
+        $blockMock = $this->createPartialMockWithReflection(
+            BlockInterface::class,
+            ['toHtml', 'setMethod']
+        );
 
         $methodMock->expects($this->once())->method('getFormBlockType')->willReturn($blockType);
         $methodMock->expects($this->once())->method('getCode')->willReturn($methodCode);
@@ -222,14 +224,14 @@ class DataTest extends TestCase
         $blockType = 'method_block_type';
 
         $methodMock = $this->getMockBuilder(MethodInterface::class)
-            ->getMockForAbstractClass();
+            ->getMock();
         $infoMock = $this->getMockBuilder(Info::class)->disableOriginalConstructor()
             ->onlyMethods(['getMethodInstance'])
             ->getMock();
-        $blockMock = $this->getMockBuilder(BlockInterface::class)->disableOriginalConstructor()
-            ->onlyMethods(['toHtml'])
-            ->addMethods(['setInfo'])
-            ->getMockForAbstractClass();
+        $blockMock = $this->createPartialMockWithReflection(
+            BlockInterface::class,
+            ['toHtml', 'setInfo']
+        );
 
         $infoMock->expects($this->once())->method('getMethodInstance')->willReturn($methodMock);
         $methodMock->expects($this->once())->method('getInfoBlockType')->willReturn($blockType);
@@ -250,14 +252,14 @@ class DataTest extends TestCase
         list($storeId, $blockHtml, $secureMode, $blockType) = [1, 'HTML MARKUP', true, 'method_block_type'];
 
         $methodMock = $this->getMockBuilder(MethodInterface::class)
-            ->getMockForAbstractClass();
+            ->getMock();
         $infoMock = $this->getMockBuilder(Info::class)->disableOriginalConstructor()
             ->onlyMethods(['getMethodInstance'])
             ->getMock();
-        $paymentBlockMock = $this->getMockBuilder(BlockInterface::class)->disableOriginalConstructor()
-            ->onlyMethods(['toHtml'])
-            ->addMethods(['setArea', 'setIsSecureMode', 'getMethod', 'setStore', 'setInfo'])
-            ->getMockForAbstractClass();
+        $paymentBlockMock = $this->createPartialMockWithReflection(
+            BlockInterface::class,
+            ['toHtml', 'setArea', 'setIsSecureMode', 'getMethod', 'setStore', 'setInfo']
+        );
 
         $this->appEmulation->expects($this->once())
             ->method('startEnvironmentEmulation')

@@ -88,7 +88,7 @@ class LoaderTest extends TestCase
      * @param $paths
      *
      * @return void
-     * @dataProvider testLoadDataProvider
+     * @dataProvider loadDataProvider
      */
     public function testLoad($paths): void
     {
@@ -134,7 +134,7 @@ class LoaderTest extends TestCase
     /**
      * @return array
      */
-    public static function testLoadDataProvider(): array
+    public static function loadDataProvider(): array
     {
         return [
             'Ordered modules list returned by registrar' => [

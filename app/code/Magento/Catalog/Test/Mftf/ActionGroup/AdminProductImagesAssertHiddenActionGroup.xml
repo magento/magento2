@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright 2025 Adobe
+ * All Rights Reserved.
+ */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminProductImagesAssertHiddenActionGroup">
+        <annotations>
+            <description>Expands "Images And Videos" section, clicks on provided image, assert "Hide from Product Page" checkbox is checked.</description>
+        </annotations>
+        <arguments>
+            <argument name="image" defaultValue="ProductImage"/>
+        </arguments>
+        <waitForElementVisible selector="{{AdminProductImagesSection.productImagesToggle}}" stepKey="waitForImagesSection"/>
+        <conditionalClick selector="{{AdminProductImagesSection.productImagesToggle}}" dependentSelector="{{AdminProductImagesSection.imageFile(image.fileName)}}" visible="false" stepKey="expandImages"/>
+        <waitForPageLoad stepKey="waitForImages"/>
+        <waitForElementVisible selector="{{AdminProductImagesSection.imageFile(image.fileName)}}" stepKey="seeProductImageName"/>
+        <click selector="{{AdminProductImagesSection.imageContainer(image.fileName)}}" stepKey="clickProductImage"/>
+        <waitForPageLoad stepKey="waitForImageDetails"/>
+        <waitForElementVisible selector="{{AdminProductImagesSection.altText}}" stepKey="seeAltTextSection"/>
+        <waitForPageLoad stepKey="waitForSlideOut"/>
+        <seeCheckboxIsChecked selector="{{AdminProductImagesSection.hideFromProductPage}}" stepKey="optionChecked"/>
+        <click selector="{{AdminSlideOutDialogSection.closeButton}}" stepKey="clickCloseButton"/>
+        <waitForPageLoad stepKey="waitForClose"/>
+        <waitForElementNotVisible selector="{{AdminProductImagesSection.altText}}" stepKey="waitForDetailsGone"/>
+    </actionGroup>
+</actionGroups>

@@ -43,7 +43,7 @@ class OperationManagementTest extends TestCase
             OperationInterfaceFactory::class,
             ['create']
         );
-        $this->loggerMock = $this->getMockForAbstractClass(LoggerInterface::class);
+        $this->loggerMock = $this->createMock(LoggerInterface::class);
         $this->resourceConnectionMock = $this->getMockBuilder(ResourceConnection::class)
             ->disableOriginalConstructor()
             ->onlyMethods(['getConnection', 'getTableName'])
@@ -81,7 +81,7 @@ class OperationManagementTest extends TestCase
 
         $connection = $this->getMockBuilder(AdapterInterface::class)
             ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+            ->getMock();
         $this->resourceConnectionMock->expects($this->atLeastOnce())
             ->method('getConnection')->with('default')
             ->willReturn($connection);
@@ -120,7 +120,7 @@ class OperationManagementTest extends TestCase
 
         $connection = $this->getMockBuilder(AdapterInterface::class)
             ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+            ->getMock();
         $this->resourceConnectionMock->expects($this->atLeastOnce())
             ->method('getConnection')->with('default')
             ->willReturn($connection);

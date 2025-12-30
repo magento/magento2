@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\Sales\Test\Unit\Block\Adminhtml\Order\Status\Assign;
 
+use Magento\Framework\Data\Form as DataForm;
 use Magento\Framework\Data\Form\Element\Fieldset;
 use Magento\Framework\Data\FormFactory;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
@@ -78,7 +79,7 @@ class FormTest extends TestCase
         array_unshift($statusesForField, ['value' => '', 'label' => '']);
         $statesForField = array_merge(['' => ''], $states);
 
-        $form = $this->createMock(\Magento\Framework\Data\Form::class);
+        $form = $this->createMock(DataForm::class);
         $fieldset = $this->createMock(Fieldset::class);
         $collection = $this->createMock(Collection::class);
 
@@ -102,8 +103,7 @@ class FormTest extends TestCase
 
         $fieldset->method('addField')
             ->willReturnCallback(
-                // @phpstan-ignore-next-line
-                function ($arg1, $arg2, $arg3) use ($statusesForField, $statesForField) {
+                function ($arg1, $arg2, $arg3) {
                     if ($arg1 === 'status' && $arg2 === 'select' && $arg3['name'] === 'status') {
                         return null;
                     } elseif ($arg1 === 'state' && $arg2 === 'select' && $arg3['name'] === 'state') {

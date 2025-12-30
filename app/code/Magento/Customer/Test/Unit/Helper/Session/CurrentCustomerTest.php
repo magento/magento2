@@ -21,9 +21,14 @@ use Magento\Framework\View\Layout;
 use Magento\Framework\View\LayoutInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 
+/**
+ * @phpstan-ignore-next-line
+ */
 class CurrentCustomerTest extends TestCase
 {
+    use MockCreationTrait;
     /**
      * @var CurrentCustomer
      */
@@ -86,13 +91,12 @@ class CurrentCustomerTest extends TestCase
     {
         $this->customerSessionMock = $this->createMock(Session::class);
         $this->layoutMock = $this->createMock(Layout::class);
-        $this->customerInterfaceFactoryMock = $this->getMockBuilder(CustomerInterfaceFactory::class)
-            ->addMethods(['setGroupId'])
-            ->onlyMethods(['create'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->customerDataMock = $this->getMockForAbstractClass(CustomerInterface::class);
-        $this->customerRepositoryMock = $this->getMockForAbstractClass(CustomerRepositoryInterface::class);
+        $this->customerInterfaceFactoryMock = $this->createPartialMockWithReflection(
+            CustomerInterfaceFactory::class,
+            ['setGroupId', 'create']
+        );
+        $this->customerDataMock = $this->createMock(CustomerInterface::class);
+        $this->customerRepositoryMock = $this->createMock(CustomerRepositoryInterface::class);
         $this->requestMock = $this->createMock(Http::class);
         $this->moduleManagerMock = $this->createMock(Manager::class);
         $this->viewMock = $this->createMock(View::class);

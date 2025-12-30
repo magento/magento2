@@ -209,7 +209,7 @@ class FactoryTest extends TestCase
      * @param        $createArgs
      * @param        $expectedArg0
      * @param        $expectedArg1
-     * @dataProvider testCreateUsingVariadicDataProvider
+     * @dataProvider createUsingVariadicDataProvider
      */
     public function testCreateUsingVariadic(
         $createArgs,
@@ -268,7 +268,7 @@ class FactoryTest extends TestCase
     /**
      * @return array
      */
-    public static function testCreateUsingVariadicDataProvider()
+    public static function createUsingVariadicDataProvider()
     {
         $oneScalar1 = static fn (self $testCase) => $testCase->createScalarMock();
         $oneScalar2 = static fn (self $testCase) => $testCase->createScalarMock();
@@ -348,7 +348,7 @@ class FactoryTest extends TestCase
      * @param        $expectedFooValue
      * @param        $expectedArg0
      * @param        $expectedArg1
-     * @dataProvider testCreateUsingSemiVariadicDataProvider
+     * @dataProvider createUsingSemiVariadicDataProvider
      */
     public function testCreateUsingSemiVariadic(
         $createArgs,
@@ -416,7 +416,7 @@ class FactoryTest extends TestCase
     /**
      * @return array
      */
-    public static function testCreateUsingSemiVariadicDataProvider()
+    public static function createUsingSemiVariadicDataProvider()
     {
         $oneScalar1 = static fn (self $testCase) => $testCase->createScalarMock();
         $oneScalar2 = static fn (self $testCase) => $testCase->createScalarMock();

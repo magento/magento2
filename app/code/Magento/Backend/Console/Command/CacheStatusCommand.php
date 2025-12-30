@@ -31,7 +31,7 @@ class CacheStatusCommand extends AbstractCacheCommand
     /**
      * @inheritdoc
      */
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $output->writeln('Current status:');
         foreach ($this->cacheManager->getStatus() as $cache => $status) {

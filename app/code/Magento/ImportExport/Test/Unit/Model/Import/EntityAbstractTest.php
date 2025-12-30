@@ -18,6 +18,7 @@ use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Framework\Stdlib\StringUtils;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\ImportExport\Model\Import;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\ImportExport\Model\Import\AbstractEntity;
 use Magento\ImportExport\Model\Import\AbstractSource;
 use Magento\ImportExport\Model\ImportFactory;
@@ -59,8 +60,8 @@ class EntityAbstractTest extends AbstractImportTestCase
 
         $this->_model = $this->getMockBuilder(AbstractEntity::class)
             ->setConstructorArgs($this->_getModelDependencies())
-            ->onlyMethods(['_saveValidatedBunches'])
-            ->getMockForAbstractClass();
+            ->onlyMethods(['_saveValidatedBunches', '_importData', 'getEntityTypeCode', 'validateRow'])
+            ->getMock();
     }
 
     protected function tearDown(): void
@@ -76,7 +77,7 @@ class EntityAbstractTest extends AbstractImportTestCase
     protected function _getModelDependencies()
     {
         $string = new StringUtils();
-        $scopeConfig = $this->getMockForAbstractClass(ScopeConfigInterface::class);
+        $scopeConfig = $this->createMock(ScopeConfigInterface::class);
         $importFactory = $this->createMock(ImportFactory::class);
         $resourceHelper = $this->createMock(Helper::class);
         $resource = $this->createMock(ResourceConnection::class);
@@ -379,12 +380,12 @@ class EntityAbstractTest extends AbstractImportTestCase
      *
      * @covers \Magento\ImportExport\Model\Import\AbstractEntity::getBehavior
      *
-     * @dataProvider dataProviderForTestGetBehaviorWithRowData
      * @param string $inputBehavior
      * @param array|null $rowData
      * @param string $expectedBehavior
      * @param array|null $availableBehaviors
      */
+    #[DataProvider('dataProviderForTestGetBehaviorWithRowData')]
     public function testGetBehaviorWithRowData(
         string $inputBehavior,
         ?array $rowData,
@@ -407,8 +408,8 @@ class EntityAbstractTest extends AbstractImportTestCase
      * Test for method isAttributeValid()
      *
      * @param array $data
-     * @dataProvider attributeList
      */
+    #[DataProvider('attributeList')]
     public function testIsAttributeValid(array $data)
     {
         $attributeCode = $data['code'];
@@ -591,15 +592,7 @@ class EntityAbstractTest extends AbstractImportTestCase
     protected function _createSourceAdapterMock(array $columns)
     {
         /** @var $source \Magento\ImportExport\Model\Import\AbstractSource|MockObject */
-        $source = $this->getMockForAbstractClass(
-            AbstractSource::class,
-            [],
-            '',
-            false,
-            true,
-            true,
-            ['getColNames']
-        );
+        $source = $this->createPartialMock(AbstractSource::class, ['getColNames', '_getNextRow']);
         $source->expects($this->any())->method('getColNames')->willReturn($columns);
         $this->_model->setSource($source);
 

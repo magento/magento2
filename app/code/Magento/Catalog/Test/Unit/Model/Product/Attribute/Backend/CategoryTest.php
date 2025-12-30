@@ -17,30 +17,18 @@ class CategoryTest extends TestCase
     {
         $categoryIds = [1, 2, 3, 4, 5];
 
-        $product = $this->getMockBuilder(DataObject::class)
-            ->addMethods(['getCategoryIds'])
-            ->onlyMethods(['setData'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $product->expects($this->once())->method('getCategoryIds')->willReturn($categoryIds);
+        $product = $this->createPartialMock(DataObject::class, []);
+        $product->setCategoryIds($categoryIds);
 
-        $product->expects($this->once())->method('setData')->with('category_ids', $categoryIds);
-
-        $categoryAttribute = $this->getMockBuilder(DataObject::class)
-            ->addMethods(['getAttributeCode'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $categoryAttribute->expects(
-            $this->once()
-        )->method(
-            'getAttributeCode'
-        )->willReturn(
-            'category_ids'
-        );
+        $categoryAttribute = $this->createPartialMock(DataObject::class, []);
+        $categoryAttribute->setAttributeCode('category_ids');
 
         $model = new Category();
         $model->setAttribute($categoryAttribute);
 
         $model->afterLoad($product);
+        
+        // Verify that the product data was set correctly
+        $this->assertEquals($categoryIds, $product->getData('category_ids'));
     }
 }

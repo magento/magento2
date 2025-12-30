@@ -52,24 +52,13 @@ class EmailNotificationTest extends TestCase
     private $inlineTranslationMock;
 
     /**
-     * @var ObjectManagerInterface|MockObject
-     */
-    private $objectManagerMock;
-
-    /**
      * @inheritDoc
      */
     protected function setUp(): void
     {
-        $this->objectManagerMock = $this->getMockBuilder(ObjectManagerInterface::class)
-            ->getMock();
-        $this->scopeConfigMock = $this->getMockBuilder(ScopeConfigInterface::class)
-            ->getMock();
-        $this->transportBuilderMock = $this->getMockBuilder(TransportBuilder::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->inlineTranslationMock = $this->getMockBuilder(StateInterface::class)
-            ->getMock();
+        $this->scopeConfigMock = $this->createMock(ScopeConfigInterface::class);
+        $this->transportBuilderMock = $this->createMock(TransportBuilder::class);
+        $this->inlineTranslationMock = $this->createMock(StateInterface::class);
 
         $this->objectManager = new ObjectManager($this);
         $this->model = $this->objectManager->getObject(
@@ -88,7 +77,7 @@ class EmailNotificationTest extends TestCase
     public function testSendErrors(): void
     {
         $exception = 'Sitemap Exception';
-        $transport = $this->getMockForAbstractClass(TransportInterface::class);
+        $transport = $this->createMock(TransportInterface::class);
 
         $this->scopeConfigMock
             ->method('getValue')

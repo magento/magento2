@@ -7,6 +7,8 @@ declare(strict_types=1);
 
 namespace Magento\CatalogImportExport\Test\Unit\Model\Import\Product;
 
+use Magento\Catalog\Model\ResourceModel\Product\LinkFactory;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\Catalog\Model\ResourceModel\Product\Link;
 use Magento\CatalogImportExport\Model\Import\Product;
 use Magento\CatalogImportExport\Model\Import\Product\LinkProcessor;
@@ -78,7 +80,7 @@ class LinkProcessorTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $this->objectManager = new ObjectManagerHelper($this);
         $this->objectManagerHelper = new ObjectManagerHelper($this);
 
         $this->resourceHelper = $this->createMock(Helper::class);
@@ -87,7 +89,7 @@ class LinkProcessorTest extends TestCase
         $this->resource->method('getMainTable')->willReturn('main_link_table');
 
         $this->linkFactory = $this->createPartialMock(
-            \Magento\Catalog\Model\ResourceModel\Product\LinkFactory::class,
+            LinkFactory::class,
             ['create']
         );
         $this->linkFactory->method('create')->willReturn($this->resource);
@@ -95,16 +97,16 @@ class LinkProcessorTest extends TestCase
         $this->skuProcessor = $this->createMock(
             SkuProcessor::class
         );
-        $this->logger = $this->getMockForAbstractClass(LoggerInterface::class);
+        $this->logger = $this->createMock(LoggerInterface::class);
         $this->skuStorage = $this->createMock(SkuStorage::class);
     }
 
     /**
-     * @dataProvider diConfigDataProvider
      * @param $expectedCallCount
      * @param $linkToNameId
      * @throws LocalizedException
      */
+    #[DataProvider('diConfigDataProvider')]
     public function testSaveLinks($expectedCallCount, $linkToNameId)
     {
         $this->linkProcessor =
@@ -118,7 +120,7 @@ class LinkProcessorTest extends TestCase
             );
 
         $importEntity = $this->createMock(Product::class);
-        $connection = $this->getMockForAbstractClass(AdapterInterface::class);
+        $connection = $this->createMock(AdapterInterface::class);
         $importEntity->method('getConnection')->willReturn($connection);
         $select = $this->createMock(Select::class);
 

@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\Catalog\Test\Unit\Model\Product\Attribute\Frontend;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\Product\Attribute\Frontend\Image;
 use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
@@ -23,10 +24,10 @@ class ImageTest extends TestCase
     private $model;
 
     /**
-     * @dataProvider getUrlDataProvider
      * @param string $expectedImage
      * @param string $productImage
      */
+    #[DataProvider('getUrlDataProvider')]
     public function testGetUrl(string $expectedImage, string $productImage)
     {
         $this->assertEquals($expectedImage, $this->model->getUrl($this->getMockedProduct($productImage)));
@@ -61,14 +62,9 @@ class ImageTest extends TestCase
      */
     private function getMockedProduct(string $productImage): Product
     {
-        $mockBuilder = $this->getMockBuilder(Product::class);
-        $mock = $mockBuilder->onlyMethods(['getData', 'getStore'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $mock = $this->createPartialMock(Product::class, ['getData', 'getStore']);
 
-        $mock->expects($this->any())
-            ->method('getData')
-            ->willReturn($productImage);
+        $mock->method('getData')->willReturn($productImage);
 
         $mock->expects($this->any())
             ->method('getStore');
@@ -83,14 +79,8 @@ class ImageTest extends TestCase
     {
         $mockedStore = $this->getMockedStore();
 
-        $mockBuilder = $this->getMockBuilder(StoreManagerInterface::class);
-        $mock = $mockBuilder->onlyMethods(['getStore'])
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-
-        $mock->expects($this->any())
-            ->method('getStore')
-            ->willReturn($mockedStore);
+        $mock = $this->createStub(StoreManagerInterface::class);
+        $mock->method('getStore')->willReturn($mockedStore);
 
         return $mock;
     }
@@ -100,14 +90,9 @@ class ImageTest extends TestCase
      */
     private function getMockedStore(): Store
     {
-        $mockBuilder = $this->getMockBuilder(Store::class);
-        $mock = $mockBuilder->onlyMethods(['getBaseUrl'])
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $mock = $this->createPartialMock(Store::class, ['getBaseUrl']);
 
-        $mock->expects($this->any())
-            ->method('getBaseUrl')
-            ->willReturn('');
+        $mock->method('getBaseUrl')->willReturn('');
 
         return $mock;
     }
@@ -117,10 +102,7 @@ class ImageTest extends TestCase
      */
     private function getMockedAttribute(): AbstractAttribute
     {
-        $mockBuilder = $this->getMockBuilder(AbstractAttribute::class);
-        $mockBuilder->onlyMethods(['getAttributeCode']);
-        $mockBuilder->disableOriginalConstructor();
-        $mock = $mockBuilder->getMockForAbstractClass();
+        $mock = $this->createPartialMock(AbstractAttribute::class, ['getAttributeCode']);
 
         $mock->expects($this->any())
             ->method('getAttributeCode');

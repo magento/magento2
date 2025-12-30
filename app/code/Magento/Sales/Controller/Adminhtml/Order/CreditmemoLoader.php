@@ -205,7 +205,7 @@ class CreditmemoLoader extends DataObject
             $backToStock = [];
             foreach ($savedData as $orderItemId => $itemData) {
                 if (isset($itemData['qty'])) {
-                    $qtys[$orderItemId] = $itemData['qty'];
+                    $qtys[$orderItemId] = $itemData['qty'] > 0 ? $itemData['qty'] : 0;
                 }
                 if (isset($itemData['back_to_stock'])) {
                     $backToStock[$orderItemId] = true;

@@ -78,10 +78,10 @@ class OrderAdapterTest extends TestCase
     {
         /** @var AddressAdapterInterface $addressAdapterMock */
         $addressAdapterMock = $this->getMockBuilder(AddressAdapterInterface::class)
-            ->getMockForAbstractClass();
+            ->getMock();
         /** @var OrderAddressInterface $orderAddressMock */
         $orderAddressMock = $this->getMockBuilder(OrderAddressInterface::class)
-            ->getMockForAbstractClass();
+            ->getMock();
         $this->addressAdapterFactoryMock->expects($this->once())
             ->method('create')
             ->with(['address' => $orderAddressMock])
@@ -102,10 +102,10 @@ class OrderAdapterTest extends TestCase
     {
         /** @var AddressAdapterInterface $addressAdapterMock */
         $addressAdapterMock = $this->getMockBuilder(AddressAdapterInterface::class)
-            ->getMockForAbstractClass();
+            ->getMock();
         /** @var OrderAddressInterface $orderAddressMock */
         $orderAddressMock = $this->getMockBuilder(OrderAddressInterface::class)
-            ->getMockForAbstractClass();
+            ->getMock();
         $this->addressAdapterFactoryMock->expects($this->once())
             ->method('create')
             ->with(['address' => $orderAddressMock])

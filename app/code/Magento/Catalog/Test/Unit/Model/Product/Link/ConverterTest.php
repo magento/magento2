@@ -10,12 +10,15 @@ namespace Magento\Catalog\Test\Unit\Model\Product\Link;
 use Magento\Catalog\Api\Data\ProductLinkInterface;
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\Product\Link\Converter;
-use Magento\Catalog\Model\Product\Type\AbstractType;
+use Magento\Catalog\Model\ProductLink\Link as ProductLink;
+use Magento\Catalog\Model\Product\Type\Simple;
 use Magento\Framework\Api\ExtensionAttributesInterface;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use PHPUnit\Framework\TestCase;
 
 class ConverterTest extends TestCase
 {
+    use MockCreationTrait;
     /**
      * @var Converter
      */
@@ -31,28 +34,23 @@ class ConverterTest extends TestCase
         $linkedProductSku = 'linkedProductSample';
         $linkedProductId = '2016';
         $linkType = 'associated';
-        $linkMock = $this->getMockBuilder(ProductLinkInterface::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['getData'])
-            ->onlyMethods(['getLinkType', 'getLinkedProductSku', 'getExtensionAttributes'])
-            ->getMockForAbstractClass();
+        $linkMock = $this->createPartialMockWithReflection(
+            ProductLink::class,
+            ['getData', 'getLinkType', 'getLinkedProductSku', 'getExtensionAttributes']
+        );
         $basicData = [$linkMock];
-        $linkedProductMock = $this->getMockBuilder(Product::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $linkedProductMock = $this->createMock(Product::class);
         $associatedProducts = [$linkedProductSku => $linkedProductMock];
         $info = [100, 300, 500];
         $infoFinal = [100, 300, 500, 'id' => $linkedProductId, 'qty' => 33];
         $linksAsArray = [$linkType => [$infoFinal]];
 
-        $typeMock = $this->getMockBuilder(AbstractType::class)
-            ->onlyMethods(['getAssociatedProducts'])
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $typeMock = $this->createPartialMockWithReflection(
+            Simple::class,
+            ['getAssociatedProducts']
+        );
 
-        $productMock = $this->getMockBuilder(Product::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $productMock = $this->createMock(Product::class);
         $productMock->expects($this->once())
             ->method('getProductLinks')
             ->willReturn($basicData);
@@ -78,9 +76,10 @@ class ConverterTest extends TestCase
         $linkedProductMock->expects($this->once())
             ->method('getId')
             ->willReturn($linkedProductId);
-        $attributeMock = $this->getMockBuilder(ExtensionAttributesInterface::class)
-            ->addMethods(['__toArray'])
-            ->getMockForAbstractClass();
+        $attributeMock = $this->createPartialMockWithReflection(
+            ExtensionAttributesInterface::class,
+            ['__toArray']
+        );
         $linkMock->expects($this->once())
             ->method('getExtensionAttributes')
             ->willReturn($attributeMock);

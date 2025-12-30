@@ -23,6 +23,7 @@ use Magento\Sales\Model\Order\Payment;
 use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -58,37 +59,26 @@ class PayflowlinkTest extends TestCase
     protected function setUp(): void
     {
         $this->store = $this->createMock(Store::class);
-        $storeManager = $this->createMock(
-            StoreManagerInterface::class
+        $storeManager = $this->createMock(StoreManagerInterface::class);
+        $this->paypalConfig = $this->createMock(Config::class);
+
+        $configFactoryMock = $this->createPartialMock(
+            ConfigInterfaceFactory::class,
+            ['create']
         );
-        $this->paypalConfig = $this->getMockBuilder(Config::class)
-            ->disableOriginalConstructor()
-            ->getMock();
 
-        $configFactoryMock = $this->getMockBuilder(ConfigInterfaceFactory::class)
-            ->onlyMethods(['create'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $requestFactory = $this->createPartialMock(
+            RequestFactory::class,
+            ['create']
+        );
 
-        $requestFactory = $this->getMockBuilder(RequestFactory::class)
-            ->onlyMethods(['create'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->payflowRequest = $this->createMock(Request::class);
 
-        $this->payflowRequest = $this->getMockBuilder(Request::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->infoInstance = $this->createMock(Payment::class);
 
-        $this->infoInstance = $this->getMockBuilder(Payment::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->scopeConfigMock = $this->createMock(ScopeConfigInterface::class);
 
-        $this->scopeConfigMock = $this->getMockBuilder(ScopeConfigInterface::class)
-            ->getMockForAbstractClass();
-
-        $this->gatewayMock = $this->getMockBuilder(Gateway::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->gatewayMock = $this->createMock(Gateway::class);
 
         $storeManager->expects($this->any())->method('getStore')->willReturn($this->store);
         $configFactoryMock->expects($this->any())
@@ -176,8 +166,8 @@ class PayflowlinkTest extends TestCase
     /**
      * @param bool $expectedResult
      * @param string $configResult
-     * @dataProvider dataProviderForTestIsActive
      */
+    #[DataProvider('dataProviderForTestIsActive')]
     public function testIsActive($expectedResult, $configResult)
     {
         $storeId = 15;

@@ -116,7 +116,7 @@ class CollectionTest extends TestCase
         /** @var MockObject $collection */
         $constructArgs = $this->objectManager
             ->getConstructArguments(QuoteItemCollection::class);
-        $constructArgs['eventManager'] = $this->getMockForAbstractClass(ManagerInterface::class);
+        $constructArgs['eventManager'] = $this->createMock(ManagerInterface::class);
         $resourceMock = $this->createMock(Quote::class);
         $resourceMock->expects($this->any())->method('getConnection')
             ->willReturn($this->createMock(Mysql::class));

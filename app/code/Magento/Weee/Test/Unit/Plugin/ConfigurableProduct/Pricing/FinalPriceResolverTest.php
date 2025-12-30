@@ -65,7 +65,7 @@ class FinalPriceResolverTest extends TestCase
     {
         $this->weeeHelperDataMock = $this->createMock(WeeeHelperData::class);
         $this->subjectMock = $this->createMock(ConfigurableProductFinalPriceResolver::class);
-        $this->productMock = $this->getMockForAbstractClass(SaleableInterface::class);
+        $this->productMock = $this->createMock(SaleableInterface::class);
         $this->priceInfoMock = $this->createMock(PriceInfo::class);
         $this->finalPriceMock = $this->createMock(CatalogFinalPrice::class);
         $this->amountMock = $this->createMock(AmountInterface::class);

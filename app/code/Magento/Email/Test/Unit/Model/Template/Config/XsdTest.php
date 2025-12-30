@@ -12,6 +12,7 @@ use Magento\Framework\Config\Dom\UrnResolver;
 use Magento\Framework\Config\ValidationStateInterface;
 use PHPUnit\Framework\AssertionFailedError;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Test for validation rules implemented by XSD schemas for email templates configuration
@@ -23,8 +24,8 @@ class XsdTest extends TestCase
      *
      * @param string $fixtureXml
      * @param array $expectedErrors
-     * @dataProvider mergedXmlDataProvider
      */
+    #[DataProvider('mergedXmlDataProvider')]
     public function testMergedXml($fixtureXml, array $expectedErrors)
     {
         if (!function_exists('libxml_set_external_entity_loader')) {
@@ -209,7 +210,7 @@ class XsdTest extends TestCase
      */
     protected function _testXmlAgainstXsd($fixtureXml, $schemaFile, array $expectedErrors)
     {
-        $validationStateMock = $this->getMockForAbstractClass(ValidationStateInterface::class);
+        $validationStateMock = $this->createMock(ValidationStateInterface::class);
         $validationStateMock->method('isValidationRequired')
             ->willReturn(true);
         $dom = new Dom($fixtureXml, $validationStateMock, [], null, null, '%message%');

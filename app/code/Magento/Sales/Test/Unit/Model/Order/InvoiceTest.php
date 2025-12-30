@@ -20,11 +20,13 @@ use Magento\Sales\Model\Order\Invoice\CommentFactory;
 use Magento\Sales\Model\Order\Payment;
 use Magento\Sales\Model\OrderFactory as SalesOrderFactory;
 use Magento\Sales\Model\ResourceModel\Order\Invoice\Collection as InvoiceCollection;
+use Magento\Sales\Model\ResourceModel\Order\Invoice\Comment\CollectionFactory as CommentCollectionFactory;
 use Magento\Sales\Model\ResourceModel\Order\Invoice\Item\CollectionFactory;
 use Magento\Sales\Model\ResourceModel\OrderFactory;
 use Magento\Store\Model\Store;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  *
@@ -32,6 +34,7 @@ use PHPUnit\Framework\TestCase;
  */
 class InvoiceTest extends TestCase
 {
+
     /**
      * @var Invoice
      */
@@ -98,7 +101,7 @@ class InvoiceTest extends TestCase
 
         $this->orderFactory = $this->createPartialMock(SalesOrderFactory::class, ['create']);
 
-        $this->eventManagerMock = $this->getMockForAbstractClass(ManagerInterface::class);
+        $this->eventManagerMock = $this->createMock(ManagerInterface::class);
         $contextMock = $this->createMock(Context::class);
         $contextMock->expects($this->any())
             ->method('getEventDispatcher')
@@ -111,7 +114,7 @@ class InvoiceTest extends TestCase
             'invoiceItemCollectionFactory' => $this->createMock(CollectionFactory::class),
             'invoiceCommentFactory' => $this->createMock(CommentFactory::class),
             'commentCollectionFactory' => $this->createMock(
-                \Magento\Sales\Model\ResourceModel\Order\Invoice\Comment\CollectionFactory::class
+                CommentCollectionFactory::class
             ),
         ];
         $this->model = $this->helperManager->getObject(Invoice::class, $arguments);
@@ -123,9 +126,9 @@ class InvoiceTest extends TestCase
     }
 
     /**
-     * @dataProvider canVoidDataProvider
      * @param bool $canVoid
      */
+    #[DataProvider('canVoidDataProvider')]
     public function testCanVoid($canVoid)
     {
         $this->order->expects($this->once())->method('getPayment')->willReturn($this->paymentMock);
@@ -138,9 +141,9 @@ class InvoiceTest extends TestCase
     }
 
     /**
-     * @dataProvider canVoidDataProvider
      * @param bool $canVoid
      */
+    #[DataProvider('canVoidDataProvider')]
     public function testDefaultCanVoid($canVoid)
     {
         $this->model->setState(Invoice::STATE_PAID);
@@ -226,11 +229,11 @@ class InvoiceTest extends TestCase
     }
 
     /**
-     * @dataProvider canCaptureDataProvider
      * @param string $state
      * @param bool|null $canPaymentCapture
      * @param bool $expectedResult
      */
+    #[DataProvider('canCaptureDataProvider')]
     public function testCanCapture($state, $canPaymentCapture, $expectedResult)
     {
         $this->model->setState($state);
@@ -262,10 +265,10 @@ class InvoiceTest extends TestCase
     }
 
     /**
-     * @dataProvider canCancelDataProvider
      * @param string $state
      * @param bool $expectedResult
      */
+    #[DataProvider('canCancelDataProvider')]
     public function testCanCancel($state, $expectedResult)
     {
         $this->model->setState($state);
@@ -287,12 +290,12 @@ class InvoiceTest extends TestCase
     }
 
     /**
-     * @dataProvider canRefundDataProvider
      * @param string $state
      * @param float $baseGrandTotal
      * @param float $baseTotalRefunded
      * @param bool $expectedResult
      */
+    #[DataProvider('canRefundDataProvider')]
     public function testCanRefund($state, $baseGrandTotal, $baseTotalRefunded, $expectedResult)
     {
         $this->model->setState($state);
@@ -356,7 +359,6 @@ class InvoiceTest extends TestCase
     }
 
     /**
-     * @dataProvider payDataProvider
      * @param float $totalPaid
      * @param float $baseTotalPaid
      * @param float $expectedTotal
@@ -364,6 +366,7 @@ class InvoiceTest extends TestCase
      * @param float $expectedState
      * @param array $items
      */
+    #[DataProvider('payDataProvider')]
     public function testPay(
         $totalPaid,
         $baseTotalPaid,
@@ -372,25 +375,25 @@ class InvoiceTest extends TestCase
         $expectedState,
         array $items
     ) {
-        $this->mockPay();
-        $this->model->setGrandTotal($totalPaid);
-        $this->model->setBaseGrandTotal($baseTotalPaid);
-        $this->order->setTotalPaid($totalPaid);
-        $this->order->setBaseTotalPaid($baseTotalPaid);
-        $collection = $this->getOrderInvoiceCollection();
-        $collection->method('getItems')
+         $this->mockPay();
+         $this->model->setGrandTotal($totalPaid);
+         $this->model->setBaseGrandTotal($baseTotalPaid);
+         $this->order->setTotalPaid($totalPaid);
+         $this->order->setBaseTotalPaid($baseTotalPaid);
+         $collection = $this->getOrderInvoiceCollection();
+         $collection->method('getItems')
             ->willReturn($items);
 
-        self::assertFalse($this->model->wasPayCalled());
-        self::assertEquals($this->model, $this->model->pay());
-        self::assertTrue($this->model->wasPayCalled());
-        self::assertEquals($expectedState, $this->model->getState());
+         self::assertFalse($this->model->wasPayCalled());
+         self::assertEquals($this->model, $this->model->pay());
+         self::assertTrue($this->model->wasPayCalled());
+         self::assertEquals($expectedState, $this->model->getState());
 
         //second call of pay() method must do nothing
-        $this->model->pay();
+         $this->model->pay();
 
-        self::assertEquals($expectedBaseTotal, $this->order->getBaseTotalPaid());
-        self::assertEquals($expectedTotal, $this->order->getTotalPaid());
+         self::assertEquals($expectedBaseTotal, $this->order->getBaseTotalPaid());
+         self::assertEquals($expectedTotal, $this->order->getTotalPaid());
     }
 
     /**
@@ -411,9 +414,7 @@ class InvoiceTest extends TestCase
      */
     private function getOrderInvoiceCollection()
     {
-        $collection = $this->getMockBuilder(InvoiceCollection::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $collection = $this->createMock(InvoiceCollection::class);
 
         $refObject = new \ReflectionClass($this->order);
         $refProperty = $refObject->getProperty('_invoices');
@@ -461,8 +462,8 @@ class InvoiceTest extends TestCase
      *
      * @param $initialInvoiceStatus
      * @param $finalInvoiceStatus
-     * @dataProvider getNotOpenedInvoiceStatuses
      */
+    #[DataProvider('getNotOpenedInvoiceStatuses')]
     public function testCannotCancelNotOpenedInvoice($initialInvoiceStatus, $finalInvoiceStatus)
     {
         $this->order->expects($this->never())->method('getPayment');

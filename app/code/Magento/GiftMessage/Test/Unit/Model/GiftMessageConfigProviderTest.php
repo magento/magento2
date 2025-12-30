@@ -22,6 +22,7 @@ use Magento\GiftMessage\Model\GiftMessageConfigProvider;
 use Magento\Quote\Model\Quote;
 use Magento\Quote\Model\Quote\Item;
 use Magento\Store\Model\ScopeInterface as Scope;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -32,6 +33,8 @@ use PHPUnit\Framework\TestCase;
  */
 class GiftMessageConfigProviderTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var GiftMessageConfigProvider
      */
@@ -81,13 +84,13 @@ class GiftMessageConfigProviderTest extends TestCase
     {
         $this->checkoutSessionMock = $this->createMock(Session::class);
         $this->httpContextMock = $this->createMock(\Magento\Framework\App\Http\Context::class);
-        $this->storeManagerMock = $this->getMockForAbstractClass(StoreManagerInterface::class);
-        $this->localeFormatMock = $this->getMockForAbstractClass(FormatInterface::class);
+        $this->storeManagerMock = $this->createMock(StoreManagerInterface::class);
+        $this->localeFormatMock = $this->createMock(FormatInterface::class);
         $this->formKeyMock = $this->createMock(FormKey::class);
-        $this->scopeConfigMock = $this->getMockForAbstractClass(ScopeConfigInterface::class);
+        $this->scopeConfigMock = $this->createMock(ScopeConfigInterface::class);
         $contextMock = $this->createMock(\Magento\Framework\App\Helper\Context::class);
-        $this->cartRepositoryMock = $this->getMockForAbstractClass(CartRepositoryInterface::class);
-        $this->itemRepositoryMock = $this->getMockForAbstractClass(ItemRepositoryInterface::class);
+        $this->cartRepositoryMock = $this->createMock(CartRepositoryInterface::class);
+        $this->itemRepositoryMock = $this->createMock(ItemRepositoryInterface::class);
         $contextMock->expects($this->atLeastOnce())->method('getScopeConfig')->willReturn($this->scopeConfigMock);
 
         $this->model = new GiftMessageConfigProvider(
@@ -121,11 +124,10 @@ class GiftMessageConfigProviderTest extends TestCase
             Store::class,
             ['getBaseUrl', 'getCode']
         );
-        $quoteMock = $this->getMockBuilder(Quote::class)
-            ->addMethods(['getQuoteCurrencyCode'])
-            ->onlyMethods(['getStore', 'getIsVirtual', 'getAllVisibleItems', 'getId'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $quoteMock = $this->createPartialMockWithReflection(
+            Quote::class,
+            ['getQuoteCurrencyCode', 'getStore', 'getIsVirtual', 'getAllVisibleItems', 'getId']
+        );
         $messageMock = $this->createMock(\Magento\GiftMessage\Model\Message::class);
 
         $this->scopeConfigMock->expects($this->atLeastOnce())->method('isSetFlag')->willReturnMap(

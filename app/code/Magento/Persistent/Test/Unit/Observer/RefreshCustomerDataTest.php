@@ -14,6 +14,7 @@ use Magento\Framework\Stdlib\Cookie\CookieMetadata;
 use Magento\Framework\Stdlib\Cookie\CookieMetadataFactory;
 use Magento\Framework\Stdlib\Cookie\PhpCookieManager;
 use Magento\Persistent\Observer\RefreshCustomerData;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -66,8 +67,8 @@ class RefreshCustomerDataTest extends TestCase
      * @param bool $result
      * @param string $callCount
      * @return void
-     * @dataProvider beforeStartDataProvider
      */
+    #[DataProvider('beforeStartDataProvider')]
     public function testBeforeStart($result, $callCount)
     {
         $observerMock = $this->createMock(Observer::class);

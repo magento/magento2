@@ -74,6 +74,8 @@
         </after>
         <!-- I see order successful Page -->
         <actionGroup ref="AssertStorefrontCheckoutSuccessActionGroup" stepKey="assertOrderSuccess"/>
+        <waitForPageLoad stepKey="waitForPageLoadAfterPayment"/>
+        <waitForElementVisible selector="{{CheckoutSuccessMainSection.orderNumber22}}" stepKey="waitForOrderNumberToBeGrabbed"/>
         <grabTextFrom selector="{{CheckoutSuccessMainSection.orderNumber22}}" stepKey="orderNumber"/>
         <waitForElementVisible selector="{{CheckoutSuccessMainSection.billingAgreement}}" stepKey="waitForBillingAgreement"/>
         <grabTextFrom selector="{{CheckoutSuccessMainSection.billingAgreement}}" stepKey="billingAgreement"/>

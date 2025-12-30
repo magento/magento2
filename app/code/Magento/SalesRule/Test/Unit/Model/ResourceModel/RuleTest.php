@@ -24,6 +24,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\SalesRule\Model\ResourceModel\Rule;
 use Magento\SalesRule\Model\Rule\Condition\Product;
 use Magento\SalesRule\Model\Rule\Condition\Product\Found;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -116,9 +117,7 @@ class RuleTest extends TestCase
                 ->getMock();
 
         $this->transactionManagerMock =
-            $this->getMockBuilder(TransactionManagerInterface::class)
-                ->disableOriginalConstructor()
-                ->getMockForAbstractClass();
+            $this->createMock(TransactionManagerInterface::class);
 
         $context->expects($this->any())
             ->method('getResources')
@@ -129,9 +128,7 @@ class RuleTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->adapter = $this->getMockBuilder(AdapterInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->adapter = $this->createMock(AdapterInterface::class);
         $this->resourcesMock->expects($this->any())
             ->method('getConnection')
             ->willReturn($this->adapter);
@@ -168,9 +165,10 @@ class RuleTest extends TestCase
                     ],
                 ]
             );
-        $serializerMock = $this->getMockBuilder(Json::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $serializerMock = $this->createMock(Json::class);
+        $serializerMock->method('serialize')->willReturnCallback(function ($value) {
+            return json_encode($value);
+        });
         $this->metadataPoolMock = $this->getMockBuilder(MetadataPool::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -198,9 +196,7 @@ class RuleTest extends TestCase
     {
         $ruleId = 1;
         /** @var AbstractModel|MockObject $abstractModel */
-        $abstractModel = $this->getMockBuilder(AbstractModel::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $abstractModel = $this->createMock(AbstractModel::class);
         $this->entityManager->expects($this->once())
             ->method('load')
             ->with($abstractModel, $ruleId);
@@ -229,8 +225,8 @@ class RuleTest extends TestCase
      *
      * @param string $testString
      * @param array $expects
-     * @dataProvider dataProviderForProductAttributes
      */
+    #[DataProvider('dataProviderForProductAttributes')]
     public function testGetProductAttributes($testString, $expects)
     {
         $result = $this->model->getProductAttributes($testString);
@@ -242,9 +238,7 @@ class RuleTest extends TestCase
      */
     public function testSaveStoreLabels()
     {
-        $entityMetadataInterfaceMock = $this->getMockBuilder(EntityMetadataInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $entityMetadataInterfaceMock = $this->createMock(EntityMetadataInterface::class);
         $entityMetadataInterfaceMock->expects($this->once())
             ->method('getLinkField')
             ->willReturn('fieldName');
@@ -255,12 +249,12 @@ class RuleTest extends TestCase
     }
 
     /**
-     * @dataProvider afterSaveShouldUpdateExistingCouponsDataProvider
      * @param array $data
      * @param bool $update
      * @return void
      * @throws \PHPUnit\Framework\MockObject\Exception
      */
+    #[DataProvider('afterSaveShouldUpdateExistingCouponsDataProvider')]
     public function testAfterSaveShouldUpdateExistingCoupons(array $data, bool $update = true): void
     {
         /** @var AbstractModel|MockObject $abstractModel */
@@ -269,7 +263,9 @@ class RuleTest extends TestCase
             ->onlyMethods(['getConditions', 'getActions'])
             ->getMock();
         $conditions = $this->createMock(\Magento\Rule\Model\Condition\Combine::class);
+        $conditions->method('asArray')->willReturn([]);
         $actions = $this->createMock(\Magento\Rule\Model\Action\Collection::class);
+        $actions->method('asArray')->willReturn([]);
         $ruleMock->method('getConditions')->willReturn($conditions);
         $ruleMock->method('getActions')->willReturn($actions);
         $ruleMock->addData($data);

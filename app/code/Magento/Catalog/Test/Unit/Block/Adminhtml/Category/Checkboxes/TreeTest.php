@@ -17,6 +17,7 @@ use Magento\Framework\Json\EncoderInterface;
 use Magento\Framework\Registry;
 use Magento\Framework\View\Helper\SecureHtmlRenderer;
 use Magento\Framework\DB\Helper as DbHelper;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\TestCase;
 
@@ -25,6 +26,8 @@ use PHPUnit\Framework\TestCase;
  */
 class TreeTest extends TestCase
 {
+    use MockCreationTrait;
+    
     /** @var ObjectManager */
     /** @var EncoderInterface|\PHPUnit\Framework\MockObject\MockObject */
     private $jsonEncoderMock;
@@ -126,9 +129,7 @@ class TreeTest extends TestCase
         $block = $this->buildBlockMock();
         // Stub factory->create()->getCollection() used by setCategoryIds
         $collectionStub = $this->createCategoryCollectionStub(['1/2/3']);
-        $categoryModelMock = $this->getMockBuilder(\stdClass::class)
-            ->addMethods(['getCollection'])
-            ->getMock();
+        $categoryModelMock = $this->createPartialMockWithReflection(\stdClass::class, ['getCollection']);
         $categoryModelMock->method('getCollection')->willReturn($collectionStub);
         $this->categoryFactoryMock->method('create')->willReturn($categoryModelMock);
 
@@ -141,9 +142,7 @@ class TreeTest extends TestCase
         $paths = ['1/2/3/4', '1/2/10/20/30'];
         $collectionStub = $this->createCategoryCollectionStub($paths);
 
-        $categoryModelMock = $this->getMockBuilder(\stdClass::class)
-            ->addMethods(['getCollection'])
-            ->getMock();
+        $categoryModelMock = $this->createPartialMockWithReflection(\stdClass::class, ['getCollection']);
         $categoryModelMock->method('getCollection')->willReturn($collectionStub);
 
         $this->categoryFactoryMock->method('create')->willReturn($categoryModelMock);
@@ -213,9 +212,7 @@ class TreeTest extends TestCase
                 return count($this->items);
             }
         };
-        $categoryModelMock = $this->getMockBuilder(\stdClass::class)
-            ->addMethods(['getCollection'])
-            ->getMock();
+        $categoryModelMock = $this->createPartialMockWithReflection(\stdClass::class, ['getCollection']);
         $categoryModelMock->method('getCollection')->willReturn($collectionStub);
         $this->categoryFactoryMock->method('create')->willReturn($categoryModelMock);
 
@@ -252,9 +249,7 @@ class TreeTest extends TestCase
         $block = $this->buildBlockMock();
         // Stub factory collection for setCategoryIds
         $collectionStub = $this->createCategoryCollectionStub(['1/2/5']);
-        $categoryModelMock = $this->getMockBuilder(\stdClass::class)
-            ->addMethods(['getCollection'])
-            ->getMock();
+        $categoryModelMock = $this->createPartialMockWithReflection(\stdClass::class, ['getCollection']);
         $categoryModelMock->method('getCollection')->willReturn($collectionStub);
         $this->categoryFactoryMock->method('create')->willReturn($categoryModelMock);
         $root = new Node(['id' => 1, 'children' => []], 'id', new \Magento\Framework\Data\Tree());
@@ -289,9 +284,7 @@ class TreeTest extends TestCase
 
         // Ensure setCategoryIds() can compute expanded paths without touching real DB
         $collectionStub = $this->createCategoryCollectionStub(['1/2/3/40']);
-        $categoryModelMock = $this->getMockBuilder(\stdClass::class)
-            ->addMethods(['getCollection'])
-            ->getMock();
+        $categoryModelMock = $this->createPartialMockWithReflection(\stdClass::class, ['getCollection']);
         $categoryModelMock->method('getCollection')->willReturn($collectionStub);
         $this->categoryFactoryMock->method('create')->willReturn($categoryModelMock);
 
@@ -421,9 +414,7 @@ class TreeTest extends TestCase
         $setProp($block, '_withProductCount', true);
         // Stub factory for setCategoryIds
         $collectionStub = $this->createCategoryCollectionStub(['1/2/5']);
-        $categoryModelMock = $this->getMockBuilder(\stdClass::class)
-            ->addMethods(['getCollection'])
-            ->getMock();
+        $categoryModelMock = $this->createPartialMockWithReflection(\stdClass::class, ['getCollection']);
         $categoryModelMock->method('getCollection')->willReturn($collectionStub);
         $this->categoryFactoryMock->method('create')->willReturn($categoryModelMock);
         // Inject factory into the block

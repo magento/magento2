@@ -12,6 +12,7 @@ use Magento\Framework\Locale\ResolverInterface;
 use Magento\Wishlist\Model\LocaleQuantityProcessor;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class LocaleQuantityProcessorTest extends TestCase
 {
@@ -32,19 +33,16 @@ class LocaleQuantityProcessorTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->resolver = $this->getMockBuilder(ResolverInterface::class)
-            ->getMock();
-        $this->filter   = $this->getMockBuilder(LocalizedToNormalized::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->resolver = $this->createMock(ResolverInterface::class);
+        $this->filter   = $this->createMock(LocalizedToNormalized::class);
         $this->processor = new LocaleQuantityProcessor($this->resolver, $this->filter);
     }
 
     /**
-     * @param int $qtyResult
+     * @param int      $qtyResult
      * @param int|null $expectedResult
-     * @dataProvider processDataProvider
      */
+    #[DataProvider('processDataProvider')]
     public function testProcess($qtyResult, $expectedResult)
     {
         $qty = 10;

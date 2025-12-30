@@ -37,12 +37,8 @@ class CommentTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->placeholderMock = $this->getMockBuilder(PlaceholderInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-        $this->fileSystemMock = $this->getMockBuilder(Filesystem::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->placeholderMock = $this->createMock(PlaceholderInterface::class);
+        $this->fileSystemMock = $this->createMock(Filesystem::class);
 
         $this->model = new Comment(
             $this->fileSystemMock,
@@ -53,9 +49,7 @@ class CommentTest extends TestCase
     public function testExecute()
     {
         $fileName = 'config.local.php';
-        $directoryReadMock = $this->getMockBuilder(ReadInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $directoryReadMock = $this->createMock(ReadInterface::class);
         $directoryReadMock->expects($this->once())
             ->method('readFile')
             ->with($fileName)

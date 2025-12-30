@@ -19,8 +19,8 @@ use Symfony\Component\Console\Output\OutputInterface;
  */
 class TemplateHintsStatusCommand extends Command
 {
-    const COMMAND_NAME = 'dev:template-hints:status';
-    const TEMPLATE_HINTS_STOREFRONT_PATH = 'dev/debug/template_hints_storefront';
+    public const COMMAND_NAME = 'dev:template-hints:status';
+    public const TEMPLATE_HINTS_STOREFRONT_PATH = 'dev/debug/template_hints_storefront';
 
     /**
      * @var ScopeConfigInterface
@@ -62,7 +62,7 @@ class TemplateHintsStatusCommand extends Command
      * @inheritdoc
      * @throws \InvalidArgumentException
      */
-    public function execute(InputInterface $input, OutputInterface $output)
+    public function execute(InputInterface $input, OutputInterface $output): int
     {
         $this->reinitableConfig->reinit();
         $templateHintsStatus =
