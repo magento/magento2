@@ -1236,7 +1236,7 @@ define([
          */
         isSearchKeyCached: function (searchKey) {
             var totalCached = this.cachedSearchResults.hasOwnProperty(searchKey) ?
-                this.deviation * this.cachedSearchResults[searchKey].lastPage :
+                this.pageLimit * this.cachedSearchResults[searchKey].lastPage :
                 0;
 
             return totalCached > 0 && totalCached >= this.cachedSearchResults[searchKey].total;
