@@ -219,6 +219,8 @@ define([
                 this.onRootListRender.bind(this)
             );
 
+            this.onScrollDown = _.debounce(this.onScrollDown, this.debounce);
+
             return this;
         },
 
