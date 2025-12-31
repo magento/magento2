@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright 2025 Adobe
+ * All Rights Reserved.
+ */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontVerifyProductPriceWithDifferentCurrenciesInStoreViewsTest">
+        <annotations>
+            <features value="Checkout"/>
+            <stories value="Shopping Cart Price Display"/>
+            <title value="Verify product price displays correctly in shopping cart with different currencies in different store views"/>
+            <description value="Verify price conversion in cart for USD and EUR views when switching between store views"/>
+            <severity value="MINOR"/>
+            <testCaseId value="AC-15943"/>
+            <group value="Checkout"/>
+        </annotations>
+        <before>
+            <!-- Step 1: Login to Admin Panel -->
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <!-- Step 2 & 3: Create additional Store View 2 under default website and default store -->
+            <actionGroup ref="AdminCreateStoreViewActionGroup" stepKey="createCustomStoreView">
+                <argument name="customStore" value="NewStoreViewData"/>
+            </actionGroup>
+            <!-- Step 4: Create simple product with price 100 USD -->
+            <createData entity="SimpleProduct_100" stepKey="createSimpleProduct"/>
+            <!-- Step 5, 6, 7: Configure currency for Store View 2 -->
+            <!-- Navigate to Currency Configuration -->
+            <actionGroup ref="AdminNavigateToCurrencySetupPageActionGroup" stepKey="goToCurrencySetupPage"/>
+            <!-- Switch to Store View 2 scope -->
+            <actionGroup ref="AdminSwitchStoreViewActionGroup" stepKey="switchToNewStoreView">
+                <argument name="storeView" value="NewStoreViewData.name"/>
+            </actionGroup>
+            <!-- Configure Euro as default display currency for Store View 2 -->
+            <uncheckOption selector="{{AdminConfigSection.allowedCurrencyCheckbox}}" stepKey="uncheckUseSystemValueDisplayCurrency"/>
+            <uncheckOption selector="{{AdminConfigSection.defaultCurrencyCheckbox}}" stepKey="uncheckUseSystemValueAllowedCurrency"/>
+            <actionGroup ref="AdminSetAllowedCurrenciesActionGroup" stepKey="setEuroAsDefaultCurrency">
+                <argument name="defaultValue" value="Euro"/>
+                <argument name="allowedValue" value="['Euro','US Dollar']"/>
+            </actionGroup>
+            <!-- Save configuration -->
+            <actionGroup ref="SaveStoreConfigurationActionGroup" stepKey="saveStoreConfiguration"/>
+            <!-- Step 8: Clear cache and reindex -->
+            <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCache">
+                <argument name="tags" value=""/>
+            </actionGroup>
+        </before>
+        <after>
+            <!-- Delete created product -->
+            <deleteData createDataKey="createSimpleProduct" stepKey="deleteProduct"/>
+            <!-- Reset currency configuration to default -->
+            <actionGroup ref="AdminNavigateToCurrencySetupPageActionGroup" stepKey="goToCurrencySetupPage"/>
+            <actionGroup ref="AdminSwitchStoreViewActionGroup" stepKey="switchToStoreView2ForCleanup">
+                <argument name="storeView" value="NewStoreViewData.name"/>
+            </actionGroup>
+            <actionGroup ref="AdminSetAllowedCurrenciesActionGroup" stepKey="resetCurrencyConfig">
+                <argument name="defaultValue" value="US Dollar"/>
+                <argument name="allowedValue" value="['US Dollar']"/>
+            </actionGroup>
+            <actionGroup ref="SaveStoreConfigurationActionGroup" stepKey="saveStoreConfiguration"/>
+            <!-- Delete Store View 2 -->
+            <actionGroup ref="AdminDeleteStoreViewActionGroup" stepKey="deleteStoreView">
+                <argument name="customStore" value="NewStoreViewData"/>
+            </actionGroup>
+            <!-- Clear cache -->
+            <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCacheAfterCleanup">
+                <argument name="tags" value=""/>
+            </actionGroup>
+            <!-- Logout from admin -->
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin"/>
+        </after>
+        <!-- Step 9: Open Storefront website -->
+        <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="openStorefront"/>
+        <!-- Step 10 & 11: Go to PDP and verify price is 100 USD -->
+        <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="openProductPageDefaultView">
+            <argument name="productUrl" value="$$createSimpleProduct.custom_attributes[url_key]$$"/>
+        </actionGroup>
+        <!-- Verify product price is $100.00 USD -->
+        <waitForText selector="{{StorefrontProductInfoMainSection.productPrice}}" userInput="$100.00" stepKey="verifyPriceIs100USD"/>
+        <!-- Step 12: Switch to Store View 2 -->
+        <actionGroup ref="StorefrontSwitchStoreViewActionGroup" stepKey="switchToStoreView2">
+            <argument name="storeView" value="NewStoreViewData"/>
+        </actionGroup>
+        <!-- Step 13: Verify price is 70.67 Euro on PDP -->
+        <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="openProductPageStoreView2">
+            <argument name="productUrl" value="$$createSimpleProduct.custom_attributes[url_key]$$"/>
+        </actionGroup>
+        <!-- Verify product price is €70.67 -->
+        <waitForText selector="{{StorefrontProductInfoMainSection.productPrice}}" userInput="€70.67" stepKey="verifyPriceIs70Point67Euro"/>
+        <!-- Step 14: Add product to cart -->
+        <actionGroup ref="StorefrontAddProductToCartActionGroup" stepKey="addProductToCart">
+            <argument name="product" value="$$createSimpleProduct$$"/>
+            <argument name="productCount" value="1"/>
+        </actionGroup>
+        <!-- Step 15 & 16: Go to shopping cart and verify price is 70.67 Euro -->
+        <actionGroup ref="StorefrontOpenCartFromMinicartActionGroup" stepKey="openShoppingCart"/>
+        <!-- Verify subtotal is also in Euro -->
+        <waitForText selector="{{CheckoutCartSummarySection.subtotal}}" userInput="€70.67" stepKey="verifySubtotalIs70Point67Euro"/>
+    </test>
+</tests>

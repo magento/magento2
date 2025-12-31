@@ -46,9 +46,8 @@ class IdentifierStoreReaderTest extends TestCase
 
         $this->configMock = $this->getMockBuilder(Config::class)
             ->onlyMethods(['getType', 'isEnabled'])
-            //->addMethods(['getType', 'isEnabled'])
             ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+            ->getMock();
 
         $this->model = new IdentifierStoreReader(
             $this->designExceptionsMock,
@@ -61,7 +60,7 @@ class IdentifierStoreReaderTest extends TestCase
     {
         $this->configMock->expects($this->any())
             ->method('getType')
-            ->willReturn(\Magento\PageCache\Model\Config::VARNISH);
+            ->willReturn(Config::VARNISH);
 
         $this->requestMock->expects($this->never())->method('getServerValue');
 
@@ -89,7 +88,7 @@ class IdentifierStoreReaderTest extends TestCase
 
         $this->configMock->expects($this->any())
             ->method('getType')
-            ->willReturn(\Magento\PageCache\Model\Config::BUILT_IN);
+            ->willReturn(Config::BUILT_IN);
 
         $defaultRequestMock = clone $this->requestMock;
         $defaultRequestMock->expects($this->any())

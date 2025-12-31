@@ -7,14 +7,13 @@ declare(strict_types=1);
 
 namespace Magento\Catalog\Test\Unit\Ui\DataProvider\Product\Form\Modifier;
 
-use Magento\Catalog\Model\Product;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\Catalog\Model\ResourceModel\Product as ProductResource;
 use Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\AbstractModifier;
 use Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\AttributeSet;
 use Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\Collection;
 use Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\CollectionFactory;
 use Magento\Framework\UrlInterface;
-use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 
 /**
@@ -46,24 +45,16 @@ class AttributeSetTest extends AbstractModifierTestCase
     protected function setUp(): void
     {
         parent::setUp();
-        
-        // Use the ProductTestHelper from parent, just configure the resource mock
-        $this->productResourceMock = $this->createMock(ProductResource::class);
-        $this->productResourceMock->method('getTypeId')->willReturn(4);
-        
-        // Set the resource on the helper using the new setResource method
-        $this->productMock->setResource($this->productResourceMock);
-        
-        $this->attributeSetCollectionFactoryMock = $this->createPartialMock(
-            CollectionFactory::class,
-            ['create']
-        );
+        $this->attributeSetCollectionFactoryMock = $this->createPartialMock(CollectionFactory::class, ['create']);
         $this->attributeSetCollectionMock = $this->createMock(Collection::class);
         $this->urlBuilderMock = $this->createMock(UrlInterface::class);
+        $this->productResourceMock = $this->createMock(ProductResource::class);
 
-        $this->attributeSetCollectionFactoryMock->method('create')
-            ->willReturn($this->attributeSetCollectionMock);
-        $this->attributeSetCollectionMock->method('setEntityTypeFilter')
+        $this->attributeSetCollectionFactoryMock->method('create')->willReturn($this->attributeSetCollectionMock);
+        $this->productMock->method('getResource')->willReturn($this->productResourceMock);
+        $this->productMock->method('getAttributeSetId')->willReturn(4);
+        $this->attributeSetCollectionMock->expects($this->any())
+            ->method('setEntityTypeFilter')
             ->willReturnSelf();
         $this->attributeSetCollectionMock->method('addFieldToSelect')
             ->willReturnSelf();
@@ -91,10 +82,13 @@ class AttributeSetTest extends AbstractModifierTestCase
         $this->assertNotEmpty($modifyMeta);
     }
 
+    /**
+     * @param bool $locked
+     */
     #[DataProvider('modifyMetaLockedDataProvider')]
     public function testModifyMetaLocked($locked)
     {
-        $this->productMock->setLockedAttribute('attribute_set_id', $locked);
+        $this->productMock->method('isLockedAttribute')->willReturn($locked);
         $modifyMeta = $this->getModel()->modifyMeta([AbstractModifier::DEFAULT_GENERAL_PANEL => []]);
         $children = $modifyMeta[AbstractModifier::DEFAULT_GENERAL_PANEL]['children'];
         $this->assertEquals(
@@ -130,8 +124,7 @@ class AttributeSetTest extends AbstractModifierTestCase
         $productId = 1;
         $attributeSetId = 4;
 
-        $this->productMock->setId($productId);
-        $this->productMock->setAttributeSetId($attributeSetId);
+        $this->productMock->setData('entity_id', $productId);
 
         $result = $this->getModel()->modifyData([]);
         $this->assertArrayHasKey($productId, $result);

@@ -37,6 +37,7 @@ use Magento\Framework\View\Element\Template\File\Validator;
 use Magento\Framework\View\FileSystem as FilesystemView;
 use Magento\Framework\View\Layout;
 use Magento\Store\Model\StoreManagerInterface;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
@@ -46,6 +47,8 @@ use Psr\Log\LoggerInterface;
  */
 class EditTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var Edit
      */
@@ -82,16 +85,16 @@ class EditTest extends TestCase
 
     protected function setUp(): void
     {
-        $layoutMock = $this->getMockBuilder(Layout::class)
-            ->addMethods(['helper'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $layoutMock = $this->createPartialMockWithReflection(
+            Layout::class,
+            ['helper']
+        );
         $helperMock = $this->createMock(Data::class);
         $menuConfigMock = $this->createMock(Config::class);
         $menuMock = $this->getMockBuilder(Menu::class)
             ->setConstructorArgs(
                 [
-                    $this->getMockForAbstractClass(LoggerInterface::class),
+                    $this->createMock(LoggerInterface::class),
                     '',
                     $this->createMock(Factory::class),
                     $this->createMock(SerializerInterface::class)
@@ -101,11 +104,10 @@ class EditTest extends TestCase
         $this->_configStructureMock = $this->createMock(Structure::class);
         $this->_emailConfigMock = $this->createMock(\Magento\Email\Model\Template\Config::class);
 
-        $this->filesystemMock = $this->getMockBuilder(Filesystem::class)
-            ->addMethods(['getFilesystem', 'getPath'])
-            ->onlyMethods(['getDirectoryRead'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->filesystemMock = $this->createPartialMockWithReflection(
+            Filesystem::class,
+            ['getFilesystem', 'getPath', 'getDirectoryRead']
+        );
 
         $viewFilesystem = $this->getMockBuilder(FilesystemView::class)
             ->onlyMethods(['getTemplateFileName'])

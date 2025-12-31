@@ -13,6 +13,7 @@ use Magento\GiftMessage\Model\Message;
 use Magento\GiftMessage\Model\MessageFactory;
 use Magento\Quote\Api\CartRepositoryInterface;
 use Magento\Quote\Model\Quote;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Quote\Model\Quote\Item;
 use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
@@ -21,6 +22,8 @@ use PHPUnit\Framework\TestCase;
 
 class CartRepositoryTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var CartRepository
      */
@@ -78,24 +81,21 @@ class CartRepositoryTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->quoteRepositoryMock = $this->getMockForAbstractClass(CartRepositoryInterface::class);
-        $this->messageFactoryMock = $this->getMockBuilder(MessageFactory::class)
-            ->addMethods(['__wakeup'])
-            ->onlyMethods(['create'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->quoteRepositoryMock = $this->createMock(CartRepositoryInterface::class);
+        $this->messageFactoryMock = $this->createPartialMockWithReflection(
+            MessageFactory::class,
+            ['__wakeup', 'create']
+        );
         $this->messageMock = $this->createMock(Message::class);
-        $this->quoteItemMock = $this->getMockBuilder(Item::class)
-            ->addMethods(['getGiftMessageId'])
-            ->onlyMethods(['__wakeup'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->quoteMock = $this->getMockBuilder(Quote::class)
-            ->addMethods(['getGiftMessageId'])
-            ->onlyMethods(['getItemById', 'getItemsCount', 'isVirtual', '__wakeup'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->storeManagerMock = $this->getMockForAbstractClass(StoreManagerInterface::class);
+        $this->quoteItemMock = $this->createPartialMockWithReflection(
+            Item::class,
+            ['getGiftMessageId', '__wakeup']
+        );
+        $this->quoteMock = $this->createPartialMockWithReflection(
+            Quote::class,
+            ['getGiftMessageId', 'getItemById', 'getItemsCount', 'isVirtual', '__wakeup']
+        );
+        $this->storeManagerMock = $this->createMock(StoreManagerInterface::class);
         $this->giftMessageManagerMock =
             $this->createMock(GiftMessageManager::class);
         $this->helperMock = $this->createMock(\Magento\GiftMessage\Helper\Message::class);

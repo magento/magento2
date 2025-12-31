@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\Catalog\Test\Unit\Model\Product\Attribute;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\Catalog\Api\Data\ProductAttributeInterface;
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Api\ProductAttributeOptionManagementInterface;
@@ -94,10 +95,9 @@ class RepositoryTest extends TestCase
         $this->filterManagerMock =
             $this->createMock(FilterManager::class);
         $this->eavAttributeRepositoryMock =
-            $this->getMockForAbstractClass(AttributeRepositoryInterface::class);
+            $this->createMock(AttributeRepositoryInterface::class);
         $this->eavConfigMock = $this->createMock(Config::class);
-        $this->eavConfigMock->expects($this->any())->method('getEntityType')
-            ->willReturn(new DataObject(['default_attribute_set_id' => 4]));
+        $this->eavConfigMock->method('getEntityType')->willReturn(new DataObject(['default_attribute_set_id' => 4]));
         $this->validatorFactoryMock = $this->createPartialMock(
             ValidatorFactory::class,
             ['create']
@@ -105,11 +105,7 @@ class RepositoryTest extends TestCase
         $this->searchCriteriaBuilderMock =
             $this->createMock(SearchCriteriaBuilder::class);
         $this->searchResultMock =
-            $this->getMockBuilder(SearchResultsInterface::class)
-                ->onlyMethods(
-                    ['getItems', 'getSearchCriteria', 'getTotalCount', 'setItems', 'setSearchCriteria', 'setTotalCount']
-                )
-                ->getMockForAbstractClass();
+            $this->createMock(SearchResultsInterface::class);
 
         $this->model = new Repository(
             $this->attributeResourceMock,
@@ -189,7 +185,7 @@ class RepositoryTest extends TestCase
     {
         $searchCriteriaMock = $this->createMock(SearchCriteria::class);
         $this->searchCriteriaBuilderMock->expects($this->once())->method('create')->willReturn($searchCriteriaMock);
-        $itemMock = $this->getMockForAbstractClass(ProductInterface::class);
+        $itemMock = $this->createMock(ProductInterface::class);
         $this->eavAttributeRepositoryMock->expects($this->once())
             ->method('getList')
             ->with(
@@ -246,8 +242,8 @@ class RepositoryTest extends TestCase
      * @param bool $filterable
      *
      * @return void
-     * @dataProvider filterableDataProvider
      */
+    #[DataProvider('filterableDataProvider')]
     public function testSaveInputExceptionInvalidIsFilterableFieldValue(
         string $field,
         string $method,
@@ -287,8 +283,8 @@ class RepositoryTest extends TestCase
         $attributeMock->expects($this->once())->method('getAttributeId')->willReturn(null);
         $attributeMock->expects($this->once())->method('setAttributeId')->with(null)->willReturnSelf();
         $labelMock = $this->createMock(FrontendLabel::class);
-        $attributeMock->expects($this->any())->method('getFrontendLabels')->willReturn([$labelMock]);
-        $attributeMock->expects($this->any())->method('getDefaultFrontendLabel')->willReturn(null);
+        $attributeMock->method('getFrontendLabels')->willReturn([$labelMock]);
+        $attributeMock->method('getDefaultFrontendLabel')->willReturn(null);
         $labelMock->expects($this->once())->method('getStoreId')->willReturn(0);
         $labelMock->expects($this->once())->method('getLabel')->willReturn(null);
 
@@ -304,13 +300,13 @@ class RepositoryTest extends TestCase
         $attributeCode = 'existing_attribute_code';
         $backendModel = 'backend_model';
         $attributeMock = $this->createMock(Attribute::class);
-        $attributeMock->expects($this->any())->method('getAttributeCode')->willReturn($attributeCode);
-        $attributeMock->expects($this->any())->method('getAttributeId')->willReturn($attributeId);
+        $attributeMock->method('getAttributeCode')->willReturn($attributeCode);
+        $attributeMock->method('getAttributeId')->willReturn($attributeId);
         $attributeMock->expects($this->once())->method('setBackendModel')->with($backendModel)->willReturnSelf();
 
         $existingModelMock = $this->createMock(Attribute::class);
-        $existingModelMock->expects($this->any())->method('getAttributeCode')->willReturn($attributeCode);
-        $existingModelMock->expects($this->any())->method('getAttributeId')->willReturn($attributeId);
+        $existingModelMock->method('getAttributeCode')->willReturn($attributeCode);
+        $existingModelMock->method('getAttributeId')->willReturn($attributeId);
         $existingModelMock->expects($this->once())->method('getBackendModel')->willReturn($backendModel);
 
         $this->eavAttributeRepositoryMock->expects($this->any())
@@ -331,24 +327,24 @@ class RepositoryTest extends TestCase
     public function testSaveSavesDefaultFrontendLabelIfItIsPresentInPayload()
     {
         $backendModel = 'backend_model';
-        $labelMock = $this->getMockForAbstractClass(AttributeFrontendLabelInterface::class);
-        $labelMock->expects($this->any())->method('getStoreId')->willReturn(1);
-        $labelMock->expects($this->any())->method('getLabel')->willReturn('Store Scope Label');
+        $labelMock = $this->createMock(AttributeFrontendLabelInterface::class);
+        $labelMock->method('getStoreId')->willReturn(1);
+        $labelMock->method('getLabel')->willReturn('Store Scope Label');
 
         $attributeId = 1;
         $attributeCode = 'existing_attribute_code';
         $attributeMock = $this->createMock(Attribute::class);
-        $attributeMock->expects($this->any())->method('getAttributeCode')->willReturn($attributeCode);
-        $attributeMock->expects($this->any())->method('getAttributeId')->willReturn($attributeId);
-        $attributeMock->expects($this->any())->method('getDefaultFrontendLabel')->willReturn(null);
-        $attributeMock->expects($this->any())->method('getFrontendLabels')->willReturn([$labelMock]);
-        $attributeMock->expects($this->any())->method('getOptions')->willReturn([]);
+        $attributeMock->method('getAttributeCode')->willReturn($attributeCode);
+        $attributeMock->method('getAttributeId')->willReturn($attributeId);
+        $attributeMock->method('getDefaultFrontendLabel')->willReturn(null);
+        $attributeMock->method('getFrontendLabels')->willReturn([$labelMock]);
+        $attributeMock->method('getOptions')->willReturn([]);
         $attributeMock->expects($this->once())->method('setBackendModel')->with($backendModel)->willReturnSelf();
 
         $existingModelMock = $this->createMock(Attribute::class);
-        $existingModelMock->expects($this->any())->method('getDefaultFrontendLabel')->willReturn('Default Label');
-        $existingModelMock->expects($this->any())->method('getAttributeId')->willReturn($attributeId);
-        $existingModelMock->expects($this->any())->method('getAttributeCode')->willReturn($attributeCode);
+        $existingModelMock->method('getDefaultFrontendLabel')->willReturn('Default Label');
+        $existingModelMock->method('getAttributeId')->willReturn($attributeId);
+        $existingModelMock->method('getAttributeCode')->willReturn($attributeCode);
         $existingModelMock->expects($this->once())->method('getBackendModel')->willReturn($backendModel);
 
         $this->eavAttributeRepositoryMock->expects($this->any())

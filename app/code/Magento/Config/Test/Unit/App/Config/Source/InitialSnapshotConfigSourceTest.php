@@ -44,16 +44,10 @@ class InitialSnapshotConfigSourceTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->flagManagerMock = $this->getMockBuilder(FlagManager::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->dataObjectFactoryMock = $this->getMockBuilder(DataObjectFactory::class)
-            ->onlyMethods(['create'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->dataObjectMock = $this->getMockBuilder(DataObject::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->flagManagerMock = $this->createMock(FlagManager::class);
+        $this->dataObjectFactoryMock = $this->createPartialMock(DataObjectFactory::class, ['create']);
+
+        $this->dataObjectMock = $this->createMock(DataObject::class);
 
         $this->dataObjectFactoryMock->expects($this->any())
             ->method('create')

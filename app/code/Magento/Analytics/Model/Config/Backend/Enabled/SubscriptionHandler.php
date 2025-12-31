@@ -24,7 +24,7 @@ class SubscriptionHandler
     /**
      * Config path for schedule setting of subscription handler.
      */
-    public const CRON_STRING_PATH = 'crontab/default/jobs/analytics_subscribe/schedule/cron_expr';
+    public const CRON_STRING_PATH = 'crontab/analytics/jobs/analytics_subscribe/schedule/cron_expr';
 
     /**
      * Config value for schedule setting of subscription handler.

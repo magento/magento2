@@ -102,6 +102,9 @@
         <actionGroup ref="OpenOrderByIdActionGroup" stepKey="openFirstOrderPage">
             <argument name="orderId" value="{$grabOrderNumber}"/>
         </actionGroup>
+        <!--Check if order is in Payment Review status and get payment update from PayPal-->
+        <conditionalClick selector="{{AdminOrderDetailsMainActionsSection.getPaymentUpdate}}" dependentSelector="{{AdminOrderDetailsMainActionsSection.getPaymentUpdate}}" visible="true" stepKey="clickGetPaymentUpdateIfVisible"/>
+        <waitForPageLoad stepKey="waitForPaymentUpdateResponse"/>
         <!-- Check order status -->
         <actionGroup ref="AdminOrderViewCheckStatusActionGroup" stepKey="seeAdminOrderStatus">
             <argument name="status" value="Processing"/>

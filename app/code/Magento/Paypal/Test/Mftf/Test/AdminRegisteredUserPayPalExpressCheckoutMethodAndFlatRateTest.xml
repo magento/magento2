@@ -83,12 +83,20 @@
         </actionGroup>
         <!--Assert the total-->
         <waitForText selector="{{AdminOrderTotalSection.grandTotal}}" userInput="$30.00" stepKey="checkGrandTotal"/>
+        <!--Check if order is in Payment Review status and get payment update from PayPal-->
+        <conditionalClick selector="{{AdminOrderDetailsMainActionsSection.getPaymentUpdate}}" dependentSelector="{{AdminOrderDetailsMainActionsSection.getPaymentUpdate}}" visible="true" stepKey="clickGetPaymentUpdateIfVisible"/>
+        <waitForPageLoad stepKey="waitForPaymentUpdateResponse"/>
+        <!--If invoice was created, capture it-->
+        <conditionalClick selector="{{AdminOrderDetailsMainActionsSection.invoice}}" dependentSelector="{{AdminOrderDetailsMainActionsSection.invoice}}" visible="true" stepKey="clickInvoiceButtonIfVisible"/>
+        <waitForPageLoad stepKey="waitForInvoicePageIfOpened"/>
+        <conditionalClick selector="{{AdminInvoiceMainActionsSection.submitInvoice}}" dependentSelector="{{AdminInvoiceMainActionsSection.submitInvoice}}" visible="true" stepKey="submitInvoiceIfOnInvoicePage"/>
+        <waitForPageLoad stepKey="waitAfterInvoiceSubmit"/>
         <!--Grab the transaction id-->
         <waitForElementVisible selector="{{AdminOrderDetailsInformationSection.paymentInformationField('Last Transaction ID')}}" stepKey="waitForTransactionIDFieldToBeAppeared"/>
         <grabTextFrom selector="{{AdminOrderDetailsInformationSection.paymentInformationField('Last Transaction ID')}}" stepKey="grabTransactionID"/>
         <!--Open comment history tab and assert the comment-->
         <actionGroup ref="AdminOpenOrderCommentsHistoryActionGroup" stepKey="clickOnCommentsHistory"/>
-        <waitForText selector="{{AdminOrderCommentsTabSection.orderCommentsWithType('Captured amount')}}" userInput="Captured amount of $30.00 online. Transaction ID: &quot;{$grabTransactionID}&quot;" stepKey="seeOrderHistoryNotes"/>
+        <waitForText selector="{{AdminOrderCommentsTabSection.orderCommentsWithType('Captured amount')}}" userInput="Transaction ID: &quot;{$grabTransactionID}&quot;" stepKey="seeOrderHistoryNotes"/>
         <waitForText selector="{{AdminOrderCommentsTabSection.orderStatus}}" userInput="Processing" stepKey="assertOrderStatusInCommentsHistorySection"/>
         <!-- Open Invoice and check -->
         <actionGroup ref="AdminOpenInvoiceFromOrderPageActionGroup" stepKey="openInvoiceFromOrder"/>

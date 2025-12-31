@@ -9,6 +9,7 @@ namespace Magento\Directory\Test\Unit\Model\Country\Postcode;
 
 use Magento\Directory\Model\Country\Postcode\Config;
 use Magento\Directory\Model\Country\Postcode\Validator;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -45,8 +46,8 @@ class ValidatorTest extends TestCase
      * @param string $postCode
      * @param string $countryId
      * @return void
-     * @dataProvider getCountryPostcodes
      */
+    #[DataProvider('getCountryPostcodes')]
     public function testValidatePositive(string $postCode, string $countryId): void
     {
         $this->assertTrue($this->model->validate($postCode, $countryId));

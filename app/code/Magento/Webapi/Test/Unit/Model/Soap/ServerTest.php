@@ -79,7 +79,7 @@ class ServerTest extends TestCase
         );
 
         $areaListMock = $this->createMock(AreaList::class);
-        $configScopeMock = $this->getMockForAbstractClass(ScopeInterface::class);
+        $configScopeMock = $this->createMock(ScopeInterface::class);
         $areaListMock->expects($this->any())->method('getFrontName')->willReturn('soap');
 
         $this->_requestMock = $this->getMockBuilder(
@@ -94,7 +94,7 @@ class ServerTest extends TestCase
 
         $this->_typeProcessor = $this->createMock(TypeProcessor::class);
         $this->wsdlGenerator = $this->createMock(Generator::class);
-        $this->_scopeConfig = $this->getMockForAbstractClass(ScopeConfigInterface::class);
+        $this->_scopeConfig = $this->createMock(ScopeConfigInterface::class);
 
         /** Init SUT. */
         $this->_soapServer = new Server(

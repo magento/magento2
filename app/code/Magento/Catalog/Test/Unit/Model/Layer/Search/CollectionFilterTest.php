@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\Catalog\Test\Unit\Model\Layer\Search;
 
+use PHPUnit\Framework\Attributes\CoversClass;
 use Magento\Catalog\Model\Category;
 use Magento\Catalog\Model\Config;
 use Magento\Catalog\Model\Layer\Search\CollectionFilter;
@@ -17,6 +18,7 @@ use Magento\Store\Model\StoreManagerInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
+#[CoversClass(CollectionFilter::class)]
 class CollectionFilterTest extends TestCase
 {
     /**
@@ -45,7 +47,7 @@ class CollectionFilterTest extends TestCase
         $this->visibilityMock = $this->createMock(Visibility::class);
         $this->catalogConfigMock = $this->createMock(Config::class);
 
-        $this->storeManagerMock = $this->getMockForAbstractClass(StoreManagerInterface::class);
+        $this->storeManagerMock = $this->createMock(StoreManagerInterface::class);
 
         $this->model = $objectManager->getObject(
             CollectionFilter::class,
@@ -57,10 +59,6 @@ class CollectionFilterTest extends TestCase
         );
     }
 
-    /**
-     * @covers \Magento\Catalog\Model\Layer\Search\CollectionFilter::filter
-     * @covers \Magento\Catalog\Model\Layer\Search\CollectionFilter::__construct
-     */
     public function testFilter()
     {
         $collectionMock = $this->createPartialMock(Collection::class, [

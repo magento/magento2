@@ -13,6 +13,7 @@ use Magento\Backend\Model\Menu\Item;
 use Magento\Framework\Escaper;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 class AnchorRendererTest extends TestCase
@@ -48,21 +49,11 @@ class AnchorRendererTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->activeMenuItemMock = $this->getMockBuilder(Item::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->menuItemMock = $this->getMockBuilder(Item::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->menuItemWithoutChildrenMock = $this->getMockBuilder(Item::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->menuItemCheckerMock = $this->getMockBuilder(MenuItemChecker::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->escaperMock = $this->getMockBuilder(Escaper::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->activeMenuItemMock = $this->createMock(Item::class);
+        $this->menuItemMock = $this->createMock(Item::class);
+        $this->menuItemWithoutChildrenMock = $this->createMock(Item::class);
+        $this->menuItemCheckerMock = $this->createMock(MenuItemChecker::class);
+        $this->escaperMock = $this->createMock(Escaper::class);
 
         $objectManagerHelper = new ObjectManagerHelper($this);
         $this->anchorRenderer =  $objectManagerHelper->getObject(
@@ -108,8 +99,8 @@ class AnchorRendererTest extends TestCase
 
     /**
      * @param bool $hasTarget
-     * @dataProvider targetDataProvider
      */
+    #[DataProvider('targetDataProvider')]
     public function testRenderAnchorLevelIsNotOne($hasTarget)
     {
         $level = 0;

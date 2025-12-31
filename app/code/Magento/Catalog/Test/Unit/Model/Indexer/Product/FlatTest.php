@@ -47,23 +47,11 @@ class FlatTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->productFlatIndexerRow = $this->getMockBuilder(
-            Row::class
-        )
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->productFlatIndexerRow = $this->createMock(Row::class);
 
-        $this->productFlatIndexerRows = $this->getMockBuilder(
-            Rows::class
-        )
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->productFlatIndexerRows = $this->createMock(Rows::class);
 
-        $this->productFlatIndexerFull = $this->getMockBuilder(
-            Full::class
-        )
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->productFlatIndexerFull = $this->createMock(Full::class);
 
         $helper = new ObjectManager($this);
         $this->model = $helper->getObject(

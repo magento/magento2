@@ -30,6 +30,7 @@ use Magento\Wishlist\Model\WishlistFactory;
 use Magento\Wishlist\Model\Item as WishlistItem;
 use Magento\Wishlist\Model\Wishlist\Config as WishlistConfig;
 use Magento\Catalog\Model\Product;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -41,6 +42,8 @@ use PHPUnit\Framework\TestCase;
  */
 class AddToCartTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var AddToCart
      */
@@ -336,7 +339,7 @@ class AddToCartTest extends TestCase
         // Mock items with only found IDs
         $mockItems = [];
         foreach ($foundItemIds as $itemId) {
-            $mockItem = $this->createMock(\Magento\Wishlist\Model\Item::class);
+            $mockItem = $this->createMock(WishlistItem::class);
             $mockItems[$itemId] = $mockItem;
         }
         $this->wishlistItemsCollection->expects($this->once())
@@ -372,15 +375,14 @@ class AddToCartTest extends TestCase
             ->willReturnSelf();
 
         // Mock wishlist item
-        $wishlistItem = $this->getMockBuilder(WishlistItem::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['getProduct', 'delete', 'getID'])
-            ->addMethods(['getProductId'])
-            ->getMock();
-        $product = $this->getMockBuilder(Product::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['getDisableAddToCart', 'setDisableAddToCart'])
-            ->getMock();
+        $wishlistItem = $this->createPartialMockWithReflection(
+            WishlistItem::class,
+            ['getProduct', 'delete', 'getID', 'getProductId']
+        );
+        $product = $this->createPartialMockWithReflection(
+            Product::class,
+            ['getDisableAddToCart', 'setDisableAddToCart']
+        );
 
         $wishlistItem->expects($this->exactly(2))
             ->method('getProduct')
@@ -475,15 +477,14 @@ class AddToCartTest extends TestCase
             ->willReturnSelf();
 
         // Mock wishlist item
-        $wishlistItem = $this->getMockBuilder(WishlistItem::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['getProduct', 'delete', 'getID'])
-            ->addMethods(['getProductId'])
-            ->getMock();
-        $product = $this->getMockBuilder(Product::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['getDisableAddToCart', 'setDisableAddToCart'])
-            ->getMock();
+        $wishlistItem = $this->createPartialMockWithReflection(
+            WishlistItem::class,
+            ['getProduct', 'delete', 'getID', 'getProductId']
+        );
+        $product = $this->createPartialMockWithReflection(
+            Product::class,
+            ['getDisableAddToCart', 'setDisableAddToCart']
+        );
 
         $wishlistItem->expects($this->exactly(2))
             ->method('getProduct')
@@ -601,15 +602,14 @@ class AddToCartTest extends TestCase
             ->willReturnSelf();
 
         // Mock wishlist item
-        $wishlistItem = $this->getMockBuilder(WishlistItem::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['getProduct', 'delete', 'getID'])
-            ->addMethods(['getProductId'])
-            ->getMock();
-        $product = $this->getMockBuilder(Product::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['getDisableAddToCart', 'setDisableAddToCart'])
-            ->getMock();
+        $wishlistItem = $this->createPartialMockWithReflection(
+            WishlistItem::class,
+            ['getProduct', 'delete', 'getID', 'getProductId']
+        );
+        $product = $this->createPartialMockWithReflection(
+            Product::class,
+            ['getDisableAddToCart', 'setDisableAddToCart']
+        );
 
         $wishlistItem->expects($this->exactly(2))
             ->method('getProduct')

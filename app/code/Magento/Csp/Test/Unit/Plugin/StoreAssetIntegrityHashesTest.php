@@ -50,17 +50,15 @@ class StoreAssetIntegrityHashesTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $this->integrityRepositoryPoolMock = $this->getMockBuilder(SubresourceIntegrityRepositoryPool::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['get'])
-            ->getMock();
-        $this->integrityCollectorMock = $this->getMockBuilder(SubresourceIntegrityCollector::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['release'])
-            ->getMock();
-        $this->loggerMock = $this->getMockBuilder(LoggerInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->integrityRepositoryPoolMock = $this->createPartialMock(
+            SubresourceIntegrityRepositoryPool::class,
+            ['get']
+        );
+        $this->integrityCollectorMock = $this->createPartialMock(
+            SubresourceIntegrityCollector::class,
+            ['release']
+        );
+        $this->loggerMock = $this->createMock(LoggerInterface::class);
         $this->plugin = new StoreAssetIntegrityHashes(
             $this->integrityCollectorMock,
             $this->integrityRepositoryPoolMock,
@@ -90,13 +88,11 @@ class StoreAssetIntegrityHashesTest extends TestCase
         );
 
         $bunches = [$bunch1, $bunch2];
-        $deployStaticContentMock = $this->getMockBuilder(DeployStaticContent::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $subResourceIntegrityMock = $this->getMockBuilder(SubresourceIntegrityRepository::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['saveBunch'])
-            ->getMock();
+        $deployStaticContentMock = $this->createMock(DeployStaticContent::class);
+        $subResourceIntegrityMock = $this->createPartialMock(
+            SubresourceIntegrityRepository::class,
+            ['saveBunch']
+        );
         $this->integrityCollectorMock->expects($this->once())->method('release')->willReturn($bunches);
         $this->integrityRepositoryPoolMock->expects($this->any())->method('get')->willReturn($subResourceIntegrityMock);
         $subResourceIntegrityMock->expects($this->any())->method('saveBunch')->willReturn(true);

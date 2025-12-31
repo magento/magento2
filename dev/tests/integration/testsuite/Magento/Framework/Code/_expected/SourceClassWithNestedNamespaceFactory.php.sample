@@ -4,8 +4,8 @@ namespace Magento\Framework\Code\GeneratorTest\NestedNamespace;
 /**
  * Factory class for @see \Magento\Framework\Code\GeneratorTest\SourceClassWithNamespace
  *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 class SourceClassWithNestedNamespaceFactory
 {

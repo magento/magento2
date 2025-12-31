@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\Catalog\Test\Unit\Model\ProductOptions\Config;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\Framework\Config\Dom\UrnResolver;
 use Magento\Framework\TestFramework\Unit\Utility\XsdValidator;
 use PHPUnit\Framework\TestCase;
@@ -60,8 +61,8 @@ class XsdTest extends TestCase
      * @param string $xmlString
      * @param array $expectedError
      * @param $isRegex
-     * @dataProvider schemaCorrectlyIdentifiesInvalidProductOptionsDataProvider
      */
+    #[DataProvider('schemaCorrectlyIdentifiesInvalidProductOptionsDataProvider')]
     public function testSchemaCorrectlyIdentifiesInvalidProductOptionsXml($xmlString, $expectedError, $isRegex)
     {
         $this->_loadDataForTest('product_options.xsd', $xmlString, $expectedError, $isRegex);
@@ -70,8 +71,8 @@ class XsdTest extends TestCase
     /**
      * @param string $xmlString
      * @param array $expectedError
-     * @dataProvider schemaCorrectlyIdentifiesInvalidProductOptionsMergedXmlDataProvider
      */
+    #[DataProvider('schemaCorrectlyIdentifiesInvalidProductOptionsMergedXmlDataProvider')]
     public function testSchemaCorrectlyIdentifiesInvalidProductOptionsMergedXml($xmlString, $expectedError)
     {
         $this->_loadDataForTest('product_options_merged.xsd', $xmlString, $expectedError);
@@ -80,8 +81,8 @@ class XsdTest extends TestCase
     /**
      * @param string $schemaName
      * @param string $validFileName
-     * @dataProvider schemaCorrectlyIdentifiesValidXmlDataProvider
      */
+    #[DataProvider('schemaCorrectlyIdentifiesValidXmlDataProvider')]
     public function testSchemaCorrectlyIdentifiesValidXml($schemaName, $validFileName)
     {
         $xmlString = file_get_contents(__DIR__ . '/_files/' . $validFileName);

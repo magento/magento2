@@ -45,4 +45,36 @@
         <requiredEntity type="ValueIndex">ValueIndex1</requiredEntity>
         <requiredEntity type="ValueIndex">ValueIndex1</requiredEntity>
     </entity>
+    <!-- Color Attribute Options -->
+    <entity name="ColorOptionBlack" type="attribute_option">
+        <data key="label">black</data>
+    </entity>
+    <entity name="ColorOptionRed" type="attribute_option">
+        <data key="label">red</data>
+    </entity>
+    <entity name="ColorOptionBlue" type="attribute_option">
+        <data key="label">blue</data>
+    </entity>
+    <entity name="ColorOptionPink" type="attribute_option">
+        <data key="label">pink</data>
+    </entity>
+    <entity name="ColorOptionWhite" type="attribute_option">
+        <data key="label">white</data>
+    </entity>
+    <!-- Size Attribute Options -->
+    <entity name="SizeOption8" type="attribute_option">
+        <data key="label">8</data>
+    </entity>
+    <entity name="SizeOption10" type="attribute_option">
+        <data key="label">10</data>
+    </entity>
+    <entity name="SizeOption12" type="attribute_option">
+        <data key="label">12</data>
+    </entity>
+    <entity name="SizeOption14" type="attribute_option">
+        <data key="label">14</data>
+    </entity>
+    <entity name="SizeOption16" type="attribute_option">
+        <data key="label">16</data>
+    </entity>
 </entities>

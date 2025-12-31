@@ -45,13 +45,8 @@ class InfoTest extends TestCase
             ]
         ];
         $objectManager->prepareObjectManager($objects);
-        $this->formFactoryMock = $this->getMockBuilder(FormFactory::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $roleMock = $this->getMockBuilder(Role::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['getData'])
-            ->getMock();
+        $this->formFactoryMock = $this->createMock(FormFactory::class);
+        $roleMock = $this->createPartialMock(Role::class, ['getData']);
 
         $roleMock->expects($this->any())->method('getData')->willReturn(['test_data' => 1]);
 
@@ -89,12 +84,8 @@ class InfoTest extends TestCase
 
     public function testBeforeToHtml()
     {
-        $formMock = $this->getMockBuilder(Form::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $fieldsetMock = $this->getMockBuilder(Fieldset::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $formMock = $this->createMock(Form::class);
+        $fieldsetMock = $this->createMock(Fieldset::class);
         $this->formFactoryMock->expects($this->any())->method('create')->willReturn($formMock);
         $formMock->expects($this->any())->method('addFieldSet')->willReturn($fieldsetMock);
         $fieldsetMock->expects($this->exactly(5))

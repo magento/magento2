@@ -21,12 +21,7 @@ class SynonymGroupTest extends TestCase
     {
         $context = $this->createMock(Context::class);
         $resources = $this->createMock(ResourceConnection::class);
-        $connection = $this->getMockForAbstractClass(
-            AdapterInterface::class,
-            [],
-            '',
-            false
-        );
+        $connection = $this->createMock(AdapterInterface::class);
         $select = $this->createMock(Select::class);
 
         $connection->expects($this->exactly(2))->method('quoteIdentifier')->willReturn('quoted');

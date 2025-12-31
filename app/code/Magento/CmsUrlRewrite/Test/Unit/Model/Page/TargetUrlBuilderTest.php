@@ -15,6 +15,7 @@ use Magento\Framework\UrlInterface;
 use Magento\Store\Api\Data\StoreInterface;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\UrlRewrite\Model\UrlFinderInterface;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -60,24 +61,17 @@ class TargetUrlBuilderTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->frontendUrlBuilderMock = $this->getMockBuilder(UrlInterface::class)
-            ->onlyMethods(['getUrl', 'setScope'])
-            ->getMockForAbstractClass();
-        $this->cmsPageMock = $this->getMockBuilder(Page::class)
-            ->onlyMethods(['checkIdentifier'])
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-        $this->cmsPageUrlPathGeneratorMock = $this->getMockBuilder(CmsPageUrlPathGenerator::class)
-            ->onlyMethods(['getCanonicalUrlPath'])
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-        $this->storeManagerMock = $this->getMockBuilder(StoreManagerInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-        $this->urlFinderMock = $this->getMockBuilder(UrlFinderInterface::class)
-            ->onlyMethods(['findOneByData'])
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->frontendUrlBuilderMock = $this->createMock(UrlInterface::class);
+        $this->cmsPageMock = $this->createPartialMock(
+            Page::class,
+            ['checkIdentifier']
+        );
+        $this->cmsPageUrlPathGeneratorMock = $this->createPartialMock(
+            CmsPageUrlPathGenerator::class,
+            ['getCanonicalUrlPath']
+        );
+        $this->storeManagerMock = $this->createMock(StoreManagerInterface::class);
+        $this->urlFinderMock = $this->createMock(UrlFinderInterface::class);
         $this->viewModel = new TargetUrlBuilder(
             $this->frontendUrlBuilderMock,
             $this->storeManagerMock,
@@ -90,16 +84,15 @@ class TargetUrlBuilderTest extends TestCase
     /**
      * Testing getTargetUrl with a scope provided
      *
-     * @dataProvider scopedUrlsDataProvider
-     *
      * @param array $urlParams
      * @param string $storeId
      * @throws NoSuchEntityException
      */
+    #[DataProvider('scopedUrlsDataProvider')]
     public function testGetTargetUrl(array $urlParams, string $storeId): void
     {
         /** @var StoreInterface|MockObject $storeMock */
-        $storeMock = $this->getMockForAbstractClass(StoreInterface::class);
+        $storeMock = $this->createMock(StoreInterface::class);
         $storeMock->expects($this->any())
             ->method('getId')
             ->willReturn($storeId);

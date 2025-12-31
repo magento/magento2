@@ -39,10 +39,9 @@ class GroupTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->groupServiceMock = $this->getMockForAbstractClass(GroupManagementInterface::class);
+        $this->groupServiceMock = $this->createMock(GroupManagementInterface::class);
         $this->converterMock = $this->createMock(DataObject::class);
-        $this->groupSource = $this->getMockBuilder(GroupSourceLoggedInOnlyInterface::class)
-            ->getMockForAbstractClass();
+        $this->groupSource = $this->createMock(GroupSourceLoggedInOnlyInterface::class);
         $this->model = (new ObjectManager($this))->getObject(
             Group::class,
             [

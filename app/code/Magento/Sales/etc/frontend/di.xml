@@ -27,4 +27,9 @@
             <argument name="addToCartInvalidProduct" xsi:type="boolean">true</argument>
         </arguments>
     </type>
+    <type name="Magento\Sales\CustomerData\LastOrderedItems">
+        <arguments>
+            <argument name="skipDeletedProductLogging" xsi:type="boolean">false</argument>
+        </arguments>
+    </type>
 </config>

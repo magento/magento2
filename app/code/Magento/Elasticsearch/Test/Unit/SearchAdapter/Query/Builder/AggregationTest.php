@@ -47,17 +47,11 @@ class AggregationTest extends TestCase
     {
         $helper = new ObjectManager($this);
 
-        $this->fieldMapper = $this->getMockBuilder(FieldMapperInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->fieldMapper = $this->createMock(FieldMapperInterface::class);
 
-        $this->requestInterface = $this->getMockBuilder(RequestInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->requestInterface = $this->createMock(RequestInterface::class);
 
-        $this->requestBucketInterface = $this->getMockBuilder(BucketInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->requestBucketInterface = $this->createMock(BucketInterface::class);
 
         $this->model = $helper->getObject(
             Aggregation::class,

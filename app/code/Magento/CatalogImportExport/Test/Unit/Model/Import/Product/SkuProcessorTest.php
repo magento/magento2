@@ -7,14 +7,18 @@ declare(strict_types=1);
 
 namespace Magento\CatalogImportExport\Test\Unit\Model\Import\Product;
 
+use Magento\Catalog\Model\ProductFactory;
 use Magento\CatalogImportExport\Model\Import\Product\SkuProcessor as SkuProcessor;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 class SkuProcessorTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
-     * @var \Magento\Catalog\Model\ProductFactory|MockObject
+     * @var ProductFactory|MockObject
      */
     protected $productFactory;
 
@@ -25,13 +29,13 @@ class SkuProcessorTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->productFactory = $this->createMock(\Magento\Catalog\Model\ProductFactory::class);
-        $this->skuProcessor = $this->getMockBuilder(
-            \Magento\CatalogImportExport\Model\Import\Product\SkuProcessor::class
-        )
-            ->onlyMethods(['_getSkus'])
-            ->setConstructorArgs([$this->productFactory])
-            ->getMock();
+        $this->productFactory = $this->createMock(ProductFactory::class);
+        
+        $this->skuProcessor = $this->createPartialMockWithReflection(
+            SkuProcessor::class,
+            ['_getSkus'],
+            [$this->productFactory]
+        );
     }
 
     public function testReloadOldSkus()
@@ -87,9 +91,7 @@ class SkuProcessorTest extends TestCase
     {
         $reflection = new \ReflectionClass(get_class($object));
         $reflectionProperty = $reflection->getProperty($property);
-        $reflectionProperty->setAccessible(true);
         $reflectionProperty->setValue($object, $value);
-
         return $object;
     }
 
@@ -103,8 +105,6 @@ class SkuProcessorTest extends TestCase
     {
         $reflection = new \ReflectionClass(get_class($object));
         $reflectionProperty = $reflection->getProperty($property);
-        $reflectionProperty->setAccessible(true);
-
         return $reflectionProperty->getValue($object);
     }
 }

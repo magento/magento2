@@ -56,14 +56,9 @@ class MethodListTest extends TestCase
     {
         $this->objectManager = new ObjectManager($this);
 
-        $this->paymentMethodList = $this->getMockBuilder(PaymentMethodListInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->paymentMethodList = $this->createMock(PaymentMethodListInterface::class);
 
-        $this->paymentMethodInstanceFactory = $this->getMockBuilder(
-            InstanceFactory::class
-        )->disableOriginalConstructor()
-            ->getMock();
+        $this->paymentMethodInstanceFactory = $this->createMock(InstanceFactory::class);
 
         $this->specificationFactoryMock = $this->createMock(SpecificationFactory::class);
 
@@ -126,7 +121,7 @@ class MethodListTest extends TestCase
                 )
             )->willReturn($compositeMock);
 
-        $methodMock = $this->getMockForAbstractClass(PaymentMethodInterface::class);
+        $methodMock = $this->createMock(PaymentMethodInterface::class);
         $this->paymentMethodList->expects($this->once())
             ->method('getActiveList')
             ->willReturn([$methodMock]);

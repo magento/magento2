@@ -124,7 +124,8 @@ class AdminUserCreateCommandTest extends TestCase
             'verbose' => false,
             'version' => false,
             'ansi' => null,
-            'no-interaction' => false
+            'no-interaction' => false,
+            'silent' => false
         ];
 
         $installerMock->expects($this->once())->method('installAdminUser')->with($expectedData);

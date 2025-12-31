@@ -117,4 +117,32 @@
         <data key="path">tax/sales_display/grandtotal</data>
         <data key="value">0</data>
     </entity>
+    <entity name="CustomDisplayShippingPricesInCatalog">
+        <data key="path">tax/display/shipping</data>
+        <data key="value">3</data>
+    </entity>
+    <entity name="CustomCartDisplayPrice">
+        <data key="path">tax/cart_display/price</data>
+        <data key="value">3</data>
+    </entity>
+    <entity name="CustomCartDisplaySubtotal">
+        <data key="path">tax/cart_display/subtotal</data>
+        <data key="value">3</data>
+    </entity>
+    <entity name="CustomCartDisplayShipping">
+        <data key="path">tax/cart_display/shipping</data>
+        <data key="value">3</data>
+    </entity>
+    <entity name="DefaultDisplayShippingPricesInCatalog">
+        <data key="path">tax/display/shipping</data>
+        <data key="value">1</data>
+    </entity>
+    <entity name="DefaultCartDisplayPrice">
+        <data key="path">tax/cart_display/price</data>
+        <data key="value">1</data>
+    </entity>
+    <entity name="DefaultCartDisplaySubtotal">
+        <data key="path">tax/cart_display/subtotal</data>
+        <data key="value">1</data>
+    </entity>
 </entities>

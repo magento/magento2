@@ -1,5 +1,5 @@
-# Copyright © Magento, Inc. All rights reserved.
-# See COPYING.txt for license details.
+# Copyright 2018 Adobe
+# All Rights Reserved.
 type StoreConfig {
     head_shortcut_icon : String @doc(description: "The small graphic image (favicon) that appears in the address bar and tab of the browser.")
     default_title : String @doc(description: "The title that appears at the title bar of each page when viewed in a browser.")

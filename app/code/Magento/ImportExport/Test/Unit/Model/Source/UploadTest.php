@@ -65,17 +65,11 @@ class UploadTest extends TestCase
         $directoryAbsolutePath = 'importexport/';
         $this->httpFactoryMock = $this->createPartialMock(FileTransferFactory::class, ['create']);
         $this->importExportDataMock = $this->createMock(DataHelper::class);
-        $this->uploaderFactoryMock = $this->getMockBuilder(UploaderFactory::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->randomMock = $this->getMockBuilder(Random::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->uploaderFactoryMock = $this->createMock(UploaderFactory::class);
+        $this->randomMock = $this->createMock(Random::class);
         $this->filesystemMock = $this->createMock(Filesystem::class);
         $this->adapterMock = $this->createMock(Http::class);
-        $directoryWriteMock = $this->getMockBuilder(WriteInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $directoryWriteMock = $this->createMock(WriteInterface::class);
         $directoryWriteMock->expects($this->once())->method('getAbsolutePath')->willReturn($directoryAbsolutePath);
         $this->filesystemMock->expects($this->once())->method('getDirectoryWrite')->willReturn($directoryWriteMock);
         $this->upload = new Upload(

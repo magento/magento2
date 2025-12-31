@@ -11,8 +11,10 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Sales\Api\Data\OrderInterface;
 use Magento\Sales\Api\Data\OrderItemInterface;
 use Magento\Sales\Model\Order;
+use Magento\Sales\Model\Order\Item;
 use Magento\Sales\Model\Order\Validation\CanShip;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -20,6 +22,7 @@ use PHPUnit\Framework\TestCase;
  */
 class CanShipTest extends TestCase
 {
+
     /**
      * @var CanShip|MockObject
      */
@@ -44,25 +47,23 @@ class CanShipTest extends TestCase
     {
         $this->objectManager = new ObjectManager($this);
 
-        $this->orderMock = $this->getMockBuilder(OrderInterface::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['getStatus', 'getItems'])
-            ->getMockForAbstractClass();
+        $this->orderMock = $this->createPartialMock(
+            Order::class,
+            ['getStatus', 'getItems', 'getState']
+        );
 
-        $this->orderItemMock = $this->getMockBuilder(OrderItemInterface::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['getQtyToShip'])
-            ->onlyMethods(['getLockedDoShip'])
-            ->getMockForAbstractClass();
+        $this->orderItemMock = $this->createPartialMock(
+            Item::class,
+            ['getQtyToShip', 'getLockedDoShip']
+        );
 
         $this->model = new CanShip();
     }
 
     /**
      * @param string $state
-     *
-     * @dataProvider canShipWrongStateDataProvider
      */
+    #[DataProvider('canShipWrongStateDataProvider')]
     public function testCanShipWrongState($state)
     {
         $this->orderMock->expects($this->any())
@@ -111,9 +112,8 @@ class CanShipTest extends TestCase
      * @param float $qtyToShipment
      * @param bool|null $itemLockedDoShipment
      * @param bool $expectedResult
-     *
-     * @dataProvider canShipDataProvider
      */
+    #[DataProvider('canShipDataProvider')]
     public function testCanShip($qtyToShipment, $itemLockedDoShipment, $expectedResult)
     {
         $this->orderMock->expects($this->any())

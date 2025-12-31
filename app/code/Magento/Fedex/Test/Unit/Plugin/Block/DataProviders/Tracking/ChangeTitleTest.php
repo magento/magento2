@@ -42,7 +42,7 @@ class ChangeTitleTest extends TestCase
      * @param string $carrierCode
      * @param string $originalResult
      * @param Phrase|string $finalResult
-     * @dataProvider testAfterGetTitleDataProvider
+     * @dataProvider afterGetTitleDataProvider
      */
     public function testAfterGetTitle(string $carrierCode, string $originalResult, $finalResult)
     {
@@ -70,7 +70,7 @@ class ChangeTitleTest extends TestCase
      *
      * @return array
      */
-    public static function testAfterGetTitleDataProvider(): array
+    public static function afterGetTitleDataProvider(): array
     {
         return [
             [Carrier::CODE, 'Original Title', __('Expected Delivery:')],
