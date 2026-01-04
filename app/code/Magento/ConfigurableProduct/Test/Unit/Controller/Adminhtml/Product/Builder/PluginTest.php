@@ -82,7 +82,7 @@ class PluginTest extends TestCase
         $this->requestMock = $this->createMock(Http::class);
         $this->productMock = $this->createPartialMockWithReflection(
             Product::class,
-            ['setTypeId', 'getAttributes', 'addData', 'setWebsiteIds']
+            ['setTypeId', 'getAttributes', 'addData', 'setWebsiteIds', 'getOrigData']
         );
         $this->attributeMock = $this->createPartialMock(
             Attribute::class,

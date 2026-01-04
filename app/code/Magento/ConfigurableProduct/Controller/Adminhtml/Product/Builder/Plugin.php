@@ -41,9 +41,24 @@ class Plugin
      * @param RequestInterface $request
      * @return Product
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function afterBuild(CatalogProductBuilder $subject, Product $product, RequestInterface $request)
+    {
+        $this->setProductType($product, $request);
+        $this->setRequiredAttributes($product, $request);
+        $this->copyAttributesFromConfigurable($product, $request);
+
+        return $product;
+    }
+
+    /**
+     * Set product type based on request attributes
+     *
+     * @param Product $product
+     * @param RequestInterface $request
+     * @return void
+     */
+    private function setProductType(Product $product, RequestInterface $request): void
     {
         if ($request->has('attributes')) {
             $attributes = $request->getParam('attributes');
@@ -53,12 +68,23 @@ class Plugin
             } else {
                 // Preserve the configurable type if product is already configurable
                 // Only convert to simple if the product was not previously a configurable product
-                if ($product->getOrigData('type_id') !== \Magento\ConfigurableProduct\Model\Product\Type\Configurable::TYPE_CODE) {
+                $configurableTypeCode = \Magento\ConfigurableProduct\Model\Product\Type\Configurable::TYPE_CODE;
+                if ($product->getOrigData('type_id') !== $configurableTypeCode) {
                     $product->setTypeId(\Magento\Catalog\Model\Product\Type::TYPE_SIMPLE);
                 }
             }
         }
+    }
 
+    /**
+     * Set required attributes on product
+     *
+     * @param Product $product
+     * @param RequestInterface $request
+     * @return void
+     */
+    private function setRequiredAttributes(Product $product, RequestInterface $request): void
+    {
         // Required attributes of simple product for configurable creation
         if ($request->getParam('popup') && ($requiredAttributes = $request->getParam('required'))) {
             $requiredAttributes = explode(",", $requiredAttributes);
@@ -68,7 +94,17 @@ class Plugin
                 }
             }
         }
+    }
 
+    /**
+     * Copy attributes from configurable product
+     *
+     * @param Product $product
+     * @param RequestInterface $request
+     * @return void
+     */
+    private function copyAttributesFromConfigurable(Product $product, RequestInterface $request): void
+    {
         if ($request->getParam('popup')
             && $request->getParam('product')
             && !is_array($request->getParam('product'))
@@ -94,7 +130,5 @@ class Plugin
             $product->addData($data);
             $product->setWebsiteIds($configProduct->getWebsiteIds());
         }
-
-        return $product;
     }
 }

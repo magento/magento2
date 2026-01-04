@@ -47,7 +47,7 @@ class ConfigurableTest extends TestCase
         $this->model = new Configurable(
             $this->requestMock
         );
-        $this->productMock = $this->createPartialMock(Product::class, ['setTypeId']);
+        $this->productMock = $this->createPartialMock(Product::class, ['setTypeId', 'getTypeId']);
         $this->subjectMock = $this->createMock(TypeTransitionManager::class);
         $this->closureMock = function () {
             return 'Expected';

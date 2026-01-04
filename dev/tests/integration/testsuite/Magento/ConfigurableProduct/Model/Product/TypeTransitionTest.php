@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\ConfigurableProduct\Test\Integration\Model\Product;
+namespace Magento\ConfigurableProduct\Model\Product\TypeTransition;
 
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\Product;
