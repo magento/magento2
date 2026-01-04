@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright 2011 Adobe
+ * Copyright 2026 Adobe
  * All Rights Reserved.
  */
 
