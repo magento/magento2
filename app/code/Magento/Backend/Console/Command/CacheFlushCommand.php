@@ -20,6 +20,7 @@ class CacheFlushCommand extends AbstractCacheTypeManageCommand
     protected function configure()
     {
         $this->setName('cache:flush');
+        $this->setAliases(['c:f']);
         $this->setDescription('Flushes cache storage used by cache type(s)');
         parent::configure();
     }

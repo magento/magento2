@@ -20,6 +20,7 @@ class CacheCleanCommand extends AbstractCacheTypeManageCommand
     protected function configure()
     {
         $this->setName('cache:clean');
+        $this->setAliases(['c:c']);
         $this->setDescription('Cleans cache type(s)');
         parent::configure();
     }
