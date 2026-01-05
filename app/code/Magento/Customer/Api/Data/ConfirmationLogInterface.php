@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright 2025 Adobe
+ * Copyright 2026 Adobe
  * All Rights Reserved.
  */
 declare(strict_types=1);
@@ -12,17 +12,17 @@ interface ConfirmationLogInterface
     /**
      * @var string
      */
-    public const string CUSTOMER_ID = 'customer_id';
+    public const CUSTOMER_ID = 'customer_id';
 
     /**
      * @var string
      */
-    public const string EMAIL_SENT_COUNTER = 'email_sent_counter';
+    public const EMAIL_SENT_COUNTER = 'email_sent_counter';
 
     /**
      * @var string
      */
-    public const string LAST_EMAIL_SENT_AT = 'last_email_sent_at';
+    public const LAST_EMAIL_SENT_AT = 'last_email_sent_at';
 
     /**
      * To get the customer id

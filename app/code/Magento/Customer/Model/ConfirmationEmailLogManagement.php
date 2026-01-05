@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright 2025 Adobe
+ * Copyright 2026 Adobe
  * All Rights Reserved.
  */
 declare(strict_types=1);
@@ -20,23 +20,23 @@ class ConfirmationEmailLogManagement implements ConfirmationEmailLogManagementIn
     /**
      * @var string
      */
-    public const string XML_PATH_MAX_REQUEST = 'customer/create_account/max_number_confirmation_email_requests';
+    public const XML_PATH_MAX_REQUEST = 'customer/create_account/max_number_confirmation_email_requests';
 
     /**
      * @var string
      */
-    public const string XML_PATH_MIN_TIME_INTERVAL =
+    public const XML_PATH_MIN_TIME_INTERVAL =
         'customer/create_account/min_time_between_confirmation_email_requests';
 
     /**
      * @var string
      */
-    public const string XML_PATH_ENABLE_RATE_LIMIT = 'customer/create_account/enable_rate_limit_for_confirmation_email';
+    public const XML_PATH_ENABLE_RATE_LIMIT = 'customer/create_account/enable_rate_limit_for_confirmation_email';
 
     /**
      * @var int
      */
-    private const int DISABLED = 0;
+    private const DISABLED = 0;
 
     /**
      * @param ResourceModel $resource
