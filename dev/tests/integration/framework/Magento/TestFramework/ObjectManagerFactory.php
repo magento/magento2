@@ -6,9 +6,10 @@
 namespace Magento\TestFramework;
 
 use Magento\Framework\App\DeploymentConfig;
-use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\App\Filesystem\DirectoryList as AppDirectoryList;
 use Magento\Framework\App\ObjectManager\ConfigLoader;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Filesystem\DirectoryList;
 use Magento\Framework\Filesystem\DriverPool;
 use Magento\Framework\Interception\PluginListInterface;
 use Magento\Framework\ObjectManager\ConfigLoaderInterface;
@@ -55,10 +56,10 @@ class ObjectManagerFactory extends \Magento\Framework\App\ObjectManagerFactory
         ObjectManager::setInstance($objectManager);
         $this->directoryList = $directoryList;
         $objectManager->configure($this->_primaryConfigData);
-        $objectManager->addSharedInstance($this->directoryList, DirectoryList::class);
+        $objectManager->addSharedInstance($this->directoryList, AppDirectoryList::class);
         $objectManager->addSharedInstance(
             $this->directoryList,
-            \Magento\Framework\Filesystem\DirectoryList::class
+            DirectoryList::class
         );
         $deploymentConfig = $this->createDeploymentConfig($directoryList, $this->configFilePool, $arguments);
         $this->factory->setArguments($arguments);

@@ -12,6 +12,7 @@ use Magento\Framework\App\Cache\StateInterface;
 use Magento\Framework\App\Cache\Type\FrontendPool;
 use Magento\Framework\App\Cache\TypeListInterface;
 use Magento\Framework\App\Console\Response;
+use Magento\Framework\Cache\Backend\BackendInterface;
 use Magento\Framework\Cache\FrontendInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -117,13 +118,18 @@ class ManagerTest extends TestCase
             ['bar', $frontendBar],
             ['baz', $frontendBaz],
         ]);
-        $backendOne = $this->getMockForAbstractClass(\Zend_Cache_Backend_Interface::class);
-        $backendTwo = $this->getMockForAbstractClass(\Zend_Cache_Backend_Interface::class);
+        $backendOne = $this->getMockForAbstractClass(BackendInterface::class);
+        $backendTwo = $this->getMockForAbstractClass(BackendInterface::class);
         $frontendFoo->expects($this->once())->method('getBackend')->willReturn($backendOne);
         $frontendBar->expects($this->once())->method('getBackend')->willReturn($backendOne);
         $frontendBaz->expects($this->once())->method('getBackend')->willReturn($backendTwo);
-        $backendOne->expects($this->once())->method('clean');
-        $backendTwo->expects($this->once())->method('clean');
+        // Manager calls clean() on frontend only once per unique backend
+        // frontendFoo cleaned (backendOne first time)
+        // frontendBar skipped (backendOne already flushed)
+        // frontendBaz cleaned (backendTwo first time)
+        $frontendFoo->expects($this->once())->method('clean');
+        $frontendBar->expects($this->never())->method('clean');
+        $frontendBaz->expects($this->once())->method('clean');
         $this->model->flush($cacheTypes);
     }
 
