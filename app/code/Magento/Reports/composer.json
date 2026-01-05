@@ -21,8 +21,8 @@
         "magento/module-sales-rule": "*",
         "magento/module-store": "*",
         "magento/module-tax": "*",
-        "magento/module-widget": "*",
         "magento/module-theme": "*",
+        "magento/module-widget": "*",
         "magento/module-wishlist": "*"
     },
     "type": "magento2-module",

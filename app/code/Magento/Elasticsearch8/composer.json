@@ -1,14 +1,17 @@
 {
     "name": "magento/module-elasticsearch-8",
     "description": "N/A",
+    "config": {
+        "sort-packages": true
+    },
     "require": {
         "php": "~8.2.0||~8.3.0||~8.4.0",
+        "elasticsearch/elasticsearch": "^8.15",
         "magento/framework": "*",
-        "magento/module-elasticsearch": "*",
         "magento/module-advanced-search": "*",
         "magento/module-catalog-search": "*",
-        "magento/module-search": "*",
-        "elasticsearch/elasticsearch": "^8.15"
+        "magento/module-elasticsearch": "*",
+        "magento/module-search": "*"
     },
     "suggest": {
         "magento/module-config": "*"
@@ -23,7 +26,7 @@
             "registration.php"
         ],
         "psr-4": {
-                "Magento\\Elasticsearch8\\": ""
+            "Magento\\Elasticsearch8\\": ""
         }
     }
 }

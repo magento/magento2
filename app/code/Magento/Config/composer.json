@@ -12,9 +12,9 @@
         "magento/module-deploy": "*",
         "magento/module-directory": "*",
         "magento/module-email": "*",
+        "magento/module-encryption-key": "*",
         "magento/module-media-storage": "*",
-        "magento/module-store": "*",
-        "magento/module-encryption-key": "*"
+        "magento/module-store": "*"
     },
     "type": "magento2-module",
     "license": [
