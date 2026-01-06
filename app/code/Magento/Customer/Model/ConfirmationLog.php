@@ -16,6 +16,9 @@ class ConfirmationLog extends AbstractModel implements ConfirmationLogInterface
 
     /**
      * @inheritdoc
+     *
+     * @SuppressWarnings(PHPMD.CamelCaseMethodName)
+     * phpcs:disable Magento2.CodeAnalysis.ProtectedModifier
      */
     protected function _construct()
     {

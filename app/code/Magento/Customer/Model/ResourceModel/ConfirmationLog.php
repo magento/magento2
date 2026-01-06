@@ -13,6 +13,9 @@ class ConfirmationLog extends AbstractDb
 {
     /**
      * @inheritdoc
+     *
+     * @SuppressWarnings(PHPMD.CamelCaseMethodName)
+     * phpcs:disable Magento2.CodeAnalysis.ProtectedModifier
      */
     protected function _construct()
     {
