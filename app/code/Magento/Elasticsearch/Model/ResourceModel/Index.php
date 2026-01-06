@@ -44,6 +44,11 @@ class Index extends \Magento\AdvancedSearch\Model\ResourceModel\Index
     protected $eavConfig;
 
     /**
+     * @var array
+     */
+    private $loadedCategoriesCache = [];
+
+    /**
      * Index constructor.
      * @param Context $context
      * @param StoreManagerInterface $storeManager
@@ -138,13 +143,28 @@ class Index extends \Magento\AdvancedSearch\Model\ResourceModel\Index
         $categoryPositions = $this->getCategoryProductIndexData($storeId, $productIds);
         $categoryData = [];
 
+        // Create cache key that includes store ID
+        $cacheKeyPrefix = 'store_' . $storeId . '_cat_';
+
         foreach ($categoryPositions as $productId => $positions) {
             foreach ($positions as $categoryId => $position) {
-                try {
-                    $category = $this->categoryRepository->get($categoryId, $storeId);
-                } catch (NoSuchEntityException $e) {
+                $cacheKey = $cacheKeyPrefix . $categoryId;
+
+                // Check instance cache first to avoid repeated repository calls (persists across multiple method calls)
+                if (!isset($this->loadedCategoriesCache[$cacheKey])) {
+                    try {
+                        $this->loadedCategoriesCache[$cacheKey] = $this->categoryRepository->get($categoryId, $storeId);
+                    } catch (NoSuchEntityException $e) {
+                        $this->loadedCategoriesCache[$cacheKey] = null;
+                        continue;
+                    }
+                }
+
+                $category = $this->loadedCategoriesCache[$cacheKey];
+                if ($category === null) {
                     continue;
                 }
+
                 $categoryName = $category->getName();
                 $categoryData[$productId][] = [
                     'id' => $categoryId,

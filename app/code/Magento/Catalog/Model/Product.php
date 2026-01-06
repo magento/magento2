@@ -1119,7 +1119,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      */
     public function cleanCache()
     {
-        $this->_cacheManager->clean('catalog_product_' . $this->getId());
+        $this->_cacheManager->clean(['catalog_product_' . $this->getId()]);
         return $this;
     }
 
