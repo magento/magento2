@@ -44,12 +44,8 @@ class PluginListGenerator implements OperationInterface
     public function doOperation()
     {
         $scopes = $this->scopeConfig->getAllScopes();
-        // remove primary scope for production mode as it is only called in developer mode
-        $scopes = array_diff($scopes, ['primary']);
-
-        // sort configuration to have it in the same order on every build
-        ksort($scopes);
-
+        // Cache IDs are now normalized (sorted) in PluginListGenerator::write()
+        // so processing order no longer affects cache ID generation
         $this->configWriter->write($scopes);
     }
 
