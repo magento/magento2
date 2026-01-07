@@ -29,9 +29,7 @@ class ModularConfigSourceTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->reader = $this->getMockBuilder(Reader::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->reader = $this->createMock(Reader::class);
         $this->source = new ModularConfigSource($this->reader);
     }
 

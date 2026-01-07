@@ -7,9 +7,11 @@ declare(strict_types=1);
 
 namespace Magento\SendFriend\Test\Unit\Block\Plugin\Catalog\Product;
 
+use Magento\Catalog\Block\Product\View as ProductView;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\SendFriend\Block\Plugin\Catalog\Product\View;
 use Magento\SendFriend\Model\SendFriend;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -24,16 +26,16 @@ class ViewTest extends TestCase
     /** @var SendFriend|MockObject */
     protected $sendfriendModel;
 
-    /** @var \Magento\Catalog\Block\Product\View|MockObject */
+    /** @var ProductView|MockObject */
     protected $productView;
 
     protected function setUp(): void
     {
         $this->sendfriendModel = $this->createPartialMock(
             SendFriend::class,
-            ['__wakeup', 'canEmailToFriend']
+            ['canEmailToFriend']
         );
-        $this->productView = $this->createMock(\Magento\Catalog\Block\Product\View::class);
+        $this->productView = $this->createMock(ProductView::class);
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->view = $this->objectManagerHelper->getObject(
@@ -45,10 +47,10 @@ class ViewTest extends TestCase
     }
 
     /**
-     * @dataProvider afterCanEmailToFriendDataSet
      * @param bool $result
      * @param string $callSendfriend
      */
+    #[DataProvider('afterCanEmailToFriendDataSet')]
     public function testAfterCanEmailToFriend($result, $callSendfriend)
     {
         $this->sendfriendModel->expects($this->$callSendfriend())->method('canEmailToFriend')

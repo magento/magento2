@@ -13,6 +13,7 @@ use Magento\Framework\Event\Observer;
 use Magento\PageCache\Model\Config;
 use Magento\PageCache\Observer\InvalidateCache;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 class InvalidateCacheTest extends TestCase
@@ -48,9 +49,9 @@ class InvalidateCacheTest extends TestCase
     }
 
     /**
-     * @dataProvider invalidateCacheDataProvider
      * @param bool $cacheState
      */
+    #[DataProvider('invalidateCacheDataProvider')]
     public function testExecute($cacheState)
     {
         $this->_configMock->expects($this->once())->method('isEnabled')->willReturn($cacheState);

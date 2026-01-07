@@ -1,18 +1,21 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Framework\Cache\Test\Unit\Frontend\Decorator;
 
+use Magento\Framework\Cache\CacheConstants;
+use Magento\Framework\Cache\Frontend\Adapter\Symfony;
 use Magento\Framework\Cache\Frontend\Adapter\Zend;
 use Magento\Framework\Cache\FrontendInterface;
 use Magento\Framework\Profiler;
 use Magento\Framework\Profiler\DriverInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ProxyTesting;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\Cache\Adapter\NullAdapter;
 
 class ProfilerTest extends TestCase
 {
@@ -29,7 +32,7 @@ class ProfilerTest extends TestCase
     /**
      * @param string $method
      * @param array $params
-     * @param \Zend_Cache_Backend $cacheBackend
+     * @param mixed $cacheBackend
      * @param \Closure $cacheFrontend
      * @param string $expectedProfileId
      * @param array $expectedProfilerTags
@@ -60,7 +63,7 @@ class ProfilerTest extends TestCase
         Profiler::add($driver);
 
         // Test
-        $object = new \Magento\Framework\Cache\Frontend\Decorator\Profiler($frontendMock, ['Zend_Cache_Backend_']);
+        $object = new \Magento\Framework\Cache\Frontend\Decorator\Profiler($frontendMock, []);
         $helper = new ProxyTesting();
         $result = $helper->invokeWithExpectations($object, $frontendMock, $method, $params, $expectedResult);
         $this->assertSame($expectedResult, $result);
@@ -68,11 +71,11 @@ class ProfilerTest extends TestCase
 
     protected function getMockForZendCache()
     {
-        $adaptee = $this->createMock(\Zend_Cache_Core::class);
+        $adaptee = $this->createMock(\Psr\Cache\CacheItemPoolInterface::class);
         $frontendFactory = function () use ($adaptee) {
             return $adaptee;
         };
-        $lowLevelFrontend = new Zend($frontendFactory);
+        $lowLevelFrontend = new Symfony($frontendFactory);
         return $lowLevelFrontend;
     }
 
@@ -81,7 +84,7 @@ class ProfilerTest extends TestCase
      */
     public static function proxyMethodDataProvider()
     {
-        $backend = new \Zend_Cache_Backend_BlackHole();
+        $backend = new NullAdapter();
         $lowLevelFrontend = static fn (self $testCase) => $testCase->getMockForZendCache();
 
         return [
@@ -94,8 +97,8 @@ class ProfilerTest extends TestCase
                 [
                     'group' => 'cache',
                     'operation' => 'cache:test',
-                    'frontend_type' => Zend::class,
-                    'backend_type' => 'BlackHole'
+                    'frontend_type' => Symfony::class,
+                    'backend_type' => NullAdapter::class
                 ],
                 111,
             ],
@@ -108,8 +111,8 @@ class ProfilerTest extends TestCase
                 [
                     'group' => 'cache',
                     'operation' => 'cache:load',
-                    'frontend_type' => Zend::class,
-                    'backend_type' => 'BlackHole'
+                    'frontend_type' => Symfony::class,
+                    'backend_type' => NullAdapter::class
                 ],
                 '111'
             ],
@@ -122,8 +125,8 @@ class ProfilerTest extends TestCase
                 [
                     'group' => 'cache',
                     'operation' => 'cache:save',
-                    'frontend_type' => Zend::class,
-                    'backend_type' => 'BlackHole'
+                    'frontend_type' => Symfony::class,
+                    'backend_type' => NullAdapter::class
                 ],
                 true
             ],
@@ -136,22 +139,22 @@ class ProfilerTest extends TestCase
                 [
                     'group' => 'cache',
                     'operation' => 'cache:remove',
-                    'frontend_type' => Zend::class,
-                    'backend_type' => 'BlackHole'
+                    'frontend_type' => Symfony::class,
+                    'backend_type' => NullAdapter::class
                 ],
                 true
             ],
             [
                 'clean',
-                [\Zend_Cache::CLEANING_MODE_MATCHING_ANY_TAG, ['tag']],
+                [CacheConstants::CLEANING_MODE_MATCHING_ANY_TAG, ['tag']],
                 $backend,
                 $lowLevelFrontend,
                 'cache_clean',
                 [
                     'group' => 'cache',
                     'operation' => 'cache:clean',
-                    'frontend_type' => Zend::class,
-                    'backend_type' => 'BlackHole'
+                    'frontend_type' => Symfony::class,
+                    'backend_type' => NullAdapter::class
                 ],
                 true
             ]

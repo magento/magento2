@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright 2017 Adobe
+ * Copyright 2024 Adobe
  * All Rights Reserved.
  */
 namespace Magento\Deploy\Console\Command\App;
@@ -19,7 +19,7 @@ class ConfigStatusCommand extends Command
     /**
      * Code for error when config import is required.
      */
-    const EXIT_CODE_CONFIG_IMPORT_REQUIRED = 2;
+    public const EXIT_CODE_CONFIG_IMPORT_REQUIRED = 2;
 
     /**
      * @var ChangeDetector
@@ -37,7 +37,7 @@ class ConfigStatusCommand extends Command
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected function configure()
     {
@@ -47,9 +47,9 @@ class ConfigStatusCommand extends Command
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         if ($this->changeDetector->hasChanges()) {
             $output->writeln(

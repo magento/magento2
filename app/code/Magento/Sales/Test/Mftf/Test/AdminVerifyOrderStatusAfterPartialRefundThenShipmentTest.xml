@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright 2025 Adobe
+ * All Rights Reserved.
+ */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminVerifyOrderStatusAfterPartialRefundThenShipmentTest">
+        <annotations>
+            <features value="Sales"/>
+            <stories value="To verify order status when the order is partially refunded"/>
+            <title value="Order status changes to complete after partial refund"/>
+            <description value="This test case verifies order status when the order is partially refunded."/>
+            <severity value="AVERAGE"/>
+            <testCaseId value="AC-6623"/>
+            <group value="sales"/>
+        </annotations>
+        <before>
+            <!-- create customer, product-->
+            <createData entity="Simple_US_Customer" stepKey="createCustomer"/>
+            <createData entity="SimpleProduct" stepKey="createProduct"/>
+            <!-- Pre Condition 1: Make sure to have a customer login for front end -->
+            <actionGroup ref="LoginToStorefrontActionGroup" stepKey="loginStorefront">
+                <argument name="Customer" value="$createCustomer$"/>
+            </actionGroup>
+            <!-- Login to admin -->
+            <actionGroup ref="AdminLoginActionGroup" stepKey="adminLogin"/>
+        </before>
+        <after>
+            <!-- Logout from customer, delete customer, product and logout from admin -->
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer"/>
+            <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
+            <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="adminLogout"/>
+        </after>
+        <!-- Step 1: Navigate to frontend, create an order of quantity 10 and place order -->
+        <actionGroup ref="StorefrontAddSimpleProductWithQtyActionGroup" stepKey="addProductToCart">
+            <argument name="product" value="$createProduct$"/>
+            <argument name="quantity" value="10"/>
+        </actionGroup>
+        <actionGroup ref="GoToCheckoutFromMinicartActionGroup" stepKey="goToCheckout"/>
+        <actionGroup ref="CheckoutSelectFlatRateShippingMethodActionGroup" stepKey="selectFlatRate"/>
+        <actionGroup ref="StorefrontCheckoutClickNextOnShippingStepActionGroup" stepKey="nextFromShipping"/>
+        <actionGroup ref="CheckoutSelectCheckMoneyOrderPaymentActionGroup" stepKey="selectCheckMoneyOrder"/>
+        <actionGroup ref="ClickPlaceOrderActionGroup" stepKey="placeOrder"/>
+        <grabTextFrom selector="{{CheckoutSuccessMainSection.orderNumber22}}" stepKey="grabOrderNumber"/>
+        <!--Step 2: Navigate to admin, open order and verify order is in pending state -->
+        <actionGroup ref="AdminOpenOrderByEntityIdActionGroup" stepKey="openOrder">
+            <argument name="entityId" value="{$grabOrderNumber}"/>
+        </actionGroup>
+        <actionGroup ref="AdminOrderViewCheckStatusActionGroup" stepKey="assertPending">
+            <argument name="status" value="Pending"/>
+        </actionGroup>
+        <!--Step 3: Create an invoice for the order of quantity 10 -->
+        <actionGroup ref="StartCreateInvoiceFromOrderPageActionGroup" stepKey="startInvoice"/>
+        <actionGroup ref="SubmitInvoiceActionGroup" stepKey="submitInvoice"/>
+        <!-- Step 4: Create partial credit memo  for refund of qty 5 -->
+        <actionGroup ref="AdminCreateCreditMemoWithUpdateQtyActionGroup" stepKey="createCreditMemoWithPartialQty">
+            <argument name="productQty" value="5"/>
+        </actionGroup>
+        <actionGroup ref="SubmitCreditMemoActionGroup" stepKey="submitCreditMemo"/>
+        <!-- Step 5: Create shipment for remaining 5 -->
+        <actionGroup ref="GoToShipmentIntoOrderActionGroup" stepKey="goToShipment"/>
+        <actionGroup ref="SubmitShipmentIntoOrderActionGroup" stepKey="submitShipment"/>
+        <!-- Step 6: Assert order status should be in complete state -->
+        <actionGroup ref="AdminOrderViewCheckStatusActionGroup" stepKey="assertOrderComplete">
+            <argument name="status" value="Complete"/>
+        </actionGroup>
+    </test>
+</tests>

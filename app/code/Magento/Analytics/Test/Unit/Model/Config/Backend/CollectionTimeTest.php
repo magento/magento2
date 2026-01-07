@@ -42,9 +42,9 @@ class CollectionTimeTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->configWriterMock = $this->getMockForAbstractClass(WriterInterface::class);
+        $this->configWriterMock = $this->createMock(WriterInterface::class);
 
-        $this->loggerMock = $this->getMockForAbstractClass(LoggerInterface::class);
+        $this->loggerMock = $this->createMock(LoggerInterface::class);
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
 

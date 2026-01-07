@@ -88,10 +88,7 @@ class ConsumerTest extends TestCase
             ->getMock();
         $this->_tokenFactory->expects($this->any())->method('create')->willReturn($this->_tokenMock);
 
-        $this->_storeManagerMock = $this->getMockBuilder(
-            StoreManagerInterface::class
-        )->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->_storeManagerMock = $this->createMock(StoreManagerInterface::class);
         $this->_storeMock = $this->getMockBuilder(
             Store::class
         )->disableOriginalConstructor()
@@ -150,7 +147,7 @@ class ConsumerTest extends TestCase
         unset($this->_oauthService);
     }
 
-    public function testCreateConsumer()
+    public function testCreateConsumer(): void
     {
         $key = $this->_generateRandomString(Oauth::LENGTH_CONSUMER_KEY);
         $secret = $this->_generateRandomString(Oauth::LENGTH_CONSUMER_SECRET);
@@ -165,7 +162,7 @@ class ConsumerTest extends TestCase
         $this->assertEquals($consumer, $this->_consumerMock, 'Consumer object was expected to be returned');
     }
 
-    public function testPostToConsumer()
+    public function testPostToConsumer(): void
     {
         $consumerId = 1;
 

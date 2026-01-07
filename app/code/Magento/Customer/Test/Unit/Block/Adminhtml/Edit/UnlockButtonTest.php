@@ -15,6 +15,7 @@ use Magento\Framework\Phrase;
 use Magento\Framework\Registry;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\Framework\UrlInterface;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 class UnlockButtonTest extends TestCase
@@ -61,10 +62,7 @@ class UnlockButtonTest extends TestCase
         $this->customerModelMock = $this->createMock(Customer::class);
         $this->registryMock = $this->createPartialMock(Registry::class, ['registry']);
 
-        $this->urlBuilderMock = $this->getMockBuilder(UrlInterface::class)
-            ->onlyMethods(['getUrl'])
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->urlBuilderMock = $this->createMock(UrlInterface::class);
         $this->contextMock->expects($this->any())->method('getUrlBuilder')->willReturn($this->urlBuilderMock);
         $objectManagerHelper = new ObjectManagerHelper($this);
 
@@ -81,9 +79,8 @@ class UnlockButtonTest extends TestCase
 
     /**
      * @param array $result
-     * @param bool $expectedValue
-     * @dataProvider getButtonDataProvider
-     */
+     * @param bool $expectedValue */
+    #[DataProvider('getButtonDataProvider')]
     public function testGetButtonData($result, $expectedValue)
     {
         $this->registryMock->expects($this->any())->method('registry')->willReturn(1);

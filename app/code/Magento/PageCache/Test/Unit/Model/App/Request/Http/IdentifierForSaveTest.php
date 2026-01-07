@@ -92,7 +92,7 @@ class IdentifierForSaveTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $objectManagerMock = $this->getMockForAbstractClass(ObjectManagerInterface::class);
+        $objectManagerMock = $this->createMock(ObjectManagerInterface::class);
         $objectManagerMock->expects($this->once())
             ->method('get')
             ->willReturn($this->identifierMock);
@@ -109,8 +109,6 @@ class IdentifierForSaveTest extends TestCase
 
     /**
      * Test get identifier for save value.
-     *
-     * @return void
      */
     public function testGetValue(): void
     {

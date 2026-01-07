@@ -13,6 +13,7 @@ use Magento\Framework\DB\Select;
 use Magento\Reports\Model\ResourceModel\Helper;
 use Magento\Store\Api\Data\StoreInterface;
 use Magento\Store\Model\StoreManagerInterface;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -77,9 +78,9 @@ class HelperTest extends TestCase
     /**
      * @param string $type
      * @param array $result
-     * @dataProvider typesDataProvider
      * @return void
      */
+    #[DataProvider('typesDataProvider')]
     public function testUpdateReportRatingPos($type, $result)
     {
         $mainTable = 'mainTable';

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -10,6 +10,7 @@ namespace Magento\Framework\App\Test\Unit;
 use Magento\Framework\App\Cache;
 use Magento\Framework\App\Cache\Frontend\Pool;
 use Magento\Framework\App\Config;
+use Magento\Framework\Cache\CacheConstants;
 use Magento\Framework\Cache\Frontend\Decorator\Bare;
 use Magento\Framework\Cache\Frontend\Decorator\TagScope;
 use Magento\Framework\Cache\FrontendInterface;
@@ -220,7 +221,7 @@ class CacheTest extends TestCase
         )->method(
             'clean'
         )->with(
-            \Zend_Cache::CLEANING_MODE_MATCHING_ANY_TAG,
+            CacheConstants::CLEANING_MODE_MATCHING_ANY_TAG,
             $expectedTags
         )->willReturn(
             true
@@ -235,7 +236,7 @@ class CacheTest extends TestCase
         )->method(
             'clean'
         )->with(
-            \Zend_Cache::CLEANING_MODE_ALL
+            CacheConstants::CLEANING_MODE_ALL
         )->willReturn(
             true
         );

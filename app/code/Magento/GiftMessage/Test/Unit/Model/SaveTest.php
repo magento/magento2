@@ -10,6 +10,7 @@ namespace Magento\GiftMessage\Test\Unit\Model;
 use Magento\Backend\Model\Session\Quote;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\GiftMessage\Helper\Message;
+use Magento\GiftMessage\Model\Message as GiftMessage;
 use Magento\GiftMessage\Model\MessageFactory;
 use Magento\GiftMessage\Model\Save;
 use Magento\Sales\Model\Order;
@@ -30,7 +31,7 @@ class SaveTest extends TestCase
 
     protected function setUp(): void
     {
-        $productRepositoryMock = $this->getMockForAbstractClass(ProductRepositoryInterface::class);
+        $productRepositoryMock = $this->createMock(ProductRepositoryInterface::class);
         $this->messageFactoryMock = $this->getMockBuilder(MessageFactory::class)
             ->onlyMethods(['create'])
             ->disableOriginalConstructor()
@@ -56,7 +57,7 @@ class SaveTest extends TestCase
         ];
         $this->model->setGiftmessages($message);
 
-        $messageMock = $this->createMock(\Magento\GiftMessage\Model\Message::class);
+        $messageMock = $this->createMock(GiftMessage::class);
         $entityModelMock = $this->createMock(Order::class);
 
         $this->messageFactoryMock->expects($this->once())->method('create')->willReturn($messageMock);

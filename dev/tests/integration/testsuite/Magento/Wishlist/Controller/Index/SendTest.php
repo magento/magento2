@@ -156,6 +156,43 @@ class SendTest extends AbstractController
     }
 
     /**
+     * Test that messages with template injection attempts are rejected.
+     *
+     * @dataProvider invalidMessageContentDataProvider
+     * @param string $maliciousMessage
+     * @return void
+     */
+    public function testSendWishListWithInvalidMessageContent(string $maliciousMessage): void
+    {
+        $this->customerSession->setCustomerId(1);
+        $postValues = ['emails' => 'test@example.com', 'message' => $maliciousMessage];
+        $this->dispatchSendWishListRequest($postValues);
+        $this->assertSessionMessages(
+            $this->equalTo([__('Invalid content detected in message. Please remove any special codes or scripts.')]),
+            MessageInterface::TYPE_ERROR
+        );
+        $this->assertRedirect($this->stringContains('wishlist/index/share'));
+        // Verify no email was sent
+        $this->assertNull($this->transportBuilder->getSentMessage());
+    }
+
+    /**
+     * Data provider for invalid message content test.
+     *
+     * @return array
+     */
+    public static function invalidMessageContentDataProvider(): array
+    {
+        return [
+            'template_directive' => ['{{var this.getTemplateFilter().filter("ls -al")}}'],
+            'template_with_newline_obfuscation' => ["{{var this.getTempl\r\nateFilter()}}"],
+            'url_encoded_template' => ['{{var this.getTempl%0d%0aateFilter().filter(%22ls -al%22)}}'],
+            'php_tag' => ['<?php echo "test"; ?>'],
+            'method_call_pattern' => ['this.getTemplateFilter().filter("test")'],
+        ];
+    }
+
+    /**
      * Dispatch send wish list request.
      *
      * @param array $postValues

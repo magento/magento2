@@ -1,7 +1,7 @@
 <?php
 /**
  * Copyright 2012 Adobe
- * All rights reserved.
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -15,7 +15,9 @@ use Magento\Framework\Exception\AuthenticationException;
 use Magento\Framework\Exception\AuthorizationException;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\Message\AbstractMessage;
 use Magento\Framework\Phrase;
+use Magento\Framework\Validator\Exception as ValidatorException;
 use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Framework\Webapi\Exception as WebapiException;
 
@@ -117,33 +119,7 @@ class ErrorProcessor
         if ($exception instanceof WebapiException) {
             $maskedException = $exception;
         } elseif ($exception instanceof LocalizedException) {
-            // Map HTTP codes for LocalizedExceptions according to exception type
-            if ($exception instanceof NoSuchEntityException) {
-                $httpCode = WebapiException::HTTP_NOT_FOUND;
-            } elseif (($exception instanceof AuthorizationException)
-                || ($exception instanceof AuthenticationException)
-            ) {
-                $httpCode = WebapiException::HTTP_UNAUTHORIZED;
-            } else {
-                // Input, Expired, InvalidState exceptions will fall to here
-                $httpCode = WebapiException::HTTP_BAD_REQUEST;
-            }
-
-            if ($exception instanceof AggregateExceptionInterface) {
-                $errors = $exception->getErrors();
-            } else {
-                $errors = null;
-            }
-
-            $maskedException = new WebapiException(
-                new Phrase($exception->getRawMessage()),
-                $exception->getCode(),
-                $httpCode,
-                $exception->getParameters(),
-                get_class($exception),
-                $errors,
-                $stackTrace
-            );
+            $maskedException = $this->processLocalizedException($exception, $stackTrace);
         } else {
             // Check if this is a client error based on the exception type
             $httpCode = $this->getClientErrorHttpCode($exception);
@@ -170,6 +146,72 @@ class ErrorProcessor
     }
 
     /**
+     * Process LocalizedException and return WebapiException
+     *
+     * @param LocalizedException $exception
+     * @param string|null $stackTrace
+     * @return WebapiException
+     */
+    private function processLocalizedException(LocalizedException $exception, $stackTrace)
+    {
+        $httpCode = $this->getHttpCodeForLocalizedException($exception);
+
+        if ($exception instanceof ValidatorException) {
+            $validatorMessages = $exception->getMessages();
+            if (empty($validatorMessages)) {
+                $errors = null;
+                $mainPhrase = new Phrase($exception->getRawMessage());
+            } elseif (count($validatorMessages) === 1) {
+                $message = $validatorMessages[0];
+                $messageText = $message instanceof AbstractMessage
+                    ? $message->getText()
+                    : (string)$message;
+                $errors = null;
+                $mainPhrase = __($messageText);
+            } else {
+                $result = $this->processValidatorExceptionForRestApi($exception, $validatorMessages);
+                $errors = $result['errors'];
+                $mainPhrase = $result['mainPhrase'];
+            }
+        } elseif ($exception instanceof AggregateExceptionInterface) {
+            $errors = $exception->getErrors();
+            $mainPhrase = new Phrase($exception->getRawMessage());
+        } else {
+            $errors = null;
+            $mainPhrase = new Phrase($exception->getRawMessage());
+        }
+
+        return new WebapiException(
+            $mainPhrase,
+            $exception->getCode(),
+            $httpCode,
+            $exception->getParameters(),
+            get_class($exception),
+            $errors,
+            $stackTrace
+        );
+    }
+
+    /**
+     * Get HTTP code for LocalizedException based on exception type
+     *
+     * @param LocalizedException $exception
+     * @return int
+     */
+    private function getHttpCodeForLocalizedException(LocalizedException $exception)
+    {
+        if ($exception instanceof NoSuchEntityException) {
+            return WebapiException::HTTP_NOT_FOUND;
+        } elseif (($exception instanceof AuthorizationException)
+            || ($exception instanceof AuthenticationException)
+        ) {
+            return WebapiException::HTTP_UNAUTHORIZED;
+        } else {
+            return WebapiException::HTTP_BAD_REQUEST;
+        }
+    }
+
+    /**
      * Return the HTTP code for a client error based on the exception type
      *
      * @param \Exception $exception
@@ -190,6 +232,42 @@ class ErrorProcessor
             return WebapiException::HTTP_BAD_REQUEST;
         }
         return WebapiException::HTTP_INTERNAL_ERROR;
+    }
+
+    /**
+     * Process ValidatorException for REST API
+     *
+     * @param ValidatorException $exception
+     * @param array $validatorMessages
+     * @return array{errors: array|null, mainPhrase: Phrase}
+     */
+    private function processValidatorExceptionForRestApi(ValidatorException $exception, array $validatorMessages): array
+    {
+        if (empty($validatorMessages)) {
+            return [
+                'errors' => null,
+                'mainPhrase' => new Phrase($exception->getRawMessage())
+            ];
+        }
+
+        $errors = [];
+        $translatedMessages = [];
+        foreach ($validatorMessages as $message) {
+            $messageText = $message instanceof AbstractMessage
+                ? $message->getText()
+                : (string)$message;
+            $translatedMessagePhrase = __($messageText);
+            $translatedString = (string)$translatedMessagePhrase;
+            $translatedMessages[] = $translatedString;
+            $errors[] = new LocalizedException(new Phrase($translatedString));
+        }
+        $combinedTranslatedMessage = implode("\n", $translatedMessages);
+        $mainPhrase = new Phrase($combinedTranslatedMessage);
+
+        return [
+            'errors' => $errors,
+            'mainPhrase' => $mainPhrase
+        ];
     }
 
     /**

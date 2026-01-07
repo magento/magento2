@@ -34,6 +34,11 @@
             </actionGroup>
         </before>
         <after>
+            <!--Cleanup PayPal configurations-->
+            <magentoCLI command="config:set {{DisablePaypalPayStandard.path}} {{DisablePaypalPayStandard.value}}" stepKey="disablePayPalStandard"/>
+            <actionGroup ref="CliCacheCleanActionGroup" stepKey="cleanFullPageCache">
+                <argument name="tags" value="config full_page"/>
+            </actionGroup>
             <deleteData createDataKey="simpleProduct" stepKey="deleteProduct"/>
             <deleteData createDataKey="simpleCategory" stepKey="deleteCategory"/>
             <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>

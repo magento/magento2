@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright 2025 Adobe
+ * All Rights Reserved.
+ */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontGuestCheckoutWithSpecialCityNamesTest">
+        <annotations>
+            <features value="Checkout"/>
+            <stories value="Guest Checkout with Special Characters in City Name"/>
+            <description value="Verify checkout with special characters in city names"/>
+            <title value="Verify guest checkout accepts city names with digits, ampersand, period, and parenthesis"/>
+            <severity value="MINOR"/>
+            <testCaseId value="AC-15276"/>
+            <group value="checkout"/>
+        </annotations>
+        <before>
+            <!-- Create simple product for checkout -->
+            <createData entity="SimpleProduct2" stepKey="createProduct"/>
+        </before>
+        <after>
+            <!-- Delete created product -->
+            <deleteData createDataKey="createProduct" stepKey="deleteSimpleProduct"/>
+        </after>
+        <!-- Test 1: City with period - "St. Moritz" -->
+        <!-- Navigate to StoreFront -->
+        <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="goToStoreFront"/>
+        <!-- Add product to cart -->
+        <actionGroup ref="AddSimpleProductToCartActionGroup" stepKey="addProductToCartToPlaceOrderWithStMoritzAddress">
+            <argument name="product" value="$$createProduct$$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontOpenCheckoutPageActionGroup" stepKey="goToCheckoutToPlaceOrderWithStMoritzAddress"/>
+        <!-- Fill Shipping Address -->
+       <actionGroup ref="FillGuestCheckoutShippingAddressWithCountryAndStateActionGroup" stepKey="fillShippingFormDataWithStMoritzCity">
+            <argument name="customer" value="CustomerEntityOne"/>
+            <argument name="customerAddress" value="CustomerAddressSimple"/>
+        </actionGroup>
+        <fillField selector="{{CheckoutShippingSection.city}}" userInput="{{Special_Characters_City.city1}}" stepKey="SetWithStMoritzCity"/>
+        <!-- Click Next button -->
+        <actionGroup ref="StorefrontGuestCheckoutProceedToPaymentStepActionGroup" stepKey="clickNextWithCityAsStMoritz"/>
+        <!-- Place Order -->
+        <actionGroup ref="CheckoutPlaceOrderActionGroup" stepKey="guestPlaceOrderWithCityAsStMoritz">
+            <argument name="orderNumberMessage" value="CONST.successGuestCheckoutOrderNumberMessage"/>
+            <argument name="emailYouMessage" value="CONST.successCheckoutEmailYouMessage"/>
+        </actionGroup>
+
+        <!-- Test 2: City with period - "St. Petersburg" -->
+        <!-- Add product to cart -->
+        <actionGroup ref="AddSimpleProductToCartActionGroup" stepKey="addProductToCartToPlaceOrderWithStPetersburgAddress">
+            <argument name="product" value="$$createProduct$$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontOpenCheckoutPageActionGroup" stepKey="goToCheckoutToPlaceOrderWithStPetersburgAddress"/>
+        <!-- Fill Shipping Address -->
+        <actionGroup ref="FillGuestCheckoutShippingAddressWithCountryAndStateActionGroup" stepKey="fillShippingFormDataWithStPetersburgCity">
+            <argument name="customer" value="CustomerEntityOne"/>
+            <argument name="customerAddress" value="CustomerAddressSimple"/>
+        </actionGroup>
+        <fillField selector="{{CheckoutShippingSection.city}}" userInput="{{Special_Characters_City.city2}}" stepKey="SetWithStPetersburgCity"/>
+        <!-- Click Next button -->
+        <actionGroup ref="StorefrontGuestCheckoutProceedToPaymentStepActionGroup" stepKey="clickNextWithCityAsStPetersburg"/>
+        <!-- Place Order -->
+        <actionGroup ref="CheckoutPlaceOrderActionGroup" stepKey="guestPlaceOrderWithCityAsStPetersburg">
+            <argument name="orderNumberMessage" value="CONST.successGuestCheckoutOrderNumberMessage"/>
+            <argument name="emailYouMessage" value="CONST.successCheckoutEmailYouMessage"/>
+        </actionGroup>
+
+        <!-- Test 3: City with ampersand - "Brighton & Hove" -->
+        <!-- Add product to cart -->
+        <actionGroup ref="AddSimpleProductToCartActionGroup" stepKey="addProductToCartToPlaceOrderWithBrightonAndHoveAddress">
+            <argument name="product" value="$$createProduct$$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontOpenCheckoutPageActionGroup" stepKey="goToCheckoutToPlaceOrderWithBrightonAndHoveAddress"/>
+        <!-- Fill Shipping Address -->
+        <actionGroup ref="FillGuestCheckoutShippingAddressWithCountryAndStateActionGroup" stepKey="fillShippingFormDataWithBrightonAndHoveCity">
+            <argument name="customer" value="CustomerEntityOne"/>
+            <argument name="customerAddress" value="CustomerAddressSimple"/>
+        </actionGroup>
+        <fillField selector="{{CheckoutShippingSection.city}}" userInput="{{Special_Characters_City.city3}}" stepKey="SetWithBrightonAndHoveCity"/>
+        <!-- Click Next button -->
+        <actionGroup ref="StorefrontGuestCheckoutProceedToPaymentStepActionGroup" stepKey="clickNextWithCityAsBrightonAndHove"/>
+        <!-- Place Order -->
+        <actionGroup ref="CheckoutPlaceOrderActionGroup" stepKey="guestPlaceOrderWithCityAsBrightonAndHove">
+            <argument name="orderNumberMessage" value="CONST.successGuestCheckoutOrderNumberMessage"/>
+            <argument name="emailYouMessage" value="CONST.successCheckoutEmailYouMessage"/>
+        </actionGroup>
+
+        <!-- Test 4: City with period - "St. Davids" -->
+        <!-- Add product to cart -->
+        <actionGroup ref="AddSimpleProductToCartActionGroup" stepKey="addProductToCartToPlaceOrderWithStDavidAddress">
+            <argument name="product" value="$$createProduct$$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontOpenCheckoutPageActionGroup" stepKey="goToCheckoutToPlaceOrderWithStDavidAddress"/>
+        <!-- Fill Shipping Address -->
+        <actionGroup ref="FillGuestCheckoutShippingAddressWithCountryAndStateActionGroup" stepKey="fillShippingFormDataWithStDavidCity">
+            <argument name="customer" value="CustomerEntityOne"/>
+            <argument name="customerAddress" value="CustomerAddressSimple"/>
+        </actionGroup>
+        <fillField selector="{{CheckoutShippingSection.city}}" userInput="{{Special_Characters_City.city4}}" stepKey="SetWithStDavidCity"/>
+        <!-- Click Next button -->
+        <actionGroup ref="StorefrontGuestCheckoutProceedToPaymentStepActionGroup" stepKey="clickNextWithCityAsStDavid"/>
+        <!-- Place Order -->
+        <actionGroup ref="CheckoutPlaceOrderActionGroup" stepKey="guestPlaceOrderWithCityAsStDavid">
+            <argument name="orderNumberMessage" value="CONST.successGuestCheckoutOrderNumberMessage"/>
+            <argument name="emailYouMessage" value="CONST.successCheckoutEmailYouMessage"/>
+        </actionGroup>
+
+        <!-- Test 5: City with digits - "29 Palms" -->
+        <!-- Add product to cart -->
+        <actionGroup ref="AddSimpleProductToCartActionGroup" stepKey="addProductToCartToPlaceOrderWith29PalmsAddress">
+            <argument name="product" value="$$createProduct$$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontOpenCheckoutPageActionGroup" stepKey="goToCheckoutToPlaceOrderWith29PalmsAddress"/>
+        <!-- Fill Shipping Address -->
+        <actionGroup ref="FillGuestCheckoutShippingAddressWithCountryAndStateActionGroup" stepKey="fillShippingFormDataWith29PalmsCity">
+            <argument name="customer" value="CustomerEntityOne"/>
+            <argument name="customerAddress" value="CustomerAddressSimple"/>
+        </actionGroup>
+        <fillField selector="{{CheckoutShippingSection.city}}" userInput="{{Special_Characters_City.city5}}" stepKey="SetWith29PalmsCity"/>
+        <!-- Click Next button -->
+        <actionGroup ref="StorefrontGuestCheckoutProceedToPaymentStepActionGroup" stepKey="clickNextWithCityAs29Palms"/>
+        <!-- Place Order -->
+        <actionGroup ref="CheckoutPlaceOrderActionGroup" stepKey="guestPlaceOrderWithCityAs29Palms">
+            <argument name="orderNumberMessage" value="CONST.successGuestCheckoutOrderNumberMessage"/>
+            <argument name="emailYouMessage" value="CONST.successCheckoutEmailYouMessage"/>
+        </actionGroup>
+
+        <!-- Test 6: City with parenthesis - "Anywhere (North)" -->
+        <!-- Add product to cart -->
+        <actionGroup ref="AddSimpleProductToCartActionGroup" stepKey="addProductToCartToPlaceOrderWithNorthAmericaPartAddress">
+            <argument name="product" value="$$createProduct$$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontOpenCheckoutPageActionGroup" stepKey="goToCheckoutToPlaceOrderWithNorthAmericaPartAddress"/>
+        <!-- Fill Shipping Address -->
+        <actionGroup ref="FillGuestCheckoutShippingAddressWithCountryAndStateActionGroup" stepKey="fillShippingFormDataWithNorthAmericaPartCity">
+            <argument name="customer" value="CustomerEntityOne"/>
+            <argument name="customerAddress" value="CustomerAddressSimple"/>
+        </actionGroup>
+        <fillField selector="{{CheckoutShippingSection.city}}" userInput="{{Special_Characters_City.city6}}" stepKey="SetWithNorthAmericaPartCity"/>
+        <!-- Click Next button -->
+        <actionGroup ref="StorefrontGuestCheckoutProceedToPaymentStepActionGroup" stepKey="clickNextWithCityAsNorthAmericaPart"/>
+        <!-- Place Order -->
+        <actionGroup ref="CheckoutPlaceOrderActionGroup" stepKey="guestPlaceOrderWithCityAsNorthAmericaPart">
+            <argument name="orderNumberMessage" value="CONST.successGuestCheckoutOrderNumberMessage"/>
+            <argument name="emailYouMessage" value="CONST.successCheckoutEmailYouMessage"/>
+        </actionGroup>
+    </test>
+</tests>

@@ -37,7 +37,10 @@ use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Exception\SessionException;
 use Magento\Framework\Exception\State\UserLockedException;
 use Magento\Customer\Controller\AbstractAccount;
+use Magento\Customer\Model\ValidatorExceptionProcessor;
 use Magento\Framework\Phrase;
+use Magento\Framework\Message\AbstractMessage;
+use Magento\Framework\Validator\Exception as ValidatorException;
 use Magento\Framework\Filesystem;
 use Magento\Framework\App\Filesystem\DirectoryList;
 
@@ -125,6 +128,11 @@ class EditPost extends AbstractAccount implements CsrfAwareActionInterface, Http
     private Url $customerUrl;
 
     /**
+     * @var ValidatorExceptionProcessor
+     */
+    private $validatorExceptionProcessor;
+
+    /**
      * @param Context $context
      * @param Session $customerSession
      * @param AccountManagementInterface $accountManagement
@@ -138,6 +146,8 @@ class EditPost extends AbstractAccount implements CsrfAwareActionInterface, Http
      * @param AccountConfirmation|null $accountConfirmation
      * @param Url|null $customerUrl
      * @param Mapper|null $customerMapper
+     * @param ValidatorExceptionProcessor|null $validatorExceptionProcessor
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function __construct(
         Context $context,
@@ -152,7 +162,8 @@ class EditPost extends AbstractAccount implements CsrfAwareActionInterface, Http
         ?SessionCleanerInterface $sessionCleaner = null,
         ?AccountConfirmation $accountConfirmation = null,
         ?Url $customerUrl = null,
-        ?Mapper $customerMapper = null
+        ?Mapper $customerMapper = null,
+        ?ValidatorExceptionProcessor $validatorExceptionProcessor = null
     ) {
         parent::__construct($context);
         $this->session = $customerSession;
@@ -168,6 +179,11 @@ class EditPost extends AbstractAccount implements CsrfAwareActionInterface, Http
             ->get(AccountConfirmation::class);
         $this->customerUrl = $customerUrl ?: ObjectManager::getInstance()->get(Url::class);
         $this->customerMapper = $customerMapper ?: ObjectManager::getInstance()->get(Mapper::class);
+        $this->validatorExceptionProcessor = $validatorExceptionProcessor
+            ?? ObjectManager::getInstance()->get(ValidatorExceptionProcessor::class);
+        if ($this->validatorExceptionProcessor !== null) {
+            $this->validatorExceptionProcessor->setMessageManager($context->getMessageManager());
+        }
     }
 
     /**
@@ -280,9 +296,13 @@ class EditPost extends AbstractAccount implements CsrfAwareActionInterface, Http
 
                 return $resultRedirect->setPath('customer/account/login');
             } catch (InputException $e) {
-                $this->messageManager->addErrorMessage($this->escaper->escapeHtml($e->getMessage()));
-                foreach ($e->getErrors() as $error) {
-                    $this->messageManager->addErrorMessage($this->escaper->escapeHtml($error->getMessage()));
+                if ($this->validatorExceptionProcessor !== null) {
+                    $this->validatorExceptionProcessor->processInputException(
+                        $e,
+                        fn($message) => $this->escaper->escapeHtml($message)
+                    );
+                } else {
+                    $this->messageManager->addErrorMessage($this->escaper->escapeHtml($e->getMessage()));
                 }
             } catch (LocalizedException $e) {
                 $this->messageManager->addErrorMessage($e->getMessage());

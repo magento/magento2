@@ -6,14 +6,14 @@
 namespace Magento\Customer\Test\Unit\Model\Metadata\Form;
 
 use Magento\Customer\Model\Metadata\Form\Boolean;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class BooleanTest extends AbstractFormTestCase
 {
     /**
      * @param mixed $value to assign to boolean
-     * @param mixed $expected text output
-     * @dataProvider getOptionTextDataProvider
-     */
+     * @param mixed $expected text output */
+    #[DataProvider('getOptionTextDataProvider')]
     public function testGetOptionText($value, $expected)
     {
         // calling outputValue() will cause the protected method getOptionText() to be called

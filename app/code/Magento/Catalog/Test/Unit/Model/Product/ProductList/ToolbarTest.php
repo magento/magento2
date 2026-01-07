@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\Catalog\Test\Unit\Model\Product\ProductList;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\Catalog\Model\Product\ProductList\Toolbar;
 use Magento\Framework\App\Request\Http;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
@@ -31,9 +32,7 @@ class ToolbarTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->requestMock = $this->getMockBuilder(Http::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->requestMock = $this->createMock(Http::class);
         $this->toolbarModel = (new ObjectManager($this))->getObject(
             Toolbar::class,
             [
@@ -43,9 +42,9 @@ class ToolbarTest extends TestCase
     }
 
     /**
-     * @dataProvider stringParamProvider
      * @param $param
      */
+    #[DataProvider('stringParamProvider')]
     public function testGetOrder($param)
     {
         $this->requestMock->expects($this->once())
@@ -56,9 +55,9 @@ class ToolbarTest extends TestCase
     }
 
     /**
-     * @dataProvider stringParamProvider
      * @param $param
      */
+    #[DataProvider('stringParamProvider')]
     public function testGetDirection($param)
     {
         $this->requestMock->expects($this->once())
@@ -69,9 +68,9 @@ class ToolbarTest extends TestCase
     }
 
     /**
-     * @dataProvider stringParamProvider
      * @param $param
      */
+    #[DataProvider('stringParamProvider')]
     public function testGetMode($param)
     {
         $this->requestMock->expects($this->once())
@@ -82,9 +81,9 @@ class ToolbarTest extends TestCase
     }
 
     /**
-     * @dataProvider stringParamProvider
      * @param $param
      */
+    #[DataProvider('stringParamProvider')]
     public function testGetLimit($param)
     {
         $this->requestMock->expects($this->once())
@@ -95,9 +94,9 @@ class ToolbarTest extends TestCase
     }
 
     /**
-     * @dataProvider intParamProvider
      * @param $param
      */
+    #[DataProvider('intParamProvider')]
     public function testGetCurrentPage($param)
     {
         $this->requestMock->expects($this->once())

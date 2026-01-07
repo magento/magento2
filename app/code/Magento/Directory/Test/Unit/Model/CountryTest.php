@@ -15,6 +15,9 @@ use PHPUnit\Framework\TestCase;
 
 class CountryTest extends TestCase
 {
+    /**
+     * @var Country
+     */
     protected $country;
 
     /**
@@ -24,7 +27,7 @@ class CountryTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->localeListsMock = $this->getMockForAbstractClass(ListsInterface::class);
+        $this->localeListsMock = $this->createMock(ListsInterface::class);
 
         $objectManager = new ObjectManager($this);
         $this->country = $objectManager->getObject(

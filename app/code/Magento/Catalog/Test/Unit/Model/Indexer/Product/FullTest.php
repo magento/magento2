@@ -71,7 +71,7 @@ class FullTest extends TestCase
     public function testExecuteFull()
     {
         $this->configMock->method('getIndexers')->willReturn(array_flip($this->orderedIndexerList));
-        $indexerMock = $this->getMockForAbstractClass(IndexerInterface::class, [], "", false);
+        $indexerMock = $this->createMock(IndexerInterface::class);
         $indexerMock->expects($this->exactly(4))->method('isScheduled')->willReturn(false);
         $indexerMock->expects($this->exactly(4))->method('reindexAll');
         $orderedIndexerList = array_intersect($this->orderedIndexerList, $this->indexerList);
@@ -93,7 +93,7 @@ class FullTest extends TestCase
     public function testExecuteList()
     {
         $this->configMock->method('getIndexers')->willReturn(array_flip($this->orderedIndexerList));
-        $indexerMock = $this->getMockForAbstractClass(IndexerInterface::class, [], "", false);
+        $indexerMock = $this->createMock(IndexerInterface::class);
         $indexerMock->expects($this->exactly(4))->method('isScheduled')->willReturn(false);
         $indexerMock->expects($this->exactly(4))->method('reindexList')->with([1, 2]);
         $orderedIndexerList = array_intersect($this->orderedIndexerList, $this->indexerList);
@@ -115,7 +115,7 @@ class FullTest extends TestCase
     public function testExecuteRow()
     {
         $this->configMock->method('getIndexers')->willReturn(array_flip($this->orderedIndexerList));
-        $indexerMock = $this->getMockForAbstractClass(IndexerInterface::class, [], "", false);
+        $indexerMock = $this->createMock(IndexerInterface::class);
         $indexerMock->expects($this->exactly(4))->method('isScheduled')->willReturn(false);
         $indexerMock->expects($this->exactly(4))->method('reindexRow')->with(1);
         $orderedIndexerList = array_intersect($this->orderedIndexerList, $this->indexerList);

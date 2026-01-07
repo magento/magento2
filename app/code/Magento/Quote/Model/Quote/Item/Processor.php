@@ -101,7 +101,7 @@ class Processor
         }
 
         $customPrice = $request->getCustomPrice();
-        if (!empty($customPrice) && !$candidate->getParentProductId()) {
+        if ($customPrice !== null && !$candidate->getParentProductId()) {
             $item->setCustomPrice($customPrice);
             $item->setOriginalCustomPrice($customPrice);
         }

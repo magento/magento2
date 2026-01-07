@@ -232,11 +232,7 @@ class TypeTest extends TestCase
      */
     private function getMockedProduct(): Product
     {
-        $mockBuilder = $this->getMockBuilder(Product::class)
-            ->disableOriginalConstructor();
-        $mock = $mockBuilder->getMock();
-
-        return $mock;
+        return $this->createMock(Product::class);
     }
 
     /**
@@ -246,14 +242,9 @@ class TypeTest extends TestCase
     {
         $mockedPriceInfoInterface = $this->getMockedPriceInfoInterface();
 
-        $mockBuilder = $this->getMockBuilder(Factory::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['create']);
-        $mock = $mockBuilder->getMock();
+        $mock = $this->createPartialMock(Factory::class, ['create']);
 
-        $mock->expects($this->any())
-            ->method('create')
-            ->willReturn($mockedPriceInfoInterface);
+        $mock->method('create')->willReturn($mockedPriceInfoInterface);
 
         return $mock;
     }
@@ -263,11 +254,7 @@ class TypeTest extends TestCase
      */
     private function getMockedPriceInfoInterface(): PriceInfoInterface
     {
-        $mockBuilder = $this->getMockBuilder(PriceInfoInterface::class)
-            ->disableOriginalConstructor();
-        $mock = $mockBuilder->getMockForAbstractClass();
-
-        return $mock;
+        return $this->createMock(PriceInfoInterface::class);
     }
 
     /**
@@ -275,10 +262,7 @@ class TypeTest extends TestCase
      */
     private function getMockedProductTypePool(): Pool
     {
-        $mockBuild = $this->getMockBuilder(Pool::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['get']);
-        $mock = $mockBuild->getMock();
+        $mock = $this->createPartialMock(Pool::class, ['get']);
 
         $mock->expects($this->any())
             ->method('get')
@@ -297,10 +281,7 @@ class TypeTest extends TestCase
      */
     private function getMockedProductTypeVirtual(): Virtual
     {
-        $mockBuilder = $this->getMockBuilder(Virtual::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['setConfig']);
-        $mock = $mockBuilder->getMock();
+        $mock = $this->createPartialMock(Virtual::class, ['setConfig']);
 
         $mock->expects($this->any())
             ->method('setConfig');
@@ -313,10 +294,7 @@ class TypeTest extends TestCase
      */
     private function getMockedProductTypeSimple(): Simple
     {
-        $mockBuilder = $this->getMockBuilder(Simple::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['setConfig']);
-        $mock = $mockBuilder->getMock();
+        $mock = $this->createPartialMock(Simple::class, ['setConfig']);
 
         $mock->expects($this->any())
             ->method('setConfig');
@@ -329,14 +307,8 @@ class TypeTest extends TestCase
      */
     private function getMockedConfig(): ConfigInterface
     {
-        $mockBuild = $this->getMockBuilder(ConfigInterface::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['getAll']);
-        $mock = $mockBuild->getMockForAbstractClass();
-
-        $mock->expects($this->any())
-            ->method('getAll')
-            ->willReturn($this->_productTypes);
+        $mock = $this->createStub(ConfigInterface::class);
+        $mock->method('getAll')->willReturn($this->_productTypes);
 
         return $mock;
     }
@@ -346,10 +318,7 @@ class TypeTest extends TestCase
      */
     private function getMockedTypePriceFactory(): PriceFactory
     {
-        $mockBuild = $this->getMockBuilder(\Magento\Catalog\Model\Product\Type\Price\Factory::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['create']);
-        $mock = $mockBuild->getMockForAbstractClass();
+        $mock = $this->createPartialMock(PriceFactory::class, ['create']);
 
         $mock->expects($this->any())
             ->method('create')
@@ -368,10 +337,6 @@ class TypeTest extends TestCase
      */
     private function getMockedProductTypePrice(): Price
     {
-        $mockBuild = $this->getMockBuilder(Price::class)
-            ->disableOriginalConstructor();
-        $mock = $mockBuild->getMock();
-
-        return $mock;
+        return $this->createMock(Price::class);
     }
 }

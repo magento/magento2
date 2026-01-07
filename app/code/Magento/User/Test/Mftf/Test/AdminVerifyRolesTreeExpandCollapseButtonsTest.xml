@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright 2025 Adobe
+ * All Rights Reserved.
+ */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminVerifyRolesTreeExpandCollapseButtonsTest">
+        <annotations>
+            <features value="User"/>
+            <stories value="ACL resource tree expand and collapse controls in integrations and user roles"/>
+            <title value="Improve user experience with roles tree"/>
+            <description value="Verify collapse all and expand all buttons work on integrations API resources tree and user roles resources tree"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="AC-14021"/>
+            <group value="user"/>
+        </annotations>
+        <before>
+            <!-- Login as admin -->
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+        </before>
+        <after>
+            <!-- Logout as admin -->
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin"/>
+        </after>
+        <!-- Step 1: Navigate to integrations, create a new integrations, go to API, resources and verify the expand all and collapse all buttons -->
+        <actionGroup ref="AdminNavigateMenuActionGroup" stepKey="navigateToIntegrationsGrid">
+            <argument name="menuUiId" value="{{AdminMenuSystem.dataUiId}}"/>
+            <argument name="submenuUiId" value="{{AdminMenuSystemExtensionsIntegrations.dataUiId}}"/>
+        </actionGroup>
+        <actionGroup ref="AdminOpenNewIntegrationPageActionGroup" stepKey="openNewIntegrationPage"/>
+        <waitForElementClickable selector="{{AdminNewIntegrationFormSection.apiTab}}" stepKey="waitApiTabClickable"/>
+        <click selector="{{AdminNewIntegrationFormSection.apiTab}}" stepKey="openApiTab"/>
+        <waitForElementVisible selector="{{AdminNewIntegrationFormSection.resourceTree}}" stepKey="waitResourceTreeVisibleOnIntegration"/>
+        <!-- Click Expand all and verify deep node visible -->
+        <waitForElementClickable selector="{{AdminCreateRoleSection.resourceTreeExpandAll}}" stepKey="waitExpandAllIntegrationClickable"/>
+        <click selector="{{AdminCreateRoleSection.resourceTreeExpandAll}}" stepKey="clickExpandAllIntegration"/>
+        <waitForElementVisible selector="{{AdminEditRoleResourcesSection.resourceCheckboxLink('Magento_Analytics::analytics_api','API')}}" stepKey="assertAnalyticsApiVisibleAfterExpandIntegration"/>
+        <!-- Click Collapse all and verify deep node hidden -->
+        <waitForElementClickable selector="{{AdminCreateRoleSection.resourceTreeCollapseAll}}" stepKey="waitCollapseAllIntegrationClickable"/>
+        <click selector="{{AdminCreateRoleSection.resourceTreeCollapseAll}}" stepKey="clickCollapseAllIntegration"/>
+        <waitForElementNotVisible selector="{{AdminEditRoleResourcesSection.resourceCheckboxLink('Magento_Analytics::analytics_api','API')}}" stepKey="assertAnalyticsApiHiddenAfterCollapseIntegration"/>
+        <!-- Step 2: Navigate to user roles, create a new role, go to role resources, and verify the expand all and collapse all buttons -->
+        <actionGroup ref="AdminNavigateMenuActionGroup" stepKey="navigateToUserRolesGrid">
+            <argument name="menuUiId" value="{{AdminMenuSystem.dataUiId}}"/>
+            <argument name="submenuUiId" value="{{AdminMenuSystemPermissionsUserRoles.dataUiId}}"/>
+        </actionGroup>
+        <actionGroup ref="AdminOpenCreateRolePageActionGroup" stepKey="openCreateRolePage"/>
+        <actionGroup ref="AdminUserClickRoleResourceTabActionGroup" stepKey="openRoleResourcesTab"/>
+        <waitForElementVisible selector="{{AdminCreateRoleSection.resourceTree}}" stepKey="waitResourceTreeVisibleOnRole"/>
+        <!-- Click expand all and verify deep node visible -->
+        <waitForElementClickable selector="{{AdminCreateRoleSection.resourceTreeExpandAll}}" stepKey="waitExpandAllRoleClickable"/>
+        <click selector="{{AdminCreateRoleSection.resourceTreeExpandAll}}" stepKey="clickExpandAllRole"/>
+        <waitForElementVisible selector="{{AdminEditRoleResourcesSection.resourceCheckboxLink('Magento_Analytics::analytics_api','API')}}" stepKey="assertAnalyticsApiVisibleAfterExpandRole"/>
+        <!-- Click collapse all and verify deep node hidden -->
+        <waitForElementClickable selector="{{AdminCreateRoleSection.resourceTreeCollapseAll}}" stepKey="waitCollapseAllRoleClickable"/>
+        <click selector="{{AdminCreateRoleSection.resourceTreeCollapseAll}}" stepKey="clickCollapseAllRole"/>
+        <waitForElementNotVisible selector="{{AdminEditRoleResourcesSection.resourceCheckboxLink('Magento_Analytics::analytics_api','API')}}" stepKey="assertAnalyticsApiHiddenAfterCollapseRole"/>
+    </test>
+</tests>

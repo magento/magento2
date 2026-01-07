@@ -32,11 +32,8 @@ class PlaceholderFactoryTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->objectManagerMock = $this->getMockBuilder(ObjectManagerInterface::class)
-            ->getMockForAbstractClass();
-        $this->environmentMock = $this->getMockBuilder(Environment::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->objectManagerMock = $this->createMock(ObjectManagerInterface::class);
+        $this->environmentMock = $this->createMock(Environment::class);
 
         $this->model = new PlaceholderFactory(
             $this->objectManagerMock,

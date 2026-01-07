@@ -13,6 +13,7 @@ use Magento\Framework\Setup\Option\TextConfigOption;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Stomp\Setup\ConfigOptionsList;
 use Magento\Stomp\Setup\ConnectionValidator;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -58,13 +59,8 @@ class ConfigOptionsListTest extends TestCase
         ];
 
         $this->objectManager = new ObjectManager($this);
-        $this->connectionValidatorMock = $this->getMockBuilder(ConnectionValidator::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $this->deploymentConfigMock = $this->getMockBuilder(DeploymentConfig::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->connectionValidatorMock = $this->createMock(ConnectionValidator::class);
+        $this->deploymentConfigMock = $this->createMock(DeploymentConfig::class);
 
         $this->model = $this->objectManager->getObject(
             ConfigOptionsList::class,
@@ -129,8 +125,8 @@ class ConfigOptionsListTest extends TestCase
     /**
      * @param array $options
      * @param array $expectedConfigData
-     * @dataProvider getCreateConfigDataProvider
      */
+    #[DataProvider('getCreateConfigDataProvider')]
     public function testCreateConfig(array $options, array $expectedConfigData)
     {
         $result = $this->model->createConfig($options, $this->deploymentConfigMock);

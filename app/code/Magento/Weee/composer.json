@@ -22,7 +22,8 @@
         "magento/module-ui": "*"
     },
     "suggest": {
-        "magento/module-bundle": "*"
+        "magento/module-bundle": "*",
+        "magento/module-swatches": "*"
     },
     "type": "magento2-module",
     "license": [

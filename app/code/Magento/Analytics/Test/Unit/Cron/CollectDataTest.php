@@ -12,6 +12,8 @@ use Magento\Analytics\Model\ExportDataHandlerInterface;
 use Magento\Analytics\Model\SubscriptionStatusProvider;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\Attributes\DataProvider;
+
 use PHPUnit\Framework\TestCase;
 
 class CollectDataTest extends TestCase
@@ -42,7 +44,7 @@ class CollectDataTest extends TestCase
     protected function setUp(): void
     {
         $this->exportDataHandlerMock = $this->getMockBuilder(ExportDataHandlerInterface::class)
-            ->getMockForAbstractClass();
+            ->getMock();
 
         $this->subscriptionStatusMock = $this->createMock(SubscriptionStatusProvider::class);
 
@@ -60,8 +62,8 @@ class CollectDataTest extends TestCase
     /**
      * @param string $status
      * @return void
-     * @dataProvider executeDataProvider
      */
+    #[DataProvider('executeDataProvider')]
     public function testExecute($status)
     {
         $this->subscriptionStatusMock
