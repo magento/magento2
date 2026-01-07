@@ -220,16 +220,35 @@ class Mysql extends \Magento\TestFramework\Db\AbstractDb
      */
     private function ensureDefaultsExtraFile()
     {
-        if (!file_exists($this->_defaultsExtraFile)) {
-            $this->assertVarPathWritable();
-            $extraConfig = [
-                '[client]',
-                'user=' . $this->_user,
-                'password="' . $this->_password . '"'
-            ];
-            file_put_contents($this->_defaultsExtraFile, implode(PHP_EOL, $extraConfig));
-            chmod($this->_defaultsExtraFile, 0640);
+        if (file_exists($this->_defaultsExtraFile)) {
+            return;
         }
+        
+        $this->assertVarPathWritable();
+
+        $config = [
+            'client' => [
+                'user='.$this->_user,
+                'password="'.$this->_password.'"',
+            ],
+        ];
+
+        $additionalFile = dirname(dirname($this->_varPath)).'/etc/mysql-client-config.php';
+        if (file_exists($this->_varPath)) {
+            $config = array_merge($config, (array)include $additionalFile);
+        }
+
+        $ini = '';
+        foreach ($config as $section => $values) {
+            $ini .= "[$section]".PHP_EOL;
+            foreach ($values as $value) {
+                $ini .= $value.PHP_EOL;
+            }
+            $ini .= PHP_EOL;
+        }
+
+        file_put_contents($this->_defaultsExtraFile, $ini);
+        chmod($this->_defaultsExtraFile, 0640);
     }
 
     /**
