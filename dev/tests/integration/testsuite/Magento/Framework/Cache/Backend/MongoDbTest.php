@@ -5,10 +5,19 @@
  */
 namespace Magento\Framework\Cache\Backend;
 
+use Magento\Framework\Cache\CacheConstants;
+use Magento\Framework\Cache\Exception\CacheException;
+
 class MongoDbTest extends \PHPUnit\Framework\TestCase
 {
+    /**
+     * @var string
+     */
     protected $_connectionString;
 
+    /**
+     * @var string
+     */
     protected $_dbName = 'magento_integration_test';
 
     /**
@@ -47,7 +56,7 @@ class MongoDbTest extends \PHPUnit\Framework\TestCase
      */
     public function testConstructorException()
     {
-        $this->expectException(\Zend_Cache_Exception::class);
+        $this->expectException(CacheException::class);
         $this->expectExceptionMessage('\'db\' option is not specified');
 
         new \Magento\Framework\Cache\Backend\MongoDb();
@@ -231,19 +240,19 @@ class MongoDbTest extends \PHPUnit\Framework\TestCase
     public static function cleanDataProvider()
     {
         return [
-            'clean all cache' => [\Zend_Cache::CLEANING_MODE_ALL, [], []],
+            'clean all cache' => [CacheConstants::CLEANING_MODE_ALL, [], []],
             'clean cache matching all tags' => [
-                \Zend_Cache::CLEANING_MODE_MATCHING_TAG,
+                CacheConstants::CLEANING_MODE_MATCHING_TAG,
                 ['tag1', 'tag2'],
                 ['test2', 'test4', 'test5'],
             ],
             'clean cache not matching tags' => [
-                \Zend_Cache::CLEANING_MODE_NOT_MATCHING_TAG,
+                CacheConstants::CLEANING_MODE_NOT_MATCHING_TAG,
                 ['tag1', 'tag2'],
                 ['test1', 'test2', 'test3'],
             ],
             'clean cache matching any tags' => [
-                \Zend_Cache::CLEANING_MODE_MATCHING_ANY_TAG,
+                CacheConstants::CLEANING_MODE_MATCHING_ANY_TAG,
                 ['tag1', 'tag2'],
                 ['test4', 'test5'],
             ]
@@ -255,7 +264,7 @@ class MongoDbTest extends \PHPUnit\Framework\TestCase
         $this->_model->save('long-living entity', 'long', [], 1000);
         $this->_model->save('infinite-living entity', 'infinite', [], null);
         $this->_model->save('short-living entity', 'short', [], 0);
-        $this->_model->clean(\Zend_Cache::CLEANING_MODE_OLD);
+        $this->_model->clean(CacheConstants::CLEANING_MODE_OLD);
         $expectedIds = ['long', 'infinite'];
         $actualIds = $this->_model->getIds();
         $this->assertSame($expectedIds, $actualIds);

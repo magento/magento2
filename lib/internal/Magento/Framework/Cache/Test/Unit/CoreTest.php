@@ -7,6 +7,11 @@ declare(strict_types=1);
 
 /**
  * \Magento\Framework\Cache\Core test case
+ *
+ * @deprecated Tests deprecated class Core
+ * @see \Magento\Framework\Cache\Core
+ * @group legacy
+ * @group disabled
  */
 namespace Magento\Framework\Cache\Test\Unit;
 
@@ -39,9 +44,16 @@ class CoreTest extends TestCase
      */
     protected $_mockBackend;
 
+    /**
+     * Skip all tests as the class being tested is deprecated
+     *
+     * @return void
+     */
     protected function setUp(): void
     {
-        $this->_mockBackend = $this->createMock(\Zend_Cache_Backend_File::class);
+        $this->markTestSkipped(
+            'Test skipped: Core is deprecated. Use Symfony cache adapter instead.'
+        );
     }
 
     protected function tearDown(): void
