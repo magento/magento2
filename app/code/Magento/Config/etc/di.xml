@@ -422,4 +422,9 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\Config\Model\Config\PathValidatorFactory">
+        <arguments>
+            <argument name="instanceName" xsi:type="string">Magento\Theme\Model\Config\PathValidator</argument>
+        </arguments>
+    </type>
 </config>

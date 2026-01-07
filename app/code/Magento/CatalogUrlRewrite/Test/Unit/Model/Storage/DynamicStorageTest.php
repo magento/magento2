@@ -21,6 +21,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\UrlRewrite\Model\OptionProvider;
 use Magento\Store\Model\ScopeInterface;
 use Magento\UrlRewrite\Service\V1\Data\UrlRewriteFactory;
+use Magento\UrlRewrite\Service\V1\Data\UrlRewrite as UrlRewriteData;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use ReflectionMethod;
@@ -414,5 +415,321 @@ class DynamicStorageTest extends TestCase
                 }
             })
         ;
+    }
+
+    public function testDoFindOneByDataReturnsNullWhenFilterEmpty(): void
+    {
+        $data = [
+            'entity_type' => 'product',
+            'store_id' => 1
+        ];
+
+        $this->connectionMock
+            ->method('fetchAll')
+            ->willReturn([]);
+
+        $method = new ReflectionMethod($this->object, 'doFindOneByData');
+        $method->setAccessible(true);
+        $result = $method->invoke($this->object, $data);
+
+        $this->assertNull($result);
+    }
+
+    public function testPrepareSelectHandlesMetadataAndNullCategory(): void
+    {
+        $calledWhere = [];
+        $selectMock = $this->selectMock;
+        $this->selectMock
+            ->method('where')
+            ->willReturnCallback(function ($clause, $value = null) use (&$calledWhere, $selectMock) {
+                $calledWhere[] = [$clause, $value];
+                return $selectMock;
+            });
+
+        $data = [
+            UrlRewriteData::REQUEST_PATH => ['test.html'],
+            UrlRewriteData::STORE_ID => [1],
+            UrlRewriteData::ENTITY_TYPE => ['product'],
+            UrlRewriteData::METADATA => [] // triggers lines 67-70 in prepareSelect
+        ];
+
+        $method = new ReflectionMethod($this->object, 'prepareSelect');
+        $method->setAccessible(true);
+        $method->invoke($this->object, $data);
+
+        $this->assertTrue(
+            array_reduce(
+                $calledWhere,
+                function ($carry, $item) {
+                    return $carry || $item[0] === 'relation.category_id IS NULL';
+                },
+                false
+            ),
+            'Expected relation.category_id IS NULL to be applied when metadata[category_id] is empty'
+        );
+    }
+
+    public function testPrepareSelectHandlesMetadataWithCategoryId(): void
+    {
+        $calledWhere = [];
+        $selectMock = $this->selectMock;
+        $this->selectMock
+            ->method('where')
+            ->willReturnCallback(function ($clause, $value = null) use (&$calledWhere, $selectMock) {
+                $calledWhere[] = [$clause, $value];
+                return $selectMock;
+            });
+
+        $data = [
+            UrlRewriteData::REQUEST_PATH => ['cat.html'],
+            UrlRewriteData::STORE_ID => [1],
+            UrlRewriteData::ENTITY_TYPE => ['category'],
+            UrlRewriteData::METADATA => ['category_id' => 99] // triggers 'relation.category_id = ?'
+        ];
+
+        $method = new ReflectionMethod($this->object, 'prepareSelect');
+        $method->setAccessible(true);
+        $method->invoke($this->object, $data);
+
+        $this->assertTrue(
+            array_reduce(
+                $calledWhere,
+                function ($carry, $item) {
+                    return $carry || ($item[0] === 'relation.category_id = ?' && (int)$item[1] === 99);
+                },
+                false
+            ),
+            'Expected relation.category_id = ? with value 99 to be applied when metadata[category_id] provided'
+        );
+    }
+
+    public function testDoFindOneByDataWithoutEntityTypeTriggersFilterEarlyReturn(): void
+    {
+        $data = [
+            'store_id' => 1
+        ];
+
+        $method = new ReflectionMethod($this->object, 'doFindOneByData');
+        $method->setAccessible(true);
+        $result = $method->invoke($this->object, $data);
+
+        $this->assertNull($result);
+    }
+
+    public function testFindProductRewritesByFilterReturnsEmptyWhenEntityTypeMissing(): void
+    {
+        $data = [
+            'store_id' => 1
+        ];
+
+        $method = new ReflectionMethod($this->object, 'findProductRewritesByFilter');
+        $method->setAccessible(true);
+        $result = $method->invoke($this->object, $data);
+
+        $this->assertSame([], $result);
+    }
+
+    public function testDoFindOneByDataCallsProductPathBranch(): void
+    {
+        $data = [
+            'request_path' => 'shop/test.html',
+            'store_id' => 1
+        ];
+        $productFromDb = [
+            'entity_type' => 'product',
+            'entity_id' => '1',
+            'request_path' => 'test.html',
+            'target_path' => 'catalog/product/view/id/1',
+            'redirect_type' => '0',
+        ];
+        $categoryFromDb = [
+            'entity_type' => 'category',
+            'entity_id' => '3',
+            'request_path' => 'shop.html',
+            'target_path' => 'catalog/category/view/id/3',
+            'redirect_type' => '0',
+        ];
+
+        $this->fetchDataMock($productFromDb, $categoryFromDb);
+        $this->scopeConfigMock
+            ->method('getValue')
+            ->willReturnMap([
+                [CategoryUrlPathGenerator::XML_PATH_CATEGORY_URL_SUFFIX,
+                    ScopeInterface::SCOPE_STORE, $data['store_id'], '.html']
+            ]);
+        $this->productResourceMock
+            ->method('canBeShowInCategory')
+            ->willReturn(true);
+
+        $method = new ReflectionMethod($this->object, 'doFindOneByData');
+        $method->setAccessible(true);
+        $result = $method->invoke($this->object, $data);
+
+        $this->assertSame(
+            [
+                'entity_type' => 'product',
+                'entity_id' => '1',
+                'request_path' => 'shop/test.html',
+                'target_path' => 'catalog/product/view/id/1/category/3',
+                'redirect_type' => '0',
+            ],
+            $result
+        );
+    }
+
+    public function testDoFindOneByDataFallsBackToFilterAndReturnsFirst(): void
+    {
+        $data = [
+            'entity_type' => 'product',
+            'store_id' => 1
+        ];
+
+        $productsFromDb = [
+            [
+                'entity_type' => 'product',
+                'entity_id' => '11',
+                'request_path' => 'p1.html',
+                'target_path' => 'catalog/product/view/id/11',
+                'redirect_type' => '0',
+                'store_id' => 1
+            ],
+        ];
+
+        $this->connectionMock
+            ->method('fetchAll')
+            ->willReturn($productsFromDb);
+        $this->connectionMock
+            ->method('fetchRow')
+            ->willReturn(false);
+
+        $method = new ReflectionMethod($this->object, 'doFindOneByData');
+        $method->setAccessible(true);
+        $result = $method->invoke($this->object, $data);
+
+        $this->assertSame($productsFromDb[0], $result);
+    }
+
+    public function testDoFindOneByDataFilterWithCategoryIdAdjustsRequestPath(): void
+    {
+        $data = [
+            'entity_type' => 'product',
+            'store_id' => 1,
+            'metadata' => ['category_id' => 5],
+        ];
+
+        $productsFromDb = [
+            [
+                'entity_type' => 'product',
+                'entity_id' => '21',
+                'request_path' => 'test.html',
+                'target_path' => 'catalog/product/view/id/21',
+                'redirect_type' => '0',
+                'store_id' => 1
+            ],
+            [
+                'entity_type' => 'product',
+                'entity_id' => '22',
+                'request_path' => 'foo.html',
+                'target_path' => 'catalog/product/view/id/22',
+                'redirect_type' => '0',
+                'store_id' => 1
+            ],
+        ];
+        $categoryFromDb = [
+            'entity_type' => 'category',
+            'entity_id' => '5',
+            'request_path' => 'cat.html',
+            'target_path' => 'catalog/category/view/id/5',
+            'redirect_type' => '0',
+        ];
+
+        $this->connectionMock
+            ->method('fetchAll')
+            ->willReturn($productsFromDb);
+        $this->connectionMock
+            ->method('fetchRow')
+            ->willReturn($categoryFromDb);
+        $this->scopeConfigMock
+            ->method('getValue')
+            ->willReturnMap([
+                [CategoryUrlPathGenerator::XML_PATH_CATEGORY_URL_SUFFIX,
+                    ScopeInterface::SCOPE_STORE, $data['store_id'], '.html']
+            ]);
+
+        $method = new ReflectionMethod($this->object, 'doFindOneByData');
+        $method->setAccessible(true);
+        $result = $method->invoke($this->object, $data);
+
+        $this->assertSame('cat/test.html', $result['request_path']);
+    }
+
+    public function testDoFindAllByDataNoRemainingProductsReturnsParentOnly(): void
+    {
+        $data = [
+            'entity_type' => 'product',
+            'store_id' => 1
+        ];
+        $parentRewrites = [
+            [
+                'entity_type' => 'product',
+                'entity_id' => '2',
+                'request_path' => 'p2.html',
+                'target_path' => 'catalog/product/view/id/2',
+                'redirect_type' => '0',
+                'store_id' => 1
+            ]
+        ];
+
+        $this->connectionMock
+            ->method('fetchAll')
+            ->willReturn($parentRewrites);
+
+        $method = new ReflectionMethod($this->object, 'doFindAllByData');
+        $method->setAccessible(true);
+        $result = $method->invoke($this->object, $data);
+
+        $this->assertSame($parentRewrites, $result);
+    }
+
+    public function testDoFindAllByDataMergesFilteredRewritesForRemainingProducts(): void
+    {
+        $data = [
+            'entity_type' => 'product',
+            'store_id' => 1,
+            'entity_id' => ['1', '2'],
+        ];
+        $parentRewrites = [
+            [
+                'entity_type' => 'product',
+                'entity_id' => '1',
+                'request_path' => 'p1.html',
+                'target_path' => 'catalog/product/view/id/1',
+                'redirect_type' => '0',
+                'store_id' => 1
+            ]
+        ];
+        $filteredRewrites = [
+            [
+                'entity_type' => 'product',
+                'entity_id' => '2',
+                'request_path' => 'p2.html',
+                'target_path' => 'catalog/product/view/id/2',
+                'redirect_type' => '0',
+                'store_id' => 1
+            ]
+        ];
+
+        $this->connectionMock
+            ->method('fetchAll')
+            ->willReturnOnConsecutiveCalls($parentRewrites, $filteredRewrites);
+
+        $method = new ReflectionMethod($this->object, 'doFindAllByData');
+        $method->setAccessible(true);
+        $result = $method->invoke($this->object, $data);
+
+        $this->assertSame(
+            array_merge($parentRewrites, $filteredRewrites),
+            $result
+        );
     }
 }
