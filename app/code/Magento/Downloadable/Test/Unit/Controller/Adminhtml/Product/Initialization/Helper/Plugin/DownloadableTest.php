@@ -7,8 +7,6 @@ declare(strict_types=1);
 
 namespace Magento\Downloadable\Test\Unit\Controller\Adminhtml\Product\Initialization\Helper\Plugin;
 
-use Magento\Catalog\Test\Unit\Helper\ProductExtensionTestHelper;
-use Magento\Catalog\Test\Unit\Helper\ProductTestHelper;
 use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\Catalog\Api\Data\ProductExtensionInterface;
 use Magento\Catalog\Controller\Adminhtml\Product\Initialization\Helper;
@@ -19,6 +17,7 @@ use Magento\Downloadable\Controller\Adminhtml\Product\Initialization\Helper\Plug
 use Magento\Downloadable\Model\Link\Builder;
 use Magento\Downloadable\Model\Product\Type;
 use Magento\Framework\App\Request\Http;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -27,6 +26,7 @@ use PHPUnit\Framework\TestCase;
  */
 class DownloadableTest extends TestCase
 {
+    use MockCreationTrait;
     /**
      * @var Downloadable
      */
@@ -63,8 +63,8 @@ class DownloadableTest extends TestCase
     protected function setUp(): void
     {
         $this->requestMock = $this->createMock(Http::class);
-        $this->productMock = $this->createPartialMock(
-            ProductTestHelper::class,
+        $this->productMock = $this->createPartialMockWithReflection(
+            Product::class,
             [
                 'setDownloadableData',
                 'getExtensionAttributes',
@@ -75,8 +75,8 @@ class DownloadableTest extends TestCase
         $this->subjectMock = $this->createMock(
             Helper::class
         );
-        $this->extensionAttributesMock = $this->createPartialMock(
-            ProductExtensionTestHelper::class,
+        $this->extensionAttributesMock = $this->createPartialMockWithReflection(
+            ProductExtensionInterface::class,
             [
                 'setDownloadableProductLinks',
                 'setDownloadableProductSamples'

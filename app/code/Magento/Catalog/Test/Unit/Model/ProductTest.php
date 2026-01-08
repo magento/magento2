@@ -81,10 +81,10 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHe
 use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Store\Model\Website;
-use PHPUnit\Framework\MockObject\MockObject;
-use PHPUnit\Framework\TestCase;
 use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -93,8 +93,8 @@ use PHPUnit\Framework\Attributes\DataProvider;
  */
 class ProductTest extends TestCase
 {
-
     use MockCreationTrait;
+
     /**
      * @var MockObject
      */
@@ -318,7 +318,7 @@ class ProductTest extends TestCase
             ['getAreaCode', 'isAreaCodeEmulated']
         );
         $this->appStateMock->method('getAreaCode')->willReturn(FrontNameResolver::AREA_CODE);
-
+      
         $this->eventManagerMock = $this->createStub(ManagerInterface::class);
         $actionValidatorMock = $this->createMock(
             RemoveAction::class
@@ -330,6 +330,7 @@ class ProductTest extends TestCase
             Context::class,
             ['getEventDispatcher', 'getCacheManager', 'getAppState', 'getActionValidator']
         );
+      
         $contextMock->method('getAppState')->willReturn($this->appStateMock);
         $contextMock->method('getEventDispatcher')->willReturn($this->eventManagerMock);
         $contextMock->method('getCacheManager')->willReturn($cacheInterfaceMock);
@@ -386,7 +387,6 @@ class ProductTest extends TestCase
             $this->createMock(
                 ImageEntryConverter::class
             );
-
         $this->mediaGalleryEntryConverterPoolMock->method('getConverterByMediaType')->willReturn($this->converterMock);
         $this->productLinkRepositoryMock = $this->createMock(ProductLinkRepositoryInterface::class);
         $this->extensionAttributesFactory = $this->createMock(ExtensionAttributesFactory::class);
@@ -488,7 +488,6 @@ class ProductTest extends TestCase
      * @param bool $isObjectNew
      *
      * @return void
-     *
      */
     #[DataProvider('getSingleStoreIds')]
     public function testGetStoreSingleSiteModelIds(bool $isObjectNew): void
@@ -544,7 +543,6 @@ class ProductTest extends TestCase
 
     /**
      * @return void
-     *
      */
     #[DataProvider('getCategoryCollectionCollectionNullDataProvider')]
     public function testGetCategoryCollectionCollectionNull(
@@ -716,7 +714,6 @@ class ProductTest extends TestCase
      * @param $categoryIndexerCount
      *
      * @return void
-     *
      */
     #[DataProvider('getProductReindexProvider')]
     public function testReindex($productChanged, $isScheduled, $productFlatCount, $categoryIndexerCount): void
@@ -810,7 +807,6 @@ class ProductTest extends TestCase
      * @param bool $isNew
      *
      * @return void
-     *
      */
     #[DataProvider('getIdentitiesProvider')]
     public function testGetIdentities(
