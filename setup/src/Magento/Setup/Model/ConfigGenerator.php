@@ -6,13 +6,14 @@
 
 namespace Magento\Setup\Model;
 
+use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\App\State;
+use Magento\Framework\Config\ConfigOptionsListConstants;
 use Magento\Framework\Config\Data\ConfigData;
 use Magento\Framework\Config\Data\ConfigDataFactory;
 use Magento\Framework\Config\File\ConfigFilePool;
-use Magento\Framework\App\DeploymentConfig;
-use Magento\Framework\Config\ConfigOptionsListConstants;
-use Magento\Framework\App\State;
+use Magento\Framework\DB\Helper\InitStatementsCleanup;
 use Magento\Framework\Math\Random;
 use Magento\Setup\Model\ConfigOptionsList\DriverOptions;
 
@@ -20,6 +21,7 @@ use Magento\Setup\Model\ConfigOptionsList\DriverOptions;
  * Creates deployment config data based on user input array
  *
  * This class introduced to break down {@see \Magento\Setup\Model\ConfigOptionsList::createConfig}
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class ConfigGenerator
 {
@@ -49,7 +51,8 @@ class ConfigGenerator
 
     /**
      * @var Random
-     * @deprecated 100.2.0
+     * @deprecated 100.2.0 CryptKeyGenerator should be used instead for generating encryption keys
+     * @see CryptKeyGeneratorInterface
      */
     protected $random;
 
@@ -69,6 +72,11 @@ class ConfigGenerator
     private $driverOptions;
 
     /**
+     * @var InitStatementsCleanup
+     */
+    private $initStatementsCleanup;
+
+    /**
      * Constructor
      *
      * @param Random $random Deprecated since 100.2.0
@@ -76,19 +84,23 @@ class ConfigGenerator
      * @param ConfigDataFactory|null $configDataFactory
      * @param CryptKeyGeneratorInterface|null $cryptKeyGenerator
      * @param DriverOptions|null $driverOptions
+     * @param InitStatementsCleanup|null $initStatementsCleanup
      */
     public function __construct(
         Random $random,
         DeploymentConfig $deploymentConfig,
         ?ConfigDataFactory $configDataFactory = null,
         ?CryptKeyGeneratorInterface $cryptKeyGenerator = null,
-        ?DriverOptions $driverOptions = null
+        ?DriverOptions $driverOptions = null,
+        ?InitStatementsCleanup $initStatementsCleanup = null
     ) {
         $this->random = $random;
         $this->deploymentConfig = $deploymentConfig;
         $this->configDataFactory = $configDataFactory ?? ObjectManager::getInstance()->get(ConfigDataFactory::class);
         $this->cryptKeyGenerator = $cryptKeyGenerator ?? ObjectManager::getInstance()->get(CryptKeyGenerator::class);
         $this->driverOptions = $driverOptions ?? ObjectManager::getInstance()->get(DriverOptions::class);
+        $this->initStatementsCleanup = $initStatementsCleanup
+            ?? ObjectManager::getInstance()->get(InitStatementsCleanup::class);
     }
 
     /**
@@ -141,7 +153,8 @@ class ConfigGenerator
      *
      * @param array $data
      * @return ConfigData|null
-     * @deprecated 2.2.0
+     * @deprecated 2.2.0 Definitions are no longer used and config generation is not required. Method returns null.
+     * @see This method is not replaced; definitions functionality was removed entirely.
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function createDefinitionsConfig(array $data)
@@ -180,7 +193,18 @@ class ConfigGenerator
 
         foreach ($optional as $key) {
             if (isset($data[$key])) {
-                $configData->set($dbConnectionPrefix . self::$paramMap[$key], $data[$key]);
+                $value = $data[$key];
+                
+                // Clean up deprecated 'SET NAMES utf8;' from initStatements
+                if ($key === ConfigOptionsListConstants::INPUT_KEY_DB_INIT_STATEMENTS && is_string($value)) {
+                    $value = $this->initStatementsCleanup->removeSetNamesUtf8($value);
+                    // If cleanup returns null, don't set the initStatements key
+                    if ($value === null) {
+                        continue;
+                    }
+                }
+                
+                $configData->set($dbConnectionPrefix . self::$paramMap[$key], $value);
             }
         }
 
