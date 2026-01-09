@@ -133,45 +133,105 @@ class Image extends File
      * @throws LocalizedException
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     protected function _validateByRules($value)
     {
         $label = $value['name'] ?? $value['file'] ?? '';
         $rules = $this->getAttribute()->getValidationRules();
 
-        // For UI component uploads, get name from file path if not provided
+        // Extract and validate file name
+        $fileName = $this->extractAndValidateFileName($value, $label);
+        if (is_array($fileName)) {
+            return $fileName; // Return error array
+        }
+        $value['name'] = $fileName;
+        $label = $fileName;
+
+        // Get and validate file path
+        $filePath = $this->getValidatedFilePath($value, $label);
+        if (is_array($filePath)) {
+            return $filePath; // Return error array
+        }
+
+        // Validate image properties
+        $imageProp = $this->validateImageProperties($filePath, $label);
+        if (is_array($imageProp)) {
+            return $imageProp; // Return error array
+        }
+
+        // Validate image format
+        $formatErrors = $this->validateImageFormat($imageProp, $value, $label);
+        if (!empty($formatErrors)) {
+            return $formatErrors;
+        }
+
+        // Validate size and dimensions
+        return $this->validateSizeAndDimensions($value, $filePath, $imageProp, $rules, $label);
+    }
+
+    /**
+     * Extract and validate file name from value
+     *
+     * @param array $value
+     * @param string $label
+     * @return string|array Returns file name or error array
+     */
+    private function extractAndValidateFileName(array $value, string $label)
+    {
         if (empty($value['name']) && !empty($value['file'])) {
-            // Validate file path for security before using basename
             if (!$this->isValidFilePath($value['file'])) {
                 return [__('"%1" is not a valid file.', $label)];
             }
-            $value['name'] = basename($value['file']);
-            $label = $value['name'];
+            $pathInfo = $this->ioFileSystem->getPathInfo($value['file']);
+            return $pathInfo['basename'] ?? '';
         }
+        return $value['name'] ?? '';
+    }
 
-        // Determine file path for validation
+    /**
+     * Get and validate file path
+     *
+     * @param array $value
+     * @param string $label
+     * @return string|array Returns file path or error array
+     */
+    private function getValidatedFilePath(array $value, string $label)
+    {
         $filePath = $value['tmp_name'] ?? null;
 
-        // For UI component uploads, construct the full temporary file path
         if (empty($filePath) && !empty($value['file'])) {
             $tmpFileName = ltrim($value['file'], '/');
 
-            // Basic path validation to prevent traversal and suspicious paths
             if (!$this->isValidFilePath($tmpFileName)) {
                 return [__('"%1" is not a valid file.', $label)];
             }
 
-            // Ensure tmpFileName is not empty after ltrim
             if ($tmpFileName !== '') {
                 $filePath = $this->mediaEntityTmpReadDirectory->getAbsolutePath($tmpFileName);
             }
         }
 
-        // Ensure we have a valid file path before attempting to read image properties
-        if (empty($filePath) || !is_string($filePath) || !file_exists($filePath)) {
+        if (empty($filePath) || !is_string($filePath)) {
             return [__('"%1" is not a valid file.', $label)];
         }
 
+        if (!$this->mediaWriteDirectory->getDriver()->isExists($filePath)) {
+            return [__('"%1" is not a valid file.', $label)];
+        }
+
+        return $filePath;
+    }
+
+    /**
+     * Validate image properties using getimagesize
+     *
+     * @param string $filePath
+     * @param string $label
+     * @return array|false Returns image properties or error array
+     */
+    private function validateImageProperties(string $filePath, string $label)
+    {
         try {
             // phpcs:ignore Magento2.Functions.DiscouragedFunction
             $imageProp = getimagesize($filePath);
@@ -183,13 +243,26 @@ class Image extends File
             return [__('"%1" is not a valid file.', $label)];
         }
 
+        return $imageProp;
+    }
+
+    /**
+     * Validate image format
+     *
+     * @param array $imageProp
+     * @param array $value
+     * @param string $label
+     * @return array Returns error array or empty array
+     */
+    private function validateImageFormat(array $imageProp, array &$value, string $label): array
+    {
         $allowImageTypes = [1 => 'gif', 2 => 'jpg', 3 => 'png'];
 
         if (!isset($allowImageTypes[$imageProp[2]])) {
             return [__('"%1" is not a valid image format.', $label)];
         }
 
-        // modify image name
+        // Modify image name if extension doesn't match
         $extension = $this->ioFileSystem->getPathInfo($value['name'])['extension'];
         if ($extension != $allowImageTypes[$imageProp[2]]) {
             $value['name'] = $this->ioFileSystem->getPathInfo($value['name'])['filename']
@@ -197,48 +270,67 @@ class Image extends File
                 . $allowImageTypes[$imageProp[2]];
         }
 
-        $maxFileSize = ArrayObjectSearch::getArrayElementByName(
-            $rules,
-            'max_file_size'
-        );
+        return [];
+    }
+
+    /**
+     * Validate file size and image dimensions
+     *
+     * @param array $value
+     * @param string $filePath
+     * @param array $imageProp
+     * @param array $rules
+     * @param string $label
+     * @return array Returns error array
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     */
+    private function validateSizeAndDimensions(
+        array $value,
+        string $filePath,
+        array $imageProp,
+        array $rules,
+        string $label
+    ): array {
         $errors = [];
+
+        $maxFileSize = ArrayObjectSearch::getArrayElementByName($rules, 'max_file_size');
         if ($maxFileSize !== null) {
             $size = $value['size'] ?? 0;
-            // For UI component uploads, get file size if not provided
-            if ($size === 0 && !empty($filePath) && file_exists($filePath)) {
-                $fileSize = filesize($filePath);
-                if ($fileSize !== false) {
-                    $size = $fileSize;
-                }
+            if ($size === 0 && !empty($filePath)) {
+                $size = $this->getFileSize($filePath);
             }
             if ($maxFileSize < $size) {
                 $errors[] = __('"%1" exceeds the allowed file size.', $label);
             }
         }
 
-        $maxImageWidth = ArrayObjectSearch::getArrayElementByName(
-            $rules,
-            'max_image_width'
-        );
-        if ($maxImageWidth !== null) {
-            if ($maxImageWidth < $imageProp[0]) {
-                $r = $maxImageWidth;
-                $errors[] = __('"%1" width exceeds allowed value of %2 px.', $label, $r);
-            }
+        $maxImageWidth = ArrayObjectSearch::getArrayElementByName($rules, 'max_image_width');
+        if ($maxImageWidth !== null && $maxImageWidth < $imageProp[0]) {
+            $errors[] = __('"%1" width exceeds allowed value of %2 px.', $label, $maxImageWidth);
         }
 
-        $maxImageHeight = ArrayObjectSearch::getArrayElementByName(
-            $rules,
-            'max_image_height'
-        );
-        if ($maxImageHeight !== null) {
-            if ($maxImageHeight < $imageProp[1]) {
-                $r = $maxImageHeight;
-                $errors[] = __('"%1" height exceeds allowed value of %2 px.', $label, $r);
-            }
+        $maxImageHeight = ArrayObjectSearch::getArrayElementByName($rules, 'max_image_height');
+        if ($maxImageHeight !== null && $maxImageHeight < $imageProp[1]) {
+            $errors[] = __('"%1" height exceeds allowed value of %2 px.', $label, $maxImageHeight);
         }
 
         return $errors;
+    }
+
+    /**
+     * Get file size safely
+     *
+     * @param string $filePath
+     * @return int
+     */
+    private function getFileSize(string $filePath): int
+    {
+        try {
+            $stat = $this->mediaWriteDirectory->getDriver()->stat($filePath);
+            return (int)($stat['size'] ?? 0);
+        } catch (\Exception $e) {
+            return 0;
+        }
     }
 
     /**

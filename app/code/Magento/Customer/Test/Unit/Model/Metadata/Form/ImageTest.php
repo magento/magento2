@@ -193,6 +193,11 @@ class ImageTest extends AbstractFormTestCase
             ->method('getStoreLabel')
             ->willReturn('File Input Field Label');
 
+        $this->driverMock->expects($this->once())
+            ->method('isExists')
+            ->with($value['tmp_name'])
+            ->willReturn(true);
+
         $this->fileProcessorMock->expects($this->once())
             ->method('isExist')
             ->with(FileProcessor::TMP_DIR . '/' . $value['tmp_name'])

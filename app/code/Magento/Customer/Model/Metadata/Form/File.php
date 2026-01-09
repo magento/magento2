@@ -199,11 +199,12 @@ class File extends AbstractData
 
         // For UI component uploads, get name from file path if not provided
         if (empty($value['name']) && !empty($value['file'])) {
-            // Validate file path for security before using basename
+            // Validate file path for security before extracting filename
             if (!$this->isValidFilePath($value['file'])) {
                 return [__('"%1" is not a valid file.', $label)];
             }
-            $value['name'] = basename($value['file']);
+            $pathInfo = $this->ioFile->getPathInfo($value['file']);
+            $value['name'] = $pathInfo['basename'] ?? '';
             $label = $value['name'];
         }
 
@@ -309,7 +310,13 @@ class File extends AbstractData
             return 0;
         }
 
-        $temporaryFile = FileProcessor::TMP_DIR . '/' . ltrim(basename($filePath), '/');
+        $pathInfo = $this->ioFile->getPathInfo($filePath);
+        $fileName = $pathInfo['basename'] ?? '';
+        if (empty($fileName)) {
+            return 0;
+        }
+
+        $temporaryFile = FileProcessor::TMP_DIR . '/' . ltrim($fileName, '/');
         if ($this->fileProcessor->isExist($temporaryFile)) {
             $stat = $this->fileProcessor->getStat($temporaryFile);
             return (int)($stat['size'] ?? 0);
