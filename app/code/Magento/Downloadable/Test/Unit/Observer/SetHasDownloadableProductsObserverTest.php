@@ -15,6 +15,7 @@ use Magento\Downloadable\Model\Product\Type as DownloadableProductType;
 use Magento\Downloadable\Observer\SetHasDownloadableProductsObserver;
 use Magento\Framework\DataObject;
 use Magento\Framework\Event\Observer;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Sales\Model\Order;
 use Magento\Sales\Model\Order\Item;
@@ -23,6 +24,7 @@ use PHPUnit\Framework\TestCase;
 
 class SetHasDownloadableProductsObserverTest extends TestCase
 {
+    use MockCreationTrait;
     /**
      * @var ObjectManager
      */
@@ -52,8 +54,8 @@ class SetHasDownloadableProductsObserverTest extends TestCase
 
         $this->orderMock = $this->createPartialMock(Order::class, ['getAllItems']);
 
-        $this->checkoutSessionMock = $this->createPartialMock(
-            \Magento\Checkout\Test\Unit\Helper\CheckoutSessionTestHelper::class,
+        $this->checkoutSessionMock = $this->createPartialMockWithReflection(
+            CheckoutSession::class,
             ['getHasDownloadableProducts', 'setHasDownloadableProducts']
         );
 

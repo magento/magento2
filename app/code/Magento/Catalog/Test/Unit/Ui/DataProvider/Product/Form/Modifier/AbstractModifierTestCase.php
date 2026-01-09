@@ -10,6 +10,7 @@ namespace Magento\Catalog\Test\Unit\Ui\DataProvider\Product\Form\Modifier;
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\Locator\LocatorInterface;
 use Magento\Framework\Stdlib\ArrayManager;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Store\Model\Store;
 use Magento\Ui\DataProvider\Modifier\ModifierInterface;
@@ -27,6 +28,8 @@ use PHPUnit\Framework\TestCase;
  */
 abstract class AbstractModifierTestCase extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var ModifierInterface
      */

@@ -8,12 +8,13 @@ declare(strict_types=1);
 namespace Magento\Checkout\Test\Unit\Plugin;
 
 use Magento\Checkout\Plugin\Model\Quote\ResetQuoteAddresses;
-use Magento\Checkout\Test\Unit\Helper\ExtensionAttributesTestHelper;
+use Magento\Quote\Api\Data\CartExtensionInterface;
 use Magento\Quote\Model\Quote;
 use Magento\Quote\Model\Quote\Address;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\Attributes\DataProvider;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 
 /**
  * Class ResetQuoteAddressesTest
@@ -22,6 +23,7 @@ use PHPUnit\Framework\Attributes\DataProvider;
  */
 class ResetQuoteAddressesTest extends TestCase
 {
+    use MockCreationTrait;
     /**
      * @var int
      */
@@ -53,7 +55,7 @@ class ResetQuoteAddressesTest extends TestCase
     private $quoteMock;
 
     /**
-     * @var ExtensionAttributesTestHelper
+     * @var CartExtensionInterface
      */
     private $extensionAttributesMock;
 
@@ -69,7 +71,10 @@ class ResetQuoteAddressesTest extends TestCase
             'getExtensionAttributes',
             'isVirtual',
         ]);
-        $this->extensionAttributesMock = new ExtensionAttributesTestHelper();
+        $this->extensionAttributesMock = $this->createPartialMockWithReflection(
+            CartExtensionInterface::class,
+            ['getShippingAssignments', 'setShippingAssignments']
+        );
 
         $this->plugin = new ResetQuoteAddresses();
     }
@@ -121,7 +126,12 @@ class ResetQuoteAddressesTest extends TestCase
             ->willReturn($isVirtualQuote);
 
         if (!$isVirtualQuote && $extensionAttributes) {
-            $this->extensionAttributesMock->setShippingAssignments([static::STUB_SHIPPING_ASSIGNMENTS]);
+            // First call in production code condition check, second call in assertion
+            $this->extensionAttributesMock->method('getShippingAssignments')
+                ->willReturnOnConsecutiveCalls([static::STUB_SHIPPING_ASSIGNMENTS], []);
+            $this->extensionAttributesMock->expects($this->once())
+                ->method('setShippingAssignments')
+                ->with([]);
         }
 
         $this->plugin->afterRemoveItem($this->quoteMock, $this->quoteMock, static::STUB_ITEM_ID);
@@ -157,7 +167,12 @@ class ResetQuoteAddressesTest extends TestCase
             ->willReturn($isVirtualQuote);
 
         if (!$isVirtualQuote && $extensionAttributes) {
-            $this->extensionAttributesMock->setShippingAssignments($extensionAttributes);
+            // First call in production code condition check, second call in assertion
+            $this->extensionAttributesMock->method('getShippingAssignments')
+                ->willReturnOnConsecutiveCalls($extensionAttributes, []);
+            $this->extensionAttributesMock->expects($this->once())
+                ->method('setShippingAssignments')
+                ->with([]);
         }
 
         $this->plugin->afterRemoveItem($this->quoteMock, $this->quoteMock, static::STUB_ITEM_ID);

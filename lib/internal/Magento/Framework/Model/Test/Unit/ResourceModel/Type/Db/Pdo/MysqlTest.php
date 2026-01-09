@@ -63,7 +63,7 @@ class MysqlTest extends TestCase
         return [
             'default values' => [
                 ['host' => 'localhost'],
-                ['host' => 'localhost', 'initStatements' => 'SET NAMES utf8', 'type' => 'pdo_mysql', 'active' => false],
+                ['host' => 'localhost', 'type' => 'pdo_mysql', 'active' => false],
             ],
             'custom values' => [
                 ['host' => 'localhost', 'initStatements' => 'init statement', 'type' => 'type', 'active' => true],
@@ -71,19 +71,19 @@ class MysqlTest extends TestCase
             ],
             'active string true' => [
                 ['host' => 'localhost', 'active' => 'true'],
-                ['host' => 'localhost', 'initStatements' => 'SET NAMES utf8', 'type' => 'pdo_mysql', 'active' => true],
+                ['host' => 'localhost', 'type' => 'pdo_mysql', 'active' => true],
             ],
             'non-active string false' => [
                 ['host' => 'localhost', 'active' => 'false'],
-                ['host' => 'localhost', 'initStatements' => 'SET NAMES utf8', 'type' => 'pdo_mysql', 'active' => false],
+                ['host' => 'localhost', 'type' => 'pdo_mysql', 'active' => false],
             ],
             'non-active string 0' => [
                 ['host' => 'localhost', 'active' => '0'],
-                ['host' => 'localhost', 'initStatements' => 'SET NAMES utf8', 'type' => 'pdo_mysql', 'active' => false],
+                ['host' => 'localhost', 'type' => 'pdo_mysql', 'active' => false],
             ],
             'non-active bool false' => [
                 ['host' => 'localhost', 'active' => false],
-                ['host' => 'localhost', 'initStatements' => 'SET NAMES utf8', 'type' => 'pdo_mysql', 'active' => false],
+                ['host' => 'localhost', 'type' => 'pdo_mysql', 'active' => false],
             ],
         ];
     }

@@ -11,8 +11,28 @@ use Magento\Framework\Cache\Frontend\Adapter\Zend;
 use Magento\Framework\TestFramework\Unit\Helper\ProxyTesting;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * Test for Zend cache frontend adapter
+ *
+ * @deprecated Tests deprecated class Zend
+ * @see \Magento\Framework\Cache\Frontend\Adapter\Zend
+ * @group legacy
+ * @group disabled
+ */
 class ZendTest extends TestCase
 {
+    /**
+     * Skip all tests as the class being tested is deprecated
+     *
+     * @return void
+     */
+    protected function setUp(): void
+    {
+        $this->markTestSkipped(
+            'Test skipped: Zend frontend adapter is deprecated. Use Symfony cache adapter instead.'
+        );
+    }
+
     /**
      * @param string $method
      * @param array $params
