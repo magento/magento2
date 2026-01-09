@@ -333,6 +333,28 @@ class QuantityValidatorTest extends TestCase
                 'expected' => [],
                 'isQtyDecimalAllowed' => false,
                 'isAllowZeroGrandTotal' => true
+            ],
+            [
+                'orderId' => 1,
+                'orderItemId' => 1,
+                'qtyToRequest' => '1.0',
+                'qtyToRefund' => 1,
+                'sku' => 'sku',
+                'total' => 15,
+                'expected' => [],
+                'isQtyDecimalAllowed' => false,
+                'isAllowZeroGrandTotal' => true
+            ],
+            [
+                'orderId' => 1,
+                'orderItemId' => 1,
+                'qtyToRequest' => '2.5',
+                'qtyToRefund' => 3,
+                'sku' => 'sku',
+                'total' => 15,
+                'expected' => [],
+                'isQtyDecimalAllowed' => true,
+                'isAllowZeroGrandTotal' => true
             ]
         ];
     }

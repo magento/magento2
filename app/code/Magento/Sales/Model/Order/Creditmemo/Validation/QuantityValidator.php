@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright 2016 Adobe
+ * Copyright 2026 Adobe
  * All Rights Reserved.
  */
 declare(strict_types=1);
@@ -133,7 +133,7 @@ class QuantityValidator implements ValidatorInterface
         }
         $orderItem = $orderItemsById[$item->getOrderItemId()];
 
-        if (!$this->isValidDecimalRefundQty($orderItem->getIsQtyDecimal(), $item->getQty())) {
+        if (!$this->isValidDecimalRefundQty($orderItem->getIsQtyDecimal(), (float)$item->getQty())) {
             return __(
                 'We found an invalid quantity to refund item "%1".',
                 $orderItem->getSku()
