@@ -202,7 +202,7 @@ class CustomOptions extends AbstractModifier
     }
 
     /**
-     * Format float number to have two digits after delimiter
+     * Format price value by path with precision based on price type
      *
      * @param string $path
      * @param array $data
@@ -214,7 +214,12 @@ class CustomOptions extends AbstractModifier
         $value = $this->arrayManager->get($path, $data);
 
         if (is_numeric($value)) {
-            $data = $this->arrayManager->replace($path, $data, $this->formatPrice($value));
+            $priceType = $this->arrayManager->get(static::FIELD_PRICE_TYPE_NAME, $data);
+            $precision = ($priceType === \Magento\Catalog\Model\Product\Option\Value::TYPE_PERCENT)
+                ? \Magento\Framework\Pricing\PriceCurrencyInterface::PERCENTAGE_PRECISION
+                : \Magento\Framework\Pricing\PriceCurrencyInterface::DEFAULT_PRECISION;
+
+            $data = $this->arrayManager->replace($path, $data, $this->formatPrice($value, $precision));
         }
 
         return $data;

@@ -202,15 +202,22 @@ abstract class AbstractModifier implements ModifierInterface
     }
 
     /**
-     * Format price to have only two decimals after delimiter
+     * Format price value with specified precision
      *
      * @param mixed $value
+     * @param int $precision
      * @return string
      * @since 101.0.0
      */
-    protected function formatPrice($value)
+    protected function formatPrice($value, $precision = PriceCurrencyInterface::DEFAULT_PRECISION)
     {
-        return $value !== null ? number_format((float)$value, PriceCurrencyInterface::DEFAULT_PRECISION, '.', '') : '';
+        if ($value === null) {
+            return '';
+        }
+
+        $formatted = number_format((float)$value, $precision, '.', '');
+
+        return rtrim($formatted, '.');
     }
 
     /**

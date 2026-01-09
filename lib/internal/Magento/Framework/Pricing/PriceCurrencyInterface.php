@@ -17,6 +17,11 @@ interface PriceCurrencyInterface
     const DEFAULT_PRECISION = 2;
 
     /**
+     * Precision for percentage-based prices
+     */
+    const PERCENTAGE_PRECISION = 4;
+
+    /**
      * Convert price value
      *
      * @param float $amount
