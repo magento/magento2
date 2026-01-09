@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright 2014 Adobe
+ * Copyright 2026 Adobe
  * All Rights Reserved.
  */
 declare(strict_types=1);
@@ -24,6 +24,7 @@ use Magento\Framework\Session\Config as SessionConfig;
 use Magento\Framework\Session\SessionManagerInterface;
 use Magento\Framework\Stdlib\DateTime;
 use Magento\Store\Model\ScopeInterface;
+use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * Class Visitor responsible for initializing visitor's.
@@ -201,6 +202,16 @@ class Visitor extends AbstractModel
     public function beforeSave()
     {
         $this->unsetData("session_id");
+
+        if (!$this->getWebsiteId()) {
+            try {
+                $storeManager = ObjectManager::getInstance()->get(StoreManagerInterface::class);
+                $this->setWebsiteId($storeManager->getWebsite()->getId());
+            } catch (\Exception $e) {
+                $this->_logger->critical($e);
+            }
+        }
+
         return parent::beforeSave();
     }
 

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright 2015 Adobe
+ * Copyright 2026 Adobe
  * All Rights Reserved.
  */
 namespace Magento\Customer\Model\ResourceModel\Online\Grid;
@@ -93,12 +93,19 @@ class Collection extends SearchResult
             $newerSessionExistsSubSelect
         );
         $this->addFilterToMap('customer_id', 'main_table.customer_id');
-        $expression = $connection->getCheckSql(
+        $visitorTypeExpression = $connection->getCheckSql(
             'main_table.customer_id IS NOT NULL AND main_table.customer_id != 0',
             $connection->quote(Visitor::VISITOR_TYPE_CUSTOMER),
             $connection->quote(Visitor::VISITOR_TYPE_VISITOR)
         );
-        $this->getSelect()->columns(['visitor_type' => $expression]);
+        $websiteIdExpression = new \Zend_Db_Expr(
+            'COALESCE(main_table.website_id, customer.website_id)'
+        );
+        $this->getSelect()->columns([
+            'visitor_type' => $visitorTypeExpression,
+            'website_id' => $websiteIdExpression
+        ]);
+        $this->addFilterToMap('website_id', $websiteIdExpression);
         return $this;
     }
 

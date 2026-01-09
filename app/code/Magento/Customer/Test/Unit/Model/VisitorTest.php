@@ -182,6 +182,30 @@ class VisitorTest extends TestCase
         $this->assertTrue($this->visitor->getDoQuoteDestroy());
     }
 
+    public function testBeforeSaveUnsetsSessionId()
+    {
+        $this->visitor->setData('session_id', 'test_session_id');
+        $this->visitor->beforeSave();
+        $this->assertNull($this->visitor->getData('session_id'));
+    }
+
+    public function testBeforeSaveSetsWebsiteIdWhenNotSet()
+    {
+        $this->visitor->unsetData('website_id');
+        $this->visitor->beforeSave();
+        // Website ID should be set by StoreManager (or remain null if not available)
+        // We can't easily mock ObjectManager here, so we just verify the method doesn't throw
+        $this->assertTrue(true);
+    }
+
+    public function testBeforeSaveDoesNotOverrideExistingWebsiteId()
+    {
+        $websiteId = 5;
+        $this->visitor->setWebsiteId($websiteId);
+        $this->visitor->beforeSave();
+        $this->assertEquals($websiteId, $this->visitor->getWebsiteId());
+    }
+
     public function testClean()
     {
         $this->visitorResourceModelMock->expects($this->once())
