@@ -526,9 +526,6 @@
         <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="visitor_id"/>
         </constraint>
-        <constraint xsi:type="foreign" referenceId="CUSTOMER_VISITOR_WEBSITE_ID_STORE_WEBSITE_WEBSITE_ID"
-                    table="customer_visitor" column="website_id" referenceTable="store_website"
-                    referenceColumn="website_id" onDelete="SET NULL"/>
         <index referenceId="CUSTOMER_VISITOR_CUSTOMER_ID" indexType="btree">
             <column name="customer_id"/>
         </index>
