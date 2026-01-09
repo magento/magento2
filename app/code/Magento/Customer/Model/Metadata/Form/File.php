@@ -199,11 +199,26 @@ class File extends AbstractData
 
         // For UI component uploads, get name from file path if not provided
         if (empty($value['name']) && !empty($value['file'])) {
+            // Validate file path for security before using basename
+            if (!$this->isValidFilePath($value['file'])) {
+                return [__('"%1" is not a valid file.', $label)];
+            }
             $value['name'] = basename($value['file']);
             $label = $value['name'];
         }
 
-        $extension = $this->ioFile->getPathInfo($value['name'])['extension'];
+        // Ensure we have a valid file name before attempting to get extension
+        if (empty($value['name'])) {
+            return [__('"%1" is not a valid file.', $label)];
+        }
+
+        $pathInfo = $this->ioFile->getPathInfo($value['name']);
+        $extension = $pathInfo['extension'] ?? '';
+
+        if (empty($extension)) {
+            return [__('"%1" is not a valid file.', $label)];
+        }
+
         $fileExtensions = ArrayObjectSearch::getArrayElementByName(
             $rules,
             'file_extensions'
@@ -224,7 +239,11 @@ class File extends AbstractData
         }
 
         // Determine file path for validation
-        $filePath = $value['tmp_name'] ?? $value['file'] ?? '';
+        $filePath = $value['tmp_name'] ?? $value['file'] ?? null;
+        if (empty($filePath)) {
+            return [__('"%1" is not a valid file.', $label)];
+        }
+
         if (!$this->_isUploadedFile($filePath)) {
             return [__('"%1" is not a valid file.', $label)];
         }
@@ -237,11 +256,7 @@ class File extends AbstractData
             $size = $value['size'] ?? 0;
             // For UI component uploads, get file size if not provided
             if ($size === 0 && !empty($value['file'])) {
-                $temporaryFile = FileProcessor::TMP_DIR . '/' . basename($value['file']);
-                if ($this->fileProcessor->isExist($temporaryFile)) {
-                    $stat = $this->fileProcessor->getStat($temporaryFile);
-                    $size = $stat['size'] ?? 0;
-                }
+                $size = $this->getTemporaryFileSize($value['file']);
             }
             if ($maxFileSize < $size) {
                 return [__('"%1" exceeds the allowed file size.', $label)];
@@ -249,6 +264,58 @@ class File extends AbstractData
         }
 
         return [];
+    }
+
+    /**
+     * Validate file path for security
+     *
+     * @param string $filePath
+     * @return bool
+     */
+    private function isValidFilePath(string $filePath): bool
+    {
+        // Check for null bytes
+        if (strpos($filePath, "\0") !== false) {
+            return false;
+        }
+
+        // Check for path traversal sequences
+        if (preg_match('#(^|/)\.\.(?:/|$)#', $filePath)) {
+            return false;
+        }
+
+        // Check for Windows absolute paths
+        if (preg_match('#^[a-zA-Z]:[\\\\/]#', $filePath)) {
+            return false;
+        }
+
+        // Check for backslashes at the start
+        if (isset($filePath[0]) && $filePath[0] === '\\') {
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * Get file size from temporary directory
+     *
+     * @param string $filePath
+     * @return int
+     */
+    private function getTemporaryFileSize(string $filePath): int
+    {
+        if (!$this->isValidFilePath($filePath)) {
+            return 0;
+        }
+
+        $temporaryFile = FileProcessor::TMP_DIR . '/' . ltrim(basename($filePath), '/');
+        if ($this->fileProcessor->isExist($temporaryFile)) {
+            $stat = $this->fileProcessor->getStat($temporaryFile);
+            return (int)($stat['size'] ?? 0);
+        }
+
+        return 0;
     }
 
     /**

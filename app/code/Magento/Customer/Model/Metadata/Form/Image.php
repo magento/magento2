@@ -141,6 +141,10 @@ class Image extends File
 
         // For UI component uploads, get name from file path if not provided
         if (empty($value['name']) && !empty($value['file'])) {
+            // Validate file path for security before using basename
+            if (!$this->isValidFilePath($value['file'])) {
+                return [__('"%1" is not a valid file.', $label)];
+            }
             $value['name'] = basename($value['file']);
             $label = $value['name'];
         }
@@ -151,7 +155,21 @@ class Image extends File
         // For UI component uploads, construct the full temporary file path
         if (empty($filePath) && !empty($value['file'])) {
             $tmpFileName = ltrim($value['file'], '/');
-            $filePath = $this->mediaEntityTmpReadDirectory->getAbsolutePath($tmpFileName);
+
+            // Basic path validation to prevent traversal and suspicious paths
+            if (!$this->isValidFilePath($tmpFileName)) {
+                return [__('"%1" is not a valid file.', $label)];
+            }
+
+            // Ensure tmpFileName is not empty after ltrim
+            if ($tmpFileName !== '') {
+                $filePath = $this->mediaEntityTmpReadDirectory->getAbsolutePath($tmpFileName);
+            }
+        }
+
+        // Ensure we have a valid file path before attempting to read image properties
+        if (empty($filePath) || !is_string($filePath) || !file_exists($filePath)) {
+            return [__('"%1" is not a valid file.', $label)];
         }
 
         try {
@@ -188,7 +206,10 @@ class Image extends File
             $size = $value['size'] ?? 0;
             // For UI component uploads, get file size if not provided
             if ($size === 0 && !empty($filePath) && file_exists($filePath)) {
-                $size = filesize($filePath);
+                $fileSize = filesize($filePath);
+                if ($fileSize !== false) {
+                    $size = $fileSize;
+                }
             }
             if ($maxFileSize < $size) {
                 $errors[] = __('"%1" exceeds the allowed file size.', $label);
@@ -218,6 +239,37 @@ class Image extends File
         }
 
         return $errors;
+    }
+
+    /**
+     * Validate file path for security
+     *
+     * @param string $filePath
+     * @return bool
+     */
+    private function isValidFilePath(string $filePath): bool
+    {
+        // Check for null bytes
+        if (strpos($filePath, "\0") !== false) {
+            return false;
+        }
+
+        // Check for path traversal sequences
+        if (preg_match('#(^|/)\.\.(?:/|$)#', $filePath)) {
+            return false;
+        }
+
+        // Check for Windows absolute paths
+        if (preg_match('#^[a-zA-Z]:[\\\\/]#', $filePath)) {
+            return false;
+        }
+
+        // Check for backslashes at the start
+        if (isset($filePath[0]) && $filePath[0] === '\\') {
+            return false;
+        }
+
+        return true;
     }
 
     /**
