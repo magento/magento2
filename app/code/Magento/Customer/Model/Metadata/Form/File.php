@@ -194,8 +194,15 @@ class File extends AbstractData
      */
     protected function _validateByRules($value)
     {
-        $label = $value['name'];
+        $label = $value['name'] ?? $value['file'] ?? '';
         $rules = $this->getAttribute()->getValidationRules();
+
+        // For UI component uploads, get name from file path if not provided
+        if (empty($value['name']) && !empty($value['file'])) {
+            $value['name'] = basename($value['file']);
+            $label = $value['name'];
+        }
+
         $extension = $this->ioFile->getPathInfo($value['name'])['extension'];
         $fileExtensions = ArrayObjectSearch::getArrayElementByName(
             $rules,
@@ -216,7 +223,9 @@ class File extends AbstractData
             return $this->_fileValidator->getMessages();
         }
 
-        if (!$this->_isUploadedFile($value['tmp_name'])) {
+        // Determine file path for validation
+        $filePath = $value['tmp_name'] ?? $value['file'] ?? '';
+        if (!$this->_isUploadedFile($filePath)) {
             return [__('"%1" is not a valid file.', $label)];
         }
 
@@ -225,7 +234,15 @@ class File extends AbstractData
             'max_file_size'
         );
         if ($maxFileSize !== null) {
-            $size = $value['size'];
+            $size = $value['size'] ?? 0;
+            // For UI component uploads, get file size if not provided
+            if ($size === 0 && !empty($value['file'])) {
+                $temporaryFile = FileProcessor::TMP_DIR . '/' . basename($value['file']);
+                if ($this->fileProcessor->isExist($temporaryFile)) {
+                    $stat = $this->fileProcessor->getStat($temporaryFile);
+                    $size = $stat['size'] ?? 0;
+                }
+            }
             if ($maxFileSize < $size) {
                 return [__('"%1" exceeds the allowed file size.', $label)];
             }
@@ -274,7 +291,8 @@ class File extends AbstractData
         $label = $attribute->getStoreLabel();
 
         $toDelete = !empty($value['delete']) ? true : false;
-        $toUpload = !empty($value['tmp_name']) ? true : false;
+        // Check both tmp_name (traditional upload) and file (UI component upload)
+        $toUpload = !empty($value['tmp_name']) || (!empty($value['file']) && $value['file'] !== $this->_value);
 
         if (!$toUpload && !$toDelete && $this->_value) {
             return true;

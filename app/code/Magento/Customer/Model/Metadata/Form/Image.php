@@ -136,17 +136,32 @@ class Image extends File
      */
     protected function _validateByRules($value)
     {
-        $label = $value['name'];
+        $label = $value['name'] ?? $value['file'] ?? '';
         $rules = $this->getAttribute()->getValidationRules();
+
+        // For UI component uploads, get name from file path if not provided
+        if (empty($value['name']) && !empty($value['file'])) {
+            $value['name'] = basename($value['file']);
+            $label = $value['name'];
+        }
+
+        // Determine file path for validation
+        $filePath = $value['tmp_name'] ?? null;
+
+        // For UI component uploads, construct the full temporary file path
+        if (empty($filePath) && !empty($value['file'])) {
+            $tmpFileName = ltrim($value['file'], '/');
+            $filePath = $this->mediaEntityTmpReadDirectory->getAbsolutePath($tmpFileName);
+        }
 
         try {
             // phpcs:ignore Magento2.Functions.DiscouragedFunction
-            $imageProp = getimagesize($value['tmp_name']);
+            $imageProp = getimagesize($filePath);
         } catch (\Throwable $e) {
             $imageProp = false;
         }
 
-        if (!$this->_isUploadedFile($value['tmp_name']) || !$imageProp) {
+        if (!$this->_isUploadedFile($filePath) || !$imageProp) {
             return [__('"%1" is not a valid file.', $label)];
         }
 
@@ -170,7 +185,11 @@ class Image extends File
         );
         $errors = [];
         if ($maxFileSize !== null) {
-            $size = $value['size'];
+            $size = $value['size'] ?? 0;
+            // For UI component uploads, get file size if not provided
+            if ($size === 0 && !empty($filePath) && file_exists($filePath)) {
+                $size = filesize($filePath);
+            }
             if ($maxFileSize < $size) {
                 $errors[] = __('"%1" exceeds the allowed file size.', $label);
             }
