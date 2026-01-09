@@ -33,8 +33,9 @@ class PathValidator
 
     /**
      * Checks whether the config path present in configuration structure.
+     * Allows partial path validation: if any config path starts with the given path, it's valid.
      *
-     * @param string $path The config path
+     * @param string $path The config path (can be partial)
      * @return true The result of validation
      * @throws ValidatorException If provided path is not valid
      * @since 101.0.0
@@ -48,7 +49,16 @@ class PathValidator
 
         $allPaths = $this->structure->getFieldPaths();
 
-        if (!array_key_exists($path, $allPaths)) {
+        // Allow exact or partial path match
+        $found = false;
+        foreach (array_keys($allPaths) as $fullPath) {
+            if ($fullPath === $path || str_starts_with($fullPath, $path . '/')) {
+                $found = true;
+                break;
+            }
+        }
+
+        if (!$found) {
             throw new ValidatorException(__('The "%1" path doesn\'t exist. Verify and try again.', $path));
         }
 

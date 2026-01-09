@@ -601,4 +601,138 @@ class ConfigShowCommandTest extends TestCase
         $prop->setAccessible(true);
         return $prop->getValue($object);
     }
+
+    /**
+     * Test PathValidator partial path validation.
+     *
+     * @return void
+     */
+    public function testPathValidatorAllowsPartialPath(): void
+    {
+        $partialPath = 'web/secure';
+        $fullPaths = [
+            'web/secure/base_url',
+            'web/secure/use_in_frontend',
+            'web/unsecure/base_url',
+        ];
+        $structureMock = $this->getMockBuilder(\Magento\Config\Model\Config\Structure::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $structureMock->method('getElementByConfigPath')->willReturn(null);
+        $structureMock->method('getFieldPaths')->willReturn(array_fill_keys($fullPaths, true));
+
+        $validator = new PathValidator($structureMock);
+        $this->assertTrue($validator->validate($partialPath));
+    }
+
+    /**
+     * Test PathValidator throws for non-existent partial path.
+     *
+     * @return void
+     */
+    public function testPathValidatorThrowsForInvalidPartialPath(): void
+    {
+        $partialPath = 'web/does_not_exist';
+        $fullPaths = [
+            'web/secure/base_url',
+            'web/secure/use_in_frontend',
+            'web/unsecure/base_url',
+        ];
+        $structureMock = $this->getMockBuilder(\Magento\Config\Model\Config\Structure::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $structureMock->method('getElementByConfigPath')->willReturn(null);
+        $structureMock->method('getFieldPaths')->willReturn(array_fill_keys($fullPaths, true));
+
+        $validator = new PathValidator($structureMock);
+        $this->expectException(\Magento\Framework\Exception\ValidatorException::class);
+        $validator->validate($partialPath);
+    }
+
+    /**
+     * Test config:show with partial path and scope.
+     */
+    public function testExecuteWithPartialPathAndScope(): void
+    {
+        $partialPath = 'web/secure';
+        $resolvedConfigPath = 'websites/1/web/secure';
+        $arrayConfigValue = [
+            'base_url' => 'https://example.com/',
+            'use_in_frontend' => 1
+        ];
+        $this->scopeValidatorMock->expects($this->once())
+            ->method('isValid')
+            ->with('websites', '1')
+            ->willReturn(true);
+        $this->pathResolverMock->expects($this->once())
+            ->method('resolve')
+            ->with($partialPath, 'websites', '1')
+            ->willReturn($resolvedConfigPath);
+        $this->configSourceMock->expects($this->once())
+            ->method('get')
+            ->with($resolvedConfigPath)
+            ->willReturn($arrayConfigValue);
+        $callCount = 0;
+        $this->valueProcessorMock->expects($this->exactly(2))
+            ->method('process')
+            ->willReturnCallback(function ($scope, $scopeCode, $value, $path) use ($partialPath, &$callCount) {
+                $callCount++;
+                if ($callCount === 1) {
+                    $this->assertEquals('websites', $scope);
+                    $this->assertEquals('1', $scopeCode);
+                    $this->assertEquals('https://example.com/', $value);
+                    $this->assertEquals($partialPath . '/base_url', $path);
+                    return 'https://example.com/';
+                } elseif ($callCount === 2) {
+                    $this->assertEquals('websites', $scope);
+                    $this->assertEquals('1', $scopeCode);
+                    $this->assertEquals(1, $value);
+                    $this->assertEquals($partialPath . '/use_in_frontend', $path);
+                    return '1';
+                }
+                return '';
+            });
+        $this->emulatedAreProcessorMock->expects($this->once())
+            ->method('process')
+            ->willReturnCallback(function ($function) { return $function(); });
+        $this->localeEmulatorMock->expects($this->once())
+            ->method('emulate')
+            ->willReturnCallback(function ($callback) { return $callback(); });
+        $tester = $this->getConfigShowCommandTester($partialPath, 'websites', '1');
+        $this->assertEquals(Cli::RETURN_SUCCESS, $tester->getStatusCode());
+        $display = $tester->getDisplay();
+        $this->assertStringContainsString($partialPath . '/base_url - https://example.com/', $display);
+        $this->assertStringContainsString($partialPath . '/use_in_frontend - 1', $display);
+    }
+
+    /**
+     * Test config:show with partial path, scope, and scope code, but no matches (should throw ValidatorException).
+     */
+    public function testExecuteWithPartialPathAndScopeNoMatches(): void
+    {
+        $partialPath = 'web/does_not_exist';
+        $exception = new \Magento\Framework\Exception\ValidatorException(
+            __("The \"%1\" path doesn't exist. Verify and try again.", $partialPath)
+        );
+        $this->scopeValidatorMock->expects($this->once())
+            ->method('isValid')
+            ->with('stores', '2')
+            ->willReturn(true);
+        $this->pathValidatorMock->expects($this->once())
+            ->method('validate')
+            ->with($partialPath)
+            ->willThrowException($exception);
+        $this->emulatedAreProcessorMock->expects($this->once())
+            ->method('process')
+            ->willReturnCallback(function ($function) { return $function(); });
+        $this->localeEmulatorMock->expects($this->once())
+            ->method('emulate')
+            ->willReturnCallback(function ($callback) { return $callback(); });
+        $tester = $this->getConfigShowCommandTester($partialPath, 'stores', '2');
+        $this->assertEquals(Cli::RETURN_FAILURE, $tester->getStatusCode());
+        $this->assertStringContainsString(
+            "The \"$partialPath\" path doesn't exist. Verify and try again.",
+            $tester->getDisplay()
+        );
+    }
 }
