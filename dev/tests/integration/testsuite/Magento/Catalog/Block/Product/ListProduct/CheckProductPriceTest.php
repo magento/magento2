@@ -107,7 +107,7 @@ class CheckProductPriceTest extends TestCase
     {
         $priceHtml = $this->getProductPriceHtml('simple-product-tax-both');
         $this->assertFinalPrice($priceHtml, 10.00);
-        $this->assertAsLowAsPriceWithTaxes($priceHtml, 5.500001, 5.00);
+        $this->assertAsLowAsPriceWithTaxes($priceHtml, 5.5, 5.00);
     }
 
     /**
