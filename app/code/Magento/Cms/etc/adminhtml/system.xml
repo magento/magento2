@@ -11,15 +11,18 @@
             <group id="default">
                 <field id="cms_home_page" translate="label" type="select" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                     <label>CMS Home Page</label>
-                    <source_model>Magento\Cms\Model\Config\Source\Page</source_model>
+                    <source_model>Magento\Cms\Model\Config\Source\PageAjax</source_model>
+                    <frontend_model>Magento\Cms\Block\Adminhtml\System\Config\Field\CmsPageSelect</frontend_model>
                 </field>
                 <field id="cms_no_route" translate="label" type="select" sortOrder="2" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                     <label>CMS No Route Page</label>
-                    <source_model>Magento\Cms\Model\Config\Source\Page</source_model>
+                    <source_model>Magento\Cms\Model\Config\Source\PageAjax</source_model>
+                    <frontend_model>Magento\Cms\Block\Adminhtml\System\Config\Field\CmsPageSelect</frontend_model>
                 </field>
                 <field id="cms_no_cookies" translate="label" type="select" sortOrder="3" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                     <label>CMS No Cookies Page</label>
-                    <source_model>Magento\Cms\Model\Config\Source\Page</source_model>
+                    <source_model>Magento\Cms\Model\Config\Source\PageAjax</source_model>
+                    <frontend_model>Magento\Cms\Block\Adminhtml\System\Config\Field\CmsPageSelect</frontend_model>
                 </field>
                 <field id="show_cms_breadcrumbs" translate="label" type="select" sortOrder="5" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                     <label>Show Breadcrumbs for CMS Pages</label>

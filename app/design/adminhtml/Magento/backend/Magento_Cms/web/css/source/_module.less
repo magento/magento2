@@ -1,5 +1,5 @@
 /**
- * Copyright 2019 Adobe
+ * Copyright 2026 Adobe
  * All Rights Reserved.
  */
 .modal-slide {
@@ -23,4 +23,84 @@
         cursor: pointer;
     }
 }
+
+//
+//  CMS Page Select Component Styles
+//  _____________________________________________
+.cms-page-select-container {
+    position: relative;
+}
+
+.cms-page-current-selection {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 6px 10px;
+    background: #fff;
+    border: 1px solid @color-gray76;
+    border-radius: 1px;
+    min-height: 32px;
+
+    &.disabled {
+        background: @color-gray-light01;
+        color: @color-gray60;
+    }
+
+    .current-value {
+        flex: 1;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+}
+
+.cms-page-search-panel {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    margin-top: 5px;
+    border: 1px solid @color-gray76;
+    border-radius: 1px;
+    background: #fff;
+    z-index: 100;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+.cms-page-search-input {
+    width: 100%;
+    box-sizing: border-box;
+    border: none;
+    border-bottom: 1px solid @color-gray-light5;
+    padding: 8px 10px;
+    outline: none;
+
+    &:focus {
+        border-bottom-color: @color-blue1;
+    }
+}
+
+.cms-page-results {
+    max-height: 200px;
+    overflow-y: auto;
+
+    .result-item {
+        padding: 8px 10px;
+        cursor: pointer;
+        transition: background-color 0.15s ease;
+
+        &:hover,
+        &._active {
+            background: @color-gray-light01;
+        }
+    }
+
+    .no-results,
+    .loading {
+        padding: 8px 10px;
+        color: @color-gray60;
+        font-style: italic;
+    }
+}
+
 

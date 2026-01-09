@@ -1,0 +1,59 @@
+<?php
+/**
+ * Copyright 2026 Adobe
+ * All Rights Reserved.
+ */
+
+/**
+ * CMS Page select field template
+ *
+ * @var \Magento\Cms\Block\Adminhtml\System\Config\Field\CmsPageSelect $block
+ * @var \Magento\Framework\Escaper $escaper
+ */
+
+$elementId = $block->getElementId();
+$name = $block->getElementName();
+$value = $block->getElementValue();
+$currentLabel = $block->getCurrentLabel();
+$searchUrl = $block->getSearchUrl();
+$isDisabled = $block->getIsDisabled();
+$disabledClass = $isDisabled ? ' disabled' : '';
+?>
+<div class="cms-page-select-container" id="<?= $escaper->escapeHtmlAttr($elementId) ?>_container">
+    <div class="cms-page-current-selection<?= $escaper->escapeHtmlAttr($disabledClass) ?>">
+        <span class="current-value" id="<?= $escaper->escapeHtmlAttr($elementId) ?>_label">
+            <?= $escaper->escapeHtml($currentLabel) ?>
+        </span>
+        <?php if (!$isDisabled): ?>
+            <button type="button"
+                    class="action-default scalable cms-page-change-btn"
+                    id="<?= $escaper->escapeHtmlAttr($elementId) ?>_change">
+                <span><?= $escaper->escapeHtml(__('Change')) ?></span>
+            </button>
+        <?php endif; ?>
+    </div>
+
+    <div class="cms-page-search-panel" id="<?= $escaper->escapeHtmlAttr($elementId) ?>_panel" style="display:none;">
+        <input type="text"
+               class="admin__control-text cms-page-search-input"
+               id="<?= $escaper->escapeHtmlAttr($elementId) ?>_search"
+               placeholder="<?= $escaper->escapeHtmlAttr(__('Type to search...')) ?>"/>
+        <div class="cms-page-results" id="<?= $escaper->escapeHtmlAttr($elementId) ?>_results"></div>
+    </div>
+
+    <input type="hidden"
+           id="<?= $escaper->escapeHtmlAttr($elementId) ?>"
+           name="<?= $escaper->escapeHtmlAttr($name) ?>"
+           value="<?= $escaper->escapeHtmlAttr($value) ?>"/>
+</div>
+
+<script type="text/x-magento-init">
+{
+    "#<?= $escaper->escapeJs($elementId) ?>_container": {
+        "Magento_Cms/js/cms-page-select": {
+            "elementId": "<?= $escaper->escapeJs($elementId) ?>",
+            "searchUrl": "<?= $escaper->escapeJs($searchUrl) ?>"
+        }
+    }
+}
+</script>
