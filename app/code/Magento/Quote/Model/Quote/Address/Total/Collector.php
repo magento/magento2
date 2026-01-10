@@ -126,7 +126,8 @@ class Collector extends \Magento\Sales\Model\Config\Ordered
         if (!$model instanceof \Magento\Quote\Model\Quote\Address\Total\AbstractTotal) {
             throw new \Magento\Framework\Exception\LocalizedException(
                 __(
-                    'The address total model should be extended from \Magento\Quote\Model\Quote\Address\Total\AbstractTotal.'
+                    'The address total model should be extended from
+                    \Magento\Quote\Model\Quote\Address\Total\AbstractTotal.'
                 )
             );
         }
