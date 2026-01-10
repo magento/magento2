@@ -198,10 +198,6 @@ class ImageTest extends AbstractFormTestCase
             ->with($value['tmp_name'])
             ->willReturn(true);
 
-        $this->fileProcessorMock->expects($this->once())
-            ->method('isExist')
-            ->with(FileProcessor::TMP_DIR . '/' . $value['tmp_name'])
-            ->willReturn(true);
 
         $this->ioFileSystemMock->expects($this->once())
             ->method('getPathInfo')

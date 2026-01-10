@@ -197,6 +197,39 @@ class File extends AbstractData
         $label = $value['name'] ?? $value['file'] ?? '';
         $rules = $this->getAttribute()->getValidationRules();
 
+        // Extract and validate file name
+        $fileNameResult = $this->extractAndValidateFileName($value, $label);
+        if (is_array($fileNameResult)) {
+            return $fileNameResult; // Return error array
+        }
+        $value['name'] = $fileNameResult['name'];
+        $label = $fileNameResult['label'];
+
+        // Validate file extension
+        $extensionResult = $this->validateFileExtension($value['name'], $rules, $label);
+        if (!empty($extensionResult)) {
+            return $extensionResult;
+        }
+
+        // Validate file path
+        $filePath = $this->getFilePath($value, $label);
+        if (is_array($filePath)) {
+            return $filePath; // Return error array
+        }
+
+        // Validate file size
+        return $this->validateFileSize($value, $rules, $label);
+    }
+
+    /**
+     * Extract and validate file name from value
+     *
+     * @param array $value
+     * @param string $label
+     * @return array Returns array with name and label or error array
+     */
+    private function extractAndValidateFileName(array $value, string $label): array
+    {
         // For UI component uploads, get name from file path if not provided
         if (empty($value['name']) && !empty($value['file'])) {
             // Validate file path for security before extracting filename
@@ -204,26 +237,38 @@ class File extends AbstractData
                 return [__('"%1" is not a valid file.', $label)];
             }
             $pathInfo = $this->ioFile->getPathInfo($value['file']);
-            $value['name'] = $pathInfo['basename'] ?? '';
-            $label = $value['name'];
+            $name = $pathInfo['basename'] ?? '';
+            $label = $name;
+        } else {
+            $name = $value['name'] ?? '';
         }
 
-        // Ensure we have a valid file name before attempting to get extension
-        if (empty($value['name'])) {
+        // Ensure we have a valid file name
+        if (empty($name)) {
             return [__('"%1" is not a valid file.', $label)];
         }
 
-        $pathInfo = $this->ioFile->getPathInfo($value['name']);
+        return ['name' => $name, 'label' => $label];
+    }
+
+    /**
+     * Validate file extension
+     *
+     * @param string $fileName
+     * @param array $rules
+     * @param string $label
+     * @return array Returns error array or empty array
+     */
+    private function validateFileExtension(string $fileName, array $rules, string $label): array
+    {
+        $pathInfo = $this->ioFile->getPathInfo($fileName);
         $extension = $pathInfo['extension'] ?? '';
 
         if (empty($extension)) {
             return [__('"%1" is not a valid file.', $label)];
         }
 
-        $fileExtensions = ArrayObjectSearch::getArrayElementByName(
-            $rules,
-            'file_extensions'
-        );
+        $fileExtensions = ArrayObjectSearch::getArrayElementByName($rules, 'file_extensions');
         if ($fileExtensions !== null) {
             $extensions = explode(',', $fileExtensions);
             $extensions = array_map('trim', $extensions);
@@ -232,14 +277,23 @@ class File extends AbstractData
             }
         }
 
-        /**
-         * Check protected file extension
-         */
+        // Check protected file extension
         if (!$this->_fileValidator->isValid($extension)) {
             return $this->_fileValidator->getMessages();
         }
 
-        // Determine file path for validation
+        return [];
+    }
+
+    /**
+     * Get and validate file path
+     *
+     * @param array $value
+     * @param string $label
+     * @return string|array Returns file path or error array
+     */
+    private function getFilePath(array $value, string $label)
+    {
         $filePath = $value['tmp_name'] ?? $value['file'] ?? null;
         if (empty($filePath)) {
             return [__('"%1" is not a valid file.', $label)];
@@ -249,19 +303,32 @@ class File extends AbstractData
             return [__('"%1" is not a valid file.', $label)];
         }
 
-        $maxFileSize = ArrayObjectSearch::getArrayElementByName(
-            $rules,
-            'max_file_size'
-        );
-        if ($maxFileSize !== null) {
-            $size = $value['size'] ?? 0;
-            // For UI component uploads, get file size if not provided
-            if ($size === 0 && !empty($value['file'])) {
-                $size = $this->getTemporaryFileSize($value['file']);
-            }
-            if ($maxFileSize < $size) {
-                return [__('"%1" exceeds the allowed file size.', $label)];
-            }
+        return $filePath;
+    }
+
+    /**
+     * Validate file size
+     *
+     * @param array $value
+     * @param array $rules
+     * @param string $label
+     * @return array Returns error array or empty array
+     */
+    private function validateFileSize(array $value, array $rules, string $label): array
+    {
+        $maxFileSize = ArrayObjectSearch::getArrayElementByName($rules, 'max_file_size');
+        if ($maxFileSize === null) {
+            return [];
+        }
+
+        $size = $value['size'] ?? 0;
+        // For UI component uploads, get file size if not provided
+        if ($size === 0 && !empty($value['file'])) {
+            $size = $this->getTemporaryFileSize($value['file']);
+        }
+
+        if ($maxFileSize < $size) {
+            return [__('"%1" exceeds the allowed file size.', $label)];
         }
 
         return [];

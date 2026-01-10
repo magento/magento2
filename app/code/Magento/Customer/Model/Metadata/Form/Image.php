@@ -133,7 +133,6 @@ class Image extends File
      * @throws LocalizedException
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
-     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     protected function _validateByRules($value)
     {
@@ -143,22 +142,19 @@ class Image extends File
         // Extract and validate file name
         $fileName = $this->extractAndValidateFileName($value, $label);
         if (is_array($fileName)) {
-            return $fileName; // Return error array
+            return $fileName;
         }
         $value['name'] = $fileName;
         $label = $fileName;
 
-        // Get and validate file path
-        $filePath = $this->getValidatedFilePath($value, $label);
-        if (is_array($filePath)) {
-            return $filePath; // Return error array
+        // Get and validate file path, then validate image properties
+        $validationResult = $this->validateFilePathAndProperties($value, $label);
+        if (is_array($validationResult) && isset($validationResult['error'])) {
+            return $validationResult['error'];
         }
 
-        // Validate image properties
-        $imageProp = $this->validateImageProperties($filePath, $label);
-        if (is_array($imageProp)) {
-            return $imageProp; // Return error array
-        }
+        $filePath = $validationResult['filePath'];
+        $imageProp = $validationResult['imageProp'];
 
         // Validate image format
         $formatErrors = $this->validateImageFormat($imageProp, $value, $label);
@@ -168,6 +164,28 @@ class Image extends File
 
         // Validate size and dimensions
         return $this->validateSizeAndDimensions($value, $filePath, $imageProp, $rules, $label);
+    }
+
+    /**
+     * Validate file path and image properties
+     *
+     * @param array $value
+     * @param string $label
+     * @return array Returns array with filePath and imageProp or error array
+     */
+    private function validateFilePathAndProperties(array $value, string $label): array
+    {
+        $filePath = $this->getValidatedFilePath($value, $label);
+        if (is_array($filePath)) {
+            return ['error' => $filePath];
+        }
+
+        $imageProp = $this->validateImageProperties($filePath, $label);
+        if (is_array($imageProp) && !isset($imageProp[0])) {
+            return ['error' => $imageProp];
+        }
+
+        return ['filePath' => $filePath, 'imageProp' => $imageProp];
     }
 
     /**
