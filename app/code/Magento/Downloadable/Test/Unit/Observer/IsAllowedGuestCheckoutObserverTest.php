@@ -15,6 +15,7 @@ use Magento\Framework\App\Config;
 use Magento\Framework\DataObject;
 use Magento\Framework\Event;
 use Magento\Framework\Event\Observer;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\Quote\Model\Quote;
 use Magento\Quote\Model\Quote\Item as QuoteItem;
@@ -28,6 +29,7 @@ use PHPUnit\Framework\TestCase;
  */
 class IsAllowedGuestCheckoutObserverTest extends TestCase
 {
+    use MockCreationTrait;
     private const XML_PATH_DISABLE_GUEST_CHECKOUT = 'catalog/downloadable/disable_guest_checkout';
 
     private const STUB_STORE_ID = 1;
@@ -72,20 +74,20 @@ class IsAllowedGuestCheckoutObserverTest extends TestCase
     {
         $this->scopeConfigMock = $this->createPartialMock(Config::class, ['isSetFlag', 'getValue']);
 
-        $this->resultMock = $this->createPartialMock(
-            \Magento\Framework\DataObject\Test\Unit\Helper\DataObjectTestHelper::class,
+        $this->resultMock = $this->createPartialMockWithReflection(
+            DataObject::class,
             ['setIsAllowed']
         );
 
-        $this->eventMock = $this->createPartialMock(
-            \Magento\Framework\Event\Test\Unit\Helper\EventTestHelper::class,
+        $this->eventMock = $this->createPartialMockWithReflection(
+            Event::class,
             ['getStore', 'getResult', 'getQuote', 'getOrder']
         );
 
         $this->observerMock = $this->createPartialMock(Observer::class, ['getEvent']);
 
-        $this->storeMock = $this->createPartialMock(
-            \Magento\Framework\DataObject\Test\Unit\Helper\DataObjectTestHelper::class,
+        $this->storeMock = $this->createPartialMockWithReflection(
+            DataObject::class,
             ['getId']
         );
 

@@ -7,10 +7,8 @@ declare(strict_types=1);
 
 namespace Magento\Bundle\Test\Unit\Block\Catalog\Product\View\Type;
 
-use Magento\Catalog\Test\Unit\Helper\BasePriceTestHelper;
-use Magento\Catalog\Test\Unit\Helper\ProductTestHelper;
-use Magento\Framework\Pricing\Test\Unit\Helper\AmountTestHelper;
 use PHPUnit\Framework\Attributes\DataProvider;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Bundle\Block\Catalog\Product\View\Type\Bundle as BundleBlock;
 use Magento\Bundle\Block\Catalog\Product\View\Type\Bundle\Option\Checkbox;
 use Magento\Bundle\Model\Option;
@@ -20,7 +18,9 @@ use Magento\Bundle\Model\Product\Type;
 use Magento\Bundle\Model\ResourceModel\Option\Collection;
 use Magento\Bundle\Pricing\Price\BundleOptionPrice;
 use Magento\Bundle\Pricing\Price\TierPrice;
-use Magento\Catalog\Helper\Product;
+use Magento\Catalog\Helper\Product as ProductHelper;
+use Magento\Catalog\Model\Product;
+use Magento\Catalog\Pricing\Price\BasePrice;
 use Magento\Catalog\Pricing\Price\FinalPrice;
 use Magento\Catalog\Pricing\Price\RegularPrice;
 use Magento\CatalogRule\Model\ResourceModel\Product\CollectionProcessor;
@@ -28,6 +28,7 @@ use Magento\Framework\DataObject;
 use Magento\Framework\Escaper;
 use Magento\Framework\Event\ManagerInterface;
 use Magento\Framework\Json\Encoder;
+use Magento\Framework\Pricing\Amount\AmountInterface;
 use Magento\Framework\Pricing\PriceInfo\Base;
 use Magento\Framework\Registry;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
@@ -40,6 +41,8 @@ use PHPUnit\Framework\TestCase;
  */
 class BundleTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var PriceFactory|MockObject
      */
@@ -61,7 +64,7 @@ class BundleTest extends TestCase
     private $eventManager;
 
     /**
-     * @var ProductTestHelper
+     * @var Product|MockObject
      */
     private $product;
 
@@ -89,12 +92,15 @@ class BundleTest extends TestCase
 
         $this->bundleProductPriceFactory = $this->createPartialMock(PriceFactory::class, ['create']);
 
-        $this->product = new ProductTestHelper();
+        $this->product = $this->createPartialMockWithReflection(
+            Product::class,
+            ['getTypeInstance', 'getStoreId', 'getPriceInfo']
+        );
         $registry = $this->createPartialMock(Registry::class, ['registry']);
         $registry->method('registry')->willReturn($this->product);
         $this->eventManager = $this->createMock(ManagerInterface::class);
         $this->jsonEncoder = $this->createMock(Encoder::class);
-        $this->catalogProduct = $this->createMock(Product::class);
+        $this->catalogProduct = $this->createMock(ProductHelper::class);
         $this->escaperMock = $this->createMock(Escaper::class);
         $this->priceCurrency = $this->createMock(\Magento\Directory\Model\PriceCurrency::class);
 
@@ -325,7 +331,10 @@ class BundleTest extends TestCase
             ->willReturn($selectionCollection);
 
         $this->product->setTypeInstance($typeInstance);
+        $this->product->method('getTypeInstance')->willReturn($typeInstance);
+        $this->product->method('getStoreId')->willReturn(0);
         $this->product->setPriceInfo($priceInfo);
+        $this->product->method('getPriceInfo')->willReturn($priceInfo);
         $this->product->setPriceType($priceType);
         $this->jsonEncoder->expects($this->any())
             ->method('encode')
@@ -369,17 +378,10 @@ class BundleTest extends TestCase
      */
     private function getPriceMock($prices)
     {
-        $priceMock = new BasePriceTestHelper();
+        $priceMock = $this->createPartialMockWithReflection(BasePrice::class, array_keys($prices));
 
         foreach ($prices as $methodName => $amount) {
-            // Use the magic __call method or specific setters
-            if ($methodName === 'getPriceWithoutOption') {
-                $priceMock->setPriceWithoutOption($amount);
-            } elseif ($methodName === 'getAmount') {
-                $priceMock->setAmount($amount);
-            } else {
-                $priceMock->setTestData(strtolower(substr($methodName, 3)), $amount);
-            }
+            $priceMock->method($methodName)->willReturn($amount);
         }
 
         return $priceMock;
@@ -403,18 +405,12 @@ class BundleTest extends TestCase
                 // Check if this selection has specific amounts configured
                 foreach ($selectionAmounts as $selectionAmount) {
                     if ($selection === $selectionAmount['item']) {
-                        $amount = new AmountTestHelper();
-                        $amount->setValue($selectionAmount['value']);
-                        $amount->setBaseAmount($selectionAmount['base_amount']);
-                        return $amount;
+                        return $this->createAmountMock($selectionAmount['value'], $selectionAmount['base_amount']);
                     }
                 }
 
                 // Default amount for other selections
-                $amount = new AmountTestHelper();
-                $amount->setValue($value);
-                $amount->setBaseAmount($baseAmount);
-                return $amount;
+                return $this->createAmountMock($value, $baseAmount);
             }
         );
 
@@ -469,7 +465,7 @@ class BundleTest extends TestCase
         $isDefault = false,
         $isSalable = true
     ) {
-        $selection = new ProductTestHelper();
+        $selection = $this->createPartialMockWithReflection(Product::class, ['getPriceInfo', 'isSalable']);
         $tierPrice = $this->createPartialMock(TierPrice::class, ['getTierPriceList']);
         $tierPrice->method('getTierPriceList')->willReturn($tierPriceList);
         $priceInfo = $this->createPartialMock(Base::class, ['getPrice']);
@@ -478,9 +474,11 @@ class BundleTest extends TestCase
         $selection->setName($name);
         $selection->setSelectionQty($qty);
         $selection->setPriceInfo($priceInfo);
+        $selection->method('getPriceInfo')->willReturn($priceInfo);
         $selection->setSelectionCanChangeQty($isCanChangeQty);
         $selection->setIsDefault($isDefault);
         $selection->setIsSalable($isSalable);
+        $selection->method('isSalable')->willReturn($isSalable);
 
         return $selection;
     }
@@ -510,6 +508,8 @@ class BundleTest extends TestCase
         $typeInstance->expects($this->once())->method('getSelectionsCollection')->with([1, 2], $this->product)
             ->willReturn($selectionConnection);
         $this->product->setTypeInstance($typeInstance);
+        $this->product->method('getTypeInstance')->willReturn($typeInstance);
+        $this->product->method('getStoreId')->willReturn(0);
         $this->product->setStoreId(0);
         $this->catalogProduct->expects($this->once())->method('getSkipSaleableCheck')->willReturn(true);
 
@@ -525,5 +525,25 @@ class BundleTest extends TestCase
             [true],
             [false]
         ];
+    }
+
+    /**
+     * Create a properly mocked AmountInterface with all required methods
+     *
+     * @param float $value
+     * @param float $baseAmount
+     * @return AmountInterface|MockObject
+     */
+    private function createAmountMock($value, $baseAmount)
+    {
+        $amount = $this->createMock(AmountInterface::class);
+        $amount->method('getValue')->willReturn($value);
+        $amount->method('getBaseAmount')->willReturn($baseAmount);
+        $amount->method('__toString')->willReturn((string)$value);
+        $amount->method('getAdjustmentAmount')->willReturn(0);
+        $amount->method('getTotalAdjustmentAmount')->willReturn(0);
+        $amount->method('getAdjustmentAmounts')->willReturn([]);
+        $amount->method('hasAdjustment')->willReturn(false);
+        return $amount;
     }
 }

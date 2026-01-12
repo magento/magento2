@@ -10,13 +10,13 @@ namespace Magento\Bundle\Test\Unit\Block\Catalog\Product\View\Type\Bundle;
 use Magento\Bundle\Block\Catalog\Product\View\Type\Bundle\Option;
 use Magento\Bundle\Pricing\Price\BundleOptionPrice;
 use Magento\Catalog\Model\Product;
-use Magento\Catalog\Test\Unit\Helper\ProductTestHelper;
 use Magento\Framework\DataObject;
 use Magento\Framework\Pricing\Amount\AmountInterface;
 use Magento\Framework\Pricing\PriceInfo\Base;
 use Magento\Framework\Pricing\Render;
 use Magento\Framework\Registry;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\View\Element\Template\Context;
 use Magento\Framework\View\LayoutInterface;
 use PHPUnit\Framework\MockObject\Exception;
@@ -30,13 +30,15 @@ use PHPUnit\Framework\TestCase;
  */
 class OptionTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var Option
      */
     protected $block;
 
     /**
-     * @var ProductTestHelper
+     * @var Product
      */
     protected $product;
 
@@ -47,7 +49,10 @@ class OptionTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->product = new ProductTestHelper();
+        $this->product = $this->createPartialMockWithReflection(
+            Product::class,
+            ['setPriceInfo', 'getPriceInfo']
+        );
 
         $registry = $this->createMock(Registry::class);
 
@@ -81,11 +86,11 @@ class OptionTest extends TestCase
         $otherOption = $this->createMock(\Magento\Bundle\Model\Option::class);
         $otherOption->method('getId')->willReturn(16);
 
-        // Create anonymous class for selection with all required methods
-        $selection = new  ProductTestHelper();
+        // Create selection mock with getSelectionId method
+        $selection = $this->createPartialMockWithReflection(Product::class, ['getSelectionId']);
+        $selection->method('getSelectionId')->willReturn($selectionId);
+        
         $otherOption->method('getSelectionById')->willReturn($selection);
-        // Use setter method for custom method instead of expects()
-        $selection->setSelectionId($selectionId);
         $option->method('getSelectionById')->with(315)->willReturn($selection);
 
         $this->assertSame($this->block, $this->block->setOption($option));
@@ -118,7 +123,7 @@ class OptionTest extends TestCase
 
         $priceRenderBlock = $this->createPartialMock(Render::class, ['renderAmount']);
 
-        $this->product->setPriceInfo($priceInfo);
+        $this->product->method('getPriceInfo')->willReturn($priceInfo);
 
         $priceInfo->expects($this->atLeastOnce())
             ->method('getPrice')

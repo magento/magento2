@@ -14,12 +14,15 @@ use Magento\Quote\Api\Data\CartInterface;
 use Magento\Quote\Model\GuestCart\GuestCartManagement;
 use Magento\Quote\Model\QuoteIdMask;
 use Magento\Quote\Model\QuoteIdMaskFactory;
-use Magento\Quote\Test\Unit\Helper\QuoteTestHelper;
+use Magento\Quote\Model\Quote;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 class GuestCartManagementTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var MockObject
      */
@@ -64,8 +67,9 @@ class GuestCartManagementTest extends TestCase
             QuoteIdMaskFactory::class,
             ['create']
         );
-        $this->quoteIdMaskMock = $this->createMock(
-            \Magento\Quote\Test\Unit\Model\GuestCart\QuoteIdMaskTestHelper::class
+        $this->quoteIdMaskMock = $this->createPartialMockWithReflection(
+            QuoteIdMask::class,
+            ['load', 'getQuoteId', 'getMaskedId', 'save', 'delete', 'setQuoteId']
         );
 
         $this->cartRepositoryMock = $this->createMock(CartRepositoryInterface::class);
@@ -117,7 +121,7 @@ class GuestCartManagementTest extends TestCase
         $orderId = 1;
 
         $this->quoteIdMaskMock->expects($this->once())->method('load')->with($cartId, 'masked_id')->willReturnSelf();
-        $this->cartRepositoryMock->expects($this->once())->method('get')->willReturn(new QuoteTestHelper());
+        $this->cartRepositoryMock->expects($this->once())->method('get')->willReturn($this->createMock(Quote::class));
         $this->quoteIdMaskMock->method('getQuoteId')->willReturn($maskedCartId);
         $this->quoteIdMaskFactoryMock->expects($this->once())->method('create')->willReturn($this->quoteIdMaskMock);
         $this->quoteManagementMock->expects($this->once())->method('placeOrder')->willReturn($orderId);

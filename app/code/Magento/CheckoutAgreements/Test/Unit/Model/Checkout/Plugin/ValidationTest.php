@@ -23,7 +23,7 @@ use Magento\Quote\Api\Data\PaymentInterface;
 use Magento\Quote\Model\Quote;
 use Magento\Store\Model\App\Emulation;
 use Magento\Store\Model\ScopeInterface;
-use Magento\Quote\Test\Unit\Helper\PaymentExtensionTestHelper;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\MockObject\RuntimeException;
 use PHPUnit\Framework\TestCase;
@@ -34,6 +34,7 @@ use PHPUnit\Framework\TestCase;
  */
 class ValidationTest extends TestCase
 {
+    use MockCreationTrait;
     /**
      * @var Validation
      */
@@ -100,8 +101,8 @@ class ValidationTest extends TestCase
         $this->subjectMock = $this->createMock(PaymentInformationManagementInterface::class);
         $this->paymentMock = $this->createMock(PaymentInterface::class);
         $this->addressMock = $this->createMock(AddressInterface::class);
-        $this->quoteMock = $this->createPartialMock(
-            \Magento\Quote\Test\Unit\Helper\QuoteTestHelper::class,
+        $this->quoteMock = $this->createPartialMockWithReflection(
+            Quote::class,
             ['getIsMultiShipping', 'getStoreId']
         );
         $this->quoteRepositoryMock = $this->createMock(CartRepositoryInterface::class);
@@ -230,8 +231,8 @@ class ValidationTest extends TestCase
      */
     private function getPaymentExtension(): PaymentExtensionInterface
     {
-        return $this->createPartialMock(
-            PaymentExtensionTestHelper::class,
+        return $this->createPartialMockWithReflection(
+            PaymentExtensionInterface::class,
             ['getAgreementIds', 'setAgreementIds']
         );
     }
