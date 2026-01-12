@@ -276,7 +276,7 @@ class Image extends File
     {
         $allowImageTypes = [1 => 'gif', 2 => 'jpg', 3 => 'png'];
 
-        if (!isset($allowImageTypes[$imageProp[2]])) {
+        if (!isset($imageProp[2]) || !isset($allowImageTypes[$imageProp[2]])) {
             return [__('"%1" is not a valid image format.', $label)];
         }
 

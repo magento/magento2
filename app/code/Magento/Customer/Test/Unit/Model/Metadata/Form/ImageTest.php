@@ -198,18 +198,20 @@ class ImageTest extends AbstractFormTestCase
             ->with($value['tmp_name'])
             ->willReturn(true);
 
-
         $this->ioFileSystemMock->expects($this->once())
             ->method('getPathInfo')
             ->willReturn($value);
 
         $model = $this->initialize([
-            'value' => $value,
+            'value' => null,
             'isAjax' => false,
             'entityTypeCode' => CustomerMetadataInterface::ENTITY_TYPE_CUSTOMER,
         ]);
 
-        $this->assertEquals(['"realFileName" is not a valid file.'], $model->validateValue($value));
+        $result = $model->validateValue($value);
+        $this->assertIsArray($result);
+        $this->assertCount(1, $result);
+        $this->assertEquals('"realFileName" is not a valid image format.', (string)$result[0]);
     }
 
     /**
@@ -233,9 +235,19 @@ class ImageTest extends AbstractFormTestCase
             ->method('getStoreLabel')
             ->willReturn('File Input Field Label');
 
+        $this->attributeMetadataMock->expects($this->once())
+            ->method('getValidationRules')
+            ->willReturn([]);
+
+        $this->driverMock->expects($this->once())
+            ->method('isExists')
+            ->with($value['tmp_name'])
+            ->willReturn(true);
+
+        // Mock fileProcessor->isExist to make _isUploadedFile return true
         $this->fileProcessorMock->expects($this->once())
             ->method('isExist')
-            ->with(FileProcessor::TMP_DIR . '/' . $value['name'])
+            ->with(FileProcessor::TMP_DIR . '/' . $value['basename'])
             ->willReturn(true);
 
         $model = $this->initialize([
@@ -278,9 +290,15 @@ class ImageTest extends AbstractFormTestCase
             ->method('getValidationRules')
             ->willReturn([$validationRuleMock]);
 
+        $this->driverMock->expects($this->once())
+            ->method('isExists')
+            ->with($value['tmp_name'])
+            ->willReturn(true);
+
+        // Mock fileProcessor->isExist to make _isUploadedFile return true
         $this->fileProcessorMock->expects($this->once())
             ->method('isExist')
-            ->with(FileProcessor::TMP_DIR . '/' . $value['name'])
+            ->with(FileProcessor::TMP_DIR . '/' . $value['basename'])
             ->willReturn(true);
 
         $this->ioFileSystemMock->expects($this->any())
@@ -293,7 +311,10 @@ class ImageTest extends AbstractFormTestCase
             'entityTypeCode' => CustomerMetadataInterface::ENTITY_TYPE_CUSTOMER,
         ]);
 
-        $this->assertEquals(['"logo.gif" exceeds the allowed file size.'], $model->validateValue($value));
+        $result = $model->validateValue($value);
+        $this->assertIsArray($result);
+        $this->assertCount(1, $result);
+        $this->assertEquals('"logo.gif" exceeds the allowed file size.', (string)$result[0]);
     }
 
     /**
@@ -330,10 +351,20 @@ class ImageTest extends AbstractFormTestCase
             ->method('getValidationRules')
             ->willReturn([$validationRuleMock]);
 
+        $this->driverMock->expects($this->once())
+            ->method('isExists')
+            ->with($value['tmp_name'])
+            ->willReturn(true);
+
+        // Mock fileProcessor->isExist to make _isUploadedFile return true
         $this->fileProcessorMock->expects($this->once())
             ->method('isExist')
-            ->with(FileProcessor::TMP_DIR . '/' . $value['name'])
+            ->with(FileProcessor::TMP_DIR . '/' . $value['basename'])
             ->willReturn(true);
+
+        $this->ioFileSystemMock->expects($this->any())
+            ->method('getPathInfo')
+            ->willReturn($value);
 
         $model = $this->initialize([
             'value' => $value,
@@ -341,7 +372,10 @@ class ImageTest extends AbstractFormTestCase
             'entityTypeCode' => CustomerMetadataInterface::ENTITY_TYPE_CUSTOMER,
         ]);
 
-        $this->assertEquals(['"logo.gif" width exceeds allowed value of 1 px.'], $model->validateValue($value));
+        $result = $model->validateValue($value);
+        $this->assertIsArray($result);
+        $this->assertCount(1, $result);
+        $this->assertEquals('"logo.gif" width exceeds allowed value of 1 px.', (string)$result[0]);
     }
 
     /**
@@ -374,9 +408,15 @@ class ImageTest extends AbstractFormTestCase
             ->method('getValidationRules')
             ->willReturn([$validationRuleMock]);
 
+        $this->driverMock->expects($this->once())
+            ->method('isExists')
+            ->with($value['tmp_name'])
+            ->willReturn(true);
+
+        // Mock fileProcessor->isExist to make _isUploadedFile return true
         $this->fileProcessorMock->expects($this->once())
             ->method('isExist')
-            ->with(FileProcessor::TMP_DIR . '/' . $value['name'])
+            ->with(FileProcessor::TMP_DIR . '/' . $value['basename'])
             ->willReturn(true);
 
         $this->ioFileSystemMock->expects($this->any())
@@ -389,7 +429,10 @@ class ImageTest extends AbstractFormTestCase
             'entityTypeCode' => CustomerMetadataInterface::ENTITY_TYPE_CUSTOMER,
         ]);
 
-        $this->assertEquals(['"logo.gif" height exceeds allowed value of 1 px.'], $model->validateValue($value));
+        $result = $model->validateValue($value);
+        $this->assertIsArray($result);
+        $this->assertCount(1, $result);
+        $this->assertEquals('"logo.gif" height exceeds allowed value of 1 px.', (string)$result[0]);
     }
 
     /**

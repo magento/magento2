@@ -195,11 +195,11 @@ class File extends AbstractData
     protected function _validateByRules($value)
     {
         $label = $value['name'] ?? $value['file'] ?? '';
-        $rules = $this->getAttribute()->getValidationRules();
+        $rules = $this->getAttribute()->getValidationRules() ?? [];
 
         // Extract and validate file name
         $fileNameResult = $this->extractAndValidateFileName($value, $label);
-        if (is_array($fileNameResult)) {
+        if (!isset($fileNameResult['name'])) {
             return $fileNameResult; // Return error array
         }
         $value['name'] = $fileNameResult['name'];
