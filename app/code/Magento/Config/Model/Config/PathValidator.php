@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright 2017 Adobe
+ * Copyright 2026 Adobe
  * All Rights Reserved.
  */
 
@@ -33,6 +33,7 @@ class PathValidator
 
     /**
      * Checks whether the config path present in configuration structure.
+     *
      * Allows partial path validation: if any config path starts with the given path, it's valid.
      *
      * @param string $path The config path (can be partial)

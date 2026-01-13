@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright 2017 Adobe
+ * Copyright 2026 Adobe
  * All Rights Reserved.
  */
 
@@ -694,10 +694,14 @@ class ConfigShowCommandTest extends TestCase
             });
         $this->emulatedAreProcessorMock->expects($this->once())
             ->method('process')
-            ->willReturnCallback(function ($function) { return $function(); });
+            ->willReturnCallback(function ($function) {
+                return $function();
+            });
         $this->localeEmulatorMock->expects($this->once())
             ->method('emulate')
-            ->willReturnCallback(function ($callback) { return $callback(); });
+            ->willReturnCallback(function ($callback) {
+                return $callback();
+            });
         $tester = $this->getConfigShowCommandTester($partialPath, 'websites', '1');
         $this->assertEquals(Cli::RETURN_SUCCESS, $tester->getStatusCode());
         $display = $tester->getDisplay();
@@ -724,10 +728,14 @@ class ConfigShowCommandTest extends TestCase
             ->willThrowException($exception);
         $this->emulatedAreProcessorMock->expects($this->once())
             ->method('process')
-            ->willReturnCallback(function ($function) { return $function(); });
+            ->willReturnCallback(function ($function) {
+                return $function();
+            });
         $this->localeEmulatorMock->expects($this->once())
             ->method('emulate')
-            ->willReturnCallback(function ($callback) { return $callback(); });
+            ->willReturnCallback(function ($callback) {
+                return $callback();
+            });
         $tester = $this->getConfigShowCommandTester($partialPath, 'stores', '2');
         $this->assertEquals(Cli::RETURN_FAILURE, $tester->getStatusCode());
         $this->assertStringContainsString(
