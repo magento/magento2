@@ -17,6 +17,7 @@ use Magento\Catalog\Helper\Product;
 use Magento\Customer\Model\Customer;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\RequestInterface;
+use Magento\Framework\App\Request\Http;
 use Magento\Framework\Controller\Result\Raw;
 use Magento\Framework\Controller\Result\RawFactory;
 use Magento\Framework\Escaper;
@@ -38,6 +39,7 @@ use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 
 /**
  * Unit test for LoadBlock controller
@@ -48,6 +50,8 @@ use PHPUnit\Framework\TestCase;
  */
 class LoadBlockTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var LoadBlock
      */
@@ -130,35 +134,22 @@ class LoadBlockTest extends TestCase
     protected function setUp(): void
     {
         $this->context = $this->createMock(Context::class);
-        $this->request = $this->getMockBuilder(RequestInterface::class)
-            ->addMethods(['getPost', 'getPostValue', 'has'])
-            ->getMockForAbstractClass();
-        $this->objectManager = $this->getMockForAbstractClass(ObjectManagerInterface::class);
+        $this->request = $this->createPartialMock(Http::class, ['getPost', 'getPostValue', 'has', 'getParam']);
+        $this->objectManager = $this->createMock(ObjectManagerInterface::class);
         $this->resultPageFactory = $this->createMock(PageFactory::class);
         $this->resultRawFactory = $this->createMock(RawFactory::class);
         $this->resultRedirectFactory = $this->createMock(RedirectFactory::class);
         $this->productHelper = $this->createMock(Product::class);
         $this->escaper = $this->createMock(Escaper::class);
-        $this->storeManager = $this->getMockForAbstractClass(StoreManagerInterface::class);
+        $this->storeManager = $this->createMock(StoreManagerInterface::class);
         $this->regexValidator = $this->createMock(RegexValidator::class);
-        $this->session = $this->getMockBuilder(Session::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['setUpdateResult', 'hasUpdateResult', 'getUpdateResult'])
-            ->getMock();
+        $this->session = $this->createPartialMockWithReflection(
+            Session::class,
+            ['setUpdateResult', 'hasUpdateResult', 'getUpdateResult']
+        );
         $this->resultPage = $this->createMock(Page::class);
         $this->layout = $this->createMock(Layout::class);
         $this->validateCoupon = $this->createMock(ValidateCoupon::class);
-
-        // Mock request methods that parent class might call
-        $this->request->expects($this->any())
-            ->method('getPost')
-            ->willReturn(null);
-        $this->request->expects($this->any())
-            ->method('getPostValue')
-            ->willReturn(null);
-        $this->request->expects($this->any())
-            ->method('has')
-            ->willReturn(false);
 
         $this->context->expects($this->any())
             ->method('getRequest')
@@ -171,7 +162,7 @@ class LoadBlockTest extends TestCase
             ->willReturn($this->resultRedirectFactory);
 
         // Mock event manager to prevent null errors
-        $eventManager = $this->getMockForAbstractClass(ManagerInterface::class);
+        $eventManager = $this->createMock(ManagerInterface::class);
         $eventManager->expects($this->any())
             ->method('dispatch')
             ->willReturn(true);
@@ -180,9 +171,7 @@ class LoadBlockTest extends TestCase
             ->willReturn($eventManager);
 
         // Mock message manager for exception handling
-        $messageManager = $this->getMockBuilder(MessageManagerInterface::class)
-            ->onlyMethods(['addErrorMessage', 'addExceptionMessage'])
-            ->getMockForAbstractClass();
+        $messageManager = $this->createMock(MessageManagerInterface::class);
         $messageManager->expects($this->any())
             ->method('addErrorMessage')
             ->willReturnSelf();
@@ -221,10 +210,7 @@ class LoadBlockTest extends TestCase
         $quote = $this->createMock(Quote::class);
 
         // Mock customer with addMethods since getCustomerGroupId may not exist
-        $customer = $this->getMockBuilder(Customer::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['getCustomerGroupId'])
-            ->getMock();
+        $customer = $this->createPartialMockWithReflection(Customer::class, ['getCustomerGroupId']);
 
         // Mock registry methods
         $registry->expects($this->any())
@@ -269,10 +255,7 @@ class LoadBlockTest extends TestCase
             ->method('getQuote')
             ->willReturn($quote);
 
-        $adminOrderCreate = $this->getMockBuilder(Create::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['setStoreId'])
-            ->getMock();
+        $adminOrderCreate = $this->createPartialMockWithReflection(Create::class, ['setStoreId']);
 
         // AdminOrderCreate uses _coreRegistry and _session properties internally
         // Since we disabled the constructor, we need to inject them via reflection
@@ -334,7 +317,7 @@ class LoadBlockTest extends TestCase
         // Clean up ObjectManager instance - create a fresh mock to pass to setInstance
         // (setInstance doesn't accept null, so we pass a new mock)
         try {
-            $cleanObjectManager = $this->getMockForAbstractClass(ObjectManagerInterface::class);
+            $cleanObjectManager = $this->createMock(ObjectManagerInterface::class);
             ObjectManager::setInstance($cleanObjectManager);
         } catch (\Exception $e) { // phpcs:ignore Magento2.CodeAnalysis.EmptyBlock
             // Ignore any errors during cleanup
@@ -628,7 +611,7 @@ class LoadBlockTest extends TestCase
     public function testConstructorWithNullRegexValidator(): void
     {
         // Create controller without passing regexValidator (null)
-        $forwardFactory = $this->getMockForAbstractClass(ForwardFactory::class, [], '', false);
+        $forwardFactory = $this->createMock(ForwardFactory::class);
         $controller = new LoadBlock(
             $this->context,
             $this->productHelper,
@@ -652,7 +635,7 @@ class LoadBlockTest extends TestCase
     public function testExecuteWithLocalizedExceptionDuringProcessing(): void
     {
         // Create a partial mock that will throw LocalizedException
-        $forwardFactory = $this->getMockForAbstractClass(ForwardFactory::class, [], '', false);
+        $forwardFactory = $this->createMock(ForwardFactory::class);
         $controller = $this->getMockBuilder(LoadBlock::class)
             ->setConstructorArgs([
                 $this->context,
@@ -732,7 +715,7 @@ class LoadBlockTest extends TestCase
     public function testExecuteWithGenericExceptionDuringProcessing(): void
     {
         // Create a partial mock that will throw Exception
-        $forwardFactory = $this->getMockForAbstractClass(ForwardFactory::class, [], '', false);
+        $forwardFactory = $this->createMock(ForwardFactory::class);
         $controller = $this->getMockBuilder(LoadBlock::class)
             ->setConstructorArgs([
                 $this->context,

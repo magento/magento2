@@ -13,14 +13,13 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHe
 use Magento\Quote\Api\Data\CartExtensionInterface;
 use Magento\Quote\Model\Quote;
 use Magento\Quote\Model\Quote\Address as QuoteAddress;
-use Magento\Quote\Test\Unit\Helper\QuoteAddressTestHelper;
 use Magento\Quote\Model\Quote\Address\BillingAddressPersister;
 use Magento\Quote\Model\Quote\Item as QuoteItem;
 use Magento\Quote\Model\Quote\Item\CartItemPersister;
 use Magento\Quote\Model\Quote\ShippingAssignment\ShippingAssignmentPersister;
 use Magento\Quote\Model\QuoteRepository\SaveHandler;
 use Magento\Quote\Model\ResourceModel\Quote as QuoteResourceModel;
-use Magento\Quote\Test\Unit\Helper\QuoteTestHelper;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -29,6 +28,7 @@ use PHPUnit\Framework\TestCase;
  */
 class SaveHandlerTest extends TestCase
 {
+    use MockCreationTrait;
     /**
      * @var SaveHandler
      */
@@ -94,8 +94,8 @@ class SaveHandlerTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $this->addressRepositoryMock = $this->createMock(AddressRepositoryInterface::class);
-        $this->quoteMock = $this->createPartialMock(
-            QuoteTestHelper::class,
+        $this->quoteMock = $this->createPartialMockWithReflection(
+            Quote::class,
             [
                 'setLastAddedItem',
                 'getItems',
@@ -105,8 +105,8 @@ class SaveHandlerTest extends TestCase
                 'collectTotals'
             ]
         );
-        $this->billingAddressMock = $this->createPartialMock(
-            QuoteAddressTestHelper::class,
+        $this->billingAddressMock = $this->createPartialMockWithReflection(
+            QuoteAddress::class,
             ['getCustomerAddressId', 'setCustomerAddressId', 'getCustomerAddress']
         );
         $this->extensionAttributesMock = $this->createMock(CartExtensionInterface::class);

@@ -11,6 +11,7 @@ use Magento\Contact\Model\Config;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\Store\Model\ScopeInterface;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -34,10 +35,7 @@ class ConfigTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->scopeConfigMock = $this->getMockBuilder(ScopeConfigInterface::class)
-            ->onlyMethods(['getValue', 'isSetFlag'])
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->scopeConfigMock = $this->createMock(ScopeConfigInterface::class);
 
         $objectManager = new ObjectManagerHelper($this);
         $this->model = $objectManager->getObject(
@@ -52,8 +50,8 @@ class ConfigTest extends TestCase
      * Test isEnabled()
      *
      * @return void
-     * @dataProvider isEnabledDataProvider
      */
+    #[DataProvider('isEnabledDataProvider')]
     public function testIsEnabled($isSetFlag, $result): void
     {
         $this->scopeConfigMock->expects($this->once())

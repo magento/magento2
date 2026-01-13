@@ -15,6 +15,7 @@ use Magento\Framework\App\State;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Store\Api\Data\StoreInterface;
 use Magento\Store\Model\StoreManagerInterface;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -48,13 +49,8 @@ class CurrencyConfigTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->config = $this->getMockBuilder(ScopeConfigInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-        $this->storeManager = $this->getMockBuilder(StoreManagerInterface::class)
-            ->onlyMethods(['getStores', 'getWebsites'])
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->config = $this->createMock(ScopeConfigInterface::class);
+        $this->storeManager = $this->createMock(StoreManagerInterface::class);
         $this->appState = $this->getMockBuilder(State::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -72,9 +68,9 @@ class CurrencyConfigTest extends TestCase
     /**
      * Test get currency config for admin, crontab and storefront areas.
      *
-     * @dataProvider getConfigCurrenciesDataProvider
      * @return void
      */
+    #[DataProvider('getConfigCurrenciesDataProvider')]
     public function testGetConfigCurrencies(string $areaCode)
     {
         $path = 'test/path';
@@ -85,10 +81,7 @@ class CurrencyConfigTest extends TestCase
             ->willReturn($areaCode);
 
         /** @var StoreInterface|MockObject $store */
-        $store = $this->getMockBuilder(StoreInterface::class)
-            ->onlyMethods(['getCode'])
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $store = $this->createMock(StoreInterface::class);
         $store->expects(self::once())
             ->method('getCode')
             ->willReturn('testCode');

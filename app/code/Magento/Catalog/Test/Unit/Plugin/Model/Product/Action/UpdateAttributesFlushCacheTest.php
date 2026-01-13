@@ -25,7 +25,7 @@ class UpdateAttributesFlushCacheTest extends TestCase
     {
         $cacheContextMock = $this->createMock(CacheContext::class);
 
-        $eventManagerMock = $this->getMockForAbstractClass(ManagerInterface::class);
+        $eventManagerMock = $this->createMock(ManagerInterface::class);
         $eventManagerMock->expects($this->once())
             ->method('dispatch')
             ->with('clean_cache_by_tags', ['object' => $cacheContextMock]);

@@ -12,6 +12,7 @@ use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\DB\Adapter\Pdo\Mysql;
 use Magento\Framework\Model\ResourceModel\Db\VersionControl\RelationComposite;
 use Magento\Framework\Model\ResourceModel\Db\VersionControl\Snapshot;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Quote\Model\Quote;
 use Magento\Quote\Model\Quote\Address as QuoteAddressModel;
@@ -21,6 +22,7 @@ use PHPUnit\Framework\TestCase;
 
 class QuoteAddressTest extends TestCase
 {
+    use MockCreationTrait;
     /**
      * @var Address
      */
@@ -61,8 +63,8 @@ class QuoteAddressTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->addressMock = $this->createPartialMock(
-            \Magento\Quote\Test\Unit\Helper\QuoteAddressTestHelper::class,
+        $this->addressMock = $this->createPartialMockWithReflection(
+            \Magento\Quote\Model\Quote\Address::class,
             ['__wakeup', 'hasDataChanges', 'beforeSave', 'afterSave', 'validateBeforeSave', 'getOrderId', 'getOrder']
         );
         $this->quoteMock = $this->createPartialMock(Quote::class, ['__wakeup', 'getId']);

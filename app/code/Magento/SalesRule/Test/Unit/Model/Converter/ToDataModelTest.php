@@ -23,6 +23,7 @@ use Magento\SalesRule\Model\Rule\Condition\Address;
 use Magento\SalesRule\Model\Rule\Condition\Combine;
 use Magento\SalesRule\Model\Rule\Condition\Product;
 use Magento\SalesRule\Model\Rule\Condition\Product\Found;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\SalesRule\Model\RuleFactory;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -32,6 +33,8 @@ use PHPUnit\Framework\TestCase;
  */
 class ToDataModelTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var RuleFactory|MockObject
      */
@@ -79,9 +82,7 @@ class ToDataModelTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->ruleFactory = $this->getMockBuilder(RuleFactory::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->ruleFactory = $this->createMock(RuleFactory::class);
 
         $this->ruleDataFactory = $this->getMockBuilder(RuleInterfaceFactory::class)
             ->disableOriginalConstructor()
@@ -94,24 +95,19 @@ class ToDataModelTest extends TestCase
             ->onlyMethods(['create'])
             ->getMock();
 
-        $this->dataObjectProcessor = $this->getMockBuilder(DataObjectProcessor::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->dataObjectProcessor = $this->createMock(DataObjectProcessor::class);
 
         $this->ruleLabelFactory = $this->getMockBuilder(RuleLabelInterfaceFactory::class)
             ->disableOriginalConstructor()
             ->onlyMethods(['create'])
             ->getMock();
 
-        $this->salesRule = $this->getMockBuilder(Rule::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['getConditionsSerialized', 'getActionsSerialized'])
-            ->onlyMethods(['_construct', 'getData'])
-            ->getMock();
+        $this->salesRule = $this->createPartialMockWithReflection(
+            Rule::class,
+            ['getConditionsSerialized', 'getActionsSerialized', '_construct', 'getData']
+        );
 
-        $this->serializer = $this->getMockBuilder(Json::class)
-            ->addMethods([])
-            ->getMock();
+        $this->serializer = $this->createMock(Json::class);
 
         $this->extensionFactoryMock = $this->getMockBuilder(RuleExtensionFactory::class)
             ->onlyMethods(['create'])
@@ -194,8 +190,7 @@ class ToDataModelTest extends TestCase
         $arrayAttributes = $array;
 
         /** @var RuleExtensionInterface|MockObject $attributesMock */
-        $attributesMock = $this->getMockBuilder(RuleExtensionInterface::class)
-            ->getMock();
+        $attributesMock = $this->createMock(RuleExtensionInterface::class);
         $arrayAttributes['extension_attributes'] = $attributesMock;
 
         $this->extensionFactoryMock->expects($this->any())
@@ -203,17 +198,12 @@ class ToDataModelTest extends TestCase
             ->with(['data' => $array['extension_attributes']])
             ->willReturn($attributesMock);
 
-        $dataModel = $this->getMockBuilder(\Magento\SalesRule\Model\Data\Rule::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['create'])
-            ->onlyMethods(['getStoreLabels', 'setStoreLabels', 'getCouponType', 'setCouponType'])
-            ->getMock();
+        $dataModel = $this->createPartialMock(
+            \Magento\SalesRule\Model\Data\Rule::class,
+            ['getStoreLabels', 'setStoreLabels', 'getCouponType', 'setCouponType']
+        );
 
-        $dataLabel = $this->getMockBuilder(RuleLabelInterface::class)
-            ->addMethods(['setStoreLabels'])
-            ->onlyMethods(['setStoreId', 'setStoreLabel'])
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $dataLabel = $this->createMock(RuleLabelInterface::class);
 
         $dataCondition = $this->getMockBuilder(Condition::class)
             ->onlyMethods(['setData'])
@@ -245,6 +235,13 @@ class ToDataModelTest extends TestCase
             ->expects($this->once())
             ->method('getConditionsSerialized')
             ->willReturn($array['conditions_serialized']);
+
+        $this->serializer
+            ->expects($this->any())
+            ->method('unserialize')
+            ->willReturnCallback(function ($data) {
+                return json_decode($data, true);
+            });
 
         $dataModel
             ->expects($this->atLeastOnce())

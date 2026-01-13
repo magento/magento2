@@ -12,15 +12,20 @@ use Magento\Framework\DataObject;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Sales\Model\Order as SalesOrder;
 use Magento\Sales\Model\Order\Creditmemo;
 use Magento\Sales\Model\Order\Creditmemo\Total\Shipping;
 use Magento\Tax\Model\Calculation as TaxCalculation;
 use Magento\Tax\Model\Config;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 
 class ShippingTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var MockObject
      */
@@ -40,25 +45,16 @@ class ShippingTest extends TestCase
     {
         $objectManager = new ObjectManager($this);
 
-        $this->creditmemoMock = $this->getMockBuilder(Creditmemo::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['hasBaseShippingAmount'])
-            ->onlyMethods(
-                [
-                    'getOrder',
-                    'getBaseShippingAmount',
-                    'setShippingAmount',
-                    'setBaseShippingAmount',
-                    'setShippingInclTax',
-                    'setBaseShippingInclTax',
-                    'setGrandTotal',
-                    'setBaseGrandTotal',
-                    'getGrandTotal',
-                    'getBaseGrandTotal',
-                ]
-            )->getMock();
+        $this->creditmemoMock = $this->createPartialMockWithReflection(
+            Creditmemo::class,
+            [
+                'hasBaseShippingAmount', 'getOrder', 'getBaseShippingAmount', 'setShippingAmount',
+                'setBaseShippingAmount', 'setShippingInclTax', 'setBaseShippingInclTax',
+                'setGrandTotal', 'setBaseGrandTotal', 'getGrandTotal', 'getBaseGrandTotal'
+            ]
+        );
 
-        $priceCurrencyMock = $this->getMockForAbstractClass(PriceCurrencyInterface::class);
+        $priceCurrencyMock = $this->createMock(PriceCurrencyInterface::class);
         $priceCurrencyMock->expects($this->any())
             ->method('round')
             ->willReturnCallback(
@@ -97,9 +93,7 @@ class ShippingTest extends TestCase
 
         $this->taxConfig->expects($this->any())->method('displaySalesShippingInclTax')->willReturn(false);
 
-        $currencyMock = $this->getMockBuilder(Currency::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $currencyMock = $this->createMock(Currency::class);
         $currencyMock->expects($this->once())
             ->method('format')
             ->with($allowedShippingAmount, null, false)
@@ -129,9 +123,7 @@ class ShippingTest extends TestCase
 
     private function getOrderMock($data)
     {
-        $orderMock = $this->getMockBuilder(\Magento\Sales\Model\Order::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $orderMock = $this->createMock(SalesOrder::class);
 
         foreach ($data as $method => $returnValue) {
             $orderMock
@@ -228,8 +220,8 @@ class ShippingTest extends TestCase
 
     /**
      * @param float $ratio
-     * @dataProvider collectWithSpecifiedShippingAmountDataProvider
      */
+    #[DataProvider('collectWithSpecifiedShippingAmountDataProvider')]
     public function testCollectWithSpecifiedShippingAmount($ratio)
     {
         $orderShippingAmount = 10;
@@ -509,9 +501,9 @@ class ShippingTest extends TestCase
     /**
      * situation: The admin user specified the desired refund amount that has taxes and discount embedded within it
      *
-     * @dataProvider calculationSequenceDataProvider
      * @throws LocalizedException
      */
+    #[DataProvider('calculationSequenceDataProvider')]
     public function testCollectUsingShippingInclTaxAndDiscountBeforeTax(string $calculationSequence)
     {
         $this->taxConfig->expects($this->any())->method('displaySalesShippingInclTax')->willReturn(true);

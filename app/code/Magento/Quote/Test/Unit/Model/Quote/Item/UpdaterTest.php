@@ -10,15 +10,13 @@ namespace Magento\Quote\Test\Unit\Model\Quote\Item;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\Catalog\Model\Product;
-use Magento\Catalog\Test\Unit\Helper\ProductTestHelper;
 use Magento\Framework\DataObject;
-use Magento\Quote\Test\Unit\Helper\DataObjectTestHelper;
 use Magento\Framework\Locale\Format;
 use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Quote\Model\Quote\Item;
 use Magento\Quote\Model\Quote\Item\Updater;
-use Magento\Quote\Test\Unit\Helper\QuoteItemUpdaterTestHelper;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -28,6 +26,7 @@ use PHPUnit\Framework\TestCase;
 #[CoversClass(\Magento\Quote\Model\Quote\Item\Updater::class)]
 class UpdaterTest extends TestCase
 {
+    use MockCreationTrait;
     /**
      * @var Updater|MockObject
      */
@@ -60,8 +59,8 @@ class UpdaterTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->productMock = $this->createPartialMock(
-            ProductTestHelper::class,
+        $this->productMock = $this->createPartialMockWithReflection(
+            Product::class,
             ['__wakeup', 'getStockItem', 'setIsSuperMode', 'unsSkipCheckRequiredOption']
         );
 
@@ -73,8 +72,8 @@ class UpdaterTest extends TestCase
             ]
         );
 
-        $this->itemMock = $this->createPartialMock(
-            QuoteItemUpdaterTestHelper::class,
+        $this->itemMock = $this->createPartialMockWithReflection(
+            Item::class,
             [
                 'setNoDiscount',
                 'setIsQtyDecimal',
@@ -217,8 +216,8 @@ class UpdaterTest extends TestCase
     {
         $customPrice = 9.99;
         $qty = 3;
-        $buyRequestMock = $this->createPartialMock(
-            DataObjectTestHelper::class,
+        $buyRequestMock = $this->createPartialMockWithReflection(
+            DataObject::class,
             ['getData', 'setCustomPrice', 'setValue', 'setCode', 'setProduct']
         );
         $buyRequestMock->expects($this->any())
@@ -263,8 +262,8 @@ class UpdaterTest extends TestCase
     public function testUpdateUnsetCustomPrice()
     {
         $qty = 3;
-        $buyRequestMock = $this->createPartialMock(
-            DataObjectTestHelper::class,
+        $buyRequestMock = $this->createPartialMockWithReflection(
+            DataObject::class,
             ['getData', 'unsetData', 'hasData', 'setCustomPrice', 'setValue', 'setCode', 'setProduct']
         );
         $buyRequestMock->expects($this->never())->method('setCustomPrice');

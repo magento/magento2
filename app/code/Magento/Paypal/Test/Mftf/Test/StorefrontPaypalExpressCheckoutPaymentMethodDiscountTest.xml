@@ -25,10 +25,12 @@
             <createData entity="SimpleProduct" stepKey="createProduct"/>
             <!-- US Customer is created -->
             <createData entity="Simple_US_Customer" stepKey="createCustomer"/>
-            <!-- Create new cart price rule -->
-            <createData entity="SalesRuleDiscountOnPayPalExpressCheckoutAsPaymentMethod" stepKey="createCartPriceRule"/>
             <!-- Admin login -->
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <!-- Delete all cart price rules -->
+            <actionGroup ref="AdminCartPriceRuleDeleteAllActionGroup" stepKey="deleteAllCartPriceRules"/>
+            <!-- Create new cart price rule -->
+            <createData entity="SalesRuleDiscountOnPayPalExpressCheckoutAsPaymentMethod" stepKey="createCartPriceRule"/>
             <!-- Search Cart Price Rule and go to edit Cart Price Rule -->
             <actionGroup ref="AdminOpenCartPriceRulesPageActionGroup" stepKey="amOnCartPriceList"/>
             <fillField selector="{{AdminCartPriceRulesSection.filterByNameInput}}" userInput="$$createCartPriceRule.name$$"

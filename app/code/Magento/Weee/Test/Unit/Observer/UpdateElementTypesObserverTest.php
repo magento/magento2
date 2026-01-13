@@ -11,6 +11,7 @@ namespace Magento\Weee\Test\Unit\Observer;
 use Magento\Framework\DataObject;
 use Magento\Framework\Event\Observer;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Reports\Model\Event;
 use Magento\Weee\Block\Element\Weee\Tax;
 use Magento\Weee\Observer\UpdateElementTypesObserver;
@@ -19,13 +20,17 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * Unit test for Magento\Weee\Observer\UpdateElementTypesObserver
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class UpdateElementTypesObserverTest extends TestCase
 {
+    use MockCreationTrait;
+
     /*
      * Stub response type
      */
-    const STUB_RESPONSE_TYPE = [];
+    public const STUB_RESPONSE_TYPE = [];
 
     /**
      * Testable Object
@@ -62,15 +67,12 @@ class UpdateElementTypesObserverTest extends TestCase
         $this->objectManager = new ObjectManager($this);
         $this->observerMock = $this->createMock(Observer::class);
 
-        $this->eventMock = $this->getMockBuilder(Event::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['getResponse'])
-            ->getMock();
+        $this->eventMock = $this->createPartialMockWithReflection(Event::class, ['getResponse']);
 
-        $this->responseMock = $this->getMockBuilder(DataObject::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['getTypes', 'setTypes'])
-            ->getMock();
+        $this->responseMock = $this->createPartialMockWithReflection(
+            DataObject::class,
+            ['getTypes', 'setTypes']
+        );
 
         $this->observer = $this->objectManager->getObject(UpdateElementTypesObserver::class);
     }

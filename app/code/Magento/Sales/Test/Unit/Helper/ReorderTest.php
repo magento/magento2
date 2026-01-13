@@ -14,8 +14,10 @@ use Magento\Sales\Api\OrderRepositoryInterface;
 use Magento\Sales\Helper\Reorder;
 use Magento\Sales\Model\Order;
 use Magento\Store\Model\ScopeInterface;
+use Magento\Store\Model\Store;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class ReorderTest extends TestCase
 {
@@ -30,12 +32,12 @@ class ReorderTest extends TestCase
     protected $scopeConfigMock;
 
     /**
-     * @var MockObject|\Magento\Store\Model\Store
+     * @var MockObject|Store
      */
     protected $storeParam;
 
     /**
-     * @var MockObject|\Magento\Sales\Model\Order
+     * @var MockObject|Order
      */
     protected $orderMock;
 
@@ -53,35 +55,29 @@ class ReorderTest extends TestCase
             ->onlyMethods(['getValue'])
             ->disableOriginalConstructor()
             ->getMock();
-        $contextMock = $this->getMockBuilder(Context::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $contextMock = $this->createMock(Context::class);
         $contextMock->expects($this->any())
             ->method('getScopeConfig')
             ->willReturn($this->scopeConfigMock);
 
         $this->repositoryMock = $this->getMockBuilder(OrderRepositoryInterface::class)
-            ->getMockForAbstractClass();
+            ->getMock();
         $this->helper = new Reorder(
             $contextMock,
             $this->repositoryMock
         );
 
-        $this->storeParam = $this->getMockBuilder(\Magento\Store\Model\Store::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->storeParam = $this->createMock(Store::class);
 
-        $this->orderMock = $this->getMockBuilder(Order::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->orderMock = $this->createMock(Order::class);
     }
 
     /**
      * Tests that the store config is checked if orders can be reordered.
      *
-     * @dataProvider getScopeConfigValue
      * @return void
      */
+    #[DataProvider('getScopeConfigValue')]
     public function testIsAllowedScopeConfigReorder($scopeConfigValue)
     {
         $this->setupScopeConfigMock($scopeConfigValue);
@@ -91,9 +87,9 @@ class ReorderTest extends TestCase
     /**
      * Tests that the store config is still checked with a null store.
      *
-     * @dataProvider getScopeConfigValue
      * @return void
      */
+    #[DataProvider('getScopeConfigValue')]
     public function testIsAllowScopeConfigReorderNotAllowWithStore($scopeConfigValue)
     {
         $this->storeParam = null;
@@ -150,8 +146,8 @@ class ReorderTest extends TestCase
      *
      * @param bool $orderCanReorder
      * @return void
-     * @dataProvider getOrderCanReorder
      */
+    #[DataProvider('getOrderCanReorder')]
     public function testCanReorder($orderCanReorder)
     {
         $this->setupOrderMock(true);

@@ -16,9 +16,11 @@ use Magento\Sales\Model\Order\TotalFactory;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
+use Magento\Sales\Model\Config as SalesConfig;
 
 class BaseTest extends TestCase
 {
+
     /** @var Base */
     private $object;
 
@@ -31,7 +33,7 @@ class BaseTest extends TestCase
     /** @var LoggerInterface|MockObject */
     private $logger;
 
-    /** @var \Magento\Sales\Model\Config|MockObject */
+    /** @var SalesConfig|MockObject */
     private $salesConfig;
 
     /** @var TotalFactory|MockObject */
@@ -40,10 +42,10 @@ class BaseTest extends TestCase
     protected function setUp(): void
     {
         $this->configCacheType = $this->createMock(Config::class);
-        $this->logger = $this->getMockForAbstractClass(LoggerInterface::class);
-        $this->salesConfig = $this->createMock(\Magento\Sales\Model\Config::class);
+        $this->logger = $this->createMock(LoggerInterface::class);
+        $this->salesConfig = $this->createMock(SalesConfig::class);
         $this->orderTotalFactory = $this->createMock(TotalFactory::class);
-        $this->serializer = $this->getMockForAbstractClass(SerializerInterface::class);
+        $this->serializer = $this->createMock(SerializerInterface::class);
 
         $objectManager = new ObjectManager($this);
         $this->object = $objectManager->getObject(
@@ -60,7 +62,7 @@ class BaseTest extends TestCase
 
     public function testGetTotalModels()
     {
-        $total = $this->getMockForAbstractClass(AbstractTotal::class);
+        $total = $this->createMock(AbstractTotal::class);
         $this->salesConfig->expects($this->once())->method('getGroupTotals')->willReturn(
             [
                 'some_code' => ['instance' => AbstractTotal::class, 'sort_order' => 1903],
@@ -72,8 +74,8 @@ class BaseTest extends TestCase
             ->with(AbstractTotal::class)
             ->willReturn($total);
 
-        $sortedCodes = ['other_code', 'some_code'];
-        $serializedCodes = '["other_code", "some_code"]';
+        $sortedCodes = ['some_code', 'other_code'];
+        $serializedCodes = '["some_code", "other_code"]';
         $this->serializer->expects($this->once())
             ->method('serialize')
             ->with($sortedCodes)
@@ -82,7 +84,7 @@ class BaseTest extends TestCase
             ->with($serializedCodes, 'sorted_collectors');
 
         $this->assertSame(
-            ['other_code' => $total, 'some_code' => $total],
+            ['some_code' => $total, 'other_code' => $total],
             $this->object->getTotalModels()
         );
     }
@@ -109,7 +111,7 @@ class BaseTest extends TestCase
 
     public function testGetTotalUnserializeCachedCollectorCodes()
     {
-        $total = $this->getMockForAbstractClass(AbstractTotal::class);
+        $total = $this->createMock(AbstractTotal::class);
         $this->salesConfig->expects($this->any())->method('getGroupTotals')->willReturn(
             [
                 'some_code' => ['instance' => AbstractTotal::class, 'sort_order' => 1903],
@@ -139,7 +141,7 @@ class BaseTest extends TestCase
 
     public function testGetTotalModelsSortingSubroutine()
     {
-        $total = $this->getMockForAbstractClass(AbstractTotal::class);
+        $total = $this->createMock(AbstractTotal::class);
         $this->salesConfig->expects($this->once())->method('getGroupTotals')->willReturn(
             [
                 'some_code' => ['instance' => AbstractTotal::class, 'sort_order' => 1903],
@@ -154,8 +156,8 @@ class BaseTest extends TestCase
 
         $this->assertSame(
             [
-                'other_code' => $total,
                 'some_code' => $total,
+                'other_code' => $total,
                 'big_order' => $total,
             ],
             $this->object->getTotalModels()

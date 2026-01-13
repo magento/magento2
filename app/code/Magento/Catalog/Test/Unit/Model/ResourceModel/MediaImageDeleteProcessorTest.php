@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\Catalog\Test\Unit\Model\ResourceModel;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\ResourceModel\MediaImageDeleteProcessor;
 use Magento\Catalog\Model\Product\Gallery\Processor;
@@ -15,6 +16,8 @@ use Magento\Catalog\Model\ResourceModel\Product\Gallery;
 use Magento\Framework\DataObject;
 use Magento\Framework\Exception\FileSystemException;
 use Magento\Framework\Filesystem;
+use Magento\Framework\Filesystem\Directory\WriteInterface;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -24,6 +27,8 @@ use PHPUnit\Framework\TestCase;
  */
 class MediaImageDeleteProcessorTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * Testable Object
      *
@@ -68,30 +73,18 @@ class MediaImageDeleteProcessorTest extends TestCase
     {
         $this->objectManager = new ObjectManager($this);
 
-        $this->productMock = $this->getMockBuilder(Product::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['getId', 'getMediaGalleryImages'])
-            ->getMock();
+        $this->productMock = $this->createPartialMock(Product::class, ['getId', 'getMediaGalleryImages']);
 
-        $this->imageConfig = $this->getMockBuilder(MediaConfig::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['getBaseMediaUrl', 'getMediaUrl', 'getBaseMediaPath', 'getMediaPath'])
-            ->getMock();
+        $this->imageConfig = $this->createPartialMock(
+            MediaConfig::class,
+            ['getBaseMediaUrl', 'getMediaUrl', 'getBaseMediaPath', 'getMediaPath']
+        );
 
-        $this->mediaDirectory = $this->getMockBuilder(Filesystem::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['getRelativePath', 'isFile', 'delete'])
-            ->getMock();
+        $this->mediaDirectory = $this->createMock(WriteInterface::class);
 
-        $this->imageProcessor = $this->getMockBuilder(Processor::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['removeImage'])
-            ->getMock();
+        $this->imageProcessor = $this->createPartialMock(Processor::class, ['removeImage']);
 
-        $this->productGallery = $this->getMockBuilder(Gallery::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['deleteGallery', 'countImageUses'])
-            ->getMock();
+        $this->productGallery = $this->createPartialMock(Gallery::class, ['deleteGallery', 'countImageUses']);
 
         $this->mediaImageDeleteProcessor = $this->objectManager->getObject(
             MediaImageDeleteProcessor::class,
@@ -107,43 +100,36 @@ class MediaImageDeleteProcessorTest extends TestCase
     /**
      * Test mediaImageDeleteProcessor execute method
      *
-     * @dataProvider executeCategoryProductMediaDeleteDataProvider
      * @param int $productId
      * @param array $productImages
      * @param bool $isValidFile
      * @param bool $imageUsedBefore
      */
+    #[DataProvider('executeCategoryProductMediaDeleteDataProvider')]
     public function testExecuteCategoryProductMediaDelete(
         int $productId,
         array $productImages,
         bool $isValidFile,
         bool $imageUsedBefore
     ): void {
-        $this->productMock->expects($this->any())
-            ->method('getId')
-            ->willReturn($productId);
+        $this->productMock->method('getId')->willReturn($productId);
 
-        $this->productMock->expects($this->any())
-            ->method('getMediaGalleryImages')
-            ->willReturn($productImages);
+        $this->productMock->method('getMediaGalleryImages')->willReturn($productImages);
 
-        $this->mediaDirectory->expects($this->any())
-            ->method('isFile')
-            ->willReturn($isValidFile);
+        $this->mediaDirectory->method('isFile')->willReturn($isValidFile);
 
-        $this->mediaDirectory->expects($this->any())
-            ->method('getRelativePath')
-            ->willReturnCallback(function ($arg) use ($productImages) {
+        // Set up the getRelativePath behavior using a callback
+        $this->mediaDirectory->method('getRelativePath')->willReturnCallback(
+            function ($arg) use ($productImages) {
                 if ($arg == $productImages[0]->getFile()) {
                     return $productImages[0]->getPath();
                 } elseif ($arg == $productImages[1]->getFile()) {
                     return $productImages[1]->getPath();
                 }
-            });
+            }
+        );
 
-        $this->productGallery->expects($this->any())
-            ->method('countImageUses')
-            ->willReturn($imageUsedBefore);
+        $this->productGallery->method('countImageUses')->willReturn($imageUsedBefore);
 
         $this->productGallery->expects($this->any())
             ->method('deleteGallery')

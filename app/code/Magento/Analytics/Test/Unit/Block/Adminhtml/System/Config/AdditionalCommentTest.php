@@ -15,10 +15,12 @@ use Magento\Framework\Escaper;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\View\Helper\SecureHtmlRenderer;
 use PHPUnit\Framework\MockObject\MockObject;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use PHPUnit\Framework\TestCase;
 
 class AdditionalCommentTest extends TestCase
 {
+    use MockCreationTrait;
     /**
      * @var AdditionalComment
      */
@@ -41,10 +43,10 @@ class AdditionalCommentTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->abstractElementMock = $this->getMockBuilder(AbstractElement::class)
-            ->addMethods(['getComment', 'getLabel'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->abstractElementMock = $this->createPartialMockWithReflection(
+            AbstractElement::class,
+            ['getComment', 'getLabel']
+        );
 
         $objectManager = new ObjectManager($this);
         $escaper = $objectManager->getObject(Escaper::class);
