@@ -1,23 +1,23 @@
 {
     "name": "magento/module-asynchronous-operations",
     "description": "N/A",
+    "type": "magento2-module",
     "config": {
         "sort-packages": true
     },
     "require": {
+        "php": "~8.2.0||~8.3.0||~8.4.0",
         "magento/framework": "*",
-        "magento/framework-message-queue": "*",
         "magento/framework-bulk": "*",
+        "magento/framework-message-queue": "*",
         "magento/module-authorization": "*",
         "magento/module-backend": "*",
-        "magento/module-ui": "*",
-        "php": "~8.2.0||~8.3.0||~8.4.0"
+        "magento/module-ui": "*"
     },
     "suggest": {
         "magento/module-admin-notification": "*",
         "magento/module-logging": "*"
     },
-    "type": "magento2-module",
     "license": [
         "OSL-3.0",
         "AFL-3.0"

@@ -1,12 +1,15 @@
 {
     "name": "magento/module-async-config",
     "description": "N/A",
+    "type": "magento2-module",
+    "config": {
+        "sort-packages": true
+    },
     "require": {
         "php": "~8.2.0||~8.3.0||~8.4.0",
         "magento/framework": "*",
         "magento/module-config": "*"
     },
-    "type": "magento2-module",
     "license": [
         "proprietary"
     ],

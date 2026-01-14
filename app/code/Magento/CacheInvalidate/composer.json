@@ -1,6 +1,7 @@
 {
     "name": "magento/module-cache-invalidate",
     "description": "N/A",
+    "type": "magento2-module",
     "config": {
         "sort-packages": true
     },
@@ -9,7 +10,6 @@
         "magento/framework": "*",
         "magento/module-page-cache": "*"
     },
-    "type": "magento2-module",
     "license": [
         "OSL-3.0",
         "AFL-3.0"

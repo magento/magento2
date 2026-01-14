@@ -1,6 +1,7 @@
 {
     "name": "magento/module-admin-notification",
     "description": "N/A",
+    "type": "magento2-module",
     "config": {
         "sort-packages": true
     },
@@ -9,12 +10,11 @@
         "lib-libxml": "*",
         "magento/framework": "*",
         "magento/module-backend": "*",
+        "magento/module-config": "*",
         "magento/module-media-storage": "*",
         "magento/module-store": "*",
-        "magento/module-ui": "*",
-        "magento/module-config": "*"
+        "magento/module-ui": "*"
     },
-    "type": "magento2-module",
     "license": [
         "OSL-3.0",
         "AFL-3.0"

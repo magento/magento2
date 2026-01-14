@@ -1,10 +1,12 @@
 {
     "name": "magento/module-advanced-search",
     "description": "N/A",
+    "type": "magento2-module",
     "config": {
         "sort-packages": true
     },
     "require": {
+        "php": "~8.2.0||~8.3.0||~8.4.0",
         "magento/framework": "*",
         "magento/module-backend": "*",
         "magento/module-catalog": "*",
@@ -12,10 +14,8 @@
         "magento/module-config": "*",
         "magento/module-customer": "*",
         "magento/module-search": "*",
-        "magento/module-store": "*",
-        "php": "~8.2.0||~8.3.0||~8.4.0"
+        "magento/module-store": "*"
     },
-    "type": "magento2-module",
     "license": [
         "OSL-3.0",
         "AFL-3.0"

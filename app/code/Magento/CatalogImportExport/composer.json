@@ -1,6 +1,7 @@
 {
     "name": "magento/module-catalog-import-export",
     "description": "N/A",
+    "type": "magento2-module",
     "config": {
         "sort-packages": true
     },
@@ -8,6 +9,8 @@
         "php": "~8.2.0||~8.3.0||~8.4.0",
         "ext-ctype": "*",
         "magento/framework": "*",
+        "magento/module-authorization": "*",
+        "magento/module-aws-s3": "*",
         "magento/module-catalog": "*",
         "magento/module-catalog-inventory": "*",
         "magento/module-catalog-url-rewrite": "*",
@@ -16,11 +19,8 @@
         "magento/module-import-export": "*",
         "magento/module-media-storage": "*",
         "magento/module-store": "*",
-        "magento/module-tax": "*",
-        "magento/module-authorization": "*",
-        "magento/module-aws-s3": "*"
+        "magento/module-tax": "*"
     },
-    "type": "magento2-module",
     "license": [
         "OSL-3.0",
         "AFL-3.0"

@@ -1,6 +1,7 @@
 {
     "name": "magento/module-catalog",
     "description": "N/A",
+    "type": "magento2-module",
     "config": {
         "sort-packages": true
     },
@@ -8,8 +9,9 @@
         "php": "~8.2.0||~8.3.0||~8.4.0",
         "magento/framework": "*",
         "magento/framework-bulk": "*",
-        "magento/module-authorization": "*",
         "magento/module-asynchronous-operations": "*",
+        "magento/module-authorization": "*",
+        "magento/module-aws-s3": "*",
         "magento/module-backend": "*",
         "magento/module-catalog-inventory": "*",
         "magento/module-catalog-rule": "*",
@@ -32,15 +34,13 @@
         "magento/module-ui": "*",
         "magento/module-url-rewrite": "*",
         "magento/module-widget": "*",
-        "magento/module-wishlist": "*",
-        "magento/module-aws-s3": "*"
+        "magento/module-wishlist": "*"
     },
     "suggest": {
+        "magento/module-catalog-sample-data": "*",
         "magento/module-cookie": "*",
-        "magento/module-sales": "*",
-        "magento/module-catalog-sample-data": "*"
+        "magento/module-sales": "*"
     },
-    "type": "magento2-module",
     "license": [
         "OSL-3.0",
         "AFL-3.0"

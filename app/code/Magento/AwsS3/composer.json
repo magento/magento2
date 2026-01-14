@@ -1,6 +1,7 @@
 {
     "name": "magento/module-aws-s3",
     "description": "N/A",
+    "type": "magento2-module",
     "config": {
         "sort-packages": true
     },
@@ -9,7 +10,6 @@
         "magento/framework": "*",
         "magento/module-remote-storage": "*"
     },
-    "type": "magento2-module",
     "license": [
         "proprietary"
     ],

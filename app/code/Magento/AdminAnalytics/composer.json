@@ -1,6 +1,7 @@
 {
     "name": "magento/module-admin-analytics",
     "description": "N/A",
+    "type": "magento2-module",
     "config": {
         "sort-packages": true
     },
@@ -9,12 +10,11 @@
         "magento/framework": "*",
         "magento/module-backend": "*",
         "magento/module-config": "*",
-        "magento/module-store": "*",
-        "magento/module-ui": "*",
+        "magento/module-csp": "*",
         "magento/module-release-notification": "*",
-        "magento/module-csp": "*"
+        "magento/module-store": "*",
+        "magento/module-ui": "*"
     },
-    "type": "magento2-module",
     "license": [
         "OSL-3.0",
         "AFL-3.0"

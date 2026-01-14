@@ -1,6 +1,7 @@
 {
     "name": "magento/module-catalog-rule-configurable",
     "description": "N/A",
+    "type": "magento2-module",
     "config": {
         "sort-packages": true
     },
@@ -15,7 +16,6 @@
     "suggest": {
         "magento/module-catalog-rule": "*"
     },
-    "type": "magento2-module",
     "license": [
         "OSL-3.0",
         "AFL-3.0"

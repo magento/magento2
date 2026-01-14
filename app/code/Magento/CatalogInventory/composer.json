@@ -1,6 +1,7 @@
 {
     "name": "magento/module-catalog-inventory",
     "description": "N/A",
+    "type": "magento2-module",
     "config": {
         "sort-packages": true
     },
@@ -15,11 +16,11 @@
         "magento/module-store": "*",
         "magento/module-ui": "*"
     },
-    "type": "magento2-module",
     "license": [
         "OSL-3.0",
         "AFL-3.0"
     ],
+    "abandoned": "magento/inventory-metapackage",
     "autoload": {
         "files": [
             "registration.php"
@@ -27,6 +28,5 @@
         "psr-4": {
             "Magento\\CatalogInventory\\": ""
         }
-    },
-    "abandoned": "magento/inventory-metapackage"
+    }
 }

@@ -1,6 +1,7 @@
 {
     "name": "magento/module-advanced-pricing-import-export",
     "description": "N/A",
+    "type": "magento2-module",
     "config": {
         "sort-packages": true
     },
@@ -12,12 +13,11 @@
         "magento/module-catalog-import-export": "*",
         "magento/module-catalog-inventory": "*",
         "magento/module-customer": "*",
+        "magento/module-directory": "*",
         "magento/module-eav": "*",
         "magento/module-import-export": "*",
-        "magento/module-store": "*",
-        "magento/module-directory": "*"
+        "magento/module-store": "*"
     },
-    "type": "magento2-module",
     "license": [
         "OSL-3.0",
         "AFL-3.0"
