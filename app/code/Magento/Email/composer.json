@@ -1,6 +1,7 @@
 {
     "name": "magento/module-email",
     "description": "N/A",
+    "type": "magento2-module",
     "config": {
         "sort-packages": true
     },
@@ -10,17 +11,16 @@
         "magento/module-backend": "*",
         "magento/module-cms": "*",
         "magento/module-config": "*",
+        "magento/module-media-storage": "*",
+        "magento/module-require-js": "*",
         "magento/module-store": "*",
         "magento/module-theme": "*",
-        "magento/module-require-js": "*",
-        "magento/module-media-storage": "*",
-        "magento/module-variable": "*",
-        "magento/module-ui": "*"
+        "magento/module-ui": "*",
+        "magento/module-variable": "*"
     },
     "suggest": {
         "magento/module-theme": "*"
     },
-    "type": "magento2-module",
     "license": [
         "OSL-3.0",
         "AFL-3.0"

@@ -1,23 +1,26 @@
 {
     "name": "magento/module-elasticsearch",
     "description": "N/A",
+    "type": "magento2-module",
+    "config": {
+        "sort-packages": true
+    },
     "require": {
         "php": "~8.2.0||~8.3.0||~8.4.0",
+        "elasticsearch/elasticsearch": "^8.15",
+        "magento/framework": "*",
         "magento/module-advanced-search": "*",
         "magento/module-catalog": "*",
+        "magento/module-catalog-inventory": "*",
         "magento/module-catalog-search": "*",
         "magento/module-customer": "*",
         "magento/module-eav": "*",
         "magento/module-search": "*",
-        "magento/module-store": "*",
-        "magento/module-catalog-inventory": "*",
-        "magento/framework": "*",
-        "elasticsearch/elasticsearch": "^8.15"
+        "magento/module-store": "*"
     },
     "suggest": {
         "magento/module-config": "*"
     },
-    "type": "magento2-module",
     "license": [
         "OSL-3.0",
         "AFL-3.0"

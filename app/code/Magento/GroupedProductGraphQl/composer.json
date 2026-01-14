@@ -2,14 +2,17 @@
     "name": "magento/module-grouped-product-graph-ql",
     "description": "N/A",
     "type": "magento2-module",
+    "config": {
+        "sort-packages": true
+    },
     "require": {
         "php": "~8.2.0||~8.3.0||~8.4.0",
-        "magento/module-grouped-product": "*",
+        "magento/framework": "*",
         "magento/module-catalog": "*",
         "magento/module-catalog-graph-ql": "*",
-        "magento/framework": "*",
-        "magento/module-store-graph-ql": "*",
-        "magento/module-quote": "*"
+        "magento/module-grouped-product": "*",
+        "magento/module-quote": "*",
+        "magento/module-store-graph-ql": "*"
     },
     "license": [
         "OSL-3.0",

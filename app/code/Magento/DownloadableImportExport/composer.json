@@ -1,6 +1,7 @@
 {
     "name": "magento/module-downloadable-import-export",
     "description": "N/A",
+    "type": "magento2-module",
     "config": {
         "sort-packages": true
     },
@@ -14,7 +15,6 @@
         "magento/module-import-export": "*",
         "magento/module-store": "*"
     },
-    "type": "magento2-module",
     "license": [
         "OSL-3.0",
         "AFL-3.0"

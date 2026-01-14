@@ -1,6 +1,7 @@
 {
     "name": "magento/module-gift-message",
     "description": "N/A",
+    "type": "magento2-module",
     "config": {
         "sort-packages": true
     },
@@ -20,7 +21,6 @@
         "magento/module-eav": "*",
         "magento/module-multishipping": "*"
     },
-    "type": "magento2-module",
     "license": [
         "OSL-3.0",
         "AFL-3.0"

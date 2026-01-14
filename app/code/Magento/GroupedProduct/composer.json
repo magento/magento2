@@ -1,6 +1,7 @@
 {
     "name": "magento/module-grouped-product",
     "description": "N/A",
+    "type": "magento2-module",
     "config": {
         "sort-packages": true
     },
@@ -24,7 +25,6 @@
     "suggest": {
         "magento/module-grouped-product-sample-data": "*"
     },
-    "type": "magento2-module",
     "license": [
         "OSL-3.0",
         "AFL-3.0"
