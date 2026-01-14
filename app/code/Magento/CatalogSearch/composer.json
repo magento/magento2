@@ -1,6 +1,7 @@
 {
     "name": "magento/module-catalog-search",
     "description": "Catalog search",
+    "type": "magento2-module",
     "config": {
         "sort-packages": true
     },
@@ -9,11 +10,11 @@
         "magento/framework": "*",
         "magento/module-backend": "*",
         "magento/module-catalog": "*",
-        "magento/module-indexer": "*",
         "magento/module-catalog-inventory": "*",
         "magento/module-customer": "*",
         "magento/module-directory": "*",
         "magento/module-eav": "*",
+        "magento/module-indexer": "*",
         "magento/module-search": "*",
         "magento/module-store": "*",
         "magento/module-theme": "*",
@@ -22,7 +23,6 @@
     "suggest": {
         "magento/module-config": "*"
     },
-    "type": "magento2-module",
     "license": [
         "OSL-3.0",
         "AFL-3.0"

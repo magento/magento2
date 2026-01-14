@@ -1,17 +1,17 @@
 {
     "name": "magento/module-csp",
     "description": "CSP module enables Content Security Policies for Magento",
+    "type": "magento2-module",
     "config": {
         "sort-packages": true
     },
     "require": {
         "php": "~8.2.0||~8.3.0||~8.4.0",
         "magento/framework": "*",
-        "magento/module-store": "*",
+        "magento/module-deploy": "*",
         "magento/module-require-js": "*",
-        "magento/module-deploy": "*"
+        "magento/module-store": "*"
     },
-    "type": "magento2-module",
     "license": [
         "OSL-3.0",
         "AFL-3.0"

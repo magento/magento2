@@ -1,6 +1,7 @@
 {
     "name": "magento/module-cookie",
     "description": "N/A",
+    "type": "magento2-module",
     "config": {
         "sort-packages": true
     },
@@ -12,7 +13,6 @@
     "suggest": {
         "magento/module-backend": "*"
     },
-    "type": "magento2-module",
     "license": [
         "OSL-3.0",
         "AFL-3.0"

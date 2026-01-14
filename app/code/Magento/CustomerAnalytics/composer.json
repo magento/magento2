@@ -1,13 +1,16 @@
 {
     "name": "magento/module-customer-analytics",
     "description": "N/A",
+    "type": "magento2-module",
+    "config": {
+        "sort-packages": true
+    },
     "require": {
         "php": "~8.2.0||~8.3.0||~8.4.0",
         "magento/framework": "*",
-        "magento/module-customer": "*",
-        "magento/module-analytics": "*"
+        "magento/module-analytics": "*",
+        "magento/module-customer": "*"
     },
-    "type": "magento2-module",
     "license": [
         "OSL-3.0",
         "AFL-3.0"

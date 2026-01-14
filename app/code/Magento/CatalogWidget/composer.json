@@ -1,6 +1,7 @@
 {
     "name": "magento/module-catalog-widget",
     "description": "N/A",
+    "type": "magento2-module",
     "config": {
         "sort-packages": true
     },
@@ -13,11 +14,10 @@
         "magento/module-eav": "*",
         "magento/module-rule": "*",
         "magento/module-store": "*",
+        "magento/module-theme": "*",
         "magento/module-widget": "*",
-        "magento/module-wishlist": "*",
-        "magento/module-theme": "*"
+        "magento/module-wishlist": "*"
     },
-    "type": "magento2-module",
     "license": [
         "OSL-3.0",
         "AFL-3.0"

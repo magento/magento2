@@ -1,6 +1,7 @@
 {
     "name": "magento/module-config",
     "description": "N/A",
+    "type": "magento2-module",
     "config": {
         "sort-packages": true
     },
@@ -12,11 +13,10 @@
         "magento/module-deploy": "*",
         "magento/module-directory": "*",
         "magento/module-email": "*",
+        "magento/module-encryption-key": "*",
         "magento/module-media-storage": "*",
-        "magento/module-store": "*",
-        "magento/module-encryption-key": "*"
+        "magento/module-store": "*"
     },
-    "type": "magento2-module",
     "license": [
         "OSL-3.0",
         "AFL-3.0"

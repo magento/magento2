@@ -1,6 +1,7 @@
 {
     "name": "magento/module-dhl",
     "description": "N/A",
+    "type": "magento2-module",
     "config": {
         "sort-packages": true
     },
@@ -21,7 +22,6 @@
     "suggest": {
         "magento/module-checkout": "*"
     },
-    "type": "magento2-module",
     "license": [
         "OSL-3.0",
         "AFL-3.0"

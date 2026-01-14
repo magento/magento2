@@ -1,6 +1,7 @@
 {
     "name": "magento/module-catalog-url-rewrite",
     "description": "N/A",
+    "type": "magento2-module",
     "config": {
         "sort-packages": true
     },
@@ -8,6 +9,7 @@
         "php": "~8.2.0||~8.3.0||~8.4.0",
         "magento/framework": "*",
         "magento/framework-bulk": "*",
+        "magento/module-asynchronous-operations": "*",
         "magento/module-backend": "*",
         "magento/module-catalog": "*",
         "magento/module-catalog-import-export": "*",
@@ -15,13 +17,11 @@
         "magento/module-import-export": "*",
         "magento/module-store": "*",
         "magento/module-ui": "*",
-        "magento/module-asynchronous-operations": "*",
         "magento/module-url-rewrite": "*"
     },
     "suggest": {
         "magento/module-webapi": "*"
     },
-    "type": "magento2-module",
     "license": [
         "OSL-3.0",
         "AFL-3.0"

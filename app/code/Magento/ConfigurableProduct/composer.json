@@ -1,6 +1,7 @@
 {
     "name": "magento/module-configurable-product",
     "description": "N/A",
+    "type": "magento2-module",
     "config": {
         "sort-packages": true
     },
@@ -19,18 +20,17 @@
         "magento/module-ui": "*"
     },
     "suggest": {
+        "magento/module-catalog-search": "*",
+        "magento/module-catalog-widget": "*",
+        "magento/module-configurable-sample-data": "*",
         "magento/module-msrp": "*",
-        "magento/module-webapi": "*",
+        "magento/module-product-links-sample-data": "*",
+        "magento/module-product-video": "*",
         "magento/module-sales": "*",
         "magento/module-sales-rule": "*",
-        "magento/module-product-video": "*",
-        "magento/module-configurable-sample-data": "*",
-        "magento/module-product-links-sample-data": "*",
         "magento/module-tax": "*",
-        "magento/module-catalog-widget": "*",
-        "magento/module-catalog-search": "*"
+        "magento/module-webapi": "*"
     },
-    "type": "magento2-module",
     "license": [
         "OSL-3.0",
         "AFL-3.0"
