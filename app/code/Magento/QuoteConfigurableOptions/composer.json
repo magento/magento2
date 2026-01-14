@@ -1,12 +1,15 @@
 {
     "name": "magento/module-quote-configurable-options",
     "description": "Magento module provides data provider for creating buy request for configurable products",
+    "type": "magento2-module",
+    "config": {
+        "sort-packages": true
+    },
     "require": {
         "php": "~8.2.0||~8.3.0||~8.4.0",
         "magento/framework": "*",
         "magento/module-quote": "*"
     },
-    "type": "magento2-module",
     "license": [
         "OSL-3.0",
         "AFL-3.0"

@@ -1,6 +1,7 @@
 {
     "name": "magento/module-sample-data",
     "description": "Sample Data fixtures",
+    "type": "magento2-module",
     "config": {
         "sort-packages": true
     },
@@ -11,7 +12,6 @@
     "suggest": {
         "magento/sample-data-media": "*"
     },
-    "type": "magento2-module",
     "license": [
         "OSL-3.0",
         "AFL-3.0"

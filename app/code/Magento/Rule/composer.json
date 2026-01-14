@@ -1,6 +1,7 @@
 {
     "name": "magento/module-rule",
     "description": "N/A",
+    "type": "magento2-module",
     "config": {
         "sort-packages": true
     },
@@ -13,7 +14,6 @@
         "magento/module-eav": "*",
         "magento/module-store": "*"
     },
-    "type": "magento2-module",
     "license": [
         "OSL-3.0",
         "AFL-3.0"

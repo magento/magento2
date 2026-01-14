@@ -1,6 +1,7 @@
 {
     "name": "magento/module-product-video",
     "description": "Add Video to Products",
+    "type": "magento2-module",
     "config": {
         "sort-packages": true
     },
@@ -15,11 +16,10 @@
         "magento/module-store": "*"
     },
     "suggest": {
-        "magento/module-customer": "*",
         "magento/module-config": "*",
+        "magento/module-customer": "*",
         "magento/module-theme": "*"
     },
-    "type": "magento2-module",
     "license": [
         "OSL-3.0",
         "AFL-3.0"

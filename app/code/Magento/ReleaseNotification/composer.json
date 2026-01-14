@@ -1,17 +1,20 @@
 {
     "name": "magento/module-release-notification",
     "description": "N/A",
+    "type": "magento2-module",
+    "config": {
+        "sort-packages": true
+    },
     "require": {
         "php": "~8.2.0||~8.3.0||~8.4.0",
-        "magento/module-user": "*",
+        "magento/framework": "*",
         "magento/module-backend": "*",
         "magento/module-ui": "*",
-        "magento/framework": "*"
+        "magento/module-user": "*"
     },
     "suggest": {
         "magento/module-config": "*"
     },
-    "type": "magento2-module",
     "license": [
         "OSL-3.0",
         "AFL-3.0"
