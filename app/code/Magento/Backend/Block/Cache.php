@@ -28,6 +28,7 @@ class Cache extends \Magento\Backend\Block\Widget\Grid\Container
                 'flush_magento',
                 [
                     'label' => __('Flush Magento Cache'),
+                    'title' => __('Removes only Magento-generated cache. Safe to use when refreshing outdated data.'),
                     'onclick' => 'setLocation(\'' . $this->getFlushSystemUrl() . '\')',
                     'class' => 'primary flush-cache-magento'
                 ]
@@ -44,6 +45,10 @@ class Cache extends \Magento\Backend\Block\Widget\Grid\Container
                 'flush_system',
                 [
                     'label' => __('Flush Cache Storage'),
+                    'title' => __(
+                        'Clears all cache data, including shared or external cache. ' .
+                        'Use if standard cache refresh does not resolve issues.'
+                    ),
                     'onclick' => 'confirmSetLocation(\'' . $message . '\', \'' . $this->getFlushStorageUrl() . '\')',
                     'class' => 'flush-cache-storage'
                 ]

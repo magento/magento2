@@ -9,15 +9,18 @@ namespace Magento\Downloadable\Test\Unit\Model\Sample;
 
 use Magento\Catalog\Api\Data\ProductExtensionInterface;
 use Magento\Catalog\Api\Data\ProductInterface;
+use Magento\Catalog\Model\Product;
 use Magento\Downloadable\Api\Data\SampleInterface;
 use Magento\Downloadable\Api\SampleRepositoryInterface;
 use Magento\Downloadable\Model\Product\Type;
 use Magento\Downloadable\Model\Sample\CreateHandler;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 class CreateHandlerTest extends TestCase
 {
+    use MockCreationTrait;
     /** @var CreateHandler */
     protected $model;
 
@@ -45,8 +48,8 @@ class CreateHandlerTest extends TestCase
             ->with(null);
 
         /** @var ProductExtensionInterface|MockObject $productExtensionMock */
-        $productExtensionMock = $this->createPartialMock(
-            \Magento\Catalog\Test\Unit\Helper\ProductExtensionTestHelper::class,
+        $productExtensionMock = $this->createPartialMockWithReflection(
+            ProductExtensionInterface::class,
             ['getDownloadableProductSamples']
         );
         $productExtensionMock->expects($this->once())
@@ -54,8 +57,8 @@ class CreateHandlerTest extends TestCase
             ->willReturn([$sampleMock]);
 
         /** @var ProductInterface|MockObject $entityMock */
-        $entityMock = $this->createPartialMock(
-            \Magento\Catalog\Test\Unit\Helper\ProductTestHelper::class,
+        $entityMock = $this->createPartialMockWithReflection(
+            Product::class,
             ['getStoreId', 'getTypeId', 'getExtensionAttributes', 'getSku']
         );
         $entityMock->expects($this->once())
@@ -86,7 +89,7 @@ class CreateHandlerTest extends TestCase
     {
         /** @var ProductInterface|MockObject $entityMock */
         $entityMock = $this->createPartialMock(
-            \Magento\Catalog\Test\Unit\Helper\ProductTestHelper::class,
+            Product::class,
             ['getStoreId', 'getTypeId', 'getExtensionAttributes', 'getSku']
         );
         $entityMock->expects($this->once())

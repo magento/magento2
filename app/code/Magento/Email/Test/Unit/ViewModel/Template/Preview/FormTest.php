@@ -13,6 +13,7 @@ use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * @covers \Magento\Email\ViewModel\Template\Preview\Form
@@ -43,12 +44,12 @@ class FormTest extends TestCase
     /**
      * Tests that the form is created with the expected fields based on the request type.
      *
-     * @dataProvider getFormFieldsDataProvider
      * @param string $httpMethod
      * @param array $httpParams
      * @param array $expectedFields
      * @throws LocalizedException
      */
+    #[DataProvider('getFormFieldsDataProvider')]
     public function testGetFormFields(string $httpMethod, array $httpParams, array $expectedFields)
     {
         $this->requestMock->expects($this->once())
@@ -67,10 +68,10 @@ class FormTest extends TestCase
     /**
      * Tests that an exception is thrown when a required parameter is missing for the request type.
      *
-     * @dataProvider getFormFieldsInvalidDataProvider
      * @param string $httpMethod
      * @param array $httpParams
      */
+    #[DataProvider('getFormFieldsInvalidDataProvider')]
     public function testGetFormFieldsMissingParameter(string $httpMethod, array $httpParams)
     {
         $this->expectException('Magento\Framework\Exception\LocalizedException');

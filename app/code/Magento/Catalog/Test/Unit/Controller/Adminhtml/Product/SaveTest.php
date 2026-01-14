@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\Catalog\Test\Unit\Controller\Adminhtml\Product;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\Backend\Model\View\Result\Forward;
 use Magento\Backend\Model\View\Result\ForwardFactory;
 use Magento\Backend\Model\View\Result\Page;
@@ -21,6 +22,7 @@ use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Message\ManagerInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\Framework\View\Result\PageFactory;
+use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 
@@ -65,44 +67,31 @@ class SaveTest extends ProductTestCase
             Builder::class,
             ['build']
         );
-        $this->product = $this->getMockBuilder(Product::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['addData', 'getSku', 'getTypeId', 'getStoreId', '__sleep'])->getMock();
-        $this->product->expects($this->any())->method('getTypeId')->willReturn('simple');
-        $this->product->expects($this->any())->method('getStoreId')->willReturn('1');
-        $this->productBuilder->expects($this->any())->method('build')->willReturn($this->product);
-
-        $this->messageManagerMock = $this->getMockForAbstractClass(
-            ManagerInterface::class
+        $this->product = $this->createPartialMock(
+            Product::class,
+            ['addData', 'getSku', 'getTypeId', 'getStoreId', '__sleep']
         );
+        $this->product->method('getTypeId')->willReturn('simple');
+        $this->product->method('getStoreId')->willReturn('1');
+        $this->productBuilder->method('build')->willReturn($this->product);
 
-        $this->resultPage = $this->getMockBuilder(Page::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->messageManagerMock = $this->createMock(ManagerInterface::class);
 
-        $resultPageFactory = $this->getMockBuilder(PageFactory::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['create'])
-            ->getMock();
-        $resultPageFactory->expects($this->any())->method('create')->willReturn($this->resultPage);
+        $this->resultPage = $this->createMock(Page::class);
 
-        $this->resultForward = $this->getMockBuilder(Forward::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $resultForwardFactory = $this->getMockBuilder(ForwardFactory::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['create'])
-            ->getMock();
-        $resultForwardFactory->expects($this->any())
-            ->method('create')
-            ->willReturn($this->resultForward);
-        $this->resultPage->expects($this->any())->method('getLayout')->willReturn($this->layout);
+        $resultPageFactory = $this->createPartialMock(PageFactory::class, ['create']);
+        $resultPageFactory->method('create')->willReturn($this->resultPage);
+
+        $this->resultForward = $this->createMock(Forward::class);
+        $resultForwardFactory = $this->createPartialMock(ForwardFactory::class, ['create']);
+        $resultForwardFactory->method('create')->willReturn($this->resultForward);
+        $this->resultPage->method('getLayout')->willReturn($this->layout);
         $this->resultRedirectFactory = $this->createPartialMock(
             RedirectFactory::class,
             ['create']
         );
         $this->resultRedirect = $this->createMock(Redirect::class);
-        $this->resultRedirectFactory->expects($this->any())->method('create')->willReturn($this->resultRedirect);
+        $this->resultRedirectFactory->method('create')->willReturn($this->resultRedirect);
 
         $this->initializationHelper = $this->createMock(
             Helper::class
@@ -110,18 +99,13 @@ class SaveTest extends ProductTestCase
 
         $additionalParams = ['resultRedirectFactory' => $this->resultRedirectFactory];
 
-        $storeManagerInterfaceMock = $this->getMockForAbstractClass(
-            StoreManagerInterface::class,
-            [],
-            '',
-            false,
-            true,
-            true,
-            ['getStore', 'getCode']
-        );
-
-        $storeManagerInterfaceMock->expects($this->any())
-            ->method('getStore')->willReturnSelf();
+        $storeManagerInterfaceMock = $this->createMock(StoreManagerInterface::class);
+        
+        // Create a Store mock with getCode method
+        $storeMock = $this->createPartialMock(Store::class, ['getCode']);
+        $storeMock->method('getCode')->willReturn('default');
+        
+        $storeManagerInterfaceMock->method('getStore')->willReturn($storeMock);
 
         $this->action = (new ObjectManagerHelper($this))->getObject(
             Save::class,
@@ -142,15 +126,14 @@ class SaveTest extends ProductTestCase
      * @param \Exception $exception
      * @param string $methodExpected
      * @return void
-     * @dataProvider exceptionTypeDataProvider
      */
+    #[DataProvider('exceptionTypeDataProvider')]
     public function testExecuteSetsProductDataToSessionAndRedirectsToNewActionOnError($exception, $methodExpected)
     {
         $productData = ['product' => ['name' => 'test-name']];
 
-        $this->request->expects($this->any())->method('getPostValue')->willReturn($productData);
-        $this->initializationHelper->expects($this->any())->method('initialize')
-            ->willReturn($this->product);
+        $this->request->method('getPostValue')->willReturn($productData);
+        $this->initializationHelper->method('initialize')->willReturn($this->product);
         $this->product->expects($this->any())->method('getSku')->willThrowException($exception);
 
         $this->resultRedirect->expects($this->once())->method('setPath')->with('catalog/*/new');

@@ -9,7 +9,9 @@ namespace Magento\Review\Test\Unit\Block;
 
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\Customer\Model\Context as CustomerContext;
 use Magento\Customer\Model\Url;
+use Magento\Framework\App\Http\Context as HttpContext;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\DataObject;
 use Magento\Framework\Serialize\Serializer\Json;
@@ -19,9 +21,11 @@ use Magento\Framework\UrlInterface;
 use Magento\Framework\View\Element\Template\Context;
 use Magento\Review\Block\Form;
 use Magento\Review\Helper\Data;
+use Magento\Store\Model\StoreManager;
 use Magento\Store\Model\StoreManagerInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\Review\Model\RatingFactory;
 use Magento\Review\Model\Rating;
 use Magento\Review\Model\ResourceModel\Rating\Collection as RatingCollection;
@@ -31,10 +35,14 @@ use Magento\Review\Model\ResourceModel\Rating\Collection as RatingCollection;
  */
 class FormTest extends TestCase
 {
-    /** @var Form */
+    /**
+     * @var Form
+     */
     protected $object;
 
-    /** @var ObjectManagerHelper */
+    /**
+     * @var ObjectManagerHelper
+     */
     protected $objectManagerHelper;
 
     /**
@@ -42,7 +50,9 @@ class FormTest extends TestCase
      */
     protected $requestMock;
 
-    /** @var Context|MockObject */
+    /**
+     * @var Context|MockObject
+     */
     protected $context;
 
     /**
@@ -50,32 +60,37 @@ class FormTest extends TestCase
      */
     protected $reviewDataMock;
 
-    /** @var ProductRepositoryInterface|MockObject */
+    /**
+     * @var ProductRepositoryInterface|MockObject
+     */
     protected $productRepository;
 
-    /** @var StoreManagerInterface|MockObject */
+    /**
+     * @var StoreManagerInterface|MockObject
+     */
     protected $storeManager;
 
-    /** @var UrlInterface|MockObject */
+    /**
+     * @var UrlInterface|MockObject
+     */
     protected $urlBuilder;
 
-    /** @var Json|MockObject */
+    /**
+     * @var Json|MockObject
+     */
     private $serializerMock;
 
     protected function setUp(): void
     {
-        $this->storeManager = $this->getMockForAbstractClass(StoreManagerInterface::class);
-        $this->requestMock = $this->getMockForAbstractClass(RequestInterface::class);
-        $this->reviewDataMock = $this->getMockBuilder(Data::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->storeManager = $this->createPartialMock(StoreManager::class, ['getStore']);
+        $this->requestMock = $this->createMock(RequestInterface::class);
+        $this->reviewDataMock = $this->createMock(Data::class);
 
         $this->reviewDataMock->expects($this->once())
             ->method('getIsGuestAllowToWrite')
             ->willReturn(true);
 
-        $this->urlBuilder = $this->getMockBuilder(UrlInterface::class)
-            ->getMockForAbstractClass();
+        $this->urlBuilder = $this->createMock(UrlInterface::class);
         $this->context = $this->createMock(Context::class);
         $this->context->expects(
             $this->any()
@@ -88,10 +103,9 @@ class FormTest extends TestCase
             ->method('getRequest')
             ->willReturn($this->requestMock);
         $this->context->expects($this->any())->method('getUrlBuilder')->willReturn($this->urlBuilder);
-        $this->productRepository = $this->getMockForAbstractClass(ProductRepositoryInterface::class);
+        $this->productRepository = $this->createMock(ProductRepositoryInterface::class);
 
-        $this->serializerMock = $this->getMockBuilder(Json::class)
-            ->getMock();
+        $this->serializerMock = $this->createMock(Json::class);
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->object = $this->objectManagerHelper->getObject(
@@ -128,7 +142,7 @@ class FormTest extends TestCase
             ->with('id', false)
             ->willReturn($productId);
 
-        $productMock = $this->getMockForAbstractClass(ProductInterface::class);
+        $productMock = $this->createMock(ProductInterface::class);
         $this->productRepository->expects($this->once())
             ->method('getById')
             ->with($productId, false, $storeId)
@@ -156,7 +170,7 @@ class FormTest extends TestCase
             ->with('id', false)
             ->willReturn($productIdNonInt);
 
-        $productMock = $this->getMockForAbstractClass(ProductInterface::class);
+        $productMock = $this->createMock(ProductInterface::class);
         $this->productRepository->expects($this->once())
             ->method('getById')
             ->with($productId, false, $storeId)
@@ -166,11 +180,11 @@ class FormTest extends TestCase
     }
 
     /**
-     * @param bool $isSecure
+     * @param bool   $isSecure
      * @param string $actionUrl
-     * @param int $productId
-     * @dataProvider getActionDataProvider
+     * @param int    $productId
      */
+    #[DataProvider('getActionDataProvider')]
     public function testGetAction($isSecure, $actionUrl, $productId)
     {
         $this->urlBuilder->expects($this->any())
@@ -263,10 +277,7 @@ class FormTest extends TestCase
     {
         $expectedUrl = 'https://example.com/customer/account/create/';
 
-        $customerUrl = $this->getMockBuilder(Url::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['getRegisterUrl'])
-            ->getMock();
+        $customerUrl = $this->createPartialMock(Url::class, ['getRegisterUrl']);
 
         $customerUrl->expects($this->once())
             ->method('getRegisterUrl')
@@ -287,20 +298,22 @@ class FormTest extends TestCase
         $encoded = 'ENCODED_REFERER';
         $loginUrlBase = 'https://example.com/customer/account/login/';
 
-        $urlBuilder = $this->createMock(\Magento\Framework\UrlInterface::class);
+        $urlBuilder = $this->createMock(UrlInterface::class);
         $urlBuilder->method('getUrl')
-            ->willReturnCallback(function ($route, $params = []) use ($currentUrl, $encoded, $loginUrlBase) {
-                if ($route === '*/*/*') {
-                    $this->assertSame(['_current' => true], $params);
-                    return $currentUrl;
+            ->willReturnCallback(
+                function ($route, $params = []) use ($currentUrl, $encoded, $loginUrlBase) {
+                    if ($route === '*/*/*') {
+                        $this->assertSame(['_current' => true], $params);
+                        return $currentUrl;
+                    }
+                    if ($route === 'customer/account/login/') {
+                        $this->assertArrayHasKey(Url::REFERER_QUERY_PARAM_NAME, $params);
+                        $this->assertSame($encoded, $params[Url::REFERER_QUERY_PARAM_NAME]);
+                        return $loginUrlBase . '?' . Url::REFERER_QUERY_PARAM_NAME . '=' . $encoded;
+                    }
+                    return '';
                 }
-                if ($route === 'customer/account/login/') {
-                    $this->assertArrayHasKey(Url::REFERER_QUERY_PARAM_NAME, $params);
-                    $this->assertSame($encoded, $params[Url::REFERER_QUERY_PARAM_NAME]);
-                    return $loginUrlBase . '?' . Url::REFERER_QUERY_PARAM_NAME . '=' . $encoded;
-                }
-                return '';
-            });
+            );
 
         $urlEncoder = $this->createMock(EncoderInterface::class);
         $urlEncoder->expects($this->once())
@@ -308,18 +321,15 @@ class FormTest extends TestCase
             ->with($currentUrl . '#review-form')
             ->willReturn($encoded);
 
-        $httpContext = $this->createMock(\Magento\Framework\App\Http\Context::class);
+        $httpContext = $this->createMock(HttpContext::class);
         $httpContext->method('getValue')
-            ->with(\Magento\Customer\Model\Context::CONTEXT_AUTH)
+            ->with(CustomerContext::CONTEXT_AUTH)
             ->willReturn(false);
 
-        $reviewData = $this->createMock(\Magento\Review\Helper\Data::class);
+        $reviewData = $this->createMock(Data::class);
         $reviewData->method('getIsGuestAllowToWrite')->willReturn(false);
 
-        $formBlock = $this->getMockBuilder(Form::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods([])
-            ->getMock();
+        $formBlock = $this->createPartialMock(Form::class, []);
 
         $this->setProtectedProperty($formBlock, '_urlBuilder', $urlBuilder);
         $this->setProtectedProperty($formBlock, 'urlEncoder', $urlEncoder);
@@ -339,10 +349,7 @@ class FormTest extends TestCase
         StoreManagerInterface $storeManager,
         RatingFactory $ratingFactory
     ): Form {
-        $formBlock = $this->getMockBuilder(Form::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods([])
-            ->getMock();
+        $formBlock = $this->createPartialMock(Form::class, []);
 
         // Inject protected properties via reflection to avoid full framework context construction
         $this->setProtectedProperty($formBlock, '_storeManager', $storeManager);

@@ -67,7 +67,7 @@ class TierPriceStorageTest extends TestCase
         $this->tierPriceValidator = $this->createMock(TierPriceValidator::class);
         $this->tierPriceFactory = $this->createMock(TierPriceFactory::class);
         $this->priceIndexProcessor = $this->createMock(PriceIndexerProcessor::class);
-        $this->productIdLocator = $this->getMockForAbstractClass(ProductIdLocatorInterface::class);
+        $this->productIdLocator = $this->createMock(ProductIdLocatorInterface::class);
         $this->getCustomerGroupCodesByIds = $this->createMock(GetCustomerGroupCodesByIds::class);
 
         $this->tierPriceStorage = new TierPriceStorage(
@@ -136,8 +136,7 @@ class TierPriceStorageTest extends TestCase
             ->method('execute')
             ->with([1, 2])
             ->willReturn([1 => 'General', 2 => 'Wholesale']);
-        $price = $this->getMockBuilder(TierPriceInterface::class)
-            ->getMockForAbstractClass();
+        $price = $this->createMock(TierPriceInterface::class);
         $this->tierPriceFactory
             ->expects($this->exactly(3))
             ->method('create')
@@ -188,7 +187,7 @@ class TierPriceStorageTest extends TestCase
      */
     public function testUpdate()
     {
-        $price = $this->getMockForAbstractClass(TierPriceInterface::class);
+        $price = $this->createMock(TierPriceInterface::class);
         $result = $this->createMock(PriceValidationResult::class);
         $result->expects($this->once())
             ->method('getFailedRowIds')
@@ -247,7 +246,7 @@ class TierPriceStorageTest extends TestCase
      */
     public function testReplace()
     {
-        $price = $this->getMockForAbstractClass(TierPriceInterface::class);
+        $price = $this->createMock(TierPriceInterface::class);
         $price->expects($this->atLeastOnce())
             ->method('getSku')
             ->willReturn('virtual');
@@ -292,7 +291,7 @@ class TierPriceStorageTest extends TestCase
      */
     public function testDelete()
     {
-        $price = $this->getMockForAbstractClass(TierPriceInterface::class);
+        $price = $this->createMock(TierPriceInterface::class);
         $price->expects($this->atLeastOnce())
             ->method('getSku')
             ->willReturn('simple');

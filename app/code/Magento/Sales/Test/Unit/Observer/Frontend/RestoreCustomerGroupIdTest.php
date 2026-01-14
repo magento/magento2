@@ -17,12 +17,17 @@ use Magento\Quote\Model\Quote;
 use Magento\Sales\Observer\Frontend\RestoreCustomerGroupId;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
+use Magento\Quote\Model\Quote\Address as QuoteAddress;
 
 /**
  * Tests Magento\Sales\Observer\Frontend\RestoreCustomerGroupIdTest
  */
 class RestoreCustomerGroupIdTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var Address|MockObject
      */
@@ -41,37 +46,29 @@ class RestoreCustomerGroupIdTest extends TestCase
 
     /**
      * @param string|null $configAddressType
-     * @dataProvider restoreCustomerGroupIdDataProvider
      */
+    #[DataProvider('restoreCustomerGroupIdDataProvider')]
     public function testExecute($configAddressType)
     {
-        $eventMock = $this->getMockBuilder(Event::class)
-            ->addMethods(['getShippingAssignment', 'getQuote'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $eventMock = $this->createPartialMockWithReflection(Event::class, ['getShippingAssignment', 'getQuote']);
         $observer = $this->createPartialMock(Observer::class, ['getEvent']);
         $observer->expects($this->exactly(2))->method('getEvent')->willReturn($eventMock);
 
-        $shippingAssignmentMock = $this->getMockForAbstractClass(ShippingAssignmentInterface::class);
+        $shippingAssignmentMock = $this->createMock(ShippingAssignmentInterface::class);
         $quoteMock = $this->createMock(Quote::class);
 
         $eventMock->expects($this->once())->method('getShippingAssignment')->willReturn($shippingAssignmentMock);
         $eventMock->expects($this->once())->method('getQuote')->willReturn($quoteMock);
 
-        $shippingMock = $this->getMockForAbstractClass(ShippingInterface::class);
+        $shippingMock = $this->createMock(ShippingInterface::class);
         $shippingAssignmentMock->expects($this->once())->method('getShipping')->willReturn($shippingMock);
 
-        $quoteAddress = $this->getMockBuilder(\Magento\Quote\Model\Quote\Address::class)->addMethods(
-            [
+        $quoteAddress = $this->createPartialMockWithReflection(QuoteAddress::class, array_merge([
                 'getPrevQuoteCustomerGroupId',
                 'unsPrevQuoteCustomerGroupId',
                 'hasPrevQuoteCustomerGroupId',
                 'setCustomerGroupId'
-            ]
-        )
-            ->onlyMethods(['getQuote'])
-            ->disableOriginalConstructor()
-            ->getMock();
+            ], ['getQuote']));
         $shippingMock->expects($this->once())->method('getAddress')->willReturn($quoteAddress);
 
         $this->customerAddressHelperMock->expects($this->once())

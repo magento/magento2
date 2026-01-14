@@ -17,11 +17,15 @@ use Magento\Framework\Pricing\PriceInfoInterface;
 use Magento\Framework\Pricing\SaleableInterface;
 use Magento\Wishlist\Model\Item\Option;
 use Magento\Wishlist\Pricing\ConfiguredPrice\Downloadable;
+use Magento\Catalog\Model\Product;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 class DownloadableTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var SaleableInterface|MockObject
      */
@@ -49,28 +53,19 @@ class DownloadableTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->priceInfoMock = $this->getMockBuilder(PriceInfoInterface::class)
-            ->getMockForAbstractClass();
+        $this->priceInfoMock = $this->createMock(PriceInfoInterface::class);
 
-        $this->saleableItem = $this->getMockBuilder(SaleableInterface::class)
-            ->addMethods([
-                'getLinksPurchasedSeparately',
-                'getCustomOption',
-                'getTypeInstance'
-            ])
-            ->onlyMethods([
-                'getPriceInfo'
-            ])
-            ->getMockForAbstractClass();
+        $this->saleableItem = $this->createPartialMockWithReflection(
+            Product::class,
+            ['getLinksPurchasedSeparately', 'getCustomOption', 'getTypeInstance', 'getPriceInfo']
+        );
         $this->saleableItem->expects($this->once())
             ->method('getPriceInfo')
             ->willReturn($this->priceInfoMock);
 
-        $this->calculator = $this->getMockBuilder(CalculatorInterface::class)
-            ->getMockForAbstractClass();
+        $this->calculator = $this->createMock(CalculatorInterface::class);
 
-        $this->priceCurrency = $this->getMockBuilder(PriceCurrencyInterface::class)
-            ->getMockForAbstractClass();
+        $this->priceCurrency = $this->createMock(PriceCurrencyInterface::class);
 
         $this->model = new Downloadable(
             $this->saleableItem,
@@ -84,30 +79,23 @@ class DownloadableTest extends TestCase
     {
         $priceValue = 10;
 
-        $wishlistItemOptionMock = $this->getMockBuilder(Option::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $wishlistItemOptionMock = $this->createMock(Option::class);
         $wishlistItemOptionMock->expects($this->once())
             ->method('getValue')
             ->willReturn('1,2');
 
-        $linkMock = $this->getMockBuilder(Link::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $linkMock = $this->createMock(Link::class);
         $linkMock->expects($this->once())
             ->method('getPrice')
             ->willReturn(10);
 
-        $productTypeMock = $this->getMockBuilder(Type::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $productTypeMock = $this->createMock(Type::class);
         $productTypeMock->expects($this->once())
             ->method('getLinks')
             ->with($this->saleableItem)
             ->willReturn([1 => $linkMock]);
 
-        $priceMock = $this->getMockBuilder(PriceInterface::class)
-            ->getMockForAbstractClass();
+        $priceMock = $this->createMock(PriceInterface::class);
         $priceMock->expects($this->once())
             ->method('getValue')
             ->willReturn($priceValue);
@@ -135,8 +123,7 @@ class DownloadableTest extends TestCase
     {
         $priceValue = 10;
 
-        $priceMock = $this->getMockBuilder(PriceInterface::class)
-            ->getMockForAbstractClass();
+        $priceMock = $this->createMock(PriceInterface::class);
         $priceMock->expects($this->once())
             ->method('getValue')
             ->willReturn($priceValue);
@@ -157,8 +144,7 @@ class DownloadableTest extends TestCase
     {
         $priceValue = 10;
 
-        $priceMock = $this->getMockBuilder(PriceInterface::class)
-            ->getMockForAbstractClass();
+        $priceMock = $this->createMock(PriceInterface::class);
         $priceMock->expects($this->once())
             ->method('getValue')
             ->willReturn($priceValue);
@@ -168,16 +154,12 @@ class DownloadableTest extends TestCase
             ->with(BasePrice::PRICE_CODE)
             ->willReturn($priceMock);
 
-        $wishlistItemOptionMock = $this->getMockBuilder(Option::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $wishlistItemOptionMock = $this->createMock(Option::class);
         $wishlistItemOptionMock->expects($this->once())
             ->method('getValue')
             ->willReturn(null);
 
-        $productTypeMock = $this->getMockBuilder(Type::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $productTypeMock = $this->createMock(Type::class);
         $productTypeMock->expects($this->once())
             ->method('getLinks')
             ->with($this->saleableItem)
@@ -199,8 +181,7 @@ class DownloadableTest extends TestCase
 
     public function testGetValueWithNoCustomOption()
     {
-        $priceMock = $this->getMockBuilder(PriceInterface::class)
-            ->getMockForAbstractClass();
+        $priceMock = $this->createMock(PriceInterface::class);
         $priceMock->expects($this->once())
             ->method('getValue')
             ->willReturn(0);

@@ -53,7 +53,7 @@ class YesNo
      * @param OutputInterface $output An OutputInterface instance
      * @return bool
      */
-    public function execute(array $messages, InputInterface $input, OutputInterface $output)
+    public function execute(array $messages, InputInterface $input, OutputInterface $output): bool
     {
         if (!$input->isInteractive()) {
             return true;

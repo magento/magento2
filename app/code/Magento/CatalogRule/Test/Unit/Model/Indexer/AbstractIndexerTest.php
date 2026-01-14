@@ -40,17 +40,17 @@ class AbstractIndexerTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->_eventManagerMock = $this->getMockForAbstractClass(ManagerInterface::class);
+        $this->_eventManagerMock = $this->createMock(ManagerInterface::class);
         $this->indexBuilder = $this->createMock(IndexBuilder::class);
 
-        $this->indexer = $this->getMockForAbstractClass(
-            AbstractIndexer::class,
-            [
+        $this->indexer = $this->getMockBuilder(AbstractIndexer::class)
+            ->setConstructorArgs([
                 $this->indexBuilder,
                 $this->_eventManagerMock
-            ]
-        );
-        $cacheMock = $this->getMockForAbstractClass(CacheInterface::class);
+            ])
+            ->onlyMethods(['doExecuteList', 'doExecuteRow'])
+            ->getMock();
+        $cacheMock = $this->createMock(CacheInterface::class);
         $reflection = new \ReflectionClass(AbstractIndexer::class);
         $reflectionProperty = $reflection->getProperty('cacheManager');
         $reflectionProperty->setAccessible(true);

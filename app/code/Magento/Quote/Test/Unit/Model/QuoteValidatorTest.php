@@ -10,14 +10,15 @@ namespace Magento\Quote\Test\Unit\Model;
 use Magento\Directory\Model\AllowedCountries;
 use Magento\Quote\Model\Quote;
 use Magento\Quote\Model\ValidationRules\QuoteValidationRuleInterface;
-use Magento\Quote\Test\Unit\Helper\QuoteTestHelper;
 use Magento\Quote\Model\Quote\Validator\MinimumOrderAmount\ValidationMessage as OrderAmountValidationMessage;
 use Magento\Quote\Model\QuoteValidator;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 class QuoteValidatorTest extends TestCase
 {
+    use MockCreationTrait;
     /**
      * @var QuoteValidator
      */
@@ -59,8 +60,8 @@ class QuoteValidatorTest extends TestCase
             $quoteValidationRule
         );
 
-        $this->quoteMock = $this->createPartialMock(
-            QuoteTestHelper::class,
+        $this->quoteMock = $this->createPartialMockWithReflection(
+            Quote::class,
             [
                 'getHasError',
                 'setHasError',

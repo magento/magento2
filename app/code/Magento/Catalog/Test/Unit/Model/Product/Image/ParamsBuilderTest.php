@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\Catalog\Test\Unit\Model\Product\Image;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\Catalog\Model\Product\Image;
 use Magento\Catalog\Model\Product\Image\ParamsBuilder;
 use Magento\Framework\App\Area;
@@ -65,13 +66,11 @@ class ParamsBuilderTest extends TestCase
     protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
-        $this->scopeConfig = $this->getMockForAbstractClass(ScopeConfigInterface::class);
-        $this->viewConfig = $this->getMockForAbstractClass(ConfigInterface::class);
-        $this->design = $this->getMockBuilder(DesignInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->scopeConfig = $this->createMock(ScopeConfigInterface::class);
+        $this->viewConfig = $this->createMock(ConfigInterface::class);
+        $this->design = $this->createMock(DesignInterface::class);
         $this->themeFactory = $this->createMock(FlyweightFactory::class);
-        $this->theme = $this->getMockForAbstractClass(ThemeInterface::class);
+        $this->theme = $this->createMock(ThemeInterface::class);
 
         $this->model = $objectManager->getObject(
             ParamsBuilder::class,
@@ -100,8 +99,8 @@ class ParamsBuilderTest extends TestCase
      * @param array $config
      * @param array $imageArguments
      * @param array $expected
-     * @dataProvider buildDataProvider
      */
+    #[DataProvider('buildDataProvider')]
     public function testBuild(
         int $scopeId,
         string $themeId,

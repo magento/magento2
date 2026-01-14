@@ -75,7 +75,11 @@
         <waitForElementClickable selector="{{CheckoutShippingMethodsSection.smartPostShippingMethod}}" stepKey="waitForSelectFedexShippingMethod"/>
         <click selector="{{CheckoutShippingMethodsSection.smartPostShippingMethod}}" stepKey="selectFedexShippingMethod"/>
         <actionGroup ref="StorefrontCheckoutClickNextOnShippingStepActionGroup" stepKey="clickNext"/>
+        <!-- Wait for payment section to be fully loaded after FedEx validation -->
+        <waitForElementVisible selector="{{CheckoutPaymentSection.paymentSectionTitle}}" time="60" stepKey="waitForPaymentSectionLoaded"/>
+        <seeCurrentUrlMatches regex="~/checkout/?#payment~" stepKey="assertCheckoutPaymentUrl"/>
         <actionGroup ref="CheckoutSelectCheckMoneyOrderPaymentActionGroup" stepKey="selectCheckMoneyPayment"/>
+        <waitForElementVisible selector="{{CheckoutPaymentSection.placeOrder}}" time="30" stepKey="waitForPlaceOrderButtonVisible"/>
         <actionGroup ref="ClickPlaceOrderActionGroup" stepKey="clickPlaceOrder"/>
         <!-- I see order successful Page -->
         <actionGroup ref="AssertStorefrontCheckoutSuccessActionGroup" stepKey="assertOrderSuccess"/>

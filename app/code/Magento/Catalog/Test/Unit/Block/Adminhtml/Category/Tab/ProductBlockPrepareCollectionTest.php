@@ -78,10 +78,7 @@ class ProductBlockPrepareCollectionTest extends TestCase
         $this->backendSessionMock = $this->createMock(BackendSession::class);
 
         // Use Http request so getPost() exists
-        $this->requestMock = $this->getMockBuilder(HttpRequest::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['getParam', 'getPost', 'has'])
-            ->getMock();
+        $this->requestMock = $this->createPartialMock(HttpRequest::class, ['getParam', 'getPost', 'has']);
 
         $this->collectionFactoryMock = $this->createMock(ProductCollectionFactory::class);
         $this->collectionMock = $this->createMock(ProductCollection::class);
@@ -91,10 +88,7 @@ class ProductBlockPrepareCollectionTest extends TestCase
         $this->statusMock = $this->createMock(Status::class);
 
         // mathRandom for getId() inside Grid::getParam()
-        $this->mathRandomMock = $this->getMockBuilder(Random::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['getUniqueHash'])
-            ->getMock();
+        $this->mathRandomMock = $this->createPartialMock(Random::class, ['getUniqueHash']);
         $this->mathRandomMock->method('getUniqueHash')->willReturn('id_test');
 
         $this->collectionFactoryMock->method('create')->willReturn($this->collectionMock);
@@ -112,10 +106,7 @@ class ProductBlockPrepareCollectionTest extends TestCase
 
     private function buildBlock(array $methodsToMock, object $categoryStub): CategoryTabProductBlock
     {
-        $block = $this->getMockBuilder(CategoryTabProductBlock::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods($methodsToMock)
-            ->getMock();
+        $block = $this->createPartialMock(CategoryTabProductBlock::class, $methodsToMock);
 
         // private Product::$productCollectionFactory
         $declProduct = new \ReflectionClass(CategoryTabProductBlock::class);

@@ -24,6 +24,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Constraint\IsIdentical;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -66,9 +67,9 @@ class DataTest extends TestCase
     protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
-        $this->scopeConfigMock = $this->getMockForAbstractClass(ScopeConfigInterface::class);
+        $this->scopeConfigMock = $this->createMock(ScopeConfigInterface::class);
         $this->scopeConfigMock->expects($this->any())->method('isSetFlag')->willReturn(false);
-        $requestMock = $this->getMockForAbstractClass(RequestInterface::class);
+        $requestMock = $this->createMock(RequestInterface::class);
         $context = $this->createMock(Context::class);
         $context->method('getRequest')
             ->willReturn($requestMock);
@@ -95,7 +96,7 @@ class DataTest extends TestCase
         $this->jsonHelperMock = $this->createMock(JsonDataHelper::class);
 
         $this->_store = $this->createMock(Store::class);
-        $storeManager = $this->getMockForAbstractClass(StoreManagerInterface::class);
+        $storeManager = $this->createMock(StoreManagerInterface::class);
         $storeManager->expects($this->any())->method('getStore')->willReturn($this->_store);
 
         $currencyFactory = $this->createMock(CurrencyFactory::class);
@@ -119,8 +120,8 @@ class DataTest extends TestCase
      * @param array $expectedDataToEncode
      *
      * @throws NoSuchEntityException
-     * @dataProvider getRegionJsonDataProvider
      */
+    #[DataProvider('getRegionJsonDataProvider')]
     public function testGetRegionJson(
         ?string $configValue,
         array $countryIds,
@@ -170,7 +171,6 @@ class DataTest extends TestCase
             'encoded_json'
         );
 
-        // Test
         $result = $this->_object->getRegionJson();
         $this->assertEquals('encoded_json', $result);
     }
@@ -247,8 +247,8 @@ class DataTest extends TestCase
     /**
      * @param string $configValue
      * @param mixed $expected
-     * @dataProvider countriesCommaListDataProvider
      */
+    #[DataProvider('countriesCommaListDataProvider')]
     public function testGetCountriesWithStatesRequired($configValue, $expected)
     {
         $this->scopeConfigMock->expects(
@@ -268,8 +268,8 @@ class DataTest extends TestCase
     /**
      * @param string $configValue
      * @param mixed $expected
-     * @dataProvider countriesCommaListDataProvider
      */
+    #[DataProvider('countriesCommaListDataProvider')]
     public function testGetCountriesWithOptionalZip($configValue, $expected)
     {
         $this->scopeConfigMock->expects(
@@ -339,8 +339,8 @@ class DataTest extends TestCase
     /**
      * @param string $topCountriesValue
      * @param array $expectedResult
-     * @dataProvider topCountriesDataProvider
      */
+    #[DataProvider('topCountriesDataProvider')]
     public function testGetTopCountryCodesReturnsParsedConfigurationValue($topCountriesValue, $expectedResult)
     {
         $this->scopeConfigMock->expects($this->once())

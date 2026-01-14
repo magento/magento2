@@ -38,7 +38,7 @@ class BatchSizeCalculatorTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->estimatorMock = $this->getMockForAbstractClass(BatchSizeManagementInterface::class);
+        $this->estimatorMock = $this->createMock(BatchSizeManagementInterface::class);
         $this->batchRowsCount = 200;
         $this->model = new BatchSizeCalculator(
             ['default' => $this->batchRowsCount],
@@ -50,7 +50,7 @@ class BatchSizeCalculatorTest extends TestCase
 
     public function testEstimateBatchSize()
     {
-        $connectionMock = $this->getMockForAbstractClass(AdapterInterface::class);
+        $connectionMock = $this->createMock(AdapterInterface::class);
         $typeId = 'default';
         $batchSize = 100500;
 

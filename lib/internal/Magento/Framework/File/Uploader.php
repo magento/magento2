@@ -806,7 +806,7 @@ class Uploader
     }
 
     /**
-     * Get new file name if the same is already exists
+     * Get new file name if the same already exists
      *
      * @param string $destinationFile
      * @return string

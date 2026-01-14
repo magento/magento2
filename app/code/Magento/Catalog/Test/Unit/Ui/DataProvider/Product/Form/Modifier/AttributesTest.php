@@ -10,11 +10,17 @@ namespace Magento\Catalog\Test\Unit\Ui\DataProvider\Product\Form\Modifier;
 use Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\Attributes;
 use Magento\Framework\AuthorizationInterface;
 use Magento\Framework\Registry;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\UrlInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 
 class AttributesTest extends AbstractModifierTestCase
 {
+    /**
+     * @var ObjectManager
+     */
+    protected $objectManager;
+
     /**
      * @var UrlInterface|MockObject
      */
@@ -33,13 +39,10 @@ class AttributesTest extends AbstractModifierTestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $this->urlBuilderMock = $this->getMockBuilder(UrlInterface::class)
-            ->getMockForAbstractClass();
-        $this->registryMock = $this->getMockBuilder(Registry::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->authorizationMock = $this->getMockBuilder(AuthorizationInterface::class)
-            ->getMockForAbstractClass();
+        $this->objectManager = new ObjectManager($this);
+        $this->urlBuilderMock = $this->createMock(UrlInterface::class);
+        $this->registryMock = $this->createMock(Registry::class);
+        $this->authorizationMock = $this->createMock(AuthorizationInterface::class);
     }
 
     /**
