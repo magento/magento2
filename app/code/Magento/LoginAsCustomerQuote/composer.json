@@ -1,6 +1,10 @@
 {
     "name": "magento/module-login-as-customer-quote",
     "description": "",
+    "type": "magento2-module",
+    "config": {
+        "sort-packages": true
+    },
     "require": {
         "php": "~8.2.0||~8.3.0||~8.4.0",
         "magento/framework": "*",
@@ -11,7 +15,6 @@
     "suggest": {
         "magento/module-login-as-customer-api": "*"
     },
-    "type": "magento2-module",
     "license": [
         "OSL-3.0",
         "AFL-3.0"

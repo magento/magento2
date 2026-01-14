@@ -1,16 +1,19 @@
 {
     "name": "magento/module-media-gallery-catalog-ui",
     "description": "Magento module that implement category grid for media gallery.",
+    "type": "magento2-module",
+    "config": {
+        "sort-packages": true
+    },
     "require": {
         "php": "~8.2.0||~8.3.0||~8.4.0",
         "magento/framework": "*",
-        "magento/module-cms": "*",
         "magento/module-backend": "*",
         "magento/module-catalog": "*",
+        "magento/module-cms": "*",
         "magento/module-store": "*",
         "magento/module-ui": "*"
     },
-    "type": "magento2-module",
     "license": [
         "OSL-3.0",
         "AFL-3.0"
