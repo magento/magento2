@@ -11,17 +11,18 @@ use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\Downloadable\Controller\Adminhtml\Downloadable\Product\Edit\Link;
 use Magento\Downloadable\Helper\Download;
 use Magento\Downloadable\Helper\File;
-use Magento\Downloadable\Test\Unit\Helper\LinkTestHelper;
+use Magento\Downloadable\Model\Link as LinkModel;
 use Magento\Framework\App\Request\Http;
 use Magento\Framework\App\ResponseInterface;
 use Magento\Framework\ObjectManager\ObjectManager;
-use Magento\Framework\App\Test\Unit\Helper\ResponseTestHelper;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 class LinkTest extends TestCase
 {
+    use MockCreationTrait;
     /**
      * @var Link
      */
@@ -68,8 +69,8 @@ class LinkTest extends TestCase
         $this->objectManagerHelper = new ObjectManagerHelper($this);
 
         $this->request = $this->createMock(Http::class);
-        $this->response = $this->createPartialMock(
-            ResponseTestHelper::class,
+        $this->response = $this->createPartialMockWithReflection(
+            ResponseInterface::class,
             [
                 'setHttpResponseCode',
                 'clearBody',
@@ -93,8 +94,8 @@ class LinkTest extends TestCase
                 'getContentDisposition'
             ]
         );
-        $this->linkModel = $this->createPartialMock(
-            LinkTestHelper::class,
+        $this->linkModel = $this->createPartialMockWithReflection(
+            LinkModel::class,
             [
                 'load',
                 'getId',

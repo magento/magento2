@@ -24,7 +24,7 @@ use Magento\Quote\Model\MaskedQuoteIdToQuoteId;
 use Magento\Quote\Model\Quote;
 use Magento\Store\Model\App\Emulation;
 use Magento\Store\Model\ScopeInterface;
-use Magento\Quote\Test\Unit\Helper\PaymentExtensionTestHelper;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\MockObject\RuntimeException;
 use PHPUnit\Framework\TestCase;
@@ -34,6 +34,8 @@ use PHPUnit\Framework\TestCase;
  */
 class GuestValidationTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var GuestValidation
      */
@@ -225,8 +227,8 @@ class GuestValidationTest extends TestCase
      */
     private function getPaymentExtension(): PaymentExtensionInterface
     {
-        return $this->createPartialMock(
-            PaymentExtensionTestHelper::class,
+        return $this->createPartialMockWithReflection(
+            PaymentExtensionInterface::class,
             ['getAgreementIds', 'setAgreementIds']
         );
     }
