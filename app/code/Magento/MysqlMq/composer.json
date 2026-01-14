@@ -1,17 +1,17 @@
 {
     "name": "magento/module-mysql-mq",
     "description": "N/A",
+    "type": "magento2-module",
     "config": {
         "sort-packages": true
     },
     "require": {
+        "php": "~8.2.0||~8.3.0||~8.4.0",
         "magento/framework": "*",
         "magento/framework-message-queue": "*",
         "magento/magento-composer-installer": "*",
-        "magento/module-store": "*",
-        "php": "~8.2.0||~8.3.0||~8.4.0"
+        "magento/module-store": "*"
     },
-    "type": "magento2-module",
     "license": [
         "OSL-3.0",
         "AFL-3.0"

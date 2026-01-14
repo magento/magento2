@@ -1,6 +1,10 @@
 {
     "name": "magento/module-media-gallery-ui-api",
     "description": "Magento module responsible for the media gallery UI implementation API",
+    "type": "magento2-module",
+    "config": {
+        "sort-packages": true
+    },
     "require": {
         "php": "~8.2.0||~8.3.0||~8.4.0",
         "magento/framework": "*"
@@ -8,7 +12,6 @@
     "suggest": {
         "magento/module-cms": "*"
     },
-    "type": "magento2-module",
     "license": [
         "OSL-3.0",
         "AFL-3.0"

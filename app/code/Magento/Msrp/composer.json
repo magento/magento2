@@ -1,6 +1,7 @@
 {
     "name": "magento/module-msrp",
     "description": "N/A",
+    "type": "magento2-module",
     "config": {
         "sort-packages": true
     },
@@ -17,7 +18,6 @@
         "magento/module-bundle": "*",
         "magento/module-msrp-sample-data": "*"
     },
-    "type": "magento2-module",
     "license": [
         "OSL-3.0",
         "AFL-3.0"

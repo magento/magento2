@@ -1,6 +1,7 @@
 {
     "name": "magento/module-media-storage",
     "description": "N/A",
+    "type": "magento2-module",
     "config": {
         "sort-packages": true
     },
@@ -8,15 +9,14 @@
         "php": "~8.2.0||~8.3.0||~8.4.0",
         "magento/framework": "*",
         "magento/framework-bulk": "*",
+        "magento/module-asynchronous-operations": "*",
+        "magento/module-authorization": "*",
         "magento/module-backend": "*",
+        "magento/module-catalog": "*",
         "magento/module-config": "*",
         "magento/module-store": "*",
-        "magento/module-catalog": "*",
-        "magento/module-theme": "*",
-        "magento/module-asynchronous-operations": "*",
-        "magento/module-authorization": "*"
+        "magento/module-theme": "*"
     },
-    "type": "magento2-module",
     "license": [
         "OSL-3.0",
         "AFL-3.0"

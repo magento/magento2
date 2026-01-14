@@ -1,12 +1,14 @@
 {
     "name": "magento/module-offline-shipping",
     "description": "N/A",
+    "type": "magento2-module",
     "config": {
         "sort-packages": true
     },
     "require": {
         "php": "~8.2.0||~8.3.0||~8.4.0",
         "magento/framework": "*",
+        "magento/module-async-config": "*",
         "magento/module-backend": "*",
         "magento/module-catalog": "*",
         "magento/module-config": "*",
@@ -15,14 +17,12 @@
         "magento/module-sales": "*",
         "magento/module-sales-rule": "*",
         "magento/module-shipping": "*",
-        "magento/module-store": "*",
-        "magento/module-async-config": "*"
+        "magento/module-store": "*"
     },
     "suggest": {
         "magento/module-checkout": "*",
         "magento/module-offline-shipping-sample-data": "*"
     },
-    "type": "magento2-module",
     "license": [
         "OSL-3.0",
         "AFL-3.0"

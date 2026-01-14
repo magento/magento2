@@ -1,6 +1,7 @@
 {
     "name": "magento/module-order-cancellation",
     "description": "N/A",
+    "type": "magento2-module",
     "config": {
         "sort-packages": true
     },
@@ -8,10 +9,9 @@
         "php": "~8.2.0||~8.3.0||~8.4.0",
         "magento/framework": "*",
         "magento/module-config": "*",
-        "magento/module-store": "*",
-        "magento/module-sales": "*"
+        "magento/module-sales": "*",
+        "magento/module-store": "*"
     },
-    "type": "magento2-module",
     "license": [
         "OSL-3.0",
         "AFL-3.0"
