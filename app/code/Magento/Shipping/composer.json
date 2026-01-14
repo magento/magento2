@@ -1,6 +1,7 @@
 {
     "name": "magento/module-shipping",
     "description": "N/A",
+    "type": "magento2-module",
     "config": {
         "sort-packages": true
     },
@@ -23,11 +24,10 @@
         "magento/module-user": "*"
     },
     "suggest": {
+        "magento/module-config": "*",
         "magento/module-fedex": "*",
-        "magento/module-ups": "*",
-        "magento/module-config": "*"
+        "magento/module-ups": "*"
     },
-    "type": "magento2-module",
     "license": [
         "OSL-3.0",
         "AFL-3.0"

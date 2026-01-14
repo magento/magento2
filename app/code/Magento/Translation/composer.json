@@ -1,6 +1,7 @@
 {
     "name": "magento/module-translation",
     "description": "N/A",
+    "type": "magento2-module",
     "config": {
         "sort-packages": true
     },
@@ -8,15 +9,14 @@
         "php": "~8.2.0||~8.3.0||~8.4.0",
         "magento/framework": "*",
         "magento/module-backend": "*",
+        "magento/module-deploy": "*",
         "magento/module-developer": "*",
         "magento/module-store": "*",
-        "magento/module-theme": "*",
-        "magento/module-deploy": "*"
+        "magento/module-theme": "*"
     },
     "suggest": {
         "magento/module-deploy": "*"
     },
-    "type": "magento2-module",
     "license": [
         "OSL-3.0",
         "AFL-3.0"

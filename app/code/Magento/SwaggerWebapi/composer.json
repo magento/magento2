@@ -1,6 +1,7 @@
 {
     "name": "magento/module-swagger-webapi",
     "description": "N/A",
+    "type": "magento2-module",
     "config": {
         "sort-packages": true
     },
@@ -9,7 +10,6 @@
         "magento/framework": "*",
         "magento/module-swagger": "*"
     },
-    "type": "magento2-module",
     "license": [
         "OSL-3.0",
         "AFL-3.0"

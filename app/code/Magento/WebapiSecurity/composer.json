@@ -1,6 +1,7 @@
 {
     "name": "magento/module-webapi-security",
     "description": "WebapiSecurity module provides option to loosen security on some webapi resources.",
+    "type": "magento2-module",
     "config": {
         "sort-packages": true
     },
@@ -9,7 +10,6 @@
         "magento/framework": "*",
         "magento/module-webapi": "*"
     },
-    "type": "magento2-module",
     "license": [
         "OSL-3.0",
         "AFL-3.0"

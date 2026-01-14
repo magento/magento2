@@ -1,21 +1,21 @@
 {
     "name": "magento/module-webapi-async",
     "description": "N/A",
+    "type": "magento2-module",
     "config": {
         "sort-packages": true
     },
     "require": {
         "php": "~8.2.0||~8.3.0||~8.4.0",
         "magento/framework": "*",
-        "magento/module-webapi": "*",
         "magento/module-asynchronous-operations": "*",
-        "magento/module-store": "*"
+        "magento/module-store": "*",
+        "magento/module-webapi": "*"
     },
     "suggest": {
-        "magento/module-user": "*",
-        "magento/module-customer": "*"
+        "magento/module-customer": "*",
+        "magento/module-user": "*"
     },
-    "type": "magento2-module",
     "license": [
         "OSL-3.0",
         "AFL-3.0"

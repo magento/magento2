@@ -1,6 +1,7 @@
 {
     "name": "magento/module-webapi",
     "description": "N/A",
+    "type": "magento2-module",
     "config": {
         "sort-packages": true
     },
@@ -13,10 +14,9 @@
         "magento/module-store": "*"
     },
     "suggest": {
-        "magento/module-user": "*",
-        "magento/module-customer": "*"
+        "magento/module-customer": "*",
+        "magento/module-user": "*"
     },
-    "type": "magento2-module",
     "license": [
         "OSL-3.0",
         "AFL-3.0"

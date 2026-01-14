@@ -1,21 +1,21 @@
 {
     "name": "magento/module-security",
     "description": "Security management module",
+    "type": "magento2-module",
     "config": {
         "sort-packages": true
     },
     "require": {
         "php": "~8.2.0||~8.3.0||~8.4.0",
         "magento/framework": "*",
-        "magento/module-config": "*",
         "magento/module-backend": "*",
+        "magento/module-config": "*",
         "magento/module-store": "*",
         "magento/module-user": "*"
     },
     "suggest": {
         "magento/module-customer": "*"
     },
-    "type": "magento2-module",
     "license": [
         "OSL-3.0",
         "AFL-3.0"

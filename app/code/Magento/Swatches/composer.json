@@ -1,6 +1,7 @@
 {
     "name": "magento/module-swatches",
     "description": "Add Swatches to Products",
+    "type": "magento2-module",
     "config": {
         "sort-packages": true
     },
@@ -13,8 +14,8 @@
         "magento/module-configurable-product": "*",
         "magento/module-customer": "*",
         "magento/module-eav": "*",
-        "magento/module-page-cache": "*",
         "magento/module-media-storage": "*",
+        "magento/module-page-cache": "*",
         "magento/module-store": "*",
         "magento/module-theme": "*"
     },
@@ -22,7 +23,6 @@
         "magento/module-layered-navigation": "*",
         "magento/module-swatches-sample-data": "*"
     },
-    "type": "magento2-module",
     "license": [
         "OSL-3.0",
         "AFL-3.0"

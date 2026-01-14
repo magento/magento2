@@ -1,6 +1,7 @@
 {
     "name": "magento/module-theme",
     "description": "N/A",
+    "type": "magento2-module",
     "config": {
         "sort-packages": true
     },
@@ -20,11 +21,10 @@
         "magento/module-widget": "*"
     },
     "suggest": {
-        "magento/module-theme-sample-data": "*",
         "magento/module-deploy": "*",
-        "magento/module-directory": "*"
+        "magento/module-directory": "*",
+        "magento/module-theme-sample-data": "*"
     },
-    "type": "magento2-module",
     "license": [
         "OSL-3.0",
         "AFL-3.0"

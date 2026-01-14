@@ -1,6 +1,7 @@
 {
     "name": "magento/module-ui",
     "description": "N/A",
+    "type": "magento2-module",
     "config": {
         "sort-packages": true
     },
@@ -16,7 +17,6 @@
     "suggest": {
         "magento/module-config": "*"
     },
-    "type": "magento2-module",
     "license": [
         "OSL-3.0",
         "AFL-3.0"

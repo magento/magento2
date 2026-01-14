@@ -1,6 +1,7 @@
 {
     "name": "magento/module-weee",
     "description": "N/A",
+    "type": "magento2-module",
     "config": {
         "sort-packages": true
     },
@@ -25,7 +26,6 @@
         "magento/module-bundle": "*",
         "magento/module-swatches": "*"
     },
-    "type": "magento2-module",
     "license": [
         "OSL-3.0",
         "AFL-3.0"

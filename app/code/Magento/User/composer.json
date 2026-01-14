@@ -1,6 +1,7 @@
 {
     "name": "magento/module-user",
     "description": "N/A",
+    "type": "magento2-module",
     "config": {
         "sort-packages": true
     },
@@ -15,7 +16,6 @@
         "magento/module-store": "*",
         "magento/module-ui": "*"
     },
-    "type": "magento2-module",
     "license": [
         "OSL-3.0",
         "AFL-3.0"
