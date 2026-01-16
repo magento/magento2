@@ -8,14 +8,16 @@ declare(strict_types=1);
 namespace Magento\GraphQlNewRelic\Helper;
 
 use GraphQL\Language\AST\DocumentNode;
+use GraphQL\Language\AST\FieldNode;
+use GraphQL\Language\AST\OperationDefinitionNode;
+use GraphQL\Language\Parser;
 use GraphQL\Language\Printer;
 use GraphQL\Type\Definition\ObjectType;
 use Magento\Framework\GraphQl\Schema;
 
 class NewRelicReportData
 {
-    private const PREFIX = '/GraphQl/Controller/GraphQl\\';
-    private const BACKSLASH = '\\';
+    private const TRANSACTION_PREFIX = 'GraphQL-';
     private const MULTIPLE_QUERIES_FLAG = 'Multiple';
 
     /**
@@ -35,12 +37,15 @@ class NewRelicReportData
         $gqlInfo = $this->extractGqlInfo($gqlFieldsInfo);
         $operationName = $this->getOperationNameFromQuery($querySource);
 
+        $primaryFieldName = $this->getPrimaryFieldNameFromQuery($querySource);
         $finalGqlCallName = $operationName !== ''
             ? $operationName
-            : ($gqlInfo['field_count'] > 1 ? self::MULTIPLE_QUERIES_FLAG : $gqlInfo['first_field_name']);
+            : ($gqlInfo['field_count'] > 1
+                ? self::MULTIPLE_QUERIES_FLAG
+                : ($primaryFieldName !== '' ? $primaryFieldName : $gqlInfo['first_field_name']));
 
         return [
-            'transactionName' => $this->buildTransactionName($gqlInfo['gql_call_type'], $finalGqlCallName),
+            'transactionName' => $this->buildTransactionName($finalGqlCallName),
             'fieldCount' => $gqlInfo['field_count'],
             'fieldNames' => $gqlInfo['all_field_names'],
         ];
@@ -56,7 +61,6 @@ class NewRelicReportData
 
         return [
             'field_count' => count($gqlFields),
-            'gql_call_type' => $gqlFieldsInfo->name,
             'first_field_name' => array_key_first($gqlFields) ?? '',
             'all_field_names' => array_keys($gqlFields),
         ];
@@ -84,15 +88,14 @@ class NewRelicReportData
     }
 
     /**
-     * Build a transaction name based on query type and operation name.
+     * Build a transaction name based on operation name.
      *
-     * @param string $gqlCallType
      * @param string $operationName
      * @return string
      */
-    private function buildTransactionName(string $gqlCallType, string $operationName): string
+    private function buildTransactionName(string $operationName): string
     {
-        return self::PREFIX . $gqlCallType . self::BACKSLASH . $operationName;
+        return self::TRANSACTION_PREFIX . $operationName;
     }
 
     /**
@@ -125,6 +128,61 @@ class NewRelicReportData
         }
 
         return $operationName;
+    }
+
+    /**
+     * Prefer the top-level field alias when available.
+     *
+     * @param DocumentNode|string $querySource
+     * @return string
+     */
+    private function getPrimaryFieldNameFromQuery(DocumentNode|string $querySource): string
+    {
+        $document = $this->getDocumentNode($querySource);
+        if (!$document) {
+            return '';
+        }
+
+        foreach ($document->definitions as $definition) {
+            if (!$definition instanceof OperationDefinitionNode || !$definition->selectionSet) {
+                continue;
+            }
+
+            foreach ($definition->selectionSet->selections as $selection) {
+                if (!$selection instanceof FieldNode) {
+                    continue;
+                }
+
+                if ($selection->alias) {
+                    return $selection->alias->value;
+                }
+
+                return $selection->name->value ?? '';
+            }
+        }
+
+        return '';
+    }
+
+    /**
+     * @param DocumentNode|string $querySource
+     * @return DocumentNode|null
+     */
+    private function getDocumentNode(DocumentNode|string $querySource): ?DocumentNode
+    {
+        if ($querySource instanceof DocumentNode) {
+            return $querySource;
+        }
+
+        if ($querySource === '') {
+            return null;
+        }
+
+        try {
+            return Parser::parse($querySource);
+        } catch (\Exception) {
+            return null;
+        }
     }
 
     /**
