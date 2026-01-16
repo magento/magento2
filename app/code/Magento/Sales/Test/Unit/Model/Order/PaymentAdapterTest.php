@@ -20,6 +20,7 @@ use PHPUnit\Framework\TestCase;
  */
 class PaymentAdapterTest extends TestCase
 {
+
     /**
      * @var PaymentAdapter
      */
@@ -47,21 +48,13 @@ class PaymentAdapterTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->orderMock = $this->getMockBuilder(OrderInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->orderMock = $this->createMock(OrderInterface::class);
 
-        $this->creditmemoMock = $this->getMockBuilder(CreditmemoInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->creditmemoMock = $this->createMock(CreditmemoInterface::class);
 
-        $this->invoiceMock = $this->getMockBuilder(InvoiceInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->invoiceMock = $this->createMock(InvoiceInterface::class);
 
-        $this->payOperationMock = $this->getMockBuilder(PayOperation::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->payOperationMock = $this->createMock(PayOperation::class);
 
         $this->subject = new PaymentAdapter(
             $this->payOperationMock

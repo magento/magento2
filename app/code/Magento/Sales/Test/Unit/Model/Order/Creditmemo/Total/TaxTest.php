@@ -15,15 +15,20 @@ use Magento\Sales\Model\Order\Creditmemo;
 use Magento\Sales\Model\Order\Creditmemo\Item;
 use Magento\Sales\Model\Order\Creditmemo\Total\Tax;
 use Magento\Sales\Model\Order\Invoice;
+use Magento\Sales\Model\Order\Item as OrderItem;
 use Magento\Sales\Model\ResourceModel\Order\Invoice as ResourceInvoice;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 
 /**
  * Class to test Collecting credit memo taxes
  */
 class TaxTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var float
      */
@@ -92,10 +97,12 @@ class TaxTest extends TestCase
      * @param array $orderData
      * @param array $creditmemoData
      * @param array $expectedResults
-     * @dataProvider collectDataProvider
+     *
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
+    #[DataProvider('collectDataProvider')]
     public function testCollect($orderData, $creditmemoData, $expectedResults)
     {
         if (!empty($creditmemoData['data_fields'])
@@ -1021,7 +1028,7 @@ class TaxTest extends TestCase
     {
         /** @var \Magento\Sales\Model\Order\Item|MockObject $orderItem */
         $orderItem = $this->createPartialMock(
-            \Magento\Sales\Model\Order\Item::class,
+            OrderItem::class,
             [
                 'isDummy'
             ]
@@ -1052,26 +1059,18 @@ class TaxTest extends TestCase
      * @param array $data
      * @return MockObject|Invoice
      */
-    private function createInvoiceMock(array $data): MockObject
+    public function createInvoiceMock(array $data): MockObject
     {
         /** @var MockObject|Invoice $invoice */
-        $invoice = $this->getMockBuilder(Invoice::class)
-            ->disableOriginalConstructor()
-            ->disableOriginalClone()
-            ->disableArgumentCloning()
-            ->disallowMockingUnknownTypes()
-            ->addMethods(['getBaseShippingDiscountTaxCompensationAmount'])
-            ->onlyMethods([
-                'getTaxAmount',
-                'getBaseTaxAmount',
-                'getShippingTaxAmount',
-                'getBaseShippingTaxAmount',
-                'getShippingDiscountTaxCompensationAmount',
-                'getDiscountTaxCompensationAmount',
-                'getBaseDiscountTaxCompensationAmount',
-                'getId'
-            ])
-            ->getMock();
+        $invoice = $this->createPartialMockWithReflection(
+            Invoice::class,
+            [
+                'getBaseShippingDiscountTaxCompensationAmount', 'getTaxAmount', 'getBaseTaxAmount',
+                'getShippingTaxAmount', 'getBaseShippingTaxAmount',
+                'getShippingDiscountTaxCompensationAmount', 'getDiscountTaxCompensationAmount',
+                'getBaseDiscountTaxCompensationAmount', 'getId'
+            ]
+        );
 
         $invoice->method('getTaxAmount')->willReturn($data['tax_amount'] ?? 0);
         $invoice->method('getBaseTaxAmount')->willReturn($data['base_tax_amount'] ?? 0);

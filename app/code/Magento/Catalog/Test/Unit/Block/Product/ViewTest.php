@@ -110,7 +110,7 @@ class ViewTest extends TestCase
     protected function setUp(): void
     {
         $helper = new ObjectManager($this);
-        $this->productTypeConfig = $this->getMockForAbstractClass(ConfigInterface::class);
+        $this->productTypeConfig = $this->createMock(ConfigInterface::class);
         $this->registryMock = $this->createMock(Registry::class);
         $this->customerSessionMock = $this->createMock(Session::class);
         $this->contextMock = $this->createMock(Context::class);

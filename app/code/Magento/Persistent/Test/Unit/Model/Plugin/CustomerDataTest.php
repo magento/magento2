@@ -9,6 +9,7 @@ namespace Magento\Persistent\Test\Unit\Model\Plugin;
 
 use Magento\Customer\CustomerData\Customer;
 use Magento\Customer\Model\Session;
+use Magento\Persistent\Helper\Session as PersistentSessionHelper;
 use Magento\Persistent\Helper\Data;
 use Magento\Persistent\Model\Plugin\CustomerData;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -45,7 +46,7 @@ class CustomerDataTest extends TestCase
     {
         $this->helperMock = $this->createMock(Data::class);
         $this->customerSessionMock = $this->createMock(Session::class);
-        $this->persistentSessionMock = $this->createMock(\Magento\Persistent\Helper\Session::class);
+        $this->persistentSessionMock = $this->createMock(PersistentSessionHelper::class);
         $this->subjectMock = $this->createMock(Customer::class);
         $this->plugin = new CustomerData(
             $this->helperMock,

@@ -7,17 +7,23 @@ declare(strict_types=1);
 
 namespace Magento\CatalogRule\Test\Unit\Model\Rule\Condition;
 
+use Magento\Catalog\Model\Product as ProductModel;
 use Magento\Catalog\Model\ProductCategoryList;
 use Magento\Catalog\Model\ResourceModel\Eav\Attribute;
 use Magento\Catalog\Model\ResourceModel\Product\Collection;
+use Magento\Catalog\Model\ResourceModel\Product as ProductResource;
 use Magento\CatalogRule\Model\Rule\Condition\Product;
 use Magento\Eav\Model\Config;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 class ProductTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var Product
      */
@@ -34,12 +40,12 @@ class ProductTest extends TestCase
     protected $config;
 
     /**
-     * @var \Magento\Catalog\Model\Product|MockObject
+     * @var ProductModel|MockObject
      */
     protected $productModel;
 
     /**
-     * @var \Magento\Catalog\Model\ResourceModel\Product|MockObject
+     * @var ProductResource|MockObject
      */
     protected $productResource;
 
@@ -59,32 +65,38 @@ class ProductTest extends TestCase
     protected function setUp(): void
     {
         $this->config = $this->createPartialMock(Config::class, ['getAttribute']);
-        $this->productModel = $this->getMockBuilder(\Magento\Catalog\Model\Product::class)
-            ->addMethods(['addAttributeToSelect', 'getAttributesByCode'])
-            ->onlyMethods(['__wakeup', 'hasData', 'getData', 'getId', 'getStoreId', 'getResource'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->productModel = $this->createPartialMockWithReflection(
+            ProductModel::class,
+            [
+                'addAttributeToSelect',
+                'getAttributesByCode',
+                '__wakeup',
+                'hasData',
+                'getData',
+                'getId',
+                'getStoreId',
+                'getResource'
+            ]
+        );
 
-        $this->productCategoryList = $this->getMockBuilder(ProductCategoryList::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->productCategoryList = $this->createMock(ProductCategoryList::class);
 
-        $this->productResource = $this->getMockBuilder(\Magento\Catalog\Model\ResourceModel\Product::class)
-            ->onlyMethods(
-                [
-                    'loadAllAttributes',
-                    'getAttributesByCode',
-                    'getAttribute',
-                    'getConnection',
-                    'getTable'
-                ]
-            )
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->productResource = $this->createPartialMock(
+            ProductResource::class,
+            [
+                'loadAllAttributes',
+                'getAttributesByCode',
+                'getAttribute',
+                'getConnection',
+                'getTable'
+            ]
+        );
 
-        $this->eavAttributeResource = $this->getMockBuilder(Attribute::class)
-            ->addMethods(['getFrontendLabel', 'getAttributesByCode'])
-            ->onlyMethods([
+        $this->eavAttributeResource = $this->createPartialMockWithReflection(
+            Attribute::class,
+            [
+                'getFrontendLabel',
+                'getAttributesByCode',
                 '__wakeup',
                 'isAllowedForRuleCondition',
                 'getDataUsingMethod',
@@ -92,9 +104,8 @@ class ProductTest extends TestCase
                 'isScopeGlobal',
                 'getBackendType',
                 'getFrontendInput'
-            ])
-            ->disableOriginalConstructor()
-            ->getMock();
+            ]
+        );
 
         $this->productResource->expects($this->any())->method('loadAllAttributes')->willReturnSelf();
         $this->productResource->expects($this->any())->method('getAttributesByCode')
@@ -143,8 +154,8 @@ class ProductTest extends TestCase
      * @param array $input
      *
      * @return void
-     * @dataProvider validateDataProvider
      */
+    #[DataProvider('validateDataProvider')]
     public function testValidateWithDatetimeValue($attributeValue, $parsedValue, $newValue, $operator, $input): void
     {
         $this->product->setData('attribute', 'attribute_key');
@@ -161,9 +172,18 @@ class ProductTest extends TestCase
 
         $this->productModel->expects($this->any())->method('hasData')
             ->willReturn(true);
+        
+        $callCount = 0;
         $this->productModel
             ->method('getData')
-            ->willReturnOnConsecutiveCalls(['1' => ['1' => $attributeValue]], $newValue, $newValue);
+            ->willReturnCallback(function () use (&$callCount, $attributeValue, $newValue) {
+                $callCount++;
+                if ($callCount === 1) {
+                    return ['1' => ['1' => $attributeValue]];
+                }
+                return $newValue;
+            });
+        
         $this->productModel->expects($this->any())->method('getId')
             ->willReturn('1');
         $this->productModel->expects($this->once())->method('getStoreId')

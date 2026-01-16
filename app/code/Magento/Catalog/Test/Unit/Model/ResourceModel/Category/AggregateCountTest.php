@@ -53,8 +53,7 @@ class AggregateCountTest extends TestCase
     {
         $this->categoryMock = $this->createMock(Category::class);
         $this->resourceCategoryMock = $this->createMock(ResourceCategory::class);
-        $this->connectionMock = $this->getMockBuilder(AdapterInterface::class)
-            ->getMockForAbstractClass();
+        $this->connectionMock = $this->createMock(AdapterInterface::class);
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->aggregateCount = $this->objectManagerHelper->getObject(AggregateCount::class);
     }
@@ -73,9 +72,7 @@ class AggregateCountTest extends TestCase
         $this->categoryMock->expects($this->once())
             ->method('getParentIds')
             ->willReturn($parentIds);
-        $this->resourceCategoryMock->expects($this->any())
-            ->method('getEntityTable')
-            ->willReturn($table);
+        $this->resourceCategoryMock->method('getEntityTable')->willReturn($table);
         $this->resourceCategoryMock->expects($this->once())
             ->method('getConnection')
             ->willReturn($this->connectionMock);

@@ -20,6 +20,7 @@ use PHPUnit\Framework\TestCase;
  */
 class RefundAdapterTest extends TestCase
 {
+
     /**
      * @var RefundAdapter
      */
@@ -47,21 +48,13 @@ class RefundAdapterTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->orderMock = $this->getMockBuilder(OrderInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->orderMock = $this->createMock(OrderInterface::class);
 
-        $this->creditmemoMock = $this->getMockBuilder(CreditmemoInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->creditmemoMock = $this->createMock(CreditmemoInterface::class);
 
-        $this->refundOperationMock = $this->getMockBuilder(RefundOperation::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->refundOperationMock = $this->createMock(RefundOperation::class);
 
-        $this->invoiceMock = $this->getMockBuilder(InvoiceInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->invoiceMock = $this->createMock(InvoiceInterface::class);
 
         $this->subject = new RefundAdapter(
             $this->refundOperationMock

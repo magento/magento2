@@ -8,6 +8,8 @@ declare(strict_types=1);
 namespace Magento\Framework\Cache\Test\Unit\Backend;
 
 use Magento\Framework\Cache\Backend\MongoDb;
+use Magento\Framework\Cache\CacheConstants;
+use Magento\Framework\Cache\Exception\CacheException;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -350,49 +352,49 @@ class MongoDbTest extends TestCase
     public static function cleanDataProvider()
     {
         return [
-            'clean expired' => [\Zend_Cache::CLEANING_MODE_OLD, [], self::arrayHasKey('expire')],
+            'clean expired' => [CacheConstants::CLEANING_MODE_OLD, [], self::arrayHasKey('expire')],
             'clean cache matching all tags (string)' => [
-                \Zend_Cache::CLEANING_MODE_MATCHING_TAG,
-                'tag1',
+                CacheConstants::CLEANING_MODE_MATCHING_TAG,
+                ['tag1'],
                 ['$and' => [['tags' => 'tag1']]],
             ],
             'clean cache matching all tags (one tag)' => [
-                \Zend_Cache::CLEANING_MODE_MATCHING_TAG,
+                CacheConstants::CLEANING_MODE_MATCHING_TAG,
                 ['tag1'],
                 ['$and' => [['tags' => 'tag1']]],
             ],
             'clean cache matching all tags (multiple tags)' => [
-                \Zend_Cache::CLEANING_MODE_MATCHING_TAG,
+                CacheConstants::CLEANING_MODE_MATCHING_TAG,
                 ['tag1', 'tag2'],
                 ['$and' => [['tags' => 'tag1'], ['tags' => 'tag2']]],
             ],
             'clean cache not matching tags (string)' => [
-                \Zend_Cache::CLEANING_MODE_NOT_MATCHING_TAG,
-                'tag1',
+                CacheConstants::CLEANING_MODE_NOT_MATCHING_TAG,
+                ['tag1'],
                 ['$nor' => [['tags' => 'tag1']]],
             ],
             'clean cache not matching tags (one tag)' => [
-                \Zend_Cache::CLEANING_MODE_NOT_MATCHING_TAG,
+                CacheConstants::CLEANING_MODE_NOT_MATCHING_TAG,
                 ['tag1'],
                 ['$nor' => [['tags' => 'tag1']]],
             ],
             'clean cache not matching tags (multiple tags)' => [
-                \Zend_Cache::CLEANING_MODE_NOT_MATCHING_TAG,
+                CacheConstants::CLEANING_MODE_NOT_MATCHING_TAG,
                 ['tag1', 'tag2'],
                 ['$nor' => [['tags' => 'tag1'], ['tags' => 'tag2']]],
             ],
             'clean cache matching any tags (string)' => [
-                \Zend_Cache::CLEANING_MODE_MATCHING_ANY_TAG,
-                'tag1',
+                CacheConstants::CLEANING_MODE_MATCHING_ANY_TAG,
+                ['tag1'],
                 ['$or' => [['tags' => 'tag1']]],
             ],
             'clean cache matching any tags (one tag)' => [
-                \Zend_Cache::CLEANING_MODE_MATCHING_ANY_TAG,
+                CacheConstants::CLEANING_MODE_MATCHING_ANY_TAG,
                 ['tag1'],
                 ['$or' => [['tags' => 'tag1']]],
             ],
             'clean cache matching any tags (multiple tags)' => [
-                \Zend_Cache::CLEANING_MODE_MATCHING_ANY_TAG,
+                CacheConstants::CLEANING_MODE_MATCHING_ANY_TAG,
                 ['tag1', 'tag2'],
                 ['$or' => [['tags' => 'tag1'], ['tags' => 'tag2']]],
             ]
@@ -402,16 +404,16 @@ class MongoDbTest extends TestCase
     public function cleanAll()
     {
         $this->_collection->expects($this->once())->method('drop')->willReturn(['ok' => true]);
-        $this->assertTrue($this->_model->clean(\Zend_Cache::CLEANING_MODE_ALL));
+        $this->assertTrue($this->_model->clean(CacheConstants::CLEANING_MODE_ALL));
     }
 
     public function cleanNoTags()
     {
         $this->_collection->expects($this->never())->method('remove');
         $modes = [
-            \Zend_Cache::CLEANING_MODE_MATCHING_TAG,
-            \Zend_Cache::CLEANING_MODE_NOT_MATCHING_TAG,
-            \Zend_Cache::CLEANING_MODE_MATCHING_ANY_TAG,
+            CacheConstants::CLEANING_MODE_MATCHING_TAG,
+            CacheConstants::CLEANING_MODE_NOT_MATCHING_TAG,
+            CacheConstants::CLEANING_MODE_MATCHING_ANY_TAG,
         ];
         foreach ($modes as $mode) {
             $this->assertFalse($this->_model->clean($mode));
@@ -420,7 +422,7 @@ class MongoDbTest extends TestCase
 
     public function testCleanInvalidMode()
     {
-        $this->expectException('Zend_Cache_Exception');
+        $this->expectException(CacheException::class);
         $this->expectExceptionMessage('Unsupported cleaning mode: invalid_mode');
         $this->_model->clean('invalid_mode');
     }

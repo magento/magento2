@@ -60,10 +60,7 @@ class GalleryTest extends TestCase
         $this->registryMock = $this->createMock(Registry::class);
         $this->productMock = $this->createPartialMock(Product::class, ['getData']);
         $this->formMock = $this->createMock(Form::class);
-        $this->dataPersistorMock = $this->getMockBuilder(DataPersistorInterface::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['get'])
-            ->getMockForAbstractClass();
+        $this->dataPersistorMock = $this->createMock(DataPersistorInterface::class);
         $this->defaultValueProcessorMock = $this->createMock(DefaultValueProcessor::class);
         $this->objectManager = new ObjectManager($this);
         $this->gallery = $this->objectManager->getObject(

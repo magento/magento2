@@ -24,6 +24,7 @@ use Magento\Framework\View\Page\Config;
 use Magento\Framework\View\Page\Title;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 
 /**
  * Unit test for Category View Block
@@ -33,6 +34,7 @@ use PHPUnit\Framework\TestCase;
  */
 class ViewTest extends TestCase
 {
+    use MockCreationTrait;
     /**
      * @var View
      */
@@ -106,10 +108,10 @@ class ViewTest extends TestCase
         $layoutMock = $this->createMock(LayoutInterface::class);
         $breadCrumbs = $this->createMock(Breadcrumbs::class);
         $title = $this->createMock(Title::class);
-        $category = $this->getMockBuilder(Category::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['getMetaTitle'])
-            ->getMock();
+        $category = $this->createPartialMockWithReflection(
+            Category::class,
+            ['getMetaTitle']
+        );
 
         $breadCrumbs->expects($this->once())
             ->method('getTitleSeparator')

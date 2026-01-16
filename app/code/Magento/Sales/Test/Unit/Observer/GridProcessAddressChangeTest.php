@@ -13,9 +13,12 @@ use Magento\Sales\Model\ResourceModel\GridPool;
 use Magento\Sales\Observer\GridProcessAddressChange;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 
 class GridProcessAddressChangeTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var GridProcessAddressChange
      */
@@ -33,13 +36,11 @@ class GridProcessAddressChangeTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->gridPoolMock = $this->getMockBuilder(GridPool::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->eventObserverMock = $this->getMockBuilder(Observer::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['getOrderId'])
-            ->getMock();
+        $this->gridPoolMock = $this->createMock(GridPool::class);
+        $this->eventObserverMock = $this->createPartialMockWithReflection(
+            Observer::class,
+            ['getOrderId']
+        );
         $this->observer = new GridProcessAddressChange($this->gridPoolMock);
     }
 

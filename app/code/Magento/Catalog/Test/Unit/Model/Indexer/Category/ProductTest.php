@@ -67,15 +67,7 @@ class ProductTest extends TestCase
             ['create']
         );
 
-        $this->indexerMock = $this->getMockForAbstractClass(
-            IndexerInterface::class,
-            [],
-            '',
-            false,
-            false,
-            true,
-            ['getId', 'load', 'isInvalid', 'isWorking']
-        );
+        $this->indexerMock = $this->createMock(IndexerInterface::class);
 
         $this->indexerRegistryMock = $this->createPartialMock(
             IndexerRegistry::class,

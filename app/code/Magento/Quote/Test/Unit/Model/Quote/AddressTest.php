@@ -14,6 +14,7 @@ use Magento\Directory\Model\RegionFactory;
 use Magento\Framework\App\Config;
 use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Quote\Model\Quote;
 use Magento\Quote\Model\Quote\Address;
 use Magento\Quote\Model\Quote\Address\CustomAttributeListInterface;
@@ -36,8 +37,6 @@ use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use Magento\Quote\Test\Unit\Helper\RateCollectorForAddressTestHelper;
-use Magento\Quote\Test\Unit\Helper\RateRequestTestHelper;
 
 /**
  * Test class for sales quote address model
@@ -48,6 +47,8 @@ use Magento\Quote\Test\Unit\Helper\RateRequestTestHelper;
  */
 class AddressTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var Address
      */
@@ -154,7 +155,11 @@ class AddressTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->rateCollection = new RateCollectorForAddressTestHelper();
+        $this->rateCollection = $this->createPartialMockWithReflection(
+            RateCollectorInterface::class,
+            ['collectRates', 'getResult']
+        );
+        $this->rateCollection->method('collectRates')->willReturnSelf();
 
         $this->itemCollectionFactory = $this->getMockBuilder(CollectionFactory::class)
             ->disableOriginalConstructor()
@@ -397,8 +402,8 @@ class AddressTest extends TestCase
             ->willReturn(1);
 
         /** @var RateRequest */
-        $request = $this->createPartialMock(
-            RateRequestTestHelper::class,
+        $request = $this->createPartialMockWithReflection(
+            RateRequest::class,
             ['setStoreId', 'setWebsiteId', 'setBaseCurrency', 'setPackageCurrency']
         );
 
@@ -453,7 +458,7 @@ class AddressTest extends TestCase
             ->method('create')
             ->willReturn($this->rateCollection);
 
-        $this->rateCollection->setResult($rates);
+        $this->rateCollection->method('getResult')->willReturn($rates);
 
         $this->itemCollectionFactory->expects($this->once())
             ->method('create')

@@ -18,11 +18,13 @@ use Magento\Framework\Data\Collection\AbstractDb;
 use Magento\Framework\Model\Context;
 use Magento\Framework\Model\ResourceModel\AbstractResource;
 use Magento\Framework\Registry;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 class CustomOptionTest extends TestCase
 {
+    use MockCreationTrait;
     /**
      * @var CustomOption
      */
@@ -41,39 +43,26 @@ class CustomOptionTest extends TestCase
 
     protected function setUp(): void
     {
-        $context = $this->getMockBuilder(Context::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $context = $this->createMock(Context::class);
+        $registry = $this->createMock(Registry::class);
+        $this->extensionAttributesFactoryMock = $this->createMock(ExtensionAttributesFactory::class);
+        $attributeValueFactory = $this->createMock(AttributeValueFactory::class);
+        $this->fileProcessor = $this->createMock(FileProcessor::class);
+        $resource = $this->createMock(AbstractResource::class);
+        $collection = $this->createMock(AbstractDb::class);
 
-        $registry = $this->getMockBuilder(Registry::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $this->extensionAttributesFactoryMock = $this->getMockBuilder(ExtensionAttributesFactory::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $attributeValueFactory = $this->getMockBuilder(AttributeValueFactory::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $this->fileProcessor = $this->getMockBuilder(
-            \Magento\Catalog\Model\Webapi\Product\Option\Type\File\Processor::class
-        )
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $resource = $this->getMockBuilder(AbstractResource::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $collection = $this->getMockBuilder(AbstractDb::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $this->extensionMock = $this->getMockBuilder(CustomOptionExtensionInterface::class)
-            ->addMethods(['getFileInfo'])
-            ->getMockForAbstractClass();
+        $this->extensionMock = $this->createPartialMockWithReflection(
+            CustomOptionExtensionInterface::class,
+            ['setFileInfo', 'getFileInfo']
+        );
+        $fileInfo = null;
+        $this->extensionMock->method('setFileInfo')->willReturnCallback(function ($value) use (&$fileInfo) {
+            $fileInfo = $value;
+            return $this->extensionMock;
+        });
+        $this->extensionMock->method('getFileInfo')->willReturnCallback(function () use (&$fileInfo) {
+            return $fileInfo;
+        });
 
         $this->extensionAttributesFactoryMock->expects(self::any())
             ->method('create')->willReturn($this->extensionMock);
@@ -110,12 +99,9 @@ class CustomOptionTest extends TestCase
 
     public function testGetOptionValueWithFileInfo()
     {
-        $imageContent = $this->getMockBuilder(ImageContentInterface::class)
-            ->getMockForAbstractClass();
+        $imageContent = $this->createMock(ImageContentInterface::class);
 
-        $this->extensionMock->expects($this->once())
-            ->method('getFileInfo')
-            ->willReturn($imageContent);
+        $this->extensionMock->setFileInfo($imageContent);
 
         $imageResult = [
             'type' => 'type',

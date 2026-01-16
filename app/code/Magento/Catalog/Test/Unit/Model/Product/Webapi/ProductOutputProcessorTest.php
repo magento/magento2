@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\Catalog\Test\Unit\Model\Product\Webapi;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Model\Product\Webapi\ProductOutputProcessor;
 use Magento\Framework\Webapi\Request;
@@ -36,18 +37,17 @@ class ProductOutputProcessorTest extends TestCase
             Request::class,
             ['getContent']
         );
-        $this->deserializerMock = $this->getMockBuilder(DeserializerInterface::class)
-            ->getMockForAbstractClass();
+        $this->deserializerMock = $this->createMock(DeserializerInterface::class);
         $this->productOutputProcessor = new ProductOutputProcessor($this->requestMock, $this->deserializerMock);
     }
 
     /**
-     * @dataProvider getProductProcessorDataProvider
      * @param $request
      * @param $product
      * @param $result
      * @param $expectedResult
      */
+    #[DataProvider('getProductProcessorDataProvider')]
     public function testGetByProductType(
         array $request,
         $product,
@@ -311,20 +311,7 @@ class ProductOutputProcessorTest extends TestCase
 
     protected function setProductInformation($productArr)
     {
-        $productMock = $this->getMockBuilder(ProductInterface::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(
-                [
-                    'setSku',
-                    'setStatus',
-                    'setProductLinks',
-                    'setTierPrices',
-                    'getSku',
-                    'getProductLinks',
-                    'getTierPrices'
-                ]
-            )
-            ->getMockForAbstractClass();
+        $productMock = $this->createMock(ProductInterface::class);
         $productMock
             ->method('setSku')
             ->with($productArr['sku'])

@@ -12,8 +12,8 @@ use Magento\ConfigurableProduct\Model\Entity\Product\Attribute\Group\AttributeMa
 use Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable\AttributeFactory;
 use Magento\Eav\Model\Entity\Attribute;
 use Magento\Framework\DataObject;
-use Magento\Framework\DataObject\Test\Unit\Helper\DataObjectTestHelper;
 use Magento\Framework\Registry;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -23,6 +23,8 @@ use PHPUnit\Framework\TestCase;
  */
 class PluginTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var Plugin
      */
@@ -64,7 +66,10 @@ class PluginTest extends TestCase
             ['getUsedAttributes']
         );
 
-        $this->magentoObject = new DataObjectTestHelper();
+        $this->magentoObject = $this->createPartialMockWithReflection(
+            DataObject::class,
+            ['getId', 'setId']
+        );
         $this->model = $helper->getObject(
             Plugin::class,
             ['registry' => $this->registry, 'attributeFactory' => $this->attributeFactory]
@@ -102,7 +107,7 @@ class PluginTest extends TestCase
             ->with('current_attribute_set')
             ->willReturn($this->magentoObject);
 
-        $this->magentoObject->setId($attrSetId);
+        $this->magentoObject->method('getId')->willReturn($attrSetId);
 
         $result = $this->model->aroundMap($attributeMapper, $proceed, $attribute);
         $this->assertEquals($expected, $result);

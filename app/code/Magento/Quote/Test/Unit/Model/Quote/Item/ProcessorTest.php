@@ -19,9 +19,11 @@ use Magento\Store\Api\Data\StoreInterface;
 use Magento\Store\Model\StoreManagerInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 
 class ProcessorTest extends TestCase
 {
+    use MockCreationTrait;
     /** @var ItemFactory|MockObject */
     private $itemFactory;
 
@@ -55,11 +57,10 @@ class ProcessorTest extends TestCase
     public function testPrepareSetsCustomPriceWhenCustomPriceIsZero(): void
     {
         $item = $this->createMock(Item::class);
-        $candidate = $this->getMockBuilder(Product::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['getFinalPrice'])
-            ->addMethods(['getStickWithinParent', 'getCartQty', 'getParentProductId'])
-            ->getMock();
+        $candidate = $this->createPartialMockWithReflection(
+            Product::class,
+            ['getFinalPrice', 'getStickWithinParent', 'getCartQty', 'getParentProductId']
+        );
         $request = new DataObject([
             'custom_price' => 0,
             'reset_count' => 0,
@@ -88,11 +89,10 @@ class ProcessorTest extends TestCase
     public function testPrepareDoesNotSetCustomPriceWhenNull(): void
     {
         $item = $this->createMock(Item::class);
-        $candidate = $this->getMockBuilder(Product::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['getFinalPrice'])
-            ->addMethods(['getStickWithinParent', 'getCartQty', 'getParentProductId'])
-            ->getMock();
+        $candidate = $this->createPartialMockWithReflection(
+            Product::class,
+            ['getFinalPrice', 'getStickWithinParent', 'getCartQty', 'getParentProductId']
+        );
         $request = new DataObject([
             'custom_price' => null,
             'reset_count' => 0,
@@ -121,11 +121,10 @@ class ProcessorTest extends TestCase
     public function testPrepareDoesNotSetCustomPriceForChildProduct(): void
     {
         $item = $this->createMock(Item::class);
-        $candidate = $this->getMockBuilder(Product::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['getFinalPrice'])
-            ->addMethods(['getStickWithinParent', 'getCartQty', 'getParentProductId'])
-            ->getMock();
+        $candidate = $this->createPartialMockWithReflection(
+            Product::class,
+            ['getFinalPrice', 'getStickWithinParent', 'getCartQty', 'getParentProductId']
+        );
         $request = new DataObject([
             'custom_price' => 0,
             'reset_count' => 0,
@@ -153,11 +152,10 @@ class ProcessorTest extends TestCase
     public function testPrepareResetsQtyWhenResetCountAndMatchingId(): void
     {
         $item = $this->createMock(Item::class);
-        $candidate = $this->getMockBuilder(Product::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['getFinalPrice'])
-            ->addMethods(['getStickWithinParent', 'getCartQty', 'getParentProductId'])
-            ->getMock();
+        $candidate = $this->createPartialMockWithReflection(
+            Product::class,
+            ['getFinalPrice', 'getStickWithinParent', 'getCartQty', 'getParentProductId']
+        );
         $request = new DataObject([
             'custom_price' => 0,
             'reset_count' => 1,
@@ -184,7 +182,7 @@ class ProcessorTest extends TestCase
      */
     public function testInitSetsStoreIdInBackendArea(): void
     {
-        $item = $this->getMockBuilder(Item::class)->disableOriginalConstructor()->addMethods(['setStoreId'])->getMock();
+        $item = $this->createPartialMockWithReflection(Item::class, ['setStoreId']);
         $product = $this->createMock(Product::class);
         $request = new DataObject([
             'reset_count' => 0,
@@ -219,7 +217,7 @@ class ProcessorTest extends TestCase
      */
     public function testInitSetsStoreIdInFrontendArea(): void
     {
-        $item = $this->getMockBuilder(Item::class)->disableOriginalConstructor()->addMethods(['setStoreId'])->getMock();
+        $item = $this->createPartialMockWithReflection(Item::class, ['setStoreId']);
         $product = $this->createMock(Product::class);
         $request = new DataObject([
             'reset_count' => 0,
@@ -245,11 +243,11 @@ class ProcessorTest extends TestCase
      */
     public function testInitDoesNotModifyExistingChildItem(): void
     {
-        $item = $this->getMockBuilder(Item::class)->disableOriginalConstructor()->addMethods(['setStoreId'])->getMock();
-        $product = $this->getMockBuilder(Product::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['getParentProductId'])
-            ->getMock();
+        $item = $this->createPartialMockWithReflection(Item::class, ['setStoreId']);
+        $product = $this->createPartialMockWithReflection(
+            Product::class,
+            ['getParentProductId']
+        );
         $request = new DataObject([
             'reset_count' => 0,
             'id' => 99,
@@ -276,15 +274,14 @@ class ProcessorTest extends TestCase
      */
     public function testInitReturnsEarlyWhenItemHasIdAndProductHasParent(): void
     {
-        $item = $this->getMockBuilder(Item::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['getId'])
-            ->addMethods(['setStoreId'])
-            ->getMock();
-        $product = $this->getMockBuilder(Product::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['getParentProductId', 'getStickWithinParent'])
-            ->getMock();
+        $item = $this->createPartialMockWithReflection(
+            Item::class,
+            ['getId', 'setStoreId']
+        );
+        $product = $this->createPartialMockWithReflection(
+            Product::class,
+            ['getParentProductId', 'getStickWithinParent']
+        );
         $request = new DataObject([
             'reset_count' => 1,
             'id' => 77,
@@ -318,11 +315,10 @@ class ProcessorTest extends TestCase
             ->disableOriginalConstructor()
             ->onlyMethods(['isChildrenCalculated'])
             ->getMock();
-        $candidate = $this->getMockBuilder(Product::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['getFinalPrice'])
-            ->addMethods(['getStickWithinParent', 'getCartQty', 'getParentProductId'])
-            ->getMock();
+        $candidate = $this->createPartialMockWithReflection(
+            Product::class,
+            ['getFinalPrice', 'getStickWithinParent', 'getCartQty', 'getParentProductId']
+        );
         $request = new DataObject([
             'custom_price' => null,
             'reset_count' => 0,
@@ -350,11 +346,10 @@ class ProcessorTest extends TestCase
     public function testPrepareDoesNotResetQtyWhenStickWithinParentTrue(): void
     {
         $item = $this->createMock(Item::class);
-        $candidate = $this->getMockBuilder(Product::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['getFinalPrice'])
-            ->addMethods(['getStickWithinParent', 'getCartQty', 'getParentProductId'])
-            ->getMock();
+        $candidate = $this->createPartialMockWithReflection(
+            Product::class,
+            ['getFinalPrice', 'getStickWithinParent', 'getCartQty', 'getParentProductId']
+        );
         $request = new DataObject([
             'custom_price' => 10,
             'reset_count' => 1,
@@ -393,11 +388,11 @@ class ProcessorTest extends TestCase
      */
     public function testInitResetsQtyWhenResetCountAndMatchingId(): void
     {
-        $item = $this->getMockBuilder(Item::class)->disableOriginalConstructor()->addMethods(['setStoreId'])->getMock();
-        $product = $this->getMockBuilder(Product::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['getStickWithinParent', 'getParentProductId'])
-            ->getMock();
+        $item = $this->createPartialMockWithReflection(Item::class, ['setStoreId']);
+        $product = $this->createPartialMockWithReflection(
+            Product::class,
+            ['getStickWithinParent', 'getParentProductId']
+        );
         $request = new DataObject([
             'reset_count' => 1,
             'id' => null,
@@ -424,11 +419,11 @@ class ProcessorTest extends TestCase
      */
     public function testInitDoesNotResetQtyWhenIdMismatch(): void
     {
-        $item = $this->getMockBuilder(Item::class)->disableOriginalConstructor()->addMethods(['setStoreId'])->getMock();
-        $product = $this->getMockBuilder(Product::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['getStickWithinParent', 'getParentProductId'])
-            ->getMock();
+        $item = $this->createPartialMockWithReflection(Item::class, ['setStoreId']);
+        $product = $this->createPartialMockWithReflection(
+            Product::class,
+            ['getStickWithinParent', 'getParentProductId']
+        );
         $request = new DataObject([
             'reset_count' => 1,
             'id' => 55,
@@ -460,11 +455,10 @@ class ProcessorTest extends TestCase
             ->disableOriginalConstructor()
             ->onlyMethods(['isChildrenCalculated'])
             ->getMock();
-        $candidate = $this->getMockBuilder(Product::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['getFinalPrice'])
-            ->addMethods(['getStickWithinParent', 'getCartQty', 'getParentProductId'])
-            ->getMock();
+        $candidate = $this->createPartialMockWithReflection(
+            Product::class,
+            ['getFinalPrice', 'getStickWithinParent', 'getCartQty', 'getParentProductId']
+        );
         $request = new DataObject([
             'custom_price' => null,
             'reset_count' => 0,
