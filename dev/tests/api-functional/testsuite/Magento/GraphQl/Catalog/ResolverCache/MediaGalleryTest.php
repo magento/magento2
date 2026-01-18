@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2023 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -20,6 +20,7 @@ use Magento\Framework\Api\Data\ImageContentInterfaceFactory;
 use Magento\Framework\App\Area as AppArea;
 use Magento\Framework\App\ObjectManager\ConfigLoader;
 use Magento\Framework\App\State as AppState;
+use Magento\Framework\Cache\Exception\CacheException;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\GraphQl\Model\Query\ContextFactory;
 use Magento\GraphQlResolverCache\Model\Resolver\Result\CacheKey\Calculator\ProviderInterface;
@@ -586,7 +587,7 @@ class MediaGalleryTest extends ResolverCacheAbstract
      *
      * @param ProductInterface $product
      * @return void
-     * @throws \Zend_Cache_Exception
+     * @throws CacheException
      * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
     private function assertCacheIdIsNotOrphanedInTagsForProduct(ProductInterface $product)

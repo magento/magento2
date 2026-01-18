@@ -11,6 +11,7 @@ use Magento\Framework\ObjectManagerInterface;
 use Magento\Payment\Model\Cart\SalesModel\Factory;
 use Magento\Quote\Model\Quote;
 use Magento\Sales\Model\Order;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -24,15 +25,15 @@ class FactoryTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->_objectManagerMock = $this->getMockForAbstractClass(ObjectManagerInterface::class);
+        $this->_objectManagerMock = $this->createMock(ObjectManagerInterface::class);
         $this->_model = new Factory($this->_objectManagerMock);
     }
 
     /**
      * @param string $salesModelClass
      * @param string $expectedType
-     * @dataProvider createDataProvider
      */
+    #[DataProvider('createDataProvider')]
     public function testCreate($salesModelClass, $expectedType)
     {
         $salesModel = $this->getMockBuilder($salesModelClass)

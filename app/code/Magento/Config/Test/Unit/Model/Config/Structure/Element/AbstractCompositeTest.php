@@ -58,15 +58,14 @@ class AbstractCompositeTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->elementVisibilityMock = $this->getMockBuilder(ElementVisibilityInterface::class)
-            ->getMockForAbstractClass();
+        $this->elementVisibilityMock = $this->createMock(ElementVisibilityInterface::class);
         $this->_iteratorMock = $this->createMock(Iterator::class);
         $this->_storeManagerMock = $this->createMock(StoreManager::class);
         $this->moduleManagerMock = $this->createMock(Manager::class);
-        $this->_model = $this->getMockForAbstractClass(
-            AbstractComposite::class,
-            [$this->_storeManagerMock, $this->moduleManagerMock, $this->_iteratorMock]
-        );
+        $this->_model = $this->getMockBuilder(AbstractComposite::class)
+            ->setConstructorArgs([$this->_storeManagerMock, $this->moduleManagerMock, $this->_iteratorMock])
+            ->onlyMethods([])
+            ->getMock();
         $objectManagerHelper = new ObjectManagerHelper($this);
         $objectManagerHelper->setBackwardCompatibleProperty(
             $this->_model,

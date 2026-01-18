@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -41,7 +41,7 @@ class ScopeResolverPoolTest extends TestCase
      * @param string $scope
      *
      * @covers \Magento\Framework\App\ScopeResolverPool::get()
-     * @dataProvider testGetExceptionDataProvider
+     * @dataProvider getExceptionDataProvider
      */
     public function testGetException($scope)
     {
@@ -59,7 +59,7 @@ class ScopeResolverPoolTest extends TestCase
     /**
      * @return array
      */
-    public static function testGetExceptionDataProvider()
+    public static function getExceptionDataProvider()
     {
         return [
             ['undefined'],

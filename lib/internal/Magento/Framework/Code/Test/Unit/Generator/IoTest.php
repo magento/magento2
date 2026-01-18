@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework\Code\Test\Unit\Generator;
 
@@ -18,13 +18,13 @@ class IoTest extends TestCase
     /**#@+
      * Source and result class parameters
      */
-    const GENERATION_DIRECTORY = 'generation_directory';
+    public const GENERATION_DIRECTORY = 'generation_directory';
 
-    const CLASS_NAME = 'class_name';
+    public const CLASS_NAME = 'class_name';
 
-    const CLASS_FILE_NAME = 'class/file/name';
+    public const CLASS_FILE_NAME = 'class/file/name';
 
-    const FILE_CONTENT = "content";
+    public const FILE_CONTENT = "content";
 
     /**#@-*/
 
@@ -80,7 +80,7 @@ class IoTest extends TestCase
     }
 
     /**
-     * @dataProvider testWriteResultFileAlreadyExistsDataProvider
+     * @dataProvider writeResultFileAlreadyExistsDataProvider
      */
     public function testWriteResultFileAlreadyExists($resultFileName, $fileExists, $exceptionDuringRename, $success)
     {
@@ -119,7 +119,7 @@ class IoTest extends TestCase
     /**
      * @return array
      */
-    public static function testWriteResultFileAlreadyExistsDataProvider()
+    public static function writeResultFileAlreadyExistsDataProvider()
     {
         return [
             'Writing file succeeds: writeResultFile succeeds' => [

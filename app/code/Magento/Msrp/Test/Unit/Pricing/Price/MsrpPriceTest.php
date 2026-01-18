@@ -94,7 +94,7 @@ class MsrpPriceTest extends TestCase
         );
         $this->config = $this->createPartialMock(Config::class, ['isEnabled']);
 
-        $this->priceCurrencyMock = $this->getMockForAbstractClass(PriceCurrencyInterface::class);
+        $this->priceCurrencyMock = $this->createMock(PriceCurrencyInterface::class);
 
         $this->object = new MsrpPrice(
             $this->saleableItem,

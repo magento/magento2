@@ -68,13 +68,19 @@ class GenerateMergedAssetIntegrity
      * @return string|null
      * @throws FileSystemException
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @SuppressWarnings(PHPMD.EmptyCatchBlock)
      */
-    public function afterMerge(FileExists $subject, ?string $result, array $assetsToMerge, LocalInterface $resultAsset)
-    {
+    public function afterMerge(
+        FileExists $subject,
+        ?string $result,
+        array $assetsToMerge,
+        LocalInterface $resultAsset
+    ): ?string {
         if ($resultAsset->getContentType() !== 'js') {
             return $result;
         }
-        $pubStaticDir = $this->filesystem->getDirectoryWrite(DirectoryList::STATIC_VIEW);
+
+        $pubStaticDir = $this->filesystem->getDirectoryRead(DirectoryList::STATIC_VIEW);
         $integrity = $this->integrityFactory->create(
             [
                 "data" => [
@@ -86,7 +92,11 @@ class GenerateMergedAssetIntegrity
             ]
         );
 
-        $this->sourceIntegrityRepository->save($integrity);
+        try {
+            $this->sourceIntegrityRepository->save($integrity);
+            // phpcs:ignore Magento2.CodeAnalysis.EmptyBlock.DetectedCatch
+        } catch (\Exception $e) {
+        }
 
         return $result;
     }

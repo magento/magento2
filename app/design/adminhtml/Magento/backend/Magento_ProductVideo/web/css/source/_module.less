@@ -1,6 +1,6 @@
 // /**
-//  * Copyright © Magento, Inc. All rights reserved.
-//  * See COPYING.txt for license details.
+//  * Copyright 2015 Adobe
+//  * All Rights Reserved.
 //  */
 
 //
@@ -146,44 +146,6 @@
     .admin__scope-old {
         //  re-arrange checkboxes fields in slideout video panel (base, small image etc)
         .admin__field {
-            &.field-role,
-            &.field-video_image,
-            &.field-video_small_image,
-            &.field-video_thumbnail,
-            &.field-video_swatch_image,
-            &.field-new_video_disabled {
-                .admin__field-control {
-                    #mix-grid .column(3, @field-grid__columns);
-                    float: left;
-                    margin-left: 80px;
-                    position: relative;
-
-                    input {
-                        float: right;
-                    }
-                }
-
-                .admin__field-label {
-                    cursor: pointer;
-                    left: 0;
-                    margin-left: 26%;
-                    padding-left: 45px;
-                    position: absolute;
-                    width: 250px;
-
-                    &:before {
-                        content: none;
-                    }
-
-                    span {
-                        float: left;
-                    }
-                }
-            }
-
-            &.field-new_video_disabled {
-                margin-top: 32px;
-            }
 
             &.field.field-new_video_screenshot {
                 margin-bottom: 5px;
@@ -194,8 +156,6 @@
             }
 
             &.field-role-label {
-                height: 0;
-
                 .admin__field-control {
                     #mix-grid .column(3, @field-grid__columns);
                     float: left;
@@ -212,62 +172,6 @@
                         right: 50px;
                         top: 21px;
                     }
-                }
-            }
-
-            label > input[type='checkbox'] {
-                margin: -3px 3px 0 0;
-                vertical-align: middle;
-            }
-
-            input[type='checkbox'] {
-                .lib-css(appearance, none, 1);
-                background: @color-white;
-                border: 1px solid @color-gray68;
-                border-radius: 2px;
-                cursor: pointer;
-                display: inline-block;
-                height: 16px;
-                margin: 0 5px 0 0;
-                position: relative;
-                transition: all .1s ease-in;
-                vertical-align: middle;
-                width: 16px;
-
-                &:focus {
-                    border-color: @color-blue-pure;
-                    box-shadow: none;
-                    outline: 0;
-                }
-
-                &[disabled] {
-                    background-color: @color-lighter-gray;
-                    border-color: @color-gray68;
-                    opacity: .5;
-                }
-
-                &:checked {
-                    &:after {
-                        color: @color-brownie;
-                        content: '\e62d';
-                        display: inline-block;
-                        font-family: 'Admin Icons';
-                        font-size: 11px;
-                        font-weight: 400;
-                        left: 0;
-                        line-height: 13px;
-                        position: absolute;
-                        text-align: center;
-                        top: 0;
-                        width: 14px;
-                    }
-                }
-            }
-
-            .control {
-                > input[type='checkbox'] {
-                    padding: 0;
-                    width: 16px;
                 }
             }
         }

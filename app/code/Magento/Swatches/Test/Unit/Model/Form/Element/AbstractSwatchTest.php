@@ -26,17 +26,11 @@ class AbstractSwatchTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->source = $this->getMockBuilder(AbstractSource::class)
-            ->getMockForAbstractClass();
+        $this->source = $this->createMock(AbstractSource::class);
 
-        $this->attribute = $this->getMockBuilder(Attribute::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->attribute = $this->createMock(Attribute::class);
 
-        $this->swatch = $this->getMockBuilder(AbstractSwatch::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['getData'])
-            ->getMockForAbstractClass();
+        $this->swatch = $this->createPartialMock(AbstractSwatch::class, ['getData']);
     }
 
     public function testGetValues()

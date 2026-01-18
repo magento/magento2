@@ -10,7 +10,7 @@
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="AdminAssignImageThumbNailRoleActionGroup">
         <annotations>
-            <description>Requires the navigation to the Product Creation page. Checks Thumb Base Role area for image.</description>
+            <description>Requires the navigation to the Product Creation page. Checks Thumb Thumbnail Role area for image.</description>
         </annotations>
         <arguments>
             <argument name="image"/>
@@ -19,7 +19,10 @@
         <waitForElementVisible selector="{{AdminProductImagesSection.imageFile(image.fileName)}}" stepKey="seeProductImageName"/>
         <click selector="{{AdminProductImagesSection.imageFile(image.fileName)}}" stepKey="clickProductImage"/>
         <waitForElementVisible selector="{{AdminProductImagesSection.altText}}" stepKey="seeAltTextSection"/>
-        <checkOption selector="{{AdminProductImagesSection.roleThumbnail}}" stepKey="checkRoles"/>
+        <waitForPageLoad stepKey="waitForSlideOut"/>
+        <conditionalClick selector="{{AdminProductImagesSection.roleThumbnailUseDefault}}" dependentSelector="{{AdminProductImagesSection.isThumbnailUseDefaultSelected}}" visible="true" stepKey="uncheckUseDefault"/>
+        <waitForElementNotVisible selector="{{AdminProductImagesSection.isThumbnailDisabled}}" stepKey="waitForCheckboxEnabled"/>
+        <conditionalClick selector="{{AdminProductImagesSection.roleThumbnail}}" dependentSelector="{{AdminProductImagesSection.isThumbnailSelected}}" visible="false" stepKey="checkRoles"/>
         <click selector="{{AdminSlideOutDialogSection.closeButton}}" stepKey="clickCloseButton"/>
     </actionGroup>
 </actionGroups>

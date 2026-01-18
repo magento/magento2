@@ -15,5 +15,6 @@
 
         <waitForElement selector="{{CheckoutPaymentSection.paymentSectionTitle}}" after="clickNext" stepKey="waitForPaymentSectionLoaded"/>
         <conditionalClick selector="{{CheckoutPaymentSection.checkMoneyOrderPayment}}" dependentSelector="{{CheckoutPaymentSection.billingAddress}}" visible="false" before="waitForPlaceOrderButton" stepKey="clickCheckMoneyOrderPayment"/>
+        <remove keyForRemoval="clickPrintOrderLink"/>
     </actionGroup>
 </actionGroups>

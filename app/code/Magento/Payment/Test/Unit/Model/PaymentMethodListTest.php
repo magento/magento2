@@ -15,6 +15,7 @@ use Magento\Payment\Model\Method\AbstractMethod;
 use Magento\Payment\Model\PaymentMethodList;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class PaymentMethodListTest extends TestCase
 {
@@ -45,13 +46,11 @@ class PaymentMethodListTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->methodFactoryMock = $this->getMockBuilder(PaymentMethodInterfaceFactory::class)
-            ->onlyMethods(['create'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->helperMock = $this->getMockBuilder(Data::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->methodFactoryMock = $this->createPartialMock(
+            PaymentMethodInterfaceFactory::class,
+            ['create']
+        );
+        $this->helperMock = $this->createMock(Data::class);
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->paymentMethodList = $this->objectManagerHelper->getObject(
@@ -82,8 +81,7 @@ class PaymentMethodListTest extends TestCase
         $this->methodFactoryMock->expects($this->any())
             ->method('create')
             ->willReturnCallback(function ($data) {
-                $paymentMethod = $this->getMockBuilder(PaymentMethodInterface::class)
-                    ->getMockForAbstractClass();
+                $paymentMethod = $this->createMock(PaymentMethodInterface::class);
                 $paymentMethod->expects($this->any())
                     ->method('getCode')
                     ->willReturn($data['code']);
@@ -103,12 +101,11 @@ class PaymentMethodListTest extends TestCase
      * @param array $methodInstancesMap
      * @param array $expected
      * @return void
-     *
-     * @dataProvider getListDataProvider
      */
+    #[DataProvider('getListDataProvider')]
     public function testGetList($storeId, $paymentMethodConfig, $methodInstancesMap, $expected)
     {
-        $methodInstancesMapFinal = array();
+        $methodInstancesMapFinal = [];
         $i = 0;
         foreach ($methodInstancesMap as $methodInstances) {
             $methodInstancesMapFinal[$i][0] = $methodInstances[0];
@@ -139,8 +136,26 @@ class PaymentMethodListTest extends TestCase
                 1,
                 ['method_code_1' => [], 'method_code_2' => []],
                 [
-                    ['method_code_1', static fn (self $testCase) => $testCase->mockPaymentMethodInstance(1, 10, 'method_code_1', 'title', true)],
-                    ['method_code_2', static fn (self $testCase) => $testCase->mockPaymentMethodInstance(1, 5, 'method_code_2', 'title', true)]
+                    [
+                        'method_code_1',
+                        static fn (self $testCase) => $testCase->mockPaymentMethodInstance(
+                            1,
+                            10,
+                            'method_code_1',
+                            'title',
+                            true
+                        )
+                    ],
+                    [
+                        'method_code_2',
+                        static fn (self $testCase) => $testCase->mockPaymentMethodInstance(
+                            1,
+                            5,
+                            'method_code_2',
+                            'title',
+                            true
+                        )
+                    ]
                 ],
                 ['method_code_2', 'method_code_1']
             ]
@@ -155,12 +170,11 @@ class PaymentMethodListTest extends TestCase
      * @param array $methodInstancesMap
      * @param array $expected
      * @return void
-     *
-     * @dataProvider getActiveListDataProvider
      */
+    #[DataProvider('getActiveListDataProvider')]
     public function testGetActiveList($storeId, $paymentMethodConfig, $methodInstancesMap, $expected)
     {
-        $methodInstancesMapFinal = array();
+        $methodInstancesMapFinal = [];
         $i = 0;
         foreach ($methodInstancesMap as $methodInstances) {
             $methodInstancesMapFinal[$i][0] = $methodInstances[0];
@@ -191,8 +205,26 @@ class PaymentMethodListTest extends TestCase
                 1,
                 ['method_code_1' => [], 'method_code_2' => []],
                 [
-                    ['method_code_1', static fn (self $testCase) => $testCase->mockPaymentMethodInstance(1, 10, 'method_code_1', 'title', false)],
-                    ['method_code_2', static fn (self $testCase) => $testCase->mockPaymentMethodInstance(1, 5, 'method_code_2', 'title', true)]
+                    [
+                        'method_code_1',
+                        static fn (self $testCase) => $testCase->mockPaymentMethodInstance(
+                            1,
+                            10,
+                            'method_code_1',
+                            'title',
+                            false
+                        )
+                    ],
+                    [
+                        'method_code_2',
+                        static fn (self $testCase) => $testCase->mockPaymentMethodInstance(
+                            1,
+                            5,
+                            'method_code_2',
+                            'title',
+                            true
+                        )
+                    ]
                 ],
                 ['method_code_2']
             ]
@@ -211,10 +243,7 @@ class PaymentMethodListTest extends TestCase
      */
     private function mockPaymentMethodInstance($storeId, $sortOrder, $code, $title, $isActive)
     {
-        $paymentMethodInstance = $this->getMockBuilder(AbstractMethod::class)
-            ->onlyMethods(['getCode', 'getTitle', 'isActive', 'getConfigData'])
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $paymentMethodInstance = $this->createMock(AbstractMethod::class);
         $paymentMethodInstance->expects($this->any())
             ->method('getConfigData')
             ->willReturnMap([

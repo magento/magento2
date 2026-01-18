@@ -93,11 +93,10 @@ class ParserTest extends TestCase
         ];
         $this->objectManager->prepareObjectManager($objects);
 
-        $this->translateInlineMock =
-            $this->getMockForAbstractClass(InlineInterface::class);
-        $this->appCacheMock = $this->getMockForAbstractClass(TypeListInterface::class);
-        $this->storeManagerMock = $this->getMockForAbstractClass(StoreManagerInterface::class);
-        $this->storeMock = $this->getMockForAbstractClass(StoreInterface::class);
+        $this->translateInlineMock = $this->createMock(InlineInterface::class);
+        $this->appCacheMock = $this->createMock(TypeListInterface::class);
+        $this->storeManagerMock = $this->createMock(StoreManagerInterface::class);
+        $this->storeMock = $this->createMock(StoreInterface::class);
         $this->storeManagerMock->method('getStore')
             ->willReturn($this->storeMock);
         $this->resourceFactoryMock = $this->getMockBuilder(
@@ -110,7 +109,7 @@ class ParserTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->inputFilterMock = $this->getMockForAbstractClass(FilterInterface::class);
+        $this->inputFilterMock = $this->createMock(FilterInterface::class);
 
         $this->resourceFactoryMock->method('create')
             ->willReturn($this->resourceMock);

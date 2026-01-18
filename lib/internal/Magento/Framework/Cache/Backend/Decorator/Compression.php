@@ -1,13 +1,17 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Framework\Cache\Backend\Decorator;
 
 /**
  * Decorator class for compressing data before storing in cache
+ *
+ * @deprecated Not used in Symfony cache system. Compression is handled by backend libraries directly.
+ * @see vendor/colinmollenhour/cache-backend-redis (Cm_Cache_Backend_Redis has built-in compression)
+ * @see \Magento\Framework\Cache\Frontend\Decorator\* (Frontend decorators for Symfony)
  *
  * @todo re-implement as a cache frontend decorator similarly to \Magento\Framework\Cache\Frontend\Decorator\*
  */

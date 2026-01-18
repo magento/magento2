@@ -218,6 +218,7 @@ Catalog,Catalog
 "The value of Admin scope can't be empty.","The value of Admin scope can't be empty."
 "You duplicated the product.","You duplicated the product."
 "This product doesn't exist.","This product doesn't exist."
+"Attribute set %1 does not exist.","Attribute set %1 does not exist."
 "Invalid product id. Should be numeric value greater than 0","Invalid product id. Should be numeric value greater than 0"
 Products,Products
 "A group with the same name already exists.","A group with the same name already exists."
@@ -805,7 +806,7 @@ Image,Image
 "Add to Wishlist","Add to Wishlist"
 "Viewed Products Grid Template","Viewed Products Grid Template"
 "Viewed Products List Template","Viewed Products List Template"
-"Viewed Products Sidebar Template","Viewed Products Sidebar Template"
+"Compared Products Sidebar Template","Compared Products Sidebar Template"
 "Recently Compared Products","Recently Compared Products"
 "List of Products Recently Compared by Visitor","List of Products Recently Compared by Visitor"
 "Compared Products Grid Template","Compared Products Grid Template"
@@ -871,3 +872,4 @@ Details,Details
 "Learn more","Learn more"
 "Recently Viewed","Recently Viewed"
 "Could not acquire lock for SKU %1","Could not acquire lock for SKU %1"
+"Use Default Order","Use Default Order"

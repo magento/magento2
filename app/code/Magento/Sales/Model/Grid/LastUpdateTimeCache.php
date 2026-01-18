@@ -8,28 +8,37 @@ declare(strict_types=1);
 namespace Magento\Sales\Model\Grid;
 
 use Magento\Framework\App\CacheInterface;
+use Magento\Framework\FlagManager;
 
 /**
- * Cache for last grid update time.
+ * Storage for last grid update time.
  */
 class LastUpdateTimeCache
 {
     /**
-     * Prefix for cache key.
+     * Prefix for storage key.
      */
-    private const CACHE_PREFIX = 'LAST_GRID_UPDATE_TIME';
+    private const STORAGE_KEY_PREFIX = 'LAST_GRID_UPDATE_TIME';
 
     /**
      * @var CacheInterface
      */
     private $cache;
 
+    /** @var FlagManager */
+    private $flagManager;
+
     /**
      * @param CacheInterface $cache
+     * @param FlagManager|null $flagManager
      */
-    public function __construct(CacheInterface $cache)
-    {
+    public function __construct(
+        CacheInterface $cache,
+        ?FlagManager $flagManager = null
+    ) {
         $this->cache = $cache;
+        $this->flagManager = $flagManager ?? \Magento\Framework\App\ObjectManager::getInstance()
+            ->get(FlagManager::class);
     }
 
     /**
@@ -41,11 +50,9 @@ class LastUpdateTimeCache
      */
     public function save(string $gridTableName, string $lastUpdatedAt): void
     {
-        $this->cache->save(
-            $lastUpdatedAt,
-            $this->getCacheKey($gridTableName),
-            [],
-            3600
+        $this->flagManager->saveFlag(
+            $this->getFlagKey($gridTableName),
+            $lastUpdatedAt
         );
     }
 
@@ -57,8 +64,7 @@ class LastUpdateTimeCache
      */
     public function get(string $gridTableName): ?string
     {
-        $lastUpdatedAt = $this->cache->load($this->getCacheKey($gridTableName));
-
+        $lastUpdatedAt = $this->flagManager->getFlagData($this->getFlagKey($gridTableName));
         return $lastUpdatedAt ?: null;
     }
 
@@ -70,7 +76,7 @@ class LastUpdateTimeCache
      */
     public function remove(string $gridTableName): void
     {
-        $this->cache->remove($this->getCacheKey($gridTableName));
+        $this->flagManager->deleteFlag($this->getFlagKey($gridTableName));
     }
 
     /**
@@ -79,8 +85,8 @@ class LastUpdateTimeCache
      * @param string $gridTableName
      * @return string
      */
-    private function getCacheKey(string $gridTableName): string
+    private function getFlagKey(string $gridTableName): string
     {
-        return self::CACHE_PREFIX . ':' . $gridTableName;
+        return self::STORAGE_KEY_PREFIX . ':' . $gridTableName;
     }
 }

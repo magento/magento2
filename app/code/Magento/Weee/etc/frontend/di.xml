@@ -20,4 +20,10 @@
     <type name="Magento\Checkout\CustomerData\Cart">
         <plugin name="cart_private_data_tax" type="Magento\Weee\Plugin\Checkout\CustomerData\Cart"/>
     </type>
+    <type name="Magento\ConfigurableProduct\Block\Product\View\Type\Configurable">
+        <plugin name="addWeeeToConfigurableJsonConfig" type="Magento\Weee\Plugin\ConfigurableProduct\Block\Product\View\Type\Configurable"/>
+    </type>
+    <type name="Magento\Swatches\Block\Product\Renderer\Listing\Configurable">
+        <plugin name="addWeeeToSwatchListingJsonConfig" type="Magento\Weee\Plugin\ConfigurableProduct\Block\Product\View\Type\Configurable"/>
+    </type>
 </config>

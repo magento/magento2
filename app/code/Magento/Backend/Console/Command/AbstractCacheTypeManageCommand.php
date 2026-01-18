@@ -58,7 +58,7 @@ abstract class AbstractCacheTypeManageCommand extends AbstractCacheManageCommand
      * @param OutputInterface $output
      * @return int
      */
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $types = $this->getRequestedTypes($input);
         $this->performAction($types);

@@ -1,0 +1,382 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright 2025 Adobe
+  * All Rights Reserved.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontConfigurableProductImageChangesByLayeredNavigationTest">
+        <annotations>
+            <features value="Swatches"/>
+            <stories value="Swatches in layered navigation"/>
+            <title value="Product image changes by swatch selection in layered navigation"/>
+            <description value="Verify that configurable product image changes when filtering by swatch attributes in layered navigation on category page"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="AC-4699"/>
+            <group value="swatches"/>
+        </annotations>
+        <before>
+            <!-- Create Category -->
+            <createData entity="ApiCategory" stepKey="createCategory"/>
+            <!-- Create Configurable Product -->
+            <createData entity="ApiConfigurableProduct" stepKey="createConfigurableProduct">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+        </before>
+        <after>
+            <!-- Delete created data -->
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <!-- Delete configurable product variants via API using ProductApiHelper -->
+            <helper class="Magento\Catalog\Test\Mftf\Helper\ProductApiHelper" method="deleteAllProductsApi" stepKey="deleteAllProductsViaApi"/>
+            <!-- Delete text and visual swatch attributes -->
+            <actionGroup ref="OpenProductAttributeFromSearchResultInGridActionGroup"
+                         stepKey="openProductAttributeFromSearchResultInGrid0">
+                <argument name="productAttributeCode" value="{{textSwatchAttribute.attribute_code}}"/>
+            </actionGroup>
+            <actionGroup ref="DeleteProductAttributeByAttributeCodeActionGroup"
+                         stepKey="deleteProductAttributeByAttributeCode0">
+                <argument name="productAttributeCode" value="{{textSwatchAttribute.attribute_code}}"/>
+            </actionGroup>
+            <actionGroup ref="AssertProductAttributeRemovedSuccessfullyActionGroup"
+                         stepKey="deleteProductAttributeSuccess0"/>
+            <actionGroup ref="OpenProductAttributeFromSearchResultInGridActionGroup"
+                         stepKey="openProductAttributeFromSearchResultInGrid1">
+                <argument name="productAttributeCode" value="{{ProductAttributeFrontendLabel.label}}"/>
+            </actionGroup>
+            <actionGroup ref="DeleteProductAttributeByAttributeCodeActionGroup"
+                         stepKey="deleteProductAttributeByAttributeCode1">
+                <argument name="productAttributeCode" value="{{ProductAttributeFrontendLabel.label}}"/>
+            </actionGroup>
+            <actionGroup ref="AssertProductAttributeRemovedSuccessfullyActionGroup"
+                         stepKey="deleteProductAttributeSuccess1"/>
+            <actionGroup ref="AdminOpenProductAttributePageActionGroup" stepKey="navigateToProductAttributeGrid"/>
+            <waitForElementClickable selector="{{AdminProductAttributeGridSection.ResetFilter}}" stepKey="waitForResetFiltersClickable"/>
+            <click selector="{{AdminProductAttributeGridSection.ResetFilter}}" stepKey="resetFiltersOnGrid"/>
+            <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="openProductIndexPage"/>
+            <actionGroup ref="AdminGridFilterResetActionGroup" stepKey="resetProductGridFilter"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+        <!-- Step 1: Create Swatch Color image attribute and Text Swatch attribute-->
+        <actionGroup ref="AddVisualSwatchActionGroup" stepKey="createVisualSwatch"/>
+        <actionGroup ref="AddTextSwatchToProductWithTwoOptionsActionGroup" stepKey="createTextSwatch">
+            <argument name="option1" value="O1"/>
+            <argument name="option2" value="O2"/>
+        </actionGroup>
+        <!-- Enable "Update Product Preview Image" for visual swatch attribute -->
+        <actionGroup ref="AdminOpenProductAttributePageActionGroup" stepKey="openAttributePageForVisualSwatch"/>
+        <actionGroup ref="OpenProductAttributeFromSearchResultInGridActionGroup" stepKey="openVisualSwatchAttribute">
+            <argument name="productAttributeCode" value="{{ProductAttributeFrontendLabel.label}}"/>
+        </actionGroup>
+        <actionGroup ref="AdminUpdateProductPreviewImageActionGroup" stepKey="enableUpdatePreviewForVisualSwatch">
+            <argument name="value" value="Yes"/>
+        </actionGroup>
+        <actionGroup ref="SaveProductAttributeActionGroup" stepKey="saveVisualSwatchAttribute"/>
+        <!-- Enable "Update Product Preview Image" for text swatch attribute -->
+        <actionGroup ref="AdminOpenProductAttributePageActionGroup" stepKey="openAttributePageForTextSwatch"/>
+        <actionGroup ref="OpenProductAttributeFromSearchResultInGridActionGroup" stepKey="openTextSwatchAttribute">
+            <argument name="productAttributeCode" value="{{textSwatchAttribute.attribute_code}}"/>
+        </actionGroup>
+        <actionGroup ref="AdminUpdateProductPreviewImageActionGroup" stepKey="enableUpdatePreviewForTextSwatch">
+            <argument name="value" value="Yes"/>
+        </actionGroup>
+        <actionGroup ref="SaveProductAttributeActionGroup" stepKey="saveTextSwatchAttribute"/>
+        <!-- Assign both swatch attributes to the Default attribute set -->
+        <actionGroup ref="AdminOpenAttributeSetGridPageActionGroup" stepKey="openAttributeSetPage"/>
+        <actionGroup ref="AdminOpenAttributeSetByNameActionGroup" stepKey="openDefaultAttributeSet"/>
+        <!-- Assign visual swatch attribute -->
+        <actionGroup ref="AssignAttributeToGroupActionGroup" stepKey="assignVisualSwatchToGroup">
+            <argument name="group" value="Product Details"/>
+            <argument name="attribute" value="{{ProductAttributeFrontendLabel.label}}"/>
+        </actionGroup>
+        <!-- Assign text swatch attribute -->
+        <actionGroup ref="AssignAttributeToGroupActionGroup" stepKey="assignTextSwatchToGroup">
+            <argument name="group" value="Product Details"/>
+            <argument name="attribute" value="{{textSwatchAttribute.attribute_code}}"/>
+        </actionGroup>
+        <!-- Save attribute set once with both attributes -->
+        <actionGroup ref="SaveAttributeSetActionGroup" stepKey="saveAttributeSet"/>
+        <!-- Step 2: Create Configurable Product with both attributes (2x2 = 4 variations) -->
+        <!-- Open the configurable product for editing -->
+        <actionGroup ref="SearchForProductOnBackendActionGroup" stepKey="searchForConfigurableProduct">
+            <argument name="product" value="$$createConfigurableProduct$$"/>
+        </actionGroup>
+        <actionGroup ref="OpenEditProductOnBackendActionGroup" stepKey="openEditProduct">
+            <argument name="product" value="$$createConfigurableProduct$$"/>
+        </actionGroup>
+        <actionGroup ref="AddProductImageActionGroup" stepKey="addImageToConfigurableProduct">
+            <argument name="image" value="ProductImage"/>
+        </actionGroup>
+        <!-- Create product configurations using both attributes -->
+        <waitForElementClickable selector="{{AdminProductFormConfigurationsSection.createConfigurations}}" stepKey="waitForCreateConfigurationsClickable"/>
+        <click selector="{{AdminProductFormConfigurationsSection.createConfigurations}}" stepKey="clickCreateConfigurations"/>
+        <waitForElementVisible selector="{{AdminCreateProductConfigurationsPanel.next}}" time="30" stepKey="waitForConfigurationModal"/>
+        <!-- Select both swatch attributes -->
+        <waitForElementClickable selector="{{AdminCreateProductConfigurationsPanel.attributeCheckbox(ProductAttributeFrontendLabel.label)}}" stepKey="waitForVisualSwatchAttributeCheckboxClickable"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.attributeCheckbox(ProductAttributeFrontendLabel.label)}}" stepKey="selectVisualSwatchAttribute"/>
+        <waitForElementClickable selector="{{AdminCreateProductConfigurationsPanel.attributeCheckbox(textSwatchAttribute.attribute_code)}}" stepKey="waitForTextSwatchAttributeCheckboxClickable"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.attributeCheckbox(textSwatchAttribute.attribute_code)}}" stepKey="selectTextSwatchAttribute"/>
+        <waitForElementClickable selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="waitForNextButton1Clickable"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="clickOnNextButton1"/>
+        <!-- Select all options from both attributes to create 2x2=4 variations -->
+        <waitForElementClickable selector="{{AdminCreateProductConfigurationsPanel.selectAllByAttribute(ProductAttributeFrontendLabel.label)}}" stepKey="waitForSelectAllVisualSwatchClickable"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.selectAllByAttribute(ProductAttributeFrontendLabel.label)}}" stepKey="selectAllVisualSwatchOptions"/>
+        <waitForElementClickable selector="{{AdminCreateProductConfigurationsPanel.selectAllByAttribute(textSwatchAttribute.default_label)}}" stepKey="waitForSelectAllTextSwatchClickable"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.selectAllByAttribute(textSwatchAttribute.default_label)}}" stepKey="selectAllTextSwatchOptions"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="clickOnNextButton2"/>
+        <!-- Set same quantity and price for all variations -->
+        <waitForElementClickable selector="{{AdminCreateProductConfigurationsPanel.applySingleQuantityToEachSkus}}" stepKey="waitForApplySingleQuantityClickable"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.applySingleQuantityToEachSkus}}" stepKey="clickApplySingleQuantity"/>
+        <waitForElementVisible selector="{{AdminCreateProductConfigurationsPanel.quantity}}" stepKey="waitForQuantityFieldVisible"/>
+        <fillField selector="{{AdminCreateProductConfigurationsPanel.quantity}}" userInput="100" stepKey="enterQuantity"/>
+        <waitForElementClickable selector="{{AdminCreateProductConfigurationsPanel.applySinglePriceToAllSkus}}" stepKey="waitForApplySinglePriceClickable"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.applySinglePriceToAllSkus}}" stepKey="clickApplySinglePrice"/>
+        <waitForElementVisible selector="{{AdminCreateProductConfigurationsPanel.singlePrice}}" stepKey="waitForPriceFieldVisible"/>
+        <fillField selector="{{AdminCreateProductConfigurationsPanel.singlePrice}}" userInput="123.00" stepKey="enterPrice"/>
+        <waitForElementClickable selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="waitForNextToSummaryClickable"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="clickNextToSummary"/>
+        <!-- Generate products -->
+        <waitForElementClickable selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="waitForGenerateProductsClickable"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="clickGenerateProducts"/>
+        <waitForElementClickable selector="{{AdminProductFormActionSection.saveButton}}" stepKey="waitForSaveButtonClickable"/>
+        <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="clickOnSaveButton"/>
+        <conditionalClick selector="{{AdminChooseAffectedAttributeSetPopup.confirm}}" dependentSelector="{{AdminChooseAffectedAttributeSetPopup.confirm}}" visible="true" stepKey="clickOnConfirmInPopup"/>
+        <waitForElementVisible selector="{{AdminProductMessagesSection.successMessage}}" stepKey="waitForSaveProductSuccessMessage"/>
+        <!-- Step 2a: Add unique images to each of the 4 generated simple product variations -->
+        <!-- Variation 1: visualSwatchOption1 + O1 = TestImageNew -->
+        <actionGroup ref="FilterAndSelectProductActionGroup" stepKey="findVariation1">
+            <argument name="productSku" value="$$createConfigurableProduct.sku$$-visualSwatchOption1-O1"/>
+        </actionGroup>
+        <actionGroup ref="AddProductImageActionGroup" stepKey="addImageToVariation1">
+            <argument name="image" value="TestImageNew"/>
+        </actionGroup>
+        <actionGroup ref="SaveProductFormActionGroup" stepKey="saveVariation1"/>
+        <!-- Variation 2: visualSwatchOption1 + O2 = TestImageAdobe -->
+        <actionGroup ref="FilterAndSelectProductActionGroup" stepKey="findVariation2">
+            <argument name="productSku" value="$$createConfigurableProduct.sku$$-visualSwatchOption1-O2"/>
+        </actionGroup>
+        <actionGroup ref="AddProductImageActionGroup" stepKey="addImageToVariation2">
+            <argument name="image" value="TestImageAdobe"/>
+        </actionGroup>
+        <actionGroup ref="SaveProductFormActionGroup" stepKey="saveVariation2"/>
+        <!-- Variation 3: visualSwatchOption2 + O1 = MagentoLogo -->
+        <actionGroup ref="FilterAndSelectProductActionGroup" stepKey="findVariation3">
+            <argument name="productSku" value="$$createConfigurableProduct.sku$$-visualSwatchOption2-O1"/>
+        </actionGroup>
+        <actionGroup ref="AddProductImageActionGroup" stepKey="addImageToVariation3">
+            <argument name="image" value="MagentoLogo"/>
+        </actionGroup>
+        <actionGroup ref="SaveProductFormActionGroup" stepKey="saveVariation3"/>
+        <!-- Variation 4: visualSwatchOption2 + O2 = Magento2 -->
+        <actionGroup ref="FilterAndSelectProductActionGroup" stepKey="findVariation4">
+            <argument name="productSku" value="$$createConfigurableProduct.sku$$-visualSwatchOption2-O2"/>
+        </actionGroup>
+        <actionGroup ref="AddProductImageActionGroup" stepKey="addImageToVariation4">
+            <argument name="image" value="Magento2"/>
+        </actionGroup>
+        <actionGroup ref="SaveProductFormActionGroup" stepKey="saveVariation4"/>
+        <!-- Reindex catalog indices and flush cache -->
+        <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindexCatalogIndices">
+            <argument name="indices" value="catalog_product_attribute catalog_product_price cataloginventory_stock"/>
+        </actionGroup>
+        <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCacheAfterProductSetup">
+            <argument name="tags" value=""/>
+        </actionGroup>
+        <!-- Step 3: Open Frontend application on base of layered navigation for product 1 -->
+        <actionGroup ref="StorefrontNavigateCategoryPageActionGroup" stepKey="navigateToCategoryPage">
+            <argument name="category" value="$$createCategory$$"/>
+        </actionGroup>
+        <waitForPageLoad stepKey="waitForCategoryPageLoad"/>
+        <waitForElementVisible selector="{{StorefrontCategoryMainSection.productLink}}" stepKey="waitForConfigurableProductVisible"/>
+        <waitForText selector="{{StorefrontCategoryMainSection.productName}}" userInput="$$createConfigurableProduct.name$$" stepKey="waitForProductNameVisible"/>
+        <!-- Verify layered navigation is present -->
+        <waitForElementVisible selector="{{StorefrontCategorySidebarSection.layeredFilterBlock}}" stepKey="waitForLayeredNavigationVisible"/>
+        <!-- Step 4: Search by attribute1 option1 (visualSwatchOption1) -->
+        <waitForElementClickable selector="{{StorefrontCategorySidebarSection.filterOptionTitle(ProductAttributeFrontendLabel.label)}}" stepKey="waitForVisualSwatchFilterClickable"/>
+        <click selector="{{StorefrontCategorySidebarSection.filterOptionTitle(ProductAttributeFrontendLabel.label)}}" stepKey="expandVisualSwatchFilter"/>
+        <waitForElementClickable selector="{{StorefrontCategorySidebarSection.attributeNthOption(ProductAttributeFrontendLabel.label, '1')}}" stepKey="waitForVisualSwatchOption1Clickable"/>
+        <click selector="{{StorefrontCategorySidebarSection.attributeNthOption(ProductAttributeFrontendLabel.label, '1')}}" stepKey="selectVisualSwatchOption1"/>
+        <waitForPageLoad stepKey="waitForFilteredResults"/>
+        <!-- Verify product is still visible after filtering -->
+        <waitForElementVisible selector="{{StorefrontCategoryMainSection.productLink}}" stepKey="waitForProductVisibleAfterFilter"/>
+        <waitForText selector="{{StorefrontCategoryMainSection.productName}}" userInput="$$createConfigurableProduct.name$$" stepKey="waitForProductNameAfterFilter"/>
+        <!-- Verify product image is displayed with TestImageNew (magento-again) -->
+        <waitForElementVisible selector="{{StorefrontCategoryMainSection.productImage}}" stepKey="waitForProductImageVisible"/>
+        <grabAttributeFrom selector="{{StorefrontCategoryMainSection.productImage}}" userInput="src" stepKey="grabProductImageStep4"/>
+        <assertStringContainsString stepKey="assertProductImageStep4">
+            <actualResult type="variable">$grabProductImageStep4</actualResult>
+            <expectedResult type="string">{{TestImageNew.filename}}</expectedResult>
+        </assertStringContainsString>
+        <!-- Step 5: Search by attribute1 option2 (visualSwatchOption2) -->
+        <!-- Remove previous filter by clicking the selected option again or using remove filter -->
+        <waitForElementClickable selector="{{StorefrontCategorySidebarSection.removeFilter}}" stepKey="waitForRemoveFilterClickable"/>
+        <click selector="{{StorefrontCategorySidebarSection.removeFilter}}" stepKey="removeVisualSwatchOption1Filter"/>
+        <waitForPageLoad stepKey="waitAfterRemovingFilter"/>
+        <!-- Select visualSwatchOption2 -->
+        <waitForElementClickable selector="{{StorefrontCategorySidebarSection.filterOptionTitle(ProductAttributeFrontendLabel.label)}}" stepKey="waitForVisualSwatchFilterClickableStep5"/>
+        <click selector="{{StorefrontCategorySidebarSection.filterOptionTitle(ProductAttributeFrontendLabel.label)}}" stepKey="expandVisualSwatchFilterStep5"/>
+        <waitForElementClickable selector="{{StorefrontCategorySidebarSection.attributeNthOption(ProductAttributeFrontendLabel.label, '2')}}" stepKey="waitForVisualSwatchOption2Clickable"/>
+        <click selector="{{StorefrontCategorySidebarSection.attributeNthOption(ProductAttributeFrontendLabel.label, '2')}}" stepKey="selectVisualSwatchOption2"/>
+        <waitForPageLoad stepKey="waitForFilteredResultsStep5"/>
+        <!-- Verify product with visualSwatchOption2 image (MagentoLogo) -->
+        <waitForElementVisible selector="{{StorefrontCategoryMainSection.productLink}}" stepKey="waitForProductVisibleAfterFilterStep5"/>
+        <waitForText selector="{{StorefrontCategoryMainSection.productName}}" userInput="$$createConfigurableProduct.name$$" stepKey="waitForProductNameAfterFilterStep5"/>
+        <waitForElementVisible selector="{{StorefrontCategoryMainSection.productImage}}" stepKey="waitForProductImageVisibleStep5"/>
+        <grabAttributeFrom selector="{{StorefrontCategoryMainSection.productImage}}" userInput="src" stepKey="grabProductImageStep5"/>
+        <assertStringContainsString stepKey="assertProductImageStep5">
+            <actualResult type="variable">$grabProductImageStep5</actualResult>
+            <expectedResult type="string">{{MagentoLogo.filename}}</expectedResult>
+        </assertStringContainsString>
+        <!-- Step 6: Search by attribute2 option1 (O1) -->
+        <!-- Remove previous filter -->
+        <waitForElementClickable selector="{{StorefrontCategorySidebarSection.removeFilter}}" stepKey="waitForRemoveFilterClickableStep6"/>
+        <click selector="{{StorefrontCategorySidebarSection.removeFilter}}" stepKey="removeVisualSwatchOption2Filter"/>
+        <waitForPageLoad stepKey="waitAfterRemovingFilterStep6"/>
+        <!-- Select text swatch O1 -->
+        <waitForElementClickable selector="{{StorefrontCategorySidebarSection.filterOptionTitle(textSwatchAttribute.default_label)}}" stepKey="waitForTextSwatchFilterClickableStep6"/>
+        <click selector="{{StorefrontCategorySidebarSection.filterOptionTitle(textSwatchAttribute.default_label)}}" stepKey="expandTextSwatchFilterStep6"/>
+        <waitForElementClickable selector="{{StorefrontCategorySidebarSection.swatchTextLayeredNav('O1')}}" stepKey="waitForTextSwatchOption1Clickable"/>
+        <click selector="{{StorefrontCategorySidebarSection.swatchTextLayeredNav('O1')}}" stepKey="selectTextSwatchOption1"/>
+        <waitForPageLoad stepKey="waitForFilteredResultsStep6"/>
+        <!-- Verify product is displayed with image from variation 3 (visualSwatchOption2 + O1 = MagentoLogo) -->
+        <waitForElementVisible selector="{{StorefrontCategoryMainSection.productLink}}" stepKey="waitForProductVisibleAfterFilterStep6"/>
+        <waitForText selector="{{StorefrontCategoryMainSection.productName}}" userInput="$$createConfigurableProduct.name$$" stepKey="waitForProductNameAfterFilterStep6"/>
+        <waitForElementVisible selector="{{StorefrontCategoryMainSection.productImage}}" stepKey="waitForProductImageVisibleStep6"/>
+        <grabAttributeFrom selector="{{StorefrontCategoryMainSection.productImage}}" userInput="src" stepKey="grabProductImageStep6"/>
+        <assertStringContainsString stepKey="assertProductImageStep6">
+            <actualResult type="variable">$grabProductImageStep6</actualResult>
+            <expectedResult type="string">{{MagentoLogo.filename}}</expectedResult>
+        </assertStringContainsString>
+        <!-- Step 7: Search by attribute2 option2 (O2) -->
+        <!-- Remove previous filter -->
+        <waitForElementClickable selector="{{StorefrontCategorySidebarSection.removeFilter}}" stepKey="waitForRemoveFilterClickableStep7"/>
+        <click selector="{{StorefrontCategorySidebarSection.removeFilter}}" stepKey="removeTextSwatchOption1Filter"/>
+        <waitForPageLoad stepKey="waitAfterRemovingFilterStep7"/>
+        <!-- Select text swatch O2 -->
+        <waitForElementClickable selector="{{StorefrontCategorySidebarSection.filterOptionTitle(textSwatchAttribute.default_label)}}" stepKey="waitForTextSwatchFilterClickableStep7"/>
+        <click selector="{{StorefrontCategorySidebarSection.filterOptionTitle(textSwatchAttribute.default_label)}}" stepKey="expandTextSwatchFilterStep7"/>
+        <waitForElementClickable selector="{{StorefrontCategorySidebarSection.swatchTextLayeredNav('O2')}}" stepKey="waitForTextSwatchOption2Clickable"/>
+        <click selector="{{StorefrontCategorySidebarSection.swatchTextLayeredNav('O2')}}" stepKey="selectTextSwatchOption2"/>
+        <waitForPageLoad stepKey="waitForFilteredResultsStep7"/>
+        <!-- Verify product is displayed with image from variation 4 (visualSwatchOption2 + O2 = MagentoLogo) -->
+        <waitForElementVisible selector="{{StorefrontCategoryMainSection.productLink}}" stepKey="waitForProductVisibleAfterFilterStep7"/>
+        <waitForText selector="{{StorefrontCategoryMainSection.productName}}" userInput="$$createConfigurableProduct.name$$" stepKey="waitForProductNameAfterFilterStep7"/>
+        <waitForElementVisible selector="{{StorefrontCategoryMainSection.productImage}}" stepKey="waitForProductImageVisibleStep7"/>
+        <grabAttributeFrom selector="{{StorefrontCategoryMainSection.productImage}}" userInput="src" stepKey="grabProductImageStep7"/>
+        <assertStringContainsString stepKey="assertProductImageStep7">
+            <actualResult type="variable">$grabProductImageStep7</actualResult>
+            <expectedResult type="string">{{MagentoLogo.filename}}</expectedResult>
+        </assertStringContainsString>
+        <!-- Step 8: Search by attribute1 option1 (visualSwatchOption1) & attribute2 option1 (O1) -->
+        <!-- Remove previous filter -->
+        <waitForElementClickable selector="{{StorefrontCategorySidebarSection.removeFilter}}" stepKey="waitForRemoveFilterClickableStep8"/>
+        <click selector="{{StorefrontCategorySidebarSection.removeFilter}}" stepKey="removeTextSwatchOption2Filter"/>
+        <waitForPageLoad stepKey="waitAfterRemovingFilterStep8"/>
+        <!-- Select visualSwatchOption1 -->
+        <waitForElementClickable selector="{{StorefrontCategorySidebarSection.filterOptionTitle(ProductAttributeFrontendLabel.label)}}" stepKey="waitForVisualSwatchFilterClickableStep8"/>
+        <click selector="{{StorefrontCategorySidebarSection.filterOptionTitle(ProductAttributeFrontendLabel.label)}}" stepKey="expandVisualSwatchFilterStep8"/>
+        <waitForElementClickable selector="{{StorefrontCategorySidebarSection.attributeNthOption(ProductAttributeFrontendLabel.label, '1')}}" stepKey="waitForVisualSwatchOption1ClickableStep8"/>
+        <click selector="{{StorefrontCategorySidebarSection.attributeNthOption(ProductAttributeFrontendLabel.label, '1')}}" stepKey="selectVisualSwatchOption1Step8"/>
+        <waitForPageLoad stepKey="waitAfterSelectingVisualSwatchStep8"/>
+        <!-- Select text swatch O1 -->
+        <waitForElementClickable selector="{{StorefrontCategorySidebarSection.filterOptionTitle(textSwatchAttribute.default_label)}}" stepKey="waitForTextSwatchFilterClickableStep8"/>
+        <click selector="{{StorefrontCategorySidebarSection.filterOptionTitle(textSwatchAttribute.default_label)}}" stepKey="expandTextSwatchFilterStep8"/>
+        <waitForElementClickable selector="{{StorefrontCategorySidebarSection.swatchTextLayeredNav('O1')}}" stepKey="waitForTextSwatchOption1ClickableStep8"/>
+        <click selector="{{StorefrontCategorySidebarSection.swatchTextLayeredNav('O1')}}" stepKey="selectTextSwatchOption1Step8"/>
+        <waitForPageLoad stepKey="waitForFilteredResultsStep8"/>
+        <!-- Verify product with specific variation (visualSwatchOption1 + O1) is displayed -->
+        <waitForElementVisible selector="{{StorefrontCategoryMainSection.productLink}}" stepKey="waitForProductVisibleAfterFilterStep8"/>
+        <waitForText selector="{{StorefrontCategoryMainSection.productName}}" userInput="$$createConfigurableProduct.name$$" stepKey="waitForProductNameAfterFilterStep8"/>
+        <!-- Verify product image is displayed (should show TestImageNew from visualSwatchOption1) -->
+        <waitForElementVisible selector="{{StorefrontCategoryMainSection.productImage}}" stepKey="waitForProductImageVisibleStep8"/>
+        <grabAttributeFrom selector="{{StorefrontCategoryMainSection.productImage}}" userInput="src" stepKey="grabProductImageStep8"/>
+        <assertStringContainsString stepKey="assertProductImageStep8">
+            <actualResult type="variable">$grabProductImageStep8</actualResult>
+            <expectedResult type="string">{{TestImageNew.filename}}</expectedResult>
+        </assertStringContainsString>
+        <!-- Step 9: Search by attribute1 option1 (visualSwatchOption1) & attribute2 option2 (O2) -->
+        <!-- Remove previous filters using Clear All -->
+        <waitForElementClickable selector="{{StorefrontCategorySidebarSection.removeAllFilters}}" stepKey="waitForClearAllFiltersClickableStep9"/>
+        <click selector="{{StorefrontCategorySidebarSection.removeAllFilters}}" stepKey="clickClearAllFiltersStep9"/>
+        <waitForPageLoad stepKey="waitAfterClearingAllFiltersStep9"/>
+        <!-- Select visualSwatchOption1 -->
+        <waitForElementClickable selector="{{StorefrontCategorySidebarSection.filterOptionTitle(ProductAttributeFrontendLabel.label)}}" stepKey="waitForVisualSwatchFilterClickableStep9"/>
+        <click selector="{{StorefrontCategorySidebarSection.filterOptionTitle(ProductAttributeFrontendLabel.label)}}" stepKey="expandVisualSwatchFilterStep9"/>
+        <waitForElementClickable selector="{{StorefrontCategorySidebarSection.attributeNthOption(ProductAttributeFrontendLabel.label, '1')}}" stepKey="waitForVisualSwatchOption1ClickableStep9"/>
+        <click selector="{{StorefrontCategorySidebarSection.attributeNthOption(ProductAttributeFrontendLabel.label, '1')}}" stepKey="selectVisualSwatchOption1Step9"/>
+        <waitForPageLoad stepKey="waitAfterSelectingVisualSwatchStep9"/>
+        <!-- Select text swatch O2 -->
+        <waitForElementClickable selector="{{StorefrontCategorySidebarSection.filterOptionTitle(textSwatchAttribute.default_label)}}" stepKey="waitForTextSwatchFilterClickableStep9"/>
+        <click selector="{{StorefrontCategorySidebarSection.filterOptionTitle(textSwatchAttribute.default_label)}}" stepKey="expandTextSwatchFilterStep9"/>
+        <waitForElementClickable selector="{{StorefrontCategorySidebarSection.swatchTextLayeredNav('O2')}}" stepKey="waitForTextSwatchOption2ClickableStep9"/>
+        <click selector="{{StorefrontCategorySidebarSection.swatchTextLayeredNav('O2')}}" stepKey="selectTextSwatchOption2Step9"/>
+        <waitForPageLoad stepKey="waitForFilteredResultsStep9"/>
+        <!-- Verify product with specific variation (visualSwatchOption1 + O2 = TestImageAdobe) is displayed -->
+        <waitForElementVisible selector="{{StorefrontCategoryMainSection.productLink}}" stepKey="waitForProductVisibleAfterFilterStep9"/>
+        <waitForText selector="{{StorefrontCategoryMainSection.productName}}" userInput="$$createConfigurableProduct.name$$" stepKey="waitForProductNameAfterFilterStep9"/>
+        <!-- Verify product image is displayed (should show TestImageAdobe from variation 2) -->
+        <waitForElementVisible selector="{{StorefrontCategoryMainSection.productImage}}" stepKey="waitForProductImageVisibleStep9"/>
+        <grabAttributeFrom selector="{{StorefrontCategoryMainSection.productImage}}" userInput="src" stepKey="grabProductImageStep9"/>
+        <assertStringContainsString stepKey="assertProductImageStep9">
+            <actualResult type="variable">$grabProductImageStep9</actualResult>
+            <expectedResult type="string">{{TestImageAdobe.filename}}</expectedResult>
+        </assertStringContainsString>
+        <!-- Step 10: Search by attribute1 option2 (visualSwatchOption2) & attribute2 option1 (O1) -->
+        <!-- Remove previous filters using Clear All -->
+        <waitForElementClickable selector="{{StorefrontCategorySidebarSection.removeAllFilters}}" stepKey="waitForClearAllFiltersClickableStep10"/>
+        <click selector="{{StorefrontCategorySidebarSection.removeAllFilters}}" stepKey="clickClearAllFiltersStep10"/>
+        <waitForPageLoad stepKey="waitAfterClearingAllFiltersStep10"/>
+        <!-- Select visualSwatchOption2 -->
+        <waitForElementClickable selector="{{StorefrontCategorySidebarSection.filterOptionTitle(ProductAttributeFrontendLabel.label)}}" stepKey="waitForVisualSwatchFilterClickableStep10"/>
+        <click selector="{{StorefrontCategorySidebarSection.filterOptionTitle(ProductAttributeFrontendLabel.label)}}" stepKey="expandVisualSwatchFilterStep10"/>
+        <waitForElementClickable selector="{{StorefrontCategorySidebarSection.attributeNthOption(ProductAttributeFrontendLabel.label, '2')}}" stepKey="waitForVisualSwatchOption2ClickableStep10"/>
+        <click selector="{{StorefrontCategorySidebarSection.attributeNthOption(ProductAttributeFrontendLabel.label, '2')}}" stepKey="selectVisualSwatchOption2Step10"/>
+        <waitForPageLoad stepKey="waitAfterSelectingVisualSwatchStep10"/>
+        <!-- Select text swatch O1 -->
+        <waitForElementClickable selector="{{StorefrontCategorySidebarSection.filterOptionTitle(textSwatchAttribute.default_label)}}" stepKey="waitForTextSwatchFilterClickableStep10"/>
+        <click selector="{{StorefrontCategorySidebarSection.filterOptionTitle(textSwatchAttribute.default_label)}}" stepKey="expandTextSwatchFilterStep10"/>
+        <waitForElementClickable selector="{{StorefrontCategorySidebarSection.swatchTextLayeredNav('O1')}}" stepKey="waitForTextSwatchOption1ClickableStep10"/>
+        <click selector="{{StorefrontCategorySidebarSection.swatchTextLayeredNav('O1')}}" stepKey="selectTextSwatchOption1Step10"/>
+        <waitForPageLoad stepKey="waitForFilteredResultsStep10"/>
+        <!-- Verify product with specific variation (visualSwatchOption2 + O1) is displayed -->
+        <waitForElementVisible selector="{{StorefrontCategoryMainSection.productLink}}" stepKey="waitForProductVisibleAfterFilterStep10"/>
+        <waitForText selector="{{StorefrontCategoryMainSection.productName}}" userInput="$$createConfigurableProduct.name$$" stepKey="waitForProductNameAfterFilterStep10"/>
+        <!-- Verify product image is displayed (should show MagentoLogo from visualSwatchOption2) -->
+        <waitForElementVisible selector="{{StorefrontCategoryMainSection.productImage}}" stepKey="waitForProductImageVisibleStep10"/>
+        <grabAttributeFrom selector="{{StorefrontCategoryMainSection.productImage}}" userInput="src" stepKey="grabProductImageStep10"/>
+        <assertStringContainsString stepKey="assertProductImageStep10">
+            <actualResult type="variable">$grabProductImageStep10</actualResult>
+            <expectedResult type="string">{{MagentoLogo.filename}}</expectedResult>
+        </assertStringContainsString>
+        <!-- Step 11: Search by attribute1 option2 (visualSwatchOption2) & attribute2 option2 (O2) -->
+        <!-- Remove previous filters using Clear All -->
+        <waitForElementClickable selector="{{StorefrontCategorySidebarSection.removeAllFilters}}" stepKey="waitForClearAllFiltersClickableStep11"/>
+        <click selector="{{StorefrontCategorySidebarSection.removeAllFilters}}" stepKey="clickClearAllFiltersStep11"/>
+        <waitForPageLoad stepKey="waitAfterClearingAllFiltersStep11"/>
+        <!-- Select visualSwatchOption2 -->
+        <waitForElementClickable selector="{{StorefrontCategorySidebarSection.filterOptionTitle(ProductAttributeFrontendLabel.label)}}" stepKey="waitForVisualSwatchFilterClickableStep11"/>
+        <click selector="{{StorefrontCategorySidebarSection.filterOptionTitle(ProductAttributeFrontendLabel.label)}}" stepKey="expandVisualSwatchFilterStep11"/>
+        <waitForElementClickable selector="{{StorefrontCategorySidebarSection.attributeNthOption(ProductAttributeFrontendLabel.label, '2')}}" stepKey="waitForVisualSwatchOption2ClickableStep11"/>
+        <click selector="{{StorefrontCategorySidebarSection.attributeNthOption(ProductAttributeFrontendLabel.label, '2')}}" stepKey="selectVisualSwatchOption2Step11"/>
+        <waitForPageLoad stepKey="waitAfterSelectingVisualSwatchStep11"/>
+        <!-- Select text swatch O2 -->
+        <waitForElementClickable selector="{{StorefrontCategorySidebarSection.filterOptionTitle(textSwatchAttribute.default_label)}}" stepKey="waitForTextSwatchFilterClickableStep11"/>
+        <click selector="{{StorefrontCategorySidebarSection.filterOptionTitle(textSwatchAttribute.default_label)}}" stepKey="expandTextSwatchFilterStep11"/>
+        <waitForElementClickable selector="{{StorefrontCategorySidebarSection.swatchTextLayeredNav('O2')}}" stepKey="waitForTextSwatchOption2ClickableStep11"/>
+        <click selector="{{StorefrontCategorySidebarSection.swatchTextLayeredNav('O2')}}" stepKey="selectTextSwatchOption2Step11"/>
+        <waitForPageLoad stepKey="waitForFilteredResultsStep11"/>
+        <!-- Verify product with specific variation (visualSwatchOption2 + O2 = Magento2) is displayed -->
+        <waitForElementVisible selector="{{StorefrontCategoryMainSection.productLink}}" stepKey="waitForProductVisibleAfterFilterStep11"/>
+        <waitForText selector="{{StorefrontCategoryMainSection.productName}}" userInput="$$createConfigurableProduct.name$$" stepKey="waitForProductNameAfterFilterStep11"/>
+        <!-- Verify product image is displayed (should show Magento2 from variation 4) -->
+        <waitForElementVisible selector="{{StorefrontCategoryMainSection.productImage}}" stepKey="waitForProductImageVisibleStep11"/>
+        <grabAttributeFrom selector="{{StorefrontCategoryMainSection.productImage}}" userInput="src" stepKey="grabProductImageStep11"/>
+        <assertStringContainsString stepKey="assertProductImageStep11">
+            <actualResult type="variable">$grabProductImageStep11</actualResult>
+            <expectedResult type="string">{{Magento2.filename}}</expectedResult>
+        </assertStringContainsString>
+    </test>
+</tests>

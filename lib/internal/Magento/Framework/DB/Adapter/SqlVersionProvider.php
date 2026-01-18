@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -32,6 +32,8 @@ class SqlVersionProvider
     public const MARIA_DB_10_4_VERSION = '10.4.';
 
     public const MARIA_DB_10_6_VERSION = '10.6.';
+
+    public const MARIA_DB_10_11_VERSION = '10.11.';
 
     public const MYSQL_8_0_29_VERSION = '8.0.29';
 
@@ -165,6 +167,7 @@ class SqlVersionProvider
         $defaultSuffixKey = SqlVersionProvider::MARIA_DB_10_6_11_VERSION;
         $isMariaDB104 = str_contains($sqlVersion, SqlVersionProvider::MARIA_DB_10_4_VERSION);
         $isMariaDB106 = str_contains($sqlVersion, SqlVersionProvider::MARIA_DB_10_6_VERSION);
+        $isMariaDB1011 = str_contains($sqlVersion, SqlVersionProvider::MARIA_DB_10_11_VERSION);
         $isMariaDB114 = str_contains($sqlVersion, SqlVersionProvider::MARIA_DB_11_4_VERSION);
         $sqlExactVersion = $this->fetchSqlVersion(ResourceConnection::DEFAULT_CONNECTION);
         if (version_compare($sqlExactVersion, '10.4.27', '>=')) {
@@ -174,6 +177,8 @@ class SqlVersionProvider
                 return SqlVersionProvider::MARIA_DB_10_6_11_VERSION;
             } elseif ($isMariaDB114) {
                 return SqlVersionProvider::MARIA_DB_10_6_11_VERSION;
+            } elseif ($isMariaDB1011) {
+                return SqlVersionProvider::MARIA_DB_10_11_VERSION;
             }
         }
         return $defaultSuffixKey;

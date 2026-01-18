@@ -9,6 +9,8 @@ namespace Magento\SalesSequence\Test\Unit\Model;
 
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Adapter\AdapterInterface;
+use Magento\Framework\DB\Adapter\Pdo\Mysql;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\SalesSequence\Model\Meta;
 use Magento\SalesSequence\Model\Profile;
@@ -18,6 +20,8 @@ use PHPUnit\Framework\TestCase;
 
 class SequenceTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var AdapterInterface|MockObject
      */
@@ -48,24 +52,19 @@ class SequenceTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->meta = $this->getMockBuilder(Meta::class)
-            ->addMethods(['getSequenceTable', 'getActiveProfile'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->profile = $this->getMockBuilder(Profile::class)
-            ->addMethods(['getSuffix', 'getPrefix', 'getStep', 'getStartValue'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->resource = $this->createPartialMock(ResourceConnection::class, ['getConnection']);
-        $this->connectionMock = $this->getMockForAbstractClass(
-            AdapterInterface::class,
-            [],
-            '',
-            false,
-            false,
-            true,
-            ['insert', 'lastInsertId']
+        $this->meta = $this->createPartialMockWithReflection(
+            Meta::class,
+            ['getSequenceTable', 'getActiveProfile']
         );
+        $this->profile = $this->createPartialMockWithReflection(
+            Profile::class,
+            ['getSuffix', 'getPrefix', 'getStep', 'getStartValue']
+        );
+        $this->resource = $this->createPartialMock(ResourceConnection::class, ['getConnection']);
+        $this->connectionMock = $this->getMockBuilder(Mysql::class)
+            ->disableOriginalConstructor()
+            ->onlyMethods(['insert', 'lastInsertId'])
+            ->getMock();
         $this->resource->expects($this->any())->method('getConnection')->willReturn($this->connectionMock);
         $helper = new ObjectManager($this);
         $this->sequence = $helper->getObject(

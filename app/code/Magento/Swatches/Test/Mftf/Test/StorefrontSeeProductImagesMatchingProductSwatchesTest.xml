@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
-  */
+/**
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
+ */
 -->
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -99,9 +99,13 @@
 
         <!-- Go to the category page -->
         <amOnPage url="{{StorefrontProductPage.url($$createSimpleProduct.custom_attributes[url_key]$$)}}" stepKey="goToProductPage"/>
-
+        <waitForPageLoad stepKey="waitForProductPageLoad"/>
         <actionGroup ref="StorefrontAssertActiveProductImageActionGroup" stepKey="StorefrontAssertActiveProductImage"/>
-
+        <!-- Check default images of products are loaded-->
+        <actionGroup ref="StorefrontAssertFotoramaImageAvailabilityActionGroup" stepKey="seeFirstImageBaseProductInSwatchOption1"/>
+        <actionGroup ref="StorefrontAssertFotoramaImageAvailabilityActionGroup" stepKey="seeSecondImageBaseProductInSwatchOption1">
+            <argument name="fileName" value="{{TestImageNew.filename}}"/>
+        </actionGroup>
          <!--Click a swatch and expect to see the image from the swatch from the configurable product -->
         <actionGroup ref="StorefrontSelectSwatchOptionOnProductPageAndCheckImageActionGroup" stepKey="clickSwatchOption">
             <argument name="optionName" value="{{visualSwatchOption1.default_label}}"/>

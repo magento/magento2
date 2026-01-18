@@ -9,6 +9,7 @@ namespace Magento\Store\Test\Unit\Model;
 
 use Magento\Framework\App\Config;
 use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\Cache\CacheConstants;
 use Magento\Framework\Cache\FrontendInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Store\Api\Data\StoreInterface;
@@ -141,7 +142,7 @@ class StoreManagerTest extends TestCase
     public function testReinitStores()
     {
         $this->cache->expects($this->once())->method('clean')->with(
-            \Zend_Cache::CLEANING_MODE_MATCHING_ANY_TAG,
+            CacheConstants::CLEANING_MODE_MATCHING_ANY_TAG,
             [StoreResolver::CACHE_TAG, Store::CACHE_TAG, Website::CACHE_TAG, Group::CACHE_TAG]
         );
         $this->scopeConfig->expects($this->once())->method('clean');
@@ -173,7 +174,8 @@ class StoreManagerTest extends TestCase
         $this->assertEquals($expectedStoresFinal, $this->model->getStores($withDefault, $codeKey));
     }
 
-    protected function getMockForStoreInterfaceClass($idReturn, $codeReturn) {
+    protected function getMockForStoreInterfaceClass($idReturn, $codeReturn)
+    {
         $storeMock = $this->getMockBuilder(StoreInterface::class)
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
@@ -190,7 +192,8 @@ class StoreManagerTest extends TestCase
         $defaultStoreMock = static fn (self $testCase) =>
             $testCase->getMockForStoreInterfaceClass(0, 'default');
         $storeMock = static fn (self $testCase) =>
-            $testCase->getMockForStoreInterfaceClass(1, 'first_store');;
+            $testCase->getMockForStoreInterfaceClass(1, 'first_store');
+        ;
 
         return [
             'withoutDefaultAndId' => [

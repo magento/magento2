@@ -10,6 +10,7 @@ namespace Magento\Backend\Test\Unit\Controller\Adminhtml\Dashboard;
 use Magento\Framework\Controller\Result\Raw;
 use Magento\Framework\Controller\Result\RawFactory;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\View\Layout;
 use Magento\Framework\View\LayoutFactory;
 use PHPUnit\Framework\TestCase;
@@ -19,6 +20,8 @@ use PHPUnit\Framework\TestCase;
  */
 class AbstractTestCase extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * Assertions for controller execute method
      *
@@ -33,11 +36,10 @@ class AbstractTestCase extends TestCase
         $resultRawFactoryMock =
             $this->createPartialMock(RawFactory::class, ['create']);
         $layoutFactoryMock = $this->createPartialMock(LayoutFactory::class, ['create']);
-        $layoutMock = $this->getMockBuilder(Layout::class)
-            ->addMethods(['toHtml'])
-            ->onlyMethods(['createBlock'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $layoutMock = $this->createPartialMockWithReflection(
+            Layout::class,
+            ['toHtml', 'createBlock']
+        );
         $layoutFactoryMock->expects($this->once())->method('create')->willReturn($layoutMock);
         $layoutMock->expects($this->once())->method('createBlock')->with($blockName)->willReturnSelf();
         $layoutMock->expects($this->once())->method('toHtml')->willReturn($outPut);

@@ -9,6 +9,7 @@ namespace Magento\Rule\Test\Unit\Model\Condition;
 
 use Magento\Framework\Model\AbstractModel;
 use Magento\Rule\Model\Condition\AbstractCondition;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -21,15 +22,7 @@ class AbstractConditionTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->_condition = $this->getMockForAbstractClass(
-            AbstractCondition::class,
-            [],
-            '',
-            false,
-            false,
-            true,
-            ['getInputType']
-        );
+        $this->_condition = $this->createPartialMock(AbstractCondition::class, ['getInputType']);
     }
 
     public function testGetjointTables()
@@ -117,9 +110,8 @@ class AbstractConditionTest extends TestCase
      * @param $operator
      * @param $valueForValidate
      * @param $expectedResult
-     *
-     * @dataProvider validateAttributeDataProvider
      */
+    #[DataProvider('validateAttributeDataProvider')]
     public function testValidateAttribute($existingValue, $operator, $valueForValidate, $expectedResult)
     {
         $this->_condition->setOperator($operator);
@@ -139,9 +131,8 @@ class AbstractConditionTest extends TestCase
      * @param $operator
      * @param $valueForValidate
      * @param $expectedResult
-     *
-     * @dataProvider validateAttributeDataProvider
      */
+    #[DataProvider('validateAttributeDataProvider')]
     public function testValidate($existingValue, $operator, $valueForValidate, $expectedResult)
     {
         $objectMock = $this->createPartialMock(
@@ -218,9 +209,8 @@ class AbstractConditionTest extends TestCase
      * @param $valueForValidate
      * @param $expectedResult
      * @param $inputType
-     *
-     * @dataProvider validateAttributeArrayInputTypeDataProvider
      */
+    #[DataProvider('validateAttributeArrayInputTypeDataProvider')]
     public function testValidateArrayOperatorType(
         $existingValue,
         $operator,

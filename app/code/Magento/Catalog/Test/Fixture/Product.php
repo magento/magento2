@@ -9,6 +9,7 @@ namespace Magento\Catalog\Test\Fixture;
 
 use Magento\Catalog\Api\Data\ProductCustomOptionInterface;
 use Magento\Catalog\Api\Data\ProductInterface;
+use Magento\Catalog\Api\Data\ProductInterfaceFactory;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\Config\Source\ProductPriceOptionsInterface;
 use Magento\Catalog\Model\Product\Attribute\Source\Status;
@@ -16,6 +17,8 @@ use Magento\Catalog\Model\Product\Option as CustomOption;
 use Magento\Catalog\Model\Product\Option\Value as CustomOptionValue;
 use Magento\Catalog\Model\Product\Type;
 use Magento\Catalog\Model\Product\Visibility;
+use Magento\Framework\Api\DataObjectHelper;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\DataObject;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\TestFramework\Fixture\Api\DataMerger;
@@ -23,6 +26,93 @@ use Magento\TestFramework\Fixture\Api\ServiceFactory;
 use Magento\TestFramework\Fixture\RevertibleDataFixtureInterface;
 use Magento\TestFramework\Fixture\Data\ProcessorInterface;
 
+/**
+ * Product fixture
+ *
+ * Usage examples:
+ *
+ * 1. Create a product with default data
+ * <pre>
+ *  #[
+ *      DataFixture(ProductFixture::class, as: 'product')
+ *  ]
+ * </pre>
+ * 2. Create a product with custom data
+ * <pre>
+ *  #[
+ *      DataFixture(AttributeFixture::class, as: 'attribute')
+ *      DataFixture(
+ *          ProductFixture::class,
+ *          [
+ *              'price' => 100,
+ *              'custom_attributes' => [['attribute_code' => '$attribute.code$', 'value' => 'Custom Value']],
+ *              'extension_attributes' => ['stock_item' => ['is_in_stock' => false]]
+ *          ]
+ *     )
+ *  ]
+ * </pre>
+ * 3. Create a product with custom options
+ * <pre>
+ *  #[
+ *      DataFixture(
+ *          ProductFixture::class,
+ *          [
+ *              'options' => [
+ *                  [
+ *                      'type' => ProductCustomOptionInterface::OPTION_TYPE_DROP_DOWN,
+ *                      'title' => 'Option 1',
+ *                      'values' => [
+ *                          [ 'title' => 'Option 1 Value 1', 'price' => 2.5, 'sku' => 'option1value1' ],
+ *                          [ 'title' => 'Option 1 Value 2', 'price' => 3, 'sku' => 'option1value2' ],
+ *                      ]
+ *                  ]
+ *              ]
+ *          ]
+ *      ),
+ *  ]
+ * </pre>
+ * 4. Create a product with media gallery entries
+ * <pre>
+ *  #[
+ *      DataFixture(
+ *          ProductFixture::class,
+ *          [
+ *              'media_gallery_entries' => [
+ *                  [
+ *                     'types' => ['image'],
+ *                     'label' => 'Image Label 1',
+ *                     'content' => [
+ *                         'type' => 'image/png', // image will be auto-generated if not provided
+ *                     ],
+ *                 ],
+ *                 [
+ *                     'types' => ['small_image', 'thumbnail'],
+ *                     'content' => [
+ *                         'type' => 'image/jpeg',
+ *                         'base64_encoded_data' => '...', // base64 encoded image data can be provided here
+ *                     ],
+ *                 ],
+ *                 [], // empty array will use all default values and generate an image
+ *              ]
+ *          ],
+ *     )
+ *  ];
+ * </pre>
+ * 5. Update an existing product within specific scope
+ * <pre>
+ *  #[
+ *      DataFixture(StoreFixture::class, as: 'store_view_2'),
+ *      DataFixture(ProductFixture::class, as: 'product')
+ *      DataFixture(
+ *          ProductFixture::class,
+ *          ['sku' => '$product.sku$', 'name' => 'name in store view 2', '_update' => true],
+ *          scope: 'store_view_2'
+ *     )
+ *  ]
+ * </pre>
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class Product implements RevertibleDataFixtureInterface
 {
     private const DEFAULT_DATA = [
@@ -84,28 +174,64 @@ class Product implements RevertibleDataFixtureInterface
     private $productRepository;
 
     /**
+     * @var ProductInterfaceFactory
+     */
+    private $productFactory;
+
+    /**
+     * @var DataObjectHelper
+     */
+    private $dataObjectHelper;
+
+    /**
      * @param ServiceFactory $serviceFactory
      * @param ProcessorInterface $dataProcessor
+     * @param DataMerger $dataMerger
+     * @param ProductRepositoryInterface $productRepository
+     * @param ProductInterfaceFactory|null $productFactory
+     * @param DataObjectHelper|null $dataObjectHelper
      */
     public function __construct(
         ServiceFactory $serviceFactory,
         ProcessorInterface $dataProcessor,
         DataMerger $dataMerger,
-        ProductRepositoryInterface $productRepository
+        ProductRepositoryInterface $productRepository,
+        ?ProductInterfaceFactory $productFactory = null,
+        ?DataObjectHelper $dataObjectHelper = null
     ) {
         $this->serviceFactory = $serviceFactory;
         $this->dataProcessor = $dataProcessor;
         $this->dataMerger = $dataMerger;
         $this->productRepository = $productRepository;
+        $this->productFactory = $productFactory ?? ObjectManager::getInstance()->get(ProductInterfaceFactory::class);
+        $this->dataObjectHelper = $dataObjectHelper ?? ObjectManager::getInstance()->get(DataObjectHelper::class);
     }
 
     /**
      * {@inheritdoc}
      * @param array $data Parameters. Same format as Product::DEFAULT_DATA. Custom attributes and extension attributes
      *  can be passed directly in the outer array instead of custom_attributes or extension_attributes.
+     *
+     * Additional fields:
+     *  - `_update`: boolean - whether to update product instead of creating a new one
+     *
+     * @return DataObject|null
      */
     public function apply(array $data = []): ?DataObject
     {
+        if (!empty($data['_update'])) {
+            $product = $this->productFactory->create();
+            unset($data['_update']);
+            $this->dataObjectHelper->populateWithArray(
+                $product,
+                $data,
+                ProductInterface::class
+            );
+            // Add data that are not part of the interface
+            $product->addData($this->dataProcessor->process($this, array_diff_key($data, self::DEFAULT_DATA)));
+            return $this->productRepository->save($product);
+        }
+        
         $service = $this->serviceFactory->create(ProductRepositoryInterface::class, 'save');
 
         return $service->execute(

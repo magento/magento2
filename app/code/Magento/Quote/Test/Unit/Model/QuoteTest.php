@@ -35,6 +35,7 @@ use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Model\Context;
 use Magento\Framework\Phrase;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Quote\Api\Data\CartInterface;
 use Magento\Quote\Model\Quote;
@@ -53,8 +54,6 @@ use Magento\Store\Model\StoreManager;
 use Magento\Store\Model\Website;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use Magento\Quote\Test\Unit\Helper\QuoteAddressTestHelper;
-use Magento\Catalog\Test\Unit\Helper\ProductTestHelper;
 use Magento\Quote\Model\ResourceModel\Quote\Item\Collection as QuoteItemCollection;
 
 /**
@@ -65,6 +64,8 @@ use Magento\Quote\Model\ResourceModel\Quote\Item\Collection as QuoteItemCollecti
  */
 class QuoteTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var AddressFactory|MockObject
      */
@@ -206,8 +207,8 @@ class QuoteTest extends TestCase
             AddressFactory::class,
             ['create']
         );
-        $this->quoteAddressMock = $this->createPartialMock(
-            QuoteAddressTestHelper::class,
+        $this->quoteAddressMock = $this->createPartialMockWithReflection(
+            Address::class,
             [
                 'getAddressType',
                 'getDeleteImmediately',
@@ -412,8 +413,8 @@ class QuoteTest extends TestCase
      */
     protected function getAddressMock($type): MockObject
     {
-        $shippingAddressMock = $this->createPartialMock(
-            QuoteAddressTestHelper::class,
+        $shippingAddressMock = $this->createPartialMockWithReflection(
+            Address::class,
             ['getAddressType', '__wakeup', 'isDeleted']
         );
 
@@ -961,8 +962,8 @@ class QuoteTest extends TestCase
             ]
         );
 
-        $productMock = $this->createPartialMock(
-            ProductTestHelper::class,
+        $productMock = $this->createPartialMockWithReflection(
+            Product::class,
             ['getParentProductId', 'setStickWithinParent', '__wakeup', 'getId']
         );
 
@@ -1009,8 +1010,8 @@ class QuoteTest extends TestCase
     #[DataProvider('dataProviderForTestAddProductItem')]
     public function testAddProductItemNew($request, $hasError): void
     {
-        $itemMock = $this->createPartialMock(
-            \Magento\Quote\Test\Unit\Helper\QuoteItemUpdaterTestHelper::class,
+        $itemMock = $this->createPartialMockWithReflection(
+            Item::class,
             ['getHasError', 'representProduct', 'setProduct', 'setOptions', 'setQuote', 'getProduct']
         );
         $itemMock->expects($this->once())->method('getHasError')->willReturn($hasError);
@@ -1034,7 +1035,7 @@ class QuoteTest extends TestCase
         );
 
         $productMock = $this->createPartialMock(
-            ProductTestHelper::class,
+            Product::class,
             ['getId']
         );
 
@@ -1295,8 +1296,8 @@ class QuoteTest extends TestCase
             $productMock = $this->createMock(Product::class);
             $productMock->method('getIsVirtual')->willReturn($type);
 
-            $itemMock = $this->createPartialMock(
-                \Magento\Quote\Test\Unit\Helper\QuoteItemUpdaterTestHelper::class,
+            $itemMock = $this->createPartialMockWithReflection(
+                Item::class,
                 ['getParentItemId', 'isDeleted', 'getProduct']
             );
             $itemMock->method('isDeleted')->willReturn(false);
@@ -1335,7 +1336,7 @@ class QuoteTest extends TestCase
     public function testGetItemsCollection(): void
     {
         $itemCollectionMock = $this->createPartialMock(
-            \Magento\Quote\Test\Unit\Helper\QuoteCollectionTestHelper::class,
+            QuoteItemCollection::class,
             ['setQuote']
         );
         $this->quoteItemCollectionFactoryMock->expects($this->once())
@@ -1345,7 +1346,7 @@ class QuoteTest extends TestCase
         $this->extensionAttributesJoinProcessorMock->expects($this->once())
             ->method('process')
             ->with(
-                $this->isInstanceOf(\Magento\Quote\Model\ResourceModel\Quote\Collection::class)
+                $this->isInstanceOf(QuoteItemCollection::class)
             );
         $itemCollectionMock->expects($this->once())->method('setQuote')->with($this->quote);
 

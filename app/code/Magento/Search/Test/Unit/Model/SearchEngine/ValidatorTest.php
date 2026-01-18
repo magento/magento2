@@ -18,16 +18,25 @@ use PHPUnit\Framework\TestCase;
  */
 class ValidatorTest extends TestCase
 {
+    /**
+     * @var Validator
+     */
     private $validator;
 
+    /**
+     * @var MockObject
+     */
     private $otherEngineValidatorMock;
 
+    /**
+     * @var MockObject
+     */
     private $scopeConfigMock;
 
     protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
-        $this->otherEngineValidatorMock = $this->getMockForAbstractClass(ValidatorInterface::class);
+        $this->otherEngineValidatorMock = $this->createMock(ValidatorInterface::class);
         $this->scopeConfigMock = $this->getMockBuilder(ScopeConfigInterface::class)->getMock();
         $this->validator = $objectManager->getObject(
             Validator::class,

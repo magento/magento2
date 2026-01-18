@@ -60,7 +60,7 @@ class GetCustomerByTokenTest extends TestCase
         $this->searchCriteriaMock = $this->createMock(SearchCriteria::class);
         $this->searchResultMock = $this->createMock(CustomerSearchResultsInterface::class);
         $this->customerRepositoryMock = $this->createMock(CustomerRepositoryInterface::class);
-        $this->customerMock = $this->getMockForAbstractClass(CustomerInterface::class);
+        $this->customerMock = $this->createMock(CustomerInterface::class);
 
         $objectManagerHelper = new ObjectManagerHelper($this);
         $this->model = $objectManagerHelper->getObject(

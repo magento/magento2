@@ -12,6 +12,7 @@ use Magento\Framework\Phrase;
 use Magento\Framework\View\Element\UiComponent\ContextInterface;
 use Magento\Framework\View\Element\UiComponent\Processor;
 use Magento\Framework\View\Element\UiComponentFactory;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 class AccountLockTest extends TestCase
@@ -27,8 +28,7 @@ class AccountLockTest extends TestCase
 
     protected function setup(): void
     {
-        $this->context = $this->getMockBuilder(ContextInterface::class)
-            ->getMockForAbstractClass();
+        $this->context = $this->createMock(ContextInterface::class);
         $processor = $this->getMockBuilder(Processor::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -42,9 +42,8 @@ class AccountLockTest extends TestCase
 
     /**
      * @param string $lockExpirationDate
-     * @param Phrase $expectedResult
-     * @dataProvider testPrepareDataSourceDataProvider
-     */
+     * @param Phrase $expectedResult */
+    #[DataProvider('prepareDataSourceDataProvider')]
     public function testPrepareDataSource($lockExpirationDate, $expectedResult)
     {
         $dataSource = $this->component->prepareDataSource($lockExpirationDate);
@@ -55,7 +54,7 @@ class AccountLockTest extends TestCase
     /**
      * @return array
      */
-    public static function testPrepareDataSourceDataProvider()
+    public static function prepareDataSourceDataProvider()
     {
         return [
             [

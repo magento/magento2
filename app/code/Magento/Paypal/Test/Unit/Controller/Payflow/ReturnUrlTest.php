@@ -17,11 +17,13 @@ use Magento\Framework\View\LayoutInterface;
 use Magento\Paypal\Controller\Payflow\ReturnUrl;
 use Magento\Paypal\Controller\Payflowadvanced\ReturnUrl as PayflowadvancedReturnUrl;
 use Magento\Paypal\Helper\Checkout;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Paypal\Model\Config;
 use Magento\Sales\Api\PaymentFailuresInterface;
 use Magento\Sales\Model\Order;
 use Magento\Sales\Model\Order\Payment;
 use Magento\Sales\Model\OrderFactory;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -30,6 +32,7 @@ use PHPUnit\Framework\TestCase;
  */
 class ReturnUrlTest extends TestCase
 {
+    use MockCreationTrait;
    
     public const LAST_REAL_ORDER_ID = '000000001';
 
@@ -114,9 +117,7 @@ class ReturnUrlTest extends TestCase
         $this->view = $this->getMockBuilder(ViewInterface::class)
             ->getMock();
 
-        $this->request = $this->getMockBuilder(Http::class)->disableOriginalConstructor()
-            ->addMethods(['getParam'])
-            ->getMock();
+        $this->request = $this->createPartialMockWithReflection(Http::class, ['getParam']);
 
         $this->layout = $this->getMockBuilder(LayoutInterface::class)
             ->getMock();
@@ -141,14 +142,12 @@ class ReturnUrlTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->checkoutSession = $this->getMockBuilder(Session::class)->disableOriginalConstructor()
-            ->onlyMethods(['getLastRealOrder', 'restoreQuote'])
-            ->addMethods(['setLastRealOrderId'])
-            ->getMock();
+        $this->checkoutSession = $this->createPartialMockWithReflection(
+            Session::class,
+            ['getLastRealOrder', 'restoreQuote', 'setLastRealOrderId']
+        );
 
-        $this->paymentFailures = $this->getMockBuilder(PaymentFailuresInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->paymentFailures = $this->createMock(PaymentFailuresInterface::class);
 
         $this->context->method('getView')
             ->willReturn($this->view);
@@ -173,8 +172,8 @@ class ReturnUrlTest extends TestCase
      * @param string $state
      *
      * @return void
-     * @dataProvider allowedOrderStateDataProvider
      */
+    #[DataProvider('allowedOrderStateDataProvider')]
     public function testExecuteAllowedOrderState($state): void
     {
         $this->withLayout();
@@ -221,8 +220,8 @@ class ReturnUrlTest extends TestCase
      * @param string $orderHash
      *
      * @return void
-     * @dataProvider invalidHashVariations
      */
+    #[DataProvider('invalidHashVariations')]
     public function testFailedHashValidation(string $requestHash, string $orderHash): void
     {
         $this->withLayout();
@@ -265,8 +264,8 @@ class ReturnUrlTest extends TestCase
      * @param string $expectedGotoSection
      *
      * @return void
-     * @dataProvider notAllowedOrderStateDataProvider
      */
+    #[DataProvider('notAllowedOrderStateDataProvider')]
     public function testExecuteNotAllowedOrderState($state, $restoreQuote, $expectedGotoSection): void
     {
         $errMessage = 'Transaction has been canceled.';
@@ -346,8 +345,8 @@ class ReturnUrlTest extends TestCase
      * @param string $errorMsgEscaped
      *
      * @return void
-     * @dataProvider checkXSSEscapedDataProvider
      */
+    #[DataProvider('checkXSSEscapedDataProvider')]
     public function testCheckXSSEscaped($errorMsg, $errorMsgEscaped): void
     {
         $this->withLayout();

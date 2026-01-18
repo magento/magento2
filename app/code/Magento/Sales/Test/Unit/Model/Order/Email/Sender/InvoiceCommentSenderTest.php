@@ -11,6 +11,7 @@ use Magento\Payment\Helper\Data;
 use Magento\Sales\Api\Data\OrderInterface;
 use Magento\Sales\Model\Order\Email\Container\InvoiceCommentIdentity;
 use Magento\Sales\Model\Order\Email\Sender\InvoiceCommentSender;
+use Magento\Sales\Model\Order\Invoice as InvoiceModel;
 use Magento\Sales\Model\ResourceModel\Order\Invoice;
 use PHPUnit\Framework\MockObject\MockObject;
 
@@ -39,7 +40,7 @@ class InvoiceCommentSenderTest extends AbstractSenderTestCase
         $this->addressRenderer->expects($this->any())->method('format')->willReturn(1);
 
         $this->invoiceMock = $this->createPartialMock(
-            \Magento\Sales\Model\Order\Invoice::class,
+            InvoiceModel::class,
             ['getStore', 'getOrder']
         );
         $this->invoiceMock->expects($this->any())

@@ -78,6 +78,20 @@ class Collection extends SearchResult
             'main_table.last_visit_at >= ?',
             $connection->formatDate($lastDate)
         );
+        // Show only one row per logged-in customer by selecting the latest session for each customer
+        $newerSessionExistsSubSelect = $connection->select()
+            ->from(['cv2' => $this->getTable('customer_visitor')], [])
+            ->columns(new \Zend_Db_Expr('1'))
+            ->where('cv2.customer_id = main_table.customer_id')
+            ->where(
+                '(cv2.last_visit_at > main_table.last_visit_at) '
+                . 'OR (cv2.last_visit_at = main_table.last_visit_at AND cv2.visitor_id > main_table.visitor_id)'
+            );
+        $this->getSelect()->where(
+            '(main_table.customer_id IS NULL OR main_table.customer_id = 0) '
+            . 'OR NOT EXISTS (?)',
+            $newerSessionExistsSubSelect
+        );
         $this->addFilterToMap('customer_id', 'main_table.customer_id');
         $expression = $connection->getCheckSql(
             'main_table.customer_id IS NOT NULL AND main_table.customer_id != 0',

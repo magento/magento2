@@ -68,23 +68,12 @@ class ConfigSetCommandTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->emulatedAreProcessorMock = $this->getMockBuilder(EmulatedAdminhtmlAreaProcessor::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->changeDetectorMock = $this->getMockBuilder(ChangeDetector::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->processorFacadeFactoryMock = $this->getMockBuilder(ProcessorFacadeFactory::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->processorFacadeMock = $this->getMockBuilder(ProcessorFacade::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->deploymentConfigMock = $this->getMockBuilder(DeploymentConfig::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->localeEmulatorMock = $this->getMockBuilder(LocaleEmulatorInterface::class)
-            ->getMockForAbstractClass();
+        $this->emulatedAreProcessorMock = $this->createMock(EmulatedAdminhtmlAreaProcessor::class);
+        $this->changeDetectorMock = $this->createMock(ChangeDetector::class);
+        $this->processorFacadeFactoryMock = $this->createMock(ProcessorFacadeFactory::class);
+        $this->processorFacadeMock = $this->createMock(ProcessorFacade::class);
+        $this->deploymentConfigMock = $this->createMock(DeploymentConfig::class);
+        $this->localeEmulatorMock = $this->createMock(LocaleEmulatorInterface::class);
 
         $this->command = new ConfigSetCommand(
             $this->emulatedAreProcessorMock,

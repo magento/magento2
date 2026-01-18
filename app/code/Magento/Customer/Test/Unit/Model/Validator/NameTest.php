@@ -9,14 +9,18 @@ namespace Magento\Customer\Test\Unit\Model\Validator;
 
 use Magento\Customer\Model\Validator\Name;
 use Magento\Customer\Model\Customer;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 
 /**
  * Customer name validator tests
  */
 class NameTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var Name
      */
@@ -33,11 +37,10 @@ class NameTest extends TestCase
     protected function setUp(): void
     {
         $this->nameValidator = new Name;
-        $this->customerMock = $this
-            ->getMockBuilder(Customer::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['getFirstname', 'getLastname', 'getMiddlename'])
-            ->getMock();
+        $this->customerMock = $this->createPartialMockWithReflection(
+            Customer::class,
+            ['getFirstname', 'getLastname', 'getMiddlename']
+        );
     }
 
     /**
@@ -47,9 +50,8 @@ class NameTest extends TestCase
      * @param string $middleName
      * @param string $lastName
      * @param string $message
-     * @return void
-     * @dataProvider expectedPunctuationInNamesDataProvider
-     */
+     * @return void */
+    #[DataProvider('expectedPunctuationInNamesDataProvider')]
     public function testValidateCorrectPunctuationInNames(
         string $firstName,
         string $middleName,

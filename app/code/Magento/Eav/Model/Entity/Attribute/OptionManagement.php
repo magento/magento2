@@ -78,7 +78,7 @@ class OptionManagement implements AttributeOptionManagementInterface, AttributeO
         if ($attribute->getSource()->getOptionId($label) !== null) {
             throw new InputException(
                 __(
-                    'Admin store attribute option label "%1" is already exists.',
+                    'Admin store attribute option label "%1" already exists.',
                     $option->getLabel()
                 )
             );
@@ -120,7 +120,7 @@ class OptionManagement implements AttributeOptionManagementInterface, AttributeO
         if (!empty($optionIdByLabel) && (int)$optionIdByLabel !== (int)$optionId) {
             throw new InputException(
                 __(
-                    'Admin store attribute option label \'%1\' is already exists.',
+                    'Admin store attribute option label \'%1\' already exists.',
                     $option->getLabel()
                 )
             );

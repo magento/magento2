@@ -18,9 +18,12 @@ use Magento\Framework\Stdlib\Cookie\CookieMetadataFactory;
 use Magento\Framework\Stdlib\Cookie\PhpCookieManager;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 
 class LogoutTest extends TestCase
 {
+    use MockCreationTrait;
+
     /** @var Logout */
     protected $controller;
 
@@ -50,36 +53,24 @@ class LogoutTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->contextMock = $this->getMockBuilder(Context::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->sessionMock = $this->getMockBuilder(Session::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['setLastCustomerId'])
-            ->onlyMethods(['getId', 'logout', 'setBeforeAuthUrl'])
-            ->getMock();
+        $this->contextMock = $this->createMock(Context::class);
+        
+        $this->sessionMock = $this->createPartialMockWithReflection(
+            Session::class,
+            ['getId', 'logout', 'setBeforeAuthUrl', 'setLastCustomerId']
+        );
 
-        $this->cookieMetadataFactory = $this->getMockBuilder(CookieMetadataFactory::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->cookieManager = $this->getMockBuilder(PhpCookieManager::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->cookieMetadata = $this->getMockBuilder(CookieMetadata::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->redirectFactory = $this->getMockBuilder(RedirectFactory::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->resultRedirect = $this->getMockBuilder(Redirect::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->cookieMetadataFactory = $this->createMock(CookieMetadataFactory::class);
+        $this->cookieManager = $this->createMock(PhpCookieManager::class);
+        $this->cookieMetadata = $this->createMock(CookieMetadata::class);
+        $this->redirectFactory = $this->createMock(RedirectFactory::class);
+        $this->resultRedirect = $this->createMock(Redirect::class);
+        
         $this->contextMock->expects($this->once())
             ->method('getResultRedirectFactory')
             ->willReturn($this->redirectFactory);
 
-        $this->redirect = $this->getMockBuilder(RedirectInterface::class)
-            ->getMockForAbstractClass();
+        $this->redirect = $this->createMock(RedirectInterface::class);
         $this->contextMock->expects($this->once())
             ->method('getRedirect')
             ->willReturn($this->redirect);

@@ -50,16 +50,9 @@ class WidgetTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->dataStorageMock = $this->getMockBuilder(Data::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->conditionsHelper = $this->getMockBuilder(Conditions::class)
-            ->onlyMethods(['encode'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->escaperMock = $this->getMockBuilder(Escaper::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->dataStorageMock = $this->createMock(Data::class);
+        $this->conditionsHelper = $this->createPartialMock(Conditions::class, ['encode']);
+        $this->escaperMock = $this->createMock(Escaper::class);
         $objectManagerHelper = new ObjectManager($this);
         $this->widget = $objectManagerHelper->getObject(
             Widget::class,
