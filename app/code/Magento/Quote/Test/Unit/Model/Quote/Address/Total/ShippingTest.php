@@ -10,6 +10,7 @@ namespace Magento\Quote\Test\Unit\Model\Quote\Address\Total;
 use Magento\Catalog\Model\Product;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Quote\Api\Data\CartItemInterface;
 use Magento\Quote\Api\Data\ShippingAssignmentInterface;
 use Magento\Quote\Api\Data\ShippingInterface;
@@ -17,14 +18,11 @@ use Magento\Quote\Model\Quote;
 use Magento\Quote\Model\Quote\Address;
 use Magento\Quote\Model\Quote\Address\FreeShippingInterface;
 use Magento\Quote\Model\Quote\Address\Rate;
-use Magento\Quote\Test\Unit\Helper\RateTestHelper;
 use Magento\Quote\Model\Quote\Address\Total;
 use Magento\Quote\Model\Quote\Address\Total\Shipping;
 use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Quote\Model\Quote\Item as QuoteItem;
 use Magento\Store\Model\Store;
-use Magento\Quote\Test\Unit\Helper\AddressShippingInfoTestHelper;
-use Magento\Quote\Test\Unit\Helper\CartItemForShippingTestHelper;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -33,6 +31,7 @@ use PHPUnit\Framework\TestCase;
  */
 class ShippingTest extends TestCase
 {
+    use MockCreationTrait;
     /**
      * @var Shipping
      */
@@ -107,14 +106,22 @@ class ShippingTest extends TestCase
         $this->quote = $this->createMock(Quote::class);
         $this->total = new Total([], new Json());
         $this->shippingAssignment = $this->createMock(ShippingAssignmentInterface::class);
-        $this->address = $this->getMockBuilder(AddressShippingInfoTestHelper::class)
-            ->onlyMethods(['collectShippingRates', 'getAllShippingRates'])
-            ->getMock();
+        $this->address = $this->createPartialMockWithReflection(
+            Address::class,
+            ['collectShippingRates', 'getAllShippingRates', 'getItemQty', 'setFreeShipping']
+        );
         $this->shipping = $this->createMock(ShippingInterface::class);
-        $this->cartItem = new CartItemForShippingTestHelper();
-        $this->rate = $this->getMockBuilder(RateTestHelper::class)
-            ->onlyMethods([])
-            ->getMock();
+        $this->cartItem = $this->createPartialMockWithReflection(
+            CartItemInterface::class,
+            [
+                'getIsVirtual', 'getParentItem', 'getHasChildren', 'getWeight', 'getQty', 'setQty', 'getProduct',
+                'getRowWeight', 'setRowWeight', 'getItemId', 'setItemId', 'getSku', 'setSku', 'getProductType',
+                'setProductType', 'getQuoteId', 'setQuoteId', 'getPrice', 'setPrice', 'getName', 'setName',
+                'getProductOption', 'setProductOption', 'getExtensionAttributes', 'setExtensionAttributes',
+                'setFreeShipping', 'getFreeShipping'
+            ]
+        );
+        $this->rate = $this->createPartialMockWithReflection(Rate::class, ['getCode', 'getPrice']);
         $this->store = $this->createMock(Store::class);
     }
 
@@ -164,26 +171,27 @@ class ShippingTest extends TestCase
             ->willReturn($isFreeShipping);
         // setFreeShipping is a real method on helper; verify via state after collect
         // setTotalAmount and setBaseTotalAmount are real methods on Total helper
-        $this->cartItem->setIsVirtual(false);
-        $this->cartItem->setParentItem(null);
-        $this->cartItem->setHasChildren(false);
-        $this->cartItem->setWeight(2);
-        $this->cartItem->setQty(2);
-        $product = new \Magento\Quote\Test\Unit\Helper\ProductForShippingTestHelper();
-        $this->cartItem->setProduct($product);
+        $product = $this->createMock(Product::class);
+        $this->cartItem->method('getIsVirtual')->willReturn(false);
+        $this->cartItem->method('getParentItem')->willReturn(null);
+        $this->cartItem->method('getHasChildren')->willReturn(false);
+        $this->cartItem->method('getWeight')->willReturn(2);
+        $this->cartItem->method('getQty')->willReturn(2);
+        $this->cartItem->method('getProduct')->willReturn($product);
+        $this->cartItem->method('getFreeShipping')->willReturn(false);
         $this->freeShippingAssertions();
-        $this->cartItem->setRowWeight(0);
-        $this->address->setItemQty(2);
+        $this->cartItem->method('getRowWeight')->willReturn(0);
+        $this->address->method('getItemQty')->willReturn(2);
         $this->address->expects($this->once())
             ->method('collectShippingRates');
         $this->address->expects($this->once())
             ->method('getAllShippingRates')
             ->willReturn([$this->rate]);
-        $this->rate->setCode('flatrate');
+        $this->rate->method('getCode')->willReturn('flatrate');
         $this->quote->expects($this->once())
             ->method('getStore')
             ->willReturn($this->store);
-        $this->rate->setPrice(5);
+        $this->rate->method('getPrice')->willReturn(5);
         $this->priceCurrency->expects($this->once())
             ->method('convert')
             ->with(5, $this->store)

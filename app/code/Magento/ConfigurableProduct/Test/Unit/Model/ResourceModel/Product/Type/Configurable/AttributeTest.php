@@ -17,9 +17,12 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHe
 use Magento\Store\Model\Store;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 
 class AttributeTest extends TestCase
 {
+    use MockCreationTrait;
+
     /** @var  MockObject */
     protected $connection;
 
@@ -93,10 +96,14 @@ class AttributeTest extends TestCase
                 'value' => 'test',
             ]
         );
-        $attributeMock = new \Magento\Eav\Test\Unit\Helper\AttributeTestHelper();
-        $attributeMock->setId($attributeId);
-        $attributeMock->setUseDefault(0);
-        $attributeMock->setLabel('test');
+        $attributeMock = $this->createPartialMockWithReflection(
+            AttributeModel::class,
+            ['getId', 'setId', 'getUseDefault', 'setUseDefault', 'getLabel', 'setLabel', 'getStoreId', 'setStoreId']
+        );
+        $attributeMock->method('getId')->willReturn($attributeId);
+        $attributeMock->method('getUseDefault')->willReturn(0);
+        $attributeMock->method('getLabel')->willReturn('test');
+        $attributeMock->method('getStoreId')->willReturn(Store::DEFAULT_STORE_ID);
         $this->assertEquals($this->attribute, $this->attribute->saveLabel($attributeMock));
     }
 
@@ -129,11 +136,14 @@ class AttributeTest extends TestCase
                 'value' => 'test'
             ]
         );
-        $attributeMock = new \Magento\Eav\Test\Unit\Helper\AttributeTestHelper();
-        $attributeMock->setId($attributeId);
-        $attributeMock->setStoreId(1);
-        $attributeMock->setUseDefault(0);
-        $attributeMock->setLabel('test');
+        $attributeMock = $this->createPartialMockWithReflection(
+            AttributeModel::class,
+            ['getId', 'setId', 'getUseDefault', 'setUseDefault', 'getLabel', 'setLabel', 'getStoreId', 'setStoreId']
+        );
+        $attributeMock->method('getId')->willReturn($attributeId);
+        $attributeMock->method('getStoreId')->willReturn(1);
+        $attributeMock->method('getUseDefault')->willReturn(0);
+        $attributeMock->method('getLabel')->willReturn('test');
         $this->assertEquals($this->attribute, $this->attribute->saveLabel($attributeMock));
     }
 }

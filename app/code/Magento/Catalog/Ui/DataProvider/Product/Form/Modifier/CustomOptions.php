@@ -94,6 +94,13 @@ class CustomOptions extends AbstractModifier
     public const CUSTOM_OPTIONS_LISTING = 'product_custom_options_listing';
     /**#@-*/
 
+    /**#@+
+     * Precision for price value
+     */
+    private const MAX_PRECISION = 6;
+    private const MIN_PRECISION = 2;
+    /**#@-*/
+
     /**
      * @var LocatorInterface
      * @since 101.0.0
@@ -214,7 +221,7 @@ class CustomOptions extends AbstractModifier
         $value = $this->arrayManager->get($path, $data);
 
         if (is_numeric($value)) {
-            $data = $this->arrayManager->replace($path, $data, $this->formatPrice($value));
+            $data = $this->arrayManager->replace($path, $data, $this->formatPriceValue($value));
         }
 
         return $data;
@@ -1177,5 +1184,29 @@ class CustomOptions extends AbstractModifier
     protected function getCurrencySymbol()
     {
         return $this->storeManager->getStore()->getBaseCurrency()->getCurrencySymbol();
+    }
+
+    /**
+     * Format price value to have the same number of digits after delimiter as the original value
+     *
+     * @param mixed $value
+     * @return string
+     */
+    private function formatPriceValue($value)
+    {
+        if ($value === null) {
+            return '';
+        }
+
+        $stringVal = (string)(float)$value;
+        $dotIndex = strpos($stringVal, '.');
+        $decimals = $dotIndex === false ? 0 : strlen(substr($stringVal, $dotIndex + 1));
+
+        return number_format(
+            (float)$value,
+            max(self::MIN_PRECISION, min(self::MAX_PRECISION, $decimals)),
+            '.',
+            ''
+        );
     }
 }

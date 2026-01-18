@@ -344,6 +344,8 @@ Debug,Debug
 "Merge JavaScript Files","Merge JavaScript Files"
 "Enable JavaScript Bundling","Enable JavaScript Bundling"
 "Minify JavaScript Files","Minify JavaScript Files"
+"Defer non-critical head scripts","Defer non-critical head scripts"
+"Non-critical scripts loaded in the head section will automatically receive ""defer"" attribute.","Non-critical scripts loaded in the head section will automatically receive ""defer"" attribute."
 "CSS Settings","CSS Settings"
 "Merge CSS Files","Merge CSS Files"
 "Minify CSS Files","Minify CSS Files"

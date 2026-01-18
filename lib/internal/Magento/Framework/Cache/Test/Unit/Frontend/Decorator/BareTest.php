@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\Framework\Cache\Test\Unit\Frontend\Decorator;
 
+use Magento\Framework\Cache\CacheConstants;
 use Magento\Framework\Cache\Frontend\Decorator\Bare;
 use Magento\Framework\Cache\FrontendInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ProxyTesting;
@@ -43,7 +44,7 @@ class BareTest extends TestCase
             ['load', ['record_id'], '111'],
             ['save', ['record_value', 'record_id', ['tag'], 555], true],
             ['remove', ['record_id'], true],
-            ['clean', [\Zend_Cache::CLEANING_MODE_MATCHING_ANY_TAG, ['tag']], true],
+            ['clean', [CacheConstants::CLEANING_MODE_MATCHING_ANY_TAG, ['tag']], true],
             ['getBackend', [], static fn (self $testCase) => $testCase->createZendCacheBackendMock()],
             ['getLowLevelFrontend', [], static fn (self $testCase) => $testCase->createZendCacheCoreMock()],
         ];
@@ -51,11 +52,12 @@ class BareTest extends TestCase
 
     public function createZendCacheBackendMock()
     {
-        return $this->createMock(\Zend_Cache_Backend::class);
+        return $this->createMock(\Magento\Framework\Cache\Backend\BackendInterface::class);
     }
 
     public function createZendCacheCoreMock()
     {
-        return $this->createMock(\Zend_Cache_Core::class);
+        // Return a simple mock object (no specific Zend class needed)
+        return $this->createMock(\stdClass::class);
     }
 }
