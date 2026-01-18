@@ -16,11 +16,13 @@ use Magento\Downloadable\Model\ProductOptionProcessor;
 use Magento\Framework\Api\DataObjectHelper;
 use Magento\Framework\DataObject;
 use Magento\Framework\DataObject\Factory as DataObjectFactory;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 class ProductOptionProcessorTest extends TestCase
 {
+    use MockCreationTrait;
     /**
      * @var ProductOptionProcessor
      */
@@ -53,8 +55,8 @@ class ProductOptionProcessorTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->dataObject = $this->createPartialMock(
-            \Magento\Framework\DataObject\Test\Unit\Helper\DataObjectTestHelper::class,
+        $this->dataObject = $this->createPartialMockWithReflection(
+            DataObject::class,
             ['getLinks', 'addData']
         );
 
@@ -89,8 +91,8 @@ class ProductOptionProcessorTest extends TestCase
     ) {
         $productOptionMock = $this->createMock(ProductOptionInterface::class);
 
-        $productOptionExtensionMock = $this->createPartialMock(
-            \Magento\Quote\Test\Unit\Helper\ProductOptionExtensionTestHelper::class,
+        $productOptionExtensionMock = $this->createPartialMockWithReflection(
+            ProductOptionExtensionInterface::class,
             ['getDownloadableOption']
         );
 

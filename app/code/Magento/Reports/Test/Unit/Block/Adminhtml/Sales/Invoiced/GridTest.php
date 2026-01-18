@@ -15,8 +15,10 @@ use Magento\Framework\DB\Select;
 use Magento\Framework\Event\ManagerInterface;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Math\Random;
-use Magento\Framework\Test\Unit\Helper\RequestInterfaceTestHelper;
+use Magento\Framework\App\Request\Http;
 use Magento\Framework\UrlInterface;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\View\Element\AbstractBlock;
 use Magento\Framework\View\LayoutInterface;
 use Magento\Reports\Block\Adminhtml\Sales\Grid\Column\Renderer\Date;
@@ -34,6 +36,12 @@ use PHPUnit\Framework\MockObject\MockObject;
  */
 class GridTest extends TestCase
 {
+    use MockCreationTrait;
+
+    /**
+     * @var ObjectManager
+     */
+    private ObjectManager $objectManagerHelper;
 
     /**
      * @var Context|MockObject
@@ -86,9 +94,9 @@ class GridTest extends TestCase
     private Random $mathRandom;
 
     /**
-     * @var RequestInterfaceTestHelper|MockObject
+     * @var Http|MockObject
      */
-    private RequestInterfaceTestHelper $request;
+    private Http $request;
 
     /**
      * @var Grid
@@ -99,7 +107,11 @@ class GridTest extends TestCase
     {
         parent::setUp();
 
-        $this->request = $this->createMock(RequestInterfaceTestHelper::class);
+        // Initialize ObjectManager to avoid "ObjectManager isn't initialized" errors
+        $this->objectManagerHelper = new ObjectManager($this);
+        $this->objectManagerHelper->prepareObjectManager();
+
+        $this->request = $this->createMock(Http::class);
         $this->mathRandom = $this->createMock(Random::class);
         $this->storeManager = $this->createMock(StoreManagerInterface::class);
         $this->context = $this->createMock(Context::class);
@@ -143,18 +155,16 @@ class GridTest extends TestCase
         $currencyCode = 'USD';
         $rate = 0.5;
         $this->layout->method('getChildName')->willReturn('columns');
-        $block = $this->getMockBuilder(AbstractBlock::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['getColumns', 'isAvailable'])
-            ->onlyMethods(['getChildBlock', 'getChildNames', 'setChild'])
-            ->getMock();
+        $block = $this->createPartialMockWithReflection(
+            AbstractBlock::class,
+            ['getColumns', 'isAvailable', 'getChildBlock', 'getChildNames', 'setChild']
+        );
         $block->method('getColumns')->willReturn([]);
         $this->layout->method('getBlock')->willReturn($block);
-        $extendedBlock = $this->getMockBuilder(DataObject::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['setId', 'setGrid', 'setDataAttribute'])
-            ->onlyMethods(['setData'])
-            ->getMock();
+        $extendedBlock = $this->createPartialMockWithReflection(
+            DataObject::class,
+            ['setId', 'setGrid', 'setDataAttribute', 'setData']
+        );
 
         $expectedData = $this->getColumnData($currencyCode, $rate);
         $callIndex = 0;

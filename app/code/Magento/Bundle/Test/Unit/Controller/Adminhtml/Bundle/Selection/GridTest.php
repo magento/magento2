@@ -11,17 +11,20 @@ use Magento\Backend\App\Action\Context;
 use Magento\Bundle\Block\Adminhtml\Catalog\Product\Edit\Tab\Bundle\Option\Search\Grid as SearchGrid;
 use Magento\Bundle\Controller\Adminhtml\Bundle\Selection\Grid;
 use Magento\Framework\App\RequestInterface;
+use Magento\Framework\App\Response\Http as HttpResponse;
 use Magento\Framework\App\ResponseInterface;
 use Magento\Framework\App\ViewInterface;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
-use Magento\Framework\View\Test\Unit\Helper\AbstractBlockTestHelper;
-use Magento\Framework\App\Test\Unit\Helper\ResponseTestHelper;
+use Magento\Framework\View\Element\AbstractBlock;
 use Magento\Framework\View\LayoutInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 class GridTest extends TestCase
 {
+    use MockCreationTrait;
+
     /** @var Grid */
     protected $controller;
 
@@ -56,7 +59,11 @@ class GridTest extends TestCase
         $this->request = $this->createMock(RequestInterface::class);
 
         /** @var ResponseInterface $response */
-        $this->response = new ResponseTestHelper();
+        $this->response = $this->createPartialMockWithReflection(
+            HttpResponse::class,
+            ['setBody', 'getBody']
+        );
+        $this->response->method('setBody')->willReturnSelf();
 
         $this->view = $this->createMock(ViewInterface::class);
 
@@ -76,15 +83,19 @@ class GridTest extends TestCase
     {
         $layout = $this->createMock(LayoutInterface::class);
 
-        /** @var AbstractBlockTestHelper $block */
-        $block = new AbstractBlockTestHelper();
+        /** @var AbstractBlock $block */
+        $block = $this->createPartialMockWithReflection(
+            AbstractBlock::class,
+            ['setIndex', 'toHtml']
+        );
+        $block->method('toHtml')->willReturn('');
+        $block->method('setIndex')->willReturnSelf();
 
-        $this->response->setBody('');
+        $this->response->method('getBody')->willReturn('');
         $this->request->expects($this->once())->method('getParam')->with('index')->willReturn('index');
         $this->view->expects($this->once())->method('getLayout')->willReturn($layout);
         $layout->expects($this->once())->method('createBlock')->willReturn($block);
         $block->setIndex('index');
-        $block->setHtmlResult('');
 
         $this->assertEquals($this->response, $this->controller->execute());
     }

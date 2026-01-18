@@ -7,8 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\GroupedProduct\Test\Unit\Model\Product\Initialization\Helper\ProductLinks\Plugin;
 
-use Magento\Catalog\Test\Unit\Helper\ProductTestHelper;
-use Magento\Catalog\Test\Unit\Helper\ProductLinkExtensionInterfaceTestHelper;
+use Magento\Catalog\Api\Data\ProductLinkExtensionInterface;
 use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\Catalog\Api\Data\ProductLinkExtensionFactory;
 use Magento\Catalog\Api\Data\ProductLinkInterface;
@@ -18,11 +17,13 @@ use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\Product\Initialization\Helper\ProductLinks;
 use Magento\Catalog\Model\Product\Type;
 use Magento\GroupedProduct\Model\Product\Type\Grouped;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 class GroupedTest extends TestCase
 {
+    use MockCreationTrait;
     /**
      * @var MockObject
      */
@@ -55,8 +56,8 @@ class GroupedTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->productMock = $this->createPartialMock(
-            ProductTestHelper::class,
+        $this->productMock = $this->createPartialMockWithReflection(
+            Product::class,
             ['__wakeup', 'getTypeId', 'getSku', 'getProductLinks', 'setProductLinks',
                 'getGroupedReadonly', 'setGroupedLinkData']
         );
@@ -103,11 +104,14 @@ class GroupedTest extends TestCase
             ->with($this->arrayHasKey(0));
         $this->productMock->expects($this->once())->method('getProductLinks')->willReturn([]);
         $this->productMock->expects($this->once())->method('getSku')->willReturn('sku');
-        $linkedProduct = $this->createPartialMock(
-            ProductTestHelper::class,
+        $linkedProduct = $this->createPartialMockWithReflection(
+            Product::class,
             ['__wakeup', 'getTypeId', 'getSku', 'getProductLinks', 'setProductLinks', 'getGroupedReadonly']
         );
-        $extensionAttributes = new ProductLinkExtensionInterfaceTestHelper();
+        $extensionAttributes = $this->createPartialMockWithReflection(
+            ProductLinkExtensionInterface::class,
+            ['setQty', 'getQty']
+        );
         $linkedProduct->expects($this->once())->method('getTypeId')->willReturn(Grouped::TYPE_CODE);
         $linkedProduct->expects($this->once())->method('getSku')->willReturn('sku');
         $productLink = $this->createMock(ProductLinkInterface::class);

@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\Bundle\Test\Unit\Model\ResourceModel\Indexer;
 
+use Magento\Bundle\Model\ResourceModel\Indexer\StockStatusQueryProcessorInterface;
 use Magento\Framework\DB\Select;
 use Magento\Bundle\Model\ResourceModel\Indexer\Price;
 use Magento\Catalog\Model\Indexer\Product\Price\TableMaintainer;
@@ -57,6 +58,11 @@ class PriceTest extends TestCase
     private $metadataPool;
 
     /**
+     * @var StockStatusQueryProcessorInterface|MockObject
+     */
+    private StockStatusQueryProcessorInterface $stockStatusQueryProcessor;
+
+    /**
      * @inheritdoc
      */
     protected function setUp(): void
@@ -85,6 +91,7 @@ class PriceTest extends TestCase
         /** @var Manager|MockObject $moduleManager */
         $moduleManager = $this->createMock(Manager::class);
         $fullReindexAction = false;
+        $this->stockStatusQueryProcessor = $this->createMock(StockStatusQueryProcessorInterface::class);
 
         $this->priceModel = new Price(
             $indexTableStructureFactory,
@@ -95,6 +102,7 @@ class PriceTest extends TestCase
             $joinAttributeProcessor,
             $eventManager,
             $moduleManager,
+            $this->stockStatusQueryProcessor,
             $fullReindexAction,
             $this->connectionName
         );
@@ -211,10 +219,13 @@ class PriceTest extends TestCase
 
         $select = $this->createMock(Select::class);
         $select->expects($this->once())->method('from')->willReturn($select);
-        $select->expects($this->exactly(5))->method('join')->willReturn($select);
-        $select->expects($this->exactly(2))->method('where')->willReturn($select);
+        $select->expects($this->exactly(4))->method('join')->willReturn($select);
+        $select->expects($this->once())->method('where')->willReturn($select);
         $select->expects($this->once())->method('columns')->willReturn($select);
         $select->method('__toString')->willReturn($selectQuery);
+        $this->stockStatusQueryProcessor->expects($this->once())
+            ->method('execute')
+            ->willReturn($select);
 
         $this->connectionMock->expects($this->once())->method('getIfNullSql');
         $this->connectionMock->expects($this->once())->method('getLeastSql');

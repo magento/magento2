@@ -112,12 +112,6 @@ class DbStorage extends AbstractStorage
             $result = null;
             $requestPath = $data[UrlRewrite::REQUEST_PATH];
             $decodedRequestPath = urldecode($requestPath);
-
-            // Validate UTF-8 encoding to prevent collation errors and reject malicious input
-            if (!$this->isValidRequestPath($decodedRequestPath)) {
-                return null;
-            }
-
             $data[UrlRewrite::REQUEST_PATH] = array_unique(
                 [
                 rtrim($requestPath, '/'),
@@ -134,39 +128,6 @@ class DbStorage extends AbstractStorage
             return $result;
         }
         return $this->connection->fetchRow($this->prepareSelect($data));
-    }
-
-    /**
-     * Validate request path for valid UTF-8 and prevent collation errors
-     *
-     * This method checks for:
-     * - Invalid UTF-8 sequences (e.g., overlong encodings like %c0%ae)
-     * - 4-byte UTF-8 characters (emojis) that may cause collation mismatches
-     * - Non-printable and control characters
-     *
-     * @param string $path
-     * @return bool
-     */
-    private function isValidRequestPath(string $path): bool
-    {
-        // Check for valid UTF-8 encoding
-        if (!mb_check_encoding($path, 'UTF-8')) {
-            return false;
-        }
-
-        // Check for 4-byte UTF-8 characters (emojis, etc.) that can cause collation issues
-        // 4-byte UTF-8 chars start with bytes 0xF0-0xF7 (11110xxx in binary)
-        if (preg_match('/[\x{10000}-\x{10FFFF}]/u', $path)) {
-            return false;
-        }
-
-        // Check for control characters and other problematic characters
-        // Allow: letters, numbers, hyphen, underscore, period, forward slash, and common URL-safe chars
-        if (preg_match('/[\x00-\x1F\x7F]/', $path)) {
-            return false;
-        }
-
-        return true;
     }
 
     /**

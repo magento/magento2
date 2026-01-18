@@ -10,11 +10,13 @@ namespace Magento\Downloadable\Test\Unit\Ui\DataProvider\Product\Form\Modifier\D
 use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Model\Locator\LocatorInterface;
+use Magento\Catalog\Model\Product;
 use Magento\Downloadable\Helper\File as DownloadableFile;
 use Magento\Downloadable\Model\Product\Type;
 use Magento\Downloadable\Ui\DataProvider\Product\Form\Modifier\Data\Samples;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Escaper;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\Framework\UrlInterface;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -28,6 +30,7 @@ use PHPUnit\Framework\TestCase;
  */
 class SamplesTest extends TestCase
 {
+    use MockCreationTrait;
     /**
      * @var ObjectManagerHelper
      */
@@ -74,8 +77,8 @@ class SamplesTest extends TestCase
     protected function setUp(): void
     {
         $this->objectManagerHelper = new ObjectManagerHelper($this);
-        $this->productMock = $this->createPartialMock(
-            \Magento\Catalog\Test\Unit\Helper\ProductTestHelper::class,
+        $this->productMock = $this->createPartialMockWithReflection(
+            Product::class,
             ['getSamplesTitle', 'getId', 'getTypeId']
         );
         $this->locatorMock = $this->createMock(LocatorInterface::class);

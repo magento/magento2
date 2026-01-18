@@ -9,8 +9,8 @@ namespace Magento\CheckoutAgreements\Test\Unit\Model;
 
 use Magento\CheckoutAgreements\Api\CheckoutAgreementsListInterface;
 use Magento\CheckoutAgreements\Model\Agreement as AgreementModel;
-use Magento\CheckoutAgreements\Test\Unit\Helper\AgreementModelTestHelper;
 use Magento\CheckoutAgreements\Model\AgreementFactory;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\CheckoutAgreements\Model\Api\SearchCriteria\ActiveStoreAgreementsFilter;
 use Magento\CheckoutAgreements\Model\CheckoutAgreementsRepository;
 use Magento\CheckoutAgreements\Model\ResourceModel\Agreement;
@@ -30,6 +30,8 @@ use PHPUnit\Framework\TestCase;
  */
 class CheckoutAgreementsRepositoryTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var CheckoutAgreementsRepository
      */
@@ -105,8 +107,8 @@ class CheckoutAgreementsRepositoryTest extends TestCase
             AgreementFactory::class,
             ['create']
         );
-        $this->agreementMock = $this->createPartialMock(
-            AgreementModelTestHelper::class,
+        $this->agreementMock = $this->createPartialMockWithReflection(
+            AgreementModel::class,
             ['setStores', 'addData', 'getData', 'getAgreementId', 'getId']
         );
         $this->storeMock = $this->createMock(Store::class);

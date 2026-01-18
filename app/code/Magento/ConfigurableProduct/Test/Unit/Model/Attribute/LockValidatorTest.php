@@ -15,13 +15,16 @@ use Magento\Framework\DB\Select;
 use Magento\Framework\EntityManager\EntityMetadata;
 use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Framework\Exception\LocalizedException;
-use Magento\Framework\Model\Test\Unit\Helper\AbstractModelTestHelper;
+use Magento\Framework\Model\AbstractModel;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 class LockValidatorTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var LockValidator
      */
@@ -73,7 +76,6 @@ class LockValidatorTest extends TestCase
         );
         $refClass = new \ReflectionClass(LockValidator::class);
         $refProperty = $refClass->getProperty('metadataPool');
-        $refProperty->setAccessible(true);
         $refProperty->setValue($this->model, $this->metadataPoolMock);
     }
 
@@ -124,9 +126,11 @@ class LockValidatorTest extends TestCase
 
         $bind = ['attribute_id' => $attributeId, 'attribute_set_id' => $attributeSet];
 
-        /** @var AbstractModelTestHelper $object */
-        $object = new AbstractModelTestHelper();
-        $object->setAttributeId($attributeId);
+        $object = $this->createPartialMockWithReflection(
+            AbstractModel::class,
+            ['getAttributeId', 'setAttributeId']
+        );
+        $object->method('getAttributeId')->willReturn($attributeId);
 
         $this->resource->expects($this->once())->method('getConnection')
             ->willReturn($this->connectionMock);
