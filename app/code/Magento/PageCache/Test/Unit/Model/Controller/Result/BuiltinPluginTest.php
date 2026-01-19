@@ -84,13 +84,11 @@ class BuiltinPluginTest extends TestCase
         $this->registryMock = $this->getMockBuilder(Registry::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->resultMock = $this->getMockBuilder(ResultInterface::class)
-            ->getMockForAbstractClass();
+        $this->resultMock = $this->createMock(ResultInterface::class);
         $this->responseMock = $this->getMockBuilder(ResponseHttp::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->httpHeaderMock = $this->getMockBuilder(HttpHeaderInterface::class)
-            ->getMockForAbstractClass();
+        $this->httpHeaderMock = $this->createMock(HttpHeaderInterface::class);
 
         $this->responseMock->expects(static::any())
             ->method('getHeader')

@@ -7,6 +7,9 @@ declare(strict_types=1);
 
 namespace Magento\Catalog\Test\Unit\Model\Product\Price\Validation;
 
+use Magento\Catalog\Model\Product;
+use Magento\Catalog\Model\Product\Type\AbstractType;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\Catalog\Api\Data\TierPriceInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\Product\Price\Validation\InvalidSkuProcessor;
@@ -19,8 +22,10 @@ use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\DB\Select;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Store\Api\Data\StoreInterface;
 use Magento\Store\Api\Data\WebsiteInterface;
 use Magento\Store\Api\WebsiteRepositoryInterface;
+use Magento\Store\Model\StoreManagerInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -77,36 +82,25 @@ class TierPriceValidatorTest extends TestCase
     private $adapterInterface;
 
     /**
+     * @var StoreManagerInterface|MockObject
+     */
+    private StoreManagerInterface $storeManager;
+
+    /**
      * {@inheritdoc}
      */
     protected function setUp(): void
     {
-        $this->productIdLocator = $this->getMockBuilder(ProductIdLocatorInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-        $this->websiteRepository = $this->getMockBuilder(WebsiteRepositoryInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-        $this->validationResult = $this->getMockBuilder(Result::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->invalidSkuProcessor = $this
-            ->getMockBuilder(InvalidSkuProcessor::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->tierPrice = $this->getMockBuilder(TierPriceInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-        $this->productRepository = $this->getMockBuilder(ProductRepositoryInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-        $this->resourceConnectionMock = $this->getMockBuilder(ResourceConnection::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->productIdLocator = $this->createMock(ProductIdLocatorInterface::class);
+        $this->websiteRepository = $this->createMock(WebsiteRepositoryInterface::class);
+        $this->validationResult = $this->createMock(Result::class);
+        $this->invalidSkuProcessor = $this->createMock(InvalidSkuProcessor::class);
+        $this->tierPrice = $this->createMock(TierPriceInterface::class);
+        $this->productRepository = $this->createMock(ProductRepositoryInterface::class);
+        $this->resourceConnectionMock = $this->createMock(ResourceConnection::class);
 
-        $this->adapterInterface = $this->getMockBuilder(AdapterInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->adapterInterface = $this->createMock(AdapterInterface::class);
+        $this->storeManager = $this->createMock(StoreManagerInterface::class);
 
         $objectManagerHelper = new ObjectManager($this);
         $this->tierPriceValidator = $objectManagerHelper->getObject(
@@ -117,7 +111,8 @@ class TierPriceValidatorTest extends TestCase
                 'validationResult' => $this->validationResult,
                 'invalidSkuProcessor' => $this->invalidSkuProcessor,
                 'productRepository' => $this->productRepository,
-                'resourceConnection' => $this->resourceConnectionMock
+                'resourceConnection' => $this->resourceConnectionMock,
+                'storeManager' => $this->storeManager
             ]
         );
     }
@@ -189,13 +184,8 @@ class TierPriceValidatorTest extends TestCase
         $this->productIdLocator->expects($this->atLeastOnce())->method('retrieveProductIdsBySkus')
             ->willReturn($idsBySku);
 
-        $product = $this->getMockBuilder(\Magento\Catalog\Model\Product::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $type = $this->getMockBuilder(\Magento\Catalog\Model\Product\Type\AbstractType::class)
-            ->onlyMethods(['canUseQtyDecimals'])
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $product = $this->createMock(Product::class);
+        $type = $this->createMock(AbstractType::class);
 
         $this->productRepository->expects($this->once())
             ->method('get')
@@ -231,18 +221,20 @@ class TierPriceValidatorTest extends TestCase
      * Test for retrieveValidationResult().
      *
      * @param array $returned
-     * @dataProvider retrieveValidationResultDataProvider
      * @return void
      */
+    #[DataProvider('retrieveValidationResultDataProvider')]
     public function testRetrieveValidationResult(array $returned)
     {
         $sku = 'ASDF234234';
+        $defaultStoreViewCode = 'default';
         $prices = [$this->tierPrice];
         $existingPrices = [$this->tierPrice];
+        $defaultStoreView = $this->createMock(StoreInterface::class);
+        $defaultStoreView->expects($this->once())->method('getCode')->willReturn($defaultStoreViewCode);
+        $this->storeManager->expects($this->once())->method('getDefaultStoreView')->willReturn($defaultStoreView);
         $this->prepareRetrieveValidationResultMethod($sku, $returned);
-        $website = $this->getMockBuilder(WebsiteInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $website = $this->createMock(WebsiteInterface::class);
         $this->websiteRepository->expects($this->atLeastOnce())->method('getById')->willReturn($website);
         $this->prepareCustomerGroupRepositoryMock();
 

@@ -10,6 +10,7 @@ namespace Magento\Customer\Test\Unit\ViewModel\Customer;
 use Magento\Customer\ViewModel\Customer\Auth;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\Http\Context;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -35,13 +36,9 @@ class AuthTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->contextMock = $this->getMockBuilder(Context::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->contextMock = $this->createMock(Context::class);
 
-        $this->scopeConfigMock = $this->getMockBuilder(ScopeConfigInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->scopeConfigMock = $this->createMock(ScopeConfigInterface::class);
 
         $this->model = new Auth(
             $this->contextMock,
@@ -67,9 +64,8 @@ class AuthTest extends TestCase
         );
     }
 
-    /**
-     * @dataProvider getCustomerShareScopeDataProvider
-     */
+    /** */
+    #[DataProvider('getCustomerShareScopeDataProvider')]
     public function testGetCustomerShareScope($configValue, int $expected): void
     {
         $this->scopeConfigMock->expects($this->once())
@@ -86,7 +82,7 @@ class AuthTest extends TestCase
     /**
      * @return array
      */
-    public function getCustomerShareScopeDataProvider(): array
+    public static function getCustomerShareScopeDataProvider(): array
     {
         return [
             'global scope as string 0' => ['0', 0],

@@ -66,14 +66,14 @@ class NotifyStockTest extends TestCase
     {
         $this->product = $this->createMock(Product::class);
         $this->productFactory = $this->createPartialMock(ProductFactory::class, ['create']);
-        $this->productFactory->expects($this->any())->method('create')->willReturn($this->product);
+        $this->productFactory->method('create')->willReturn($this->product);
 
         $this->stock = $this->createMock(Stock::class);
         $this->stockFactory = $this->createPartialMock(
             StockFactory::class,
             ['create']
         );
-        $this->stockFactory->expects($this->any())->method('create')->willReturn($this->stock);
+        $this->stockFactory->method('create')->willReturn($this->stock);
 
         $this->status = $this->createMock(Status::class);
         $this->eventManager = $this->createMock(Manager::class);

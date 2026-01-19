@@ -24,6 +24,7 @@ use Magento\Tax\Api\Data\TaxClassKeyInterface;
 use Magento\Tax\Api\Data\TaxClassKeyInterfaceFactory;
 use Magento\Tax\Api\Data\TaxDetailsInterface;
 use Magento\Tax\Api\TaxCalculationInterface;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Tax\Model\Config;
 use Magento\Tax\Model\Sales\Total\Quote\Subtotal;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -37,6 +38,8 @@ use PHPUnit\Framework\TestCase;
  */
 class SubtotalTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var ObjectManager
      */
@@ -101,29 +104,24 @@ class SubtotalTest extends TestCase
     {
         $this->objectManager = new ObjectManager($this);
         $this->totalsMock = $this->createMock(Total::class);
-        $this->shippingAssignmentMock = $this->getMockForAbstractClass(ShippingAssignmentInterface::class);
-        $this->shippingMock = $this->getMockForAbstractClass(ShippingInterface::class);
+        $this->shippingAssignmentMock = $this->createMock(ShippingAssignmentInterface::class);
+        $this->shippingMock = $this->createMock(ShippingInterface::class);
         $this->taxConfigMock = $this->getMockBuilder(Config::class)
             ->disableOriginalConstructor()
             ->onlyMethods(['priceIncludesTax', 'getShippingTaxClass', 'shippingPriceIncludesTax', 'discountTax'])
             ->getMock();
-        $this->taxCalculationMock = $this->getMockBuilder(TaxCalculationInterface::class)
-            ->getMockForAbstractClass();
-        $this->quoteDetailsDataObjectFactoryMock =
-            $this->getMockBuilder(QuoteDetailsInterfaceFactory::class)
-                ->disableOriginalConstructor()
-                ->addMethods(['setBillingAddress', 'setShippingAddress'])
-                ->onlyMethods(['create'])->getMock();
-        $this->keyDataObjectFactoryMock = $this->createPartialMock(
+        $this->taxCalculationMock = $this->createMock(TaxCalculationInterface::class);
+        $this->quoteDetailsDataObjectFactoryMock = $this->createPartialMockWithReflection(
+            QuoteDetailsInterfaceFactory::class,
+            ['create']
+        );
+        $this->keyDataObjectFactoryMock = $this->createPartialMockWithReflection(
             TaxClassKeyInterfaceFactory::class,
             ['create']
         );
 
-        $customerAddressMock = $this->getMockForAbstractClass(
-            AddressInterface::class,
-            [],
-            '',
-            false
+        $customerAddressMock = $this->createMock(
+            AddressInterface::class
         );
         $customerAddressFactoryMock = $this->createPartialMock(
             AddressInterfaceFactory::class,
@@ -131,11 +129,8 @@ class SubtotalTest extends TestCase
         );
         $customerAddressFactoryMock->expects($this->any())->method('create')->willReturn($customerAddressMock);
 
-        $customerAddressRegionMock = $this->getMockForAbstractClass(
-            RegionInterface::class,
-            [],
-            '',
-            false
+        $customerAddressRegionMock = $this->createMock(
+            RegionInterface::class
         );
         $customerAddressRegionMock->expects($this->any())->method('setRegionId')->willReturnSelf();
         $customerAddressRegionFactoryMock = $this->createPartialMock(
@@ -158,23 +153,22 @@ class SubtotalTest extends TestCase
             ]
         );
 
-        $this->addressMock = $this->getMockBuilder(Address::class)
-            ->disableOriginalConstructor()
-            ->addMethods([
-                'getAssociatedTaxables', 'getBillingAddress',
-                'getParentItem',
-            ])
-            ->onlyMethods([
-                'getQuote', 'getRegionId', 'getAllItems', '__wakeup'])->getMock();
+        $this->addressMock = $this->createPartialMockWithReflection(
+            Address::class,
+            [
+                'getAssociatedTaxables', 'getBillingAddress', 'getParentItem',
+                'getQuote', 'getRegionId', 'getAllItems', '__wakeup'
+            ]
+        );
 
         $this->quoteMock = $this->getMockBuilder(Quote::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->addressMock->expects($this->any())->method('getQuote')->willReturn($this->quoteMock);
-        $this->storeMock = $this->getMockBuilder(
-            Store::class
-        )->disableOriginalConstructor()
-            ->addMethods(['getStoreId'])->getMock();
+        $this->storeMock = $this->createPartialMockWithReflection(
+            Store::class,
+            ['getStoreId']
+        );
         $this->quoteMock->expects($this->any())->method('getStore')->willReturn($this->storeMock);
         $this->storeMock->expects($this->any())->method('getStoreId')->willReturn(111);
     }
@@ -193,9 +187,7 @@ class SubtotalTest extends TestCase
         $this->checkGetAddressItems();
         $this->taxConfigMock->expects($this->once())->method('priceIncludesTax')->willReturn($priceIncludesTax);
         $this->addressMock->expects($this->atLeastOnce())->method('getParentItem')->willReturnSelf();
-        $taxDetailsMock = $this->getMockBuilder(TaxDetailsInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $taxDetailsMock = $this->createMock(TaxDetailsInterface::class);
         $this->taxCalculationMock->expects($this->atLeastOnce())->method('calculateTax')->willReturn($taxDetailsMock);
         $taxDetailsMock->expects($this->atLeastOnce())->method('getItems')->willReturn([]);
         $this->model->collect($this->quoteMock, $this->shippingAssignmentMock, $this->totalsMock);
@@ -216,17 +208,13 @@ class SubtotalTest extends TestCase
             ->willReturn($customerTaxClassId);
         $this->quoteMock->expects($this->atLeastOnce())->method('getBillingAddress')->willReturn($this->addressMock);
         $this->shippingMock->expects($this->any())->method('getAddress')->willReturn($this->addressMock);
-        $keyDataObjectMock = $this->getMockBuilder(TaxClassKeyInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $keyDataObjectMock = $this->createMock(TaxClassKeyInterface::class);
         $this->keyDataObjectFactoryMock->expects($this->atLeastOnce())->method('create')
             ->willReturn($keyDataObjectMock);
         $keyDataObjectMock->expects($this->atLeastOnce())->method('setType')->willReturnSelf();
         $keyDataObjectMock->expects($this->atLeastOnce())->method('setValue')->willReturnSelf();
 
-        $quoteDetailsMock = $this->getMockBuilder(QuoteDetailsInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $quoteDetailsMock = $this->createMock(QuoteDetailsInterface::class);
         $this->quoteDetailsDataObjectFactoryMock->expects($this->atLeastOnce())
             ->method('create')->willReturn($quoteDetailsMock);
         // calls in populateAddressData()

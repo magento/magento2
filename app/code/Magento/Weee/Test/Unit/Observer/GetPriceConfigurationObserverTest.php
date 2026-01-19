@@ -12,16 +12,22 @@ use Magento\Catalog\Model\Product\Type\Simple;
 use Magento\Framework\DataObject;
 use Magento\Framework\Event\Observer;
 use Magento\Framework\Registry;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Weee\Helper\Data;
 use Magento\Weee\Observer\GetPriceConfigurationObserver;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 class GetPriceConfigurationObserverTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * Tests the methods that rely on the ScopeConfigInterface object to provide their return values
-     * @dataProvider getPriceConfigurationProvider
+     */
+    #[DataProvider('getPriceConfigurationProvider')]
+    /**
      * @param bool $hasWeeeAttributes
      * @param array $testArray
      * @param array $expectedArray
@@ -61,10 +67,10 @@ class GetPriceConfigurationObserverTest extends TestCase
 
         $productInstance=$this->createMock(Simple::class);
 
-        $product = $this->getMockBuilder(Type::class)
-            ->addMethods(['getTypeInstance', 'getTypeId', 'getStoreId'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $product = $this->createPartialMockWithReflection(
+            Type::class,
+            ['getTypeInstance', 'getTypeId', 'getStoreId']
+        );
         $product->expects($this->any())
             ->method('getTypeInstance')
             ->willReturn($productInstance);

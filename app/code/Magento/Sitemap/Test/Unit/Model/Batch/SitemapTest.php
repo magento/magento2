@@ -11,6 +11,7 @@ use Magento\Config\Model\Config\Reader\Source\Deployed\DocumentRoot;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\Data\Collection\AbstractDb;
+use Magento\Framework\DataObject;
 use Magento\Framework\Escaper;
 use Magento\Framework\Exception\FileSystemException;
 use Magento\Framework\Filesystem;
@@ -20,6 +21,7 @@ use Magento\Framework\Model\Context;
 use Magento\Framework\Model\ResourceModel\AbstractResource;
 use Magento\Framework\Registry;
 use Magento\Framework\Stdlib\DateTime\DateTime;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Sitemap\Helper\Data;
 use Magento\Sitemap\Model\Batch\Sitemap;
 use Magento\Sitemap\Model\ItemProvider\Category;
@@ -48,6 +50,8 @@ use PHPUnit\Framework\TestCase;
  */
 class SitemapTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var Sitemap|MockObject
      */
@@ -184,20 +188,16 @@ class SitemapTest extends TestCase
         $this->productConfigReader = $this->createMock(ProductConfigReader::class);
         $this->directory = $this->createMock(Write::class);
 
-        $this->sitemapData = $this->getMockBuilder(Data::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['getBaseUrl'])
-            ->onlyMethods(['getEnableSubmissionRobots', 'getMaximumLinesNumber', 'getMaximumFileSize'])
-            ->getMock();
+        $this->sitemapData = $this->createPartialMockWithReflection(
+            Data::class,
+            ['getBaseUrl', 'getEnableSubmissionRobots', 'getMaximumLinesNumber', 'getMaximumFileSize']
+        );
 
         $scopeConfig = $this->createMock(ScopeConfigInterface::class);
         $scopeConfig->method('getValue')
             ->willReturn('http://example.com/');
 
-        $this->store = $this->getMockBuilder(Store::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['getId'])  // Only mock methods we know can be mocked
-            ->getMock();
+        $this->store = $this->createPartialMock(Store::class, ['getId']);
 
         $this->store->method('getId')
             ->willReturn(1);
@@ -220,9 +220,7 @@ class SitemapTest extends TestCase
         $this->filesystem->method('getDirectoryWrite')
             ->willReturn($this->directory);
 
-        $this->resource = $this->getMockBuilder(SitemapResource::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->resource = $this->createMock(SitemapResource::class);
 
         $this->resource->method('getIdFieldName')
             ->willReturn('sitemap_id');
@@ -241,8 +239,7 @@ class SitemapTest extends TestCase
         $itemProvider = $this->createMock(ItemProviderInterface::class);
         $configReader = $this->createMock(SitemapConfigReaderInterface::class);
 
-        $writeInterface = $this->getMockBuilder(WriteInterface::class)
-            ->getMock();
+        $writeInterface = $this->createMock(WriteInterface::class);
         $writeInterface->method('write')
             ->willReturn(1);
 
@@ -382,9 +379,10 @@ class SitemapTest extends TestCase
 
         $batchProductResource = $this->createMock(Product::class);
 
-        $product = $this->getMockBuilder(\Magento\Framework\DataObject::class)
-            ->addMethods(['getUrl', 'getUpdatedAt', 'getImages'])
-            ->getMock();
+        $product = $this->createPartialMockWithReflection(
+            DataObject::class,
+            ['getUrl', 'getUpdatedAt', 'getImages']
+        );
 
         $product->expects($this->any())
             ->method('getUrl')
@@ -476,9 +474,10 @@ class SitemapTest extends TestCase
 
         $batchProductResource = $this->createMock(Product::class);
 
-        $product1 = $this->getMockBuilder(\Magento\Framework\DataObject::class)
-            ->addMethods(['getUrl', 'getUpdatedAt', 'getImages'])
-            ->getMock();
+        $product1 = $this->createPartialMockWithReflection(
+            DataObject::class,
+            ['getUrl', 'getUpdatedAt', 'getImages']
+        );
 
         $product1->expects($this->any())
             ->method('getUrl')
@@ -492,9 +491,10 @@ class SitemapTest extends TestCase
             ->method('getImages')
             ->willReturn([]);
 
-        $product2 = $this->getMockBuilder(\Magento\Framework\DataObject::class)
-            ->addMethods(['getUrl', 'getUpdatedAt', 'getImages'])
-            ->getMock();
+        $product2 = $this->createPartialMockWithReflection(
+            DataObject::class,
+            ['getUrl', 'getUpdatedAt', 'getImages']
+        );
 
         $product2->expects($this->any())
             ->method('getUrl')
@@ -538,8 +538,7 @@ class SitemapTest extends TestCase
             ->method('create')
             ->willReturn($sitemapItem);
 
-        $writeInterface = $this->getMockBuilder(WriteInterface::class)
-            ->getMock();
+        $writeInterface = $this->createMock(WriteInterface::class);
         $writeInterface->expects($this->any())
             ->method('write')
             ->willReturn(1);

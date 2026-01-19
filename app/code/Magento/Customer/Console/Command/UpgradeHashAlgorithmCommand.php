@@ -58,7 +58,7 @@ class UpgradeHashAlgorithmCommand extends Command
     /**
      * @inheritdoc
      */
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $this->collection = $this->customerCollectionFactory->create();
         $this->collection->addAttributeToSelect('*');

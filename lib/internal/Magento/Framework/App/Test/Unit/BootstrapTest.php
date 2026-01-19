@@ -189,7 +189,7 @@ class BootstrapTest extends TestCase
      * @param $modeFromDeployment
      * @param $isDeveloper
      *
-     * @dataProvider testIsDeveloperModeDataProvider
+     * @dataProvider isDeveloperModeDataProvider
      */
     public function testIsDeveloperMode($modeFromEnvironment, $modeFromDeployment, $isDeveloper)
     {
@@ -207,7 +207,7 @@ class BootstrapTest extends TestCase
     /**
      * @return array
      */
-    public static function testIsDeveloperModeDataProvider()
+    public static function isDeveloperModeDataProvider()
     {
         return [
             [null, null, false],

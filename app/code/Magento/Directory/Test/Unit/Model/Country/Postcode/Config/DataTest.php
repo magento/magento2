@@ -35,7 +35,7 @@ class DataTest extends TestCase
     {
         $this->readerMock = $this->createMock(Reader::class);
         $this->cacheMock = $this->createMock(Config::class);
-        $this->serializerMock = $this->getMockForAbstractClass(SerializerInterface::class);
+        $this->serializerMock = $this->createMock(SerializerInterface::class);
     }
 
     public function testGet()

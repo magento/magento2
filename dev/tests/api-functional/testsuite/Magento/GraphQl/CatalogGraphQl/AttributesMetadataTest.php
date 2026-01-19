@@ -23,6 +23,7 @@ use Magento\TestFramework\TestCase\GraphQlAbstract;
         CategoryAttribute::class,
         [
             'frontend_input' => 'multiselect',
+            'backend_type' => 'text',
             'is_filterable_in_search' => true,
             'position' => 4,
             'apply_to' => 'category'
@@ -33,6 +34,7 @@ use Magento\TestFramework\TestCase\GraphQlAbstract;
         Attribute::class,
         [
             'frontend_input' => 'multiselect',
+            'backend_type' => 'text',
             'is_filterable_in_search' => true,
             'position' => 5,
         ],

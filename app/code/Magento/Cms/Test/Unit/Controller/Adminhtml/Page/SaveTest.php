@@ -19,6 +19,8 @@ use Magento\Framework\App\Request\DataPersistorInterface;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Message\ManagerInterface;
+use Magento\Framework\Event\ManagerInterface as EventManagerInterface;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -27,6 +29,7 @@ use PHPUnit\Framework\TestCase;
  */
 class SaveTest extends TestCase
 {
+    use MockCreationTrait;
     /**
      * @var RequestInterface|MockObject
      */
@@ -58,7 +61,7 @@ class SaveTest extends TestCase
     private $messageManagerMock;
 
     /**
-     * @var \Magento\Framework\Event\ManagerInterface|MockObject
+     * @var EventManagerInterface|MockObject
      */
     private $eventManagerMock;
 
@@ -103,22 +106,25 @@ class SaveTest extends TestCase
             ->getMock();
         $this->dataPersistorMock = $this->getMockBuilder(DataPersistorInterface::class)
             ->getMock();
-        $this->requestMock = $this->getMockBuilder(RequestInterface::class)
-            ->addMethods(['getPostValue'])
-            ->onlyMethods(['getParam'])
-            ->getMockForAbstractClass();
-        $this->messageManagerMock = $this->getMockBuilder(ManagerInterface::class)
-            ->getMockForAbstractClass();
-        $this->eventManagerMock = $this->getMockBuilder(\Magento\Framework\Event\ManagerInterface::class)
-            ->onlyMethods(['dispatch'])
-            ->getMockForAbstractClass();
+        // Use MockCreationTrait to add non-existent methods like getPostValue
+        $this->requestMock = $this->createPartialMockWithReflection(
+            RequestInterface::class,
+            ['getPostValue', 'getParam', 'isPost', 'getFullActionName', 'setParam',
+             'getModuleName', 'setModuleName', 'getActionName', 'setActionName',
+             'getCookie', 'getBeforeForwardInfo', 'getPathInfo', 'setPathInfo',
+             'getOriginalPathInfo', 'getFrontName', 'getControllerName', 'getRouteName',
+             'setParams', 'getParams', 'isSecure']
+        );
+        $this->messageManagerMock = $this->createMock(ManagerInterface::class);
+        $this->eventManagerMock = $this->createPartialMock(
+            EventManagerInterface::class,
+            ['dispatch']
+        );
         $this->pageFactory = $this->getMockBuilder(PageFactory::class)
             ->disableOriginalConstructor()
             ->onlyMethods(['create'])
             ->getMock();
-        $this->pageRepository = $this->getMockBuilder(PageRepositoryInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->pageRepository = $this->createMock(PageRepositoryInterface::class);
         $context = $this->getMockBuilder(Context::class)
             ->disableOriginalConstructor()
             ->getMock();

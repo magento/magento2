@@ -11,15 +11,19 @@ use Magento\Cms\Model\Page;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\Event;
 use Magento\Framework\Event\Observer;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\GoogleOptimizer\Helper\Data;
 use Magento\GoogleOptimizer\Model\Code;
 use Magento\GoogleOptimizer\Observer\CmsPage\SaveGoogleExperimentScriptObserver;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 class SaveGoogleExperimentScriptObserverTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var MockObject
      */
@@ -59,13 +63,13 @@ class SaveGoogleExperimentScriptObserverTest extends TestCase
     {
         $this->_helperMock = $this->createMock(Data::class);
         $this->_codeMock = $this->createMock(Code::class);
-        $this->_requestMock = $this->getMockForAbstractClass(RequestInterface::class);
+        $this->_requestMock = $this->createMock(RequestInterface::class);
 
         $this->_pageMock = $this->createMock(Page::class);
-        $event = $this->getMockBuilder(Event::class)
-            ->addMethods(['getObject'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $event = $this->createPartialMockWithReflection(
+            Event::class,
+            ['getObject']
+        );
         $event->expects($this->once())->method('getObject')->willReturn($this->_pageMock);
         $this->_eventObserverMock = $this->createMock(Observer::class);
         $this->_eventObserverMock->expects($this->once())->method('getEvent')->willReturn($event);
@@ -114,8 +118,8 @@ class SaveGoogleExperimentScriptObserverTest extends TestCase
 
     /**
      * @param array $params
-     * @dataProvider dataProviderWrongRequestForCreating
      */
+    #[DataProvider('dataProviderWrongRequestForCreating')]
     public function testCreatingCodeIfRequestIsNotValid($params)
     {
         $this->_helperMock->expects($this->once())->method('isGoogleExperimentActive')->willReturn(true);

@@ -9,10 +9,12 @@ namespace Magento\QuoteGraphQl\Test\Unit\Model\CartItem;
 
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\Catalog\Model\Product;
 use Magento\CatalogInventory\Api\Data\StockStatusInterface;
 use Magento\CatalogInventory\Api\StockRegistryInterface;
 use Magento\CatalogInventory\Model\StockState;
 use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Quote\Model\Quote\Item;
 use Magento\Quote\Model\Quote\Item\Option;
 use Magento\QuoteGraphQl\Model\CartItem\ProductStock;
@@ -25,6 +27,7 @@ use PHPUnit\Framework\TestCase;
  */
 class ProductStockTest extends TestCase
 {
+    use MockCreationTrait;
     /**
      * @var ProductStock
      */
@@ -96,8 +99,8 @@ class ProductStockTest extends TestCase
             $this->stockRegistryMock
         );
         $this->stockStatusMock = $this->createMock(StockStatusInterface::class);
-        $this->cartItemMock = $this->createPartialMock(
-            \Magento\Quote\Test\Unit\Helper\QuoteItemUpdaterTestHelper::class,
+        $this->cartItemMock = $this->createPartialMockWithReflection(
+            \Magento\Quote\Model\Quote\Item::class,
             [
                 'getStore',
                 'getProductType',
@@ -109,11 +112,11 @@ class ProductStockTest extends TestCase
             ]
         );
         $this->productMock = $this->createPartialMock(
-            \Magento\Catalog\Test\Unit\Helper\ProductTestHelper::class,
+            Product::class,
             ['getId', 'getStore']
         );
         $this->optionProductMock = $this->createPartialMock(
-            \Magento\Catalog\Test\Unit\Helper\ProductTestHelper::class,
+            Product::class,
             ['getId', 'getStore']
         );
         $this->storeMock = $this->createMock(StoreInterface::class);

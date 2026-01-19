@@ -12,6 +12,7 @@ use Magento\Framework\Event\ManagerInterface;
 use Magento\Payment\Model\Cart\SalesModel\Factory;
 use Magento\Payment\Model\Cart\SalesModel\SalesModelInterface;
 use Magento\Paypal\Model\Cart;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -35,14 +36,9 @@ class CartTest extends TestCase
      */
     protected $_salesModel;
 
-    /**
-     * @param null|string $name
-     * @param array $data
-     * @param string $dataName
-     */
-    public function __construct($name = null, array $data = [], string $dataName = '')
+    public static function setUpBeforeClass(): void
     {
-        parent::__construct($name, $data, $dataName);
+        parent::setUpBeforeClass();
         self::$_validItem = new DataObject(
             [
                 'parent_item' => null,
@@ -56,9 +52,7 @@ class CartTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->_salesModel = $this->getMockForAbstractClass(
-            SalesModelInterface::class
-        );
+        $this->_salesModel = $this->createMock(SalesModelInterface::class);
         $factoryMock = $this->createPartialMock(Factory::class, ['create']);
         $factoryMock->expects(
             $this->once()
@@ -69,15 +63,15 @@ class CartTest extends TestCase
         )->willReturn(
             $this->_salesModel
         );
-        $eventManagerMock = $this->getMockForAbstractClass(ManagerInterface::class);
+        $eventManagerMock = $this->createMock(ManagerInterface::class);
 
         $this->_model = new Cart($factoryMock, $eventManagerMock, 'sales model');
     }
 
     /**
      * @param array $items
-     * @dataProvider invalidGetAllItemsDataProvider
      */
+    #[DataProvider('invalidGetAllItemsDataProvider')]
     public function testInvalidGetAllItems(array $items)
     {
         $taxContainer = new DataObject(
@@ -156,8 +150,8 @@ class CartTest extends TestCase
     /**
      * @param array $values
      * @param bool $transferDiscount
-     * @dataProvider invalidTotalsGetAllItemsDataProvider
      */
+    #[DataProvider('invalidTotalsGetAllItemsDataProvider')]
     public function testInvalidTotalsGetAllItems($values, $transferDiscount)
     {
         $expectedSubtotal = $this->_prepareInvalidModelData($values, $transferDiscount);
@@ -238,8 +232,8 @@ class CartTest extends TestCase
      * @param array $values
      * @param bool $transferDiscount
      * @param bool $transferShipping
-     * @dataProvider invalidGetAmountsDataProvider
      */
+    #[DataProvider('invalidGetAmountsDataProvider')]
     public function testInvalidGetAmounts($values, $transferDiscount, $transferShipping)
     {
         $expectedSubtotal = $this->_prepareInvalidModelData($values, $transferDiscount);

@@ -64,6 +64,7 @@ use Magento\Customer\Test\Fixture\CustomerAttribute;
         [
             'entity_type_id' => CategorySetup::CATALOG_PRODUCT_ENTITY_TYPE_ID,
             'frontend_input' => 'boolean',
+            'backend_type' => 'int',
             'source_model' => 'Magento\Eav\Model\Entity\Attribute\Source\Boolean',
             'is_visible_on_front' => 1,
         ],
@@ -74,6 +75,7 @@ use Magento\Customer\Test\Fixture\CustomerAttribute;
         [
             'entity_type_id' => CategorySetup::CATALOG_PRODUCT_ENTITY_TYPE_ID,
             'frontend_input' => 'boolean',
+            'backend_type' => 'int',
             'source_model' => 'Magento\Eav\Model\Entity\Attribute\Source\Boolean',
             'is_visible_on_front' => 1,
             'is_comparable' => 1

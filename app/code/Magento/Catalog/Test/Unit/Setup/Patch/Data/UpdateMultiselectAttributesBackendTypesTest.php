@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\Catalog\Test\Unit\Setup\Patch\Data;
 
+use PHPUnit\Framework\MockObject\MockObject;
 use Magento\Catalog\Setup\Patch\Data\UpdateMultiselectAttributesBackendTypes;
 use Magento\Eav\Setup\EavSetup;
 use Magento\Eav\Setup\EavSetupFactory;
@@ -18,12 +19,12 @@ use PHPUnit\Framework\TestCase;
 class UpdateMultiselectAttributesBackendTypesTest extends TestCase
 {
     /**
-     * @var ModuleDataSetupInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var ModuleDataSetupInterface|MockObject
      */
     private $dataSetup;
 
     /**
-     * @var EavSetupFactory|\PHPUnit\Framework\MockObject\MockObject
+     * @var EavSetupFactory|MockObject
      */
     private $eavSetupFactory;
 

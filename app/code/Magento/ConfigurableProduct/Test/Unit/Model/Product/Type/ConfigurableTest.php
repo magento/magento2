@@ -47,6 +47,7 @@ use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
 use ReflectionClass;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 
 /**
  * @SuppressWarnings(PHPMD.LongVariable)
@@ -56,6 +57,8 @@ use ReflectionClass;
 #[CoversClass(\Magento\ConfigurableProduct\Model\Product\Type\Configurable::class)]
 class ConfigurableTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var ProductInterfaceFactory
      */
@@ -231,32 +234,63 @@ class ConfigurableTest extends TestCase
      */
     public function testSave(): void
     {
-        $product = new \Magento\Catalog\Test\Unit\Helper\ProductTestHelper();
-        // Configure ProductTestHelper with expected values
-        $product->setConfigurableAttributesData($this->attributeData);
-        $product->setIsDuplicate(true);
-        $product->setStoreId(1);
-        $product->setAssociatedProductIds([2]);
-        $product->setHasData('_cache_instance_used_product_attribute_ids', true);
-        $extensionAttributes = new \Magento\Catalog\Test\Unit\Helper\ProductExtensionTestHelper();
+        $extensionAttributes = $this->createPartialMockWithReflection(
+            \Magento\Catalog\Api\Data\ProductExtensionInterface::class,
+            [
+                'setConfigurableProductOptions', 'setConfigurableProductLinks',
+                'getConfigurableProductOptions', 'getConfigurableProductLinks'
+            ]
+        );
+        $extensionAttributes->method('getConfigurableProductOptions')->willReturn([]);
+        $extensionAttributes->method('getConfigurableProductLinks')->willReturn([]);
+        
+        $product = $this->createPartialMockWithReflection(
+            \Magento\Catalog\Model\Product::class,
+            [
+                'getExtensionAttributes', 'setConfigurableAttributesData', 'setIsDuplicate', 'setStoreId',
+                'setAssociatedProductIds', 'hasData', 'getConfigurableAttributesData', 'getIsDuplicate',
+                'getStoreId', 'setExtensionAttributes', 'setData', 'getData'
+            ]
+        );
+        $product->method('getExtensionAttributes')->willReturn($extensionAttributes);
+        $product->method('getConfigurableAttributesData')->willReturn($this->attributeData);
+        $product->method('getIsDuplicate')->willReturn(true);
+        $product->method('getStoreId')->willReturn(1);
+        $product->method('hasData')->willReturnMap([
+            ['_cache_instance_used_product_attribute_ids', true]
+        ]);
+        $product->method('getData')->willReturnMap([
+            ['_cache_instance_used_product_attribute_ids', null, [1]],
+            ['link', null, 1]
+        ]);
         $extensionAttributes->setConfigurableProductOptions([]);
         $extensionAttributes->setConfigurableProductLinks([]);
 
         $this->entityMetadata->method('getLinkField')->willReturn('link');
-        // Configure ProductTestHelper with extension attributes
-        $product->setExtensionAttributes($extensionAttributes);
-        $product->setData('_cache_instance_used_product_attribute_ids', 1);
-        $product->setData('link', 1);
 
-        $attribute = new \Magento\Eav\Test\Unit\Helper\AttributeTestHelper();
+        $attribute = $this->createPartialMockWithReflection(
+            \Magento\ConfigurableProduct\Model\Product\Type\Configurable\Attribute::class,
+            ['loadByProductAndAttribute', 'addData', 'setStoreId', 'setProductId', 'save']
+        );
+        $attribute->method('addData')->willReturnSelf();
+        $attribute->method('setStoreId')->willReturnSelf();
+        $attribute->method('setProductId')->willReturnSelf();
+        $attribute->method('save')->willReturnSelf();
+        
         $expectedAttributeData = $this->attributeData[1];
         unset($expectedAttributeData['id']);
-        // Configure AttributeTestHelper - addData, setStoreId, setProductId, save methods return $this
 
         $this->configurableAttributeFactoryMock->expects($this->once())
             ->method('create')
             ->willReturn($attribute);
-        $attributeCollection = $this->createMock(Collection::class);
+        $attributeCollection = $this->createPartialMock(
+            Collection::class,
+            ['setProductFilter', 'addFieldToFilter', 'load', 'walk']
+        );
+        $attributeCollection->method('setProductFilter')->willReturnSelf();
+        $attributeCollection->method('addFieldToFilter')->willReturnSelf();
+        $attributeCollection->method('load')->willReturnSelf();
+        $attributeCollection->method('walk')->willReturnSelf();
         $this->attributeCollectionFactory->expects($this->once())
             ->method('create')
             ->willReturn($attributeCollection);
@@ -350,16 +384,30 @@ class ConfigurableTest extends TestCase
     {
         $attributeSource = $this->createMock(AbstractSource::class);
         $attributeFrontend = $this->createMock(AbstractFrontend::class);
-        $eavAttribute = $this->createMock(\Magento\Catalog\Model\ResourceModel\Eav\Attribute::class);
+        $eavAttribute = $this->createPartialMockWithReflection(
+            \Magento\Catalog\Model\ResourceModel\Eav\Attribute::class,
+            ['getFrontend', 'getSource', 'getStoreLabel', 'setStoreId', 'getId', 'getAttributeCode']
+        );
 
         $attributeSource->expects($this->once())->method('getAllOptions')->willReturn([]);
         $attributeFrontend->expects($this->once())->method('getLabel')->willReturn('Label');
         $eavAttribute->expects($this->once())->method('getFrontend')->willReturn($attributeFrontend);
         $eavAttribute->expects($this->once())->method('getSource')->willReturn($attributeSource);
         $eavAttribute->expects($this->atLeastOnce())->method('getStoreLabel')->willReturn('Store Label');
+        $eavAttribute->method('setStoreId')->willReturnSelf();
+        $eavAttribute->method('getId')->willReturn(1);
+        $eavAttribute->method('getAttributeCode')->willReturn('test_code');
 
-        $attribute = new \Magento\Eav\Test\Unit\Helper\AttributeTestHelper();
-        $attribute->setProductAttribute($eavAttribute);
+        $attribute = $this->createPartialMockWithReflection(
+            \Magento\Eav\Model\Entity\Attribute::class,
+            ['getProductAttribute', 'getLabel', 'getUseDefault', 'getPosition', 'getOptions', 'getId']
+        );
+        $attribute->method('getProductAttribute')->willReturn($eavAttribute);
+        $attribute->method('getLabel')->willReturn('Attribute Label');
+        $attribute->method('getUseDefault')->willReturn(false);
+        $attribute->method('getPosition')->willReturn(0);
+        $attribute->method('getOptions')->willReturn([]);
+        $attribute->method('getId')->willReturn(1);
 
         $product = $this->createPartialMock(Product::class, ['getStoreId', 'getData', 'hasData', '__sleep']);
         $product->expects($this->atLeastOnce())->method('getStoreId')->willReturn($productStore);
@@ -473,13 +521,16 @@ class ConfigurableTest extends TestCase
      */
     public function testHasOptionsConfigurableAttribute(): void
     {
-        $productMock = new \Magento\Catalog\Test\Unit\Helper\ProductTestHelper();
+        $productMock = $this->createPartialMock(Product::class, ['getOptions', 'hasData', 'getData']);
         $attributeMock = $this->createMock(Attribute::class);
 
-        // Configure ProductTestHelper with expected values
-        $productMock->setOptions([]);
-        $productMock->setHasData('_cache_instance_configurable_attributes', 1);
-        $productMock->setData('_cache_instance_configurable_attributes', [$attributeMock]);
+        $productMock->expects($this->once())->method('getOptions')->willReturn([]);
+        $productMock->expects($this->once())
+            ->method('hasData')
+            ->with('_cache_instance_configurable_attributes')->willReturn(1);
+        $productMock->expects($this->once())
+            ->method('getData')
+            ->with('_cache_instance_configurable_attributes')->willReturn([$attributeMock]);
 
         $this->assertTrue($this->model->hasOptions($productMock));
     }
@@ -578,7 +629,10 @@ class ConfigurableTest extends TestCase
 
         $productMock = $this->createMock(Product::class);
         $optionMock = $this->createMock(OptionInterface::class);
-        $usedAttributeMock = new \Magento\Eav\Test\Unit\Helper\AttributeTestHelper();
+        $usedAttributeMock = $this->createPartialMockWithReflection(
+            \Magento\Eav\Model\Entity\Attribute::class,
+            ['getProductAttribute']
+        );
         $attributeMock = $this->createMock(\Magento\Catalog\Model\ResourceModel\Eav\Attribute::class);
 
         $optionMock->expects($this->once())->method('getValue')->willReturn(json_encode($this->attributeData));
@@ -587,7 +641,7 @@ class ConfigurableTest extends TestCase
         $productMock
             ->method('getData')
             ->willReturnOnConsecutiveCalls(true, [1 => $usedAttributeMock]);
-        $usedAttributeMock->setProductAttribute($attributeMock);
+        $usedAttributeMock->method('getProductAttribute')->willReturn($attributeMock);
         $attributeMock->expects($this->once())->method('getStoreLabel')->willReturn('attr_store_label');
         $attributeMock->expects($this->once())->method('getSourceModel')->willReturn(false);
 
@@ -610,12 +664,15 @@ class ConfigurableTest extends TestCase
      */
     public function testCheckProductBuyState(): void
     {
-        $productMock = new \Magento\Catalog\Test\Unit\Helper\ProductTestHelper();
+        $productMock = $this->createPartialMockWithReflection(
+            Product::class,
+            ['getSkipCheckRequiredOption', 'getCustomOption']
+        );
         $optionMock = $this->createMock(Option::class);
 
-        // Configure ProductTestHelper with expected values
-        $productMock->setSkipCheckRequiredOption(true);
-        $productMock->setCustomOption('info_buyRequest', $optionMock);
+        $productMock->expects($this->once())->method('getSkipCheckRequiredOption')->willReturn(true);
+        $productMock->expects($this->once())->method('getCustomOption')
+            ->with('info_buyRequest')->willReturn($optionMock);
         $optionMock->expects($this->once())
             ->method('getValue')
             ->willReturn(json_encode(['super_attribute' => ['test_key' => 'test_value', 'empty_key' => '']]));
@@ -637,12 +694,15 @@ class ConfigurableTest extends TestCase
     {
         $this->expectException('Magento\Framework\Exception\LocalizedException');
         $this->expectExceptionMessage('You need to choose options for your item.');
-        $productMock = new \Magento\Catalog\Test\Unit\Helper\ProductTestHelper();
+        $productMock = $this->createPartialMockWithReflection(
+            Product::class,
+            ['getSkipCheckRequiredOption', 'getCustomOption']
+        );
         $optionMock = $this->createMock(Option::class);
 
-        // Configure ProductTestHelper with expected values
-        $productMock->setSkipCheckRequiredOption(true);
-        $productMock->setCustomOption('info_buyRequest', $optionMock);
+        $productMock->expects($this->once())->method('getSkipCheckRequiredOption')->willReturn(true);
+        $productMock->expects($this->once())->method('getCustomOption')
+            ->with('info_buyRequest')->willReturn($optionMock);
         $optionMock->expects($this->once())->method('getValue')->willReturn(json_encode([]));
         $this->serializer->expects($this->any())
             ->method('unserialize')
@@ -724,13 +784,22 @@ class ConfigurableTest extends TestCase
      */
     public function testSetImageFromChildProduct(): void
     {
-        $productMock = new \Magento\Catalog\Test\Unit\Helper\ProductTestHelper();
+        $productMock = $this->createPartialMockWithReflection(
+            Product::class,
+            ['hasData', 'getData', 'setImage']
+        );
         $childProductMock = $this->createMock(Product::class);
         $this->entityMetadata->method('getLinkField')->willReturn('link');
-        // Configure ProductTestHelper with expected values
-        $productMock->setHasData('_cache_instance_products', true);
-        $productMock->setData('image', 'no_selection');
-        $productMock->setData('_cache_instance_products', [$childProductMock]);
+        
+        // Configure mock with expected values
+        $productMock->method('hasData')->willReturnMap([
+            ['_cache_instance_products', true]
+        ]);
+        $productMock->method('getData')->willReturnMap([
+            ['image', null, 'no_selection'],
+            ['_cache_instance_products', null, [$childProductMock]]
+        ]);
+        $productMock->expects($this->once())->method('setImage')->with('image_data');
 
         $childProductMock->expects($this->any())->method('getData')->with('image')->willReturn('image_data');
 

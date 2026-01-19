@@ -41,7 +41,7 @@ class ScopeResolverPoolTest extends TestCase
      * @param string $scope
      *
      * @covers \Magento\Framework\App\ScopeResolverPool::get()
-     * @dataProvider testGetExceptionDataProvider
+     * @dataProvider getExceptionDataProvider
      */
     public function testGetException($scope)
     {
@@ -59,7 +59,7 @@ class ScopeResolverPoolTest extends TestCase
     /**
      * @return array
      */
-    public static function testGetExceptionDataProvider()
+    public static function getExceptionDataProvider()
     {
         return [
             ['undefined'],

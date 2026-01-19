@@ -15,7 +15,11 @@ define([
     return function initEnsureSubtotalSync(config, element)
     {
         const $root = $(element || document);
-        let clicked = false;
+
+        // Check if already synced on the body element (persists across form replacements)
+        if ($('body').data('cart-synced')) {
+            return;
+        }
 
         function parsePrice(text)
         {
@@ -44,7 +48,7 @@ define([
             // Sum of row totals on the table
             let sum = 0;
 
-            $root.find('#shopping-cart-table .col.subtotal .cart-price').each(function () {
+            $root.find('#shopping-cart-table .col.subtotal .price-excluding-tax .cart-price').each(function () {
                 const text = $(this).text(), val = parsePrice(text);
 
                 if (!isNaN(val)) {
@@ -70,19 +74,35 @@ define([
                 return;
             }
 
-            if (clicked) {
-                return;
-            }
-
             const central = getCentralSubtotal(), summary = getSummarySubtotal();
 
             if (!isNaN(central) && !isNaN(summary) && central !== summary) {
-                const $updateBtn = $root.find('.cart.main.actions button.action.update');
+                // Mark as synced immediately to prevent multiple calls
+                $('body').data('cart-synced', true);
 
-                if ($updateBtn.length) {
-                    clicked = true;
-                    $updateBtn.trigger('click');
-                }
+                // Reload cart content via AJAX
+                $('body').trigger('processStart');
+                $.ajax({
+                    url: window.location.href,
+                    type: 'GET',
+                    data: { ajax: 1 },
+                    success: function (response) {
+                        // Extract and replace cart form
+                        const newContent = $(response).find('#form-validate');
+
+                        // Replace the form with the new content
+                        $('#form-validate').replaceWith(newContent);
+                        // Reinitialize widgets on new content
+                        $('#form-validate').trigger('contentUpdated');
+                    },
+                    error: function () {
+                        $('body').trigger('processStop');
+                        $('body').data('cart-synced', false);
+                    },
+                    complete: function () {
+                        $('body').trigger('processStop');
+                    }
+                });
             }
         }
 
@@ -98,7 +118,7 @@ define([
                 const obs = new MutationObserver(function () {
                     trySync();
 
-                    if (clicked) {
+                    if ($('body').data('cart-synced')) {
                         obs.disconnect();
                     }
                 });

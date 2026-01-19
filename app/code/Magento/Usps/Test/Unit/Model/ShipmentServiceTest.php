@@ -8,9 +8,11 @@ declare(strict_types=1);
 namespace Magento\Usps\Test\Unit\Model;
 
 use Exception;
+use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory;
 use Magento\Framework\DataObject;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\HTTP\AsyncClient\HttpResponseDeferredInterface;
 use Magento\Framework\HTTP\AsyncClient\Response;
 use Magento\Framework\HTTP\AsyncClientInterface;
@@ -37,6 +39,7 @@ use Psr\Log\LoggerInterface;
  */
 class ShipmentServiceTest extends TestCase
 {
+    use MockCreationTrait;
     /**
      * @var ShipmentService
      */
@@ -107,30 +110,16 @@ class ShipmentServiceTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->rateFactoryMock = $this->getMockBuilder(ResultFactory::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->rateMethodFactoryMock =
-            $this->getMockBuilder(MethodFactory::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->rateErrorFactoryMock =
-            $this->getMockBuilder(ErrorFactory::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->productCollectionFactoryMock =
-            $this->getMockBuilder(CollectionFactory::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->rateFactoryMock = $this->createMock(ResultFactory::class);
+        $this->rateMethodFactoryMock = $this->createMock(MethodFactory::class);
+        $this->rateErrorFactoryMock = $this->createMock(ErrorFactory::class);
+        $this->productCollectionFactoryMock = $this->createMock(CollectionFactory::class);
         $this->carrierHelperMock = $this->createMock(CarrierHelper::class);
         $this->loggerMock = $this->createMock(LoggerInterface::class);
         $this->uspsPaymentAuthTokenMock = $this->createMock(UspsPaymentAuthToken::class);
         $this->shippingMethodManagerMock = $this->createMock(ShippingMethodManager::class);
         $this->httpClientMock = $this->createMock(AsyncClientInterface::class);
-        $this->proxyDeferredFactoryMock =
-            $this->getMockBuilder(ProxyDeferredFactory::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->proxyDeferredFactoryMock = $this->createMock(ProxyDeferredFactory::class);
         $this->carrierModelMock = $this->createMock(Carrier::class);
         $carrierModelReflection = new \ReflectionClass(Carrier::class);
         $_defaultGatewayUrl = $carrierModelReflection->getProperty('_defaultRestUrl');
@@ -785,11 +774,10 @@ class ShipmentServiceTest extends TestCase
         ]);
 
         // Mock product collection
-        $productMock = $this->getMockBuilder(\Magento\Catalog\Model\Product::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['getCountryOfManufacture'])
-            ->onlyMethods(['getId'])
-            ->getMock();
+        $productMock = $this->createPartialMockWithReflection(
+            Product::class,
+            ['getId', 'getCountryOfManufacture']
+        );
         $productMock->method('getId')->willReturn(1);
         $productMock->method('getCountryOfManufacture')->willReturn('US');
 
@@ -934,11 +922,10 @@ class ShipmentServiceTest extends TestCase
             ->with('GB')
             ->willReturn('United Kingdom');
 
-        $productMock = $this->getMockBuilder(\Magento\Catalog\Model\Product::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['getCountryOfManufacture'])
-            ->onlyMethods(['getId'])
-            ->getMock();
+        $productMock = $this->createPartialMockWithReflection(
+            Product::class,
+            ['getId', 'getCountryOfManufacture']
+        );
         $productMock->method('getId')->willReturn(1);
         $productMock->method('getCountryOfManufacture')->willReturn('US');
 
@@ -1081,11 +1068,10 @@ class ShipmentServiceTest extends TestCase
             ->willReturn('test_payment_token');
 
         // Mock product collection
-        $productMock = $this->getMockBuilder(\Magento\Catalog\Model\Product::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['getCountryOfManufacture'])
-            ->onlyMethods(['getId'])
-            ->getMock();
+        $productMock = $this->createPartialMockWithReflection(
+            Product::class,
+            ['getId', 'getCountryOfManufacture']
+        );
         $productMock->method('getId')->willReturn(1);
         $productMock->method('getCountryOfManufacture')->willReturn('US');
 

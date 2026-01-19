@@ -19,6 +19,7 @@ use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
 use Magento\Store\Model\ScopeInterface;
 use PHPUnit\Framework\MockObject\MockObject as Mock;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -71,14 +72,8 @@ class DefaultProcessorTest extends TestCase
     {
         $this->deploymentConfigMock = $this->createMock(DeploymentConfig::class);
         $this->configPathResolverMock = $this->createMock(ConfigPathResolver::class);
-        $this->resourceModelMock = $this->getMockBuilder(AbstractDb::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['save'])
-            ->getMockForAbstractClass();
-        $this->valueMock = $this->getMockBuilder(Value::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['getResource'])
-            ->getMock();
+        $this->resourceModelMock = $this->createPartialMock(AbstractDb::class, ['save', '_construct']);
+        $this->valueMock = $this->createPartialMock(Value::class, ['getResource']);
         $this->preparedValueFactoryMock = $this->createMock(PreparedValueFactory::class);
         $this->configFactory = $this->createMock(ConfigFactory::class);
 
@@ -97,8 +92,8 @@ class DefaultProcessorTest extends TestCase
      * @param string $value
      * @param string $scope
      * @param string|null $scopeCode
-     * @dataProvider processDataProvider
      */
+    #[DataProvider('processDataProvider')]
     public function testProcess($path, $value, $scope, $scopeCode)
     {
         $this->configMockForProcessTest($path, $scope, $scopeCode);

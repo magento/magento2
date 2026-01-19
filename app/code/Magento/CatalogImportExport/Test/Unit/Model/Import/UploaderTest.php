@@ -6,6 +6,7 @@
  */
 namespace Magento\CatalogImportExport\Test\Unit\Model\Import;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\CatalogImportExport\Model\Import\Uploader;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Filesystem;
@@ -81,79 +82,63 @@ class UploaderTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->coreFileStorageDb = $this->getMockBuilder(Database::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->coreFileStorageDb = $this->createMock(Database::class);
 
-        $this->coreFileStorage = $this->getMockBuilder(Storage::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->coreFileStorage = $this->createMock(Storage::class);
 
-        $this->imageFactory = $this->getMockBuilder(AdapterFactory::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->imageFactory = $this->createMock(AdapterFactory::class);
 
-        $this->validator = $this->getMockBuilder(
-            NotProtectedExtension::class
-        )->disableOriginalConstructor()
-            ->getMock();
+        $this->validator = $this->createMock(NotProtectedExtension::class);
 
-        $this->readFactory = $this->getMockBuilder(ReadFactory::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['create'])
-            ->getMock();
+        $this->readFactory = $this->createPartialMock(ReadFactory::class, ['create']);
 
-        $this->directoryMock = $this->getMockBuilder(Write::class)
-            ->onlyMethods(['writeFile', 'getRelativePath', 'isWritable', 'getAbsolutePath'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->directoryMock = $this->createPartialMock(
+            Write::class,
+            ['writeFile', 'getRelativePath', 'isWritable', 'getAbsolutePath']
+        );
 
-        $this->filesystem = $this->getMockBuilder(Filesystem::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['getDirectoryWrite'])
-            ->getMock();
-        $this->filesystem->expects($this->any())
-            ->method('getDirectoryWrite')
-            ->willReturn($this->directoryMock);
+        $this->filesystem = $this->createPartialMock(Filesystem::class, ['getDirectoryWrite']);
+        $this->filesystem->method('getDirectoryWrite')->willReturn($this->directoryMock);
 
-        $this->random = $this->getMockBuilder(Random::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['getRandomString'])
-            ->getMock();
+        $this->random = $this->createPartialMock(Random::class, ['getRandomString']);
 
-        $this->targetDirectory = $this->getMockBuilder(TargetDirectory::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['getDirectoryWrite', 'getDirectoryRead'])
-            ->getMock();
+        $this->targetDirectory = $this->createPartialMock(
+            TargetDirectory::class,
+            ['getDirectoryWrite', 'getDirectoryRead']
+        );
         $this->targetDirectory->method('getDirectoryWrite')->willReturn($this->directoryMock);
         $this->targetDirectory->method('getDirectoryRead')->willReturn($this->directoryMock);
 
-        $this->uploader = $this->getMockBuilder(Uploader::class)
-            ->setConstructorArgs(
-                [
-                    $this->coreFileStorageDb,
-                    $this->coreFileStorage,
-                    $this->imageFactory,
-                    $this->validator,
-                    $this->filesystem,
-                    $this->readFactory,
-                    null,
-                    $this->random,
-                    $this->targetDirectory
-                ]
-            )
-            ->onlyMethods(['_setUploadFile', 'save', 'getTmpDir', 'checkAllowedExtension'])
-            ->getMock();
+        $this->uploader = $this->createPartialMock(
+            Uploader::class,
+            ['_setUploadFile', 'save', 'getTmpDir', 'checkAllowedExtension']
+        );
+        
+        // Call constructor manually via reflection
+        $reflection = new \ReflectionClass($this->uploader);
+        $constructor = $reflection->getConstructor();
+        $constructor->invoke(
+            $this->uploader,
+            $this->coreFileStorageDb,
+            $this->coreFileStorage,
+            $this->imageFactory,
+            $this->validator,
+            $this->filesystem,
+            $this->readFactory,
+            null,
+            $this->random,
+            $this->targetDirectory
+        );
     }
 
     /**
-     * @dataProvider moveFileUrlDataProvider
      * @param $fileUrl
      * @param $expectedHost
      * @param $expectedFileName
      * @param $checkAllowedExtension
      * @throws LocalizedException
      */
+    #[DataProvider('moveFileUrlDataProvider')]
     public function testMoveFileUrl($fileUrl, $expectedHost, $expectedFileName, $checkAllowedExtension)
     {
         $tmpDir = 'var/tmp';
@@ -174,10 +159,7 @@ class UploaderTest extends TestCase
             ->with($tmpDir . '/' . $expectedFileName);
 
         // Create adjusted reader which does not validate path.
-        $readMock = $this->getMockBuilder(Read::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['readAll'])
-            ->getMock();
+        $readMock = $this->createPartialMock(Read::class, ['readAll']);
 
         // Expected invocations to create reader and read contents from url
         $this->readFactory->expects($this->once())->method('create')
@@ -187,8 +169,7 @@ class UploaderTest extends TestCase
             ->willReturn(null);
 
         // Expected invocation to write the temp file
-        $this->directoryMock->expects($this->any())->method('writeFile')
-            ->willReturn($expectedFileName);
+        $this->directoryMock->method('writeFile')->willReturn($expectedFileName);
 
         // Expected invocations save the downloaded file to temp file
         // and move the temp file to the destination directory
@@ -280,50 +261,44 @@ class UploaderTest extends TestCase
         $this->uploader->move($fileName);
     }
 
-    /**
-     * @dataProvider moveFileUrlDriverPoolDataProvider
-     */
+    #[DataProvider('moveFileUrlDriverPoolDataProvider')]
     public function testMoveFileUrlDrivePool($fileUrl, $expectedHost, $expectedDriverPool, $expectedScheme)
     {
         $driverPool = $this->createPartialMock(DriverPool::class, ['getDriver']);
-        $driverMock = $this->getMockBuilder($expectedDriverPool)
-            ->disableOriginalConstructor()
-            ->addMethods(['readAll'])
-            ->onlyMethods(['isExists'])
-            ->getMock();
-        $driverMock->method('isExists')->willReturn(true);
-        $driverMock->method('readAll')->willReturn(null);
+        $driverMock = $this->createMock($expectedDriverPool);
         $driverPool->method('getDriver')->willReturn($driverMock);
 
-        $readFactory = $this->getMockBuilder(ReadFactory::class)
-            ->setConstructorArgs(
-                [
-                    $driverPool,
-                ]
-            )
-            ->onlyMethods(['create'])
-            ->getMock();
+        $readFactory = $this->createPartialMock(ReadFactory::class, ['create']);
+        
+        // Set driverPool via reflection
+        $reflection = new \ReflectionClass($readFactory);
+        if ($reflection->hasProperty('driverPool')) {
+            $property = $reflection->getProperty('driverPool');
+            $property->setValue($readFactory, $driverPool);
+        }
 
         $readFactory->method('create')
             ->with($expectedHost, $expectedScheme)
             ->willReturn($driverMock);
 
         /** @var Uploader $uploaderMock */
-        $uploaderMock = $this->getMockBuilder(Uploader::class)
-            ->setConstructorArgs(
-                [
-                    $this->coreFileStorageDb,
-                    $this->coreFileStorage,
-                    $this->imageFactory,
-                    $this->validator,
-                    $this->filesystem,
-                    $readFactory,
-                    null,
-                    $this->random,
-                    $this->targetDirectory
-                ]
-            )
-            ->getMock();
+        $uploaderMock = $this->createMock(Uploader::class);
+        
+        // Call constructor manually via reflection
+        $reflection = new \ReflectionClass($uploaderMock);
+        $constructor = $reflection->getConstructor();
+        $constructor->invoke(
+            $uploaderMock,
+            $this->coreFileStorageDb,
+            $this->coreFileStorage,
+            $this->imageFactory,
+            $this->validator,
+            $this->filesystem,
+            $readFactory,
+            null,
+            $this->random,
+            $this->targetDirectory
+        );
 
         $result = $uploaderMock->move($fileUrl);
         $this->assertNull($result);

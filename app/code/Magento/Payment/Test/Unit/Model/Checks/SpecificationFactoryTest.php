@@ -25,22 +25,18 @@ class SpecificationFactoryTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->_compositeFactory = $this->getMockBuilder(
-            CompositeFactory::class
-        )->disableOriginalConstructor()
-            ->onlyMethods(['create'])->getMock();
+        $this->_compositeFactory = $this->createPartialMock(
+            CompositeFactory::class,
+            ['create']
+        );
     }
 
     public function testCreate()
     {
-        $specification = $this->getMockBuilder(
-            SpecificationInterface::class
-        )->disableOriginalConstructor()->getMock();
+        $specification = $this->createMock(SpecificationInterface::class);
         $specificationMapping = [self::SPECIFICATION_KEY => $specification];
 
-        $expectedComposite = $this->getMockBuilder(
-            Composite::class
-        )->disableOriginalConstructor()->getMock();
+        $expectedComposite = $this->createMock(Composite::class);
         $modelFactory = new SpecificationFactory($this->_compositeFactory, $specificationMapping);
         $this->_compositeFactory->expects($this->once())->method('create')->with(
             ['list' => $specificationMapping]

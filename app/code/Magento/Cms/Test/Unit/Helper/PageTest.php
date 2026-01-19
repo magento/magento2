@@ -17,6 +17,7 @@ use Magento\Framework\Message\Collection;
 use Magento\Framework\Message\ManagerInterface;
 use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\UrlInterface;
 use Magento\Framework\View\DesignInterface;
 use Magento\Framework\View\Element\AbstractBlock;
@@ -27,6 +28,11 @@ use Magento\Framework\View\LayoutInterface;
 use Magento\Framework\View\Page\Config;
 use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
+use Magento\Cms\Model\Page as CmsPage;
+use Magento\Framework\Event\ManagerInterface as EventManagerInterface;
+use Magento\Framework\View\Result\Page as ResultPage;
+use Magento\Framework\View\Result\PageFactory as ResultPageFactory;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -38,6 +44,7 @@ use PHPUnit\Framework\TestCase;
  */
 class PageTest extends TestCase
 {
+    use MockCreationTrait;
     /**
      * @var Page
      */
@@ -54,7 +61,7 @@ class PageTest extends TestCase
     protected $pageFactoryMock;
 
     /**
-     * @var \Magento\Cms\Model\Page|MockObject
+     * @var CmsPage|MockObject
      */
     protected $pageMock;
 
@@ -89,7 +96,7 @@ class PageTest extends TestCase
     protected $messageManagerMock;
 
     /**
-     * @var \Magento\Framework\Event\ManagerInterface|MockObject
+     * @var EventManagerInterface|MockObject
      */
     protected $eventManagerMock;
 
@@ -104,7 +111,7 @@ class PageTest extends TestCase
     protected $storeMock;
 
     /**
-     * @var \Magento\Framework\View\Result\Page|MockObject
+     * @var ResultPage|MockObject
      */
     protected $resultPageMock;
 
@@ -134,7 +141,7 @@ class PageTest extends TestCase
     protected $messageCollectionMock;
 
     /**
-     * @var \Magento\Framework\View\Result\PageFactory|MockObject
+     * @var ResultPageFactory|MockObject
      */
     protected $resultPageFactory;
 
@@ -155,61 +162,51 @@ class PageTest extends TestCase
             ->disableOriginalConstructor()
             ->onlyMethods(['create'])
             ->getMock();
-        $this->pageMock = $this->getMockBuilder(\Magento\Cms\Model\Page::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['setStoreId', 'getCustomPageLayout'])
-            ->onlyMethods(
-                [
-                    'getId',
-                    'load',
-                    'getCustomThemeFrom',
-                    'getCustomThemeTo',
-                    'getCustomTheme',
-                    'getPageLayout',
-                    'getIdentifier',
-                    'getCustomLayoutUpdateXml',
-                    'getLayoutUpdateXml',
-                    'getContentHeading',
-                ]
-            )
-            ->getMock();
-        $this->storeManagerMock = $this->getMockBuilder(StoreManagerInterface::class)
-            ->getMockForAbstractClass();
-        $this->localeDateMock = $this->getMockBuilder(TimezoneInterface::class)
-            ->getMockForAbstractClass();
-        $this->designMock = $this->getMockBuilder(DesignInterface::class)
-            ->getMockForAbstractClass();
+        $this->pageMock = $this->createPartialMockWithReflection(
+            CmsPage::class,
+            [
+                'setStoreId',
+                'getCustomPageLayout',
+                'getId',
+                'load',
+                'getCustomThemeFrom',
+                'getCustomThemeTo',
+                'getCustomTheme',
+                'getPageLayout',
+                'getIdentifier',
+                'getCustomLayoutUpdateXml',
+                'getLayoutUpdateXml',
+                'getContentHeading',
+            ]
+        );
+        $this->storeManagerMock = $this->createMock(StoreManagerInterface::class);
+        $this->localeDateMock = $this->createMock(TimezoneInterface::class);
+        $this->designMock = $this->createMock(DesignInterface::class);
         $this->pageConfigMock = $this->getMockBuilder(Config::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->escaperMock = $this->getMockBuilder(Escaper::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->eventManagerMock = $this->getMockBuilder(\Magento\Framework\Event\ManagerInterface::class)
-            ->getMockForAbstractClass();
-        $this->urlBuilderMock = $this->getMockBuilder(UrlInterface::class)
-            ->getMockForAbstractClass();
-        $this->httpRequestMock = $this->getMockBuilder(RequestInterface::class)
-            ->getMockForAbstractClass();
+        $this->eventManagerMock = $this->createMock(EventManagerInterface::class);
+        $this->urlBuilderMock = $this->createMock(UrlInterface::class);
+        $this->httpRequestMock = $this->createMock(RequestInterface::class);
         $this->storeMock = $this->getMockBuilder(Store::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->resultPageMock = $this->getMockBuilder(\Magento\Framework\View\Result\Page::class)
+        $this->resultPageMock = $this->getMockBuilder(ResultPage::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->layoutMock = $this->getMockBuilder(LayoutInterface::class)
-            ->getMockForAbstractClass();
-        $this->layoutProcessorMock = $this->getMockBuilder(ProcessorInterface::class)
-            ->getMockForAbstractClass();
-        $this->blockMock = $this->getMockBuilder(AbstractBlock::class)
-            ->addMethods(['setContentHeading'])
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->layoutMock = $this->createMock(LayoutInterface::class);
+        $this->layoutProcessorMock = $this->createMock(ProcessorInterface::class);
+        $this->blockMock = $this->createPartialMockWithReflection(
+            AbstractBlock::class,
+            ['setContentHeading']
+        );
         $this->messagesBlockMock = $this->getMockBuilder(Messages::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->messageManagerMock = $this->getMockBuilder(ManagerInterface::class)
-            ->getMockForAbstractClass();
+        $this->messageManagerMock = $this->createMock(ManagerInterface::class);
         $this->messageCollectionMock = $this->getMockBuilder(Collection::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -224,7 +221,7 @@ class PageTest extends TestCase
             ]
         );
 
-        $this->resultPageFactory = $this->createMock(\Magento\Framework\View\Result\PageFactory::class);
+        $this->resultPageFactory = $this->createMock(ResultPageFactory::class);
 
         $this->object = $objectManager->getObject(
             Page::class,
@@ -254,10 +251,9 @@ class PageTest extends TestCase
      * @param string $layoutUpdate
      * @param boolean $expectedResult
      *
-     * @dataProvider renderPageExtendedDataProvider
-     *
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
+    #[DataProvider('renderPageExtendedDataProvider')]
     public function testPrepareResultPage(
         $pageId,
         $internalPageId,
@@ -449,9 +445,8 @@ class PageTest extends TestCase
      * @param integer|null $internalPageId
      * @param integer $pageLoadResultIndex
      * @param string|null $expectedResult
-     *
-     * @dataProvider getPageUrlDataProvider
      */
+    #[DataProvider('getPageUrlDataProvider')]
     public function testGetPageUrl(
         $pageId,
         $internalPageId,

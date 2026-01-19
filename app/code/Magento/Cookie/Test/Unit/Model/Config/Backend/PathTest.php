@@ -33,13 +33,8 @@ class PathTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->validatorMock = $this->getMockBuilder(CookiePathValidator::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $this->resourceMock = $this->getMockBuilder(ModuleResource::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->validatorMock = $this->createMock(CookiePathValidator::class);
+        $this->resourceMock = $this->createMock(ModuleResource::class);
 
         $objectManager = new ObjectManager($this);
         $this->model = $objectManager->getObject(

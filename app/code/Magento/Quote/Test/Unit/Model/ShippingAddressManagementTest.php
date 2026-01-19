@@ -9,22 +9,30 @@ namespace Magento\Quote\Test\Unit\Model;
 
 use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\Customer\Api\AddressRepositoryInterface;
+use Magento\Customer\Api\Data\AddressInterface as CustomerAddressInterface;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Quote\Api\CartRepositoryInterface;
 use Magento\Quote\Api\Data\AddressInterface;
 use Magento\Quote\Model\Quote;
+use Magento\Quote\Model\Quote\Address;
 use Magento\Quote\Model\Quote\TotalsCollector;
 use Magento\Quote\Model\QuoteAddressValidator;
 use Magento\Quote\Model\QuoteAddressValidationService;
 use Magento\Quote\Model\ShippingAddressManagement;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
-use Magento\Quote\Test\Unit\Helper\QuoteAddressTestHelper;
 
+/**
+ * Summary of ShippingAddressManagementTest
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class ShippingAddressManagementTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var ShippingAddressManagement
      */
@@ -102,8 +110,8 @@ class ShippingAddressManagementTest extends TestCase
     public function testAssign(bool $saveInAddressBook, bool $showCompany): void
     {
         $cartId = $customerId = 123;
-        $addressMock = $this->createPartialMock(
-            QuoteAddressTestHelper::class,
+        $addressMock = $this->createPartialMockWithReflection(
+            Address::class,
             [
                 'importCustomerAddressData',
                 'getSaveInAddressBook',
@@ -137,13 +145,21 @@ class ShippingAddressManagementTest extends TestCase
             ->expects($this->once())
             ->method('getCustomerAddressId')
             ->willReturn($customerId);
+        $customerAddressMock = $this->createMock(CustomerAddressInterface::class);
+        $this->addressRepositoryMock
+            ->expects($this->once())
+            ->method('getById')
+            ->with($customerId)
+            ->willReturn($customerAddressMock);
         $addressMock
             ->expects($saveInAddressBook && !$showCompany ? $this->once() : $this->never())
             ->method('setCompany')
             ->with(null);
         $addressMock
+            ->expects($this->once())
             ->method('importCustomerAddressData')
-            ->willReturn($addressMock);
+            ->with($customerAddressMock)
+            ->willReturnSelf();
         $addressMock
             ->expects($this->once())
             ->method('setSameAsBilling')

@@ -35,15 +35,7 @@ class BehaviorAbstractTest extends AbstractBehaviorTestCase
     {
         parent::setUp();
 
-        $model = $this->getMockForAbstractClass(
-            AbstractBehavior::class,
-            [[]],
-            '',
-            false,
-            true,
-            true,
-            ['toArray']
-        );
+        $model = $this->createPartialMock(AbstractBehavior::class, ['toArray', 'getCode']);
         $model->expects($this->any())->method('toArray')->willReturn($this->_sourceArray);
 
         $this->_model = $model;

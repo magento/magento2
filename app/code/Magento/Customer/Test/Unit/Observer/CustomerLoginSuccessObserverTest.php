@@ -38,7 +38,7 @@ class CustomerLoginSuccessObserverTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->authenticationMock = $this->getMockForAbstractClass(AuthenticationInterface::class);
+        $this->authenticationMock = $this->createMock(AuthenticationInterface::class);
 
         $this->customerModelMock = $this->createPartialMock(Customer::class, ['getId']);
         $this->customerLoginSuccessObserver = new CustomerLoginSuccessObserver(

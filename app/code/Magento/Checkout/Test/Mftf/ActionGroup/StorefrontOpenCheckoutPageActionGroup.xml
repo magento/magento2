@@ -15,5 +15,6 @@
 
         <amOnPage url="{{CheckoutPage.url}}" stepKey="openCheckoutPage"/>
         <waitForPageLoad stepKey="waitForCheckoutPageLoaded"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForContentLoaded"/>
     </actionGroup>
 </actionGroups>

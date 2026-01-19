@@ -467,4 +467,16 @@
     <entity name="EmptyFileValidationMessage">
         <data key="fileValidationMessage">The file is empty. Select another file and try again.</data>
     </entity>
+    <entity name="ProductOptionFileUpload" type="product_option">
+        <var key="product_sku" entityType="product" entityKey="sku"/>
+        <data key="title">File upload</data>
+        <data key="type">file</data>
+        <data key="is_require">false</data>
+        <data key="sort_order">1</data>
+        <data key="price">0.00</data>
+        <data key="price_type">fixed</data>
+        <data key="file_extension">png, jpg</data>
+        <data key="image_size_x">0</data>
+        <data key="image_size_y">0</data>
+    </entity>
 </entities>

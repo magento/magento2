@@ -20,6 +20,7 @@ use Magento\Widget\Model\Config\Reader;
 use Magento\Widget\Model\NamespaceResolver;
 use Magento\Widget\Model\Widget;
 use Magento\Widget\Model\Widget\Instance;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use ReflectionProperty;
@@ -39,7 +40,9 @@ class InstanceTest extends TestCase
      */
     protected $_viewFileSystemMock;
 
-    /** @var  NamespaceResolver|MockObject */
+    /**
+     * @var NamespaceResolver|MockObject
+     */
     protected $_namespaceResolver;
 
     /**
@@ -47,7 +50,9 @@ class InstanceTest extends TestCase
      */
     protected $_model;
 
-    /** @var  Reader */
+    /**
+     * @var Reader
+     */
     protected $_readerMock;
 
     /**
@@ -60,28 +65,18 @@ class InstanceTest extends TestCase
      */
     protected $_directoryMock;
 
-    /** @var Json|MockObject */
+    /**
+     * @var Json|MockObject
+     */
     private $serializer;
 
     protected function setUp(): void
     {
-        $this->_widgetModelMock = $this->getMockBuilder(
-            Widget::class
-        )->disableOriginalConstructor()
-            ->getMock();
-        $this->_viewFileSystemMock = $this->getMockBuilder(
-            FilesystemView::class
-        )->disableOriginalConstructor()
-            ->getMock();
-        $this->_namespaceResolver = $this->getMockBuilder(
-            NamespaceResolver::class
-        )->disableOriginalConstructor()
-            ->getMock();
-        $this->_cacheTypesListMock = $this->getMockForAbstractClass(TypeListInterface::class);
-        $this->_readerMock = $this->getMockBuilder(
-            Reader::class
-        )->disableOriginalConstructor()
-            ->getMock();
+        $this->_widgetModelMock = $this->createMock(Widget::class);
+        $this->_viewFileSystemMock = $this->createMock(FilesystemView::class);
+        $this->_namespaceResolver = $this->createMock(NamespaceResolver::class);
+        $this->_cacheTypesListMock = $this->createMock(TypeListInterface::class);
+        $this->_readerMock = $this->createMock(Reader::class);
 
         $filesystemMock = $this->createMock(Filesystem::class);
         $this->_directoryMock = $this->createMock(Read::class);
@@ -111,10 +106,27 @@ class InstanceTest extends TestCase
         );
 
         /** @var Instance _model */
-        $this->_model = $this->getMockBuilder(Instance::class)
-            ->onlyMethods(['_construct'])
-            ->setConstructorArgs($args)
-            ->getMock();
+        $this->_model = $this->createPartialMock(Instance::class, ['_construct']);
+        $this->_model->__construct(
+            $args['context'],
+            $args['registry'],
+            $args['escaper'],
+            $args['viewFileSystem'],
+            $args['cacheTypeList'],
+            $args['productType'],
+            $args['reader'],
+            $args['widgetModel'],
+            $args['namespaceResolver'],
+            $args['mathRandom'],
+            $args['filesystem'],
+            $args['conditionsHelper'],
+            $args['resource'],
+            $args['resourceCollection'],
+            $args['relatedCacheTypes'] ?? [],
+            $args['data'] ?? [],
+            $args['serializer'],
+            $args['xmlValidatorFactory']
+        );
     }
 
     public function testGetWidgetConfigAsArray()
@@ -405,11 +417,11 @@ class InstanceTest extends TestCase
     /**
      * Test case for beforeSave method with updated page groups with layout handles
      *
-     * @dataProvider beforeSavePageGroupDataProvider
-     * @param array $pageGroups
-     * @param array $expectedData
+     * @param  array $pageGroups
+     * @param  array $expectedData
      * @return void
      */
+    #[DataProvider('beforeSavePageGroupDataProvider')]
     public function testBeforeSaveWithUpdatedLayoutHandles(array $pageGroups, array $expectedData): void
     {
         $this->setLayoutHandles();

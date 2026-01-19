@@ -6,6 +6,8 @@
 
 namespace Magento\Reports\Block\Adminhtml\Sales\Shipping;
 
+use Magento\Reports\Block\Adminhtml\Grid\Column\Renderer\Currency;
+
 /**
  * Adminhtml shipping report grid block
  *
@@ -101,7 +103,8 @@ class Grid extends \Magento\Reports\Block\Adminhtml\Grid\AbstractGrid
                 'sortable' => false,
                 'rate' => $rate,
                 'header_css_class' => 'col-total-sales-shipping',
-                'column_css_class' => 'col-total-sales-shipping'
+                'column_css_class' => 'col-total-sales-shipping',
+                'renderer' => Currency::class
             ]
         );
 
@@ -116,7 +119,8 @@ class Grid extends \Magento\Reports\Block\Adminhtml\Grid\AbstractGrid
                 'sortable' => false,
                 'rate' => $rate,
                 'header_css_class' => 'col-total-shipping',
-                'column_css_class' => 'col-total-shipping'
+                'column_css_class' => 'col-total-shipping',
+                'renderer' => Currency::class
             ]
         );
 

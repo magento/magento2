@@ -208,7 +208,7 @@ class ProcessManagerTest extends TestCase
     }
 
     /**
-     * @dataProvider testIsMultiThreadsExecuteDataProvider
+     * @dataProvider isMultiThreadsExecuteDataProvider
      * @param $threadsCount
      * @param $expectedResult
      * @return void
@@ -230,7 +230,7 @@ class ProcessManagerTest extends TestCase
         $this->assertEquals($expectedResult, $processManager->isMultiThreadsExecute());
     }
 
-    public static function testIsMultiThreadsExecuteDataProvider(): array
+    public static function isMultiThreadsExecuteDataProvider(): array
     {
         return [
             'threadsCount is null' => [null, false],

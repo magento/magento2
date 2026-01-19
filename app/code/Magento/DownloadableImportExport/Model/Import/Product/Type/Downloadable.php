@@ -1036,7 +1036,7 @@ class Downloadable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
     /**
      * Uploading files into the "downloadable/files" media folder.
      *
-     * Return a new file name if the same file is already exists.
+     * Return a new file name if the same file already exists.
      *
      * @param string $fileName
      * @param string $type

@@ -9,11 +9,12 @@ namespace Magento\Quote\Test\Unit\Model\Quote\Item;
 
 use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\Quote\Model\Quote\Item\AbstractItem;
-use Magento\Quote\Test\Unit\Helper\AbstractItemForTestHelper;
 use PHPUnit\Framework\TestCase;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 
 class AbstractItemTest extends TestCase
 {
+    use MockCreationTrait;
     /**
      * Test the getTotalDiscountAmount function
      *
@@ -29,10 +30,13 @@ class AbstractItemTest extends TestCase
         foreach ($children as $child) {
             $finalChildMock[] = $child($this);
         }
-        $abstractItemMock = new AbstractItemForTestHelper();
-        $abstractItemMock->setChildren($finalChildMock)
-            ->setIsChildrenCalculated($calculated)
-            ->setDiscountAmount($myDiscountAmount);
+        $abstractItemMock = $this->createPartialMockWithReflection(
+            AbstractItem::class,
+            ['getQuote', 'getAddress', 'getOptionByCode', 'isChildrenCalculated', 'getChildren', 'getDiscountAmount']
+        );
+        $abstractItemMock->method('isChildrenCalculated')->willReturn($calculated);
+        $abstractItemMock->method('getChildren')->willReturn($finalChildMock);
+        $abstractItemMock->method('getDiscountAmount')->willReturn($myDiscountAmount);
 
         $totalDiscountAmount = $abstractItemMock->getTotalDiscountAmount();
         $this->assertEquals($expectedDiscountAmount, $totalDiscountAmount);
@@ -40,7 +44,11 @@ class AbstractItemTest extends TestCase
 
     protected function getMockForAbstractItem($childDiscountAmount)
     {
-        $childItemMock = (new AbstractItemForTestHelper())->setDiscountAmount($childDiscountAmount);
+        $childItemMock = $this->createPartialMockWithReflection(
+            AbstractItem::class,
+            ['getQuote', 'getAddress', 'getOptionByCode', 'getDiscountAmount']
+        );
+        $childItemMock->method('getDiscountAmount')->willReturn($childDiscountAmount);
 
         return $childItemMock;
     }

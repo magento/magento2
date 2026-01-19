@@ -21,7 +21,7 @@ class WsdlFactoryTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->_objectManagerMock = $this->getMockForAbstractClass(ObjectManagerInterface::class);
+        $this->_objectManagerMock = $this->createMock(ObjectManagerInterface::class);
         $this->_soapWsdlFactory = new WsdlFactory($this->_objectManagerMock);
         parent::setUp();
     }
