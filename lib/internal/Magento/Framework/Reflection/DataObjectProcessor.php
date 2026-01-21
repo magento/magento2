@@ -6,6 +6,7 @@
 namespace Magento\Framework\Reflection;
 
 use Magento\Framework\Api\CustomAttributesDataInterface;
+use Magento\Framework\Api\SimpleDataObjectConverter;
 use Magento\Framework\Phrase;
 
 /**
@@ -93,15 +94,23 @@ class DataObjectProcessor
     {
         $methods = $this->methodsMapProcessor->getMethodsMap($dataObjectType);
         $outputData = [];
+        $methodFieldNames = [];
 
         $excludedMethodsForDataObjectType = $this->excludedMethodsClassMap[$dataObjectType] ?? [];
 
         foreach (array_keys($methods) as $methodName) {
-            if (in_array($methodName, $excludedMethodsForDataObjectType)) {
+            if (!$this->methodsMapProcessor->isMethodValidForDataField($dataObjectType, $methodName)) {
                 continue;
             }
 
-            if (!$this->methodsMapProcessor->isMethodValidForDataField($dataObjectType, $methodName)) {
+            $key = $this->fieldNamer->getFieldNameForMethodName($methodName);
+            if ($key === null) {
+                continue;
+            }
+
+            $methodFieldNames[$key] = true;
+
+            if (in_array($methodName, $excludedMethodsForDataObjectType)) {
                 continue;
             }
 
@@ -115,14 +124,19 @@ class DataObjectProcessor
             }
 
             $returnType = $this->methodsMapProcessor->getMethodReturnType($dataObjectType, $methodName);
-            $key = $this->fieldNamer->getFieldNameForMethodName($methodName);
             if ($key === CustomAttributesDataInterface::CUSTOM_ATTRIBUTES && $value === []) {
                 continue;
             }
 
             if ($key === CustomAttributesDataInterface::CUSTOM_ATTRIBUTES) {
+                if (!($dataObject instanceof CustomAttributesDataInterface)) {
+                    continue;
+                }
                 $value = $this->customAttributesProcessor->buildOutputDataArray($dataObject, $dataObjectType);
             } elseif ($key === "extension_attributes") {
+                if (!($value instanceof \Magento\Framework\Api\ExtensionAttributesInterface)) {
+                    continue;
+                }
                 $value = $this->extensionAttributesProcessor->buildOutputDataArray($value, $returnType);
                 if (empty($value)) {
                     continue;
@@ -133,6 +147,8 @@ class DataObjectProcessor
 
             $outputData[$key] = $value;
         }
+
+        $outputData = $this->addPublicProperties($dataObject, $dataObjectType, $outputData, $methodFieldNames);
 
         $outputData = $this->changeOutputArray($dataObject, $outputData);
 
@@ -166,6 +182,169 @@ class DataObjectProcessor
             return $valueResult;
         }
         return $this->typeCaster->castValueToType($value, $returnType);
+    }
+
+    /**
+     * Append public properties that do not have a matching getter.
+     *
+     * @param object $dataObject
+     * @param string $dataObjectType
+     * @param array $outputData
+     * @param array $methodFieldNames
+     * @return array
+     */
+    private function addPublicProperties($dataObject, $dataObjectType, array $outputData, array $methodFieldNames): array
+    {
+        $reflection = new \ReflectionObject($dataObject);
+        foreach ($reflection->getProperties(\ReflectionProperty::IS_PUBLIC) as $property) {
+            if ($property->isStatic()) {
+                continue;
+            }
+
+            if (!$property->isInitialized($dataObject)) {
+                continue;
+            }
+
+            $key = SimpleDataObjectConverter::camelCaseToSnakeCase($property->getName());
+            if (isset($methodFieldNames[$key]) || array_key_exists($key, $outputData)) {
+                continue;
+            }
+
+            $value = $property->getValue($dataObject);
+            $propertyMetadata = $this->getPropertyMetadata($property);
+            $returnType = $this->resolvePropertyReturnType($propertyMetadata['type'], $value, $property);
+
+            if ($value === null && !$propertyMetadata['isRequired']) {
+                continue;
+            }
+
+            if ($key === CustomAttributesDataInterface::CUSTOM_ATTRIBUTES && $value === []) {
+                continue;
+            }
+
+            if ($key === CustomAttributesDataInterface::CUSTOM_ATTRIBUTES) {
+                $value = $this->customAttributesProcessor->buildOutputDataArray($dataObject, $dataObjectType);
+            } elseif ($key === "extension_attributes") {
+                $value = $this->extensionAttributesProcessor->buildOutputDataArray($value, $returnType);
+                if (empty($value)) {
+                    continue;
+                }
+            } else {
+                $value = $this->processValue($value, $returnType);
+            }
+
+            $outputData[$key] = $value;
+        }
+
+        return $outputData;
+    }
+
+    /**
+     * Resolve property type metadata for serialization.
+     *
+     * @param \ReflectionProperty $property
+     * @return array{type: string|null, isRequired: bool}
+     */
+    private function getPropertyMetadata(\ReflectionProperty $property): array
+    {
+        $type = $property->getType();
+        if ($type === null) {
+            return ['type' => null, 'isRequired' => false];
+        }
+
+        $allowsNull = $type->allowsNull();
+        $typeName = null;
+
+        if ($type instanceof \ReflectionUnionType) {
+            foreach ($type->getTypes() as $unionType) {
+                if ($unionType->getName() !== 'null') {
+                    $typeName = $unionType->getName();
+                    break;
+                }
+            }
+        } elseif ($type instanceof \ReflectionIntersectionType) {
+            $types = $type->getTypes();
+            $typeName = $types ? $types[0]->getName() : null;
+        } else {
+            $typeName = $type->getName();
+        }
+
+        $typeName = $this->normalizePropertyType($property, $typeName);
+
+        return [
+            'type' => $typeName,
+            'isRequired' => !$allowsNull,
+        ];
+    }
+
+    /**
+     * Normalize property type names for casting.
+     *
+     * @param \ReflectionProperty $property
+     * @param string|null $typeName
+     * @return string|null
+     */
+    private function normalizePropertyType(\ReflectionProperty $property, ?string $typeName): ?string
+    {
+        if ($typeName === null) {
+            return null;
+        }
+
+        if ($typeName === 'self' || $typeName === 'static') {
+            return $property->getDeclaringClass()->getName();
+        }
+
+        if ($typeName === 'parent') {
+            $parent = $property->getDeclaringClass()->getParentClass();
+            return $parent ? $parent->getName() : null;
+        }
+
+        if ($typeName === 'array' || $typeName === 'iterable' || $typeName === 'mixed') {
+            return TypeProcessor::UNSTRUCTURED_ARRAY;
+        }
+
+        return $typeName;
+    }
+
+    /**
+     * Ensure object values use a compatible return type.
+     *
+     * @param string|null $returnType
+     * @param mixed $value
+     * @param \ReflectionProperty $property
+     * @return string|null
+     */
+    private function resolvePropertyReturnType(?string $returnType, $value, \ReflectionProperty $property): ?string
+    {
+        if (is_array($value) && $returnType === null) {
+            return TypeProcessor::UNSTRUCTURED_ARRAY;
+        }
+
+        if (is_object($value) && !($value instanceof Phrase)) {
+            if ($returnType === null || !$this->isObjectType($returnType)) {
+                return get_class($value);
+            }
+
+            if ($returnType === 'self' || $returnType === 'static') {
+                return $property->getDeclaringClass()->getName();
+            }
+
+            if ($returnType === 'parent') {
+                $parent = $property->getDeclaringClass()->getParentClass();
+                return $parent ? $parent->getName() : get_class($value);
+            }
+        }
+
+        return $returnType;
+    }
+
+    /**
+     * @param string $type
+     * @return bool
+     */
+    private function isObjectType(string $type): bool
+    {
+        return interface_exists($type) || class_exists($type);
     }
 
     /**

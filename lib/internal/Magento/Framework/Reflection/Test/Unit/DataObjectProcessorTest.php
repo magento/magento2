@@ -211,4 +211,63 @@ class DataObjectProcessorTest extends TestCase
         $this->assertEquals($unstructuredArrayData, $outputData['items']);
         $this->assertSame($unstructuredArrayData, $outputData['items']);
     }
+
+    public function testBuildOutputDataArrayWithPublicProperties()
+    {
+        $objectManager = new ObjectManager($this);
+
+        $this->dataObjectProcessor = $objectManager->getObject(
+            DataObjectProcessor::class,
+            [
+                'methodsMapProcessor' => $this->methodsMapProcessor,
+                'typeCaster' => $objectManager->getObject(TypeCaster::class),
+                'fieldNamer' => $objectManager->getObject(FieldNamer::class),
+                'extensionAttributesProcessor' => $this->extensionAttributesProcessorMock,
+            ]
+        );
+
+        $testDataObject = new TestDataObjectWithPublicProperties(12, 'Sample');
+
+        $outputData = $this->dataObjectProcessor->buildOutputDataArray(
+            $testDataObject,
+            TestDataObjectWithPublicProperties::class
+        );
+
+        $this->assertSame(
+            [
+                'entity_id' => 12,
+                'name' => 'Sample',
+            ],
+            $outputData
+        );
+    }
+
+    public function testBuildOutputDataArrayPrefersGetterOverPublicProperty()
+    {
+        $objectManager = new ObjectManager($this);
+
+        $this->dataObjectProcessor = $objectManager->getObject(
+            DataObjectProcessor::class,
+            [
+                'methodsMapProcessor' => $this->methodsMapProcessor,
+                'typeCaster' => $objectManager->getObject(TypeCaster::class),
+                'fieldNamer' => $objectManager->getObject(FieldNamer::class),
+                'extensionAttributesProcessor' => $this->extensionAttributesProcessorMock,
+            ]
+        );
+
+        $testDataObject = new TestDataObjectWithGetterAndPublicProperty('property-value');
+
+        $outputData = $this->dataObjectProcessor->buildOutputDataArray(
+            $testDataObject,
+            TestDataObjectWithGetterAndPublicProperty::class
+        );
+
+        $this->assertSame(
+            [
+                'name' => 'getter-value',
+            ],
+            $outputData
+        );
+    }
 }

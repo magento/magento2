@@ -290,6 +290,22 @@ class ServiceInputProcessorTest extends TestCase
         $this->assertEquals('Test', $arg->getName());
     }
 
+    public function testSimpleConstructorPropertiesWithSnakeCase()
+    {
+        $data = ['simpleConstructor' => ['entity_id' => 15, 'name' => 'Test']];
+        $result = $this->serviceInputProcessor->process(
+            TestService::class,
+            'simpleConstructor',
+            $data
+        );
+        $this->assertNotNull($result);
+        $arg = $result[0];
+
+        $this->assertTrue($arg instanceof SimpleConstructor);
+        $this->assertEquals(15, $arg->getEntityId());
+        $this->assertEquals('Test', $arg->getName());
+    }
+
     public function testSimpleArrayProperties()
     {
         $data = ['ids' => [1, 2, 3, 4]];
