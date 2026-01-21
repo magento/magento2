@@ -3191,6 +3191,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface, Rese
 
         $query = '';
         if (is_array($condition)) {
+            $condition = array_change_key_case($condition, CASE_LOWER);
             $key = key(array_intersect_key($condition, $conditionKeyMap));
 
             if (isset($condition['from']) || isset($condition['to'])) {
