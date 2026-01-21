@@ -26,6 +26,13 @@ class ConfigProvider implements \Magento\Checkout\Model\ConfigProviderInterface
     protected $formIds;
 
     /**
+     * List of form require captcha
+     *
+     * @var array
+     */
+    protected $formIsRequired = [];
+
+    /**
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Captcha\Helper\Data $captchaData
      * @param array $formIds
@@ -116,7 +123,10 @@ class ConfigProvider implements \Magento\Checkout\Model\ConfigProviderInterface
      */
     protected function isRequired($formId)
     {
-        return (boolean)$this->getCaptchaModel($formId)->isRequired();
+        if (!array_key_exists($formId, $this->formIsRequired)) {
+            $this->formIsRequired[$formId] = (boolean)$this->getCaptchaModel($formId)->isRequired();
+        }
+        return $this->formIsRequired[$formId];
     }
 
     /**
