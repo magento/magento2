@@ -243,7 +243,9 @@ class ServiceInputProcessor implements ServicePayloadConverterInterface, ResetAf
         $res = [];
         $parameters = $constructor->getParameters();
         foreach ($parameters as $parameter) {
-            if (isset($data[$parameter->getName()])) {
+            $parameterName = $parameter->getName();
+            $snakeCaseParameterName = SimpleDataObjectConverter::camelCaseToSnakeCase($parameterName);
+            if (isset($data[$parameterName]) || isset($data[$snakeCaseParameterName])) {
                 $parameterType = $this->typeProcessor->getParamType($parameter);
 
                 // Allow only simple types or Api Data Objects
@@ -253,8 +255,9 @@ class ServiceInputProcessor implements ServicePayloadConverterInterface, ResetAf
                     continue;
                 }
 
+                $parameterValue = isset($data[$parameterName]) ? $data[$parameterName] : $data[$snakeCaseParameterName];
                 try {
-                    $res[$parameter->getName()] = $this->convertValue($data[$parameter->getName()], $parameterType);
+                    $res[$parameterName] = $this->convertValue($parameterValue, $parameterType);
                 } catch (\ReflectionException $e) {
                     // Parameter was not correclty declared or the class is uknown.
                     // By not returing the contructor value, we will automatically fall back to the "setters" way.
@@ -299,10 +302,14 @@ class ServiceInputProcessor implements ServicePayloadConverterInterface, ResetAf
         // Primary method: assign to constructor parameters
         $constructorArgs = $this->getConstructorData($className, $data);
         $object = $this->objectManager->create($className, $constructorArgs);
+        $constructorArgSnakeCaseMap = [];
+        foreach (array_keys($constructorArgs) as $constructorArgName) {
+            $constructorArgSnakeCaseMap[SimpleDataObjectConverter::camelCaseToSnakeCase($constructorArgName)] = true;
+        }
 
         // Secondary method: fallback to setter methods
         foreach ($data as $propertyName => $value) {
-            if (isset($constructorArgs[$propertyName])) {
+            if (isset($constructorArgs[$propertyName]) || isset($constructorArgSnakeCaseMap[$propertyName])) {
                 continue;
             }
 
