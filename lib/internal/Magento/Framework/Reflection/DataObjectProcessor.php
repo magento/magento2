@@ -193,50 +193,150 @@ class DataObjectProcessor
      * @param array $methodFieldNames
      * @return array
      */
-    private function addPublicProperties($dataObject, $dataObjectType, array $outputData, array $methodFieldNames): array
-    {
+    private function addPublicProperties(
+        $dataObject,
+        $dataObjectType,
+        array $outputData,
+        array $methodFieldNames
+    ): array {
         $reflection = new \ReflectionObject($dataObject);
         foreach ($reflection->getProperties(\ReflectionProperty::IS_PUBLIC) as $property) {
-            if ($property->isStatic()) {
+            $propertyData = $this->getPublicPropertyOutputData(
+                $dataObject,
+                $dataObjectType,
+                $property,
+                $methodFieldNames,
+                $outputData
+            );
+            if ($propertyData === null) {
                 continue;
             }
 
-            if (!$property->isInitialized($dataObject)) {
-                continue;
-            }
-
-            $key = SimpleDataObjectConverter::camelCaseToSnakeCase($property->getName());
-            if (isset($methodFieldNames[$key]) || array_key_exists($key, $outputData)) {
-                continue;
-            }
-
-            $value = $property->getValue($dataObject);
-            $propertyMetadata = $this->getPropertyMetadata($property);
-            $returnType = $this->resolvePropertyReturnType($propertyMetadata['type'], $value, $property);
-
-            if ($value === null && !$propertyMetadata['isRequired']) {
-                continue;
-            }
-
-            if ($key === CustomAttributesDataInterface::CUSTOM_ATTRIBUTES && $value === []) {
-                continue;
-            }
-
-            if ($key === CustomAttributesDataInterface::CUSTOM_ATTRIBUTES) {
-                $value = $this->customAttributesProcessor->buildOutputDataArray($dataObject, $dataObjectType);
-            } elseif ($key === "extension_attributes") {
-                $value = $this->extensionAttributesProcessor->buildOutputDataArray($value, $returnType);
-                if (empty($value)) {
-                    continue;
-                }
-            } else {
-                $value = $this->processValue($value, $returnType);
-            }
-
-            $outputData[$key] = $value;
+            $outputData[$propertyData['key']] = $propertyData['value'];
         }
 
         return $outputData;
+    }
+
+    /**
+     * Build output payload for a public property.
+     *
+     * @param object $dataObject
+     * @param string $dataObjectType
+     * @param \ReflectionProperty $property
+     * @param array $methodFieldNames
+     * @param array $outputData
+     * @return array|null
+     */
+    private function getPublicPropertyOutputData(
+        $dataObject,
+        $dataObjectType,
+        \ReflectionProperty $property,
+        array $methodFieldNames,
+        array $outputData
+    ): ?array {
+        $key = $this->getPublicPropertyKey($dataObject, $property, $methodFieldNames, $outputData);
+        if ($key === null) {
+            return null;
+        }
+
+        $value = $property->getValue($dataObject);
+        $propertyMetadata = $this->getPropertyMetadata($property);
+        if ($this->shouldSkipPublicPropertyValue($key, $value, $propertyMetadata['isRequired'])) {
+            return null;
+        }
+
+        $returnType = $this->resolvePropertyReturnType($propertyMetadata['type'], $value, $property);
+        $value = $this->processPublicPropertyValue($dataObject, $dataObjectType, $key, $value, $returnType);
+        if ($value === null) {
+            return null;
+        }
+
+        return [
+            'key' => $key,
+            'value' => $value,
+        ];
+    }
+
+    /**
+     * Determine the output key for a public property.
+     *
+     * @param object $dataObject
+     * @param \ReflectionProperty $property
+     * @param array $methodFieldNames
+     * @param array $outputData
+     * @return string|null
+     */
+    private function getPublicPropertyKey(
+        $dataObject,
+        \ReflectionProperty $property,
+        array $methodFieldNames,
+        array $outputData
+    ): ?string {
+        if ($property->isStatic() || !$property->isInitialized($dataObject)) {
+            return null;
+        }
+
+        $key = SimpleDataObjectConverter::camelCaseToSnakeCase($property->getName());
+        if (isset($methodFieldNames[$key]) || array_key_exists($key, $outputData)) {
+            return null;
+        }
+
+        return $key;
+    }
+
+    /**
+     * Determine whether a property should be skipped based on its value.
+     *
+     * @param string $key
+     * @param mixed $value
+     * @param bool $isRequired
+     * @return bool
+     */
+    private function shouldSkipPublicPropertyValue(string $key, $value, bool $isRequired): bool
+    {
+        if ($value === null && !$isRequired) {
+            return true;
+        }
+
+        return $key === CustomAttributesDataInterface::CUSTOM_ATTRIBUTES && $value === [];
+    }
+
+    /**
+     * Process a public property value based on the field key.
+     *
+     * @param object $dataObject
+     * @param string $dataObjectType
+     * @param string $key
+     * @param mixed $value
+     * @param string|null $returnType
+     * @return mixed|null
+     */
+    private function processPublicPropertyValue(
+        $dataObject,
+        $dataObjectType,
+        string $key,
+        $value,
+        ?string $returnType
+    ) {
+        if ($key === CustomAttributesDataInterface::CUSTOM_ATTRIBUTES) {
+            if (!($dataObject instanceof CustomAttributesDataInterface)) {
+                return null;
+            }
+
+            return $this->customAttributesProcessor->buildOutputDataArray($dataObject, $dataObjectType);
+        }
+
+        if ($key === "extension_attributes") {
+            if (!($value instanceof \Magento\Framework\Api\ExtensionAttributesInterface)) {
+                return null;
+            }
+
+            $extensionAttributes = $this->extensionAttributesProcessor->buildOutputDataArray($value, $returnType);
+            return empty($extensionAttributes) ? null : $extensionAttributes;
+        }
+
+        return $this->processValue($value, $returnType);
     }
 
     /**
@@ -320,25 +420,42 @@ class DataObjectProcessor
             return TypeProcessor::UNSTRUCTURED_ARRAY;
         }
 
-        if (is_object($value) && !($value instanceof Phrase)) {
-            if ($returnType === null || !$this->isObjectType($returnType)) {
-                return get_class($value);
-            }
+        if (!is_object($value) || $value instanceof Phrase) {
+            return $returnType;
+        }
 
-            if ($returnType === 'self' || $returnType === 'static') {
-                return $property->getDeclaringClass()->getName();
-            }
+        return $this->resolveObjectReturnType($returnType, $value, $property);
+    }
 
-            if ($returnType === 'parent') {
-                $parent = $property->getDeclaringClass()->getParentClass();
-                return $parent ? $parent->getName() : get_class($value);
-            }
+    /**
+     * Resolve return types for object property values.
+     *
+     * @param string|null $returnType
+     * @param object $value
+     * @param \ReflectionProperty $property
+     * @return string|null
+     */
+    private function resolveObjectReturnType(?string $returnType, object $value, \ReflectionProperty $property): ?string
+    {
+        if ($returnType === null || !$this->isObjectType($returnType)) {
+            return get_class($value);
+        }
+
+        if ($returnType === 'self' || $returnType === 'static') {
+            return $property->getDeclaringClass()->getName();
+        }
+
+        if ($returnType === 'parent') {
+            $parent = $property->getDeclaringClass()->getParentClass();
+            return $parent ? $parent->getName() : get_class($value);
         }
 
         return $returnType;
     }
 
     /**
+     * Check whether the type maps to a class or interface.
+     *
      * @param string $type
      * @return bool
      */
