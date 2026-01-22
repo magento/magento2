@@ -12,9 +12,12 @@ use Magento\Directory\Model\RegionFactory;
 use Magento\Framework\DataObject;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 
 class RegionTest extends TestCase
 {
+    use MockCreationTrait;
+
     /** @var RegionFactory|MockObject */
     protected $regionFactory;
 
@@ -30,16 +33,25 @@ class RegionTest extends TestCase
     protected function setUp(): void
     {
         $this->regionFactory = $this->createPartialMock(RegionFactory::class, ['create']);
-        $this->region = $this->getMockBuilder(\Magento\Directory\Model\Region::class)->addMethods(['getCountryId'])
-            ->onlyMethods(['load', 'getId', 'getName'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->region = $this->createPartialMockWithReflection(
+            \Magento\Directory\Model\Region::class,
+            [
+                'getCountryId',
+                'load',
+                'getId',
+                'getName'
+            ]
+        );
         $this->model = new Region($this->regionFactory);
-        $this->object = $this->getMockBuilder(DataObject::class)
-            ->addMethods(['getCountryId', 'setRegionId', 'setRegion'])
-            ->onlyMethods(['getData'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->object = $this->createPartialMockWithReflection(
+            DataObject::class,
+            [
+                'getCountryId',
+                'setRegionId',
+                'setRegion',
+                'getData'
+            ]
+        );
     }
 
     public function testBeforeSave()

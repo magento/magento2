@@ -17,8 +17,8 @@ use Magento\Catalog\Model\ResourceModel\Eav\Attribute;
 use Magento\Catalog\Model\ResourceModel\Eav\AttributeFactory;
 use Magento\ConfigurableProduct\Api\Data\OptionInterface;
 use Magento\ConfigurableProduct\Helper\Product\Options\Factory;
-use Magento\Catalog\Test\Unit\Helper\ProductExtensionTestHelper;
 use Magento\ConfigurableProduct\Model\LinkManagement;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
 use Magento\ConfigurableProduct\Model\Product\Type\Configurable\Attribute as ConfigurableAttribute;
 use Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable\Attribute\Collection;
@@ -36,6 +36,8 @@ use PHPUnit\Framework\TestCase;
  */
 class LinkManagementTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var MockObject
      */
@@ -169,7 +171,10 @@ class LinkManagementTest extends TestCase
 
         $configurable = $this->createPartialMock(Product::class, ['getId', 'getExtensionAttributes']);
         $simple = $this->createPartialMock(Product::class, ['getId', 'getData']);
-        $extensionAttributesMock = new \Magento\Catalog\Test\Unit\Helper\ProductExtensionTestHelper();
+        $extensionAttributesMock = $this->createPartialMockWithReflection(
+            ProductExtensionInterface::class,
+            ['getConfigurableProductOptions', 'setConfigurableProductOptions', 'setConfigurableProductLinks']
+        );
         $productAttributeMock = $this->createPartialMock(AbstractAttribute::class, ['getAttributeCode']);
         $optionMock = $this->createPartialMock(ConfigurableAttribute::class, []);
         $optionMock->setProductAttribute($productAttributeMock);
@@ -178,7 +183,6 @@ class LinkManagementTest extends TestCase
         $optionsFactoryMock = $this->createPartialMock(Factory::class, ['create']);
         $reflectionClass = new \ReflectionClass(LinkManagement::class);
         $optionsFactoryReflectionProperty = $reflectionClass->getProperty('optionsFactory');
-        $optionsFactoryReflectionProperty->setAccessible(true);
         $optionsFactoryReflectionProperty->setValue($this->object, $optionsFactoryMock);
 
         $attributeFactoryMock = $this->createPartialMock(AttributeFactory::class, ['create']);
@@ -209,7 +213,7 @@ class LinkManagementTest extends TestCase
         $simple->method('getId')->willReturn(999);
 
         $configurable->method('getExtensionAttributes')->willReturn($extensionAttributesMock);
-        $extensionAttributesMock->setConfigurableProductOptions([$optionMock]);
+        $extensionAttributesMock->method('getConfigurableProductOptions')->willReturn([$optionMock]);
         $productAttributeMock->method('getAttributeCode')->willReturn('color');
         $simple->method('getData')->willReturn('color');
 
@@ -287,7 +291,10 @@ class LinkManagementTest extends TestCase
         $productType->expects($this->once())->method('getUsedProducts')
             ->willReturn([$option]);
 
-        $extensionAttributesMock = new ProductExtensionTestHelper();
+        $extensionAttributesMock = $this->createPartialMockWithReflection(
+            ProductExtensionInterface::class,
+            ['getConfigurableProductOptions', 'setConfigurableProductOptions', 'setConfigurableProductLinks']
+        );
 
         $product->expects($this->once())->method('getExtensionAttributes')->willReturn($extensionAttributesMock);
         $this->productRepository->expects($this->once())->method('save');

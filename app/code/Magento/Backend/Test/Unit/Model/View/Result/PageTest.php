@@ -9,6 +9,7 @@ namespace Magento\Backend\Test\Unit\Model\View\Result;
 
 use Magento\Backend\Block\Widget\Breadcrumbs;
 use Magento\Backend\Model\View\Result\Page;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\Framework\View\Element\Template\Context;
 use Magento\Framework\View\LayoutInterface;
@@ -17,6 +18,7 @@ use PHPUnit\Framework\TestCase;
 
 class PageTest extends TestCase
 {
+    use MockCreationTrait;
     /**
      * @var Page
      */
@@ -44,14 +46,23 @@ class PageTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->layoutMock = $this->getMockBuilder(LayoutInterface::class)
-            ->addMethods(['setGeneratorPool'])
-            ->getMockForAbstractClass();
-        $this->breadcrumbsBlockMock = $this->getMockBuilder(Breadcrumbs::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-
         $this->objectManagerHelper = new ObjectManagerHelper($this);
+        
+        $this->layoutMock = $this->createPartialMockWithReflection(
+            LayoutInterface::class,
+            [
+                'setGeneratorPool', 'getBlock', 'getUpdate', 'generateXml', 'generateElements',
+                'renderElement', 'addOutputElement', 'getOutput', 'hasElement', 'unsetElement',
+                'getAllBlocks', 'getChildBlock', 'setChild', 'reorderChild', 'unsetChild',
+                'getChildNames', 'getChildBlocks', 'getChildName', 'addToParentGroup',
+                'getGroupChildNames', 'getParentName', 'createBlock', 'addBlock', 'addContainer',
+                'renameElement', 'getElementAlias', 'removeOutputElement', 'getMessagesBlock',
+                'getBlockSingleton', 'getElementProperty', 'isBlock', 'isContainer',
+                'isManipulationAllowed', 'setBlock', 'isCacheable'
+            ]
+        );
+        $this->breadcrumbsBlockMock = $this->createMock(Breadcrumbs::class);
+        
         $this->context = $this->objectManagerHelper->getObject(
             Context::class,
             ['layout' => $this->layoutMock]

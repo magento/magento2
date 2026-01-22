@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Setup\Console\Style;
@@ -111,7 +111,7 @@ class MagentoStyle extends OutputStyle implements MagentoStyleInterface
     /**
      * @inheritdoc
      */
-    public function title($message)
+    public function title($message): void
     {
         $this->autoPrependBlock();
         $bar = str_repeat('=', Helper::width(Helper::removeDecoration($this->getFormatter(), $message)));
@@ -127,7 +127,7 @@ class MagentoStyle extends OutputStyle implements MagentoStyleInterface
     /**
      * @inheritdoc
      */
-    public function section($message)
+    public function section($message): void
     {
         $this->autoPrependBlock();
         $bar = str_repeat('-', Helper::width(Helper::removeDecoration($this->getFormatter(), $message)));
@@ -143,7 +143,7 @@ class MagentoStyle extends OutputStyle implements MagentoStyleInterface
     /**
      * @inheritdoc
      */
-    public function listing(array $elements)
+    public function listing(array $elements): void
     {
         $this->autoPrependText();
         $elements = array_map(
@@ -160,7 +160,7 @@ class MagentoStyle extends OutputStyle implements MagentoStyleInterface
     /**
      * @inheritdoc
      */
-    public function text($message)
+    public function text($message): void
     {
         $this->autoPrependText();
         $messages = is_array($message) ? array_values($message) : [$message];
@@ -184,7 +184,7 @@ class MagentoStyle extends OutputStyle implements MagentoStyleInterface
     /**
      * @inheritdoc
      */
-    public function success($message, $padding = true)
+    public function success($message, $padding = true): void
     {
         $this->block($message, 'SUCCESS', 'fg=black;bg=green', ' ', $padding);
     }
@@ -192,7 +192,7 @@ class MagentoStyle extends OutputStyle implements MagentoStyleInterface
     /**
      * @inheritdoc
      */
-    public function error($message, $padding = true)
+    public function error($message, $padding = true): void
     {
         $this->block($message, 'ERROR', 'fg=white;bg=red', ' ', $padding);
     }
@@ -200,7 +200,7 @@ class MagentoStyle extends OutputStyle implements MagentoStyleInterface
     /**
      * @inheritdoc
      */
-    public function warning($message, $padding = true)
+    public function warning($message, $padding = true): void
     {
         $this->block($message, 'WARNING', 'fg=black;bg=yellow', ' ', $padding);
     }
@@ -208,7 +208,7 @@ class MagentoStyle extends OutputStyle implements MagentoStyleInterface
     /**
      * @inheritdoc
      */
-    public function note($message, $padding = false)
+    public function note($message, $padding = false): void
     {
         $this->block($message, 'NOTE', 'fg=yellow', ' ', $padding);
     }
@@ -216,7 +216,7 @@ class MagentoStyle extends OutputStyle implements MagentoStyleInterface
     /**
      * @inheritdoc
      */
-    public function caution($message, $padding = true)
+    public function caution($message, $padding = true): void
     {
         $this->block($message, 'CAUTION', 'fg=black;bg=yellow', ' ! ', $padding);
     }
@@ -224,7 +224,7 @@ class MagentoStyle extends OutputStyle implements MagentoStyleInterface
     /**
      * @inheritdoc
      */
-    public function table(array $headers, array $rows)
+    public function table(array $headers, array $rows): void
     {
         $style = clone Table::getStyleDefinition('symfony-style-guide');
         $style->setCellHeaderFormat('<info>%s</info>');
@@ -289,7 +289,7 @@ class MagentoStyle extends OutputStyle implements MagentoStyleInterface
     /**
      * @inheritdoc
      */
-    public function progressStart($max = 0)
+    public function progressStart($max = 0): void
     {
         $this->progressBar = $this->createProgressBar($max);
         $this->progressBar->start();
@@ -300,7 +300,7 @@ class MagentoStyle extends OutputStyle implements MagentoStyleInterface
      * @throws \Symfony\Component\Console\Exception\LogicException
      * @throws \Symfony\Component\Console\Exception\RuntimeException
      */
-    public function progressAdvance($step = 1)
+    public function progressAdvance($step = 1): void
     {
         $this->getProgressBar()->advance($step);
     }
@@ -309,7 +309,7 @@ class MagentoStyle extends OutputStyle implements MagentoStyleInterface
      * @inheritdoc
      * @throws \Symfony\Component\Console\Exception\RuntimeException
      */
-    public function progressFinish()
+    public function progressFinish(): void
     {
         $this->getProgressBar()->finish();
         $this->newLine(2);
@@ -447,7 +447,7 @@ class MagentoStyle extends OutputStyle implements MagentoStyleInterface
     /**
      * @inheritdoc
      */
-    public function writeln($messages, $type = self::OUTPUT_NORMAL)
+    public function writeln($messages, $type = self::OUTPUT_NORMAL): void
     {
         parent::writeln($messages, $type);
         $this->bufferedOutput->writeln($this->reduceBuffer($messages), $type);
@@ -456,7 +456,7 @@ class MagentoStyle extends OutputStyle implements MagentoStyleInterface
     /**
      * @inheritdoc
      */
-    public function write($messages, $newline = false, $type = self::OUTPUT_NORMAL)
+    public function write($messages, $newline = false, $type = self::OUTPUT_NORMAL): void
     {
         parent::write($messages, $newline, $type);
         $this->bufferedOutput->write($this->reduceBuffer($messages), $newline, $type);
@@ -465,7 +465,7 @@ class MagentoStyle extends OutputStyle implements MagentoStyleInterface
     /**
      * @inheritdoc
      */
-    public function newLine($count = 1)
+    public function newLine(int $count = 1): void
     {
         parent::newLine($count);
         $this->bufferedOutput->write(str_repeat(PHP_EOL, $count));

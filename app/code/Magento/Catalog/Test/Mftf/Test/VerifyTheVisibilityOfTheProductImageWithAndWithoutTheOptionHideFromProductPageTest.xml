@@ -99,7 +99,7 @@
         <!--Expand images section and click on Hide From Product Page-->
         <click selector="{{AdminProductImagesSection.nthProductImage('1')}}" stepKey="openImageDetails2"/>
         <waitForPageLoad stepKey="waitForSlideout2"/>
-        <click selector="{{AdminProductImagesSection.hideFromProductPage}}" stepKey="selectHideFromProductPage"/>
+        <click selector="{{AdminProductImagesSection.hideFromProductPageLabel}}" stepKey="selectHideFromProductPage"/>
         <pressKey selector="{{AdminProductImagesSection.altText}}" parameterArray="[\Facebook\WebDriver\WebDriverKeys::ESCAPE]" stepKey="pressEsc2"/>
         <actionGroup ref="AdminProductFormSaveActionGroup" stepKey="saveProduct1"/>
         <!-- Go to the product page and see the Base image-->
@@ -146,7 +146,7 @@
         <!--Expand images section and click on Hide From Product Page-->
         <click selector="{{AdminProductImagesSection.nthProductImage('1')}}" stepKey="openImageDetails22"/>
         <waitForPageLoad stepKey="waitForSlideout22"/>
-        <click selector="{{AdminProductImagesSection.hideFromProductPage}}" stepKey="selectHideFromProductPage22"/>
+        <click selector="{{AdminProductImagesSection.hideFromProductPageLabel}}" stepKey="selectHideFromProductPage22"/>
         <pressKey selector="{{AdminProductImagesSection.altText}}" parameterArray="[\Facebook\WebDriver\WebDriverKeys::ESCAPE]" stepKey="pressEsc22"/>
         <actionGroup ref="AdminProductFormSaveActionGroup" stepKey="saveProduct22"/>
         <!-- Go to the product page and see the Base image-->
@@ -204,7 +204,7 @@
         <!--Expand images section and click on Hide From Product Page-->
         <click selector="{{AdminProductImagesSection.nthProductImage('1')}}" stepKey="openImageDetails321"/>
         <waitForPageLoad stepKey="waitForSlideout32"/>
-        <click selector="{{AdminProductImagesSection.hideFromProductPage}}" stepKey="selectHideFromProductPage32"/>
+        <click selector="{{AdminProductImagesSection.hideFromProductPageLabel}}" stepKey="selectHideFromProductPage32"/>
         <pressKey selector="{{AdminProductImagesSection.altText}}" parameterArray="[\Facebook\WebDriver\WebDriverKeys::ESCAPE]" stepKey="pressEsc32"/>
         <actionGroup ref="AdminProductFormSaveActionGroup" stepKey="saveProduct32"/>
         <!--Go to the product page and see the Base image-->

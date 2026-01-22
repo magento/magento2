@@ -45,7 +45,7 @@ class UnlockAdminAccountCommand extends Command
     /**
      * @inheritdoc
      */
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $adminUserName = $input->getArgument(self::ARGUMENT_ADMIN_USERNAME);
         $userData = $this->adminUser->loadByUsername($adminUserName);

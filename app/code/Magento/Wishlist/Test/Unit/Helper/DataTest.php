@@ -12,6 +12,7 @@ use Magento\Customer\Model\Session;
 use Magento\Framework\App\ActionInterface;
 use Magento\Framework\App\Helper\Context;
 use Magento\Framework\App\RequestInterface;
+use Magento\Framework\App\Request\Http as RequestHttp;
 use Magento\Framework\Data\Helper\PostHelper;
 use Magento\Framework\DataObject;
 use Magento\Framework\Registry;
@@ -24,6 +25,7 @@ use Magento\Wishlist\Controller\WishlistProviderInterface;
 use Magento\Wishlist\Helper\Data;
 use Magento\Wishlist\Model\Item as WishlistItem;
 use Magento\Wishlist\Model\Wishlist;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -32,6 +34,8 @@ use PHPUnit\Framework\TestCase;
  */
 class DataTest extends TestCase
 {
+    use MockCreationTrait;
+
     /** @var  Data */
     protected $model;
 
@@ -81,33 +85,23 @@ class DataTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->store = $this->getMockBuilder(Store::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->store = $this->createMock(Store::class);
 
-        $this->storeManager = $this->getMockBuilder(StoreManagerInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->storeManager = $this->createMock(StoreManagerInterface::class);
         $this->storeManager->expects($this->any())
             ->method('getStore')
             ->willReturn($this->store);
 
-        $this->urlEncoderMock = $this->getMockBuilder(EncoderInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->urlEncoderMock = $this->createMock(EncoderInterface::class);
 
-        $this->requestMock = $this->getMockBuilder(RequestInterface::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['getServer'])
-            ->getMockForAbstractClass();
+        $this->requestMock = $this->createPartialMock(
+            RequestHttp::class,
+            ['getServer']
+        );
 
-        $this->urlBuilder = $this->getMockBuilder(UrlInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->urlBuilder = $this->createMock(UrlInterface::class);
 
-        $this->context = $this->getMockBuilder(Context::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->context = $this->createMock(Context::class);
         $this->context->expects($this->once())
             ->method('getUrlBuilder')
             ->willReturn($this->urlBuilder);
@@ -118,34 +112,22 @@ class DataTest extends TestCase
             ->method('getRequest')
             ->willReturn($this->requestMock);
 
-        $this->wishlistProvider = $this->getMockBuilder(WishlistProviderInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->wishlistProvider = $this->createMock(WishlistProviderInterface::class);
 
-        $this->coreRegistry = $this->getMockBuilder(Registry::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->coreRegistry = $this->createMock(Registry::class);
 
-        $this->postDataHelper = $this->getMockBuilder(PostHelper::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->postDataHelper = $this->createMock(PostHelper::class);
 
-        $this->wishlistItem = $this->getMockBuilder(WishlistItem::class)
-            ->disableOriginalConstructor()
-            ->addMethods([ 'getWishlistItemId', 'getQty'])
-            ->onlyMethods(['getProduct'])->getMock();
+        $this->wishlistItem = $this->createPartialMockWithReflection(
+            WishlistItem::class,
+            ['getWishlistItemId', 'getQty', 'getProduct']
+        );
 
-        $this->wishlist = $this->getMockBuilder(Wishlist::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->wishlist = $this->createMock(Wishlist::class);
 
-        $this->product = $this->getMockBuilder(Product::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->product = $this->createMock(Product::class);
 
-        $this->customerSession = $this->getMockBuilder(Session::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->customerSession = $this->createMock(Session::class);
 
         $objectManager = new ObjectManager($this);
         $this->model = $objectManager->getObject(
@@ -182,10 +164,10 @@ class DataTest extends TestCase
     {
         $url = 'http://magento2ce/wishlist/index/configure/id/4/product_id/30/qty/1000';
 
-        $buyRequest = $this->getMockBuilder(DataObject::class)
-            ->addMethods(['getSuperAttribute', 'getQty'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $buyRequest = $this->createPartialMockWithReflection(
+            DataObject::class,
+            ['getSuperAttribute', 'getQty']
+        );
         $buyRequest->expects($this->once())
             ->method('getSuperAttribute')
             ->willReturn(['100' => '10']);
@@ -194,11 +176,10 @@ class DataTest extends TestCase
             ->willReturn('1000');
 
         /** @var WishlistItem|MockObject $wishlistItem */
-        $wishlistItem = $this->getMockBuilder(WishlistItem::class)
-            ->addMethods(['getWishlistItemId', 'getProductId', 'getQty'])
-            ->onlyMethods(['getBuyRequest'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $wishlistItem = $this->createPartialMockWithReflection(
+            WishlistItem::class,
+            ['getWishlistItemId', 'getProductId', 'getQty', 'getBuyRequest']
+        );
         $wishlistItem
             ->expects($this->once())
             ->method('getBuyRequest')

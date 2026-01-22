@@ -39,7 +39,7 @@ class CompositeProductRowSizeEstimatorTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->websiteManagementMock = $this->getMockForAbstractClass(WebsiteManagementInterface::class);
+        $this->websiteManagementMock = $this->createMock(WebsiteManagementInterface::class);
         $this->collectionFactoryMock = $this->createPartialMock(
             CollectionFactory::class,
             ['create']

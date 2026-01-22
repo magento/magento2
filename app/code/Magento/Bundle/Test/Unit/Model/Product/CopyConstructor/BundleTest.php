@@ -10,9 +10,10 @@ namespace Magento\Bundle\Test\Unit\Model\Product\CopyConstructor;
 use Magento\Bundle\Model\Link;
 use Magento\Bundle\Model\Option;
 use Magento\Bundle\Model\Product\CopyConstructor\Bundle;
+use Magento\Catalog\Api\Data\ProductExtensionInterface;
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\Product\Type;
-use Magento\Catalog\Test\Unit\Helper\ProductExtensionTestHelper;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -22,6 +23,8 @@ use PHPUnit\Framework\TestCase;
  */
 class BundleTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var Bundle
      */
@@ -57,7 +60,10 @@ class BundleTest extends TestCase
     {
         /** @var Product|MockObject $product */
         $product = $this->createMock(Product::class);
-        $extensionAttributesProduct = new ProductExtensionTestHelper();
+        $extensionAttributesProduct = $this->createPartialMockWithReflection(
+            ProductExtensionInterface::class,
+            ['getBundleProductOptions', 'setBundleProductOptions']
+        );
 
         $product->expects($this->once())
             ->method('getTypeId')
@@ -98,21 +104,28 @@ class BundleTest extends TestCase
             $bundleOptionsData
         );
 
-        // Configure test helper with setter method
-        $extensionAttributesProduct->setBundleProductOptions($bundleOptions);
+        // Configure mock to return bundleOptions
+        $extensionAttributesProduct->method('getBundleProductOptions')->willReturn($bundleOptions);
 
         /** @var Product|MockObject $duplicate */
         $duplicate = $this->createMock(Product::class);
-        $extensionAttributesDuplicate = new ProductExtensionTestHelper();
+        $extensionAttributesDuplicate = $this->createPartialMockWithReflection(
+            ProductExtensionInterface::class,
+            ['setBundleProductOptions']
+        );
+
+        $bundleOptionsClone = null;
+        $extensionAttributesDuplicate->expects($this->once())
+            ->method('setBundleProductOptions')
+            ->willReturnCallback(function ($options) use (&$bundleOptionsClone) {
+                $bundleOptionsClone = $options;
+            });
 
         $duplicate->expects($this->once())
             ->method('getExtensionAttributes')
             ->willReturn($extensionAttributesDuplicate);
-        // Test helper doesn't need mock expectations - setBundleProductOptions will be called by code under test
+        
         $this->model->build($product, $duplicate);
-
-        // Capture the cloned options after the build method runs
-        $bundleOptionsClone = $extensionAttributesDuplicate->getBundleProductOptions();
         $this->assertNotEmpty($bundleOptionsClone, 'Bundle options should be set on duplicate product');
 
         foreach ($bundleOptionsData as $key => $optionData) {
@@ -176,7 +189,10 @@ class BundleTest extends TestCase
     public function testBuildWithoutOptions()
     {
         $product = $this->createMock(Product::class);
-        $extensionAttributesProduct = new ProductExtensionTestHelper();
+        $extensionAttributesProduct = $this->createPartialMockWithReflection(
+            ProductExtensionInterface::class,
+            ['getBundleProductOptions']
+        );
 
         $product->expects($this->once())
             ->method('getTypeId')
@@ -185,16 +201,21 @@ class BundleTest extends TestCase
             ->method('getExtensionAttributes')
             ->willReturn($extensionAttributesProduct);
 
-        // Configure test helper with setter method
-        $extensionAttributesProduct->setBundleProductOptions(null);
+        $extensionAttributesProduct->method('getBundleProductOptions')->willReturn(null);
 
         $duplicate = $this->createMock(Product::class);
-        $extensionAttributesDuplicate = new ProductExtensionTestHelper();
+        $extensionAttributesDuplicate = $this->createPartialMockWithReflection(
+            ProductExtensionInterface::class,
+            ['setBundleProductOptions']
+        );
+
+        $extensionAttributesDuplicate->expects($this->once())
+            ->method('setBundleProductOptions')
+            ->with([]);
 
         $duplicate->expects($this->once())
             ->method('getExtensionAttributes')
             ->willReturn($extensionAttributesDuplicate);
-        // Test helper doesn't need mock expectations - setBundleProductOptions will be called by code under test
 
         $this->model->build($product, $duplicate);
     }

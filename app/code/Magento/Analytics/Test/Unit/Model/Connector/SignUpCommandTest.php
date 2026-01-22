@@ -71,9 +71,9 @@ class SignUpCommandTest extends TestCase
         $this->analyticsTokenMock =  $this->createMock(AnalyticsToken::class);
         $this->integrationManagerMock = $this->createMock(IntegrationManager::class);
         $this->integrationToken = $this->createMock(IntegrationToken::class);
-        $this->configMock = $this->getMockForAbstractClass(ScopeConfigInterface::class);
-        $this->httpClientMock = $this->getMockForAbstractClass(ClientInterface::class);
-        $this->loggerMock = $this->getMockForAbstractClass(LoggerInterface::class);
+        $this->configMock = $this->createMock(ScopeConfigInterface::class);
+        $this->httpClientMock = $this->createMock(ClientInterface::class);
+        $this->loggerMock = $this->createMock(LoggerInterface::class);
         $this->responseResolverMock = $this->createMock(ResponseResolver::class);
 
         $this->signUpCommand = new SignUpCommand(

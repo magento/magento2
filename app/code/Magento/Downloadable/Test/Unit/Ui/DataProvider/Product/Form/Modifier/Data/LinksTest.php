@@ -10,6 +10,7 @@ namespace Magento\Downloadable\Test\Unit\Ui\DataProvider\Product\Form\Modifier\D
 use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Model\Locator\LocatorInterface;
+use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\Product\Type as ProductType;
 use Magento\Downloadable\Api\Data\LinkInterface;
 use Magento\Downloadable\Helper\File as DownloadableFile;
@@ -19,6 +20,7 @@ use Magento\Downloadable\Ui\DataProvider\Product\Form\Modifier\Data\Links;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\DataObject;
 use Magento\Framework\Escaper;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\Framework\UrlInterface;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -30,6 +32,7 @@ use PHPUnit\Framework\TestCase;
  */
 class LinksTest extends TestCase
 {
+    use MockCreationTrait;
     /**
      * @var ObjectManagerHelper
      */
@@ -81,8 +84,8 @@ class LinksTest extends TestCase
     protected function setUp(): void
     {
         $this->objectManagerHelper = new ObjectManagerHelper($this);
-        $this->productMock = $this->createPartialMock(
-            \Magento\Catalog\Test\Unit\Helper\ProductTestHelper::class,
+        $this->productMock = $this->createPartialMockWithReflection(
+            Product::class,
             ['getId', 'getTypeId', 'getLinksTitle', 'getTypeInstance', 'getStoreId']
         );
         $this->locatorMock = $this->createMock(LocatorInterface::class);
@@ -291,8 +294,8 @@ class LinksTest extends TestCase
         string $useDefaultPrice,
         string $useDefaultTitle
     ): MockObject {
-        $linkMock = $this->createPartialMock(
-            \Magento\Downloadable\Test\Unit\Helper\LinkTestHelper::class,
+        $linkMock = $this->createPartialMockWithReflection(
+            LinkModel::class,
             [
                 'getId', 'getTitle', 'getPrice', 'getNumberOfDownloads', 'getIsShareable', 'getSortOrder',
                 'getLinkType', 'getLinkUrl', 'getSampleType', 'getSampleUrl', 'getWebsitePrice', 'getStoreTitle'

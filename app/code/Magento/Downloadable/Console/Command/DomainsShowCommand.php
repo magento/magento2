@@ -50,7 +50,7 @@ class DomainsShowCommand extends Command
     /**
      * @inheritdoc
      */
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         try {
             $whitelist = implode("\n", $this->domainManager->getDomains());

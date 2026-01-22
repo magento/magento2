@@ -17,6 +17,7 @@ use Magento\Framework\App\Request\Http as HttpRequest;
 use Magento\Framework\Controller\Result\Json;
 use Magento\Framework\Controller\Result\JsonFactory;
 use Magento\Framework\Escaper;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -67,7 +68,7 @@ class LoadTest extends TestCase
         $this->contextMock = $this->createMock(Context::class);
         $this->resultJsonFactoryMock = $this->createMock(JsonFactory::class);
         $this->sectionIdentifierMock = $this->createMock(Identifier::class);
-        $this->sectionPoolMock = $this->getMockForAbstractClass(SectionPoolInterface::class);
+        $this->sectionPoolMock = $this->createMock(SectionPoolInterface::class);
         $this->escaperMock = $this->createMock(Escaper::class);
         $this->httpRequestMock = $this->createMock(HttpRequest::class);
         $this->resultJsonMock = $this->createMock(Json::class);
@@ -89,9 +90,8 @@ class LoadTest extends TestCase
      * @param string $sectionNames
      * @param bool $forceNewSectionTimestamp
      * @param string[] $sectionNamesAsArray
-     * @param bool $forceNewTimestamp
-     * @dataProvider executeDataProvider
-     */
+     * @param bool $forceNewTimestamp */
+    #[DataProvider('executeDataProvider')]
     public function testExecute($sectionNames, $forceNewSectionTimestamp, $sectionNamesAsArray, $forceNewTimestamp)
     {
         $this->resultJsonFactoryMock->expects($this->once())

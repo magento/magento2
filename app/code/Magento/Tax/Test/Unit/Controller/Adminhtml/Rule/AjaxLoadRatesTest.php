@@ -79,7 +79,7 @@ class AjaxLoadRatesTest extends TestCase
     /**
      * Executes the controller action and asserts an exception logic
      */
-    public function testExecute()
+    public function testExecute(): void
     {
         $objectManager = new ObjectManager($this);
 
@@ -96,8 +96,7 @@ class AjaxLoadRatesTest extends TestCase
             ->method('setPageSize')
             ->willReturnSelf();
 
-        $searchCriteria = $this->getMockBuilder(SearchCriteriaInterface::class)
-            ->getMockForAbstractClass();
+        $searchCriteria = $this->createMock(SearchCriteriaInterface::class);
 
         $this->searchCriteriaBuilder->expects($this->once())
             ->method('create')

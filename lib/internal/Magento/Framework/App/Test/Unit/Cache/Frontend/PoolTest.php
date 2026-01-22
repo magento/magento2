@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -43,13 +43,20 @@ class PoolTest extends TestCase
             'resource2' => $this->getMockForAbstractClass(FrontendInterface::class)
         ];
 
+        // Note: Pool class adds 'frontend_id' to options before calling factory->create()
         $frontendFactoryMap = [
             [
-                ['data1' => 'value1', 'data2' => 'value2'],
+                ['data1' => 'value1', 'data2' => 'value2', 'frontend_id' => Pool::DEFAULT_FRONTEND_ID],
                 $this->_frontendInstances[Pool::DEFAULT_FRONTEND_ID],
             ],
-            [['r1d1' => 'value1', 'r1d2' => 'value2'], $this->_frontendInstances['resource1']],
-            [['r2d1' => 'value1', 'r2d2' => 'value2'], $this->_frontendInstances['resource2']]
+            [
+                ['r1d1' => 'value1', 'r1d2' => 'value2', 'frontend_id' => 'resource1'],
+                $this->_frontendInstances['resource1']
+            ],
+            [
+                ['r2d1' => 'value1', 'r2d2' => 'value2', 'frontend_id' => 'resource2'],
+                $this->_frontendInstances['resource2']
+            ]
         ];
         $frontendFactory = $this->createMock(Factory::class);
         $frontendFactory->expects($this->any())->method('create')->willReturnMap($frontendFactoryMap);
@@ -125,22 +132,26 @@ class PoolTest extends TestCase
             'no deployment config, default settings' => [
                 ['frontend' => []],
                 [Pool::DEFAULT_FRONTEND_ID => ['default_option' => 'default_value']],
-                ['default_option' => 'default_value']
+                ['default_option' => 'default_value', 'frontend_id' => Pool::DEFAULT_FRONTEND_ID]
             ],
             'deployment config, default settings but no frontend cache' => [
                 [],
                 [Pool::DEFAULT_FRONTEND_ID => ['default_option' => 'default_value']],
-                ['default_option' => 'default_value']
+                ['default_option' => 'default_value', 'frontend_id' => Pool::DEFAULT_FRONTEND_ID]
             ],
             'deployment config, default settings' => [
                 ['frontend' => [Pool::DEFAULT_FRONTEND_ID => ['configured_option' => 'configured_value']]],
                 [Pool::DEFAULT_FRONTEND_ID => ['default_option' => 'default_value']],
-                ['configured_option' => 'configured_value', 'default_option' => 'default_value']
+                [
+                    'configured_option' => 'configured_value',
+                    'default_option' => 'default_value',
+                    'frontend_id' => Pool::DEFAULT_FRONTEND_ID
+                ]
             ],
             'deployment config, overridden settings' => [
                 ['frontend' => [Pool::DEFAULT_FRONTEND_ID => ['configured_option' => 'configured_value']]],
                 [Pool::DEFAULT_FRONTEND_ID => ['configured_option' => 'default_value']],
-                ['configured_option' => 'configured_value']
+                ['configured_option' => 'configured_value', 'frontend_id' => Pool::DEFAULT_FRONTEND_ID]
             ],
             'deployment config, default settings, overridden settings' => [
                 ['frontend' => [Pool::DEFAULT_FRONTEND_ID => ['configured_option' => 'configured_value']]],
@@ -148,17 +159,29 @@ class PoolTest extends TestCase
                     'configured_option' => 'default_value',
                     'default_setting' => 'default_value'
                 ]],
-                ['configured_option' => 'configured_value', 'default_setting' => 'default_value'],
+                [
+                    'configured_option' => 'configured_value',
+                    'default_setting' => 'default_value',
+                    'frontend_id' => Pool::DEFAULT_FRONTEND_ID
+                ],
             ],
             'custom deployent config, default settings' => [
                 ['frontend' => ['custom' => ['configured_option' => 'configured_value']]],
                 ['custom' => ['default_option' => 'default_value']],
-                ['configured_option' => 'configured_value', 'default_option' => 'default_value']
+                [
+                    'configured_option' => 'configured_value',
+                    'default_option' => 'default_value',
+                    'frontend_id' => 'custom'
+                ]
             ],
             'custom deployent config, default settings, overridden settings' => [
                 ['frontend' => ['custom' => ['configured_option' => 'configured_value']]],
                 ['custom' => ['default_option' => 'default_value', 'configured_option' => 'default_value']],
-                ['configured_option' => 'configured_value', 'default_option' => 'default_value']
+                [
+                    'configured_option' => 'configured_value',
+                    'default_option' => 'default_value',
+                    'frontend_id' => 'custom'
+                ]
             ]
         ];
     }

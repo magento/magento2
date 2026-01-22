@@ -323,27 +323,15 @@ class Calculator implements BundleCalculatorInterface, ResetAfterRequestInterfac
             }
         }
 
-        /** @var  Store $store */
-        $store = $bundleProduct->getStore();
-        $roundingMethod = $this->taxHelper->getCalculationAlgorithm($store);
         foreach ($amountList as $amountInfo) {
             /** @var AmountInterface $itemAmount */
             $itemAmount = $amountInfo['amount'];
             $qty = $amountInfo['quantity'];
-
-            if ($roundingMethod != TaxCalculationInterface::CALC_TOTAL_BASE) {
-                //We need to round the individual selection first
-                $fullAmount += ($this->priceCurrency->round($itemAmount->getValue()) * $qty);
-                foreach ($itemAmount->getAdjustmentAmounts() as $code => $adjustment) {
-                    $adjustment = $this->priceCurrency->round($adjustment) * $qty;
-                    $adjustments[$code] = isset($adjustments[$code]) ? $adjustments[$code] + $adjustment : $adjustment;
-                }
-            } else {
-                $fullAmount += ($itemAmount->getValue() * $qty);
-                foreach ($itemAmount->getAdjustmentAmounts() as $code => $adjustment) {
-                    $adjustment = $adjustment * $qty;
-                    $adjustments[$code] = isset($adjustments[$code]) ? $adjustments[$code] + $adjustment : $adjustment;
-                }
+            //We need to round the individual selection first
+            $fullAmount += ($this->priceCurrency->round($itemAmount->getValue()) * $qty);
+            foreach ($itemAmount->getAdjustmentAmounts() as $code => $adjustment) {
+                $adjustment = $this->priceCurrency->round($adjustment) * $qty;
+                $adjustments[$code] = isset($adjustments[$code]) ? $adjustments[$code] + $adjustment : $adjustment;
             }
         }
         if (is_array($exclude) == false) {

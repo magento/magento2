@@ -22,6 +22,7 @@ use Magento\Framework\Event\ManagerInterface;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Registry;
 use Magento\Framework\Serialize\Serializer\Json;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\MediaStorage\Helper\File\Storage\Database;
 use Magento\Quote\Model\Quote\Item\Option;
@@ -37,6 +38,8 @@ use Psr\Log\LoggerInterface;
  */
 class TypeTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var Type
      */
@@ -114,8 +117,8 @@ class TypeTest extends TestCase
                 }
             );
 
-        $this->product = $this->createPartialMock(
-            \Magento\Catalog\Test\Unit\Helper\ProductTestHelper::class,
+        $this->product = $this->createPartialMockWithReflection(
+            Product::class,
             [
                 'getLinksPurchasedSeparately',
                 'setTypeHasRequiredOptions',

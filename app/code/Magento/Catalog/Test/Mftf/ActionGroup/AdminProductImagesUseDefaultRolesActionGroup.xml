@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright 2025 Adobe
+ * All Rights Reserved.
+ */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminProductImagesUseDefaultRolesActionGroup" extends="AdminProductImagesAssertHiddenActionGroup">
+        <annotations>
+            <description>Expands "Images And Videos" section, clicks on provided image, checks "Use Default value" for all roles</description>
+        </annotations>
+        <remove keyForRemoval="optionChecked"/>
+        <checkOption selector="{{AdminProductImagesSection.roleBaseUseDefault}}" after="waitForSlideOut" stepKey="roleBaseUseDefault"/>
+        <checkOption selector="{{AdminProductImagesSection.roleSmallUseDefault}}" after="waitForSlideOut" stepKey="roleSmallUseDefault"/>
+        <checkOption selector="{{AdminProductImagesSection.roleThumbnailUseDefault}}" after="waitForSlideOut" stepKey="roleThumbnailUseDefault"/>
+        <checkOption selector="{{AdminProductImagesSection.roleSwatchUseDefault}}" after="waitForSlideOut" stepKey="roleSwatchUseDefault"/>
+    </actionGroup>
+</actionGroups>

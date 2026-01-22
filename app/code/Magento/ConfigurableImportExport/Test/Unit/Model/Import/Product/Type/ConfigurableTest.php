@@ -19,8 +19,8 @@ use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
 use Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\Collection;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DataObject;
-use Magento\Framework\DataObject\Test\Unit\Helper\DataObjectTestHelper;
 use Magento\Framework\DB\Adapter\Pdo\Mysql;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\DB\Select;
 use Magento\Framework\EntityManager\EntityMetadata;
 use Magento\Framework\EntityManager\MetadataPool;
@@ -35,6 +35,8 @@ use ReflectionClass;
  */
 class ConfigurableTest extends AbstractImportTestCase
 {
+    use MockCreationTrait;
+
     /** @var Configurable */
     protected $configurable;
 
@@ -194,8 +196,20 @@ class ConfigurableTest extends AbstractImportTestCase
             ]
         );
 
-        $this->_connection = new \Magento\Framework\DB\Test\Unit\Helper\MysqlTestHelper();
+        $this->_connection = $this->createPartialMockWithReflection(
+            Mysql::class,
+            [
+                'setTestData', 'select', 'fetchAll', 'quoteInto', 'setQuoteIdentifierCallback',
+                'insert', 'insertOnDuplicate', 'delete'
+            ]
+        );
         $this->_connection->setTestData('select', $this->select);
+        $this->_connection->expects($this->any())->method('select')->willReturn($this->select);
+        $this->_connection->expects($this->any())->method('fetchAll')->willReturn([]);
+        $this->_connection->expects($this->any())->method('quoteInto')->willReturn('query');
+        $this->_connection->expects($this->any())->method('insert')->willReturn(1);
+        $this->_connection->expects($this->any())->method('insertOnDuplicate')->willReturn(1);
+        $this->_connection->expects($this->any())->method('delete')->willReturn(1);
         $this->select->expects($this->any())->method('from')->willReturnSelf();
         $this->select->expects($this->any())->method('where')->willReturnSelf();
         $this->select->expects($this->any())->method('joinLeft')->willReturnSelf();
@@ -240,7 +254,7 @@ class ConfigurableTest extends AbstractImportTestCase
             ['id' => 20, 'attribute_set_id' => 4, 'testattr2'=> 1, 'testattr3'=> 1]
         ];
         foreach ($testProducts as $product) {
-            $item = new DataObjectTestHelper();
+            $item = $this->createMock(DataObject::class);
             $item->setData($product);
             $item->setAttributeSetId(4);
 
@@ -282,6 +296,9 @@ class ConfigurableTest extends AbstractImportTestCase
             ->method('getIdentifierField')
             ->willReturn($this->productEntityLinkField);
 
+        $productTypesConfig = $this->createMock(ConfigInterface::class);
+        $resourceHelper = $this->createMock(\Magento\ImportExport\Model\ResourceModel\Helper::class);
+
         $this->configurable = $this->objectManagerHelper->getObject(
             Configurable::class,
             [
@@ -289,6 +306,8 @@ class ConfigurableTest extends AbstractImportTestCase
                 'prodAttrColFac' => $this->attrCollectionFactory,
                 'params' => $this->params,
                 'resource' => $this->resource,
+                'productTypesConfig' => $productTypesConfig,
+                'resourceHelper' => $resourceHelper,
                 'productColFac' => $this->productCollectionFactory,
                 'metadataPool' => $metadataPoolMock,
                 'skuStorage' => $this->skuStorage

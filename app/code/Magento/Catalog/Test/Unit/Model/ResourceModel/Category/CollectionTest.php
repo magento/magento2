@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\Catalog\Test\Unit\Model\ResourceModel\Category;
 
+use Magento\Framework\DB\Ddl\Table;
 use Magento\Catalog\Model\Category;
 use Magento\Framework\Data\Collection\EntityFactory;
 use Magento\Store\Model\Store;
@@ -126,65 +127,30 @@ class CollectionTest extends TestCase
      */
     public function setUp(): void
     {
-        $this->entityFactory = $this->getMockBuilder(EntityFactory::class)
-            ->disableOriginalConstructor(true)
-            ->getMock();
-        $this->logger = $this->getMockBuilder(LoggerInterface::class)
-            ->getMock();
-        $this->fetchStrategy = $this->getMockBuilder(FetchStrategyInterface::class)
-            ->getMock();
-        $this->eventManager = $this->getMockBuilder(ManagerInterface::class)
-            ->getMock();
-        $this->eavConfig = $this->getMockBuilder(Config::class)
-            ->disableOriginalConstructor(true)
-            ->getMock();
-        $this->resource = $this->getMockBuilder(ResourceConnection::class)
-            ->disableOriginalConstructor(true)
-            ->getMock();
-        $this->eavEntityFactory = $this->getMockBuilder(EavEntityFactory::class)
-            ->disableOriginalConstructor(true)
-            ->getMock();
-        $this->resourceHelper = $this->getMockBuilder(Helper::class)
-            ->disableOriginalConstructor(true)
-            ->getMock();
-        $this->universalFactory = $this->getMockBuilder(UniversalFactory::class)
-            ->disableOriginalConstructor(true)
-            ->getMock();
-        $this->storeManager = $this->getMockBuilder(StoreManagerInterface::class)
-            ->getMock();
-        $this->connection = $this->getMockBuilder(AdapterInterface::class)
-            ->getMock();
-        $this->scopeConfig = $this->getMockBuilder(ScopeConfigInterface::class)
-            ->getMock();
-        $this->catalogProductVisibility = $this->getMockBuilder(Visibility::class)
-            ->disableOriginalConstructor(true)
-            ->getMock();
+        $this->entityFactory = $this->createMock(EntityFactory::class);
+        $this->logger = $this->createMock(LoggerInterface::class);
+        $this->fetchStrategy = $this->createMock(FetchStrategyInterface::class);
+        $this->eventManager = $this->createMock(ManagerInterface::class);
+        $this->eavConfig = $this->createMock(Config::class);
+        $this->resource = $this->createMock(ResourceConnection::class);
+        $this->eavEntityFactory = $this->createMock(EavEntityFactory::class);
+        $this->resourceHelper = $this->createMock(Helper::class);
+        $this->universalFactory = $this->createMock(UniversalFactory::class);
+        $this->storeManager = $this->createMock(StoreManagerInterface::class);
+        $this->connection = $this->createMock(AdapterInterface::class);
+        $this->scopeConfig = $this->createMock(ScopeConfigInterface::class);
+        $this->catalogProductVisibility = $this->createMock(Visibility::class);
 
-        $this->categoryEntity = $this->getMockBuilder(CategoryEntity::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->universalFactory->expects($this->any())
-            ->method('create')
-            ->willReturn($this->categoryEntity);
-        $this->categoryEntity->expects($this->any())
-            ->method('getConnection')
-            ->willReturn($this->connection);
-        $this->categoryEntity->expects($this->any())
-            ->method('getDefaultAttributes')
-            ->willReturn([]);
+        $this->categoryEntity = $this->createMock(CategoryEntity::class);
+        $this->universalFactory->method('create')->willReturn($this->categoryEntity);
+        $this->categoryEntity->method('getConnection')->willReturn($this->connection);
+        $this->categoryEntity->method('getDefaultAttributes')->willReturn([]);
 
-        $this->select = $this->getMockBuilder(Select::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->connection->expects($this->any())
-            ->method('select')
-            ->willReturn($this->select);
+        $this->select = $this->createMock(Select::class);
+        $this->connection->method('select')->willReturn($this->select);
 
-        $this->store = $this->getMockBuilder(StoreInterface::class)
-            ->getMock();
-        $this->storeManager->expects($this->any())
-            ->method('getStore')
-            ->willReturn($this->store);
+        $this->store = $this->createMock(StoreInterface::class);
+        $this->storeManager->method('getStore')->willReturn($this->store);
 
         $this->collection = new Collection(
             $this->entityFactory,
@@ -229,13 +195,9 @@ class CollectionTest extends TestCase
         $items = [];
         $categoryIds = [];
         for ($i = 1; $i <= $categoryCount; $i++) {
-            $category = $this->getMockBuilder(Category::class)
-                ->addMethods(['getIsAnchor'])
-                ->onlyMethods(['getId', 'setProductCount'])
-                ->disableOriginalConstructor()
-                ->getMock();
+            $category = $this->createPartialMock(Category::class, ['getId', 'setProductCount']);
             $category->method('getId')->willReturn($i);
-            $category->method('getIsAnchor')->willReturn(true);
+            $category->setData('is_anchor', true);
             $category->expects($this->once())->method('setProductCount')->with(5);
             $items[$i] = $category;
             $categoryIds[] = $i;
@@ -245,7 +207,7 @@ class CollectionTest extends TestCase
         $this->storeManager->method('getStore')->with($storeId)->willReturn($storeMock);
         $this->connection->method('select')->willReturn($this->select);
         $counts = array_fill_keys($categoryIds, 5);
-        $tableMock = $this->createMock(\Magento\Framework\DB\Ddl\Table::class);
+        $tableMock = $this->createMock(Table::class);
         $tableMock->method('addColumn')->willReturnSelf();
         $tableMock->method('addIndex')->willReturnSelf();
         $this->connection->method('newTable')

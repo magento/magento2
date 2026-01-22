@@ -14,12 +14,21 @@ use Magento\Framework\Data\Collection\AbstractDb;
 use Magento\Framework\Event\ManagerInterface;
 use Magento\Framework\Model\Context;
 use Magento\Framework\Model\ResourceModel\AbstractResource;
+use Magento\Framework\Model\ResourceModel\Db\AbstractDb as DbAbstractDb;
 use Magento\Framework\Registry;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.UnusedLocalVariable)
+ */
 class StockTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var Context
      */
@@ -36,7 +45,7 @@ class StockTest extends TestCase
     private $extensionFactory;
 
     /**
-     * @var \Magento\Framework\Model\ExtensionAttributesFactory
+     * @var AttributeValueFactory
      */
     private $customAttributeFactory;
 
@@ -66,13 +75,13 @@ class StockTest extends TestCase
         $this->eventDispatcher = $this->getMockBuilder(ManagerInterface::class)
             ->disableOriginalConstructor()
             ->onlyMethods(['dispatch'])
-            ->getMockForAbstractClass();
+            ->getMock();
 
         $this->context = $this->getMockBuilder(Context::class)
             ->disableOriginalConstructor()
             ->onlyMethods(['getEventDispatcher'])
             ->getMock();
-        $this->context->expects($this->any())->method('getEventDispatcher')->willReturn($this->eventDispatcher);
+        $this->context->method('getEventDispatcher')->willReturn($this->eventDispatcher);
 
         $this->registry = $this->getMockBuilder(Registry::class)
             ->disableOriginalConstructor()
@@ -86,14 +95,12 @@ class StockTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->resource = $this->getMockBuilder(AbstractResource::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['getIdFieldName'])
-            ->getMockForAbstractClass();
+        $this->resource = $this->createPartialMockWithReflection(DbAbstractDb::class, ['getIdFieldName', '_construct']);
+        $this->resource->method('getIdFieldName')->willReturn('stock_id');
 
         $this->resourceCollection = $this->getMockBuilder(AbstractDb::class)
             ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+            ->getMock();
 
         $this->stockModel = new Stock(
             $this->context,
@@ -111,9 +118,8 @@ class StockTest extends TestCase
      * @param $eventName
      * @param $methodName
      * @param $objectName
-     *
-     * @dataProvider eventsDataProvider
      */
+    #[DataProvider('eventsDataProvider')]
     public function testDispatchEvents($eventName, $methodName, $objectName)
     {
         $isCalledWithRightPrefix = 0;

@@ -18,7 +18,7 @@ $commentText = $block->getCreditmemo()->getCommentText();
 
 <section class="admin__page-section">
     <div class="admin__page-section-title">
-        <span class="title"><?= $block->escapeHtml(__('Items to Refund')) ?></span>
+        <span class="title"><?= $escaper->escapeHtml(__('Items to Refund')) ?></span>
     </div>
 
     <?php if (count($_items)): ?>
@@ -26,17 +26,17 @@ $commentText = $block->getCreditmemo()->getCommentText();
         <table class="data-table admin__table-primary order-creditmemo-tables">
             <thead>
                 <tr class="headings">
-                    <th class="col-product"><span><?= $block->escapeHtml(__('Product')) ?></span></th>
-                    <th class="col-price"><span><?= $block->escapeHtml(__('Price')) ?></span></th>
-                    <th class="col-ordered-qty"><span><?= $block->escapeHtml(__('Qty')) ?></span></th>
+                    <th class="col-product"><span><?= $escaper->escapeHtml(__('Product')) ?></span></th>
+                    <th class="col-price"><span><?= $escaper->escapeHtml(__('Price')) ?></span></th>
+                    <th class="col-ordered-qty"><span><?= $escaper->escapeHtml(__('Qty')) ?></span></th>
                     <?php if ($block->canReturnToStock()): ?>
-                    <th class="col-return-to-stock"><span><?= $block->escapeHtml(__('Return to Stock')) ?></span></th>
+                    <th class="col-return-to-stock"><span><?= $escaper->escapeHtml(__('Return to Stock')) ?></span></th>
                     <?php endif; ?>
-                    <th class="col-refund"><span><?= $block->escapeHtml(__('Qty to Refund')) ?></span></th>
-                    <th class="col-subtotal"><span><?= $block->escapeHtml(__('Subtotal')) ?></span></th>
-                    <th class="col-tax-amount"><span><?= $block->escapeHtml(__('Tax Amount')) ?></span></th>
-                    <th class="col-discont"><span><?= $block->escapeHtml(__('Discount Amount')) ?></span></th>
-                    <th class="col-total last"><span><?= $block->escapeHtml(__('Row Total')) ?></span></th>
+                    <th class="col-refund"><span><?= $escaper->escapeHtml(__('Qty to Refund')) ?></span></th>
+                    <th class="col-subtotal"><span><?= $escaper->escapeHtml(__('Subtotal')) ?></span></th>
+                    <th class="col-tax-amount"><span><?= $escaper->escapeHtml(__('Tax Amount')) ?></span></th>
+                    <th class="col-discont"><span><?= $escaper->escapeHtml(__('Discount Amount')) ?></span></th>
+                    <th class="col-total last"><span><?= $escaper->escapeHtml(__('Row Total')) ?></span></th>
                 </tr>
             </thead>
             <?php if ($block->canEditQty()): ?>
@@ -65,7 +65,7 @@ $commentText = $block->getCreditmemo()->getCommentText();
     </div>
     <?php else: ?>
     <div class="no-items">
-        <?= $block->escapeHtml(__('No Items To Refund')) ?>
+        <?= $escaper->escapeHtml(__('No Items To Refund')) ?>
     </div>
     <?php endif; ?>
 </section>
@@ -81,31 +81,31 @@ $commentText = $block->getCreditmemo()->getCommentText();
 <section class="admin__page-section">
     <input type="hidden" name="creditmemo[do_offline]" id="creditmemo_do_offline" value="0" />
     <div class="admin__page-section-title">
-        <span class="title"><?= $block->escapeHtml(__('Order Total')) ?></span>
+        <span class="title"><?= $escaper->escapeHtml(__('Order Total')) ?></span>
     </div>
     <div class="admin__page-section-content">
         <div class="admin__page-section-item order-comments-history">
             <div class="admin__page-section-item-title">
-                <span class="title"><?= $block->escapeHtml(__('Credit Memo Comments')) ?></span>
+                <span class="title"><?= $escaper->escapeHtml(__('Credit Memo Comments')) ?></span>
             </div>
             <div id="history_form" class="admin__fieldset-wrapper-content">
                 <div class="admin__field">
                     <label class="normal admin__field-label"
                            for="creditmemo_comment_text">
-                        <span><?= $block->escapeHtml(__('Comment Text')) ?></span></label>
+                        <span><?= $escaper->escapeHtml(__('Comment Text')) ?></span></label>
                     <div class="admin__field-control">
                         <textarea id="creditmemo_comment_text"
                                   class="admin__control-textarea"
                                   name="creditmemo[comment_text]"
                                   rows="3"
-                                  cols="5"><?= $block->escapeHtml($commentText) ?></textarea>
+                                  cols="5"><?= $escaper->escapeHtml($commentText) ?></textarea>
                     </div>
                 </div>
             </div>
         </div>
         <div class="admin__page-section-item order-totals creditmemo-totals">
             <div class="admin__page-section-item-title">
-                <span class="title"><?= $block->escapeHtml(__('Refund Totals')) ?></span>
+                <span class="title"><?= $escaper->escapeHtml(__('Refund Totals')) ?></span>
             </div>
             <?= $block->getChildHtml('creditmemo_totals') ?>
             <div class="totals-actions"><?= /* @noEscape */ $viewModel->getUpdateTotalsButton() ?></div>
@@ -117,7 +117,7 @@ $commentText = $block->getCreditmemo()->getCommentText();
                            value="1"
                            type="checkbox" />
                     <label for="notify_customer" class="admin__field-label">
-                        <span><?= $block->escapeHtml(__('Append Comments')) ?></span>
+                        <span><?= $escaper->escapeHtml(__('Append Comments')) ?></span>
                     </label>
                 </div>
                 <?php if ($block->canSendCreditmemoEmail()):?>
@@ -128,7 +128,7 @@ $commentText = $block->getCreditmemo()->getCommentText();
                            value="1"
                            type="checkbox" />
                     <label for="send_email" class="admin__field-label">
-                        <span><?= $block->escapeHtml(__('Email Copy of Credit Memo')) ?></span>
+                        <span><?= $escaper->escapeHtml(__('Email Copy of Credit Memo')) ?></span>
                     </label>
                 </div>
                 <?php endif; ?>
@@ -151,6 +151,9 @@ require(['jquery'], function(jQuery){
 var submitButtons = jQuery('.submit-button');
 var updateButtons = jQuery('.update-button, .update-totals-button');
 var fields = jQuery('.qty-input, .order-subtotal-table input[type="text"]');
+var requiredFields = jQuery('input[required], textarea[required], select[required]');
+var hasValidationErrors = false;
+
 function enableButtons(buttons) {
     buttons.removeClass('disabled').prop('disabled', false);
 }
@@ -160,6 +163,28 @@ function disableButtons(buttons) {
 }
 
 disableButtons(updateButtons);
+
+function checkRequiredFieldsStatus() {
+    var allRequiredFieldsFilled = true;
+    requiredFields.each(function() {
+        var fieldValue = jQuery(this).val();
+        if (!fieldValue || fieldValue.trim() === '') {
+            allRequiredFieldsFilled = false;
+            return false; // Break out of the loop
+        }
+    });
+
+    if (allRequiredFieldsFilled) {
+        enableButtons(submitButtons);
+    } else {
+        disableButtons(submitButtons);
+    }
+}
+
+// Monitor all required fields for changes
+requiredFields.on('input change', function() {
+    checkRequiredFieldsStatus();
+});
 
 fields.on('change', checkButtonsRelation);
 fields.each(function (i, elem) {
@@ -174,31 +199,43 @@ function checkButtonsRelation() {
         }
     }.bind(this));
     if (hasChanges) {
-        disableButtons(submitButtons);
         enableButtons(updateButtons);
+        // When quantity changes, check if all required fields are still filled
+        checkRequiredFieldsStatus();
     }
     else {
-        enableButtons(submitButtons);
         disableButtons(updateButtons);
+        // Make sure buttons are enabled if no quantity changes and required fields are filled
+        checkRequiredFieldsStatus();
     }
 }
 
 submitCreditMemo = function() {
-    var creditMemoOffline = jQuery('#creditmemo_do_offline');
-    if (creditMemoOffline.length) {
-        creditMemoOffline.prop('value', 0);
+    if (jQuery('#edit_form').valid()) {
+        var creditMemoOffline = jQuery('#creditmemo_do_offline');
+        if (creditMemoOffline.length) {
+            creditMemoOffline.prop('value', 0);
+        }
+        // Temporary solution will be replaced after refactoring order functionality
+        jQuery('#edit_form').triggerHandler('save');
+    } else {
+        hasValidationErrors = true;
+        disableButtons(submitButtons);
     }
-    // Temporary solution will be replaced after refactoring order functionality
-    jQuery('#edit_form').triggerHandler('save');
 };
 
 submitCreditMemoOffline = function() {
-    var creditMemoOffline = jQuery('#creditmemo_do_offline');
-    if (creditMemoOffline.length) {
-        creditMemoOffline.prop('value', 1);
+    if (jQuery('#edit_form').valid()) {
+        var creditMemoOffline = jQuery('#creditmemo_do_offline');
+        if (creditMemoOffline.length) {
+            creditMemoOffline.prop('value', 1);
+        }
+        // Temporary solution will be replaced after refactoring order functionality
+        jQuery('#edit_form').triggerHandler('save');
+    } else {
+        hasValidationErrors = true;
+        disableButtons(submitButtons);
     }
-    // Temporary solution will be replaced after refactoring order functionality
-    jQuery('#edit_form').triggerHandler('save');
 };
 
 var sendEmailCheckbox = jQuery('#send_email');

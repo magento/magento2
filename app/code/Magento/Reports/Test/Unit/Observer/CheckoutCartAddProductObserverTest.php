@@ -10,6 +10,7 @@ namespace Magento\Reports\Test\Unit\Observer;
 
 use Magento\Framework\Event;
 use Magento\Framework\Event\Observer;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Quote\Model\Quote\Item as QuoteItem;
 use Magento\Reports\Model\Event as ReportsEventModel;
@@ -24,8 +25,10 @@ use PHPUnit\Framework\TestCase;
  */
 class CheckoutCartAddProductObserverTest extends TestCase
 {
-    const STUB_QUOTE_PARENT_ITEM_ID = 1;
-    const STUB_QUOTE_ITEM_ID = 2;
+    use MockCreationTrait;
+
+    private const STUB_QUOTE_PARENT_ITEM_ID = 1;
+    private const STUB_QUOTE_ITEM_ID = 2;
 
     /**
      * @var MockObject|EventSaver
@@ -66,10 +69,10 @@ class CheckoutCartAddProductObserverTest extends TestCase
         $this->reportStatusMock = $this->createMock(ReportStatus::class);
         $this->eventObserverMock = $this->createMock(Observer::class);
         $this->quoteItemMock = $this->createMock(QuoteItem::class);
-        $this->eventMock = $this->getMockBuilder(Event::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['getItem'])
-            ->getMock();
+        $this->eventMock = $this->createPartialMockWithReflection(
+            Event::class,
+            ['getItem']
+        );
 
         $objectManager = new ObjectManager($this);
         $this->observer = $objectManager->getObject(

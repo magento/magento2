@@ -29,7 +29,9 @@ use Magento\Tax\Api\Data\TaxClassKeyInterfaceFactory;
 use Magento\Tax\Api\Data\TaxDetailsInterface;
 use Magento\Tax\Api\Data\TaxDetailsItemInterface;
 use Magento\Tax\Api\TaxCalculationInterface;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Tax\Helper\Data as TaxHelper;
+use \Magento\Quote\Model\Quote\Address\Total as QuoteAddressTotal;
 use Magento\Tax\Model\Config;
 use Magento\Tax\Model\Sales\Total\Quote\CommonTaxCollector;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -40,6 +42,8 @@ use PHPUnit\Framework\TestCase;
  */
 class CommonTaxCollectorTest extends TestCase
 {
+    use MockCreationTrait;
+    
     /** @var Config|MockObject */
     private $taxConfig;
 
@@ -228,18 +232,18 @@ class CommonTaxCollectorTest extends TestCase
             ->with(15)
             ->willReturn($defaultBillingCustomerAddress);
 
-        $quote = $this->getMockBuilder(\stdClass::class)
-            ->addMethods(['isVirtual', 'getCustomerId', 'getBillingAddress'])
-            ->getMock();
+        $quote = $this->createPartialMockWithReflection(
+            \stdClass::class,
+            ['isVirtual', 'getCustomerId', 'getBillingAddress']
+        );
         $quote->method('isVirtual')->willReturn(true);
         $quote->method('getCustomerId')->willReturn(15);
         $quote->method('getBillingAddress')->willReturn($billingAddressFromQuote);
 
-        $address = $this->getMockBuilder(QuoteAddress::class)
-            ->onlyMethods(['getCountryId', 'getQuote', 'importCustomerAddressData'])
-            ->addMethods(['getAddressType'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $address = $this->createPartialMockWithReflection(
+            QuoteAddress::class,
+            ['getCountryId', 'getQuote', 'importCustomerAddressData', 'getAddressType']
+        );
 
         $address->method('getAddressType')->willReturn(QuoteAddress::ADDRESS_TYPE_BILLING);
         $address->method('getCountryId')->willReturn(null);
@@ -279,16 +283,16 @@ class CommonTaxCollectorTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $address = $this->getMockBuilder(QuoteAddress::class)
-            ->onlyMethods(['getQuote'])
-            ->addMethods(['getAddressType'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $address = $this->createPartialMockWithReflection(
+            QuoteAddress::class,
+            ['getQuote', 'getAddressType']
+        );
         $address->method('getAddressType')->willReturn(QuoteAddress::ADDRESS_TYPE_SHIPPING);
 
-        $quote = $this->getMockBuilder(\stdClass::class)
-            ->addMethods(['getBillingAddress'])
-            ->getMock();
+        $quote = $this->createPartialMockWithReflection(
+            \stdClass::class,
+            ['getBillingAddress']
+        );
         $quote->method('getBillingAddress')->willReturn($billingAddress);
         $address->method('getQuote')->willReturn($quote);
 
@@ -332,15 +336,13 @@ class CommonTaxCollectorTest extends TestCase
         $baseItemTaxDetails->method('getTaxPercent')->willReturn(7.5);
         $baseItemTaxDetails->method('getDiscountTaxCompensationAmount')->willReturn(0.25);
 
-        $quoteItem = $this->getMockBuilder(\stdClass::class)
-            ->addMethods([
+        $quoteItem = $this->createPartialMockWithReflection(\stdClass::class, [
                 'setPrice', 'getCustomPrice', 'setCustomPrice', 'setConvertedPrice', 'setPriceInclTax',
                 'setRowTotal', 'setRowTotalInclTax', 'setTaxAmount', 'setTaxPercent',
                 'setDiscountTaxCompensationAmount', 'setBasePrice', 'setBasePriceInclTax', 'setBaseRowTotal',
                 'setBaseRowTotalInclTax', 'setBaseTaxAmount', 'setBaseDiscountTaxCompensationAmount',
                 'setDiscountCalculationPrice', 'setBaseDiscountCalculationPrice'
-            ])
-            ->getMock();
+            ]);
 
         $quoteItem->expects($this->atLeastOnce())->method('setPrice')->with(10.00)->willReturnSelf();
         $quoteItem->method('getCustomPrice')->willReturn(12.00);
@@ -488,28 +490,25 @@ class CommonTaxCollectorTest extends TestCase
         $taxClassKey->method('setValue')->willReturnSelf();
         $this->taxClassKeyFactory->method('create')->willReturn($taxClassKey);
 
-        $product = $this->getMockBuilder(\stdClass::class)
-            ->addMethods(['getTaxClassId'])
-            ->getMock();
+        $product = $this->createPartialMockWithReflection(
+            \stdClass::class,
+            ['getTaxClassId']
+        );
         $product->method('getTaxClassId')->willReturn(4);
 
-        $item = $this->getMockBuilder(AbstractItem::class)
-            ->onlyMethods([
+        $item = $this->createPartialMockWithReflection(
+            AbstractItem::class,
+            [
                 'getQuote', 'getAddress', 'getOptionByCode',
                 'getQty', 'getProduct',
-                'getCalculationPriceOriginal', 'getOriginalPrice'
-            ])
-            ->addMethods(
-                [
-                    'getDiscountAmount',
-                    'getTaxCalculationItemId',
-                    'setTaxCalculationItemId',
-                    'getTaxCalculationPrice',
-                    'setTaxCalculationPrice'
-                ]
-            )
-            ->disableOriginalConstructor()
-            ->getMock();
+                'getCalculationPriceOriginal', 'getOriginalPrice',
+                'getDiscountAmount',
+                'getTaxCalculationItemId',
+                'setTaxCalculationItemId',
+                'getTaxCalculationPrice',
+                'setTaxCalculationPrice'
+            ]
+        );
         $item->method('getQuote')->willReturn(null);
         $item->method('getAddress')->willReturn(null);
         $item->method('getOptionByCode')->willReturn(null);
@@ -530,11 +529,10 @@ class CommonTaxCollectorTest extends TestCase
 
     public function testMapItemExtraTaxablesBuildsItems(): void
     {
-        $item = $this->getMockBuilder(AbstractItem::class)
-            ->onlyMethods(['getQuote', 'getAddress', 'getOptionByCode'])
-            ->addMethods(['getAssociatedTaxables', 'getTaxCalculationItemId'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $item = $this->createPartialMockWithReflection(
+            AbstractItem::class,
+            ['getQuote', 'getAddress', 'getOptionByCode', 'getAssociatedTaxables', 'getTaxCalculationItemId']
+        );
         $item->method('getQuote')->willReturn(null);
         $item->method('getAddress')->willReturn(null);
         $item->method('getOptionByCode')->willReturn(null);
@@ -593,16 +591,15 @@ class CommonTaxCollectorTest extends TestCase
             ->onlyMethods(['mapItem', 'mapItemExtraTaxables'])
             ->getMock();
 
-        $shippingAssignment = $this->getMockBuilder(ShippingAssignmentInterface::class)
-            ->getMockForAbstractClass();
+        $shippingAssignment = $this->createMock(ShippingAssignmentInterface::class);
 
-        $parentItem = $this->getMockBuilder(AbstractItem::class)
-            ->onlyMethods(
-                ['getQuote', 'getAddress', 'getOptionByCode', 'getParentItem', 'isChildrenCalculated', 'getChildren']
-            )
-            ->addMethods(['getHasChildren'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $parentItem = $this->createPartialMockWithReflection(
+            AbstractItem::class,
+            [
+                'getQuote', 'getAddress', 'getOptionByCode', 'getParentItem',
+                'isChildrenCalculated', 'getChildren', 'getHasChildren'
+            ]
+        );
         $parentItem->method('getQuote')->willReturn(null);
         $parentItem->method('getAddress')->willReturn(null);
         $parentItem->method('getOptionByCode')->willReturn(null);
@@ -630,27 +627,22 @@ class CommonTaxCollectorTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $address->method('getQuote')->willReturn((function () use ($store) {
-            $quote = $this->getMockBuilder(\stdClass::class)->addMethods(['getStore'])->getMock();
+            $quote = $this->createPartialMockWithReflection(\stdClass::class, ['getStore']);
             $quote->method('getStore')->willReturn($store);
             return $quote;
         })());
 
-        $shipping = $this->getMockBuilder(ShippingInterface::class)
-            ->getMockForAbstractClass();
+        $shipping = $this->createMock(ShippingInterface::class);
         $shipping->method('getAddress')->willReturn($address);
 
-        $shippingAssignment = $this->getMockBuilder(ShippingAssignmentInterface::class)
-            ->getMockForAbstractClass();
+        $shippingAssignment = $this->createMock(ShippingAssignmentInterface::class);
         $shippingAssignment->method('getShipping')->willReturn($shipping);
 
-        $total = $this->getMockBuilder(\Magento\Quote\Model\Quote\Address\Total::class)
-            ->addMethods([
+        $total = $this->createPartialMockWithReflection(QuoteAddressTotal::class, [
                 'getShippingTaxCalculationAmount', 'setShippingTaxCalculationAmount', 'getShippingAmount',
                 'setBaseShippingTaxCalculationAmount', 'getBaseShippingAmount', 'getShippingDiscountAmount',
                 'getBaseShippingDiscountAmount'
-            ])
-            ->disableOriginalConstructor()
-            ->getMock();
+            ]);
         $total->method('getShippingTaxCalculationAmount')->willReturn(10.0);
         $total->method('getShippingAmount')->willReturn(10.0);
         $total->method('getBaseShippingAmount')->willReturn(8.0);
@@ -714,19 +706,20 @@ class CommonTaxCollectorTest extends TestCase
             ->onlyMethods(['getQuote'])
             ->disableOriginalConstructor()
             ->getMock();
-        $quote = $this->getMockBuilder(\stdClass::class)
-            ->addMethods(['getCustomerTaxClassId', 'getCustomerId', 'getStore', 'getBillingAddress'])
-            ->getMock();
+        $quote = $this->createPartialMockWithReflection(
+            \stdClass::class,
+            ['getCustomerTaxClassId', 'getCustomerId', 'getStore', 'getBillingAddress']
+        );
         $quote->method('getCustomerTaxClassId')->willReturn(7);
         $quote->method('getCustomerId')->willReturn(77);
         $quote->method('getStore')->willReturn($store);
         $quote->method('getBillingAddress')->willReturn($address);
         $address->method('getQuote')->willReturn($quote);
 
-        $shipping = $this->getMockBuilder(ShippingInterface::class)->getMockForAbstractClass();
+        $shipping = $this->createMock(ShippingInterface::class);
         $shipping->method('getAddress')->willReturn($address);
 
-        $shippingAssignment = $this->getMockBuilder(ShippingAssignmentInterface::class)->getMockForAbstractClass();
+        $shippingAssignment = $this->getMockBuilder(ShippingAssignmentInterface::class)->getMock();
         $shippingAssignment->method('getItems')->willReturn([new \stdClass()]);
         $shippingAssignment->method('getShipping')->willReturn($shipping);
 
@@ -750,15 +743,13 @@ class CommonTaxCollectorTest extends TestCase
         $expectedQuoteDetails = $this->createMock(QuoteDetailsInterface::class);
         $this->quoteDetailsFactory->method('create')->willReturn($expectedQuoteDetails);
 
-        $shippingAssignment = $this->getMockBuilder(ShippingAssignmentInterface::class)
-            ->getMockForAbstractClass();
+        $shippingAssignment = $this->createMock(ShippingAssignmentInterface::class);
         $shippingAssignment->method('getItems')->willReturn([]);
         // prepareQuoteDetails evaluates shipping->getAddress() before returning on empty items
         $address = $this->getMockBuilder(QuoteAddress::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $shipping = $this->getMockBuilder(ShippingInterface::class)
-            ->getMockForAbstractClass();
+        $shipping = $this->createMock(ShippingInterface::class);
         $shipping->method('getAddress')->willReturn($address);
         $shippingAssignment->method('getShipping')->willReturn($shipping);
 
@@ -774,37 +765,35 @@ class CommonTaxCollectorTest extends TestCase
     {
         $store = $this->createMock(Store::class);
 
-        $addressItem = $this->getMockBuilder(SafeArrayObject::class)
-            ->addMethods([
-                'getTaxCalculationItemId', 'isDeleted', 'getHasChildren', 'isChildrenCalculated'
-            ])
-            ->getMock();
+        $addressItem = $this->createPartialMockWithReflection(
+            SafeArrayObject::class,
+            ['getTaxCalculationItemId', 'isDeleted', 'getHasChildren', 'isChildrenCalculated']
+        );
         $addressItem->method('getTaxCalculationItemId')->willReturn('code-xyz');
         $addressItem->method('isDeleted')->willReturn(false);
         $addressItem->method('getHasChildren')->willReturn(false);
         $addressItem->method('isChildrenCalculated')->willReturn(false);
 
         $address = $this->getMockBuilder(QuoteAddress::class)
-            ->onlyMethods(['getQuote'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $quote = $this->getMockBuilder(\stdClass::class)->addMethods(['getStore'])->getMock();
+            ->onlyMethods(['getQuote'])->disableOriginalConstructor()->getMock();
+        $quote = $this->createPartialMockWithReflection(\stdClass::class, ['getStore']);
         $quote->method('getStore')->willReturn($store);
         $address->method('getQuote')->willReturn($quote);
 
-        $shipping = $this->getMockBuilder(ShippingInterface::class)->getMockForAbstractClass();
+        $shipping = $this->createMock(ShippingInterface::class);
         $shipping->method('getAddress')->willReturn($address);
 
-        $shippingAssignment = $this->getMockBuilder(ShippingAssignmentInterface::class)
-            ->getMockForAbstractClass();
+        $shippingAssignment = $this->createMock(ShippingAssignmentInterface::class);
         $shippingAssignment->method('getItems')->willReturn([$addressItem]);
         $shippingAssignment->method('getShipping')->willReturn($shipping);
 
-        $total = $this->getMockBuilder(\Magento\Quote\Model\Quote\Address\Total::class)
-            ->onlyMethods(['setTotalAmount', 'setBaseTotalAmount'])
-            ->addMethods(['setSubtotalInclTax', 'setBaseSubtotalTotalInclTax', 'setBaseSubtotalInclTax'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $total = $this->createPartialMockWithReflection(
+            QuoteAddressTotal::class,
+            [
+                'setTotalAmount', 'setBaseTotalAmount', 'setSubtotalInclTax',
+                'setBaseSubtotalTotalInclTax', 'setBaseSubtotalInclTax'
+            ]
+        );
         $total->method('setTotalAmount')->willReturnSelf();
         $total->method('setBaseTotalAmount')->willReturnSelf();
         $total->expects($this->once())->method('setSubtotalInclTax')->with(110.0);
@@ -857,37 +846,37 @@ class CommonTaxCollectorTest extends TestCase
     {
         $store = $this->createMock(Store::class);
 
-        $addressItem = $this->getMockBuilder(SafeArrayObject::class)
-            ->setConstructorArgs([[]])
-            ->addMethods(['getTaxCalculationItemId', 'setAppliedTaxes', 'getId'])
-            ->getMock();
+        $addressItem = $this->createPartialMockWithReflection(
+            SafeArrayObject::class,
+            [
+                'getTaxCalculationItemId', 'isDeleted', 'getHasChildren',
+                'isChildrenCalculated', 'getId', 'setAppliedTaxes'
+            ]
+        );
         $addressItem->method('getTaxCalculationItemId')->willReturn('code-1');
         $addressItem->method('getId')->willReturn(123);
         $addressItem->expects($this->once())->method('setAppliedTaxes')->with($this->isType('array'));
 
         $address = $this->getMockBuilder(QuoteAddress::class)
-            ->onlyMethods(['getQuote'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $quote = $this->getMockBuilder(\stdClass::class)->addMethods(['getStore'])->getMock();
+            ->onlyMethods(['getQuote'])->disableOriginalConstructor()->getMock();
+        $quote = $this->createPartialMockWithReflection(\stdClass::class, ['getStore']);
         $quote->method('getStore')->willReturn($store);
         $address->method('getQuote')->willReturn($quote);
 
-        $shipping = $this->getMockBuilder(ShippingInterface::class)->getMockForAbstractClass();
+        $shipping = $this->createMock(ShippingInterface::class);
         $shipping->method('getAddress')->willReturn($address);
 
-        $shippingAssignment = $this->getMockBuilder(ShippingAssignmentInterface::class)
-            ->getMockForAbstractClass();
+        $shippingAssignment = $this->createMock(ShippingAssignmentInterface::class);
         $shippingAssignment->method('getItems')->willReturn([$addressItem]);
         $shippingAssignment->method('getShipping')->willReturn($shipping);
 
-        $applied = $this->createMock(\Magento\Tax\Api\Data\AppliedTaxInterface::class);
+        $applied = $this->createMock(AppliedTaxInterface::class);
         $applied->method('getAmount')->willReturn(1.0);
         $applied->method('getPercent')->willReturn(10.0);
         $applied->method('getTaxRateKey')->willReturn('rate1');
         $applied->method('getRates')->willReturn([]);
 
-        $baseApplied = $this->createMock(\Magento\Tax\Api\Data\AppliedTaxInterface::class);
+        $baseApplied = $this->createMock(AppliedTaxInterface::class);
         $baseApplied->method('getAmount')->willReturn(0.8);
         $baseApplied->method('getPercent')->willReturn(10.0);
         $baseApplied->method('getTaxRateKey')->willReturn('rate1');
@@ -909,11 +898,10 @@ class CommonTaxCollectorTest extends TestCase
             ]
         ];
 
-        $total = $this->getMockBuilder(\Magento\Quote\Model\Quote\Address\Total::class)
-            ->onlyMethods(['addTotalAmount', 'addBaseTotalAmount'])
-            ->addMethods(['setAppliedTaxes', 'setItemsAppliedTaxes', 'getAppliedTaxes'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $total = $this->createPartialMockWithReflection(
+            QuoteAddressTotal::class,
+            ['addTotalAmount', 'addBaseTotalAmount', 'setAppliedTaxes', 'setItemsAppliedTaxes', 'getAppliedTaxes']
+        );
         $total->method('getAppliedTaxes')->willReturn([]);
         $total->method('setAppliedTaxes')->willReturnSelf();
         $total->expects($this->atLeastOnce())->method('setItemsAppliedTaxes')->with($this->callback(function ($arr) {
@@ -928,7 +916,7 @@ class CommonTaxCollectorTest extends TestCase
         $method = $ref->getMethod('processAppliedTaxes');
         $method->setAccessible(true);
         // Ensure correct type is passed for $shippingAssignment
-        $typedShippingAssignment = $this->getMockBuilder(ShippingAssignmentInterface::class)->getMockForAbstractClass();
+        $typedShippingAssignment = $this->getMockBuilder(ShippingAssignmentInterface::class)->getMock();
         $typedShippingAssignment->method('getItems')->willReturn([$addressItem]);
         $typedShippingAssignment->method('getShipping')->willReturn($shipping);
         $method->invoke($sut, $total, $typedShippingAssignment, $itemsByType);
@@ -940,9 +928,10 @@ class CommonTaxCollectorTest extends TestCase
     {
         $store = $this->createMock(Store::class);
 
-        $productAddressItem = $this->getMockBuilder(\stdClass::class)
-            ->addMethods(['getTaxCalculationItemId', 'getId'])
-            ->getMock();
+        $productAddressItem = $this->createPartialMockWithReflection(
+            \stdClass::class,
+            ['getTaxCalculationItemId', 'getId']
+        );
         $productAddressItem->method('getTaxCalculationItemId')->willReturn('product-code-1');
         $productAddressItem->method('getId')->willReturn(123);
 
@@ -950,14 +939,14 @@ class CommonTaxCollectorTest extends TestCase
             ->onlyMethods(['getQuote'])
             ->disableOriginalConstructor()
             ->getMock();
-        $quote = $this->getMockBuilder(\stdClass::class)->addMethods(['getStore'])->getMock();
+        $quote = $this->createPartialMockWithReflection(\stdClass::class, ['getStore']);
         $quote->method('getStore')->willReturn($store);
         $address->method('getQuote')->willReturn($quote);
 
-        $shipping = $this->getMockBuilder(ShippingInterface::class)->getMockForAbstractClass();
+        $shipping = $this->createMock(ShippingInterface::class);
         $shipping->method('getAddress')->willReturn($address);
 
-        $shippingAssignment = $this->getMockBuilder(ShippingAssignmentInterface::class)->getMockForAbstractClass();
+        $shippingAssignment = $this->getMockBuilder(ShippingAssignmentInterface::class)->getMock();
         $shippingAssignment->method('getItems')->willReturn([$productAddressItem]);
         $shippingAssignment->method('getShipping')->willReturn($shipping);
 
@@ -992,11 +981,10 @@ class CommonTaxCollectorTest extends TestCase
             ]
         ];
 
-        $total = $this->getMockBuilder(\Magento\Quote\Model\Quote\Address\Total::class)
-            ->onlyMethods(['addTotalAmount', 'addBaseTotalAmount'])
-            ->addMethods(['setAppliedTaxes', 'setItemsAppliedTaxes', 'getAppliedTaxes'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $total = $this->createPartialMockWithReflection(
+            QuoteAddressTotal::class,
+            ['addTotalAmount', 'addBaseTotalAmount', 'setAppliedTaxes', 'setItemsAppliedTaxes', 'getAppliedTaxes']
+        );
         $total->method('getAppliedTaxes')->willReturn([]);
         $total->method('setAppliedTaxes')->willReturnSelf();
         $total->expects($this->atLeastOnce())->method('setItemsAppliedTaxes')->with($this->callback(function ($map) {
@@ -1023,14 +1011,14 @@ class CommonTaxCollectorTest extends TestCase
             ->onlyMethods(['getQuote'])
             ->disableOriginalConstructor()
             ->getMock();
-        $quote = $this->getMockBuilder(\stdClass::class)->addMethods(['getStore'])->getMock();
+        $quote = $this->createPartialMockWithReflection(\stdClass::class, ['getStore']);
         $quote->method('getStore')->willReturn($store);
         $address->method('getQuote')->willReturn($quote);
 
-        $shipping = $this->getMockBuilder(ShippingInterface::class)->getMockForAbstractClass();
+        $shipping = $this->createMock(ShippingInterface::class);
         $shipping->method('getAddress')->willReturn($address);
 
-        $shippingAssignment = $this->getMockBuilder(ShippingAssignmentInterface::class)->getMockForAbstractClass();
+        $shippingAssignment = $this->getMockBuilder(ShippingAssignmentInterface::class)->getMock();
         $shippingAssignment->method('getItems')->willReturn([]);
         $shippingAssignment->method('getShipping')->willReturn($shipping);
 
@@ -1066,11 +1054,10 @@ class CommonTaxCollectorTest extends TestCase
             ]
         ];
 
-        $total = $this->getMockBuilder(\Magento\Quote\Model\Quote\Address\Total::class)
-            ->onlyMethods(['addTotalAmount', 'addBaseTotalAmount'])
-            ->addMethods(['setAppliedTaxes', 'setItemsAppliedTaxes', 'getAppliedTaxes'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $total = $this->createPartialMockWithReflection(
+            QuoteAddressTotal::class,
+            ['addTotalAmount', 'addBaseTotalAmount', 'setAppliedTaxes', 'setItemsAppliedTaxes', 'getAppliedTaxes']
+        );
         $total->method('getAppliedTaxes')->willReturn([]);
         $total->method('setAppliedTaxes')->willReturnSelf();
         $total->expects($this->atLeastOnce())->method('setItemsAppliedTaxes')->with($this->callback(function ($map) {
@@ -1097,31 +1084,24 @@ class CommonTaxCollectorTest extends TestCase
             ->onlyMethods(['getQuote'])
             ->disableOriginalConstructor()
             ->getMock();
-        $quote = $this->getMockBuilder(\stdClass::class)->addMethods(['getStore'])->getMock();
+        $quote = $this->createPartialMockWithReflection(\stdClass::class, ['getStore']);
         $quote->method('getStore')->willReturn($store);
         $address->method('getQuote')->willReturn($quote);
 
-        $shipping = $this->getMockBuilder(ShippingInterface::class)->getMockForAbstractClass();
+        $shipping = $this->createMock(ShippingInterface::class);
         $shipping->method('getAddress')->willReturn($address);
 
-        $shippingAssignment = $this->getMockBuilder(ShippingAssignmentInterface::class)
-            ->getMockForAbstractClass();
+        $shippingAssignment = $this->createMock(ShippingAssignmentInterface::class);
         $shippingAssignment->method('getShipping')->willReturn($shipping);
 
-        $total = $this->getMockBuilder(\Magento\Quote\Model\Quote\Address\Total::class)
-            ->onlyMethods(['setTotalAmount', 'setBaseTotalAmount', 'addTotalAmount', 'addBaseTotalAmount'])
-            ->addMethods(
-                [
-                    'setShippingInclTax',
-                    'setBaseShippingInclTax',
-                    'setShippingTaxAmount',
-                    'setBaseShippingTaxAmount',
-                    'setShippingAmountForDiscount',
-                    'setBaseShippingAmountForDiscount'
-                ]
-            )
-            ->disableOriginalConstructor()
-            ->getMock();
+        $total = $this->createPartialMockWithReflection(
+            QuoteAddressTotal::class,
+            [
+                'setTotalAmount', 'setBaseTotalAmount', 'addTotalAmount', 'addBaseTotalAmount',
+                'setShippingInclTax', 'setBaseShippingInclTax', 'setShippingTaxAmount',
+                'setBaseShippingTaxAmount', 'setShippingAmountForDiscount', 'setBaseShippingAmountForDiscount'
+            ]
+        );
 
         $this->taxConfig->method('discountTax')->with($store)->willReturn(true);
 
@@ -1148,10 +1128,10 @@ class CommonTaxCollectorTest extends TestCase
 
     public function testSaveAppliedTaxesAggregatesAmounts(): void
     {
-        $total = $this->getMockBuilder(\Magento\Quote\Model\Quote\Address\Total::class)
-            ->addMethods(['getAppliedTaxes', 'setAppliedTaxes'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $total = $this->createPartialMockWithReflection(
+            QuoteAddressTotal::class,
+            ['getAppliedTaxes', 'setAppliedTaxes']
+        );
         $total->method('getAppliedTaxes')->willReturn([]);
         $total->expects($this->once())->method('setAppliedTaxes')->with($this->callback(function ($arr) {
             return isset($arr['id1']) && isset($arr['id1']['amount']) && isset($arr['id1']['base_amount']);
@@ -1209,9 +1189,7 @@ class CommonTaxCollectorTest extends TestCase
         $method = $ref->getMethod('getQuoteItemId');
         $method->setAccessible(true);
 
-        $quoteItem = $this->getMockBuilder(\stdClass::class)
-            ->addMethods(['getId'])
-            ->getMock();
+        $quoteItem = $this->createPartialMockWithReflection(\stdClass::class, ['getId']);
         $quoteItem->method('getId')->willReturn(999);
 
         $keyedAddressItems = [
@@ -1242,26 +1220,25 @@ class CommonTaxCollectorTest extends TestCase
             ->onlyMethods(['mapItem', 'mapItemExtraTaxables'])
             ->getMock();
 
-        $parentItem = $this->getMockBuilder(AbstractItem::class)
-            ->onlyMethods(
-                ['getQuote', 'getAddress', 'getOptionByCode', 'isChildrenCalculated', 'getChildren', 'getParentItem']
-            )
-            ->addMethods(['getHasChildren'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $parentItem = $this->createPartialMockWithReflection(
+            AbstractItem::class,
+            [
+                'getQuote', 'getAddress', 'getOptionByCode', 'isChildrenCalculated',
+                'getChildren', 'getParentItem', 'getHasChildren'
+            ]
+        );
         $parentItem->method('getHasChildren')->willReturn(true);
         $parentItem->method('isChildrenCalculated')->willReturn(true);
         $parentItem->method('getParentItem')->willReturn(null);
 
-        $childItem = $this->getMockBuilder(AbstractItem::class)
-            ->onlyMethods(['getQuote', 'getAddress', 'getOptionByCode'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $childItem = $this->createPartialMockWithReflection(
+            AbstractItem::class,
+            ['getQuote', 'getAddress', 'getOptionByCode']
+        );
 
         $parentItem->method('getChildren')->willReturn([$childItem]);
 
-        $shippingAssignment = $this->getMockBuilder(ShippingAssignmentInterface::class)
-            ->getMockForAbstractClass();
+        $shippingAssignment = $this->createMock(ShippingAssignmentInterface::class);
         $shippingAssignment->method('getItems')->willReturn([$parentItem]);
 
         $parentMapped = $this->createMock(QuoteDetailsItemInterface::class);
@@ -1298,6 +1275,7 @@ class CommonTaxCollectorTest extends TestCase
 
     /**
      * @SuppressWarnings(PHPMD.UnusedLocalVariable)
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function testConstructorFallsBackToOmForOptionalDependencies(): void
     {
@@ -1377,15 +1355,17 @@ class CommonTaxCollectorTest extends TestCase
                 ->method('getDefaultBillingAddress')
                 ->with(15)->willReturn(null);
 
-            $quote = $this->getMockBuilder(\stdClass::class)
-                ->addMethods(['isVirtual', 'getCustomerId', 'getBillingAddress'])->getMock();
+            $quote = $this->createPartialMockWithReflection(
+                \stdClass::class,
+                ['isVirtual', 'getCustomerId', 'getBillingAddress']
+            );
             $quote->method('isVirtual')->willReturn(true);
             $quote->method('getCustomerId')->willReturn(15);
             $quote->method('getBillingAddress')->willReturn($billingAddressFromQuote);
-            $address = $this->getMockBuilder(QuoteAddress::class)
-                ->onlyMethods(['getQuote', 'getCountryId'])
-                ->addMethods(['getAddressType'])
-                ->disableOriginalConstructor()->getMock();
+            $address = $this->createPartialMockWithReflection(
+                QuoteAddress::class,
+                ['getQuote', 'getCountryId', 'getAddressType']
+            );
             $address->method('getAddressType')->willReturn(QuoteAddress::ADDRESS_TYPE_BILLING);
             $address->method('getCountryId')->willReturn(null);
             $address->method('getQuote')->willReturn($quote);
@@ -1401,11 +1381,10 @@ class CommonTaxCollectorTest extends TestCase
 
     public function testMapItemExtraTaxablesReturnsEmptyWhenNoTaxables(): void
     {
-        $item = $this->getMockBuilder(AbstractItem::class)
-            ->onlyMethods(['getQuote', 'getAddress', 'getOptionByCode'])
-            ->addMethods(['getAssociatedTaxables', 'getTaxCalculationItemId'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $item = $this->createPartialMockWithReflection(
+            AbstractItem::class,
+            ['getQuote', 'getAddress', 'getOptionByCode', 'getAssociatedTaxables', 'getTaxCalculationItemId']
+        );
         $item->method('getAssociatedTaxables')->willReturn(null);
         $item->method('getTaxCalculationItemId')->willReturn('any');
 
@@ -1416,11 +1395,10 @@ class CommonTaxCollectorTest extends TestCase
 
     public function testMapItemExtraTaxablesUsesBaseUnitPriceWhenUseBaseCurrency(): void
     {
-        $item = $this->getMockBuilder(AbstractItem::class)
-            ->onlyMethods(['getQuote', 'getAddress', 'getOptionByCode'])
-            ->addMethods(['getAssociatedTaxables', 'getTaxCalculationItemId'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $item = $this->createPartialMockWithReflection(
+            AbstractItem::class,
+            ['getQuote', 'getAddress', 'getOptionByCode', 'getAssociatedTaxables', 'getTaxCalculationItemId']
+        );
         $item->method('getTaxCalculationItemId')->willReturn('calc-3');
         $item->method('getAssociatedTaxables')->willReturn([
             [
@@ -1460,8 +1438,7 @@ class CommonTaxCollectorTest extends TestCase
     public function testMapItemsReturnsEmptyWhenNoItems(): void
     {
         $sut = $this->createSut();
-        $shippingAssignment = $this->getMockBuilder(ShippingAssignmentInterface::class)
-            ->getMockForAbstractClass();
+        $shippingAssignment = $this->createMock(ShippingAssignmentInterface::class);
         $shippingAssignment->method('getItems')->willReturn([]);
 
         $result = $sut->mapItems($shippingAssignment, true, false);
@@ -1488,13 +1465,10 @@ class CommonTaxCollectorTest extends TestCase
         $sut->expects($this->never())->method('mapItem');
         $sut->expects($this->never())->method('mapItemExtraTaxables');
 
-        $childItem = $this->getMockBuilder(\stdClass::class)
-            ->addMethods(['getParentItem'])
-            ->getMock();
+        $childItem = $this->createPartialMockWithReflection(\stdClass::class, ['getParentItem']);
         $childItem->method('getParentItem')->willReturn(new \stdClass());
 
-        $shippingAssignment = $this->getMockBuilder(ShippingAssignmentInterface::class)
-            ->getMockForAbstractClass();
+        $shippingAssignment = $this->createMock(ShippingAssignmentInterface::class);
         $shippingAssignment->method('getItems')->willReturn([$childItem]);
 
         $result = $sut->mapItems($shippingAssignment, true, false);
@@ -1505,27 +1479,23 @@ class CommonTaxCollectorTest extends TestCase
     {
         $store = $this->createMock(Store::class);
 
-        $addressItem = $this->getMockBuilder(\stdClass::class)
-            ->addMethods(['getTaxCalculationItemId', 'isDeleted', 'getHasChildren', 'isChildrenCalculated'])
-            ->getMock();
+        $addressItem = $this->createPartialMockWithReflection(
+            \stdClass::class,
+            ['getTaxCalculationItemId', 'isDeleted', 'getHasChildren', 'isChildrenCalculated']
+        );
         $addressItem->method('getTaxCalculationItemId')->willReturn('code-skip');
         $addressItem->method('isDeleted')->willReturn(false);
         $addressItem->method('getHasChildren')->willReturn(true);
         $addressItem->method('isChildrenCalculated')->willReturn(true);
 
-        $address = $this->getMockBuilder(\stdClass::class)
-            ->addMethods(
-                [
-                    'getQuote',
-                    'setBaseTaxAmount',
-                    'setBaseSubtotalTotalInclTax',
-                    'setSubtotalInclTax',
-                    'setSubtotal',
-                    'setBaseSubtotal'
-                ]
-            )
-            ->getMock();
-        $quote = $this->getMockBuilder(\stdClass::class)->addMethods(['getStore'])->getMock();
+        $address = $this->createPartialMockWithReflection(
+            \stdClass::class,
+            [
+                'getQuote', 'setBaseTaxAmount', 'setBaseSubtotalTotalInclTax',
+                'setSubtotalInclTax', 'setSubtotal', 'setBaseSubtotal'
+            ]
+        );
+        $quote = $this->createPartialMockWithReflection(\stdClass::class, ['getStore']);
         $quote->method('getStore')->willReturn($store);
         $address->method('getQuote')->willReturn($quote);
         $address->method('setBaseTaxAmount')->willReturnSelf();
@@ -1534,19 +1504,20 @@ class CommonTaxCollectorTest extends TestCase
         $address->method('setSubtotal')->willReturnSelf();
         $address->method('setBaseSubtotal')->willReturnSelf();
 
-        $shipping = $this->getMockBuilder(ShippingInterface::class)->getMockForAbstractClass();
+        $shipping = $this->createMock(ShippingInterface::class);
         $shipping->method('getAddress')->willReturn($address);
 
-        $shippingAssignment = $this->getMockBuilder(ShippingAssignmentInterface::class)
-            ->getMockForAbstractClass();
+        $shippingAssignment = $this->createMock(ShippingAssignmentInterface::class);
         $shippingAssignment->method('getItems')->willReturn([$addressItem]);
         $shippingAssignment->method('getShipping')->willReturn($shipping);
 
-        $total = $this->getMockBuilder(\Magento\Quote\Model\Quote\Address\Total::class)
-            ->onlyMethods(['setTotalAmount', 'setBaseTotalAmount'])
-            ->addMethods(['setSubtotalInclTax', 'setBaseSubtotalTotalInclTax', 'setBaseSubtotalInclTax'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $total = $this->createPartialMockWithReflection(
+            QuoteAddressTotal::class,
+            [
+                'setTotalAmount', 'setBaseTotalAmount', 'setSubtotalInclTax',
+                'setBaseSubtotalTotalInclTax', 'setBaseSubtotalInclTax'
+            ]
+        );
         $total->method('setTotalAmount')->willReturnSelf();
         $total->method('setBaseTotalAmount')->willReturnSelf();
         $total->expects($this->once())->method('setSubtotalInclTax')->with(0.0);
@@ -1620,15 +1591,13 @@ class CommonTaxCollectorTest extends TestCase
         $baseItemTaxDetails->method('getTaxPercent')->willReturn(7.5);
         $baseItemTaxDetails->method('getDiscountTaxCompensationAmount')->willReturn(0.25);
 
-        $quoteItem = $this->getMockBuilder(\stdClass::class)
-            ->addMethods([
+        $quoteItem = $this->createPartialMockWithReflection(\stdClass::class, [
                 'setPrice', 'getCustomPrice', 'setCustomPrice', 'setConvertedPrice', 'setPriceInclTax',
                 'setRowTotal', 'setRowTotalInclTax', 'setTaxAmount', 'setTaxPercent',
                 'setDiscountTaxCompensationAmount', 'setBasePrice', 'setBasePriceInclTax', 'setBaseRowTotal',
                 'setBaseRowTotalInclTax', 'setBaseTaxAmount', 'setBaseDiscountTaxCompensationAmount',
                 'setDiscountCalculationPrice', 'setBaseDiscountCalculationPrice'
-            ])
-            ->getMock();
+            ]);
         // Allow most setters to be called without strict expectations
         $quoteItem->method('setPrice')->willReturnSelf();
         $quoteItem->method('setConvertedPrice')->willReturnSelf();

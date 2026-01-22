@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 
 /**
@@ -9,7 +9,6 @@
  */
 namespace Magento\Framework\App\Cache\Frontend;
 
-use Cm_Cache_Backend_File;
 use Exception;
 use LogicException;
 use Magento\Framework\App\Filesystem\DirectoryList;
@@ -17,14 +16,15 @@ use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\Cache\Backend\Database;
 use Magento\Framework\Cache\Backend\Eaccelerator;
 use Magento\Framework\Cache\Backend\RemoteSynchronizedCache;
-use Magento\Framework\Cache\Core;
-use Magento\Framework\Cache\Frontend\Adapter\Zend;
+use Magento\Framework\Cache\Frontend\Adapter\PreloadingSymfonyAdapter;
+use Magento\Framework\Cache\Frontend\Adapter\Symfony;
+use Magento\Framework\Cache\Frontend\Adapter\SymfonyAdapterProvider;
+use Magento\Framework\Cache\Frontend\Decorator\Compression as CompressionDecorator;
 use Magento\Framework\Cache\FrontendInterface;
 use Magento\Framework\Filesystem;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Profiler;
 use UnexpectedValueException;
-use Zend_Cache;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -74,7 +74,7 @@ class Factory
      *
      * @var string
      */
-    protected $_defaultBackend = 'Cm_Cache_Backend_File';
+    protected $_defaultBackend = 'file';
 
     /**
      * Options for default backend
@@ -92,9 +92,38 @@ class Factory
     protected $_resource;
 
     /**
+     * SymfonyAdapterProvider instance for creating Symfony cache adapters
+     *
+     * @var SymfonyAdapterProvider
+     */
+    private SymfonyAdapterProvider $adapterProvider;
+
+    /**
+     * Cached directory paths (performance optimization)
+     *
+     * @var array
+     */
+    private array $cachedDirectories = [];
+
+    /**
+     * Cached extension availability checks (performance optimization)
+     *
+     * @var array
+     */
+    private array $extensionCache = [];
+
+    /**
+     * Cached ID prefix (performance optimization)
+     *
+     * @var string|null
+     */
+    private ?string $cachedIdPrefix = null;
+
+    /**
      * @param ObjectManagerInterface $objectManager
      * @param Filesystem $filesystem
      * @param ResourceConnection $resource
+     * @param SymfonyAdapterProvider $adapterProvider
      * @param array $enforcedOptions
      * @param array $decorators
      */
@@ -102,12 +131,14 @@ class Factory
         ObjectManagerInterface $objectManager,
         Filesystem $filesystem,
         ResourceConnection $resource,
+        SymfonyAdapterProvider $adapterProvider,
         array $enforcedOptions = [],
         array $decorators = []
     ) {
         $this->_objectManager = $objectManager;
         $this->_filesystem = $filesystem;
         $this->_resource = $resource;
+        $this->adapterProvider = $adapterProvider;
         $this->_enforcedOptions = $enforcedOptions;
         $this->_decorators = $decorators;
     }
@@ -122,25 +153,21 @@ class Factory
     {
         $options = $this->_getExpandedOptions($options);
 
+        // Optimize: Cache directory operations
         foreach (['backend_options', 'slow_backend_options'] as $section) {
             if (!empty($options[$section]['cache_dir'])) {
-                $directory = $this->_filesystem->getDirectoryWrite(DirectoryList::VAR_DIR);
-                $directory->create($options[$section]['cache_dir']);
-                $options[$section]['cache_dir'] = $directory->getAbsolutePath($options[$section]['cache_dir']);
+                $cacheDir = $options[$section]['cache_dir'];
+                if (!isset($this->cachedDirectories[$cacheDir])) {
+                    $directory = $this->_filesystem->getDirectoryWrite(DirectoryList::VAR_DIR);
+                    $directory->create($cacheDir);
+                    $this->cachedDirectories[$cacheDir] = $directory->getAbsolutePath($cacheDir);
+                }
+                $options[$section]['cache_dir'] = $this->cachedDirectories[$cacheDir];
             }
         }
 
-        $idPrefix = isset($options['id_prefix']) ? $options['id_prefix'] : '';
-        if (!$idPrefix && isset($options['prefix'])) {
-            $idPrefix = $options['prefix'];
-        }
-        if (empty($idPrefix)) {
-            $configDirPath = $this->_filesystem->getDirectoryRead(DirectoryList::CONFIG)->getAbsolutePath();
-            $idPrefix =
-                // md5() here is not for cryptographic use.
-                // phpcs:ignore Magento2.Security.InsecureFunction
-                substr(md5($configDirPath), 0, 3) . '_';
-        }
+        // Optimize: Use cached ID prefix or generate once
+        $idPrefix = $this->getIdPrefix($options);
         $options['frontend_options']['cache_id_prefix'] = $idPrefix;
 
         $backend = $this->_getBackendOptions($options);
@@ -155,31 +182,51 @@ class Factory
         ];
         Profiler::start('cache_frontend_create', $profilerTags);
 
-        try {
-            $result = $this->_objectManager->create(
-                Zend::class,
-                [
-                    'frontendFactory' => function () use ($frontend, $backend) {
-                        return Zend_Cache::factory(
-                            $frontend['type'],
-                            $backend['type'],
-                            $frontend,
-                            $backend['options'],
-                            true,
-                            true,
-                            true
-                        );
-                    },
-                ]
-            );
-        } catch (\Exception $e) {
-            $result = $this->createCacheWithDefaultOptions($options);
+        // Check for special backend types
+        $backendType = $options['backend'] ?? $this->_defaultBackend;
+
+        if ($this->isSymfonyL2Cache($backendType)) {
+            // SymfonyL2Cache backend for L2 cache with Symfony
+            $result = $this->createSymfonyL2Cache($options);
+        } else {
+            // Use Symfony cache - fully backward compatible, no Zend cache needed
+            $result = $this->createSymfonyCache($options);
         }
+
         $result = $this->_applyDecorators($result);
 
         // stop profiling
         Profiler::stop('cache_frontend_create');
         return $result;
+    }
+
+    /**
+     * Get or generate cache ID prefix (optimized with caching)
+     *
+     * @param array $options
+     * @return string
+     */
+    private function getIdPrefix(array $options): string
+    {
+        // Check explicit prefix in options
+        $idPrefix = $options['id_prefix'] ?? $options['prefix'] ?? '';
+
+        if (!empty($idPrefix)) {
+            return $idPrefix;
+        }
+
+        // Use cached prefix if available
+        if ($this->cachedIdPrefix !== null) {
+            return $this->cachedIdPrefix;
+        }
+
+        // Generate and cache prefix
+        $configDirPath = $this->_filesystem->getDirectoryRead(DirectoryList::CONFIG)->getAbsolutePath();
+        // md5() here is not for cryptographic use.
+        // phpcs:ignore Magento2.Security.InsecureFunction
+        $this->cachedIdPrefix = substr(md5($configDirPath), 0, 3) . '_';
+
+        return $this->cachedIdPrefix;
     }
 
     /**
@@ -220,6 +267,20 @@ class Factory
     }
 
     /**
+     * Check if extension is loaded (cached for performance)
+     *
+     * @param string $extension
+     * @return bool
+     */
+    private function isExtensionLoaded(string $extension): bool
+    {
+        if (!isset($this->extensionCache[$extension])) {
+            $this->extensionCache[$extension] = extension_loaded($extension);
+        }
+        return $this->extensionCache[$extension];
+    }
+
+    /**
      * Get cache backend options. Result array contain backend type ('type' key) and backend options ('options')
      *
      * @param  array $cacheOptions
@@ -230,28 +291,28 @@ class Factory
     protected function _getBackendOptions(array $cacheOptions) //phpcs:ignore Generic.Metrics.NestingLevel
     {
         $enableTwoLevels = false;
-        $type = isset($cacheOptions['backend']) ? $cacheOptions['backend'] : $this->_defaultBackend;
-        if (isset($cacheOptions['backend_options']) && is_array($cacheOptions['backend_options'])) {
-            $options = $cacheOptions['backend_options'];
-        } else {
-            $options = [];
-        }
+        $type = $cacheOptions['backend'] ?? $this->_defaultBackend;
+        $options = (isset($cacheOptions['backend_options']) && is_array($cacheOptions['backend_options']))
+            ? $cacheOptions['backend_options']
+            : [];
 
         $backendType = false;
-        switch (strtolower($type)) {
+        $typeLower = strtolower($type);
+
+        switch ($typeLower) {
             case 'sqlite':
-                if (extension_loaded('sqlite') && isset($options['cache_db_complete_path'])) {
+                if ($this->isExtensionLoaded('sqlite') && isset($options['cache_db_complete_path'])) {
                     $backendType = 'Sqlite';
                 }
                 break;
             case 'memcached':
-                if (extension_loaded('memcached')) {
+                if ($this->isExtensionLoaded('memcached')) {
                     if (isset($cacheOptions['memcached'])) {
                         $options = $cacheOptions['memcached'];
                     }
                     $enableTwoLevels = true;
                     $backendType = 'Libmemcached';
-                } elseif (extension_loaded('memcache')) {
+                } elseif ($this->isExtensionLoaded('memcache')) {
                     if (isset($cacheOptions['memcached'])) {
                         $options = $cacheOptions['memcached'];
                     }
@@ -260,20 +321,20 @@ class Factory
                 }
                 break;
             case 'apc':
-                if (extension_loaded('apc') && ini_get('apc.enabled')) {
+                if ($this->isExtensionLoaded('apc') && ini_get('apc.enabled')) {
                     $enableTwoLevels = true;
                     $backendType = 'Apc';
                 }
                 break;
             case 'xcache':
-                if (extension_loaded('xcache')) {
+                if ($this->isExtensionLoaded('xcache')) {
                     $enableTwoLevels = true;
                     $backendType = 'Xcache';
                 }
                 break;
             case 'eaccelerator':
             case 'varien_cache_backend_eaccelerator':
-                if (extension_loaded('eaccelerator') && ini_get('eaccelerator.enable')) {
+                if ($this->isExtensionLoaded('eaccelerator') && ini_get('eaccelerator.enable')) {
                     $enableTwoLevels = true;
                     $backendType = Eaccelerator::class;
                 }
@@ -286,31 +347,34 @@ class Factory
                 $backendType = RemoteSynchronizedCache::class;
                 $options['remote_backend'] = Database::class;
                 $options['remote_backend_options'] = $this->_getDbAdapterOptions();
-                $options['local_backend'] = Cm_Cache_Backend_File::class;
-                $cacheDir = $this->_filesystem->getDirectoryWrite(DirectoryList::CACHE);
-                $options['local_backend_options']['cache_dir'] = $cacheDir->getAbsolutePath();
-                $cacheDir->create();
+                $options['local_backend'] = 'file';
+                // Use cached directory operation
+                if (!isset($this->cachedDirectories['cache'])) {
+                    $cacheDir = $this->_filesystem->getDirectoryWrite(DirectoryList::CACHE);
+                    $this->cachedDirectories['cache'] = $cacheDir->getAbsolutePath();
+                    $cacheDir->create();
+                }
+                $options['local_backend_options']['cache_dir'] = $this->cachedDirectories['cache'];
                 break;
             default:
-                if ($type != $this->_defaultBackend) {
-                    try {
-                        if (class_exists($type, true)) {
-                            $implements = class_implements($type, true);
-                            if (in_array('Zend_Cache_Backend_Interface', $implements)) {
-                                $backendType = $type;
-                            }
-                        }
-                    // phpcs:ignore Magento2.CodeAnalysis.EmptyBlock
-                    } catch (Exception $e) {
-                    }
+                // For custom backend types, use the type as-is if it's a valid class
+                if ($type != $this->_defaultBackend && class_exists($type, true)) {
+                    $backendType = $type;
                 }
         }
+
         if (!$backendType) {
             $backendType = $this->_defaultBackend;
-            $cacheDir = $this->_filesystem->getDirectoryWrite(DirectoryList::CACHE);
-            $this->_backendOptions['cache_dir'] = $cacheDir->getAbsolutePath();
-            $cacheDir->create();
+            // Use cached directory operation
+            if (!isset($this->cachedDirectories['cache'])) {
+                $cacheDir = $this->_filesystem->getDirectoryWrite(DirectoryList::CACHE);
+                $this->cachedDirectories['cache'] = $cacheDir->getAbsolutePath();
+                $cacheDir->create();
+            }
+            $this->_backendOptions['cache_dir'] = $this->cachedDirectories['cache'];
         }
+
+        // Merge with default backend options (optimized)
         foreach ($this->_backendOptions as $option => $value) {
             if (!array_key_exists($option, $options)) {
                 $options[$option] = $value;
@@ -390,7 +454,7 @@ class Factory
     }
 
     /**
-     * Get options of cache frontend (options of \Zend_Cache_Core)
+     * Get options of cache frontend
      *
      * @param  array $cacheOptions
      * @return array
@@ -410,39 +474,300 @@ class Factory
         if (!array_key_exists('automatic_cleaning_factor', $options)) {
             $options['automatic_cleaning_factor'] = 0;
         }
-        $options['type'] = isset($cacheOptions['frontend']) ? $cacheOptions['frontend'] : Core::class;
+        $options['type'] = isset($cacheOptions['frontend']) ? $cacheOptions['frontend'] : Symfony::class;
         return $options;
     }
 
     /**
-     * Create frontend cache with default options.
+     * Prepare and cache directory paths for cache storage
      *
      * @param array $options
-     * @return Zend
+     * @return void
      */
-    private function createCacheWithDefaultOptions(array $options): Zend
+    private function prepareCacheDirectories(array &$options): void
     {
-        unset($options['backend']);
-        unset($options['frontend']);
-        $backend = $this->_getBackendOptions($options);
-        $frontend = $this->_getFrontendOptions($options);
+        foreach (['backend_options', 'slow_backend_options'] as $section) {
+            if (!empty($options[$section]['cache_dir'])) {
+                $cacheDir = $options[$section]['cache_dir'];
+                if (!isset($this->cachedDirectories[$cacheDir])) {
+                    $directory = $this->_filesystem->getDirectoryWrite(DirectoryList::VAR_DIR);
+                    $directory->create($cacheDir);
+                    $this->cachedDirectories[$cacheDir] = $directory->getAbsolutePath($cacheDir);
+                }
+                $options[$section]['cache_dir'] = $this->cachedDirectories[$cacheDir];
+            }
+        }
+    }
 
+    /**
+     * Create cache frontend instance using Symfony Cache
+     *
+     * This method creates a Symfony-based cache adapter that implements FrontendInterface.
+     * It provides PSR-6 compliant caching while maintaining full backward compatibility.
+     *
+     * @param array $options
+     * @return FrontendInterface
+     * @throws \Exception
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     */
+    private function createSymfonyCache(array $options): FrontendInterface
+    {
+        $options = $this->_getExpandedOptions($options);
+
+        // Prepare cache directories
+        $this->prepareCacheDirectories($options);
+
+        // Optimize: Use cached ID prefix
+        $idPrefix = $this->getIdPrefix($options);
+
+        // Get backend configuration
+        // For Symfony cache, use the original backend string from config, not the resolved Zend class
+        $originalBackendType = $options['backend'] ?? $this->_defaultBackend;
+        $backend = $this->_getBackendOptions($options);
+        $backendOptions = $backend['options'];
+
+        // Get default lifetime
+        $frontend = $this->_getFrontendOptions($options);
+        $defaultLifetime = $frontend['lifetime'] ?? self::DEFAULT_LIFETIME;
+
+        // Detect if this is page cache
+        $frontendId = $options['frontend_id'] ?? null;
+        $isPageCache = in_array($frontendId, ['page_cache', 'full_page'], true);
+
+        // Start profiling
+        $profilerTags = [
+            'group' => 'cache',
+            'operation' => 'cache:create_symfony',
+            'backend_type' => $originalBackendType,
+        ];
+        Profiler::start('cache_symfony_create', $profilerTags);
+
+        try {
+            // Use injected adapter provider instance
+            $adapterProvider = $this->adapterProvider;
+
+            // Create cache adapter factory closure (for fork detection)
+            // Use originalBackendType so SymfonyAdapterProvider can map it correctly
+            $cacheFactory = function () use (
+                $adapterProvider,
+                $originalBackendType,
+                $backendOptions,
+                $idPrefix,
+                $defaultLifetime
+            ) {
+                return $adapterProvider->createAdapter(
+                    $originalBackendType,
+                    $backendOptions,
+                    $idPrefix,
+                    $defaultLifetime
+                );
+            };
+
+            // Create initial cache pool
+            $cachePool = $cacheFactory();
+
+            // Create tag adapter for backend-specific operations
+            $adapter = $adapterProvider->createTagAdapter(
+                $originalBackendType,
+                $cachePool,
+                $idPrefix,
+                $isPageCache,
+                $backendOptions
+            );
+
+            // Create Symfony adapter with fork detection support and tag adapter
+            $result = $this->_objectManager->create(
+                Symfony::class,
+                [
+                    'cacheFactory' => $cacheFactory,
+                    'adapter' => $adapter,
+                    'defaultLifetime' => $defaultLifetime,
+                    'idPrefix' => $idPrefix,
+                ]
+            );
+
+            // Apply compression decorator if enabled in backend options
+            if ($this->isCompressionEnabled($backendOptions)) {
+                $result = $this->applyCompressionDecorator($result, $backendOptions);
+            }
+
+            // Apply other decorators
+            $result = $this->_applyDecorators($result);
+
+            // Apply preloading wrapper if preload_keys configured
+            if (!empty($backendOptions['preload_keys']) && is_array($backendOptions['preload_keys'])) {
+                $result = $this->_objectManager->create(
+                    PreloadingSymfonyAdapter::class,
+                    [
+                        'adapter' => $result,
+                        'preloadKeys' => $backendOptions['preload_keys'],
+                    ]
+                );
+            }
+
+        } catch (\Exception $e) {
+            Profiler::stop('cache_symfony_create');
+
+            // Log the error but don't re-throw - SymfonyAdapterProvider has fallback logic
+            // Re-throw exception only for critical errors (not connection failures)
+            throw new \RuntimeException(
+                'Failed to create Symfony cache: ' . $e->getMessage(),
+                $e->getCode(),
+                $e
+            );
+        }
+
+        Profiler::stop('cache_symfony_create');
+        return $result;
+    }
+
+    /**
+     * Check if compression is enabled in backend options
+     *
+     * @param array $backendOptions
+     * @return bool
+     */
+    private function isCompressionEnabled(array $backendOptions): bool
+    {
+        // Check if compress_data is explicitly enabled (value '1' or true)
+        return isset($backendOptions['compress_data'])
+            && ($backendOptions['compress_data'] === '1' || $backendOptions['compress_data'] === 1);
+    }
+
+    /**
+     * Apply compression decorator to cache frontend
+     *
+     * @param FrontendInterface $frontend
+     * @param array $backendOptions
+     * @return FrontendInterface
+     */
+    private function applyCompressionDecorator(
+        FrontendInterface $frontend,
+        array $backendOptions
+    ): FrontendInterface {
+        // Get compression threshold (default: 2048 bytes)
+        // Matches legacy Zend cache default of 512, but increased for better performance
+        $threshold = (int)($backendOptions['compression_threshold'] ?? 2048);
+
+        // Get compression library (default: gzip for best compatibility)
+        // Supported: gzip, snappy, lzf, lz4, zstd
+        $compressionLib = $backendOptions['compression_lib'] ?? 'gzip';
+        if (empty($compressionLib)) {
+            $compressionLib = 'gzip'; // Default to gzip if empty string
+        }
+
+        // Get compression level (1-9, default: 6)
+        $compressionLevel = (int)($backendOptions['compression_level'] ?? 6);
+
+        // Create and return compression decorator
         return $this->_objectManager->create(
-            Zend::class,
+            CompressionDecorator::class,
             [
-                'frontendFactory' => function () use ($frontend, $backend) {
-                    return Zend_Cache::factory(
-                        $frontend['type'],
-                        $backend['type'],
-                        $frontend,
-                        $backend['options'],
-                        true,
-                        true,
-                        true
-                    );
-                },
+                'frontend' => $frontend,
+                'threshold' => $threshold,
+                'compressionLib' => $compressionLib,
+                'compressionLevel' => $compressionLevel,
             ]
         );
+    }
+
+    /**
+     * Check if backend is SymfonyL2Cache
+     *
+     * @param string $backendType
+     * @return bool
+     */
+    private function isSymfonyL2Cache(string $backendType): bool
+    {
+        $backendLower = strtolower($backendType);
+
+        // Check for symfony_l2 or l2_symfony or SymfonyL2Cache
+        return in_array($backendLower, [
+            'symfony_l2',
+            'l2_symfony',
+            'symfony_l2_cache',
+            'magento\framework\cache\backend\symfonyl2cache',
+        ], true);
+    }
+
+    /**
+     * Create SymfonyL2Cache (Clean L2 cache for Symfony)
+     *
+     * @param array $options
+     * @return FrontendInterface
+     * @throws \Exception
+     */
+    private function createSymfonyL2Cache(array $options): FrontendInterface
+    {
+        $backendOptions = $options['backend_options'] ?? [];
+
+        // Get remote backend configuration (L2 - persistent, shared)
+        $remoteBackend = $backendOptions['remote_backend'] ?? 'redis';
+        $remoteBackendOptions = $backendOptions['remote_backend_options'] ?? [];
+
+        // Get local backend configuration (L1 - fast, local)
+        $localBackend = $backendOptions['local_backend'] ?? 'file';
+        $localBackendOptions = $backendOptions['local_backend_options'] ?? [];
+
+        // Get common options
+        $frontend = $this->_getFrontendOptions($options);
+        $defaultLifetime = $frontend['lifetime'] ?? self::DEFAULT_LIFETIME;
+
+        Profiler::start('cache_symfony_l2_create', [
+            'group' => 'cache',
+            'operation' => 'cache:create_symfony_l2',
+            'remote_backend' => $remoteBackend,
+            'local_backend' => $localBackend,
+        ]);
+
+        try {
+            // Create remote backend (L2 - Symfony)
+            $remoteOptions = array_merge($options, [
+                'backend' => $remoteBackend,
+                'backend_options' => $remoteBackendOptions,
+            ]);
+            $remoteFrontend = $this->createSymfonyCache($remoteOptions);
+
+            // Create local backend (L1 - Symfony)
+            $localOptions = array_merge($options, [
+                'backend' => $localBackend,
+                'backend_options' => $localBackendOptions,
+            ]);
+            $localFrontend = $this->createSymfonyCache($localOptions);
+
+            // Create SymfonyL2Cache backend
+            $l2Backend = $this->_objectManager->create(
+                \Magento\Framework\Cache\Backend\SymfonyL2Cache::class,
+                [
+                    'remote' => $remoteFrontend,
+                    'local' => $localFrontend,
+                    'options' => [
+                        'cleanup_percentage' => $backendOptions['cleanup_percentage'] ?? 90,
+                        'use_stale_cache' => $backendOptions['use_stale_cache'] ?? false,
+                    ],
+                ]
+            );
+
+            // Wrap in frontend adapter
+            $result = $this->_objectManager->create(
+                \Magento\Framework\Cache\Frontend\Adapter\RemoteSynchronizedSymfonyAdapter::class,
+                [
+                    'backend' => $l2Backend,
+                    'defaultLifetime' => $defaultLifetime,
+                ]
+            );
+
+            Profiler::stop('cache_symfony_l2_create');
+            return $result;
+
+        } catch (\Exception $e) {
+            Profiler::stop('cache_symfony_l2_create');
+            throw new \RuntimeException(
+                'Failed to create Symfony L2 cache: ' . $e->getMessage(),
+                $e->getCode(),
+                $e
+            );
+        }
     }
 
     /**

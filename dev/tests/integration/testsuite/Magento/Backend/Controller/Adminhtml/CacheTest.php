@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Backend\Controller\Adminhtml;
@@ -33,7 +33,7 @@ class CacheTest extends \Magento\TestFramework\TestCase\AbstractBackendControlle
         );
         /** @var $cacheFrontend \Magento\Framework\Cache\FrontendInterface */
         foreach ($cachePool as $cacheFrontend) {
-            $this->assertFalse($cacheFrontend->getBackend()->load('NON_APPLICATION_FIXTURE'));
+            $this->assertFalse($cacheFrontend->load('NON_APPLICATION_FIXTURE'));
         }
     }
 
@@ -59,7 +59,7 @@ class CacheTest extends \Magento\TestFramework\TestCase\AbstractBackendControlle
         foreach ($cachePool as $cacheFrontend) {
             $this->assertSame(
                 'non-application cache data',
-                $cacheFrontend->getBackend()->load('NON_APPLICATION_FIXTURE')
+                $cacheFrontend->load('NON_APPLICATION_FIXTURE')
             );
         }
     }

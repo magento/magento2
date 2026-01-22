@@ -13,14 +13,18 @@ use Magento\Framework\Data\Collection\AbstractDb;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\DB\Select;
 use Magento\Framework\Model\ResourceModel\Db\Context;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Reports\Model\ResourceModel\Event;
 use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 class EventTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var Event
      */
@@ -138,8 +142,8 @@ class EventTest extends TestCase
      * @param array|null $storeIdSelect
      *
      * @return void
-     * @dataProvider getApplyLogToCollectionDataProvider
      */
+    #[DataProvider('getApplyLogToCollectionDataProvider')]
     public function testApplyLogToCollection(?int $storeId, ?array $storeIdSelect): void
     {
         $derivedSelect = 'SELECT * FROM table';
@@ -163,11 +167,10 @@ class EventTest extends TestCase
             ->method('order')
             ->willReturnSelf();
 
-        $collectionMock = $this->getMockBuilder(AbstractDb::class)
-            ->onlyMethods(['getResource', 'getIdFieldName', 'getSelect'])
-            ->addMethods(['getStoreId'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $collectionMock = $this->createPartialMockWithReflection(
+            AbstractDb::class,
+            ['getResource', 'getIdFieldName', 'getSelect', 'getStoreId']
+        );
         $collectionMock
             ->expects($this->once())
             ->method('getResource')
@@ -247,11 +250,10 @@ class EventTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $selectMock = $this->getMockBuilder(Select::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['where', 'limit', 'from', 'joinLeft'])
-            ->addMethods(['select', 'fetchCol'])
-            ->getMock();
+        $selectMock = $this->createPartialMockWithReflection(
+            Select::class,
+            ['where', 'limit', 'from', 'joinLeft', 'select', 'fetchCol']
+        );
 
         $callCount = 0;
         $this->connectionMock

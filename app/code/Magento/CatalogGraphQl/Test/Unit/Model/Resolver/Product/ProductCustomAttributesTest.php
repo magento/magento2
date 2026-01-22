@@ -78,16 +78,14 @@ class ProductCustomAttributesTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->getAttributeValueMock = $this->getMockForAbstractClass(GetAttributeValueInterface::class);
+        $this->getAttributeValueMock = $this->createMock(GetAttributeValueInterface::class);
         $this->productDataProviderMock = $this->createMock(ProductDataProvider::class);
         $this->getFilteredAttributesMock = $this->createMock(GetFilteredAttributes::class);
         $this->filterCustomAttributeMock = $this->createMock(FilterProductCustomAttribute::class);
         $this->fieldMock = $this->createMock(Field::class);
-        $this->contextMock = $this->getMockForAbstractClass(ContextInterface::class);
+        $this->contextMock = $this->createMock(ContextInterface::class);
         $this->resolveInfoMock = $this->createMock(ResolveInfo::class);
-        $this->productMock = $this->getMockBuilder(Product::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->productMock = $this->createMock(Product::class);
 
         $this->resolver = new ProductCustomAttributes(
             $this->getAttributeValueMock,
@@ -109,10 +107,10 @@ class ProductCustomAttributesTest extends TestCase
         $attributeCode1 = 'description';
         $attributeCode2 = 'color';
         
-        $attributeMock1 = $this->getMockForAbstractClass(AttributeInterface::class);
+        $attributeMock1 = $this->createMock(AttributeInterface::class);
         $attributeMock1->method('getAttributeCode')->willReturn($attributeCode1);
         
-        $attributeMock2 = $this->getMockForAbstractClass(AttributeInterface::class);
+        $attributeMock2 = $this->createMock(AttributeInterface::class);
         $attributeMock2->method('getAttributeCode')->willReturn($attributeCode2);
 
         $this->productMock->method('getId')->willReturn($productId);
@@ -177,7 +175,7 @@ class ProductCustomAttributesTest extends TestCase
         $productId = 1;
         $attributeCode = 'category_ids';
         
-        $attributeMock = $this->getMockForAbstractClass(AttributeInterface::class);
+        $attributeMock = $this->createMock(AttributeInterface::class);
         $attributeMock->method('getAttributeCode')->willReturn($attributeCode);
 
         $this->productMock->method('getId')->willReturn($productId);
@@ -231,7 +229,7 @@ class ProductCustomAttributesTest extends TestCase
         $productId = 1;
         $attributeCode = 'gift_card_amounts';
         
-        $attributeMock = $this->getMockForAbstractClass(AttributeInterface::class);
+        $attributeMock = $this->createMock(AttributeInterface::class);
         $attributeMock->method('getAttributeCode')->willReturn($attributeCode);
 
         $this->productMock->method('getId')->willReturn($productId);
@@ -307,7 +305,7 @@ class ProductCustomAttributesTest extends TestCase
         $attributeCode = 'custom_attribute';
         $filters = ['is_visible_on_front' => true];
         
-        $attributeMock = $this->getMockForAbstractClass(AttributeInterface::class);
+        $attributeMock = $this->createMock(AttributeInterface::class);
         $attributeMock->method('getAttributeCode')->willReturn($attributeCode);
 
         $this->productMock->method('getId')->willReturn($productId);
@@ -361,10 +359,10 @@ class ProductCustomAttributesTest extends TestCase
         $existingAttributeCode = 'description';
         $nonExistentAttributeCode = 'non_existent';
         
-        $attributeMock1 = $this->getMockForAbstractClass(AttributeInterface::class);
+        $attributeMock1 = $this->createMock(AttributeInterface::class);
         $attributeMock1->method('getAttributeCode')->willReturn($existingAttributeCode);
         
-        $attributeMock2 = $this->getMockForAbstractClass(AttributeInterface::class);
+        $attributeMock2 = $this->createMock(AttributeInterface::class);
         $attributeMock2->method('getAttributeCode')->willReturn($nonExistentAttributeCode);
 
         $this->productMock->method('getId')->willReturn($productId);
@@ -464,7 +462,7 @@ class ProductCustomAttributesTest extends TestCase
         $productId = 1;
         $attributeCode = 'empty_attribute';
         
-        $attributeMock = $this->getMockForAbstractClass(AttributeInterface::class);
+        $attributeMock = $this->createMock(AttributeInterface::class);
         $attributeMock->method('getAttributeCode')->willReturn($attributeCode);
 
         $this->productMock->method('getId')->willReturn($productId);

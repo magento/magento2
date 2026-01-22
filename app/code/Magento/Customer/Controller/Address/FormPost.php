@@ -24,9 +24,12 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Controller\Result\ForwardFactory;
 use Magento\Framework\Data\Form\FormKey\Validator as FormKeyValidator;
+use Magento\Customer\Model\ValidatorExceptionProcessor;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\NotFoundException;
 use Magento\Framework\Filesystem;
+use Magento\Framework\Message\AbstractMessage;
+use Magento\Framework\Validator\Exception as ValidatorException;
 use Magento\Framework\Reflection\DataObjectProcessor;
 use Magento\Framework\View\Result\PageFactory;
 
@@ -68,6 +71,11 @@ class FormPost extends \Magento\Customer\Controller\Address implements HttpPostA
     private $fileNameValidator;
 
     /**
+     * @var ValidatorExceptionProcessor
+     */
+    private $validatorExceptionProcessor;
+
+    /**
      * @param Context $context
      * @param Session $customerSession
      * @param FormKeyValidator $formKeyValidator
@@ -84,6 +92,7 @@ class FormPost extends \Magento\Customer\Controller\Address implements HttpPostA
      * @param Filesystem|null $filesystem
      * @param AddressMetadataInterface|null $addressMetadata
      * @param FileNameValidator|null $fileNameValidator
+     * @param ValidatorExceptionProcessor|null $validatorExceptionProcessor
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -102,7 +111,8 @@ class FormPost extends \Magento\Customer\Controller\Address implements HttpPostA
         HelperData $helperData,
         ?Filesystem $filesystem = null,
         ?AddressMetadataInterface $addressMetadata = null,
-        ?FileNameValidator $fileNameValidator = null
+        ?FileNameValidator $fileNameValidator = null,
+        ?ValidatorExceptionProcessor $validatorExceptionProcessor = null
     ) {
         $this->regionFactory = $regionFactory;
         $this->helperData = $helperData;
@@ -124,6 +134,11 @@ class FormPost extends \Magento\Customer\Controller\Address implements HttpPostA
             $resultForwardFactory,
             $resultPageFactory
         );
+        $this->validatorExceptionProcessor = $validatorExceptionProcessor
+            ?? ObjectManager::getInstance()->get(ValidatorExceptionProcessor::class);
+        if ($this->validatorExceptionProcessor !== null) {
+            $this->validatorExceptionProcessor->setMessageManager($context->getMessageManager());
+        }
     }
 
     /**
@@ -249,9 +264,10 @@ class FormPost extends \Magento\Customer\Controller\Address implements HttpPostA
             $url = $this->_buildUrl('*/*/index', ['_secure' => true]);
             return $this->resultRedirectFactory->create()->setUrl($this->_redirect->success($url));
         } catch (InputException $e) {
-            $this->messageManager->addErrorMessage($e->getMessage());
-            foreach ($e->getErrors() as $error) {
-                $this->messageManager->addErrorMessage($error->getMessage());
+            if ($this->validatorExceptionProcessor !== null) {
+                $this->validatorExceptionProcessor->processInputException($e);
+            } else {
+                $this->messageManager->addErrorMessage($e->getMessage());
             }
         } catch (\Exception $e) {
             $redirectUrl = $this->_buildUrl('*/*/index');

@@ -24,6 +24,10 @@
         <data key="store_type">store</data>
         <requiredEntity type="storeGroup">customStoreGroup</requiredEntity>
     </entity>
+    <entity name="customStoreView2" type="data">
+        <data key="name">secondStoreView2</data>
+        <data key="code" unique="suffix">second_store_view</data>
+    </entity>
     <entity name="customStoreEN" type="store">
         <data key="name" unique="suffix">EN</data>
         <data key="code" unique="suffix">en</data>

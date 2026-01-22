@@ -1119,7 +1119,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      */
     public function cleanCache()
     {
-        $this->_cacheManager->clean('catalog_product_' . $this->getId());
+        $this->_cacheManager->clean(['catalog_product_' . $this->getId()]);
         return $this;
     }
 
@@ -1545,7 +1545,8 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
     public function getMediaGalleryImages()
     {
         $directory = $this->_filesystem->getDirectoryRead(DirectoryList::MEDIA);
-        if (!$this->hasData('media_gallery_images')) {
+        $mediaGalleryImages = $this->getData('media_gallery_images');
+        if (!$mediaGalleryImages instanceof \Magento\Framework\Data\Collection) {
             $this->setData('media_gallery_images', $this->_collectionFactory->create());
         }
         if (!$this->getData('media_gallery_images')->count() && is_array($this->getMediaGallery('images'))) {

@@ -1,14 +1,17 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
+declare(strict_types=1);
 
 /**
  * Cache frontend decorator that attaches no additional responsibility to a decorated instance.
  * To be used as an ancestor for concrete decorators to conveniently override only methods of interest.
  */
 namespace Magento\Framework\Cache\Frontend\Decorator;
+
+use Magento\Framework\Cache\CacheConstants;
 
 class Bare implements \Magento\Framework\Cache\FrontendInterface
 {
@@ -84,7 +87,7 @@ class Bare implements \Magento\Framework\Cache\FrontendInterface
     /**
      * @inheritdoc
      */
-    public function clean($mode = \Zend_Cache::CLEANING_MODE_ALL, array $tags = [])
+    public function clean($mode = CacheConstants::CLEANING_MODE_ALL, array $tags = [])
     {
         return $this->_getFrontend()->clean($mode, $tags);
     }

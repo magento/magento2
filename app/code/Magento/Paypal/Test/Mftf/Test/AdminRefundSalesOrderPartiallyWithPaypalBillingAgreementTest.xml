@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright 2025 Adobe
+  * All Rights Reserved.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminRefundSalesOrderPartiallyWithPaypalBillingAgreementTest">
+        <annotations>
+            <features value="PayPal"/>
+            <stories value="Partial Refund Order with billing agreement"/>
+            <title value="Partial Refund order placed within Billing Agreement"/>
+            <description value="Place an order with billing agreement as payment method and refund partially the order"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="AC-5289"/>
+            <group value="3rd_party_integration"/>
+            <group value="pr_exclude"/>
+        </annotations>
+        <before>
+            <!-- Simple product is created -->
+            <createData entity="SimpleProduct" stepKey="createProduct">
+                <field key="price">15</field>
+            </createData>
+            <!-- US Customer is created -->
+            <createData entity="Simple_US_Customer_CA" stepKey="createCustomer"/>
+            <!-- Set Billing Agreement value to Auto -->
+            <magentoCLI command="config:set {{BillingAgreement.path}} {{BillingAgreement.value}}" stepKey="enableAutoBilling"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <!-- Disable conflicting PayPal methods first -->
+            <actionGroup ref="AdminDisableAllConflictingPayPalMethodsActionGroup" stepKey="disableConflictingPayPalMethods"/>
+            <actionGroup ref="CliCacheFlushActionGroup" stepKey="cleanCache">
+                <argument name="tags" value=""/>
+            </actionGroup>
+            <!-- Configure PayPal Express Checkout -->
+            <actionGroup ref="AdminPayPalExpressCheckoutEnableActionGroup" stepKey="ConfigPayPalExpress">
+                <argument name="credentials" value="SamplePaypalExpressConfig2"/>
+            </actionGroup>
+            <actionGroup ref="AdminPayPalExpressCheckoutEnableBillingAgreementActionGroup" stepKey="enableBillingAgreement">
+                <argument name="countryCode" value="{{MerchantUnitedStates.value}}"/>
+            </actionGroup>
+            <!-- Precondition Step 1: Order is placed within PayPal Billing Agreement -->
+            <actionGroup ref="LoginToStorefrontActionGroup" stepKey="storefrontCustomerLogin">
+                <argument name="Customer" value="$$createCustomer$$"/>
+            </actionGroup>
+            <!-- Add product to cart -->
+            <actionGroup ref="StorefrontAddSimpleProductWithQtyActionGroup" stepKey="addProductToCart">
+                <argument name="product" value="$$createProduct$$"/>
+                <argument name="quantity" value="2"/>
+            </actionGroup>
+            <!-- Go to Checkout Page -->
+            <actionGroup ref="StorefrontOpenCheckoutPageActionGroup" stepKey="goToCheckout"/>
+            <actionGroup ref="CheckoutSelectFlatRateShippingMethodActionGroup" stepKey="selectFlatRateShipping"/>
+            <actionGroup ref="StorefrontCheckoutClickNextOnShippingStepActionGroup" stepKey="clickNext"/>
+            <!-- Click on PayPal payment radio button -->
+            <waitForElementClickable selector="{{CheckoutPaymentSection.PayPalPaymentRadio}}" stepKey="waitForPayPalRadioButton"/>
+            <click selector="{{CheckoutPaymentSection.PayPalPaymentRadio}}" stepKey="selectPaypalPayment"/>
+            <actionGroup ref="SwitchToPayPalGroupBtnActionGroup" stepKey="clickPayPalBtn"/>
+            <!-- Login to Paypal in-context-->
+            <actionGroup ref="StorefrontLoginToPayPalPaymentAccountTwoStepActionGroup" stepKey="loginToPayPal"/>
+            <!-- Click PayPal button and go back to Magento site -->
+            <actionGroup ref="StorefrontPaypalSwitchBackToMagentoFromCheckoutPageActionGroup" stepKey="confirmPaymentAndGoBackToMagento"/>
+        </before>
+        <after>
+            <actionGroup ref="AdminPayPalExpressCheckoutDisableActionGroup" stepKey="disablePaypalExpressCheckout"/>
+            <!-- Login to Paypal in-context-->
+            <actionGroup ref="AdminClearPayPalExpressCheckoutDataActionGroup" stepKey="clearPaypalExpressCheckoutFields"/>
+            <actionGroup ref="AdminPayPalExpressCheckoutDisableBillingAgreementActionGroup" stepKey="disableBillingAgreement">
+                <argument name="countryCode" value="{{MerchantUnitedStates.value}}"/>
+            </actionGroup>
+            <!-- Set Billing Agreement value to default -->
+            <magentoCLI command="config:set {{BillingAgreement.path}} {{BillingAgreement.default}}" stepKey="disableAutoBilling"/>
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer"/>
+            <!-- Delete Data -->
+            <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
+            <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+        <actionGroup ref="AssertStorefrontCheckoutSuccessActionGroup" stepKey="assertOrderSuccess"/>
+        <grabTextFrom selector="{{CheckoutSuccessMainSection.orderNumber22}}" stepKey="orderNumber"/>
+        <waitForElementVisible selector="{{CheckoutSuccessMainSection.billingAgreement}}" stepKey="waitForBillingAgreement"/>
+        <grabTextFrom selector="{{CheckoutSuccessMainSection.billingAgreement}}" stepKey="billingAgreement"/>
+        <assertNotEmpty stepKey="assertOrderIdIsNotEmpty">
+            <actualResult type="const">$orderNumber</actualResult>
+        </assertNotEmpty>
+        <assertNotEmpty stepKey="assertBillingAgreementIsNotEmpty">
+            <actualResult type="const">$billingAgreement</actualResult>
+        </assertNotEmpty>
+        <!-- Step 2&3: Go to Sales > Orders & Open the Order from preconditions -->
+        <actionGroup ref="OpenOrderByIdActionGroup" stepKey="openOrder">
+            <argument name="orderId" value="{$orderNumber}"/>
+        </actionGroup>
+        <!-- Step 4&5: Refund created order & Click OK button-->
+        <actionGroup ref="AdminCreateInvoiceActionGroup" stepKey="createInvoice"/>
+        <!--Create Credit Memo-->
+        <click selector="{{AdminOrderDetailsMainActionsSection.creditMemo}}" stepKey="clickCreditMemo"/>
+        <waitForElementClickable selector="{{AdminConfirmationModalSection.ok}}" stepKey="waitForOkButtonToBeClicked"/>
+        <click selector="{{AdminConfirmationModalSection.ok}}" stepKey="confirmCreditMemo"/>
+        <waitForElementVisible selector="{{AdminCreditMemoItemsSection.itemQtyToRefund('1')}}" stepKey="waitToItemToRefundTextField"/>
+        <fillField selector="{{AdminCreditMemoItemsSection.itemQtyToRefund('1')}}" userInput="1" stepKey="partialRefund"/>
+        <waitForElementClickable selector="{{AdminCreditMemoItemsSection.updateQty}}" stepKey="waitToClickUpdateQuantity"/>
+        <click selector="{{AdminCreditMemoItemsSection.updateQty}}" stepKey="updateQuantityToRefund"/>
+        <!--Step 6: Create Refund Button -->
+        <waitForElementVisible selector="{{AdminCreditMemoItemsSection.refundbtn}}" stepKey="waitForSuccesMessagea"/>
+        <click selector="{{AdminCreditMemoItemsSection.refundbtn}}" stepKey="clickRefundOffline"/>
+        <actionGroup ref="AdminOrderViewCheckStatusActionGroup" stepKey="checkOrderStatus">
+            <argument name="status" value="Processing"/>
+        </actionGroup>
+        <actionGroup ref="AdminOpenOrderCommentsHistoryActionGroup" stepKey="clickOnCommentsHistoryTab"/>
+        <waitForText selector="{{AdminOrderCommentsTabSection.orderComments}}" userInput="{{BillingAgreement.refund_note}}" stepKey="seeOrderHistoryPrice"/>
+        <!--Step 7: Go to Credit Memo Tab -->
+        <click selector="{{AdminOrderDetailsOrderViewSection.creditMemos}}" stepKey="clickCreditMemoTab"/>
+        <waitForElementVisible selector="{{CheckoutPaymentSection.creditMemoView}}" stepKey="seeCreditMemoViewButton"/>
+        <click selector="{{CheckoutPaymentSection.creditMemoView}}" stepKey="clickCreditMemoViewButton"/>
+        <waitForElementVisible selector="{{CheckoutPaymentSection.status(BillingAgreement.refund_status)}}" stepKey="waitForStatusInCreditMemo"/>
+        <waitForText selector="{{AdminOrderTotalSection.grandTotal}}" userInput="$25.00" stepKey="checkOrderTotalInBackend"/>
+        <waitForElementClickable selector="{{AdminProductFormActionSection.backButton}}" stepKey="waitForBackButtonToBeClicked"/>
+        <click selector="{{AdminProductFormActionSection.backButton}}" stepKey="clickBackButton"/>
+        <!--Step 8: Go to Transaction Tab -->
+        <waitForElementClickable selector="{{AdminTransactionsGridSection.transactionsSectionBtn}}" stepKey="waitForTransactionsTabToBeClicked"/>
+        <click selector="{{AdminTransactionsGridSection.transactionsSectionBtn}}" stepKey="clickTransactionsTab"/>
+        <actionGroup ref="AdminAssertTransitionTypeStatusNewActionGroup" stepKey="assertTransactionTypeStatusForAuthorization">
+            <argument name="transactionType" value="authorization"/>
+            <argument name="transitionTypeStatus" value="Yes"/>
+        </actionGroup>
+        <actionGroup ref="AdminAssertTransitionTypeStatusNewActionGroup" stepKey="assertTransactionTypeStatusForCapture">
+            <argument name="transactionType" value="capture"/>
+            <argument name="transitionTypeStatus" value="No"/>
+        </actionGroup>
+    </test>
+</tests>
+

@@ -22,5 +22,10 @@
         <element name="emptyAttributeValueConstant" type="input" selector="#basic_behavior_import_empty_attribute_value_constant"/>
         <element name="imagesFileDirectory" type="input" selector="#import_images_file_dir"/>
         <element name="importImagesFileDirNote" type="input" selector="#import_images_file_dir-note"/>
+        <element name="customImportBehavior" type="select" selector="#custom_behavior"/>
+        <element name="customValidationStrategy" type="select" selector="#custom_behaviorvalidation_strategy"/>
+        <element name="customAllowedErrorsCount" type="input" selector="#custom_behavior_allowed_error_count"/>
+        <element name="customFieldSeparator" type="input" selector="#custom_behavior__import_field_separator"/>
+        <element name="customMultipleValueSeparator" type="input" selector="#custom_behavior_import_multiple_value_separator"/>
     </section>
 </sections>

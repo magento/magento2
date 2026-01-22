@@ -29,8 +29,7 @@ class TranslationTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->source = $this->getMockBuilder(ConfigSourceInterface::class)
-            ->getMockForAbstractClass();
+        $this->source = $this->createMock(ConfigSourceInterface::class);
         $this->configType = new Translation($this->source);
     }
 
