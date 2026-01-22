@@ -13,6 +13,7 @@ class MultiselectAttribute extends SelectAttribute
 {
     private const DEFAULT_DATA = [
         'frontend_input' => 'multiselect',
+        'backend_type' => 'text'
     ];
 
     /**

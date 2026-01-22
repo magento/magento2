@@ -9,7 +9,7 @@ namespace Magento\Quote\Test\Unit\Model\Quote;
 
 use Magento\Quote\Model\Quote;
 use Magento\Quote\Model\Quote\Address\Total;
-use Magento\Quote\Test\Unit\Helper\TotalTestHelper;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Quote\Model\Quote\Address\Total\AbstractTotal;
 use Magento\Quote\Model\Quote\Address\TotalFactory;
 use Magento\Quote\Model\Quote\TotalsCollectorList;
@@ -19,6 +19,7 @@ use PHPUnit\Framework\TestCase;
 
 class TotalsReaderTest extends TestCase
 {
+    use MockCreationTrait;
     /**
      * @var TotalsReader
      */
@@ -74,7 +75,7 @@ class TotalsReaderTest extends TestCase
     {
         $total = [];
         $storeId = 1;
-        $testedTotalMock = $this->createPartialMock(TotalTestHelper::class, ['setData', 'getCode']);
+        $testedTotalMock = $this->createPartialMockWithReflection(Total::class, ['setData', 'getCode']);
         $expected = ['my_total_type' => $testedTotalMock];
         $data = ['code' => 'my_total_type'];
         $this->totalMock->expects($this->once())->method('setData')->with([])->willReturnSelf();
@@ -128,8 +129,8 @@ class TotalsReaderTest extends TestCase
     {
         $total = [];
         $storeId = 1;
-        $firstTotalMock = $this->createPartialMock(TotalTestHelper::class, ['setData', 'getCode']);
-        $secondTotalMock = $this->createPartialMock(TotalTestHelper::class, ['setData', 'getCode']);
+        $firstTotalMock = $this->createPartialMockWithReflection(Total::class, ['setData', 'getCode']);
+        $secondTotalMock = $this->createPartialMockWithReflection(Total::class, ['setData', 'getCode']);
         $expected = ['first_total_type' => $firstTotalMock, 'second_total_type' => $secondTotalMock];
         $data = [['code' => 'first_total_type'], ['code' => 'second_total_type']];
         $this->totalMock->expects($this->once())->method('setData')->with([])->willReturnSelf();
@@ -160,7 +161,7 @@ class TotalsReaderTest extends TestCase
     {
         $total = [];
         $storeId = 1;
-        $testedTotalMock = $this->createPartialMock(TotalTestHelper::class, ['setData', 'getCode']);
+        $testedTotalMock = $this->createPartialMockWithReflection(Total::class, ['setData', 'getCode']);
         $expected = ['my_total_type' => $testedTotalMock];
         $this->totalMock->expects($this->once())->method('setData')->with([])->willReturnSelf();
         $this->quoteMock->expects($this->once())->method('getStoreId')->willReturn($storeId);

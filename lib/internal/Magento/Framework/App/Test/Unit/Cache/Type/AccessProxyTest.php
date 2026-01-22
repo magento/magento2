@@ -9,6 +9,7 @@ namespace Magento\Framework\App\Test\Unit\Cache\Type;
 
 use Magento\Framework\App\Cache\StateInterface;
 use Magento\Framework\App\Cache\Type\AccessProxy;
+use Magento\Framework\Cache\CacheConstants;
 use Magento\Framework\Cache\FrontendInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ProxyTesting;
 use PHPUnit\Framework\TestCase;
@@ -66,7 +67,7 @@ class AccessProxyTest extends TestCase
             ['load', ['record_id'], false, '111'],
             ['save', ['record_value', 'record_id', ['tag'], 555], true, false],
             ['remove', ['record_id'], true, false],
-            ['clean', [\Zend_Cache::CLEANING_MODE_MATCHING_ANY_TAG, ['tag']], true, false]
+            ['clean', [CacheConstants::CLEANING_MODE_MATCHING_ANY_TAG, ['tag']], true, false]
         ];
     }
 }

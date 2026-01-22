@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\Catalog\Test\Unit\Model\Layer\Search;
 
+use PHPUnit\Framework\Attributes\CoversClass;
 use Magento\Catalog\Model\Layer\Search\FilterableAttributeList;
 use Magento\Catalog\Model\ResourceModel\Eav\Attribute;
 use Magento\Catalog\Model\ResourceModel\Product\Attribute\Collection;
@@ -16,6 +17,7 @@ use Magento\Store\Model\StoreManagerInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
+#[CoversClass(FilterableAttributeList::class)]
 class FilterableAttributeListTest extends TestCase
 {
     /**
@@ -40,7 +42,7 @@ class FilterableAttributeListTest extends TestCase
             ['create']
         );
 
-        $this->storeManagerMock = $this->getMockForAbstractClass(StoreManagerInterface::class);
+        $this->storeManagerMock = $this->createMock(StoreManagerInterface::class);
 
         $this->model = new FilterableAttributeList(
             $this->collectionFactoryMock,
@@ -48,9 +50,6 @@ class FilterableAttributeListTest extends TestCase
         );
     }
 
-    /**
-     * @covers \Magento\Catalog\Model\Layer\Search\FilterableAttributeList::_prepareAttributeCollection()
-     */
     public function testGetList()
     {
         $storeMock = $this->createMock(Store::class);

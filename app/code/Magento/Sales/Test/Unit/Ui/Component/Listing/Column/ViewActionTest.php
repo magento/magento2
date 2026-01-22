@@ -14,9 +14,11 @@ use Magento\Framework\View\Element\UiComponent\Processor;
 use Magento\Sales\Ui\Component\Listing\Column\ViewAction;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class ViewActionTest extends TestCase
 {
+
     /**
      * @var ViewAction
      */
@@ -35,7 +37,7 @@ class ViewActionTest extends TestCase
     protected function setUp(): void
     {
         $this->objectManager = new ObjectManager($this);
-        $this->urlBuilder = $this->getMockForAbstractClass(UrlInterface::class);
+        $this->urlBuilder = $this->createMock(UrlInterface::class);
     }
 
     /**
@@ -44,8 +46,8 @@ class ViewActionTest extends TestCase
      * @param array $expectedDataSourceItems
      * @param string $expectedUrlPath
      * @param array $expectedUrlParam
-     * @dataProvider prepareDataSourceDataProvider
      */
+    #[DataProvider('prepareDataSourceDataProvider')]
     public function testPrepareDataSource(
         $data,
         $dataSourceItems,
@@ -53,33 +55,31 @@ class ViewActionTest extends TestCase
         $expectedUrlPath,
         $expectedUrlParam
     ) {
-        $contextMock = $this->getMockBuilder(ContextInterface::class)
-            ->getMockForAbstractClass();
-        $processor = $this->getMockBuilder(Processor::class)
-            ->disableOriginalConstructor()
+         $contextMock = $this->getMockBuilder(ContextInterface::class)
             ->getMock();
-        $contextMock->expects($this->never())->method('getProcessor')->willReturn($processor);
-        $this->model = $this->objectManager->getObject(
-            ViewAction::class,
-            [
+         $processor = $this->createMock(Processor::class);
+         $contextMock->expects($this->never())->method('getProcessor')->willReturn($processor);
+         $this->model = $this->objectManager->getObject(
+             ViewAction::class,
+             [
                 'urlBuilder' => $this->urlBuilder,
                 'data' => $data,
                 'context' => $contextMock,
-            ]
-        );
+             ]
+         );
 
-        $this->urlBuilder->expects($this->once())
+         $this->urlBuilder->expects($this->once())
             ->method('getUrl')
             ->with($expectedUrlPath, $expectedUrlParam)
             ->willReturn('url');
 
-        $dataSource = [
+         $dataSource = [
             'data' => [
                 'items' => $dataSourceItems
             ]
-        ];
-        $dataSource = $this->model->prepareDataSource($dataSource);
-        $this->assertEquals($expectedDataSourceItems, $dataSource['data']['items']);
+         ];
+         $dataSource = $this->model->prepareDataSource($dataSource);
+         $this->assertEquals($expectedDataSourceItems, $dataSource['data']['items']);
     }
 
     /**

@@ -11,10 +11,11 @@ use Magento\CatalogInventory\Model\Stock;
 use Magento\ConfigurableProduct\Model\Plugin\UpdateStockChangedAuto;
 use Magento\Catalog\Model\ResourceModel\GetProductTypeById;
 use Magento\CatalogInventory\Model\ResourceModel\Stock\Item as ItemResourceModel;
-use Magento\Framework\Model\AbstractModel as StockItem;
+use Magento\CatalogInventory\Model\Stock\Item as StockItem;
 use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 
 /**
  * Unit test for Magento\ConfigurableProduct\Model\Plugin\UpdateStockChangedAuto class.
@@ -24,6 +25,8 @@ use PHPUnit\Framework\TestCase;
  */
 class UpdateStockChangedAutoTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var MockObject
      */
@@ -51,9 +54,11 @@ class UpdateStockChangedAutoTest extends TestCase
     public function testBeforeSaveForInStock()
     {
         $itemResourceModel = $this->createMock(ItemResourceModel::class);
-        $stockItem = new \Magento\CatalogInventory\Test\Unit\Helper\ItemTestHelper();
-        // Configure ItemTestHelper with expected values
-        $stockItem->setIsInStock(true);
+        $stockItem = $this->createPartialMockWithReflection(
+            StockItem::class,
+            ['getIsInStock']
+        );
+        $stockItem->method('getIsInStock')->willReturn(true);
         $this->plugin->beforeSave($itemResourceModel, $stockItem);
     }
 
@@ -67,11 +72,13 @@ class UpdateStockChangedAutoTest extends TestCase
         $productType = Configurable::TYPE_CODE;
         $productId = 1;
         $itemResourceModel = $this->createMock(ItemResourceModel::class);
-        $stockItem = new \Magento\CatalogInventory\Test\Unit\Helper\ItemTestHelper();
-        // Configure ItemTestHelper with expected values
-        $stockItem->setIsInStock(false);
-        $stockItem->setHasStockStatusChangedAutomaticallyFlag(false);
-        $stockItem->setProductId($productId);
+        $stockItem = $this->createPartialMockWithReflection(
+            StockItem::class,
+            ['getIsInStock', 'hasStockStatusChangedAutomaticallyFlag', 'getProductId', 'setStockStatusChangedAuto']
+        );
+        $stockItem->method('getIsInStock')->willReturn(false);
+        $stockItem->method('hasStockStatusChangedAutomaticallyFlag')->willReturn(false);
+        $stockItem->method('getProductId')->willReturn($productId);
         $this->getProductTypeByIdMock->expects(self::once())
             ->method('execute')
             ->with($productId)

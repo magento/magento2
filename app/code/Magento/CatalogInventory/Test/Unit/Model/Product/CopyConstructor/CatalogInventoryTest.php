@@ -52,21 +52,17 @@ class CatalogInventoryTest extends TestCase
     {
         $this->productMock = $this->createPartialMock(Product::class, ['__wakeup', 'getStore']);
         $store = $this->createPartialMock(Store::class, ['getWebsiteId', '__wakeup']);
-        $store->expects($this->any())->method('getWebsiteId')->willReturn(0);
-        $this->productMock->expects($this->any())->method('getStore')->willReturn($store);
+        $store->method('getWebsiteId')->willReturn(0);
+        $this->productMock->method('getStore')->willReturn($store);
 
         $this->duplicateMock = $this->createPartialMock(
             Product::class,
             ['setStockData']
         );
 
-        $this->stockItemDoMock = $this->getMockForAbstractClass(
-            StockItemInterface::class
-        );
+        $this->stockItemDoMock = $this->createMock(StockItemInterface::class);
 
-        $this->stockRegistry = $this->getMockForAbstractClass(
-            StockRegistryInterface::class
-        );
+        $this->stockRegistry = $this->createMock(StockRegistryInterface::class);
 
         $this->objectManager = new ObjectManager($this);
         $this->model = $this->objectManager->getObject(
@@ -84,7 +80,7 @@ class CatalogInventoryTest extends TestCase
             'use_config_backorders' => 1,
             'use_config_notify_stock_qty' => 1,
         ];
-        $this->stockItemDoMock->expects($this->any())->method('getStockId')->willReturn(false);
+        $this->stockItemDoMock->method('getStockId')->willReturn(false);
 
         $this->stockRegistry->expects($this->once())
             ->method('getStockItem')
@@ -111,19 +107,11 @@ class CatalogInventoryTest extends TestCase
             ->method('getStockItem')
             ->willReturn($this->stockItemDoMock);
 
-        $this->stockItemDoMock->expects($this->any())->method('getItemId')->willReturn(50);
-        $this->stockItemDoMock->expects($this->any())
-            ->method('getUseConfigEnableQtyInc')
-            ->willReturn('use_config_enable_qty_inc');
-        $this->stockItemDoMock->expects($this->any())
-            ->method('getEnableQtyIncrements')
-            ->willReturn('enable_qty_increments');
-        $this->stockItemDoMock->expects($this->any())
-            ->method('getUseConfigQtyIncrements')
-            ->willReturn('use_config_qty_increments');
-        $this->stockItemDoMock->expects($this->any())
-            ->method('getQtyIncrements')
-            ->willReturn('qty_increments');
+        $this->stockItemDoMock->method('getItemId')->willReturn(50);
+        $this->stockItemDoMock->method('getUseConfigEnableQtyInc')->willReturn('use_config_enable_qty_inc');
+        $this->stockItemDoMock->method('getEnableQtyIncrements')->willReturn('enable_qty_increments');
+        $this->stockItemDoMock->method('getUseConfigQtyIncrements')->willReturn('use_config_qty_increments');
+        $this->stockItemDoMock->method('getQtyIncrements')->willReturn('qty_increments');
 
         $this->duplicateMock->expects($this->once())->method('setStockData')->with($expectedData);
         $this->model->build($this->productMock, $this->duplicateMock);

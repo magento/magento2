@@ -27,10 +27,7 @@ class LayoutTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->pageLayoutBuilder = $this->getMockBuilder(
-            BuilderInterface::class
-        )->disableOriginalConstructor()
-            ->getMock();
+        $this->pageLayoutBuilder = $this->createMock(BuilderInterface::class);
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->layoutModel = $this->objectManagerHelper->getObject(
@@ -47,12 +44,8 @@ class LayoutTest extends TestCase
             '0' => ['value' => '', 'label' => 'No layout updates'],
             '1' => ['value' => 'option_value', 'label' => 'option_label'],
         ];
-        $mockPageLayoutConfig = $this->getMockBuilder(Config::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $mockPageLayoutConfig->expects($this->any())
-            ->method('toOptionArray')
-            ->willReturn(['0' => $expectedOptions['1']]);
+        $mockPageLayoutConfig = $this->createMock(Config::class);
+        $mockPageLayoutConfig->method('toOptionArray')->willReturn(['0' => $expectedOptions['1']]);
 
         $this->pageLayoutBuilder->expects($this->once())
             ->method('getPageLayoutsConfig')

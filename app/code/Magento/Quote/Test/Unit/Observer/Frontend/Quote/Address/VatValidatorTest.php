@@ -11,14 +11,17 @@ use Magento\Customer\Helper\Address;
 use Magento\Customer\Model\Address\AbstractAddress;
 use Magento\Customer\Model\Vat;
 use Magento\Framework\DataObject;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
+use Magento\Quote\Model\Quote\Address as QuoteAddress;
 use Magento\Quote\Observer\Frontend\Quote\Address\VatValidator;
 use Magento\Store\Model\Store;
-use Magento\Quote\Test\Unit\Helper\QuoteAddressTestHelper;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 class VatValidatorTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var  VatValidator
      */
@@ -63,7 +66,14 @@ class VatValidatorTest extends TestCase
 
         $this->storeMock = $this->createMock(Store::class);
 
-        $this->quoteAddressMock = $this->createMock(QuoteAddressTestHelper::class);
+        $this->quoteAddressMock = $this->createPartialMockWithReflection(
+            QuoteAddress::class,
+            [
+                'getVatIsValid', 'getVatRequestId', 'getVatRequestDate', 'getVatRequestSuccess',
+                'getCountryId', 'getVatId', 'getValidatedCountryCode', 'getValidatedVatNumber',
+                'save', 'getAddressType'
+            ]
+        );
 
         $this->testData = [
             'is_valid' => true,

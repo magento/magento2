@@ -1,0 +1,72 @@
+<?php
+/**
+ * Copyright 2025 Adobe
+ * All Rights Reserved.
+ */
+?>
+<?php
+/** @var \Magento\Catalog\Block\Adminhtml\Form\Renderer\Fieldset\Element $block */
+/** @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer */
+/** @var \Magento\Framework\Escaper $escaper */
+$element = $block->getElement();
+$element->addClass('admin__actions-switch-checkbox');
+$addOn = $element->getBeforeElementHtml() || $element->getAfterElementHtml();
+$fieldId = ($element->getHtmlContainerId()) ? ' id="' . $element->getHtmlContainerId() . '"' : '';
+$fieldClass = "admin__field field field-{$element->getId()} {$element->getCssClass()}";
+$fieldClass .= ($addOn) ? ' with-addon' : '';
+$fieldClass .= ($element->getRequired()) ? ' required' : '';
+$fieldClass .= ($element->getNote()) ? ' with-note' : '';
+
+$fieldAttributes = $fieldId . ' class="' . $escaper->escapeHtmlAttr($fieldClass) . '" '
+    . $block->getUiId('form-field', $escaper->escapeHtmlAttr($element->getId()));
+?>
+
+<?php if (!$element->getNoDisplay()):?>
+    <?php if ($element->getType() == 'hidden'):?>
+        <?= $element->getElementHtml() ?>
+    <?php else:?>
+    <div<?= /* @noEscape */ $fieldAttributes ?>>
+        <?= $element->getLabelHtml('', $element->getScopeLabel()) ?>
+        <div class="admin__field-control">
+            <?php if ($addOn):?>
+                <div class="addon">
+                    <div class="admin__actions-switch" data-role="switcher">
+                        <?= $element->getElementHtml() ?>
+                        <label class="admin__actions-switch-label" for="<?= $element->getHtmlId() ?>">
+                            <span class="admin__actions-switch-text" data-text-on="Yes" data-text-off="No"></span>
+                        </label>
+                    </div>
+                </div>
+            <?php else:?>
+                <div class="admin__actions-switch" data-role="switcher">
+                    <?= $element->getElementHtml() ?>
+                    <label class="admin__actions-switch-label" for="<?= $element->getHtmlId() ?>">
+                        <span class="admin__actions-switch-text"
+                              data-text-on="<?= $escaper->escapeHtmlAttr(__('Yes')) ?>"
+                              data-text-off="<?= $escaper->escapeHtmlAttr(__('No')) ?>"></span>
+                    </label>
+                </div>
+            <?php endif; ?>
+            <?php if ($element->getNote()):?>
+                <div class="note admin__field-note">
+                    <?= $escaper->escapeHtml($element->getNote()) ?>
+                </div>
+            <?php endif; ?>
+            <?php if ($element->hasUseDefault()):?>
+                <div class="admin__field-service">
+                    <input type="checkbox" class="admin__control-checkbox"
+                           id="<?= $element->getHtmlId() ?>-use_default"
+                           data-role="use-default"
+                           value="1"
+                            <?= $escaper->escapeHtmlAttr($element->getUseDefault() ? 'checked' : '') ?>>
+
+                    <label class="admin__field-label"
+                           for="<?= $element->getHtmlId() ?>-use_default">
+                        <?= $escaper->escapeHtml(__('Use Default Value')); ?>
+                    </label>
+                </div>
+            <?php endif; ?>
+        </div>
+    </div>
+    <?php endif; ?>
+<?php endif; ?>

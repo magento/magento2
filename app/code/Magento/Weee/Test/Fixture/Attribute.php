@@ -13,6 +13,7 @@ class Attribute extends \Magento\Catalog\Test\Fixture\Attribute
 {
     private const DEFAULT_DATA = [
         'frontend_input' => 'weee',
+        'backend_type' => null
     ];
 
     /**

@@ -3,6 +3,7 @@
  * Copyright 2016 Adobe
  * All Rights Reserved.
  */
+declare(strict_types=1);
 
 /**
  * phpcs:disable PSR1.Files.SideEffects
@@ -65,7 +66,7 @@ if ($cacheConfigs) {
         try {
             /** @var \Magento\Framework\App\Cache\Frontend\Factory $cacheFrontendFactory */
             $cacheFrontendFactory = $objectManager->get(Magento\Framework\App\Cache\Frontend\Factory::class);
-            /** @var \Zend_Cache_Backend_Interface $backend */
+            /** @var \Magento\Framework\Cache\Backend\BackendInterface $backend */
             $backend = $cacheFrontendFactory->create($cacheConfig);
             $backend->test('test_cache_id');
         } catch (\Exception $e) {

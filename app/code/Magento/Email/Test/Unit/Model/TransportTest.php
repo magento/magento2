@@ -54,13 +54,8 @@ class TransportTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->loggerMock = $this->getMockBuilder(LoggerInterface::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['error'])
-            ->getMockForAbstractClass();
-        $this->scopeConfigMock = $this->getMockBuilder(ScopeConfigInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->loggerMock = $this->createMock(LoggerInterface::class);
+        $this->scopeConfigMock = $this->createMock(ScopeConfigInterface::class);
         $this->symfonyMessageMock = $this->createMock(SymfonyMessage::class);
         $headersMock = new Headers();
         $this->symfonyMessageMock->method('getHeaders')->willReturn($headersMock);

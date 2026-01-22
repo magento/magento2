@@ -7,19 +7,18 @@ declare(strict_types=1);
 
 namespace Magento\Catalog\Test\Unit\Ui\DataProvider\Product\Form\Modifier;
 
+use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\Locator\LocatorInterface;
-use Magento\Catalog\Test\Unit\Helper\ProductTestHelper;
 use Magento\Framework\Stdlib\ArrayManager;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-use Magento\Store\Test\Unit\Helper\StoreTestHelper;
+use Magento\Store\Model\Store;
 use Magento\Ui\DataProvider\Modifier\ModifierInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 /**
  * Abstract test case for product form modifiers
- *
- * Uses test helpers instead of inline anonymous classes following PHPUnit 12 migration rules.
  *
  * @SuppressWarnings(PHPMD.NumberOfChildren)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -29,15 +28,12 @@ use PHPUnit\Framework\TestCase;
  */
 abstract class AbstractModifierTestCase extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var ModifierInterface
      */
     private $model;
-
-    /**
-     * @var ObjectManager
-     */
-    protected $objectManager;
 
     /**
      * @var LocatorInterface|MockObject
@@ -45,12 +41,12 @@ abstract class AbstractModifierTestCase extends TestCase
     protected $locatorMock;
 
     /**
-     * @var ProductTestHelper
+     * @var Product|MockObject
      */
     protected $productMock;
 
     /**
-     * @var StoreTestHelper
+     * @var Store|MockObject
      */
     protected $storeMock;
 
@@ -60,18 +56,39 @@ abstract class AbstractModifierTestCase extends TestCase
     protected $arrayManagerMock;
 
     /**
-     * Set up test environment
-     *
-     * @return void
-     * @throws \PHPUnit\Framework\MockObject\Exception
+     * @var ObjectManager
      */
+    protected $objectManager;
+
     protected function setUp(): void
     {
         $this->objectManager = new ObjectManager($this);
         $this->locatorMock = $this->createMock(LocatorInterface::class);
-        $this->productMock = new ProductTestHelper();
-        $this->storeMock = new StoreTestHelper();
+        
+        // Use createPartialMock for Product class to allow method configuration
+        // Note: getId/setId are NOT mocked, allowing natural behavior via DataObject
+        $this->productMock = $this->createPartialMock(
+            Product::class,
+            [
+                'getCustomAttributesCodes',
+                'getStoreId',
+                'getResource',
+                'isLockedAttribute',
+                'getTypeId',
+                'getAttributeSetId',
+                'getOptions',
+                'getStore',
+                'getMediaAttributes'
+            ]
+        );
+        $this->productMock->method('getCustomAttributesCodes')->willReturn([]);
+        $this->productMock->method('getMediaAttributes')->willReturn([]);
+
+        $this->storeMock = $this->createPartialMock(Store::class, ['load', 'getConfig', 'getId']);
+        $this->storeMock->method('getId')->willReturn(1);
+
         $this->arrayManagerMock = $this->createMock(ArrayManager::class);
+
         $this->arrayManagerMock->expects($this->any())
             ->method('replace')
             ->willReturnArgument(1);

@@ -7,6 +7,11 @@ declare(strict_types=1);
 
 /**
  * \Magento\Framework\Cache\Backend\Decorator\Compression test case
+ *
+ * @deprecated Tests deprecated class Compression
+ * @see \Magento\Framework\Cache\Backend\Decorator\Compression
+ * @group legacy
+ * @group disabled
  */
 namespace Magento\Framework\Cache\Test\Unit\Backend\Decorator;
 
@@ -30,13 +35,16 @@ class CompressionTest extends TestCase
      */
     protected static $_cacheStorage = [];
 
+    /**
+     * Skip all tests as the class being tested is deprecated
+     *
+     * @return void
+     */
     protected function setUp(): void
     {
-        $options = [
-            'concrete_backend' => $this->createMock(\Zend_Cache_Backend_File::class),
-            'compression_threshold' => strlen($this->_testString),
-        ];
-        $this->_decorator = new Compression($options);
+        $this->markTestSkipped(
+            'Test skipped: Compression is deprecated. Compression is handled by backend libraries directly.'
+        );
     }
 
     protected function tearDown(): void

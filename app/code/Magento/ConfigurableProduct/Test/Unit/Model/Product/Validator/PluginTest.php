@@ -15,14 +15,16 @@ use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
 use Magento\Framework\App\Request\Http;
 use Magento\Framework\DataObject;
 use Magento\Framework\Event\Manager;
-use Magento\Framework\DataObject\Test\Unit\Helper\DataObjectTestHelper;
 use Magento\Framework\Json\Helper\Data;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 class PluginTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var Plugin
      */
@@ -90,7 +92,13 @@ class PluginTest extends TestCase
             Http::class,
             ['getPost', 'getParam', 'has']
         );
-        $this->responseMock = new DataObjectTestHelper();
+        $this->responseMock = $this->createPartialMockWithReflection(
+            DataObject::class,
+            ['setError', 'getError', 'setMessage', 'setAttributes']
+        );
+        $this->responseMock->method('setError')->willReturnSelf();
+        $this->responseMock->method('setMessage')->willReturnSelf();
+        $this->responseMock->method('setAttributes')->willReturnSelf();
         $this->arguments = [$this->productMock, $this->requestMock, $this->responseMock];
 
         $this->subjectMock = $this->createMock(Validator::class);

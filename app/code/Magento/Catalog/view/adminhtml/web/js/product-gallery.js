@@ -47,6 +47,7 @@ define([
             imgTitleSelector: '[data-role=img-title]',
             imageSizeLabel: '[data-role=size]',
             types: null,
+            showSpinner: true,
             initialized: false
         },
 
@@ -153,6 +154,8 @@ define([
                     type: image.code,
                     imageData: imageData
                 });
+
+                this.element.find('[type="hidden"][name="use_default[' + image.code + ']"]').val('0');
 
                 if (isImageOpened) {
                     this.element.find('.item').addClass('selected');
@@ -565,6 +568,26 @@ define([
                 });
             }.bind(this));
 
+            $dialog.on('change', '[data-role="use-default"]', function (e) {
+                const target = $(e.target),
+                    isChecked = target.is(':checked'),
+                    name = target.attr('name'),
+                    imageData = $dialog.data('imageData');
+
+                this.element.find('input[type="hidden"][name="' + name + '"]').val(isChecked ? 1 : 0);
+                if (name.indexOf('[images]') !== -1) {
+                    const attrName = name.substring(name.lastIndexOf('[') + 1, name.length - 1);
+
+                    if (attrName) {
+                        imageData[attrName] = isChecked ? 1 : 0;
+                    }
+                }
+                target.closest('.field')
+                    .toggleClass('_disabled', isChecked)
+                    .find('input:not([data-role="use-default"]), textarea:not([data-role="use-default"])')
+                    .prop('disabled', isChecked);
+            }.bind(this));
+
             this.$dialog = $dialog;
         },
 
@@ -577,7 +600,10 @@ define([
                 $template;
 
             $template = this.dialogTmpl({
-                'data': imageData
+                'data': imageData,
+                context: {
+                    showSpinner: this.options.showSpinner
+                }
             });
 
             this.$dialog
@@ -585,6 +611,9 @@ define([
                 .data('imageData', imageData)
                 .data('imageContainer', $imageContainer)
                 .modal('openModal');
+            if (this.options.showSpinner) {
+                this.$dialog.find('[data-role=spinner]').hide();
+            }
         },
 
         /**
@@ -626,6 +655,19 @@ define([
                     );
                     parent.toggleClass(selectedClass, isChecked);
                 }, this));
+
+            this.$dialog.find('[data-role="use-default"]').each(function (index, element) {
+                const $useDefaultCheckbox = $(element),
+                    name = $useDefaultCheckbox.attr('name');
+
+                if (name) {
+                    const $useDefaultInput = this.element.find('input[type="hidden"][name="' + name + '"]');
+
+                    if ($useDefaultInput.length) {
+                        $useDefaultCheckbox.prop('checked', $useDefaultInput.val() === '1').trigger('change');
+                    }
+                }
+            }.bind(this));
         },
 
         /**
@@ -659,7 +701,7 @@ define([
                 $imageContainer.addClass('hidden-for-front') :
                 $imageContainer.removeClass('hidden-for-front');
 
-            $imageContainer.find('[name*="disabled"]').val(disabled);
+            $imageContainer.find('[name*="[disabled]"]').val(disabled);
             imageData.disabled = disabled;
 
             this._contentUpdated();

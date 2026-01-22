@@ -15,11 +15,13 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\View\Element\Html\Select;
 use Magento\Framework\View\LayoutInterface;
 use PHPUnit\Framework\TestCase;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 
 class ServicesTest extends TestCase
 {
+    use MockCreationTrait;
     /**
-     * Object manager helper
+     * Object manager for the test
      *
      * @var ObjectManager
      */
@@ -28,6 +30,7 @@ class ServicesTest extends TestCase
     protected function setUp(): void
     {
         $this->objectManagerHelper = new ObjectManager($this);
+        $this->objectManagerHelper->prepareObjectManager([]);
     }
 
     protected function tearDown(): void
@@ -45,27 +48,15 @@ class ServicesTest extends TestCase
             ['create']
         );
         $sourceServiceMock = $this->createMock(Service::class);
-        $backendSessionMock = $this->getMockBuilder(Session::class)
-            ->addMethods(['getCurrencyRateService'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $backendSessionMock = $this->createPartialMockWithReflection(Session::class, ['getCurrencyRateService']);
 
-        /** @var LayoutInterface|MockObject $layoutMock */
-        $layoutMock = $this->getMockForAbstractClass(
-            LayoutInterface::class,
-            [],
-            '',
-            false,
-            false,
-            true,
-            ['createBlock']
+        /** @var LayoutInterface $layoutMock */
+        $layoutMock = $this->createMock(LayoutInterface::class);
+
+        $blockMock = $this->createPartialMockWithReflection(
+            Select::class,
+            ['setName', 'setValue', 'setOptions', 'setId', 'setTitle']
         );
-
-        $blockMock = $this->getMockBuilder(Select::class)
-            ->addMethods(['setName', 'setValue'])
-            ->onlyMethods(['setOptions', 'setId', 'setTitle'])
-            ->disableOriginalConstructor()
-            ->getMock();
 
         $layoutMock->expects($this->once())->method('createBlock')->willReturn($blockMock);
 

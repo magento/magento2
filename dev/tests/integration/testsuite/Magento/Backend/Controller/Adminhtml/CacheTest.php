@@ -33,7 +33,7 @@ class CacheTest extends \Magento\TestFramework\TestCase\AbstractBackendControlle
         );
         /** @var $cacheFrontend \Magento\Framework\Cache\FrontendInterface */
         foreach ($cachePool as $cacheFrontend) {
-            $this->assertFalse($cacheFrontend->getBackend()->load('NON_APPLICATION_FIXTURE'));
+            $this->assertFalse($cacheFrontend->load('NON_APPLICATION_FIXTURE'));
         }
     }
 
@@ -59,7 +59,7 @@ class CacheTest extends \Magento\TestFramework\TestCase\AbstractBackendControlle
         foreach ($cachePool as $cacheFrontend) {
             $this->assertSame(
                 'non-application cache data',
-                $cacheFrontend->getBackend()->load('NON_APPLICATION_FIXTURE')
+                $cacheFrontend->load('NON_APPLICATION_FIXTURE')
             );
         }
     }

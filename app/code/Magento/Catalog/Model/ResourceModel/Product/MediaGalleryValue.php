@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\Catalog\Model\ResourceModel\Product;
 
+use Exception;
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Framework\EntityManager\MetadataPool;
 
@@ -27,7 +28,7 @@ class MediaGalleryValue
      *
      * @param int $entityId
      * @return array
-     * @throws \Exception
+     * @throws Exception
      */
     public function getAllByEntityId(int $entityId): array
     {
@@ -41,11 +42,30 @@ class MediaGalleryValue
     }
 
     /**
+     * Returns value IDs by entity ID and store ID.
+     *
+     * @param int $entityId
+     * @param int $storeId
+     * @return array
+     */
+    public function getAllByEntityIdAndStoreId(int $entityId, int $storeId): array
+    {
+        $metadata = $this->metadataPool->getMetadata(ProductInterface::class);
+        $connection = $this->galleryResource->getConnection();
+        $select = $connection->select()
+            ->from($this->galleryResource->getTable(Gallery::GALLERY_VALUE_TABLE))
+            ->where($metadata->getLinkField() . ' = ?', $entityId)
+            ->where('store_id = ?', $storeId);
+
+        return $connection->fetchAll($select);
+    }
+
+    /**
      * Create or update media gallery value record.
      *
      * @param array $data
      * @return void
-     * @throws \Exception
+     * @throws Exception
      */
     public function saveGalleryStoreValue(array $data): void
     {

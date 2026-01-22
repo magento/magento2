@@ -36,21 +36,13 @@ class FlatTest extends TestCase
     {
         $this->_store = $this->createMock(Store::class);
 
-        $this->_storeManagerInterface = $this->getMockForAbstractClass(StoreManagerInterface::class);
+        $this->_storeManagerInterface = $this->createMock(StoreManagerInterface::class);
 
-        $this->_storeManagerInterface->expects(
-            $this->any()
-        )->method(
-            'getStore'
-        )->willReturn(
+        $this->_storeManagerInterface->method('getStore')->willReturn(
             $this->_store
         );
 
-        $this->_storeManagerInterface->expects(
-            $this->any()
-        )->method(
-            'getDefaultStoreView'
-        )->willReturn(
+        $this->_storeManagerInterface->method('getDefaultStoreView')->willReturn(
             $this->_store
         );
 

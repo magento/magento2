@@ -12,6 +12,7 @@ use Magento\Sales\Api\Data\InvoiceCreationArgumentsInterface;
 use Magento\Sales\Api\Data\InvoiceInterface;
 use Magento\Sales\Api\Data\InvoiceItemCreationInterface;
 use Magento\Sales\Model\Order;
+use Magento\Sales\Model\Order\Invoice;
 use Magento\Sales\Model\Order\InvoiceDocumentFactory;
 use Magento\Sales\Model\Service\InvoiceService;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -19,6 +20,7 @@ use PHPUnit\Framework\TestCase;
 
 class InvoiceDocumentFactoryTest extends TestCase
 {
+
     /**
      * @var MockObject|InvoiceService
      */
@@ -51,26 +53,15 @@ class InvoiceDocumentFactoryTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->invoiceServiceMock = $this->getMockBuilder(InvoiceService::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->invoiceServiceMock = $this->createMock(InvoiceService::class);
 
-        $this->orderMock = $this->getMockBuilder(Order::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->orderMock = $this->createMock(Order::class);
 
-        $this->invoiceMock = $this->getMockBuilder(InvoiceInterface::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['addComment'])
-            ->getMockForAbstractClass();
+        $this->invoiceMock = $this->createPartialMock(Invoice::class, ['addComment']);
 
-        $this->itemMock = $this->getMockBuilder(InvoiceItemCreationInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->itemMock = $this->createMock(InvoiceItemCreationInterface::class);
 
-        $this->commentMock = $this->getMockBuilder(InvoiceCommentCreationInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->commentMock = $this->createMock(InvoiceCommentCreationInterface::class);
 
         $this->invoiceDocumentFactory = new InvoiceDocumentFactory($this->invoiceServiceMock);
     }

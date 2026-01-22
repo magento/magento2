@@ -27,6 +27,7 @@ use Magento\Framework\View\Page\Title;
 use Magento\Framework\View\Result\PageFactory;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 
 /**
  * Unit test for Edit controller
@@ -35,6 +36,8 @@ use PHPUnit\Framework\TestCase;
  */
 class EditTest extends TestCase
 {
+
+    use MockCreationTrait;
     /**
      * @var Edit
      */
@@ -95,11 +98,11 @@ class EditTest extends TestCase
         $this->contextMock = $this->createMock(Context::class);
         $this->registryMock = $this->createMock(Registry::class);
         $this->resultPageFactoryMock = $this->createMock(PageFactory::class);
-        $this->attributeSetRepositoryMock = $this->getMockForAbstractClass(AttributeSetRepositoryInterface::class);
-        $this->requestMock = $this->getMockForAbstractClass(RequestInterface::class);
-        $this->messageManagerMock = $this->getMockForAbstractClass(ManagerInterface::class);
+        $this->attributeSetRepositoryMock = $this->createMock(AttributeSetRepositoryInterface::class);
+        $this->requestMock = $this->createMock(RequestInterface::class);
+        $this->messageManagerMock = $this->createMock(ManagerInterface::class);
         $this->resultRedirectFactoryMock = $this->createMock(RedirectFactory::class);
-        $this->objectManagerMock = $this->getMockForAbstractClass(ObjectManagerInterface::class);
+        $this->objectManagerMock = $this->createMock(ObjectManagerInterface::class);
 
         // Setup Product and ProductResource mocks for _setTypeId()
         $productResourceMock = $this->createMock(ProductResource::class);
@@ -149,8 +152,8 @@ class EditTest extends TestCase
     public function testConstructorWithNullAttributeSetRepository(): void
     {
         // Create a mock for ObjectManager singleton
-        $objectManagerMock = $this->getMockForAbstractClass(ObjectManagerInterface::class);
-        $attributeSetRepositoryMock = $this->getMockForAbstractClass(AttributeSetRepositoryInterface::class);
+        $objectManagerMock = $this->createMock(ObjectManagerInterface::class);
+        $attributeSetRepositoryMock = $this->createMock(AttributeSetRepositoryInterface::class);
         
         $objectManagerMock->expects($this->once())
             ->method('get')
@@ -183,10 +186,22 @@ class EditTest extends TestCase
         $attributeSetName = 'Test Attribute Set';
 
         // Mock attribute set
-        $attributeSetMock = $this->getMockBuilder(AttributeSetInterface::class)
-            ->onlyMethods(['getAttributeSetName'])
-            ->addMethods(['getId'])
-            ->getMockForAbstractClass();
+        $attributeSetMock = $this->createPartialMockWithReflection(
+            AttributeSetInterface::class,
+            [
+                'getAttributeSetId',
+                'setAttributeSetId',
+                'getAttributeSetName',
+                'setAttributeSetName',
+                'getSortOrder',
+                'setSortOrder',
+                'getEntityTypeId',
+                'setEntityTypeId',
+                'getExtensionAttributes',
+                'setExtensionAttributes',
+                'getId'
+            ]
+        );
         $attributeSetMock->expects($this->any())
             ->method('getId')
             ->willReturn($attributeSetId);
@@ -303,9 +318,22 @@ class EditTest extends TestCase
         $attributeSetId = 18;
 
         // Mock attribute set with no ID (invalid)
-        $attributeSetMock = $this->getMockBuilder(AttributeSetInterface::class)
-            ->addMethods(['getId'])
-            ->getMockForAbstractClass();
+        $attributeSetMock = $this->createPartialMockWithReflection(
+            AttributeSetInterface::class,
+            [
+                'getAttributeSetId',
+                'setAttributeSetId',
+                'getAttributeSetName',
+                'setAttributeSetName',
+                'getSortOrder',
+                'setSortOrder',
+                'getEntityTypeId',
+                'setEntityTypeId',
+                'getExtensionAttributes',
+                'setExtensionAttributes',
+                'getId'
+            ]
+        );
         $attributeSetMock->expects($this->any())
             ->method('getId')
             ->willReturn(null);

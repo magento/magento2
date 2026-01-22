@@ -10,10 +10,12 @@ namespace Magento\Downloadable\Test\Unit\Model\Product\TypeHandler;
 use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\Catalog\Model\Product;
 use Magento\Downloadable\Helper\Download;
+use Magento\Downloadable\Model\Link as LinkModel;
 use Magento\Downloadable\Model\LinkFactory;
 use Magento\Downloadable\Model\Product\TypeHandler\Link;
 use Magento\Framework\EntityManager\EntityMetadata;
 use Magento\Framework\EntityManager\MetadataPool;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\Store\Model\Store;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -26,6 +28,7 @@ use Magento\Downloadable\Model\ResourceModel\Link as LinkResource;
  */
 class LinkTest extends TestCase
 {
+    use MockCreationTrait;
     /**
      * @var MockObject
      */
@@ -225,8 +228,8 @@ class LinkTest extends TestCase
      */
     private function createLinkkModel($product, array $modelData, $isUnlimited)
     {
-        $link = $this->createPartialMock(
-            \Magento\Downloadable\Test\Unit\Helper\LinkTestHelper::class,
+        $link = $this->createPartialMockWithReflection(
+            LinkModel::class,
             [
                 'setProductId',
                 'setStoreId',
@@ -281,8 +284,8 @@ class LinkTest extends TestCase
      */
     protected function createProductMock($id, $storeId, $storeWebsiteId, array $websiteIds)
     {
-        $product = $this->createPartialMock(
-            \Magento\Catalog\Test\Unit\Helper\ProductTestHelper::class,
+        $product = $this->createPartialMockWithReflection(
+            Product::class,
             [
                 'getLinksPurchasedSeparately',
                 'setIsCustomOptionChanged',

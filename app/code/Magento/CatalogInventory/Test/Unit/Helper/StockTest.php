@@ -9,6 +9,7 @@ namespace Magento\CatalogInventory\Test\Unit\Helper;
 
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\ResourceModel\Collection\AbstractCollection;
+use Magento\Catalog\Model\ResourceModel\Product\Collection as ProductCollection;
 use Magento\Catalog\Model\ResourceModel\Product\Link\Product\Collection;
 use Magento\CatalogInventory\Api\Data\StockStatusInterface;
 use Magento\CatalogInventory\Api\StockConfigurationInterface;
@@ -18,15 +19,20 @@ use Magento\CatalogInventory\Model\ResourceModel\Stock\StatusFactory;
 use Magento\CatalogInventory\Model\Spi\StockRegistryProviderInterface;
 use Magento\Framework\App\Config;
 use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Store\Model\StoreManagerInterface;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.UnusedLocalVariable)
  */
 class StockTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var Stock
      */
@@ -66,10 +72,10 @@ class StockTest extends TestCase
             ->getMock();
         $this->storeManagerMock = $this->getMockBuilder(StoreManagerInterface::class)
             ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+            ->getMock();
         $this->scopeConfigMock = $this->getMockBuilder(ScopeConfigInterface::class)
             ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+            ->getMock();
         $this->statusFactoryMock =
             $this->getMockBuilder(StatusFactory::class)
                 ->disableOriginalConstructor()
@@ -99,23 +105,17 @@ class StockTest extends TestCase
 
         $stockStatusMock = $this->getMockBuilder(StockStatusInterface::class)
             ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-        $stockStatusMock->expects($this->any())
-            ->method('getStockStatus')
-            ->willReturn($status);
-        $this->stockRegistryProviderMock->expects($this->any())
-            ->method('getStockStatus')
-            ->willReturn($stockStatusMock);
+            ->getMock();
+        $stockStatusMock->method('getStockStatus')->willReturn($status);
+        $this->stockRegistryProviderMock->method('getStockStatus')->willReturn($stockStatusMock);
         $this->stockConfiguration->expects($this->once())->method('getDefaultScopeId')->willReturn($websiteId);
 
-        $productMock = $this->getMockBuilder(Product::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['setIsSalable'])
-            ->onlyMethods(['getId'])
-            ->getMock();
-        $productMock->expects($this->once())
-            ->method('setIsSalable')
-            ->with($status);
+        $productMock = $this->createPartialMockWithReflection(
+            Product::class,
+            ['getId', 'setIsSalable']
+        );
+        
+        $productMock->setIsSalable($status);
         $this->assertNull($this->stock->assignStatusToProduct($productMock));
     }
 
@@ -125,39 +125,27 @@ class StockTest extends TestCase
         $productId = 2;
         $status = 'test';
 
-        $productMock = $this->getMockBuilder(Product::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['setIsSalable'])
-            ->onlyMethods(['getId'])
-            ->getMock();
-        $productMock->expects($this->once())
-            ->method('setIsSalable')
-            ->with($status);
-        $stockStatusMock = $this->getMockBuilder(StockStatusInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $productMock = $this->createPartialMockWithReflection(
+            Product::class,
+            ['getId', 'setIsSalable']
+        );
+        
+        $productMock->setIsSalable($status);
+        $productMock->setId($productId);
+        
+        $stockStatusMock = $this->createMock(StockStatusInterface::class);
         $stockStatusMock->expects($this->once())
             ->method('getStockStatus')
             ->willReturn($status);
-        $productCollectionMock =
-            $this->getMockBuilder(AbstractCollection::class)
-                ->disableOriginalConstructor()
-                ->getMock();
+        $productCollectionMock = $this->createMock(AbstractCollection::class);
         $productCollectionMock->expects($this->any())
             ->method('getItemById')
             ->with($productId)
             ->willReturn($productMock);
-        $productCollectionMock->expects($this->any())
-            ->method('getStoreId')
-            ->willReturn($storeId);
-        $productMock->expects($this->any())
-            ->method('getId')
-            ->willReturn($productId);
+        $productCollectionMock->method('getStoreId')->willReturn($storeId);
         $iteratorMock = new \ArrayIterator([$productMock]);
 
-        $productCollectionMock->expects($this->any())
-            ->method('getIterator')
-            ->willReturn($iteratorMock);
+        $productCollectionMock->method('getIterator')->willReturn($iteratorMock);
         $this->stockRegistryProviderMock->expects($this->once())
             ->method('getStockStatus')
             ->withAnyParameters()
@@ -166,32 +154,23 @@ class StockTest extends TestCase
         $this->assertNull($this->stock->addStockStatusToProducts($productCollectionMock));
     }
 
-    /**
-     * @dataProvider filterProvider
-     */
+    #[DataProvider('filterProvider')]
     public function testAddInStockFilterToCollection($configMock)
     {
         if ($configMock!=null) {
             $configMock = $configMock($this);
         }
 
-        $collectionMock = $this->getMockBuilder(
-            Collection::class
-        )->disableOriginalConstructor()
-            ->getMock();
+        $collectionMock = $this->createMock(Collection::class);
         $collectionMock->expects($this->any())
             ->method('joinField');
-        $this->scopeConfigMock->expects($this->any())
-            ->method('getValue')
-            ->willReturn($configMock);
+        $this->scopeConfigMock->method('getValue')->willReturn($configMock);
         $this->assertNull($this->stock->addInStockFilterToCollection($collectionMock));
     }
 
     public function getMockForConfigClass()
     {
-        $configMock = $this->getMockBuilder(Config::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $configMock = $this->createMock(Config::class);
         return $configMock;
     }
 
@@ -209,13 +188,8 @@ class StockTest extends TestCase
 
     public function testAddIsInStockFilterToCollection()
     {
-        $collectionMock = $this->getMockBuilder(\Magento\Catalog\Model\ResourceModel\Product\Collection::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $stockStatusMock = $this->getMockBuilder(Status::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['addStockDataToCollection'])
-            ->getMock();
+        $collectionMock = $this->createMock(ProductCollection::class);
+        $stockStatusMock = $this->createMock(Status::class);
         $stockStatusMock->expects($this->once())
             ->method('addStockDataToCollection')
             ->with($collectionMock);

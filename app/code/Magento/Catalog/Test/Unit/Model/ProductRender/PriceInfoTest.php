@@ -44,20 +44,12 @@ class PriceInfoTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->contextMock = $this->getMockBuilder(Context::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->contextMock = $this->createMock(Context::class);
 
-        $this->extensionFactoryMock = $this->getMockBuilder(ExtensionAttributesFactory::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->registryMock = $this->getMockBuilder(Registry::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->extensionFactoryMock = $this->createMock(ExtensionAttributesFactory::class);
+        $this->registryMock = $this->createMock(Registry::class);
 
-        $this->attributeValueFactoryMock = $this->getMockBuilder(AttributeValueFactory::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->attributeValueFactoryMock = $this->createMock(AttributeValueFactory::class);
 
         $this->priceInfo = new PriceInfo(
             $this->contextMock,

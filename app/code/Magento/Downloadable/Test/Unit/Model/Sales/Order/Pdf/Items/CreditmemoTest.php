@@ -11,6 +11,7 @@ use Magento\Downloadable\Model\Sales\Order\Pdf\Items\Creditmemo;
 use Magento\Framework\DataObject;
 use Magento\Framework\Filter\FilterManager;
 use Magento\Framework\Stdlib\StringUtils;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Sales\Model\Order;
 use Magento\Sales\Model\Order\Pdf\AbstractPdf;
@@ -22,6 +23,8 @@ use PHPUnit\Framework\TestCase;
  */
 class CreditmemoTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var Creditmemo
      */
@@ -49,8 +52,8 @@ class CreditmemoTest extends TestCase
             ['drawLineBlocks', 'getPdf']
         );
 
-        $filterManager = $this->createPartialMock(
-            \Magento\Framework\Filter\Test\Unit\Helper\FilterManagerTestHelper::class,
+        $filterManager = $this->createPartialMockWithReflection(
+            FilterManager::class,
             ['stripTags']
         );
         $filterManager->expects($this->any())->method('stripTags')->willReturnArgument(0);

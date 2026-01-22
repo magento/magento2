@@ -15,6 +15,15 @@ use Magento\Sales\Model\Order\Item;
 use Magento\Sales\Model\OrderFactory as SalesOrderFactory;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
+use Magento\Catalog\Model\Product\Type\AbstractType as ProductAbstractType;
+use Magento\Framework\DataObject;
+use Magento\Catalog\Model\Product as CatalogProduct;
+use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Store\Model\Store;
+use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * Unit test for order item class.
@@ -24,6 +33,7 @@ use PHPUnit\Framework\TestCase;
  */
 class ItemTest extends TestCase
 {
+    use MockCreationTrait;
     /**
      * @var Item
      */
@@ -134,9 +144,8 @@ class ItemTest extends TestCase
      * @param $qtyRefunded
      * @param $qtyShipped
      * @param $expectedStatus
-     *
-     * @dataProvider getStatusIdDataProvider
-     */
+     *     */
+    #[DataProvider('getStatusIdDataProvider')]
     public function testGetStatusId(
         $qtyBackOrdered,
         $qtyCanceled,
@@ -146,14 +155,14 @@ class ItemTest extends TestCase
         $qtyShipped,
         $expectedStatus
     ) {
-        $this->model->setQtyBackordered($qtyBackOrdered);
-        $this->model->setQtyCanceled($qtyCanceled);
-        $this->model->setQtyInvoiced($qtyInvoiced);
-        $this->model->setQtyOrdered($qtyOrdered);
-        $this->model->setQtyRefunded($qtyRefunded);
-        $this->model->setQtyShipped($qtyShipped);
+         $this->model->setQtyBackordered($qtyBackOrdered);
+         $this->model->setQtyCanceled($qtyCanceled);
+         $this->model->setQtyInvoiced($qtyInvoiced);
+         $this->model->setQtyOrdered($qtyOrdered);
+         $this->model->setQtyRefunded($qtyRefunded);
+         $this->model->setQtyShipped($qtyShipped);
 
-        $this->assertEquals($expectedStatus, $this->model->getStatusId());
+         $this->assertEquals($expectedStatus, $this->model->getStatusId());
     }
 
     /**
@@ -209,9 +218,8 @@ class ItemTest extends TestCase
      *
      * @param array|string $options
      * @param array $expectedResult
-     *
-     * @dataProvider getProductOptionsDataProvider
-     */
+     *     */
+    #[DataProvider('getProductOptionsDataProvider')]
     public function testGetProductOptions($options, $expectedResult)
     {
         if (is_string($options)) {
@@ -260,9 +268,8 @@ class ItemTest extends TestCase
      *
      * @param array $options
      * @param float $expectedResult
-     *
-     * @dataProvider getItemQtyVariants
-     */
+     *     */
+    #[DataProvider('getItemQtyVariants')]
     public function testGetSimpleQtyToMethods(array $options, $expectedResult)
     {
         $this->model->setData($options);
@@ -390,8 +397,8 @@ class ItemTest extends TestCase
      *
      * @param array $data
      * @param bool $expected
-     * @dataProvider canInvoiceDataProvider
      */
+    #[DataProvider('canInvoiceDataProvider')]
     public function testCanInvoice(array $data, bool $expected)
     {
         $this->model->setData($data);
@@ -426,8 +433,8 @@ class ItemTest extends TestCase
      *
      * @param array $data
      * @param bool $expected
-     * @dataProvider canShipDataProvider
      */
+    #[DataProvider('canShipDataProvider')]
     public function testCanShip(array $data, bool $expected)
     {
         $this->model->setData($data);
@@ -462,8 +469,8 @@ class ItemTest extends TestCase
      *
      * @param array $data
      * @param bool $expected
-     * @dataProvider canRefundDataProvider
      */
+    #[DataProvider('canRefundDataProvider')]
     public function testCanRefund(array $data, bool $expected)
     {
         $this->model->setData($data);
@@ -498,8 +505,8 @@ class ItemTest extends TestCase
      *
      * @param array $data
      * @param float $expected
-     * @dataProvider getQtyToRefundDataProvider
      */
+    #[DataProvider('getQtyToRefundDataProvider')]
     public function testGetQtyToRefund(array $data, float $expected)
     {
         $this->model->setData($data);
@@ -623,8 +630,8 @@ class ItemTest extends TestCase
      *
      * @param string|null $code
      * @param mixed $expected
-     * @dataProvider getProductOptionByCodeDataProvider
      */
+    #[DataProvider('getProductOptionByCodeDataProvider')]
     public function testGetProductOptionByCode($code, $expected)
     {
         $options = [
@@ -716,8 +723,8 @@ class ItemTest extends TestCase
      * @param bool $hasParent
      * @param int|null $calculation
      * @param bool $expected
-     * @dataProvider isChildrenCalculatedDataProvider
      */
+    #[DataProvider('isChildrenCalculatedDataProvider')]
     public function testIsChildrenCalculated(bool $hasParent, ?int $calculation, bool $expected)
     {
         if ($hasParent) {
@@ -745,23 +752,23 @@ class ItemTest extends TestCase
         return [
             'no_parent_calculate_child' => [
                 false,
-                \Magento\Catalog\Model\Product\Type\AbstractType::CALCULATE_CHILD,
+                ProductAbstractType::CALCULATE_CHILD,
                 true
             ],
             'no_parent_calculate_parent' => [
                 false,
-                \Magento\Catalog\Model\Product\Type\AbstractType::CALCULATE_PARENT,
+                ProductAbstractType::CALCULATE_PARENT,
                 false
             ],
             'no_parent_no_calculation' => [false, null, false],
             'has_parent_calculate_child' => [
                 true,
-                \Magento\Catalog\Model\Product\Type\AbstractType::CALCULATE_CHILD,
+                ProductAbstractType::CALCULATE_CHILD,
                 true
             ],
             'has_parent_calculate_parent' => [
                 true,
-                \Magento\Catalog\Model\Product\Type\AbstractType::CALCULATE_PARENT,
+                ProductAbstractType::CALCULATE_PARENT,
                 false
             ]
         ];
@@ -773,8 +780,8 @@ class ItemTest extends TestCase
      * @param bool $hasParent
      * @param int|null $shipmentType
      * @param bool $expected
-     * @dataProvider isShipSeparatelyDataProvider
      */
+    #[DataProvider('isShipSeparatelyDataProvider')]
     public function testIsShipSeparately(bool $hasParent, ?int $shipmentType, bool $expected)
     {
         if ($hasParent) {
@@ -802,23 +809,23 @@ class ItemTest extends TestCase
         return [
             'no_parent_ship_separately' => [
                 false,
-                \Magento\Catalog\Model\Product\Type\AbstractType::SHIPMENT_SEPARATELY,
+                ProductAbstractType::SHIPMENT_SEPARATELY,
                 true
             ],
             'no_parent_ship_together' => [
                 false,
-                \Magento\Catalog\Model\Product\Type\AbstractType::SHIPMENT_TOGETHER,
+                ProductAbstractType::SHIPMENT_TOGETHER,
                 false
             ],
             'no_parent_no_shipment_type' => [false, null, false],
             'has_parent_ship_separately' => [
                 true,
-                \Magento\Catalog\Model\Product\Type\AbstractType::SHIPMENT_SEPARATELY,
+                ProductAbstractType::SHIPMENT_SEPARATELY,
                 true
             ],
             'has_parent_ship_together' => [
                 true,
-                \Magento\Catalog\Model\Product\Type\AbstractType::SHIPMENT_TOGETHER,
+                ProductAbstractType::SHIPMENT_TOGETHER,
                 false
             ]
         ];
@@ -829,8 +836,8 @@ class ItemTest extends TestCase
      *
      * @param array $setup
      * @param bool $expected
-     * @dataProvider isDummyShipmentDataProvider
      */
+    #[DataProvider('isDummyShipmentDataProvider')]
     public function testIsDummyForShipment(array $setup, bool $expected)
     {
         if (isset($setup['has_children'])) {
@@ -839,8 +846,8 @@ class ItemTest extends TestCase
         if (isset($setup['ship_separately'])) {
             $this->model->setProductOptions([
                 'shipment_type' => $setup['ship_separately']
-                    ? \Magento\Catalog\Model\Product\Type\AbstractType::SHIPMENT_SEPARATELY
-                    : \Magento\Catalog\Model\Product\Type\AbstractType::SHIPMENT_TOGETHER
+                    ? ProductAbstractType::SHIPMENT_SEPARATELY
+                    : ProductAbstractType::SHIPMENT_TOGETHER
             ]);
         }
         if (isset($setup['has_parent'])) {
@@ -849,8 +856,8 @@ class ItemTest extends TestCase
             if (isset($setup['parent_ship_separately'])) {
                 $parentItem->setProductOptions([
                     'shipment_type' => $setup['parent_ship_separately']
-                        ? \Magento\Catalog\Model\Product\Type\AbstractType::SHIPMENT_SEPARATELY
-                        : \Magento\Catalog\Model\Product\Type\AbstractType::SHIPMENT_TOGETHER
+                        ? ProductAbstractType::SHIPMENT_SEPARATELY
+                        : ProductAbstractType::SHIPMENT_TOGETHER
                 ]);
             }
         }
@@ -891,8 +898,8 @@ class ItemTest extends TestCase
      *
      * @param array $setup
      * @param bool $expected
-     * @dataProvider isDummyCalculationDataProvider
      */
+    #[DataProvider('isDummyCalculationDataProvider')]
     public function testIsDummyForCalculation(array $setup, bool $expected)
     {
         if (isset($setup['has_children'])) {
@@ -901,8 +908,8 @@ class ItemTest extends TestCase
         if (isset($setup['children_calculated'])) {
             $this->model->setProductOptions([
                 'product_calculations' => $setup['children_calculated']
-                    ? \Magento\Catalog\Model\Product\Type\AbstractType::CALCULATE_CHILD
-                    : \Magento\Catalog\Model\Product\Type\AbstractType::CALCULATE_PARENT
+                    ? ProductAbstractType::CALCULATE_CHILD
+                    : ProductAbstractType::CALCULATE_PARENT
             ]);
         }
         if (isset($setup['has_parent'])) {
@@ -911,8 +918,8 @@ class ItemTest extends TestCase
             if (isset($setup['parent_children_calculated'])) {
                 $parentItem->setProductOptions([
                     'product_calculations' => $setup['parent_children_calculated']
-                        ? \Magento\Catalog\Model\Product\Type\AbstractType::CALCULATE_CHILD
-                        : \Magento\Catalog\Model\Product\Type\AbstractType::CALCULATE_PARENT
+                        ? ProductAbstractType::CALCULATE_CHILD
+                        : ProductAbstractType::CALCULATE_PARENT
                 ]);
             }
         }
@@ -960,7 +967,7 @@ class ItemTest extends TestCase
 
         $buyRequest = $this->model->getBuyRequest();
 
-        $this->assertInstanceOf(\Magento\Framework\DataObject::class, $buyRequest);
+        $this->assertInstanceOf(DataObject::class, $buyRequest);
         $this->assertEquals(10, $buyRequest->getQty());
         $this->assertEquals(123, $buyRequest->getProduct());
     }
@@ -973,7 +980,7 @@ class ItemTest extends TestCase
         $this->model->setQtyOrdered(5);
         $buyRequest = $this->model->getBuyRequest();
 
-        $this->assertInstanceOf(\Magento\Framework\DataObject::class, $buyRequest);
+        $this->assertInstanceOf(DataObject::class, $buyRequest);
         $this->assertEquals(5, $buyRequest->getQty());
     }
 
@@ -1005,7 +1012,7 @@ class ItemTest extends TestCase
         ]);
         $this->model->setHasChildren(true);
         $this->model->setProductOptions([
-            'shipment_type' => \Magento\Catalog\Model\Product\Type\AbstractType::SHIPMENT_SEPARATELY
+            'shipment_type' => ProductAbstractType::SHIPMENT_SEPARATELY
         ]);
 
         // This is a dummy item for shipment (has children + ship separately)
@@ -1024,7 +1031,7 @@ class ItemTest extends TestCase
         ]);
         $this->model->setHasChildren(true);
         $this->model->setProductOptions([
-            'product_calculations' => \Magento\Catalog\Model\Product\Type\AbstractType::CALCULATE_CHILD
+            'product_calculations' => ProductAbstractType::CALCULATE_CHILD
         ]);
 
         // This is a dummy item for calculation
@@ -1042,7 +1049,7 @@ class ItemTest extends TestCase
         ]);
         $this->model->setHasChildren(true);
         $this->model->setProductOptions([
-            'product_calculations' => \Magento\Catalog\Model\Product\Type\AbstractType::CALCULATE_CHILD
+            'product_calculations' => ProductAbstractType::CALCULATE_CHILD
         ]);
 
         // This is a dummy item for calculation
@@ -1054,7 +1061,7 @@ class ItemTest extends TestCase
      */
     public function testGetProductWhenCached()
     {
-        $product = $this->createMock(\Magento\Catalog\Model\Product::class);
+        $product = $this->createMock(CatalogProduct::class);
         $this->model->setProduct($product);
 
         $this->assertSame($product, $this->model->getProduct());
@@ -1066,9 +1073,9 @@ class ItemTest extends TestCase
     public function testGetProductWhenNotCached()
     {
         $productId = 123;
-        $product = $this->createMock(\Magento\Catalog\Model\Product::class);
+        $product = $this->createMock(CatalogProduct::class);
 
-        $productRepository = $this->createMock(\Magento\Catalog\Api\ProductRepositoryInterface::class);
+        $productRepository = $this->createMock(ProductRepositoryInterface::class);
         $productRepository->expects($this->once())
             ->method('getById')
             ->with($productId)
@@ -1094,11 +1101,11 @@ class ItemTest extends TestCase
     {
         $productId = 999;
 
-        $productRepository = $this->createMock(\Magento\Catalog\Api\ProductRepositoryInterface::class);
+        $productRepository = $this->createMock(ProductRepositoryInterface::class);
         $productRepository->expects($this->once())
             ->method('getById')
             ->with($productId)
-            ->willThrowException(new \Magento\Framework\Exception\NoSuchEntityException(__('Product not found')));
+            ->willThrowException(new NoSuchEntityException(__('Product not found')));
 
         // Create a new model with mock product repository
         $testModel = $this->objectManager->getObject(Item::class, [
@@ -1117,9 +1124,9 @@ class ItemTest extends TestCase
     public function testGetStoreWithStoreId()
     {
         $storeId = 5;
-        $store = $this->createMock(\Magento\Store\Model\Store::class);
+        $store = $this->createMock(Store::class);
 
-        $storeManager = $this->createMock(\Magento\Store\Model\StoreManagerInterface::class);
+        $storeManager = $this->createMock(StoreManagerInterface::class);
         $storeManager->expects($this->once())
             ->method('getStore')
             ->with($storeId)
@@ -1141,9 +1148,9 @@ class ItemTest extends TestCase
      */
     public function testGetStoreWithoutStoreId()
     {
-        $store = $this->createMock(\Magento\Store\Model\Store::class);
+        $store = $this->createMock(Store::class);
 
-        $storeManager = $this->createMock(\Magento\Store\Model\StoreManagerInterface::class);
+        $storeManager = $this->createMock(StoreManagerInterface::class);
         $storeManager->expects($this->once())
             ->method('getStore')
             ->with(null)
@@ -1164,20 +1171,15 @@ class ItemTest extends TestCase
      */
     public function testGetForceApplyDiscountToParentItemWithoutParent()
     {
-        $typeInstance = $this->getMockForAbstractClass(
-            \Magento\Catalog\Model\Product\Type\AbstractType::class,
-            [],
-            '',
-            false,
-            true,
-            true,
-            ['getForceApplyDiscountToParentItem']
+        $typeInstance = $this->createPartialMockWithReflection(
+            ProductAbstractType::class,
+            ['getForceApplyDiscountToParentItem', 'deleteTypeSpecificData']
         );
         $typeInstance->expects($this->once())
             ->method('getForceApplyDiscountToParentItem')
             ->willReturn(true);
 
-        $product = $this->createMock(\Magento\Catalog\Model\Product::class);
+        $product = $this->createMock(CatalogProduct::class);
         $product->expects($this->once())
             ->method('getTypeInstance')
             ->willReturn($typeInstance);
@@ -1192,20 +1194,15 @@ class ItemTest extends TestCase
      */
     public function testGetForceApplyDiscountToParentItemWithParent()
     {
-        $typeInstance = $this->getMockForAbstractClass(
-            \Magento\Catalog\Model\Product\Type\AbstractType::class,
-            [],
-            '',
-            false,
-            true,
-            true,
-            ['getForceApplyDiscountToParentItem']
+        $typeInstance = $this->createPartialMockWithReflection(
+            ProductAbstractType::class,
+            ['getForceApplyDiscountToParentItem', 'deleteTypeSpecificData']
         );
         $typeInstance->expects($this->once())
             ->method('getForceApplyDiscountToParentItem')
             ->willReturn(false);
 
-        $parentProduct = $this->createMock(\Magento\Catalog\Model\Product::class);
+        $parentProduct = $this->createMock(CatalogProduct::class);
         $parentProduct->expects($this->once())
             ->method('getTypeInstance')
             ->willReturn($typeInstance);

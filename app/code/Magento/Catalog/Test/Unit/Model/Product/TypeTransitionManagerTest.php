@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\Catalog\Test\Unit\Model\Product;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\Product\Edit\WeightResolver;
 use Magento\Catalog\Model\Product\Type;
@@ -56,8 +57,8 @@ class TypeTransitionManagerTest extends TestCase
      * @param bool $hasWeight
      * @param string $currentTypeId
      * @param string $expectedTypeId
-     * @dataProvider processProductDataProvider
      */
+    #[DataProvider('processProductDataProvider')]
     public function testProcessProduct($hasWeight, $currentTypeId, $expectedTypeId)
     {
         $this->productMock->expects($this->once())->method('getTypeId')->willReturn($currentTypeId);

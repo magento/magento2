@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright 2026 Adobe
+ * All Rights Reserved.
+ */
+-->
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminDisableAllConflictingPayPalMethodsActionGroup">
+        <annotations>
+            <description>Disables all PayPal payment methods that might conflict with PayPal Express Checkout configuration.</description>
+        </annotations>
+        <magentoCLI command="config:set payment/wps_express/active 0" stepKey="disableWPSExpress"/>
+        <magentoCLI command="config:set payment/hosted_pro/active 0" stepKey="disableHostedPro"/>
+        <magentoCLI command="config:set payment/paypal_payment_pro/active 0" stepKey="disablePaymentsPro"/>
+        <magentoCLI command="config:set payment/payflow_link/active 0" stepKey="disablePayflowLink"/>
+        <magentoCLI command="config:set payment/payflow_advanced/active 0" stepKey="disablePayflowAdvanced"/>
+        <magentoCLI command="config:set payment/payflow_express/active 0" stepKey="disablePayflowExpress"/>
+        <magentoCLI command="config:set payment/payflow_express_bml/active 0" stepKey="disablePayflowExpressBml"/>
+    </actionGroup>
+</actionGroups>

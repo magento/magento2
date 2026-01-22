@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\Catalog\Test\Unit\Model\Indexer\Product\Price\Plugin;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\Catalog\Model\Indexer\Product\Price\DimensionModeConfiguration;
 use Magento\Catalog\Model\Indexer\Product\Price\Plugin\CustomerGroup;
 use Magento\Catalog\Model\Indexer\Product\Price\TableMaintainer;
@@ -87,12 +88,11 @@ class CustomerGroupTest extends TestCase
      *
      * @param $customerGroupId
      * @param $callTimes
-     *
-     * @dataProvider aroundSaveDataProvider
      */
+    #[DataProvider('aroundSaveDataProvider')]
     public function testAroundSave($customerGroupId, $callTimes)
     {
-        $subjectMock = $this->getMockForAbstractClass(GroupRepositoryInterface::class);
+        $subjectMock = $this->createMock(GroupRepositoryInterface::class);
         $customerGroupMock = $this->createPartialMock(
             Group::class,
             ['getId']

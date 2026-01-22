@@ -1118,8 +1118,7 @@ XMLRequest;
                             "AddressLine" => ["{$params['49_residential']}"],
                             "StateProvinceCode" => "{$params['destRegionCode']}",
                             "PostalCode" => "{$params['19_destPostal']}",
-                            "CountryCode" => "{$params['22_destCountry']}",
-                            "ResidentialAddressIndicator" => "{$residentialAddressIndicator}"
+                            "CountryCode" => "{$params['22_destCountry']}"
                         ]
                     ],
                     "ShipFrom" => [
@@ -1133,6 +1132,11 @@ XMLRequest;
                 ]
             ]
         ];
+
+        if ($params['49_residential'] === '01') {
+            $rateParams['RateRequest']['Shipment']['ShipTo']['Address']['ResidentialAddressIndicator']
+                = $residentialAddressIndicator;
+        }
 
         if ($this->getConfigFlag('negotiated_active')) {
             $rateParams['RateRequest']['Shipment']['ShipmentRatingOptions']['TPFCNegotiatedRatesIndicator'] = "Y";
