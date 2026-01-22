@@ -25,6 +25,7 @@ use Magento\Framework\Reflection\TypeProcessor;
 use Magento\Framework\Webapi\Exception as WebapiException;
 use Magento\Framework\Webapi\CustomAttribute\PreprocessorInterface;
 use Laminas\Code\Reflection\ClassReflection;
+use Laminas\Code\Reflection\MethodReflection;
 use Magento\Framework\Webapi\Validator\IOLimit\DefaultPageSizeSetter;
 use Magento\Framework\Webapi\Validator\ServiceInputValidatorInterface;
 
@@ -227,46 +228,115 @@ class ServiceInputProcessor implements ServicePayloadConverterInterface, ResetAf
      */
     private function getConstructorData(string $className, array $data): array
     {
-        $preferenceClass = $this->config->getPreference($className);
-        $class = new ClassReflection($preferenceClass ?: $className);
-
-        try {
-            $constructor = $class->getMethod('__construct');
-        } catch (\ReflectionException $e) {
-            $constructor = null;
-        }
-
+        $constructor = $this->getConstructorReflection($className);
         if ($constructor === null) {
             return [];
         }
 
-        $res = [];
-        $parameters = $constructor->getParameters();
-        foreach ($parameters as $parameter) {
-            $parameterName = $parameter->getName();
-            $snakeCaseParameterName = SimpleDataObjectConverter::camelCaseToSnakeCase($parameterName);
-            if (isset($data[$parameterName]) || isset($data[$snakeCaseParameterName])) {
-                $parameterType = $this->typeProcessor->getParamType($parameter);
+        return $this->getConstructorArguments($constructor, $data);
+    }
 
-                // Allow only simple types or Api Data Objects
-                if (!($this->typeProcessor->isTypeSimple($parameterType)
-                    || preg_match('~\\\\?\w+\\\\\w+\\\\Api\\\\Data\\\\~', $parameterType) === 1
-                )) {
-                    continue;
-                }
+    /**
+     * Get constructor reflection for a class.
+     *
+     * @param string $className
+     * @return MethodReflection|null
+     * @throws \ReflectionException
+     */
+    private function getConstructorReflection(string $className): ?MethodReflection
+    {
+        $preferenceClass = $this->config->getPreference($className);
+        $class = new ClassReflection($preferenceClass ?: $className);
 
-                $parameterValue = isset($data[$parameterName]) ? $data[$parameterName] : $data[$snakeCaseParameterName];
-                try {
-                    $res[$parameterName] = $this->convertValue($parameterValue, $parameterType);
-                } catch (\ReflectionException $e) {
-                    // Parameter was not correclty declared or the class is uknown.
-                    // By not returing the contructor value, we will automatically fall back to the "setters" way.
-                    continue;
-                }
+        try {
+            return $class->getMethod('__construct');
+        } catch (\ReflectionException $e) {
+            return null;
+        }
+    }
+
+    /**
+     * Build constructor arguments from input data.
+     *
+     * @param MethodReflection $constructor
+     * @param array $data
+     * @return array
+     */
+    private function getConstructorArguments(MethodReflection $constructor, array $data): array
+    {
+        $result = [];
+        foreach ($constructor->getParameters() as $parameter) {
+            $parameterValue = $this->getConstructorParameterValue($parameter, $data);
+            if ($parameterValue === null) {
+                continue;
             }
+
+            $result[$parameter->getName()] = $parameterValue;
         }
 
-        return $res;
+        return $result;
+    }
+
+    /**
+     * Resolve a constructor parameter value from input data.
+     *
+     * @param \ReflectionParameter $parameter
+     * @param array $data
+     * @return mixed|null
+     * @throws LocalizedException
+     */
+    private function getConstructorParameterValue(\ReflectionParameter $parameter, array $data)
+    {
+        [$hasValue, $parameterValue] = $this->getParameterValue($data, $parameter->getName());
+        if (!$hasValue) {
+            return null;
+        }
+
+        $parameterType = $this->typeProcessor->getParamType($parameter);
+        if (!$this->isAllowedConstructorType($parameterType)) {
+            return null;
+        }
+
+        try {
+            return $this->convertValue($parameterValue, $parameterType);
+        } catch (\ReflectionException $e) {
+            // Parameter was not correctly declared or the class is unknown.
+            // By not returning the constructor value, we will automatically fall back to the "setters" way.
+            return null;
+        }
+    }
+
+    /**
+     * Retrieve input value for a constructor parameter.
+     *
+     * @param array $data
+     * @param string $parameterName
+     * @return array [bool $hasValue, mixed $value]
+     */
+    private function getParameterValue(array $data, string $parameterName): array
+    {
+        if (isset($data[$parameterName])) {
+            return [true, $data[$parameterName]];
+        }
+
+        $snakeCaseParameterName = SimpleDataObjectConverter::camelCaseToSnakeCase($parameterName);
+        if (isset($data[$snakeCaseParameterName])) {
+            return [true, $data[$snakeCaseParameterName]];
+        }
+
+        return [false, null];
+    }
+
+    /**
+     * Allow only simple types or Api Data Objects for constructor hydration.
+     *
+     * @param string $parameterType
+     * @return bool
+     */
+    private function isAllowedConstructorType(string $parameterType): bool
+    {
+        return $this->typeProcessor->isTypeSimple($parameterType)
+            || preg_match('~\\\\?\w+\\\\\w+\\\\Api\\\\Data\\\\~', $parameterType) === 1;
     }
 
     /**
