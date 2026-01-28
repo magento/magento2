@@ -194,9 +194,6 @@ class LabelGenerator
         $pdfImage = \Zend_Pdf_Image::imageWithPath($tmpFileName);
         $page->drawImage($pdfImage, 0, 0, $xSize, $ySize);
         $directory->delete($directory->getRelativePath($tmpFileName));
-        if (is_resource($image)) {
-            imagedestroy($image);
-        }
         return $page;
     }
 }

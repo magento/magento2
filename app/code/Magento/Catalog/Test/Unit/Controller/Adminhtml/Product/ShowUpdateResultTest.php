@@ -64,9 +64,8 @@ class ShowUpdateResultTest extends TestCase
         // Use reflection to set the storage property
         $reflection = new \ReflectionClass($session);
         $storageProperty = $reflection->getProperty('storage');
-        $storageProperty->setAccessible(true);
         $storageProperty->setValue($session, $storage);
-        
+
         return $session;
     }
 
@@ -117,7 +116,7 @@ class ShowUpdateResultTest extends TestCase
         $productCompositeHelper = $this->createMock(Composite::class);
         $layoutResult = $this->createMock(ResultLayout::class);
         $compositeProductResult = new DataObject();
-        
+
         $productCompositeHelper->expects($this->once())
             ->method('renderUpdateResult')
             ->with($compositeProductResult)
@@ -125,7 +124,7 @@ class ShowUpdateResultTest extends TestCase
 
         $productBuilder = $this->createMock(Builder::class);
         $context = $this->getContext();
-        
+
         // Configure the session to return composite product result
         $this->session->expects($this->once())
             ->method('hasCompositeProductResult')
@@ -139,7 +138,7 @@ class ShowUpdateResultTest extends TestCase
         /** @var ShowUpdateResult $controller */
         $controller = new ShowUpdateResult($context, $productBuilder, $productCompositeHelper);
         $result = $controller->execute();
-        
+
         // The controller should return the result from renderUpdateResult
         $this->assertSame($layoutResult, $result);
     }

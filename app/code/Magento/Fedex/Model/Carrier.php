@@ -435,12 +435,12 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
                 'PACKAGE';
             $ratesRequest['requestedShipment']['requestedPackageLineItems'][$packageNum]['groupPackageCount'] = 1;
             $ratesRequest['requestedShipment']['requestedPackageLineItems'][$packageNum]['weight']['value']
-                = (double) $package['weight'];
+                = (float) $package['weight'];
             $ratesRequest['requestedShipment']['requestedPackageLineItems'][$packageNum]['weight']['units']
                 = $this->getConfigData('unit_of_measure');
             if (isset($package['price'])) {
                 $ratesRequest['requestedShipment']['requestedPackageLineItems'][$packageNum]['declaredValue']['amount']
-                    = (double) $package['price'];
+                    = (float) $package['price'];
                 $ratesRequest['requestedShipment']['requestedPackageLineItems'][$packageNum]['declaredValue']
                 ['currency'] = $this->getCurrencyCode();
             }
@@ -454,7 +454,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
         if ($purpose == self::RATE_REQUEST_SMARTPOST) {
             $ratesRequest['requestedShipment']['serviceType'] = self::RATE_REQUEST_SMARTPOST;
             $ratesRequest['requestedShipment']['smartPostInfoDetail'] = [
-                'indicia' => (double)$r->getWeight() >= 1 ? 'PARCEL_SELECT' : 'PRESORTED_STANDARD',
+                'indicia' => (float)$r->getWeight() >= 1 ? 'PARCEL_SELECT' : 'PRESORTED_STANDARD',
                 'hubId' => $this->getConfigData('smartpost_hubid'),
             ];
         }
@@ -912,7 +912,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
             'CLP' => 'CHP',
             'TWD' => 'NTD',
         ];
-        $currencyCode = $this->_storeManager->getStore()->getBaseCurrencyCode();
+        $currencyCode = $this->_storeManager->getStore()->getBaseCurrencyCode() ?? '';
 
         return $codes[$currencyCode] ?? $currencyCode;
     }
@@ -1388,7 +1388,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
 
         if ($request->getShippingMethod() == self::RATE_REQUEST_SMARTPOST) {
             $requestClient['requestedShipment']['smartPostInfoDetail'] = [
-                'indicia' => (double)$request->getPackageWeight() >= 1 ? 'PARCEL_SELECT' : 'PRESORTED_STANDARD',
+                'indicia' => (float)$request->getPackageWeight() >= 1 ? 'PARCEL_SELECT' : 'PRESORTED_STANDARD',
                 'hubId' => $this->getConfigData('smartpost_hubid'),
             ];
         }

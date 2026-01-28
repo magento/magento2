@@ -143,7 +143,6 @@ class ValidateTest extends TestCase
         );
         $reflection = new \ReflectionClass($this->validate);
         $importProperty = $reflection->getProperty('import');
-        $importProperty->setAccessible(true);
         $importProperty->setValue($this->validate, $this->importMock);
     }
 

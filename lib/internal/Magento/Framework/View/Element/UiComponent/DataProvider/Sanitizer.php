@@ -70,11 +70,14 @@ class Sanitizer
      *
      * Will sanitize full component's metadata as well as metadata of it's child components.
      *
-     * @param array $meta
+     * @param array|null $meta
      * @return array
      */
-    public function sanitizeComponentMetadata(array $meta): array
+    public function sanitizeComponentMetadata(?array $meta): array
     {
+        if ($meta === null) {
+            return [];
+        }
         if (array_key_exists('arguments', $meta)
             && is_array($meta['arguments'])
             && array_key_exists('data', $meta['arguments'])

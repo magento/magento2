@@ -62,7 +62,6 @@ class OrdersTest extends TestCase
 
         $reflection = new ReflectionClass($orders);
         $resourceNameProperty = $reflection->getProperty('_resourceName');
-        $resourceNameProperty->setAccessible(true);
 
         $this->assertEquals(
             OrdersResource::class,

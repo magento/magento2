@@ -78,7 +78,6 @@ class StoreRepositoryTest extends TestCase
     {
         $repositoryReflection = new \ReflectionClass($this->storeRepository);
         $deploymentProperty = $repositoryReflection->getProperty('appConfig');
-        $deploymentProperty->setAccessible(true);
         $deploymentProperty->setValue($this->storeRepository, $this->appConfigMock);
     }
 

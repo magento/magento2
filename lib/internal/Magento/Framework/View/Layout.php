@@ -798,6 +798,7 @@ class Layout extends \Magento\Framework\Simplexml\Config implements \Magento\Fra
      */
     public function setBlock($name, $block)
     {
+        $name = $name ?? '';
         $this->_blocks[$name] = $block;
         return $this;
     }

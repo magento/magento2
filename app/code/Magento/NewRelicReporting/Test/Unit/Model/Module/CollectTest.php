@@ -406,7 +406,6 @@ class CollectTest extends TestCase
         // Use reflection to call the protected getState method
         $reflection = new ReflectionClass($this->model);
         $method = $reflection->getMethod('getState');
-        $method->setAccessible(true);
 
         $result = $method->invoke($this->model, $moduleName);
 
@@ -433,7 +432,6 @@ class CollectTest extends TestCase
         // Use reflection to call the protected getState method
         $reflection = new ReflectionClass($this->model);
         $method = $reflection->getMethod('getState');
-        $method->setAccessible(true);
 
         $result = $method->invoke($this->model, $moduleName);
 
@@ -475,7 +473,6 @@ class CollectTest extends TestCase
         // Use reflection to call the protected getState method
         $reflection = new ReflectionClass($this->model);
         $method = $reflection->getMethod('getState');
-        $method->setAccessible(true);
 
         $result = $method->invoke($this->model, $moduleName);
 

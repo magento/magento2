@@ -143,7 +143,6 @@ class ViewTest extends TestCase
             ->getMock();
         $reflectionStore = new ReflectionClass($this->plugin);
         $origStore = $reflectionStore->getProperty('origStore');
-        $origStore->setAccessible(true);
         $origStore->setValue($this->plugin, $origStoreMock);
 
         $origStoreMock->expects($this->atLeastOnce())
@@ -204,7 +203,6 @@ class ViewTest extends TestCase
             ->getMock();
         $reflectionStore = new ReflectionClass($this->plugin);
         $origStore = $reflectionStore->getProperty('origStore');
-        $origStore->setAccessible(true);
         $origStore->setValue($this->plugin, $origStoreMock);
 
         $origStoreMock->expects($this->atLeastOnce())

@@ -779,7 +779,6 @@ class CheckoutTest extends TestCase
     {
         $reflection = new \ReflectionClass($api);
         $property = $reflection->getProperty('_countryFactory');
-        $property->setAccessible(true);
         $property->setValue($api, $this->objectManager->get(CountryFactory::class));
     }
 }

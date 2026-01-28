@@ -58,7 +58,6 @@ class ViewTest extends TestCase
             View::class,
             '_isPaymentReview'
         );
-        $testMethod->setAccessible(true);
 
         $this->assertEquals($expectedResult, $testMethod->invoke($block));
     }

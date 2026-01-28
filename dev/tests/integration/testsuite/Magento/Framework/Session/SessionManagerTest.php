@@ -244,7 +244,6 @@ namespace Magento\Framework\Session {
             $this->model->start();
 
             $reflection = new \ReflectionMethod($this->model, '_addHost');
-            $reflection->setAccessible(true);
             $reflection->invoke($this->model);
 
             $this->assertFalse($this->model->isValidForHost('test.com'));

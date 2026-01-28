@@ -76,7 +76,6 @@ class WebsiteRepositoryTest extends TestCase
     {
         $repositoryReflection = new ReflectionClass($this->model);
         $deploymentProperty = $repositoryReflection->getProperty('appConfig');
-        $deploymentProperty->setAccessible(true);
         $deploymentProperty->setValue($this->model, $this->appConfigMock);
     }
 

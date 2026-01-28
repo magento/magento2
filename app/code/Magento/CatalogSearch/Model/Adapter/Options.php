@@ -3,6 +3,8 @@
  * Copyright 2015 Adobe
  * All Rights Reserved.
  */
+declare(strict_types=1);
+
 namespace Magento\CatalogSearch\Model\Adapter;
 
 use Magento\Framework\App\Config\ScopeConfigInterface;
@@ -17,9 +19,9 @@ use Magento\Store\Model\ScopeInterface;
  */
 class Options implements OptionsInterface
 {
-    const XML_PATH_INTERVAL_DIVISION_LIMIT = 'catalog/layered_navigation/interval_division_limit';
-    const XML_PATH_RANGE_STEP = 'catalog/layered_navigation/price_range_step';
-    const XML_PATH_RANGE_MAX_INTERVALS = 'catalog/layered_navigation/price_range_max_intervals';
+    public const XML_PATH_INTERVAL_DIVISION_LIMIT = 'catalog/layered_navigation/interval_division_limit';
+    public const XML_PATH_RANGE_STEP = 'catalog/layered_navigation/price_range_step';
+    public const XML_PATH_RANGE_MAX_INTERVALS = 'catalog/layered_navigation/price_range_max_intervals';
 
     /**
      * @var ScopeConfigInterface
@@ -44,7 +46,7 @@ class Options implements OptionsInterface
                 self::XML_PATH_INTERVAL_DIVISION_LIMIT,
                 ScopeInterface::SCOPE_STORE
             ),
-            'range_step' => (double)$this->scopeConfig->getValue(
+            'range_step' => (float)$this->scopeConfig->getValue(
                 self::XML_PATH_RANGE_STEP,
                 ScopeInterface::SCOPE_STORE
             ),

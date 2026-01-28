@@ -68,7 +68,6 @@ class DeveloperTest extends TestCase
     {
         $reflectionClass = new \ReflectionClass(get_class($this->model));
         $reflectionProperty = $reflectionClass->getProperty('_virtualTypes');
-        $reflectionProperty->setAccessible(true);
         $reflectionProperty->setValue($this->model, ['SomeVirtualClass' => 'SomeClass']);
 
         $this->interceptionConfig->expects($this->once())->method('hasPlugins')->with('SomeClass')->willReturn(true);

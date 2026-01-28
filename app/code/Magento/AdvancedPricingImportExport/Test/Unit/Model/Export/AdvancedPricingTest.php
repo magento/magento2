@@ -240,26 +240,23 @@ class AdvancedPricingTest extends TestCase
             AdvancedPricing::class,
             array_merge($mockAddMethods, $mockMethods)
         );
-        
+
         // Configure constructor methods to return self
         foreach ($constructorMethods as $method) {
             $this->advancedPricing->method($method)->willReturnSelf();
         }
-        
+
         // Set properties directly using reflection instead of calling constructor
         // to avoid parent constructor that needs ObjectManager
         $reflection = new \ReflectionClass($this->advancedPricing);
-        
+
         $storeResolverProperty = $reflection->getProperty('_storeResolver');
-        $storeResolverProperty->setAccessible(true);
         $storeResolverProperty->setValue($this->advancedPricing, $this->storeResolver);
-        
+
         $groupRepositoryProperty = $reflection->getProperty('_groupRepository');
-        $groupRepositoryProperty->setAccessible(true);
         $groupRepositoryProperty->setValue($this->advancedPricing, $this->groupRepository);
-        
+
         $resourceProperty = $reflection->getProperty('_resource');
-        $resourceProperty->setAccessible(true);
         $resourceProperty->setValue($this->advancedPricing, $this->resource);
     }
 
@@ -371,7 +368,6 @@ class AdvancedPricingTest extends TestCase
     {
         $reflection = new \ReflectionClass(get_class($object));
         $reflectionProperty = $reflection->getProperty($property);
-        $reflectionProperty->setAccessible(true);
         return $reflectionProperty->getValue($object);
     }
 
@@ -388,7 +384,6 @@ class AdvancedPricingTest extends TestCase
     {
         $reflection = new \ReflectionClass(get_class($object));
         $reflectionProperty = $reflection->getProperty($property);
-        $reflectionProperty->setAccessible(true);
         $reflectionProperty->setValue($object, $value);
         return $object;
     }

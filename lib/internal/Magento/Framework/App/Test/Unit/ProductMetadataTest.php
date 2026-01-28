@@ -43,7 +43,6 @@ class ProductMetadataTest extends TestCase
         $objectManager = new ObjectManager($this);
         $this->productMetadata = $objectManager->getObject(ProductMetadata::class, ['cache' => $this->cacheMock]);
         $reflectionProperty = new \ReflectionProperty($this->productMetadata, 'composerInformation');
-        $reflectionProperty->setAccessible(true);
         $reflectionProperty->setValue($this->productMetadata, $this->composerInformationMock);
     }
 

@@ -48,7 +48,6 @@ class ReviewTest extends AbstractModifierTestCase
 
         $reviewClass = new \ReflectionClass(Review::class);
         $moduleManagerProperty = $reviewClass->getProperty('moduleManager');
-        $moduleManagerProperty->setAccessible(true);
         $moduleManagerProperty->setValue(
             $model,
             $this->moduleManagerMock

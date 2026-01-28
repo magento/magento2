@@ -827,7 +827,6 @@ class StoreTest extends TestCase
         $property = (new \ReflectionClass(get_class($model)))
             ->getProperty('urlModifier');
 
-        $property->setAccessible(true);
         $property->setValue($model, $this->urlModifierMock);
     }
 }

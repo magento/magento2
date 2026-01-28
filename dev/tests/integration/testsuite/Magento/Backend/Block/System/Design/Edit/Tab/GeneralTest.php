@@ -34,7 +34,6 @@ class GeneralTest extends \PHPUnit\Framework\TestCase
             \Magento\Backend\Block\System\Design\Edit\Tab\General::class,
             '_prepareForm'
         );
-        $prepareFormMethod->setAccessible(true);
         $prepareFormMethod->invoke($block);
 
         $form = $block->getForm();

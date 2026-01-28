@@ -179,8 +179,6 @@ class ElasticsearchTest extends TestCase
     {
         $reflector = new \ReflectionClass(Elasticsearch::class);
         $method = $reflector->getMethod('buildESConfig');
-        $method->setAccessible(true);
-
         return $method;
     }
 

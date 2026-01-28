@@ -630,10 +630,8 @@ class NewWidgetTest extends TestCase
 
         $ref = new ReflectionClass($block);
         $prop = $ref->getProperty('_storeManager');
-        $prop->setAccessible(true);
         $prop->setValue($block, $storeManager);
         $prop = $ref->getProperty('_design');
-        $prop->setAccessible(true);
         $prop->setValue($block, $design);
 
         $block->setData('page_var_name', 'page_number');

@@ -111,30 +111,25 @@ class ProductBlockPrepareCollectionTest extends TestCase
         // private Product::$productCollectionFactory
         $declProduct = new \ReflectionClass(CategoryTabProductBlock::class);
         $propPcf = $declProduct->getProperty('productCollectionFactory');
-        $propPcf->setAccessible(true);
         $propPcf->setValue($block, $this->collectionFactoryMock);
 
         // Grid protected deps
         $declGrid = new \ReflectionClass(\Magento\Backend\Block\Widget\Grid::class);
 
         $bhProp = $declGrid->getProperty('_backendHelper');
-        $bhProp->setAccessible(true);
         $bhProp->setValue($block, $this->backendHelperMock);
 
         $bsProp = $declGrid->getProperty('_backendSession');
-        $bsProp->setAccessible(true);
         $bsProp->setValue($block, $this->backendSessionMock);
 
         // AbstractBlock::_request
         $declAbs = new \ReflectionClass(\Magento\Framework\View\Element\AbstractBlock::class);
         $reqProp = $declAbs->getProperty('_request');
-        $reqProp->setAccessible(true);
         $reqProp->setValue($block, $this->requestMock);
 
         // Backend\Block\Template::$mathRandom for getId() calls in Grid::getParam()
         $declTpl = new \ReflectionClass(\Magento\Backend\Block\Template::class);
         $mrProp = $declTpl->getProperty('mathRandom');
-        $mrProp->setAccessible(true);
         $mrProp->setValue($block, $this->mathRandomMock);
 
         // Avoid Grid column lookups
@@ -250,7 +245,6 @@ class ProductBlockPrepareCollectionTest extends TestCase
     private function invokePrepareCollection(object $block): void
     {
         $m = (new \ReflectionClass($block))->getMethod('_prepareCollection');
-        $m->setAccessible(true);
         $m->invoke($block);
     }
 }

@@ -144,7 +144,7 @@ class Discount extends AbstractTotal
         $this->calculator->reset($address);
         $itemsAggregate = [];
         foreach ($shippingAssignment->getItems() as $item) {
-            $itemId = $item->getId();
+            $itemId = $item->getId() ?? '';
             $itemsAggregate[$itemId] = $item;
         }
         $items = [];
@@ -243,7 +243,7 @@ class Discount extends AbstractTotal
         }
         $this->calculator->initTotals($items, $address);
         foreach ($items as $item) {
-            if (!isset($itemsAggregate[$item->getId()])) {
+            if (!isset($itemsAggregate[$item->getId() ?? ''])) {
                 continue;
             }
             if ($item->getParentItem()) {

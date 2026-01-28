@@ -134,7 +134,6 @@ class ConfigTest extends TestCase
 
         $this->areaResolverMock = $this->createMock(State::class);
         $areaResolverReflection = (new \ReflectionClass(get_class($this->model)))->getProperty('areaResolver');
-        $areaResolverReflection->setAccessible(true);
         $areaResolverReflection->setValue($this->model, $this->areaResolverMock);
     }
 

@@ -39,9 +39,7 @@ class ExportTest extends \PHPUnit\Framework\TestCase
         $this->assertTrue(property_exists($this->_model, '_entityAdapter'));
         $object = new ReflectionClass(get_class($this->_model));
         $attribute = $object->getProperty('_entityAdapter');
-        $attribute->setAccessible(true);
         $propertyObject = $attribute->getValue($this->_model);
-        $attribute->setAccessible(false);
         $this->assertInstanceOf($expectedEntityType, $propertyObject);
     }
 

@@ -52,7 +52,6 @@ class ClassReaderTest extends TestCase
         $this->assertEquals([0 => 'FirstClassForParentCall'], $model->getParents('ThirdClassForParentCall'));
         $reflection = new \ReflectionClass(ClassReader::class);
         $expectedClass = $reflection->getProperty('parentsCache');
-        $expectedClass->setAccessible(true);
         $this->assertEquals(
             $expectedClass->getValue($model)['ThirdClassForParentCall'],
             $model->getParents('ThirdClassForParentCall')

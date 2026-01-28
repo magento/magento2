@@ -178,7 +178,7 @@ class DataProviderWithDefaultAddresses extends AbstractDataProvider
         if (!empty($data)) {
             $customer = $this->customerFactory->create();
             $this->fileUploaderDataResolver->overrideFileUploaderData($customer, $data['customer']);
-            $customerId = $data['customer']['entity_id'] ?? null;
+            $customerId = $data['customer']['entity_id'] ?? '';
             $this->loadedData[$customerId] = $data;
             $this->session->unsCustomerFormData();
         }

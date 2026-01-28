@@ -210,6 +210,7 @@ class BulkManagementTest extends TestCase
         $connectionName = 'default';
         $exceptionMessage = 'Exception message';
         $operation = $this->createMock(OperationInterface::class);
+        $operation->method('getTopicName')->willReturn('async.operation.add');
         $metadata = $this->createMock(EntityMetadataInterface::class);
         $this->metadataPool->expects($this->once())
             ->method('getMetadata')

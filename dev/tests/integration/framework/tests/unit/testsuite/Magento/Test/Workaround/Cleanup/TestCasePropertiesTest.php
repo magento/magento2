@@ -49,7 +49,6 @@ class TestCasePropertiesTest extends TestCase
 
         foreach ($classProperties as $property) {
             if (in_array($property->getName(), $fixturePropertiesNames)) {
-                $property->setAccessible(true);
                 $value = $property->getValue($testSuite);
                 $this->assertNotNull($value);
             }
@@ -59,7 +58,6 @@ class TestCasePropertiesTest extends TestCase
 
         foreach ($classProperties as $property) {
             if (in_array($property->getName(), $fixturePropertiesNames)) {
-                $property->setAccessible(true);
                 $value = $property->getValue($testSuite);
                 $this->assertNull($value);
             }

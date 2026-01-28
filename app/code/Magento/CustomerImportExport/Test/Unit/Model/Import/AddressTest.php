@@ -200,11 +200,11 @@ class AddressTest extends TestCase
         );
         $dataSourceModel->method('getNextBunch')->willReturn([]);
         $dataSourceModel->method('getColNames')->willReturn([]);
-        
+
         $connection = $this->createMock(\stdClass::class);
         $attributeCollection = $this->_createAttrCollectionMock();
         $customerStorage = $this->_createCustomerStorageMock();
-        
+
         // Create mock for customer entity
         $customerEntity = $this->createPartialMockWithReflection(
             \Magento\Framework\Model\AbstractModel::class,
@@ -212,7 +212,7 @@ class AddressTest extends TestCase
         );
         $customerEntity->method('filterEntityCollection')->willReturnArgument(0);
         $customerEntity->method('getEntityTable')->willReturn('customer_entity');
-        
+
         $addressCollection = new Collection(
             $this->createMock(EntityFactory::class)
         );
@@ -259,23 +259,23 @@ class AddressTest extends TestCase
         $attributeCollection->method('setEntityTypeCode')->with('customer_address')->willReturnSelf();
         $attributeCollection->method('getEntityTypeCode')->willReturn('customer_address');
         $attributeCollection->method('addItem')->willReturnSelf();
-        
+
         $attributes = [];
         foreach ($this->_attributes as $attributeData) {
             $attribute = $this->createPartialMock(
                 AbstractAttribute::class,
                 ['_construct', 'getBackend']
             );
-            
+
             // Create a backend mock that returns the table
             $backend = $this->createMock(\Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend::class);
             $backend->method('getTable')->willReturn($attributeData['table']);
-            
+
             $attribute->method('getBackend')->willReturn($backend);
             $attributes[] = $attribute;
         }
         $attributeCollection->method('getIterator')->willReturn(new \ArrayIterator($attributes));
-        
+
         return $attributeCollection;
     }
 
@@ -381,7 +381,6 @@ class AddressTest extends TestCase
         );
 
         $property = new \ReflectionProperty($modelMock, '_availableBehaviors');
-        $property->setAccessible(true);
         $property->setValue($modelMock, $this->_availableBehaviors);
 
         return $modelMock;

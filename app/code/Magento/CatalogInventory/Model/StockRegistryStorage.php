@@ -68,12 +68,14 @@ class StockRegistryStorage implements ResetAfterRequestInterface
     /**
      * Retrieve Stock Item
      *
-     * @param int $productId
-     * @param int $scopeId
+     * @param int|null $productId
+     * @param int|null $scopeId
      * @return StockItemInterface
      */
-    public function getStockItem($productId, $scopeId)
+    public function getStockItem(?int $productId, ?int $scopeId)
     {
+        $productId= $productId ?? '';
+        $scopeId= $scopeId ?? '';
         return $this->stockItems[$productId][$scopeId] ?? null;
     }
 
@@ -109,12 +111,14 @@ class StockRegistryStorage implements ResetAfterRequestInterface
     /**
      * Retrieve stock status
      *
-     * @param int $productId
-     * @param int $scopeId
+     * @param int|null $productId
+     * @param int|null $scopeId
      * @return StockStatusInterface
      */
-    public function getStockStatus($productId, $scopeId)
+    public function getStockStatus(?int $productId, ?int $scopeId)
     {
+        $productId = $productId ?? '';
+        $scopeId = $scopeId ?? '';
         return $this->stockStatuses[$productId][$scopeId] ?? null;
     }
 

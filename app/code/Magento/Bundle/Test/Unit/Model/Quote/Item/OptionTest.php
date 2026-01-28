@@ -174,7 +174,6 @@ class OptionTest extends TestCase
             $options[$id] = $option;
         }
         $reflectionProperty = new \ReflectionProperty($optionsCollection, '_items');
-        $reflectionProperty->setAccessible(true);
         $reflectionProperty->setValue($optionsCollection, $options);
 
         return $optionsCollection;
@@ -201,7 +200,6 @@ class OptionTest extends TestCase
             $selections[$id] = $selection;
         }
         $reflectionProperty = new \ReflectionProperty($selectionsCollection, '_items');
-        $reflectionProperty->setAccessible(true);
         $reflectionProperty->setValue($selectionsCollection, $selections);
 
         return $selectionsCollection;

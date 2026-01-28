@@ -182,7 +182,6 @@ class WidgetTest extends TestCase
         $mathRandomMock->expects($this->any())->method('getRandomString')->willReturn('asdf');
         $reflection = new \ReflectionClass(get_class($this->widget));
         $reflectionProperty = $reflection->getProperty('mathRandom');
-        $reflectionProperty->setAccessible(true);
         $reflectionProperty->setValue($this->widget, $mathRandomMock);
 
         $conditions = [

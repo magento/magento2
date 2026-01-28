@@ -42,9 +42,7 @@ class MenuTest extends \PHPUnit\Framework\TestCase
 
         $reflection = new \ReflectionClass(\Magento\Framework\Component\ComponentRegistrar::class);
         $paths = $reflection->getProperty('paths');
-        $paths->setAccessible(true);
         $this->backupRegistrar = $paths->getValue();
-        $paths->setAccessible(false);
 
         $this->menuConfig = $this->prepareMenuConfig();
 
@@ -99,7 +97,6 @@ class MenuTest extends \PHPUnit\Framework\TestCase
 
         $reflection = new \ReflectionClass(\Magento\Framework\Component\ComponentRegistrar::class);
         $paths = $reflection->getProperty('paths');
-        $paths->setAccessible(true);
 
         $paths->setValue(
             null,
@@ -110,7 +107,6 @@ class MenuTest extends \PHPUnit\Framework\TestCase
                 ComponentRegistrar::LIBRARY => []
             ]
         );
-        $paths->setAccessible(false);
 
         ComponentRegistrar::register(ComponentRegistrar::LIBRARY, 'magento/framework', $libraryPath);
 
@@ -162,8 +158,6 @@ class MenuTest extends \PHPUnit\Framework\TestCase
         $this->configCacheType->save('', \Magento\Backend\Model\Menu\Config::CACHE_MENU_OBJECT);
         $reflection = new \ReflectionClass(\Magento\Framework\Component\ComponentRegistrar::class);
         $paths = $reflection->getProperty('paths');
-        $paths->setAccessible(true);
         $paths->setValue(null, $this->backupRegistrar);
-        $paths->setAccessible(false);
     }
 }

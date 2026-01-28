@@ -41,15 +41,16 @@ class AddressRegistry implements ResetAfterRequestInterface
      */
     public function retrieve($addressId)
     {
-        if (isset($this->registry[$addressId])) {
-            return $this->registry[$addressId];
+        $registryKey = (string)$addressId;
+        if (isset($this->registry[$registryKey])) {
+            return $this->registry[$registryKey];
         }
         $address = $this->addressFactory->create();
         $address->load($addressId);
         if (!$address->getId()) {
             throw NoSuchEntityException::singleField('addressId', $addressId);
         }
-        $this->registry[$addressId] = $address;
+        $this->registry[$registryKey] = $address;
         return $address;
     }
 

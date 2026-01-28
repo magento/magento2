@@ -72,10 +72,23 @@
         </actionGroup>
         <!-- Go to Checkout Page -->
         <actionGroup ref="StorefrontOpenCheckoutPageActionGroup" stepKey="goToCheckout"/>
-        <waitForElementClickable selector="{{CheckoutShippingMethodsSection.smartPostShippingMethod}}" stepKey="waitForSelectFedexShippingMethod"/>
-        <click selector="{{CheckoutShippingMethodsSection.smartPostShippingMethod}}" stepKey="selectFedexShippingMethod"/>
+        <!-- Wait for shipping methods to load -->
+        <waitForPageLoad stepKey="waitForShippingMethodsLoader"/>
+        <waitForElementNotVisible selector="{{CheckoutShippingMethodsSection.shippingMethodLoader}}" time="60" stepKey="waitForShippingMethodsLoaded"/>
+        <!-- Wait for at least one shipping method to be visible -->
+        <waitForElementVisible selector="{{CheckoutShippingMethodsSection.firstShippingMethod}}" time="60" stepKey="waitForAtLeastOneShippingMethod"/>
+        <!-- Select first available FedEx shipping method using conditional clicks (same pattern as AdminCreateShippingLabelForFedExShipmentTest) -->
+        <conditionalClick selector="{{CheckoutShippingMethodsSection.fedexExpressServerShippingMethod}}" dependentSelector="{{CheckoutShippingMethodsSection.fedexExpressServerShippingMethod}}" visible="true" stepKey="selectFedexShippingExpressServer"/>
+        <conditionalClick selector="{{CheckoutShippingMethodsSection.fedex2dayShippingMethod}}" dependentSelector="{{CheckoutShippingMethodsSection.fedex2dayShippingMethod}}" visible="true" stepKey="selectFedexShipping2Day"/>
+        <conditionalClick selector="{{CheckoutShippingMethodsSection.smartPostShippingMethod}}" dependentSelector="{{CheckoutShippingMethodsSection.smartPostShippingMethod}}" visible="true" stepKey="selectFedexShippingMethod"/>
+        <conditionalClick selector="{{CheckoutShippingMethodsSection.groundShippingMethod}}" dependentSelector="{{CheckoutShippingMethodsSection.groundShippingMethod}}" visible="true" stepKey="selectFedexShippingMethodGround"/>
+        <!-- Click Next and proceed to payment -->
         <actionGroup ref="StorefrontCheckoutClickNextOnShippingStepActionGroup" stepKey="clickNext"/>
+        <!-- Wait for payment section - use placeOrder button as indicator (same as AdminCreateShippingLabelForFedExShipmentTest) -->
+        <waitForElementClickable selector="{{CheckoutPaymentSection.placeOrder}}" time="120" stepKey="waitForPaymentSectionLoaded"/>
+        <seeCurrentUrlMatches regex="~/checkout/?#payment~" stepKey="assertCheckoutPaymentUrl"/>
         <actionGroup ref="CheckoutSelectCheckMoneyOrderPaymentActionGroup" stepKey="selectCheckMoneyPayment"/>
+        <waitForElementVisible selector="{{CheckoutPaymentSection.placeOrder}}" time="30" stepKey="waitForPlaceOrderButtonVisible"/>
         <actionGroup ref="ClickPlaceOrderActionGroup" stepKey="clickPlaceOrder"/>
         <!-- I see order successful Page -->
         <actionGroup ref="AssertStorefrontCheckoutSuccessActionGroup" stepKey="assertOrderSuccess"/>
@@ -90,7 +103,9 @@
         <actionGroup ref="SubmitInvoiceActionGroup" stepKey="submitInvoice"/>
         <!--Create shipping label-->
         <actionGroup ref="GoToShipmentIntoOrderActionGroup" stepKey="goToShipmentIntoOrder"/>
-        <waitForElementVisible selector="{{AdminShipmentTotalSection.createShippingLabel}}" stepKey="waitForCreateShippingLabel"/>
+        <waitForPageLoad stepKey="waitForShipmentPageLoad"/>
+        <scrollTo selector="{{AdminShipmentTotalSection.createShippingLabel}}" stepKey="scrollToCreateShippingLabel"/>
+        <waitForElementVisible selector="{{AdminShipmentTotalSection.createShippingLabel}}" time="60" stepKey="waitForCreateShippingLabel"/>
         <checkOption selector="{{AdminShipmentTotalSection.createShippingLabel}}" stepKey="checkCreateShippingLabel"/>
         <waitForElementClickable selector="{{AdminShipmentMainActionsSection.submitShipment}}" stepKey="waitForSubmitShipment"/>
         <click selector="{{AdminShipmentMainActionsSection.submitShipment}}" stepKey="clickSubmitShipment"/>

@@ -182,7 +182,6 @@ class TierTest extends TestCase
         // Use reflection to call protected method
         $reflection = new \ReflectionClass($this->block);
         $method = $reflection->getMethod('_getInitialCustomerGroups');
-        $method->setAccessible(true);
         $result = $method->invoke($this->block);
 
         $this->assertIsArray($result);
@@ -206,7 +205,6 @@ class TierTest extends TestCase
         // Use reflection to call protected method
         $reflection = new \ReflectionClass($this->block);
         $method = $reflection->getMethod('_sortValues');
-        $method->setAccessible(true);
         $result = $method->invoke($this->block, $data);
 
         $this->assertIsArray($result);
@@ -288,7 +286,6 @@ class TierTest extends TestCase
         // Use reflection to call protected method
         $reflection = new \ReflectionClass($this->block);
         $method = $reflection->getMethod('_sortTierPrices');
-        $method->setAccessible(true);
         $result = $method->invoke($this->block, $item1, $item2);
 
         $this->assertSame($expectedResult, $result);
@@ -330,7 +327,6 @@ class TierTest extends TestCase
         // Use reflection to call protected method
         $reflection = new \ReflectionClass($this->block);
         $method = $reflection->getMethod('_prepareLayout');
-        $method->setAccessible(true);
         $result = $method->invoke($this->block);
 
         $this->assertSame($this->block, $result);
@@ -360,7 +356,6 @@ class TierTest extends TestCase
         // Use reflection to call protected method
         $reflection = new \ReflectionClass($this->block);
         $method = $reflection->getMethod('_sortValues');
-        $method->setAccessible(true);
         $result = $method->invoke($this->block, $data);
 
         $this->assertCount(3, $result);

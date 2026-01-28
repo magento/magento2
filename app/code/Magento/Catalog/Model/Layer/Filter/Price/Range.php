@@ -3,6 +3,8 @@
  * Copyright 2014 Adobe
  * All Rights Reserved.
  */
+declare(strict_types=1);
+
 namespace Magento\Catalog\Model\Layer\Filter\Price;
 
 use Magento\Catalog\Model\Layer\Resolver;
@@ -16,7 +18,7 @@ use Magento\Store\Model\ScopeInterface;
  */
 class Range
 {
-    const XML_PATH_RANGE_STEP = 'catalog/layered_navigation/price_range_step';
+    public const XML_PATH_RANGE_STEP = 'catalog/layered_navigation/price_range_step';
 
     /**
      * @var Registry
@@ -47,6 +49,8 @@ class Range
     }
 
     /**
+     * Get price range from the current category.
+     *
      * @return array
      */
     public function getPriceRange()
@@ -58,10 +62,12 @@ class Range
     }
 
     /**
+     * Get configured layered navigation price range step.
+     *
      * @return float
      */
     public function getConfigRangeStep()
     {
-        return (double)$this->scopeConfig->getValue(self::XML_PATH_RANGE_STEP, ScopeInterface::SCOPE_STORE);
+        return (float)$this->scopeConfig->getValue(self::XML_PATH_RANGE_STEP, ScopeInterface::SCOPE_STORE);
     }
 }

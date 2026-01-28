@@ -27,6 +27,7 @@ use PHPUnit\Framework\TestCase;
 /**
  * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.UnusedPrivateField)
  */
 class SimpleTest extends TestCase
 {
@@ -105,7 +106,7 @@ class SimpleTest extends TestCase
         $attribute1->method('getAttributeCode')->willReturn('attr_code');
         $attribute1->method('getFrontendInput')->willReturn('multiselect');
         $attribute1->method('isStatic')->willReturn(true);
-        
+
         $attribute2 = $this->createPartialMockWithReflection(
             \Magento\Eav\Model\Entity\Attribute\AbstractAttribute::class,
             ['getId', 'getAttributeCode', 'getFrontendInput', 'isStatic', 'getIsRequired', 'getIsUnique',
@@ -122,7 +123,7 @@ class SimpleTest extends TestCase
         $attribute2->method('getIsVisible')->willReturn(true);
         $attribute2->method('getApplyTo')->willReturn(['simple']);
         $attribute2->method('getIsGlobal')->willReturn(true);
-        
+
         $attribute3 = $this->createPartialMockWithReflection(
             \Magento\Eav\Model\Entity\Attribute\AbstractAttribute::class,
             ['getId', 'getAttributeCode', 'getFrontendInput', 'isStatic', 'getIsRequired', 'getIsUnique',
@@ -156,7 +157,7 @@ class SimpleTest extends TestCase
             ->willReturn([$attribute1, $attribute2, $attribute3]);
         $attrCollection->method('addFieldToFilter')
             ->willReturnSelf();
-        
+
         $getItemsCallCount = 0;
         $attrCollection->method('getItems')
             ->willReturnCallback(
@@ -185,7 +186,7 @@ class SimpleTest extends TestCase
         $this->connection->method('select')->willReturn($this->select);
         $this->connection->method('fetchAll')->willReturn($entityAttributes);
         $this->connection->method('getConnection')->willReturnSelf(); // Prevent actual DB connection
-        
+
         $connection = $this->createMock(Mysql::class);
         $connection->method('quoteInto')->willReturn('query');
         $this->select->method('getConnection')->willReturn($connection);
@@ -203,7 +204,7 @@ class SimpleTest extends TestCase
         // Create minimal ObjectManager mock
         $objectManagerMock = $this->createMock(\Magento\Framework\ObjectManagerInterface::class);
         \Magento\Framework\App\ObjectManager::setInstance($objectManagerMock);
-        
+
         // Instantiate Simple class directly with dependencies
         $this->simpleType = new Simple(
             $attrSetColFactory,
@@ -359,7 +360,6 @@ class SimpleTest extends TestCase
     {
         $reflection = new \ReflectionClass(get_class($object));
         $reflectionProperty = $reflection->getProperty($property);
-        $reflectionProperty->setAccessible(true);
 
         return $reflectionProperty->getValue($object);
     }
@@ -373,7 +373,6 @@ class SimpleTest extends TestCase
     {
         $reflection = new \ReflectionClass(get_class($object));
         $reflectionProperty = $reflection->getProperty($property);
-        $reflectionProperty->setAccessible(true);
         $reflectionProperty->setValue($object, $value);
         return $object;
     }

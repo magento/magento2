@@ -451,4 +451,107 @@ class CarrierTest extends TestCase
 
         $this->assertEquals($error, $resultRate);
     }
+
+    /**
+     * Test commercial destination excludes ResidentialAddressIndicator field
+     *
+     * @magentoConfigFixture default_store carriers/ups/active 1
+     * @magentoConfigFixture current_store carriers/ups/type UPS_REST
+     * @magentoConfigFixture default_store carriers/ups/dest_type COM
+     * @magentoConfigFixture default_store carriers/ups/allowed_methods 03
+     * @magentoConfigFixture default_store carriers/ups/shipper_number 12345
+     * @magentoConfigFixture default_store carriers/ups/username user
+     * @magentoConfigFixture default_store carriers/ups/password pass
+     */
+    public function testCommercialDestinationDoesNotIncludeResidentialAddressIndicator(): void
+    {
+        $request = Bootstrap::getObjectManager()->create(
+            RateRequest::class,
+            [
+                'data' => [
+                    'dest_country' => 'US',
+                    'dest_postal' => '90001',
+                    'package_weight' => '20.8',
+                    'product' => '11',
+                    'action' => 'Rate',
+                    'unit_measure' => 'LBS',
+                    'base_currency' => new DataObject(['code' => 'USD'])
+                ]
+            ]
+        );
+
+        //phpcs:disable Magento2.Functions.DiscouragedFunction
+        $this->httpClient->nextResponses(
+            [
+                new Response(200, [], file_get_contents(__DIR__ . "/../_files/ups_rates_response_option1.json"))
+            ]
+        );
+        //phpcs:enable Magento2.Functions.DiscouragedFunction
+        $this->httpClient->clearRequests();
+        $this->upsAuthMock->method('getAccessToken')->willReturn('abcdefghijklmnop');
+
+        $this->carrier->collectRates($request);
+
+        $requests = $this->httpClient->getRequests();
+        $this->assertNotEmpty($requests);
+
+        $requestData = json_decode($requests[0]->getBody(), true);
+        $shipToAddress = $requestData['RateRequest']['Shipment']['ShipTo']['Address'];
+
+        $this->assertFalse(
+            isset($shipToAddress['ResidentialAddressIndicator'])
+             && !empty($shipToAddress['ResidentialAddressIndicator']),
+            'ResidentialAddressIndicator should not be present for commercial addresses'
+        );
+    }
+
+    /**
+     * Test residential destination includes ResidentialAddressIndicator field
+     *
+     * @magentoConfigFixture default_store carriers/ups/active 1
+     * @magentoConfigFixture current_store carriers/ups/type UPS_REST
+     * @magentoConfigFixture default_store carriers/ups/dest_type RES
+     * @magentoConfigFixture default_store carriers/ups/allowed_methods 03
+     * @magentoConfigFixture default_store carriers/ups/shipper_number 12345
+     * @magentoConfigFixture default_store carriers/ups/username user
+     * @magentoConfigFixture default_store carriers/ups/password pass
+     */
+    public function testResidentialDestinationIncludesResidentialAddressIndicator(): void
+    {
+        $request = Bootstrap::getObjectManager()->create(
+            RateRequest::class,
+            [
+                'data' => [
+                    'dest_country' => 'US',
+                    'dest_postal' => '90001',
+                    'package_weight' => '20.8',
+                    'product' => '11',
+                    'action' => 'Rate',
+                    'unit_measure' => 'LBS',
+                    'base_currency' => new DataObject(['code' => 'USD'])
+                ]
+            ]
+        );
+
+        //phpcs:disable Magento2.Functions.DiscouragedFunction
+        $this->httpClient->nextResponses(
+            [
+                new Response(200, [], file_get_contents(__DIR__ . "/../_files/ups_rates_response_option1.json"))
+            ]
+        );
+        //phpcs:enable Magento2.Functions.DiscouragedFunction
+        $this->httpClient->clearRequests();
+        $this->upsAuthMock->method('getAccessToken')->willReturn('abcdefghijklmnop');
+
+        $this->carrier->collectRates($request);
+
+        $requests = $this->httpClient->getRequests();
+        $this->assertNotEmpty($requests);
+
+        $requestData = json_decode($requests[0]->getBody(), true);
+        $shipToAddress = $requestData['RateRequest']['Shipment']['ShipTo']['Address'];
+
+        $this->assertArrayHasKey('ResidentialAddressIndicator', $shipToAddress);
+        $this->assertEquals('01', $shipToAddress['ResidentialAddressIndicator']);
+    }
 }

@@ -227,7 +227,7 @@ class CreditmemoLoader extends DataObject
                 $parentId = $orderItem->getParentItemId();
                 if ($parentId && isset($backToStock[$parentId]) && $backToStock[$parentId]) {
                     $creditmemoItem->setBackToStock(true);
-                } elseif (isset($backToStock[$orderItem->getId()])) {
+                } elseif (isset($backToStock[$orderItem->getId() ?? ''])) {
                     $creditmemoItem->setBackToStock(true);
                 } elseif (empty($savedData)) {
                     $creditmemoItem->setBackToStock(

@@ -440,7 +440,6 @@ class DefaultTest extends TestCase
             $randomMock
         );
         $method = new \ReflectionMethod($captcha, 'generateWord');
-        $method->setAccessible(true);
         $this->assertEquals($string, $method->invoke($captcha));
     }
     /**

@@ -90,7 +90,6 @@ class DbTableTest extends TestCase
         $this->_model = new DbTable($resource);
 
         $method = new \ReflectionMethod(DbTable::class, 'checkConnection');
-        $method->setAccessible(true);
         $this->assertNull($method->invoke($this->_model));
     }
 
@@ -105,7 +104,6 @@ class DbTableTest extends TestCase
         $this->_model = new DbTable($resource);
 
         $method = new \ReflectionMethod(DbTable::class, 'checkConnection');
-        $method->setAccessible(true);
         $this->assertNull($method->invoke($this->_model));
     }
 
@@ -131,7 +129,6 @@ class DbTableTest extends TestCase
         $this->_model = new DbTable($resource);
 
         $method = new \ReflectionMethod(DbTable::class, 'checkConnection');
-        $method->setAccessible(true);
         $this->assertNull($method->invoke($this->_model));
     }
 

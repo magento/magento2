@@ -45,7 +45,6 @@ class AbstractTest extends \PHPUnit\Framework\TestCase
         $model->setRule($rule);
 
         $property = new \ReflectionProperty(\Magento\Rule\Model\Condition\AbstractCondition::class, '_inputType');
-        $property->setAccessible(true);
         $property->setValue($model, 'date');
 
         $element = $model->getValueElement();

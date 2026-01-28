@@ -5,14 +5,19 @@
  */
 namespace Magento\Backend\Block\Widget\Grid\Column\Renderer;
 
+use Magento\Backend\Block\Widget\Grid\Column\Renderer\Text;
+use Magento\Framework\DataObject;
+use Magento\Ui\Component\Listing\Columns\Options as UiOptions;
+
 /**
  * Grid column widget for rendering grid cells that contains mapped values
  *
  * @api
- * @deprecated 100.2.0 in favour of UI component implementation
+ * @deprecated 100.2.0 Legacy grid renderer; use UI component columns instead.
+ * @see UiOptions
  * @since 100.0.2
  */
-class Options extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Text
+class Options extends Text
 {
     /**
      * Get options from column
@@ -27,11 +32,11 @@ class Options extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Text
     /**
      * Render a grid cell as options
      *
-     * @param \Magento\Framework\DataObject $row
+     * @param DataObject $row
      * @return string|void
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
-    public function render(\Magento\Framework\DataObject $row)
+    public function render(DataObject $row)
     {
         $options = $this->_getOptions();
 
@@ -47,16 +52,16 @@ class Options extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Text
             if (is_array($value)) {
                 $res = [];
                 foreach ($value as $item) {
-                    if (isset($output[$item])) {
+                    if ($item !== null && isset($output[$item])) {
                         $res[] = $this->escapeHtml($output[$item]);
                     } elseif ($showMissingOptionValues) {
                         $res[] = $this->escapeHtml($item);
                     }
                 }
                 return implode(', ', $res);
-            } elseif (isset($output[$value])) {
+            } elseif ($value !== null && isset($output[$value])) {
                 return $this->escapeHtml($output[$value]);
-            } elseif (in_array($value, $output)) {
+            } elseif ($value !== null && in_array($value, $output)) {
                 return $this->escapeHtml($value);
             }
         }

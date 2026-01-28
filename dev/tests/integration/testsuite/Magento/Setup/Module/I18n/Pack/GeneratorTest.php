@@ -69,9 +69,7 @@ class GeneratorTest extends \PHPUnit\Framework\TestCase
 
         $reflection = new \ReflectionClass(\Magento\Framework\Component\ComponentRegistrar::class);
         $paths = $reflection->getProperty('paths');
-        $paths->setAccessible(true);
         $this->backupRegistrar = $paths->getValue();
-        $paths->setAccessible(false);
     }
 
     protected function tearDown(): void
@@ -79,9 +77,7 @@ class GeneratorTest extends \PHPUnit\Framework\TestCase
         \Magento\Framework\System\Dirs::rm($this->_packPath);
         $reflection = new \ReflectionClass(\Magento\Framework\Component\ComponentRegistrar::class);
         $paths = $reflection->getProperty('paths');
-        $paths->setAccessible(true);
         $paths->setValue(null, $this->backupRegistrar);
-        $paths->setAccessible(false);
     }
 
     public function testGeneration()

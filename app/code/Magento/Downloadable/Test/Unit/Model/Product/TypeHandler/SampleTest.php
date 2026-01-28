@@ -79,7 +79,6 @@ class SampleTest extends TestCase
         );
         $refClass = new \ReflectionClass(Sample::class);
         $refProperty = $refClass->getProperty('metadataPool');
-        $refProperty->setAccessible(true);
         $refProperty->setValue($this->target, $this->metadataPoolMock);
     }
 
