@@ -170,7 +170,6 @@ class PayflowproVoidTest extends TestCase
 
         $payment = $order->getPayment();
         $canVoidLookupProperty = new \ReflectionProperty(get_class($payment), '_canVoidLookup');
-        $canVoidLookupProperty->setAccessible(true);
         $canVoidLookupProperty->setValue($payment, true);
 
         return $order;

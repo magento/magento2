@@ -48,8 +48,9 @@ class Comparator implements ComparatorInterface
         DataObject $option2
     ): bool {
         if ($option1->getCode() === $option2->getCode()) {
-            return isset($this->customComparators[$option1->getCode()])
-                ? $this->customComparators[$option1->getCode()]->compare($option1, $option2)
+            $codeKey = $option1->getCode() ?? '';
+            return isset($this->customComparators[$codeKey])
+                ? $this->customComparators[$codeKey]->compare($option1, $option2)
                 : $option1->getValue() == $option2->getValue();
         }
 

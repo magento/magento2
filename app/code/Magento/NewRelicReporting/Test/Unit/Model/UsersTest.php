@@ -62,7 +62,6 @@ class UsersTest extends TestCase
 
         $reflection = new ReflectionClass($users);
         $resourceNameProperty = $reflection->getProperty('_resourceName');
-        $resourceNameProperty->setAccessible(true);
 
         $this->assertEquals(
             UsersResource::class,

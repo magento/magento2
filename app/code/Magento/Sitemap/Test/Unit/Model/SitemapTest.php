@@ -715,7 +715,6 @@ class SitemapTest extends TestCase
         $model->__construct(...$constructorArgs);
 
         $method = new \ReflectionMethod($model, 'getDocumentRootFromBaseDir');
-        $method->setAccessible(true);
         $this->assertSame($documentRoot, $method->invoke($model));
     }
 
@@ -761,9 +760,7 @@ class SitemapTest extends TestCase
         if ($attribute->isPublic()) {
             $object->$attributeName = $value;
         } else {
-            $attribute->setAccessible(true);
             $attribute->setValue($object, $value);
-            $attribute->setAccessible(false);
         }
     }
 }

@@ -124,7 +124,6 @@ class ProductUrlRewriteGeneratorTest extends TestCase
 
         $reflection = new ReflectionClass(get_class($this->productUrlRewriteGenerator));
         $reflectionProperty = $reflection->getProperty('productScopeRewriteGenerator');
-        $reflectionProperty->setAccessible(true);
         $reflectionProperty->setValue($this->productUrlRewriteGenerator, $this->productScopeRewriteGenerator);
     }
 

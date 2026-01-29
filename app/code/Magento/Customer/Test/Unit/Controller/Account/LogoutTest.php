@@ -79,11 +79,9 @@ class LogoutTest extends TestCase
 
         $refClass = new \ReflectionClass(Logout::class);
         $cookieMetadataManagerProperty = $refClass->getProperty('cookieMetadataManager');
-        $cookieMetadataManagerProperty->setAccessible(true);
         $cookieMetadataManagerProperty->setValue($this->controller, $this->cookieManager);
 
         $cookieMetadataFactoryProperty = $refClass->getProperty('cookieMetadataFactory');
-        $cookieMetadataFactoryProperty->setAccessible(true);
         $cookieMetadataFactoryProperty->setValue($this->controller, $this->cookieMetadataFactory);
     }
 

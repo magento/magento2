@@ -363,7 +363,7 @@ class Shipping implements RateCollectorInterface
         $fullItems = [];
         $weightItems = [];
 
-        $maxWeight = (double)$carrier->getConfigData('max_package_weight');
+        $maxWeight = (float)$carrier->getConfigData('max_package_weight');
 
         /** @var $item \Magento\Quote\Model\Quote\Item */
         foreach ($allItems as $item) {

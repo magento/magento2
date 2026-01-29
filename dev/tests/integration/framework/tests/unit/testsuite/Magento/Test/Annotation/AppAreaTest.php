@@ -76,7 +76,6 @@ class AppAreaTest extends \PHPUnit\Framework\TestCase
     protected function tearDown(): void
     {
         $property = new ReflectionProperty(TestCaseAnnotation::class, 'instance');
-        $property->setAccessible(true);
         $property->setValue(null);
     }
 
@@ -88,7 +87,6 @@ class AppAreaTest extends \PHPUnit\Framework\TestCase
     public function testGetTestAppArea($annotations, $expectedArea)
     {
         $property = new ReflectionProperty(TestCaseAnnotation::class, 'instance');
-        $property->setAccessible(true);
         $property->setValue($this->testCaseAnnotationsMock);
         $this->testCaseAnnotationsMock->method('getAnnotations')->willReturn($annotations);
         $this->_applicationMock->expects($this->any())->method('getArea')->willReturn(null);
@@ -121,7 +119,6 @@ class AppAreaTest extends \PHPUnit\Framework\TestCase
 
         $annotations = ['method' => ['magentoAppArea' => ['some_invalid_area']]];
         $property = new ReflectionProperty(TestCaseAnnotation::class, 'instance');
-        $property->setAccessible(true);
         $property->setValue($this->testCaseAnnotationsMock);
         $this->testCaseAnnotationsMock->expects($this->once())->method('getAnnotations')->willReturn($annotations);
 
@@ -138,7 +135,6 @@ class AppAreaTest extends \PHPUnit\Framework\TestCase
     {
         $annotations = ['method' => ['magentoAppArea' => [$areaCode]]];
         $property = new ReflectionProperty(TestCaseAnnotation::class, 'instance');
-        $property->setAccessible(true);
         $property->setValue($this->testCaseAnnotationsMock);
         $this->testCaseAnnotationsMock->expects($this->once())->method('getAnnotations')->willReturn($annotations);
         $this->_applicationMock->expects($this->any())->method('getArea')->willReturn(null);
@@ -152,7 +148,6 @@ class AppAreaTest extends \PHPUnit\Framework\TestCase
     {
         $annotations = ['method' => ['magentoAppArea' => ['global']]];
         $property = new ReflectionProperty(TestCaseAnnotation::class, 'instance');
-        $property->setAccessible(true);
         $property->setValue($this->testCaseAnnotationsMock);
         $this->testCaseAnnotationsMock->expects($this->once())->method('getAnnotations')->willReturn($annotations);
         $this->_applicationMock->expects($this->once())->method('reinitialize');
@@ -167,7 +162,6 @@ class AppAreaTest extends \PHPUnit\Framework\TestCase
     {
         $annotations = ['method' => ['magentoAppArea' => ['adminhtml']]];
         $property = new ReflectionProperty(TestCaseAnnotation::class, 'instance');
-        $property->setAccessible(true);
         $property->setValue($this->testCaseAnnotationsMock);
         $this->testCaseAnnotationsMock->expects($this->once())->method('getAnnotations')->willReturn($annotations);
         $this->_applicationMock->expects($this->once())->method('getArea')->willReturn('adminhtml');

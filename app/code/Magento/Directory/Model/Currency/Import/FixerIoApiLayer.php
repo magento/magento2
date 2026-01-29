@@ -147,7 +147,7 @@ class FixerIoApiLayer implements ImportInterface
                     $this->messages[] = __($message, self::CURRENCY_CONVERTER_HOST, $currencyTo);
                     $data[$currencyFrom][$currencyTo] = null;
                 } else {
-                    $data[$currencyFrom][$currencyTo] = (double)$response['rates'][$currencyTo];
+                    $data[$currencyFrom][$currencyTo] = (float)$response['rates'][$currencyTo];
                 }
             }
         }

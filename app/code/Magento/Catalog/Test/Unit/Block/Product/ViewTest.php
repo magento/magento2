@@ -216,7 +216,6 @@ class ViewTest extends TestCase
 
         $reflection = new \ReflectionClass($this->view);
         $method = $reflection->getMethod('getCustomerId');
-        $method->setAccessible(true);
 
         $this->assertSame($expectedCustomerId, $method->invoke($this->view));
     }

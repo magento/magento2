@@ -162,7 +162,6 @@ class AbstractAttributeTest extends TestCase
 
         $reflection = new \ReflectionClass($modelClassName);
         $reflectionProperty = $reflection->getProperty('serializer');
-        $reflectionProperty->setAccessible(true);
         $reflectionProperty->setValue($model, $serializerMock);
 
         $model->setData(AttributeInterface::VALIDATE_RULES, $rule);

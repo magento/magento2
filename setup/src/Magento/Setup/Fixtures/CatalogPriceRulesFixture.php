@@ -75,8 +75,8 @@ class CatalogPriceRulesFixture extends Fixture
         for ($i = 0; $i < $catalogPriceRulesCount; $i++) {
             $ruleName = sprintf('Catalog Price Rule %1$d', $i);
             $data = [
-                $idField                => null,
-                $linkField              => null,
+                // Guard against null array offsets on PHP 8.1+ by only setting when field names are present
+                // (identifier/link fields can be null depending on metadata implementation)
                 'name'                  => $ruleName,
                 'description'           => '',
                 'is_active'             => '1',
@@ -121,6 +121,12 @@ class CatalogPriceRulesFixture extends Fixture
                 'banner_is_enabled'         => '',
                 'related_banners'           => [],
             ];
+            if (!empty($idField)) {
+                $data[$idField] = null;
+            }
+            if (!empty($linkField)) {
+                $data[$linkField] = null;
+            }
             if (isset($data['simple_action']) && $data['simple_action'] == 'by_percent'
                 && isset($data['discount_amount'])
             ) {

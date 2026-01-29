@@ -133,7 +133,6 @@ return [
     ['TYPE_BINARY', null, 'Magento_DB_Ddl_Table::TYPE_BLOB'],
     ['TYPE_CHAR', null, 'Magento_DB_Ddl_Table::TYPE_TEXT'],
     ['TYPE_CLOB', null, 'Magento_DB_Ddl_Table::TYPE_TEXT'],
-    ['TYPE_DOUBLE', null, 'Magento_DB_Ddl_Table::TYPE_FLOAT'],
     ['TYPE_LONGVARBINARY', null, 'Magento_DB_Ddl_Table::TYPE_BLOB'],
     ['TYPE_LONGVARCHAR', null, 'Magento_DB_Ddl_Table::TYPE_TEXT'],
     ['TYPE_REAL', null, 'Magento_DB_Ddl_Table::TYPE_FLOAT'],

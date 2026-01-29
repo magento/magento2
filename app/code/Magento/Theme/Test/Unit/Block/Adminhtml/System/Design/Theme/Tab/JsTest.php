@@ -61,7 +61,6 @@ class JsTest extends TestCase
     {
         $class = new \ReflectionClass(Js::class);
         $method = $class->getMethod($name);
-        $method->setAccessible(true);
         return $method;
     }
 

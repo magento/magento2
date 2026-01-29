@@ -112,7 +112,6 @@ class ImageFactoryTest extends TestCase
         }
         file_put_contents($imagePath, stream_get_contents($memory, -1, 0));
         fclose($memory);
-        imagedestroy($image);
         // phpcs:enable
 
         return $imagePath;

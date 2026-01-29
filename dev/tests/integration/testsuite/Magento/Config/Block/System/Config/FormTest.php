@@ -515,7 +515,6 @@ class FormTest extends \PHPUnit\Framework\TestCase
         $directories = $fileResolver->get('config.xml', 'global');
 
         $property = new \ReflectionProperty($directories, 'paths');
-        $property->setAccessible(true);
         $property->setValue(
             $directories,
             array_merge($property->getValue($directories), [__DIR__ . '/_files/test_config.xml'])
@@ -540,7 +539,6 @@ class FormTest extends \PHPUnit\Framework\TestCase
 
         $composite = Bootstrap::getObjectManager()->get('systemConfigPostProcessorComposite');
         $property = new \ReflectionProperty($composite, 'processors');
-        $property->setAccessible(true);
         $processors = $property->getValue($composite);
         $processors['metadata'] = $metadataConfigTypeProcessor;
         $property->setValue($composite, $processors);
@@ -588,7 +586,6 @@ class FormTest extends \PHPUnit\Framework\TestCase
         $reflection = new \ReflectionObject($this);
         foreach ($reflection->getProperties() as $property) {
             if (!$property->isStatic() && 0 !== strpos($property->getDeclaringClass()->getName(), 'PHPUnit')) {
-                $property->setAccessible(true);
                 $property->setValue($this, null);
             }
         }

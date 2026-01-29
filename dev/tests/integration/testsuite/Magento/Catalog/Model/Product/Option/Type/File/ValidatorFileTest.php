@@ -108,7 +108,6 @@ class ValidatorFileTest extends \PHPUnit\Framework\TestCase
         $this->httpFactoryMock->expects($this->once())->method('create')->willReturn($httpAdapterMock);
 
         $property = new \ReflectionProperty($httpAdapterMock, 'files');
-        $property->setAccessible(true);
         $property->setValue($httpAdapterMock, ['options_1_file' => $_FILES['options_1_file']]);
         $this->model->validate(
             $this->objectManager->create(\Magento\Framework\DataObject::class),
@@ -132,7 +131,6 @@ class ValidatorFileTest extends \PHPUnit\Framework\TestCase
         $this->httpFactoryMock->expects($this->once())->method('create')->willReturn($httpAdapterMock);
 
         $property = new \ReflectionProperty($httpAdapterMock, 'files');
-        $property->setAccessible(true);
         $property->setValue($httpAdapterMock, ['options_1_file' => $_FILES['options_1_file']]);
         $this->model->validate(
             $this->objectManager->create(\Magento\Framework\DataObject::class),
@@ -153,7 +151,6 @@ class ValidatorFileTest extends \PHPUnit\Framework\TestCase
         $this->httpFactoryMock->expects($this->once())->method('create')->willReturn($httpAdapterMock);
 
         $property = new \ReflectionProperty($httpAdapterMock, 'files');
-        $property->setAccessible(true);
         $property->setValue($httpAdapterMock, ['options_1_file' => $_FILES['options_1_file']]);
         $this->model->validate(
             $this->objectManager->create(\Magento\Framework\DataObject::class),
@@ -228,7 +225,6 @@ class ValidatorFileTest extends \PHPUnit\Framework\TestCase
         $this->httpFactoryMock->expects($this->once())->method('create')->willReturn($httpAdapterMock);
 
         $property = new \ReflectionProperty($httpAdapterMock, 'files');
-        $property->setAccessible(true);
         $property->setValue($httpAdapterMock, ['options_1_file' => $_FILES['options_1_file']]);
         $result = $this->model->validate(
             $this->objectManager->create(\Magento\Framework\DataObject::class),
@@ -250,7 +246,6 @@ class ValidatorFileTest extends \PHPUnit\Framework\TestCase
         $this->httpFactoryMock->expects($this->once())->method('create')->willReturn($httpAdapterMock);
 
         $property = new \ReflectionProperty($httpAdapterMock, 'files');
-        $property->setAccessible(true);
         $property->setValue($httpAdapterMock, ['options_1_file' => $_FILES['options_1_file']]);
         $this->model->validate(
             $this->objectManager->create(\Magento\Framework\DataObject::class),

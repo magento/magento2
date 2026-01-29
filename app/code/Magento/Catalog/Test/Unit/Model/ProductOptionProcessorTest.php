@@ -104,7 +104,6 @@ class ProductOptionProcessorTest extends TestCase
 
         $reflection = new \ReflectionClass(get_class($this->processor));
         $reflectionProperty = $reflection->getProperty('urlBuilder');
-        $reflectionProperty->setAccessible(true);
         $reflectionProperty->setValue($this->processor, $urlBuilder);
     }
 

@@ -45,7 +45,6 @@ $properties = [
 foreach ($properties as $key => $value) {
     if ($reflectionClass->hasProperty($key)) {
         $reflectionProperty = $reflectionClass->getProperty($key);
-        $reflectionProperty->setAccessible(true);
         $reflectionProperty->setValue($categoryLinkManagement, $value);
     }
 }

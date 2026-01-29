@@ -190,7 +190,7 @@ class ConfigFixture
         $parts = preg_split('/\s+/', $configPathAndValue, 3);
         list($configScope, $configPath, $requiredValue) = $parts + ['', '', ''];
         $originalValue = $this->_getConfigValue($configPath, $storeCode);
-        $this->storeConfigValues[$storeCode][$configPath] = $originalValue;
+        $this->storeConfigValues[$storeCode ?? ''][$configPath] = $originalValue;
         $this->_setConfigValue($configPath, $requiredValue, $storeCode);
     }
 
@@ -204,7 +204,7 @@ class ConfigFixture
      */
     protected function setWebsiteConfigValue(array $matches, $configPathAndValue): void
     {
-        $websiteCode = $matches[0] != 'current' ? $matches[0] : null;
+        $websiteCode = $matches[0] != 'current' ? $matches[0] : '';
         $parts = preg_split('/\s+/', $configPathAndValue, 3);
         list($configScope, $configPath, $requiredValue) = $parts + ['', '', ''];
         $originalValue = $this->getScopeConfigValue($configPath, ScopeInterface::SCOPE_WEBSITES, $websiteCode);

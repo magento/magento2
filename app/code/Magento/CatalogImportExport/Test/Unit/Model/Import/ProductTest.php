@@ -401,7 +401,6 @@ class ProductTest extends AbstractImportTestCase
         $this->skuProcessor = $this->createMock(SkuProcessor::class);
         $reflection = new \ReflectionClass(SkuProcessor::class);
         $reflectionProperty = $reflection->getProperty('metadataPool');
-        $reflectionProperty->setAccessible(true);
         $reflectionProperty->setValue($this->skuProcessor, $metadataPoolMock);
 
         $this->categoryProcessor = $this->createMock(CategoryProcessor::class);
@@ -484,7 +483,6 @@ class ProductTest extends AbstractImportTestCase
         );
         $reflection = new \ReflectionClass(Product::class);
         $reflectionProperty = $reflection->getProperty('metadataPool');
-        $reflectionProperty->setAccessible(true);
         $reflectionProperty->setValue($this->importProduct, $metadataPoolMock);
     }
 
@@ -1182,11 +1180,13 @@ class ProductTest extends AbstractImportTestCase
             Product::COL_TYPE => $colType,
             Product::COL_ATTR_SET => $colAttrSet
         ];
+        $attrSetKey = (string)($rowData[Product::COL_ATTR_SET] ?? '');
         $_attrSetNameToId = [
-            $rowData[Product::COL_ATTR_SET] => $attrSetNameToIdColAttrSet
+            $attrSetKey => $attrSetNameToIdColAttrSet
         ];
+        $typeKey = (string)($rowData[Product::COL_TYPE] ?? '');
         $_productTypeModels = [
-            $rowData[Product::COL_TYPE] => $productTypeModelsColType
+            $typeKey => $productTypeModelsColType
         ];
         $oldSku = [
             $sku => null
@@ -1957,7 +1957,6 @@ class ProductTest extends AbstractImportTestCase
     {
         $reflection = new \ReflectionClass(get_class($object));
         $method = $reflection->getMethod($methodName);
-        $method->setAccessible(true);
 
         return $method->invokeArgs($object, $parameters);
     }
@@ -1971,7 +1970,6 @@ class ProductTest extends AbstractImportTestCase
     {
         $reflection = new \ReflectionClass(get_class($object));
         $reflectionProperty = $reflection->getProperty($property);
-        $reflectionProperty->setAccessible(true);
         $reflectionProperty->setValue($object, $value);
         return $object;
     }
@@ -1984,7 +1982,6 @@ class ProductTest extends AbstractImportTestCase
     {
         $reflection = new \ReflectionClass(get_class($object));
         $reflectionProperty = $reflection->getProperty($property);
-        $reflectionProperty->setAccessible(true);
 
         return $reflectionProperty->getValue($object);
     }
@@ -2001,7 +1998,6 @@ class ProductTest extends AbstractImportTestCase
             $reflection = $reflection->getParentClass();
         }
         $reflectionProperty = $reflection->getProperty($property);
-        $reflectionProperty->setAccessible(true);
         $reflectionProperty->setValue($object, $value);
         return $object;
     }
@@ -2153,7 +2149,6 @@ class ProductTest extends AbstractImportTestCase
     {
         $reflector = new \ReflectionClass($this->importProduct);
         $property = $reflector->getMethod('getRemoteFileContent');
-        $property->setAccessible(true);
         $this->assertEquals(
             '',
             $property->invokeArgs($this->importProduct, ['php://filter'])

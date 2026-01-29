@@ -133,7 +133,7 @@ class FixerIo extends AbstractImport
                     $data[$currencyFrom][$currencyTo] = null;
                 } else {
                     $data[$currencyFrom][$currencyTo] = $this->_numberFormat(
-                        (double)$response['rates'][$currencyTo]
+                        (float)$response['rates'][$currencyTo]
                     );
                 }
             }

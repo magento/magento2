@@ -60,7 +60,6 @@ class RefreshPathTest extends TestCase
     {
         $reflectionClass = new \ReflectionClass($object);
         $reflectionProperty = $reflectionClass->getProperty($propertyName);
-        $reflectionProperty->setAccessible(true);
         $reflectionProperty->setValue($object, $value);
     }
 

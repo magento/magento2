@@ -118,8 +118,8 @@ class Algorithm
      */
     public function setLimits($lowerLimit = null, $upperLimit = null)
     {
-        $this->_lowerLimit = empty($lowerLimit) ? null : (double)$lowerLimit;
-        $this->_upperLimit = empty($upperLimit) ? null : (double)$upperLimit;
+        $this->_lowerLimit = empty($lowerLimit) ? null : (float)$lowerLimit;
+        $this->_upperLimit = empty($upperLimit) ? null : (float)$upperLimit;
 
         return $this;
     }

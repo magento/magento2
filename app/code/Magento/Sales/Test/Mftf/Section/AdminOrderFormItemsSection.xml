@@ -45,5 +45,7 @@
         <element name="datepickerGoToday" type="button" selector="#ui-datepicker-div button.ui-datepicker-current" timeout="30"/>
         <element name="datepickerClose" type="button" selector="#ui-datepicker-div button.ui-datepicker-close" timeout="30"/>
         <element name="optionPrice" type="text" selector="//span[@class='price-wrapper ' and contains(text(), '{{priceAmount}}')]" parameterized="true"/>
+        <element name="orderedItemProductName" type="text" selector="//table[contains(@class, 'order-tables')]/tbody[{{row}}]//td[contains(@class, 'col-product')]//span[contains(@id, 'order_item')]" parameterized="true"/>
+        <element name="orderedItemQty" type="input" selector="//table[contains(@class, 'order-tables')]/tbody[{{row}}]//td[contains(@class, 'col-qty')]//input" parameterized="true"/>
     </section>
 </sections>

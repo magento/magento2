@@ -131,10 +131,14 @@ class ConfigOptionsListConstants
 
     /**#@+
      * Array keys for database driver options configurations
+     * 
+     * PHP 8.4+ deprecated PDO::MYSQL_ATTR_SSL_* constants in favor of Pdo\Mysql::ATTR_SSL_*
+     * PHP 8.5+ removed the deprecated constants entirely
+     * We use the new constants if available (PHP 8.4+), otherwise fall back to legacy constants
      */
-    public const KEY_MYSQL_SSL_KEY = \PDO::MYSQL_ATTR_SSL_KEY;
-    public const KEY_MYSQL_SSL_CERT = \PDO::MYSQL_ATTR_SSL_CERT;
-    public const KEY_MYSQL_SSL_CA = \PDO::MYSQL_ATTR_SSL_CA;
+    public const KEY_MYSQL_SSL_KEY = \PHP_VERSION_ID >= 80400 ? \Pdo\Mysql::ATTR_SSL_KEY : \PDO::MYSQL_ATTR_SSL_KEY;
+    public const KEY_MYSQL_SSL_CERT = \PHP_VERSION_ID >= 80400 ? \Pdo\Mysql::ATTR_SSL_CERT : \PDO::MYSQL_ATTR_SSL_CERT;
+    public const KEY_MYSQL_SSL_CA = \PHP_VERSION_ID >= 80400 ? \Pdo\Mysql::ATTR_SSL_CA : \PDO::MYSQL_ATTR_SSL_CA;
 
     /**
      * Constant \PDO::MYSQL_ATTR_SSL_VERIFY_SERVER_CERT cannot be used as it was introduced in PHP 7.1.4

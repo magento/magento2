@@ -48,7 +48,7 @@ class CompositeInstallConfig implements InstallConfigInterface
             $searchEngine = $this->scopeConfig->getValue('catalog/search/engine');
         }
 
-        if (isset($this->installConfigList[$searchEngine]) && !empty($inputOptions)) {
+        if ($searchEngine !== null && isset($this->installConfigList[$searchEngine]) && !empty($inputOptions)) {
             $installConfig = $this->installConfigList[$searchEngine];
             $installConfig->configure($inputOptions);
 

@@ -470,7 +470,7 @@ abstract class AbstractItem extends AbstractExtensibleModel implements ItemInter
     {
         if (!$this->hasBaseCalculationPrice()) {
             if ($this->hasCustomPrice()) {
-                $price = (double)$this->getCustomPrice();
+                $price = (float)$this->getCustomPrice();
                 if ($price) {
                     $rate = $this->priceCurrency->convert($price, $this->getStore()) / $price;
                     $price = $price / $rate;
@@ -492,7 +492,7 @@ abstract class AbstractItem extends AbstractExtensibleModel implements ItemInter
     {
         if (!$this->hasBaseCalculationPrice()) {
             if ($this->hasOriginalCustomPrice()) {
-                $price = (double)$this->getOriginalCustomPrice();
+                $price = (float)$this->getOriginalCustomPrice();
                 if ($price) {
                     $rate = $this->priceCurrency->convert($price, $this->getStore()) / $price;
                     $price = $price / $rate;

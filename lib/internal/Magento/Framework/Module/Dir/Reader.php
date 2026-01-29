@@ -175,6 +175,8 @@ class Reader
      */
     public function getModuleDir($type, $moduleName)
     {
+        $moduleName = $moduleName ?? '';
+        $type = $type ?? '';
         if (isset($this->customModuleDirs[$moduleName][$type])) {
             return $this->customModuleDirs[$moduleName][$type];
         }

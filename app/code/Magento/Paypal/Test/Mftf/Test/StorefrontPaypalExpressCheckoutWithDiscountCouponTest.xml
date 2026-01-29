@@ -20,11 +20,15 @@
             <group value="pr_exclude"/>
         </annotations>
         <before>
-            <!-- Simple product is created -->
-            <createData entity="SimpleProduct" stepKey="createProduct"/>
             <!-- US Customer is created -->
             <createData entity="Simple_US_Customer" stepKey="createCustomer"/>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <!-- Simple product is created -->
+            <actionGroup ref="AdminOpenNewProductFormPageActionGroup" stepKey="openNewProductPage"/>
+            <actionGroup ref="FillMainProductFormActionGroup" stepKey="createProduct">
+                <argument name="product" value="SimpleProduct"/>
+            </actionGroup>
+            <actionGroup ref="SaveProductFormActionGroup" stepKey="saveSimpleProduct"/>
             <!-- Delete all existing cart price rules -->
             <actionGroup ref="AdminCartPriceRuleDeleteAllActionGroup" stepKey="deleteAllCartPriceRules"/>
             <!-- Create new cart price rule -->
@@ -49,10 +53,11 @@
         <actionGroup ref="LoginToStorefrontActionGroup" stepKey="storefrontCustomerLogin">
             <argument name="Customer" value="$$createCustomer$$"/>
         </actionGroup>
-        <!-- Add product to cart -->
-        <actionGroup ref="AddSimpleProductToCartActionGroup" stepKey="addProductToCart">
-            <argument name="product" value="$$createProduct$$"/>
+        <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="navigateToProductPage">
+            <argument name="productUrl" value="{{SimpleProduct.urlKey}}"/>
         </actionGroup>
+        <!-- Add product to cart -->
+        <actionGroup ref="StorefrontProductPageAddSimpleProductToCartActionGroup" stepKey="addProductToCart"/>
         <!-- Goto Checkout Page -->
         <actionGroup ref="StorefrontOpenCheckoutPageActionGroup" stepKey="goToCheckout"/>
         <actionGroup ref="CheckoutSelectFlatRateShippingMethodActionGroup" stepKey="selectFlatRateShipping" />

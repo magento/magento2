@@ -197,9 +197,9 @@ class OperationsExecutor
                 $statementAggregator = $this->statementAggregatorFactory->create();
 
                 foreach ($this->operations as $operation) {
-                    if (isset($tableHistory[$operation->getOperationName()])) {
+                    if (isset($tableHistory[$operation->getOperationName() ?? ''])) {
                         /** @var ElementHistory $elementHistory */
-                        foreach ($tableHistory[$operation->getOperationName()] as $elementHistory) {
+                        foreach ($tableHistory[$operation->getOperationName() ?? ''] as $elementHistory) {
                             $statementAggregator->addStatements($operation->doOperation($elementHistory));
 
                             if ($operation->isOperationDestructive()) {

@@ -101,14 +101,16 @@ class Data
                 $productAttribute = $attribute->getProductAttribute();
                 $productAttributeId = $productAttribute->getId();
                 $attributeValue = $product->getData($productAttribute->getAttributeCode());
-                if ($this->canDisplayShowOutOfStockStatus()) {
-                    if ($product->isSalable()) {
-                        $options['salable'][$productAttributeId][$attributeValue][] = $productId;
-                    }
-                    $options[$productAttributeId][$attributeValue][] = $productId;
-                } else {
-                    if ($product->isSalable()) {
+                if ($attributeValue !== null) {
+                    if ($this->canDisplayShowOutOfStockStatus()) {
+                        if ($product->isSalable()) {
+                            $options['salable'][$productAttributeId][$attributeValue][] = $productId;
+                        }
                         $options[$productAttributeId][$attributeValue][] = $productId;
+                    } else {
+                        if ($product->isSalable()) {
+                            $options[$productAttributeId][$attributeValue][] = $productId;
+                        }
                     }
                 }
                 $options['index'][$productId][$productAttributeId] = $attributeValue;

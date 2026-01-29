@@ -33,7 +33,7 @@ class Translator
             $argumentStack = & $args;
             $canTranslate = true;
             while (is_array($argumentStack) && count($argumentStack) > 0) {
-                $argumentName = array_shift($argumentHierarchy);
+                $argumentName = array_shift($argumentHierarchy) ?? '';
                 if (isset($argumentStack[$argumentName])) {
                     /*
                      * Move to the next element in arguments hierarchy

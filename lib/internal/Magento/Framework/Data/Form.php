@@ -170,6 +170,9 @@ class Form extends \Magento\Framework\Data\Form\AbstractForm
      */
     protected function _elementIdExists($elementId)
     {
+        if ($elementId === null) {
+            return false;
+        }
         return isset($this->_elementsIndex[$elementId]);
     }
 
@@ -182,7 +185,10 @@ class Form extends \Magento\Framework\Data\Form\AbstractForm
      */
     public function addElementToCollection($element)
     {
-        $this->_elementsIndex[$element->getId()] = $element;
+        $elementId = $element->getId();
+        if ($elementId !== null) {
+            $this->_elementsIndex[$elementId] = $element;
+        }
         $this->_allElements->add($element);
         return $this;
     }

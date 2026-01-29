@@ -284,7 +284,6 @@ class CarrierTest extends TestCase
         $request->setData($requestData);
         $this->model->setRequest($request);
         $property = new \ReflectionProperty($this->model, '_rawRequest');
-        $property->setAccessible(true);
         $rawRequest = $property->getValue($this->model);
         $this->assertEquals($rawRequestData, array_intersect_key($rawRequest->getData(), $rawRequestData));
     }

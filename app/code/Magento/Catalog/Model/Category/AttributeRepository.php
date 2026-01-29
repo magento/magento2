@@ -82,7 +82,8 @@ class AttributeRepository implements CategoryAttributeRepositoryInterface, Reloa
      */
     public function getCustomAttributesMetadata($dataObjectClassName = null)
     {
-        if (!isset($this->metadataCache[$dataObjectClassName])) {
+        $cacheKey = $dataObjectClassName ?? '';
+        if (!isset($this->metadataCache[$cacheKey])) {
             $defaultAttributeSetId = $this->eavConfig
                 ->getEntityType(\Magento\Catalog\Api\Data\CategoryAttributeInterface::ENTITY_TYPE_CODE)
                 ->getDefaultAttributeSetId();
@@ -94,10 +95,10 @@ class AttributeRepository implements CategoryAttributeRepositoryInterface, Reloa
                         ->create(),
                 ]
             );
-            $this->metadataCache[$dataObjectClassName] = $this->getList($searchCriteria->create())
+            $this->metadataCache[$cacheKey] = $this->getList($searchCriteria->create())
                 ->getItems();
         }
-        return $this->metadataCache[$dataObjectClassName];
+        return $this->metadataCache[$cacheKey];
     }
 
     /**

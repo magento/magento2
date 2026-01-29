@@ -75,7 +75,6 @@ class ShippingTest extends TestCase
         // needed until 'taxConfig' becomes part of the constructor for shippingCollector
         $reflection = new \ReflectionClass(get_class($this->shippingCollector));
         $reflectionProperty = $reflection->getProperty('taxConfig');
-        $reflectionProperty->setAccessible(true);
         $reflectionProperty->setValue($this->shippingCollector, $this->taxConfig);
     }
 

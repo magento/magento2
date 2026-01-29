@@ -196,8 +196,6 @@ class DynamicStorageTest extends TestCase
             ->willReturn($canBeShownInCategory);
 
         $method = new ReflectionMethod($this->object, 'findProductRewriteByRequestPath');
-        $method->setAccessible(true);
-
         $this->assertSame($expectedProductRewrite, $method->invoke($this->object, $data));
     }
 
@@ -429,7 +427,6 @@ class DynamicStorageTest extends TestCase
             ->willReturn([]);
 
         $method = new ReflectionMethod($this->object, 'doFindOneByData');
-        $method->setAccessible(true);
         $result = $method->invoke($this->object, $data);
 
         $this->assertNull($result);
@@ -454,7 +451,6 @@ class DynamicStorageTest extends TestCase
         ];
 
         $method = new ReflectionMethod($this->object, 'prepareSelect');
-        $method->setAccessible(true);
         $method->invoke($this->object, $data);
 
         $this->assertTrue(
@@ -488,7 +484,6 @@ class DynamicStorageTest extends TestCase
         ];
 
         $method = new ReflectionMethod($this->object, 'prepareSelect');
-        $method->setAccessible(true);
         $method->invoke($this->object, $data);
 
         $this->assertTrue(
@@ -510,7 +505,6 @@ class DynamicStorageTest extends TestCase
         ];
 
         $method = new ReflectionMethod($this->object, 'doFindOneByData');
-        $method->setAccessible(true);
         $result = $method->invoke($this->object, $data);
 
         $this->assertNull($result);
@@ -523,7 +517,6 @@ class DynamicStorageTest extends TestCase
         ];
 
         $method = new ReflectionMethod($this->object, 'findProductRewritesByFilter');
-        $method->setAccessible(true);
         $result = $method->invoke($this->object, $data);
 
         $this->assertSame([], $result);
@@ -562,7 +555,6 @@ class DynamicStorageTest extends TestCase
             ->willReturn(true);
 
         $method = new ReflectionMethod($this->object, 'doFindOneByData');
-        $method->setAccessible(true);
         $result = $method->invoke($this->object, $data);
 
         $this->assertSame(
@@ -603,7 +595,6 @@ class DynamicStorageTest extends TestCase
             ->willReturn(false);
 
         $method = new ReflectionMethod($this->object, 'doFindOneByData');
-        $method->setAccessible(true);
         $result = $method->invoke($this->object, $data);
 
         $this->assertSame($productsFromDb[0], $result);
@@ -657,7 +648,6 @@ class DynamicStorageTest extends TestCase
             ]);
 
         $method = new ReflectionMethod($this->object, 'doFindOneByData');
-        $method->setAccessible(true);
         $result = $method->invoke($this->object, $data);
 
         $this->assertSame('cat/test.html', $result['request_path']);
@@ -685,7 +675,6 @@ class DynamicStorageTest extends TestCase
             ->willReturn($parentRewrites);
 
         $method = new ReflectionMethod($this->object, 'doFindAllByData');
-        $method->setAccessible(true);
         $result = $method->invoke($this->object, $data);
 
         $this->assertSame($parentRewrites, $result);
@@ -724,7 +713,6 @@ class DynamicStorageTest extends TestCase
             ->willReturnOnConsecutiveCalls($parentRewrites, $filteredRewrites);
 
         $method = new ReflectionMethod($this->object, 'doFindAllByData');
-        $method->setAccessible(true);
         $result = $method->invoke($this->object, $data);
 
         $this->assertSame(

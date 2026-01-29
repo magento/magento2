@@ -982,7 +982,7 @@ class Checkout
 
         foreach ($address->getGroupedAllShippingRates() as $group) {
             foreach ($group as $rate) {
-                $amount = (double)$rate->getPrice();
+                $amount = (float)$rate->getPrice();
                 if ($rate->getErrorMessage()) {
                     continue;
                 }

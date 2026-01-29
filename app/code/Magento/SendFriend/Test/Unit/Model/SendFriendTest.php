@@ -94,7 +94,6 @@ class SendFriendTest extends TestCase
             ->willReturn($sensitiveCookieMetadataMock);
         $sendFriendClass = new \ReflectionClass(SendFriend::class);
         $method = $sendFriendClass->getMethod('_sentCountByCookies');
-        $method->setAccessible(true);
         $method->invokeArgs($this->model, [true]);
     }
 }

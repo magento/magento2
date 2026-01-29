@@ -174,7 +174,6 @@ class CollectionTest extends TestCase
 
         $reflection = new ReflectionClass(get_class($this->collection));
         $reflectionProperty = $reflection->getProperty('metadataPool');
-        $reflectionProperty->setAccessible(true);
         $reflectionProperty->setValue($this->collection, $this->metadataPool);
     }
 

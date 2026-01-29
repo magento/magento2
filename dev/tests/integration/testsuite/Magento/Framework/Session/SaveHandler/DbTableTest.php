@@ -110,7 +110,6 @@ class DbTableTest extends \PHPUnit\Framework\TestCase
     public function testCheckConnection()
     {
         $method = new \ReflectionMethod(\Magento\Framework\Session\SaveHandler\DbTable::class, 'checkConnection');
-        $method->setAccessible(true);
         $this->assertNull($method->invoke($this->_model));
     }
 

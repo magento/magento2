@@ -189,7 +189,6 @@ class CompiledTest extends TestCase
 
         $reflection = new \ReflectionClass(Compiled::class);
         $arguments = $reflection->getProperty('arguments');
-        $arguments->setAccessible(true);
 
         $this->assertEquals($expectedResult['arguments'], $arguments->getValue($compiled));
         $this->assertEquals($expectedResult['preferences'], $compiled->getPreferences());
@@ -249,7 +248,6 @@ class CompiledTest extends TestCase
 
         $reflection = new \ReflectionClass(Compiled::class);
         $arguments = $reflection->getProperty('arguments');
-        $arguments->setAccessible(true);
 
         $this->assertEquals($expectedResult['arguments'], $arguments->getValue($compiled));
         $this->assertEquals($expectedResult['preferences'], $compiled->getPreferences());

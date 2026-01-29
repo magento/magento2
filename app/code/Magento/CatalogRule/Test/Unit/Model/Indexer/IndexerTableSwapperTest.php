@@ -97,7 +97,7 @@ class IndexerTableSwapperTest extends TestCase
                     return $temporaryTableName;
                 }
             });
-        
+
         $this->assertEquals(
             $temporaryTableName,
             $model->getWorkingTableName($originalTableName)
@@ -117,7 +117,6 @@ class IndexerTableSwapperTest extends TestCase
     {
         $reflectionClass = new \ReflectionClass($object);
         $reflectionProperty = $reflectionClass->getProperty($propertyName);
-        $reflectionProperty->setAccessible(true);
         $reflectionProperty->setValue($object, $value);
     }
 

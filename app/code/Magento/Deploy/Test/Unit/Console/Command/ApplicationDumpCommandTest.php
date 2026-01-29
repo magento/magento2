@@ -144,7 +144,6 @@ class ApplicationDumpCommandTest extends TestCase
             });
 
         $method = new \ReflectionMethod(ApplicationDumpCommand::class, 'execute');
-        $method->setAccessible(true);
         $this->assertEquals(
             Cli::RETURN_SUCCESS,
             $method->invokeArgs(

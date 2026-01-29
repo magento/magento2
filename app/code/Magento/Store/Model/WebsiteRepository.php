@@ -187,8 +187,10 @@ class WebsiteRepository implements \Magento\Store\Api\WebsiteRepositoryInterface
                     'data' => $data
                 ]);
                 $this->default = $website;
-                $this->entities[$this->default->getCode()] = $this->default;
-                $this->entitiesById[$this->default->getId()] = $this->default;
+                $websiteCode = $this->default->getCode() ?? '';
+                $websiteId = $this->default->getId() ?? '';
+                $this->entities[$websiteCode] = $this->default;
+                $this->entitiesById[$websiteId] = $this->default;
             }
         }
     }

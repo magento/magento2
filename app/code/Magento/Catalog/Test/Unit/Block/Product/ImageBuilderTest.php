@@ -234,7 +234,6 @@ class ImageBuilderTest extends TestCase
 
         $reflection = new ReflectionClass($this->imageBuilder);
         $method = $reflection->getMethod('getRatio');
-        $method->setAccessible(true);
 
         $result = $method->invoke($this->imageBuilder, $helperMock);
 
@@ -304,7 +303,6 @@ class ImageBuilderTest extends TestCase
 
         $reflection = new ReflectionClass($this->imageBuilder);
         $method = $reflection->getMethod('getCustomAttributes');
-        $method->setAccessible(true);
 
         $result = $method->invoke($this->imageBuilder);
 

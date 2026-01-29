@@ -58,7 +58,6 @@ class CollectionTest extends TestCase
         // Call the protected _construct method via reflection
         $reflection = new ReflectionClass($collection);
         $constructMethod = $reflection->getMethod('_construct');
-        $constructMethod->setAccessible(true);
         $constructMethod->invoke($collection);
     }
 }

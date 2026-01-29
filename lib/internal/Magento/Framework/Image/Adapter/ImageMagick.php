@@ -318,7 +318,7 @@ class ImageMagick extends AbstractAdapter
         $this->_checkCanProcess();
 
         $opacity = $this->getWatermarkImageOpacity() ? $this->getWatermarkImageOpacity() : $opacity;
-        $opacity = (double) number_format($opacity / 100, 1);
+        $opacity = (float) number_format($opacity / 100, 1);
 
         $watermark = new \Imagick($imagePath);
 

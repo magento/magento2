@@ -528,7 +528,7 @@ class QuoteManagement implements CartManagementInterface, ResetAfterRequestInter
     {
         $orderItems = [];
         foreach ($quote->getAllItems() as $quoteItem) {
-            $itemId = $quoteItem->getId();
+            $itemId = $quoteItem->getId() ?? '';
 
             if (!empty($orderItems[$itemId])) {
                 continue;
@@ -542,7 +542,9 @@ class QuoteManagement implements CartManagementInterface, ResetAfterRequestInter
                     ['parent_item' => null]
                 );
             }
-            $parentItem = isset($orderItems[$parentItemId]) ? $orderItems[$parentItemId] : null;
+            $parentItem = (isset($parentItemId, $orderItems[$parentItemId]))
+                ? $orderItems[$parentItemId]
+                : null;
             $orderItems[$itemId] = $this->quoteItemToOrderItem->convert($quoteItem, ['parent_item' => $parentItem]);
         }
         return array_values($orderItems);

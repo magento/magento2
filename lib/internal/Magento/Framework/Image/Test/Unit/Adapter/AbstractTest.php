@@ -80,7 +80,6 @@ class AbstractTest extends TestCase
     public function testAdaptResizeValues($width, $height, $expectedResult)
     {
         $method = new \ReflectionMethod($this->_model, '_adaptResizeValues');
-        $method->setAccessible(true);
 
         $result = $method->invoke($this->_model, $width, $height);
 
@@ -107,15 +106,12 @@ class AbstractTest extends TestCase
     public function testPrepareDestination($destination, $newName, $expectedResult)
     {
         $property = new \ReflectionProperty(get_class($this->_model), '_fileSrcPath');
-        $property->setAccessible(true);
         $property->setValue($this->_model, '_fileSrcPath');
 
         $property = new \ReflectionProperty(get_class($this->_model), '_fileSrcName');
-        $property->setAccessible(true);
         $property->setValue($this->_model, '_fileSrcName');
 
         $method = new \ReflectionMethod($this->_model, '_prepareDestination');
-        $method->setAccessible(true);
 
         $result = $method->invoke($this->_model, $destination, $newName);
 
