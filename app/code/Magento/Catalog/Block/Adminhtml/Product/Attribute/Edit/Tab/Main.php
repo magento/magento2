@@ -88,10 +88,11 @@ class Main extends AbstractMain
 
         $additionalReadOnlyTypes = ['gallery' => __('Gallery')];
         $attributeObject = $this->getAttributeObject();
-        if (isset($additionalReadOnlyTypes[$attributeObject->getFrontendInput()])) {
+        $frontendInput = $attributeObject->getFrontendInput();
+        if ($frontendInput !== null && isset($additionalReadOnlyTypes[$frontendInput])) {
             $additionalTypes[] = [
-                'value' => $attributeObject->getFrontendInput(),
-                'label' => $additionalReadOnlyTypes[$attributeObject->getFrontendInput()],
+                'value' => $frontendInput,
+                'label' => $additionalReadOnlyTypes[$frontendInput],
             ];
         }
 

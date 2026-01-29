@@ -101,7 +101,6 @@ class AdminConfigFixtureTest extends TestCase
     public function testInitConfigFixture(array $attributes, string $expectedValue): void
     {
         $reflectionMethod = new \ReflectionMethod(AdminConfigFixture::class, 'initConfigFixture');
-        $reflectionMethod->setAccessible(true);
         $value = $reflectionMethod->invoke($this->object, $attributes);
         $this->assertEquals($expectedValue, $value);
     }
@@ -139,7 +138,6 @@ class AdminConfigFixtureTest extends TestCase
     private function invokeIsFixtureMatchMethod(array $attributes, string $fixture): bool
     {
         $reflectionMethod = new \ReflectionMethod(AdminConfigFixture::class, 'isFixtureMatch');
-        $reflectionMethod->setAccessible(true);
         return $reflectionMethod->invoke($this->object, $attributes, $fixture);
     }
 }

@@ -286,7 +286,8 @@ QRY);
         $attribute = array_filter($items, function ($item) use ($attribute_code) {
             return $item['code'] == $attribute_code;
         });
-        return $attribute[array_key_first($attribute)] ?? [];
+        $key = array_key_first($attribute);
+        return $key !== null ? ($attribute[$key] ?? []) : [];
     }
 
     /**

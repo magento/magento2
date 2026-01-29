@@ -183,9 +183,6 @@ class CurlClient
             throw new \Exception($error);
         }
 
-        // phpcs:ignore Magento2.Functions.DiscouragedFunction
-        curl_close($curl);
-
         $meta = $resp["meta"];
         if ($meta && $meta['http_code'] >= 400) {
             // phpcs:ignore Magento2.Exceptions.DirectThrow

@@ -98,7 +98,6 @@ class OptionTest extends TestCase
         // Set the _selectedOptions property directly to fix the test
         $reflection = new \ReflectionClass($this->block);
         $property = $reflection->getProperty('_selectedOptions');
-        $property->setAccessible(true);
         $property->setValue($this->block, 315); // Set to the selection ID we expect
 
         $this->assertTrue($this->block->isSelected($selection));

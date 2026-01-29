@@ -58,6 +58,7 @@ class Total extends \Magento\Framework\DataObject
     {
         $amount = is_float($amount) ? round($amount, 4) : $amount;
 
+        $code = $code ?? '';
         $this->totalAmounts[$code] = $amount;
         if ($code != 'subtotal') {
             $code = $code . '_amount';
@@ -78,6 +79,7 @@ class Total extends \Magento\Framework\DataObject
     {
         $amount = is_float($amount) ? round($amount, 4) : $amount;
 
+        $code = $code ?? '';
         $this->baseTotalAmounts[$code] = $amount;
         if ($code != 'subtotal') {
             $code = $code . '_amount';
@@ -125,6 +127,7 @@ class Total extends \Magento\Framework\DataObject
      */
     public function getTotalAmount($code)
     {
+        $code = $code ?? '';
         if (isset($this->totalAmounts[$code])) {
             return $this->totalAmounts[$code];
         }
@@ -140,6 +143,7 @@ class Total extends \Magento\Framework\DataObject
      */
     public function getBaseTotalAmount($code)
     {
+        $code = $code ?? '';
         if (isset($this->baseTotalAmounts[$code])) {
             return $this->baseTotalAmounts[$code];
         }

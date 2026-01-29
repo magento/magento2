@@ -260,7 +260,7 @@ class Item extends AbstractModel implements InvoiceItemInterface
      */
     public function isLast()
     {
-        if ((string)(double)$this->getQty() == (string)(double)$this->getOrderItem()->getQtyToInvoice()) {
+        if ((string)(float)$this->getQty() == (string)(float)$this->getOrderItem()->getQtyToInvoice()) {
             return true;
         }
         return false;

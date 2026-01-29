@@ -232,6 +232,7 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
         $columnsToSelect = [];
         foreach ($columns as $columnEntry) {
             list($correlationName, $column, $alias) = $columnEntry;
+            $alias = $alias ?? '';
             if ($correlationName !== 'main_table' || isset($this->expressionFieldsToSelect[$alias])) {
                 // Add joined fields to select
                 if ($column instanceof \Zend_Db_Expr) {

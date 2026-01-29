@@ -136,7 +136,6 @@ class NvpTest extends TestCase
     {
         $object = new \ReflectionClass($nvpObject);
         $property = $object->getProperty($property);
-        $property->setAccessible(true);
 
         return $property->getValue($nvpObject);
     }

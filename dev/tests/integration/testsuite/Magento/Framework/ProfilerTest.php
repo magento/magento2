@@ -27,9 +27,7 @@ class ProfilerTest extends \PHPUnit\Framework\TestCase
         $this->assertTrue(property_exists($profiler, '_drivers'));
         $object = new ReflectionClass(\Magento\Framework\Profiler::class);
         $attribute = $object->getProperty('_drivers');
-        $attribute->setAccessible(true);
         $propertyObject = $attribute->getValue($profiler);
-        $attribute->setAccessible(false);
         $this->assertEquals($expectedDrivers, $propertyObject);
     }
 

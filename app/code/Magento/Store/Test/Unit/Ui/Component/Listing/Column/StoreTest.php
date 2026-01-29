@@ -105,7 +105,6 @@ class StoreTest extends TestCase
     {
         $reflection = new \ReflectionClass(get_class($this->model));
         $reflectionProperty = $reflection->getProperty($propertyName);
-        $reflectionProperty->setAccessible(true);
         $reflectionProperty->setValue($this->model, $mockObject);
     }
 

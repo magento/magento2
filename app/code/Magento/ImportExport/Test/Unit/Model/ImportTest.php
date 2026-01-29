@@ -1066,7 +1066,6 @@ class ImportTest extends AbstractImportTestCase
     {
         $reflection = new \ReflectionClass(get_class($object));
         $reflectionProperty = $reflection->getProperty($property);
-        $reflectionProperty->setAccessible(true);
         $reflectionProperty->setValue($object, $value);
         return $object;
     }
@@ -1083,8 +1082,6 @@ class ImportTest extends AbstractImportTestCase
     {
         $reflection = new \ReflectionClass(get_class($object));
         $method = $reflection->getMethod($methodName);
-        $method->setAccessible(true);
-
         return $method->invokeArgs($object, $parameters);
     }
 }

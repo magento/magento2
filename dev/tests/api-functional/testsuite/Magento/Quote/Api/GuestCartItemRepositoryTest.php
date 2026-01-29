@@ -675,7 +675,6 @@ class GuestCartItemRepositoryTest extends WebapiAbstract
                 throw new \InvalidArgumentException('Unsupported image type');
         }
         $content = base64_encode(ob_get_clean());
-        imagedestroy($image);
         return $content;
     }
 

@@ -340,7 +340,6 @@ class ProductTest extends TestCase
         $groupExtension = $this->objectManagerHelper->getObject(ProductLinkExtension::class);
         $reflectionOfExtension = new \ReflectionClass(ProductLinkExtension::class);
         $method = $reflectionOfExtension->getMethod('setData');
-        $method->setAccessible(true);
         $method->invokeArgs($groupExtension, ['qty', 1]);
 
         $outputGroupLink = $this->objectManagerHelper->getObject(Link::class);

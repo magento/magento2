@@ -67,7 +67,7 @@ class TypeCaster
         }
 
         if ($type === "double") {
-            return (double)$value;
+            return (float)$value;
         }
 
         return $value;

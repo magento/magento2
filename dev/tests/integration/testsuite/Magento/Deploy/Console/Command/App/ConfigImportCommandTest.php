@@ -365,7 +365,6 @@ class ConfigImportCommandTest extends \PHPUnit\Framework\TestCase
             $currencyImportSettings,
             '_configValueFactory'
         );
-        $reflectionProperty->setAccessible(true);
         $valueFactory = $reflectionProperty->getValue($currencyImportSettings);
         /** @var $configValue \Magento\Framework\App\Config\ValueInterface */
         $configValue = $valueFactory->create();

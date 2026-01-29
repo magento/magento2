@@ -72,7 +72,6 @@ class LinkTest extends TestCase
         );
         $refClass = new \ReflectionClass(Link::class);
         $refProperty = $refClass->getProperty('metadataPool');
-        $refProperty->setAccessible(true);
         $refProperty->setValue($this->target, $this->metadataPoolMock);
     }
 

@@ -39,11 +39,9 @@ class AbstractTest extends \PHPUnit\Framework\TestCase
         $this->_model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(self::STUB_CLASS);
 
         $resourceProperty = new \ReflectionProperty(get_class($this->_model), '_resourceName');
-        $resourceProperty->setAccessible(true);
         $resourceProperty->setValue($this->_model, \Magento\Catalog\Model\ResourceModel\Product::class);
 
         $collectionProperty = new \ReflectionProperty(get_class($this->_model), '_collectionName');
-        $collectionProperty->setAccessible(true);
         $collectionProperty->setValue($this->_model, \Magento\Catalog\Model\ResourceModel\Product\Collection::class);
     }
 

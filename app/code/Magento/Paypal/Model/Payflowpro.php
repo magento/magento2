@@ -1015,6 +1015,7 @@ class Payflowpro extends \Magento\Payment\Model\Method\Cc implements GatewayInte
      */
     private function mapResponseCreditCardType($ccType)
     {
+        $ccType = $ccType ?? '';
         return $this->ccTypeMap[$ccType] ?? $ccType;
     }
 }

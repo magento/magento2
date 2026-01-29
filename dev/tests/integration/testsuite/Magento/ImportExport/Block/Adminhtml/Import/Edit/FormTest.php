@@ -47,7 +47,6 @@ class FormTest extends \PHPUnit\Framework\TestCase
             \Magento\ImportExport\Block\Adminhtml\Import\Edit\Form::class,
             '_prepareForm'
         );
-        $prepareForm->setAccessible(true);
         $prepareForm->invoke($formBlock);
 
         // check form

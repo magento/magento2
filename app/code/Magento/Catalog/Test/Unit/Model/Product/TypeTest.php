@@ -60,7 +60,6 @@ class TypeTest extends TestCase
     public function testGetTypes(): void
     {
         $property = new \ReflectionProperty($this->_model, '_types');
-        $property->setAccessible(true);
         $this->assertNull($property->getValue($this->_model));
         $this->assertEquals($this->_productTypes, $this->_model->getTypes());
     }
@@ -125,7 +124,6 @@ class TypeTest extends TestCase
     public function testGetCompositeTypes(): void
     {
         $property = new \ReflectionProperty($this->_model, '_compositeTypes');
-        $property->setAccessible(true);
         $this->assertNull($property->getValue($this->_model));
 
         $this->assertEquals(['type_id_3'], $this->_model->getCompositeTypes());

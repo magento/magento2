@@ -90,6 +90,7 @@ use PHPUnit\Framework\TestCase;
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.ExcessivePublicCount)
+ * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  */
 class ProductTest extends TestCase
 {
@@ -295,9 +296,8 @@ class ProductTest extends TestCase
             Manager::class,
             ['isEnabled']
         );
-        $this->extensionAttributes = $this->createPartialMockWithReflection(
-            ProductExtensionInterface::class,
-            ['getStockItem']
+        $this->extensionAttributes = $this->createExtensionAttributesStub(
+            $this->createStub(StockItemInterface::class)
         );
 
         $this->stockItemFactoryMock = $this->createPartialMock(
@@ -318,7 +318,7 @@ class ProductTest extends TestCase
             ['getAreaCode', 'isAreaCodeEmulated']
         );
         $this->appStateMock->method('getAreaCode')->willReturn(FrontNameResolver::AREA_CODE);
-      
+
         $this->eventManagerMock = $this->createStub(ManagerInterface::class);
         $actionValidatorMock = $this->createMock(
             RemoveAction::class
@@ -330,7 +330,7 @@ class ProductTest extends TestCase
             Context::class,
             ['getEventDispatcher', 'getCacheManager', 'getAppState', 'getActionValidator']
         );
-      
+
         $contextMock->method('getAppState')->willReturn($this->appStateMock);
         $contextMock->method('getEventDispatcher')->willReturn($this->eventManagerMock);
         $contextMock->method('getCacheManager')->willReturn($cacheInterfaceMock);
@@ -395,10 +395,7 @@ class ProductTest extends TestCase
         $this->mediaConfig = $this->createMock(MediaConfig::class);
         $this->eavConfig = $this->createMock(Config::class);
 
-        $this->productExtAttributes = $this->createPartialMockWithReflection(
-            ProductExtensionInterface::class,
-            ['getStockItem']
-        );
+        $this->productExtAttributes = $this->createExtensionAttributesStub();
         $this->extensionAttributesFactory
             ->method('create')->willReturn($this->productExtAttributes);
 
@@ -754,7 +751,7 @@ class ProductTest extends TestCase
 
         // Configure the catalog product helper mock to return false for price indexer check
         $this->_catalogProduct->method('isDataForPriceIndexerWasChanged')->willReturn(false);
-            
+
         $this->model = new Product(
             $this->createMock(Context::class),
             $this->registry,
@@ -835,13 +832,48 @@ class ProductTest extends TestCase
 
     protected function getMockForExtensionAttribute()
     {
-        $extensionAttributesMock = $this->createPartialMockWithReflection(
-            ProductExtensionInterface::class,
-            ['getStockItem']
-        );
         $stockItemMock = $this->createStub(StockItemInterface::class);
-        $extensionAttributesMock->method('getStockItem')->willReturn($stockItemMock);
-        return $extensionAttributesMock;
+        return $this->createExtensionAttributesStub($stockItemMock);
+    }
+
+    /**
+     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
+     */
+    private function createExtensionAttributesStub(
+        ?StockItemInterface $stockItem = null,
+        ?callable $onSetLinks = null
+    ): ExtensionAttributesInterface {
+        return new class ($stockItem, $onSetLinks) implements ExtensionAttributesInterface {
+            /**
+             * @var StockItemInterface|null
+             */
+            private ?StockItemInterface $stockItem;
+            /**
+             * @var callable|null
+             */
+            private $onSetLinks;
+
+            public function __construct(?StockItemInterface $stockItem, ?callable $onSetLinks)
+            {
+                $this->stockItem = $stockItem;
+                $this->onSetLinks = $onSetLinks;
+            }
+
+            public function getStockItem(): ?StockItemInterface
+            {
+                return $this->stockItem;
+            }
+
+            /**
+             * @SuppressWarnings(PHPMD.UnusedLocalVariable)
+             */
+            public function setConfigurableProductLinks($links): void
+            {
+                if ($this->onSetLinks !== null) {
+                    ($this->onSetLinks)($links);
+                }
+            }
+        };
     }
     /**
      * @return array
@@ -1309,10 +1341,10 @@ class ProductTest extends TestCase
         $typeInstance = $this->createPartialMock(AbstractType::class, ['getSku','deleteTypeSpecificData']);
         $typeInstance->method('getSku')->willReturn('model');
         $this->productTypeInstanceMock->method('factory')->willReturn($typeInstance);
-        
+
         // Set the linkRepository property directly to avoid ObjectManager dependency
         $this->setPropertyValue($this->model, 'linkRepository', $this->productLinkRepositoryMock);
-        
+
         $links = $this->model->getProductLinks();
         $this->assertEquals($links, $expectedOutput);
     }
@@ -1567,6 +1599,167 @@ class ProductTest extends TestCase
     }
 
     /**
+     * Test that getMediaGalleryImages creates new collection when data is an array (not Collection object)
+     *
+     * @return void
+     */
+    public function testGetMediaGalleryImagesWhenDataIsArray(): void
+    {
+        // Set media_gallery_images as an array (simulating cached data that was serialized/unserialized)
+        $this->model->setData('media_gallery_images', []);
+
+        $directoryMock = $this->getMockForAbstractClass(ReadInterface::class);
+        $this->filesystemMock->method('getDirectoryRead')->willReturn($directoryMock);
+
+        $imagesCollectionMock = $this->createMock(Collection::class);
+        $imagesCollectionMock->method('count')->willReturn(0);
+        $this->collectionFactoryMock->method('create')->willReturn($imagesCollectionMock);
+
+        $result = $this->model->getMediaGalleryImages();
+
+        // Should return a Collection object, not an array
+        $this->assertInstanceOf(Collection::class, $result);
+    }
+
+    /**
+     * Test that getMediaGalleryImages returns existing collection when it already has items
+     *
+     * @return void
+     */
+    public function testGetMediaGalleryImagesWhenCollectionHasItems(): void
+    {
+        $directoryMock = $this->getMockForAbstractClass(ReadInterface::class);
+        $this->filesystemMock->method('getDirectoryRead')->willReturn($directoryMock);
+
+        $imagesCollectionMock = $this->createMock(Collection::class);
+        // Collection already has items
+        $imagesCollectionMock->method('count')->willReturn(2);
+        $this->model->setData('media_gallery_images', $imagesCollectionMock);
+
+        // Set media_gallery with images - these should NOT be processed since collection already has items
+        $this->model->setData('media_gallery', ['images' => [['value_id' => 1, 'file' => 'test.jpg']]]);
+
+        $result = $this->model->getMediaGalleryImages();
+
+        // Should return the existing collection
+        $this->assertSame($imagesCollectionMock, $result);
+    }
+
+    /**
+     * Test that getMediaGalleryImages handles case when images is not an array
+     *
+     * @return void
+     */
+    public function testGetMediaGalleryImagesWhenImagesIsNotArray(): void
+    {
+        $directoryMock = $this->getMockForAbstractClass(ReadInterface::class);
+        $this->filesystemMock->method('getDirectoryRead')->willReturn($directoryMock);
+
+        $imagesCollectionMock = $this->createMock(Collection::class);
+        $imagesCollectionMock->method('count')->willReturn(0);
+        $this->collectionFactoryMock->method('create')->willReturn($imagesCollectionMock);
+
+        // Set media_gallery with images as null (not an array)
+        $this->model->setData('media_gallery', ['images' => null]);
+
+        $result = $this->model->getMediaGalleryImages();
+
+        $this->assertInstanceOf(Collection::class, $result);
+    }
+
+    /**
+     * Test that getMediaGalleryImages skips disabled images
+     *
+     * @return void
+     */
+    public function testGetMediaGalleryImagesSkipsDisabledImages(): void
+    {
+        $mediaEntries = [
+            'images' => [
+                [
+                    'value_id' => 1,
+                    'file' => 'imageFile.jpg',
+                    'media_type' => 'image',
+                    'disabled' => 1  // This image should be skipped
+                ]
+            ]
+        ];
+
+        $directoryMock = $this->getMockForAbstractClass(ReadInterface::class);
+        $this->filesystemMock->method('getDirectoryRead')->willReturn($directoryMock);
+        $this->model->setData('media_gallery', $mediaEntries);
+
+        $imagesCollectionMock = $this->createMock(Collection::class);
+        $imagesCollectionMock->method('count')->willReturn(0);
+        // addItem should never be called for disabled images
+        $imagesCollectionMock->expects($this->never())->method('addItem');
+        $this->collectionFactoryMock->method('create')->willReturn($imagesCollectionMock);
+
+        $this->model->getMediaGalleryImages();
+    }
+
+    /**
+     * Test that getMediaGalleryImages skips removed images
+     *
+     * @return void
+     */
+    public function testGetMediaGalleryImagesSkipsRemovedImages(): void
+    {
+        $mediaEntries = [
+            'images' => [
+                [
+                    'value_id' => 1,
+                    'file' => 'imageFile.jpg',
+                    'media_type' => 'image',
+                    'removed' => 1  // This image should be skipped
+                ]
+            ]
+        ];
+
+        $directoryMock = $this->getMockForAbstractClass(ReadInterface::class);
+        $this->filesystemMock->method('getDirectoryRead')->willReturn($directoryMock);
+        $this->model->setData('media_gallery', $mediaEntries);
+
+        $imagesCollectionMock = $this->createMock(Collection::class);
+        $imagesCollectionMock->method('count')->willReturn(0);
+        // addItem should never be called for removed images
+        $imagesCollectionMock->expects($this->never())->method('addItem');
+        $this->collectionFactoryMock->method('create')->willReturn($imagesCollectionMock);
+
+        $this->model->getMediaGalleryImages();
+    }
+
+    /**
+     * Test that getMediaGalleryImages skips images without value_id
+     *
+     * @return void
+     */
+    public function testGetMediaGalleryImagesSkipsImagesWithoutValueId(): void
+    {
+        $mediaEntries = [
+            'images' => [
+                [
+                    'file' => 'imageFile.jpg',
+                    'media_type' => 'image'
+                    // No value_id - this image should be skipped
+                ]
+            ]
+        ];
+
+        $directoryMock = $this->getMockForAbstractClass(ReadInterface::class);
+        $this->filesystemMock->method('getDirectoryRead')->willReturn($directoryMock);
+        $this->model->setData('media_gallery', $mediaEntries);
+
+        $imagesCollectionMock = $this->createMock(Collection::class);
+        $imagesCollectionMock->method('count')->willReturn(0);
+        // addItem should never be called for images without value_id
+        $imagesCollectionMock->expects($this->never())->method('addItem');
+        $this->collectionFactoryMock->method('create')->willReturn($imagesCollectionMock);
+
+        $this->model->getMediaGalleryImages();
+    }
+
+    /**
      * @return void
      */
     public function testGetCustomAttributes(): void
@@ -1650,7 +1843,6 @@ class ProductTest extends TestCase
     {
         $reflection = new \ReflectionClass(get_class($object));
         $reflectionProperty = $reflection->getProperty($property);
-        $reflectionProperty->setAccessible(true);
         $reflectionProperty->setValue($object, $value);
         return $object;
     }
@@ -1663,7 +1855,6 @@ class ProductTest extends TestCase
     {
         $reflection = new \ReflectionClass(get_class($object));
         $reflectionProperty = $reflection->getProperty($property);
-        $reflectionProperty->setAccessible(true);
 
         return $reflectionProperty->getValue($object);
     }
@@ -1768,4 +1959,574 @@ class ProductTest extends TestCase
     {
         $this->assertNull($this->model->getOptionById(100));
     }
+
+    /**
+     * Test addImageToMediaGallery calls getMediaGalleryProcessor
+     *
+     * @return void
+     */
+    public function testAddImageToMediaGallery(): void
+    {
+        $file = '/path/to/image.jpg';
+        $mediaAttribute = 'image';
+        $move = false;
+        $exclude = true;
+
+        // Create a mock for Gallery Processor
+        $processorMock = $this->createMock(\Magento\Catalog\Model\Product\Gallery\Processor::class);
+        $processorMock->expects($this->once())
+            ->method('addImage')
+            ->with($this->model, $file, $mediaAttribute, $move, $exclude);
+
+        // Use reflection to set the private mediaGalleryProcessor property
+        $reflection = new \ReflectionClass($this->model);
+        $property = $reflection->getProperty('mediaGalleryProcessor');
+        $property->setValue($this->model, $processorMock);
+
+        // Mock the type instance to return attributes including media_gallery
+        $mediaGalleryAttributeMock = $this->createMock(\Magento\Eav\Model\Entity\Attribute\AbstractAttribute::class);
+        $typeInstanceMock = $this->createMock(\Magento\Catalog\Model\Product\Type\AbstractType::class);
+        $typeInstanceMock->method('getSetAttributes')
+            ->willReturn(['media_gallery' => $mediaGalleryAttributeMock]);
+        $this->model->setTypeInstance($typeInstanceMock);
+
+        $result = $this->model->addImageToMediaGallery($file, $mediaAttribute, $move, $exclude);
+
+        $this->assertSame($this->model, $result);
+    }
+
+    /**
+     * Test addImageToMediaGallery does nothing when no gallery attribute
+     *
+     * @return void
+     */
+    public function testAddImageToMediaGalleryWithoutGalleryAttribute(): void
+    {
+        $file = '/path/to/image.jpg';
+
+        // Mock the type instance to return attributes without media_gallery
+        $typeInstanceMock = $this->createMock(\Magento\Catalog\Model\Product\Type\AbstractType::class);
+        $typeInstanceMock->method('getSetAttributes')
+            ->willReturn([]);
+        $this->model->setTypeInstance($typeInstanceMock);
+
+        $result = $this->model->addImageToMediaGallery($file);
+
+        $this->assertSame($this->model, $result);
+    }
+
+    /**
+     * Test setAssociatedProductIds sets configurable product links via extension attributes
+     *
+     * @return void
+     */
+    public function testSetAssociatedProductIds(): void
+    {
+        $productIds = [1, 2, 3];
+
+        $capturedLinks = null;
+        $this->productExtAttributes = $this->createExtensionAttributesStub(
+            null,
+            function ($links) use (&$capturedLinks): void {
+                $capturedLinks = $links;
+            }
+        );
+        $extensionAttributesFactoryMock = $this->createMock(ExtensionAttributesFactory::class);
+        $extensionAttributesFactoryMock
+            ->method('create')
+            ->willReturn($this->productExtAttributes);
+
+        $model = new Product(
+            $this->createMock(Context::class),
+            $this->registry,
+            $extensionAttributesFactoryMock,
+            $this->attributeValueFactory,
+            $this->storeManager,
+            $this->metadataServiceMock,
+            $this->createMock(ProductUrl::class),
+            $this->createMock(ProductLink::class),
+            $this->createMock(ItemOptionFactory::class),
+            $this->stockItemFactoryMock,
+            $this->createMock(OptionFactory::class),
+            $this->createMock(Visibility::class),
+            $this->createMock(Status::class),
+            $this->mediaConfig,
+            $this->productTypeInstanceMock,
+            $this->moduleManager,
+            $this->_catalogProduct,
+            $this->resource,
+            $this->createMock(ProductCollection::class),
+            $this->collectionFactoryMock,
+            $this->filesystemMock,
+            $this->indexerRegistryMock,
+            $this->productFlatProcessor,
+            $this->productPriceProcessor,
+            $this->createMock(EavProcessor::class),
+            $this->categoryRepository,
+            $this->imageCacheFactory,
+            $this->createMock(ProductLinkCollectionProvider::class),
+            $this->createMock(LinkTypeProvider::class),
+            $this->createMock(ProductLinkInterfaceFactory::class),
+            $this->createMock(ProductLinkExtensionFactory::class),
+            $this->mediaGalleryEntryConverterPoolMock,
+            $this->dataObjectHelperMock,
+            $this->createMock(JoinProcessorInterface::class),
+            ['id' => 1],
+            $this->eavConfig,
+            $this->filterCustomAttribute
+        );
+        $model->setAssociatedProductIds($productIds);
+
+        $this->assertSame($productIds, $capturedLinks);
+    }
+
+    /**
+     * Test getQuantityAndStockStatus returns quantity and stock status data
+     *
+     * @return void
+     */
+    public function testGetQuantityAndStockStatus(): void
+    {
+        $quantityAndStockStatus = ['qty' => 100, 'is_in_stock' => true];
+        $this->model->setData('quantity_and_stock_status', $quantityAndStockStatus);
+
+        $this->assertEquals($quantityAndStockStatus, $this->model->getQuantityAndStockStatus());
+    }
+
+    /**
+     * Test getQuantityAndStockStatus returns null when not set
+     *
+     * @return void
+     */
+    public function testGetQuantityAndStockStatusReturnsNullWhenNotSet(): void
+    {
+        $this->assertNull($this->model->getQuantityAndStockStatus());
+    }
+
+    /**
+     * Test setQuantityAndStockStatus sets quantity and stock status data
+     *
+     * @return void
+     */
+    public function testSetQuantityAndStockStatus(): void
+    {
+        $quantityAndStockStatus = ['qty' => 50, 'is_in_stock' => false];
+
+        $result = $this->model->setQuantityAndStockStatus($quantityAndStockStatus);
+
+        $this->assertSame($this->model, $result);
+        $this->assertEquals($quantityAndStockStatus, $this->model->getData('quantity_and_stock_status'));
+    }
+
+    /**
+     * Test setStockData sets stock data
+     *
+     * @return void
+     */
+    public function testSetStockData(): void
+    {
+        $stockData = ['qty' => 200, 'is_in_stock' => true, 'manage_stock' => 1];
+
+        $result = $this->model->setStockData($stockData);
+
+        $this->assertSame($this->model, $result);
+        $this->assertEquals($stockData, $this->model->getData('stock_data'));
+    }
+
+    /**
+     * Test _resetState resets internal properties
+     *
+     * @return void
+     */
+    public function testResetState(): void
+    {
+        // Set some data that should be reset
+        $this->model->setData('custom_options', ['option1' => 'value1']);
+
+        // Call _resetState
+        $this->model->_resetState();
+
+        // Use reflection to verify internal properties are reset
+        $reflection = new \ReflectionClass($this->model);
+
+        $customOptionsProperty = $reflection->getProperty('_customOptions');
+        $this->assertEquals([], $customOptionsProperty->getValue($this->model));
+
+        $errorsProperty = $reflection->getProperty('_errors');
+        $this->assertEquals([], $errorsProperty->getValue($this->model));
+
+        $canAffectOptionsProperty = $reflection->getProperty('_canAffectOptions');
+        $this->assertFalse($canAffectOptionsProperty->getValue($this->model));
+
+        $productIdCachedProperty = $reflection->getProperty('_productIdCached');
+        $this->assertNull($productIdCachedProperty->getValue($this->model));
+    }
+
+    /**
+     * Test getUrlModel returns the URL model
+     *
+     * @return void
+     */
+    public function testGetUrlModel(): void
+    {
+        $result = $this->model->getUrlModel();
+
+        $this->assertInstanceOf(\Magento\Catalog\Model\Product\Url::class, $result);
+    }
+
+    /**
+     * Test validate dispatches events and calls resource validate
+     *
+     * @return void
+     */
+    public function testValidate(): void
+    {
+        $validationResult = ['error' => false];
+
+        $this->resource->expects($this->once())
+            ->method('validate')
+            ->with($this->model)
+            ->willReturn($validationResult);
+
+        $this->eventManagerMock->expects($this->exactly(2))
+            ->method('dispatch')
+            ->willReturnCallback(function ($eventName) {
+                static $callCount = 0;
+                $callCount++;
+                if ($callCount === 1) {
+                    $this->assertEquals('catalog_product_validate_before', $eventName);
+                } elseif ($callCount === 2) {
+                    $this->assertEquals('catalog_product_validate_after', $eventName);
+                }
+            });
+
+        $result = $this->model->validate();
+
+        $this->assertEquals($validationResult, $result);
+    }
+
+    /**
+     * Test getProductLinks calls getLinkRepository when product has sku and id
+     *
+     * @return void
+     */
+    public function testGetProductLinksCallsLinkRepository(): void
+    {
+        $sku = 'test-sku';
+        $productId = 123;
+        $links = [$this->createMock(\Magento\Catalog\Api\Data\ProductLinkInterface::class)];
+
+        $this->model->setData('sku', $sku);
+        $this->model->setId($productId);
+
+        // Mock the type instance for getSku()
+        $typeInstanceMock = $this->createMock(\Magento\Catalog\Model\Product\Type\AbstractType::class);
+        $typeInstanceMock->method('getSku')
+            ->with($this->model)
+            ->willReturn($sku);
+        $this->model->setTypeInstance($typeInstanceMock);
+
+        // Use reflection to set the linkRepository
+        $linkRepositoryMock = $this->createMock(\Magento\Catalog\Api\ProductLinkRepositoryInterface::class);
+        $linkRepositoryMock->expects($this->once())
+            ->method('getList')
+            ->with($this->model)
+            ->willReturn($links);
+
+        $reflection = new \ReflectionClass($this->model);
+        $property = $reflection->getProperty('linkRepository');
+        $property->setValue($this->model, $linkRepositoryMock);
+
+        $result = $this->model->getProductLinks();
+
+        $this->assertEquals($links, $result);
+    }
+
+    /**
+     * Test getProductLinks returns empty array when product has no sku or id
+     *
+     * @return void
+     */
+    public function testGetProductLinksReturnsEmptyArrayWhenNoSkuOrId(): void
+    {
+        // Mock the type instance to return null/empty sku
+        $typeInstanceMock = $this->createMock(\Magento\Catalog\Model\Product\Type\AbstractType::class);
+        $typeInstanceMock->method('getSku')
+            ->with($this->model)
+            ->willReturn(null);
+        $this->model->setTypeInstance($typeInstanceMock);
+
+        // Don't set id
+        $result = $this->model->getProductLinks();
+
+        $this->assertEquals([], $result);
+    }
+
+    /**
+     * Test getMediaGalleryProcessor returns cached processor on second call
+     *
+     * @return void
+     */
+    public function testGetMediaGalleryProcessorReturnsCachedProcessor(): void
+    {
+        $file = '/path/to/image.jpg';
+
+        // Create a mock for Gallery Processor
+        $processorMock = $this->createMock(\Magento\Catalog\Model\Product\Gallery\Processor::class);
+        $processorMock->expects($this->exactly(2))
+            ->method('addImage');
+
+        // Use reflection to set the private mediaGalleryProcessor property
+        $reflection = new \ReflectionClass($this->model);
+        $property = $reflection->getProperty('mediaGalleryProcessor');
+        $property->setValue($this->model, $processorMock);
+
+        // Mock the type instance to return attributes including media_gallery
+        $mediaGalleryAttributeMock = $this->createMock(\Magento\Eav\Model\Entity\Attribute\AbstractAttribute::class);
+        $typeInstanceMock = $this->createMock(\Magento\Catalog\Model\Product\Type\AbstractType::class);
+        $typeInstanceMock->method('getSetAttributes')
+            ->willReturn(['media_gallery' => $mediaGalleryAttributeMock]);
+        $this->model->setTypeInstance($typeInstanceMock);
+
+        // Call twice to verify processor is reused
+        $this->model->addImageToMediaGallery($file);
+        $this->model->addImageToMediaGallery($file);
+    }
+
+    /**
+     * Test getLinkRepository returns cached repository on second call
+     *
+     * @return void
+     */
+    public function testGetLinkRepositoryReturnsCachedRepository(): void
+    {
+        $sku = 'test-sku';
+        $productId = 123;
+        $links = [];
+
+        $this->model->setData('sku', $sku);
+        $this->model->setId($productId);
+
+        // Mock the type instance for getSku()
+        $typeInstanceMock = $this->createMock(\Magento\Catalog\Model\Product\Type\AbstractType::class);
+        $typeInstanceMock->method('getSku')
+            ->with($this->model)
+            ->willReturn($sku);
+        $this->model->setTypeInstance($typeInstanceMock);
+
+        // Use reflection to set the linkRepository
+        $linkRepositoryMock = $this->createMock(\Magento\Catalog\Api\ProductLinkRepositoryInterface::class);
+        $linkRepositoryMock->expects($this->once())
+            ->method('getList')
+            ->with($this->model)
+            ->willReturn($links);
+
+        $reflection = new \ReflectionClass($this->model);
+        $property = $reflection->getProperty('linkRepository');
+        $property->setValue($this->model, $linkRepositoryMock);
+
+        // Call getProductLinks - this will cache the result in _links
+        $this->model->getProductLinks();
+
+        // Call again - should use cached _links, not call repository again
+        $result = $this->model->getProductLinks();
+
+        $this->assertEquals($links, $result);
+    }
+
+    /**
+     * Test getMediaGalleryProcessor lazy loads via ObjectManager when not set
+     *
+     * @return void
+     */
+    public function testGetMediaGalleryProcessorLazyLoading(): void
+    {
+        $file = '/path/to/image.jpg';
+
+        // Save original ObjectManager instance if it exists
+        $originalObjectManager = null;
+        try {
+            $originalObjectManager = \Magento\Framework\App\ObjectManager::getInstance();
+        } catch (\RuntimeException $e) {
+            // ObjectManager not initialized yet
+        }
+
+        // Create a mock for Gallery Processor
+        $processorMock = $this->createMock(\Magento\Catalog\Model\Product\Gallery\Processor::class);
+        $processorMock->expects($this->once())
+            ->method('addImage');
+
+        // Mock ObjectManager
+        $objectManagerMock = $this->createMock(\Magento\Framework\ObjectManagerInterface::class);
+        $objectManagerMock->expects($this->once())
+            ->method('get')
+            ->with(\Magento\Catalog\Model\Product\Gallery\Processor::class)
+            ->willReturn($processorMock);
+
+        // Set the mock ObjectManager
+        \Magento\Framework\App\ObjectManager::setInstance($objectManagerMock);
+
+        // Ensure mediaGalleryProcessor is null (not pre-set)
+        $reflection = new \ReflectionClass($this->model);
+        $property = $reflection->getProperty('mediaGalleryProcessor');
+        $property->setValue($this->model, null);
+
+        // Mock the type instance to return attributes including media_gallery
+        $mediaGalleryAttributeMock = $this->createMock(\Magento\Eav\Model\Entity\Attribute\AbstractAttribute::class);
+        $typeInstanceMock = $this->createMock(\Magento\Catalog\Model\Product\Type\AbstractType::class);
+        $typeInstanceMock->method('getSetAttributes')
+            ->willReturn(['media_gallery' => $mediaGalleryAttributeMock]);
+        $this->model->setTypeInstance($typeInstanceMock);
+
+        // This should trigger lazy loading of mediaGalleryProcessor
+        $this->model->addImageToMediaGallery($file);
+
+        // Restore original ObjectManager if it existed
+        if ($originalObjectManager !== null) {
+            \Magento\Framework\App\ObjectManager::setInstance($originalObjectManager);
+        }
+    }
+
+    /**
+     * Test getLinkRepository lazy loads via ObjectManager when not set
+     *
+     * @return void
+     */
+    public function testGetLinkRepositoryLazyLoading(): void
+    {
+        $sku = 'test-sku';
+        $productId = 123;
+        $links = [];
+
+        // Save original ObjectManager instance if it exists
+        $originalObjectManager = null;
+        try {
+            $originalObjectManager = \Magento\Framework\App\ObjectManager::getInstance();
+        } catch (\RuntimeException $e) {
+            // ObjectManager not initialized yet
+        }
+
+        $this->model->setData('sku', $sku);
+        $this->model->setId($productId);
+
+        // Mock the type instance for getSku()
+        $typeInstanceMock = $this->createMock(\Magento\Catalog\Model\Product\Type\AbstractType::class);
+        $typeInstanceMock->method('getSku')
+            ->with($this->model)
+            ->willReturn($sku);
+        $this->model->setTypeInstance($typeInstanceMock);
+
+        // Create a mock for LinkRepository
+        $linkRepositoryMock = $this->createMock(\Magento\Catalog\Api\ProductLinkRepositoryInterface::class);
+        $linkRepositoryMock->expects($this->once())
+            ->method('getList')
+            ->with($this->model)
+            ->willReturn($links);
+
+        // Mock ObjectManager
+        $objectManagerMock = $this->createMock(\Magento\Framework\ObjectManagerInterface::class);
+        $objectManagerMock->expects($this->once())
+            ->method('get')
+            ->with(\Magento\Catalog\Api\ProductLinkRepositoryInterface::class)
+            ->willReturn($linkRepositoryMock);
+
+        // Set the mock ObjectManager
+        \Magento\Framework\App\ObjectManager::setInstance($objectManagerMock);
+
+        // Ensure linkRepository is null (not pre-set)
+        $reflection = new \ReflectionClass($this->model);
+        $property = $reflection->getProperty('linkRepository');
+        $property->setValue($this->model, null);
+
+        // This should trigger lazy loading of linkRepository
+        $result = $this->model->getProductLinks();
+
+        $this->assertEquals($links, $result);
+
+        // Restore original ObjectManager if it existed
+        if ($originalObjectManager !== null) {
+            \Magento\Framework\App\ObjectManager::setInstance($originalObjectManager);
+        }
+    }
+
+    /**
+     * Test constructor uses ObjectManager fallback for optional parameters when null
+     *
+     * @return void
+     */
+    public function testConstructorObjectManagerFallback(): void
+    {
+        // Save original ObjectManager instance if it exists
+        $originalObjectManager = null;
+        try {
+            $originalObjectManager = \Magento\Framework\App\ObjectManager::getInstance();
+        } catch (\RuntimeException $e) {
+            // ObjectManager not initialized yet
+        }
+
+        // Mock ObjectManager to return mocks for optional parameters
+        $eavConfigMock = $this->createMock(\Magento\Eav\Model\Config::class);
+        $filterCustomAttributeMock = $this->createMock(FilterProductCustomAttribute::class);
+
+        $objectManagerMock = $this->createMock(\Magento\Framework\ObjectManagerInterface::class);
+        $objectManagerMock->method('get')
+            ->willReturnMap([
+                [\Magento\Eav\Model\Config::class, $eavConfigMock],
+                [FilterProductCustomAttribute::class, $filterCustomAttributeMock],
+            ]);
+
+        \Magento\Framework\App\ObjectManager::setInstance($objectManagerMock);
+
+        // Create Product without optional parameters to trigger ObjectManager fallback
+        $product = new Product(
+            $this->createMock(\Magento\Framework\Model\Context::class),
+            $this->createMock(\Magento\Framework\Registry::class),
+            $this->extensionAttributesFactory,
+            $this->attributeValueFactory,
+            $this->storeManager,
+            $this->metadataServiceMock,
+            $this->createMock(ProductUrl::class),
+            $this->createMock(ProductLink::class),
+            $this->createMock(ItemOptionFactory::class),
+            $this->stockItemFactoryMock,
+            $this->createMock(OptionFactory::class),
+            $this->createMock(Visibility::class),
+            $this->createMock(Status::class),
+            $this->createMock(MediaConfig::class),
+            $this->productTypeInstanceMock,
+            $this->moduleManager,
+            $this->_catalogProduct,
+            $this->resource,
+            $this->createMock(ProductCollection::class),
+            $this->collectionFactoryMock,
+            $this->filesystemMock,
+            $this->indexerRegistryMock,
+            $this->productFlatProcessor,
+            $this->productPriceProcessor,
+            $this->createMock(EavProcessor::class),
+            $this->categoryRepository,
+            $this->imageCacheFactory,
+            $this->createMock(ProductLinkCollectionProvider::class),
+            $this->createMock(LinkTypeProvider::class),
+            $this->createMock(ProductLinkInterfaceFactory::class),
+            $this->createMock(ProductLinkExtensionFactory::class),
+            $this->mediaGalleryEntryConverterPoolMock,
+            $this->dataObjectHelperMock,
+            $this->createMock(JoinProcessorInterface::class),
+            [],
+            null,  // Pass null to trigger ObjectManager fallback for eavConfig
+            null   // Pass null to trigger ObjectManager fallback for filterCustomAttribute
+        );
+
+        $this->assertInstanceOf(\Magento\Catalog\Model\Product::class, $product);
+
+        // Restore original ObjectManager if it existed
+        if ($originalObjectManager !== null) {
+            \Magento\Framework\App\ObjectManager::setInstance($originalObjectManager);
+        }
+    }
 }
+
+/**
+ * Lightweight extension attributes stub for product tests.
+ */

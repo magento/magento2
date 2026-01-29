@@ -177,7 +177,8 @@ class SchemaBuilder
 
                 $table->addIndexes($indexes);
                 $table->addConstraints($constraints);
-                $this->tables[$table->getName()] = $table;
+                $tableName = $table->getName() ?? '';
+                $this->tables[$tableName] = $table;
             }
         }
 

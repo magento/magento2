@@ -85,6 +85,7 @@ class ParamsBuilderTest extends TestCase
         $this->scopeConfig->method('getValue')
             ->willReturnCallback(
                 function ($path, $scopeType, $scopeCode) {
+                    $scopeCode = $scopeCode ?? '';
                     return $this->scopeConfigData[$path][$scopeType][$scopeCode] ?? null;
                 }
             );
@@ -109,7 +110,7 @@ class ParamsBuilderTest extends TestCase
         array $imageArguments,
         array $expected
     ) {
-        $this->scopeConfigData[Image::XML_PATH_JPEG_QUALITY][ScopeConfigInterface::SCOPE_TYPE_DEFAULT][null] = 80;
+        $this->scopeConfigData[Image::XML_PATH_JPEG_QUALITY][ScopeConfigInterface::SCOPE_TYPE_DEFAULT][''] = 80;
         foreach ($config as $path => $value) {
             $this->scopeConfigData[$path][ScopeInterface::SCOPE_STORE][$scopeId] = $value;
         }

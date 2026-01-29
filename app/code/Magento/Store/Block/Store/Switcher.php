@@ -125,8 +125,9 @@ class Switcher extends \Magento\Framework\View\Element\Template
                     $stores[] = $store;
                 }
             }
-            if (!$useStore && isset($this->_stores[$group->getId()][$group->getDefaultStoreId()])) {
-                $stores[] = $this->_stores[$group->getId()][$group->getDefaultStoreId()];
+            $defaultStoreId = $group->getDefaultStoreId() ?? '';
+            if (!$useStore && isset($this->_stores[$group->getId()][$defaultStoreId])) {
+                $stores[] = $this->_stores[$group->getId()][$defaultStoreId];
             }
         }
 

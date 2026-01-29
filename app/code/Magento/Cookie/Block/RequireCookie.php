@@ -29,7 +29,7 @@ class RequireCookie extends \Magento\Framework\View\Element\Template
      */
     public function getScriptOptions()
     {
-        $isRedirectCmsPage = (boolean)$this->_scopeConfig->getValue('web/browser_capabilities/cookies');
+        $isRedirectCmsPage = (bool)$this->_scopeConfig->getValue('web/browser_capabilities/cookies');
         $params = [
             'noCookieUrl' => $this->escapeUrl($this->getUrl('cookie/index/noCookies/')),
             'triggers' => $this->escapeHtml($this->getTriggers()),

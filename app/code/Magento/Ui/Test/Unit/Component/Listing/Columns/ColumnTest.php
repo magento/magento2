@@ -241,8 +241,6 @@ class ColumnTest extends TestCase
             Column::class,
             'applySorting'
         );
-        $method->setAccessible(true);
-
         $method->invokeArgs($column, []);
     }
 

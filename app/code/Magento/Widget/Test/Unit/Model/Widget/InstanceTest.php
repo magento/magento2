@@ -455,7 +455,6 @@ class InstanceTest extends TestCase
         ];
 
         $reflection = new ReflectionProperty(Instance::class, '_layoutHandles');
-        $reflection->setAccessible(true);
         $reflection->setValue($this->_model, $layoutHandles);
     }
 
@@ -478,7 +477,6 @@ class InstanceTest extends TestCase
             'grouped_products' => 'catalog_product_view_id_{{ID}}',
         ];
         $reflection = new ReflectionProperty(Instance::class, '_specificEntitiesLayoutHandles');
-        $reflection->setAccessible(true);
         $reflection->setValue($this->_model, $specificEntitiesLayoutHandles);
     }
 

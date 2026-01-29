@@ -71,7 +71,7 @@ class Totals extends \Magento\Sales\Block\Order\Totals
         /**
          * Add discount
          */
-        if ((double)$order->getDiscountAmount() != 0) {
+        if ((float)$order->getDiscountAmount() != 0) {
             if ($order->getDiscountDescription()) {
                 $discountLabel = __('Discount (%1)', $order->getDiscountDescription());
             } else {

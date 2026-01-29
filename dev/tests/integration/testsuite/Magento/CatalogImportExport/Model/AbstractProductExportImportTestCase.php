@@ -359,7 +359,6 @@ abstract class AbstractProductExportImportTestCase extends \PHPUnit\Framework\Te
         if ($usePagination) {
             /** @var \ReflectionProperty $itemsPerPageProperty */
             $itemsPerPageProperty = new \ReflectionProperty(Product::class, '_itemsPerPage');
-            $itemsPerPageProperty->setAccessible(true);
             $itemsPerPageProperty->setValue($exportProduct, 1);
         }
 

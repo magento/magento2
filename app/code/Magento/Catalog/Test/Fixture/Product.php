@@ -450,7 +450,6 @@ class Product implements RevertibleDataFixtureInterface
                 break;
         }
         $content = ob_get_clean();
-        imagedestroy($image);
 
         return $content;
     }

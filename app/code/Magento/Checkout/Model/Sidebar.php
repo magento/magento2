@@ -131,7 +131,7 @@ class Sidebar
     {
         if ($itemQty) {
             if (is_string($itemQty) && str_contains($itemQty, ',')) {
-                $itemQty = (double)str_replace(',', '.', $itemQty);
+                $itemQty = (float)str_replace(',', '.', $itemQty);
             }
 
             $filter = new LocalizedToNormalized(

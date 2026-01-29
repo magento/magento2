@@ -183,7 +183,6 @@ class NewCategoryTest extends TestCase
         $this->invokePrepareForm();
 
         $reflectionProperty = (new ReflectionClass($this->block))->getProperty('_form');
-        $reflectionProperty->setAccessible(true);
         $assignedForm = $reflectionProperty->getValue($this->block);
 
         $this->assertSame($form, $assignedForm);
@@ -356,7 +355,6 @@ HTML;
     {
         $reflection = new ReflectionClass($this->block);
         $method = $reflection->getMethod('_prepareForm');
-        $method->setAccessible(true);
         $method->invoke($this->block);
     }
 
@@ -369,7 +367,6 @@ HTML;
     {
         $reflection = new ReflectionClass($this->block);
         $method = $reflection->getMethod('_getParentCategoryOptions');
-        $method->setAccessible(true);
         return $method->invoke($this->block);
     }
 

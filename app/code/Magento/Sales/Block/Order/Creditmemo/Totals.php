@@ -79,7 +79,7 @@ class Totals extends \Magento\Sales\Block\Order\Totals
     {
         parent::_initTotals();
         $this->removeTotal('base_grandtotal');
-        if ((double)$this->getSource()->getAdjustmentPositive()) {
+        if ((float)$this->getSource()->getAdjustmentPositive()) {
             $total = new \Magento\Framework\DataObject(
                 [
                     'code' => 'adjustment_positive',
@@ -89,7 +89,7 @@ class Totals extends \Magento\Sales\Block\Order\Totals
             );
             $this->addTotal($total);
         }
-        if ((double)$this->getSource()->getAdjustmentNegative()) {
+        if ((float)$this->getSource()->getAdjustmentNegative()) {
             $total = new \Magento\Framework\DataObject(
                 [
                     'code' => 'adjustment_negative',

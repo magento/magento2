@@ -164,7 +164,6 @@ class ItemTest extends TestCase
     protected function setDataArrayValue($key, $value)
     {
         $property = new \ReflectionProperty($this->item, '_data');
-        $property->setAccessible(true);
         $dataArray = $property->getValue($this->item);
         $dataArray[$key] = $value;
         $property->setValue($this->item, $dataArray);
@@ -255,7 +254,6 @@ class ItemTest extends TestCase
             ->willReturn($groupId);
 
         $property = new \ReflectionProperty($this->item, 'customerGroupId');
-        $property->setAccessible(true);
 
         $this->assertNull($property->getValue($this->item));
         $this->assertSame($groupId, $this->item->getCustomerGroupId());
@@ -282,7 +280,6 @@ class ItemTest extends TestCase
         $minSaleQty = $config['min_sale_qty'];
 
         $property = new \ReflectionProperty($this->item, 'customerGroupId');
-        $property->setAccessible(true);
         $property->setValue($this->item, $groupId);
 
         $this->setDataArrayValue('use_config_min_sale_qty', $useConfigMinSaleQty);
@@ -367,7 +364,6 @@ class ItemTest extends TestCase
     {
         if ($storeId) {
             $property = new \ReflectionProperty($this->item, 'storeId');
-            $property->setAccessible(true);
             $property->setValue($this->item, $storeId);
         }
         $this->assertSame($expected, $this->item->getStoreId());

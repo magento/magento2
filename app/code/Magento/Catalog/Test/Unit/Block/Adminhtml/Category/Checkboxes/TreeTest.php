@@ -109,7 +109,6 @@ class TreeTest extends TestCase
             while ($class) {
                 if ($class->hasProperty($prop)) {
                     $p = $class->getProperty($prop);
-                    $p->setAccessible(true);
                     $p->setValue($object, $value);
                     return;
                 }
@@ -155,7 +154,6 @@ class TreeTest extends TestCase
         // Assert expanded path contains all ancestors from both paths
         $reflection = new \ReflectionClass($block);
         $prop = $reflection->getProperty('_expandedPath');
-        $prop->setAccessible(true);
         $expanded = $prop->getValue($block);
 
         foreach (['1','2','3','4','10','20','30'] as $expectedId) {
@@ -353,7 +351,6 @@ class TreeTest extends TestCase
             while ($class) {
                 if ($class->hasProperty($prop)) {
                     $p = $class->getProperty($prop);
-                    $p->setAccessible(true);
                     $p->setValue($object, $value);
                     return;
                 }
@@ -403,7 +400,6 @@ class TreeTest extends TestCase
             while ($class) {
                 if ($class->hasProperty($prop)) {
                     $p = $class->getProperty($prop);
-                    $p->setAccessible(true);
                     $p->setValue($object, $value);
                     return;
                 }
@@ -435,7 +431,6 @@ class TreeTest extends TestCase
 
         $ref = new \ReflectionClass($block);
         $method = $ref->getMethod('_getNodeJson');
-        $method->setAccessible(true);
         $result = $method->invoke($block, $node, 1);
 
         $this->assertArrayHasKey('id', $result);
@@ -469,7 +464,6 @@ class TreeTest extends TestCase
 
         $ref = new \ReflectionClass($block);
         $method = $ref->getMethod('_getNodeJson');
-        $method->setAccessible(true);
         $result = $method->invoke($block, $node, 1);
 
         $this->assertTrue($result['expanded']);
@@ -507,7 +501,6 @@ class TreeTest extends TestCase
 
         $ref = new \ReflectionClass($block);
         $method = $ref->getMethod('_getNodeJson');
-        $method->setAccessible(true);
         $result = $method->invoke($block, $parent, 1);
 
         $this->assertArrayHasKey('children', $result);
@@ -537,7 +530,6 @@ class TreeTest extends TestCase
 
         $ref = new \ReflectionClass($block);
         $method = $ref->getMethod('_getNodeJson');
-        $method->setAccessible(true);
         $result = $method->invoke($block, $node, 1);
 
         $this->assertArrayHasKey('children', $result);
@@ -557,7 +549,6 @@ class TreeTest extends TestCase
 
         $ref = new \ReflectionClass($block);
         $method = $ref->getMethod('_prepareLayout');
-        $method->setAccessible(true);
         $method->invoke($block);
     }
 }

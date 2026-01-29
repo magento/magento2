@@ -362,7 +362,6 @@ abstract class IntegrationTestCase extends TestCase
         if ($actionName == 'Save') {
             $reflection = new \ReflectionClass(get_class($controller));
             $reflectionProperty = $reflection->getProperty('securityCookie');
-            $reflectionProperty->setAccessible(true);
             $reflectionProperty->setValue($controller, $this->securityCookieMock);
         }
         return $controller;

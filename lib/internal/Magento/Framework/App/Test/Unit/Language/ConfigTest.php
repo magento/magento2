@@ -78,7 +78,6 @@ class ConfigTest extends TestCase
     public function testGetSchemaFile()
     {
         $method = new \ReflectionMethod($this->config, 'getSchemaFile');
-        $method->setAccessible(true);
         $this->assertEquals(
             $this->urnResolver->getRealPath('urn:magento:framework:App/Language/package.xsd'),
             $method->invoke($this->config)

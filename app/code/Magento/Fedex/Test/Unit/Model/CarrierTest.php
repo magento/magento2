@@ -589,11 +589,9 @@ class CarrierTest extends TestCase
     {
         $refClass = new \ReflectionClass(Carrier::class);
         $property = $refClass->getProperty('_debugReplacePrivateDataKeys');
-        $property->setAccessible(true);
         $property->setValue($this->carrier, $maskFields);
 
         $refMethod = $refClass->getMethod('filterDebugData');
-        $refMethod->setAccessible(true);
         $result = $refMethod->invoke($this->carrier, $data);
         $this->assertEquals($expected, $result);
     }

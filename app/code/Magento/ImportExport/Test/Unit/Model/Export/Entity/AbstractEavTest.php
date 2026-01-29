@@ -68,7 +68,6 @@ class AbstractEavTest extends TestCase
     public function testAddAttributesToCollection()
     {
         $method = new \ReflectionMethod($this->_model, '_addAttributesToCollection');
-        $method->setAccessible(true);
         $stubCollection = $this->createPartialMock(
             AbstractCollection::class,
             ['addAttributeToSelect']
@@ -113,11 +112,9 @@ class AbstractEavTest extends TestCase
         $item->expects($this->any())->method('getData')->willReturn($testAttributeValue);
 
         $method = new \ReflectionMethod($this->_model, '_initAttributeValues');
-        $method->setAccessible(true);
         $method->invoke($this->_model);
 
         $method = new \ReflectionMethod($this->_model, '_addAttributeValuesToRow');
-        $method->setAccessible(true);
         $row = $method->invoke($this->_model, $item);
         /**
          *  Prepare expected data

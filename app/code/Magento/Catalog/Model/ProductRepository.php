@@ -356,7 +356,11 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
      */
     private function cacheProduct($cacheKey, ProductInterface $product)
     {
-        $this->instancesById[$product->getId()][$cacheKey] = $product;
+        // Only cache products with valid IDs (skip unsaved products)
+        $productId = $product->getId();
+        if ($productId !== null) {
+            $this->instancesById[$productId][$cacheKey] = $product;
+        }
         $this->saveProductInLocalCache($product, $cacheKey);
 
         if ($this->cacheLimit && count($this->instances) > $this->cacheLimit) {

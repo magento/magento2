@@ -1241,9 +1241,9 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
         $select->where($this->getPriceExpression($select) . ' IS NOT NULL');
         $row = $this->getConnection()->fetchRow($select, $this->_bindParams, \Zend_Db::FETCH_NUM);
         $this->_pricesCount = (int)$row[0];
-        $this->_maxPrice = (double)$row[1];
-        $this->_minPrice = (double)$row[2];
-        $this->_priceStandardDeviation = (double)$row[3];
+        $this->_maxPrice = (float)$row[1];
+        $this->_minPrice = (float)$row[2];
+        $this->_priceStandardDeviation = (float)$row[3];
 
         return $this;
     }

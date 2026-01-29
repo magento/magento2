@@ -260,7 +260,9 @@ class CustomerTest extends \PHPUnit\Framework\TestCase
      */
     private function getAttributeValueById(string $attributeCode, $valueId)
     {
-        if (isset($this->attributeValues[$attributeCode])
+        // PHP 8.5 Compatibility: Check for null before using as array offset
+        if ($valueId !== null
+            && isset($this->attributeValues[$attributeCode])
             && isset($this->attributeValues[$attributeCode][$valueId])
         ) {
             return $this->attributeValues[$attributeCode][$valueId];

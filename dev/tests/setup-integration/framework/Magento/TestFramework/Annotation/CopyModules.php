@@ -91,7 +91,6 @@ class CopyModules
     {
         $reflection = new \ReflectionClass(ComponentRegistrar::class);
         $reflectionProperty = $reflection->getProperty('paths');
-        $reflectionProperty->setAccessible(true);
         $value = $reflectionProperty->getValue();
         unset($value[ComponentRegistrar::MODULE][$moduleName]);
         $reflectionProperty->setValue(null, $value);

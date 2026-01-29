@@ -131,14 +131,12 @@ class SampleRepositoryTest extends TestCase
         $linkRepository = new \ReflectionClass(get_class($this->service));
         $metadataPoolProperty = $linkRepository->getProperty('metadataPool');
         $this->metadataPoolMock = $this->createMock(MetadataPool::class);
-        $metadataPoolProperty->setAccessible(true);
         $metadataPoolProperty->setValue(
             $this->service,
             $this->metadataPoolMock
         );
         $saveHandlerProperty = $linkRepository->getProperty('sampleTypeHandler');
         $this->sampleHandlerMock = $this->createMock(Sample::class);
-        $saveHandlerProperty->setAccessible(true);
         $saveHandlerProperty->setValue(
             $this->service,
             $this->sampleHandlerMock

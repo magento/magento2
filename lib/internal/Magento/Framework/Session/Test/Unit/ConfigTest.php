@@ -131,7 +131,6 @@ class ConfigTest extends TestCase
     {
         $this->getModel($this->validatorMock);
         $appStateProperty = new \ReflectionProperty(Config::class, 'options');
-        $appStateProperty->setAccessible(true);
         $original = $appStateProperty->getValue($this->config);
         $valueForTest = ['test' => 'test2'];
         $appStateProperty->setValue($this->config, $valueForTest);

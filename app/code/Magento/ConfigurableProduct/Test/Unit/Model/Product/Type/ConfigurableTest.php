@@ -217,7 +217,6 @@ class ConfigurableTest extends TestCase
         );
         $refClass = new ReflectionClass(Configurable::class);
         $refProperty = $refClass->getProperty('metadataPool');
-        $refProperty->setAccessible(true);
         $refProperty->setValue($this->model, $this->metadataPool);
     }
 

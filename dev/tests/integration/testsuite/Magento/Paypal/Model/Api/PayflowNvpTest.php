@@ -71,7 +71,6 @@ class PayflowNvpTest extends \PHPUnit\Framework\TestCase
 
         $refObject = new \ReflectionObject($config);
         $refProperty = $refObject->getProperty('productMetadata');
-        $refProperty->setAccessible(true);
         $refProperty->setValue($config, $productMetadata);
 
         $this->nvpApi->setConfigObject($config);

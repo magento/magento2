@@ -201,7 +201,7 @@ class Item extends AbstractModel implements CreditmemoItemInterface
         $orderItem = $this->getOrderItem();
         $qty = $this->getQty();
         if ($orderItem->getIsQtyDecimal()) {
-            $qty = (double)$qty;
+            $qty = (float)$qty;
         } else {
             $qty = (int)$qty;
         }
@@ -285,7 +285,7 @@ class Item extends AbstractModel implements CreditmemoItemInterface
     {
         $orderItem = $this->getOrderItem();
         $qty = $this->processQty();
-        if ((string)(double)$qty == (string)(double)$orderItem->getQtyToRefund()) {
+        if ((string)(float)$qty == (string)(float)$orderItem->getQtyToRefund()) {
             return true;
         }
         return false;

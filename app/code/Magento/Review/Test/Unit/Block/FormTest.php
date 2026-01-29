@@ -338,7 +338,6 @@ class FormTest extends TestCase
 
         $ref = new \ReflectionObject($formBlock);
         $method = $ref->getMethod('_construct');
-        $method->setAccessible(true);
         $method->invoke($formBlock);
 
         $expectedLoginUrl = $loginUrlBase . '?' . Url::REFERER_QUERY_PARAM_NAME . '=' . $encoded;
@@ -368,7 +367,6 @@ class FormTest extends TestCase
             }
         }
         $prop = $reflection->getProperty($property);
-        $prop->setAccessible(true);
         $prop->setValue($object, $value);
     }
 }

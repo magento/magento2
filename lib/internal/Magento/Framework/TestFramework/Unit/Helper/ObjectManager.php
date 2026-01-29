@@ -95,7 +95,6 @@ class ObjectManager
     {
         $reflection = new \ReflectionClass($this->_testObject);
         $method = $reflection->getMethod('createPartialMock');
-        $method->setAccessible(true);
         $resourceMock = $method->invoke(
             $this->_testObject,
             \Magento\Framework\Module\ModuleResource::class,
@@ -103,7 +102,6 @@ class ObjectManager
         );
         $reflection = new \ReflectionClass($this->_testObject);
         $anyMethod = $reflection->getMethod('any');
-        $anyMethod->setAccessible(true);
         $resourceMock->expects(
             $anyMethod->invoke($this->_testObject)
         )->method(
@@ -123,14 +121,12 @@ class ObjectManager
     {
         $reflection = new \ReflectionClass($this->_testObject);
         $method = $reflection->getMethod('createMock');
-        $method->setAccessible(true);
         $translator = $method->invoke($this->_testObject, $className);
         $translateCallback = function ($arguments) {
             return is_array($arguments) ? vsprintf(array_shift($arguments), $arguments) : '';
         };
         $reflection = new \ReflectionClass($this->_testObject);
         $anyMethod = $reflection->getMethod('any');
-        $anyMethod->setAccessible(true);
         $translator->expects(
             $anyMethod->invoke($this->_testObject)
         )->method(
@@ -150,7 +146,6 @@ class ObjectManager
         // Use reflection to call protected createMock method
         $reflection = new \ReflectionClass($this->_testObject);
         $method = $reflection->getMethod('createMock');
-        $method->setAccessible(true);
         return $method->invoke($this->_testObject, $className);
     }
 
@@ -175,7 +170,6 @@ class ObjectManager
             while ($propertyReflectionClass) {
                 if ($propertyReflectionClass->hasProperty($key)) {
                     $reflectionProperty = $propertyReflectionClass->getProperty($key);
-                    $reflectionProperty->setAccessible(true);
                     $reflectionProperty->setValue($newObject, $value);
                     break;
                 }
@@ -197,7 +191,6 @@ class ObjectManager
         if (!isset($arguments['objectFactory'])) {
             $reflection = new \ReflectionClass($this->_testObject);
             $method = $reflection->getMethod('getMockBuilder');
-            $method->setAccessible(true);
             $mockBuilder = $method->invoke($this->_testObject, \Magento\Framework\Api\ObjectFactory::class);
 
             // Use onlyMethods() with methods that actually exist in ObjectFactory
@@ -207,7 +200,6 @@ class ObjectManager
 
             $reflection = new \ReflectionClass($this->_testObject);
             $anyMethod = $reflection->getMethod('any');
-            $anyMethod->setAccessible(true);
 
             // Only configure methods that actually exist in ObjectFactory
             $objectFactory->expects($anyMethod->invoke($this->_testObject))
@@ -295,7 +287,6 @@ class ObjectManager
                     $parameterString = substr($parameterString, 0, strpos($parameterString, ' '));
                     $reflection = new \ReflectionClass($this->_testObject);
                     $method = $reflection->getMethod('createMock');
-                    $method->setAccessible(true);
                     $object = $method->invoke($this->_testObject, $parameterString);
                 }
             }
@@ -322,12 +313,10 @@ class ObjectManager
         }
         $reflection = new \ReflectionClass($this->_testObject);
         $method = $reflection->getMethod('createMock');
-        $method->setAccessible(true);
         $mock = $method->invoke($this->_testObject, $className);
         $iterator = new \ArrayIterator($data);
         $reflection = new \ReflectionClass($this->_testObject);
         $anyMethod = $reflection->getMethod('any');
-        $anyMethod->setAccessible(true);
         $mock->expects(
             $anyMethod->invoke($this->_testObject)
         )->method(
@@ -368,7 +357,6 @@ class ObjectManager
     {
         $reflection = new \ReflectionClass($className ? $className : get_class($object));
         $reflectionProperty = $reflection->getProperty($propertyName);
-        $reflectionProperty->setAccessible(true);
         $reflectionProperty->setValue($object, $propertyValue);
     }
 
@@ -381,7 +369,6 @@ class ObjectManager
     {
         $reflection = new \ReflectionClass($this->_testObject);
         $method = $reflection->getMethod('createMock');
-        $method->setAccessible(true);
         $objectManagerMock = $method->invoke(
             $this->_testObject,
             ObjectManagerInterface::class
@@ -390,7 +377,6 @@ class ObjectManager
         $objectManagerMock->method('get')->willReturnMap($map);
 
         $reflectionProperty = new \ReflectionProperty(AppObjectManager::class, '_instance');
-        $reflectionProperty->setAccessible(true);
         $reflectionProperty->setValue($objectManagerMock, $objectManagerMock);
     }
 }

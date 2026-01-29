@@ -225,7 +225,6 @@ LUA;
         if ($adapter instanceof TagAwareAdapter) {
             $reflection = new \ReflectionClass($adapter);
             $poolProperty = $reflection->getProperty('pool');
-            $poolProperty->setAccessible(true);
             $adapter = $poolProperty->getValue($adapter);
         }
 
@@ -233,7 +232,6 @@ LUA;
         if ($adapter instanceof RedisAdapter) {
             $reflection = new \ReflectionClass($adapter);
             $redisProperty = $reflection->getProperty('redis');
-            $redisProperty->setAccessible(true);
             $redis = $redisProperty->getValue($adapter);
 
             if ($redis instanceof \Redis || $redis instanceof \RedisCluster ||
