@@ -342,24 +342,10 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
             $categoryIds = array_keys($anchor);
             $countSelect = $this->getProductsCountQuery($categoryIds, (bool)$websiteId);
             $categoryProductsCount = $this->_conn->fetchPairs($countSelect);
-            $countFromCategoryTable = [];
-            if (count($categoryIds) > self::BULK_PROCESSING_LIMIT) {
-                $countFromCategoryTable = $this->getCountFromCategoryTableBulk($categoryIds, (int)$websiteId);
-            }
-
             foreach ($anchor as $item) {
-                $productsCount = 0;
-                if (count($categoryIds) > self::BULK_PROCESSING_LIMIT) {
-                    if (isset($categoryProductsCount[$item->getId()])) {
-                        $productsCount = (int)$categoryProductsCount[$item->getId()];
-                    } elseif (isset($countFromCategoryTable[$item->getId()])) {
-                        $productsCount = (int)$countFromCategoryTable[$item->getId()];
-                    }
-                } else {
-                    $productsCount = isset($categoryProductsCount[$item->getId()])
-                        ? (int)$categoryProductsCount[$item->getId()]
-                        : $this->getProductsCountFromCategoryTable($item, $websiteId);
-                }
+                $productsCount = isset($categoryProductsCount[$item->getId()])
+                    ? (int)$categoryProductsCount[$item->getId()]
+                    : $this->getProductsCountFromCategoryTable($item, $websiteId);
                 $item->setProductCount($productsCount);
             }
         }
