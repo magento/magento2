@@ -339,10 +339,10 @@ class EmailNotification implements EmailNotificationInterface
     private function getWebsiteStoreId($customer, $defaultStoreId = null): int
     {
         if ($customer->getWebsiteId() != 0 && empty($defaultStoreId)) {
-            $storeIds = $this->storeManager->getWebsite($customer->getWebsiteId())->getStoreIds();
+            $storeIds = $this->storeManager->getWebsite((int) $customer->getWebsiteId())->getStoreIds();
             $defaultStoreId = reset($storeIds);
         }
-        return $defaultStoreId;
+        return (int) $defaultStoreId;
     }
 
     /**
