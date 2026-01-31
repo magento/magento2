@@ -28,6 +28,13 @@ class GetByIdCustomerGroupExcludedWebsite
     private $groupExcludedWebsiteRepository;
 
     /**
+     * In-request cache of excluded websites per customer group id
+     *
+     * @var array<int, array>
+     */
+    private $excludedWebsitesCache = [];
+
+    /**
      * @param \Magento\Customer\Api\Data\GroupExtensionInterfaceFactory $groupExtensionInterfaceFactory
      * @param GroupExcludedWebsiteRepository $groupExcludedWebsiteRepository
      */
@@ -55,7 +62,11 @@ class GetByIdCustomerGroupExcludedWebsite
         GroupInterface $result,
         int $id
     ): GroupInterface {
-        $excludedWebsites = $this->groupExcludedWebsiteRepository->getCustomerGroupExcludedWebsites($id);
+        if (!isset($this->excludedWebsitesCache[$id])) {
+            $this->excludedWebsitesCache[$id] = $this->groupExcludedWebsiteRepository
+                ->getCustomerGroupExcludedWebsites($id);
+        }
+        $excludedWebsites = $this->excludedWebsitesCache[$id];
         if (!empty($excludedWebsites)) {
             $customerGroupExtensionAttributes = $this->groupExtensionInterfaceFactory->create();
             $customerGroupExtensionAttributes->setExcludeWebsiteIds($excludedWebsites);
