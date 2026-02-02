@@ -19,6 +19,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Store\Api\StoreRepositoryInterface;
 use PHPUnit\Framework\MockObject\MockObject;
+use Magento\Framework\Exception\InputException;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -73,7 +74,7 @@ class SpecialPriceStorageTest extends TestCase
             SpecialPriceInterface::class,
             ['getEntityLinkField', 'get', 'update', 'delete']
         );
-        
+
         $this->productIdLocator = $this->createMock(ProductIdLocatorInterface::class);
         $this->storeRepository = $this->createMock(StoreRepositoryInterface::class);
         $this->invalidSkuProcessor = $this->createMock(InvalidSkuProcessor::class);
@@ -388,5 +389,27 @@ class SpecialPriceStorageTest extends TestCase
         $this->specialPriceResource->expects($this->once())->method('update')->with([]);
 
         $this->model->update($prices);
+    }
+
+    /**
+     * Test update method with null input - should throw InputException
+     */
+    public function testUpdateWithNullInput(): void
+    {
+        $this->expectException(InputException::class);
+        $this->expectExceptionMessage('Invalid input data format. Expected an array of prices.');
+
+        $this->model->update(null);
+    }
+
+    /**
+     * Test update method with non-array input - should throw InputException
+     */
+    public function testUpdateWithInvalidInput(): void
+    {
+        $this->expectException(InputException::class);
+        $this->expectExceptionMessage('Invalid input data format. Expected an array of prices.');
+
+        $this->model->update('invalid_string');
     }
 }

@@ -105,7 +105,7 @@ define([
         });
     });
 
-    describe('Magento_Checkout/js/view/billing-address', function () {
+    describe('Magento_Checkout/js/view/billing-address validation', function () {
         describe('"updateAddress" method', function () {
             it('should call updateAddresses when form is invalid with false', function () {
                 billingAddress.source.set.and.callFake(function (key, value) {

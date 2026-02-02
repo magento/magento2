@@ -17,6 +17,9 @@ use Magento\Catalog\Model\Product\Attribute\Backend\Price as BackendPrice;
  */
 class Decimal extends AbstractBaseAttributeData
 {
+    /**
+     * @inheritdoc
+     */
     public function __construct()
     {
         parent::__construct();
@@ -45,6 +48,7 @@ class Decimal extends AbstractBaseAttributeData
         $result = parent::getAttributeDataWithCheckArray();
         unset($result["{static::getFrontendInput()}_with_default_value"]);
         unset($result["{static::getFrontendInput()}_without_default_value"]);
+        unset($result["{static::getFrontendInput()}_with_store_view_scope"]);
 
         return $result;
     }

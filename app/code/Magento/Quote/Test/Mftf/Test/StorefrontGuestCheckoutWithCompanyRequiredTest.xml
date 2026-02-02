@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright 2026 Adobe
+ * All Rights Reserved.
+ */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontGuestCheckoutWithCompanyRequiredTest">
+        <annotations>
+            <features value="Quote"/>
+            <stories value="Guest Checkout with Company Required"/>
+            <title value="Guest should be able to place an order when company field is required"/>
+            <description value="Verify that guest can complete checkout when company attribute is configured as required"/>
+            <severity value="AVERAGE"/>
+            <testCaseId value="AC-15093"/>
+            <group value="checkout"/>
+        </annotations>
+        <before>
+            <!-- Step 1: Set company attribute as required -->
+            <magentoCLI command="config:set {{ShowCompanyRequiredConfigData.path}} {{ShowCompanyRequiredConfigData.value}}" stepKey="setCompanyRequired"/>
+            <!-- Step 2: Create simple product -->
+            <createData entity="ApiSimpleProduct" stepKey="createProduct"/>
+        </before>
+        <after>
+            <!-- Revert company attribute to optional -->
+            <magentoCLI command="config:set {{ShowCompanyOptionalConfigData.path}} {{ShowCompanyOptionalConfigData.value}}" stepKey="setCompanyOptional"/>
+            <!-- Delete created entities -->
+            <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
+            <!-- Admin logout -->
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="adminLogout"/>
+        </after>
+        <!-- Step 3: Add product to cart -->
+        <actionGroup ref="StorefrontOpenProductEntityPageActionGroup" stepKey="openProductPage">
+            <argument name="product" value="$createProduct$"/>
+        </actionGroup>
+        <actionGroup ref="AddToCartFromStorefrontProductPageActionGroup" stepKey="addProductToCart">
+            <argument name="productName" value="$createProduct.name$"/>
+        </actionGroup>
+        <!-- Step 4: Proceed to checkout as guest -->
+        <actionGroup ref="GoToCheckoutFromMinicartActionGroup" stepKey="goToCheckout"/>
+        <!-- Step 5: Fill shipping address with company field -->
+        <actionGroup ref="GuestCheckoutFillNewShippingAddressActionGroup" stepKey="fillShippingAddress">
+            <argument name="customer" value="CustomerEntityOne"/>
+            <argument name="address" value="CustomerAddressSimple"/>
+        </actionGroup>
+        <fillField selector="{{CheckoutShippingSection.company}}" userInput="{{CustomerAddressSimple.company}}" stepKey="fillCompany"/>
+        <!-- Select shipping method and proceed to payment -->
+        <actionGroup ref="StorefrontSetShippingMethodActionGroup" stepKey="selectShippingMethod"/>
+        <actionGroup ref="StorefrontCheckoutClickNextOnShippingStepActionGroup" stepKey="clickNext"/>
+        <!-- Select payment method and place order -->
+        <actionGroup ref="CheckoutSelectCheckMoneyOrderPaymentActionGroup" stepKey="selectPaymentMethod"/>
+        <!-- Step 6: Place order -->
+        <actionGroup ref="CheckoutPlaceOrderActionGroup" stepKey="placeOrder">
+            <argument name="orderNumberMessage" value="CONST.successGuestCheckoutOrderNumberMessage"/>
+            <argument name="emailYouMessage" value="CONST.successCheckoutEmailYouMessage"/>
+        </actionGroup>
+        <!-- Grab order number for verification -->
+        <grabTextFrom selector="{{CheckoutSuccessMainSection.orderNumber}}" stepKey="grabOrderNumber"/>
+        <!-- Verify order in admin -->
+        <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+        <actionGroup ref="AdminOpenOrderByEntityIdActionGroup" stepKey="openOrder">
+            <argument name="entityId" value="{$grabOrderNumber}"/>
+        </actionGroup>
+        <!-- Verify billing address contains company -->
+        <waitForText selector="{{AdminOrderDetailsInformationSection.billingAddress}}" userInput="{{CustomerAddressSimple.company}}" stepKey="verifyCompanyInBillingAddress"/>
+        <!-- Verify shipping address contains company -->
+        <waitForText selector="{{AdminOrderDetailsInformationSection.shippingAddress}}" userInput="{{CustomerAddressSimple.company}}" stepKey="verifyCompanyInShippingAddress"/>
+    </test>
+</tests>

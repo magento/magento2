@@ -23,25 +23,26 @@
             <!--Login as Admin-->
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
             <!--Create product-->
-            <createData entity="SimpleProduct" stepKey="createProduct"/>
+            <actionGroup ref="AdminOpenNewProductFormPageActionGroup" stepKey="openNewProductPage"/>
+            <actionGroup ref="FillMainProductFormActionGroup" stepKey="createProduct">
+                <argument name="product" value="SimpleProduct"/>
+            </actionGroup>
+            <actionGroup ref="SaveProductFormActionGroup" stepKey="saveSimpleProduct"/>
         </before>
         <after>
             <!--Delete product-->
-            <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
+            <actionGroup ref="DeleteAllProductsUsingProductGridActionGroup" stepKey="deleteProduct"/>
             <!--Logout as Admin-->
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutAsAdmin"/>
         </after>
         <!--Navigate to storefront home page-->
         <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="goToStorefrontHomePage"/>
         <!--Open product page-->
-        <actionGroup ref="StorefrontOpenProductEntityPageActionGroup" stepKey="openCreatedProductPage">
-            <argument name="product" value="$$createProduct$$"/>
+        <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="openCreatedProductPage">
+            <argument name="productUrl" value="{{SimpleProduct.urlKey}}"/>
         </actionGroup>
         <!--Add product to cart-->
-        <actionGroup ref="StorefrontAddProductToCartActionGroup" stepKey="addProductToCart">
-            <argument name="product" value="$$createProduct$$"/>
-            <argument name="productCount" value="1"/>
-        </actionGroup>
+        <actionGroup ref="StorefrontProductPageAddSimpleProductToCartActionGroup" stepKey="addProductToCart"/>
         <!--Navigate to shopping cart-->
         <actionGroup ref="StorefrontCartPageOpenActionGroup" stepKey="openShoppingCartPage"/>
         <!--Navigate to Shipping details page-->
