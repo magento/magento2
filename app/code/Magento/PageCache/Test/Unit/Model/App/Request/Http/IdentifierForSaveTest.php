@@ -17,6 +17,7 @@ use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Serialize\Serializer\Json;
 use Magento\PageCache\Model\App\Request\Http\IdentifierForSave;
 use Magento\PageCache\Model\App\Request\Http\IdentifierStoreReader;
+use Magento\Framework\App\Response\Http;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -270,6 +271,85 @@ class IdentifierForSaveTest extends TestCase
             ),
             $this->model->getValue()
         );
+    }
+
+    /**
+     * Test vary string resolution from cookie or context fallback.
+     *
+     * @param string|null $cookieVaryString
+     * @param string $contextVaryString
+     * @param string $expectedVaryString
+     * @param bool $expectContextCall
+     * @return void
+     * @dataProvider varyStringDataProvider
+     * @covers \Magento\PageCache\Model\App\Request\Http\IdentifierForSave::getValue
+     */
+    public function testGetValueVaryStringResolution(
+        ?string $cookieVaryString,
+        string $contextVaryString,
+        string $expectedVaryString,
+        bool $expectContextCall
+    ): void {
+        $this->identifierMock->expects($this->once())
+            ->method('getMarketingParameterPatterns')
+            ->willReturn([]);
+        $this->requestMock->expects($this->once())
+            ->method('isSecure')
+            ->willReturn(true);
+        $this->requestMock->expects($this->once())
+            ->method('getUriString')
+            ->willReturn('http://example.com/path1/');
+        $this->requestMock->expects($this->once())
+            ->method('get')
+            ->with(Http::COOKIE_VARY_STRING)
+            ->willReturn($cookieVaryString);
+
+        $this->contextMock->expects($expectContextCall ? $this->once() : $this->never())
+            ->method('getVaryString')
+            ->willReturn($contextVaryString);
+
+        $uri = $this->createMock(HttpUri::class);
+        $uri->expects($this->once())
+            ->method('getQueryAsArray')
+            ->willReturn([]);
+        $this->requestMock->expects($this->once())
+            ->method('getUri')
+            ->willReturn($uri);
+        $this->identifierStoreReader->expects($this->once())
+            ->method('getPageTagsWithStoreCacheTags')
+            ->willReturnArgument(0);
+
+        $expected = sha1(json_encode([true, 'http://example.com/path1/', '', $expectedVaryString]));
+        $this->assertSame($expected, $this->model->getValue());
+    }
+
+    /**
+     * Data provider for vary string resolution tests.
+     *
+     * @return array
+     */
+    public static function varyStringDataProvider(): array
+    {
+        return [
+            'cookie vary string takes precedence' => [
+                'cookie_vary_value',
+                'context_vary_value',
+                'cookie_vary_value',
+                false
+            ],
+            'fallback to context when cookie is null' => [
+                null,
+                'context_vary_value',
+                'context_vary_value',
+                true
+            ],
+            'fallback to context when cookie is empty' => [
+                '',
+                'context_vary_value',
+                'context_vary_value',
+                true
+            ],
+        ];
     }
 
     /**

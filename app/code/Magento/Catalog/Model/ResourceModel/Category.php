@@ -310,11 +310,14 @@ class Category extends AbstractResource implements ResetAfterRequestInterface
                 $object->setPath($object->getPath() . '/');
             }
 
-            $this->getConnection()->update(
-                $this->getEntityTable(),
-                ['children_count' => new \Zend_Db_Expr('children_count+1')],
-                ['entity_id IN(?)' => $toUpdateChild]
-            );
+            $createdIn = $object->getData('created_in');
+            if (!$createdIn || $createdIn == 1) {
+                $this->getConnection()->update(
+                    $this->getEntityTable(),
+                    ['children_count' => new \Zend_Db_Expr('children_count+1')],
+                    ['entity_id IN(?)' => $toUpdateChild]
+                );
+            }
         }
         return $this;
     }

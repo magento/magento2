@@ -23,6 +23,14 @@
         <data key="optional">Optional</data>
         <data key="required">Required</data>
     </entity>
+    <entity name="ShowCompanyRequiredConfigData">
+        <data key="path">customer/address/company_show</data>
+        <data key="value">req</data>
+    </entity>
+    <entity name="ShowCompanyOptionalConfigData">
+        <data key="path">customer/address/company_show</data>
+        <data key="value">opt</data>
+    </entity>
     <entity name="CustomerConfigurationSectionNameAndAddressOptions">
         <data key="id">customer_address-head</data>
         <data key="title">Name and Address Options</data>

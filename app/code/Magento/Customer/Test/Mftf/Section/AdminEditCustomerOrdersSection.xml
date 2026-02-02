@@ -12,5 +12,6 @@
         <element name="orderGrid" type="text" selector="#customer_orders_grid_table"/>
         <element name="orderIdInGrid" type="text" selector="//td[contains(., '{{orderId}}')]" parameterized="true"/>
         <element name="orderIdInGridUsingClassName" type="text" selector="//td[contains(normalize-space(@class), 'col-increment_id') and contains(., '{{orderId}}')]" parameterized="true"/>
+        <element name="reorderLinkInGrid" type="text" selector="//td[contains(text(),'{{orderId}}')]/following::td[contains(@class,'col-action')]//a[contains(@href,'reorder')]" parameterized="true"/>
     </section>
 </sections>

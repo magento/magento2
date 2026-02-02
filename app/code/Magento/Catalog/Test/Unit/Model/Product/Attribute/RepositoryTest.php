@@ -28,6 +28,7 @@ use Magento\Framework\DataObject;
 use Magento\Framework\Filter\FilterManager;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Magento\Eav\Model\Validator\Attribute\Code;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -85,6 +86,11 @@ class RepositoryTest extends TestCase
     protected $searchResultMock;
 
     /**
+     * @var MockObject
+     */
+    protected $attributeCodeValidatorMock;
+
+    /**
      * @inheritdoc
      */
     protected function setUp(): void
@@ -111,6 +117,11 @@ class RepositoryTest extends TestCase
         $this->searchResultMock =
             $this->createMock(SearchResultsInterface::class);
 
+        $this->attributeCodeValidatorMock = $this->createMock(Code::class);
+        $this->attributeCodeValidatorMock
+            ->method('isValid')
+            ->willReturn(true);
+
         $this->model = new Repository(
             $this->attributeResourceMock,
             $this->productHelperMock,
@@ -118,7 +129,8 @@ class RepositoryTest extends TestCase
             $this->eavAttributeRepositoryMock,
             $this->eavConfigMock,
             $this->validatorFactoryMock,
-            $this->searchCriteriaBuilderMock
+            $this->searchCriteriaBuilderMock,
+            $this->attributeCodeValidatorMock
         );
     }
 
@@ -559,6 +571,17 @@ class RepositoryTest extends TestCase
     {
         $this->expectException('Magento\Framework\Exception\InputException');
         $this->expectExceptionMessage('Invalid value of "123_invalid_code" provided for the attribute_code field.');
+        $this->attributeCodeValidatorMock
+            ->expects($this->once())
+            ->method('isValid')
+            ->with('123_invalid_code')
+            ->willThrowException(new \Magento\Framework\Exception\InputException(
+                __('Invalid value of "%1" provided for the %2 field.', '123_invalid_code', 'attribute_code')
+            ));
+        // Add missing validator factory setup
+        $validatorMock = $this->createMock(Validator::class);
+        $validatorMock->expects($this->any())->method('isValid')->willReturn(true);
+        $this->validatorFactoryMock->expects($this->any())->method('create')->willReturn($validatorMock);
 
         $attributeMock = $this->createMock(Attribute::class);
         $attributeMock->expects($this->any())->method('getAttributeId')->willReturn(null);
@@ -566,7 +589,13 @@ class RepositoryTest extends TestCase
         $attributeMock->expects($this->any())->method('getDefaultFrontendLabel')->willReturn('Test Attribute');
         $attributeMock->expects($this->any())->method('getFrontendLabels')->willReturn([]);
         $attributeMock->expects($this->any())->method('getAttributeCode')->willReturn('123_invalid_code');
-
+        // Expect setAttributeCode to be called with the existing code
+        $attributeMock->expects($this->once())->method('setAttributeCode')->with('123_invalid_code')->willReturnSelf();
+        // Add frontend input setup to ensure validation passes
+        $attributeMock->expects($this->any())->method('getFrontendInput')->willReturn('text');
+        // Add filterable method setup to prevent early validation failures
+        $attributeMock->expects($this->any())->method('getIsFilterable')->willReturn(false);
+        $attributeMock->expects($this->any())->method('getIsFilterableInSearch')->willReturn(false);
         $this->model->save($attributeMock);
     }
 
