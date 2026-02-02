@@ -919,7 +919,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
                 return $product->getShipmentType() == Type\AbstractType::SHIPMENT_TOGETHER;
             }
         } catch (\Throwable $e) {
-            // Product may be deleted or unavailable
+            // phpcs:ignore Generic.CodeAnalysis.EmptyStatement -- Product may be deleted or unavailable
         }
 
         $productOptions = $parentItem->getProductOptions();
@@ -1635,13 +1635,16 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     /**
      * Gets order item by given ID.
      *
-     * @param int $itemId
+     * @param int|null $itemId Order item ID (null in rare edge cases, e.g. legacy data)
      * @return \Magento\Framework\DataObject|null
      */
     public function getItemById($itemId)
     {
+        if ($itemId === null) {
+            return null;
+        }
+
         $items = $this->getItems();
-        $itemId = $itemId ?? '';
 
         if (isset($items[$itemId])) {
             return $items[$itemId];
