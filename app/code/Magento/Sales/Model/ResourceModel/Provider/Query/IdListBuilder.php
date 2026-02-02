@@ -10,7 +10,6 @@ namespace Magento\Sales\Model\ResourceModel\Provider\Query;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\DB\Select;
-use Magento\Sales\Model\ResourceModel\Grid;
 
 /**
  * Query builder for retrieving list of updated order ids that was not synced to grid table.
@@ -99,7 +98,6 @@ class IdListBuilder
             );
 
         $select->where('grid_table.entity_id IS NULL');
-        $select->limit(Grid::BATCH_SIZE);
         foreach ($this->additionalGridTables as $table) {
             $select->joinLeft(
                 [$table => $table],
