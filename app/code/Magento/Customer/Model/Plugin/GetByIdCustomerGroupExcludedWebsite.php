@@ -11,11 +11,12 @@ use Magento\Customer\Api\Data\GroupInterface;
 use Magento\Customer\Api\GroupRepositoryInterface;
 use Magento\Customer\Model\ResourceModel\GroupExcludedWebsiteRepository;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 
 /**
  * Add excluded websites to customer group as extension attributes while retrieving this group by id.
  */
-class GetByIdCustomerGroupExcludedWebsite
+class GetByIdCustomerGroupExcludedWebsite implements ResetAfterRequestInterface
 {
     /**
      * @var \Magento\Customer\Api\Data\GroupExtensionInterfaceFactory
@@ -74,5 +75,13 @@ class GetByIdCustomerGroupExcludedWebsite
         }
 
         return $result;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        $this->excludedWebsitesCache = [];
     }
 }
