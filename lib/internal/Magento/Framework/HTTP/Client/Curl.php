@@ -22,7 +22,8 @@ class Curl implements \Magento\Framework\HTTP\ClientInterface
         'POST',
         'PUT',
         'PATCH',
-        'OPTIONS'
+        'OPTIONS',
+        'DELETE'
     ];
 
     /**
