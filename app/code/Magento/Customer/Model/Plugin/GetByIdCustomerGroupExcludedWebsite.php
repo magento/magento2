@@ -9,14 +9,17 @@ namespace Magento\Customer\Model\Plugin;
 
 use Magento\Customer\Api\Data\GroupInterface;
 use Magento\Customer\Api\GroupRepositoryInterface;
+use Magento\Customer\Model\Cache\GroupExcludedWebsiteCache;
 use Magento\Customer\Model\ResourceModel\GroupExcludedWebsiteRepository;
 use Magento\Framework\Exception\LocalizedException;
-use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 
 /**
  * Add excluded websites to customer group as extension attributes while retrieving this group by id.
+ *
+ * Uses shared GroupExcludedWebsiteCache so cache is properly invalidated when excluded websites
+ * are modified by SaveCustomerGroupExcludedWebsite or DeleteCustomerGroupExcludedWebsite.
  */
-class GetByIdCustomerGroupExcludedWebsite implements ResetAfterRequestInterface
+class GetByIdCustomerGroupExcludedWebsite
 {
     /**
      * @var \Magento\Customer\Api\Data\GroupExtensionInterfaceFactory
@@ -29,22 +32,23 @@ class GetByIdCustomerGroupExcludedWebsite implements ResetAfterRequestInterface
     private $groupExcludedWebsiteRepository;
 
     /**
-     * In-request cache of excluded websites per customer group id
-     *
-     * @var array<int, array>
+     * @var GroupExcludedWebsiteCache
      */
-    private $excludedWebsitesCache = [];
+    private $groupExcludedWebsiteCache;
 
     /**
      * @param \Magento\Customer\Api\Data\GroupExtensionInterfaceFactory $groupExtensionInterfaceFactory
      * @param GroupExcludedWebsiteRepository $groupExcludedWebsiteRepository
+     * @param GroupExcludedWebsiteCache $groupExcludedWebsiteCache
      */
     public function __construct(
         \Magento\Customer\Api\Data\GroupExtensionInterfaceFactory $groupExtensionInterfaceFactory,
-        GroupExcludedWebsiteRepository $groupExcludedWebsiteRepository
+        GroupExcludedWebsiteRepository $groupExcludedWebsiteRepository,
+        GroupExcludedWebsiteCache $groupExcludedWebsiteCache
     ) {
         $this->groupExtensionInterfaceFactory = $groupExtensionInterfaceFactory;
         $this->groupExcludedWebsiteRepository = $groupExcludedWebsiteRepository;
+        $this->groupExcludedWebsiteCache = $groupExcludedWebsiteCache;
     }
 
     /**
@@ -63,11 +67,13 @@ class GetByIdCustomerGroupExcludedWebsite implements ResetAfterRequestInterface
         GroupInterface $result,
         int $id
     ): GroupInterface {
-        if (!isset($this->excludedWebsitesCache[$id])) {
-            $this->excludedWebsitesCache[$id] = $this->groupExcludedWebsiteRepository
-                ->getCustomerGroupExcludedWebsites($id);
+        if ($this->groupExcludedWebsiteCache->isCached($id)) {
+            $excludedWebsites = $this->groupExcludedWebsiteCache->getFromCache($id);
+        } else {
+            $excludedWebsites = $this->groupExcludedWebsiteRepository->getCustomerGroupExcludedWebsites($id);
+            // Resource model populates cache when loading from DB
         }
-        $excludedWebsites = $this->excludedWebsitesCache[$id];
+
         if (!empty($excludedWebsites)) {
             $customerGroupExtensionAttributes = $this->groupExtensionInterfaceFactory->create();
             $customerGroupExtensionAttributes->setExcludeWebsiteIds($excludedWebsites);
@@ -75,13 +81,5 @@ class GetByIdCustomerGroupExcludedWebsite implements ResetAfterRequestInterface
         }
 
         return $result;
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function _resetState(): void
-    {
-        $this->excludedWebsitesCache = [];
     }
 }
