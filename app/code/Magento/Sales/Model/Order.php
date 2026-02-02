@@ -890,12 +890,9 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
             if (!$item->getParentItem() || $item->getParentItem()->getProductType() !== Type::TYPE_BUNDLE) {
                 $qtyToShip = $item->getQtyToShip();
             } else {
-                if ($item->getParentItem()->getProductType() === Type::TYPE_BUNDLE &&
-                    $item->getParentItem()->getProduct()->getShipmentType() == Type\AbstractType::SHIPMENT_TOGETHER) {
-                    $qtyToShip = $item->getParentItem()->getQtyToShip();
-                } else {
-                    $qtyToShip = $item->getSimpleQtyToShip();
-                }
+                $parentItem = $item->getParentItem();
+                $isShipTogether = $this->isBundleShipTogether($parentItem);
+                $qtyToShip = $isShipTogether ? $parentItem->getQtyToShip() : $item->getSimpleQtyToShip();
             }
 
             if ($qtyToShip > 0 && !$item->getIsVirtual() && !$item->getLockedDoShip()) {
@@ -904,6 +901,30 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
         }
 
         return false;
+    }
+
+    /**
+     * Check if bundle product is configured to ship together.
+     * For "Ship Together" bundles, only the parent's qty_shipped is updated on shipment,
+     * so we must use the parent's getQtyToShip() for children when determining canShip().
+     *
+     * @param OrderItemInterface $parentItem
+     * @return bool
+     */
+    private function isBundleShipTogether(OrderItemInterface $parentItem): bool
+    {
+        try {
+            $product = $parentItem->getProduct();
+            if ($product !== null) {
+                return $product->getShipmentType() == Type\AbstractType::SHIPMENT_TOGETHER;
+            }
+        } catch (\Throwable $e) {
+            // Product may be deleted or unavailable
+        }
+
+        $productOptions = $parentItem->getProductOptions();
+        return isset($productOptions['shipment_type'])
+            && $productOptions['shipment_type'] == Type\AbstractType::SHIPMENT_TOGETHER;
     }
 
     /**
