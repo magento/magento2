@@ -53,4 +53,21 @@ class CacheFlushCommandTest extends AbstractCacheManageCommandTestCase
     {
         return 'Flushed cache types:' . PHP_EOL . implode(PHP_EOL, $types) . PHP_EOL;
     }
+
+    /**
+     * Test that command has correct aliases
+     */
+    public function testCommandHasCorrectAliases(): void
+    {
+        $aliases = $this->command->getAliases();
+        $this->assertContains('c:f', $aliases, 'Command should have "c:f" alias');
+    }
+
+    /**
+     * Test that command has correct name
+     */
+    public function testCommandName(): void
+    {
+        $this->assertEquals('cache:flush', $this->command->getName());
+    }
 }
