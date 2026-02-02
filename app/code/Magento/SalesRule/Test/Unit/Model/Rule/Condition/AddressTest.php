@@ -100,4 +100,59 @@ class AddressTest extends TestCase
             'Postcode "100 00" should match rule value "10000" (normalized)'
         );
     }
+
+    /**
+     * Test that Polish postcode with hyphen matches without hyphen (e.g. "56-500" vs "56500")
+     *
+     * @return void
+     */
+    public function testValidateAttributePostcodePolishWithHyphenMatchesWithoutHyphen(): void
+    {
+        $this->model->setAttribute('postcode');
+        $this->model->setOperator('==');
+        $this->model->setValueParsed('56-500');
+
+        $this->assertTrue(
+            $this->model->validateAttribute('56-500'),
+            'Postcode "56-500" should match rule value "56-500"'
+        );
+        $this->assertTrue(
+            $this->model->validateAttribute('56500'),
+            'Postcode "56500" should match rule value "56-500" (normalized)'
+        );
+    }
+
+    /**
+     * Test that postcode rule without hyphen matches address with hyphen (Polish format)
+     *
+     * @return void
+     */
+    public function testValidateAttributePostcodeRuleWithoutHyphenMatchesAddressWithHyphen(): void
+    {
+        $this->model->setAttribute('postcode');
+        $this->model->setOperator('==');
+        $this->model->setValueParsed('56500');
+
+        $this->assertTrue(
+            $this->model->validateAttribute('56-500'),
+            'Postcode "56-500" should match rule value "56500" (normalized)'
+        );
+    }
+
+    /**
+     * Test that postcode with dot is normalized (e.g. "12.345" or "56.500")
+     *
+     * @return void
+     */
+    public function testValidateAttributePostcodeWithDotNormalized(): void
+    {
+        $this->model->setAttribute('postcode');
+        $this->model->setOperator('==');
+        $this->model->setValueParsed('56500');
+
+        $this->assertTrue(
+            $this->model->validateAttribute('56.500'),
+            'Postcode "56.500" should match rule value "56500" (dot normalized)'
+        );
+    }
 }
