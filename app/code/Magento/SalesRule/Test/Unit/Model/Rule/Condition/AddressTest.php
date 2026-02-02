@@ -62,4 +62,42 @@ class AddressTest extends TestCase
         $this->model->loadAttributeOptions();
         $this->assertEquals($attributes, array_keys($this->model->getAttributeOption()));
     }
+
+    /**
+     * Test that postcode with space matches postcode without space (e.g. Swedish format "100 00")
+     *
+     * @return void
+     */
+    public function testValidateAttributePostcodeWithSpaceMatchesWithoutSpace(): void
+    {
+        $this->model->setAttribute('postcode');
+        $this->model->setOperator('==');
+        $this->model->setValueParsed('100 00');
+
+        $this->assertTrue(
+            $this->model->validateAttribute('100 00'),
+            'Postcode "100 00" should match rule value "100 00"'
+        );
+        $this->assertTrue(
+            $this->model->validateAttribute('10000'),
+            'Postcode "10000" should match rule value "100 00" (normalized)'
+        );
+    }
+
+    /**
+     * Test that postcode rule without space matches address with space
+     *
+     * @return void
+     */
+    public function testValidateAttributePostcodeRuleWithoutSpaceMatchesAddressWithSpace(): void
+    {
+        $this->model->setAttribute('postcode');
+        $this->model->setOperator('==');
+        $this->model->setValueParsed('10000');
+
+        $this->assertTrue(
+            $this->model->validateAttribute('100 00'),
+            'Postcode "100 00" should match rule value "10000" (normalized)'
+        );
+    }
 }
