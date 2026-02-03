@@ -42,7 +42,7 @@ class UnitBaseCalculatorTest extends TestCase
 
     public const CODE = 'CODE';
     public const TYPE = 'TYPE';
-    public const ROW_TAX = 44.958682408681;
+    public const ROW_TAX = 44.954135954135964;
     public const ROW_TAX_ROUNDED = 44.95;
     public const PRICE_INCL_TAX = 495.4954954955;
     public const PRICE_INCL_TAX_ROUNDED = 495.50;

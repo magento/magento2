@@ -164,7 +164,6 @@ class CartPriceRulesFixtureTest extends TestCase
     {
         $reflection = new \ReflectionClass($this->model);
         $reflectionProperty = $reflection->getProperty('cartPriceRulesCount');
-        $reflectionProperty->setAccessible(true);
         $reflectionProperty->setValue($this->model, $ruleCount);
 
         $result = $this->model->generateAdvancedCondition($ruleId, $categoriesArray);

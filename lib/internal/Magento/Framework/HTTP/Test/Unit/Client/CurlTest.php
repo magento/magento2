@@ -38,7 +38,6 @@ class CurlTest extends TestCase
             $curl,
             'parseHeaders'
         );
-        $parseHeaders->setAccessible(true);
 
         // Parse headers
         foreach ($this->headersDataProvider() as $header) {

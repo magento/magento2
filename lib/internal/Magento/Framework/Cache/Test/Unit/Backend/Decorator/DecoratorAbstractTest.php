@@ -55,13 +55,11 @@ class DecoratorAbstractTest extends TestCase
             AbstractDecorator::class,
             '_backend'
         );
-        $backendProperty->setAccessible(true);
 
         $optionsProperty = new \ReflectionProperty(
             AbstractDecorator::class,
             '_decoratorOptions'
         );
-        $optionsProperty->setAccessible(true);
 
         $this->assertSame($backendProperty->getValue($decorator), $this->_mockBackend);
 

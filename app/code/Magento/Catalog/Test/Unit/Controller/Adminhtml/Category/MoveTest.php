@@ -145,7 +145,6 @@ class MoveTest extends TestCase
         $this->objectManager = $this->createMock(ObjectManagerInterface::class);
         $moveController = new \ReflectionClass($this->moveController);
         $objectManagerProp = $moveController->getProperty('_objectManager');
-        $objectManagerProp->setAccessible(true);
         $objectManagerProp->setValue($this->moveController, $this->objectManager);
     }
 

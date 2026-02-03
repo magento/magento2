@@ -69,7 +69,6 @@ class FilterManagerTest extends TestCase
         $this->initMocks();
         $method =
             new \ReflectionMethod(FilterManager::class, 'getFilterFactories');
-        $method->setAccessible(true);
         $this->assertEquals([$this->_factoryMock], $method->invoke($this->_filterManager));
     }
 
@@ -104,7 +103,6 @@ class FilterManagerTest extends TestCase
         $this->_filterManager = new FilterManager($this->_objectManager, $this->_config);
 
         $method = new \ReflectionMethod(FilterManager::class, 'getFilterFactories');
-        $method->setAccessible(true);
         $method->invoke($this->_filterManager);
     }
 
@@ -116,7 +114,6 @@ class FilterManagerTest extends TestCase
         $this->configureFactoryMock($filterMock, 'alias', ['123']);
 
         $method = new \ReflectionMethod(FilterManager::class, 'createFilterInstance');
-        $method->setAccessible(true);
         $this->assertEquals($filterMock, $method->invoke($this->_filterManager, 'alias', ['123']));
     }
 
@@ -137,7 +134,6 @@ class FilterManagerTest extends TestCase
         );
 
         $method = new \ReflectionMethod(FilterManager::class, 'createFilterInstance');
-        $method->setAccessible(true);
         $method->invoke($this->_filterManager, $filterAlias, []);
     }
 

@@ -74,7 +74,6 @@ class ChecksumTest extends TestCase
 
         $reflection = new \ReflectionClass(Checksum::class);
         $reflectionProperty = $reflection->getProperty('assetSource');
-        $reflectionProperty->setAccessible(true);
         $reflectionProperty->setValue($this->checksum, $this->assetSource);
 
         $this->resultAsset = $this->createMock(File::class);

@@ -121,6 +121,7 @@ class GoogleOptimizerTest extends TestCase
     #[DataProvider('getDataGoogleExperimentEnabledDataProvider')]
     public function testGetDataGoogleExperimentEnabled($productId, $experimentScript, $codeId, $expectedCalls)
     {
+        $productId = $productId ?? '';
         $expectedResult[$productId]['google_experiment'] = [
             'experiment_script' => $experimentScript,
             'code_id' => $codeId,

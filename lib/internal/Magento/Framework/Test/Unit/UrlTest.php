@@ -166,7 +166,6 @@ class UrlTest extends TestCase
         $modelProperty = (new ReflectionClass(get_class($model)))
             ->getProperty('urlModifier');
 
-        $modelProperty->setAccessible(true);
         $modelProperty->setValue($model, $this->urlModifier);
 
         $zendEscaper = new ZendEscaper();

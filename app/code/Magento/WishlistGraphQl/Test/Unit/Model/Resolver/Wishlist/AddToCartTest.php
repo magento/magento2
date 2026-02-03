@@ -753,7 +753,6 @@ class AddToCartTest extends TestCase
         // Test the loadByCustomerId path by using reflection to call getWishlist directly
         $reflection = new \ReflectionClass($this->resolver);
         $method = $reflection->getMethod('getWishlist');
-        $method->setAccessible(true);
 
         // Call getWishlist with null wishlistId to trigger loadByCustomerId path
         $result = $method->invoke($this->resolver, null, $customerId);
@@ -787,7 +786,6 @@ class AddToCartTest extends TestCase
         // Test the saveCart method using reflection
         $reflection = new \ReflectionClass($this->resolver);
         $method = $reflection->getMethod('saveCart');
-        $method->setAccessible(true);
 
         // Should not throw any exception
         $method->invoke($this->resolver, $maskedCartId);
@@ -812,7 +810,6 @@ class AddToCartTest extends TestCase
         // Test the saveCart method using reflection
         $reflection = new \ReflectionClass($this->resolver);
         $method = $reflection->getMethod('saveCart');
-        $method->setAccessible(true);
 
         $method->invoke($this->resolver, $maskedCartId);
     }

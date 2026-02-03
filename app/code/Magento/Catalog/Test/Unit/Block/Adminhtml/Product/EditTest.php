@@ -164,7 +164,6 @@ class EditTest extends TestCase
     {
         $reflection = new ReflectionClass($this->block);
         $method = $reflection->getMethod($methodName);
-        $method->setAccessible(true);
         return $method->invoke($this->block);
     }
 

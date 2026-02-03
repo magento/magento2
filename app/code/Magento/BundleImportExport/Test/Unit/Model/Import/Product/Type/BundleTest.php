@@ -220,7 +220,6 @@ class BundleTest extends AbstractImportTestCase
             ->willReturn($metadataMock);
         $reflection = new \ReflectionClass(Bundle::class);
         $reflectionProperty = $reflection->getProperty('metadataPool');
-        $reflectionProperty->setAccessible(true);
         $reflectionProperty->setValue($this->bundle, $metadataPoolMock);
     }
 
@@ -453,7 +452,6 @@ class BundleTest extends AbstractImportTestCase
     {
         $reflection = new \ReflectionClass(get_class($object));
         $reflectionProperty = $reflection->getProperty($property);
-        $reflectionProperty->setAccessible(true);
         $reflectionProperty->setValue($object, $value);
         return $object;
     }

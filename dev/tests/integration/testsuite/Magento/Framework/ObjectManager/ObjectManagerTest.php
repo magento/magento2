@@ -146,9 +146,7 @@ class ObjectManagerTest extends \PHPUnit\Framework\TestCase
                 $this->assertIsObject($testObject);
                 $this->assertTrue(property_exists($testObject, $propertyName));
                 $attribute = $object->getProperty($propertyName);
-                $attribute->setAccessible(true);
                 $propertyObject = $attribute->getValue($testObject);
-                $attribute->setAccessible(false);
                 $this->assertInstanceOf($propertyClass, $propertyObject);
             }
         }

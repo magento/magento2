@@ -164,7 +164,7 @@ class FormTest extends TestCase
     {
         $requestFieldName = 'request_id';
         $primaryFieldName = 'primary_id';
-        $fieldId = null;
+        $fieldId = '';
         $row = ['key' => 'value'];
         $data = [
             $fieldId => $row,

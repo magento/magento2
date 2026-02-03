@@ -198,7 +198,6 @@ class GroupedTest extends AbstractImportTestCase
             ->willReturn('entity_id');
         $reflection = new \ReflectionClass(Grouped::class);
         $reflectionProperty = $reflection->getProperty('metadataPool');
-        $reflectionProperty->setAccessible(true);
         $reflectionProperty->setValue($this->grouped, $metadataPoolMock);
     }
 

@@ -377,7 +377,6 @@ class PluginListTest extends TestCase
     {
         $reflection = new \ReflectionClass($this->object);
         $reflection_property = $reflection->getProperty('_scopePriorityScheme');
-        $reflection_property->setAccessible(true);
         $reflection_property->setValue($this->object, $areaCodes);
     }
 }
