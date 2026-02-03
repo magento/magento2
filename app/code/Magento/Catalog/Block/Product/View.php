@@ -286,7 +286,7 @@ class View extends AbstractProduct implements \Magento\Framework\DataObject\Iden
         $qty = $this->getMinimalQty($product);
         $config = $product->getPreconfiguredValues();
         $configQty = $config->getQty();
-        if ($configQty > $qty) {
+        if (is_numeric($configQty) && (float)$configQty > $qty) {
             $qty = $configQty;
         }
 

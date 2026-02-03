@@ -68,9 +68,9 @@ class Qty extends \Magento\Framework\View\Element\Template
     public function getQtyValue()
     {
         $qty = $this->getProduct()->getPreconfiguredValues()->getQty();
-        if (!$qty) {
+        if (!$qty || !is_numeric($qty)) {
             $qty = 1;
         }
-        return $qty;
+        return (int)$qty;
     }
 }
