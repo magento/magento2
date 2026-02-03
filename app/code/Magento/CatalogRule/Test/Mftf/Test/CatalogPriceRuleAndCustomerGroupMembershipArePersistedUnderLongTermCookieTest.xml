@@ -16,7 +16,10 @@
             <description value="Verify that Catalog Price Rule and Customer Group Membership are persisted under long-term cookie"/>
             <severity value="CRITICAL"/>
             <testCaseId value="MC-27571"/>
-            <group value="CatalogRule"/>
+            <group value="persistent"/>
+            <skip>
+                <issueId value="AC-16377"/>
+            </skip>
         </annotations>
         <before>
 

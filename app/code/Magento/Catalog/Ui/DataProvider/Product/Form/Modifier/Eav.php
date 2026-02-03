@@ -468,7 +468,7 @@ class Eav extends AbstractModifier
     {
         $persistentData = (array)$this->dataPersistor->get('catalog_product');
         $this->dataPersistor->clear('catalog_product');
-        $productId = $this->locator->getProduct()->getId();
+        $productId = $this->locator->getProduct()->getId() ?? '';
 
         if (empty($data[$productId][self::DATA_SOURCE_DEFAULT])) {
             $data[$productId][self::DATA_SOURCE_DEFAULT] = [];
