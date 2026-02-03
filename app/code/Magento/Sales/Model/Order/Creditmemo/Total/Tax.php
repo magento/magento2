@@ -106,7 +106,7 @@ class Tax extends AbstractTotal
         $baseOrderShippingAmount = (float)$order->getBaseShippingAmount();
         if ($invoice = $creditmemo->getInvoice()) {
             // recalculate tax amounts in case if refund shipping value was changed
-            if ($baseOrderShippingAmount && $creditmemo->getBaseShippingAmount() !== null) {
+            if ($baseOrderShippingAmount > 0 && $creditmemo->getBaseShippingAmount() !== null) {
                 $taxFactor = $creditmemo->getBaseShippingAmount() / $baseOrderShippingAmount;
                 $shippingTaxAmount = $invoice->getShippingTaxAmount() * $taxFactor;
                 $baseShippingTaxAmount = $invoice->getBaseShippingTaxAmount() * $taxFactor;
@@ -134,7 +134,7 @@ class Tax extends AbstractTotal
             $baseShippingDiscountTaxCompensationAmount = 0;
             $shippingDelta = $baseOrderShippingAmount - $baseOrderShippingRefundedAmount;
 
-            if ($orderShippingAmount > 0 && ($shippingDelta > $creditmemo->getBaseShippingAmount() ||
+            if ($orderShippingAmount > 0 && $baseOrderShippingAmount > 0 && ($shippingDelta > $creditmemo->getBaseShippingAmount() ||
                 $this->isShippingIncludeTaxWithTaxAfterDiscount($order->getStoreId()))) {
                 $part = $creditmemo->getShippingAmount() / $orderShippingAmount;
                 $basePart = $creditmemo->getBaseShippingAmount() / $baseOrderShippingAmount;
