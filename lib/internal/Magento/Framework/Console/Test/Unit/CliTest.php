@@ -75,7 +75,6 @@ class CliTest extends TestCase
     {
         $reflection = new \ReflectionClass(Cli::class);
         $reflectionProperty = $reflection->getProperty($propertyName);
-        $reflectionProperty->setAccessible(true);
         $reflectionProperty->setValue($this->cli, $mockObject);
     }
 }

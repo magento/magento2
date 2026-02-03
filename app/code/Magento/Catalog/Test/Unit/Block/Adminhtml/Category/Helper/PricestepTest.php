@@ -69,7 +69,7 @@ class PricestepTest extends TestCase
         $this->factoryCollectionMock = $this->createMock(CollectionFactory::class);
         $this->escaperMock = $this->createMock(Escaper::class);
         $this->escaperMock->method('escapeHtml')->willReturnArgument(0);
-        
+
         $this->secureRendererMock = $this->createMock(SecureHtmlRenderer::class);
         $this->secureRendererMock->method('renderTag')
             ->willReturnCallback(
@@ -110,21 +110,18 @@ class PricestepTest extends TestCase
         // Inject dependencies using reflection to avoid parent constructor issues
         // Access AbstractElement class directly
         $abstractElementReflection = new \ReflectionClass(\Magento\Framework\Data\Form\Element\AbstractElement::class);
-        
+
         // Inject escaper (from AbstractElement)
         $escaperProperty = $abstractElementReflection->getProperty('_escaper');
-        $escaperProperty->setAccessible(true);
         $escaperProperty->setValue($this->model, $this->escaperMock);
-        
+
         // Inject random (from AbstractElement)
         $randomProperty = $abstractElementReflection->getProperty('random');
-        $randomProperty->setAccessible(true);
         $randomProperty->setValue($this->model, $this->randomMock);
-        
+
         // Inject secureRenderer (from Pricestep) - use the real class for reflection
         $pricestepReflection = new \ReflectionClass(Pricestep::class);
         $secureRendererProperty = $pricestepReflection->getProperty('secureRenderer');
-        $secureRendererProperty->setAccessible(true);
         $secureRendererProperty->setValue($this->model, $this->secureRendererMock);
 
         $this->model->setForm($this->formMock);

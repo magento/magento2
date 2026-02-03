@@ -845,7 +845,6 @@ class AbstractGroupTest extends TestCase
         // Use reflection to set the private _websites property
         $reflection = new \ReflectionClass($this->block);
         $property = $reflection->getProperty('_websites');
-        $property->setAccessible(true);
         $property->setValue($this->block, $cachedWebsites);
 
         $result = $this->block->getWebsites();

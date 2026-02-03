@@ -141,7 +141,6 @@ class ConfigShowCommandTest extends TestCase
     {
         $reflection = new \ReflectionClass(Structure::class);
         $mappedPaths = $reflection->getProperty('mappedPaths');
-        $mappedPaths->setAccessible(true);
         $mappedPaths->setValue($this->structure, $this->getConfigPaths());
     }
 

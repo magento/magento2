@@ -93,7 +93,6 @@ class ImageTest extends \PHPUnit\Framework\TestCase
             \Magento\Customer\Model\Metadata\Form\Image::class,
             'processCustomerAddressValue'
         );
-        $processCustomerAddressValueMethod->setAccessible(true);
         $actual = $processCustomerAddressValueMethod->invoke($image, $imageFile);
         $this->assertEquals($this->expectedFileName, $actual);
         $this->assertTrue($this->mediaDirectory->isExist($expectedPath));
@@ -126,7 +125,6 @@ class ImageTest extends \PHPUnit\Framework\TestCase
             \Magento\Customer\Model\Metadata\Form\Image::class,
             'processCustomerValue'
         );
-        $processCustomerAddressValueMethod->setAccessible(true);
         $result = $processCustomerAddressValueMethod->invoke($image, $imageFile);
         $this->assertInstanceOf('Magento\Framework\Api\ImageContent', $result);
         $this->assertFileDoesNotExist($tmpFilePath);
@@ -165,7 +163,6 @@ class ImageTest extends \PHPUnit\Framework\TestCase
             \Magento\Customer\Model\Metadata\Form\Image::class,
             'processCustomerValue'
         );
-        $processCustomerAddressValueMethod->setAccessible(true);
         $processCustomerAddressValueMethod->invoke($image, $imageFile);
     }
 
@@ -194,7 +191,6 @@ class ImageTest extends \PHPUnit\Framework\TestCase
             \Magento\Customer\Model\Metadata\Form\Image::class,
             '_validateByRules'
         );
-        $processValidateMethod->setAccessible(true);
         $validationResult = $processValidateMethod->invoke($image, $imageFile);
         $this->assertEquals('"' . $this->fileName .'" is not a valid file.', $validationResult[0]->__toString());
     }

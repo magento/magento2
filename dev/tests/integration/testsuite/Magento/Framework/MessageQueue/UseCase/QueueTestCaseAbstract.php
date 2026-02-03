@@ -125,8 +125,6 @@ class QueueTestCaseAbstract extends \PHPUnit\Framework\TestCase
         // phpcs:enable Magento2.Functions.StaticFunction
         if (version_compare(phpversion(), '7') == -1) {
             $closeConnection = new \ReflectionMethod(\Magento\Amqp\Model\Config::class, 'closeConnection');
-            $closeConnection->setAccessible(true);
-
             $config = Bootstrap::getObjectManager()->get(\Magento\Amqp\Model\Config::class);
             $closeConnection->invoke($config);
         }

@@ -169,11 +169,9 @@ class ShowUpdateResultTest extends TestCase
 
         $reflection = new \ReflectionClass($adminOrderCreate);
         $registryProperty = $reflection->getProperty('_coreRegistry');
-        $registryProperty->setAccessible(true);
         $registryProperty->setValue($adminOrderCreate, $registry);
 
         $sessionProperty = $reflection->getProperty('_session');
-        $sessionProperty->setAccessible(true);
         $sessionProperty->setValue($adminOrderCreate, $quoteSession);
 
         $adminOrderCreate->expects($this->any())

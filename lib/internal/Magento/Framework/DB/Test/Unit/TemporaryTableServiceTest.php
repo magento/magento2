@@ -154,9 +154,7 @@ class TemporaryTableServiceTest extends TestCase
     public function testDropTableWhenCreatedTablesArrayNotEmpty($tableName, $assertion)
     {
         $createdTableAdapters = new \ReflectionProperty($this->temporaryTableService, 'createdTableAdapters');
-        $createdTableAdapters->setAccessible(true);
         $createdTableAdapters->setValue($this->temporaryTableService, ['tmp_select_table' => $this->adapterMock]);
-        $createdTableAdapters->setAccessible(false);
 
         $this->adapterMock->expects($this->any())
             ->method('dropTemporaryTable')

@@ -133,7 +133,6 @@ class MagentoDatabaseAdapterTest extends TestCase
         // Inject mocked backend via reflection
         $reflection = new \ReflectionClass($this->adapter);
         $backendProperty = $reflection->getProperty('backend');
-        $backendProperty->setAccessible(true);
         $backendProperty->setValue($this->adapter, $backendMock);
 
         // Mock serializer
@@ -170,7 +169,6 @@ class MagentoDatabaseAdapterTest extends TestCase
 
         $reflection = new \ReflectionClass($this->adapter);
         $backendProperty = $reflection->getProperty('backend');
-        $backendProperty->setAccessible(true);
         $backendProperty->setValue($this->adapter, $backendMock);
 
         $item = $this->adapter->getItem($key);
@@ -207,7 +205,6 @@ class MagentoDatabaseAdapterTest extends TestCase
 
         $reflection = new \ReflectionClass($this->adapter);
         $backendProperty = $reflection->getProperty('backend');
-        $backendProperty->setAccessible(true);
         $backendProperty->setValue($this->adapter, $backendMock);
 
         $this->serializerMock
@@ -244,7 +241,6 @@ class MagentoDatabaseAdapterTest extends TestCase
 
         $reflection = new \ReflectionClass($this->adapter);
         $backendProperty = $reflection->getProperty('backend');
-        $backendProperty->setAccessible(true);
         $backendProperty->setValue($this->adapter, $backendMock);
 
         $this->serializerMock
@@ -276,7 +272,6 @@ class MagentoDatabaseAdapterTest extends TestCase
 
         $reflection = new \ReflectionClass($this->adapter);
         $backendProperty = $reflection->getProperty('backend');
-        $backendProperty->setAccessible(true);
         $backendProperty->setValue($this->adapter, $backendMock);
 
         $items = $this->adapter->getItems($keys);
@@ -317,7 +312,6 @@ class MagentoDatabaseAdapterTest extends TestCase
 
         $reflection = new \ReflectionClass($this->adapter);
         $backendProperty = $reflection->getProperty('backend');
-        $backendProperty->setAccessible(true);
         $backendProperty->setValue($this->adapter, $backendMock);
 
         $result = $this->adapter->hasItem($key);
@@ -345,7 +339,6 @@ class MagentoDatabaseAdapterTest extends TestCase
 
         $reflection = new \ReflectionClass($this->adapter);
         $backendProperty = $reflection->getProperty('backend');
-        $backendProperty->setAccessible(true);
         $backendProperty->setValue($this->adapter, $backendMock);
 
         $result = $this->adapter->hasItem($key);
@@ -371,7 +364,6 @@ class MagentoDatabaseAdapterTest extends TestCase
 
         $reflection = new \ReflectionClass($this->adapter);
         $backendProperty = $reflection->getProperty('backend');
-        $backendProperty->setAccessible(true);
         $backendProperty->setValue($this->adapter, $backendMock);
 
         $result = $this->adapter->clear();
@@ -397,7 +389,6 @@ class MagentoDatabaseAdapterTest extends TestCase
 
         $reflection = new \ReflectionClass($this->adapter);
         $backendProperty = $reflection->getProperty('backend');
-        $backendProperty->setAccessible(true);
         $backendProperty->setValue($this->adapter, $backendMock);
 
         // Prefix parameter is accepted but not used
@@ -426,7 +417,6 @@ class MagentoDatabaseAdapterTest extends TestCase
 
         $reflection = new \ReflectionClass($this->adapter);
         $backendProperty = $reflection->getProperty('backend');
-        $backendProperty->setAccessible(true);
         $backendProperty->setValue($this->adapter, $backendMock);
 
         $result = $this->adapter->deleteItem($key);
@@ -454,7 +444,6 @@ class MagentoDatabaseAdapterTest extends TestCase
 
         $reflection = new \ReflectionClass($this->adapter);
         $backendProperty = $reflection->getProperty('backend');
-        $backendProperty->setAccessible(true);
         $backendProperty->setValue($this->adapter, $backendMock);
 
         $result = $this->adapter->deleteItem($key);
@@ -481,7 +470,6 @@ class MagentoDatabaseAdapterTest extends TestCase
 
         $reflection = new \ReflectionClass($this->adapter);
         $backendProperty = $reflection->getProperty('backend');
-        $backendProperty->setAccessible(true);
         $backendProperty->setValue($this->adapter, $backendMock);
 
         $result = $this->adapter->deleteItems($keys);
@@ -507,7 +495,6 @@ class MagentoDatabaseAdapterTest extends TestCase
 
         $reflection = new \ReflectionClass($this->adapter);
         $backendProperty = $reflection->getProperty('backend');
-        $backendProperty->setAccessible(true);
         $backendProperty->setValue($this->adapter, $backendMock);
 
         $result = $this->adapter->deleteItems($keys);
@@ -525,22 +512,18 @@ class MagentoDatabaseAdapterTest extends TestCase
 
         // Set key
         $keyProperty = $reflection->getProperty('key');
-        $keyProperty->setAccessible(true);
         $keyProperty->setValue($item, 'save_key');
 
         // Set value
         $valueProperty = $reflection->getProperty('value');
-        $valueProperty->setAccessible(true);
         $valueProperty->setValue($item, 'save_value');
 
         // Set expiry
         $expiryProperty = $reflection->getProperty('expiry');
-        $expiryProperty->setAccessible(true);
         $expiryProperty->setValue($item, time() + 3600);
 
         // Set newMetadata with tags (simulates TagAwareAdapter)
         $newMetadataProperty = $reflection->getProperty('newMetadata');
-        $newMetadataProperty->setAccessible(true);
         $newMetadataProperty->setValue($item, [
             CacheItem::METADATA_TAGS => ['tag1' => 'version1', 'tag2' => 'version2']
         ]);
@@ -563,7 +546,6 @@ class MagentoDatabaseAdapterTest extends TestCase
 
         $reflection = new \ReflectionClass($this->adapter);
         $backendProperty = $reflection->getProperty('backend');
-        $backendProperty->setAccessible(true);
         $backendProperty->setValue($this->adapter, $backendMock);
 
         $this->serializerMock
@@ -585,11 +567,9 @@ class MagentoDatabaseAdapterTest extends TestCase
         $reflection = new \ReflectionClass($item);
 
         $keyProperty = $reflection->getProperty('key');
-        $keyProperty->setAccessible(true);
         $keyProperty->setValue($item, 'simple_key');
 
         $valueProperty = $reflection->getProperty('value');
-        $valueProperty->setAccessible(true);
         $valueProperty->setValue($item, 'simple_value');
 
         $backendMock = $this->getMockBuilder(Database::class)
@@ -610,7 +590,6 @@ class MagentoDatabaseAdapterTest extends TestCase
 
         $reflection = new \ReflectionClass($this->adapter);
         $backendProperty = $reflection->getProperty('backend');
-        $backendProperty->setAccessible(true);
         $backendProperty->setValue($this->adapter, $backendMock);
 
         $this->serializerMock
@@ -631,13 +610,11 @@ class MagentoDatabaseAdapterTest extends TestCase
         $item1 = new CacheItem();
         $reflection1 = new \ReflectionClass($item1);
         $keyProperty1 = $reflection1->getProperty('key');
-        $keyProperty1->setAccessible(true);
         $keyProperty1->setValue($item1, 'deferred1');
 
         $item2 = new CacheItem();
         $reflection2 = new \ReflectionClass($item2);
         $keyProperty2 = $reflection2->getProperty('key');
-        $keyProperty2->setAccessible(true);
         $keyProperty2->setValue($item2, 'deferred2');
 
         $result1 = $this->adapter->saveDeferred($item1);
@@ -655,19 +632,15 @@ class MagentoDatabaseAdapterTest extends TestCase
         $item1 = new CacheItem();
         $reflection1 = new \ReflectionClass($item1);
         $keyProperty1 = $reflection1->getProperty('key');
-        $keyProperty1->setAccessible(true);
         $keyProperty1->setValue($item1, 'commit1');
         $valueProperty1 = $reflection1->getProperty('value');
-        $valueProperty1->setAccessible(true);
         $valueProperty1->setValue($item1, 'value1');
 
         $item2 = new CacheItem();
         $reflection2 = new \ReflectionClass($item2);
         $keyProperty2 = $reflection2->getProperty('key');
-        $keyProperty2->setAccessible(true);
         $keyProperty2->setValue($item2, 'commit2');
         $valueProperty2 = $reflection2->getProperty('value');
-        $valueProperty2->setAccessible(true);
         $valueProperty2->setValue($item2, 'value2');
 
         $backendMock = $this->getMockBuilder(Database::class)
@@ -682,7 +655,6 @@ class MagentoDatabaseAdapterTest extends TestCase
 
         $reflection = new \ReflectionClass($this->adapter);
         $backendProperty = $reflection->getProperty('backend');
-        $backendProperty->setAccessible(true);
         $backendProperty->setValue($this->adapter, $backendMock);
 
         $this->serializerMock
@@ -704,10 +676,8 @@ class MagentoDatabaseAdapterTest extends TestCase
         $item = new CacheItem();
         $reflection = new \ReflectionClass($item);
         $keyProperty = $reflection->getProperty('key');
-        $keyProperty->setAccessible(true);
         $keyProperty->setValue($item, 'clear_test');
         $valueProperty = $reflection->getProperty('value');
-        $valueProperty->setAccessible(true);
         $valueProperty->setValue($item, 'value');
 
         $backendMock = $this->getMockBuilder(Database::class)
@@ -722,7 +692,6 @@ class MagentoDatabaseAdapterTest extends TestCase
 
         $reflection = new \ReflectionClass($this->adapter);
         $backendProperty = $reflection->getProperty('backend');
-        $backendProperty->setAccessible(true);
         $backendProperty->setValue($this->adapter, $backendMock);
 
         $this->serializerMock
@@ -749,19 +718,15 @@ class MagentoDatabaseAdapterTest extends TestCase
         $item1 = new CacheItem();
         $reflection1 = new \ReflectionClass($item1);
         $keyProperty1 = $reflection1->getProperty('key');
-        $keyProperty1->setAccessible(true);
         $keyProperty1->setValue($item1, 'fail1');
         $valueProperty1 = $reflection1->getProperty('value');
-        $valueProperty1->setAccessible(true);
         $valueProperty1->setValue($item1, 'value1');
 
         $item2 = new CacheItem();
         $reflection2 = new \ReflectionClass($item2);
         $keyProperty2 = $reflection2->getProperty('key');
-        $keyProperty2->setAccessible(true);
         $keyProperty2->setValue($item2, 'fail2');
         $valueProperty2 = $reflection2->getProperty('value');
-        $valueProperty2->setAccessible(true);
         $valueProperty2->setValue($item2, 'value2');
 
         $backendMock = $this->getMockBuilder(Database::class)
@@ -775,7 +740,6 @@ class MagentoDatabaseAdapterTest extends TestCase
 
         $reflection = new \ReflectionClass($this->adapter);
         $backendProperty = $reflection->getProperty('backend');
-        $backendProperty->setAccessible(true);
         $backendProperty->setValue($this->adapter, $backendMock);
 
         $this->serializerMock

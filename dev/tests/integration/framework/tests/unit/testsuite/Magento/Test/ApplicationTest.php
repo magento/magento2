@@ -170,14 +170,12 @@ class ApplicationTest extends \PHPUnit\Framework\TestCase
 
         // bypass db dump logic
         $reflectionProperty = new \ReflectionProperty($subject, '_factory');
-        $reflectionProperty->setAccessible(true);
         $reflectionProperty->setValue($subject, $this->factoryMock);
         $this->_factory = $this->factoryMock;
         $dbMock = $this->getMockBuilder(Mysql::class)->disableOriginalConstructor()->getMock();
 
         $reflectionSubject = new ReflectionClass($subject);
         $dbProperty = $reflectionSubject->getProperty('_db');
-        $dbProperty->setAccessible(true);
         $dbProperty->setValue($subject, $dbMock);
         $property = $reflectionSubject->getProperty('canLoadArea');
         $property->setValue($subject, false);

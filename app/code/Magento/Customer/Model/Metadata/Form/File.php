@@ -142,7 +142,7 @@ class File extends AbstractData
                 $scopes = [];
             }
             // phpcs:disable Magento2.Security.Superglobal
-            if (!empty($_FILES[$mainScope])) {
+            if ($mainScope !== null && !empty($_FILES[$mainScope])) {
                 foreach ($_FILES[$mainScope] as $fileKey => $scopeData) {
                     // phpcs:enable Magento2.Security.Superglobal
                     foreach ($scopes as $scopeName) {

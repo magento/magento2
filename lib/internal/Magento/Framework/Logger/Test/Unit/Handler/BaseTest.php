@@ -33,7 +33,6 @@ class BaseTest extends TestCase
 
         $class = new \ReflectionClass($this->model);
         $this->sanitizeMethod = $class->getMethod('sanitizeFileName');
-        $this->sanitizeMethod->setAccessible(true);
     }
 
     public function testSanitizeEmpty()

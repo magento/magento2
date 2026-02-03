@@ -466,7 +466,6 @@ class AttributesTest extends TestCase
 
         foreach ($dependencies as $propertyName => $value) {
             $property = $reflection->getProperty($propertyName);
-            $property->setAccessible(true);
             $property->setValue($this->attributesMock, $value);
         }
     }
@@ -481,7 +480,6 @@ class AttributesTest extends TestCase
     {
         $reflection = new \ReflectionClass($this->attributesMock);
         $method = $reflection->getMethod($methodName);
-        $method->setAccessible(true);
         return $method->invoke($this->attributesMock);
     }
 

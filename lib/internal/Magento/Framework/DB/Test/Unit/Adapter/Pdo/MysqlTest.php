@@ -782,7 +782,6 @@ class MysqlTest extends TestCase
             get_class($adapterMock),
             '_profiler'
         );
-        $resourceProperty->setAccessible(true);
         $resourceProperty->setValue($adapterMock, $this->profiler);
 
         return $adapterMock;
@@ -798,7 +797,6 @@ class MysqlTest extends TestCase
             get_class($pdoAdapterMock),
             '_connection'
         );
-        $resourceProperty->setAccessible(true);
         $resourceProperty->setValue($pdoAdapterMock, $this->connection);
     }
 
@@ -993,7 +991,6 @@ class MysqlTest extends TestCase
     {
         $reflection = new \ReflectionClass($adapter);
         $method = $reflection->getMethod($method);
-        $method->setAccessible(true);
 
         return $method->invokeArgs($adapter, $parameters);
     }

@@ -107,7 +107,7 @@ class AllmethodsTest extends TestCase
         return [
             [
                 [
-                    'allowedMethods' => [null => 'method_title'],
+                    'allowedMethods' => ['' => 'method_title'],
                     'expected_result' => [ 'value' => [], 'label' => null],
                     'getAllCarriers'  => [],
                     'getActiveCarriers'  => []

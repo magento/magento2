@@ -198,7 +198,6 @@ class HelperTest extends TestCase
         $this->linkResolverMock = $this->createMock(Resolver::class);
         $helperReflection = new \ReflectionClass(get_class($this->helper));
         $resolverProperty = $helperReflection->getProperty('linkResolver');
-        $resolverProperty->setAccessible(true);
         $resolverProperty->setValue($this->helper, $this->linkResolverMock);
     }
 

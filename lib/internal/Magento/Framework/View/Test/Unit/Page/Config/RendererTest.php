@@ -7,11 +7,11 @@ declare(strict_types=1);
 
 namespace Magento\Framework\View\Test\Unit\Page\Config;
 
+use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Escaper;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Phrase;
 use Magento\Framework\Stdlib\StringUtils;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\UrlInterface;
 use Magento\Framework\View\Asset\AssetInterface;
 use Magento\Framework\View\Asset\GroupedCollection;
@@ -22,6 +22,7 @@ use Magento\Framework\View\Page\Config\Generator\Head;
 use Magento\Framework\View\Page\Config\Metadata\MsApplicationTileImage;
 use Magento\Framework\View\Page\Config\Renderer;
 use Magento\Framework\View\Page\Title;
+use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
@@ -89,9 +90,9 @@ class RendererTest extends TestCase
     protected $titleMock;
 
     /**
-     * @var ObjectManager
+     * @var ScopeConfigInterface|MockObject
      */
-    protected $objectManagerHelper;
+    private ScopeConfigInterface $scopeConfig;
 
     /**
      * @inheritdoc
@@ -137,19 +138,17 @@ class RendererTest extends TestCase
             ->onlyMethods(['set', 'get'])
             ->disableOriginalConstructor()
             ->getMock();
+        $this->scopeConfig = $this->createMock(ScopeConfigInterface::class);
 
-        $this->objectManagerHelper = new ObjectManager($this);
-        $this->renderer = $this->objectManagerHelper->getObject(
-            Renderer::class,
-            [
-                'pageConfig' => $this->pageConfigMock,
-                'assetMergeService' => $this->assetMergeServiceMock,
-                'urlBuilder' => $this->urlBuilderMock,
-                'escaper' => $this->escaperMock,
-                'string' => $this->stringMock,
-                'logger' => $this->loggerMock,
-                'msApplicationTileImage' => $this->msApplicationTileImageMock
-            ]
+        $this->renderer = new Renderer(
+            $this->pageConfigMock,
+            $this->assetMergeServiceMock,
+            $this->urlBuilderMock,
+            $this->escaperMock,
+            $this->stringMock,
+            $this->loggerMock,
+            $this->msApplicationTileImageMock,
+            $this->scopeConfig
         );
     }
 
@@ -343,7 +342,7 @@ class RendererTest extends TestCase
         $exception = new LocalizedException(new Phrase('my message'));
 
         $assetMockOne = $this->getMockForAbstractClass(AssetInterface::class);
-        $assetMockOne->expects($this->exactly(2))
+        $assetMockOne->expects($this->any())
             ->method('getUrl')
             ->willReturn($assetUrl);
         $assetMockOne->expects($this->atLeastOnce())->method('getContentType')->willReturn($groupOne['type']);
@@ -368,7 +367,7 @@ class RendererTest extends TestCase
             );
 
         $assetMockTwo = $this->getMockForAbstractClass(AssetInterface::class);
-        $assetMockTwo->expects($this->once())
+        $assetMockTwo->expects($this->any())
             ->method('getUrl')
             ->willThrowException($exception);
         $assetMockTwo->expects($this->atLeastOnce())->method('getContentType')->willReturn($groupTwo['type']);
@@ -509,6 +508,63 @@ class RendererTest extends TestCase
         $this->assertEquals(
             '<link rel="some-rel" href="url" />' . "\n",
             $this->renderer->renderAssets($this->renderer->getAvailableResultGroups())
+        );
+    }
+
+    /**
+     * @return void
+     * @throws Exception
+     */
+    public function testRenderAssetsAddsDeferForNonCriticalJsWhenConfigEnabled(): void
+    {
+        $this->scopeConfig->method('getValue')
+            ->with('dev/js/defer_non_critical')
+            ->willReturn(1);
+
+        $this->escaperMock->method('escapeHtml')
+            ->willReturnCallback(static fn ($value) => $value);
+
+        $assetUrl = 'https://example.com/static/frontend/Magento/luma/en_US/custom.js';
+
+        $asset = $this->createMock(AssetInterface::class);
+        $asset->method('getUrl')->willReturn($assetUrl);
+        $asset->method('getContentType')->willReturn('js');
+
+        $group = $this->getMockBuilder(PropertyGroup::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $group->method('getAll')->willReturn([$asset]);
+
+        $group->method('getProperty')
+            ->willReturnCallback(function (string $key) {
+                switch ($key) {
+                    case GroupedCollection::PROPERTY_CAN_MERGE:
+                        return false;
+                    case GroupedCollection::PROPERTY_CONTENT_TYPE:
+                        return 'js';
+                    case 'attributes':
+                        return ['data-test' => 'value'];
+                    case 'ie_condition':
+                        return null;
+                    default:
+                        return null;
+                }
+            });
+
+        $assetCollection = $this->createMock(GroupedCollection::class);
+        $assetCollection->method('getGroups')->willReturn([$group]);
+
+        $this->pageConfigMock->method('getAssetCollection')->willReturn($assetCollection);
+
+        $result = $this->renderer->renderAssets($this->renderer->getAvailableResultGroups());
+        $this->assertStringContainsString('<script', $result);
+        $this->assertStringContainsString($assetUrl, $result);
+
+        $this->assertStringContainsString('defer', $result);
+        $this->assertMatchesRegularExpression(
+            '#<script[^>]*\sdefer[^>]*src="' . preg_quote($assetUrl, '#') . '"#',
+            $result
         );
     }
 }

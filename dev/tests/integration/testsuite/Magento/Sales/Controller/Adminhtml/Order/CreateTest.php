@@ -257,7 +257,6 @@ class CreateTest extends \Magento\TestFramework\TestCase\AbstractBackendControll
         $this->getRequest()->setActionName($actionName);
 
         $method = new \ReflectionMethod(\Magento\Sales\Controller\Adminhtml\Order\Create::class, '_getAclResource');
-        $method->setAccessible(true);
         $result = $method->invoke($orderController);
         $this->assertEquals($result, $expectedResult);
     }

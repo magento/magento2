@@ -154,7 +154,6 @@ class PagerTest extends TestCase
     {
         $reflection = new \ReflectionClass($this->pager);
         $reflection_property = $reflection->getProperty('_collection');
-        $reflection_property->setAccessible(true);
         $reflection_property->setValue($this->pager, $collection);
     }
 }
