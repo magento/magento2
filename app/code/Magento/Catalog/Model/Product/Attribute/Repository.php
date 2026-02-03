@@ -140,6 +140,16 @@ class Repository implements \Magento\Catalog\Api\ProductAttributeRepositoryInter
                 ->getEntityType(\Magento\Catalog\Api\Data\ProductAttributeInterface::ENTITY_TYPE_CODE)
                 ->getId()
         );
+        // When attribute_id is missing but attribute_code is provided, load existing attribute for update
+        if (!$attribute->getAttributeId() && $attribute->getAttributeCode()) {
+            try {
+                $existingAttribute = $this->get($attribute->getAttributeCode());
+                $attribute->setAttributeId($existingAttribute->getAttributeId());
+            // phpcs:ignore Magento2.CodeAnalysis.EmptyBlock.DetectedCatch
+            } catch (NoSuchEntityException $e) {
+                // Attribute doesn't exist, proceed with new attribute creation
+            }
+        }
         if ($attribute->getAttributeId()) {
             $existingModel = $this->get($attribute->getAttributeCode());
 
