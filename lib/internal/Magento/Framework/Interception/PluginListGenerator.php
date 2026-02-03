@@ -93,7 +93,11 @@ class PluginListGenerator implements ConfigWriterInterface, ConfigLoaderInterfac
                 if (false === in_array($scope, $this->scopePriorityScheme, true)) {
                     $this->scopePriorityScheme[] = $scope;
                 }
-                $cacheId = implode('|', $this->scopePriorityScheme) . "|" . $this->cacheId;
+                // Sort scopes alphabetically to ensure cache ID is deterministic
+                // regardless of processing order (fixes mismatch with runtime loading)
+                $sortedScheme = array_values($this->scopePriorityScheme);
+                sort($sortedScheme);
+                $cacheId = implode('|', $sortedScheme) . "|" . $this->cacheId;
                 [
                     $virtualTypes,
                     $this->scopePriorityScheme,

@@ -217,7 +217,11 @@ class PluginList extends Scoped implements InterceptionPluginList
             }
             $this->_scopePriorityScheme[] = $scope;
 
-            $cacheId = implode('|', $this->_scopePriorityScheme) . "|" . $this->_cacheId;
+            // Sort scopes alphabetically to ensure cache ID is deterministic
+            // regardless of processing order (fixes mismatch with compile-time generation)
+            $sortedScheme = array_values($this->_scopePriorityScheme);
+            sort($sortedScheme);
+            $cacheId = implode('|', $sortedScheme) . "|" . $this->_cacheId;
             $configData = $this->configLoader->load($cacheId);
 
             if ($configData) {
