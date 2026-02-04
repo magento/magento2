@@ -190,6 +190,7 @@ class Address extends \Magento\Rule\Model\Condition\AbstractCondition
 
     /**
      * Validate postcode attribute with normalized values for formats that use spaces, hyphens or dots.
+     *
      * Ensures cart price rules match regardless of formatting (e.g. Sweden "100 00", Poland "56-500").
      *
      * @param object|array|int|string|float|bool|null $validatedValue
