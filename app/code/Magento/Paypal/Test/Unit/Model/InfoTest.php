@@ -11,6 +11,7 @@ use Magento\Framework\DataObject;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\Payment\Model\InfoInterface;
 use Magento\Paypal\Model\Info;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 class InfoTest extends TestCase
@@ -30,10 +31,10 @@ class InfoTest extends TestCase
     }
 
     /**
-     * @dataProvider additionalInfoDataProvider
      * @param array $additionalInfo
      * @param array $expectation
      */
+    #[DataProvider('additionalInfoDataProvider')]
     public function testGetPaymentInfo($additionalInfo, $expectation)
     {
         /** @var InfoInterface $paymentInfo */
@@ -43,10 +44,10 @@ class InfoTest extends TestCase
     }
 
     /**
-     * @dataProvider additionalInfoDataProvider
      * @param array $additionalInfo
      * @param array $expectation
      */
+    #[DataProvider('additionalInfoDataProvider')]
     public function testGetPaymentInfoLabelValues($additionalInfo, $expectation)
     {
         /** @var InfoInterface $paymentInfo */
@@ -59,10 +60,10 @@ class InfoTest extends TestCase
     }
 
     /**
-     * @dataProvider additionalInfoPublicDataProvider
      * @param array $additionalInfo
      * @param array $expectation
      */
+    #[DataProvider('additionalInfoPublicDataProvider')]
     public function testGetPublicPaymentInfo($additionalInfo, $expectation)
     {
         /** @var InfoInterface $paymentInfo */
@@ -75,10 +76,10 @@ class InfoTest extends TestCase
     }
 
     /**
-     * @dataProvider additionalInfoPublicDataProvider
      * @param array $additionalInfo
      * @param array $expectation
      */
+    #[DataProvider('additionalInfoPublicDataProvider')]
     public function testGetPublicPaymentInfoLabelValues($additionalInfo, $expectation)
     {
         /** @var InfoInterface $paymentInfo */
@@ -88,10 +89,10 @@ class InfoTest extends TestCase
     }
 
     /**
-     * @dataProvider importToPaymentDataProvider
      * @param array $mapping
      * @param array $expectation
      */
+    #[DataProvider('importToPaymentDataProvider')]
     public function testImportToPayment($mapping, $expectation)
     {
         // we create $from object, based on mapping
@@ -103,10 +104,10 @@ class InfoTest extends TestCase
     }
 
     /**
-     * @dataProvider importToPaymentDataProvider
      * @param array $mapping
      * @param array $expectation
      */
+    #[DataProvider('importToPaymentDataProvider')]
     public function testExportFromPayment($mapping, $expectation)
     {
         /** @var InfoInterface $paymentInfo */
@@ -120,10 +121,10 @@ class InfoTest extends TestCase
     }
 
     /**
-     * @dataProvider importToPaymentDataProvider
      * @param array $mapping
      * @param array $expectation
      */
+    #[DataProvider('importToPaymentDataProvider')]
     public function testExportFromPaymentCustomMapping($mapping, $expectation)
     {
         /** @var InfoInterface $paymentInfo */

@@ -10,6 +10,7 @@ namespace Magento\SalesRule\Test\Unit\Model\Rule\Condition\Product;
 use Magento\Catalog\Model\Product;
 use Magento\Framework\DataObject;
 use Magento\Framework\Model\AbstractModel;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Quote\Model\Quote;
 use Magento\Quote\Model\Quote\Item;
 use Magento\Quote\Model\Quote\Item\AbstractItem;
@@ -17,6 +18,7 @@ use Magento\Rule\Model\Condition\Context;
 use Magento\Catalog\Model\Product\Type as ProductType;
 use Magento\SalesRule\Model\Rule\Condition\Product as SalesRuleProduct;
 use Magento\SalesRule\Model\Rule\Condition\Product\Subselect as SalesRuleProductSubselect;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -25,6 +27,7 @@ use PHPUnit\Framework\TestCase;
  */
 class SubselectTest extends TestCase
 {
+    use MockCreationTrait;
     /** @var SalesRuleProductSubselect */
     private $model;
 
@@ -48,40 +51,36 @@ class SubselectTest extends TestCase
         $contextMock = $this->getMockBuilder(Context::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->ruleConditionMock = $this->getMockBuilder(SalesRuleProduct::class)
-            ->onlyMethods(['getAttribute', 'getValueParsed', 'getOperatorForValidate'])
-            ->addMethods(['setName', 'setAttributeScope'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->abstractModel = $this->getMockBuilder(AbstractModel::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['getQuote', 'getAllItems', 'getProduct'])
-            ->getMockForAbstractClass();
-        $this->productMock = $this->getMockBuilder(Product::class)
-            ->onlyMethods(['getData', 'getResource', 'hasData'])
-            ->addMethods(['getOperatorForValidate', 'getValueParsed'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->quoteMock = $this->getMockBuilder(Quote::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['getIsMultiShipping'])
-            ->onlyMethods(['getAllVisibleItems'])
-            ->getMock();
-        $this->quoteItemMock = $this->getMockBuilder(Item::class)
-            ->addMethods(['getHasChildren', 'getProductId'])
-            ->onlyMethods(
-                [
-                    'getData',
-                    'getProduct',
-                    'getProductType',
-                    'getChildren',
-                    'getQuote',
-                    'getAddress',
-                    'getOptionByCode'
-                ]
-            )
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->ruleConditionMock = $this->createPartialMockWithReflection(
+            SalesRuleProduct::class,
+            ['getAttribute', 'getValueParsed', 'getOperatorForValidate', 'setName', 'setAttributeScope']
+        );
+        $this->abstractModel = $this->createPartialMockWithReflection(
+            AbstractModel::class,
+            ['getQuote', 'getAllItems', 'getProduct']
+        );
+        $this->productMock = $this->createPartialMockWithReflection(
+            Product::class,
+            ['getData', 'getResource', 'hasData', 'getOperatorForValidate', 'getValueParsed']
+        );
+        $this->quoteMock = $this->createPartialMockWithReflection(
+            Quote::class,
+            ['getIsMultiShipping', 'getAllVisibleItems']
+        );
+        $this->quoteItemMock = $this->createPartialMockWithReflection(
+            Item::class,
+            [
+                'getHasChildren',
+                'getProductId',
+                'getData',
+                'getProduct',
+                'getProductType',
+                'getChildren',
+                'getQuote',
+                'getAddress',
+                'getOptionByCode'
+            ]
+        );
         $this->quoteMock->expects($this->any())
             ->method('getAllVisibleItems')
             ->willReturn([$this->quoteItemMock]);
@@ -110,8 +109,8 @@ class SubselectTest extends TestCase
      * @param bool $expectedResult
      * @return void
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
-     * @dataProvider dataProviderForFixedBundleProduct
      */
+    #[DataProvider('dataProviderForFixedBundleProduct')]
     public function testValidateForFixedBundleProduct(
         ?array $attributeDetails,
         array $productDetails,
@@ -156,11 +155,10 @@ class SubselectTest extends TestCase
             ->willReturn($productDetails['type']);
 
         /* @var AbstractItem|MockObject $quoteItemMock */
-        $childQuoteItemMock = $this->getMockBuilder(AbstractItem::class)
-            ->onlyMethods(['getProduct', 'getData', 'getPrice', 'getQty'])
-            ->addMethods(['getBaseRowTotal'])
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $childQuoteItemMock = $this->createPartialMockWithReflection(
+            Item::class,
+            ['getProduct', 'getData', 'getPrice', 'getQty', 'getBaseRowTotal']
+        );
         $childQuoteItemMock->expects($this->any())
             ->method('getProduct')
             ->willReturn($this->productMock);
@@ -206,8 +204,8 @@ class SubselectTest extends TestCase
      * @param bool $expectedResult
      * @return void
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
-     * @dataProvider dataProviderForBundleAndSimpleProducts
      */
+    #[DataProvider('dataProviderForBundleAndSimpleProducts')]
     public function testValidateForBundleAndSimpleProducts(
         array $attributeDetails,
         array $productsDetails,
@@ -253,11 +251,10 @@ class SubselectTest extends TestCase
                 ->willReturn($productDetails['type']);
 
             /* @var AbstractItem|MockObject $quoteItemMock */
-            $childQuoteItemMock = $this->getMockBuilder(AbstractItem::class)
-                ->onlyMethods(['getProduct', 'getData', 'getPrice', 'getQty'])
-                ->addMethods(['getBaseRowTotal'])
-                ->disableOriginalConstructor()
-                ->getMockForAbstractClass();
+            $childQuoteItemMock = $this->createPartialMockWithReflection(
+                Item::class,
+                ['getProduct', 'getData', 'getPrice', 'getQty', 'getBaseRowTotal']
+            );
             $childQuoteItemMock->expects($this->any())
                 ->method('getProduct')
                 ->willReturn($this->productMock);
@@ -294,10 +291,10 @@ class SubselectTest extends TestCase
             $childrenQuoteItemsMock[] = clone $this->quoteItemMock;
         }
 
-        $abstractModel = $this->getMockBuilder(AbstractModel::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['getQuote', 'getAllItems', 'getProduct'])
-            ->getMockForAbstractClass();
+        $abstractModel = $this->createPartialMockWithReflection(
+            AbstractModel::class,
+            ['getQuote', 'getAllItems', 'getProduct']
+        );
         $abstractModel->expects($this->any())
             ->method('getQuote')
             ->willReturn($this->quoteMock);
@@ -488,8 +485,8 @@ class SubselectTest extends TestCase
      * @param bool $expectedResult
      * @return void
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
-     * @dataProvider dataProviderForBaseTotalInclTax
      */
+    #[DataProvider('dataProviderForBaseTotalInclTax')]
     public function testValidateForBaseTotalInclTax(
         ?array $attributeDetails,
         array $productDetails,

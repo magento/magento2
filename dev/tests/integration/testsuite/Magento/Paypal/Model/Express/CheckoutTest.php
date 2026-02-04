@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Paypal\Model\Express;
@@ -779,7 +779,6 @@ class CheckoutTest extends TestCase
     {
         $reflection = new \ReflectionClass($api);
         $property = $reflection->getProperty('_countryFactory');
-        $property->setAccessible(true);
         $property->setValue($api, $this->objectManager->get(CountryFactory::class));
     }
 }

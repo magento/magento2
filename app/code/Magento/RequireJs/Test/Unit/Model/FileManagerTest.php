@@ -18,6 +18,7 @@ use Magento\Framework\View\Asset\File;
 use Magento\Framework\View\Asset\File\FallbackContext;
 use Magento\Framework\View\Asset\Repository;
 use Magento\RequireJs\Model\FileManager;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -65,14 +66,14 @@ class FileManagerTest extends TestCase
         $this->appState = $this->createMock(State::class);
         $this->assetRepoMock = $this->createMock(Repository::class);
         $this->object = new FileManager($this->configMock, $this->fileSystem, $this->appState, $this->assetRepoMock);
-        $this->dir = $this->getMockForAbstractClass(WriteInterface::class);
+        $this->dir = $this->createMock(WriteInterface::class);
         $this->asset = $this->createMock(File::class);
     }
 
     /**
      * @param bool $exists
-     * @dataProvider createRequireJsAssetDataProvider
      */
+    #[DataProvider('createRequireJsAssetDataProvider')]
     public function testCreateRequireJsConfigAsset($exists)
     {
         $this->configMock->expects($this->once())
@@ -138,10 +139,7 @@ class FileManagerTest extends TestCase
     public function testCreateBundleJsPool()
     {
         unset($this->configMock);
-        $dirRead = $this->getMockBuilder(Read::class)
-            ->setMockClassName('libDir')
-            ->disableOriginalConstructor()
-            ->getMock();
+        $dirRead = $this->createMock(Read::class);
         $context = $this->createMock(FallbackContext::class);
         $assetRepo = $this->createMock(Repository::class);
         $config = $this->createMock(Config::class);
@@ -241,9 +239,7 @@ class FileManagerTest extends TestCase
 
     public function testClearBundleJsPool()
     {
-        $context = $this->getMockBuilder(FallbackContext::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $context = $this->createMock(FallbackContext::class);
         $this->fileSystem->expects($this->once())
             ->method('getDirectoryWrite')
             ->with(DirectoryList::STATIC_VIEW)

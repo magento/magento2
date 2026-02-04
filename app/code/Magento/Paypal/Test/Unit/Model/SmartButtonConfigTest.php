@@ -14,6 +14,7 @@ use Magento\Paypal\Model\ConfigFactory;
 use Magento\Paypal\Model\SmartButtonConfig;
 use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -42,21 +43,19 @@ class SmartButtonConfigTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->localeResolverMock   = $this->getMockForAbstractClass(ResolverInterface::class);
-        $this->configMock           = $this->getMockBuilder(Config::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->localeResolverMock   = $this->createMock(ResolverInterface::class);
+        $this->configMock           = $this->createMock(Config::class);
 
         /** @var ScopeConfigInterface|MockObject $scopeConfigMock */
-        $scopeConfigMock = $this->getMockForAbstractClass(ScopeConfigInterface::class);
+        $scopeConfigMock = $this->createMock(ScopeConfigInterface::class);
         $scopeConfigMock->method('isSetFlag')
             ->willReturn(true);
 
         /** @var ConfigFactory|MockObject $configFactoryMock */
-        $configFactoryMock = $this->getMockBuilder(ConfigFactory::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['create'])
-            ->getMock();
+        $configFactoryMock = $this->createPartialMock(
+            ConfigFactory::class,
+            ['create']
+        );
         $configFactoryMock->expects($this->any())->method('create')->willReturn($this->configMock);
 
         $sdkUrl = $this->createMock(\Magento\Paypal\Model\SdkUrl::class);
@@ -85,9 +84,9 @@ class SmartButtonConfigTest extends TestCase
      * @param string $installmentPeriod
      * @param string $installmentPeriodLocale
      * @param array $expected
-     * @dataProvider getConfigDataProvider
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
+    #[DataProvider('getConfigDataProvider')]
     public function testGetConfig(
         string $page,
         string $locale,

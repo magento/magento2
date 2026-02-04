@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2022 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -40,8 +40,6 @@ class SearchResultTest extends TestCase
     {
         $totalCount = new \ReflectionProperty($this->model, 'totalCount');
         $totalRecords = new \ReflectionProperty($this->model, '_totalRecords');
-        $totalCount->setAccessible(true);
-        $totalRecords->setAccessible(true);
         $this->model->setTotalCount(2);
         self::assertTrue($totalCount->isInitialized($this->model));
         self::assertTrue($totalRecords->isInitialized($this->model));

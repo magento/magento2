@@ -39,9 +39,9 @@ class CompositeInstallConfigTest extends TestCase
     protected function setup(): void
     {
         $objectManager = new ObjectManager($this);
-        $this->firstInstallConfigMock = $this->getMockForAbstractClass(InstallConfigInterface::class);
-        $this->secondInstallConfigMock = $this->getMockForAbstractClass(InstallConfigInterface::class);
-        $this->scopeConfigMock = $this->getMockForAbstractClass(ScopeConfigInterface::class);
+        $this->firstInstallConfigMock = $this->createMock(InstallConfigInterface::class);
+        $this->secondInstallConfigMock = $this->createMock(InstallConfigInterface::class);
+        $this->scopeConfigMock = $this->createMock(ScopeConfigInterface::class);
         $this->compositeInstallConfig = $objectManager->getObject(
             CompositeInstallConfig::class,
             [

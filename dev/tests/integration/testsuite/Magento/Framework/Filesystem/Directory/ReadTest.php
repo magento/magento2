@@ -2,8 +2,8 @@
 /**
  * Test for \Magento\Framework\Filesystem\Directory\Read
  *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework\Filesystem\Directory;
 

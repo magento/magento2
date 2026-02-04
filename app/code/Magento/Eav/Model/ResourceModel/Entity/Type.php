@@ -52,6 +52,7 @@ class Type extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      */
     public function getAdditionalAttributeTable($entityTypeId)
     {
+        $entityTypeId = (string)$entityTypeId;
         if (isset($this->additionalAttributeTables[$entityTypeId])) {
             return $this->additionalAttributeTables[$entityTypeId];
         }

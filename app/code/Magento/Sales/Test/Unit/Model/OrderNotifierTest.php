@@ -19,9 +19,12 @@ use Magento\Sales\Model\ResourceModel\Order\Status\History\CollectionFactory;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 
 class OrderNotifierTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var CollectionFactory|MockObject
      */
@@ -61,7 +64,7 @@ class OrderNotifierTest extends TestCase
             OrderSender::class,
             ['send']
         );
-        $this->loggerMock = $this->getMockForAbstractClass(LoggerInterface::class);
+        $this->loggerMock = $this->createMock(LoggerInterface::class);
         $this->notifier = new OrderNotifier(
             $this->historyCollectionFactory,
             $this->loggerMock,
@@ -76,11 +79,10 @@ class OrderNotifierTest extends TestCase
      */
     public function testNotifySuccess(): void
     {
-        $historyCollection = $this->getMockBuilder(Collection::class)
-            ->addMethods(['setIsCustomerNotified'])
-            ->onlyMethods(['getUnnotifiedForInstance', 'save'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $historyCollection = $this->createPartialMockWithReflection(
+            Collection::class,
+            ['setIsCustomerNotified', 'getUnnotifiedForInstance', 'save']
+        );
         $historyItem = $this->createPartialMock(
             History::class,
             ['setIsCustomerNotified', 'save']

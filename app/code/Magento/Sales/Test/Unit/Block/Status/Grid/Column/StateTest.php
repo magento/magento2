@@ -17,9 +17,12 @@ use Magento\Sales\Model\ResourceModel\Order\Status\Collection;
 use Magento\Sales\Model\ResourceModel\Order\Status\CollectionFactory;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 
 class StateTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var  State
      */
@@ -59,10 +62,7 @@ class StateTest extends TestCase
 
     public function testDecorateState()
     {
-        $rowMock = $this->getMockBuilder(Status::class)
-            ->addMethods(['getStatus'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $rowMock = $this->createPartialMockWithReflection(Status::class, ['getStatus']);
         $rowMock->expects($this->any())->method('getStatus')->willReturn('fraud');
         $columnMock = $this->createMock(Column::class);
         $statuses = [
@@ -83,11 +83,10 @@ class StateTest extends TestCase
                 ]
             )
         ];
-        $collectionMock = $this->getMockBuilder(Collection::class)
-            ->addMethods(['create'])
-            ->onlyMethods(['joinStates'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $collectionMock = $this->createPartialMockWithReflection(
+            Collection::class,
+            ['create', 'joinStates']
+        );
         $this->orderStatusCollectionFactoryMock->expects($this->once())
             ->method('create')
             ->willReturn($collectionMock);

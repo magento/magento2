@@ -18,13 +18,13 @@ use Magento\Bundle\Pricing\Price\BundleSelectionFactory;
 use Magento\Bundle\Pricing\Price\BundleSelectionPrice;
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\Product\Type\AbstractType;
-use Magento\Catalog\Test\Unit\Helper\ProductTestHelper;
 use Magento\Framework\Pricing\Adjustment\Calculator as AdjustmentCalculator;
 use Magento\Framework\Pricing\Amount\AmountFactory;
 use Magento\Framework\Pricing\Amount\AmountInterface;
 use Magento\Framework\Pricing\Amount\Base as BaseAmount;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
 use Magento\Framework\Pricing\PriceInfo\Base as BasePriceInfo;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\Tax\Helper\Data as TaxHelperData;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -36,6 +36,8 @@ use PHPUnit\Framework\TestCase;
  */
 class BundleOptionsTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var BundleOptions
      */
@@ -196,13 +198,12 @@ class BundleOptionsTest extends TestCase
     #[DataProvider('selectionAmountDataProvider')]
     public function testGetOptionSelectionAmount(float $selectionQty, $selectionAmount, bool $useRegularPrice)
     {
-        /** @var Product $selection */
-        $selection = new ProductTestHelper();
+        $selection = $this->createPartialMockWithReflection(Product::class, ['getSelectionQty']);
+        $selection->method('getSelectionQty')->willReturn($selectionQty);
         $amountInterfaceMock = $this->createAmountInterfaceMock();
         $amountInterfaceMock->expects($this->once())
             ->method('getValue')
             ->willReturn($selectionAmount);
-        $selection->setSelectionQty($selectionQty);
         $priceMock = $this->createMock(BundleSelectionPrice::class);
         $priceMock->expects($this->once())
             ->method('getAmount')
@@ -278,21 +279,22 @@ class BundleOptionsTest extends TestCase
     private function createSelectionMock(array $selectionData)
     {
         /** @var Product $selection */
-        $selection = new ProductTestHelper();
+        $selection = $this->createPartialMockWithReflection(
+            Product::class,
+            ['isSalable', 'getProduct']
+        );
 
-        // All items are saleable
-        $selection->setIsSalable(true);
+        $selection->method('isSalable')->willReturn(true);
         foreach ($selectionData['data'] as $key => $value) {
             $selection->setData($key, $value);
         }
         $amountMock = $this->createAmountMock($selectionData['amount']);
-        $selection->setAmount($amountMock);
-        $selection->setQuantity(1);
+        $selection->setData('amount', $amountMock);
+        $selection->setData('quantity', 1);
 
-        /** @var Product $innerProduct */
-        $innerProduct = new ProductTestHelper();
-        $innerProduct->setSelectionCanChangeQty(true);
-        $selection->setProduct($innerProduct);
+        $innerProduct = $this->createPartialMockWithReflection(Product::class, ['getSelectionCanChangeQty']);
+        $innerProduct->method('getSelectionCanChangeQty')->willReturn(true);
+        $selection->method('getProduct')->willReturn($innerProduct);
 
         return $selection;
     }

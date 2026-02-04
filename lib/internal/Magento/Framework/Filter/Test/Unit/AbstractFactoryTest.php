@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -52,11 +52,9 @@ class AbstractFactoryTest extends TestCase
             ['objectManger' => $this->_objectManager]
         );
         $property = new \ReflectionProperty(AbstractFactory::class, 'invokableClasses');
-        $property->setAccessible(true);
         $property->setValue($this->_factory, $this->_invokableList);
 
         $property = new \ReflectionProperty(AbstractFactory::class, 'shared');
-        $property->setAccessible(true);
         $property->setValue($this->_factory, $this->_sharedList);
     }
 
@@ -109,7 +107,6 @@ class AbstractFactoryTest extends TestCase
     public function testCreateFilter($alias, $arguments, $isShared)
     {
         $property = new \ReflectionProperty(AbstractFactory::class, 'sharedInstances');
-        $property->setAccessible(true);
 
         $filterMock = $this->getMockBuilder(\stdClass::class)
             ->addMethods(['filter'])->getMock();

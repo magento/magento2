@@ -14,6 +14,7 @@ use Magento\Catalog\Model\Product;
 use Magento\Customer\Block\Adminhtml\Edit\Tab\View\Grid\Renderer\Item;
 use Magento\Framework\Escaper;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -100,9 +101,8 @@ class ItemTest extends TestCase
         $this->itemBlock->render($this->item);
     }
 
-    /**
-     * @dataProvider optionHtmlProvider
-     */
+    /** */
+    #[DataProvider('optionHtmlProvider')]
     public function testRender($amountOption, $expectedHtml)
     {
         $this->configure($amountOption);

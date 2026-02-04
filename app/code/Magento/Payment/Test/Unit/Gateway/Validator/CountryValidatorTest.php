@@ -11,6 +11,7 @@ use Magento\Payment\Gateway\ConfigInterface;
 use Magento\Payment\Gateway\Validator\CountryValidator;
 use Magento\Payment\Gateway\Validator\Result;
 use Magento\Payment\Gateway\Validator\ResultInterfaceFactory;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -41,15 +42,12 @@ class CountryValidatorTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->configMock = $this->getMockBuilder(ConfigInterface::class)
-            ->getMockForAbstractClass();
-        $this->resultFactoryMock = $this->getMockBuilder(ResultInterfaceFactory::class)
-            ->onlyMethods(['create'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->resultMock = $this->getMockBuilder(Result::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->configMock = $this->createMock(ConfigInterface::class);
+        $this->resultFactoryMock = $this->createPartialMock(
+            ResultInterfaceFactory::class,
+            ['create']
+        );
+        $this->resultMock = $this->createMock(Result::class);
 
         $this->model = new CountryValidator(
             $this->resultFactoryMock,
@@ -65,8 +63,8 @@ class CountryValidatorTest extends TestCase
      * @param $isValid
      *
      * @return void
-     * @dataProvider validateAllowspecificTrueDataProvider
      */
+    #[DataProvider('validateAllowspecificTrueDataProvider')]
     public function testValidateAllowspecificTrue(
         $storeId,
         $country,
@@ -106,8 +104,8 @@ class CountryValidatorTest extends TestCase
     }
 
     /**
-     * @dataProvider validateAllowspecificFalseDataProvider
      */
+    #[DataProvider('validateAllowspecificFalseDataProvider')]
     public function testValidateAllowspecificFalse($storeId, $allowspecific, $isValid): void
     {
         $validationSubject = ['storeId' => $storeId];

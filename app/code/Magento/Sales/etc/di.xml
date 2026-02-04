@@ -267,21 +267,29 @@
     <virtualType name="SalesOrderIndexGridAsyncInsert" type="Magento\Sales\Model\GridAsyncInsert">
         <arguments>
             <argument name="entityGrid" xsi:type="object">Magento\Sales\Model\ResourceModel\Order\Grid</argument>
+            <argument name="lockManager" xsi:type="object">Magento\Framework\Lock\LockManagerInterface</argument>
+            <argument name="lockName" xsi:type="string">grid_async_insert_sales_order</argument>
         </arguments>
     </virtualType>
     <virtualType name="SalesInvoiceIndexGridAsyncInsert" type="Magento\Sales\Model\GridAsyncInsert">
         <arguments>
             <argument name="entityGrid" xsi:type="object">Magento\Sales\Model\ResourceModel\Order\Invoice\Grid</argument>
+            <argument name="lockManager" xsi:type="object">Magento\Framework\Lock\LockManagerInterface</argument>
+            <argument name="lockName" xsi:type="string">grid_async_insert_sales_invoice</argument>
         </arguments>
     </virtualType>
     <virtualType name="SalesShipmentIndexGridAsyncInsert" type="Magento\Sales\Model\GridAsyncInsert">
         <arguments>
             <argument name="entityGrid" xsi:type="object">ShipmentGridAggregator</argument>
+            <argument name="lockManager" xsi:type="object">Magento\Framework\Lock\LockManagerInterface</argument>
+            <argument name="lockName" xsi:type="string">grid_async_insert_sales_shipment</argument>
         </arguments>
     </virtualType>
     <virtualType name="SalesCreditmemoIndexGridAsyncInsert" type="Magento\Sales\Model\GridAsyncInsert">
         <arguments>
             <argument name="entityGrid" xsi:type="object">CreditmemoGridAggregator</argument>
+            <argument name="lockManager" xsi:type="object">Magento\Framework\Lock\LockManagerInterface</argument>
+            <argument name="lockName" xsi:type="string">grid_async_insert_sales_creditmemo</argument>
         </arguments>
     </virtualType>
 

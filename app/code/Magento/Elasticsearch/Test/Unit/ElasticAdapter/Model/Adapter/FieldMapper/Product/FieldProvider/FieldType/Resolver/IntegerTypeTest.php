@@ -14,6 +14,7 @@ use Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider\FieldT
     as FieldTypeConverterInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * @SuppressWarnings(PHPMD)
@@ -37,10 +38,7 @@ class IntegerTypeTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->fieldTypeConverter = $this->getMockBuilder(FieldTypeConverterInterface::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['convert'])
-            ->getMockForAbstractClass();
+        $this->fieldTypeConverter = $this->createPartialMock(FieldTypeConverterInterface::class, ['convert']);
 
         $objectManager = new ObjectManagerHelper($this);
 
@@ -53,13 +51,13 @@ class IntegerTypeTest extends TestCase
     }
 
     /**
-     * @dataProvider getFieldTypeProvider
      * @param string $attributeCode
      * @param bool $isIntegerType
      * @param bool $isBooleanType
      * @param string $expected
      * @return void
      */
+    #[DataProvider('getFieldTypeProvider')]
     public function testGetFieldType(
         string $attributeCode,
         bool $isIntegerType,

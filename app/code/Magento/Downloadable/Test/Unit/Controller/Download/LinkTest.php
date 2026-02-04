@@ -15,14 +15,12 @@ use Magento\Downloadable\Helper\Data;
 use Magento\Downloadable\Helper\Download;
 use Magento\Downloadable\Model\Link\Purchased;
 use Magento\Downloadable\Model\Link\Purchased\Item;
-use Magento\Downloadable\Test\Unit\Helper\ItemTestHelper;
-use Magento\Downloadable\Test\Unit\Helper\PurchasedTestHelper;
 use Magento\Framework\App\Request\Http;
 use Magento\Framework\App\Response\RedirectInterface;
 use Magento\Framework\App\ResponseInterface;
 use Magento\Framework\HTTP\Mime;
 use Magento\Framework\Message\ManagerInterface;
-use Magento\Framework\App\Test\Unit\Helper\ResponseTestHelper;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\Framework\UrlInterface;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -33,6 +31,7 @@ use PHPUnit\Framework\TestCase;
  */
 class LinkTest extends TestCase
 {
+    use MockCreationTrait;
     /**
      * @var Link
      */
@@ -112,8 +111,8 @@ class LinkTest extends TestCase
         $this->objectManagerHelper = new ObjectManagerHelper($this);
 
         $this->request = $this->createMock(Http::class);
-        $this->response = $this->createPartialMock(
-            ResponseTestHelper::class,
+        $this->response = $this->createPartialMockWithReflection(
+            ResponseInterface::class,
             [
                 'setHttpResponseCode',
                 'clearBody',
@@ -139,8 +138,8 @@ class LinkTest extends TestCase
             'output'
         ]);
         $this->product = $this->createMock(Product::class);
-        $this->linkPurchasedItem = $this->createPartialMock(
-            ItemTestHelper::class,
+        $this->linkPurchasedItem = $this->createPartialMockWithReflection(
+            Item::class,
             [
                 'getProductId',
                 'getPurchasedId',
@@ -157,8 +156,8 @@ class LinkTest extends TestCase
                 'save'
             ]
         );
-        $this->linkPurchased = $this->createPartialMock(
-            PurchasedTestHelper::class,
+        $this->linkPurchased = $this->createPartialMockWithReflection(
+            Purchased::class,
             [
                 'load',
                 'getCustomerId'

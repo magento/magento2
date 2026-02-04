@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -132,7 +132,6 @@ class KernelTest extends TestCase
 
         $reflection = new \ReflectionClass(Kernel::class);
         $reflectionProperty = $reflection->getProperty('fullPageCache');
-        $reflectionProperty->setAccessible(true);
         $reflectionProperty->setValue($this->kernel, $this->fullPageCacheMock);
     }
 
@@ -253,7 +252,7 @@ class KernelTest extends TestCase
      * @param $httpCode
      *
      * @return void
-     * @dataProvider testProcessSaveCacheDataProvider
+     * @dataProvider processSaveCacheDataProvider
      */
     public function testProcessSaveCache($httpCode): void
     {
@@ -303,7 +302,7 @@ class KernelTest extends TestCase
     /**
      * @return array
      */
-    public static function testProcessSaveCacheDataProvider(): array
+    public static function processSaveCacheDataProvider(): array
     {
         return [
             [200],

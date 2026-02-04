@@ -15,7 +15,7 @@ use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\DB\Select;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use PHPUnit\Framework\MockObject\MockObject;
-use PHPUnit\Framework\MockObject\Stub\Stub;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 class ReportValidatorTest extends TestCase
@@ -64,7 +64,7 @@ class ReportValidatorTest extends TestCase
         $this->queryFactoryMock = $this->createMock(QueryFactory::class);
         $this->queryMock = $this->createMock(Query::class);
         $this->connectionMock = $this->getMockBuilder(AdapterInterface::class)
-            ->getMockForAbstractClass();
+            ->getMock();
         $this->selectMock = $this->createMock(Select::class);
         $this->objectManagerHelper = new ObjectManagerHelper($this);
 
@@ -78,12 +78,13 @@ class ReportValidatorTest extends TestCase
     }
 
     /**
-     * @dataProvider errorDataProvider
      * @param string $reportName
      * @param array $result
-     * @param Stub $queryReturnStub
+     * @param string $stubType
+     * @param mixed $stubValue
      */
-    public function testValidate($reportName, $result, Stub $queryReturnStub)
+    #[DataProvider('errorDataProvider')]
+    public function testValidate($reportName, $result, $stubType, $stubValue = null)
     {
         $connectionName = 'testConnection';
         $this->queryFactoryMock->expects($this->once())
@@ -95,7 +96,20 @@ class ReportValidatorTest extends TestCase
             ->willReturn($this->connectionMock);
         $this->queryMock->expects($this->atLeastOnce())->method('getSelect')->willReturn($this->selectMock);
         $this->selectMock->expects($this->once())->method('limit')->with(0);
-        $this->connectionMock->expects($this->once())->method('query')->with($this->selectMock)->will($queryReturnStub);
+        
+        // Configure query mock based on stub type
+        if ($stubType === 'returnValue') {
+            $this->connectionMock->expects($this->once())
+                ->method('query')
+                ->with($this->selectMock)
+                ->willReturn($stubValue);
+        } elseif ($stubType === 'throwException') {
+            $this->connectionMock->expects($this->once())
+                ->method('query')
+                ->with($this->selectMock)
+                ->willThrowException($stubValue);
+        }
+        
         $this->assertEquals($result, $this->reportValidator->validate($reportName));
     }
 
@@ -111,13 +125,15 @@ class ReportValidatorTest extends TestCase
         return [
             [
                 $reportName,
-                'result' => [],
-                'queryReturnStub' => self::returnValue(null)
+                [],
+                'returnValue',
+                null
             ],
             [
                 $reportName,
-                'result' => [$reportName, $errorMessage],
-                'queryReturnStub' => self::throwException(new \Zend_Db_Statement_Exception($errorMessage))
+                [$reportName, $errorMessage],
+                'throwException',
+                new \Zend_Db_Statement_Exception($errorMessage)
             ]
         ];
     }

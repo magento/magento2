@@ -2,8 +2,8 @@
 /**
  * Test class for \Magento\Framework\Profiler\Driver\Standard\AbstractOutput
  *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework\Profiler\Test\Unit\Driver\Standard;
 
@@ -87,7 +87,6 @@ class OutputAbstractTest extends TestCase
     public function testRenderColumnValue($value, $columnKey, $expectedValue)
     {
         $method = new \ReflectionMethod($this->_output, '_renderColumnValue');
-        $method->setAccessible(true);
         $this->assertEquals($expectedValue, $method->invoke($this->_output, $value, $columnKey));
     }
 
@@ -111,7 +110,6 @@ class OutputAbstractTest extends TestCase
     public function testRenderCaption()
     {
         $method = new \ReflectionMethod($this->_output, '_renderCaption');
-        $method->setAccessible(true);
         $this->assertMatchesRegularExpression(
             '/Code Profiler \(Memory usage: real - \d+, emalloc - \d+\)/',
             $method->invoke($this->_output)
@@ -139,7 +137,6 @@ class OutputAbstractTest extends TestCase
         );
 
         $method = new \ReflectionMethod($this->_output, '_getTimerIds');
-        $method->setAccessible(true);
         $this->assertEquals($expectedTimerIds, $method->invoke($this->_output, $mockStat));
     }
 
@@ -149,7 +146,6 @@ class OutputAbstractTest extends TestCase
     public function testRenderTimerId()
     {
         $method = new \ReflectionMethod($this->_output, '_renderTimerId');
-        $method->setAccessible(true);
         $this->assertEquals('someTimerId', $method->invoke($this->_output, 'someTimerId'));
     }
 }

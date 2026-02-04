@@ -60,11 +60,11 @@ class DeleteButtonTest extends TestCase
         $this->addressFactory = $this->getMockBuilder(AddressFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->urlBuilder = $this->getMockForAbstractClass(UrlInterface::class);
+        $this->urlBuilder = $this->createMock(UrlInterface::class);
         $this->addressResourceModel = $this->getMockBuilder(Address::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->request = $this->getMockForAbstractClass(RequestInterface::class);
+        $this->request = $this->createMock(RequestInterface::class);
         $this->addressRepository = $this->getMockBuilder(
             AddressRepository::class
         )

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -154,9 +154,7 @@ class TemporaryTableServiceTest extends TestCase
     public function testDropTableWhenCreatedTablesArrayNotEmpty($tableName, $assertion)
     {
         $createdTableAdapters = new \ReflectionProperty($this->temporaryTableService, 'createdTableAdapters');
-        $createdTableAdapters->setAccessible(true);
         $createdTableAdapters->setValue($this->temporaryTableService, ['tmp_select_table' => $this->adapterMock]);
-        $createdTableAdapters->setAccessible(false);
 
         $this->adapterMock->expects($this->any())
             ->method('dropTemporaryTable')

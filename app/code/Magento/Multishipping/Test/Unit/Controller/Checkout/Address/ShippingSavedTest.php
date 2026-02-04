@@ -74,21 +74,21 @@ class ShippingSavedTest extends TestCase
     protected function setUp(): void
     {
         $this->checkoutMock = $this->createMock(Multishipping::class);
-        $this->objectManagerMock = $this->getMockForAbstractClass(ObjectManagerInterface::class);
+        $this->objectManagerMock = $this->createMock(ObjectManagerInterface::class);
         $this->objectManagerMock->expects($this->any())
             ->method('get')
             ->with(Multishipping::class)
             ->willReturn($this->checkoutMock);
         $this->contextMock = $this->createMock(Context::class);
-        $requestMock = $this->getMockForAbstractClass(RequestInterface::class);
-        $responseMock = $this->getMockForAbstractClass(ResponseInterface::class);
-        $this->redirectMock = $this->getMockForAbstractClass(RedirectInterface::class);
+        $requestMock = $this->createMock(RequestInterface::class);
+        $responseMock = $this->createMock(ResponseInterface::class);
+        $this->redirectMock = $this->createMock(RedirectInterface::class);
         $this->contextMock->expects($this->any())->method('getObjectManager')->willReturn($this->objectManagerMock);
         $this->contextMock->expects($this->any())->method('getRequest')->willReturn($requestMock);
         $this->contextMock->expects($this->any())->method('getResponse')->willReturn($responseMock);
         $this->contextMock->expects($this->any())->method('getRedirect')->willReturn($this->redirectMock);
 
-        $this->addressRepositoryMock = $this->getMockForAbstractClass(AddressRepositoryInterface::class);
+        $this->addressRepositoryMock = $this->createMock(AddressRepositoryInterface::class);
         $this->filterBuilderMock = $this->createMock(FilterBuilder::class);
         $this->criteriaBuilderMock = $this->createMock(SearchCriteriaBuilder::class);
         $this->controller = new ShippingSaved(
@@ -102,13 +102,13 @@ class ShippingSavedTest extends TestCase
     public function testExecuteResetsCheckoutIfCustomerHasAddedNewShippingAddressAndItIsTheOnlyAddressHeHas()
     {
         $customerId = 1;
-        $customerMock = $this->getMockForAbstractClass(CustomerInterface::class);
+        $customerMock = $this->createMock(CustomerInterface::class);
         $customerMock->expects($this->any())->method('getId')->willReturn($customerId);
         $this->checkoutMock->expects($this->any())->method('getCustomer')->willReturn($customerMock);
 
         $this->mockCustomerAddressRepository(
             $customerId,
-            [$this->getMockForAbstractClass(AddressInterface::class)]
+            [$this->createMock(AddressInterface::class)]
         );
 
         // check that checkout is reset
@@ -119,15 +119,15 @@ class ShippingSavedTest extends TestCase
     public function testExecuteDoesNotResetCheckoutIfCustomerHasMoreThanOneAddress()
     {
         $customerId = 1;
-        $customerMock = $this->getMockForAbstractClass(CustomerInterface::class);
+        $customerMock = $this->createMock(CustomerInterface::class);
         $customerMock->expects($this->any())->method('getId')->willReturn($customerId);
         $this->checkoutMock->expects($this->any())->method('getCustomer')->willReturn($customerMock);
 
         $this->mockCustomerAddressRepository(
             $customerId,
             [
-                $this->getMockForAbstractClass(AddressInterface::class),
-                $this->getMockForAbstractClass(AddressInterface::class),
+                $this->createMock(AddressInterface::class),
+                $this->createMock(AddressInterface::class),
             ]
         );
 
@@ -154,7 +154,7 @@ class ShippingSavedTest extends TestCase
         $this->criteriaBuilderMock->expects($this->once())->method('addFilters')->with([$filterMock])->willReturnSelf();
         $this->criteriaBuilderMock->expects($this->once())->method('create')->willReturn($searchCriteriaMock);
 
-        $searchResultMock = $this->getMockForAbstractClass(AddressSearchResultsInterface::class);
+        $searchResultMock = $this->createMock(AddressSearchResultsInterface::class);
         $this->addressRepositoryMock->expects($this->once())
             ->method('getList')
             ->with($searchCriteriaMock)

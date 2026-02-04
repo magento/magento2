@@ -9,9 +9,11 @@ namespace Magento\Reports\Test\Unit\Helper;
 
 use Magento\Framework\App\Helper\Context;
 use Magento\Framework\Data\Collection;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Reports\Helper\Data;
 use Magento\Reports\Model\Item;
 use Magento\Reports\Model\ItemFactory;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -20,6 +22,8 @@ use PHPUnit\Framework\TestCase;
  */
 class DataTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var Data
      */
@@ -61,8 +65,8 @@ class DataTest extends TestCase
      * @param array $results
      *
      * @return void
-     * @dataProvider intervalsDataProvider
      */
+    #[DataProvider('intervalsDataProvider')]
     public function testGetIntervals($from, $to, $period, $results): void
     {
         $this->assertEquals($this->data->getIntervals($from, $to, $period), $results);
@@ -75,8 +79,8 @@ class DataTest extends TestCase
      * @param array $results
      *
      * @return void
-     * @dataProvider intervalsDataProvider
      */
+    #[DataProvider('intervalsDataProvider')]
     public function testPrepareIntervalsCollection($from, $to, $period, $results): void
     {
         $collection = $this->getMockBuilder(Collection::class)
@@ -84,11 +88,10 @@ class DataTest extends TestCase
             ->onlyMethods(['addItem'])
             ->getMock();
 
-        $item = $this->getMockBuilder(Item::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['setIsEmpty'])
-            ->addMethods(['setPeriod'])
-            ->getMock();
+        $item = $this->createPartialMockWithReflection(
+            Item::class,
+            ['setIsEmpty', 'setPeriod']
+        );
 
         $this->itemFactoryMock->expects($this->exactly(count($results)))
             ->method('create')

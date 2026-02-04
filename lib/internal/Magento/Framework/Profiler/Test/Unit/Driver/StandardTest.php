@@ -2,8 +2,8 @@
 /**
  * Test class for \Magento\Framework\Profiler\Driver\Standard
  *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -177,7 +177,6 @@ class StandardTest extends TestCase
     public function testDefaultOutputFactory(): void
     {
         $method = new ReflectionMethod($this->driver, '_getOutputFactory');
-        $method->setAccessible(true);
         $this->assertInstanceOf(
             Factory::class,
             $method->invoke($this->driver)

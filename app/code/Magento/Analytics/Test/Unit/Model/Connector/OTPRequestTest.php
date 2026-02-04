@@ -58,11 +58,11 @@ class OTPRequestTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->loggerMock = $this->getMockForAbstractClass(LoggerInterface::class);
+        $this->loggerMock = $this->createMock(LoggerInterface::class);
 
-        $this->configMock = $this->getMockForAbstractClass(ScopeConfigInterface::class);
+        $this->configMock = $this->createMock(ScopeConfigInterface::class);
 
-        $this->httpClientMock = $this->getMockForAbstractClass(ClientInterface::class);
+        $this->httpClientMock = $this->createMock(ClientInterface::class);
 
         $this->analyticsTokenMock = $this->createMock(AnalyticsToken::class);
 

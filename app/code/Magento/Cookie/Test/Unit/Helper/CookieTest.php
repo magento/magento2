@@ -53,7 +53,7 @@ class CookieTest extends TestCase
         $websiteMock = $this->createMock(Website::class);
         $websiteMock->expects($this->any())->method('getId')->willReturn(1);
 
-        $this->scopeConfigMock = $this->createPartialMock(ScopeConfigInterface::class, ['getValue', 'isSetFlag']);
+        $this->scopeConfigMock = $this->createMock(ScopeConfigInterface::class);
 
         $this->requestMock = $this->createPartialMock(Http::class, ['getCookie']);
 

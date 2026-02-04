@@ -12,7 +12,7 @@ use Magento\Directory\Block\Adminhtml\Frontend\Currency\Base;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\Data\Form\Element\AbstractElement;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Store\Model\Store;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -22,7 +22,9 @@ use PHPUnit\Framework\TestCase;
  */
 class BaseTest extends TestCase
 {
-    const STUB_WEBSITE_PARAM = 'website';
+    use MockCreationTrait;
+
+    private const STUB_WEBSITE_PARAM = 'website';
 
     /**
      * @var AbstractElement|MockObject
@@ -40,7 +42,7 @@ class BaseTest extends TestCase
     private $scopeConfigMock;
 
     /**
-     * @var Base
+     * @var Base|MockObject
      */
     private $baseCurrency;
 
@@ -50,16 +52,18 @@ class BaseTest extends TestCase
     protected function setUp(): void
     {
         $this->elementMock = $this->createMock(AbstractElement::class);
-        $this->scopeConfigMock = $this->getMockForAbstractClass(ScopeConfigInterface::class);
-        $this->requestMock = $this->getMockBuilder(RequestInterface::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['getParam'])
-            ->getMockForAbstractClass();
+        $this->scopeConfigMock = $this->createMock(ScopeConfigInterface::class);
+        $this->requestMock = $this->createMock(RequestInterface::class);
 
-        $this->baseCurrency = (new ObjectManagerHelper($this))->getObject(
-            Base::class,
-            ['_request' => $this->requestMock, '_scopeConfig' => $this->scopeConfigMock]
-        );
+        $this->baseCurrency = $this->getMockBuilder(Base::class)
+            ->disableOriginalConstructor()
+            ->onlyMethods([])
+            ->getMock();
+
+        $this->addPropertyValue($this->baseCurrency, [
+            '_request' => $this->requestMock,
+            '_scopeConfig' => $this->scopeConfigMock,
+        ], Base::class);
     }
 
     /**

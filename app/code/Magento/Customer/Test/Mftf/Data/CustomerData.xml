@@ -542,4 +542,12 @@
         <data key="ca_address">John Doe, 7700 West Parmer Lane 113, Los Angeles, California 90001, United States</data>
         <data key="br_address">John Doe, 3976 Thunder Road, Brisbane, California 94005, United States</data>
     </entity>
+    <entity name="Special_Characters_City" type="customer">
+        <data key="city1">St. Moritz</data>
+        <data key="city2">St. Petersburg</data>
+        <data key="city3">Brighton &amp; Hove</data>
+        <data key="city4">St. Davids</data>
+        <data key="city5">29 Palms</data>
+        <data key="city6">New York</data>
+    </entity>
 </entities>

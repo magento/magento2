@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\TestFramework\TestCase\HttpClient;
 
@@ -182,9 +182,6 @@ class CurlClient
             // phpcs:ignore Magento2.Exceptions.DirectThrow
             throw new \Exception($error);
         }
-
-        // phpcs:ignore Magento2.Functions.DiscouragedFunction
-        curl_close($curl);
 
         $meta = $resp["meta"];
         if ($meta && $meta['http_code'] >= 400) {

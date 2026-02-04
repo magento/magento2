@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\Catalog\Test\Unit\Block\Product;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\Catalog\Block\Product\Image;
 use Magento\Catalog\Block\Product\ImageFactory;
 use Magento\Catalog\Model\Product;
@@ -43,7 +44,7 @@ class ImageFactoryTest extends TestCase
     protected function setUp(): void
     {
         $this->viewConfig = $this->createMock(View::class);
-        $configInterface = $this->getMockForAbstractClass(ConfigInterface::class);
+        $configInterface = $this->createMock(ConfigInterface::class);
         $configInterface->method('getViewConfig')->willReturn($this->viewConfig);
         $this->viewAssetImageFactory = $this->createMock(ViewAssetImageFactory::class);
         $this->paramsBuilder = $this->createMock(ParamsBuilder::class);
@@ -62,8 +63,8 @@ class ImageFactoryTest extends TestCase
 
     /**
      * @param array $data
-     * @dataProvider createDataProvider
      */
+    #[DataProvider('createDataProvider')]
     public function testCreate($data, $expected)
     {
         $product = $this->createMock(Product::class);

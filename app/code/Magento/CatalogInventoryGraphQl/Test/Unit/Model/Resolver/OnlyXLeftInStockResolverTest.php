@@ -8,6 +8,7 @@ declare(strict_types=1);
 namespace Magento\CatalogInventoryGraphQl\Test\Unit\Model\Resolver;
 
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\MockObject\MockObject;
 use Magento\CatalogInventoryGraphQl\Model\Resolver\OnlyXLeftInStockResolver;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\GraphQl\Config\Element\Field;
@@ -35,7 +36,7 @@ class OnlyXLeftInStockResolverTest extends TestCase
     /**
      * Testable Object
      *
-     * @var RevokeCustomerToken
+     * @var OnlyXLeftInStockResolver
      */
     private $resolver;
 
@@ -92,29 +93,17 @@ class OnlyXLeftInStockResolverTest extends TestCase
     {
         $this->objectManager = new ObjectManager($this);
 
-        $this->contextMock = $this->getMockBuilder(ContextInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->contextMock = $this->createMock(ContextInterface::class);
+        $this->fieldMock = $this->createMock(Field::class);
+        $this->resolveInfoMock = $this->createMock(ResolveInfo::class);
+        $this->productModelMock = $this->createMock(Product::class);
+        $this->scopeConfigMock = $this->createMock(ScopeConfigInterface::class);
+        $this->stockRegistryMock = $this->createMock(StockRegistryInterface::class);
+        $this->storeMock = $this->createMock(StoreInterface::class);
+        $this->stockItemMock = $this->createMock(StockItemInterface::class);
+        $this->stockStatusMock = $this->createMock(StockStatusInterface::class);
 
-        $this->fieldMock = $this->getMockBuilder(Field::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $this->resolveInfoMock = $this->getMockBuilder(ResolveInfo::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $this->productModelMock = $this->getMockBuilder(Product::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $this->scopeConfigMock = $this->getMockBuilder(ScopeConfigInterface::class)->getMock();
-        $this->stockRegistryMock = $this->getMockBuilder(StockRegistryInterface::class)->getMock();
-        $this->storeMock = $this->getMockBuilder(StoreInterface::class)->getMock();
-        $this->stockItemMock = $this->getMockBuilder(StockItemInterface::class)->getMock();
-        $this->stockStatusMock = $this->getMockBuilder(StockStatusInterface::class)->getMock();
-        $this->productModelMock->expects($this->any())->method('getId')
-            ->willReturn(1);
+        $this->productModelMock->method('getId')->willReturn(1);
         $this->productModelMock->expects($this->atMost(1))->method('getStore')
             ->willReturn($this->storeMock);
         $this->stockRegistryMock->expects($this->atMost(1))->method('getStockStatus')

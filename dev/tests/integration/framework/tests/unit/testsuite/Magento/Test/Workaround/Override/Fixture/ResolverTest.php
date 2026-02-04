@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -28,7 +28,6 @@ class ResolverTest extends TestCase
         $resolverMock = $this->createResolverMock();
         $reflection = new \ReflectionClass(Resolver::class);
         $reflectionMethod = $reflection->getMethod('getApplierByFixtureType');
-        $reflectionMethod->setAccessible(true);
         $reflectionMethod->invoke($resolverMock, 'unsupportedFixtureType');
     }
 
@@ -58,7 +57,6 @@ class ResolverTest extends TestCase
         $mock->method('getComponentRegistrar')->willReturn(new ComponentRegistrar());
         $reflection = new \ReflectionClass(Resolver::class);
         $reflectionProperty = $reflection->getProperty('instance');
-        $reflectionProperty->setAccessible(true);
         $reflectionProperty->setValue(Resolver::class, $mock);
 
         return $mock;

@@ -22,6 +22,7 @@ use Magento\Swatches\Controller\Adminhtml\Iframe\Show;
 use Magento\Swatches\Helper\Media;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Class to show swatch image and save it on disk
@@ -83,7 +84,7 @@ class ShowTest extends TestCase
         );
 
         $this->uploaderMock = $this->createMock(Uploader::class);
-        $this->adapterMock = $this->getMockForAbstractClass(AdapterInterface::class);
+        $this->adapterMock = $this->createMock(AdapterInterface::class);
         $this->mediaDirectoryMock = $this->createMock(Read::class);
 
         $objectManager = new ObjectManager($this);
@@ -110,9 +111,7 @@ class ShowTest extends TestCase
         $this->controller->execute();
     }
 
-    /**
-     * @dataProvider dataForExecute
-     */
+    #[DataProvider('dataForExecute')]
     public function testExecute($fileResult, $expectedResult)
     {
         $this->uploaderFactoryMock->expects($this->once())->method('create')->willReturn($this->uploaderMock);

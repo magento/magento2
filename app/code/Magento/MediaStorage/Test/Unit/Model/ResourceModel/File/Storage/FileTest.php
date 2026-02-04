@@ -49,7 +49,7 @@ class FileTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->loggerMock = $this->getMockForAbstractClass(LoggerInterface::class);
+        $this->loggerMock = $this->createMock(LoggerInterface::class);
         $this->filesystemMock = $this->createPartialMock(Filesystem::class, ['getDirectoryRead']);
         $this->directoryReadMock = $this->createPartialMock(
             Read::class,

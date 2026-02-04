@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -164,7 +164,6 @@ class CartPriceRulesFixtureTest extends TestCase
     {
         $reflection = new \ReflectionClass($this->model);
         $reflectionProperty = $reflection->getProperty('cartPriceRulesCount');
-        $reflectionProperty->setAccessible(true);
         $reflectionProperty->setValue($this->model, $ruleCount);
 
         $result = $this->model->generateAdvancedCondition($ruleId, $categoriesArray);

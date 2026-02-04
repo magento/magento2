@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright 2014 Adobe
+ * Copyright 2025 Adobe
  * All Rights Reserved.
  */
 declare(strict_types=1);
@@ -280,7 +280,7 @@ class Escaper
             $translateInline = $this->getTranslateInline();
 
             return $translateInline->isAllowed()
-                ? $this->inlineSensitiveEscapeHthmlAttr($string)
+                ? $this->inlineSensitiveEscapeHtmlAttr($string)
                 : $this->getEscaper()->escapeHtmlAttr($string);
         }
 
@@ -407,12 +407,12 @@ class Escaper
     private function escapeScriptIdentifiers(string $data): string
     {
         $filteredData = preg_replace('/[\x00-\x1F\x7F\xA0]/u', '', $data);
-        if ($filteredData === false || $filteredData === '') {
+        if ($filteredData === null || $filteredData === '') {
             return '';
         }
 
         $filteredData = preg_replace(self::$xssFiltrationPattern, ':', $filteredData);
-        if ($filteredData === false) {
+        if ($filteredData === null) {
             return '';
         }
 
@@ -518,7 +518,7 @@ class Escaper
      * @param string $text
      * @return string
      */
-    private function inlineSensitiveEscapeHthmlAttr(string $text): string
+    private function inlineSensitiveEscapeHtmlAttr(string $text): string
     {
         $escaper = $this->getEscaper();
         $textLength = strlen($text);

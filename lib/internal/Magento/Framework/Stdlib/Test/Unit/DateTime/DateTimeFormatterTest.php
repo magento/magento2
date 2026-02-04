@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -57,7 +57,6 @@ class DateTimeFormatterTest extends TestCase
 
         $reflection = new \ReflectionClass(get_class($dateTimeFormatter));
         $reflectionProperty = $reflection->getProperty('localeResolver');
-        $reflectionProperty->setAccessible(true);
         $reflectionProperty->setValue($dateTimeFormatter, $this->localeResolverMock);
 
         $this->assertEquals(
@@ -135,7 +134,6 @@ class DateTimeFormatterTest extends TestCase
 
         $reflection = new \ReflectionClass(get_class($dateTimeFormatter));
         $reflectionProperty = $reflection->getProperty('localeResolver');
-        $reflectionProperty->setAccessible(true);
         $reflectionProperty->setValue($dateTimeFormatter, $this->localeResolverMock);
         $dateTimeFormatter->formatObject(new \DateTime('2013-06-06 17:05:06 Europe/Dublin'), new \StdClass());
     }
@@ -155,7 +153,6 @@ class DateTimeFormatterTest extends TestCase
 
         $reflection = new \ReflectionClass(get_class($dateTimeFormatter));
         $reflectionProperty = $reflection->getProperty('localeResolver');
-        $reflectionProperty->setAccessible(true);
         $reflectionProperty->setValue($dateTimeFormatter, $this->localeResolverMock);
         $result = $dateTimeFormatter->formatObject(
             new \DateTime('2022-03-30 00:01:02 GMT'),

@@ -84,10 +84,7 @@ class GetSuggestionFrequencyTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->searchResult = $this->getMockBuilder(SearchResultInterface::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['getTotalCount'])
-            ->getMockForAbstractClass();
+        $this->searchResult = $this->createMock(SearchResultInterface::class);
 
         $objectManager = new ObjectManagerHelper($this);
 

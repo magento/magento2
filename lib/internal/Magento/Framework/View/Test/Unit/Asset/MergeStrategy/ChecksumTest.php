@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -74,7 +74,6 @@ class ChecksumTest extends TestCase
 
         $reflection = new \ReflectionClass(Checksum::class);
         $reflectionProperty = $reflection->getProperty('assetSource');
-        $reflectionProperty->setAccessible(true);
         $reflectionProperty->setValue($this->checksum, $this->assetSource);
 
         $this->resultAsset = $this->createMock(File::class);

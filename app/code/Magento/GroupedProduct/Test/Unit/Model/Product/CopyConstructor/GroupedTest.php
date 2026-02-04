@@ -10,6 +10,7 @@ namespace Magento\GroupedProduct\Test\Unit\Model\Product\CopyConstructor;
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\Product\Link;
 use Magento\Catalog\Model\ResourceModel\Product\Link\Collection;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\GroupedProduct\Model\Product\CopyConstructor\Grouped;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -17,6 +18,7 @@ use PHPUnit\Framework\TestCase;
 
 class GroupedTest extends TestCase
 {
+    use MockCreationTrait;
     /**
      * @var Grouped
      */
@@ -51,13 +53,13 @@ class GroupedTest extends TestCase
             ['getTypeId', '__wakeup', 'getLinkInstance']
         );
 
-        $this->_duplicateMock = $this->createPartialMock(
-            \Magento\Catalog\Test\Unit\Helper\ProductTestHelper::class,
+        $this->_duplicateMock = $this->createPartialMockWithReflection(
+            \Magento\Catalog\Model\Product::class,
             ['__wakeup', 'setGroupedLinkData']
         );
 
-        $this->_linkMock = $this->createPartialMock(
-            \Magento\Catalog\Test\Unit\Helper\ProductLinkTestHelper::class,
+        $this->_linkMock = $this->createPartialMockWithReflection(
+            \Magento\Catalog\Model\Product\Link::class,
             ['__wakeup', 'getAttributes', 'getLinkCollection', 'setLinkTypeId']
         );
 
@@ -92,8 +94,8 @@ class GroupedTest extends TestCase
 
         $this->_linkMock->expects($this->once())->method('getAttributes')->willReturn($attributes);
 
-        $productLinkMock = $this->createPartialMock(
-            \Magento\Catalog\Test\Unit\Helper\ProductResourceLinkTestHelper::class,
+        $productLinkMock = $this->createPartialMockWithReflection(
+            \Magento\Catalog\Model\ResourceModel\Product\Link::class,
             ['__wakeup', 'getLinkedProductId', 'toArray']
         );
         $this->_linkMock->expects(

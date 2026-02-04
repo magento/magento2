@@ -11,13 +11,16 @@ use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\View\Element\Template\Context;
 use Magento\Payment\Block\Info\Cc;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Payment\Model\Config;
 use Magento\Payment\Model\Info;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 class CcTest extends TestCase
 {
+    use MockCreationTrait;
     /**
      * @var Cc
      */
@@ -42,7 +45,7 @@ class CcTest extends TestCase
     {
         $this->objectManager = new ObjectManager($this);
         $this->paymentConfig = $this->createMock(Config::class);
-        $this->localeDate = $this->getMockForAbstractClass(TimezoneInterface::class);
+        $this->localeDate = $this->createMock(TimezoneInterface::class);
         $context = $this->createPartialMock(Context::class, ['getLocaleDate']);
         $context->expects($this->any())
             ->method('getLocaleDate')
@@ -56,18 +59,16 @@ class CcTest extends TestCase
         );
     }
 
-    /**
-     * @dataProvider getCcTypeNameDataProvider
-     */
+    #[DataProvider('getCcTypeNameDataProvider')]
     public function testGetCcTypeName($configCcTypes, $ccType, $expected)
     {
         $this->paymentConfig->expects($this->any())
             ->method('getCcTypes')
             ->willReturn($configCcTypes);
-        $paymentInfo = $this->getMockBuilder(Info::class)
-            ->addMethods(['getCcType'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $paymentInfo = $this->createPartialMockWithReflection(
+            Info::class,
+            ['getCcType']
+        );
         $paymentInfo->expects($this->any())
             ->method('getCcType')
             ->willReturn($ccType);
@@ -87,15 +88,13 @@ class CcTest extends TestCase
         ];
     }
 
-    /**
-     * @dataProvider hasCcExpDateDataProvider
-     */
+    #[DataProvider('hasCcExpDateDataProvider')]
     public function testHasCcExpDate($ccExpMonth, $ccExpYear, $expected)
     {
-        $paymentInfo = $this->getMockBuilder(Info::class)
-            ->addMethods(['getCcExpMonth', 'getCcExpYear'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $paymentInfo = $this->createPartialMockWithReflection(
+            Info::class,
+            ['getCcExpMonth', 'getCcExpYear']
+        );
         $paymentInfo->expects($this->any())
             ->method('getCcExpMonth')
             ->willReturn($ccExpMonth);
@@ -118,15 +117,13 @@ class CcTest extends TestCase
         ];
     }
 
-    /**
-     * @dataProvider ccExpMonthDataProvider
-     */
+    #[DataProvider('ccExpMonthDataProvider')]
     public function testGetCcExpMonth($ccExpMonth, $expected)
     {
-        $paymentInfo = $this->getMockBuilder(Info::class)
-            ->addMethods(['getCcExpMonth'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $paymentInfo = $this->createPartialMockWithReflection(
+            Info::class,
+            ['getCcExpMonth']
+        );
         $paymentInfo->expects($this->any())
             ->method('getCcExpMonth')
             ->willReturn($ccExpMonth);
@@ -145,15 +142,13 @@ class CcTest extends TestCase
         ];
     }
 
-    /**
-     * @dataProvider getCcExpDateDataProvider
-     */
+    #[DataProvider('getCcExpDateDataProvider')]
     public function testGetCcExpDate($ccExpMonth, $ccExpYear)
     {
-        $paymentInfo = $this->getMockBuilder(Info::class)
-            ->addMethods(['getCcExpMonth', 'getCcExpYear'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $paymentInfo = $this->createPartialMockWithReflection(
+            Info::class,
+            ['getCcExpMonth', 'getCcExpYear']
+        );
         $paymentInfo
             ->expects($this->any())
             ->method('getCcExpMonth')

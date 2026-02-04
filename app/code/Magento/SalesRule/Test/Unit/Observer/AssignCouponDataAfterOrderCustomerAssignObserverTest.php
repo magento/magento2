@@ -74,9 +74,7 @@ class AssignCouponDataAfterOrderCustomerAssignObserverTest extends TestCase
             ->onlyMethods(['getData'])
             ->getMock();
 
-        $this->orderMock = $this->getMockBuilder(OrderInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->orderMock = $this->createMock(OrderInterface::class);
 
         $this->updateCouponUsagesMock = $this->getMockBuilder(UpdateCouponUsages::class)
             ->disableOriginalConstructor()

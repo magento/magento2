@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -113,7 +113,6 @@ class AdminConfigFixtureTest extends TestCase
             ->willReturn($annotations['method'][$this->object::ANNOTATION]);
         $reflection = new \ReflectionClass(Resolver::class);
         $reflectionProperty = $reflection->getProperty('instance');
-        $reflectionProperty->setAccessible(true);
         $reflectionProperty->setValue(Resolver::class, $mock);
     }
 }

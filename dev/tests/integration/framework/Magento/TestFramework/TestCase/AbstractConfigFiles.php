@@ -3,8 +3,8 @@
  * Abstract class that helps in writing tests that validate config xml files
  * are valid both individually and when merged.
  *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\TestFramework\TestCase;
 

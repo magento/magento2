@@ -1,12 +1,17 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 /**
  * \Magento\Framework\Cache\Backend\Decorator\AbstractDecorator test case
+ *
+ * @deprecated Tests deprecated class AbstractDecorator
+ * @see \Magento\Framework\Cache\Backend\Decorator\AbstractDecorator
+ * @group legacy
+ * @group disabled
  */
 namespace Magento\Framework\Cache\Test\Unit\Backend\Decorator;
 
@@ -20,9 +25,16 @@ class DecoratorAbstractTest extends TestCase
      */
     protected $_mockBackend;
 
+    /**
+     * Skip all tests as the class being tested is deprecated
+     *
+     * @return void
+     */
     protected function setUp(): void
     {
-        $this->_mockBackend = $this->createMock(\Zend_Cache_Backend_File::class);
+        $this->markTestSkipped(
+            'Test skipped: AbstractDecorator is deprecated. Use Symfony cache frontend decorators instead.'
+        );
     }
 
     protected function tearDown(): void
@@ -43,13 +55,11 @@ class DecoratorAbstractTest extends TestCase
             AbstractDecorator::class,
             '_backend'
         );
-        $backendProperty->setAccessible(true);
 
         $optionsProperty = new \ReflectionProperty(
             AbstractDecorator::class,
             '_decoratorOptions'
         );
-        $optionsProperty->setAccessible(true);
 
         $this->assertSame($backendProperty->getValue($decorator), $this->_mockBackend);
 
@@ -64,7 +74,7 @@ class DecoratorAbstractTest extends TestCase
     public function testConstructorException($options)
     {
         if (!empty($options)) {
-           $options['concrete_backend'] = $options['concrete_backend']($this);
+            $options['concrete_backend'] = $options['concrete_backend']($this);
         }
 
         $this->expectException('Zend_Cache_Exception');
@@ -78,8 +88,10 @@ class DecoratorAbstractTest extends TestCase
     {
         return [
             'empty' => [[]],
-            'wrong_class' => [['concrete_backend' => static fn (self $testCase) => $testCase->getMockBuilder('Test_Class')
-                ->getMock()]]
+            'wrong_class' => [[
+                'concrete_backend' => static fn (self $testCase) => $testCase->getMockBuilder('Test_Class')
+                    ->getMock()
+            ]]
         ];
     }
 

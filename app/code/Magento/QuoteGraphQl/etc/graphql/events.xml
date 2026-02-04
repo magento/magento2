@@ -10,4 +10,7 @@
         <observer name="sendEmail" instance="Magento\Quote\Observer\SubmitObserver"/>
         <observer name="sendInvoiceEmail" instance="Magento\Quote\Observer\SendInvoiceEmailObserver"/>
     </event>
+    <event name="sales_quote_item_qty_set_after">
+        <observer name="checkAndUpdateQty" instance="Magento\QuoteGraphQl\Observer\CheckAndUpdateQtyObserver"/>
+    </event>
 </config>

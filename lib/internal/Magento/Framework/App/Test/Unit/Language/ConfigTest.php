@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -78,7 +78,6 @@ class ConfigTest extends TestCase
     public function testGetSchemaFile()
     {
         $method = new \ReflectionMethod($this->config, 'getSchemaFile');
-        $method->setAccessible(true);
         $this->assertEquals(
             $this->urnResolver->getRealPath('urn:magento:framework:App/Language/package.xsd'),
             $method->invoke($this->config)

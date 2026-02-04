@@ -13,6 +13,7 @@ use Magento\Framework\DB\Adapter\Pdo\Mysql;
 use Magento\Framework\Model\ResourceModel\Db\VersionControl\Snapshot;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Sales\Model\Order;
+use Magento\Sales\Model\Order\Address as OrderAddress;
 use Magento\Sales\Model\Order\Address\Validator;
 use Magento\Sales\Model\ResourceModel\Order\Address;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -58,7 +59,7 @@ class AddressTest extends TestCase
     protected function setUp(): void
     {
         $this->addressMock = $this->createPartialMock(
-            \Magento\Sales\Model\Order\Address::class,
+            OrderAddress::class,
             ['getParentId', 'hasDataChanges', 'beforeSave', 'afterSave', 'validateBeforeSave', 'getOrder']
         );
         $this->orderMock = $this->createPartialMock(Order::class, ['getId']);

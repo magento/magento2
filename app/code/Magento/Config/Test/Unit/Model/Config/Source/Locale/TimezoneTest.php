@@ -26,9 +26,7 @@ class TimezoneTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->listMock = $this->getMockBuilder(TranslatedLists::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->listMock = $this->createMock(TranslatedLists::class);
         $this->model = new Timezone($this->listMock);
     }
 

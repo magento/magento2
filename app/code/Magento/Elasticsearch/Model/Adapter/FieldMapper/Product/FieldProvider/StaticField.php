@@ -10,6 +10,7 @@ namespace Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider;
 use Magento\Catalog\Api\Data\ProductAttributeInterface;
 use Magento\Eav\Model\Config;
 use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
+use Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\AttributeFieldsMappingProcessorInterface;
 use Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\AttributeProvider;
 use Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider\FieldIndex\ConverterInterface
     as IndexTypeConverterInterface;
@@ -21,11 +22,13 @@ use Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider\FieldT
     as FieldTypeResolver;
 use Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProviderInterface;
 use Magento\Elasticsearch\Model\Adapter\FieldMapperInterface;
+use Magento\Framework\App\ObjectManager;
 
 /**
  * Provide static fields for mapping of product.
  * @deprecated Elasticsearch is no longer supported by Adobe
  * @see this class will be responsible for ES only
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class StaticField implements FieldProviderInterface
 {
@@ -70,6 +73,11 @@ class StaticField implements FieldProviderInterface
     private $excludedAttributes;
 
     /**
+     * @var AttributeFieldsMappingProcessorInterface
+     */
+    private $attributeFieldsMappingProcessor;
+
+    /**
      * @param Config $eavConfig
      * @param FieldTypeConverterInterface $fieldTypeConverter
      * @param IndexTypeConverterInterface $indexTypeConverter
@@ -78,6 +86,7 @@ class StaticField implements FieldProviderInterface
      * @param AttributeProvider $attributeAdapterProvider
      * @param FieldName\ResolverInterface $fieldNameResolver
      * @param array $excludedAttributes
+     * @param AttributeFieldsMappingProcessorInterface|null $attributeFieldsMappingProcessor
      */
     public function __construct(
         Config $eavConfig,
@@ -87,7 +96,8 @@ class StaticField implements FieldProviderInterface
         FieldIndexResolver $fieldIndexResolver,
         AttributeProvider $attributeAdapterProvider,
         FieldName\ResolverInterface $fieldNameResolver,
-        array $excludedAttributes = []
+        array $excludedAttributes = [],
+        ?AttributeFieldsMappingProcessorInterface $attributeFieldsMappingProcessor = null
     ) {
         $this->eavConfig = $eavConfig;
         $this->fieldTypeConverter = $fieldTypeConverter;
@@ -97,6 +107,8 @@ class StaticField implements FieldProviderInterface
         $this->attributeAdapterProvider = $attributeAdapterProvider;
         $this->fieldNameResolver = $fieldNameResolver;
         $this->excludedAttributes = $excludedAttributes;
+        $this->attributeFieldsMappingProcessor = $attributeFieldsMappingProcessor
+            ?? ObjectManager::getInstance()->get(AttributeFieldsMappingProcessorInterface::class);
     }
 
     /**
@@ -211,7 +223,10 @@ class StaticField implements FieldProviderInterface
             }
         }
 
-        return $fieldMapping;
+        return $this->attributeFieldsMappingProcessor->process(
+            $attribute->getAttributeCode(),
+            $fieldMapping
+        );
     }
 
     /**

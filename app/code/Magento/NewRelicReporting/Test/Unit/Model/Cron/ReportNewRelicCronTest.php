@@ -16,6 +16,7 @@ use Magento\NewRelicReporting\Model\CronEvent;
 use Magento\NewRelicReporting\Model\CronEventFactory;
 use Magento\NewRelicReporting\Model\Module\Collect;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
 use ReflectionException;
@@ -264,12 +265,10 @@ class ReportNewRelicCronTest extends TestCase
         // Use reflection to call protected method
         $reflection = new ReflectionClass($this->model);
         $method = $reflection->getMethod('reportModules');
-        $method->setAccessible(true);
         $method->invoke($this->model);
 
         // Verify custom parameters were added
         $property = $reflection->getProperty('customParameters');
-        $property->setAccessible(true);
         $customParams = $property->getValue($this->model);
 
         $this->assertEquals(10, $customParams[Config::MODULES_ENABLED]);
@@ -304,12 +303,10 @@ class ReportNewRelicCronTest extends TestCase
         // Use reflection to call protected method
         $reflection = new ReflectionClass($this->model);
         $method = $reflection->getMethod('reportModules');
-        $method->setAccessible(true);
         $method->invoke($this->model);
 
         // Verify custom parameters were still added
         $property = $reflection->getProperty('customParameters');
-        $property->setAccessible(true);
         $customParams = $property->getValue($this->model);
 
         $this->assertEquals(8, $customParams[Config::MODULES_ENABLED]);
@@ -334,7 +331,6 @@ class ReportNewRelicCronTest extends TestCase
         // Use reflection to call protected method
         $reflection = new ReflectionClass($this->model);
         $method = $reflection->getMethod('setModuleChangeStatusDeployment');
-        $method->setAccessible(true);
         $method->invoke($this->model, $changesArray, $deploymentText);
     }
 
@@ -356,7 +352,6 @@ class ReportNewRelicCronTest extends TestCase
         // Use reflection to call protected method
         $reflection = new ReflectionClass($this->model);
         $method = $reflection->getMethod('setModuleChangeStatusDeployment');
-        $method->setAccessible(true);
         $method->invoke($this->model, $changesArray, $deploymentText);
     }
 
@@ -381,10 +376,9 @@ class ReportNewRelicCronTest extends TestCase
      * @param string $changeType
      * @param string $moduleName
      * @param string $version
-     * @return void
-     * @dataProvider moduleChangeTypesDataProvider
-     * @throws ReflectionException
+     * @return void     * @throws ReflectionException
      */
+    #[DataProvider('moduleChangeTypesDataProvider')]
     public function testReportModulesHandlesChangeTypes(string $changeType, string $moduleName, string $version)
     {
         $moduleData = [
@@ -411,7 +405,6 @@ class ReportNewRelicCronTest extends TestCase
         // Use reflection to call protected method
         $reflection = new ReflectionClass($this->model);
         $method = $reflection->getMethod('reportModules');
-        $method->setAccessible(true);
         $method->invoke($this->model);
     }
 
@@ -448,7 +441,6 @@ class ReportNewRelicCronTest extends TestCase
         // Use reflection to call protected method
         $reflection = new ReflectionClass($this->model);
         $method = $reflection->getMethod('reportModules');
-        $method->setAccessible(true);
         $method->invoke($this->model);
     }
 }

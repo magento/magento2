@@ -11,6 +11,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Search\Adapter\Query\Preprocessor\Synonyms;
 use Magento\Search\Api\SynonymAnalyzerInterface;
 use Magento\Search\Model\SynonymAnalyzer;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -48,32 +49,28 @@ class SynonymsTest extends TestCase
      *
      * @return array
      */
-    public static function loadProcessDataProvider()
+    public static function getDataProvider()
     {
         return [
             'oneWord' => [
-                'query' => 'big',
-                'result' => [['big', 'huge']],
-                'newQuery' => 'big huge'
+                'big',
+                [['big', 'huge']],
+                'big huge'
             ],
             'twoWords' => [
-                'query' => 'big universe',
-                'result' => [['big', 'huge'], ['universe', 'cosmos']],
-                'newQuery' => 'big huge universe cosmos'
+                'big universe',
+                [['big', 'huge'], ['universe', 'cosmos']],
+                'big huge universe cosmos'
             ],
             'noSynonyms' => [
-                'query' => 'no synonyms',
-                'result' => [['no'], ['synonyms']],
-                'newQuery' => 'no synonyms'
+                'no synonyms',
+                [['no'], ['synonyms']],
+                'no synonyms'
             ]
         ];
     }
 
-    /**
-     * @param string $phrase
-     * @param array $expectedResult
-     * @dataProvider loadProcessDataProvider
-     */
+    #[DataProvider('getDataProvider')]
     public function testProcess($query, $result, $newQuery)
     {
         $this->synonymAnalyzer->expects($this->once())
@@ -81,7 +78,7 @@ class SynonymsTest extends TestCase
             ->with($query)
             ->willReturn($result);
 
-        $result = $this->synonymPreprocessor->process($query);
-        $this->assertEquals($result, $newQuery);
+        $actualResult = $this->synonymPreprocessor->process($query);
+        $this->assertEquals($newQuery, $actualResult);
     }
 }

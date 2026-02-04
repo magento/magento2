@@ -13,6 +13,7 @@ use Magento\Framework\Controller\Result\JsonFactory;
 use Magento\Framework\DataObject;
 use Magento\Framework\Session\Generic;
 use Magento\Framework\Session\SessionManager;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Paypal\Controller\Transparent\RequestSecureToken;
 use Magento\Paypal\Model\Payflow\Service\Request\SecureToken;
 use Magento\Paypal\Model\Payflow\Transparent;
@@ -25,6 +26,8 @@ use PHPUnit\Framework\TestCase;
  */
 class RequestSecureTokenTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var Transparent|MockObject
      */
@@ -74,20 +77,14 @@ class RequestSecureTokenTest extends TestCase
             ->onlyMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
-        $this->sessionTransparent = $this->getMockBuilder(Generic::class)
-            ->addMethods(['setQuoteId'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->sessionTransparent = $this->createPartialMockWithReflection(Generic::class, ['setQuoteId']);
         $this->secureTokenService = $this->getMockBuilder(
             SecureToken::class
         )
             ->onlyMethods(['requestToken'])
             ->disableOriginalConstructor()
             ->getMock();
-        $this->sessionManager = $this->getMockBuilder(SessionManager::class)
-            ->addMethods(['getQuote'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->sessionManager = $this->createPartialMockWithReflection(SessionManager::class, ['getQuote']);
         $this->transparent = $this->getMockBuilder(Transparent::class)
             ->onlyMethods(['getCode', 'isActive'])
             ->disableOriginalConstructor()

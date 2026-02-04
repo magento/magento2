@@ -16,6 +16,7 @@
     <preference for="Magento\Framework\Search\Dynamic\DataProviderInterface" type="Magento\Elasticsearch\SearchAdapter\Dynamic\DataProvider" />
     <preference for="Magento\CatalogSearch\Model\ResourceModel\Fulltext\Collection\SearchResultApplierInterface" type="Magento\Elasticsearch\Model\ResourceModel\Fulltext\Collection\SearchResultApplier"/>
     <preference for="Magento\Elasticsearch\Model\DataProvider\Base\GetSuggestionFrequencyInterface" type="Magento\Elasticsearch\Model\DataProvider\Base\GetSuggestionFrequency"/>
+    <preference for="Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\AttributeFieldsMappingProcessorInterface" type="Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\CompositeAttributeFieldsMappingProcessor"/>
     <type name="Magento\Catalog\Model\Indexer\Category\Product\Action\Rows">
         <plugin name="catalogsearchFulltextProductAssignment" type="Magento\Elasticsearch\Model\Indexer\Fulltext\Plugin\Category\Product\Action\Rows"/>
     </type>
@@ -421,6 +422,13 @@
     <type name="Magento\CatalogSearch\Model\ResourceModel\Fulltext\Collection\SearchCriteriaResolverFactory">
         <arguments>
             <argument name="instanceName" xsi:type="string">Magento\Elasticsearch\Model\ResourceModel\Fulltext\Collection\SearchCriteriaResolver</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\CompositeAttributeFieldsMappingProcessor">
+        <arguments>
+            <argument name="processors" xsi:type="array">
+                <item name="searchable" xsi:type="object">Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\SearchableAttributeFieldsMappingProcessor</item>
+            </argument>
         </arguments>
     </type>
 </config>

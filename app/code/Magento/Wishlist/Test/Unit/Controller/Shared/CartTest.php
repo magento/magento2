@@ -26,6 +26,8 @@ use Magento\Wishlist\Model\Item\Option;
 use Magento\Wishlist\Model\Item\OptionFactory;
 use Magento\Wishlist\Model\ItemFactory;
 use Magento\Wishlist\Model\ResourceModel\Item\Option\Collection as OptionCollection;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -37,6 +39,8 @@ use PHPUnit\Framework\TestCase;
  */
 class CartTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var SharedCart|MockObject
      */
@@ -107,9 +111,9 @@ class CartTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->request = $this->getMockForAbstractClass(RequestInterface::class);
-        $this->redirect = $this->getMockForAbstractClass(RedirectInterface::class);
-        $this->messageManager = $this->getMockForAbstractClass(ManagerInterface::class);
+        $this->request = $this->createMock(RequestInterface::class);
+        $this->redirect = $this->createMock(RedirectInterface::class);
+        $this->messageManager = $this->createMock(ManagerInterface::class);
         $this->resultRedirect = $this->createMock(Redirect::class);
 
         $resultFactory = $this->createMock(ResultFactory::class);
@@ -119,9 +123,7 @@ class CartTest extends TestCase
             ->willReturn($this->resultRedirect);
 
         /** @var ActionContext|MockObject $context */
-        $context = $this->getMockBuilder(ActionContext::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $context = $this->createMock(ActionContext::class);
         $context->expects($this->any())
             ->method('getRequest')
             ->willReturn($this->request);
@@ -138,16 +140,11 @@ class CartTest extends TestCase
         $this->cart = $this->createMock(Cart::class);
         $this->cartHelper = $this->createMock(CartHelper::class);
 
-        $this->quote = $this->getMockBuilder(Quote::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['getHasError'])
-            ->getMock();
+        $this->quote = $this->createPartialMockWithReflection(Quote::class, ['getHasError']);
 
         $this->optionCollection = $this->createMock(OptionCollection::class);
 
-        $this->option = $this->getMockBuilder(Option::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->option = $this->createMock(Option::class);
 
         /** @var OptionFactory|MockObject $optionFactory */
         $optionFactory = $this->createMock(OptionFactory::class);
@@ -183,9 +180,8 @@ class CartTest extends TestCase
      * @param string $refererUrl
      * @param string $cartUrl
      * @param string $redirectUrl
-     *
-     * @dataProvider dataProviderExecute
      */
+    #[DataProvider('dataProviderExecute')]
     public function testExecute(
         $itemId,
         $productName,

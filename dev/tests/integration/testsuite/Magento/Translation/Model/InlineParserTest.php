@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 
 declare(strict_types=1);
@@ -110,12 +110,9 @@ class InlineParserTest extends TestCase
             ->setAreaCode($area);
 
         $isJsonProperty = new \ReflectionProperty(get_class($this->model), '_isJson');
-        $isJsonProperty->setAccessible(true);
-
         $this->assertFalse($isJsonProperty->getValue($this->model));
 
         $setIsJsonMethod = new \ReflectionMethod($this->model, 'setIsJson');
-        $setIsJsonMethod->setAccessible(true);
         $setIsJsonMethod->invoke($this->model, true);
 
         $this->assertTrue($isJsonProperty->getValue($this->model));

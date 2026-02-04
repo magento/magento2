@@ -12,7 +12,7 @@ use Magento\Backend\App\Action\Context;
 use Magento\Backend\Helper\Data;
 use Magento\Backend\Model\Session;
 use Magento\Framework\App\ActionFlag;
-use Magento\Framework\App\ResponseInterface;
+use Magento\Framework\App\Response\HttpInterface;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Message\ManagerInterface;
 use Magento\Framework\Phrase;
@@ -59,7 +59,7 @@ class LogoutAllTest extends TestCase
     protected $actionFlagMock;
 
     /**
-     * @var ResponseInterface
+     * @var HttpInterface
      */
     protected $responseMock;
 
@@ -80,22 +80,14 @@ class LogoutAllTest extends TestCase
     protected function setUp(): void
     {
         $this->objectManager = new ObjectManager($this);
-        $this->contextMock = $this->getMockBuilder(Context::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->contextMock = $this->createMock(Context::class);
 
-        $this->messageManager = $this->getMockBuilder(ManagerInterface::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['addSuccessMessage', 'addErrorMessage', 'addExceptionMessage'])
-            ->getMockForAbstractClass();
+        $this->messageManager = $this->createMock(ManagerInterface::class);
         $this->contextMock->expects($this->any())
             ->method('getMessageManager')
             ->willReturn($this->messageManager);
 
-        $this->session = $this->getMockBuilder(Session::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['setIsUrlNotice'])
-            ->getMock();
+        $this->session = $this->createMock(Session::class);
         $this->contextMock->expects($this->any())
             ->method('getSession')
             ->willReturn($this->session);
@@ -105,18 +97,12 @@ class LogoutAllTest extends TestCase
             ['logoutOtherUserSessions']
         );
 
-        $this->actionFlagMock = $this->getMockBuilder(ActionFlag::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['get'])
-            ->getMock();
+        $this->actionFlagMock = $this->createPartialMock(ActionFlag::class, ['get']);
         $this->contextMock->expects($this->any())
             ->method('getActionFlag')
             ->willReturn($this->actionFlagMock);
 
-        $this->responseMock = $this->getMockBuilder(ResponseInterface::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['setRedirect'])
-            ->getMockForAbstractClass();
+        $this->responseMock = $this->createMock(HttpInterface::class);
         $this->contextMock->expects($this->any())
             ->method('getResponse')
             ->willReturn($this->responseMock);

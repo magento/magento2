@@ -93,7 +93,6 @@ class RequestPreprocessorTest extends TestCase
         $modelProperty = (new \ReflectionClass(get_class($this->_model)))
             ->getProperty('baseUrlChecker');
 
-        $modelProperty->setAccessible(true);
         $modelProperty->setValue($this->_model, $this->baseUrlChecker);
     }
 

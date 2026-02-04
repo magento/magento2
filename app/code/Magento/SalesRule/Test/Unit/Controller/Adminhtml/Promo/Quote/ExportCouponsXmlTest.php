@@ -11,6 +11,7 @@ namespace Magento\SalesRule\Test\Unit\Controller\Adminhtml\Promo\Quote;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\App\Response\Http\FileFactory;
 use Magento\Framework\Controller\ResultFactory;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\Framework\View\Element\AbstractBlock;
 use Magento\Framework\View\LayoutInterface;
@@ -22,6 +23,8 @@ use PHPUnit\Framework\TestCase;
 
 class ExportCouponsXmlTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var ExportCouponsXml
      */
@@ -68,11 +71,11 @@ class ExportCouponsXmlTest extends TestCase
         $fileName = 'coupon_codes.xml';
 
         $resultLayoutMock = $this->createMock(Layout::class);
-        $layoutMock = $this->getMockForAbstractClass(LayoutInterface::class);
-        $contentMock = $this->getMockBuilder(AbstractBlock::class)
-            ->addMethods(['getExcelFile'])
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $layoutMock = $this->createMock(LayoutInterface::class);
+        $contentMock = $this->createPartialMockWithReflection(
+            AbstractBlock::class,
+            ['getExcelFile']
+        );
         $this->resultFactoryMock
             ->expects($this->once())
             ->method('create')

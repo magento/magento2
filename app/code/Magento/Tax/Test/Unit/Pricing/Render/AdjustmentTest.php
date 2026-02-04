@@ -17,9 +17,11 @@ use Magento\Framework\Pricing\Render;
 use Magento\Framework\Pricing\Render\Amount;
 use Magento\Framework\Pricing\Render\AmountRenderInterface;
 use Magento\Framework\Pricing\SaleableInterface;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\View\Element\Template\Context;
 use Magento\Tax\Helper\Data;
 use Magento\Tax\Pricing\Render\Adjustment;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -28,6 +30,8 @@ use PHPUnit\Framework\TestCase;
  */
 class AdjustmentTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var \Magento\Framework\View\Element\Template\Context
      */
@@ -62,19 +66,16 @@ class AdjustmentTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->contextMock = $this->getMockBuilder(Context::class)
-            ->addMethods(['getStoreConfig'])
-            ->onlyMethods(['getEventManager', 'getScopeConfig'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->contextMock = $this->createPartialMockWithReflection(
+            Context::class,
+            ['getStoreConfig', 'getEventManager', 'getScopeConfig']
+        );
         $this->priceCurrencyMock = $this->createMock(PriceCurrency::class);
         $this->taxHelperMock = $this->createMock(Data::class);
 
-        $eventManagerMock = $this->getMockBuilder(ManagerInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $eventManagerMock = $this->createMock(ManagerInterface::class);
 
-        $scopeConfigMock = $this->getMockForAbstractClass(ScopeConfigInterface::class);
+        $scopeConfigMock = $this->createMock(ScopeConfigInterface::class);
 
         $this->contextMock->expects($this->any())
             ->method('getEventManager')
@@ -93,7 +94,7 @@ class AdjustmentTest extends TestCase
     /**
      * Test for method getAdjustmentCode
      */
-    public function testGetAdjustmentCode()
+    public function testGetAdjustmentCode(): void
     {
         $this->assertEquals(\Magento\Tax\Pricing\Adjustment::ADJUSTMENT_CODE, $this->model->getAdjustmentCode());
     }
@@ -101,7 +102,7 @@ class AdjustmentTest extends TestCase
     /**
      * Test for method getDefaultExclusions
      */
-    public function testGetDefaultExclusions()
+    public function testGetDefaultExclusions(): void
     {
         $defaultExclusions = $this->model->getDefaultExclusions();
         $this->assertNotEmpty($defaultExclusions, 'Expected to have at least one default exclusion');
@@ -111,7 +112,7 @@ class AdjustmentTest extends TestCase
     /**
      * Test for method displayBothPrices
      */
-    public function testDisplayBothPrices()
+    public function testDisplayBothPrices(): void
     {
         $shouldDisplayBothPrices = true;
         $this->taxHelperMock->expects($this->once())
@@ -123,7 +124,7 @@ class AdjustmentTest extends TestCase
     /**
      * Test for method getDisplayAmountExclTax
      */
-    public function testGetDisplayAmountExclTax()
+    public function testGetDisplayAmountExclTax(): void
     {
         $expectedPriceValue = 1.23;
         $expectedPrice = '$4.56';
@@ -160,11 +161,9 @@ class AdjustmentTest extends TestCase
 
     /**
      * Test for method getDisplayAmount
-     *
-     * @param bool $includeContainer
-     * @dataProvider getDisplayAmountDataProvider
      */
-    public function testGetDisplayAmount($includeContainer)
+    #[DataProvider('getDisplayAmountDataProvider')]
+    public function testGetDisplayAmount(bool $includeContainer): void
     {
         $expectedPriceValue = 1.23;
         $expectedPrice = '$4.56';
@@ -204,21 +203,16 @@ class AdjustmentTest extends TestCase
      *
      * @return array
      */
-    public static function getDisplayAmountDataProvider()
+    public static function getDisplayAmountDataProvider(): array
     {
         return [[true], [false]];
     }
 
     /**
      * Test for method buildIdWithPrefix
-     *
-     * @param string $prefix
-     * @param null|false|int $saleableId
-     * @param null|false|string $suffix
-     * @param string $expectedResult
-     * @dataProvider buildIdWithPrefixDataProvider
      */
-    public function testBuildIdWithPrefix($prefix, $saleableId, $suffix, $expectedResult)
+    #[DataProvider('buildIdWithPrefixDataProvider')]
+    public function testBuildIdWithPrefix(string $prefix, $saleableId, $suffix, string $expectedResult): void
     {
         /** @var Amount $amountRender */
         $amountRender = $this->getMockBuilder(Amount::class)
@@ -251,7 +245,7 @@ class AdjustmentTest extends TestCase
      *
      * @return array
      */
-    public static function buildIdWithPrefixDataProvider()
+    public static function buildIdWithPrefixDataProvider(): array
     {
         return [
             ['some_prefix_', null, '_suffix', 'some_prefix__suffix'],
@@ -265,7 +259,7 @@ class AdjustmentTest extends TestCase
     /**
      * test for method displayPriceIncludingTax
      */
-    public function testDisplayPriceIncludingTax()
+    public function testDisplayPriceIncludingTax(): void
     {
         $expectedResult = true;
 
@@ -281,7 +275,7 @@ class AdjustmentTest extends TestCase
     /**
      * test for method displayPriceExcludingTax
      */
-    public function testDisplayPriceExcludingTax()
+    public function testDisplayPriceExcludingTax(): void
     {
         $expectedResult = true;
 
@@ -294,13 +288,13 @@ class AdjustmentTest extends TestCase
         $this->assertEquals($expectedResult, $result);
     }
 
-    public function testGetHtmlExcluding()
+    public function testGetHtmlExcluding(): void
     {
         $arguments = [];
         $displayValue = 8.0;
 
-        $amountRender = $this->getMockForAbstractClass(AmountRenderInterface::class);
-        $amountMock = $this->getMockForAbstractClass(AmountInterface::class);
+        $amountRender = $this->createMock(AmountRenderInterface::class);
+        $amountMock = $this->createMock(AmountInterface::class);
         $amountMock->expects($this->once())
             ->method('getValue')
             ->with(\Magento\Tax\Pricing\Adjustment::ADJUSTMENT_CODE)
@@ -323,17 +317,16 @@ class AdjustmentTest extends TestCase
         $this->model->render($amountRender, $arguments);
     }
 
-    public function testGetHtmlBoth()
+    public function testGetHtmlBoth(): void
     {
         $arguments = [];
         $this->model->setZone(Render::ZONE_ITEM_VIEW);
 
-        $amountRender = $this->getMockBuilder(Amount::class)
-            ->addMethods(['setPriceDisplayLabel', 'setPriceWrapperCss', 'setPriceId'])
-            ->onlyMethods(['getSaleableItem'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $product = $this->getMockForAbstractClass(SaleableInterface::class);
+        $amountRender = $this->createPartialMockWithReflection(
+            Amount::class,
+            ['setPriceDisplayLabel', 'setPriceWrapperCss', 'setPriceId', 'getSaleableItem']
+        );
+        $product = $this->createMock(SaleableInterface::class);
         $product->expects($this->once())
             ->method('getId');
 
@@ -356,14 +349,14 @@ class AdjustmentTest extends TestCase
 
     /**
      * test for method getDataPriceType
-     * @dataProvider dataPriceTypeDataProvider
      */
+    #[DataProvider('dataPriceTypeDataProvider')]
     public function testGetDataPriceType(?string $priceType, string $priceTypeValue): void
     {
-        $amountRender = $this->getMockBuilder(Amount::class)
-            ->addMethods(['getPriceType'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $amountRender = $this->createPartialMockWithReflection(
+            Amount::class,
+            ['getPriceType']
+        );
         $amountRender->expects($this->atLeastOnce())
             ->method('getPriceType')
             ->willReturn($priceType);

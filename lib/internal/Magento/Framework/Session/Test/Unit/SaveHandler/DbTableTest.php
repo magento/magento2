@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -90,7 +90,6 @@ class DbTableTest extends TestCase
         $this->_model = new DbTable($resource);
 
         $method = new \ReflectionMethod(DbTable::class, 'checkConnection');
-        $method->setAccessible(true);
         $this->assertNull($method->invoke($this->_model));
     }
 
@@ -105,7 +104,6 @@ class DbTableTest extends TestCase
         $this->_model = new DbTable($resource);
 
         $method = new \ReflectionMethod(DbTable::class, 'checkConnection');
-        $method->setAccessible(true);
         $this->assertNull($method->invoke($this->_model));
     }
 
@@ -131,7 +129,6 @@ class DbTableTest extends TestCase
         $this->_model = new DbTable($resource);
 
         $method = new \ReflectionMethod(DbTable::class, 'checkConnection');
-        $method->setAccessible(true);
         $this->assertNull($method->invoke($this->_model));
     }
 

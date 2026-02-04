@@ -1,7 +1,8 @@
 <?php declare(strict_types=1);
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
+ *
  *
  * Test class for \Magento\Framework\Profiler\Driver\Standard\Output\Factory
  */

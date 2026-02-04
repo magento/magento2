@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -377,7 +377,6 @@ class PluginListTest extends TestCase
     {
         $reflection = new \ReflectionClass($this->object);
         $reflection_property = $reflection->getProperty('_scopePriorityScheme');
-        $reflection_property->setAccessible(true);
         $reflection_property->setValue($this->object, $areaCodes);
     }
 }

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -480,7 +480,6 @@ class SubscriptionTest extends TestCase
         );
 
         $method = new ReflectionMethod($model, 'buildStatement');
-        $method->setAccessible(true);
         $statement = $method->invoke($model, Trigger::EVENT_UPDATE, $this->viewMock);
 
         $this->assertStringNotContainsString($ignoredColumnName, $statement);

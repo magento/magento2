@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2023 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -10,7 +10,9 @@ namespace Magento\TestFramework\TestCase\GraphQl;
 use Magento\Authorization\Model\UserContextInterface;
 use Magento\Customer\Api\Data\CustomerInterface;
 use Magento\Framework\App\Area;
+use Magento\Framework\App\Cache\Frontend\Pool;
 use Magento\Framework\App\ObjectManager\ConfigLoader;
+use Magento\Framework\Cache\CacheConstants;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\GraphQl\Model\Query\ContextFactory;
 use Magento\GraphQlResolverCache\Model\Resolver\Result\Type as GraphQlResolverCache;
@@ -220,10 +222,30 @@ class ResolverCacheAbstract extends GraphQlAbstract
      */
     private function cleanCacheType(string $cacheType): void
     {
-        $appDir = dirname(Bootstrap::getInstance()->getAppTempDir());
-        $out = '';
+        try {
+            // Get a fresh Pool instance without affecting shared instances
+            $cachePool = $this->objectManager->create(Pool::class);
+            $cache = $cachePool->get($cacheType);
 
-        // phpcs:ignore Magento2.Security.InsecureFunction
-        exec("php -f {$appDir}/bin/magento cache:clean $cacheType", $out);
+            // Clean all cache entries for this type
+            $cache->clean(CacheConstants::CLEANING_MODE_ALL);
+
+            if ($cacheType === GraphQlResolverCache::TYPE_IDENTIFIER) {
+                $backend = $cache->getBackend();
+                if (method_exists($backend, 'clean')) {
+                    $backend->clean(CacheConstants::CLEANING_MODE_ALL);
+                }
+
+                $this->objectManager->removeSharedInstance(
+                    GraphQlResolverCache::class
+                );
+            }
+        } catch (\Exception $e) {
+            // Fallback to original exec() method if direct clean fails
+            $appDir = dirname(Bootstrap::getInstance()->getAppTempDir());
+            $out = '';
+            // phpcs:ignore Magento2.Security.InsecureFunction
+            exec("php -f {$appDir}/bin/magento cache:clean $cacheType", $out);
+        }
     }
 }

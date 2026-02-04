@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -28,16 +28,16 @@ use Psr\Log\LoggerInterface;
 class CompiledTest extends TestCase
 {
     /** @var ObjectManagerInterface|MockObject */
-    protected $objectManagerMock;
+    private $objectManagerMock;
 
     /** @var ConfigInterface|MockObject */
-    protected $config;
+    private $config;
 
     /** @var DefinitionInterface|MockObject */
     private $definitionsMock;
 
     /** @var Compiled */
-    protected $factory;
+    private $factory;
 
     /** @var array */
     private $sharedInstances;
@@ -76,7 +76,7 @@ class CompiledTest extends TestCase
     /**
      * Test create simple
      */
-    public function testCreateSimple()
+    public function testCreateSimple(): void
     {
         $expectedConfig = $this->getSimpleConfig();
 
@@ -85,7 +85,7 @@ class CompiledTest extends TestCase
         $sharedType = DependencySharedTesting::class;
         $nonSharedType = DependencyTesting::class;
 
-        $this->config->expects($this->any())
+        $this->config
             ->method('getArguments')
             ->willReturnMap(
                 [
@@ -94,7 +94,7 @@ class CompiledTest extends TestCase
                     [$nonSharedType, null]
                 ]
             );
-        $this->config->expects($this->any())
+        $this->config
             ->method('getInstanceType')
             ->willReturnMap(
                 [
@@ -126,6 +126,50 @@ class CompiledTest extends TestCase
     }
 
     /**
+     * Test create invalid simple
+     */
+    public function testCreateInvalidSimple(): void
+    {
+        $expectedConfig = $this->getInvalidSimpleConfig();
+
+        $requestedType = 'requestedType';
+        $type = SimpleClassTesting::class;
+        $sharedType = DependencySharedTesting::class;
+        $nonSharedType = DependencyTesting::class;
+
+        $this->config
+            ->method('getArguments')
+            ->willReturnMap(
+                [
+                    [$requestedType, $expectedConfig],
+                    [$sharedType, null],
+                    [$nonSharedType, null]
+                ]
+            );
+        $this->config
+            ->method('getInstanceType')
+            ->willReturnMap(
+                [
+                    [$requestedType, $type],
+                    [$sharedType, $sharedType],
+                    [$nonSharedType, $nonSharedType]
+                ]
+            );
+
+        $this->factory->setArguments(
+            [
+                'globalValue' => 'GLOBAL_ARGUMENT',
+            ]
+        );
+
+        $this->expectException(\Error::class);
+        $this->expectExceptionMessage('Unknown named parameter $value_array');
+
+        /** @var SimpleClassTesting $result */
+        $this->factory->create($requestedType, []);
+    }
+
+    /**
      * Create class with exception
      *
      * @return void
@@ -149,7 +193,7 @@ class CompiledTest extends TestCase
     /**
      * Test create simple configured arguments
      */
-    public function testCreateSimpleConfiguredArguments()
+    public function testCreateSimpleConfiguredArguments(): void
     {
         $expectedConfig = $this->getSimpleNestedConfig();
 
@@ -159,7 +203,7 @@ class CompiledTest extends TestCase
             DependencySharedTesting::class;
         $nonSharedType = DependencyTesting::class;
 
-        $this->config->expects($this->any())
+        $this->config
             ->method('getArguments')
             ->willReturnMap(
                 [
@@ -168,7 +212,7 @@ class CompiledTest extends TestCase
                     [$nonSharedType, null]
                 ]
             );
-        $this->config->expects($this->any())
+        $this->config
             ->method('getInstanceType')
             ->willReturnMap(
                 [
@@ -216,11 +260,11 @@ class CompiledTest extends TestCase
     /**
      * Test create get arguments in runtime
      */
-    public function testCreateGetArgumentsInRuntime()
+    public function testCreateGetArgumentsInRuntime(): void
     {
         // Stub OM to create test assets
-        $this->config->expects($this->any())->method('isShared')->willReturn(true);
-        $this->objectManagerMock->expects($this->any())->method('get')->willReturnMap(
+        $this->config->method('isShared')->willReturn(true);
+        $this->objectManagerMock->method('get')->willReturnMap(
             [
                 [DependencyTesting::class, new DependencyTesting()],
                 [DependencySharedTesting::class, new DependencySharedTesting()]
@@ -229,8 +273,8 @@ class CompiledTest extends TestCase
 
         // Simulate case where compiled DI config not found
         $type = SimpleClassTesting::class;
-        $this->config->expects($this->any())->method('getArguments')->willReturn(null);
-        $this->config->expects($this->any())->method('getInstanceType')->willReturnArgument(0);
+        $this->config->method('getArguments')->willReturn(null);
+        $this->config->method('getInstanceType')->willReturnArgument(0);
         $this->definitionsMock->expects($this->once())
             ->method('getParameters')
             ->with($type)
@@ -258,7 +302,7 @@ class CompiledTest extends TestCase
      *
      * @return array
      */
-    private function getSimpleConfig()
+    private function getSimpleConfig(): array
     {
         return [
             'nonSharedDependency' => [
@@ -269,9 +313,6 @@ class CompiledTest extends TestCase
             ],
             'value' => [
                 '_v_' => 'value',
-            ],
-            'value_array' => [
-                '_v_' => ['default_value1', 'default_value2'],
             ],
             'globalValue' => [
                 '_a_' => 'globalValue',
@@ -289,7 +330,24 @@ class CompiledTest extends TestCase
      *
      * @return array
      */
-    private function getSimpleNestedConfig()
+    private function getInvalidSimpleConfig(): array
+    {
+        $config = $this->getSimpleConfig();
+        //Add not existing parameter
+        $config['value_array'] = [
+            '_v_' => ['default_value1', 'default_value2'],
+        ];
+
+        return $config;
+    }
+
+    /**
+     * Returns config for \Magento\Framework\ObjectManager\Test\Unit\Factory\Fixture\Compiled\SimpleClassTesting
+     * with non-default nested array value for the $value_array parameter
+     *
+     * @return array
+     */
+    private function getSimpleNestedConfig(): array
     {
         return [
             'nonSharedDependency' => [
@@ -301,7 +359,7 @@ class CompiledTest extends TestCase
             'value' => [
                 '_v_' => 'value',
             ],
-            'value_array' => [
+            'valueArray' => [
                 '_vac_' => [
                     'array_value' => 'value',
                     'array_configured_instance' => [
@@ -344,7 +402,7 @@ class CompiledTest extends TestCase
      *
      * @return array
      */
-    private function getRuntimeParameters()
+    private function getRuntimeParameters(): array
     {
         return [
             0 => [

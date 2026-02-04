@@ -14,6 +14,7 @@ use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Store\Model\ScopeInterface;
 use Magento\Tax\Helper\Data;
 use Magento\Weee\Model\Config;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 class ConfigTest extends TestCase
@@ -23,13 +24,13 @@ class ConfigTest extends TestCase
      *
      * @param string $method
      * @param string $path
-     * @param bool $configValue
-     * @param bool $expectedValue
-     * @dataProvider dataProviderScopeConfigMethods
+     * @param bool   $configValue
+     * @param bool   $expectedValue
      */
+    #[DataProvider('dataProviderScopeConfigMethods')]
     public function testScopeConfigMethods($method, $path, $configValue, $expectedValue)
     {
-        $scopeConfigMock = $this->getMockForAbstractClass(ScopeConfigInterface::class);
+        $scopeConfigMock = $this->createMock(ScopeConfigInterface::class);
         $scopeConfigMock->expects($this->any())
             ->method('getValue')
             ->with($path, ScopeInterface::SCOPE_STORE, null)

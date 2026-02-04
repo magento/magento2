@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -131,7 +131,6 @@ class ConfigTest extends TestCase
     {
         $this->getModel($this->validatorMock);
         $appStateProperty = new \ReflectionProperty(Config::class, 'options');
-        $appStateProperty->setAccessible(true);
         $original = $appStateProperty->getValue($this->config);
         $valueForTest = ['test' => 'test2'];
         $appStateProperty->setValue($this->config, $valueForTest);

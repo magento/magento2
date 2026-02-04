@@ -327,7 +327,8 @@ abstract class AbstractEntity
 
             /** @var $attribute AbstractAttribute */
             foreach ($this->filterAttributeCollection($this->getAttributeCollection()) as $attribute) {
-                if (!isset($skippedAttributes[$attribute->getAttributeId()])
+                $attributeId = $attribute->getAttributeId() ?? '';
+                if (!isset($skippedAttributes[$attributeId])
                     || in_array($attribute->getAttributeCode(), $this->_permanentAttributes)
                 ) {
                     $attributeCodes[] = $attribute->getAttributeCode();

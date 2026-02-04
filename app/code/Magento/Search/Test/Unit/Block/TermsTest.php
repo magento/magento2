@@ -19,6 +19,7 @@ use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManager;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Tests for Terms block
@@ -78,18 +79,14 @@ class TermsTest extends TestCase
     /**
      * Verify terms
      *
-     * @dataProvider termKeysProvider
      * @param string $termKey
      * @param bool $popularity
      */
+    #[DataProvider('termKeysProvider')]
     public function testGetTerms(string $termKey, bool $popularity): void
     {
         $terms = $this->createMock(Collection::class);
-        $dataObjectMock = $this->getMockBuilder(Query::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['getPopularity'])
-            ->onlyMethods(['getQueryText'])
-            ->getMock();
+        $dataObjectMock = $this->createPartialMock(Query::class, ['getQueryText']);
         $storeMock = $this->createMock(Store::class);
 
         $this->storeManagerMock->expects($this->once())
@@ -114,9 +111,7 @@ class TermsTest extends TestCase
         $terms->expects($this->once())
             ->method('getItems')
             ->willReturn([$dataObjectMock]);
-        $dataObjectMock->expects($this->exactly(!$popularity ? 3 : 4))
-            ->method('getPopularity')
-            ->willReturn($popularity);
+        $dataObjectMock->setData('popularity', $popularity);
         $dataObjectMock->expects($this->exactly(!$popularity ? 0 : 2))
             ->method('getQueryText')
             ->willReturn($termKey);
@@ -136,11 +131,7 @@ class TermsTest extends TestCase
             ->onlyMethods(['setQueryParam', 'getUrl'])
             ->getMock();
 
-        $dataObjectMock = $this->getMockBuilder(Query::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['getPopularity'])
-            ->onlyMethods(['getQueryText'])
-            ->getMock();
+        $dataObjectMock = $this->createPartialMock(Query::class, ['getQueryText']);
         $this->urlFactoryMock->expects($this->once())
             ->method('create')
             ->willReturn($urlMock);

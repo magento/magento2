@@ -14,6 +14,7 @@ use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Directory\WriteInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -76,8 +77,8 @@ class BackupTest extends TestCase
      * @covers \Magento\Backup\Model\Backup::output
      * @param bool $isFile
      * @param string $result
-     * @dataProvider outputDataProvider
      */
+    #[DataProvider('outputDataProvider')]
     public function testOutput($isFile, $result)
     {
         $path = '/path/to';

@@ -41,15 +41,19 @@ class Creditmemo extends SalesResource implements CreditmemoResourceInterface
     protected function _beforeSave(\Magento\Framework\Model\AbstractModel $object)
     {
         /** @var \Magento\Sales\Model\Order\Creditmemo $object */
-        if (!$object->getOrderId() && $object->getOrder()) {
-            $object->setOrderId($object->getOrder()->getId());
-            $object->setBillingAddressId($object->getOrder()->getBillingAddress()->getId());
+        $order = $object->getOrder();
+        if (!$object->getOrderId() && $order) {
+            $object->setOrderId($order->getId());
+            $billingAddress = $order->getBillingAddress();
+            if ($billingAddress) {
+                $object->setBillingAddressId($billingAddress->getId());
+            }
         }
 
-        if (!$object->getInvoiceId() && $object->getInvoice()) {
-            $object->setInvoiceId($object->getInvoice()->getId());
+        $invoice = $object->getInvoice();
+        if (!$object->getInvoiceId() && $invoice) {
+            $object->setInvoiceId($invoice->getId());
         }
-
         return parent::_beforeSave($object);
     }
 }

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -120,7 +120,6 @@ class RemoteServiceGeneratorTest extends TestCase
     {
         $reflectionObject = new \ReflectionObject($this->generator);
         $reflectionMethod = $reflectionObject->getMethod('_generateCode');
-        $reflectionMethod->setAccessible(true);
         $generatedCode = $reflectionMethod->invoke($this->generator);
         self::assertEquals($expectedResult, $generatedCode);
     }

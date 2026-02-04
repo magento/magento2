@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -166,7 +166,6 @@ class UrlTest extends TestCase
         $modelProperty = (new ReflectionClass(get_class($model)))
             ->getProperty('urlModifier');
 
-        $modelProperty->setAccessible(true);
         $modelProperty->setValue($model, $this->urlModifier);
 
         $zendEscaper = new ZendEscaper();

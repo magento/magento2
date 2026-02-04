@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -331,10 +331,8 @@ class ModuleEnableDisableCommandTest extends TestCase
         $class = $isEnable ? ModuleEnableCommand::class : ModuleDisableCommand::class;
         $command = new $class($this->objectManagerProviderMock);
         $deploymentConfigProperty = new \ReflectionProperty($class, 'deploymentConfig');
-        $deploymentConfigProperty->setAccessible(true);
         $deploymentConfigProperty->setValue($command, $this->deploymentConfigMock);
         $deploymentConfigProperty = new \ReflectionProperty($class, 'generatedFiles');
-        $deploymentConfigProperty->setAccessible(true);
         $deploymentConfigProperty->setValue($command, $this->generatedFiles);
         return new CommandTester($command);
     }

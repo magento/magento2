@@ -2,8 +2,8 @@
 /**
  * Test Webapi Error Processor.
  *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -14,12 +14,13 @@ use Magento\Framework\Exception\AuthorizationException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Json\Encoder;
+use Magento\Framework\Message\AbstractMessage;
 use Magento\Framework\Phrase;
 use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\Framework\Webapi\ErrorProcessor;
-
 use Magento\Framework\Webapi\Exception as WebapiException;
+use Magento\Framework\Validator\Exception as ValidatorException;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
@@ -101,7 +102,8 @@ class ErrorProcessorTest extends TestCase
         )->method(
             'encode'
         )->willReturnCallback(
-            [$this, 'callbackJsonEncode'], $this->returnArgument(0)
+            [$this, 'callbackJsonEncode'],
+            $this->returnArgument(0)
         );
         /** Init output buffering to catch output via echo function. */
         ob_start();
@@ -141,7 +143,8 @@ class ErrorProcessorTest extends TestCase
         )->method(
             'encode'
         )->willReturnCallback(
-            [$this, 'callbackJsonEncode'], $this->returnArgument(0)
+            [$this, 'callbackJsonEncode'],
+            $this->returnArgument(0)
         );
         ob_start();
         $this->_errorProcessor->renderErrorMessage('Message', 'Message trace.', 401);
@@ -257,11 +260,9 @@ class ErrorProcessorTest extends TestCase
         $this->_loggerMock->expects($this->once())
             ->method('critical')
             ->willReturnCallback(
-
                 function (\Exception $loggedException) use ($thrownException) {
                     $this->assertSame($thrownException, $loggedException->getPrevious());
                 }
-
             );
         $this->_errorProcessor->maskException($thrownException);
     }
@@ -317,6 +318,88 @@ class ErrorProcessorTest extends TestCase
                 [],
             ]
         ];
+    }
+
+    /**
+     * Test ValidatorException handling with multiple messages
+     */
+    public function testMaskExceptionWithValidatorException(): void
+    {
+        $errorMessage1 = $this->createMock(AbstractMessage::class);
+        $errorMessage1->expects($this->once())
+            ->method('getText')
+            ->willReturn('First Name is not valid!');
+
+        $errorMessage2 = $this->createMock(AbstractMessage::class);
+        $errorMessage2->expects($this->once())
+            ->method('getText')
+            ->willReturn('Last Name is not valid!');
+
+        $validatorException = $this->getMockBuilder(ValidatorException::class)
+            ->setConstructorArgs([new Phrase('Combined error message')])
+            ->onlyMethods(['getMessages', 'getRawMessage'])
+            ->getMock();
+        $validatorException->expects($this->once())
+            ->method('getMessages')
+            ->willReturn([$errorMessage1, $errorMessage2]);
+        $validatorException->expects($this->never())
+            ->method('getRawMessage');
+
+        $maskedException = $this->_errorProcessor->maskException($validatorException);
+
+        $this->assertInstanceOf(WebapiException::class, $maskedException);
+        $this->assertEquals(WebapiException::HTTP_BAD_REQUEST, $maskedException->getHttpCode());
+        $errors = $maskedException->getErrors();
+        $this->assertIsArray($errors);
+        $this->assertCount(2, $errors);
+        $this->assertStringContainsString('First Name is not valid!', $maskedException->getMessage());
+        $this->assertStringContainsString('Last Name is not valid!', $maskedException->getMessage());
+    }
+
+    /**
+     * Test ValidatorException handling with empty messages
+     */
+    public function testMaskExceptionWithValidatorExceptionEmptyMessages(): void
+    {
+        $validatorException = $this->getMockBuilder(ValidatorException::class)
+            ->setConstructorArgs([new Phrase('Combined error message')])
+            ->onlyMethods(['getMessages', 'getRawMessage'])
+            ->getMock();
+        $validatorException->expects($this->once())
+            ->method('getMessages')
+            ->willReturn([]);
+        $validatorException->expects($this->once())
+            ->method('getRawMessage')
+            ->willReturn('Combined error message');
+
+        $maskedException = $this->_errorProcessor->maskException($validatorException);
+
+        $this->assertInstanceOf(WebapiException::class, $maskedException);
+        $this->assertEquals(WebapiException::HTTP_BAD_REQUEST, $maskedException->getHttpCode());
+        $this->assertNull($maskedException->getErrors());
+        $this->assertStringContainsString('Combined error message', $maskedException->getMessage());
+    }
+
+    /**
+     * Test ValidatorException handling with string messages
+     */
+    public function testMaskExceptionWithValidatorExceptionStringMessages(): void
+    {
+        $validatorException = $this->getMockBuilder(ValidatorException::class)
+            ->setConstructorArgs([new Phrase('Combined error message')])
+            ->onlyMethods(['getMessages'])
+            ->getMock();
+        $validatorException->expects($this->once())
+            ->method('getMessages')
+            ->willReturn(['First Name is not valid!', 'Last Name is not valid!']);
+
+        $maskedException = $this->_errorProcessor->maskException($validatorException);
+
+        $this->assertInstanceOf(WebapiException::class, $maskedException);
+        $this->assertEquals(WebapiException::HTTP_BAD_REQUEST, $maskedException->getHttpCode());
+        $errors = $maskedException->getErrors();
+        $this->assertIsArray($errors);
+        $this->assertCount(2, $errors);
     }
 
     /**

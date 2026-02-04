@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 
 /**
@@ -45,7 +45,6 @@ class AbstractTest extends \PHPUnit\Framework\TestCase
         $model->setRule($rule);
 
         $property = new \ReflectionProperty(\Magento\Rule\Model\Condition\AbstractCondition::class, '_inputType');
-        $property->setAccessible(true);
         $property->setValue($model, 'date');
 
         $element = $model->getValueElement();

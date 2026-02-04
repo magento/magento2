@@ -13,15 +13,16 @@ use Magento\Customer\Block\Widget\Taxvat;
 use Magento\Customer\Helper\Address;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\View\Element\Template\Context;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 class TaxvatTest extends TestCase
 {
     /** Constants used in the unit tests */
-    const CUSTOMER_ENTITY_TYPE = 'customer';
+    private const CUSTOMER_ENTITY_TYPE = 'customer';
 
-    const TAXVAT_ATTRIBUTE_CODE = 'taxvat';
+    private const TAXVAT_ATTRIBUTE_CODE = 'taxvat';
 
     /**
      * @var MockObject|CustomerMetadataInterface
@@ -36,10 +37,8 @@ class TaxvatTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->attribute = $this->getMockBuilder(AttributeMetadataInterface::class)
-            ->getMockForAbstractClass();
-        $this->customerMetadata = $this->getMockBuilder(CustomerMetadataInterface::class)
-            ->getMockForAbstractClass();
+        $this->attribute = $this->createMock(AttributeMetadataInterface::class);
+        $this->customerMetadata = $this->createMock(CustomerMetadataInterface::class);
         $this->customerMetadata->expects(
             $this->any()
         )->method(
@@ -61,9 +60,8 @@ class TaxvatTest extends TestCase
      * @param bool $isVisible Determines whether the 'taxvat' attribute is visible or enabled
      * @param bool $expectedValue The value we expect from Taxvat::isEnabled()
      * @return void
-     *
-     * @dataProvider isEnabledDataProvider
-     */
+     * */
+    #[DataProvider('isEnabledDataProvider')]
     public function testIsEnabled($isVisible, $expectedValue)
     {
         $this->attribute->expects($this->once())->method('isVisible')->willReturn($isVisible);
@@ -99,9 +97,8 @@ class TaxvatTest extends TestCase
      * @param bool $isRequired Determines whether the 'taxvat' attribute is required
      * @param bool $expectedValue The value we expect from Taxvat::isRequired()
      * @return void
-     *
-     * @dataProvider isRequiredDataProvider
-     */
+     * */
+    #[DataProvider('isRequiredDataProvider')]
     public function testIsRequired($isRequired, $expectedValue)
     {
         $this->attribute->expects($this->once())->method('isRequired')->willReturn($isRequired);

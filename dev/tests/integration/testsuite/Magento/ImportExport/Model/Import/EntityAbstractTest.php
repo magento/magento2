@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 
 /**
@@ -58,7 +58,6 @@ class EntityAbstractTest extends \PHPUnit\Framework\TestCase
         $model->setSource($source);
 
         $method = new \ReflectionMethod($model, '_saveValidatedBunches');
-        $method->setAccessible(true);
         $method->invoke($model);
 
         /** @var $dataSourceModel \Magento\ImportExport\Model\ResourceModel\Import\Data */

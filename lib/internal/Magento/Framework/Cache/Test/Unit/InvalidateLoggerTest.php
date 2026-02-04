@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -75,7 +75,6 @@ class InvalidateLoggerTest extends TestCase
     {
         $expected = ['method' => $this->method, 'url' => $this->url, 'invalidateInfo' => $this->params];
         $method = new \ReflectionMethod($this->invalidateLogger, 'makeParams');
-        $method->setAccessible(true);
         $this->assertEquals(
             $expected,
             $method->invoke($this->invalidateLogger, $this->params)

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Store\App\FrontController\Plugin;
@@ -323,7 +323,6 @@ class RequestPreprocessorTest extends \Magento\TestFramework\TestCase\AbstractCo
 
         foreach ($properties as $name) {
             $property = $reflection->getProperty($name);
-            $property->setAccessible(true);
             $property->setValue($request, null);
         }
         $request->setServer(new Parameters($server));

@@ -11,6 +11,7 @@ use Magento\Framework\App\Helper\Context;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\GoogleOptimizer\Helper\Data;
 use Magento\Store\Model\ScopeInterface;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -58,8 +59,8 @@ class DataTest extends TestCase
 
     /**
      * @param bool $isExperimentsEnabled
-     * @dataProvider dataProviderBoolValues
      */
+    #[DataProvider('dataProviderBoolValues')]
     public function testGoogleExperimentIsEnabled($isExperimentsEnabled)
     {
         $store = 1;
@@ -91,8 +92,8 @@ class DataTest extends TestCase
      * @param bool $isExperimentsEnabled
      * @param bool $isAnalyticsAvailable
      * @param bool $result
-     * @dataProvider dataProviderForTestGoogleExperimentIsActive
      */
+    #[DataProvider('dataProviderForTestGoogleExperimentIsActive')]
     public function testGoogleExperimentIsActive($isExperimentsEnabled, $isAnalyticsAvailable, $result)
     {
         $store = 1;

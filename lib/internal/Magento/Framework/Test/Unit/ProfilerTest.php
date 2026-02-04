@@ -2,8 +2,8 @@
 /**
  * Unit Test for \Magento\Framework\Profiler
  *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework\Test\Unit;
 
@@ -466,7 +466,6 @@ class ProfilerTest extends TestCase
             $expected['driverFactory'] = $expected['driverFactory']($this);
         }
         $method = new \ReflectionMethod(Profiler::class, '_parseConfig');
-        $method->setAccessible(true);
         $this->assertEquals($expected, $method->invoke(null, $data, '', $isAjax));
     }
 

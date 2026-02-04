@@ -8,6 +8,7 @@ declare(strict_types=1);
 namespace Magento\Paypal\Test\Unit\Block\Adminhtml\System\Config\Fieldset;
 
 use Magento\Framework\Data\Form\Element\AbstractElement;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Paypal\Block\Adminhtml\System\Config\Fieldset\Hint;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -15,6 +16,8 @@ use PHPUnit\Framework\TestCase;
 
 class HintTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var Hint
      */
@@ -27,15 +30,14 @@ class HintTest extends TestCase
 
     protected function setUp(): void
     {
-        $om = new ObjectManager($this);
+        $objectManager = new ObjectManager($this);
 
-        $this->element = $this->getMockBuilder(AbstractElement::class)
-            ->addMethods(['getComment'])
-            ->onlyMethods(['getHtmlId'])
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->element = $this->createPartialMockWithReflection(
+            AbstractElement::class,
+            ['getComment', 'getHtmlId']
+        );
 
-        $this->block = $om->getObject(Hint::class);
+        $this->block = $objectManager->getObject(Hint::class);
     }
 
     /**

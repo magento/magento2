@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -88,7 +88,7 @@ class LoaderTest extends TestCase
      * @param $paths
      *
      * @return void
-     * @dataProvider testLoadDataProvider
+     * @dataProvider loadDataProvider
      */
     public function testLoad($paths): void
     {
@@ -134,7 +134,7 @@ class LoaderTest extends TestCase
     /**
      * @return array
      */
-    public static function testLoadDataProvider(): array
+    public static function loadDataProvider(): array
     {
         return [
             'Ordered modules list returned by registrar' => [

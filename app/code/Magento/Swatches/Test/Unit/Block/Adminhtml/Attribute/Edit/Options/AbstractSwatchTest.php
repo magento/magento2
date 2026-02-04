@@ -16,10 +16,14 @@ use Magento\Eav\Model\ResourceModel\Entity\Attribute\Option\CollectionFactory;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\DB\Select;
 use Magento\Framework\Registry;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\Validator\UniversalFactory;
 use Magento\Swatches\Block\Adminhtml\Attribute\Edit\Options\AbstractSwatch;
 use Magento\Swatches\Helper\Media;
+use Magento\Framework\Json\Helper\Data;
+use Magento\Framework\View\Element\Html\Select as HtmlSelect;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -29,6 +33,7 @@ use PHPUnit\Framework\TestCase;
  */
 class AbstractSwatchTest extends TestCase
 {
+    use MockCreationTrait;
     /**
      * @var MockObject
      */
@@ -74,6 +79,20 @@ class AbstractSwatchTest extends TestCase
      */
     protected function setUp(): void
     {
+        // Initialize ObjectManager for global access
+        $objectManager = new ObjectManager($this);
+        $objects = [
+            [
+                Data::class,
+                $this->createMock(Data::class)
+            ],
+            [
+                HtmlSelect::class,
+                $this->createMock(HtmlSelect::class)
+            ]
+        ];
+        $objectManager->prepareObjectManager($objects);
+
         $this->contextMock = $this->createMock(Context::class);
         $this->registryMock = $this->createMock(Registry::class);
         $this->attrOptionCollectionFactoryMock = $this->createPartialMock(
@@ -84,40 +103,38 @@ class AbstractSwatchTest extends TestCase
         $this->universalFactoryMock = $this->createMock(UniversalFactory::class);
         $this->swatchHelperMock = $this->createMock(Media::class);
 
-        $this->block = $this->getMockBuilder(AbstractSwatch::class)
-            ->onlyMethods(['getData'])
-            ->setConstructorArgs(
-                [
-                    'context' => $this->contextMock,
-                    'registry' => $this->registryMock,
-                    'attrOptionCollectionFactory' => $this->attrOptionCollectionFactoryMock,
-                    'universalFactory' => $this->universalFactoryMock,
-                    'mediaConfig' => $this->mediaConfigMock,
-                    'swatchHelper' => $this->swatchHelperMock,
-                    'data' => []
-                ]
-            )
-            ->getMock();
-        $this->connectionMock = $this->getMockBuilder(AdapterInterface::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['quoteInto'])
-            ->getMockForAbstractClass();
+        $this->block = $this->createPartialMock(AbstractSwatch::class, ['getData']);
+        // Set constructor arguments using reflection
+        $reflection = new \ReflectionClass($this->block);
+        $constructor = $reflection->getConstructor();
+        if ($constructor) {
+            $constructor->invokeArgs($this->block, [
+                $this->contextMock,
+                $this->registryMock,
+                $this->attrOptionCollectionFactoryMock,
+                $this->universalFactoryMock,
+                $this->mediaConfigMock,
+                $this->swatchHelperMock,
+                []
+            ]);
+        }
+        $this->connectionMock = $this->createMock(AdapterInterface::class);
     }
 
     /**
      * @return void
-     * @dataProvider dataForGetStoreOptionValues
      */
+    #[DataProvider('dataForGetStoreOptionValues')]
     public function testGetStoreOptionValues($values): void
     {
         $this->block->expects($this->once())->method('getData')->with('store_option_values_1')->willReturn($values);
         if ($values === null) {
             $objectManager = new ObjectManager($this);
 
-            $option = $this->getMockBuilder(Option::class)
-                ->addMethods(['getId', 'getValue', 'getLabel'])
-                ->disableOriginalConstructor()
-                ->getMock();
+            $option = $this->createPartialMockWithReflection(
+                Option::class,
+                ['getId', 'getValue', 'getLabel']
+            );
 
             $attrOptionCollectionMock = $objectManager->getCollectionMock(
                 Collection::class,
@@ -129,10 +146,10 @@ class AbstractSwatchTest extends TestCase
                 ->method('create')
                 ->willReturn($attrOptionCollectionMock);
 
-            $attribute = $this->getMockBuilder(Attribute::class)
-                ->addMethods(['getId'])
-                ->disableOriginalConstructor()
-                ->getMock();
+            $attribute = $this->createPartialMockWithReflection(
+                Attribute::class,
+                ['getId']
+            );
             $attribute->expects($this->once())->method('getId')->willReturn(23);
 
             $this->registryMock

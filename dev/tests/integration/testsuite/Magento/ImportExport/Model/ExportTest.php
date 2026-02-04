@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\ImportExport\Model;
 
@@ -39,9 +39,7 @@ class ExportTest extends \PHPUnit\Framework\TestCase
         $this->assertTrue(property_exists($this->_model, '_entityAdapter'));
         $object = new ReflectionClass(get_class($this->_model));
         $attribute = $object->getProperty('_entityAdapter');
-        $attribute->setAccessible(true);
         $propertyObject = $attribute->getValue($this->_model);
-        $attribute->setAccessible(false);
         $this->assertInstanceOf($expectedEntityType, $propertyObject);
     }
 

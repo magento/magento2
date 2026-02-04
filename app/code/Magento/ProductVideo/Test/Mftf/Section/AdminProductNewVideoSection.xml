@@ -11,6 +11,8 @@
     <section name="AdminProductNewVideoSection">
         <element name="saveButton" type="button" selector=".action-primary.video-create-button" timeout="30"/>
         <element name="saveButtonDisabled" type="text" selector="//button[@class='action-primary video-create-button' and @disabled='disabled']"/>
+        <element name="editButton" type="button" selector=".action-primary.video-edit"/>
+        <element name="editButtonDisabled" type="button" selector=".action-primary.video-edit:disabled"/>
         <element name="cancelButton" type="button" selector=".video-cancel-button" timeout="30"/>
         <element name="getVideoInformationButton" type="button" selector="#new_video_get"/>
         <element name="videoUrlTextField" type="input" selector="#video_url"/>
@@ -23,5 +25,17 @@
         <element name="hideFromProductPageCheckbox" type="checkbox" selector="#new_video_disabled"/>
         <element name="errorElement" type="text" selector="#{{inputName}}-error" parameterized="true" />
         <element name="previewImageUploader" type="file" selector=".field-new_video_screenshot #new_video_screenshot"/>
+        <element name="baseCheckboxLabel" type="text" selector="#video_image+label"/>
+        <element name="smallCheckboxLabel" type="text" selector="#video_small_image+label"/>
+        <element name="swatchCheckboxLabel" type="text" selector="#video_swatch_image+label"/>
+        <element name="thumbnailCheckboxLabel" type="text" selector="#video_thumbnail+label"/>
+        <element name="hideFromProductPageCheckboxLabel" type="checkbox" selector="#new_video_disabled+label"/>
+        <element name="videoTitleUseDefault" type="checkbox" selector=".mage-new-video-dialog .field-video_title [data-role=use-default]"/>
+        <element name="videoDescriptionUseDefault" type="checkbox" selector=".mage-new-video-dialog .field-video_description [data-role=use-default]"/>
+        <element name="roleImageUseDefault" type="checkbox" selector=".mage-new-video-dialog .field-video_image [data-role=use-default]"/>
+        <element name="roleSmallUseDefault" type="checkbox" selector=".mage-new-video-dialog .field-video_small_image [data-role=use-default]"/>
+        <element name="roleThumbnailUseDefault" type="checkbox" selector=".mage-new-video-dialog .field-video_thumbnail [data-role=use-default]"/>
+        <element name="roleSwatchUseDefault" type="checkbox" selector=".mage-new-video-dialog .field-video_swatch_image [data-role=use-default]"/>
+        <element name="hideFromProductPageUseDefault" type="checkbox" selector=".mage-new-video-dialog .field-new_video_disabled [data-role=use-default]"/>
     </section>
 </sections>

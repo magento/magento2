@@ -9,6 +9,7 @@ namespace Magento\Quote\Test\Unit\Model\Quote\Address\Total;
 
 use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\Catalog\Api\Data\ProductExtensionInterface;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\Product\Type\Price;
 use Magento\CatalogInventory\Model\StockRegistry;
@@ -25,8 +26,6 @@ use Magento\Quote\Model\Quote\Item;
 use Magento\Store\Model\Store;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use Magento\Quote\Test\Unit\Helper\TotalTestHelper;
-use Magento\Quote\Test\Unit\Helper\ProductExtensionForSubtotalTestHelper;
 
 /**
  * Test address total collector model.
@@ -35,6 +34,8 @@ use Magento\Quote\Test\Unit\Helper\ProductExtensionForSubtotalTestHelper;
  */
 class SubtotalTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var ObjectManager
      */
@@ -123,9 +124,7 @@ class SubtotalTest extends TestCase
             ]
         );
         /** @var Address|MockObject $address */
-        $address = $this->getMockBuilder(\Magento\Quote\Test\Unit\Helper\AddressShippingInfoTestHelper::class)
-            ->onlyMethods(['removeItem', 'getQuote'])
-            ->getMock();
+        $address = $this->createPartialMock(Address::class, ['removeItem', 'getQuote']);
 
         /** @var Product|MockObject $product */
         $product = $this->createMock(Product::class);
@@ -140,7 +139,11 @@ class SubtotalTest extends TestCase
         $store->method('getWebsiteId')->willReturn(10);
         $product->method('getStore')->willReturn($store);
         $product->expects($this->any())->method('isVisibleInCatalog')->willReturn(true);
-        $extensionAttribute = new ProductExtensionForSubtotalTestHelper($this->stockItemMock);
+        $extensionAttribute = $this->createPartialMockWithReflection(
+            ProductExtensionInterface::class,
+            ['getStockItem']
+        );
+        $extensionAttribute->method('getStockItem')->willReturn($this->stockItemMock);
         $product->expects($this->atLeastOnce())->method('getExtensionAttributes')->willReturn($extensionAttribute);
         $quote->expects($this->any())->method('getStore')->willReturn($store);
         $quoteItem->setProduct($product)->setQuote($quote);
@@ -193,8 +196,8 @@ class SubtotalTest extends TestCase
         ];
 
         $quoteMock = $this->createMock(Quote::class);
-        $totalMock = new TotalTestHelper();
-        $totalMock->setSubtotal(100);
+        $totalMock = $this->createPartialMockWithReflection(Total::class, ['getSubtotal']);
+        $totalMock->expects($this->once())->method('getSubtotal')->willReturn(100);
         $this->assertEquals($expectedResult, $this->subtotalModel->fetch($quoteMock, $totalMock));
     }
 

@@ -18,12 +18,14 @@ use Magento\Quote\Api\Data\ProductOptionExtensionInterface;
 use Magento\Quote\Api\Data\ProductOptionInterfaceFactory;
 use Magento\Quote\Model\Quote\Item;
 use Magento\Quote\Model\Quote\ProductOption;
-use Magento\Quote\Test\Unit\Helper\ProductOptionExtensionTestHelper;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 class CartItemProcessorTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var MockObject
      */
@@ -80,13 +82,16 @@ class CartItemProcessorTest extends TestCase
         $cartItemMock = $this->createMock(Item::class);
         $productOptionMock = $this->createMock(ProductOption::class);
         $dataObjectMock = $this->createMock(DataObject::class);
-        $optionExtensionMock = new ProductOptionExtensionTestHelper();
+        $optionExtensionMock = $this->createPartialMockWithReflection(
+            ProductOptionExtensionInterface::class,
+            ['getBundleOptions', 'setBundleOptions']
+        );
         $requestDataMock = [
             'bundle_option' => [$optionId => $optionSelections],
             'bundle_option_qty' => [$optionId => $optionQty]
         ];
 
-        $optionExtensionMock->setBundleOptions([$bundleOptionMock]);
+        $optionExtensionMock->method('getBundleOptions')->willReturn([$bundleOptionMock]);
         $cartItemMock->expects($this->atLeastOnce())->method('getProductOption')->willReturn($productOptionMock);
         $productOptionMock->expects($this->atLeastOnce())->method('getExtensionAttributes')
             ->willReturn($optionExtensionMock);
@@ -122,7 +127,10 @@ class CartItemProcessorTest extends TestCase
         $cartItemMock = $this->createMock(Item::class);
         $bundleOptionMock = $this->createMock(BundleOption::class);
         $productOptionMock = $this->createMock(ProductOption::class);
-        $optionExtensionMock = new ProductOptionExtensionTestHelper();
+        $optionExtensionMock = $this->createPartialMockWithReflection(
+            ProductOptionExtensionInterface::class,
+            ['getBundleOptions', 'setBundleOptions']
+        );
 
         $cartItemMock->expects($this->once())->method('getProductType')->willReturn(Type::TYPE_BUNDLE);
         $cartItemMock->expects($this->atLeastOnce())->method('getBuyRequest')->willReturn($buyRequestMock);
@@ -132,7 +140,8 @@ class CartItemProcessorTest extends TestCase
             ->willReturnSelf();
         $bundleOptionMock->expects($this->once())->method('setOptionQty')->with($optionQty)->willReturnSelf();
         $this->productOptionExtensionMock->expects($this->once())->method('create')->willReturn($optionExtensionMock);
-        $optionExtensionMock->setBundleOptions([$bundleOptionMock]);
+        $optionExtensionMock->method('setBundleOptions')->willReturnSelf();
+        $optionExtensionMock->method('getBundleOptions')->willReturn([$bundleOptionMock]);
         $cartItemMock->expects($this->atLeastOnce())->method('getProductOption')->willReturn($productOptionMock);
         $productOptionMock->expects($this->once())->method('setExtensionAttributes')->with($optionExtensionMock);
 

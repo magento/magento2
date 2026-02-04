@@ -67,7 +67,7 @@ class MappableConditionsProcessor
         $invalidConditions = [];
 
         foreach ($originalConditions->getConditions() as $condition) {
-            if ($condition->getType() === CombinedCondition::class) {
+            if ($condition instanceof CombinedCondition) {
                 $rebuildSubCondition = $this->rebuildCombinedCondition($condition);
 
                 if (count($rebuildSubCondition->getConditions()) > 0) {
@@ -79,7 +79,7 @@ class MappableConditionsProcessor
                 continue;
             }
 
-            if ($condition->getType() === SimpleCondition::class) {
+            if ($condition instanceof SimpleCondition) {
                 if ($this->validateSimpleCondition($condition)) {
                     $validConditions[] = $condition;
                 } else {

@@ -17,6 +17,7 @@ use PHPUnit\Framework\TestCase;
  */
 class NotSyncedDataProviderTest extends TestCase
 {
+
     public function testGetIdsEmpty()
     {
         /** @var TMapFactory|MockObject $tMapFactory */
@@ -41,12 +42,12 @@ class NotSyncedDataProviderTest extends TestCase
             ->getMock();
 
         $provider1 = $this->getMockBuilder(NotSyncedDataProviderInterface::class)
-            ->getMockForAbstractClass();
+            ->getMock();
         $provider1->method('getIds')
             ->willReturn([1, 2]);
 
         $provider2 = $this->getMockBuilder(NotSyncedDataProviderInterface::class)
-            ->getMockForAbstractClass();
+            ->getMock();
         $provider2->method('getIds')
             ->willReturn([2, 3, 4]);
 

@@ -16,6 +16,7 @@ use Magento\Framework\App\Cache\Type\Config;
 use Magento\Framework\App\State;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
 
@@ -62,7 +63,7 @@ class ConfigTest extends TestCase
 
         $this->configReaderMock = $this->createMock(Reader::class);
 
-        $this->logger = $this->getMockForAbstractClass(LoggerInterface::class);
+        $this->logger = $this->createMock(LoggerInterface::class);
 
         $this->menuMock = $this->createMock(Menu::class);
 
@@ -141,8 +142,8 @@ class ConfigTest extends TestCase
      * @param string $expectedException
      *
      * @return void
-     * @dataProvider getMenuExceptionLoggedDataProvider
      */
+    #[DataProvider('getMenuExceptionLoggedDataProvider')]
     public function testGetMenuExceptionLogged(string $expectedException): void
     {
         $this->expectException($expectedException);

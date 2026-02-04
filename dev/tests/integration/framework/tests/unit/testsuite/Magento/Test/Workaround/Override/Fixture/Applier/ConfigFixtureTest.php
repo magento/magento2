@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -233,7 +233,6 @@ class ConfigFixtureTest extends TestCase
     public function testInitConfigFixture(array $attributes, string $expectedValue): void
     {
         $reflectionMethod = new \ReflectionMethod(ConfigFixture::class, 'initConfigFixture');
-        $reflectionMethod->setAccessible(true);
         $value = $reflectionMethod->invoke($this->object, $attributes);
         $this->assertEquals($expectedValue, $value);
     }
@@ -500,7 +499,6 @@ class ConfigFixtureTest extends TestCase
     private function invokeIsFixtureMatchMethod(array $attributes, string $fixture): bool
     {
         $reflectionMethod = new \ReflectionMethod(ConfigFixture::class, 'isFixtureMatch');
-        $reflectionMethod->setAccessible(true);
         return $reflectionMethod->invoke($this->object, $attributes, $fixture);
     }
 }

@@ -132,7 +132,6 @@ class CssTest extends TestCase
     {
         $class = new \ReflectionClass(Css::class);
         $method = $class->getMethod($name);
-        $method->setAccessible(true);
         return $method;
     }
 

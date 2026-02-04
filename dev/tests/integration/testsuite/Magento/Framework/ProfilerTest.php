@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework;
 
@@ -27,9 +27,7 @@ class ProfilerTest extends \PHPUnit\Framework\TestCase
         $this->assertTrue(property_exists($profiler, '_drivers'));
         $object = new ReflectionClass(\Magento\Framework\Profiler::class);
         $attribute = $object->getProperty('_drivers');
-        $attribute->setAccessible(true);
         $propertyObject = $attribute->getValue($profiler);
-        $attribute->setAccessible(false);
         $this->assertEquals($expectedDrivers, $propertyObject);
     }
 

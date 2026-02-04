@@ -17,9 +17,10 @@ use Magento\Framework\DB\Select;
 use Magento\Framework\Encryption\EncryptorInterface;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Math\Random;
+use Magento\Framework\Model\ResourceModel\Db\Context;
 use Magento\Framework\Model\ResourceModel\Db\ObjectRelationProcessor;
 use Magento\Framework\Model\ResourceModel\Db\TransactionManagerInterface;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -30,6 +31,8 @@ use PHPUnit\Framework\TestCase;
  */
 class ChangeTest extends TestCase
 {
+    use MockCreationTrait;
+
     /** @var EncryptorInterface|MockObject */
     protected $encryptMock;
 
@@ -65,55 +68,47 @@ class ChangeTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->encryptMock = $this->getMockBuilder(EncryptorInterface::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['setNewKey', 'exportKeys'])
-            ->getMockForAbstractClass();
-        $this->filesystemMock = $this->getMockBuilder(Filesystem::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->structureMock = $this->getMockBuilder(Structure::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->writerMock = $this->getMockBuilder(Writer::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->adapterMock = $this->getMockBuilder(AdapterInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-        $this->resourceMock = $this->getMockBuilder(ResourceConnection::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->selectMock = $this->getMockBuilder(Select::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['update'])
-            ->onlyMethods(['from', 'where'])
-            ->getMock();
-        $translationClassName = TransactionManagerInterface::class;
-        $this->transactionMock = $this->getMockBuilder($translationClassName)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $relationClassName = ObjectRelationProcessor::class;
-        $this->objRelationMock = $this->getMockBuilder($relationClassName)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->encryptMock = $this->createPartialMockWithReflection(
+            EncryptorInterface::class,
+            [
+                'getHash',
+                'hash',
+                'validateHash',
+                'isValidHash',
+                'validateHashVersion',
+                'encrypt',
+                'decrypt',
+                'validateKey',
+                'setNewKey',
+                'exportKeys'
+            ]
+        );
+        $this->filesystemMock = $this->createMock(Filesystem::class);
+        $this->structureMock = $this->createMock(Structure::class);
+        $this->writerMock = $this->createMock(Writer::class);
+        $this->adapterMock = $this->createMock(AdapterInterface::class);
+        $this->resourceMock = $this->createMock(ResourceConnection::class);
+        $this->selectMock = $this->createPartialMockWithReflection(
+            Select::class,
+            ['update', 'from', 'where']
+        );
+        $this->transactionMock = $this->createMock(TransactionManagerInterface::class);
+        $this->objRelationMock = $this->createMock(ObjectRelationProcessor::class);
         $this->randomMock = $this->createMock(Random::class);
 
-        $helper = new ObjectManager($this);
-
-        $this->model = $helper->getObject(
-            Change::class,
-            [
-                'filesystem' => $this->filesystemMock,
-                'structure' => $this->structureMock,
-                'encryptor' => $this->encryptMock,
-                'writer' => $this->writerMock,
-                'adapterInterface' => $this->adapterMock,
-                'resource' => $this->resourceMock,
-                'transactionManager' => $this->transactionMock,
-                'relationProcessor' => $this->objRelationMock,
-                'random' => $this->randomMock
-            ]
+        $contextMock = $this->createPartialMock(
+            Context::class,
+            ['getResources']
+        );
+        $contextMock->method('getResources')->willReturn($this->resourceMock);
+        
+        $this->model = new Change(
+            $contextMock,
+            $this->filesystemMock,
+            $this->structureMock,
+            $this->encryptMock,
+            $this->writerMock,
+            $this->randomMock
         );
     }
 

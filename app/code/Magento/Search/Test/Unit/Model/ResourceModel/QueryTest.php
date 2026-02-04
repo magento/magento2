@@ -12,6 +12,7 @@ use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\Model\ResourceModel\Db\Context;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Search\Model\ResourceModel\Query;
+use Magento\Search\Model\Query as SearchQuery;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -33,7 +34,7 @@ class QueryTest extends TestCase
 
         $this->adapter = $this->getMockBuilder(AdapterInterface::class)
             ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+            ->getMock();
 
         $resource = $this->getMockBuilder(ResourceConnection::class)
             ->disableOriginalConstructor()
@@ -57,8 +58,8 @@ class QueryTest extends TestCase
 
     public function testSaveIncrementalPopularity()
     {
-        /** @var \Magento\Search\Model\Query|MockObject $model */
-        $model = $this->getMockBuilder(\Magento\Search\Model\Query::class)
+        /** @var SearchQuery|MockObject $model */
+        $model = $this->getMockBuilder(SearchQuery::class)
             ->disableOriginalConstructor()
             ->getMock();
         $model->expects($this->any())
@@ -76,21 +77,15 @@ class QueryTest extends TestCase
 
     public function testSaveNumResults()
     {
-        /** @var \Magento\Search\Model\Query|MockObject $model */
-        $model = $this->getMockBuilder(\Magento\Search\Model\Query::class)
-            ->onlyMethods(['getStoreId', 'getQueryText'])
-            ->addMethods(['getNumResults'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        /** @var SearchQuery|MockObject $model */
+        $model = $this->createMock(SearchQuery::class);
         $model->expects($this->any())
             ->method('getStoreId')
             ->willReturn(1);
         $model->expects($this->any())
             ->method('getQueryText')
             ->willReturn('queryText');
-        $model->expects($this->any())
-            ->method('getNumResults')
-            ->willReturn(30);
+        $model->setData('num_results', 30);
 
         $this->adapter->expects($this->once())
             ->method('insertOnDuplicate');

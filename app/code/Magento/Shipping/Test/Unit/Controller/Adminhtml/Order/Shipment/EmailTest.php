@@ -21,6 +21,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHe
 use Magento\Sales\Model\Order\Shipment;
 use Magento\Shipping\Controller\Adminhtml\Order\Shipment\Email;
 use Magento\Shipping\Controller\Adminhtml\Order\ShipmentLoader;
+use Magento\Store\Model\Store;
 use Magento\Shipping\Model\ShipmentNotifier;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -137,7 +138,7 @@ class EmailTest extends TestCase
         );
         $this->messageManager = $this->createPartialMock(
             MessageManager::class,
-            ['addSuccess', 'addError']
+            ['addSuccess', 'addError', 'addWarningMessage']
         );
         $this->session = $this->getMockBuilder(BackendSession::class)
             ->addMethods(['setIsUrlNotice'])
@@ -183,9 +184,20 @@ class EmailTest extends TestCase
         $shipment = ['items' => []];
         $orderShipment = $this->createPartialMock(
             Shipment::class,
-            ['load', 'save', '__wakeup']
+            ['load', 'save', 'getStore', '__wakeup']
         );
         $shipmentNotifier = $this->createPartialMock(ShipmentNotifier::class, ['notify', '__wakeup']);
+
+        // Mock store and config
+        $store = $this->createMock(Store::class);
+        $store->expects($this->once())
+            ->method('getConfig')
+            ->with('sales_email/shipment/enabled')
+            ->willReturn(true);
+
+        $orderShipment->expects($this->once())
+            ->method('getStore')
+            ->willReturn($store);
 
         $this->request->expects($this->any())
             ->method('getParam')
@@ -234,6 +246,73 @@ class EmailTest extends TestCase
     }
 
     /**
+     * @return void
+     */
+    public function testEmailDisabled(): void
+    {
+        $shipmentId = 1000012;
+        $orderId = 10003;
+        $tracking = [];
+        $shipment = ['items' => []];
+        $orderShipment = $this->createPartialMock(
+            Shipment::class,
+            ['load', 'save', 'getStore', '__wakeup']
+        );
+
+        // Mock store with disabled config
+        $store = $this->createMock(Store::class);
+        $store->expects($this->once())
+            ->method('getConfig')
+            ->with('sales_email/shipment/enabled')
+            ->willReturn(false);
+
+        $orderShipment->expects($this->once())
+            ->method('getStore')
+            ->willReturn($store);
+
+        $this->request->expects($this->any())
+            ->method('getParam')
+            ->willReturnMap(
+                [
+                    ['order_id', null, $orderId],
+                    ['shipment_id', null, $shipmentId],
+                    ['shipment', null, $shipment],
+                    ['tracking', null, $tracking]
+                ]
+            );
+        $this->shipmentLoader->expects($this->once())
+            ->method('setShipmentId')
+            ->with($shipmentId);
+        $this->shipmentLoader->expects($this->once())
+            ->method('setOrderId')
+            ->with($orderId);
+        $this->shipmentLoader->expects($this->once())
+            ->method('setShipment')
+            ->with($shipment);
+        $this->shipmentLoader->expects($this->once())
+            ->method('setTracking')
+            ->with($tracking);
+        $this->shipmentLoader->expects($this->once())
+            ->method('load')
+            ->willReturn($orderShipment);
+
+        // Verify notify is NOT called when disabled
+        $this->objectManager->expects($this->never())
+            ->method('create');
+
+        $this->messageManager->expects($this->once())
+            ->method('addWarningMessage')
+            ->with('Shipment emails are disabled for this store. No email was sent.');
+
+        $path = '*/*/view';
+        $arguments = ['shipment_id' => $shipmentId];
+        $this->prepareRedirect($path, $arguments);
+
+        $this->shipmentEmail->execute();
+        $this->assertEquals($this->response, $this->shipmentEmail->getResponse());
+    }
+
+    /**
      * @param string $path
      * @param array $arguments
      *
@@ -251,5 +330,112 @@ class EmailTest extends TestCase
         $this->resultRedirect
             ->method('setPath')
             ->with($path, ['shipment_id' => $arguments['shipment_id']]);
+    }
+
+    /**
+     * Test LocalizedException is caught and proper error message is displayed
+     *
+     * @return void
+     */
+    public function testEmailWithLocalizedException(): void
+    {
+        $shipmentId = 1000012;
+        $orderId = 10003;
+        $tracking = [];
+        $shipment = ['items' => []];
+        $exceptionMessage = 'Localized exception message';
+
+        $this->request->expects($this->any())
+            ->method('getParam')
+            ->willReturnMap(
+                [
+                    ['order_id', null, $orderId],
+                    ['shipment_id', null, $shipmentId],
+                    ['shipment', null, $shipment],
+                    ['tracking', null, $tracking]
+                ]
+            );
+
+        $this->shipmentLoader->expects($this->once())
+            ->method('setShipmentId')
+            ->with($shipmentId);
+        $this->shipmentLoader->expects($this->once())
+            ->method('setOrderId')
+            ->with($orderId);
+        $this->shipmentLoader->expects($this->once())
+            ->method('setShipment')
+            ->with($shipment);
+        $this->shipmentLoader->expects($this->once())
+            ->method('setTracking')
+            ->with($tracking);
+
+        // Simulate LocalizedException being thrown
+        $this->shipmentLoader->expects($this->once())
+            ->method('load')
+            ->willThrowException(new \Magento\Framework\Exception\LocalizedException(__($exceptionMessage)));
+
+        // Verify the exception message is added as error
+        $this->messageManager->expects($this->once())
+            ->method('addError')
+            ->with($exceptionMessage);
+
+        $path = '*/*/view';
+        $arguments = ['shipment_id' => $shipmentId];
+        $this->prepareRedirect($path, $arguments);
+
+        $this->shipmentEmail->execute();
+    }
+
+    /**
+     * Test generic Exception is caught and generic error message is displayed
+     *
+     * @return void
+     */
+    public function testEmailWithGenericException(): void
+    {
+        $shipmentId = 1000012;
+        $orderId = 10003;
+        $tracking = [];
+        $shipment = ['items' => []];
+
+        $this->request->expects($this->any())
+            ->method('getParam')
+            ->willReturnMap(
+                [
+                    ['order_id', null, $orderId],
+                    ['shipment_id', null, $shipmentId],
+                    ['shipment', null, $shipment],
+                    ['tracking', null, $tracking]
+                ]
+            );
+
+        $this->shipmentLoader->expects($this->once())
+            ->method('setShipmentId')
+            ->with($shipmentId);
+        $this->shipmentLoader->expects($this->once())
+            ->method('setOrderId')
+            ->with($orderId);
+        $this->shipmentLoader->expects($this->once())
+            ->method('setShipment')
+            ->with($shipment);
+        $this->shipmentLoader->expects($this->once())
+            ->method('setTracking')
+            ->with($tracking);
+
+        // Simulate generic Exception being thrown
+        $this->shipmentLoader->expects($this->once())
+            ->method('load')
+            ->willThrowException(new \Exception('Some error occurred'));
+
+        // Verify generic error message is added
+        $this->messageManager->expects($this->once())
+            ->method('addError')
+            ->with('Cannot send shipment information.');
+
+        $path = '*/*/view';
+        $arguments = ['shipment_id' => $shipmentId];
+        $this->prepareRedirect($path, $arguments);
+
+        $this->shipmentEmail->execute();
     }
 }

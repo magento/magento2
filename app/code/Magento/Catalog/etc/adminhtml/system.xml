@@ -93,6 +93,11 @@
                     <comment>Applies to category pages.</comment>
                     <source_model>Magento\Catalog\Model\Config\Source\ListSort</source_model>
                 </field>
+                <field id="default_sort_by_order" translate="label comment" type="select" sortOrder="6" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Product Listing Sort by Order</label>
+                    <comment>Applies to category pages.</comment>
+                    <source_model>Magento\Catalog\Model\Config\Source\SortOrder</source_model>
+                </field>
                 <field id="list_allow_all" translate="label comment" type="select" sortOrder="6" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                     <label>Allow All Products per Page</label>
                     <comment>Whether to show "All" option in the "Show X Per Page" dropdown.</comment>

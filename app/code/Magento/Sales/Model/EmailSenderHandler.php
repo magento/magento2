@@ -183,8 +183,9 @@ class EmailSenderHandler
         /** @var \Magento\Sales\Model\EntityInterface $item */
         foreach ($entityCollection->getItems() as $item) {
             /** @var StoreManagerInterface $store */
-            $store = $this->storeManager->getStore($item->getStoreId());
-            $stores[$item->getStoreId()] = $store;
+            $storeId = $item->getStoreId() ?? '';
+            $store = $this->storeManager->getStore($storeId);
+            $stores[$storeId] = $store;
         }
 
         return $stores;

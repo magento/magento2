@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\CatalogImportExport\Model;
 
@@ -359,7 +359,6 @@ abstract class AbstractProductExportImportTestCase extends \PHPUnit\Framework\Te
         if ($usePagination) {
             /** @var \ReflectionProperty $itemsPerPageProperty */
             $itemsPerPageProperty = new \ReflectionProperty(Product::class, '_itemsPerPage');
-            $itemsPerPageProperty->setAccessible(true);
             $itemsPerPageProperty->setValue($exportProduct, 1);
         }
 

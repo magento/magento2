@@ -18,6 +18,7 @@ use Magento\Elasticsearch\SearchAdapter\Query\ValueTransformerPool;
 use Magento\Framework\Search\Request\Query\MatchQuery;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Test Match query builder
@@ -57,11 +58,11 @@ class MatchQueryTest extends TestCase
         $this->attributeProvider = $this->createMock(AttributeProvider::class);
         $this->fieldTypeResolver = $this->createMock(TypeResolver::class);
         $this->config = $this->createMock(Config::class);
-        $this->fieldMapper = $this->getMockForAbstractClass(FieldMapperInterface::class);
+        $this->fieldMapper = $this->createMock(FieldMapperInterface::class);
         $this->fieldMapper->method('getFieldName')
             ->willReturnArgument(0);
         $valueTransformerPoolMock = $this->createMock(ValueTransformerPool::class);
-        $valueTransformerMock = $this->getMockForAbstractClass(ValueTransformerInterface::class);
+        $valueTransformerMock = $this->createMock(ValueTransformerInterface::class);
         $valueTransformerPoolMock->method('get')
             ->willReturn($valueTransformerMock);
         $valueTransformerMock->method('transform')
@@ -83,9 +84,9 @@ class MatchQueryTest extends TestCase
      * @param array $fields
      * @param array $expected
      * @param string|null $minimumShouldMatch
-     * @dataProvider buildDataProvider
-     * @dataProvider buildDataProviderForMatchPhrasePrefix
      */
+    #[DataProvider('buildDataProvider')]
+    #[DataProvider('buildDataProviderForMatchPhrasePrefix')]
     public function testBuild(
         string $searchQuery,
         array $fields,
