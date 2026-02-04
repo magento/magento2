@@ -220,7 +220,7 @@ class CollectionTest extends TestCase
         $this->select->expects($this->once())->method('joinInner')
             ->with(
                 ['ce2' => null],
-                'ce2.path LIKE CONCAT(ce.path, \'/%\')',
+                'ce2.path LIKE CONCAT(ce.path, \'/%\') OR ce2.entity_id = ce.entity_id',
                 []
             )->willReturnSelf();
         $this->select->method('where')->willReturnSelf();
