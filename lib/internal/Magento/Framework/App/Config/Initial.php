@@ -58,8 +58,8 @@ class Initial
         } else {
             $data = $this->serializer->unserialize($data);
         }
-        $this->_data = $data['data'];
-        $this->_metadata = $data['metadata'];
+        $this->_data = $data['data'] ?? [];
+        $this->_metadata = $data['metadata'] ?? [];
     }
 
     /**
