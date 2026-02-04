@@ -910,10 +910,11 @@ class File extends AbstractIo
      * Get path info
      *
      * @param string $path
+     * @param int|null $flags
      * @return mixed
      */
-    public function getPathInfo($path)
+    public function getPathInfo($path, $flags = null)
     {
-        return pathinfo($path);
+        return $flags === null ? pathinfo($path) : pathinfo($path, $flags);
     }
 }
