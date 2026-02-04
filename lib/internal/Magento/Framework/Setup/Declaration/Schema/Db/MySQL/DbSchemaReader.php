@@ -8,6 +8,7 @@ declare(strict_types=1);
 namespace Magento\Framework\Setup\Declaration\Schema\Db\MySQL;
 
 use Magento\Framework\App\ResourceConnection;
+use Magento\Framework\DB\Adapter\SqlVersionProvider;
 use Magento\Framework\DB\Sql\Expression;
 use Magento\Framework\Setup\Declaration\Schema\Db\DbSchemaReaderInterface;
 use Magento\Framework\Setup\Declaration\Schema\Db\DefinitionAggregator;
@@ -34,17 +35,26 @@ class DbSchemaReader implements DbSchemaReaderInterface
     private $definitionAggregator;
 
     /**
+     * @var SqlVersionProvider
+     */
+    private $sqlVersionProvider;
+
+    /**
      * Constructor.
      *
      * @param ResourceConnection $resourceConnection
      * @param DefinitionAggregator $definitionAggregator
+     * @param SqlVersionProvider|null $sqlVersionProvider
      */
     public function __construct(
         ResourceConnection $resourceConnection,
-        DefinitionAggregator $definitionAggregator
+        DefinitionAggregator $definitionAggregator,
+        ?SqlVersionProvider $sqlVersionProvider = null
     ) {
         $this->resourceConnection = $resourceConnection;
         $this->definitionAggregator = $definitionAggregator;
+        $this->sqlVersionProvider = $sqlVersionProvider
+            ?? \Magento\Framework\App\ObjectManager::getInstance()->get(SqlVersionProvider::class);
     }
 
     /**
@@ -120,12 +130,69 @@ class DbSchemaReader implements DbSchemaReaderInterface
 
         $columnsDefinition = $adapter->fetchAssoc($stmt);
 
+        // In MariaDB, JSON columns are stored as LONGTEXT internally.
+        // Detect JSON columns by checking for json_valid CHECK constraints.
+        $jsonColumns = $this->getJsonColumnsFromCheckConstraints($tableName, $resource);
+
         foreach ($columnsDefinition as $columnDefinition) {
+            // If this is a MariaDB JSON column reported as longtext, correct the type
+            if (isset($jsonColumns[$columnDefinition['name']]) && $columnDefinition['type'] === 'longtext') {
+                $columnDefinition['type'] = 'json';
+            }
             $column = $this->definitionAggregator->fromDefinition($columnDefinition);
             $columns[$column['name']] = $column;
         }
 
         return $columns;
+    }
+
+    /**
+     * Get columns that have json_valid CHECK constraints (indicating JSON type in MariaDB).
+     *
+     * MariaDB stores JSON columns as LONGTEXT internally but adds a json_valid() CHECK constraint.
+     * This method detects such columns so they can be properly identified as JSON type.
+     *
+     * @param string $tableName
+     * @param string $resource
+     * @return array Column names that are JSON type (as keys)
+     */
+    private function getJsonColumnsFromCheckConstraints(string $tableName, string $resource): array
+    {
+        $jsonColumns = [];
+
+        try {
+            if (!$this->sqlVersionProvider->isMariaDbEngine()) {
+                return $jsonColumns;
+            }
+        } catch (\Exception $e) {
+            // If we can't determine the engine, assume not MariaDB
+            return $jsonColumns;
+        }
+
+        $adapter = $this->resourceConnection->getConnection($resource);
+        $dbName = $this->resourceConnection->getSchemaName($resource);
+
+        // Query CHECK_CONSTRAINTS to find json_valid constraints
+        // MariaDB adds constraints like: json_valid(`column_name`)
+        $stmt = $adapter->select()
+            ->from(
+                'information_schema.CHECK_CONSTRAINTS',
+                ['CHECK_CLAUSE']
+            )
+            ->where('CONSTRAINT_SCHEMA = ?', $dbName)
+            ->where('TABLE_NAME = ?', $tableName)
+            ->where('CHECK_CLAUSE LIKE ?', 'json_valid(%');
+
+        $checkConstraints = $adapter->fetchCol($stmt);
+
+        foreach ($checkConstraints as $checkClause) {
+            // Extract column name from json_valid(`column_name`) or json_valid(column_name)
+            if (preg_match('/json_valid\s*\(\s*`?([^`\)]+)`?\s*\)/i', $checkClause, $matches)) {
+                $jsonColumns[$matches[1]] = true;
+            }
+        }
+
+        return $jsonColumns;
     }
 
     /**
