@@ -918,8 +918,8 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
             if ($product !== null) {
                 return $product->getShipmentType() == Type\AbstractType::SHIPMENT_TOGETHER;
             }
+        // phpcs:ignore Generic.CodeAnalysis.EmptyStatement.DetectedCatch -- Product may be deleted or unavailable
         } catch (\Throwable $e) {
-            // phpcs:ignore Generic.CodeAnalysis.EmptyStatement -- Product may be deleted or unavailable
         }
 
         $productOptions = $parentItem->getProductOptions();
