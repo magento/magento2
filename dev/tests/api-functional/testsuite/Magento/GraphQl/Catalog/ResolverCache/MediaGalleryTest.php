@@ -130,7 +130,6 @@ class MediaGalleryTest extends ResolverCacheAbstract
 
         $reflectionClass = new \ReflectionClass($context);
         $reflectionProperty = $reflectionClass->getProperty('messageManager');
-        $reflectionProperty->setAccessible(true);
         $reflectionProperty->setValue($context, $messageManager);
 
         /** @var AdminProductSaveController $adminProductSaveController */

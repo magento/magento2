@@ -97,7 +97,6 @@ class ProductTest extends TestCase
             Product::class,
             'cacheContext'
         );
-        $cacheContextProperty->setAccessible(true);
         $cacheContextProperty->setValue($this->model, $this->cacheContextMock);
     }
 

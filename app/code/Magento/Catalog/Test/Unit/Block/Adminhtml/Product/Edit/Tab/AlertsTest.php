@@ -24,6 +24,7 @@ use PHPUnit\Framework\TestCase;
  * Unit test for Magento\Catalog\Block\Adminhtml\Product\Edit\Tab\Alerts
  *
  * @covers \Magento\Catalog\Block\Adminhtml\Product\Edit\Tab\Alerts
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class AlertsTest extends TestCase
 {
@@ -204,7 +205,6 @@ class AlertsTest extends TestCase
     {
         $reflection = new \ReflectionClass($this->alerts);
         $method = $reflection->getMethod('_prepareLayout');
-        $method->setAccessible(true);
         return $method->invoke($this->alerts);
     }
 

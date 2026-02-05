@@ -110,12 +110,9 @@ class InlineParserTest extends TestCase
             ->setAreaCode($area);
 
         $isJsonProperty = new \ReflectionProperty(get_class($this->model), '_isJson');
-        $isJsonProperty->setAccessible(true);
-
         $this->assertFalse($isJsonProperty->getValue($this->model));
 
         $setIsJsonMethod = new \ReflectionMethod($this->model, 'setIsJson');
-        $setIsJsonMethod->setAccessible(true);
         $setIsJsonMethod->invoke($this->model, true);
 
         $this->assertTrue($isJsonProperty->getValue($this->model));

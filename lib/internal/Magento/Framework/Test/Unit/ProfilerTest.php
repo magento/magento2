@@ -466,7 +466,6 @@ class ProfilerTest extends TestCase
             $expected['driverFactory'] = $expected['driverFactory']($this);
         }
         $method = new \ReflectionMethod(Profiler::class, '_parseConfig');
-        $method->setAccessible(true);
         $this->assertEquals($expected, $method->invoke(null, $data, '', $isAjax));
     }
 

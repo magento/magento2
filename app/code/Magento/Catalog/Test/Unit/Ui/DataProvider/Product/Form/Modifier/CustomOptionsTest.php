@@ -233,7 +233,6 @@ class CustomOptionsTest extends AbstractModifierTestCase
 
         $reflection = new \ReflectionClass($model);
         $method = $reflection->getMethod('formatPriceByPath');
-        $method->setAccessible(true);
 
         $result = $method->invoke($model, $path, $data);
 
@@ -334,7 +333,6 @@ class CustomOptionsTest extends AbstractModifierTestCase
 
         $reflection = new \ReflectionClass($model);
         $method = $reflection->getMethod('getCommonContainerConfig');
-        $method->setAccessible(true);
 
         $result = $method->invoke($model, $sortOrder);
 
@@ -367,7 +365,6 @@ class CustomOptionsTest extends AbstractModifierTestCase
 
         $reflection = new \ReflectionClass($model);
         $method = $reflection->getMethod('getCommonContainerConfig');
-        $method->setAccessible(true);
 
         $result = $method->invoke($model, $sortOrder);
 
@@ -401,7 +398,6 @@ class CustomOptionsTest extends AbstractModifierTestCase
 
         $reflection = new \ReflectionClass($model);
         $method = $reflection->getMethod('getProductOptionTypes');
-        $method->setAccessible(true);
 
         $result = $method->invoke($model);
 
@@ -537,7 +533,6 @@ class CustomOptionsTest extends AbstractModifierTestCase
 
         $reflection = new \ReflectionClass($model);
         $method = $reflection->getMethod('formatPriceValue');
-        $method->setAccessible(true);
 
         $result = $method->invoke($model, $inputValue);
 

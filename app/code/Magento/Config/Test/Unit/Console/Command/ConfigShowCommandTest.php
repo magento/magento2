@@ -598,7 +598,6 @@ class ConfigShowCommandTest extends TestCase
     {
         $reflection = new \ReflectionClass($object);
         $prop = $reflection->getProperty($property);
-        $prop->setAccessible(true);
         return $prop->getValue($object);
     }
 }

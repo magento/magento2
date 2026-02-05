@@ -120,7 +120,6 @@ class RemoteServiceGeneratorTest extends TestCase
     {
         $reflectionObject = new \ReflectionObject($this->generator);
         $reflectionMethod = $reflectionObject->getMethod('_generateCode');
-        $reflectionMethod->setAccessible(true);
         $generatedCode = $reflectionMethod->invoke($this->generator);
         self::assertEquals($expectedResult, $generatedCode);
     }

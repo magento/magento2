@@ -180,7 +180,6 @@ class LinkTest extends TestCase
             ]
         );
         $property = (new ReflectionClass(get_class($store)))->getProperty('urlModifier');
-        $property->setAccessible(true);
         $property->setValue($store, $urlModifier);
 
         $urlModifier->expects($this->any())

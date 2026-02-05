@@ -110,7 +110,6 @@ class ItemsTest extends TestCase
     {
         $productId = 7;
         $property = new \ReflectionProperty($this->items, '_canReturnToStock');
-        $property->setAccessible(true);
         $this->assertNull($property->getValue($this->items));
         $this->stockConfiguration->expects($this->once())
             ->method('canSubtractQty')

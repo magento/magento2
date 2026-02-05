@@ -53,7 +53,6 @@ class AbstractIndexerTest extends TestCase
         $cacheMock = $this->createMock(CacheInterface::class);
         $reflection = new \ReflectionClass(AbstractIndexer::class);
         $reflectionProperty = $reflection->getProperty('cacheManager');
-        $reflectionProperty->setAccessible(true);
         $reflectionProperty->setValue($this->indexer, $cacheMock);
     }
 

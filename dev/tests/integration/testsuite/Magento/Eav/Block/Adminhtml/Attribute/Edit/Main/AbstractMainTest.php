@@ -51,7 +51,6 @@ class AbstractMainTest extends \PHPUnit\Framework\TestCase
             \Magento\Eav\Block\Adminhtml\Attribute\Edit\Main\AbstractMain::class,
             '_prepareForm'
         );
-        $method->setAccessible(true);
         $method->invoke($block);
 
         $element = $block->getForm()->getElement('default_value_date');

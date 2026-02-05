@@ -337,7 +337,6 @@ class HttpTest extends TestCase
         /* ensure that the test preconditions are met */
         $objectManagerClass = new ReflectionClass(AppObjectManager::class);
         $instanceProperty = $objectManagerClass->getProperty('_instance');
-        $instanceProperty->setAccessible(true);
         $instanceProperty->setValue(null, null);
 
         $this->model->__wakeup();

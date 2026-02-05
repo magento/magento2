@@ -205,7 +205,7 @@ class Option extends \Magento\Bundle\Block\Catalog\Product\Price
     protected function _getSelectedQty()
     {
         if ($this->getProduct()->hasPreconfiguredValues()) {
-            $selectedQty = (double)$this->getProduct()->getPreconfiguredValues()->getData(
+            $selectedQty = (float)$this->getProduct()->getPreconfiguredValues()->getData(
                 'bundle_option_qty/' . $this->getOption()->getId()
             );
             if ($selectedQty < 0) {

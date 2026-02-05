@@ -342,7 +342,6 @@ class FileTest extends TestCase
     {
         $reflection = new \ReflectionClass($this->fileBackend);
         $method = $reflection->getMethod('getRelativeMediaPath');
-        $method->setAccessible(true);
         $this->assertEquals(
             $filename,
             $method->invoke($this->fileBackend, $path . $filename)

@@ -346,7 +346,6 @@ class WatermarkTest extends TestCase
             ]);
 
         $method = new ReflectionMethod(Watermark::class, '_getHeaderHtml');
-        $method->setAccessible(true);
 
         $result = $method->invoke($this->watermark, $elementMock);
 
@@ -376,7 +375,6 @@ class WatermarkTest extends TestCase
             ->willReturn('base');
 
         $method = new ReflectionMethod(Watermark::class, '_getHeaderHtml');
-        $method->setAccessible(true);
 
         $result = $method->invoke($this->watermark, $elementMock);
 
@@ -404,7 +402,6 @@ class WatermarkTest extends TestCase
             ]);
 
         $method = new ReflectionMethod(Watermark::class, '_getHeaderHtml');
-        $method->setAccessible(true);
 
         $result = $method->invoke($this->watermark, $elementMock);
 
@@ -423,7 +420,6 @@ class WatermarkTest extends TestCase
         $elementMock = $this->createElementMock();
 
         $method = new ReflectionMethod(Watermark::class, '_getFooterHtml');
-        $method->setAccessible(true);
 
         $result = $method->invoke($this->watermark, $elementMock);
 
@@ -682,7 +678,6 @@ class WatermarkTest extends TestCase
             ->willReturn(null);
 
         $method = new ReflectionMethod(Watermark::class, '_getHeaderHtml');
-        $method->setAccessible(true);
 
         $result = $method->invoke($this->watermark, $elementMock);
 

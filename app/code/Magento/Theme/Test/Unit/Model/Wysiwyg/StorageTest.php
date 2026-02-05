@@ -131,7 +131,6 @@ class StorageTest extends TestCase
 
         $reflection = new ReflectionClass(HelperStorage::class);
         $reflection_property = $reflection->getProperty('file');
-        $reflection_property->setAccessible(true);
         $reflection_property->setValue($this->helperStorage, $file);
 
         $this->objectManager = $this->getMockForAbstractClass(ObjectManagerInterface::class);

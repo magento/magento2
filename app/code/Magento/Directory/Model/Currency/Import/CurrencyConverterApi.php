@@ -120,7 +120,7 @@ class CurrencyConverterApi extends AbstractImport
                     $data[$currencyFrom][$to] = null;
                 } else {
                     $data[$currencyFrom][$to] = $this->_numberFormat(
-                        (double)$response[$currencyFrom . '_' . $to]
+                        (float)$response[$currencyFrom . '_' . $to]
                     );
                 }
             }

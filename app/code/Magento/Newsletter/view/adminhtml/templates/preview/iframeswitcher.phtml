@@ -60,7 +60,7 @@ function unBlockPreview() {
 jQuery(document).ready(preview);
 jQuery(previewIframe).ready(unBlockPreview);
 
-jQuery("#preview_iframe").load(function() {
+jQuery("#preview_iframe").on('load', function() {
     jQuery(this).height(jQuery(this).contents().find("html").height() );
 });
 

@@ -323,7 +323,6 @@ class RequestPreprocessorTest extends \Magento\TestFramework\TestCase\AbstractCo
 
         foreach ($properties as $name) {
             $property = $reflection->getProperty($name);
-            $property->setAccessible(true);
             $property->setValue($request, null);
         }
         $request->setServer(new Parameters($server));

@@ -235,7 +235,6 @@ JSON;
     {
         $reflection = new \ReflectionClass(get_class($object));
         $reflectionProperty = $reflection->getProperty($propertyName);
-        $reflectionProperty->setAccessible(true);
         $reflectionProperty->setValue($object, $propertyValue);
     }
 }

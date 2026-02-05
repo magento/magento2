@@ -102,7 +102,6 @@ class GeneratorTest extends TestCase
             ->willReturn($optionResolver);
         $this->generator->generate('', $outputFilename);
         $property = new \ReflectionProperty($this->generator, 'writer');
-        $property->setAccessible(true);
         $this->assertNull($property->getValue($this->generator));
     }
 

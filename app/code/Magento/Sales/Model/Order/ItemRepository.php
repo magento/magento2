@@ -180,8 +180,9 @@ class ItemRepository implements OrderItemRepositoryInterface, ResetAfterRequestI
         }
 
         $this->metadata->getMapper()->save($entity);
-        $this->registry[$entity->getEntityId()] = $entity;
-        return $this->registry[$entity->getEntityId()];
+        $entityId = $entity->getEntityId() ?? '';
+        $this->registry[$entityId] = $entity;
+        return $this->registry[$entityId];
     }
 
     /**
@@ -234,7 +235,7 @@ class ItemRepository implements OrderItemRepositoryInterface, ResetAfterRequestI
         $request = $this->objectFactory->create(['qty' => $entity->getQtyOrdered()]);
 
         $productType = $entity->getProductType();
-        if (isset($this->processorPool[$productType])
+        if (isset($this->processorPool[$productType ?? ''])
             && !$entity->getParentItemId()) {
             $productOption = $entity->getProductOption();
             if ($productOption) {

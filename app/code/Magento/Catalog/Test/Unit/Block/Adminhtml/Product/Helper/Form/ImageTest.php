@@ -110,7 +110,6 @@ class ImageTest extends TestCase
     {
         $reflection = new \ReflectionClass($this->model);
         $method = $reflection->getMethod($methodName);
-        $method->setAccessible(true);
 
         return $method->invoke($this->model);
     }

@@ -38,7 +38,6 @@ class AbstractAdapterTest extends TestCase
             AbstractAdapter::class,
             '_addPhrase'
         );
-        $this->_adapterReflection->setAccessible(true);
     }
 
     public function testParse()

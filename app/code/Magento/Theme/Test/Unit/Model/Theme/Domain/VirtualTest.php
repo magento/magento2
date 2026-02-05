@@ -69,7 +69,6 @@ class VirtualTest extends TestCase
         $appState = $this->createPartialMock(State::class, ['getAreaCode']);
         $appState->expects($this->any())->method('getAreaCode')->willReturn('fixture_area');
         $appStateProperty = new \ReflectionProperty(Theme::class, '_appState');
-        $appStateProperty->setAccessible(true);
         /** @var DataObject $theme */
         $theme->setData(
             [

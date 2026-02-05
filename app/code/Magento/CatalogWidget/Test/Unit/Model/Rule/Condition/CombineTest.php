@@ -71,11 +71,10 @@ class CombineTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $productCondition->expects($this->any())->method('loadAttributeOptions')->willReturnSelf();
-        
+
         // Set attribute options via reflection since getAttributeOption uses magic methods
         $reflection = new ReflectionClass($productCondition);
         $property = $reflection->getProperty('_data');
-        $property->setAccessible(true);
         $property->setValue($productCondition, ['attribute_option' => $attributeOptions]);
 
         $this->conditionFactory->expects($this->atLeastOnce())->method('create')->willReturn($productCondition);

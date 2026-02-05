@@ -150,7 +150,6 @@ class StaticProperties
             $reflectionClass = self::getReflectionClass($class);
             $staticProperties = $reflectionClass->getProperties(\ReflectionProperty::IS_STATIC);
             foreach ($staticProperties as $staticProperty) {
-                $staticProperty->setAccessible(true);
                 $staticProperty->setValue(self::$backupStaticVariables[$class][$staticProperty->getName()]);
             }
         }
@@ -216,7 +215,6 @@ class StaticProperties
             if (self::_isClassCleanable($reflectionClass)) {
                 $staticProperties = $reflectionClass->getProperties(\ReflectionProperty::IS_STATIC);
                 foreach ($staticProperties as $staticProperty) {
-                    $staticProperty->setAccessible(true);
                     $value = $staticProperty->getValue();
                     self::$backupStaticVariables[$className][$staticProperty->getName()] = $value;
                 }
