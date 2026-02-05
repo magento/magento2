@@ -910,10 +910,11 @@ class File extends AbstractIo
      * Get path info
      *
      * @param string $path
-     * @param int|null $flags
-     * @return mixed
+     * @param int|null $flags One of PATHINFO_DIRNAME, PATHINFO_BASENAME, PATHINFO_EXTENSION or PATHINFO_FILENAME
+     * @return array|string
+     * @since 101.1.0
      */
-    public function getPathInfo($path, $flags = null)
+    public function getPathInfo(string $path, ?int $flags = null): array|string
     {
         return $flags === null ? pathinfo($path) : pathinfo($path, $flags);
     }
