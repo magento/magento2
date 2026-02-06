@@ -24,7 +24,7 @@ class Telephone extends AbstractValidator
      * \d: Digits (0-9).
      */
     private const PATTERN_TELEPHONE = '/(?:[\d\s\+\-\()]{1,20})/u';
-    
+
     /**
      * Validate telephone fields.
      *
@@ -50,12 +50,10 @@ class Telephone extends AbstractValidator
      */
     private function isValidTelephone($telephoneValue)
     {
-        if ($telephoneValue != null) {
-            if (preg_match(self::PATTERN_TELEPHONE, (string) $telephoneValue, $matches)) {
-                return $matches[0] == $telephoneValue;
-            }
+        if ($telephoneValue === null) {
+            return true;
         }
 
-        return true;
+        return (bool) preg_match(self::PATTERN_TELEPHONE, (string) $telephoneValue);
     }
 }
