@@ -132,6 +132,10 @@ class MediaTest extends TestCase
             ->method('isReadable')
             ->with(self::RELATIVE_FILE_PATH)
             ->willReturn(true);
+        $this->directoryPubMock->expects(self::exactly(2))
+            ->method('isFile')
+            ->with(self::RELATIVE_FILE_PATH)
+            ->willReturn(true);
         $this->responseMock->expects(self::once())
             ->method('setFilePath')
             ->with($filePath);
@@ -156,6 +160,10 @@ class MediaTest extends TestCase
             ->willReturn(self::MEDIA_DIRECTORY);
         $this->directoryPubMock->expects(self::exactly(2))
             ->method('isReadable')
+            ->with(self::RELATIVE_FILE_PATH)
+            ->willReturn(true);
+        $this->directoryPubMock->expects(self::exactly(2))
+            ->method('isFile')
             ->with(self::RELATIVE_FILE_PATH)
             ->willReturn(true);
         $this->directoryPubMock->expects(self::exactly(2))
@@ -184,6 +192,34 @@ class MediaTest extends TestCase
             ->willReturn(self::MEDIA_DIRECTORY);
         $this->directoryPubMock->expects(self::exactly(2))
             ->method('isReadable')
+            ->with(self::RELATIVE_FILE_PATH)
+            ->willReturn(false);
+        $this->directoryPubMock->expects(self::never())
+            ->method('isFile');
+        $this->configMock->expects($this->once())
+            ->method('getMediaDirectory')
+            ->willReturn('');
+        $this->directoryPubMock->method('getAbsolutePath')->willReturn('');
+
+        self::assertSame($this->responseMock, $this->mediaModel->launch());
+    }
+
+    public function testProcessRequestReturnsPlaceholderForDirectoryPath(): void
+    {
+        $this->mediaModel = $this->createMediaModel();
+
+        $this->sync->method('synchronize')
+            ->with(self::RELATIVE_FILE_PATH);
+        $this->directoryMediaMock->expects(self::once())
+            ->method('getAbsolutePath')
+            ->with(null)
+            ->willReturn(self::MEDIA_DIRECTORY);
+        $this->directoryPubMock->expects(self::atLeastOnce())
+            ->method('isReadable')
+            ->with(self::RELATIVE_FILE_PATH)
+            ->willReturn(true);
+        $this->directoryPubMock->expects(self::exactly(2))
+            ->method('isFile')
             ->with(self::RELATIVE_FILE_PATH)
             ->willReturn(false);
         $this->configMock->expects($this->once())

@@ -192,7 +192,9 @@ class Media implements AppInterface
         try {
             $this->createLocalCopy();
 
-            if ($this->directoryPub->isReadable($this->relativeFileName)) {
+            if ($this->directoryPub->isReadable($this->relativeFileName)
+                && $this->directoryPub->isFile($this->relativeFileName)
+            ) {
                 $this->response->setFilePath($this->directoryPub->getAbsolutePath($this->relativeFileName));
             } else {
                 $this->setPlaceholderImage();
@@ -214,7 +216,9 @@ class Media implements AppInterface
         $synchronizer = $this->syncFactory->create(['directory' => $this->directoryPub]);
         $synchronizer->synchronize($this->relativeFileName);
 
-        if ($this->directoryPub->isReadable($this->relativeFileName)) {
+        if ($this->directoryPub->isReadable($this->relativeFileName)
+            && $this->directoryPub->isFile($this->relativeFileName)
+        ) {
             return;
         }
 
