@@ -140,8 +140,7 @@ class LockerProcessTest extends TestCase
      */
     private function getTmpDirectoryMock()
     {
-        $tmpDirectoryMock = $this->getMockBuilder(WriteInterface::class)
-            ->getMockForAbstractClass();
+        $tmpDirectoryMock = $this->createMock(WriteInterface::class);
 
         return $tmpDirectoryMock;
     }

@@ -16,6 +16,8 @@ use Magento\ConfigurableProduct\Model\Plugin\ProductRepositorySave;
 use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
 use Magento\ConfigurableProduct\Test\Unit\Model\Product\ProductExtensionAttributes;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
+use Magento\Catalog\Api\Data\ProductExtensionInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Magento\Framework\Exception\InputException;
@@ -27,6 +29,8 @@ use Magento\Framework\Exception\InputException;
  */
 class ProductRepositorySaveTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var ProductAttributeRepositoryInterface|MockObject
      */
@@ -81,7 +85,15 @@ class ProductRepositorySaveTest extends TestCase
 
         $this->productRepository = $this->createMock(ProductRepositoryInterface::class);
 
-        $this->extensionAttributes = new \Magento\Catalog\Test\Unit\Helper\ProductExtensionTestHelper();
+        $this->extensionAttributes = $this->createPartialMockWithReflection(
+            ProductExtensionInterface::class,
+            [
+                'getConfigurableProductOptions',
+                'setConfigurableProductOptions',
+                'getConfigurableProductLinks',
+                'setConfigurableProductLinks'
+            ]
+        );
 
         $this->eavAttribute = $this->createMock(ProductAttributeInterface::class);
 
@@ -127,8 +139,8 @@ class ProductRepositorySaveTest extends TestCase
             ->method('getExtensionAttributes')
             ->willReturn($this->extensionAttributes);
 
-        $this->extensionAttributes->setConfigurableProductOptions([]);
-        $this->extensionAttributes->setConfigurableProductLinks([]);
+        $this->extensionAttributes->method('getConfigurableProductOptions')->willReturn([]);
+        $this->extensionAttributes->method('getConfigurableProductLinks')->willReturn([]);
 
         $this->productAttributeRepository->expects(static::never())
             ->method('get');
@@ -161,8 +173,8 @@ class ProductRepositorySaveTest extends TestCase
         $this->product->expects(static::once())
             ->method('getExtensionAttributes')
             ->willReturn($this->extensionAttributes);
-        $this->extensionAttributes->setConfigurableProductOptions([$this->option]);
-        $this->extensionAttributes->setConfigurableProductLinks($links);
+        $this->extensionAttributes->method('getConfigurableProductOptions')->willReturn([$this->option]);
+        $this->extensionAttributes->method('getConfigurableProductLinks')->willReturn($links);
 
         $this->productAttributeRepository->expects(static::once())
             ->method('get')
@@ -210,8 +222,8 @@ class ProductRepositorySaveTest extends TestCase
         $this->product->expects(static::once())
             ->method('getExtensionAttributes')
             ->willReturn($this->extensionAttributes);
-        $this->extensionAttributes->setConfigurableProductOptions([$this->option]);
-        $this->extensionAttributes->setConfigurableProductLinks($links);
+        $this->extensionAttributes->method('getConfigurableProductOptions')->willReturn([$this->option]);
+        $this->extensionAttributes->method('getConfigurableProductLinks')->willReturn($links);
 
         $this->productAttributeRepository->expects(static::once())
             ->method('get')

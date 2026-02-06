@@ -46,7 +46,7 @@ class FilesystemTest extends TestCase
     public function testGetDirectoryRead()
     {
         /** @var ReadInterface $dirReadMock */
-        $dirReadMock = $this->getMockForAbstractClass(ReadInterface::class);
+        $dirReadMock = $this->createMock(ReadInterface::class);
         $this->_dirReadFactoryMock->expects($this->once())->method('create')->willReturn($dirReadMock);
         $this->assertEquals($dirReadMock, $this->_filesystem->getDirectoryRead(DirectoryList::ROOT));
     }
@@ -54,7 +54,7 @@ class FilesystemTest extends TestCase
     public function testGetDirectoryReadByPath()
     {
         /** @var ReadInterface $dirReadMock */
-        $dirReadMock = $this->getMockForAbstractClass(ReadInterface::class);
+        $dirReadMock = $this->createMock(ReadInterface::class);
         $this->_dirReadFactoryMock->expects($this->once())->method('create')->willReturn($dirReadMock);
         $this->assertEquals($dirReadMock, $this->_filesystem->getDirectoryReadByPath('path/to/some/file'));
     }
@@ -62,7 +62,7 @@ class FilesystemTest extends TestCase
     public function testGetDirectoryWrite()
     {
         /** @var WriteInterface $dirWriteMock */
-        $dirWriteMock = $this->getMockForAbstractClass(WriteInterface::class);
+        $dirWriteMock = $this->createMock(WriteInterface::class);
         $this->_dirWriteFactoryMock->expects($this->once())->method('create')->willReturn($dirWriteMock);
         $this->assertEquals($dirWriteMock, $this->_filesystem->getDirectoryWrite(DirectoryList::ROOT));
     }

@@ -15,6 +15,7 @@ use Magento\Framework\Pricing\SaleableInterface;
 use Magento\Tax\Pricing\Adjustment;
 use Magento\Weee\Helper\Data as WeeeHelperData;
 use Magento\Weee\Plugin\ConfigurableProduct\Pricing\FinalPriceResolver;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -78,10 +79,10 @@ class FinalPriceResolverTest extends TestCase
      *
      * @return void
      */
-    public function testAfterResolvePriceWhenWeeeDisplayIsEnabledViaDisplayIncl(): void
+    #[DataProvider('pricesDataProvider')]
+    public function testAfterResolvePriceWhenWeeeDisplayIsEnabledViaDisplayIncl($amount, $expected): void
     {
         $originalResult = 100.0;
-        $expectedPrice = 119.0;
 
         // Mock WEEE display settings - isDisplayIncl returns true
         $this->weeeHelperDataMock->expects($this->once())
@@ -109,7 +110,7 @@ class FinalPriceResolverTest extends TestCase
         $this->amountMock->expects($this->once())
             ->method('getValue')
             ->with(Adjustment::ADJUSTMENT_CODE)
-            ->willReturn($expectedPrice);
+            ->willReturn($amount);
 
         // Execute
         $result = $this->plugin->afterResolvePrice(
@@ -119,7 +120,7 @@ class FinalPriceResolverTest extends TestCase
         );
 
         // Assert
-        $this->assertEquals($expectedPrice, $result);
+        $this->assertEquals($expected, $result);
     }
 
     /**
@@ -127,10 +128,10 @@ class FinalPriceResolverTest extends TestCase
      *
      * @return void
      */
-    public function testAfterResolvePriceWhenWeeeDisplayIsEnabledViaDisplayInclDesc(): void
+    #[DataProvider('pricesDataProvider')]
+    public function testAfterResolvePriceWhenWeeeDisplayIsEnabledViaDisplayInclDesc($amount, $expected): void
     {
         $originalResult = 100.0;
-        $expectedPrice = 119.0;
 
         // Mock WEEE display settings - isDisplayIncl returns false, isDisplayInclDesc returns true
         $this->weeeHelperDataMock->expects($this->once())
@@ -158,7 +159,7 @@ class FinalPriceResolverTest extends TestCase
         $this->amountMock->expects($this->once())
             ->method('getValue')
             ->with(Adjustment::ADJUSTMENT_CODE)
-            ->willReturn($expectedPrice);
+            ->willReturn($amount);
 
         // Execute
         $result = $this->plugin->afterResolvePrice(
@@ -168,7 +169,7 @@ class FinalPriceResolverTest extends TestCase
         );
 
         // Assert
-        $this->assertEquals($expectedPrice, $result);
+        $this->assertEquals($expected, $result);
     }
 
     /**
@@ -176,10 +177,10 @@ class FinalPriceResolverTest extends TestCase
      *
      * @return void
      */
-    public function testAfterResolvePriceWhenWeeeDisplayIsDisabled(): void
+    #[DataProvider('pricesDataProvider')]
+    public function testAfterResolvePriceWhenWeeeDisplayIsDisabled($amount, $expected): void
     {
         $originalResult = 100.0;
-        $expectedPrice = 100.0;
 
         // Mock WEEE display settings - both return false
         $this->weeeHelperDataMock->expects($this->once())
@@ -203,7 +204,7 @@ class FinalPriceResolverTest extends TestCase
         // Should call getValue() without any argument (not getValue(Adjustment::ADJUSTMENT_CODE))
         $this->finalPriceMock->expects($this->once())
             ->method('getValue')
-            ->willReturn($expectedPrice);
+            ->willReturn($amount);
 
         // Execute
         $result = $this->plugin->afterResolvePrice(
@@ -213,7 +214,7 @@ class FinalPriceResolverTest extends TestCase
         );
 
         // Assert
-        $this->assertEquals($expectedPrice, $result);
+        $this->assertEquals($expected, $result);
     }
 
     /**
@@ -320,5 +321,19 @@ class FinalPriceResolverTest extends TestCase
         // The result should be the actual price from product, not the original result
         $this->assertEquals($actualPrice, $result);
         $this->assertNotEquals($originalResult, $result);
+    }
+
+    public static function pricesDataProvider(): array
+    {
+        return [
+            [
+                "amount" => 119.0,
+                "expected" => 119.0
+            ],
+            [
+                "amount" => "119.0",
+                "expected" => 119.0
+            ]
+        ];
     }
 }

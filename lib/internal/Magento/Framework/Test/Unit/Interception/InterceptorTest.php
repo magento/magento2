@@ -38,8 +38,7 @@ class InterceptorTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->pluginListMock = $this->getMockBuilder(PluginListInterface::class)
-            ->getMockForAbstractClass();
+        $this->pluginListMock = $this->createMock(PluginListInterface::class);
 
         $this->sampleInterceptor = new Interceptor();
         $this->samplePlugins = [

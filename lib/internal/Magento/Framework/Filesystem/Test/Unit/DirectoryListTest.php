@@ -9,6 +9,7 @@ namespace Magento\Framework\Filesystem\Test\Unit;
 
 use Magento\Framework\Filesystem\DirectoryList;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class DirectoryListTest extends TestCase
 {
@@ -19,9 +20,8 @@ class DirectoryListTest extends TestCase
 
     /**
      * @param array $config
-     * @param string $expectedError
-     * @dataProvider validateDataProvider
-     */
+     * @param string $expectedError     */
+    #[DataProvider('validateDataProvider')]
     public function testValidate($config, $expectedError)
     {
         $this->expectException('\InvalidArgumentException');
@@ -60,9 +60,8 @@ class DirectoryListTest extends TestCase
     }
 
     /**
-     * @param string $method
-     * @dataProvider assertCodeDataProvider
-     */
+     * @param string $method     */
+    #[DataProvider('assertCodeDataProvider')]
     public function testAssertCode($method)
     {
         $this->expectException('Magento\Framework\Exception\FileSystemException');
@@ -76,14 +75,16 @@ class DirectoryListTest extends TestCase
      */
     public static function assertCodeDataProvider()
     {
-        return [['getPath', 'getUrlPath']];
+        return [
+            ['getPath'],
+            ['getUrlPath']
+        ];
     }
 
     /**
      * @param array $config
-     * @param string|bool $expected
-     * @dataProvider getUrlPathDataProvider
-     */
+     * @param string|bool $expected     */
+    #[DataProvider('getUrlPathDataProvider')]
     public function testGetUrlPath($config, $expected)
     {
         $object = new DirectoryList('/root/dir', $config);
@@ -114,9 +115,8 @@ class DirectoryListTest extends TestCase
     }
 
     /**
-     * @param string $value
-     * @dataProvider assertUrlPathDataProvider
-     */
+     * @param string $value     */
+    #[DataProvider('assertUrlPathDataProvider')]
     public function testAssertUrlPath($value)
     {
         $this->expectException('InvalidArgumentException');

@@ -12,6 +12,7 @@ use Magento\Store\Model\Group;
 use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Store\Model\Website;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -61,15 +62,7 @@ class StoreTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->storeManagerMock = $this->getMockForAbstractClass(
-            StoreManagerInterface::class,
-            [],
-            '',
-            false,
-            false,
-            true,
-            []
-        );
+        $this->storeManagerMock = $this->createMock(StoreManagerInterface::class);
         $this->groupMock->expects($this->any())->method('getStores')->willReturn([$this->storeMock]);
         $this->groupMock->expects($this->atLeastOnce())->method('getId')->willReturn(self::$groupId);
         $this->websiteMock->expects($this->atLeastOnce())->method('getGroups')->willReturn([$this->groupMock]);
@@ -82,9 +75,9 @@ class StoreTest extends TestCase
     }
 
     /**
-     * @dataProvider getStoresStructureDataProvider
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
+    #[DataProvider('getStoresStructureDataProvider')]
     public function testGetStoresStructure(
         $isAll,
         $storeId,
@@ -184,9 +177,9 @@ class StoreTest extends TestCase
     }
 
     /**
-     * @dataProvider getStoreValuesForFormDataProvider
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
+    #[DataProvider('getStoreValuesForFormDataProvider')]
     public function testGetStoreValuesForForm(
         $empty,
         $all,

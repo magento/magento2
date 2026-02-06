@@ -10,6 +10,9 @@ namespace Magento\TestFramework\Fixture\Parser;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\TestFramework\Fixture\ParserInterface;
 use PHPUnit\Framework\TestCase;
+use ReflectionClass;
+use ReflectionException;
+use ReflectionMethod;
 
 /**
  * AppIsolation attribute parser
@@ -37,15 +40,25 @@ class AppIsolation implements ParserInterface
     {
         $fixtures = [];
         try {
-            $reflection = $scope === ParserInterface::SCOPE_CLASS
-                ? new \ReflectionClass($test)
-                : new \ReflectionMethod($test, $test->name());
-        } catch (\ReflectionException $e) {
+            if ($scope === ParserInterface::SCOPE_CLASS) {
+                $reflection = new ReflectionClass($test);
+            } else {
+                // Check if name property is initialized before accessing
+                // The 'name' property is from PHPUnit\Framework\TestCase
+                $nameReflection = new ReflectionClass(TestCase::class);
+                $nameProperty = $nameReflection->getProperty('name');
+                
+                if (!$nameProperty->isInitialized($test)) {
+                    // Cannot parse method-level attributes without a test name
+                    return [];
+                }
+                
+                $reflection = new ReflectionMethod($test, $test->name());
+            }
+        } catch (ReflectionException $e) {
+            $context = $scope === ParserInterface::SCOPE_CLASS ? ' (class level)' : ' (method level)';
             throw new LocalizedException(
-                __(
-                    'Unable to parse attributes for %1',
-                    get_class($test) . ($scope === ParserInterface::SCOPE_CLASS ? '' : '::' . $test->name())
-                ),
+                __('Unable to parse attributes for %1', get_class($test) . $context),
                 $e
             );
         }

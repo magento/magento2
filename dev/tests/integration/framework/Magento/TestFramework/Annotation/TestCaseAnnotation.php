@@ -8,8 +8,10 @@ declare(strict_types=1);
 namespace Magento\TestFramework\Annotation;
 
 use PHPUnit\Framework\TestCase;
-use PHPUnit\Util\Exception;
 use PHPUnit\Metadata\Annotation\Parser\Registry;
+use PHPUnit\Util\Exception;
+use ReflectionClass;
+use ReflectionException;
 
 /**
  * Returns annotations for given testcase.
@@ -42,10 +44,20 @@ class TestCaseAnnotation
     {
         $registry = Registry::getInstance();
         $className = get_class($testCase);
-        $methodName = $testCase->name();
+
+        // Use reflection to safely check if name property is initialized
+        // The 'name' property is from PHPUnit\Framework\TestCase, not the child class
+        try {
+            $reflection = new ReflectionClass(TestCase::class);
+            $nameProperty = $reflection->getProperty('name');
+            $methodName = $nameProperty->isInitialized($testCase) ? $testCase->name() : null;
+        } catch (ReflectionException $e) {
+            // If property doesn't exist or can't be accessed, fallback to null
+            $methodName = null;
+        }
 
         return [
-            'method' => $methodName ? $registry->forMethod($className, $methodName)->symbolAnnotations() : null,
+            'method' => $methodName ? $registry->forMethod($className, $methodName)->symbolAnnotations() : [],
             'class'  => $registry->forClassName($className)->symbolAnnotations(),
         ];
     }

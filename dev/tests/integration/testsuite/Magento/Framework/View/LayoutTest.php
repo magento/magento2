@@ -24,6 +24,7 @@ use Magento\Framework\View\Layout\Element;
 use Magento\Framework\View\Layout\ProcessorInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -215,8 +216,8 @@ class LayoutTest extends TestCase
 
     /**
      * @return void
-     * @dataProvider createBlockDataProvider
      */
+    #[DataProvider('createBlockDataProvider')]
     public function testCreateBlock($blockType, $blockName, array $blockData, $expectedName): void
     {
         $expectedData = $blockData + ['type' => $blockType];
@@ -248,8 +249,8 @@ class LayoutTest extends TestCase
 
     /**
      * @return void
-     * @dataProvider blockNotExistsDataProvider
      */
+    #[DataProvider('blockNotExistsDataProvider')]
     public function testCreateBlockNotExists($name): void
     {
         $this->expectException(LocalizedException::class);
@@ -288,8 +289,8 @@ class LayoutTest extends TestCase
     /**
      * @magentoAppIsolation enabled
      * @return void
-     * @dataProvider addContainerDataProvider()
      */
+    #[DataProvider('addContainerDataProvider')]
     public function testAddContainer($htmlTag): void
     {
         $this->assertFalse($this->layout->hasElement('container'));

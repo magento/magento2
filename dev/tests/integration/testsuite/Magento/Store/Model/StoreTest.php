@@ -231,7 +231,6 @@ class StoreTest extends \PHPUnit\Framework\TestCase
 
         if ($useCustomEntryPoint) {
             $property = new \ReflectionProperty($this->model, '_isCustomEntryPoint');
-            $property->setAccessible(true);
             $property->setValue($this->model, $useCustomEntryPoint);
         }
         $actual = $this->model->getBaseUrl($type);

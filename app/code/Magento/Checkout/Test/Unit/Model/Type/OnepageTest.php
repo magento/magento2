@@ -325,7 +325,6 @@ class OnepageTest extends TestCase
         $storage->setData('last_order_id', $orderId);
         $parentReflection = new \ReflectionClass(\Magento\Framework\Session\SessionManager::class);
         $storageProperty = $parentReflection->getProperty('storage');
-        $storageProperty->setAccessible(true);
         $storageProperty->setValue($sessionStub, $storage);
         $orderMock = $this->createPartialMock(
             Order::class,

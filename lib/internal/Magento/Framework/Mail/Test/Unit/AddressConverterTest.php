@@ -11,6 +11,7 @@ use Magento\Framework\Mail\AddressConverter;
 use Magento\Framework\Mail\AddressFactory;
 use Magento\Framework\Mail\Address;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class AddressConverterTest extends TestCase
 {
@@ -40,9 +41,8 @@ class AddressConverterTest extends TestCase
      * @param string $email
      * @param string $name
      * @param string $emailExpected
-     * @param string $nameExpected
-     * @dataProvider convertDataProvider
-     */
+     * @param string $nameExpected     */
+    #[DataProvider('convertDataProvider')]
     public function testConvert(string $email, string $name, string $emailExpected, string $nameExpected)
     {
         $this->addressFactoryMock->expects($this->once())

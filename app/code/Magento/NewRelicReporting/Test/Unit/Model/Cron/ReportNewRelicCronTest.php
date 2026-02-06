@@ -265,12 +265,10 @@ class ReportNewRelicCronTest extends TestCase
         // Use reflection to call protected method
         $reflection = new ReflectionClass($this->model);
         $method = $reflection->getMethod('reportModules');
-        $method->setAccessible(true);
         $method->invoke($this->model);
 
         // Verify custom parameters were added
         $property = $reflection->getProperty('customParameters');
-        $property->setAccessible(true);
         $customParams = $property->getValue($this->model);
 
         $this->assertEquals(10, $customParams[Config::MODULES_ENABLED]);
@@ -305,12 +303,10 @@ class ReportNewRelicCronTest extends TestCase
         // Use reflection to call protected method
         $reflection = new ReflectionClass($this->model);
         $method = $reflection->getMethod('reportModules');
-        $method->setAccessible(true);
         $method->invoke($this->model);
 
         // Verify custom parameters were still added
         $property = $reflection->getProperty('customParameters');
-        $property->setAccessible(true);
         $customParams = $property->getValue($this->model);
 
         $this->assertEquals(8, $customParams[Config::MODULES_ENABLED]);
@@ -335,7 +331,6 @@ class ReportNewRelicCronTest extends TestCase
         // Use reflection to call protected method
         $reflection = new ReflectionClass($this->model);
         $method = $reflection->getMethod('setModuleChangeStatusDeployment');
-        $method->setAccessible(true);
         $method->invoke($this->model, $changesArray, $deploymentText);
     }
 
@@ -357,7 +352,6 @@ class ReportNewRelicCronTest extends TestCase
         // Use reflection to call protected method
         $reflection = new ReflectionClass($this->model);
         $method = $reflection->getMethod('setModuleChangeStatusDeployment');
-        $method->setAccessible(true);
         $method->invoke($this->model, $changesArray, $deploymentText);
     }
 
@@ -411,7 +405,6 @@ class ReportNewRelicCronTest extends TestCase
         // Use reflection to call protected method
         $reflection = new ReflectionClass($this->model);
         $method = $reflection->getMethod('reportModules');
-        $method->setAccessible(true);
         $method->invoke($this->model);
     }
 
@@ -448,7 +441,6 @@ class ReportNewRelicCronTest extends TestCase
         // Use reflection to call protected method
         $reflection = new ReflectionClass($this->model);
         $method = $reflection->getMethod('reportModules');
-        $method->setAccessible(true);
         $method->invoke($this->model);
     }
 }

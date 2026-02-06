@@ -13,6 +13,7 @@ use Magento\Framework\Registry;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\View\Element\Template\Context;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -78,11 +79,11 @@ class PriceTest extends TestCase
     /**
      * Test getPrice returns formatted price from registry product
      *
-     * @dataProvider priceDataProvider
      * @covers \Magento\Catalog\Block\Product\View\Price::getPrice
      * @param string|float $formattedPrice
      * @return void
      */
+    #[DataProvider('priceDataProvider')]
     public function testGetPriceReturnsFormattedPriceFromProduct(string|float $formattedPrice): void
     {
         $this->registryMock->expects($this->once())

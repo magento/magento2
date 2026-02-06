@@ -10,6 +10,12 @@ namespace Magento\Catalog\Api;
 use Magento\Authorization\Model\Role;
 use Magento\Authorization\Model\RoleFactory;
 use Magento\Authorization\Model\Rules;
+use Magento\Catalog\Model\Product\Gallery\DefaultValueProcessor;
+use Magento\Catalog\Test\Fixture\Product as ProductFixture;
+use Magento\Store\Test\Fixture\Store as StoreFixture;
+use Magento\TestFramework\Fixture\DataFixture;
+use Magento\TestFramework\Fixture\DataFixtureStorageManager;
+use Magento\TestFramework\Fixture\ScopeFixture;
 use Magento\UrlRewrite\Model\ResourceModel\UrlRewriteCollectionFactory;
 use Magento\Authorization\Model\RulesFactory;
 use Magento\Catalog\Api\Data\ProductInterface;
@@ -2195,6 +2201,72 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
         $this->assertCount(1, $urlRewriteCollection);
     }
 
+    #[
+        DataFixture(ScopeFixture::class, as: 'global_scope'),
+        DataFixture(StoreFixture::class, as: 'store_view_2'),
+        DataFixture(
+            ProductFixture::class,
+            ['media_gallery_entries' => [['label' => 'test label', 'position' => 1, 'disabled' => false]]],
+            as: 'p1',
+            scope: 'global_scope'
+        ),
+    ]
+    public function testMediaGalleryInheritanceTest(): void
+    {
+        $this->_markTestAsRestOnly(
+            'Test skipped due to known issue with SOAP. NULL value is cast to corresponding attribute type.'
+        );
+        
+        $fixtures = DataFixtureStorageManager::getStorage();
+        $defaultValueProcessor = Bootstrap::getObjectManager()->get(DefaultValueProcessor::class);
+        $sku = $fixtures->get('p1')->getSku();
+        $store2 = $fixtures->get('store_view_2');
+        
+        $productData = $this->getProduct($sku, $store2->getCode());
+        
+        // Update1: Update product in store view 2 without media_gallery_entries
+        $update1 = $productData;
+        unset($update1['media_gallery_entries']);
+        $this->saveProduct($update1, $store2->getCode());
+
+        // Check image label, visibility and position inheritance in store view 2
+        $product = $this->getProductModel($sku, (int) $store2->getId());
+        $gallery = $defaultValueProcessor->process($product, $product->getData('media_gallery'));
+        $image = current($gallery['images']);
+        $this->assertEquals(1, $image['label_use_default']);
+        $this->assertEquals(1, $image['disabled_use_default']);
+        $this->assertEquals(1, $image['position_use_default']);
+
+        // Update2: Update product in store view 2 with media_gallery_entries
+        $update2 = $productData;
+        $this->saveProduct($update2, $store2->getCode());
+
+        // Check image label, visibility and position inheritance in store view 2
+        $product = $this->getProductModel($sku, (int) $store2->getId());
+        $gallery = $defaultValueProcessor->process($product, $product->getData('media_gallery'));
+        $image = current($gallery['images']);
+        $this->assertEquals(0, $image['label_use_default']);
+        $this->assertEquals(0, $image['disabled_use_default']);
+        $this->assertEquals(0, $image['position_use_default']);
+
+        // Update3: Update product in store view 2 to use default values for media_gallery_entries
+        $update3 = $productData;
+        foreach ($update3['media_gallery_entries'] as &$entry) {
+            $entry['label'] = null;
+            $entry['position'] = null;
+            $entry['disabled'] = null;
+        }
+        $this->saveProduct($update3, $store2->getCode());
+
+        // Check image label, visibility and position inheritance in store view 2
+        $product = $this->getProductModel($sku, (int) $store2->getId());
+        $gallery = $defaultValueProcessor->process($product, $product->getData('media_gallery'));
+        $image = current($gallery['images']);
+        $this->assertEquals(1, $image['label_use_default']);
+        $this->assertEquals(1, $image['disabled_use_default']);
+        $this->assertEquals(1, $image['position_use_default']);
+    }
+    
     /**
      * @return string
      */
