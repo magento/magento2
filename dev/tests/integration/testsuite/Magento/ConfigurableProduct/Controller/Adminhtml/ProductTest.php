@@ -342,7 +342,7 @@ class ProductTest extends AbstractBackendController
             $this->assertEquals($expectedProduct['price'], $product->getPrice());
 
             if (!empty($expectedProduct['weight'])) {
-                $this->assertEquals($expectedProduct['weight'], (double)$product->getWeight());
+                $this->assertEquals($expectedProduct['weight'], (float)$product->getWeight());
                 $this->assertInstanceOf(Simple::class, $product->getTypeInstance());
             } else {
                 $this->assertInstanceOf(Virtual::class, $product->getTypeInstance());
@@ -529,7 +529,6 @@ class ProductTest extends AbstractBackendController
         $reflection = new \ReflectionObject($this);
         foreach ($reflection->getProperties() as $property) {
             if (!$property->isStatic() && 0 !== strpos($property->getDeclaringClass()->getName(), 'PHPUnit')) {
-                $property->setAccessible(true);
                 $property->setValue($this, null);
             }
         }

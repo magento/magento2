@@ -70,7 +70,7 @@ class AbstractEnableTest extends TestCase
 
         $randomMock = $this->createMock(Random::class);
         $randomMock->method('getRandomString')->willReturn('12345abcdef');
-        
+
         $mockArguments = $this->createMocks([
             \Magento\Framework\Data\Form\Element\Factory::class,
             CollectionFactory::class,
@@ -79,7 +79,7 @@ class AbstractEnableTest extends TestCase
         $mockArguments[] = [];
         $mockArguments[] = $this->createMock(SecureHtmlRenderer::class);
         $mockArguments[] = $randomMock;
-        
+
         $this->elementMock = $this->createPartialMockWithReflection(
             AbstractElement::class,
             ['getHtmlId', 'getForm', 'getTooltip']
@@ -88,11 +88,9 @@ class AbstractEnableTest extends TestCase
         $escaper = $objectManager->getObject(Escaper::class);
         $reflection = new ReflectionClass(AbstractElement::class);
         $reflectionProperty = $reflection->getProperty('_escaper');
-        $reflectionProperty->setAccessible(true);
         $reflectionProperty->setValue($this->elementMock, $escaper);
-        
+
         $randomProperty = $reflection->getProperty('random');
-        $randomProperty->setAccessible(true);
         $randomProperty->setValue($this->elementMock, $randomMock);
 
         $objects = [
@@ -140,7 +138,7 @@ class AbstractEnableTest extends TestCase
     public function testRender()
     {
         $formMock = $this->createPartialMockWithReflection(Form::class, ['getFieldNameSuffix']);
-    
+
         $this->elementMock->expects($this->any())
             ->method('getHtmlId')
             ->willReturn('test-html-id');

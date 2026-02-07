@@ -11,9 +11,11 @@ namespace Magento\Test\Helper;
 
 use Magento\Framework\App\Bootstrap;
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 
 class BootstrapTest extends \PHPUnit\Framework\TestCase
 {
+    use MockCreationTrait;
     /**
      * @var \Magento\TestFramework\Helper\Bootstrap
      */
@@ -47,11 +49,10 @@ class BootstrapTest extends \PHPUnit\Framework\TestCase
             \Magento\TestFramework\Application::class,
             ['getTempDir', 'getInitParams', 'reinitialize', 'run']
         );
-        $this->_bootstrap = $this->getMockBuilder(\Magento\TestFramework\Bootstrap::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['getDbVendorName'])
-            ->onlyMethods(['getApplication'])
-            ->getMock();
+        $this->_bootstrap = $this->createPartialMockWithReflection(
+            \Magento\TestFramework\Bootstrap::class,
+            ['getDbVendorName', 'getApplication']
+        );
         $this->_bootstrap->expects(
             $this->any()
         )->method(

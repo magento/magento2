@@ -7,6 +7,8 @@ declare(strict_types=1);
 
 namespace Magento\Catalog\Model\Product\Attribute\Save;
 
+use PHPUnit\Framework\Attributes\DataProvider;
+
 /**
  * @magentoDbIsolation enabled
  * @magentoDataFixture  Magento/Catalog/_files/multiselect_attribute.php
@@ -32,8 +34,8 @@ class AttributeMultiSelectTest extends AbstractAttributeTest
 
     /**
      * @inheritdoc
-     * @dataProvider productProvider
      */
+    #[DataProvider('productProvider')]
     public function testDefaultValue(string $productSku): void
     {
         $this->markTestSkipped('Test is blocked by issue MC-29019');

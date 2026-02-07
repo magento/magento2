@@ -172,7 +172,6 @@ class ParserTest extends TestCase
         $escaper = new Escaper();
         $reflection = new \ReflectionClass($escaper);
         $reflectionProperty = $reflection->getProperty('escaper');
-        $reflectionProperty->setAccessible(true);
         $reflectionProperty->setValue($escaper, new \Magento\Framework\ZendEscaper());
         return $escaper;
     }

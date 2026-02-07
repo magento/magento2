@@ -130,7 +130,7 @@ class Billing extends \Magento\Payment\Block\Form\Container
      */
     public function getQuoteBaseGrandTotal()
     {
-        return (double)$this->getQuote()->getBaseGrandTotal();
+        return (float)$this->getQuote()->getBaseGrandTotal();
     }
 
     /**

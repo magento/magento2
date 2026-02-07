@@ -310,7 +310,6 @@ class PriceTest extends TestCase
             Price::class,
             $methodName
         );
-        $method->setAccessible(true);
 
         return (string)$method->invoke($this->priceModel, $args);
     }

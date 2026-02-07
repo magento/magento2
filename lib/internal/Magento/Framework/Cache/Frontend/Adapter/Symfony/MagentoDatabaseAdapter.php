@@ -277,7 +277,6 @@ class MagentoDatabaseAdapter implements AdapterInterface
             // Try newMetadata first (set by TagAwareAdapter during save)
             if ($reflection->hasProperty('newMetadata')) {
                 $newMetadataProperty = $reflection->getProperty('newMetadata');
-                $newMetadataProperty->setAccessible(true);
                 $newMetadata = $newMetadataProperty->getValue($item);
 
                 if (isset($newMetadata[CacheItem::METADATA_TAGS]) && is_array($newMetadata[CacheItem::METADATA_TAGS])) {
@@ -322,23 +321,19 @@ class MagentoDatabaseAdapter implements AdapterInterface
 
         // Set key
         $keyProperty = $reflection->getProperty('key');
-        $keyProperty->setAccessible(true);
         $keyProperty->setValue($item, $key);
 
         // Set value
         $valueProperty = $reflection->getProperty('value');
-        $valueProperty->setAccessible(true);
         $valueProperty->setValue($item, $value);
 
         // Set isHit
         $isHitProperty = $reflection->getProperty('isHit');
-        $isHitProperty->setAccessible(true);
         $isHitProperty->setValue($item, $isHit);
 
         // Set expiry
         if ($expiry !== null && $expiry > 0) {
             $expiryProperty = $reflection->getProperty('expiry');
-            $expiryProperty->setAccessible(true);
             $expiryProperty->setValue($item, $expiry);
         }
 
@@ -346,7 +341,6 @@ class MagentoDatabaseAdapter implements AdapterInterface
         // TagAwareAdapter expects metadata[METADATA_TAGS] = ['TAG1' => 'version', 'TAG2' => 'version']
         if (!empty($tagVersions)) {
             $metadataProperty = $reflection->getProperty('metadata');
-            $metadataProperty->setAccessible(true);
 
             // Store tag versions exactly as provided (with actual version bytes)
             $metadata = [
@@ -367,7 +361,6 @@ class MagentoDatabaseAdapter implements AdapterInterface
         if ($item instanceof CacheItem) {
             $reflection = new \ReflectionClass($item);
             $valueProperty = $reflection->getProperty('value');
-            $valueProperty->setAccessible(true);
             return $valueProperty->getValue($item);
         }
         return $item->get();
@@ -384,7 +377,6 @@ class MagentoDatabaseAdapter implements AdapterInterface
         if ($item instanceof CacheItem) {
             $reflection = new \ReflectionClass($item);
             $expiryProperty = $reflection->getProperty('expiry');
-            $expiryProperty->setAccessible(true);
             $expiry = $expiryProperty->getValue($item);
             return $expiry !== null ? (int)$expiry : null;
         }

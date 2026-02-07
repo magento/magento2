@@ -26,10 +26,8 @@
             <createData entity="Simple_US_CA_Customer" stepKey="createCustomer"/>
         </before>
         <after>
-            <!--Delete customer-->
-            <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
-            <!--Delete created customer while generating Order-->
-            <actionGroup ref="AdminDeleteAllCustomerActionGroup" stepKey="deleteAllCustomers"/>
+            <!--Delete all customers via API-->
+            <helper class="Magento\Customer\Test\Mftf\Helper\CustomerApiHelper" method="deleteAllCustomersApi" stepKey="deleteAllCustomersViaApi"/>
             <!--Delete product-->
             <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
             <!--Logout as Admin-->

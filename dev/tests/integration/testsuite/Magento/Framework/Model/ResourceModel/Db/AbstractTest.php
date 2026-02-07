@@ -31,7 +31,6 @@ class AbstractTest extends \PHPUnit\Framework\TestCase
     public function testConstruct()
     {
         $resourceProperty = new \ReflectionProperty(get_class($this->_model), '_resources');
-        $resourceProperty->setAccessible(true);
         $this->assertInstanceOf(
             \Magento\Framework\App\ResourceConnection::class,
             $resourceProperty->getValue($this->_model)
@@ -41,8 +40,6 @@ class AbstractTest extends \PHPUnit\Framework\TestCase
     public function testSetMainTable()
     {
         $setMainTableMethod = new \ReflectionMethod($this->_model, '_setMainTable');
-        $setMainTableMethod->setAccessible(true);
-
         $tableName = $this->_model->getTable('store_website');
         $idFieldName = 'website_id';
 

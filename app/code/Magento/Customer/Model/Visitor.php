@@ -269,7 +269,7 @@ class Visitor extends AbstractModel
     public function isModuleIgnored($observer)
     {
         if (is_array($this->ignores) && $observer) {
-            $curModule = $this->requestSafety->getRouteName();
+            $curModule = $this->requestSafety->getRouteName() ?? '';
             if (isset($this->ignores[$curModule])) {
                 return true;
             }

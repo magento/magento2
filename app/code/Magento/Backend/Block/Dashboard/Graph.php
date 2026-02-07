@@ -235,7 +235,7 @@ class Graph extends \Magento\Backend\Block\Dashboard\AbstractDashboard
             }
             foreach ($this->getAllSeries() as $index => $serie) {
                 if (in_array($d, $this->_axisLabels['x'])) {
-                    $datas[$index][] = (double)array_shift($this->_allSeries[$index]);
+                    $datas[$index][] = (float)array_shift($this->_allSeries[$index]);
                 } else {
                     $datas[$index][] = 0;
                 }

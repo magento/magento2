@@ -35,8 +35,8 @@ class FieldDataConverterFactoryTest extends TestCase
     protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
-        $this->objectManagerMock = $this->getMockForAbstractClass(ObjectManagerInterface::class);
-        $this->dataConverterMock = $this->getMockForAbstractClass(DataConverterInterface::class);
+        $this->objectManagerMock = $this->createMock(ObjectManagerInterface::class);
+        $this->dataConverterMock = $this->createMock(DataConverterInterface::class);
         $this->fieldDataConverterFactory = $objectManager->getObject(
             FieldDataConverterFactory::class,
             [
