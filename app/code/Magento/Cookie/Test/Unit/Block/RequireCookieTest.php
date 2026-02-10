@@ -9,6 +9,7 @@ namespace Magento\Cookie\Test\Unit\Block;
 
 use Magento\Cookie\Block\RequireCookie;
 use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\View\Element\Template\Context;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -18,6 +19,8 @@ use PHPUnit\Framework\TestCase;
  */
 class RequireCookieTest extends TestCase
 {
+    use MockCreationTrait;
+
     private const STUB_NOCOOKIES_URL = 'http://magento.com/cookie/index/noCookies/';
 
     /**
@@ -40,25 +43,17 @@ class RequireCookieTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->scopeConfigMock = $this->getMockBuilder(ScopeConfigInterface::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['getValue'])
-            ->getMockForAbstractClass();
+        $this->scopeConfigMock = $this->createMock(ScopeConfigInterface::class);
 
-        $this->contextMock = $this->getMockBuilder(Context::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->contextMock = $this->createMock(Context::class);
         $this->contextMock->expects($this->any())->method('getScopeConfig')
             ->willReturn($this->scopeConfigMock);
 
-        $this->block = $this->getMockBuilder(RequireCookie::class)
-            ->addMethods(['getTriggers'])
-            ->onlyMethods(['escapeHtml', 'escapeUrl', 'getUrl'])
-            ->setConstructorArgs(
-                [
-                    'context' => $this->contextMock
-                ]
-            )->getMock();
+        $this->block = $this->createPartialMockWithReflection(
+            RequireCookie::class,
+            ['escapeHtml', 'escapeUrl', 'getUrl', 'getTriggers'],
+            ['context' => $this->contextMock]
+        );
     }
 
     /**

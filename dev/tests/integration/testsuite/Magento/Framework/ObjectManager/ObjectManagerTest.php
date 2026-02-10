@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework\ObjectManager;
 
@@ -146,9 +146,7 @@ class ObjectManagerTest extends \PHPUnit\Framework\TestCase
                 $this->assertIsObject($testObject);
                 $this->assertTrue(property_exists($testObject, $propertyName));
                 $attribute = $object->getProperty($propertyName);
-                $attribute->setAccessible(true);
                 $propertyObject = $attribute->getValue($testObject);
-                $attribute->setAccessible(false);
                 $this->assertInstanceOf($propertyClass, $propertyObject);
             }
         }

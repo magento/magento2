@@ -29,9 +29,7 @@ class JsonSerializerTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->jsonEncoderMock = $this->getMockBuilder(Json::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->jsonEncoderMock = $this->createMock(Json::class);
 
         $this->model = new JsonSerializer(
             $this->jsonEncoderMock

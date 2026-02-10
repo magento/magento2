@@ -50,19 +50,11 @@ class IndexTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->resultFactoryMock = $this->getMockBuilder(ResultFactory::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->pageMock = $this->getMockBuilder(Page::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->pageConfigMock = $this->getMockBuilder(Config::class)
-            ->onlyMethods(['getTitle'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->titleMock = $this->getMockBuilder(Title::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->resultFactoryMock = $this->createMock(ResultFactory::class);
+        $this->pageMock = $this->createMock(Page::class);
+        $this->pageConfigMock = $this->createPartialMock(Config::class, ['getTitle']);
+
+        $this->titleMock = $this->createMock(Title::class);
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->indexController =  $this->objectManagerHelper->getObject(

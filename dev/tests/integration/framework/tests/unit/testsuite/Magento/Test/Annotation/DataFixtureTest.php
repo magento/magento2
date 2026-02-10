@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2012 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -80,9 +80,9 @@ class DataFixtureTest extends TestCase
             ->getMock();
         /** @var ObjectManagerInterface|MockObject $objectManager */
         $objectManager = $this->getMockBuilder(ObjectManagerInterface::class)
-            ->onlyMethods(['get', 'create'])
+            ->onlyMethods(['get', 'create', 'configure'])
             ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+            ->getMock();
 
         $this->fixture1 = $this->getMock(RevertibleDataFixtureInterface::class, 'MockFixture1');
         $this->fixture2 = $this->getMock(RevertibleDataFixtureInterface::class, 'MockFixture2');
@@ -148,7 +148,7 @@ class DataFixtureTest extends TestCase
 
         $mockBuilder = $this->getMockBuilder($class);
         $mockBuilder->setMockClassName($mockClassName);
-        return $mockBuilder->getMockForAbstractClass();
+        return $mockBuilder->getMock();
     }
 
     /**
@@ -574,7 +574,6 @@ class DataFixtureTest extends TestCase
             ->getMock();
         $reflection = new \ReflectionClass(Resolver::class);
         $reflectionProperty = $reflection->getProperty('instance');
-        $reflectionProperty->setAccessible(true);
         $reflectionProperty->setValue(Resolver::class, $mock);
         $mock->method('applyDataFixtures')
             ->willReturnArgument(1);

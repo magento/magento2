@@ -54,7 +54,7 @@ class GroupedTest extends TestCase
         $this->productMock->method('getTypeInstance')->willReturn(
             $this->typeInstanceMock
         );
-        $this->configuredValueMock = new \Magento\Framework\DataObject\Test\Unit\Helper\DataObjectTestHelper();
+        $this->configuredValueMock = new \Magento\Framework\DataObject();
         $layout = $this->createMock(LayoutInterface::class);
         $this->groupedView = $helper->getObject(
             Grouped::class,

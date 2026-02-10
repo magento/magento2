@@ -103,7 +103,7 @@ class GridTest extends TestCase
 
         $this->notSyncedDataProvider->expects($this->atLeastOnce())
             ->method('getIds')
-            ->willReturn($notSyncedIds);
+            ->willReturnOnConsecutiveCalls($notSyncedIds, []);
         $select = $this->createMock(Select::class);
         $select->expects($this->atLeastOnce())
             ->method('from')

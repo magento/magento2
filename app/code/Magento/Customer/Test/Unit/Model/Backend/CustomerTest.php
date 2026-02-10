@@ -14,6 +14,7 @@ use Magento\Customer\Model\Backend\Customer;
 use Magento\Framework\DataObject;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Store\Model\StoreManager;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -39,12 +40,12 @@ class CustomerTest extends TestCase
     }
 
     /**
-     * @dataProvider getStoreDataProvider
      * @param $websiteId
      * @param $websiteStoreId
      * @param $storeId
      * @param $result
      */
+    #[DataProvider('getStoreDataProvider')]
     public function testGetStoreId($websiteId, $websiteStoreId, $storeId, $result)
     {
         if ($websiteId * 1) {

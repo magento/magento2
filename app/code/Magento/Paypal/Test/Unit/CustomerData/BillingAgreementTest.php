@@ -10,6 +10,7 @@ namespace Magento\Paypal\Test\Unit\CustomerData;
 use Magento\Customer\Helper\Session\CurrentCustomer;
 use Magento\Framework\Escaper;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\Translate\InlineInterface;
 use Magento\Paypal\CustomerData\BillingAgreement;
 use Magento\Paypal\Helper\Data;
 use Magento\Paypal\Model\Config;
@@ -50,8 +51,8 @@ class BillingAgreementTest extends TestCase
         $helper = new ObjectManager($this);
         $objects = [
             [
-                \Magento\Framework\Translate\InlineInterface::class,
-                $this->createMock(\Magento\Framework\Translate\InlineInterface::class)
+                InlineInterface::class,
+                $this->createMock(InlineInterface::class)
             ]
         ];
         $helper->prepareObjectManager($objects);

@@ -19,6 +19,7 @@ use Magento\Framework\DataObject;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\DB\Select;
 use Magento\Framework\Model\ResourceModel\Db\Context;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Sitemap\Helper\Data as SitemapHelper;
 use Magento\Sitemap\Model\ResourceModel\Catalog\Batch\Product as BatchProduct;
 use Magento\Sitemap\Model\ResourceModel\Catalog\ProductSelectBuilder;
@@ -35,6 +36,7 @@ use PHPUnit\Framework\TestCase;
  */
 class ProductTest extends TestCase
 {
+    use MockCreationTrait;
     /**
      * @var BatchProduct
      */
@@ -133,22 +135,20 @@ class ProductTest extends TestCase
             ->method('getResources')
             ->willReturn($resourceMock);
 
-        $this->model = $this->getMockBuilder(BatchProduct::class)
-            ->setConstructorArgs([
-                $this->contextMock,
-                $this->sitemapHelperMock,
-                $this->productResourceMock,
-                $this->storeManagerMock,
-                $this->productVisibilityMock,
-                $this->productStatusMock,
-                $this->mediaGalleryResourceModelMock,
-                $this->mediaGalleryReadHandlerMock,
-                null,
-                $this->imageUrlBuilderMock,
-                $this->productSelectBuilderMock,
-            ])
-            ->onlyMethods(['getMainTable', 'getIdFieldName'])
-            ->getMock();
+        $this->model = $this->createPartialMock(BatchProduct::class, ['getMainTable', 'getIdFieldName']);
+        $this->model->__construct(
+            $this->contextMock,
+            $this->sitemapHelperMock,
+            $this->productResourceMock,
+            $this->storeManagerMock,
+            $this->productVisibilityMock,
+            $this->productStatusMock,
+            $this->mediaGalleryResourceModelMock,
+            $this->mediaGalleryReadHandlerMock,
+            null,
+            $this->imageUrlBuilderMock,
+            $this->productSelectBuilderMock
+        );
 
         $this->model->expects($this->any())
             ->method('getMainTable')
@@ -538,11 +538,10 @@ class ProductTest extends TestCase
             ->method('getVisibleStatusIds')
             ->willReturn([1]);
 
-        $attributeMock = $this->getMockBuilder(Attribute::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['getEntityTypeId', 'getId', 'getBackendType', 'getBackend'])
-            ->addMethods(['getIsGlobal'])
-            ->getMock();
+        $attributeMock = $this->createPartialMockWithReflection(
+            Attribute::class,
+            ['getEntityTypeId', 'getId', 'getBackendType', 'getBackend', 'getIsGlobal']
+        );
 
         $backendMock = $this->createMock(AbstractBackend::class);
 

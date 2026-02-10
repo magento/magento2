@@ -9,14 +9,18 @@ namespace Magento\Customer\Test\Unit\Model\Validator;
 
 use Magento\Customer\Model\Validator\Telephone;
 use Magento\Customer\Model\Customer;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 
 /**
  * Customer telephone validator tests
  */
 class TelephoneTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var Telephone
      */
@@ -33,11 +37,10 @@ class TelephoneTest extends TestCase
     protected function setUp(): void
     {
         $this->nameValidator = new Telephone;
-        $this->customerMock = $this
-            ->getMockBuilder(Customer::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['getTelephone'])
-            ->getMock();
+        $this->customerMock = $this->createPartialMockWithReflection(
+            Customer::class,
+            ['getTelephone']
+        );
     }
 
     /**
@@ -45,9 +48,8 @@ class TelephoneTest extends TestCase
      *
      * @param string $telephone
      * @param string $message
-     * @return void
-     * @dataProvider expectedPunctuationInNamesDataProvider
-     */
+     * @return void */
+    #[DataProvider('expectedPunctuationInNamesDataProvider')]
     public function testValidateCorrectPunctuationInNames(
         string $telephone,
         string $message

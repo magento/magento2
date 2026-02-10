@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\Catalog\Test\Unit\Model\Indexer\Product\Flat;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\Catalog\Model\Indexer\Product\Flat\TableData;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Adapter\AdapterInterface;
@@ -34,7 +35,7 @@ class TableDataTest extends TestCase
     protected function setUp(): void
     {
         $this->_objectManager = new ObjectManager($this);
-        $this->_connectionMock = $this->getMockForAbstractClass(AdapterInterface::class);
+        $this->_connectionMock = $this->createMock(AdapterInterface::class);
         $this->_resourceMock = $this->createMock(ResourceConnection::class);
     }
 
@@ -44,8 +45,8 @@ class TableDataTest extends TestCase
      * @param string $flatDropName
      * @param string $temporaryFlatTableName
      * @param array $expectedRenameTablesArgument
-     * @dataProvider moveDataProvider
      */
+    #[DataProvider('moveDataProvider')]
     public function testMove(
         $flatTable,
         $isFlatTableExists,
@@ -72,11 +73,7 @@ class TableDataTest extends TestCase
             $expectedRenameTablesArgument
         );
 
-        $this->_resourceMock->expects(
-            $this->any()
-        )->method(
-            'getConnection'
-        )->willReturn(
+        $this->_resourceMock->method('getConnection')->willReturn(
             $this->_connectionMock
         );
 

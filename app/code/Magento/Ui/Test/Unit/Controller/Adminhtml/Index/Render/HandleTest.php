@@ -20,6 +20,7 @@ use Magento\Framework\View\Element\UiComponentInterface;
 use Magento\Framework\View\LayoutInterface;
 use Magento\Ui\Controller\Adminhtml\Index\Render\Handle;
 use PHPUnit\Framework\MockObject\MockObject;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -81,34 +82,31 @@ class HandleTest extends TestCase
     {
         $this->contextMock = $this->createMock(Context::class);
 
-        $this->requestMock = $this->getMockForAbstractClass(RequestInterface::class);
+        $this->requestMock = $this->createMock(RequestInterface::class);
         $this->contextMock->expects($this->atLeastOnce())->method('getRequest')->willReturn($this->requestMock);
 
         $this->responseMock = $this->createMock(Response::class);
         $this->contextMock->expects($this->atLeastOnce())->method('getResponse')->willReturn($this->responseMock);
 
-        $this->viewMock = $this->getMockForAbstractClass(ViewInterface::class);
+        $this->viewMock = $this->createMock(ViewInterface::class);
         $this->contextMock->expects($this->atLeastOnce())->method('getView')->willReturn($this->viewMock);
-        $this->authorizationMock = $this->getMockBuilder(AuthorizationInterface::class)
-            ->getMockForAbstractClass();
+        $this->authorizationMock = $this->createMock(AuthorizationInterface::class);
         $this->authorizationMock->expects($this->any())
             ->method('isAllowed')
             ->willReturn(true);
-        $this->uiComponentContextMock = $this->getMockForAbstractClass(
+        $this->uiComponentContextMock = $this->createMock(
             ContextInterface::class
         );
-        $this->uiComponentMock = $this->getMockForAbstractClass(
+        $this->uiComponentMock = $this->createMock(
             UiComponentInterface::class
         );
-        $this->dataProviderMock = $this->getMockForAbstractClass(
+        $this->dataProviderMock = $this->createMock(
             DataProviderInterface::class
         );
         $this->uiComponentContextMock->expects($this->once())
             ->method('getDataProvider')
             ->willReturn($this->dataProviderMock);
-        $this->uiFactoryMock = $this->getMockBuilder(UiComponentFactory::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->uiFactoryMock = $this->createMock(UiComponentFactory::class);
         $this->uiComponentMock->expects($this->any())
             ->method('getContext')
             ->willReturn($this->uiComponentContextMock);
@@ -130,7 +128,7 @@ class HandleTest extends TestCase
         $this->viewMock->expects($this->once())
             ->method('loadLayout')
             ->with(['default', $result], true, true, false);
-        $layoutMock = $this->getMockForAbstractClass(LayoutInterface::class);
+        $layoutMock = $this->createMock(LayoutInterface::class);
         $this->viewMock->expects($this->once())->method('getLayout')->willReturn($layoutMock);
 
         $layoutMock->expects($this->once())->method('getBlock');
@@ -148,7 +146,7 @@ class HandleTest extends TestCase
             ->method('loadLayout')
             ->with(['default', $result], true, true, false);
 
-        $layoutMock = $this->getMockForAbstractClass(LayoutInterface::class);
+        $layoutMock = $this->createMock(LayoutInterface::class);
         $this->viewMock->expects($this->once())->method('getLayout')->willReturn($layoutMock);
 
         $layoutMock->expects($this->exactly(2))->method('getBlock');

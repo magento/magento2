@@ -36,6 +36,12 @@ parameters:
         - '#Constant TESTS_MODULES_PATH not found.#'
         - '#Constant TESTS_INSTALLATION_DB_CONFIG_FILE not found.#'
         - '#Constant T_[A-Z_]+ not found.#'
+        # Ignore Predis\Client - optional dependency for Redis fallback
+        - '#Class Predis\\Client not found.#'
+        - '#Instantiated class Predis\\Client not found.#'
+        - '#has unknown class Predis\\Client as its type.#'
+        - '#has invalid return type Predis\\Client.#'
+        - '#Parameter .* has invalid type Predis\\Client.#'
 
 
 services:

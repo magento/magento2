@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright 2025 Adobe
+ * All Rights Reserved.
+ */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontSimpleProductsDisplayedAfterSwatchFilteringTest">
+        <annotations>
+            <features value="LayeredNavigation"/>
+            <stories value="Simple products are displayed after search"/>
+            <title value="Simple products are displayed after search with visual and text swatch filters"/>
+            <description value="Creates visual and text swatch attributes, assigns values to products and verifies storefront filtering and visibility"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="AC-4386"/>
+            <group value="layeredNavigation"/>
+        </annotations>
+        <before>
+            <!-- Create category, products and assign to category-->
+            <createData entity="SimpleSubCategory" stepKey="createCategory"/>
+            <createData entity="_defaultProduct" stepKey="createProduct1">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <createData entity="_defaultProduct" stepKey="createProduct2">
+                <requiredEntity createDataKey="createCategory" />
+            </createData>
+            <!-- Step 1: Create visual swatch attribute -->
+            <createData entity="VisualSwatchProductAttributeForm" stepKey="createVisualSwatchAttribute"/>
+            <createData entity="SwatchProductAttributeOption1" stepKey="createVisualOption1">
+                <field key="label">visual1</field>
+                <requiredEntity createDataKey="createVisualSwatchAttribute"/>
+            </createData>
+            <createData entity="SwatchProductAttributeOption2" stepKey="createVisualOption2">
+                <field key="label">visual2</field>
+                <requiredEntity createDataKey="createVisualSwatchAttribute"/>
+            </createData>
+            <!-- Read persisted visual swatch option labels -->
+            <getData entity="ProductAttributeOptionGetter" index="1" stepKey="getVisualOption1">
+                <requiredEntity createDataKey="createVisualSwatchAttribute"/>
+            </getData>
+            <getData entity="ProductAttributeOptionGetter" index="2" stepKey="getVisualOption2">
+                <requiredEntity createDataKey="createVisualSwatchAttribute"/>
+            </getData>
+            <!-- Step 1:Create text swatch attribute -->
+            <createData entity="TextSwatchProductAttributeForm" stepKey="createTextSwatchAttribute"/>
+            <createData entity="SwatchProductAttributeOption1" stepKey="createTextOption1">
+                <field key="label">text1</field>
+                <requiredEntity createDataKey="createTextSwatchAttribute"/>
+            </createData>
+            <createData entity="SwatchProductAttributeOption2" stepKey="createTextOption2">
+                <field key="label">text2</field>
+                <requiredEntity createDataKey="createTextSwatchAttribute"/>
+            </createData>
+            <!-- Read persisted text swatch option labels -->
+            <getData entity="ProductAttributeOptionGetter" index="1" stepKey="getTextOption1">
+                <requiredEntity createDataKey="createTextSwatchAttribute"/>
+            </getData>
+            <getData entity="ProductAttributeOptionGetter" index="2" stepKey="getTextOption2">
+                <requiredEntity createDataKey="createTextSwatchAttribute"/>
+            </getData>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="adminLogin"/>
+            <!--Step 1: Set use in layered navigation for visual swatch attribute  -->
+            <actionGroup ref="OpenProductAttributeFromSearchResultInGridActionGroup" stepKey="openVisualAttributeFromGrid">
+                <argument name="productAttributeCode" value="$createVisualSwatchAttribute.attribute_code$"/>
+            </actionGroup>
+            <actionGroup ref="AdminSetProductAttributeUseInLayeredNavigationOptionActionGroup" stepKey="setVisualUseInLayeredNavigation">
+                <argument name="useInLayeredNavigationValue" value="Filterable (with results)"/>
+            </actionGroup>
+            <!-- Step 1: Set Use in layered navigation for text swatch attribute  -->
+            <actionGroup ref="OpenProductAttributeFromSearchResultInGridActionGroup" stepKey="openTextAttributeFromGrid">
+                <argument name="productAttributeCode" value="$createTextSwatchAttribute.attribute_code$"/>
+            </actionGroup>
+            <actionGroup ref="AdminSetProductAttributeUseInLayeredNavigationOptionActionGroup" stepKey="setTextUseInLayeredNavigation">
+                <argument name="useInLayeredNavigationValue" value="Filterable (with results)"/>
+            </actionGroup>
+            <!--Step 2: Assign visual swatch option1 to Product 1  -->
+            <actionGroup ref="NavigateToCreatedProductEditPageActionGroup" stepKey="openProduct1ForEdit">
+                <argument name="product" value="$$createProduct1$$"/>
+            </actionGroup>
+            <actionGroup ref="AdminAddCustomAttributeToSelectedProductActionGroup" stepKey="addVisualAttrToProduct1">
+                <argument name="attributeCode" value="$createVisualSwatchAttribute.attribute_code$"/>
+                <argument name="adminOption1" value="$getVisualOption1.label$"/>
+            </actionGroup>
+            <!--Step 3: Assign text swatch option2 to Product 2  -->
+            <actionGroup ref="NavigateToCreatedProductEditPageActionGroup" stepKey="openProduct2ForEdit">
+                <argument name="product" value="$$createProduct2$$"/>
+            </actionGroup>
+            <actionGroup ref="AdminAddCustomAttributeToSelectedProductActionGroup" stepKey="addTextAttrToProduct2">
+                <argument name="attributeCode" value="$createTextSwatchAttribute.attribute_code$"/>
+                <argument name="adminOption1" value="$getTextOption2.label$"/>
+            </actionGroup>
+        </before>
+        <after>
+            <!-- Delete products, swatch attributes, category and logout from admin-->
+            <deleteData createDataKey="createProduct1" stepKey="deleteProduct1"/>
+            <deleteData createDataKey="createProduct2" stepKey="deleteProduct2"/>
+            <deleteData createDataKey="createVisualSwatchAttribute" stepKey="deleteVisualAttribute"/>
+            <deleteData createDataKey="createTextSwatchAttribute" stepKey="deleteTextAttribute"/>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="adminLogout"/>
+        </after>
+        <!-- Step 4: Open Frontend application with layered navigation of products-->
+        <actionGroup ref="StorefrontNavigateCategoryPageActionGroup" stepKey="openCategory">
+            <argument name="category" value="$createCategory$"/>
+        </actionGroup>
+        <waitForElementClickable selector="{{StorefrontCategorySidebarSection.filterOptionsTitle('$createVisualSwatchAttribute.frontend_label[0]$')}}" stepKey="waitToClickVisualFilter"/>
+        <click selector="{{StorefrontCategorySidebarSection.filterOptionsTitle('$createVisualSwatchAttribute.frontend_label[0]$')}}" stepKey="expandVisualFilter"/>
+        <!-- Step 5: Search by visual swatch attribute with option1 in layered navigation and verify product1 is displayed-->
+        <waitForElementClickable selector="{{StorefrontLayeredNavigationSection.layeredNavigationNthSwatch('$getVisualOption1.label$')}}" stepKey="waitToFilterVisualOption1"/>
+        <click selector="{{StorefrontLayeredNavigationSection.layeredNavigationNthSwatch('$getVisualOption1.label$')}}" stepKey="filterVisualOption1"/>
+        <waitForPageLoad stepKey="waitAfterSelectingVisualOption"/>
+        <actionGroup ref="AssertStorefrontProductIsPresentOnCategoryPageActionGroup" stepKey="assertProduct1Visible">
+            <argument name="productName" value="$createProduct1.name$"/>
+        </actionGroup>
+        <!-- Step 6: Verify visual swatch option2 is not visible -->
+        <waitForElementNotVisible selector="{{StorefrontLayeredNavigationSection.layeredNavigationNthSwatch('$getVisualOption2.label$')}}" stepKey="verifyVisualOption2IsNotVisible"/>
+        <!-- Step 7: Verify text swatch option1 is not visible -->
+        <waitForElementClickable selector="{{StorefrontCategorySidebarSection.removeFilter}}" stepKey="waitToRemoveTheFilter"/>
+        <click selector="{{StorefrontCategorySidebarSection.removeFilter}}" stepKey="removeTheFilter"/>
+        <waitForElementClickable selector="{{StorefrontCategorySidebarSection.filterOptionsTitle('$createTextSwatchAttribute.frontend_label[0]$')}}" stepKey="waitToExpandTextFilter"/>
+        <click selector="{{StorefrontCategorySidebarSection.filterOptionsTitle('$createTextSwatchAttribute.frontend_label[0]$')}}" stepKey="expandTextFilter"/>
+        <waitForElementNotVisible selector="{{StorefrontLayeredNavigationSection.layeredNavigationNthSwatch('$getTextOption1.label$')}}" stepKey="verifyTextOption1IsNotVisible"/>
+        <!-- Step 8: Search by text swatch attribute with option2 in layered navigation and verify product2 is displayed-->
+        <waitForElementClickable selector="{{StorefrontLayeredNavigationSection.layeredNavigationNthSwatch('$getTextOption2.label$')}}" stepKey="waitToFilterTextOption2"/>
+        <click selector="{{StorefrontLayeredNavigationSection.layeredNavigationNthSwatch('$getTextOption2.label$')}}" stepKey="filterTextOption2"/>
+        <waitForPageLoad stepKey="waitAfterTextOptionSelection" />
+        <actionGroup ref="AssertStorefrontProductIsPresentOnCategoryPageActionGroup" stepKey="assertProduct2Visible">
+            <argument name="productName" value="$createProduct2.name$"/>
+        </actionGroup>
+    </test>
+</tests>

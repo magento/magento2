@@ -12,10 +12,13 @@ use Magento\CatalogInventory\Model\ResourceModel\Stock\Item;
 use Magento\CatalogInventory\Observer\UpdateItemsStockUponConfigChangeObserver;
 use Magento\Framework\Event;
 use Magento\Framework\Event\Observer;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.UnusedLocalVariable)
+ */
 class UpdateItemsStockUponConfigChangeObserverTest extends TestCase
 {
     /**
@@ -42,25 +45,16 @@ class UpdateItemsStockUponConfigChangeObserverTest extends TestCase
     {
         $this->resourceStockItem = $this->createMock(Item::class);
 
-        $this->event = $this->getMockBuilder(Event::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['getWebsite', 'getChangedPaths'])
-            ->getMock();
+        $this->event = new Event();
 
-        $this->eventObserver = $this->getMockBuilder(Observer::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['getEvent'])
-            ->getMock();
+        $this->eventObserver = $this->createMock(Observer::class);
 
         $this->eventObserver->expects($this->atLeastOnce())
             ->method('getEvent')
             ->willReturn($this->event);
 
-        $this->observer = (new ObjectManager($this))->getObject(
-            UpdateItemsStockUponConfigChangeObserver::class,
-            [
-                'resourceStockItem' => $this->resourceStockItem,
-            ]
+        $this->observer = new UpdateItemsStockUponConfigChangeObserver(
+            $this->resourceStockItem
         );
     }
 
@@ -71,12 +65,8 @@ class UpdateItemsStockUponConfigChangeObserverTest extends TestCase
         $this->resourceStockItem->expects($this->once())->method('updateSetInStock');
         $this->resourceStockItem->expects($this->once())->method('updateLowStockDate');
 
-        $this->event->expects($this->once())
-            ->method('getWebsite')
-            ->willReturn($websiteId);
-        $this->event->expects($this->once())
-            ->method('getChangedPaths')
-            ->willReturn([Configuration::XML_PATH_MANAGE_STOCK]);
+        $this->event->setWebsite($websiteId);
+        $this->event->setChangedPaths([Configuration::XML_PATH_MANAGE_STOCK]);
 
         $this->observer->execute($this->eventObserver);
     }

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 /**
@@ -51,7 +51,6 @@ class AbstractMainTest extends \PHPUnit\Framework\TestCase
             \Magento\Eav\Block\Adminhtml\Attribute\Edit\Main\AbstractMain::class,
             '_prepareForm'
         );
-        $method->setAccessible(true);
         $method->invoke($block);
 
         $element = $block->getForm()->getElement('default_value_date');

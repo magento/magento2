@@ -13,10 +13,13 @@ use Magento\CatalogInventory\Api\Data\StockItemInterface;
 use Magento\CatalogInventory\Api\StockRegistryInterface;
 use Magento\CatalogInventory\Api\StockStateInterface;
 use Magento\CatalogInventory\Model\Quote\Item\QuantityValidator\Initializer\Option;
+use Magento\CatalogInventory\Model\Stock\Item as StockItem;
 use Magento\CatalogInventory\Model\Quote\Item\QuantityValidator\QuoteItemQtyList;
 use Magento\Framework\DataObject;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Quote\Model\Quote\Item;
+use Magento\Quote\Model\Quote\Item\Option as QuoteItemOption;
 use Magento\Store\Model\Store;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -26,6 +29,7 @@ use PHPUnit\Framework\TestCase;
  */
 class OptionTest extends TestCase
 {
+    use MockCreationTrait;
     /**
      * @var Option
      */
@@ -88,62 +92,42 @@ class OptionTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->optionMock = $this->getMockBuilder(\Magento\Quote\Model\Quote\Item\Option::class)
-            ->addMethods(['setIsQtyDecimal', 'setHasQtyOptionUpdate', 'setValue', 'setMessage', 'setBackorders'])
-            ->onlyMethods(['getValue', 'getProduct'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->optionMock = $this->createPartialMockWithReflection(
+            QuoteItemOption::class,
+            ['setIsQtyDecimal', 'setHasQtyOptionUpdate', 'setValue', 'setMessage', 'setBackorders',
+             'getValue', 'getProduct']
+        );
 
         $store = $this->createPartialMock(Store::class, ['getWebsiteId']);
         $store->expects($this->any())->method('getWebsiteId')->willReturn($this->websiteId);
 
-        $this->quoteItemMock = $this->getMockBuilder(Item::class)
-            ->addMethods(['getQtyToAdd'])
-            ->onlyMethods(['getId', 'updateQtyOption', 'setData', 'getQuoteId', 'getStore'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->quoteItemMock = $this->createPartialMockWithReflection(
+            Item::class,
+            ['getQtyToAdd', 'getId', 'updateQtyOption', 'setData', 'getQuoteId', 'getStore']
+        );
         $this->quoteItemMock->expects($this->any())->method('getStore')->willReturn($store);
 
-        $this->stockItemMock = $this->getMockBuilder(StockItemInterface::class)
-            ->addMethods(
-                [
-                    'setIsChildItem',
-                    'setSuppressCheckQtyIncrements',
-                    'unsIsChildItem',
-                    'setProductName'
-                ]
-            )
-            ->onlyMethods(['getItemId'])
-            ->getMockForAbstractClass();
+        $this->stockItemMock = $this->createPartialMockWithReflection(
+            StockItem::class,
+            ['setIsChildItem', 'setSuppressCheckQtyIncrements', 'unsIsChildItem', 'setProductName', 'getItemId']
+        );
+        
         $this->productMock = $this->createPartialMock(Product::class, ['getId', 'getStore']);
-        $store = $this->createPartialMock(Store::class, ['getWebsiteId']);
-        $store->expects($this->any())->method('getWebsiteId')->willReturn($this->websiteId);
-        $this->productMock->expects($this->any())->method('getStore')->willReturn($store);
+        $productStore = $this->createPartialMock(Store::class, ['getWebsiteId']);
+        $productStore->expects($this->any())->method('getWebsiteId')->willReturn($this->websiteId);
+        $this->productMock->expects($this->any())->method('getStore')->willReturn($productStore);
 
-        $this->qtyItemListMock = $this->createMock(
-            QuoteItemQtyList::class
-        );
-        $this->resultMock = $this->getMockBuilder(DataObject::class)
-            ->addMethods(
-                [
-                    'getItemIsQtyDecimal',
-                    'getHasQtyOptionUpdate',
-                    'getOrigQty',
-                    'getMessage',
-                    'getItemBackorders',
-                    'getItemQty'
-                ]
-            )
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $this->stockRegistry = $this->getMockForAbstractClass(
-            StockRegistryInterface::class
+        $this->qtyItemListMock = $this->createMock(QuoteItemQtyList::class);
+        
+        $this->resultMock = $this->createPartialMockWithReflection(
+            DataObject::class,
+            ['getItemIsQtyDecimal', 'getHasQtyOptionUpdate', 'getOrigQty', 'getMessage',
+             'getItemBackorders', 'getItemQty']
         );
 
-        $this->stockState = $this->getMockForAbstractClass(
-            StockStateInterface::class
-        );
+        $this->stockRegistry = $this->createMock(StockRegistryInterface::class);
+
+        $this->stockState = $this->createMock(StockStateInterface::class);
 
         $this->objectManager = new ObjectManager($this);
         $this->validator = $this->objectManager->getObject(

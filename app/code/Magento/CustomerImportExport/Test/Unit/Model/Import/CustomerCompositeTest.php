@@ -34,16 +34,20 @@ use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorFactory;
 use Magento\ImportExport\Model\Import\Source\Csv;
 use Magento\ImportExport\Model\ImportFactory;
 use Magento\ImportExport\Model\ResourceModel\Helper;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 
 /**
  * The test for Customer composite model
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @phpstan-ignore-next-line
  */
 class CustomerCompositeTest extends TestCase
 {
+    use MockCreationTrait;
     /**
      * @var array
      */
@@ -128,15 +132,15 @@ class CustomerCompositeTest extends TestCase
 
     protected function setUp(): void
     {
-        $translateInline = $this->getMockForAbstractClass(InlineInterface::class);
+        $translateInline = $this->createMock(InlineInterface::class);
         $translateInline->expects($this->any())->method('isAllowed')->willReturn(false);
 
-        $context =
-            $this->getMockBuilder(Context::class)
-                ->addMethods(['getTranslateInline'])
-                ->disableOriginalConstructor()
-                ->getMock();
-        $context->expects($this->any())->method('getTranslateInline')->willReturn($translateInline);
+        // Create Context mock with translateInline support
+        $context = $this->createPartialMockWithReflection(
+            Context::class,
+            ['getInlineTranslation', 'getScopeConfig']
+        );
+        $context->method('getInlineTranslation')->willReturn($translateInline);
 
         $this->_string = new StringUtils();
 
@@ -169,7 +173,7 @@ class CustomerCompositeTest extends TestCase
             ->setConstructorArgs([$this->errorFactory])
             ->getMock();
 
-        $this->_scopeConfigMock = $this->getMockForAbstractClass(ScopeConfigInterface::class);
+        $this->_scopeConfigMock = $this->createMock(ScopeConfigInterface::class);
         $this->indexerProcessor = $this->createMock(Processor::class);
     }
 
@@ -221,10 +225,14 @@ class CustomerCompositeTest extends TestCase
      */
     protected function _getModelMockForPrepareRowForDb()
     {
-        $customerStorage = $this->getMockBuilder('stdClass')
-            ->addMethods(['getCustomerId', 'prepareCustomers', 'addCustomer'])
-            ->getMock();
-        $customerStorage->expects($this->any())->method('getCustomerId')->willReturn(1);
+        // Create customer storage mock
+        $customerStorage = $this->createPartialMockWithReflection(
+            \stdClass::class,
+            ['getCustomerId', 'setCustomerId']
+        );
+        $customerStorage->method('getCustomerId')->willReturn(1);
+        $customerStorage->method('setCustomerId')->willReturnSelf();
+        
         $customerEntity = $this->_getCustomerEntityMock();
         $customerEntity->expects($this->any())->method('validateRow')->willReturn(true);
         $customerEntity->expects($this->any())
@@ -240,12 +248,13 @@ class CustomerCompositeTest extends TestCase
             ->method('getCustomerStorage')
             ->willReturn($customerStorage);
 
-        $dataSourceMock = $this->getMockBuilder(\stdClass::class)->addMethods(['cleanBunches', 'saveBunch'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $dataSourceMock->expects($this->any())
-            ->method('saveBunch')
-            ->willReturnCallback([$this, 'verifyPrepareRowForDbData']);
+        // Create data source mock with saveBunch callback
+        $dataSourceMock = $this->createPartialMockWithReflection(
+            \stdClass::class,
+            ['saveBunch', 'setSaveBunchCallback']
+        );
+        $dataSourceMock->method('saveBunch')->willReturnCallback([$this, 'verifyPrepareRowForDbData']);
+        $dataSourceMock->method('setSaveBunchCallback')->willReturnSelf();
 
         $data = $this->_getModelDependencies();
         $data['customer_entity'] = $customerEntity;
@@ -364,16 +373,20 @@ class CustomerCompositeTest extends TestCase
     }
 
     /**
-     * @dataProvider getRowDataProvider
-     *
      * @param array $rows
      * @param array $calls
      * @param bool $validationReturn
      * @param array $expectedErrors
      * @param int $behavior
      */
-    public function testValidateRow(array $rows, array $calls, $validationReturn, array $expectedErrors, $behavior)
-    {
+    #[DataProvider('getRowDataProvider')]
+    public function testValidateRow(
+        array $rows,
+        array $calls,
+        $validationReturn,
+        array $expectedErrors,
+        $behavior
+    ): void {
         $customerEntity = $this->_getCustomerEntityMock();
         $addressEntity = $this->_getAddressEntityMock();
 
@@ -386,10 +399,14 @@ class CustomerCompositeTest extends TestCase
             ->method('validateRow')
             ->willReturn($validationReturn);
 
-        $customerStorage = $this->getMockBuilder(\stdClass::class)->addMethods(['getCustomerId'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $customerStorage->expects($this->any())->method('getCustomerId')->willReturn(true);
+        // Create customer storage mock
+        $customerStorage = $this->createPartialMockWithReflection(
+            \stdClass::class,
+            ['getCustomerId', 'setCustomerId']
+        );
+        $customerStorage->method('getCustomerId')->willReturn(true);
+        $customerStorage->method('setCustomerId')->willReturnSelf();
+        
         $addressEntity->expects($this->any())
             ->method('getCustomerStorage')
             ->willReturn($customerStorage);
@@ -424,10 +441,14 @@ class CustomerCompositeTest extends TestCase
             ->method('validateRow')
             ->willReturnCallback([$this, 'validateAddressRowParams']);
 
-        $customerStorage = $this->getMockBuilder(\stdClass::class)->addMethods(['getCustomerId'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $customerStorage->expects($this->any())->method('getCustomerId')->willReturn(true);
+        // Create customer storage mock
+        $customerStorage = $this->createPartialMockWithReflection(
+            \stdClass::class,
+            ['getCustomerId', 'setCustomerId']
+        );
+        $customerStorage->method('getCustomerId')->willReturn(true);
+        $customerStorage->method('setCustomerId')->willReturnSelf();
+        
         $addressEntity->expects($this->any())
             ->method('getCustomerStorage')
             ->willReturn($customerStorage);
@@ -586,12 +607,7 @@ class CustomerCompositeTest extends TestCase
 
         $modelUnderTest = $this->_createModelMock($data);
 
-        $source = $this->getMockForAbstractClass(
-            AbstractSource::class,
-            [],
-            '',
-            false
-        );
+        $source = $this->createMock(AbstractSource::class);
         $modelUnderTest->setSource($source);
     }
 
@@ -683,14 +699,13 @@ class CustomerCompositeTest extends TestCase
     }
 
     /**
-     * @dataProvider dataProviderTestImportData
-     *
      * @param string $behavior
-     * @param boolean $customerImport
-     * @param boolean $addressImport
-     * @param boolean $result
+     * @param bool $customerImport
+     * @param bool $addressImport
+     * @param bool $result
      */
-    public function testImportData($behavior, $customerImport, $addressImport, $result)
+    #[DataProvider('dataProviderTestImportData')]
+    public function testImportData(string $behavior, bool $customerImport, bool $addressImport, bool $result): void
     {
         $isDeleteBehavior = $behavior == Import::BEHAVIOR_DELETE;
         $entityMock = $this->_getModelMockForImportData($isDeleteBehavior, $customerImport, $addressImport);

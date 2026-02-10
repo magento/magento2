@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright 2017 Adobe
+ * Copyright 2024 Adobe
  * All Rights Reserved.
  */
 
@@ -159,7 +159,7 @@ class ConfigSetCommand extends Command
      * @throws RuntimeException
      * @since 101.0.0
      */
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         if (!$this->deploymentConfig->isAvailable()) {
             $output->writeln(

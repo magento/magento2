@@ -41,10 +41,7 @@ class RecurringTest extends TestCase
     protected function setUp(): void
     {
         $this->objectManager = new ObjectManager($this);
-        $this->messageQueueConfig = $this->getMockBuilder(
-            TopologyConfigInterface::class
-        )
-            ->getMockForAbstractClass();
+        $this->messageQueueConfig = $this->createMock(TopologyConfigInterface::class);
         $this->model = $this->objectManager->getObject(
             Recurring::class,
             [
@@ -59,7 +56,7 @@ class RecurringTest extends TestCase
     public function testInstall()
     {
         for ($i = 1; $i <= 3; $i++) {
-            $queue = $this->getMockForAbstractClass(QueueConfigItemInterface::class);
+            $queue = $this->createMock(QueueConfigItemInterface::class);
             $queue->expects($this->once())
                 ->method('getName')
                 ->willReturn('queue_name_' . $i);
@@ -75,20 +72,15 @@ class RecurringTest extends TestCase
         ];
         $queueTableName = 'queue_table';
 
-        $setup = $this->getMockBuilder(SchemaSetupInterface::class)
-            ->getMockForAbstractClass();
-        $context = $this->getMockBuilder(ModuleContextInterface::class)
-            ->getMockForAbstractClass();
+        $setup = $this->createMock(SchemaSetupInterface::class);
+        $context = $this->createMock(ModuleContextInterface::class);
 
         $setup->expects($this->once())->method('startSetup')->willReturnSelf();
         $this->messageQueueConfig->expects($this->once())->method('getQueues')->willReturn($queues);
-        $connection = $this->getMockBuilder(AdapterInterface::class)
-            ->getMockForAbstractClass();
+        $connection = $this->createMock(AdapterInterface::class);
         $setup->expects($this->once())->method('getConnection')->willReturn($connection);
         $setup->expects($this->any())->method('getTable')->with('queue')->willReturn($queueTableName);
-        $select = $this->getMockBuilder(Select::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $select = $this->createMock(Select::class);
         $connection->expects($this->once())->method('select')->willReturn($select);
         $select->expects($this->once())->method('from')->with($queueTableName, 'name')->willReturnSelf();
         $connection->expects($this->once())->method('fetchCol')->with($select)->willReturn($dbQueues);

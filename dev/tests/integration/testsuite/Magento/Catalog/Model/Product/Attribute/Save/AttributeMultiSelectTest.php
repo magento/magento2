@@ -1,11 +1,13 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Catalog\Model\Product\Attribute\Save;
+
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * @magentoDbIsolation enabled
@@ -32,8 +34,8 @@ class AttributeMultiSelectTest extends AbstractAttributeTest
 
     /**
      * @inheritdoc
-     * @dataProvider productProvider
      */
+    #[DataProvider('productProvider')]
     public function testDefaultValue(string $productSku): void
     {
         $this->markTestSkipped('Test is blocked by issue MC-29019');

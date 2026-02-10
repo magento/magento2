@@ -16,9 +16,9 @@ use Magento\Bundle\Model\ResourceModel\Option\Collection as OptionsCollection;
 use Magento\Bundle\Model\ResourceModel\Selection\Collection as SelectionsCollection;
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\Product\Configuration\Item\Option\OptionInterface;
-use Magento\Catalog\Test\Unit\Helper\ProductTestHelper;
 use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
 
@@ -28,6 +28,8 @@ use PHPUnit\Framework\TestCase;
  */
 class OptionTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var Option
      */
@@ -172,7 +174,6 @@ class OptionTest extends TestCase
             $options[$id] = $option;
         }
         $reflectionProperty = new \ReflectionProperty($optionsCollection, '_items');
-        $reflectionProperty->setAccessible(true);
         $reflectionProperty->setValue($optionsCollection, $options);
 
         return $optionsCollection;
@@ -189,14 +190,16 @@ class OptionTest extends TestCase
 
         $selections = [];
         foreach ($ids as $id) {
-            $selection = new ProductTestHelper();
-            $selection->setSelectionId($id);
-            $selection->setOptionId(intdiv($id, 10));
+            $selection = $this->createPartialMockWithReflection(
+                Product::class,
+                ['getSelectionId', 'setSelectionId', 'getOptionId', 'setOptionId']
+            );
+            $selection->method('getSelectionId')->willReturn($id);
+            $selection->method('getOptionId')->willReturn(intdiv($id, 10));
 
             $selections[$id] = $selection;
         }
         $reflectionProperty = new \ReflectionProperty($selectionsCollection, '_items');
-        $reflectionProperty->setAccessible(true);
         $reflectionProperty->setValue($selectionsCollection, $selections);
 
         return $selectionsCollection;

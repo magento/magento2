@@ -61,9 +61,7 @@ class EnableAdminUsageTest extends \PHPUnit\Framework\TestCase
         $configFactory->method('create')
             ->willReturn($this->configMock);
 
-        $this->productMetadataMock = $this->getMockBuilder(ProductMetadataInterface::class)
-            ->onlyMethods(['getVersion'])
-            ->getMockForAbstractClass();
+        $this->productMetadataMock = $this->createMock(ProductMetadataInterface::class);
 
         $this->productMetadataMock->method('getVersion')
             ->willReturn(self::STUB_PRODUCT_VERSION);

@@ -55,19 +55,11 @@ class SetGoogleAnalyticsOnOrderSuccessPageViewObserverTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->googleAnalyticsDataMock = $this->getMockBuilder(GaDataHelper::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->storeManagerMock = $this->getMockBuilder(StoreManagerInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-        $this->layoutMock = $this->getMockBuilder(LayoutInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-        $this->observerMock = $this->getMockBuilder(Observer::class)
-            ->getMock();
-        $this->eventMock = $this->getMockBuilder(Event::class)
-            ->getMock();
+        $this->googleAnalyticsDataMock = $this->createMock(GaDataHelper::class);
+        $this->storeManagerMock = $this->createMock(StoreManagerInterface::class);
+        $this->layoutMock = $this->createMock(LayoutInterface::class);
+        $this->observerMock = $this->createMock(Observer::class);
+        $this->eventMock = $this->createMock(Event::class);
 
         $objectManager = new ObjectManager($this);
 
@@ -106,9 +98,7 @@ class SetGoogleAnalyticsOnOrderSuccessPageViewObserverTest extends TestCase
      */
     public function testExecuteWithOrderIds()
     {
-        $blockMock = $this->getMockBuilder(AbstractBlock::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $blockMock = $this->createMock(AbstractBlock::class);
         $orderIds = [8];
 
         $this->observerMock->expects($this->once())

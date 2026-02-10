@@ -72,7 +72,6 @@ class PartialSearchModifierTest extends TestCase
             $items[] = $item;
         }
         $reflectionProperty = new \ReflectionProperty($this->collection, '_items');
-        $reflectionProperty->setAccessible(true);
         $reflectionProperty->setValue($this->collection, $items);
         $this->assertEquals($expected, $this->model->modify($requests));
     }

@@ -10,6 +10,7 @@ namespace Magento\Reports\Test\Unit\Observer;
 
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Framework\Event\Observer;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\Reports\Model\Event;
 use Magento\Reports\Model\ReportStatus;
@@ -23,6 +24,8 @@ use PHPUnit\Framework\TestCase;
  */
 class WishlistAddProductObserverTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var Observer|MockObject
      */
@@ -81,13 +84,13 @@ class WishlistAddProductObserverTest extends TestCase
             ->with(Event::EVENT_PRODUCT_TO_WISHLIST)
             ->willReturn(true);
 
-        $eventMock = $this->getMockBuilder(Event::class)
-            ->addMethods(['getProduct'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $eventMock = $this->createPartialMockWithReflection(
+            Event::class,
+            ['getProduct']
+        );
         $eventMock->expects($this->once())
             ->method('getProduct')
-            ->willReturn($this->getMockForAbstractClass(ProductInterface::class));
+            ->willReturn($this->createMock(ProductInterface::class));
         $this->eventObserverMock->expects($this->once())->method('getEvent')->willReturn($eventMock);
 
         $this->eventSaverMock->expects($this->once())->method('save');

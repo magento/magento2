@@ -11,6 +11,7 @@ use Magento\Framework\DataObject;
 use Magento\Payment\Model\Method\ConfigInterface;
 use Magento\Paypal\Model\Payflow\Service\Response\Validator\CVV2Match;
 use Magento\Paypal\Model\Payflow\Transparent;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -43,11 +44,8 @@ class CVV2MatchTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->configMock = $this->getMockBuilder(ConfigInterface::class)
-            ->getMockForAbstractClass();
-        $this->payflowproFacade = $this->getMockBuilder(Transparent::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->configMock = $this->createMock(ConfigInterface::class);
+        $this->payflowproFacade = $this->createMock(Transparent::class);
 
         $this->validator = new CVV2Match();
     }
@@ -57,8 +55,8 @@ class CVV2MatchTest extends TestCase
      * @param DataObject $response
      * @param string $avsSecurityCodeFlag
      *
-     * @dataProvider validationDataProvider
      */
+    #[DataProvider('validationDataProvider')]
     public function testValidation(
         $expectedResult,
         DataObject $response,

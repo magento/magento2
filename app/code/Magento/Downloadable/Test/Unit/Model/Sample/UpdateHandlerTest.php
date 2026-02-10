@@ -9,10 +9,12 @@ namespace Magento\Downloadable\Test\Unit\Model\Sample;
 
 use Magento\Catalog\Api\Data\ProductExtensionInterface;
 use Magento\Catalog\Api\Data\ProductInterface;
+use Magento\Catalog\Model\Product;
 use Magento\Downloadable\Api\Data\SampleInterface;
 use Magento\Downloadable\Api\SampleRepositoryInterface;
 use Magento\Downloadable\Model\Product\Type;
 use Magento\Downloadable\Model\Sample\UpdateHandler;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\MockObject\RuntimeException;
 use PHPUnit\Framework\TestCase;
@@ -22,6 +24,8 @@ use PHPUnit\Framework\TestCase;
  */
 class UpdateHandlerTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var UpdateHandler
      */
@@ -58,8 +62,8 @@ class UpdateHandlerTest extends TestCase
         $this->productExtensionMock//->expects($this->once())
             ->method('getDownloadableProductSamples')
             ->willReturn([$this->sampleMock]);
-        $this->entityMock = $this->createPartialMock(
-            \Magento\Catalog\Test\Unit\Helper\ProductTestHelper::class,
+        $this->entityMock = $this->createPartialMockWithReflection(
+            Product::class,
             ['getStoreId', 'getTypeId', 'getExtensionAttributes', 'getSku']
         );
 
@@ -151,9 +155,9 @@ class UpdateHandlerTest extends TestCase
      */
     private function getProductExtensionMock(): MockObject
     {
-        return $this->createPartialMock(
-            \Magento\Catalog\Test\Unit\Helper\ProductExtensionTestHelper::class,
-            ['getDownloadableProductSamples']
+        return $this->createPartialMockWithReflection(
+            ProductExtensionInterface::class,
+            ['getDownloadableProductSamples', 'setDownloadableProductSamples']
         );
     }
 }

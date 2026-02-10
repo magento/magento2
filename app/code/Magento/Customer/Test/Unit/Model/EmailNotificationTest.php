@@ -25,6 +25,7 @@ use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Store\Model\Website;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -125,7 +126,7 @@ class EmailNotificationTest extends TestCase
     protected function setUp(): void
     {
         $this->customerRegistryMock = $this->createMock(CustomerRegistry::class);
-        $this->storeManagerMock = $this->getMockForAbstractClass(StoreManagerInterface::class);
+        $this->storeManagerMock = $this->createMock(StoreManagerInterface::class);
         $this->transportBuilderMock = $this->createMock(TransportBuilder::class);
         $this->customerViewHelperMock = $this->createMock(View::class);
         $this->dataProcessorMock = $this->createMock(DataObjectProcessor::class);
@@ -145,10 +146,12 @@ class EmailNotificationTest extends TestCase
 
         $this->storeMock = $this->createMock(Store::class);
 
-        $this->senderResolverMock = $this->getMockBuilder(SenderResolverInterface::class)
-            ->onlyMethods(['resolve'])
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->senderResolverMock = $this->createPartialMock(
+            SenderResolverInterface::class,
+            [
+                'resolve'
+            ]
+        );
         $this->emulation = $this->createMock(Emulation::class);
 
         $objectManager = new ObjectManagerHelper($this);
@@ -176,11 +179,11 @@ class EmailNotificationTest extends TestCase
      * @param string $oldEmail
      * @param string $newEmail
      * @param bool $isPasswordChanged
-     * @dataProvider sendNotificationEmailsDataProvider
      *
      * @return void
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
+    #[DataProvider('sendNotificationEmailsDataProvider')]
     public function testEmailNotifyWhenCredentialsChanged(
         $testNumber,
         $customerStoreId,
@@ -217,7 +220,7 @@ class EmailNotificationTest extends TestCase
         /**
          * @var MockObject $origCustomerMock
          */
-        $origCustomerMock = $this->getMockForAbstractClass(CustomerInterface::class);
+        $origCustomerMock = $this->createMock(CustomerInterface::class);
         $origCustomerMock->expects($this->any())
             ->method('getStoreId')
             ->willReturn($customerStoreId);
@@ -325,7 +328,7 @@ class EmailNotificationTest extends TestCase
                 }
             });
 
-        $transport = $this->getMockForAbstractClass(TransportInterface::class);
+        $transport = $this->createMock(TransportInterface::class);
 
         $this->transportBuilderMock->expects(clone $expects)
             ->method('getTransport')
@@ -404,9 +407,9 @@ class EmailNotificationTest extends TestCase
      * @param int $customerStoreId
      *
      * @return void
-     * @dataProvider customerStoreIdDataProvider
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
+    #[DataProvider('customerStoreIdDataProvider')]
     public function testPasswordReminder(int $customerStoreId): void
     {
         $customerData = ['key' => 'value'];
@@ -422,7 +425,7 @@ class EmailNotificationTest extends TestCase
         /**
          * @var CustomerInterface|MockObject $customerMock
          */
-        $customerMock = $this->getMockForAbstractClass(CustomerInterface::class);
+        $customerMock = $this->createMock(CustomerInterface::class);
         $customerMock->expects($this->never())
             ->method('getWebsiteId');
         $customerMock->expects($this->any())
@@ -533,7 +536,7 @@ class EmailNotificationTest extends TestCase
         /**
          * @var CustomerInterface|MockObject $customer
          */
-        $customer = $this->getMockForAbstractClass(CustomerInterface::class);
+        $customer = $this->createMock(CustomerInterface::class);
         $customer->expects($this->any())
             ->method('getWebsiteId')
             ->willReturn(self::STUB_CUSTOMER_WEBSITE_ID);
@@ -617,12 +620,12 @@ class EmailNotificationTest extends TestCase
     /**
      * Test email notify for password reset confirm
      *
-     * @dataProvider customerStoreIdDataProvider
      * @param int $customerStoreId
      *
      * @return void
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
+    #[DataProvider('customerStoreIdDataProvider')]
     public function testPasswordResetConfirmation(int $customerStoreId): void
     {
         $customerData = ['key' => 'value'];
@@ -637,7 +640,7 @@ class EmailNotificationTest extends TestCase
         /**
          * @var CustomerInterface|MockObject $customerMock
          */
-        $customerMock = $this->getMockForAbstractClass(CustomerInterface::class);
+        $customerMock = $this->createMock(CustomerInterface::class);
 
         $customerMock->expects($this->never())
             ->method('getWebsiteId');
@@ -719,12 +722,12 @@ class EmailNotificationTest extends TestCase
     /**
      * Test email notify with new account
      *
-     * @dataProvider customerStoreIdDataProvider
      * @param int $customerStoreId
      *
      * @return void
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
+    #[DataProvider('customerStoreIdDataProvider')]
     public function testNewAccount(int $customerStoreId): void
     {
         $customerData = ['key' => 'value'];
@@ -739,7 +742,7 @@ class EmailNotificationTest extends TestCase
         /**
          * @var CustomerInterface|MockObject $customer
          */
-        $customer = $this->getMockForAbstractClass(CustomerInterface::class);
+        $customer = $this->createMock(CustomerInterface::class);
         $customer->expects($this->never())
             ->method('getWebsiteId');
         $customer->expects($this->any())
@@ -857,7 +860,7 @@ class EmailNotificationTest extends TestCase
         string $customerName,
         array $templateVars = []
     ): void {
-        $transportMock = $this->getMockForAbstractClass(TransportInterface::class);
+        $transportMock = $this->createMock(TransportInterface::class);
 
         $this->transportBuilderMock->expects($this->once())
             ->method('setTemplateIdentifier')

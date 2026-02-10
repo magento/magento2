@@ -50,23 +50,13 @@ class AttributeTest extends TestCase
     protected function setUp(): void
     {
         $this->appResourceMock = $this->createMock(ResourceConnection::class);
-        $this->eventManagerMock = $this->getMockForAbstractClass(
-            ManagerInterface::class,
-            [],
-            '',
-            false,
-            false,
-            true,
-            []
-        );
-        $this->modelMock = $this->getMockForAbstractClass(
+        $this->eventManagerMock = $this->getMockBuilder(ManagerInterface::class)
+            ->onlyMethods(['dispatch'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->modelMock = $this->createPartialMock(
             AbstractModel::class,
-            [],
-            '',
-            false,
-            false,
-            true,
-            ['getId', 'getEventPrefix', 'getEventObject']
+            ['getId', 'getEventPrefix', 'getEventObject', 'getData']
         );
         $this->connectionMock = $this->getMockBuilder(Mysql::class)
             ->onlyMethods(['rollback', 'describeTable', 'insert', 'lastInsertId', 'beginTransaction', 'commit'])
@@ -79,6 +69,9 @@ class AttributeTest extends TestCase
             ->method('insert');
         $this->connectionMock->expects($this->any())
             ->method('lastInsertId');
+        $this->modelMock->expects($this->any())
+            ->method('getData')
+            ->willReturn([]);
         $this->attribute = new Attribute(
             $this->appResourceMock,
             $this->eventManagerMock
@@ -100,6 +93,9 @@ class AttributeTest extends TestCase
         $this->modelMock->expects($this->any())
             ->method('getEventObject')
             ->willReturn('event_object');
+        $this->modelMock->expects($this->any())
+            ->method('getData')
+            ->willReturn([]);
         $this->eventManagerMock
             ->method('dispatch')
             ->willReturnCallback(function ($arg1, $arg2) {

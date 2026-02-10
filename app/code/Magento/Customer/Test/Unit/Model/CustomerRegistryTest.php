@@ -14,6 +14,7 @@ use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 
 /**
  * Test for CustomerRegistry
@@ -21,6 +22,8 @@ use PHPUnit\Framework\TestCase;
  */
 class CustomerRegistryTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var CustomerRegistry
      */
@@ -39,9 +42,9 @@ class CustomerRegistryTest extends TestCase
     /**#@+
      * Sample customer data
      */
-    const CUSTOMER_ID = 1;
-    const CUSTOMER_EMAIL = 'customer@example.com';
-    const WEBSITE_ID = 1;
+    private const CUSTOMER_ID = 1;
+    private const CUSTOMER_EMAIL = 'customer@example.com';
+    private const WEBSITE_ID = 1;
 
     protected function setUp(): void
     {
@@ -54,24 +57,19 @@ class CustomerRegistryTest extends TestCase
             CustomerRegistry::class,
             ['customerFactory' => $this->customerFactory]
         );
-        $this->customer = $this->getMockBuilder(Customer::class)
-            ->disableOriginalConstructor()
-            ->addMethods(
-                [
-                    'getEmail',
-                    'getWebsiteId',
-                    'setEmail',
-                    'setWebsiteId'
-                ]
-            )->onlyMethods(
-                [
-                    'load',
-                    'getId',
-                    '__wakeup',
-                    'loadByEmail',
-                ]
-            )
-            ->getMock();
+        $this->customer = $this->createPartialMockWithReflection(
+            Customer::class,
+            [
+                'load',
+                'getId',
+                '__wakeup',
+                'loadByEmail',
+                'getEmail',
+                'getWebsiteId',
+                'setEmail',
+                'setWebsiteId'
+            ]
+        );
     }
 
     public function testRetrieve()

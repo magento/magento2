@@ -60,21 +60,17 @@ class CacheIdCalculatorTest extends TestCase
 
     protected function setup(): void
     {
-        $this->logger = $this->getMockForAbstractClass(LoggerInterface::class);
-        $this->contextFactory = $this->getMockForAbstractClass(ContextFactoryInterface::class);
-        $context = $this->getMockForAbstractClass(ContextInterface::class);
+        $this->logger = $this->createMock(LoggerInterface::class);
+        $this->contextFactory = $this->createMock(ContextFactoryInterface::class);
+        $context = $this->createMock(ContextInterface::class);
         $this->contextFactory->expects($this->any())->method('get')->willReturn($context);
-        $this->deploymentConfig = $this->getMockBuilder(DeploymentConfig::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->envWriter = $this->getMockBuilder(DeploymentConfig\Writer::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->deploymentConfig = $this->createMock(DeploymentConfig::class);
+        $this->envWriter = $this->createMock(DeploymentConfig\Writer::class);
         $this->random = new Random();
-        $this->factorProvider1 = $this->getMockForAbstractClass(CacheIdFactorProviderInterface::class);
+        $this->factorProvider1 = $this->createMock(CacheIdFactorProviderInterface::class);
         $this->factorProvider1->expects($this->any())->method('getFactorName')->willReturn('FACTOR_ONE_NAME');
         $this->factorProvider1->expects($this->any())->method('getFactorValue')->willReturn('FACTOR_ONE_VALUE');
-        $this->factorProvider2 = $this->getMockForAbstractClass(CacheIdFactorProviderInterface::class);
+        $this->factorProvider2 = $this->createMock(CacheIdFactorProviderInterface::class);
         $this->factorProvider2->expects($this->any())->method('getFactorName')->willReturn('FACTOR_TWO_NAME');
         $this->factorProvider2->expects($this->any())->method('getFactorValue')->willReturn('FACTOR_TWO_VALUE');
     }

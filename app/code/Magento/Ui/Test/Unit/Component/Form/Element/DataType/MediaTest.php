@@ -33,10 +33,8 @@ class MediaTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->context = $this->getMockBuilder(ContextInterface::class)
-            ->getMockForAbstractClass();
-        $this->urlBuilder = $this->getMockBuilder(UrlInterface::class)
-            ->getMockForAbstractClass();
+        $this->context = $this->createMock(ContextInterface::class);
+        $this->urlBuilder = $this->createMock(UrlInterface::class);
 
         $this->media = new Media($this->context);
     }
@@ -59,9 +57,7 @@ class MediaTest extends TestCase
             'dataScope' => 'test_name'
         ];
 
-        $this->processor = $this->getMockBuilder(Processor::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->processor = $this->createMock(Processor::class);
         $this->context->expects($this->atLeastOnce())->method('getProcessor')->willReturn($this->processor);
         $this->context->expects($this->once())
             ->method('getUrl')
@@ -91,9 +87,7 @@ class MediaTest extends TestCase
             'dataScope' => 'other_data_scope'
         ];
 
-        $this->processor = $this->getMockBuilder(Processor::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->processor = $this->createMock(Processor::class);
         $this->context->expects($this->atLeastOnce())->method('getProcessor')->willReturn($this->processor);
         $this->context->expects($this->once())
             ->method('getUrl')

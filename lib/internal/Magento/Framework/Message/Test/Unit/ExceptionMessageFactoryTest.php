@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -40,7 +40,7 @@ class ExceptionMessageFactoryTest extends TestCase
     public function testCreateMessageDefaultType()
     {
         $exception = new \Exception('message');
-        $message = $this->getMockForAbstractClass(MessageInterface::class);
+        $message = $this->createMock(MessageInterface::class);
 
         $message->expects($this->once())
             ->method('setText')

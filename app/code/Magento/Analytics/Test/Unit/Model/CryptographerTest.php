@@ -13,6 +13,7 @@ use Magento\Analytics\Model\EncodedContext;
 use Magento\Analytics\Model\EncodedContextFactory;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 class CryptographerTest extends TestCase
@@ -168,9 +169,7 @@ class CryptographerTest extends TestCase
         $this->assertCount(2, array_unique($this->initializationVectors));
     }
 
-    /**
-     * @dataProvider encodeNotValidSourceDataProvider
-     */
+    #[DataProvider('encodeNotValidSourceDataProvider')]
     public function testEncodeNotValidSource($source)
     {
         $this->expectException('Magento\Framework\Exception\LocalizedException');

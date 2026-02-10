@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -13,12 +13,14 @@ use Magento\Framework\Math\Random;
 use Magento\Framework\Session\SessionManager;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 
 /**
  * Test for Magento\Framework\Data\Form\FormKey
  */
 class FormKeyTest extends TestCase
 {
+    use MockCreationTrait;
     /**
      * @var Random|MockObject
      */
@@ -42,11 +44,10 @@ class FormKeyTest extends TestCase
     protected function setUp(): void
     {
         $this->mathRandomMock = $this->createMock(Random::class);
-        $this->sessionMock = $this->getMockBuilder(SessionManager::class)
-            ->addMethods(['setData'])
-            ->onlyMethods(['getData'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->sessionMock = $this->createPartialMockWithReflection(
+            SessionManager::class,
+            ['setData', 'getData']
+        );
         $this->escaperMock = $this->createMock(Escaper::class);
         $this->escaperMock->expects($this->any())->method('escapeJs')->willReturnArgument(0);
         $this->formKey = new FormKey(

@@ -55,21 +55,11 @@ class ProductLoaderTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->productRepository = $this->getMockBuilder(ProductRepositoryInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-        $this->searchCriteriaBuilder = $this->getMockBuilder(SearchCriteriaBuilder::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->productSearchResultsInterface = $this->getMockBuilder(ProductSearchResultsInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-        $this->searchCriteria = $this->getMockBuilder(SearchCriteria::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->product = $this->getMockBuilder(Product::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->productRepository = $this->createMock(ProductRepositoryInterface::class);
+        $this->searchCriteriaBuilder = $this->createMock(SearchCriteriaBuilder::class);
+        $this->productSearchResultsInterface = $this->createMock(ProductSearchResultsInterface::class);
+        $this->searchCriteria = $this->createMock(SearchCriteria::class);
+        $this->product = $this->createMock(Product::class);
 
         $this->productLoader = new ProductLoader(
             $this->productRepository,

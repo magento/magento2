@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Config\Console\Command;
@@ -141,7 +141,6 @@ class ConfigShowCommandTest extends TestCase
     {
         $reflection = new \ReflectionClass(Structure::class);
         $mappedPaths = $reflection->getProperty('mappedPaths');
-        $mappedPaths->setAccessible(true);
         $mappedPaths->setValue($this->structure, $this->getConfigPaths());
     }
 

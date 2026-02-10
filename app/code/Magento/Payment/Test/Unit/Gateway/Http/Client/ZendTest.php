@@ -54,7 +54,7 @@ class ZendTest extends TestCase
     protected function setUp(): void
     {
         $this->converterMock = $this->getMockBuilder(ConverterInterface::class)
-            ->getMockForAbstractClass();
+            ->getMock();
 
         $this->clientFactoryMock = $this->getMockBuilder(LaminasClientFactory::class)
             ->onlyMethods(['create'])
@@ -70,7 +70,7 @@ class ZendTest extends TestCase
             ->getMock();
 
         $this->transferObjectMock = $this->getMockBuilder(TransferInterface::class)
-            ->getMockForAbstractClass();
+            ->getMock();
 
         $this->model = new Zend(
             $this->clientFactoryMock,

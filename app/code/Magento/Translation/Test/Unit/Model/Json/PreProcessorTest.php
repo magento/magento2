@@ -20,6 +20,7 @@ use Magento\Translation\Model\Js\DataProvider;
 use Magento\Translation\Model\Json\PreProcessor;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider as DataProviderAttribute;
 
 class PreProcessorTest extends TestCase
 {
@@ -61,8 +62,8 @@ class PreProcessorTest extends TestCase
         $this->configMock = $this->createMock(Config::class);
         $this->dataProviderMock = $this->createMock(DataProvider::class);
         $this->areaListMock = $this->createMock(AreaList::class);
-        $this->translateMock = $this->getMockForAbstractClass(TranslateInterface::class);
-        $this->designMock = $this->getMockForAbstractClass(DesignInterface::class);
+        $this->translateMock = $this->createMock(TranslateInterface::class);
+        $this->designMock = $this->createMock(DesignInterface::class);
         $this->model = new PreProcessor(
             $this->configMock,
             $this->dataProviderMock,
@@ -77,8 +78,8 @@ class PreProcessorTest extends TestCase
      *
      * @param array $data
      * @param array $expects
-     * @dataProvider processDataProvider
      */
+    #[DataProviderAttribute('processDataProvider')]
     public function testProcess(array $data, array $expects)
     {
         $chain = $this->createMock(Chain::class);
@@ -91,7 +92,7 @@ class PreProcessorTest extends TestCase
         $areaCode = $data['area_code'];
 
         $area = $this->createMock(Area::class);
-        $area->expects($expects['area_load'])->method('load')->willReturnSelf();
+        $area->expects($expects['area_load'] === 0 ? $this->never() : $this->once())->method('load')->willReturnSelf();
 
         $chain->expects($this->once())
             ->method('getTargetAssetPath')
@@ -117,7 +118,7 @@ class PreProcessorTest extends TestCase
 
         $this->designMock->expects($this->once())->method('setDesignTheme')->with($themePath, $areaCode);
 
-        $this->areaListMock->expects($expects['areaList_getArea'])
+        $this->areaListMock->expects($expects['areaList_getArea'] === 0 ? $this->never() : $this->once())
             ->method('getArea')
             ->with($areaCode)
             ->willReturn($area);
@@ -147,22 +148,22 @@ class PreProcessorTest extends TestCase
     public static function processDataProvider()
     {
         return [
-            [
+            'adminhtml_area' => [
                 [
                     'area_code' => FrontNameResolver::AREA_CODE
                 ],
                 [
-                    'areaList_getArea' => self::never(),
-                    'area_load' => self::never(),
+                    'areaList_getArea' => 0,
+                    'area_load' => 0,
                 ]
             ],
-            [
+            'frontend_area' => [
                 [
                     'area_code' => 'frontend'
                 ],
                 [
-                    'areaList_getArea' => self::once(),
-                    'area_load' => self::once(),
+                    'areaList_getArea' => 1,
+                    'area_load' => 1,
                 ]
             ],
         ];

@@ -35,12 +35,12 @@ class NotificationStorageTest extends TestCase
     protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
-        $this->cacheMock = $this->getMockForAbstractClass(FrontendInterface::class);
+        $this->cacheMock = $this->createMock(FrontendInterface::class);
         $this->notificationStorage = $objectManager->getObject(
             NotificationStorage::class,
             ['cache' => $this->cacheMock]
         );
-        $this->serializerMock = $this->getMockForAbstractClass(SerializerInterface::class);
+        $this->serializerMock = $this->createMock(SerializerInterface::class);
         $objectManager->setBackwardCompatibleProperty($this->notificationStorage, 'serializer', $this->serializerMock);
     }
 

@@ -14,6 +14,7 @@ use Magento\Framework\Phrase;
 use Magento\Framework\View\Element\UiComponent\ContextInterface;
 use Magento\Framework\View\Element\UiComponent\Processor;
 use Magento\Framework\View\Element\UiComponentFactory;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -55,8 +56,7 @@ class ConfirmationTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->context = $this->getMockBuilder(ContextInterface::class)
-            ->getMockForAbstractClass();
+        $this->context = $this->createMock(ContextInterface::class);
 
         $this->context->expects($this->never())
             ->method('getProcessor')
@@ -66,8 +66,7 @@ class ConfirmationTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->scopeConfig = $this->getMockBuilder(ScopeConfigInterface::class)
-            ->getMockForAbstractClass();
+        $this->scopeConfig = $this->createMock(ScopeConfigInterface::class);
 
         $this->accountConfirmation = $this->createMock(AccountConfirmation::class);
 
@@ -84,9 +83,8 @@ class ConfirmationTest extends TestCase
     /**
      * @param int $isConfirmationRequired
      * @param string|null $confirmation
-     * @param Phrase $expected
-     * @dataProvider dataProviderPrepareDataSource
-     */
+     * @param Phrase $expected */
+    #[DataProvider('dataProviderPrepareDataSource')]
     public function testPrepareDataSource(
         $isConfirmationRequired,
         $confirmation,

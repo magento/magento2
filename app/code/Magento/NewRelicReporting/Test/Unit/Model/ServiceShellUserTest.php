@@ -8,6 +8,8 @@ declare(strict_types=1);
 namespace Magento\NewRelicReporting\Test\Unit\Model;
 
 use Magento\NewRelicReporting\Model\ServiceShellUser;
+use PHPUnit\Framework\Attributes\DataProvider;
+
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -32,9 +34,8 @@ class ServiceShellUserTest extends TestCase
 
     /**
      * Test get method with various inputs and expected outputs
-     *
-     * @dataProvider valuesProvider
      */
+    #[DataProvider('valuesProvider')]
     public function testGetReturnsExpectedValue($input, $expected): void
     {
         $this->assertEquals($expected, $this->serviceShellUser->get($input));

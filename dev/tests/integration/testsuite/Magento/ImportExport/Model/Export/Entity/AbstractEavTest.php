@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 
 /**
@@ -92,7 +92,6 @@ class AbstractEavTest extends \PHPUnit\Framework\TestCase
     {
         $this->_model->setParameters($this->_getSkippedAttributes());
         $method = new \ReflectionMethod($this->_model, '_getExportAttributeCodes');
-        $method->setAccessible(true);
         $attributes = $method->invoke($this->_model);
         foreach (self::$_skippedAttributes as $code) {
             $this->assertNotContains($code, $attributes);

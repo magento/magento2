@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -170,7 +170,6 @@ class PayflowproVoidTest extends TestCase
 
         $payment = $order->getPayment();
         $canVoidLookupProperty = new \ReflectionProperty(get_class($payment), '_canVoidLookup');
-        $canVoidLookupProperty->setAccessible(true);
         $canVoidLookupProperty->setValue($payment, true);
 
         return $order;

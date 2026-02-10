@@ -45,13 +45,12 @@ class FetchReportsTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->objectManagerMock = $this->getMockBuilder(ObjectManagerInterface::class)
-            ->getMock();
+        $this->objectManagerMock = $this->createMock(ObjectManagerInterface::class);
         $this->settlementFactoryMock = $this->getMockBuilder(SettlementFactory::class)
             ->disableOriginalConstructor()
             ->onlyMethods(['create'])
             ->getMock();
-        $this->logger = $this->getMockForAbstractClass(LoggerInterface::class);
+        $this->logger = $this->createMock(LoggerInterface::class);
 
         $this->objectManager = new ObjectManager($this);
         $this->fetchReports = $this->objectManager->getObject(

@@ -45,7 +45,7 @@ class RuleIdProviderTest extends TestCase
     protected function setUp(): void
     {
         $this->resourceConnectionMock = $this->createMock(ResourceConnection::class);
-        $this->connectionMock = $this->getMockForAbstractClass(AdapterInterface::class);
+        $this->connectionMock = $this->createMock(AdapterInterface::class);
         $this->selectMock = $this->createMock(Select::class);
 
         $this->resourceConnectionMock->method('getConnection')

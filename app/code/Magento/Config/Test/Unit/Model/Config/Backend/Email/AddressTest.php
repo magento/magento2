@@ -10,6 +10,7 @@ namespace Magento\Config\Test\Unit\Model\Config\Backend\Email;
 use Magento\Config\Model\Config\Backend\Email\Address;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 class AddressTest extends TestCase
@@ -26,11 +27,11 @@ class AddressTest extends TestCase
     }
 
     /**
-     * @dataProvider beforeSaveDataProvider
      * @param string|null $value
      * @param string|bool $expectedValue false if exception to be thrown
      * @return void
      */
+    #[DataProvider('beforeSaveDataProvider')]
     public function testBeforeSave($value, $expectedValue)
     {
         $this->model->setValue($value);

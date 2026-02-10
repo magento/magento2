@@ -8,6 +8,7 @@ declare(strict_types=1);
 namespace Magento\Directory\Test\Unit\Model\Currency\Import;
 
 use Magento\Directory\Model\Currency\Import\Config;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 class ConfigTest extends TestCase
@@ -30,8 +31,8 @@ class ConfigTest extends TestCase
     /**
      * @param array $configData
      * @param string $expectedException
-     * @dataProvider constructorExceptionDataProvider
      */
+    #[DataProvider('constructorExceptionDataProvider')]
     public function testConstructorException(array $configData, $expectedException)
     {
         $this->expectException('InvalidArgumentException');
@@ -80,8 +81,8 @@ class ConfigTest extends TestCase
     /**
      * @param string $serviceName
      * @param mixed $expectedResult
-     * @dataProvider getServiceClassDataProvider
      */
+    #[DataProvider('getServiceClassDataProvider')]
     public function testGetServiceClass($serviceName, $expectedResult)
     {
         $this->assertEquals($expectedResult, $this->_model->getServiceClass($serviceName));
@@ -98,8 +99,8 @@ class ConfigTest extends TestCase
     /**
      * @param string $serviceName
      * @param mixed $expectedResult
-     * @dataProvider getServiceLabelDataProvider
      */
+    #[DataProvider('getServiceLabelDataProvider')]
     public function testGetServiceLabel($serviceName, $expectedResult)
     {
         $this->assertEquals($expectedResult, $this->_model->getServiceLabel($serviceName));

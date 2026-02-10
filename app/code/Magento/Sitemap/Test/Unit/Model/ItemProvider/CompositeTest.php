@@ -10,6 +10,7 @@ namespace Magento\Sitemap\Test\Unit\Model\ItemProvider;
 use Magento\Sitemap\Model\ItemProvider\Composite as CompositeItemResolver;
 use Magento\Sitemap\Model\ItemProvider\ItemProviderInterface;
 use Magento\Sitemap\Model\SitemapItemInterface;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 class CompositeTest extends TestCase
@@ -21,16 +22,16 @@ class CompositeTest extends TestCase
     }
 
     /**
-     * @dataProvider sitemapItemsProvider
      * @param array $itemResolverData
      * @param array $expectedItems
      */
+    #[DataProvider('sitemapItemsProvider')]
     public function testGetItems($itemResolverData, $expectedItems)
     {
         $mockResolvers = [];
 
         foreach ($itemResolverData as $data) {
-            $mockResolver = $this->getMockForAbstractClass(ItemProviderInterface::class);
+            $mockResolver = $this->createMock(ItemProviderInterface::class);
             $mockResolver->expects(self::once())
                 ->method('getItems')
                 ->willReturn($data);
@@ -59,7 +60,7 @@ class CompositeTest extends TestCase
                 $items = [];
                 $maxItems = random_int(2, 5);
                 for ($k = 1; $k < $maxItems; $k++) {
-                    $sitemapItem = static fn (self $testCase) => $testCase->getMockForAbstractClass(SitemapItemInterface::class);
+                    $sitemapItem = static fn (self $testCase) => $testCase->createMock(SitemapItemInterface::class);
                     $items[] = $sitemapItem;
                     $expectedItems[]  = $sitemapItem;
                 }

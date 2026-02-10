@@ -14,11 +14,14 @@ use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\DataObject;
 use Magento\Framework\HTTP\LaminasClient;
 use Magento\Framework\HTTP\LaminasClientFactory;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 class FixerIoApiLayerTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var FixerIoApiLayer
      */
@@ -52,9 +55,7 @@ class FixerIoApiLayerTest extends TestCase
             ->disableOriginalConstructor()
             ->onlyMethods(['create'])
             ->getMock();
-        $this->scopeConfig = $this->getMockBuilder(ScopeConfigInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->scopeConfig = $this->createMock(ScopeConfigInterface::class);
 
         $this->model = new FixerIoApiLayer($this->currencyFactory, $this->scopeConfig, $this->httpClientFactory);
     }
@@ -93,10 +94,10 @@ class FixerIoApiLayerTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
         /** @var DataObject|MockObject $currencyMock */
-        $httpResponse = $this->getMockBuilder(DataObject::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['getBody'])
-            ->getMock();
+        $httpResponse = $this->createPartialMockWithReflection(
+            DataObject::class,
+            ['getBody']
+        );
 
         $this->currencyFactory->method('create')
             ->willReturn($currency);

@@ -13,6 +13,7 @@ use Magento\Framework\App\Request\Http as HttpRequest;
 use Magento\MediaStorage\Model\File\Storage\Response as FileResponse;
 use Magento\PageCache\Model\App\Response\HttpPlugin;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -54,9 +55,8 @@ class HttpPluginTest extends TestCase
      * @param bool $headersSent
      * @param int $sendVaryCalled
      * @return void
-     *
-     * @dataProvider beforeSendResponseDataProvider
      */
+    #[DataProvider('beforeSendResponseDataProvider')]
     public function testBeforeSendResponse(string $responseClass, bool $headersSent, int $sendVaryCalled): void
     {
         /** @var HttpResponse|MockObject $responseMock */
@@ -90,6 +90,18 @@ class HttpPluginTest extends TestCase
         $responseMock->expects($this->once())->method('setNoCacheHeaders');
         $responseMock->expects($this->once())->method('sendVary');
 
+        $this->httpPlugin->beforeSendResponse($responseMock);
+    }
+
+    public function testBeforeSendResponseVaryNotSet()
+    {
+        /** @var HttpResponse|MockObject $responseMock */
+        $this->context->expects($this->any())->method('getVaryString')->willReturn('currentVary');
+        $this->request->expects($this->any())->method('get')->willReturn(null);
+        /** @var HttpResponse|MockObject $responseMock */
+        $responseMock = $this->createMock(HttpResponse::class);
+        $responseMock->expects($this->never())->method('setNoCacheHeaders');
+        $responseMock->expects($this->once())->method('sendVary');
         $this->httpPlugin->beforeSendResponse($responseMock);
     }
 }

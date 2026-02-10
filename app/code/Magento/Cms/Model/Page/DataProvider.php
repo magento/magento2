@@ -114,10 +114,11 @@ class DataProvider extends ModifierPoolDataProvider
         }
 
         $page = $this->getCurrentPage();
-        $this->loadedData[$page->getId()] = $page->getData();
+        $pageId = $page->getId() ?? '';
+        $this->loadedData[$pageId] = $page->getData();
         if ($page->getCustomLayoutUpdateXml() || $page->getLayoutUpdateXml()) {
             //Deprecated layout update exists.
-            $this->loadedData[$page->getId()]['layout_update_selected'] = '_existing_';
+            $this->loadedData[$pageId]['layout_update_selected'] = '_existing_';
         }
 
         return $this->loadedData;

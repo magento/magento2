@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -87,8 +87,6 @@ class PaymentFailuresServiceTest extends \PHPUnit\Framework\TestCase
 
         $paymentReflection = new \ReflectionClass($this->paymentFailures);
         $templateVarsMethod = $paymentReflection->getMethod('getTemplateVars');
-        $templateVarsMethod->setAccessible(true);
-
         $templateVars = $templateVarsMethod->invoke($this->paymentFailures, $this->quote, $errorMessage, $checkoutType);
         $expectedVars = [
             'reason' => $errorMessage->render(),
@@ -134,8 +132,6 @@ class PaymentFailuresServiceTest extends \PHPUnit\Framework\TestCase
 
         $paymentReflection = new \ReflectionClass($this->paymentFailures);
         $templateVarsMethod = $paymentReflection->getMethod('getTemplateVars');
-        $templateVarsMethod->setAccessible(true);
-
         $templateVars = $templateVarsMethod->invoke($this->paymentFailures, $this->quote, $errorMessage, $checkoutType);
         $expectedVars = [
             'reason' => $errorMessage->render(),

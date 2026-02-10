@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -12,6 +12,7 @@ use Magento\Framework\Data\Form\FormKey;
 use Magento\Framework\Data\Form\FormKey\Validator;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class ValidatorTest extends TestCase
 {
@@ -39,9 +40,8 @@ class ValidatorTest extends TestCase
 
     /**
      * @param string $formKey
-     * @param bool $expected
-     * @dataProvider validateDataProvider
-     */
+     * @param bool $expected     */
+    #[DataProvider('validateDataProvider')]
     public function testValidate($formKey, $expected)
     {
         $this->_requestMock->expects(

@@ -13,6 +13,7 @@ use Magento\Framework\Data\Form\Element\CollectionFactory;
 use Magento\Framework\Data\Form\Element\Factory;
 use Magento\Framework\Data\Form\Element\Text;
 use Magento\Framework\Data\Form\Element\TextFactory;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -22,7 +23,9 @@ use PHPUnit\Framework\TestCase;
  */
 class StockTest extends TestCase
 {
-    const ATTRIBUTE_NAME = 'quantity_and_stock_status';
+    use MockCreationTrait;
+
+    private const ATTRIBUTE_NAME = 'quantity_and_stock_status';
 
     /**
      * @var Factory|MockObject
@@ -55,14 +58,14 @@ class StockTest extends TestCase
         $this->_collectionFactoryMock = $this->createMock(
             CollectionFactory::class
         );
-        $this->_qtyMock = $this->getMockBuilder(Text::class)
-            ->addMethods(['setValue', 'setName'])
-            ->onlyMethods(['setForm'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->_qtyMock = $this->createPartialMockWithReflection(
+            Text::class,
+            ['setValue', 'setName', 'setForm']
+        );
         $this->_factoryTextMock = $this->createMock(TextFactory::class);
 
         $objectManagerHelper = new ObjectManager($this);
+        $objectManagerHelper->prepareObjectManager();
         $this->_block = $objectManagerHelper->getObject(
             Stock::class,
             [

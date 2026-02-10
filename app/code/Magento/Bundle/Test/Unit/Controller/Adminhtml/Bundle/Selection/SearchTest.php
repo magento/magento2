@@ -10,10 +10,11 @@ namespace Magento\Bundle\Test\Unit\Controller\Adminhtml\Bundle\Selection;
 use Magento\Backend\App\Action\Context;
 use Magento\Bundle\Controller\Adminhtml\Bundle\Selection\Search;
 use Magento\Framework\App\RequestInterface;
+use Magento\Framework\App\Response\Http as HttpResponse;
 use Magento\Framework\App\ResponseInterface;
 use Magento\Framework\App\ViewInterface;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
-use Magento\Framework\App\Test\Unit\Helper\ResponseTestHelper;
 use Magento\Framework\View\LayoutInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -21,6 +22,8 @@ use Magento\Bundle\Block\Adminhtml\Catalog\Product\Edit\Tab\Bundle\Option\Search
 
 class SearchTest extends TestCase
 {
+    use MockCreationTrait;
+
     /** @var Search */
     protected $controller;
 
@@ -55,7 +58,11 @@ class SearchTest extends TestCase
         $this->request = $this->createMock(RequestInterface::class);
 
         /** @var ResponseInterface $response */
-        $this->response = new ResponseTestHelper();
+        $this->response = $this->createPartialMockWithReflection(
+            HttpResponse::class,
+            ['setBody', 'getBody']
+        );
+        $this->response->method('setBody')->willReturnSelf();
 
         $this->view = $this->createMock(ViewInterface::class);
 
@@ -79,7 +86,7 @@ class SearchTest extends TestCase
         $block = $this->createPartialMock(SearchBlock::class, ['toHtml']);
         $block->method('toHtml')->willReturn('');
 
-        $this->response->setBody('');
+        $this->response->method('getBody')->willReturn('');
         $this->request->expects($this->once())->method('getParam')->with('index')->willReturn('index');
         $this->view->expects($this->once())->method('getLayout')->willReturn($layout);
         $layout->expects($this->once())->method('createBlock')->willReturn($block);

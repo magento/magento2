@@ -15,9 +15,13 @@ use Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable\At
 use Magento\Framework\DataObject;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
+use Magento\Catalog\Model\ResourceModel\Eav\Attribute as EavAttribute;
 
 class ConfigurableAttributeDataTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var Product|MockObject
      */
@@ -38,7 +42,10 @@ class ConfigurableAttributeDataTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->product = new \Magento\Catalog\Test\Unit\Helper\ProductTestHelper();
+        $this->product = $this->createPartialMockWithReflection(
+            Product::class,
+            ['getStoreId', 'setStoreId']
+        );
         $this->attributeMock = $this->createMock(
             Attribute::class
         );
@@ -86,9 +93,13 @@ class ConfigurableAttributeDataTest extends TestCase
             $attributeId => ['option_id_1' => 'option_products_1', 'option_id_2' => 'option_products_2'],
         ];
 
-        $productAttributeMock = new \Magento\Eav\Test\Unit\Helper\AttributeTestHelper();
-        $productAttributeMock->setId($attributeId);
-        $productAttributeMock->setAttributeCode($expected['attributes'][$attributeId]['code']);
+        $productAttributeMock = $this->createPartialMockWithReflection(
+            EavAttribute::class,
+            ['getId', 'setId', 'getAttributeCode', 'setAttributeCode', 'getStoreLabel', 'setStoreLabel']
+        );
+        $productAttributeMock->method('getId')->willReturn($attributeId);
+        $productAttributeMock->method('getAttributeCode')->willReturn($expected['attributes'][$attributeId]['code']);
+        $productAttributeMock->method('getStoreLabel')->willReturn($expected['attributes'][$attributeId]['label']);
 
         $attributeMock = $this->createPartialMock(ConfigurableAttribute::class, []);
         $attributeMock->setProductAttribute($productAttributeMock);
@@ -96,8 +107,7 @@ class ConfigurableAttributeDataTest extends TestCase
         $attributeMock->setAttributeId($attributeId);
         $attributeMock->setOptions($attributeOptions);
 
-        $this->product->setStoreId($storeId);
-        $productAttributeMock->setStoreLabel($expected['attributes'][$attributeId]['label']);
+        $this->product->method('getStoreId')->willReturn($storeId);
 
         $configurableProduct = $this->createMock(
             Configurable::class
@@ -110,7 +120,7 @@ class ConfigurableAttributeDataTest extends TestCase
         $configuredValueMock = $this->createMock(DataObject::class);
         $configuredValueMock->method('getData')->willReturn($expected['defaultValues'][$attributeId]);
 
-        // Configure ProductTestHelper with expected values
+        // Configure product mock with expected values
         $this->product->setTypeInstance($configurableProduct);
         $this->product->setHasPreconfiguredValues(true);
         $this->product->setPreconfiguredValues($configuredValueMock);

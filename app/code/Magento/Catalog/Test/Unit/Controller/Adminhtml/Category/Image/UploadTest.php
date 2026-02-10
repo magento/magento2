@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\Catalog\Test\Unit\Controller\Adminhtml\Category\Image;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\CardinalCommerce\Model\Response\JwtPayloadValidator;
 use Magento\Catalog\Controller\Adminhtml\Category\Image\Upload as Model;
 use Magento\Catalog\Model\ImageUploader;
@@ -43,9 +44,8 @@ class UploadTest extends TestCase
     /**
      * @param string $name
      * @param string $savedName
-     *
-     * @dataProvider executeDataProvider
      */
+    #[DataProvider('executeDataProvider')]
     public function testExecute($name, $savedName)
     {
         $request = $this->objectManager->getObject(Request::class);

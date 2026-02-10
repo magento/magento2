@@ -15,10 +15,14 @@ use Magento\Persistent\Helper\Data;
 use Magento\Persistent\Helper\Session;
 use Magento\Persistent\Model\QuoteManager;
 use Magento\Persistent\Observer\CheckExpirePersistentQuoteObserver;
+use Magento\Customer\Model\Session as CustomerSession;
+use Magento\Checkout\Model\Session as CheckoutSession;
 use Magento\Quote\Api\CartRepositoryInterface;
 use Magento\Quote\Model\Quote;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\MockObject\Rule\InvokedCount;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -26,6 +30,9 @@ use PHPUnit\Framework\TestCase;
  */
 class CheckExpirePersistentQuoteObserverTest extends TestCase
 {
+
+    use MockCreationTrait;
+
     /**
      * @var CheckExpirePersistentQuoteObserver
      */
@@ -87,20 +94,24 @@ class CheckExpirePersistentQuoteObserverTest extends TestCase
     protected function setUp(): void
     {
         $this->sessionMock = $this->createMock(Session::class);
-        $this->customerSessionMock = $this->createMock(\Magento\Customer\Model\Session::class);
+        $this->customerSessionMock = $this->createMock(CustomerSession::class);
         $this->persistentHelperMock = $this->createMock(Data::class);
-        $this->observerMock = $this->getMockBuilder(Observer::class)
-            ->addMethods(['getControllerAction'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->observerMock = $this->createPartialMockWithReflection(
+            Observer::class,
+            ['getControllerAction']
+        );
         $this->quoteManagerMock = $this->createMock(QuoteManager::class);
-        $this->eventManagerMock = $this->getMockForAbstractClass(ManagerInterface::class);
-        $this->checkoutSessionMock = $this->createMock(\Magento\Checkout\Model\Session::class);
-        $this->requestMock = $this->getMockBuilder(RequestInterface::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['getRequestUri', 'getServer'])
-            ->getMockForAbstractClass();
-        $this->quoteRepositoryMock = $this->getMockForAbstractClass(CartRepositoryInterface::class);
+        $this->eventManagerMock = $this->createMock(ManagerInterface::class);
+        $this->checkoutSessionMock = $this->createMock(CheckoutSession::class);
+        $this->requestMock = $this->createPartialMockWithReflection(
+            RequestInterface::class,
+            [
+                'getModuleName', 'setModuleName', 'getActionName', 'setActionName',
+                'getParam', 'setParams', 'getParams', 'getCookie', 'isSecure',
+                'getRequestUri', 'getServer'  // Custom methods
+            ]
+        );
+        $this->quoteRepositoryMock = $this->createMock(CartRepositoryInterface::class);
 
         $this->model = new CheckExpirePersistentQuoteObserver(
             $this->sessionMock,
@@ -112,11 +123,10 @@ class CheckExpirePersistentQuoteObserverTest extends TestCase
             $this->requestMock,
             $this->quoteRepositoryMock
         );
-        $this->quoteMock = $this->getMockBuilder(Quote::class)
-            ->addMethods(['getIsPersistent'])
-            ->onlyMethods(['getCustomerIsGuest'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->quoteMock = $this->createPartialMockWithReflection(
+            Quote::class,
+            ['getIsPersistent', 'getCustomerIsGuest']
+        );
     }
 
     public function testExecuteWhenCanNotApplyPersistentData()
@@ -158,14 +168,14 @@ class CheckExpirePersistentQuoteObserverTest extends TestCase
      * @param InvokedCount $dispatchCounter
      * @param InvokedCount $setCustomerIdCounter
      * @return void
-     * @dataProvider requestDataProvider
      */
+    #[DataProvider('requestDataProvider')]
     public function testExecuteWhenPersistentIsEnabled(
         string $refererUri,
         string $requestUri,
-        InvokedCount $expireCounter,
-        InvokedCount $dispatchCounter,
-        InvokedCount $setCustomerIdCounter
+        string $expireCounter,
+        string $dispatchCounter,
+        string $setCustomerIdCounter
     ): void {
         $this->persistentHelperMock
             ->expects($this->once())
@@ -192,10 +202,10 @@ class CheckExpirePersistentQuoteObserverTest extends TestCase
             ->expects($this->atLeastOnce())
             ->method('getQuoteId')
             ->willReturn(10);
-        $this->eventManagerMock->expects($dispatchCounter)->method('dispatch');
-        $this->quoteManagerMock->expects($expireCounter)->method('expire');
+        $this->eventManagerMock->expects($this->{$dispatchCounter}())->method('dispatch');
+        $this->quoteManagerMock->expects($this->{$expireCounter}())->method('expire');
         $this->customerSessionMock
-            ->expects($setCustomerIdCounter)
+            ->expects($this->{$setCustomerIdCounter}())
             ->method('setCustomerId')
             ->with(null)
             ->willReturnSelf();
@@ -219,30 +229,30 @@ class CheckExpirePersistentQuoteObserverTest extends TestCase
             [
                 'refererUri'           => 'checkout',
                 'requestUri'           => 'index',
-                'expireCounter'        => self::never(),
-                'dispatchCounter'      => self::never(),
-                'setCustomerIdCounter' => self::never(),
+                'expireCounter'        => 'never',
+                'dispatchCounter'      => 'never',
+                'setCustomerIdCounter' => 'never',
             ],
             [
                 'refererUri'           => 'checkout',
                 'requestUri'           => 'checkout',
-                'expireCounter'        => self::never(),
-                'dispatchCounter'      => self::never(),
-                'setCustomerIdCounter' => self::never(),
+                'expireCounter'        => 'never',
+                'dispatchCounter'      => 'never',
+                'setCustomerIdCounter' => 'never',
             ],
             [
                 'refererUri'           => 'index',
                 'requestUri'           => 'checkout',
-                'expireCounter'        => self::never(),
-                'dispatchCounter'      => self::never(),
-                'setCustomerIdCounter' => self::never(),
+                'expireCounter'        => 'never',
+                'dispatchCounter'      => 'never',
+                'setCustomerIdCounter' => 'never',
             ],
             [
                 'refererUri'           => 'index',
                 'requestUri'           => 'index',
-                'expireCounter'        => self::once(),
-                'dispatchCounter'      => self::once(),
-                'setCustomerIdCounter' => self::once(),
+                'expireCounter'        => 'once',
+                'dispatchCounter'      => 'once',
+                'setCustomerIdCounter' => 'once',
             ],
         ];
     }

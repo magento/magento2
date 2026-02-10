@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\SalesRule\Test\Unit\Model\Rule\Action\Discount;
 
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Quote\Model\Quote;
 use Magento\Quote\Model\Quote\Item\AbstractItem;
@@ -17,11 +18,13 @@ use Magento\SalesRule\Model\Rule\Action\Discount\DataFactory;
 use Magento\SalesRule\Model\Validator;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
 use Magento\Store\Model\Store;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 class ByFixedTest extends TestCase
 {
+    use MockCreationTrait;
     /**
      * @var ByFixed
      */
@@ -53,8 +56,7 @@ class ByFixedTest extends TestCase
                 ['getItemPrice', 'getItemBasePrice', 'getItemOriginalPrice', 'getItemBaseOriginalPrice']
             )->getMock();
 
-        $this->priceCurrency = $this->getMockBuilder(PriceCurrencyInterface::class)
-            ->getMockForAbstractClass();
+        $this->priceCurrency = $this->createMock(PriceCurrencyInterface::class);
 
         $this->discountDataFactory = $this->getMockBuilder(
             DataFactory::class
@@ -81,9 +83,9 @@ class ByFixedTest extends TestCase
      * @param $itemData
      * @param $validItemData
      * @param $expectedDiscountData
-     * @dataProvider calculateDataProvider
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
+    #[DataProvider('calculateDataProvider')]
     public function testCalculate(
         $qty,
         $ruleData,
@@ -100,32 +102,29 @@ class ByFixedTest extends TestCase
 
         $this->discountDataFactory->expects($this->once())->method('create')->willReturn($discountData);
 
-        $rule = $this->getMockBuilder(
-            Rule::class
-        )->disableOriginalConstructor()
-            ->addMethods(
-                ['getDiscountAmount']
-            )->getMock();
+        $rule = $this->createPartialMockWithReflection(
+            Rule::class,
+            ['getDiscountAmount']
+        );
 
         $quote = $this->getMockBuilder(Quote::class)
             ->onlyMethods(['getStore'])
             ->disableOriginalConstructor()
             ->getMock();
         $store = $this->createMock(Store::class);
-        $quote->expects($this->any())->method('getStore')->will($this->returnValue($store));
+        $quote->expects($this->any())->method('getStore')->willReturn($store);
 
-        $item = $this->getMockBuilder(
-            AbstractItem::class
-        )->disableOriginalConstructor()
-            ->addMethods(['getDiscountAmount', 'getBaseDiscountAmount',])
-            ->onlyMethods(
-                [
-                    'getQuote',
-                    'getAddress',
-                    'getOptionByCode',
-                    'getQty'
-                ]
-            )->getMock();
+        $item = $this->createPartialMockWithReflection(
+            AbstractItem::class,
+            [
+                'getDiscountAmount',
+                'getBaseDiscountAmount',
+                'getQuote',
+                'getAddress',
+                'getOptionByCode',
+                'getQty'
+            ]
+        );
         $this->validator->expects(
             $this->atLeastOnce()
         )->method(
@@ -263,14 +262,14 @@ class ByFixedTest extends TestCase
      * @param int $step
      * @param int|float $qty
      * @param int $expected
-     * @dataProvider fixQuantityDataProvider
      */
+    #[DataProvider('fixQuantityDataProvider')]
     public function testFixQuantity($step, $qty, $expected)
     {
-        $rule = $this->getMockBuilder(Rule::class)
-            ->addMethods(['getDiscountStep'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $rule = $this->createPartialMockWithReflection(
+            Rule::class,
+            ['getDiscountStep']
+        );
         $rule->expects($this->once())->method('getDiscountStep')->willReturn($step);
 
         $this->assertEquals($expected, $this->model->fixQuantity($qty, $rule));

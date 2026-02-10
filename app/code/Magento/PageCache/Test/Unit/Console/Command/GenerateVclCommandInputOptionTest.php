@@ -56,9 +56,7 @@ class GenerateVclCommandInputOptionTest extends TestCase
         $this->vclGeneratorInterfaceFactory->method('create')->willReturn($this->vclGenerator);
         $this->writeFactoryMock = $this->createMock(WriteFactory::class);
         $this->scopeConfigMock = $this->createMock(ScopeConfigInterface::class);
-        $this->serializer = $this->getMockBuilder(Json::class)
-            ->onlyMethods(['unserialize'])
-            ->getMockForAbstractClass();
+        $this->serializer = $this->createMock(Json::class);
 
         $this->command = new GenerateVclCommand(
             $this->vclGeneratorInterfaceFactory,
