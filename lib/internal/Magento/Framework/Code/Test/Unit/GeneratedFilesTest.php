@@ -8,6 +8,7 @@ namespace Magento\Framework\Code\Test\Unit;
 
 use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Code\GeneratedFiles;
 use Magento\Framework\Exception\FileSystemException;
@@ -68,7 +69,7 @@ class GeneratedFilesTest extends TestCase
         $this->directoryList = $this->createMock(DirectoryList::class);
         $this->writeFactory = $this->createMock(WriteFactory::class);
         $this->lockManager = $this->createMock(FileLock::class);
-        $this->writeInterface = $this->getMockForAbstractClass(WriteInterface::class);
+        $this->writeInterface = $this->createMock(WriteInterface::class);
 
         $this->directoryList->expects($this->any())->method('getPath')->willReturnMap(
             [
@@ -251,9 +252,8 @@ class GeneratedFilesTest extends TestCase
      * @test
      * @param string $exceptionClassName
      * @return void
-     *
-     * @dataProvider itDoesNotCleanGeneratedFilesDueToExceptionsDataProvider
-     */
+     *     */
+    #[DataProvider('itDoesNotCleanGeneratedFilesDueToExceptionsDataProvider')]
     public function itDoesNotCleanGeneratedFilesWhenCheckingFlagExistsDueToExceptions(
         string $exceptionClassName
     ) {
@@ -274,9 +274,8 @@ class GeneratedFilesTest extends TestCase
      * @test
      * @param string $exceptionClassName
      * @return void
-     *
-     * @dataProvider itDoesNotCleanGeneratedFilesDueToExceptionsDataProvider
-     */
+     *     */
+    #[DataProvider('itDoesNotCleanGeneratedFilesDueToExceptionsDataProvider')]
     public function itDoesNotCleanGeneratedFilesWhenCheckingProcessLockDueToExceptions(
         string $exceptionClassName
     ) {

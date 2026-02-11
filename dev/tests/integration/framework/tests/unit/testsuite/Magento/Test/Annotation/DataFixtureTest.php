@@ -80,9 +80,9 @@ class DataFixtureTest extends TestCase
             ->getMock();
         /** @var ObjectManagerInterface|MockObject $objectManager */
         $objectManager = $this->getMockBuilder(ObjectManagerInterface::class)
-            ->onlyMethods(['get', 'create'])
+            ->onlyMethods(['get', 'create', 'configure'])
             ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+            ->getMock();
 
         $this->fixture1 = $this->getMock(RevertibleDataFixtureInterface::class, 'MockFixture1');
         $this->fixture2 = $this->getMock(RevertibleDataFixtureInterface::class, 'MockFixture2');
@@ -148,7 +148,7 @@ class DataFixtureTest extends TestCase
 
         $mockBuilder = $this->getMockBuilder($class);
         $mockBuilder->setMockClassName($mockClassName);
-        return $mockBuilder->getMockForAbstractClass();
+        return $mockBuilder->getMock();
     }
 
     /**

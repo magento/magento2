@@ -22,6 +22,7 @@ use Magento\Deploy\Strategy\DeployStrategyFactory;
 use Magento\Framework\App\View\Deployment\Version\StorageInterface;
 
 use Magento\Framework\ObjectManagerInterface;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject as Mock;
 
 use PHPUnit\Framework\TestCase;
@@ -69,19 +70,9 @@ class DeployStaticContentTest extends TestCase
     {
         $this->deployStrategyFactory = $this->createPartialMock(DeployStrategyFactory::class, ['create']);
         $this->queueFactory = $this->createPartialMock(QueueFactory::class, ['create']);
-        $this->logger = $this->getMockForAbstractClass(
-            LoggerInterface::class,
-            [],
-            '',
-            false
-        );
+        $this->logger = $this->createMock(LoggerInterface::class);
         $this->objectManager = $this->createPartialMock(ObjectManagerInterface::class, ['create', 'get', 'configure']);
-        $this->versionStorage = $this->getMockForAbstractClass(
-            StorageInterface::class,
-            ['save'],
-            '',
-            false
-        );
+        $this->versionStorage = $this->createMock(StorageInterface::class);
 
         $this->service = new DeployStaticContent(
             $this->objectManager,
@@ -95,11 +86,11 @@ class DeployStaticContentTest extends TestCase
     /**
      * @param array $options
      * @param string $expectedContentVersion
-     * @dataProvider deployDataProvider
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
+    #[DataProvider('deployDataProvider')]
     public function testDeploy($options, $expectedContentVersion)
     {
         $package = $this->createMock(Package::class);
@@ -122,9 +113,7 @@ class DeployStaticContentTest extends TestCase
             $this->versionStorage->expects($this->once())->method('save');
         }
 
-        $queue = $this->getMockBuilder(Queue::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $queue = $this->createMock(Queue::class);
         if ($options['refresh-content-version-only']) {
             $this->queueFactory->expects($this->never())->method('create');
         } else {
@@ -134,7 +123,7 @@ class DeployStaticContentTest extends TestCase
         $strategy = $this->getMockBuilder(CompactDeploy::class)
             ->onlyMethods(['deploy'])
             ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+            ->getMock();
         if ($options['refresh-content-version-only']) {
             $strategy->expects($this->never())->method('deploy');
         } else {
@@ -148,23 +137,23 @@ class DeployStaticContentTest extends TestCase
         }
         $deployPackageService = $this->getMockBuilder(DeployPackage::class)
             ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+            ->getMock();
         $deployRjsConfig = $this->getMockBuilder(DeployRequireJsConfig::class)
             ->onlyMethods(['deploy'])
             ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+            ->getMock();
         $deployI18n = $this->getMockBuilder(DeployTranslationsDictionary::class)
             ->onlyMethods(['deploy'])
             ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+            ->getMock();
         $deployBundle = $this->getMockBuilder(Bundle::class)
             ->onlyMethods(['deploy'])
             ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+            ->getMock();
         $minifyTemplates = $this->getMockBuilder(MinifyTemplates::class)
             ->onlyMethods(['minifyTemplates'])
             ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+            ->getMock();
 
         if ($options['refresh-content-version-only']) {
             $this->objectManager->expects($this->never())->method('create');

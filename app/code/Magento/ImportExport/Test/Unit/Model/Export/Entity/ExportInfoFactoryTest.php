@@ -25,6 +25,11 @@ use Psr\Log\LoggerInterface;
  */
 class ExportInfoFactoryTest extends TestCase
 {
+    /**
+     * Summary of testCreateBuildsExportInfoAndAdapterParameters
+     * @return
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     */
     public function testCreateBuildsExportInfoAndAdapterParameters(): void
     {
         $objectManager = $this->createMock(ObjectManagerInterface::class);
@@ -50,8 +55,16 @@ class ExportInfoFactoryTest extends TestCase
 
         $entityAdapter = $this->getMockBuilder(ExportAbstractEntity::class)
             ->disableOriginalConstructor()
-            ->onlyMethods(['getEntityTypeCode', 'getFileName', 'setParameters'])
-            ->getMockForAbstractClass();
+            ->onlyMethods([
+                'getEntityTypeCode',
+                'getFileName',
+                'setParameters',
+                'export',
+                'exportItem',
+                '_getHeaderColumns',
+                '_getEntityCollection'
+            ])
+            ->getMock();
         $entityAdapter->method('getEntityTypeCode')->willReturn($entity);
         $entityAdapter->method('getFileName')->willReturn(null);
         $entityAdapter->expects($this->once())
@@ -77,8 +90,8 @@ class ExportInfoFactoryTest extends TestCase
 
         $writer = $this->getMockBuilder(ExportWriterAdapter::class)
             ->disableOriginalConstructor()
-            ->onlyMethods(['getContentType', 'getFileExtension'])
-            ->getMockForAbstractClass();
+            ->onlyMethods(['getContentType', 'getFileExtension', 'writeRow'])
+            ->getMock();
         $writer->method('getContentType')->willReturn('text/csv');
         $writer->method('getFileExtension')->willReturn('csv');
         $adapterFactory->expects($this->once())
@@ -145,16 +158,24 @@ class ExportInfoFactoryTest extends TestCase
 
         $entityAdapter = $this->getMockBuilder(ExportAbstractEntity::class)
             ->disableOriginalConstructor()
-            ->onlyMethods(['getEntityTypeCode', 'getFileName', 'setParameters'])
-            ->getMockForAbstractClass();
+            ->onlyMethods([
+                'getEntityTypeCode',
+                'getFileName',
+                'setParameters',
+                'export',
+                'exportItem',
+                '_getHeaderColumns',
+                '_getEntityCollection'
+            ])
+            ->getMock();
         $entityAdapter->method('getEntityTypeCode')->willReturn($entity);
         $entityAdapter->method('getFileName')->willReturn('custom_name');
         $entityFactory->method('create')->with('EntityModel')->willReturn($entityAdapter);
 
         $writer = $this->getMockBuilder(ExportWriterAdapter::class)
             ->disableOriginalConstructor()
-            ->onlyMethods(['getContentType', 'getFileExtension'])
-            ->getMockForAbstractClass();
+            ->onlyMethods(['getContentType', 'getFileExtension', 'writeRow'])
+            ->getMock();
         $writer->method('getContentType')->willReturn('text/csv');
         $writer->method('getFileExtension')->willReturn('csv');
         $adapterFactory->method('create')->with('WriterModel')->willReturn($writer);
@@ -198,8 +219,8 @@ class ExportInfoFactoryTest extends TestCase
 
         $writer = $this->getMockBuilder(ExportWriterAdapter::class)
             ->disableOriginalConstructor()
-            ->onlyMethods(['getContentType', 'getFileExtension'])
-            ->getMockForAbstractClass();
+            ->onlyMethods(['getContentType', 'getFileExtension', 'writeRow'])
+            ->getMock();
         $writer->method('getContentType')->willReturn('text/csv');
         $writer->method('getFileExtension')->willReturn('csv');
         $adapterFactory->method('create')->with('WriterModel')->willReturn($writer);
@@ -261,8 +282,8 @@ class ExportInfoFactoryTest extends TestCase
 
         $writer = $this->getMockBuilder(ExportWriterAdapter::class)
             ->disableOriginalConstructor()
-            ->onlyMethods(['getContentType', 'getFileExtension'])
-            ->getMockForAbstractClass();
+            ->onlyMethods(['getContentType', 'getFileExtension', 'writeRow'])
+            ->getMock();
         $writer->method('getContentType')->willReturn('text/csv');
         $writer->method('getFileExtension')->willReturn('csv');
         $adapterFactory->method('create')->with('WriterModel')->willReturn($writer);
@@ -357,8 +378,8 @@ class ExportInfoFactoryTest extends TestCase
 
         $writer = $this->getMockBuilder(ExportWriterAdapter::class)
             ->disableOriginalConstructor()
-            ->onlyMethods(['getContentType', 'getFileExtension'])
-            ->getMockForAbstractClass();
+            ->onlyMethods(['getContentType', 'getFileExtension', 'writeRow'])
+            ->getMock();
         $writer->method('getContentType')->willReturn('text/csv');
         $writer->method('getFileExtension')->willReturn('csv');
         $adapterFactory->method('create')->with('WriterModel')->willReturn($writer);
@@ -398,16 +419,16 @@ class ExportInfoFactoryTest extends TestCase
 
         $writer = $this->getMockBuilder(ExportWriterAdapter::class)
             ->disableOriginalConstructor()
-            ->onlyMethods(['getContentType', 'getFileExtension'])
-            ->getMockForAbstractClass();
+            ->onlyMethods(['getContentType', 'getFileExtension', 'writeRow'])
+            ->getMock();
         $writer->method('getContentType')->willReturn('text/csv');
         $writer->method('getFileExtension')->willReturn('csv');
         $adapterFactory->method('create')->with('WriterModel')->willReturn($writer);
 
         $entityAdapter = $this->getMockBuilder(ExportAbstractEntity::class)
             ->disableOriginalConstructor()
-            ->onlyMethods(['getEntityTypeCode'])
-            ->getMockForAbstractClass();
+            ->onlyMethods(['getEntityTypeCode', 'export', 'exportItem', '_getHeaderColumns', '_getEntityCollection'])
+            ->getMock();
         $entityAdapter->method('getEntityTypeCode')->willReturn('different_code');
         $entityFactory->method('create')->with('EntityModel')->willReturn($entityAdapter);
 
@@ -447,16 +468,24 @@ class ExportInfoFactoryTest extends TestCase
 
         $entityAdapter = $this->getMockBuilder(ExportAbstractEntity::class)
             ->disableOriginalConstructor()
-            ->onlyMethods(['getEntityTypeCode', 'getFileName', 'setParameters'])
-            ->getMockForAbstractClass();
+            ->onlyMethods([
+                'getEntityTypeCode',
+                'getFileName',
+                'setParameters',
+                'export',
+                'exportItem',
+                '_getHeaderColumns',
+                '_getEntityCollection'
+            ])
+            ->getMock();
         $entityAdapter->method('getEntityTypeCode')->willReturn($entity);
         $entityAdapter->method('getFileName')->willReturn(null);
         $entityFactory->method('create')->with('EntityModel')->willReturn($entityAdapter);
 
         $writer = $this->getMockBuilder(ExportWriterAdapter::class)
             ->disableOriginalConstructor()
-            ->onlyMethods(['getContentType', 'getFileExtension'])
-            ->getMockForAbstractClass();
+            ->onlyMethods(['getContentType', 'getFileExtension', 'writeRow'])
+            ->getMock();
         $writer->method('getContentType')->willReturn('text/csv');
         $writer->method('getFileExtension')->willReturn('csv');
         $adapterFactory->method('create')->with('WriterModel')->willReturn($writer);

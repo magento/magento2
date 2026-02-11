@@ -6,6 +6,8 @@
 
 namespace Magento\Widget\Model\Widget;
 
+use PHPUnit\Framework\Attributes\DataProvider;
+
 class InstanceTest extends \PHPUnit\Framework\TestCase
 {
     /**
@@ -148,9 +150,9 @@ class InstanceTest extends \PHPUnit\Framework\TestCase
     /**
      * @covers \Magento\Widget\Model\Widget\Instance::beforeSave()
      * @magentoDataFixture Magento/Widget/_files/new_widget.php
-     * @dataProvider beforeSaveDataProvider
      * @param array $expected
      */
+    #[DataProvider('beforeSaveDataProvider')]
     public function testBeforeSave(array $expected)
     {
         /** @var \Magento\Widget\Model\ResourceModel\Widget\Instance $resourceModel */

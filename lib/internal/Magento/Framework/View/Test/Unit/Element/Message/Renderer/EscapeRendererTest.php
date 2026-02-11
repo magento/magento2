@@ -27,7 +27,7 @@ class EscapeRendererTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
         /** @var MessageInterface|MockObject $message */
-        $message = $this->getMockForAbstractClass(MessageInterface::class);
+        $message = $this->createMock(MessageInterface::class);
 
         $message->expects(static::once())
             ->method('getText')

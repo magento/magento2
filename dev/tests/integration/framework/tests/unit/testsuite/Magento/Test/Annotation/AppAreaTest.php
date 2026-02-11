@@ -12,6 +12,7 @@ use Magento\TestFramework\Annotation\TestCaseAnnotation;
 use Magento\TestFramework\Fixture\Parser\AppArea;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\Attributes\DataProvider;
 use ReflectionProperty;
 
 class AppAreaTest extends \PHPUnit\Framework\TestCase
@@ -43,9 +44,9 @@ class AppAreaTest extends \PHPUnit\Framework\TestCase
     {
         /** @var ObjectManagerInterface|MockObject $objectManager */
         $objectManager = $this->getMockBuilder(ObjectManagerInterface::class)
-            ->onlyMethods(['get', 'create'])
+            ->onlyMethods(['get', 'create', 'configure'])
             ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+            ->getMock();
 
         $sharedInstances = [
             AppArea::class => $this->createConfiguredMock(AppArea::class, ['parse' => []])
@@ -82,8 +83,8 @@ class AppAreaTest extends \PHPUnit\Framework\TestCase
     /**
      * @param array $annotations
      * @param string $expectedArea
-     * @dataProvider getTestAppAreaDataProvider
      */
+    #[DataProvider('getTestAppAreaDataProvider')]
     public function testGetTestAppArea($annotations, $expectedArea)
     {
         $property = new ReflectionProperty(TestCaseAnnotation::class, 'instance');
@@ -111,8 +112,6 @@ class AppAreaTest extends \PHPUnit\Framework\TestCase
         ];
     }
 
-    /**
-     */
     public function testGetTestAppAreaWithInvalidArea()
     {
         $this->expectException(\PHPUnit\Framework\Exception::class);
@@ -127,10 +126,9 @@ class AppAreaTest extends \PHPUnit\Framework\TestCase
 
     /**
      * Check startTest() with different allowed area codes.
-     *
-     * @dataProvider startTestWithDifferentAreaCodes
      * @param string $areaCode
      */
+    #[DataProvider('startTestWithDifferentAreaCodes')]
     public function testStartTestWithDifferentAreaCodes(string $areaCode)
     {
         $annotations = ['method' => ['magentoAppArea' => [$areaCode]]];

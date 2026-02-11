@@ -9,6 +9,7 @@ namespace Magento\Test\Workaround\Override\Fixture;
 
 use Magento\Framework\Component\ComponentRegistrar;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\TestFramework\Workaround\Override\Fixture\Resolver;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -18,6 +19,7 @@ use PHPUnit\Framework\TestCase;
  */
 class ResolverTest extends TestCase
 {
+    use MockCreationTrait;
     /**
      * @return void
      */
@@ -50,10 +52,10 @@ class ResolverTest extends TestCase
      */
     private function createResolverMock(): MockObject
     {
-        $mock = $this->getMockBuilder(Resolver::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['getComponentRegistrar'])
-            ->getMock();
+        $mock = $this->createPartialMockWithReflection(
+            Resolver::class,
+            ['getComponentRegistrar']
+        );
         $mock->method('getComponentRegistrar')->willReturn(new ComponentRegistrar());
         $reflection = new \ReflectionClass(Resolver::class);
         $reflectionProperty = $reflection->getProperty('instance');

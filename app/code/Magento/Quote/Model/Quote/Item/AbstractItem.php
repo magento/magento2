@@ -152,6 +152,11 @@ abstract class AbstractItem extends AbstractExtensibleModel implements ItemInter
             $this->setProduct($product);
         }
 
+        // webapi/async flows there is no product_id and no attached product yet
+        if (!$product) {
+            return null;
+        }
+
         /**
          * Reset product final price because it related to custom options
          */
