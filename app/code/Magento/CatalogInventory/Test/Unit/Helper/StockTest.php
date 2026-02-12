@@ -94,7 +94,6 @@ class StockTest extends TestCase
         // Todo: \Magento\Framework\TestFramework\Unit\Helper\ObjectManager to do this automatically (MAGETWO-49793)
         $reflection = new \ReflectionClass(get_class($this->stock));
         $reflectionProperty = $reflection->getProperty('stockConfiguration');
-        $reflectionProperty->setAccessible(true);
         $reflectionProperty->setValue($this->stock, $this->stockConfiguration);
     }
 

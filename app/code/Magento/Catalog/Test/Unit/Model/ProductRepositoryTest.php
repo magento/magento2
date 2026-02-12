@@ -14,7 +14,6 @@ use Magento\Catalog\Api\Data\ProductSearchResultsInterface;
 use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Catalog\Api\Data\ProductSearchResultsInterfaceFactory;
 use Magento\Catalog\Api\ProductAttributeRepositoryInterface;
-use Magento\Catalog\Controller\Adminhtml\Product\Initialization\Helper;
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\Product\Gallery\MimeTypeExtensionMap;
 use Magento\Catalog\Model\Product\Gallery\Processor;
@@ -277,7 +276,29 @@ class ProductRepositoryTest extends TestCase
         $this->storeManager = $this->createMock(StoreManagerInterface::class);
         $this->productExtension = $this->createPartialMockWithReflection(
             ProductExtensionInterface::class,
-            ['__toArray']
+            [
+                'getWebsiteIds',
+                'setWebsiteIds',
+                'getCategoryLinks',
+                'setCategoryLinks',
+                'getBundleProductOptions',
+                'setBundleProductOptions',
+                'getStockItem',
+                'setStockItem',
+                'getDiscounts',
+                'setDiscounts',
+                'getConfigurableProductOptions',
+                'setConfigurableProductOptions',
+                'getConfigurableProductLinks',
+                'setConfigurableProductLinks',
+                'getDownloadableProductLinks',
+                'setDownloadableProductLinks',
+                'getDownloadableProductSamples',
+                'setDownloadableProductSamples',
+                'getGiftcardAmounts',
+                'setGiftcardAmounts',
+                '__toArray'
+            ]
         );
         $this->productExtension
             ->method('__toArray')

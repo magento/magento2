@@ -14,7 +14,9 @@ use Magento\Framework\Data\Form\Element\Factory;
 use Magento\Framework\DataObject;
 use Magento\Framework\Escaper;
 use Magento\Framework\Math\Random;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\View\Helper\SecureHtmlRenderer;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -25,6 +27,8 @@ use PHPUnit\Framework\TestCase;
  */
 class PricestepTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var Pricestep
      */
@@ -69,7 +73,7 @@ class PricestepTest extends TestCase
         $this->factoryCollectionMock = $this->createMock(CollectionFactory::class);
         $this->escaperMock = $this->createMock(Escaper::class);
         $this->escaperMock->method('escapeHtml')->willReturnArgument(0);
-        
+
         $this->secureRendererMock = $this->createMock(SecureHtmlRenderer::class);
         $this->secureRendererMock->method('renderTag')
             ->willReturnCallback(
@@ -90,41 +94,33 @@ class PricestepTest extends TestCase
         $this->randomMock = $this->createMock(Random::class);
         $this->randomMock->method('getRandomString')->willReturn('test123456');
 
-        $this->formMock = $this->getMockBuilder(Form::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['getHtmlIdPrefix', 'getFieldNameSuffix', 'getHtmlIdSuffix'])
-            ->onlyMethods(['addSuffixToName'])
-            ->getMock();
+        $this->formMock = $this->createPartialMockWithReflection(
+            Form::class,
+            ['getHtmlIdPrefix', 'getFieldNameSuffix', 'getHtmlIdSuffix', 'addSuffixToName']
+        );
 
         $this->formMock->method('getHtmlIdPrefix')->willReturn('');
         $this->formMock->method('getFieldNameSuffix')->willReturn('');
         $this->formMock->method('getHtmlIdSuffix')->willReturn('');
         $this->formMock->method('addSuffixToName')->willReturnArgument(0);
 
-        // Using getMockBuilder to avoid parent constructor ObjectManager::getInstance() calls
-        $this->model = $this->getMockBuilder(Pricestep::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods([])
-            ->getMock();
+        $this->model = $this->createPartialMock(Pricestep::class, []);
 
         // Inject dependencies using reflection to avoid parent constructor issues
         // Access AbstractElement class directly
         $abstractElementReflection = new \ReflectionClass(\Magento\Framework\Data\Form\Element\AbstractElement::class);
-        
+
         // Inject escaper (from AbstractElement)
         $escaperProperty = $abstractElementReflection->getProperty('_escaper');
-        $escaperProperty->setAccessible(true);
         $escaperProperty->setValue($this->model, $this->escaperMock);
-        
+
         // Inject random (from AbstractElement)
         $randomProperty = $abstractElementReflection->getProperty('random');
-        $randomProperty->setAccessible(true);
         $randomProperty->setValue($this->model, $this->randomMock);
-        
+
         // Inject secureRenderer (from Pricestep) - use the real class for reflection
         $pricestepReflection = new \ReflectionClass(Pricestep::class);
         $secureRendererProperty = $pricestepReflection->getProperty('secureRenderer');
-        $secureRendererProperty->setAccessible(true);
         $secureRendererProperty->setValue($this->model, $this->secureRendererMock);
 
         $this->model->setForm($this->formMock);
@@ -133,11 +129,11 @@ class PricestepTest extends TestCase
     /**
      * Test getToggleCode method returns correct JavaScript code
      *
-     * @dataProvider toggleCodeDataProvider
      * @param string $htmlId
      * @param string $expectedId
      * @return void
      */
+    #[DataProvider('toggleCodeDataProvider')]
     public function testGetToggleCode(string $htmlId, string $expectedId): void
     {
         $this->model->setData('html_id', $htmlId);

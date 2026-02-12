@@ -6,6 +6,7 @@
 namespace Magento\Catalog\Model\Webapi\Product\Option\Type\File;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class ProcessorTest extends \PHPUnit\Framework\TestCase
 {
@@ -20,8 +21,8 @@ class ProcessorTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @dataProvider pathConfigDataProvider
      */
+    #[DataProvider('pathConfigDataProvider')]
     public function testProcessFileContent($pathConfig)
     {
         $model = $this->getModel($pathConfig);

@@ -187,7 +187,6 @@ class LinkManagementTest extends TestCase
 
         $attributeFactoryMock = $this->createPartialMock(AttributeFactory::class, ['create']);
         $attributeFactoryReflectionProperty = $reflectionClass->getProperty('attributeFactory');
-        $attributeFactoryReflectionProperty->setAccessible(true);
         $attributeFactoryReflectionProperty->setValue($this->object, $attributeFactoryMock);
 
         $attributeMock = $this->createPartialMock(

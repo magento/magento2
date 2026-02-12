@@ -63,11 +63,9 @@ class CreditmemoTest extends TestCase
         // Use reflection to inject dependencies
         $reflection = new \ReflectionClass($this->model);
         $stringProperty = $reflection->getProperty('string');
-        $stringProperty->setAccessible(true);
         $stringProperty->setValue($this->model, new StringUtils());
 
         $filterManagerProperty = $reflection->getProperty('filterManager');
-        $filterManagerProperty->setAccessible(true);
         $filterManagerProperty->setValue($this->model, $filterManager);
 
         $this->model->setOrder($this->order);

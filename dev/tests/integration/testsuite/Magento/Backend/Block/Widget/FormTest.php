@@ -35,7 +35,6 @@ class FormTest extends \PHPUnit\Framework\TestCase
         ];
         $attributes = [$objectManager->create(\Magento\Eav\Model\Entity\Attribute::class, $arguments)];
         $method = new \ReflectionMethod(\Magento\Backend\Block\Widget\Form::class, '_setFieldset');
-        $method->setAccessible(true);
         $method->invoke($formBlock, $attributes, $fieldSet);
         $fields = $fieldSet->getElements();
 

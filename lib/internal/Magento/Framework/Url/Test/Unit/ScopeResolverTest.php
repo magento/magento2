@@ -13,6 +13,7 @@ use Magento\Framework\Url\ScopeInterface;
 use Magento\Framework\Url\ScopeResolver;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class ScopeResolverTest extends TestCase
 {
@@ -44,9 +45,8 @@ class ScopeResolverTest extends TestCase
     /**
      * @param int|null$scopeId
      *
-     * @return void
-     * @dataProvider getScopeDataProvider
-     */
+     * @return void     */
+    #[DataProvider('getScopeDataProvider')]
     public function testGetScope($scopeId): void
     {
         $scopeMock = $this->getMockBuilder(ScopeInterface::class)

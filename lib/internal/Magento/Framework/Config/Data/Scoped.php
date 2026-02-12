@@ -82,7 +82,7 @@ class Scoped extends \Magento\Framework\Config\Data
      */
     protected function _loadScopedData()
     {
-        $scope = $this->_configScope->getCurrentScope();
+        $scope = $this->_configScope->getCurrentScope() ?? '';
         if (false == isset($this->_loadedScopes[$scope])) {
             if (false == in_array($scope, $this->_scopePriorityScheme)) {
                 $this->_scopePriorityScheme[] = $scope;

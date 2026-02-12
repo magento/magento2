@@ -125,7 +125,6 @@ class TierPriceTest extends TestCase
 
         $reflection = new ReflectionClass($this->tierPrice);
         $property = $reflection->getProperty('customerGroups');
-        $property->setAccessible(true);
         $this->assertEquals($expectedCustomerGroups, $property->getValue($this->tierPrice));
     }
 

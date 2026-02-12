@@ -233,7 +233,6 @@ class Curl implements AdapterInterface
      */
     public function close()
     {
-        curl_close($this->_getResource());
         $this->_resource = null;
         return $this;
     }

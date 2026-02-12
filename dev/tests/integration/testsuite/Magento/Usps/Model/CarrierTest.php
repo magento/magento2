@@ -248,9 +248,7 @@ class CarrierTest extends TestCase
      */
     public function testGetRatesWithHttpException(): void
     {
-        $deferredResponse = $this->getMockBuilder(HttpResponseDeferredInterface::class)
-            ->onlyMethods(['get'])
-            ->getMockForAbstractClass();
+        $deferredResponse = $this->createMock(HttpResponseDeferredInterface::class);
         $exception = new HttpException('Exception message');
         $deferredResponse->method('get')->willThrowException($exception);
         $this->httpClient->setDeferredResponseMock($deferredResponse);

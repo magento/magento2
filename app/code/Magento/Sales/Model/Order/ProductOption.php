@@ -63,7 +63,7 @@ class ProductOption
         $request = $orderItem->getBuyRequest();
         $request->setProductOptions($orderItem->getProductOptions());
 
-        $productType = $orderItem->getProductType();
+        $productType = $orderItem->getProductType() ?? '';
         if (isset($this->processorPool[$productType])
             && !$orderItem->getParentItemId()) {
             $data = $this->processorPool[$productType]->convertToProductOption($request);

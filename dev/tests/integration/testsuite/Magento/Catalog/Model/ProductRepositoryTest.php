@@ -35,6 +35,7 @@ use Magento\TestFramework\Fixture\DataFixtureStorage;
 use Magento\TestFramework\Fixture\DataFixtureStorageManager;
 use Magento\TestFramework\Fixture\DbIsolation;
 use Magento\TestFramework\Helper\Bootstrap;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -181,8 +182,8 @@ class ProductRepositoryTest extends TestCase
      * @param string $sku
      * @return void
      * @magentoDataFixture Magento/Catalog/_files/product_simple.php
-     * @dataProvider skuDataProvider
      */
+    #[DataProvider('skuDataProvider')]
     public function testGetProduct(string $sku): void
     {
         $expectedSku = 'simple';
@@ -315,13 +316,13 @@ class ProductRepositoryTest extends TestCase
     /**
      * Tests product repository update
      *
-     * @dataProvider productUpdateDataProvider
      * @magentoDataFixture Magento/Catalog/_files/product_simple.php
      * @param int $storeId
      * @param int $checkStoreId
      * @param string $expectedNameStore
      * @param string $expectedNameCheckedStore
      */
+    #[DataProvider('productUpdateDataProvider')]
     public function testProductUpdate(
         int $storeId,
         int $checkStoreId,

@@ -5,6 +5,7 @@
  */
 namespace Magento\Quote\Api;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\Framework\Api\FilterBuilder;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\Api\SortOrderBuilder;
@@ -20,6 +21,9 @@ use Magento\Framework\Webapi\Rest\Request;
  */
 class CartRepositoryTest extends WebapiAbstract
 {
+    /**
+     * @var string
+     */
     private static $mineCartUrl = '/V1/carts/mine';
 
     /**
@@ -145,7 +149,6 @@ class CartRepositoryTest extends WebapiAbstract
 
     /**
      * Tests exception when cartId is not provided.
-     *
      */
     public function testGetCartThrowsExceptionIfThereIsNoCartWithProvidedId()
     {
@@ -269,9 +272,9 @@ class CartRepositoryTest extends WebapiAbstract
     /**
      * Saving quote - negative case, attempt to change customer id in the active quote for the user with Customer role.
      *
-     * @dataProvider customerIdDataProvider
      * @magentoApiDataFixture Magento/Checkout/_files/quote_with_shipping_method.php
      */
+    #[DataProvider('customerIdDataProvider')]
     public function testSaveQuoteException($customerId)
     {
         $this->expectException(\Exception::class);

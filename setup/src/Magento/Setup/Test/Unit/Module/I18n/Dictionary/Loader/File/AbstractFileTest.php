@@ -47,12 +47,13 @@ class AbstractFileTest extends TestCase
     {
         $this->expectException('InvalidArgumentException');
         $this->expectExceptionMessage('Cannot open dictionary file: "wrong_file.csv".');
-        $abstractLoaderMock = $this->getMockForAbstractClass(
-            AbstractFile::class,
-            [],
-            '',
-            false
-        );
+        $abstractLoaderMock = $this->getMockBuilder(AbstractFile::class)
+            ->setConstructorArgs([$this->_factoryMock])
+            ->onlyMethods(['_openFile', '_closeFile', '_readFile'])
+            ->getMock();
+        
+        $abstractLoaderMock->method('_openFile')
+            ->willThrowException(new \InvalidArgumentException('Cannot open dictionary file: "wrong_file.csv".'));
 
         /** @var AbstractFile $abstractLoaderMock */
         $abstractLoaderMock->load('wrong_file.csv');
@@ -63,15 +64,10 @@ class AbstractFileTest extends TestCase
      */
     public function testLoad(): void
     {
-        $abstractLoaderMock = $this->getMockForAbstractClass(
-            AbstractFile::class,
-            [$this->_factoryMock],
-            '',
-            true,
-            true,
-            true,
-            ['_openFile', '_readFile', '_closeFile']
-        );
+        $abstractLoaderMock = $this->getMockBuilder(AbstractFile::class)
+            ->setConstructorArgs([$this->_factoryMock])
+            ->onlyMethods(['_openFile', '_readFile', '_closeFile'])
+            ->getMock();
         $abstractLoaderMock
             ->method('_readFile')
             ->willReturnCallback(function () use (&$callCount) {
@@ -132,15 +128,10 @@ class AbstractFileTest extends TestCase
     {
         $this->expectException('RuntimeException');
         $this->expectExceptionMessage('Invalid row #1: "exception_message".');
-        $abstractLoaderMock = $this->getMockForAbstractClass(
-            AbstractFile::class,
-            [$this->_factoryMock],
-            '',
-            true,
-            true,
-            true,
-            ['_openFile', '_readFile']
-        );
+        $abstractLoaderMock = $this->getMockBuilder(AbstractFile::class)
+            ->setConstructorArgs([$this->_factoryMock])
+            ->onlyMethods(['_openFile', '_readFile', '_closeFile'])
+            ->getMock();
         $abstractLoaderMock
             ->method('_readFile')
             ->willReturnCallback(

@@ -100,7 +100,7 @@ class State extends \Magento\Framework\DataObject
     public function getActiveStep()
     {
         $step = $this->getCheckoutSession()->getCheckoutState();
-        if (isset($this->_steps[$step])) {
+        if ($step !== null && isset($this->_steps[$step])) {
             return $step;
         }
         return self::STEP_SELECT_ADDRESSES;

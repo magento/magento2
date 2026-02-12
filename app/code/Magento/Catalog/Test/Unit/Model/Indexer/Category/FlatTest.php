@@ -86,7 +86,6 @@ class FlatTest extends TestCase
             Flat::class,
             'cacheContext'
         );
-        $cacheContextProperty->setAccessible(true);
         $cacheContextProperty->setValue($this->model, $this->cacheContextMock);
     }
 

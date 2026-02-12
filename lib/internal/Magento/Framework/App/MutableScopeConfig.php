@@ -51,7 +51,7 @@ class MutableScopeConfig extends Config implements MutableScopeConfigInterface
         $scope = ScopeConfigInterface::SCOPE_TYPE_DEFAULT,
         $scopeCode = null
     ) {
-        $this->data[$scope][$scopeCode][$path] = $value;
+        $this->data[$scope][$scopeCode ?? ''][$path] = $value;
     }
 
     /**

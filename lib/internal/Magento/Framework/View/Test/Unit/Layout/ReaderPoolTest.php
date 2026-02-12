@@ -61,7 +61,7 @@ class ReaderPoolTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $moveReaderMock->expects($this->exactly(2))->method('interpret')
-            ->willReturn($this->returnSelf());
+            ->willReturnSelf();
         $moveReaderMock->method('getSupportedNodes')
             ->willReturn(['move']);
 

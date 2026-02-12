@@ -78,9 +78,7 @@ class NullableTest extends TestCase
     public function testToDefinitionNotNullableAware()
     {
         /** @var ElementInterface|MockObject $column */
-        $column = $this->getMockBuilder(ElementInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $column = $this->createMock(ElementInterface::class);
         $this->assertEquals(
             '',
             $this->nullable->toDefinition($column)
