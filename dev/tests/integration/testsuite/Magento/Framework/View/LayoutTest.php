@@ -22,15 +22,19 @@ use Magento\Framework\View\Element\Text\ListText;
 use Magento\Framework\View\Layout\Data\Structure;
 use Magento\Framework\View\Layout\Element;
 use Magento\Framework\View\Layout\ProcessorInterface;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\TestFramework\Helper\Bootstrap;
-use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Depends;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class LayoutTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var Layout
      */
@@ -99,13 +103,7 @@ class LayoutTest extends TestCase
             ->setConstructorArgs($layoutUtility->getLayoutDependencies())
             ->getMock();
 
-        $merge = $this->getMockBuilder(\StdClass::class)
-            ->disableOriginalConstructor()
-            ->disableOriginalClone()
-            ->disableArgumentCloning()
-            ->disallowMockingUnknownTypes()
-            ->addMethods(['asSimplexml'])
-            ->getMock();
+        $merge = $this->createPartialMockWithReflection(\StdClass::class, ['asSimplexml']);
 
         $merge->expects($this->once())
             ->method('asSimplexml')
@@ -383,9 +381,9 @@ class LayoutTest extends TestCase
 
     /**
      * @param LayoutInterface $layout
-     * @depends testSetChild
      * @return void
      */
+    #[Depends('testSetChild')]
     public function testReorderChild(LayoutInterface $layout): void
     {
         $layout->addContainer('four', 'Four', [], 'one');

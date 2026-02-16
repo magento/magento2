@@ -7,6 +7,8 @@ declare(strict_types=1);
 
 namespace Magento\Framework\Filter;
 
+use PHPUnit\Framework\Attributes\DataProvider;
+
 class TruncateFilterTest extends \PHPUnit\Framework\TestCase
 {
     /**
@@ -16,8 +18,8 @@ class TruncateFilterTest extends \PHPUnit\Framework\TestCase
      * @param int $length
      * @param string $etc
      * @param bool $breakWords
-     * @dataProvider truncateDataProvider
      */
+    #[DataProvider('truncateDataProvider')]
     public function testFilter(
         $expectedValue,
         $expectedRemainder,

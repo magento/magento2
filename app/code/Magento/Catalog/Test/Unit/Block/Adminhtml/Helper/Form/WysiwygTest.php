@@ -19,10 +19,12 @@ use Magento\Framework\DataObject;
 use Magento\Framework\Escaper;
 use Magento\Framework\Math\Random;
 use Magento\Framework\Module\Manager as ModuleManager;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\View\Helper\SecureHtmlRenderer;
 use Magento\Framework\View\LayoutInterface;
 use ReflectionClass;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\MockObject\MockObject;
 
@@ -32,6 +34,7 @@ use PHPUnit\Framework\MockObject\MockObject;
  */
 class WysiwygTest extends TestCase
 {
+    use MockCreationTrait;
     /**
      * @var ObjectManager
      */
@@ -124,10 +127,7 @@ class WysiwygTest extends TestCase
             new Random()
         );
 
-        $formMock = $this->getMockBuilder(Form::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['getHtmlIdPrefix', 'getHtmlIdSuffix'])
-            ->getMock();
+        $formMock = $this->createPartialMockWithReflection(Form::class, ['getHtmlIdPrefix', 'getHtmlIdSuffix']);
         $formMock->method('getHtmlIdPrefix')->willReturn('');
         $formMock->method('getHtmlIdSuffix')->willReturn('');
         $this->element->setForm($formMock);
@@ -208,10 +208,7 @@ class WysiwygTest extends TestCase
      */
     private function givenEnabledAttribute(): object
     {
-        $attributeMock = $this->getMockBuilder(DataObject::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['getIsWysiwygEnabled'])
-            ->getMock();
+        $attributeMock = $this->createPartialMockWithReflection(DataObject::class, ['getIsWysiwygEnabled']);
         $attributeMock->method('getIsWysiwygEnabled')->willReturn(true);
         return $attributeMock;
     }
@@ -356,7 +353,6 @@ class WysiwygTest extends TestCase
      * Validate getIsWysiwygEnabled across combinations of module/config/attribute flags.
      *
      * @covers \Magento\Catalog\Block\Adminhtml\Helper\Form\Wysiwyg::getIsWysiwygEnabled
-     * @dataProvider getIsWysiwygEnabledDataProvider
      * @param bool $moduleEnabled
      * @param bool $configEnabled
      * @param bool $attributeEnabled
@@ -364,6 +360,7 @@ class WysiwygTest extends TestCase
      *
      * @return void
      */
+    #[DataProvider('getIsWysiwygEnabledDataProvider')]
     public function testGetIsWysiwygEnabled(
         bool $moduleEnabled,
         bool $configEnabled,
@@ -385,10 +382,7 @@ class WysiwygTest extends TestCase
                 ->expects($this->never())
                 ->method('isEnabled');
         }
-        $attributeMock = $this->getMockBuilder(DataObject::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['getIsWysiwygEnabled'])
-            ->getMock();
+        $attributeMock = $this->createPartialMockWithReflection(DataObject::class, ['getIsWysiwygEnabled']);
         $attributeMock->method('getIsWysiwygEnabled')->willReturn($attributeEnabled);
 
         $this->element->setData('html_id', 'field_id');

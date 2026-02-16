@@ -12,6 +12,7 @@ namespace Magento\Test\Integrity\Magento\Payment;
 use Magento\Framework\App\State;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestStatus\TestStatus;
+use PHPUnit\Framework\Attributes\DataProvider;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
@@ -20,10 +21,10 @@ class MethodsTest extends \PHPUnit\Framework\TestCase
     /**
      * @param string $methodClass
      * @param string $code
-     * @dataProvider paymentMethodDataProvider
      * @magentoAppArea frontend
      * @throws \Exception on various assertion failures
      */
+    #[DataProvider('paymentMethodDataProvider')]
     public function testPaymentMethod($code, $methodClass)
     {
         if (in_array($code, ['free', 'substitution', 'vault', 'payflowpro_cc_vault', 'fake_vault'])) {

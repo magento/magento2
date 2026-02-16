@@ -14,6 +14,8 @@ use Magento\Framework\Filter\VariableResolver\StrictResolver;
 use Magento\Framework\Filter\VariableResolverInterface;
 use PHPUnit\Framework\TestCase;
 
+use PHPUnit\Framework\Attributes\DataProvider;
+
 class VarDirectiveTest extends TestCase
 {
     /**
@@ -49,9 +51,7 @@ class VarDirectiveTest extends TestCase
         self::assertSame('{{var}}', $result);
     }
 
-    /**
-     * @dataProvider useCasesProvider
-     */
+    #[DataProvider('useCasesProvider')]
     public function testCases(string $parameter, array $variables, string $expect)
     {
         $template = 'blah {{var ' . $parameter . '}} blah';

@@ -77,7 +77,7 @@ class AppAreaTest extends \PHPUnit\Framework\TestCase
     protected function tearDown(): void
     {
         $property = new ReflectionProperty(TestCaseAnnotation::class, 'instance');
-        $property->setValue(null);
+        $property->setValue(null, null);
     }
 
     /**

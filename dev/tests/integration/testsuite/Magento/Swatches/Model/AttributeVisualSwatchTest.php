@@ -36,7 +36,7 @@ class AttributeVisualSwatchTest extends AbstractAttributeTest
     /**
      * @magentoDataFixture Magento/Swatches/_files/product_visual_swatch_attribute.php
      * @magentoDataFixture Magento/Catalog/_files/second_product_simple.php
-     * @magentoDataFixture Magento/Catalog/_files/product_simple_out_of_stock.php     
+     * @magentoDataFixture Magento/Catalog/_files/product_simple_out_of_stock.php
      * phpcs:disable Generic.CodeAnalysis.UselessOverridingMethod
      * @inheritdoc
      */

@@ -66,9 +66,8 @@ class AbstractTypeTest extends TestCase
         $serializer = $this->objectManager->get(
             Json::class
         );
-        $this->_model = $this->getMockForAbstractClass(
-            AbstractType::class,
-            [
+        $this->_model = $this->getMockBuilder(AbstractType::class)
+            ->setConstructorArgs([
                 $catalogProductOption,
                 $this->objectManager->get(Config::class),
                 $catalogProductType,
@@ -79,8 +78,9 @@ class AbstractTypeTest extends TestCase
                 $logger,
                 $this->productRepository,
                 $serializer
-            ]
-        );
+            ])
+            ->onlyMethods(['deleteTypeSpecificData'])
+            ->getMock();
     }
 
     public function testGetRelationInfo()

@@ -8,6 +8,7 @@ declare(strict_types=1);
 namespace Magento\GraphQl\ConfigurableProduct;
 
 use Magento\TestFramework\TestCase\GraphQlAbstract;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Test products query for configurable product options
@@ -16,10 +17,10 @@ class ConfigurableProductOptionsTest extends GraphQlAbstract
 {
     /**
      * @magentoApiDataFixture Magento/ConfigurableProduct/_files/configurable_products_with_two_attributes.php
-     * @dataProvider expectedResultDataProvider
      * @param $expectedOptions
      * @throws \Exception
      */
+    #[DataProvider('expectedResultDataProvider')]
     public function testQueryConfigurableProductLinks($expectedOptions)
     {
         $configurableProduct = 'configurable';

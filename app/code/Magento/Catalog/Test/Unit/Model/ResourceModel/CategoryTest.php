@@ -20,8 +20,10 @@ use Magento\Eav\Model\Entity\Type;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Adapter\AdapterInterface as Adapter;
 use Magento\Framework\DB\Select;
+use Magento\Framework\DataObject;
 use Magento\Framework\Event\ManagerInterface;
 use Magento\Framework\Serialize\Serializer\Json;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Store\Model\StoreManagerInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -33,6 +35,8 @@ use PHPUnit\Framework\TestCase;
  */
 class CategoryTest extends TestCase
 {
+    use MockCreationTrait;
+
     private const STUB_PRIMARY_KEY = 'PK';
 
     /**
@@ -1464,16 +1468,18 @@ class CategoryTest extends TestCase
 
     public function testDeleteChildrenFullLoop(): void
     {
-        // Test deleteChildren with actual loop iteration using addMethods for magic methods
-        $childCategory1 = $this->getMockBuilder(\Magento\Framework\DataObject::class)
-            ->addMethods(['setSkipDeleteChildren', 'delete'])
-            ->getMock();
+        // Test deleteChildren with actual loop iteration using MockCreationTrait for magic methods
+        $childCategory1 = $this->createPartialMockWithReflection(
+            DataObject::class,
+            ['setSkipDeleteChildren', 'delete']
+        );
         $childCategory1->expects($this->once())->method('setSkipDeleteChildren')->with(true);
         $childCategory1->expects($this->once())->method('delete');
 
-        $childCategory2 = $this->getMockBuilder(\Magento\Framework\DataObject::class)
-            ->addMethods(['setSkipDeleteChildren', 'delete'])
-            ->getMock();
+        $childCategory2 = $this->createPartialMockWithReflection(
+            DataObject::class,
+            ['setSkipDeleteChildren', 'delete']
+        );
         $childCategory2->expects($this->once())->method('setSkipDeleteChildren')->with(true);
         $childCategory2->expects($this->once())->method('delete');
 
@@ -1553,27 +1559,24 @@ class CategoryTest extends TestCase
         // Note: parent::_beforeSave requires full EAV framework
         // Complete coverage is provided by integration tests
 
-        $categoryMock = $this->getMockBuilder(\Magento\Catalog\Model\Category::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods([
-                'isObjectNew',
-                'getPosition',
-                'getPath',
-                'getId',
-                'getData',
-                'setPosition',
-                'setLevel',
-                'setParentId',
-                'setPath',
-                'getChildrenCount'
-            ])->addMethods([
-                'getAttributeSetId',
-                'setAttributeSetId',
-                'setChildrenCount',
-                'hasPosition',
-                'hasLevel',
-                'hasParentId'
-            ])->getMock();
+        $categoryMock = $this->createPartialMockWithReflection(\Magento\Catalog\Model\Category::class, [
+            'isObjectNew',
+            'getPosition',
+            'getPath',
+            'getId',
+            'getData',
+            'setPosition',
+            'setLevel',
+            'setParentId',
+            'setPath',
+            'getChildrenCount',
+            'getAttributeSetId',
+            'setAttributeSetId',
+            'setChildrenCount',
+            'hasPosition',
+            'hasLevel',
+            'hasParentId'
+        ]);
 
         $categoryMock->method('isObjectNew')->willReturn(true);
         $categoryMock->method('getChildrenCount')->willReturn(0);

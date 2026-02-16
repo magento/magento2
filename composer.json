@@ -49,7 +49,7 @@
         "magento/magento-zf-captcha": "^1.0",
         "laminas/laminas-session": "^2.26",
         "laminas/laminas-code": "^4.13",
-        "magento/magento-zf-di": "^1.0",
+        "laminas/laminas-di": "^3.16",
         "laminas/laminas-escaper": "^2.13",
         "laminas/laminas-eventmanager": "^3.11",
         "laminas/laminas-feed": "^2.26",
@@ -58,7 +58,7 @@
         "laminas/laminas-i18n": "^2.17",
         "laminas/laminas-modulemanager": "^2.19",
         "laminas/laminas-permissions-acl": "^2.18",
-        "magento/magento-zf-server": "^1.0",
+        "laminas/laminas-server": "^2.19",
         "laminas/laminas-servicemanager": "^3.16",
         "magento/magento-zf-soap": "^1.0",
         "laminas/laminas-stdlib": "^3.11",
@@ -108,7 +108,7 @@
         "pdepend/pdepend": "^3@dev",
         "phpmd/phpmd": "^3@dev",
         "phpstan/phpstan": "^1.9",
-        "phpunit/phpunit": "^10.5",
+        "phpunit/phpunit": "^12.0",
         "symfony/finder": "^7.4"
     },
     "suggest": {
