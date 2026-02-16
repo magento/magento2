@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright 2026 Adobe
+ * Copyright 2017 Adobe
  * All Rights Reserved.
  */
 
@@ -37,7 +37,7 @@ class PathValidator
      * Allows partial path validation: if any config path starts with the given path, it's valid.
      *
      * @param string $path The config path (can be partial)
-     * @return true The result of validation
+     * @return bool The result of validation
      * @throws ValidatorException If provided path is not valid
      * @since 101.0.0
      */
@@ -50,19 +50,18 @@ class PathValidator
 
         $allPaths = $this->structure->getFieldPaths();
 
-        // Allow exact or partial path match
-        $found = false;
+        // Fast exact match check first
+        if (array_key_exists($path, $allPaths)) {
+            return true;
+        }
+
+        // Allow partial path match
         foreach (array_keys($allPaths) as $fullPath) {
-            if ($fullPath === $path || str_starts_with($fullPath, $path . '/')) {
-                $found = true;
-                break;
+            if (str_starts_with($fullPath, $path . '/')) {
+                return true;
             }
         }
 
-        if (!$found) {
-            throw new ValidatorException(__('The "%1" path doesn\'t exist. Verify and try again.', $path));
-        }
-
-        return true;
+        throw new ValidatorException(__('The "%1" path doesn\'t exist. Verify and try again.', $path));
     }
 }
