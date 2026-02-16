@@ -181,29 +181,20 @@ class Timezone implements TimezoneInterface
         $locale = (string)($locale ?: $this->_localeResolver->getLocale());
         $timezone = (string)($useTimezone ? $this->getConfigTimezone() : date_default_timezone_get());
 
-        switch (true) {
-            case (empty($date)):
-                return new \DateTime('now', new \DateTimeZone($timezone));
-            case ($date instanceof \DateTime):
-                return $date->setTimezone(new \DateTimeZone($timezone));
-            case ($date instanceof \DateTimeImmutable):
-                return new \DateTime($date->format('Y-m-d H:i:s'), $date->getTimezone());
-            case (!is_numeric($date)):
-                // Check if date is in ISO format (yyyy-MM-dd or yyyy-MM-dd HH:mm:ss)
-                if ($this->isIsoFormat((string)$date)) {
-                    $dateTime = new \DateTime((string)$date, new \DateTimeZone($timezone));
-                    $date = $dateTime->getTimestamp();
-                } else {
-                    $date = $this->appendTimeIfNeeded((string)$date, (bool)$includeTime, $timezone, $locale);
-                    $formatter = $this->dateFormatterFactory->create(
-                        $locale,
-                        \IntlDateFormatter::SHORT,
-                        $includeTime ? \IntlDateFormatter::SHORT : \IntlDateFormatter::NONE,
-                        $timezone
-                    );
-                    $date = $formatter->parse($date) ?: (new \DateTime($date))->getTimestamp();
-                }
-                break;
+        if (empty($date)) {
+            return new \DateTime('now', new \DateTimeZone($timezone));
+        }
+
+        if ($date instanceof \DateTime) {
+            return $date->setTimezone(new \DateTimeZone($timezone));
+        }
+
+        if ($date instanceof \DateTimeImmutable) {
+            return new \DateTime($date->format('Y-m-d H:i:s'), $date->getTimezone());
+        }
+
+        if (!is_numeric($date)) {
+            $date = $this->parseStringDate((string)$date, $locale, $timezone, (bool)$includeTime);
         }
 
         return (new \DateTime('now', new \DateTimeZone($timezone)))->setTimestamp($date);
@@ -403,6 +394,34 @@ class Timezone implements TimezoneInterface
         }
 
         return $date;
+    }
+
+    /**
+     * Parse string date to timestamp
+     *
+     * @param string $date
+     * @param string $locale
+     * @param string $timezone
+     * @param bool $includeTime
+     * @return int
+     */
+    private function parseStringDate(string $date, string $locale, string $timezone, bool $includeTime): int
+    {
+        // Check if date is in ISO format (yyyy-MM-dd or yyyy-MM-dd HH:mm:ss)
+        if ($this->isIsoFormat($date)) {
+            $dateTime = new \DateTime($date, new \DateTimeZone($timezone));
+            return $dateTime->getTimestamp();
+        }
+
+        $date = $this->appendTimeIfNeeded($date, $includeTime, $timezone, $locale);
+        $formatter = $this->dateFormatterFactory->create(
+            $locale,
+            \IntlDateFormatter::SHORT,
+            $includeTime ? \IntlDateFormatter::SHORT : \IntlDateFormatter::NONE,
+            $timezone
+        );
+        
+        return $formatter->parse($date) ?: (new \DateTime($date))->getTimestamp();
     }
 
     /**

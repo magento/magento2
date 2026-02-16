@@ -114,6 +114,7 @@ class TimezoneTest extends TestCase
     /**
      * DataProvider for testDateIncludeTime
      *
+     * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
      * @return array
      */
     public static function dateIncludeTimeDataProvider(): array
