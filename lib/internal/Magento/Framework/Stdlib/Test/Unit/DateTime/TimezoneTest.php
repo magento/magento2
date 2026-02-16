@@ -21,6 +21,7 @@ use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Test for @see Timezone
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class TimezoneTest extends TestCase
 {
@@ -114,7 +115,6 @@ class TimezoneTest extends TestCase
     /**
      * DataProvider for testDateIncludeTime
      *
-     * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
      * @return array
      */
     public static function dateIncludeTimeDataProvider(): array
