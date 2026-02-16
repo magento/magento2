@@ -189,14 +189,20 @@ class Timezone implements TimezoneInterface
             case ($date instanceof \DateTimeImmutable):
                 return new \DateTime($date->format('Y-m-d H:i:s'), $date->getTimezone());
             case (!is_numeric($date)):
-                $date = $this->appendTimeIfNeeded((string)$date, (bool)$includeTime, $timezone, $locale);
-                $formatter = $this->dateFormatterFactory->create(
-                    $locale,
-                    \IntlDateFormatter::SHORT,
-                    $includeTime ? \IntlDateFormatter::SHORT : \IntlDateFormatter::NONE,
-                    $timezone
-                );
-                $date = $formatter->parse($date) ?: (new \DateTime($date))->getTimestamp();
+                // Check if date is in ISO format (yyyy-MM-dd or yyyy-MM-dd HH:mm:ss)
+                if ($this->isIsoFormat((string)$date)) {
+                    $dateTime = new \DateTime((string)$date, new \DateTimeZone($timezone));
+                    $date = $dateTime->getTimestamp();
+                } else {
+                    $date = $this->appendTimeIfNeeded((string)$date, (bool)$includeTime, $timezone, $locale);
+                    $formatter = $this->dateFormatterFactory->create(
+                        $locale,
+                        \IntlDateFormatter::SHORT,
+                        $includeTime ? \IntlDateFormatter::SHORT : \IntlDateFormatter::NONE,
+                        $timezone
+                    );
+                    $date = $formatter->parse($date) ?: (new \DateTime($date))->getTimestamp();
+                }
                 break;
         }
 
@@ -397,5 +403,17 @@ class Timezone implements TimezoneInterface
         }
 
         return $date;
+    }
+
+    /**
+     * Check if date string is in ISO format
+     *
+     * @param string $date
+     * @return bool
+     */
+    private function isIsoFormat(string $date): bool
+    {
+        // Check for ISO date formats: yyyy-MM-dd or yyyy-MM-dd HH:mm:ss
+        return preg_match('/^\d{4}-\d{2}-\d{2}(\s+\d{2}:\d{2}(:\d{2})?)?$/', $date) === 1;
     }
 }

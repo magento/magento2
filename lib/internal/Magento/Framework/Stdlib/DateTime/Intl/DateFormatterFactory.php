@@ -40,15 +40,12 @@ class DateFormatterFactory
         int $timeStyle,
         ?string $timeZone = null,
         bool $useFourDigitsForYear = true,
-        string $format = 'yyyy-MM-dd HH:mm:ss'
     ): \IntlDateFormatter {
         $formatter = new \IntlDateFormatter(
             $locale,
             $dateStyle,
             $timeStyle,
             $timeZone,
-            null,
-            $format
         );
         /**
          * Process custom date formats
