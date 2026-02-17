@@ -1,13 +1,11 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
  */
 
 /**
  * Wishlist Report collection
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\Reports\Model\ResourceModel\Wishlist;
 
@@ -64,8 +62,8 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
 
     /**
      * Set wishlist table name
-     * @codeCoverageIgnore
      *
+     * @codeCoverageIgnore
      * @param string $value
      * @return $this
      */
@@ -77,8 +75,8 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
 
     /**
      * Retrieve wishlist table name
-     * @codeCoverageIgnore
      *
+     * @codeCoverageIgnore
      * @return string
      */
     public function getWishlistTable()

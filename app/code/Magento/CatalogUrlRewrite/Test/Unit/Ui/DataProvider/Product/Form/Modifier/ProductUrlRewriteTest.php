@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -24,8 +24,7 @@ class ProductUrlRewriteTest extends AbstractModifierTestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $this->scopeConfigMock = $this->getMockBuilder(ScopeConfigInterface::class)
-            ->getMockForAbstractClass();
+        $this->scopeConfigMock = $this->createMock(ScopeConfigInterface::class);
     }
 
     /**
@@ -44,9 +43,7 @@ class ProductUrlRewriteTest extends AbstractModifierTestCase
     {
         $this->assertSame([], $this->getModel()->modifyMeta([]));
 
-        $this->productMock->expects($this->any())
-            ->method('getId')
-            ->willReturn(1);
+        $this->productMock->setId(1);
 
         $this->assertNotEmpty($this->getModel()->modifyMeta([
             'test_group_code' => [

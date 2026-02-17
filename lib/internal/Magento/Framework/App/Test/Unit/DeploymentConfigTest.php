@@ -1,10 +1,8 @@
 <?php
-
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
-
 declare(strict_types=1);
 
 namespace Magento\Framework\App\Test\Unit;
@@ -15,6 +13,7 @@ use Magento\Framework\Config\ConfigOptionsListConstants;
 use Magento\Framework\Exception\FileSystemException;
 use Magento\Framework\Exception\RuntimeException;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 class DeploymentConfigTest extends TestCase
@@ -183,11 +182,11 @@ class DeploymentConfigTest extends TestCase
     }
 
     /**
-     * @dataProvider keyCollisionDataProvider
      * @param array $data
      * @throws FileSystemException
      * @throws RuntimeException
      */
+    #[DataProvider('keyCollisionDataProvider')]
     public function testKeyCollision(array $data): void
     {
         $this->expectException('Exception');
@@ -213,11 +212,9 @@ class DeploymentConfigTest extends TestCase
     public static function keyCollisionDataProvider(): array
     {
         return [
-            [
-                ['foo' => ['bar' => '1'], 'foo/bar' => '2'],
-                ['foo/bar' => '1', 'foo' => ['bar' => '2']],
-                ['foo' => ['subfoo' => ['subbar' => '1'], 'subfoo/subbar' => '2'], 'bar' => '3'],
-            ],
+            [['foo' => ['bar' => '1'], 'foo/bar' => '2']],
+            [['foo/bar' => '1', 'foo' => ['bar' => '2']]],
+            [['foo' => ['subfoo' => ['subbar' => '1'], 'subfoo/subbar' => '2'], 'bar' => '3']],
         ];
     }
 
@@ -279,8 +276,10 @@ class DeploymentConfigTest extends TestCase
         $this->readerMock->expects($this->once())->method('load')->willReturn(['a'=>'b']);
         putenv('MAGENTO_DC_A=c');
         putenv('MAGENTO_DC_B__B__B=D');
+        putenv('MAGENTO_DC_C=false');
         $this->assertSame('c', $this->deploymentConfig->get('a'));
         $this->assertSame('D', $this->deploymentConfig->get('b/b/b'));
+        $this->assertFalse($this->deploymentConfig->get('c'));
     }
 
     public function testEnvVariablesSubstitution(): void
@@ -350,11 +349,11 @@ class DeploymentConfigTest extends TestCase
         $testValue = 42;
         $loadReturn = ['a' => ['a' => ['a' => 1]]];
         $this->readerMock->expects($this->any())->method('load')
-            ->will($this->returnCallback(
+            ->willReturnCallback(
                 function () use (&$loadReturn) {
                     return $loadReturn;
                 }
-            ));
+            );
         $this->deploymentConfig->get('a/a/a');
         $abcReturnValue1 = $this->deploymentConfig->get('a/b/c');
         $this->assertNull($abcReturnValue1); // first try, it isn't set yet.

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -12,6 +12,7 @@ use Magento\Captcha\Model\Checkout\ConfigProvider;
 use Magento\Captcha\Model\DefaultModel;
 use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -49,7 +50,7 @@ class ConfigProviderTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->storeManagerMock = $this->getMockForAbstractClass(StoreManagerInterface::class);
+        $this->storeManagerMock = $this->createMock(StoreManagerInterface::class);
         $this->captchaHelperMock = $this->createMock(Data::class);
         $this->captchaMock = $this->createMock(DefaultModel::class);
         $this->storeMock = $this->createMock(Store::class);
@@ -63,11 +64,11 @@ class ConfigProviderTest extends TestCase
     }
 
     /**
-     * @dataProvider getConfigDataProvider
-     * @param bool $isRequired
-     * @param integer $captchaGenerations
-     * @param array $expectedConfig
+     * @param $isRequired
+     * @param $captchaGenerations
+     * @param $expectedConfig
      */
+    #[DataProvider('getConfigDataProvider')]
     public function testGetConfig($isRequired, $captchaGenerations, $expectedConfig)
     {
         $this->captchaHelperMock->expects($this->any())->method('getCaptcha')->with(self::$formId)

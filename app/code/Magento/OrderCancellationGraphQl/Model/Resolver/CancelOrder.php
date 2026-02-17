@@ -11,6 +11,7 @@ use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Exception\GraphQlAuthorizationException;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
+use Magento\Framework\GraphQl\Query\Uid;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\OrderCancellation\Model\CancelOrder as CancelOrderAction;
 use Magento\OrderCancellationGraphQl\Model\Validator\ValidateOrder;
@@ -31,13 +32,15 @@ class CancelOrder implements ResolverInterface
      * @param OrderRepositoryInterface $orderRepository
      * @param CancelOrderAction $cancelOrderAction
      * @param ValidateOrder $validateOrder
+     * @param Uid $idEncoder
      */
     public function __construct(
         private readonly ValidateRequest          $validateRequest,
         private readonly OrderFormatter           $orderFormatter,
         private readonly OrderRepositoryInterface $orderRepository,
         private readonly CancelOrderAction        $cancelOrderAction,
-        private readonly ValidateOrder            $validateOrder
+        private readonly ValidateOrder            $validateOrder,
+        private readonly Uid                      $idEncoder
     ) {
     }
 
@@ -54,7 +57,7 @@ class CancelOrder implements ResolverInterface
         $this->validateRequest->execute($context, $args['input'] ?? []);
 
         try {
-            $order = $this->orderRepository->get($args['input']['order_id']);
+            $order = $this->orderRepository->get($this->idEncoder->decode($args['input']['order_id']));
 
             if ((int)$order->getCustomerId() !== $context->getUserId()) {
                 throw new GraphQlAuthorizationException(__('Current user is not authorized to cancel this order'));

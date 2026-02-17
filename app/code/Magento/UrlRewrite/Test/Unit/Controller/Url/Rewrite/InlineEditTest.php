@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -84,12 +84,7 @@ class InlineEditTest extends TestCase
     {
         $this->objectManager = new ObjectManager($this);
 
-        $this->request = $this->getMockForAbstractClass(
-            RequestInterface::class,
-            [],
-            '',
-            false
-        );
+        $this->request = $this->createMock(RequestInterface::class);
 
         $this->contextMock = $this->objectManager->getObject(
             Context::class,

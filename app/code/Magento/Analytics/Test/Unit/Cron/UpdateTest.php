@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -16,6 +16,7 @@ use Magento\Framework\App\Config\Storage\WriterInterface;
 use Magento\Framework\Exception\NotFoundException;
 use Magento\Framework\FlagManager;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 class UpdateTest extends TestCase
@@ -56,9 +57,9 @@ class UpdateTest extends TestCase
     protected function setUp(): void
     {
         $this->connectorMock =  $this->createMock(Connector::class);
-        $this->configWriterMock =  $this->getMockForAbstractClass(WriterInterface::class);
+        $this->configWriterMock =  $this->createMock(WriterInterface::class);
         $this->flagManagerMock =  $this->createMock(FlagManager::class);
-        $this->reinitableConfigMock = $this->getMockForAbstractClass(ReinitableConfigInterface::class);
+        $this->reinitableConfigMock = $this->createMock(ReinitableConfigInterface::class);
         $this->analyticsTokenMock = $this->createMock(AnalyticsToken::class);
 
         $this->update = new Update(
@@ -117,9 +118,10 @@ class UpdateTest extends TestCase
     /**
      * @param $counterData
      * @return void
-     * @dataProvider executeWithEmptyReverseCounterDataProvider
+     *
      * @throws NotFoundException
      */
+    #[DataProvider('executeWithEmptyReverseCounterDataProvider')]
     public function testExecuteWithEmptyReverseCounter($counterData)
     {
         $this->flagManagerMock
@@ -157,9 +159,10 @@ class UpdateTest extends TestCase
      * @param bool $finalConditionsIsExpected
      * @param bool $functionResult
      * @return void
-     * @dataProvider executeRegularScenarioDataProvider
+     *
      * @throws NotFoundException
      */
+    #[DataProvider('executeRegularScenarioDataProvider')]
     public function testExecuteRegularScenario(
         int $reverseCount,
         bool $commandResult,

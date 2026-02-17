@@ -35,9 +35,11 @@ class CollectionTest extends TestCase
         $table = $this->queryResource->getTable('search_query');
         $indexQueryStoreNumPopularity = 'SEARCH_QUERY_STORE_ID_NUM_RESULTS_POPULARITY';
         $indexQueryTextStoreNumPopularity = 'SEARCH_QUERY_QUERY_TEXT_STORE_ID_NUM_RESULTS_POPULARITY';
+        $indexPopularityQueryTextStoreNum = 'SEARCH_QUERY_POPULARITY_QUERY_TEXT_STORE_ID_NUM_RESULTS';
         $connection = $this->queryResource->getConnection();
         $tableIndexes = $connection->getIndexList($table);
         $this->assertArrayHasKey($indexQueryStoreNumPopularity, $tableIndexes);
         $this->assertArrayHasKey($indexQueryTextStoreNumPopularity, $tableIndexes);
+        $this->assertArrayHasKey($indexPopularityQueryTextStoreNum, $tableIndexes);
     }
 }

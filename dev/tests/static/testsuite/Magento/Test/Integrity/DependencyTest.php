@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Test\Integrity;
 
@@ -24,6 +24,8 @@ use Magento\TestFramework\Dependency\PhpRule;
 use Magento\TestFramework\Dependency\ReportsConfigRule;
 use Magento\TestFramework\Dependency\Route\RouteMapper;
 use Magento\TestFramework\Dependency\VirtualType\VirtualTypeMapper;
+use PHPUnit\Framework\Attributes\Depends;
+use PHPUnit\Framework\Attributes\Test;
 
 /**
  * Scan source code for incorrect or undeclared modules dependencies
@@ -823,10 +825,10 @@ class DependencyTest extends \PHPUnit\Framework\TestCase
      * Collect redundant dependencies
      *
      * @SuppressWarnings(PHPMD.NPathComplexity)
-     * @test
-     * @depends testUndeclared
      * @throws \Exception
      */
+    #[Test]
+    #[Depends('testUndeclared')]
     public function collectRedundant()
     {
         $objectManager = Bootstrap::create(BP, $_SERVER)->getObjectManager();
@@ -849,9 +851,8 @@ class DependencyTest extends \PHPUnit\Framework\TestCase
 
     /**
      * Check redundant dependencies
-     *
-     * @depends collectRedundant
      */
+    #[Depends('collectRedundant')]
     public function testRedundant()
     {
         $output = [];
@@ -967,7 +968,7 @@ class DependencyTest extends \PHPUnit\Framework\TestCase
                 $area = $matches['area'];
                 self::$_mapLayoutBlocks[$area] = self::$_mapLayoutBlocks[$area] ?? [];
             }
-            if (preg_match('/(?<namespace>[A-Z][a-z]+)[_\/\\\\](?<module>[A-Z][a-zA-Z]+)/', $file, $matches)) {
+            if (preg_match('/(?<namespace>[A-Z][A-Za-z]+)[_\/\\\\](?<module>[A-Z][a-zA-Z]+)/', $file, $matches)) {
                 $module = $matches['namespace'] . '\\' . $matches['module'];
                 $xml = simplexml_load_file($file);
                 foreach ((array)$xml->xpath('//container | //block') as $element) {

@@ -1,14 +1,15 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\GraphQl\Controller\HttpRequestValidator;
 
 use Magento\Framework\App\HttpRequestInterface;
-use Magento\Framework\GraphQl\Exception\GraphQlInputException;
+use Magento\Framework\GraphQl\Exception\UnsupportedMediaTypeException;
+use Magento\Framework\Phrase;
 use Magento\GraphQl\Controller\HttpRequestValidatorInterface;
 
 /**
@@ -21,7 +22,7 @@ class ContentTypeValidator implements HttpRequestValidatorInterface
      *
      * @param HttpRequestInterface $request
      * @return void
-     * @throws GraphQlInputException
+     * @throws UnsupportedMediaTypeException
      */
     public function validate(HttpRequestInterface $request) : void
     {
@@ -32,8 +33,8 @@ class ContentTypeValidator implements HttpRequestValidatorInterface
         if ($request->isPost()
             && strpos($headerValue, $requiredHeaderValue) === false
         ) {
-            throw new GraphQlInputException(
-                new \Magento\Framework\Phrase('Request content type must be application/json')
+            throw new UnsupportedMediaTypeException(
+                new Phrase('Request content type must be application/json')
             );
         }
     }

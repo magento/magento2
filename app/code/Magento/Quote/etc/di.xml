@@ -46,6 +46,7 @@
     <preference for="Magento\Quote\Model\ValidationRules\QuoteValidationRuleInterface" type="Magento\Quote\Model\ValidationRules\QuoteValidationComposite\Proxy"/>
     <preference for="Magento\Quote\Model\QuoteMutexInterface" type="Magento\Quote\Model\QuoteMutex"/>
     <preference for="Magento\Quote\Model\CartMutexInterface" type="Magento\Quote\Model\CartMutex"/>
+    <preference for="Magento\Quote\Model\CartAddressMutexInterface" type="Magento\Quote\Model\CartAddressMutex"/>
     <preference for="Magento\Quote\Model\Quote\Item\Option\ComparatorInterface" type="Magento\Quote\Model\Quote\Item\Option\Comparator"/>
     <preference for="Magento\Quote\Model\Cart\ProductReaderInterface" type="Magento\Quote\Model\Cart\ProductReader"/>
     <type name="Magento\Webapi\Controller\Rest\ParamsOverrider">
@@ -164,6 +165,7 @@
     <type name="Magento\Quote\Model\Quote\Item\Repository">
         <arguments>
             <argument name="quoteMutex" xsi:type="object">Magento\Quote\Model\QuoteIdMutex</argument>
+            <argument name="cartItemValidator" xsi:type="object">Magento\Quote\Model\Quote\Item\CartItemValidatorChainOnSave</argument>
         </arguments>
     </type>
     <preference for="Magento\Quote\Api\ErrorInterface" type="Magento\Quote\Model\Cart\Data\Error" />
@@ -180,7 +182,15 @@
                 <item name="The requested qty is not available" xsi:type="string">INSUFFICIENT_STOCK</item>
                 <item name="Not enough items for sale" xsi:type="string">INSUFFICIENT_STOCK</item>
                 <item name="Only %s of %s available" xsi:type="string">INSUFFICIENT_STOCK</item>
+                <item name="You need to choose options for your item." xsi:type="string">REQUIRED_PARAMETER_MISSING</item>
             </argument>
         </arguments>
     </type>
+    <type name="Magento\Quote\Api\CartRepositoryInterface">
+        <plugin name="quoteValidateOrderId" type="Magento\Quote\Plugin\ValidateQuoteOrigOrder"/>
+    </type>
+    <preference for="Magento\Quote\Model\Quote\Item\CartItemValidatorInterface" type="Magento\Quote\Model\Quote\Item\CartItemValidatorChain"/>
+    <preference for="Magento\Quote\Model\Quote\Item\CartItemValidatorResultInterface" type="Magento\Quote\Model\Quote\Item\CartItemValidatorResult"/>
+    <virtualType name="Magento\Quote\Model\Quote\Item\CartItemValidatorChainOnSave" type="Magento\Quote\Model\Quote\Item\CartItemValidatorChain"/>
+    <preference for="Magento\Quote\Model\Address\Validator\AddressAttributeValidatorInterface" type="Magento\Quote\Model\Address\Validator\AddressAttributeValidator"/>
 </config>

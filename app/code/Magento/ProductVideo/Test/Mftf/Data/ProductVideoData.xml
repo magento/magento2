@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
-  */
+/**
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
+ */
 -->
 
 <entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -17,6 +17,7 @@
         <data key="videoUrl">https://vimeo.com/76979871</data>
         <data key="videoTitle">The New Vimeo Player (You Know, For Videos)</data>
         <data key="videoShortTitle">The New Vimeo Player</data>
+        <data key="videoShortDescription">It may look (mostly) the same on the surface, but under the hood we totally rebuilt our player.</data>
     </entity>
     <entity name="VimeoPrivateVideo" type="product_video">
         <data key="videoUrl">https://vimeo.com/313826626</data>

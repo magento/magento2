@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -10,13 +10,17 @@ namespace Magento\Catalog\Test\Unit\Model\Product\CopyConstructor;
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\Product\CopyConstructor\UpSell;
 use Magento\Catalog\Model\Product\Link;
+use Magento\Catalog\Model\ResourceModel\Product\Link as ProductLink;
 use Magento\Catalog\Model\ResourceModel\Product\Link\Collection;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\MockObject\MockObject;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use PHPUnit\Framework\TestCase;
 
 class UpSellTest extends TestCase
 {
+
+    use MockCreationTrait;
     /**
      * @var UpSell
      */
@@ -48,22 +52,17 @@ class UpSellTest extends TestCase
 
         $this->_productMock = $this->createMock(Product::class);
 
-        $this->_duplicateMock = $this->getMockBuilder(Product::class)
-            ->addMethods(['setUpSellLinkData'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->_duplicateMock = $this->createPartialMockWithReflection(
+            Product::class,
+            ['setUpSellLinkData']
+        );
 
-        $this->_linkMock = $this->getMockBuilder(Link::class)
-            ->addMethods(['getUpSellLinkCollection'])
-            ->onlyMethods([ 'getAttributes', 'useUpSellLinks'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->_linkMock = $this->createPartialMockWithReflection(
+            Link::class,
+            ['setAttributes', 'getAttributes', 'useUpSellLinks']
+        );
 
-        $this->_productMock->expects(
-            $this->any()
-        )->method(
-            'getLinkInstance'
-        )->willReturn(
+        $this->_productMock->method('getLinkInstance')->willReturn(
             $this->_linkMock
         );
     }
@@ -79,11 +78,10 @@ class UpSellTest extends TestCase
 
         $this->_linkMock->expects($this->once())->method('getAttributes')->willReturn($attributes);
 
-        $productLinkMock = $this->getMockBuilder(\Magento\Catalog\Model\ResourceModel\Product\Link::class)->addMethods(
+        $productLinkMock = $this->createPartialMockWithReflection(
+            ProductLink::class,
             ['getLinkedProductId', 'toArray']
-        )
-            ->disableOriginalConstructor()
-            ->getMock();
+        );
 
         $productLinkMock->expects($this->once())->method('getLinkedProductId')->willReturn('100500');
         $productLinkMock->expects(

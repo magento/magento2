@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2024 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -9,6 +9,7 @@ namespace Magento\Directory\Test\Unit\Model\Country\Postcode;
 
 use Magento\Directory\Model\Country\Postcode\Config;
 use Magento\Directory\Model\Country\Postcode\Validator;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -31,17 +32,25 @@ class ValidatorTest extends TestCase
             'US' => [
                 'pattern_1' => ['pattern' => '^[0-9]{5}\-[0-9]{4}$'],
                 'pattern_2' => ['pattern' => '^[0-9]{5}$']
+            ],
+            'NL' => [
+                'pattern_1' => ['pattern' => '^[1-9][0-9]{3}\s?[a-zA-Z]{2}$'],
+                'pattern_2' => ['pattern' => '^[1-9][0-9]{3}$']
             ]
         ];
         $this->postcodesConfigMock->expects($this->once())->method('getPostCodes')->willReturn($postCodes);
         $this->model = new Validator($this->postcodesConfigMock);
     }
 
-    public function testValidatePositive()
+    /**
+     * @param string $postCode
+     * @param string $countryId
+     * @return void
+     */
+    #[DataProvider('getCountryPostcodes')]
+    public function testValidatePositive(string $postCode, string $countryId): void
     {
-        $postcode = '12345-6789';
-        $countryId = 'US';
-        $this->assertTrue($this->model->validate($postcode, $countryId));
+        $this->assertTrue($this->model->validate($postCode, $countryId));
     }
 
     public function testValidateNegative()
@@ -58,5 +67,26 @@ class ValidatorTest extends TestCase
         $postcode = '12345-6789';
         $countryId = 'QQ';
         $this->assertFalse($this->model->validate($postcode, $countryId));
+    }
+
+    /**
+     * @return \string[][]
+     */
+    public static function getCountryPostcodes(): array
+    {
+        return [
+            [
+                'postCode' => '12345-6789',
+                'countryId' => 'US'
+            ],
+            [
+                'postCode' => '1234',
+                'countryId' => 'NL'
+            ],
+            [
+                'postCode' => '1234AB',
+                'countryId' => 'NL'
+            ]
+        ];
     }
 }

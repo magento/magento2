@@ -57,5 +57,6 @@
         <element name="customerAddressAttribute" type="input" selector="[id*='{{attribute}}']" parameterized="true"/>
         <element name="savedAddress" type="text" selector="div[class='shipping-address-item selected-item']"/>
         <element name="shippingAddressBox" type="text" selector="//div[@class='shipping-address-item selected-item']" timeout="30"/>
+        <element name="cancelCouponText" type="text" selector="//div[@data-ui-id='message-success']//div[text()='{{cancelCodeText}}']" parameterized="true"/>
     </section>
 </sections>

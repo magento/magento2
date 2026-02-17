@@ -1,6 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
+ * Copyright 2025 Adobe
+ * All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -9,6 +10,10 @@ declare(strict_types=1);
 namespace Magento\WebapiAsync\Controller\Rest;
 
 use Magento\Framework\Exception\BulkException;
+use Magento\Framework\Exception\InputException;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Webapi\Exception;
+use Magento\Framework\Webapi\Rest\Request;
 use Magento\Webapi\Controller\Rest\RequestProcessorInterface;
 use Magento\Framework\Webapi\Rest\Response as RestResponse;
 use Magento\WebapiAsync\Controller\Rest\Asynchronous\InputParamsResolver;
@@ -25,8 +30,8 @@ use Magento\AsynchronousOperations\Api\Data\AsyncResponseInterface;
  */
 class AsynchronousRequestProcessor implements RequestProcessorInterface
 {
-    const PROCESSOR_PATH = "/^\\/async(\\/V.+)/";
-    const BULK_PROCESSOR_PATH = "/^\\/async\/bulk(\\/V.+)/";
+    public const PROCESSOR_PATH = "/^\\/async(\\/V.+)/";
+    public const BULK_PROCESSOR_PATH = "/^\\/async\/bulk(\\/V.+)/";
 
     /**
      * @var \Magento\Framework\Webapi\Rest\Response
@@ -87,9 +92,9 @@ class AsynchronousRequestProcessor implements RequestProcessorInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
-    public function process(\Magento\Framework\Webapi\Rest\Request $request)
+    public function process(Request $request)
     {
         $path = $request->getPathInfo();
         $path = preg_replace($this->processorPath, "$1", $path);
@@ -119,10 +124,15 @@ class AsynchronousRequestProcessor implements RequestProcessorInterface
     }
 
     /**
-     * @param \Magento\Framework\Webapi\Rest\Request $request
+     * Get Topic Name
+     *
+     * @param Request $request
      * @return string
+     * @throws InputException
+     * @throws LocalizedException
+     * @throws Exception
      */
-    private function getTopicName($request)
+    private function getTopicName(Request $request): string
     {
         $route = $this->inputParamsResolver->getRoute();
 
@@ -133,11 +143,11 @@ class AsynchronousRequestProcessor implements RequestProcessorInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
-    public function canProcess(\Magento\Framework\Webapi\Rest\Request $request)
+    public function canProcess(Request $request)
     {
-        if ($request->getHttpMethod() === \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_GET) {
+        if ($request->getHttpMethod() === Request::HTTP_METHOD_GET) {
             return false;
         }
 
@@ -148,10 +158,12 @@ class AsynchronousRequestProcessor implements RequestProcessorInterface
     }
 
     /**
-     * @param \Magento\Framework\Webapi\Rest\Request $request
+     * To check if it is bulk
+     *
+     * @param Request $request
      * @return bool
      */
-    public function isBulk(\Magento\Framework\Webapi\Rest\Request $request)
+    public function isBulk(Request $request): bool
     {
         if (preg_match(self::BULK_PROCESSOR_PATH, $request->getPathInfo()) === 1) {
             return true;

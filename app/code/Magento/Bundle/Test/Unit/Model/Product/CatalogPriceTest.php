@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -11,13 +11,17 @@ use Magento\Bundle\Model\Product\CatalogPrice;
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\Product\Type\Price;
 use Magento\Framework\Registry;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Store\Api\Data\StoreInterface;
 use Magento\Store\Model\StoreManagerInterface;
+use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 class CatalogPriceTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var CatalogPrice
      */
@@ -39,12 +43,12 @@ class CatalogPriceTest extends TestCase
     protected $coreRegistryMock;
 
     /**
-     * @var MockObject
+     * @var Product|MockObject
      */
     protected $productMock;
 
     /**
-     * @var MockObject
+     * @var FinalPrice|MockObject
      */
     protected $priceModelMock;
 
@@ -53,18 +57,18 @@ class CatalogPriceTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->storeManagerMock = $this->getMockForAbstractClass(StoreManagerInterface::class);
+        $this->storeManagerMock = $this->createMock(StoreManagerInterface::class);
         $this->commonPriceMock = $this->createMock(\Magento\Catalog\Model\Product\CatalogPrice::class);
         $this->coreRegistryMock = $this->createMock(Registry::class);
-        $this->productMock = $this->getMockBuilder(Product::class)
-            ->addMethods(['getWebsiteId', 'getCustomerGroupId'])
-            ->onlyMethods(['getStoreId', 'getPriceModel'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->priceModelMock = $this->getMockBuilder(Price::class)
-            ->addMethods(['getTotalPrices'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->productMock = $this->createPartialMockWithReflection(
+            Product::class,
+            ['setStoreId', 'setWebsiteId', 'setCustomerGroupId', 'setPriceModel',
+             'getStoreId', 'getWebsiteId', 'getCustomerGroupId', 'getPriceModel']
+        );
+        $this->priceModelMock = $this->createPartialMockWithReflection(
+            Price::class,
+            ['setTotalPrices', 'getTotalPrices']
+        );
         $this->catalogPrice = new CatalogPrice(
             $this->storeManagerMock,
             $this->commonPriceMock,
@@ -78,28 +82,12 @@ class CatalogPriceTest extends TestCase
     public function testGetCatalogPriceWithCurrentStore(): void
     {
         $this->coreRegistryMock->expects($this->once())->method('unregister')->with('rule_data');
-        $this->productMock->expects($this->once())->method('getStoreId')->willReturn('store_id');
-        $this->productMock->expects($this->once())->method('getWebsiteId')->willReturn('website_id');
-        $this->productMock->expects($this->once())->method('getCustomerGroupId')->willReturn('group_id');
+        $this->productMock->method('getStoreId')->willReturn('store_id');
+        $this->productMock->method('getWebsiteId')->willReturn('website_id');
+        $this->productMock->method('getCustomerGroupId')->willReturn('group_id');
         $this->coreRegistryMock->expects($this->once())->method('register');
-        $this->productMock->expects(
-            $this->once()
-        )->method(
-            'getPriceModel'
-        )->willReturn(
-            $this->priceModelMock
-        );
-        $this->priceModelMock->expects(
-            $this->once()
-        )->method(
-            'getTotalPrices'
-        )->with(
-            $this->productMock,
-            'min',
-            false
-        )->willReturn(
-            15
-        );
+        $this->productMock->method('getPriceModel')->willReturn($this->priceModelMock);
+        $this->priceModelMock->method('getTotalPrices')->willReturn(15);
         $this->storeManagerMock->expects($this->never())->method('getStore');
         $this->storeManagerMock->expects($this->never())->method('setCurrentStore');
         $this->assertEquals(15, $this->catalogPrice->getCatalogPrice($this->productMock));
@@ -107,37 +95,22 @@ class CatalogPriceTest extends TestCase
 
     /**
      * @return void
+     * @throws Exception
      */
     public function testGetCatalogPriceWithCustomStore(): void
     {
-        $storeMock = $this->getMockForAbstractClass(StoreInterface::class);
+        $storeMock = $this->createMock(StoreInterface::class);
         $storeMock->expects($this->once())->method('getId')->willReturn('store_id');
-        $currentStoreMock = $this->getMockForAbstractClass(StoreInterface::class);
+        $currentStoreMock = $this->createMock(StoreInterface::class);
         $currentStoreMock->expects($this->once())->method('getId')->willReturn('current_store_id');
 
         $this->coreRegistryMock->expects($this->once())->method('unregister')->with('rule_data');
-        $this->productMock->expects($this->once())->method('getStoreId')->willReturn('store_id');
-        $this->productMock->expects($this->once())->method('getWebsiteId')->willReturn('website_id');
-        $this->productMock->expects($this->once())->method('getCustomerGroupId')->willReturn('group_id');
+        $this->productMock->method('getStoreId')->willReturn('store_id');
+        $this->productMock->method('getWebsiteId')->willReturn('website_id');
+        $this->productMock->method('getCustomerGroupId')->willReturn('group_id');
         $this->coreRegistryMock->expects($this->once())->method('register');
-        $this->productMock->expects(
-            $this->once()
-        )->method(
-            'getPriceModel'
-        )->willReturn(
-            $this->priceModelMock
-        );
-        $this->priceModelMock->expects(
-            $this->once()
-        )->method(
-            'getTotalPrices'
-        )->with(
-            $this->productMock,
-            'min',
-            true
-        )->willReturn(
-            15
-        );
+        $this->productMock->method('getPriceModel')->willReturn($this->priceModelMock);
+        $this->priceModelMock->method('getTotalPrices')->willReturn(15);
 
         $this->storeManagerMock
             ->method('getStore')

@@ -1,11 +1,11 @@
 <?php
 /**
- *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Catalog\Api;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\Framework\Webapi\Exception as HTTPExceptionCodes;
 
 /**
@@ -13,9 +13,9 @@ use Magento\Framework\Webapi\Exception as HTTPExceptionCodes;
  */
 class ProductAttributeRepositoryTest extends \Magento\TestFramework\TestCase\WebapiAbstract
 {
-    const SERVICE_NAME = 'catalogProductAttributeRepositoryV1';
-    const SERVICE_VERSION = 'V1';
-    const RESOURCE_PATH = '/V1/products/attributes';
+    public const SERVICE_NAME = 'catalogProductAttributeRepositoryV1';
+    public const SERVICE_VERSION = 'V1';
+    public const RESOURCE_PATH = '/V1/products/attributes';
 
     /**
      * @var array
@@ -89,11 +89,11 @@ class ProductAttributeRepositoryTest extends \Magento\TestFramework\TestCase\Web
     /**
      * Test create attribute
      *
-     * @dataProvider attributeCodeDataProvider
      * @magentoApiDataFixture Magento/Catalog/Model/Product/Attribute/_files/create_attribute_service.php
      * @param string $attributeCode
      * @return void
      */
+    #[DataProvider('attributeCodeDataProvider')]
     public function testCreate(string $attributeCode): void
     {
         $attribute = $this->createAttribute($attributeCode);

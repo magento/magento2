@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -16,6 +16,7 @@ use PHPUnit\Framework\TestCase;
 
 class TrackValidatorTest extends TestCase
 {
+
     /**
      * @var TrackValidator
      */
@@ -35,9 +36,9 @@ class TrackValidatorTest extends TestCase
     {
         $objectManagerHelper = new ObjectManager($this);
         $this->shipmentMock = $this->getMockBuilder(ShipmentInterface::class)
-            ->getMockForAbstractClass();
+            ->getMock();
         $this->shipmentTrackMock = $this->getMockBuilder(ShipmentTrackInterface::class)
-            ->getMockForAbstractClass();
+            ->getMock();
         $this->validator = $objectManagerHelper->getObject(TrackValidator::class);
     }
 

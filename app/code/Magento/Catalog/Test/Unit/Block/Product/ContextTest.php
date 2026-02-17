@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -40,16 +40,9 @@ class ContextTest extends TestCase
     {
         $objectManager = new ObjectManager($this);
 
-        $this->stockRegistryMock = $this->getMockForAbstractClass(
-            StockRegistryInterface::class,
-            [],
-            '',
-            false
-        );
+        $this->stockRegistryMock = $this->createMock(StockRegistryInterface::class);
 
-        $this->imageBuilder = $this->getMockBuilder(ImageBuilder::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->imageBuilder = $this->createMock(ImageBuilder::class);
 
         $this->context = $objectManager->getObject(
             Context::class,

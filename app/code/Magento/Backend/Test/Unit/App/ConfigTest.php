@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -9,7 +9,11 @@ namespace Magento\Backend\Test\Unit\App;
 
 use Magento\Backend\App\Config;
 use Magento\Backend\App\Config as BackendConfig;
+use Magento\Framework\App\Config as FrameworkConfig;
 use Magento\Framework\App\Config\Data;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -20,6 +24,8 @@ use PHPUnit\Framework\TestCase;
  */
 class ConfigTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var \Magento\Framework\App\Config|MockObject
      */
@@ -30,9 +36,15 @@ class ConfigTest extends TestCase
      */
     protected $model;
 
+    /**
+     * @var ObjectManager
+     */
+    private $objectManager;
+
     protected function setUp(): void
     {
-        $this->appConfig = $this->createPartialMock(\Magento\Framework\App\Config::class, ['get']);
+        $this->objectManager = new ObjectManager($this);
+        $this->appConfig = $this->createPartialMock(FrameworkConfig::class, ['get']);
         $this->model = new BackendConfig($this->appConfig);
     }
 
@@ -58,8 +70,8 @@ class ConfigTest extends TestCase
      * @param string $configPath
      * @param mixed $configValue
      * @param bool $expectedResult
-     * @dataProvider isSetFlagDataProvider
      */
+    #[DataProvider('isSetFlagDataProvider')]
     public function testIsSetFlag($configPath, $configValue, $expectedResult)
     {
         $this->appConfig->expects(
@@ -98,9 +110,9 @@ class ConfigTest extends TestCase
      */
     protected function getConfigDataMock($mockedMethod)
     {
-        return $this->getMockBuilder(Data::class)
-            ->addMethods([$mockedMethod])
-            ->disableOriginalConstructor()
-            ->getMock();
+        return $this->createPartialMockWithReflection(
+            Data::class,
+            [$mockedMethod]
+        );
     }
 }

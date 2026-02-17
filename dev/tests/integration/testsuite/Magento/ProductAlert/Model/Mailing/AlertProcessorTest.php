@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -94,7 +94,7 @@ class AlertProcessorTest extends TestCase
         $customerName = $this->fixtures->get('customer')->getName();
         $this->processAlerts($customerId);
 
-        $messageContent = $this->transportBuilder->getSentMessage()->getBody()->getParts()[0]->getRawContent();
+        $messageContent = quoted_printable_decode($this->transportBuilder->getSentMessage()->getBody()->bodyToString());
         /** Checking is the email was sent */
         $this->assertStringContainsString(
             $customerName,
@@ -165,14 +165,14 @@ class AlertProcessorTest extends TestCase
         // Check email from main website
         $this->processAlerts($customer1Id);
         $message = $this->transportBuilder->getSentMessage();
-        $messageContent = $message->getBody()->getParts()[0]->getRawContent();
+        $messageContent = quoted_printable_decode($message->getBody()->bodyToString());
         $this->assertStringContainsString('/frontend/Magento/luma/fr_FR/', $messageContent);
         $this->assertStringContainsString($frTxt, $messageContent);
 
         // Check email from second website
         $this->processAlerts($customer2Id, $website2Id);
         $message = $this->transportBuilder->getSentMessage();
-        $messageContent = $message->getBody()->getParts()[0]->getRawContent();
+        $messageContent = quoted_printable_decode($message->getBody()->bodyToString());
         $this->assertStringContainsString('/frontend/Magento/luma/pt_BR/', $messageContent);
         $this->assertStringContainsString($ptTxt, $messageContent);
     }
@@ -194,10 +194,10 @@ class AlertProcessorTest extends TestCase
         $customerId = (int) $this->fixtures->get('customer')->getId();
         $productId = (int) $this->fixtures->get('product')->getId();
         $this->processAlerts($customerId);
-
+        $messageContent = quoted_printable_decode($this->transportBuilder->getSentMessage()->getBody()->bodyToString());
         $this->assertStringContainsString(
             '$10.00',
-            $this->transportBuilder->getSentMessage()->getBody()->getParts()[0]->getRawContent()
+            $messageContent
         );
 
         // Intentional: update product without using ProductRepository
@@ -210,10 +210,10 @@ class AlertProcessorTest extends TestCase
         $productResource->save($product);
 
         $this->processAlerts($customerId);
-
+        $messageContent = quoted_printable_decode($this->transportBuilder->getSentMessage()->getBody()->bodyToString());
         $this->assertStringContainsString(
             '$5.00',
-            $this->transportBuilder->getSentMessage()->getBody()->getParts()[0]->getRawContent()
+            $messageContent
         );
     }
 
@@ -296,7 +296,7 @@ class AlertProcessorTest extends TestCase
         $ptMailSent = false;
         $this->transportBuilder->setOnMessageSentCallback(
             function ($message) use (&$frMailSent, &$ptMailSent) {
-                $messageContent = $message->getBody()->getParts()[0]->getRawContent();
+                $messageContent = quoted_printable_decode($message->getBody()->bodyToString());
                 $frTxt = $this->fixtures->get('frTxt')->getTranslate();
                 $ptTxt = $this->fixtures->get('ptTxt')->getTranslate();
 
@@ -338,7 +338,6 @@ class AlertProcessorTest extends TestCase
      */
     private function getMessageRawContent(EmailMessage $message): string
     {
-        $emailParts = $message->getBody()->getParts();
-        return current($emailParts)->getRawContent();
+        return quoted_printable_decode($message->getBody()->bodyToString());
     }
 }

@@ -1,12 +1,13 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Catalog\Test\Unit\Model\Indexer\Product\Flat;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\Catalog\Model\Indexer\Product\Flat\Processor;
 use Magento\Catalog\Model\Indexer\Product\Flat\State;
 use Magento\Framework\Indexer\IndexerRegistry;
@@ -47,7 +48,7 @@ class ProcessorTest extends TestCase
         $this->_objectManager = new ObjectManager($this);
 
         $this->_indexerMock = $this->createPartialMock(Indexer::class, ['getId', 'invalidate']);
-        $this->_indexerMock->expects($this->any())->method('getId')->willReturn(1);
+        $this->_indexerMock->method('getId')->willReturn(1);
 
         $this->_stateMock = $this->createPartialMock(
             State::class,
@@ -108,8 +109,8 @@ class ProcessorTest extends TestCase
      * @param bool $isFlatEnabled
      * @param bool $forceReindex
      * @param bool $isScheduled
-     * @dataProvider dataProviderReindexRow
      */
+    #[DataProvider('dataProviderReindexRow')]
     public function testReindexRow(
         $isFlatEnabled,
         $forceReindex,
@@ -119,18 +120,14 @@ class ProcessorTest extends TestCase
             ->method('isFlatEnabled')
             ->willReturn($isFlatEnabled);
 
-        $indexerMock = $this->getMockBuilder(Indexer::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $indexerMock = $this->createMock(Indexer::class);
 
         $this->indexerRegistryMock->expects($this->any())
             ->method('get')
             ->with(Processor::INDEXER_ID)
             ->willReturn($indexerMock);
 
-        $indexerMock->expects($this->any())
-            ->method('isScheduled')
-            ->willReturn($isScheduled);
+        $indexerMock->method('isScheduled')->willReturn($isScheduled);
         $indexerMock->expects($this->never())
             ->method('reindexRow');
 
@@ -156,18 +153,14 @@ class ProcessorTest extends TestCase
             ->method('isFlatEnabled')
             ->willReturn(true);
 
-        $indexerMock = $this->getMockBuilder(Indexer::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $indexerMock = $this->createMock(Indexer::class);
 
         $this->indexerRegistryMock->expects($this->any())
             ->method('get')
             ->with(Processor::INDEXER_ID)
             ->willReturn($indexerMock);
 
-        $indexerMock->expects($this->any())
-            ->method('isScheduled')
-            ->willReturn(true);
+        $indexerMock->method('isScheduled')->willReturn(true);
         $indexerMock->expects($this->any())
             ->method('reindexList')
             ->with($id)
@@ -180,8 +173,8 @@ class ProcessorTest extends TestCase
      * @param bool $isFlatEnabled
      * @param bool $forceReindex
      * @param bool $isScheduled
-     * @dataProvider dataProviderReindexList
      */
+    #[DataProvider('dataProviderReindexList')]
     public function testReindexList(
         $isFlatEnabled,
         $forceReindex,
@@ -191,18 +184,14 @@ class ProcessorTest extends TestCase
             ->method('isFlatEnabled')
             ->willReturn($isFlatEnabled);
 
-        $indexerMock = $this->getMockBuilder(Indexer::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $indexerMock = $this->createMock(Indexer::class);
 
         $this->indexerRegistryMock->expects($this->any())
             ->method('get')
             ->with(Processor::INDEXER_ID)
             ->willReturn($indexerMock);
 
-        $indexerMock->expects($this->any())
-            ->method('isScheduled')
-            ->willReturn($isScheduled);
+        $indexerMock->method('isScheduled')->willReturn($isScheduled);
         $indexerMock->expects($this->never())
             ->method('reindexList');
 
@@ -228,18 +217,14 @@ class ProcessorTest extends TestCase
             ->method('isFlatEnabled')
             ->willReturn(true);
 
-        $indexerMock = $this->getMockBuilder(Indexer::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $indexerMock = $this->createMock(Indexer::class);
 
         $this->indexerRegistryMock->expects($this->any())
             ->method('get')
             ->with(Processor::INDEXER_ID)
             ->willReturn($indexerMock);
 
-        $indexerMock->expects($this->any())
-            ->method('isScheduled')
-            ->willReturn(true);
+        $indexerMock->method('isScheduled')->willReturn(true);
         $indexerMock->expects($this->any())
             ->method('reindexList')
             ->with($ids)

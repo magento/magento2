@@ -49,7 +49,7 @@ class Order
             'increment_id' => $orderModel->getIncrementId(),
             'number' => $orderModel->getIncrementId(),
             'order_date' => $this->timezone->date($orderModel->getCreatedAt())
-                ->format(DateTime::DATETIME_PHP_FORMAT),
+                ->format(DateTime::DATETIME_SLASH_PHP_FORMAT),
             'order_number' => $orderModel->getIncrementId(),
             'status' => $orderModel->getStatusLabel(),
             'email' => $orderModel->getCustomerEmail(),
@@ -57,8 +57,29 @@ class Order
             'shipping_address' => $this->orderAddress->getOrderShippingAddress($orderModel),
             'billing_address' => $this->orderAddress->getOrderBillingAddress($orderModel),
             'payment_methods' => $this->orderPayments->getOrderPaymentMethod($orderModel),
-            'applied_coupons' => $orderModel->getCouponCode() ? ['code' => $orderModel->getCouponCode()] : [],
+            'applied_coupons' => $orderModel->getCouponCode() ? [['code' => $orderModel->getCouponCode()]] : [],
             'model' => $orderModel,
+            'comments' => $this->getOrderComments($orderModel)
         ];
+    }
+
+    /**
+     * Get order comments
+     *
+     * @param OrderInterface $order
+     * @return array
+     */
+    public function getOrderComments(OrderInterface $order):array
+    {
+        $comments = [];
+        foreach ($order->getStatusHistories() as $comment) {
+            if ($comment->getIsVisibleOnFront()) {
+                $comments[] = [
+                    'message' => $comment->getComment(),
+                    'timestamp' => $comment->getCreatedAt()
+                ];
+            }
+        }
+        return $comments;
     }
 }

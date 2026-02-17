@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright 2011 Adobe
+ * Copyright 2013 Adobe
  * All Rights Reserved.
  */
 
@@ -178,16 +178,19 @@ class View extends \Magento\Framework\App\Helper\AbstractHelper
         if ($params && $params->getBeforeHandles()) {
             foreach ($params->getBeforeHandles() as $handle) {
                 $resultPage->addPageLayoutHandles(['type' => $product->getTypeId()], $handle, false);
+                $resultPage->addPageLayoutHandles(['attribute_set' => $product->getAttributeSetId()], $handle, false);
                 $resultPage->addPageLayoutHandles(['id' => $product->getId(), 'sku' => $urlSafeSku], $handle);
             }
         }
 
         $resultPage->addPageLayoutHandles(['type' => $product->getTypeId()], null, false);
+        $resultPage->addPageLayoutHandles(['attribute_set' => $product->getAttributeSetId()], null, false);
         $resultPage->addPageLayoutHandles(['id' => $product->getId(), 'sku' => $urlSafeSku]);
 
         if ($params && $params->getAfterHandles()) {
             foreach ($params->getAfterHandles() as $handle) {
                 $resultPage->addPageLayoutHandles(['type' => $product->getTypeId()], $handle, false);
+                $resultPage->addPageLayoutHandles(['attribute_set' => $product->getAttributeSetId()], $handle, false);
                 $resultPage->addPageLayoutHandles(['id' => $product->getId(), 'sku' => $urlSafeSku], $handle);
             }
         }

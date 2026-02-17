@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright 2014 Adobe
+ * Copyright 2015 Adobe
  * All Rights Reserved.
  */
 declare(strict_types=1);
@@ -57,7 +57,7 @@ class AgreementsConfigProviderTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->scopeConfigMock = $this->getMockForAbstractClass(ScopeConfigInterface::class);
+        $this->scopeConfigMock = $this->createMock(ScopeConfigInterface::class);
         $agreementsRepositoryMock = $this->createMock(
             CheckoutAgreementsRepositoryInterface::class
         );
@@ -111,7 +111,7 @@ class AgreementsConfigProviderTest extends TestCase
             ->with(AgreementsProvider::PATH_ENABLED, ScopeInterface::SCOPE_STORE)
             ->willReturn(true);
 
-        $agreement = $this->getMockForAbstractClass(AgreementInterface::class);
+        $agreement = $this->createMock(AgreementInterface::class);
         $searchCriteriaMock = $this->createMock(SearchCriteria::class);
         $this->agreementsFilterMock->expects($this->once())
             ->method('buildSearchCriteria')
@@ -165,7 +165,7 @@ class AgreementsConfigProviderTest extends TestCase
             ->with(AgreementsProvider::PATH_ENABLED, ScopeInterface::SCOPE_STORE)
             ->willReturn(true);
 
-        $agreement = $this->getMockForAbstractClass(AgreementInterface::class);
+        $agreement = $this->createMock(AgreementInterface::class);
         $searchCriteriaMock = $this->createMock(SearchCriteria::class);
         $this->agreementsFilterMock->expects($this->once())
             ->method('buildSearchCriteria')

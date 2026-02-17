@@ -35,6 +35,7 @@ use Magento\TestFramework\Fixture\DataFixtureStorage;
 use Magento\TestFramework\Fixture\DataFixtureStorageManager;
 use Magento\TestFramework\Fixture\DbIsolation;
 use Magento\TestFramework\Helper\Bootstrap;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -75,9 +76,9 @@ class CreatedatTest extends TestCase
 
     /**
      * @magentoDataFixture Magento/SalesRule/_files/order_with_coupon.php
-     * @dataProvider orderParamsDataProvider()
      * @param $orderParams
      */
+    #[DataProvider('orderParamsDataProvider')]
     public function testTotals($orderParams)
     {
         /** @var Order $order */

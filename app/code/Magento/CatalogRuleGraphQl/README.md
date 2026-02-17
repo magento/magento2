@@ -1,3 +1,3 @@
-# CatalogRuleGraphQl
+# Magento_CatalogRuleGraphQl module
 
-The *Magento_CatalogRuleGraphQl* module applies catalog rules to products for GraphQL requests.
+This module applies catalog rules to products for GraphQL requests.

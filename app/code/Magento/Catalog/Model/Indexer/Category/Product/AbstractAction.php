@@ -6,7 +6,9 @@
 
 namespace Magento\Catalog\Model\Indexer\Category\Product;
 
+use Magento\Catalog\Api\Data\CategoryInterface;
 use Magento\Catalog\Api\Data\ProductInterface;
+use Magento\Catalog\Model\Category;
 use Magento\Catalog\Model\Product;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\ResourceConnection;
@@ -312,19 +314,17 @@ abstract class AbstractAction implements ResetAfterRequestInterface
     protected function getNonAnchorCategoriesSelect(Store $store)
     {
         if (!isset($this->nonAnchorSelects[$store->getId()])) {
-            $statusAttributeId = $this->config->getAttribute(
-                Product::ENTITY,
-                'status'
-            )->getId();
-            $visibilityAttributeId = $this->config->getAttribute(
-                Product::ENTITY,
-                'visibility'
-            )->getId();
+            $statusAttributeId = $this->config->getAttribute(Product::ENTITY, 'status')->getId();
+            $visibilityAttributeId = $this->config->getAttribute(Product::ENTITY, 'visibility')->getId();
+            $isActiveAttributeId = $this->config->getAttribute(Category::ENTITY, 'is_active')->getId();
 
             $rootPath = $this->getPathFromCategoryId($store->getRootCategoryId());
 
-            $metadata = $this->metadataPool->getMetadata(ProductInterface::class);
-            $linkField = $metadata->getLinkField();
+            $productMetadata = $this->metadataPool->getMetadata(ProductInterface::class);
+            $productLinkField = $productMetadata->getLinkField();
+            $categoryMetadata = $this->metadataPool->getMetadata(CategoryInterface::class);
+            $categoryLinkField = $categoryMetadata->getLinkField();
+
             $select = $this->connection->select()->from(
                 ['cc' => $this->getTable('catalog_category_entity')],
                 []
@@ -342,28 +342,37 @@ abstract class AbstractAction implements ResetAfterRequestInterface
                 []
             )->joinInner(
                 ['cpsd' => $this->getTable('catalog_product_entity_int')],
-                'cpsd.' . $linkField . ' = cpe.' . $linkField . ' AND cpsd.store_id = 0' .
-                ' AND cpsd.attribute_id = ' .
-                $statusAttributeId,
+                'cpsd.' . $productLinkField . ' = cpe.' . $productLinkField . ' AND cpsd.store_id = 0' .
+                ' AND cpsd.attribute_id = ' . $statusAttributeId,
                 []
             )->joinLeft(
                 ['cpss' => $this->getTable('catalog_product_entity_int')],
-                'cpss.' . $linkField . ' = cpe.' . $linkField . ' AND cpss.attribute_id = cpsd.attribute_id' .
-                ' AND cpss.store_id = ' .
-                $store->getId(),
+                'cpss.' . $productLinkField . ' = cpe.' . $productLinkField .
+                ' AND cpss.attribute_id = cpsd.attribute_id AND cpss.store_id = ' . $store->getId(),
                 []
             )->joinInner(
                 ['cpvd' => $this->getTable('catalog_product_entity_int')],
-                'cpvd.' . $linkField . ' = cpe.' . $linkField . ' AND cpvd.store_id = 0' .
-                ' AND cpvd.attribute_id = ' .
-                $visibilityAttributeId,
+                'cpvd.' . $productLinkField . ' = cpe.' . $productLinkField . ' AND cpvd.store_id = 0' .
+                ' AND cpvd.attribute_id = ' . $visibilityAttributeId,
                 []
             )->joinLeft(
                 ['cpvs' => $this->getTable('catalog_product_entity_int')],
-                'cpvs.' . $linkField . ' = cpe.' . $linkField . ' AND cpvs.attribute_id = cpvd.attribute_id' .
-                ' AND cpvs.store_id = ' .
-                $store->getId(),
+                'cpvs.' . $productLinkField . ' = cpe.' . $productLinkField .
+                ' AND cpvs.attribute_id = cpvd.attribute_id AND cpvs.store_id = ' . $store->getId(),
                 []
+            )->joinInner(
+                ['ccacd' => $this->getTable('catalog_category_entity_int')],
+                'ccacd.' . $categoryLinkField . ' = cc.' . $categoryLinkField . ' AND ccacd.store_id = 0' .
+                ' AND ccacd.attribute_id = ' . $isActiveAttributeId,
+                []
+            )->joinLeft(
+                ['ccacs' => $this->getTable('catalog_category_entity_int')],
+                'ccacs.' . $categoryLinkField . ' = cc.' . $categoryLinkField .
+                ' AND ccacs.attribute_id = ccacd.attribute_id AND ccacs.store_id = ' . $store->getId(),
+                []
+            )->where(
+                $this->connection->getIfNullSql('ccacs.value', 'ccacd.value') . ' = ?',
+                1
             )->where(
                 'cc.path LIKE ' . $this->connection->quote($rootPath . '/%')
             )->where(
@@ -530,10 +539,8 @@ abstract class AbstractAction implements ResetAfterRequestInterface
     protected function createAnchorSelect(Store $store)
     {
         $this->setCurrentStore($store);
-        $isAnchorAttributeId = $this->config->getAttribute(
-            \Magento\Catalog\Model\Category::ENTITY,
-            'is_anchor'
-        )->getId();
+        $isAnchorAttributeId = $this->config->getAttribute(Category::ENTITY, 'is_anchor')->getId();
+        $isActiveAttributeId = $this->config->getAttribute(Category::ENTITY, 'is_active')->getId();
         $statusAttributeId = $this->config->getAttribute(Product::ENTITY, 'status')->getId();
         $visibilityAttributeId = $this->config->getAttribute(Product::ENTITY, 'visibility')->getId();
         $rootCatIds = explode('/', $this->getPathFromCategoryId($store->getRootCategoryId()));
@@ -542,7 +549,7 @@ abstract class AbstractAction implements ResetAfterRequestInterface
         $temporaryTreeTable = $this->makeTempCategoryTreeIndex();
 
         $productMetadata = $this->metadataPool->getMetadata(ProductInterface::class);
-        $categoryMetadata = $this->metadataPool->getMetadata(\Magento\Catalog\Api\Data\CategoryInterface::class);
+        $categoryMetadata = $this->metadataPool->getMetadata(CategoryInterface::class);
         $productLinkField = $productMetadata->getLinkField();
         $categoryLinkField = $categoryMetadata->getLinkField();
 
@@ -580,21 +587,18 @@ abstract class AbstractAction implements ResetAfterRequestInterface
             []
         )->joinLeft(
             ['cpss' => $this->getTable('catalog_product_entity_int')],
-            'cpss.' . $productLinkField . ' = cpe.' . $productLinkField . ' AND cpss.attribute_id = cpsd.attribute_id' .
-            ' AND cpss.store_id = ' .
-            $store->getId(),
+            'cpss.' . $productLinkField . ' = cpe.' . $productLinkField .
+            ' AND cpss.attribute_id = cpsd.attribute_id AND cpss.store_id = ' . $store->getId(),
             []
         )->joinInner(
             ['cpvd' => $this->getTable('catalog_product_entity_int')],
             'cpvd.' . $productLinkField . ' = cpe. ' . $productLinkField . ' AND cpvd.store_id = 0' .
-            ' AND cpvd.attribute_id = ' .
-            $visibilityAttributeId,
+            ' AND cpvd.attribute_id = ' . $visibilityAttributeId,
             []
         )->joinLeft(
             ['cpvs' => $this->getTable('catalog_product_entity_int')],
             'cpvs.' . $productLinkField . ' = cpe.' . $productLinkField .
-            ' AND cpvs.attribute_id = cpvd.attribute_id ' . 'AND cpvs.store_id = ' .
-            $store->getId(),
+            ' AND cpvs.attribute_id = cpvd.attribute_id ' . 'AND cpvs.store_id = ' . $store->getId(),
             []
         )->joinInner(
             ['ccad' => $this->getTable('catalog_category_entity_int')],
@@ -604,9 +608,21 @@ abstract class AbstractAction implements ResetAfterRequestInterface
         )->joinLeft(
             ['ccas' => $this->getTable('catalog_category_entity_int')],
             'ccas.' . $categoryLinkField . ' = cc.' . $categoryLinkField
-            . ' AND ccas.attribute_id = ccad.attribute_id AND ccas.store_id = ' .
-            $store->getId(),
+            . ' AND ccas.attribute_id = ccad.attribute_id AND ccas.store_id = ' . $store->getId(),
             []
+        )->joinInner(
+            ['ccacd' => $this->getTable('catalog_category_entity_int')],
+            'ccacd.' . $categoryLinkField . ' = cc.' . $categoryLinkField . ' AND ccacd.store_id = 0' .
+            ' AND ccacd.attribute_id = ' . $isActiveAttributeId,
+            []
+        )->joinLeft(
+            ['ccacs' => $this->getTable('catalog_category_entity_int')],
+            'ccacs.' . $categoryLinkField . ' = cc.' . $categoryLinkField
+            . ' AND ccacs.attribute_id = ccacd.attribute_id AND ccacs.store_id = ' . $store->getId(),
+            []
+        )->where(
+            $this->connection->getIfNullSql('ccacs.value', 'ccacd.value') . ' = ?',
+            1
         )->where(
             'cpw.website_id = ?',
             $store->getWebsiteId()
@@ -712,11 +728,8 @@ abstract class AbstractAction implements ResetAfterRequestInterface
      */
     protected function fillTempCategoryTreeIndex($temporaryName)
     {
-        $isActiveAttributeId = $this->config->getAttribute(
-            \Magento\Catalog\Model\Category::ENTITY,
-            'is_active'
-        )->getId();
-        $categoryMetadata = $this->metadataPool->getMetadata(\Magento\Catalog\Api\Data\CategoryInterface::class);
+        $isActiveAttributeId = $this->config->getAttribute(Category::ENTITY, 'is_active')->getId();
+        $categoryMetadata = $this->metadataPool->getMetadata(CategoryInterface::class);
         $categoryLinkField = $categoryMetadata->getLinkField();
         $selects = $this->prepareSelectsByRange(
             $this->connection->select()

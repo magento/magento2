@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -15,10 +15,14 @@ use Magento\Framework\Locale\ResolverInterface;
 use Magento\Framework\Model\AbstractModel;
 use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Psr\Log\LoggerInterface;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 
 class SelectTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var Select
      */
@@ -26,9 +30,9 @@ class SelectTest extends TestCase
 
     protected function setUp(): void
     {
-        $timezoneMock = $this->getMockForAbstractClass(TimezoneInterface::class);
-        $loggerMock = $this->getMockForAbstractClass(LoggerInterface::class);
-        $localeResolverMock = $this->getMockForAbstractClass(ResolverInterface::class);
+        $timezoneMock = $this->createMock(TimezoneInterface::class);
+        $loggerMock = $this->createMock(LoggerInterface::class);
+        $localeResolverMock = $this->createMock(ResolverInterface::class);
 
         $this->model = new Select($timezoneMock, $loggerMock, $localeResolverMock);
     }
@@ -39,8 +43,8 @@ class SelectTest extends TestCase
      * @param string $format
      * @param mixed $value
      * @param mixed $expectedResult
-     * @dataProvider outputValueDataProvider
      */
+    #[DataProvider('outputValueDataProvider')]
     public function testOutputValue($format, $value, $expectedResult)
     {
         $entityMock = $this->createMock(AbstractModel::class);
@@ -87,13 +91,20 @@ class SelectTest extends TestCase
      * @param mixed $value
      * @param mixed $originalValue
      * @param bool $isRequired
+     * @param bool $skipRequiredValidation
      * @param array $expectedResult
-     * @dataProvider validateValueDataProvider
      */
-    public function testValidateValue($value, $originalValue, $isRequired, $expectedResult)
+    #[DataProvider('validateValueDataProvider')]
+    public function testValidateValue($value, $originalValue, $isRequired, $skipRequiredValidation, $expectedResult)
     {
-        $entityMock = $this->createMock(AbstractModel::class);
+        $entityMock = $this->createPartialMockWithReflection(
+            AbstractModel::class,
+            ['getSkipRequiredValidation', 'getData']
+        );
         $entityMock->expects($this->any())->method('getData')->willReturn($originalValue);
+        $entityMock->expects($this->any())
+            ->method('getSkipRequiredValidation')
+            ->willReturn($skipRequiredValidation);
 
         $attributeMock = $this->createMock(Attribute::class);
         $attributeMock->expects($this->any())->method('getStoreLabel')->willReturn('Label');
@@ -114,30 +125,35 @@ class SelectTest extends TestCase
                 'value' => false,
                 'originalValue' => 'value',
                 'isRequired' => false,
+                'skipRequiredValidation' => false,
                 'expectedResult' => true,
             ],
             [
                 'value' => false,
                 'originalValue' => null,
                 'isRequired' => true,
+                'skipRequiredValidation' => false,
                 'expectedResult' => ['"Label" is a required value.'],
             ],
             [
                 'value' => false,
                 'originalValue' => null,
                 'isRequired' => false,
+                'skipRequiredValidation' => true,
                 'expectedResult' => true,
             ],
             [
                 'value' => false,
                 'originalValue' => '0',
                 'isRequired' => true,
+                'skipRequiredValidation' => true,
                 'expectedResult' => true,
             ],
             [
                 'value' => 'value',
                 'originalValue' => '',
                 'isRequired' => true,
+                'skipRequiredValidation' => true,
                 'expectedResult' => true,
             ]
         ];

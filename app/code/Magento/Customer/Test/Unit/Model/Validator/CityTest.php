@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2024 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -9,14 +9,18 @@ namespace Magento\Customer\Test\Unit\Model\Validator;
 
 use Magento\Customer\Model\Validator\City;
 use Magento\Customer\Model\Customer;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 
 /**
  * Customer city validator tests
  */
 class CityTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var City
      */
@@ -33,11 +37,10 @@ class CityTest extends TestCase
     protected function setUp(): void
     {
         $this->nameValidator = new City;
-        $this->customerMock = $this
-            ->getMockBuilder(Customer::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['getCity'])
-            ->getMock();
+        $this->customerMock = $this->createPartialMockWithReflection(
+            Customer::class,
+            ['getCity']
+        );
     }
 
     /**
@@ -45,9 +48,8 @@ class CityTest extends TestCase
      *
      * @param string $city
      * @param string $message
-     * @return void
-     * @dataProvider expectedPunctuationInNamesDataProvider
-     */
+     * @return void */
+    #[DataProvider('expectedPunctuationInNamesDataProvider')]
     public function testValidateCorrectPunctuationInNames(
         string $city,
         string $message
@@ -79,6 +81,38 @@ class CityTest extends TestCase
             [
                 'city' => ' Moscow Moscow',
                 'message' => 'Whitespace characters must be allowed in city'
+            ],
+            [
+                'city' => 'O\'Higgins',
+                'message' => 'Straight apostrophe must be allowed in city names'
+            ],
+            [
+                'city' => 'O’Higgins',
+                'message' => 'Typographical apostrophe must be allowed in city names'
+            ],
+            [
+                'city' => 'Saint_Petersburg',
+                'message' => 'Underscore must be allowed in city names'
+            ],
+            [
+                'city' => 'Stratford-upon-Avon',
+                'message' => 'Hyphens must be allowed in city names'
+            ],
+            [
+                'city' => 'St. Petersburg',
+                'message' => 'Periods must be allowed in city names'
+            ],
+            [
+                'city' => 'Trinidad & Tobago',
+                'message' => 'Ampersand must be allowed in city names'
+            ],
+            [
+                'city' => 'Winston-Salem (NC)',
+                'message' => 'Parentheses must be allowed in city names'
+            ],
+            [
+                'city' => 'Rostov-on-Don, Russia',
+                'message' => 'Commas must be allowed in city names'
             ]
         ];
     }

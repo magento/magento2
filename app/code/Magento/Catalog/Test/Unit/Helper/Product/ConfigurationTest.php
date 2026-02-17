@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -63,7 +63,7 @@ class ConfigurationTest extends TestCase
     {
         $additionalOptionResult = ['additional_option' => 1];
 
-        $itemMock = $this->getMockForAbstractClass(ItemInterface::class);
+        $itemMock = $this->createMock(ItemInterface::class);
         $optionMock = $this->createMock(
             OptionInterface::class
         );

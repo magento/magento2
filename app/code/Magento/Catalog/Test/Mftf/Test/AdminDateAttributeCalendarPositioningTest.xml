@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright 2024 Adobe
+ * All Rights Reserved.
+ */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminDateAttributeCalendarPositioningTest">
+        <annotations>
+            <features value="Catalog"/>
+            <stories value="ACP2E-4060: Date Attribute in custom Attribute Group Fails to Show Datepicker in Admin"/>
+            <title value="Date attribute calendar should appear in correct position when assigned to attribute group"/>
+            <description value="Verify that date attributes assigned to custom attribute groups display the calendar widget in the correct position relative to the input field"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="AC-15180"/>
+            <group value="Catalog"/>
+        </annotations>
+
+        <before>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+
+            <!-- Create a new date attribute -->
+            <createData entity="dateProductAttribute" stepKey="attribute"/>
+
+            <!-- Go to default attribute set edit page -->
+            <amOnPage url="{{AdminProductAttributeSetEditPage.url}}/{{AddToDefaultSet.attributeSetId}}/" stepKey="onAttributeSetEdit"/>
+
+            <!-- Assert created attribute in unassigned section -->
+            <see userInput="$$attribute.attribute_code$$" selector="{{AdminProductAttributeSetEditSection.unassignedAttributesTree}}" stepKey="seeAttributeInUnassigned"/>
+
+            <!-- Assign the date attribute to the new group -->
+            <actionGroup ref="AssignAttributeToGroupActionGroup" stepKey="assignAttributeToGroup">
+                <argument name="group" value="Design"/>
+                <argument name="attribute" value="$$attribute.attribute_code$$"/>
+            </actionGroup>
+
+            <actionGroup ref="SaveAttributeSetActionGroup" stepKey="saveAttributeSet"/>
+
+            <!-- Create a simple product for testing -->
+            <createData entity="SimpleProduct" stepKey="createSimpleProduct"/>
+        </before>
+
+        <after>
+            <deleteData createDataKey="createSimpleProduct" stepKey="deleteProduct"/>
+            <deleteData createDataKey="attribute" stepKey="deleteAttribute"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+
+        <!-- Navigate to the product edit page -->
+        <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="navigateToProductIndex"/>
+        <actionGroup ref="FilterProductGridBySkuActionGroup" stepKey="filterProductGridBySku">
+            <argument name="product" value="$$createSimpleProduct$$"/>
+        </actionGroup>
+        <click selector="{{AdminProductGridSection.productRowBySku($$createSimpleProduct.sku$$)}}" stepKey="openProduct"/>
+        <waitForPageLoad stepKey="waitForProductToLoad"/>
+
+        <!-- Verify the date attribute is visible in the custom group -->
+        <conditionalClick selector="{{AdminProductGridSection.productCollapsibleColumns('closed','Design')}}" dependentSelector="{{AdminProductGridSection.productCollapsibleColumns('closed','Design')}}" visible="true" stepKey="expandDesign"/>
+
+        <!-- Click on the date input field to trigger the calendar -->
+        <click selector="{{AdminProductFormSection.datePickerCalendar('1')}}" stepKey="clickDatePickerTrigger"/>
+
+        <!-- Assert that the calendar is fully visible on screen -->
+        <actionGroup ref="AssertElementVisibleOnScreenActionGroup" stepKey="assertCalendarVisibleOnScreen">
+            <argument name="selector" value=".ui-datepicker"/>
+        </actionGroup>
+    </test>
+</tests>

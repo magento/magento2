@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright 2025 Adobe
+  * All Rights Reserved.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminCreatePartialCaptureForOrderPaidWithPayPalPaymentsAdvancedTest">
+        <annotations>
+            <features value="PayPal"/>
+            <stories value="PayPal Payments Advanced"/>
+            <title value="Create partial capture for order paid with PayPal Payments Advanced"/>
+            <description value="Admin creates partial capture for order paid with PayPal Payments Advanced and verifies refund transaction"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="AC-5129"/>
+            <group value="paypalPaymentsAdvanced"/>
+            <group value="3rd_party_integration"/>
+            <group value="pr_exclude"/>
+        </annotations>
+        <before>
+            <!-- Create category -->
+            <createData entity="_defaultCategory" stepKey="createCategory"/>
+            <!-- Create customer -->
+            <createData entity="Simple_US_Customer" stepKey="createCustomer"/>
+            <!-- Create configurable product attribute -->
+            <createData entity="productAttributeWithTwoOptions" stepKey="createConfigProductAttribute"/>
+            <createData entity="productAttributeOption1" stepKey="createConfigProductAttributeOption1">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+            </createData>
+            <createData entity="productAttributeOption2" stepKey="createConfigProductAttributeOption2">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+            </createData>
+            <!-- Add attribute to default attribute set -->
+            <createData entity="AddToDefaultSet" stepKey="createConfigAddToAttributeSet">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+            </createData>
+            <!-- Get attribute options -->
+            <getData entity="ProductAttributeOptionGetter" index="1" stepKey="getConfigAttributeOption1">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+            </getData>
+            <getData entity="ProductAttributeOptionGetter" index="2" stepKey="getConfigAttributeOption2">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+            </getData>
+            <!-- Create configurable product -->
+            <createData entity="BaseConfigurableProduct" stepKey="createConfigProduct">
+                <requiredEntity createDataKey="createCategory"/>
+                <field key="price">134.07</field>
+            </createData>
+            <!-- Create child products -->
+            <createData entity="ApiSimpleOne" stepKey="createConfigChildProduct1">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+                <requiredEntity createDataKey="getConfigAttributeOption1"/>
+                <field key="price">134.07</field>
+            </createData>
+            <createData entity="ApiSimpleTwo" stepKey="createConfigChildProduct2">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+                <requiredEntity createDataKey="getConfigAttributeOption2"/>
+                <field key="price">134.07</field>
+            </createData>
+            <!-- Create configurable product options -->
+            <createData entity="ConfigurableProductTwoOptions" stepKey="createConfigProductOption">
+                <requiredEntity createDataKey="createConfigProduct"/>
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+                <requiredEntity createDataKey="getConfigAttributeOption1"/>
+                <requiredEntity createDataKey="getConfigAttributeOption2"/>
+            </createData>
+            <!-- Add child products to configurable product -->
+            <createData entity="ConfigurableProductAddChild" stepKey="createConfigProductAddChild1">
+                <requiredEntity createDataKey="createConfigProduct"/>
+                <requiredEntity createDataKey="createConfigChildProduct1"/>
+            </createData>
+            <createData entity="ConfigurableProductAddChild" stepKey="createConfigProductAddChild2">
+                <requiredEntity createDataKey="createConfigProduct"/>
+                <requiredEntity createDataKey="createConfigChildProduct2"/>
+            </createData>
+            <!-- Login to admin -->
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <!-- Configure PayPal Payments Advanced -->
+            <actionGroup ref="AdminConfigPaymentsAdvancedActionGroup" stepKey="configurePayPalPaymentsAdvanced">
+                <argument name="credentials" value="SamplePaypalPaymentsAdvancedConfig"/>
+            </actionGroup>
+            <!--Save Configuration-->
+            <actionGroup ref="AdminSaveConfigActionGroup" stepKey="saveConfigs"/>
+            <!-- clean cache -->
+            <actionGroup ref="CliCacheCleanActionGroup" stepKey="cleanCache">
+                <argument name="tags" value="config full_page"/>
+            </actionGroup>
+            <!-- Login to storefront -->
+            <actionGroup ref="LoginToStorefrontActionGroup" stepKey="customerLogin">
+                <argument name="Customer" value="$createCustomer$"/>
+            </actionGroup>
+            <!-- Navigate to configurable product page -->
+            <actionGroup ref="StorefrontOpenProductEntityPageActionGroup" stepKey="goToProductOnStorefront">
+                <argument name="product" value="$$createConfigProduct$$"/>
+            </actionGroup>
+            <!-- Select configurable product option -->
+            <selectOption selector="{{StorefrontProductInfoMainSection.productAttributeOptionsSelectButton}}" userInput="$$getConfigAttributeOption1.label$$" stepKey="selectOption1"/>
+            <!-- Add product to cart with qty 1 -->
+            <fillField userInput="1" selector="{{StorefrontProductPageSection.qtyInput}}" stepKey="fillProductQty"/>
+            <actionGroup ref="AddToCartFromStorefrontProductPageActionGroup" stepKey="addProductToCartFromStorefrontProductPage">
+                <argument name="productName" value="$createConfigProduct.name$"/>
+            </actionGroup>
+            <!-- Go to checkout -->
+            <actionGroup ref="StorefrontCartPageOpenActionGroup" stepKey="goToCheckoutCartPage"/>
+            <actionGroup ref="StorefrontClickProceedToCheckoutActionGroup" stepKey="clickProceedToCheckout"/>
+            <actionGroup ref="StorefrontCheckoutClickNextButtonActionGroup" stepKey="clickOnNextButton"/>
+            <!-- Select PayPal Payments Advanced payment method -->
+            <waitForElementClickable selector="{{AdminConfigurepaymentsAdvancedSection.payflowEdition}}" stepKey="waitForPayPalRadioButton"/>
+            <click selector="{{AdminConfigurepaymentsAdvancedSection.payflowEdition}}" stepKey="selectPaypalPayment"/>
+            <waitForElementClickable selector="{{CheckoutPaymentSection.ContinuePayPalBtn}}" stepKey="waitForPayPalBtn"/>
+            <click selector="{{CheckoutPaymentSection.ContinuePayPalBtn}}" stepKey="clickPayPalBtn"/>
+            <actionGroup ref="StorefrontLoginToPayPalExpressCheckoutPayFlowEditionActionGroup" stepKey="loginToPayPal"/>
+            <!-- Submit payment on PayPal site -->
+            <actionGroup ref="StorefrontPaypalSwitchBackToMagentoFromCheckoutPageActionGroup" stepKey="submitAdvancedPayment"/>
+            <!-- Assert Order success -->
+            <actionGroup ref="AssertStorefrontCheckoutSuccessActionGroup" stepKey="assertCheckoutSuccessPayPalAdvanced"/>
+        </before>
+        <after>
+            <magentoCLI command="config:set {{DisablePaymentAdvancedSolution.path}} {{DisablePaymentAdvancedSolution.value}}" stepKey="disablePaymentAdvanced"/>
+            <!-- Cleanup -->
+            <actionGroup ref="AdminOrdersPageOpenActionGroup" stepKey="navigateToSalesOrderPage"/>
+            <actionGroup ref="AdminClearFiltersActionGroup" stepKey="clickOnButtonToRemoveFiltersIfPresent"/>
+            <deleteData createDataKey="createConfigChildProduct1" stepKey="deleteConfigChildProduct1"/>
+            <deleteData createDataKey="createConfigChildProduct2" stepKey="deleteConfigChildProduct2"/>
+            <deleteData createDataKey="createConfigProduct" stepKey="deleteConfigProduct"/>
+            <deleteData createDataKey="createConfigProductAttribute" stepKey="deleteConfigProductAttribute"/>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+        <grabTextFrom selector="{{CheckoutSuccessMainSection.orderNumber22}}" stepKey="grabOrderNumber"/>
+        <!-- Step 1,2: Go to Sales > Orders and open Order from Preconditions -->
+        <actionGroup ref="OpenOrderByIdActionGroup" stepKey="openOrder">
+            <argument name="orderId" value="{$grabOrderNumber}"/>
+        </actionGroup>
+        <!-- Step 3: Go to Invoices tab and open created invoice -->
+        <actionGroup ref="GoToInvoiceIntoOrderActionGroup" stepKey="goToInvoiceIntoOrderPage"/>
+        <actionGroup ref="SubmitInvoiceActionGroup" stepKey="submitInvoiceIntoOrder"/>
+        <actionGroup ref="AdminOpenInvoiceTabFromOrderPageActionGroup" stepKey="openInvoiceTab"/>
+        <waitForElementClickable selector="{{AdminOrderInvoicesTabSection.viewInvoice}}" stepKey="waitForInvoicesTabOpened"/>
+        <click selector="{{AdminOrderInvoicesTabSection.viewInvoice}}" stepKey="clickViewInvoice"/>
+        <waitForPageLoad stepKey="waitForInvoicePageToBeLoaded"/>
+        <!-- Step 4: Click Credit Memo button -->
+        <actionGroup ref="AdminStartToCreateCreditMemoFromInvoicePageActionGroup" stepKey="clickOnCreditMemoFromInvoiceTab"/>
+        <!-- Step 5: Reduce the qty to invoice of configurable product 1 from 1 to 0 and click Update Qty's button -->
+        <waitForElementVisible selector="{{AdminCreditMemoItemsSection.itemQtyToRefund('1')}}" stepKey="waitToItemToRefundTextField"/>
+        <fillField selector="{{AdminCreditMemoItemsSection.itemQtyToRefund('1')}}" userInput="0" stepKey="reduceRefundQuantity"/>
+        <waitForElementClickable selector="{{AdminCreditMemoItemsSection.updateQty}}" stepKey="waitToClickUpdateQuantity"/>
+        <click selector="{{AdminCreditMemoItemsSection.updateQty}}" stepKey="updateQuantityToRefund"/>
+        <waitForPageLoad stepKey="waitForQuantityApplied"/>
+        <!-- Step 6: Click Refund button -->
+        <actionGroup ref="SubmitCreditMemoActionGroup" stepKey="submitCreditMemo">
+            <argument name="refundButton" value="{{AdminInvoiceMainActionsSection.submitNewRefundFromInvoice}}"/>
+        </actionGroup>
+        <!-- Verify "You created the credit memo" message is displayed -->
+        <waitForElementVisible selector="{{AdminMessagesSection.success}}" stepKey="waitForSuccessMessage"/>
+        <waitForText selector="{{AdminMessagesSection.success}}" userInput="You created the credit memo" stepKey="seeSuccessMessage"/>
+        <!-- Verify Order status = Processing -->
+        <waitForText selector="{{AdminOrderDetailsInformationSection.orderStatus}}" userInput="Processing" stepKey="seeOrderStatus"/>
+        <!-- Grab transaction ID for refund and verify refund message in comments history tab -->
+        <waitForElementVisible selector="{{AdminOrderPaymentInformationSection.paymentInformationField('Last Transaction ID')}}" stepKey="waitForTransactionID"/>
+        <grabTextFrom selector="{{AdminOrderPaymentInformationSection.paymentInformationField('Last Transaction ID')}}" stepKey="grabTransactionID"/>
+        <actionGroup ref="AdminOpenOrderCommentsHistoryActionGroup" stepKey="clickOnCommentsHistory"/>
+        <waitForText selector="{{AdminOrderCommentsTabSection.orderCommentsWithType('refunded')}}" userInput="We refunded $5.00 online. Transaction ID: &quot;{$grabTransactionID}&quot;" stepKey="seeOrderHistoryNotesForRefund"/>
+        <!-- Step 7: Go to Credit Memos tab -->
+        <waitForElementClickable selector="{{AdminOrderDetailsOrderViewSection.creditMemos}}" stepKey="waitToClickCreditMemoTab"/>
+        <click selector="{{AdminOrderDetailsOrderViewSection.creditMemos}}" stepKey="clickCreditMemoTab"/>
+        <actionGroup ref="AdminOpenCreditMemoFromOrderPageActionGroup" stepKey="clickOnCreditMemosTab"/>
+        <!-- Verify Credit Memo is present in grid and Grand Total = $5.00 -->
+        <actionGroup ref="AssertAdminCreditMemoGrandTotalActionGroup" stepKey="assertGrandTotal">
+            <argument name="expectedGrandTotal" value="$5.00"/>
+        </actionGroup>
+        <waitForElementClickable selector="{{AdminProductFormActionSection.backButton}}" stepKey="waitToClickBackButtonFromCreditMemo"/>
+        <click selector="{{AdminProductFormActionSection.backButton}}" stepKey="clickBackButtonFromCreditMemo"/>
+        <!-- Step 8: Go to Transactions tab -->
+        <!-- Verify Authorization transaction is present, Closed = Yes -->
+        <actionGroup ref="AdminAssertTransactionTypeInTransactionTabActionGroup" stepKey="assertAuthorizationTransactionType">
+            <argument name="transactionType" value="authorization"/>
+        </actionGroup>
+        <waitForText selector="{{AdminTransactionsGridSection.transactionData('Is Closed')}}" userInput="Yes" stepKey="seeIfClosedHeaderIsSetAsYesForAuthorization"/>
+        <waitForElementClickable selector="{{AdminProductFormActionSection.backButton}}" stepKey="waitForBackButtonToBeClickedFromAuthorization"/>
+        <click selector="{{AdminProductFormActionSection.backButton}}" stepKey="clickBackButtonFromAuthorization"/>
+        <!-- Verify Capture transaction is present, Closed = No -->
+        <actionGroup ref="AdminAssertTransactionTypeInTransactionTabActionGroup" stepKey="assertCaptureTransactionType">
+            <argument name="transactionType" value="capture"/>
+        </actionGroup>
+        <waitForText selector="{{AdminTransactionsGridSection.transactionData('Is Closed')}}" userInput="No" stepKey="seeIfClosedHeaderIsSetAsNoForCapture"/>
+        <waitForElementClickable selector="{{AdminProductFormActionSection.backButton}}" stepKey="waitForBackButtonToBeClickedFromCapture"/>
+        <click selector="{{AdminProductFormActionSection.backButton}}" stepKey="clickBackButtonFromCapture"/>
+        <!-- Verify Refund transaction is present, Closed = Yes -->
+        <actionGroup ref="AdminAssertTransactionTypeInTransactionTabActionGroup" stepKey="assertRefundTransactionType">
+            <argument name="transactionType" value="refund"/>
+        </actionGroup>
+        <waitForText selector="{{AdminTransactionsGridSection.transactionData('Is Closed')}}" userInput="Yes" stepKey="seeIfClosedHeaderIsSetAsYesForRefund"/>
+    </test>
+</tests>

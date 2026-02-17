@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2022 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -45,13 +45,9 @@ class SetGoogleAnalyticsOnOrderSuccessPageViewObserverTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->layoutMock = $this->getMockBuilder(LayoutInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-        $this->observerMock = $this->getMockBuilder(Observer::class)
-            ->getMock();
-        $this->eventMock = $this->getMockBuilder(Event::class)
-            ->getMock();
+        $this->layoutMock = $this->createMock(LayoutInterface::class);
+        $this->observerMock = $this->createMock(Observer::class);
+        $this->eventMock = $this->createMock(Event::class);
 
         $objectManager = new ObjectManager($this);
 
@@ -88,9 +84,7 @@ class SetGoogleAnalyticsOnOrderSuccessPageViewObserverTest extends TestCase
      */
     public function testExecuteWithOrderIds()
     {
-        $blockMock = $this->getMockBuilder(AbstractBlock::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $blockMock = $this->createMock(AbstractBlock::class);
         $orderIds = [8];
 
         $this->observerMock->expects($this->once())

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -70,10 +70,10 @@ class ReaderTest extends TestCase
         }
         $this->objectManager = new ObjectManager($this);
         $this->filePath = __DIR__ . '/_files/';
-        $this->fileResolverMock = $this->getMockForAbstractClass(FileResolverInterface::class);
+        $this->fileResolverMock = $this->createMock(FileResolverInterface::class);
         $this->converterMock = $this->createMock(Converter::class);
         $this->schemaLocatorMock = $this->createMock(SchemaLocator::class);
-        $this->validationStateMock = $this->getMockForAbstractClass(ValidationStateInterface::class);
+        $this->validationStateMock = $this->createMock(ValidationStateInterface::class);
         $this->validationStateMock->expects($this->any())
             ->method('isValidationRequired')
             ->willReturn(true);

@@ -10,6 +10,7 @@ namespace Magento\OrderCancellationGraphQl\Model\Resolver;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
+use Magento\Framework\GraphQl\Query\Uid;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\OrderCancellationGraphQl\Model\ConfirmCancelOrder as ConfirmCancelOrderGuest;
 use Magento\OrderCancellationGraphQl\Model\Validator\ValidateOrder;
@@ -28,12 +29,14 @@ class ConfirmCancelOrder implements ResolverInterface
      * @param OrderRepositoryInterface $orderRepository
      * @param ConfirmCancelOrderGuest $confirmCancelOrder
      * @param ValidateOrder $validateOrder
+     * @param Uid $idEncoder
      */
     public function __construct(
         private readonly ValidateConfirmRequest   $validateRequest,
         private readonly OrderRepositoryInterface $orderRepository,
         private readonly ConfirmCancelOrderGuest  $confirmCancelOrder,
-        private readonly ValidateOrder            $validateOrder
+        private readonly ValidateOrder            $validateOrder,
+        private readonly Uid                      $idEncoder
     ) {
     }
 
@@ -50,7 +53,7 @@ class ConfirmCancelOrder implements ResolverInterface
         $this->validateRequest->execute($args['input'] ?? []);
 
         try {
-            $order = $this->orderRepository->get($args['input']['order_id']);
+            $order = $this->orderRepository->get((int)$this->idEncoder->decode($args['input']['order_id']));
 
             if (!$order->getCustomerIsGuest()) {
                 return [

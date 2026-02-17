@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -16,11 +16,16 @@ use Magento\Eav\Model\Entity\VersionControl\AbstractEntity;
 use Magento\Framework\DataObject;
 use Magento\Framework\Model\ResourceModel\Db\VersionControl\RelationComposite;
 use Magento\Framework\Model\ResourceModel\Db\VersionControl\Snapshot;
+use Magento\Framework\Serialize\SerializerInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\Validator\UniversalFactory as Factory;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Test for version control abstract entity model.
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class AbstractEntityTest extends \Magento\Eav\Test\Unit\Model\Entity\AbstractEntityTest
 {
@@ -47,7 +52,6 @@ class AbstractEntityTest extends \Magento\Eav\Test\Unit\Model\Entity\AbstractEnt
         );
 
         parent::setUp();
-
     }
 
     /**
@@ -57,8 +61,8 @@ class AbstractEntityTest extends \Magento\Eav\Test\Unit\Model\Entity\AbstractEnt
      * @param array $productOrigData
      *
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
-     * @dataProvider productAttributesDataProvider
      */
+    #[DataProvider('productAttributesDataProvider')]
     public function testSave($attributeCode, $attributeSetId, $productData, $productOrigData)
     {
         $object = $this->createPartialMock(
@@ -82,11 +86,10 @@ class AbstractEntityTest extends \Magento\Eav\Test\Unit\Model\Entity\AbstractEnt
         $attribute = $this->_getAttributeMock($attributeCode, $attributeSetId);
 
         /** @var AbstractBackend $backendModel */
-        $backendModel = $this->getMockBuilder(AbstractBackend::class)
-            ->addMethods(['getBackend', 'getBackendTable'])
-            ->onlyMethods(['getAffectedFields', 'isStatic', 'getEntityValueId'])
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $backendModel = $this->createPartialMockWithReflection(
+            AbstractBackend::class,
+            ['getBackend', 'getBackendTable', 'getAffectedFields', 'isStatic', 'getEntityValueId']
+        );
 
         $backendModel->expects(
             $this->once()
@@ -103,9 +106,7 @@ class AbstractEntityTest extends \Magento\Eav\Test\Unit\Model\Entity\AbstractEnt
         $attribute->expects($this->any())->method('getBackend')->willReturn($backendModel);
         $attribute->setId(222);
         $attributes[$attributeCode] = $attribute;
-        $eavConfig = $this->getMockBuilder(Config::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $eavConfig = $this->createMock(Config::class);
 
         $objectManager = new ObjectManager($this);
 
@@ -142,11 +143,9 @@ class AbstractEntityTest extends \Magento\Eav\Test\Unit\Model\Entity\AbstractEnt
         /** @var AbstractEntity|MockObject $model */
         $model = $this->getMockBuilder(AbstractEntity::class)
             ->setConstructorArgs($arguments)
-            ->addMethods(['_getValue'])
             ->onlyMethods(['beginTransaction', 'commit', 'rollback', 'getConnection'])
             ->getMock();
 
-        $model->expects($this->any())->method('_getValue')->willReturn($eavConfig);
         $model->expects($this->any())->method('getConnection')->willReturn($this->_getConnectionMock());
 
         $eavConfig->expects($this->any())->method('getAttribute')->willReturnCallback(

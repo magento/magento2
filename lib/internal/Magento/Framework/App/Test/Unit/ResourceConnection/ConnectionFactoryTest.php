@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -38,7 +38,7 @@ class ConnectionFactoryTest extends TestCase
         $this->objectManager = new ObjectManager($this);
         $this->objectManagerMock = $this->getMockBuilder(ObjectManagerInterface::class)
             ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+            ->getMock();
         $this->connectionFactory = $this->objectManager->getObject(
             ConnectionFactory::class,
             ['objectManager' => $this->objectManagerMock]
@@ -56,7 +56,7 @@ class ConnectionFactoryTest extends TestCase
             ->getMock();
         $connectionMock = $this->getMockBuilder(AdapterInterface::class)
             ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+            ->getMock();
         $connectionMock->expects($this->once())
             ->method('setCacheAdapter')
             ->with($cacheAdapterMock)

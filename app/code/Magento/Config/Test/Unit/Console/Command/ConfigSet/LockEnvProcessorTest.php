@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -17,7 +17,9 @@ use Magento\Framework\App\DeploymentConfig\Writer;
 use Magento\Framework\Config\File\ConfigFilePool;
 use Magento\Framework\Exception\FileSystemException;
 use Magento\Framework\Stdlib\ArrayManager;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Store\Model\ScopeInterface;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject as Mock;
 use PHPUnit\Framework\TestCase;
 
@@ -29,6 +31,8 @@ use PHPUnit\Framework\TestCase;
  */
 class LockEnvProcessorTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var LockProcessor
      */
@@ -64,23 +68,15 @@ class LockEnvProcessorTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->preparedValueFactory = $this->getMockBuilder(PreparedValueFactory::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->deploymentConfigWriterMock = $this->getMockBuilder(Writer::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->arrayManagerMock = $this->getMockBuilder(ArrayManager::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->configPathResolver = $this->getMockBuilder(ConfigPathResolver::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->valueMock = $this->getMockBuilder(Value::class)
-            ->addMethods(['setValue', 'getValue'])
-            ->onlyMethods(['validateBeforeSave', 'beforeSave', 'afterSave'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->preparedValueFactory = $this->createMock(PreparedValueFactory::class);
+        $this->deploymentConfigWriterMock = $this->createMock(Writer::class);
+        $this->arrayManagerMock = $this->createMock(ArrayManager::class);
+        $this->configPathResolver = $this->createMock(ConfigPathResolver::class);
+        
+        $this->valueMock = $this->createPartialMockWithReflection(
+            Value::class,
+            ['setValue', 'getValue', 'validateBeforeSave', 'beforeSave', 'afterSave']
+        );
 
         $this->model = new LockProcessor(
             $this->preparedValueFactory,
@@ -98,8 +94,8 @@ class LockEnvProcessorTest extends TestCase
      * @param string $value
      * @param string $scope
      * @param string|null $scopeCode
-     * @dataProvider processDataProvider
      */
+    #[DataProvider('processDataProvider')]
     public function testProcess($path, $value, $scope, $scopeCode)
     {
         $this->preparedValueFactory->expects($this->once())

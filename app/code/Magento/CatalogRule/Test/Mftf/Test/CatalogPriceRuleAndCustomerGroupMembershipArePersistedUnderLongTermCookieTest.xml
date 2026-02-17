@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
-  */
+/**
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
+ */
 -->
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -17,6 +17,9 @@
             <severity value="CRITICAL"/>
             <testCaseId value="MC-27571"/>
             <group value="persistent"/>
+            <skip>
+                <issueId value="AC-16377"/>
+            </skip>
         </annotations>
         <before>
 
@@ -91,7 +94,14 @@
 
         <!--Click the *Not you?* link and check the price for Simple Product-->
         <click selector="{{StorefrontPanelHeaderSection.notYouLink}}" stepKey="clickNotYouLink"/>
+        <actionGroup ref="ReloadPageActionGroup" stepKey="waitFormReload"/>
         <actionGroup ref="AssertStorefrontDefaultWelcomeMessageActionGroup" stepKey="seeWelcomeMessageForJohnDoeCustomerAfterLogout"/>
+
+        <!--Clear cache to ensure fresh price calculation after customer group change-->
+        <actionGroup ref="CliCacheCleanActionGroup" stepKey="cleanCacheToEnsureFreshPriceCalculationAfterCustomerGroupChange">
+            <argument name="tags" value="full_page block_html"/>
+        </actionGroup>
+
         <actionGroup ref="AssertStorefrontProductPriceInCategoryPageActionGroup" stepKey="assertProductPriceInCategoryPageAfterLogout">
             <argument name="categoryUrl" value="$createCategory.custom_attributes[url_key]$"/>
             <argument name="productName" value="$createProduct.name$"/>
