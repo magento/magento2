@@ -1,12 +1,13 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\ProductAlert\Test\Unit\Model;
 
+use Magento\Store\Model\Group;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\ProductAlert\Model\EmailFactory;
 use Magento\ProductAlert\Model\Mailing\Publisher;
@@ -18,6 +19,7 @@ use Magento\Store\Model\StoreManagerInterface;
 use Magento\Store\Model\Website;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Exception;
 
 /**
  * Class ObserverTest
@@ -84,12 +86,12 @@ class ObserverTest extends TestCase
     public function testGetWebsitesThrowsException(): void
     {
         $message = 'get website exception';
-        $this->expectException(\Exception::class);
+        $this->expectException(Exception::class);
         $this->expectExceptionMessage($message);
 
         $this->scopeConfigMock->method('isSetFlag')->willReturn(false);
         $this->storeManagerMock->method('getWebsites')
-            ->willThrowException(new \Exception($message));
+            ->willThrowException(new Exception($message));
 
         $this->observer->process();
     }
@@ -102,10 +104,10 @@ class ObserverTest extends TestCase
     public function testProcessPriceThrowsException(): void
     {
         $message = 'create collection exception';
-        $this->expectException(\Exception::class);
+        $this->expectException(Exception::class);
         $this->expectExceptionMessage($message);
 
-        $groupMock = $this->createMock(\Magento\Store\Model\Group::class);
+        $groupMock = $this->createMock(Group::class);
         $storeMock = $this->createMock(Store::class);
         $groupMock->method('getDefaultStore')->willReturn($storeMock);
 
@@ -117,7 +119,7 @@ class ObserverTest extends TestCase
 
         $this->priceColFactoryMock->expects($this->once())
             ->method('create')
-            ->willThrowException(new \Exception($message));
+            ->willThrowException(new Exception($message));
 
         $this->observer->process();
     }
@@ -130,10 +132,10 @@ class ObserverTest extends TestCase
     public function testProcessStockThrowsException(): void
     {
         $message = 'create collection exception';
-        $this->expectException(\Exception::class);
+        $this->expectException(Exception::class);
         $this->expectExceptionMessage($message);
 
-        $groupMock = $this->createMock(\Magento\Store\Model\Group::class);
+        $groupMock = $this->createMock(Group::class);
         $storeMock = $this->createMock(Store::class);
         $groupMock->method('getDefaultStore')->willReturn($storeMock);
 
@@ -147,7 +149,7 @@ class ObserverTest extends TestCase
 
         $this->stockColFactoryMock->expects($this->once())
             ->method('create')
-            ->willThrowException(new \Exception($message));
+            ->willThrowException(new Exception($message));
 
         $this->observer->process();
     }

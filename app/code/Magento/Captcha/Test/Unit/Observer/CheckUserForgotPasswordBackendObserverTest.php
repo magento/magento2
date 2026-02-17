@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 
 declare(strict_types=1);
@@ -9,7 +9,7 @@ declare(strict_types=1);
 namespace Magento\Captcha\Test\Unit\Observer;
 
 use Magento\Captcha\Helper\Data as DataHelper;
-use Magento\Captcha\Model\CaptchaInterface;
+use Magento\Captcha\Model\DefaultModel;
 use Magento\Captcha\Observer\CaptchaStringResolver;
 use Magento\Captcha\Observer\CheckUserForgotPasswordBackendObserver;
 use Magento\Framework\App\Action\Action;
@@ -18,8 +18,8 @@ use Magento\Framework\App\Request\Http as HttpRequest;
 use Magento\Framework\App\Response\Http as HttpResponse;
 use Magento\Framework\Event\Observer;
 use Magento\Framework\Message\ManagerInterface;
-use Magento\Framework\Session\SessionManagerInterface;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Framework\Session\SessionManager;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -29,6 +29,8 @@ use PHPUnit\Framework\TestCase;
  */
 class CheckUserForgotPasswordBackendObserverTest extends TestCase
 {
+    use MockCreationTrait;
+
     private const STUB_EMAIL = 'stub@test.mail';
     private const STUB_REQUEST_PARAMS = ['STUB_PARAM'];
 
@@ -43,7 +45,7 @@ class CheckUserForgotPasswordBackendObserverTest extends TestCase
     private $captchaStringResolverMock;
 
     /**
-     * @var MockObject|SessionManagerInterface
+     * @var MockObject|SessionManager
      */
     private $sessionMock;
 
@@ -63,7 +65,7 @@ class CheckUserForgotPasswordBackendObserverTest extends TestCase
     private $observer;
 
     /**
-     * @var MockObject|CaptchaInterface
+     * @var MockObject|DefaultModel
      */
     private $captchaMock;
 
@@ -96,30 +98,27 @@ class CheckUserForgotPasswordBackendObserverTest extends TestCase
 
         $this->helperMock = $this->createMock(DataHelper::class);
         $this->captchaStringResolverMock = $this->createMock(CaptchaStringResolver::class);
-        $this->sessionMock = $this->getMockBuilder(SessionManagerInterface::class)
-            ->addMethods(['setEmail'])
-            ->getMockForAbstractClass();
+        $this->sessionMock = $this->createPartialMockWithReflection(
+            SessionManager::class,
+            ['setEmail']
+        );
         $this->actionFlagMock = $this->createMock(ActionFlag::class);
-        $this->messageManagerMock = $this->getMockForAbstractClass(ManagerInterface::class);
+        $this->messageManagerMock = $this->createMock(ManagerInterface::class);
         $this->requestMock = $this->createMock(HttpRequest::class);
 
-        $objectManager = new ObjectManagerHelper($this);
-        $this->observer = $objectManager->getObject(
-            CheckUserForgotPasswordBackendObserver::class,
-            [
-                '_helper' => $this->helperMock,
-                'captchaStringResolver' => $this->captchaStringResolverMock,
-                '_session' => $this->sessionMock,
-                '_actionFlag' => $this->actionFlagMock,
-                'messageManager' => $this->messageManagerMock,
-                'request' => $this->requestMock
-            ]
+        $this->observer = new CheckUserForgotPasswordBackendObserver(
+            $this->helperMock,
+            $this->captchaStringResolverMock,
+            $this->sessionMock,
+            $this->actionFlagMock,
+            $this->messageManagerMock,
+            $this->requestMock
         );
 
-        $this->captchaMock = $this->getMockBuilder(CaptchaInterface::class)
-            ->addMethods(['isRequired'])
-            ->onlyMethods(['isCorrect'])
-            ->getMockForAbstractClass();
+        $this->captchaMock = $this->createPartialMock(
+            DefaultModel::class,
+            ['isRequired', 'isCorrect']
+        );
         $this->helperMock->expects($this->once())
             ->method('getCaptcha')
             ->with($formId)
@@ -127,19 +126,18 @@ class CheckUserForgotPasswordBackendObserverTest extends TestCase
 
         $this->httpResponseMock = $this->createMock(HttpResponse::class);
 
-        $this->controllerMock = $this->getMockBuilder(Action::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['getUrl'])
-            ->onlyMethods(['getResponse'])
-            ->getMockForAbstractClass();
+        $this->controllerMock = $this->createPartialMockWithReflection(
+            Action::class,
+            ['getUrl', 'getResponse', 'execute']
+        );
         $this->controllerMock->expects($this->any())
             ->method('getResponse')
             ->willReturn($this->httpResponseMock);
 
-        $this->eventObserverMock = $this->getMockBuilder(Observer::class)
-            ->addMethods(['getControllerAction'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->eventObserverMock = $this->createPartialMockWithReflection(
+            Observer::class,
+            ['getControllerAction']
+        );
         $this->eventObserverMock->expects($this->any())
             ->method('getControllerAction')
             ->willReturn($this->controllerMock);

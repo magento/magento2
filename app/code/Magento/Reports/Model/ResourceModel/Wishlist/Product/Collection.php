@@ -1,13 +1,11 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
  */
 
 /**
  * Wishlist Report collection
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\Reports\Model\ResourceModel\Wishlist\Product;
 
@@ -44,7 +42,7 @@ class Collection extends \Magento\Wishlist\Model\ResourceModel\Item\Collection
         )->group(
             'wi.product_id'
         );
-
+        // phpstan:ignore
         $this->getEntity()->setStore(0);
         return $this;
     }

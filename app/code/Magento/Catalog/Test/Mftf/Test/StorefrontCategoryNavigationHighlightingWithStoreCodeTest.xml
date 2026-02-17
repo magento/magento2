@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright 2025 Adobe
+ * All Rights Reserved.
+ */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontCategoryNavigationHighlightingWithStoreCodeTest" extends="StorefrontCategoryNavigationHighlightingTest">
+        <annotations>
+            <features value="Catalog"/>
+            <stories value="Category Navigation Highlighting with Store Code in URLs"/>
+            <title value="Verify category highlighting in navigation with store code in URLs and no URL suffixes"/>
+            <description value="Correct category should be highlighted in the navigation menu when navigating through categories and products on the storefront based on store code"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="AC-10854"/>
+            <group value="Catalog"/>
+        </annotations>
+        <before>
+            <remove keyForRemoval="enableUseCategoriesPathForProductUrlsDefault"/>
+            <!-- Precondition Step 2: Set configuration: Add Store Code to Urls: Yes -->
+            <magentoCLI command="config:set {{StorefrontEnableAddStoreCodeToUrls.path}} {{StorefrontEnableAddStoreCodeToUrls.value}}" stepKey="enableStoreCodeInUrl" after="clickSaveButton"/>
+            <!-- Set configuration: Remove category URL suffix -->
+            <magentoCLI command="config:set {{CategoriesUrlSuffix.path}} {{CategoriesUrlSuffix.label}}" stepKey="setCategoryUrlSuffixEmpty" after="enableStoreCodeInUrl"/>
+            <!-- Set configuration: Remove product URL suffix -->
+            <magentoCLI command="config:set {{ProductsUrlSuffix.path}} {{ProductsUrlSuffix.label}}" stepKey="setProductUrlSuffixEmpty" after="setCategoryUrlSuffixEmpty"/>
+        </before>
+        <after>
+            <!-- Reset configuration: Restore store code URL -->
+            <magentoCLI command="config:set {{StorefrontDisableAddStoreCodeToUrls.path}} {{StorefrontDisableAddStoreCodeToUrls.value}}" stepKey="addStoreCodeToUrlDisable"/>
+            <!-- Reset configuration: Restore default category URL suffix -->
+            <magentoCLI command="config:set {{CategoriesUrlSuffix.path}} {{CategoriesUrlSuffix.value}}" stepKey="resetCategoryUrlSuffixAsDefault"/>
+            <!-- Reset configuration: Restore default product URL suffix -->
+            <magentoCLI command="config:set {{ProductsUrlSuffix.path}} {{ProductsUrlSuffix.value}}" stepKey="resetProductUrlSuffixAsDefault"/>
+        </after>
+        <remove keyForRemoval="navigateToCategoryStorefront"/>
+        <!-- Step 7: Open direct Category 1.2 url -> Check that Cat 1.2 is highlighted & parent Cat 1 is also highlighted -->
+        <actionGroup ref="NavigateToStorefrontForCreatedPageActionGroup" stepKey="navigateToCategoryPageStorefront" after="assertParentCategoryHasActiveChild_Try4">
+            <argument name="page" value="/default/$$createCat1.custom_attributes[url_key]$$/$$createCat12.custom_attributes[url_key]$$"/>
+        </actionGroup>
+        <remove keyForRemoval="navigateToProductStorefront"/>
+        <!-- Step 9: Open Product 1.1-1.2 direct url with category & store in it -> Check that only categories Cat 1 & Cat 1.2 are highlighted -->
+        <actionGroup ref="NavigateToStorefrontForCreatedPageActionGroup" stepKey="navigateToProductPageStorefront" after="assertParentCategoryHasActiveChild_Try6">
+            <argument name="page" value="/default/$$createCat1.custom_attributes[url_key]$$/$$createCat12.custom_attributes[url_key]$$/$$createProduct1112.custom_attributes[url_key]$$"/>
+        </actionGroup>
+    </test>
+</tests>

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\ConfigurableProduct\Helper;
@@ -101,14 +101,16 @@ class Data
                 $productAttribute = $attribute->getProductAttribute();
                 $productAttributeId = $productAttribute->getId();
                 $attributeValue = $product->getData($productAttribute->getAttributeCode());
-                if ($this->canDisplayShowOutOfStockStatus()) {
-                    if ($product->isSalable()) {
-                        $options['salable'][$productAttributeId][$attributeValue][] = $productId;
-                    }
-                    $options[$productAttributeId][$attributeValue][] = $productId;
-                } else {
-                    if ($product->isSalable()) {
+                if ($attributeValue !== null) {
+                    if ($this->canDisplayShowOutOfStockStatus()) {
+                        if ($product->isSalable()) {
+                            $options['salable'][$productAttributeId][$attributeValue][] = $productId;
+                        }
                         $options[$productAttributeId][$attributeValue][] = $productId;
+                    } else {
+                        if ($product->isSalable()) {
+                            $options[$productAttributeId][$attributeValue][] = $productId;
+                        }
                     }
                 }
                 $options['index'][$productId][$productAttributeId] = $attributeValue;

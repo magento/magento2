@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -19,7 +19,7 @@ class FileTransport implements RevertibleDataFixtureInterface
 {
     private const DEFAULT_DATA = [
         'directory' => DirectoryList::TMP,
-        'path' => 'mail/%uniqid%',
+        'path' => 'mail/%uniqid%'
     ];
 
     private const CONFIG_FILE = 'mail-transport-config.json';

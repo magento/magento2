@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -13,6 +13,7 @@ use Magento\Customer\Helper\Address as AddressHelper;
 use Magento\Customer\Model\Session as CustomerSession;
 use Magento\Directory\Helper\Data as DirectoryHelper;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\Directory\Model\AllowedCountries;
 
 class AttributeMergerTest extends TestCase
@@ -72,8 +73,8 @@ class AttributeMergerTest extends TestCase
      *
      * @param String $validationRule - validation rule.
      * @param String $expectedValidation - expected mapped validation.
-     * @dataProvider validationRulesDataProvider
      */
+    #[DataProvider('validationRulesDataProvider')]
     public function testMerge(String $validationRule, String $expectedValidation): void
     {
         $elements = [

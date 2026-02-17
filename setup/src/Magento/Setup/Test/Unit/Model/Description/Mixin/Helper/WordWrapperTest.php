@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -9,6 +9,7 @@ namespace Magento\Setup\Test\Unit\Model\Description\Mixin\Helper;
 
 use Magento\Setup\Model\Description\Mixin\Helper\WordWrapper;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class WordWrapperTest extends TestCase
 {
@@ -25,8 +26,8 @@ class WordWrapperTest extends TestCase
     /**
      * @param array $inputData
      * @param string $expectedResult
-     * @dataProvider getTestData
      */
+    #[DataProvider('getTestData')]
     public function testWrapping($inputData, $expectedResult)
     {
         $this->assertEquals(

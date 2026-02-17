@@ -545,6 +545,11 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
     {
         if (!$this->_quote) {
             $this->_quote = $this->getSession()->getQuote();
+            $customerId = (int) $this->_quote->getCustomerId();
+            if ($customerId > 0) {
+                $customerData = $this->customerRepository->getById($customerId);
+                $this->_quote->updateCustomerData($customerData);
+            }
         }
 
         return $this->_quote;
@@ -708,6 +713,7 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
      * @param int $qty
      * @return \Magento\Quote\Model\Quote\Item|string|$this
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @throws LocalizedException
      */
     public function initFromOrderItem(\Magento\Sales\Model\Order\Item $orderItem, $qty = null)
     {
@@ -733,9 +739,14 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
 
             $this->formattedOptions($product, $buyRequest, $productOptions);
 
-            $item = $this->getQuote()->addProduct($product, $buyRequest);
-            if (is_string($item)) {
-                return $item;
+            try {
+                $item = $this->getQuote()->addProduct($product, $buyRequest);
+                if (is_string($item)) {
+                    return $item;
+                }
+            } catch (LocalizedException $e) {
+                $this->messageManager->addErrorMessage(__($e->getMessage()));
+                return $this;
             }
 
             if ($additionalOptions = $orderItem->getProductOptionByCode('additional_options')) {
@@ -931,7 +942,10 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
                         $cartItems = $cart->getAllVisibleItems();
                         $cartItemsToRestore = [];
                         foreach ($cartItems as $cartItem) {
-                            $cartItemsToRestore[$cartItem->getItemId()] = $cartItem->getItemId();
+                            $itemId = $cartItem->getItemId();
+                            if ($itemId !== null) {
+                                $cartItemsToRestore[$itemId] = $itemId;
+                            }
                         }
                         $canBeRestored = $this->restoreTransferredItem('cart', $cartItemsToRestore);
 
@@ -1183,7 +1197,7 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
     public function addProducts(array $products)
     {
         foreach ($products as $productId => $config) {
-            $config['qty'] = isset($config['qty']) ? (double)$config['qty'] : 1;
+            $config['qty'] = isset($config['qty']) ? (float)$config['qty'] : 1;
             try {
                 $this->addProduct($productId, $config);
             } catch (\Magento\Framework\Exception\LocalizedException $e) {
@@ -1213,13 +1227,13 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
             foreach ($items as $itemId => $info) {
                 if (!empty($info['configured'])) {
                     $item = $this->getQuote()->updateItem($itemId, $this->objectFactory->create($info));
-                    $info['qty'] = (double)$item->getQty();
+                    $info['qty'] = (float)$item->getQty();
                 } else {
                     $item = $this->getQuote()->getItemById($itemId);
                     if (!$item) {
                         continue;
                     }
-                    $info['qty'] = (double)$info['qty'];
+                    $info['qty'] = (float)$info['qty'];
                 }
                 $this->quoteItemUpdater->update($item, $info);
                 if ($item && !empty($info['action'])) {
@@ -2085,10 +2099,8 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
     private function beforeSubmit(Quote $quote)
     {
         $orderData = [];
-        if ($this->getSession()->getReordered() || $this->getSession()->getOrder()->getId()) {
+        if ($this->getSession()->getOrder()->getId()) {
             $oldOrder = $this->getSession()->getOrder();
-            $oldOrder = $oldOrder->getId() ?
-                $oldOrder : $this->orderRepositoryInterface->get($this->getSession()->getReordered());
             $originalId = $oldOrder->getOriginalIncrementId();
             if (!$originalId) {
                 $originalId = $oldOrder->getIncrementId();
@@ -2115,16 +2127,12 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
      */
     private function afterSubmit(Order $order)
     {
-        if ($this->getSession()->getReordered() || $this->getSession()->getOrder()->getId()) {
+        if ($this->getSession()->getOrder()->getId()) {
             $oldOrder = $this->getSession()->getOrder();
-            $oldOrder = $oldOrder->getId() ?
-                $oldOrder : $this->orderRepositoryInterface->get($this->getSession()->getReordered());
             $oldOrder->setRelationChildId($order->getId());
             $oldOrder->setRelationChildRealId($order->getIncrementId());
             $oldOrder->save();
-            if ($this->getSession()->getOrder()->getId()) {
-                $this->orderManagement->cancel($oldOrder->getEntityId());
-            }
+            $this->orderManagement->cancel($oldOrder->getEntityId());
             $order->save();
         }
     }
@@ -2353,25 +2361,22 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
     }
 
     /**
-     * Remove cart from transferred items and update the qty.
+     * Remove cart from transferred items
      *
      * @param int|null|Item $cartItem
      * @param int $itemId
      * @return void
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @see AC-14442
      */
     private function removeCartTransferredItemsAndUpdateQty(int|null|Item $cartItem, int $itemId)
     {
         $removeCartTransferredItems = $this->getSession()->getTransferredItems() ?? [];
         if (isset($removeCartTransferredItems['cart'])) {
             $removeTransferredItemKey = array_search($cartItem->getId(), $removeCartTransferredItems['cart']);
-            if ($removeCartTransferredItems['cart'][$removeTransferredItemKey]) {
+            if ($removeTransferredItemKey !== false && $removeCartTransferredItems['cart'][$removeTransferredItemKey]) {
                 $cartItem->clearMessage();
                 $cartItem->setHasError(false);
-                if (isset($this->request->get('item')[$itemId]['qty'])) {
-                    $qty = $this->request->get('item')[$itemId]['qty'];
-                    $cartItem->setQty($qty);
-                }
-
                 if ($cartItem->getHasError()) {
                     throw new LocalizedException(__($cartItem->getMessage()));
                 }

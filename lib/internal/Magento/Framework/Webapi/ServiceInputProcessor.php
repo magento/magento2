@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -246,6 +246,13 @@ class ServiceInputProcessor implements ServicePayloadConverterInterface, ResetAf
             if (isset($data[$parameter->getName()])) {
                 $parameterType = $this->typeProcessor->getParamType($parameter);
 
+                // Allow only simple types or Api Data Objects
+                if (!($this->typeProcessor->isTypeSimple($parameterType)
+                    || preg_match('~\\\\?\w+\\\\\w+\\\\Api\\\\Data\\\\~', $parameterType) === 1
+                )) {
+                    continue;
+                }
+
                 try {
                     $res[$parameter->getName()] = $this->convertValue($data[$parameter->getName()], $parameterType);
                 } catch (\ReflectionException $e) {
@@ -333,6 +340,14 @@ class ServiceInputProcessor implements ServicePayloadConverterInterface, ResetAf
                             )
                         );
                     }
+                    if (is_string($setterValue) && $this->validateParamsValue($setterValue)) {
+                        throw new InputException(
+                            new Phrase(
+                                '"%field_name" does not contains valid value.',
+                                ['field_name' => $propertyName]
+                            )
+                        );
+                    }
                     $this->serviceInputValidator->validateEntityValue($object, $propertyName, $setterValue);
                     $object->{$setterName}($setterValue);
                 }
@@ -346,6 +361,17 @@ class ServiceInputProcessor implements ServicePayloadConverterInterface, ResetAf
         }
 
         return $object;
+    }
+
+    /**
+     * Validate input param value
+     *
+     * @param string $value
+     * @return bool
+     */
+    private function validateParamsValue(string $value)
+    {
+        return preg_match('/<script\b[^>]*>(.*?)<\/script>/is', $value);
     }
 
     /**

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -17,6 +17,7 @@ interface CommandInterface
 {
     /**
      * Execute call to external service
+     *
      * Information about destination and arguments appears from config
      *
      * @return bool

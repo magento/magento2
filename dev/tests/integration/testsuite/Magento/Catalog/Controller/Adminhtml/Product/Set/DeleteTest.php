@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -109,7 +109,7 @@ class DeleteTest extends AbstractBackendController
         $this->deleteAttributeSetByNameAndAssert('new_attribute_set');
         $this->expectExceptionObject(
             new NoSuchEntityException(
-                __('The product that was requested doesn\'t exist. Verify the product and try again.')
+                __('The product with SKU "simple" does not exist.')
             )
         );
         $this->productRepository->get('simple');

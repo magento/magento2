@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\ImportExport\Model\Import;
 
@@ -719,7 +719,7 @@ abstract class AbstractEntity implements EntityInterface
                 break;
             case 'decimal':
                 $value = trim($rowData[$attributeCode]);
-                $valid = (double)$value == $value && is_numeric($value);
+                $valid = (float)$value == $value && is_numeric($value);
                 $message = self::ERROR_INVALID_ATTRIBUTE_TYPE;
                 break;
             case 'select':

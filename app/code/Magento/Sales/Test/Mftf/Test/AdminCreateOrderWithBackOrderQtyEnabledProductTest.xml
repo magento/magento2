@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright 2025 Adobe
+ * All Rights Reserved.
+ */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminCreateOrderWithBackOrderQtyEnabledProductTest">
+        <annotations>
+            <features value="Sales"/>
+            <stories value="Backorders"/>
+            <title value="Backordered quantity is visible on order item level in backend"/>
+            <description value="Ensure that backordered quantity is displayed at item level in admin order details when backorders are allowed."/>
+            <testCaseId value="AC-12061"/>
+            <severity value="AVERAGE"/>
+            <group value="sales"/>
+        </annotations>
+        <before>
+            <!-- Create product and customer -->
+            <createData entity="SimpleProductInStockQuantityZero" stepKey="createProduct"/>
+            <createData entity="Simple_US_Customer" stepKey="createCustomer"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+        </before>
+        <after>
+            <!-- Delete created data -->
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+            <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
+            <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
+        </after>
+        <!-- Step1: Open created product and allow backorders -->
+        <actionGroup ref="NavigateToCreatedProductEditPageActionGroup" stepKey="openCreatedProductEditPage">
+            <argument name="product" value="$$createProduct$$"/>
+        </actionGroup>
+        <actionGroup ref="AdminClickOnAdvancedInventoryLinkActionGroup" stepKey="clickOnAdvancedInventoryLink"/>
+        <actionGroup ref="AdminSetBackordersOnProductAdvancedInventoryActionGroup" stepKey="allowBackorders"/>
+        <actionGroup ref="AdminFillAdvancedInventoryQtyActionGroup" stepKey="fillProductQty">
+            <argument name="qty" value="-5"/>
+        </actionGroup>
+        <actionGroup ref="AdminSubmitAdvancedInventoryFormActionGroup" stepKey="clickDoneButton"/>
+        <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProduct"/>
+        <!-- Step2: Create Order -->
+        <actionGroup ref="AdminNavigateToNewOrderPageExistingCustomerActionGroup" stepKey="navigateToNewOrderPage">
+            <argument name="customer" value="$createCustomer$"/>
+        </actionGroup>
+        <actionGroup ref="AddSimpleProductToOrderActionGroup" stepKey="addProduct">
+            <argument name="product" value="$createProduct$"/>
+        </actionGroup>
+        <actionGroup ref="FillOrderCustomerInformationActionGroup" stepKey="fillCustomerInfo">
+            <argument name="customer" value="$createCustomer$"/>
+            <argument name="address" value="US_Address_TX"/>
+        </actionGroup>
+        <actionGroup ref="OrderSelectFlatRateShippingActionGroup" stepKey="selectFlatRate"/>
+        <!-- Submit order -->
+        <actionGroup ref="AdminSubmitOrderActionGroup" stepKey="submitOrder"/>
+        <!-- Step3: Create Invoice for this Order and verify backorder -->
+        <actionGroup ref="StartCreateInvoiceFromOrderPageActionGroup" stepKey="createInvoice"/>
+        <actionGroup ref="SubmitInvoiceActionGroup" stepKey="submitInvoice"/>
+        <waitForText selector="{{AdminOrderItemsOrderedSection.itemsOrderedStatus($$createProduct.sku$$)}}" userInput="Invoiced" stepKey="verifyItemStatusAfterInvoice"/>
+        <waitForText selector="{{AdminOrderItemsOrderedSection.backOrdered($$createProduct.sku$$)}}" userInput="1" stepKey="verifyBackOrderedAfterInvoice"/>
+    </test>
+</tests>

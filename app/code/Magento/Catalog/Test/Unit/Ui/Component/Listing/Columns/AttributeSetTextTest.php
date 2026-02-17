@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -31,12 +31,8 @@ class AttributeSetTextTest extends AbstractColumnTestCase
     {
         parent::setUp();
 
-        $this->attributeSetRepositoryMock = $this->getMockBuilder(AttributeSetRepositoryInterface::class)
-            ->onlyMethods(['get'])
-            ->getMockForAbstractClass();
-        $this->attributeSetMock = $this->getMockBuilder(AttributeSetInterface::class)
-            ->onlyMethods(['getAttributeSetName'])
-            ->getMockForAbstractClass();
+        $this->attributeSetRepositoryMock = $this->createMock(AttributeSetRepositoryInterface::class);
+        $this->attributeSetMock = $this->createMock(AttributeSetInterface::class);
     }
 
     /**

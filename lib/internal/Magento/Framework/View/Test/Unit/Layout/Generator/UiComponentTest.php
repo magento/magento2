@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -24,12 +24,14 @@ use Magento\Framework\View\Layout\ScheduledStructure;
 use Magento\Framework\View\LayoutInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class UiComponentTest extends TestCase
 {
+    use MockCreationTrait;
     /**
      * @var ObjectManagerHelper
      */
@@ -73,15 +75,13 @@ class UiComponentTest extends TestCase
     protected function setUp(): void
     {
         $this->objectManagerHelper = new ObjectManagerHelper($this);
-        $this->argumentInterpreterMock = $this->getMockBuilder(
+        $this->argumentInterpreterMock = $this->createMock(
             InterpreterInterface::class
-        )->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-        $this->uiComponentFactoryMock = $this->getMockBuilder(UiComponentFactory::class)
-            ->addMethods(['setLayout'])
-            ->onlyMethods(['create'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        );
+        $this->uiComponentFactoryMock = $this->createPartialMockWithReflection(
+            UiComponentFactory::class,
+            ['setLayout', 'create']
+        );
         $this->scheduledStructureMock = $this->getMockBuilder(ScheduledStructure::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -124,8 +124,7 @@ class UiComponentTest extends TestCase
             ->with(UiComponent::TYPE, 'new_group')
             ->willReturnSelf();
 
-        $layoutMock = $this->getMockBuilder(LayoutInterface::class)
-            ->getMockForAbstractClass();
+        $layoutMock = $this->createMock(LayoutInterface::class);
 
         $generatorContextMock->expects($this->any())
             ->method('getStructure')
@@ -139,7 +138,7 @@ class UiComponentTest extends TestCase
             ->with($layoutMock)
             ->willReturnSelf();
 
-        $componentMock = $this->getMockForAbstractClass(
+        $componentMock = $this->createMock(
             UiComponentInterface::class,
             [],
             '',
@@ -149,13 +148,13 @@ class UiComponentTest extends TestCase
             []
         );
 
-        $contextMock = $this->getMockForAbstractClass(
+        $contextMock = $this->createMock(
             ContextInterface::class,
             [],
             '',
             false
         );
-        $blockMock = $this->getMockForAbstractClass(
+        $blockMock = $this->createMock(
             BlockInterface::class,
             [],
             '',

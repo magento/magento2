@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -28,22 +28,24 @@ class PhpCookieManager implements CookieManagerInterface
 {
     /**#@+
      * Constants for Cookie manager.
-     * RFC 2109 - Page 15
+     * RFC 2109 - Page 26
      * http://www.ietf.org/rfc/rfc6265.txt
      */
-    const MAX_NUM_COOKIES = 50;
-    const MAX_COOKIE_SIZE = 4096;
-    const EXPIRE_NOW_TIME = 1;
-    const EXPIRE_AT_END_OF_SESSION_TIME = 0;
+    public const MAX_NUM_COOKIES = 50;
+    public const MAX_COOKIE_SIZE = 4096;
+    public const EXPIRE_NOW_TIME = 1;
+    public const EXPIRE_AT_END_OF_SESSION_TIME = 0;
     /**#@-*/
 
     /**#@+
      * Constant for metadata array key
      */
-    const KEY_EXPIRE_TIME = 'expiry';
+    public const KEY_EXPIRE_TIME = 'expiry';
     /**#@-*/
 
-    /**#@-*/
+    /**
+     * @var CookieScopeInterface
+     */
     private $scope;
 
     /**
@@ -213,7 +215,7 @@ class PhpCookieManager implements CookieManagerInterface
             $this->logger->warning(
                 new Phrase('Unable to send the cookie. Maximum number of cookies would be exceeded.'),
                 [
-                    'cookies' => $_COOKIE,
+                    'cookies' => array_keys($_COOKIE),
                     'user-agent' => $this->httpHeader->getHttpUserAgent()
                 ]
             );

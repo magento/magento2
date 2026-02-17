@@ -1,12 +1,13 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Catalog\Test\Unit\Model\Product\Filter;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\Catalog\Model\Product\Filter\DateTime;
 use Magento\Framework\Locale\Resolver;
 use Magento\Framework\Locale\ResolverInterface;
@@ -34,7 +35,7 @@ class DateTimeTest extends TestCase
         parent::setUp();
         $objectManager = new ObjectManager($this);
         $this->locale = Resolver::DEFAULT_LOCALE;
-        $localeResolver = $this->getMockForAbstractClass(ResolverInterface::class);
+        $localeResolver = $this->createMock(ResolverInterface::class);
         $localeResolver->expects($this->any())
             ->method('getLocale')
             ->willReturnCallback(
@@ -60,9 +61,8 @@ class DateTimeTest extends TestCase
 
     /**
      * Test filter with different dates formats and locales
-     *
-     * @dataProvider provideFilter
      */
+    #[DataProvider('provideFilter')]
     public function testFilter(string $date, string $expectedDate, string $locale = Resolver::DEFAULT_LOCALE)
     {
         $this->locale = $locale;

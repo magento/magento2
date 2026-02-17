@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -21,6 +21,7 @@ use Magento\Swatches\Model\SwatchAttributeType;
 use Magento\Swatches\Model\SwatchFactory;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\Framework\Exception\InputException;
 
 /**
@@ -29,6 +30,7 @@ use Magento\Framework\Exception\InputException;
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.TooManyPublicMethods)
  * @SuppressWarnings(PHPMD.ExcessiveClassLength)
+ * @SuppressWarnings(PHPMD.CyclomaticComplexity)
  */
 class EavAttributeTest extends TestCase
 {
@@ -302,9 +304,8 @@ class EavAttributeTest extends TestCase
      * @param int $swatchType
      * @param string $swatch1
      * @param string $swatch2
-     *
-     * @dataProvider visualSwatchProvider
      */
+    #[DataProvider('visualSwatchProvider')]
     public function testAfterAfterSaveVisualSwatch(int $swatchType, string $swatch1, string $swatch2)
     {
         $options = self::VISUAL_SWATCH_OPTIONS;
@@ -338,22 +339,27 @@ class EavAttributeTest extends TestCase
                 }
             });
 
+        $callCount = 0;
         $this->collectionMock->expects($this->exactly(2))
             ->method('getFirstItem')
-            ->willReturnOnConsecutiveCalls(
-                $this->createSwatchMock(
-                    (string)$swatchType,
-                    $swatch1 ?: null,
-                    1
-                ),
-                $this->createSwatchMock(
-                    (string)$swatchType,
-                    $swatch2 ?: null,
-                    null,
-                    self::OPTION_2_ID,
-                    self::ADMIN_STORE_ID
-                )
-            );
+            ->willReturnCallback(function () use (&$callCount, $swatchType, $swatch1, $swatch2) {
+                $callCount++;
+                if ($callCount === 1) {
+                    return $this->createSwatchMock(
+                        (string)$swatchType,
+                        $swatch1 ?: null,
+                        1
+                    );
+                } else {
+                    return $this->createSwatchMock(
+                        (string)$swatchType,
+                        $swatch2 ?: null,
+                        null,
+                        self::OPTION_2_ID,
+                        self::ADMIN_STORE_ID
+                    );
+                }
+            });
         $this->collectionFactoryMock->expects($this->exactly(2))
             ->method('create')
             ->willReturn($this->collectionMock);
@@ -404,46 +410,58 @@ class EavAttributeTest extends TestCase
                 }
             });
 
+        $callCount = 0;
         $this->collectionMock->expects($this->exactly(6))
             ->method('getFirstItem')
-            ->willReturnOnConsecutiveCalls(
-                $this->createSwatchMock(
-                    (string)Swatch::SWATCH_TYPE_TEXTUAL,
-                    self::TEXT_SWATCH_OPTIONS['value'][self::OPTION_1_ID][self::ADMIN_STORE_ID],
-                    1
-                ),
-                $this->createSwatchMock(
-                    (string)Swatch::SWATCH_TYPE_TEXTUAL,
-                    self::TEXT_SWATCH_OPTIONS['value'][self::OPTION_1_ID][self::DEFAULT_STORE_ID],
-                    1
-                ),
-                $this->createSwatchMock(
-                    (string)Swatch::SWATCH_TYPE_TEXTUAL,
-                    self::TEXT_SWATCH_OPTIONS['value'][self::OPTION_1_ID][self::SECOND_STORE_ID],
-                    1
-                ),
-                $this->createSwatchMock(
-                    (string)Swatch::SWATCH_TYPE_TEXTUAL,
-                    self::TEXT_SWATCH_OPTIONS['value'][self::NEW_OPTION_KEY][self::ADMIN_STORE_ID],
-                    null,
-                    self::OPTION_2_ID,
-                    self::ADMIN_STORE_ID
-                ),
-                $this->createSwatchMock(
-                    (string)Swatch::SWATCH_TYPE_TEXTUAL,
-                    self::TEXT_SWATCH_OPTIONS['value'][self::NEW_OPTION_KEY][self::DEFAULT_STORE_ID],
-                    null,
-                    self::OPTION_2_ID,
-                    self::DEFAULT_STORE_ID
-                ),
-                $this->createSwatchMock(
-                    (string)Swatch::SWATCH_TYPE_TEXTUAL,
-                    self::TEXT_SWATCH_OPTIONS['value'][self::NEW_OPTION_KEY][self::SECOND_STORE_ID],
-                    null,
-                    self::OPTION_2_ID,
-                    self::SECOND_STORE_ID
-                )
-            );
+            ->willReturnCallback(function () use (&$callCount) {
+                $callCount++;
+                switch ($callCount) {
+                    case 1:
+                        return $this->createSwatchMock(
+                            (string)Swatch::SWATCH_TYPE_TEXTUAL,
+                            self::TEXT_SWATCH_OPTIONS['value'][self::OPTION_1_ID][self::ADMIN_STORE_ID],
+                            1
+                        );
+                    case 2:
+                        return $this->createSwatchMock(
+                            (string)Swatch::SWATCH_TYPE_TEXTUAL,
+                            self::TEXT_SWATCH_OPTIONS['value'][self::OPTION_1_ID][self::DEFAULT_STORE_ID],
+                            1
+                        );
+                    case 3:
+                        return $this->createSwatchMock(
+                            (string)Swatch::SWATCH_TYPE_TEXTUAL,
+                            self::TEXT_SWATCH_OPTIONS['value'][self::OPTION_1_ID][self::SECOND_STORE_ID],
+                            1
+                        );
+                    case 4:
+                        return $this->createSwatchMock(
+                            (string)Swatch::SWATCH_TYPE_TEXTUAL,
+                            self::TEXT_SWATCH_OPTIONS['value'][self::NEW_OPTION_KEY][self::ADMIN_STORE_ID],
+                            null,
+                            self::OPTION_2_ID,
+                            self::ADMIN_STORE_ID
+                        );
+                    case 5:
+                        return $this->createSwatchMock(
+                            (string)Swatch::SWATCH_TYPE_TEXTUAL,
+                            self::TEXT_SWATCH_OPTIONS['value'][self::NEW_OPTION_KEY][self::DEFAULT_STORE_ID],
+                            null,
+                            self::OPTION_2_ID,
+                            self::DEFAULT_STORE_ID
+                        );
+                    case 6:
+                        return $this->createSwatchMock(
+                            (string)Swatch::SWATCH_TYPE_TEXTUAL,
+                            self::TEXT_SWATCH_OPTIONS['value'][self::NEW_OPTION_KEY][self::SECOND_STORE_ID],
+                            null,
+                            self::OPTION_2_ID,
+                            self::SECOND_STORE_ID
+                        );
+                    default:
+                        return null;
+                }
+            });
         $this->collectionFactoryMock->expects($this->exactly(6))
             ->method('create')
             ->willReturn($this->collectionMock);
@@ -488,7 +506,7 @@ class EavAttributeTest extends TestCase
 
         $this->collectionMock->expects($this->exactly(1))
             ->method('getFirstItem')
-            ->willReturnOnConsecutiveCalls(
+            ->willReturn(
                 $this->createSwatchMock(
                     (string)Swatch::SWATCH_TYPE_VISUAL_COLOR,
                     self::VISUAL_SWATCH_OPTIONS['value'][self::NEW_OPTION_KEY],
@@ -541,31 +559,40 @@ class EavAttributeTest extends TestCase
                 }
             });
 
+        $callCount = 0;
         $this->collectionMock->expects($this->exactly(3))
             ->method('getFirstItem')
-            ->willReturnOnConsecutiveCalls(
-                $this->createSwatchMock(
-                    (string)Swatch::SWATCH_TYPE_TEXTUAL,
-                    self::TEXT_SWATCH_OPTIONS['value'][self::NEW_OPTION_KEY][self::ADMIN_STORE_ID],
-                    null,
-                    self::OPTION_2_ID,
-                    self::ADMIN_STORE_ID
-                ),
-                $this->createSwatchMock(
-                    (string)Swatch::SWATCH_TYPE_TEXTUAL,
-                    self::TEXT_SWATCH_OPTIONS['value'][self::NEW_OPTION_KEY][self::DEFAULT_STORE_ID],
-                    null,
-                    self::OPTION_2_ID,
-                    self::DEFAULT_STORE_ID
-                ),
-                $this->createSwatchMock(
-                    (string)Swatch::SWATCH_TYPE_TEXTUAL,
-                    self::TEXT_SWATCH_OPTIONS['value'][self::NEW_OPTION_KEY][self::SECOND_STORE_ID],
-                    null,
-                    self::OPTION_2_ID,
-                    self::SECOND_STORE_ID
-                )
-            );
+            ->willReturnCallback(function () use (&$callCount) {
+                $callCount++;
+                switch ($callCount) {
+                    case 1:
+                        return $this->createSwatchMock(
+                            (string)Swatch::SWATCH_TYPE_TEXTUAL,
+                            self::TEXT_SWATCH_OPTIONS['value'][self::NEW_OPTION_KEY][self::ADMIN_STORE_ID],
+                            null,
+                            self::OPTION_2_ID,
+                            self::ADMIN_STORE_ID
+                        );
+                    case 2:
+                        return $this->createSwatchMock(
+                            (string)Swatch::SWATCH_TYPE_TEXTUAL,
+                            self::TEXT_SWATCH_OPTIONS['value'][self::NEW_OPTION_KEY][self::DEFAULT_STORE_ID],
+                            null,
+                            self::OPTION_2_ID,
+                            self::DEFAULT_STORE_ID
+                        );
+                    case 3:
+                        return $this->createSwatchMock(
+                            (string)Swatch::SWATCH_TYPE_TEXTUAL,
+                            self::TEXT_SWATCH_OPTIONS['value'][self::NEW_OPTION_KEY][self::SECOND_STORE_ID],
+                            null,
+                            self::OPTION_2_ID,
+                            self::SECOND_STORE_ID
+                        );
+                    default:
+                        return null;
+                }
+            });
         $this->collectionFactoryMock->expects($this->exactly(3))
             ->method('create')
             ->willReturn($this->collectionMock);
@@ -623,46 +650,48 @@ class EavAttributeTest extends TestCase
                 }
             });
 
+        $callCount = 0;
         $this->collectionMock->expects($this->exactly(6))
             ->method('getFirstItem')
-            ->willReturnOnConsecutiveCalls(
-                $this->createSwatchMock(
-                    (string)Swatch::SWATCH_TYPE_TEXTUAL,
-                    null,
-                    1
-                ),
-                $this->createSwatchMock(
-                    (string)Swatch::SWATCH_TYPE_TEXTUAL,
-                    null,
-                    1
-                ),
-                $this->createSwatchMock(
-                    (string)Swatch::SWATCH_TYPE_TEXTUAL,
-                    null,
-                    1
-                ),
-                $this->createSwatchMock(
-                    (string)Swatch::SWATCH_TYPE_TEXTUAL,
-                    null,
-                    null,
-                    self::OPTION_2_ID,
-                    self::ADMIN_STORE_ID
-                ),
-                $this->createSwatchMock(
-                    (string)Swatch::SWATCH_TYPE_TEXTUAL,
-                    null,
-                    null,
-                    self::OPTION_2_ID,
-                    self::DEFAULT_STORE_ID
-                ),
-                $this->createSwatchMock(
-                    (string)Swatch::SWATCH_TYPE_TEXTUAL,
-                    null,
-                    null,
-                    self::OPTION_2_ID,
-                    self::SECOND_STORE_ID
-                )
-            );
+            ->willReturnCallback(function () use (&$callCount) {
+                $callCount++;
+                switch ($callCount) {
+                    case 1:
+                    case 2:
+                    case 3:
+                        return $this->createSwatchMock(
+                            (string)Swatch::SWATCH_TYPE_TEXTUAL,
+                            null,
+                            1
+                        );
+                    case 4:
+                        return $this->createSwatchMock(
+                            (string)Swatch::SWATCH_TYPE_TEXTUAL,
+                            null,
+                            null,
+                            self::OPTION_2_ID,
+                            self::ADMIN_STORE_ID
+                        );
+                    case 5:
+                        return $this->createSwatchMock(
+                            (string)Swatch::SWATCH_TYPE_TEXTUAL,
+                            null,
+                            null,
+                            self::OPTION_2_ID,
+                            self::DEFAULT_STORE_ID
+                        );
+                    case 6:
+                        return $this->createSwatchMock(
+                            (string)Swatch::SWATCH_TYPE_TEXTUAL,
+                            null,
+                            null,
+                            self::OPTION_2_ID,
+                            self::SECOND_STORE_ID
+                        );
+                    default:
+                        return null;
+                }
+            });
         $this->collectionFactoryMock->expects($this->exactly(6))
             ->method('create')
             ->willReturn($this->collectionMock);

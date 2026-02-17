@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -12,6 +12,7 @@ use Magento\Framework\App\Cache\StateInterface;
 use Magento\Framework\App\Cache\Type\FrontendPool;
 use Magento\Framework\App\Cache\TypeListInterface;
 use Magento\Framework\App\Console\Response;
+use Magento\Framework\Cache\Backend\BackendInterface;
 use Magento\Framework\Cache\FrontendInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -45,8 +46,8 @@ class ManagerTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->cacheTypeList = $this->getMockForAbstractClass(TypeListInterface::class);
-        $this->cacheState = $this->getMockForAbstractClass(StateInterface::class);
+        $this->cacheTypeList = $this->createMock(TypeListInterface::class);
+        $this->cacheState = $this->createMock(StateInterface::class);
         $this->response = $this->createMock(Response::class);
         $this->frontendPool = $this->createMock(FrontendPool::class);
         $this->model = new Manager($this->cacheTypeList, $this->cacheState, $this->frontendPool);
@@ -109,21 +110,26 @@ class ManagerTest extends TestCase
     public function testFlushAll()
     {
         $cacheTypes = ['foo', 'bar', 'baz'];
-        $frontendFoo = $this->getMockForAbstractClass(FrontendInterface::class);
-        $frontendBar = $this->getMockForAbstractClass(FrontendInterface::class);
-        $frontendBaz = $this->getMockForAbstractClass(FrontendInterface::class);
+        $frontendFoo = $this->createMock(FrontendInterface::class);
+        $frontendBar = $this->createMock(FrontendInterface::class);
+        $frontendBaz = $this->createMock(FrontendInterface::class);
         $this->frontendPool->expects($this->exactly(3))->method('get')->willReturnMap([
             ['foo', $frontendFoo],
             ['bar', $frontendBar],
             ['baz', $frontendBaz],
         ]);
-        $backendOne = $this->getMockForAbstractClass(\Zend_Cache_Backend_Interface::class);
-        $backendTwo = $this->getMockForAbstractClass(\Zend_Cache_Backend_Interface::class);
+        $backendOne = $this->createMock(BackendInterface::class);
+        $backendTwo = $this->createMock(BackendInterface::class);
         $frontendFoo->expects($this->once())->method('getBackend')->willReturn($backendOne);
         $frontendBar->expects($this->once())->method('getBackend')->willReturn($backendOne);
         $frontendBaz->expects($this->once())->method('getBackend')->willReturn($backendTwo);
-        $backendOne->expects($this->once())->method('clean');
-        $backendTwo->expects($this->once())->method('clean');
+        // Manager calls clean() on frontend only once per unique backend
+        // frontendFoo cleaned (backendOne first time)
+        // frontendBar skipped (backendOne already flushed)
+        // frontendBaz cleaned (backendTwo first time)
+        $frontendFoo->expects($this->once())->method('clean');
+        $frontendBar->expects($this->never())->method('clean');
+        $frontendBaz->expects($this->once())->method('clean');
         $this->model->flush($cacheTypes);
     }
 

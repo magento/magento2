@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 
 declare(strict_types=1);
@@ -21,6 +21,7 @@ use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -99,11 +100,11 @@ class QueryFactoryTest extends TestCase
 
         $this->selectMock = $this->createMock(Select::class);
 
-        $this->assemblerMock = $this->getMockForAbstractClass(AssemblerInterface::class);
+        $this->assemblerMock = $this->createMock(AssemblerInterface::class);
 
-        $this->queryCacheMock = $this->getMockForAbstractClass(CacheInterface::class);
+        $this->queryCacheMock = $this->createMock(CacheInterface::class);
 
-        $this->objectManagerMock = $this->getMockForAbstractClass(ObjectManagerInterface::class);
+        $this->objectManagerMock = $this->createMock(ObjectManagerInterface::class);
 
         $this->selectHydratorMock = $this->createMock(SelectHydrator::class);
 
@@ -130,8 +131,8 @@ class QueryFactoryTest extends TestCase
      * Test create() if query cached
      *
      * @return void
-     * @dataProvider queryDataProvider
      */
+    #[DataProvider('queryDataProvider')]
     public function testCreateIfQueryCached(array $queryDataMock, string $jsonEncodeData): void
     {
         $queryConfigMock = $queryDataMock['config'];
@@ -166,8 +167,8 @@ class QueryFactoryTest extends TestCase
      * Test create() if query not cached
      *
      * @return void
-     * @dataProvider queryDataProvider
      */
+    #[DataProvider('queryDataProvider')]
     public function testCreateIfQueryNotCached(array $queryDataMock, string $jsonEncodeData): void
     {
         $queryConfigMock = $queryDataMock['config'];

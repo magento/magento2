@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -15,11 +15,12 @@ use Magento\Framework\App\Action\Action;
 use Magento\Framework\App\ActionFlag;
 use Magento\Framework\App\Request\DataPersistorInterface;
 use Magento\Framework\App\Request\Http;
+use Magento\Framework\App\Response\Http as ResponseHttp;
 use Magento\Framework\App\Response\RedirectInterface;
 use Magento\Framework\Event\Observer;
 use Magento\Framework\Message\ManagerInterface;
 use Magento\Framework\Session\SessionManager;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -30,10 +31,7 @@ use PHPUnit\Framework\TestCase;
  */
 class CheckContactUsFormObserverTest extends TestCase
 {
-    /**
-     * @var ObjectManager
-     */
-    private $objectManagerHelper;
+    use MockCreationTrait;
 
     /**
      * @var CheckContactUsFormObserver
@@ -82,32 +80,26 @@ class CheckContactUsFormObserverTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->objectManagerHelper = new ObjectManager($this);
-
         $this->helperMock = $this->createMock(Data::class);
         $this->actionFlagMock = $this->createMock(ActionFlag::class);
-        $this->messageManagerMock = $this->getMockForAbstractClass(ManagerInterface::class);
-        $this->redirectMock = $this->getMockForAbstractClass(RedirectInterface::class);
+        $this->messageManagerMock = $this->createMock(ManagerInterface::class);
+        $this->redirectMock = $this->createMock(RedirectInterface::class);
         $this->captchaStringResolverMock = $this->createMock(CaptchaStringResolver::class);
-        $this->dataPersistorMock = $this->getMockBuilder(DataPersistorInterface::class)
-            ->getMockForAbstractClass();
+        $this->dataPersistorMock = $this->createMock(DataPersistorInterface::class);
 
-        $this->sessionMock = $this->getMockBuilder(SessionManager::class)
-            ->addMethods(['addErrorMessage'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->sessionMock = $this->createPartialMockWithReflection(
+            SessionManager::class,
+            ['addErrorMessage']
+        );
         $this->captchaMock = $this->createMock(DefaultModel::class);
 
-        $this->checkContactUsFormObserver = $this->objectManagerHelper->getObject(
-            CheckContactUsFormObserver::class,
-            [
-                'helper' => $this->helperMock,
-                'actionFlag' => $this->actionFlagMock,
-                'messageManager' => $this->messageManagerMock,
-                'redirect' => $this->redirectMock,
-                'captchaStringResolver' => $this->captchaStringResolverMock,
-                'dataPersistor' => $this->dataPersistorMock
-            ]
+        $this->checkContactUsFormObserver = new CheckContactUsFormObserver(
+            $this->helperMock,
+            $this->actionFlagMock,
+            $this->messageManagerMock,
+            $this->redirectMock,
+            $this->captchaStringResolverMock,
+            $this->dataPersistorMock
         );
     }
 
@@ -151,7 +143,7 @@ class CheckContactUsFormObserverTest extends TestCase
         $postData = ['name' => 'Some Name'];
 
         $request = $this->createMock(Http::class);
-        $response = $this->createMock(\Magento\Framework\App\Response\Http::class);
+        $response = $this->createMock(ResponseHttp::class);
         $request->method('getPost')
             ->with(Data::INPUT_NAME_FIELD_VALUE, null)
             ->willReturn([$formId => $captchaValue]);

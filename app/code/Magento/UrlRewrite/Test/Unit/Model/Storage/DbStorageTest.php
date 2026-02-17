@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -56,15 +56,13 @@ class DbStorageTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->urlRewriteFactory = $this->getMockBuilder(UrlRewriteFactory::class)
-            ->onlyMethods(['create'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->urlRewriteFactory = $this->createPartialMock(
+            UrlRewriteFactory::class,
+            ['create']
+        );
         $this->dataObjectHelper = $this->createMock(DataObjectHelper::class);
-        $this->connectionMock = $this->getMockForAbstractClass(AdapterInterface::class);
-        $this->select = $this->getMockBuilder(Select::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->connectionMock = $this->createMock(AdapterInterface::class);
+        $this->select = $this->createMock(Select::class);
         $this->resource = $this->createMock(ResourceConnection::class);
 
         $this->resource->method('getConnection')

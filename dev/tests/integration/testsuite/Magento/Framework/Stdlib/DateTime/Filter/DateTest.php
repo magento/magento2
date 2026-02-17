@@ -1,11 +1,12 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework\Stdlib\DateTime\Filter;
 
 use Magento\TestFramework\ObjectManager;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class DateTest extends \PHPUnit\Framework\TestCase
 {
@@ -47,9 +48,8 @@ class DateTest extends \PHPUnit\Framework\TestCase
     /**
      * @param string $inputData
      * @param string $expectedDate
-     *
-     * @dataProvider filterDataProvider
      */
+    #[DataProvider('filterDataProvider')]
     public function testFilter($inputData, $expectedDate)
     {
         $this->markTestSkipped(
@@ -75,9 +75,9 @@ class DateTest extends \PHPUnit\Framework\TestCase
      * @param string $inputData
      * @param string $expectedDate
      *
-     * @dataProvider localeDateFilterProvider
      * @return void
      */
+    #[DataProvider('localeDateFilterProvider')]
     public function testLocaleDateFilter($locale, $inputData, $expectedDate)
     {
         $this->localeResolver->setLocale($locale);

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -10,6 +10,7 @@ namespace Magento\Framework\ObjectManager\Test\Unit\Config;
 use Magento\Framework\ObjectManager\Config\Compiled;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class CompiledTest extends TestCase
 {
@@ -174,9 +175,8 @@ class CompiledTest extends TestCase
      *
      * @param $data
      * @param array $expectedResult
-     *
-     * @dataProvider constructorFieldsValidation
-     */
+     *     */
+    #[DataProvider('constructorFieldsValidation')]
     public function testConstructorFieldsValidation($data, $expectedResult)
     {
         /** @var Compiled $compiled */
@@ -189,7 +189,6 @@ class CompiledTest extends TestCase
 
         $reflection = new \ReflectionClass(Compiled::class);
         $arguments = $reflection->getProperty('arguments');
-        $arguments->setAccessible(true);
 
         $this->assertEquals($expectedResult['arguments'], $arguments->getValue($compiled));
         $this->assertEquals($expectedResult['preferences'], $compiled->getPreferences());
@@ -232,9 +231,8 @@ class CompiledTest extends TestCase
      *
      * @param $data
      * @param array $expectedResult
-     *
-     * @dataProvider extendFieldsValidation
-     */
+     *     */
+    #[DataProvider('extendFieldsValidation')]
     public function testExtendFieldsValidation($data, $expectedResult)
     {
         /** @var Compiled $compiled */
@@ -249,7 +247,6 @@ class CompiledTest extends TestCase
 
         $reflection = new \ReflectionClass(Compiled::class);
         $arguments = $reflection->getProperty('arguments');
-        $arguments->setAccessible(true);
 
         $this->assertEquals($expectedResult['arguments'], $arguments->getValue($compiled));
         $this->assertEquals($expectedResult['preferences'], $compiled->getPreferences());

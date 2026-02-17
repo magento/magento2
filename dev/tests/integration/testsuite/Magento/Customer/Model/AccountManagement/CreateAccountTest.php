@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -31,6 +31,7 @@ use Magento\Store\Model\StoreManagerInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\Helper\Xpath;
 use Magento\TestFramework\Mail\Template\TransportBuilderMock;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -146,13 +147,13 @@ class CreateAccountTest extends TestCase
     }
 
     /**
-     * @dataProvider createInvalidAccountDataProvider
      * @param array $customerData
      * @param string $password
      * @param string $errorType
      * @param string $errorMessage
      * @return void
      */
+    #[DataProvider('createInvalidAccountDataProvider')]
     public function testCreateAccountWithInvalidFields(
         array $customerData,
         string $password,
@@ -346,13 +347,13 @@ class CreateAccountTest extends TestCase
     {
         $customerEntity = $this->populateCustomerEntity($this->defaultCustomerData);
         $newCustomerEntity = $this->accountManagement->createAccount($customerEntity);
-        $mailTemplate = $this->transportBuilderMock->getSentMessage()->getBody()->getParts()[0]->getRawContent();
+        $mailTemplate = $this->transportBuilderMock->getSentMessage()->getBody()->bodyToString();
 
         $this->assertEquals(
             1,
             Xpath::getElementsCountForXpath(
                 sprintf("//a[contains(@href, 'customer/account/createPassword/?id=%s')]", $newCustomerEntity->getId()),
-                $mailTemplate
+                quoted_printable_decode($mailTemplate)
             ),
             'Password creation link was not found.'
         );
@@ -739,7 +740,7 @@ class CreateAccountTest extends TestCase
         $this->assertEquals($expectedData['email'], $messageFrom->getEmail());
         $this->assertStringContainsString(
             $expectedData['message'],
-            $message->getBody()->getParts()[0]->getRawContent(),
+            quoted_printable_decode($message->getBody()->bodyToString()),
             'Expected message wasn\'t found in email content.'
         );
     }

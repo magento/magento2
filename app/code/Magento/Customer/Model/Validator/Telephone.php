@@ -1,13 +1,13 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2024 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Customer\Model\Validator;
 
-use Magento\Customer\Model\Customer;
+use Magento\Customer\Model\Address;
 use Magento\Framework\Validator\AbstractValidator;
 
 /**
@@ -22,18 +22,19 @@ class Telephone extends AbstractValidator
      * \+: Matches the plus sign.
      * \-: Matches the hyphen.
      * \d: Digits (0-9).
+     * \s: Matches whitespace characters.
      */
-    private const PATTERN_TELEPHONE = '/(?:[\d\s\+\-\()]{1,20})/u';
-    
+    private const PATTERN_TELEPHONE = '/^[\d\s\+\-\()]{1,20}$/u';
+
     /**
      * Validate telephone fields.
      *
-     * @param Customer $customer
+     * @param \Magento\Customer\Model\Address $value
      * @return bool
      */
-    public function isValid($customer)
+    public function isValid($value): bool
     {
-        if (!$this->isValidTelephone($customer->getTelephone())) {
+        if (!$this->isValidTelephone((string)$value->getTelephone())) {
             parent::_addMessages([[
                 'telephone' => "Invalid Phone Number. Please use 0-9, +, -, (, ) and space."
             ]]);
@@ -48,12 +49,10 @@ class Telephone extends AbstractValidator
      * @param string|null $telephoneValue
      * @return bool
      */
-    private function isValidTelephone($telephoneValue)
+    private function isValidTelephone(?string $telephoneValue): bool
     {
         if ($telephoneValue != null) {
-            if (preg_match(self::PATTERN_TELEPHONE, (string) $telephoneValue, $matches)) {
-                return $matches[0] == $telephoneValue;
-            }
+            return preg_match(self::PATTERN_TELEPHONE, $telephoneValue) === 1;
         }
 
         return true;

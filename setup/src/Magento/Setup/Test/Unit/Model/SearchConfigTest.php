@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -13,6 +13,7 @@ use Magento\Search\Setup\CompositeInstallConfig;
 use Magento\Setup\Model\SearchConfig;
 use Magento\Setup\Model\SearchConfigOptionsList;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 class SearchConfigTest extends TestCase
@@ -61,8 +62,8 @@ class SearchConfigTest extends TestCase
     /**
      * @param array $installInput
      * @param array $searchInput
-     * @dataProvider installInputDataProvider
      */
+    #[DataProvider('installInputDataProvider')]
     public function testSaveConfiguration(array $installInput, array $searchInput)
     {
         $this->installConfigMock->expects($this->once())->method('configure')->with($searchInput);
@@ -77,8 +78,8 @@ class SearchConfigTest extends TestCase
     /**
      * @param array $installInput
      * @param array $searchInput
-     * @dataProvider installInputDataProvider
      */
+    #[DataProvider('installInputDataProvider')]
     public function testSaveConfigurationInvalidSearchEngine(array $installInput, array $searchInput)
     {
         $this->expectException(\Magento\Setup\Exception::class);
@@ -94,8 +95,8 @@ class SearchConfigTest extends TestCase
     /**
      * @param array $installInput
      * @param array $searchInput
-     * @dataProvider installInputDataProvider
      */
+    #[DataProvider('installInputDataProvider')]
     public function testSaveConfigurationValidationFail(array $installInput, array $searchInput)
     {
         $this->expectException(\Magento\Framework\Validation\ValidationException::class);
@@ -141,7 +142,7 @@ class SearchConfigTest extends TestCase
                     'base-url-secure' => null,
                     'use-secure-admin' => null,
                     'admin-use-security-key' => null,
-                    'search-engine' => 'elasticsearch7',
+                    'search-engine' => 'elasticsearch8',
                     'elasticsearch-host' => 'localhost',
                     'elasticsearch-port' => '9200',
                     'elasticsearch-enable-auth' => false,
@@ -150,7 +151,7 @@ class SearchConfigTest extends TestCase
                     'no-interaction' => false,
                 ],
                 'searchInput' => [
-                    'search-engine' => 'elasticsearch7',
+                    'search-engine' => 'elasticsearch8',
                     'elasticsearch-host' => 'localhost',
                     'elasticsearch-port' => '9200',
                     'elasticsearch-enable-auth' => false,

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Backend\Block\Widget\Form\Element;
@@ -13,8 +13,6 @@ use Magento\Backend\Block\Template\Context;
 
 /**
  * Backend image gallery item renderer
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Gallery extends \Magento\Backend\Block\Template implements
     \Magento\Framework\Data\Form\Element\Renderer\RendererInterface

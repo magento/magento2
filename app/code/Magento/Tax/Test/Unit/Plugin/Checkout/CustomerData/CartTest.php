@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -14,6 +14,7 @@ use Magento\Quote\Model\Quote;
 use Magento\Quote\Model\Quote\Item;
 use Magento\Tax\Block\Item\Price\Renderer;
 use Magento\Tax\Plugin\Checkout\CustomerData\Cart;
+use Magento\Framework\Pricing\PriceCurrencyInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -49,6 +50,11 @@ class CartTest extends TestCase
      */
     private $cart;
 
+    /**
+     * @var PriceCurrencyInterface|MockObject
+     */
+    private $priceCurrency;
+
     protected function setUp(): void
     {
         $this->checkoutSession = $this->createMock(Session::class);
@@ -56,6 +62,7 @@ class CartTest extends TestCase
         $this->itemPriceRenderer = $this->createMock(Renderer::class);
         $this->checkoutCart = $this->createMock(CheckoutCart::class);
         $this->quote = $this->createMock(Quote::class);
+        $this->priceCurrency = $this->createMock(PriceCurrencyInterface::class);
 
         $this->checkoutSession->method('getQuote')
             ->willReturn($this->quote);
@@ -63,7 +70,8 @@ class CartTest extends TestCase
         $this->cart = new Cart(
             $this->checkoutSession,
             $this->checkoutHelper,
-            $this->itemPriceRenderer
+            $this->itemPriceRenderer,
+            $this->priceCurrency
         );
     }
 
@@ -100,6 +108,7 @@ class CartTest extends TestCase
 
         $this->itemPriceRenderer->method('toHtml')
             ->willReturn(1);
+        $this->priceCurrency->expects($this->exactly(2))->method('convertAndRound');
 
         $result = $this->cart->afterGetSectionData($this->checkoutCart, $input);
 

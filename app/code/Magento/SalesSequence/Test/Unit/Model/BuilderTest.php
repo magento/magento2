@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -10,8 +10,10 @@ namespace Magento\SalesSequence\Test\Unit\Model;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\DB\Ddl\Sequence;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\SalesSequence\Model\Builder;
+use Magento\SalesSequence\Model\Meta as SequenceMeta;
 use Magento\SalesSequence\Model\MetaFactory;
 use Magento\SalesSequence\Model\Profile;
 use Magento\SalesSequence\Model\ProfileFactory;
@@ -21,6 +23,8 @@ use PHPUnit\Framework\TestCase;
 
 class BuilderTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var Builder
      */
@@ -32,7 +36,7 @@ class BuilderTest extends TestCase
     private $resourceSequenceMeta;
 
     /**
-     * @var \Magento\SalesSequence\Model\Meta|MockObject
+     * @var SequenceMeta|MockObject
      */
     private $meta;
 
@@ -68,31 +72,21 @@ class BuilderTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->connectionMock = $this->getMockForAbstractClass(
-            AdapterInterface::class,
-            [],
-            '',
-            false,
-            false,
-            true,
-            ['query']
+        $this->connectionMock = $this->createMock(AdapterInterface::class);
+        $this->resourceSequenceMeta = $this->createPartialMockWithReflection(
+            Meta::class,
+            ['createSequence', 'loadByEntityTypeAndStore', 'save']
         );
-        $this->resourceSequenceMeta = $this->getMockBuilder(Meta::class)
-            ->addMethods(['createSequence'])
-            ->onlyMethods(['loadByEntityTypeAndStore', 'save'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->meta = $this->getMockBuilder(\Magento\SalesSequence\Model\Meta::class)->addMethods(['getSequenceTable'])
-            ->onlyMethods(['getId', 'setData', 'save'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->meta = $this->createPartialMockWithReflection(
+            SequenceMeta::class,
+            ['getSequenceTable', 'getId', 'setData', 'save']
+        );
         $this->sequence = $this->createMock(Sequence::class);
         $this->resourceMock = $this->createMock(ResourceConnection::class);
-        $this->profile = $this->getMockBuilder(Profile::class)
-            ->addMethods(['getStartValue'])
-            ->onlyMethods(['getId', 'setData'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->profile = $this->createPartialMockWithReflection(
+            Profile::class,
+            ['getStartValue', 'getId', 'setData']
+        );
         $this->metaFactory = $this->createPartialMock(MetaFactory::class, ['create']);
         $this->metaFactory->expects($this->any())->method('create')->willReturn($this->meta);
         $this->profileFactory = $this->createPartialMock(

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -10,11 +10,18 @@ namespace Magento\Weee\Test\Unit\Ui\DataProvider\Product\Form\Modifier;
 use Magento\Catalog\Model\ResourceModel\Eav\Attribute as EavAttribute;
 use Magento\Catalog\Model\ResourceModel\Eav\AttributeFactory as EavAttributeFactory;
 use Magento\Catalog\Test\Unit\Ui\DataProvider\Product\Form\Modifier\AbstractModifierTestCase;
+use Magento\Directory\Helper\Data as DirectoryHelper;
 use Magento\Directory\Model\Config\Source\Country as SourceCountry;
 use Magento\Weee\Ui\DataProvider\Product\Form\Modifier\Manager\Website as WebsiteManager;
 use Magento\Weee\Ui\DataProvider\Product\Form\Modifier\Weee;
 use PHPUnit\Framework\MockObject\MockObject;
 
+/**
+ * Unit Tests to cover Weee
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.UnusedLocalVariable)
+ */
 class WeeeTest extends AbstractModifierTestCase
 {
     /**
@@ -40,19 +47,10 @@ class WeeeTest extends AbstractModifierTestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $this->sourceCountryMock = $this->getMockBuilder(SourceCountry::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->eavAttributeFactoryMock = $this->getMockBuilder(EavAttributeFactory::class)
-            ->onlyMethods(['create'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->eavAttributeMock = $this->getMockBuilder(EavAttribute::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->websiteManagerMock = $this->getMockBuilder(WebsiteManager::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->sourceCountryMock = $this->createMock(SourceCountry::class);
+        $this->eavAttributeFactoryMock = $this->createPartialMock(EavAttributeFactory::class, ['create']);
+        $this->eavAttributeMock = $this->createMock(EavAttribute::class);
+        $this->websiteManagerMock = $this->createMock(WebsiteManager::class);
 
         $this->eavAttributeFactoryMock->expects($this->any())
             ->method('create')
@@ -67,12 +65,13 @@ class WeeeTest extends AbstractModifierTestCase
      */
     protected function createModel()
     {
-        return $this->objectManager->getObject(Weee::class, [
-            'locator' => $this->locatorMock,
-            'sourceCountry' => $this->sourceCountryMock,
-            'eavAttributeFactory' => $this->eavAttributeFactoryMock,
-            'websiteManager' => $this->websiteManagerMock,
-        ]);
+        return new Weee(
+            $this->locatorMock,
+            $this->sourceCountryMock,
+            $this->createMock(DirectoryHelper::class),
+            $this->eavAttributeFactoryMock,
+            $this->websiteManagerMock
+        );
     }
 
     public function testModifyMeta()

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2021 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -13,6 +13,7 @@ use Magento\Framework\App\ScopeInterface;
 use Magento\Framework\App\ScopeResolverPool;
 use Magento\Framework\Message\MessageInterface;
 use Magento\TestFramework\TestCase\AbstractBackendController;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Checks saving and updating of configuration data
@@ -40,12 +41,12 @@ class SaveTest extends AbstractBackendController
     }
 
     /**
-     * @dataProvider saveConfigDataProvider
      * @magentoDbIsolation enabled
      * @param array $params
      * @param array $post
      * @return void
      */
+    #[DataProvider('saveConfigDataProvider')]
     public function testSaveConfig(array $params, array $post): void
     {
         $expectedPathValue = $this->prepareExpectedPathValue($params['section'], $post['groups']);

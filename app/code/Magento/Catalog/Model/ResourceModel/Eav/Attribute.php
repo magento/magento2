@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright 2011 Adobe
+ * Copyright 2015 Adobe
  * All Rights Reserved.
  */
 
@@ -8,8 +8,10 @@ namespace Magento\Catalog\Model\ResourceModel\Eav;
 
 use Magento\Catalog\Model\Attribute\Backend\DefaultBackend;
 use Magento\Catalog\Model\Attribute\LockValidatorInterface;
+use Magento\Catalog\Model\Product\Attribute\AttributeSetUnassignValidatorInterface;
 use Magento\Eav\Model\Entity;
 use Magento\Framework\Api\AttributeValueFactory;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Stdlib\DateTime\DateTimeFormatterInterface;
 
 /**
@@ -96,6 +98,11 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute implements
     private $eavAttributeFactory;
 
     /**
+     * @var AttributeSetUnassignValidatorInterface
+     */
+    private $attributeSetUnassignValidator;
+
+    /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory
@@ -120,6 +127,7 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute implements
      * @param \Magento\Framework\Data\Collection\AbstractDb|null $resourceCollection
      * @param array $data
      * @param \Magento\Eav\Api\Data\AttributeExtensionFactory|null $eavAttributeFactory
+     * @param AttributeSetUnassignValidatorInterface|null $attributeSetUnassignValidator
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -146,7 +154,8 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute implements
         ?\Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         ?\Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = [],
-        ?\Magento\Eav\Api\Data\AttributeExtensionFactory $eavAttributeFactory = null
+        ?\Magento\Eav\Api\Data\AttributeExtensionFactory $eavAttributeFactory = null,
+        ?AttributeSetUnassignValidatorInterface $attributeSetUnassignValidator = null
     ) {
         $this->_indexerEavProcessor = $indexerEavProcessor;
         $this->_productFlatIndexerProcessor = $productFlatIndexerProcessor;
@@ -154,6 +163,8 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute implements
         $this->attrLockValidator = $lockValidator;
         $this->eavAttributeFactory = $eavAttributeFactory ?: \Magento\Framework\App\ObjectManager::getInstance()
             ->get(\Magento\Eav\Api\Data\AttributeExtensionFactory::class);
+        $this->attributeSetUnassignValidator = $attributeSetUnassignValidator
+            ?: ObjectManager::getInstance()->get(AttributeSetUnassignValidatorInterface::class);
         parent::__construct(
             $context,
             $registry,
@@ -913,5 +924,17 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute implements
         }
 
         return $backend;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function deleteEntity()
+    {
+        if ($this->getEntityAttributeId()) {
+            $result = $this->_getResource()->getEntityAttribute($this->getEntityAttributeId());
+            $result && $this->attributeSetUnassignValidator->validate($this, (int) $result['attribute_set_id']);
+        }
+        return parent::deleteEntity();
     }
 }

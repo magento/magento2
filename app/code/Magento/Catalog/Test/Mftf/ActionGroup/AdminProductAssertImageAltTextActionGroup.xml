@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
-  */
+/**
+ * Copyright 2021 Adobe
+ * All Rights Reserved.
+ */
 -->
 
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -20,9 +20,10 @@
         <conditionalClick selector="{{AdminProductImagesSection.productImagesToggle}}" dependentSelector="{{AdminProductImagesSection.imageFile(image.fileName)}}" visible="false" stepKey="expandImages"/>
         <waitForPageLoad stepKey="waitForImages"/>
         <waitForElementVisible selector="{{AdminProductImagesSection.imageFile(image.fileName)}}" stepKey="seeProductImageName"/>
-        <click selector="{{AdminProductImagesSection.imageFile(image.fileName)}}" stepKey="clickProductImage"/>
+        <click selector="{{AdminProductImagesSection.imageContainer(image.fileName)}}" stepKey="clickProductImage"/>
         <waitForPageLoad stepKey="waitForImageDetails"/>
         <waitForElementVisible selector="{{AdminProductImagesSection.altText}}" stepKey="seeAltTextSection"/>
+        <waitForPageLoad stepKey="waitForSlideOut"/>
         <grabValueFrom selector="{{AdminProductImagesSection.altText}}" stepKey="actualAltText"/>
         <assertEquals stepKey="assertAltText">
             <expectedResult type="string">{{altText}}</expectedResult>

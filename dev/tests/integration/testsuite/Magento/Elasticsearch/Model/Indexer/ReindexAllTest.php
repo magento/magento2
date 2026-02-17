@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Elasticsearch\Model\Indexer;
 
@@ -17,12 +17,13 @@ use Magento\Elasticsearch\Model\Config;
 use Magento\Elasticsearch\SearchAdapter\SearchIndexNameResolver;
 use Magento\Framework\Search\EngineResolverInterface;
 use Magento\TestModuleCatalogSearch\Model\SearchEngineVersionReader;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Important: Please make sure that each integration test file works with unique search index. In order to
  * achieve this, use @magentoConfigFixture to pass unique value for index_prefix for every test
  * method.
- * E.g. '@magentoConfigFixture current_store catalog/search/elasticsearch7_index_prefix indexerhandlertest_configurable'
+ * E.g. '@magentoConfigFixture current_store catalog/search/elasticsearch8_index_prefix indexerhandlertest_configurable'
  *
  * @magentoDbIsolation disabled
  * @magentoAppIsolation enabled
@@ -197,11 +198,11 @@ class ReindexAllTest extends \PHPUnit\Framework\TestCase
      *
      * @magentoDataFixture Magento/ConfigurableProduct/_files/configurable_products.php
      * @magentoDataFixture Magento/Catalog/_files/products.php
-     * @dataProvider searchSpecificProductDataProvider
      * @param string $searchName
      * @param string $sku
      * @param int $expectedCount
      */
+    #[DataProvider('searchSpecificProductDataProvider')]
     public function testSearchSpecificProduct(string $searchName, string $sku, int $expectedCount)
     {
         $this->reindexAll();

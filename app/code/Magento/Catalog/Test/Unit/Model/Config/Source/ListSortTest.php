@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -27,9 +27,7 @@ class ListSortTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->catalogConfig = $this->getMockBuilder(Config::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->catalogConfig = $this->createMock(Config::class);
 
         $helper = new ObjectManager($this);
         $this->model = $helper->getObject(
@@ -44,7 +42,7 @@ class ListSortTest extends TestCase
             ['label' => __('Position'), 'value' => 'position'],
             ['label' => 'testLabel', 'value' => 'testAttributeCode'],
         ];
-        $this->catalogConfig->expects($this->any())->method('getAttributesUsedForSortBy')
+        $this->catalogConfig->method('getAttributesUsedForSortBy')
             ->willReturn([['frontend_label' => 'testLabel', 'attribute_code' => 'testAttributeCode']]);
 
         $this->assertEquals($except, $this->model->toOptionArray());

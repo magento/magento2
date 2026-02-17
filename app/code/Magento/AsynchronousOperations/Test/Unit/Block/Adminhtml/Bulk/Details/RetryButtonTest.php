@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -10,6 +10,7 @@ namespace Magento\AsynchronousOperations\Test\Unit\Block\Adminhtml\Bulk\Details;
 use Magento\AsynchronousOperations\Block\Adminhtml\Bulk\Details\RetryButton;
 use Magento\AsynchronousOperations\Model\Operation\Details;
 use Magento\Framework\App\RequestInterface;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -33,7 +34,7 @@ class RetryButtonTest extends TestCase
     protected function setUp(): void
     {
         $this->detailsMock = $this->createMock(Details::class);
-        $this->requestMock = $this->getMockForAbstractClass(RequestInterface::class);
+        $this->requestMock = $this->createMock(RequestInterface::class);
         $this->block = new RetryButton(
             $this->detailsMock,
             $this->requestMock
@@ -43,8 +44,8 @@ class RetryButtonTest extends TestCase
     /**
      * @param int $failedCount
      * @param array $expectedResult
-     * @dataProvider getButtonDataProvider
      */
+    #[DataProvider('getButtonDataProvider')]
     public function testGetButtonData($failedCount, $expectedResult)
     {
         $details = ['failed_retriable' => $failedCount];

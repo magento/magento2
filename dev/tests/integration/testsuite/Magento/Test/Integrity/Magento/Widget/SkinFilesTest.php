@@ -1,15 +1,15 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Test\Integrity\Magento\Widget;
 
+use PHPUnit\Framework\Attributes\DataProvider;
+
 class SkinFilesTest extends \PHPUnit\Framework\TestCase
 {
-    /**
-     * @dataProvider widgetPlaceholderImagesDataProvider
-     */
+    #[DataProvider('widgetPlaceholderImagesDataProvider')]
     public function testWidgetPlaceholderImages($skinImage)
     {
         /** @var \Magento\Framework\View\Asset\Repository $assetRepo */

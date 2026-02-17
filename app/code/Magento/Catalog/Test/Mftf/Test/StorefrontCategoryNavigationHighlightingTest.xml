@@ -1,0 +1,252 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright 2025 Adobe
+ * All Rights Reserved.
+ */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontCategoryNavigationHighlightingTest">
+        <annotations>
+            <features value="Catalog"/>
+            <stories value="Category Navigation Highlighting without Store Code in URLs"/>
+            <title value="Verify category highlighting in navigation without store code in URLs and no URL suffixes"/>
+            <description value="Correct category is highlighted in the navigation menu when navigating through categories and products on the storefront based on store code"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="AC-10851"/>
+            <group value="Catalog"/>
+        </annotations>
+        <before>
+            <!-- Login as admin -->
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <!-- Precondition Step 1: Create root category Cat 0 -->
+            <createData entity="SimpleSubCategory" stepKey="createCat0"/>
+            <!-- Create main category Cat 1 -->
+            <createData entity="_defaultCategory" stepKey="createCat1"/>
+            <!-- Create subcategory Cat 1.1 -->
+            <createData entity="Two_nested_categories" stepKey="createCat11">
+                <requiredEntity createDataKey="createCat1"/>
+            </createData>
+            <!-- Create subcategory Cat 1.2 -->
+            <createData entity="Two_nested_categories" stepKey="createCat12">
+                <requiredEntity createDataKey="createCat1"/>
+            </createData>
+            <!-- Create Product 1.1 and assign to Cat 1.1 -->
+            <createData entity="SimpleProduct" stepKey="createProduct11">
+                <requiredEntity createDataKey="createCat11"/>
+            </createData>
+            <!-- Create Product 1.2 and assign to Cat 1.2 -->
+            <createData entity="SimpleProduct" stepKey="createProduct12">
+                <requiredEntity createDataKey="createCat12"/>
+            </createData>
+            <!-- Create Product 1.1-1.2 and assign to both Cat 1.1 and Cat 1.2 -->
+            <createData entity="_defaultProduct" stepKey="createProduct1112">
+                <requiredEntity createDataKey="createCat11"/>
+            </createData>
+            <actionGroup ref="SearchForProductOnBackendActionGroup" stepKey="searchForSimpleProduct">
+                <argument name="product" value="$$createProduct1112$$"/>
+            </actionGroup>
+            <actionGroup ref="OpenEditProductOnBackendActionGroup" stepKey="openEditProduct1">
+                <argument name="product" value="$$createProduct1112$$"/>
+            </actionGroup>
+            <searchAndMultiSelectOption selector="{{AdminProductFormSection.categoriesDropdown}}" parameterArray="[$$createCat12.name$$]" stepKey="fillCategory"/>
+            <actionGroup ref="AdminProductFormSaveActionGroup" stepKey="clickSaveButton"/>
+            <!-- Set configuration: Use Categories Path for Product URLs: Yes -->
+            <magentoCLI command="config:set {{EnableCategoriesPathForProductUrls.path}} {{EnableCategoriesPathForProductUrls.value}}" stepKey="enableUseCategoriesPathForProductUrlsDefault"/>
+        </before>
+        <after>
+            <!-- Reset configuration: Use Categories Path for Product URLs: Yes (default) -->
+            <magentoCLI command="config:set {{DisableCategoriesPathForProductUrls.path}} {{DisableCategoriesPathForProductUrls.value}}" stepKey="disableCategoriesPathForProductUrls"/>
+            <!-- Delete created products -->
+            <deleteData createDataKey="createProduct11" stepKey="deleteProduct11"/>
+            <deleteData createDataKey="createProduct12" stepKey="deleteProduct12"/>
+            <deleteData createDataKey="createProduct1112" stepKey="deleteProduct1112"/>
+            <!-- Delete created categories -->
+            <deleteData createDataKey="createCat12" stepKey="deleteCat12"/>
+            <deleteData createDataKey="createCat11" stepKey="deleteCat11"/>
+            <deleteData createDataKey="createCat1" stepKey="deleteCat1"/>
+            <deleteData createDataKey="createCat0" stepKey="deleteCat0"/>
+            <!-- Logout from admin -->
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin"/>
+        </after>
+        <!-- Step 1: Open home page -->
+        <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="openStorefrontHomePage"/>
+        <!-- Step 2: Open Cat 1 -> Check that Cat 1 is highlighted (has class 'active') -->
+        <actionGroup ref="StorefrontGoToCategoryPageActionGroup" stepKey="selectCategory">
+            <argument name="categoryName" value="$$createCat1.name$$"/>
+        </actionGroup>
+        <grabAttributeFrom selector="{{AdminCategorySidebarTreeSection.categoryHighlighted($$createCat1.name$$)}}" userInput="class" stepKey="grabCategory1Class"/>
+        <assertStringContainsString stepKey="assertCategory1IsHighlighted">
+            <actualResult type="const">$grabCategory1Class</actualResult>
+            <expectedResult type="string">active</expectedResult>
+        </assertStringContainsString>
+        <!--Check if Category 1 is highlighted -->
+        <executeJS function="return document.querySelectorAll('{{AdminCategorySidebarTreeSection.categoryNotHighlighted}}').length" stepKey="highlightedCategoryAmount"/>
+        <executeJS function="return document.querySelectorAll('{{AdminCategorySidebarTreeSection.parentCategoryNotHighlighted}}').length" stepKey="highlightedParentCategoryAmount"/>
+        <assertEquals stepKey="assertCategoryIsActive">
+            <actualResult type="const">$highlightedCategoryAmount</actualResult>
+            <expectedResult type="int">1</expectedResult>
+        </assertEquals>
+        <assertEquals stepKey="assertParentCategoryHasActiveChild">
+            <actualResult type="const">$highlightedParentCategoryAmount</actualResult>
+            <expectedResult type="int">0</expectedResult>
+        </assertEquals>
+        <!-- Step 3: Open Cat 1.1 > Check that Cat 1.1 is highlighted (has class 'active') & parent Cat 1 is also highlighted (has class 'has-active') -->
+        <actionGroup ref="StorefrontGoToSubCategoryPageActionGroup" stepKey="navigateToSubCategoryPage">
+            <argument name="categoryName" value="$$createCat1.name$$"/>
+            <argument name="subCategoryName" value="$$createCat11.name$$"/>
+        </actionGroup>
+        <grabAttributeFrom selector="{{AdminCategorySidebarTreeSection.categoryHighlighted($$createCat11.name$$)}}" userInput="class" stepKey="grabCat11Class"/>
+        <assertStringContainsString stepKey="assertCat11IsHighlighted">
+            <actualResult type="const">$grabCat11Class</actualResult>
+            <expectedResult type="string">active</expectedResult>
+        </assertStringContainsString>
+        <!-- Verify parent Cat 1 has 'has-active' class -->
+        <grabAttributeFrom selector="{{AdminCategorySidebarTreeSection.categoryHighlighted($$createCat1.name$$)}}" userInput="class" stepKey="grabCat1ParentClass"/>
+        <assertStringContainsString stepKey="assertCat1HasActiveClass">
+            <actualResult type="const">$grabCat1ParentClass</actualResult>
+            <expectedResult type="string">has-active</expectedResult>
+        </assertStringContainsString>
+        <!-- Verify Cat 1.1 is highlighted with active class -->
+        <executeJS function="return document.querySelectorAll('{{AdminCategorySidebarTreeSection.categoryNotHighlighted}}').length" stepKey="highlightedCategoryAmount_Try2"/>
+        <executeJS function="return document.querySelectorAll('{{AdminCategorySidebarTreeSection.parentCategoryNotHighlighted}}').length" stepKey="highlightedParentCategoryAmount_Try2"/>
+        <assertEquals stepKey="assertCategoryIsActive_Try2">
+            <actualResult type="const">$highlightedCategoryAmount_Try2</actualResult>
+            <expectedResult type="int">1</expectedResult>
+        </assertEquals>
+        <assertEquals stepKey="assertParentCategoryHasActiveChild_Try2">
+            <actualResult type="const">$highlightedParentCategoryAmount_Try2</actualResult>
+            <expectedResult type="int">1</expectedResult>
+        </assertEquals>
+        <!-- Step 4: Open Product 1.1-1.2 from Cat 1.1 page -> check that only categories Cat 1 & Cat 1.1 are highlighted -->
+        <actionGroup ref="StorefrontOpenProductFromCategoryPageActionGroup" stepKey="openProduct1112FromCat11">
+            <argument name="productName" value="$$createProduct1112.name$$"/>
+        </actionGroup>
+        <grabAttributeFrom selector="{{AdminCategorySidebarTreeSection.categoryHighlighted($$createCat11.name$$)}}" userInput="class" stepKey="grabCat11ClassOnProduct"/>
+        <assertStringContainsString stepKey="assertCat11IsHighlightedOnProduct">
+            <actualResult type="const">$grabCat11ClassOnProduct</actualResult>
+            <expectedResult type="string">active</expectedResult>
+        </assertStringContainsString>
+        <!-- Verify parent Cat 1 still has 'has-active' class -->
+        <grabAttributeFrom selector="{{AdminCategorySidebarTreeSection.categoryHighlighted($$createCat1.name$$)}}" userInput="class" stepKey="grabCat1ParentClassOnProduct"/>
+        <assertStringContainsString stepKey="assertCat1HasActiveClassOnProduct">
+            <actualResult type="const">$grabCat1ParentClassOnProduct</actualResult>
+            <expectedResult type="string">has-active</expectedResult>
+        </assertStringContainsString>
+        <!-- Verify Cat 1.1 is still highlighted -->
+        <executeJS function="return document.querySelectorAll('{{AdminCategorySidebarTreeSection.categoryNotHighlighted}}').length" stepKey="highlightedCategoryAmount_Try3"/>
+        <executeJS function="return document.querySelectorAll('{{AdminCategorySidebarTreeSection.parentCategoryNotHighlighted}}').length" stepKey="highlightedParentCategoryAmount_Try3"/>
+        <assertEquals stepKey="assertCategoryIsActive_Try3">
+            <actualResult type="const">$highlightedCategoryAmount_Try3</actualResult>
+            <expectedResult type="int">1</expectedResult>
+        </assertEquals>
+        <assertEquals stepKey="assertParentCategoryHasActiveChild_Try3">
+            <actualResult type="const">$highlightedParentCategoryAmount_Try3</actualResult>
+            <expectedResult type="int">1</expectedResult>
+        </assertEquals>
+        <!-- Step 5: Click on home page -> Check that no categories are highlighted -->
+        <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="returnToStorefrontHomePage"/>
+        <!-- Verify no categories are highlighted after returning to home -->
+        <executeJS function="return document.querySelectorAll('{{AdminCategorySidebarTreeSection.categoryNotHighlighted}}').length" stepKey="getHighlightedCategoriesCountAfterHome"/>
+        <assertEquals stepKey="assertNoCategoriesHighlightedAfterHome">
+            <actualResult type="const">$getHighlightedCategoriesCountAfterHome</actualResult>
+            <expectedResult type="int">0</expectedResult>
+        </assertEquals>
+        <!-- Step 6: Open Cat 1.2 -> Check that Cat 1.2 is highlighted (has class 'active') & parent Cat 1 is also highlighted (has class 'has–active') -->
+        <actionGroup ref="StorefrontGoToSubCategoryPageActionGroup" stepKey="goToSubCategoryPage">
+            <argument name="categoryName" value="$$createCat1.name$$"/>
+            <argument name="subCategoryName" value="$$createCat12.name$$"/>
+        </actionGroup>
+        <grabAttributeFrom selector="{{AdminCategorySidebarTreeSection.categoryHighlighted($$createCat12.name$$)}}" userInput="class" stepKey="grabCat12Class"/>
+        <assertStringContainsString stepKey="assertCat12IsHighlighted">
+            <actualResult type="const">$grabCat12Class</actualResult>
+            <expectedResult type="string">active</expectedResult>
+        </assertStringContainsString>
+        <!-- Verify parent Cat 1 has 'has-active' class -->
+        <grabAttributeFrom selector="{{AdminCategorySidebarTreeSection.categoryHighlighted($$createCat1.name$$)}}" userInput="class" stepKey="grabCat1ParentClassForCat12"/>
+        <assertStringContainsString stepKey="assertCat1HasActiveClassForCat12">
+            <actualResult type="const">$grabCat1ParentClassForCat12</actualResult>
+            <expectedResult type="string">has-active</expectedResult>
+        </assertStringContainsString>
+        <!-- Verify Cat 1.2 is highlighted with active class -->
+        <executeJS function="return document.querySelectorAll('{{AdminCategorySidebarTreeSection.categoryNotHighlighted}}').length" stepKey="highlightedCategoryAmount_Try5"/>
+        <executeJS function="return document.querySelectorAll('{{AdminCategorySidebarTreeSection.parentCategoryNotHighlighted}}').length" stepKey="highlightedParentCategoryAmount_Try5"/>
+        <assertEquals stepKey="assertCategoryIsActive_Try4">
+            <actualResult type="const">$highlightedCategoryAmount_Try5</actualResult>
+            <expectedResult type="int">1</expectedResult>
+        </assertEquals>
+        <assertEquals stepKey="assertParentCategoryHasActiveChild_Try4">
+            <actualResult type="const">$highlightedParentCategoryAmount_Try5</actualResult>
+            <expectedResult type="int">1</expectedResult>
+        </assertEquals>
+        <!-- Step 7: Open direct Category 1.2 url -> Check that Cat 1.2 is highlighted & parent Cat 1 is also highlighted -->
+        <actionGroup ref="NavigateToStorefrontForCreatedPageActionGroup" stepKey="navigateToCategoryStorefront">
+            <argument name="page" value="$$createCat1.custom_attributes[url_key]$$/$$createCat12.custom_attributes[url_key]$$.html"/>
+        </actionGroup>
+        <!-- Verify parent Cat 1 has 'has-active' class after direct navigation -->
+        <grabAttributeFrom selector="{{AdminCategorySidebarTreeSection.categoryHighlighted($$createCat1.name$$)}}" userInput="class" stepKey="grabCat1ParentClassDirectNav"/>
+        <assertStringContainsString stepKey="assertCat1HasActiveClassDirectNav">
+            <actualResult type="const">$grabCat1ParentClassDirectNav</actualResult>
+            <expectedResult type="string">has-active</expectedResult>
+        </assertStringContainsString>
+        <grabAttributeFrom selector="{{AdminCategorySidebarTreeSection.categoryHighlighted($$createCat12.name$$)}}" userInput="class" stepKey="grabCat12ClassDirect"/>
+        <assertStringContainsString stepKey="assertCat12IsHighlightedDirect">
+            <actualResult type="const">$grabCat12ClassDirect</actualResult>
+            <expectedResult type="string">active</expectedResult>
+        </assertStringContainsString>
+        <!-- Verify Cat 1.2 is highlighted after direct navigation -->
+        <executeJS function="return document.querySelectorAll('{{AdminCategorySidebarTreeSection.categoryNotHighlighted}}').length" stepKey="highlightedCategoryAmount_Try6"/>
+        <executeJS function="return document.querySelectorAll('{{AdminCategorySidebarTreeSection.parentCategoryNotHighlighted}}').length" stepKey="highlightedParentCategoryAmount_Try6"/>
+        <assertEquals stepKey="assertCategoryIsActive_Try5">
+            <actualResult type="const">$highlightedCategoryAmount_Try6</actualResult>
+            <expectedResult type="int">1</expectedResult>
+        </assertEquals>
+        <assertEquals stepKey="assertParentCategoryHasActiveChild_Try5">
+            <actualResult type="const">$highlightedParentCategoryAmount_Try6</actualResult>
+            <expectedResult type="int">1</expectedResult>
+        </assertEquals>
+        <!-- Step 8: Open Product 1.1-1.2 from Cat 1.2 page -> Check that only categories Cat 1 & Cat 1.2 are highlighted -->
+        <actionGroup ref="StorefrontOpenProductFromCategoryPageActionGroup" stepKey="openProduct1112FromCat12">
+            <argument name="productName" value="$$createProduct1112.name$$"/>
+        </actionGroup>
+        <grabAttributeFrom selector="{{AdminCategorySidebarTreeSection.categoryHighlighted($$createCat12.name$$)}}" userInput="class" stepKey="grabCat12ClassOnProduct"/>
+        <assertStringContainsString stepKey="assertCat12IsHighlightedOnProduct">
+            <actualResult type="const">$grabCat12ClassOnProduct</actualResult>
+            <expectedResult type="string">active</expectedResult>
+        </assertStringContainsString>
+        <!-- Verify parent Cat 1 still has 'has-active' class on product page -->
+        <grabAttributeFrom selector="{{AdminCategorySidebarTreeSection.categoryHighlighted($$createCat1.name$$)}}" userInput="class" stepKey="grabCat1ParentClassOnProductFromCat12"/>
+        <assertStringContainsString stepKey="assertCat1HasActiveClassOnProductFromCat12">
+            <actualResult type="const">$grabCat1ParentClassOnProductFromCat12</actualResult>
+            <expectedResult type="string">has-active</expectedResult>
+        </assertStringContainsString>
+        <!-- Verify Cat 1.2 is still highlighted on product page -->
+        <executeJS function="return document.querySelectorAll('{{AdminCategorySidebarTreeSection.categoryNotHighlighted}}').length" stepKey="highlightedCategoryAmount_Try7"/>
+        <executeJS function="return document.querySelectorAll('{{AdminCategorySidebarTreeSection.parentCategoryNotHighlighted}}').length" stepKey="highlightedParentCategoryAmount_Try7"/>
+        <assertEquals stepKey="assertCategoryIsActive_Try6">
+            <actualResult type="const">$highlightedCategoryAmount_Try7</actualResult>
+            <expectedResult type="int">1</expectedResult>
+        </assertEquals>
+        <assertEquals stepKey="assertParentCategoryHasActiveChild_Try6">
+            <actualResult type="const">$highlightedParentCategoryAmount_Try7</actualResult>
+            <expectedResult type="int">1</expectedResult>
+        </assertEquals>
+        <!-- Step 9: Open Product 1.1-1.2 direct url with category & store in it -> Check that only categories Cat 1 & Cat 1.2 are highlighted -->
+        <actionGroup ref="NavigateToStorefrontForCreatedPageActionGroup" stepKey="navigateToProductStorefront">
+            <argument name="page" value="$$createCat1.custom_attributes[url_key]$$/$$createCat12.custom_attributes[url_key]$$/$$createProduct1112.custom_attributes[url_key]$$.html"/>
+        </actionGroup>
+        <!-- Verify Cat 1.2 is still highlighted on product page -->
+        <executeJS function="return document.querySelectorAll('{{AdminCategorySidebarTreeSection.categoryNotHighlighted}}').length" stepKey="highlightedCategoryAmount_Try8"/>
+        <executeJS function="return document.querySelectorAll('{{AdminCategorySidebarTreeSection.parentCategoryNotHighlighted}}').length" stepKey="highlightedParentCategoryAmount_Try8"/>
+        <assertEquals stepKey="assertCategoryIsActive_Try8">
+            <actualResult type="const">$highlightedCategoryAmount_Try8</actualResult>
+            <expectedResult type="int">1</expectedResult>
+        </assertEquals>
+        <assertEquals stepKey="assertParentCategoryHasActiveChild_Try8">
+            <actualResult type="const">$highlightedParentCategoryAmount_Try8</actualResult>
+            <expectedResult type="int">1</expectedResult>
+        </assertEquals>
+    </test>
+</tests>

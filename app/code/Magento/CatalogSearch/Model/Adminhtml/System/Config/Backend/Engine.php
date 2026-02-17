@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\CatalogSearch\Model\Adminhtml\System\Config\Backend;
 
@@ -61,8 +61,7 @@ class Engine extends \Magento\Framework\App\Config\Value
         parent::beforeSave();
         $value = (string)$this->getValue();
         if (empty($value)) {
-            $defaultCountry = $this->engineResolver->getCurrentSearchEngine();
-            $this->setValue($defaultCountry);
+            $this->setValue($this->engineResolver->getCurrentSearchEngine());
         }
         return $this;
     }

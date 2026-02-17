@@ -1,29 +1,34 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Email\Model;
 
-use Laminas\Mail\Transport\Smtp;
-use Laminas\Mail\Transport\SmtpOptions;
+use Magento\Framework\Mail\EmailMessageInterface;
+use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
+use Symfony\Component\Mailer\Mailer;
+use Symfony\Component\Mailer\Transport\NativeTransportFactory;
+use Symfony\Component\Mailer\Transport\Dsn;
+use Symfony\Component\Mailer\Transport\TransportInterface as SymfonyTransportInterface;
+use Symfony\Component\Mailer\Transport\Smtp\EsmtpTransport;
+use Symfony\Component\Mailer\Transport\Smtp\Auth\LoginAuthenticator;
+use Symfony\Component\Mailer\Transport\Smtp\Auth\PlainAuthenticator;
+use Symfony\Component\Mailer\Transport\Smtp\EsmtpTransportFactory;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\MailException;
-use Magento\Framework\Mail\MessageInterface;
 use Magento\Framework\Mail\TransportInterface;
 use Magento\Framework\Phrase;
+use Symfony\Component\Mime\Message as SymfonyMessage;
 use Magento\Store\Model\ScopeInterface;
-use Laminas\Mail\Message;
-use Laminas\Mail\Transport\Sendmail;
-use Laminas\Mail\Transport\TransportInterface as LaminasTransportInterface;
 use Psr\Log\LoggerInterface;
 
 /**
  * Class that responsible for filling some message data before transporting it.
- * @see \Laminas\Mail\Transport\Sendmail is used for transport
+ * @see \Symfony\Component\Mailer\Transport is used for transport
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Transport implements TransportInterface
@@ -75,6 +80,11 @@ class Transport implements TransportInterface
     private const XML_PATH_SSL = 'system/smtp/ssl';
 
     /**
+     * SMTP scheme constant
+     */
+    private const SMTP_SCHEME = 'smtp';
+
+    /**
      * Whether return path should be set or no.
      *
      * Possible values are:
@@ -84,48 +94,41 @@ class Transport implements TransportInterface
      *
      * @var int
      */
-    private $isSetReturnPath;
+    private int $isSetReturnPath;
 
     /**
      * @var string|null
      */
-    private $returnPathValue;
+    private ?string $returnPathValue;
 
     /**
      * @var ScopeConfigInterface
      */
-    private $scopeConfig;
+    private ScopeConfigInterface $scopeConfig;
 
     /**
-     * @var LaminasTransportInterface|null
+     * @var SymfonyTransportInterface
      */
-    private $laminasTransport;
+    private SymfonyTransportInterface $symfonyTransport;
 
     /**
-     * @var null|string|array|\Traversable
+     * @var EmailMessageInterface
      */
-    private $parameters;
-
-    /**
-     * @var MessageInterface
-     */
-    private $message;
+    private EmailMessageInterface $message;
 
     /**
      * @var LoggerInterface|null
      */
-    private $logger;
+    private ?LoggerInterface $logger;
 
     /**
-     * @param MessageInterface $message Email message object
+     * @param EmailMessageInterface $message Email message object
      * @param ScopeConfigInterface $scopeConfig Core store config
-     * @param null|string|array|\Traversable $parameters Config options for sendmail parameters
      * @param LoggerInterface|null $logger
      */
     public function __construct(
-        MessageInterface $message,
+        EmailMessageInterface $message,
         ScopeConfigInterface $scopeConfig,
-        $parameters = null,
         ?LoggerInterface $logger = null
     ) {
         $this->isSetReturnPath = (int) $scopeConfig->getValue(
@@ -138,49 +141,107 @@ class Transport implements TransportInterface
         );
         $this->message = $message;
         $this->scopeConfig = $scopeConfig;
-        $this->parameters = $parameters;
         $this->logger = $logger ?: ObjectManager::getInstance()->get(LoggerInterface::class);
     }
 
     /**
-     * Get the LaminasTransport based on the configuration.
+     * Get the SymfonyTransport based on the configuration.
      *
-     * @return LaminasTransportInterface
+     * @return SymfonyTransportInterface
      */
-    public function getTransport(): LaminasTransportInterface
+    public function getTransport(): SymfonyTransportInterface
     {
-        if ($this->laminasTransport === null) {
-            $transport = $this->scopeConfig->getValue(
-                self::XML_PATH_TRANSPORT,
-                ScopeInterface::SCOPE_STORE
-            );
-
-            if ($transport === 'smtp') {
-                $this->laminasTransport = $this->createSmtpTransport();
+        if (!isset($this->symfonyTransport)) {
+            $transportType = $this->scopeConfig->getValue(self::XML_PATH_TRANSPORT, ScopeInterface::SCOPE_STORE);
+            if ($transportType === 'smtp') {
+                $this->symfonyTransport = $this->createSmtpTransport();
             } else {
-                $this->laminasTransport = $this->createSendmailTransport();
+                $this->symfonyTransport = $this->createSendmailTransport();
             }
         }
 
-        return $this->laminasTransport;
+        return $this->symfonyTransport;
+    }
+
+    /**
+     * Build the DSN string for Symfony transport based on configuration.
+     *
+     * @return SymfonyTransportInterface
+     */
+    private function createSmtpTransport(): SymfonyTransportInterface
+    {
+        $host = $this->scopeConfig->getValue(self::XML_PATH_HOST, ScopeInterface::SCOPE_STORE);
+        $port = (int) $this->scopeConfig->getValue(self::XML_PATH_PORT, ScopeInterface::SCOPE_STORE);
+        $username = $this->scopeConfig->getValue(self::XML_PATH_USERNAME, ScopeInterface::SCOPE_STORE);
+        $password = $this->scopeConfig->getValue(self::XML_PATH_PASSWORD, ScopeInterface::SCOPE_STORE);
+        $auth = $this->scopeConfig->getValue(self::XML_PATH_AUTH, ScopeInterface::SCOPE_STORE);
+        $ssl = $this->scopeConfig->getValue(self::XML_PATH_SSL, ScopeInterface::SCOPE_STORE);
+
+        $options = [];
+        if ($ssl === 'tls') {
+            $options['tls'] = true;
+        } elseif ($ssl === 'ssl') {
+            $options['ssl'] = true;
+            $options['verify_peer'] = true;
+            $options['verify_peer_name'] = true;
+        }
+
+        $dsn = new Dsn(
+            self::SMTP_SCHEME,
+            $host,
+            $username,
+            $password,
+            $port,
+            $options
+        );
+
+        $factory = new EsmtpTransportFactory();
+        $transport = $factory->create($dsn);
+
+        switch ($auth) {
+            case 'plain':
+                $transport->setAuthenticators([new PlainAuthenticator()]);
+                break;
+            case 'login':
+                $transport->setAuthenticators([new LoginAuthenticator()]);
+                break;
+            case 'none':
+                break;
+            default:
+                throw new \InvalidArgumentException('Invalid authentication type: ' . $auth);
+        }
+
+        return $transport;
+    }
+
+    /**
+     * Create a Sendmail transport for Symfony Mailer.
+     *
+     * @return SymfonyTransportInterface
+     */
+    private function createSendmailTransport(): SymfonyTransportInterface
+    {
+        $dsn = new Dsn('native', 'default');
+        $nativeTransportFactory = new NativeTransportFactory();
+        return $nativeTransportFactory->create($dsn);
     }
 
     /**
      * @inheritdoc
      */
-    public function sendMessage()
+    public function sendMessage(): void
     {
         try {
-            $laminasMessage = Message::fromString($this->message->getRawMessage())->setEncoding('utf-8');
-            if (2 === $this->isSetReturnPath && $this->returnPathValue) {
-                $laminasMessage->setSender($this->returnPathValue);
-            } elseif (1 === $this->isSetReturnPath && $laminasMessage->getFrom()->count()) {
-                $fromAddressList = $laminasMessage->getFrom();
-                $fromAddressList->rewind();
-                $laminasMessage->setSender($fromAddressList->current()->getEmail());
-            }
-
-            $this->getTransport()->send($laminasMessage);
+            $email = $this->message->getSymfonyMessage();
+            $this->setReturnPath($email);
+            $mailer = new Mailer($this->getTransport());
+            $mailer->send($email);
+        } catch (TransportExceptionInterface $transportException) {
+            $this->logger->error('Transport error while sending email: ' . $transportException->getMessage());
+            throw new MailException(
+                new Phrase('Transport error: Unable to send mail at this time.'),
+                $transportException
+            );
         } catch (\Exception $e) {
             $this->logger->error($e);
             throw new MailException(new Phrase('Unable to send mail. Please try again later.'), $e);
@@ -188,81 +249,30 @@ class Transport implements TransportInterface
     }
 
     /**
+     * Set the return path if configured.
+     *
+     * @param SymfonyMessage $email
+     */
+    private function setReturnPath(SymfonyMessage $email): void
+    {
+        if ($this->isSetReturnPath === 2 && $this->returnPathValue) {
+            $email->getHeaders()->addMailboxHeader('Sender', $this->returnPathValue);
+        } elseif ($this->isSetReturnPath === 1 &&
+            !empty(
+                /** @var \Symfony\Component\Mime\Address[] $fromAddresses */
+                $fromAddresses = $email->getHeaders()->get('From')?->getAddresses()
+            )
+        ) {
+            reset($fromAddresses);
+            $email->getHeaders()->addMailboxHeader('Sender', current($fromAddresses));
+        }
+    }
+
+    /**
      * @inheritdoc
      */
-    public function getMessage()
+    public function getMessage(): EmailMessageInterface
     {
         return $this->message;
-    }
-
-    /**
-     * Create a Smtp LaminasTransport.
-     *
-     * @return Smtp
-     */
-    private function createSmtpTransport(): Smtp
-    {
-        $host = $this->scopeConfig->getValue(
-            self::XML_PATH_HOST,
-            ScopeInterface::SCOPE_STORE
-        );
-
-        $port = $this->scopeConfig->getValue(
-            self::XML_PATH_PORT,
-            ScopeInterface::SCOPE_STORE
-        );
-
-        $username = $this->scopeConfig->getValue(
-            self::XML_PATH_USERNAME,
-            ScopeInterface::SCOPE_STORE
-        );
-
-        $password = $this->scopeConfig->getValue(
-            self::XML_PATH_PASSWORD,
-            ScopeInterface::SCOPE_STORE
-        );
-
-        $auth = $this->scopeConfig->getValue(
-            self::XML_PATH_AUTH,
-            ScopeInterface::SCOPE_STORE
-        );
-
-        $ssl = $this->scopeConfig->getValue(
-            self::XML_PATH_SSL,
-            ScopeInterface::SCOPE_STORE
-        );
-
-        $options  = [
-            'name' => 'localhost',
-            'host' => $host,
-            'port' => $port,
-            'connection_config' => [
-                'username' => $username,
-                'password' => $password,
-            ]
-        ];
-
-        if ($auth && $auth !== 'none') {
-            $options['connection_class'] = $auth;
-        }
-
-        if ($ssl && $ssl !== 'none') {
-            $options['connection_config']['ssl'] = $ssl;
-        }
-
-        $transport = new Smtp();
-        $transport->setOptions(new SmtpOptions($options));
-
-        return $transport;
-    }
-
-    /**
-     * Create a Sendmail Laminas Transport
-     *
-     * @return Sendmail
-     */
-    private function createSendmailTransport(): Sendmail
-    {
-        return new Sendmail($this->parameters);
     }
 }

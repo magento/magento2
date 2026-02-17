@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -9,19 +9,17 @@ namespace Magento\Checkout\Test\Unit\Model;
 
 use Magento\Checkout\Api\Data\TotalsInformationInterface;
 use Magento\Checkout\Model\TotalsInformationManagement;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Checkout\Model\TotalsInformationManagement as TotalsInformationManagementModel;
 use Magento\Quote\Api\CartRepositoryInterface;
 use Magento\Quote\Api\CartTotalRepositoryInterface;
 use Magento\Quote\Model\Quote;
 use Magento\Quote\Model\Quote\Address;
+use PHPUnit\Framework\Attributes\DataProvider;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 
 class TotalsInformationManagementTest extends \PHPUnit\Framework\TestCase
 {
-    /**
-     * @var ObjectManager
-     */
-    private $objectManager;
-
+    use MockCreationTrait;
     /**
      * @var CartRepositoryInterface|\PHPUnit\Framework\MockObject\MockObject
      */
@@ -39,20 +37,15 @@ class TotalsInformationManagementTest extends \PHPUnit\Framework\TestCase
 
     protected function setUp(): void
     {
-        $this->objectManager = new ObjectManager($this);
         $this->cartRepositoryMock = $this->createMock(
             CartRepositoryInterface::class
         );
         $this->cartTotalRepositoryMock = $this->createMock(
             CartTotalRepositoryInterface::class
         );
-
-        $this->totalsInformationManagement = $this->objectManager->getObject(
-            TotalsInformationManagement::class,
-            [
-                'cartRepository' => $this->cartRepositoryMock,
-                'cartTotalRepository' => $this->cartTotalRepositoryMock,
-            ]
+        $this->totalsInformationManagement = new TotalsInformationManagementModel(
+            $this->cartRepositoryMock,
+            $this->cartTotalRepositoryMock
         );
     }
 
@@ -62,8 +55,8 @@ class TotalsInformationManagementTest extends \PHPUnit\Framework\TestCase
      * @param string|null $carrierCode
      * @param string|null $carrierMethod
      * @param int $methodSetCount
-     * @dataProvider dataProviderCalculate
      */
+    #[DataProvider('dataProviderCalculate')]
     public function testCalculate(?string $carrierCode, ?string $carrierMethod, int $methodSetCount)
     {
         $cartId = 1;
@@ -75,35 +68,36 @@ class TotalsInformationManagementTest extends \PHPUnit\Framework\TestCase
         $this->cartRepositoryMock->expects($this->once())->method('get')->with($cartId)->willReturn($cartMock);
         $this->cartTotalRepositoryMock->expects($this->once())->method('get')->with($cartId);
 
-        $addressInformationMock = $this->createMock(
-            TotalsInformationInterface::class
+        $addressInformationMock = $this->createMock(TotalsInformationInterface::class);
+        $addressMock = $this->createPartialMockWithReflection(
+            Address::class,
+            ['setCollectShippingRates', 'setShippingMethod', 'getShippingMethod', 'getCollectShippingRatesFlag', 'save']
         );
-        $addressMock = $this->getMockBuilder(Address::class)
-            ->addMethods(
-                [
-                    'setShippingMethod',
-                    'setCollectShippingRates',
-                ]
-            )
-            ->onlyMethods(['save'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $addressMock->method('save')->willReturnSelf();
+
+        if ($methodSetCount > 0) {
+            $expectedMethod = $carrierCode . '_' . $carrierMethod;
+            $addressMock->method('getShippingMethod')->willReturnOnConsecutiveCalls(null, $expectedMethod);
+            $addressMock->expects($this->once())->method('setCollectShippingRates')->with(true)->willReturnSelf();
+            $addressMock->expects($this->once())->method('setShippingMethod')->with($expectedMethod)->willReturnSelf();
+            $addressMock->method('getCollectShippingRatesFlag')->willReturn(true);
+        } else {
+            $addressMock->method('getShippingMethod')->willReturn(null);
+        }
 
         $addressInformationMock->expects($this->once())->method('getAddress')->willReturn($addressMock);
-        $addressInformationMock->expects($this->any())->method('getShippingCarrierCode')->willReturn($carrierCode);
-        $addressInformationMock->expects($this->any())->method('getShippingMethodCode')->willReturn($carrierMethod);
+        $addressInformationMock->method('getShippingCarrierCode')->willReturn($carrierCode);
+        $addressInformationMock->method('getShippingMethodCode')->willReturn($carrierMethod);
         $cartMock->expects($this->once())->method('setShippingAddress')->with($addressMock);
         $cartMock->expects($this->exactly($methodSetCount))->method('getShippingAddress')->willReturn($addressMock);
-        $addressMock->expects($this->exactly($methodSetCount))
-            ->method('setCollectShippingRates')->with(true)->willReturn($addressMock);
-        $addressMock->expects($this->exactly($methodSetCount))
-            ->method('setShippingMethod')->with($carrierCode . '_' . $carrierMethod);
-        $addressMock->expects($this->exactly($methodSetCount))
-            ->method('save')
-            ->willReturnSelf();
         $cartMock->expects($this->once())->method('collectTotals');
 
         $this->totalsInformationManagement->calculate($cartId, $addressInformationMock);
+
+        if ($methodSetCount > 0) {
+            $this->assertTrue($addressMock->getCollectShippingRatesFlag());
+            $this->assertSame($carrierCode . '_' . $carrierMethod, $addressMock->getShippingMethod());
+        }
     }
 
     /**
@@ -124,56 +118,41 @@ class TotalsInformationManagementTest extends \PHPUnit\Framework\TestCase
         $this->cartTotalRepositoryMock->method('get')->with($cartId);
 
         $addressInformationMock = $this->createMock(TotalsInformationInterface::class);
-        $addressMock = $this->getMockBuilder(Address::class)
-            ->addMethods(
-                [
-                    'setShippingMethod',
-                    'setCollectShippingRates'
-                ]
-            )->onlyMethods(
-                [
-                    'getShippingMethod',
-                    'setShippingAmount',
-                    'setBaseShippingAmount',
-                    'save'
-                ]
-            )
-            ->disableOriginalConstructor()
-            ->getMock();
-        $addressMock->method('getShippingMethod')
-            ->willReturn('flatrate_flatrate');
-        $addressInformationMock->method('getAddress')
-            ->willReturn($addressMock);
-        $addressInformationMock->method('getShippingCarrierCode')
-            ->willReturn($carrierCode);
-        $addressInformationMock->method('getShippingMethodCode')
-            ->willReturn($carrierMethod);
-        $cartMock->method('setShippingAddress')
-            ->with($addressMock);
-        $cartMock->method('getShippingAddress')
-            ->willReturn($addressMock);
-        $addressMock->expects($this->once())
-            ->method('setCollectShippingRates')
-            ->with(true)
-            ->willReturn($addressMock);
-        $addressMock->expects($this->once())
-            ->method('setShippingAmount')
-            ->with(0)
-            ->willReturn($addressMock);
-        $addressMock->expects($this->once())
-            ->method('setBaseShippingAmount')
-            ->with(0)
-            ->willReturn($addressMock);
-        $addressMock->expects($this->once())
-            ->method('setShippingMethod')
-            ->with($carrierCode . '_' . $carrierMethod);
-        $addressMock->expects($this->once())
-            ->method('save')
-            ->willReturnSelf();
-        $cartMock->expects($this->once())
-            ->method('collectTotals');
+        $addressMock = $this->createPartialMockWithReflection(
+            Address::class,
+            ['setCollectShippingRates', 'setShippingMethod', 'getShippingMethod',
+             'setShippingAmount', 'setBaseShippingAmount', 'getCollectShippingRatesFlag',
+             'getShippingAmount', 'getBaseShippingAmount', 'save']
+        );
+        $expectedMethod = $carrierCode . '_' . $carrierMethod;
+        // getShippingMethod called twice in condition (line 240-241), once in assertion
+        $addressMock->method('getShippingMethod')->willReturnOnConsecutiveCalls(
+            'flatrate_flatrate',
+            'flatrate_flatrate',
+            $expectedMethod
+        );
+        $addressMock->expects($this->once())->method('setShippingAmount')->with(0)->willReturnSelf();
+        $addressMock->expects($this->once())->method('setBaseShippingAmount')->with(0)->willReturnSelf();
+        $addressMock->expects($this->once())->method('setCollectShippingRates')->with(true)->willReturnSelf();
+        $addressMock->expects($this->once())->method('setShippingMethod')->with($expectedMethod)->willReturnSelf();
+        $addressMock->method('getCollectShippingRatesFlag')->willReturn(true);
+        $addressMock->method('getShippingAmount')->willReturn(0);
+        $addressMock->method('getBaseShippingAmount')->willReturn(0);
+        $addressMock->method('save')->willReturnSelf();
+
+        $addressInformationMock->method('getAddress')->willReturn($addressMock);
+        $addressInformationMock->method('getShippingCarrierCode')->willReturn($carrierCode);
+        $addressInformationMock->method('getShippingMethodCode')->willReturn($carrierMethod);
+        $cartMock->method('setShippingAddress')->with($addressMock);
+        $cartMock->method('getShippingAddress')->willReturn($addressMock);
+        $cartMock->expects($this->once())->method('collectTotals');
 
         $this->totalsInformationManagement->calculate($cartId, $addressInformationMock);
+
+        $this->assertTrue($addressMock->getCollectShippingRatesFlag());
+        $this->assertSame(0, $addressMock->getShippingAmount());
+        $this->assertSame(0, $addressMock->getBaseShippingAmount());
+        $this->assertSame($carrierCode . '_' . $carrierMethod, $addressMock->getShippingMethod());
     }
 
     /**

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ *  Copyright 2014 Adobe
+ *  All Rights Reserved.
  */
 
 namespace Magento\Framework\Config\Reader;
@@ -82,6 +82,13 @@ class Filesystem implements \Magento\Framework\Config\ReaderInterface
     protected $_schemaFile;
 
     /**
+     * Name of an attribute that stands for data type of node values
+     *
+     * @var string|null
+     */
+    private $typeAttributeName;
+
+    /**
      * Constructor
      *
      * @param \Magento\Framework\Config\FileResolverInterface $fileResolver
@@ -92,6 +99,7 @@ class Filesystem implements \Magento\Framework\Config\ReaderInterface
      * @param array $idAttributes
      * @param string $domDocumentClass
      * @param string $defaultScope
+     * @param string|null $typeAttributeName
      */
     public function __construct(
         \Magento\Framework\Config\FileResolverInterface $fileResolver,
@@ -101,7 +109,8 @@ class Filesystem implements \Magento\Framework\Config\ReaderInterface
         $fileName,
         $idAttributes = [],
         $domDocumentClass = \Magento\Framework\Config\Dom::class,
-        $defaultScope = 'global'
+        $defaultScope = 'global',
+        ?string $typeAttributeName = null,
     ) {
         $this->_fileResolver = $fileResolver;
         $this->_converter = $converter;
@@ -113,6 +122,7 @@ class Filesystem implements \Magento\Framework\Config\ReaderInterface
             ? $schemaLocator->getPerFileSchema() : null;
         $this->_domDocumentClass = $domDocumentClass;
         $this->_defaultScope = $defaultScope;
+        $this->typeAttributeName = $typeAttributeName;
     }
 
     /**
@@ -210,7 +220,7 @@ class Filesystem implements \Magento\Framework\Config\ReaderInterface
             $initialContents,
             $this->validationState,
             $this->_idAttributes,
-            null,
+            $this->typeAttributeName,
             $this->_perFileSchema
         );
         if (!$result instanceof \Magento\Framework\Config\Dom) {

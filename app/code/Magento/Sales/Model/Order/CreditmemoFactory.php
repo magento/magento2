@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Sales\Model\Order;
 
@@ -292,8 +292,9 @@ class CreditmemoFactory
     {
         $qty = 0;
         if ($orderItem->isDummy()) {
-            if (isset($qtyList[$orderItem->getParentItemId()])) {
-                $parentQty = $qtyList[$orderItem->getParentItemId()];
+            $parentItemId = $orderItem->getParentItemId();
+            if ($parentItemId !== null && isset($qtyList[$parentItemId])) {
+                $parentQty = $qtyList[$parentItemId];
             } elseif ($orderItem->getProductType() === BundlePrice::PRODUCT_TYPE) {
                 $parentQty = $orderItem->getQtyInvoiced();
             } else {

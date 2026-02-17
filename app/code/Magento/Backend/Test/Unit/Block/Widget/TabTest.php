@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -9,6 +9,7 @@ namespace Magento\Backend\Test\Unit\Block\Widget;
 
 use Magento\Backend\Block\Widget\Tab;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 class TabTest extends TestCase
@@ -28,8 +29,8 @@ class TabTest extends TestCase
      * @param string $field
      * @param mixed $value
      * @param mixed $expected
-     * @dataProvider dataProvider
      */
+    #[DataProvider('dataProvider')]
     public function testGetters($method, $field, $value, $expected)
     {
         /** @var Tab $object */

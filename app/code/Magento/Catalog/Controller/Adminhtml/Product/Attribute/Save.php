@@ -1,7 +1,6 @@
 <?php
 /**
- *
- * Copyright 2024 Adobe
+ * Copyright 2014 Adobe
  * All Rights Reserved.
  */
 
@@ -272,6 +271,16 @@ class Save extends Attribute implements HttpPostActionInterface
             if (array_key_exists('reset_is-default_option', $data) && $data['reset_is-default_option']) {
                 unset($data['reset_is-default_option']);
                 $data['default_value'] = null;
+            } elseif (isset($data['default'])) {
+                $defaultOptions = [];
+                foreach ((array)$data['default'] as $defaultValue) {
+                    if ((int)$defaultValue > 0) {
+                        $defaultOptions[] = $defaultValue;
+                    }
+                }
+                if (!empty($defaultOptions)) {
+                    $data['default_value'] = implode(",", $defaultOptions);
+                }
             }
 
             $model->addData($data);
