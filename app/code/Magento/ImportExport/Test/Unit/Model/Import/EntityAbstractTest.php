@@ -121,7 +121,6 @@ class EntityAbstractTest extends AbstractImportTestCase
         ];
 
         $method = new \ReflectionMethod($this->_model, '_prepareRowForDb');
-        $method->setAccessible(true);
         $actual = $method->invoke($this->_model, $expected);
 
         $expected['test3'] = null;
@@ -160,7 +159,6 @@ class EntityAbstractTest extends AbstractImportTestCase
         $attributeCode = 'test';
 
         $property = new \ReflectionProperty($this->_model, '_specialAttributes');
-        $property->setAccessible(true);
         $property->setValue($this->_model, [$attributeCode]);
 
         $this->assertTrue($this->_model->isAttributeParticular($attributeCode));
@@ -189,7 +187,6 @@ class EntityAbstractTest extends AbstractImportTestCase
         $rows = 4;
         $skippedRows = [2 => true, 4 => true];
         $property = new \ReflectionProperty($this->_model, '_skippedRows');
-        $property->setAccessible(true);
         $property->setValue($this->_model, $skippedRows);
 
         $modelForValidateRow = clone $this->_model;
@@ -219,7 +216,6 @@ class EntityAbstractTest extends AbstractImportTestCase
     public function testGetBehaviorWithoutRowData()
     {
         $property = new \ReflectionProperty($this->_model, '_availableBehaviors');
-        $property->setAccessible(true);
         $property->setValue($this->_model, $this->_availableBehaviors);
 
         $default = AbstractEntity::getDefaultBehavior();
@@ -393,8 +389,6 @@ class EntityAbstractTest extends AbstractImportTestCase
         ?array $availableBehaviors = null
     ) {
         $property = new \ReflectionProperty($this->_model, '_availableBehaviors');
-        $property->setAccessible(true);
-
         if (isset($availableBehaviors)) {
             $property->setValue($this->_model, $availableBehaviors);
         } else {
@@ -539,7 +533,6 @@ class EntityAbstractTest extends AbstractImportTestCase
 
         $permanentAttributes = ['test2', 'test3'];
         $property = new \ReflectionProperty($this->_model, '_permanentAttributes');
-        $property->setAccessible(true);
         $property->setValue($this->_model, $permanentAttributes);
 
         $errorAggregator = $this->_model->validateData();

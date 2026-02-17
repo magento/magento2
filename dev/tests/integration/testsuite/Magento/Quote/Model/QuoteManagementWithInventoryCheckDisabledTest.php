@@ -16,6 +16,7 @@ use Magento\Quote\Api\CartManagementInterface;
 use Magento\Sales\Api\OrderRepositoryInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\Quote\Model\GetQuoteByReservedOrderId;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 class QuoteManagementWithInventoryCheckDisabledTest extends TestCase
@@ -62,8 +63,8 @@ class QuoteManagementWithInventoryCheckDisabledTest extends TestCase
      * @return void
      * @magentoDataFixture Magento/Sales/_files/quote_with_purchase_order.php
      * @magentoConfigFixture cataloginventory/options/enable_inventory_check 0
-     * @dataProvider getQtyAndStockStatusProvider
      */
+    #[DataProvider('getQtyAndStockStatusProvider')]
     public function testPlaceOrderWithDisabledInventoryCheck(int $qty, int $stockStatus): void
     {
         $quote = $this->getQuoteByReservedOrderId->execute('test_order_1');

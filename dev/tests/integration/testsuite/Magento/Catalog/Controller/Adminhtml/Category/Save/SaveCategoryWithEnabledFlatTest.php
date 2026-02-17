@@ -18,6 +18,7 @@ use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Indexer\IndexerRegistry;
 use Magento\UrlRewrite\Model\ResourceModel\UrlRewrite as UrlRewriteResource;
 use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Test cases related to save category with enabled category flat.
@@ -82,9 +83,13 @@ class SaveCategoryWithEnabledFlatTest extends AbstractSaveCategoryTest
     protected function tearDown(): void
     {
         parent::tearDown();
-        $categoryFlatIndexer = $this->indexerRegistry->get(State::INDEXER_ID);
-        $categoryFlatIndexer->invalidate();
-        $this->categoryFlatResource->getConnection()->dropTable($this->categoryFlatResource->getMainTable());
+        try {
+            $categoryFlatIndexer = $this->indexerRegistry->get(State::INDEXER_ID);
+            $categoryFlatIndexer->invalidate();
+            $this->categoryFlatResource->getConnection()->dropTable($this->categoryFlatResource->getMainTable());
+        } catch (\InvalidArgumentException $e) {
+            // Indexer doesn't exist, skip cleanup
+        }
         $this->deleteAllCategoryUrlRewrites();
         try {
             $this->categoryRepository->deleteByIdentifier($this->createdCategoryId);
@@ -140,14 +145,13 @@ class SaveCategoryWithEnabledFlatTest extends AbstractSaveCategoryTest
     /**
      * Assert that category flat table is created and flat table contains category with expected data.
      *
-     * @dataProvider enableCategoryDataProvider
-     *
      * @magentoConfigFixture current_store catalog/frontend/flat_catalog_category true
      *
      * @param array $postData
      * @param array $expectedData
      * @return void
      */
+    #[DataProvider('enableCategoryDataProvider')]
     public function testSaveCategoryWithData(array $postData, array $expectedData): void
     {
         $responseData = $this->performSaveCategoryRequest($postData);

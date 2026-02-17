@@ -13,6 +13,7 @@ use Magento\Catalog\Block\Product\View\Tabs;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\View\Element\Template;
 use Magento\Framework\View\Layout;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -96,11 +97,11 @@ class TabsTest extends TestCase
      * @param string|null $title
      * @param string|null $block
      * @param string|null $template
-     * @dataProvider invalidParametersDataProvider
      * @covers \Magento\Catalog\Block\Product\View\Tabs::addTab
      * @covers \Magento\Catalog\Block\Product\View\Tabs::getTabs
      * @return void
      */
+    #[DataProvider('invalidParametersDataProvider')]
     public function testAddTabWithInvalidParameters(?string $title, ?string $block, ?string $template): void
     {
         $this->layoutMock->expects($this->never())->method('createBlock');
@@ -208,10 +209,10 @@ class TabsTest extends TestCase
      * @param string $title
      * @param string $block
      * @param string $template
-     * @dataProvider whitespaceParametersDataProvider
      * @covers \Magento\Catalog\Block\Product\View\Tabs::addTab
      * @return void
      */
+    #[DataProvider('whitespaceParametersDataProvider')]
     public function testAddTabWithWhitespaceOnlyValues(string $title, string $block, string $template): void
     {
         $tabBlock = $this->createMock(Template::class);

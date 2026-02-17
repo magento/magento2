@@ -33,6 +33,8 @@ class QuoteItemQtyList
     public function getQty($productId, $quoteItemId, $quoteId, $itemQty)
     {
         $qty = $itemQty;
+        $quoteId = (string)$quoteId;
+        $productId = (string)$productId;
         if (isset($this->_checkedQuoteItems[$quoteId][$productId]['qty']) && $quoteItemId !== null && !in_array(
             $quoteItemId,
             $this->_checkedQuoteItems[$quoteId][$productId]['items']

@@ -78,7 +78,7 @@ QUERY;
         $response = $this->graphQlQueryWithResponseHeaders($query, [], '', $this->getHeaderMap());
         $this->assertArrayHasKey(CacheIdCalculator::CACHE_ID_HEADER, $response['headers']);
         $cacheId = $response['headers'][CacheIdCalculator::CACHE_ID_HEADER];
-        $this->assertTrue((boolean)preg_match('/^[0-9a-f]{64}$/i', $cacheId));
+        $this->assertTrue((bool)preg_match('/^[0-9a-f]{64}$/i', $cacheId));
         //Change tax rate to different value
         /** @var Rate $rate */
         $rate = $this->taxRate->loadByCode('US-AL-*-Rate-1');
@@ -88,7 +88,7 @@ QUERY;
         $this->assertArrayHasKey(CacheIdCalculator::CACHE_ID_HEADER, $responseAfterTaxRateChange['headers']);
         $cacheIdTaxRateChange = $responseAfterTaxRateChange['headers'][CacheIdCalculator::CACHE_ID_HEADER];
         // Verify that the the cache id generated is a 64 character long
-        $this->assertTrue((boolean)preg_match('/^[0-9a-f]{64}$/i', $cacheId));
+        $this->assertTrue((bool)preg_match('/^[0-9a-f]{64}$/i', $cacheId));
         // check that the cache ids generated before and after tax rate changes are not equal
         $this->assertNotEquals($cacheId, $cacheIdTaxRateChange);
 

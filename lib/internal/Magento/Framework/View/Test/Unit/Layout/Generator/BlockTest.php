@@ -12,6 +12,7 @@ use Magento\Framework\App\ScopeResolverInterface;
 use Magento\Framework\Data\Argument\InterpreterInterface;
 use Magento\Framework\Event\ManagerInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\View\Element\AbstractBlock;
 use Magento\Framework\View\Element\BlockFactory;
 use Magento\Framework\View\Layout\Data\Structure;
@@ -22,6 +23,7 @@ use Magento\Framework\View\LayoutInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\MockObject\Rule\InvokedCount;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * @covers \Magento\Framework\View\Layout\Generator\Block
@@ -29,6 +31,7 @@ use PHPUnit\Framework\TestCase;
  */
 class BlockTest extends TestCase
 {
+    use MockCreationTrait;
     /**
      * @covers \Magento\Framework\View\Layout\Generator\Block::process()
      * @covers \Magento\Framework\View\Layout\Generator\Block::createBlock()
@@ -41,12 +44,11 @@ class BlockTest extends TestCase
      * @param InvokedCount $addToParentGroupCount
      * @param InvokedCount $setTemplateCount
      * @param InvokedCount $setTtlCount
-     * @param InvokedCount $setIsFlag
-     * @dataProvider provider
-     *
+     * @param InvokedCount $setIsFlag     *
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
+    #[DataProvider('provider')]
     public function testProcess(
         $testGroup,
         $testTemplate,
@@ -59,6 +61,20 @@ class BlockTest extends TestCase
         $setTtlCount,
         $setIsFlag
     ) {
+        // Convert string expectations to matchers
+        $addToParentGroupCount = is_string($addToParentGroupCount) 
+            ? $this->createInvocationMatcher($addToParentGroupCount) 
+            : $addToParentGroupCount;
+        $setTemplateCount = is_string($setTemplateCount) 
+            ? $this->createInvocationMatcher($setTemplateCount) 
+            : $setTemplateCount;
+        $setTtlCount = is_string($setTtlCount) 
+            ? $this->createInvocationMatcher($setTtlCount) 
+            : $setTtlCount;
+        $setIsFlag = is_string($setIsFlag) 
+            ? $this->createInvocationMatcher($setIsFlag) 
+            : $setIsFlag;
+        
         $elementName = 'test_block';
         $methodName = 'setTest';
         $literal = 'block';
@@ -107,17 +123,16 @@ class BlockTest extends TestCase
         $readerContext->expects($this->once())->method('getScheduledStructure')
             ->willReturn($scheduleStructure);
 
-        $layout = $this->getMockForAbstractClass(LayoutInterface::class);
+        $layout = $this->createMock(LayoutInterface::class);
 
         /**
          * @var \Magento\Framework\View\Element\AbstractBlock|\PHPUnit\Framework\MockObject\MockObject $blockInstance
          */
-        // explicitly set mocked methods for successful expectation of magic methods
-        $blockInstance = $this->getMockBuilder(AbstractBlock::class)
-            ->addMethods(['setType', 'setTemplate', 'setTtl', $methodName])
-            ->onlyMethods(['setNameInLayout', 'addData', 'setLayout'])
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        // Use createPartialMockWithReflection because setType doesn't exist in AbstractBlock
+        $blockInstance = $this->createPartialMockWithReflection(
+            AbstractBlock::class,
+            ['setType', 'setTemplate', 'setTtl', $methodName, 'setNameInLayout', 'addData', 'setLayout']
+        );
         $blockInstance->expects($this->once())->method('setType')->with(get_class($blockInstance));
         $blockInstance->expects($this->once())->method('setNameInLayout')->with($elementName);
         $blockInstance->expects($this->once())->method('addData')->with($argumentData);
@@ -141,7 +156,7 @@ class BlockTest extends TestCase
         /**
          * @var MockObject $argumentInterpreter
          */
-        $argumentInterpreter = $this->getMockForAbstractClass(InterpreterInterface::class);
+        $argumentInterpreter = $this->createMock(InterpreterInterface::class);
         if ($isNeedEvaluate) {
             $argumentInterpreter
                 ->expects($this->any())
@@ -160,15 +175,15 @@ class BlockTest extends TestCase
             ->willReturn($blockInstance);
 
         /** @var ManagerInterface|MockObject $eventManager */
-        $eventManager = $this->getMockForAbstractClass(ManagerInterface::class);
+        $eventManager = $this->createMock(ManagerInterface::class);
         $eventManager->expects($this->once())->method('dispatch')
             ->with('core_layout_block_create_after', [$literal => $blockInstance]);
 
-        $scopeConfigMock = $this->getMockForAbstractClass(ScopeConfigInterface::class);
+        $scopeConfigMock = $this->createMock(ScopeConfigInterface::class);
         $scopeConfigMock->expects($this->once())->method('isSetFlag')
             ->with('config_path', 'scope', 'default')->willReturn($testIsFlag);
 
-        $scopeResolverMock = $this->getMockForAbstractClass(ScopeResolverInterface::class);
+        $scopeResolverMock = $this->createMock(ScopeResolverInterface::class);
         $scopeResolverMock->expects($this->once())->method('getScope')
             ->willReturn('default');
 
@@ -200,10 +215,10 @@ class BlockTest extends TestCase
                 ['argument' => ['name' => 'argument', 'xsi:type' => 'type', 'value' => 'value']],
                 true,
                 true,
-                self::once(),
-                self::never(),
-                self::once(),
-                self::once(),
+                'once',
+                'never',
+                'once',
+                'once',
             ],
             [
                 '',
@@ -212,10 +227,10 @@ class BlockTest extends TestCase
                 ['argument' => 'value'],
                 false,
                 false,
-                self::never(),
-                self::once(),
-                self::never(),
-                self::never(),
+                'never',
+                'once',
+                'never',
+                'never',
             ],
         ];
     }

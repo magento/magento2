@@ -29,9 +29,12 @@ use Magento\Framework\Json\Helper\Data as JsonHelper;
 use Magento\Framework\Module\Manager;
 use Magento\Framework\Registry;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\Translate\InlineInterface;
 use Magento\Framework\View\Element\AbstractBlock;
+use Magento\Framework\View\LayoutInterface;
 use Magento\Store\Model\StoreManagerInterface;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
@@ -44,6 +47,7 @@ use ReflectionClass;
  */
 class TabsTest extends TestCase
 {
+    use MockCreationTrait;
     /**
      * @var Tabs
      */
@@ -132,16 +136,16 @@ class TabsTest extends TestCase
         $objectManager->prepareObjectManager($objects);
 
         $this->contextMock = $this->createMock(Context::class);
-        $this->jsonEncoderMock = $this->getMockForAbstractClass(EncoderInterface::class);
+        $this->jsonEncoderMock = $this->createMock(EncoderInterface::class);
         $this->authSessionMock = $this->createMock(Session::class);
         $this->moduleManagerMock = $this->createMock(Manager::class);
         $this->collectionFactory = $this->createMock(CollectionFactory::class);
         $this->helperCatalogMock = $this->createMock(Catalog::class);
         $this->catalogDataMock = $this->createMock(Data::class);
         $this->registryMock = $this->createMock(Registry::class);
-        $this->translateInlineMock = $this->getMockForAbstractClass(InlineInterface::class);
-        $this->storeManagerMock = $this->getMockForAbstractClass(StoreManagerInterface::class);
-        $this->requestMock = $this->getMockForAbstractClass(RequestInterface::class);
+        $this->translateInlineMock = $this->createMock(InlineInterface::class);
+        $this->storeManagerMock = $this->createMock(StoreManagerInterface::class);
+        $this->requestMock = $this->createMock(RequestInterface::class);
         $this->productMock = $this->createMock(Product::class);
 
         $this->contextMock->expects($this->any())
@@ -238,10 +242,10 @@ class TabsTest extends TestCase
      *
      * @param string|null $helperReturn
      * @param string $expectedBlock
-     * @dataProvider getAttributeTabBlockDataProvider
      * @covers \Magento\Catalog\Block\Adminhtml\Product\Edit\Tabs::getAttributeTabBlock
      * @return void
      */
+    #[DataProvider('getAttributeTabBlockDataProvider')]
     public function testGetAttributeTabBlock(?string $helperReturn, string $expectedBlock): void
     {
         $this->helperCatalogMock->expects($this->any())
@@ -301,20 +305,18 @@ class TabsTest extends TestCase
     {
         $reflection = new ReflectionClass($this->tabs);
 
-        $tabDataObjectMock = $this->getMockBuilder(DataObject::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['getGroupCode'])
-            ->getMock();
+        $tabDataObjectMock = $this->createPartialMockWithReflection(
+            DataObject::class,
+            ['getGroupCode']
+        );
         $tabDataObjectMock->expects($this->once())
             ->method('getGroupCode')
             ->willReturn(Tabs::ADVANCED_TAB_GROUP_CODE);
 
         $tabsProperty = $reflection->getProperty('_tabs');
-        $tabsProperty->setAccessible(true);
         $tabsProperty->setValue($this->tabs, ['advanced-pricing' => $tabDataObjectMock]);
 
         $activeTabProperty = $reflection->getProperty('_activeTab');
-        $activeTabProperty->setAccessible(true);
         $activeTabProperty->setValue($this->tabs, 'advanced-pricing');
 
         $result = $this->tabs->isAdvancedTabGroupActive();
@@ -331,20 +333,18 @@ class TabsTest extends TestCase
     {
         $reflection = new ReflectionClass($this->tabs);
 
-        $tabDataObjectMock = $this->getMockBuilder(DataObject::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['getGroupCode'])
-            ->getMock();
+        $tabDataObjectMock = $this->createPartialMockWithReflection(
+            DataObject::class,
+            ['getGroupCode']
+        );
         $tabDataObjectMock->expects($this->once())
             ->method('getGroupCode')
             ->willReturn(Tabs::BASIC_TAB_GROUP_CODE);
 
         $tabsProperty = $reflection->getProperty('_tabs');
-        $tabsProperty->setAccessible(true);
         $tabsProperty->setValue($this->tabs, ['basic-tab' => $tabDataObjectMock]);
 
         $activeTabProperty = $reflection->getProperty('_activeTab');
-        $activeTabProperty->setAccessible(true);
         $activeTabProperty->setValue($this->tabs, 'basic-tab');
 
         $result = $this->tabs->isAdvancedTabGroupActive();
@@ -359,27 +359,26 @@ class TabsTest extends TestCase
      */
     public function testGetAccordionWithMatchingParentTab(): void
     {
-        $parentTabMock = $this->getMockBuilder(Tab::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['getId'])
-            ->getMock();
+        $parentTabMock = $this->createPartialMockWithReflection(
+            Tab::class,
+            ['getId']
+        );
         $parentTabMock->expects($this->any())
             ->method('getId')
             ->willReturn('parent-tab');
 
-        $childTabMock = $this->getMockBuilder(Tab::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['getParentTab'])
-            ->getMock();
+        $childTabMock = $this->createPartialMockWithReflection(
+            Tab::class,
+            ['getParentTab']
+        );
         $childTabMock->expects($this->any())
             ->method('getParentTab')
             ->willReturn('parent-tab');
 
-        $childBlockMock = $this->getMockBuilder(AbstractBlock::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['setTab'])
-            ->onlyMethods(['toHtml'])
-            ->getMock();
+        $childBlockMock = $this->createPartialMockWithReflection(
+            AbstractBlock::class,
+            ['setTab', 'toHtml']
+        );
         $childBlockMock->expects($this->once())
             ->method('setTab')
             ->with($childTabMock)
@@ -390,7 +389,6 @@ class TabsTest extends TestCase
 
         $reflection = new ReflectionClass($this->tabs);
         $tabsProperty = $reflection->getProperty('_tabs');
-        $tabsProperty->setAccessible(true);
         $tabsProperty->setValue($this->tabs, [$childTabMock]);
 
         $tabsMock = $this->getMockBuilder(Tabs::class)
@@ -429,25 +427,24 @@ class TabsTest extends TestCase
      */
     public function testGetAccordionWithNoMatchingChildTabs(): void
     {
-        $parentTabMock = $this->getMockBuilder(Tab::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['getId'])
-            ->getMock();
+        $parentTabMock = $this->createPartialMockWithReflection(
+            Tab::class,
+            ['getId']
+        );
         $parentTabMock->expects($this->any())
             ->method('getId')
             ->willReturn('parent-tab');
 
-        $childTabMock = $this->getMockBuilder(Tab::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['getParentTab'])
-            ->getMock();
+        $childTabMock = $this->createPartialMockWithReflection(
+            Tab::class,
+            ['getParentTab']
+        );
         $childTabMock->expects($this->any())
             ->method('getParentTab')
             ->willReturn('different-parent-tab');
 
         $reflection = new ReflectionClass($this->tabs);
         $tabsProperty = $reflection->getProperty('_tabs');
-        $tabsProperty->setAccessible(true);
 
         $tabsMock = $this->getMockBuilder(Tabs::class)
             ->setConstructorArgs([
@@ -483,43 +480,42 @@ class TabsTest extends TestCase
      */
     public function testGetAccordionWithMultipleChildTabs(): void
     {
-        $parentTabMock = $this->getMockBuilder(Tab::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['getId'])
-            ->getMock();
+        $parentTabMock = $this->createPartialMockWithReflection(
+            Tab::class,
+            ['getId']
+        );
         $parentTabMock->expects($this->any())
             ->method('getId')
             ->willReturn('parent-tab');
 
-        $childTab1Mock = $this->getMockBuilder(Tab::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['getParentTab'])
-            ->getMock();
+        $childTab1Mock = $this->createPartialMockWithReflection(
+            Tab::class,
+            ['getParentTab']
+        );
         $childTab1Mock->expects($this->any())
             ->method('getParentTab')
             ->willReturn('parent-tab');
 
-        $childTab2Mock = $this->getMockBuilder(Tab::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['getParentTab'])
-            ->getMock();
+        $childTab2Mock = $this->createPartialMockWithReflection(
+            Tab::class,
+            ['getParentTab']
+        );
         $childTab2Mock->expects($this->any())
             ->method('getParentTab')
             ->willReturn('parent-tab');
 
-        $childTab3Mock = $this->getMockBuilder(Tab::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['getParentTab'])
-            ->getMock();
+        $childTab3Mock = $this->createPartialMockWithReflection(
+            Tab::class,
+            ['getParentTab']
+        );
         $childTab3Mock->expects($this->any())
             ->method('getParentTab')
             ->willReturn('different-parent');
 
-        $childBlockMock = $this->getMockBuilder(AbstractBlock::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['setTab'])
-            ->onlyMethods(['toHtml'])
-            ->getMock();
+        $childBlockMock = $this->createPartialMockWithReflection(
+            AbstractBlock::class,
+            ['setTab', 'toHtml']
+        );
         $childBlockMock->expects($this->exactly(2))
             ->method('setTab')
             ->willReturnSelf();
@@ -529,7 +525,6 @@ class TabsTest extends TestCase
 
         $reflection = new ReflectionClass($this->tabs);
         $tabsProperty = $reflection->getProperty('_tabs');
-        $tabsProperty->setAccessible(true);
 
         $tabsMock = $this->getMockBuilder(Tabs::class)
             ->setConstructorArgs([
@@ -567,17 +562,16 @@ class TabsTest extends TestCase
      */
     public function testGetAccordionWithEmptyTabs(): void
     {
-        $parentTabMock = $this->getMockBuilder(Tab::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['getId'])
-            ->getMock();
+        $parentTabMock = $this->createPartialMockWithReflection(
+            Tab::class,
+            ['getId']
+        );
         $parentTabMock->expects($this->any())
             ->method('getId')
             ->willReturn('parent-tab');
 
         $reflection = new ReflectionClass($this->tabs);
         $tabsProperty = $reflection->getProperty('_tabs');
-        $tabsProperty->setAccessible(true);
 
         $tabsMock = $this->getMockBuilder(Tabs::class)
             ->setConstructorArgs([
@@ -634,7 +628,6 @@ class TabsTest extends TestCase
 
         $reflection = new ReflectionClass($this->tabs);
         $method = $reflection->getMethod('_translateHtml');
-        $method->setAccessible(true);
 
         $result = $method->invoke($this->tabs, $html);
         $this->assertEquals($expectedHtml, $result);
@@ -648,8 +641,7 @@ class TabsTest extends TestCase
      */
     public function testPrepareLayoutWithNoAttributeSetId(): void
     {
-        $layoutMock = $this->getMockBuilder(\Magento\Framework\View\LayoutInterface::class)
-            ->getMockForAbstractClass();
+        $layoutMock = $this->createMock(LayoutInterface::class);
 
         $this->contextMock->expects($this->any())
             ->method('getLayout')
@@ -691,7 +683,6 @@ class TabsTest extends TestCase
 
         $reflection = new ReflectionClass($tabsMock);
         $method = $reflection->getMethod('_prepareLayout');
-        $method->setAccessible(true);
 
         $result = $method->invoke($tabsMock);
         $this->assertSame($tabsMock, $result);
@@ -707,8 +698,7 @@ class TabsTest extends TestCase
     public function testPrepareLayoutInSingleStoreMode(): void
     {
         $attributeSetId = 5;
-        $layoutMock = $this->getMockBuilder(\Magento\Framework\View\LayoutInterface::class)
-            ->getMockForAbstractClass();
+        $layoutMock = $this->createMock(LayoutInterface::class);
 
         $this->contextMock->expects($this->any())
             ->method('getLayout')
@@ -727,11 +717,10 @@ class TabsTest extends TestCase
             ->willReturn(true);
 
         // Mock attribute group
-        $groupMock = $this->getMockBuilder(Group::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['getAttributeGroupCode', 'getTabGroupCode'])
-            ->onlyMethods(['getId', 'getAttributeGroupName'])
-            ->getMock();
+        $groupMock = $this->createPartialMockWithReflection(
+            Group::class,
+            ['getAttributeGroupCode', 'getTabGroupCode', 'getId', 'getAttributeGroupName']
+        );
         $groupMock->expects($this->any())
             ->method('getId')
             ->willReturn(1);
@@ -746,10 +735,10 @@ class TabsTest extends TestCase
             ->willReturn('basic');
 
         // Mock attribute
-        $attributeMock = $this->getMockBuilder(AbstractAttribute::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['getIsVisible', 'getApplyTo'])
-            ->getMockForAbstractClass();
+        $attributeMock = $this->createPartialMockWithReflection(
+            AbstractAttribute::class,
+            ['getIsVisible', 'getApplyTo']
+        );
         $attributeMock->expects($this->any())
             ->method('getIsVisible')
             ->willReturn(true);
@@ -784,11 +773,10 @@ class TabsTest extends TestCase
             ->willReturn(new \ArrayIterator([$groupMock]));
 
         // Mock attribute tab block
-        $attributeTabBlockMock = $this->getMockBuilder(Attributes::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['setGroup', 'setGroupAttributes'])
-            ->onlyMethods(['toHtml'])
-            ->getMock();
+        $attributeTabBlockMock = $this->createPartialMockWithReflection(
+            Attributes::class,
+            ['setGroup', 'setGroupAttributes', 'toHtml']
+        );
         $attributeTabBlockMock->expects($this->once())
             ->method('setGroup')
             ->with($groupMock)
@@ -869,7 +857,6 @@ class TabsTest extends TestCase
 
         $reflection = new ReflectionClass($tabsMock);
         $method = $reflection->getMethod('_prepareLayout');
-        $method->setAccessible(true);
 
         $result = $method->invoke($tabsMock);
         $this->assertSame($tabsMock, $result);
@@ -885,8 +872,7 @@ class TabsTest extends TestCase
     public function testPrepareLayoutInMultiStoreMode(): void
     {
         $attributeSetId = 5;
-        $layoutMock = $this->getMockBuilder(\Magento\Framework\View\LayoutInterface::class)
-            ->getMockForAbstractClass();
+        $layoutMock = $this->createMock(LayoutInterface::class);
 
         $this->contextMock->expects($this->any())
             ->method('getLayout')
@@ -905,11 +891,10 @@ class TabsTest extends TestCase
             ->willReturn(false);
 
         // Mock basic group
-        $groupMock = $this->getMockBuilder(Group::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['getAttributeGroupCode', 'getTabGroupCode'])
-            ->onlyMethods(['getId', 'getAttributeGroupName'])
-            ->getMock();
+        $groupMock = $this->createPartialMockWithReflection(
+            Group::class,
+            ['getAttributeGroupCode', 'getTabGroupCode', 'getId', 'getAttributeGroupName']
+        );
         $groupMock->expects($this->any())
             ->method('getId')
             ->willReturn(1);
@@ -924,11 +909,10 @@ class TabsTest extends TestCase
             ->willReturn('basic');
 
         // Mock advanced pricing group
-        $advancedPricingGroupMock = $this->getMockBuilder(Group::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['getAttributeGroupCode', 'getTabGroupCode'])
-            ->onlyMethods(['getId', 'getAttributeGroupName'])
-            ->getMock();
+        $advancedPricingGroupMock = $this->createPartialMockWithReflection(
+            Group::class,
+            ['getAttributeGroupCode', 'getTabGroupCode', 'getId', 'getAttributeGroupName']
+        );
         $advancedPricingGroupMock->expects($this->any())
             ->method('getId')
             ->willReturn(2);
@@ -943,11 +927,10 @@ class TabsTest extends TestCase
             ->willReturn('advanced');
 
         // Mock design group
-        $designGroupMock = $this->getMockBuilder(Group::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['getAttributeGroupCode', 'getTabGroupCode'])
-            ->onlyMethods(['getId', 'getAttributeGroupName'])
-            ->getMock();
+        $designGroupMock = $this->createPartialMockWithReflection(
+            Group::class,
+            ['getAttributeGroupCode', 'getTabGroupCode', 'getId', 'getAttributeGroupName']
+        );
         $designGroupMock->expects($this->any())
             ->method('getId')
             ->willReturn(3);
@@ -962,10 +945,10 @@ class TabsTest extends TestCase
             ->willReturn('advanced');
 
         // Mock attribute
-        $attributeMock = $this->getMockBuilder(AbstractAttribute::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['getIsVisible', 'getApplyTo'])
-            ->getMockForAbstractClass();
+        $attributeMock = $this->createPartialMockWithReflection(
+            AbstractAttribute::class,
+            ['getIsVisible', 'getApplyTo']
+        );
         $attributeMock->expects($this->any())
             ->method('getIsVisible')
             ->willReturn(true);
@@ -1001,11 +984,10 @@ class TabsTest extends TestCase
             ->willReturn(new \ArrayIterator([$groupMock, $advancedPricingGroupMock, $designGroupMock]));
 
         // Mock attribute tab block
-        $attributeTabBlockMock = $this->getMockBuilder(Attributes::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['setGroup', 'setGroupAttributes'])
-            ->onlyMethods(['toHtml'])
-            ->getMock();
+        $attributeTabBlockMock = $this->createPartialMockWithReflection(
+            Attributes::class,
+            ['setGroup', 'setGroupAttributes', 'toHtml']
+        );
         $attributeTabBlockMock->expects($this->any())
             ->method('setGroup')
             ->willReturnSelf();
@@ -1099,7 +1081,6 @@ class TabsTest extends TestCase
 
         $reflection = new ReflectionClass($tabsMock);
         $method = $reflection->getMethod('_prepareLayout');
-        $method->setAccessible(true);
 
         $result = $method->invoke($tabsMock);
         $this->assertSame($tabsMock, $result);
@@ -1149,21 +1130,19 @@ class TabsTest extends TestCase
     public function testIsAdvancedTabGroupActiveWithEmptyTabsArray(): void
     {
         // Add a valid tab first to avoid undefined array key warning
-        $tabMock = $this->getMockBuilder(Tab::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['getGroupCode'])
-            ->getMock();
+        $tabMock = $this->createPartialMockWithReflection(
+            Tab::class,
+            ['getGroupCode']
+        );
         $tabMock->expects($this->once())
             ->method('getGroupCode')
             ->willReturn('some-other-group');
 
         $reflection = new ReflectionClass($this->tabs);
         $activeTabProperty = $reflection->getProperty('_activeTab');
-        $activeTabProperty->setAccessible(true);
         $activeTabProperty->setValue($this->tabs, 'test-tab');
 
         $tabsProperty = $reflection->getProperty('_tabs');
-        $tabsProperty->setAccessible(true);
         $tabsProperty->setValue($this->tabs, ['test-tab' => $tabMock]);
 
         $result = $this->tabs->isAdvancedTabGroupActive();
@@ -1178,17 +1157,16 @@ class TabsTest extends TestCase
      */
     public function testGetAccordionWithNullParentTab(): void
     {
-        $parentTabMock = $this->getMockBuilder(Tab::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['getId'])
-            ->getMock();
+        $parentTabMock = $this->createPartialMockWithReflection(
+            Tab::class,
+            ['getId']
+        );
         $parentTabMock->expects($this->any())
             ->method('getId')
             ->willReturn(null);
 
         $reflection = new ReflectionClass($this->tabs);
         $tabsProperty = $reflection->getProperty('_tabs');
-        $tabsProperty->setAccessible(true);
         $tabsProperty->setValue($this->tabs, []);
 
         $result = $this->tabs->getAccordion($parentTabMock);
@@ -1302,7 +1280,6 @@ class TabsTest extends TestCase
 
         $reflection = new ReflectionClass($this->tabs);
         $method = $reflection->getMethod('_translateHtml');
-        $method->setAccessible(true);
 
         $result = $method->invoke($this->tabs, null);
         $this->assertNull($result);
@@ -1322,7 +1299,6 @@ class TabsTest extends TestCase
 
         $reflection = new ReflectionClass($this->tabs);
         $method = $reflection->getMethod('_translateHtml');
-        $method->setAccessible(true);
 
         $result = $method->invoke($this->tabs, '');
         $this->assertEquals('', $result);
@@ -1346,7 +1322,6 @@ class TabsTest extends TestCase
 
         $reflection = new ReflectionClass($this->tabs);
         $method = $reflection->getMethod('_translateHtml');
-        $method->setAccessible(true);
 
         $result = $method->invoke($this->tabs, $html);
         $this->assertEquals($html, $result);
@@ -1360,25 +1335,24 @@ class TabsTest extends TestCase
      */
     public function testGetAccordionWhenChildTabBlockReturnsNull(): void
     {
-        $parentTabMock = $this->getMockBuilder(Tab::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['getId'])
-            ->getMock();
+        $parentTabMock = $this->createPartialMockWithReflection(
+            Tab::class,
+            ['getId']
+        );
         $parentTabMock->expects($this->any())
             ->method('getId')
             ->willReturn('parent-tab');
 
-        $childTabMock = $this->getMockBuilder(Tab::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['getParentTab'])
-            ->getMock();
+        $childTabMock = $this->createPartialMockWithReflection(
+            Tab::class,
+            ['getParentTab']
+        );
         $childTabMock->expects($this->any())
             ->method('getParentTab')
             ->willReturn('parent-tab');
 
         $reflection = new ReflectionClass($this->tabs);
         $tabsProperty = $reflection->getProperty('_tabs');
-        $tabsProperty->setAccessible(true);
 
         $tabsMock = $this->getMockBuilder(Tabs::class)
             ->setConstructorArgs([

@@ -13,6 +13,7 @@ use Magento\Directory\Helper\Data as DirectoryHelper;
 use Magento\Framework\Json\Helper\Data as JsonHelper;
 use Magento\Framework\Registry;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -96,11 +97,11 @@ class ConfigureTest extends TestCase
     /**
      * Test getProduct returns correct product based on registry state
      *
-     * @dataProvider getProductRegistryScenariosDataProvider
      * @param bool $hasRegistryProduct
      * @param int $expectedRegistryCalls
      * @return void
      */
+    #[DataProvider('getProductRegistryScenariosDataProvider')]
     public function testGetProductReturnsCorrectProductBasedOnRegistryState(
         bool $hasRegistryProduct,
         int $expectedRegistryCalls
@@ -190,10 +191,10 @@ class ConfigureTest extends TestCase
     /**
      * Test setProduct sets product and returns self for method chaining
      *
-     * @dataProvider setProductScenariosDataProvider
      * @param bool $setNull
      * @return void
      */
+    #[DataProvider('setProductScenariosDataProvider')]
     public function testSetProductReturnsBlockInstance(bool $setNull): void
     {
         $productMock = null;

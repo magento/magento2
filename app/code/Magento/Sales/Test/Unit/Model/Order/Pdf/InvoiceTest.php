@@ -140,7 +140,6 @@ class InvoiceTest extends TestCase
 
         $this->model->getPdf([]);
         $renderers = new \ReflectionProperty($this->model, '_renderers');
-        $renderers->setAccessible(true);
         $this->assertSame(
             [
                 'product_type_one' => ['model' => 'Renderer_Type_One_Product_One', 'renderer' => null],

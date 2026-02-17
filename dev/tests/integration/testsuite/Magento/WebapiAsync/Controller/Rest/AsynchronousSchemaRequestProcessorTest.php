@@ -7,6 +7,7 @@
 namespace Magento\WebapiAsync\Controller\Rest;
 
 use Magento\TestFramework\TestCase\AbstractController;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class AsynchronousSchemaRequestProcessorTest extends AbstractController
 {
@@ -15,8 +16,8 @@ class AsynchronousSchemaRequestProcessorTest extends AbstractController
      *
      * @param string $path
      * @magentoAppArea webapi_rest
-     * @dataProvider schemaRequestProvider
      */
+    #[DataProvider('schemaRequestProvider')]
     public function testSchemaRequest($path)
     {
         ob_start();

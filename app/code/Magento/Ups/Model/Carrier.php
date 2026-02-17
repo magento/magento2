@@ -1030,7 +1030,7 @@ XMLRequest;
             $successConversion = true;
             if ($responseCurrencyCode) {
                 if (in_array($responseCurrencyCode, $allowedCurrencies)) {
-                    $cost = (double)$cost * $this->_getBaseCurrencyRate($responseCurrencyCode);
+                    $cost = (float)$cost * $this->_getBaseCurrencyRate($responseCurrencyCode);
                 } else {
                     $errorTitle = __(
                         'We can\'t convert a rate from "%1-%2".',
@@ -1402,7 +1402,7 @@ XMLRequest;
             $successConversion = true;
             if ($responseCurrencyCode) {
                 if (in_array($responseCurrencyCode, $allowedCurrencies)) {
-                    $cost = (double)$cost * $this->_getBaseCurrencyRate($responseCurrencyCode);
+                    $cost = (float)$cost * $this->_getBaseCurrencyRate($responseCurrencyCode);
                 } else {
                     $errorTitle = __(
                         'We can\'t convert a rate from "%1-%2".',

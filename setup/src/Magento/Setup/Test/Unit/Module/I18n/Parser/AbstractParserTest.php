@@ -11,6 +11,7 @@ use Magento\Setup\Module\I18n\Parser\AbstractParser;
 use Magento\Setup\Module\I18n\Parser\AdapterInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class AbstractParserTest extends TestCase
 {
@@ -21,19 +22,17 @@ class AbstractParserTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->_parserMock = $this->getMockForAbstractClass(
-            AbstractParser::class,
-            [],
-            '',
-            false
-        );
+        $this->_parserMock = $this->getMockBuilder(AbstractParser::class)
+            ->disableOriginalConstructor()
+            ->onlyMethods(['_parseByTypeOptions'])
+            ->getMock();
     }
 
     /**
      * @param array $options
      * @param string $message
-     * @dataProvider dataProviderForValidateOptions
      */
+    #[DataProvider('dataProviderForValidateOptions')]
     public function testValidateOptions($options, $message)
     {
         $this->expectException('InvalidArgumentException');
@@ -41,7 +40,7 @@ class AbstractParserTest extends TestCase
 
         $this->_parserMock->addAdapter(
             'php',
-            $this->getMockForAbstractClass(AdapterInterface::class)
+            $this->createMock(AdapterInterface::class)
         );
         $this->_parserMock->parse($options);
     }

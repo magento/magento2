@@ -10,6 +10,7 @@ namespace Magento\Catalog\Test\Unit\Block\Product\ReviewRenderer;
 use Magento\Catalog\Block\Product\ReviewRenderer\DefaultProvider;
 use Magento\Catalog\Block\Product\ReviewRendererInterface;
 use Magento\Catalog\Model\Product;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -47,8 +48,8 @@ class DefaultProviderTest extends TestCase
      *
      * @param string $templateType
      * @param bool $displayIfNoReviews
-     * @dataProvider templateTypeDataProvider
      */
+    #[DataProvider('templateTypeDataProvider')]
     public function testGetReviewsSummaryHtmlReturnsEmptyString($templateType, $displayIfNoReviews)
     {
         $result = $this->model->getReviewsSummaryHtml(
@@ -133,8 +134,8 @@ class DefaultProviderTest extends TestCase
      *
      * @param string $templateType
      * @param bool $displayIfNoReviews
-     * @dataProvider allTemplateTypeCombinationsDataProvider
      */
+    #[DataProvider('allTemplateTypeCombinationsDataProvider')]
     public function testAllTemplateTypeCombinations($templateType, $displayIfNoReviews)
     {
         // Test with product having various IDs
