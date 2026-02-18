@@ -14,11 +14,13 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\View\Element\BlockInterface;
 use Magento\Framework\View\LayoutInterface;
 use PHPUnit\Framework\TestCase;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 
 class CurrencysymbolTest extends TestCase
 {
+    use MockCreationTrait;
     /**
-     * Object manager helper
+     * Object manager for the test
      *
      * @var ObjectManager
      */
@@ -27,6 +29,7 @@ class CurrencysymbolTest extends TestCase
     protected function setUp(): void
     {
         $this->objectManagerHelper = new ObjectManager($this);
+        $this->objectManagerHelper->prepareObjectManager([]);
     }
 
     protected function tearDown(): void
@@ -41,21 +44,10 @@ class CurrencysymbolTest extends TestCase
             ['create']
         );
 
-        $blockMock = $this->getMockBuilder(BlockInterface::class)
-            ->addMethods(['addChild'])
-            ->onlyMethods(['toHtml'])
-            ->getMockForAbstractClass();
+        $blockMock = $this->createPartialMockWithReflection(BlockInterface::class, ['addChild', 'toHtml']);
 
-        /** @var LayoutInterface|MockObject $layoutMock */
-        $layoutMock = $this->getMockForAbstractClass(
-            LayoutInterface::class,
-            [],
-            '',
-            false,
-            false,
-            true,
-            ['getBlock']
-        );
+        /** @var LayoutInterface $layoutMock */
+        $layoutMock = $this->createMock(LayoutInterface::class);
 
         $layoutMock->expects($this->once())->method('getBlock')->willReturn($blockMock);
 

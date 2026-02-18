@@ -11,6 +11,7 @@ use Exception;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\SampleData\Console\Command\SampleDataDeployCommand;
 use Magento\Setup\Model\PackagesAuth;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Symfony\Component\Console\Tester\CommandTester;
 
 class SampleDataDeployCommandTest extends AbstractSampleDataCommandTestCase
@@ -43,9 +44,8 @@ class SampleDataDeployCommandTest extends AbstractSampleDataCommandTestCase
      * @param string $expectedMsg
      * @param bool $authExist
      * @return void
-     *
-     * @dataProvider processDataProvider
      */
+    #[DataProvider('processDataProvider')]
     public function testExecute(
         array $sampleDataPackages,
         int $appRunResult,
@@ -73,9 +73,8 @@ class SampleDataDeployCommandTest extends AbstractSampleDataCommandTestCase
      * @param string $expectedMsg
      * @param bool $authExist
      * @return void
-     *
-     * @dataProvider processDataProvider
      */
+    #[DataProvider('processDataProvider')]
     public function testExecuteWithNoUpdate(
         array $sampleDataPackages,
         int $appRunResult,

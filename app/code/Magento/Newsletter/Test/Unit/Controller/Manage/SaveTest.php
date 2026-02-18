@@ -70,31 +70,16 @@ class SaveTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->requestMock = $this->getMockBuilder(RequestInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-        $this->responseMock = $this->getMockBuilder(ResponseInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-        $this->messageManagerMock = $this->getMockBuilder(ManagerInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-        $this->redirectMock = $this->getMockBuilder(RedirectInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-        $this->customerSessionMock = $this->getMockBuilder(Session::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->requestMock = $this->createMock(RequestInterface::class);
+        $this->responseMock = $this->createMock(ResponseInterface::class);
+        $this->messageManagerMock = $this->createMock(ManagerInterface::class);
+        $this->redirectMock = $this->createMock(RedirectInterface::class);
+        $this->customerSessionMock = $this->createMock(Session::class);
         $this->customerSessionMock->expects($this->any())
             ->method('isLoggedIn')
             ->willReturn(true);
-        $this->formKeyValidatorMock = $this->getMockBuilder(Validator::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->customerRepositoryMock =
-            $this->getMockBuilder(CustomerRepositoryInterface::class)
-                ->disableOriginalConstructor()
-                ->getMockForAbstractClass();
+        $this->formKeyValidatorMock = $this->createMock(Validator::class);
+        $this->customerRepositoryMock = $this->createMock(CustomerRepositoryInterface::class);
         $objectManager = new ObjectManager($this);
 
         $this->action = $objectManager->getObject(

@@ -51,19 +51,15 @@ class EsConfigTest extends TestCase
     protected function setUp(): void
     {
         $this->objectManager = new ObjectManagerHelper($this);
-        $this->reader = $this->getMockBuilder(ReaderInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->reader = $this->createMock(ReaderInterface::class);
 
-        $this->cache = $this->getMockBuilder(CacheInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->cache = $this->createMock(CacheInterface::class);
 
         $this->cache->expects($this->any())
             ->method('load')
             ->willReturn('serializedData');
 
-        $this->serializerMock = $this->getMockForAbstractClass(SerializerInterface::class);
+        $this->serializerMock = $this->createMock(SerializerInterface::class);
 
         $this->serializerMock->expects($this->once())
             ->method('unserialize')
@@ -81,7 +77,7 @@ class EsConfigTest extends TestCase
     }
 
     /**
-     * @return array|mixed|null
+     * @return void
      */
     public function testGetStemmerInfo()
     {
@@ -89,7 +85,7 @@ class EsConfigTest extends TestCase
     }
 
     /**
-     * @return array|mixed|null
+     * @return void
      */
     public function testGetStopwordsInfo()
     {

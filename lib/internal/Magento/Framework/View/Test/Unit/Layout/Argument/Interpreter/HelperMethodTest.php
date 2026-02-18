@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -12,6 +12,7 @@ use Magento\Framework\View\Layout\Argument\Interpreter\HelperMethod;
 use Magento\Framework\View\Layout\Argument\Interpreter\NamedParams;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class HelperMethodTest extends TestCase
 {
@@ -32,7 +33,7 @@ class HelperMethodTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->_objectManager = $this->getMockForAbstractClass(ObjectManagerInterface::class);
+        $this->_objectManager = $this->createMock(ObjectManagerInterface::class);
         $this->_interpreter = $this->createMock(NamedParams::class);
         $this->_model = new HelperMethod($this->_objectManager, $this->_interpreter);
     }
@@ -72,9 +73,8 @@ class HelperMethodTest extends TestCase
     /**
      * @param string $helperMethod
      * @param string $expectedExceptionMessage
-     *
-     * @dataProvider evaluateExceptionDataProvider
-     */
+     *     */
+    #[DataProvider('evaluateExceptionDataProvider')]
     public function testEvaluateException($helperMethod, $expectedExceptionMessage)
     {
         $this->expectException('\InvalidArgumentException');

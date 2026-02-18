@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright 2013 Adobe
+ * Copyright 2015 Adobe
  * All Rights Reserved.
  */
 declare(strict_types=1);
@@ -56,10 +56,10 @@ class FilesystemTest extends TestCase
     protected function setUp(): void
     {
         $this->_file = file_get_contents(__DIR__ . '/../_files/reader/config.xml');
-        $this->_fileResolverMock = $this->getMockForAbstractClass(FileResolverInterface::class);
-        $this->_converterMock = $this->getMockForAbstractClass(ConverterInterface::class);
-        $this->_schemaLocatorMock = $this->getMockForAbstractClass(SchemaLocatorInterface::class);
-        $this->_validationStateMock = $this->getMockForAbstractClass(ValidationStateInterface::class);
+        $this->_fileResolverMock = $this->createMock(FileResolverInterface::class);
+        $this->_converterMock = $this->createMock(ConverterInterface::class);
+        $this->_schemaLocatorMock = $this->createMock(SchemaLocatorInterface::class);
+        $this->_validationStateMock = $this->createMock(ValidationStateInterface::class);
         $this->urnResolver = new UrnResolver();
     }
 

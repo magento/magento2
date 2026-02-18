@@ -1,15 +1,18 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Customer\Block\Address;
 
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\TestFramework\Helper\Bootstrap;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class BookTest extends \PHPUnit\Framework\TestCase
 {
+    use MockCreationTrait;
     /**
      * @var \Magento\Customer\Block\Address\Book
      */
@@ -22,13 +25,10 @@ class BookTest extends \PHPUnit\Framework\TestCase
 
     protected function setUp(): void
     {
-        $blockMock = $this->getMockBuilder(
-            \Magento\Framework\View\Element\BlockInterface::class
-        )->disableOriginalConstructor()->addMethods(
-            ['setTitle']
-        )->onlyMethods(
-            ['toHtml']
-        )->getMock();
+        $blockMock = $this->createPartialMockWithReflection(
+            \Magento\Framework\View\Element\BlockInterface::class,
+            ['setTitle', 'toHtml']
+        );
 
         $blockMock->expects($this->any())->method('setTitle');
 
@@ -66,9 +66,9 @@ class BookTest extends \PHPUnit\Framework\TestCase
      * @magentoDataFixture Magento/Customer/_files/customer.php
      * @magentoDataFixture Magento/Customer/_files/customer_two_addresses.php
      * @magentoDataFixture Magento/Customer/_files/customer_no_address.php
-     * @dataProvider hasPrimaryAddressDataProvider
      * @magentoAppIsolation enabled
      */
+    #[DataProvider('hasPrimaryAddressDataProvider')]
     public function testHasPrimaryAddress($customerId, $expected)
     {
         if (!empty($customerId)) {
@@ -101,9 +101,9 @@ class BookTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @magentoDataFixture Magento/Customer/_files/customer_no_address.php
-     * @dataProvider getAdditionalAddressesDataProvider
      * @magentoAppIsolation enabled
      */
+    #[DataProvider('getAdditionalAddressesDataProvider')]
     public function testGetAdditionalAddressesNegative($customerId, $expected)
     {
         if (!empty($customerId)) {
@@ -164,9 +164,9 @@ class BookTest extends \PHPUnit\Framework\TestCase
      * @magentoDataFixture Magento/Customer/_files/customer.php
      * @magentoDataFixture Magento/Customer/_files/customer_two_addresses.php
      * @magentoDataFixture Magento/Customer/_files/customer_no_address.php
-     * @dataProvider getDefaultBillingDataProvider
      * @magentoAppIsolation enabled
      */
+    #[DataProvider('getDefaultBillingDataProvider')]
     public function testGetDefaultBilling($customerId, $expected)
     {
         $this->currentCustomer->setCustomerId($customerId);
@@ -182,9 +182,9 @@ class BookTest extends \PHPUnit\Framework\TestCase
      * @magentoDataFixture Magento/Customer/_files/customer.php
      * @magentoDataFixture Magento/Customer/_files/customer_two_addresses.php
      * @magentoDataFixture Magento/Customer/_files/customer_no_address.php
-     * @dataProvider getDefaultShippingDataProvider
      * @magentoAppIsolation enabled
      */
+    #[DataProvider('getDefaultShippingDataProvider')]
     public function testGetDefaultShipping($customerId, $expected)
     {
         if (!empty($customerId)) {

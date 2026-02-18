@@ -11,6 +11,7 @@ use Magento\Backend\Block\Template\Context;
 use Magento\Framework\Data\FormFactory;
 use Magento\Framework\Registry;
 use Magento\ImportExport\Block\Adminhtml\Import\Edit\Form;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\ImportExport\Model\Import;
 use Magento\ImportExport\Model\Source\Import\Behavior\Factory;
 use Magento\ImportExport\Model\Source\Import\EntityFactory;
@@ -44,25 +45,15 @@ class FormTest extends TestCase
 
     protected function setUp(): void
     {
-        $context = $this->getMockBuilder(Context::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $registry = $this->getMockBuilder(Registry::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $formFactory = $this->getMockBuilder(FormFactory::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->_importModel = $this->getMockBuilder(Import::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->_entityFactory = $this->getMockBuilder(EntityFactory::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->_behaviorFactory = $this->getMockBuilder(
-            Factory::class
-        )->disableOriginalConstructor()
-            ->getMock();
+        $objectManager = new ObjectManager($this);
+        $objectManager->prepareObjectManager();
+
+        $context = $this->createMock(Context::class);
+        $registry = $this->createMock(Registry::class);
+        $formFactory = $this->createMock(FormFactory::class);
+        $this->_importModel = $this->createMock(Import::class);
+        $this->_entityFactory = $this->createMock(EntityFactory::class);
+        $this->_behaviorFactory = $this->createMock(Factory::class);
 
         $this->form = $this->getMockBuilder(Form::class)
             ->setConstructorArgs([

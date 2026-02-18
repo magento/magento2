@@ -11,6 +11,7 @@ use Magento\Framework\Escaper;
 use Magento\OfflinePayments\Model\Checkmo;
 use Magento\OfflinePayments\Model\CheckmoConfigProvider;
 use Magento\Payment\Helper\Data as PaymentHelper;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -58,8 +59,8 @@ class CheckmoConfigProviderTest extends TestCase
      * @param string $mailingAddress
      * @param string $payableTo
      * @param array $result
-     * @dataProvider dataProviderGetConfig
      */
+    #[DataProvider('dataProviderGetConfig')]
     public function testGetConfig($isAvailable, $mailingAddress, $payableTo, $result)
     {
         $this->methodMock->expects($this->once())

@@ -12,6 +12,7 @@ use Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider\FieldI
 use Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider\FieldIndex\IndexResolver;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * @SuppressWarnings(PHPMD)
@@ -35,10 +36,7 @@ class IndexResolverTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->converter = $this->getMockBuilder(ConverterInterface::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['convert'])
-            ->getMockForAbstractClass();
+        $this->converter = $this->createPartialMock(ConverterInterface::class, ['convert']);
         $objectManager = new ObjectManagerHelper($this);
 
         $this->resolver = $objectManager->getObject(
@@ -50,13 +48,13 @@ class IndexResolverTest extends TestCase
     }
 
     /**
-     * @dataProvider getFieldIndexProvider
      * @param $isSearchable
      * @param $isAlwaysIndexable
      * @param $serviceFieldType
      * @param $expected
      * @return void
      */
+    #[DataProvider('getFieldIndexProvider')]
     public function testGetFieldName(
         $isSearchable,
         $isAlwaysIndexable,

@@ -18,6 +18,7 @@ use Magento\Sales\Model\Order\Shipment\Track\Validator;
 use Magento\Sales\Model\ResourceModel\Order\Shipment\Track;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Magento\Sales\Model\Order\Shipment\Track as ShipmentTrack;
 
 class TrackTest extends TestCase
 {
@@ -27,7 +28,7 @@ class TrackTest extends TestCase
     protected $trackResource;
 
     /**
-     * @var \Magento\Sales\Model\Order\Shipment\Track|MockObject
+     * @var ShipmentTrack|MockObject
      */
     protected $trackModelMock;
 
@@ -56,7 +57,7 @@ class TrackTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->trackModelMock = $this->createMock(\Magento\Sales\Model\Order\Shipment\Track::class);
+        $this->trackModelMock = $this->createMock(ShipmentTrack::class);
         $this->appResourceMock = $this->createMock(ResourceConnection::class);
         $this->connectionMock = $this->createMock(Mysql::class);
         $this->validatorMock = $this->createMock(Validator::class);

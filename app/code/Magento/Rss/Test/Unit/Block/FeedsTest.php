@@ -40,7 +40,7 @@ class FeedsTest extends TestCase
     protected function setUp(): void
     {
         $this->context = $this->createMock(Context::class);
-        $this->rssManagerInterface = $this->getMockForAbstractClass(RssManagerInterface::class);
+        $this->rssManagerInterface = $this->createMock(RssManagerInterface::class);
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->block = $this->objectManagerHelper->getObject(
@@ -54,8 +54,8 @@ class FeedsTest extends TestCase
 
     public function testGetFeeds()
     {
-        $provider1 = $this->getMockForAbstractClass(DataProviderInterface::class);
-        $provider2 = $this->getMockForAbstractClass(DataProviderInterface::class);
+        $provider1 = $this->createMock(DataProviderInterface::class);
+        $provider2 = $this->createMock(DataProviderInterface::class);
         $feed1 = [
             'group' => 'Some Group',
             'feeds' => [

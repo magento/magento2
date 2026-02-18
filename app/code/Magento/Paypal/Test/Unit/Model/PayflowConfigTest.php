@@ -14,6 +14,7 @@ use Magento\Payment\Model\MethodInterface;
 use Magento\Paypal\Model\Config;
 use Magento\Paypal\Model\PayflowConfig;
 use Magento\Store\Model\ScopeInterface;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -39,11 +40,8 @@ class PayflowConfigTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->scopeConfigMock = $this->getMockBuilder(ScopeConfigInterface::class)
-            ->onlyMethods(['getValue', 'isSetFlag'])
-            ->getMockForAbstractClass();
-        $this->methodInterfaceMock = $this->getMockBuilder(MethodInterface::class)
-            ->getMockForAbstractClass();
+        $this->scopeConfigMock = $this->createMock(ScopeConfigInterface::class);
+        $this->methodInterfaceMock = $this->createMock(MethodInterface::class);
 
         $om = new ObjectManager($this);
         $this->config = $om->getObject(
@@ -59,8 +57,8 @@ class PayflowConfigTest extends TestCase
      * @param string|null $expectedValue
      *
      * @return void
-     * @dataProvider getTrxTypeDataProvider
      */
+    #[DataProvider('getTrxTypeDataProvider')]
     public function testGetTrxType($paymentAction, $expectedValue): void
     {
         $this->scopeConfigMock->expects($this->any())
@@ -87,8 +85,8 @@ class PayflowConfigTest extends TestCase
      * @param string|null $expectedValue
      *
      * @return void
-     * @dataProvider getPaymentActionDataProvider
      */
+    #[DataProvider('getPaymentActionDataProvider')]
     public function testGetPaymentAction($paymentAction, $expectedValue): void
     {
         $this->scopeConfigMock->expects($this->any())
@@ -182,8 +180,8 @@ class PayflowConfigTest extends TestCase
      * @param bool $result
      *
      * @return void
-     * @dataProvider dataProviderForTestIsMethodActive
      */
+    #[DataProvider('dataProviderForTestIsMethodActive')]
     public function testIsMethodActive(array $expectsMethods, $currentMethod, $result): void
     {
         $this->config->setStoreId(5);

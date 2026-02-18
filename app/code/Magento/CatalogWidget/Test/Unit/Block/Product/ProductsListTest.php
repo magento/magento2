@@ -22,6 +22,7 @@ use Magento\Framework\DataObject\IdentityInterface;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
 use Magento\Framework\Pricing\Render;
 use Magento\Framework\Serialize\Serializer\Json;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\Framework\View\Design\ThemeInterface;
 use Magento\Framework\View\DesignInterface;
@@ -31,6 +32,7 @@ use Magento\Rule\Model\Condition\Sql\Builder;
 use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Widget\Helper\Conditions;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -39,6 +41,8 @@ use PHPUnit\Framework\TestCase;
  */
 class ProductsListTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var ProductsList
      */
@@ -144,13 +148,11 @@ class ProductsListTest extends TestCase
 
     public function testGetCacheKeyInfo()
     {
-        $store = $this->getMockBuilder(Store::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['getId'])->getMock();
+        $store = $this->createPartialMock(Store::class, ['getId']);
         $store->expects($this->once())->method('getId')->willReturn(1);
         $this->storeManager->expects($this->once())->method('getStore')->willReturn($store);
 
-        $theme = $this->getMockForAbstractClass(ThemeInterface::class);
+        $theme = $this->createMock(ThemeInterface::class);
         $theme->expects($this->once())->method('getId')->willReturn('blank');
         $this->design->expects($this->once())->method('getDesignTheme')->willReturn($theme);
 
@@ -202,16 +204,10 @@ class ProductsListTest extends TestCase
 
     public function testGetProductPriceHtml()
     {
-        $product = $this->getMockBuilder(Product::class)
-            ->onlyMethods(['getId'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $product = $this->createPartialMock(Product::class, ['getId']);
         $product->expects($this->once())->method('getId')->willReturn(1);
 
-        $priceRenderer = $this->getMockBuilder(Render::class)
-            ->onlyMethods(['render'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $priceRenderer = $this->createPartialMock(Render::class, ['render']);
         $priceRenderer->expects($this->once())
             ->method('render')
             ->with('final_price', $product, [
@@ -241,26 +237,26 @@ class ProductsListTest extends TestCase
 
     public function testGetPagerHtml()
     {
-        $collection = $this->getMockBuilder(Collection::class)
-            ->onlyMethods(['getSize'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $collection = $this->createPartialMock(Collection::class, ['getSize']);
         $collection->expects($this->once())->method('getSize')->willReturn(3);
 
         $this->productsList->setData('show_pager', true);
         $this->productsList->setData('products_per_page', 2);
         $this->productsList->setData('product_collection', $collection);
 
-        $pagerBlock = $this->getMockBuilder(Pager::class)
-            ->addMethods(['setUseContainer', 'setShowAmounts', 'setTotalLimit'])
-            ->onlyMethods([
+        $pagerBlock = $this->createPartialMockWithReflection(
+            Pager::class,
+            [
+                'setUseContainer',
+                'setShowAmounts',
+                'setTotalLimit',
                 'toHtml',
                 'setShowPerPage',
                 'setPageVarName',
                 'setLimit',
                 'setCollection',
-            ])->disableOriginalConstructor()
-            ->getMock();
+            ]
+        );
 
         $pagerBlock->expects($this->once())->method('setUseContainer')->willReturnSelf();
         $pagerBlock->expects($this->once())->method('setShowAmounts')->willReturnSelf();
@@ -282,9 +278,8 @@ class ProductsListTest extends TestCase
      * @param int  $productsCount
      * @param int  $productsPerPage
      * @param int  $expectedPageSize
-     *
-     * @dataProvider createCollectionDataProvider
      */
+    #[DataProvider('createCollectionDataProvider')]
     public function testCreateCollection($pagerEnable, $productsCount, $productsPerPage, $expectedPageSize)
     {
         $this->visibility->expects($this->once())->method('getVisibleInCatalogIds')
@@ -380,12 +375,13 @@ class ProductsListTest extends TestCase
 
     public function testGetIdentities()
     {
-        $collection = $this->getMockBuilder(Collection::class)
-            ->onlyMethods([
+        $collection = $this->createPartialMock(
+            Collection::class,
+            [
                 'addAttributeToSelect',
                 'getIterator',
-            ])->disableOriginalConstructor()
-            ->getMock();
+            ]
+        );
 
         $product = $this->createPartialMock(IdentityInterface::class, ['getIdentities']);
         $product->expects($this->once())->method('getIdentities')->willReturn(['product_identity']);
@@ -407,10 +403,10 @@ class ProductsListTest extends TestCase
      */
     private function getConditionsForCollection($collection)
     {
-        $conditions = $this->getMockBuilder(Combine::class)
-            ->addMethods(['collectValidatedAttributes'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $conditions = $this->createPartialMockWithReflection(
+            Combine::class,
+            ['collectValidatedAttributes']
+        );
         $conditions->expects($this->once())->method('collectValidatedAttributes')
             ->with($collection)
             ->willReturnSelf();

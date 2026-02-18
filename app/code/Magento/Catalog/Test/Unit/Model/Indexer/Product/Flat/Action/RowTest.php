@@ -84,37 +84,31 @@ class RowTest extends TestCase
 
         $attributeTable = 'catalog_product_entity_int';
         $statusId = 22;
-        $this->connection = $this->getMockForAbstractClass(AdapterInterface::class);
+        $this->connection = $this->createMock(AdapterInterface::class);
         $this->resource = $this->createMock(ResourceConnection::class);
         $this->resource->expects($this->any())->method('getConnection')
             ->with('default')
             ->willReturn($this->connection);
-        $this->storeManager = $this->getMockForAbstractClass(StoreManagerInterface::class);
+        $this->storeManager = $this->createMock(StoreManagerInterface::class);
         $this->store = $this->createMock(Store::class);
-        $this->store->expects($this->any())->method('getId')->willReturn('store_id_1');
-        $this->storeManager->expects($this->any())->method('getStores')->willReturn([$this->store]);
+        $this->store->method('getId')->willReturn('store_id_1');
+        $this->storeManager->method('getStores')->willReturn([$this->store]);
         $this->flatItemEraser = $this->createMock(Eraser::class);
         $this->flatItemWriter = $this->createMock(Indexer::class);
         $this->flatTableBuilder = $this->createMock(
             FlatTableBuilder::class
         );
         $this->productIndexerHelper = $this->createMock(\Magento\Catalog\Helper\Product\Flat\Indexer::class);
-        $statusAttributeMock = $this->getMockBuilder(Attribute::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $statusAttributeMock = $this->createMock(Attribute::class);
         $this->productIndexerHelper->expects($this->any())->method('getAttribute')
             ->with('status')
             ->willReturn($statusAttributeMock);
-        $backendMock = $this->getMockBuilder(AbstractBackend::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $backendMock->expects($this->any())->method('getTable')->willReturn($attributeTable);
-        $statusAttributeMock->expects($this->any())->method('getBackend')->willReturn($backendMock);
-        $statusAttributeMock->expects($this->any())->method('getId')->willReturn($statusId);
-        $selectMock = $this->getMockBuilder(Select::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->connection->expects($this->any())->method('select')->willReturn($selectMock);
+        $backendMock = $this->createMock(AbstractBackend::class);
+        $backendMock->method('getTable')->willReturn($attributeTable);
+        $statusAttributeMock->method('getBackend')->willReturn($backendMock);
+        $statusAttributeMock->method('getId')->willReturn($statusId);
+        $selectMock = $this->createMock(Select::class);
+        $this->connection->method('select')->willReturn($selectMock);
         $selectMock->method('from')
             ->willReturnSelf();
         $selectMock->method('joinLeft')
@@ -124,14 +118,13 @@ class RowTest extends TestCase
         $selectMock->expects($this->any())->method('limit')->willReturnSelf();
         $pdoMock = $this->createMock(\Zend_Db_Statement_Pdo::class);
         $this->connection->expects($this->any())->method('query')->with($selectMock)->willReturn($pdoMock);
-        $pdoMock->expects($this->any())->method('fetchColumn')->willReturn('1');
+        $pdoMock->method('fetchColumn')->willReturn('1');
 
         $metadataPool = $this->createMock(MetadataPool::class);
-        $productMetadata = $this->getMockBuilder(EntityMetadataInterface::class)
-            ->getMockForAbstractClass();
+        $productMetadata = $this->createMock(EntityMetadataInterface::class);
         $metadataPool->expects($this->any())->method('getMetadata')->with(ProductInterface::class)
             ->willReturn($productMetadata);
-        $productMetadata->expects($this->any())->method('getLinkField')->willReturn('entity_id');
+        $productMetadata->method('getLinkField')->willReturn('entity_id');
 
         $this->model = $objectManager->getObject(
             Row::class,
@@ -157,8 +150,7 @@ class RowTest extends TestCase
 
     public function testExecuteWithNonExistingFlatTablesCreatesTables()
     {
-        $this->productIndexerHelper->expects($this->any())->method('getFlatTableName')
-            ->willReturn('store_flat_table');
+        $this->productIndexerHelper->method('getFlatTableName')->willReturn('store_flat_table');
         $this->connection->expects($this->any())->method('isTableExists')->with('store_flat_table')
             ->willReturn(false);
         $this->flatItemEraser->expects($this->never())->method('removeDeletedProducts');
@@ -169,12 +161,10 @@ class RowTest extends TestCase
 
     public function testExecuteWithExistingFlatTablesCreatesTables()
     {
-        $this->productIndexerHelper->expects($this->any())->method('getFlatTableName')
-            ->willReturn('store_flat_table');
+        $this->productIndexerHelper->method('getFlatTableName')->willReturn('store_flat_table');
         $this->connection->expects($this->any())->method('isTableExists')->with('store_flat_table')
             ->willReturn(true);
-        $this->connection->expects($this->any())->method('fetchCol')
-            ->willReturn(['store_id_1']);
+        $this->connection->method('fetchCol')->willReturn(['store_id_1']);
         $this->flatItemEraser->expects($this->once())->method('removeDeletedProducts');
         $this->flatTableBuilder->expects($this->never())->method('build')->with('store_id_1', ['product_id_1']);
         $this->model->execute('product_id_1');
@@ -182,12 +172,10 @@ class RowTest extends TestCase
 
     public function testExecuteWithExistingFlatTablesRemoveProductFromStore()
     {
-        $this->productIndexerHelper->expects($this->any())->method('getFlatTableName')
-            ->willReturn('store_flat_table');
+        $this->productIndexerHelper->method('getFlatTableName')->willReturn('store_flat_table');
         $this->connection->expects($this->any())->method('isTableExists')->with('store_flat_table')
             ->willReturn(true);
-        $this->connection->expects($this->any())->method('fetchCol')
-            ->willReturn([1]);
+        $this->connection->method('fetchCol')->willReturn([1]);
         $this->flatItemEraser->expects($this->once())->method('deleteProductsFromStore');
         $this->flatItemEraser->expects($this->never())->method('removeDeletedProducts');
         $this->flatTableBuilder->expects($this->never())->method('build')->with('store_id_1', ['product_id_1']);

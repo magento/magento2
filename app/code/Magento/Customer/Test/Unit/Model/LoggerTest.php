@@ -14,6 +14,7 @@ use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Adapter\Pdo\Mysql;
 use Magento\Framework\DB\Select;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -74,9 +75,9 @@ class LoggerTest extends TestCase
     /**
      * @param int $customerId
      * @param array $data
-     * @dataProvider logDataProvider
      * @return void
      */
+    #[DataProvider('logDataProvider')]
     public function testLog($customerId, $data)
     {
         $tableName = 'customer_log_table_name';
@@ -117,9 +118,9 @@ class LoggerTest extends TestCase
     /**
      * @param int $customerId
      * @param array $data
-     * @dataProvider getDataProvider
      * @return void
      */
+    #[DataProvider('getDataProvider')]
     public function testGet($customerId, $data)
     {
         $logArguments = [

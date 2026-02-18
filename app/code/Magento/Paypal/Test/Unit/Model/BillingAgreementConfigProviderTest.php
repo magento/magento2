@@ -34,15 +34,15 @@ class BillingAgreementConfigProviderTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->currentCustomerMock = $this->getMockBuilder(CurrentCustomer::class)
-            ->onlyMethods(['getCustomerId'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->currentCustomerMock = $this->createPartialMock(
+            CurrentCustomer::class,
+            ['getCustomerId']
+        );
 
-        $this->agreementFactoryMock = $this->getMockBuilder(AgreementFactory::class)
-            ->onlyMethods(['create'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->agreementFactoryMock = $this->createPartialMock(
+            AgreementFactory::class,
+            ['create']
+        );
 
         $this->configProvider = new BillingAgreementConfigProvider(
             $this->currentCustomerMock,
@@ -72,9 +72,7 @@ class BillingAgreementConfigProviderTest extends TestCase
 
         $this->currentCustomerMock->expects($this->once())->method('getCustomerId')->willReturn($customerId);
 
-        $agreementMock = $this->getMockBuilder(Agreement::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $agreementMock = $this->createMock(Agreement::class);
 
         $agreementMock->expects($this->once())
             ->method('getAvailableCustomerBillingAgreements')

@@ -10,6 +10,7 @@ namespace Magento\ImportExport\Test\Unit\Model\Export\Config;
 use Magento\Framework\Config\Dom\UrnResolver;
 use Magento\Framework\TestFramework\Unit\Utility\XsdValidator;
 use PHPUnit\Framework\AssertionFailedError;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 class XsdTest extends TestCase
@@ -49,8 +50,8 @@ class XsdTest extends TestCase
     /**
      * @param string $xmlString
      * @param array $expectedError
-     * @dataProvider schemaCorrectlyIdentifiesExportOptionsDataProvider
      */
+    #[DataProvider('schemaCorrectlyIdentifiesExportOptionsDataProvider')]
     public function testSchemaCorrectlyIdentifiesInvalidProductOptionsXml($xmlString, $expectedError)
     {
         $actualErrors = $this->_xsdValidator->validate($this->_xsdSchemaPath . 'export.xsd', $xmlString);
@@ -76,8 +77,8 @@ class XsdTest extends TestCase
     /**
      * @param string $xmlString
      * @param array $expectedError
-     * @dataProvider schemaCorrectlyIdentifiesInvalidExportMergedXmlDataProvider
      */
+    #[DataProvider('schemaCorrectlyIdentifiesInvalidExportMergedXmlDataProvider')]
     public function testSchemaCorrectlyIdentifiesInvalidProductOptionsMergedXml($xmlString, $expectedError)
     {
         $this->_loadDataForTest('export_merged.xsd', $xmlString, $expectedError);
@@ -86,8 +87,8 @@ class XsdTest extends TestCase
     /**
      * @param string $schemaName
      * @param string $validFileName
-     * @dataProvider schemaCorrectlyIdentifiesValidXmlDataProvider
      */
+    #[DataProvider('schemaCorrectlyIdentifiesValidXmlDataProvider')]
     public function testSchemaCorrectlyIdentifiesValidXml($schemaName, $validFileName)
     {
         $xmlString = file_get_contents(__DIR__ . '/_files/' . $validFileName);

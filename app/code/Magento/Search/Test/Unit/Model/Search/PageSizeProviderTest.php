@@ -11,6 +11,7 @@ use Magento\Search\Model\EngineResolver;
 use Magento\Search\Model\Search\PageSizeProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class PageSizeProviderTest extends TestCase
 {
@@ -41,8 +42,8 @@ class PageSizeProviderTest extends TestCase
     /**
      * @param string $searchEngine
      * @param int $size
-     * @dataProvider getPageSizeDataProvider
      */
+    #[DataProvider('getPageSizeDataProvider')]
     public function testGetPageSize($searchEngine, $size)
     {
         $this->pageSizeBySearchEngineMock

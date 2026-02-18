@@ -49,7 +49,7 @@ class SpecialTest extends TestCase
     {
         $this->product = $this->createMock(Product::class);
         $this->productFactory = $this->createPartialMock(ProductFactory::class, ['create']);
-        $this->productFactory->expects($this->any())->method('create')->willReturn($this->product);
+        $this->productFactory->method('create')->willReturn($this->product);
         $this->storeManager = $this->createMock(StoreManager::class);
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);

@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright 2026 Adobe
+ * All Rights Reserved.
+ */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminAddCustomOptionValueWhenTwoPagesFullTest">
+        <annotations>
+            <features value="Catalog"/>
+            <stories value="Customizable Options Pagination"/>
+            <title value="Admin can add custom option value when two pages are full"/>
+            <description value="Adding value when two pages are full should switch to page 3, not stay in loading state"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="AC-14688"/>
+            <group value="Catalog"/>
+        </annotations>
+        <before>
+            <!-- Step 1: Login as admin -->
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+        </before>
+        <after>
+            <!-- Cleanup: Delete created product -->
+            <actionGroup ref="DeleteProductUsingProductGridActionGroup" stepKey="deleteProduct">
+                <argument name="product" value="SimpleProduct"/>
+            </actionGroup>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="adminLogout"/>
+        </after>
+        <!-- Step 2: Go to product page and create product -->
+        <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="navigateToProductIndex"/>
+        <actionGroup ref="GoToCreateProductPageActionGroup" stepKey="goToCreateProduct">
+            <argument name="product" value="SimpleProduct"/>
+        </actionGroup>
+        <actionGroup ref="FillMainProductFormNoWeightActionGroup" stepKey="fillProductForm">
+            <argument name="product" value="SimpleProduct"/>
+        </actionGroup>
+        <!-- Step 3: Create a Customizable Option with drop-down type -->
+        <waitForElementClickable selector="{{AdminProductCustomizableOptionsSection.customizableOptions}}" stepKey="waitForCustomizableOptionsTab"/>
+        <click selector="{{AdminProductCustomizableOptionsSection.customizableOptions}}" stepKey="openCustomizableOptions"/>
+        <waitForElementClickable selector="{{AdminProductCustomizableOptionsSection.addOptionBtn}}" stepKey="waitForAddOptionButton"/>
+        <click selector="{{AdminProductCustomizableOptionsSection.addOptionBtn}}" stepKey="clickAddOptions"/>
+        <waitForPageLoad stepKey="waitForOptionPanelLoad"/>
+        <!-- Fill in the option and select the type of drop down -->
+        <waitForElementVisible selector="{{AdminProductCustomizableOptionsSection.optionTitleInput('0')}}" stepKey="waitForOptionTitleField"/>
+        <fillField selector="{{AdminProductCustomizableOptionsSection.optionTitleInput('0')}}" userInput="TestDropdownOption" stepKey="fillOptionTitle"/>
+        <waitForElementClickable selector="{{AdminProductCustomizableOptionsSection.lastOptionTypeParent}}" stepKey="waitForOptionTypeDropdown"/>
+        <click selector="{{AdminProductCustomizableOptionsSection.lastOptionTypeParent}}" stepKey="clickOptionTypeParent"/>
+        <waitForPageLoad stepKey="waitForDropdownOpen"/>
+        <waitForElementClickable selector="{{AdminProductCustomizableOptionsSection.optionType('Drop-down')}}" stepKey="waitForDropdownOption"/>
+        <click selector="{{AdminProductCustomizableOptionsSection.optionType('Drop-down')}}" stepKey="clickOptionType"/>
+        <waitForPageLoad stepKey="waitForDropdownTypeSelected"/>
+        <!-- Step 4: Add values until both pages are fully populated (40 values, 20 per page) -->
+        <helper class="Magento\Catalog\Test\Mftf\Helper\CustomizableOptionsHelper" method="addMultipleCustomizableOptionValues" stepKey="add40CustomizableOptionValues">
+            <argument name="start">1</argument>
+            <argument name="end">40</argument>
+            <argument name="titlePrefix">OptionValue</argument>
+            <argument name="price">10</argument>
+            <argument name="addValueButton">{{AdminProductCustomizableOptionsSection.addValue}}</argument>
+            <argument name="valueTitleField">{{AdminProductCustomizableOptionsSection.valueTitle}}</argument>
+            <argument name="valuePriceField">{{AdminProductCustomizableOptionsSection.valuePrice}}</argument>
+        </helper>
+        <!-- Step 5: Save the product -->
+        <actionGroup ref="AdminProductFormSaveActionGroup" stepKey="saveProduct"/>
+        <waitForElementVisible selector="{{AdminProductMessagesSection.successMessage}}" stepKey="seeSaveSuccessMessage"/>
+        <!-- Step 6: Navigate to Customizable Options tab -->
+        <waitForElementClickable selector="{{AdminProductCustomizableOptionsSection.customizableOptions}}" stepKey="waitForCustomizableOptionsTabAgain"/>
+        <click selector="{{AdminProductCustomizableOptionsSection.customizableOptions}}" stepKey="openCustomizableOptionsAgain"/>
+        <waitForPageLoad stepKey="waitForCustomizableOptionsPanelOpen"/>
+        <!-- Verify we're on page 2 (pagination should show page 2 of 2) -->
+        <waitForElementVisible selector="{{AdminProductCustomizableOptionsSection.customOptionPageDropdown}}" stepKey="waitForPaginationDropdown"/>
+        <!-- Step 7: Add a new value (41st value) -->
+        <helper class="Magento\Catalog\Test\Mftf\Helper\CustomizableOptionsHelper" method="addMultipleCustomizableOptionValues" stepKey="add41CustomizableOptionValue">
+            <argument name="start">41</argument>
+            <argument name="end">41</argument>
+            <argument name="titlePrefix">OptionValue</argument>
+            <argument name="price">10</argument>
+            <argument name="addValueButton">{{AdminProductCustomizableOptionsSection.addValue}}</argument>
+            <argument name="valueTitleField">{{AdminProductCustomizableOptionsSection.valueTitle}}</argument>
+            <argument name="valuePriceField">{{AdminProductCustomizableOptionsSection.valuePrice}}</argument>
+        </helper>
+        <!-- Save product again to confirm value persists -->
+        <actionGroup ref="AdminProductFormSaveActionGroup" stepKey="saveProductAgain"/>
+        <waitForElementVisible selector="{{AdminProductMessagesSection.successMessage}}" stepKey="seeSaveSuccessMessageAgain"/>
+    </test>
+</tests>

@@ -46,7 +46,7 @@ class FileTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->loggerMock = $this->getMockForAbstractClass(LoggerInterface::class);
+        $this->loggerMock = $this->createMock(LoggerInterface::class);
         $this->storageHelperMock = $this->createMock(Database::class);
         $this->mediaHelperMock = $this->createMock(Media::class);
         $this->fileUtilityMock = $this->createMock(\Magento\MediaStorage\Model\ResourceModel\File\Storage\File::class);

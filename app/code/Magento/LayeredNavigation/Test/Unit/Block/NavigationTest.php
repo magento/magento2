@@ -12,15 +12,22 @@ use Magento\Catalog\Model\Layer;
 use Magento\Catalog\Model\Layer\AvailabilityFlagInterface;
 use Magento\Catalog\Model\Layer\FilterList;
 use Magento\Catalog\Model\Layer\Resolver;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\View\Element\AbstractBlock;
 use Magento\Framework\View\LayoutInterface;
 use Magento\LayeredNavigation\Block\Navigation;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
+/**
+ * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+ * @SuppressWarnings(PHPMD.UnusedLocalVariable)
+ */
 class NavigationTest extends TestCase
 {
+    use MockCreationTrait;
     /**
      * @var MockObject
      */
@@ -53,13 +60,10 @@ class NavigationTest extends TestCase
     {
         $this->catalogLayerMock = $this->createMock(Layer::class);
         $this->filterListMock = $this->createMock(FilterList::class);
-        $this->visibilityFlagMock = $this->getMockForAbstractClass(AvailabilityFlagInterface::class);
+        $this->visibilityFlagMock = $this->createMock(AvailabilityFlagInterface::class);
 
         /** @var MockObject|Resolver $layerResolver */
-        $layerResolver = $this->getMockBuilder(Resolver::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['get', 'create'])
-            ->getMock();
+        $layerResolver = $this->createPartialMock(Resolver::class, ['get', 'create']);
         $layerResolver->expects($this->any())
             ->method($this->anything())
             ->willReturn($this->catalogLayerMock);
@@ -73,7 +77,7 @@ class NavigationTest extends TestCase
                 'visibilityFlag' => $this->visibilityFlagMock
             ]
         );
-        $this->layoutMock = $this->getMockForAbstractClass(LayoutInterface::class);
+        $this->layoutMock = $this->createMock(LayoutInterface::class);
     }
 
     /**
@@ -135,8 +139,8 @@ class NavigationTest extends TestCase
      * @param bool $result
      *
      * @return void
-     * @dataProvider canShowBlockDataProvider
      */
+    #[DataProvider('canShowBlockDataProvider')]
     public function testCanShowBlockWithDifferentDisplayModes(string $mode, bool $result): void
     {
         $filters = ['To' => 'be', 'or' => 'not', 'to' => 'be'];
@@ -188,14 +192,9 @@ class NavigationTest extends TestCase
         $this->model->setLayout($this->layoutMock);
         $this->layoutMock->expects($this->once())->method('getChildName')->willReturn('sample block');
 
-        $blockMock = $this->getMockForAbstractClass(
-            AbstractBlock::class,
-            [],
-            '',
-            false
-        );
+        $blockMock = $this->createPartialMockWithReflection(AbstractBlock::class, ['getClearUrl']);
         $clearUrl = 'very clear URL';
-        $blockMock->setClearUrl($clearUrl);
+        $blockMock->method('getClearUrl')->willReturn($clearUrl);
 
         $this->layoutMock->expects($this->once())->method('getBlock')->willReturn($blockMock);
         $this->assertEquals($clearUrl, $this->model->getClearUrl());

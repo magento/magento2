@@ -292,7 +292,6 @@ class TransparentTest extends TestCase
         $gatewayMock = $this->objectManager->get(Gateway::class);
         $reflection = new \ReflectionClass($gatewayMock);
         $property = $reflection->getProperty('httpClientFactory');
-        $property->setAccessible(true);
         $property->setValue($gatewayMock, $clientFactory);
         
         return $gatewayMock;

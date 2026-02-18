@@ -58,30 +58,16 @@ class FileTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->contextMock = $this->getMockBuilder(Context::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->registryMock = $this->getMockBuilder(Registry::class)
-            ->getMockForAbstractClass();
-        $this->scopeConfigMock = $this->getMockBuilder(ScopeConfigInterface::class)
-            ->getMockForAbstractClass();
-        $this->typeListMock = $this->getMockBuilder(TypeListInterface::class)
-            ->getMockForAbstractClass();
-        $this->uploaderFactoryMock = $this->getMockBuilder(UploaderFactory::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['create'])
-            ->getMock();
+        $this->contextMock = $this->createMock(Context::class);
+        $this->registryMock = $this->createMock(Registry::class);
+        $this->scopeConfigMock = $this->createMock(ScopeConfigInterface::class);
+        $this->typeListMock = $this->createMock(TypeListInterface::class);
+        $this->uploaderFactoryMock = $this->createPartialMock(UploaderFactory::class, ['create']);
         $this->requestDataMock
-            = $this->getMockBuilder(RequestDataInterface::class)
-                ->getMockForAbstractClass();
-        $this->filesystemMock = $this->getMockBuilder(Filesystem::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->writeMock = $this->getMockBuilder(WriteInterface::class)
-            ->getMock();
-        $this->uploaderMock = $this->getMockBuilder(Uploader::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+            = $this->createPartialMock(RequestDataInterface::class, ['getTmpName', 'getName']);
+        $this->filesystemMock = $this->createMock(Filesystem::class);
+        $this->writeMock = $this->createMock(WriteInterface::class);
+        $this->uploaderMock = $this->createMock(Uploader::class);
 
         $this->uploaderFactoryMock->expects($this->any())
             ->method('create')

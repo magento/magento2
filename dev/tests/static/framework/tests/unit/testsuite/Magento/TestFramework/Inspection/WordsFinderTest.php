@@ -1,19 +1,20 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\TestFramework\Inspection;
 
 use Magento\Framework\Component\ComponentRegistrar;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class WordsFinderTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @param string $configFile
      * @param string $baseDir
-     * @dataProvider constructorExceptionDataProvider
      */
+    #[DataProvider('constructorExceptionDataProvider')]
     public function testConstructorException($configFile, $baseDir)
     {
         $this->expectException(\Magento\TestFramework\Inspection\Exception::class);
@@ -37,8 +38,8 @@ class WordsFinderTest extends \PHPUnit\Framework\TestCase
      * @param string|array $configFiles
      * @param string $file
      * @param array $expected
-     * @dataProvider findWordsDataProvider
      */
+    #[DataProvider('findWordsDataProvider')]
     public function testFindWords($configFiles, $file, $expected)
     {
         $wordsFinder = new \Magento\TestFramework\Inspection\WordsFinder(

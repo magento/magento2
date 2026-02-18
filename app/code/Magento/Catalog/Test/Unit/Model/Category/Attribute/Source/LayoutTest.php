@@ -15,6 +15,9 @@ use PHPUnit\Framework\TestCase;
 
 class LayoutTest extends TestCase
 {
+    /**
+     * @var array
+     */
     private $testArray = ['test1', ['test1']];
 
     /**
@@ -45,17 +48,10 @@ class LayoutTest extends TestCase
      */
     private function getMockedPageLayoutBuilder()
     {
-        $mockPageLayoutConfig = $this->getMockBuilder(Config::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $mockPageLayoutConfig->expects($this->any())
-            ->method('toOptionArray')
-            ->willReturn($this->testArray);
+        $mockPageLayoutConfig = $this->createMock(Config::class);
+        $mockPageLayoutConfig->method('toOptionArray')->willReturn($this->testArray);
 
-        $mockPageLayoutBuilder = $this->getMockBuilder(
-            BuilderInterface::class
-        )->disableOriginalConstructor()
-            ->getMock();
+        $mockPageLayoutBuilder = $this->createMock(BuilderInterface::class);
         $mockPageLayoutBuilder->expects($this->once())
             ->method('getPageLayoutsConfig')
             ->willReturn($mockPageLayoutConfig);

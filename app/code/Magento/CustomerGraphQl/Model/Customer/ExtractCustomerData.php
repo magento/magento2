@@ -12,6 +12,7 @@ use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Customer\Api\Data\CustomerInterface;
 use Magento\EavGraphQl\Model\GetAttributeValueComposite;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\GraphQl\Query\Uid;
 use Magento\Framework\Webapi\ServiceOutputProcessor;
 
 /**
@@ -20,25 +21,17 @@ use Magento\Framework\Webapi\ServiceOutputProcessor;
 class ExtractCustomerData
 {
     /**
-     * @var ServiceOutputProcessor
-     */
-    private $serviceOutputProcessor;
-
-    /**
-     * @var GetAttributeValueComposite
-     */
-    private GetAttributeValueComposite $getAttributeValueComposite;
-
-    /**
+     * ExtractCustomerData Constructor.
+     *
      * @param ServiceOutputProcessor $serviceOutputProcessor
      * @param GetAttributeValueComposite $getAttributeValueComposite
+     * @param Uid $idEncoder
      */
     public function __construct(
-        ServiceOutputProcessor $serviceOutputProcessor,
-        GetAttributeValueComposite $getAttributeValueComposite
+        private readonly ServiceOutputProcessor     $serviceOutputProcessor,
+        private readonly GetAttributeValueComposite $getAttributeValueComposite,
+        private readonly Uid                        $idEncoder
     ) {
-        $this->serviceOutputProcessor = $serviceOutputProcessor;
-        $this->getAttributeValueComposite = $getAttributeValueComposite;
     }
 
     /**
@@ -57,6 +50,7 @@ class ExtractCustomerData
                 $arrayAddress[$key]['default_billing'] = false;
             }
         }
+
         return $arrayAddress;
     }
 
@@ -98,14 +92,15 @@ class ExtractCustomerData
         }
         //Fields are deprecated and should not be exposed on storefront.
         $customerData['group_id'] = null;
-        $customerData['id'] = null;
-
         $customerData['model'] = $customer;
 
         //'dob' is deprecated, 'date_of_birth' is used instead.
         if (!empty($customerData['dob'])) {
             $customerData['date_of_birth'] = $customerData['dob'];
         }
+
+        $customerData['id'] = $this->idEncoder->encode((string) $customerData['id']);
+
         return $customerData;
     }
 }

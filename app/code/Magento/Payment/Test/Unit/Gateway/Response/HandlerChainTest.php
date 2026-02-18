@@ -18,9 +18,9 @@ class HandlerChainTest extends TestCase
     public function testHandle()
     {
         $handler1 = $this->getMockBuilder(HandlerInterface::class)
-            ->getMockForAbstractClass();
+            ->getMock();
         $handler2 = $this->getMockBuilder(HandlerInterface::class)
-            ->getMockForAbstractClass();
+            ->getMock();
         $tMapFactory = $this->getMockBuilder(TMapFactory::class)
             ->disableOriginalConstructor()
             ->onlyMethods(['create'])

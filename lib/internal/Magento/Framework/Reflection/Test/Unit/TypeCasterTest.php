@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -12,6 +12,7 @@ use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class TypeCasterTest extends TestCase
 {
@@ -42,9 +43,8 @@ class TypeCasterTest extends TestCase
      *
      * @param mixed $origValue
      * @param string $typeToCast
-     * @param mixed $expectedValue
-     * @dataProvider typeCastValueProvider
-     */
+     * @param mixed $expectedValue     */
+    #[DataProvider('typeCastValueProvider')]
     public function testCastValues($origValue, $typeToCast, $expectedValue)
     {
         $this->serializer->expects(self::never())
@@ -60,9 +60,8 @@ class TypeCasterTest extends TestCase
      * @covers \Magento\Framework\Reflection\TypeCaster::castValueToType
      * @param array $origValue
      * @param string $typeToCast
-     * @param string $expected
-     * @dataProvider arraysDataProvider
-     */
+     * @param string $expected     */
+    #[DataProvider('arraysDataProvider')]
     public function testCastValueToType(array $origValue, $typeToCast, $expected)
     {
         $this->serializer->expects(self::once())

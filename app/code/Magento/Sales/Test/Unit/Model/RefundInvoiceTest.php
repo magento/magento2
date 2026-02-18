@@ -34,6 +34,7 @@ use Magento\Sales\Model\RefundInvoice;
 use Magento\Sales\Model\ValidatorResultInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -42,6 +43,7 @@ use Psr\Log\LoggerInterface;
  */
 class RefundInvoiceTest extends TestCase
 {
+
     /**
      * @var ResourceConnection|MockObject
      */
@@ -144,74 +146,38 @@ class RefundInvoiceTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->resourceConnectionMock = $this->getMockBuilder(ResourceConnection::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->orderRepositoryMock = $this->getMockBuilder(OrderRepositoryInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-        $this->invoiceRepositoryMock = $this->getMockBuilder(InvoiceRepositoryInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-        $this->creditmemoDocumentFactoryMock = $this->getMockBuilder(CreditmemoDocumentFactory::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->refundAdapterMock = $this->getMockBuilder(RefundAdapterInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-        $this->refundInvoiceValidatorMock = $this->getMockBuilder(RefundInvoiceInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-        $this->orderStateResolverMock = $this->getMockBuilder(OrderStateResolverInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-        $this->configMock = $this->getMockBuilder(OrderConfig::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->resourceConnectionMock = $this->createMock(ResourceConnection::class);
+        $this->orderRepositoryMock = $this->createMock(OrderRepositoryInterface::class);
+        $this->invoiceRepositoryMock = $this->createMock(InvoiceRepositoryInterface::class);
+        $this->creditmemoDocumentFactoryMock = $this->createMock(CreditmemoDocumentFactory::class);
+        $this->refundAdapterMock = $this->createMock(RefundAdapterInterface::class);
+        $this->refundInvoiceValidatorMock = $this->createMock(RefundInvoiceInterface::class);
+        $this->orderStateResolverMock = $this->createMock(OrderStateResolverInterface::class);
+        $this->configMock = $this->createMock(OrderConfig::class);
 
-        $this->creditmemoRepositoryMock = $this->getMockBuilder(CreditmemoRepositoryInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->creditmemoRepositoryMock = $this->createMock(CreditmemoRepositoryInterface::class);
 
-        $this->notifierMock = $this->getMockBuilder(NotifierInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->notifierMock = $this->createMock(NotifierInterface::class);
 
-        $this->loggerMock = $this->getMockBuilder(LoggerInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->loggerMock = $this->createMock(LoggerInterface::class);
 
-        $this->creditmemoCommentCreationMock = $this->getMockBuilder(CreditmemoCommentCreationInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->creditmemoCommentCreationMock = $this->createMock(CreditmemoCommentCreationInterface::class);
 
-        $this->creditmemoCreationArgumentsMock = $this->getMockBuilder(CreditmemoCreationArgumentsInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->creditmemoCreationArgumentsMock = $this->createMock(CreditmemoCreationArgumentsInterface::class);
 
-        $this->orderMock = $this->getMockBuilder(OrderInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->orderMock = $this->createMock(OrderInterface::class);
 
-        $this->invoiceMock = $this->getMockBuilder(InvoiceInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->invoiceMock = $this->createMock(InvoiceInterface::class);
 
-        $this->creditmemoMock = $this->getMockBuilder(CreditmemoInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->creditmemoMock = $this->createMock(CreditmemoInterface::class);
 
-        $this->adapterInterface = $this->getMockBuilder(AdapterInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->adapterInterface = $this->createMock(AdapterInterface::class);
 
-        $this->creditmemoItemCreationMock = $this->getMockBuilder(CreditmemoItemCreationInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->creditmemoItemCreationMock = $this->createMock(CreditmemoItemCreationInterface::class);
         $this->validationMessagesMock = $this->getMockBuilder(ValidatorResultInterface::class)
             ->disableOriginalConstructor()
             ->onlyMethods(['hasMessages', 'getMessages', 'addMessage'])
-            ->getMockForAbstractClass();
+            ->getMock();
 
         $this->refundInvoice = new RefundInvoice(
             $this->resourceConnectionMock,
@@ -237,8 +203,8 @@ class RefundInvoiceTest extends TestCase
      * @param bool $appendComment
      * @throws CouldNotRefundException
      * @throws DocumentValidationException
-     * @dataProvider dataProvider
      */
+    #[DataProvider('dataProvider')]
     public function testOrderCreditmemo($invoiceId, $isOnline, $items, $notify, $appendComment)
     {
         $this->mockConnection($invoiceId);
@@ -480,10 +446,9 @@ class RefundInvoiceTest extends TestCase
         );
     }
 
-    protected function getMockForCreditMemoItem() {
-        $creditmemoItemCreationMock = $this->getMockBuilder(CreditmemoItemCreationInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+    protected function getMockForCreditMemoItem()
+    {
+        $creditmemoItemCreationMock = $this->createMock(CreditmemoItemCreationInterface::class);
         return $creditmemoItemCreationMock;
     }
 

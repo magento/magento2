@@ -62,12 +62,12 @@ class RetrieverPluginTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->userContextMock = $this->getMockForAbstractClass(UserContextInterface::class);
-        $this->customerRepositoryMock = $this->getMockForAbstractClass(CustomerRepositoryInterface::class);
+        $this->userContextMock = $this->createMock(UserContextInterface::class);
+        $this->customerRepositoryMock = $this->createMock(CustomerRepositoryInterface::class);
         $this->appStateMock = $this->createMock(State::class);
-        $this->loggerMock = $this->getMockForAbstractClass(LoggerInterface::class);
+        $this->loggerMock = $this->createMock(LoggerInterface::class);
         $this->subjectMock = $this->createMock(Retriever::class);
-        $this->customerMock = $this->getMockForAbstractClass(CustomerInterface::class);
+        $this->customerMock = $this->createMock(CustomerInterface::class);
 
         $this->plugin = new RetrieverPlugin(
             $this->userContextMock,

@@ -34,10 +34,7 @@ class AggregationFactoryTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->objectManager = $this->getMockBuilder(ObjectManagerInterface::class)
-            ->onlyMethods(['create'])
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->objectManager = $this->createMock(ObjectManagerInterface::class);
 
         $objectManagerHelper = new ObjectManagerHelper($this);
         $this->objectManager->expects($this->any())

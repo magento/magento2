@@ -20,7 +20,7 @@ use PHPUnit\Framework\TestCase;
 class FileResolverTest extends TestCase
 {
     /**
-     * @vat \Magento\Paypal\Model\Config\Rules\FileResolver
+     * @var FileResolver
      */
     protected $fileResolver;
 
@@ -36,9 +36,7 @@ class FileResolverTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->readerMock = $this->getMockBuilder(Reader::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->readerMock = $this->createMock(Reader::class);
 
         $this->fileResolver = new FileResolver($this->readerMock);
     }

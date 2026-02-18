@@ -16,6 +16,8 @@ use Magento\Framework\Filesystem\Directory\WriteInterface as DirectoryWriteInter
 use Magento\Framework\Filesystem\File\WriteInterface as FileWriteInterface;
 use PHPUnit\Framework\Attributes\TestWith;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\Attributes\DataProvider;
+
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -160,9 +162,8 @@ class ReportWriterTest extends TestCase
     /**
      * @param array $configData
      * @return void
-     *
-     * @dataProvider writeErrorFileDataProvider
      */
+    #[DataProvider('writeErrorFileDataProvider')]
     public function testWriteErrorFile(array $configData): void
     {
         $errors = ['orders', 'SQL Error: test'];

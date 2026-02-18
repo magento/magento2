@@ -7,10 +7,13 @@ declare(strict_types=1);
 
 namespace Magento\CompareListGraphQl\Model\Resolver;
 
+use Magento\CompareListGraphQl\Model\Service\CompareCookieManager;
+use Magento\Catalog\Helper\Product\Compare;
 use Magento\CompareListGraphQl\Model\Service\AddToCompareList;
 use Magento\CompareListGraphQl\Model\Service\CreateCompareList as CreateCompareListService;
 use Magento\CompareListGraphQl\Model\Service\Customer\GetListIdByCustomerId;
 use Magento\CompareListGraphQl\Model\Service\GetCompareList;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
@@ -22,6 +25,8 @@ use Magento\Framework\Math\Random;
 
 /**
  * Class for creating compare list
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class CreateCompareList implements ResolverInterface
 {
@@ -51,24 +56,42 @@ class CreateCompareList implements ResolverInterface
     private $createCompareList;
 
     /**
+     * @var Compare
+     */
+    private mixed $productCompareHelper;
+
+    /**
+     * @var CompareCookieManager
+     */
+    private CompareCookieManager $compareCookieManager;
+
+    /**
      * @param Random $mathRandom
      * @param GetListIdByCustomerId $getListIdByCustomerId
      * @param AddToCompareList $addProductToCompareList
      * @param GetCompareList $getCompareList
      * @param CreateCompareListService $createCompareList
+     * @param Compare|null $productCompareHelper
+     * @param CompareCookieManager|null $compareCookieManager
      */
     public function __construct(
         Random $mathRandom,
         GetListIdByCustomerId $getListIdByCustomerId,
         AddToCompareList $addProductToCompareList,
         GetCompareList $getCompareList,
-        CreateCompareListService $createCompareList
+        CreateCompareListService $createCompareList,
+        ?Compare $productCompareHelper = null,
+        ?CompareCookieManager $compareCookieManager = null
     ) {
         $this->mathRandom = $mathRandom;
         $this->getListIdByCustomerId = $getListIdByCustomerId;
         $this->addProductToCompareList = $addProductToCompareList;
         $this->getCompareList = $getCompareList;
         $this->createCompareList = $createCompareList;
+        $this->productCompareHelper = $productCompareHelper ?: ObjectManager::getInstance()
+            ->get(Compare::class);
+        $this->compareCookieManager = $compareCookieManager ?: ObjectManager::getInstance()
+            ->get(CompareCookieManager::class);
     }
 
     /**
@@ -111,6 +134,8 @@ class CreateCompareList implements ResolverInterface
                 } else {
                     $listId = $this->createCompareList->execute($generatedListId, $customerId);
                     $this->addProductToCompareList->execute($listId, $products, $context);
+                    $this->productCompareHelper->calculate();
+                    $this->compareCookieManager->invalidate();
                 }
             }
         } catch (LocalizedException $exception) {

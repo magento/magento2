@@ -124,6 +124,7 @@ class Start extends ImportResultController implements HttpPostActionInterface
 
                 $this->addErrorMessages($resultBlock, $errorAggregator);
                 $resultBlock->addSuccess(__('Import successfully done'));
+                $this->_eventManager->dispatch('log_admin_import');
             }
 
             return $resultLayout;

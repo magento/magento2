@@ -33,13 +33,8 @@ class LifetimeTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->validatorMock = $this->getMockBuilder(CookieLifetimeValidator::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $this->resourceMock = $this->getMockBuilder(ModuleResource::class)
-            ->disableOriginalConstructor('delete')
-            ->getMock();
+        $this->validatorMock = $this->createMock(CookieLifetimeValidator::class);
+        $this->resourceMock = $this->createMock(ModuleResource::class);
 
         $objectManager = new ObjectManager($this);
         $this->model = $objectManager->getObject(

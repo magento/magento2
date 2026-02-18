@@ -16,6 +16,7 @@ use Magento\Framework\App\State;
 use Magento\Framework\Escaper;
 use Magento\Framework\Event\ManagerInterface;
 use Magento\Framework\Filter\Input\MaliciousCode;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Newsletter\Block\Adminhtml\Queue\Preview as QueuePreview;
 use Magento\Newsletter\Model\Queue;
@@ -35,6 +36,8 @@ use PHPUnit\Framework\TestCase;
  */
 class PreviewTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var ObjectManager
      */
@@ -78,10 +81,10 @@ class PreviewTest extends TestCase
     protected function setUp(): void
     {
         $context = $this->createMock(Context::class);
-        $eventManager = $this->getMockForAbstractClass(ManagerInterface::class);
+        $eventManager = $this->createMock(ManagerInterface::class);
         $context->expects($this->once())->method('getEventManager')
             ->willReturn($eventManager);
-        $scopeConfig = $this->getMockForAbstractClass(ScopeConfigInterface::class);
+        $scopeConfig = $this->createMock(ScopeConfigInterface::class);
         $context->expects($this->once())->method('getScopeConfig')
             ->willReturn($scopeConfig);
         $this->requestMock = $this->createMock(Http::class);
@@ -97,31 +100,17 @@ class PreviewTest extends TestCase
         $context->expects($this->once())->method('getAppState')
             ->willReturn($appState);
 
-        $backendSession = $this->getMockBuilder(Session::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $backendSession = $this->createMock(Session::class);
 
         $context->expects($this->once())
             ->method('getBackendSession')
             ->willReturn($backendSession);
 
         $templateFactory = $this->createPartialMock(TemplateFactory::class, ['create']);
-        $this->templateMock = $this->getMockBuilder(Template::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(
-                [
-                    'isPlain',
-                    'setId',
-                ]
-            )
-            ->addMethods(
-                [
-                    'setTemplateType',
-                    'setTemplateText',
-                    'setTemplateStyles',
-                ]
-            )
-            ->getMock();
+        $this->templateMock = $this->createPartialMockWithReflection(
+            Template::class,
+            ['isPlain', 'setId', 'setTemplateType', 'setTemplateText', 'setTemplateStyles']
+        );
 
         $templateFactory->expects($this->once())
             ->method('create')
@@ -134,22 +123,10 @@ class PreviewTest extends TestCase
             ->willReturn($this->subscriberMock);
 
         $queueFactory = $this->createPartialMock(QueueFactory::class, ['create']);
-        $this->queueMock = $this->getMockBuilder(Queue::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(
-                [
-                    'load',
-                ]
-            )
-            ->addMethods(
-                [
-                    'getTemplateId',
-                    'getNewsletterType',
-                    'getNewsletterText',
-                    'getNewsletterStyles',
-                ]
-            )
-            ->getMock();
+        $this->queueMock = $this->createPartialMockWithReflection(
+            Queue::class,
+            ['load', 'getTemplateId', 'getNewsletterType', 'getNewsletterText', 'getNewsletterStyles']
+        );
         $queueFactory->expects($this->any())
             ->method('create')
             ->willReturn($this->queueMock);

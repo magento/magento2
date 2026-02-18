@@ -10,6 +10,7 @@
         xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
     <section name="StorefrontCategoryPageProductInfoSection">
         <element name="visualSwatchOption" type="button" selector="#product-item-info_{{var1}} .swatch-option[data-option-label='{{var2}}']" parameterized="true"/>
+        <element name="swatchOptionByLabel" type="button" selector=".products-grid .swatch-option[data-option-label='{{var1}}']" parameterized="true"/>
         <element name="productAddToWishlist" type="button" selector="#product-item-info_{{var1}} .action.towishlist" parameterized="true"/>
     </section>
 </sections>

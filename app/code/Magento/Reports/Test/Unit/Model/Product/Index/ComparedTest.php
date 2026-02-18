@@ -19,6 +19,7 @@ use Magento\Framework\Model\ResourceModel\AbstractResource;
 use Magento\Framework\Registry;
 use Magento\Framework\Session\Generic;
 use Magento\Framework\Stdlib\DateTime;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Reports\Model\Product\Index\Compared;
 use Magento\Store\Model\StoreManagerInterface;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -29,6 +30,8 @@ use PHPUnit\Framework\TestCase;
  */
 class ComparedTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var Compared
      */
@@ -119,11 +122,10 @@ class ComparedTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->resourceMock = $this->getMockBuilder(AbstractResource::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['getIdFieldName'])
-            ->onlyMethods(['_construct', 'getConnection'])
-            ->getMockForAbstractClass();
+        $this->resourceMock = $this->createPartialMockWithReflection(
+            AbstractResource::class,
+            ['getIdFieldName', '_construct', 'getConnection']
+        );
         $this->dbMock = $this->getMockBuilder(AbstractDb::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -148,10 +150,10 @@ class ComparedTest extends TestCase
      */
     public function testGetExcludeProductIds()
     {
-        $collection = $this->getMockBuilder(Collection::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['getEntityId'])
-            ->getMock();
+        $collection = $this->createPartialMockWithReflection(
+            Collection::class,
+            ['getEntityId']
+        );
         $collection->expects($this->once())->method('getEntityId')->willReturn(1);
 
         $product = $this->getMockBuilder(Product::class)

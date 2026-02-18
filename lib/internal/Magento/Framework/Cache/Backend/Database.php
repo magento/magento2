@@ -1,8 +1,9 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
+declare(strict_types=1);
 
 /**
  * Tables declaration:
@@ -29,10 +30,15 @@
 
 namespace Magento\Framework\Cache\Backend;
 
+use Magento\Framework\Cache\CacheConstants;
+use Magento\Framework\Cache\Exception\CacheException;
+
 /**
  * Database cache backend.
+ *
+ * Magento-native cache backend using database storage.
  */
-class Database extends \Zend_Cache_Backend implements \Zend_Cache_Backend_ExtendedInterface
+class Database extends AbstractBackend implements ExtendedBackendInterface
 {
     /**
      * Available options
@@ -59,23 +65,23 @@ class Database extends \Zend_Cache_Backend implements \Zend_Cache_Backend_Extend
      * Constructor
      *
      * @param array $options associative array of options
-     * @throws \Zend_Cache_Exception
+     * @throws CacheException
      */
     public function __construct($options = [])
     {
         parent::__construct($options);
         if (empty($this->_options['adapter_callback'])) {
             if (!$this->_options['adapter'] instanceof \Magento\Framework\DB\Adapter\AdapterInterface) {
-                \Zend_Cache::throwException(
-                    'Option "adapter" should be declared and extend \Magento\Framework\DB\Adapter\AdapterInterface!'
+                throw new CacheException(
+                    __('Option "adapter" should be declared and extend \Magento\Framework\DB\Adapter\AdapterInterface!')
                 );
             }
         }
         if (empty($this->_options['data_table']) && empty($this->_options['data_table_callback'])) {
-            \Zend_Cache::throwException('Option "data_table" or "data_table_callback" should be declared!');
+            throw new CacheException(__('Option "data_table" or "data_table_callback" should be declared!'));
         }
         if (empty($this->_options['tags_table']) && empty($this->_options['tags_table_callback'])) {
-            \Zend_Cache::throwException('Option "tags_table" or "tags_table_callback" should be declared!');
+            throw new CacheException(__('Option "tags_table" or "tags_table_callback" should be declared!'));
         }
     }
 
@@ -83,7 +89,7 @@ class Database extends \Zend_Cache_Backend implements \Zend_Cache_Backend_Extend
      * Get DB adapter
      *
      * @return \Magento\Framework\DB\Adapter\AdapterInterface
-     * @throws \Zend_Cache_Exception
+     * @throws CacheException
      */
     protected function _getConnection()
     {
@@ -94,8 +100,8 @@ class Database extends \Zend_Cache_Backend implements \Zend_Cache_Backend_Extend
                 $connection = $this->_options['adapter'];
             }
             if (!$connection instanceof \Magento\Framework\DB\Adapter\AdapterInterface) {
-                \Zend_Cache::throwException(
-                    'DB Adapter should be declared and extend \Magento\Framework\DB\Adapter\AdapterInterface'
+                throw new CacheException(
+                    __('DB Adapter should be declared and extend \Magento\Framework\DB\Adapter\AdapterInterface')
                 );
             } else {
                 $this->_connection = $connection;
@@ -108,14 +114,14 @@ class Database extends \Zend_Cache_Backend implements \Zend_Cache_Backend_Extend
      * Get table name where data is stored
      *
      * @return string
-     * @throws \Zend_Cache_Exception
+     * @throws CacheException
      */
     protected function _getDataTable()
     {
         if (empty($this->_options['data_table'])) {
             $this->setOption('data_table', call_user_func($this->_options['data_table_callback']));
             if (empty($this->_options['data_table'])) {
-                \Zend_Cache::throwException('Failed to detect data_table option');
+                throw new CacheException(__('Failed to detect data_table option'));
             }
         }
         return $this->_options['data_table'];
@@ -125,14 +131,14 @@ class Database extends \Zend_Cache_Backend implements \Zend_Cache_Backend_Extend
      * Get table name where tags are stored
      *
      * @return string
-     * @throws \Zend_Cache_Exception
+     * @throws CacheException
      */
     protected function _getTagsTable()
     {
         if (empty($this->_options['tags_table'])) {
             $this->setOption('tags_table', call_user_func($this->_options['tags_table_callback']));
             if (empty($this->_options['tags_table'])) {
-                \Zend_Cache::throwException('Failed to detect tags_table option');
+                throw new CacheException(__('Failed to detect tags_table option'));
             }
         }
         return $this->_options['tags_table'];
@@ -146,7 +152,7 @@ class Database extends \Zend_Cache_Backend implements \Zend_Cache_Backend_Extend
      * @param string $id Cache id
      * @param boolean $doNotTestCacheValidity If set to true, the cache validity won't be tested
      * @return string|false cached datas
-     * @throws \Zend_Cache_Exception
+     * @throws CacheException
      */
     public function load($id, $doNotTestCacheValidity = false)
     {
@@ -173,7 +179,7 @@ class Database extends \Zend_Cache_Backend implements \Zend_Cache_Backend_Extend
      *
      * @param string $id cache id
      * @return mixed|false (a cache is not available) or "last modified" timestamp (int) of the available cache record
-     * @throws \Zend_Cache_Exception
+     * @throws CacheException
      */
     public function test($id)
     {
@@ -208,9 +214,9 @@ class Database extends \Zend_Cache_Backend implements \Zend_Cache_Backend_Extend
      * @param int|bool $specificLifetime Integer to set a specific lifetime or null for infinite lifetime
      * @return bool true if no problem
      * @throws \Zend_Db_Statement_Exception
-     * @throws \Zend_Cache_Exception
+     * @throws CacheException
      */
-    public function save($data, $id, $tags = [], $specificLifetime = false)
+    public function save($data, $id, $tags = [], $specificLifetime = null)
     {
         $result = false;
         if (!$this->_options['infinite_loop_flag']) {
@@ -249,7 +255,7 @@ class Database extends \Zend_Cache_Backend implements \Zend_Cache_Backend_Extend
      *
      * @param string $id Cache id
      * @return int|boolean Number of affected rows or false on failure
-     * @throws \Zend_Cache_Exception
+     * @throws CacheException
      */
     public function remove($id)
     {
@@ -266,40 +272,40 @@ class Database extends \Zend_Cache_Backend implements \Zend_Cache_Backend_Extend
      * Clean some cache records
      *
      * Available modes are :
-     * \Zend_Cache::CLEANING_MODE_ALL (default)    => remove all cache entries ($tags is not used)
-     * \Zend_Cache::CLEANING_MODE_OLD              => remove too old cache entries ($tags is not used)
-     * \Zend_Cache::CLEANING_MODE_MATCHING_TAG     => remove cache entries matching all given tags
+     * CacheConstants::CLEANING_MODE_ALL (default)    => remove all cache entries ($tags is not used)
+     * CacheConstants::CLEANING_MODE_OLD              => remove too old cache entries ($tags is not used)
+     * CacheConstants::CLEANING_MODE_MATCHING_TAG     => remove cache entries matching all given tags
      *                                               ($tags can be an array of strings or a single string)
-     * \Zend_Cache::CLEANING_MODE_NOT_MATCHING_TAG => remove cache entries not {matching one of the given tags}
+     * CacheConstants::CLEANING_MODE_NOT_MATCHING_TAG => remove cache entries not {matching one of the given tags}
      *                                               ($tags can be an array of strings or a single string)
-     * \Zend_Cache::CLEANING_MODE_MATCHING_ANY_TAG => remove cache entries matching any given tags
+     * CacheConstants::CLEANING_MODE_MATCHING_ANY_TAG => remove cache entries matching any given tags
      *                                               ($tags can be an array of strings or a single string)
      *
      * @param string $mode Clean mode
      * @param string[] $tags Array of tags
      * @return boolean true if no problem
-     * @throws \Zend_Cache_Exception
+     * @throws CacheException
      */
-    public function clean($mode = \Zend_Cache::CLEANING_MODE_ALL, $tags = [])
+    public function clean($mode = CacheConstants::CLEANING_MODE_ALL, $tags = [])
     {
+        $result = false;
         if (!$this->_options['infinite_loop_flag']) {
             $this->_options['infinite_loop_flag'] = true;
             $connection = $this->_getConnection();
             switch ($mode) {
-                case \Zend_Cache::CLEANING_MODE_ALL:
+                case CacheConstants::CLEANING_MODE_ALL:
                     $result = $this->cleanAll($connection);
                     break;
-                case \Zend_Cache::CLEANING_MODE_OLD:
+                case CacheConstants::CLEANING_MODE_OLD:
                     $result = $this->cleanOld($connection);
                     break;
-                case \Zend_Cache::CLEANING_MODE_MATCHING_TAG:
-                case \Zend_Cache::CLEANING_MODE_NOT_MATCHING_TAG:
-                case \Zend_Cache::CLEANING_MODE_MATCHING_ANY_TAG:
+                case CacheConstants::CLEANING_MODE_MATCHING_TAG:
+                case CacheConstants::CLEANING_MODE_NOT_MATCHING_TAG:
+                case CacheConstants::CLEANING_MODE_MATCHING_ANY_TAG:
                     $result = $this->_cleanByTags($mode, $tags);
                     break;
                 default:
-                    \Zend_Cache::throwException('Invalid mode for clean() method');
-                    break;
+                    throw new CacheException(__('Invalid mode for clean() method'));
             }
             $this->_options['infinite_loop_flag'] = false;
         }
@@ -311,7 +317,7 @@ class Database extends \Zend_Cache_Backend implements \Zend_Cache_Backend_Extend
      * Return an array of stored cache ids
      *
      * @return string[] array of stored cache ids (string)
-     * @throws \Zend_Cache_Exception
+     * @throws CacheException
      */
     public function getIds()
     {
@@ -327,7 +333,7 @@ class Database extends \Zend_Cache_Backend implements \Zend_Cache_Backend_Extend
      * Return an array of stored tags
      *
      * @return string[] array of stored tags (string)
-     * @throws \Zend_Cache_Exception
+     * @throws CacheException
      */
     public function getTags()
     {
@@ -342,7 +348,7 @@ class Database extends \Zend_Cache_Backend implements \Zend_Cache_Backend_Extend
      *
      * @param string[] $tags array of tags
      * @return string[] array of matching cache ids (string)
-     * @throws \Zend_Cache_Exception
+     * @throws CacheException
      */
     public function getIdsMatchingTags($tags = [])
     {
@@ -369,7 +375,7 @@ class Database extends \Zend_Cache_Backend implements \Zend_Cache_Backend_Extend
      *
      * @param string[] $tags array of tags
      * @return string[] array of not matching cache ids (string)
-     * @throws \Zend_Cache_Exception
+     * @throws CacheException
      */
     public function getIdsNotMatchingTags($tags = [])
     {
@@ -383,7 +389,7 @@ class Database extends \Zend_Cache_Backend implements \Zend_Cache_Backend_Extend
      *
      * @param string[] $tags array of tags
      * @return string[] array of any matching cache ids (string)
-     * @throws \Zend_Cache_Exception
+     * @throws CacheException
      */
     public function getIdsMatchingAnyTags($tags = [])
     {
@@ -419,7 +425,7 @@ class Database extends \Zend_Cache_Backend implements \Zend_Cache_Backend_Extend
      *
      * @param string $id cache id
      * @return array|false array of metadatas (false if the cache id is not found)
-     * @throws \Zend_Cache_Exception
+     * @throws CacheException
      */
     public function getMetadatas($id)
     {
@@ -441,7 +447,7 @@ class Database extends \Zend_Cache_Backend implements \Zend_Cache_Backend_Extend
      * @param string $id cache id
      * @param int $extraLifetime
      * @return boolean true if ok
-     * @throws \Zend_Cache_Exception
+     * @throws CacheException
      */
     public function touch($id, $extraLifetime)
     {
@@ -488,7 +494,7 @@ class Database extends \Zend_Cache_Backend implements \Zend_Cache_Backend_Extend
      * @param string $id
      * @param string[] $tags
      * @return bool
-     * @throws \Zend_Cache_Exception
+     * @throws CacheException
      */
     protected function _saveTags($id, $tags)
     {
@@ -527,7 +533,7 @@ class Database extends \Zend_Cache_Backend implements \Zend_Cache_Backend_Extend
      * @param string $mode
      * @param string[] $tags
      * @return bool
-     * @throws \Zend_Cache_Exception
+     * @throws CacheException
      * @throws \Zend_Db_Statement_Exception
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
@@ -537,18 +543,17 @@ class Database extends \Zend_Cache_Backend implements \Zend_Cache_Backend_Extend
             $connection = $this->_getConnection();
             $select = $connection->select()->from($this->_getTagsTable(), 'cache_id');
             switch ($mode) {
-                case \Zend_Cache::CLEANING_MODE_MATCHING_TAG:
+                case CacheConstants::CLEANING_MODE_MATCHING_TAG:
                     $select->where('tag IN (?)', $tags)->group('cache_id')->having('COUNT(cache_id)=' . count($tags));
                     break;
-                case \Zend_Cache::CLEANING_MODE_NOT_MATCHING_TAG:
+                case CacheConstants::CLEANING_MODE_NOT_MATCHING_TAG:
                     $select->where('tag NOT IN (?)', $tags);
                     break;
-                case \Zend_Cache::CLEANING_MODE_MATCHING_ANY_TAG:
+                case CacheConstants::CLEANING_MODE_MATCHING_ANY_TAG:
                     $select->where('tag IN (?)', $tags);
                     break;
                 default:
-                    \Zend_Cache::throwException('Invalid mode for _cleanByTags() method');
-                    break;
+                    throw new CacheException(__('Invalid mode for _cleanByTags() method'));
             }
 
             $result = true;
@@ -578,7 +583,7 @@ class Database extends \Zend_Cache_Backend implements \Zend_Cache_Backend_Extend
      *
      * @param \Magento\Framework\DB\Adapter\AdapterInterface $connection
      * @return bool
-     * @throws \Zend_Cache_Exception
+     * @throws CacheException
      */
     private function cleanAll(\Magento\Framework\DB\Adapter\AdapterInterface $connection)
     {
@@ -596,7 +601,7 @@ class Database extends \Zend_Cache_Backend implements \Zend_Cache_Backend_Extend
      *
      * @param \Magento\Framework\DB\Adapter\AdapterInterface $connection
      * @return bool
-     * @throws \Zend_Cache_Exception
+     * @throws CacheException
      */
     private function cleanOld(\Magento\Framework\DB\Adapter\AdapterInterface $connection)
     {

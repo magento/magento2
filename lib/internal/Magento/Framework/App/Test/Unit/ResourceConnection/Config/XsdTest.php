@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright 2013 Adobe
+ * Copyright 2015 Adobe
  * All Rights Reserved.
  */
 declare(strict_types=1);
@@ -9,6 +9,7 @@ namespace Magento\Framework\App\Test\Unit\ResourceConnection\Config;
 
 use Magento\Framework\Config\Dom\UrnResolver;
 use Magento\Framework\TestFramework\Unit\Utility\XsdValidator;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 class XsdTest extends TestCase
@@ -31,11 +32,9 @@ class XsdTest extends TestCase
         $this->_xsdValidator = new XsdValidator();
     }
 
-    /**
-     * @param string $xmlString
-     * @param array $expectedError
-     * @dataProvider schemaCorrectlyIdentifiesInvalidXmlDataProvider
+    /**     * @param array $expectedError
      */
+    #[DataProvider('schemaCorrectlyIdentifiesInvalidXmlDataProvider')]
     public function testSchemaCorrectlyIdentifiesInvalidXml($xmlString, $expectedError)
     {
         $actualError = $this->_xsdValidator->validate($this->_xsdSchema, $xmlString);

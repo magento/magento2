@@ -14,11 +14,12 @@ use Magento\Quote\Api\CartRepositoryInterface;
 use Magento\Quote\Api\CartTotalRepositoryInterface;
 use Magento\Quote\Model\Quote;
 use Magento\Quote\Model\Quote\Address;
-use Magento\Quote\Test\Unit\Helper\AddressShippingInfoTestHelper;
 use PHPUnit\Framework\Attributes\DataProvider;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 
 class TotalsInformationManagementTest extends \PHPUnit\Framework\TestCase
 {
+    use MockCreationTrait;
     /**
      * @var CartRepositoryInterface|\PHPUnit\Framework\MockObject\MockObject
      */
@@ -67,10 +68,22 @@ class TotalsInformationManagementTest extends \PHPUnit\Framework\TestCase
         $this->cartRepositoryMock->expects($this->once())->method('get')->with($cartId)->willReturn($cartMock);
         $this->cartTotalRepositoryMock->expects($this->once())->method('get')->with($cartId);
 
-        $addressInformationMock = $this->createMock(
-            TotalsInformationInterface::class
+        $addressInformationMock = $this->createMock(TotalsInformationInterface::class);
+        $addressMock = $this->createPartialMockWithReflection(
+            Address::class,
+            ['setCollectShippingRates', 'setShippingMethod', 'getShippingMethod', 'getCollectShippingRatesFlag', 'save']
         );
-        $addressMock = new AddressShippingInfoTestHelper();
+        $addressMock->method('save')->willReturnSelf();
+
+        if ($methodSetCount > 0) {
+            $expectedMethod = $carrierCode . '_' . $carrierMethod;
+            $addressMock->method('getShippingMethod')->willReturnOnConsecutiveCalls(null, $expectedMethod);
+            $addressMock->expects($this->once())->method('setCollectShippingRates')->with(true)->willReturnSelf();
+            $addressMock->expects($this->once())->method('setShippingMethod')->with($expectedMethod)->willReturnSelf();
+            $addressMock->method('getCollectShippingRatesFlag')->willReturn(true);
+        } else {
+            $addressMock->method('getShippingMethod')->willReturn(null);
+        }
 
         $addressInformationMock->expects($this->once())->method('getAddress')->willReturn($addressMock);
         $addressInformationMock->method('getShippingCarrierCode')->willReturn($carrierCode);
@@ -105,21 +118,34 @@ class TotalsInformationManagementTest extends \PHPUnit\Framework\TestCase
         $this->cartTotalRepositoryMock->method('get')->with($cartId);
 
         $addressInformationMock = $this->createMock(TotalsInformationInterface::class);
-        $addressMock = new AddressShippingInfoTestHelper();
-        $addressMock->setShippingMethod('flatrate_flatrate');
+        $addressMock = $this->createPartialMockWithReflection(
+            Address::class,
+            ['setCollectShippingRates', 'setShippingMethod', 'getShippingMethod',
+             'setShippingAmount', 'setBaseShippingAmount', 'getCollectShippingRatesFlag',
+             'getShippingAmount', 'getBaseShippingAmount', 'save']
+        );
+        $expectedMethod = $carrierCode . '_' . $carrierMethod;
+        // getShippingMethod called twice in condition (line 240-241), once in assertion
+        $addressMock->method('getShippingMethod')->willReturnOnConsecutiveCalls(
+            'flatrate_flatrate',
+            'flatrate_flatrate',
+            $expectedMethod
+        );
+        $addressMock->expects($this->once())->method('setShippingAmount')->with(0)->willReturnSelf();
+        $addressMock->expects($this->once())->method('setBaseShippingAmount')->with(0)->willReturnSelf();
+        $addressMock->expects($this->once())->method('setCollectShippingRates')->with(true)->willReturnSelf();
+        $addressMock->expects($this->once())->method('setShippingMethod')->with($expectedMethod)->willReturnSelf();
+        $addressMock->method('getCollectShippingRatesFlag')->willReturn(true);
+        $addressMock->method('getShippingAmount')->willReturn(0);
+        $addressMock->method('getBaseShippingAmount')->willReturn(0);
+        $addressMock->method('save')->willReturnSelf();
 
-        $addressInformationMock->method('getAddress')
-            ->willReturn($addressMock);
-        $addressInformationMock->method('getShippingCarrierCode')
-            ->willReturn($carrierCode);
-        $addressInformationMock->method('getShippingMethodCode')
-            ->willReturn($carrierMethod);
-        $cartMock->method('setShippingAddress')
-            ->with($addressMock);
-        $cartMock->method('getShippingAddress')
-            ->willReturn($addressMock);
-        $cartMock->expects($this->once())
-            ->method('collectTotals');
+        $addressInformationMock->method('getAddress')->willReturn($addressMock);
+        $addressInformationMock->method('getShippingCarrierCode')->willReturn($carrierCode);
+        $addressInformationMock->method('getShippingMethodCode')->willReturn($carrierMethod);
+        $cartMock->method('setShippingAddress')->with($addressMock);
+        $cartMock->method('getShippingAddress')->willReturn($addressMock);
+        $cartMock->expects($this->once())->method('collectTotals');
 
         $this->totalsInformationManagement->calculate($cartId, $addressInformationMock);
 

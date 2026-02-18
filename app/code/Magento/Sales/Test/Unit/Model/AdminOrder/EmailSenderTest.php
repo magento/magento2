@@ -55,7 +55,7 @@ class EmailSenderTest extends TestCase
     protected function setUp(): void
     {
         $this->messageManagerMock = $this->createMock(Manager::class);
-        $this->loggerMock = $this->getMockForAbstractClass(LoggerInterface::class);
+        $this->loggerMock = $this->createMock(LoggerInterface::class);
         $this->orderSenderMock = $this->createMock(OrderSender::class);
         $this->invoiceSenderMock = $this->createMock(InvoiceSender::class);
 

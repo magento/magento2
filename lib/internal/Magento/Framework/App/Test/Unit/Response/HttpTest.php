@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -18,6 +18,7 @@ use Magento\Framework\Stdlib\Cookie\CookieMetadataFactory;
 use Magento\Framework\Stdlib\Cookie\SensitiveCookieMetadata;
 use Magento\Framework\Stdlib\CookieManagerInterface;
 use Magento\Framework\Stdlib\DateTime;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -28,6 +29,7 @@ use ReflectionClass;
  */
 class HttpTest extends TestCase
 {
+    use MockCreationTrait;
     /**
      * @var Http
      */
@@ -83,12 +85,11 @@ class HttpTest extends TestCase
             ->onlyMethods(['get'])
             ->disableOriginalConstructor()
             ->getMock();
-        $this->cookieMetadataFactoryMock = $this->getMockBuilder(CookieMetadataFactory::class)
-            ->addMethods(['get'])
-            ->onlyMethods(['createSensitiveCookieMetadata'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->cookieManagerMock = $this->getMockForAbstractClass(CookieManagerInterface::class);
+        $this->cookieMetadataFactoryMock = $this->createPartialMockWithReflection(
+            CookieMetadataFactory::class,
+            ['get', 'createSensitiveCookieMetadata']
+        );
+        $this->cookieManagerMock = $this->createMock(CookieManagerInterface::class);
         $this->contextMock = $this->getMockBuilder(Context::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -99,7 +100,7 @@ class HttpTest extends TestCase
 
         $this->sessionConfigMock = $this->getMockBuilder(ConfigInterface::class)
             ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+            ->getMock();
 
         $this->model = $this->objectManager->getObject(
             Http::class,
@@ -122,7 +123,7 @@ class HttpTest extends TestCase
     {
         unset($this->model);
         /** @var ObjectManagerInterface|MockObject $objectManagerMock*/
-        $objectManagerMock = $this->getMockForAbstractClass(ObjectManagerInterface::class);
+        $objectManagerMock = $this->createMock(ObjectManagerInterface::class);
         AppObjectManager::setInstance($objectManagerMock);
     }
 
@@ -337,7 +338,6 @@ class HttpTest extends TestCase
         /* ensure that the test preconditions are met */
         $objectManagerClass = new ReflectionClass(AppObjectManager::class);
         $instanceProperty = $objectManagerClass->getProperty('_instance');
-        $instanceProperty->setAccessible(true);
         $instanceProperty->setValue(null, null);
 
         $this->model->__wakeup();

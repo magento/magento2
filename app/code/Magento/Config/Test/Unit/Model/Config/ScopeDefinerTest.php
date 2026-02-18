@@ -29,7 +29,7 @@ class ScopeDefinerTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->_requestMock = $this->getMockForAbstractClass(RequestInterface::class);
+        $this->_requestMock = $this->createMock(RequestInterface::class);
         $objectManager = new ObjectManager($this);
         $this->_model = $objectManager->getObject(
             ScopeDefiner::class,

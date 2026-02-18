@@ -12,6 +12,8 @@ use Magento\Persistent\Helper\Data;
 use Magento\Persistent\Helper\Session;
 use Magento\Persistent\Model\QuoteManager;
 use Magento\Persistent\Observer\RemovePersistentCookieOnRegisterObserver;
+use Magento\Customer\Model\Session as CustomerSession;
+use Magento\Persistent\Model\Session as PersistentSession;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -33,7 +35,7 @@ class RemovePersistentCookieOnRegisterObserverTest extends TestCase
     protected $persistentDataMock;
 
     /**
-     * @var \Magento\Customer\Model\Session|MockObject
+     * @var CustomerSession|MockObject
      */
     protected $customerSessionMock;
 
@@ -48,16 +50,16 @@ class RemovePersistentCookieOnRegisterObserverTest extends TestCase
     protected $observerMock;
 
     /**
-     * @var \Magento\Persistent\Model\Session|MockObject
+     * @var PersistentSession|MockObject
      */
     protected $sessionModelMock;
 
     protected function setUp(): void
     {
         $this->persistentSessionMock = $this->createMock(Session::class);
-        $this->sessionModelMock = $this->createMock(\Magento\Persistent\Model\Session::class);
+        $this->sessionModelMock = $this->createMock(PersistentSession::class);
         $this->persistentDataMock = $this->createMock(Data::class);
-        $this->customerSessionMock = $this->createMock(\Magento\Customer\Model\Session::class);
+        $this->customerSessionMock = $this->createMock(CustomerSession::class);
         $this->quoteManagerMock = $this->createMock(QuoteManager::class);
         $this->observerMock = $this->createMock(Observer::class);
 

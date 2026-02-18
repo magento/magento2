@@ -21,7 +21,9 @@ class PayflowadvancedTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->model = (new ObjectManager($this))->getObject(Payflowadvanced::class);
+        $objectManager = new ObjectManager($this);
+        $objectManager->prepareObjectManager();
+        $this->model = $objectManager->getObject(Payflowadvanced::class);
     }
 
     /**

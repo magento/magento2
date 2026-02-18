@@ -39,9 +39,7 @@ class DataMapperResolverTest extends TestCase
         $this->dataMapperFactoryMock = $this->getMockBuilder(DataMapperFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->dataMapperEntity = $this->getMockBuilder(BatchDataMapperInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->dataMapperEntity = $this->createMock(BatchDataMapperInterface::class);
         $this->model = (new ObjectManagerHelper($this))->getObject(
             DataMapperResolver::class,
             [

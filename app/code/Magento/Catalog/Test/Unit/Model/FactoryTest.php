@@ -51,7 +51,7 @@ class FactoryTest extends TestCase
 
     protected function setObjectManager()
     {
-        $this->objectManager = $this->getMockForAbstractClass(ObjectManagerInterface::class);
+        $this->objectManager = $this->createMock(ObjectManagerInterface::class);
 
         $this->objectManager
             ->expects($this->any())

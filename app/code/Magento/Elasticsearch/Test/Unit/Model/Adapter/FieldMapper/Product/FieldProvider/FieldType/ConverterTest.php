@@ -10,6 +10,7 @@ namespace Magento\Elasticsearch\Test\Unit\Model\Adapter\FieldMapper\Product\Fiel
 use Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider\FieldType\Converter;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * @SuppressWarnings(PHPMD)
@@ -36,11 +37,11 @@ class ConverterTest extends TestCase
     }
 
     /**
-     * @dataProvider convertProvider
      * @param $internalType
      * @param $expected
      * @return void
      */
+    #[DataProvider('convertProvider')]
     public function testConvert($internalType, $expected)
     {
         $this->assertEquals(

@@ -11,13 +11,15 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\Quote\Model\Quote\Item;
 use Magento\Quote\Model\Quote\Item\Option;
-use Magento\Quote\Test\Unit\Helper\OptionRelatedProductsTestHelper;
 use Magento\Quote\Model\Quote\Item\RelatedProducts;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use PHPUnit\Framework\TestCase;
 
 #[CoversClass(\Magento\Quote\Model\Quote\Item\RelatedProducts::class)]
 class RelatedProductsTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var RelatedProducts
      */
@@ -43,8 +45,8 @@ class RelatedProductsTest extends TestCase
     public function testGetRelatedProductIds($optionValue, $productId, $expectedResult)
     {
         $quoteItemMock = $this->createMock(Item::class);
-        $itemOptionMock = $this->createPartialMock(
-            OptionRelatedProductsTestHelper::class,
+        $itemOptionMock = $this->createPartialMockWithReflection(
+            Option::class,
             ['getValue', 'getProductId', '__wakeup']
         );
 

@@ -10,5 +10,6 @@
           xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
     <section name="StorefrontMultishippingCheckoutOverviewReviewSection">
         <element name="placeOrder" type="button" selector="button.action.primary.submit"/>
+        <element name="shippingMethodForCity" type="block" selector="//form[contains(@id, 'review-order-form')]//address[contains(., '{{city}}')]/ancestor::div[contains(@class, 'block-content')]//div[contains(@class, 'box-shipping-method')]" parameterized="true" timeout="30"/>
     </section>
 </sections>

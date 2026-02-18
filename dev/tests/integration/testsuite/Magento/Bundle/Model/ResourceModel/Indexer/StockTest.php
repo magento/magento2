@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Bundle\Model\ResourceModel\Indexer;
@@ -14,6 +14,7 @@ use Magento\Catalog\Test\Fixture\Product as ProductFixture;
 use Magento\CatalogInventory\Model\ResourceModel\Stock\Status as StockStatusResource;
 use Magento\TestFramework\Fixture\DataFixture;
 use Magento\TestFramework\Helper\Bootstrap;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class StockTest extends \PHPUnit\Framework\TestCase
 {
@@ -120,11 +121,11 @@ class StockTest extends \PHPUnit\Framework\TestCase
         DataFixture(BundleProductFixture::class, ['sku' => 'bundle1', '_options' => ['$opt1$', '$opt2$', '$opt3$']]),
     ]
     /**
-     * @dataProvider reindexRowDataProvider
      * @param array $stockItems
      * @param bool $expectedStockStatus
      * @return void
      */
+    #[DataProvider('reindexRowDataProvider')]
     public function testReindexRow(array $stockItems, bool $expectedStockStatus): void
     {
         $productRepository = Bootstrap::getObjectManager()->get(ProductRepositoryInterface::class);

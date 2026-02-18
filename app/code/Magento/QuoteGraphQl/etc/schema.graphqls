@@ -144,9 +144,10 @@ input SetShippingAddressesOnCartInput @doc(description: "Specifies an array of a
 }
 
 input ShippingAddressInput @doc(description: "Defines a single shipping address.") {
-    customer_address_id: Int @doc(description: "An ID from the customer's address book that uniquely identifies the address to be used for shipping.")
+    customer_address_id: Int @doc(description: "An ID from the customer's address book that uniquely identifies the address to be used for shipping.") @deprecated(reason: "Use `customer_address_uid` instead.")
     address: CartAddressInput @doc(description: "Defines a shipping address.")
     customer_notes: String @doc(description: "Text provided by the shopper.")
+    customer_address_uid: ID @doc(description: "The unique ID from the customer's address book that uniquely identifies the address to be used for shipping.")
 }
 
 input SetBillingAddressOnCartInput @doc(description: "Sets the billing address.") {
@@ -155,10 +156,11 @@ input SetBillingAddressOnCartInput @doc(description: "Sets the billing address."
 }
 
 input BillingAddressInput @doc(description: "Defines the billing address.") {
-    customer_address_id: Int @doc(description: "An ID from the customer's address book that uniquely identifies the address to be used for billing.")
+    customer_address_id: Int @doc(description: "An ID from the customer's address book that uniquely identifies the address to be used for billing.") @deprecated(reason: "Use `customer_address_uid` instead.")
     address: CartAddressInput @doc(description: "Defines a billing address.")
     use_for_shipping: Boolean @doc(description: "Indicates whether to set the shipping address to be the same as this billing address.")
     same_as_shipping: Boolean @doc(description: "Indicates whether to set the billing address to be the same as the existing shipping address on the cart.")
+    customer_address_uid: ID @doc(description: "The unique ID from the customer's address book that uniquely identifies the address to be used for billing.")
 }
 
 input CartAddressInput @doc(description: "Defines the billing or shipping address to be applied to the cart.") {
@@ -301,8 +303,9 @@ type CartItems {
 }
 
 interface CartAddressInterface @typeResolver(class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\CartAddressTypeResolver") {
-    uid: String! @doc(description: "The unique id of the customer address.")
-    id: Int @doc(description: "Id of the customer address.")
+    uid: ID! @doc(description: "The unique id of the customer cart address.")
+    id: Int @doc(description: "Id of the customer address.") @deprecated(reason: "Use `customer_address_uid` instead.")
+    customer_address_uid: ID @doc(description: "The unique ID from the customer's address book that uniquely identifies the address.")
     firstname: String! @doc(description: "The first name of the customer or guest.")
     lastname: String! @doc(description: "The last name of the customer or guest.")
     company: String @doc(description: "The company specified for the billing or shipping address.")

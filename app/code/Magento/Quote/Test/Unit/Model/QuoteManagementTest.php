@@ -10,7 +10,6 @@ namespace Magento\Quote\Test\Unit\Model;
 use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\Authorization\Model\UserContextInterface;
 use Magento\Checkout\Model\Session;
-use Magento\Checkout\Test\Unit\Helper\CheckoutSessionTestHelper;
 use Magento\Checkout\Model\Type\Onepage;
 use Magento\Customer\Api\AccountManagementInterface;
 use Magento\Customer\Api\AddressRepositoryInterface;
@@ -19,8 +18,6 @@ use Magento\Customer\Api\Data\AddressInterface;
 use Magento\Customer\Api\Data\CustomerInterface;
 use Magento\Customer\Api\Data\GroupInterface;
 use Magento\Customer\Model\Customer;
-use Magento\Customer\Test\Unit\Helper\CustomerTestHelper;
-use Magento\Sales\Test\Unit\Helper\OrderTestHelper;
 use Magento\Customer\Model\CustomerFactory;
 use Magento\Customer\Model\Session as CustomerSession;
 use Magento\Framework\Api\DataObjectHelper;
@@ -31,6 +28,7 @@ use Magento\Framework\Exception\StateException;
 use Magento\Framework\HTTP\PhpEnvironment\RemoteAddress;
 use Magento\Framework\App\Request\Http as HttpRequest;
 use Magento\Framework\Lock\LockManagerInterface;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Quote\Api\CartRepositoryInterface;
 use Magento\Quote\Model\CartMutexInterface;
@@ -59,13 +57,8 @@ use Magento\Sales\Model\Order;
 use Magento\Sales\Model\Order\Address as SalesOrderAddress;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Store\Model\Store;
-use Magento\Sales\Test\Unit\Helper\OrderInterfaceFactoryTestHelper;
-use Magento\Quote\Test\Unit\Helper\QuoteTestHelper;
-use Magento\Quote\Test\Unit\Helper\QuoteAddressTestHelper;
-use Magento\Quote\Test\Unit\Helper\PaymentTestHelper;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use Magento\Store\Test\Unit\Helper\StoreIdGetterTestHelper;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -75,6 +68,8 @@ use Magento\Store\Test\Unit\Helper\StoreIdGetterTestHelper;
  */
 class QuoteManagementTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var QuoteManagement
      */
@@ -230,7 +225,10 @@ class QuoteManagementTest extends TestCase
 
         $this->submitQuoteValidator = $this->createMock(SubmitQuoteValidator::class);
         $this->eventManager = $this->createMock(ManagerInterface::class);
-        $this->orderFactory = $this->createPartialMock(OrderInterfaceFactoryTestHelper::class, ['create', 'populate']);
+        $this->orderFactory = $this->createPartialMockWithReflection(
+            OrderInterfaceFactory::class,
+            ['create', 'populate']
+        );
         $this->quoteAddressToOrder = $this->createMock(ToOrder::class);
         $this->quotePaymentToOrderPayment = $this->createMock(ToOrderPayment::class);
         $this->quoteAddressToOrderAddress = $this->createMock(ToOrderAddress::class);
@@ -247,8 +245,8 @@ class QuoteManagementTest extends TestCase
         );
         $this->storeManagerMock = $this->createMock(StoreManagerInterface::class);
 
-        $this->quoteMock = $this->createPartialMock(
-            QuoteTestHelper::class,
+        $this->quoteMock = $this->createPartialMockWithReflection(
+            Quote::class,
             [
                 'getCustomerEmail',
                 'setCustomerEmail',
@@ -281,8 +279,8 @@ class QuoteManagementTest extends TestCase
         );
 
         $this->dataObjectHelperMock = $this->createMock(DataObjectHelper::class);
-        $this->checkoutSessionMock = $this->createPartialMock(
-            CheckoutSessionTestHelper::class,
+        $this->checkoutSessionMock = $this->createPartialMockWithReflection(
+            Session::class,
             ['setLastQuoteId', 'setLastSuccessQuoteId', 'setLastOrderId', 'setLastRealOrderId', 'setLastOrderStatus']
         );
         $this->customerSessionMock = $this->createMock(CustomerSession::class);
@@ -341,7 +339,7 @@ class QuoteManagementTest extends TestCase
         $quoteId = 2311;
 
         $quoteMock = $this->createMock(Quote::class);
-        $quoteAddress = $this->createPartialMock(QuoteAddressTestHelper::class, ['setCollectShippingRates']);
+        $quoteAddress = $this->createPartialMockWithReflection(Address::class, ['setCollectShippingRates']);
         $quoteAddress->expects($this->once())->method('setCollectShippingRates')->with(true);
 
         $quoteMock->expects($this->any())->method('setBillingAddress')->with($quoteAddress)->willReturnSelf();
@@ -356,8 +354,10 @@ class QuoteManagementTest extends TestCase
         $this->quoteRepositoryMock->expects($this->once())->method('save')->with($quoteMock);
         $quoteMock->expects($this->once())->method('getId')->willReturn($quoteId);
 
+        $storeMock = $this->createPartialMockWithReflection(Store::class, ['getStoreId']);
+        $storeMock->method('getStoreId')->willReturn($storeId);
         $this->storeManagerMock->expects($this->once())->method('getStore')
-            ->willReturn(new StoreIdGetterTestHelper($storeId));
+            ->willReturn($storeMock);
 
         $this->assertEquals($quoteId, $this->model->createEmptyCart());
     }
@@ -379,7 +379,7 @@ class QuoteManagementTest extends TestCase
             ->with($userId)
             ->willThrowException(new NoSuchEntityException());
         $customer = $this->createMock(CustomerInterface::class);
-        $quoteAddress = $this->createPartialMock(
+        $quoteAddress = $this->createPartialMockWithReflection(
             Address::class,
             ['getCustomerId']
         );
@@ -395,8 +395,10 @@ class QuoteManagementTest extends TestCase
         $this->customerRepositoryMock->expects($this->atLeastOnce())->method('getById')->willReturn($customer);
         $customer->expects($this->atLeastOnce())->method('getDefaultBilling')->willReturn(0);
 
+        $storeMock = $this->createPartialMockWithReflection(Store::class, ['getStoreId']);
+        $storeMock->method('getStoreId')->willReturn($storeId);
         $this->storeManagerMock->expects($this->once())->method('getStore')
-            ->willReturn(new StoreIdGetterTestHelper($storeId));
+            ->willReturn($storeMock);
 
         $this->assertEquals($quoteId, $this->model->createEmptyCartForCustomer($userId));
     }
@@ -417,7 +419,7 @@ class QuoteManagementTest extends TestCase
             ->with($userId)->willReturn($quoteMock);
 
         $customer = $this->createMock(CustomerInterface::class);
-        $quoteAddress = $this->createPartialMock(
+        $quoteAddress = $this->createPartialMockWithReflection(
             Address::class,
             ['getCustomerId']
         );
@@ -429,8 +431,10 @@ class QuoteManagementTest extends TestCase
         $this->quoteFactoryMock->expects($this->never())->method('create')->willReturn($quoteMock);
         $this->quoteRepositoryMock->expects($this->once())->method('save')->with($quoteMock);
 
+        $storeMock = $this->createPartialMockWithReflection(Store::class, ['getId']);
+        $storeMock->method('getId')->willReturn($storeId);
         $this->storeManagerMock->expects($this->once())->method('getStore')
-            ->willReturn(new StoreIdGetterTestHelper($storeId));
+            ->willReturn($storeMock);
 
         $this->model->createEmptyCartForCustomer($userId);
     }
@@ -493,8 +497,8 @@ class QuoteManagementTest extends TestCase
         $customerId = 455;
         $storeId = 5;
 
-        $quoteMock = $this->createPartialMock(
-            QuoteTestHelper::class,
+        $quoteMock = $this->createPartialMockWithReflection(
+            Quote::class,
             ['getCustomerId', 'setCustomer', 'setCustomerIsGuest']
         );
         $customerMock = $this->createMock(CustomerInterface::class);
@@ -542,8 +546,8 @@ class QuoteManagementTest extends TestCase
         $customerId = 455;
         $storeId = 5;
 
-        $quoteMock = $this->createPartialMock(
-            QuoteTestHelper::class,
+        $quoteMock = $this->createPartialMockWithReflection(
+            Quote::class,
             ['getCustomerId', 'setCustomer', 'setCustomerIsGuest']
         );
 
@@ -580,13 +584,13 @@ class QuoteManagementTest extends TestCase
             ->method('create')
             ->willReturn($this->quoteIdMock);
 
-        $quoteMock = $this->createPartialMock(
-            QuoteTestHelper::class,
+        $quoteMock = $this->createPartialMockWithReflection(
+            Quote::class,
             ['getCustomerId', 'setCustomer', 'setCustomerIsGuest', 'setIsActive', 'getIsActive', 'merge']
         );
 
-        $activeQuoteMock = $this->createPartialMock(
-            QuoteTestHelper::class,
+        $activeQuoteMock = $this->createPartialMockWithReflection(
+            Quote::class,
             ['getCustomerId', 'setCustomer', 'setCustomerIsGuest', 'setIsActive', 'getIsActive', 'merge']
         );
 
@@ -657,8 +661,8 @@ class QuoteManagementTest extends TestCase
             ->method('create')
             ->willReturn($this->quoteIdMock);
 
-        $quoteMock = $this->createPartialMock(
-            QuoteTestHelper::class,
+        $quoteMock = $this->createPartialMockWithReflection(
+            Quote::class,
             ['getCustomerId', 'setCustomer', 'setCustomerIsGuest', 'setIsActive', 'getIsActive', 'merge']
         );
 
@@ -730,8 +734,8 @@ class QuoteManagementTest extends TestCase
         $quoteId = 1;
         $quoteItem = $this->createMock(Item::class);
         $billingAddress = $this->createMock(Address::class);
-        $shippingAddress = $this->createPartialMock(
-            QuoteAddressTestHelper::class,
+        $shippingAddress = $this->createPartialMockWithReflection(
+            Address::class,
             [
                 'getQuoteId',
                 'getShippingMethod',
@@ -1061,7 +1065,7 @@ class QuoteManagementTest extends TestCase
         $this->checkoutSessionMock->expects($this->once())->method('setLastRealOrderId')->with($orderIncrementId);
         $this->checkoutSessionMock->expects($this->once())->method('setLastOrderStatus')->with($orderStatus);
 
-        $paymentMethod = $this->createPartialMock(PaymentTestHelper::class, ['getData', 'setChecks']);
+        $paymentMethod = $this->createPartialMockWithReflection(Payment::class, ['getData', 'setChecks']);
         $paymentMethod->expects($this->once())->method('setChecks');
         $paymentMethod->expects($this->once())->method('getData')->willReturn(['additional_data' => []]);
 
@@ -1094,8 +1098,8 @@ class QuoteManagementTest extends TestCase
         ?Address $shippingAddress,
         bool $setIsActive
     ): MockObject {
-        $quote = $this->createPartialMock(
-            QuoteTestHelper::class,
+        $quote = $this->createPartialMockWithReflection(
+            Quote::class,
             [
                 'getCustomerEmail',
                 'getCustomerId',
@@ -1135,8 +1139,8 @@ class QuoteManagementTest extends TestCase
             ->method('getPayment')
             ->willReturn($payment);
 
-        $customer = $this->createPartialMock(
-            \Magento\Customer\Test\Unit\Helper\CustomerTestHelper::class,
+        $customer = $this->createPartialMockWithReflection(
+            Customer::class,
             ['getDefaultBilling', 'getId']
         );
         $quote->method('getCustomerId')->willReturn($customerId);
@@ -1179,8 +1183,8 @@ class QuoteManagementTest extends TestCase
         ?OrderAddressInterface $shippingAddress = null,
         ?int $customerId = null
     ): MockObject {
-        $order = $this->createPartialMock(
-            OrderTestHelper::class,
+        $order = $this->createPartialMockWithReflection(
+            Order::class,
             [
                 'addAddresses',
                 'setAddresses',
@@ -1250,7 +1254,6 @@ class QuoteManagementTest extends TestCase
     {
         $reflection = new \ReflectionClass(get_class($object));
         $reflectionProperty = $reflection->getProperty($property);
-        $reflectionProperty->setAccessible(true);
 
         return $reflectionProperty->getValue($object);
     }
@@ -1266,7 +1269,6 @@ class QuoteManagementTest extends TestCase
     {
         $reflection = new \ReflectionClass(get_class($object));
         $reflectionProperty = $reflection->getProperty($property);
-        $reflectionProperty->setAccessible(true);
         $reflectionProperty->setValue($object, $value);
 
         return $object;
@@ -1288,8 +1290,8 @@ class QuoteManagementTest extends TestCase
         $quoteId = 1;
         $quoteItem = $this->createMock(Item::class);
         $billingAddress = $this->createMock(Address::class);
-        $shippingAddress = $this->createPartialMock(
-            QuoteAddressTestHelper::class,
+        $shippingAddress = $this->createPartialMockWithReflection(
+            Address::class,
             ['getQuoteId', 'getShippingMethod', 'getId', 'exportCustomerAddress']
         );
         $payment = $this->createMock(Payment::class);
@@ -1393,7 +1395,6 @@ class QuoteManagementTest extends TestCase
     {
         $reflection = new \ReflectionClass(get_class($object));
         $method = $reflection->getMethod($methodName);
-        $method->setAccessible(true);
 
         return $method->invokeArgs($object, $parameters);
     }

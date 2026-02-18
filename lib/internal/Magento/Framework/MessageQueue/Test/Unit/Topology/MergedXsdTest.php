@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright 2016 Adobe
+ * Copyright 2018 Adobe
  * All Rights Reserved.
  */
 declare(strict_types=1);
@@ -11,6 +11,7 @@ use Magento\Framework\Config\Dom;
 use Magento\Framework\Config\Dom\UrnResolver;
 use Magento\Framework\Config\ValidationStateInterface;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class MergedXsdTest extends TestCase
 {
@@ -27,12 +28,11 @@ class MergedXsdTest extends TestCase
 
     /**
      * @param string $fixtureXml
-     * @param array $expectedErrors
-     * @dataProvider exemplarXmlDataProvider
-     */
+     * @param array $expectedErrors     */
+    #[DataProvider('exemplarXmlDataProvider')]
     public function testExemplarXml($fixtureXml, array $expectedErrors)
     {
-        $validationState = $this->getMockForAbstractClass(ValidationStateInterface::class);
+        $validationState = $this->createMock(ValidationStateInterface::class);
         $validationState->expects($this->any())
             ->method('isValidationRequired')
             ->willReturn(true);

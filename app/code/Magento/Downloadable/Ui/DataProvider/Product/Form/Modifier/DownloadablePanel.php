@@ -51,7 +51,7 @@ class DownloadablePanel extends AbstractModifier
     {
         $model = $this->locator->getProduct();
 
-        $data[$model->getId()][ProductAttributeInterface::CODE_IS_DOWNLOADABLE] =
+        $data[$model->getId() ?? ''][ProductAttributeInterface::CODE_IS_DOWNLOADABLE] =
             ($model->getTypeId() === Type::TYPE_DOWNLOADABLE) ? '1' : '0';
 
         return $data;

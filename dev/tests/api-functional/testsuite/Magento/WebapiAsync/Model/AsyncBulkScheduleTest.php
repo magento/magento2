@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 
 declare(strict_types=1);
@@ -9,6 +9,7 @@ declare(strict_types=1);
 namespace Magento\WebapiAsync\Model;
 
 use Magento\Catalog\Api\Data\ProductInterface;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Exception\NotFoundException;
 use Magento\TestFramework\MessageQueue\PreconditionFailedException;
@@ -109,9 +110,8 @@ class AsyncBulkScheduleTest extends WebapiAbstract
         parent::setUp();
     }
 
-    /**
-     * @dataProvider productsArrayCreationProvider
-     */
+    /** */
+    #[DataProvider('productsArrayCreationProvider')]
     public function testAsyncScheduleBulkMultipleEntities($products)
     {
         $this->_markTestAsRestOnly();
@@ -142,9 +142,8 @@ class AsyncBulkScheduleTest extends WebapiAbstract
         }
     }
 
-    /**
-     * @dataProvider productSingleCreationProvider
-     */
+    /** */
+    #[DataProvider('productSingleCreationProvider')]
     public function testAsyncScheduleBulkSingleEntity($products)
     {
         $this->_markTestAsRestOnly();
@@ -171,9 +170,8 @@ class AsyncBulkScheduleTest extends WebapiAbstract
         }
     }
 
-    /**
-     * @dataProvider wrongProductCreationProvider
-     */
+    /** */
+    #[DataProvider('wrongProductCreationProvider')]
     public function testAsyncScheduleBulkWrongEntity($products)
     {
         $this->_markTestAsRestOnly();
@@ -195,9 +193,8 @@ class AsyncBulkScheduleTest extends WebapiAbstract
 
     /**
      * @param string $sku
-     * @param string|null $storeCode
-     * @dataProvider productGetDataProvider
-     */
+     * @param string|null $storeCode */
+    #[DataProvider('productGetDataProvider')]
     public function testGETRequestToAsyncBulk($sku, $storeCode = null)
     {
         $this->expectException(\Exception::class);

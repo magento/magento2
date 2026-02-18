@@ -34,8 +34,8 @@ class UrlBuilderTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->urlInterface = $this->getMockForAbstractClass(UrlInterface::class);
-        $this->scopeConfigInterface = $this->getMockForAbstractClass(ScopeConfigInterface::class);
+        $this->urlInterface = $this->createMock(UrlInterface::class);
+        $this->scopeConfigInterface = $this->createMock(ScopeConfigInterface::class);
 
         $objectManagerHelper = new ObjectManagerHelper($this);
         $this->urlBuilder = $objectManagerHelper->getObject(
