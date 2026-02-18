@@ -187,6 +187,11 @@
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                     <comment>Minification is not applied in developer mode.</comment>
                 </field>
+                <field id="defer_non_critical" translate="label comment" type="select" sortOrder="111" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Defer non-critical head scripts</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <comment>Non-critical scripts loaded in the head section will automatically receive "defer" attribute.</comment>
+                </field>
             </group>
             <group id="css" translate="label" type="text" sortOrder="110" showInDefault="1" showInWebsite="1" showInStore="1">
                 <label>CSS Settings</label>

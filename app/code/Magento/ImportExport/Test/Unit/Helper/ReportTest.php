@@ -33,7 +33,9 @@ use Magento\ImportExport\Model\Import\Config;
 use Magento\ImportExport\Model\Import\Entity\Factory;
 use Magento\ImportExport\Model\LocaleEmulatorInterface;
 use Magento\ImportExport\Model\Source\Upload;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\MediaStorage\Model\File\UploaderFactory;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
@@ -43,6 +45,8 @@ use Psr\Log\LoggerInterface;
  */
 class ReportTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var ObjectManagerHelper
      */
@@ -84,9 +88,7 @@ class ReportTest extends TestCase
     protected function setUp(): void
     {
         $this->context = $this->createMock(Context::class);
-        $this->requestMock = $this->getMockBuilder(Http::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->requestMock = $this->createMock(Http::class);
         $this->context->expects($this->any())->method('getRequest')->willReturn($this->requestMock);
         $this->varDirectory = $this->createPartialMock(
             Write::class,
@@ -187,10 +189,10 @@ class ReportTest extends TestCase
      */
     public function testGetSummaryStats()
     {
-        $logger = $this->getMockForAbstractClass(LoggerInterface::class);
+        $logger = $this->createMock(LoggerInterface::class);
         $filesystem = $this->createMock(Filesystem::class);
         $importExportData = $this->createMock(Data::class);
-        $coreConfig = $this->getMockForAbstractClass(ScopeConfigInterface::class);
+        $coreConfig = $this->createMock(ScopeConfigInterface::class);
         $importConfig = $this->createPartialMock(Config::class, ['getEntities']);
         $importConfig->expects($this->any())
             ->method('getEntities')
@@ -218,7 +220,7 @@ class ReportTest extends TestCase
         $importHistoryModel = $this->createMock(History::class);
         $localeDate = $this->createMock(\Magento\Framework\Stdlib\DateTime\DateTime::class);
         $upload = $this->createMock(Upload::class);
-        $localeEmulator = $this->getMockForAbstractClass(LocaleEmulatorInterface::class);
+        $localeEmulator = $this->createMock(LocaleEmulatorInterface::class);
         $localeEmulator->method('emulate')
             ->willReturnCallback(fn (callable $callback) => $callback());
         $this->objectManagerHelper->prepareObjectManager();
@@ -249,10 +251,10 @@ class ReportTest extends TestCase
     }
 
     /**
-     * @dataProvider importFileExistsDataProvider
      * @param string $fileName
      * @return void
      */
+    #[DataProvider('importFileExistsDataProvider')]
     public function testImportFileExistsException($fileName)
     {
         $this->expectException(\InvalidArgumentException::class);
@@ -329,22 +331,24 @@ class ReportTest extends TestCase
      */
     private function getTimezone(string $timezone = 'UTC'): Timezone|MockObject
     {
-        $localeResolver = $this->getMockBuilder(ResolverInterface::class)->getMock();
-        $scopeResolver = $this->getMockBuilder(ScopeResolverInterface::class)->getMock();
-        $dateTime = $this->getMockBuilder(DateTime::class)->getMock();
-        $scopeConfig = $this->getMockBuilder(ScopeConfigInterface::class)->getMock();
-        $timezoneMock = $this->getMockBuilder(Timezone::class)
-            ->addMethods(['diff', 'format'])
-            ->onlyMethods(['getConfigTimezone'])
-            ->setConstructorArgs([
-                'scopeResolver' => $scopeResolver,
-                'localeResolver' => $localeResolver,
-                'dateTime' => $dateTime,
-                'scopeConfig' => $scopeConfig,
-                'scopeType' => 'default',
-                'defaultTimezonePath' => 'general/locale/timezone',
-                'dateFormatterFactory' => (new DateFormatterFactory())
-            ])->getMock();
+        $localeResolver = $this->createMock(ResolverInterface::class);
+        $scopeResolver = $this->createMock(ScopeResolverInterface::class);
+        $dateTime = $this->createMock(DateTime::class);
+        $scopeConfig = $this->createMock(ScopeConfigInterface::class);
+        $timezoneMock = $this->createPartialMockWithReflection(
+            Timezone::class,
+            ['getConfigTimezone', 'diff', 'format']
+        );
+        
+        $timezoneMock->__construct(
+            $scopeResolver,
+            $localeResolver,
+            $dateTime,
+            $scopeConfig,
+            'default',
+            'general/locale/timezone',
+            new DateFormatterFactory()
+        );
 
         $timezoneMock->method('getConfigTimezone')->willReturn($timezone);
 

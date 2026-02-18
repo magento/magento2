@@ -8,7 +8,7 @@ declare(strict_types=1);
 namespace Magento\Customer\Test\Unit\Model\Validator;
 
 use Magento\Customer\Model\Validator\Telephone;
-use Magento\Customer\Model\Customer;
+use Magento\Customer\Model\Address;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -27,9 +27,9 @@ class TelephoneTest extends TestCase
     private Telephone $nameValidator;
 
     /**
-     * @var Customer|MockObject
+     * @var Address|MockObject
      */
-    private MockObject $customerMock;
+    private MockObject $addressMock;
 
     /**
      * @return void
@@ -37,8 +37,8 @@ class TelephoneTest extends TestCase
     protected function setUp(): void
     {
         $this->nameValidator = new Telephone;
-        $this->customerMock = $this->createPartialMockWithReflection(
-            Customer::class,
+        $this->addressMock = $this->createPartialMockWithReflection(
+            Address::class,
             ['getTelephone']
         );
     }
@@ -54,10 +54,28 @@ class TelephoneTest extends TestCase
         string $telephone,
         string $message
     ) {
-        $this->customerMock->expects($this->once())->method('getTelephone')->willReturn($telephone);
+        $this->addressMock->expects($this->once())->method('getTelephone')->willReturn($telephone);
 
-        $isValid = $this->nameValidator->isValid($this->customerMock);
+        $isValid = $this->nameValidator->isValid($this->addressMock);
         $this->assertTrue($isValid, $message);
+    }
+
+    /**
+     * Test for invalid characters in telephone numbers
+     *
+     * @param string $telephone
+     * @param string $message
+     * @return void
+     */
+    #[DataProvider('invalidTelephoneDataProvider')]
+    public function testValidateInvalidTelephone(
+        string $telephone,
+        string $message
+    ) {
+        $this->addressMock->expects($this->once())->method('getTelephone')->willReturn($telephone);
+
+        $isValid = $this->nameValidator->isValid($this->addressMock);
+        $this->assertFalse($isValid, $message);
     }
 
     /**
@@ -81,6 +99,57 @@ class TelephoneTest extends TestCase
             [
                 'telephone' => '123456789',
                 'message' => 'Digits (numbers) must be allowed in telephone'
+            ],
+            [
+                'telephone' => '(123) 456-7890',
+                'message' => 'spaces must be allowed in telephone'
+            ]
+        ];
+    }
+
+    /**
+     * Data provider for invalid telephone numbers
+     *
+     * @return array
+     */
+    public static function invalidTelephoneDataProvider(): array
+    {
+        return [
+            [
+                'telephone' => '123абв456',
+                'message' => 'Cyrillic characters should not be allowed in telephone'
+            ],
+            [
+                'telephone' => '123abc456',
+                'message' => 'Latin letters should not be allowed in telephone'
+            ],
+            [
+                'telephone' => 'aaaaaa',
+                'message' => 'Pure alphabetic string should not be allowed in telephone'
+            ],
+            [
+                'telephone' => '123@456',
+                'message' => 'Special character @ should not be allowed in telephone'
+            ],
+            [
+                'telephone' => '123#456',
+                'message' => 'Special character # should not be allowed in telephone'
+            ],
+            [
+                'telephone' => '123$456',
+                'message' => 'Special character $ should not be allowed in telephone'
+            ],
+            [
+                'telephone' => '123.456.7890',
+                'message' => 'Dots should not be allowed in telephone'
+            ],
+            [
+                'telephone' => '123456789012345678901',
+                'message' => 'Telephone number longer than 20 characters should not be allowed'
+            ],
+            [
+                'telephone' => '<' . 'script>alert("xss")<' . '/script>',
+                'message' => 'XSS attempt should not be allowed in telephone'
             ]
         ];
     }

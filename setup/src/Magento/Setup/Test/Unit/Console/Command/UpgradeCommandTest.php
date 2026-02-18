@@ -13,12 +13,14 @@ use Magento\Framework\Config\CacheInterface;
 use Magento\Framework\Console\Cli;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Setup\Console\Command\UpgradeCommand;
+use Magento\Setup\Model\DbInitStatementsCleanup;
 use Magento\Setup\Model\Installer;
 use Magento\Setup\Model\InstallerFactory;
-use PHPUnit\Framework\MockObject\MockObject;
-use PHPUnit\Framework\TestCase;
 use Magento\Setup\Model\SearchConfig;
 use Magento\Setup\Model\SearchConfigFactory;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Tester\CommandTester;
 
 class UpgradeCommandTest extends TestCase
@@ -47,6 +49,11 @@ class UpgradeCommandTest extends TestCase
      * @var SearchConfig|MockObject
      */
     private $searchConfigMock;
+
+    /**
+     * @var DbInitStatementsCleanup|MockObject
+     */
+    private $dbInitStatementsCleanupMock;
 
     /**
      * @var UpgradeCommand
@@ -94,11 +101,17 @@ class UpgradeCommandTest extends TestCase
             ->getMock();
         $searchConfigFactoryMock->expects($this->once())->method('create')->willReturn($this->searchConfigMock);
 
+        $this->dbInitStatementsCleanupMock = $this->getMockBuilder(DbInitStatementsCleanup::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
         $this->upgradeCommand = new UpgradeCommand(
             $this->installerFactoryMock,
             $searchConfigFactoryMock,
             $this->deploymentConfigMock,
-            $this->appStateMock
+            $this->appStateMock,
+            null,
+            $this->dbInitStatementsCleanupMock
         );
         $this->commandTester = new CommandTester($this->upgradeCommand);
     }
@@ -110,11 +123,14 @@ class UpgradeCommandTest extends TestCase
      * @param array $expectedOptions
      *
      * @return void
-     * @dataProvider executeDataProvider
      */
+    #[DataProvider('executeDataProvider')]
     public function testExecute($options, $deployMode, $expectedString, $expectedOptions): void
     {
         $this->appStateMock->method('getMode')->willReturn($deployMode);
+        $this->dbInitStatementsCleanupMock->expects($this->once())
+            ->method('execute')
+            ->willReturn(false);
         $this->installerMock->expects($this->once())
             ->method('installSchema')
             ->with($expectedOptions);
@@ -132,6 +148,7 @@ class UpgradeCommandTest extends TestCase
      */
     public static function executeDataProvider(): array
     {
+        $cleanupMessage = "Cleaning up deprecated SET NAMES utf8 from database connections...\n";
         $mediaGalleryNotice = "Media files stored outside of 'Media Gallery Allowed' folders will not be available "
         . "to the media gallery.\n"
         . "Please refer to Developer Guide for more details.\n"
@@ -144,7 +161,8 @@ class UpgradeCommandTest extends TestCase
                     '--convert-old-scripts' => false
                 ],
                 'deployMode' => AppState::MODE_PRODUCTION,
-                'expectedString' => 'Please re-run Magento compile command. Use the command "setup:di:compile"'
+                'expectedString' => $cleanupMessage
+                    . 'Please re-run Magento compile command. Use the command "setup:di:compile"'
                     . PHP_EOL . $mediaGalleryNotice,
                 'expectedOptions' => [
                     'keep-generated' => false,
@@ -162,7 +180,7 @@ class UpgradeCommandTest extends TestCase
                     '--keep-generated' => true
                 ],
                 'deployMode' => AppState::MODE_PRODUCTION,
-                'expectedString' => $mediaGalleryNotice,
+                'expectedString' => $cleanupMessage . $mediaGalleryNotice,
                 'expectedOptions' => [
                     'keep-generated' => true,
                     'convert-old-scripts' => false,
@@ -175,7 +193,7 @@ class UpgradeCommandTest extends TestCase
             [
                 'options' => ['--magento-init-params' => '', '--convert-old-scripts' => false],
                 'deployMode' => AppState::MODE_DEVELOPER,
-                'expectedString' => $mediaGalleryNotice,
+                'expectedString' => $cleanupMessage . $mediaGalleryNotice,
                 'expectedOptions' => [
                     'keep-generated' => false,
                     'convert-old-scripts' => false,
@@ -188,7 +206,7 @@ class UpgradeCommandTest extends TestCase
             [
                 'options' => ['--magento-init-params' => '', '--convert-old-scripts' => false],
                 'deployMode' => AppState::MODE_DEFAULT,
-                'expectedString' => $mediaGalleryNotice,
+                'expectedString' => $cleanupMessage . $mediaGalleryNotice,
                 'expectedOptions' => [
                     'keep-generated' => false,
                     'convert-old-scripts' => false,

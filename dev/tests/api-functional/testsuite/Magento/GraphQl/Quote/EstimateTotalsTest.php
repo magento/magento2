@@ -15,6 +15,7 @@ use Magento\Tax\Test\Fixture\TaxRule as TaxRuleFixture;
 use Magento\TestFramework\Fixture\DataFixture;
 use Magento\TestFramework\Fixture\DataFixtureStorageManager;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\Quote\Test\Fixture\GuestCart;
 use Magento\Quote\Test\Fixture\QuoteIdMask;
 use Magento\Catalog\Test\Fixture\Product as ProductFixture;
@@ -31,8 +32,8 @@ class EstimateTotalsTest extends GraphQlAbstract
      * @param array $prices
      * @return void
      * @throws LocalizedException
-     * @dataProvider estimationsProvider
      */
+    #[DataProvider('estimationsProvider')]
     #[
         DataFixture(
             ProductTaxClass::class,

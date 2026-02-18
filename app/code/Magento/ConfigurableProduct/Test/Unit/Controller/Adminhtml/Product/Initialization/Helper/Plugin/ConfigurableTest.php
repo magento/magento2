@@ -7,20 +7,22 @@ declare(strict_types=1);
 
 namespace Magento\ConfigurableProduct\Test\Unit\Controller\Adminhtml\Product\Initialization\Helper\Plugin;
 
+use Magento\Catalog\Api\Data\ProductExtensionInterface;
 use Magento\Catalog\Controller\Adminhtml\Product\Initialization\Helper;
 use Magento\Catalog\Model\Product;
-use Magento\Catalog\Test\Unit\Helper\ProductTestHelper;
 use Magento\ConfigurableProduct\Controller\Adminhtml\Product\Initialization\Helper\Plugin\Configurable;
 use Magento\ConfigurableProduct\Helper\Product\Options\Factory;
 use Magento\ConfigurableProduct\Model\Product\Type\Configurable as ConfigurableProduct;
 use Magento\ConfigurableProduct\Model\Product\VariationHandler;
-use Magento\Catalog\Test\Unit\Helper\ProductExtensionTestHelper;
 use Magento\Framework\App\Request\Http;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 class ConfigurableTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var VariationHandler|MockObject
      */
@@ -153,7 +155,10 @@ class ConfigurableTest extends TestCase
             ->method('getParam')
             ->willReturnMap($paramValueMap);
 
-        $extensionAttributes = new ProductExtensionTestHelper();
+        $extensionAttributes = $this->createPartialMockWithReflection(
+            ProductExtensionInterface::class,
+            ['setConfigurableProductOptions', 'setConfigurableProductLinks']
+        );
         $this->product->expects(static::once())
             ->method('getExtensionAttributes')
             ->willReturn($extensionAttributes);
@@ -208,7 +213,10 @@ class ConfigurableTest extends TestCase
             ->method('getParam')
             ->willReturnMap($paramValueMap);
 
-        $extensionAttributes = new ProductExtensionTestHelper();
+        $extensionAttributes = $this->createPartialMockWithReflection(
+            ProductExtensionInterface::class,
+            ['setConfigurableProductOptions', 'setConfigurableProductLinks']
+        );
         $this->product->expects(static::once())
             ->method('getExtensionAttributes')
             ->willReturn($extensionAttributes);

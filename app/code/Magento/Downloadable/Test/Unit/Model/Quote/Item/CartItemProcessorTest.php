@@ -14,9 +14,11 @@ use Magento\Downloadable\Model\Quote\Item\CartItemProcessor;
 use Magento\Framework\Api\DataObjectHelper;
 use Magento\Framework\DataObject;
 use Magento\Framework\DataObject\Factory;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Quote\Api\Data\CartItemInterface;
 use Magento\Quote\Api\Data\ProductOptionExtension;
 use Magento\Quote\Api\Data\ProductOptionExtensionFactory;
+use Magento\Quote\Api\Data\ProductOptionExtensionInterface;
 use Magento\Quote\Api\Data\ProductOptionInterface;
 use Magento\Quote\Model\Quote\Item;
 use Magento\Quote\Model\Quote\ProductOptionFactory;
@@ -29,6 +31,7 @@ use PHPUnit\Framework\TestCase;
  */
 class CartItemProcessorTest extends TestCase
 {
+    use MockCreationTrait;
     /**
      * @var CartItemProcessor
      */
@@ -104,8 +107,8 @@ class CartItemProcessorTest extends TestCase
 
         $cartItemMock->method('getProductOption')->willReturn($productOptionMock);
         $cartItemMock->method('getQty')->willReturn($itemQty);
-        $extAttributesMock = $this->createPartialMock(
-            \Magento\Quote\Test\Unit\Helper\ProductOptionExtensionTestHelper::class,
+        $extAttributesMock = $this->createPartialMockWithReflection(
+            ProductOptionExtensionInterface::class,
             ['getDownloadableOption']
         );
         $productOptionMock->method('getExtensionAttributes')->willReturn($extAttributesMock);
@@ -237,8 +240,8 @@ class CartItemProcessorTest extends TestCase
      */
     private function getProductOptionExtensionMock(): MockObject
     {
-        return $this->createPartialMock(
-            \Magento\Quote\Test\Unit\Helper\ProductOptionExtensionTestHelper::class,
+        return $this->createPartialMockWithReflection(
+            ProductOptionExtensionInterface::class,
             ['setDownloadableOption']
         );
     }

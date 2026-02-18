@@ -15,6 +15,7 @@ use Magento\ConfigurableProduct\Pricing\Render\FinalPriceBox;
 use Magento\Framework\Pricing\Render\Amount;
 use Magento\Framework\Pricing\Render\RendererPool;
 use Magento\TestFramework\Helper\Bootstrap;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * @magentoDbIsolation disabled
@@ -119,9 +120,9 @@ class RenderingBasedOnIsProductListFlagWithDimensionTest extends \PHPUnit\Framew
      * @param int|bool $count
      * @magentoDataFixture Magento/ConfigurableProduct/_files/product_configurable.php
      * @magentoAppArea frontend
-     * @dataProvider isProductListDataProvider
      * @magentoDbIsolation disabled
      */
+    #[DataProvider('isProductListDataProvider')]
     public function testRenderingAccordingToIsProductListFlag($flag, $count)
     {
         $this->finalPriceBox->setData('is_product_list', $flag);

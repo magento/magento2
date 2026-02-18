@@ -36,6 +36,7 @@ use Magento\TestFramework\Fixture\DataFixture;
 use Magento\TestFramework\Fixture\DataFixtureStorage;
 use Magento\TestFramework\Fixture\DataFixtureStorageManager;
 use Magento\TestFramework\Helper\Bootstrap;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -209,12 +210,12 @@ class CustomerRepositoryTest extends TestCase
     /**
      * Test update customer
      *
-     * @dataProvider updateCustomerDataProvider
      * @magentoAppArea frontend
      * @magentoDataFixture Magento/Customer/_files/customer.php
      * @param int|null $defaultBilling
      * @param int|null $defaultShipping
      */
+    #[DataProvider('updateCustomerDataProvider')]
     public function testUpdateCustomer($defaultBilling, $defaultShipping)
     {
         $existingCustomerId = 1;
@@ -462,11 +463,10 @@ class CustomerRepositoryTest extends TestCase
      * @param Filter[] $filterGroup
      * @param array $expectedResult array of expected results indexed by ID
      *
-     * @dataProvider searchCustomersDataProvider
-     *
      * @magentoDataFixture Magento/Customer/_files/three_customers.php
      * @magentoDbIsolation enabled
      */
+    #[DataProvider('searchCustomersDataProvider')]
     public function testSearchCustomers($filters, $filterGroup, $expectedResult)
     {
         /** @var SearchCriteriaBuilder $searchBuilder */

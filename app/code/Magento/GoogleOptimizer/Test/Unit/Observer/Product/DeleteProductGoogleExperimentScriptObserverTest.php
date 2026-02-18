@@ -10,6 +10,7 @@ namespace Magento\GoogleOptimizer\Test\Unit\Observer\Product;
 use Magento\Catalog\Model\Product;
 use Magento\Framework\Event;
 use Magento\Framework\Event\Observer;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\GoogleOptimizer\Model\Code;
 use Magento\GoogleOptimizer\Observer\Product\DeleteProductGoogleExperimentScriptObserver;
@@ -18,6 +19,8 @@ use PHPUnit\Framework\TestCase;
 
 class DeleteProductGoogleExperimentScriptObserverTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var MockObject
      */
@@ -39,10 +42,10 @@ class DeleteProductGoogleExperimentScriptObserverTest extends TestCase
         $storeId = 0;
 
         $this->_codeMock = $this->createMock(Code::class);
-        $event = $this->getMockBuilder(Event::class)
-            ->addMethods(['getProduct'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $event = $this->createPartialMockWithReflection(
+            Event::class,
+            ['getProduct']
+        );
         $this->_eventObserverMock = $this->createMock(Observer::class);
         $this->_eventObserverMock->expects($this->once())->method('getEvent')->willReturn($event);
         $product = $this->createPartialMock(Product::class, ['getId', 'getStoreId', '__wakeup']);

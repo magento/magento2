@@ -14,6 +14,7 @@ use Magento\ImportExport\Model\Import;
 use Magento\ImportExport\Model\Import\AbstractSource;
 use Magento\ImportExport\Model\Import\Entity\AbstractEntity;
 use Magento\ImportExport\Test\Unit\Model\Import\AbstractImportTestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 
 class AbstractTest extends AbstractImportTestCase
@@ -29,10 +30,16 @@ class AbstractTest extends AbstractImportTestCase
     {
         parent::setUp();
 
-        $this->_model = $this->getMockBuilder(AbstractEntity::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['_saveValidatedBunches', 'getErrorAggregator'])
-            ->getMockForAbstractClass();
+        $this->_model = $this->createPartialMock(
+            AbstractEntity::class,
+            [
+                '_saveValidatedBunches',
+                'getErrorAggregator',
+                '_importData',
+                'getEntityTypeCode',
+                'validateRow'
+            ]
+        );
 
         $this->_model->method('getErrorAggregator')->willReturn(
             $this->getErrorAggregatorObject()
@@ -55,15 +62,7 @@ class AbstractTest extends AbstractImportTestCase
     protected function _createSourceAdapterMock(array $columns)
     {
         /** @var $source \Magento\ImportExport\Model\Import\AbstractSource|MockObject */
-        $source = $this->getMockForAbstractClass(
-            AbstractSource::class,
-            [],
-            '',
-            false,
-            true,
-            true,
-            ['getColNames']
-        );
+        $source = $this->createPartialMock(AbstractSource::class, ['getColNames', '_getNextRow']);
         $source->expects($this->any())->method('getColNames')->willReturn($columns);
         $this->_model->setSource($source);
 
@@ -154,7 +153,6 @@ class AbstractTest extends AbstractImportTestCase
     /**
      * Test for method isAttributeValid()
      *
-     * @dataProvider isAttributeValidDataProvider
      * @covers \Magento\ImportExport\Model\Import\Entity\AbstractEntity::isAttributeValid
      *
      * @param string $attrCode
@@ -163,6 +161,7 @@ class AbstractTest extends AbstractImportTestCase
      * @param int $rowNum
      * @param bool $expectedResult
      */
+    #[DataProvider('isAttributeValidDataProvider')]
     public function testIsAttributeValid($attrCode, array $attrParams, array $rowData, $rowNum, $expectedResult)
     {
         $this->_createSourceAdapterMock(['_test1']);

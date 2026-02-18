@@ -18,15 +18,16 @@ use Magento\Quote\Model\Quote\Address\Rate;
 use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Tax\Helper\Data;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use Magento\Quote\Test\Unit\Helper\RateTestHelper;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class ShippingMethodConverterTest extends TestCase
 {
+    use MockCreationTrait;
     /**
      * @var ShippingMethodConverter
      */
@@ -80,7 +81,10 @@ class ShippingMethodConverterTest extends TestCase
         $this->storeManagerMock = $this->createMock(StoreManagerInterface::class);
         $this->currencyMock = $this->createMock(Currency::class);
         $this->shippingMethodMock = $this->createMock(ShippingMethod::class);
-        $this->rateModelMock = $this->createMock(RateTestHelper::class);
+        $this->rateModelMock = $this->createPartialMockWithReflection(
+            Rate::class,
+            ['getCarrier', 'getMethod', 'getPrice', 'getCarrierTitle', 'getMethodTitle', 'getAddress']
+        );
         $this->storeMock = $this->createMock(Store::class);
         $this->taxHelper = $this->createMock(Data::class);
 

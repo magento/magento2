@@ -25,7 +25,7 @@ class IndexerInfoCommand extends AbstractIndexerCommand
     /**
      * @inheritdoc
      */
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $indexers = $this->getAllIndexers();
         foreach ($indexers as $indexer) {

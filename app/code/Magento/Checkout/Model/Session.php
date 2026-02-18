@@ -486,7 +486,9 @@ class Session extends \Magento\Framework\Session\SessionManager
      */
     public function clearQuote()
     {
-        $this->_eventManager->dispatch('checkout_quote_destroy', ['quote' => $this->getQuote()]);
+        if ($this->_quote !== null) {
+            $this->_eventManager->dispatch('checkout_quote_destroy', ['quote' => $this->_quote]);
+        }
         $this->_quote = null;
         $this->setQuoteId(null);
         $this->setLastSuccessQuoteId(null);

@@ -9,7 +9,6 @@ declare(strict_types=1);
 namespace Magento\JwtFrameworkAdapter\Model;
 
 use Jose\Component\Core\AlgorithmManager;
-use Jose\Component\Encryption\Compression\CompressionMethodManager;
 use Jose\Component\Encryption\JWEDecrypter;
 use Jose\Component\Encryption\JWELoader;
 use Jose\Component\Encryption\Serializer\JWESerializerManager;
@@ -31,32 +30,35 @@ class JweLoaderFactory
      */
     private $contentAlgoManager;
 
-    /**
-     * @var CompressionMethodManager
+    /***
+     * @param JweSerializerPoolFactory $serializerPoolFactory
+     * @param JweAlgorithmManagerFactory $algorithmManagerFactory
+     * @param JweContentAlgorithmManagerFactory $contentAlgoManagerFactory
      */
-    private $compressionManager;
-
     public function __construct(
         JweSerializerPoolFactory $serializerPoolFactory,
         JweAlgorithmManagerFactory $algorithmManagerFactory,
-        JweContentAlgorithmManagerFactory $contentAlgoManagerFactory,
-        JweCompressionManagerFactory $compressionManagerFactory
+        JweContentAlgorithmManagerFactory $contentAlgoManagerFactory
     ) {
         $this->serializers = $serializerPoolFactory->create();
         $this->algoManager = $algorithmManagerFactory->create();
         $this->contentAlgoManager = $contentAlgoManagerFactory->create();
-        $this->compressionManager = $compressionManagerFactory->create();
     }
 
+    /***
+     * Return object of type JWELoader
+     *
+     * @return JWELoader
+     */
     public function create(): JWELoader
     {
+        $allAlgorithms = array_merge(
+            $this->algoManager->all(),
+            $this->contentAlgoManager->all()
+        );
         return new JWELoader(
             $this->serializers,
-            new JWEDecrypter(
-                $this->algoManager,
-                $this->contentAlgoManager,
-                $this->compressionManager
-            ),
+            new JWEDecrypter(new \Jose\Component\Core\AlgorithmManager($allAlgorithms)),
             null
         );
     }

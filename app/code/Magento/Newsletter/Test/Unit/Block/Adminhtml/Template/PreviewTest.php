@@ -17,6 +17,7 @@ use Magento\Framework\App\TemplateTypesInterface;
 use Magento\Framework\Escaper;
 use Magento\Framework\Event\ManagerInterface;
 use Magento\Framework\Filter\Input\MaliciousCode;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
@@ -36,6 +37,8 @@ use Magento\Store\Model\StoreManagerInterface;
  */
 class PreviewTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * Constant for test string
      */
@@ -80,35 +83,31 @@ class PreviewTest extends TestCase
     protected function setUp(): void
     {
         $this->objectManagerHelper = new ObjectManager($this);
-        $this->requestMock = $this->getMockForAbstractClass(RequestInterface::class);
+        $this->requestMock = $this->createMock(RequestInterface::class);
         $this->appStateMock = $this->createMock(State::class);
-        $this->eventManagerMock = $this->getMockForAbstractClass(ManagerInterface::class);
-        $this->storeManager = $this->getMockBuilder(StoreManagerInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->eventManagerMock = $this->createMock(ManagerInterface::class);
+        $this->storeManager = $this->createMock(StoreManagerInterface::class);
 
-        $this->backendSessionMock = $this->getMockBuilder(Session::class)
-            ->addMethods(['hasPreviewData'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->backendSessionMock = $this->createPartialMockWithReflection(
+            Session::class,
+            ['hasPreviewData']
+        );
         
-         $this->templateMock = $this->getMockBuilder(Template::class)
-            ->addMethods(['setTemplateType', 'setTemplateText', 'setTemplateStyles'])
-            ->onlyMethods(['isPlain', 'emulateDesign', 'revertDesign', 'getProcessedTemplate', 'load'])
-            ->disableOriginalConstructor()
-            ->getMock();
+         $this->templateMock = $this->createPartialMockWithReflection(
+             Template::class,
+             [
+                 'setTemplateType', 'setTemplateText', 'setTemplateStyles', 'isPlain',
+                 'emulateDesign', 'revertDesign', 'getProcessedTemplate', 'load'
+             ]
+         );
         $this->escaperMock = $this->createMock(Escaper::class);
         $this->escaperMock->method('escapeHtml')
             ->willReturnCallback(fn($string) => $string);
 
-        $eventManager = $this->getMockForAbstractClass(ManagerInterface::class);
-        $scopeConfig = $this->getMockForAbstractClass(ScopeConfigInterface::class);
-        $design = $this->getMockForAbstractClass(DesignInterface::class);
-        $appState = $this->getMockBuilder(State::class)
-            ->setConstructorArgs([$scopeConfig])
-            ->onlyMethods(['emulateAreaCode'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $eventManager = $this->createMock(ManagerInterface::class);
+        $scopeConfig = $this->createMock(ScopeConfigInterface::class);
+        $design = $this->createMock(DesignInterface::class);
+        $appState = $this->createPartialMock(State::class, ['emulateAreaCode']);
         $appState->expects($this->any())
             ->method('emulateAreaCode')
             ->with(

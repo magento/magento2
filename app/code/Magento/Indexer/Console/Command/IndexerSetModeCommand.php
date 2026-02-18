@@ -19,13 +19,13 @@ class IndexerSetModeCommand extends AbstractIndexerManageCommand
     /**#@+
      * Names of input arguments or options
      */
-    const INPUT_KEY_MODE = 'mode';
-    const INPUT_KEY_REALTIME = 'realtime';
-    const INPUT_KEY_SCHEDULE = 'schedule';
+    public const INPUT_KEY_MODE = 'mode';
+    public const INPUT_KEY_REALTIME = 'realtime';
+    public const INPUT_KEY_SCHEDULE = 'schedule';
     /**#@- */
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected function configure()
     {
@@ -37,9 +37,9 @@ class IndexerSetModeCommand extends AbstractIndexerManageCommand
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $errors = $this->validate($input);
         if ($errors) {

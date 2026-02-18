@@ -24,14 +24,17 @@ use Magento\Store\Model\System\Store;
 use Magento\Store\Model\Website;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class CurrencysymbolTest extends TestCase
 {
+    use MockCreationTrait;
     /**
-     * Object manager helper
+     * Object manager for the test
      *
      * @var ObjectManager
      */
@@ -120,8 +123,8 @@ class CurrencysymbolTest extends TestCase
             ReinitableConfigInterface::class,
             ['reinit', 'setValue', 'getValue', 'isSetFlag']
         );
-        $this->storeManagerMock = $this->getMockForAbstractClass(StoreManagerInterface::class);
-        $this->cacheTypeListMock = $this->getMockForAbstractClass(TypeListInterface::class);
+        $this->storeManagerMock = $this->createMock(StoreManagerInterface::class);
+        $this->cacheTypeListMock = $this->createMock(TypeListInterface::class);
         $this->serializerMock = $this->getMockBuilder(Json::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -199,11 +202,10 @@ class CurrencysymbolTest extends TestCase
         /**
          * @var Config|MockObject
          */
-        $configMock = $this->getMockBuilder(Config::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['setSection', 'setWebsite', 'setStore', 'setGroups'])
-            ->onlyMethods(['save'])
-            ->getMock();
+        $configMock = $this->createPartialMockWithReflection(
+            Config::class,
+            ['setSection', 'setWebsite', 'setStore', 'setGroups', 'save']
+        );
 
         $this->configFactoryMock->expects($this->once())->method('create')->willReturn($configMock);
         $configMock->expects($this->once())
@@ -226,9 +228,7 @@ class CurrencysymbolTest extends TestCase
         $this->eventManagerMock->expects($this->exactly(2))->method('dispatch');
     }
 
-    /**
-     * @dataProvider getCurrencySymbolDataProvider
-     */
+    #[DataProvider('getCurrencySymbolDataProvider')]
     public function testGetCurrencySymbol(
         $code,
         $expectedSymbol,

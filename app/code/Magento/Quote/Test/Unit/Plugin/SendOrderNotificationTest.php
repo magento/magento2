@@ -7,21 +7,23 @@ declare(strict_types=1);
 
 namespace Magento\Quote\Test\Unit\Plugin;
 
-use Magento\Framework\Event\Observer;
 use Magento\Framework\App\RequestInterface;
+use Magento\Framework\Event;
+use Magento\Framework\Event\Observer;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Quote\Observer\SubmitObserver;
 use Magento\Quote\Plugin\SendOrderNotification;
-use Magento\Quote\Test\Unit\Helper\EventTestHelper;
+use Magento\Sales\Model\Order;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use Magento\Sales\Model\Order;
-use Magento\Framework\Event;
 
 /**
  * Unit test for SendOrderNotification plugin
  */
 class SendOrderNotificationTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var RequestInterface|RequestInterface&MockObject|MockObject
      */
@@ -66,8 +68,8 @@ class SendOrderNotificationTest extends TestCase
             ->onlyMethods([])
             ->getMock();
 
-        $event = new EventTestHelper();
-        $event->setOrder($order);
+        $event = $this->createPartialMockWithReflection(Event::class, ['setOrder', 'getOrder']);
+        $event->method('getOrder')->willReturn($order);
 
         $this->observer->expects($this->exactly(2))->method('getEvent')->willReturn($event);
 
@@ -94,8 +96,8 @@ class SendOrderNotificationTest extends TestCase
             ->onlyMethods([])
             ->getMock();
 
-        $event = new EventTestHelper();
-        $event->setOrder($order);
+        $event = $this->createPartialMockWithReflection(Event::class, ['setOrder', 'getOrder']);
+        $event->method('getOrder')->willReturn($order);
 
         $this->observer->expects($this->exactly(2))->method('getEvent')->willReturn($event);
 

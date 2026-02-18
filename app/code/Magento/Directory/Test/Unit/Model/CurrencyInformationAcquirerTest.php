@@ -17,11 +17,14 @@ use Magento\Directory\Model\Data\ExchangeRateFactory;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManager;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 class CurrencyInformationAcquirerTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var CurrencyInformationAcquirer
      */
@@ -85,19 +88,19 @@ class CurrencyInformationAcquirerTest extends TestCase
     public function testGetCurrencyInfo()
     {
         /** @var ExchangeRate $exchangeRate */
-        $exchangeRate = $this->getMockBuilder(ExchangeRate::class)
-            ->addMethods(['load'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $exchangeRate = $this->createPartialMockWithReflection(
+            ExchangeRate::class,
+            ['load']
+        );
 
         $exchangeRate->expects($this->any())->method('load')->willReturnSelf();
         $this->exchangeRateFactory->expects($this->any())->method('create')->willReturn($exchangeRate);
 
         /** @var CurrencyInformation $currencyInformation */
-        $currencyInformation = $this->getMockBuilder(CurrencyInformation::class)
-            ->addMethods(['load'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $currencyInformation = $this->createPartialMockWithReflection(
+            CurrencyInformation::class,
+            ['load']
+        );
 
         $currencyInformation->expects($this->any())->method('load')->willReturnSelf();
         $this->currencyInformationFactory->expects($this->any())->method('create')->willReturn($currencyInformation);

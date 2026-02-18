@@ -8,6 +8,7 @@ declare(strict_types=1);
 namespace Magento\Tax\Test\Unit\Model\Calculation;
 
 use Magento\Framework\DataObject;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Tax\Api\Data\AppliedTaxInterface;
 use Magento\Tax\Api\Data\AppliedTaxInterfaceFactory;
@@ -31,22 +32,23 @@ use PHPUnit\Framework\TestCase;
  */
 class RowBaseAndTotalBaseCalculatorTestCase extends TestCase
 {
-    const STORE_ID = 2300;
-    const QUANTITY = 1;
-    const UNIT_PRICE = 500;
-    const RATE = 10;
-    const STORE_RATE = 11;
+    use MockCreationTrait;
+    protected const STORE_ID = 2300;
+    protected const QUANTITY = 1;
+    protected const UNIT_PRICE = 500;
+    protected const RATE = 10;
+    protected const STORE_RATE = 11;
 
-    const UNIT_PRICE_INCL_TAX = 495.49549549545;
-    const UNIT_PRICE_INCL_TAX_ROUNDED = 495.5;
+    protected const UNIT_PRICE_INCL_TAX = 495.49549549545;
+    protected const UNIT_PRICE_INCL_TAX_ROUNDED = 495.5;
 
-    const CODE = 'CODE';
-    const TYPE = 'TYPE';
+    protected const CODE = 'CODE';
+    protected const TYPE = 'TYPE';
 
-    const ONCE = 'once';
-    const MOCK_METHOD_NAME = 'mock_method_name';
-    const MOCK_VALUE = 'mock_value';
-    const WITH_ARGUMENT = 'with_argument';
+    protected const ONCE = 'once';
+    protected const MOCK_METHOD_NAME = 'mock_method_name';
+    protected const MOCK_VALUE = 'mock_value';
+    protected const WITH_ARGUMENT = 'with_argument';
 
     /** @var ObjectManager */
     protected $objectManager;
@@ -123,14 +125,12 @@ class RowBaseAndTotalBaseCalculatorTestCase extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->mockItem = $this->getMockBuilder(QuoteDetailsItemInterface::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['getExtensionAttributes', 'getUnitPrice'])
-            ->getMockForAbstractClass();
-        $this->quoteDetailsItemExtension = $this->getMockBuilder(QuoteDetailsItemExtensionInterface::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['getPriceForTaxCalculation'])
-            ->getMockForAbstractClass();
+        $this->mockItem = $this->createMock(QuoteDetailsItemInterface::class);
+        // Use createPartialMockWithReflection for extension interface with custom methods - PHPUnit 12 compatible
+        $this->quoteDetailsItemExtension = $this->createPartialMockWithReflection(
+            QuoteDetailsItemExtensionInterface::class,
+            ['getPriceForTaxCalculation', 'setPriceForTaxCalculation']
+        );
         $this->mockItem->expects($this->any())->method('getExtensionAttributes')
             ->willReturn($this->quoteDetailsItemExtension);
 

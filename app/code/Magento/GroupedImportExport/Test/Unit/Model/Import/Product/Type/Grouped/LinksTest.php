@@ -17,6 +17,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHe
 use Magento\GroupedImportExport\Model\Import\Product\Type\Grouped\Links;
 use Magento\ImportExport\Model\ImportFactory;
 use Magento\ImportExport\Model\ResourceModel\Import\Data;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -84,9 +85,8 @@ class LinksTest extends TestCase
 
     /**
      * @param array $linksData
-     *
-     * @dataProvider linksDataProvider
      */
+    #[DataProvider('linksDataProvider')]
     public function testSaveLinksDataNoProductsAttrs($linksData)
     {
         $this->processBehaviorGetter('append');
@@ -98,9 +98,8 @@ class LinksTest extends TestCase
 
     /**
      * @param array $linksData
-     *
-     * @dataProvider linksDataProvider
      */
+    #[DataProvider('linksDataProvider')]
     public function testSaveLinksDataWithProductsAttrs($linksData)
     {
         $linksData['attr_product_ids'] = [12 => true, 16 => true];
@@ -177,9 +176,8 @@ class LinksTest extends TestCase
     /**
      * @param array $dbAttributes
      * @param array $returnedAttributes
-     *
-     * @dataProvider attributesDataProvider
      */
+    #[DataProvider('attributesDataProvider')]
     public function testGetAttributes($dbAttributes, $returnedAttributes)
     {
         $this->processAttributeGetter($dbAttributes);

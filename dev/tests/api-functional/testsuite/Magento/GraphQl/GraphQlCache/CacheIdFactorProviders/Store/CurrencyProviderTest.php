@@ -25,12 +25,12 @@ class CurrencyProviderTest extends GraphQlAbstract
         $currency1Response = $this->graphQlQueryWithResponseHeaders($query, [], '', ['content-currency' => 'USD']);
         $this->assertArrayHasKey(CacheIdCalculator::CACHE_ID_HEADER, $currency1Response['headers']);
         $currency1CacheId = $currency1Response['headers'][CacheIdCalculator::CACHE_ID_HEADER];
-        $this->assertTrue((boolean)preg_match('/^[0-9a-f]{64}$/i', $currency1CacheId));
+        $this->assertTrue((bool)preg_match('/^[0-9a-f]{64}$/i', $currency1CacheId));
 
         $currency2Response = $this->graphQlQueryWithResponseHeaders($query, [], '', ['content-currency' => 'EUR']);
         $this->assertArrayHasKey(CacheIdCalculator::CACHE_ID_HEADER, $currency2Response['headers']);
         $currency2CacheId = $currency2Response['headers'][CacheIdCalculator::CACHE_ID_HEADER];
-        $this->assertTrue((boolean)preg_match('/^[0-9a-f]{64}$/i', $currency2CacheId));
+        $this->assertTrue((bool)preg_match('/^[0-9a-f]{64}$/i', $currency2CacheId));
 
         // Assert that currency1 and currency2 return different cache ids
         $this->assertNotEquals($currency1CacheId, $currency2CacheId);

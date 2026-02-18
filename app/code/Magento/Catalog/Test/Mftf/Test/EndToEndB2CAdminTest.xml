@@ -30,6 +30,9 @@
             <actionGroup ref="DeleteCategoryActionGroup" stepKey="cleanSimpleSubCategory">
                 <argument name="categoryEntity" value="SimpleSubCategory"/>
             </actionGroup>
+            <actionGroup ref="DeleteCategoryActionGroup" stepKey="cleanDefaultCategory">
+                <argument name="categoryEntity" value="_defaultCategory"/>
+            </actionGroup>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutOfAdmin"/>
             <magentoCLI command="config:set checkout/options/enable_guest_checkout_login 0" stepKey="DisablingGuestCheckoutLogin"/>
         </after>

@@ -5,6 +5,8 @@
  */
 namespace Magento\Test;
 
+use PHPUnit\Framework\Attributes\DataProvider;
+
 class EntityTest extends \PHPUnit\Framework\TestCase
 {
     /**
@@ -50,8 +52,6 @@ class EntityTest extends \PHPUnit\Framework\TestCase
         $this->_model->setId(null);
     }
 
-    /**
-     */
     public function testConstructorIrrelevantModelClass()
     {
         $this->expectException(\InvalidArgumentException::class);
@@ -71,9 +71,7 @@ class EntityTest extends \PHPUnit\Framework\TestCase
         ];
     }
 
-    /**
-     * @dataProvider crudDataProvider
-     */
+    #[DataProvider('crudDataProvider')]
     public function testTestCrud($saveCallback, $expectedException = null)
     {
         if ($expectedException != null) {

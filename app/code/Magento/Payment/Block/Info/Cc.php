@@ -42,7 +42,7 @@ class Cc extends \Magento\Payment\Block\Info
     public function getCcTypeName()
     {
         $types = $this->_paymentConfig->getCcTypes();
-        $ccType = $this->getInfo()->getCcType();
+        $ccType = $this->getInfo()->getCcType() ?? '';
         if (isset($types[$ccType])) {
             return $types[$ccType];
         }

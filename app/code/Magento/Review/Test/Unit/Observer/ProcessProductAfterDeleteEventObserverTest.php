@@ -10,6 +10,7 @@ namespace Magento\Review\Test\Unit\Observer;
 use Magento\Catalog\Model\Product;
 use Magento\Framework\Event;
 use Magento\Framework\Event\Observer;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Review\Model\ResourceModel\Rating;
 use Magento\Review\Model\ResourceModel\Review;
 use Magento\Review\Observer\ProcessProductAfterDeleteEventObserver;
@@ -18,6 +19,8 @@ use PHPUnit\Framework\TestCase;
 
 class ProcessProductAfterDeleteEventObserverTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * Testable Object
      *
@@ -58,15 +61,9 @@ class ProcessProductAfterDeleteEventObserverTest extends TestCase
     {
         $productId = 1;
         $observerMock = $this->createMock(Observer::class);
-        $eventMock = $this->getMockBuilder(Event::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['getProduct'])
-            ->getMock();
+        $eventMock = $this->createPartialMockWithReflection(Event::class, ['getProduct']);
 
-        $productMock = $this->getMockBuilder(Product::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['getId'])
-            ->getMock();
+        $productMock = $this->createPartialMock(Product::class, ['getId']);
 
         $productMock->expects(self::exactly(3))
             ->method('getId')
@@ -95,10 +92,7 @@ class ProcessProductAfterDeleteEventObserverTest extends TestCase
     public function testCleanupProductReviewsWithoutProduct()
     {
         $observerMock = $this->createMock(Observer::class);
-        $eventMock = $this->getMockBuilder(Event::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['getProduct'])
-            ->getMock();
+        $eventMock = $this->createPartialMockWithReflection(Event::class, ['getProduct']);
 
         $eventMock->expects($this->once())
             ->method('getProduct')

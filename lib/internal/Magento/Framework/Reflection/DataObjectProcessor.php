@@ -13,6 +13,8 @@ use Magento\Framework\Phrase;
  *
  * @api
  * @since 100.0.2
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class DataObjectProcessor
 {
@@ -126,21 +128,7 @@ class DataObjectProcessor
                     continue;
                 }
             } else {
-                if (is_object($value) && !($value instanceof Phrase)) {
-                    $value = $this->buildOutputDataArray($value, $returnType);
-                } elseif (is_array($value)) {
-                    $valueResult = [];
-                    $arrayElementType = $returnType !== null ? substr($returnType, 0, -2) : '';
-                    foreach ($value as $singleValue) {
-                        if (is_object($singleValue) && !($singleValue instanceof Phrase)) {
-                            $singleValue = $this->buildOutputDataArray($singleValue, $arrayElementType);
-                        }
-                        $valueResult[] = $this->typeCaster->castValueToType($singleValue, $arrayElementType);
-                    }
-                    $value = $valueResult;
-                } else {
-                    $value = $this->typeCaster->castValueToType($value, $returnType);
-                }
+                $value = $this->processValue($value, $returnType);
             }
 
             $outputData[$key] = $value;
@@ -149,6 +137,35 @@ class DataObjectProcessor
         $outputData = $this->changeOutputArray($dataObject, $outputData);
 
         return $outputData;
+    }
+
+    /**
+     * Process value based on its type and return type
+     *
+     * @param mixed $value
+     * @param string $returnType
+     * @return mixed
+     */
+    private function processValue($value, $returnType)
+    {
+        if (is_object($value) && !($value instanceof Phrase)) {
+            return $this->buildOutputDataArray($value, $returnType);
+        }
+        if (is_array($value)) {
+            if ($returnType === TypeProcessor::UNSTRUCTURED_ARRAY) {
+                return $value;
+            }
+            $valueResult = [];
+            $arrayElementType = $returnType !== null ? substr($returnType, 0, -2) : '';
+            foreach ($value as $singleValue) {
+                if (is_object($singleValue) && !($singleValue instanceof Phrase)) {
+                    $singleValue = $this->buildOutputDataArray($singleValue, $arrayElementType);
+                }
+                $valueResult[] = $this->typeCaster->castValueToType($singleValue, $arrayElementType);
+            }
+            return $valueResult;
+        }
+        return $this->typeCaster->castValueToType($value, $returnType);
     }
 
     /**

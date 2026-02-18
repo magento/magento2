@@ -14,6 +14,7 @@ use Magento\Integration\Model\Oauth\ConsumerFactory;
 use Magento\Integration\Model\Oauth\Token;
 use Magento\Integration\Model\Oauth\Token\Provider;
 use Magento\Integration\Model\Oauth\TokenFactory;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
@@ -23,6 +24,8 @@ use Psr\Log\LoggerInterface;
  */
 class ProviderTest extends TestCase
 {
+    use MockCreationTrait;
+
     /** @var Provider */
     protected $tokenProvider;
 
@@ -58,65 +61,51 @@ class ProviderTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->loggerMock = $this->getMockBuilder(LoggerInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->loggerMock = $this->createMock(LoggerInterface::class);
 
-        $this->consumerMock = $this->getMockBuilder(ConsumerInterface::class)
-            ->addMethods([
+        $this->consumerMock = $this->createPartialMockWithReflection(
+            ConsumerInterface::class,
+            [
                 'load',
-                'loadByKey'
-            ])
-            ->onlyMethods(
-                [
-                    'validate',
-                    'getId',
-                    'getKey',
-                    'getSecret',
-                    'getCallbackUrl',
-                    'getCreatedAt',
-                    'isValidForTokenExchange'
-                ]
-            )
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+                'loadByKey',
+                'validate',
+                'getId',
+                'getKey',
+                'getSecret',
+                'getCallbackUrl',
+                'getCreatedAt',
+                'isValidForTokenExchange'
+            ]
+        );
 
-        $this->requestTokenMock = $this->getMockBuilder(Token::class)
-            ->addMethods([
+        $this->requestTokenMock = $this->createPartialMockWithReflection(
+            Token::class,
+            [
                 'getConsumerId',
                 'getType',
                 'getSecret',
                 'getToken',
-            ])
-            ->onlyMethods(
-                [
-                    'loadByConsumerIdAndUserType',
-                    'load',
-                    'getId',
-                    'getVerifier',
-                    'createRequestToken',
-                    'convertToAccess'
-                ]
-            )
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $this->accessTokenMock = $this->getMockBuilder(Token::class)
-            ->onlyMethods([
+                'loadByConsumerIdAndUserType',
                 'load',
                 'getId',
-            ])
-            ->addMethods(
-                [
-                    'getToken',
-                    'getSecret',
-                    'getConsumerId',
-                    'getType',
-                    'getRevoked'
-                ]
-            )
-            ->disableOriginalConstructor()
-            ->getMock();
+                'getVerifier',
+                'createRequestToken',
+                'convertToAccess'
+            ]
+        );
+
+        $this->accessTokenMock = $this->createPartialMockWithReflection(
+            Token::class,
+            [
+                'load',
+                'getId',
+                'getToken',
+                'getSecret',
+                'getConsumerId',
+                'getType',
+                'getRevoked'
+            ]
+        );
 
         $this->tokenProvider = $objectManagerHelper->getObject(
             Provider::class,
@@ -182,17 +171,15 @@ class ProviderTest extends TestCase
         $tokenString = '12345678901234567890123456789012';
         $secret = 'secret';
 
-        $tokenMock = $this->getMockBuilder(Token::class)
-            ->addMethods(['getType'])
-            ->onlyMethods(
-                [
-                    'loadByConsumerIdAndUserType',
-                    'getId',
-                    'createRequestToken'
-                ]
-            )
-            ->disableOriginalConstructor()
-            ->getMock();
+        $tokenMock = $this->createPartialMockWithReflection(
+            Token::class,
+            [
+                'getType',
+                'loadByConsumerIdAndUserType',
+                'getId',
+                'createRequestToken'
+            ]
+        );
 
         $tokenMock->expects($this->once())
             ->method('loadByConsumerIdAndUserType')
@@ -225,19 +212,15 @@ class ProviderTest extends TestCase
         $consumerId = 1;
         $tokenId = 1;
 
-        $tokenMock = $this->getMockBuilder(Token::class)
-            ->addMethods([
+        $tokenMock = $this->createPartialMockWithReflection(
+            Token::class,
+            [
                 'getType',
-            ])
-            ->onlyMethods(
-                [
-                    'loadByConsumerIdAndUserType',
-                    'getId',
-                    'createRequestToken'
-                ]
-            )
-            ->disableOriginalConstructor()
-            ->getMock();
+                'loadByConsumerIdAndUserType',
+                'getId',
+                'createRequestToken'
+            ]
+        );
 
         $tokenMock->expects($this->once())
             ->method('loadByConsumerIdAndUserType')

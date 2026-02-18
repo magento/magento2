@@ -15,6 +15,7 @@ use Magento\Setup\Model\InstallerFactory;
 use Magento\Setup\Mvc\Bootstrap\InitParamListener;
 use Magento\User\Model\UserValidationRules;
 use PHPUnit\Framework\MockObject\Exception;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Application;
@@ -124,7 +125,8 @@ class AdminUserCreateCommandTest extends TestCase
             'verbose' => false,
             'version' => false,
             'ansi' => null,
-            'no-interaction' => false
+            'no-interaction' => false,
+            'silent' => false
         ];
 
         $installerMock->expects($this->once())->method('installAdminUser')->with($expectedData);
@@ -146,8 +148,8 @@ class AdminUserCreateCommandTest extends TestCase
      * @param string $description
      *
      * @return void
-     * @dataProvider getOptionListDataProvider
      */
+    #[DataProvider('getOptionListDataProvider')]
     public function testGetOptionsList(int $mode, string $description): void
     {
         /* @var $argsList InputArgument[] */
@@ -179,16 +181,11 @@ class AdminUserCreateCommandTest extends TestCase
      * @param int $minPasswordLength
      *
      * @throws Exception
-     * @dataProvider validateDataProvider
      */
+    #[DataProvider('validateDataProvider')]
     public function testValidate(array $options, array $errors, int $minPasswordLength = 7): void
     {
-        $inputMock = $this->getMockForAbstractClass(
-            InputInterface::class,
-            [],
-            '',
-            false
-        );
+        $inputMock = $this->createMock(InputInterface::class);
         $inputMock
             ->method('getOption')
             ->willReturnOnConsecutiveCalls(...$options);

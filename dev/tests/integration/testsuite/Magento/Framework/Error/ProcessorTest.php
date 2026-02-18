@@ -6,6 +6,7 @@
 namespace Magento\Framework\Error;
 
 use Magento\TestFramework\Helper\Bootstrap;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 require_once __DIR__ . '/../../../../../../../pub/errors/processor.php';
 
@@ -41,8 +42,8 @@ class ProcessorTest extends \PHPUnit\Framework\TestCase
      * @param int $logReportDirNestingLevel
      * @param int $logReportDirNestingLevelChanged
      * @param string $exceptionMessage
-     * @dataProvider dataProviderSaveAndLoadReport
      */
+    #[DataProvider('dataProviderSaveAndLoadReport')]
     public function testSaveAndLoadReport(
         int $logReportDirNestingLevel,
         int $logReportDirNestingLevelChanged,

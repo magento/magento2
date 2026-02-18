@@ -79,13 +79,10 @@ class TaxRateCollectionTest extends TestCase
         $this->searchCriteriaBuilderMock =
             $this->createMock(SearchCriteriaBuilder::class);
         $this->sortOrderBuilderMock = $this->createMock(SortOrderBuilder::class);
-        $this->rateServiceMock = $this->getMockBuilder(TaxRateRepositoryInterface::class)
-            ->addMethods(['__wakeup'])
-            ->onlyMethods(['save', 'get', 'deleteById', 'getList', 'delete'])
-            ->getMockForAbstractClass();
+        $this->rateServiceMock = $this->createMock(TaxRateRepositoryInterface::class);
         $this->rateConverterMock = $this->createMock(Converter::class);
-        $this->searchCriteriaMock = $this->getMockForAbstractClass(SearchCriteriaInterface::class);
-        $this->searchResultsMock = $this->getMockForAbstractClass(TaxRateSearchResultsInterface::class);
+        $this->searchCriteriaMock = $this->createMock(SearchCriteriaInterface::class);
+        $this->searchResultsMock = $this->createMock(TaxRateSearchResultsInterface::class);
         $this->taxRateMock = $this->createMock(Rate::class);
 
         $this->searchCriteriaBuilderMock->expects($this->any())
@@ -102,7 +99,7 @@ class TaxRateCollectionTest extends TestCase
         );
     }
 
-    public function testLoadData()
+    public function testLoadData(): void
     {
         $this->rateServiceMock->expects($this->once())
             ->method('getList')
@@ -129,7 +126,7 @@ class TaxRateCollectionTest extends TestCase
         $this->model->loadData();
     }
 
-    public function testCreateTaxRateCollectionItem()
+    public function testCreateTaxRateCollectionItem(): void
     {
         $this->rateServiceMock->expects($this->once())
             ->method('getList')

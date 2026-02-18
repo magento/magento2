@@ -74,26 +74,16 @@ class MessageProcessorTest extends TestCase
     {
         $topicName = 'topic';
         $messagesToAcknowledge = [];
-        $connection = $this->getMockBuilder(AdapterInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $connection = $this->createMock(AdapterInterface::class);
         $connection->expects($this->atLeastOnce())->method('beginTransaction');
         $connection->expects($this->atLeastOnce())->method('commit');
         $this->resource->expects($this->atLeastOnce())->method('getConnection')->willReturn($connection);
-        $queue = $this->getMockBuilder(QueueInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-        $configuration = $this->getMockBuilder(ConsumerConfigurationInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $queue = $this->createMock(QueueInterface::class);
+        $configuration = $this->createMock(ConsumerConfigurationInterface::class);
         $configuration->expects($this->atLeastOnce())->method('getHandlers')->willReturn([]);
         $this->messageStatusProcessor->expects($this->exactly(2))->method('acknowledgeMessages');
-        $mergedMessage = $this->getMockBuilder(CustomAttributesDataInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-        $message = $this->getMockBuilder(EnvelopeInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $mergedMessage = $this->createMock(CustomAttributesDataInterface::class);
+        $message = $this->createMock(EnvelopeInterface::class);
         $mergedMessages = [
             $topicName => [$mergedMessage]
         ];
@@ -113,28 +103,18 @@ class MessageProcessorTest extends TestCase
     {
         $topicName = 'topic';
         $messagesToAcknowledge = [];
-        $connection = $this->getMockBuilder(AdapterInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $connection = $this->createMock(AdapterInterface::class);
         $connection->expects($this->atLeastOnce())->method('beginTransaction');
         $connection->expects($this->never())->method('commit');
         $connection->expects($this->atLeastOnce())->method('rollBack');
         $this->resource->expects($this->atLeastOnce())->method('getConnection')->willReturn($connection);
-        $queue = $this->getMockBuilder(QueueInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-        $configuration = $this->getMockBuilder(ConsumerConfigurationInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $queue = $this->createMock(QueueInterface::class);
+        $configuration = $this->createMock(ConsumerConfigurationInterface::class);
         $exception = new ConnectionLostException('Exception Message');
         $configuration->expects($this->atLeastOnce())->method('getHandlers')->willThrowException($exception);
         $this->messageStatusProcessor->expects($this->once())->method('acknowledgeMessages');
-        $mergedMessage = $this->getMockBuilder(CustomAttributesDataInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-        $message = $this->getMockBuilder(EnvelopeInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $mergedMessage = $this->createMock(CustomAttributesDataInterface::class);
+        $message = $this->createMock(EnvelopeInterface::class);
         $mergedMessages = [
             $topicName => [$mergedMessage]
         ];
@@ -154,29 +134,19 @@ class MessageProcessorTest extends TestCase
     {
         $topicName = 'topic';
         $messagesToAcknowledge = [];
-        $connection = $this->getMockBuilder(AdapterInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $connection = $this->createMock(AdapterInterface::class);
         $connection->expects($this->atLeastOnce())->method('beginTransaction');
         $connection->expects($this->never())->method('commit');
         $connection->expects($this->atLeastOnce())->method('rollBack');
         $this->resource->expects($this->atLeastOnce())->method('getConnection')->willReturn($connection);
-        $queue = $this->getMockBuilder(QueueInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-        $configuration = $this->getMockBuilder(ConsumerConfigurationInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $queue = $this->createMock(QueueInterface::class);
+        $configuration = $this->createMock(ConsumerConfigurationInterface::class);
         $exception = new \Exception();
         $configuration->expects($this->atLeastOnce())->method('getHandlers')->willThrowException($exception);
         $this->messageStatusProcessor->expects($this->once())->method('acknowledgeMessages');
         $this->messageStatusProcessor->expects($this->atLeastOnce())->method('rejectMessages');
-        $mergedMessage = $this->getMockBuilder(CustomAttributesDataInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-        $message = $this->getMockBuilder(EnvelopeInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $mergedMessage = $this->createMock(CustomAttributesDataInterface::class);
+        $message = $this->createMock(EnvelopeInterface::class);
         $mergedMessages = [
             $topicName => [$mergedMessage]
         ];

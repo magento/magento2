@@ -7,13 +7,15 @@ declare(strict_types=1);
 
 namespace Magento\Tax\Test\Unit\Model\System\Message\Notification;
 
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\UrlInterface;
-use Magento\Store\Api\Data\StoreInterface;
 use Magento\Store\Api\Data\WebsiteInterface;
+use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Tax\Model\Config as TaxConfig;
 use Magento\Tax\Model\System\Message\Notification\ApplyDiscountOnPrices as ApplyDiscountOnPricesNotification;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -24,6 +26,8 @@ use PHPUnit\Framework\TestCase;
  */
 class ApplyDiscountOnPricesTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var ApplyDiscountOnPricesNotification
      */
@@ -48,23 +52,18 @@ class ApplyDiscountOnPricesTest extends TestCase
     {
         parent::setUp();
 
-        $websiteMock = $this->getMockForAbstractClass(WebsiteInterface::class);
+        $websiteMock = $this->createMock(WebsiteInterface::class);
         $websiteMock->expects($this->any())->method('getName')->willReturn('testWebsiteName');
-        $storeMock = $this->getMockForAbstractClass(
-            StoreInterface::class,
-            [],
-            '',
-            false,
-            true,
-            true,
+        $storeMock = $this->createPartialMockWithReflection(
+            Store::class,
             ['getWebsite', 'getName']
         );
         $storeMock->expects($this->any())->method('getName')->willReturn('testStoreName');
         $storeMock->expects($this->any())->method('getWebsite')->willReturn($websiteMock);
-        $this->storeManagerMock = $this->getMockForAbstractClass(StoreManagerInterface::class);
+        $this->storeManagerMock = $this->createMock(StoreManagerInterface::class);
         $this->storeManagerMock->expects($this->any())->method('getStores')->willReturn([$storeMock]);
 
-        $this->urlBuilderMock = $this->getMockForAbstractClass(UrlInterface::class);
+        $this->urlBuilderMock = $this->createMock(UrlInterface::class);
         $this->taxConfigMock = $this->createMock(TaxConfig::class);
         $this->applyDiscountOnPricesNotification = (new ObjectManager($this))->getObject(
             ApplyDiscountOnPricesNotification::class,
@@ -76,16 +75,14 @@ class ApplyDiscountOnPricesTest extends TestCase
         );
     }
 
-    /**
-     * @dataProvider dataProviderIsDisplayed
-     */
+    #[DataProvider('dataProviderIsDisplayed')]
     public function testIsDisplayed(
-        $isWrongApplyDiscountSettingIgnored,
-        $priceIncludesTax,
-        $applyTaxAfterDiscount,
-        $discountTax,
-        $expectedResult
-    ) {
+        bool $isWrongApplyDiscountSettingIgnored,
+        bool $priceIncludesTax,
+        bool $applyTaxAfterDiscount,
+        bool $discountTax,
+        bool $expectedResult
+    ): void {
         $this->taxConfigMock->expects($this->any())->method('isWrongApplyDiscountSettingIgnored')
             ->willReturn($isWrongApplyDiscountSettingIgnored);
         $this->taxConfigMock->expects($this->any())->method('priceIncludesTax')->willReturn($priceIncludesTax);
@@ -99,7 +96,7 @@ class ApplyDiscountOnPricesTest extends TestCase
     /**
      * @return array
      */
-    public static function dataProviderIsDisplayed()
+    public static function dataProviderIsDisplayed(): array
     {
         return [
             [
@@ -140,7 +137,7 @@ class ApplyDiscountOnPricesTest extends TestCase
         ];
     }
 
-    public function testGetText()
+    public function testGetText(): void
     {
         $this->taxConfigMock->expects($this->any())->method('isWrongApplyDiscountSettingIgnored')->willReturn(false);
 

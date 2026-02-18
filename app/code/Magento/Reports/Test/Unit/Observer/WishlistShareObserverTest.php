@@ -9,6 +9,7 @@ declare(strict_types=1);
 namespace Magento\Reports\Test\Unit\Observer;
 
 use Magento\Framework\Event\Observer;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\Reports\Model\Event;
 use Magento\Reports\Model\ReportStatus;
@@ -23,6 +24,8 @@ use PHPUnit\Framework\TestCase;
  */
 class WishlistShareObserverTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var Observer|MockObject
      */
@@ -81,10 +84,10 @@ class WishlistShareObserverTest extends TestCase
             ->with(Event::EVENT_WISHLIST_SHARE)
             ->willReturn(true);
 
-        $eventMock = $this->getMockBuilder(Event::class)
-            ->addMethods(['getWishlist'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $eventMock = $this->createPartialMockWithReflection(
+            Event::class,
+            ['getWishlist']
+        );
         $eventMock->expects($this->once())
             ->method('getWishlist')
             ->willReturn($this->createMock(Wishlist::class));
