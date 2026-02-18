@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2012 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Sales\Block\Adminhtml\Report\Filter\Form;
 
@@ -9,7 +9,6 @@ namespace Magento\Sales\Block\Adminhtml\Report\Filter\Form;
  * Sales Adminhtml report filter form for coupons report
  *
  * @api
- * @author     Magento Core Team <core@magentocommerce.com>
  * @SuppressWarnings(PHPMD.DepthOfInheritance)
  * @since 100.0.2
  */

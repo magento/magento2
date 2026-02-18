@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -45,13 +45,8 @@ class PaymentFailuresServiceTest extends \PHPUnit\Framework\TestCase
     protected function setUp(): void
     {
         $this->quote = Bootstrap::getObjectManager()->create(Quote::class);
-        $this->cartRepositoryMock = $this->getMockBuilder(CartRepositoryInterface::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['get'])
-            ->getMockForAbstractClass();
-        $this->localeDateMock = $this->getMockBuilder(TimezoneInterface::class)
-            ->onlyMethods(['formatDateTime'])
-            ->getMockForAbstractClass();
+        $this->cartRepositoryMock = $this->createMock(CartRepositoryInterface::class);
+        $this->localeDateMock = $this->createMock(TimezoneInterface::class);
 
         $this->paymentFailures = Bootstrap::getObjectManager()->create(
             PaymentFailuresInterface::class,
@@ -87,8 +82,6 @@ class PaymentFailuresServiceTest extends \PHPUnit\Framework\TestCase
 
         $paymentReflection = new \ReflectionClass($this->paymentFailures);
         $templateVarsMethod = $paymentReflection->getMethod('getTemplateVars');
-        $templateVarsMethod->setAccessible(true);
-
         $templateVars = $templateVarsMethod->invoke($this->paymentFailures, $this->quote, $errorMessage, $checkoutType);
         $expectedVars = [
             'reason' => $errorMessage->render(),
@@ -134,8 +127,6 @@ class PaymentFailuresServiceTest extends \PHPUnit\Framework\TestCase
 
         $paymentReflection = new \ReflectionClass($this->paymentFailures);
         $templateVarsMethod = $paymentReflection->getMethod('getTemplateVars');
-        $templateVarsMethod->setAccessible(true);
-
         $templateVars = $templateVarsMethod->invoke($this->paymentFailures, $this->quote, $errorMessage, $checkoutType);
         $expectedVars = [
             'reason' => $errorMessage->render(),

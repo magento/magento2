@@ -66,9 +66,8 @@ class AbstractTypeTest extends TestCase
         $serializer = $this->objectManager->get(
             Json::class
         );
-        $this->_model = $this->getMockForAbstractClass(
-            AbstractType::class,
-            [
+        $this->_model = $this->getMockBuilder(AbstractType::class)
+            ->setConstructorArgs([
                 $catalogProductOption,
                 $this->objectManager->get(Config::class),
                 $catalogProductType,
@@ -79,8 +78,9 @@ class AbstractTypeTest extends TestCase
                 $logger,
                 $this->productRepository,
                 $serializer
-            ]
-        );
+            ])
+            ->onlyMethods(['deleteTypeSpecificData'])
+            ->getMock();
     }
 
     public function testGetRelationInfo()
@@ -527,7 +527,6 @@ class AbstractTypeTest extends TestCase
             AbstractType::class,
             '_prepareOptions'
         );
-        $method->setAccessible(true);
         $exceptionIsThrown = false;
         try {
             $method->invoke($this->_model, $buyRequest, $product, 'full');
@@ -668,10 +667,8 @@ class AbstractTypeTest extends TestCase
         $uploader = new Http();
         $refObject = new \ReflectionObject($uploader);
         $validators = $refObject->getProperty('validators');
-        $validators->setAccessible(true);
         $validators->setValue($uploader, []);
         $files = $refObject->getProperty('files');
-        $files->setAccessible(true);
         $filesValues = $files->getValue($uploader);
         foreach (array_keys($filesValues) as $value) {
             $filesValues[$value]['validators'] = [];

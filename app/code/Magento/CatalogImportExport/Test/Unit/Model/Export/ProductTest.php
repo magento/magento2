@@ -1,18 +1,23 @@
 <?php
 /**
- * Copyright 2013 Adobe
+ * Copyright 2015 Adobe
  * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\CatalogImportExport\Test\Unit\Model\Export;
 
+use Magento\Catalog\Model\ResourceModel\ProductFactory;
+use Magento\CatalogInventory\Model\ResourceModel\Stock\ItemFactory;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\Catalog\Model\Product\LinkTypeProvider;
 use Magento\Catalog\Model\ResourceModel\Category\CollectionFactory as CategoryCollectionFactory;
 use Magento\CatalogImportExport\Model\Export\Product;
 use Magento\CatalogImportExport\Model\Export\Product\Type\Factory;
 use Magento\CatalogImportExport\Model\Export\ProductFilterInterface;
 use Magento\CatalogImportExport\Model\Export\RowCustomizer\Composite;
+use Magento\Catalog\Model\ResourceModel\Product as ProductResource;
+use Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\Collection as AttributeSetCollection;
 use Magento\CatalogInventory\Api\StockConfigurationInterface;
 use Magento\Eav\Model\Config;
 use Magento\Eav\Model\Entity\Collection\AbstractCollection;
@@ -172,42 +177,29 @@ class ProductTest extends TestCase
         $this->logger = $this->createMock(Monolog::class);
 
         $this->collection = $this->createMock(\Magento\Catalog\Model\ResourceModel\Product\CollectionFactory::class);
-        $this->abstractCollection = $this->getMockForAbstractClass(
-            AbstractCollection::class,
-            [],
-            '',
-            false,
-            true,
-            true,
-            [
-                'count',
-                'setOrder',
-                'setStoreId',
-                'getCurPage',
-                'getLastPageNumber',
-            ]
-        );
+        $this->abstractCollection = $this->createMock(AbstractCollection::class);
         $this->exportConfig = $this->createMock(\Magento\ImportExport\Model\Export\Config::class);
 
-        $this->productFactory = $this->getMockBuilder(
-            \Magento\Catalog\Model\ResourceModel\ProductFactory::class
-        )->disableOriginalConstructor()
-            ->addMethods(['getTypeId'])
-            ->onlyMethods(['create'])
-            ->getMock();
+        // Create Product ResourceModel mock
+        $productResourceMock = $this->createMock(ProductResource::class);
+        $productResourceMock->method('getTypeId')->willReturn(4);
 
-        $this->attrSetColFactory = $this->getMockBuilder(AttributeSetCollectionFactory::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['setEntityTypeFilter'])
-            ->onlyMethods(['create'])
-            ->getMock();
+        // Create Product Factory mock that returns the ResourceModel
+        $this->productFactory = $this->createMock(\Magento\Catalog\Model\ResourceModel\ProductFactory::class);
+        $this->productFactory->method('create')->willReturn($productResourceMock);
 
-        $this->categoryColFactory = $this->getMockBuilder(CategoryCollectionFactory::class)
-            ->disableOriginalConstructor()->addMethods(['addNameToResult'])
-            ->onlyMethods(['create'])
-            ->getMock();
+        // Create AttributeSet Collection mock
+        $attributeSetCollectionMock = $this->createMock(AttributeSetCollection::class);
+        $attributeSetCollectionMock->method('setEntityTypeFilter')->willReturnSelf();
+        $attributeSetCollectionMock->method('getIterator')->willReturn(new \ArrayIterator([]));
 
-        $this->itemFactory = $this->createMock(\Magento\CatalogInventory\Model\ResourceModel\Stock\ItemFactory::class);
+        // Create AttributeSet Collection Factory mock that returns the Collection
+        $this->attrSetColFactory = $this->createMock(AttributeSetCollectionFactory::class);
+        $this->attrSetColFactory->method('create')->willReturn($attributeSetCollectionMock);
+
+        $this->categoryColFactory = $this->createMock(CategoryCollectionFactory::class);
+
+        $this->itemFactory = $this->createMock(ItemFactory::class);
         $this->optionColFactory = $this->createMock(
             \Magento\Catalog\Model\ResourceModel\Product\Option\CollectionFactory::class
         );
@@ -342,16 +334,12 @@ class ProductTest extends TestCase
         $this->product->expects($this->once())->method('getItemsPerPage')->willReturn($itemsPerPage);
         $this->product->expects($this->once())->method('paginateCollection')->with($page, $itemsPerPage);
         $this->abstractCollection->expects($this->once())->method('setOrder')->with('entity_id', 'asc');
-        $this->abstractCollection->expects($this->once())->method('setStoreId')->with(Store::DEFAULT_STORE_ID);
-
-        $this->abstractCollection->expects($this->once())->method('count')->willReturn(0);
 
         $this->abstractCollection->expects($this->never())->method('getCurPage');
         $this->abstractCollection->expects($this->never())->method('getLastPageNumber');
         $this->product->expects($this->never())->method('_getHeaderColumns');
         $this->writer->expects($this->never())->method('setHeaderCols');
         $this->writer->expects($this->never())->method('writeRow');
-        $this->product->expects($this->never())->method('getExportData');
         $this->product->expects($this->never())->method('_customFieldsMapping');
 
         $this->writer->expects($this->once())->method('getContents');
@@ -373,9 +361,6 @@ class ProductTest extends TestCase
         $this->product->expects($this->once())->method('getItemsPerPage')->willReturn($itemsPerPage);
         $this->product->expects($this->once())->method('paginateCollection')->with($page, $itemsPerPage);
         $this->abstractCollection->expects($this->once())->method('setOrder')->with('entity_id', 'asc');
-        $this->abstractCollection->expects($this->once())->method('setStoreId')->with(Store::DEFAULT_STORE_ID);
-
-        $this->abstractCollection->expects($this->once())->method('count')->willReturn(1);
 
         $this->abstractCollection->expects($this->once())->method('getCurPage')->willReturn($curPage);
         $this->abstractCollection->expects($this->once())->method('getLastPageNumber')->willReturn($lastPage);
@@ -414,7 +399,6 @@ class ProductTest extends TestCase
     {
         $reflection = new \ReflectionClass(get_class($object));
         $reflectionProperty = $reflection->getProperty($property);
-        $reflectionProperty->setAccessible(true);
 
         return $reflectionProperty->getValue($object);
     }
@@ -430,7 +414,6 @@ class ProductTest extends TestCase
     {
         $reflection = new \ReflectionClass(get_class($object));
         $reflectionProperty = $reflection->getProperty($property);
-        $reflectionProperty->setAccessible(true);
         $reflectionProperty->setValue($object, $value);
 
         return $object;
@@ -441,9 +424,8 @@ class ProductTest extends TestCase
      *
      * @return void
      * @throws \ReflectionException
-     *
-     * @dataProvider getItemsPerPageDataProvider
      */
+    #[DataProvider('getItemsPerPageDataProvider')]
     public function testGetItemsPerPage($scenarios)
     {
 

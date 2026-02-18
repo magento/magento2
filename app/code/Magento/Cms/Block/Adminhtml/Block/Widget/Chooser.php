@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Cms\Block\Adminhtml\Block\Widget;
 
@@ -100,7 +100,7 @@ class Chooser extends \Magento\Backend\Block\Widget\Grid\Extended
         $js = '
             function (grid, event) {
                 var trElement = Event.findElement(event, "tr");
-                var blockId = trElement.down("td").next().next().innerHTML.replace(/^\s+|\s+$/g,"");
+                var blockId = trElement.down("td").innerHTML.replace(/^\s+|\s+$/g,"");
                 var blockTitle = trElement.down("td").next().innerHTML;
                 ' .
             $chooserJsObject .

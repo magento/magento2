@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
-  */
+/**
+ * Copyright 2024 Adobe
+ * All Rights Reserved.
+ */
 -->
 
 <entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -51,5 +51,63 @@
         <data key="scope_id">1</data>
         <data key="label">No</data>
         <data key="value">0</data>
+    </entity>
+    <entity name="AdminEnableFreeMethodUSPSConfigData" type="usps_config">
+        <data key="path">carriers/usps/free_method</data>
+        <data key="value">7</data>
+    </entity>
+    <entity name="AdminDisableFreeMethodUSPSConfigData" type="usps_config">
+        <data key="path">carriers/usps/free_method</data>
+        <data key="value">0</data>
+    </entity>
+    <entity name="AdminEnableFreeShippingThresholdUSPSConfigData" type="usps_config">
+        <data key="path">carriers/usps/free_shipping_enable</data>
+        <data key="value">1</data>
+    </entity>
+    <entity name="AdminDisableFreeShippingThresholdUSPSConfigData" type="usps_config">
+        <data key="path">carriers/usps/free_shipping_enable</data>
+        <data key="value">0</data>
+    </entity>
+    <entity name="AdminFillFreeShippingAmountThresholdUSPSConfigData" type="usps_config">
+        <data key="path">carriers/usps/free_shipping_subtotal</data>
+        <data key="value">49</data>
+    </entity>
+    <entity name="AdminSetUSPSTypeToUSPSRestAPIUSPSConfigData" type="usps_config">
+        <data key="path">carriers/usps/usps_type</data>
+        <data key="value">USPS_REST</data>
+    </entity>
+    <entity name="AdminSetUSPSTypeToUSPSWebToolUSPSConfigData" type="usps_config">
+        <data key="path">carriers/usps/usps_type</data>
+        <data key="value">USPS_XML</data>
+    </entity>
+    <entity name="AdminConsumerKeyUSPSConfigData" type="usps_config">
+        <data key="path">carriers/usps/client_id</data>
+        <data key="value">{{_CREDS.magento/carriers_usps_rest_client_id}}</data>
+    </entity>
+    <entity name="AdminConsumerSecretUSPSConfigData" type="usps_config">
+        <data key="path">carriers/usps/client_secret</data>
+        <data key="value">{{_CREDS.magento/carriers_usps_rest_client_secret}}</data>
+    </entity>
+    <entity name="AdminAccountNumberUSPSConfigData" type="usps_config">
+        <data key="path">carriers/usps/account_number</data>
+        <data key="value">{{_CREDS.magento/carriers_usps_rest_account_number}}</data>
+    </entity>
+    <entity name="AdminCRIDUSPSConfigData" type="usps_config">
+        <data key="path">carriers/usps/crid</data>
+        <data key="value">{{_CREDS.magento/carriers_usps_rest_crid}}</data>
+    </entity>
+    <entity name="AdminMIDUSPSConfigData" type="usps_config">
+        <data key="path">carriers/usps/mid</data>
+        <data key="value">{{_CREDS.magento/carriers_usps_rest_mid}}</data>
+    </entity>
+    <entity name="AdminMMIDUSPSConfigData" type="usps_config">
+        <data key="path">carriers/usps/mmid</data>
+        <data key="value">{{_CREDS.magento/carriers_usps_rest_mmid}}</data>
+    </entity>
+    <entity name="ShippingTypeUSPSConfigData" type="usps_config">
+        <data key="value">Priority Mail International Flat Rate Envelope</data>
+    </entity>
+    <entity name="USPSFirstClassInternationalShippingMethodData" type="usps_config">
+        <data key="value">First-Class Package International Service</data>
     </entity>
 </entities>

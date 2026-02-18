@@ -1,17 +1,7 @@
 <?php
-/************************************************************************
- * Copyright 2025 Adobe
+/**
+ * Copyright 2014 Adobe
  * All Rights Reserved.
- *
- * NOTICE: All information contained herein is, and remains
- * the property of Adobe and its suppliers, if any. The intellectual
- * and technical concepts contained herein are proprietary to Adobe
- * and its suppliers and are protected by all applicable intellectual
- * property laws, including trade secret and copyright laws.
- * Dissemination of this information or reproduction of this material
- * is strictly forbidden unless prior written permission is obtained
- * from Adobe.
- * ***********************************************************************
  */
 declare(strict_types=1);
 
@@ -22,6 +12,7 @@ use Magento\Sales\Model\Order\Invoice\Comment;
 use Magento\Sales\Model\Order\Invoice\Comment\Validator;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\Sales\Helper\SalesEntityCommentValidator;
 
 class ValidatorTest extends TestCase
@@ -46,8 +37,7 @@ class ValidatorTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->salesEntityCommentValidator = $this->getMockBuilder(SalesEntityCommentValidator::class)
-            ->disableOriginalConstructor()->getMock();
+        $this->salesEntityCommentValidator = $this->createMock(SalesEntityCommentValidator::class);
         $this->commentModelMock = $this->createPartialMock(
             Comment::class,
             ['hasData', 'getData']
@@ -67,8 +57,8 @@ class ValidatorTest extends TestCase
      * @param $commentDataMap
      * @param $commentData
      * @param $expectedWarnings
-     * @dataProvider providerCommentData
      */
+    #[DataProvider('providerCommentData')]
     public function testValidate($commentDataMap, $commentData, $expectedWarnings)
     {
         $this->commentModelMock->expects($this->any())

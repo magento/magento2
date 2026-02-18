@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
-  */
+/**
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
+ */
 -->
 
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -14,7 +14,7 @@
         </annotations>
 
         <waitForPageLoad stepKey="waitForPageLoad"/>
-        <seeElement selector="{{StorefrontBundledSection.validationMessageBox}}" stepKey="seeErrorBox"/>
-        <seeNumberOfElements selector="{{StorefrontBundledSection.validationMessageBox}}" userInput="1" stepKey="seeOneErrorBox"/>
+        <seeElement selector="{{StorefrontBundledSection.selectOptionError}}" stepKey="seeErrorBox"/>
+        <seeNumberOfElements selector="{{StorefrontBundledSection.selectOptionError}}" userInput="1" stepKey="seeOneErrorBox"/>
     </actionGroup>
 </actionGroups>

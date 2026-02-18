@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -89,18 +89,14 @@ class FlatTest extends TestCase
     {
         $this->objectManager = new ObjectManager($this);
 
-        $this->selectMock = $this->getMockBuilder(Select::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['where', 'from'])
-            ->getMock();
+        $this->selectMock = $this->createPartialMock(Select::class, ['where', 'from']);
         $this->selectMock->expects($this->once())
             ->method('where')
             ->willReturn($this->selectMock);
         $this->selectMock->expects($this->once())
             ->method('from')
             ->willReturn($this->selectMock);
-        $this->connectionMock = $this->getMockBuilder(Adapter::class)
-            ->getMockForAbstractClass();
+        $this->connectionMock = $this->createMock(Adapter::class);
         $this->connectionMock->expects($this->once())
             ->method('select')
             ->willReturn($this->selectMock);
@@ -108,48 +104,24 @@ class FlatTest extends TestCase
             ->method('fetchOne')
             ->with($this->selectMock)
             ->willReturn(self::PARENT_PATH);
-        $this->resourceMock = $this->getMockBuilder(ResourceConnection::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['getConnection', 'getTableName'])
-            ->getMock();
-        $this->resourceMock->expects($this->any())
-            ->method('getConnection')
-            ->willReturn($this->connectionMock);
-        $this->resourceMock->expects($this->any())
-            ->method('getTableName')
-            ->willReturn(self::TABLE_NAME);
-        $this->contextMock = $this->getMockBuilder(Context::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['getResources'])
-            ->getMock();
-        $this->contextMock->expects($this->any())
-            ->method('getResources')
-            ->willReturn($this->resourceMock);
+        $this->resourceMock = $this->createPartialMock(ResourceConnection::class, ['getConnection', 'getTableName']);
+        $this->resourceMock->method('getConnection')->willReturn($this->connectionMock);
+        $this->resourceMock->method('getTableName')->willReturn(self::TABLE_NAME);
+        $this->contextMock = $this->createPartialMock(Context::class, ['getResources']);
+        $this->contextMock->method('getResources')->willReturn($this->resourceMock);
 
-        $this->storeMock = $this->getMockBuilder(Store::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['getId'])
-            ->getMock();
-        $this->storeMock->expects($this->any())
-            ->method('getId')
-            ->willReturn(self::STORE_ID);
-        $this->storeManagerMock = $this->getMockBuilder(StoreManagerInterface::class)
-            ->getMockForAbstractClass();
-        $this->storeManagerMock->expects($this->any())
-            ->method('getStore')
-            ->willReturn($this->storeMock);
+        $this->storeMock = $this->createPartialMock(Store::class, ['getId']);
+        $this->storeMock->method('getId')->willReturn(self::STORE_ID);
+        $this->storeManagerMock = $this->createMock(StoreManagerInterface::class);
+        $this->storeManagerMock->method('getStore')->willReturn($this->storeMock);
     }
 
     public function testGetCategories()
     {
-        $this->categoryCollectionFactoryMock = $this->getMockBuilder(CollectionFactory::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['create'])
-            ->getMock();
-        $this->categoryCollectionMock = $this->getMockBuilder(Collection::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(
-                [
+        $this->categoryCollectionFactoryMock = $this->createPartialMock(CollectionFactory::class, ['create']);
+        $this->categoryCollectionMock = $this->createPartialMock(
+            Collection::class,
+            [
                     'addNameToResult',
                     'addUrlRewriteToResult',
                     'addParentPathFilter',
@@ -159,8 +131,7 @@ class FlatTest extends TestCase
                     'addSortedField',
                     'load'
                 ]
-            )
-            ->getMock();
+        );
         $this->categoryCollectionMock->expects($this->once())
             ->method('addNameToResult')
             ->willReturn($this->categoryCollectionMock);
@@ -202,7 +173,6 @@ class FlatTest extends TestCase
 
         $reflection = new \ReflectionClass(get_class($this->model));
         $reflectionProperty = $reflection->getProperty('categoryFlatCollectionFactory');
-        $reflectionProperty->setAccessible(true);
         $reflectionProperty->setValue($this->model, $this->categoryCollectionFactoryMock);
 
         $this->assertEquals(

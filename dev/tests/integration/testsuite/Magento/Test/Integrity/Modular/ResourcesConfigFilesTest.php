@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -14,11 +14,13 @@ use Magento\Framework\Component\DirSearch;
 use Magento\Framework\Config\FileIteratorFactory;
 use Magento\Framework\Config\FileResolverInterface;
 use Magento\Framework\Config\ValidationStateInterface;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
 
 class ResourcesConfigFilesTest extends TestCase
 {
+    use MockCreationTrait;
     /**
      * @var Reader
      */
@@ -41,13 +43,11 @@ class ResourcesConfigFilesTest extends TestCase
         $fileResolverMock->expects($this->any())->method('get')->willReturn($xmlFiles);
         $validationStateMock = $this->createMock(ValidationStateInterface::class);
         $validationStateMock->expects($this->any())->method('isValidationRequired')->willReturn(true);
-        $deploymentConfigMock = $this->getMockBuilder(DeploymentConfig::class)
-            ->disableOriginalConstructor()
-            ->disableOriginalClone()
-            ->disableArgumentCloning()
-            ->disallowMockingUnknownTypes()
-            ->addMethods(['getConfiguration'])
-            ->getMock();
+
+        $deploymentConfigMock = $this->createPartialMockWithReflection(
+            DeploymentConfig::class,
+            ['getConfiguration']
+        );
 
         $deploymentConfigMock->expects($this->any())->method('getConfiguration')->willReturn([]);
         $objectManager = Bootstrap::getObjectManager();

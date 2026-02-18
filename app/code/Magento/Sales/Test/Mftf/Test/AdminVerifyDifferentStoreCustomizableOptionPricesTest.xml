@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+   * Copyright 2025 Adobe
+  * All Rights Reserved.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminVerifyDifferentStoreCustomizableOptionPricesTest">
+        <annotations>
+            <features value="Sales"/>
+            <stories value="Create different stores"/>
+            <title value="Create different stores with product customizable option price"/>
+            <description value="Verify different stores with product customizable option price on order creation page."/>
+            <severity value="AVERAGE"/>
+            <testCaseId value="AC-13151"/>
+            <group value="Sales"/>
+        </annotations>
+        <before>
+            <!-- Create simple product and customer -->
+            <createData entity="SimpleProduct2" stepKey="createSimpleProduct"/>
+            <createData entity="Simple_US_CA_Customer" stepKey="createCustomer"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <!-- Create two store and storeViews -->
+            <!-- Create first store and storeView -->
+            <actionGroup ref="AdminCreateNewStoreGroupActionGroup" stepKey="createNewCustomStoreGroup">
+                <argument name="website" value="{{_defaultWebsite.name}}"/>
+                <argument name="storeGroupName" value="{{customStoreGroup.name}}"/>
+                <argument name="storeGroupCode" value="{{customStoreGroup.code}}"/>
+            </actionGroup>
+            <actionGroup ref="AdminCreateStoreViewActionGroup" stepKey="createStoreView">
+                <argument name="StoreGroup" value="customStoreGroup"/>
+                <argument name="customStore" value="customStore"/>
+            </actionGroup>
+            <!-- Create second store and storeView -->
+            <actionGroup ref="AdminCreateNewStoreGroupActionGroup" stepKey="adminCreateNewStore">
+                <argument name="website" value="{{_defaultWebsite.name}}"/>
+                <argument name="storeGroupName" value="{{NewStoreData.name}}"/>
+                <argument name="storeGroupCode" value="{{NewStoreData.code}}"/>
+            </actionGroup>
+            <actionGroup ref="AdminCreateStoreViewActionGroup" stepKey="createSecondStoreView">
+                <argument name="StoreGroup" value="NewStoreData"/>
+                <argument name="customStore" value="storeViewData"/>
+            </actionGroup>
+        </before>
+        <after>
+            <!-- Delete created data -->
+            <deleteData createDataKey="createSimpleProduct" stepKey="deleteSimpleProduct"/>
+            <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
+            <actionGroup ref="DeleteCustomStoreActionGroup" stepKey="deleteFirstStoreGroup">
+                <argument name="storeGroupName" value="customStoreGroup.name"/>
+            </actionGroup>
+            <actionGroup ref="DeleteCustomStoreActionGroup" stepKey="deleteSecondStoreGroup">
+                <argument name="storeGroupName" value="NewStoreData.name"/>
+            </actionGroup>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+        <!-- Open created product for edit -->
+        <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="goToProductEditPage">
+            <argument name="productId" value="$createSimpleProduct.id$"/>
+        </actionGroup>
+        <waitForPageLoad stepKey="waitForProductPageLoad"/>
+        <!-- Expand customizable options -->
+        <scrollTo selector="{{AdminProductCustomizableOptionsSection.customizableOptions}}" stepKey="scrollToAddButtonOption"/>
+        <conditionalClick selector="{{AdminProductCustomizableOptionsSection.customizableOptions}}" dependentSelector="{{AdminProductCustomizableOptionsSection.addOptionBtn}}" visible="false" stepKey="openCustomOptionSection"/>
+        <!-- Add Custom Options -->
+        <actionGroup ref="AdminAddProductCustomOptionActionGroup" stepKey="addProductCustomRadiobuttonOption">
+            <argument name="customOptionTitle" value="{{ProductOptionRadiobutton.title}}"/>
+            <argument name="customOptionType" value="{{ProductRadioButtonType.type}}"/>
+        </actionGroup>
+        <actionGroup ref="AdminAddTitleAndPriceValueToCustomOptionActionGroup" stepKey="addTitleAndPriceValueToCustomRadiobuttonOption">
+            <argument name="optionValue" value="ProductOptionValueRadioButtons1"/>
+        </actionGroup>
+        <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProduct"/>
+        <!--Change Scope to first store view  and change price of custom option-->
+        <actionGroup ref="SwitchToTheNewStoreViewActionGroup" stepKey="changeScopeToFirstStoreView">
+            <argument name="storeViewName" value="{{customStore.name}}"/>
+        </actionGroup>
+        <scrollTo selector="{{AdminProductCustomizableOptionsSection.customizableOptions}}" stepKey="scrollToAddButtonOptionInFirstStoreView"/>
+        <conditionalClick selector="{{AdminProductCustomizableOptionsSection.customizableOptions}}" dependentSelector="{{AdminProductCustomizableOptionsSection.addOptionBtn}}" visible="false" stepKey="openCustomOptionSectionInFirstStoreView"/>
+        <fillField selector="{{AdminProductCustomizableOptionsSection.valuePrice}}" userInput="1000" stepKey="fillInValuePriceInFirstStoreView"/>
+        <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProductInFirstStoreView"/>
+        <!--Change Scope to Default store view  and change price of custom option-->
+        <actionGroup ref="SwitchToTheNewStoreViewActionGroup" stepKey="changeScopeToDefaultStoreView">
+            <argument name="storeViewName" value="{{_defaultStore.name}}"/>
+        </actionGroup>
+        <scrollTo selector="{{AdminProductCustomizableOptionsSection.customizableOptions}}" stepKey="scrollToAddButtonOptionInDefaultStoreView"/>
+        <conditionalClick selector="{{AdminProductCustomizableOptionsSection.customizableOptions}}" dependentSelector="{{AdminProductCustomizableOptionsSection.addOptionBtn}}" visible="false" stepKey="openCustomOptionSectionInDefaultStoreView"/>
+        <fillField selector="{{AdminProductCustomizableOptionsSection.valuePrice}}" userInput="1500" stepKey="fillInValuePriceInDefaultStoreView"/>
+        <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProductInDefaultStoreView"/>
+        <!-- Go to order page and select existing customer -->
+        <actionGroup ref="AdminNavigateToNewOrderPageExistingCustomerActionGroup" stepKey="navigateToNewOrderPage">
+            <argument name="customer" value="$createCustomer$"/>
+        </actionGroup>
+        <actionGroup ref="AdminSelectStoreDuringOrderCreationActionGroup" stepKey="selectCustomStore">
+            <argument name="storeView" value="customStore"/>
+        </actionGroup>
+        <!-- Assert created product custom option price -->
+        <actionGroup ref="AdminVerifySimpleProductCustomOptionPriceActionGroup" stepKey="assertProductCustomPrice">
+            <argument name="product" value="$createSimpleProduct$"/>
+        </actionGroup>
+    </test>
+</tests>

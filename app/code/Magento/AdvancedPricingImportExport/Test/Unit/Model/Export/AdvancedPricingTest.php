@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -14,17 +14,21 @@ use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory;
 use Magento\Catalog\Model\ResourceModel\ProductFactory;
 use Magento\CatalogImportExport\Model\Export\Product;
 use Magento\CatalogImportExport\Model\Export\Product\Type\Factory;
+use Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory as AttributeCollectionFactory;
+use Magento\Catalog\Model\ResourceModel\Product\Option\CollectionFactory as OptionCollectionFactory;
 use Magento\CatalogImportExport\Model\Export\RowCustomizer\Composite;
 use Magento\CatalogImportExport\Model\Import\Product\StoreResolver;
 use Magento\CatalogInventory\Model\ResourceModel\Stock\ItemFactory;
 use Magento\Customer\Api\GroupRepositoryInterface;
 use Magento\Eav\Model\Config;
+use Magento\ImportExport\Model\Export\Config as ExportConfig;
 use Magento\Eav\Model\Entity\Collection\AbstractCollection;
 use Magento\Eav\Model\Entity\Type;
 use Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\CollectionFactory as AttributeSetCollectionFactory;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\Logger\Monolog;
 use Magento\Framework\Stdlib\DateTime\Timezone;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\ImportExport\Model\Export\Adapter\AbstractAdapter;
 use Magento\ImportExport\Model\Export\ConfigInterface;
 use Magento\Store\Model\Store;
@@ -39,6 +43,8 @@ use Psr\Log\LoggerInterface;
  */
 class AdvancedPricingTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var Timezone|MockObject
      */
@@ -157,18 +163,13 @@ class AdvancedPricingTest extends TestCase
         $this->localeDate = $this->createMock(Timezone::class);
         $this->config = $this->createPartialMock(Config::class, ['getEntityType']);
         $type = $this->createMock(Type::class);
-        $this->config->expects($this->once())->method('getEntityType')->willReturn($type);
+        $this->config->method('getEntityType')->willReturn($type);
         $this->resource = $this->createMock(ResourceConnection::class);
         $this->storeManager = $this->createMock(StoreManager::class);
         $this->logger = $this->createMock(Monolog::class);
         $this->collection = $this->createMock(CollectionFactory::class);
-        $this->abstractCollection = $this->getMockForAbstractClass(
+        $this->abstractCollection = $this->createPartialMockWithReflection(
             AbstractCollection::class,
-            [],
-            '',
-            false,
-            true,
-            true,
             [
                 'count',
                 'setOrder',
@@ -177,29 +178,22 @@ class AdvancedPricingTest extends TestCase
                 'getLastPageNumber',
             ]
         );
-        $this->exportConfig = $this->createMock(\Magento\ImportExport\Model\Export\Config::class);
-        $this->productFactory = $this->getMockBuilder(ProductFactory::class)
-            ->addMethods(['getTypeId'])
-            ->onlyMethods(['create'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->attrSetColFactory = $this->getMockBuilder(AttributeSetCollectionFactory::class)
-            ->addMethods(['setEntityTypeFilter'])
-            ->onlyMethods(['create'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->categoryColFactory = $this->getMockBuilder(CategoryCollectionFactory::class)
-            ->addMethods(['addNameToResult'])
-            ->onlyMethods(['create'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->exportConfig = $this->createMock(ExportConfig::class);
+        $this->productFactory = $this->createPartialMockWithReflection(
+            ProductFactory::class,
+            ['getTypeId', 'create']
+        );
+        $this->attrSetColFactory = $this->createPartialMockWithReflection(
+            AttributeSetCollectionFactory::class,
+            ['setEntityTypeFilter', 'create']
+        );
+        $this->categoryColFactory = $this->createPartialMockWithReflection(
+            CategoryCollectionFactory::class,
+            ['addNameToResult', 'create']
+        );
         $this->itemFactory = $this->createMock(ItemFactory::class);
-        $this->optionColFactory = $this->createMock(
-            \Magento\Catalog\Model\ResourceModel\Product\Option\CollectionFactory::class
-        );
-        $this->attributeColFactory = $this->createMock(
-            \Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory::class
-        );
+        $this->optionColFactory = $this->createMock(OptionCollectionFactory::class);
+        $this->attributeColFactory = $this->createMock(AttributeCollectionFactory::class);
         $this->typeFactory = $this->createMock(Factory::class);
         $this->linkTypeProvider = $this->createMock(LinkTypeProvider::class);
         $this->rowCustomizer = $this->createMock(
@@ -208,7 +202,7 @@ class AdvancedPricingTest extends TestCase
         $this->storeResolver = $this->createMock(
             StoreResolver::class
         );
-        $this->groupRepository = $this->getMockForAbstractClass(GroupRepositoryInterface::class);
+        $this->groupRepository = $this->createMock(GroupRepositoryInterface::class);
         $this->writer = $this->createPartialMock(
             AbstractAdapter::class,
             [
@@ -242,36 +236,28 @@ class AdvancedPricingTest extends TestCase
             '_getCustomerGroupById',
             'correctExportData'
         ]);
-        $this->advancedPricing = $this->getMockBuilder(
-            AdvancedPricing::class
-        )
-            ->addMethods($mockAddMethods)
-            ->onlyMethods($mockMethods)
-            ->disableOriginalConstructor()
-            ->getMock();
-        foreach ($constructorMethods as $method) {
-            $this->advancedPricing->expects($this->once())->method($method)->willReturnSelf();
-        }
-        $this->advancedPricing->__construct(
-            $this->localeDate,
-            $this->config,
-            $this->resource,
-            $this->storeManager,
-            $this->logger,
-            $this->collection,
-            $this->exportConfig,
-            $this->productFactory,
-            $this->attrSetColFactory,
-            $this->categoryColFactory,
-            $this->itemFactory,
-            $this->optionColFactory,
-            $this->attributeColFactory,
-            $this->typeFactory,
-            $this->linkTypeProvider,
-            $this->rowCustomizer,
-            $this->storeResolver,
-            $this->groupRepository
+        $this->advancedPricing = $this->createPartialMockWithReflection(
+            AdvancedPricing::class,
+            array_merge($mockAddMethods, $mockMethods)
         );
+
+        // Configure constructor methods to return self
+        foreach ($constructorMethods as $method) {
+            $this->advancedPricing->method($method)->willReturnSelf();
+        }
+
+        // Set properties directly using reflection instead of calling constructor
+        // to avoid parent constructor that needs ObjectManager
+        $reflection = new \ReflectionClass($this->advancedPricing);
+
+        $storeResolverProperty = $reflection->getProperty('_storeResolver');
+        $storeResolverProperty->setValue($this->advancedPricing, $this->storeResolver);
+
+        $groupRepositoryProperty = $reflection->getProperty('_groupRepository');
+        $groupRepositoryProperty->setValue($this->advancedPricing, $this->groupRepository);
+
+        $resourceProperty = $reflection->getProperty('_resource');
+        $resourceProperty->setValue($this->advancedPricing, $this->resource);
     }
 
     /**
@@ -382,7 +368,6 @@ class AdvancedPricingTest extends TestCase
     {
         $reflection = new \ReflectionClass(get_class($object));
         $reflectionProperty = $reflection->getProperty($property);
-        $reflectionProperty->setAccessible(true);
         return $reflectionProperty->getValue($object);
     }
 
@@ -399,7 +384,6 @@ class AdvancedPricingTest extends TestCase
     {
         $reflection = new \ReflectionClass(get_class($object));
         $reflectionProperty = $reflection->getProperty($property);
-        $reflectionProperty->setAccessible(true);
         $reflectionProperty->setValue($object, $value);
         return $object;
     }

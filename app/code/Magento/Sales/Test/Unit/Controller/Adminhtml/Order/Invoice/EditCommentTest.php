@@ -1,17 +1,7 @@
 <?php
-/************************************************************************
+/**
  * Copyright 2025 Adobe
  * All Rights Reserved.
- *
- * NOTICE: All information contained herein is, and remains
- * the property of Adobe and its suppliers, if any. The intellectual
- * and technical concepts contained herein are proprietary to Adobe
- * and its suppliers and are protected by all applicable intellectual
- * property laws, including trade secret and copyright laws.
- * Dissemination of this information or reproduction of this material
- * is strictly forbidden unless prior written permission is obtained
- * from Adobe.
- * ***********************************************************************
  */
 declare(strict_types=1);
 
@@ -61,10 +51,8 @@ class EditCommentTest extends TestCase
             ->disableOriginalConstructor()
             ->onlyMethods(['create'])
             ->getMock();
-        $this->forward = $this->getMockBuilder(Forward::class)->disableOriginalConstructor()->getMock();
-        $this->context = $this->getMockBuilder(Context::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->forward = $this->createMock(Forward::class);
+        $this->context = $this->createMock(Context::class);
 
         $objectManager = new ObjectManager($this);
         $this->controller = $objectManager->getObject(

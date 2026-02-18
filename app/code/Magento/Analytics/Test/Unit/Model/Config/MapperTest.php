@@ -1,8 +1,7 @@
 <?php
 /**
- * Copyright 2024 Adobe
- * All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -10,6 +9,8 @@ namespace Magento\Analytics\Test\Unit\Model\Config;
 
 use Magento\Analytics\Model\Config\Mapper;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use PHPUnit\Framework\Attributes\DataProvider;
+
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -41,9 +42,8 @@ class MapperTest extends TestCase
      * @param array $configData
      * @param array $resultData
      * @return void
-     *
-     * @dataProvider executingDataProvider
      */
+    #[DataProvider('executingDataProvider')]
     public function testExecution($configData, $resultData)
     {
         $this->assertSame($resultData, $this->mapper->execute($configData));

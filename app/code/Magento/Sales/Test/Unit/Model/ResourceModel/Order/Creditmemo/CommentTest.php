@@ -1,17 +1,7 @@
 <?php
-/************************************************************************
- * Copyright 2025 Adobe
+/**
+ * Copyright 2014 Adobe
  * All Rights Reserved.
- *
- * NOTICE: All information contained herein is, and remains
- * the property of Adobe and its suppliers, if any. The intellectual
- * and technical concepts contained herein are proprietary to Adobe
- * and its suppliers and are protected by all applicable intellectual
- * property laws, including trade secret and copyright laws.
- * Dissemination of this information or reproduction of this material
- * is strictly forbidden unless prior written permission is obtained
- * from Adobe.
- * ***********************************************************************
  */
 declare(strict_types=1);
 
@@ -30,6 +20,7 @@ use Magento\Sales\Model\ResourceModel\Order\Creditmemo\Comment;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Magento\Sales\Model\Order\Creditmemo as OrderCreditmemo;
+use Magento\Sales\Model\Order\Creditmemo\Comment as CreditmemoComment;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -42,7 +33,7 @@ class CommentTest extends TestCase
     protected $commentResource;
 
     /**
-     * @var \Magento\Sales\Model\Order\Creditmemo\Comment|MockObject
+     * @var CreditmemoComment|MockObject
      */
     protected $commentModelMock;
 
@@ -81,7 +72,7 @@ class CommentTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->commentModelMock = $this->createMock(\Magento\Sales\Model\Order\Creditmemo\Comment::class);
+        $this->commentModelMock = $this->createMock(CreditmemoComment::class);
         $this->appResourceMock = $this->createMock(ResourceConnection::class);
         $this->connectionMock = $this->createMock(Mysql::class);
         $this->validatorMock = $this->createMock(Validator::class);

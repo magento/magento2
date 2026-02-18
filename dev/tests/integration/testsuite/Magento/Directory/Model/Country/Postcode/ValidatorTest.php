@@ -1,11 +1,12 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Directory\Model\Country\Postcode;
 
 use Magento\TestFramework\Helper\Bootstrap;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class ValidatorTest extends \PHPUnit\Framework\TestCase
 {
@@ -21,8 +22,8 @@ class ValidatorTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @dataProvider getPostcodesDataProvider
      */
+    #[DataProvider('getPostcodesDataProvider')]
     public function testPostCodes($countryId, $validPostcode)
     {
         try {
@@ -44,16 +45,16 @@ class ValidatorTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @dataProvider getCanadaInvalidPostCodes
      */
+    #[DataProvider('getCanadaInvalidPostCodes')]
     public function testInvalidCanadaZipCode($countryId, $invalidPostCode)
     {
         $this->assertFalse($this->validator->validate($invalidPostCode, $countryId));
     }
 
     /**
-     * @dataProvider getCanadaValidPostCodes
      */
+    #[DataProvider('getCanadaValidPostCodes')]
     public function testValidCanadaZipCode($countryId, $validPostCode)
     {
         $this->assertTrue($this->validator->validate($validPostCode, $countryId));
@@ -65,10 +66,10 @@ class ValidatorTest extends \PHPUnit\Framework\TestCase
     public static function getCanadaInvalidPostCodes()
     {
         return [
-            ['countryId' => 'CA', 'invalidPostCode' => '12345'],
-            ['countryId' => 'CA', 'invalidPostCode' => 'A1B2C3D'],
-            ['countryId' => 'CA', 'invalidPostCode' => 'A1B2C'],
-            ['countryId' => 'CA', 'invalidPostCode' => 'A1B  2C3'],
+            ['CA', '12345'],  // $countryId, $invalidPostCode
+            ['CA', 'A1B2C3D'],
+            ['CA', 'A1B2C'],
+            ['CA', 'A1B  2C3'],
         ];
     }
 
@@ -78,12 +79,12 @@ class ValidatorTest extends \PHPUnit\Framework\TestCase
     public static function getCanadaValidPostCodes()
     {
         return [
-            ['countryId' => 'CA', 'validPostCode' => 'A1B2C3'],
-            ['countryId' => 'CA', 'validPostCode' => 'A1B 2C3'],
-            ['countryId' => 'CA', 'validPostCode' => 'A1B'],
-            ['countryId' => 'CA', 'validPostCode' => 'Z9Y 8X7'],
-            ['countryId' => 'CA', 'validPostCode' => 'Z9Y8X7'],
-            ['countryId' => 'CA', 'validPostCode' => 'Z9Y'],
+            ['CA', 'A1B2C3'],  // $countryId, $validPostCode
+            ['CA', 'A1B 2C3'],
+            ['CA', 'A1B'],
+            ['CA', 'Z9Y 8X7'],
+            ['CA', 'Z9Y8X7'],
+            ['CA', 'Z9Y'],
         ];
     }
 
@@ -94,183 +95,46 @@ class ValidatorTest extends \PHPUnit\Framework\TestCase
     public static function getPostcodesDataProvider()
     {
         return [
-            ['countryId' => 'AD', 'validPostcode' => 'AD100'],
-            ['countryId' => 'AM', 'validPostcode' => '123456'],
-            ['countryId' => 'AR', 'validPostcode' => '1234'],
-            ['countryId' => 'AS', 'validPostcode' => '12345'],
-            ['countryId' => 'AT', 'validPostcode' => '1234'],
-            ['countryId' => 'AU', 'validPostcode' => '1234'],
-            ['countryId' => 'AX', 'validPostcode' => '22101'],
-            ['countryId' => 'AZ', 'validPostcode' => '1234'],
-            ['countryId' => 'AZ', 'validPostcode' => '123456'],
-            ['countryId' => 'BA', 'validPostcode' => '12345'],
-            ['countryId' => 'BB', 'validPostcode' => 'BB10900'],
-            ['countryId' => 'BD', 'validPostcode' => '1234'],
-            ['countryId' => 'BE', 'validPostcode' => '1234'],
-            ['countryId' => 'BG', 'validPostcode' => '1234'],
-            ['countryId' => 'BH', 'validPostcode' => '323'],
-            ['countryId' => 'BH', 'validPostcode' => '1209'],
-            ['countryId' => 'BM', 'validPostcode' => 'MA 02'],
-            ['countryId' => 'BN', 'validPostcode' => 'PS1234'],
-            ['countryId' => 'BR', 'validPostcode' => '12345678'],
-            ['countryId' => 'BR', 'validPostcode' => '12345-678'],
-            ['countryId' => 'BY', 'validPostcode' => '123456'],
-            ['countryId' => 'CA', 'validPostcode' => 'P9M 3T6'],
-            ['countryId' => 'CC', 'validPostcode' => '6799'],
-            ['countryId' => 'CH', 'validPostcode' => '1234'],
-            ['countryId' => 'CK', 'validPostcode' => '1234'],
-            ['countryId' => 'CL', 'validPostcode' => '1234567'],
-            ['countryId' => 'CN', 'validPostcode' => '123456'],
-            ['countryId' => 'CR', 'validPostcode' => '12345'],
-            ['countryId' => 'CS', 'validPostcode' => '12345'],
-            ['countryId' => 'CU', 'validPostcode' => '12345'],
-            ['countryId' => 'CV', 'validPostcode' => '1234'],
-            ['countryId' => 'CX', 'validPostcode' => '6798'],
-            ['countryId' => 'CY', 'validPostcode' => '1234'],
-            ['countryId' => 'CZ', 'validPostcode' => '123 45'],
-            ['countryId' => 'DE', 'validPostcode' => '12345'],
-            ['countryId' => 'DK', 'validPostcode' => '1234'],
-            ['countryId' => 'DO', 'validPostcode' => '12345'],
-            ['countryId' => 'DZ', 'validPostcode' => '12345'],
-            ['countryId' => 'EC', 'validPostcode' => 'A1234B'],
-            ['countryId' => 'EC', 'validPostcode' => 'AB123456'],
-            ['countryId' => 'EC', 'validPostcode' => '123456'],
-            ['countryId' => 'EE', 'validPostcode' => '12345'],
-            ['countryId' => 'EG', 'validPostcode' => '12345'],
-            ['countryId' => 'ES', 'validPostcode' => '12345'],
-            ['countryId' => 'ET', 'validPostcode' => '1234'],
-            ['countryId' => 'FI', 'validPostcode' => '12345'],
-            ['countryId' => 'FK', 'validPostcode' => 'FIQQ 1ZZ'],
-            ['countryId' => 'FM', 'validPostcode' => '96941'],
-            ['countryId' => 'FO', 'validPostcode' => '123'],
-            ['countryId' => 'FR', 'validPostcode' => '12345'],
-            ['countryId' => 'GB', 'validPostcode' => 'PL12 3RT'],
-            ['countryId' => 'GB', 'validPostcode' => 'P1L 2RT'],
-            ['countryId' => 'GB', 'validPostcode' => 'QW1 2RT'],
-            ['countryId' => 'GB', 'validPostcode' => 'QW1R 2TG'],
-            ['countryId' => 'GB', 'validPostcode' => 'L12 3PL'],
-            ['countryId' => 'GB', 'validPostcode' => 'Q1 2PL'],
-            ['countryId' => 'GE', 'validPostcode' => '1234'],
-            ['countryId' => 'GF', 'validPostcode' => '12345'],
-            ['countryId' => 'GG', 'validPostcode' => 'GY10 2AB'],
-            ['countryId' => 'GL', 'validPostcode' => '1234'],
-            ['countryId' => 'GH', 'validPostcode' => 'GA18400'],
-            ['countryId' => 'GN', 'validPostcode' => '123'],
-            ['countryId' => 'GP', 'validPostcode' => '12345'],
-            ['countryId' => 'GR', 'validPostcode' => '12345'],
-            ['countryId' => 'GS', 'validPostcode' => 'SIQQ 1ZZ'],
-            ['countryId' => 'GT', 'validPostcode' => '12345'],
-            ['countryId' => 'GU', 'validPostcode' => '12345'],
-            ['countryId' => 'GW', 'validPostcode' => '1234'],
-            ['countryId' => 'HM', 'validPostcode' => '1234'],
-            ['countryId' => 'HN', 'validPostcode' => '12345'],
-            ['countryId' => 'HR', 'validPostcode' => '12345'],
-            ['countryId' => 'HT', 'validPostcode' => '1234'],
-            ['countryId' => 'HU', 'validPostcode' => '1234'],
-            ['countryId' => 'IC', 'validPostcode' => '12345'],
-            ['countryId' => 'ID', 'validPostcode' => '12345'],
-            ['countryId' => 'IL', 'validPostcode' => '1234567'],
-            ['countryId' => 'IM', 'validPostcode' => 'IM1 1AD'],
-            ['countryId' => 'IN', 'validPostcode' => '123456'],
-            ['countryId' => 'IS', 'validPostcode' => '123'],
-            ['countryId' => 'IT', 'validPostcode' => '12345'],
-            ['countryId' => 'JE', 'validPostcode' => 'JE2 4PJ'],
-            ['countryId' => 'JO', 'validPostcode' => '12345'],
-            ['countryId' => 'JP', 'validPostcode' => '123-4567'],
-            ['countryId' => 'JP', 'validPostcode' => '1234567'],
-            ['countryId' => 'KE', 'validPostcode' => '12345'],
-            ['countryId' => 'KG', 'validPostcode' => '123456'],
-            ['countryId' => 'KH', 'validPostcode' => '12345'],
-            ['countryId' => 'KR', 'validPostcode' => '123-456'],
-            ['countryId' => 'KW', 'validPostcode' => '12345'],
-            ['countryId' => 'KZ', 'validPostcode' => '123456'],
-            ['countryId' => 'LA', 'validPostcode' => '12345'],
-            ['countryId' => 'LB', 'validPostcode' => '1234 5678'],
-            ['countryId' => 'LI', 'validPostcode' => '1234'],
-            ['countryId' => 'LK', 'validPostcode' => '12345'],
-            ['countryId' => 'LT', 'validPostcode' => '12345'],
-            ['countryId' => 'LU', 'validPostcode' => '1234'],
-            ['countryId' => 'LV', 'validPostcode' => '1234'],
-            ['countryId' => 'MA', 'validPostcode' => '12345'],
-            ['countryId' => 'MC', 'validPostcode' => '12345'],
-            ['countryId' => 'ME', 'validPostcode' => '81101'],
-            ['countryId' => 'MD', 'validPostcode' => '1234'],
-            ['countryId' => 'MG', 'validPostcode' => '123'],
-            ['countryId' => 'MH', 'validPostcode' => '12345'],
-            ['countryId' => 'MK', 'validPostcode' => '1234'],
-            ['countryId' => 'MN', 'validPostcode' => '123456'],
-            ['countryId' => 'MP', 'validPostcode' => '12345'],
-            ['countryId' => 'MQ', 'validPostcode' => '12345'],
-            ['countryId' => 'MS', 'validPostcode' => 'MSR1250'],
-            ['countryId' => 'MT', 'validPostcode' => 'WRT 123'],
-            ['countryId' => 'MT', 'validPostcode' => 'WRT 45'],
-            ['countryId' => 'MU', 'validPostcode' => 'A1201'],
-            ['countryId' => 'MU', 'validPostcode' => '80110'],
-            ['countryId' => 'MV', 'validPostcode' => '12345'],
-            ['countryId' => 'MV', 'validPostcode' => '1234'],
-            ['countryId' => 'MX', 'validPostcode' => '12345'],
-            ['countryId' => 'MY', 'validPostcode' => '12345'],
-            ['countryId' => 'NC', 'validPostcode' => '98800'],
-            ['countryId' => 'NE', 'validPostcode' => '1234'],
-            ['countryId' => 'NF', 'validPostcode' => '2899'],
-            ['countryId' => 'NG', 'validPostcode' => '123456'],
-            ['countryId' => 'NI', 'validPostcode' => '22500'],
-            ['countryId' => 'NL', 'validPostcode' => '1234 TR'],
-            ['countryId' => 'NO', 'validPostcode' => '1234'],
-            ['countryId' => 'NP', 'validPostcode' => '12345'],
-            ['countryId' => 'NZ', 'validPostcode' => '1234'],
-            ['countryId' => 'OM', 'validPostcode' => 'PC 123'],
-            ['countryId' => 'PA', 'validPostcode' => '1234'],
-            ['countryId' => 'PF', 'validPostcode' => '98701'],
-            ['countryId' => 'PG', 'validPostcode' => '123'],
-            ['countryId' => 'PH', 'validPostcode' => '1234'],
-            ['countryId' => 'PK', 'validPostcode' => '12345'],
-            ['countryId' => 'PL', 'validPostcode' => '12-345'],
-            ['countryId' => 'PM', 'validPostcode' => '97500'],
-            ['countryId' => 'PN', 'validPostcode' => 'PCRN 1ZZ'],
-            ['countryId' => 'PR', 'validPostcode' => '12345'],
-            ['countryId' => 'PT', 'validPostcode' => '1234'],
-            ['countryId' => 'PT', 'validPostcode' => '1234-567'],
-            ['countryId' => 'PW', 'validPostcode' => '96939'],
-            ['countryId' => 'PW', 'validPostcode' => '96940'],
-            ['countryId' => 'PY', 'validPostcode' => '1234'],
-            ['countryId' => 'RE', 'validPostcode' => '12345'],
-            ['countryId' => 'RO', 'validPostcode' => '123456'],
-            ['countryId' => 'RU', 'validPostcode' => '123456'],
-            ['countryId' => 'SA', 'validPostcode' => '12345'],
-            ['countryId' => 'SE', 'validPostcode' => '123 45'],
-            ['countryId' => 'SG', 'validPostcode' => '123456'],
-            ['countryId' => 'SH', 'validPostcode' => 'ASCN 1ZZ'],
-            ['countryId' => 'SI', 'validPostcode' => '1234'],
-            ['countryId' => 'SJ', 'validPostcode' => '1234'],
-            ['countryId' => 'SK', 'validPostcode' => '123 45'],
-            ['countryId' => 'SM', 'validPostcode' => '47890'],
-            ['countryId' => 'SN', 'validPostcode' => '12345'],
-            ['countryId' => 'SO', 'validPostcode' => '12345'],
-            ['countryId' => 'SZ', 'validPostcode' => 'R123'],
-            ['countryId' => 'TC', 'validPostcode' => 'TKCA 1ZZ'],
-            ['countryId' => 'TH', 'validPostcode' => '12345'],
-            ['countryId' => 'TJ', 'validPostcode' => '123456'],
-            ['countryId' => 'TM', 'validPostcode' => '123456'],
-            ['countryId' => 'TN', 'validPostcode' => '1234'],
-            ['countryId' => 'TR', 'validPostcode' => '12345'],
-            ['countryId' => 'TT', 'validPostcode' => '120110'],
-            ['countryId' => 'TW', 'validPostcode' => '123'],
-            ['countryId' => 'TW', 'validPostcode' => '12345'],
-            ['countryId' => 'UA', 'validPostcode' => '02232'],
-            ['countryId' => 'US', 'validPostcode' => '12345-6789'],
-            ['countryId' => 'US', 'validPostcode' => '12345'],
-            ['countryId' => 'UY', 'validPostcode' => '12345'],
-            ['countryId' => 'UZ', 'validPostcode' => '123456'],
-            ['countryId' => 'VA', 'validPostcode' => '00120'],
-            ['countryId' => 'VE', 'validPostcode' => '1234'],
-            ['countryId' => 'VI', 'validPostcode' => '12345'],
-            ['countryId' => 'WF', 'validPostcode' => '98601'],
-            ['countryId' => 'XK', 'validPostcode' => '12345'],
-            ['countryId' => 'XY', 'validPostcode' => '12345'],
-            ['countryId' => 'YT', 'validPostcode' => '97601'],
-            ['countryId' => 'ZA', 'validPostcode' => '1234'],
-            ['countryId' => 'ZM', 'validPostcode' => '12345'],
+            ['AD', 'AD100'],  // $countryId, $validPostcode
+            ['AM', '123456'],
+            ['AR', '1234'], ['AS', '12345'], ['AT', '1234'], ['AU', '1234'], ['AX', '22101'],
+            ['AZ', '1234'], ['AZ', '123456'], ['BA', '12345'], ['BB', 'BB10900'], ['BD', '1234'],
+            ['BE', '1234'], ['BG', '1234'], ['BH', '323'], ['BH', '1209'], ['BM', 'MA 02'],
+            ['BN', 'PS1234'], ['BR', '12345678'], ['BR', '12345-678'], ['BY', '123456'],
+            ['CA', 'P9M 3T6'], ['CC', '6799'], ['CH', '1234'], ['CK', '1234'], ['CL', '1234567'],
+            ['CN', '123456'], ['CR', '12345'], ['CS', '12345'], ['CU', '12345'], ['CV', '1234'],
+            ['CX', '6798'], ['CY', '1234'], ['CZ', '123 45'], ['DE', '12345'], ['DK', '1234'],
+            ['DO', '12345'], ['DZ', '12345'], ['EC', 'A1234B'], ['EC', 'AB123456'], ['EC', '123456'],
+            ['EE', '12345'], ['EG', '12345'], ['ES', '12345'], ['ET', '1234'], ['FI', '12345'],
+            ['FK', 'FIQQ 1ZZ'], ['FM', '96941'], ['FO', '123'], ['FR', '12345'],
+            ['GB', 'PL12 3RT'], ['GB', 'P1L 2RT'], ['GB', 'QW1 2RT'], ['GB', 'QW1R 2TG'],
+            ['GB', 'L12 3PL'], ['GB', 'Q1 2PL'], ['GE', '1234'], ['GF', '12345'],
+            ['GG', 'GY10 2AB'], ['GL', '1234'], ['GH', 'GA18400'], ['GN', '123'], ['GP', '12345'],
+            ['GR', '12345'], ['GS', 'SIQQ 1ZZ'], ['GT', '12345'], ['GU', '12345'], ['GW', '1234'],
+            ['HM', '1234'], ['HN', '12345'], ['HR', '12345'], ['HT', '1234'], ['HU', '1234'],
+            ['IC', '12345'], ['ID', '12345'], ['IR', 'A65 F4E2'], ['IR', 'D02 X285'],
+            ['IL', '1234567'], ['IM', 'IM1 1AD'], ['IN', '123456'], ['IS', '123'], ['IT', '12345'],
+            ['JE', 'JE2 4PJ'], ['JO', '12345'], ['JP', '123-4567'], ['JP', '1234567'],
+            ['KE', '12345'], ['KG', '123456'], ['KH', '12345'], ['KR', '123-456'], ['KW', '12345'],
+            ['KZ', '123456'], ['LA', '12345'], ['LB', '1234 5678'], ['LI', '1234'], ['LK', '12345'],
+            ['LT', '12345'], ['LU', '1234'], ['LV', '1234'], ['MA', '12345'], ['MC', '12345'],
+            ['ME', '81101'], ['MD', '1234'], ['MG', '123'], ['MH', '12345'], ['MK', '1234'],
+            ['MN', '123456'], ['MP', '12345'], ['MQ', '12345'], ['MS', 'MSR1250'],
+            ['MT', 'WRT 123'], ['MT', 'WRT 45'], ['MU', 'A1201'], ['MU', '80110'],
+            ['MV', '12345'], ['MV', '1234'], ['MX', '12345'], ['MY', '12345'], ['NC', '98800'],
+            ['NE', '1234'], ['NF', '2899'], ['NG', '123456'], ['NI', '22500'], ['NL', '1234 TR'],
+            ['NO', '1234'], ['NP', '12345'], ['NZ', '1234'], ['OM', 'PC 123'], ['PA', '1234'],
+            ['PF', '98701'], ['PG', '123'], ['PH', '1234'], ['PK', '12345'], ['PL', '12-345'],
+            ['PM', '97500'], ['PN', 'PCRN 1ZZ'], ['PR', '12345'], ['PT', '1234'], ['PT', '1234-567'],
+            ['PW', '96939'], ['PW', '96940'], ['PY', '1234'], ['RE', '12345'], ['RO', '123456'],
+            ['RU', '123456'], ['SA', '12345'], ['SE', '123 45'], ['SG', '123456'],
+            ['SH', 'ASCN 1ZZ'], ['SI', '1234'], ['SJ', '1234'], ['SK', '123 45'], ['SM', '47890'],
+            ['SN', '12345'], ['SO', '12345'], ['SZ', 'R123'], ['TC', 'TKCA 1ZZ'], ['TH', '12345'],
+            ['TJ', '123456'], ['TM', '123456'], ['TN', '1234'], ['TR', '12345'], ['TT', '120110'],
+            ['TW', '123'], ['TW', '12345'], ['UA', '02232'], ['US', '12345-6789'], ['US', '12345'],
+            ['UY', '12345'], ['UZ', '123456'], ['VA', '00120'], ['VE', '1234'], ['VI', '12345'],
+            ['WF', '98601'], ['XK', '12345'], ['XY', '12345'], ['YT', '97601'], ['ZA', '1234'],
+            ['ZM', '12345'],
         ];
     }
 }

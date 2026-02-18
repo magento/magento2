@@ -105,7 +105,7 @@ class Renderer extends \Magento\Framework\View\Element\Template
     }
 
     /**
-     * Get store id
+     * Get current store ID
      *
      * @return int|null|string
      */
@@ -202,18 +202,13 @@ class Renderer extends \Magento\Framework\View\Element\Template
     }
 
     /**
-     * Get item price in display currency or order currency depending on item type
+     * Get item price in display currency or order currency
      *
      * @return float
      */
     public function getItemDisplayPriceExclTax()
     {
-        $item = $this->getItem();
-        if ($item instanceof QuoteItem) {
-            return $item->getCalculationPrice();
-        } else {
-            return $item->getPrice();
-        }
+        return $this->getItem()->getPrice();
     }
 
     /**

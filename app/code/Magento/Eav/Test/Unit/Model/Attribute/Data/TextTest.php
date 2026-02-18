@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2012 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -11,22 +11,25 @@ use Magento\Eav\Model\Attribute;
 use Magento\Eav\Model\Attribute\Data\Text;
 use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
 use Magento\Eav\Model\Entity\Type;
-use Magento\Eav\Model\Entity\TypeFactory;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Locale\ResolverInterface;
 use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
 use Magento\Framework\Stdlib\StringUtils;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\Validator\Alnum;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Psr\Log\LoggerInterface;
+use Magento\Framework\Model\AbstractModel;
 
 /**
  * Eav text attribute model test
  */
 class TextTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var Text
      */
@@ -37,9 +40,9 @@ class TextTest extends TestCase
      */
     protected function setUp(): void
     {
-        $locale = $this->getMockForAbstractClass(TimezoneInterface::class);
-        $localeResolver = $this->getMockForAbstractClass(ResolverInterface::class);
-        $logger = $this->getMockForAbstractClass(LoggerInterface::class);
+        $locale = $this->createMock(TimezoneInterface::class);
+        $localeResolver = $this->createMock(ResolverInterface::class);
+        $logger = $this->createMock(LoggerInterface::class);
         $helper = new StringUtils();
 
         $this->model = new Text($locale, $logger, $localeResolver, $helper);
@@ -53,6 +56,8 @@ class TextTest extends TestCase
                 ]
             )
         );
+        $entityMock = $this->createMock(AbstractModel::class);
+        $this->model->setEntity($entityMock);
     }
 
     /**
@@ -74,12 +79,35 @@ class TextTest extends TestCase
     }
 
     /**
+     * Test for skip required attribute validation
+     */
+    public function testValidateNotRequiredValidation(): void
+    {
+        $entityMock = $this->createPartialMockWithReflection(
+            AbstractModel::class,
+            ['getSkipRequiredValidation']
+        );
+        $entityMock->expects($this->once())->method('getSkipRequiredValidation')->willReturn(true);
+        $this->model->setEntity($entityMock);
+        $attributeMock = $this->createMock(Attribute::class);
+        $attributeMock->expects($this->any())->method('getIsRequired')->willReturn(1);
+        $this->model->setAttribute($attributeMock);
+        $inputValue = false;
+        $expectedResult = true;
+        self::assertEquals($expectedResult, $this->model->validateValue($inputValue));
+    }
+
+    /**
      * Test for integer validation
      */
     public function testValidateValueInteger(): void
     {
         $inputValue = 0;
         $expectedResult = ['"Test" is a required value.'];
+        $attributeMock = $this->createMock(Attribute::class);
+        $attributeMock->expects($this->any())->method('getStoreLabel')->willReturn('Test');
+        $attributeMock->expects($this->any())->method('getIsRequired')->willReturn(1);
+        $this->model->setAttribute($attributeMock);
         $result = $this->model->validateValue($inputValue);
         self::assertEquals($expectedResult, [(string)$result[0]]);
     }
@@ -113,8 +141,8 @@ class TextTest extends TestCase
      * @param {Boolean|Array} $expectedResult - validation result
      * @return void
      * @throws LocalizedException
-     * @dataProvider alphanumDataProvider
      */
+    #[DataProvider('alphanumDataProvider')]
     public function testAlphanumericValidation($value, $expectedResult): void
     {
         $defaultAttributeData = [
@@ -161,8 +189,8 @@ class TextTest extends TestCase
      * @param {Boolean|Array} $expectedResult - validation result
      * @return void
      * @throws LocalizedException
-     * @dataProvider alphanumWithSpacesDataProvider
      */
+    #[DataProvider('alphanumWithSpacesDataProvider')]
     public function testAlphanumericValidationWithSpaces($value, $expectedResult): void
     {
         $defaultAttributeData = [
@@ -212,30 +240,26 @@ class TextTest extends TestCase
 
     /**
      * @param array $attributeData
-     * @return Attribute
+     * @return AbstractAttribute|MockObject
      */
-    protected function createAttribute($attributeData): AbstractAttribute
+    protected function createAttribute(array $attributeData): AbstractAttribute
     {
-        $attributeClass = Attribute::class;
-        $objectManagerHelper = new ObjectManager($this);
-        $eavTypeFactory = $this->createMock(TypeFactory::class);
-        $arguments = $objectManagerHelper->getConstructArguments(
-            $attributeClass,
-            ['eavTypeFactory' => $eavTypeFactory, 'data' => $attributeData]
-        );
-
         $entityTypeMock = $this->createMock(Type::class);
-
-        /** @var \Magento\Eav\Model\Entity\Attribute\AbstractAttribute|MockObject $attribute
-         */
-        $attribute = $this->getMockBuilder($attributeClass)
-            ->onlyMethods(['_init', 'getEntityType'])
-            ->setConstructorArgs($arguments)
-            ->getMock();
-
+        $attribute = $this->createPartialMockWithReflection(
+            Attribute::class,
+            ['getEntityType', 'getData', 'getStoreLabel']
+        );
+        $attribute->expects($this->any())->method('getStoreLabel')->willReturn($attributeData['store_label']);
         $attribute->expects($this->any())
             ->method('getEntityType')
             ->willReturn($entityTypeMock);
+        $attribute->expects($this->any())
+            ->method('getData')
+            ->willReturnMap(array_map(
+                fn($key, $value) => [$key, null, $value],
+                array_keys($attributeData),
+                array_values($attributeData)
+            ));
         return $attribute;
     }
 }

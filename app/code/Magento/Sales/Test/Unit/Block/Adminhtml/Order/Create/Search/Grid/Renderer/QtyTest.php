@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -14,9 +14,12 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Sales\Block\Adminhtml\Order\Create\Search\Grid\Renderer\Qty;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 
 class QtyTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var Qty
      */
@@ -36,11 +39,11 @@ class QtyTest extends TestCase
     {
         $helper = new ObjectManager($this);
 
-        $this->rowMock = $this->getMockBuilder(DataObject::class)
-            ->addMethods(['getTypeId', 'getIndex'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->typeConfigMock = $this->getMockForAbstractClass(ConfigInterface::class);
+        $this->rowMock = $this->createPartialMockWithReflection(
+            DataObject::class,
+            ['getTypeId', 'getIndex']
+        );
+        $this->typeConfigMock = $this->createMock(ConfigInterface::class);
         $this->renderer = $helper->getObject(
             Qty::class,
             ['typeConfig' => $this->typeConfigMock]
@@ -61,11 +64,7 @@ class QtyTest extends TestCase
             true
         );
         $this->rowMock->expects($this->once())->method('getTypeId')->willReturn('id');
-        $columnMock = $this->getMockBuilder(Column::class)
-            ->addMethods(['getInlineCss'])
-            ->onlyMethods(['getId'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $columnMock = $this->createPartialMockWithReflection(Column::class, ['getInlineCss', 'getId']);
         $this->renderer->setColumn($columnMock);
 
         $columnMock->expects($this->once())->method('getId')->willReturn('id_name');

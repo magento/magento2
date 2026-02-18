@@ -1,39 +1,59 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
+
 declare(strict_types=1);
 
 namespace Magento\Store\Model;
 
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\App\Request\Http;
+use Magento\Framework\Cache\FrontendInterface;
+use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Store\Api\Data\StoreInterface;
+use Magento\Store\Api\StoreCookieManagerInterface;
+use Magento\Store\Api\StoreRepositoryInterface;
+use Magento\Store\Api\StoreResolverInterface;
+use Magento\Store\App\Request\StorePathInfoValidator;
+use Magento\Framework\Stdlib\CookieManagerInterface;
+
 /**
  * Class used to resolve store from url path or get parameters or cookie.
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
  */
-class StoreResolver implements \Magento\Store\Api\StoreResolverInterface
+class StoreResolver implements StoreResolverInterface
 {
     /**
      * Cache tag
      */
-    const CACHE_TAG = 'store_relations';
+    public const CACHE_TAG = 'store_relations';
 
     /**
-     * @var \Magento\Store\Api\StoreRepositoryInterface
+     * @var StoreRepositoryInterface
      */
     protected $storeRepository;
 
     /**
-     * @var \Magento\Store\Api\StoreCookieManagerInterface
+     * @var StoreCookieManagerInterface
      */
     protected $storeCookieManager;
 
     /**
      * @deprecated 101.0.0
+     * @see No longer needed
+     *
+     * @var FrontendInterface
      */
     protected $cache;
 
     /**
      * @deprecated 101.0.0
+     * @see No longer needed
+     *
+     * @var StoreResolver\ReaderList
      */
     protected $readerList;
 
@@ -48,7 +68,7 @@ class StoreResolver implements \Magento\Store\Api\StoreResolverInterface
     protected $scopeCode;
 
     /**
-     * @var \Magento\Framework\App\Request\Http
+     * @var Http
      */
     protected $request;
 
@@ -58,27 +78,34 @@ class StoreResolver implements \Magento\Store\Api\StoreResolverInterface
     private $storesData;
 
     /**
-     * @var \Magento\Store\App\Request\StorePathInfoValidator
+     * @var StorePathInfoValidator
      */
     private $storePathInfoValidator;
 
     /**
-     * @param \Magento\Store\Api\StoreRepositoryInterface $storeRepository
-     * @param \Magento\Store\Api\StoreCookieManagerInterface $storeCookieManager
-     * @param \Magento\Framework\App\Request\Http $request
-     * @param \Magento\Store\Model\StoresData $storesData
-     * @param \Magento\Store\App\Request\StorePathInfoValidator $storePathInfoValidator
-     * @param string|null $runMode
+     * @var CookieManagerInterface
+     */
+    private $cookieManagerInterface;
+
+    /**
+     * @param StoreRepositoryInterface $storeRepository
+     * @param StoreCookieManagerInterface $storeCookieManager
+     * @param Http $request
+     * @param StoresData $storesData
+     * @param StorePathInfoValidator $storePathInfoValidator
+     * @param string $runMode
      * @param string|null $scopeCode
+     * @param CookieManagerInterface|null $cookieManagerInterface
      */
     public function __construct(
-        \Magento\Store\Api\StoreRepositoryInterface $storeRepository,
-        \Magento\Store\Api\StoreCookieManagerInterface $storeCookieManager,
-        \Magento\Framework\App\Request\Http $request,
-        \Magento\Store\Model\StoresData $storesData,
-        \Magento\Store\App\Request\StorePathInfoValidator $storePathInfoValidator,
+        StoreRepositoryInterface $storeRepository,
+        StoreCookieManagerInterface $storeCookieManager,
+        Http $request,
+        StoresData $storesData,
+        StorePathInfoValidator $storePathInfoValidator,
         $runMode = ScopeInterface::SCOPE_STORE,
-        $scopeCode = null
+        $scopeCode = null,
+        ?CookieManagerInterface $cookieManagerInterface = null
     ) {
         $this->storeRepository = $storeRepository;
         $this->storeCookieManager = $storeCookieManager;
@@ -87,6 +114,8 @@ class StoreResolver implements \Magento\Store\Api\StoreResolverInterface
         $this->storesData = $storesData;
         $this->runMode = $scopeCode ? $runMode : ScopeInterface::SCOPE_WEBSITE;
         $this->scopeCode = $scopeCode;
+        $this->cookieManagerInterface = $cookieManagerInterface ?:
+            ObjectManager::getInstance()->get(CookieManagerInterface::class);
     }
 
     /**
@@ -95,12 +124,11 @@ class StoreResolver implements \Magento\Store\Api\StoreResolverInterface
     public function getCurrentStoreId()
     {
         list($stores, $defaultStoreId) = $this->getStoresData();
-
         $storeCode = $this->storePathInfoValidator->getValidStoreCode($this->request);
 
         if (!$storeCode) {
             $storeCode = $this->request->getParam(
-                \Magento\Store\Model\StoreManagerInterface::PARAM_NAME,
+                StoreManagerInterface::PARAM_NAME,
                 $this->storeCookieManager->getStoreCodeFromCookie()
             );
         }
@@ -115,7 +143,9 @@ class StoreResolver implements \Magento\Store\Api\StoreResolverInterface
         if ($storeCode) {
             try {
                 $store = $this->getRequestedStoreByCode($storeCode);
-            } catch (\Magento\Framework\Exception\NoSuchEntityException $e) {
+            } catch (NoSuchEntityException $e) {
+                $this->request->setQueryValue(StoreManagerInterface::PARAM_NAME);
+                $this->cookieManagerInterface->deleteCookie(StoreCookieManager::COOKIE_NAME);
                 $store = $this->getDefaultStoreById($defaultStoreId);
             }
 
@@ -143,7 +173,7 @@ class StoreResolver implements \Magento\Store\Api\StoreResolverInterface
      *
      * @return array
      * @deprecated 101.0.0
-     * @see \Magento\Store\Model\StoreResolver::getStoresData
+     * @see StoreResolver::getStoresData
      */
     protected function readStoresData() : array
     {
@@ -154,15 +184,15 @@ class StoreResolver implements \Magento\Store\Api\StoreResolverInterface
      * Retrieve active store by code
      *
      * @param string $storeCode
-     * @return \Magento\Store\Api\Data\StoreInterface
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     * @return StoreInterface
+     * @throws NoSuchEntityException
      */
-    protected function getRequestedStoreByCode($storeCode) : \Magento\Store\Api\Data\StoreInterface
+    protected function getRequestedStoreByCode($storeCode) : StoreInterface
     {
         try {
             $store = $this->storeRepository->getActiveStoreByCode($storeCode);
         } catch (StoreIsInactiveException $e) {
-            throw new \Magento\Framework\Exception\NoSuchEntityException(__('Requested store is inactive'));
+            throw new NoSuchEntityException(__('Requested store is inactive'));
         }
 
         return $store;
@@ -172,15 +202,15 @@ class StoreResolver implements \Magento\Store\Api\StoreResolverInterface
      * Retrieve active store by code
      *
      * @param int $id
-     * @return \Magento\Store\Api\Data\StoreInterface
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     * @return StoreInterface
+     * @throws NoSuchEntityException
      */
-    protected function getDefaultStoreById($id) : \Magento\Store\Api\Data\StoreInterface
+    protected function getDefaultStoreById($id) : StoreInterface
     {
         try {
             $store = $this->storeRepository->getActiveStoreById($id);
         } catch (StoreIsInactiveException $e) {
-            throw new \Magento\Framework\Exception\NoSuchEntityException(__('Default store is inactive'));
+            throw new NoSuchEntityException(__('Default store is inactive'));
         }
 
         return $store;

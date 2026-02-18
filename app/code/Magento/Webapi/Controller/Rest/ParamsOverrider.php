@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Webapi\Controller\Rest;
@@ -60,7 +60,7 @@ class ParamsOverrider
             $arrayKeys = explode('.', $name);
             if ($paramData[Converter::KEY_FORCE] || !$this->isNestedArrayValueSet($inputData, $arrayKeys)) {
                 $paramValue = $paramData[Converter::KEY_VALUE];
-                if (isset($this->paramOverriders[$paramValue])) {
+                if ($paramValue !== null && isset($this->paramOverriders[$paramValue])) {
                     $value = $this->paramOverriders[$paramValue]->getOverriddenValue();
                 } else {
                     $value = $paramData[Converter::KEY_VALUE];

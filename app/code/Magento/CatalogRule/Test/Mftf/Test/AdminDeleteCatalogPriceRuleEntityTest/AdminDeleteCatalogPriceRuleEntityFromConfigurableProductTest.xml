@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
-  */
+/**
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
+ */
 -->
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
@@ -16,6 +16,8 @@
             <severity value="CRITICAL"/>
             <group value="CatalogRule"/>
             <group value="mtf_migrated"/>
+            <!-- pr_exclude is added as in daily builds and will be addressed and group will removed in ACQE-7945-->
+            <group value="pr_exclude"/>
         </annotations>
 
         <before>

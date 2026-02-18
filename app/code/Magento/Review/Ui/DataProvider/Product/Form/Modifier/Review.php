@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Review\Ui\DataProvider\Product\Form\Modifier;
 
@@ -126,7 +126,7 @@ class Review extends AbstractModifier
     {
         $productId = $this->locator->getProduct()->getId();
 
-        $data[$productId][self::DATA_SOURCE_DEFAULT]['current_product_id'] = $productId;
+        $data[$productId ?? ''][self::DATA_SOURCE_DEFAULT]['current_product_id'] = $productId;
 
         return $data;
     }

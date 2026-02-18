@@ -1,7 +1,7 @@
 <?php declare(strict_types=1);
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Developer\Test\Unit\Model\Di;
 
@@ -37,13 +37,9 @@ class InformationTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->objectManagerConfig = $this->getMockBuilder(ConfigInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->objectManagerConfig = $this->createMock(ConfigInterface::class);
 
-        $this->definitions = $this->getMockBuilder(DefinitionInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->definitions = $this->createMock(DefinitionInterface::class);
 
         $this->pluginList = $this->getMockBuilder(PluginList::class)
             ->disableOriginalConstructor()

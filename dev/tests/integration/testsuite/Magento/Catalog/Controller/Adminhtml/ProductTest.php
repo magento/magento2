@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -25,6 +25,7 @@ use Magento\Catalog\Model\Product\Type;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\Category;
 use Magento\Catalog\Model\Product\Attribute\Repository as ProductAttributeRepository;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Test class for Product adminhtml actions
@@ -254,13 +255,13 @@ class ProductTest extends AbstractBackendController
     /**
      * Test create product with already existing url key.
      *
-     * @dataProvider saveActionWithAlreadyExistingUrlKeyDataProvider
      * @magentoDataFixture Magento/Catalog/_files/product_image.php
      * @magentoDataFixture Magento/Catalog/_files/product_simple.php
      * @magentoDbIsolation disabled
      * @param array $postData
      * @return void
      */
+    #[DataProvider('saveActionWithAlreadyExistingUrlKeyDataProvider')]
     public function testSaveActionWithAlreadyExistingUrlKey(array $postData)
     {
         $this->getRequest()->setPostValue($postData);
@@ -346,12 +347,12 @@ class ProductTest extends AbstractBackendController
     /**
      * Test product save with selected tier price
      *
-     * @dataProvider saveActionTierPriceDataProvider
      * @param array $postData
      * @param array $tierPrice
      * @magentoDataFixture Magento/Catalog/_files/product_has_tier_price_show_as_low_as.php
      * @magentoConfigFixture current_store catalog/price/scope 1
      */
+    #[DataProvider('saveActionTierPriceDataProvider')]
     public function testSaveActionTierPrice(array $postData, array $tierPrice)
     {
         $postData['product'] = $this->getProductData($tierPrice);
@@ -682,11 +683,11 @@ class ProductTest extends AbstractBackendController
     /**
      * Test create product with invalid existing url key.
      *
-     * @dataProvider saveActionWithInvalidUrlKeyDataProvider
      * @magentoDbIsolation disabled
      * @param array $postData
      * @return void
      */
+    #[DataProvider('saveActionWithInvalidUrlKeyDataProvider')]
     public function testSaveActionWithInvalidUrlKey(array $postData)
     {
         $identifier = 'graphql';

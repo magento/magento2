@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -9,11 +9,13 @@ namespace Magento\Cms\Test\Unit\Model;
 
 use Magento\Cms\Model\Page;
 use Magento\Cms\Model\ResourceModel\Page as PageResource;
+use Magento\Cms\Helper\Page as CmsPageHelperPage;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Event\ManagerInterface;
 use Magento\Framework\Model\Context;
 use Magento\Framework\Model\ResourceModel\AbstractResource;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -23,6 +25,8 @@ use PHPUnit\Framework\TestCase;
  */
 class PageTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var \Magento\Cms\Model\Page
      */
@@ -55,25 +59,19 @@ class PageTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->eventManagerMock = $this->getMockBuilder(ManagerInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->eventManagerMock = $this->createMock(ManagerInterface::class);
         $this->contextMock = $this->getMockBuilder(Context::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->resourcePageMock = $this->getMockBuilder(PageResource::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['getResources'])
-            ->onlyMethods(['getIdFieldName', 'checkIdentifier'])
-            ->getMock();
-        $this->eventManagerMock = $this->getMockBuilder(ManagerInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-        $this->resourcesMock = $this->getMockBuilder(AbstractResource::class)
-            ->addMethods(['getIdFieldName', 'load', 'checkIdentifier'])
-            ->getMockForAbstractClass();
-        $this->scopeConfigMock = $this->getMockBuilder(ScopeConfigInterface::class)
-            ->getMockForAbstractClass();
+        $this->resourcePageMock = $this->createPartialMockWithReflection(
+            PageResource::class,
+            ['getResources', 'getIdFieldName', 'checkIdentifier']
+        );
+        $this->resourcesMock = $this->createPartialMockWithReflection(
+            AbstractResource::class,
+            ['getIdFieldName', 'load', 'checkIdentifier', '_construct', 'getConnection']
+        );
+        $this->scopeConfigMock = $this->createMock(ScopeConfigInterface::class);
 
         $this->contextMock->expects($this->any())
             ->method('getEventDispatcher')
@@ -138,7 +136,7 @@ class PageTest extends TestCase
             ->willReturnMap(
                 [
                     [
-                        \Magento\Cms\Helper\Page::XML_PATH_NO_ROUTE_PAGE,
+                        CmsPageHelperPage::XML_PATH_NO_ROUTE_PAGE,
                         ScopeConfigInterface::SCOPE_TYPE_DEFAULT,
                         null,
                         'no-route'
@@ -162,7 +160,7 @@ class PageTest extends TestCase
             ->willReturnMap(
                 [
                     [
-                        \Magento\Cms\Helper\Page::XML_PATH_HOME_PAGE,
+                        CmsPageHelperPage::XML_PATH_HOME_PAGE,
                         ScopeConfigInterface::SCOPE_TYPE_DEFAULT,
                         null,
                         'home'
@@ -186,7 +184,7 @@ class PageTest extends TestCase
             ->willReturnMap(
                 [
                     [
-                        \Magento\Cms\Helper\Page::XML_PATH_NO_COOKIES_PAGE,
+                        CmsPageHelperPage::XML_PATH_NO_COOKIES_PAGE,
                         ScopeConfigInterface::SCOPE_TYPE_DEFAULT,
                         null,
                         'no-cookies'

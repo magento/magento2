@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -33,7 +33,7 @@ class DbValidatorTest extends TestCase
     protected function setUp(): void
     {
         $this->connectionFactory = $this->createMock(ConnectionFactory::class);
-        $this->connection = $this->getMockForAbstractClass(AdapterInterface::class);
+        $this->connection = $this->createMock(AdapterInterface::class);
         $this->connectionFactory->expects($this->any())->method('create')->willReturn($this->connection);
         $this->dbValidator = new DbValidator($this->connectionFactory);
     }
@@ -45,7 +45,7 @@ class DbValidatorTest extends TestCase
             ->method('fetchOne')
             ->with('SELECT version()')
             ->willReturn('5.6.0-0ubuntu0.12.04.1');
-        $pdo = $this->getMockForAbstractClass(\Zend_Db_Statement_Interface::class, [], '', false);
+        $pdo = $this->createMock(\Zend_Db_Statement_Interface::class);
         $this->connection
             ->expects($this->atLeastOnce())
             ->method('query')
@@ -92,7 +92,7 @@ class DbValidatorTest extends TestCase
             ->method('fetchOne')
             ->with('SELECT version()')
             ->willReturn('5.6.0-0ubuntu0.12.04.1');
-        $pdo = $this->getMockForAbstractClass(\Zend_Db_Statement_Interface::class, [], '', false);
+        $pdo = $this->createMock(\Zend_Db_Statement_Interface::class);
         $this->connection
             ->expects($this->atLeastOnce())
             ->method('query')
@@ -122,7 +122,7 @@ class DbValidatorTest extends TestCase
             ->method('fetchOne')
             ->with('SELECT version()')
             ->willReturn('5.6.0-0ubuntu0.12.04.1');
-        $pdo = $this->getMockForAbstractClass(\Zend_Db_Statement_Interface::class, [], '', false);
+        $pdo = $this->createMock(\Zend_Db_Statement_Interface::class);
         $this->connection
             ->expects($this->atLeastOnce())
             ->method('query')

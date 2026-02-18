@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2023 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 namespace Magento\CatalogRule\Test\Unit\Model\Indexer;
@@ -48,10 +48,10 @@ class ReindexRuleProductsPriceProcessorTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->storeManagerMock = $this->getMockForAbstractClass(StoreManagerInterface::class);
+        $this->storeManagerMock = $this->createMock(StoreManagerInterface::class);
         $this->productPriceCalculatorMock = $this->createMock(ProductPriceCalculator::class);
         $this->pricesPersitorMock = $this->createMock(RuleProductPricesPersistor::class);
-        $this->localeDateMock = $this->getMockForAbstractClass(TimezoneInterface::class);
+        $this->localeDateMock = $this->createMock(TimezoneInterface::class);
 
         $this->model = new ReindexRuleProductsPriceProcessor(
             $this->storeManagerMock,
@@ -69,11 +69,11 @@ class ReindexRuleProductsPriceProcessorTest extends TestCase
         $defaultGroupId = 11;
         $defaultStoreId = 22;
 
-        $websiteMock = $this->getMockForAbstractClass(WebsiteInterface::class);
+        $websiteMock = $this->createMock(WebsiteInterface::class);
         $websiteMock->expects($this->once())
             ->method('getDefaultGroupId')
             ->willReturn($defaultGroupId);
-        $groupMock = $this->getMockForAbstractClass(GroupInterface::class);
+        $groupMock = $this->createMock(GroupInterface::class);
         $groupMock->expects($this->once())
             ->method('getDefaultStoreId')
             ->willReturn($defaultStoreId);

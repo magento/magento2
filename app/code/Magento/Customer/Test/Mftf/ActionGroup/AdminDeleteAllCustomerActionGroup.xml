@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright 2025 Adobe
+  * All Rights Reserved.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminDeleteAllCustomerActionGroup">
+        <annotations>
+            <description>Goes to the Admin Customers grid page, Selects all customers and deletes them using bulk actions.</description>
+        </annotations>
+
+        <amOnPage url="{{AdminCustomerPage.url}}" stepKey="navigateToCustomersPage"/>
+        <waitForPageLoad stepKey="waitForCustomersPageLoad"/>
+        <conditionalClick selector="{{AdminCustomerFiltersSection.clearAll}}" dependentSelector="{{AdminCustomerFiltersSection.clearAll}}" visible="true" stepKey="clickClearFilters"/>
+        <waitForPageLoad stepKey="waitForFiltersClear"/>
+        <!-- Only proceed if there are customers in the grid -->
+        <conditionalClick selector="{{AdminCustomerGridMainActionsSection.multicheck}}" dependentSelector="{{AdminDataGridTableSection.dataGridEmpty}}" visible="false" stepKey="selectAllCustomers"/>
+        <conditionalClick selector="{{AdminCustomerGridMainActionsSection.actions}}" dependentSelector="{{AdminDataGridTableSection.dataGridEmpty}}" visible="false" stepKey="openActions"/>
+        <conditionalClick selector="{{AdminCustomerGridMainActionsSection.delete}}" dependentSelector="{{AdminDataGridTableSection.dataGridEmpty}}" visible="false" stepKey="clickDelete"/>
+        <conditionalClick selector="{{AdminConfirmationModalSection.ok}}" dependentSelector="{{AdminConfirmationModalSection.ok}}" visible="true" stepKey="confirmDelete"/>
+        <!-- Wait for success message if customers were deleted -->
+        <waitForPageLoad stepKey="waitForGridReload"/>
+    </actionGroup>
+</actionGroups>

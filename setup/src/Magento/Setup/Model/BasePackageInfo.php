@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright 2015 Adobe
+ * Copyright 2016 Adobe
  * All Rights Reserved.
  */
 namespace Magento\Setup\Model;

@@ -1,12 +1,13 @@
 <?php
 /**
- * Copyright 2014 Adobe
+ * Copyright 2015 Adobe
  * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\CatalogSearch\Test\Unit\Model\Indexer\Fulltext\Plugin;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\Catalog\Model\Product;
 use Magento\CatalogSearch\Model\Indexer\Fulltext;
 use Magento\CatalogSearch\Model\Indexer\Fulltext\Plugin\Attribute;
@@ -70,15 +71,7 @@ class AttributeTest extends TestCase
     {
         $this->objectManager = new ObjectManager($this);
         $this->subjectMock = $this->createMock(\Magento\Catalog\Model\ResourceModel\Attribute::class);
-        $this->indexerMock = $this->getMockForAbstractClass(
-            IndexerInterface::class,
-            [],
-            '',
-            false,
-            false,
-            true,
-            ['getId', 'getState', '__wakeup']
-        );
+        $this->indexerMock = $this->createMock(IndexerInterface::class);
         $this->indexerRegistryMock = $this->createPartialMock(
             IndexerRegistry::class,
             ['get']
@@ -132,8 +125,8 @@ class AttributeTest extends TestCase
      *
      * @param bool $saveNeedInvalidation
      * @param bool $saveIsNew
-     * @dataProvider afterSaveDataProvider
      */
+    #[DataProvider('afterSaveDataProvider')]
     public function testAfterSaveWithInvalidation(bool $saveNeedInvalidation, bool $saveIsNew)
     {
         $model = $this->objectManager->getObject(

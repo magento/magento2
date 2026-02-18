@@ -2,20 +2,12 @@
 /**
  * Copyright 2024 Adobe
  * All Rights Reserved.
- *
- * NOTICE: All information contained herein is, and remains
- * the property of Adobe and its suppliers, if any. The intellectual
- * and technical concepts contained herein are proprietary to Adobe
- * and its suppliers and are protected by all applicable intellectual
- * property laws, including trade secret and copyright laws.
- * Dissemination of this information or reproduction of this material
- * is strictly forbidden unless prior written permission is obtained
- * from Adobe.
  */
 declare(strict_types=1);
 
 namespace Magento\GraphQl\OrderCancellation;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use Exception;
 use Magento\Checkout\Test\Fixture\SetGuestEmail as SetGuestEmailFixture;
 use Magento\Customer\Test\Fixture\Customer;
@@ -179,12 +171,11 @@ MUTATION;
      * @throws AuthenticationException
      * @throws LocalizedException
      * @throws Exception
-     *
-     * @dataProvider orderStatusProvider
      */
     #[
         Config('sales/cancellation/enabled', 1)
     ]
+    #[DataProvider('orderStatusProvider')]
     public function testAttemptToCancelOrderWithSomeStatuses(string $status, string $expectedStatus)
     {
         /**
@@ -483,7 +474,7 @@ MUTATION;
     /**
      * @return array[]
      */
-    public function orderStatusProvider(): array
+    public static function orderStatusProvider(): array
     {
         return [
             'On Hold status' => [

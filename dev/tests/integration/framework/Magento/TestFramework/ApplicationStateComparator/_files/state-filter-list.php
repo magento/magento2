@@ -187,6 +187,7 @@ return [
         Magento\Framework\MessageQueue\Publisher\Config\PublisherConfigItem::class => [
             'topic' => null, // TODO: Confirm this doesn't change outside of deployment,
                             // TODO:  or if it does, that it resets properly from poison pill
+            'queue' => null,
             'isDisabled' => null,
         ],
         Magento\Framework\View\File\Collector\Decorator\ModuleDependency::class => [

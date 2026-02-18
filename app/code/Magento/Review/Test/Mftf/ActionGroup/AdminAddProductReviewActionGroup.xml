@@ -20,6 +20,7 @@
         <pressKey parameterArray="[\Facebook\WebDriver\WebDriverKeys::ENTER]" selector="{{AdminCreateNewReviewSection.filterName}}" stepKey="pressEnter"/>
         <waitForElementClickable selector="{{AdminCreateNewReviewSection.firstRowReview}}" stepKey="waitForVisibleReviewButton"/>
         <executeJS function="jQuery('{{AdminCreateNewReviewSection.firstRowReview}}').click()" stepKey="addNewReviewBySKU"/>
+        <waitForPageLoad stepKey="waitForPageLoad"/>
         <waitForElementVisible selector="{{AdminCreateNewReviewSection.select_stores}}" stepKey="waitForVisibleReviewDetails"/>
         <selectOption selector="{{AdminCreateNewReviewSection.select_stores}}" userInput="{{review.select_stores[0]}}" stepKey="visibilityField"/>
         <fillField selector="{{AdminCreateNewReviewSection.nickname}}" userInput="{{review.nickname}}" stepKey="fillNicknameField"/>

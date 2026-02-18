@@ -23,6 +23,7 @@ use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Class ElasticsearchTest to test Elasticsearch 8
@@ -75,24 +76,18 @@ class ElasticsearchTest extends TestCase
         )
             ->disableOriginalConstructor()
             ->getMock();
-        $this->indicesMock = $this->getMockBuilder(Indices::class) /** @phpstan-ignore-line */
-        ->onlyMethods(
-            [
-                'exists',
-                'getSettings',
-                'create',
-                'delete',
-                'putMapping',
-                'getMapping',
-                'stats',
-                'updateAliases',
-                'existsAlias',
-                'getAlias',
-            ]
-        )
-            ->addMethods(['deleteMapping'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->indicesMock = $this->createPartialMock(Indices::class, [
+            'exists',
+            'getSettings',
+            'create',
+            'delete',
+            'putMapping',
+            'getMapping',
+            'stats',
+            'updateAliases',
+            'existsAlias',
+            'getAlias'
+        ]);
         $this->elasticsearchResponse = $this->getMockBuilder(ElasticsearchResponse::class) /** @phpstan-ignore-line */
         ->onlyMethods([
             'asBool',
@@ -164,11 +159,12 @@ class ElasticsearchTest extends TestCase
      * @param string $expectedResult
      * @throws LocalizedException
      * @throws \ReflectionException
-     * @dataProvider getOptionsDataProvider
      */
+    #[DataProvider('getOptionsDataProvider')]
     public function testBuildConfig(array $options, string $expectedResult): void
     {
-        $buildConfig = new Elasticsearch($options);
+        $dynamicTemplatesProviderMock = $this->createMock(DynamicTemplatesProvider::class);
+        $buildConfig = new Elasticsearch($options, null, [], $dynamicTemplatesProviderMock);
         $config = $this->getPrivateMethod();
         $result = $config->invoke($buildConfig, $options);
         $this->assertEquals($expectedResult, $result['hosts'][0]);
@@ -183,36 +179,34 @@ class ElasticsearchTest extends TestCase
     {
         $reflector = new \ReflectionClass(Elasticsearch::class);
         $method = $reflector->getMethod('buildESConfig');
-        $method->setAccessible(true);
-
         return $method;
     }
 
     /**
      * Get options data provider.
      */
-    public function getOptionsDataProvider(): array
+    public static function getOptionsDataProvider(): array
     {
         return [
             [
-                'without_protocol' => [
+                [
                     'hostname' => 'localhost',
                     'port' => '9200',
                     'timeout' => 15,
                     'index' => 'magento2',
                     'enableAuth' => 0,
                 ],
-                'expected_result' => 'http://localhost:9200',
+                'http://localhost:9200',
             ],
             [
-                'with_protocol' => [
+                [
                     'hostname' => 'https://localhost',
                     'port' => '9200',
                     'timeout' => 15,
                     'index' => 'magento2',
                     'enableAuth' => 0,
                 ],
-                'expected_result' => 'https://localhost:9200',
+                'https://localhost:9200',
             ],
         ];
     }

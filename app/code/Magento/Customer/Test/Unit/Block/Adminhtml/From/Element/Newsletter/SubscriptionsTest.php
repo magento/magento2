@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -15,6 +15,7 @@ use Magento\Framework\Data\Form\Element\Factory;
 use Magento\Framework\Escaper;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\View\Helper\SecureHtmlRenderer;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -56,7 +57,7 @@ class SubscriptionsTest extends TestCase
         $this->factoryElement = $this->createMock(Factory::class);
         $this->factoryCollection = $this->createMock(CollectionFactory::class);
         $this->escaper = $this->createMock(Escaper::class);
-        $this->dataPersistor = $this->getMockForAbstractClass(DataPersistorInterface::class);
+        $this->dataPersistor = $this->createMock(DataPersistorInterface::class);
 
         $objectManager = new ObjectManager($this);
         $objects = [
@@ -85,9 +86,8 @@ class SubscriptionsTest extends TestCase
      * @param array $data
      * @param array $elementsHtml
      * @param string $expectedHtml
-     * @return void
-     * @dataProvider getElementHtmlDataProvider
-     */
+     * @return void */
+    #[DataProvider('getElementHtmlDataProvider')]
     public function testGetElementHtml(array $data, array $elementsHtml, string $expectedHtml): void
     {
         $this->escaper->method('escapeHtml')->withAnyParameters()->willReturnArgument(0);

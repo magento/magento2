@@ -1,26 +1,32 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\OfflineShipping\Test\Unit\Model\Quote\Address;
 
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\OfflineShipping\Model\Quote\Address\FreeShipping;
 use Magento\OfflineShipping\Model\SalesRule\Calculator;
 use Magento\Quote\Model\Quote;
 use Magento\Quote\Model\Quote\Address;
 use Magento\Quote\Model\Quote\Item;
 use Magento\Store\Api\Data\StoreInterface;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 /**
  * Test for Magento\OfflineShipping\Model\Quote\Address\FreeShipping class.
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.UnusedFormalParameter)
  */
 class FreeShippingTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var int
      */
@@ -67,15 +73,15 @@ class FreeShippingTest extends TestCase
      * @param int $fItemFree
      * @param int $sItemFree
      * @param bool $expected
-     * @dataProvider itemsDataProvider
      */
+    #[DataProvider('itemsDataProvider')]
     public function testIsFreeShipping(int $addressFree, int $fItemFree, int $sItemFree, bool $expected)
     {
         $address = $this->getShippingAddress();
         $this->withStore();
         $quote = $this->getQuote($address);
-        $fItem = $this->getItem($quote);
-        $sItem = $this->getItem($quote);
+        $fItem = $this->getItem($quote, $address);
+        $sItem = $this->getItem($quote, $address);
         $items = [$fItem, $sItem];
 
         $this->calculator->method('initFromQuote')
@@ -117,9 +123,7 @@ class FreeShippingTest extends TestCase
      */
     private function withStore()
     {
-        $store = $this->getMockBuilder(StoreInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $store = $this->createMock(StoreInterface::class);
 
         $store->method('getWebsiteId')
             ->willReturn(self::$websiteId);
@@ -129,23 +133,21 @@ class FreeShippingTest extends TestCase
      * Get mock object for quote entity.
      *
      * @param Address $address
-     * @return Quote
+     * @return Quote|MockObject
      */
     private function getQuote(Address $address): Quote
     {
         /** @var Quote|MockObject $quote */
-        $quote = $this->getMockBuilder(Quote::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['getCouponCode'])
-            ->onlyMethods(
-                [
-                    'getCustomerGroupId',
-                    'getShippingAddress',
-                    'getStoreId',
-                    'isVirtual'
-                ]
-            )
-            ->getMock();
+        $quote = $this->createPartialMockWithReflection(
+            Quote::class,
+            [
+                'getCustomerGroupId',
+                'getShippingAddress',
+                'getStoreId',
+                'isVirtual',
+                'getCouponCode'
+            ]
+        );
 
         $quote->method('getStoreId')
             ->willReturn(self::$storeId);
@@ -181,20 +183,38 @@ class FreeShippingTest extends TestCase
      * Gets stub object for quote item.
      *
      * @param Quote $quote
-     * @return Item
+     * @param Address $address
+     * @return Item|MockObject
      */
-    private function getItem(Quote $quote): Item
+    private function getItem(Quote $quote, Address $address): Item
     {
         /** @var Item|MockObject $item */
-        $item = $this->getMockBuilder(Item::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['getHasChildren'])
-            ->getMock();
-        $item->setQuote($quote);
-        $item->setNoDiscount(0);
-        $item->setParentItemId(0);
+        $item = $this->createPartialMockWithReflection(
+            Item::class,
+            ['getHasChildren',
+            'setQuote',
+            'setNoDiscount',
+            'setParentItemId',
+            'getAddress',
+            'setFreeShipping',
+            'getFreeShipping']
+        );
+        $item->method('setQuote')->willReturnSelf();
+        $item->method('setNoDiscount')->willReturnSelf();
+        $item->method('setParentItemId')->willReturnSelf();
         $item->method('getHasChildren')
             ->willReturn(0);
+        $item->method('getAddress')
+            ->willReturn($address);
+
+        $freeShipping = 0;
+        $item->method('setFreeShipping')->willReturnCallback(function ($value) use (&$freeShipping, $item) {
+            $freeShipping = $value;
+            return $item;
+        });
+        $item->method('getFreeShipping')->willReturnCallback(function () use (&$freeShipping) {
+            return $freeShipping;
+        });
 
         return $item;
     }

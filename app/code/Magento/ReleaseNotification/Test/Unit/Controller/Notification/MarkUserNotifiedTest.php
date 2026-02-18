@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -14,6 +14,7 @@ use Magento\Framework\App\ProductMetadataInterface;
 use Magento\Framework\Controller\Result\Json;
 use Magento\Framework\Controller\ResultFactory;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\ReleaseNotification\Controller\Adminhtml\Notification\MarkUserNotified;
 use Magento\ReleaseNotification\Model\ResourceModel\Viewer\Logger as NotificationLogger;
@@ -26,6 +27,8 @@ use Psr\Log\LoggerInterface;
  */
 class MarkUserNotifiedTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var MockObject|StorageInterface
      */
@@ -63,31 +66,20 @@ class MarkUserNotifiedTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->storageMock = $this->getMockBuilder(StorageInterface::class)
-            ->addMethods(['getId'])
-            ->getMockForAbstractClass();
-        $this->authMock = $this->getMockBuilder(Auth::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $contextMock = $this->getMockBuilder(Context::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->storageMock = $this->createPartialMockWithReflection(
+            StorageInterface::class,
+            ['authenticate', 'login', 'reload', 'hasAvailableResources', 'setHasAvailableResources', 'getId']
+        );
+        $this->authMock = $this->createMock(Auth::class);
+        $contextMock = $this->createMock(Context::class);
         $contextMock->expects($this->once())
             ->method('getAuth')
             ->willReturn($this->authMock);
-        $this->productMetadataMock = $this->getMockBuilder(ProductMetadataInterface::class)
-            ->getMockForAbstractClass();
-        $this->notificationLoggerMock = $this->getMockBuilder(NotificationLogger::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->loggerMock = $this->getMockBuilder(LoggerInterface::class)
-            ->getMock();
-        $resultFactoryMock = $this->getMockBuilder(ResultFactory::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->resultMock = $this->getMockBuilder(Json::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->productMetadataMock = $this->createMock(ProductMetadataInterface::class);
+        $this->notificationLoggerMock = $this->createMock(NotificationLogger::class);
+        $this->loggerMock = $this->createMock(LoggerInterface::class);
+        $resultFactoryMock = $this->createMock(ResultFactory::class);
+        $this->resultMock = $this->createMock(Json::class);
         $resultFactoryMock->expects($this->once())
             ->method('create')
             ->with(ResultFactory::TYPE_JSON)

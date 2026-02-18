@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -87,5 +87,77 @@ class GenerateAssetIntegrity
         }
 
         return $result;
+    }
+
+    /**
+     * Generates integrity for RequireJs mixins asset.
+     *
+     * @param FileManager $subject
+     * @param File $result
+     *
+     * @return File
+     *
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     */
+    public function afterCreateRequireJsMixinsAsset(
+        FileManager $subject,
+        File $result
+    ): File {
+        if (PHP_SAPI === 'cli') {
+            $this->generateHash($result);
+        }
+
+        return $result;
+    }
+
+    /**
+     * Generates integrity for static JS asset.
+     *
+     * @param FileManager $subject
+     * @param File|false $result
+     *
+     * @return File|false
+     *
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     */
+    public function afterCreateStaticJsAsset(
+        FileManager $subject,
+        mixed $result
+    ): mixed {
+        if ($result !== false && PHP_SAPI === 'cli') {
+            $this->generateHash($result);
+        }
+
+        return $result;
+    }
+
+    /**
+     * Generates hash for the given file result if it matches the supported content types.
+     *
+     * @param File $result
+     * @return void
+     */
+    private function generateHash(File $result): void
+    {
+        if (in_array($result->getContentType(), self::CONTENT_TYPES)) {
+            try {
+                $content = $result->getContent();
+            } catch (\Exception $e) {
+                $content = null;
+            }
+            $path = $result->getPath();
+
+            if ($content !== null) {
+                $integrity = $this->integrityFactory->create(
+                    [
+                        "data" => [
+                            'hash' => $this->hashGenerator->generate($content),
+                            'path' => $path
+                        ]
+                    ]
+                );
+                $this->integrityCollector->collect($integrity);
+            }
+        }
     }
 }

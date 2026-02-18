@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -14,6 +14,7 @@ use Magento\Framework\DataObject;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Registry;
 use Magento\TestFramework\Helper\Bootstrap;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -93,11 +94,11 @@ class CompositeTest extends TestCase
     }
 
     /**
-     * @dataProvider renderConfigureResultExceptionProvider
      * @param array $data
      * @param string $expectedErrorMessage
      * @return void
      */
+    #[DataProvider('renderConfigureResultExceptionProvider')]
     public function testRenderConfigureResultException(array $data, string $expectedErrorMessage): void
     {
         /** @var DataObject $configureResult */
@@ -135,8 +136,7 @@ class CompositeTest extends TestCase
                 'data' => [
                     'ok' => true,
                 ],
-                'expectedErrorMessage' => 'The product that was requested doesn\'t exist.'
-                    . ' Verify the product and try again.',
+                'expectedErrorMessage' => 'The product with ID "" does not exist.',
             ],
         ];
     }

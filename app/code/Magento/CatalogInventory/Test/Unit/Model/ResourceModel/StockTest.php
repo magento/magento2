@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -16,8 +16,10 @@ use Magento\Framework\Model\ResourceModel\Db\Context;
 use Magento\Framework\Stdlib\DateTime\DateTime;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Store\Model\StoreManagerInterface;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Zend_Db_Statement_Interface;
 
 /**
  * Test for \Magento\CatalogInventory\Model\ResourceModel\Stock
@@ -94,11 +96,11 @@ class StockTest extends TestCase
             ->getMock();
         $this->storeManagerMock = $this->getMockBuilder(StoreManagerInterface::class)
             ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+            ->getMock();
         $this->connectionMock = $this->getMockBuilder(Mysql::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->statementMock = $this->getMockForAbstractClass(\Zend_Db_Statement_Interface::class);
+        $this->statementMock = $this->createMock(Zend_Db_Statement_Interface::class);
         $this->stock = $this->getMockBuilder(Stock::class)
             ->onlyMethods(['getTable', 'getConnection'])
             ->setConstructorArgs(
@@ -122,10 +124,10 @@ class StockTest extends TestCase
      * @param array $items
      *
      * @return void
-     * @dataProvider productsDataProvider
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
+    #[DataProvider('productsDataProvider')]
     public function testLockProductsStock(
         int $websiteId,
         array $productIds,

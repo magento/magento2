@@ -117,12 +117,12 @@ class AssociatedProductsTest extends TestCase
             ->with('getAssociatedProductIds')
             ->willReturn([$productId]);
         $product->expects($this->any())->method('getData')->with('attribute_code')->willReturn('attribute_value');
-        $product->expects($this->any())->method('getId')->willReturn($productId);
-        $product->expects($this->any())->method('getSku')->willReturn('sku');
-        $product->expects($this->any())->method('getName')->willReturn('name');
-        $product->expects($this->any())->method('getPrice')->willReturn(100.00);
-        $product->expects($this->any())->method('getWeight')->willReturn(1);
-        $product->expects($this->any())->method('getStatus')->willReturn(1);
+        $product->method('getId')->willReturn($productId);
+        $product->method('getSku')->willReturn('sku');
+        $product->method('getName')->willReturn('name');
+        $product->method('getPrice')->willReturn(100.00);
+        $product->method('getWeight')->willReturn(1);
+        $product->method('getStatus')->willReturn(1);
         $baseCurrency = $this->createMock(\Magento\Directory\Model\Currency::class);
         $baseCurrency->expects($this->once())->method('getCurrencySymbol')->willReturn('$');
         $store = $this->createMock(Store::class);
@@ -136,16 +136,14 @@ class AssociatedProductsTest extends TestCase
             ->method('getById')
             ->with($productId)
             ->willReturn($product);
-        $this->locator->expects($this->any())
-            ->method('getProduct')
-            ->willReturn($product);
+        $this->locator->method('getProduct')->willReturn($product);
         $attribute = $this->createMock(AbstractAttribute::class);
-        $attribute->expects($this->any())->method('getAttributeCode')->willReturn('attribute_code');
-        $attribute->expects($this->any())->method('getAttributeId')->willReturn('1');
+        $attribute->method('getAttributeCode')->willReturn('attribute_code');
+        $attribute->method('getAttributeId')->willReturn('1');
         $option = $this->createMock(AttributeOptionInterface::class);
-        $option->expects($this->any())->method('getValue')->willReturn('attribute_value');
-        $option->expects($this->any())->method('getLabel')->willReturn('attribute_label');
-        $attribute->expects($this->any())->method('getOptions')->willReturn([$option]);
+        $option->method('getValue')->willReturn('attribute_value');
+        $option->method('getLabel')->willReturn('attribute_label');
+        $attribute->method('getOptions')->willReturn([$option]);
         $this->configurableType->expects($this->exactly(2))
             ->method('getUsedProductAttributes')
             ->with($product)

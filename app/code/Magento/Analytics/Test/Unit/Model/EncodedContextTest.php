@@ -1,8 +1,7 @@
 <?php
 /**
- * Copyright 2024 Adobe
- * All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -10,6 +9,8 @@ namespace Magento\Analytics\Test\Unit\Model;
 
 use Magento\Analytics\Model\EncodedContext;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use PHPUnit\Framework\Attributes\DataProvider;
+
 use PHPUnit\Framework\TestCase;
 
 class EncodedContextTest extends TestCase
@@ -31,8 +32,8 @@ class EncodedContextTest extends TestCase
      * @param string $content
      * @param string|null $initializationVector
      * @return void
-     * @dataProvider constructDataProvider
      */
+    #[DataProvider('constructDataProvider')]
     public function testConstruct($content, $initializationVector)
     {
         $constructorArguments = [
