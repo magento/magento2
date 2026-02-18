@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -12,8 +12,10 @@ use Magento\Sales\Model\Order;
 use Magento\Sales\Model\Order\Invoice;
 use Magento\Sales\Model\Order\Invoice\Item;
 use Magento\Sales\Model\Order\Invoice\Total\Tax;
+use Magento\Sales\Model\Order\Item as OrderItem;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class TaxTest extends TestCase
 {
@@ -65,8 +67,8 @@ class TaxTest extends TestCase
      * @param array $orderData
      * @param array $invoiceData
      * @param array $expectedResults
-     * @dataProvider collectDataProvider
      */
+    #[DataProvider('collectDataProvider')]
     public function testCollect($orderData, $invoiceData, $expectedResults)
     {
         $roundingDelta = [];
@@ -364,8 +366,8 @@ class TaxTest extends TestCase
      */
     protected function getInvoiceItem($invoiceItemData)
     {
-        /** @var \Magento\Sales\Model\Order\Item|MockObject $orderItem */
-        $orderItem = $this->createPartialMock(\Magento\Sales\Model\Order\Item::class, [
+        /** @var OrderItem|MockObject $orderItem */
+        $orderItem = $this->createPartialMock(OrderItem::class, [
             'isDummy'
         ]);
         foreach ($invoiceItemData['order_item'] as $key => $value) {

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -19,6 +19,7 @@ use Magento\MediaGallerySynchronizationApi\Api\SynchronizeFilesInterface;
 use Magento\MediaGalleryApi\Api\GetAssetsKeywordsInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Test for SynchronizeFiles.
@@ -66,7 +67,6 @@ class SynchronizeFilesTest extends TestCase
     /**
      * Test for SynchronizeFiles::execute
      *
-     * @dataProvider filesProvider
      * @param null|string $file
      * @param null|string $title
      * @param null|string $description
@@ -74,6 +74,7 @@ class SynchronizeFilesTest extends TestCase
      * @throws FileSystemException
      * @throws \Magento\Framework\Exception\LocalizedException
      */
+    #[DataProvider('filesProvider')]
     public function testExecute(
         ?string $file,
         ?string $title,

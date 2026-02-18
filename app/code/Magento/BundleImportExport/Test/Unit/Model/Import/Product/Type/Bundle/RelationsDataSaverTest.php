@@ -40,17 +40,10 @@ class RelationsDataSaverTest extends TestCase
     protected function setUp(): void
     {
         $helper = new ObjectManager($this);
-        $this->resourceMock = $this->getMockBuilder(ResourceConnection::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->connectionMock = $this->getMockBuilder(AdapterInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->resourceMock = $this->createMock(ResourceConnection::class);
+        $this->connectionMock = $this->createMock(AdapterInterface::class);
 
-        $this->productRelationMock = $this->getMockBuilder(Relation::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-
+        $this->productRelationMock = $this->createMock(Relation::class);
         $this->relationsDataSaver = $helper->getObject(
             RelationsDataSaver::class,
             [

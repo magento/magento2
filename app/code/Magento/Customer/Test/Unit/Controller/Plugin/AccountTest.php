@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -15,15 +15,19 @@ use Magento\Framework\App\ActionFlag;
 use Magento\Framework\App\Request\Http;
 use Magento\Framework\App\Request\Http as HttpRequest;
 use Magento\Framework\Controller\ResultInterface;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 
 class AccountTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var string
      */
-    const EXPECTED_VALUE = 'expected_value';
+    private const EXPECTED_VALUE = 'expected_value';
 
     /**
      * @var Account
@@ -57,46 +61,36 @@ class AccountTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->sessionMock = $this->getMockBuilder(Session::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['setNoReferer', 'unsNoReferer'])
-            ->onlyMethods(['authenticate'])
-            ->getMock();
+        $this->sessionMock = $this->createPartialMockWithReflection(
+            Session::class,
+            ['authenticate', 'setNoReferer', 'unsNoReferer']
+        );
 
-        $this->actionMock = $this->getMockBuilder(AccountInterface::class)
-            ->addMethods(['getActionFlag'])
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->actionMock = $this->createPartialMockWithReflection(
+            AccountInterface::class,
+            ['getActionFlag', 'execute']
+        );
 
-        $this->requestMock = $this->getMockBuilder(HttpRequest::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['getActionName'])
-            ->getMock();
+        $this->requestMock = $this->createPartialMock(HttpRequest::class, ['getActionName']);
 
-        $this->resultMock = $this->getMockBuilder(ResultInterface::class)
-            ->getMockForAbstractClass();
+        $this->resultMock = $this->createMock(ResultInterface::class);
 
-        $this->actionFlagMock = $this->getMockBuilder(ActionFlag::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->actionFlagMock = $this->createMock(ActionFlag::class);
     }
 
     /**
      * @param string $action
      * @param array $allowedActions
      * @param boolean $isAllowed
-     *
-     * @dataProvider beforeExecuteDataProvider
-     */
+     * */
+    #[DataProvider('beforeExecuteDataProvider')]
     public function testAroundExecuteInterruptsOriginalCallWhenNotAllowed(
         string $action,
         array $allowedActions,
         bool $isAllowed
     ) {
         /** @var callable|MockObject $proceedMock */
-        $proceedMock = $this->getMockBuilder(\stdClass::class)
-            ->addMethods(['__invoke'])
-            ->getMock();
+        $proceedMock = $this->createPartialMockWithReflection(\stdClass::class, ['__invoke']);
 
         $closureMock = Closure::fromCallable($proceedMock);
 

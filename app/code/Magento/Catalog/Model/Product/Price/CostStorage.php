@@ -6,14 +6,14 @@
 
 namespace Magento\Catalog\Model\Product\Price;
 
+use Magento\Framework\Exception\InputException;
+
 /**
  * Product cost storage.
  */
 class CostStorage implements \Magento\Catalog\Api\CostStorageInterface
 {
     /**
-     * Attribute code.
-     *
      * @var string
      */
     private $attributeCode = 'cost';
@@ -44,8 +44,6 @@ class CostStorage implements \Magento\Catalog\Api\CostStorageInterface
     private $invalidSkuProcessor;
 
     /**
-     * Allowed product types.
-     *
      * @var array
      */
     private $allowedProductTypes = [];
@@ -90,7 +88,7 @@ class CostStorage implements \Magento\Catalog\Api\CostStorageInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function get(array $skus)
     {
@@ -111,10 +109,15 @@ class CostStorage implements \Magento\Catalog\Api\CostStorageInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
-    public function update(array $prices)
+    public function update($prices)
     {
+        if ($prices === null || !is_array($prices)) {
+            throw new InputException(
+                __('Invalid input data format. Expected an array of prices.')
+            );
+        }
         $prices = $this->retrieveValidPrices($prices);
         $formattedPrices = [];
 
@@ -136,7 +139,7 @@ class CostStorage implements \Magento\Catalog\Api\CostStorageInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function delete(array $skus)
     {

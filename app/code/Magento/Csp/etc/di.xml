@@ -121,6 +121,9 @@
     <type name="Magento\Framework\View\Asset\GroupedCollection">
         <plugin name="addDefaultPropertiesToGroup" type="Magento\Csp\Plugin\AddDefaultPropertiesToGroupPlugin" />
     </type>
+    <type name="Magento\Framework\View\Page\Config\Renderer">
+        <plugin name="addIntegrityToAssetHtml" type="Magento\Csp\Plugin\AddIntegrityToAssetHtml" />
+    </type>
     <type name="Magento\Deploy\Service\DeployStaticContent">
         <plugin name="removeAllAssetIntegrityHashes" type="Magento\Csp\Plugin\RemoveAllAssetIntegrityHashes" />
         <plugin name="storeAssetIntegrityHashes" type="Magento\Csp\Plugin\StoreAssetIntegrityHashes" />

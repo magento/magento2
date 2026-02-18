@@ -105,7 +105,12 @@ class Multiselect extends AbstractData
         }
 
         if (!empty($value) && $attribute->getSourceModel()) {
-            $values = is_array($value) ? $value : explode(',', (string) $value);
+            if (is_array($value)) {
+                $values = $value;
+            } else {
+                $values = preg_split('/[,\n\r]+/', (string) $value);
+            }
+            $values = array_map('trim', $values);
             $errors = array_merge(
                 $errors,
                 $this->validateBySource($values)

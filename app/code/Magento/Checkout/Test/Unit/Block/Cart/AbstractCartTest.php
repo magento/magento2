@@ -17,6 +17,7 @@ use Magento\Quote\Model\Quote;
 use Magento\Quote\Model\Quote\Address;
 use Magento\Sales\Block\Items\AbstractItems;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class AbstractCartTest extends TestCase
 {
@@ -31,10 +32,10 @@ class AbstractCartTest extends TestCase
     }
 
     /**
-     * @dataProvider getItemRendererDataProvider
      * @param string|null $type
      * @param string $expectedType
      */
+    #[DataProvider('getItemRendererDataProvider')]
     public function testGetItemRenderer($type, $expectedType)
     {
         $renderer = $this->createMock(RendererList::class);
@@ -110,8 +111,8 @@ class AbstractCartTest extends TestCase
     /**
      * @param array $expectedResult
      * @param bool $isVirtual
-     * @dataProvider getTotalsCacheDataProvider
      */
+    #[DataProvider('getTotalsCacheDataProvider')]
     public function testGetTotalsCache($expectedResult, $isVirtual)
     {
         $totals = $isVirtual ? ['billing_totals'] : ['shipping_totals'];
@@ -121,8 +122,8 @@ class AbstractCartTest extends TestCase
         $checkoutSessionMock->expects($this->once())->method('getQuote')->willReturn($quoteMock);
 
         $quoteMock->expects($this->once())->method('isVirtual')->willReturn($isVirtual);
-        $quoteMock->expects($this->any())->method('getShippingAddress')->willReturn($addressMock);
-        $quoteMock->expects($this->any())->method('getBillingAddress')->willReturn($addressMock);
+        $quoteMock->method('getShippingAddress')->willReturn($addressMock);
+        $quoteMock->method('getBillingAddress')->willReturn($addressMock);
         $addressMock->expects($this->once())->method('getTotals')->willReturn($totals);
 
         /** @var \Magento\Checkout\Block\Cart\AbstractCart $model */

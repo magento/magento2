@@ -70,13 +70,9 @@ class DirectoryDataTest extends TestCase
         $testCountryInfo->setData('name_en_US', 'United States of America');
         $countries = ['US' => $testCountryInfo];
 
-        $this->directoryHelperMock->expects($this->any())
-            ->method('getRegionData')
-            ->willReturn($regions);
+        $this->directoryHelperMock->method('getRegionData')->willReturn($regions);
 
-        $this->directoryHelperMock->expects($this->any())
-            ->method('getCountryCollection')
-            ->willReturn($countries);
+        $this->directoryHelperMock->method('getCountryCollection')->willReturn($countries);
 
         /* Assert result */
         $this->assertEquals(

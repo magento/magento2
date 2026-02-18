@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\Catalog\Test\Unit\Model\Product\Image;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\Catalog\Model\Product\Image\ConvertImageMiscParamsToReadableFormat;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -29,8 +30,8 @@ class ConvertImageMiscParamsToReadableFormatTest extends TestCase
     /**
      * @param array $data
      * @return void
-     * @dataProvider createDataProvider
      */
+    #[DataProvider('createDataProvider')]
     public function testConvertImageMiscParamsToReadableFormat(array $data): void
     {
         $this->assertEquals(

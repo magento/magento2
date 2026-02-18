@@ -71,4 +71,10 @@
         <data key="disabled">false</data>
         <requiredEntity type="ImageContent">TestImageContent</requiredEntity>
     </entity>
+    <entity name="ProductAttributeMediaGalleryRole">
+        <data key="Base">image</data>
+        <data key="Small">small_image</data>
+        <data key="Thumbnail">thumbnail</data>
+        <data key="Swatch">swatch_image</data>
+    </entity>
 </entities>

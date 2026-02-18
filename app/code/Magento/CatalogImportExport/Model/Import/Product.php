@@ -183,6 +183,10 @@ class Product extends AbstractEntity
 
     private const ERROR_DUPLICATE_URL_KEY_BY_CATEGORY = 'duplicatedUrlKeyByCategory';
 
+    private const STRING_OVERFLOW = 8000;
+
+    private const STRING_PADDING = 5;
+
     /**
      * @var array
      */
@@ -375,7 +379,7 @@ class Product extends AbstractEntity
      *     'type_id'        => (string) product type
      *     'attr_set_id'    => (int) product attribute set ID
      *     'entity_id'      => (int) product ID
-     *     'supported_type' => (boolean) is product type supported by current version of import module
+     *     'supported_type' => (bool) is product type supported by current version of import module
      * )
      *
      * @var array
@@ -2423,7 +2427,7 @@ class Product extends AbstractEntity
     /**
      * Uploading files into the "catalog/product" media folder.
      *
-     * Return a new file name if the same file is already exists.
+     * Return a new file name if the same file already exists.
      *
      * @param string $fileName
      * @param bool $renameFileOff [optional] boolean to pass.
@@ -3167,6 +3171,42 @@ class Product extends AbstractEntity
     }
 
     /**
+     * Split SKUs into butches
+     *
+     * @param array $data
+     * @return array
+     */
+    private function splitIntoBatches(array $data): array
+    {
+        $batches = [];
+        $batch = [];
+        $accumulatedSkuLength = 0;
+        $accumulatedUrlLength = 0;
+        foreach ($data as $url => $sku) {
+            $skuLength = strlen($sku) + self::STRING_PADDING;
+            $urlLength = strlen($url) + self::STRING_PADDING;
+            if ($skuLength + $accumulatedSkuLength >= self::STRING_OVERFLOW ||
+                $urlLength + $accumulatedUrlLength >= self::STRING_OVERFLOW
+            ) {
+                $batches[] = $batch;
+                $batch = [$url => $sku];
+                $accumulatedSkuLength = $skuLength;
+                $accumulatedUrlLength = $urlLength;
+            } else {
+                $batch[$url] = $sku;
+                $accumulatedSkuLength += $skuLength;
+                $accumulatedUrlLength += $urlLength;
+            }
+        }
+
+        if (!empty($batch)) {
+            $batches[] = $batch;
+        }
+
+        return $batches;
+    }
+
+    /**
      * Check that url_keys are not already assigned to others entities in DB
      *
      * @return void
@@ -3176,21 +3216,27 @@ class Product extends AbstractEntity
     {
         $resource = $this->getResource();
         foreach ($this->urlKeys as $storeId => $urlKeys) {
-            $urlKeyDuplicates = $this->_connection->fetchAssoc(
-                $this->_connection->select()->from(
-                    ['url_rewrite' => $resource->getTable('url_rewrite')],
-                    [
-                        'request_path',
-                        'store_id',
-                        'entity_type'
-                    ]
-                )->joinLeft(
-                    ['cpe' => $resource->getTable('catalog_product_entity')],
-                    "cpe.entity_id = url_rewrite.entity_id"
-                )->where('request_path IN (?)', array_map('strval', array_keys($urlKeys)))
-                    ->where('store_id IN (?)', $storeId)
-                    ->where('cpe.sku not in (?)', array_values($urlKeys))
-            );
+            $requestPaths = $this->splitIntoBatches($urlKeys);
+
+            $urlKeyDuplicates = [];
+            foreach ($requestPaths as $urlKeys) {
+                $duplicates = $this->_connection->fetchAssoc(
+                    $this->_connection->select()->from(
+                        ['url_rewrite' => $resource->getTable('url_rewrite')],
+                        [
+                            'request_path',
+                            'store_id',
+                            'entity_type'
+                        ]
+                    )->joinLeft(
+                        ['cpe' => $resource->getTable('catalog_product_entity')],
+                        "cpe.entity_id = url_rewrite.entity_id"
+                    )->where('request_path IN (?)', array_map('strval', array_keys($urlKeys)))
+                        ->where('store_id IN (?)', $storeId)
+                        ->where('cpe.sku not in (?)', array_values($urlKeys))
+                );
+                $urlKeyDuplicates = [...$urlKeyDuplicates, ...$duplicates];
+            }
 
             foreach ($urlKeyDuplicates as $entityData) {
                 $rowNum = $this->rowNumbers[$entityData['store_id']][$entityData['request_path']];

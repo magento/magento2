@@ -13,6 +13,7 @@ use Magento\Framework\App\State;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\UrlInterface;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 class AdditionalTest extends TestCase
@@ -34,10 +35,8 @@ class AdditionalTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->urlBuilderMock = $this->getMockForAbstractClass(UrlInterface::class);
-        $this->appStateMock = $this->getMockBuilder(State::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->urlBuilderMock = $this->createMock(UrlInterface::class);
+        $this->appStateMock = $this->createMock(State::class);
 
         $objectHelper = new ObjectManager($this);
         $context = $objectHelper->getObject(
@@ -87,8 +86,8 @@ class AdditionalTest extends TestCase
     /**
      * @param string $mode
      * @param bool $expected
-     * @dataProvider isInProductionModeDataProvider
      */
+    #[DataProvider('isInProductionModeDataProvider')]
     public function testIsInProductionMode($mode, $expected)
     {
         $this->appStateMock->expects($this->once())

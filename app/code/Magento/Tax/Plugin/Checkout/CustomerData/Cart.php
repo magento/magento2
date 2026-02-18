@@ -1,10 +1,13 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Tax\Plugin\Checkout\CustomerData;
+
+use Magento\Framework\Pricing\PriceCurrencyInterface;
+use Magento\Framework\App\ObjectManager;
 
 /**
  * Process quote items price, considering tax configuration.
@@ -38,18 +41,26 @@ class Cart
     protected $totals = null;
 
     /**
+     * @var PriceCurrencyInterface
+     */
+    private $priceCurrency;
+
+    /**
      * @param \Magento\Checkout\Model\Session $checkoutSession
      * @param \Magento\Checkout\Helper\Data $checkoutHelper
      * @param \Magento\Tax\Block\Item\Price\Renderer $itemPriceRenderer
+     * @param PriceCurrencyInterface|null $priceCurrency
      */
     public function __construct(
         \Magento\Checkout\Model\Session $checkoutSession,
         \Magento\Checkout\Helper\Data $checkoutHelper,
-        \Magento\Tax\Block\Item\Price\Renderer $itemPriceRenderer
+        \Magento\Tax\Block\Item\Price\Renderer $itemPriceRenderer,
+        ?PriceCurrencyInterface $priceCurrency = null
     ) {
         $this->checkoutSession = $checkoutSession;
         $this->checkoutHelper = $checkoutHelper;
         $this->itemPriceRenderer = $itemPriceRenderer;
+        $this->priceCurrency = $priceCurrency ?? ObjectManager::getInstance()->get(PriceCurrencyInterface::class);
     }
 
     /**
@@ -69,9 +80,10 @@ class Cart
         if (is_array($result['items'])) {
             foreach ($result['items'] as $key => $itemAsArray) {
                 if ($item = $this->findItemById($itemAsArray['item_id'], $items)) {
+                    $item->setPrice($this->priceCurrency->convertAndRound($item->getPrice()));
                     $this->itemPriceRenderer->setItem($item);
                     $this->itemPriceRenderer->setTemplate('checkout/cart/item/price/sidebar.phtml');
-                    $result['items'][$key]['product_price']=$this->itemPriceRenderer->toHtml();
+                    $result['items'][$key]['product_price'] = $this->itemPriceRenderer->toHtml();
                     if ($this->itemPriceRenderer->displayPriceExclTax()) {
                         $result['items'][$key]['product_price_value'] = $item->getCalculationPrice();
                     } elseif ($this->itemPriceRenderer->displayPriceInclTax()) {

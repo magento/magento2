@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -13,6 +13,7 @@ use Magento\CatalogInventory\Api\StockRegistryInterface;
 use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\TestFramework\Helper\Bootstrap;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -63,10 +64,10 @@ class VariationHandlerTest extends TestCase
 
     /**
      * @magentoDataFixture Magento/ConfigurableProduct/_files/product_configurable.php
-     * @dataProvider generateSimpleProductsDataProvider
      * @param array $productsData
      * @return void
      */
+    #[DataProvider('generateSimpleProductsDataProvider')]
     public function testGenerateSimpleProducts(array $productsData): void
     {
         $this->product->setImage('some_test_image.jpg')
@@ -94,9 +95,9 @@ class VariationHandlerTest extends TestCase
     /**
      * @param array $productsData
      * @magentoDataFixture Magento/ConfigurableProduct/_files/product_configurable.php
-     * @dataProvider generateSimpleProductsWithPartialDataDataProvider
      * @return void
      */
+    #[DataProvider('generateSimpleProductsWithPartialDataDataProvider')]
     public function testGenerateSimpleProductsWithPartialData(array $productsData): void
     {
         $this->product->setNewVariationsAttributeSetId(4);
@@ -111,10 +112,10 @@ class VariationHandlerTest extends TestCase
 
     /**
      * @magentoDataFixture Magento/ConfigurableProduct/_files/product_configurable.php
-     * @dataProvider generateSimpleProductsWithPartialDataDataProvider
      * @param array $productsData
      * @return void
      */
+    #[DataProvider('generateSimpleProductsWithPartialDataDataProvider')]
     public function testGeneratedSimpleProductInheritTaxClassFromParent(array $productsData): void
     {
         $this->product->setTaxClassId(2);

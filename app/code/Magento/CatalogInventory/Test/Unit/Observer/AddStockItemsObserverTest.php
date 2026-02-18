@@ -7,15 +7,15 @@ declare(strict_types=1);
 
 namespace Magento\CatalogInventory\Test\Unit\Observer;
 
-use Magento\Catalog\Api\Data\ProductExtensionInterface;
+use Magento\Catalog\Api\Data\ProductExtension;
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\ResourceModel\Product\Collection as ProductCollection;
 use Magento\CatalogInventory\Api\Data\StockItemInterface;
 use Magento\CatalogInventory\Api\StockConfigurationInterface;
-use Magento\CatalogInventory\Api\StockItemCriteriaInterfaceFactory;
 use Magento\CatalogInventory\Model\StockRegistryPreloader;
 use Magento\CatalogInventory\Observer\AddStockItemsObserver;
 use Magento\Framework\Event\Observer;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -24,6 +24,7 @@ use PHPUnit\Framework\TestCase;
  */
 class AddStockItemsObserverTest extends TestCase
 {
+    use MockCreationTrait;
     /**
      * Test subject.
      *
@@ -45,10 +46,7 @@ class AddStockItemsObserverTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->stockConfigurationMock = $this->getMockBuilder(StockConfigurationInterface::class)
-            ->onlyMethods(['getDefaultScopeId'])
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->stockConfigurationMock = $this->createMock(StockConfigurationInterface::class);
         $this->stockRegistryPreloader = $this->createMock(StockRegistryPreloader::class);
         $this->subject = new AddStockItemsObserver(
             $this->stockConfigurationMock,
@@ -64,10 +62,7 @@ class AddStockItemsObserverTest extends TestCase
         $productId = 1;
         $defaultScopeId = 0;
 
-        $stockItem = $this->getMockBuilder(StockItemInterface::class)
-            ->onlyMethods(['getProductId'])
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $stockItem = $this->createMock(StockItemInterface::class);
         $stockItem->expects(self::once())
             ->method('getProductId')
             ->willReturn($productId);
@@ -90,17 +85,15 @@ class AddStockItemsObserverTest extends TestCase
             ->method('getDefaultScopeId')
             ->willReturn($defaultScopeId);
 
-        $productExtension = $this->getMockBuilder(ProductExtensionInterface::class)
-            ->addMethods(['setStockItem'])
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $productExtension = $this->createPartialMockWithReflection(
+            ProductExtension::class,
+            ['setStockItem']
+        );
         $productExtension->expects(self::once())
             ->method('setStockItem')
             ->with(self::identicalTo($stockItem));
 
-        $product = $this->getMockBuilder(Product::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $product = $this->createMock(Product::class);
         $product->expects(self::once())
             ->method('getExtensionAttributes')
             ->willReturn($productExtension);
@@ -110,9 +103,7 @@ class AddStockItemsObserverTest extends TestCase
             ->willReturnSelf();
 
         /** @var ProductCollection|MockObject $productCollection */
-        $productCollection = $this->getMockBuilder(ProductCollection::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $productCollection = $this->createMock(ProductCollection::class);
         $productCollection->expects(self::once())
             ->method('getItems')
             ->willReturn([$productId => $product]);
@@ -122,9 +113,7 @@ class AddStockItemsObserverTest extends TestCase
             ->willReturn($product);
 
         /** @var Observer|MockObject $observer */
-        $observer = $this->getMockBuilder(Observer::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $observer = $this->createMock(Observer::class);
         $observer->expects(self::once())
             ->method('getData')
             ->with('collection')

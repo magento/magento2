@@ -28,9 +28,7 @@ class RowSizeEstimatorTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->resourceConnectionMock = $this->getMockBuilder(ResourceConnection::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->resourceConnectionMock = $this->createMock(ResourceConnection::class);
 
         $this->model = new RowSizeEstimator(
             $this->resourceConnectionMock
@@ -39,11 +37,8 @@ class RowSizeEstimatorTest extends TestCase
 
     public function testEstimateRowSize()
     {
-        $connectionMock = $this->getMockBuilder(AdapterInterface::class)
-            ->getMock();
-        $storeGroupCounterMock = $this->getMockBuilder(Select::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $connectionMock = $this->createMock(AdapterInterface::class);
+        $storeGroupCounterMock = $this->createMock(Select::class);
         $this->resourceConnectionMock->expects($this->exactly(2))
             ->method('getTableName')
             ->willReturnMap([['store_group', 'storegrouptable'], ['catalog_category_product', 'ccp']]);

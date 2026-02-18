@@ -9,6 +9,7 @@ namespace Magento\Catalog\Model\Plugin\SpecialPricePluginForREST;
 
 use Magento\Catalog\Model\Product\Price\SpecialPriceStorage;
 use Magento\Store\Model\StoreManagerInterface;
+use Magento\Framework\Exception\InputException;
 
 /**
  * Special price storage Plugin to handle website scope issue at the frontend (only for REST API calls)
@@ -31,11 +32,18 @@ class SpecialPriceStoragePlugin
      *
      * @param SpecialPriceStorage $subject
      * @param callable $proceed
-     * @param array $prices
+     * @param mixed $prices
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function aroundUpdate(SpecialPriceStorage $subject, callable $proceed, array $prices)
+    public function aroundUpdate(SpecialPriceStorage $subject, callable $proceed, $prices)
     {
+        // Validate input before processing
+        if ($prices === null || !is_array($prices)) {
+            throw new InputException(
+                __('Invalid input data format. Expected an array of prices.')
+            );
+        }
+
         $prices = $this->applyWebsitePrices($prices);
         return $proceed($prices);
     }

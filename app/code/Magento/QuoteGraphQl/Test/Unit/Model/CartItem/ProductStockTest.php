@@ -9,10 +9,12 @@ namespace Magento\QuoteGraphQl\Test\Unit\Model\CartItem;
 
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\Catalog\Model\Product;
 use Magento\CatalogInventory\Api\Data\StockStatusInterface;
 use Magento\CatalogInventory\Api\StockRegistryInterface;
 use Magento\CatalogInventory\Model\StockState;
 use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Quote\Model\Quote\Item;
 use Magento\Quote\Model\Quote\Item\Option;
 use Magento\QuoteGraphQl\Model\CartItem\ProductStock;
@@ -25,6 +27,7 @@ use PHPUnit\Framework\TestCase;
  */
 class ProductStockTest extends TestCase
 {
+    use MockCreationTrait;
     /**
      * @var ProductStock
      */
@@ -95,25 +98,27 @@ class ProductStockTest extends TestCase
             $this->scopeConfigMock,
             $this->stockRegistryMock
         );
-        $this->stockStatusMock = $this->getMockBuilder(StockStatusInterface::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['getQty', 'getStockStatus'])
-            ->getMockForAbstractClass();
-        $this->cartItemMock = $this->getMockBuilder(Item::class)
-            ->addMethods(['getQtyToAdd', 'getPreviousQty'])
-            ->onlyMethods(['getStore', 'getProductType', 'getProduct', 'getChildren', 'getQtyOptions'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->productMock = $this->getMockBuilder(ProductInterface::class)
-            ->onlyMethods(['getId'])
-            ->addMethods(['getStore'])
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-        $this->optionProductMock = $this->getMockBuilder(ProductInterface::class)
-            ->onlyMethods(['getId'])
-            ->addMethods(['getStore'])
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->stockStatusMock = $this->createMock(StockStatusInterface::class);
+        $this->cartItemMock = $this->createPartialMockWithReflection(
+            \Magento\Quote\Model\Quote\Item::class,
+            [
+                'getStore',
+                'getProductType',
+                'getProduct',
+                'getChildren',
+                'getQtyOptions',
+                'getQtyToAdd',
+                'getPreviousQty'
+            ]
+        );
+        $this->productMock = $this->createPartialMock(
+            Product::class,
+            ['getId', 'getStore']
+        );
+        $this->optionProductMock = $this->createPartialMock(
+            Product::class,
+            ['getId', 'getStore']
+        );
         $this->storeMock = $this->createMock(StoreInterface::class);
         $this->qtyOptionMock = $this->createMock(Option::class);
     }

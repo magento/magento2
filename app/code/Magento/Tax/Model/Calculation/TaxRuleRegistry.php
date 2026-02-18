@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Tax\Model\Calculation;
@@ -41,7 +41,11 @@ class TaxRuleRegistry
      */
     public function registerTaxRule(TaxRuleModel $taxRuleModel)
     {
-        $this->registry[$taxRuleModel->getId()] = $taxRuleModel;
+        // PHP 8.5: Using null as array offset is deprecated
+        $taxRuleId = $taxRuleModel->getId();
+        if ($taxRuleId !== null) {
+            $this->registry[$taxRuleId] = $taxRuleModel;
+        }
     }
 
     /**
@@ -53,6 +57,10 @@ class TaxRuleRegistry
      */
     public function retrieveTaxRule($taxRuleId)
     {
+        if ($taxRuleId === null) {
+            throw NoSuchEntityException::singleField('taxRuleId', $taxRuleId);
+        }
+
         if (isset($this->registry[$taxRuleId])) {
             return $this->registry[$taxRuleId];
         }
@@ -73,6 +81,8 @@ class TaxRuleRegistry
      */
     public function removeTaxRule($taxRuleId)
     {
-        unset($this->registry[$taxRuleId]);
+        if ($taxRuleId !== null) {
+            unset($this->registry[$taxRuleId]);
+        }
     }
 }

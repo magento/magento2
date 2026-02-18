@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright 2025 Adobe
+ * Copyright 2020 Adobe
  * All Rights Reserved.
  */
 declare(strict_types=1);
@@ -222,7 +222,7 @@ class GenerateRenditions implements GenerateRenditionsInterface
     {
         return $this->filesystem->getDirectoryWrite(DirectoryList::MEDIA);
     }
-    
+
     /**
      * Get image file name pattern for validation
      *

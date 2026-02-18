@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Paypal\Model;
@@ -511,7 +511,8 @@ class Payflowlink extends \Magento\Paypal\Model\Payflowpro
             Config::PAYMENT_ACTION_SALE => self::TRXTYPE_SALE
         ];
 
-        return $tokenTypes[$this->getConfigData('payment_action')] ?? '';
+        $paymentAction = $this->getConfigData('payment_action') ?? '';
+        return $tokenTypes[$paymentAction] ?? '';
     }
 
     /**

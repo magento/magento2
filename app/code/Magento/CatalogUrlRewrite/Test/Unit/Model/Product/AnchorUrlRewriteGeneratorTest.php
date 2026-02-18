@@ -119,13 +119,13 @@ class AnchorUrlRewriteGeneratorTest extends TestCase
         $category = $this->createMock(Category::class);
         $category->expects($this->any())->method('getId')->willReturn($categoryIds);
         $category->expects($this->any())->method('getAnchorsAbove')->willReturn($categoryIds);
-        $category->expects($this->any())->method('getParentId')->will(
-            $this->onConsecutiveCalls(
-                $categoryIds[0],
-                $categoryIds[1],
-                $categoryIds[2],
-                $categoryIds[3]
-            )
+        $parentIdCallCount = 0;
+        $category->expects($this->any())->method('getParentId')->willReturnCallback(
+            function () use ($categoryIds, &$parentIdCallCount) {
+                $result = $categoryIds[$parentIdCallCount % count($categoryIds)];
+                $parentIdCallCount++;
+                return $result;
+            }
         );
         $this->categoryRepositoryInterface
             ->expects($this->any())
@@ -146,13 +146,14 @@ class AnchorUrlRewriteGeneratorTest extends TestCase
             ->with(ProductUrlRewriteGenerator::ENTITY_TYPE)->willReturnSelf();
         $this->urlRewrite->expects($this->any())->method('setRequestPath')->willReturnSelf();
         $this->urlRewrite->expects($this->any())->method('setTargetPath')->willReturnSelf();
+        $metadataCallCount = 0;
         $this->urlRewrite->expects($this->any())->method('setMetadata')
-            ->will(
-                $this->onConsecutiveCalls(
-                    $urls[0],
-                    $urls[1],
-                    $urls[2]
-                )
+            ->willReturnCallback(
+                function () use ($urls, &$metadataCallCount) {
+                    $result = $urls[$metadataCallCount % count($urls)];
+                    $metadataCallCount++;
+                    return $result;
+                }
             );
         $this->urlRewriteFactory->expects($this->any())->method('create')->willReturn(
             $this->urlRewrite

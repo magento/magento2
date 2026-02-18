@@ -410,7 +410,6 @@ class Curl implements \Magento\Framework\HTTP\ClientInterface
         if ($err) {
             $this->doError(curl_error($this->_ch));
         }
-        curl_close($this->_ch);
     }
 
     /**

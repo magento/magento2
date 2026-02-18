@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Directory\Model\ResourceModel\Country;
@@ -120,7 +120,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
     }
 
     /**
-     * Foreground countries
+     * Highlighted country codes list.
      *
      * @var array
      */
@@ -137,9 +137,10 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
     }
 
     /**
-     * Return Allowed Countries reader
+     * Return allowed countries reader.
      *
-     * @deprecated 100.1.2
+     * @deprecated 100.1.2 Use constructor-injected AllowedCountries instead.
+     * @see AllowedCountries
      * @return \Magento\Directory\Model\AllowedCountries
      */
     private function getAllowedCountriesReader()
@@ -203,7 +204,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
                 if (is_array($iso)) {
                     $whereOr = [];
                     foreach ($iso as $iso_curr) {
-                        $whereOr[] .= $this->_getConditionSql("{$iso_curr}_code", ['in' => $countryCode]);
+                            $whereOr[] = $this->_getConditionSql("{$iso_curr}_code", ['in' => $countryCode]);
                     }
                     $this->_select->where('(' . implode(') OR (', $whereOr) . ')');
                 } else {
@@ -213,7 +214,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
                 if (is_array($iso)) {
                     $whereOr = [];
                     foreach ($iso as $iso_curr) {
-                        $whereOr[] .= $this->_getConditionSql("{$iso_curr}_code", $countryCode);
+                            $whereOr[] = $this->_getConditionSql("{$iso_curr}_code", $countryCode);
                     }
                     $this->_select->where('(' . implode(') OR (', $whereOr) . ')');
                 } else {
@@ -299,7 +300,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
                 \Magento\Directory\Helper\Data::XML_PATH_DEFAULT_COUNTRY,
                 ScopeInterface::SCOPE_WEBSITES,
                 $website
-            );
+            ) ?? '';
             $defaultCountry[$defaultCountryConfig][] = $website->getId();
         }
 

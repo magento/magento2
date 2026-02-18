@@ -80,6 +80,9 @@
     <type name="Magento\Quote\Model\QuoteManagement">
         <plugin name="merge_guest_orders_with_customer_after_place"
                 type="Magento\QuoteGraphQl\Plugin\Model\MergeGuestOrder" />
+        <plugin name="validate_payment_method_on_place_order"
+                type="Magento\QuoteGraphQl\Plugin\Quote\ValidatePaymentOnPlaceOrder"
+                sortOrder="10"/>
     </type>
     <type name="Magento\QuoteGraphQl\Model\Resolver\UpdateCartItems">
         <arguments>
@@ -113,5 +116,11 @@
                 <item name="process_order_response_formatter" xsi:type="object">Magento\QuoteGraphQl\Model\OrderResponseFormatter</item>
             </argument>
         </arguments>
+    </type>
+    <type name="Magento\Quote\Model\ValidationRules\ShippingMethodValidationRule">
+        <plugin name="shipping_method_validation_plugin"
+                type="Magento\QuoteGraphQl\Plugin\ShippingMethodValidationRulePlugin"
+                sortOrder="10"
+                disabled="false"/>
     </type>
 </config>

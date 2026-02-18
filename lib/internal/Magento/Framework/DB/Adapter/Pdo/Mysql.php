@@ -7,6 +7,7 @@
 namespace Magento\Framework\DB\Adapter\Pdo;
 
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Cache\CacheConstants;
 use Magento\Framework\Cache\FrontendInterface;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\DB\Adapter\ConnectionException;
@@ -499,9 +500,10 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface, Rese
         } elseif (strpos($this->_config['host'], ':') !== false) {
             list($this->_config['host'], $this->_config['port']) = explode(':', $this->_config['host']);
         }
+        $multiStmtAttr = $this->getMysqlConstant('ATTR_MULTI_STATEMENTS');
 
-        if (!isset($this->_config['driver_options'][\PDO::MYSQL_ATTR_MULTI_STATEMENTS])) {
-            $this->_config['driver_options'][\PDO::MYSQL_ATTR_MULTI_STATEMENTS] = false;
+        if (!isset($this->_config['driver_options'][$multiStmtAttr])) {
+            $this->_config['driver_options'][$multiStmtAttr] = false;
         }
 
         if (!isset($this->_config['driver_options'][\PDO::ATTR_STRINGIFY_FETCHES])) {
@@ -527,12 +529,32 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface, Rese
 
         if (!$this->_connectionFlagsSet) {
             $this->_connection->setAttribute(\PDO::ATTR_EMULATE_PREPARES, true);
+            $bufferedQueryAttr = $this->getMysqlConstant('ATTR_USE_BUFFERED_QUERY');
             if (isset($this->_config['use_buffered_query']) && $this->_config['use_buffered_query'] === false) {
-                $this->_connection->setAttribute(\PDO::MYSQL_ATTR_USE_BUFFERED_QUERY, false);
+                $this->_connection->setAttribute($bufferedQueryAttr, false);
             } else {
-                $this->_connection->setAttribute(\PDO::MYSQL_ATTR_USE_BUFFERED_QUERY, true);
+                $this->_connection->setAttribute($bufferedQueryAttr, true);
             }
             $this->_connectionFlagsSet = true;
+        }
+    }
+
+    /**
+     * Get MySQL-specific PDO constant for backward compatibility
+     *
+     * PHP 8.5 deprecated PDO::MYSQL_ATTR_* in favor of Pdo\Mysql::ATTR_*
+     * This method provides compatibility across PHP 8.2-8.5
+     *
+     * @param string $constantName Constant name without prefix (e.g., 'ATTR_MULTI_STATEMENTS')
+     * @return int
+     */
+    private function getMysqlConstant(string $constantName): int
+    {
+        if(version_compare(PHP_VERSION, '8.4') < 0){
+            return constant('PDO::MYSQL_' . $constantName);
+        }
+        else{
+            return constant('Pdo\Mysql::' . $constantName);
         }
     }
 
@@ -1736,7 +1758,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface, Rese
         if ($tableName === null) {
             $this->_ddlCache = [];
             if ($this->_cacheAdapter) {
-                $this->_cacheAdapter->clean(\Zend_Cache::CLEANING_MODE_MATCHING_TAG, [self::DDL_CACHE_TAG]);
+                $this->_cacheAdapter->clean(CacheConstants::CLEANING_MODE_MATCHING_TAG, [self::DDL_CACHE_TAG]);
             }
         } else {
             $cacheKey = $this->_getTableName($tableName, $schemaName);
@@ -2153,7 +2175,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface, Rese
                 $field = $this->quoteIdentifier($k);
                 if ($v instanceof \Zend_Db_Expr) {
                     $value = $v->__toString();
-                } elseif ($v instanceof \Laminas\Db\Sql\Expression) {
+                } elseif ($v instanceof \PhpDb\Sql\Expression) {
                     $value = $v->getExpression();
                 } elseif (is_string($v)) {
                     $value = sprintf('VALUES(%s)', $this->quoteIdentifier($v));
@@ -3190,7 +3212,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface, Rese
 
         $query = '';
         if (is_array($condition)) {
-            $key = key(array_intersect_key($condition, $conditionKeyMap));
+            $key = key(array_intersect_key($condition, $conditionKeyMap)) ?? '';
 
             if (isset($condition['from']) || isset($condition['to'])) {
                 if (isset($condition['from'])) {

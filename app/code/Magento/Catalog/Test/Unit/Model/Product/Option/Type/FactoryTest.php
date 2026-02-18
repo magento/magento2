@@ -28,7 +28,7 @@ class FactoryTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->_objectManagerMock = $this->getMockForAbstractClass(ObjectManagerInterface::class);
+        $this->_objectManagerMock = $this->createMock(ObjectManagerInterface::class);
 
         $objectManagerHelper = new ObjectManager($this);
         $this->_factory = $objectManagerHelper->getObject(
@@ -84,9 +84,7 @@ class FactoryTest extends TestCase
         );
         $className = 'WrongClass';
 
-        $filterMock = $this->getMockBuilder($className)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $filterMock = $this->createMock(\stdClass::class);
         $this->_objectManagerMock->expects($this->once())->method('create')->willReturn($filterMock);
 
         $this->_factory->create($className);

@@ -20,6 +20,7 @@
         </annotations>
         <before>
             <!-- Step1: Login as Admin -->
+            <magentoCLI command="config:set {{DefaultStoreFrontProductsSortByOrder.path}} {{DefaultStoreFrontProductsSortByOrder.value}}" stepKey="setDefaultSortByOrderValue"/>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
         </before>
         <after>

@@ -1,22 +1,18 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Security\Test\Unit\Model\ResourceModel\PasswordResetRequestEvent;
 
-use Magento\Framework\Data\Collection\Db\FetchStrategyInterface;
-use Magento\Framework\Data\Collection\EntityFactoryInterface;
 use Magento\Framework\DB\Adapter\Pdo\Mysql;
 use Magento\Framework\DB\Select;
-use Magento\Framework\Event\ManagerInterface;
-use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
 use Magento\Framework\Stdlib\DateTime\DateTime;
+use Magento\Security\Model\ResourceModel\PasswordResetRequestEvent as PasswordResetRequestEventResource;
 use Magento\Security\Model\ResourceModel\PasswordResetRequestEvent\Collection;
 use PHPUnit\Framework\TestCase;
-use Psr\Log\LoggerInterface;
 
 /**
  * Test class for \Magento\Security\Model\ResourceModel\AdminSessionInfo\Collection testing
@@ -32,7 +28,7 @@ class CollectionTest extends TestCase
     /** @var Select */
     protected $selectMock;
 
-    /** @var AbstractDb */
+    /** @var PasswordResetRequestEventResource */
     protected $resourceMock;
 
     /**
@@ -41,11 +37,6 @@ class CollectionTest extends TestCase
      */
     protected function setUp(): void
     {
-        $entityFactory = $this->getMockForAbstractClass(EntityFactoryInterface::class);
-        $logger = $this->getMockForAbstractClass(LoggerInterface::class);
-        $fetchStrategy = $this->getMockForAbstractClass(FetchStrategyInterface::class);
-        $eventManager = $this->getMockForAbstractClass(ManagerInterface::class);
-
         $this->dateTimeMock = $this->createPartialMock(
             DateTime::class,
             ['gmtTimestamp']
@@ -53,16 +44,13 @@ class CollectionTest extends TestCase
 
         $this->selectMock = $this->createPartialMock(Select::class, ['limit', 'from']);
 
-        $connection = $this->getMockBuilder(Mysql::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $connection = $this->createMock(Mysql::class);
         $connection->expects($this->any())->method('select')->willReturn($this->selectMock);
 
-        $this->resourceMock = $this->getMockBuilder(AbstractDb::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['deleteRecordsOlderThen'])
-            ->onlyMethods(['getConnection', 'getMainTable', 'getTable'])
-            ->getMockForAbstractClass();
+        $this->resourceMock = $this->createPartialMock(
+            PasswordResetRequestEventResource::class,
+            ['deleteRecordsOlderThen', 'getConnection', 'getMainTable', 'getTable']
+        );
 
         $this->resourceMock->expects($this->any())
             ->method('getConnection')
@@ -71,27 +59,13 @@ class CollectionTest extends TestCase
         $this->resourceMock->expects($this->any())->method('getMainTable')->willReturn('table_test');
         $this->resourceMock->expects($this->any())->method('getTable')->willReturn('test');
 
-        $this->collectionMock = $this->getMockBuilder(
-            Collection::class
-        )
-            ->onlyMethods(['addFieldToFilter', 'addOrder', 'getSelect', 'getResource', 'getConnection'])
-            ->setConstructorArgs(
-                [
-                    $entityFactory,
-                    $logger,
-                    $fetchStrategy,
-                    $eventManager,
-                    $this->dateTimeMock,
-                    $connection,
-                    $this->resourceMock
-                ]
-            )
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->collectionMock = $this->createPartialMock(
+            Collection::class,
+            ['addFieldToFilter', 'addOrder', 'getSelect', 'getResource', 'getConnection']
+        );
 
         $reflection = new \ReflectionClass(get_class($this->collectionMock));
         $reflectionProperty = $reflection->getProperty('dateTime');
-        $reflectionProperty->setAccessible(true);
         $reflectionProperty->setValue($this->collectionMock, $this->dateTimeMock);
 
         $this->collectionMock->expects($this->any())

@@ -1,6 +1,6 @@
 // /**
-//  * Copyright © Magento, Inc. All rights reserved.
-//  * See COPYING.txt for license details.
+//  * Copyright 2015 Adobe
+//  * All Rights Reserved.
 //  */
 
 //
@@ -10,14 +10,14 @@
 & when (@media-common = true) {
     .form.send.friend {
         &:extend(.abs-add-fields all);
-        
+
         .fieldset {
             .field {
                 .control {
                     width: 100%;
-                }  
+                }
             }
-        } 
+        }
     }
 
     .product-social-links .action.mailto.friend {
@@ -52,12 +52,12 @@
         }
     }
 }
-.media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen__m) { 
+.media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen__m) {
     .form.send.friend {
         .fieldset {
             padding-bottom: @indent__xs;
-        } 
-        
+        }
+
         .action {
             &.remove {
                 margin-left: 0;
