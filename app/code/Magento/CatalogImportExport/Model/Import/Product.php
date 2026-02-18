@@ -3101,7 +3101,7 @@ class Product extends AbstractEntity
 
             if (isset($this->defaultStockData[$key])
                 && isset($this->defaultStockData[$useConfigName])
-                && !empty($value)
+                && $value !== null && $value !== ''
                 && empty($rowData[$useConfigName])
             ) {
                 $useConfigFields[$useConfigName] = ($value == self::INVENTORY_USE_CONFIG) ? 1 : 0;
