@@ -103,6 +103,10 @@ class TelephoneTest extends TestCase
             [
                 'telephone' => '(123) 456-7890',
                 'message' => 'spaces must be allowed in telephone'
+            ],
+            [
+                'telephone' => '123/4567890',
+                'message' => 'forward slash must be allowed in telephone'
             ]
         ];
     }

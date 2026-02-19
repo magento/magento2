@@ -21,10 +21,11 @@ class Telephone extends AbstractValidator
      * \() :Matches open and close parentheses
      * \+: Matches the plus sign.
      * \-: Matches the hyphen.
+     * \/ :Matches the forward slash.
      * \d: Digits (0-9).
      * \s: Matches whitespace characters.
      */
-    private const PATTERN_TELEPHONE = '/^[\d\s\+\-\()]{1,20}$/u';
+    private const PATTERN_TELEPHONE = '/^[\d\s\+\-\()\/]{1,20}$/u';
 
     /**
      * Validate telephone fields.
@@ -36,7 +37,7 @@ class Telephone extends AbstractValidator
     {
         if (!$this->isValidTelephone((string)$value->getTelephone())) {
             parent::_addMessages([[
-                'telephone' => "Invalid Phone Number. Please use 0-9, +, -, (, ) and space."
+                'telephone' => "Invalid Phone Number. Please use 0-9, +, -, (, ), / and space."
             ]]);
         }
 
