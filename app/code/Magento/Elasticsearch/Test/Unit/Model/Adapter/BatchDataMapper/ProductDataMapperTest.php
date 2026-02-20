@@ -483,6 +483,18 @@ class ProductDataMapperTest extends TestCase
                 15,
                 [],
             ],
+            'excluded attribute media_gallery' => [
+                10,
+                [
+                    'attribute_code' => 'media_gallery',
+                    'backend_type' => 'varchar',
+                    'frontend_input' => 'gallery',
+                    'is_searchable' => false,
+                    'options' => [],
+                ],
+                ['/img1.jpg', '/img2.jpg'],
+                [],
+            ],
             'sortable multiple values' => [
                 10,
                 [

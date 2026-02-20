@@ -68,7 +68,6 @@ class ProductDataMapper implements BatchDataMapperInterface
         'price',
         'media_gallery',
         'tier_price',
-        'media_gallery',
         'giftcard_amounts',
     ];
 
