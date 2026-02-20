@@ -12,6 +12,7 @@ use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\DB\Adapter\SqlVersionProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class SqlVersionProviderTest extends TestCase
 {
@@ -40,9 +41,8 @@ class SqlVersionProviderTest extends TestCase
         );
     }
 
-    /**
-     * @dataProvider mariaDbSuffixKeyDataProvider
-     */
+    /**     */
+    #[DataProvider('mariaDbSuffixKeyDataProvider')]
     public function testGetMariaDbSuffixKey(
         string $sqlExactVersion,
         string $expectedSuffixKey

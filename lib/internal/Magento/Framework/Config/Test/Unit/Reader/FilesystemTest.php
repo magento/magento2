@@ -59,10 +59,10 @@ class FilesystemTest extends TestCase
             $this->markTestSkipped('Skipped on HHVM. Will be fixed in MAGETWO-45033');
         }
         $this->_file = file_get_contents(__DIR__ . '/../_files/reader/config.xml');
-        $this->_fileResolverMock = $this->getMockForAbstractClass(FileResolverInterface::class);
-        $this->_converterMock = $this->getMockForAbstractClass(ConverterInterface::class);
-        $this->_schemaLocatorMock = $this->getMockForAbstractClass(SchemaLocatorInterface::class);
-        $this->_validationStateMock = $this->getMockForAbstractClass(ValidationStateInterface::class);
+        $this->_fileResolverMock = $this->createMock(FileResolverInterface::class);
+        $this->_converterMock = $this->createMock(ConverterInterface::class);
+        $this->_schemaLocatorMock = $this->createMock(SchemaLocatorInterface::class);
+        $this->_validationStateMock = $this->createMock(ValidationStateInterface::class);
         $this->urnResolver = new UrnResolver();
     }
 

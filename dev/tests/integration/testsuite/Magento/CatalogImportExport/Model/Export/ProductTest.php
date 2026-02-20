@@ -38,6 +38,7 @@ use Magento\TestFramework\Fixture\DataFixtureStorage;
 use Magento\TestFramework\Fixture\DataFixtureStorageManager;
 use Magento\TestFramework\Fixture\DbIsolation;
 use Magento\Translation\Test\Fixture\Translation;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * @magentoDataFixtureBeforeTransaction Magento/Catalog/_files/enable_reindex_schedule.php
@@ -199,11 +200,11 @@ class ProductTest extends \PHPUnit\Framework\TestCase
      * @magentoDataFixture Magento/Catalog/_files/product_text_attribute.php
      * @magentoDataFixture Magento/Catalog/_files/second_product_simple.php
      * @magentoDbIsolation enabled
-     * @dataProvider exportWithJsonAndMarkupTextAttributeDataProvider
      * @param string $attributeData
      * @param string $expectedResult
      * @return void
      */
+    #[DataProvider('exportWithJsonAndMarkupTextAttributeDataProvider')]
     public function testExportWithJsonAndMarkupTextAttribute(string $attributeData, string $expectedResult): void
     {
         /** @var \Magento\Catalog\Api\ProductRepositoryInterface $productRepository */
@@ -790,13 +791,13 @@ class ProductTest extends \PHPUnit\Framework\TestCase
      * Verify that "stock status" filter correctly applies to export result
      *
      * @magentoDataFixture Magento/Catalog/_files/multiple_products_with_few_out_of_stock.php
-     * @dataProvider filterByQuantityAndStockStatusDataProvider
      *
      * @param string $value
      * @param array $productsIncluded
      * @param array $productsNotIncluded
      * @return void
      */
+    #[DataProvider('filterByQuantityAndStockStatusDataProvider')]
     public function testFilterByQuantityAndStockStatus(
         string $value,
         array $productsIncluded,
@@ -857,8 +858,8 @@ class ProductTest extends \PHPUnit\Framework\TestCase
      *
      * @magentoDataFixture Magento/Catalog/_files/product_simple_with_options.php
      * @magentoDataFixture Magento/Catalog/_files/product_with_two_websites.php
-     * @dataProvider websiteIdFilterDataProvider
      */
+    #[DataProvider('websiteIdFilterDataProvider')]
     public function testFilterByWebsiteId(string $websiteIdFilter): void
     {
         $websiteRepository = $this->objectManager->get(\Magento\Store\Api\WebsiteRepositoryInterface::class);

@@ -64,17 +64,13 @@ class UploadJsTest extends ThemeTestCase
         $this->serviceModel = $this->createMock(Service::class);
         $this->themeFactory = $this->createMock(FlyweightFactory::class);
         $this->jsonHelper = $this->createMock(Data::class);
-        $this->logger = $this->getMockForAbstractClass(LoggerInterface::class, [], '', false);
-        $this->themeCustomization = $this->getMockForAbstractClass(
+        $this->logger = $this->createMock(LoggerInterface::class);
+        $this->themeCustomization = $this->createPartialMockWithReflection(
             CustomizationInterface::class,
-            [],
-            '',
-            false,
-            false,
-            true,
             [
-                'generateFileInfo',
-                'getFilesByType'
+                'getFiles', 'getFilesByType', 'getCustomizationPath',
+                'getThemeFilesPath', 'getCustomViewConfigPath', 'reorder', 'delete',
+                'generateFileInfo'
             ]
         );
         $this->customizationJs = $this->createMock(Js::class);
@@ -161,19 +157,14 @@ class UploadJsTest extends ThemeTestCase
     public function testExecute(): void
     {
         $themeId = 23;
-        $theme = $this->getMockForAbstractClass(ThemeInterface::class, [], '', false);
-        $jsFile = $this->getMockForAbstractClass(
+        $theme = $this->createMock(ThemeInterface::class);
+        $jsFile = $this->createPartialMockWithReflection(
             FileInterface::class,
-            [],
-            '',
-            false,
-            true,
-            true,
             [
-                'setTheme',
-                'setFileName',
-                'setData',
-                'save'
+                'setCustomizationService', 'getCustomizationService',
+                'setTheme', 'getTheme', 'setFileName', 'getFileName',
+                'getFullPath', 'getFileInfo', 'getContent', 'save', 'delete',
+                'setData'
             ]
         );
 

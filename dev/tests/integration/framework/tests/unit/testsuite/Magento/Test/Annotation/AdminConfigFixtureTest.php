@@ -11,6 +11,7 @@ use Magento\TestFramework\Annotation\AdminConfigFixture;
 use Magento\TestFramework\Annotation\TestCaseAnnotation;
 use Magento\TestFramework\Workaround\Override\Fixture\Resolver;
 use PHPUnit\Framework\TestCase;
+use ReflectionClass;
 
 /**
  * Test class for \Magento\TestFramework\Annotation\AdminConfigFixture.
@@ -110,9 +111,9 @@ class AdminConfigFixtureTest extends TestCase
             ->getMock();
         $annotations = TestCaseAnnotation::getInstance()->getAnnotations($this);
         $mock->method('applyConfigFixtures')
-            ->willReturn($annotations['method'][$this->object::ANNOTATION]);
-        $reflection = new \ReflectionClass(Resolver::class);
+            ->willReturn($annotations['method'][$this->object::ANNOTATION] ?? []);
+        $reflection = new ReflectionClass(Resolver::class);
         $reflectionProperty = $reflection->getProperty('instance');
-        $reflectionProperty->setValue(Resolver::class, $mock);
+        $reflectionProperty->setValue(null, $mock);
     }
 }

@@ -39,7 +39,7 @@ class CacheCleanerTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $this->action = $this->getMockForAbstractClass(ActionInterface::class);
+        $this->action = $this->createMock(ActionInterface::class);
         $this->cacheCleaner = $this->createMock(DeferredCacheCleaner::class);
         $this->model = new CacheCleaner($this->cacheCleaner);
     }

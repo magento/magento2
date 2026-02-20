@@ -104,7 +104,6 @@ class HostedproTest extends \PHPUnit\Framework\TestCase
     {
         $pro = $this->getMockBuilder(Pro::class)
             ->disableOriginalConstructor()
-            ->addMethods(['__wakeup'])
             ->onlyMethods(['getApi', 'setMethod', 'getConfig'])
             ->getMock();
 

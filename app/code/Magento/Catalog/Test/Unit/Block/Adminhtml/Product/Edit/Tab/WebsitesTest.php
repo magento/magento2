@@ -27,6 +27,8 @@ use Magento\Store\Model\StoreFactory;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Store\Model\Website;
 use Magento\Store\Model\WebsiteFactory;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -39,6 +41,7 @@ use PHPUnit\Framework\TestCase;
  */
 class WebsitesTest extends TestCase
 {
+    use MockCreationTrait;
     /**
      * @var Websites
      */
@@ -92,12 +95,11 @@ class WebsitesTest extends TestCase
 
         $this->registry = $this->createMock(Registry::class);
 
-        $this->product = $this->getMockBuilder(Product::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['getStoreId', 'getId', 'getWebsiteIds'])
-            ->addMethods(['getWebsitesReadonly'])
-            ->getMock();
-        $this->storeManager = $this->getMockForAbstractClass(StoreManagerInterface::class);
+        $this->product = $this->createPartialMockWithReflection(
+            Product::class,
+            ['getStoreId', 'getId', 'getWebsiteIds', 'getWebsitesReadonly']
+        );
+        $this->storeManager = $this->createMock(StoreManagerInterface::class);
         $this->websiteFactory = $this->createMock(WebsiteFactory::class);
         $this->groupFactory = $this->createMock(GroupFactory::class);
         $this->storeFactory = $this->createMock(StoreFactory::class);
@@ -308,8 +310,8 @@ class WebsitesTest extends TestCase
      * @param int $websiteId
      * @param bool $expected
      * @return void
-     * @dataProvider hasWebsiteDataProvider
      */
+    #[DataProvider('hasWebsiteDataProvider')]
     public function testHasWebsite(int $websiteId, bool $expected): void
     {
         $this->product->method('getWebsiteIds')->willReturn([1, 2, 3]);
@@ -335,8 +337,8 @@ class WebsitesTest extends TestCase
      * @param bool $websitesReadonly
      * @param bool $expected
      * @return void
-     * @dataProvider isReadonlyDataProvider
      */
+    #[DataProvider('isReadonlyDataProvider')]
     public function testIsReadonly(bool $websitesReadonly, bool $expected): void
     {
         $this->product->method('getWebsitesReadonly')->willReturn($websitesReadonly);
@@ -399,9 +401,9 @@ class WebsitesTest extends TestCase
      * @param array $expectedContains
      * @param array $expectedNotContains
      * @return void
-     * @dataProvider getChooseFromStoreHtmlDataProvider
      * @throws Exception
      */
+    #[DataProvider('getChooseFromStoreHtmlDataProvider')]
     public function testGetChooseFromStoreHtml(
         array $productWebsites,
         array $websiteData,
@@ -428,11 +430,10 @@ class WebsitesTest extends TestCase
 
         $groups = [];
         foreach ($groupData as $gData) {
-            $group = $this->getMockBuilder(Group::class)
-                ->disableOriginalConstructor()
-                ->onlyMethods(['getName', 'getWebsiteId', 'getStoreCollection'])
-                ->addMethods(['getGroupId'])
-                ->getMock();
+            $group = $this->createPartialMockWithReflection(
+                Group::class,
+                ['getName', 'getWebsiteId', 'getStoreCollection', 'getGroupId']
+            );
             $group->method('getName')->willReturn($gData['name']);
             $group->method('getWebsiteId')->willReturn($gData['website_id']);
             $group->method('getGroupId')->willReturn($gData['id']);
@@ -653,11 +654,10 @@ class WebsitesTest extends TestCase
         $storeCollection->method('setOrder')->willReturnSelf();
         $storeCollection->method('load')->willReturnSelf();
 
-        $group = $this->getMockBuilder(Group::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['getName', 'getWebsiteId', 'getStoreCollection'])
-            ->addMethods(['getGroupId'])
-            ->getMock();
+        $group = $this->createPartialMockWithReflection(
+            Group::class,
+            ['getName', 'getWebsiteId', 'getStoreCollection', 'getGroupId']
+        );
         $group->method('getName')->willReturn('Main Store');
         $group->method('getWebsiteId')->willReturn(1);
         $group->method('getGroupId')->willReturn(1);

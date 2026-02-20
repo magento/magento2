@@ -14,17 +14,18 @@ use Magento\Framework\View\LayoutInterface;
 use Magento\Paypal\Model\Config;
 use Magento\Store\Model\ScopeInterface;
 use Magento\TestFramework\Helper\Bootstrap;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 class BannerTest extends TestCase
 {
     /**
      * @magentoAppArea frontend
-     * @dataProvider getJsLayoutDataProvider
      * @magentoAppIsolation enabled
      * @covers       \Magento\Paypal\Block\PayLater\Banner::getJsLayout()
      * @covers       \Magento\Paypal\Block\PayLater\Banner::getStyleAttributesConfig()
      */
+    #[DataProvider('getJsLayoutDataProvider')]
     public function testGetJsLayout($systemConfig, $blockConfig, $expectedConfig)
     {
         $this->setConfig($systemConfig);
@@ -121,10 +122,10 @@ class BannerTest extends TestCase
 
     /**
      * @magentoAppArea frontend
-     * @dataProvider sdkUrlDataProvider
      * @covers \Magento\Paypal\Block\PayLater\Banner::getJsLayout()
      * @covers \Magento\Paypal\Block\PayLater\Banner::getPayPalSdkUrl()
      */
+    #[DataProvider('sdkUrlDataProvider')]
     public function testSdkUrl($blockConfig, $expectedUrl)
     {
         $layout = Bootstrap::getObjectManager()->get(LayoutInterface::class);
@@ -216,10 +217,10 @@ class BannerTest extends TestCase
      *
      * @magentoAppArea frontend
      * @magentoAppIsolation enabled
-     * @dataProvider toHtmlEmptyDataProvider
      * @param $systemConfig
      * @param $blockConfig
      */
+    #[DataProvider('toHtmlEmptyDataProvider')]
     public function testToHtmlEmpty($systemConfig, $blockConfig)
     {
         //Enable all required options

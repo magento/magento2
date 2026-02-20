@@ -15,6 +15,7 @@ use Magento\Framework\Phrase;
 use Magento\Framework\Session\Generic;
 use Magento\Framework\Url\EncoderInterface;
 use Magento\TestFramework\TestCase\AbstractController;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Class checks customer login action
@@ -57,13 +58,12 @@ class LoginPostTest extends AbstractController
      *
      * @magentoDataFixture Magento/Customer/_files/customer.php
      *
-     * @dataProvider missingParametersDataProvider
-     *
      * @param string|null $email
      * @param string|null $password
      * @param string $expectedErrorMessage
      * @return void
      */
+    #[DataProvider('missingParametersDataProvider')]
     public function testLoginIncorrectParameters(?string $email, ?string $password, string $expectedErrorMessage): void
     {
         $this->prepareRequest($email, $password);

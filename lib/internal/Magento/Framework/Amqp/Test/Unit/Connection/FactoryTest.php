@@ -10,6 +10,7 @@ namespace Magento\Framework\Amqp\Test\Unit\Connection;
 use Magento\Framework\Amqp\Connection\Factory;
 use Magento\Framework\Amqp\Connection\FactoryOptions;
 use PhpAmqpLib\Connection\AMQPStreamConnection;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -45,8 +46,8 @@ class FactoryTest extends TestCase
      * @param bool $sslEnabled
      * @param string $connectionClass
      * @return void
-     * @dataProvider connectionDataProvider
      */
+    #[DataProvider('connectionDataProvider')]
     public function testSSLConnection(bool $sslEnabled, string $connectionClass)
     {
         $this->optionsMock->method('isSslEnabled')->willReturn($sslEnabled);

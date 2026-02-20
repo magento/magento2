@@ -9,7 +9,9 @@ namespace Magento\Catalog\Model\ResourceModel\Product;
 
 use Exception;
 use Magento\Catalog\Api\Data\ProductInterface;
+use Magento\Framework\DB\Sql\Expression;
 use Magento\Framework\EntityManager\MetadataPool;
+use Magento\Store\Model\Store;
 
 class MediaGalleryValue
 {
@@ -84,6 +86,17 @@ class MediaGalleryValue
                 ]
             );
         } else {
+            if (isset($data['label'], $data['store_id'])
+                && $data['label'] === ''
+                && ((int)$data['store_id']) !== Store::DEFAULT_STORE_ID
+            ) {
+                /**
+                 * Ensures empty label is saved as is in store level and not converted to NULL
+                 * because NULL is treated as "use default value" in store scope.
+                 * @see \Magento\Framework\DB\Adapter\AdapterInterface::prepareColumnValue
+                 */
+                $data['label'] = new Expression($connection->quote($data['label']));
+            }
             $this->galleryResource->insertGalleryValueInStore($data);
         }
     }

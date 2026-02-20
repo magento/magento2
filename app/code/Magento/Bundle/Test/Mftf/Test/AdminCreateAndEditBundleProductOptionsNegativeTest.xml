@@ -16,9 +16,6 @@
             <description value="Admin should be able to set/edit other product information when creating/editing a bundle product"/>
             <severity value="MAJOR"/>
             <testCaseId value="MC-224"/>
-            <skip>
-                <issueId value="https://github.com/magento/magento2/issues/25468"/>
-            </skip>
             <group value="Catalog"/>
             <group value="pr_exclude"/>
         </annotations>

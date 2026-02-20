@@ -9,6 +9,7 @@ use Magento\Framework\Intl\DateTimeFactory;
 use Magento\Framework\Stdlib\DateTime;
 use Magento\TestFramework\Mail\Template\TransportBuilderMock;
 use Magento\TestFramework\Helper\Bootstrap;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Test class for \Magento\User\Controller\Adminhtml\Auth
@@ -164,11 +165,11 @@ class AuthTest extends \Magento\TestFramework\TestCase\AbstractBackendController
     }
 
     /**
-     * @dataProvider resetPasswordDataProvider
      * @covers \Magento\User\Controller\Adminhtml\Auth\ResetPasswordPost::execute
      * @covers \Magento\User\Controller\Adminhtml\Auth\ResetPasswordPost::_validateResetPasswordLinkToken
      * @magentoDataFixture Magento/User/_files/dummy_user.php
      */
+    #[DataProvider('resetPasswordDataProvider')]
     public function testResetPasswordPostAction($password, $passwordConfirmation, $isPasswordChanged)
     {
         $objectManager = Bootstrap::getObjectManager();

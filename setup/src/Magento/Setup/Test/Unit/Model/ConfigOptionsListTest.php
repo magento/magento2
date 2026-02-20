@@ -20,6 +20,7 @@ use Magento\Setup\Model\ConfigOptionsList\DriverOptions;
 use Magento\Setup\Model\ConfigOptionsList\Lock;
 use Magento\Setup\Validator\DbValidator;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -223,8 +224,8 @@ class ConfigOptionsListTest extends TestCase
     /**
      * @param string $hosts
      * @param bool $expectedError
-     * @dataProvider validateCacheHostsDataProvider
      */
+    #[DataProvider('validateCacheHostsDataProvider')]
     public function testValidateCacheHosts($hosts, $expectedError)
     {
         $options = [
