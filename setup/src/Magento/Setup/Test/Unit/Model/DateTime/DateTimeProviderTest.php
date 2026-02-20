@@ -27,12 +27,7 @@ class DateTimeProviderTest extends TestCase
         $timeZoneProvider->expects($this->any())
             ->method('get')
             ->willReturn($timeZone);
-        $objectManager = $this->getMockForAbstractClass(
-            ObjectManagerInterface::class,
-            [],
-            '',
-            false
-        );
+        $objectManager = $this->createMock(ObjectManagerInterface::class);
         $objectManager->expects($this->once())
             ->method('create')
             ->with(

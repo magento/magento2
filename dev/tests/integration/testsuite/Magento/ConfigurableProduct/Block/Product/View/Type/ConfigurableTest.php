@@ -22,6 +22,7 @@ use Magento\Framework\View\LayoutInterface;
 use Magento\Store\Api\WebsiteRepositoryInterface;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\TestFramework\Helper\Bootstrap;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -219,12 +220,11 @@ class ConfigurableTest extends TestCase
     }
 
     /**
-     * @dataProvider expectedDataProvider
-     *
      * @param string $label
      * @param array $expectedConfig
      * @return void
      */
+    #[DataProvider('expectedDataProvider')]
     public function testConfigurableProductView(string $label, array $expectedConfig): void
     {
         $attributes = $this->block->decorateArray($this->block->getAllowAttributes());

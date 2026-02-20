@@ -33,7 +33,7 @@ class ConfigTest extends TestCase
             ->method('getRealPath')
             ->with('urn:magento:framework:View/PageLayout/etc/layouts.xsd')
             ->willReturn($urnResolver->getRealPath('urn:magento:framework:View/PageLayout/etc/layouts.xsd'));
-        $validationStateMock = $this->getMockForAbstractClass(ValidationStateInterface::class);
+        $validationStateMock = $this->createMock(ValidationStateInterface::class);
         $validationStateMock->method('isValidationRequired')
             ->willReturn(true);
         $domFactoryMock = $this->createMock(DomFactory::class);

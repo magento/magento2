@@ -19,6 +19,7 @@ use Magento\Setup\Model\InstallerFactory;
 use Magento\Setup\Model\SearchConfig;
 use Magento\Setup\Model\SearchConfigFactory;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Tester\CommandTester;
 
@@ -122,8 +123,8 @@ class UpgradeCommandTest extends TestCase
      * @param array $expectedOptions
      *
      * @return void
-     * @dataProvider executeDataProvider
      */
+    #[DataProvider('executeDataProvider')]
     public function testExecute($options, $deployMode, $expectedString, $expectedOptions): void
     {
         $this->appStateMock->method('getMode')->willReturn($deployMode);

@@ -9,6 +9,9 @@ parameters:
         - %rootDir%/../../../dev/tests/*/tmp/*
         - %rootDir%/../../../dev/tests/*/_generated/*
         - %rootDir%/../../../pub/*
+        # Test modules loaded at runtime only (FixtureCallStorage, TestModule Controller)
+        - %rootDir%/../../../../../../../../api-functional/testsuite/Magento/TestModuleOverrideConfig/MagentoApiDataFixture/*
+        - %rootDir%/../../../../../../../../integration/testsuite/Magento/Backend/App/RouterTest.php
     scanDirectories:
         - %rootDir%/../../../dev/tests/static/framework/tests/unit/testsuite/Magento
         - %rootDir%/../../../dev/tests/integration/framework/tests/unit/testsuite/Magento
@@ -42,7 +45,12 @@ parameters:
         - '#has unknown class Predis\\Client as its type.#'
         - '#has invalid return type Predis\\Client.#'
         - '#Parameter .* has invalid type Predis\\Client.#'
-
+        # Closures in data provider use $this via bindTo() at runtime (static context has no $this)
+        - message: '#Undefined variable: \$this#'
+          path: ../../../../../../../../tests/api-functional/testsuite/Magento/GraphQl/CustomerGraphQl/Model/Resolver/CustomerTest.php
+        # Test module classes in _files (excluded from scan) - loaded at runtime
+        - '~FixtureCallStorage not found\.?~'
+        - '~TestModule\\Controller\\Adminhtml\\Controller not found\.?~'
 
 services:
     -

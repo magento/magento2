@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\GraphQl\LoginAsCustomerGraphQl;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use Exception;
 use Magento\Framework\Exception\AuthenticationException;
 use Magento\Integration\Api\AdminTokenServiceInterface as AdminTokenService;
@@ -117,12 +118,12 @@ class GenerateLoginCustomerTokenTest extends GraphQlAbstract
      * @magentoApiDataFixture Magento/LoginAsCustomer/_files/admin.php
      * @magentoConfigFixture admin_store login_as_customer/general/enabled 1
      *
-     * @dataProvider dataProviderInvalidInfo
      * @param string $adminUserName
      * @param string $adminPassword
      * @param string $customerEmail
      * @param string $message
      */
+    #[DataProvider('dataProviderInvalidInfo')]
     public function testGenerateCustomerTokenInvalidData(
         string $adminUserName,
         string $adminPassword,

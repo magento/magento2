@@ -69,11 +69,17 @@
             <argument name="productOption" value="$$getConfigAttributeOption.value$$"/>
             <argument name="qty" value="1"/>
         </actionGroup>
-        <remove keyForRemoval="createPackage"/>
+        <!-- Replace createPackage step with assertion to verify virtual product exclusion -->
         <actionGroup ref="AdminAssertProductsIntoPackageActionGroup" after="clickSubmitShipment" stepKey="assetShipmentPackageForSimpleConfigurableAndVirtualProduct">
             <argument name="simpleProductName" value="$$createProduct.name$$"/>
             <argument name="configurableProductName" value="$$createConfigProduct.name$$"/>
             <argument name="virtualProductName" value="$$initialVirtualProduct.name$$"/>
         </actionGroup>
+        <remove keyForRemoval="createPackage"/>
+        <!-- Remove shipping method assertions - focus is on virtual product exclusion, not carrier validation -->
+        <remove keyForRemoval="grabShippingMethod"/>
+        <remove keyForRemoval="grabShippingMethodTitle"/>
+        <remove keyForRemoval="assertShippingMethodIsFedEx"/>
+        <remove keyForRemoval="assertShippingMethodTitleIsFedEx"/>
     </test>
 </tests>

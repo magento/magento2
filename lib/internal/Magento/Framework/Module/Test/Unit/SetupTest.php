@@ -35,7 +35,7 @@ class SetupTest extends TestCase
     protected function setUp(): void
     {
         $this->resourceModel = $this->createMock(ResourceConnection::class);
-        $this->connection = $this->getMockForAbstractClass(AdapterInterface::class);
+        $this->connection = $this->createMock(AdapterInterface::class);
         $this->resourceModel->expects($this->any())
             ->method('getConnection')
             ->with(self::CONNECTION_NAME)

@@ -28,11 +28,8 @@ class FormTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->contextMock = $this->getMockBuilder(ContextInterface::class)
-            ->getMockForAbstractClass();
-        $this->filterBuilderMock = $this->getMockBuilder(FilterBuilder::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->contextMock = $this->createMock(ContextInterface::class);
+        $this->filterBuilderMock = $this->createMock(FilterBuilder::class);
 
         $this->contextMock->expects($this->never())->method('getProcessor');
 
@@ -62,8 +59,7 @@ class FormTest extends TestCase
 
         /** @var DataProviderInterface|MockObject $dataProviderMock */
         $dataProviderMock =
-            $this->getMockBuilder(DataProviderInterface::class)
-                ->getMock();
+            $this->createMock(DataProviderInterface::class);
         $dataProviderMock->expects($this->once())
             ->method('getRequestFieldName')
             ->willReturn($requestFieldName);
@@ -80,9 +76,7 @@ class FormTest extends TestCase
             ->willReturn($fieldId);
 
         /** @var Filter|MockObject $filterMock */
-        $filterMock = $this->getMockBuilder(Filter::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $filterMock = $this->createMock(Filter::class);
 
         $this->filterBuilderMock->expects($this->once())
             ->method('setField')
@@ -116,8 +110,7 @@ class FormTest extends TestCase
 
         /** @var DataProviderInterface|MockObject $dataProviderMock */
         $dataProviderMock =
-            $this->getMockBuilder(DataProviderInterface::class)
-                ->getMock();
+            $this->createMock(DataProviderInterface::class);
         $dataProviderMock->expects($this->once())
             ->method('getRequestFieldName')
             ->willReturn($requestFieldName);
@@ -134,9 +127,7 @@ class FormTest extends TestCase
             ->willReturn($fieldId);
 
         /** @var Filter|MockObject $filterMock */
-        $filterMock = $this->getMockBuilder(Filter::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $filterMock = $this->createMock(Filter::class);
 
         $this->filterBuilderMock->expects($this->once())
             ->method('setField')
@@ -175,8 +166,7 @@ class FormTest extends TestCase
 
         /** @var DataProviderInterface|MockObject $dataProviderMock */
         $dataProviderMock =
-            $this->getMockBuilder(DataProviderInterface::class)
-                ->getMock();
+            $this->createMock(DataProviderInterface::class);
         $dataProviderMock->expects($this->once())
             ->method('getRequestFieldName')
             ->willReturn($requestFieldName);
@@ -193,9 +183,7 @@ class FormTest extends TestCase
             ->willReturn($fieldId);
 
         /** @var Filter|MockObject $filterMock */
-        $filterMock = $this->getMockBuilder(Filter::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $filterMock = $this->createMock(Filter::class);
 
         $this->filterBuilderMock->expects($this->once())
             ->method('setField')
@@ -236,8 +224,7 @@ class FormTest extends TestCase
 
         /** @var DataProviderInterface|MockObject $dataProviderMock */
         $dataProviderMock =
-            $this->getMockBuilder(DataProviderInterface::class)
-                ->getMock();
+            $this->createMock(DataProviderInterface::class);
         $dataProviderMock->expects($this->once())
             ->method('getRequestFieldName')
             ->willReturn($requestFieldName);
@@ -254,9 +241,7 @@ class FormTest extends TestCase
             ->willReturn($fieldId);
 
         /** @var Filter|MockObject $filterMock */
-        $filterMock = $this->getMockBuilder(Filter::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $filterMock = $this->createMock(Filter::class);
 
         $this->filterBuilderMock->expects($this->once())
             ->method('setField')
