@@ -361,15 +361,12 @@ class PluginTest extends TestCase
         $reflection = new \ReflectionClass($plugin);
 
         $eventManagerProperty = $reflection->getProperty('eventManager');
-        $eventManagerProperty->setAccessible(true);
         $eventManagerProperty->setValue($plugin, $this->eventManagerMock);
 
         $productFactoryProperty = $reflection->getProperty('productFactory');
-        $productFactoryProperty->setAccessible(true);
         $productFactoryProperty->setValue($plugin, $this->productFactoryMock);
 
         $jsonHelperProperty = $reflection->getProperty('jsonHelper');
-        $jsonHelperProperty->setAccessible(true);
         $jsonHelperProperty->setValue($plugin, $this->jsonHelperMock);
 
         return $plugin;

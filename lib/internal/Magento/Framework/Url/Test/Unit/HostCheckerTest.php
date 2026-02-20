@@ -13,6 +13,7 @@ use Magento\Framework\Url\ScopeInterface;
 use Magento\Framework\Url\ScopeResolverInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class HostCheckerTest extends TestCase
 {
@@ -40,11 +41,10 @@ class HostCheckerTest extends TestCase
         );
     }
 
-    /**
-     * @dataProvider isOwnOriginDataProvider
-     * @param string $url
+    /**     * @param string $url
      * @param boolean $result
      */
+    #[DataProvider('isOwnOriginDataProvider')]
     public function testIsOwnOrigin($url, $result)
     {
         $scopes[0] = $this->getMockBuilder(ScopeInterface::class)

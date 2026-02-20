@@ -68,6 +68,16 @@ class SymfonyL2Cache extends AbstractBackend implements ExtendedBackendInterface
     private bool $useStaleCache;
 
     /**
+     * Key prefix for tracking invalid entries in local cache
+     */
+    private const INVALID_KEY_PREFIX = '__invalid::';
+
+    /**
+     * TTL for invalid markers for 24 hours
+     */
+    private const INVALID_MARK_TTL = 86400;
+
+    /**
      * Constructor
      *
      * @param FrontendInterface $remote Remote cache (L2 - persistent, shared)
@@ -101,32 +111,19 @@ class SymfonyL2Cache extends AbstractBackend implements ExtendedBackendInterface
         // Try local cache first (fast path)
         $localData = $this->local->load($id);
 
+        if ($this->isInvalid($id)) {
+            return $this->handleInvalidKey($id);
+        }
+
         if ($localData !== false) {
-            // Check if local data is still valid by comparing hash
-            $remoteHash = $this->remote->load($id . self::HASH_SUFFIX);
-            $localHash = $this->getDataHash($localData);
-
-            if ($remoteHash === $localHash) {
-                // Local cache is up-to-date
-                return $localData;
+            $result = $this->validateLocalCache($id, $localData);
+            if ($result !== null) {
+                return $result;
             }
-
             // Local cache is stale, fall through to load from remote
         }
 
-        // Load from remote cache
-        $remoteData = $this->remote->load($id);
-
-        if ($remoteData !== false) {
-            // Save to local cache for next time
-            $this->local->save($remoteData, $id);
-            return $remoteData;
-        } elseif ($localData && $this->useStaleCache) {
-            // Remote failed but local (stale) data exists, return stale data for high availability
-            return $localData;
-        }
-
-        return false;
+        return $this->loadFromRemoteOrFallback($id, $localData);
     }
 
     /**
@@ -148,15 +145,32 @@ class SymfonyL2Cache extends AbstractBackend implements ExtendedBackendInterface
      */
     public function save($data, $id, $tags = [], $specificLifetime = null)
     {
-        // Calculate and save hash to remote for synchronization
-        $hash = $this->getDataHash($data);
-        $this->remote->save($hash, $id . self::HASH_SUFFIX, $tags, $specificLifetime);
+        $hashSaved = false;
 
-        // Save data to remote
-        $remoteSaved = $this->remote->save($data, $id, $tags, $specificLifetime);
+        try {
+            // Save data first to avoid hash pointing to non-existent data
+            $remoteSaved = $this->remote->save($data, $id, $tags, $specificLifetime);
+
+            if ($remoteSaved !== false) {
+                // Calculate and save hash to remote for synchronization
+                $hash = $this->getDataHash($data);
+                $hashSaved = $this->remote->save($hash, $id . self::HASH_SUFFIX, $tags, $specificLifetime);
+            }
+        } catch (\Exception $e) {
+            $remoteSaved = false;
+            $hashSaved = false;
+        }
 
         // Save to local cache
         $this->local->save($data, $id, $tags, $specificLifetime);
+
+        if ($remoteSaved !== false && $hashSaved !== false) {
+            $this->markValid($id);
+        } else {
+            if ($this->useStaleCache) {
+                $this->markInvalid($id);
+            }
+        }
 
         return $remoteSaved;
     }
@@ -166,15 +180,28 @@ class SymfonyL2Cache extends AbstractBackend implements ExtendedBackendInterface
      */
     public function remove($id)
     {
-        // Remove hash from remote
-        $this->remote->remove($id . self::HASH_SUFFIX);
+        try {
+            // Remove hash from remote
+            $hashRemoved = $this->remote->remove($id . self::HASH_SUFFIX);
 
-        // Remove from remote
-        $result = $this->remote->remove($id);
+            // Remove from remote
+            $result = $this->remote->remove($id);
+        } catch (\Exception $e) {
+            $hashRemoved = false;
+            $result = false;
+        }
 
         // Only remove from local if NOT using stale cache (keep stale data for availability)
         if (!$this->useStaleCache) {
             $this->local->remove($id);
+        }
+
+        if ($result !== false && $hashRemoved !== false) {
+            $this->markValid($id);
+        } else {
+            if ($this->useStaleCache) {
+                $this->markInvalid($id);
+            }
         }
 
         return $result;
@@ -324,5 +351,120 @@ class SymfonyL2Cache extends AbstractBackend implements ExtendedBackendInterface
     public function getLocal(): FrontendInterface
     {
         return $this->local;
+    }
+
+    /**
+     * Check if a cache key was modified while remote was unavailable
+     *
+     * @param string $id
+     * @return bool
+     */
+    private function isInvalid(string $id): bool
+    {
+        return $this->local->load(self::INVALID_KEY_PREFIX . $id) !== false;
+    }
+
+    /**
+     * Mark a cache key as invalid (modified while remote was unavailable)
+     *
+     * @param string $id
+     * @return void
+     */
+    private function markInvalid(string $id): void
+    {
+        $this->local->save('1', self::INVALID_KEY_PREFIX . $id, [], self::INVALID_MARK_TTL);
+    }
+
+    /**
+     * Mark a cache key as valid (synchronized with remote)
+     *
+     * @param string $id
+     * @return void
+     */
+    private function markValid(string $id): void
+    {
+        $this->local->remove(self::INVALID_KEY_PREFIX . $id);
+    }
+
+    /**
+     * Clean an invalid key from remote cache
+     *
+     * @param string $id
+     * @return bool
+     */
+    private function cleanInvalidFromRemote(string $id): bool
+    {
+        try {
+            $this->remote->remove($id . self::HASH_SUFFIX);
+            $this->remote->remove($id);
+            return true;
+        } catch (\Exception $e) { // phpcs:ignore Magento2.CodeAnalysis.EmptyBlock
+            // If remote is still unavailable, the invalid marker will be cleared anyway
+            return false;
+        }
+    }
+
+    /**
+     * Handle invalid key by cleaning from remote and local
+     *
+     * @param string $id
+     * @return false
+     */
+    private function handleInvalidKey(string $id)
+    {
+        $remoteCleanSuccess = $this->cleanInvalidFromRemote($id);
+        $this->local->remove($id);
+
+        if ($remoteCleanSuccess) {
+            $this->markValid($id);
+        }
+        return false;
+    }
+
+    /**
+     * Validate local cache data against remote hash
+     *
+     * @param string $id
+     * @param string $localData
+     * @return string|false|null Returns data if valid, false if invalid, null if stale (should try remote)
+     */
+    private function validateLocalCache(string $id, string $localData)
+    {
+        $remoteHash = $this->remote->load($id . self::HASH_SUFFIX);
+
+        if ($remoteHash === false && $this->useStaleCache) {
+            return $localData;
+        }
+
+        $localHash = $this->getDataHash($localData);
+
+        if ($remoteHash === $localHash) {
+            return $localData;
+        }
+
+        return null;
+    }
+
+    /**
+     * Load from remote cache or fallback to stale local data
+     *
+     * @param string $id
+     * @param string|false $localData
+     * @return string|false
+     */
+    private function loadFromRemoteOrFallback(string $id, $localData)
+    {
+        $remoteData = $this->remote->load($id);
+
+        if ($remoteData !== false) {
+            $this->local->save($remoteData, $id);
+            return $remoteData;
+        }
+
+        if ($localData && $this->useStaleCache) {
+            return $localData;
+        }
+
+        return false;
     }
 }

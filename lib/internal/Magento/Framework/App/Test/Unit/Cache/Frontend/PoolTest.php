@@ -13,6 +13,7 @@ use Magento\Framework\App\Cache\Type\FrontendPool;
 use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\Cache\FrontendInterface;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -38,9 +39,9 @@ class PoolTest extends TestCase
     protected function setUp(): void
     {
         $this->_frontendInstances = [
-            Pool::DEFAULT_FRONTEND_ID => $this->getMockForAbstractClass(FrontendInterface::class),
-            'resource1' => $this->getMockForAbstractClass(FrontendInterface::class),
-            'resource2' => $this->getMockForAbstractClass(FrontendInterface::class)
+            Pool::DEFAULT_FRONTEND_ID => $this->createMock(FrontendInterface::class),
+            'resource1' => $this->createMock(FrontendInterface::class),
+            'resource2' => $this->createMock(FrontendInterface::class)
         ];
 
         // Note: Pool class adds 'frontend_id' to options before calling factory->create()
@@ -92,13 +93,9 @@ class PoolTest extends TestCase
         new Pool($deploymentConfig, $frontendFactory);
     }
 
-    /**
-     * @param array $fixtureCacheConfig
-     * @param array $frontendSettings
-     * @param array $expectedFactoryArg
-     *
-     * @dataProvider initializationParamsDataProvider
+        /**
      */
+    #[DataProvider('initializationParamsDataProvider')]
     public function testInitializationParams(
         array $fixtureCacheConfig,
         array $frontendSettings,

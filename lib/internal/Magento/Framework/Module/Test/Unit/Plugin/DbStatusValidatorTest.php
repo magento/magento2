@@ -18,9 +18,13 @@ use Magento\Framework\Module\Plugin\DbStatusValidator;
 use PHPUnit\Framework\MockObject\MockObject;
 
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 
 class DbStatusValidatorTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var DbStatusValidator
      */
@@ -58,20 +62,18 @@ class DbStatusValidatorTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->_cacheMock = $this->getMockBuilder(FrontendInterface::class)
-            ->addMethods(['db_is_up_to_date'])
-            ->getMockForAbstractClass();
-        $this->requestMock = $this->getMockForAbstractClass(RequestInterface::class);
+        $this->_cacheMock = $this->createMock(FrontendInterface::class);
+        $this->requestMock = $this->createMock(RequestInterface::class);
         $this->subjectMock = $this->createMock(FrontController::class);
-        $moduleList = $this->getMockForAbstractClass(ModuleListInterface::class);
+        $moduleList = $this->createMock(ModuleListInterface::class);
         $moduleList->expects($this->any())
             ->method('getNames')
             ->willReturn(['Module_One', 'Module_Two']);
 
-        $this->moduleManager = $this->getMockBuilder(Manager::class)
-            ->addMethods(['isDbSchemaUpToDate', 'isDbDataUpToDate'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->moduleManager = $this->createPartialMockWithReflection(
+            Manager::class,
+            ['isDbSchemaUpToDate', 'isDbDataUpToDate']
+        );
         $this->dbVersionInfoMock = $this->createMock(DbVersionInfo::class);
 
         $this->deploymentConfig =$this->getMockBuilder(DeploymentConfig::class)
@@ -124,9 +126,8 @@ class DbStatusValidatorTest extends TestCase
 
     /**
      * @param array $dbVersionErrors
-     *
-     * @dataProvider aroundDispatchExceptionDataProvider
-     */
+     *     */
+    #[DataProvider('aroundDispatchExceptionDataProvider')]
     public function testAroundDispatchException(array $dbVersionErrors)
     {
         $this->expectException('Magento\Framework\Exception\LocalizedException');

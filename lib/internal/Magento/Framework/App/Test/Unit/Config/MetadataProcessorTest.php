@@ -51,7 +51,7 @@ class MetadataProcessorTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $this->_backendModelMock = $this->getMockBuilder(ProcessorInterface::class)
-            ->getMockForAbstractClass();
+            ->getMock();
 
         $this->_initialConfigMock->expects($this->any())
             ->method('getMetadata')

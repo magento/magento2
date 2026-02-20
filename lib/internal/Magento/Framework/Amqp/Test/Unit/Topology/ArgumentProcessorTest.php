@@ -65,6 +65,9 @@ class ArgumentProcessorTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $this->argumentProcessor = $this->getMockForTrait(ArgumentProcessor::class);
+        // Create anonymous class that uses the trait
+        $this->argumentProcessor = new class {
+            use ArgumentProcessor;
+        };
     }
 }

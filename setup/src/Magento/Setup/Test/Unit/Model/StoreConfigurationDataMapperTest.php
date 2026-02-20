@@ -14,14 +14,15 @@ use Magento\Directory\Model\Currency;
 use Magento\Setup\Model\StoreConfigurationDataMapper;
 use Magento\Store\Model\Store;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class StoreConfigurationDataMapperTest extends TestCase
 {
     /**
      * @param array $data
      * @param array $expected
-     * @dataProvider getConfigDataDataProvider
      */
+    #[DataProvider('getConfigDataDataProvider')]
     public function testGetConfigData(array $data, array $expected)
     {
         $userConfigurationDataMapper = new StoreConfigurationDataMapper();

@@ -130,8 +130,8 @@ class MessagesTest extends TestCase
      */
     public function testAddMessages(): void
     {
-        $messageOne = $this->getMockForAbstractClass(MessageInterface::class);
-        $messageTwo = $this->getMockForAbstractClass(MessageInterface::class);
+        $messageOne = $this->createMock(MessageInterface::class);
+        $messageTwo = $this->createMock(MessageInterface::class);
 
         $arrayMessages = [$messageOne, $messageTwo];
 
@@ -163,7 +163,7 @@ class MessagesTest extends TestCase
      */
     public function testAddMessage(): void
     {
-        $message = $this->getMockForAbstractClass(MessageInterface::class);
+        $message = $this->createMock(MessageInterface::class);
 
         $collection = $this->initMessageCollection();
 
@@ -181,7 +181,7 @@ class MessagesTest extends TestCase
     {
         $messageText = 'Some message error text';
 
-        $message = $this->getMockForAbstractClass(MessageInterface::class);
+        $message = $this->createMock(MessageInterface::class);
 
         $this->messageFactory->expects($this->once())
             ->method('create')
@@ -203,7 +203,7 @@ class MessagesTest extends TestCase
     {
         $messageText = 'Some message warning text';
 
-        $message = $this->getMockForAbstractClass(MessageInterface::class);
+        $message = $this->createMock(MessageInterface::class);
 
         $this->messageFactory->expects($this->once())
             ->method('create')
@@ -225,7 +225,7 @@ class MessagesTest extends TestCase
     {
         $messageText = 'Some message notice text';
 
-        $message = $this->getMockForAbstractClass(MessageInterface::class);
+        $message = $this->createMock(MessageInterface::class);
 
         $this->messageFactory->expects($this->once())
             ->method('create')
@@ -247,7 +247,7 @@ class MessagesTest extends TestCase
     {
         $messageText = 'Some message success text';
 
-        $message = $this->getMockForAbstractClass(MessageInterface::class);
+        $message = $this->createMock(MessageInterface::class);
 
         $this->messageFactory->expects($this->once())
             ->method('create')
@@ -268,7 +268,7 @@ class MessagesTest extends TestCase
     public function testGetMessagesByType(): void
     {
         $messageType = MessageInterface::TYPE_SUCCESS;
-        $resultMessages = [$this->getMockForAbstractClass(MessageInterface::class)];
+        $resultMessages = [$this->createMock(MessageInterface::class)];
 
         $collection = $this->initMessageCollection();
         $collection->expects($this->once())
@@ -346,14 +346,10 @@ class MessagesTest extends TestCase
         $resultHtml .= '</div></div>';
         $resultHtml .= '</div>';
 
-        $errorMock = $this->getMockBuilder(MessageInterface::class)
-            ->getMockForAbstractClass();
-        $warningMock = $this->getMockBuilder(MessageInterface::class)
-            ->getMockForAbstractClass();
-        $noticeMock = $this->getMockBuilder(MessageInterface::class)
-            ->getMockForAbstractClass();
-        $successMock = $this->getMockBuilder(MessageInterface::class)
-            ->getMockForAbstractClass();
+        $errorMock = $this->createMock(MessageInterface::class);
+        $warningMock = $this->createMock(MessageInterface::class);
+        $noticeMock = $this->createMock(MessageInterface::class);
+        $successMock = $this->createMock(MessageInterface::class);
 
         $this->messageInterpretationStrategy->expects(static::any())
             ->method('interpret')

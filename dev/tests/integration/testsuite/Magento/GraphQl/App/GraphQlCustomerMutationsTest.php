@@ -17,6 +17,7 @@ use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Registry;
 use Magento\GraphQl\App\State\GraphQlStateDiff;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Tests the dispatch method in the GraphQl Controller class using a simple product query
@@ -62,9 +63,9 @@ class GraphQlCustomerMutationsTest extends \PHPUnit\Framework\TestCase
     /**
      * @magentoDataFixture Magento/Customer/_files/customer.php
      * @magentoDataFixture Magento/Customer/_files/customer_address.php
-     * @dataProvider customerDataProvider
      * @return void
      */
+    #[DataProvider('customerDataProvider')]
     public function testCustomerState(
         string $query,
         array $variables,

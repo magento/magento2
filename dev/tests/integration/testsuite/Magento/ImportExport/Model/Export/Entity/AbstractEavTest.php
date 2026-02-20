@@ -40,9 +40,16 @@ class AbstractEavTest extends \PHPUnit\Framework\TestCase
         );
 
         $this->_model = $this->getMockBuilder(\Magento\ImportExport\Model\Export\Entity\AbstractEav::class)
-            ->onlyMethods(['getEntityTypeCode', 'getAttributeCollection'])
+            ->onlyMethods([
+                'getEntityTypeCode',
+                'getAttributeCollection',
+                'export',
+                'exportItem',
+                '_getHeaderColumns',
+                '_getEntityCollection'
+            ])
             ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+            ->getMock();
 
         $this->_model->expects(
             $this->any()
@@ -92,7 +99,6 @@ class AbstractEavTest extends \PHPUnit\Framework\TestCase
     {
         $this->_model->setParameters($this->_getSkippedAttributes());
         $method = new \ReflectionMethod($this->_model, '_getExportAttributeCodes');
-        $method->setAccessible(true);
         $attributes = $method->invoke($this->_model);
         foreach (self::$_skippedAttributes as $code) {
             $this->assertNotContains($code, $attributes);

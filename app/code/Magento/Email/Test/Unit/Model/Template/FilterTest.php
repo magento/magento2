@@ -304,7 +304,6 @@ class FilterTest extends TestCase
             ->getMock();
         $reflectionClass = new \ReflectionClass(Filter::class);
         $reflectionProperty = $reflectionClass->getProperty('cssProcessor');
-        $reflectionProperty->setAccessible(true);
         $reflectionProperty->setValue($filter, $cssProcessor);
         $cssProcessor->expects($this->any())
             ->method('process')
@@ -415,7 +414,6 @@ class FilterTest extends TestCase
             ->getMock();
         $reflectionClass = new \ReflectionClass(Filter::class);
         $reflectionProperty = $reflectionClass->getProperty('cssProcessor');
-        $reflectionProperty->setAccessible(true);
         $reflectionProperty->setValue($filter, $cssProcessor);
         $cssProcessor->expects($this->any())
             ->method('process')

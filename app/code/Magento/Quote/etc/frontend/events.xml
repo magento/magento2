@@ -10,4 +10,7 @@
         <observer name="sendEmail" instance="Magento\Quote\Observer\SubmitObserver"/>
         <observer name="sendInvoiceEmail" instance="Magento\Quote\Observer\SendInvoiceEmailObserver"/>
     </event>
+    <event name="checkout_cart_product_add_after">
+        <observer name="setBasePriceObserver" instance="Magento\Quote\Observer\SetBasePriceObserver"/>
+    </event>
 </config>

@@ -24,6 +24,7 @@ use PHPUnit\Framework\MockObject\MockObject;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.UnusedFormalParameter)
  */
 class CategoriesTest extends AbstractModifierTestCase
 {
@@ -82,7 +83,6 @@ class CategoriesTest extends AbstractModifierTestCase
         $this->sessionMock = $this->createPartialMock(Session::class, []);
         $reflection = new \ReflectionClass($this->sessionMock);
         $storageProperty = $reflection->getProperty('storage');
-        $storageProperty->setAccessible(true);
         $storageProperty->setValue($this->sessionMock, new \Magento\Framework\DataObject());
         $this->categoryCollectionFactoryMock->expects($this->any())
             ->method('create')
@@ -149,7 +149,6 @@ class CategoriesTest extends AbstractModifierTestCase
     {
         $class = new \ReflectionClass(Categories::class);
         $method = $class->getMethod($method);
-        $method->setAccessible(true);
 
         return $method->invokeArgs($object, $args);
     }
@@ -207,7 +206,7 @@ class CategoriesTest extends AbstractModifierTestCase
             ->willReturnArgument(2);
 
         $modifyMeta = $this->createModel()->modifyMeta($meta);
-        
+
         // Debug: Check what the modifyMeta actually returns
         if (isset($modifyMeta['children']['category_ids']['arguments']['data']['config']['disabled'])) {
             $this->assertEquals(
@@ -221,7 +220,7 @@ class CategoriesTest extends AbstractModifierTestCase
                 'category_ids field not found in modifyMeta result'
             );
         }
-        
+
         if (isset($modifyMeta['children']['create_category_button']['arguments']['data']['config']['disabled'])) {
             $this->assertEquals(
                 $locked,
@@ -262,7 +261,6 @@ class CategoriesTest extends AbstractModifierTestCase
         $this->sessionMock = $this->createPartialMock(Session::class, []);
         $reflection = new \ReflectionClass($this->sessionMock);
         $storageProperty = $reflection->getProperty('storage');
-        $storageProperty->setAccessible(true);
         $storageProperty->setValue($this->sessionMock, new \Magento\Framework\DataObject());
 
         $this->sessionMock->setUser($userAclUser);

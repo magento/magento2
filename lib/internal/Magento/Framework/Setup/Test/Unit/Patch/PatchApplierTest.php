@@ -26,6 +26,7 @@ use Magento\Framework\Setup\SetupInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -106,10 +107,10 @@ class PatchApplierTest extends TestCase
         $this->moduleResourceMock = $this->createMock(ModuleResource::class);
         $this->patchHistoryMock = $this->createMock(PatchHistory::class);
         $this->patchFactoryMock = $this->createMock(PatchFactory::class);
-        $this->schemaSetupMock = $this->getMockForAbstractClass(SchemaSetupInterface::class);
-        $this->moduleDataSetupMock = $this->getMockForAbstractClass(ModuleDataSetupInterface::class);
-        $this->objectManagerMock = $this->getMockForAbstractClass(ObjectManagerInterface::class);
-        $this->connectionMock = $this->getMockForAbstractClass(AdapterInterface::class);
+        $this->schemaSetupMock = $this->createMock(SchemaSetupInterface::class);
+        $this->moduleDataSetupMock = $this->createMock(ModuleDataSetupInterface::class);
+        $this->objectManagerMock = $this->createMock(ObjectManagerInterface::class);
+        $this->connectionMock = $this->createMock(AdapterInterface::class);
         $this->moduleDataSetupMock->expects($this->any())->method('getConnection')->willReturn($this->connectionMock);
 
         $objectManager = new ObjectManager($this);
@@ -146,6 +147,7 @@ class PatchApplierTest extends TestCase
      *
      * @dataProvider applyDataPatchDataNewModuleProvider()
      */
+    #[DataProvider('applyDataPatchDataNewModuleProvider')]
     public function testApplyDataPatchForNewlyInstalledModule($moduleName, $dataPatches, $moduleVersionInDb)
     {
         $this->dataPatchReaderMock->expects($this->once())
@@ -204,6 +206,7 @@ class PatchApplierTest extends TestCase
      *
      * @dataProvider applyDataPatchDataNewModuleProvider()
      */
+    #[DataProvider('applyDataPatchDataNewModuleProvider')]
     public function testApplyDataPatchForAlias($moduleName, $dataPatches, $moduleVersionInDb)
     {
         $this->dataPatchReaderMock->expects($this->once())
@@ -217,7 +220,7 @@ class PatchApplierTest extends TestCase
             ]
         );
 
-        $patch1 = $this->getMockForAbstractClass(DataPatchInterface::class);
+        $patch1 = $this->createMock(DataPatchInterface::class);
         $patch1->expects($this->any())->method('getAliases')->willReturn(['PatchAlias']);
         $patchClass = get_class($patch1);
 
@@ -263,6 +266,7 @@ class PatchApplierTest extends TestCase
      *
      * @dataProvider applyDataPatchDataInstalledModuleProvider()
      */
+    #[DataProvider('applyDataPatchDataInstalledModuleProvider')]
     public function testApplyDataPatchForInstalledModule($moduleName, $dataPatches, $moduleVersionInDb)
     {
         $this->dataPatchReaderMock->expects($this->once())
@@ -344,6 +348,7 @@ class PatchApplierTest extends TestCase
      *
      * @dataProvider applyDataPatchDataInstalledModuleProvider()
      */
+    #[DataProvider('applyDataPatchDataInstalledModuleProvider')]
     public function testApplyDataPatchRollback($moduleName, $dataPatches, $moduleVersionInDb)
     {
         $this->expectException('Exception');
@@ -475,6 +480,7 @@ class PatchApplierTest extends TestCase
      *
      * @dataProvider schemaPatchDataProvider()
      */
+    #[DataProvider('schemaPatchDataProvider')]
     public function testSchemaPatchAplly($moduleName, $schemaPatches, $moduleVersionInDb)
     {
         $this->schemaPatchReaderMock->expects($this->once())
@@ -531,6 +537,7 @@ class PatchApplierTest extends TestCase
      *
      * @dataProvider schemaPatchDataProvider()
      */
+    #[DataProvider('schemaPatchDataProvider')]
     public function testSchemaPatchApplyForPatchAlias($moduleName, $schemaPatches, $moduleVersionInDb)
     {
         $this->schemaPatchReaderMock->expects($this->once())
@@ -544,7 +551,7 @@ class PatchApplierTest extends TestCase
             ]
         );
 
-        $patch1 = $this->getMockForAbstractClass(PatchInterface::class);
+        $patch1 = $this->createMock(PatchInterface::class);
         $patch1->expects($this->any())->method('getAliases')->willReturn(['PatchAlias']);
         $patchClass = get_class($patch1);
 
