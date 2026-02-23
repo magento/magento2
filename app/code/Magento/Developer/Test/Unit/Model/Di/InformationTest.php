@@ -37,13 +37,9 @@ class InformationTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->objectManagerConfig = $this->getMockBuilder(ConfigInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->objectManagerConfig = $this->createMock(ConfigInterface::class);
 
-        $this->definitions = $this->getMockBuilder(DefinitionInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->definitions = $this->createMock(DefinitionInterface::class);
 
         $this->pluginList = $this->getMockBuilder(PluginList::class)
             ->disableOriginalConstructor()

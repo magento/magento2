@@ -15,6 +15,7 @@ use Magento\Framework\Search\Request\Dimension;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Test for \Magento\Framework\Indexer\ScopeResolver\IndexScopeResolver
@@ -41,11 +42,9 @@ class IndexScopeResolverTest extends TestCase
         $this->resource = $this->getMockBuilder(ResourceConnection::class)
             ->onlyMethods(['getTableName'])
             ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+            ->getMock();
 
-        $this->scopeResolver = $this->getMockBuilder(ScopeResolverInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->scopeResolver = $this->createMock(ScopeResolverInterface::class);
 
         $objectManager = new ObjectManager($this);
 
@@ -61,9 +60,8 @@ class IndexScopeResolverTest extends TestCase
     /**
      * @param string $indexName
      * @param Dimension[] $dimensions
-     * @param string $expected
-     * @dataProvider resolveDataProvider
-     */
+     * @param string $expected     */
+    #[DataProvider('resolveDataProvider')]
     public function testResolve($indexName, array $dimensions, $expected)
     {
         $dimensions = array_map(
@@ -72,9 +70,7 @@ class IndexScopeResolverTest extends TestCase
             },
             $dimensions
         );
-        $scope = $this->getMockBuilder(ScopeInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $scope = $this->createMock(ScopeInterface::class);
 
         $scope->expects($this->any())->method('getId')->willReturn(1);
 

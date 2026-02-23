@@ -12,6 +12,7 @@ use Magento\Framework\Phrase;
 use Magento\Framework\Phrase\Renderer\Placeholder;
 use Magento\Framework\Phrase\RendererInterface;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class LocalizedExceptionTest extends TestCase
 {
@@ -49,9 +50,8 @@ class LocalizedExceptionTest extends TestCase
      * @param string $message
      * @param array $params
      * @param string $expectedLogMessage
-     * @return void
-     * @dataProvider constructorParametersDataProvider
-     */
+     * @return void     */
+    #[DataProvider('constructorParametersDataProvider')]
     public function testConstructor($message, $params, $expectedLogMessage)
     {
         $cause = new \Exception();
@@ -90,7 +90,6 @@ class LocalizedExceptionTest extends TestCase
             'withoutParameters'    => [
                 'message',
                 [],
-                'message',
                 'message',
             ],
         ];

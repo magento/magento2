@@ -8,6 +8,7 @@ declare(strict_types=1);
 
 namespace Magento\WebapiAsync\Model;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\ResourceModel\Product\Collection;
@@ -33,30 +34,36 @@ use Magento\TestFramework\TestCase\WebapiAbstract;
  */
 class AsyncScheduleMultiStoreTest extends WebapiAbstract
 {
-    const SERVICE_NAME = 'catalogProductRepositoryV1';
-    const SERVICE_VERSION = 'V1';
-    const REST_RESOURCE_PATH = '/V1/products';
-    const ASYNC_RESOURCE_PATH = '/async/V1/products';
-    const ASYNC_CONSUMER_NAME = 'async.operations.all';
+    public const SERVICE_NAME = 'catalogProductRepositoryV1';
+    public const SERVICE_VERSION = 'V1';
+    public const REST_RESOURCE_PATH = '/V1/products';
+    public const ASYNC_RESOURCE_PATH = '/async/V1/products';
+    public const ASYNC_CONSUMER_NAME = 'async.operations.all';
 
-    const STORE_CODE_FROM_FIXTURE = 'fixturestore';
-    const STORE_NAME_FROM_FIXTURE = 'Fixture Store';
+    public const STORE_CODE_FROM_FIXTURE = 'fixturestore';
+    public const STORE_NAME_FROM_FIXTURE = 'Fixture Store';
 
-    const STORE_CODE_ALL = 'all';
-    const STORE_CODE_DEFAULT = 'default';
+    public const STORE_CODE_ALL = 'all';
+    public const STORE_CODE_DEFAULT = 'default';
 
+    /**
+     * @var string[]
+     */
     private static $stores = [
         self::STORE_CODE_DEFAULT,
         self::STORE_CODE_ALL,
         self::STORE_CODE_FROM_FIXTURE,
     ];
 
-    const KEY_TIER_PRICES = 'tier_prices';
-    const KEY_SPECIAL_PRICE = 'special_price';
-    const KEY_CATEGORY_LINKS = 'category_links';
+    public const KEY_TIER_PRICES = 'tier_prices';
+    public const KEY_SPECIAL_PRICE = 'special_price';
+    public const KEY_CATEGORY_LINKS = 'category_links';
 
-    const BULK_UUID_KEY = 'bulk_uuid';
+    public const BULK_UUID_KEY = 'bulk_uuid';
 
+    /**
+     * @var string[]
+     */
     protected $consumers = [
         self::ASYNC_CONSUMER_NAME,
     ];
@@ -119,11 +126,11 @@ class AsyncScheduleMultiStoreTest extends WebapiAbstract
     }
 
     /**
-     * @dataProvider storeProvider
      * @magentoApiDataFixture Magento/Store/_files/core_fixturestore.php
      * @param string|null $storeCode
      * @return void
      */
+    #[DataProvider('storeProvider')]
     public function testAsyncScheduleBulkMultistore(?string $storeCode): void
     {
         $product = $this->getProductData();

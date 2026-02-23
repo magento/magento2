@@ -20,6 +20,7 @@ use Magento\Theme\Model\Theme;
 use Magento\Theme\Model\Theme\Domain\Virtual;
 use Magento\Theme\Model\ThemeFactory;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class VirtualTest extends TestCase
 {
@@ -145,10 +146,13 @@ class VirtualTest extends TestCase
         $this->assertTrue($model->isAssigned());
     }
 
-    protected function getMockForPhysicalTheme() {
-        $physicalTheme = $this->getMockBuilder(ThemeInterface::class)
-            ->onlyMethods(['isPhysical', 'getId'])
-            ->getMockForAbstractClass();
+    protected function getMockForPhysicalTheme()
+    {
+        $physicalTheme = $this->createPartialMock(
+            ThemeInterface::class,
+            ['getArea', 'getThemePath', 'getFullPath', 'getParentTheme',
+             'getCode', 'isPhysical', 'getInheritedThemes', 'getId']
+        );
         $physicalTheme->expects($this->once())
             ->method('isPhysical')
             ->willReturn(true);
@@ -173,9 +177,9 @@ class VirtualTest extends TestCase
     /**
      * @test
      * @return void
-     * @dataProvider physicalThemeDataProvider
      * @covers \Magento\Theme\Model\Theme\Domain\Virtual::getPhysicalTheme
      */
+    #[DataProvider('physicalThemeDataProvider')]
     public function testGetPhysicalTheme($data): void
     {
         if (is_callable($data)) {

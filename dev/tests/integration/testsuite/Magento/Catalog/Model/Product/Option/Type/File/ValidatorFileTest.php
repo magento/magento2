@@ -99,20 +99,31 @@ class ValidatorFileTest extends \PHPUnit\Framework\TestCase
             sprintf($exceptionMessage, $this->maxFileSizeInMb)
         );
         $this->prepareEnv();
+        $originalContentLength = $_SERVER['CONTENT_LENGTH'] ?? null;
         $_SERVER['CONTENT_LENGTH'] = $this->maxFileSize + 1;
-        $httpAdapterMock = $this->createPartialMock(Http::class, ['getFileInfo']);
-        $exception = function () {
-            throw new \Exception();
-        };
-        $httpAdapterMock->expects($this->once())->method('getFileInfo')->willReturnCallback($exception);
-        $this->httpFactoryMock->expects($this->once())->method('create')->willReturn($httpAdapterMock);
+        try {
+            $httpAdapterMock = $this->createPartialMock(Http::class, ['getFileInfo']);
+            $exception = function () {
+                throw new \Exception();
+            };
+            $httpAdapterMock->expects($this->once())->method('getFileInfo')->willReturnCallback($exception);
+            $this->httpFactoryMock->expects($this->once())->method('create')->willReturn($httpAdapterMock);
 
-        $property = new \ReflectionProperty($httpAdapterMock, 'files');
-        $property->setValue($httpAdapterMock, ['options_1_file' => $_FILES['options_1_file']]);
-        $this->model->validate(
-            $this->objectManager->create(\Magento\Framework\DataObject::class),
-            $this->getProductOption(['is_require' => false])
-        );
+            $property = new \ReflectionProperty($httpAdapterMock, 'files');
+            $property->setAccessible(true);
+            $property->setValue($httpAdapterMock, ['options_1_file' => $_FILES['options_1_file']]);
+            $this->model->validate(
+                $this->objectManager->create(\Magento\Framework\DataObject::class),
+                $this->getProductOption(['is_require' => false])
+            );
+        } finally {
+            // Restore original value to avoid affecting other tests
+            if ($originalContentLength !== null) {
+                $_SERVER['CONTENT_LENGTH'] = $originalContentLength;
+            } else {
+                unset($_SERVER['CONTENT_LENGTH']);
+            }
+        }
     }
 
     /**

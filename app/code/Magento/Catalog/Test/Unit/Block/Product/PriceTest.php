@@ -16,16 +16,20 @@ use Magento\Framework\Json\EncoderInterface;
 use Magento\Framework\Math\Random;
 use Magento\Framework\Registry;
 use Magento\Framework\Stdlib\StringUtils;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\View\Element\Template\Context;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \Magento\Catalog\Block\Product\Price
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class PriceTest extends TestCase
 {
+    use MockCreationTrait;
     /**
      * @var Price
      */
@@ -170,10 +174,10 @@ class PriceTest extends TestCase
         $priceHtml = '<span>100.00</span>';
         $expectedJsonEncodedValue = '"<span>100.00<\/span>"';
 
-        $productMock = $this->getMockBuilder(Product::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['getRealPriceHtml'])
-            ->getMock();
+        $productMock = $this->createPartialMockWithReflection(
+            Product::class,
+            ['getRealPriceHtml']
+        );
 
         $productMock->expects($this->once())->method('getRealPriceHtml')->willReturn($priceHtml);
         $this->jsonEncoderMock->expects($this->once())
@@ -224,19 +228,19 @@ class PriceTest extends TestCase
     /**
      * Unit test for _toHtml() using data provider
      *
-     * @dataProvider toHtmlProvider
      * @param bool|null $productCanShowPrice
      * @return void
      */
+    #[DataProvider('toHtmlProvider')]
     public function testToHtml(?bool $productCanShowPrice): void
     {
         if ($productCanShowPrice === null) {
             $this->registryMock->method('registry')->with('product')->willReturn(null);
         } else {
-            $productMock = $this->getMockBuilder(Product::class)
-                ->disableOriginalConstructor()
-                ->addMethods(['getCanShowPrice'])
-                ->getMock();
+            $productMock = $this->createPartialMockWithReflection(
+                Product::class,
+                ['getCanShowPrice']
+            );
             $productMock->method('getCanShowPrice')->willReturn($productCanShowPrice);
             $this->registryMock->method('registry')->with('product')->willReturn($productMock);
         }

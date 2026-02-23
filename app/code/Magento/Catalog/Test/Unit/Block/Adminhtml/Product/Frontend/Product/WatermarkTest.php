@@ -21,6 +21,8 @@ use Magento\Framework\Data\Form\Element\Imagefile;
 use Magento\Framework\Data\Form\Element\Select;
 use Magento\Framework\Data\Form\Element\Text;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use ReflectionMethod;
@@ -33,6 +35,7 @@ use ReflectionMethod;
  */
 class WatermarkTest extends TestCase
 {
+    use MockCreationTrait;
     /**
      * @var Watermark
      */
@@ -76,7 +79,7 @@ class WatermarkTest extends TestCase
         $this->positionMock = $this->createMock(Position::class);
         $this->formFieldMock = $this->createMock(Field::class);
         $this->elementFactoryMock = $this->createMock(Factory::class);
-        $this->requestMock = $this->getMockForAbstractClass(RequestInterface::class);
+        $this->requestMock = $this->createMock(RequestInterface::class);
 
         $this->contextMock->expects($this->any())
             ->method('getRequest')
@@ -107,11 +110,10 @@ class WatermarkTest extends TestCase
      */
     private function createElementMock(): MockObject
     {
-        $elementMock = $this->getMockBuilder(AbstractElement::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['getLegend'])
-            ->onlyMethods(['getHtmlId'])
-            ->getMock();
+        $elementMock = $this->createPartialMockWithReflection(
+            AbstractElement::class,
+            ['getLegend', 'getHtmlId']
+        );
         $elementMock->expects($this->any())->method('getLegend')->willReturn('Watermark Settings');
         $elementMock->expects($this->any())->method('getHtmlId')->willReturn('watermark_fieldset');
         return $elementMock;
@@ -124,11 +126,10 @@ class WatermarkTest extends TestCase
      */
     private function createTextFieldMock(): MockObject
     {
-        $mock = $this->getMockBuilder(Text::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['setName', 'setLabel'])
-            ->onlyMethods(['setForm', 'setRenderer', 'toHtml'])
-            ->getMock();
+        $mock = $this->createPartialMockWithReflection(
+            Text::class,
+            ['setName', 'setLabel', 'setForm', 'setRenderer', 'toHtml']
+        );
         $mock->expects($this->any())->method('setName')->willReturnSelf();
         $mock->expects($this->any())->method('setForm')->willReturnSelf();
         $mock->expects($this->any())->method('setLabel')->willReturnSelf();
@@ -144,11 +145,10 @@ class WatermarkTest extends TestCase
      */
     private function createImageFieldMock(): MockObject
     {
-        $mock = $this->getMockBuilder(Imagefile::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['setName', 'setLabel'])
-            ->onlyMethods(['setForm', 'setRenderer', 'toHtml'])
-            ->getMock();
+        $mock = $this->createPartialMockWithReflection(
+            Imagefile::class,
+            ['setName', 'setLabel', 'setForm', 'setRenderer', 'toHtml']
+        );
         $mock->expects($this->any())->method('setName')->willReturnSelf();
         $mock->expects($this->any())->method('setForm')->willReturnSelf();
         $mock->expects($this->any())->method('setLabel')->willReturnSelf();
@@ -164,11 +164,10 @@ class WatermarkTest extends TestCase
      */
     private function createSelectFieldMock(): MockObject
     {
-        $mock = $this->getMockBuilder(Select::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['setName', 'setLabel', 'setValues'])
-            ->onlyMethods(['setForm', 'setRenderer', 'toHtml'])
-            ->getMock();
+        $mock = $this->createPartialMockWithReflection(
+            Select::class,
+            ['setName', 'setLabel', 'setValues', 'setForm', 'setRenderer', 'toHtml']
+        );
         $mock->expects($this->any())->method('setName')->willReturnSelf();
         $mock->expects($this->any())->method('setForm')->willReturnSelf();
         $mock->expects($this->any())->method('setLabel')->willReturnSelf();
@@ -210,10 +209,10 @@ class WatermarkTest extends TestCase
      * @param string|null $storeParam
      * @param bool $expectUseDefault
      * @param array $expectedContains
-     * @dataProvider renderDataProvider
      * @covers \Magento\Catalog\Block\Adminhtml\Product\Frontend\Product\Watermark::render
      * @return void
      */
+    #[DataProvider('renderDataProvider')]
     public function testRender(
         ?string $websiteParam,
         ?string $storeParam,
@@ -446,11 +445,10 @@ class WatermarkTest extends TestCase
      */
     public function testRenderWithNullLegend(): void
     {
-        $elementMock = $this->getMockBuilder(AbstractElement::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['getLegend'])
-            ->onlyMethods(['getHtmlId'])
-            ->getMock();
+        $elementMock = $this->createPartialMockWithReflection(
+            AbstractElement::class,
+            ['getLegend', 'getHtmlId']
+        );
         $elementMock->expects($this->any())->method('getLegend')->willReturn(null);
         $elementMock->expects($this->any())->method('getHtmlId')->willReturn('test_id');
 
@@ -665,11 +663,10 @@ class WatermarkTest extends TestCase
      */
     public function testGetHeaderHtmlWithEmptyHtmlId(): void
     {
-        $elementMock = $this->getMockBuilder(AbstractElement::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['getLegend'])
-            ->onlyMethods(['getHtmlId'])
-            ->getMock();
+        $elementMock = $this->createPartialMockWithReflection(
+            AbstractElement::class,
+            ['getLegend', 'getHtmlId']
+        );
         $elementMock->expects($this->any())->method('getLegend')->willReturn('Test Legend');
         $elementMock->expects($this->any())->method('getHtmlId')->willReturn('');
 

@@ -20,20 +20,25 @@ use Magento\Eav\Model\Entity\AbstractEntity;
 use Magento\Eav\Model\Entity\AttributeLoaderInterface;
 use Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\Collection;
 use Magento\Framework\App\ScopeResolverInterface;
+use Magento\Framework\Data\Form\Element\AbstractElement;
 use Magento\Framework\DataObject;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\DB\Select;
 use Magento\Framework\Locale\Format;
 use Magento\Framework\Locale\FormatInterface;
 use Magento\Framework\Locale\ResolverInterface;
-use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
+use Magento\Framework\View\LayoutInterface;
 use Magento\Quote\Model\Quote\Item\AbstractItem;
+use Magento\Quote\Model\Quote\Item as QuoteItem;
 use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
+use Magento\Rule\Block\Editable;
+use Magento\Rule\Model\Condition\AbstractCondition;
 use Magento\Rule\Model\Condition\Context;
 use Magento\SalesRule\Model\Rule\Condition\Product as SalesRuleProduct;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use ReflectionProperty;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -437,11 +442,10 @@ class ProductTest extends TestCase
             )
         );
 
-        $product = $this->getMockBuilder(\Magento\Catalog\Model\Product::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['getResource', 'hasData', 'getData'])
-            ->addMethods(['setQuoteItemQty', 'setQuoteItemPrice', 'setQuoteItemRowTotal'])
-            ->getMock();
+        $product = $this->createPartialMockWithReflection(
+            CatalogProduct::class,
+            ['getResource', 'hasData', 'getData', 'setQuoteItemQty', 'setQuoteItemPrice', 'setQuoteItemRowTotal']
+        );
         $product->method('getResource')->willReturn($attr);
         $product->method('hasData')->willReturn(true);
         $product->method('getData')->with('quote_item_price')->willReturn($parentUnitPrice);
@@ -452,22 +456,20 @@ class ProductTest extends TestCase
             ->willReturnSelf();
         $product->method('setQuoteItemRowTotal')->willReturnSelf();
 
-        $parentItem = $this->getMockBuilder(AbstractItem::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['getQty', 'getPrice', 'getParentItem', 'getProduct'])
-            ->addMethods(['getBaseRowTotal'])
-            ->getMockForAbstractClass();
+        $parentItem = $this->createPartialMockWithReflection(
+            QuoteItem::class,
+            ['getQty', 'getPrice', 'getBaseRowTotal', 'getParentItem', 'getProduct']
+        );
         $parentItem->method('getQty')->willReturn(1);
         $parentItem->method('getPrice')->willReturn($parentUnitPrice);
         $parentItem->method('getBaseRowTotal')->willReturn($parentUnitPrice);
         $parentItem->method('getParentItem')->willReturn(null);
         $parentItem->method('getProduct')->willReturn($product);
 
-        $childItem = $this->getMockBuilder(AbstractItem::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['getQty', 'getPrice', 'getParentItem', 'getProduct'])
-            ->addMethods(['getBaseRowTotal'])
-            ->getMockForAbstractClass();
+        $childItem = $this->createPartialMockWithReflection(
+            QuoteItem::class,
+            ['getQty', 'getPrice', 'getBaseRowTotal', 'getParentItem', 'getProduct']
+        );
         $childItem->method('getQty')->willReturn(1);
         $childItem->method('getPrice')->willReturn($childUnitPrice);
         $childItem->method('getBaseRowTotal')->willReturn($childUnitPrice);
@@ -496,11 +498,10 @@ class ProductTest extends TestCase
             new DataObject(['frontend_input' => 'text', 'backend_type' => 'varchar'])
         );
 
-        $product = $this->getMockBuilder(\Magento\Catalog\Model\Product::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['getResource', 'hasData', 'getData'])
-            ->addMethods(['setQuoteItemQty', 'setQuoteItemPrice', 'setQuoteItemRowTotal'])
-            ->getMock();
+        $product = $this->createPartialMockWithReflection(
+            CatalogProduct::class,
+            ['getResource', 'hasData', 'getData', 'setQuoteItemQty', 'setQuoteItemPrice', 'setQuoteItemRowTotal']
+        );
         $product->method('getResource')->willReturn($attr);
         $product->method('hasData')->willReturn(true);
         $product->method('getData')->with('quote_item_price')->willReturn($unitPrice);
@@ -511,11 +512,10 @@ class ProductTest extends TestCase
             ->willReturnSelf();
         $product->method('setQuoteItemRowTotal')->willReturnSelf();
 
-        $item = $this->getMockBuilder(AbstractItem::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['getQty', 'getPrice', 'getParentItem', 'getProduct'])
-            ->addMethods(['getBaseRowTotal'])
-            ->getMockForAbstractClass();
+        $item = $this->createPartialMockWithReflection(
+            QuoteItem::class,
+            ['getQty', 'getPrice', 'getBaseRowTotal', 'getParentItem', 'getProduct']
+        );
         $item->method('getQty')->willReturn(1);
         $item->method('getPrice')->willReturn($unitPrice);
         $item->method('getBaseRowTotal')->willReturn($unitPrice);
@@ -595,11 +595,17 @@ class ProductTest extends TestCase
         $resource = $this->createPartialMock(Product::class, ['getAttribute']);
         $resource->method('getAttribute')->with($attrCode)->willReturn($eavAttr);
 
-        $product = $this->getMockBuilder(\Magento\Catalog\Model\Product::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['getResource', 'hasData', 'getData', 'setData', 'unsetData'])
-            ->addMethods(['setQuoteItemQty', 'setQuoteItemPrice', 'setQuoteItemRowTotal'])
-            ->getMock();
+        $product = $this->createPartialMockWithReflection(
+            CatalogProduct::class,
+            ['getResource',
+            'hasData',
+            'getData',
+            'setData',
+            'unsetData',
+            'setQuoteItemQty',
+            'setQuoteItemPrice',
+            'setQuoteItemRowTotal']
+        );
         $product->method('getResource')->willReturn($resource);
         $product->method('hasData')->with($attrCode)->willReturnOnConsecutiveCalls(false, true);
         $product->method('getData')->with($attrCode)->willReturn(null);
@@ -609,11 +615,10 @@ class ProductTest extends TestCase
         $product->method('setQuoteItemPrice')->willReturnSelf();
         $product->method('setQuoteItemRowTotal')->willReturnSelf();
 
-        $item = $this->getMockBuilder(AbstractItem::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['getQty', 'getPrice', 'getParentItem', 'getProduct'])
-            ->addMethods(['getBaseRowTotal', 'getProductId'])
-            ->getMockForAbstractClass();
+        $item = $this->createPartialMockWithReflection(
+            QuoteItem::class,
+            ['getQty', 'getPrice', 'getBaseRowTotal', 'getParentItem', 'getProduct', 'getProductId']
+        );
         $item->method('getQty')->willReturn(1);
         $item->method('getPrice')->willReturn(10.0);
         $item->method('getBaseRowTotal')->willReturn(10.0);
@@ -633,15 +638,15 @@ class ProductTest extends TestCase
         // Ensure scope is set to "parent" so it should be passed as hidden field value
         $this->model->setAttribute('parent::quote_item_qty');
 
-        $elementHidden = $this->getMockBuilder(\Magento\Framework\Data\Form\Element\AbstractElement::class)
+        $elementHidden = $this->getMockBuilder(AbstractElement::class)
             ->disableOriginalConstructor()
             ->onlyMethods(['getHtml'])
-            ->getMockForAbstractClass();
+            ->getMock();
         $elementHidden->method('getHtml')->willReturn('HIDDEN_HTML');
-        $elementSelect = $this->getMockBuilder(\Magento\Framework\Data\Form\Element\AbstractElement::class)
+        $elementSelect = $this->getMockBuilder(AbstractElement::class)
             ->disableOriginalConstructor()
             ->onlyMethods(['getHtml'])
-            ->getMockForAbstractClass();
+            ->getMock();
         $elementSelect->method('getHtml')->willReturn('ATTR_HTML');
 
         $capturedConfig = null;
@@ -666,14 +671,13 @@ class ProductTest extends TestCase
         $this->model->setRule($rule);
         $this->model->setFormName('form-name');
         // Inject a layout so getBlockSingleton() calls succeed
-        $layout = $this->getMockBuilder(\Magento\Framework\View\LayoutInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-        $editable = $this->getMockBuilder(\Magento\Rule\Block\Editable::class)
+        $layout = $this->createMock(LayoutInterface::class);
+        $editable = $this->getMockBuilder(Editable::class)
             ->disableOriginalConstructor()
             ->getMock();
         $layout->method('getBlockSingleton')->willReturn($editable);
-        $ref = new \ReflectionProperty(\Magento\Rule\Model\Condition\AbstractCondition::class, '_layout');
+        $ref = new ReflectionProperty(AbstractCondition::class, '_layout');
+        $ref->setAccessible(true);
         $ref->setValue($this->model, $layout);
         $html = $this->model->getAttributeElementHtml();
 

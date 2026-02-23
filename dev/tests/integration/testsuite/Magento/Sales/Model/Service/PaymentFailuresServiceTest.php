@@ -45,13 +45,8 @@ class PaymentFailuresServiceTest extends \PHPUnit\Framework\TestCase
     protected function setUp(): void
     {
         $this->quote = Bootstrap::getObjectManager()->create(Quote::class);
-        $this->cartRepositoryMock = $this->getMockBuilder(CartRepositoryInterface::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['get'])
-            ->getMockForAbstractClass();
-        $this->localeDateMock = $this->getMockBuilder(TimezoneInterface::class)
-            ->onlyMethods(['formatDateTime'])
-            ->getMockForAbstractClass();
+        $this->cartRepositoryMock = $this->createMock(CartRepositoryInterface::class);
+        $this->localeDateMock = $this->createMock(TimezoneInterface::class);
 
         $this->paymentFailures = Bootstrap::getObjectManager()->create(
             PaymentFailuresInterface::class,
