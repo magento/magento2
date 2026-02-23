@@ -63,7 +63,7 @@ class ApplyThemeCustomizationObserverTest extends TestCase
             $this->themeCustomization
         );
 
-        $designMock = $this->getMockForAbstractClass(DesignInterface::class);
+        $designMock = $this->createMock(DesignInterface::class);
         $designMock->expects($this->any())->method('getDesignTheme')->willReturn($themeMock);
 
         $this->assetsMock = $this->createMock(GroupedCollection::class);
@@ -89,9 +89,7 @@ class ApplyThemeCustomizationObserverTest extends TestCase
     {
         $asset = $this->createMock(File::class);
         $file = $this->createMock(\Magento\Theme\Model\Theme\File::class);
-        $fileService = $this->getMockForAbstractClass(
-            FileAssetInterface::class
-        );
+        $fileService = $this->createMock(FileAssetInterface::class);
         $file->expects($this->any())->method('getCustomizationService')->willReturn($fileService);
 
         $this->assetRepo->expects($this->once())

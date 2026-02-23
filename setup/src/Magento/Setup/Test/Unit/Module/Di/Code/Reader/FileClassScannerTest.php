@@ -270,7 +270,6 @@ PHP
 
 namespace This\Is\My\Ns;
 
-use stdClass;
 
 class ThisIsMyTest
 {

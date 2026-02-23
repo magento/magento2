@@ -13,6 +13,7 @@ use Magento\Framework\View\Asset\Minification;
 use Magento\Framework\View\Asset\Source;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class FileTest extends TestCase
 {
@@ -39,7 +40,7 @@ class FileTest extends TestCase
     protected function setUp(): void
     {
         $this->source = $this->createMock(Source::class);
-        $this->context = $this->getMockForAbstractClass(ContextInterface::class);
+        $this->context = $this->createMock(ContextInterface::class);
         $this->minificationMock = $this->getMockBuilder(Minification::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -77,9 +78,8 @@ class FileTest extends TestCase
      * @param string $contextPath
      * @param string $module
      * @param string $filePath
-     * @param string $expected
-     * @dataProvider getPathDataProvider
-     */
+     * @param string $expected     */
+    #[DataProvider('getPathDataProvider')]
     public function testGetPath($contextPath, $module, $filePath, $expected)
     {
         $this->context->expects($this->once())->method('getPath')->willReturn($contextPath);

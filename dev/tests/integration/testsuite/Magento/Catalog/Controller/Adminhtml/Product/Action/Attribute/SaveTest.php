@@ -20,6 +20,7 @@ use Magento\TestFramework\MessageQueue\EnvironmentPreconditionException;
 use Magento\TestFramework\MessageQueue\PreconditionFailedException;
 use Magento\TestFramework\MessageQueue\PublisherConsumerController;
 use Magento\TestFramework\TestCase\AbstractBackendController;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * @covers \Magento\Catalog\Controller\Adminhtml\Product\Action\Attribute\Save::execute
@@ -93,11 +94,11 @@ class SaveTest extends AbstractBackendController
     }
 
     /**
-     * @dataProvider saveActionVisibilityAttrDataProvider
      * @param array $attributes
      * @magentoDataFixture Magento/Catalog/_files/product_simple.php
      * @magentoDbIsolation disabled
      */
+    #[DataProvider('saveActionVisibilityAttrDataProvider')]
     public function testSaveActionChangeVisibility(array $attributes): void
     {
         /** @var ProductRepository $repository */

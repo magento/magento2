@@ -9,12 +9,12 @@ namespace Magento\Framework\DB\Test\Unit;
 
 use Magento\Framework\DB\ExpressionConverter;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class ExpressionConverterTest extends TestCase
 {
-    /**
-     * @dataProvider shortenEntityNameDataProvider
-     */
+    /**     */
+    #[DataProvider('shortenEntityNameDataProvider')]
     public function testShortenEntityName($in, $prefix, $expectedOut)
     {
         $resultEntityName = ExpressionConverter::shortenEntityName($in, $prefix);

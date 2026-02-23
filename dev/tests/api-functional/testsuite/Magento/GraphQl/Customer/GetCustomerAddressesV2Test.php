@@ -15,6 +15,7 @@ use Magento\Integration\Api\CustomerTokenServiceInterface;
 use Magento\TestFramework\Fixture\DataFixture;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 #[
     DataFixture(CustomerWithAddresses::class, ['email' => 'customer@example.com',], 'customer')
@@ -42,8 +43,8 @@ class GetCustomerAddressesV2Test extends GraphQlAbstract
      * @param array $expectedResponse
      * @return void
      * @throws AuthenticationException
-     * @dataProvider dataProviderGetCustomerAddressesV2
      */
+    #[DataProvider('dataProviderGetCustomerAddressesV2')]
     public function testGetCustomerAddressesV2(int $pageSize, int $currentPage, array $expectedResponse)
     {
         $query = $this->getQuery($pageSize, $currentPage);

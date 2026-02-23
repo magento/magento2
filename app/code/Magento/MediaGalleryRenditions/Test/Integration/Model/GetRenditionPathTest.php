@@ -14,6 +14,7 @@ use Magento\Framework\Filesystem\Directory\WriteInterface;
 use Magento\Framework\Filesystem\DriverInterface;
 use Magento\MediaGalleryRenditionsApi\Api\GetRenditionPathInterface;
 use Magento\TestFramework\Helper\Bootstrap;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 class GetRenditionPathTest extends TestCase
@@ -43,10 +44,9 @@ class GetRenditionPathTest extends TestCase
     }
 
     /**
-     * @dataProvider getImageProvider
-     *
      * Test for getting a rendition path.
      */
+    #[DataProvider('getImageProvider')]
     public function testExecute(string $path, string $expectedRenditionPath): void
     {
         $imagePath = realpath(__DIR__ . '/../../_files' . $path);

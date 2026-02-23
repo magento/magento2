@@ -40,7 +40,7 @@ class MaintenanceModeTest extends TestCase
      */
     protected function setup(): void
     {
-        $this->flagDir = $this->getMockForAbstractClass(WriteInterface::class);
+        $this->flagDir = $this->createMock(WriteInterface::class);
         $filesystem = $this->createMock(Filesystem::class);
         $filesystem->method('getDirectoryWrite')
             ->willReturn($this->flagDir);

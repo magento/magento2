@@ -20,6 +20,7 @@ use Magento\Newsletter\Model\ResourceModel\Subscriber\CollectionFactory;
 use Magento\Newsletter\Model\ResourceModel\Subscriber\Grid\Collection as GridCollection;
 use Magento\Store\Model\ScopeInterface;
 use Magento\TestFramework\TestCase\AbstractController;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Class checks subscription behaviour from frontend
@@ -74,12 +75,11 @@ class NewActionTest extends AbstractController
     }
 
     /**
-     * @dataProvider subscribersDataProvider
-     *
      * @param string $email
      * @param string $expectedMessage
      * @return void
      */
+    #[DataProvider('subscribersDataProvider')]
     public function testNewAction(string $email, string $expectedMessage): void
     {
         $this->subscriberToDelete = $email ? $email : null;
@@ -144,10 +144,10 @@ class NewActionTest extends AbstractController
 
     /**
      * @magentoDataFixture Magento/Customer/_files/new_customer.php
-     * @dataProvider emailAndStatusDataProvider
      *
      * @return void
      */
+    #[DataProvider('emailAndStatusDataProvider')]
     public function testNewActionUsedEmail($email, $subscriptionType): void
     {
         $this->prepareRequest($email);

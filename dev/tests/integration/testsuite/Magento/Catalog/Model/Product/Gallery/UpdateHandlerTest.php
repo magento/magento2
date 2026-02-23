@@ -231,12 +231,12 @@ class UpdateHandlerTest extends TestCase
      * Tests updating image roles during product save.
      *
      * @magentoDataFixture Magento/Catalog/_files/product_with_multiple_images.php
-     * @dataProvider executeWithTwoImagesAndRolesDataProvider
      * @magentoDbIsolation enabled
      * @param array $roles
      * @return void
      * @throws LocalizedException
      */
+    #[DataProvider('executeWithTwoImagesAndRolesDataProvider')]
     public function testExecuteWithTwoImagesAndDifferentRoles(array $roles): void
     {
         $imageRoles = ['image', 'small_image', 'thumbnail', 'swatch_image'];
@@ -256,7 +256,6 @@ class UpdateHandlerTest extends TestCase
      *
      * @magentoDataFixture Magento/Catalog/_files/product_with_multiple_images.php
      * @magentoDataFixture Magento/Store/_files/second_store.php
-     * @dataProvider executeWithTwoImagesAndRolesDataProvider
      * @magentoDbIsolation enabled
      * @param array $roles
      * @return void
@@ -264,6 +263,7 @@ class UpdateHandlerTest extends TestCase
      * @throws ConfigurationMismatchException
      * @throws NoSuchEntityException
      */
+    #[DataProvider('executeWithTwoImagesAndRolesDataProvider')]
     public function testExecuteWithTwoImagesAndDifferentRolesOnStoreView(array $roles): void
     {
         $secondStoreId = (int)$this->storeRepository->get('fixture_second_store')->getId();
@@ -579,7 +579,6 @@ class UpdateHandlerTest extends TestCase
      * Check that product images should be updated successfully regardless if the existing images exist or not
      *
      * @magentoDataFixture Magento/Catalog/_files/product_with_image.php
-     * @dataProvider updateImageDataProvider
      * @param string $newFile
      * @param string $expectedFile
      * @param bool $exist
@@ -588,6 +587,7 @@ class UpdateHandlerTest extends TestCase
      * @throws NoSuchEntityException
      * @throws FileSystemException
      */
+    #[DataProvider('updateImageDataProvider')]
     public function testUpdateImage(string $newFile, string $expectedFile, bool $exist): void
     {
         $product = $this->getProduct(Store::DEFAULT_STORE_ID);
@@ -669,7 +669,6 @@ class UpdateHandlerTest extends TestCase
      *
      * @magentoDataFixture Magento/Catalog/_files/product_with_image.php
      * @magentoDataFixture Magento/Store/_files/second_store.php
-     * @dataProvider addImagesDataProvider
      * @param string $addFromStore
      * @param array $newImages
      * @param string $viewFromStore
@@ -679,6 +678,7 @@ class UpdateHandlerTest extends TestCase
      * @throws LocalizedException
      * @throws NoSuchEntityException
      */
+    #[DataProvider('addImagesDataProvider')]
     public function testAddImages(
         string $addFromStore,
         array $newImages,

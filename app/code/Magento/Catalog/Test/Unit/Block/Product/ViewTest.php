@@ -31,9 +31,11 @@ use Magento\Framework\Url\EncoderInterface as UrlEncoderInterface;
 use Magento\Framework\Pricing\Amount\AmountInterface;
 use Magento\Framework\Pricing\PriceInfo\Base;
 use Magento\Framework\Registry;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\UrlInterface;
 use Magento\Store\Model\Store;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -44,6 +46,7 @@ use PHPUnit\Framework\TestCase;
  */
 class ViewTest extends TestCase
 {
+    use MockCreationTrait;
     /**
      * @var View
      */
@@ -410,10 +413,10 @@ class ViewTest extends TestCase
      */
     public function testIsStartCustomizationReturnsTrueWithConfigureMode(): void
     {
-        $productMock = $this->getMockBuilder(Product::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['getConfigureMode'])
-            ->getMock();
+        $productMock = $this->createPartialMockWithReflection(
+            Product::class,
+            ['getConfigureMode']
+        );
 
         $this->registryMock->method('registry')
             ->with('product')
@@ -427,20 +430,20 @@ class ViewTest extends TestCase
     /**
      * Unit test for getProductDefaultQty() with data provider
      *
-     * @dataProvider productQtyDataProvider
      * @param int $minQty
      * @param int $configuredQty
      * @param int $expectedQty
      * @return void
      */
+    #[DataProvider('productQtyDataProvider')]
     public function testGetProductDefaultQty(int $minQty, int $configuredQty, int $expectedQty): void
     {
         $storeMock = $this->createMock(Store::class);
         $stockItemMock = $this->createMock(Item::class);
-        $configMock = $this->getMockBuilder(DataObject::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['getQty'])
-            ->getMock();
+        $configMock = $this->createPartialMockWithReflection(
+            DataObject::class,
+            ['getQty']
+        );
 
         $this->registryMock->method('registry')
             ->with('product')
@@ -480,10 +483,10 @@ class ViewTest extends TestCase
     public function testGetOptionsContainerReturnsContainer1(): void
     {
         $expectedOptionsContainer = 'container1';
-        $productMock = $this->getMockBuilder(Product::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['getOptionsContainer'])
-            ->getMock();
+        $productMock = $this->createPartialMockWithReflection(
+            Product::class,
+            ['getOptionsContainer']
+        );
         $this->registryMock->method('registry')
             ->with('product')
             ->willReturn($productMock);
@@ -548,11 +551,10 @@ class ViewTest extends TestCase
     /**
      * Unit test for hasOptions() using data provider
      *
-     * @dataProvider hasOptionsDataProvider
-     *
      * @param bool $hasOptions
      * @return void
      */
+    #[DataProvider('hasOptionsDataProvider')]
     public function testHasOptionsWithProvider(bool $hasOptions): void
     {
         $typeMock = $this->createMock(AbstractType::class);
