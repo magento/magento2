@@ -873,3 +873,4 @@ Details,Details
 "Recently Viewed","Recently Viewed"
 "Could not acquire lock for SKU %1","Could not acquire lock for SKU %1"
 "Use Default Order","Use Default Order"
+"A category cannot be assigned to one of its own descendants.","A category cannot be assigned to one of its own descendants."
