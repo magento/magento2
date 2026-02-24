@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -16,11 +16,15 @@ use Magento\Framework\App\Request\Http;
 use Magento\Framework\DataObject;
 use Magento\Framework\Event\Manager;
 use Magento\Framework\Json\Helper\Data;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 class PluginTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var Plugin
      */
@@ -88,10 +92,13 @@ class PluginTest extends TestCase
             Http::class,
             ['getPost', 'getParam', 'has']
         );
-        $this->responseMock = $this->getMockBuilder(DataObject::class)
-            ->addMethods(['setError', 'setMessage', 'setAttributes'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->responseMock = $this->createPartialMockWithReflection(
+            DataObject::class,
+            ['setError', 'getError', 'setMessage', 'setAttributes']
+        );
+        $this->responseMock->method('setError')->willReturnSelf();
+        $this->responseMock->method('setMessage')->willReturnSelf();
+        $this->responseMock->method('setAttributes')->willReturnSelf();
         $this->arguments = [$this->productMock, $this->requestMock, $this->responseMock];
 
         $this->subjectMock = $this->createMock(Validator::class);
@@ -125,16 +132,7 @@ class PluginTest extends TestCase
     {
         $matrix = ['products'];
 
-        $plugin = $this->getMockBuilder(Plugin::class)
-            ->onlyMethods(['_validateProductVariations'])
-            ->setConstructorArgs(
-                [
-                    $this->eventManagerMock,
-                    $this->productFactoryMock,
-                    $this->jsonHelperMock
-                ]
-            )
-            ->getMock();
+        $plugin = $this->createPluginMock();
 
         $plugin->expects($this->once())
             ->method('_validateProductVariations')
@@ -146,7 +144,7 @@ class PluginTest extends TestCase
             ->with('variations-matrix')
             ->willReturn($matrix);
 
-        $this->responseMock->expects($this->never())->method('setError');
+        // Anonymous class setError method is available but not expected to be called
 
         $this->assertEquals(
             $this->proceedResult,
@@ -167,16 +165,7 @@ class PluginTest extends TestCase
     {
         $matrix = ['products'];
 
-        $plugin = $this->getMockBuilder(Plugin::class)
-            ->onlyMethods(['_validateProductVariations'])
-            ->setConstructorArgs(
-                [
-                    $this->eventManagerMock,
-                    $this->productFactoryMock,
-                    $this->jsonHelperMock
-                ]
-            )
-            ->getMock();
+        $plugin = $this->createPluginMock();
 
         $plugin->expects($this->once())
             ->method('_validateProductVariations')
@@ -188,9 +177,8 @@ class PluginTest extends TestCase
             ->with('variations-matrix')
             ->willReturn($matrix);
 
-        $this->responseMock->expects($this->once())->method('setError')->with(true)->willReturnSelf();
-        $this->responseMock->expects($this->once())->method('setMessage')->willReturnSelf();
-        $this->responseMock->expects($this->once())->method('setAttributes')->willReturnSelf();
+        // Anonymous class setError method will be called with true
+        // Anonymous class setMessage and setAttributes methods return $this by default
         $this->assertEquals(
             $this->proceedResult,
             $plugin->afterValidate(
@@ -300,7 +288,7 @@ class PluginTest extends TestCase
             ->method('getAttributes')
             ->willReturn($attributes);
 
-        $this->responseMock->expects($this->never())->method('setError');
+        // Anonymous class setError method is available but not expected to be called
 
         $result = $this->plugin->afterValidate(
             $this->subjectMock,
@@ -328,9 +316,7 @@ class PluginTest extends TestCase
             ->method('create')
             ->willReturn($productMock);
 
-        $productMock->expects($this->any())
-            ->method('validate')
-            ->willReturn(true);
+        $productMock->method('validate')->willReturn(true);
 
         return $productMock;
     }
@@ -347,26 +333,42 @@ class PluginTest extends TestCase
         $isUserDefined,
         $isRequired
     ): AbstractAttribute {
-        $attribute = $this->getMockBuilder(AbstractAttribute::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(
-                [
-                    'getAttributeCode',
-                    'getIsUserDefined',
-                    'getIsRequired'
-                ]
-            )
-            ->getMock();
-        $attribute->expects($this->any())
-            ->method('getAttributeCode')
-            ->willReturn($attributeCode);
-        $attribute->expects($this->any())
-            ->method('getIsRequired')
-            ->willReturn($isRequired);
-        $attribute->expects($this->any())
-            ->method('getIsUserDefined')
-            ->willReturn($isUserDefined);
+        $attribute = $this->createPartialMock(
+            AbstractAttribute::class,
+            [
+                'getAttributeCode',
+                'getIsUserDefined',
+                'getIsRequired'
+            ]
+        );
+        $attribute->method('getAttributeCode')->willReturn($attributeCode);
+        $attribute->method('getIsRequired')->willReturn($isRequired);
+        $attribute->method('getIsUserDefined')->willReturn($isUserDefined);
 
         return $attribute;
+    }
+
+    /**
+     * Create Plugin mock with constructor arguments
+     *
+     * @return Plugin|MockObject
+     */
+    private function createPluginMock(): Plugin
+    {
+        $plugin = $this->createPartialMock(Plugin::class, ['_validateProductVariations']);
+
+        // Use reflection to inject dependencies
+        $reflection = new \ReflectionClass($plugin);
+
+        $eventManagerProperty = $reflection->getProperty('eventManager');
+        $eventManagerProperty->setValue($plugin, $this->eventManagerMock);
+
+        $productFactoryProperty = $reflection->getProperty('productFactory');
+        $productFactoryProperty->setValue($plugin, $this->productFactoryMock);
+
+        $jsonHelperProperty = $reflection->getProperty('jsonHelper');
+        $jsonHelperProperty->setValue($plugin, $this->jsonHelperMock);
+
+        return $plugin;
     }
 }

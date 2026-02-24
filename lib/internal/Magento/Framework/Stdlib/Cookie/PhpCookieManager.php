@@ -1,16 +1,7 @@
 <?php
 /**
- * Copyright 2025 Adobe
+ * Copyright 2014 Adobe
  * All Rights Reserved.
- *
- * NOTICE: All information contained herein is, and remains
- * the property of Adobe and its suppliers, if any. The intellectual
- * and technical concepts contained herein are proprietary to Adobe
- * and its suppliers and are protected by all applicable intellectual
- * property laws, including trade secret and copyright laws.
- * Dissemination of this information or reproduction of this material
- * is strictly forbidden unless prior written permission is obtained
- * from Adobe.
  */
 declare(strict_types=1);
 
@@ -37,7 +28,7 @@ class PhpCookieManager implements CookieManagerInterface
 {
     /**#@+
      * Constants for Cookie manager.
-     * RFC 2109 - Page 15
+     * RFC 2109 - Page 26
      * http://www.ietf.org/rfc/rfc6265.txt
      */
     public const MAX_NUM_COOKIES = 50;
@@ -220,7 +211,7 @@ class PhpCookieManager implements CookieManagerInterface
 
         $sizeOfCookie = $this->sizeOfCookie($name, $value);
 
-        if ($numCookies > self::MAX_NUM_COOKIES) {
+        if ($numCookies > static::MAX_NUM_COOKIES) {
             $this->logger->warning(
                 new Phrase('Unable to send the cookie. Maximum number of cookies would be exceeded.'),
                 [
@@ -230,7 +221,7 @@ class PhpCookieManager implements CookieManagerInterface
             );
         }
 
-        if ($sizeOfCookie > self::MAX_COOKIE_SIZE) {
+        if ($sizeOfCookie > static::MAX_COOKIE_SIZE) {
             throw new CookieSizeLimitReachedException(
                 new Phrase(
                     'Unable to send the cookie. Size of \'%name\' is %size bytes.',

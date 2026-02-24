@@ -11,12 +11,13 @@ use Magento\Deploy\Console\Command\App\ConfigImportCommand;
 use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\State as AppState;
+use Magento\Framework\Config\CacheInterface;
 use Magento\Framework\Console\Cli;
 use Magento\Framework\Exception\RuntimeException;
-use Magento\Framework\Config\CacheInterface;
 use Magento\Framework\Setup\ConsoleLogger;
 use Magento\Framework\Setup\Declaration\Schema\DryRunLogger;
 use Magento\Framework\Setup\Declaration\Schema\OperationsExecutor;
+use Magento\Setup\Model\DbInitStatementsCleanup;
 use Magento\Setup\Model\InstallerFactory;
 use Magento\Setup\Model\SearchConfigFactory;
 use Symfony\Component\Console\Input\ArrayInput;
@@ -65,24 +66,33 @@ class UpgradeCommand extends AbstractSetupCommand
     private $cache;
 
     /**
+     * @var DbInitStatementsCleanup
+     */
+    private $dbInitStatementsCleanup;
+
+    /**
      * @param InstallerFactory $installerFactory
      * @param SearchConfigFactory $searchConfigFactory
      * @param DeploymentConfig $deploymentConfig
      * @param AppState|null $appState
      * @param CacheInterface|null $cache
+     * @param DbInitStatementsCleanup|null $dbInitStatementsCleanup
      */
     public function __construct(
         InstallerFactory $installerFactory,
         SearchConfigFactory $searchConfigFactory,
         ?DeploymentConfig $deploymentConfig = null,
         ?AppState $appState = null,
-        ?CacheInterface $cache = null
+        ?CacheInterface $cache = null,
+        ?DbInitStatementsCleanup $dbInitStatementsCleanup = null
     ) {
         $this->installerFactory = $installerFactory;
         $this->searchConfigFactory = $searchConfigFactory;
         $this->deploymentConfig = $deploymentConfig ?: ObjectManager::getInstance()->get(DeploymentConfig::class);
         $this->appState = $appState ?: ObjectManager::getInstance()->get(AppState::class);
         $this->cache = $cache ?: ObjectManager::getInstance()->get(CacheInterface::class);
+        $this->dbInitStatementsCleanup = $dbInitStatementsCleanup
+            ?: ObjectManager::getInstance()->get(DbInitStatementsCleanup::class);
         parent::__construct();
     }
 
@@ -136,11 +146,16 @@ class UpgradeCommand extends AbstractSetupCommand
     /**
      * @inheritdoc
      */
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         try {
             $request = $input->getOptions();
             $keepGenerated = $input->getOption(self::INPUT_KEY_KEEP_GENERATED);
+            
+            // Clean up deprecated 'SET NAMES utf8;' from database connections
+            $output->writeln('<info>Cleaning up deprecated SET NAMES utf8 from database connections...</info>');
+            $this->dbInitStatementsCleanup->execute();
+            
             $installer = $this->installerFactory->create(new ConsoleLogger($output));
             $installer->updateModulesSequence($keepGenerated);
             $searchConfig = $this->searchConfigFactory->create();
@@ -175,8 +190,16 @@ class UpgradeCommand extends AbstractSetupCommand
             $output->writeln(
                 '<info>Please refer to Developer Guide for more details.</info>'
             );
+
+            // Add standardized success message for deployment script parsing
+            $output->writeln('<info>Upgrade completed successfully.</info>');
+
         } catch (\Exception $e) {
             $output->writeln('<error>' . $e->getMessage() . '</error>');
+
+            // Add standardized failure message for deployment script parsing
+            $output->writeln('<error>Upgrade failed: ' . $e->getMessage() . '</error>');
+
             return Cli::RETURN_FAILURE;
         }
 

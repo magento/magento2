@@ -1,4 +1,3 @@
-# ConfigurableProductGraphQl
+# Magento_ConfigurableProductGraphQl module
 
-**ConfigurableProductGraphQl** provides type and resolver information for the GraphQl module
-to generate configurable product information.
+This module provides type and resolver information for the GraphQl module to generate configurable product information.

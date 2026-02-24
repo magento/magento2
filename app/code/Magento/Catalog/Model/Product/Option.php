@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright 2011 Adobe
+ * Copyright 2013 Adobe
  * All Rights Reserved.
  */
 
@@ -357,7 +357,9 @@ class Option extends AbstractExtensibleModel implements ProductCustomOptionInter
             $type = $this->getType();
         }
 
-        return $this->optionTypesToGroups[$type] ?? '';
+        return ($type !== null && isset($this->optionTypesToGroups[$type]))
+            ? $this->optionTypesToGroups[$type]
+            : '';
     }
 
     /**

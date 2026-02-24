@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Catalog\Ui\DataProvider\Product\Listing\Collector;
@@ -20,21 +20,6 @@ use Magento\Framework\Data\Helper\PostHelper;
  */
 class Url implements ProductRenderCollectorInterface
 {
-    /** Compare Data key */
-    const KEY_COMPARE_URL_POST_DATA = "compare_url_post_data";
-
-    /** Add to cart url key post data */
-    const KEY_ADD_TO_CART_URL_POST_DATA = "add_to_cart_url_post_data";
-
-    /** Add to cart url key */
-    const KEY_ADD_TO_CART_URL = "add_to_cart_url";
-
-    /** Product Url */
-    const KEY_URL = "url";
-
-    /** Has Required options key */
-    const KEY_HAS_REQUIRED_OPTIONS = "has_required_options";
-
     /**
      * @var AbstractProduct
      */
@@ -79,7 +64,7 @@ class Url implements ProductRenderCollectorInterface
     public function collect(ProductInterface $product, ProductRenderInterface $productRender)
     {
         $addToCart = $productRender->getAddToCartButton();
-        $addToCompare = $productRender->getAddToCartButton();
+        $addToCompare = $productRender->getAddToCompareButton();
 
         if (!$addToCart) {
             $addToCart = $this->buttonFactory->create();

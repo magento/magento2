@@ -24,7 +24,7 @@
 ##
 ## fastcgi_param  MAGE_MODE $MAGE_MODE;
 ##
-## In production mode, you should uncomment the 'expires' directive in the /static/ location block
+## In production mode, you should uncomment the 'add_header Cache-Control "public, max-age=31536000, immutable"' directive in the /static/ location block
 
 # Modules can be loaded only at the very beginning of the Nginx config file, please move the line below to the main config file
 # load_module /etc/nginx/modules/ngx_http_image_filter_module.so;
@@ -47,6 +47,11 @@ location /.user.ini {
 location ~* ^/setup($|/) {
     root $MAGE_ROOT;
     location ~ ^/setup/index.php {
+        deny all;
+        # If you want to enable the web based setup functionality, add your
+        # ip address to the allow list below or comment out the deny all above.
+        # allow 127.0.0.1;
+
         fastcgi_pass   fastcgi_backend;
 
         fastcgi_param  PHP_FLAG  "session.auto_start=off \n suhosin.session.cryptua=off";
@@ -105,7 +110,7 @@ location /pub/ {
 
 location /static/ {
     # Uncomment the following line in production mode
-    # expires max;
+    # add_header Cache-Control "public, max-age=31536000, immutable";
 
     # Remove signature of the static files that is used to overcome the browser cache
     location ~ ^/static/version\d*/ {
@@ -113,9 +118,8 @@ location /static/ {
     }
 
     location ~* \.(ico|jpg|jpeg|png|gif|svg|svgz|webp|avif|avifs|js|css|eot|ttf|otf|woff|woff2|html|json|webmanifest)$ {
-        add_header Cache-Control "public";
+        add_header Cache-Control "public, max-age=31536000, immutable";
         add_header X-Frame-Options "SAMEORIGIN";
-        expires +1y;
 
         if (!-f $request_filename) {
             rewrite ^/static/(version\d*/)?(.*)$ /static.php?resource=$2 last;
@@ -160,7 +164,7 @@ location /media/ {
 #       image_filter_jpeg_quality 90;
 #   }
 
-    try_files $uri $uri/ /get.php$is_args$args;
+    # try_files $uri $uri/ /get.php$is_args$args;
 
     location ~ ^/media/theme_customization/.*\.xml {
         deny all;
@@ -176,7 +180,7 @@ location /media/ {
         add_header Cache-Control "no-store";
         add_header X-Frame-Options "SAMEORIGIN";
         expires    off;
-        try_files $uri $uri/ /get.php$is_args$args;
+        # try_files $uri $uri/ /get.php$is_args$args;
     }
     add_header X-Frame-Options "SAMEORIGIN";
 }

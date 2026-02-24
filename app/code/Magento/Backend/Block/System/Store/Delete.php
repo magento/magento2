@@ -1,14 +1,12 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Backend\Block\System\Store;
 
 /**
  * Store / store view / website delete form container
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Delete extends \Magento\Backend\Block\Widget\Form\Container
 {

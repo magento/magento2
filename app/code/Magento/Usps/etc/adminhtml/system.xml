@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2025 Adobe
+ * All Rights Reserved.
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
@@ -14,13 +14,39 @@
                     <label>Enabled for Checkout</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
+                <field id="usps_type" translate="label" type="select" sortOrder="20" showInDefault="1" showInWebsite="1" canRestore="1">
+                    <label>USPS Type</label>
+                    <source_model>Magento\Usps\Model\Config\Source\Type</source_model>
+                </field>
                 <field id="gateway_url" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" canRestore="1">
                     <label>Gateway URL</label>
                     <backend_model>Magento\Usps\Model\Config\Backend\UspsUrl</backend_model>
+                    <depends>
+                        <field id="usps_type">USPS_XML</field>
+                    </depends>
+                </field>
+                <field id="gateway_rest_prod_url" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" canRestore="1">
+                    <label>Gateway URL</label>
+                    <backend_model>Magento\Usps\Model\Config\Backend\UspsUrl</backend_model>
+                    <depends>
+                        <field id="usps_type">USPS_REST</field>
+                        <field id="mode">1</field>
+                    </depends>
+                </field>
+                <field id="gateway_rest_dev_url" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" canRestore="1">
+                    <label>Gateway URL</label>
+                    <backend_model>Magento\Usps\Model\Config\Backend\UspsUrl</backend_model>
+                    <depends>
+                        <field id="usps_type">USPS_REST</field>
+                        <field id="mode">0</field>
+                    </depends>
                 </field>
                 <field id="gateway_secure_url" translate="label" type="text" sortOrder="30" showInDefault="1" showInWebsite="1" canRestore="1">
                     <label>Secure Gateway URL</label>
                     <backend_model>Magento\Usps\Model\Config\Backend\UspsUrl</backend_model>
+                    <depends>
+                        <field id="usps_type">USPS_XML</field>
+                    </depends>
                 </field>
                 <field id="title" translate="label" type="text" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                     <label>Title</label>
@@ -28,22 +54,95 @@
                 <field id="userid" translate="label" type="obscure" sortOrder="50" showInDefault="1" showInWebsite="1">
                     <label>User ID</label>
                     <backend_model>Magento\Config\Model\Config\Backend\Encrypted</backend_model>
+                    <depends>
+                        <field id="usps_type">USPS_XML</field>
+                    </depends>
                 </field>
                 <field id="password" translate="label" type="obscure" sortOrder="53" showInDefault="1" showInWebsite="1">
                     <label>Password</label>
                     <backend_model>Magento\Config\Model\Config\Backend\Encrypted</backend_model>
+                    <depends>
+                        <field id="usps_type">USPS_XML</field>
+                    </depends>
                 </field>
-                <field id="mode" translate="label" type="select" sortOrder="54" showInDefault="1" showInWebsite="1" canRestore="1">
+                <field id="client_id" translate="label" type="obscure" sortOrder="54" showInDefault="1" showInWebsite="1">
+                    <label>Consumer Key</label>
+                    <backend_model>Magento\Config\Model\Config\Backend\Encrypted</backend_model>
+                    <depends>
+                        <field id="usps_type">USPS_REST</field>
+                    </depends>
+                </field>
+                <field id="client_secret" translate="label" type="obscure" sortOrder="55" showInDefault="1" showInWebsite="1">
+                    <label>Consumer Secret</label>
+                    <backend_model>Magento\Config\Model\Config\Backend\Encrypted</backend_model>
+                    <depends>
+                        <field id="usps_type">USPS_REST</field>
+                    </depends>
+                </field>
+                <field id="account_type" translate="label" type="select" sortOrder="56" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Account Type</label>
+                    <source_model>Magento\Usps\Model\Config\Source\Account</source_model>
+                    <depends>
+                        <field id="usps_type">USPS_REST</field>
+                    </depends>
+                </field>
+                <field id="price_type" translate="label" type="select" sortOrder="57" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Pricing Options</label>
+                    <source_model>Magento\Usps\Model\Config\Source\PriceType</source_model>
+                    <depends>
+                        <field id="usps_type">USPS_REST</field>
+                    </depends>
+                </field>
+                <field id="account_number" translate="label" type="text" sortOrder="58" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Account Number</label>
+                    <validate>required-entry</validate>
+                    <depends>
+                        <field id="usps_type">USPS_REST</field>
+                    </depends>
+                </field>
+                <field id="crid" translate="label" type="text" sortOrder="59" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Customer Registration ID (CRID)</label>
+                    <validate>required-entry</validate>
+                    <depends>
+                        <field id="usps_type">USPS_REST</field>
+                    </depends>
+                </field>
+                <field id="mid" translate="label" type="text" sortOrder="60" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Mailer Identifier (MID)</label>
+                    <validate>required-entry</validate>
+                    <depends>
+                        <field id="usps_type">USPS_REST</field>
+                    </depends>
+                </field>
+                <field id="mmid" translate="label" type="text" sortOrder="61" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Manifest MID</label>
+                    <validate>required-entry</validate>
+                    <depends>
+                        <field id="usps_type">USPS_REST</field>
+                    </depends>
+                </field>
+                <field id="aesitn" translate="label" type="text" sortOrder="62" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>AES/ITN</label>
+                    <comment>Automated Export System/International Transaction Number. For international shipment outside US.</comment>
+                    <tooltip>Each item in the shipment, classified under Schedule B Export Codes (available at www.census.gov/foreign-trade/schedules/b), is valued at $2,500 or less, and no export license is required. If the shipment, regardless of value, is destined for Canada without requiring an export license, no further action is needed. Otherwise, the AESITN field must be filled with the appropriate AES/ITN.</tooltip>
+                    <depends>
+                        <field id="usps_type">USPS_REST</field>
+                    </depends>
+                </field>
+                <field id="mode" translate="label" type="select" sortOrder="63" showInDefault="1" showInWebsite="1" canRestore="1">
                     <label>Mode</label>
                     <source_model>Magento\Shipping\Model\Config\Source\Online\Mode</source_model>
                 </field>
-                <field id="shipment_requesttype" translate="label" type="select" sortOrder="55" showInDefault="1" showInWebsite="1" canRestore="1">
+                <field id="shipment_requesttype" translate="label" type="select" sortOrder="64" showInDefault="1" showInWebsite="1" canRestore="1">
                     <label>Packages Request Type</label>
                     <source_model>Magento\Shipping\Model\Config\Source\Online\Requesttype</source_model>
                 </field>
-                <field id="container" translate="label" type="select" sortOrder="60" showInDefault="1" showInWebsite="1" canRestore="1">
+                <field id="container" translate="label" type="select" sortOrder="65" showInDefault="1" showInWebsite="1" canRestore="1">
                     <label>Container</label>
                     <source_model>Magento\Usps\Model\Source\Container</source_model>
+                    <depends>
+                        <field id="usps_type">USPS_XML</field>
+                    </depends>
                 </field>
                 <field id="size" translate="label" type="select" sortOrder="70" showInDefault="1" showInWebsite="1" canRestore="1">
                     <label>Size</label>
@@ -51,18 +150,21 @@
                 </field>
                 <field id="width" translate="label" type="text" sortOrder="73" showInDefault="1" showInWebsite="1">
                     <label>Width</label>
+                    <validate>required-entry validate-number validate-greater-than-zero</validate>
                     <depends>
                         <field id="size">LARGE</field>
                     </depends>
                 </field>
                 <field id="length" translate="label" type="text" sortOrder="72" showInDefault="1" showInWebsite="1">
                     <label>Length</label>
+                    <validate>required-entry validate-number validate-greater-than-zero</validate>
                     <depends>
                         <field id="size">LARGE</field>
                     </depends>
                 </field>
                 <field id="height" translate="label" type="text" sortOrder="74" showInDefault="1" showInWebsite="1">
                     <label>Height</label>
+                    <validate>required-entry validate-number validate-greater-than-zero</validate>
                     <depends>
                         <field id="size">LARGE</field>
                     </depends>
@@ -76,6 +178,9 @@
                 <field id="machinable" translate="label" type="select" sortOrder="80" showInDefault="1" showInWebsite="1" canRestore="1">
                     <label>Machinable</label>
                     <source_model>Magento\Usps\Model\Source\Machinable</source_model>
+                    <depends>
+                        <field id="usps_type">USPS_XML</field>
+                    </depends>
                 </field>
                 <field id="max_package_weight" translate="label" type="text" sortOrder="90" showInDefault="1" showInWebsite="1" canRestore="1">
                     <label>Maximum Package Weight (Please consult your shipping carrier for maximum supported shipping weight)</label>
@@ -97,6 +202,17 @@
                     <label>Allowed Methods</label>
                     <source_model>Magento\Usps\Model\Source\Method</source_model>
                     <can_be_empty>1</can_be_empty>
+                    <depends>
+                        <field id="usps_type">USPS_XML</field>
+                    </depends>
+                </field>
+                <field id="rest_allowed_methods" translate="label" type="multiselect" sortOrder="130" showInDefault="1" showInWebsite="1" canRestore="1">
+                    <label>Allowed Methods</label>
+                    <source_model>Magento\Usps\Model\Source\RestMethod</source_model>
+                    <can_be_empty>1</can_be_empty>
+                    <depends>
+                        <field id="usps_type">USPS_REST</field>
+                    </depends>
                 </field>
                 <field id="free_method" translate="label" type="select" sortOrder="140" showInDefault="1" showInWebsite="1" canRestore="1">
                     <label>Free Method</label>

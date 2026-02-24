@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -31,13 +31,8 @@ class DecimalTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->filter = $this->getMockBuilder(FilterInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-        $this->resource = $this->getMockBuilder(Decimal::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['getMinMax', 'getCount'])
-            ->getMock();
+        $this->filter = $this->createMock(FilterInterface::class);
+        $this->resource = $this->createPartialMock(Decimal::class, ['getMinMax', 'getCount']);
         $objectManagerHelper = new ObjectManagerHelper($this);
         $this->target = $objectManagerHelper->getObject(
             \Magento\Catalog\Model\Layer\Filter\DataProvider\Decimal::class,

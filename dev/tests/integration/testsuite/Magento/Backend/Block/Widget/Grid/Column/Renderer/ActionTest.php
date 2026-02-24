@@ -2,8 +2,8 @@
 declare(strict_types=1);
 
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2023 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Backend\Block\Widget\Grid\Column\Renderer;
 
@@ -13,6 +13,7 @@ use Magento\Framework\Phrase;
 use Magento\Framework\Phrase\RendererInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\ObjectManager;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class ActionTest extends \PHPUnit\Framework\TestCase
 {
@@ -31,7 +32,7 @@ class ActionTest extends \PHPUnit\Framework\TestCase
         $this->objectManager = Bootstrap::getObjectManager();
         $this->origRenderer = Phrase::getRenderer();
         /** @var RendererInterface|PHPUnit\Framework\MockObject_MockObject $rendererMock */
-        $rendererMock = $this->getMockForAbstractClass(RendererInterface::class);
+        $rendererMock = $this->createMock(RendererInterface::class);
         $rendererMock->expects($this->any())
             ->method('render')
             ->willReturnCallback(
@@ -51,8 +52,8 @@ class ActionTest extends \PHPUnit\Framework\TestCase
      * @param array $columnData
      * @param array $rowData
      * @param string $expected
-     * @dataProvider renderDataProvider
      */
+    #[DataProvider('renderDataProvider')]
     public function testRender($columnData, $rowData, $expected)
     {
         /** @var Text $renderer */

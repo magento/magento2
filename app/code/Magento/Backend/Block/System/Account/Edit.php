@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Backend\Block\System\Account;
 
@@ -9,12 +9,13 @@ namespace Magento\Backend\Block\System\Account;
  * Adminhtml edit admin user account
  *
  * @api
- * @author      Magento Core Team <core@magentocommerce.com>
  * @since 100.0.2
  */
 class Edit extends \Magento\Backend\Block\Widget\Form\Container
 {
     /**
+     * Initialise the page
+     *
      * @return void
      */
     protected function _construct()
@@ -29,6 +30,8 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
     }
 
     /**
+     * Return a Phrase for the header text
+     *
      * @return \Magento\Framework\Phrase
      */
     public function getHeaderText()

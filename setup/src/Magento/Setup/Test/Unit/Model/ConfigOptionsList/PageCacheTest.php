@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -45,7 +45,7 @@ class PageCacheTest extends TestCase
     public function testGetOptions()
     {
         $options = $this->configList->getOptions();
-        $this->assertCount(8, $options);
+        $this->assertCount(16, $options);
 
         $this->assertArrayHasKey(0, $options);
         $this->assertInstanceOf(SelectConfigOption::class, $options[0]);
@@ -77,7 +77,39 @@ class PageCacheTest extends TestCase
 
         $this->assertArrayHasKey(7, $options);
         $this->assertInstanceOf(TextConfigOption::class, $options[7]);
-        $this->assertEquals('page-cache-id-prefix', $options[7]->getName());
+        $this->assertEquals('page-cache-redis-serializer', $options[7]->getName());
+
+        $this->assertArrayHasKey(8, $options);
+        $this->assertInstanceOf(TextConfigOption::class, $options[8]);
+        $this->assertEquals('page-cache-id-prefix', $options[8]->getName());
+
+        $this->assertArrayHasKey(9, $options);
+        $this->assertInstanceOf(TextConfigOption::class, $options[9]);
+        $this->assertEquals('page-cache-valkey-server', $options[9]->getName());
+
+        $this->assertArrayHasKey(10, $options);
+        $this->assertInstanceOf(TextConfigOption::class, $options[10]);
+        $this->assertEquals('page-cache-valkey-db', $options[10]->getName());
+
+        $this->assertArrayHasKey(11, $options);
+        $this->assertInstanceOf(TextConfigOption::class, $options[11]);
+        $this->assertEquals('page-cache-valkey-port', $options[11]->getName());
+
+        $this->assertArrayHasKey(12, $options);
+        $this->assertInstanceOf(TextConfigOption::class, $options[12]);
+        $this->assertEquals('page-cache-valkey-password', $options[12]->getName());
+
+        $this->assertArrayHasKey(13, $options);
+        $this->assertInstanceOf(TextConfigOption::class, $options[13]);
+        $this->assertEquals('page-cache-valkey-compress-data', $options[13]->getName());
+
+        $this->assertArrayHasKey(14, $options);
+        $this->assertInstanceOf(TextConfigOption::class, $options[14]);
+        $this->assertEquals('page-cache-valkey-compression-lib', $options[14]->getName());
+
+        $this->assertArrayHasKey(15, $options);
+        $this->assertInstanceOf(TextConfigOption::class, $options[15]);
+        $this->assertEquals('page-cache-valkey-serializer', $options[15]->getName());
     }
 
     /**
@@ -91,7 +123,7 @@ class PageCacheTest extends TestCase
             'cache' => [
                 'frontend' => [
                     'page_cache' => [
-                        'backend' => \Magento\Framework\Cache\Backend\Redis::class,
+                        'backend' => 'redis',
                         'backend_options' => [
                             'server' => '',
                             'port' => '',
@@ -99,6 +131,7 @@ class PageCacheTest extends TestCase
                             'compress_data' => '',
                             'password' => '',
                             'compression_lib' => '',
+                            'serializer' => '',
                         ],
                         'id_prefix' => $this->expectedIdPrefix(),
                     ]
@@ -113,6 +146,8 @@ class PageCacheTest extends TestCase
 
     /**
      * testCreateConfigWithRedisConfiguration
+     *
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function testCreateConfigWithRedisConfiguration()
     {
@@ -139,7 +174,7 @@ class PageCacheTest extends TestCase
             'cache' => [
                 'frontend' => [
                     'page_cache' => [
-                        'backend' => \Magento\Framework\Cache\Backend\Redis::class,
+                        'backend' => 'redis',
                         'backend_options' => [
                             'server' => 'foo.bar',
                             'port' => '9000',
@@ -147,6 +182,7 @@ class PageCacheTest extends TestCase
                             'password' => '',
                             'compress_data' => '1',
                             'compression_lib' => 'gzip',
+                            'serializer' => null,
                         ],
                     ]
                 ]
@@ -179,6 +215,9 @@ class PageCacheTest extends TestCase
                 'frontend' => [
                     'page_cache' => [
                         'id_prefix' => $this->expectedIdPrefix(),
+                        'backend_options' => [
+                            'serializer' => 'igbinary'
+                        ]
                     ]
                 ]
             ]
@@ -202,6 +241,9 @@ class PageCacheTest extends TestCase
                 'frontend' => [
                     'page_cache' => [
                         'id_prefix' => $explicitPrefix,
+                        'backend_options' => [
+                            'serializer' => 'igbinary'
+                        ]
                     ]
                 ]
             ]
@@ -226,7 +268,8 @@ class PageCacheTest extends TestCase
 
         $options = [
             'page-cache' => 'redis',
-            'page-cache-redis-db' => '2'
+            'page-cache-redis-db' => '2',
+            'cache-backend' => 'redis'
         ];
 
         $errors = $this->configList->validate($options, $this->deploymentConfigMock);

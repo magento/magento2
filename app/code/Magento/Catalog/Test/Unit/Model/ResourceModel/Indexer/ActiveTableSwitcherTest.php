@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -9,8 +9,10 @@ namespace Magento\Catalog\Test\Unit\Model\ResourceModel\Indexer;
 
 use Magento\Catalog\Model\ResourceModel\Indexer\ActiveTableSwitcher;
 use Magento\Framework\DB\Adapter\AdapterInterface;
+use Magento\Framework\DB\Adapter\Pdo\Mysql;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Zend_Db_Statement_Interface;
 
 /**
  * Unit test for \Magento\Catalog\Model\ResourceModel\Indexer\ActiveTableSwitcher class.
@@ -36,11 +38,11 @@ class ActiveTableSwitcherTest extends TestCase
     public function testSwitch()
     {
         /** @var AdapterInterface|MockObject $connectionMock */
-        $connectionMock = $this->getMockBuilder(AdapterInterface::class)
-            ->addMethods(['changeTableComment'])
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-        $statement = $this->createMock(\Zend_Db_Statement_Interface::class);
+        $connectionMock = $this->createPartialMock(
+            Mysql::class,
+            ['changeTableComment', 'showTableStatus', 'renameTablesBatch']
+        );
+        $statement = $this->createMock(Zend_Db_Statement_Interface::class);
         $tableName = 'tableName';
         $tableData = ['Comment' => 'Table comment'];
         $replicaName = 'tableName_replica';

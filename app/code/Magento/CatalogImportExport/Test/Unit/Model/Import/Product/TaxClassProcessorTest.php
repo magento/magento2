@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -11,17 +11,19 @@ use Magento\CatalogImportExport\Model\Import\Product\TaxClassProcessor;
 use Magento\CatalogImportExport\Model\Import\Product\Type\AbstractType;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\Tax\Model\ClassModel;
+use Magento\Tax\Model\ClassModelFactory;
 use Magento\Tax\Model\ResourceModel\TaxClass\Collection;
+use Magento\Tax\Model\ResourceModel\TaxClass\CollectionFactory;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 class TaxClassProcessorTest extends TestCase
 {
-    const TEST_TAX_CLASS_NAME = 'className';
+    public const TEST_TAX_CLASS_NAME = 'className';
 
-    const TEST_TAX_CLASS_ID = 1;
+    public const TEST_TAX_CLASS_ID = 1;
 
-    const TEST_JUST_CREATED_TAX_CLASS_ID = 2;
+    public const TEST_JUST_CREATED_TAX_CLASS_ID = 2;
 
     /**
      * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
@@ -43,12 +45,10 @@ class TaxClassProcessorTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $this->objectManager = new ObjectManagerHelper($this);
         $this->objectManagerHelper = new ObjectManagerHelper($this);
 
-        $taxClass = $this->getMockBuilder(ClassModel::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $taxClass = $this->createMock(ClassModel::class);
         $taxClass->method('getClassName')->willReturn(self::TEST_TAX_CLASS_NAME);
         $taxClass->method('getId')->willReturn(self::TEST_TAX_CLASS_ID);
 
@@ -59,19 +59,17 @@ class TaxClassProcessorTest extends TestCase
             );
 
         $taxClassCollectionFactory = $this->createPartialMock(
-            \Magento\Tax\Model\ResourceModel\TaxClass\CollectionFactory::class,
+            CollectionFactory::class,
             ['create']
         );
 
         $taxClassCollectionFactory->method('create')->willReturn($taxClassCollection);
 
-        $anotherTaxClass = $this->getMockBuilder(ClassModel::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $anotherTaxClass = $this->createMock(ClassModel::class);
         $anotherTaxClass->method('getClassName')->willReturn(self::TEST_TAX_CLASS_NAME);
         $anotherTaxClass->method('getId')->willReturn(self::TEST_JUST_CREATED_TAX_CLASS_ID);
 
-        $taxClassFactory = $this->createPartialMock(\Magento\Tax\Model\ClassModelFactory::class, ['create']);
+        $taxClassFactory = $this->createPartialMock(ClassModelFactory::class, ['create']);
 
         $taxClassFactory->method('create')->willReturn($anotherTaxClass);
 
@@ -81,13 +79,7 @@ class TaxClassProcessorTest extends TestCase
                 $taxClassFactory
             );
 
-        $this->product =
-            $this->getMockForAbstractClass(
-                AbstractType::class,
-                [],
-                '',
-                false
-            );
+        $this->product = $this->createMock(AbstractType::class);
     }
 
     public function testUpsertTaxClassExist()

@@ -1,12 +1,11 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\CatalogInventory\Model;
 
 use Magento\Catalog\Model\CollectionConditionInterface;
-use Magento\Eav\Model\Entity\Collection\AbstractCollection;
 use Magento\Framework\Data\Collection\AbstractDb;
 use Magento\Framework\Data\CollectionModifierInterface;
 

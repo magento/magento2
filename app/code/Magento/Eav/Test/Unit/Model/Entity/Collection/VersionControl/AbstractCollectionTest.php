@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -10,6 +10,7 @@ namespace Magento\Eav\Test\Unit\Model\Entity\Collection\VersionControl;
 use Magento\Framework\Model\ResourceModel\Db\VersionControl\Snapshot;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Test for version control abstract collection model.
@@ -51,8 +52,8 @@ class AbstractCollectionTest extends \Magento\Eav\Test\Unit\Model\Entity\Collect
 
     /**
      * @param array $data
-     * @dataProvider fetchItemDataProvider
      */
+    #[DataProvider('fetchItemDataProvider')]
     public function testFetchItem(array $data)
     {
         $item = $this->getMagentoObject()->setData($data);

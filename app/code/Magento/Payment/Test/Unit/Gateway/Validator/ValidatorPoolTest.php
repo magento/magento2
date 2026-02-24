@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -19,7 +19,7 @@ class ValidatorPoolTest extends TestCase
     public function testGet()
     {
         $commandI = $this->getMockBuilder(ValidatorInterface::class)
-            ->getMockForAbstractClass();
+            ->getMock();
         $tMap = $this->getMockBuilder(TMap::class)
             ->disableOriginalConstructor()
             ->getMock();

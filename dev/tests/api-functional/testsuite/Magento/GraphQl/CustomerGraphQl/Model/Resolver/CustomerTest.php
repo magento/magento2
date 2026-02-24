@@ -13,6 +13,7 @@ use Magento\Customer\Api\Data\CustomerInterface;
 use Magento\Customer\Model\Customer;
 use Magento\Customer\Test\Fixture\Customer as CustomerFixture;
 use Magento\CustomerGraphQl\Model\Resolver\Customer as CustomerResolver;
+use Magento\Framework\Serialize\SerializerInterface;
 use Magento\NewsletterGraphQl\Model\Resolver\IsSubscribed;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Registry;
@@ -25,9 +26,12 @@ use Magento\Store\Test\Fixture\Group as StoreGroupFixture;
 use Magento\Store\Test\Fixture\Store as StoreFixture;
 use Magento\Store\Test\Fixture\Website as WebsiteFixture;
 use Magento\TestFramework\Fixture\DataFixture;
+use Magento\TestFramework\Fixture\DbIsolation;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\GraphQl\ResolverCacheAbstract;
 use Magento\TestFramework\TestCase\GraphQl\ResponseContainsErrorsException;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Test for customer resolver cache
@@ -61,6 +65,11 @@ class CustomerTest extends ResolverCacheAbstract
      */
     private $registry;
 
+    /**
+     * @var SerializerInterface
+     */
+    private $json;
+
     protected function setUp(): void
     {
         $this->objectManager = Bootstrap::getObjectManager();
@@ -76,6 +85,7 @@ class CustomerTest extends ResolverCacheAbstract
         $this->websiteRepository = $this->objectManager->get(
             WebsiteRepositoryInterface::class
         );
+        $this->json = $this->objectManager->get(SerializerInterface::class);
 
         // first register secure area so we have permission to delete customer in tests
         $this->registry = $this->objectManager->get(Registry::class);
@@ -100,8 +110,9 @@ class CustomerTest extends ResolverCacheAbstract
      * @magentoApiDataFixture Magento/Customer/_files/customer_address.php
      * @magentoApiDataFixture Magento/Store/_files/second_store.php
      * @magentoConfigFixture default/system/full_page_cache/caching_application 2
-     * @dataProvider invalidationMechanismProvider
      */
+    #[DataProvider('invalidationMechanismProvider')]
+    #[AllowMockObjectsWithoutExpectations]
     public function testCustomerResolverCacheAndInvalidation(callable $invalidationMechanismCallable)
     {
         $customer = $this->customerRepository->get('customer@example.com');
@@ -129,7 +140,9 @@ class CustomerTest extends ResolverCacheAbstract
         );
 
         // change customer data
-        $invalidationMechanismCallable($customer, $token);
+        // Bind closure to current instance so $this works inside the closure
+        $boundCallable = $invalidationMechanismCallable->bindTo($this, self::class);
+        $boundCallable($customer, $token);
         // assert that cache entry is invalidated
         $this->assertCurrentCustomerCacheRecordDoesNotExist();
     }
@@ -140,6 +153,7 @@ class CustomerTest extends ResolverCacheAbstract
      * @magentoApiDataFixture Magento/Store/_files/second_store.php
      * @magentoConfigFixture default/system/full_page_cache/caching_application 2
      */
+    #[AllowMockObjectsWithoutExpectations]
     public function testCustomerIsSubscribedResolverCacheAndInvalidation()
     {
         /** @var SubscriptionManagerInterface $subscriptionManager */
@@ -257,6 +271,7 @@ class CustomerTest extends ResolverCacheAbstract
      * @magentoApiDataFixture Magento/Store/_files/second_store.php
      * @magentoConfigFixture default/system/full_page_cache/caching_application 2
      */
+    #[AllowMockObjectsWithoutExpectations]
     public function testCustomerResolverCacheInvalidationOnStoreChange()
     {
         $customer = $this->customerRepository->get('customer@example.com');
@@ -330,6 +345,7 @@ class CustomerTest extends ResolverCacheAbstract
      * @magentoConfigFixture default/system/full_page_cache/caching_application 2
      * @return void
      */
+    #[AllowMockObjectsWithoutExpectations]
     public function testCustomerResolverCacheGeneratesSeparateEntriesForEachCustomer()
     {
         $customer1 = $this->customerRepository->get('customer@example.com');
@@ -400,6 +416,7 @@ class CustomerTest extends ResolverCacheAbstract
      * @magentoConfigFixture default/system/full_page_cache/caching_application 2
      * @return void
      */
+    #[AllowMockObjectsWithoutExpectations]
     public function testCustomerResolverCacheInvalidatesWhenCustomerGetsDeleted()
     {
         $customer = $this->customerRepository->get('customer@example.com');
@@ -459,6 +476,7 @@ class CustomerTest extends ResolverCacheAbstract
             ]
         )
     ]
+    #[AllowMockObjectsWithoutExpectations]
     public function testCustomerWithSameEmailInTwoSeparateWebsitesKeepsSeparateCacheEntries()
     {
         $website2 = $this->websiteRepository->get('website2');
@@ -534,6 +552,7 @@ class CustomerTest extends ResolverCacheAbstract
      * @magentoConfigFixture default/system/full_page_cache/caching_application 2
      * @return void
      */
+    #[AllowMockObjectsWithoutExpectations]
     public function testGuestQueryingCustomerDoesNotGenerateResolverCacheEntry()
     {
         $query = $this->getCustomerQuery();
@@ -561,6 +580,7 @@ class CustomerTest extends ResolverCacheAbstract
      * @throws \Magento\Framework\Exception\LocalizedException
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
+    #[AllowMockObjectsWithoutExpectations]
     public function testCustomerQueryingCustomerWithDifferentStoreHeaderDoesNotGenerateResolverCacheEntry()
     {
         $customer = $this->customerRepository->get('customer@example.com');
@@ -619,7 +639,10 @@ class CustomerTest extends ResolverCacheAbstract
         );
     }
 
-    public function invalidationMechanismProvider(): array
+    /**
+     * Data provider with closures that use $this via bindTo() at runtime.
+     */
+    public static function invalidationMechanismProvider(): array
     {
         // provider is invoked before setUp() is called so need to init here
         $repo = Bootstrap::getObjectManager()->get(
@@ -828,6 +851,48 @@ MUTATIONDELETE;
           }
         }
         QUERY;
+    }
+
+    /**
+     * Test that updated customer email is returned in the response
+     *
+     * @throws Exception
+     */
+    #[
+        DbIsolation(false),
+        DataFixture(CustomerFixture::class, ['email' => 'customer@example.com'], as: 'customer'),
+    ]
+    #[AllowMockObjectsWithoutExpectations]
+    public function testChangeEmailSuccessfully(): void
+    {
+        $currentPassword = 'password';
+        $updatedEmail = 'customer2@example.com';
+        $query
+            = <<<QUERY
+mutation {
+  updateCustomerEmail(
+    email: "$updatedEmail",
+    password: "$currentPassword"
+  ) {
+  customer {
+    email
+    }
+  }
+}
+QUERY;
+        $customer = $this->customerRepository->get('customer@example.com');
+        $customerToken = $this->generateCustomerToken(
+            $customer->getEmail(),
+            'password'
+        );
+        $response = $this->graphQlMutation(
+            $query,
+            [],
+            '',
+            ['Authorization' => 'Bearer ' . $customerToken]
+        );
+
+        $this->assertEquals($updatedEmail, $response['updateCustomerEmail']['customer']['email']);
     }
 
     /**

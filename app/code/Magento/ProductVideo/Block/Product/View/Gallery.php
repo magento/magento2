@@ -1,13 +1,11 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 /**
  * Simple product data view
- *
- * @author     Magento Core Team <core@magentocommerce.com>
  */
 
 namespace Magento\ProductVideo\Block\Product\View;
@@ -87,6 +85,7 @@ class Gallery extends \Magento\Catalog\Block\Product\View\Gallery
 
     /**
      * Return media gallery for product options
+     *
      * @return string
      * @since 100.1.0
      */

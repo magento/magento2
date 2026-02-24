@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -69,19 +69,13 @@ class ApplicationDumpCommandTest extends TestCase
         $this->configHashMock = $this->getMockBuilder(Hash::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->input = $this->getMockBuilder(InputInterface::class)
-            ->getMockForAbstractClass();
-        $this->output = $this->getMockBuilder(OutputInterface::class)
-            ->getMockForAbstractClass();
+        $this->input = $this->createMock(InputInterface::class);
+        $this->output = $this->createMock(OutputInterface::class);
         $this->writer = $this->getMockBuilder(Writer::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->source = $this->getMockBuilder(SourceInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-        $this->sourceEnv = $this->getMockBuilder(SourceInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->source = $this->createMock(SourceInterface::class);
+        $this->sourceEnv = $this->createMock(SourceInterface::class);
         $this->commentMock = $this->getMockBuilder(Comment::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -144,7 +138,6 @@ class ApplicationDumpCommandTest extends TestCase
             });
 
         $method = new \ReflectionMethod(ApplicationDumpCommand::class, 'execute');
-        $method->setAccessible(true);
         $this->assertEquals(
             Cli::RETURN_SUCCESS,
             $method->invokeArgs(

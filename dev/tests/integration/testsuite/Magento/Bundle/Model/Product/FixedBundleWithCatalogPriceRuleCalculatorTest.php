@@ -1,13 +1,14 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Bundle\Model\Product;
 
-use \Magento\Bundle\Api\Data\LinkInterface;
+use Magento\Bundle\Api\Data\LinkInterface;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * @magentoAppArea frontend
@@ -17,11 +18,11 @@ class FixedBundleWithCatalogPriceRuleCalculatorTest extends BundlePriceAbstract
     /**
      * @param array $strategyModifiers
      * @param array $expectedResults
-     * @dataProvider getTestCases
      * @magentoAppIsolation enabled
      * @magentoDataFixture Magento/Bundle/_files/PriceCalculator/fixed_bundle_product_with_catalog_rule.php
      * @magentoDbIsolation disabled
      */
+    #[DataProvider('getTestCases')]
     public function testPriceForFixedBundle(array $strategyModifiers, array $expectedResults)
     {
         $this->prepareFixture($strategyModifiers, 'bundle_product');

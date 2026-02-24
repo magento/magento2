@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -10,6 +10,7 @@ namespace Magento\Framework\Config\Test\Unit;
 use Magento\Framework\Config\Dom\UrnResolver;
 use Magento\Framework\Config\Theme;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class ThemeTest extends TestCase
 {
@@ -43,9 +44,8 @@ class ThemeTest extends TestCase
 
     /**
      * @param string $themePath
-     * @param array $expected
-     * @dataProvider dataGetterDataProvider
-     */
+     * @param array $expected     */
+    #[DataProvider('dataGetterDataProvider')]
     public function testDataGetter($themePath, $expected)
     {
         $expected = reset($expected);

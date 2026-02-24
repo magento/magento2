@@ -97,6 +97,9 @@ class ExportTest extends AbstractBackendController
         $this->assertSessionMessages($this->containsEqual($expectedSessionMessage));
         $this->assertRedirect($this->stringContains('/export/index/key/'));
         $queue = $this->queueRepository->get($this->defaultValueProvider->getConnection(), 'export');
+        if ($this->defaultValueProvider->getConnection() === 'stomp') {
+            $queue->subscribeQueue();
+        }
         /** @var Envelope $message */
         $message = $queue->dequeue();
         $this->assertEquals(self::TOPIC_NAME, $message->getProperties()['topic_name']);

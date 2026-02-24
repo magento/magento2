@@ -1,17 +1,21 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Framework\Cache\Test\Unit\Backend;
 
 use Magento\Framework\Cache\Backend\Database;
+use Magento\Framework\Cache\CacheConstants;
+use Magento\Framework\Cache\Exception\CacheException;
 use Magento\Framework\DB\Adapter\Pdo\Mysql;
 use Magento\Framework\DB\Select;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\Attributes\DataProvider;
+
 use PHPUnit\Framework\TestCase;
 
 class DatabaseTest extends TestCase
@@ -33,14 +37,14 @@ class DatabaseTest extends TestCase
      * @param array $options
      *
      * @return void
-     * @dataProvider initializeWithExceptionDataProvider
      */
+     #[DataProvider('initializeWithExceptionDataProvider')]
     public function testInitializeWithException($options): void
     {
         if ($options['adapter']!='' && is_callable($options['adapter'])) {
             $options['adapter'] = $options['adapter']($this);
         }
-        $this->expectException('Zend_Cache_Exception');
+        $this->expectException(CacheException::class);
         $this->objectManager->getObject(
             Database::class,
             ['options' => $options]
@@ -91,8 +95,8 @@ class DatabaseTest extends TestCase
      * @param bool|string $expected
      *
      * @return void
-     * @dataProvider loadDataProvider
      */
+     #[DataProvider('loadDataProvider')]
     public function testLoad($options, $expected): void
     {
         $options = $options($this);
@@ -203,8 +207,8 @@ class DatabaseTest extends TestCase
      * @param bool|string $expected
      *
      * @return void
-     * @dataProvider loadDataProvider
      */
+     #[DataProvider('loadDataProvider')]
     public function testTest($options, $expected): void
     {
         $options = $options($this);
@@ -223,8 +227,8 @@ class DatabaseTest extends TestCase
      * @param bool $expected
      *
      * @return void
-     * @dataProvider saveDataProvider
      */
+     #[DataProvider('saveDataProvider')]
     public function testSave($options, $expected): void
     {
         $options = $options($this);
@@ -244,11 +248,15 @@ class DatabaseTest extends TestCase
     {
         return [
             'major_case_with_store_data' => [
-                'options' => static fn (self $testCase) => $testCase->getOptionsWithStoreData(static fn (self $testCase) => $testCase->getSaveAdapterMock(true)),
+                'options' => static fn (self $testCase) => $testCase->getOptionsWithStoreData(
+                    static fn (self $testCase) => $testCase->getSaveAdapterMock(true)
+                ),
                 'expected' => true
             ],
             'minor_case_with_store_data' => [
-                'options' => static fn (self $testCase) => $testCase->getOptionsWithStoreData(static fn (self $testCase) => $testCase->getSaveAdapterMock(false)),
+                'options' => static fn (self $testCase) => $testCase->getOptionsWithStoreData(
+                    static fn (self $testCase) => $testCase->getSaveAdapterMock(false)
+                ),
                 'expected' => false
             ],
             'without_store_data' => [
@@ -269,10 +277,7 @@ class DatabaseTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $dbStatementMock = $this->getMockBuilder(\Zend_Db_Statement_Interface::class)
-            ->onlyMethods(['rowCount'])
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $dbStatementMock = $this->createMock(\Zend_Db_Statement_Interface::class);
 
         $dbStatementMock->expects($this->any())
             ->method('rowCount')
@@ -294,8 +299,8 @@ class DatabaseTest extends TestCase
      * @param bool $expected
      *
      * @return void
-     * @dataProvider removeDataProvider
      */
+     #[DataProvider('removeDataProvider')]
     public function testRemove($options, $expected): void
     {
         $options = $options($this);
@@ -347,8 +352,8 @@ class DatabaseTest extends TestCase
      * @param bool $expected
      *
      * @return void
-     * @dataProvider cleanDataProvider
      */
+     #[DataProvider('cleanDataProvider')]
     public function testClean($options, $mode, $expected): void
     {
         $options = $options($this);
@@ -388,39 +393,39 @@ class DatabaseTest extends TestCase
         return [
             'mode_all_with_store_data' => [
                 'options' => static fn (self $testCase) => $testCase->getOptionsWithStoreData($connectionMock),
-                'mode' => \Zend_Cache::CLEANING_MODE_ALL,
+                'mode' => CacheConstants::CLEANING_MODE_ALL,
                 'expected' => false
 
             ],
             'mode_all_without_store_data' => [
                 'options' => static fn (self $testCase) => $testCase->getOptionsWithoutStoreData($connectionMock),
-                'mode' => \Zend_Cache::CLEANING_MODE_ALL,
+                'mode' => CacheConstants::CLEANING_MODE_ALL,
                 'expected' => false
             ],
             'mode_old_with_store_data' => [
                 'options' => static fn (self $testCase) => $testCase->getOptionsWithStoreData($connectionMock),
-                'mode' => \Zend_Cache::CLEANING_MODE_OLD,
+                'mode' => CacheConstants::CLEANING_MODE_OLD,
                 'expected' => true
 
             ],
             'mode_old_without_store_data' => [
                 'options' => static fn (self $testCase) => $testCase->getOptionsWithoutStoreData($connectionMock),
-                'mode' => \Zend_Cache::CLEANING_MODE_OLD,
+                'mode' => CacheConstants::CLEANING_MODE_OLD,
                 'expected' => true
             ],
             'mode_matching_tag_without_store_data' => [
                 'options' => static fn (self $testCase) => $testCase->getOptionsWithoutStoreData($connectionMock),
-                'mode' => \Zend_Cache::CLEANING_MODE_MATCHING_TAG,
+                'mode' => CacheConstants::CLEANING_MODE_MATCHING_TAG,
                 'expected' => true
             ],
             'mode_not_matching_tag_without_store_data' => [
                 'options' => static fn (self $testCase) => $testCase->getOptionsWithoutStoreData($connectionMock),
-                'mode' => \Zend_Cache::CLEANING_MODE_NOT_MATCHING_TAG,
+                'mode' => CacheConstants::CLEANING_MODE_NOT_MATCHING_TAG,
                 'expected' => true
             ],
             'mode_matching_any_tag_without_store_data' => [
                 'options' => static fn (self $testCase) => $testCase->getOptionsWithoutStoreData($connectionMock),
-                'mode' => \Zend_Cache::CLEANING_MODE_MATCHING_ANY_TAG,
+                'mode' => CacheConstants::CLEANING_MODE_MATCHING_ANY_TAG,
                 'expected' => true
             ]
         ];
@@ -431,7 +436,7 @@ class DatabaseTest extends TestCase
      */
     public function testCleanException(): void
     {
-        $this->expectException('Zend_Cache_Exception');
+        $this->expectException(CacheException::class);
         /** @var Database $database */
         $database = $this->objectManager->getObject(
             Database::class,
@@ -446,8 +451,8 @@ class DatabaseTest extends TestCase
      * @param array $expected
      *
      * @return void
-     * @dataProvider getIdsDataProvider
      */
+     #[DataProvider('getIdsDataProvider')]
     public function testGetIds($options, $expected): void
     {
         $options = $options($this);
@@ -715,8 +720,8 @@ class DatabaseTest extends TestCase
      * @param bool $expected
      *
      * @return void
-     * @dataProvider touchDataProvider
      */
+     #[DataProvider('touchDataProvider')]
     public function testTouch($options, $expected): void
     {
         $options = $options($this);

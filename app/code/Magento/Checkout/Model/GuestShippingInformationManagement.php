@@ -1,9 +1,11 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Checkout\Model;
+
+use Magento\Checkout\Api\Data\ShippingInformationInterface;
 
 class GuestShippingInformationManagement implements \Magento\Checkout\Api\GuestShippingInformationManagementInterface
 {
@@ -35,7 +37,7 @@ class GuestShippingInformationManagement implements \Magento\Checkout\Api\GuestS
      */
     public function saveAddressInformation(
         $cartId,
-        \Magento\Checkout\Api\Data\ShippingInformationInterface $addressInformation
+        ShippingInformationInterface $addressInformation
     ) {
         /** @var $quoteIdMask \Magento\Quote\Model\QuoteIdMask */
         $quoteIdMask = $this->quoteIdMaskFactory->create()->load($cartId, 'masked_id');

@@ -1,13 +1,13 @@
 <?php
 /**
- * Copyright 2024 Adobe
- * All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Catalog\Test\Unit\Model\Product\Option\Validator;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\Catalog\Model\Config\Source\Product\Options\Price;
 use Magento\Catalog\Model\Product\Option;
 use Magento\Catalog\Model\Product\Option\Validator\Select;
@@ -39,10 +39,10 @@ class SelectTest extends TestCase
      */
     protected function setUp(): void
     {
-        $configMock = $this->getMockForAbstractClass(ConfigInterface::class);
-        $storeManagerMock = $this->getMockForAbstractClass(StoreManagerInterface::class);
+        $configMock = $this->createMock(ConfigInterface::class);
+        $storeManagerMock = $this->createMock(StoreManagerInterface::class);
         $priceConfigMock = new Price($storeManagerMock);
-        $this->localeFormatMock = $this->getMockForAbstractClass(FormatInterface::class);
+        $this->localeFormatMock = $this->createMock(FormatInterface::class);
         $config = [
             [
                 'label' => 'group label 1',
@@ -78,8 +78,8 @@ class SelectTest extends TestCase
     /**
      * @param bool $expectedResult
      * @param array $value
-     * @dataProvider isValidSuccessDataProvider
      */
+    #[DataProvider('isValidSuccessDataProvider')]
     public function testIsValidSuccess($expectedResult, array $value)
     {
         $this->valueMock->expects($this->once())->method('getTitle')->willReturn('option_title');
@@ -170,8 +170,8 @@ class SelectTest extends TestCase
      * @param string $priceType
      * @param int $price
      * @param string|null $title
-     * @dataProvider isValidateWithInvalidDataDataProvider
      */
+    #[DataProvider('isValidateWithInvalidDataDataProvider')]
     public function testIsValidateWithInvalidData($priceType, $price, $title)
     {
         $value = [
@@ -184,7 +184,7 @@ class SelectTest extends TestCase
         $this->valueMock->expects($this->never())->method('getPriceType');
         $this->valueMock->expects($this->never())->method('getPrice');
         $this->valueMock->expects($this->any())->method('getData')->with('values')->willReturn([$value]);
-        $this->localeFormatMock->expects($this->any())->method('getNumber')->willReturn($price);
+        $this->localeFormatMock->method('getNumber')->willReturn($price);
         $messages = [
             'option values' => 'Invalid option value',
         ];

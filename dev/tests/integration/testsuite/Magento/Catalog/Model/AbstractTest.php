@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Catalog\Model;
 
@@ -10,7 +10,7 @@ class AbstractTest extends \PHPUnit\Framework\TestCase
     /**
      * Stub class name for class under test
      */
-    const STUB_CLASS = 'Magento_Catalog_Model_AbstractModel_Stub';
+    public const STUB_CLASS = \Magento\Catalog\Model\AbstractModel\ConcreteStub::class;
 
     /**
      * @var \Magento\Catalog\Model\AbstractModel
@@ -27,23 +27,15 @@ class AbstractTest extends \PHPUnit\Framework\TestCase
     protected function setUp(): void
     {
         if (!self::$_isStubClass) {
-            $this->getMockForAbstractClass(
-                \Magento\Catalog\Model\AbstractModel\Stub::class,
-                [],
-                self::STUB_CLASS,
-                false
-            );
             self::$_isStubClass = true;
         }
 
         $this->_model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(self::STUB_CLASS);
 
         $resourceProperty = new \ReflectionProperty(get_class($this->_model), '_resourceName');
-        $resourceProperty->setAccessible(true);
         $resourceProperty->setValue($this->_model, \Magento\Catalog\Model\ResourceModel\Product::class);
 
         $collectionProperty = new \ReflectionProperty(get_class($this->_model), '_collectionName');
-        $collectionProperty->setAccessible(true);
         $collectionProperty->setValue($this->_model, \Magento\Catalog\Model\ResourceModel\Product\Collection::class);
     }
 

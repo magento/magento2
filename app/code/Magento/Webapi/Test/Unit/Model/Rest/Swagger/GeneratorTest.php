@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -22,6 +22,7 @@ use Magento\Webapi\Model\Rest\Swagger\Generator;
 use Magento\Webapi\Model\Rest\SwaggerFactory;
 use Magento\Webapi\Model\ServiceMetadata;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -73,62 +74,45 @@ class GeneratorTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->serviceMetadataMock = $this->getMockBuilder(
-            ServiceMetadata::class
-        )->disableOriginalConstructor()
-            ->getMock();
+        $this->serviceMetadataMock = $this->createMock(ServiceMetadata::class);
 
         $this->objectManager = new ObjectManager($this);
 
         $swagger = $this->objectManager->getObject(Swagger::class);
-        $this->swaggerFactoryMock = $this->getMockBuilder(
-            SwaggerFactory::class
-        )->onlyMethods(
+        $this->swaggerFactoryMock = $this->createPartialMock(
+            SwaggerFactory::class,
             ['create']
-        )->disableOriginalConstructor()
-            ->getMock();
+        );
         $this->swaggerFactoryMock->expects($this->any())->method('create')->willReturn($swagger);
 
-        $this->cacheMock = $this->getMockBuilder(Webapi::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->cacheMock = $this->createMock(Webapi::class);
         $this->cacheMock->expects($this->any())->method('load')->willReturn(false);
         $this->cacheMock->expects($this->any())->method('save')->willReturn(true);
 
-        $this->typeProcessorMock = $this->getMockBuilder(TypeProcessor::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->typeProcessorMock = $this->createMock(TypeProcessor::class);
         $this->typeProcessorMock->expects($this->any())
             ->method('getOperationName')
             ->willReturn(self::OPERATION_NAME);
 
-        $this->customAttributeTypeLocatorMock = $this->getMockBuilder(
-            ServiceTypeListInterface::class
-        )->disableOriginalConstructor()
-            ->onlyMethods(['getDataTypes'])
-            ->getMockForAbstractClass();
+        $this->customAttributeTypeLocatorMock = $this->createPartialMock(
+            ServiceTypeListInterface::class,
+            ['getDataTypes']
+        );
         $this->customAttributeTypeLocatorMock->expects($this->any())
             ->method('getDataTypes')
             ->willReturn(['customAttributeClass']);
 
-        $storeMock = $this->getMockBuilder(
-            Store::class
-        )->disableOriginalConstructor()
-            ->getMock();
+        $storeMock = $this->createMock(Store::class);
 
         $storeMock->expects($this->any())
             ->method('getCode')
             ->willReturn('store_code');
 
         /** @var Authorization|MockObject $authorizationMock */
-        $authorizationMock = $this->getMockBuilder(Authorization::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $authorizationMock = $this->createMock(Authorization::class);
         $authorizationMock->expects($this->any())->method('isAllowed')->willReturn(true);
 
-        $this->serializer = $this->getMockBuilder(Json::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->serializer = $this->createMock(Json::class);
         $this->serializer->expects($this->any())
             ->method('serialize')
             ->willReturnCallback(
@@ -164,8 +148,8 @@ class GeneratorTest extends TestCase
      * @param string[] $serviceMetadata
      * @param string[] $typeData
      * @param string $schema
-     * @dataProvider generateDataProvider
      */
+    #[DataProvider('generateDataProvider')]
     public function testGenerate($serviceMetadata, $typeData, $schema)
     {
         $service = 'testModule5AllSoapAndRestV2';
@@ -419,16 +403,14 @@ class GeneratorTest extends TestCase
     /**
      * @param string $typeName
      * @param array $result
-     * @dataProvider getObjectSchemaDataProvider
      */
+    #[DataProvider('getObjectSchemaDataProvider')]
     public function testGetObjectSchema($typeName, $description, $result)
     {
         $property = new \ReflectionProperty($this->generator, 'definitions');
-        $property->setAccessible(true);
         $property->setValue($this->generator, ['customer-data-customer-interface' => []]);
 
         $method = new \ReflectionMethod($this->generator, 'getObjectSchema');
-        $method->setAccessible(true);
         $actual = $method->invoke($this->generator, $typeName, $description);
 
         $this->assertSame(json_encode($result), json_encode($actual));
@@ -474,8 +456,8 @@ class GeneratorTest extends TestCase
     /**
      * @param array $typeData
      * @param array $expected
-     * @dataProvider generateDefinitionDataProvider
      */
+    #[DataProvider('generateDefinitionDataProvider')]
     public function testGenerateDefinition($typeData, $expected)
     {
         $getTypeData = function ($type) use ($typeData) {
@@ -487,7 +469,6 @@ class GeneratorTest extends TestCase
             ->willReturnCallback($getTypeData);
 
         $method = new \ReflectionMethod($this->generator, 'generateDefinition');
-        $method->setAccessible(true);
         $actual = $method->invoke($this->generator, key($typeData));
 
         ksort($expected);
@@ -577,7 +558,6 @@ class GeneratorTest extends TestCase
     public function testGetDefinitionReference()
     {
         $method = new \ReflectionMethod($this->generator, 'getDefinitionReference');
-        $method->setAccessible(true);
         $actual = $method->invoke($this->generator, 'CustomerDataAddressInterface');
 
         $this->assertEquals('#/definitions/customer-data-address-interface', $actual);

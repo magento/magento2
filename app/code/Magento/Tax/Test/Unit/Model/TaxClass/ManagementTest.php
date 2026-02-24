@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -64,7 +64,7 @@ class ManagementTest extends TestCase
 
     public function testGetTaxClassIdByIDType()
     {
-        $taxClassKey = $this->getMockForAbstractClass(TaxClassKeyInterface::class);
+        $taxClassKey = $this->createMock(TaxClassKeyInterface::class);
         $taxClassKey->expects($this->once())
             ->method('getType')
             ->willReturn(TaxClassKeyInterface::TYPE_ID);
@@ -74,7 +74,7 @@ class ManagementTest extends TestCase
 
     public function testGetTaxClassIdByNameType()
     {
-        $taxClassKey = $this->getMockForAbstractClass(TaxClassKeyInterface::class);
+        $taxClassKey = $this->createMock(TaxClassKeyInterface::class);
         $taxClassKey->expects($this->once())
             ->method('getType')
             ->willReturn(TaxClassKeyInterface::TYPE_NAME);
@@ -108,10 +108,10 @@ class ManagementTest extends TestCase
             ->with([$filter])
             ->willReturnSelf();
 
-        $searchCriteria = $this->getMockForAbstractClass(SearchCriteriaInterface::class);
+        $searchCriteria = $this->createMock(SearchCriteriaInterface::class);
         $this->searchCriteriaBuilder->expects($this->once())->method('create')->willReturn($searchCriteria);
 
-        $result = $this->getMockForAbstractClass(TaxRateSearchResultsInterface::class);
+        $result = $this->createMock(TaxRateSearchResultsInterface::class);
         $result->expects($this->once())->method('getItems')->willReturn([]);
         $this->classRepository->expects($this->once())->method('getList')->with($searchCriteria)->willReturn($result);
 

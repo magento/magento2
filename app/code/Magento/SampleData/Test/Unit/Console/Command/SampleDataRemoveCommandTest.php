@@ -1,13 +1,14 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\SampleData\Test\Unit\Console\Command;
 
 use Magento\SampleData\Console\Command\SampleDataRemoveCommand;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Symfony\Component\Console\Tester\CommandTester;
 
 /**
@@ -21,9 +22,8 @@ class SampleDataRemoveCommandTest extends AbstractSampleDataCommandTestCase
      * @param array $composerJsonContent
      * @param string $expectedMsg
      * @return void
-     *
-     * @dataProvider processDataProvider
      */
+    #[DataProvider('processDataProvider')]
     public function testExecute(
         array $sampleDataPackages,
         int $appRunResult,
@@ -48,9 +48,8 @@ class SampleDataRemoveCommandTest extends AbstractSampleDataCommandTestCase
      * @param array $composerJsonContent
      * @param string $expectedMsg
      * @return void
-     *
-     * @dataProvider processDataProvider
      */
+    #[DataProvider('processDataProvider')]
     public function testExecuteWithNoUpdate(
         array $sampleDataPackages,
         int $appRunResult,

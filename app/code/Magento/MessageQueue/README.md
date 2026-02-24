@@ -1,3 +1,3 @@
-# MessageQueue
+# Magento_MessageQueue module
 
-**MessageQueue** provides support of Advanced Message Queuing Protocol
+This module provides support of Advanced Message Queuing Protocol.

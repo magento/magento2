@@ -1,17 +1,7 @@
 <?php
-/************************************************************************
+/**
  * Copyright 2025 Adobe
  * All Rights Reserved.
- *
- * NOTICE: All information contained herein is, and remains
- * the property of Adobe and its suppliers, if any. The intellectual
- * and technical concepts contained herein are proprietary to Adobe
- * and its suppliers and are protected by all applicable intellectual
- * property laws, including trade secret and copyright laws.
- * Dissemination of this information or reproduction of this material
- * is strictly forbidden unless prior written permission is obtained
- * from Adobe.
- * ***********************************************************************
  */
 declare(strict_types=1);
 
@@ -22,6 +12,7 @@ use Magento\Sales\Helper\SalesEntityCommentValidator;
 use Magento\Authorization\Model\UserContextInterface;
 use Magento\Sales\Model\Order\Invoice\Comment as InvoiceComment;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Test cases of sales entity comment validator test
@@ -48,9 +39,7 @@ class SalesEntityCommentValidatorTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->userContextMock = $this->getMockBuilder(UserContextInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->userContextMock = $this->createMock(UserContextInterface::class);
 
         $this->invoiceComment = $this->getMockBuilder(InvoiceComment::class)
             ->onlyMethods(['getData','getId','setData'])
@@ -69,13 +58,13 @@ class SalesEntityCommentValidatorTest extends TestCase
     /**
      * Tests that comment is allowed to edit
      *
-     * @dataProvider commentDataProvider
      * @param $userId
      * @param $userType
      * @param $commentData
      * @param $result
      * @return void
      */
+    #[DataProvider('commentDataProvider')]
     public function testIsEditCommentAllowed($userId, $userType, $commentData, $result): void
     {
         $this->userContextMock->expects($this->any())->method('getUserId')->willReturn($userId);

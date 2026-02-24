@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -38,7 +38,7 @@ class CustomerLoginSuccessObserverTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->authenticationMock = $this->getMockForAbstractClass(AuthenticationInterface::class);
+        $this->authenticationMock = $this->createMock(AuthenticationInterface::class);
 
         $this->customerModelMock = $this->createPartialMock(Customer::class, ['getId']);
         $this->customerLoginSuccessObserver = new CustomerLoginSuccessObserver(
