@@ -71,13 +71,13 @@ class QuoteOrderPlaceRedirectUrlTest extends TestCase
         $this->paymentMock->method('getOrderPlaceRedirectUrl')->willReturn('https://example.com/payment');
 
         $this->quoteMock = $this->createMock(CartInterface::class);
-        $this->quoteMock->method('getEntityId')->willReturn(123);
+        $this->quoteMock->method('getId')->willReturn(123);
         $this->quoteMock->method('getId')->willReturn(123);
         $this->quoteMock->method('getQuoteId')->willReturn(456);
         $this->quoteMock->method('getPayment')->willReturn($this->paymentMock);
 
         $this->orderMock = $this->createMock(OrderInterface::class);
-        $this->orderMock->method('getEntityId')->willReturn(123);
+        $this->orderMock->method('getId')->willReturn(123);
         $this->orderMock->method('getQuoteId')->willReturn(456);
 
         $this->quoteRepositoryMock = $this->createMock(QuoteRepository::class);
