@@ -1,12 +1,13 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Catalog\Test\Unit\Model\Product;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\Catalog\Api\Data\ProductTierPriceInterface;
 use Magento\Catalog\Api\Data\ProductTierPriceInterfaceFactory;
 use Magento\Catalog\Model\Product;
@@ -89,22 +90,22 @@ class TierPriceManagementTest extends TestCase
             ProductTierPriceInterfaceFactory::class,
             ['create']
         );
-        $this->storeManagerMock = $this->getMockForAbstractClass(StoreManagerInterface::class);
+        $this->storeManagerMock = $this->createMock(StoreManagerInterface::class);
         $this->websiteMock =
             $this->createPartialMock(Website::class, ['getId']);
         $this->productMock = $this->createPartialMock(
             Product::class,
             ['getData', 'getIdBySku', 'load', 'save', 'validate', 'setData']
         );
-        $this->configMock = $this->getMockForAbstractClass(ScopeConfigInterface::class);
+        $this->configMock = $this->createMock(ScopeConfigInterface::class);
         $this->priceModifierMock =
             $this->createMock(PriceModifier::class);
         $this->repositoryMock->expects($this->any())->method('get')->with('product_sku')
             ->willReturn($this->productMock);
         $this->groupManagementMock =
-            $this->getMockForAbstractClass(GroupManagementInterface::class);
+            $this->createMock(GroupManagementInterface::class);
         $this->groupRepositoryMock =
-            $this->getMockForAbstractClass(GroupRepositoryInterface::class);
+            $this->createMock(GroupRepositoryInterface::class);
 
         $this->service = new TierPriceManagement(
             $this->repositoryMock,
@@ -122,14 +123,13 @@ class TierPriceManagementTest extends TestCase
      * @param $customerGroupId
      * @param $groupData
      * @param $expected
-     * @dataProvider getListDataProvider
      */
+    #[DataProvider('getListDataProvider')]
     public function testGetList($configValue, $customerGroupId, $groupData, $expected)
     {
         $group = $this->createMock(Group::class);
-        $group->expects($this->any())->method('getId')->willReturn(GroupManagement::CUST_GROUP_ALL);
-        $this->groupManagementMock->expects($this->any())->method('getAllCustomersGroup')
-            ->willReturn($group);
+        $group->method('getId')->willReturn(GroupManagement::CUST_GROUP_ALL);
+        $this->groupManagementMock->method('getAllCustomersGroup')->willReturn($group);
         $this->repositoryMock->expects($this->once())->method('get')->with('product_sku')
             ->willReturn($this->productMock);
         $this->productMock
@@ -144,7 +144,7 @@ class TierPriceManagementTest extends TestCase
             ->willReturn($configValue);
         $priceMock = null;
         if ($expected) {
-            $priceMock = $this->getMockForAbstractClass(ProductTierPriceInterface::class);
+            $priceMock = $this->createMock(ProductTierPriceInterface::class);
             $priceMock->expects($this->once())
                 ->method('setValue')
                 ->with($expected['value'])
@@ -243,10 +243,7 @@ class TierPriceManagementTest extends TestCase
 
     public function testSetNewPriceWithGlobalPriceScopeAll()
     {
-        $websiteMock = $this->getMockBuilder(Website::class)
-            ->onlyMethods(['getId'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $websiteMock = $this->createPartialMock(Website::class, ['getId']);
         $websiteMock->expects($this->once())->method('getId')->willReturn(0);
 
         $this->storeManagerMock->expects($this->once())->method('getWebsite')->willReturn($websiteMock);
@@ -402,8 +399,8 @@ class TierPriceManagementTest extends TestCase
     /**
      * @param string|int $price
      * @param string|float $qty
-     * @dataProvider addDataProvider
      */
+    #[DataProvider('addDataProvider')]
     public function testAddWithInvalidData($price, $qty)
     {
         $this->expectException('Magento\Framework\Exception\InputException');

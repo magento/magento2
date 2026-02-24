@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -70,8 +70,8 @@ class UpdateCouponUsages
         $updateInfo->setCustomerId((int)$quote->getCustomerId());
         $updateInfo->setIsIncrement($increment);
 
-        $this->couponUsagePublisher->publish($updateInfo);
-        $this->processor->updateCustomerRulesUsages($updateInfo);
         $this->processor->updateCouponUsages($updateInfo);
+        $this->processor->updateCustomerRulesUsages($updateInfo);
+        $this->couponUsagePublisher->publish($updateInfo);
     }
 }

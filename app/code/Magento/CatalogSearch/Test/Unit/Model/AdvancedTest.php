@@ -1,12 +1,13 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\CatalogSearch\Test\Unit\Model;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\Catalog\Model\ResourceModel\Eav\Attribute;
 use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory;
 use Magento\CatalogSearch\Model\ResourceModel\Advanced;
@@ -22,6 +23,7 @@ use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use ArrayIterator;
 
 /**
  * @see \Magento\CatalogSearch\Model\Advanced
@@ -93,15 +95,9 @@ class AdvancedTest extends TestCase
             ->onlyMethods(['getCurrentCurrencyCode', 'getBaseCurrencyCode', 'getBaseCurrency'])
             ->disableOriginalConstructor()
             ->getMock();
-        $this->store->expects($this->any())
-            ->method('getBaseCurrency')
-            ->willReturn($this->currency);
-        $this->storeManager = $this->getMockBuilder(StoreManagerInterface::class)
-            ->onlyMethods(['getStore'])
-            ->getMockForAbstractClass();
-        $this->storeManager->expects($this->any())
-            ->method('getStore')
-            ->willReturn($this->store);
+        $this->store->method('getBaseCurrency')->willReturn($this->currency);
+        $this->storeManager = $this->createMock(StoreManagerInterface::class);
+        $this->storeManager->method('getStore')->willReturn($this->store);
     }
 
     protected function getMockForAttribute(
@@ -198,8 +194,8 @@ class AdvancedTest extends TestCase
      * @param array $values
      * @param string $currentCurrencyCode
      * @param string $baseCurrencyCode
-     * @dataProvider addFiltersDataProvider
      */
+    #[DataProvider('addFiltersDataProvider')]
     public function testAddFiltersVerifyAddConditionsToRegistry(
         array $attributes,
         array $values,
@@ -215,11 +211,9 @@ class AdvancedTest extends TestCase
         $this->collection->expects($this->any())->method('addTaxPercents')->willReturnSelf();
         $this->collection->expects($this->any())->method('addStoreFilter')->willReturnSelf();
         $this->collection->expects($this->any())->method('setVisibility')->willReturnSelf();
-        $this->resource->expects($this->any())->method('prepareCondition')
-            ->willReturn(['like' => '%simple%']);
-        $this->resource->expects($this->any())->method('getIdFieldName')->willReturn('entity_id');
-        $this->dataCollection->expects($this->any())->method('getIterator')
-            ->willReturn(new \ArrayIterator($attributes));
+        $this->resource->method('prepareCondition')->willReturn(['like' => '%simple%']);
+        $this->resource->method('getIdFieldName')->willReturn('entity_id');
+        $this->dataCollection->method('getIterator')->willReturn(new ArrayIterator($attributes));
         $objectManager = new ObjectManager($this);
 
         $advancedFactory = $this->getMockBuilder(AdvancedFactory::class)
@@ -233,14 +227,10 @@ class AdvancedTest extends TestCase
                 ->onlyMethods(['create'])
                 ->disableOriginalConstructor()
                 ->getMock();
-        $productCollectionFactory->expects($this->any())->method('create')->willReturn($this->collection);
+        $productCollectionFactory->method('create')->willReturn($this->collection);
 
-        $this->store->expects($this->any())
-            ->method('getCurrentCurrencyCode')
-            ->willReturn($currentCurrencyCode);
-        $this->store->expects($this->any())
-            ->method('getBaseCurrencyCode')
-            ->willReturn($baseCurrencyCode);
+        $this->store->method('getCurrentCurrencyCode')->willReturn($currentCurrencyCode);
+        $this->store->method('getBaseCurrencyCode')->willReturn($baseCurrencyCode);
         $this->currency->expects($this->any())
             ->method('getRate')
             ->with($currentCurrencyCode)
@@ -260,9 +250,7 @@ class AdvancedTest extends TestCase
             ->onlyMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
-        $currencyFactory->expects($this->any())
-            ->method('create')
-            ->willReturn($currency);
+        $currencyFactory->method('create')->willReturn($currency);
 
         /** @var \Magento\CatalogSearch\Model\Advanced $instance */
         $instance = $objectManager->getObject(
@@ -303,13 +291,8 @@ class AdvancedTest extends TestCase
      */
     private function createSource($optionText = 'optionText')
     {
-        $source = $this->getMockBuilder(AbstractSource::class)
-            ->onlyMethods(['getOptionText'])
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-        $source->expects($this->any())
-            ->method('getOptionText')
-            ->willReturn($optionText);
+        $source = $this->createMock(AbstractSource::class);
+        $source->method('getOptionText')->willReturn($optionText);
         return $source;
     }
 
@@ -423,12 +406,12 @@ class AdvancedTest extends TestCase
             'getSource',
             '__wakeup'
         ]);
-        $attribute->expects($this->any())->method('getBackend')->willReturn($backend);
-        $attribute->expects($this->any())->method('getSource')->willReturn($source);
-        $attribute->expects($this->any())->method('getAttributeCode')->willReturn($attributeCode);
-        $attribute->expects($this->any())->method('getStoreLabel')->willReturn($storeLabel);
-        $attribute->expects($this->any())->method('getFrontendInput')->willReturn($frontendInput);
-        $attribute->expects($this->any())->method('getBackendType')->willReturn($backendType);
+        $attribute->method('getBackend')->willReturn($backend);
+        $attribute->method('getSource')->willReturn($source);
+        $attribute->method('getAttributeCode')->willReturn($attributeCode);
+        $attribute->method('getStoreLabel')->willReturn($storeLabel);
+        $attribute->method('getFrontendInput')->willReturn($frontendInput);
+        $attribute->method('getBackendType')->willReturn($backendType);
         return $attribute;
     }
 }

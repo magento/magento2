@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework\File;
 
@@ -217,11 +217,11 @@ class Uploader
      */
     public function __construct(
         $fileId,
-        Mime $fileMime = null,
-        DirectoryList $directoryList = null,
-        DriverPool $driverPool = null,
-        TargetDirectory $targetDirectory = null,
-        Filesystem $filesystem = null
+        ?Mime $fileMime = null,
+        ?DirectoryList $directoryList = null,
+        ?DriverPool $driverPool = null,
+        ?TargetDirectory $targetDirectory = null,
+        ?Filesystem $filesystem = null
     ) {
         $this->directoryList = $directoryList ?: ObjectManager::getInstance()->get(DirectoryList::class);
         $this->targetDirectory = $targetDirectory ?: ObjectManager::getInstance()->get(TargetDirectory::class);
@@ -806,7 +806,7 @@ class Uploader
     }
 
     /**
-     * Get new file name if the same is already exists
+     * Get new file name if the same already exists
      *
      * @param string $destinationFile
      * @return string

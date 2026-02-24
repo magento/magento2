@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Customer\Controller\Account;
 
@@ -47,7 +47,7 @@ class ResetPasswordPost extends \Magento\Customer\Controller\AbstractAccount imp
         Session $customerSession,
         AccountManagementInterface $accountManagement,
         CustomerRepositoryInterface $customerRepository,
-        CredentialsValidator $credentialsValidator = null
+        ?CredentialsValidator $credentialsValidator = null
     ) {
         $this->session = $customerSession;
         $this->accountManagement = $accountManagement;

@@ -35,7 +35,7 @@ class InfoLanguageListCommand extends Command
      * @param Lists $lists
      * @param TableFactory $tableHelperFactory
      */
-    public function __construct(Lists $lists, TableFactory $tableHelperFactory = null)
+    public function __construct(Lists $lists, ?TableFactory $tableHelperFactory = null)
     {
         $this->lists = $lists;
         $this->tableHelperFactory = $tableHelperFactory ?: ObjectManager::getInstance()->create(TableFactory::class);
@@ -45,7 +45,7 @@ class InfoLanguageListCommand extends Command
     /**
      * @inheritdoc
      */
-    protected function configure()
+    protected function configure(): void
     {
         $this->setName(self::NAME)
             ->setDescription('Displays the list of available language locales');
@@ -56,7 +56,7 @@ class InfoLanguageListCommand extends Command
     /**
      * @inheritdoc
      */
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $tableHelper = $this->tableHelperFactory->create(['output' => $output]);
         $tableHelper->setHeaders(['Language', 'Code']);

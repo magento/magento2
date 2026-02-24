@@ -1,6 +1,6 @@
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 define([
@@ -38,8 +38,8 @@ define([
                 //Expired section names are reloaded on page load
                 && _.indexOf(customerData.getExpiredSectionNames(), 'compare-products') === -1
                 && window.checkout
-                && window.checkout.websiteId
-                && window.checkout.websiteId !== this.compareProducts().websiteId
+                && window.checkout.storeId
+                && window.checkout.storeId !== this.compareProducts().storeId
             ) {
                 //set count to 0 to prevent "compared products" blocks and count to show with wrong count and items
                 this.compareProducts().count = 0;

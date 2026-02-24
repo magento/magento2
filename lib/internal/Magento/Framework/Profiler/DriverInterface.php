@@ -4,8 +4,8 @@
  *
  * Implementation of this interface is responsible for logic of profiling.
  *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework\Profiler;
 
@@ -22,7 +22,7 @@ interface DriverInterface
      * @param array|null $tags
      * @return void
      */
-    public function start($timerId, array $tags = null);
+    public function start($timerId, ?array $tags = null);
 
     /**
      * Stop timer

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright 2024 Adobe
+  * All Rights Reserved.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminReorderPlacedUsingDHLAPShippingMethodTest" extends="StorefrontRegisteredCustomerUsesDHLAPOnlineShippingCarrierOnCheckoutTest">
+        <annotations>
+            <stories value="Admin Reorder with DHL Shipping method"/>
+            <title value="Reorder placed order using DHL in admin panel"/>
+            <description value="Reorder in admin panel order placed using DHL (AP) as a shipping method"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="AC-4802"/>
+            <group value="pr_exclude"/>
+            <group value="3rd_party_integration"/>
+        </annotations>
+        <remove keyForRemoval="selectExpressWorldWide"/>
+        <click selector="{{CheckoutCartSummarySection.shippingMethods('Express easy')}}"  after="verifyMedicalExpressIsAvailable" stepKey="selectExpressEasy"/>
+        <actionGroup ref="AdminOrderGridClickFirstRowActionGroup" stepKey="clickOrderRow"/>
+        <actionGroup ref="AdminStartReorderFromOrderPageActionGroup" stepKey="startReorder"/>
+        <!--select Check/Money order payment method-->
+        <scrollTo selector="{{AdminOrderFormPaymentSection.DHLShipping('Express easy')}}" stepKey="scrollToDHLShippingMethod"/>
+        <waitForText selector="{{AdminOrderFormPaymentSection.DHLShipping('Express easy')}}" userInput="Express easy" stepKey="verifyDHLShippingMethodIsSelected"/>
+        <waitForText selector="{{AdminOrderFormPaymentSection.verifyCheckMoneyPayment}}" userInput="Check / Money order" stepKey="verifyCheckMoneyOrderIsSelected"/>
+        <actionGroup ref="AdminSubmitOrderActionGroup" stepKey="submitOrder"/>
+        <actionGroup ref="AdminOrderViewCheckStatusActionGroup" stepKey="seeAdminOrderStatusIsPending"/>
+        <waitForText selector="{{AdminOrderFormPaymentSection.shippingMethodName('DHL - Express easy')}}" userInput="DHL - Express easy" stepKey="verifyShippingAndHandlingInformationInOrderPage"/>
+    </test>
+</tests>

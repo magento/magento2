@@ -1,12 +1,14 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Catalog\Test\Unit\Model\View\Asset;
 
+use Magento\Framework\Filesystem\Directory\WriteInterface;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\Catalog\Model\View\Asset\Placeholder;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\View\Asset\ContextInterface;
@@ -52,17 +54,11 @@ class PlaceholderTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->scopeConfig = $this->getMockBuilder(ScopeConfigInterface::class)
-            ->getMockForAbstractClass();
-        $this->imageContext = $this->getMockBuilder(ContextInterface::class)
-            ->getMockForAbstractClass();
-        $this->repository = $this->getMockBuilder(Repository::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->scopeConfig = $this->createMock(ScopeConfigInterface::class);
+        $this->imageContext = $this->createMock(ContextInterface::class);
+        $this->repository = $this->createMock(Repository::class);
         $this->filesystem = $this->createMock(Filesystem::class);
-        $this->filesystem->expects($this->any())
-            ->method('getDirectoryWrite')
-            ->willReturn($this->createMock(\Magento\Framework\Filesystem\Directory\WriteInterface::class));
+        $this->filesystem->method('getDirectoryWrite')->willReturn($this->createMock(WriteInterface::class));
         $this->mediaConfig = $this->createMock(ConfigInterface::class);
         $this->model = new Placeholder(
             $this->imageContext,
@@ -98,8 +94,8 @@ class PlaceholderTest extends TestCase
     /**
      * @param string $imageType
      * @param string $placeholderPath
-     * @dataProvider getPathDataProvider
      */
+    #[DataProvider('getPathDataProvider')]
     public function testGetPathAndGetSourceFile($imageType, $placeholderPath)
     {
         $imageModel = new Placeholder(
@@ -122,13 +118,12 @@ class PlaceholderTest extends TestCase
 
         if ($placeholderPath == null) {
             $this->imageContext->expects($this->never())->method('getPath');
-            $assetMock = $this->getMockBuilder(MergeableInterface::class)
-                ->getMockForAbstractClass();
+            $assetMock = $this->createMock(MergeableInterface::class);
             $expectedResult = 'path/to_default/placeholder/by_type';
-            $assetMock->expects($this->any())->method('getSourceFile')->willReturn($expectedResult);
-            $this->repository->expects($this->any())->method('createAsset')->willReturn($assetMock);
+            $assetMock->method('getSourceFile')->willReturn($expectedResult);
+            $this->repository->method('createAsset')->willReturn($assetMock);
         } else {
-            $this->imageContext->expects($this->any())->method('getPath')->willReturn($absolutePath);
+            $this->imageContext->method('getPath')->willReturn($absolutePath);
             $expectedResult = DIRECTORY_SEPARATOR . $imageModel->getModule()
                 . DIRECTORY_SEPARATOR . $placeholderPath;
         }
@@ -140,8 +135,8 @@ class PlaceholderTest extends TestCase
     /**
      * @param string $imageType
      * @param string $placeholderPath
-     * @dataProvider getPathDataProvider
      */
+    #[DataProvider('getPathDataProvider')]
     public function testGetUrl($imageType, $placeholderPath)
     {
         $imageModel = new Placeholder(
@@ -164,10 +159,10 @@ class PlaceholderTest extends TestCase
         if ($placeholderPath == null) {
             $this->imageContext->expects($this->never())->method('getBaseUrl');
             $expectedResult = 'http://localhost/media/catalog/product/to_default/placeholder/by_type';
-            $this->repository->expects($this->any())->method('getUrl')->willReturn($expectedResult);
+            $this->repository->method('getUrl')->willReturn($expectedResult);
         } else {
             $baseUrl = 'http://localhost/media/catalog/product';
-            $this->imageContext->expects($this->any())->method('getBaseUrl')->willReturn($baseUrl);
+            $this->imageContext->method('getBaseUrl')->willReturn($baseUrl);
             $expectedResult = $baseUrl
                 . DIRECTORY_SEPARATOR . $imageModel->getModule()
                 . DIRECTORY_SEPARATOR . $placeholderPath;

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -11,6 +11,7 @@ use Magento\AsynchronousOperations\Model\Operation;
 use Magento\AsynchronousOperations\Model\OperationStatusPool;
 use Magento\AsynchronousOperations\Model\OperationStatusValidator;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 class OperationStatusValidatorTest extends TestCase
@@ -55,8 +56,8 @@ class OperationStatusValidatorTest extends TestCase
      * @param string $status
      * @param array $statusPool
      * @param string $expectedResult
-     * @dataProvider dataProviderForTestSetStatus
      */
+    #[DataProvider('dataProviderForTestSetStatus')]
     public function testSetStatus(
         int $status,
         array $statusPool,

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -16,6 +16,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHe
 use Magento\PageCache\Model\App\FrontController\VarnishPlugin;
 use Magento\PageCache\Model\Config;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -74,13 +75,11 @@ class VarnishPluginTest extends TestCase
         $this->stateMock = $this->getMockBuilder(AppState::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->frontControllerMock = $this->getMockBuilder(FrontControllerInterface::class)
-            ->getMockForAbstractClass();
+        $this->frontControllerMock = $this->createMock(FrontControllerInterface::class);
         $this->responseMock = $this->getMockBuilder(ResponseHttp::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->resultMock = $this->getMockBuilder(ResultInterface::class)
-            ->getMockForAbstractClass();
+        $this->resultMock = $this->createMock(ResultInterface::class);
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->plugin = $this->objectManagerHelper->getObject(
@@ -96,9 +95,8 @@ class VarnishPluginTest extends TestCase
     /**
      * @param string $state
      * @param int $countHeader
-     *
-     * @dataProvider afterDispatchDataProvider
      */
+    #[DataProvider('afterDispatchDataProvider')]
     public function testAfterDispatchReturnsCache($state, $countHeader)
     {
         $this->configMock->expects(static::once())

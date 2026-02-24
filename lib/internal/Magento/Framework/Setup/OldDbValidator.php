@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -16,7 +16,7 @@ use Magento\Framework\Module\DbVersionInfo;
  * Used in order to support backward compatibility of modules that are installed
  * in old way (with Install/Upgrade Schema/Data scripts)
  */
-class OldDbValidator implements UpToDateValidatorInterface
+class OldDbValidator implements UpToDateValidatorInterface, DetailProviderInterface
 {
     /**
      * @var DbVersionInfo
@@ -72,5 +72,23 @@ class OldDbValidator implements UpToDateValidatorInterface
     public function isUpToDate(): bool
     {
         return empty($this->dbVersionInfo->getDbVersionErrors());
+    }
+
+    /**
+     * Get detailed information about database version errors
+     *
+     * @return array
+     */
+    public function getDetails() : array
+    {
+        $versionErrors = $this->dbVersionInfo->getDbVersionErrors();
+        if (empty($versionErrors)) {
+            return [];
+        }
+
+        return [
+            'timestamp' => date('Y-m-d H:i:s'),
+            'version_errors' => $versionErrors
+        ];
     }
 }

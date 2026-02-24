@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Newsletter\Model\ResourceModel;
 
@@ -19,7 +19,6 @@ use Magento\Store\Model\StoreManagerInterface;
 /**
  * Newsletter subscriber resource model
  *
- * @author Magento Core Team <core@magentocommerce.com>
  * @api
  * @since 100.0.2
  */
@@ -47,7 +46,7 @@ class Subscriber extends AbstractDb
     protected $_messagesScope = 'newsletter/session';
 
     /**
-     * Date
+     * Date variable
      *
      * @var DateTime
      */
@@ -59,7 +58,7 @@ class Subscriber extends AbstractDb
     protected $mathRandom;
 
     /**
-     * Store manager
+     * Member variable for Store manager
      *
      * @var StoreManagerInterface
      */
@@ -79,7 +78,7 @@ class Subscriber extends AbstractDb
         DateTime $date,
         Random $mathRandom,
         $connectionName = null,
-        StoreManagerInterface $storeManager = null
+        ?StoreManagerInterface $storeManager = null
     ) {
         $this->_date = $date;
         $this->mathRandom = $mathRandom;

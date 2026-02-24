@@ -1,12 +1,13 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Catalog\Test\Unit\Model\Product\Option\Validator;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\Catalog\Model\Config\Source\Product\Options\Price;
 use Magento\Catalog\Model\Product\Option;
 use Magento\Catalog\Model\Product\Option\Validator\DefaultValidator;
@@ -39,10 +40,10 @@ class DefaultValidatorTest extends TestCase
      */
     protected function setUp(): void
     {
-        $configMock = $this->getMockForAbstractClass(ConfigInterface::class);
-        $storeManagerMock = $this->getMockForAbstractClass(StoreManagerInterface::class);
+        $configMock = $this->createMock(ConfigInterface::class);
+        $storeManagerMock = $this->createMock(StoreManagerInterface::class);
         $priceConfigMock = new Price($storeManagerMock);
-        $this->localeFormatMock = $this->getMockForAbstractClass(FormatInterface::class);
+        $this->localeFormatMock = $this->createMock(FormatInterface::class);
 
         $config = [
             [
@@ -93,17 +94,17 @@ class DefaultValidatorTest extends TestCase
      * @param string $title
      * @param string $type
      * @param string $priceType
-     * @param \Magento\Framework\DataObject $product
+     * @param DataObject $product
      * @param array $messages
      * @param bool $result
-     * @dataProvider isValidTitleDataProvider
      */
+    #[DataProvider('isValidTitleDataProvider')]
     public function testIsValidTitle($title, $type, $priceType, $price, $product, $messages, $result)
     {
         $methods = ['getTitle', 'getType', 'getPriceType', 'getPrice', 'getProduct'];
         $valueMock = $this->createPartialMock(Option::class, $methods);
         $valueMock->expects($this->once())->method('getTitle')->willReturn($title);
-        $valueMock->expects($this->any())->method('getType')->willReturn($type);
+        $valueMock->method('getType')->willReturn($type);
         $valueMock->expects($this->once())->method('getPriceType')->willReturn($priceType);
         $valueMock->expects($this->once())->method('getPrice')->willReturn($price);
         $valueMock->expects($this->once())->method('getProduct')->willReturn($product);
@@ -128,9 +129,9 @@ class DefaultValidatorTest extends TestCase
     }
 
     /**
-     * @param \Magento\Framework\DataObject $product
-     * @dataProvider isValidFailDataProvider
+     * @param DataObject $product
      */
+    #[DataProvider('isValidFailDataProvider')]
     public function testIsValidFail($product)
     {
         $methods = ['getTitle', 'getType', 'getPriceType', 'getPrice', 'getProduct'];
@@ -169,8 +170,8 @@ class DefaultValidatorTest extends TestCase
      * @param $priceType
      * @param $price
      * @param $product
-     * @dataProvider validationPriceDataProvider
      */
+    #[DataProvider('validationPriceDataProvider')]
     public function testValidationPrice($title, $type, $priceType, $price, $product)
     {
         $methods = ['getTitle', 'getType', 'getPriceType', 'getPrice', 'getProduct'];

@@ -114,12 +114,12 @@ class Visitor extends AbstractModel
         ScopeConfigInterface $scopeConfig,
         DateTime $dateTime,
         IndexerRegistry $indexerRegistry,
-        AbstractResource $resource = null,
-        AbstractDb $resourceCollection = null,
+        ?AbstractResource $resource = null,
+        ?AbstractDb $resourceCollection = null,
         array $ignoredUserAgents = [],
         array $ignores = [],
         array $data = [],
-        RequestSafetyInterface $requestSafety = null
+        ?RequestSafetyInterface $requestSafety = null
     ) {
         $this->session = $session;
         $this->httpHeader = $httpHeader;
@@ -269,7 +269,7 @@ class Visitor extends AbstractModel
     public function isModuleIgnored($observer)
     {
         if (is_array($this->ignores) && $observer) {
-            $curModule = $this->requestSafety->getRouteName();
+            $curModule = $this->requestSafety->getRouteName() ?? '';
             if (isset($this->ignores[$curModule])) {
                 return true;
             }

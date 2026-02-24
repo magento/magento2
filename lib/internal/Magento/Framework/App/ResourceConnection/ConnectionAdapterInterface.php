@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -26,5 +26,5 @@ interface ConnectionAdapterInterface
      * @return AdapterInterface
      * @throws \InvalidArgumentException
      */
-    public function getConnection(LoggerInterface $logger = null, SelectFactory $selectFactory = null);
+    public function getConnection(?LoggerInterface $logger = null, ?SelectFactory $selectFactory = null);
 }

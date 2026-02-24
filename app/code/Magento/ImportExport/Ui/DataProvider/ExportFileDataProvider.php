@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -66,7 +66,7 @@ class ExportFileDataProvider extends DataProvider
         \Magento\Framework\Api\FilterBuilder $filterBuilder,
         DriverInterface $file,
         Filesystem $filesystem,
-        File $fileIO = null,
+        ?File $fileIO = null,
         array $meta = [],
         array $data = []
     ) {

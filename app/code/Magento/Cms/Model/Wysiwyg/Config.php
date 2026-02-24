@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Cms\Model\Wysiwyg;
 
@@ -141,7 +141,7 @@ class Config extends \Magento\Framework\DataObject implements ConfigInterface
         Filesystem $filesystem,
         array $windowSize = [],
         array $data = [],
-        \Magento\Cms\Model\Wysiwyg\CompositeConfigProvider $configProvider = null
+        ?\Magento\Cms\Model\Wysiwyg\CompositeConfigProvider $configProvider = null
     ) {
         $this->_backendUrl = $backendUrl;
         $this->_eventManager = $eventManager;

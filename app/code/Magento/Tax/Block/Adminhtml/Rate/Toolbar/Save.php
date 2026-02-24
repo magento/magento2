@@ -1,13 +1,16 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
  */
 
 /**
  * Admin tax rate save toolbar
  */
 namespace Magento\Tax\Block\Adminhtml\Rate\Toolbar;
+
+use Magento\Framework\Escaper;
+use Magento\Framework\App\ObjectManager;
 
 /**
  * Rate toolbar block
@@ -30,19 +33,29 @@ class Save extends \Magento\Backend\Block\Template implements \Magento\Backend\B
     protected $toolbar;
 
     /**
+     * Escaper for secure output rendering
+     *
+     * @var Escaper
+     */
+    private $escaper;
+
+    /**
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Backend\Block\Widget\Button\ButtonList $buttonList
      * @param \Magento\Backend\Block\Widget\Button\ToolbarInterface $toolbar
      * @param array $data
+     * @param Escaper|null $escaper
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
         \Magento\Backend\Block\Widget\Button\ButtonList $buttonList,
         \Magento\Backend\Block\Widget\Button\ToolbarInterface $toolbar,
-        array $data = []
+        array $data = [],
+        ?Escaper $escaper = null
     ) {
         $this->buttonList = $buttonList;
         $this->toolbar = $toolbar;
+        $this->escaper = $escaper ?? ObjectManager::getInstance()->get(Escaper::class);
         parent::__construct($context, $data);
     }
 
@@ -122,13 +135,14 @@ class Save extends \Magento\Backend\Block\Template implements \Magento\Backend\B
 
         $rate = (int)$this->getRequest()->getParam('rate');
         if ($rate) {
+            $confirmMessage = $this->escaper->escapeJs(
+                $this->escaper->escapeHtml(__('Are you sure you want to do this?'))
+            );
             $this->buttonList->add(
                 'delete',
                 [
                     'label' => __('Delete Rate'),
-                    'onclick' => 'deleteConfirm(\'' . __(
-                        'Are you sure you want to do this?'
-                    ) . '\', \'' . $this->getUrl(
+                    'onclick' => 'deleteConfirm(\'' . $confirmMessage . '\', \'' . $this->getUrl(
                         'tax/*/delete',
                         ['rate' => $rate]
                     ) . '\', {data: {}})',

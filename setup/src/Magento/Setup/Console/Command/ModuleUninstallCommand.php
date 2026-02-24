@@ -132,7 +132,7 @@ class ModuleUninstallCommand extends AbstractModuleCommand
         UninstallCollector $collector,
         ModuleUninstaller $moduleUninstaller,
         ModuleRegistryUninstaller $moduleRegistryUninstaller,
-        MaintenanceModeEnabler $maintenanceModeEnabler = null
+        ?MaintenanceModeEnabler $maintenanceModeEnabler = null
     ) {
         parent::__construct($objectManagerProvider);
         $this->composer = $composer;
@@ -219,7 +219,7 @@ class ModuleUninstallCommand extends AbstractModuleCommand
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         if (!$this->deploymentConfig->isAvailable()) {
             $output->writeln(

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -10,6 +10,7 @@ namespace Magento\Backend\Test\Unit\Console\Command;
 use Magento\Backend\Console\Command\MaintenanceStatusCommand;
 use Magento\Framework\App\MaintenanceMode;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Tester\CommandTester;
 
@@ -34,8 +35,8 @@ class MaintenanceStatusCommandTest extends TestCase
     /**
      * @param array $maintenanceData
      * @param string $expectedMessage
-     * @dataProvider executeDataProvider
      */
+    #[DataProvider('executeDataProvider')]
     public function testExecute(array $maintenanceData, $expectedMessage)
     {
         $this->maintenanceMode->expects($this->once())->method('isOn')->willReturn($maintenanceData[0]);

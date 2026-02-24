@@ -1,14 +1,12 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 /**
  * Review reports admin controller
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\Reports\Controller\Adminhtml\Report;
 
@@ -60,20 +58,20 @@ abstract class Review extends Action
      */
     protected function _isAllowed()
     {
-        return match ($this->getRequest()->getActionName()) {
-            'exportCustomerCsv',
-            'exportCustomerExcel',
+        return match (strtolower($this->getRequest()->getActionName())) {
+            'exportcustomercsv',
+            'exportcustomerexcel',
             'customer' =>
-                $this->_authorization->isAllowed('Magento_Reports::review_customer'),
-            'exportProductCsv',
-            'exportProductExcel',
-            'exportProductDetailCsv',
-            'exportProductDetailExcel',
-            'productDetail',
+            $this->_authorization->isAllowed('Magento_Reports::review_customer'),
+            'exportproductcsv',
+            'exportproductexcel',
+            'exportproductdetailcsv',
+            'exportproductdetailexcel',
+            'productdetail',
             'product' =>
-                $this->_authorization->isAllowed('Magento_Reports::review_product'),
+            $this->_authorization->isAllowed('Magento_Reports::review_product'),
             default =>
-                $this->_authorization->isAllowed('Magento_Reports::review'),
+            $this->_authorization->isAllowed('Magento_Reports::review'),
         };
     }
 }

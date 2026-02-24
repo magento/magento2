@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Tax\Model;
@@ -77,7 +77,7 @@ class TaxRuleRepository implements TaxRuleRepositoryInterface
         CollectionFactory $collectionFactory,
         ResourceRule $resource,
         \Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface $joinProcessor,
-        CollectionProcessorInterface $collectionProcessor = null
+        ?CollectionProcessorInterface $collectionProcessor = null
     ) {
         $this->taxRuleRegistry = $taxRuleRegistry;
         $this->taxRuleSearchResultsFactory = $searchResultsFactory;

@@ -30,8 +30,6 @@
             <argument name="template" value="EmailTemplateWithStoreddXSS"/>
         </actionGroup>
         <actionGroup ref="PreviewEmailTemplateActionGroup" stepKey="previewTemplate"/>
-        <actionGroup ref="AssertEmailTemplateContentActionGroup" stepKey="assertContent">
-            <argument name="expectedContent" value="{{EmailTemplateWithStoreddXSS.expectedTemplate}}"/>
-        </actionGroup>
+        <dontSee userInput="{{EmailTemplateWithStoreddXSS.templateText}}" stepKey="assertContent"/>
     </test>
 </tests>

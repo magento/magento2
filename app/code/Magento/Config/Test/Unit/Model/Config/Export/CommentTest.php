@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -15,6 +15,7 @@ use Magento\Config\Model\Placeholder\PlaceholderInterface;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 class CommentTest extends TestCase
@@ -43,27 +44,18 @@ class CommentTest extends TestCase
     {
         $objectManager = new ObjectManager($this);
 
-        $this->placeholderMock = $this->getMockBuilder(PlaceholderInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->placeholderMock = $this->createMock(PlaceholderInterface::class);
 
-        $placeholderFactoryMock = $this->getMockBuilder(PlaceholderFactory::class)
-            ->onlyMethods(['create'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $placeholderFactoryMock = $this->createPartialMock(PlaceholderFactory::class, ['create']);
 
         $placeholderFactoryMock->expects($this->once())
             ->method('create')
             ->with(PlaceholderFactory::TYPE_ENVIRONMENT)
             ->willReturn($this->placeholderMock);
 
-        $this->configSourceMock = $this->getMockBuilder(DumpConfigSourceInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->configSourceMock = $this->createMock(DumpConfigSourceInterface::class);
 
-        $this->typePoolMock = $this->getMockBuilder(TypePool::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->typePoolMock = $this->createMock(TypePool::class);
 
         $this->model = $objectManager->getObject(
             Comment::class,
@@ -80,8 +72,8 @@ class CommentTest extends TestCase
      * @param array $notSensitive
      * @param array $expectedMocks
      * @param $expectedMessage
-     * @dataProvider dataProviderForTestGet
      */
+    #[DataProvider('dataProviderForTestGet')]
     public function testGet(
         array $sensitive,
         array $notSensitive,
@@ -91,10 +83,30 @@ class CommentTest extends TestCase
         $this->configSourceMock->expects($this->once())
             ->method('getExcludedFields')
             ->willReturn(array_unique(array_merge($sensitive, $notSensitive)));
-        $this->typePoolMock->expects($expectedMocks['typePoolMock']['isPresent']['expects'])
+        
+        // Convert string/array expects to actual matcher for typePoolMock
+        $typePoolExpects = $expectedMocks['typePoolMock']['isPresent']['expects'];
+        if (is_string($typePoolExpects)) {
+            $typePoolMatcher = $this->{$typePoolExpects}();
+        } elseif (is_array($typePoolExpects)) {
+            $typePoolMatcher = $this->{$typePoolExpects[0]}($typePoolExpects[1]);
+        } else {
+            $typePoolMatcher = $typePoolExpects;
+        }
+        $this->typePoolMock->expects($typePoolMatcher)
             ->method('isPresent')
             ->willReturnMap($expectedMocks['typePoolMock']['isPresent']['returnMap']);
-        $this->placeholderMock->expects($expectedMocks['placeholderMock']['generate']['expects'])
+        
+        // Convert string/array expects to actual matcher for placeholderMock
+        $placeholderExpects = $expectedMocks['placeholderMock']['generate']['expects'];
+        if (is_string($placeholderExpects)) {
+            $placeholderMatcher = $this->{$placeholderExpects}();
+        } elseif (is_array($placeholderExpects)) {
+            $placeholderMatcher = $this->{$placeholderExpects[0]}($placeholderExpects[1]);
+        } else {
+            $placeholderMatcher = $placeholderExpects;
+        }
+        $this->placeholderMock->expects($placeholderMatcher)
             ->method('generate')
             ->willReturnMap($expectedMocks['placeholderMock']['generate']['returnMap']);
 
@@ -113,13 +125,13 @@ class CommentTest extends TestCase
                 'expectedMocks' => [
                     'typePoolMock' => [
                         'isPresent' => [
-                            'expects' => self::never(),
+                            'expects' => 'never',
                             'returnMap' => [],
                         ]
                     ],
                     'placeholderMock' => [
                         'generate' => [
-                            'expects' => self::never(),
+                            'expects' => 'never',
                             'returnMap' => [],
                         ],
                     ],
@@ -135,7 +147,7 @@ class CommentTest extends TestCase
                 'expectedMocks' => [
                     'typePoolMock' => [
                         'isPresent' => [
-                            'expects' => self::exactly(2),
+                            'expects' => ['exactly', 2],
                             'returnMap' => [
                                 ['some/notSensitive/field1', TypePool::TYPE_SENSITIVE, false],
                                 ['some/notSensitive/field2', TypePool::TYPE_SENSITIVE, false],
@@ -144,7 +156,7 @@ class CommentTest extends TestCase
                     ],
                     'placeholderMock' => [
                         'generate' => [
-                            'expects' => self::never(),
+                            'expects' => 'never',
                             'returnMap' => [],
                         ],
                     ],
@@ -157,7 +169,7 @@ class CommentTest extends TestCase
                 'expectedMocks' => [
                     'typePoolMock' => [
                         'isPresent' => [
-                            'expects' => self::exactly(5),
+                            'expects' => ['exactly', 5],
                             'returnMap' => [
                                 ['some/sensitive/field1', TypePool::TYPE_SENSITIVE, true],
                                 ['some/sensitive/field2', TypePool::TYPE_SENSITIVE, true],
@@ -168,7 +180,7 @@ class CommentTest extends TestCase
                     ],
                     'placeholderMock' => [
                         'generate' => [
-                            'expects' => self::exactly(3),
+                            'expects' => ['exactly', 3],
                             'returnMap' => [
                                 [
                                     'some/sensitive/field1',

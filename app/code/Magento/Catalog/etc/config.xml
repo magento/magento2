@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Store:etc/config.xsd">
@@ -30,6 +30,7 @@
                 <flat_catalog_category>0</flat_catalog_category>
                 <flat_catalog_product>0</flat_catalog_product>
                 <default_sort_by>position</default_sort_by>
+                <default_sort_by_order>ASC</default_sort_by_order>
                 <list_allow_all>0</list_allow_all>
                 <parse_url_directives>1</parse_url_directives>
                 <remember_pagination>0</remember_pagination>

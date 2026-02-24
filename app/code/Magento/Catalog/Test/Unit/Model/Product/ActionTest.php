@@ -1,12 +1,13 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Catalog\Test\Unit\Model\Product;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\Catalog\Model\Indexer\Product\Category;
 use Magento\Catalog\Model\Product\Action;
 use Magento\Catalog\Model\Product\Website;
@@ -16,6 +17,7 @@ use Magento\Eav\Model\Config;
 use Magento\Framework\Event\ManagerInterface;
 use Magento\Framework\Indexer\IndexerRegistry;
 use Magento\Framework\Model\ResourceModel\AbstractResource;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Indexer\Model\Indexer;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -26,6 +28,7 @@ use PHPUnit\Framework\TestCase;
  */
 class ActionTest extends TestCase
 {
+    use MockCreationTrait;
     /**
      * @var Action
      */
@@ -68,24 +71,24 @@ class ActionTest extends TestCase
 
     protected function setUp(): void
     {
-        $eventManagerMock = $this->getMockForAbstractClass(ManagerInterface::class);
+        $eventManagerMock = $this->createMock(ManagerInterface::class);
         $this->productWebsiteFactory = $this->createPartialMock(
             WebsiteFactory::class,
             ['create']
         );
-        $this->resource = $this->getMockBuilder(AbstractResource::class)
-            ->addMethods(['updateAttributes', 'getIdFieldName'])
-            ->onlyMethods(['getConnection'])
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->resource = $this->createPartialMockWithReflection(
+            AbstractResource::class,
+            ['setUpdateAttributesResult', 'getIdFieldName', 'updateAttributes', '_construct', 'getConnection']
+        );
+        $this->resource->method('setUpdateAttributesResult')->willReturnSelf();
+        $this->resource->method('getIdFieldName')->willReturn('entity_id');
+        $this->resource->method('updateAttributes')->willReturnSelf();
         $this->productWebsite = $this->createPartialMock(
             Website::class,
             ['addProducts', 'removeProducts']
         );
         $this->productWebsiteFactory
-            ->expects($this->any())
-            ->method('create')
-            ->willReturn($this->productWebsite);
+            ->method('create')->willReturn($this->productWebsite);
         $this->categoryIndexer = $this->createPartialMock(
             Indexer::class,
             ['getId', 'load', 'isScheduled', 'reindexList']
@@ -119,28 +122,16 @@ class ActionTest extends TestCase
         $productIdsUnique = [0 => 1, 1 => 2, 3 => 4];
         $attrData = [1];
         $storeId = 1;
-        $this->resource
-            ->expects($this->any())
-            ->method('updateAttributes')
-            ->with($productIds, $attrData, $storeId)->willReturnSelf();
 
         $this->categoryIndexer
-            ->expects($this->any())
-            ->method('isScheduled')
-            ->willReturn(false);
+            ->method('isScheduled')->willReturn(false);
         $this->categoryIndexer
-            ->expects($this->any())
-            ->method('reindexList')
-            ->willReturn($productIds);
+            ->method('reindexList')->willReturn($productIds);
         $this->prepareIndexer();
         $this->eavConfig
-            ->expects($this->any())
-            ->method('getAttribute')
-            ->willReturn($this->eavAttribute);
+            ->method('getAttribute')->willReturn($this->eavAttribute);
         $this->eavAttribute
-            ->expects($this->any())
-            ->method('isIndexable')
-            ->willReturn(false);
+            ->method('isIndexable')->willReturn(false);
         $this->assertEquals($this->model, $this->model->updateAttributes($productIds, $attrData, $storeId));
         $this->assertEquals($this->model->getDataByKey('product_ids'), $productIdsUnique);
         $this->assertEquals($this->model->getDataByKey('attributes_data'), $attrData);
@@ -150,8 +141,8 @@ class ActionTest extends TestCase
     /**
      * @param $type
      * @param $methodName
-     * @dataProvider updateWebsitesDataProvider
      */
+    #[DataProvider('updateWebsitesDataProvider')]
     public function testUpdateWebsites($type, $methodName)
     {
         $productIds = [1, 2, 2, 4];
@@ -163,13 +154,9 @@ class ActionTest extends TestCase
             ->with($websiteIds, $productIds)->willReturnSelf();
 
         $this->categoryIndexer
-            ->expects($this->any())
-            ->method('isScheduled')
-            ->willReturn(false);
+            ->method('isScheduled')->willReturn(false);
         $this->categoryIndexer
-            ->expects($this->any())
-            ->method('reindexList')
-            ->willReturn($productIds);
+            ->method('reindexList')->willReturn($productIds);
         $this->prepareIndexer();
         $this->model->updateWebsites($productIds, $websiteIds, $type);
         $this->assertEquals($this->model->getDataByKey('product_ids'), $productIdsUnique);

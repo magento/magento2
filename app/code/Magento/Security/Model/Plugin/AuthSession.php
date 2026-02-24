@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Security\Model\Plugin;
 
@@ -51,7 +51,7 @@ class AuthSession
         \Magento\Framework\Message\ManagerInterface $messageManager,
         AdminSessionsManager $sessionsManager,
         \Magento\Security\Model\SecurityCookie $securityCookie,
-        \Magento\Security\Model\UserExpirationManager $userExpirationManager = null
+        ?\Magento\Security\Model\UserExpirationManager $userExpirationManager = null
     ) {
         $this->request = $request;
         $this->messageManager = $messageManager;

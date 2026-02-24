@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Elasticsearch\SearchAdapter\Dynamic;
 
@@ -129,8 +129,8 @@ class DataProvider implements \Magento\Framework\Search\Dynamic\DataProviderInte
         \Magento\Elasticsearch\SearchAdapter\SearchIndexNameResolver $searchIndexNameResolver,
         $indexerId,
         \Magento\Framework\App\ScopeResolverInterface $scopeResolver,
-        QueryContainer $queryContainer = null,
-        LoggerInterface $logger = null,
+        ?QueryContainer $queryContainer = null,
+        ?LoggerInterface $logger = null,
         ?string $aggregationFieldName = null
     ) {
         $this->connectionManager = $connectionManager;

@@ -107,7 +107,7 @@ class SessionManager implements SessionManagerInterface, ResetAfterRequestInterf
         \Magento\Framework\Stdlib\CookieManagerInterface $cookieManager,
         \Magento\Framework\Stdlib\Cookie\CookieMetadataFactory $cookieMetadataFactory,
         \Magento\Framework\App\State $appState,
-        SessionStartChecker $sessionStartChecker = null
+        ?SessionStartChecker $sessionStartChecker = null
     ) {
         $this->request = $request;
         $this->sidResolver = $sidResolver;
@@ -330,7 +330,7 @@ class SessionManager implements SessionManagerInterface, ResetAfterRequestInterf
      * @param  array $options
      * @return void
      */
-    public function destroy(array $options = null)
+    public function destroy(?array $options = null)
     {
         $options = $options ?? [];
         $options = array_merge($this->defaultDestroyOptions, $options);

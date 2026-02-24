@@ -1,8 +1,7 @@
 <?php
 /**
- *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -16,6 +15,7 @@ use Magento\Framework\App\RequestInterface;
 use Magento\Framework\App\ResponseInterface;
 use Magento\Framework\Controller\Result\Json;
 use Magento\Framework\Controller\ResultFactory;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\PageCache\Model\Config;
 use Magento\Swatches\Controller\Ajax\Media;
@@ -23,8 +23,12 @@ use Magento\Swatches\Helper\Data;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class MediaTest extends TestCase
 {
+    use MockCreationTrait;
     /** @var array */
     private $mediaGallery;
 
@@ -65,7 +69,7 @@ class MediaTest extends TestCase
     private $productId = 23;
 
     /**
-     * @inheridoc
+     * @inheritDoc
      */
     protected function setUp(): void
     {
@@ -89,12 +93,13 @@ class MediaTest extends TestCase
         $this->productMock = $this->createMock(Product::class);
         $this->contextMock = $this->createMock(Context::class);
 
-        $this->requestMock = $this->getMockForAbstractClass(RequestInterface::class);
+        $this->requestMock = $this->createMock(RequestInterface::class);
         $this->contextMock->method('getRequest')->willReturn($this->requestMock);
-        $this->responseMock = $this->getMockBuilder(ResponseInterface::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['setPublicHeaders'])
-            ->getMockForAbstractClass();
+        $this->responseMock = $this->createPartialMockWithReflection(
+            ResponseInterface::class,
+            ['setPublicHeaders', 'sendResponse', 'setHeader', 'clearHeader', 'clearHeaders',
+             'setHttpResponseCode', 'setBody', 'appendBody', 'getBody', 'setRedirect', 'setStatusHeader']
+        );
         $this->responseMock->method('setPublicHeaders')->willReturnSelf();
         $this->contextMock->method('getResponse')->willReturn($this->responseMock);
         $this->resultFactory = $this->createPartialMock(ResultFactory::class, ['create']);

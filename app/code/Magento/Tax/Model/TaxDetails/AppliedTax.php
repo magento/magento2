@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Tax\Model\TaxDetails;
 
@@ -93,7 +93,7 @@ class AppliedTax extends AbstractExtensibleModel implements AppliedTaxInterface
      * @param \Magento\Tax\Api\Data\AppliedTaxRateInterface[] $rates
      * @return $this
      */
-    public function setRates(array $rates = null)
+    public function setRates(?array $rates = null)
     {
         return $this->setData(self::KEY_RATES, $rates);
     }

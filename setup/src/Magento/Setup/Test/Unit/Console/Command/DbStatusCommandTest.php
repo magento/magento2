@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -56,7 +56,7 @@ class DbStatusCommandTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
         /** @var ObjectManagerInterface|Mock $objectManager */
-        $objectManager = $this->getMockForAbstractClass(ObjectManagerInterface::class);
+        $objectManager = $this->createMock(ObjectManagerInterface::class);
         $this->deploymentConfig = $this->getMockBuilder(DeploymentConfig::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -104,7 +104,7 @@ class DbStatusCommandTest extends TestCase
             ->willReturn(true);
         $tester = new CommandTester($this->command);
         $tester->execute([]);
-        $this->assertStringMatchesFormat('All modules are up to date.', $tester->getDisplay());
+        $this->assertStringMatchesFormat('%AAll modules are up to date.', $tester->getDisplay());
         $this->assertSame(0, $tester->getStatusCode());
     }
 
@@ -117,7 +117,7 @@ class DbStatusCommandTest extends TestCase
         $tester->execute([]);
 
         $this->assertStringMatchesFormat(
-            'No information is available: the Magento application is not installed.%w',
+            '%ANo information is available: the Magento application is not installed.%w',
             $tester->getDisplay()
         );
         $this->assertSame(Cli::RETURN_FAILURE, $tester->getStatusCode());

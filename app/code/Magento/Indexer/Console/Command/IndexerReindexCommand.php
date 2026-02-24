@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Indexer\Console\Command;
@@ -66,9 +66,9 @@ class IndexerReindexCommand extends AbstractIndexerManageCommand
      */
     public function __construct(
         ObjectManagerFactory $objectManagerFactory,
-        IndexerRegistry $indexerRegistry = null,
-        DependencyInfoProvider $dependencyInfoProvider = null,
-        MakeSharedIndexValid $makeSharedValid = null,
+        ?IndexerRegistry $indexerRegistry = null,
+        ?DependencyInfoProvider $dependencyInfoProvider = null,
+        ?MakeSharedIndexValid $makeSharedValid = null,
         ?LoggerInterface $logger = null
     ) {
         $this->indexerRegistry = $indexerRegistry;

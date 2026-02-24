@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Sales\Model\Order;
@@ -157,11 +157,11 @@ class Payment extends Info implements OrderPaymentInterface
         \Magento\Sales\Model\Order\Payment\Transaction\BuilderInterface $transactionBuilder,
         \Magento\Sales\Model\Order\Payment\Processor $paymentProcessor,
         OrderRepositoryInterface $orderRepository,
-        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
-        \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
+        ?\Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
+        ?\Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = [],
-        CreditmemoManager $creditmemoManager = null,
-        SaleOperation $saleOperation = null
+        ?CreditmemoManager $creditmemoManager = null,
+        ?SaleOperation $saleOperation = null
     ) {
         $this->priceCurrency = $priceCurrency;
         $this->creditmemoFactory = $creditmemoFactory;
@@ -393,7 +393,7 @@ class Payment extends Info implements OrderPaymentInterface
 
         $isCustomerNotified = $isCustomerNotified ?: $order->getCustomerNoteNotify();
 
-        if (!array_key_exists($orderStatus, $order->getConfig()->getStateStatuses($orderState))) {
+        if ($orderStatus === null || !array_key_exists($orderStatus, $order->getConfig()->getStateStatuses($orderState))) {
             $orderStatus = $order->getConfig()->getStateDefaultStatus($orderState);
         }
 
@@ -1175,7 +1175,7 @@ class Payment extends Info implements OrderPaymentInterface
             0 == $this->getBaseAmountCanceled()
         ) {
             if ($authTransaction->canVoidAuthorizationCompletely()) {
-                $amount = (double)$order->getBaseGrandTotal();
+                $amount = (float)$order->getBaseGrandTotal();
             }
         }
 

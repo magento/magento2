@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -14,10 +14,15 @@ use Magento\NewRelicReporting\Model\Config;
 use Magento\NewRelicReporting\Model\NewRelicWrapper;
 use Magento\NewRelicReporting\Model\Observer\ReportProductSavedToNewRelic;
 use PHPUnit\Framework\MockObject\MockObject;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 class ReportProductSavedToNewRelicTest extends TestCase
 {
+
+    use MockCreationTrait;
+
     /**
      * @var ReportProductSavedToNewRelic
      */
@@ -87,10 +92,7 @@ class ReportProductSavedToNewRelicTest extends TestCase
         $this->config->expects($this->once())
             ->method('isNewRelicEnabled')
             ->willReturn(true);
-        $event = $this->getMockBuilder(Event::class)
-            ->addMethods(['getProduct'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $event = $this->createPartialMockWithReflection(Event::class, ['getProduct']);
         $eventObserver->expects($this->once())
             ->method('getEvent')
             ->willReturn($event);
@@ -110,9 +112,10 @@ class ReportProductSavedToNewRelicTest extends TestCase
     /**
      * Test case when module is enabled in config and product updating
      *
-     * @dataProvider actionDataProvider
+     * @param bool $isNewObject
      * @return void
      */
+    #[DataProvider('actionDataProvider')]
     public function testReportProductUpdatedToNewRelic($isNewObject)
     {
         /** @var Observer|MockObject $eventObserver */
@@ -122,10 +125,7 @@ class ReportProductSavedToNewRelicTest extends TestCase
         $this->config->expects($this->once())
             ->method('isNewRelicEnabled')
             ->willReturn(true);
-        $event = $this->getMockBuilder(Event::class)
-            ->addMethods(['getProduct'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $event = $this->createPartialMockWithReflection(Event::class, ['getProduct']);
         $eventObserver->expects($this->once())
             ->method('getEvent')
             ->willReturn($event);

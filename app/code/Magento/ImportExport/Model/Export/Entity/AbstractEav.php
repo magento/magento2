@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\ImportExport\Model\Export\Entity;
 
@@ -321,7 +321,8 @@ abstract class AbstractEav extends \Magento\ImportExport\Model\Export\AbstractEn
      */
     private function getAttributeValueById($attributeCode, $valueId)
     {
-        if (isset($this->_attributeValues[$attributeCode])
+        if ($valueId !== null 
+            && isset($this->_attributeValues[$attributeCode])
             && isset($this->_attributeValues[$attributeCode][$valueId])
         ) {
             return $this->_attributeValues[$attributeCode][$valueId];

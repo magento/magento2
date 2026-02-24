@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Paypal\Model;
@@ -623,7 +623,7 @@ class Config extends AbstractConfig
         \Magento\Payment\Model\Source\CctypeFactory $cctypeFactory,
         \Magento\Paypal\Model\CertFactory $certFactory,
         $params = [],
-        CspNonceProvider $cspNonceProvider = null
+        ?CspNonceProvider $cspNonceProvider = null
     ) {
         parent::__construct($scopeConfig);
         $this->directoryHelper = $directoryHelper;
@@ -1055,7 +1055,7 @@ class Config extends AbstractConfig
      * @param \Magento\Framework\Locale\ResolverInterface $localeResolver
      * @return string
      */
-    public function getPaymentMarkWhatIsPaypalUrl(\Magento\Framework\Locale\ResolverInterface $localeResolver = null)
+    public function getPaymentMarkWhatIsPaypalUrl(?\Magento\Framework\Locale\ResolverInterface $localeResolver = null)
     {
         $countryCode = 'US';
         if (null !== $localeResolver) {

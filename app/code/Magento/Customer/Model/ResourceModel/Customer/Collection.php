@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Customer\Model\ResourceModel\Customer;
 
@@ -56,7 +56,7 @@ class Collection extends \Magento\Eav\Model\Entity\Collection\VersionControl\Abs
         \Magento\Framework\Validator\UniversalFactory $universalFactory,
         \Magento\Framework\Model\ResourceModel\Db\VersionControl\Snapshot $entitySnapshot,
         \Magento\Framework\DataObject\Copy\Config $fieldsetConfig,
-        \Magento\Framework\DB\Adapter\AdapterInterface $connection = null,
+        ?\Magento\Framework\DB\Adapter\AdapterInterface $connection = null,
         $modelName = self::CUSTOMER_MODEL_NAME
     ) {
         $this->_fieldsetConfig = $fieldsetConfig;

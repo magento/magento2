@@ -1,13 +1,16 @@
 <?php
 /**
- * Copyright 2024 Adobe
+ * Copyright 2025 Adobe
  * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Catalog\Test\Unit\Model\ResourceModel\Category;
 
+use Magento\Framework\DB\Ddl\Table;
+use Magento\Catalog\Model\Category;
 use Magento\Framework\Data\Collection\EntityFactory;
+use Magento\Store\Model\Store;
 use Psr\Log\LoggerInterface;
 use Magento\Framework\Data\Collection\Db\FetchStrategyInterface;
 use Magento\Framework\Event\ManagerInterface;
@@ -124,65 +127,30 @@ class CollectionTest extends TestCase
      */
     public function setUp(): void
     {
-        $this->entityFactory = $this->getMockBuilder(EntityFactory::class)
-            ->disableOriginalConstructor(true)
-            ->getMock();
-        $this->logger = $this->getMockBuilder(LoggerInterface::class)
-            ->getMock();
-        $this->fetchStrategy = $this->getMockBuilder(FetchStrategyInterface::class)
-            ->getMock();
-        $this->eventManager = $this->getMockBuilder(ManagerInterface::class)
-            ->getMock();
-        $this->eavConfig = $this->getMockBuilder(Config::class)
-            ->disableOriginalConstructor(true)
-            ->getMock();
-        $this->resource = $this->getMockBuilder(ResourceConnection::class)
-            ->disableOriginalConstructor(true)
-            ->getMock();
-        $this->eavEntityFactory = $this->getMockBuilder(EavEntityFactory::class)
-            ->disableOriginalConstructor(true)
-            ->getMock();
-        $this->resourceHelper = $this->getMockBuilder(Helper::class)
-            ->disableOriginalConstructor(true)
-            ->getMock();
-        $this->universalFactory = $this->getMockBuilder(UniversalFactory::class)
-            ->disableOriginalConstructor(true)
-            ->getMock();
-        $this->storeManager = $this->getMockBuilder(StoreManagerInterface::class)
-            ->getMock();
-        $this->connection = $this->getMockBuilder(AdapterInterface::class)
-            ->getMock();
-        $this->scopeConfig = $this->getMockBuilder(ScopeConfigInterface::class)
-            ->getMock();
-        $this->catalogProductVisibility = $this->getMockBuilder(Visibility::class)
-            ->disableOriginalConstructor(true)
-            ->getMock();
+        $this->entityFactory = $this->createMock(EntityFactory::class);
+        $this->logger = $this->createMock(LoggerInterface::class);
+        $this->fetchStrategy = $this->createMock(FetchStrategyInterface::class);
+        $this->eventManager = $this->createMock(ManagerInterface::class);
+        $this->eavConfig = $this->createMock(Config::class);
+        $this->resource = $this->createMock(ResourceConnection::class);
+        $this->eavEntityFactory = $this->createMock(EavEntityFactory::class);
+        $this->resourceHelper = $this->createMock(Helper::class);
+        $this->universalFactory = $this->createMock(UniversalFactory::class);
+        $this->storeManager = $this->createMock(StoreManagerInterface::class);
+        $this->connection = $this->createMock(AdapterInterface::class);
+        $this->scopeConfig = $this->createMock(ScopeConfigInterface::class);
+        $this->catalogProductVisibility = $this->createMock(Visibility::class);
 
-        $this->categoryEntity = $this->getMockBuilder(CategoryEntity::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->universalFactory->expects($this->any())
-            ->method('create')
-            ->willReturn($this->categoryEntity);
-        $this->categoryEntity->expects($this->any())
-            ->method('getConnection')
-            ->willReturn($this->connection);
-        $this->categoryEntity->expects($this->any())
-            ->method('getDefaultAttributes')
-            ->willReturn([]);
+        $this->categoryEntity = $this->createMock(CategoryEntity::class);
+        $this->universalFactory->method('create')->willReturn($this->categoryEntity);
+        $this->categoryEntity->method('getConnection')->willReturn($this->connection);
+        $this->categoryEntity->method('getDefaultAttributes')->willReturn([]);
 
-        $this->select = $this->getMockBuilder(Select::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->connection->expects($this->any())
-            ->method('select')
-            ->willReturn($this->select);
+        $this->select = $this->createMock(Select::class);
+        $this->connection->method('select')->willReturn($this->select);
 
-        $this->store = $this->getMockBuilder(StoreInterface::class)
-            ->getMock();
-        $this->storeManager->expects($this->any())
-            ->method('getStore')
-            ->willReturn($this->store);
+        $this->store = $this->createMock(StoreInterface::class);
+        $this->storeManager->method('getStore')->willReturn($this->store);
 
         $this->collection = new Collection(
             $this->entityFactory,
@@ -203,19 +171,71 @@ class CollectionTest extends TestCase
 
     public function testLoadProductCount() : void
     {
-        $this->select->expects($this->exactly(3))
+        $this->select->expects($this->exactly(1))
             ->method('from')
             ->willReturnSelf();
-        $this->select->expects($this->exactly(3))
+        $this->select->expects($this->exactly(1))
             ->method('where')
             ->willReturnSelf();
-        $this->select->expects($this->exactly(1))
-            ->method('group')
-            ->willReturnSelf();
-        $this->connection->expects($this->exactly(2))
+        $this->connection->expects($this->exactly(1))
             ->method('fetchPairs')
             ->with($this->select)
             ->willReturn([]);
         $this->collection->loadProductCount([]);
+    }
+
+    /**
+     * Test that loadProductCount calls getCountFromCategoryTableBulk
+     */
+    public function testLoadProductCountCallsBulkMethodForLargeCategoryCount()
+    {
+        $websiteId = 1;
+        $storeId = 1;
+        $categoryCount = 401;
+        $items = [];
+        $categoryIds = [];
+        for ($i = 1; $i <= $categoryCount; $i++) {
+            $category = $this->createPartialMock(Category::class, ['getId', 'setProductCount']);
+            $category->method('getId')->willReturn($i);
+            $category->setData('is_anchor', true);
+            $category->expects($this->once())->method('setProductCount')->with(5);
+            $items[$i] = $category;
+            $categoryIds[] = $i;
+        }
+        $storeMock = $this->createMock(Store::class);
+        $storeMock->method('getWebsiteId')->willReturn($websiteId);
+        $this->storeManager->method('getStore')->with($storeId)->willReturn($storeMock);
+        $this->connection->method('select')->willReturn($this->select);
+        $counts = array_fill_keys($categoryIds, 5);
+        $tableMock = $this->createMock(Table::class);
+        $tableMock->method('addColumn')->willReturnSelf();
+        $tableMock->method('addIndex')->willReturnSelf();
+        $this->connection->method('newTable')
+            ->with($this->stringContains('temp_category_descendants_'))
+            ->willReturn($tableMock);
+        $this->connection->expects($this->once())->method('createTemporaryTable')->with($tableMock);
+        $this->connection->expects($this->once())->method('dropTemporaryTable')
+            ->with($this->stringContains('temp_category_descendants_'));
+        $this->select->method('from')->willReturnSelf();
+        $this->select->expects($this->once())->method('joinInner')
+            ->with(
+                ['ce2' => null],
+                'ce2.path LIKE CONCAT(ce.path, \'/%\')',
+                []
+            )->willReturnSelf();
+        $this->select->method('where')->willReturnSelf();
+        $this->connection->method('select')->willReturn($this->select);
+        $this->connection->method('insertFromSelect')->willReturn('INSERT QUERY');
+        $this->connection->method('query')->with('INSERT QUERY')->willReturnSelf();
+        $this->select->method('from')->willReturnSelf();
+        $this->select->method('joinLeft')->willReturnSelf();
+        $this->select->method('join')->willReturnSelf();
+        $this->select->method('where')->willReturnSelf();
+        $this->select->method('group')->willReturnSelf();
+        $this->connection->method('fetchPairs')
+            ->with($this->isInstanceOf(Select::class))
+            ->willReturn($counts);
+        $this->collection->setProductStoreId($storeId);
+        $this->collection->loadProductCount($items, false, true);
     }
 }

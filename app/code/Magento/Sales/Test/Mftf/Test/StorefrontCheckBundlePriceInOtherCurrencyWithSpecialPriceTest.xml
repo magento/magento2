@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright 2024 Adobe
+ * All Rights Reserved.
+ */
+ -->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontCheckBundlePriceInOtherCurrencyWithSpecialPriceTest">
+        <annotations>
+            <stories value="Bundle"/>
+            <title value="Bundle price on Storefront in other currency with special price"/>
+            <description value="Checks bundle price in other currency on Storefront when special price is applied"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="AC-15624"/>
+            <useCaseId value="ACP2E-4110"/>
+        </annotations>
+        <before>
+            <!-- Set currency -->
+            <magentoCLI command="config:set currency/options/allow EUR,GBP,USD" stepKey="setCurrencyAllow"/>
+            <magentoCLI command="config:set currency/options/default GBP" stepKey="setCurrencyDisplay"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="LoginAsAdmin"/>
+            <actionGroup ref="AdminOpenCurrencyRatesPageActionGroup" stepKey="gotToCurrencyRatesPage"/>
+            <actionGroup ref="AdminSetCurrencyRatesActionGroup" stepKey="setCurrencyRate">
+                <argument name="firstCurrency" value="USD"/>
+                <argument name="secondCurrency" value="GBP"/>
+                <argument name="rate" value="0.75"/>
+            </actionGroup>
+            <!-- Create Category -->
+            <createData entity="SimpleSubCategory" stepKey="createSubCategory"/>
+            <!-- Create bundle Product -->
+            <createData entity="SimpleProduct2" stepKey="simpleProduct1">
+                <field key="price">40.25</field>
+            </createData>
+            <createData entity="ApiBundleProductPriceViewRange" stepKey="createBundleProduct">
+                <requiredEntity createDataKey="createSubCategory"/>
+            </createData>
+            <createData entity="DropDownBundleOption" stepKey="createBundleOption1_1">
+                <requiredEntity createDataKey="createBundleProduct"/>
+                <field key="required">True</field>
+            </createData>
+            <createData entity="ApiBundleLink" stepKey="linkOptionToProduct">
+                <requiredEntity createDataKey="createBundleProduct"/>
+                <requiredEntity createDataKey="createBundleOption1_1"/>
+                <requiredEntity createDataKey="simpleProduct1"/>
+            </createData>
+            <actionGroup ref="NavigateToCreatedProductEditPageActionGroup" stepKey="goToBundleProduct">
+                <argument name="product" value="$$createBundleProduct$$"/>
+            </actionGroup>
+            <grabTextFrom selector="{{AdminProductFormBundleSection.currentBundleOption}}" stepKey="grabBundleOption"/>
+            <assertNotEmpty stepKey="assertBundleOptionNotEmpty">
+                <actualResult type="const">$grabBundleOption</actualResult>
+            </assertNotEmpty>
+            <actionGroup ref="AddSpecialPriceToProductActionGroup" stepKey="addSpecialPriceToProduct">
+                <argument name="price" value="97.5"/>
+            </actionGroup>
+            <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProductForm"/>
+            <actionGroup ref="AdminClearFiltersActionGroup" stepKey="clearProductGridFilters"/>
+            <!-- Reindex and clear cache -->
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindexConfig">
+                <argument name="indices" value=""/>
+            </actionGroup>
+            <actionGroup ref="CliCacheCleanActionGroup" stepKey="cleanFullPageCache">
+                <argument name="tags" value="config full_page"/>
+            </actionGroup>
+        </before>
+
+        <after>
+            <!-- Delete products and category -->
+            <deleteData createDataKey="createSubCategory" stepKey="deleteCategory1"/>
+            <deleteData createDataKey="simpleProduct1" stepKey="deleteProduct1"/>
+            <deleteData createDataKey="createBundleProduct" stepKey="deleteBundleProduct"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+            <!-- Revert currency settings -->
+            <magentoCLI command="config:set currency/options/default USD" stepKey="unsetCurrencyDisplay"/>
+            <magentoCLI command="config:set currency/options/allow EUR,USD" stepKey="unsetCurrencyAllow"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindexConfigAfterReverting">
+                <argument name="indices" value=""/>
+            </actionGroup>
+            <actionGroup ref="CliCacheCleanActionGroup" stepKey="cleanFullPageCacheAfterReverting">
+                <argument name="tags" value="config full_page"/>
+            </actionGroup>
+        </after>
+
+        <!-- Open Bundle product page -->
+        <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="openStorefrontProductPage">
+            <argument name="productUrl" value="$$createBundleProduct.custom_attributes[url_key]$$"/>
+        </actionGroup>
+        <waitForPageLoad stepKey="waitForStorefrontPage"/>
+
+        <!-- Assert Bundle Product Price -->
+        <see userInput="£29.43" selector="{{StorefrontProductInfoMainSection.fixedFinalPrice}}" stepKey="seeBundlePrice"/>
+
+    </test>
+</tests>

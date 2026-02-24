@@ -100,7 +100,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper implements Reset
         \Magento\Weee\Model\Config $weeeConfig,
         \Magento\Tax\Helper\Data $taxData,
         \Magento\Framework\Registry $coreRegistry,
-        \Magento\Framework\Serialize\Serializer\Json $serializer = null
+        ?\Magento\Framework\Serialize\Serializer\Json $serializer = null
     ) {
         $this->_storeManager = $storeManager;
         $this->_weeeTax = $weeeTax;

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -12,6 +12,7 @@ use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\Product\Image\Cache;
 use Magento\Framework\App\Area;
 use Magento\Framework\Config\View;
+use Magento\Framework\Data\Collection as DataCollection;
 use Magento\Framework\DataObject;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\View\ConfigInterface;
@@ -61,34 +62,23 @@ class CacheTest extends TestCase
     protected $imageHelper;
 
     /**
-     * @var \Magento\Framework\Data\Collection|MockObject
+     * @var DataCollection|MockObject
      */
     protected $mediaGalleryCollection;
 
     protected function setUp(): void
     {
-        $this->product = $this->getMockBuilder(Product::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->product = $this->createMock(Product::class);
 
-        $this->viewConfig = $this->getMockBuilder(ConfigInterface::class)
-            ->getMockForAbstractClass();
+        $this->viewConfig = $this->createMock(ConfigInterface::class);
 
-        $this->config = $this->getMockBuilder(View::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->config = $this->createMock(View::class);
 
-        $this->themeCollection = $this->getMockBuilder(Collection::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->themeCollection = $this->createMock(Collection::class);
 
-        $this->imageHelper = $this->getMockBuilder(Image::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->imageHelper = $this->createMock(Image::class);
 
-        $this->mediaGalleryCollection = $this->getMockBuilder(\Magento\Framework\Data\Collection::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->mediaGalleryCollection = $this->createMock(DataCollection::class);
 
         $this->objectManager = new ObjectManager($this);
         $this->model = $this->objectManager->getObject(
@@ -117,9 +107,7 @@ class CacheTest extends TestCase
             ->method('getIterator')
             ->willReturn(new \ArrayIterator([$imageItem]));
 
-        $this->product->expects($this->any())
-            ->method('getMediaGalleryImages')
-            ->willReturn($this->mediaGalleryCollection);
+        $this->product->method('getMediaGalleryImages')->willReturn($this->mediaGalleryCollection);
 
         $data = $this->getTestData();
         $this->config->expects($this->once())
@@ -127,9 +115,7 @@ class CacheTest extends TestCase
             ->with('Magento_Catalog')
             ->willReturn($data);
 
-        $themeMock = $this->getMockBuilder(Theme::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $themeMock = $this->createMock(Theme::class);
         $themeMock->expects($this->exactly(3))
             ->method('getCode')
             ->willReturn('Magento\theme');

@@ -1,13 +1,13 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Wishlist\Test\Unit\Block\Cart\Item\Renderer\Actions;
 
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\View\Element\Template\Context;
 use Magento\Quote\Model\Quote\Item;
 use Magento\Wishlist\Block\Cart\Item\Renderer\Actions\MoveToWishlist;
 use Magento\Wishlist\Helper\Data;
@@ -24,19 +24,17 @@ class MoveToWishlistTest extends TestCase
     /** @var Data|MockObject */
     protected $wishlistHelperMock;
 
+    /** @var Context|MockObject */
+    protected $contextMock;
+
     protected function setUp(): void
     {
-        $objectManagerHelper = new ObjectManager($this);
+        $this->contextMock = $this->createMock(Context::class);
+        $this->wishlistHelperMock = $this->createMock(Data::class);
 
-        $this->wishlistHelperMock = $this->getMockBuilder(Data::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $this->model = $objectManagerHelper->getObject(
-            MoveToWishlist::class,
-            [
-                'wishlistHelper' => $this->wishlistHelperMock,
-            ]
+        $this->model = new MoveToWishlist(
+            $this->contextMock,
+            $this->wishlistHelperMock
         );
     }
 
@@ -57,9 +55,7 @@ class MoveToWishlistTest extends TestCase
         /**
          * @var Item|MockObject $itemMock
          */
-        $itemMock = $this->getMockBuilder(Item::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $itemMock = $this->createMock(Item::class);
 
         $itemMock->expects($this->once())
             ->method('getId')

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
-  */
+/**
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
+ */
 -->
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -51,7 +51,7 @@
             <argument name="taxCode" value="SimpleTaxUKZeroRate"/>
         </actionGroup>
         <actionGroup ref="AddCustomerTaxClassActionGroup" stepKey="addCustomerTaxClass">
-            <argument name="customerTaxClassName" value="UK_zero"/>
+            <argument name="customerTaxClassName" value="{{UkCustomerTaxClass.taxClassName}}"/>
         </actionGroup>
         <click stepKey="disableDefaultProdTaxClass" selector="{{AdminTaxRulesSection.defaultCustomerTaxClass}}"/>
         <wait stepKey="waitForDisableDefaultProdTaxClass" time="2"/>
@@ -61,7 +61,7 @@
         <!--Create a Customer Group (CUSTOMERS > Customer Groups)-->
         <actionGroup ref="AdminCreateCustomerGroupActionGroup" stepKey="createCustomerGroup">
             <argument name="groupName" value="test_UK"/>
-            <argument name="taxClass" value="UK_zero"/>
+            <argument name="taxClass" value="{{UkCustomerTaxClass.taxClassName}}"/>
         </actionGroup>
 
         <!--Set Customer Create New Account Options Config-->
@@ -137,7 +137,7 @@
             <deleteData createDataKey="createCategory" stepKey="deleteCategoryFirst"/>
 
             <actionGroup ref="DeleteProductTaxClassActionGroup" stepKey="deleteFirstProductTaxClass">
-                <argument name="taxClassName" value="UK_zero"/>
+                <argument name="taxClassName" value="{{UkCustomerTaxClass.taxClassName}}"/>
             </actionGroup>
 
             <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer" />

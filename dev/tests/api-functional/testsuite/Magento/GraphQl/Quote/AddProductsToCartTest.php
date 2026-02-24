@@ -1,21 +1,7 @@
 <?php
-/************************************************************************
- *
- *  ADOBE CONFIDENTIAL
- *  ___________________
- *
- *  Copyright 2024 Adobe
- *  All Rights Reserved.
- *
- *  NOTICE: All information contained herein is, and remains
- *  the property of Adobe and its suppliers, if any. The intellectual
- *  and technical concepts contained herein are proprietary to Adobe
- *  and its suppliers and are protected by all applicable intellectual
- *  property laws, including trade secret and copyright laws.
- *  Dissemination of this information or reproduction of this material
- *  is strictly forbidden unless prior written permission is obtained
- *  from Adobe.
- *  ************************************************************************
+/**
+ * Copyright 2024 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -32,11 +18,14 @@ use Magento\TestFramework\Fixture\DataFixtureStorage;
 use Magento\TestFramework\Fixture\DataFixtureStorageManager;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\Catalog\Test\Fixture\ProductStock as ProductStockFixture;
 use Magento\Quote\Test\Fixture\QuoteIdMask as QuoteMaskFixture;
 
 /**
  * Get add to cart through GraphQl query and variables
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class AddProductsToCartTest extends GraphQlAbstract
 {
@@ -63,10 +52,10 @@ class AddProductsToCartTest extends GraphQlAbstract
      * Test addProductsToCart mutation by passing SKU Upper & Lower case
      *
      * @param string $sku
-     * @dataProvider skuDataProvider
      * @throws NoSuchEntityException
      * @throws Exception
      */
+    #[DataProvider('skuDataProvider')]
     #[
         DataFixture(ProductFixture::class, ['sku' => 'Upper_And_Lower_Test_Prod']),
         DataFixture(GuestCartFixture::class, as: 'cart'),

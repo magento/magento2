@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -11,10 +11,14 @@ use Magento\Backend\Block\Widget\Grid\Column;
 use Magento\Backend\Block\Widget\Grid\Column\Renderer\Concat;
 use Magento\Framework\DataObject;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 class ConcatTest extends TestCase
 {
+    use MockCreationTrait;
+
     /** @var ObjectManager  */
     protected $objectManagerHelper;
 
@@ -40,16 +44,14 @@ class ConcatTest extends TestCase
         ];
     }
 
-    /**
-     * @dataProvider typeProvider
-     */
+    #[DataProvider('typeProvider')]
     public function testRender($method, $getters)
     {
         $object = new DataObject(['test' => 'a', 'best' => 'b']);
-        $column = $this->getMockBuilder(Column::class)
-            ->addMethods([$method, 'getSeparator'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $column = $this->createPartialMockWithReflection(
+            Column::class,
+            [$method, 'getSeparator']
+        );
         $column->expects($this->any())
             ->method('getSeparator')
             ->willReturn('-');

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework\Config;
 
@@ -83,7 +83,7 @@ class Data implements \Magento\Framework\Config\DataInterface
         ReaderInterface $reader,
         CacheInterface $cache,
         $cacheId,
-        SerializerInterface $serializer = null,
+        ?SerializerInterface $serializer = null,
         ?array $cacheTags = null,
     ) {
         $this->reader = $reader;

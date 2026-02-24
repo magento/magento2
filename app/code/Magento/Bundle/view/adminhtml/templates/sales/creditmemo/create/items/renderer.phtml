@@ -1,14 +1,17 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
  */
+
+use Magento\Framework\Escaper;
 
 /**
  * @see \Magento\Bundle\Block\Adminhtml\Sales\Order\Items\Renderer
  */
 /** @var $block \Magento\Bundle\Block\Adminhtml\Sales\Order\Items\Renderer */
 /** @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer */
+/** @var Escaper $escaper */
 ?>
 
 <?php $_item = $block->getItem() ?>
@@ -35,7 +38,7 @@ $catalogHelper = $block->getData('catalogHelper');
         <?php if ($_prevOptionId != $attributes['option_id']): ?>
         <tr>
             <td class="col-product">
-                <div class="option-label"><?= $block->escapeHtml($attributes['option_label']) ?></div>
+                <div class="option-label"><?= $escaper->escapeHtml($attributes['option_label']) ?></div>
             </td>
             <td>&nbsp;</td>
             <td>&nbsp;</td>
@@ -52,10 +55,12 @@ $catalogHelper = $block->getData('catalogHelper');
     <tr<?= (++$_index == $_count && !$_showlastRow) ? ' class="border"' : '' ?>>
         <?php if (!$_item->getOrderItem()->getParentItem()): ?>
         <td class="col-product">
-            <div class="product-title"><?= $block->escapeHtml($_item->getName()) ?></div>
+            <div class="product-title"><?= $escaper->escapeHtml($_item->getName()) ?></div>
             <div class="product-sku-block">
-                <span><?= $block->escapeHtml(__('SKU')) ?>:</span>
-                <?= /* @noEscape */ implode('<br />', $catalogHelper->splitSku($_item->getSku())) ?>
+                <span><?= $escaper->escapeHtml(__('SKU')) ?>:</span>
+                <?= /* @noEscape */ implode('<br />', $catalogHelper->splitSku(
+                    $escaper->escapeHtml($_item->getSku())
+                )) ?>
             </div>
         </td>
         <?php else: ?>
@@ -72,31 +77,31 @@ $catalogHelper = $block->getData('catalogHelper');
             <?php if ($block->canShowPriceInfo($_item)): ?>
                 <table class="qty-table">
                     <tr>
-                        <th><?= $block->escapeHtml(__('Ordered')) ?></th>
+                        <th><?= $escaper->escapeHtml(__('Ordered')) ?></th>
                         <td><?= (float)$_item->getOrderItem()->getQtyOrdered() * 1 ?></td>
                     </tr>
                     <?php if ((float) $_item->getOrderItem()->getQtyInvoiced()): ?>
                     <tr>
-                        <th><?= $block->escapeHtml(__('Invoiced')) ?></th>
+                        <th><?= $escaper->escapeHtml(__('Invoiced')) ?></th>
                         <td><?= (float)$_item->getOrderItem()->getQtyInvoiced() * 1 ?></td>
                     </tr>
                     <?php endif; ?>
                     <?php if ((float) $_item->getOrderItem()->getQtyShipped() &&
                         $block->isShipmentSeparately($_item)): ?>
                     <tr>
-                        <th><?= $block->escapeHtml(__('Shipped')) ?></th>
+                        <th><?= $escaper->escapeHtml(__('Shipped')) ?></th>
                         <td><?= (float)$_item->getOrderItem()->getQtyShipped() * 1 ?></td>
                     </tr>
                     <?php endif; ?>
                     <?php if ((float) $_item->getOrderItem()->getQtyRefunded()): ?>
                     <tr>
-                        <th><?= $block->escapeHtml(__('Refunded')) ?></th>
+                        <th><?= $escaper->escapeHtml(__('Refunded')) ?></th>
                         <td><?= (float)$_item->getOrderItem()->getQtyRefunded() * 1 ?></td>
                     </tr>
                     <?php endif; ?>
                     <?php if ((float) $_item->getOrderItem()->getQtyCanceled()): ?>
                     <tr>
-                        <th><?= $block->escapeHtml(__('Canceled')) ?></th>
+                        <th><?= $escaper->escapeHtml(__('Canceled')) ?></th>
                         <td><?= (float)$_item->getOrderItem()->getQtyCanceled() * 1 ?></td>
                     </tr>
                     <?php endif; ?>
@@ -104,12 +109,12 @@ $catalogHelper = $block->getData('catalogHelper');
             <?php elseif ($block->isShipmentSeparately($_item)): ?>
                 <table class="qty-table">
                     <tr>
-                        <th><?= $block->escapeHtml(__('Ordered')) ?></th>
+                        <th><?= $escaper->escapeHtml(__('Ordered')) ?></th>
                         <td><?= (float)$_item->getOrderItem()->getQtyOrdered() * 1 ?></td>
                     </tr>
                     <?php if ((float) $_item->getOrderItem()->getQtyShipped()): ?>
                     <tr>
-                        <th><?= $block->escapeHtml(__('Shipped')) ?></th>
+                        <th><?= $escaper->escapeHtml(__('Shipped')) ?></th>
                         <td><?= (float)$_item->getOrderItem()->getQtyShipped() * 1 ?></td>
                     </tr>
                     <?php endif; ?>
@@ -124,7 +129,7 @@ $catalogHelper = $block->getData('catalogHelper');
                 <?php if ($block->canReturnItemToStock($_item)): ?>
                     <input type="checkbox"
                            class="admin__control-checkbox"
-                           name="creditmemo[items][<?= $block->escapeHtmlAttr($_item->getOrderItemId())
+                           name="creditmemo[items][<?= $escaper->escapeHtmlAttr($_item->getOrderItemId())
                             ?>][back_to_stock]"
                            value="1"<?php if ($_item->getBackToStock()):?> checked="checked"<?php endif;?> />
                     <label class="admin__field-label"></label>
@@ -139,7 +144,7 @@ $catalogHelper = $block->getData('catalogHelper');
                 <?php if ($block->canEditQty()): ?>
                     <input type="text"
                            class="input-text admin__control-text qty-input"
-                           name="creditmemo[items][<?= $block->escapeHtmlAttr($_item->getOrderItemId()) ?>][qty]"
+                           name="creditmemo[items][<?= $escaper->escapeHtmlAttr($_item->getOrderItemId()) ?>][qty]"
                            value="<?= (float)$_item->getQty() * 1 ?>" />
                 <?php else: ?>
                     <?= (float)$_item->getQty() * 1 ?>
@@ -184,16 +189,16 @@ $catalogHelper = $block->getData('catalogHelper');
             <?php if ($block->getOrderOptions($_item->getOrderItem())): ?>
                 <dl class="item-options">
                 <?php foreach ($block->getOrderOptions($_item->getOrderItem()) as $option): ?>
-                    <dt><?= $block->escapeHtml($option['label']) ?></dt>
+                    <dt><?= $escaper->escapeHtml($option['label']) ?></dt>
                     <dd>
                     <?php if (isset($option['custom_view']) && $option['custom_view']): ?>
-                        <?= $block->escapeHtml($option['value']) ?>
+                        <?= $escaper->escapeHtml($option['value']) ?>
                     <?php else: ?>
-                        <?= $block->escapeHtml($block->truncateString($option['value'], 55, '', $_remainder)) ?>
+                        <?= $escaper->escapeHtml($block->truncateString($option['value'], 55, '', $_remainder)) ?>
                         <?php if ($_remainder):?>
-                            ... <span id="<?= $block->escapeHtmlAttr($_id = 'id' . uniqid())
-                            ?>"><?= $block->escapeHtml($_remainder) ?></span>
-                            <?php $escapedId = /* @noEscape */ $block->escapeJs($_id);
+                            ... <span id="<?= $escaper->escapeHtmlAttr($_id = 'id' . uniqid())
+                            ?>"><?= $escaper->escapeHtml($_remainder) ?></span>
+                            <?php $escapedId = /* @noEscape */ $escaper->escapeJs($_id);
                             $scriptString = <<<script
                                 require(['prototype'], function(){
                                     $('{$escapedId}').hide();
@@ -211,7 +216,7 @@ script;
             <?php else: ?>
                 &nbsp;
             <?php endif; ?>
-            <?= $block->escapeHtml($_item->getDescription()) ?>
+            <?= $escaper->escapeHtml($_item->getDescription()) ?>
         </td>
         <td>&nbsp;</td>
         <td>&nbsp;</td>

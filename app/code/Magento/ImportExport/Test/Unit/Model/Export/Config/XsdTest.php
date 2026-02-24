@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -9,6 +9,8 @@ namespace Magento\ImportExport\Test\Unit\Model\Export\Config;
 
 use Magento\Framework\Config\Dom\UrnResolver;
 use Magento\Framework\TestFramework\Unit\Utility\XsdValidator;
+use PHPUnit\Framework\AssertionFailedError;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 class XsdTest extends TestCase
@@ -51,18 +53,35 @@ class XsdTest extends TestCase
     /**
      * @param string $xmlString
      * @param array $expectedError
-     * @dataProvider schemaCorrectlyIdentifiesExportOptionsDataProvider
      */
+    #[DataProvider('schemaCorrectlyIdentifiesExportOptionsDataProvider')]
     public function testSchemaCorrectlyIdentifiesInvalidProductOptionsXml($xmlString, $expectedError)
     {
-        $this->_loadDataForTest('export.xsd', $xmlString, $expectedError);
+        $actualErrors = $this->_xsdValidator->validate($this->_xsdSchemaPath . 'export.xsd', $xmlString);
+        $this->assertNotEmpty($actualErrors);
+        foreach ($expectedError as [$error, $isRegex]) {
+            if ($isRegex) {
+                $matched = false;
+                foreach ($actualErrors as $actualError) {
+                    try {
+                        $this->assertMatchesRegularExpression($error, $actualError);
+                        $matched = true;
+                        break;
+                    } catch (AssertionFailedError) {
+                    }
+                }
+                $this->assertTrue($matched, "None of the errors matched: $error");
+            } else {
+                $this->assertContains($error, $actualErrors);
+            }
+        }
     }
 
     /**
      * @param string $xmlString
      * @param array $expectedError
-     * @dataProvider schemaCorrectlyIdentifiesInvalidExportMergedXmlDataProvider
      */
+    #[DataProvider('schemaCorrectlyIdentifiesInvalidExportMergedXmlDataProvider')]
     public function testSchemaCorrectlyIdentifiesInvalidProductOptionsMergedXml($xmlString, $expectedError)
     {
         $this->_loadDataForTest('export_merged.xsd', $xmlString, $expectedError);
@@ -71,8 +90,8 @@ class XsdTest extends TestCase
     /**
      * @param string $schemaName
      * @param string $validFileName
-     * @dataProvider schemaCorrectlyIdentifiesValidXmlDataProvider
      */
+    #[DataProvider('schemaCorrectlyIdentifiesValidXmlDataProvider')]
     public function testSchemaCorrectlyIdentifiesValidXml($schemaName, $validFileName)
     {
         $xmlString = file_get_contents(__DIR__ . '/_files/' . $validFileName);

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework\ObjectManager\Relations;
 
@@ -22,7 +22,7 @@ class Runtime implements \Magento\Framework\ObjectManager\RelationsInterface
     /**
      * @param \Magento\Framework\Code\Reader\ClassReaderInterface $classReader
      */
-    public function __construct(\Magento\Framework\Code\Reader\ClassReaderInterface $classReader = null)
+    public function __construct(?\Magento\Framework\Code\Reader\ClassReaderInterface $classReader = null)
     {
         $this->_classReader = $classReader ?: new \Magento\Framework\Code\Reader\ClassReader();
     }

@@ -1,23 +1,14 @@
 <?php
-/************************************************************************
- * Copyright 2024 Adobe
+/**
+ * Copyright 2023 Adobe
  * All Rights Reserved.
- *
- * NOTICE: All information contained herein is, and remains
- * the property of Adobe and its suppliers, if any. The intellectual
- * and technical concepts contained herein are proprietary to Adobe
- * and its suppliers and are protected by all applicable intellectual
- * property laws, including trade secret and copyright laws.
- * Dissemination of this information or reproduction of this material
- * is strictly forbidden unless prior written permission is obtained
- * from Adobe.
- * ***********************************************************************
  */
-
 declare(strict_types=1);
 
 namespace Magento\Catalog\Test\Unit\Model\Product\Image;
 
+use PHPUnit\Framework\Attributes\DataProvider;
+use Magento\Framework\App\Area;
 use Magento\Catalog\Model\Product\Image\ConvertImageMiscParamsToReadableFormat;
 use Magento\Catalog\Model\Product\Image\ParamsBuilder;
 use Magento\Catalog\Model\Product\Image\RemoveDeletedImagesFromCache;
@@ -112,8 +103,8 @@ class RemoveDeletedImagesFromCacheTest extends TestCase
     /**
      * @param array $data
      * @return void
-     * @dataProvider createDataProvider
      */
+    #[DataProvider('createDataProvider')]
     public function testRemoveDeletedImagesFromCache(array $data): void
     {
         $this->getRespectiveMethodMockObjForRemoveDeletedImagesFromCache($data);
@@ -128,8 +119,8 @@ class RemoveDeletedImagesFromCacheTest extends TestCase
     /**
      * @param array $data
      * @return void
-     * @dataProvider createDataProvider
      */
+    #[DataProvider('createDataProvider')]
     public function testRemoveDeletedImagesFromCacheWithException(array $data): void
     {
         $this->getRespectiveMethodMockObjForRemoveDeletedImagesFromCache($data);
@@ -167,7 +158,7 @@ class RemoveDeletedImagesFromCacheTest extends TestCase
     {
         $this->presentationConfig->expects($this->once())
             ->method('getViewConfig')
-            ->with(['area' => \Magento\Framework\App\Area::AREA_FRONTEND])
+            ->with(['area' => Area::AREA_FRONTEND])
             ->willReturn($this->viewMock);
 
         $this->viewMock->expects($this->once())

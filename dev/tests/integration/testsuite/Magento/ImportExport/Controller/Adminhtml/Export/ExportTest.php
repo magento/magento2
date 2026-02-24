@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -49,7 +49,7 @@ class ExportTest extends AbstractBackendController
     private $localeResolver;
 
     /**
-     * @inheridoc
+     * @inheritDoc
      */
     protected function setUp(): void
     {
@@ -97,6 +97,9 @@ class ExportTest extends AbstractBackendController
         $this->assertSessionMessages($this->containsEqual($expectedSessionMessage));
         $this->assertRedirect($this->stringContains('/export/index/key/'));
         $queue = $this->queueRepository->get($this->defaultValueProvider->getConnection(), 'export');
+        if ($this->defaultValueProvider->getConnection() === 'stomp') {
+            $queue->subscribeQueue();
+        }
         /** @var Envelope $message */
         $message = $queue->dequeue();
         $this->assertEquals(self::TOPIC_NAME, $message->getProperties()['topic_name']);

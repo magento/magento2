@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -103,7 +103,7 @@ class GridTest extends TestCase
 
         $this->notSyncedDataProvider->expects($this->atLeastOnce())
             ->method('getIds')
-            ->willReturn($notSyncedIds);
+            ->willReturnOnConsecutiveCalls($notSyncedIds, []);
         $select = $this->createMock(Select::class);
         $select->expects($this->atLeastOnce())
             ->method('from')

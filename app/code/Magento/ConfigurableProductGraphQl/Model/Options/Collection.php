@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -67,7 +67,7 @@ class Collection implements ResetAfterRequestInterface
         CollectionFactory $attributeCollectionFactory,
         ProductFactory $productFactory,
         MetadataPool $metadataPool,
-        Uid $uidEncoder = null
+        ?Uid $uidEncoder = null
     ) {
         $this->attributeCollectionFactory = $attributeCollectionFactory;
         $this->productFactory = $productFactory;

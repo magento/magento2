@@ -1,20 +1,24 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 
 namespace Magento\CatalogRule\Test\Unit\Plugin\Model\Product;
 
+use Magento\Catalog\Model\Product\Action as ProductAction;
 use Magento\CatalogRule\Model\Indexer\Product\ProductRuleProcessor;
 use Magento\CatalogRule\Plugin\Model\Product\Action;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 class ActionTest extends TestCase
 {
+    use MockCreationTrait;
+
     /** @var Action */
     protected $action;
 
@@ -23,26 +27,22 @@ class ActionTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->productRuleProcessor = $this->getMockBuilder(
-            ProductRuleProcessor::class
-        )->disableOriginalConstructor()
-            ->onlyMethods(['reindexList'])
-            ->getMock();
+        $this->productRuleProcessor = $this->createPartialMock(
+            ProductRuleProcessor::class,
+            ['reindexList']
+        );
 
         $this->action = new Action($this->productRuleProcessor);
     }
 
     public function testAfterUpdateAttributes()
     {
-        $subject = $this->getMockBuilder(\Magento\Catalog\Model\Product\Action::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods([])
-            ->getMock();
+        $subject = $this->createMock(ProductAction::class);
 
-        $result = $this->getMockBuilder(\Magento\Catalog\Model\Product\Action::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['getAttributesData', 'getProductIds'])
-            ->getMock();
+        $result = $this->createPartialMockWithReflection(
+            ProductAction::class,
+            ['getAttributesData', 'getProductIds']
+        );
 
         $result->expects($this->once())
             ->method('getAttributesData')
@@ -60,15 +60,12 @@ class ActionTest extends TestCase
     public function testAfterUpdateAttributesWithPrice()
     {
         $productIds = [1, 2, 3];
-        $subject = $this->getMockBuilder(\Magento\Catalog\Model\Product\Action::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods([])
-            ->getMock();
+        $subject = $this->createMock(ProductAction::class);
 
-        $result = $this->getMockBuilder(\Magento\Catalog\Model\Product\Action::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['getAttributesData', 'getProductIds'])
-            ->getMock();
+        $result = $this->createPartialMockWithReflection(
+            ProductAction::class,
+            ['getAttributesData', 'getProductIds']
+        );
 
         $result->expects($this->once())
             ->method('getAttributesData')

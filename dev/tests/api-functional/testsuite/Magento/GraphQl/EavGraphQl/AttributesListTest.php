@@ -1,8 +1,7 @@
 <?php
-
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2023 Adobe
+ * All Rights Reserved.
  */
 
 declare(strict_types=1);
@@ -65,6 +64,7 @@ use Magento\Customer\Test\Fixture\CustomerAttribute;
         [
             'entity_type_id' => CategorySetup::CATALOG_PRODUCT_ENTITY_TYPE_ID,
             'frontend_input' => 'boolean',
+            'backend_type' => 'int',
             'source_model' => 'Magento\Eav\Model\Entity\Attribute\Source\Boolean',
             'is_visible_on_front' => 1,
         ],
@@ -75,6 +75,7 @@ use Magento\Customer\Test\Fixture\CustomerAttribute;
         [
             'entity_type_id' => CategorySetup::CATALOG_PRODUCT_ENTITY_TYPE_ID,
             'frontend_input' => 'boolean',
+            'backend_type' => 'int',
             'source_model' => 'Magento\Eav\Model\Entity\Attribute\Source\Boolean',
             'is_visible_on_front' => 1,
             'is_comparable' => 1
@@ -131,7 +132,7 @@ class AttributesListTest extends GraphQlAbstract
     private $catalogAttribute4;
 
     /**
-     * @inheridoc
+     * @inheritDoc
      */
     protected function setUp(): void
     {
@@ -285,7 +286,8 @@ QRY);
         $attribute = array_filter($items, function ($item) use ($attribute_code) {
             return $item['code'] == $attribute_code;
         });
-        return $attribute[array_key_first($attribute)] ?? [];
+        $key = array_key_first($attribute);
+        return $key !== null ? ($attribute[$key] ?? []) : [];
     }
 
     /**

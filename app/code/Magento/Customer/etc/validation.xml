@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2012 Adobe
+ * All Rights Reserved.
  */
 -->
 <validation xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Validator/etc/validation.xsd">
@@ -23,12 +23,18 @@
                     <constraint alias="name_validator" class="Magento\Customer\Model\Validator\Name" />
                 </entity_constraints>
             </rule>
+            <rule name="check_dob">
+                <entity_constraints>
+                    <constraint alias="dob_validator" class="Magento\Customer\Model\Validator\Dob" />
+                </entity_constraints>
+            </rule>
         </rules>
         <groups>
             <group name="save">
                 <uses>
                     <use rule="check_eav"/>
                     <use rule="check_name"/>
+                    <use rule="check_dob"/>
                 </uses>
             </group>
             <group name="form">

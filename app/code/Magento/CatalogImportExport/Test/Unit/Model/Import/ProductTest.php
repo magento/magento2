@@ -1,18 +1,27 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\CatalogImportExport\Test\Unit\Model\Import;
 
+use Magento\CatalogImportExport\Model\Import\Proxy\Product\ResourceModelFactory;
+use Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\CollectionFactory;
+use Magento\Catalog\Model\ResourceModel\Product\LinkFactory;
+use Magento\CatalogImportExport\Model\Import\Proxy\ProductFactory;
+use Magento\CatalogImportExport\Model\Import\UploaderFactory;
+use Magento\CatalogInventory\Model\ResourceModel\Stock\ItemFactory;
+use Magento\CatalogImportExport\Model\Import\Product\OptionFactory;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Model\Product\Url;
 use Magento\CatalogImportExport\Model\Import\Product;
 use Magento\CatalogImportExport\Model\Import\Product\CategoryProcessor;
 use Magento\CatalogImportExport\Model\Import\Product\ImageTypeProcessor;
 use Magento\CatalogImportExport\Model\Import\Product\Option;
+use Magento\CatalogImportExport\Model\Import\Product\RowValidatorInterface as ValidatorInterface;
 use Magento\CatalogImportExport\Model\Import\Product\SkuProcessor;
 use Magento\CatalogImportExport\Model\Import\Product\SkuStorage;
 use Magento\CatalogImportExport\Model\Import\Product\StoreResolver;
@@ -27,6 +36,7 @@ use Magento\CatalogInventory\Api\StockRegistryInterface;
 use Magento\CatalogInventory\Model\Spi\StockStateProviderInterface;
 use Magento\ConfigurableImportExport\Model\Import\Product\Type\Configurable;
 use Magento\Eav\Model\Config;
+use Magento\Eav\Model\Entity\AbstractEntity;
 use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
 use Magento\Eav\Model\Entity\Attribute\Set;
 use Magento\Eav\Model\Entity\Type;
@@ -51,10 +61,16 @@ use Magento\Framework\Stdlib\DateTime;
 use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
 use Magento\Framework\Stdlib\StringUtils;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Catalog\Helper\Data as CatalogHelper;
+use Magento\ImportExport\Helper\Data as ImportExportHelper;
 use Magento\ImportExport\Model\Import;
+use Magento\ImportExport\Model\Import\Config as ImportConfig;
+use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingError;
 use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregatorInterface;
 use Magento\ImportExport\Model\ResourceModel\Helper;
+use Magento\ImportExport\Model\ResourceModel\Import\Data as ImportData;
 use Magento\ImportExport\Test\Unit\Model\Import\AbstractImportTestCase;
+use phpseclib3\Exception\NoKeyLoadedException;
 use PHPUnit\Framework\MockObject\MockObject;
 use Psr\Log\LoggerInterface;
 
@@ -82,7 +98,7 @@ class ProductTest extends AbstractImportTestCase
     protected $_connection;
 
     /**
-     * @var \Magento\Framework\Json\Helper\Data|MockObject
+     * @var Data|MockObject
      */
     protected $jsonHelper;
 
@@ -182,7 +198,7 @@ class ProductTest extends AbstractImportTestCase
     protected $_resourceFactory;
 
     /**
-     * @var \Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\CollectionFactory|MockObject
+     * @var CollectionFactory|MockObject
      */
     protected $_setColFactory;
 
@@ -267,7 +283,7 @@ class ProductTest extends AbstractImportTestCase
     protected $transactionManager;
 
     /**
-     * @var \Magento\CatalogImportExport\Model\Import\Product\TaxClassProcessor|MockObject
+     * @var TaxClassProcessor|MockObject
      */
     protected $taxClassProcessor;
 
@@ -309,6 +325,12 @@ class ProductTest extends AbstractImportTestCase
      */
     private $skuStorageMock;
 
+    /** @var array $productPropertiesMap */
+    private array $productPropertiesMap = [];
+
+    /** @var ObjectManager $objectManager */
+    private ObjectManager $objectManager;
+
     /**
      * @inheritDoc
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
@@ -323,67 +345,30 @@ class ProductTest extends AbstractImportTestCase
             ->method('getMetadata')
             ->with(ProductInterface::class)
             ->willReturn($entityMetadataMock);
-        $entityMetadataMock->expects($this->any())
-            ->method('getLinkField')
-            ->willReturn('entity_id');
+        $entityMetadataMock->method('getLinkField')->willReturn('entity_id');
 
         /* For parent object construct */
-        $this->jsonHelper =
-            $this->getMockBuilder(Data::class)
-                ->disableOriginalConstructor()
-                ->getMock();
-        $this->importExportData =
-            $this->getMockBuilder(\Magento\ImportExport\Helper\Data::class)
-                ->disableOriginalConstructor()
-                ->getMock();
-        $this->_dataSourceModel =
-            $this->getMockBuilder(\Magento\ImportExport\Model\ResourceModel\Import\Data::class)
-                ->disableOriginalConstructor()
-                ->getMock();
-        $this->config =
-            $this->getMockBuilder(Config::class)
-                ->disableOriginalConstructor()
-                ->getMock();
-        $this->resource =
-            $this->getMockBuilder(ResourceConnection::class)
-                ->disableOriginalConstructor()
-                ->getMock();
-        $this->resourceHelper =
-            $this->getMockBuilder(Helper::class)
-                ->disableOriginalConstructor()
-                ->getMock();
-        $this->string =
-            $this->getMockBuilder(StringUtils::class)
-                ->disableOriginalConstructor()
-                ->getMock();
+        $this->jsonHelper = $this->createMock(Data::class);
+        $this->importExportData = $this->createMock(ImportExportHelper::class);
+        $this->_dataSourceModel = $this->createMock(ImportData::class);
+        $this->config = $this->createMock(Config::class);
+        $this->resource = $this->createMock(ResourceConnection::class);
+        $this->resourceHelper = $this->createMock(Helper::class);
+        $this->string = $this->createMock(StringUtils::class);
 
         /* For object construct */
-        $this->_eventManager =
-            $this->getMockBuilder(ManagerInterface::class)
-                ->getMock();
-        $this->stockRegistry =
-            $this->getMockBuilder(StockRegistryInterface::class)
-                ->getMock();
-        $this->stockConfiguration =
-            $this->getMockBuilder(StockConfigurationInterface::class)
-                ->getMock();
-        $this->stockStateProvider =
-            $this->getMockBuilder(StockStateProviderInterface::class)
-                ->getMock();
-        $this->_catalogData =
-            $this->getMockBuilder(\Magento\Catalog\Helper\Data::class)
-                ->disableOriginalConstructor()
-                ->getMock();
-        $this->_importConfig =
-            $this->getMockBuilder(\Magento\ImportExport\Model\Import\Config::class)
-                ->disableOriginalConstructor()
-                ->getMock();
+        $this->_eventManager = $this->createMock(ManagerInterface::class);
+        $this->stockRegistry = $this->createMock(StockRegistryInterface::class);
+        $this->stockConfiguration = $this->createMock(StockConfigurationInterface::class);
+        $this->stockStateProvider = $this->createMock(StockStateProviderInterface::class);
+        $this->_catalogData = $this->createMock(CatalogHelper::class);
+        $this->_importConfig = $this->createMock(ImportConfig::class);
         $this->_resourceFactory = $this->createPartialMock(
-            \Magento\CatalogImportExport\Model\Import\Proxy\Product\ResourceModelFactory::class,
+            ResourceModelFactory::class,
             ['create']
         );
         $this->_setColFactory = $this->createPartialMock(
-            \Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\CollectionFactory::class,
+            CollectionFactory::class,
             ['create']
         );
         $this->_productTypeFactory = $this->createPartialMock(
@@ -391,97 +376,54 @@ class ProductTest extends AbstractImportTestCase
             ['create']
         );
         $this->_linkFactory = $this->createPartialMock(
-            \Magento\Catalog\Model\ResourceModel\Product\LinkFactory::class,
+            LinkFactory::class,
             ['create']
         );
         $this->_proxyProdFactory = $this->createPartialMock(
-            \Magento\CatalogImportExport\Model\Import\Proxy\ProductFactory::class,
+            ProductFactory::class,
             ['create']
         );
         $this->_uploaderFactory = $this->createPartialMock(
-            \Magento\CatalogImportExport\Model\Import\UploaderFactory::class,
+            UploaderFactory::class,
             ['create']
         );
-        $this->_filesystem =
-            $this->getMockBuilder(Filesystem::class)
-                ->disableOriginalConstructor()
-                ->getMock();
-        $this->_mediaDirectory =
-            $this->getMockBuilder(WriteInterface::class)
-                ->getMock();
+        $this->_filesystem = $this->createMock(Filesystem::class);
+        $this->_mediaDirectory = $this->createMock(WriteInterface::class);
         $this->_stockResItemFac = $this->createPartialMock(
-            \Magento\CatalogInventory\Model\ResourceModel\Stock\ItemFactory::class,
+            ItemFactory::class,
             ['create']
         );
-        $this->_localeDate =
-            $this->getMockBuilder(TimezoneInterface::class)
-                ->getMock();
-        $this->dateTime =
-            $this->getMockBuilder(DateTime::class)
-                ->disableOriginalConstructor()
-                ->getMock();
-        $this->indexerRegistry =
-            $this->getMockBuilder(IndexerRegistry::class)
-                ->disableOriginalConstructor()
-                ->getMock();
-        $this->_logger =
-            $this->getMockBuilder(LoggerInterface::class)
-                ->getMock();
-        $this->storeResolver =
-            $this->getMockBuilder(StoreResolver::class)
-                ->onlyMethods(['getStoreCodeToId'])
-                ->disableOriginalConstructor()
-                ->getMock();
-        $this->skuProcessor =
-            $this->getMockBuilder(SkuProcessor::class)
-                ->disableOriginalConstructor()
-                ->getMock();
+        $this->_localeDate = $this->createMock(TimezoneInterface::class);
+        $this->dateTime = $this->createMock(DateTime::class);
+        $this->indexerRegistry = $this->createMock(IndexerRegistry::class);
+        $this->_logger = $this->createMock(LoggerInterface::class);
+        $this->storeResolver = $this->createPartialMock(StoreResolver::class, ['getStoreCodeToId']);
+        $this->skuProcessor = $this->createMock(SkuProcessor::class);
         $reflection = new \ReflectionClass(SkuProcessor::class);
         $reflectionProperty = $reflection->getProperty('metadataPool');
-        $reflectionProperty->setAccessible(true);
         $reflectionProperty->setValue($this->skuProcessor, $metadataPoolMock);
 
-        $this->categoryProcessor =
-            $this->getMockBuilder(CategoryProcessor::class)
-                ->disableOriginalConstructor()
-                ->getMock();
-        $this->validator =
-            $this->getMockBuilder(Validator::class)
-                ->onlyMethods(['isAttributeValid', 'getMessages', 'isValid', 'init'])
-                ->disableOriginalConstructor()
-                ->getMock();
-        $this->objectRelationProcessor =
-            $this->getMockBuilder(ObjectRelationProcessor::class)
-                ->disableOriginalConstructor()
-                ->getMock();
-        $this->transactionManager =
-            $this->getMockBuilder(TransactionManagerInterface::class)
-                ->getMock();
+        $this->categoryProcessor = $this->createMock(CategoryProcessor::class);
+        $this->validator = $this->createPartialMock(
+            Validator::class,
+            ['isAttributeValid', 'getMessages', 'isValid', 'init']
+        );
+        $this->objectRelationProcessor = $this->createMock(ObjectRelationProcessor::class);
+        $this->transactionManager = $this->createMock(TransactionManagerInterface::class);
 
-        $this->taxClassProcessor =
-            $this->getMockBuilder(TaxClassProcessor::class)
-                ->disableOriginalConstructor()
-                ->getMock();
+        $this->taxClassProcessor = $this->createMock(TaxClassProcessor::class);
 
-        $this->scopeConfig = $this->getMockBuilder(ScopeConfigInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->scopeConfig = $this->createMock(ScopeConfigInterface::class);
 
-        $this->productUrl = $this->getMockBuilder(Url::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->productUrl = $this->createMock(Url::class);
 
         $this->errorAggregator = $this->getErrorAggregatorObject();
 
-        $this->driverFile = $this->getMockBuilder(DriverFile::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->driverFile = $this->createMock(DriverFile::class);
 
         $this->data = [];
 
-        $this->imageTypeProcessor = $this->getMockBuilder(ImageTypeProcessor::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->imageTypeProcessor = $this->createMock(ImageTypeProcessor::class);
 
         $this->skuStorageMock = $this->createMock(SkuStorage::class);
 
@@ -492,55 +434,55 @@ class ProductTest extends AbstractImportTestCase
             ->_initSkus()
             ->_initImagesArrayKeys();
 
-        $objectManager = new ObjectManager($this);
+        $this->objectManager = new ObjectManager($this);
+        $this->productPropertiesMap = [
+            'jsonHelper' => $this->jsonHelper,
+            'importExportData' => $this->importExportData,
+            'importData' => $this->_dataSourceModel,
+            'config' => $this->config,
+            'resource' => $this->resource,
+            'resourceHelper' => $this->resourceHelper,
+            'string' => $this->string,
+            'errorAggregator' => $this->errorAggregator,
+            'eventManager' => $this->_eventManager,
+            'stockRegistry' => $this->stockRegistry,
+            'stockConfiguration' => $this->stockConfiguration,
+            'stockStateProvider' => $this->stockStateProvider,
+            'catalogData' => $this->_catalogData,
+            'importConfig' => $this->_importConfig,
+            'resourceFactory' => $this->_resourceFactory,
+            'optionFactory' => $this->optionFactory,
+            'setColFactory' => $this->_setColFactory,
+            'productTypeFactory' => $this->_productTypeFactory,
+            'linkFactory' => $this->_linkFactory,
+            'proxyProdFactory' => $this->_proxyProdFactory,
+            'uploaderFactory' => $this->_uploaderFactory,
+            'filesystem' => $this->_filesystem,
+            'stockResItemFac' => $this->_stockResItemFac,
+            'localeDate' => $this->_localeDate,
+            'dateTime' => $this->dateTime,
+            'logger' => $this->_logger,
+            'indexerRegistry' => $this->indexerRegistry,
+            'storeResolver' => $this->storeResolver,
+            'skuProcessor' => $this->skuProcessor,
+            'categoryProcessor' => $this->categoryProcessor,
+            'validator' => $this->validator,
+            'objectRelationProcessor' => $this->objectRelationProcessor,
+            'transactionManager' => $this->transactionManager,
+            'taxClassProcessor' => $this->taxClassProcessor,
+            'scopeConfig' => $this->scopeConfig,
+            'productUrl' => $this->productUrl,
+            'data' => $this->data,
+            'imageTypeProcessor' => $this->imageTypeProcessor,
+            'skuStorage' => $this->skuStorageMock,
+        ];
 
-        $this->importProduct = $objectManager->getObject(
+        $this->importProduct = $this->objectManager->getObject(
             Product::class,
-            [
-                'jsonHelper' => $this->jsonHelper,
-                'importExportData' => $this->importExportData,
-                'importData' => $this->_dataSourceModel,
-                'config' => $this->config,
-                'resource' => $this->resource,
-                'resourceHelper' => $this->resourceHelper,
-                'string' => $this->string,
-                'errorAggregator' => $this->errorAggregator,
-                'eventManager' => $this->_eventManager,
-                'stockRegistry' => $this->stockRegistry,
-                'stockConfiguration' => $this->stockConfiguration,
-                'stockStateProvider' => $this->stockStateProvider,
-                'catalogData' => $this->_catalogData,
-                'importConfig' => $this->_importConfig,
-                'resourceFactory' => $this->_resourceFactory,
-                'optionFactory' => $this->optionFactory,
-                'setColFactory' => $this->_setColFactory,
-                'productTypeFactory' => $this->_productTypeFactory,
-                'linkFactory' => $this->_linkFactory,
-                'proxyProdFactory' => $this->_proxyProdFactory,
-                'uploaderFactory' => $this->_uploaderFactory,
-                'filesystem' => $this->_filesystem,
-                'stockResItemFac' => $this->_stockResItemFac,
-                'localeDate' => $this->_localeDate,
-                'dateTime' => $this->dateTime,
-                'logger' => $this->_logger,
-                'indexerRegistry' => $this->indexerRegistry,
-                'storeResolver' => $this->storeResolver,
-                'skuProcessor' => $this->skuProcessor,
-                'categoryProcessor' => $this->categoryProcessor,
-                'validator' => $this->validator,
-                'objectRelationProcessor' => $this->objectRelationProcessor,
-                'transactionManager' => $this->transactionManager,
-                'taxClassProcessor' => $this->taxClassProcessor,
-                'scopeConfig' => $this->scopeConfig,
-                'productUrl' => $this->productUrl,
-                'data' => $this->data,
-                'imageTypeProcessor' => $this->imageTypeProcessor,
-                'skuStorage' => $this->skuStorageMock
-            ]
+            $this->productPropertiesMap
         );
         $reflection = new \ReflectionClass(Product::class);
         $reflectionProperty = $reflection->getProperty('metadataPool');
-        $reflectionProperty->setAccessible(true);
         $reflectionProperty->setValue($this->importProduct, $metadataPoolMock);
     }
 
@@ -550,15 +492,13 @@ class ProductTest extends AbstractImportTestCase
     protected function _objectConstructor()
     {
         $this->optionFactory = $this->createPartialMock(
-            \Magento\CatalogImportExport\Model\Import\Product\OptionFactory::class,
+            OptionFactory::class,
             ['create']
         );
-        $this->optionEntity = $this->getMockBuilder(Option::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->optionFactory->expects($this->once())->method('create')->willReturn($this->optionEntity);
+        $this->optionEntity = $this->createMock(Option::class);
+        $this->optionFactory->expects($this->atLeastOnce())->method('create')->willReturn($this->optionEntity);
 
-        $this->_filesystem->expects($this->once())
+        $this->_filesystem->expects($this->atLeastOnce())
             ->method('getDirectoryWrite')
             ->with(DirectoryList::ROOT)
             ->willReturn($this->_mediaDirectory);
@@ -572,21 +512,16 @@ class ProductTest extends AbstractImportTestCase
      */
     protected function _parentObjectConstructor()
     {
-        $type = $this->getMockBuilder(Type::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $type->expects($this->any())->method('getEntityTypeId')->willReturn(self::ENTITY_TYPE_ID);
+        $type = $this->createMock(Type::class);
+        $type->method('getEntityTypeId')->willReturn(self::ENTITY_TYPE_ID);
         $this->config->expects($this->any())->method('getEntityType')->with(self::ENTITY_TYPE_CODE)->willReturn($type);
 
-        $this->_connection = $this->getMockForAbstractClass(AdapterInterface::class);
-        $this->select = $this->getMockBuilder(Select::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['from', 'where'])
-            ->getMock();
+        $this->_connection = $this->createMock(AdapterInterface::class);
+        $this->select = $this->createPartialMock(Select::class, ['from', 'where', 'joinLeft']);
         $this->select->expects($this->any())->method('from')->willReturnSelf();
         //$this->select->expects($this->any())->method('where')->willReturnSelf();
-        $this->_connection->expects($this->any())->method('select')->willReturn($this->select);
-        $this->resource->expects($this->any())->method('getConnection')->willReturn($this->_connection);
+        $this->_connection->method('select')->willReturn($this->select);
+        $this->resource->method('getConnection')->willReturn($this->_connection);
         return $this;
     }
 
@@ -595,33 +530,19 @@ class ProductTest extends AbstractImportTestCase
      */
     protected function _initAttributeSets()
     {
-        $attributeSetOne = $this->getMockBuilder(Set::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $attributeSetOne->expects($this->any())
-            ->method('getAttributeSetName')
-            ->willReturn('attributeSet1');
-        $attributeSetOne->expects($this->any())
-            ->method('getId')
-            ->willReturn('1');
-        $attributeSetTwo = $this->getMockBuilder(Set::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $attributeSetTwo->expects($this->any())
-            ->method('getAttributeSetName')
-            ->willReturn('attributeSet2');
-        $attributeSetTwo->expects($this->any())
-            ->method('getId')
-            ->willReturn('2');
+        $attributeSetOne = $this->createMock(Set::class);
+        $attributeSetOne->method('getAttributeSetName')->willReturn('attributeSet1');
+        $attributeSetOne->method('getId')->willReturn('1');
+        $attributeSetTwo = $this->createMock(Set::class);
+        $attributeSetTwo->method('getAttributeSetName')->willReturn('attributeSet2');
+        $attributeSetTwo->method('getId')->willReturn('2');
         $attributeSetCol = [$attributeSetOne, $attributeSetTwo];
-        $collection = $this->getMockBuilder(Collection::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $collection->expects($this->once())
+        $collection = $this->createMock(Collection::class);
+        $collection->expects($this->atLeastOnce())
             ->method('setEntityTypeFilter')
             ->with(self::ENTITY_TYPE_ID)
             ->willReturn($attributeSetCol);
-        $this->_setColFactory->expects($this->once())
+        $this->_setColFactory->expects($this->atLeastOnce())
             ->method('create')
             ->willReturn($collection);
         return $this;
@@ -637,24 +558,21 @@ class ProductTest extends AbstractImportTestCase
                 'model' => 'simple_product',
                 'params' => []
             ]];
-        $productTypeInstance =
-            $this->getMockBuilder(AbstractType::class)
-                ->disableOriginalConstructor()
-                ->getMock();
-        $productTypeInstance->expects($this->once())
+        $productTypeInstance = $this->createMock(AbstractType::class);
+        $productTypeInstance->expects($this->atLeastOnce())
             ->method('isSuitable')
             ->willReturn(true);
-        $productTypeInstance->expects($this->once())
+        $productTypeInstance->expects($this->atLeastOnce())
             ->method('getParticularAttributes')
             ->willReturn([]);
-        $productTypeInstance->expects($this->once())
+        $productTypeInstance->expects($this->atLeastOnce())
             ->method('getCustomFieldsMapping')
             ->willReturn([]);
-        $this->_importConfig->expects($this->once())
+        $this->_importConfig->expects($this->atLeastOnce())
             ->method('getEntityTypes')
             ->with(self::ENTITY_TYPE_CODE)
             ->willReturn($entityTypes);
-        $this->_productTypeFactory->expects($this->once())->method('create')->willReturn($productTypeInstance);
+        $this->_productTypeFactory->expects($this->atLeastOnce())->method('create')->willReturn($productTypeInstance);
         return $this;
     }
 
@@ -663,10 +581,8 @@ class ProductTest extends AbstractImportTestCase
      */
     protected function _initSkus()
     {
-        $this->skuProcessor->expects($this->once())->method('setTypeModels');
-        $this->skuProcessor->expects($this->never())->method('reloadOldSkus')->willReturnSelf();
-        $this->skuProcessor->expects($this->never())->method('getOldSkus')->willReturn([]);
-        $this->skuStorageMock->expects($this->once())->method('reset');
+        $this->skuProcessor->expects($this->atLeastOnce())->method('setTypeModels');
+        $this->skuStorageMock->expects($this->atLeastOnce())->method('reset');
         return $this;
     }
 
@@ -675,7 +591,7 @@ class ProductTest extends AbstractImportTestCase
      */
     protected function _initImagesArrayKeys()
     {
-        $this->imageTypeProcessor->expects($this->once())->method('getImageTypes')->willReturn(
+        $this->imageTypeProcessor->expects($this->atLeastOnce())->method('getImageTypes')->willReturn(
             ['image', 'small_image', 'thumbnail', 'swatch_image', '_media_image']
         );
         return $this;
@@ -710,15 +626,9 @@ class ProductTest extends AbstractImportTestCase
         $this->_connection->expects($this->once())
             ->method('insertOnDuplicate')
             ->with($testTable, $tableData, ['value']);
-        $attribute = $this->getMockBuilder(AbstractAttribute::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['getId'])
-            ->getMockForAbstractClass();
+        $attribute = $this->createPartialMock(AbstractAttribute::class, ['getId']);
         $attribute->expects($this->once())->method('getId')->willReturn(1);
-        $resource = $this->getMockBuilder(ResourceModel::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['getAttribute'])
-            ->getMock();
+        $resource = $this->createPartialMock(ResourceModel::class, ['getAttribute']);
         $resource->expects($this->once())->method('getAttribute')->willReturn($attribute);
         $this->_resourceFactory->expects($this->once())->method('create')->willReturn($resource);
         $this->setPropertyValue($this->importProduct, '_oldSku', [$testSku => ['entity_id' => self::ENTITY_ID]]);
@@ -734,13 +644,13 @@ class ProductTest extends AbstractImportTestCase
 
     /**
      * @return void
-     * @dataProvider isAttributeValidAssertAttrValidDataProvider
      */
+    #[DataProvider('isAttributeValidAssertAttrValidDataProvider')]
     public function testIsAttributeValidAssertAttrValid($attrParams, $rowData): void
     {
         $attrCode = 'code';
         $rowNum = 0;
-        $string = $this->getMockBuilder(StringUtils::class)->getMock();
+        $string = $this->createMock(StringUtils::class);
         $this->setPropertyValue($this->importProduct, 'string', $string);
 
         $this->validator->expects($this->once())->method('isAttributeValid')->willReturn(true);
@@ -751,13 +661,13 @@ class ProductTest extends AbstractImportTestCase
 
     /**
      * @return void
-     * @dataProvider isAttributeValidAssertAttrInvalidDataProvider
      */
+    #[DataProvider('isAttributeValidAssertAttrInvalidDataProvider')]
     public function testIsAttributeValidAssertAttrInvalid($attrParams, $rowData): void
     {
         $attrCode = 'code';
         $rowNum = 0;
-        $string = $this->getMockBuilder(StringUtils::class)->getMock();
+        $string = $this->createMock(StringUtils::class);
         $this->setPropertyValue($this->importProduct, 'string', $string);
 
         $this->validator->expects($this->once())->method('isAttributeValid')->willReturn(false);
@@ -837,10 +747,7 @@ class ProductTest extends AbstractImportTestCase
      */
     public function testDeleteProductsForReplacement(): void
     {
-        $importProduct = $this->getMockBuilder(Product::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['setParameters', '_deleteProducts'])
-            ->getMock();
+        $importProduct = $this->createPartialMock(Product::class, ['setParameters', '_deleteProducts']);
 
         $importProduct->expects($this->once())->method('setParameters')->with(
             [
@@ -863,14 +770,9 @@ class ProductTest extends AbstractImportTestCase
         $this->setPropertyValue($this->importProduct, '_mediaGalleryAttributeId', null);
 
         $expectedId = '100';
-        $attribute = $this->getMockBuilder(AbstractAttribute::class)->disableOriginalConstructor()
-            ->onlyMethods(['getId'])
-            ->getMockForAbstractClass();
+        $attribute = $this->createPartialMock(AbstractAttribute::class, ['getId']);
         $attribute->expects($this->once())->method('getId')->willReturn($expectedId);
-        $resource = $this->getMockBuilder(ResourceModel::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['getAttribute'])
-            ->getMock();
+        $resource = $this->createPartialMock(ResourceModel::class, ['getAttribute']);
         $resource->expects($this->once())->method('getAttribute')->willReturn($attribute);
         $this->_resourceFactory->expects($this->once())->method('create')->willReturn($resource);
 
@@ -880,8 +782,8 @@ class ProductTest extends AbstractImportTestCase
 
     /**
      * @return void
-     * @dataProvider getRowScopeDataProvider
      */
+    #[DataProvider('getRowScopeDataProvider')]
     public function testGetRowScope($rowData, $expectedResult): void
     {
         $result = $this->importProduct->getRowScope($rowData);
@@ -902,17 +804,16 @@ class ProductTest extends AbstractImportTestCase
 
     /**
      * @return void
-     * @dataProvider validateRowDataProvider
      */
+    #[DataProvider('validateRowDataProvider')]
     public function testValidateRow($rowScope, $oldSku, $expectedResult, $behaviour = Import::BEHAVIOR_DELETE): void
     {
-        $importProduct = $this->getMockBuilder(Product::class)->disableOriginalConstructor()
-            ->onlyMethods(['getBehavior', 'getRowScope', 'getErrorAggregator'])
-            ->getMock();
+        $importProduct = $this->createPartialMock(
+            Product::class,
+            ['getBehavior', 'getRowScope', 'getErrorAggregator']
+        );
         $importProduct
-            ->expects($this->any())
-            ->method('getBehavior')
-            ->willReturn($behaviour);
+            ->method('getBehavior')->willReturn($behaviour);
         $importProduct
             ->method('getErrorAggregator')
             ->willReturn($this->getErrorAggregatorObject());
@@ -942,10 +843,10 @@ class ProductTest extends AbstractImportTestCase
      */
     public function testValidateRowDeleteBehaviourAddRowErrorCall(): void
     {
-        $importProduct = $this->getMockBuilder(Product::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['getBehavior', 'getRowScope', 'addRowError', 'getErrorAggregator'])
-            ->getMock();
+        $importProduct = $this->createPartialMock(
+            Product::class,
+            ['getBehavior', 'getRowScope', 'addRowError', 'getErrorAggregator']
+        );
 
         $importProduct->expects($this->exactly(2))->method('getBehavior')
             ->willReturn(Import::BEHAVIOR_DELETE);
@@ -1037,14 +938,12 @@ class ProductTest extends AbstractImportTestCase
      * Cover getStoreIdByCode().
      *
      * @return void
-     * @dataProvider getStoreIdByCodeDataProvider
      */
+    #[DataProvider('getStoreIdByCodeDataProvider')]
     public function testGetStoreIdByCode($storeCode, $expectedResult): void
     {
         $this->storeResolver
-            ->expects($this->any())
-            ->method('getStoreCodeToId')
-            ->willReturn('getStoreCodeToId value');
+            ->method('getStoreCodeToId')->willReturn('getStoreCodeToId value');
 
         $actualResult = $this->importProduct->getStoreIdByCode($storeCode);
         $this->assertEquals($expectedResult, $actualResult);
@@ -1103,8 +1002,8 @@ class ProductTest extends AbstractImportTestCase
 
     /**
      * @return void
-     * @dataProvider validateRowCheckSpecifiedSkuDataProvider
      */
+    #[DataProvider('validateRowCheckSpecifiedSkuDataProvider')]
     public function testValidateRowCheckSpecifiedSku($sku): void
     {
         $importProduct = $this->createModelMockWithErrorAggregator(
@@ -1233,7 +1132,7 @@ class ProductTest extends AbstractImportTestCase
             ],
         ];
         $importProduct = $this->createModelMockWithErrorAggregator(
-            ['addRowError', 'getOptionEntity'],
+            ['addRowError', 'getOptionEntity', 'getNewSku'],
             ['isRowInvalid' => true]
         );
 
@@ -1265,8 +1164,8 @@ class ProductTest extends AbstractImportTestCase
      * @param string $error
      *
      * @return void
-     * @dataProvider validateRowValidateNewProductTypeAddRowErrorCallDataProvider
      */
+    #[DataProvider('validateRowValidateNewProductTypeAddRowErrorCallDataProvider')]
     public function testValidateRowValidateNewProductTypeAddRowErrorCall(
         $colType,
         $productTypeModelsColType,
@@ -1281,17 +1180,19 @@ class ProductTest extends AbstractImportTestCase
             Product::COL_TYPE => $colType,
             Product::COL_ATTR_SET => $colAttrSet
         ];
+        $attrSetKey = (string)($rowData[Product::COL_ATTR_SET] ?? '');
         $_attrSetNameToId = [
-            $rowData[Product::COL_ATTR_SET] => $attrSetNameToIdColAttrSet
+            $attrSetKey => $attrSetNameToIdColAttrSet
         ];
+        $typeKey = (string)($rowData[Product::COL_TYPE] ?? '');
         $_productTypeModels = [
-            $rowData[Product::COL_TYPE] => $productTypeModelsColType
+            $typeKey => $productTypeModelsColType
         ];
         $oldSku = [
             $sku => null
         ];
         $importProduct = $this->createModelMockWithErrorAggregator(
-            ['addRowError', 'getOptionEntity'],
+            ['addRowError', 'getOptionEntity', 'getNewSku'],
             ['isRowInvalid' => true]
         );
 
@@ -1347,7 +1248,7 @@ class ProductTest extends AbstractImportTestCase
         $this->setPropertyValue($importProduct, '_productTypeModels', $_productTypeModels);
         $this->setPropertyValue($importProduct, '_attrSetNameToId', $_attrSetNameToId);
 
-        $this->skuProcessor->expects($this->once())->method('getNewSku')->willReturn(null);
+        $this->skuProcessor->expects($this->exactly(2))->method('getNewSku')->willReturn(null);
         $this->skuProcessor->expects($this->once())->method('addNewSku')->with($sku, $expectedData);
         $this->setPropertyValue($importProduct, 'skuProcessor', $this->skuProcessor);
         $this->setPrivatePropertyValue($importProduct, 'skuStorage', $this->skuStorageMock);
@@ -1398,13 +1299,11 @@ class ProductTest extends AbstractImportTestCase
         $importProduct = $this->createModelMockWithErrorAggregator(['getOptionEntity']);
 
         $this->setPropertyValue($importProduct, '_oldSku', $oldSku);
-        $this->skuProcessor->expects($this->any())->method('getNewSku')->willReturn($newSku);
+        $this->skuProcessor->method('getNewSku')->willReturn($newSku);
         $this->setPropertyValue($importProduct, 'skuProcessor', $this->skuProcessor);
         $this->setPrivatePropertyValue($importProduct, 'skuStorage', $this->skuStorageMock);
 
-        $productType = $this->getMockBuilder(AbstractType::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $productType = $this->createMock(AbstractType::class);
         $productType->expects($this->any())->method('isRowValid')->with($expectedRowData);
         $this->setPropertyValue(
             $importProduct,
@@ -1439,7 +1338,7 @@ class ProductTest extends AbstractImportTestCase
             ]
         ];
         $importProduct = $this->createModelMockWithErrorAggregator(
-            ['addRowError', 'getOptionEntity'],
+            ['addRowError', 'getOptionEntity', 'getNewSku'],
             ['isRowInvalid' => true]
         );
 
@@ -1448,9 +1347,7 @@ class ProductTest extends AbstractImportTestCase
         //suppress validator
         $this->_setValidatorMockInImportProduct($importProduct);
 
-        $option = $this->getMockBuilder(Option::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $option = $this->createMock(Option::class);
         $option->expects($this->once())->method('validateRow')->with($rowData, $rowNum);
         $importProduct->expects($this->once())->method('getOptionEntity')->willReturn($option);
         $this->setPrivatePropertyValue($importProduct, 'skuStorage', $this->skuStorageMock);
@@ -1460,8 +1357,8 @@ class ProductTest extends AbstractImportTestCase
 
     /**
      * @return void
-     * @dataProvider getImagesFromRowDataProvider
      */
+    #[DataProvider('getImagesFromRowDataProvider')]
     public function testGetImagesFromRow($rowData, $expectedResult): void
     {
         $this->assertEquals(
@@ -1482,10 +1379,7 @@ class ProductTest extends AbstractImportTestCase
         $entityTypeModel->expects($this->exactly(2))->method('retrieveAttributeFromCache')->willReturn([
             'type' => 'multiselect'
         ]);
-        $importProduct = $this->getMockBuilder(Product::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['retrieveProductTypeByName'])
-            ->getMock();
+        $importProduct = $this->createPartialMock(Product::class, ['retrieveProductTypeByName']);
         $importProduct->expects($this->exactly(2))->method('retrieveProductTypeByName')->willReturn($entityTypeModel);
 
         $attributesData = 'PARAM1=value1,param2=value2|value3';
@@ -1510,17 +1404,13 @@ class ProductTest extends AbstractImportTestCase
      */
     public function testParseAttributesWithWrappedValuesWillReturnsLowercasedAttributeCodes(): void
     {
-        $attribute1 = $this->getMockBuilder(AbstractAttribute::class)->disableOriginalConstructor()
-            ->onlyMethods(['getFrontendInput'])
-            ->getMockForAbstractClass();
+        $attribute1 = $this->createPartialMock(AbstractAttribute::class, ['getFrontendInput']);
 
         $attribute1->expects($this->once())
             ->method('getFrontendInput')
             ->willReturn('text');
 
-        $attribute2 = $this->getMockBuilder(AbstractAttribute::class)->disableOriginalConstructor()
-            ->onlyMethods(['getFrontendInput'])
-            ->getMockForAbstractClass();
+        $attribute2 = $this->createPartialMock(AbstractAttribute::class, ['getFrontendInput']);
 
         $attribute2->expects($this->once())
             ->method('getFrontendInput')
@@ -1556,8 +1446,8 @@ class ProductTest extends AbstractImportTestCase
      * @param string $message
      *
      * @return void
-     * @dataProvider fillUploaderObjectDataProvider
      */
+    #[DataProvider('fillUploaderObjectDataProvider')]
     public function testFillUploaderObject($isRead, $isWrite, $message): void
     {
         $dir = $this->createMock(WriteInterface::class);
@@ -1567,10 +1457,7 @@ class ProductTest extends AbstractImportTestCase
             ->with(DirectoryList::MEDIA)
             ->willReturn($dir);
 
-        $fileUploaderMock = $this
-            ->getMockBuilder(Uploader::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $fileUploaderMock = $this->createMock(Uploader::class);
 
         $fileUploaderMock
             ->method('setTmpDir')
@@ -1621,8 +1508,8 @@ class ProductTest extends AbstractImportTestCase
      * @param bool $throwException
      *
      * @return void
-     * @dataProvider uploadMediaFilesDataProvider
      */
+    #[DataProvider('uploadMediaFilesDataProvider')]
     public function testUploadMediaFiles(string $fileName, bool $throwException): void
     {
         $exception = new \Exception();
@@ -1631,10 +1518,7 @@ class ProductTest extends AbstractImportTestCase
             $expectedFileName = '';
             $this->_logger->expects($this->once())->method('critical')->with($exception);
         }
-        $fileUploaderMock = $this
-            ->getMockBuilder(Uploader::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $fileUploaderMock = $this->createMock(Uploader::class);
         $fileUploaderMock
             ->expects($this->once())
             ->method('move')
@@ -1669,15 +1553,24 @@ class ProductTest extends AbstractImportTestCase
      * @param array $categoriesData
      * @param string $tableName
      * @param array $result
-     * @dataProvider productCategoriesDataProvider
      */
+    #[DataProvider('productCategoriesDataProvider')]
     public function testGetProductCategoriesDataSave(array $categoriesData, string $tableName, array $result)
     {
-        $this->_connection->method('fetchOne')->willReturnOnConsecutiveCalls('0', '-2');
+        $fetchOneCallCount = 0;
+        $this->_connection->method('fetchOne')->willReturnCallback(
+            function () use (&$fetchOneCallCount) {
+                $fetchOneCallCount++;
+                return $fetchOneCallCount === 1 ? '0' : '-2';
+            }
+        );
+        $getNewSkuCallCount = 0;
         $this->skuProcessor->method('getNewSku')
-            ->willReturnOnConsecutiveCalls(
-                ['entity_id' => 2],
-                ['entity_id' => 5]
+            ->willReturnCallback(
+                function () use (&$getNewSkuCallCount) {
+                    $getNewSkuCallCount++;
+                    return $getNewSkuCallCount === 1 ? ['entity_id' => 2] : ['entity_id' => 5];
+                }
             );
         $actualResult = $this->invokeMethod(
             $this->importProduct,
@@ -2064,7 +1957,6 @@ class ProductTest extends AbstractImportTestCase
     {
         $reflection = new \ReflectionClass(get_class($object));
         $method = $reflection->getMethod($methodName);
-        $method->setAccessible(true);
 
         return $method->invokeArgs($object, $parameters);
     }
@@ -2078,7 +1970,6 @@ class ProductTest extends AbstractImportTestCase
     {
         $reflection = new \ReflectionClass(get_class($object));
         $reflectionProperty = $reflection->getProperty($property);
-        $reflectionProperty->setAccessible(true);
         $reflectionProperty->setValue($object, $value);
         return $object;
     }
@@ -2091,7 +1982,6 @@ class ProductTest extends AbstractImportTestCase
     {
         $reflection = new \ReflectionClass(get_class($object));
         $reflectionProperty = $reflection->getProperty($property);
-        $reflectionProperty->setAccessible(true);
 
         return $reflectionProperty->getValue($object);
     }
@@ -2108,7 +1998,6 @@ class ProductTest extends AbstractImportTestCase
             $reflection = $reflection->getParentClass();
         }
         $reflectionProperty = $reflection->getProperty($property);
-        $reflectionProperty->setAccessible(true);
         $reflectionProperty->setValue($object, $value);
         return $object;
     }
@@ -2174,9 +2063,7 @@ class ProductTest extends AbstractImportTestCase
      */
     private function _rewriteGetOptionEntityInImportProduct($importProduct): MockObject
     {
-        $option = $this->getMockBuilder(Option::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $option = $this->createMock(Option::class);
         $importProduct->expects($this->once())->method('getOptionEntity')->willReturn($option);
 
         return $importProduct;
@@ -2193,10 +2080,7 @@ class ProductTest extends AbstractImportTestCase
         array $errorAggregatorMethods = []
     ): MockObject {
         $methods[] = 'getErrorAggregator';
-        $importProduct = $this->getMockBuilder(Product::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods($methods)
-            ->getMock();
+        $importProduct = $this->createPartialMock(Product::class, $methods);
         $errorMethods = array_keys($errorAggregatorMethods);
         $errorAggregator = $this->getErrorAggregatorObject($errorMethods);
         foreach ($errorAggregatorMethods as $method => $result) {
@@ -2207,9 +2091,7 @@ class ProductTest extends AbstractImportTestCase
         return $importProduct;
     }
 
-    /**
-     * @dataProvider valuesDataProvider
-     */
+    #[DataProvider('valuesDataProvider')]
     public function testParseMultiselectValues($value, $fieldSeparator, $valueSeparator)
     {
         $this->importProduct->setParameters(
@@ -2267,10 +2149,196 @@ class ProductTest extends AbstractImportTestCase
     {
         $reflector = new \ReflectionClass($this->importProduct);
         $property = $reflector->getMethod('getRemoteFileContent');
-        $property->setAccessible(true);
         $this->assertEquals(
             '',
             $property->invokeArgs($this->importProduct, ['php://filter'])
         );
+    }
+
+    /**
+     * Test when import product throws an error when the file has duplicated Url Keys from another entity.
+     *
+     * @param array $dataProvider
+     *
+     * @return void
+     */
+    #[DataProvider('duplicatedUrlCheckDataProvider')]
+    public function testImportProductOnDuplicatedUrlKey(array $dataProvider): void
+    {
+        $tableName = $dataProvider['table_name'];
+        $tableNameProduct = $dataProvider['table_name_product'];
+        $callIndexTableName = 0;
+        $errorAggregator = $this->setUpPropertiesMap($dataProvider);
+        $importProduct = $this->objectManager->getObject(
+            Product::class,
+            $this->productPropertiesMap
+        );
+
+        $this->_resourceFactory->expects($this->once())
+            ->method('create')
+            ->willReturn($this->resource);
+
+        $this->resource->expects($this->exactly(2))
+            ->method('getTable')
+            ->willReturnCallback(function ($table) use (&$callIndexTableName, $tableName, $tableNameProduct) {
+                if ($callIndexTableName === 0) {
+                    $this->assertEquals($tableName, $table);
+                    $callIndexTableName++;
+                    return $tableName;
+                }
+
+                $this->assertEquals($tableNameProduct, $table);
+                return $tableNameProduct;
+            });
+
+        $this->_connection->expects($this->once())
+            ->method('select')
+            ->willReturn($this->select);
+
+        $this->select->expects($this->once())
+            ->method('from')
+            ->with(['url_rewrite' => $tableName], $dataProvider['fields'])
+            ->willReturn($this->select);
+
+        $this->select->expects($this->once())
+            ->method('joinLeft')
+            ->with(['cpe' => $tableNameProduct], 'cpe.entity_id = url_rewrite.entity_id')
+            ->willReturn($this->select);
+
+        $callIndexSelect = 0;
+        $storeId = $dataProvider['store_id'];
+
+        $this->select->expects($this->exactly(3))
+            ->method('where')
+            ->willReturnCallback(function ($condition, $value) use (&$callIndexSelect, $storeId) {
+                if ($callIndexSelect === 0) {
+                    $this->assertEquals('request_path IN (?)', $condition);
+                    $this->assertEquals([$storeId => "adobe.html"], $value);
+                } elseif ($callIndexSelect === 1) {
+                    $this->assertEquals('store_id IN (?)', $condition);
+                    $this->assertEquals($storeId, $value);
+                } else {
+                    $this->assertEquals('cpe.sku not in (?)', $condition);
+                }
+                $callIndexSelect++;
+                return $this->select;
+            });
+
+        $this->_connection->expects($this->once())
+            ->method('fetchAssoc')
+            ->with($this->select)
+            ->willReturn([$dataProvider['entity']]);
+
+        if ($dataProvider['is_error_expected']) {
+            if ($dataProvider['entity']['entity_type'] === 'product') {
+                $expectedErrorMessage = sprintf(
+                    $dataProvider['error_message_template'],
+                    $dataProvider['request_path'],
+                    $dataProvider['entity']['sku'],
+                );
+            } else {
+                $expectedErrorMessage = sprintf(
+                    $dataProvider['error_message_template'],
+                    $dataProvider['request_path'],
+                    $dataProvider['entity']['entity_type'],
+                    $dataProvider['entity']['entity_id']
+                );
+            }
+
+            $errorAggregator->expects($this->once())
+                ->method('addError')
+                ->with(
+                    ValidatorInterface::ERROR_DUPLICATE_URL_KEY,
+                    ProcessingError::ERROR_LEVEL_CRITICAL,
+                    $this->productPropertiesMap['rowNumbers'][$storeId][$dataProvider['request_path']],
+                    'url_key',
+                    $expectedErrorMessage
+                );
+        }
+
+        $this->invokeMethod(
+            $importProduct,
+            'checkUrlKeyDuplicates',
+        );
+    }
+
+    /**
+     * Data provider for checking duplicated entries.
+     *
+     * @return array[]
+     */
+    public static function duplicatedUrlCheckDataProvider(): array
+    {
+        return [
+            'Record duplicated by category. Should Throw Validation Error' => [
+                'dataProvider' => [
+                    'is_error_expected' => true,
+                    'store_id' => 0,
+                    'table_name' => 'url_rewrite',
+                    'table_name_product' => 'catalog_product_entity',
+                    'request_path' => 'adobe.html',
+                    'entity' => [
+                        'request_path' => 'adobe.html',
+                        'store_id' => 0,
+                        'entity_type' => 'category',
+                        'entity_id' => rand(),
+                        'url_rewrite_id' => rand(),
+                        'url_entity' => rand()
+                    ],
+                    'error_message_template' => 'Url key: \'%s\' was already generated for a %s with the ID: %s. ' .
+                        'You need to specify the unique URL key manually',
+                    'fields' => [
+                        'request_path',
+                        'store_id',
+                        'entity_type'
+                    ]
+                ]
+            ],
+            'Record duplicated by product. Should Throw Validation Error' => [
+                'dataProvider' => [
+                    'is_error_expected' => true,
+                    'store_id' => 0,
+                    'table_name' => 'url_rewrite',
+                    'table_name_product' => 'catalog_product_entity',
+                    'request_path' => 'adobe.html',
+                    'entity' => [
+                        'request_path' => 'adobe.html',
+                        'store_id' => 0,
+                        'entity_type' => 'product',
+                        'entity_id' => 42,
+                        'url_rewrite_id' => rand(),
+                        'url_entity' => rand(),
+                        'sku' => rand()
+                    ],
+                    'fields' => [
+                        'request_path',
+                        'store_id',
+                        'entity_type',
+                    ],
+                    'error_message_template' => 'Url key: \'%s\' was already generated for an item with the SKU: ' .
+                        '\'%s\'. You need to specify the unique URL key manually'
+                ]
+            ]
+        ];
+    }
+
+    /**
+     * Set up properties map.
+     *
+     * @param array $dataProvider
+     *
+     * @return MockObject
+     */
+    private function setUpPropertiesMap(array $dataProvider): MockObject
+    {
+        $errorAggregator = $this->createMock(ProcessingErrorAggregatorInterface::class);
+
+        $this->resource = $this->createMock(AbstractEntity::class);
+
+        $this->productPropertiesMap['urlKeys'] = [[$dataProvider['request_path'] => 'Entity Name']];
+        $this->productPropertiesMap['rowNumbers'] = [$dataProvider['store_id'] => [$dataProvider['request_path'] => 1]];
+        $this->productPropertiesMap['errorAggregator'] = $errorAggregator;
+
+        return $errorAggregator;
     }
 }

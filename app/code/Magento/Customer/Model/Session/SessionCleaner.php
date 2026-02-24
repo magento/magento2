@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -74,8 +74,8 @@ class SessionCleaner implements SessionCleanerInterface
         VisitorCollectionFactory $visitorCollectionFactory,
         SessionManagerInterface $sessionManager,
         SaveHandlerInterface $saveHandler,
-        CustomerResourceModel $customerResourceModel = null,
-        VisitorResourceModel $visitorResourceModel = null
+        ?CustomerResourceModel $customerResourceModel = null,
+        ?VisitorResourceModel $visitorResourceModel = null
     ) {
         $this->scopeConfig = $scopeConfig;
         $this->dateTimeFactory = $dateTimeFactory;

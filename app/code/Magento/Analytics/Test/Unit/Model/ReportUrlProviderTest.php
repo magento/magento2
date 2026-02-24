@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -16,6 +16,7 @@ use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\FlagManager;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -53,7 +54,7 @@ class ReportUrlProviderTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->configMock = $this->getMockForAbstractClass(ScopeConfigInterface::class);
+        $this->configMock = $this->createMock(ScopeConfigInterface::class);
 
         $this->analyticsTokenMock = $this->createMock(AnalyticsToken::class);
 
@@ -79,9 +80,8 @@ class ReportUrlProviderTest extends TestCase
      * @param string|null $otp If null OTP was not received.
      * @param string $configPath
      * @return void
-     *
-     * @dataProvider getUrlDataProvider
      */
+    #[DataProvider('getUrlDataProvider')]
     public function testGetUrl(bool $isTokenExist, ?string $otp, string $configPath): void
     {
         $reportUrl = 'https://example.com/report';

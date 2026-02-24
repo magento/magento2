@@ -1,12 +1,13 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2023 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\CatalogGraphQl\Test\Unit\Model\Resolver\Product;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use Exception;
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\Product\Gallery\Entry;
@@ -47,35 +48,28 @@ class MediaGalleryTest extends TestCase
     protected function setUp(): void
     {
         $this->fieldMock = $this->createMock(Field::class);
-        $this->contextMock = $this->getMockForAbstractClass(ContextInterface::class);
+        $this->contextMock = $this->createMock(ContextInterface::class);
         $this->infoMock = $this->createMock(ResolveInfo::class);
-        $this->productMock = $this->getMockBuilder(Product::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->productMock = $this->createMock(Product::class);
         $this->mediaGallery = new MediaGallery();
     }
 
     /**
-     * @dataProvider dataProviderForResolve
      * @param $expected
      * @param $productName
      * @return void
      * @throws Exception
      */
+    #[DataProvider('dataProviderForResolve')]
     public function testResolve($expected, $productName): void
     {
-        $existingEntryMock = $this->getMockBuilder(Entry::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['getName'])
-            ->onlyMethods(['getData', 'getExtensionAttributes'])
-            ->getMock();
-        $existingEntryMock->expects($this->any())->method('getData')->willReturn($expected);
-        $existingEntryMock->expects($this->any())->method(
-            'getExtensionAttributes'
-        )->willReturn(false);
-        $this->productMock->expects($this->any())->method('getName')->willReturn($productName);
-        $this->productMock->expects($this->any())->method('getMediaGalleryEntries')
-            ->willReturn([$existingEntryMock]);
+        // Create a mock for Entry with getExtensionAttributes method
+        $existingEntryMock = $this->createPartialMock(Entry::class, ['getExtensionAttributes']);
+        $existingEntryMock->method('getExtensionAttributes')->willReturn(false);
+        $existingEntryMock->setData($expected);
+        
+        $this->productMock->method('getName')->willReturn($productName);
+        $this->productMock->method('getMediaGalleryEntries')->willReturn([$existingEntryMock]);
         $result = $this->mediaGallery->resolve(
             $this->fieldMock,
             $this->contextMock,

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -184,7 +184,7 @@ class ApiConfigFixture extends ConfigFixture
     /**
      * @inheritdoc
      */
-    protected function getScopeConfigValue(string $configPath, string $scopeType, string $scopeCode = null): ?string
+    protected function getScopeConfigValue(string $configPath, string $scopeType, ?string $scopeCode = null): ?string
     {
         /** @var ConfigStorage $configStorage */
         $configStorage = Bootstrap::getObjectManager()->get(ConfigStorage::class);

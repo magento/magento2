@@ -1,7 +1,7 @@
 <?php
-/***
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+/**
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -12,6 +12,7 @@ use Magento\Framework\Escaper;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Store\Model\Group;
 use Magento\Store\Model\System\Store;
+use Magento\Store\Model\Store as StoreModelStore;
 use Magento\Store\Model\Website;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -39,7 +40,7 @@ class OptionsTest extends TestCase
     protected $groupMock;
 
     /**
-     * @var \Magento\Store\Model\Store|MockObject
+     * @var StoreModelStore|MockObject
      */
     protected $storeMock;
 
@@ -60,7 +61,7 @@ class OptionsTest extends TestCase
 
         $this->groupMock = $this->createMock(Group::class);
 
-        $this->storeMock = $this->createMock(\Magento\Store\Model\Store::class);
+        $this->storeMock = $this->createMock(StoreModelStore::class);
 
         $this->escaperMock = $this->createMock(Escaper::class);
 

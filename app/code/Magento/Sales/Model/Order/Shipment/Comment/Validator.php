@@ -1,18 +1,27 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
  */
+declare(strict_types=1);
 
 namespace Magento\Sales\Model\Order\Shipment\Comment;
 
+use Magento\Framework\App\ObjectManager;
+use Magento\Sales\Helper\SalesEntityCommentValidator;
 use Magento\Sales\Model\Order\Shipment\Comment;
 
 /**
- * Class Validator
+ * Sales shipment comment validator
  */
 class Validator
 {
+    /**
+     * Sales entity comment validator
+     * @var SalesEntityCommentValidator
+     */
+    private SalesEntityCommentValidator $helperValidator;
+
     /**
      * Required field
      *
@@ -24,6 +33,16 @@ class Validator
     ];
 
     /**
+     * @param SalesEntityCommentValidator|null $helperValidator
+     */
+    public function __construct(
+        ?SalesEntityCommentValidator $helperValidator = null
+    ) {
+        $this->helperValidator = $helperValidator ??
+            ObjectManager::getInstance()->get(SalesEntityCommentValidator::class);
+    }
+
+    /**
      * Validate data
      *
      * @param \Magento\Sales\Model\Order\Shipment\Comment $comment
@@ -33,6 +52,11 @@ class Validator
     {
         $errors = [];
         $commentData = $comment->getData();
+
+        if (!$this->helperValidator->isEditCommentAllowed($comment)) {
+            $errors['comment'] = sprintf('User is not authorized to edit comment.');
+        }
+
         foreach ($this->required as $code => $label) {
             if (!$comment->hasData($code)) {
                 $errors[$code] = sprintf('"%s" is required. Enter and try again.', $label);

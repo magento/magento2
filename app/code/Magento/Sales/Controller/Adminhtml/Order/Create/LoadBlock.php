@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -57,8 +57,8 @@ class LoadBlock extends CreateAction implements HttpPostActionInterface, HttpGet
         PageFactory $resultPageFactory,
         ForwardFactory $resultForwardFactory,
         RawFactory $resultRawFactory,
-        StoreManagerInterface $storeManager = null,
-        RegexValidator $regexValidator = null
+        ?StoreManagerInterface $storeManager = null,
+        ?RegexValidator $regexValidator = null
     ) {
         $this->resultRawFactory = $resultRawFactory;
         parent::__construct(
@@ -129,7 +129,16 @@ class LoadBlock extends CreateAction implements HttpPostActionInterface, HttpGet
 
         $result = $resultPage->getLayout()->renderElement('content');
         if ($request->getParam('as_js_varname')) {
-            $this->_objectManager->get(\Magento\Backend\Model\Session::class)->setUpdateResult($result);
+            $session = $this->_objectManager->get(\Magento\Backend\Model\Session::class);
+
+            // Compress data for JSON responses to prevent session bloat while maintaining redirect pattern
+            if ($asJson && function_exists('gzencode')) {
+                // Level 6 compression for balance of speed/size
+                // phpcs:ignore Magento2.Functions.DiscouragedFunction
+                $session->setUpdateResult(['compressed' => true, 'data' => gzencode($result, 6)]);
+            } else {
+                $session->setUpdateResult($result);
+            }
             return $this->resultRedirectFactory->create()->setPath('sales/*/showUpdateResult');
         }
         return $this->resultRawFactory->create()->setContents($result);

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -9,6 +9,7 @@ namespace Magento\GroupedProduct\Test\Unit\Block\Adminhtml\Order\Create;
 
 use Magento\Catalog\Model\Product;
 use Magento\Framework\DataObject;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\GroupedProduct\Block\Adminhtml\Order\Create\Sidebar;
 use Magento\GroupedProduct\Model\Product\Type\Grouped;
 use Magento\Sales\Block\Adminhtml\Order\Create\Sidebar\AbstractSidebar;
@@ -17,6 +18,7 @@ use PHPUnit\Framework\TestCase;
 
 class SidebarTest extends TestCase
 {
+    use MockCreationTrait;
     /**
      * @var Sidebar
      */
@@ -44,10 +46,10 @@ class SidebarTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->itemMock = $this->getMockBuilder(DataObject::class)
-            ->addMethods(['getProduct'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->itemMock = $this->createPartialMockWithReflection(
+            DataObject::class,
+            ['getProduct']
+        );
         $this->productMock = $this->createMock(Product::class);
         $this->subjectMock = $this->createMock(
             AbstractSidebar::class
@@ -60,7 +62,7 @@ class SidebarTest extends TestCase
 
     public function testAroundGetItemQtyWhenProductGrouped()
     {
-        $this->itemMock->expects($this->once())->method('getProduct')->willReturn($this->productMock);
+        $this->itemMock->method('getProduct')->willReturn($this->productMock);
         $this->productMock->expects(
             $this->once()
         )->method(
@@ -76,7 +78,7 @@ class SidebarTest extends TestCase
 
     public function testAroundGetItemQtyWhenProductNotGrouped()
     {
-        $this->itemMock->expects($this->once())->method('getProduct')->willReturn($this->productMock);
+        $this->itemMock->method('getProduct')->willReturn($this->productMock);
         $this->productMock->expects($this->once())->method('getTypeId')->willReturn('one');
         $this->sidebarMock->aroundGetItemQty($this->subjectMock, $this->closureMock, $this->itemMock);
     }

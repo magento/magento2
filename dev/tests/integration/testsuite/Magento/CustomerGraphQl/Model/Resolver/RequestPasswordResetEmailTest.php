@@ -23,6 +23,7 @@ use Magento\TestFramework\Fixture\DataFixture;
 use Magento\TestFramework\Fixture\DataFixtureStorage;
 use Magento\TestFramework\Fixture\DataFixtureStorageManager;
 use Magento\TestFramework\Helper\Bootstrap;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 class RequestPasswordResetEmailTest extends TestCase
@@ -71,7 +72,6 @@ class RequestPasswordResetEmailTest extends TestCase
      * Test the consistency of the reset password email for customers registered with a custom store,
      * ensuring alignment between content and subject in translated languages.
      *
-     * @dataProvider customerOnFrenchStore
      * @param string $requestFromStore
      * @param string $subject
      * @param string $message
@@ -84,6 +84,7 @@ class RequestPasswordResetEmailTest extends TestCase
         Config('general/locale/code', 'fr_FR', ScopeInterface::SCOPE_STORE, 'fr_store_view'),
         ComponentsDir('Magento/CustomerGraphQl/_files'),
         DataFixture(Customer::class, ['email' => 'customer@example.com', 'store_id' => '$store2.id$'], as: 'customer'),
+        DataProvider('customerOnFrenchStore')
     ]
     public function testResetPasswordEmailRequestFromCustomStoreWhenCustomerIsOnCustomStore(
         string $requestFromStore,
@@ -97,7 +98,6 @@ class RequestPasswordResetEmailTest extends TestCase
      * Test the consistency of the reset password email for customers registered with a custom store,
      * ensuring alignment between content and subject in translated languages.
      *
-     * @dataProvider customerOnDefaultStore
      * @param string $requestFromStore
      * @param string $subject
      * @param string $comment
@@ -110,6 +110,7 @@ class RequestPasswordResetEmailTest extends TestCase
         Config('general/locale/code', 'fr_FR', 'store', 'fr_store_view'),
         ComponentsDir('Magento/CustomerGraphQl/_files'),
         DataFixture(Customer::class, ['email' => 'customer@example.com'], as: 'customer'),
+        DataProvider('customerOnDefaultStore')
     ]
     public function testResetPasswordEmailRequestFromCustomStoreWhenCustomerIsOnDefaultStore(
         string $requestFromStore,
@@ -161,7 +162,7 @@ QUERY;
         $subject = __($subject, $this->storeRepository->getById($customer->getStoreId())->getFrontendName())->render();
         $message = __($message)->render();
         $this->assertEquals($subject, $sentMessage->getSubject());
-        $messageRaw = $sentMessage->getBody()->getParts()[0]->getRawContent();
+        $messageRaw = quoted_printable_decode($sentMessage->getBody()->bodyToString());
         $this->assertStringContainsString($message, $messageRaw);
     }
 
@@ -174,15 +175,15 @@ QUERY;
     {
         return [
             'request_from_default_store' => [
-                'requestFromStore' => 'default',
-                'subject' => 'Réinitialiser votre mot de passe %1',
-                'comment' => 'Si vous êtes bien à l’origine de cette demande, veuillez cliquer ci-dessous pour' .
+                'default',
+                'Réinitialiser votre mot de passe %1',
+                'Si vous êtes bien à l’origine de cette demande, veuillez cliquer ci-dessous pour' .
                     ' définir un nouveau mot de passe',
             ],
             'request_from_french_store' => [
-                'requestFromStore' => 'fr_store_view',
-                'subject' => 'Réinitialiser votre mot de passe %1',
-                'comment' => 'Si vous êtes bien à l’origine de cette demande, veuillez cliquer ci-dessous pour' .
+                 'fr_store_view',
+                 'Réinitialiser votre mot de passe %1',
+                 'Si vous êtes bien à l’origine de cette demande, veuillez cliquer ci-dessous pour' .
                     ' définir un nouveau mot de passe',
             ]
         ];
@@ -197,14 +198,14 @@ QUERY;
     {
         return [
             'request_from_default_store' => [
-                'requestFromStore' => 'default',
-                'subject' => 'Reset your %1 password',
-                'comment' => 'There was recently a request to change the password for your account'
+                'default',
+                'Reset your %1 password',
+                'There was recently a request to change the password for your account'
             ],
             'request_from_french_store' => [
-                'requestFromStore' => 'fr_store_view',
-                'subject' => 'Reset your %1 password',
-                'comment' => 'There was recently a request to change the password for your account'
+                'fr_store_view',
+                'Reset your %1 password',
+                'There was recently a request to change the password for your account'
             ]
         ];
     }

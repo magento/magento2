@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Analytics\Model;
 
@@ -125,7 +125,7 @@ class FileRecorder
         }
 
         $directory->delete($fileInfo->getPath());
-
+        // phpcs:ignore Magento2.Functions.DiscouragedFunction
         $directoryName = dirname($fileInfo->getPath());
         if ($directoryName !== '.') {
             $directory->delete($directoryName);
