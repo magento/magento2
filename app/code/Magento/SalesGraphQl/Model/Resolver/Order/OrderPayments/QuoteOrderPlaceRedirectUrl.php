@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2026 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -32,7 +32,13 @@ class QuoteOrderPlaceRedirectUrl implements ResolverInterface
     /**
      * @inheritdoc
      */
-    public function resolve(Field $field, $context, ResolveInfo $info, ?array $value = null, ?array $args = null): ?string
+    public function resolve(
+        Field $field, 
+        $context, 
+        ResolveInfo $info, 
+        ?array $value = null, 
+        ?array $args = null
+    ): ?string 
     {
         if (!isset($value['model']) || !($value['model'] instanceof OrderInterface)) {
             throw new LocalizedException(__('"model" value should be specified'));
@@ -64,4 +70,3 @@ class QuoteOrderPlaceRedirectUrl implements ResolverInterface
         return $redirectUrl;
     }
 }
-
