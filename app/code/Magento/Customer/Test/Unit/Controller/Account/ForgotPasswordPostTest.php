@@ -8,8 +8,11 @@ declare(strict_types=1);
 namespace Magento\Customer\Test\Unit\Controller\Account;
 
 use Magento\Customer\Api\AccountManagementInterface;
+use Magento\Customer\Api\CustomerRepositoryInterface;
+use Magento\Customer\Api\SessionCleanerInterface;
 use Magento\Customer\Controller\Account\ForgotPasswordPost;
 use Magento\Customer\Model\AccountManagement;
+use Magento\Customer\Model\Data\Customer;
 use Magento\Customer\Model\Session;
 use Magento\Framework\App\Action\Context;
 use Magento\Framework\App\Request\Http as Request;
@@ -71,6 +74,16 @@ class ForgotPasswordPostTest extends TestCase
      */
     protected $messageManager;
 
+    /**
+     * @var CustomerRepositoryInterface|MockObject
+     */
+    private $customerRepository;
+
+    /**
+     * @var SessionCleanerInterface|MockObject
+     */
+    private $sessionCleanerMock;
+
     protected function setUp(): void
     {
         $this->prepareContext();
@@ -81,11 +94,18 @@ class ForgotPasswordPostTest extends TestCase
 
         $this->escaper = $this->createMock(Escaper::class);
 
+        $this->customerRepository = $this->getMockBuilder(CustomerRepositoryInterface::class)
+            ->getMockForAbstractClass();
+
+        $this->sessionCleanerMock = $this->createMock(SessionCleanerInterface::class);
+
         $this->controller = new ForgotPasswordPost(
             $this->context,
             $this->session,
             $this->accountManagement,
-            $this->escaper
+            $this->escaper,
+            $this->customerRepository,
+            $this->sessionCleanerMock
         );
     }
 
@@ -112,6 +132,7 @@ class ForgotPasswordPostTest extends TestCase
     public function testExecute()
     {
         $email = 'user1@example.com';
+        $customerId = '1';
 
         $this->request->expects($this->once())
             ->method('getPost')
@@ -122,6 +143,21 @@ class ForgotPasswordPostTest extends TestCase
             ->method('initiatePasswordReset')
             ->with($email, AccountManagement::EMAIL_RESET)
             ->willReturnSelf();
+
+        $customer = $this->getMockBuilder(Customer::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $customer->expects($this->once())
+            ->method('getId')
+            ->willReturn($customerId);
+
+        $this->customerRepository->expects($this->once())
+            ->method('get')
+            ->with($email)
+            ->willReturn($customer);
+
+        $this->sessionCleanerMock->expects($this->once())->method('clearFor')->with($customerId)->willReturnSelf();
 
         $this->escaper->expects($this->once())
             ->method('escapeHtml')
@@ -142,8 +178,6 @@ class ForgotPasswordPostTest extends TestCase
             ->with('*/*/')
             ->willReturnSelf();
 
-        $this->session->expects($this->once())->method('destroy')->with(['send_expire_cookie']);
-
         $this->controller->execute();
     }
 
@@ -160,6 +194,15 @@ class ForgotPasswordPostTest extends TestCase
             ->method('initiatePasswordReset')
             ->with($email, AccountManagement::EMAIL_RESET)
             ->willThrowException(new NoSuchEntityException(__('NoSuchEntityException')));
+
+        $customer = $this->getMockBuilder(Customer::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $customer->expects($this->never())
+            ->method('getId');
+
+        $this->sessionCleanerMock->expects($this->never())->method('clearFor');
 
         $this->escaper->expects($this->once())
             ->method('escapeHtml')
