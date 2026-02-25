@@ -47,7 +47,7 @@ class DateRangeTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->contextMock = $this->createMock(originalClassName: ContextInterface::class);
+        $this->contextMock = $this->createMock(ContextInterface::class);
         $this->uiComponentFactory = $this->createPartialMock(
             UiComponentFactory::class,
             ['create']

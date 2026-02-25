@@ -9,6 +9,7 @@ namespace Magento\Customer\Block\Adminhtml\Edit\Tab;
 
 use Magento\Backend\Model\Session\Quote as SessionQuote;
 use Magento\Quote\Model\Quote;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Class checks customer's shopping cart block with simple product and simple product with options.
@@ -43,13 +44,13 @@ class CartTest extends AbstractCartTest
      *
      * @magentoDataFixture Magento/Sales/_files/quote_with_two_products_and_customer.php
      * @magentoDataFixture Magento/Customer/_files/customer.php
-     * @dataProvider getQuoteDataProvider
      *
      * @param int $customerId
      * @param bool $guest
      * @param bool $contains
      * @return void
      */
+    #[DataProvider('getQuoteDataProvider')]
     public function testVerifyCollectionWithQuote(int $customerId, bool $guest, bool $contains): void
     {
         $session = $this->objectManager->create(SessionQuote::class);

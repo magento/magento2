@@ -88,12 +88,12 @@ class InstanceTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @param \Magento\Widget\Model\Widget\Instance $model
-     * @depends testGetWidgetSupportedContainers
+     * Test get widget supported templates by container
      */
-    public function testGetWidgetSupportedTemplatesByContainer($model)
+    public function testGetWidgetSupportedTemplatesByContainer()
     {
-        $templates = $model->getWidgetSupportedTemplatesByContainer('content');
+        $this->_model->setType(\Magento\Catalog\Block\Product\Widget\NewWidget::class);
+        $templates = $this->_model->getWidgetSupportedTemplatesByContainer('content');
         $this->assertNotEmpty($templates);
         $this->assertIsArray($templates);
         foreach ($templates as $row) {
@@ -105,11 +105,10 @@ class InstanceTest extends \PHPUnit\Framework\TestCase
     /**
      * @covers  \Magento\Widget\Model\Widget\Instance::generateLayoutUpdateXml()
      * @covers  \Magento\Widget\Model\Widget\Instance::getWidgetParameters()
-     * @param \Magento\Widget\Model\Widget\Instance $model
-     * @depends testGetWidgetConfigAsArray
      */
-    public function testGenerateLayoutUpdateXml(\Magento\Widget\Model\Widget\Instance $model)
+    public function testGenerateLayoutUpdateXml()
     {
+        $this->_model->setType(\Magento\Catalog\Block\Product\Widget\NewWidget::class);
         $params = [
             'display_mode' => 'fixed',
             'types' => ['type_1', 'type_2'],
@@ -128,12 +127,12 @@ class InstanceTest extends \PHPUnit\Framework\TestCase
                 ],
             ],
         ];
-        $model->setData('widget_parameters', $params);
-        $this->assertEquals('', $model->generateLayoutUpdateXml('content'));
-        $model->setId('test_id')->setPackageTheme('Magento/luma');
-        $result = $model->generateLayoutUpdateXml('content');
+        $this->_model->setData('widget_parameters', $params);
+        $this->assertEquals('', $this->_model->generateLayoutUpdateXml('content'));
+        $this->_model->setId('test_id')->setPackageTheme('Magento/luma');
+        $result = $this->_model->generateLayoutUpdateXml('content');
         $this->assertStringContainsString('<body><referenceContainer name="content">', $result);
-        $this->assertStringContainsString('<block class="' . $model->getType() . '"', $result);
+        $this->assertStringContainsString('<block class="' . $this->_model->getType() . '"', $result);
         $this->assertEquals(count($params), substr_count($result, '<action method="setData">'));
         $this->assertStringContainsString('<argument name="name" xsi:type="string">display_mode</argument>', $result);
         $this->assertStringContainsString('<argument name="value" xsi:type="string">fixed</argument>', $result);
@@ -177,11 +176,12 @@ class InstanceTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @param Instance $model
-     * @depends testGetWidgetConfigAsArray
+     * Test generate layout update xml with invalid param name
      */
-    public function testGenerateLayoutUpdateXmlWithInvalidParamName(\Magento\Widget\Model\Widget\Instance $model)
+    public function testGenerateLayoutUpdateXmlWithInvalidParamName()
     {
+        $this->_model->setType(\Magento\Catalog\Block\Product\Widget\NewWidget::class);
+        $this->_model->setId('test_id')->setPackageTheme('Magento/luma');
         $params = [
             'block_id' => '2',
             'block_id</argument><argument name="value" xsi:type="string">2</argument></action></block><block'
@@ -190,7 +190,7 @@ class InstanceTest extends \PHPUnit\Framework\TestCase
         ];
         $this->expectException('\Magento\Framework\Exception\LocalizedException');
         $this->expectExceptionMessage('Layout update is invalid');
-        $model->setData('widget_parameters', $params);
-        $model->generateLayoutUpdateXml('content');
+        $this->_model->setData('widget_parameters', $params);
+        $this->_model->generateLayoutUpdateXml('content');
     }
 }

@@ -15,6 +15,7 @@ use Magento\Sales\Model\Order\Payment;
 use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
 use Magento\Framework\Stdlib\DateTime;
 use DateTimeZone;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Verify chart data by different period.
@@ -46,9 +47,9 @@ class ChartTest extends TestCase
      * Verify getByPeriod with all types of period
      *
      * @magentoDataFixture Magento/Sales/_files/order_list_with_invoice.php
-     * @dataProvider getChartDataProvider
      * @return void
      */
+    #[DataProvider('getChartDataProvider')]
     public function testGetByPeriodWithParam(
         int $expectedDataQty,
         string $period,

@@ -16,6 +16,7 @@ use Magento\TestFramework\Fixture\DataFixture;
 use Magento\TestFramework\Fixture\DataFixtureStorageManager;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Tests for create customer (V2)
@@ -199,11 +200,10 @@ class CreateCustomerV2Test extends GraphQlAbstract
     }
 
     /**
-     * @dataProvider invalidEmailAddressDataProvider
-     *
      * @param string $email
      * @throws Exception
      */
+    #[DataProvider('invalidEmailAddressDataProvider')]
     public function testCreateCustomerIfEmailIsNotValid(string $email): void
     {
         $this->expectExceptionMessage('"' . $email . '" is not a valid email address.');

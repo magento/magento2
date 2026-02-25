@@ -23,6 +23,7 @@ use Magento\Shipping\Model\Tracking\Result\Status;
 use Magento\Store\Model\ScopeInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\HTTP\AsyncClientInterfaceMock;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -94,8 +95,8 @@ class CarrierTest extends TestCase
      * @param string $responseXml
      * @param array $expectedTrackingData
      * @param string $expectedRequestXml
-     * @dataProvider trackingDataProvider
      */
+    #[DataProvider('trackingDataProvider')]
     public function testGetTracking(
         $trackingNumbers,
         string $responseXml,
@@ -267,8 +268,8 @@ class CarrierTest extends TestCase
      * @param string $destCountryId
      * @param bool|null $isProductNameContainsSpecialChars
      * @return void
-     * @dataProvider requestToShipmentDataProvider
      */
+    #[DataProvider('requestToShipmentDataProvider')]
     public function testRequestToShip(
         string $origCountryId,
         string $expectedRegionCode,
@@ -509,11 +510,12 @@ class CarrierTest extends TestCase
      * @param string|null $depth
      * @magentoConfigFixture default_store carriers/dhl/active 1
      * @magentoConfigFixture default_store carriers/dhl/type DHL_XML
-     * @dataProvider collectRatesWithoutDimensionsDataProvider
      */
+    #[DataProvider('collectRatesWithoutDimensionsDataProvider')]
     public function testCollectRatesWithoutDimensions(?string $size, ?string $height, ?string $width, ?string $depth)
     {
         $this->setDhlConfig(['size' => $size, 'height' => $height, 'width' => $width, 'depth' => $depth]);
+        $this->setNextResponse(__DIR__ . '/../_files/dhl_quote_response.xml');
 
         $request = $this->createRequest();
         $this->dhlCarrier = Bootstrap::getObjectManager()->create(Carrier::class);
@@ -537,9 +539,7 @@ class CarrierTest extends TestCase
     public function testGetRatesWithHttpException(): void
     {
         $this->setDhlConfig(['showmethod' => 1]);
-        $deferredResponse = $this->getMockBuilder(HttpResponseDeferredInterface::class)
-            ->onlyMethods(['get'])
-            ->getMockForAbstractClass();
+        $deferredResponse = $this->createMock(HttpResponseDeferredInterface::class);
         $exception = new HttpException('Exception message');
         $deferredResponse->method('get')->willThrowException($exception);
         $this->httpClient->setDeferredResponseMock($deferredResponse);
@@ -618,8 +618,8 @@ class CarrierTest extends TestCase
      * @magentoConfigFixture default_store carriers/dhl/free_shipping_subtotal 25
      * @magentoConfigFixture default_store shipping/origin/country_id GB
      * @magentoAppIsolation enabled
-     * @dataProvider collectRatesWithFreeShippingDataProvider
      */
+    #[DataProvider('collectRatesWithFreeShippingDataProvider')]
     public function testCollectRatesWithFreeShipping(array $addRequestData, bool $freeShippingExpects): void
     {
         $this->setNextResponse(__DIR__ . '/../_files/dhl_quote_response.xml');
@@ -826,9 +826,9 @@ class CarrierTest extends TestCase
      * @param string $shipperCity
      * @param string $recipientCity
      * @return void
-     * @dataProvider requestToRestShipmentDataProvider
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
+    #[DataProvider('requestToRestShipmentDataProvider')]
     public function testRequestRestToShip(
         string $origCountryId,
         string $destCountryId,
@@ -981,8 +981,8 @@ class CarrierTest extends TestCase
      * @param string $responseRest
      * @param array $expectedTrackingData
      * @param string $expectedRequestRest
-     * @dataProvider trackingRestDataProvider
      */
+    #[DataProvider('trackingRestDataProvider')]
     public function testGetRestTracking(
         $trackingNumbers,
         string $responseRest,
