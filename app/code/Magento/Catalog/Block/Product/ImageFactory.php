@@ -23,6 +23,8 @@ use Magento\Catalog\Helper\Image as ImageHelper;
  */
 class ImageFactory
 {
+    const TEMPLATE = 'Magento_Catalog::product/image_with_borders.phtml';
+
     /**
      * @var ConfigInterface
      */
@@ -163,7 +165,7 @@ class ImageFactory
 
         $data = [
             'data' => [
-                'template' => 'Magento_Catalog::product/image_with_borders.phtml',
+                'template' => self::TEMPLATE,
                 'image_url' => $imageAsset->getUrl(),
                 'width' => $imageMiscParams['image_width'],
                 'height' => $imageMiscParams['image_height'],
