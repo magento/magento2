@@ -128,8 +128,7 @@ class ValidateTest extends TestCase
         $this->importMock = $this->createMock(Import::class);
         $this->abstractSourceMock = $this->createMock(AbstractSource::class);
 
-        $this->eventManagerMock = $this->getMockBuilder(EventManagerInterface::class)
-            ->getMockForAbstractClass();
+        $this->eventManagerMock = $this->createMock(EventManagerInterface::class);
 
         $this->contextMock->expects($this->any())
             ->method('getEventManager')
@@ -143,7 +142,6 @@ class ValidateTest extends TestCase
         );
         $reflection = new \ReflectionClass($this->validate);
         $importProperty = $reflection->getProperty('import');
-        $importProperty->setAccessible(true);
         $importProperty->setValue($this->validate, $this->importMock);
     }
 

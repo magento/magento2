@@ -14,11 +14,13 @@ use Magento\Framework\View\Layout;
 use Magento\Shipping\Block\Adminhtml\Order\Packaging\Grid;
 use Magento\Shipping\Controller\Adminhtml\Order\Shipment\GetShippingItemsGrid;
 use Magento\Shipping\Controller\Adminhtml\Order\ShipmentLoader;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 class GetShippingItemsGridTest extends TestCase
 {
+    use MockCreationTrait;
     /**
      * @var ShipmentLoader|MockObject
      */
@@ -49,31 +51,27 @@ class GetShippingItemsGridTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->requestMock = $this->getMockBuilder(Http::class)
-            ->addMethods(['__wakeup'])
-            ->onlyMethods(['getParam'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->shipmentLoaderMock = $this->getMockBuilder(ShipmentLoader::class)
-            ->addMethods(['setOrderId', 'setShipmentId', 'setShipment', 'setTracking', '__wakeup'])
-            ->onlyMethods(['load'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->viewMock = $this->getMockBuilder(View::class)
-            ->addMethods(['__wakeup'])
-            ->onlyMethods(['getLayout', 'renderLayout'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->requestMock = $this->createPartialMockWithReflection(
+            Http::class,
+            ['__wakeup', 'getParam']
+        );
+        $this->shipmentLoaderMock = $this->createPartialMockWithReflection(
+            ShipmentLoader::class,
+            ['setOrderId', 'setShipmentId', 'setShipment', 'setTracking', '__wakeup', 'load']
+        );
+        $this->viewMock = $this->createPartialMockWithReflection(
+            View::class,
+            ['__wakeup', 'getLayout', 'renderLayout']
+        );
         $this->responseMock = $this->createPartialMock(
             \Magento\Framework\App\Response\Http::class,
             ['setBody', '__wakeup']
         );
 
-        $contextMock = $this->getMockBuilder(Context::class)
-            ->addMethods(['__wakeup'])
-            ->onlyMethods(['getRequest', 'getResponse', 'getView'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $contextMock = $this->createPartialMockWithReflection(
+            Context::class,
+            ['__wakeup', 'getRequest', 'getResponse', 'getView']
+        );
 
         $contextMock->expects($this->any())->method('getRequest')->willReturn($this->requestMock);
         $contextMock->expects($this->any())->method('getResponse')->willReturn($this->responseMock);
@@ -99,11 +97,10 @@ class GetShippingItemsGridTest extends TestCase
         $result = 'result-html';
 
         $layoutMock = $this->createPartialMock(Layout::class, ['createBlock']);
-        $gridMock = $this->getMockBuilder(Grid::class)
-            ->addMethods(['setIndex'])
-            ->onlyMethods(['toHtml'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $gridMock = $this->createPartialMockWithReflection(
+            Grid::class,
+            ['setIndex', 'toHtml']
+        );
 
         $this->shipmentLoaderMock->expects($this->once())->method('setOrderId')->with($orderId);
         $this->shipmentLoaderMock->expects($this->once())->method('setShipmentId')->with($shipmentId);

@@ -9,6 +9,7 @@ namespace Magento\Sales\Model\Order;
 use Magento\Framework\App\State;
 use Magento\Sales\Api\Data\OrderInterfaceFactory;
 use Magento\TestFramework\Helper\Bootstrap;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Class ShipmentTest
@@ -16,7 +17,7 @@ use Magento\TestFramework\Helper\Bootstrap;
  */
 class StatusTest extends \PHPUnit\Framework\TestCase
 {
-    public static function theCorrectLabelIsUsedDependingOnTheAreaProvider()
+    public static function theCorrectLabelIsUsedDependingOnTheAreaProvider(): array
     {
         return [
             'backend label' => [
@@ -37,8 +38,8 @@ class StatusTest extends \PHPUnit\Framework\TestCase
      * @param $result
      *
      * @magentoDataFixture Magento/Sales/_files/order_status.php
-     * @dataProvider theCorrectLabelIsUsedDependingOnTheAreaProvider
      */
+    #[DataProvider('theCorrectLabelIsUsedDependingOnTheAreaProvider')]
     public function testTheCorrectLabelIsUsedDependingOnTheArea($area, $result)
     {
         $objectManager = Bootstrap::getObjectManager();

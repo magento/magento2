@@ -14,12 +14,13 @@ use Magento\Quote\Model\ChangeQuoteControl;
 use Magento\Quote\Model\Quote;
 use Magento\Quote\Model\QuoteRepository;
 use Magento\Quote\Model\QuoteRepository\Plugin\AccessChangeQuoteControl;
-use Magento\Quote\Test\Unit\Helper\QuoteTestHelper;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 class AccessChangeQuoteControlTest extends TestCase
 {
+    use MockCreationTrait;
     /**
      * @var AccessChangeQuoteControl
      */
@@ -51,7 +52,7 @@ class AccessChangeQuoteControlTest extends TestCase
         $this->userContextMock->method('getUserId')
             ->willReturn(1);
 
-        $this->quoteMock = $this->createPartialMock(QuoteTestHelper::class, ['getCustomerId']);
+        $this->quoteMock = $this->createPartialMockWithReflection(Quote::class, ['getCustomerId']);
 
         $this->quoteRepositoryMock = $this->getMockBuilder(QuoteRepository::class)
             ->disableOriginalConstructor()

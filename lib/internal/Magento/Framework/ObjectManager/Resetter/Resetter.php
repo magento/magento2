@@ -256,9 +256,7 @@ class Resetter implements ResetterInterface
                 continue;
             }
             $value = $classResetValues[$name];
-            $property->setAccessible(true);
             $property->setValue($instance, $value);
-            $property->setAccessible(false);
         }
     }
 }

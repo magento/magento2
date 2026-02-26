@@ -11,15 +11,8 @@ declare(strict_types=1);
 
 namespace Magento\TestFramework\CodingStandard\Tool;
 
-use PHPMD\Console\Output;
+use Symfony\Component\Console\Output\NullOutput;
 
-class CodeMessOutput extends Output
+class CodeMessOutput extends NullOutput
 {
-    /**
-     * @inheritdoc
-     */
-    protected function doWrite(string $message): void
-    {
-        // TODO: Implement doWrite() method.
-    }
 }

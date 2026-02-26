@@ -14,6 +14,7 @@ use Magento\Framework\Cache\FrontendInterface;
 use Magento\Framework\Profiler;
 use Magento\Framework\Profiler\DriverInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ProxyTesting;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Cache\Adapter\NullAdapter;
 
@@ -37,8 +38,8 @@ class ProfilerTest extends TestCase
      * @param string $expectedProfileId
      * @param array $expectedProfilerTags
      * @param mixed $expectedResult
-     * @dataProvider proxyMethodDataProvider
      */
+    #[DataProvider('proxyMethodDataProvider')]
     public function testProxyMethod(
         $method,
         $params,
@@ -50,14 +51,14 @@ class ProfilerTest extends TestCase
     ) {
         $cacheFrontend = $cacheFrontend($this);
         // Cache frontend setup
-        $frontendMock = $this->getMockForAbstractClass(FrontendInterface::class);
+        $frontendMock = $this->createMock(FrontendInterface::class);
 
         $frontendMock->expects($this->any())->method('getBackend')->willReturn($cacheBackend);
 
         $frontendMock->expects($this->any())->method('getLowLevelFrontend')->willReturn($cacheFrontend);
 
         // Profiler setup
-        $driver = $this->getMockForAbstractClass(DriverInterface::class);
+        $driver = $this->createMock(DriverInterface::class);
         $driver->expects($this->once())->method('start')->with($expectedProfileId, $expectedProfilerTags);
         $driver->expects($this->once())->method('stop')->with($expectedProfileId);
         Profiler::add($driver);

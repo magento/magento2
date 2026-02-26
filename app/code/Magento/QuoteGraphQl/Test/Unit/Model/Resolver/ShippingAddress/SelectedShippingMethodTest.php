@@ -11,6 +11,7 @@ use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\GraphQl\Model\Query\Context;
 use Magento\Quote\Model\Quote;
 use Magento\QuoteGraphQl\Model\Resolver\ShippingAddress\SelectedShippingMethod;
@@ -26,6 +27,7 @@ use Magento\Quote\Model\Quote\Address\Rate;
  */
 class SelectedShippingMethodTest extends TestCase
 {
+    use MockCreationTrait;
     /**
      * @var SelectedShippingMethod
      */
@@ -87,16 +89,16 @@ class SelectedShippingMethodTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $this->scopeConfigMock = $this->createMock(ScopeConfigInterface::class);
-        $this->addressMock = $this->createPartialMock(
-            \Magento\Quote\Test\Unit\Helper\QuoteAddressTestHelper::class,
+        $this->addressMock = $this->createPartialMockWithReflection(
+            \Magento\Quote\Model\Quote\Address::class,
             ['getShippingMethod', 'getAllShippingRates', 'getQuote', 'getShippingAmount', 'getMethod']
         );
-        $this->rateMock = $this->createPartialMock(
-            \Magento\Quote\Test\Unit\Helper\RateTestHelper::class,
+        $this->rateMock = $this->createPartialMockWithReflection(
+            \Magento\Quote\Model\Quote\Address\Rate::class,
             ['getCode', 'getCarrier', 'getMethod']
         );
-        $this->quoteMock = $this->createPartialMock(
-            \Magento\Quote\Test\Unit\Helper\QuoteTestHelper::class,
+        $this->quoteMock = $this->createPartialMockWithReflection(
+            \Magento\Quote\Model\Quote::class,
             ['getQuoteCurrencyCode', 'getMethodTitle', 'getCarrierTitle', 'getPriceExclTax', 'getPriceInclTax']
         );
         $this->selectedShippingMethod = new SelectedShippingMethod(

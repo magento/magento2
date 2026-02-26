@@ -14,6 +14,7 @@ use Magento\Framework\Backup\Media;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Directory\WriteInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -79,7 +80,7 @@ class MediaTest extends TestCase
         $this->_backupDbMock->expects($this->any())->method('create')->willReturn(true);
 
         $this->_filesystemMock = $this->createMock(Filesystem::class);
-        $dirMock = $this->getMockForAbstractClass(WriteInterface::class);
+        $dirMock = $this->createMock(WriteInterface::class);
         $this->_filesystemMock->expects($this->any())
             ->method('getDirectoryWrite')
             ->willReturn($dirMock);
@@ -98,8 +99,8 @@ class MediaTest extends TestCase
 
     /**
      * @param string $action
-     * @dataProvider actionProvider
      */
+    #[DataProvider('actionProvider')]
     public function testAction($action)
     {
         $this->_backupFactoryMock->expects($this->once())->method('create');

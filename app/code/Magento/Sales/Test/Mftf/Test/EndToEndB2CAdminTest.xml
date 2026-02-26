@@ -298,5 +298,7 @@
         <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex" after="deleteStoreView">
             <argument name="indices" value=""/>
         </actionGroup>
+        <!--Delete all customers via API-->
+        <helper class="Magento\Customer\Test\Mftf\Helper\CustomerApiHelper" method="deleteAllCustomersApi" stepKey="deleteAllCustomersViaApi" after="reindex"/>
     </test>
 </tests>

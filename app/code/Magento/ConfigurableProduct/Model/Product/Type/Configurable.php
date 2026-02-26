@@ -536,7 +536,12 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType impl
             }
             $eavAttribute->setStoreId($storeId);
             /* @var $attribute \Magento\ConfigurableProduct\Model\Product\Type\Configurable\Attribute */
-            $res[$eavAttribute->getId()] = [
+            $eavAttributeId = $eavAttribute->getId();
+            // Skip attributes without valid IDs
+            if ($eavAttributeId === null) {
+                continue;
+            }
+            $res[$eavAttributeId] = [
                 'id' => $attribute->getId(),
                 'label' => $attribute->getLabel(),
                 'use_default' => $attribute->getUseDefault(),
@@ -778,7 +783,7 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType impl
             try {
                 $testAttribute = $this->configurableAttributeFactory->create();
                 // Only proceed if we have a real model with collection support
-                if (method_exists($testAttribute, 'getCollection') && 
+                if (method_exists($testAttribute, 'getCollection') &&
                     method_exists($testAttribute, 'getResourceCollection')) {
                     $collection = $testAttribute->getCollection()
                         ->addFieldToFilter('product_id', $productId)
@@ -796,14 +801,14 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType impl
         foreach ($data as $attributeData) {
             /** @var $configurableAttribute \Magento\ConfigurableProduct\Model\Product\Type\Configurable\Attribute */
             $configurableAttribute = null;
-            
+
             // OPTIMIZATION: Use pre-loaded attribute if available
             if (!empty($attributeData['attribute_id']) && isset($existingAttributes[$attributeData['attribute_id']])) {
                 $configurableAttribute = $existingAttributes[$attributeData['attribute_id']];
             } else {
                 $configurableAttribute = $this->configurableAttributeFactory->create();
             }
-            
+
             if (!$product->getIsDuplicate()) {
                 if (!empty($attributeData['id']) && !$configurableAttribute->getId()) {
                     $configurableAttribute->load($attributeData['id']);
@@ -876,8 +881,9 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType impl
         }
 
         $sku = $product->getSku();
-        if (isset($this->isSaleableBySku[$storeId][$sku])) {
-            return $this->isSaleableBySku[$storeId][$sku];
+        $cacheKey = $storeId === null ? 0 : $storeId;
+        if (isset($this->isSaleableBySku[$cacheKey][$sku])) {
+            return $this->isSaleableBySku[$cacheKey][$sku];
         }
 
         $salable = parent::isSalable($product);
@@ -889,7 +895,7 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType impl
             $salable = 0 !== $collection->getSize();
         }
 
-        $this->isSaleableBySku[$storeId][$sku] = $salable;
+        $this->isSaleableBySku[$cacheKey][$sku] = $salable;
 
         return $salable;
     }
@@ -1634,7 +1640,7 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType impl
     private function getConfigurableAttributeCodes($product): array
     {
         $productId = $product->getId();
-        
+
         if ($productId && !isset($this->attributeCodeCache[$productId])) {
             $codes = [];
             // Use existing configurable attributes if already loaded
@@ -1651,9 +1657,9 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType impl
                         ['attribute_id']
                     )
                     ->where('product_id = ?', $productId);
-                
+
                 $attributeIds = $connection->fetchCol($select);
-                
+
                 foreach ($attributeIds as $attrId) {
                     $attribute = $this->_eavConfig->getAttribute(\Magento\Catalog\Model\Product::ENTITY, $attrId);
                     if ($attribute) {
@@ -1661,11 +1667,11 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType impl
                     }
                 }
             }
-            
+
             $this->attributeCodeCache[$productId] = $codes;
         }
-        
-        return $this->attributeCodeCache[$productId] ?? [];
+
+        return $productId === null ? [] : ($this->attributeCodeCache[$productId] ?? []);
     }
 
     /**

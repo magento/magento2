@@ -31,7 +31,6 @@ class PageTest extends TestCase
         $this->page = $objectManager->getObject(CmsPage::class);
         $reflection = new \ReflectionClass($this->page);
         $reflectionProperty = $reflection->getProperty('_idFieldName');
-        $reflectionProperty->setAccessible(true);
         $reflectionProperty->setValue($this->page, 'page_id');
         $this->page->setId(1);
     }

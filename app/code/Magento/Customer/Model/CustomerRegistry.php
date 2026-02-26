@@ -78,6 +78,7 @@ class CustomerRegistry implements ResetAfterRequestInterface
      */
     public function retrieve($customerId)
     {
+        $customerId = (string)$customerId;
         if (isset($this->customerRegistryById[$customerId])) {
             return $this->customerRegistryById[$customerId];
         }

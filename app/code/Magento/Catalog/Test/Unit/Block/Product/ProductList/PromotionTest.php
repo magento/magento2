@@ -114,7 +114,7 @@ class PromotionTest extends TestCase
                 'context' => $this->contextMock,
                 'postDataHelper' => $this->createMock(PostHelper::class),
                 'layerResolver' => $this->layerResolverMock,
-                'categoryRepository' => $this->getMockForAbstractClass(CategoryRepositoryInterface::class),
+                'categoryRepository' => $this->createMock(CategoryRepositoryInterface::class),
                 'urlHelper' => $this->createMock(UrlHelper::class),
                 'productCollectionFactory' => $this->productCollectionFactoryMock
             ]
@@ -149,7 +149,6 @@ class PromotionTest extends TestCase
         // Use reflection to test protected method
         $reflection = new \ReflectionClass($this->block);
         $method = $reflection->getMethod('_getProductCollection');
-        $method->setAccessible(true);
 
         $result = $method->invoke($this->block);
 
@@ -184,7 +183,6 @@ class PromotionTest extends TestCase
         // Use reflection to test protected method
         $reflection = new \ReflectionClass($this->block);
         $method = $reflection->getMethod('_getProductCollection');
-        $method->setAccessible(true);
 
         $firstCall = $method->invoke($this->block);
         $secondCall = $method->invoke($this->block);
@@ -215,7 +213,6 @@ class PromotionTest extends TestCase
 
         $reflection = new \ReflectionClass($this->block);
         $method = $reflection->getMethod('_getProductCollection');
-        $method->setAccessible(true);
 
         $method->invoke($this->block);
     }

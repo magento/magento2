@@ -10,6 +10,7 @@ namespace Magento\Setup\Test\Unit\Module\Dependency\Parser;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Setup\Module\Dependency\Parser\Code;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class CodeTest extends TestCase
 {
@@ -26,8 +27,8 @@ class CodeTest extends TestCase
 
     /**
      * @param array $options
-     * @dataProvider dataProviderWrongOptionFilesForParse
      */
+    #[DataProvider('dataProviderWrongOptionFilesForParse')]
     public function testParseWithWrongOptionFilesForParse($options)
     {
         $this->expectException('InvalidArgumentException');
@@ -49,8 +50,8 @@ class CodeTest extends TestCase
 
     /**
      * @param array $options
-     * @dataProvider dataProviderWrongOptionDeclaredNamespace
      */
+    #[DataProvider('dataProviderWrongOptionDeclaredNamespace')]
     public function testParseWithWrongOptionDeclaredNamespace($options)
     {
         $this->expectException('InvalidArgumentException');

@@ -15,6 +15,7 @@ use Magento\Framework\App\Request\Http as HttpRequest;
 use Magento\Framework\Exception\AuthorizationException;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\TestFramework\Helper\Bootstrap;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -60,9 +61,8 @@ class AuthorizationTest extends TestCase
      *
      * @magentoDataFixture Magento/Catalog/_files/product_simple_with_design_attributes.php
      * @param array $data
-     *
-     * @dataProvider postRequestData
      */
+    #[DataProvider('postRequestData')]
     public function testAuthorizedSavingOf(array $data): void
     {
         $this->request->setPost(new Parameters($data));
@@ -130,9 +130,8 @@ class AuthorizationTest extends TestCase
      *
      * @magentoDataFixture Magento/Catalog/_files/product_simple.php
      * @param array $data
-     *
-     * @dataProvider postRequestDataException
      */
+    #[DataProvider('postRequestDataException')]
     public function testAuthorizedSavingOfWithException(array $data): void
     {
         $this->expectException(AuthorizationException::class);

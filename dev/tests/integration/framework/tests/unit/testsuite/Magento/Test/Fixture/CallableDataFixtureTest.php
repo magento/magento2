@@ -8,6 +8,7 @@ declare(strict_types=1);
 namespace Magento\Test\Fixture;
 
 use Magento\Framework\DataObject;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\TestFramework\Fixture\CallableDataFixture;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -18,6 +19,7 @@ use stdClass;
  */
 class CallableDataFixtureTest extends TestCase
 {
+    use MockCreationTrait;
     /**
      * @var string
      */
@@ -35,9 +37,10 @@ class CallableDataFixtureTest extends TestCase
     {
         parent::setUp();
         static::$testFlag = '';
-        $this->fakeClass = $this->getMockBuilder(stdClass::class)
-            ->addMethods(['fakeMethod', 'fakeMethodRollback'])
-            ->getMock();
+        $this->fakeClass = $this->createPartialMockWithReflection(
+            stdClass::class,
+            ['fakeMethod', 'fakeMethodRollback']
+        );
     }
 
     /**

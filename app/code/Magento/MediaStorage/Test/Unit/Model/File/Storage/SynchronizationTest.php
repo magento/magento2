@@ -32,12 +32,11 @@ class SynchronizationTest extends TestCase
         );
         $reflection = new \ReflectionClass($storageMock);
         $dataProperty = $reflection->getProperty('_data');
-        $dataProperty->setAccessible(true);
         $dataProperty->setValue($storageMock, [
             'id' => true,
             'content' => $content
         ]);
-        
+
         $storageMock->expects($this->once())->method('loadByFilename');
         $storageMock->expects($this->once())->method('getId')->willReturn(true);
         $storageMock->expects($this->once())->method('getContent')->willReturn($content);
