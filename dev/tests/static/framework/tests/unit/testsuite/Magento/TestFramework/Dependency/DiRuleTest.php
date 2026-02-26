@@ -6,6 +6,7 @@
 namespace Magento\TestFramework\Dependency;
 
 use Magento\TestFramework\Dependency\VirtualType\VirtualTypeMapper;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class DiRuleTest extends \PHPUnit\Framework\TestCase
 {
@@ -13,8 +14,8 @@ class DiRuleTest extends \PHPUnit\Framework\TestCase
      * @param string $module
      * @param string $contents
      * @param array $expected
-     * @dataProvider getDependencyInfoDataProvider
      */
+    #[DataProvider('getDependencyInfoDataProvider')]
     public function testGetDependencyInfo($module, $contents, array $expected)
     {
         $diRule = new DiRule(new VirtualTypeMapper([

@@ -48,9 +48,7 @@ class LowLevelBackendTest extends TestCase
         $expectedIds = ['id1', 'id2', 'id3'];
 
         // Create a mock that has the getIdsMatchingTags method
-        $adapterMock = $this->getMockBuilder(TagAdapterInterface::class)
-            ->onlyMethods(['getIdsMatchingTags', 'clearAllIndices'])
-            ->getMockForAbstractClass();
+        $adapterMock = $this->createMock(TagAdapterInterface::class);
 
         $adapterMock
             ->expects($this->once())
@@ -82,9 +80,7 @@ class LowLevelBackendTest extends TestCase
      */
     public function testGetIdsMatchingTagsWithEmptyTags(): void
     {
-        $adapterMock = $this->getMockBuilder(TagAdapterInterface::class)
-            ->onlyMethods(['getIdsMatchingTags'])
-            ->getMockForAbstractClass();
+        $adapterMock = $this->createMock(TagAdapterInterface::class);
 
         $adapterMock
             ->expects($this->once())
@@ -106,9 +102,7 @@ class LowLevelBackendTest extends TestCase
         $tags = ['category', 'product'];
         $expectedIds = ['product_1', 'product_2', 'product_3', 'category_home'];
 
-        $adapterMock = $this->getMockBuilder(TagAdapterInterface::class)
-            ->onlyMethods(['getIdsMatchingTags'])
-            ->getMockForAbstractClass();
+        $adapterMock = $this->createMock(TagAdapterInterface::class);
 
         $adapterMock
             ->expects($this->once())
@@ -128,9 +122,7 @@ class LowLevelBackendTest extends TestCase
      */
     public function testCleanWithModeAll(): void
     {
-        $adapterMock = $this->getMockBuilder(TagAdapterInterface::class)
-            ->onlyMethods(['clearAllIndices'])
-            ->getMockForAbstractClass();
+        $adapterMock = $this->createMock(TagAdapterInterface::class);
 
         $adapterMock
             ->expects($this->once())
@@ -147,9 +139,7 @@ class LowLevelBackendTest extends TestCase
      */
     public function testCleanWithModeAllAndTags(): void
     {
-        $adapterMock = $this->getMockBuilder(TagAdapterInterface::class)
-            ->onlyMethods(['clearAllIndices'])
-            ->getMockForAbstractClass();
+        $adapterMock = $this->createMock(TagAdapterInterface::class);
 
         $adapterMock
             ->expects($this->once())
@@ -233,9 +223,7 @@ class LowLevelBackendTest extends TestCase
      */
     public function testCleanWithDefaultMode(): void
     {
-        $adapterMock = $this->getMockBuilder(TagAdapterInterface::class)
-            ->onlyMethods(['clearAllIndices'])
-            ->getMockForAbstractClass();
+        $adapterMock = $this->createMock(TagAdapterInterface::class);
 
         $adapterMock
             ->expects($this->once())

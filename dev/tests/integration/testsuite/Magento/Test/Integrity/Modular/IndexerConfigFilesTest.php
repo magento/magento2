@@ -6,6 +6,7 @@
 namespace Magento\Test\Integrity\Modular;
 
 use Magento\Framework\Filesystem;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class IndexerConfigFilesTest extends \PHPUnit\Framework\TestCase
 {
@@ -32,8 +33,8 @@ class IndexerConfigFilesTest extends \PHPUnit\Framework\TestCase
     /**
      * Test each acl configuration file
      * @param string $file
-     * @dataProvider indexerConfigFileDataProvider
      */
+    #[DataProvider('indexerConfigFileDataProvider')]
     public function testIndexerConfigFile($file)
     {
         $validationStateMock = $this->createMock(\Magento\Framework\Config\ValidationStateInterface::class);

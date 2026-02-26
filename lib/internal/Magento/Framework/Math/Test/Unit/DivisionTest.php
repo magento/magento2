@@ -9,6 +9,7 @@ namespace Magento\Framework\Math\Test\Unit;
 
 use Magento\Framework\Math\Division;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class DivisionTest extends TestCase
 {
@@ -17,9 +18,8 @@ class DivisionTest extends TestCase
      */
     private const EPSILON = 0.0000000001;
 
-    /**
-     * @dataProvider getExactDivisionDataProvider
-     */
+    /**     */
+    #[DataProvider('getExactDivisionDataProvider')]
     public function testGetExactDivision($dividend, $divisor, $expected)
     {
         $mathDivision = new Division();

@@ -30,7 +30,7 @@ class SkuProcessorTest extends TestCase
     protected function setUp(): void
     {
         $this->productFactory = $this->createMock(ProductFactory::class);
-        
+
         $this->skuProcessor = $this->createPartialMockWithReflection(
             SkuProcessor::class,
             ['_getSkus'],
@@ -105,6 +105,7 @@ class SkuProcessorTest extends TestCase
     {
         $reflection = new \ReflectionClass(get_class($object));
         $reflectionProperty = $reflection->getProperty($property);
+
         return $reflectionProperty->getValue($object);
     }
 }

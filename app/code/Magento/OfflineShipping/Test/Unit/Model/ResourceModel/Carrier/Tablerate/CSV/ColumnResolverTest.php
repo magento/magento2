@@ -9,6 +9,7 @@ namespace Magento\OfflineShipping\Test\Unit\Model\ResourceModel\Carrier\Tablerat
 
 use Magento\OfflineShipping\Model\ResourceModel\Carrier\Tablerate\CSV\ColumnNotFoundException;
 use Magento\OfflineShipping\Model\ResourceModel\Carrier\Tablerate\CSV\ColumnResolver;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -34,8 +35,8 @@ class ColumnResolverTest extends TestCase
      * @param $column
      * @param $expectedValue
      * @throws ColumnNotFoundException
-     * @dataProvider getColumnValueDataProvider
      */
+    #[DataProvider('getColumnValueDataProvider')]
     public function testGetColumnValueByPosition($column, $expectedValue)
     {
         $headers = array_keys(self::$values);
@@ -58,8 +59,8 @@ class ColumnResolverTest extends TestCase
 
     /**
      * @return void
-     * @dataProvider getColumnValueWithCustomHeaderDataProvider
      */
+    #[DataProvider('getColumnValueWithCustomHeaderDataProvider')]
     public function testGetColumnValueByHeader($column, $expectedValue)
     {
         $reversedValues = array_reverse(self::$values);

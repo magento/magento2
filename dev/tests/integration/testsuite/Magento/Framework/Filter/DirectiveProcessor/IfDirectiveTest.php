@@ -13,6 +13,7 @@ use Magento\Framework\Filter\Template;
 use Magento\Framework\Filter\VariableResolver\StrictResolver;
 use Magento\Framework\Filter\VariableResolverInterface;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class IfDirectiveTest extends TestCase
 {
@@ -50,8 +51,8 @@ class IfDirectiveTest extends TestCase
     }
 
     /**
-     * @dataProvider useCasesProvider
      */
+    #[DataProvider('useCasesProvider')]
     public function testCases(string $template, array $variables, string $expect)
     {
         $result = $this->processor->process(

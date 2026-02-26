@@ -7,6 +7,7 @@ namespace Magento\Sales\Model\ResourceModel;
 
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\DB\Adapter\AdapterInterface;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Model\ResourceModel\Db\Context;
 use Magento\Sales\Model\Grid\LastUpdateTimeCache;
 use Magento\Sales\Model\ResourceModel\Provider\NotSyncedDataProviderInterface;
@@ -89,6 +90,8 @@ class Grid extends AbstractGrid
             ObjectManager::getInstance()->get(LastUpdateTimeCache::class);
 
         parent::__construct($context, $connectionName);
+
+        $this->connection = $this->_resources->getConnection('sales');
     }
 
     /**
@@ -168,7 +171,7 @@ class Grid extends AbstractGrid
      *
      * @return \Magento\Framework\DB\Select
      */
-    protected function getGridOriginSelect()
+    public function getGridOriginSelect()
     {
         $select = $this->getConnection()->select()
             ->from([$this->mainTableName => $this->getTable($this->mainTableName)], []);
@@ -195,5 +198,16 @@ class Grid extends AbstractGrid
         }
         $select->columns($columns);
         return $select;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getMainTable()
+    {
+        if (empty($this->mainTableName)) {
+            throw new LocalizedException(new \Magento\Framework\Phrase('Empty main table name'));
+        }
+        return $this->mainTableName;
     }
 }

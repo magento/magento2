@@ -28,6 +28,7 @@ use Magento\Store\Model\ScopeInterface;
 use Magento\TestFramework\Fixture\Config;
 use Magento\TestFramework\Fixture\DataFixture;
 use Magento\TestFramework\Fixture\DataFixtureStorageManager;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\TestFramework\Fixture\DbIsolation;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\Framework\App\Filesystem\DirectoryList;
@@ -141,14 +142,13 @@ class BundleTest extends \Magento\TestFramework\Indexer\TestCase
     /**
      * Test that Bundle options are updated correctly by import
      *
-     * @dataProvider valuesDataProvider
-     *
      * @magentoAppArea adminhtml
      * @magentoDbIsolation enabled
      * @magentoAppIsolation enabled
      * @param array $expectedValues
      * @return void
      */
+    #[DataProvider('valuesDataProvider')]
     public function testBundleImportUpdateValues(array $expectedValues): void
     {
         // import data from CSV file
@@ -302,13 +302,13 @@ class BundleTest extends \Magento\TestFramework\Indexer\TestCase
 
     /**
      * @magentoDbIsolation enabled
-     * @dataProvider shouldUpdateBundleStockStatusIfChildProductsStockStatusChangedDataProvider
      * @param bool $isOption1Required
      * @param bool $isOption2Required
      * @param string $outOfStockImportFile
      * @param string $inStockImportFile
      * @throws NoSuchEntityException
      */
+    #[DataProvider('shouldUpdateBundleStockStatusIfChildProductsStockStatusChangedDataProvider')]
     public function testShouldUpdateBundleStockStatusIfChildProductsStockStatusChanged(
         bool $isOption1Required,
         bool $isOption2Required,

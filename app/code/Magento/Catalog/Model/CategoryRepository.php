@@ -148,9 +148,9 @@ class CategoryRepository implements CategoryRepositoryInterface, ResetAfterReque
      */
     public function get($categoryId, $storeId = null)
     {
-        $cacheKey = $storeId ?? $this->storeManager->getStore()->getId();
+        $cacheKey = (string) ($storeId ?? $this->storeManager->getStore()->getId());
+
         if (!isset($this->instances[$categoryId][$cacheKey])) {
-            /** @var Category $category */
             $category = $this->categoryFactory->create();
             if (null !== $storeId) {
                 $category->setStoreId($storeId);

@@ -16,7 +16,6 @@ use Magento\Framework\HTTP\PhpEnvironment\Response;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use PHPUnit\Runner\PhptTestCase;
 
 /**
  * Tests http transfer adapter.
@@ -187,8 +186,9 @@ class HttpTest extends TestCase
             ->method('isHead')
             ->willReturn(true);
 
+        // For HEAD requests, no output should be generated
+        $this->expectOutputString('');
+        
         $this->object->send($file);
-        $phpTest = new PhptTestCase($file);
-        $this->assertFalse($phpTest->hasOutput());
     }
 }

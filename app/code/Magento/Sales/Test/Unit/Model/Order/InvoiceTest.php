@@ -418,7 +418,6 @@ class InvoiceTest extends TestCase
 
         $refObject = new \ReflectionClass($this->order);
         $refProperty = $refObject->getProperty('_invoices');
-        $refProperty->setAccessible(true);
         $refProperty->setValue($this->order, $collection);
 
         return $collection;

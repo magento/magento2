@@ -16,6 +16,7 @@ use Magento\Framework\App\Backpressure\IdentityProviderInterface;
 use Magento\Framework\App\Request\Backpressure\RequestTypeExtractorInterface;
 use Magento\Framework\App\RequestInterface;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 class ContextFactoryTest extends TestCase
@@ -93,14 +94,9 @@ class ContextFactoryTest extends TestCase
         ];
     }
 
-    /**
-     * Verify that identity is created for customers.
-     *
-     * @param int $userType
-     * @param string $userId
-     * @return void
-     * @dataProvider getIdentityCases
+    /**     * @return void
      */
+    #[DataProvider('getIdentityCases')]
     public function testCreateForIdentity(
         int $userType,
         string $userId

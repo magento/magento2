@@ -112,7 +112,6 @@ class AbstractTest extends TestCase
         $model->expects($this->once())->method('drawLineBlocks')->willReturn($page);
 
         $reflectionMethod = new \ReflectionMethod(AbstractPdf::class, 'insertTotals');
-        $reflectionMethod->setAccessible(true);
         $actual = $reflectionMethod->invoke($model, $page, $source);
 
         $this->assertSame($page, $actual);

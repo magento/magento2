@@ -29,8 +29,9 @@ class City extends AbstractValidator
      * ,: Comma.
      * &: Ampersand.
      * (): Parentheses.
+     * /: Forward slash.
      */
-    private const PATTERN_CITY = '/^[\p{L}\p{M}\d\s\-_\'’\.,&\(\)]{1,100}$/u';
+    private const PATTERN_CITY = '/^[\p{L}\p{M}\d\s\-_\'’\.,&\(\)\/]{1,100}$/u';
 
     /**
      * Validate city fields.
@@ -43,7 +44,7 @@ class City extends AbstractValidator
         if (!$this->isValidCity($customer->getCity())) {
             parent::_addMessages([[
                 'city' => "Invalid City. Please use letters, numbers, spaces,
-                and the following characters: - _ ' ’ . , & ( )"
+                and the following characters: - _ ' ’ . , & ( ) /"
             ]]);
         }
 
@@ -58,12 +59,10 @@ class City extends AbstractValidator
      */
     private function isValidCity($cityValue)
     {
-        if ($cityValue != null) {
-            if (preg_match(self::PATTERN_CITY, $cityValue, $matches)) {
-                return $matches[0] == $cityValue;
-            }
+        if ($cityValue === null || $cityValue === '') {
+            return true;
         }
 
-        return true;
+        return preg_match(self::PATTERN_CITY, $cityValue) === 1;
     }
 }

@@ -48,8 +48,7 @@ class WebsiteTest extends TestCase
         };
 
         /** @var IndexerInterface|MockObject $indexerMock */
-        $indexerMock = $this->getMockBuilder(IndexerInterface::class)
-            ->getMockForAbstractClass();
+        $indexerMock = $this->createMock(IndexerInterface::class);
         $indexerMock->expects($this->once())
             ->method('invalidate');
 
@@ -91,8 +90,7 @@ class WebsiteTest extends TestCase
             ->getMock();
 
         /** @var IndexerInterface|MockObject $indexerMock */
-        $indexerMock = $this->getMockBuilder(IndexerInterface::class)
-            ->getMockForAbstractClass();
+        $indexerMock = $this->createMock(IndexerInterface::class);
         $indexerMock->expects($this->once())
             ->method('invalidate');
 

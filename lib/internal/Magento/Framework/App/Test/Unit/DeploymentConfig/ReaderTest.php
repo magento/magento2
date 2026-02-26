@@ -14,6 +14,7 @@ use Magento\Framework\Exception\FileSystemException;
 use Magento\Framework\Filesystem\Driver\File;
 use Magento\Framework\Filesystem\DriverPool;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 class ReaderTest extends TestCase
@@ -99,11 +100,9 @@ class ReaderTest extends TestCase
         $this->assertSame(['fooKey' =>'foo', 'barKey' => 'bar', 'envKey' => 'env'], $object->load());
     }
 
-    /**
-     * @param string $file
-     * @param array $expected
-     * @dataProvider loadCustomDataProvider
+    /**     * @param array $expected
      */
+    #[DataProvider('loadCustomDataProvider')]
     public function testCustomLoad($file, $expected)
     {
         $configFilePool = $this->createMock(ConfigFilePool::class);

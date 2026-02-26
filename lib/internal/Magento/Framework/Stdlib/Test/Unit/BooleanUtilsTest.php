@@ -9,6 +9,7 @@ namespace Magento\Framework\Stdlib\Test\Unit;
 
 use Magento\Framework\Stdlib\BooleanUtils;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class BooleanUtilsTest extends TestCase
 {
@@ -32,9 +33,8 @@ class BooleanUtilsTest extends TestCase
     /**
      * @param mixed $input
      * @param bool $expected
-     *
-     * @dataProvider toBooleanDataProvider
-     */
+     *     */
+    #[DataProvider('toBooleanDataProvider')]
     public function testToBoolean($input, $expected)
     {
         $actual = $this->object->toBoolean($input);
@@ -60,9 +60,8 @@ class BooleanUtilsTest extends TestCase
 
     /**
      * @param mixed $input
-     *
-     * @dataProvider toBooleanExceptionDataProvider
-     */
+     *     */
+    #[DataProvider('toBooleanExceptionDataProvider')]
     public function testToBooleanException($input)
     {
         $this->expectException('InvalidArgumentException');
