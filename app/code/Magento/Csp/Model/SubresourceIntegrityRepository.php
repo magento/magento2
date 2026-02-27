@@ -155,13 +155,37 @@ class SubresourceIntegrityRepository
         if ($this->data === null) {
             $rawData = $this->storage->load($this->context);
 
-            $this->data = $rawData ? $this->serializer->unserialize($rawData) : [];
-
+            if ($rawData) {
+                try {
+                    $this->data = $this->serializer->unserialize($rawData);
+                } catch (\Throwable $e) {
+                    $this->data = [];
+                    $this->safeRemove($this->context);
+                }
+            } else {
+                $this->data = [];
+            }
             foreach ($this->data as $path => $hash) {
                 $this->data[$path] = new SubresourceIntegrity(["path" => $path, "hash" => $hash]);
             }
         }
 
         return $this->data;
+    }
+
+    /**
+     * Safely removes sri-hashes.json file from storage.
+     *
+     * @param string|null $context
+     *
+     * @return bool
+     */
+    private function safeRemove(?string $context): bool
+    {
+        try {
+            return $this->storage->remove($context);
+        } catch (\Throwable $e) {
+            return false;
+        }
     }
 }

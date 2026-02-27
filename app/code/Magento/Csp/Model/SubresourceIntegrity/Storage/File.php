@@ -243,7 +243,7 @@ class File implements StorageInterface
         $allHashes = array_merge($existingHashes, $newHashes);
 
         if ($allHashes !== $existingHashes) {
-            $staticDir->writeFile($filePath, $this->serializer->serialize($allHashes), 'w');
+            $staticDir->writeFile($filePath, $this->serializer->serialize($allHashes), 'w', true);
         }
     }
 }
