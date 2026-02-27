@@ -152,8 +152,7 @@ define([
          * Form validation failed.
          */
         onError: function (response) {
-            var that = this,
-                elm,
+            var elm,
                 responseData = [];
 
             try {
@@ -177,7 +176,7 @@ define([
                     actions: {
                         /** @inheritdoc */
                         always: function () {
-                            that.submitForm();
+                            $(document.body).trigger('processStop');
                         }
                     }
                 });
