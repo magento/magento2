@@ -6,6 +6,7 @@
 namespace Magento\Framework\ObjectManager;
 
 use Magento\Framework\Filesystem\DriverInterface;
+use Magento\Framework\App\State;
 use Magento\Framework\ObjectManager\Definition\Runtime;
 use Magento\Framework\Code\Generator\Autoloader;
 
@@ -45,17 +46,20 @@ class DefinitionFactory
         $this->_generationDir = $generationDir;
     }
 
-    /**
-     * Create class definitions
-     *
-     * @return DefinitionInterface
-     */
-    public function createClassDefinition()
-    {
-        $autoloader = new Autoloader($this->getCodeGenerator());
-        spl_autoload_register([$autoloader, 'load']);
+     /**
+      * Create class definitions
+      *
+      * @param string|null $mode Application mode. When production, Generator Autoloader is not registered.
+      * @return DefinitionInterface
+      */
+     public function createClassDefinition($mode = null)
+     {
+        if ($mode !== State::MODE_PRODUCTION) {
+            $autoloader = new Autoloader($this->getCodeGenerator());
+            spl_autoload_register([$autoloader, 'load']);
+        }
         return new Runtime();
-    }
+     }
 
     /**
      * Create plugin definitions
