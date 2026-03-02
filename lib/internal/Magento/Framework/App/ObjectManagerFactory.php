@@ -168,7 +168,8 @@ class ObjectManagerFactory
             $this->directoryList->getPath(AppDirectoryList::GENERATED_CODE)
         );
 
-        $definitions = $definitionFactory->createClassDefinition();
+        $mode = $arguments[State::PARAM_MODE] ?? State::MODE_DEFAULT;
+        $definitions = $definitionFactory->createClassDefinition($mode);
         $relations = $definitionFactory->createRelations();
 
         /** @var EnvironmentFactory $envFactory */
