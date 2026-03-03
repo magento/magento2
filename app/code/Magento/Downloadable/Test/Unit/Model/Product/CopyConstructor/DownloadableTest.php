@@ -13,11 +13,13 @@ use Magento\Downloadable\Model\Product\CopyConstructor\Downloadable;
 use Magento\Downloadable\Model\Product\Type;
 use Magento\Downloadable\Model\Sample;
 use Magento\Framework\Json\Helper\Data;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 class DownloadableTest extends TestCase
 {
+    use MockCreationTrait;
     /**
      * @var Downloadable
      */
@@ -65,8 +67,8 @@ class DownloadableTest extends TestCase
 
         $this->_productMock = $this->createMock(Product::class);
 
-        $this->_duplicateMock = $this->createPartialMock(
-            \Magento\Catalog\Test\Unit\Helper\ProductTestHelper::class,
+        $this->_duplicateMock = $this->createPartialMockWithReflection(
+            Product::class,
             ['setDownloadableData', '__wakeup']
         );
 

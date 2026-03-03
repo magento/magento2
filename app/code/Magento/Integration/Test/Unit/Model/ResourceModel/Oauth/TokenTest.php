@@ -7,13 +7,17 @@ declare(strict_types=1);
 
 namespace Magento\Integration\Test\Unit\Model\ResourceModel\Oauth;
 
+use Magento\Framework\App\ObjectManager as AppObjectManager;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\DB\Adapter\Pdo\Mysql;
 use Magento\Framework\DB\Select;
 use Magento\Framework\Model\ResourceModel\Db\Context;
+use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Integration\Model\ResourceModel\Oauth\Token;
+use Magento\Integration\Model\Oauth\Token as TokenModel;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -22,6 +26,8 @@ use PHPUnit\Framework\TestCase;
  */
 class TokenTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var AdapterInterface|MockObject
      */
@@ -48,19 +54,22 @@ class TokenTest extends TestCase
         $contextMock = $this->createMock(Context::class);
         $contextMock->expects($this->once())->method('getResources')->willReturn($this->resourceMock);
 
+        // Mock ObjectManager to prevent "ObjectManager isn't initialized" error
+        $objectManagerMock = $this->createMock(ObjectManagerInterface::class);
+        AppObjectManager::setInstance($objectManagerMock);
+
         $this->tokenResource = $objectManager->getObject(
             Token::class,
             ['context' => $contextMock]
         );
     }
 
-    public function testCleanOldAuthorizedTokensExcept()
+    public function testCleanOldAuthorizedTokensExcept(): void
     {
-        $tokenMock = $this->getMockBuilder(\Magento\Integration\Model\Oauth\Token::class)
-            ->addMethods(['getAuthorized', 'getConsumerId', 'getCustomerId', 'getAdminId'])
-            ->onlyMethods(['getId'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $tokenMock = $this->createPartialMockWithReflection(
+            TokenModel::class,
+            ['getAuthorized', 'getConsumerId', 'getCustomerId', 'getAdminId', 'getId']
+        );
         $tokenMock->expects($this->any())->method('getId')->willReturn(1);
         $tokenMock->expects($this->once())->method('getAuthorized')->willReturn(true);
         $tokenMock->expects($this->any())->method('getCustomerId')->willReturn(1);
@@ -69,14 +78,14 @@ class TokenTest extends TestCase
         $this->tokenResource->cleanOldAuthorizedTokensExcept($tokenMock);
     }
 
-    public function testDeleteOldEntries()
+    public function testDeleteOldEntries(): void
     {
         $this->connectionMock->expects($this->once())->method('delete');
         $this->connectionMock->expects($this->once())->method('quoteInto');
         $this->tokenResource->deleteOldEntries(5);
     }
 
-    public function testSelectTokenByType()
+    public function testSelectTokenByType(): void
     {
         $selectMock = $this->createMock(Select::class);
         $selectMock->expects($this->once())->method('from')->willReturn($selectMock);
@@ -86,7 +95,7 @@ class TokenTest extends TestCase
         $this->tokenResource->selectTokenByType(5, 'nonce');
     }
 
-    public function testSelectTokenByConsumerIdAndUserType()
+    public function testSelectTokenByConsumerIdAndUserType(): void
     {
         $selectMock = $this->createMock(Select::class);
         $selectMock->expects($this->once())->method('from')->willReturn($selectMock);
@@ -96,7 +105,7 @@ class TokenTest extends TestCase
         $this->tokenResource->selectTokenByConsumerIdAndUserType(5, 'nonce');
     }
 
-    public function testSelectTokenByAdminId()
+    public function testSelectTokenByAdminId(): void
     {
         $selectMock = $this->createMock(Select::class);
         $selectMock->expects($this->once())->method('from')->willReturn($selectMock);
@@ -106,7 +115,7 @@ class TokenTest extends TestCase
         $this->tokenResource->selectTokenByAdminId(5);
     }
 
-    public function testSelectTokenByCustomerId()
+    public function testSelectTokenByCustomerId(): void
     {
         $selectMock = $this->createMock(Select::class);
         $selectMock->expects($this->once())->method('from')->willReturn($selectMock);

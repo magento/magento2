@@ -13,6 +13,7 @@ use Magento\Framework\App\Request\Http as HttpRequest;
 use Magento\MediaStorage\Model\File\Storage\Response as FileResponse;
 use Magento\PageCache\Model\App\Response\HttpPlugin;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -54,9 +55,8 @@ class HttpPluginTest extends TestCase
      * @param bool $headersSent
      * @param int $sendVaryCalled
      * @return void
-     *
-     * @dataProvider beforeSendResponseDataProvider
      */
+    #[DataProvider('beforeSendResponseDataProvider')]
     public function testBeforeSendResponse(string $responseClass, bool $headersSent, int $sendVaryCalled): void
     {
         /** @var HttpResponse|MockObject $responseMock */

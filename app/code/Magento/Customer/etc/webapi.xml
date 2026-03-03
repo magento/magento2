@@ -283,4 +283,10 @@
             <resource ref="Magento_Customer::manage"/>
         </resources>
     </route>
+    <route url="/V1/customers/activate" method="POST">
+        <service class="Magento\Customer\Api\AccountManagementInterface" method="activate"/>
+        <resources>
+            <resource ref="anonymous"/>
+        </resources>
+    </route>
 </routes>

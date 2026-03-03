@@ -6,6 +6,10 @@
 
 namespace Magento\Catalog\Test\Unit\Model\Product\Webapi\Rest;
 
+use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
+use Magento\Framework\Exception\InputException;
+use Magento\Framework\Webapi\Exception;
 use Magento\Catalog\Model\Product\Webapi\Rest\RequestTypeBasedDeserializer;
 use Magento\Framework\App\State;
 use Magento\Framework\Json\Decoder;
@@ -24,7 +28,7 @@ use PHPUnit\Framework\MockObject\MockObject;
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class RequestTypeBasedDeserializerTest extends \PHPUnit\Framework\TestCase
+class RequestTypeBasedDeserializerTest extends TestCase
 {
     /** @var RequestTypeBasedDeserializer */
     private $requestTypeBasedDeserializer;
@@ -54,14 +58,14 @@ class RequestTypeBasedDeserializerTest extends \PHPUnit\Framework\TestCase
     /**
      * Test RequestTypeBasedDeserializer::deserializeMethod()
      *
-     * @dataProvider getDeserializerDataProvider
      * @param string $body
      * @param string $contentType
      * @param DeserializerInterface $deserializer
      * @param array $expectedResult
-     * @throws \Magento\Framework\Exception\InputException
-     * @throws \Magento\Framework\Webapi\Exception
+     * @throws InputException
+     * @throws Exception
      */
+    #[DataProvider('getDeserializerDataProvider')]
     public function testDeserialize(
         string $body,
         string $contentType,

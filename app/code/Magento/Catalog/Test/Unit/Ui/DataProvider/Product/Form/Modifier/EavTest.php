@@ -7,9 +7,12 @@ declare(strict_types=1);
 
 namespace Magento\Catalog\Test\Unit\Ui\DataProvider\Product\Form\Modifier;
 
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\Catalog\Api\Data\ProductAttributeInterface;
 use Magento\Catalog\Api\ProductAttributeGroupRepositoryInterface;
 use Magento\Catalog\Api\ProductAttributeRepositoryInterface;
+use Magento\Catalog\Model\Attribute\ScopeOverriddenValue;
 use Magento\Catalog\Model\ResourceModel\Eav\Attribute;
 use Magento\Catalog\Model\ResourceModel\Eav\Attribute as EavAttribute;
 use Magento\Catalog\Model\ResourceModel\Eav\AttributeFactory as EavAttributeFactory;
@@ -35,13 +38,14 @@ use Magento\Framework\Event\ManagerInterface;
 use Magento\Framework\Locale\Currency as CurrencyLocale;
 use Magento\Framework\Phrase;
 use Magento\Framework\Stdlib\ArrayManager;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Store\Api\Data\StoreInterface;
+use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Ui\DataProvider\EavValidationRules;
 use Magento\Ui\DataProvider\Mapper\FormElement as FormElementMapper;
 use Magento\Ui\DataProvider\Mapper\MetaProperties as MetaPropertiesMapper;
-use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 
 /**
@@ -49,8 +53,11 @@ use PHPUnit\Framework\MockObject\MockObject;
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
+#[CoversClass(\Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\Eav::class)]
 class EavTest extends AbstractModifierTestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var Config|MockObject
      */
@@ -172,6 +179,11 @@ class EavTest extends AbstractModifierTestCase
     protected $currencyMock;
 
     /**
+     * @var \Magento\Catalog\Model\Attribute\ScopeOverriddenValue|MockObject
+     */
+    private $scopeOverriddenValueMock;
+
+    /**
      * @var CurrencyLocale|MockObject
      */
     protected $currencyLocaleMock;
@@ -212,6 +224,7 @@ class EavTest extends AbstractModifierTestCase
     protected function setUp(): void
     {
         parent::setUp();
+
         $this->objectManager = new ObjectManager($this);
         $this->eavConfigMock = $this->createMock(Config::class);
         $this->eavValidationRulesMock = $this->createMock(EavValidationRules::class);
@@ -230,25 +243,34 @@ class EavTest extends AbstractModifierTestCase
         );
         $this->attributeCollectionMock = $this->createMock(AttributeCollection::class);
         $this->storeManagerMock = $this->createMock(StoreManagerInterface::class);
+        $this->storeManagerMock->method('isSingleStoreMode')->willReturn(true);
         $this->formElementMapperMock = $this->createMock(FormElementMapper::class);
         $this->metaPropertiesMapperMock = $this->createMock(MetaPropertiesMapper::class);
         $this->searchCriteriaBuilderMock = $this->createMock(SearchCriteriaBuilder::class);
         $this->attributeGroupRepositoryMock = $this->createMock(ProductAttributeGroupRepositoryInterface::class);
-        $this->attributeGroupMock = $this->createMock(Group::class);
+        // Group is a framework model with magic methods (extends AbstractExtensibleModel)
+        $this->attributeGroupMock = $this->createPartialMockWithReflection(
+            Group::class,
+            ['getAttributeGroupCode']  // Magic method via @method annotation
+        );
         $this->attributeRepositoryMock = $this->createMock(ProductAttributeRepositoryInterface::class);
         $this->searchCriteriaMock = $this->createMock(SearchCriteria::class);
         $this->attributeGroupSearchResultsMock = $this->createMock(SearchResultsInterface::class);
         $this->sortOrderBuilderMock = $this->createMock(SortOrderBuilder::class);
         $this->searchResultsMock = $this->createMock(SearchResultsInterface::class);
         // Use parent Attribute class - all setters work via magic methods (DataObject)
-        $this->eavAttributeMock = $this->createPartialMock(Attribute::class, []);
-        $this->productAttributeMock = $this->createPartialMock(Attribute::class, []);
+        $this->eavAttributeMock = $this->createPartialMock(
+            Attribute::class,
+            ['load', 'getApplyTo', 'getFrontendInput', 'getAttributeCode']
+        );
+        $this->productAttributeMock = $this->createPartialMock(Attribute::class, ['load']);
         $this->arrayManagerMock = $this->createMock(ArrayManager::class);
         $this->eavAttributeFactoryMock = $this->createPartialMock(
             EavAttributeFactory::class,
             ['create']
         );
         $this->eventManagerMock = $this->createMock(ManagerInterface::class);
+        $this->scopeOverriddenValueMock = $this->createMock(ScopeOverriddenValue::class);
 
         $this->eavAttributeFactoryMock->expects($this->any())
             ->method('create')
@@ -265,25 +287,24 @@ class EavTest extends AbstractModifierTestCase
         $this->groupCollectionMock->expects($this->any())
             ->method('load')
             ->willReturnSelf();
-        $this->groupCollectionMock->expects($this->any())
-            ->method('getIterator')
-            ->willReturn(new \ArrayIterator([$this->groupMock]));
+        $this->groupCollectionMock->method('getIterator')->willReturn(new \ArrayIterator([$this->groupMock]));
         $this->attributeCollectionMock->expects($this->any())
             ->method('addFieldToSelect')
             ->willReturnSelf();
         $this->attributeCollectionMock->expects($this->any())
             ->method('load')
             ->willReturnSelf();
-        $this->eavConfigMock->expects($this->any())
-            ->method('getEntityType')
-            ->willReturn($this->entityTypeMock);
-        $this->entityTypeMock->expects($this->any())
-            ->method('getAttributeCollection')
-            ->willReturn($this->attributeCollectionMock);
-        $this->storeMock = $this->createMock(StoreInterface::class);
-        $this->storeManagerMock->expects($this->any())
-            ->method('isSingleStoreMode')
-            ->willReturn(true);
+        $this->eavConfigMock->method('getEntityType')->willReturn($this->entityTypeMock);
+        $this->entityTypeMock->method('getAttributeCollection')->willReturn($this->attributeCollectionMock);
+        $this->productMock->setAttributes([$this->attributeMock]);
+        $this->storeMock = $this->createPartialMock(
+            Store::class,
+            ['load', 'getConfig', 'getBaseCurrencyCode', 'getId']
+        );
+        $this->storeMock->method('load')->willReturnSelf();
+        $this->eavAttributeMock->expects($this->any())
+            ->method('load')
+            ->willReturnSelf();
 
         $this->eav =$this->getModel();
     }
@@ -310,6 +331,7 @@ class EavTest extends AbstractModifierTestCase
                 'attributeRepository' => $this->attributeRepositoryMock,
                 'arrayManager' => $this->arrayManagerMock,
                 'eavAttributeFactory' => $this->eavAttributeFactoryMock,
+                'scopeOverriddenValue' => $this->scopeOverriddenValueMock,
                 '_eventManager' => $this->eventManagerMock,
                 'attributeCollectionFactory' => $this->attributeCollectionFactoryMock
             ]
@@ -329,11 +351,9 @@ class EavTest extends AbstractModifierTestCase
         $this->attributeCollectionFactoryMock->expects($this->once())->method('create')
             ->willReturn($this->attributeCollectionMock);
 
-        $this->attributeCollectionMock->expects($this->any())->method('getItems')
-            ->willReturn([$this->eavAttributeMock]);
+        $this->attributeCollectionMock->method('getItems')->willReturn([$this->eavAttributeMock]);
 
-        $this->locatorMock->expects($this->any())->method('getProduct')
-            ->willReturn($this->productMock);
+        $this->locatorMock->method('getProduct')->willReturn($this->productMock);
 
         $this->productMock->setId(1);
         $this->productMock->setAttributeSetId(4);
@@ -341,12 +361,14 @@ class EavTest extends AbstractModifierTestCase
 
         $this->searchCriteriaBuilderMock->expects($this->any())->method('addFilter')
             ->willReturnSelf();
-        $this->searchCriteriaBuilderMock->expects($this->any())->method('create')
-            ->willReturn($this->searchCriteriaMock);
-        $this->attributeGroupSearchResultsMock->method('getItems')
-            ->willReturn([$this->attributeGroupMock]);
-        $this->attributeGroupRepositoryMock->expects($this->any())->method('getList')
-            ->willReturn($this->attributeGroupSearchResultsMock);
+        $this->searchCriteriaBuilderMock->method('create')->willReturn($this->searchCriteriaMock);
+        
+        // Create separate search results for attribute groups (not attributes!)
+        $groupSearchResultsMock = $this->createMock(SearchResultsInterface::class);
+        $this->attributeGroupMock->method('getAttributeGroupCode')->willReturn('product-details');
+        $groupSearchResultsMock->method('getItems')->willReturn([$this->attributeGroupMock]);
+        $this->attributeGroupRepositoryMock->method('getList')->willReturn($groupSearchResultsMock);
+        
         $this->sortOrderBuilderMock->expects($this->once())->method('setField')
             ->willReturnSelf();
         $this->sortOrderBuilderMock->expects($this->once())->method('setAscendingDirection')
@@ -359,16 +381,18 @@ class EavTest extends AbstractModifierTestCase
             ->willReturnSelf();
         $this->searchCriteriaBuilderMock->expects($this->once())->method('addSortOrder')
             ->willReturnSelf();
-        $this->searchCriteriaBuilderMock->expects($this->any())->method('create')
-            ->willReturn($this->searchCriteriaMock);
+        $this->searchCriteriaBuilderMock->method('create')->willReturn($this->searchCriteriaMock);
 
         $this->attributeRepositoryMock->expects($this->once())->method('getList')
             ->with($this->searchCriteriaMock)
             ->willReturn($this->searchResultsMock);
-        $this->eavAttributeMock->setAttributeGroupCode('product-details');
-        $this->eavAttributeMock->setApplyTo([]);
-        $this->eavAttributeMock->setFrontendInput('price');
-        $this->eavAttributeMock->setAttributeCode(ProductAttributeInterface::CODE_PRICE);
+        $this->eavAttributeMock->setData('attribute_group_code', 'product-details');
+        $this->eavAttributeMock->expects($this->once())->method('getApplyTo')
+            ->willReturn([]);
+        $this->eavAttributeMock->expects($this->once())->method('getFrontendInput')
+            ->willReturn('price');
+        $this->eavAttributeMock->method('getAttributeCode')->willReturn(ProductAttributeInterface::CODE_PRICE);
+
         $this->searchResultsMock->expects($this->once())->method('getItems')
             ->willReturn([$this->eavAttributeMock]);
 
@@ -383,8 +407,6 @@ class EavTest extends AbstractModifierTestCase
      * @param bool $locked
      * @param string|null $frontendInput
      * @param array $expectedCustomize
-     * @covers       \Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\Eav::isProductExists
-     * @covers       \Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\Eav::setupAttributeMeta
      */
     #[DataProvider('setupAttributeMetaDataProvider')]
     public function testSetupAttributeMetaDefaultAttribute(
@@ -415,20 +437,26 @@ class EavTest extends AbstractModifierTestCase
         ];
 
         $this->productMock->setId($productId);
-        $this->productMock->setLockedAttribute('code', $locked);
+        $this->productMock->method('isLockedAttribute')->willReturn($locked);
+
+        // For non-locked tests, set storeId to 0 to prevent arguments key from being added
+        $this->productMock->method('getStoreId')->willReturn(!$locked && $productId ? 0 : 1);
+
         $this->productAttributeMock->setIsRequired($productRequired);
         $this->productAttributeMock->setDefaultValue('required_value');
         $this->productAttributeMock->setAttributeCode('code');
         $this->productAttributeMock->setValue('value');
         $this->productAttributeMock->setFrontendInput($frontendInput);
 
+        $attributeMock = $this->createMock(AttributeInterface::class);
+
         $attributeMock = $this->createStub(AttributeInterface::class);
         $attributeMock->method('getValue')->willReturn($attrValue);
 
-        $this->productMock->setCustomAttribute('code', $attributeMock);
+        $this->productMock->setCustomAttribute('code', $attrValue);
         $this->eavAttributeMock->setUsesSource(true);
 
-        $attributeSource = $this->createStub(SourceInterface::class);
+        $attributeSource = $this->createMock(SourceInterface::class);
         $attributeSource->method('getAllOptions')->willReturn($attributeOptions);
 
         $this->eavAttributeMock->setSource($attributeSource);

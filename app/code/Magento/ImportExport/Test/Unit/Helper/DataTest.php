@@ -12,6 +12,7 @@ use Magento\Framework\App\Helper\Context;
 use Magento\Framework\File\Size as FileSize;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\ImportExport\Helper\Data as HelperData;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -54,7 +55,7 @@ class DataTest extends TestCase
     {
         $this->contextMock = $this->createMock(Context::class);
         $this->fileSizeMock = $this->createMock(FileSize::class);
-        $this->scopeConfigMock = $this->getMockForAbstractClass(ScopeConfigInterface::class);
+        $this->scopeConfigMock = $this->createMock(ScopeConfigInterface::class);
         $this->contextMock->expects($this->any())->method('getScopeConfig')->willReturn($this->scopeConfigMock);
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
@@ -73,8 +74,8 @@ class DataTest extends TestCase
      * @param float $maxImageSize
      * @param string $expected
      * @return void
-     * @dataProvider getMaxUploadSizeMessageDataProvider
      */
+    #[DataProvider('getMaxUploadSizeMessageDataProvider')]
     public function testGetMaxUploadSizeMessage($maxImageSize, $expected)
     {
         $this->fileSizeMock->expects($this->any())->method('getMaxFileSizeInMb')->willReturn($maxImageSize);

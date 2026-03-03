@@ -11,7 +11,7 @@
         <annotations>
             <features value="Customer"/>
             <stories value="Customer Registration Form Validation"/>
-            <title value="Verify validation error messages are displayed on registration form when submitting empty fields"/>
+            <title value="Verify validation error messages display consistently on registration form across multiple submissions"/>
             <description value="Verify that all required fields on customer registration form display proper mage-error validation messages when form is submitted without filling any data"/>
             <severity value="MINOR"/>
             <testCaseId value="AC-15355"/>
@@ -28,23 +28,39 @@
         </after>
         <!-- Step 3: Navigate to customer registration page -->
         <actionGroup ref="StorefrontOpenCustomerAccountCreatePageActionGroup" stepKey="openCreateAccountPage"/>
-        <!-- Step 4: Submit form without filling any data -->
+        <!-- Step 4: Submit form without filling any data (Iteration 1) -->
         <scrollTo selector="{{StorefrontCustomerCreateFormSection.createAccountButton}}" stepKey="scrollToCreateButton"/>
         <waitForElementClickable selector="{{StorefrontCustomerCreateFormSection.createAccountButton}}" stepKey="waitForCreateAccountButton"/>
         <click selector="{{StorefrontCustomerCreateFormSection.createAccountButton}}" stepKey="clickCreateAccountButton"/>
         <waitForPageLoad stepKey="waitForValidation"/>
-        <!-- Step 5: Verify all required fields display proper error messages -->
-        <waitForText selector="{{StorefrontCustomerCreateFormSection.fieldErrorByFieldId('firstname-error')}}" userInput="{{ProductWarningMessage.require_Message}}" stepKey="assertFirstNameError"/>
-        <waitForText selector="{{StorefrontCustomerCreateFormSection.fieldErrorByFieldId('lastname-error')}}" userInput="{{ProductWarningMessage.require_Message}}" stepKey="assertLastNameError"/>
-        <waitForText selector="{{StorefrontCustomerCreateFormSection.fieldErrorByFieldId('email_address-error')}}" userInput="{{ProductWarningMessage.require_Message}}" stepKey="assertEmailError"/>
-        <waitForText selector="{{StorefrontCustomerCreateFormSection.fieldErrorByFieldId('password-error')}}" userInput="{{ProductWarningMessage.require_Message}}" stepKey="assertPasswordError"/>
-        <waitForText selector="{{StorefrontCustomerCreateFormSection.fieldErrorByFieldId('password-confirmation-error')}}" userInput="{{ProductWarningMessage.require_Message}}" stepKey="assertPasswordConfirmationError"/>
-        <!-- Step 6: Enter all needed data -->
+        <!-- Verify all required fields display proper error messages -->
+        <actionGroup ref="StorefrontAssertCustomerRegistrationValidationMessagesActionGroup" stepKey="assertValidationMessagesIteration1"/>
+        <!-- Step 5: Refresh the browser page -->
+        <reloadPage stepKey="refreshPage"/>
+        <waitForPageLoad stepKey="waitForPageLoad"/>
+        <!-- Step 6: Submit form without filling any data (Iteration 2) -->
+        <scrollTo selector="{{StorefrontCustomerCreateFormSection.createAccountButton}}" stepKey="scrollToCreateButtonAfterRefresh"/>
+        <waitForElementClickable selector="{{StorefrontCustomerCreateFormSection.createAccountButton}}" stepKey="waitForCreateAccountButtonAfterRefresh"/>
+        <click selector="{{StorefrontCustomerCreateFormSection.createAccountButton}}" stepKey="clickCreateAccountButtonAfterRefresh"/>
+        <waitForPageLoad stepKey="waitForValidationAfterRefresh"/>
+        <!-- Verify all validation messages - Iteration 2 -->
+        <actionGroup ref="StorefrontAssertCustomerRegistrationValidationMessagesActionGroup" stepKey="assertValidationMessagesIteration2"/>
+        <!-- Step 7: Repeat steps 5 & 6 (Iteration 3) -->
+        <reloadPage stepKey="refreshPageThirdTime"/>
+        <waitForPageLoad stepKey="waitForPageLoadThirdTime"/>
+        <scrollTo selector="{{StorefrontCustomerCreateFormSection.createAccountButton}}" stepKey="scrollToCreateButtonThirdTime"/>
+        <waitForElementClickable selector="{{StorefrontCustomerCreateFormSection.createAccountButton}}" stepKey="waitForCreateAccountButtonThirdTime"/>
+        <click selector="{{StorefrontCustomerCreateFormSection.createAccountButton}}" stepKey="clickCreateAccountButtonThirdTime"/>
+        <waitForPageLoad stepKey="waitForValidationThirdTime"/>
+        <!-- Verify all validation messages - Iteration 3 -->
+        <actionGroup ref="StorefrontAssertCustomerRegistrationValidationMessagesActionGroup" stepKey="assertValidationMessagesIteration3"/>
+        <!-- Step 8: Fill form with valid data and complete registration -->
         <actionGroup ref="StorefrontFillCustomerAccountCreationFormActionGroup" stepKey="fillCreateAccountForm">
             <argument name="customer" value="Simple_US_Customer"/>
         </actionGroup>
-        <!-- Step 7: Click on save customer and verify customer is saved successfully -->
+        <!-- Step 9: Click on save button -->
         <actionGroup ref="StorefrontClickCreateAnAccountCustomerAccountCreationFormActionGroup" stepKey="submitCreateAccountForm"/>
+        <!-- Verify success message is displayed -->
         <actionGroup ref="AssertMessageCustomerCreateAccountActionGroup" stepKey="seeSuccessMessage">
             <argument name="messageType" value="success"/>
             <argument name="message" value="{{customerSavedSuccessfullyMessage.value}}"/>

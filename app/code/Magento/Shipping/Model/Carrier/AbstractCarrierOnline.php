@@ -318,7 +318,7 @@ abstract class AbstractCarrierOnline extends AbstractCarrier
             return $this;
         }
 
-        $maxAllowedWeight = (double)$this->getConfigData('max_package_weight');
+        $maxAllowedWeight = (float)$this->getConfigData('max_package_weight');
         $errorMsg = '';
         $configErrorMsg = $this->getConfigData('specificerrmsg');
         $defaultErrorMsg = __('The shipping module is not available.');

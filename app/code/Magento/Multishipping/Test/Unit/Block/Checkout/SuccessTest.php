@@ -7,7 +7,8 @@ declare(strict_types=1);
 
 namespace Magento\Multishipping\Test\Unit\Block\Checkout;
 
-use Magento\Framework\Session\SessionManagerInterface;
+use Magento\Framework\Session\Generic;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\View\Element\Template\Context;
 use Magento\Multishipping\Block\Checkout\Success;
@@ -18,6 +19,7 @@ use PHPUnit\Framework\TestCase;
 
 class SuccessTest extends TestCase
 {
+    use MockCreationTrait;
     /**
      * @var Success
      */
@@ -39,32 +41,12 @@ class SuccessTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->sessionMock = $this->getMockBuilder(SessionManagerInterface::class)
-            ->addMethods(['getOrderIds'])
-            ->onlyMethods(
-                [
-                    'start',
-                    'writeClose',
-                    'isSessionExists',
-                    'getSessionId',
-                    'getName',
-                    'setName',
-                    'destroy',
-                    'clearStorage',
-                    'getCookieDomain',
-                    'getCookiePath',
-                    'getCookieLifetime',
-                    'setSessionId',
-                    'regenerateId',
-                    'expireSessionCookie',
-                    'getSessionIdForHost',
-                    'isValidForHost',
-                    'isValidForPath'
-                ]
-            )
-            ->getMockForAbstractClass();
+        $this->sessionMock = $this->createPartialMockWithReflection(
+            Generic::class,
+            ['getOrderIds']
+        );
         $this->contextMock = $this->createMock(Context::class);
-        $this->storeManagerMock = $this->getMockForAbstractClass(StoreManagerInterface::class);
+        $this->storeManagerMock = $this->createMock(StoreManagerInterface::class);
 
         $objectManager = new ObjectManager($this);
         $this->contextMock->expects($this->once())->method('getSession')->willReturn($this->sessionMock);

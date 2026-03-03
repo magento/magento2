@@ -16,10 +16,14 @@ use Magento\NewRelicReporting\Model\Observer\ReportProductSaved;
 use Magento\NewRelicReporting\Model\System;
 use Magento\NewRelicReporting\Model\SystemFactory;
 use PHPUnit\Framework\MockObject\MockObject;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use PHPUnit\Framework\TestCase;
 
 class ReportProductSavedTest extends TestCase
 {
+
+    use MockCreationTrait;
+    
     /**
      * @var ReportProductSaved
      */
@@ -111,10 +115,7 @@ class ReportProductSavedTest extends TestCase
         $this->config->expects($this->once())
             ->method('isNewRelicEnabled')
             ->willReturn(true);
-        $event = $this->getMockBuilder(Event::class)
-            ->addMethods(['getProduct'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $event = $this->createPartialMockWithReflection(Event::class, ['getProduct']);
         $eventObserver->expects($this->once())
             ->method('getEvent')
             ->willReturn($event);
@@ -157,10 +158,7 @@ class ReportProductSavedTest extends TestCase
         $this->config->expects($this->once())
             ->method('isNewRelicEnabled')
             ->willReturn(true);
-        $event = $this->getMockBuilder(Event::class)
-            ->addMethods(['getProduct'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $event = $this->createPartialMockWithReflection(Event::class, ['getProduct']);
         $eventObserver->expects($this->once())
             ->method('getEvent')
             ->willReturn($event);

@@ -235,7 +235,6 @@ class AddOptionToAttributeTest extends TestCase
         $reflection = new \ReflectionObject($this);
         foreach ($reflection->getProperties() as $property) {
             if (!$property->isStatic() && 0 !== strpos($property->getDeclaringClass()->getName(), 'PHPUnit')) {
-                $property->setAccessible(true);
                 $property->setValue($this, null);
             }
         }

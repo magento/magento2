@@ -102,16 +102,16 @@ class StockedProductsFilterPluginTest extends TestCase
         $stockStatusMock->expects($this->atLeastOnce())
             ->method('getStockStatus')
             ->willReturnOnConsecutiveCalls(Stock::STOCK_IN_STOCK, Stock::STOCK_OUT_OF_STOCK);
-        $stockStatusCollectionTestHelper = $this->getMockBuilder(StockStatusCollectionInterface::class)
+        $stockStatusCollection = $this->getMockBuilder(StockStatusCollectionInterface::class)
             ->getMock();
-        $stockStatusCollectionTestHelper
+        $stockStatusCollection
             ->expects($this->once())
             ->method('getItems')
             ->willReturn([1 => $stockStatusMock, 2 => $stockStatusMock]);
         $this->stockStatusRepositoryMock
             ->expects($this->once())
             ->method('getList')
-            ->willReturn($stockStatusCollectionTestHelper);
+            ->willReturn($stockStatusCollection);
 
         list($indexData, $productData, $storeId) = $this->plugin->beforePrepareProductIndex(
             $dataProviderMock,

@@ -57,7 +57,7 @@ class AttributeSetFixtureTest extends TestCase
         // Mock Attribute Sets
         $attributeSetMock = $this->getMockBuilder(AttributeSetInterface::class)
             ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+            ->getMock();
         $attributeSetMock->expects($this->once())
             ->method('setAttributeSetName')
             ->with("attribute set name");
@@ -78,7 +78,7 @@ class AttributeSetFixtureTest extends TestCase
 
         $attributeSetManagementMock = $this->getMockBuilder(AttributeSetManagementInterface::class)
             ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+            ->getMock();
         $attributeSetManagementMock->expects($this->once())
             ->method('create')
             ->with($attributeSetMock, '4')
@@ -87,7 +87,7 @@ class AttributeSetFixtureTest extends TestCase
         //Mock Attribute Groups
         $attributeGroupMock = $this->getMockBuilder(AttributeGroupInterface::class)
             ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+            ->getMock();
         $attributeGroupMock->expects($this->once())
             ->method('setAttributeGroupName')
             ->with($attributeSetMock->getAttributeSetName() . ' - Group');
@@ -116,7 +116,7 @@ class AttributeSetFixtureTest extends TestCase
         // Mock Attributes
         $attributeMock = $this->getMockBuilder(ProductAttributeInterface::class)
             ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+            ->getMock();
 
         $attributeFactoryMock = $this->getMockBuilder(\Magento\Catalog\Api\Data\ProductAttributeInterfaceFactory::class)
             ->disableOriginalConstructor()
@@ -129,7 +129,7 @@ class AttributeSetFixtureTest extends TestCase
         //Mock Attribute Options
         $optionMock = $this->getMockBuilder(AttributeOptionInterface::class)
             ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+            ->getMock();
 
         $optionFactoryMock = $this->getMockBuilder(\Magento\Eav\Api\Data\AttributeOptionInterfaceFactory::class)
             ->disableOriginalConstructor()

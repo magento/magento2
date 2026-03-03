@@ -165,7 +165,6 @@ class PageTest extends ResolverCacheAbstract
         $page = $this->getPageByTitle('Page with 1column layout');
 
         $getGraphQlClient = new \ReflectionMethod($this, 'getGraphQlClient');
-        $getGraphQlClient->setAccessible(true);
 
         $query = $this->getQuery($page->getIdentifier());
         $getGraphQlClient->invoke($this)->postWithResponseHeaders($query);

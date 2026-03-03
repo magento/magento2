@@ -11,6 +11,13 @@ namespace Magento\ConfigurableProduct\Model\Product\Type;
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\Product;
+use Magento\Catalog\Test\Fixture\Product as ProductFixture;
+use Magento\ConfigurableProduct\Test\Fixture\Attribute as AttributeFixture;
+use Magento\ConfigurableProduct\Test\Fixture\Product as ConfigurableProductFixture;
+use Magento\Store\Test\Fixture\Store as StoreFixture;
+use Magento\TestFramework\Fixture\DataFixture;
+use Magento\TestFramework\Fixture\DataFixtureStorageManager;
+use Magento\TestFramework\Fixture\DbIsolation;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\Catalog\Api\Data\ProductCustomOptionInterfaceFactory;
 use PHPUnit\Framework\TestCase;
@@ -672,5 +679,63 @@ class ConfigurableTest extends TestCase
 
         $product = $this->productRepository->get($sku);
         $this->assertEmpty($product->getOptions());
+    }
+
+    /**
+     * Test getProductByAttributes method returns child product with correct store view data
+     * and not necessarily the current store view
+     */
+    #[
+        DbIsolation(false),
+        DataFixture(StoreFixture::class, as: 'store_view_2'),
+        DataFixture(StoreFixture::class, as: 'store_view_3'),
+        DataFixture(ProductFixture::class, as: 'configurable_product_child'),
+        DataFixture(AttributeFixture::class, as: 'attribute'),
+        DataFixture(
+            ConfigurableProductFixture::class,
+            [
+                '_options' => ['$attribute$'],
+                '_links' => ['$configurable_product_child$']
+            ],
+            'configurable_product'
+        ),
+    ]
+    public function testGetProductByAttributesStoreView(): void
+    {
+        $fixtures = DataFixtureStorageManager::getStorage();
+        $configurableProductSku = $fixtures->get('configurable_product')->getSku();
+        $configurableChildProductSku = $fixtures->get('configurable_product_child')->getSku();
+        $attribute = $fixtures->get('attribute');
+        $storeView2 = $fixtures->get('store_view_2');
+        $storeView3 = $fixtures->get('store_view_3');
+        $nameInStoreView2 = 'Child Product Name in Store View 2';
+        $nameInStoreView3 = 'Child Product Name in Store View 3';
+        $attributes = [
+            $attribute->getId() => $attribute->getData('option_1')
+        ];
+        
+        // Update child product name in store view 2
+        $childProduct = $this->productRepository->get($configurableChildProductSku, true, $storeView2->getId(), true);
+        $childProduct->setName($nameInStoreView2);
+        $this->productRepository->save($childProduct);
+        
+        // Update child product name in store view 3
+        $childProduct = $this->productRepository->get($configurableChildProductSku, true, $storeView3->getId(), true);
+        $childProduct->setName($nameInStoreView3);
+        $this->productRepository->save($childProduct);
+        
+        // Load configurable product in store view 2
+        $configurableProduct = $this->productRepository->get($configurableProductSku, true, $storeView2->getId(), true);
+        // Load child product by attributes
+        $childProduct = $configurableProduct->getTypeInstance()
+            ->getProductByAttributes($attributes, $configurableProduct);
+        $this->assertEquals($nameInStoreView2, $childProduct->getName());
+
+        // Load configurable product in store view 3
+        $configurableProduct = $this->productRepository->get($configurableProductSku, true, $storeView3->getId(), true);
+        // Load child product by attributes
+        $childProduct = $configurableProduct->getTypeInstance()
+            ->getProductByAttributes($attributes, $configurableProduct);
+        $this->assertEquals($nameInStoreView3, $childProduct->getName());
     }
 }

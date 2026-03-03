@@ -36,6 +36,8 @@ class FilterEmulateTest extends TestCase
     protected function setUp(): void
     {
         $this->objectManagerHelper = new ObjectManagerHelper($this);
+        $this->objectManagerHelper->prepareObjectManager();
+
         $this->appStateMock = $this->createMock(State::class);
 
         $this->filterEmulate = $this->objectManagerHelper->getObject(

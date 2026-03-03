@@ -49,7 +49,8 @@ define([
         try {
             injector.remove();
             injector.clean();
-        } catch (e) {}
+        } catch (e) { // eslint-disable-line no-unused-vars
+        }
     });
 
     describe('Magento_Checkout/js/model/payment-service', function () {
@@ -67,7 +68,7 @@ define([
         });
     });
 
-    describe('Magento_Checkout/js/model/payment-service', function () {
+    describe('Magento_Checkout/js/model/payment-service vault methods', function () {
         beforeEach(function (done) {
             injector.mock(mocksPaymentMethodVault);
             // eslint-disable-next-line max-nested-callbacks

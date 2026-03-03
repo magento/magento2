@@ -38,6 +38,7 @@ use Magento\Quote\Test\Fixture\AddProductToCart as AddProductToCartFixture;
 use Magento\Quote\Test\Fixture\GuestCart as GuestCartFixture;
 use Magento\TestFramework\Fixture\DataFixture;
 use Magento\TestFramework\Fixture\DataFixtureStorage;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\TestFramework\Fixture\DataFixtureStorageManager;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\ObjectManager;
@@ -467,9 +468,9 @@ class QuoteTest extends TestCase
      * @param int|null $expectedOrderGiftMessageId
      *
      * @magentoDataFixture Magento/Sales/_files/quote.php
-     * @dataProvider giftMessageDataProvider
      * @return void
      */
+    #[DataProvider('giftMessageDataProvider')]
     public function testMerge(
         ?int $guestItemGiftMessageId,
         ?int $customerItemGiftMessageId,

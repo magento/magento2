@@ -16,6 +16,7 @@ use Magento\Framework\Message\MessageInterface;
 use Magento\Framework\Serialize\SerializerInterface;
 use Magento\TestFramework\Store\ExecuteInStoreContext;
 use Magento\TestFramework\TestCase\AbstractController;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Class add product to cart controller.
@@ -120,11 +121,10 @@ class AddTest extends AbstractController
     }
 
     /**
-     * @dataProvider wrongParamsDataProvider
-     *
      * @param array $params
      * @return void
      */
+    #[DataProvider('wrongParamsDataProvider')]
     public function testWithWrongParams(array $params): void
     {
         $this->prepareReferer();

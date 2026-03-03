@@ -15,12 +15,14 @@ use Magento\Framework\Controller\ResultFactory;
 use Magento\Framework\Message\ManagerInterface;
 use Magento\Framework\Registry;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\View\Result\PageFactory;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 class AttributeTest extends TestCase
 {
+    use MockCreationTrait;
     /**
      * @var ObjectManagerHelper
      */
@@ -64,33 +66,35 @@ class AttributeTest extends TestCase
     protected function setUp(): void
     {
         $this->objectManager = new ObjectManagerHelper($this);
-        $this->contextMock = $this->getMockBuilder(Context::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->attributeLabelCacheMock = $this->getMockBuilder(FrontendInterface::class)
-            ->getMockForAbstractClass();
-        $this->coreRegistryMock = $this->getMockBuilder(Registry::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->resultPageFactoryMock = $this->getMockBuilder(PageFactory::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->requestMock = $this->getMockBuilder(RequestInterface::class)
-            ->addMethods(['getPostValue', 'has'])
-            ->getMockForAbstractClass();
-        $this->resultFactoryMock = $this->getMockBuilder(ResultFactory::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->messageManager = $this->getMockBuilder(ManagerInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->contextMock = $this->createMock(Context::class);
+        $this->attributeLabelCacheMock = $this->createMock(FrontendInterface::class);
+        $this->coreRegistryMock = $this->createMock(Registry::class);
+        $this->resultPageFactoryMock = $this->createMock(PageFactory::class);
+        $this->requestMock = $this->createPartialMockWithReflection(
+            RequestInterface::class,
+            [
+                'getPostValue', 'getParam', 'has',
+                'getModuleName', 'setModuleName', 'getActionName', 'setActionName',
+                'getCookie', 'getDistroBaseUrl', 'getRequestUri', 'getScheme',
+                'setParams', 'getParams', 'isSecure'
+            ]
+        );
+        $this->requestMock->method('getModuleName')->willReturn('catalog');
+        $this->requestMock->method('setModuleName')->willReturnSelf();
+        $this->requestMock->method('getActionName')->willReturn('attribute');
+        $this->requestMock->method('setActionName')->willReturnSelf();
+        $this->requestMock->method('getCookie')->willReturn(null);
+        $this->requestMock->method('getDistroBaseUrl')->willReturn('');
+        $this->requestMock->method('getRequestUri')->willReturn('/');
+        $this->requestMock->method('getScheme')->willReturn('http');
+        $this->requestMock->method('setParams')->willReturnSelf();
+        $this->requestMock->method('getParams')->willReturn([]);
+        $this->requestMock->method('isSecure')->willReturn(false);
+        $this->resultFactoryMock = $this->createMock(ResultFactory::class);
+        $this->messageManager = $this->createMock(ManagerInterface::class);
 
-        $this->contextMock->expects($this->any())
-            ->method('getRequest')
-            ->willReturn($this->requestMock);
-        $this->contextMock->expects($this->any())
-            ->method('getResultFactory')
-            ->willReturn($this->resultFactoryMock);
+        $this->contextMock->method('getRequest')->willReturn($this->requestMock);
+        $this->contextMock->method('getResultFactory')->willReturn($this->resultFactoryMock);
         $this->contextMock
             ->method('getMessageManager')
             ->willReturn($this->messageManager);

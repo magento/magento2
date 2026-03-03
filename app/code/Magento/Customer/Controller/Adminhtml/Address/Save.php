@@ -12,8 +12,12 @@ use Magento\Framework\App\Action\HttpPostActionInterface;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Controller\Result\Json;
 use Magento\Framework\Controller\Result\JsonFactory;
+use Magento\Customer\Model\ValidatorExceptionProcessor;
+use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\Message\AbstractMessage;
+use Magento\Framework\Validator\Exception as ValidatorException;
 use Magento\Store\Model\StoreManagerInterface;
 use Psr\Log\LoggerInterface;
 
@@ -76,6 +80,11 @@ class Save extends Action implements HttpPostActionInterface
     private $customerRegistry;
 
     /**
+     * @var ValidatorExceptionProcessor
+     */
+    private $validatorExceptionProcessor;
+
+    /**
      * @param Action\Context $context
      * @param \Magento\Customer\Api\AddressRepositoryInterface $addressRepository
      * @param \Magento\Customer\Model\Metadata\FormFactory $formFactory
@@ -86,6 +95,7 @@ class Save extends Action implements HttpPostActionInterface
      * @param JsonFactory $resultJsonFactory
      * @param StoreManagerInterface|null $storeManager
      * @param CustomerRegistry|null $customerRegistry
+     * @param ValidatorExceptionProcessor|null $validatorExceptionProcessor
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -98,7 +108,8 @@ class Save extends Action implements HttpPostActionInterface
         LoggerInterface $logger,
         JsonFactory $resultJsonFactory,
         ?StoreManagerInterface $storeManager = null,
-        ?CustomerRegistry $customerRegistry = null
+        ?CustomerRegistry $customerRegistry = null,
+        ?ValidatorExceptionProcessor $validatorExceptionProcessor = null
     ) {
         parent::__construct($context);
         $this->addressRepository = $addressRepository;
@@ -112,6 +123,11 @@ class Save extends Action implements HttpPostActionInterface
             ?? ObjectManager::getInstance()->get(StoreManagerInterface::class);
         $this->customerRegistry = $customerRegistry
             ?? ObjectManager::getInstance()->get(CustomerRegistry::class);
+        $this->validatorExceptionProcessor = $validatorExceptionProcessor
+            ?? ObjectManager::getInstance()->get(ValidatorExceptionProcessor::class);
+        if ($this->validatorExceptionProcessor !== null) {
+            $this->validatorExceptionProcessor->setMessageManager($context->getMessageManager());
+        }
     }
 
     /**
@@ -175,7 +191,11 @@ class Save extends Action implements HttpPostActionInterface
             $message = __('There is no customer with such id.');
         } catch (LocalizedException $e) {
             $error = true;
-            $message = __($e->getMessage());
+            if ($e instanceof InputException && $this->validatorExceptionProcessor !== null) {
+                $message = $this->validatorExceptionProcessor->processInputExceptionForJson($e);
+            } else {
+                $message = __($e->getMessage());
+            }
             $this->logger->critical($e);
         } catch (\Exception $e) {
             $error = true;

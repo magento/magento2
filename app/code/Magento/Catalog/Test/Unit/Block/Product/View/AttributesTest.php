@@ -67,58 +67,26 @@ class AttributesTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->attribute = $this
-            ->getMockBuilder(AbstractAttribute::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->attribute = $this->createMock(AbstractAttribute::class);
         $this->attribute
-            ->expects($this->any())
-            ->method('getIsVisibleOnFront')
-            ->willReturn(true);
+            ->method('getIsVisibleOnFront')->willReturn(true);
         $this->attribute
-            ->expects($this->any())
-            ->method('getAttributeCode')
-            ->willReturn('phrase');
-        $this->frontendAttribute = $this
-            ->getMockBuilder(AbstractFrontend::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+            ->method('getAttributeCode')->willReturn('phrase');
+        $this->frontendAttribute = $this->createMock(AbstractFrontend::class);
         $this->attribute
-            ->expects($this->any())
-            ->method('getFrontendInput')
-            ->willReturn('phrase');
+            ->method('getFrontendInput')->willReturn('phrase');
         $this->attribute
-            ->expects($this->any())
-            ->method('getFrontend')
-            ->willReturn($this->frontendAttribute);
-        $this->product = $this
-            ->getMockBuilder(Product::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+            ->method('getFrontend')->willReturn($this->frontendAttribute);
+        $this->product = $this->createMock(Product::class);
         $this->product
-            ->expects($this->any())
-            ->method('getAttributes')
-            ->willReturn([$this->attribute]);
+            ->method('getAttributes')->willReturn([$this->attribute]);
         $this->product
-            ->expects($this->any())
-            ->method('hasData')
-            ->willReturn(true);
-        $this->context = $this
-            ->getMockBuilder(Context::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->registry = $this
-            ->getMockBuilder(Registry::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+            ->method('hasData')->willReturn(true);
+        $this->context = $this->createMock(Context::class);
+        $this->registry = $this->createMock(Registry::class);
         $this->registry
-            ->expects($this->any())
-            ->method('registry')
-            ->willReturn($this->product);
-        $this->priceCurrencyInterface = $this
-            ->getMockBuilder(PriceCurrencyInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+            ->method('registry')->willReturn($this->product);
+        $this->priceCurrencyInterface = $this->createMock(PriceCurrencyInterface::class);
         $this->attributesBlock = new AttributesBlock(
             $this->context,
             $this->registry,
@@ -133,9 +101,7 @@ class AttributesTest extends TestCase
     {
         $this->phrase = '';
         $this->frontendAttribute
-            ->expects($this->any())
-            ->method('getValue')
-            ->willReturn($this->phrase);
+            ->method('getValue')->willReturn($this->phrase);
         $attributes = $this->attributesBlock->getAdditionalData();
         $this->assertEmpty($attributes);
     }
@@ -147,9 +113,7 @@ class AttributesTest extends TestCase
     {
         $this->phrase = __('Yes');
         $this->frontendAttribute
-            ->expects($this->any())
-            ->method('getValue')
-            ->willReturn($this->phrase);
+            ->method('getValue')->willReturn($this->phrase);
         $attributes = $this->attributesBlock->getAdditionalData();
         $this->assertNotEmpty($attributes['phrase']);
         $this->assertNotEmpty($attributes['phrase']['value']);

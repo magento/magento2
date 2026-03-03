@@ -54,7 +54,11 @@ abstract class AbstractBundleProductSaveTest extends AbstractBackendController
     protected function tearDown(): void
     {
         if ($this->productToDelete) {
-            $this->productRepository->deleteById($this->productToDelete);
+            try {
+                $this->productRepository->deleteById($this->productToDelete);
+            } catch (\Magento\Framework\Exception\NoSuchEntityException $e) {
+                // Product doesn't exist
+            }
         }
 
         parent::tearDown();

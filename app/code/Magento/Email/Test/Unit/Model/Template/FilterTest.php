@@ -44,6 +44,7 @@ use Magento\Variable\Model\Source\Variables;
 use Magento\Variable\Model\VariableFactory;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -165,9 +166,7 @@ class FilterTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->logger = $this->getMockBuilder(LoggerInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->logger = $this->createMock(LoggerInterface::class);
 
         $this->escaper = $this->objectManager->getObject(Escaper::class);
 
@@ -175,21 +174,15 @@ class FilterTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->scopeConfig = $this->getMockBuilder(ScopeConfigInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->scopeConfig = $this->createMock(ScopeConfigInterface::class);
 
         $this->coreVariableFactory = $this->getMockBuilder(VariableFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->storeManager = $this->getMockBuilder(StoreManagerInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->storeManager = $this->createMock(StoreManagerInterface::class);
 
-        $this->layout = $this->getMockBuilder(LayoutInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->layout = $this->createMock(LayoutInterface::class);
 
         $this->layoutFactory = $this->getMockBuilder(LayoutFactory::class)
             ->disableOriginalConstructor()
@@ -199,9 +192,7 @@ class FilterTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->backendUrlBuilder = $this->getMockBuilder(UrlInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->backendUrlBuilder = $this->createMock(UrlInterface::class);
 
         $this->configVariables = $this->getMockBuilder(Variables::class)
             ->disableOriginalConstructor()
@@ -303,9 +294,8 @@ class FilterTest extends TestCase
      * @param $html
      * @param $css
      * @param $expectedResults
-     *
-     * @dataProvider applyInlineCssDataProvider
      */
+    #[DataProvider('applyInlineCssDataProvider')]
     public function testApplyInlineCss($html, $css, $expectedResults)
     {
         $filter = $this->getModel(['getCssFilesContent']);
@@ -314,7 +304,6 @@ class FilterTest extends TestCase
             ->getMock();
         $reflectionClass = new \ReflectionClass(Filter::class);
         $reflectionProperty = $reflectionClass->getProperty('cssProcessor');
-        $reflectionProperty->setAccessible(true);
         $reflectionProperty->setValue($filter, $cssProcessor);
         $cssProcessor->expects($this->any())
             ->method('process')
@@ -425,7 +414,6 @@ class FilterTest extends TestCase
             ->getMock();
         $reflectionClass = new \ReflectionClass(Filter::class);
         $reflectionProperty = $reflectionClass->getProperty('cssProcessor');
-        $reflectionProperty->setAccessible(true);
         $reflectionProperty->setValue($filter, $cssProcessor);
         $cssProcessor->expects($this->any())
             ->method('process')
@@ -579,9 +567,7 @@ class FilterTest extends TestCase
         $model->protocolDirective($data);
     }
 
-    /**
-     * @dataProvider dataProviderUrlModelCompanyRedirect
-     */
+    #[DataProvider('dataProviderUrlModelCompanyRedirect')]
     public function testStoreDirectiveForCompanyRedirect($className, $backendModelClass)
     {
         $this->storeManager->expects($this->any())
@@ -589,10 +575,7 @@ class FilterTest extends TestCase
             ->willReturn($this->store);
         $this->store->expects($this->any())->method('getCode')->willReturn('frvw');
 
-        $this->backendUrlBuilder = $this->getMockBuilder($className)
-            ->onlyMethods(['setScope','getUrl'])
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->backendUrlBuilder = $this->createMock($className);
 
         $this->backendUrlBuilder->expects($this->once())
             ->method('getUrl')
@@ -631,8 +614,8 @@ class FilterTest extends TestCase
      * @param bool $hasCacheKey
      * @param bool $expectGetCacheKey
      * @param bool $expectSetData
-     * @dataProvider blockDirectiveCacheKeyDataProvider
      */
+    #[DataProvider('blockDirectiveCacheKeyDataProvider')]
     public function testBlockDirectiveCacheKey($hasCacheKey, $expectGetCacheKey, $expectSetData)
     {
         $block = $this->getMockBuilder(AbstractBlock::class)

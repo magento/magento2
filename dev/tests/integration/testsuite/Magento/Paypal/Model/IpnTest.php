@@ -6,6 +6,7 @@
 namespace Magento\Paypal\Model;
 
 use Magento\Framework\Api\SearchCriteriaBuilder;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\Sales\Api\Data\OrderInterface;
 use Magento\Sales\Api\OrderRepositoryInterface;
 use Magento\Sales\Model\Order;
@@ -30,12 +31,12 @@ class IpnTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @param string $currencyCode
-     * @dataProvider currencyProvider
      * @magentoDataFixture Magento/Paypal/_files/order_express.php
      * @magentoConfigFixture current_store payment/paypal_direct/active 1
      * @magentoConfigFixture current_store payment/paypal_express/active 1
      * @magentoConfigFixture current_store paypal/general/merchant_country US
      */
+    #[DataProvider('currencyProvider')]
     public function testProcessIpnRequestExpressCurrency($currencyCode)
     {
         $this->_processIpnRequestCurrency($currencyCode);

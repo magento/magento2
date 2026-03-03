@@ -10,9 +10,9 @@ namespace Magento\CatalogUrlRewrite\Test\Unit\Observer;
 use Magento\CatalogImportExport\Model\Import\Product;
 use Magento\CatalogImportExport\Model\Import\Product\SkuStorage;
 use Magento\CatalogUrlRewrite\Observer\ClearProductUrlsObserver;
-use Magento\Framework\Event\Test\Unit\Helper\EventTestHelper;
 use Magento\Framework\Event;
 use Magento\Framework\Event\Observer;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\UrlRewrite\Model\UrlPersistInterface;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -24,6 +24,8 @@ use PHPUnit\Framework\TestCase;
  */
 class ClearProductUrlsObserverTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var ClearProductUrlsObserver
      */
@@ -78,10 +80,9 @@ class ClearProductUrlsObserverTest extends TestCase
      */
     protected function setUp(): void
     {
-        $objectManager = new ObjectManagerHelper($this);
         $this->skuStorage = $this->createMock(SkuStorage::class);
-        $this->event = $objectManager->createPartialMockWithReflection(
-            EventTestHelper::class,
+        $this->event = $this->createPartialMockWithReflection(
+            Event::class,
             ['getBunch']
         );
         $this->event->expects($this->once())

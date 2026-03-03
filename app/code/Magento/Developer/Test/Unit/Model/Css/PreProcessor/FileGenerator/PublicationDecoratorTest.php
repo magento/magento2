@@ -94,11 +94,8 @@ class PublicationDecoratorTest extends TestCase
         $this->importGeneratorMock = $this->getMockBuilder(Import::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->localAssetMock = $this->getMockBuilder(LocalInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-        $this->scopeConfigMock = $this->getMockBuilder(ScopeConfigInterface::class)
-            ->getMockForAbstractClass();
+        $this->localAssetMock = $this->createMock(LocalInterface::class);
+        $this->scopeConfigMock = $this->createMock(ScopeConfigInterface::class);
         $this->stateMock = $this->getMockBuilder(State::class)
             ->disableOriginalConstructor()
             ->getMock();

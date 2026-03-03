@@ -16,6 +16,7 @@ use Magento\Sales\Model\Order\Address;
 use Magento\Sales\Model\Order\Address\Validator;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class ValidatorTest extends TestCase
 {
@@ -79,8 +80,8 @@ class ValidatorTest extends TestCase
      * @param $email
      * @param $addressType
      * @param $expectedWarnings
-     * @dataProvider providerAddressData
      */
+    #[DataProvider('providerAddressData')]
     public function testValidate($addressData, $email, $addressType, $expectedWarnings)
     {
         $this->addressMock->expects($this->any())

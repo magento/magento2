@@ -227,7 +227,7 @@ class GenerateVclCommand extends Command
      * @param InputInterface $input
      * @return array
      */
-    private function inputToVclParameters(InputInterface $input)
+    private function inputToVclParameters(InputInterface $input): array
     {
         $parameters = [];
 
@@ -244,7 +244,7 @@ class GenerateVclCommand extends Command
      * @param InputInterface $input
      * @return array
      */
-    private function validate(InputInterface $input)
+    private function validate(InputInterface $input): array
     {
         $errors = [];
 

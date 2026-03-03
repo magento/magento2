@@ -13,6 +13,7 @@ use Magento\Framework\Session\SessionStartChecker;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\GraphQl\Model\Config\DisableSession;
 use Magento\GraphQl\Plugin\DisableSession as DisableSessionPlugin;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -63,8 +64,8 @@ class DisableSessionTest extends TestCase
      * @param bool $methodResult
      * @param bool $expectedResult
      * @return void
-     * @dataProvider afterCheckDataProvider
      */
+    #[DataProvider('afterCheckDataProvider')]
     public function testAfterCheck(string $area, bool $config, bool $methodResult, bool $expectedResult)
     {
         $this->disableSessionConfigMock->expects($this->any())->method('isDisabled')->willReturn($config);
@@ -98,8 +99,8 @@ class DisableSessionTest extends TestCase
      * @param bool $methodResult
      * @param bool $expectedResult
      * @return void
-     * @dataProvider afterCheckDataProviderNoAreaCode
      */
+    #[DataProvider('afterCheckDataProviderNoAreaCode')]
     public function testAfterCheckNoArea(bool $config, bool $methodResult, bool $expectedResult)
     {
         $this->disableSessionConfigMock->expects($this->any())->method('isDisabled')->willReturn($config);

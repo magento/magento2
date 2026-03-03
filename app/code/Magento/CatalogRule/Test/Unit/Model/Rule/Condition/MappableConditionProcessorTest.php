@@ -7,17 +7,23 @@ declare(strict_types=1);
 
 namespace Magento\CatalogRule\Test\Unit\Model\Rule\Condition;
 
+use Magento\Catalog\Model\Product;
 use Magento\CatalogRule\Model\Rule\Condition\Combine as CombinedCondition;
 use Magento\CatalogRule\Model\Rule\Condition\MappableConditionsProcessor;
 use Magento\CatalogRule\Model\Rule\Condition\Product as SimpleCondition;
 use Magento\Eav\Model\Config as EavConfig;
+use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
 use Magento\Framework\Api\SearchCriteria\CollectionProcessor\ConditionProcessor\CustomConditionProviderInterface;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Rule\Model\Condition\AbstractCondition;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 class MappableConditionProcessorTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var MappableConditionsProcessor
      */
@@ -40,16 +46,12 @@ class MappableConditionProcessorTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->eavConfigMock = $this->getMockBuilder(EavConfig::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['getAttribute'])
-            ->getMock();
+        $this->eavConfigMock = $this->createPartialMock(
+            EavConfig::class,
+            ['getAttribute']
+        );
 
-        $this->customConditionProcessorBuilderMock = $this->getMockBuilder(
-            CustomConditionProviderInterface::class
-        )->disableOriginalConstructor()
-            ->onlyMethods(['hasProcessorForField'])
-            ->getMockForAbstractClass();
+        $this->customConditionProcessorBuilderMock = $this->createMock(CustomConditionProviderInterface::class);
 
         $this->objectManagerHelper = new ObjectManager($this);
 
@@ -985,12 +987,11 @@ class MappableConditionProcessorTest extends TestCase
         $this->expectException('Magento\Framework\Exception\InputException');
         $this->expectExceptionMessage('Undefined condition type "olo-lo" passed in.');
         
-        // Create a mock that doesn't extend SimpleCondition or CombinedCondition
         // This tests the instanceof logic at line 82 and 70 - if neither match, throw exception
-        $invalidCondition = $this->getMockBuilder(\Magento\Rule\Model\Condition\AbstractCondition::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['getType'])
-            ->getMockForAbstractClass();
+        $invalidCondition = $this->createPartialMockWithReflection(
+            AbstractCondition::class,
+            ['getType']
+        );
         $invalidCondition->method('getType')->willReturn('olo-lo');
         
         $inputCondition = $this->getMockForCombinedCondition([$invalidCondition], 'any');
@@ -1005,10 +1006,7 @@ class MappableConditionProcessorTest extends TestCase
      */
     protected function getMockForCombinedCondition($subConditions, $aggregator)
     {
-        $mock = $this->getMockBuilder(CombinedCondition::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods([])
-            ->getMock();
+        $mock = $this->createPartialMock(CombinedCondition::class, []);
 
         $mock->setConditions($subConditions);
         $mock->setAggregator($aggregator);
@@ -1023,10 +1021,7 @@ class MappableConditionProcessorTest extends TestCase
      */
     protected function getMockForSimpleCondition($attribute)
     {
-        $mock = $this->getMockBuilder(SimpleCondition::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods([])
-            ->getMock();
+        $mock = $this->createPartialMock(SimpleCondition::class, []);
 
         $mock->setAttribute($attribute);
         $mock->setType(SimpleCondition::class);
@@ -1041,14 +1036,13 @@ class MappableConditionProcessorTest extends TestCase
      */
     public function testValidateSimpleConditionWithEavAttribute()
     {
-        // Create a simple condition with an EAV attribute
         $simpleCondition = $this->getMockForSimpleCondition('sku');
         
         // Mock attribute with backend type (valid EAV attribute)
-        $attributeMock = $this->getMockBuilder(\Magento\Eav\Model\Entity\Attribute\AbstractAttribute::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['getBackendType'])
-            ->getMockForAbstractClass();
+        $attributeMock = $this->createPartialMock(
+            AbstractAttribute::class,
+            ['getBackendType']
+        );
         $attributeMock->method('getBackendType')->willReturn('varchar');
 
         // No custom processor for this field
@@ -1062,7 +1056,7 @@ class MappableConditionProcessorTest extends TestCase
         $this->eavConfigMock
             ->expects($this->once())
             ->method('getAttribute')
-            ->with(\Magento\Catalog\Model\Product::ENTITY, 'sku')
+            ->with(Product::ENTITY, 'sku')
             ->willReturn($attributeMock);
 
         $inputCondition = $this->getMockForCombinedCondition([$simpleCondition], 'all');
@@ -1081,14 +1075,13 @@ class MappableConditionProcessorTest extends TestCase
      */
     public function testValidateSimpleConditionWithNonEavAttribute()
     {
-        // Create a simple condition with a non-EAV field
         $simpleCondition = $this->getMockForSimpleCondition('non_existent_field');
         
         // Mock attribute with null backend type (invalid/non-existent EAV attribute)
-        $attributeMock = $this->getMockBuilder(\Magento\Eav\Model\Entity\Attribute\AbstractAttribute::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['getBackendType'])
-            ->getMockForAbstractClass();
+        $attributeMock = $this->createPartialMock(
+            AbstractAttribute::class,
+            ['getBackendType']
+        );
         $attributeMock->method('getBackendType')->willReturn(null);
 
         // No custom processor for this field
@@ -1102,7 +1095,7 @@ class MappableConditionProcessorTest extends TestCase
         $this->eavConfigMock
             ->expects($this->once())
             ->method('getAttribute')
-            ->with(\Magento\Catalog\Model\Product::ENTITY, 'non_existent_field')
+            ->with(Product::ENTITY, 'non_existent_field')
             ->willReturn($attributeMock);
 
         $inputCondition = $this->getMockForCombinedCondition([$simpleCondition], 'all');
@@ -1121,7 +1114,6 @@ class MappableConditionProcessorTest extends TestCase
      */
     public function testValidateSimpleConditionWithCustomProcessor()
     {
-        // Create a simple condition with a custom field
         $simpleCondition = $this->getMockForSimpleCondition('custom_field');
         
         // Has custom processor for this field

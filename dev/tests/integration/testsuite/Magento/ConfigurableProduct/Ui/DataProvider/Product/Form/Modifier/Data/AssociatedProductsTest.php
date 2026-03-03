@@ -10,6 +10,7 @@ use Magento\Ui\Component\Filters\FilterModifier;
 use Magento\Framework\View\Element\UiComponent\ContextInterface;
 use Magento\ConfigurableProduct\Ui\DataProvider\Product\Form\Modifier\ConfigurablePanel;
 use Magento\Framework\App\RequestInterface;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -39,11 +40,11 @@ class AssociatedProductsTest extends TestCase
     }
 
     /**
-     * @dataProvider getProductMatrixDataProvider
      * @param string $interfaceLocale
      * @magentoDataFixture Magento/ConfigurableProduct/_files/product_configurable.php
      * @magentoAppArea adminhtml
      */
+    #[DataProvider('getProductMatrixDataProvider')]
     public function testGetProductMatrix($interfaceLocale)
     {
         $productSku = 'configurable';
@@ -59,9 +60,7 @@ class AssociatedProductsTest extends TestCase
         $store->load('admin');
         $this->registry->register('current_store', $store);
         /** @var \Magento\Framework\Locale\ResolverInterface|\PHPUnit\Framework\MockObject\MockObject $localeResolver */
-        $localeResolver = $this->getMockBuilder(\Magento\Framework\Locale\ResolverInterface::class)
-            ->onlyMethods(['getLocale'])
-            ->getMockForAbstractClass();
+        $localeResolver = $this->createMock(\Magento\Framework\Locale\ResolverInterface::class);
         $localeResolver->expects($this->any())->method('getLocale')->willReturn($interfaceLocale);
         $localeCurrency = $this->objectManager->create(
             \Magento\Framework\Locale\CurrencyInterface::class,

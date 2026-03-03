@@ -9,8 +9,10 @@ namespace Magento\CustomerGraphQl\Model\Customer\Address;
 
 use Magento\Customer\Api\AddressRepositoryInterface;
 use Magento\Customer\Api\Data\AddressInterface;
+use Magento\CustomerGraphQl\Model\ValidatorExceptionProcessor;
 use Magento\Framework\Api\DataObjectHelper;
 use Magento\Framework\Exception\AbstractAggregateException;
+use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 
@@ -24,6 +26,7 @@ class UpdateCustomerAddress
      * @param DataObjectHelper $dataObjectHelper
      * @param ValidateAddress $addressValidator
      * @param PopulateCustomerAddressFromInput $populateCustomerAddressFromInput
+     * @param ValidatorExceptionProcessor $validatorExceptionProcessor
      * @param array $restrictedKeys
      */
     public function __construct(
@@ -31,6 +34,7 @@ class UpdateCustomerAddress
         private readonly DataObjectHelper $dataObjectHelper,
         private readonly ValidateAddress $addressValidator,
         private readonly PopulateCustomerAddressFromInput $populateCustomerAddressFromInput,
+        private readonly ValidatorExceptionProcessor $validatorExceptionProcessor,
         private readonly array $restrictedKeys = []
     ) {
     }
@@ -63,6 +67,8 @@ class UpdateCustomerAddress
 
         try {
             $this->addressRepository->save($address);
+        } catch (InputException $e) {
+            throw $this->validatorExceptionProcessor->processInputExceptionForGraphQl($e, "\n");
         } catch (AbstractAggregateException $e) {
             $errors = $e->getErrors();
             if (is_array($errors) && !empty($errors)) {

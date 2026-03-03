@@ -51,9 +51,9 @@ class ReaderTest extends TestCase
     {
         $this->mapperMock = $this->createMock(Mapper::class);
 
-        $this->readerXmlMock = $this->getMockForAbstractClass(ReaderInterface::class);
+        $this->readerXmlMock = $this->createMock(ReaderInterface::class);
 
-        $this->readerDbMock = $this->getMockForAbstractClass(ReaderInterface::class);
+        $this->readerDbMock = $this->createMock(ReaderInterface::class);
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
 

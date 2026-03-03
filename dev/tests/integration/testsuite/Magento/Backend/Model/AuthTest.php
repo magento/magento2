@@ -7,6 +7,7 @@ namespace Magento\Backend\Model;
 
 use Magento\Framework\Data\Form\FormKey;
 use Magento\Framework\Exception\AuthenticationException;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Test class for \Magento\Backend\Model\Auth.
@@ -33,10 +34,10 @@ class AuthTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @dataProvider getLoginDataProvider
      * @param string $userName
      * @param string $password
      */
+    #[DataProvider('getLoginDataProvider')]
     public function testLoginFailed($userName, $password)
     {
         $this->expectException(\Magento\Framework\Exception\AuthenticationException::class);
