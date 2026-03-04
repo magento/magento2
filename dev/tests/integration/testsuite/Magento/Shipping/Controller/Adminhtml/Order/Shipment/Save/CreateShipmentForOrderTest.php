@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -11,6 +11,7 @@ use Magento\Framework\App\Request\Http as HttpRequest;
 use Magento\Framework\Message\MessageInterface;
 use Magento\Shipping\Controller\Adminhtml\Order\Shipment\AbstractShipmentControllerTest;
 use Magento\Framework\Escaper;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Test cases related to check that shipment creates as expected or proper error message appear.
@@ -40,12 +41,12 @@ class CreateShipmentForOrderTest extends AbstractShipmentControllerTest
      * Assert that shipment created successfully.
      *
      * @magentoDataFixture Magento/Sales/_files/order_with_two_order_items_with_simple_product.php
-     * @dataProvider dataForCreateShipmentDataProvider
      *
      * @param array $dataForBuildPostData
      * @param array $expectedShippedQtyBySku
      * @return void
      */
+    #[DataProvider('dataForCreateShipmentDataProvider')]
     public function testCreateOrderShipment(array $dataForBuildPostData, array $expectedShippedQtyBySku): void
     {
         $postData = $this->createPostData($dataForBuildPostData);
@@ -68,7 +69,7 @@ class CreateShipmentForOrderTest extends AbstractShipmentControllerTest
      *
      * @return array
      */
-    public function dataForCreateShipmentDataProvider(): array
+    public static function dataForCreateShipmentDataProvider(): array
     {
         return [
             'create_full_shipment' => [

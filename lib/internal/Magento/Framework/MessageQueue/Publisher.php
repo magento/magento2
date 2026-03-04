@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework\MessageQueue;
 
@@ -72,7 +72,7 @@ class Publisher implements PublisherInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function publish($topicName, $data)
     {
@@ -85,7 +85,7 @@ class Publisher implements PublisherInterface
                     'delivery_mode' => 2,
                     // md5() here is not for cryptographic use.
                     // phpcs:ignore Magento2.Security.InsecureFunction
-                    'message_id' => md5(uniqid($topicName))
+                    'message_id' => md5(gethostname() . microtime(true) . uniqid($topicName, true))
                 ]
             ]
         );

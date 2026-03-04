@@ -3,12 +3,13 @@
  * Abstract class that helps in writing tests that validate config xml files
  * are valid both individually and when merged.
  *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\TestFramework\TestCase;
 
 use Magento\Framework\Component\ComponentRegistrar;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 abstract class AbstractConfigFiles extends \PHPUnit\Framework\TestCase
 {
@@ -35,11 +36,11 @@ abstract class AbstractConfigFiles extends \PHPUnit\Framework\TestCase
     /**
      * @var ComponentRegistrar
      */
-    protected $componentRegistrar;
+    protected static $componentRegistrar;
 
     protected function setUp(): void
     {
-        $this->componentRegistrar = new ComponentRegistrar();
+        self::$componentRegistrar = new ComponentRegistrar();
         $this->_objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $xmlFiles = $this->getXmlConfigFiles();
         if (!empty($xmlFiles)) {
@@ -71,9 +72,7 @@ abstract class AbstractConfigFiles extends \PHPUnit\Framework\TestCase
         $this->_objectManager->removeSharedInstance($this->_getReaderClassName());
     }
 
-    /**
-     * @dataProvider xmlConfigFileProvider
-     */
+    #[DataProvider('xmlConfigFileProvider')]
     public function testXmlConfigFile($file, $skip = false)
     {
         if ($skip) {
@@ -120,9 +119,9 @@ abstract class AbstractConfigFiles extends \PHPUnit\Framework\TestCase
      *
      * @return array
      */
-    public function xmlConfigFileProvider()
+    public static function xmlConfigFileProvider()
     {
-        $fileList = $this->getXmlConfigFiles();
+        $fileList = self::getXmlConfigFiles();
         $result = [];
         foreach ($fileList as $fileContent) {
             $result[] = [$fileContent];
@@ -135,14 +134,14 @@ abstract class AbstractConfigFiles extends \PHPUnit\Framework\TestCase
      *
      * @return \Magento\Framework\Config\FileIterator
      */
-    public function getXmlConfigFiles()
+    public static function getXmlConfigFiles()
     {
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         /** @var $moduleDirSearch \Magento\Framework\Component\DirSearch */
         $moduleDirSearch = $objectManager->get(\Magento\Framework\Component\DirSearch::class);
 
         return $objectManager->get(\Magento\Framework\Config\FileIteratorFactory::class)
-            ->create($moduleDirSearch->collectFiles(ComponentRegistrar::MODULE, $this->_getConfigFilePathGlob()));
+            ->create($moduleDirSearch->collectFiles(ComponentRegistrar::MODULE, static::_getConfigFilePathGlob()));
     }
 
     /**
@@ -159,12 +158,12 @@ abstract class AbstractConfigFiles extends \PHPUnit\Framework\TestCase
      *
      * @return string
      */
-    abstract protected function _getConfigFilePathGlob();
+    abstract protected static function _getConfigFilePathGlob();
 
     /**
      * Returns an absolute path to the XSD file corresponding to the XML files specified in _getConfigFilePathGlob
      *
      * @return string
      */
-    abstract protected function _getXsdPath();
+    abstract protected static function _getXsdPath();
 }

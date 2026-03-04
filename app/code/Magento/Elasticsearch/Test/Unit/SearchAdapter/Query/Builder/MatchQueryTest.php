@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2021 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -16,9 +16,9 @@ use Magento\Elasticsearch\SearchAdapter\Query\Builder\MatchQuery as MatchQueryBu
 use Magento\Elasticsearch\SearchAdapter\Query\ValueTransformerInterface;
 use Magento\Elasticsearch\SearchAdapter\Query\ValueTransformerPool;
 use Magento\Framework\Search\Request\Query\MatchQuery;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Test Match query builder
@@ -39,12 +39,14 @@ class MatchQueryTest extends TestCase
      * @var MatchQueryBuilder
      */
     private $matchQueryBuilder;
+
     /**
-     * @var MockObject
+     * @var Config|MockObject
      */
     private $config;
+
     /**
-     * @var MockObject
+     * @var FieldMapperInterface|MockObject
      */
     private $fieldMapper;
 
@@ -56,25 +58,22 @@ class MatchQueryTest extends TestCase
         $this->attributeProvider = $this->createMock(AttributeProvider::class);
         $this->fieldTypeResolver = $this->createMock(TypeResolver::class);
         $this->config = $this->createMock(Config::class);
-        $this->fieldMapper = $this->getMockForAbstractClass(FieldMapperInterface::class);
+        $this->fieldMapper = $this->createMock(FieldMapperInterface::class);
         $this->fieldMapper->method('getFieldName')
             ->willReturnArgument(0);
         $valueTransformerPoolMock = $this->createMock(ValueTransformerPool::class);
-        $valueTransformerMock = $this->getMockForAbstractClass(ValueTransformerInterface::class);
+        $valueTransformerMock = $this->createMock(ValueTransformerInterface::class);
         $valueTransformerPoolMock->method('get')
             ->willReturn($valueTransformerMock);
         $valueTransformerMock->method('transform')
             ->willReturnArgument(0);
-        $this->matchQueryBuilder = (new ObjectManager($this))->getObject(
-            MatchQueryBuilder::class,
-            [
-                'fieldMapper' => $this->fieldMapper,
-                'preprocessorContainer' => [],
-                'attributeProvider' => $this->attributeProvider,
-                'fieldTypeResolver' => $this->fieldTypeResolver,
-                'valueTransformerPool' => $valueTransformerPoolMock,
-                'config' => $this->config,
-            ]
+
+        $this->matchQueryBuilder = new MatchQueryBuilder(
+            $this->fieldMapper,
+            $this->attributeProvider,
+            $this->fieldTypeResolver,
+            $valueTransformerPoolMock,
+            $this->config
         );
     }
 
@@ -85,9 +84,9 @@ class MatchQueryTest extends TestCase
      * @param array $fields
      * @param array $expected
      * @param string|null $minimumShouldMatch
-     * @dataProvider buildDataProvider
-     * @dataProvider buildDataProviderForMatchPhrasePrefix
      */
+    #[DataProvider('buildDataProvider')]
+    #[DataProvider('buildDataProviderForMatchPhrasePrefix')]
     public function testBuild(
         string $searchQuery,
         array $fields,
@@ -120,7 +119,7 @@ class MatchQueryTest extends TestCase
     /**
      * @return array
      */
-    public function buildDataProvider(): array
+    public static function buildDataProvider(): array
     {
         return [
             'match query without minimum_should_match' => [
@@ -182,6 +181,7 @@ class MatchQueryTest extends TestCase
                 ],
                 '2<75%'
             ],
+            //[match_phrase] query does not support [minimum_should_match]
             'match_phrase query with minimum_should_match' => [
                 '"fitness bottle"',
                 [
@@ -196,21 +196,19 @@ class MatchQueryTest extends TestCase
                             'name' => [
                                 'query' => 'fitness bottle',
                                 'boost' => 6,
-                                'minimum_should_match' => '2<75%',
                             ],
                         ],
                     ],
                 ],
                 '2<75%'
             ],
-
         ];
     }
 
     /**
      * @return array
      */
-    public function buildDataProviderForMatchPhrasePrefix()
+    public static function buildDataProviderForMatchPhrasePrefix()
     {
         return [
         'match_phrase_prefix query with minimum_should_match' => [

@@ -1,8 +1,7 @@
 <?php
 /**
- *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -70,15 +69,13 @@ class ReportTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $this->pageConfigMock = $this->getMockBuilder(Config::class)
-            ->setMethods(['getTitle'])
+            ->onlyMethods(['getTitle'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->titleMock = $this->getMockBuilder(Title::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->eventManagerMock = $this->getMockBuilder(ManagerInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->eventManagerMock = $this->createMock(ManagerInterface::class);
         $this->contextMock = $this->getMockBuilder(Context::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -107,8 +104,15 @@ class ReportTest extends TestCase
             ->willReturnSelf();
         $this->pageMock->expects($this->exactly(2))
             ->method('addBreadcrumb')
-            ->withConsecutive([__('Reports'), __('Reports')], [__('Search Terms'), __('Search Terms')])
-            ->willReturnSelf();
+            ->willReturnCallback(
+                function ($arg1, $arg2) {
+                    if ($arg1 == __('Reports') && $arg2 == __('Reports')) {
+                        return $this->pageMock;
+                    } elseif ($arg1 == __('Search Terms') && $arg2 == __('Search Terms')) {
+                        return $this->pageMock;
+                    }
+                }
+            );
         $this->pageMock->expects($this->once())
             ->method('getConfig')
             ->willReturn($this->pageConfigMock);

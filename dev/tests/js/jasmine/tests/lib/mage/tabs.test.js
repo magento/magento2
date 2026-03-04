@@ -1,15 +1,14 @@
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 
 /* eslint-disable max-nested-callbacks */
 define([
     'jquery',
-    'jquery/ui',
     'mage/tabs',
     'text!tests/assets/lib/web/mage/tabs.html'
-], function ($, ui, tabs, tabsTmpl) {
+], function ($, tabs, tabsTmpl) {
     'use strict';
 
     describe('mage/tabs', function () {

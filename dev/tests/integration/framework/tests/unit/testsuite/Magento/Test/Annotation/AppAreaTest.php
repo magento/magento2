@@ -1,13 +1,18 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Test\Annotation;
 
 use Magento\Framework\App\Area;
+use Magento\Framework\ObjectManagerInterface;
 use Magento\TestFramework\Annotation\TestCaseAnnotation;
+use Magento\TestFramework\Fixture\Parser\AppArea;
+use Magento\TestFramework\Helper\Bootstrap;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\Attributes\DataProvider;
 use ReflectionProperty;
 
 class AppAreaTest extends \PHPUnit\Framework\TestCase
@@ -37,6 +42,29 @@ class AppAreaTest extends \PHPUnit\Framework\TestCase
      */
     protected function setUp(): void
     {
+        /** @var ObjectManagerInterface|MockObject $objectManager */
+        $objectManager = $this->getMockBuilder(ObjectManagerInterface::class)
+            ->onlyMethods(['get', 'create', 'configure'])
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $sharedInstances = [
+            AppArea::class => $this->createConfiguredMock(AppArea::class, ['parse' => []])
+        ];
+        $objectManager->method('get')
+            ->willReturnCallback(
+                function (string $type) use ($sharedInstances) {
+                    return $sharedInstances[$type] ?? new $type();
+                }
+            );
+        $objectManager->method('create')
+            ->willReturnCallback(
+                function (string $type, array $arguments = []) {
+                    return new $type(...array_values($arguments));
+                }
+            );
+
+        Bootstrap::setObjectManager($objectManager);
         $this->_testCaseMock = $this->createMock(\PHPUnit\Framework\TestCase::class);
         $this->testCaseAnnotationsMock = $this->createMock(TestCaseAnnotation::class);
         $this->_applicationMock = $this->createMock(\Magento\TestFramework\Application::class);
@@ -49,28 +77,26 @@ class AppAreaTest extends \PHPUnit\Framework\TestCase
     protected function tearDown(): void
     {
         $property = new ReflectionProperty(TestCaseAnnotation::class, 'instance');
-        $property->setAccessible(true);
-        $property->setValue(null);
+        $property->setValue(null, null);
     }
 
     /**
      * @param array $annotations
      * @param string $expectedArea
-     * @dataProvider getTestAppAreaDataProvider
      */
+    #[DataProvider('getTestAppAreaDataProvider')]
     public function testGetTestAppArea($annotations, $expectedArea)
     {
         $property = new ReflectionProperty(TestCaseAnnotation::class, 'instance');
-        $property->setAccessible(true);
         $property->setValue($this->testCaseAnnotationsMock);
-        $this->testCaseAnnotationsMock->expects($this->once())->method('getAnnotations')->willReturn($annotations);
+        $this->testCaseAnnotationsMock->method('getAnnotations')->willReturn($annotations);
         $this->_applicationMock->expects($this->any())->method('getArea')->willReturn(null);
         $this->_applicationMock->expects($this->once())->method('reinitialize');
         $this->_applicationMock->expects($this->once())->method('loadArea')->with($expectedArea);
         $this->_object->startTest($this->_testCaseMock);
     }
 
-    public function getTestAppAreaDataProvider()
+    public static function getTestAppAreaDataProvider()
     {
         return [
             'method scope' => [['method' => ['magentoAppArea' => ['adminhtml']]], 'adminhtml'],
@@ -86,15 +112,12 @@ class AppAreaTest extends \PHPUnit\Framework\TestCase
         ];
     }
 
-    /**
-     */
     public function testGetTestAppAreaWithInvalidArea()
     {
-        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
+        $this->expectException(\PHPUnit\Framework\Exception::class);
 
         $annotations = ['method' => ['magentoAppArea' => ['some_invalid_area']]];
         $property = new ReflectionProperty(TestCaseAnnotation::class, 'instance');
-        $property->setAccessible(true);
         $property->setValue($this->testCaseAnnotationsMock);
         $this->testCaseAnnotationsMock->expects($this->once())->method('getAnnotations')->willReturn($annotations);
 
@@ -103,15 +126,13 @@ class AppAreaTest extends \PHPUnit\Framework\TestCase
 
     /**
      * Check startTest() with different allowed area codes.
-     *
-     * @dataProvider startTestWithDifferentAreaCodes
      * @param string $areaCode
      */
+    #[DataProvider('startTestWithDifferentAreaCodes')]
     public function testStartTestWithDifferentAreaCodes(string $areaCode)
     {
         $annotations = ['method' => ['magentoAppArea' => [$areaCode]]];
         $property = new ReflectionProperty(TestCaseAnnotation::class, 'instance');
-        $property->setAccessible(true);
         $property->setValue($this->testCaseAnnotationsMock);
         $this->testCaseAnnotationsMock->expects($this->once())->method('getAnnotations')->willReturn($annotations);
         $this->_applicationMock->expects($this->any())->method('getArea')->willReturn(null);
@@ -125,7 +146,6 @@ class AppAreaTest extends \PHPUnit\Framework\TestCase
     {
         $annotations = ['method' => ['magentoAppArea' => ['global']]];
         $property = new ReflectionProperty(TestCaseAnnotation::class, 'instance');
-        $property->setAccessible(true);
         $property->setValue($this->testCaseAnnotationsMock);
         $this->testCaseAnnotationsMock->expects($this->once())->method('getAnnotations')->willReturn($annotations);
         $this->_applicationMock->expects($this->once())->method('reinitialize');
@@ -140,7 +160,6 @@ class AppAreaTest extends \PHPUnit\Framework\TestCase
     {
         $annotations = ['method' => ['magentoAppArea' => ['adminhtml']]];
         $property = new ReflectionProperty(TestCaseAnnotation::class, 'instance');
-        $property->setAccessible(true);
         $property->setValue($this->testCaseAnnotationsMock);
         $this->testCaseAnnotationsMock->expects($this->once())->method('getAnnotations')->willReturn($annotations);
         $this->_applicationMock->expects($this->once())->method('getArea')->willReturn('adminhtml');
@@ -154,29 +173,29 @@ class AppAreaTest extends \PHPUnit\Framework\TestCase
      *
      * @return array
      */
-    public function startTestWithDifferentAreaCodes()
+    public static function startTestWithDifferentAreaCodes()
     {
         return [
             [
-                'area_code' => Area::AREA_GLOBAL,
+                'areaCode' => Area::AREA_GLOBAL,
             ],
             [
-                'area_code' => Area::AREA_ADMINHTML,
+                'areaCode' => Area::AREA_ADMINHTML,
             ],
             [
-                'area_code' => Area::AREA_FRONTEND,
+                'areaCode' => Area::AREA_FRONTEND,
             ],
             [
-                'area_code' => Area::AREA_WEBAPI_REST,
+                'areaCode' => Area::AREA_WEBAPI_REST,
             ],
             [
-                'area_code' => Area::AREA_WEBAPI_SOAP,
+                'areaCode' => Area::AREA_WEBAPI_SOAP,
             ],
             [
-                'area_code' => Area::AREA_CRONTAB,
+                'areaCode' => Area::AREA_CRONTAB,
             ],
             [
-                'area_code' => Area::AREA_GRAPHQL,
+                'areaCode' => Area::AREA_GRAPHQL,
             ],
         ];
     }

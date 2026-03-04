@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\MessageQueue\Console;
 
@@ -18,13 +18,14 @@ use Magento\Framework\Lock\LockManagerInterface;
  */
 class StartConsumerCommand extends Command
 {
-    const ARGUMENT_CONSUMER = 'consumer';
-    const OPTION_NUMBER_OF_MESSAGES = 'max-messages';
-    const OPTION_BATCH_SIZE = 'batch-size';
-    const OPTION_AREACODE = 'area-code';
-    const OPTION_SINGLE_THREAD = 'single-thread';
-    const PID_FILE_PATH = 'pid-file-path';
-    const COMMAND_QUEUE_CONSUMERS_START = 'queue:consumers:start';
+    public const ARGUMENT_CONSUMER = 'consumer';
+    public const OPTION_NUMBER_OF_MESSAGES = 'max-messages';
+    public const OPTION_BATCH_SIZE = 'batch-size';
+    public const OPTION_AREACODE = 'area-code';
+    public const OPTION_SINGLE_THREAD = 'single-thread';
+    public const OPTION_MULTI_PROCESS = 'multi-process';
+    public const PID_FILE_PATH = 'pid-file-path';
+    public const COMMAND_QUEUE_CONSUMERS_START = 'queue:consumers:start';
 
     /**
      * @var ConsumerFactory
@@ -42,9 +43,6 @@ class StartConsumerCommand extends Command
     private $lockManager;
 
     /**
-     * StartConsumerCommand constructor.
-     * {@inheritdoc}
-     *
      * @param \Magento\Framework\App\State $appState
      * @param ConsumerFactory $consumerFactory
      * @param string $name
@@ -54,7 +52,7 @@ class StartConsumerCommand extends Command
         \Magento\Framework\App\State $appState,
         ConsumerFactory $consumerFactory,
         $name = null,
-        LockManagerInterface $lockManager = null
+        ?LockManagerInterface $lockManager = null
     ) {
         $this->appState = $appState;
         $this->consumerFactory = $consumerFactory;
@@ -66,7 +64,7 @@ class StartConsumerCommand extends Command
     /**
      * @inheritdoc
      */
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $consumerName = $input->getArgument(self::ARGUMENT_CONSUMER);
         $numberOfMessages = $input->getOption(self::OPTION_NUMBER_OF_MESSAGES);
@@ -78,6 +76,12 @@ class StartConsumerCommand extends Command
         }
 
         $singleThread = $input->getOption(self::OPTION_SINGLE_THREAD);
+        $multiProcess = $input->getOption(self::OPTION_MULTI_PROCESS);
+
+        if ($multiProcess && !$this->lockManager->lock(md5($consumerName . '-' . $multiProcess),0)) { //phpcs:ignore
+            $output->writeln('<error>Consumer with the same name is running</error>');
+            return \Magento\Framework\Console\Cli::RETURN_FAILURE;
+        }
 
         if ($singleThread && !$this->lockManager->lock(md5($consumerName),0)) { //phpcs:ignore
             $output->writeln('<error>Consumer with the same name is running</error>');
@@ -88,8 +92,12 @@ class StartConsumerCommand extends Command
 
         $consumer = $this->consumerFactory->get($consumerName, $batchSize);
         $consumer->process($numberOfMessages);
+
         if ($singleThread) {
             $this->lockManager->unlock(md5($consumerName)); //phpcs:ignore
+        }
+        if ($multiProcess) {
+            $this->lockManager->unlock(md5($consumerName . '-' . $multiProcess)); //phpcs:ignore
         }
 
         return \Magento\Framework\Console\Cli::RETURN_SUCCESS;
@@ -134,6 +142,12 @@ class StartConsumerCommand extends Command
             'This option prevents running multiple copies of one consumer simultaneously.'
         );
         $this->addOption(
+            self::OPTION_MULTI_PROCESS,
+            null,
+            InputOption::VALUE_OPTIONAL,
+            'The number of processes per consumer.'
+        );
+        $this->addOption(
             self::PID_FILE_PATH,
             null,
             InputOption::VALUE_REQUIRED,
@@ -161,11 +175,15 @@ To specify the preferred area:
 
 To do not run multiple copies of one consumer simultaneously:
 
-    <comment>%command.full_name% someConsumer --single-thread'</comment>
+    <comment>%command.full_name% someConsumer --single-thread</comment>
 
 To save PID enter path (This option is deprecated, use --single-thread instead):
 
     <comment>%command.full_name% someConsumer --pid-file-path='/var/someConsumer.pid'</comment>
+
+To define the number of processes per consumer:
+
+    <comment>%command.full_name% someConsumer --multi-process=4</comment>
 HELP
         );
         parent::configure();

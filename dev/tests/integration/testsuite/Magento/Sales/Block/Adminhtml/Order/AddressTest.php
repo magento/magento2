@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -15,6 +15,7 @@ use Magento\Sales\Api\Data\OrderInterface;
 use Magento\Sales\Model\Order\Address as AddressType;
 use Magento\Sales\Model\OrderFactory;
 use Magento\TestFramework\Helper\Bootstrap;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -62,13 +63,12 @@ class AddressTest extends TestCase
     }
 
     /**
-     * @dataProvider addressTypeProvider
-     *
      * @magentoDataFixture Magento/Sales/_files/order.php
      *
      * @param string $type
      * @return void
      */
+    #[DataProvider('addressTypeProvider')]
     public function testGetHeaderText(string $type): void
     {
         $order = $this->orderFactory->create()->loadByIncrementId(100000001);
@@ -85,7 +85,7 @@ class AddressTest extends TestCase
     /**
      * @return array
      */
-    public function addressTypeProvider(): array
+    public static function addressTypeProvider(): array
     {
         return [
             'billing_address' => [

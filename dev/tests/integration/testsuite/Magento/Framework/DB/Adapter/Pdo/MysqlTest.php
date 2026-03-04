@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2012 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework\DB\Adapter\Pdo;
 
@@ -9,6 +9,7 @@ use Magento\Framework\App\ResourceConnection;
 use Magento\TestFramework\Helper\CacheCleaner;
 use Magento\Framework\DB\Ddl\Table;
 use Magento\TestFramework\Helper\Bootstrap;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Class checks Mysql adapter behaviour
@@ -32,6 +33,30 @@ class MysqlTest extends \PHPUnit\Framework\TestCase
     protected function tearDown(): void
     {
         restore_error_handler();
+    }
+
+    /**
+     * Check PDO stringify fetches options
+     */
+    public function testStringifyFetchesTrue(): void
+    {
+        $tableName = $this->resourceConnection->getTableName('table_with_int_column');
+        $columnId = 'integer_column';
+        $adapter = $this->getDbAdapter();
+
+        $table = $adapter
+            ->newTable($tableName)
+            ->addColumn($columnId, Table::TYPE_INTEGER);
+        $adapter->createTable($table);
+        $adapter->insert($tableName, [$columnId => 100]);
+
+        $select = $adapter->select()
+            ->from($tableName)
+            ->columns([$columnId])
+            ->limit(1);
+        $result = $adapter->fetchOne($select);
+        $this->assertIsString($result);
+        $adapter->dropTable($tableName);
     }
 
     /**
@@ -214,8 +239,8 @@ class MysqlTest extends \PHPUnit\Framework\TestCase
      * @param array $options
      * @param string|bool $expected
      * @throws \Zend_Db_Exception
-     * @dataProvider getAutoIncrementFieldDataProvider
      */
+    #[DataProvider('getAutoIncrementFieldDataProvider')]
     public function testGetAutoIncrementField(array $options, $expected)
     {
         $adapter = $this->getDbAdapter();
@@ -256,16 +281,16 @@ class MysqlTest extends \PHPUnit\Framework\TestCase
         $adapter->dropTable($tableName);
     }
 
-    public function getAutoIncrementFieldDataProvider()
+    public static function getAutoIncrementFieldDataProvider()
     {
         return [
             'auto increment field' => [
-                'field options' => ['identity' => true, 'unsigned' => true, 'nullable' => false, 'primary' => true],
-                'expected result' => 'row_id',
+                'options' => ['identity' => true, 'unsigned' => true, 'nullable' => false, 'primary' => true],
+                'expected' => 'row_id',
             ],
             'non auto increment field' => [
-                'field options' => ['unsigned' => true, 'nullable' => false,],
-                'expected result' => false,
+                'options' => ['unsigned' => true, 'nullable' => false,],
+                'expected' => false,
             ]
         ];
     }

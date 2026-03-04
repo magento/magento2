@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Config\App\Config\Source;
 
@@ -100,6 +100,7 @@ class RuntimeConfigSource implements ConfigSourceInterface
             } else {
                 $code = $this->scopeCodeResolver->resolve($item->getScope(), $item->getScopeId());
                 $config[$item->getScope()][$code][$item->getPath()] = $item->getValue();
+                $config[$item->getScope()][strtolower($code)][$item->getPath()] = $item->getValue();
             }
         }
 

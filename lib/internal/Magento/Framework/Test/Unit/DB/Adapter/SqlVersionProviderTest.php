@@ -1,7 +1,8 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
+ *
  * @noinspection PhpDeprecationInspection
  */
 declare(strict_types=1);
@@ -13,7 +14,7 @@ use Magento\Framework\DB\Adapter\ConnectionException;
 use Magento\Framework\DB\Adapter\Pdo\Mysql;
 use Magento\Framework\DB\Adapter\SqlVersionProvider;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-use PHPUnit\Framework\MockObject\MockBuilder;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -49,8 +50,10 @@ class SqlVersionProviderTest extends TestCase
      */
     private $supportedVersionPatterns = [
         'MySQL-8' => '^8\.0\.',
+        'MySQL-8.4' => '^8\.4\.',
         'MySQL-5.7' => '^5\.7\.',
-        'MariaDB-(10.2-10.4)' => '^10\.[2-4]\.'
+        'MariaDB-(10.2-10.6)' => '^10\.[2-6]\.',
+        'MariaDB-11.4' => '^11\.4\.'
     ];
 
     /**
@@ -59,28 +62,27 @@ class SqlVersionProviderTest extends TestCase
     protected function setUp(): void
     {
         $this->objectManager = new ObjectManager($this);
-        $this->resourceConnection = $this->getMockBuilder(ResourceConnection::class)
-            ->setMethods(['getConnection'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->mysqlAdapter = $this->getMockBuilder(Mysql::class)
-            ->setMethods(['fetchPairs'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->resourceConnection = $this->createPartialMock(
+            ResourceConnection::class,
+            ['getConnection']
+        );
+        $this->mysqlAdapter = $this->createPartialMock(
+            Mysql::class,
+            ['fetchPairs']
+        );
         $this->resourceConnection->expects($this->atLeastOnce())
             ->method('getConnection')
             ->willReturn($this->mysqlAdapter);
     }
 
     /**
-     * @dataProvider executeDataProvider
-     *
      * @param array $versionVariableValue
      * @param string $expectedResult
      *
      * @return void
      * @throws ConnectionException
      */
+    #[DataProvider('executeDataProvider')]
     public function testGetSqlVersionProviderReturnsRightResponse(
         array $versionVariableValue,
         string $expectedResult
@@ -94,7 +96,7 @@ class SqlVersionProviderTest extends TestCase
      */
     public function testSqlVersionProviderThrowsExceptionWhenNonSupportedEngineUsed(): void
     {
-        $this->prepareSqlProviderAndMySQLAdapter(['version' => '10.5.0-MariaDB-1:10.5.0+maria~bionic']);
+        $this->prepareSqlProviderAndMySQLAdapter(['version' => '10.7.0-MariaDB-1:10.7.0+maria~bionic']);
         $this->expectExceptionMessage('Current version of RDBMS is not supported.');
         $this->expectException(ConnectionException::class);
         $this->sqlVersionProvider->getSqlVersion();
@@ -103,9 +105,13 @@ class SqlVersionProviderTest extends TestCase
     /**
      * @return array
      */
-    public function executeDataProvider(): array
+    public static function executeDataProvider(): array
     {
         return [
+            'MariaDB-10.6' => [
+                ['version' => '10.6.12-MariaDB'],
+                '10.6.'
+            ],
             'MariaDB-10.4' => [
                 ['version' => '10.4.12-MariaDB-1:10.4.12+maria~bionic'],
                 '10.4.'
@@ -114,6 +120,10 @@ class SqlVersionProviderTest extends TestCase
                 ['version' => '10.2.31-MariaDB-1:10.2.31+maria~bionic'],
                 '10.2.'
             ],
+            'MariaDB-11.4' => [
+                ['version' => '11.4.2-MariaDB'],
+                SqlVersionProvider::MARIA_DB_11_4_VERSION
+            ],
             'MySQL-5.7' => [
                 ['version' => '5.7.29'],
                 SqlVersionProvider::MYSQL_5_7_VERSION,
@@ -121,6 +131,10 @@ class SqlVersionProviderTest extends TestCase
             'MySQL-8' => [
                 ['version' => '8.0.19'],
                 SqlVersionProvider::MYSQL_8_0_VERSION,
+            ],
+            'MySQL-8.4' => [
+                ['version' => '8.4.0'],
+                SqlVersionProvider::MYSQL_8_4_VERSION,
             ],
             'Percona' => [
                 ['version' => '5.7.29-32'],

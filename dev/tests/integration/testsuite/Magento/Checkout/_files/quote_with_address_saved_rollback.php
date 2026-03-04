@@ -2,8 +2,8 @@
 /**
  * Rollback for quote_with_address_saved.php fixture.
  *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 use Magento\TestFramework\Workaround\Override\Fixture\Resolver;
 

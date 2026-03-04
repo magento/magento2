@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -86,6 +86,8 @@ class ProductViewTest extends GraphQlAbstract
                 }
             }
             name
+            new_from_date
+            new_to_date
             options_container
             ... on CustomizableProductInterface {
               options {
@@ -337,6 +339,8 @@ QUERY;
                 }
             }
             name
+            new_from_date
+            new_to_date
             options_container
             ... on CustomizableProductInterface {
               field_options: options {
@@ -893,9 +897,16 @@ QUERY;
      * @param string $eavAttributeCode
      * @return string
      */
-    private function eavAttributesToGraphQlSchemaFieldTranslator(string $eavAttributeCode)
+    private function eavAttributesToGraphQlSchemaFieldTranslator(string $eavAttributeCode): string
     {
-        return $eavAttributeCode;
+        switch ($eavAttributeCode) {
+            case 'news_from_date':
+                return 'new_from_date';
+            case 'news_to_date':
+                return 'new_to_date';
+            default:
+                return $eavAttributeCode;
+        }
     }
 
     /**

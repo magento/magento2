@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -20,6 +20,7 @@ use Magento\Framework\Validator\UniversalFactory;
 use Magento\Review\Model\ResourceModel\Review\Product\Collection;
 use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -80,7 +81,7 @@ class CollectionTest extends TestCase
         $universalFactory->expects($this->any())->method('create')->willReturn($entity);
         $store = $this->createMock(Store::class);
         $store->expects($this->any())->method('getId')->willReturn(1);
-        $storeManager = $this->getMockForAbstractClass(StoreManagerInterface::class);
+        $storeManager = $this->createMock(StoreManagerInterface::class);
         $storeManager->expects($this->any())->method('getStore')->willReturn($store);
         $fetchStrategy = $this->createMock(
             Query::class
@@ -89,9 +90,7 @@ class CollectionTest extends TestCase
         $productLimitationMock = $this->createMock(
             ProductLimitation::class
         );
-        $productLimitationFactoryMock = $this->getMockBuilder(ProductLimitationFactory::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $productLimitationFactoryMock = $this->createMock(ProductLimitationFactory::class);
         $productLimitationFactoryMock->method('create')
             ->willReturn($productLimitationMock);
         $this->objectManager = new ObjectManager($this);
@@ -111,8 +110,8 @@ class CollectionTest extends TestCase
      * @param $attribute
      *
      * @return void
-     * @dataProvider addAttributeToFilterDataProvider
      */
+    #[DataProvider('addAttributeToFilterDataProvider')]
     public function testAddAttributeToFilter($attribute): void
     {
         $conditionSqlQuery = 'sqlQuery';
@@ -132,7 +131,7 @@ class CollectionTest extends TestCase
     /**
      * @return array
      */
-    public function addAttributeToFilterDataProvider(): array
+    public static function addAttributeToFilterDataProvider(): array
     {
         return [
             ['rt.review_id'],
@@ -164,8 +163,8 @@ class CollectionTest extends TestCase
      * @param $doubleConditionSqlQuery
      *
      * @return void
-     * @dataProvider addAttributeToFilterWithAttributeTypeDataProvider
      */
+    #[DataProvider('addAttributeToFilterWithAttributeTypeDataProvider')]
     public function testAddAttributeToFilterWithAttributeType(
         $condition,
         $sqlConditionWith,
@@ -176,8 +175,18 @@ class CollectionTest extends TestCase
 
         if ($sqlConditionWithSec) {
             $this->connectionMock->method('prepareSqlCondition')
-                ->withConsecutive(['rdt.customer_id', $sqlConditionWith], ['rdt.store_id', $sqlConditionWithSec])
-                ->willReturnOnConsecutiveCalls($conditionSqlQuery, $conditionSqlQuery);
+                ->willReturnCallback(
+                    function ($arg1, $arg2) use ($sqlConditionWith, $conditionSqlQuery, $sqlConditionWithSec) {
+                        static $callCount = 0;
+                        if ($callCount === 0 && $arg1 === 'rdt.customer_id' && $arg2 === $sqlConditionWith) {
+                            $callCount++;
+                            return $conditionSqlQuery;
+                        } elseif ($callCount === 1 && $arg1 === 'rdt.store_id' && $arg2 === $sqlConditionWithSec) {
+                            $callCount++;
+                            return $conditionSqlQuery;
+                        }
+                    }
+                );
         } else {
             $this->connectionMock->method('prepareSqlCondition')
                 ->with('rdt.customer_id', $sqlConditionWith)
@@ -196,7 +205,7 @@ class CollectionTest extends TestCase
     /**
      * @return array
      */
-    public function addAttributeToFilterWithAttributeTypeDataProvider(): array
+    public static function addAttributeToFilterWithAttributeTypeDataProvider(): array
     {
         $exprNull = new \Zend_Db_Expr('NULL');
         $defaultStore = Store::DEFAULT_STORE_ID;

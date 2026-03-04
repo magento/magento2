@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -90,7 +90,7 @@ class ValidatorFile extends Validator
         \Magento\Framework\File\Size $fileSize,
         \Magento\Framework\HTTP\Adapter\FileTransferFactory $httpFactory,
         \Magento\Framework\Validator\File\IsImage $isImageValidator,
-        Random $random = null
+        ?Random $random = null
     ) {
         $this->mediaDirectory = $filesystem->getDirectoryWrite(DirectoryList::MEDIA);
         $this->filesystem = $filesystem;
@@ -124,7 +124,6 @@ class ValidatorFile extends Validator
      * @throws \Exception
      * @throws \Magento\Framework\Exception\InputException
      * @throws \Magento\Framework\Validator\Exception
-     * @throws \Zend_File_Transfer_Exception
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
@@ -182,8 +181,6 @@ class ValidatorFile extends Validator
             $filePath = $dispersion . '/' . $fileName;
             $fileFullPath = $this->mediaDirectory->getAbsolutePath($this->quotePath . $filePath);
 
-            $upload->addFilter(new \Zend_Filter_File_Rename(['target' => $fileFullPath, 'overwrite' => true]));
-
             if ($this->product !== null) {
                 $this->product->getTypeInstance()->addFileQueue(
                     [
@@ -200,8 +197,10 @@ class ValidatorFile extends Validator
             $_height = 0;
 
             if ($tmpDirectory->isReadable($tmpDirectory->getRelativePath($fileInfo['tmp_name']))) {
+                // phpcs:ignore Magento2.Functions.DiscouragedFunction
                 if (filesize($fileInfo['tmp_name'])) {
                     if ($this->isImageValidator->isValid($fileInfo['tmp_name'])) {
+                        // phpcs:ignore Magento2.Functions.DiscouragedFunction
                         $imageSize = getimagesize($fileInfo['tmp_name']);
                     }
                 } else {
@@ -272,6 +271,7 @@ class ValidatorFile extends Validator
      */
     protected function validateContentLength()
     {
+        // phpcs:disable Magento2.Security.Superglobal
         return isset($_SERVER['CONTENT_LENGTH']) && $_SERVER['CONTENT_LENGTH'] > $this->fileSize->getMaxFileSize();
     }
 }

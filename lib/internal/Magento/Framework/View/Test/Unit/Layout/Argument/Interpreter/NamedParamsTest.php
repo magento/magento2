@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -11,6 +11,7 @@ use Magento\Framework\Data\Argument\InterpreterInterface;
 use Magento\Framework\View\Layout\Argument\Interpreter\NamedParams;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class NamedParamsTest extends TestCase
 {
@@ -29,7 +30,7 @@ class NamedParamsTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->_interpreter = $this->getMockForAbstractClass(
+        $this->_interpreter = $this->createMock(
             InterpreterInterface::class
         );
         $this->_model = new NamedParams($this->_interpreter);
@@ -46,8 +47,13 @@ class NamedParamsTest extends TestCase
 
         $this->_interpreter
             ->method('evaluate')
-            ->withConsecutive([['value' => 'value 1']], [['value' => 'value 2']])
-            ->willReturnOnConsecutiveCalls('value 1 (evaluated)', 'value 2 (evaluated)');
+            ->willReturnCallback(function ($arg1) {
+                if ($arg1 == ['value' => 'value 1']) {
+                    return 'value 1 (evaluated)';
+                } elseif ($arg1 == ['value' => 'value 2']) {
+                    return 'value 2 (evaluated)';
+                }
+            });
         $expected = ['param1' => 'value 1 (evaluated)', 'param2' => 'value 2 (evaluated)'];
 
         $actual = $this->_model->evaluate($input);
@@ -56,9 +62,8 @@ class NamedParamsTest extends TestCase
 
     /**
      * @return void
-     *
-     * @dataProvider evaluateWrongParamDataProvider
-     */
+     *     */
+    #[DataProvider('evaluateWrongParamDataProvider')]
     public function testEvaluateWrongParam($input, $expectedExceptionMessage): void
     {
         $this->expectException('\InvalidArgumentException');
@@ -69,7 +74,7 @@ class NamedParamsTest extends TestCase
     /**
      * @return array
      */
-    public function evaluateWrongParamDataProvider(): array
+    public static function evaluateWrongParamDataProvider(): array
     {
         return [
             'root param is non-array' => [

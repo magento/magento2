@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Integration\Model;
@@ -10,6 +10,7 @@ use Magento\Framework\Exception\InputException;
 use Magento\Integration\Model\Oauth\Token as TokenModel;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\User\Model\User as UserModel;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Test class for \Magento\Integration\Model\AdminTokenService.
@@ -72,9 +73,7 @@ class AdminTokenServiceTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    /**
-     * @dataProvider validationDataProvider
-     */
+    #[DataProvider('validationDataProvider')]
     public function testCreateAdminAccessTokenEmptyOrNullCredentials($username, $password)
     {
         try {
@@ -105,7 +104,7 @@ class AdminTokenServiceTest extends \PHPUnit\Framework\TestCase
      *
      * @return array
      */
-    public function validationDataProvider()
+    public static function validationDataProvider()
     {
         return [
             'Check for empty credentials' => ['', ''],

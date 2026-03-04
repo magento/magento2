@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -14,6 +14,7 @@ use Magento\Eav\Model\Config;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\Stdlib\StringUtils;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\ImportExport\Model\Export\Factory;
 use Magento\ImportExport\Model\Import\Entity\AbstractEav;
 use Magento\ImportExport\Model\ImportFactory;
@@ -73,8 +74,11 @@ class EavAbstractTest extends AbstractImportTestCase
     {
         parent::setUp();
 
+        $objectManager = new ObjectManager($this);
+        $objectManager->prepareObjectManager();
+
         $this->_string = new StringUtils();
-        $scopeConfig = $this->getMockForAbstractClass(ScopeConfigInterface::class);
+        $scopeConfig = $this->createMock(ScopeConfigInterface::class);
 
         $this->_importFactory = $this->createMock(ImportFactory::class);
         $this->_resource = $this->createMock(ResourceConnection::class);
@@ -83,21 +87,25 @@ class EavAbstractTest extends AbstractImportTestCase
         $this->_collectionFactory = $this->createMock(Factory::class);
         $this->_eavConfig = $this->createMock(Config::class);
 
-        $this->_model = $this->getMockForAbstractClass(
+        $this->_model = $this->createPartialMock(
             AbstractEav::class,
-            [
-                $this->_string,
-                $scopeConfig,
-                $this->_importFactory,
-                $this->_resourceHelper,
-                $this->_resource,
-                $this->getErrorAggregatorObject(),
-                $this->_storeManager,
-                $this->_collectionFactory,
-                $this->_eavConfig,
-                $this->_getModelDependencies()
-            ]
+            ['_importData', 'getEntityTypeCode', 'validateRow']
         );
+
+        $constructorArgs = [
+            $this->_string,
+            $scopeConfig,
+            $this->_importFactory,
+            $this->_resourceHelper,
+            $this->_resource,
+            $this->getErrorAggregatorObject(),
+            $this->_storeManager,
+            $this->_collectionFactory,
+            $this->_eavConfig,
+            $this->_getModelDependencies()
+        ];
+
+        $this->_model->__construct(...$constructorArgs);
     }
 
     protected function tearDown(): void

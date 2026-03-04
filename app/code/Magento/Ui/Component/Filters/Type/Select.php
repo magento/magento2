@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Ui\Component\Filters\Type;
 
@@ -17,12 +17,12 @@ use Magento\Ui\Component\Filters\FilterModifier;
  */
 class Select extends AbstractFilter
 {
-    const NAME = 'filter_select';
+    public const NAME = 'filter_select';
 
-    const COMPONENT = 'select';
+    public const COMPONENT = 'select';
 
     /**
-     * Wrapped component
+     * UI Component
      *
      * @var ElementSelect
      */
@@ -47,7 +47,7 @@ class Select extends AbstractFilter
         UiComponentFactory $uiComponentFactory,
         \Magento\Framework\Api\FilterBuilder $filterBuilder,
         FilterModifier $filterModifier,
-        OptionSourceInterface $optionsProvider = null,
+        ?OptionSourceInterface $optionsProvider = null,
         array $components = [],
         array $data = []
     ) {
@@ -79,7 +79,8 @@ class Select extends AbstractFilter
             'config',
             array_replace_recursive(
                 (array)$this->wrappedComponent->getData('config'),
-                (array)$this->getData('config')
+                (array)$this->getData('config'),
+                ['__disableTmpl' => ['label' => true]]
             )
         );
 

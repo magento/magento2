@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -16,6 +16,7 @@ use Magento\Catalog\Model\Indexer\Product\Category\Action\RowsFactory;
 use Magento\Framework\Indexer\CacheContext;
 use Magento\Framework\Indexer\IndexerInterface;
 use Magento\Framework\Indexer\IndexerRegistry;
+use Magento\Framework\Indexer\IndexMutexInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -69,25 +70,28 @@ class CategoryTest extends TestCase
             ['create']
         );
 
-        $this->indexerMock = $this->getMockForAbstractClass(
-            IndexerInterface::class,
-            [],
-            '',
-            false,
-            false,
-            true,
-            ['getId', 'load', 'isInvalid', 'isWorking']
-        );
+        $this->indexerMock = $this->createMock(IndexerInterface::class);
 
         $this->indexerRegistryMock = $this->createPartialMock(
             IndexerRegistry::class,
             ['get']
         );
 
+        $indexMutexMock = $this->createMock(IndexMutexInterface::class);
+        $indexMutexMock->method('execute')
+            ->willReturnCallback(
+                function (string $indexerName, callable $callback) {
+                    if ($indexerName) {
+                        $callback();
+                    }
+                }
+            );
+
         $this->model = new Category(
             $this->fullMock,
             $this->rowsMock,
-            $this->indexerRegistryMock
+            $this->indexerRegistryMock,
+            $indexMutexMock
         );
 
         $this->cacheContextMock = $this->createMock(CacheContext::class);
@@ -96,7 +100,6 @@ class CategoryTest extends TestCase
             Product::class,
             'cacheContext'
         );
-        $cacheContextProperty->setAccessible(true);
         $cacheContextProperty->setValue($this->model, $this->cacheContextMock);
     }
 

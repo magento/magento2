@@ -1,13 +1,14 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Downloadable\Model\Url;
 
 use Magento\Downloadable\Model\DomainManager;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\Framework\App\DeploymentConfig;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Test for Magento\Downloadable\Model\Url\DomainValidator
@@ -54,8 +55,8 @@ class DomainValidatorTest extends \PHPUnit\Framework\TestCase
      * @magentoConfigFixture current_store web/secure/base_url https://secure.example.com/
      * @magentoConfigFixture fixture_second_store_store web/unsecure/base_url http://example2.com/
      * @magentoConfigFixture fixture_second_store_store web/secure/base_url https://secure.example2.com/
-     * @dataProvider isValidDataProvider
      */
+    #[DataProvider('isValidDataProvider')]
     public function testIsValid(string $urlInput, array $envDomainWhitelist, bool $isValid)
     {
         $this->deploymentConfig
@@ -72,7 +73,7 @@ class DomainValidatorTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    public function isValidDataProvider()
+    public static function isValidDataProvider()
     {
         return [
             ['http://example.com', ['example.co'], false],

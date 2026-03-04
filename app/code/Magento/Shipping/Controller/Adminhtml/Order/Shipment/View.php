@@ -1,8 +1,7 @@
 <?php
 /**
- *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Shipping\Controller\Adminhtml\Order\Shipment;
 
@@ -16,7 +15,7 @@ class View extends \Magento\Backend\App\Action implements HttpGetActionInterface
      *
      * @see _isAllowed()
      */
-    const ADMIN_RESOURCE = 'Magento_Sales::shipment';
+    public const ADMIN_RESOURCE = 'Magento_Sales::shipment';
 
     /**
      * @var \Magento\Shipping\Controller\Adminhtml\Order\ShipmentLoader
@@ -54,7 +53,7 @@ class View extends \Magento\Backend\App\Action implements HttpGetActionInterface
     /**
      * Shipment information page
      *
-     * @return void
+     * @return \Magento\Framework\Controller\ResultInterface|\Magento\Framework\App\ResponseInterface
      */
     public function execute()
     {
@@ -69,7 +68,7 @@ class View extends \Magento\Backend\App\Action implements HttpGetActionInterface
                 ->updateBackButtonUrl($this->getRequest()->getParam('come_from'));
             $resultPage->setActiveMenu('Magento_Sales::sales_shipment');
             $resultPage->getConfig()->getTitle()->prepend(__('Shipments'));
-            $resultPage->getConfig()->getTitle()->prepend("#" . $shipment->getIncrementId());
+            $resultPage->getConfig()->getTitle()->prepend(__('View Shipment #%1', $shipment->getIncrementId()));
             return $resultPage;
         } else {
             $resultRedirect = $this->resultRedirectFactory->create();

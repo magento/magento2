@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -141,6 +141,7 @@ class SessionTest extends TestCase
         $this->checkoutSession->setCustomerData($customer);
         $quote = $this->checkoutSession->getQuote();
         $this->validateCustomerDataInQuote($quote);
+        $this->quoteRepository->delete($quote);
     }
 
     /**
@@ -158,6 +159,7 @@ class SessionTest extends TestCase
         $this->customerSession->setCustomerDataObject($customer);
         $quote = $this->checkoutSession->getQuote();
         $this->validateCustomerDataInQuote($quote);
+        $this->quoteRepository->delete($quote);
     }
 
     /**

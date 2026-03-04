@@ -1,12 +1,13 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Catalog\Model;
 
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Framework\App\Filesystem\DirectoryList;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Tests product model:
@@ -129,10 +130,10 @@ class ProductGettersTest extends \PHPUnit\Framework\TestCase
      * @covers \Magento\Catalog\Model\Product::getSpecialToDate
      * @covers \Magento\Catalog\Model\Product::getRequestPath
      * @covers \Magento\Catalog\Model\Product::getGiftMessageAvailable
-     * @dataProvider getObsoleteGettersDataProvider
      * @param string $key
      * @param string $method
      */
+    #[DataProvider('getObsoleteGettersDataProvider')]
     public function testGetObsoleteGetters($key, $method)
     {
         $value = uniqid();
@@ -141,7 +142,7 @@ class ProductGettersTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($value, $this->_model->{$method}());
     }
 
-    public function getObsoleteGettersDataProvider()
+    public static function getObsoleteGettersDataProvider()
     {
         return [
             ['calculated_final_price', 'getCalculatedFinalPrice'],
@@ -222,6 +223,25 @@ class ProductGettersTest extends \PHPUnit\Framework\TestCase
         self::assertEquals(
             $expected,
             $product->getAttributeText('multiselect_attribute')
+        );
+    }
+
+    /**
+     * @magentoDataFixture Magento/Catalog/_files/products_with_multiselect_attribute.php
+     */
+    public function testMultipleMultiselectTextValues()
+    {
+        $expectedArray = [];
+
+        for ($i = 1; $i < 200; $i++) {
+            $expectedArray[] = sprintf('Multiselect option %d', $i);
+        }
+
+        $product = $this->productRepository->get('simple_ms_3');
+
+        self::assertEquals(
+            $expectedArray,
+            $product->getAttributeText('multiselect_attribute_text')
         );
     }
 

@@ -1,13 +1,17 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2021 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\TestFramework\Integrity\Library\PhpParser;
 
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\TestCase;
+
 /**
+ * Check static calls parsing
  */
-class StaticCallsTest extends \PHPUnit\Framework\TestCase
+class StaticCallsTest extends TestCase
 {
     /**
      * @var StaticCalls
@@ -31,55 +35,66 @@ class StaticCallsTest extends \PHPUnit\Framework\TestCase
 
     /**
      * Test get static call dependencies
-     *
-     * @test
      */
-    public function testGetDependencies()
+    #[DataProvider('tokensDataProvider')]
+    public function testGetDependencies(array $tokens)
     {
-        $tokens = [
-            0 => [T_WHITESPACE, ' '],
-            1 => [T_NS_SEPARATOR, '\\'],
-            2 => [T_STRING, 'Object'],
-            3 => [T_PAAMAYIM_NEKUDOTAYIM, '::'],
-        ];
-
-        $this->tokens->expects($this->any())->method('getPreviousToken')->willReturnCallback(
-
+        $this->tokens->method('getPreviousToken')
+            ->willReturnCallback(
                 function ($k) use ($tokens) {
                     return $tokens[$k - 1];
                 }
+            );
 
-        );
-
-        $this->tokens->expects($this->any())->method('getTokenCodeByKey')->willReturnCallback(
-
+        $this->tokens->method('getTokenCodeByKey')
+            ->willReturnCallback(
                 function ($k) use ($tokens) {
                     return $tokens[$k][0];
                 }
+            );
 
-        );
-
-        $this->tokens->expects($this->any())->method('getTokenValueByKey')->willReturnCallback(
-
+        $this->tokens->method('getTokenValueByKey')
+            ->willReturnCallback(
                 function ($k) use ($tokens) {
                     return $tokens[$k][1];
                 }
+            );
 
-        );
-
-        $throws = new StaticCalls($this->tokens);
+        $staticCalls = new StaticCalls($this->tokens);
         foreach ($tokens as $k => $token) {
-            $throws->parse($token, $k);
+            $staticCalls->parse($token, $k);
         }
 
         $uses = $this->getMockBuilder(
             \Magento\TestFramework\Integrity\Library\PhpParser\Uses::class
         )->disableOriginalConstructor()->getMock();
 
-        $uses->expects($this->once())->method('hasUses')->willReturn(true);
+        $this->assertEquals(['\Object'], $staticCalls->getDependencies($uses));
+    }
 
-        $uses->expects($this->once())->method('getClassNameWithNamespace')->willReturn('\Object');
-
-        $this->assertEquals(['\Object'], $throws->getDependencies($uses));
+    /**
+     * different tokens data for php 7 and php 8
+     *
+     * @return array
+     */
+    public static function tokensDataProvider(): array
+    {
+        return [
+            'PHP 7' => [
+                [
+                    0 => [T_WHITESPACE, ' '],
+                    1 => [T_NS_SEPARATOR, '\\'],
+                    2 => [T_STRING, 'Object'],
+                    3 => [T_PAAMAYIM_NEKUDOTAYIM, '::'],
+                ]
+            ],
+            'PHP 8' => [
+                [
+                    0 => [T_WHITESPACE, ' '],
+                    1 => [T_NAME_FULLY_QUALIFIED, '\\Object'],
+                    2 => [T_PAAMAYIM_NEKUDOTAYIM, '::'],
+                ]
+            ]
+        ];
     }
 }

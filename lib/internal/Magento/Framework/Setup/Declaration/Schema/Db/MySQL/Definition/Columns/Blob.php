@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Framework\Setup\Declaration\Schema\Db\MySQL\Definition\Columns;
@@ -68,7 +68,7 @@ class Blob implements DbDefinitionProcessorInterface
     public function fromDefinition(array $data)
     {
         $matches = [];
-        if (preg_match('/^text\s*\((\d+)\)/', $data['definition'], $matches) && isset($matches[1])) {
+        if (preg_match('/^text\s*\((\d+)\)/', $data['definition'] ?? '', $matches) && isset($matches[1])) {
             $data['length'] = $matches[1];
         }
 

@@ -1,6 +1,6 @@
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 /**
@@ -234,7 +234,7 @@ define([
             }
 
             if (typeof elem.validate === 'function') {
-                this.valid = this.valid & elem.validate().valid;
+                this.valid &= elem.validate().valid;
             } else if (elem.elems) {
                 elem.elems().forEach(this.validate, this);
             }

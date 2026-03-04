@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -77,8 +77,8 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
         \Magento\Catalog\Model\ResourceModel\Product\Collection $productResource,
         \Magento\Customer\Model\ResourceModel\Customer $customerResource,
         \Magento\Sales\Model\ResourceModel\Order\Collection $orderResource,
-        \Magento\Framework\DB\Adapter\AdapterInterface $connection = null,
-        \Magento\Framework\Model\ResourceModel\Db\AbstractDb $resource = null,
+        ?\Magento\Framework\DB\Adapter\AdapterInterface $connection = null,
+        ?\Magento\Framework\Model\ResourceModel\Db\AbstractDb $resource = null,
         ?ProductDataRetriever $productDataRetriever = null
     ) {
         parent::__construct(
@@ -121,7 +121,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
 
         $quoteItemsSelect->reset()
             ->from(['main_table' => $this->getTable('quote_item')], '')
-            ->columns('main_table.product_id')
+            ->columns(['main_table.product_id', 'main_table.name', 'main_table.price'])
             ->columns(['carts' => new \Zend_Db_Expr('COUNT(main_table.item_id)')])
             ->columns('quote.base_to_global_rate')
             ->joinInner(

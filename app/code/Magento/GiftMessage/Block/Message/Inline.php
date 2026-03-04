@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\GiftMessage\Block\Message;
 
@@ -10,8 +10,6 @@ use Magento\GiftMessage\Model\Message;
 
 /**
  * Gift message inline edit form
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Inline extends \Magento\Framework\View\Element\Template
 {
@@ -36,8 +34,6 @@ class Inline extends \Magento\Framework\View\Element\Template
     protected $_template = 'Magento_GiftMessage::inline.phtml';
 
     /**
-     * Gift message message
-     *
      * @var \Magento\GiftMessage\Helper\Message|null
      */
     protected $_giftMessageMessage = null;
@@ -324,7 +320,8 @@ class Inline extends \Magento\Framework\View\Element\Template
      */
     public function getEscaped($value, $defaultValue = '')
     {
-        return $this->escapeHtml(trim($value) != '' ? $value : $defaultValue);
+        $value = ($value !== null && trim($value) != '') ? $value : $defaultValue;
+        return $this->escapeHtml($value);
     }
 
     /**
@@ -359,7 +356,8 @@ class Inline extends \Magento\Framework\View\Element\Template
      */
     public function isItemMessagesAvailable($item)
     {
-        $type = substr($this->getType(), 0, 5) == 'multi' ? 'address_item' : 'item';
+        $type = $this->getType() !== null && substr($this->getType(), 0, 5) === 'multi' ?
+            'address_item' : 'item';
         return $this->_giftMessageMessage->isMessagesAllowed($type, $item);
     }
 

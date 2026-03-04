@@ -1,0 +1,41 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright 2025 Adobe
+ * All Rights Reserved.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <type name="Magento\StoreGraphQl\Model\Resolver\Store\StoreConfigDataProvider">
+        <arguments>
+            <argument name="extendedConfigData" xsi:type="array">
+                <item name="order_cancellation_enabled" xsi:type="string">sales/cancellation/enabled</item>
+                <item name="order_cancellation_reasons" xsi:type="string">sales/cancellation/reasons</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\SalesGraphQl\Model\GetOrderAvailableActions">
+        <arguments>
+            <argument name="actions" xsi:type="array">
+                <item name="cancel_action" xsi:type="object">Magento\OrderCancellationGraphQl\Model\GetOrderCancellationAvailableActions</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\OrderCancellationGraphQl\Model\Resolver\CancelOrderError">
+        <arguments>
+            <argument name="errorMessageCodesMapper" xsi:type="array">
+                <item name="order cancellation is not enabled for requested store." xsi:type="string">ORDER_CANCELLATION_DISABLED</item>
+                <item name="current user is not authorized to cancel this order" xsi:type="string">UNAUTHORISED</item>
+                <item name="the entity that was requested doesn't exist. verify the entity and try again." xsi:type="string">ORDER_NOT_FOUND</item>
+                <item name="order with one or more items shipped cannot be cancelled" xsi:type="string">PARTIAL_ORDER_ITEM_SHIPPED</item>
+                <item name="order already closed, complete, cancelled or on hold" xsi:type="string">INVALID_ORDER_STATUS</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\OrderCancellation\Model\CancelOrder">
+        <plugin name="validateCancelOrderReason" type="Magento\OrderCancellationGraphQl\Plugin\Model\CancelOrder"/>
+    </type>
+    <type name="Magento\OrderCancellationGraphQl\Model\CancelOrderGuest">
+        <plugin name="validateCancelGuestOrderReason" type="Magento\OrderCancellationGraphQl\Plugin\Model\CancelOrderGuest"/>
+    </type>
+</config>

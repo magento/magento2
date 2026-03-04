@@ -1,8 +1,7 @@
 <?php
 /**
- *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -13,13 +12,13 @@ use Magento\Contact\Model\MailInterface;
 use Magento\Framework\App\Action\Context;
 use Magento\Framework\App\Request\DataPersistorInterface;
 use Magento\Framework\App\Request\Http;
-use Magento\Framework\App\Request\HttpRequest;
 use Magento\Framework\App\ResponseInterface;
 use Magento\Framework\Controller\Result\Redirect;
 use Magento\Framework\Controller\Result\RedirectFactory;
 use Magento\Framework\Message\ManagerInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\Framework\UrlInterface;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -50,7 +49,7 @@ class PostTest extends TestCase
     private $urlMock;
 
     /**
-     * @var HttpRequest|MockObject
+     * @var Http|MockObject
      */
     private $requestStub;
 
@@ -74,14 +73,13 @@ class PostTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->mailMock = $this->getMockBuilder(MailInterface::class)
-            ->getMockForAbstractClass();
+        $this->mailMock = $this->createMock(MailInterface::class);
         $contextMock = $this->createPartialMock(
             Context::class,
             ['getRequest', 'getResponse', 'getResultRedirectFactory', 'getUrl', 'getRedirect', 'getMessageManager']
         );
-        $this->urlMock = $this->getMockForAbstractClass(UrlInterface::class);
-        $this->messageManagerMock = $this->getMockForAbstractClass(ManagerInterface::class);
+        $this->urlMock = $this->createMock(UrlInterface::class);
+        $this->messageManagerMock = $this->createMock(ManagerInterface::class);
         $this->requestStub = $this->createPartialMock(
             Http::class,
             ['getPostValue', 'getParams', 'getParam', 'isPost']
@@ -98,15 +96,14 @@ class PostTest extends TestCase
             ->method('create')
             ->willReturn($this->redirectResultMock);
 
-        $this->dataPersistorMock = $this->getMockBuilder(DataPersistorInterface::class)
-            ->getMockForAbstractClass();
+        $this->dataPersistorMock = $this->createMock(DataPersistorInterface::class);
 
         $contextMock->expects($this->any())
             ->method('getRequest')
             ->willReturn($this->requestStub);
         $contextMock->expects($this->any())
             ->method('getResponse')
-            ->willReturn($this->getMockForAbstractClass(ResponseInterface::class));
+            ->willReturn($this->createMock(ResponseInterface::class));
         $contextMock->expects($this->any())
             ->method('getMessageManager')
             ->willReturn($this->messageManagerMock);
@@ -138,21 +135,18 @@ class PostTest extends TestCase
 
     /**
      * Test exceute post validation
+     *
      * @param array $postData
-     * @param bool $exceptionExpected
-     * @dataProvider postDataProvider
      */
-    public function testExecutePostValidation($postData, $exceptionExpected): void
+    #[DataProvider('postDataProvider')]
+    public function testExecutePostValidation($postData): void
     {
         $this->stubRequestPostData($postData);
-
-        if ($exceptionExpected) {
-            $this->messageManagerMock->expects($this->once())
-                ->method('addErrorMessage');
-            $this->dataPersistorMock->expects($this->once())
-                ->method('set')
-                ->with('contact_us', $postData);
-        }
+        $this->messageManagerMock->expects($this->once())
+            ->method('addErrorMessage');
+        $this->dataPersistorMock->expects($this->once())
+            ->method('set')
+            ->with('contact_us', $postData);
 
         $this->controller->execute();
     }
@@ -160,15 +154,15 @@ class PostTest extends TestCase
     /**
      * Data provider for test exceute post validation
      */
-    public function postDataProvider(): array
+    public static function postDataProvider(): array
     {
         return [
-            [['name' => null, 'comment' => null, 'email' => '', 'hideit' => 'no'], true],
-            [['name' => 'test', 'comment' => '', 'email' => '', 'hideit' => 'no'], true],
-            [['name' => '', 'comment' => 'test', 'email' => '', 'hideit' => 'no'], true],
-            [['name' => '', 'comment' => '', 'email' => 'test', 'hideit' => 'no'], true],
-            [['name' => '', 'comment' => '', 'email' => '', 'hideit' => 'no'], true],
-            [['name' => 'Name', 'comment' => 'Name', 'email' => 'invalidmail', 'hideit' => 'no'], true],
+            [['name' => null, 'comment' => null, 'email' => '', 'hideit' => 'no']],
+            [['name' => 'test', 'comment' => '', 'email' => '', 'hideit' => 'no']],
+            [['name' => '', 'comment' => 'test', 'email' => '', 'hideit' => 'no']],
+            [['name' => '', 'comment' => '', 'email' => 'test', 'hideit' => 'no']],
+            [['name' => '', 'comment' => '', 'email' => '', 'hideit' => 'no']],
+            [['name' => 'Name', 'comment' => 'Name', 'email' => 'invalidmail', 'hideit' => 'no']],
         ];
     }
 
@@ -181,7 +175,7 @@ class PostTest extends TestCase
             'name' => 'Name',
             'comment' => 'Comment',
             'email' => 'valid@mail.com',
-            'hideit' => null
+            'hideit' => ''
         ];
 
         $this->dataPersistorMock->expects($this->once())
@@ -207,8 +201,8 @@ class PostTest extends TestCase
         $this->requestStub->method('getPostValue')->willReturn($post);
         $this->requestStub->method('getParams')->willReturn($post);
         $this->requestStub->method('getParam')->willReturnCallback(
-            function ($key) use ($post) {
-                return $post[$key];
+            function ($key, $defaultValue) use ($post) {
+                return $post[$key] ?? $defaultValue;
             }
         );
     }

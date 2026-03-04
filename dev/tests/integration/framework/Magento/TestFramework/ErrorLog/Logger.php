@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -9,6 +9,8 @@ namespace Magento\TestFramework\ErrorLog;
 
 use Magento\Framework\Logger\Monolog;
 use Monolog\Handler\HandlerInterface;
+use Monolog\DateTimeImmutable;
+use Monolog\Level;
 
 class Logger extends Monolog
 {
@@ -43,6 +45,8 @@ class Logger extends Monolog
     }
 
     /**
+     * Clear messages
+     *
      * @return void
      */
     public function clearMessages(): void
@@ -51,6 +55,8 @@ class Logger extends Monolog
     }
 
     /**
+     * Get messages
+     *
      * @return array
      */
     public function getMessages(): array
@@ -61,15 +67,17 @@ class Logger extends Monolog
     /**
      * @inheritdoc
      *
-     * @param int $level The logging level
+     * @param int|Level $level The logging level
      * @param string $message The log message
      * @param array $context The log context
+     * @param DateTimeImmutable|null $datetime Optional log date to log into the past or future
      * @return bool Whether the record has been processed
      */
     public function addRecord(
-        int $level,
+        int|Level $level,
         string $message,
-        array $context = []
+        array $context = [],
+        DateTimeImmutable|null $datetime = null
     ): bool {
         if ($level <= $this->minimumErrorLevel) {
             $this->messages[] = [
@@ -77,6 +85,6 @@ class Logger extends Monolog
                 'message' => $message,
             ];
         }
-        return parent::addRecord($level, $message, $context);
+        return parent::addRecord($level, $message, $context, $datetime);
     }
 }

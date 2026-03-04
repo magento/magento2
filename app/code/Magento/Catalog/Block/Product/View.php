@@ -1,12 +1,11 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Catalog\Block\Product;
 
 use Magento\Catalog\Api\ProductRepositoryInterface;
-use Magento\Catalog\Model\Category;
 
 /**
  * Product View block
@@ -183,7 +182,8 @@ class View extends AbstractProduct implements \Magento\Framework\DataObject\Iden
         foreach ($tierPricesList as $tierPrice) {
             $tierPriceData = [
                 'qty' => $tierPrice['price_qty'],
-                'price' => $tierPrice['website_price'],
+                'price' => $tierPrice['price']->getValue(),
+                'basePrice' => $tierPrice['price']->getBaseAmount()
             ];
             $tierPrices[] = $tierPriceData;
         }

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework\View\Model\Layout;
 
@@ -25,27 +25,27 @@ class Merge implements \Magento\Framework\View\Layout\ProcessorInterface
     /**
      * Layout abstraction based on designer prerogative.
      */
-    const DESIGN_ABSTRACTION_CUSTOM = 'custom';
+    public const DESIGN_ABSTRACTION_CUSTOM = 'custom';
 
     /**
      * Layout generalization guaranteed to load into View
      */
-    const DESIGN_ABSTRACTION_PAGE_LAYOUT = 'page_layout';
+    public const DESIGN_ABSTRACTION_PAGE_LAYOUT = 'page_layout';
 
     /**
      * XPath of handles originally declared in layout updates
      */
-    const XPATH_HANDLE_DECLARATION = '/layout[@design_abstraction]';
+    public const XPATH_HANDLE_DECLARATION = '/layout[@design_abstraction]';
 
     /**
      * Name of an attribute that stands for data type of node values
      */
-    const TYPE_ATTRIBUTE = 'xsi:type';
+    public const TYPE_ATTRIBUTE = 'xsi:type';
 
     /**
      * Cache id suffix for page layout
      */
-    const PAGE_LAYOUT_CACHE_SUFFIX = 'page_layout_merged';
+    public const PAGE_LAYOUT_CACHE_SUFFIX = 'page_layout_merged';
 
     /**
      * Default cache life time
@@ -208,10 +208,10 @@ class Merge implements \Magento\Framework\View\Layout\ProcessorInterface
         \Magento\Framework\View\Model\Layout\Update\Validator $validator,
         \Psr\Log\LoggerInterface $logger,
         ReadFactory $readFactory,
-        \Magento\Framework\View\Design\ThemeInterface $theme = null,
+        ?\Magento\Framework\View\Design\ThemeInterface $theme = null,
         $cacheSuffix = '',
-        LayoutCacheKeyInterface $layoutCacheKey = null,
-        SerializerInterface $serializer = null,
+        ?LayoutCacheKeyInterface $layoutCacheKey = null,
+        ?SerializerInterface $serializer = null,
         ?int $cacheLifetime = null
     ) {
         $this->theme = $theme ?: $design->getDesignTheme();
@@ -562,6 +562,21 @@ class Merge implements \Magento\Framework\View\Layout\ProcessorInterface
     protected function _loadXmlString($xmlString)
     {
         return simplexml_load_string($xmlString, \Magento\Framework\View\Layout\Element::class);
+    }
+
+    /**
+     * Return object representation of XML string, or false, if XML was invalid
+     *
+     * @param string $xmlString
+     * @return \SimpleXMLElement|false
+     */
+    protected function _safeLoadXmlString(string $xmlString): \SimpleXMLElement|false
+    {
+        return simplexml_load_string(
+            $xmlString,
+            \Magento\Framework\View\Layout\Element::class,
+            LIBXML_NOWARNING | LIBXML_NOERROR
+        );
     }
 
     /**
@@ -988,15 +1003,7 @@ class Merge implements \Magento\Framework\View\Layout\ProcessorInterface
     private function extractHandlers(): void
     {
         foreach ($this->updates as $update) {
-            $updateXml = null;
-
-            try {
-                $updateXml = $this->_loadXmlString($update);
-                // phpcs:ignore Magento2.CodeAnalysis.EmptyBlock
-            } catch (\Exception $exception) {
-                // ignore invalid
-            }
-
+            $updateXml = is_string($update) ? $this->_safeLoadXmlString($update) : false;
             if ($updateXml && strtolower($updateXml->getName()) == 'update' && isset($updateXml['handle'])) {
                 $this->addHandle((string)$updateXml['handle']);
             }

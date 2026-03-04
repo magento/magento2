@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -9,6 +9,7 @@ namespace Magento\Quote\Model;
 
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\ObjectManager;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -45,12 +46,11 @@ class QuoteInfiniteLoopTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @dataProvider getLoadQuoteParametersProvider
-     *
      * @param $triggerRecollect
      * @param $observerEnabled
      * @return void
      */
+    #[DataProvider('getLoadQuoteParametersProvider')]
     public function testLoadQuoteSuccessfully($triggerRecollect, $observerEnabled): void
     {
         $originalQuote = $this->generateQuote($triggerRecollect);
@@ -80,7 +80,7 @@ class QuoteInfiniteLoopTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function getLoadQuoteParametersProvider()
+    public static function getLoadQuoteParametersProvider()
     {
         return [
             [0, false],

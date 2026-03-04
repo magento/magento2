@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 
 /**
@@ -16,17 +16,19 @@ class Adapter extends AbstractAdapter
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      * @param array|string $messageId
+     * @param string $textDomain
      * @param null|string $locale
      * @return string
      */
-    public function translate($messageId, $locale = null)
+    public function translate($messageId, $textDomain = 'default', $locale = null)
     {
-        $translator = $this->getOptions('translator');
+        $translator = $this->getTranslator();
+
         if (is_callable($translator)) {
             return call_user_func($translator, $messageId);
-        } else {
-            return $messageId;
         }
+
+        return $translator !== null ? $translator->translate($messageId, $textDomain, $locale) : $messageId;
     }
 
     // @codingStandardsIgnoreStart

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Setup\Module;
 
@@ -36,7 +36,7 @@ class SetupFactory
      * @param ResourceConnection $appResource
      * @return Setup
      */
-    public function create(ResourceConnection $appResource = null)
+    public function create(?ResourceConnection $appResource = null)
     {
         $objectManager = $this->objectManagerProvider->get();
         if ($appResource === null) {

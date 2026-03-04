@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -58,8 +58,8 @@ class FileIteratorTest extends TestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testIterator(): void
     {
         $contents = ['content1', 'content2'];
@@ -73,8 +73,14 @@ class FileIteratorTest extends TestCase
         }
         $this->fileReadFactory
             ->method('create')
-            ->withConsecutive(...$createWithArgs)
-            ->willReturnOnConsecutiveCalls(...$createWillReturnArgs);
+            ->willReturnCallback(function ($createWithArgs) use ($createWillReturnArgs) {
+                if (!empty($createWithArgs)) {
+                    static $callCount = 0;
+                    $returnValue = $createWillReturnArgs[$callCount] ?? null;
+                    $callCount++;
+                    return $returnValue;
+                }
+            });
         $this->fileRead
             ->method('readAll')
             ->willReturnOnConsecutiveCalls(...$readAllWillReturnArgs);
@@ -86,8 +92,8 @@ class FileIteratorTest extends TestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testToArray(): void
     {
         $contents = ['content1', 'content2'];
@@ -102,8 +108,14 @@ class FileIteratorTest extends TestCase
         }
         $this->fileReadFactory
             ->method('create')
-            ->withConsecutive(...$createWithArgs)
-            ->willReturnOnConsecutiveCalls(...$createWillReturnArgs);
+            ->willReturnCallback(function ($createWithArgs) use ($createWillReturnArgs) {
+                if (!empty($createWithArgs)) {
+                    static $callCount = 0;
+                    $returnValue = $createWillReturnArgs[$callCount] ?? null;
+                    $callCount++;
+                    return $returnValue;
+                }
+            });
         $this->fileRead
             ->method('readAll')
             ->willReturnOnConsecutiveCalls(...$readAllWillReturnArgs);

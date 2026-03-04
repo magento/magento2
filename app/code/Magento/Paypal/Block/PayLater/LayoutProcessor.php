@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2021 Adobe
+ * All Rights Reserved.
  */
 
 declare(strict_types=1);
@@ -9,8 +9,10 @@ declare(strict_types=1);
 namespace Magento\Paypal\Block\PayLater;
 
 use Magento\Checkout\Block\Checkout\LayoutProcessorInterface;
+use Magento\Framework\App\ObjectManager;
 use Magento\Paypal\Model\PayLaterConfig;
 use Magento\Paypal\Model\SdkUrl;
+use Magento\Paypal\Model\Config as PaypalConfig;
 
 /**
  * PayLater Layout Processor
@@ -33,24 +35,34 @@ class LayoutProcessor implements LayoutProcessorInterface
     private $sdkUrl;
 
     /**
+     * @var PaypalConfig
+     */
+    private $paypalConfig;
+
+    /**
      * @param PayLaterConfig $payLaterConfig
      * @param SdkUrl $sdkUrl
+     * @param PaypalConfig $paypalConfig
      */
-    public function __construct(PayLaterConfig $payLaterConfig, SdkUrl $sdkUrl)
-    {
+    public function __construct(
+        PayLaterConfig $payLaterConfig,
+        SdkUrl $sdkUrl,
+        PaypalConfig $paypalConfig
+    ) {
         $this->payLaterConfig = $payLaterConfig;
         $this->sdkUrl = $sdkUrl;
+        $this->paypalConfig = $paypalConfig;
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function process($jsLayout)
     {
         if (!$this->payLaterConfig->isEnabled(PayLaterConfig::CHECKOUT_PAYMENT_PLACEMENT)) {
             unset($jsLayout['components']['checkout']['children']['steps']['children']['billing-step']
-                ['children']['payment']['children']['payments-list']['children']['paypal-method-extra-content']['children']
-                ['paylater-place-order']);
+                ['children']['payment']['children']['payments-list']['children']['paypal-method-extra-content']
+                ['children']['paylater-place-order']);
 
             return $jsLayout;
         }
@@ -75,6 +87,10 @@ class LayoutProcessor implements LayoutProcessorInterface
             $displayAmount = $config['displayAmount'] ?? false;
             $config['displayAmount'] = !$displayAmount || $this->payLaterConfig->isPPBillingAgreementEnabled()
                 ? false : true;
+            $config['dataAttributes'] = [
+                'data-partner-attribution-id' => $this->paypalConfig->getBuildNotationCode(),
+                'data-csp-nonce' => $this->paypalConfig->getCspNonce(),
+            ];
 
             $attributes = $this->payLaterConfig->getSectionConfig(
                 PayLaterConfig::CHECKOUT_PAYMENT_PLACEMENT,

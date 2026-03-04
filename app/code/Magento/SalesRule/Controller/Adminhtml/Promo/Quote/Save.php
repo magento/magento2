@@ -1,13 +1,13 @@
 <?php
 /**
- *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\SalesRule\Controller\Adminhtml\Promo\Quote;
 
 use Magento\Framework\App\Action\HttpPostActionInterface;
 use Magento\Framework\App\Request\DataPersistorInterface;
+use Magento\Framework\Filter\FilterInput;
 use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
 
 /**
@@ -21,7 +21,7 @@ class Save extends \Magento\SalesRule\Controller\Adminhtml\Promo\Quote implement
      * @var TimezoneInterface
      */
     private $timezone;
-    
+
     /**
      * @var DataPersistorInterface
      */
@@ -40,8 +40,8 @@ class Save extends \Magento\SalesRule\Controller\Adminhtml\Promo\Quote implement
         \Magento\Framework\Registry $coreRegistry,
         \Magento\Framework\App\Response\Http\FileFactory $fileFactory,
         \Magento\Framework\Stdlib\DateTime\Filter\Date $dateFilter,
-        TimezoneInterface $timezone = null,
-        DataPersistorInterface $dataPersistor = null
+        ?TimezoneInterface $timezone = null,
+        ?DataPersistorInterface $dataPersistor = null
     ) {
         parent::__construct($context, $coreRegistry, $fileFactory, $dateFilter);
         $this->timezone =  $timezone ?? \Magento\Framework\App\ObjectManager::getInstance()->get(
@@ -63,6 +63,9 @@ class Save extends \Magento\SalesRule\Controller\Adminhtml\Promo\Quote implement
     {
         $data = $this->getRequest()->getPostValue();
         if ($data) {
+            $data['simple_free_shipping'] = (($data['simple_free_shipping'] ?? '') === '')
+                    ? null : $data['simple_free_shipping'];
+
             try {
                 /** @var $model \Magento\SalesRule\Model\Rule */
                 $model = $this->_objectManager->create(\Magento\SalesRule\Model\Rule::class);
@@ -78,7 +81,7 @@ class Save extends \Magento\SalesRule\Controller\Adminhtml\Promo\Quote implement
                 if ($this->getRequest()->getParam('to_date')) {
                     $filterValues['to_date'] = $this->_dateFilter;
                 }
-                $inputFilter = new \Zend_Filter_Input(
+                $inputFilter = new FilterInput(
                     $filterValues,
                     [],
                     $data
@@ -89,7 +92,6 @@ class Save extends \Magento\SalesRule\Controller\Adminhtml\Promo\Quote implement
                 }
 
                 $session = $this->_objectManager->get(\Magento\Backend\Model\Session::class);
-
                 $validateResult = $model->validateData(new \Magento\Framework\DataObject($data));
                 if ($validateResult !== true) {
                     foreach ($validateResult as $errorMessage) {
@@ -116,13 +118,14 @@ class Save extends \Magento\SalesRule\Controller\Adminhtml\Promo\Quote implement
                     $data['actions'] = $data['rule']['actions'];
                 }
                 unset($data['rule']);
+
+                $data = $this->updateCouponData($data);
                 $model->loadPost($data);
 
                 $useAutoGeneration = (int)(
                     !empty($data['use_auto_generation']) && $data['use_auto_generation'] !== 'false'
                 );
                 $model->setUseAutoGeneration($useAutoGeneration);
-
                 $session->setPageData($model->getData());
 
                 $model->save();
@@ -172,5 +175,22 @@ class Save extends \Magento\SalesRule\Controller\Adminhtml\Promo\Quote implement
             }
         }
         return true;
+    }
+
+    /**
+     * Update data related to Coupon
+     *
+     * @param array $data
+     * @return array
+     */
+    private function updateCouponData(array $data): array
+    {
+        if (isset($data['uses_per_coupon']) && $data['uses_per_coupon'] === '') {
+            $data['uses_per_coupon'] = 0;
+        }
+        if (isset($data['uses_per_customer']) && $data['uses_per_customer'] === '') {
+            $data['uses_per_customer'] = 0;
+        }
+        return $data;
     }
 }

@@ -1,6 +1,6 @@
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 /* global Variables, updateElementAtCursor, MagentovariablePlugin, Base64 */
@@ -301,7 +301,7 @@ define([
                 updateElementAtCursor(textareaElm, value);
                 textareaElm.focus();
                 textareaElm.scrollTop = scrollPos;
-                jQuery(textareaElm).change();
+                jQuery(textareaElm).trigger('change');
                 textareaElm = null;
             }
 

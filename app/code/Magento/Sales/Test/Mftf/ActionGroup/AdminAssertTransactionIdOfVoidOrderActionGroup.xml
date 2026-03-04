@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright 2024 Adobe
+  * All Rights Reserved.
+  */
+-->
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminAssertTransactionIdOfVoidOrderActionGroup">
+        <annotations>
+            <description>Click the Transactions button on the Order Details page</description>
+        </annotations>
+        <waitForElementClickable selector="{{AdminTransactionsGridSection.transactionsSectionBtn}}" stepKey="waitForTransactionsTabToBeClicked"/>
+        <click selector="{{AdminTransactionsGridSection.transactionsSectionBtn}}" stepKey="clickTransactionsTab"/>
+        <waitForElementVisible selector="{{AdminTransactionsGridSection.orderTxnTable}}" stepKey="orderTransactionsTableIsVisible"/>
+        <selectOption selector="{{AdminTransactionsGridSection.orderTxnTableTypeFilter}}" userInput="void" stepKey="selectVoidTypeTxn" />
+        <waitForElementClickable selector="{{AdminTransactionsGridSection.orderTxnTableSearchBtn}}" stepKey="waitToClickSearch"/>
+        <click selector="{{AdminTransactionsGridSection.orderTxnTableSearchBtn}}" stepKey="clickSearch"/>
+        <waitForPageLoad stepKey="waitForFilterToLoad"/>
+        <waitForElementClickable selector="{{AdminTransactionsGridSection.orderTxnTableFirstRow}}" stepKey="clickOnVoidTransaction"/>
+        <click selector="{{AdminTransactionsGridSection.orderTxnTableFirstRow}}" stepKey="clickVoidTxn"/>
+        <waitForPageLoad stepKey="waitForTxnToLoad"/>
+        <grabTextFrom selector="{{AdminTransactionsGridSection.transactionData('Transaction ID')}}" stepKey="getVoidTransaction"/>
+        <assertRegExp stepKey="assertEquals" message="pass">
+            <expectedResult type="string">/([0-9a-z\-])*(?&lt;!void)$/</expectedResult>
+            <actualResult type="variable">getVoidTransaction</actualResult>
+        </assertRegExp>
+    </actionGroup>
+</actionGroups>

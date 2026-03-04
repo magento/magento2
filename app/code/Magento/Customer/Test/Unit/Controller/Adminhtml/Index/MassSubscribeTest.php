@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -26,6 +26,7 @@ use Magento\Newsletter\Model\SubscriptionManagerInterface;
 use Magento\Ui\Component\MassAction\Filter;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 
 /**
  * Class to test mass subscribe customers by ids
@@ -34,6 +35,7 @@ use PHPUnit\Framework\TestCase;
  */
 class MassSubscribeTest extends TestCase
 {
+    use MockCreationTrait;
     /**
      * @var MassSubscribe
      */
@@ -103,36 +105,24 @@ class MassSubscribeTest extends TestCase
 
         $this->contextMock = $this->createMock(BackendContext::class);
         $resultRedirectFactory = $this->createMock(RedirectFactory::class);
-        $this->responseMock = $this->getMockForAbstractClass(ResponseInterface::class);
-        $this->requestMock = $this->getMockBuilder(Http::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->responseMock = $this->createMock(ResponseInterface::class);
+        $this->requestMock = $this->createMock(Http::class);
         $this->objectManagerMock = $this->createPartialMock(
             ObjectManager::class,
             ['create']
         );
         $this->messageManagerMock = $this->createMock(Manager::class);
         $this->customerCollectionMock =
-            $this->getMockBuilder(Collection::class)
-                ->disableOriginalConstructor()
-                ->getMock();
-        $this->customerCollectionFactoryMock =
-            $this->getMockBuilder(CollectionFactory::class)
-                ->disableOriginalConstructor()
-                ->setMethods(['create'])
-                ->getMock();
-        $redirectMock = $this->getMockBuilder(Redirect::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+            $this->createMock(Collection::class);
+        $this->customerCollectionFactoryMock = $this->createPartialMock(CollectionFactory::class, ['create']);
+        $redirectMock = $this->createMock(Redirect::class);
 
-        $resultFactoryMock = $this->getMockBuilder(ResultFactory::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $resultFactoryMock = $this->createMock(ResultFactory::class);
         $resultFactoryMock->expects($this->any())
             ->method('create')
             ->with(ResultFactory::TYPE_REDIRECT)
             ->willReturn($redirectMock);
-        $this->subscriptionManager = $this->getMockForAbstractClass(SubscriptionManagerInterface::class);
+        $this->subscriptionManager = $this->createMock(SubscriptionManagerInterface::class);
         $this->resultRedirectMock = $this->createMock(Redirect::class);
         $resultRedirectFactory->expects($this->any())->method('create')->willReturn($this->resultRedirectMock);
 
@@ -155,8 +145,7 @@ class MassSubscribeTest extends TestCase
         $this->customerCollectionFactoryMock->expects($this->once())
             ->method('create')
             ->willReturn($this->customerCollectionMock);
-        $this->customerRepositoryMock = $this->getMockBuilder(CustomerRepositoryInterface::class)
-            ->getMockForAbstractClass();
+        $this->customerRepositoryMock = $this->createMock(CustomerRepositoryInterface::class);
         $this->massAction = $objectManagerHelper->getObject(
             MassSubscribe::class,
             [
@@ -179,7 +168,7 @@ class MassSubscribeTest extends TestCase
         $customersIds = [$customerId, $customerId, $customerId];
 
         $this->customerCollectionMock->method('getAllIds')->willReturn($customersIds);
-        $customer = $this->getMockForAbstractClass(CustomerInterface::class);
+        $customer = $this->createMock(CustomerInterface::class);
         $customer->method('getStoreId')->willReturn($storeId);
         $customer->method('getId')->willReturn($customerId);
         $this->customerRepositoryMock->method('getById')->with($customerId)->willReturn($customer);

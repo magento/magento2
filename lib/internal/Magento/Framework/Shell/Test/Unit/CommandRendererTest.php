@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -9,15 +9,15 @@ namespace Magento\Framework\Shell\Test\Unit;
 
 use Magento\Framework\Shell\CommandRenderer;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class CommandRendererTest extends TestCase
 {
     /**
      * @param $expectedCommand
      * @param $actualCommand
-     * @param $testArguments
-     * @dataProvider commandsDataProvider
-     */
+     * @param $testArguments     */
+    #[DataProvider('commandsDataProvider')]
     public function testRender($expectedCommand, $actualCommand, $testArguments)
     {
         $commandRenderer = new CommandRenderer();
@@ -30,7 +30,7 @@ class CommandRendererTest extends TestCase
     /**
      * @return array
      */
-    public function commandsDataProvider()
+    public static function commandsDataProvider()
     {
         $testArgument  = 'argument';
         $testArgument2 = 'argument2';

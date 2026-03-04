@@ -1,6 +1,6 @@
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 'use strict';
@@ -67,7 +67,11 @@ function init(config) {
                 /**
                  * @todo rename "helpers" to "specs" (implies overriding grunt-contrib-jasmine code)
                  */
-                helpers: specs
+                helpers: specs,
+                sandboxArgs: {
+                    args: ['--no-sandbox', '--disable-setuid-sandbox'],
+                    defaultViewport: {width: 400, height: 400, hasTouch: true}
+                }
             }
         };
     });

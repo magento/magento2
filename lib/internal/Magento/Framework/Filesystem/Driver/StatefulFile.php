@@ -1,9 +1,7 @@
 <?php
 /**
- * Origin filesystem driver
- *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Framework\Filesystem\Driver;
@@ -13,7 +11,7 @@ use Magento\Framework\Exception\FileSystemException;
 use Magento\Framework\Filesystem\DriverInterface;
 
 /**
- * Filesystem driver that uses the local filesystem.
+ * Origin filesystem driver. Filesystem driver that uses the local filesystem.
  *
  * Assumed that stat cache is cleanup by data modification methods
  *
@@ -36,7 +34,7 @@ class StatefulFile implements DriverInterface
      * StatefulFile constructor.
      * @param File $driverFile
      */
-    public function __construct(File $driverFile = null)
+    public function __construct(?File $driverFile = null)
     {
         $this->driverFile = $driverFile ?? ObjectManager::getInstance()->create(
             File::class,
@@ -201,7 +199,7 @@ class StatefulFile implements DriverInterface
      * @return bool
      * @throws FileSystemException
      */
-    public function rename($oldPath, $newPath, DriverInterface $targetDriver = null)
+    public function rename($oldPath, $newPath, ?DriverInterface $targetDriver = null)
     {
         return $this->driverFile->rename($oldPath, $newPath, $targetDriver);
     }
@@ -215,7 +213,7 @@ class StatefulFile implements DriverInterface
      * @return bool
      * @throws FileSystemException
      */
-    public function copy($source, $destination, DriverInterface $targetDriver = null)
+    public function copy($source, $destination, ?DriverInterface $targetDriver = null)
     {
         return $this->driverFile->copy($source, $destination, $targetDriver);
     }
@@ -229,7 +227,7 @@ class StatefulFile implements DriverInterface
      * @return bool
      * @throws FileSystemException
      */
-    public function symlink($source, $destination, DriverInterface $targetDriver = null)
+    public function symlink($source, $destination, ?DriverInterface $targetDriver = null)
     {
         return $this->driverFile->symlink($source, $destination, $targetDriver);
     }
@@ -517,7 +515,7 @@ class StatefulFile implements DriverInterface
      */
     protected function fixSeparator($path)
     {
-        return str_replace('\\', '/', $path);
+        return $path !== null ? str_replace('\\', '/', $path) : '';
     }
 
     /**

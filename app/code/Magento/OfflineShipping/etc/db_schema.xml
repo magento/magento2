@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 -->
 <schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -38,8 +38,8 @@
         </constraint>
     </table>
     <table name="salesrule" resource="default" comment="Salesrule">
-        <column xsi:type="smallint" name="simple_free_shipping" unsigned="true" nullable="false"
-                identity="false" default="0" comment="Simple Free Shipping"/>
+        <column xsi:type="smallint" name="simple_free_shipping" unsigned="true" nullable="true"
+                identity="false" default="null" comment="Simple Free Shipping"/>
     </table>
     <table name="sales_order_item" resource="sales" comment="Sales Flat Order Item">
         <column xsi:type="smallint" name="free_shipping" unsigned="true" nullable="false" identity="false"

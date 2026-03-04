@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -108,6 +108,7 @@ class FilterAttributeReader implements ReaderInterface
         $filterTypeMap = [
             'price' => self::FILTER_RANGE_TYPE,
             'date' => self::FILTER_RANGE_TYPE,
+            'datetime' => self::FILTER_RANGE_TYPE,
             'select' => self::FILTER_EQUAL_TYPE,
             'multiselect' => self::FILTER_EQUAL_TYPE,
             'boolean' => self::FILTER_EQUAL_TYPE,

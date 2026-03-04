@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -20,22 +20,16 @@ use PHPUnit\Framework\TestCase;
 class ManagerTest extends TestCase
 {
     /**
-     * Integration service mock
-     *
      * @var IntegrationServiceInterface|MockObject
      */
     protected $integrationServiceMock;
 
     /**
-     * Authorization service mock
-     *
      * @var AuthorizationServiceInterface|MockObject
      */
     protected $integrationAuthorizationServiceMock;
 
     /**
-     * API setup plugin
-     *
      * @var Manager
      */
     protected $apiSetupPlugin;
@@ -143,8 +137,10 @@ class ManagerTest extends TestCase
         );
         $this->integrationServiceMock
             ->method('findByName')
-            ->withConsecutive(['TestIntegration1'], ['TestIntegration2'])
-            ->willReturnOnConsecutiveCalls($integrationsData1, $integrationsData2);
+            ->willReturnCallback(fn($param) => match ([$param]) {
+                ['TestIntegration1'] => $integrationsData1,
+                ['TestIntegration2'] => $integrationsData2
+            });
         $this->apiSetupPlugin->afterProcessIntegrationConfig(
             $this->subjectMock,
             ['TestIntegration1', 'TestIntegration2']
@@ -194,8 +190,10 @@ class ManagerTest extends TestCase
 
         $this->integrationServiceMock
             ->method('findByName')
-            ->withConsecutive(['TestIntegration1'], ['TestIntegration2'])
-            ->willReturnOnConsecutiveCalls($integrationsData1Object, $integrationsData2Object);
+            ->willReturnCallback(fn($param) => match ([$param]) {
+                ['TestIntegration1'] => $integrationsData1Object,
+                ['TestIntegration2'] => $integrationsData2Object
+            });
 
         $this->apiSetupPlugin->afterProcessConfigBasedIntegrations(
             $this->subjectMock,

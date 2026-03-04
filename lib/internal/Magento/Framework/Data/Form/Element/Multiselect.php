@@ -1,13 +1,11 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 
 /**
  * Form select element
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\Framework\Data\Form\Element;
 
@@ -95,7 +93,7 @@ class Multiselect extends AbstractElement
 
         $value = $this->getValue();
         if (!is_array($value)) {
-            $value = explode(',', $value);
+            $value = explode(',', $value ?? '');
         }
 
         $values = $this->getValues();

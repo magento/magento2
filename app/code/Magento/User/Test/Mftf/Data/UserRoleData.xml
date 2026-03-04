@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
-  */
+/**
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
+ */
 -->
 
 <entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -45,6 +45,13 @@
         <data key="rolename" unique="suffix">Limited</data>
         <data key="roleScopes">Custom</data>
         <data key="resourceAccess">All</data>
+    </entity>
+
+    <entity name="limitedAccessRole" type="role">
+        <data key="name" unique="suffix">Limited</data>
+        <data key="rolename" unique="suffix">Limited</data>
+        <data key="roleScopes">All</data>
+        <data key="resourceAccess">Custom</data>
     </entity>
 
     <entity name="restrictedRole" type="role">

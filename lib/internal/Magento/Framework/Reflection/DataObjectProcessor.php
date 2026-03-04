@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework\Reflection;
 
@@ -13,6 +13,8 @@ use Magento\Framework\Phrase;
  *
  * @api
  * @since 100.0.2
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class DataObjectProcessor
 {
@@ -47,12 +49,18 @@ class DataObjectProcessor
     private $processors;
 
     /**
+     * @var array[]
+     */
+    private $excludedMethodsClassMap;
+
+    /**
      * @param MethodsMap $methodsMapProcessor
      * @param TypeCaster $typeCaster
      * @param FieldNamer $fieldNamer
      * @param CustomAttributesProcessor $customAttributesProcessor
      * @param ExtensionAttributesProcessor $extensionAttributesProcessor
      * @param array $processors
+     * @param array $excludedMethodsClassMap
      */
     public function __construct(
         MethodsMap $methodsMapProcessor,
@@ -60,7 +68,8 @@ class DataObjectProcessor
         FieldNamer $fieldNamer,
         CustomAttributesProcessor $customAttributesProcessor,
         ExtensionAttributesProcessor $extensionAttributesProcessor,
-        array $processors = []
+        array $processors = [],
+        array $excludedMethodsClassMap = []
     ) {
         $this->methodsMapProcessor = $methodsMapProcessor;
         $this->typeCaster = $typeCaster;
@@ -68,6 +77,7 @@ class DataObjectProcessor
         $this->extensionAttributesProcessor = $extensionAttributesProcessor;
         $this->customAttributesProcessor = $customAttributesProcessor;
         $this->processors = $processors;
+        $this->excludedMethodsClassMap = $excludedMethodsClassMap;
     }
 
     /**
@@ -77,13 +87,20 @@ class DataObjectProcessor
      * @param string $dataObjectType
      * @return array
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function buildOutputDataArray($dataObject, $dataObjectType)
     {
         $methods = $this->methodsMapProcessor->getMethodsMap($dataObjectType);
         $outputData = [];
 
+        $excludedMethodsForDataObjectType = $this->excludedMethodsClassMap[$dataObjectType] ?? [];
+
         foreach (array_keys($methods) as $methodName) {
+            if (in_array($methodName, $excludedMethodsForDataObjectType)) {
+                continue;
+            }
+
             if (!$this->methodsMapProcessor->isMethodValidForDataField($dataObjectType, $methodName)) {
                 continue;
             }
@@ -111,21 +128,7 @@ class DataObjectProcessor
                     continue;
                 }
             } else {
-                if (is_object($value) && !($value instanceof Phrase)) {
-                    $value = $this->buildOutputDataArray($value, $returnType);
-                } elseif (is_array($value)) {
-                    $valueResult = [];
-                    $arrayElementType = substr($returnType, 0, -2);
-                    foreach ($value as $singleValue) {
-                        if (is_object($singleValue) && !($singleValue instanceof Phrase)) {
-                            $singleValue = $this->buildOutputDataArray($singleValue, $arrayElementType);
-                        }
-                        $valueResult[] = $this->typeCaster->castValueToType($singleValue, $arrayElementType);
-                    }
-                    $value = $valueResult;
-                } else {
-                    $value = $this->typeCaster->castValueToType($value, $returnType);
-                }
+                $value = $this->processValue($value, $returnType);
             }
 
             $outputData[$key] = $value;
@@ -134,6 +137,35 @@ class DataObjectProcessor
         $outputData = $this->changeOutputArray($dataObject, $outputData);
 
         return $outputData;
+    }
+
+    /**
+     * Process value based on its type and return type
+     *
+     * @param mixed $value
+     * @param string $returnType
+     * @return mixed
+     */
+    private function processValue($value, $returnType)
+    {
+        if (is_object($value) && !($value instanceof Phrase)) {
+            return $this->buildOutputDataArray($value, $returnType);
+        }
+        if (is_array($value)) {
+            if ($returnType === TypeProcessor::UNSTRUCTURED_ARRAY) {
+                return $value;
+            }
+            $valueResult = [];
+            $arrayElementType = $returnType !== null ? substr($returnType, 0, -2) : '';
+            foreach ($value as $singleValue) {
+                if (is_object($singleValue) && !($singleValue instanceof Phrase)) {
+                    $singleValue = $this->buildOutputDataArray($singleValue, $arrayElementType);
+                }
+                $valueResult[] = $this->typeCaster->castValueToType($singleValue, $arrayElementType);
+            }
+            return $valueResult;
+        }
+        return $this->typeCaster->castValueToType($value, $returnType);
     }
 
     /**

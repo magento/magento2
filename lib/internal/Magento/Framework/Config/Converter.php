@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework\Config;
 
@@ -9,8 +9,6 @@ use Magento\Framework\View\Xsd\Media\TypeDataExtractorPool;
 
 /**
  * Class Converter convert xml to appropriate array
- *
- * @package Magento\Framework\Config
  */
 class Converter implements \Magento\Framework\Config\ConverterInterface
 {
@@ -103,9 +101,11 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
             }
         }
         if (!count($result)) {
-            $result = (strtolower($node->nodeValue) !== 'true' && strtolower($node->nodeValue) !== 'false')
-                ? $node->nodeValue
-                : filter_var($node->nodeValue, FILTER_VALIDATE_BOOLEAN);
+            $result = (
+                $node->nodeValue !== null
+                && strtolower($node->nodeValue) !== 'true'
+                && strtolower($node->nodeValue) !== 'false'
+            ) ? $node->nodeValue : filter_var($node->nodeValue, FILTER_VALIDATE_BOOLEAN);
         }
         return $result;
     }

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
-  */
+/**
+ * Copyright 2021 Adobe
+ * All Rights Reserved.
+ */
 -->
 
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -17,6 +17,6 @@
         </arguments>
 
         <waitForElementVisible selector="{{StorefrontPanelHeaderSection.welcomeMessage}}" stepKey="waitForWelcomeMessage"/>
-        <see userInput="{{customMessage}}" selector="{{StorefrontPanelHeaderSection.welcomeMessage}}" stepKey="verifyCustomMessage"/>
+        <waitForText userInput="{{customMessage}}" selector="{{StorefrontPanelHeaderSection.welcomeMessage}}" stepKey="verifyCustomMessage"/>
     </actionGroup>
 </actionGroups>

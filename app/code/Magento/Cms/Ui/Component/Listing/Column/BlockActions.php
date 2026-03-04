@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Cms\Ui\Component\Listing\Column;
 
@@ -20,9 +20,9 @@ class BlockActions extends Column
     /**
      * Url path
      */
-    const URL_PATH_EDIT = 'cms/block/edit';
-    const URL_PATH_DELETE = 'cms/block/delete';
-    const URL_PATH_DETAILS = 'cms/block/details';
+    public const URL_PATH_EDIT = 'cms/block/edit';
+    public const URL_PATH_DELETE = 'cms/block/delete';
+    public const URL_PATH_DETAILS = 'cms/block/details';
 
     /**
      * @var UrlInterface
@@ -40,16 +40,19 @@ class BlockActions extends Column
      * @param UrlInterface $urlBuilder
      * @param array $components
      * @param array $data
+     * @param Escaper|null $escaper
      */
     public function __construct(
         ContextInterface $context,
         UiComponentFactory $uiComponentFactory,
         UrlInterface $urlBuilder,
         array $components = [],
-        array $data = []
+        array $data = [],
+        ?Escaper $escaper = null
     ) {
         $this->urlBuilder = $urlBuilder;
         parent::__construct($context, $uiComponentFactory, $components, $data);
+        $this->escaper = $escaper ?: ObjectManager::getInstance()->get(Escaper::class);
     }
 
     /**
@@ -60,30 +63,30 @@ class BlockActions extends Column
         if (isset($dataSource['data']['items'])) {
             foreach ($dataSource['data']['items'] as & $item) {
                 if (isset($item['block_id'])) {
-                    $title = $this->getEscaper()->escapeHtmlAttr($item['title']);
+                    $title = $this->escaper->escapeHtmlAttr($item['title']);
                     $item[$this->getData('name')] = [
                         'edit' => [
                             'href' => $this->urlBuilder->getUrl(
                                 static::URL_PATH_EDIT,
                                 [
-                                    'block_id' => $item['block_id'],
+                                    'block_id' => $item['block_id']
                                 ]
                             ),
-                            'label' => __('Edit'),
+                            'label' => __('Edit')
                         ],
                         'delete' => [
                             'href' => $this->urlBuilder->getUrl(
                                 static::URL_PATH_DELETE,
                                 [
-                                    'block_id' => $item['block_id'],
+                                    'block_id' => $item['block_id']
                                 ]
                             ),
                             'label' => __('Delete'),
                             'confirm' => [
                                 'title' => __('Delete %1', $title),
-                                'message' => __('Are you sure you want to delete a %1 record?', $title),
+                                'message' => __('Are you sure you want to delete a %1 record?', $title)
                             ],
-                            'post' => true,
+                            'post' => true
                         ],
                     ];
                 }
@@ -91,19 +94,5 @@ class BlockActions extends Column
         }
 
         return $dataSource;
-    }
-
-    /**
-     * Get instance of escaper
-     *
-     * @return Escaper
-     * @deprecated 101.0.7
-     */
-    private function getEscaper()
-    {
-        if (!$this->escaper) {
-            $this->escaper = ObjectManager::getInstance()->get(Escaper::class);
-        }
-        return $this->escaper;
     }
 }

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework\MessageQueue\Consumer\Config\Xml;
 
@@ -26,8 +26,6 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
     private $configParser;
 
     /**
-     * Default value provider.
-     *
      * @var DefaultValueProvider
      */
     private $defaultValueProvider;
@@ -61,7 +59,7 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
 
             $result[$consumerName] = [
                 'name' => $consumerName,
-                'queue' => $this->getAttributeValue($consumerNode, 'queue'),
+                'queue' => $this->getAttributeValue($consumerNode, 'queue', $consumerName),
                 'consumerInstance' => $this->getAttributeValue(
                     $consumerNode,
                     'consumerInstance',

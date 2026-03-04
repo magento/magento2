@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -106,10 +106,10 @@ class UrlRewriteHandler
         UrlPersistInterface $urlPersist,
         CollectionFactory $productCollectionFactory,
         CategoryProductUrlPathGenerator $categoryBasedProductRewriteGenerator,
-        MergeDataProviderFactory $mergeDataProviderFactory = null,
-        Json $serializer = null,
-        ProductScopeRewriteGenerator $productScopeRewriteGenerator = null,
-        ScopeConfigInterface $scopeConfig = null
+        ?MergeDataProviderFactory $mergeDataProviderFactory = null,
+        ?Json $serializer = null,
+        ?ProductScopeRewriteGenerator $productScopeRewriteGenerator = null,
+        ?ScopeConfigInterface $scopeConfig = null
     ) {
         $this->childrenCategoriesProvider = $childrenCategoriesProvider;
         $this->categoryUrlRewriteGenerator = $categoryUrlRewriteGenerator;

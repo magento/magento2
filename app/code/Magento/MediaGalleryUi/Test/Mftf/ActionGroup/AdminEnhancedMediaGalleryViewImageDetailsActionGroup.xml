@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
-  */
+/**
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
+ */
 -->
 
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -15,6 +15,7 @@
 
         <click selector="{{AdminEnhancedMediaGalleryImageActionsSection.openContextMenu}}" stepKey="openContextMenu"/>
         <click selector="{{AdminEnhancedMediaGalleryImageActionsSection.viewDetails}}" stepKey="viewDetails"/>
-        <waitForElementVisible selector="{{AdminEnhancedMediaGalleryViewDetailsSection.modalTitle}}" stepKey="waitForLoadingMaskToDisappear"/>
+        <waitForPageLoad stepKey="waitForLoadingMaskToDisappear"/>
+        <waitForElementVisible selector="{{AdminEnhancedMediaGalleryViewDetailsSection.modalTitle}}" stepKey="waitForSlideOut"/>
     </actionGroup>
 </actionGroups>

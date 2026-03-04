@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -9,7 +9,7 @@ namespace Magento\Security\Test\Unit\Observer;
 
 use Magento\Framework\Event;
 use Magento\Framework\Event\Observer;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Security\Api\Data\UserExpirationInterface;
 use Magento\Security\Model\UserExpirationManager;
 use Magento\Security\Observer\AdminUserAuthenticateBefore;
@@ -23,10 +23,7 @@ use PHPUnit\Framework\TestCase;
  */
 class AdminUserAuthenticateBeforeTest extends TestCase
 {
-    /**
-     * @var ObjectManager
-     */
-    private $objectManager;
+    use MockCreationTrait;
 
     /**
      * @var MockObject|UserExpirationManager
@@ -70,26 +67,21 @@ class AdminUserAuthenticateBeforeTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->objectManager = new ObjectManager($this);
-
         $this->userExpirationManagerMock = $this->createPartialMock(
             UserExpirationManager::class,
             ['isUserExpired', 'deactivateExpiredUsersById']
         );
         $this->userFactoryMock = $this->createPartialMock(UserFactory::class, ['create']);
         $this->userMock = $this->createPartialMock(User::class, ['loadByUsername', 'getId']);
-        $this->observer = $this->objectManager->getObject(
-            AdminUserAuthenticateBefore::class,
-            [
-                'userExpirationManager' => $this->userExpirationManagerMock,
-                'userFactory' => $this->userFactoryMock,
-            ]
+        $this->observer = new AdminUserAuthenticateBefore(
+            $this->userExpirationManagerMock,
+            $this->userFactoryMock
         );
         $this->eventObserverMock = $this->createPartialMock(Observer::class, ['getEvent']);
-        $this->eventMock = $this->getMockBuilder(Event::class)
-            ->addMethods(['getUsername'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->eventMock = $this->createPartialMockWithReflection(
+            Event::class,
+            ['getUsername']
+        );
         $this->userExpirationMock = $this->createPartialMock(
             UserExpirationInterface::class,
             [

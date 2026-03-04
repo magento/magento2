@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -23,7 +23,9 @@ use Magento\Framework\Url\EncoderInterface;
 use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\TestFramework\Eav\Model\GetAttributeSetByName;
+use Magento\TestFramework\Fixture\Cache;
 use Magento\TestFramework\Request;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use Psr\Log\LoggerInterface;
 use Magento\Catalog\Api\Data\ProductAttributeInterface;
@@ -162,10 +164,10 @@ class ViewTest extends AbstractController
 
     /**
      * @magentoDataFixture Magento/Catalog/_files/second_product_simple.php
-     * @dataProvider productVisibilityDataProvider
      * @param int $visibility
      * @return void
      */
+    #[DataProvider('productVisibilityDataProvider')]
     public function testProductVisibility(int $visibility): void
     {
         $product = $this->updateProductVisibility('simple2', $visibility);
@@ -177,7 +179,7 @@ class ViewTest extends AbstractController
     /**
      * @return array
      */
-    public function productVisibilityDataProvider(): array
+    public static function productVisibilityDataProvider(): array
     {
         return [
             'catalog_search' => [Visibility::VISIBILITY_BOTH],
@@ -286,9 +288,11 @@ class ViewTest extends AbstractController
      * Test that 404 page has product tag if product is not visible
      *
      * @magentoDataFixture Magento/Quote/_files/is_not_salable_product.php
-     * @magentoCache full_page enabled
      * @return void
      */
+    #[
+        Cache('full_page', true)
+    ]
     public function test404NotFoundPageCacheTags(): void
     {
         $cache = $this->_objectManager->get(Manager::class);
@@ -403,9 +407,7 @@ class ViewTest extends AbstractController
      */
     private function setupLoggerMock(): MockObject
     {
-        $logger = $this->getMockBuilder(LoggerInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $logger = $this->createMock(LoggerInterface::class);
         $this->_objectManager->addSharedInstance($logger, LoggerInterface::class, true);
 
         return $logger;
@@ -424,5 +426,24 @@ class ViewTest extends AbstractController
         $product->setVisibility($visibility);
 
         return $this->productRepository->save($product);
+    }
+
+    /**
+     * Test product details block as active on load
+     *
+     * @magentoDataFixture Magento/Catalog/_files/product_simple_without_custom_options.php
+     * @return void
+     */
+    public function testProductDetailsBlock(): void
+    {
+        $product = $this->productRepository->get('simple-2');
+        $this->dispatch(sprintf('catalog/product/view/id/%s/', $product->getId()));
+        $content = $this->getResponse()->getContent();
+
+        $this->assertStringContainsString(
+            '<div class="data item title active"
+                     data-role="collapsible" id="tab-label-description">',
+            $content
+        );
     }
 }

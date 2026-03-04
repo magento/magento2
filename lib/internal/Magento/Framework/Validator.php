@@ -1,10 +1,14 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Framework;
+
+use Laminas\Validator\Translator\TranslatorInterface;
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
+use Magento\Framework\Validator\AbstractValidator;
 
 /**
  * Validator class that represents chain of validators.
@@ -12,7 +16,7 @@ namespace Magento\Framework;
  * @api
  * @since 100.0.2
  */
-class Validator extends \Magento\Framework\Validator\AbstractValidator
+class Validator extends AbstractValidator implements ResetAfterRequestInterface
 {
     /**
      * Validator chain
@@ -53,7 +57,6 @@ class Validator extends \Magento\Framework\Validator\AbstractValidator
         $result = true;
         $this->_clearMessages();
 
-        /** @var $validator \Zend_Validate_Interface */
         foreach ($this->_validators as $element) {
             $validator = $element['instance'];
             if ($validator->isValid($value)) {
@@ -72,14 +75,22 @@ class Validator extends \Magento\Framework\Validator\AbstractValidator
     /**
      * Set translator to chain.
      *
-     * @param \Magento\Framework\Translate\AdapterInterface|null $translator
-     * @return \Magento\Framework\Validator\AbstractValidator
+     * @param TranslatorInterface|null $translator
+     * @return AbstractValidator
      */
-    public function setTranslator($translator = null)
+    public function setTranslator(?TranslatorInterface $translator = null)
     {
         foreach ($this->_validators as $validator) {
             $validator['instance']->setTranslator($translator);
         }
         return parent::setTranslator($translator);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        $this->_validators = [];
     }
 }

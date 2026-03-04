@@ -1,20 +1,21 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\TestFramework\Integrity\Library;
 
 use Laminas\Code\Reflection\ClassReflection;
-use ReflectionClass;
+use Magento\Framework\GetParameterClassTrait;
 use ReflectionException;
-use ReflectionParameter;
 
 /**
  * Provide dependencies for the file
  */
 class Injectable
 {
+    use GetParameterClassTrait;
+
     /**
      * @var string[]
      */
@@ -52,21 +53,5 @@ class Injectable
         }
 
         return $this->dependencies;
-    }
-
-    /**
-     * Get class by reflection parameter
-     *
-     * @param ReflectionParameter $reflectionParameter
-     * @return ReflectionClass|null
-     * @throws ReflectionException
-     */
-    private function getParameterClass(ReflectionParameter $reflectionParameter): ?ReflectionClass
-    {
-        $parameterType = $reflectionParameter->getType();
-
-        return $parameterType && !$parameterType->isBuiltin()
-            ? new ReflectionClass($parameterType->getName())
-            : null;
     }
 }

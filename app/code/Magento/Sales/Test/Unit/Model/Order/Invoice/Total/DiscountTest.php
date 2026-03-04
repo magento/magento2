@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -9,6 +9,7 @@ namespace Magento\Sales\Test\Unit\Model\Order\Invoice\Total;
 
 use Magento\Sales\Model\Order\Invoice\Total\Discount;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\MockObject\MockObject;
 use Magento\Sales\Model\Order;
@@ -66,10 +67,9 @@ class DiscountTest extends TestCase
     /**
      * Test for collect invoice
      *
-     * @param array $invoiceData
-     * @dataProvider collectInvoiceData
-     * @return void
+     * @param array $invoiceData     * @return void
      */
+    #[DataProvider('collectInvoiceData')]
     public function testCollectInvoiceWithZeroGrandTotal(array $invoiceData): void
     {
         //Set up invoice mock
@@ -138,7 +138,7 @@ class DiscountTest extends TestCase
     /**
      * @return array
      */
-    public function collectInvoiceData(): array
+    public static function collectInvoiceData(): array
     {
         return [
             [

@@ -2,8 +2,8 @@
 /**
  * RouterList model test class
  *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -44,7 +44,7 @@ class RouterListTest extends TestCase
             'anotherRouter' => ['class' => 'AnotherClass', 'disable' => false, 'sortOrder' => 15]
         ];
 
-        $this->objectManagerMock = $this->getMockForAbstractClass(ObjectManagerInterface::class);
+        $this->objectManagerMock = $this->createStub(ObjectManagerInterface::class);
         $this->model = new RouterList($this->objectManagerMock, $this->routerList);
     }
 
@@ -103,8 +103,15 @@ class RouterListTest extends TestCase
 
         $this->objectManagerMock
             ->method('create')
-            ->withConsecutive(['DefaultClass'], ['FrontClass'])
-            ->willReturnOnConsecutiveCalls($defaultClass, $frontClass);
+            ->willReturnCallback(
+                function ($arg) use ($defaultClass, $frontClass) {
+                    if ($arg == 'DefaultClass') {
+                        return $defaultClass;
+                    } elseif ($arg == 'FrontClass') {
+                        return $frontClass;
+                    }
+                }
+            );
 
         $this->assertEquals($defaultClass, $this->model->current());
         $this->model->next();

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -12,6 +12,7 @@ use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\DB\Select;
 use Magento\Framework\Model\ResourceModel\Db\Context;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Store\Model\StoreManager;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Weee\Model\ResourceModel\Tax;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -51,11 +52,11 @@ class TaxTest extends TestCase
     {
         $objectManager = new ObjectManager($this);
 
-        $this->storeManagerMock = $this->getMockForAbstractClass(StoreManagerInterface::class);
+        $this->storeManagerMock = $this->createPartialMock(StoreManager::class, []);
 
         $this->selectMock = $this->createMock(Select::class);
 
-        $this->connectionMock = $this->getMockForAbstractClass(AdapterInterface::class);
+        $this->connectionMock = $this->createMock(AdapterInterface::class);
         $this->connectionMock->expects($this->once())
             ->method('select')
             ->willReturn($this->selectMock);
@@ -88,8 +89,15 @@ class TaxTest extends TestCase
 
         $this->selectMock
             ->method('where')
-            ->withConsecutive(['website_id IN(?)', [1, 0]], ['country = ?', 'US'], ['state = ?', 0])
-            ->willReturnOnConsecutiveCalls($this->selectMock, $this->selectMock, $this->selectMock);
+            ->willReturnCallback(function ($column, $value) {
+                if ($column == 'website_id IN(?)' && $value == [1, 0]) {
+                    return $this->selectMock;
+                } elseif ($column == 'country = ?' && $value == 'US') {
+                    return $this->selectMock;
+                } elseif ($column == 'state = ?' && $value == 0) {
+                    return $this->selectMock;
+                }
+            });
 
         $this->selectMock->expects($this->any())
             ->method('from')

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -248,7 +248,7 @@ class PriceTest extends TestCase
         // final price is the lowest price of configurable variations
         $this->assertEquals(
             round($expectedPrice, 2),
-            round($this->priceModel->getFinalPrice(1, $product), 2)
+            round((float) $this->priceModel->getFinalPrice(1, $product), 2)
         );
     }
 

@@ -1,6 +1,6 @@
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 define([
     'jquery',
@@ -63,9 +63,8 @@ define([
          * @returns {Boolean}
          */
         update: function () {
-            var checkVideoID = this.element.find(this.options.container).find(
-                    '.' + this.options.videoClass
-                ).data('code'),
+            var checkVideoID =
+                this.element.find(this.options.container).find('.' + this.options.videoClass).data('code'),
                 eventVideoData = {
                     oldVideoId: checkVideoID ? checkVideoID.toString() : checkVideoID,
                     newVideoId: this.options.videoId ? this.options.videoId.toString() : this.options.videoId
@@ -309,6 +308,7 @@ define([
 
             try {
                 videoForm.validation('clearError');
+                // eslint-disable-next-line no-unused-vars
             } catch (e) {
                 // Do nothing
             }
@@ -336,21 +336,21 @@ define([
             var self = this;
 
             self.element.on('finish_update_video finish_create_video', $.proxy(function (element, playerData) {
-                    if (!self._onlyVideoPlayer ||
-                        !self._isEditPage && playerData.oldVideoId !== playerData.newVideoId ||
-                        playerData.oldVideoId && playerData.oldVideoId !== playerData.newVideoId
-                    ) {
-                        self.element.updateInputFields({
-                            reset: false,
-                            data: {
-                                title: data.title,
-                                description: data.description
-                            }
-                        });
-                        this._loadRemotePreview(data.thumbnail);
-                    }
-                    self._onlyVideoPlayer = true;
-                }, this))
+                if (!self._onlyVideoPlayer ||
+                    !self._isEditPage && playerData.oldVideoId !== playerData.newVideoId ||
+                    playerData.oldVideoId && playerData.oldVideoId !== playerData.newVideoId
+                ) {
+                    self.element.updateInputFields({
+                        reset: false,
+                        data: {
+                            title: data.title,
+                            description: data.description
+                        }
+                    });
+                    this._loadRemotePreview(data.thumbnail);
+                }
+                self._onlyVideoPlayer = true;
+            }, this))
                 .createVideoPlayer({
                     videoId: data.videoId,
                     videoProvider: data.videoProvider,
@@ -584,6 +584,7 @@ define([
 
             try {
                 data = JSON.parse(result);
+                // eslint-disable-next-line no-unused-vars
             } catch (e) {
                 data = result;
             }
@@ -601,7 +602,7 @@ define([
             $.each(this.element.find(this._videoFormSelector).serializeArray(), function (i, field) {
                 data[field.name] = field.value;
             });
-            data.disabled = this.element.find(this._videoDisableinputSelector).attr('checked') ? 1 : 0;
+            data.disabled = this.element.find(this._videoDisableinputSelector).prop('checked') ? 1 : 0;
             data['media_type'] = 'external-video';
             data.oldFile = oldFile;
 
@@ -616,21 +617,19 @@ define([
          * @private
          */
         _uploadFile: function (data, callback) {
-            var fu = this.element.find(this._videoPreviewInputSelector),
-                tmpInput = document.createElement('input'),
-                fileUploader = null;
+            let form = this.element.find(this._videoFormSelector).get(0),
+                formData = new FormData(form);
 
-            $(tmpInput).attr({
-                'name': fu.attr('name'),
-                'value': fu.val(),
-                'type': 'file',
-                'data-ui-ud': fu.attr('data-ui-ud')
-            }).css('display', 'none');
-            fu.parent().append(tmpInput);
-            fileUploader = $(tmpInput).fileupload();
-            fileUploader.fileupload('send', data).done(function (result, textStatus, jqXHR) {
-                tmpInput.remove();
-                callback.call(null, result, textStatus, jqXHR);
+            $.ajax({
+                type: 'post',
+                url: data.url,
+                processData: false,
+                contentType: false,
+                data: formData,
+                success: function (result, textStatus, jqXHR) {
+                    // eslint-disable-next-line no-useless-call
+                    callback.call(null, result, textStatus, jqXHR);
+                }
             });
         },
 
@@ -858,7 +857,8 @@ define([
                     }
 
                     nvs.removeClass(reqClass);
-                }, this
+                },
+                this
             ));
         },
 
@@ -893,14 +893,32 @@ define([
                             _tmp = _inputSelector.slice(0, _inputSelector.length - 2) + '[' + fieldName + ']"]';
                             this._gallery.find(_tmp).val(_field.val());
                             imageData[fieldName] = _field.val();
+                            const $useDefaultCheckBox = _field.closest('.field').find('[data-role="use-default"]');
+
+                            if ($useDefaultCheckBox.length > 0) {
+                                fieldName += '_use_default';
+                                _tmp = _inputSelector.slice(0, _inputSelector.length - 2) + '[' + fieldName + ']"]';
+                                imageData[fieldName] = $useDefaultCheckBox.is(':checked') ? 1 : 0;
+                                this._gallery.find(_tmp).val(imageData[fieldName]);
+                            }
                         }
                     }.bind(this));
-                    flagChecked = this.element.find(this._videoDisableinputSelector).attr('checked') ? 1 : 0;
+                    const $disabledCheckBox = this.element.find(this._videoDisableinputSelector),
+                        $useDefaultCheckBox = $disabledCheckBox.closest('.field').find('[data-role="use-default"]');
+
+                    flagChecked = $disabledCheckBox.prop('checked') ? 1 : 0;
                     this._gallery.find('input[name*="' + itemId + '][disabled]"]').val(flagChecked);
                     this._gallery.find(_inputSelector).siblings('.image-fade').css(
-                        'visibility', flagChecked ? 'visible' : 'hidden'
+                        'visibility',
+                        flagChecked ? 'visible' : 'hidden'
                     );
                     imageData.disabled = flagChecked;
+
+                    if ($useDefaultCheckBox.length > 0) {
+                        imageData.disabled_use_default = $useDefaultCheckBox.is(':checked') ? 1 : 0;
+                        this._gallery.find('input[name*="' + itemId + '][disabled_use_default]"]')
+                            .val(imageData.disabled_use_default);
+                    }
 
                     if (this._tempPreviewImageData) {
                         this._onImageLoaded(
@@ -929,7 +947,8 @@ define([
                         this._replaceImage(imageData.file, imageData.file, imageData);
                         callback(0, imageData);
                     }
-                }, this
+                },
+                this
             ));
         },
 
@@ -1107,16 +1126,21 @@ define([
             newVideoForm = this.element.find(this._videoFormSelector);
 
             $(newVideoForm).find('input[type="hidden"][name!="form_key"]').val('');
-            this._gallery.find('input[name*="' + this.element.find(
-                    this._itemIdSelector).val() + '"]'
+            this._gallery.find(
+                'input[name*="' + this.element.find(this._itemIdSelector).val() + '"]'
             ).parent().removeClass('active');
 
             try {
                 newVideoForm.validation('clearError');
+                // eslint-disable-next-line no-unused-vars
             } catch (e) {
 
             }
             newVideoForm.trigger('reset');
+            newVideoForm.find('.field')
+                .removeClass('_disabled')
+                .find('input, textarea')
+                .prop('disabled', false);
         },
 
         /**
@@ -1152,7 +1176,11 @@ define([
                             self._videoFormSelector + ' input[value="' + imageType + '"]'
                         );
 
-                    self._changeRole(imageType, imageCheckbox.attr('checked'), imageData);
+                    self._changeRole(imageType, imageCheckbox.prop('checked'), imageData);
+                    const $useDefaultCheckBox = imageCheckbox.closest('.field').find('[data-role="use-default"]');
+
+                    self._gallery.find('input[name="use_default[' + imageType + ']"]')
+                        .val($useDefaultCheckBox.is(':checked') ? 1 : 0);
                 });
             }
         },
@@ -1203,7 +1231,14 @@ define([
                 formFields = modal.find(this._videoFormSelector).find('.edited-data');
 
                 $.each(formFields, function (i, field) {
-                    $(field).val(imageData[field.name]);
+                    const $field = $(field);
+
+                    $field.prop('disabled', false).val(imageData[field.name]);
+                    if (imageData[field.name + '_use_default'] !== undefined) {
+                        $field.closest('.field').find('[data-role="use-default"]')
+                            .prop('checked', !!imageData[field.name + '_use_default'])
+                            .trigger('change');
+                    }
                 });
 
                 flagChecked = imageData.disabled > 0;
@@ -1224,6 +1259,17 @@ define([
                         imageRole = this.name.substring(start, end);
                         modal.find('#new_video_form input[value="' + imageRole + '"]').prop('checked', true);
                     }
+                    if (this.name.startsWith('use_default[')) {
+                        start = this.name.indexOf('[') + 1;
+                        end = this.name.length - 1;
+                        imageRole = this.name.substring(start, end);
+                        const $field = modal.find('#new_video_form input[value="' + imageRole + '"]')
+                            .closest('.field');
+
+                        $field.find('[data-role="use-default"]')
+                            .prop('checked', $(this).val() === '1')
+                            .trigger('change');
+                    }
                 });
             }
 
@@ -1235,6 +1281,16 @@ define([
         toggleButtons: function () {
             var self = this,
                 modal = this.element.closest('.mage-new-video-dialog');
+
+            modal.on('change', '[data-role="use-default"]', function (e) {
+                const $target = $(e.target),
+                    isChecked = $target.is(':checked');
+
+                $target.closest('.field')
+                    .toggleClass('_disabled', isChecked)
+                    .find('input:not([data-role="use-default"]), textarea:not([data-role="use-default"])')
+                    .prop('disabled', isChecked);
+            });
 
             modal.find('.video-placeholder, .add-video-button-container > button').click(function () {
                 modal.find('.video-create-button').show();
@@ -1265,7 +1321,7 @@ define([
                 });
 
                 flagChecked = container.find('input[name*="disabled"]').val() > 0;
-                self._gallery.find(self._videoDisableinputSelector).attr('checked', flagChecked);
+                self._gallery.find(self._videoDisableinputSelector).prop('checked', flagChecked);
 
                 file = self._gallery.find('#file_name').val(container.find('input[name*="file"]').val());
 

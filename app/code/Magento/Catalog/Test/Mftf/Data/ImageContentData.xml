@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
-  */
+/**
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
+ */
 -->
 
 <entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -42,5 +42,9 @@
     </entity>
     <entity name="MagentoPlaceHolderImageContent" type="ImageContent">
         <data key="baseImage_md5">c0459a796c5b8ee74254472c235a7460</data>
+    </entity>
+    <entity name="TestImageWithDotInFilenameImageContent" extends="MagentoLogoImageContent" type="ImageContent">
+        <data key="baseImage_md5">4aa2a3c3eefd29898585a8dd781e5bfd</data>
+        <data key="name" unique="prefix">m.agento-logo.png</data>
     </entity>
 </entities>

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -38,8 +38,8 @@ class MediaGallery implements ResolverInterface
         Field $field,
         $context,
         ResolveInfo $info,
-        array $value = null,
-        array $args = null
+        ?array $value = null,
+        ?array $args = null
     ) {
         if (!isset($value['model'])) {
             throw new LocalizedException(__('"model" value should be specified'));
@@ -51,6 +51,9 @@ class MediaGallery implements ResolverInterface
         $mediaGalleryEntries = [];
         foreach ($product->getMediaGalleryEntries() ?? [] as $key => $entry) {
             $mediaGalleryEntries[$key] = $entry->getData();
+            if ($mediaGalleryEntries[$key]['label'] === null) {
+                $mediaGalleryEntries[$key]['label'] = $product->getName();
+            }
             $mediaGalleryEntries[$key]['model'] = $product;
             if ($entry->getExtensionAttributes() && $entry->getExtensionAttributes()->getVideoContent()) {
                 $mediaGalleryEntries[$key]['video_content']

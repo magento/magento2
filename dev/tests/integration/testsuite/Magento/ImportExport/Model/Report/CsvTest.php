@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -47,7 +47,7 @@ class CsvTest extends \PHPUnit\Framework\TestCase
     protected function setUp(): void
     {
         $filesystem = Bootstrap::getObjectManager()->create(Filesystem::class);
-        $this->directory = $filesystem->getDirectoryWrite(DirectoryList::VAR_DIR);
+        $this->directory = $filesystem->getDirectoryWrite(DirectoryList::VAR_IMPORT_EXPORT);
 
         $this->csvReport = Bootstrap::getObjectManager()->create(Csv::class);
     }

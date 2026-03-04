@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Customer\Controller;
@@ -25,6 +25,7 @@ use Magento\TestFramework\Request;
 use Magento\TestFramework\TestCase\AbstractController;
 use Magento\Theme\Controller\Result\MessagePlugin;
 use PHPUnit\Framework\Constraint\StringContains;
+use Symfony\Component\Mime\Message;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -113,6 +114,7 @@ class AccountTest extends AbstractController
         $customer->save();
 
         $this->getRequest()->setParam('token', $token);
+        $this->getRequest()->setParam('id', 1);
 
         $this->dispatch('customer/account/createPassword');
 
@@ -193,7 +195,7 @@ class AccountTest extends AbstractController
      * @param int $customerId
      * @param string|null $confirmation
      */
-    private function assertCustomerConfirmationEquals(int $customerId, string $confirmation = null)
+    private function assertCustomerConfirmationEquals(int $customerId, ?string $confirmation = null)
     {
         /** @var \Magento\Customer\Model\Customer $customer */
         $customer = Bootstrap::getObjectManager()
@@ -252,21 +254,20 @@ class AccountTest extends AbstractController
             );
 
         $this->dispatch('customer/account/confirmation');
-        $this->assertRedirect($this->stringContains('customer/account/index'));
         $this->assertSessionMessages(
             $this->equalTo(
                 [
-                    'This email does not require confirmation.',
+                    'Wrong email.',
                 ]
             ),
-            MessageInterface::TYPE_SUCCESS
+            MessageInterface::TYPE_ERROR
         );
     }
 
     /**
      * @magentoDataFixture Magento/Customer/_files/customer.php
      */
-    public function testResetPasswordPostNoTokenAction()
+    public function testResetPasswordPostNoEmail()
     {
         $this->getRequest()
             ->setParam('id', 1)
@@ -282,7 +283,7 @@ class AccountTest extends AbstractController
         $this->dispatch('customer/account/resetPasswordPost');
         $this->assertRedirect($this->stringContains('customer/account/'));
         $this->assertSessionMessages(
-            $this->equalTo(['Something went wrong while saving the new password.']),
+            $this->equalTo(['&quot;email&quot; is required. Enter and try again.']),
             MessageInterface::TYPE_ERROR
         );
     }
@@ -558,21 +559,15 @@ class AccountTest extends AbstractController
         $message = $this->transportBuilderMock->getSentMessage();
         $rawMessage = $message->getRawMessage();
 
-        /** @var \Laminas\Mime\Part $messageBodyPart */
-        $messageBodyParts = $message->getBody()->getParts();
-        $messageBodyPart = reset($messageBodyParts);
-        $messageEncoding = $messageBodyPart->getCharset();
+        /** @var Message $messageBodyPart */
+        $messageBodyPart = $message->getBody();
         $name = 'John Smith';
-
-        if (strtoupper($messageEncoding) !== 'ASCII') {
-            $name = \Laminas\Mail\Header\HeaderWrap::mimeEncodeValue($name, $messageEncoding);
-        }
 
         $nameEmail = sprintf('%s <%s>', $name, $email);
 
         $this->assertStringContainsString('To: ' . $nameEmail, $rawMessage);
 
-        $content = $messageBodyPart->getRawContent();
+        $content = $messageBodyPart->getBody();
         $confirmationUrl = $this->getConfirmationUrlFromMessageContent($content);
         $this->setRequestInfo($confirmationUrl, 'confirm');
         $this->clearCookieMessagesList();
@@ -622,7 +617,8 @@ class AccountTest extends AbstractController
         $customerRegistry = $this->_objectManager->get(CustomerRegistry::class);
         $customerData = $customerRegistry->retrieveByEmail($email);
         $token = $customerData->getRpToken();
-        $this->assertForgotPasswordEmailContent($token);
+        $customerId = $customerData->getId();
+        $this->assertForgotPasswordEmailContent($token, $customerId, $email);
 
         /* Set new email */
         /** @var CustomerRepositoryInterface $customerRepository */
@@ -699,13 +695,17 @@ class AccountTest extends AbstractController
      * Check that 'Forgot password' email contains correct data.
      *
      * @param string $token
+     * @param int $customerId
+     * @param string $email
      * @return void
      */
-    private function assertForgotPasswordEmailContent(string $token): void
+    private function assertForgotPasswordEmailContent(string $token, int $customerId, string $email): void
     {
         $message = $this->transportBuilderMock->getSentMessage();
-        $pattern = "/<a.+customer\/account\/createPassword\/\?token={$token}.+Set\s+a\s+New\s+Password<\/a\>/";
-        $rawMessage = $message->getBody()->getParts()[0]->getRawContent();
+        $email = urlencode($email);
+        //phpcs:ignore
+        $pattern = "/<a.+customer\/account\/createPassword\/\?email={$email}&amp;id={$customerId}&amp;token={$token}.+Set\s+a\s+New\s+Password<\/a\>/";
+        $rawMessage = quoted_printable_decode($message->getBody()->bodyToString());
         $messageConstraint = $this->logicalAnd(
             new StringContains('There was recently a request to change the password for your account.'),
             $this->matchesRegularExpression($pattern)

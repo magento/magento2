@@ -1,14 +1,15 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Catalog\Model\Product\Type;
 
 use Magento\Catalog\Api\ProductRepositoryInterface;
-use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\File\Http;
 use Magento\Framework\File\UploaderFactory;
 
 /**
@@ -64,16 +65,16 @@ abstract class AbstractType
      */
     protected $_fileQueue = [];
 
-    const CALCULATE_CHILD = 0;
+    public const CALCULATE_CHILD = 0;
 
-    const CALCULATE_PARENT = 1;
+    public const CALCULATE_PARENT = 1;
 
     /**#@+
      * values for shipment type (invoice etc)
      */
-    const SHIPMENT_SEPARATELY = 1;
+    public const SHIPMENT_SEPARATELY = 1;
 
-    const SHIPMENT_TOGETHER = 0;
+    public const SHIPMENT_TOGETHER = 0;
     /**#@-*/
 
     /**
@@ -82,19 +83,19 @@ abstract class AbstractType
      * Full validation - all required options must be set, whole configuration
      * must be valid
      */
-    const PROCESS_MODE_FULL = 'full';
+    public const PROCESS_MODE_FULL = 'full';
 
     /**
      * Process modes
      *
      * Lite validation - only received options are validated
      */
-    const PROCESS_MODE_LITE = 'lite';
+    public const PROCESS_MODE_LITE = 'lite';
 
     /**
      * Item options prefix
      */
-    const OPTION_PREFIX = 'option_';
+    public const OPTION_PREFIX = 'option_';
 
     /**
      * @var \Magento\Framework\Filesystem
@@ -127,8 +128,6 @@ abstract class AbstractType
     abstract public function deleteTypeSpecificData(\Magento\Catalog\Model\Product $product);
 
     /**
-     * Core registry
-     *
      * @var \Magento\Framework\Registry
      */
     protected $_coreRegistry;
@@ -146,22 +145,16 @@ abstract class AbstractType
     protected $_logger;
 
     /**
-     * Catalog product type
-     *
      * @var \Magento\Catalog\Model\Product\Type
      */
     protected $_catalogProductType;
 
     /**
-     * Eav config
-     *
      * @var \Magento\Eav\Model\Config
      */
     protected $_eavConfig;
 
     /**
-     * Catalog product option
-     *
      * @var \Magento\Catalog\Model\Product\Option
      */
     protected $_catalogProductOption;
@@ -180,6 +173,11 @@ abstract class AbstractType
     protected $serializer;
 
     /**
+     * @var \Magento\Framework\Cache\FrontendInterface|null
+     */
+    private $cache;
+
+    /**
      * @param \Magento\Catalog\Model\Product\Option $catalogProductOption
      * @param \Magento\Eav\Model\Config $eavConfig
      * @param \Magento\Catalog\Model\Product\Type $catalogProductType
@@ -191,6 +189,7 @@ abstract class AbstractType
      * @param ProductRepositoryInterface $productRepository
      * @param \Magento\Framework\Serialize\Serializer\Json|null $serializer
      * @param UploaderFactory $uploaderFactory
+     * @param \Magento\Framework\Cache\FrontendInterface|null $cache
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -203,8 +202,9 @@ abstract class AbstractType
         \Magento\Framework\Registry $coreRegistry,
         \Psr\Log\LoggerInterface $logger,
         ProductRepositoryInterface $productRepository,
-        \Magento\Framework\Serialize\Serializer\Json $serializer = null,
-        UploaderFactory $uploaderFactory = null
+        ?\Magento\Framework\Serialize\Serializer\Json $serializer = null,
+        ?UploaderFactory $uploaderFactory = null,
+        ?\Magento\Framework\Cache\FrontendInterface $cache = null
     ) {
         $this->_catalogProductOption = $catalogProductOption;
         $this->_eavConfig = $eavConfig;
@@ -218,6 +218,17 @@ abstract class AbstractType
         $this->serializer = $serializer ?: ObjectManager::getInstance()
             ->get(\Magento\Framework\Serialize\Serializer\Json::class);
         $this->uploaderFactory = $uploaderFactory ?: ObjectManager::getInstance()->get(UploaderFactory::class);
+        $this->cache = $cache;
+    }
+
+    /**
+     * Get cache frontend instance
+     *
+     * @return \Magento\Framework\Cache\FrontendInterface|null
+     */
+    private function getCache()
+    {
+        return $this->cache;
     }
 
     /**
@@ -248,12 +259,13 @@ abstract class AbstractType
      *   group => array(ids)
      * )
      *
-     * @deplacated TODO: refactor to child relation manager
+     * @deprecated TODO: refactor to child relation manager
      *
      * @param int $parentId
      * @param bool $required
      * @return array
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @see Nothing
      */
     public function getChildrenIds($parentId, $required = true)
     {
@@ -501,7 +513,7 @@ abstract class AbstractType
                     case 'receive_uploaded_file':
                         $src = $queueOptions['src_name'] ?? '';
                         $dst = $queueOptions['dst_name'] ?? '';
-                        /** @var $uploader \Zend_File_Transfer_Adapter_Http */
+                        /** @var $uploader Http */
                         $uploader = $queueOptions['uploader'] ?? null;
                         $isUploaded = false;
                         if ($uploader && $uploader->isValid($src)) {
@@ -599,14 +611,16 @@ abstract class AbstractType
 
                     if ($product->getSkipCheckRequiredOption() !== true) {
                         $group->validateUserValue($optionsFromRequest);
-                    } elseif ($optionsFromRequest !== null && isset($optionsFromRequest[$option->getId()])) {
+                    } elseif ($optionsFromRequest !== null
+                        && isset($optionsFromRequest[$option->getId()])
+                        && $optionsFromRequest[$option->getId()] !== ''
+                    ) {
                         if (is_array($optionsFromRequest[$option->getId()])) {
                             $group->validateUserValue($optionsFromRequest);
                         } else {
                             $transport->options[$option->getId()] = $optionsFromRequest[$option->getId()];
                         }
                     }
-
                 } catch (LocalizedException $e) {
                     $results[] = $e->getMessage();
                     continue;
@@ -644,7 +658,7 @@ abstract class AbstractType
             foreach ($options as $option) {
                 if ($option->getIsRequire()) {
                     $customOption = $product->getCustomOption(self::OPTION_PREFIX . $option->getId());
-                    if (!$customOption || strlen($customOption->getValue()) == 0) {
+                    if (!$customOption || strlen($customOption->getValue() ?? '') == 0) {
                         $product->setSkipCheckRequiredOption(true);
                         throw new \Magento\Framework\Exception\LocalizedException(
                             __('The product has required options. Enter the options and try again.')
@@ -673,7 +687,7 @@ abstract class AbstractType
 
         $optionIds = $product->getCustomOption('option_ids');
         if ($optionIds) {
-            foreach (explode(',', $optionIds->getValue()) as $optionId) {
+            foreach (explode(',', $optionIds->getValue() ?? '') as $optionId) {
                 $option = $product->getOptionById($optionId);
                 if ($option) {
                     $confItemOption = $product->getCustomOption(self::OPTION_PREFIX . $option->getId());
@@ -713,17 +727,49 @@ abstract class AbstractType
      *
      * @param \Magento\Catalog\Model\Product $product
      * @return $this
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function save($product)
     {
-        if ($product->dataHasChangedFor('type_id') && $product->getOrigData('type_id')) {
-            $oldTypeProduct = clone $product;
-            $oldTypeInstance = $this->_catalogProductType->factory(
-                $oldTypeProduct->setTypeId($product->getOrigData('type_id'))
-            );
-            $oldTypeProduct->setTypeInstance($oldTypeInstance);
-            $oldTypeInstance->deleteTypeSpecificData($oldTypeProduct);
+        // OPTIMIZATION: Batch cache operations for performance
+        // This batching covers Simple, Virtual, Downloadable, and all non-configurable product types
+        // Configurable products have their own batching implementation that wraps this call
+        $cache = $this->getCache();
+        $batchingStarted = false;
+
+        // Only start batching if cache is available and has beginBatch method
+        if ($cache !== null && method_exists($cache, 'beginBatch')) {
+            try {
+                $cache->beginBatch();
+                $batchingStarted = true;
+            } catch (\Exception $e) {
+                // If beginBatch fails, continue without batching
+                $batchingStarted = false;
+            }
         }
+
+        try {
+            if ($product->dataHasChangedFor('type_id') && $product->getOrigData('type_id')) {
+                $oldTypeProduct = clone $product;
+                $oldTypeInstance = $this->_catalogProductType->factory(
+                    $oldTypeProduct->setTypeId($product->getOrigData('type_id'))
+                );
+                $oldTypeProduct->setTypeInstance($oldTypeInstance);
+                $oldTypeInstance->deleteTypeSpecificData($oldTypeProduct);
+            }
+
+            // End batching if we started it
+            if ($batchingStarted && $cache !== null && method_exists($cache, 'endBatch')) {
+                $cache->endBatch();
+            }
+        } catch (\Exception $e) {
+            // Ensure batch mode is ended on error
+            if ($batchingStarted && $cache !== null && method_exists($cache, 'endBatch')) {
+                $cache->endBatch();
+            }
+            throw $e;
+        }
+
         return $this;
     }
 
@@ -824,7 +870,7 @@ abstract class AbstractType
         }
         $optionIds = $product->getCustomOption('option_ids');
         if ($optionIds) {
-            foreach (explode(',', $optionIds->getValue()) as $optionId) {
+            foreach (explode(',', $optionIds->getValue() ?? '') as $optionId) {
                 $option = $product->getOptionById($optionId);
                 if ($option) {
                     $confItemOption = $product->getCustomOption(self::OPTION_PREFIX . $optionId);

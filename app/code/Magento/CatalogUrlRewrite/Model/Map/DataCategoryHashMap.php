@@ -1,18 +1,19 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\CatalogUrlRewrite\Model\Map;
 
 use Magento\Catalog\Model\ResourceModel\CategoryFactory;
 use Magento\Catalog\Model\CategoryRepository;
 use Magento\Catalog\Api\Data\CategoryInterface;
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 
 /**
  * Map that holds data for category ids and its subcategories ids
  */
-class DataCategoryHashMap implements HashMapInterface
+class DataCategoryHashMap implements HashMapInterface, ResetAfterRequestInterface
 {
     /**
      * @var int[]
@@ -57,7 +58,7 @@ class DataCategoryHashMap implements HashMapInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getData($categoryId, $key)
     {
@@ -86,10 +87,18 @@ class DataCategoryHashMap implements HashMapInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function resetData($categoryId)
     {
         unset($this->hashMap[$categoryId]);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        $this->hashMap = [];
     }
 }

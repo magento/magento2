@@ -1,13 +1,18 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Framework\Cache\Backend\Decorator;
 
 /**
  * Abstract decorator class for \Zend_Cache_Backend class and its descendants
+ *
+ * @deprecated Not used in Symfony cache system. Use frontend decorators instead.
+ * @see \Magento\Framework\Cache\Frontend\Decorator\Bare
+ * @see \Magento\Framework\Cache\Frontend\Decorator\TagScope
+ * @see \Magento\Framework\Cache\Frontend\Decorator\Profiler
  */
 abstract class AbstractDecorator extends \Zend_Cache_Backend implements \Zend_Cache_Backend_ExtendedInterface
 {
@@ -63,7 +68,7 @@ abstract class AbstractDecorator extends \Zend_Cache_Backend implements \Zend_Ca
      *
      * Note : return value is always "string" (unserialization is done by the core not by the backend)
      *
-     * @param  string  $cacheId                     Cache id
+     * @param  string  $cacheId             Cache id
      * @param  boolean $noTestCacheValidity If set to true, the cache validity won't be tested
      * @return string|false cached datas
      */
@@ -89,13 +94,13 @@ abstract class AbstractDecorator extends \Zend_Cache_Backend implements \Zend_Ca
      * Note : $data is always "string" (serialization is done by the
      * core not by the backend)
      *
-     * @param  string $data             Datas to cache
-     * @param  string $cacheId          Cache id
-     * @param  string[] $tags           Array of strings, the cache record will be tagged by each string entry
-     * @param  bool $specificLifetime   If != false, set a specific lifetime for this cache record
-     *                                  (null => infinite lifetime)
-     * @param  int $priority            integer between 0 (very low priority) and 10 (maximum priority) used by
-     *                                  some particular backends
+     * @param  string   $data             Datas to cache
+     * @param  string   $cacheId          Cache id
+     * @param  string[] $tags             Array of strings, the cache record will be tagged by each string entry
+     * @param  bool     $specificLifetime If != false, set a specific lifetime for this cache record
+     *                                    (null => infinite lifetime)
+     * @param  int      $priority         integer between 0 (very low priority) and 10 (maximum priority) used by
+     *                                    some particular backends
      * @return bool true if no problem
      */
     public function save($data, $cacheId, $tags = [], $specificLifetime = false, $priority = 8)
@@ -268,7 +273,7 @@ abstract class AbstractDecorator extends \Zend_Cache_Backend implements \Zend_Ca
     /**
      * Get the life time
      *
-     * if $specificLifetime is not false, the given specific life time is used
+     * If $specificLifetime is not false, the given specific life time is used
      * else, the global lifetime is used
      *
      * @param  int $specificLifetime
@@ -282,7 +287,7 @@ abstract class AbstractDecorator extends \Zend_Cache_Backend implements \Zend_Ca
     /**
      * Determine system TMP directory and detect if we have read access
      *
-     * inspired from \Zend_File_Transfer_Adapter_Abstract
+     * Inspired from \Zend_File_Transfer_Adapter_Abstract
      *
      * @return string
      * @throws \Zend_Cache_Exception if unable to determine directory

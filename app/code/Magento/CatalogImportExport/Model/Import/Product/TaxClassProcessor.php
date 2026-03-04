@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\CatalogImportExport\Model\Import\Product;
 
@@ -29,11 +29,9 @@ class TaxClassProcessor
     /**
      * Tax attribute code.
      */
-    const ATRR_CODE = 'tax_class_id';
+    public const ATRR_CODE = 'tax_class_id';
 
     /**
-     * Tax classes.
-     *
      * @var array
      */
     protected $taxClasses;
@@ -114,7 +112,7 @@ class TaxClassProcessor
      */
     public function upsertTaxClass($taxClassName, AbstractType $productTypeModel)
     {
-        $normalizedTaxClassName = mb_strtolower($taxClassName);
+        $normalizedTaxClassName = $taxClassName !== null ? mb_strtolower($taxClassName) : '';
 
         if ($normalizedTaxClassName === (string) self::CLASS_NONE_ID) {
             $normalizedTaxClassName = self::CLASS_NONE_NAME;

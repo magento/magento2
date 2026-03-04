@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2025 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Eav\Model\Entity\Collection;
@@ -19,6 +19,7 @@ use Magento\Framework\Exception\LocalizedException;
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.ExcessivePublicCount)
  * @since 100.0.2
  */
 abstract class AbstractCollection extends AbstractDb implements SourceProviderInterface
@@ -26,7 +27,7 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
     /**
      * Define default prefix for attribute table alias
      */
-    const ATTRIBUTE_TABLE_ALIAS_PREFIX = 'at_';
+    public const ATTRIBUTE_TABLE_ALIAS_PREFIX = 'at_';
 
     /**
      * Array of items with item id key
@@ -155,7 +156,7 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
         \Magento\Eav\Model\EntityFactory $eavEntityFactory,
         \Magento\Eav\Model\ResourceModel\Helper $resourceHelper,
         \Magento\Framework\Validator\UniversalFactory $universalFactory,
-        \Magento\Framework\DB\Adapter\AdapterInterface $connection = null
+        ?\Magento\Framework\DB\Adapter\AdapterInterface $connection = null
     ) {
         $this->_eventManager = $eventManager;
         $this->_eavConfig = $eavConfig;
@@ -178,6 +179,27 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
      */
     protected function _construct()
     {
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        $this->_itemsById = [];
+        $this->_staticFields = [];
+        $this->_entity = null;
+        $this->_selectEntityTypes = [];
+        $this->_selectAttributes = [];
+        $this->_filterAttributes = [];
+        $this->_joinEntities = [];
+        $this->_joinAttributes = [];
+        $this->_joinFields = [];
+        parent::_resetState();
+        $this->_construct();
+        $this->setConnection($this->getEntity()->getConnection());
+        $this->_prepareStaticFields();
+        $this->_initSelect();
     }
 
     /**
@@ -568,7 +590,7 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
             $attribute = [$attribute];
         }
 
-        $fullExpression = $expression;
+        $fullExpression = $expression ?: '';
         // Replacing multiple attributes
         foreach ($attribute as $attributeItem) {
             if (isset($this->_staticFields[$attributeItem])) {
@@ -752,6 +774,8 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
      * @param string $joinType 'left'
      * @return $this
      * @throws LocalizedException
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function joinField($alias, $table, $field, $bind, $cond = null, $joinType = 'inner')
     {
@@ -764,9 +788,9 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
         $tableAlias = $this->_getAttributeTableAlias($alias);
 
         // validate bind
-        list($pKey, $fKey) = explode('=', $bind);
-        $pKey = $this->getSelect()->getConnection()->quoteColumnAs(trim($pKey), null);
-        $bindCond = $tableAlias . '.' . trim($pKey) . '=' . $this->_getAttributeFieldName(trim($fKey));
+        list($pKey, $fKey) = explode('=', $bind ?: '');
+        $pKey = $this->getSelect()->getConnection()->quoteColumnAs(trim($pKey ?: ''), null);
+        $bindCond = $tableAlias . '.' . trim($pKey ?: '') . '=' . $this->_getAttributeFieldName(trim($fKey ?: ''));
 
         // process join type
         switch ($joinType) {
@@ -815,6 +839,7 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
      * @return $this
      * @throws LocalizedException
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function joinTable($table, $bind, $fields = null, $cond = null, $joinType = 'inner')
     {
@@ -842,7 +867,7 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
         }
 
         // validate bind
-        list($pKey, $fKey) = explode('=', $bind);
+        list($pKey, $fKey) = explode('=', $bind ?: '');
         $bindCond = $tableAlias . '.' . $pKey . '=' . $this->_getAttributeFieldName($fKey);
 
         // process join type
@@ -863,7 +888,7 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
                     $condArr[] = $this->_getConditionSql($tableAlias . '.' . $key, $value);
                 }
             } else {
-                $condArr[] = str_replace('{{table}}', $tableAlias, $cond);
+                $condArr[] = str_replace('{{table}}', $tableAlias ?: '', $cond);
             }
         }
         $cond = '(' . implode(') AND (', $condArr) . ')';
@@ -1208,8 +1233,27 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
                     throw $e;
                 }
 
+                $attributeCode = $data = [];
+                $entityIdField = $entity->getEntityIdField();
+
                 foreach ($values as $value) {
-                    $this->_setItemAttributeValue($value);
+                    $entityId = $value[$entityIdField];
+                    $attributeId = $value['attribute_id'];
+                    if (!isset($attributeCode[$attributeId])) {
+                        $attributeCode[$attributeId] = array_search($attributeId, $this->_selectAttributes);
+                        if (!$attributeCode[$attributeId]) {
+                            $attribute = $this->_eavConfig->getAttribute(
+                                $this->getEntity()->getType(),
+                                $attributeId
+                            );
+                            $attributeCode[$attributeId] = $attribute->getAttributeCode();
+                        }
+                    }
+                    $data[$entityId][$attributeCode[$attributeId]] = $value['value'];
+                }
+
+                if ($data) {
+                    $this->_setItemAttributeValues($data);
                 }
             }
         }
@@ -1280,6 +1324,9 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
      *
      * Parameter $valueInfo is _getLoadAttributesSelect fetch result row
      *
+     * @deprecated Batch process of attribute values is introduced to reduce time complexity.
+     * @see _setItemAttributeValues($entityAttributeMap) uses array union (+) to acheive O(n) complexity.
+     *
      * @param array $valueInfo
      * @return $this
      * @throws LocalizedException
@@ -1310,6 +1357,33 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
     }
 
     /**
+     * Initialize entity object property value
+     *
+     * Parameter $entityAttributeMap is [entity_id => [attribute_code => value, ...]]
+     *
+     * @param array $entityAttributeMap
+     * @return $this
+     * @throws LocalizedException
+     */
+    protected function _setItemAttributeValues(array $entityAttributeMap)
+    {
+        foreach ($entityAttributeMap as $entityId => $attributeValues) {
+            if (!isset($this->_itemsById[$entityId])) {
+                throw new LocalizedException(
+                    __('A header row is missing for an attribute. Verify the header row and try again.')
+                );
+            }
+            // _itemsById[$entityId] is always an array (typically with one element)
+            // foreach handles edge cases where multiple objects share the same entity ID
+            foreach ($this->_itemsById[$entityId] as $object) {
+                $object->setData($object->getData()+$attributeValues);
+            }
+
+        }
+        return $this;
+    }
+
+    /**
      * Get alias for attribute value table
      *
      * @param string $attributeCode
@@ -1329,7 +1403,7 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
      */
     protected function _getAttributeFieldName($attributeCode)
     {
-        $attributeCode = trim($attributeCode);
+        $attributeCode = $attributeCode !== null ? trim($attributeCode) : '';
         if (isset($this->_joinAttributes[$attributeCode]['condition_alias'])) {
             return $this->_joinAttributes[$attributeCode]['condition_alias'];
         }
@@ -1594,14 +1668,12 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
     protected function _reset()
     {
         parent::_reset();
-
         $this->_selectEntityTypes = [];
         $this->_selectAttributes = [];
         $this->_filterAttributes = [];
         $this->_joinEntities = [];
         $this->_joinAttributes = [];
         $this->_joinFields = [];
-
         return $this;
     }
 

@@ -1,13 +1,14 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Sales\Block\Adminhtml\Order\Create\Form;
 
 use Magento\Backend\Model\Session\Quote;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Data\Form\Element\AbstractElement;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
 use Magento\Customer\Api\Data\AddressInterface;
 use Magento\Eav\Model\AttributeDataFactory;
@@ -20,21 +21,21 @@ use Magento\Eav\Model\AttributeDataFactory;
 class Address extends \Magento\Sales\Block\Adminhtml\Order\Create\Form\AbstractForm
 {
     /**
-     * Customer form factory
+     * Customer Metadata form factory
      *
      * @var \Magento\Customer\Model\Metadata\FormFactory
      */
     protected $_customerFormFactory;
 
     /**
-     * Json encoder
+     * Framework Json encoder
      *
      * @var \Magento\Framework\Json\EncoderInterface
      */
     protected $_jsonEncoder;
 
     /**
-     * Directory helper
+     * Directory helper Data
      *
      * @var \Magento\Directory\Helper\Data
      */
@@ -48,28 +49,28 @@ class Address extends \Magento\Sales\Block\Adminhtml\Order\Create\Form\AbstractF
     protected $options;
 
     /**
-     * Address service
+     * Address service - AddressRepositoryInterface
      *
      * @var \Magento\Customer\Api\AddressRepositoryInterface
      */
     protected $addressService;
 
     /**
-     * Address helper
+     * Customer Address helper
      *
      * @var \Magento\Customer\Helper\Address
      */
     protected $_addressHelper;
 
     /**
-     * Search criteria builder
+     * Search criteria builder for getList calls
      *
      * @var \Magento\Framework\Api\SearchCriteriaBuilder
      */
     protected $searchCriteriaBuilder;
 
     /**
-     * Filter builder
+     * Filter builder for getList calls
      *
      * @var \Magento\Framework\Api\FilterBuilder
      */
@@ -219,6 +220,7 @@ class Address extends \Magento\Sales\Block\Adminhtml\Order\Create\Form\AbstractF
      * @return $this
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @throws LocalizedException
      */
     protected function _prepareForm()
     {
@@ -229,15 +231,25 @@ class Address extends \Magento\Sales\Block\Adminhtml\Order\Create\Form\AbstractF
 
         $addressForm = $this->_customerFormFactory->create('customer_address', 'adminhtml_customer_address');
         $attributes = $addressForm->getAttributes();
+        uasort(
+            $attributes,
+            function ($attr1, $attr2) {
+                return $attr1->getSortOrder() <=> $attr2->getSortOrder();
+            }
+        );
         $this->_addAttributesToForm($attributes, $fieldset);
 
         $prefixElement = $this->_form->getElement('prefix');
         if ($prefixElement) {
             $prefixOptions = $this->options->getNamePrefixOptions($this->getStore());
             if (!empty($prefixOptions)) {
+                $mappedPrefixOptions = [];
+                foreach ($prefixOptions as $prefix) {
+                    $mappedPrefixOptions[$prefix] = $prefix;
+                }
                 $fieldset->removeField($prefixElement->getId());
                 $prefixField = $fieldset->addField($prefixElement->getId(), 'select', $prefixElement->getData(), '^');
-                $prefixField->setValues($prefixOptions);
+                $prefixField->setValues($mappedPrefixOptions);
                 if ($this->getAddressId()) {
                     $prefixField->addElementValues($this->getAddress()->getPrefix());
                 }
@@ -322,6 +334,7 @@ class Address extends \Magento\Sales\Block\Adminhtml\Order\Create\Form\AbstractF
      * Retrieve Directory Countries collection
      *
      * @deprecated 100.1.3
+     * @see MAGETWO-711174: Introduce deprecated and since doc blocks.
      * @return \Magento\Directory\Model\ResourceModel\Country\Collection
      */
     private function getCountriesCollection()
@@ -338,6 +351,7 @@ class Address extends \Magento\Sales\Block\Adminhtml\Order\Create\Form\AbstractF
      * Retrieve Backend Quote Session
      *
      * @deprecated 100.1.3
+     * @see MAGETWO-711174: Introduce deprecated and since doc blocks.
      * @return Quote
      */
     private function getBackendQuoteSession()

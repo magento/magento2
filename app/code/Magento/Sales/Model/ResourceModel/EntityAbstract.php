@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -10,6 +10,7 @@ namespace Magento\Sales\Model\ResourceModel;
 use Magento\Framework\Model\ResourceModel\Db\VersionControl\AbstractDb;
 use Magento\Framework\Model\ResourceModel\Db\VersionControl\RelationComposite;
 use Magento\Framework\Model\ResourceModel\Db\VersionControl\Snapshot;
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 use Magento\SalesSequence\Model\Manager;
 use Magento\Sales\Model\EntityInterface;
 
@@ -21,18 +22,14 @@ use Magento\Sales\Model\EntityInterface;
  * @SuppressWarnings(PHPMD.NumberOfChildren)
  * @since 100.0.2
  */
-abstract class EntityAbstract extends AbstractDb
+abstract class EntityAbstract extends AbstractDb implements ResetAfterRequestInterface
 {
     /**
-     * Event prefix
-     *
      * @var string
      */
     protected $_eventPrefix = 'sales_order_resource';
 
     /**
-     * Event object
-     *
      * @var string
      */
     protected $_eventObject = 'resource';
@@ -179,7 +176,9 @@ abstract class EntityAbstract extends AbstractDb
         $condition = $this->getConnection()->quoteInto($this->getIdFieldName() . '=?', $object->getId());
         $data = $this->_prepareDataForSave($object);
         unset($data[$this->getIdFieldName()]);
-        $this->getConnection()->update($this->getMainTable(), $data, $condition);
+        if (count($data) > 0) {
+            $this->getConnection()->update($this->getMainTable(), $data, $condition);
+        }
     }
 
     /**
@@ -206,5 +205,14 @@ abstract class EntityAbstract extends AbstractDb
     {
         parent::_afterDelete($object);
         return $this;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        $this->_uniqueFields = null;
+        $this->serializer = null;
     }
 }

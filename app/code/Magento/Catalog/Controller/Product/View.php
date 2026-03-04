@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Catalog\Controller\Product;
 
@@ -125,6 +125,7 @@ class View extends ProductAction implements HttpGetActionInterface, HttpPostActi
             $resultForward->forward('noroute');
             return $resultForward;
         }
+        return $this->getResponse();
     }
 
     /**

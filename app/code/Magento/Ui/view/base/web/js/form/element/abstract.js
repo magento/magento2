@@ -1,6 +1,6 @@
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 
 /**
@@ -11,8 +11,9 @@ define([
     'mageUtils',
     'uiLayout',
     'uiElement',
-    'Magento_Ui/js/lib/validation/validator'
-], function (_, utils, layout, Element, validator) {
+    'Magento_Ui/js/lib/validation/validator',
+    'uiRegistry'
+], function (_, utils, layout, Element, validator, registry) {
     'use strict';
 
     return Element.extend({
@@ -131,6 +132,7 @@ define([
                 uid: uid,
                 noticeId: 'notice-' + uid,
                 errorId: 'error-' + uid,
+                tooltipId: 'tooltip-' + uid,
                 inputName: utils.serializeName(name.join('.')),
                 valueUpdate: valueUpdate
             });
@@ -409,7 +411,7 @@ define([
 
             this.error(message);
             this.error.valueHasMutated();
-            this.bubble('error', message);
+            this.bubble('error', message, this);
 
             //TODO: Implement proper result propagation for form
             if (this.source && !isValid) {
@@ -482,6 +484,17 @@ define([
             }
 
             return id;
+        },
+
+        /**
+         * Destroys switcher.
+         */
+        destroy: function () {
+            this._super();
+
+            if (this.switcherConfig.enabled) {
+                registry.remove(this.switcherConfig.name);
+            }
         }
     });
 });

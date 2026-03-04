@@ -1,11 +1,10 @@
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 
 /*global FORM_KEY*/
 /*global bSelection*/
-/*global $H*/
 /**
  * @api
  */
@@ -186,7 +185,9 @@ define([
                                 });
                                 bSelection.gridRemoval.each(function (pair) {
                                     $optionBox.find('.col-sku').filter(function () {
-                                        return $(this).text().trim() === pair.key; // find row by SKU
+                                        let text = $(this).text();
+
+                                        return text.trim() === pair.key; // find row by SKU
                                     }).closest('tr').find('button.delete').trigger('click');
                                 });
                                 widget.refreshSortableElements();

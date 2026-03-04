@@ -1,6 +1,6 @@
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 define([
@@ -265,7 +265,7 @@ define([
              * @returns {Array}
              */
             function strPad(string, times) {
-                return (new Array(times + 1)).join(string);
+                return new Array(times + 1).join(string);
             }
 
             /**

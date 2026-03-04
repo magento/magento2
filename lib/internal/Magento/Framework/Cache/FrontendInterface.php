@@ -1,9 +1,12 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework\Cache;
+
+use Magento\Framework\Cache\Backend\BackendInterface;
+use Magento\Framework\Cache\CacheConstants;
 
 /**
  * Interface of a cache frontend - an ultimate publicly available interface to an actual cache storage
@@ -26,7 +29,6 @@ interface FrontendInterface
      *
      * @param string $identifier
      * @return string|bool
-     * @api
      */
     public function load($identifier);
 
@@ -38,7 +40,6 @@ interface FrontendInterface
      * @param array $tags
      * @param int|bool|null $lifeTime
      * @return bool
-     * @api
      */
     public function save($data, $identifier, array $tags = [], $lifeTime = null);
 
@@ -47,7 +48,6 @@ interface FrontendInterface
      *
      * @param string $identifier
      * @return bool
-     * @api
      */
     public function remove($identifier);
 
@@ -57,21 +57,20 @@ interface FrontendInterface
      * @param string $mode
      * @param array $tags
      * @return bool
-     * @api
      */
-    public function clean($mode = \Zend_Cache::CLEANING_MODE_ALL, array $tags = []);
+    public function clean($mode = CacheConstants::CLEANING_MODE_ALL, array $tags = []);
 
     /**
      * Retrieve backend instance
      *
-     * @return \Zend_Cache_Backend_Interface
+     * @return \Psr\Cache\CacheItemPoolInterface
      */
     public function getBackend();
 
     /**
-     * Retrieve frontend instance compatible with Zend Locale Data setCache() to be used as a workaround
+     * Retrieve low-level frontend instance for compatibility
      *
-     * @return \Zend_Cache_Core
+     * @return \Psr\Cache\CacheItemPoolInterface
      */
     public function getLowLevelFrontend();
 }

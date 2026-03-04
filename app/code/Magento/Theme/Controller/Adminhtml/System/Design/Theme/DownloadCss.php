@@ -1,8 +1,7 @@
 <?php
 /**
- *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Theme\Controller\Adminhtml\System\Design\Theme;
 
@@ -48,7 +47,7 @@ class DownloadCss extends Theme implements HttpGetActionInterface
         FileFactory $fileFactory,
         Repository $assetRepo,
         Filesystem $appFileSystem,
-        Escaper $escaper = null
+        ?Escaper $escaper = null
     ) {
         $this->escaper = $escaper ?? $context->getObjectManager()->get(Escaper::class);
         parent::__construct($context, $coreRegistry, $fileFactory, $assetRepo, $appFileSystem);

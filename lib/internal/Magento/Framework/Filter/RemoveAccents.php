@@ -1,14 +1,16 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework\Filter;
+
+use Laminas\Filter\FilterInterface;
 
 /**
  * Remove accents from string
  */
-class RemoveAccents implements \Zend_Filter_Interface
+class RemoveAccents implements FilterInterface
 {
     /**
      * @var bool
@@ -24,6 +26,8 @@ class RemoveAccents implements \Zend_Filter_Interface
     }
 
     /**
+     * Returns the result of filtering value
+     *
      * @param string $string
      * @return string
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
@@ -183,7 +187,7 @@ class RemoveAccents implements \Zend_Filter_Interface
             $string = $convertedString;
         }
         // Replace
-        $string = strtr($string, $replacements[$this->german]);
+        $string = $string !== null ? strtr($string, $replacements[$this->german]) : '';
         return $string;
     }
 }

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Quote\Model\Quote\Item;
@@ -75,7 +75,9 @@ class CartItemPersister
                 $buyRequestData = $this->cartItemOptionProcessor->getBuyRequest($productType, $item);
                 if (is_object($buyRequestData)) {
                     /** Update item product options */
-                    $item = $quote->updateItem($itemId, $buyRequestData);
+                    if ($quote->getIsActive()) {
+                        $item = $quote->updateItem($itemId, $buyRequestData);
+                    }
                 } else {
                     if ($item->getQty() !== $currentItem->getQty()) {
                         $currentItem->clearMessage();

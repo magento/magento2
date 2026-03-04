@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework\Stdlib;
 
@@ -16,7 +16,7 @@ class ArrayManager
     /**
      * Default node delimiter for path
      */
-    const DEFAULT_PATH_DELIMITER = '/';
+    public const DEFAULT_PATH_DELIMITER = '/';
 
     /**
      * @var array
@@ -49,7 +49,7 @@ class ArrayManager
      *
      * @param array|string $path
      * @param array $data
-     * @param null $defaultValue
+     * @param mixed $defaultValue
      * @param string $delimiter
      * @return mixed|null
      * @since 100.1.0
@@ -251,7 +251,9 @@ class ArrayManager
         $startPath = is_array($startPath) ? implode($delimiter, $startPath) : $startPath;
         $internalPath = is_array($internalPath) ? implode($delimiter, $internalPath) : $internalPath;
         $data = $startPath !== null ? $this->get($startPath, $data, [], $delimiter) : $data;
-        $checkList = [$startPath => ['start' => $startPath === null, 'children' => $data]];
+        // Use empty string as array key when startPath is null to avoid array offset deprecation
+        $checkListKey = $startPath ?? '';
+        $checkList = [$checkListKey => ['start' => $startPath === null, 'children' => $data]];
         $paths = [];
 
         while ($checkList) {
@@ -321,6 +323,6 @@ class ArrayManager
      */
     public function slicePath($path, $offset, $length = null, $delimiter = self::DEFAULT_PATH_DELIMITER)
     {
-        return implode($delimiter, array_slice(explode($delimiter, $path), $offset, $length));
+        return $path ? implode($delimiter, array_slice(explode($delimiter, $path), $offset, $length)) : '';
     }
 }

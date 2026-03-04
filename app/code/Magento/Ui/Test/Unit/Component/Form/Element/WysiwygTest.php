@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -16,7 +16,7 @@ use Magento\Ui\Component\Form\Element\Wysiwyg;
 use Magento\Ui\Component\Wysiwyg\ConfigInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 
-class WysiwygTest extends AbstractElementTest
+class WysiwygTest extends AbstractElementTestCase
 {
     /**
      * @var FormFactory|MockObject
@@ -41,24 +41,16 @@ class WysiwygTest extends AbstractElementTest
     protected function setUp(): void
     {
         parent::setUp();
-        $this->formFactoryMock = $this->getMockBuilder(FormFactory::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['create'])
-            ->getMock();
-        $this->formMock = $this->getMockBuilder(Form::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->wysiwygConfig = $this->getMockBuilder(ConfigInterface::class)
-            ->getMockForAbstractClass();
+        $this->formFactoryMock = $this->createPartialMock(FormFactory::class, ['create']);
+        $this->formMock = $this->createMock(Form::class);
+        $this->wysiwygConfig = $this->createMock(ConfigInterface::class);
         $dataObject = new DataObject();
         $this->wysiwygConfig
             ->expects($this->once())
             ->method('getConfig')
             ->willReturn($dataObject);
 
-        $this->editorMock = $this->getMockBuilder(Editor::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->editorMock = $this->createMock(Editor::class);
 
         $this->formFactoryMock->expects($this->any())
             ->method('create')

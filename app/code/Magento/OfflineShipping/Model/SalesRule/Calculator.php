@@ -1,13 +1,11 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 
 /**
  * Shopping Cart Rule data model
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\OfflineShipping\Model\SalesRule;
 
@@ -32,7 +30,7 @@ class Calculator extends Validator
         $address = $item->getAddress();
         $item->setFreeShipping(false);
 
-        foreach ($this->_getRules($address) as $rule) {
+        foreach ($this->getRules($address) as $rule) {
             /* @var $rule \Magento\SalesRule\Model\Rule */
             if (!$this->validatorUtility->canProcessRule($rule, $address)) {
                 continue;

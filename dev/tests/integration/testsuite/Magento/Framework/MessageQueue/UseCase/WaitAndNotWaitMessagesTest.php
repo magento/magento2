@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework\MessageQueue\UseCase;
 
@@ -9,6 +9,8 @@ use Magento\Framework\App\DeploymentConfig\FileReader;
 use Magento\Framework\App\DeploymentConfig\Writer;
 use Magento\Framework\Config\File\ConfigFilePool;
 use Magento\Framework\Filesystem;
+use Magento\Framework\MessageQueue\DefaultValueProvider;
+use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestModuleAsyncAmqp\Model\AsyncTestData;
 
 class WaitAndNotWaitMessagesTest extends QueueTestCaseAbstract
@@ -34,7 +36,7 @@ class WaitAndNotWaitMessagesTest extends QueueTestCaseAbstract
     protected $msgObject;
 
     /**
-     * {@inheritdoc}
+     * @var string[]
      */
     protected $consumers = ['mixed.sync.and.async.queue.consumer'];
 
@@ -49,16 +51,28 @@ class WaitAndNotWaitMessagesTest extends QueueTestCaseAbstract
     protected $maxMessages = 4;
 
     /**
+     * @var string
+     */
+    private $connectionType;
+
+    /**
      * @inheritdoc
      */
     protected function setUp(): void
     {
-        parent::setUp();
-        // phpstan:ignore "Class Magento\TestModuleAsyncAmqp\Model\AsyncTestData not found."
-        $this->msgObject = $this->objectManager->create(AsyncTestData::class);
-        $this->reader = $this->objectManager->get(FileReader::class);
-        $this->filesystem = $this->objectManager->get(Filesystem::class);
-        $this->config = $this->loadConfig();
+        $this->objectManager = Bootstrap::getObjectManager();
+        /** @var DefaultValueProvider $defaultValueProvider */
+        $defaultValueProvider = $this->objectManager->get(DefaultValueProvider::class);
+        $this->connectionType = $defaultValueProvider->getConnection();
+
+        if ($this->connectionType === 'amqp') {
+            parent::setUp();
+            // phpstan:ignore "Class Magento\TestModuleAsyncAmqp\Model\AsyncTestData not found."
+            $this->msgObject = $this->objectManager->create(AsyncTestData::class);
+            $this->reader = $this->objectManager->get(FileReader::class);
+            $this->filesystem = $this->objectManager->get(Filesystem::class);
+            $this->config = $this->loadConfig();
+        }
     }
 
     /**
@@ -66,6 +80,11 @@ class WaitAndNotWaitMessagesTest extends QueueTestCaseAbstract
      */
     public function testWaitForMessages()
     {
+        if ($this->connectionType === 'stomp') {
+            $this->markTestSkipped('AMQP test skipped because STOMP connection is available.
+            This test is AMQP-specific.');
+        }
+
         $this->publisherConsumerController->stopConsumers();
 
         $config = $this->config;
@@ -97,6 +116,11 @@ class WaitAndNotWaitMessagesTest extends QueueTestCaseAbstract
      */
     public function testNotWaitForMessages(): void
     {
+        if ($this->connectionType === 'stomp') {
+            $this->markTestSkipped('AMQP test skipped because STOMP connection is available.
+            This test is AMQP-specific.');
+        }
+
         $this->publisherConsumerController->stopConsumers();
 
         $config = $this->config;
@@ -157,6 +181,8 @@ class WaitAndNotWaitMessagesTest extends QueueTestCaseAbstract
     protected function tearDown(): void
     {
         parent::tearDown();
-        $this->writeConfig($this->config);
+        if ($this->config !== null) {
+            $this->writeConfig($this->config);
+        }
     }
 }

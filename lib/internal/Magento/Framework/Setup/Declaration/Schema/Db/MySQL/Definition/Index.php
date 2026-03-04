@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Framework\Setup\Declaration\Schema\Db\MySQL\Definition;
@@ -21,7 +21,7 @@ class Index implements DbDefinitionProcessorInterface
     /**
      * Index statement.
      */
-    const INDEX_KEY_NAME = 'INDEX';
+    public const INDEX_KEY_NAME = 'INDEX';
 
     /**
      * @var ResourceConnection
@@ -39,7 +39,6 @@ class Index implements DbDefinitionProcessorInterface
     }
 
     /**
-     * @param \Magento\Framework\Setup\Declaration\Schema\Dto\Index $index
      * @inheritdoc
      */
     public function toDefinition(ElementInterface $index)
@@ -73,7 +72,7 @@ class Index implements DbDefinitionProcessorInterface
     public function fromDefinition(array $data)
     {
         return [
-            'indexType' => strtolower($data['Index_type']),
+            'indexType' => strtolower($data['Index_type'] ?? ''),
             'name' => $data['Key_name'],
             'column' => [
                 $data['Column_name'] => $data['Column_name']

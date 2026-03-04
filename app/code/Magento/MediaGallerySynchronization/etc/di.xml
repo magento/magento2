@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
@@ -49,5 +49,10 @@
     </type>
     <type name="Magento\Framework\App\Config\Value">
         <plugin name="admin_system_config_adobe_stock_save_plugin" type="Magento\MediaGallerySynchronization\Plugin\MediaGallerySyncTrigger"/>
+    </type>
+    <type name="Magento\MediaGallerySynchronization\Console\Command\Synchronize">
+        <arguments>
+            <argument name="synchronizeAssets" xsi:type="object">Magento\MediaGallerySynchronizationApi\Api\SynchronizeInterface\Proxy</argument>
+        </arguments>
     </type>
 </config>

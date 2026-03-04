@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 /** @var \Magento\Framework\Registry $registry */
 /** @var \Magento\SalesRule\Model\Rule $salesRule */
@@ -24,7 +24,7 @@ $salesRule->setData(
         'simple_action' => 'by_percent',
         'discount_amount' => 50,
         'discount_step' => 0,
-        'stop_rules_processing' => 1,
+        'stop_rules_processing' => 0,
         'website_ids' => [
             \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
                 \Magento\Store\Model\StoreManagerInterface::class

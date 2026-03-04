@@ -1,15 +1,15 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 
 $billingAddress = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
     \Magento\Sales\Model\Order\Address::class,
     [
         'data' => [
-            'firstname' => 'guest',
-            'lastname' => 'guest',
+            'firstname' => 'guestfname',
+            'lastname' => 'guestlname',
             'email' => 'customer@example.com',
             'street' => 'street',
             'city' => 'Los Angeles',

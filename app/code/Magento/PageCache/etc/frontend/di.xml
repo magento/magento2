@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
@@ -25,5 +25,10 @@
     </type>
     <type name="Magento\Framework\App\Response\Http">
         <plugin name="response-http-page-cache" type="Magento\PageCache\Model\App\Response\HttpPlugin"/>
+    </type>
+    <type name="Magento\Framework\App\PageCache\Kernel">
+        <arguments>
+            <argument name="identifierForSave" xsi:type="object">Magento\PageCache\Model\App\Request\Http\IdentifierForSave</argument>
+        </arguments>
     </type>
 </config>

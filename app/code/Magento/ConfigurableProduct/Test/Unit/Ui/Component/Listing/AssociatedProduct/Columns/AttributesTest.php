@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -67,21 +67,12 @@ class AttributesTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->contextMock = $this->getMockBuilder(ContextInterface::class)
-            ->getMockForAbstractClass();
-        $this->attributeRepositoryMock = $this->getMockBuilder(ProductAttributeRepositoryInterface::class)
-            ->getMockForAbstractClass();
-        $this->searchCriteriaBuilderMock = $this->getMockBuilder(SearchCriteriaBuilder::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->uiElementProcessorMock = $this->getMockBuilder(UiElementProcessor::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->searchCriteriaMock = $this->getMockBuilder(SearchCriteria::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->searchResultsMock = $this->getMockBuilder(ProductAttributeSearchResultsInterface::class)
-            ->getMockForAbstractClass();
+        $this->contextMock = $this->createMock(ContextInterface::class);
+        $this->attributeRepositoryMock = $this->createMock(ProductAttributeRepositoryInterface::class);
+        $this->searchCriteriaBuilderMock = $this->createMock(SearchCriteriaBuilder::class);
+        $this->uiElementProcessorMock = $this->createMock(UiElementProcessor::class);
+        $this->searchCriteriaMock = $this->createMock(SearchCriteria::class);
+        $this->searchResultsMock = $this->createMock(ProductAttributeSearchResultsInterface::class);
 
         $this->contextMock->expects(static::never())
             ->method('getProcessor')
@@ -109,10 +100,13 @@ class AttributesTest extends TestCase
         $name = 'some_name';
         $initialData = [
             'data' => [
+                'totalRecords' => 4,
                 'items' => [
-                    ['attribute1_1_code' => 'attribute1_1_option2'],
-                    ['attribute2_1_code' => 'attribute2_1_option3'],
-                    ['attribute3_1_code' => 'attribute3_1_option3', 'attribute3_2_code' => 'attribute3_2_option1']
+                    ['attribute1_1_code' => 'attribute1_1_option2', 'required_options' => '0'],
+                    ['attribute2_1_code' => 'attribute2_1_option3', 'required_options' => '0'],
+                    ['attribute3_1_code' => 'attribute3_1_option3', 'attribute3_2_code' => 'attribute3_2_option1',
+                        'required_options' => '0'],
+                    ['attribute4_1_code' => 'attribute4_1_option1', 'required_options' => '1']
                 ]
             ]
         ];
@@ -158,18 +152,22 @@ class AttributesTest extends TestCase
         ];
         $resultData = [
             'data' => [
+                'totalRecords' => 3,
                 'items' => [
                     [
                         'attribute1_1_code' => 'attribute1_1_option2',
+                        'required_options' => '0',
                         $name => 'attribute1_1_label: attribute1_1_option2_label'
                     ],
                     [
                         'attribute2_1_code' => 'attribute2_1_option3',
+                        'required_options' => '0',
                         $name => ''
                     ],
                     [
                         'attribute3_1_code' => 'attribute3_1_option3',
                         'attribute3_2_code' => 'attribute3_2_option1',
+                        'required_options' => '0',
                         $name => 'attribute3_1_label: attribute3_1_option3_label,'
                             . ' attribute3_2_label: attribute3_2_option1_label'
                     ]
@@ -187,7 +185,9 @@ class AttributesTest extends TestCase
             ->method('getItems')
             ->willReturn($attributes);
 
-        $this->assertSame($resultData, $this->attributesColumn->prepareDataSource($initialData));
+        $actualResultItems = $this->attributesColumn->prepareDataSource($initialData);
+        $this->assertSame($resultData['data']['items'], $actualResultItems['data']['items']);
+        $this->assertSame($resultData['data']['totalRecords'], count($actualResultItems['data']['items']));
     }
 
     /**
@@ -200,8 +200,7 @@ class AttributesTest extends TestCase
      */
     private function createAttributeMock($attributeCode, $defaultFrontendLabel, array $options = [])
     {
-        $attributeMock = $this->getMockBuilder(ProductAttributeInterface::class)
-            ->getMockForAbstractClass();
+        $attributeMock = $this->createMock(ProductAttributeInterface::class);
 
         $attributeMock->expects(static::any())
             ->method('getAttributeCode')
@@ -225,8 +224,7 @@ class AttributesTest extends TestCase
      */
     private function createAttributeOptionMock($value, $label)
     {
-        $attributeOptionMock = $this->getMockBuilder(AttributeOptionInterface::class)
-            ->getMockForAbstractClass();
+        $attributeOptionMock = $this->createMock(AttributeOptionInterface::class);
 
         $attributeOptionMock->expects(static::any())
             ->method('getValue')

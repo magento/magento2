@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Ui\Model\Export;
 
@@ -11,9 +11,6 @@ use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Filesystem;
 use Magento\Ui\Component\MassAction\Filter;
 
-/**
- * Class ConvertToCsv
- */
 class ConvertToCsv
 {
     /**
@@ -84,16 +81,33 @@ class ConvertToCsv
         $searchCriteria = $dataProvider->getSearchCriteria()
             ->setCurrentPage($i)
             ->setPageSize($this->pageSize);
-        $totalCount = (int) $dataProvider->getSearchResult()->getTotalCount();
-        while ($totalCount > 0) {
-            $items = $dataProvider->getSearchResult()->getItems();
+
+        $totalCount = null;
+        $totalPagesCount = null;
+
+        do {
+            $searchResult = $dataProvider->getSearchResult();
+            $items = $searchResult->getItems();
+
+            if ($totalCount === null) { // get total count only once
+                $totalCount = $searchResult->getTotalCount();
+                $totalPagesCount = (int) ceil($totalCount / $this->pageSize);
+            }
+
+            // call setTotalCount to prevent total count from being calculate in subsequent iterations of this loop
+            $searchResult->setTotalCount($totalCount);
+            // Ensure $items is always an array
+            if ($items === null) {
+                $items = [];
+            }
             foreach ($items as $item) {
                 $this->metadataProvider->convertDate($item, $component->getName());
                 $stream->writeCsv($this->metadataProvider->getRowData($item, $fields, $options));
             }
+
             $searchCriteria->setCurrentPage(++$i);
-            $totalCount = $totalCount - $this->pageSize;
-        }
+        } while ($i <= $totalPagesCount);
+
         $stream->unlock();
         $stream->close();
 

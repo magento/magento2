@@ -1,6 +1,6 @@
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 /**
@@ -60,12 +60,14 @@ define([
                 return this;
             }
 
-            action   = this.getAction(actionIndex);
+            action = this.getAction(actionIndex);
             callback = this._getCallback(action, data);
 
             action.confirm ?
                 this._confirm(action, callback) :
                 callback();
+
+            this.close();
 
             return this;
         },
@@ -127,7 +129,7 @@ define([
          */
         _getCallback: function (action, selections) {
             var callback = action.callback,
-                args     = [action, selections];
+                args = [action, selections];
 
             if (utils.isObject(callback)) {
                 args.unshift(callback.target);
@@ -178,7 +180,9 @@ define([
             var confirmData = action.confirm,
                 data = this.getSelections(),
                 total = data.total ? data.total : 0,
-                confirmMessage = confirmData.message + ' (' + total + ' record' + (total > 1 ? 's' : '') + ')';
+                confirmMessage = confirmData.message + (data.showTotalRecords || data.showTotalRecords === undefined ?
+                    ' (' + total + ' record' + (total > 1 ? 's' : '') + ')'
+                    : '');
 
             confirm({
                 title: confirmData.title,

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -16,15 +16,19 @@ use Magento\Sales\Model\Order\Invoice;
 use Magento\Sales\Model\Order\Invoice\CommentFactory;
 use Magento\Sales\Model\Order\Invoice\Total\Shipping;
 use Magento\Sales\Model\OrderFactory;
+use Magento\Sales\Model\ResourceModel\Order\Invoice\Comment\CollectionFactory as CommentCollectionFactory;
 use Magento\Sales\Model\ResourceModel\Order\Invoice\Item\CollectionFactory;
+use Magento\Sales\Model\ResourceModel\OrderFactory as OrderResourceFactory;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class ShippingTest extends TestCase
 {
+
     /**
      * @var Shipping
      */
@@ -36,17 +40,17 @@ class ShippingTest extends TestCase
     }
 
     /**
-     * @dataProvider collectWithNoOrZeroPrevInvoiceDataProvider
      * @param array $prevInvoicesData
      * @param float $orderShipping
      * @param float $expectedShipping
      */
+    #[DataProvider('collectWithNoOrZeroPrevInvoiceDataProvider')]
     public function testCollectWithNoOrZeroPrevInvoice(array $prevInvoicesData, $orderShipping, $expectedShipping)
     {
         $invoice = $this->createInvoiceStub($prevInvoicesData, $orderShipping);
-        $invoice->expects($this->exactly(2))
+        $invoice->expects($this->once())
             ->method('setShippingAmount')
-            ->withConsecutive([0], [$expectedShipping]);
+            ->with($expectedShipping);
 
         $this->total->collect($invoice);
     }
@@ -63,7 +67,7 @@ class ShippingTest extends TestCase
                 'expectedShipping' => 10.00,
             ],
             'zero shipping in previous invoices' => [
-                'prevInvoicesData' => [['shipping_amount' => '0.0000']],
+                'prevInvoicesData' => [['shipping_amount' => null]],
                 'orderShipping' => 10.00,
                 'expectedShipping' => 10.00,
             ],
@@ -75,9 +79,8 @@ class ShippingTest extends TestCase
         $orderShipping = 10.00;
         $prevInvoicesData = [['shipping_amount' => '10.000']];
         $invoice = $this->createInvoiceStub($prevInvoicesData, $orderShipping);
-        $invoice->expects($this->once())
-            ->method('setShippingAmount')
-            ->with(0);
+        $invoice->expects($this->never())
+            ->method('setShippingAmount');
 
         $this->total->collect($invoice);
     }
@@ -92,9 +95,9 @@ class ShippingTest extends TestCase
     private function createInvoiceStub(array $prevInvoicesData, $orderShipping)
     {
         $order = $this->getMockBuilder(Order::class)
-            ->setMethods(['getInvoiceCollection', 'getShippingAmount'])
+            ->onlyMethods(['getInvoiceCollection', 'getShippingAmount'])
             ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+            ->getMock();
         $order->expects($this->any())
             ->method('getInvoiceCollection')
             ->willReturn($this->getInvoiceCollection($prevInvoicesData));
@@ -102,9 +105,7 @@ class ShippingTest extends TestCase
             ->method('getShippingAmount')
             ->willReturn($orderShipping);
         /** @var \Magento\Sales\Model\Order\Invoice|MockObject $invoice */
-        $invoice = $this->getMockBuilder(Invoice::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $invoice = $this->createMock(Invoice::class);
         $invoice->expects($this->any())
             ->method('getOrder')
             ->willReturn($order);
@@ -127,7 +128,7 @@ class ShippingTest extends TestCase
         $arguments = [
             'orderFactory' => $this->createMock(OrderFactory::class),
             'orderResourceFactory' => $this->createMock(
-                \Magento\Sales\Model\ResourceModel\OrderFactory::class
+                OrderResourceFactory::class
             ),
             'calculatorFactory' => $this->createMock(
                 CalculatorFactory::class
@@ -139,7 +140,7 @@ class ShippingTest extends TestCase
                 CommentFactory::class
             ),
             'commentCollectionFactory' => $this->createMock(
-                \Magento\Sales\Model\ResourceModel\Order\Invoice\Comment\CollectionFactory::class
+                CommentCollectionFactory::class
             ),
         ];
         foreach ($invoicesData as $oneInvoiceData) {
@@ -147,7 +148,7 @@ class ShippingTest extends TestCase
             $arguments = $objectManagerHelper->getConstructArguments($className, $arguments);
             /** @var \Magento\Sales\Model\Order\Invoice $prevInvoice */
             $prevInvoice = $this->getMockBuilder($className)
-                ->setMethods(['_init'])
+                ->onlyMethods(['_init'])
                 ->setConstructorArgs($arguments)
                 ->getMock();
             $result->addItem($prevInvoice);

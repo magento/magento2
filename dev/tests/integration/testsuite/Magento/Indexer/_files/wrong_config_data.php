@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -12,5 +12,9 @@ use Magento\TestFramework\Helper\Bootstrap;
 $configFactory = Bootstrap::getObjectManager()->get(Factory::class);
 $config = $configFactory->create();
 $config->setScope('stores');
-$config->setDataByPath('catalog/search/elasticsearch7_server_port', 2309);
+
+$engine = $config->getConfigDataValue('catalog/search/engine');
+$portField = "catalog/search/{$engine}_server_port";
+
+$config->setDataByPath($portField, 2309);
 $config->save();

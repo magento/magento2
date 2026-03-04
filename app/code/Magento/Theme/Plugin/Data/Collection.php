@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -23,7 +23,7 @@ class Collection
      */
     public function afterGetCurPage(DataCollection $subject, int $result): int
     {
-        if ($result > $subject->getLastPageNumber()) {
+        if ($result > 1 && $result > $subject->getLastPageNumber()) {
             $result = 1;
         }
 

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Backend\Block\Widget\Button;
 
@@ -164,8 +164,12 @@ class SplitButton extends \Magento\Backend\Block\Widget
         if ($disabled) {
             $classes[] = $disabled;
         }
-
-        $attributes = ['title' => $title, 'class' => join(' ', $classes), 'disabled' => $disabled];
+        $attributes = [
+            'title' => $title,
+            'class' => join(' ', $classes),
+            'disabled' => $disabled,
+            'aria-label' => (string)$this->getData('dropdown_button_aria_label'),
+        ];
         $this->_getDataAttributes(['mage-init' => '{"dropdown": {}}', 'toggle' => 'dropdown'], $attributes);
 
         $html = $this->_getAttributesString($attributes);

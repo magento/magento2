@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Framework\Session\SaveHandler;
@@ -45,7 +45,7 @@ class DbTable extends \SessionHandler
      */
     public function __construct(
         ResourceConnection $resource,
-        EncryptorInterface $encryptor = null
+        ?EncryptorInterface $encryptor = null
     ) {
         $this->_sessionTable = $resource->getTableName('session');
         $this->connection = $resource->getConnection();
@@ -83,6 +83,7 @@ class DbTable extends \SessionHandler
      * @return bool
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
+    #[\ReturnTypeWillChange]
     public function open($savePath, $sessionName)
     {
         return true;
@@ -93,6 +94,7 @@ class DbTable extends \SessionHandler
      *
      * @return bool
      */
+    #[\ReturnTypeWillChange]
     public function close()
     {
         return true;
@@ -104,6 +106,7 @@ class DbTable extends \SessionHandler
      * @param string $sessionId
      * @return string
      */
+    #[\ReturnTypeWillChange]
     public function read($sessionId)
     {
         // need to use write connection to get the most fresh DB sessions
@@ -131,6 +134,7 @@ class DbTable extends \SessionHandler
      * @param string $sessionData
      * @return bool
      */
+    #[\ReturnTypeWillChange]
     public function write($sessionId, $sessionData)
     {
         $hashedSessionId = $this->encryptor->hash($sessionId);
@@ -158,6 +162,7 @@ class DbTable extends \SessionHandler
      * @param string $sessionId
      * @return bool
      */
+    #[\ReturnTypeWillChange]
     public function destroy($sessionId)
     {
         $where = ['session_id = ?' => $this->encryptor->hash($sessionId)];
@@ -172,6 +177,7 @@ class DbTable extends \SessionHandler
      * @return bool
      * @SuppressWarnings(PHPMD.ShortMethodName)
      */
+    #[\ReturnTypeWillChange]
     public function gc($maxLifeTime)
     {
         $where = ['session_expires < ?' => time() - $maxLifeTime];

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -21,6 +21,7 @@ use Magento\Framework\ObjectManager\RelationsInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 require_once __DIR__ . '/../Custom/Module/Model/Item.php';
 require_once __DIR__ . '/../Custom/Module/Model/Item/Enhanced.php';
@@ -71,12 +72,12 @@ class ConfigTest extends TestCase
     protected function setUp(): void
     {
         $this->readerMock = $this->createMock(Dom::class);
-        $this->configScopeMock = $this->getMockForAbstractClass(ScopeListInterface::class);
-        $this->omConfigMock = $this->getMockForAbstractClass(
+        $this->configScopeMock = $this->createMock(ScopeListInterface::class);
+        $this->omConfigMock = $this->createMock(
             ConfigInterface::class
         );
-        $this->definitionMock = $this->getMockForAbstractClass(DefinitionInterface::class);
-        $this->relationsMock = $this->getMockForAbstractClass(
+        $this->definitionMock = $this->createMock(DefinitionInterface::class);
+        $this->relationsMock = $this->createMock(
             RelationsInterface::class
         );
         $this->cacheManagerMock = $this->createMock(CacheManager::class);
@@ -85,9 +86,8 @@ class ConfigTest extends TestCase
 
     /**
      * @param boolean $expectedResult
-     * @param string $type
-     * @dataProvider hasPluginsDataProvider
-     */
+     * @param string $type     */
+    #[DataProvider('hasPluginsDataProvider')]
     public function testHasPluginsWhenDataIsNotCached($expectedResult, $type, $entityParents)
     {
         $readerMap = include __DIR__ . '/../_files/reader_mock_map.php';
@@ -166,9 +166,10 @@ class ConfigTest extends TestCase
     /**
      * @param boolean $expectedResult
      * @param string $type
-     * @dataProvider hasPluginsDataProvider
+     * @param array $entityParents
      */
-    public function testHasPluginsWhenDataIsCached($expectedResult, $type)
+    #[DataProvider('hasPluginsDataProvider')]
+    public function testHasPluginsWhenDataIsCached($expectedResult, $type, $entityParents = [])
     {
         $cacheId = 'interception';
         $interceptionData = [
@@ -208,7 +209,7 @@ class ConfigTest extends TestCase
     /**
      * @return array
      */
-    public function hasPluginsDataProvider()
+    public static function hasPluginsDataProvider()
     {
         return [
             // item container has plugins only in the backend scope

@@ -1,17 +1,17 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\MediaGallery\Model\Directory;
 
 use Magento\Framework\App\Config\ScopeConfigInterface;
-use Magento\Framework\App\ObjectManager;
-use Magento\Framework\Filesystem\File\WriteInterface;
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Filesystem;
+use Magento\Framework\Filesystem\File\WriteInterface;
 use Magento\MediaGalleryApi\Api\IsPathExcludedInterface;
 use Magento\MediaGalleryApi\Model\ExcludedPatternsConfigInterface;
 
@@ -55,13 +55,12 @@ class IsExcluded implements IsPathExcludedInterface
     public function __construct(
         ExcludedPatternsConfigInterface $config,
         Filesystem $filesystem,
-        ScopeConfigInterface $coreConfig = null
+        ?ScopeConfigInterface $coreConfig = null
     ) {
         $this->config = $config;
         $this->filesystem = $filesystem;
         $this->mediaDirectory = $this->filesystem->getDirectoryWrite(DirectoryList::MEDIA);
         $this->coreConfig = $coreConfig ?: ObjectManager::getInstance()->get(ScopeConfigInterface::class);
-
     }
 
     /**
@@ -90,8 +89,8 @@ class IsExcluded implements IsPathExcludedInterface
             );
             $regExp = '/^(';
             $or = '';
-            foreach($mediaGalleryImageFolders as $folder) {
-                $folderPattern = str_replace('/', '[\/]+', $folder);
+            foreach ($mediaGalleryImageFolders as $folder) {
+                $folderPattern = $folder !== null ? str_replace('/', '[\/]+', $folder) : '';
                 $regExp .= $or . $folderPattern . '\b(?!-)(?:\/?[^\/]+)*\/?$';
                 $or = '|';
             }

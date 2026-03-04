@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -48,23 +48,18 @@ class FileUploaderTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->customerMetadataService = $this->getMockBuilder(CustomerMetadataInterface::class)
-            ->getMockForAbstractClass();
+        $this->customerMetadataService = $this->createMock(CustomerMetadataInterface::class);
 
-        $this->addressMetadataService = $this->getMockBuilder(AddressMetadataInterface::class)
-            ->getMockForAbstractClass();
+        $this->addressMetadataService = $this->createMock(AddressMetadataInterface::class);
 
-        $this->elementFactory = $this->getMockBuilder(ElementFactory::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->elementFactory = $this->createMock(ElementFactory::class);
 
         $this->fileProcessorFactory = $this->getMockBuilder(FileProcessorFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
 
-        $this->attributeMetadata = $this->getMockBuilder(AttributeMetadataInterface::class)
-            ->getMockForAbstractClass();
+        $this->attributeMetadata = $this->createMock(AttributeMetadataInterface::class);
     }
 
     protected function tearDown(): void
@@ -105,9 +100,7 @@ class FileUploaderTest extends TestCase
             ],
         ];
 
-        $formElement = $this->getMockBuilder(Image::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $formElement = $this->createMock(Image::class);
         $formElement->expects($this->once())
             ->method('validateValue')
             ->with(['name' => $filename])
@@ -154,9 +147,7 @@ class FileUploaderTest extends TestCase
             'url' => $resultFileUrl,
         ];
 
-        $fileProcessor = $this->getMockBuilder(FileProcessor::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $fileProcessor = $this->createMock(FileProcessor::class);
         $fileProcessor->expects($this->once())
             ->method('saveTemporaryFile')
             ->with('customer[' . $attributeCode . ']')
@@ -178,8 +169,7 @@ class FileUploaderTest extends TestCase
             ])
             ->willReturn($fileProcessor);
 
-        $validationRuleMock = $this->getMockBuilder(ValidationRuleInterface::class)
-            ->getMockForAbstractClass();
+        $validationRuleMock = $this->createMock(ValidationRuleInterface::class);
         $validationRuleMock->expects($this->once())
             ->method('getName')
             ->willReturn('file_extensions');

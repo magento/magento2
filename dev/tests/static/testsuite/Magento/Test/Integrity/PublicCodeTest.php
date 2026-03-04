@@ -1,18 +1,17 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Test\Integrity;
 
 use Exception;
 use Magento\Framework\App\Utility\Files;
 use Magento\Setup\Module\Di\Code\Reader\FileClassScanner;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
-use ReflectionException;
 use ReflectionMethod;
-use ReflectionParameter;
 
 /**
  * Tests @api annotated code integrity
@@ -32,16 +31,16 @@ class PublicCodeTest extends TestCase
     /**
      * @var string[]|null
      */
-    private $blockWhitelist;
+    private static $blockWhitelist;
 
     /**
      * Return whitelist class names
      *
      * @return string[]
      */
-    private function getWhitelist(): array
+    private static function getWhitelist(): array
     {
-        if ($this->blockWhitelist === null) {
+        if (self::$blockWhitelist === null) {
             $whiteListFiles = str_replace(
                 '\\',
                 '/',
@@ -51,9 +50,9 @@ class PublicCodeTest extends TestCase
             foreach (glob($whiteListFiles) as $fileName) {
                 $whiteListItems[] = file($fileName, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
             }
-            $this->blockWhitelist = array_merge([], ...$whiteListItems);
+            self::$blockWhitelist = array_merge([], ...$whiteListItems);
         }
-        return $this->blockWhitelist;
+        return self::$blockWhitelist;
     }
 
     /**
@@ -62,8 +61,8 @@ class PublicCodeTest extends TestCase
      *
      * @param $layoutFile
      * @throws \ReflectionException
-     * @dataProvider layoutFilesDataProvider
      */
+    #[DataProvider('layoutFilesDataProvider')]
     public function testAllBlocksReferencedInLayoutArePublic($layoutFile)
     {
         $nonPublishedBlocks = [];
@@ -73,7 +72,7 @@ class PublicCodeTest extends TestCase
         foreach ($elements as $node) {
             $class = (string) $node['class'];
             if ($class && \class_exists($class) && !in_array($class, $this->getWhitelist())) {
-                $reflection = (new \ReflectionClass($class));
+                $reflection = (new ReflectionClass($class));
                 if (strpos($reflection->getDocComment(), '@api') === false) {
                     $nonPublishedBlocks[] = $class;
                 }
@@ -93,7 +92,7 @@ class PublicCodeTest extends TestCase
      * @return array
      * @throws Exception
      */
-    public function layoutFilesDataProvider()
+    public static function layoutFilesDataProvider()
     {
         return Files::init()->getLayoutFiles([], true);
     }
@@ -106,12 +105,12 @@ class PublicCodeTest extends TestCase
      *
      * @param string $class
      * @throws \ReflectionException
-     * @dataProvider publicPHPTypesDataProvider
      */
+    #[DataProvider('publicPHPTypesDataProvider')]
     public function testAllPHPClassesReferencedFromPublicClassesArePublic($class)
     {
         $nonPublishedClasses = [];
-        $reflection = new \ReflectionClass($class);
+        $reflection = new ReflectionClass($class);
         $filter = ReflectionMethod::IS_PUBLIC;
         if ($reflection->isAbstract()) {
             $filter = $filter | ReflectionMethod::IS_PROTECTED;
@@ -152,7 +151,7 @@ class PublicCodeTest extends TestCase
      * @return array
      * @throws Exception
      */
-    public function publicPHPTypesDataProvider(): array
+    public static function publicPHPTypesDataProvider(): array
     {
         $files = Files::init()->getPhpFiles(Files::INCLUDE_LIBS | Files::INCLUDE_APP_CODE);
         $result = [];
@@ -162,7 +161,7 @@ class PublicCodeTest extends TestCase
                 $fileClassScanner = new FileClassScanner($file);
                 $className = $fileClassScanner->getClassName();
 
-                if (!in_array($className, $this->getWhitelist())
+                if (!in_array($className, self::getWhitelist())
                     && (class_exists($className) || interface_exists($className))
                 ) {
                     $result[$className] = [$className];
@@ -175,10 +174,11 @@ class PublicCodeTest extends TestCase
     /**
      * Check if a class is @api annotated
      *
-     * @param \ReflectionClass $class
+     * @param ReflectionClass $class
+     *
      * @return bool
      */
-    private function isPublished(\ReflectionClass $class)
+    private function isPublished(ReflectionClass $class)
     {
         return strpos($class->getDocComment(), '@api') !== false;
     }
@@ -250,7 +250,7 @@ class PublicCodeTest extends TestCase
                 && !$this->isGenerated($returnType)
                 && \class_exists($returnType)
             ) {
-                $returnTypeReflection = new \ReflectionClass($returnType);
+                $returnTypeReflection = new ReflectionClass($returnType);
                 if (!$returnTypeReflection->isInternal()
                     && $this->areClassesFromSameVendor($returnType, $class)
                     && !$this->isPublished($returnTypeReflection)
@@ -276,12 +276,13 @@ class PublicCodeTest extends TestCase
     {
         /* Ignoring docblocks for argument types */
         foreach ($method->getParameters() as $parameter) {
-            if ($parameter->hasType()
-                && method_exists($parameter->getType(), 'isBuiltin')
-                && !$parameter->getType()->isBuiltin()
-                && !$this->isGenerated($parameter->getType()->getName())
+            $parameterType = $parameter->getType();
+            if ($parameterType
+                && method_exists($parameterType, 'isBuiltin')
+                && !$parameterType->isBuiltin()
+                && !$this->isGenerated($parameterType->getName())
             ) {
-                $parameterClass = $this->getParameterClass($parameter);
+                $parameterClass = new ReflectionClass($parameterType->getName());
                 /*
                  * We don't want to check integrity of @api coverage of classes
                  * that belong to different vendors, because it is too complicated.
@@ -299,21 +300,5 @@ class PublicCodeTest extends TestCase
             }
         }
         return $nonPublishedClasses;
-    }
-
-    /**
-     * Get class by reflection parameter
-     *
-     * @param ReflectionParameter $reflectionParameter
-     * @return ReflectionClass|null
-     * @throws ReflectionException
-     */
-    private function getParameterClass(ReflectionParameter $reflectionParameter): ?ReflectionClass
-    {
-        $parameterType = $reflectionParameter->getType();
-
-        return $parameterType && !$parameterType->isBuiltin()
-            ? new ReflectionClass($parameterType->getName())
-            : null;
     }
 }

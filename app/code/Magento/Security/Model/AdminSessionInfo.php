@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -27,26 +27,27 @@ class AdminSessionInfo extends \Magento\Framework\Model\AbstractModel
     /**
      * Admin logged in
      */
-    const LOGGED_IN = 1;
+    public const LOGGED_IN = 1;
 
     /**
      * Admin logged out
      */
-    const LOGGED_OUT = 0;
+    public const LOGGED_OUT = 0;
 
     /**
      * User has been logged out by another login with the same credentials
      */
-    const LOGGED_OUT_BY_LOGIN = 2;
+    public const LOGGED_OUT_BY_LOGIN = 2;
 
     /**
      * User has been logged out manually from another session
      */
-    const LOGGED_OUT_MANUALLY = 3;
+    public const LOGGED_OUT_MANUALLY = 3;
 
     /**
      * All other open sessions were terminated
      * @since 100.1.0
+     * @var bool
      */
     protected $isOtherSessionsTerminated = false;
 
@@ -77,8 +78,8 @@ class AdminSessionInfo extends \Magento\Framework\Model\AbstractModel
         \Magento\Framework\Registry $registry,
         ConfigInterface $securityConfig,
         \Magento\Framework\Stdlib\DateTime\DateTime $dateTime,
-        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
-        \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
+        ?\Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
+        ?\Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
     ) {
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);
@@ -133,10 +134,10 @@ class AdminSessionInfo extends \Magento\Framework\Model\AbstractModel
         $currentTime = $this->dateTime->gmtTimestamp();
         $lastUpdatedTime = $this->getUpdatedAt();
         if (!is_numeric($lastUpdatedTime)) {
-            $lastUpdatedTime = strtotime($lastUpdatedTime);
+            $lastUpdatedTime = $lastUpdatedTime === null ? 0 : strtotime($lastUpdatedTime);
         }
 
-        return $lastUpdatedTime <= ($currentTime - $lifetime) ? true : false;
+        return $lastUpdatedTime <= ($currentTime - $lifetime);
     }
 
     /**

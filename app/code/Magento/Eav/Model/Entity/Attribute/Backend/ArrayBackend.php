@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Eav\Model\Entity\Attribute\Backend;
 
@@ -45,12 +45,31 @@ class ArrayBackend extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractB
         if ($object->hasData($attributeCode)) {
             $data = $object->getData($attributeCode);
             if (is_array($data)) {
-                $object->setData($attributeCode, implode(',', array_filter($data)));
+                $object->setData($attributeCode, $this->prepare($data));
+            } elseif (is_string($data)) {
+                $object->setData($attributeCode, $this->prepare(explode(',', $data)));
             } elseif (empty($data)) {
                 $object->setData($attributeCode, null);
             }
         }
 
         return parent::validate($object);
+    }
+
+    /**
+     * Prepare attribute values
+     *
+     * @param array $data
+     * @return string
+     */
+    private function prepare(array $data): string
+    {
+        return implode(
+            ',',
+            array_filter(
+                array_unique($data),
+                fn($value) => is_numeric($value) || !empty($value)
+            )
+        );
     }
 }

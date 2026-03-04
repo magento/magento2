@@ -1,22 +1,42 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\BundleImportExport\Model\Import\Product\Type;
 
+use Magento\Bundle\Test\Fixture\Link as BundleSelectionFixture;
+use Magento\Bundle\Test\Fixture\Option as BundleOptionFixture;
+use Magento\Bundle\Test\Fixture\Product as BundleProductFixture;
+use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\ResourceModel\Product as ProductResource;
+use Magento\Catalog\Test\Fixture\Product as ProductFixture;
+use Magento\CatalogInventory\Api\Data\StockItemInterface;
+use Magento\CatalogInventory\Api\StockConfigurationInterface;
+use Magento\CatalogInventory\Api\StockItemCriteriaInterfaceFactory;
+use Magento\CatalogInventory\Api\StockItemRepositoryInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Filesystem;
 use Magento\ImportExport\Model\Import;
+use Magento\ImportExport\Model\Import\Adapter as ImportAdapter;
+use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregatorInterface;
 use Magento\ImportExport\Model\Import\Source\Csv;
+use Magento\ImportExport\Test\Fixture\CsvFile as CsvFileFixture;
+use Magento\Store\Model\ScopeInterface;
+use Magento\TestFramework\Fixture\Config;
+use Magento\TestFramework\Fixture\DataFixture;
+use Magento\TestFramework\Fixture\DataFixtureStorageManager;
+use PHPUnit\Framework\Attributes\DataProvider;
+use Magento\TestFramework\Fixture\DbIsolation;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\TestFramework\Fixture\ScopeFixture;
 
 /**
  * @magentoAppArea adminhtml
+ * @magentoAppIsolation enabled
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class BundleTest extends \Magento\TestFramework\Indexer\TestCase
@@ -24,17 +44,12 @@ class BundleTest extends \Magento\TestFramework\Indexer\TestCase
     /**
      * Bundle product test Name
      */
-    const TEST_PRODUCT_NAME = 'Bundle 1';
+    private const TEST_PRODUCT_NAME = 'Bundle 1';
 
     /**
      * Bundle product test Type
      */
-    const TEST_PRODUCT_TYPE = 'bundle';
-
-    /**
-     * @var \Magento\CatalogImportExport\Model\Import\Product
-     */
-    protected $model;
+    private const TEST_PRODUCT_TYPE = 'bundle';
 
     /**
      * @var \Magento\Framework\ObjectManagerInterface
@@ -69,7 +84,6 @@ class BundleTest extends \Magento\TestFramework\Indexer\TestCase
     protected function setUp(): void
     {
         $this->objectManager = Bootstrap::getObjectManager();
-        $this->model = $this->objectManager->create(\Magento\CatalogImportExport\Model\Import\Product::class);
     }
 
     /**
@@ -81,29 +95,8 @@ class BundleTest extends \Magento\TestFramework\Indexer\TestCase
     {
         // import data from CSV file
         $pathToFile = __DIR__ . '/../../_files/import_bundle.csv';
-        $filesystem = $this->objectManager->create(
-            Filesystem::class
-        );
-
-        $directory = $filesystem->getDirectoryWrite(DirectoryList::ROOT);
-        $source = $this->objectManager->create(
-            Csv::class,
-            [
-                'file' => $pathToFile,
-                'directory' => $directory
-            ]
-        );
-        $errors = $this->model->setSource(
-            $source
-        )->setParameters(
-            [
-                'behavior' => Import::BEHAVIOR_APPEND,
-                'entity' => 'catalog_product'
-            ]
-        )->validateData();
-
-        $this->assertTrue($errors->getErrorsCount() == 0);
-        $this->model->importData();
+        $errors = $this->doImport($pathToFile, Import::BEHAVIOR_APPEND);
+        $this->assertEquals(0, $errors->getErrorsCount());
 
         $resource = $this->objectManager->get(ProductResource::class);
         $productId = $resource->getIdBySku(self::TEST_PRODUCT_NAME);
@@ -149,62 +142,24 @@ class BundleTest extends \Magento\TestFramework\Indexer\TestCase
     /**
      * Test that Bundle options are updated correctly by import
      *
-     * @dataProvider valuesDataProvider
-     *
      * @magentoAppArea adminhtml
      * @magentoDbIsolation enabled
      * @magentoAppIsolation enabled
      * @param array $expectedValues
      * @return void
      */
+    #[DataProvider('valuesDataProvider')]
     public function testBundleImportUpdateValues(array $expectedValues): void
     {
         // import data from CSV file
         $pathToFile = __DIR__ . '/../../_files/import_bundle.csv';
-        $filesystem = $this->objectManager->create(
-            Filesystem::class
-        );
-
-        $directory = $filesystem->getDirectoryWrite(DirectoryList::ROOT);
-        $source = $this->objectManager->create(
-            Csv::class,
-            [
-                'file' => $pathToFile,
-                'directory' => $directory
-            ]
-        );
-        $errors = $this->model->setSource(
-            $source
-        )->setParameters(
-            [
-                'behavior' => Import::BEHAVIOR_APPEND,
-                'entity' => 'catalog_product'
-            ]
-        )->validateData();
-
-        $this->assertTrue($errors->getErrorsCount() == 0);
-        $this->model->importData();
+        $errors = $this->doImport($pathToFile, Import::BEHAVIOR_APPEND);
+        $this->assertEquals(0, $errors->getErrorsCount());
 
         // import data from CSV file to update values
         $pathToFile2 = __DIR__ . '/../../_files/import_bundle_update_values.csv';
-        $source2 = $this->objectManager->create(
-            Csv::class,
-            [
-                'file' => $pathToFile2,
-                'directory' => $directory
-            ]
-        );
-        $errors2 = $this->model->setSource(
-            $source2
-        )->setParameters(
-            [
-                'behavior' => Import::BEHAVIOR_APPEND,
-                'entity' => 'catalog_product'
-            ]
-        )->validateData();
-
-        $this->assertTrue($errors2->getErrorsCount() == 0);
-        $this->model->importData();
+        $errors = $this->doImport($pathToFile2, Import::BEHAVIOR_APPEND);
+        $this->assertEquals(0, $errors->getErrorsCount());
 
         $resource = $this->objectManager->get(ProductResource::class);
         $productId = $resource->getIdBySku(self::TEST_PRODUCT_NAME);
@@ -235,6 +190,44 @@ class BundleTest extends \Magento\TestFramework\Indexer\TestCase
     }
 
     /**
+     * Test that Bundle options with question mark are updated correctly by import
+     *
+     *
+     * @magentoAppArea adminhtml
+     * @magentoDbIsolation enabled
+     * @magentoAppIsolation enabled
+     * @return void
+     */
+    public function testBundleImportUpdateValuesWithQuestionMark(): void
+    {
+        // import data from CSV file
+        $pathToFile = __DIR__ . '/../../_files/import_bundle_with_question_mark.csv';
+        $errors = $this->doImport($pathToFile, Import::BEHAVIOR_APPEND);
+        $this->assertEquals(0, $errors->getErrorsCount());
+
+        // import data from CSV file to update values
+        $pathToFile2 = __DIR__ . '/../../_files/import_bundle_with_question_mark.csv';
+        $errors = $this->doImport($pathToFile2, Import::BEHAVIOR_APPEND);
+        $this->assertEquals(0, $errors->getErrorsCount());
+
+        $resource = $this->objectManager->get(ProductResource::class);
+        $productId = $resource->getIdBySku(self::TEST_PRODUCT_NAME);
+        $this->assertIsNumeric($productId);
+        /** @var Product $product */
+        $product = $this->objectManager->create(ProductRepositoryInterface::class);
+        $ProductRepository = $product->get(self::TEST_PRODUCT_NAME);
+
+        $this->assertEquals(self::TEST_PRODUCT_NAME, $ProductRepository->getName());
+        $this->assertEquals(self::TEST_PRODUCT_TYPE, $ProductRepository->getTypeId());
+        $this->assertEquals(1, $ProductRepository->getShipmentType());
+
+        $bundleOptionCollection = $ProductRepository->getExtensionAttributes()->getBundleProductOptions();
+        $this->assertCount(1, $bundleOptionCollection);
+
+        $this->importedProductSkus = ['Simple 1', 'Bundle 1'];
+    }
+
+    /**
      * @magentoDataFixture Magento/Store/_files/second_store.php
      * @magentoDbIsolation disabled
      * @magentoAppArea adminhtml
@@ -244,24 +237,8 @@ class BundleTest extends \Magento\TestFramework\Indexer\TestCase
     {
         // import data from CSV file
         $pathToFile = __DIR__ . '/../../_files/import_bundle_multiple_store_views.csv';
-        $filesystem = $this->objectManager->create(Filesystem::class);
-        $directory = $filesystem->getDirectoryWrite(DirectoryList::ROOT);
-        $source = $this->objectManager->create(
-            Csv::class,
-            [
-                'file' => $pathToFile,
-                'directory' => $directory,
-            ]
-        );
-        $errors = $this->model->setSource($source)
-            ->setParameters(
-                [
-                    'behavior' => Import::BEHAVIOR_APPEND,
-                    'entity' => 'catalog_product',
-                ]
-            )->validateData();
-        $this->assertTrue($errors->getErrorsCount() == 0);
-        $this->model->importData();
+        $errors = $this->doImport($pathToFile, Import::BEHAVIOR_APPEND);
+        $this->assertEquals(0, $errors->getErrorsCount());
         $resource = $this->objectManager->get(ProductResource::class);
         $productId = $resource->getIdBySku(self::TEST_PRODUCT_NAME);
         $this->assertIsNumeric($productId);
@@ -301,7 +278,7 @@ class BundleTest extends \Magento\TestFramework\Indexer\TestCase
      *
      * @return array
      */
-    public function valuesDataProvider(): array
+    public static function valuesDataProvider(): array
     {
         return [
             [
@@ -321,6 +298,189 @@ class BundleTest extends \Magento\TestFramework\Indexer\TestCase
                 ],
             ],
         ];
+    }
+
+    /**
+     * @magentoDbIsolation enabled
+     * @param bool $isOption1Required
+     * @param bool $isOption2Required
+     * @param string $outOfStockImportFile
+     * @param string $inStockImportFile
+     * @throws NoSuchEntityException
+     */
+    #[DataProvider('shouldUpdateBundleStockStatusIfChildProductsStockStatusChangedDataProvider')]
+    public function testShouldUpdateBundleStockStatusIfChildProductsStockStatusChanged(
+        bool $isOption1Required,
+        bool $isOption2Required,
+        string $outOfStockImportFile,
+        string $inStockImportFile
+    ): void {
+        // import data from CSV file
+        $pathToFile = __DIR__ . '/../../_files/import_bundle.csv';
+        $errors = $this->doImport($pathToFile, Import::BEHAVIOR_APPEND);
+        $this->assertEquals(0, $errors->getErrorsCount());
+        $this->importedProductSkus = ['Simple 1', 'Simple 2', 'Simple 3', 'Bundle 1'];
+        $sku = 'Bundle 1';
+        /** @var ProductRepositoryInterface $productRepository */
+        $productRepository = $this->objectManager->get(ProductRepositoryInterface::class);
+        /** @var ProductInterface $product */
+        $product = $productRepository->get($sku, true, null, true);
+        $options = $product->getExtensionAttributes()->getBundleProductOptions();
+        $options[0]->setRequired($isOption1Required);
+        $options[1]->setRequired($isOption2Required);
+        $extension = $product->getExtensionAttributes();
+        $extension->setBundleProductOptions($options);
+        $product->setExtensionAttributes($extension);
+        $productRepository->save($product);
+
+        $stockItem = $this->getStockItem((int) $product->getId());
+        $this->assertNotNull($stockItem);
+        $this->assertTrue($stockItem->getIsInStock());
+
+        $errors = $this->doImport(__DIR__ . '/../../_files/' . $outOfStockImportFile);
+        $this->assertEquals(0, $errors->getErrorsCount());
+
+        $stockItem = $this->getStockItem((int) $product->getId());
+        $this->assertNotNull($stockItem);
+        $this->assertFalse($stockItem->getIsInStock());
+
+        $errors = $this->doImport(__DIR__ . '/../../_files/' . $inStockImportFile);
+        $this->assertEquals(0, $errors->getErrorsCount());
+
+        $stockItem = $this->getStockItem((int) $product->getId());
+        $this->assertNotNull($stockItem);
+        $this->assertTrue($stockItem->getIsInStock());
+    }
+
+    /**
+     * @return array
+     */
+    public static function shouldUpdateBundleStockStatusIfChildProductsStockStatusChangedDataProvider(): array
+    {
+        return [
+            'all options are required' => [
+                true,
+                true,
+                'outOfStockImportFile' => 'import_bundle_set_option1_products_out_of_stock.csv',
+                'inStockImportFile' => 'import_bundle_set_option1_products_in_stock.csv'
+            ],
+            'all options are optional' => [
+                false,
+                false,
+                'outOfStockImportFile' => 'import_bundle_set_all_products_out_of_stock.csv',
+                'inStockImportFile' => 'import_bundle_set_option1_products_in_stock.csv'
+            ]
+        ];
+    }
+
+    #[
+        DbIsolation(false),
+        Config(\Magento\Catalog\Helper\Data::XML_PATH_PRICE_SCOPE, 1, ScopeInterface::SCOPE_STORE, 'default'),
+        DataFixture(ScopeFixture::class, as: 'global_scope'),
+        DataFixture(ScopeFixture::class, ['code' => 'default'], as: 'default_store'),
+        DataFixture(ProductFixture::class, ['sku' => 'bundle_child_1'], as: 'p1'),
+        DataFixture(ProductFixture::class, ['sku' => 'bundle_child_2'], as: 'p2'),
+        DataFixture(BundleSelectionFixture::class, ['sku' => '$p1.sku$', 'price' => 10, 'price_type' => 0], 'link1'),
+        DataFixture(BundleSelectionFixture::class, ['sku' => '$p2.sku$', 'price' => 20, 'price_type' => 1], 'link2'),
+        DataFixture(BundleOptionFixture::class, ['product_links' => ['$link1$'], 'title' => 'opt1'], 'opt1'),
+        DataFixture(BundleOptionFixture::class, ['product_links' => ['$link2$'], 'title' => 'opt2'], 'opt2'),
+        DataFixture(
+            BundleProductFixture::class,
+            ['price' => 50,'price_type' => 1, '_options' => ['$opt1$','$opt2$']],
+            'bundle',
+            'global_scope',
+        ),
+        DataFixture(
+            CsvFileFixture::class,
+            [
+                'rows' => [
+                    [
+                        'sku' => '$bundle.sku$',
+                        'bundle_values' => 'name=opt1,type=select,required=1,sku=bundle_child_1,price=10.0000' .
+                            ',default=0,default_qty=1.0000,price_type=fixed,can_change_qty=0' .
+                            ',price_website_base=40.000000,price_type_website_base=percent' .
+                            '|name=opt2,type=select,required=1,sku=bundle_child_2,price=20.0000' .
+                            ',default=0,default_qty=1.0000,price_type=percent,can_change_qty=0' .
+                            ',price_website_base=50.000000,price_type_website_base=percent'
+                    ]
+                ]
+            ],
+            'importFile',
+        ),
+    ]
+    public function testImportWhenPriceScopeIsWebsite(): void
+    {
+        $fixtures = DataFixtureStorageManager::getStorage();
+        $pathToFile = $fixtures->get('importFile')->getAbsolutePath();
+        $sku = $fixtures->get('bundle')->getSku();
+        $store = $fixtures->get('default_store');
+        
+        // import data from CSV file
+        $errors = $this->doImport($pathToFile, Import::BEHAVIOR_APPEND);
+        $this->assertEquals(0, $errors->getErrorsCount());
+        /** @var ProductRepositoryInterface $productRepository */
+        $productRepository = $this->objectManager->get(ProductRepositoryInterface::class);
+        
+        // verify selection prices in default scope
+        /** @var ProductInterface $product */
+        $product = $productRepository->get($sku, false, 0, true);
+        $options = $product->getExtensionAttributes()->getBundleProductOptions();
+        $this->assertCount(2, $options);
+        $this->assertEquals(10, $options[0]->getProductLinks()[0]->getPrice());
+        $this->assertEquals(0, $options[0]->getProductLinks()[0]->getPriceType());
+        $this->assertEquals(20, $options[1]->getProductLinks()[0]->getPrice());
+        $this->assertEquals(1, $options[1]->getProductLinks()[0]->getPriceType());
+        
+        // verify selection prices in default store
+        $product = $productRepository->get($sku, false, $store->getId(), true);
+        $options = $product->getExtensionAttributes()->getBundleProductOptions();
+        $this->assertCount(2, $options);
+        $this->assertEquals(40, $options[0]->getProductLinks()[0]->getPrice());
+        $this->assertEquals(1, $options[0]->getProductLinks()[0]->getPriceType());
+        $this->assertEquals(50, $options[1]->getProductLinks()[0]->getPrice());
+        $this->assertEquals(1, $options[1]->getProductLinks()[0]->getPriceType());
+    }
+
+    /**
+     * @param int $productId
+     * @return StockItemInterface|null
+     */
+    private function getStockItem(int $productId): ?StockItemInterface
+    {
+        $criteriaFactory = $this->objectManager->create(StockItemCriteriaInterfaceFactory::class);
+        $stockItemRepository = $this->objectManager->create(StockItemRepositoryInterface::class);
+        $stockConfiguration = $this->objectManager->create(StockConfigurationInterface::class);
+        $criteria = $criteriaFactory->create();
+        $criteria->setScopeFilter($stockConfiguration->getDefaultScopeId());
+        $criteria->setProductsFilter($productId);
+        $stockItemCollection = $stockItemRepository->getList($criteria);
+        $stockItems = $stockItemCollection->getItems();
+        return reset($stockItems);
+    }
+
+    /**
+     * @param string $file
+     * @param string $behavior
+     * @param bool $validateOnly
+     * @return ProcessingErrorAggregatorInterface
+     */
+    private function doImport(
+        string $file,
+        string $behavior = Import::BEHAVIOR_ADD_UPDATE,
+        bool $validateOnly = false
+    ): ProcessingErrorAggregatorInterface {
+        /** @var Filesystem $filesystem */
+        $filesystem = $this->objectManager->create(Filesystem::class);
+        $directoryWrite = $filesystem->getDirectoryWrite(DirectoryList::ROOT);
+        $source = ImportAdapter::findAdapterFor($file, $directoryWrite);
+        $model = $this->objectManager->create(\Magento\CatalogImportExport\Model\Import\Product::class);
+        $model->setParameters(['behavior' => $behavior, 'entity' => 'catalog_product']);
+        $model->setSource($source);
+        $errors = $model->validateData();
+        if (!$validateOnly && !$errors->getAllErrors()) {
+            $model->importData();
+        }
+        return $errors;
     }
 
     /**

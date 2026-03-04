@@ -1,7 +1,7 @@
 <!--
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 -->
 <select class="admin__control-select" data-bind="
@@ -9,7 +9,8 @@
         name: inputName,
         id: uid,
         disabled: disabled,
-        'aria-describedby': noticeId
+        'aria-describedby': noticeId,
+        'aria-label': noticeId
     },
     hasFocus: focused,
     optgroup: options,

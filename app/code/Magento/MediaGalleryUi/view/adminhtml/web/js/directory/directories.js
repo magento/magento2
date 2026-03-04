@@ -1,6 +1,6 @@
 /**
- * Copyright © Magento, Inc. All rights reserved.g
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 
 define([
@@ -39,6 +39,7 @@ define([
          */
         initialize: function () {
             this._super().observe(['selectedFolder']);
+            this._addValidation();
             this.initEvents();
 
             return this;
@@ -74,9 +75,7 @@ define([
                             [this.getNewFolderPath(folderName)]
                         ).then(function () {
                             this.directoryTree().reloadJsTree().then(function () {
-                                $(this.directoryTree().directoryTreeSelector).on('loaded.jstree', function () {
-                                    this.directoryTree().locateNode(this.getNewFolderPath(folderName));
-                                }.bind(this));
+                                this.directoryTree().locateNode(this.getNewFolderPath(folderName));
                             }.bind(this));
                         }.bind(this)).fail(function (error) {
                             uiAlert({
@@ -120,26 +119,26 @@ define([
           * Return configured prompt with input field
           */
         getPrompt: function (data) {
-                prompt({
-                    title: $t(data.title),
-                    content:  $t(data.content),
-                    modalClass: 'media-gallery-folder-prompt',
-                    validation: true,
-                    validationRules: ['required-entry', 'validate-alphanum'],
-                    attributesField: {
-                        name: 'folder_name',
-                        'data-validate': '{required:true, validate-alphanum}',
-                        maxlength: '128'
-                    },
-                    attributesForm: {
-                        novalidate: 'novalidate',
-                        action: ''
-                    },
-                    context: this,
-                    actions: data.actions,
-                    buttons: data.buttons
-                });
-            },
+            prompt({
+                title: $t(data.title),
+                content:  $t(data.content),
+                modalClass: 'media-gallery-folder-prompt',
+                validation: true,
+                validationRules: ['required-entry', 'validate-filename'],
+                attributesField: {
+                    name: 'folder_name',
+                    'data-validate': '{required:true, validate-filename}',
+                    maxlength: '128'
+                },
+                attributesForm: {
+                    novalidate: 'novalidate',
+                    action: ''
+                },
+                context: this,
+                actions: data.actions,
+                buttons: data.buttons
+            });
+        },
 
         /**
           * Confirmation popup for delete folder action.
@@ -187,12 +186,23 @@ define([
          * @param {String} folderId
          */
         setActive: function (folderId) {
+            this.selectedFolder(folderId);
+
             if (!this.allowedActions.includes('delete_folder')) {
                 return;
             }
-
-            this.selectedFolder(folderId);
             $(this.deleteButtonSelector).prop('disabled', false).removeClass('disabled');
+        },
+
+        /**
+         * @private
+         */
+        _addValidation: function () {
+            $.validator.addMethod(
+                'validate-filename', function (value) {
+                    return $.mage.isEmptyNoTrim(value) || /^[a-z0-9_-]+$/i.test(value);
+                },
+                $.mage.__('Please use only letters (a-z or A-Z), numbers (0-9), underscore (_) or hyphen (-) in this field. No spaces or other characters are allowed.')); //eslint-disable-line max-len
         }
     });
 });

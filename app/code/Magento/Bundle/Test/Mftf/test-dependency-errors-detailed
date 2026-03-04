@@ -1,0 +1,68 @@
+
+File "/var/www/html/app/code/Magento/Bundle/Test/Mftf/Test/AdminBundleDynamicAttributesAfterMassUpdateTest.xml"
+contains entity references that violate dependency constraints:
+		
+	 CliConsumerStartActionGroup from module(s): magento/module-message-queue
+
+File "/var/www/html/app/code/Magento/Bundle/Test/Mftf/Test/AdminCreateBundleProductTest.xml"
+contains entity references that violate dependency constraints:
+		
+	 ImportProductSimple2_Bundle from module(s): magento/module-bundle-import-export
+	 ImportProductSimple1_Bundle from module(s): magento/module-bundle-import-export
+
+File "/var/www/html/app/code/Magento/Bundle/Test/Mftf/Test/AdminDeleteBundleDynamicPriceProductTest.xml"
+contains entity references that violate dependency constraints:
+		
+	 StorefrontCatalogSearchMainSection from module(s): magento/module-catalog-search
+	 StoreFrontQuickSearchActionGroup from module(s): magento/module-search
+
+File "/var/www/html/app/code/Magento/Bundle/Test/Mftf/Test/AdminDeleteBundleDynamicProductTest.xml"
+contains entity references that violate dependency constraints:
+		
+	 StorefrontCatalogSearchMainSection from module(s): magento/module-catalog-search
+	 StoreFrontQuickSearchActionGroup from module(s): magento/module-search
+
+File "/var/www/html/app/code/Magento/Bundle/Test/Mftf/Test/AdminDeleteBundleFixedProductTest.xml"
+contains entity references that violate dependency constraints:
+		
+	 StorefrontCatalogSearchMainSection from module(s): magento/module-catalog-search
+	 StoreFrontQuickSearchActionGroup from module(s): magento/module-search
+
+File "/var/www/html/app/code/Magento/Bundle/Test/Mftf/Test/AdminShouldBeAbleToMassUpdateAttributesForBundleProductsTest.xml"
+contains entity references that violate dependency constraints:
+		
+	 AdminProductAttributeUpdateMessageConsumerData from module(s): magento/module-message-queue
+	 CliConsumerStartActionGroup from module(s): magento/module-message-queue
+
+File "/var/www/html/app/code/Magento/Bundle/Test/Mftf/Test/AdvanceCatalogSearchBundleByDescriptionTest.xml"
+contains entity references that violate dependency constraints:
+		
+	 StorefrontCatalogSearchAdvancedResultMainSection from module(s): magento/module-catalog-search
+
+File "/var/www/html/app/code/Magento/Bundle/Test/Mftf/Test/AdvanceCatalogSearchBundleByPriceTest.xml"
+contains entity references that violate dependency constraints:
+		
+	 StorefrontCatalogSearchAdvancedResultMainSection from module(s): magento/module-catalog-search
+
+File "/var/www/html/app/code/Magento/Bundle/Test/Mftf/Test/AdvanceCatalogSearchBundleByShortDescriptionTest.xml"
+contains entity references that violate dependency constraints:
+		
+	 StorefrontCatalogSearchAdvancedResultMainSection from module(s): magento/module-catalog-search
+
+File "/var/www/html/app/code/Magento/Bundle/Test/Mftf/Test/AdvanceCatalogSearchBundleProductTest.xml"
+contains entity references that violate dependency constraints:
+		
+	 StorefrontCatalogSearchAdvancedResultMainSection from module(s): magento/module-catalog-search
+
+File "/var/www/html/app/code/Magento/Bundle/Test/Mftf/Test/CurrencyChangingBundleProductInCartTest.xml"
+contains entity references that violate dependency constraints:
+		
+	 ConfigCurrencySetupPage from module(s): magento/module-currency-symbol
+	 CurrencySetupSection from module(s): magento/module-currency-symbol
+
+File "/var/www/html/app/code/Magento/Bundle/Test/Mftf/Test/StorefrontCustomerSearchBundleProductsByKeywordsTest.xml"
+contains entity references that violate dependency constraints:
+		
+	 StorefrontCheckQuickSearchStringActionGroup from module(s): magento/module-catalog-search
+	 StorefrontQuickSearchSeeProductByNameActionGroup from module(s): magento/module-catalog-search
+	 StorefrontQuickSearchCheckProductNameNotInGridActionGroup from module(s): magento/module-catalog-search

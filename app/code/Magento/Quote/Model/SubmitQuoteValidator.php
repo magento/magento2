@@ -1,13 +1,14 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Quote\Model;
 
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Validator\Exception as ValidatorException;
 use Magento\Sales\Model\Order;
 use Magento\Sales\Model\Order\Address\Validator as OrderAddressValidator;
 
@@ -43,6 +44,7 @@ class SubmitQuoteValidator
      *
      * @param Quote $quote
      * @return void
+     * @throws ValidatorException
      * @throws LocalizedException
      */
     public function validateQuote(Quote $quote): void
@@ -55,6 +57,7 @@ class SubmitQuoteValidator
      *
      * @param Order $order
      * @return void
+     * @throws ValidatorException
      * @throws LocalizedException
      */
     public function validateOrder(Order $order): void
@@ -62,7 +65,7 @@ class SubmitQuoteValidator
         foreach ($order->getAddresses() as $address) {
             $errors = $this->orderAddressValidator->validate($address);
             if (!empty($errors)) {
-                throw new LocalizedException(
+                throw new ValidatorException(
                     __("Failed address validation:\n%1", implode("\n", $errors))
                 );
             }

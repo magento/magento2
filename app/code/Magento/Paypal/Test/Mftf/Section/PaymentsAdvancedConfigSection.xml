@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+   * Copyright 2024 Adobe
+  * All Rights Reserved.
+  */
+-->
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="PaymentsAdvancedConfigSection">
+        <element name="configBtn" type="button" selector="#payment_{{countryCode}}_paypal_group_all_in_one_payflow_advanced-head" parameterized="true"/>
+        <element name="email" type="input" selector="#payment_{{countryCode}}_paypal_group_all_in_one_payflow_advanced_required_settings_payments_advanced_business_account" parameterized="true"/>
+        <element name="partner" type="input" selector="#payment_{{countryCode}}_paypal_group_all_in_one_payflow_advanced_required_settings_payments_advanced_partner" parameterized="true"/>
+        <element name="vendor" type="input" selector="#payment_{{countryCode}}_paypal_group_all_in_one_payflow_advanced_required_settings_payments_advanced_vendor" parameterized="true"/>
+        <element name="testMode" type="input" selector="#payment_{{countryCode}}_paypal_group_all_in_one_payflow_advanced_required_settings_payments_advanced_sandbox_flag" parameterized="true" />
+        <element name="enableSolution" type="input" selector="#payment_{{countryCode}}_paypal_group_all_in_one_payflow_advanced_required_settings_enable_payflow_advanced" parameterized="true" />
+        <element name="enablePaypalexp" type="input" selector="#payment_{{countryCode}}_paypal_group_all_in_one_payflow_advanced_required_settings_enable_paypal_paylater_experience" parameterized="true" />
+        <element name="advisepaylaterBtn" type="button" selector="#payment_{{countryCode}}_paypal_group_all_in_one_payflow_advanced_required_settings_advanced_advertise_paylater-head" parameterized="true" />
+        <element name="payLaterConfigDropDown" type="button" selector="#payment_{{countryCode}}_paypal_group_all_in_one_payflow_advanced_required_settings_advanced_advertise_paylater_paylater_enabled" parameterized="true"/>
+        <element name="cartBtn" type="button" selector="#payment_{{countryCode}}_paypal_group_all_in_one_payflow_advanced_required_settings_advanced_advertise_paylater_advanced_settings_paylater_cartpage-head" parameterized="true"/>
+        <element name="payLaterDisplay" type="button" selector="#payment_{{countryCode}}_paypal_group_all_in_one_payflow_advanced_required_settings_advanced_advertise_paylater_advanced_settings_paylater_cartpage_paylater_cartpage_display" parameterized="true"/>
+        <element name="displayOption" type="button" selector="#payment_{{countryCode}}_paypal_group_all_in_one_payflow_advanced_required_settings_advanced_advertise_paylater_advanced_settings_paylater_cartpage_paylater_cartpage_display" parameterized="true"/>
+        <element name="payLaterMessage" type="input" selector="//span[text()='Buy now, pay later.']"/>
+        <element name="positionOption" type="button" selector="#payment_{{countryCode}}_paypal_group_all_in_one_payflow_advanced_required_settings_advanced_advertise_paylater_advanced_settings_paylater_cartpage_paylater_cartpage_position" parameterized="true"/>
+        <element name="payPalCheckoutField" type="text" selector="//*[@id='maincontent']/div[3]/div/div[2]/div[1]/ul/li[2]/div[1]/input"/>
+        <element name="payPalFrame" type="iframe" selector="//iframe[contains(@id, 'jsx-iframe')]"/>
+    </section>
+</sections>

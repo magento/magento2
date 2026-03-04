@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -22,6 +22,7 @@ use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\UrlRewrite\Model\Storage\DbStorage;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -32,6 +33,7 @@ use PHPUnit\Framework\TestCase;
  * @magentoAppArea adminhtml
  * @magentoDbIsolation enabled
  * @magentoAppIsolation enabled
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class SuffixTest extends TestCase
 {
@@ -83,19 +85,18 @@ class SuffixTest extends TestCase
     public function testSaveWithError(): void
     {
         $this->expectException(LocalizedException::class);
-        $this->expectErrorMessage((string)__('Anchor symbol (#) is not supported in url rewrite suffix.'));
+        $this->expectExceptionMessage((string)__('Anchor symbol (#) is not supported in url rewrite suffix.'));
         $this->model->setValue('.html#');
         $this->model->beforeSave();
     }
 
     /**
-     * @dataProvider wrongValuesProvider
-     *
      * @magentoDataFixture Magento/Catalog/_files/second_product_simple.php
      *
      * @param array $data
      * @return void
      */
+    #[DataProvider('wrongValuesProvider')]
     public function testSaveWithWrongData(array $data): void
     {
         $productId = (int)$this->productRepository->get('simple2')->getId();
@@ -114,7 +115,7 @@ class SuffixTest extends TestCase
     /**
      * @return array
      */
-    public function wrongValuesProvider(): array
+    public static function wrongValuesProvider(): array
     {
         return [
             'with_wrong_path' => [

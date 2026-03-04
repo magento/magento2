@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -18,12 +18,16 @@ use Magento\Framework\Mview\View\ChangelogInterface;
 use Magento\Framework\Mview\View\CollectionInterface;
 use Magento\Framework\Mview\View\StateInterface;
 use Magento\Framework\Mview\View\Subscription;
+use Magento\Framework\Mview\View\SubscriptionStatementPostprocessorInterface;
 use Magento\Framework\Mview\ViewInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use ReflectionException;
 use ReflectionMethod;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class SubscriptionTest extends TestCase
 {
     /**
@@ -90,7 +94,7 @@ class SubscriptionTest extends TestCase
             ->with(DefaultProcessor::class)
             ->willReturn($this->defaultProcessor);
         $this->triggerFactoryMock = $this->createMock(TriggerFactory::class);
-        $this->viewCollectionMock = $this->getMockForAbstractClass(
+        $this->viewCollectionMock = $this->createMock(
             CollectionInterface::class,
             [],
             '',
@@ -99,7 +103,7 @@ class SubscriptionTest extends TestCase
             true,
             []
         );
-        $this->viewMock = $this->getMockForAbstractClass(
+        $this->viewMock = $this->createMock(
             ViewInterface::class,
             [],
             '',
@@ -124,7 +128,9 @@ class SubscriptionTest extends TestCase
                     ]
                 ]
             ]);
-        $this->mviewConfig = $mviewConfigMock;
+        $statementPostprocessorMock = $this->createMock(SubscriptionStatementPostprocessorInterface::class);
+        $statementPostprocessorMock->method('process')
+            ->willReturnArgument(2);
         $this->model = new Subscription(
             $this->resourceMock,
             $this->triggerFactoryMock,
@@ -134,7 +140,8 @@ class SubscriptionTest extends TestCase
             'columnName',
             [],
             [],
-            $mviewConfigMock
+            $mviewConfigMock,
+            $statementPostprocessorMock
         );
     }
 
@@ -192,17 +199,19 @@ class SubscriptionTest extends TestCase
 
         $triggerMock
             ->method('addStatement')
-            ->withConsecutive(
-                ["INSERT IGNORE INTO test_view_cl (entity_id) VALUES (NEW.columnName);"],
-                ["INSERT IGNORE INTO other_test_view_cl (entity_id) VALUES (NEW.columnName);"],
-                ["INSERT IGNORE INTO test_view_cl (entity_id) VALUES (NEW.columnName);"],
-                ["INSERT IGNORE INTO other_test_view_cl (entity_id) VALUES (NEW.columnName);"],
-                ["INSERT IGNORE INTO test_view_cl (entity_id) VALUES (OLD.columnName);"],
-                ["INSERT IGNORE INTO other_test_view_cl (entity_id) VALUES (OLD.columnName);"]
-            )
-            ->willReturnOnConsecutiveCalls($triggerMock, $triggerMock, $triggerMock, $triggerMock, $triggerMock, $triggerMock);
+            ->willReturnCallback(
+                function ($arg1) use ($triggerMock) {
+                    if ($arg1 == "INSERT IGNORE INTO test_view_cl (entity_id) VALUES (NEW.columnName);") {
+                        return $triggerMock;
+                    } elseif ($arg1 == "INSERT IGNORE INTO other_test_view_cl (entity_id) VALUES (NEW.columnName);") {
+                        return $triggerMock;
+                    } elseif ($arg1 == "INSERT IGNORE INTO test_view_cl (entity_id) VALUES (OLD.columnName);") {
+                        return $triggerMock;
+                    }
+                }
+            );
 
-        $changelogMock = $this->getMockForAbstractClass(
+        $changelogMock = $this->createMock(
             ChangelogInterface::class,
             [],
             '',
@@ -226,7 +235,7 @@ class SubscriptionTest extends TestCase
             ->method('create')
             ->willReturn($triggerMock);
 
-        $otherChangelogMock = $this->getMockForAbstractClass(
+        $otherChangelogMock = $this->createMock(
             ChangelogInterface::class,
             [],
             '',
@@ -242,7 +251,7 @@ class SubscriptionTest extends TestCase
             ->method('getColumnName')
             ->willReturn('entity_id');
 
-        $otherViewMock = $this->getMockForAbstractClass(
+        $otherViewMock = $this->createMock(
             ViewInterface::class,
             [],
             '',
@@ -321,7 +330,7 @@ class SubscriptionTest extends TestCase
             ->method('create')
             ->willReturn($triggerMock);
 
-        $otherChangelogMock = $this->getMockForAbstractClass(
+        $otherChangelogMock = $this->createMock(
             ChangelogInterface::class,
             [],
             '',
@@ -337,7 +346,7 @@ class SubscriptionTest extends TestCase
             ->method('getColumnName')
             ->willReturn('entity_id');
 
-        $otherViewMock = $this->getMockForAbstractClass(
+        $otherViewMock = $this->createMock(
             ViewInterface::class,
             [],
             '',
@@ -416,6 +425,9 @@ class SubscriptionTest extends TestCase
                     ]
                 ]
             ]);
+        $statementPostprocessorMock = $this->createMock(SubscriptionStatementPostprocessorInterface::class);
+        $statementPostprocessorMock->method('process')
+            ->willReturnArgument(2);
 
         $this->connectionMock->expects($this->any())
             ->method('isTableExists')
@@ -433,7 +445,7 @@ class SubscriptionTest extends TestCase
                 $notIgnoredColumnName => ['COLUMN_NAME' => $notIgnoredColumnName]
             ]);
 
-        $otherChangelogMock = $this->getMockForAbstractClass(ChangelogInterface::class);
+        $otherChangelogMock = $this->createMock(ChangelogInterface::class);
         $otherChangelogMock->expects($this->any())
             ->method('getViewId')
             ->willReturn($viewId);
@@ -463,11 +475,11 @@ class SubscriptionTest extends TestCase
             'columnName',
             [],
             $ignoredData,
-            $mviewConfigMock
+            $mviewConfigMock,
+            $statementPostprocessorMock
         );
 
         $method = new ReflectionMethod($model, 'buildStatement');
-        $method->setAccessible(true);
         $statement = $method->invoke($model, Trigger::EVENT_UPDATE, $this->viewMock);
 
         $this->assertStringNotContainsString($ignoredColumnName, $statement);

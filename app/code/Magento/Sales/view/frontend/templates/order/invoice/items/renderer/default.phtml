@@ -1,8 +1,9 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
+/** @var \Magento\Framework\Locale\LocaleFormatter $localeFormatter */
 ?>
 <?php /** @var  $block \Magento\Sales\Block\Order\Item\Renderer\DefaultRenderer */ ?>
 <?php $_item = $block->getItem() ?>
@@ -46,7 +47,9 @@
         <?= $block->getItemPriceHtml() ?>
     </td>
     <td class="col qty" data-th="<?= $block->escapeHtml(__('Qty Invoiced')) ?>">
-        <span class="qty summary"><?= (float) $_item->getQty() ?></span>
+        <span class="qty summary">
+            <?= /* @noEscape */ $localeFormatter->formatNumber((float) $_item->getQty()) ?>
+        </span>
     </td>
     <td class="col subtotal" data-th="<?= $block->escapeHtml(__('Subtotal')) ?>">
         <?= $block->getItemRowTotalHtml() ?>

@@ -1,6 +1,6 @@
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 
 /* global FORM_KEY, tinyMceEditors */
@@ -49,7 +49,7 @@ define([
                 showLoader: true
             }).done($.proxy(function (data) {
                 if (typeof targetElement === 'function') {
-                    targetElement(data.content);
+                    targetElement(data.content, {text: record['title']});
                 } else if (targetElement.is('textarea')) {
                     this.insertAtCursor(targetElement.get(0), data.content);
                     targetElement.focus();

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -18,8 +18,6 @@ use PHPUnit\Framework\TestCase;
 class ManagerTest extends TestCase
 {
     /**
-     * Integration service
-     *
      * @var IntegrationServiceInterface
      */
     protected $integrationServiceMock;
@@ -35,8 +33,6 @@ class ManagerTest extends TestCase
     protected $configMock;
 
     /**
-     * Integration config
-     *
      * @var ConfigBasedIntegrationManager
      */
     protected $integrationManager;
@@ -92,8 +88,8 @@ class ManagerTest extends TestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testProcessIntegrationConfigNoIntegrations(): void
     {
         $this->configMock->expects($this->never())->method('getIntegrations');
@@ -110,16 +106,14 @@ class ManagerTest extends TestCase
         )->method(
             'getIntegrations'
         )->willReturn(
-
-                [
-                    'TestIntegration1' => [
-                        'email' => 'test-integration1@magento.com',
-                        'endpoint_url' => 'http://endpoint.com',
-                        'identity_link_url' => 'http://www.example.com/identity'
-                    ],
-                    'TestIntegration2' => ['email' => 'test-integration2@magento.com']
-                ]
-
+            [
+                'TestIntegration1' => [
+                    'email' => 'test-integration1@magento.com',
+                    'endpoint_url' => 'http://endpoint.com',
+                    'identity_link_url' => 'http://www.example.com/identity'
+                ],
+                'TestIntegration2' => ['email' => 'test-integration2@magento.com']
+            ]
         );
         $intLookupData1 = $this->getMockBuilder(Integration::class)
             ->disableOriginalConstructor()
@@ -148,8 +142,10 @@ class ManagerTest extends TestCase
         $this->integrationServiceMock->expects($this->once())->method('create')->with($integrationsData2);
         $this->integrationServiceMock
             ->method('findByName')
-            ->withConsecutive(['TestIntegration1'], ['TestIntegration2'])
-            ->willReturnOnConsecutiveCalls($intLookupData1, $intLookupData2);
+            ->willReturnCallback(fn($param) => match ([$param]) {
+                ['TestIntegration1'] => $intLookupData1,
+                ['TestIntegration2'] => $intLookupData2
+            });
         $this->integrationServiceMock
             ->method('update')
             ->with($intUpdateData1);
@@ -245,8 +241,10 @@ class ManagerTest extends TestCase
         // Integration2 does not exist, so create it
         $this->integrationServiceMock
             ->method('findByName')
-            ->withConsecutive(['TestIntegration1'], ['TestIntegration2'])
-            ->willReturnOnConsecutiveCalls($integrationObject, $integrationObject);
+            ->willReturnCallback(fn($param) => match ([$param]) {
+                ['TestIntegration1'] => $integrationObject,
+                ['TestIntegration2'] => $integrationObject
+            });
 
         $this->integrationManager->processConfigBasedIntegrations($integrations);
     }

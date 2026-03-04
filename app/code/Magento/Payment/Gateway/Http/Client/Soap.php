@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Payment\Gateway\Http\Client;
 
@@ -42,7 +42,7 @@ class Soap implements ClientInterface
     public function __construct(
         Logger $logger,
         ClientFactory $clientFactory,
-        ConverterInterface $converter = null
+        ?ConverterInterface $converter = null
     ) {
         $this->logger = $logger;
         $this->converter = $converter;

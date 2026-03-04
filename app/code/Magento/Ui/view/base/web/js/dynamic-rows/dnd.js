@@ -1,6 +1,6 @@
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 
 /**
@@ -124,7 +124,9 @@ define([
                 originRecord = $(elem).parents('tr').eq(0),
                 drEl = this.draggableElement,
                 $table = $(elem).parents('table').eq(0),
-                $tableWrapper = $table.parent();
+                $tableWrapper = $table.parent(),
+                outerHight =
+                    $table.children('thead').outerHeight() === undefined ? 0 : $table.children('thead').outerHeight();
 
             this.disableScroll();
             $(recordNode).addClass(this.draggableElementClass);
@@ -134,9 +136,8 @@ define([
             drEl.instance = recordNode = this.processingStyles(recordNode, elem);
             drEl.instanceCtx = this.getRecord(originRecord[0]);
             drEl.eventMousedownY = this.getPageY(event);
-            drEl.minYpos =
-                $table.offset().top - originRecord.offset().top + $table.children('thead').outerHeight();
-            drEl.maxYpos = drEl.minYpos + $table.children('tbody').outerHeight() - originRecord.outerHeight();
+            drEl.minYpos = $table.offset().top - originRecord.offset().top + outerHight;
+            drEl.maxYpos = drEl.minYpos + ($table.children('tbody').outerHeight() || 0) - originRecord.outerHeight();
             $tableWrapper.append(recordNode);
             this.body.on('mousemove touchmove', this.mousemoveHandler);
             this.body.on('mouseup touchend', this.mouseupHandler);

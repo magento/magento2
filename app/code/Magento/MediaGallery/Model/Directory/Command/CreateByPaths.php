@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -60,6 +60,7 @@ class CreateByPaths implements CreateDirectoriesByPathsInterface
                 continue;
             }
             try {
+                $path = $path !== null ? $path : '';
                 //phpcs:ignore Magento2.Functions.DiscouragedFunction
                 $name = basename($path);
                 //phpcs:ignore Magento2.Functions.DiscouragedFunction

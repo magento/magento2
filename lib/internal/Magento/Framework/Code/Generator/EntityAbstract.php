@@ -1,24 +1,26 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework\Code\Generator;
 
 use Laminas\Code\Generator\ValueGenerator;
-use ReflectionClass;
-use ReflectionException;
-use ReflectionParameter;
+use Magento\Framework\GetParameterClassTrait;
 
 /**
  * Abstract entity
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 abstract class EntityAbstract
 {
+    use GetParameterClassTrait;
+
     /**
      * Entity type abstract
      */
-    const ENTITY_TYPE = 'abstract';
+    public const ENTITY_TYPE = 'abstract';
 
     /**
      * @var string[]
@@ -66,9 +68,9 @@ abstract class EntityAbstract
     public function __construct(
         $sourceClassName = null,
         $resultClassName = null,
-        Io $ioObject = null,
-        \Magento\Framework\Code\Generator\CodeGeneratorInterface $classGenerator = null,
-        DefinedClasses $definedClasses = null
+        ?Io $ioObject = null,
+        ?\Magento\Framework\Code\Generator\CodeGeneratorInterface $classGenerator = null,
+        ?DefinedClasses $definedClasses = null
     ) {
         if ($ioObject) {
             $this->_ioObject = $ioObject;
@@ -157,8 +159,7 @@ abstract class EntityAbstract
      */
     protected function _getFullyQualifiedClassName($className)
     {
-        $className = ltrim($className, '\\');
-        return $className ? '\\' . $className : '';
+        return $className ? '\\' . ltrim($className, '\\') : '';
     }
 
     /**
@@ -320,6 +321,7 @@ abstract class EntityAbstract
     /**
      * Extract parameter type
      *
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @param \ReflectionParameter $parameter
      * @return null|string
      */
@@ -333,37 +335,33 @@ abstract class EntityAbstract
         /** @var string|null $typeName */
         $typeName = null;
         $parameterType = $parameter->getType();
-        if ($parameterType->getName() === 'array') {
+
+        if ($parameterType instanceof \ReflectionUnionType) {
+            $parameterType = $parameterType->getTypes();
+            $parameterType = implode('|', $parameterType);
+        } elseif ($parameterType instanceof \ReflectionIntersectionType) {
+            $parameterType = $parameterType->getTypes();
+            $parameterType = implode('&', $parameterType);
+        } else {
+            $parameterType = $parameterType->getName();
+        }
+
+        if ($parameterType === 'array') {
             $typeName = 'array';
         } elseif ($parameterClass = $this->getParameterClass($parameter)) {
             $typeName = $this->_getFullyQualifiedClassName($parameterClass->getName());
-        } elseif ($parameterType->getName() === 'callable') {
+        } elseif ($parameterType === 'callable') {
             $typeName = 'callable';
         } else {
-            $typeName = $parameterType->getName();
+            $typeName = $parameterType;
         }
 
-        if ($parameter->allowsNull()) {
-            $typeName = '?' . $typeName;
+        // Type "?array|string|null" is a union type, and therefore cannot be also marked nullable with the "?" prefix
+        if ($parameter->allowsNull() && $typeName !== 'mixed') {
+            $typeName = str_contains($typeName, "null") ? $typeName : '?' . $typeName;
         }
 
         return $typeName;
-    }
-
-    /**
-     * Get class by reflection parameter
-     *
-     * @param ReflectionParameter $reflectionParameter
-     * @return ReflectionClass|null
-     * @throws ReflectionException
-     */
-    private function getParameterClass(ReflectionParameter $reflectionParameter): ?ReflectionClass
-    {
-        $parameterType = $reflectionParameter->getType();
-
-        return $parameterType && !$parameterType->isBuiltin()
-            ? new ReflectionClass($parameterType->getName())
-            : null;
     }
 
     /**

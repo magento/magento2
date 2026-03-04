@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework\MessageQueue\Publisher\Config\Xml;
 
@@ -21,8 +21,6 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
     private $booleanUtils;
 
     /**
-     * Default value provider.
-     *
      * @var DefaultValueProvider
      */
     private $defaultValueProvider;
@@ -40,7 +38,7 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function convert($source)
     {
@@ -48,6 +46,7 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
         /** @var $publisherConfig \DOMElement */
         foreach ($source->getElementsByTagName('publisher') as $publisherConfig) {
             $topic = $this->getAttributeValue($publisherConfig, 'topic');
+            $queueName = $this->getAttributeValue($publisherConfig, 'queue');
 
             $connections = [];
             /** @var \DOMNode $connectionConfig */
@@ -55,10 +54,11 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
                 if ($connectionConfig->nodeName != 'connection' || $connectionConfig->nodeType != XML_ELEMENT_NODE) {
                     continue;
                 }
-                $connectionName = $this->getAttributeValue($connectionConfig, 'name');
-                if (!$connectionName) {
-                    throw new \InvalidArgumentException('Connection name is missing');
-                }
+                $connectionName = $this->getAttributeValue(
+                    $connectionConfig,
+                    'name',
+                    $this->defaultValueProvider->getConnection()
+                ) ?? '';
                 $exchangeName = $this->getAttributeValue(
                     $connectionConfig,
                     'exchange',
@@ -71,9 +71,18 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
                     'disabled' => $this->booleanUtils->toBoolean($isDisabled),
                 ];
             }
+            if (count($connections) === 0) {
+                $defaultConnection = $this->defaultValueProvider->getConnection() ?? '';
+                $connections[$defaultConnection] = [
+                    'name' => $defaultConnection,
+                    'exchange' => $this->defaultValueProvider->getExchange(),
+                    'disabled' => false
+                ];
+            }
             $isDisabled = $this->getAttributeValue($publisherConfig, 'disabled', false);
             $result[$topic] = [
                 'topic' => $topic,
+                'queue' => $queueName,
                 'disabled' => $this->booleanUtils->toBoolean($isDisabled),
                 'connections' => $connections,
 

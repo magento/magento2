@@ -2,13 +2,14 @@
 /**
  * Test for \Magento\Framework\Filesystem\Directory\Read
  *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework\Filesystem\Directory;
 
 use Magento\Framework\Exception\ValidatorException;
 use Magento\TestFramework\Helper\Bootstrap;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Class ReadTest
@@ -98,11 +99,11 @@ class ReadTest extends \PHPUnit\Framework\TestCase
     /**
      * Test for read method
      *
-     * @dataProvider readProvider
      * @param string $dirPath
      * @param string $readPath
      * @param array $expectedResult
      */
+    #[DataProvider('readProvider')]
     public function testRead($dirPath, $readPath, $expectedResult)
     {
         $dir = $this->getDirectoryInstance($dirPath);
@@ -117,7 +118,7 @@ class ReadTest extends \PHPUnit\Framework\TestCase
      *
      * @return array
      */
-    public function readProvider()
+    public static function readProvider()
     {
         return [
             ['foo', null, ['bar', 'file_three.txt']],
@@ -151,11 +152,11 @@ class ReadTest extends \PHPUnit\Framework\TestCase
     /**
      * Test for search method
      *
-     * @dataProvider searchProvider
      * @param string $dirPath
      * @param string $pattern
      * @param array $expectedResult
      */
+    #[DataProvider('searchProvider')]
     public function testSearch($dirPath, $pattern, $expectedResult)
     {
         $dir = $this->getDirectoryInstance($dirPath);
@@ -170,7 +171,7 @@ class ReadTest extends \PHPUnit\Framework\TestCase
      *
      * @return array
      */
-    public function searchProvider()
+    public static function searchProvider()
     {
         return [
             ['foo', 'bar/*', ['bar/file_two.txt', 'bar/baz']],
@@ -204,11 +205,11 @@ class ReadTest extends \PHPUnit\Framework\TestCase
     /**
      * Test for isExist method
      *
-     * @dataProvider existsProvider
      * @param string $dirPath
      * @param string $path
      * @param bool $exists
      */
+    #[DataProvider('existsProvider')]
     public function testIsExist($dirPath, $path, $exists)
     {
         $dir = $this->getDirectoryInstance($dirPath);
@@ -220,7 +221,7 @@ class ReadTest extends \PHPUnit\Framework\TestCase
      *
      * @return array
      */
-    public function existsProvider()
+    public static function existsProvider()
     {
         return [
             ['foo', 'bar', true],
@@ -256,10 +257,10 @@ class ReadTest extends \PHPUnit\Framework\TestCase
     /**
      * Test for stat method
      *
-     * @dataProvider statProvider
      * @param string $dirPath
      * @param string $path
      */
+    #[DataProvider('statProvider')]
     public function testStat($dirPath, $path)
     {
         $dir = $this->getDirectoryInstance($dirPath);
@@ -289,7 +290,7 @@ class ReadTest extends \PHPUnit\Framework\TestCase
      *
      * @return array
      */
-    public function statProvider()
+    public static function statProvider()
     {
         return [['foo', 'bar'], ['foo', 'file_three.txt']];
     }
@@ -319,11 +320,11 @@ class ReadTest extends \PHPUnit\Framework\TestCase
     /**
      * Test for isReadable method
      *
-     * @dataProvider isReadableProvider
      * @param string $dirPath
      * @param string $path
      * @param bool $readable
      */
+    #[DataProvider('isReadableProvider')]
     public function testIsReadable($dirPath, $path, $readable)
     {
         $dir = $this->getDirectoryInstance($dirPath);
@@ -355,10 +356,10 @@ class ReadTest extends \PHPUnit\Framework\TestCase
     /**
      * Test for isFile method
      *
-     * @dataProvider isFileProvider
      * @param string $path
      * @param bool $isFile
      */
+    #[DataProvider('isFileProvider')]
     public function testIsFile($path, $isFile)
     {
         $this->assertEquals($isFile, $this->getDirectoryInstance('foo')->isFile($path));
@@ -389,10 +390,10 @@ class ReadTest extends \PHPUnit\Framework\TestCase
     /**
      * Test for isDirectory method
      *
-     * @dataProvider isDirectoryProvider
      * @param string $path
      * @param bool $isDirectory
      */
+    #[DataProvider('isDirectoryProvider')]
     public function testIsDirectory($path, $isDirectory)
     {
         $this->assertEquals($isDirectory, $this->getDirectoryInstance('foo')->isDirectory($path));
@@ -425,7 +426,7 @@ class ReadTest extends \PHPUnit\Framework\TestCase
      *
      * @return array
      */
-    public function isReadableProvider()
+    public static function isReadableProvider()
     {
         return [['foo', 'bar', true], ['foo', 'file_three.txt', true]];
     }
@@ -435,7 +436,7 @@ class ReadTest extends \PHPUnit\Framework\TestCase
      *
      * @return array
      */
-    public function isFileProvider()
+    public static function isFileProvider()
     {
         return [['bar', false], ['file_three.txt', true]];
     }
@@ -445,7 +446,7 @@ class ReadTest extends \PHPUnit\Framework\TestCase
      *
      * @return array
      */
-    public function isDirectoryProvider()
+    public static function isDirectoryProvider()
     {
         return [['bar', true], ['file_three.txt', false]];
     }
@@ -485,10 +486,10 @@ class ReadTest extends \PHPUnit\Framework\TestCase
     /**
      * Test readFile
      *
-     * @dataProvider readFileProvider
      * @param string $path
      * @param string $content
      */
+    #[DataProvider('readFileProvider')]
     public function testReadFile($path, $content)
     {
         $directory = $this->getDirectoryInstance('');
@@ -500,7 +501,7 @@ class ReadTest extends \PHPUnit\Framework\TestCase
      *
      * @return array
      */
-    public function readFileProvider()
+    public static function readFileProvider()
     {
         return [
             ['popup.csv', 'var myData = 5;'],

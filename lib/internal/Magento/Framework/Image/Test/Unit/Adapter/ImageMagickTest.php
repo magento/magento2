@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -15,6 +15,7 @@ use Magento\Framework\Phrase;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Psr\Log\LoggerInterface;
 
 class ImageMagickTest extends TestCase
@@ -63,9 +64,8 @@ class ImageMagickTest extends TestCase
 
     /**
      * @param string $imagePath
-     * @param string $expectedMessage
-     * @dataProvider watermarkDataProvider
-     */
+     * @param string $expectedMessage     */
+    #[DataProvider('watermarkDataProvider')]
     public function testWatermark($imagePath, $expectedMessage)
     {
         $this->expectException('LogicException');
@@ -76,7 +76,7 @@ class ImageMagickTest extends TestCase
     /**
      * @return array
      */
-    public function watermarkDataProvider(): array
+    public static function watermarkDataProvider(): array
     {
         return [
             ['', ImageMagick::ERROR_WATERMARK_IMAGE_ABSENT],

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 
 declare(strict_types=1);
@@ -15,6 +15,8 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHe
 use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Store\Model\System\Store as SystemStore;
+use Magento\Store\Model\Website;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -60,8 +62,8 @@ class StoreTest extends TestCase
         $this->systemStore = $this->createMock(SystemStore::class);
         $this->store = $this->createMock(Store::class);
         $this->configShare = $this->createMock(ConfigShare::class);
-        $this->storeManager = $this->getMockForAbstractClass(StoreManagerInterface::class);
-        $this->dataPersistor = $this->getMockForAbstractClass(DataPersistorInterface::class);
+        $this->storeManager = $this->createMock(StoreManagerInterface::class);
+        $this->dataPersistor = $this->createMock(DataPersistorInterface::class);
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->customerStore = $this->objectManagerHelper->getObject(
             CustomerStore::class,
@@ -80,15 +82,19 @@ class StoreTest extends TestCase
      * @param array $options
      * @param bool $isWebsiteScope
      * @param bool $isCustomerDataInSession
-     * @dataProvider dataProviderOptionsArray
      * @return void
      */
+    #[DataProvider('dataProviderOptionsArray')]
     public function testToOptionArray(array $options, bool $isWebsiteScope, bool $isCustomerDataInSession): void
     {
         $this->configShare->method('isWebsiteScope')
             ->willReturn($isWebsiteScope);
         $this->store->method('getWebsiteId')
             ->willReturn(1);
+
+        $websiteMock = $this->createPartialMock(Website::class, ['getId']);
+        $websiteMock->method('getId')->willReturn(1);
+        $this->systemStore->method('getWebsiteCollection')->willReturn([$websiteMock]);
 
         if ($isCustomerDataInSession) {
             $this->dataPersistor->method('get')
@@ -130,7 +136,7 @@ class StoreTest extends TestCase
      *
      * @return array
      */
-    public function dataProviderOptionsArray(): array
+    public static function dataProviderOptionsArray(): array
     {
         return [
             [

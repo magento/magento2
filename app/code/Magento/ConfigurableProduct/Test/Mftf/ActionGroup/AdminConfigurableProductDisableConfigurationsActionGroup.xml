@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
-  */
+/**
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
+ */
 -->
 
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -12,8 +12,10 @@
         <arguments>
             <argument name="productName" type="string" defaultValue="{{SimpleProduct.name}}"/>
         </arguments>
+        <scrollTo selector="{{AdminProductFormConfigurationsSection.currentVariations}}" stepKey="scrollToVariations" />
         <click selector="{{AdminProductFormConfigurationsSection.actionsBtnByProductName(productName)}}" stepKey="clickToExpandActionsSelect"/>
-        <click selector="{{AdminProductFormConfigurationsSection.disableProductBtn}}" stepKey="clickDisableChildProduct"/>
+        <click selector="{{AdminProductFormConfigurationsSection.disableProductBtnActive}}" stepKey="clickDisableChildProduct"/>
         <see selector="{{AdminProductFormConfigurationsSection.confProductOptionStatusCell(productName)}}" userInput="Disabled" stepKey="seeConfigDisabled"/>
+        <scrollTo selector="{{AdminProductFormConfigurationsSection.sectionHeader}}" stepKey="scrollToSectionHeader" />
     </actionGroup>
 </actionGroups>

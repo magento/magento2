@@ -1,10 +1,12 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Eav\Model;
+
+use PHPUnit\Framework\Attributes\DataProvider;
 
 use Magento\TestFramework\Helper\Bootstrap;
 
@@ -23,8 +25,8 @@ class TypeLocatorTest extends \PHPUnit\Framework\TestCase
     /**
      * @param string $entityType
      * @param string[] $attributeList
-     * @dataProvider getExpectedAttributeTypesProvider
      */
+    #[DataProvider('getExpectedAttributeTypesProvider')]
     public function testGetType(
         $entityType,
         array $attributeList
@@ -42,7 +44,7 @@ class TypeLocatorTest extends \PHPUnit\Framework\TestCase
      * @return array
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function getExpectedAttributeTypesProvider(): array
+    public static function getExpectedAttributeTypesProvider(): array
     {
         return [
             'product' => [
@@ -193,7 +195,7 @@ class TypeLocatorTest extends \PHPUnit\Framework\TestCase
                     'custom_design_to' => 'string',
                     'available_sort_by' => 'string[]',
                     'page_layout' => 'string',
-                    'default_sort_by' => 'string[]',
+                    'default_sort_by' => 'string',
                     'filter_price_range' => 'double',
                     'custom_layout_update' => 'string',
                 ]
@@ -214,7 +216,6 @@ class TypeLocatorTest extends \PHPUnit\Framework\TestCase
         $reflection = new \ReflectionObject($this);
         foreach ($reflection->getProperties() as $property) {
             if (!$property->isStatic() && 0 !== strpos($property->getDeclaringClass()->getName(), 'PHPUnit')) {
-                $property->setAccessible(true);
                 $property->setValue($this, null);
             }
         }

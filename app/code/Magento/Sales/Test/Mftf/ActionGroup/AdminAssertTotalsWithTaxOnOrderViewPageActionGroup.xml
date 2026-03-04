@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright 2024 Adobe
+  * All Rights Reserved.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminAssertTotalsWithTaxOnOrderViewPageActionGroup">
+        <annotations>
+            <description>Asserts Totals on the Order View page</description>
+        </annotations>
+        <arguments>
+            <argument name="subtotalExclTax" type="string"/>
+            <argument name="subtotalInclTax" type="string"/>
+            <argument name="discount" type="string"/>
+            <argument name="shippingAndHandlingExclTax" type="string"/>
+            <argument name="shippingAndHandlingInclTax" type="string"/>
+            <argument name="fpt" type="string"/>
+            <argument name="grandTotalExclTax" type="string"/>
+            <argument name="grandTotalInclTax" type="string"/>
+            <argument name="totalTaxWithTaxRate" type="string"/>
+        </arguments>
+        <scrollTo selector="{{AdminOrderTotalSection.subTotal}}" stepKey="scrollToOrderTotalSection"/>
+        <waitForText selector="{{AdminOrderTotalSection.subTotal}}"  userInput="{{subtotalExclTax}}" stepKey="checkSubtotalExclTax"/>
+        <waitForText time="30" selector="{{AdminOrderTotalSection.fieldsInOrderTotals('Subtotal (Incl.Tax)')}}"  userInput="{{subtotalInclTax}}" stepKey="checkPriceForSubtotalInclTax"/>
+        <waitForText selector="{{AdminOrderTotalSection.fieldsInOrderTotals('Discount (Sales Rule Description)')}}"  userInput="{{discount}}" stepKey="checkPriceForDiscount"/>
+        <waitForText selector="{{AdminOrderTotalSection.fieldsInOrderTotals('Shipping &amp; Handling (Excl.Tax)')}}"  userInput="{{shippingAndHandlingExclTax}}" stepKey="checkPriceForShippingAndHandlingExclTax"/>
+        <waitForText selector="{{AdminOrderTotalSection.fieldsInOrderTotals('Shipping &amp; Handling (Incl.Tax)')}}"  userInput="{{shippingAndHandlingInclTax}}" stepKey="checkPriceForShippingAndHandlingInclTax"/>
+        <waitForText selector="{{AdminOrderTotalSection.fpt}}"  userInput="{{fpt}}" stepKey="checkPriceForFPT"/>
+        <waitForText selector="{{AdminOrderTotalSection.fieldsInOrderTotals('Grand Total (Excl.Tax)')}}"  userInput="{{grandTotalExclTax}}" stepKey="checkPriceForGrandTotalExclTax"/>
+        <waitForText selector="{{AdminOrderTotalSection.fieldsInOrderTotals('Grand Total (Incl.Tax)')}}"  userInput="{{grandTotalInclTax}}" stepKey="checkPriceForGrandTotalInclTax"/>
+        <waitForElementClickable selector="{{AdminOrderTotalSection.totalTaxDropdown}}" stepKey="waitForTotalTaxDropdownToClickable"/>
+        <click selector="{{AdminOrderTotalSection.totalTaxDropdown}}" stepKey="clickTotalTaxDropdown"/>
+        <waitForText selector="{{AdminOrderTotalSection.totalTaxWithTaxRate}}"  userInput="{{totalTaxWithTaxRate}}" stepKey="checkPriceForTotalTaxWithTaxRate"/>
+    </actionGroup>
+</actionGroups>

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Framework\Config\Composer;
@@ -65,7 +65,7 @@ class Package
      */
     public function get($propertyPath, $filter = null)
     {
-        $result = $this->traverseGet($this->json, explode('->', $propertyPath));
+        $result = $this->traverseGet($this->json, explode('->', $propertyPath ?: ''));
         if ($result && $filter) {
             foreach ($result as $key => $value) {
                 if (!preg_match($filter, $key)) {

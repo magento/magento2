@@ -1,6 +1,6 @@
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 /**
@@ -24,7 +24,11 @@ define([
             messageContainer = messageContainer || globalMessageList;
 
             if (response.status == 401) { //eslint-disable-line eqeqeq
-                window.location.replace(url.build('customer/account/login/'));
+                error = {
+                    message: $t('You are not authorized to access this resource.')
+                };
+                messageContainer.addErrorMessage(error);
+                this.redirectTo(url.build('customer/account/login/'), 2000);
             } else {
                 try {
                     error = JSON.parse(response.responseText);
@@ -35,6 +39,15 @@ define([
                 }
                 messageContainer.addErrorMessage(error);
             }
+        },
+
+        /**
+         * Method to redirect by requested URL.
+         */
+        redirectTo: function (redirectUrl, delay = 0) {
+            setTimeout(() => {
+                window.location.replace(redirectUrl);
+            }, delay);
         }
     };
 });

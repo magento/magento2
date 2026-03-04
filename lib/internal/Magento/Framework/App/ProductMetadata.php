@@ -2,8 +2,8 @@
 /**
  * Magento application product metadata
  *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework\App;
 
@@ -62,7 +62,7 @@ class ProductMetadata implements ProductMetadataInterface
      */
     public function __construct(
         ComposerJsonFinder $composerJsonFinder,
-        CacheInterface $cache = null
+        ?CacheInterface $cache = null
     ) {
         $this->composerJsonFinder = $composerJsonFinder;
         $this->cache = $cache ?: ObjectManager::getInstance()->get(CacheInterface::class);

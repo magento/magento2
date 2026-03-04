@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -17,6 +17,7 @@ use Magento\Paypal\Helper\Data;
 use Magento\Paypal\Model\Config;
 use Magento\Paypal\Model\ConfigFactory;
 use Magento\Paypal\Model\Express\Checkout;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -63,9 +64,7 @@ class FormTest extends TestCase
             ->method('setTemplate')->willReturnSelf();
         $mark->expects($this->any())
             ->method('__call')->willReturnSelf();
-        $layout = $this->getMockForAbstractClass(
-            LayoutInterface::class
-        );
+        $layout = $this->createMock(LayoutInterface::class);
         $layout->expects($this->once())
             ->method('createBlock')
             ->with(Template::class)
@@ -76,7 +75,7 @@ class FormTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $localeResolver = $this->getMockForAbstractClass(ResolverInterface::class);
+        $localeResolver = $this->createMock(ResolverInterface::class);
 
         $helper = new ObjectManager($this);
         $this->_model = $helper->getObject(
@@ -94,8 +93,8 @@ class FormTest extends TestCase
     /**
      * @param bool $ask
      * @param string|null $expected
-     * @dataProvider getBillingAgreementCodeDataProvider
      */
+    #[DataProvider('getBillingAgreementCodeDataProvider')]
     public function testGetBillingAgreementCode($ask, $expected)
     {
         $this->currentCustomer->expects($this->once())
@@ -114,7 +113,7 @@ class FormTest extends TestCase
     /**
      * @return array
      */
-    public function getBillingAgreementCodeDataProvider()
+    public static function getBillingAgreementCodeDataProvider()
     {
         return [
             [true, Checkout::PAYMENT_INFO_TRANSPORT_BILLING_AGREEMENT],

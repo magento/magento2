@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -11,6 +11,8 @@ use Magento\Framework\GraphQl\Config\ConfigElementInterface;
 
 /**
  * Defines contracts for return type data as GraphQL objects.
+ *
+ * @api
  */
 interface TypeInterface extends ConfigElementInterface
 {
@@ -19,5 +21,5 @@ interface TypeInterface extends ConfigElementInterface
      *
      * @return Field[]
      */
-    public function getFields() : array;
+    public function getFields(): array;
 }

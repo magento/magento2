@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -12,6 +12,8 @@ use Magento\Framework\Controller\Result\Redirect;
 
 /**
  * Delegating account actions from outside of customer module.
+ *
+ * @api
  */
 interface AccountDelegationInterface
 {
@@ -26,6 +28,6 @@ interface AccountDelegationInterface
      */
     public function createRedirectForNew(
         CustomerInterface $customer,
-        array $mixedData = null
+        ?array $mixedData = null
     ): Redirect;
 }

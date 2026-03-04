@@ -1,6 +1,6 @@
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 define([
     'uiComponent',
@@ -22,7 +22,14 @@ define([
 
             this._super();
             this.renderPayPalButtons(element);
-            this.declinePayment = !customer().firstname && !cart().isGuestCheckoutAllowed;
+
+            if (cart().isGuestCheckoutAllowed === undefined) {
+                cart.subscribe(function (updatedCart) {
+                    this.declinePayment = !customer().firstname && !cart().isGuestCheckoutAllowed;
+
+                    return updatedCart;
+                }.bind(this));
+            }
 
             return this;
         },

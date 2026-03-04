@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
-  */
+/**
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
+ */
 -->
 
 <entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -84,5 +84,65 @@
         <data key="path">tax/classes/default_product_tax_class</data>
         <data key="label">Yes</data>
         <data key="value">2</data>
+    </entity>
+    <entity name="EnableDisplayFullTaxSummarySales">
+        <data key="path">tax/sales_display/full_summary</data>
+        <data key="value">1</data>
+    </entity>
+    <entity name="DisableDisplayFullTaxSummarySales">
+        <data key="path">tax/sales_display/full_summary</data>
+        <data key="value">0</data>
+    </entity>
+    <entity name="DisplaySubtotal">
+        <data key="path">tax/sales_display/subtotal</data>
+        <data key="value">3</data>
+    </entity>
+    <entity name="DefaultDisplaySubtotal">
+        <data key="path">tax/sales_display/subtotal</data>
+        <data key="value">1</data>
+    </entity>
+    <entity name="DisplayShippingAmount">
+        <data key="path">tax/sales_display/shipping</data>
+        <data key="value">3</data>
+    </entity>
+    <entity name="DefaultDisplayShippingAmount">
+        <data key="path">tax/sales_display/shipping</data>
+        <data key="value">1</data>
+    </entity>
+    <entity name="EnableOrderTotalWithoutTax">
+        <data key="path">tax/sales_display/grandtotal</data>
+        <data key="value">1</data>
+    </entity>
+    <entity name="DisableOrderTotalWithoutTax">
+        <data key="path">tax/sales_display/grandtotal</data>
+        <data key="value">0</data>
+    </entity>
+    <entity name="CustomDisplayShippingPricesInCatalog">
+        <data key="path">tax/display/shipping</data>
+        <data key="value">3</data>
+    </entity>
+    <entity name="CustomCartDisplayPrice">
+        <data key="path">tax/cart_display/price</data>
+        <data key="value">3</data>
+    </entity>
+    <entity name="CustomCartDisplaySubtotal">
+        <data key="path">tax/cart_display/subtotal</data>
+        <data key="value">3</data>
+    </entity>
+    <entity name="CustomCartDisplayShipping">
+        <data key="path">tax/cart_display/shipping</data>
+        <data key="value">3</data>
+    </entity>
+    <entity name="DefaultDisplayShippingPricesInCatalog">
+        <data key="path">tax/display/shipping</data>
+        <data key="value">1</data>
+    </entity>
+    <entity name="DefaultCartDisplayPrice">
+        <data key="path">tax/cart_display/price</data>
+        <data key="value">1</data>
+    </entity>
+    <entity name="DefaultCartDisplaySubtotal">
+        <data key="path">tax/cart_display/subtotal</data>
+        <data key="value">1</data>
     </entity>
 </entities>

@@ -1,7 +1,7 @@
 <!--
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 -->
 <if args="isAllowed()">
@@ -9,6 +9,7 @@
        attr="href: $row().url">
         <img if="imageExists($row())"
              class="product-image-photo"
+             loading="lazy"
              attr="src: getImageUrl($row()),
                alt: getLabel($row()),
                title: getLabel($row()),

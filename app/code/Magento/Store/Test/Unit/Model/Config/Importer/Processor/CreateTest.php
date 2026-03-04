@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -10,6 +10,7 @@ namespace Magento\Store\Test\Unit\Model\Config\Importer\Processor;
 use Magento\Framework\Event\ManagerInterface;
 use Magento\Framework\Exception\RuntimeException;
 use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Store\Model\Config\Importer\DataDifferenceCalculator;
 use Magento\Store\Model\Config\Importer\Processor\Create;
 use Magento\Store\Model\Group;
@@ -28,6 +29,8 @@ use PHPUnit\Framework\TestCase;
  */
 class CreateTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var DataDifferenceCalculator|MockObject
      */
@@ -125,37 +128,36 @@ class CreateTest extends TestCase
             ->getMock();
         $this->websiteFactoryMock = $this->getMockBuilder(WebsiteFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
         $this->groupFactoryMock = $this->getMockBuilder(GroupFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
         $this->storeFactoryMock = $this->getMockBuilder(StoreFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
-        $this->eventManagerMock = $this->getMockBuilder(ManagerInterface::class)
-            ->getMockForAbstractClass();
+        $this->eventManagerMock = $this->createMock(ManagerInterface::class);
         $this->abstractDbMock = $this->getMockBuilder(AbstractDb::class)
             ->disableOriginalConstructor()
-            ->setMethods(['save', 'load', 'addCommitCallback'])
-            ->getMockForAbstractClass();
+            ->onlyMethods(['save', 'load', 'addCommitCallback', '_construct'])
+            ->getMock();
         $this->websiteMock = $this->getMockBuilder(Website::class)
             ->disableOriginalConstructor()
-            ->setMethods(['setData', 'getResource', 'setDefaultGroupId'])
+            ->onlyMethods(['setData', 'getResource', 'setDefaultGroupId'])
             ->getMock();
         $this->groupMock = $this->getMockBuilder(Group::class)
             ->disableOriginalConstructor()
-            ->setMethods([
+            ->onlyMethods([
                 'getResource', 'getId', 'setData', 'setRootCategoryId',
                 'getDefaultStoreId', 'setDefaultStoreId', 'setWebsite'
             ])
             ->getMock();
-        $this->storeMock = $this->getMockBuilder(Store::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['setData', 'getResource', 'setGroup', 'setWebsite', 'getStoreId'])
-            ->getMock();
+        $this->storeMock = $this->createPartialMockWithReflection(
+            Store::class,
+            ['getStoreId', 'setData', 'getResource', 'setGroup', 'setWebsite']
+        );
         $this->websiteFactoryMock->expects($this->any())
             ->method('create')
             ->willReturn($this->websiteMock);
@@ -307,11 +309,13 @@ class CreateTest extends TestCase
 
         $this->groupMock->expects($this->exactly(2))
             ->method('setData')
-            ->withConsecutive(
-                [$this->equalTo($this->trimmedGroup[0])],
-                [$this->equalTo($this->trimmedGroup[1])]
-            )->willReturnSelf();
-
+            ->willReturnCallback(function ($arg1) {
+                if ($arg1 == $this->equalTo($this->trimmedGroup[0])) {
+                    return $this;
+                } elseif ($arg1 == $this->equalTo($this->trimmedGroup[1])) {
+                    return $this;
+                }
+            });
         $this->groupMock->expects($this->exactly(6))
             ->method('getResource')
             ->willReturn($this->abstractDbMock);
@@ -334,8 +338,13 @@ class CreateTest extends TestCase
 
         $this->abstractDbMock->expects($this->any())
             ->method('load')
-            ->withConsecutive([$this->websiteMock, 'base', 'code'], [$this->storeMock, 'default', 'code'])
-            ->willReturnSelf();
+            ->willReturnCallback(function ($arg1, $arg2, $arg3) {
+                if ($arg1 == $this->websiteMock && $arg2 == 'base' && $arg3 == 'code') {
+                    return $this;
+                } elseif ($arg1 == $this->storeMock && $arg2 == 'default' && $arg3 == 'code') {
+                    return $this;
+                }
+            });
         $this->abstractDbMock->expects($this->exactly(4))
             ->method('save')
             ->with($this->groupMock)
@@ -372,8 +381,13 @@ class CreateTest extends TestCase
 
         $this->abstractDbMock->expects($this->exactly(2))
             ->method('load')
-            ->withConsecutive([$this->groupMock, 'default', 'code'], [$this->websiteMock, 'base', 'code'])
-            ->willReturnSelf();
+            ->willReturnCallback(function ($arg1, $arg2, $arg3) {
+                if ($arg1 == $this->groupMock && $arg2 == 'default' && $arg3 == 'code') {
+                    return $this;
+                } elseif ($arg1 == $this->websiteMock && $arg2 == 'base' && $arg3 == 'code') {
+                    return $this;
+                }
+            });
 
         $this->storeMock->expects($this->once())
             ->method('setData')

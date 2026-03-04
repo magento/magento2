@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -21,6 +21,8 @@ use Magento\RemoteStorage\Model\Config;
 
 /**
  * Creates a pre-configured instance of AWS S3 driver.
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class AwsS3Factory implements DriverFactoryInterface
 {
@@ -55,12 +57,18 @@ class AwsS3Factory implements DriverFactoryInterface
     private $cachePrefix;
 
     /**
+     * @var CachedCredentialsProvider
+     */
+    private $cachedCredentialsProvider;
+
+    /**
      * @param ObjectManagerInterface $objectManager
      * @param Config $config
      * @param MetadataProviderInterfaceFactory $metadataProviderFactory
      * @param CacheInterfaceFactory $cacheInterfaceFactory
      * @param CachedAdapterInterfaceFactory $cachedAdapterInterfaceFactory
      * @param string|null $cachePrefix
+     * @param CachedCredentialsProvider|null $cachedCredentialsProvider
      */
     public function __construct(
         ObjectManagerInterface $objectManager,
@@ -68,7 +76,8 @@ class AwsS3Factory implements DriverFactoryInterface
         MetadataProviderInterfaceFactory $metadataProviderFactory,
         CacheInterfaceFactory $cacheInterfaceFactory,
         CachedAdapterInterfaceFactory $cachedAdapterInterfaceFactory,
-        string $cachePrefix = null
+        ?string $cachePrefix = null,
+        ?CachedCredentialsProvider $cachedCredentialsProvider = null,
     ) {
         $this->objectManager = $objectManager;
         $this->config = $config;
@@ -76,6 +85,8 @@ class AwsS3Factory implements DriverFactoryInterface
         $this->cacheInterfaceFactory = $cacheInterfaceFactory;
         $this->cachedAdapterInterfaceFactory = $cachedAdapterInterfaceFactory;
         $this->cachePrefix = $cachePrefix;
+        $this->cachedCredentialsProvider = $cachedCredentialsProvider ??
+            $this->objectManager->get(CachedCredentialsProvider::class);
     }
 
     /**
@@ -94,18 +105,19 @@ class AwsS3Factory implements DriverFactoryInterface
     }
 
     /**
-     * @inheritDoc
+     * Prepare config for S3Client
+     *
+     * @param array $config
+     * @return array
+     * @throws DriverException
      */
-    public function createConfigured(
-        array $config,
-        string $prefix,
-        string $cacheAdapter = '',
-        array $cacheConfig = []
-    ): RemoteDriverInterface {
+    private function prepareConfig(array $config)
+    {
         $config['version'] = 'latest';
 
         if (empty($config['credentials']['key']) || empty($config['credentials']['secret'])) {
-            unset($config['credentials']);
+            //Access keys were not provided; request token from AWS config (local or EC2) and cache result
+            $config['credentials'] = $this->cachedCredentialsProvider->get();
         }
 
         if (empty($config['bucket']) || empty($config['region'])) {
@@ -120,6 +132,19 @@ class AwsS3Factory implements DriverFactoryInterface
             $config['use_path_style_endpoint'] = boolval($config['path_style']);
         }
 
+        return $config;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function createConfigured(
+        array $config,
+        string $prefix,
+        string $cacheAdapter = '',
+        array $cacheConfig = []
+    ): RemoteDriverInterface {
+        $config = $this->prepareConfig($config);
         $client = new S3Client($config);
         $adapter = new AwsS3V3Adapter($client, $config['bucket'], $prefix);
         $cache = $this->cacheInterfaceFactory->create(

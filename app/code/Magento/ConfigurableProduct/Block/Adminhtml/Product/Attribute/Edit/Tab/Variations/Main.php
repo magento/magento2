@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 
 /**
@@ -31,9 +31,11 @@ class Main extends \Magento\Eav\Block\Adminhtml\Attribute\Edit\Main\AbstractMain
         $fieldsToRemove = ['attribute_code', 'is_unique', 'frontend_class'];
 
         foreach ($fieldset->getElements() as $element) {
+            $elementId = $element->getId() ?? '';
+
             /** @var \Magento\Framework\Data\Form\AbstractForm $element  */
-            if (substr($element->getId(), 0, strlen('default_value')) == 'default_value') {
-                $fieldsToRemove[] = $element->getId();
+            if (substr($elementId, 0, strlen('default_value')) == 'default_value') {
+                $fieldsToRemove[] = $elementId;
             }
         }
         foreach ($fieldsToRemove as $id) {

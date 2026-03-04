@@ -1,20 +1,20 @@
 <?php
 /**
- * Application area list
- *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework\App;
 
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
+
 /**
  * Lists router area codes & processes resolves FrontEndNames to area codes
+ *
+ * @api
  */
-class AreaList
+class AreaList implements ResetAfterRequestInterface
 {
     /**
-     * Area configuration list
-     *
      * @var array
      */
     protected $_areas = [];
@@ -66,7 +66,6 @@ class AreaList
      *
      * @param string $frontName
      * @return null|string
-     * @api
      */
     public function getCodeByFrontName($frontName)
     {
@@ -87,7 +86,6 @@ class AreaList
      *
      * @param string $areaCode
      * @return string
-     * @api
      */
     public function getFrontName($areaCode)
     {
@@ -98,7 +96,6 @@ class AreaList
      * Retrieve area codes
      *
      * @return string[]
-     * @api
      */
     public function getCodes()
     {
@@ -110,7 +107,6 @@ class AreaList
      *
      * @param string $areaCode
      * @return string
-     * @api
      */
     public function getDefaultRouter($areaCode)
     {
@@ -125,6 +121,8 @@ class AreaList
      */
     public function getArea($code)
     {
+        // PHP 8.5 Compatibility: Ensure $code is not null before using as array offset
+        $code = $code ?? '';
         if (!isset($this->_areaInstances[$code])) {
             $this->_areaInstances[$code] = $this->objectManager->create(
                 \Magento\Framework\App\AreaInterface::class,
@@ -132,5 +130,13 @@ class AreaList
             );
         }
         return $this->_areaInstances[$code];
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        $this->_areaInstances = [];
     }
 }

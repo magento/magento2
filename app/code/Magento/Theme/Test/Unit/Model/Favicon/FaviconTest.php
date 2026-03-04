@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -58,10 +58,9 @@ class FaviconTest extends TestCase
     {
         $storeManager = $this->getMockBuilder(StoreManagerInterface::class)
             ->getMock();
-        $this->store = $this->getMockBuilder(
+        $this->store = $this->createMock(
             Store::class
-        )->disableOriginalConstructor()
-            ->getMock();
+        );
         $storeManager->expects($this->any())
             ->method('getStore')
             ->willReturn($this->store);
@@ -69,12 +68,8 @@ class FaviconTest extends TestCase
         $this->scopeManager = $this->getMockBuilder(
             ScopeConfigInterface::class
         )->getMock();
-        $this->fileStorageDatabase = $this->getMockBuilder(Database::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $filesystem = $this->getMockBuilder(Filesystem::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->fileStorageDatabase = $this->createMock(Database::class);
+        $filesystem = $this->createMock(Filesystem::class);
         $this->mediaDir = $this->getMockBuilder(
             ReadInterface::class
         )->getMock();
@@ -129,9 +124,15 @@ class FaviconTest extends TestCase
             ->willReturn(true);
         $this->mediaDir
             ->method('isFile')
-            ->withConsecutive([$expectedFile], [$expectedFile])
-            ->willReturnOnConsecutiveCalls(false, true);
-
+            ->willReturnCallback(function ($expectedFile) {
+                static $count = 0;
+                if ($count == 0) {
+                    $count++;
+                    return false;
+                } else {
+                    return true;
+                }
+            });
         $results = $this->object->getFaviconFile();
         $this->assertEquals(
             $expectedUrl,

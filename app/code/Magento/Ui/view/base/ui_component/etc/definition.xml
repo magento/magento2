@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 -->
 <components xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Ui:etc/ui_definition.xsd">
@@ -122,9 +122,12 @@
             <multiple>true</multiple>
         </settings>
     </checkboxset>
-    <wysiwyg class="Magento\Ui\Component\Form\Element\Wysiwyg" component="Magento_Ui/js/form/element/wysiwyg" template="ui/content/content">
+    <wysiwyg class="Magento\Ui\Component\Form\Element\Wysiwyg" component="Magento_Ui/js/form/element/wysiwyg" template="ui/form/wysiwyg">
         <settings>
             <elementTmpl>ui/content/content</elementTmpl>
+            <validation>
+                <rule name="validate-no-utf8mb4-characters" xsi:type="boolean">true</rule>
+            </validation>
         </settings>
     </wysiwyg>
     <actionDelete class="Magento\Ui\Component\Form\Element\ActionDelete" component="Magento_Ui/js/dynamic-rows/action-delete" template="ui/dynamic-rows/cells/action-delete"/>

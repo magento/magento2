@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -44,8 +44,8 @@ class DeadlockRetrierTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->adapterMock = $this->getMockForAbstractClass(AdapterInterface::class);
-        $this->loggerMock = $this->getMockForAbstractClass(LoggerInterface::class);
+        $this->adapterMock = $this->createMock(AdapterInterface::class);
+        $this->loggerMock = $this->createMock(LoggerInterface::class);
         $this->modelMock = $this->createMock(AbstractModel::class);
         $this->retrier = new DeadlockRetrier($this->loggerMock);
     }
@@ -107,7 +107,7 @@ class DeadlockRetrierTest extends TestCase
 
         $this->modelMock
             ->method('getId')
-            ->willReturnOnConsecutiveCalls($this->throwException(new DeadlockException()),2);
+            ->willReturnOnConsecutiveCalls($this->throwException(new DeadlockException()), 2);
 
         $this->retrier->execute(
             function () {

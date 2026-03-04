@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -14,6 +14,7 @@ use Magento\Framework\Setup\XmlPersistor;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Unit test for schema persistor.
@@ -58,11 +59,10 @@ class SchemaPersistorTest extends TestCase
         );
     }
 
-    /**
-     * @dataProvider schemaListenerTablesDataProvider
-     * @param array $tables
+    /**     * @param array $tables
      * @param string $expectedXML
      */
+    #[DataProvider('schemaListenerTablesDataProvider')]
     public function testPersist(array $tables, $expectedXML) : void
     {
         $moduleName = 'First_Module';
@@ -91,11 +91,11 @@ class SchemaPersistorTest extends TestCase
      *
      * @return array
      */
-    public function schemaListenerTablesDataProvider() : array
+    public static function schemaListenerTablesDataProvider() : array
     {
         return [
             [
-                'schemaListenerTables' => [
+                'tables' => [
                     'First_Module' => [
                         'first_table' => [
                             'disabled' => false,
@@ -147,7 +147,7 @@ class SchemaPersistorTest extends TestCase
                     ]
                 ],
                 // @codingStandardsIgnoreStart
-                'XMLResult' => '<?xml version="1.0"?>
+                'expectedXML' => '<?xml version="1.0"?>
                         <schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                             xsi:noNamespaceSchemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/schema.xsd">
                             <table name="first_table" resource="default" engine="innodb">

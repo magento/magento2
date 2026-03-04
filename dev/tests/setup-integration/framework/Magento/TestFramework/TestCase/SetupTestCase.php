@@ -1,16 +1,18 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\TestFramework\TestCase;
 
+use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Adapter\ConnectionException;
 use Magento\Framework\DB\Adapter\SqlVersionProvider;
 use Magento\TestFramework\Annotation\DataProviderFromFile;
 use Magento\TestFramework\Helper\Bootstrap;
+use Zend_Db_Statement_Exception;
 
 /**
  * Instance of Setup test case. Used in order to tweak dataProviders functionality.
@@ -28,29 +30,39 @@ class SetupTestCase extends \PHPUnit\Framework\TestCase implements MutableDataIn
     private $dbKey;
 
     /**
-     * @var SqlVersionProvider
+     * @var SqlVersionProvider|null
      */
     private $sqlVersionProvider;
 
     /**
-     * @inheritDoc
+     * @var ResourceConnection|null
      */
-    public function __construct(
-        $name = null,
-        array $data = [],
-        $dataName = ''
-    ) {
-        parent::__construct($name, $data, $dataName);
+    private ?ResourceConnection $resourceConnection = null;
 
-        $this->sqlVersionProvider = Bootstrap::getObjectManager()->get(SqlVersionProvider::class);
+    /**
+     * Get SQL version provider instance (lazy initialization)
+     *
+     * @return SqlVersionProvider
+     */
+    private function getSqlVersionProvider(): SqlVersionProvider
+    {
+        if ($this->sqlVersionProvider === null) {
+            $this->sqlVersionProvider = Bootstrap::getObjectManager()->get(SqlVersionProvider::class);
+        }
+        return $this->sqlVersionProvider;
     }
 
     /**
-     * @inheritdoc
+     * Get resource connection instance (lazy initialization)
+     *
+     * @return ResourceConnection
      */
-    public function setData(array $data)
+    private function getResourceConnection(): ResourceConnection
     {
-        $this->data = $data;
+        if ($this->resourceConnection === null) {
+            $this->resourceConnection = Bootstrap::getObjectManager()->get(ResourceConnection::class);
+        }
+        return $this->resourceConnection;
     }
 
     /**
@@ -59,6 +71,7 @@ class SetupTestCase extends \PHPUnit\Framework\TestCase implements MutableDataIn
     public function flushData()
     {
         $this->data = [];
+        DataProviderFromFile::setTestObject([]);
     }
 
     /**
@@ -66,6 +79,11 @@ class SetupTestCase extends \PHPUnit\Framework\TestCase implements MutableDataIn
      */
     public function getData()
     {
+        if (empty($this->data)) {
+            $testDataObj = DataProviderFromFile::getTestObject();
+            $this->data = $testDataObj->providedData();
+        }
+
         if (array_key_exists($this->getDbKey(), $this->data)) {
             return $this->data[$this->getDbKey()];
         }
@@ -81,7 +99,7 @@ class SetupTestCase extends \PHPUnit\Framework\TestCase implements MutableDataIn
      */
     protected function getDatabaseVersion(): string
     {
-        return $this->sqlVersionProvider->getSqlVersion();
+        return $this->getSqlVersionProvider()->getSqlVersion();
     }
 
     /**
@@ -96,13 +114,43 @@ class SetupTestCase extends \PHPUnit\Framework\TestCase implements MutableDataIn
         }
 
         $this->dbKey = DataProviderFromFile::FALLBACK_VALUE;
-        foreach (DataProviderFromFile::POSSIBLE_SUFFIXES as $possibleVersion => $suffix) {
-            if (strpos($this->getDatabaseVersion(), (string)$possibleVersion) !== false) {
-                $this->dbKey = $suffix;
-                break;
+        
+        try {
+            foreach (DataProviderFromFile::POSSIBLE_SUFFIXES as $possibleVersion => $suffix) {
+                if ($this->getSqlVersionProvider()->isMysqlGte8029()) {
+                    $this->dbKey = DataProviderFromFile::POSSIBLE_SUFFIXES[SqlVersionProvider::MYSQL_8_0_29_VERSION];
+                    break;
+                } elseif ($this->getSqlVersionProvider()->isMariaDbEngine()) {
+                    $suffixKey = $this->getSqlVersionProvider()->getMariaDbSuffixKey();
+                    $this->dbKey = DataProviderFromFile::POSSIBLE_SUFFIXES[$suffixKey];
+                    break;
+                } elseif (strpos($this->getDatabaseVersion(), (string)$possibleVersion) !== false) {
+                    $this->dbKey = $suffix;
+                    break;
+                }
             }
+        } catch (\Exception $e) {
+            // If database connection is not available yet (e.g., during data provider setup),
+            // use the fallback value
+            $this->dbKey = DataProviderFromFile::FALLBACK_VALUE;
         }
 
         return $this->dbKey;
+    }
+
+    /**
+     * Checks if the DB connection Aurora RDS
+     *
+     * @param string $resource
+     * @return bool
+     */
+    public function isUsingAuroraDb(string $resource = ResourceConnection::DEFAULT_CONNECTION): bool
+    {
+        try {
+            $this->getResourceConnection()->getConnection($resource)->query('SELECT AURORA_VERSION();');
+            return true;
+        } catch (Zend_Db_Statement_Exception $e) {
+            return false;
+        }
     }
 }

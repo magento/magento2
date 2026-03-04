@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\CustomerImportExport\Model\ResourceModel\Import\CustomerComposite;
 
@@ -10,14 +10,14 @@ use Magento\CustomerImportExport\Model\Import\CustomerComposite;
 class Data extends \Magento\ImportExport\Model\ResourceModel\Import\Data
 {
     /**
-     * Entity type
+     * Entity
      *
      * @var string
      */
     protected $_entityType = CustomerComposite::COMPONENT_ENTITY_CUSTOMER;
 
     /**
-     * Customer attributes
+     * Customer attributes data
      *
      * @var array
      */
@@ -27,7 +27,7 @@ class Data extends \Magento\ImportExport\Model\ResourceModel\Import\Data
      * Class constructor
      *
      * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
-     * @param \Magento\Framework\Json\Helper\Data $coreHelper
+     * @param \Magento\Framework\Json\Helper\Data $jsonHelper
      * @param string $connectionName
      * @param array $arguments
      */
@@ -50,11 +50,12 @@ class Data extends \Magento\ImportExport\Model\ResourceModel\Import\Data
     /**
      * Get next bunch of validated rows.
      *
+     * @param array|null $ids
      * @return array|null
      */
-    public function getNextBunch()
+    public function getNextUniqueBunch($ids = null)
     {
-        $bunchRows = parent::getNextBunch();
+        $bunchRows = parent::getNextUniqueBunch($ids);
         if ($bunchRows != null) {
             $rows = [];
             foreach ($bunchRows as $rowNumber => $rowData) {
@@ -80,7 +81,7 @@ class Data extends \Magento\ImportExport\Model\ResourceModel\Import\Data
     {
         $entityCustomer = CustomerComposite::COMPONENT_ENTITY_CUSTOMER;
         if ($this->_entityType == $entityCustomer) {
-            if ($rowData['_scope'] == CustomerComposite::SCOPE_DEFAULT) {
+            if ((isset($rowData['_scope'])) && $rowData['_scope'] == CustomerComposite::SCOPE_DEFAULT) {
                 return $rowData;
             } else {
                 return null;

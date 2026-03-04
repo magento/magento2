@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Ui\Config\Reader;
 
@@ -14,22 +14,12 @@ use Magento\Framework\View\Element\UiComponent\Config\FileCollector\AggregatedFi
  */
 class FileResolver implements FileResolverInterface
 {
-    /**
-     * @var AggregatedFileCollectorFactory
-     */
-    private $fileCollectorFactory;
-
-    /**
-     * @var string
-     */
-    private $scope;
 
     /**
      * @param AggregatedFileCollectorFactory $fileCollectorFactory
      */
-    public function __construct(AggregatedFileCollectorFactory $fileCollectorFactory)
+    public function __construct(private readonly AggregatedFileCollectorFactory $fileCollectorFactory)
     {
-        $this->fileCollectorFactory = $fileCollectorFactory;
     }
 
     /**
@@ -37,7 +27,6 @@ class FileResolver implements FileResolverInterface
      */
     public function get($filename, $scope)
     {
-        $this->scope = $scope;
         /** @var AggregatedFileCollector $aggregatedFiles */
         $aggregatedFiles = $this->fileCollectorFactory->create();
         return $aggregatedFiles->collectFiles($filename);

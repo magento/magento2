@@ -1,8 +1,8 @@
 <?php
 
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Quote\Model\Quote;
@@ -53,8 +53,6 @@ class TotalsCollector
     protected $collectorList;
 
     /**
-     * Quote validator
-     *
      * @var \Magento\Quote\Model\QuoteValidator
      */
     protected $quoteValidator;
@@ -97,7 +95,7 @@ class TotalsCollector
         \Magento\Quote\Model\ShippingFactory $shippingFactory,
         \Magento\Quote\Model\ShippingAssignmentFactory $shippingAssignmentFactory,
         \Magento\Quote\Model\QuoteValidator $quoteValidator,
-        QuantityCollector $quantityCollector = null
+        ?QuantityCollector $quantityCollector = null
     ) {
         $this->totalCollector = $totalCollector;
         $this->totalCollectorFactory = $totalCollectorFactory;
@@ -194,7 +192,7 @@ class TotalsCollector
     protected function _validateCouponCode(\Magento\Quote\Model\Quote $quote)
     {
         $code = $quote->getData('coupon_code');
-        if (strlen($code)) {
+        if ($code !== null && strlen($code)) {
             $addressHasCoupon = false;
             $addresses = $quote->getAllAddresses();
             if (count($addresses) > 0) {
@@ -271,7 +269,7 @@ class TotalsCollector
                 'total' => $total
             ]
         );
-
+        $total->setBaseSubtotalTotalInclTax($total->getBaseSubtotalInclTax());
         $address->addData($total->getData());
         $address->setAppliedTaxes($total->getAppliedTaxes());
         return $total;

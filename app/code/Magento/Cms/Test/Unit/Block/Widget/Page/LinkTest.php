@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -9,7 +9,11 @@ namespace Magento\Cms\Test\Unit\Block\Widget\Page;
 
 use Magento\Cms\Block\Widget\Page\Link;
 use Magento\Cms\Helper\Page;
+use Magento\Cms\Model\ResourceModel\Page as CmsPageResource;
+use Magento\Framework\Math\Random;
+use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\View\Helper\SecureHtmlRenderer;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -31,15 +35,32 @@ class LinkTest extends TestCase
     protected $mockCmsPage;
 
     /**
-     * @var \Magento\Cms\Model\ResourceModel\Page|MockObject
+     * @var CmsPageResource|MockObject
      */
     protected $mockResourcePage;
+
+    /**
+     * @var ObjectManagerHelper
+     */
+    protected $objectManagerHelper;
 
     protected function setUp(): void
     {
         $this->objectManager = new ObjectManager($this);
+        $objects = [
+            [
+                SecureHtmlRenderer::class,
+                $this->createMock(SecureHtmlRenderer::class)
+            ],
+            [
+                Random::class,
+                $this->createMock(Random::class)
+            ]
+        ];
+        $this->objectManager->prepareObjectManager($objects);
+
         $this->mockCmsPage = $this->createMock(Page::class);
-        $this->mockResourcePage = $this->createMock(\Magento\Cms\Model\ResourceModel\Page::class);
+        $this->mockResourcePage = $this->createMock(CmsPageResource::class);
 
         $this->linkElement = $this->objectManager->getObject(
             Link::class,

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Sales\Model\Order;
 
@@ -24,36 +24,38 @@ use Magento\Sales\Model\AbstractModel;
  */
 class Item extends AbstractModel implements OrderItemInterface
 {
-    const STATUS_PENDING = 1;
+    public const STATUS_PENDING = 1;
 
     // No items shipped, invoiced, canceled, refunded nor backordered
-    const STATUS_SHIPPED = 2;
+    public const STATUS_SHIPPED = 2;
 
     // When qty ordered - [qty canceled + qty returned] = qty shipped
-    const STATUS_INVOICED = 9;
+    public const STATUS_INVOICED = 9;
 
     // When qty ordered - [qty canceled + qty returned] = qty invoiced
-    const STATUS_BACKORDERED = 3;
+    public const STATUS_BACKORDERED = 3;
 
     // When qty ordered - [qty canceled + qty returned] = qty backordered
-    const STATUS_CANCELED = 5;
+    public const STATUS_CANCELED = 5;
 
     // When qty ordered = qty canceled
-    const STATUS_PARTIAL = 6;
+    public const STATUS_PARTIAL = 6;
 
     // If [qty shipped or(max of two) qty invoiced + qty canceled + qty returned]
     // < qty ordered
-    const STATUS_MIXED = 7;
+    public const STATUS_MIXED = 7;
 
     // All other combinations
-    const STATUS_REFUNDED = 8;
+    public const STATUS_REFUNDED = 8;
 
     // When qty ordered = qty refunded
-    const STATUS_RETURNED = 4;
+    public const STATUS_RETURNED = 4;
 
-    // When qty ordered = qty returned // not used at the moment
-
-    // When qty ordered = qty returned // not used at the moment
+    /**
+     * When qty ordered = qty returned // not used at the moment
+     *
+     * @var string
+     */
     protected $_eventPrefix = 'sales_order_item';
 
     /**
@@ -124,10 +126,10 @@ class Item extends AbstractModel implements OrderItemInterface
         \Magento\Sales\Model\OrderFactory $orderFactory,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Catalog\Api\ProductRepositoryInterface $productRepository,
-        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
-        \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
+        ?\Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
+        ?\Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = [],
-        \Magento\Framework\Serialize\Serializer\Json $serializer = null
+        ?\Magento\Framework\Serialize\Serializer\Json $serializer = null
     ) {
         parent::__construct(
             $context,
@@ -232,7 +234,7 @@ class Item extends AbstractModel implements OrderItemInterface
      */
     public function getSimpleQtyToShip()
     {
-        $qty = $this->getQtyOrdered() - max($this->getQtyShipped(), $this->getQtyRefunded()) - $this->getQtyCanceled();
+        $qty = $this->getQtyOrdered() - $this->getQtyShipped() - $this->getQtyRefunded() - $this->getQtyCanceled();
         return max(round($qty, 8), 0);
     }
 
@@ -313,15 +315,15 @@ class Item extends AbstractModel implements OrderItemInterface
      */
     public function getStatusId()
     {
-        $backordered = (double)$this->getQtyBackordered();
+        $backordered = (float)$this->getQtyBackordered();
         if (!$backordered && $this->getHasChildren()) {
-            $backordered = (double)$this->_getQtyChildrenBackordered();
+            $backordered = (float)$this->_getQtyChildrenBackordered();
         }
-        $canceled = (double)$this->getQtyCanceled();
-        $invoiced = (double)$this->getQtyInvoiced();
-        $ordered = (double)$this->getQtyOrdered();
-        $refunded = (double)$this->getQtyRefunded();
-        $shipped = (double)$this->getQtyShipped();
+        $canceled = (float)$this->getQtyCanceled();
+        $invoiced = (float)$this->getQtyInvoiced();
+        $ordered = (float)$this->getQtyOrdered();
+        $refunded = (float)$this->getQtyRefunded();
+        $shipped = (float)$this->getQtyShipped();
 
         $actuallyOrdered = $ordered - $canceled - $refunded;
 
@@ -364,7 +366,7 @@ class Item extends AbstractModel implements OrderItemInterface
     {
         $backordered = null;
         foreach ($this->_children as $childItem) {
-            $backordered += (double)$childItem->getQtyBackordered();
+            $backordered += (float)$childItem->getQtyBackordered();
         }
 
         return $backordered;
@@ -465,7 +467,7 @@ class Item extends AbstractModel implements OrderItemInterface
      * @param array $options
      * @return $this
      */
-    public function setProductOptions(array $options = null)
+    public function setProductOptions(?array $options = null)
     {
         $this->setData('product_options', $options);
         return $this;

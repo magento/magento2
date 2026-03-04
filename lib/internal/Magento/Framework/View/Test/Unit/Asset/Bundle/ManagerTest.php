@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -51,14 +51,12 @@ class ManagerTest extends TestCase
         $this->bundle = $this->getMockBuilder(Bundle::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->bundleConfig = $this->getMockBuilder(ConfigInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->bundleConfig = $this->createMock(ConfigInterface::class);
         $this->assetConfig = $this->getMockBuilder(\Magento\Framework\View\Asset\ConfigInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->asset = $this->getMockForAbstractClass(
+        $this->asset = $this->createMock(
             LocalInterface::class,
             [],
             '',
@@ -92,9 +90,7 @@ class ManagerTest extends TestCase
 
     public function testAddAssetWithExcludedFile()
     {
-        $dirRead = $this->getMockBuilder(ReadInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $dirRead = $this->createMock(ReadInterface::class);
         $context = $this->getMockBuilder(FallbackContext::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -118,6 +114,13 @@ class ManagerTest extends TestCase
         $this->asset->expects($this->atLeastOnce())
             ->method('getFilePath')
             ->willReturn('source/file.min.js');
+        $this->asset->expects($this->once())
+            ->method('getPath')
+            ->willReturn('some/path/to_file');
+        $dirRead->expects($this->once())
+            ->method('getAbsolutePath')
+            ->with('some/path/to_file')
+            ->willReturn('some/path/to_file');
         $this->filesystem->expects($this->once())
             ->method('getDirectoryRead')
             ->with(DirectoryList::APP)
@@ -135,9 +138,7 @@ class ManagerTest extends TestCase
 
     public function testAddAssetWithExcludedDirectory()
     {
-        $dirRead = $this->getMockBuilder(ReadInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $dirRead = $this->createMock(ReadInterface::class);
         $context = $this->getMockBuilder(FallbackContext::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -171,6 +172,8 @@ class ManagerTest extends TestCase
         $this->asset->expects($this->atLeastOnce())
             ->method('getContext')
             ->willReturn($context);
+        $this->asset->method('getPath')
+            ->willReturn('');   // PHP 8.1. compatibility
         $this->bundleConfig->expects($this->atLeastOnce())
             ->method('getConfig')
             ->with($context)
@@ -187,9 +190,7 @@ class ManagerTest extends TestCase
 
     public function testAddAsset()
     {
-        $dirRead = $this->getMockBuilder(ReadInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $dirRead = $this->createMock(ReadInterface::class);
         $context = $this->getMockBuilder(FallbackContext::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -201,6 +202,8 @@ class ManagerTest extends TestCase
             ->method('getDirectoryRead')
             ->with(DirectoryList::APP)
             ->willReturn($dirRead);
+        $dirRead->method('getAbsolutePath')
+            ->willReturn('some/excluded/file');
         $this->asset->expects($this->atLeastOnce())
             ->method('getSourceFile')
             ->willReturn('/path/to/source/file.min.js');

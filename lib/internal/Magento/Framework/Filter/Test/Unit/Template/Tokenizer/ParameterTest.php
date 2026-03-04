@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -9,6 +9,7 @@ namespace Magento\Framework\Filter\Test\Unit\Template\Tokenizer;
 
 use Magento\Framework\Filter\Template\Tokenizer\Parameter;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class ParameterTest extends TestCase
 {
@@ -24,9 +25,8 @@ class ParameterTest extends TestCase
 
     /**
      * @param string $string String to tokenize
-     * @param string $expectedValue
-     * @dataProvider sampleTokenizeStringProvider
-     */
+     * @param string $expectedValue     */
+    #[DataProvider('sampleTokenizeStringProvider')]
     public function testTokenize($string, $expectedValue)
     {
         $this->_filter->setString($string);
@@ -35,9 +35,8 @@ class ParameterTest extends TestCase
 
     /**
      * @param string $string String to get value of
-     * @param string $expectedValue
-     * @dataProvider sampleGetValueStringProvider
-     */
+     * @param string $expectedValue     */
+    #[DataProvider('sampleGetValueStringProvider')]
     public function testGetValue($string, $expectedValue)
     {
         $this->_filter->setString($string);
@@ -47,7 +46,7 @@ class ParameterTest extends TestCase
     /**
      * @return array
      */
-    public function sampleTokenizeStringProvider()
+    public static function sampleTokenizeStringProvider()
     {
         return [
             ["%20direct_url='about-magento-demo-store'", ['direct_url' => 'about-magento-demo-store']],
@@ -60,7 +59,7 @@ class ParameterTest extends TestCase
     /**
      * @return array
      */
-    public function sampleGetValueStringProvider()
+    public static function sampleGetValueStringProvider()
     {
         return [
             [" direct_url='about-magento-demo-store'", "direct_url='about-magento-demo-store'"],

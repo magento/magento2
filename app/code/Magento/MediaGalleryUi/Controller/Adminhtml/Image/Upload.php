@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -72,13 +72,11 @@ class Upload extends Action implements HttpPostActionInterface
             ];
             $resultJson->setHttpResponseCode(self::HTTP_BAD_REQUEST);
             $resultJson->setData($responseContent);
-
             return $resultJson;
         }
 
         try {
             $this->uploadImage->execute($targetFolder, $type);
-
             $responseCode = self::HTTP_OK;
             $responseContent = [
                 'success' => true,
@@ -101,7 +99,6 @@ class Upload extends Action implements HttpPostActionInterface
 
         $resultJson->setHttpResponseCode($responseCode);
         $resultJson->setData($responseContent);
-
         return $resultJson;
     }
 }

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -11,6 +11,8 @@ use Magento\Csp\Api\Data\PolicyInterface;
 
 /**
  * Merges policies with the same ID in order to have only 1 policy DTO-per-policy.
+ *
+ * @api
  */
 interface MergerInterface
 {

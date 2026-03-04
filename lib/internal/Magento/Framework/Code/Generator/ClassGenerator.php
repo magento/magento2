@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Framework\Code\Generator;
@@ -226,6 +226,10 @@ class ClassGenerator extends \Laminas\Code\Generator\ClassGenerator implements
      */
     public function getNamespaceName()
     {
-        return ltrim(parent::getNamespaceName(), '\\') ?: null;
+        $namespaceName = parent::getNamespaceName();
+        if ($namespaceName !== null) {
+            $namespaceName = ltrim($namespaceName, '\\') ?: null;
+        }
+        return $namespaceName;
     }
 }

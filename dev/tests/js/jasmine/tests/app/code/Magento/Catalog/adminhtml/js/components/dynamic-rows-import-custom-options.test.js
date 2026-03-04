@@ -1,6 +1,6 @@
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 
 /*eslint max-nested-callbacks: 0*/
@@ -26,7 +26,6 @@ define([
             data = [{
                 'options': [
                     {
-                        'sort_order': 1,
                         'option_id': 1,
                         'option_type_id': 1,
                         'values': [{
@@ -36,7 +35,6 @@ define([
                         }]
                     },
                     {
-                        'sort_order': 2,
                         'option_id': 2,
                         'option_type_id': 2,
                         'values': [{

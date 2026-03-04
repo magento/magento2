@@ -1,9 +1,7 @@
 <?php
 /**
- * URL rewrite resource model
- *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\UrlRewrite\Model\ResourceModel;
 

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 
 declare(strict_types=1);
@@ -10,6 +10,8 @@ namespace Magento\CatalogImportExport\Model\Import;
 
 use Magento\Framework\App\Bootstrap;
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\Filesystem\Directory\TargetDirectory;
+use Magento\Framework\Filesystem\Driver\File;
 
 /**
  * Tests for the \Magento\CatalogImportExport\Model\Import\Uploader class.
@@ -46,7 +48,7 @@ class UploaderTest extends \Magento\TestFramework\Indexer\TestCase
     protected function setUp(): void
     {
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        $this->fileReader = $this->getMockForAbstractClass(\Magento\Framework\Filesystem\File\ReadInterface::class);
+        $this->fileReader = $this->createMock(\Magento\Framework\Filesystem\File\ReadInterface::class);
         $fileReadFactory = $this->createMock(\Magento\Framework\Filesystem\File\ReadFactory::class);
         $fileReadFactory->method('create')->willReturn($this->fileReader);
         $random = $this->createMock(\Magento\Framework\Math\Random::class);
@@ -59,14 +61,18 @@ class UploaderTest extends \Magento\TestFramework\Indexer\TestCase
             ]
         );
 
-        $filesystem = $this->objectManager->create(\Magento\Framework\Filesystem::class);
+        $this->directory = $this->objectManager->get(TargetDirectory::class)->getDirectoryWrite(DirectoryList::ROOT);
 
-        $appParams = \Magento\TestFramework\Helper\Bootstrap::getInstance()
-            ->getBootstrap()
-            ->getApplication()
-            ->getInitParams()[Bootstrap::INIT_PARAM_FILESYSTEM_DIR_PATHS];
-        $mediaPath = $appParams[DirectoryList::MEDIA][DirectoryList::PATH];
-        $this->directory = $filesystem->getDirectoryWrite(DirectoryList::ROOT);
+        if (!$this->directory->getDriver() instanceof File) {
+            $mediaPath = 'media';
+        } else {
+            $appParams = \Magento\TestFramework\Helper\Bootstrap::getInstance()
+                ->getBootstrap()
+                ->getApplication()
+                ->getInitParams()[Bootstrap::INIT_PARAM_FILESYSTEM_DIR_PATHS];
+            $mediaPath = $appParams[DirectoryList::MEDIA][DirectoryList::PATH];
+        }
+
         $tmpDir = $this->directory->getRelativePath($mediaPath . '/import');
         if (!$this->directory->create($tmpDir)) {
             throw new \RuntimeException('Failed to create temporary directory');
@@ -103,7 +109,8 @@ class UploaderTest extends \Magento\TestFramework\Indexer\TestCase
         $fileName = basename($testImagePath);
         $filePath = $this->directory->getAbsolutePath($this->uploader->getTmpDir() . '/' . $fileName);
         //phpcs:ignore
-        copy($testImagePath, $filePath);
+        $this->copyFile($testImagePath, $filePath);
+
         $this->uploader->move($fileName);
         $this->assertTrue($this->directory->isExist($this->uploader->getTmpDir() . '/' . $fileName));
     }
@@ -127,7 +134,7 @@ class UploaderTest extends \Magento\TestFramework\Indexer\TestCase
         $fileName = basename($testImagePath);
         $filePath = $this->directory->getAbsolutePath($tmpDir . '/' . $fileName);
         //phpcs:ignore
-        copy($testImagePath, $filePath);
+        $this->copyFile($testImagePath, $filePath);
         $this->uploader->move('../' . $fileName);
         $this->assertTrue($this->directory->isExist($tmpDir . '/' . $fileName));
     }
@@ -143,7 +150,7 @@ class UploaderTest extends \Magento\TestFramework\Indexer\TestCase
         $fileName = 'media_import_image.php';
         $filePath = $this->directory->getAbsolutePath($this->uploader->getTmpDir() . '/' . $fileName);
         //phpcs:ignore
-        copy(__DIR__ . '/_files/' . $fileName, $filePath);
+        $this->copyFile(__DIR__ . '/_files/' . $fileName, $filePath);
         $this->uploader->move($fileName);
         $this->assertFalse($this->directory->isExist($this->uploader->getTmpDir() . '/' . $fileName));
     }
@@ -156,5 +163,19 @@ class UploaderTest extends \Magento\TestFramework\Indexer\TestCase
     private function getTestImagePath(): string
     {
         return __DIR__ . '/_files/magento_additional_image_one.jpg';
+    }
+
+    /**
+     * @param string $source
+     * @param string $destination
+     * @throws \Magento\Framework\Exception\FileSystemException
+     */
+    private function copyFile(string $source, string $destination)
+    {
+        $driver = $this->directory->getDriver();
+        $absolutePath = $this->directory->getAbsolutePath($destination);
+
+        $driver->createDirectory(dirname($absolutePath));
+        $driver->filePutContents($destination, file_get_contents($source));
     }
 }

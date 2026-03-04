@@ -1,23 +1,22 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Tax\Model;
 
 use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 use Magento\Tax\Model\ClassModel as TaxClassModel;
 use Magento\Tax\Model\ClassModelFactory as TaxClassModelFactory;
 
 /**
  * Registry for the tax class models
  */
-class ClassModelRegistry
+class ClassModelRegistry implements ResetAfterRequestInterface
 {
     /**
-     * Tax class model factory
-     *
      * @var TaxClassModelFactory
      */
     private $taxClassModelFactory;
@@ -81,5 +80,13 @@ class ClassModelRegistry
     public function remove($taxClassId)
     {
         unset($this->taxClassRegistryById[$taxClassId]);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        $this->taxClassRegistryById = [];
     }
 }

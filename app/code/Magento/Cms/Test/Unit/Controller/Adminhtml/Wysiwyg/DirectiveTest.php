@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -23,6 +23,7 @@ use Magento\Framework\Image\Adapter\AdapterInterface;
 use Magento\Framework\Image\AdapterFactory;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\Url\DecoderInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -34,7 +35,8 @@ use Psr\Log\LoggerInterface;
  */
 class DirectiveTest extends TestCase
 {
-    const IMAGE_PATH = 'pub/media/wysiwyg/image.jpg';
+    use MockCreationTrait;
+    public const IMAGE_PATH = 'pub/media/wysiwyg/image.jpg';
 
     /**
      * @var Directive
@@ -114,51 +116,40 @@ class DirectiveTest extends TestCase
         $this->actionContextMock = $this->getMockBuilder(Context::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->requestMock = $this->getMockBuilder(RequestInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-        $this->urlDecoderMock = $this->getMockBuilder(DecoderInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-        $this->objectManagerMock = $this->getMockBuilder(ObjectManagerInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->requestMock = $this->createMock(RequestInterface::class);
+        $this->urlDecoderMock = $this->createMock(DecoderInterface::class);
+        $this->objectManagerMock = $this->createMock(ObjectManagerInterface::class);
         $this->templateFilterMock = $this->getMockBuilder(Filter::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->imageAdapterFactoryMock = $this->getMockBuilder(AdapterFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->imageAdapterMock = $this->getMockBuilder(AdapterInterface::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(
-                [
-                    'getColorAt',
-                    'getImage',
-                    'watermark',
-                    'refreshImageDimensions',
-                    'checkDependencies',
-                    'createPngFromString',
-                    'open',
-                    'resize',
-                    'crop',
-                    'save',
-                    'rotate'
-                ]
-            )
-            ->addMethods(['getMimeType'])
-            ->getMockForAbstractClass();
-        $this->responseMock = $this->getMockBuilder(ResponseInterface::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['sendResponse'])
-            ->addMethods(['setHeader', 'setBody'])
-            ->getMockForAbstractClass();
+        $this->imageAdapterMock = $this->createPartialMockWithReflection(
+            AdapterInterface::class,
+            [
+                'getColorAt',
+                'getImage',
+                'watermark',
+                'refreshImageDimensions',
+                'checkDependencies',
+                'createPngFromString',
+                'open',
+                'resize',
+                'crop',
+                'save',
+                'rotate',
+                'getMimeType'
+            ]
+        );
+        $this->responseMock = $this->createPartialMockWithReflection(
+            ResponseInterface::class,
+            ['sendResponse', 'setHeader', 'setBody']
+        );
         $this->wysiwygConfigMock = $this->getMockBuilder(Config::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->loggerMock = $this->getMockBuilder(LoggerInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->loggerMock = $this->createMock(LoggerInterface::class);
         $this->rawFactoryMock = $this->getMockBuilder(RawFactory::class)
             ->onlyMethods(['create'])
             ->disableOriginalConstructor()
@@ -264,8 +255,11 @@ class DirectiveTest extends TestCase
             ->willReturn($placeholderPath);
         $this->imageAdapterMock
             ->method('open')
-            ->withConsecutive([self::IMAGE_PATH])
-            ->willThrowException($exception);
+            ->willReturnCallback(function ($arg1) use ($exception) {
+                if ($arg1 === self::IMAGE_PATH) {
+                    throw $exception;
+                }
+            });
         $this->imageAdapterMock->expects($this->atLeastOnce())
             ->method('getMimeType')
             ->willReturn($mimeType);

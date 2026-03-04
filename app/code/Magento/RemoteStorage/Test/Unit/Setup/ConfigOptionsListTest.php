@@ -1,17 +1,19 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2021 Adobe
+ * All Rights Reserved.
  */
+declare(strict_types=1);
 
 namespace Magento\RemoteStorage\Test\Unit\Setup;
 
 use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\RemoteStorage\Driver\DriverFactoryInterface;
 use Magento\RemoteStorage\Driver\DriverFactoryPool;
 use Magento\RemoteStorage\Driver\RemoteDriverInterface;
 use Magento\RemoteStorage\Setup\ConfigOptionsList;
-use Magento\RemoteStorage\Driver\DriverFactoryInterface;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
@@ -33,19 +35,10 @@ class ConfigOptionsListTest extends TestCase
      */
     private $configOptionsList;
 
-    /**
-     * @return void
-     * @throws \Magento\Framework\Exception\FileSystemException
-     */
     protected function setUp(): void
     {
-        $this->driverFactoryPoolMock = $this->getMockBuilder(DriverFactoryPool::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $this->loggerMock = $this->getMockBuilder(LoggerInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->driverFactoryPoolMock = $this->createMock(DriverFactoryPool::class);
+        $this->loggerMock = $this->createMock(LoggerInterface::class);
 
         $this->configOptionsList = new ConfigOptionsList(
             $this->driverFactoryPoolMock,
@@ -57,13 +50,11 @@ class ConfigOptionsListTest extends TestCase
      * @param array $input
      * @param bool $isDeploymentConfigExists
      * @param array $expectedOutput
-     * @dataProvider validateDataProvider
      */
+    #[DataProvider('validateDataProvider')]
     public function testValidate(array $input, bool $isDeploymentConfigExists, array $expectedOutput)
     {
-        $deploymentConfigMock = $this->getMockBuilder(DeploymentConfig::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $deploymentConfigMock = $this->createMock(DeploymentConfig::class);
 
         $deploymentConfigMock
             ->expects(static::once())
@@ -76,9 +67,7 @@ class ConfigOptionsListTest extends TestCase
         );
 
         if ($isConnectionToBeTested) {
-            $driverFactoryMock = $this->getMockBuilder(DriverFactoryInterface::class)
-                ->disableOriginalConstructor()
-                ->getMock();
+            $driverFactoryMock = $this->createMock(DriverFactoryInterface::class);
 
             $this->driverFactoryPoolMock
                 ->expects(static::once())
@@ -86,9 +75,7 @@ class ConfigOptionsListTest extends TestCase
                 ->with($input['remote-storage-driver'])
                 ->willReturn($driverFactoryMock);
 
-            $remoteDriverMock = $this->getMockBuilder(RemoteDriverInterface::class)
-                ->disableOriginalConstructor()
-                ->getMock();
+            $remoteDriverMock = $this->createMock(RemoteDriverInterface::class);
 
             $driverFactoryMock
                 ->expects(static::once())
@@ -116,7 +103,7 @@ class ConfigOptionsListTest extends TestCase
     /**
      * @return array
      */
-    public function validateDataProvider()
+    public static function validateDataProvider()
     {
         return [
             'Local File Storage Before Deployment Config Exists' => [
@@ -186,6 +173,148 @@ class ConfigOptionsListTest extends TestCase
                     'Adapter error: [Message from LocalizedException]',
                 ]
             ],
+        ];
+    }
+
+    /**
+     * @param array $options
+     * @param array $deploymentConfig
+     * @param array $expectedConfigArr
+     */
+    #[DataProvider('createConfigProvider')]
+    public function testCreateConfig(array $options, array $deploymentConfig, array $expectedConfigArr)
+    {
+        $deploymentConfigMock = $this->createMock(DeploymentConfig::class);
+
+        $deploymentConfigMock
+            ->expects(static::once())
+            ->method('getConfigData')
+            ->willReturn($deploymentConfig);
+
+        $configDataListArr = $this->configOptionsList->createConfig($options, $deploymentConfigMock);
+
+        if (count($configDataListArr)) {
+            $this->assertCount(1, $configDataListArr);
+            $configDataArr = $configDataListArr[0]->getData();
+        } else {
+            $configDataArr = [];
+        }
+
+        $this->assertEquals(
+            $expectedConfigArr,
+            $configDataArr
+        );
+    }
+
+    /**
+     * @return array
+     */
+    public static function createConfigProvider()
+    {
+        return [
+            'Remote Storage Options Missing and Remote Storage Deployment Config Present' => [
+                [
+                    'backend-frontname' => 'admin2022',
+                ],
+                [
+                    'remote_storage' => [
+                        'driver' => 'aws-s3',
+                    ]
+                ],
+                // no config data will be passed to write to deployment config
+                []
+            ],
+            'Remote Storage Options Missing and Remote Storage Deployment Config Missing' => [
+                [
+                    'backend-frontname' => 'admin2022',
+                ],
+                [],
+                [
+                    // will create default config with file driver
+                    'remote_storage' => [
+                        'driver' => 'file',
+                    ]
+                ]
+            ],
+            'Remote Storage Options Present and Remote Storage Deployment Config Missing' => [
+                [
+                    'remote-storage-driver' => 'aws-s3',
+                    'remote-storage-region' => 'us-east-1',
+                    'remote-storage-bucket' => 'bucket1',
+                    'remote-storage-prefix' => 'pre_',
+                ],
+                [],
+                [
+                    'remote_storage' => [
+                        'driver' => 'aws-s3',
+                        'prefix' => 'pre_',
+                        'config' => [
+                            'bucket' => 'bucket1',
+                            'region' => 'us-east-1',
+                        ],
+                    ]
+                ]
+            ],
+            'Remote Storage Options Present and Remote Storage Deployment Config Present' => [
+                [
+                    'remote-storage-driver' => 'aws-s3',
+                    'remote-storage-region' => 'us-east-1_NEW',
+                    'remote-storage-bucket' => 'bucket_NEW',
+                ],
+                [
+                    'remote_storage' => [
+                        'driver' => 'aws-s3',
+                        'prefix' => 'pre_OLD',
+                        'config' => [
+                            'bucket' => 'bucket_OLD',
+                            'region' => 'us-east-1_OLD',
+                        ],
+                    ]
+                ],
+                [
+                    'remote_storage' => [
+                        'driver' => 'aws-s3',
+                        // prefix should be removed as it was not passed in options
+                        'config' => [
+                            'bucket' => 'bucket_NEW',
+                            'region' => 'us-east-1_NEW',
+                        ],
+                    ]
+                ]
+            ],
+        ];
+    }
+
+    /**
+     * @param string $name
+     * @param string $configPath
+     * @return void
+     */
+    #[DataProvider('getOptionsProvider')]
+    public function testGetOptions(string $name, string $configPath): void
+    {
+        $options = $this->configOptionsList->getOptions();
+        $optionsMap = array_merge(
+            ...array_map(fn ($o) => [$o->getName() => $o->getConfigPath()], $options)
+        );
+        $this->assertArrayHasKey($name, $optionsMap);
+        $this->assertEquals($configPath, $optionsMap[$name]);
+    }
+
+    /**
+     * @return array[]
+     */
+    public static function getOptionsProvider(): array
+    {
+        return [
+            ['remote-storage-driver', 'remote_storage/driver'],
+            ['remote-storage-prefix', 'remote_storage/prefix'],
+            ['remote-storage-endpoint', 'remote_storage/config/endpoint'],
+            ['remote-storage-bucket', 'remote_storage/config/bucket'],
+            ['remote-storage-region', 'remote_storage/config/region'],
+            ['remote-storage-key', 'remote_storage/config/credentials/key'],
+            ['remote-storage-secret', 'remote_storage/config/credentials/secret'],
+            ['remote-storage-path-style', 'remote_storage/config/path_style'],
         ];
     }
 }

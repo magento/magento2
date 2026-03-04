@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
-  */
+/**
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
+ */
 -->
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
@@ -12,5 +12,8 @@
         <element name="addSelectedProductToPackage" type="button" selector="#package_block_1 button[data-action='package-save-items']"/>
         <element name="save" type="button" selector="button[data-action='save-packages']"/>
         <element name="saveButtonDisabled" type="button" selector="button[data-action='save-packages']._disabled"/>
+        <element name="addPackage" type="button" selector="//div[@class='page-actions-buttons']//button[@data-action='add-packages']"/>
+        <element name="addProductsToSecondPackage" type="button" selector="#package_block_2 button[data-action='package-add-items']"/>
+        <element name="addSelectedProductToSecondPackage" type="button" selector="#package_block_2 button[data-action='package-save-items']"/>
     </section>
 </sections>

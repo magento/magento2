@@ -1,12 +1,16 @@
-<?php declare(strict_types=1);
+<?php
 /**
- * test Magento\Customer\Model\Metadata\Form\AbstractData
- *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
+declare(strict_types=1);
+
 namespace Magento\Customer\Test\Unit\Model\Metadata\Form;
 
+use Closure;
+use Laminas\I18n\Validator\Alpha;
+use Laminas\Validator\Date;
+use Laminas\Validator\Digits;
 use Magento\Customer\Api\Data\AttributeMetadataInterface;
 use Magento\Customer\Api\Data\ValidationRuleInterface;
 use Magento\Framework\App\Request\Http;
@@ -14,6 +18,10 @@ use Magento\Framework\App\RequestInterface;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Locale\ResolverInterface;
 use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
+use Magento\Framework\Validator\Alnum;
+use Magento\Framework\Validator\EmailAddress;
+use Magento\Framework\Validator\Hostname;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
@@ -23,7 +31,7 @@ use Psr\Log\LoggerInterface;
  */
 class AbstractDataTest extends TestCase
 {
-    const MODEL = 'MODEL';
+    public const MODEL = 'MODEL';
 
     /**
      * @var ExtendsAbstractData
@@ -70,17 +78,14 @@ class AbstractDataTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->localeMock = $this->getMockBuilder(
+        $this->localeMock = $this->createMock(
             TimezoneInterface::class
-        )->disableOriginalConstructor()
-            ->getMock();
-        $this->localeResolverMock = $this->getMockBuilder(
+        );
+        $this->localeResolverMock = $this->createMock(
             ResolverInterface::class
-        )->disableOriginalConstructor()
-            ->getMock();
-        $this->loggerMock = $this->getMockBuilder(LoggerInterface::class)
-            ->getMock();
-        $this->attributeMock = $this->getMockForAbstractClass(AttributeMetadataInterface::class);
+        );
+        $this->loggerMock = $this->createMock(LoggerInterface::class);
+        $this->attributeMock = $this->createMock(AttributeMetadataInterface::class);
         $this->value = 'VALUE';
         $this->entityTypeCode = 'ENTITY_TYPE_CODE';
         $this->isAjax = false;
@@ -128,9 +133,8 @@ class AbstractDataTest extends TestCase
     /**
      * @param bool $bool
      *
-     * @return void
-     * @dataProvider trueFalseDataProvider
-     */
+     * @return void */
+    #[DataProvider('trueFalseDataProvider')]
     public function testSetRequestScopeOnly($bool): void
     {
         $this->assertSame($this->model, $this->model->setRequestScopeOnly($bool));
@@ -140,7 +144,7 @@ class AbstractDataTest extends TestCase
     /**
      * @return array
      */
-    public function trueFalseDataProvider(): array
+    public static function trueFalseDataProvider(): array
     {
         return [[true], [false]];
     }
@@ -162,9 +166,8 @@ class AbstractDataTest extends TestCase
      * @param bool|string $output
      * @param bool|string $filter
      *
-     * @return void
-     * @dataProvider applyInputFilterProvider
-     */
+     * @return void */
+    #[DataProvider('applyInputFilterProvider')]
     public function testApplyInputFilter($input, $output, $filter): void
     {
         if ($input) {
@@ -176,7 +179,7 @@ class AbstractDataTest extends TestCase
     /**
      * @return array
      */
-    public function applyInputFilterProvider(): array
+    public static function applyInputFilterProvider(): array
     {
         return [
             [false, false, false],
@@ -191,9 +194,8 @@ class AbstractDataTest extends TestCase
      * @param null|bool|string $format
      * @param string           $output
      *
-     * @return void
-     * @dataProvider dateFilterFormatProvider
-     */
+     * @return void */
+    #[DataProvider('dateFilterFormatProvider')]
     public function testDateFilterFormat($format, $output): void
     {
         // Since model is instantiated in setup, if I use it directly in the dataProvider, it will be null.
@@ -219,7 +221,7 @@ class AbstractDataTest extends TestCase
     /**
      * @return array
      */
-    public function dateFilterFormatProvider(): array
+    public static function dateFilterFormatProvider(): array
     {
         return [[null, 'Whatever I put'], [false, self::MODEL], ['something else', self::MODEL]];
     }
@@ -229,9 +231,8 @@ class AbstractDataTest extends TestCase
      * @param bool|string $output
      * @param bool|string $filter
      *
-     * @return void
-     * @dataProvider applyOutputFilterDataProvider
-     */
+     * @return void */
+    #[DataProvider('applyOutputFilterDataProvider')]
     public function testApplyOutputFilter($input, $output, $filter): void
     {
         if ($input) {
@@ -245,7 +246,7 @@ class AbstractDataTest extends TestCase
      *
      * @return array
      */
-    public function applyOutputFilterDataProvider(): array
+    public static function applyOutputFilterDataProvider(): array
     {
         return [
             [false, false, false],
@@ -264,14 +265,11 @@ class AbstractDataTest extends TestCase
      * @param null|string $inputValidation
      * @param bool|array  $expectedOutput
      *
-     * @return void
-     * @dataProvider validateInputRuleDataProvider
-     */
+     * @return void */
+    #[DataProvider('validateInputRuleDataProvider')]
     public function testValidateInputRule($value, $label, $inputValidation, $expectedOutput): void
     {
-        $validationRule = $this->getMockBuilder(ValidationRuleInterface::class)->disableOriginalConstructor()
-            ->onlyMethods(['getName', 'getValue'])
-            ->getMockForAbstractClass();
+        $validationRule = $this->createMock(ValidationRuleInterface::class);
 
         $validationRule->method('getName')
             ->willReturn('input_validation');
@@ -291,7 +289,7 @@ class AbstractDataTest extends TestCase
     /**
      * @return array
      */
-    public function validateInputRuleDataProvider(): array
+    public static function validateInputRuleDataProvider(): array
     {
         return [
             [null, null, null, true],
@@ -301,7 +299,7 @@ class AbstractDataTest extends TestCase
                 'mylabel',
                 'alphanumeric',
                 [
-                    \Zend_Validate_Alnum::NOT_ALNUM => '"mylabel" contains non-alphabetic or non-numeric characters.'
+                    Alnum::NOT_ALNUM => '"mylabel" contains non-alphabetic or non-numeric characters.'
                 ]
             ],
             [
@@ -309,7 +307,7 @@ class AbstractDataTest extends TestCase
                 'mylabel',
                 'alphanumeric',
                 [
-                    \Zend_Validate_Alnum::NOT_ALNUM => '"mylabel" contains non-alphabetic or non-numeric characters.'
+                    Alnum::NOT_ALNUM => '"mylabel" contains non-alphabetic or non-numeric characters.'
                 ]
             ],
             ['abcqaz', 'mylabel', 'alphanumeric', true],
@@ -318,13 +316,13 @@ class AbstractDataTest extends TestCase
                 '!@#$',
                 'mylabel',
                 'numeric',
-                [\Zend_Validate_Digits::NOT_DIGITS => '"mylabel" contains non-numeric characters.']
+                [Digits::NOT_DIGITS => '"mylabel" contains non-numeric characters.']
             ],
             [
                 '1234',
                 'mylabel',
                 'alpha',
-                [\Zend_Validate_Alpha::NOT_ALPHA => '"mylabel" contains non-alphabetic characters.']
+                [Alpha::NOT_ALPHA => '"mylabel" contains non-alphabetic characters.']
             ],
             [
                 '!@#$',
@@ -332,9 +330,9 @@ class AbstractDataTest extends TestCase
                 'email',
                 [
                     // @codingStandardsIgnoreStart
-                    \Zend_Validate_EmailAddress::INVALID_HOSTNAME => '"mylabel" is not a valid hostname.',
-                    \Zend_Validate_Hostname::INVALID_HOSTNAME => "'#\$' does not match the expected structure for a DNS hostname",
-                    \Zend_Validate_Hostname::INVALID_LOCAL_NAME => "'#\$' does not look like a valid local network name."
+                    EmailAddress::INVALID_HOSTNAME => '"mylabel" is not a valid hostname.',
+                    Hostname::INVALID_HOSTNAME => "'#\$' does not match the expected structure for a DNS hostname",
+                    Hostname::INVALID_LOCAL_NAME => "'#\$' does not look like a valid local network name."
                     // @codingStandardsIgnoreEnd
                 ]
             ],
@@ -344,7 +342,7 @@ class AbstractDataTest extends TestCase
                 '1234',
                 'mylabel',
                 'date',
-                [\Zend_Validate_Date::INVALID_DATE => '"mylabel" is not a valid date.']
+                [Date::INVALID_DATE => '"mylabel" is not a valid date.']
             ]
         ];
     }
@@ -352,9 +350,8 @@ class AbstractDataTest extends TestCase
     /**
      * @param bool $ajaxRequest
      *
-     * @return void
-     * @dataProvider trueFalseDataProvider
-     */
+     * @return void */
+    #[DataProvider('trueFalseDataProvider')]
     public function testGetIsAjaxRequest($ajaxRequest): void
     {
         $this->model = new ExtendsAbstractData(
@@ -370,15 +367,14 @@ class AbstractDataTest extends TestCase
     }
 
     /**
-     * @param RequestInterface $request
+     * @param Closure|null                  $request
      * @param string                        $attributeCode
      * @param bool|string                   $requestScope
      * @param bool                          $requestScopeOnly
      * @param string                        $expectedValue
      *
-     * @return void
-     * @dataProvider getRequestValueDataProvider
-     */
+     * @return void */
+    #[DataProvider('getRequestValueDataProvider')]
     public function testGetRequestValue(
         $request,
         $attributeCode,
@@ -386,6 +382,9 @@ class AbstractDataTest extends TestCase
         $requestScopeOnly,
         $expectedValue
     ): void {
+        if ($request != null) {
+            $request = $request($this);
+        }
         $this->attributeMock->expects(
             $this->once()
         )->method(
@@ -399,30 +398,77 @@ class AbstractDataTest extends TestCase
     }
 
     /**
+     * @param $expectedValue
+     *
      * @return array
      */
-    public function getRequestValueDataProvider(): array
+    public function getRequestMock($expectedValue): array
     {
-        $expectedValue = 'EXPECTED_VALUE';
-        $requestMock = $this->getMockBuilder(RequestInterface::class)
-            ->getMock();
+        $requestMock = $this->createMock(RequestInterface::class);
         $requestMock->method('getParam')
-            ->withConsecutive(['ATTR_CODE'], ['REQUEST_SCOPE'], ['REQUEST_SCOPE'])
-            ->willReturn($expectedValue, ['ATTR_CODE' => $expectedValue], []);
-
-        $requestMockHttp = $this->getMockBuilder(Http::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+            ->willReturnCallback(
+                function ($arg) use ($expectedValue) {
+                    static $callCount = 0;
+                    if ($arg == 'ATTR_CODE' && $callCount ==0) {
+                        $callCount++;
+                        return $expectedValue;
+                    } elseif ($arg == 'REQUEST_SCOPE' && $callCount == 1) {
+                        $callCount++;
+                        return ['ATTR_CODE' => $expectedValue];
+                    } elseif ($arg == 'REQUEST_SCOPE' && $callCount == 2) {
+                        $callCount++;
+                        return false;
+                    }
+                }
+            );
+        $requestMockHttp = $this->createMock(Http::class);
         $requestMockHttp
-            ->expects($this->once())
+            ->expects($this->any())
             ->method('getParams')
             ->willReturn(['REQUEST' => ['SCOPE' => ['ATTR_CODE' => $expectedValue]]]);
 
         return [
-            [$requestMock, 'ATTR_CODE', false, false, $expectedValue],
-            [$requestMock, 'ATTR_CODE', 'REQUEST_SCOPE', false, $expectedValue],
-            [$requestMock, 'ATTR_CODE', 'REQUEST_SCOPE', false, false],
-            [$requestMockHttp, 'ATTR_CODE', 'REQUEST/SCOPE', false, $expectedValue]
+            'requestMock' => $requestMock,
+            'requestMockHttp' => $requestMockHttp
+        ];
+    }
+
+    /**
+     * @return array
+     */
+    public static function getRequestValueDataProvider(): array
+    {
+        $expectedValue = 'EXPECTED_VALUE';
+
+        return [
+            [
+                static fn (self $testCase) => $testCase->getRequestMock($expectedValue)['requestMock'],
+                'ATTR_CODE',
+                false,
+                false,
+                $expectedValue
+            ],
+            [
+                static fn (self $testCase) => $testCase->getRequestMock($expectedValue)['requestMock'],
+                'ATTR_CODE',
+                'REQUEST_SCOPE',
+                false,
+                $expectedValue
+            ],
+            [
+                static fn (self $testCase) => $testCase->getRequestMock($expectedValue)['requestMockHttp'],
+                'ATTR_CODE',
+                'REQUEST_SCOPE',
+                false,
+                false
+            ],
+            [
+                static fn (self $testCase) => $testCase->getRequestMock($expectedValue)['requestMockHttp'],
+                'ATTR_CODE',
+                'REQUEST/SCOPE',
+                false,
+                $expectedValue
+            ]
         ];
     }
 }

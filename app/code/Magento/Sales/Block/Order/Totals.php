@@ -1,10 +1,11 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Sales\Block\Order;
 
+use Magento\Framework\DataObject;
 use Magento\Sales\Model\Order;
 
 /**
@@ -31,7 +32,7 @@ class Totals extends \Magento\Framework\View\Element\Template
     protected $_order = null;
 
     /**
-     * Core registry
+     * Core registry object
      *
      * @var \Magento\Framework\Registry
      */
@@ -125,7 +126,7 @@ class Totals extends \Magento\Framework\View\Element\Template
         /**
          * Add discount
          */
-        if ((double)$this->getSource()->getDiscountAmount() != 0) {
+        if ((float)$this->getSource()->getDiscountAmount() != 0) {
             if ($this->getSource()->getDiscountDescription()) {
                 $discountLabel = __('Discount (%1)', $source->getDiscountDescription());
             } else {
@@ -141,24 +142,7 @@ class Totals extends \Magento\Framework\View\Element\Template
             );
         }
 
-        /**
-         * Add shipping
-         */
-        if (!$source->getIsVirtual() && ((double)$source->getShippingAmount() || $source->getShippingDescription())) {
-            $label = __('Shipping & Handling');
-            if ($this->getSource()->getCouponCode() && !isset($this->_totals['discount'])) {
-                $label = __('Shipping & Handling (%1)', $this->getSource()->getCouponCode());
-            }
-
-            $this->_totals['shipping'] = new \Magento\Framework\DataObject(
-                [
-                    'code' => 'shipping',
-                    'field' => 'shipping_amount',
-                    'value' => $this->getSource()->getShippingAmount(),
-                    'label' => $label,
-                ]
-            );
-        }
+        $this->addShippingTotal($source);
 
         $this->_totals['grand_total'] = new \Magento\Framework\DataObject(
             [
@@ -187,6 +171,38 @@ class Totals extends \Magento\Framework\View\Element\Template
     }
 
     /**
+     * Add shipping total
+     *
+     * @param Order|Order\Invoice $source
+     * @retrurn void
+     */
+    private function addShippingTotal($source)
+    {
+        if (!$source->getIsVirtual()
+            && ($source->getShippingAmount() !== null
+                || $source->getShippingDescription())
+        ) {
+            $shippingLabel = __('Shipping & Handling');
+
+            if (!isset($this->_totals['discount'])) {
+                if ($source->getCouponCode()) {
+                    $shippingLabel .= " ({$source->getCouponCode()})";
+                } elseif ($source->getDiscountDescription()) {
+                    $shippingLabel .= " ({$source->getDiscountDescription()})";
+                }
+            }
+            $this->_totals['shipping'] = new DataObject(
+                [
+                    'code' => 'shipping',
+                    'field' => 'shipping_amount',
+                    'value' => $source->getShippingAmount(),
+                    'label' => $shippingLabel,
+                ]
+            );
+        }
+    }
+
+    /**
      * Add new total to totals array after specific total or before last total by default
      *
      * @param   \Magento\Framework\DataObject $total
@@ -202,24 +218,24 @@ class Totals extends \Magento\Framework\View\Element\Template
                 $totals[$code] = $item;
                 if ($code == $after) {
                     $added = true;
-                    $totals[$total->getCode()] = $total;
+                    $totals[$total->getCode() ?? ''] = $total;
                 }
             }
             if (!$added) {
                 $last = array_pop($totals);
-                $totals[$total->getCode()] = $total;
-                $totals[$last->getCode()] = $last;
+                $totals[$total->getCode() ?? ''] = $total;
+                $totals[$last->getCode() ?? ''] = $last;
             }
             $this->_totals = $totals;
         } elseif ($after == 'last') {
-            $this->_totals[$total->getCode()] = $total;
+            $this->_totals[$total->getCode() ?? ''] = $total;
         } elseif ($after == 'first') {
-            $totals = [$total->getCode() => $total];
+            $totals = [$total->getCode() ?? '' => $total];
             $this->_totals = array_merge($totals, $this->_totals);
         } else {
             $last = array_pop($this->_totals);
-            $this->_totals[$total->getCode()] = $total;
-            $this->_totals[$last->getCode()] = $last;
+            $this->_totals[$total->getCode() ?? ''] = $total;
+            $this->_totals[$last->getCode() ?? ''] = $last;
         }
         return $this;
     }
@@ -242,7 +258,7 @@ class Totals extends \Magento\Framework\View\Element\Template
                     $totals = [];
                     foreach ($this->_totals as $code => $item) {
                         if ($code == $beforeTotals) {
-                            $totals[$total->getCode()] = $total;
+                            $totals[$total->getCode() ?? ''] = $total;
                         }
                         $totals[$code] = $item;
                     }
@@ -253,8 +269,8 @@ class Totals extends \Magento\Framework\View\Element\Template
         }
         $totals = [];
         $first = array_shift($this->_totals);
-        $totals[$first->getCode()] = $first;
-        $totals[$total->getCode()] = $total;
+        $totals[$first->getCode() ?? ''] = $first;
+        $totals[$total->getCode() ?? ''] = $total;
         foreach ($this->_totals as $code => $item) {
             $totals[$code] = $item;
         }

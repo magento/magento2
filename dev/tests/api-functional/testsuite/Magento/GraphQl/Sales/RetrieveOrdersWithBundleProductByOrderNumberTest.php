@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe.
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -77,6 +77,10 @@ class RetrieveOrdersWithBundleProductByOrderNumberTest extends GraphQlAbstract
             'bundle-product-two-dropdown-options-simple1-simple2',
             $bundledItemInTheOrder['product_sku']
         );
+        $this->assertEquals(
+            'bundle-product-two-dropdown-options',
+            $bundledItemInTheOrder['parent_sku']
+        );
         $priceOfBundledItemInOrder = $bundledItemInTheOrder['product_sale_price']['value'];
         $this->assertEquals(15, $priceOfBundledItemInOrder);
         $this->assertArrayHasKey('bundle_options', $bundledItemInTheOrder);
@@ -115,6 +119,35 @@ class RetrieveOrdersWithBundleProductByOrderNumberTest extends GraphQlAbstract
                 ],
             ];
         $this->assertEquals($expectedBundleOptions, $bundleOptionsFromResponse);
+    }
+
+    /**
+     * Test customer order with bundle product and no telephone in address
+     *
+     * @magentoApiDataFixture Magento/Customer/_files/attribute_telephone_not_required_address.php
+     * @magentoApiDataFixture Magento/Customer/_files/customer.php
+     * @magentoApiDataFixture Magento/Bundle/_files/bundle_product_two_dropdown_options.php
+     */
+    public function testOrderBundleProductWithNoTelephoneInAddress()
+    {
+        //Place order with bundled product
+        $qty = 1;
+        $bundleSku = 'bundle-product-two-dropdown-options';
+        /** @var CustomerPlaceOrder $bundleProductOrderFixture */
+        $bundleProductOrderFixture = Bootstrap::getObjectManager()->create(CustomerPlaceOrder::class);
+        $orderResponse = $bundleProductOrderFixture->placeOrderWithBundleProduct(
+            ['email' => 'customer@example.com', 'password' => 'password'],
+            ['sku' => $bundleSku, 'quantity' => $qty],
+            ['telephone' => '']
+        );
+        $orderNumber = $orderResponse['placeOrder']['order']['order_number'];
+        $customerOrderResponse = $this->getCustomerOrderQueryBundleProduct($orderNumber);
+        $customerOrderItems = $customerOrderResponse[0];
+        $this->assertEquals("Pending", $customerOrderItems['status']);
+        $billingAddress = $customerOrderItems['billing_address'];
+        $shippingAddress = $customerOrderItems['shipping_address'];
+        $this->assertNull($billingAddress['telephone']);
+        $this->assertNull($shippingAddress['telephone']);
     }
 
     /**
@@ -220,59 +253,82 @@ class RetrieveOrdersWithBundleProductByOrderNumberTest extends GraphQlAbstract
         $query =
             <<<QUERY
 {
-     customer {
-       orders(filter:{number:{eq:"{$orderNumber}"}}) {
-         total_count
-         items {
-          id
-           number
-           order_date
-           status
-           items{
-            __typename
-            product_sku
-            product_name
-            product_url_key
-            product_sale_price{value}
-            quantity_ordered
-            discounts{amount{value} label}
-            ... on BundleOrderItem{
-              bundle_options{
-                __typename
-                label
-                values {
-                  product_sku
-                  product_name
-                  quantity
-                  price {
-                    value
-                    currency
-                  }
+    customer {
+        orders(filter:{number:{eq:"{$orderNumber}"}}) {
+            total_count
+            items {
+                id
+                number
+                order_date
+                status
+                items{
+                    __typename
+                    product_sku
+                    product_name
+                    product_url_key
+                    product_sale_price{value}
+                    quantity_ordered
+                    discounts{amount{value} label}
+                    ... on BundleOrderItem{
+                        parent_sku
+                        bundle_options{
+                            __typename
+                            label
+                            values {
+                                product_sku
+                                product_name
+                                quantity
+                                price {
+                                    value
+                                    currency
+                                }
+                            }
+                        }
+                    }
                 }
-              }
-          }
-         }
-           total {
-             base_grand_total{value currency}
-             grand_total{value currency}
-             subtotal {value currency }
-             total_tax{value currency}
-             taxes {amount{value currency} title rate}
-             total_shipping{value currency}
-             shipping_handling
-             {
-               amount_including_tax{value}
-               amount_excluding_tax{value}
-               total_amount{value}
-               discounts{amount{value}}
-               taxes {amount{value} title rate}
-             }
-             discounts {amount{value currency} label}
-           }
-         }
-       }
-     }
-   }
+                total {
+                    base_grand_total{value currency}
+                    grand_total{value currency}
+                    subtotal {value currency }
+                    total_tax{value currency}
+                    taxes {amount{value currency} title rate}
+                    total_shipping{value currency}
+                    shipping_handling
+                    {
+                        amount_including_tax{value}
+                        amount_excluding_tax{value}
+                        total_amount{value}
+                        discounts{amount{value}}
+                        taxes {amount{value} title rate}
+                    }
+                    discounts {amount{value currency} label}
+                }
+                billing_address {
+                    firstname
+                    lastname
+                    street
+                    city
+                    region
+                    region_id
+                    postcode
+                    telephone
+                    country_code
+                }
+                shipping_address {
+                    firstname
+                    lastname
+                    street
+                    city
+                    region
+                    region_id
+                    postcode
+                    telephone
+                    country_code
+                }
+            }
+        }
+    }
+}
 QUERY;
         $currentEmail = 'customer@example.com';
         $currentPassword = 'password';

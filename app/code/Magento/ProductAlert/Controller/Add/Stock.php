@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\ProductAlert\Controller\Add;
@@ -41,7 +41,7 @@ class Stock extends AddController implements HttpGetActionInterface
         Context $context,
         CustomerSession $customerSession,
         ProductRepositoryInterface $productRepository,
-        StoreManagerInterface $storeManager = null
+        ?StoreManagerInterface $storeManager = null
     ) {
         $this->productRepository = $productRepository;
         parent::__construct($context, $customerSession);

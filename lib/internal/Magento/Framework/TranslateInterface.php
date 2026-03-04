@@ -1,12 +1,14 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework;
 
 /**
  * @todo change this interface when i18n-related logic is moved to library
+ *
+ * @api
  */
 interface TranslateInterface
 {

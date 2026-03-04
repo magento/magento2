@@ -1,8 +1,10 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
+declare(strict_types=1);
+
 namespace Magento\Ui\Component\Control;
 
 use Magento\Framework\View\Element\AbstractBlock;
@@ -10,6 +12,8 @@ use Magento\Framework\View\Element\UiComponent\Control\ControlInterface;
 
 /**
  * Class Container
+ *
+ * @api
  */
 class Container extends AbstractBlock
 {

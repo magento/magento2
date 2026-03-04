@@ -1,11 +1,12 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Sales\Controller\Adminhtml\Order;
 
 use Magento\Framework\App\Action\HttpPostActionInterface;
+use Magento\Sales\Api\Data\OrderInterface;
 use Magento\Sales\Model\Order\Email\Sender\OrderCommentSender;
 
 /**
@@ -20,12 +21,12 @@ class AddComment extends \Magento\Sales\Controller\Adminhtml\Order implements Ht
      *
      * @see _isAllowed()
      */
-    const ADMIN_RESOURCE = 'Magento_Sales::comment';
+    public const ADMIN_RESOURCE = 'Magento_Sales::comment';
 
     /**
      * ACL resource needed to send comment email notification
      */
-    const ADMIN_SALES_EMAIL_RESOURCE = 'Magento_Sales::emails';
+    public const ADMIN_SALES_EMAIL_RESOURCE = 'Magento_Sales::emails';
 
     /**
      * Add order comment action
@@ -39,12 +40,13 @@ class AddComment extends \Magento\Sales\Controller\Adminhtml\Order implements Ht
             try {
                 $data = $this->getRequest()->getPost('history');
                 if (empty($data['comment']) && $data['status'] == $order->getDataByKey('status')) {
-                    throw new \Magento\Framework\Exception\LocalizedException(
-                        __('The comment is missing. Enter and try again.')
-                    );
+                    $error = 'Please provide a comment text or ' .
+                        'update the order status to be able to submit a comment for this order.';
+                    throw new \Magento\Framework\Exception\LocalizedException(__($error));
                 }
 
-                $order->setStatus($data['status']);
+                $orderStatus = $this->getOrderStatus($order, $data['status']);
+                $order->setStatus($orderStatus);
                 $notify = $data['is_customer_notified'] ?? false;
                 $visible = $data['is_visible_on_front'] ?? false;
 
@@ -52,12 +54,11 @@ class AddComment extends \Magento\Sales\Controller\Adminhtml\Order implements Ht
                     $notify = false;
                 }
 
-                $history = $order->addStatusHistoryComment($data['comment'], $data['status']);
+                $comment = trim(strip_tags($data['comment']));
+                $history = $order->addStatusHistoryComment($comment, $orderStatus);
                 $history->setIsVisibleOnFront($visible);
                 $history->setIsCustomerNotified($notify);
                 $history->save();
-
-                $comment = trim(strip_tags($data['comment']));
 
                 $order->save();
                 /** @var OrderCommentSender $orderCommentSender */
@@ -79,5 +80,26 @@ class AddComment extends \Magento\Sales\Controller\Adminhtml\Order implements Ht
             }
         }
         return $this->resultRedirectFactory->create()->setPath('sales/*/');
+    }
+
+    /**
+     * Get order status to set
+     *
+     * @param OrderInterface $order
+     * @param string $historyStatus
+     * @return string
+     */
+    private function getOrderStatus(OrderInterface $order, string $historyStatus): string
+    {
+        $config = $order->getConfig();
+        if ($config === null) {
+            return $historyStatus;
+        }
+        $statuses = $config->getStateStatuses($order->getState());
+
+        if (!isset($statuses[$historyStatus])) {
+            return $order->getDataByKey('status');
+        }
+        return $historyStatus;
     }
 }

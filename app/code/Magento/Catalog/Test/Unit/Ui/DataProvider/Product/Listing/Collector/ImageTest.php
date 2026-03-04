@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -53,22 +53,16 @@ class ImageTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->imageFactory = $this->getMockBuilder(ImageFactory::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->imageFactory = $this->createMock(ImageFactory::class);
 
-        $this->imageInterfaceFactory = $this->getMockBuilder(
-            ImageInterfaceFactory::class
-        )
-            ->setMethods(['create'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->imageInterfaceFactory = $this->createPartialMock(
+            ImageInterfaceFactory::class,
+            ['create']
+        );
 
-        $this->state = $this->getMockBuilder(State::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->storeManager = $this->getMockForAbstractClass(StoreManagerInterface::class);
-        $this->design = $this->getMockForAbstractClass(DesignInterface::class);
+        $this->state = $this->createMock(State::class);
+        $this->storeManager = $this->createMock(StoreManagerInterface::class);
+        $this->design = $this->createMock(DesignInterface::class);
         $this->designLoader = $this->createMock(DesignLoader::class);
         $this->model = new Image(
             $this->imageFactory,
@@ -83,26 +77,18 @@ class ImageTest extends TestCase
 
     public function testGet()
     {
-        $product = $this->getMockBuilder(Product::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $image = $this->getMockBuilder(ImageInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $product = $this->createMock(Product::class);
+        $image = $this->createMock(ImageInterface::class);
 
         $imageCode = 'widget_recently_viewed';
-        $productRenderInfoDto = $this->getMockForAbstractClass(ProductRenderInterface::class);
+        $productRenderInfoDto = $this->createMock(ProductRenderInterface::class);
 
         $productRenderInfoDto->expects($this->once())
             ->method('getStoreId')
             ->willReturn('1');
-        $imageHelper = $this->getMockBuilder(ImageHelper::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $imageHelper = $this->createMock(ImageHelper::class);
         $this->imageInterfaceFactory
-            ->expects($this->any())
-            ->method('create')
-            ->willReturn($image);
+            ->method('create')->willReturn($image);
 
         $this->state->expects($this->once())
             ->method('emulateAreaCode')
@@ -153,15 +139,9 @@ class ImageTest extends TestCase
 
     public function testEmulateImageCreating()
     {
-        $productMock = $this->getMockBuilder(ProductInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-        $imageMock = $this->getMockBuilder(ImageInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-        $imageHelperMock = $this->getMockBuilder(\Magento\Catalog\Helper\Image::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $productMock = $this->createMock(ProductInterface::class);
+        $imageMock = $this->createMock(ImageInterface::class);
+        $imageHelperMock = $this->createMock(ImageHelper::class);
         $this->imageFactory->expects($this->once())
             ->method('create')
             ->willReturn($imageHelperMock);

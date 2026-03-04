@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -164,6 +164,7 @@ class SaveTest extends AbstractBackendController
             [
                 'gotoEdit' => '1',
                 'skeleton_set' => $this->getCatalogProductDefaultAttributeSetId(),
+                'attribute_set_name' => ''
             ]
         );
         $this->dispatch('backend/catalog/product_set/save/');

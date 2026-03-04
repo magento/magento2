@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 
 /**
@@ -107,7 +107,7 @@ class Matrix extends \Magento\Backend\Block\Template
 
         foreach ($array as $key => $rate) {
             foreach ($rate as $code => $value) {
-                $parts = explode('.', $value);
+                $parts = $value !== null ? explode('.', $value) : [];
                 if (count($parts) == 2) {
                     $parts[1] = str_pad(rtrim($parts[1], 0), 4, '0', STR_PAD_RIGHT);
                     $array[$key][$code] = join('.', $parts);

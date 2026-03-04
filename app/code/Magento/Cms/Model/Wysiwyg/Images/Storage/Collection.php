@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Cms\Model\Wysiwyg\Images\Storage;
@@ -42,7 +42,8 @@ class Collection extends \Magento\Framework\Data\Collection\Filesystem
      */
     protected function _generateRow($filename)
     {
-        $filename = preg_replace('~[/\\\]+(?<![htps?]://)~', '/', $filename);
+        $filename = $filename !== null ?
+            preg_replace('~[/\\\]+(?<![htps?]://)~', '/', $filename) : '';
         $path = $this->_filesystem->getDirectoryWrite(DirectoryList::MEDIA);
         try {
             $mtime = $path->stat($path->getRelativePath($filename))['mtime'];

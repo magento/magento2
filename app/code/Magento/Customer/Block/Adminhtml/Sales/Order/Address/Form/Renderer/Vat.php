@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Customer\Block\Adminhtml\Sales\Order\Address\Form\Renderer;
 
@@ -11,8 +11,6 @@ use Magento\Framework\View\Helper\SecureHtmlRenderer;
 
 /**
  * VAT ID element renderer
- *
- * @author     Magento Core Team <core@magentocommerce.com>
  */
 class Vat extends \Magento\Backend\Block\Widget\Form\Renderer\Fieldset\Element
 {

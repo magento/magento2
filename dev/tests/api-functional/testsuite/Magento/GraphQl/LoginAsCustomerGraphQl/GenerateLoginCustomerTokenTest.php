@@ -1,12 +1,13 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\GraphQl\LoginAsCustomerGraphQl;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use Exception;
 use Magento\Framework\Exception\AuthenticationException;
 use Magento\Integration\Api\AdminTokenServiceInterface as AdminTokenService;
@@ -117,12 +118,12 @@ class GenerateLoginCustomerTokenTest extends GraphQlAbstract
      * @magentoApiDataFixture Magento/LoginAsCustomer/_files/admin.php
      * @magentoConfigFixture admin_store login_as_customer/general/enabled 1
      *
-     * @dataProvider dataProviderInvalidInfo
      * @param string $adminUserName
      * @param string $adminPassword
      * @param string $customerEmail
      * @param string $message
      */
+    #[DataProvider('dataProviderInvalidInfo')]
     public function testGenerateCustomerTokenInvalidData(
         string $adminUserName,
         string $adminPassword,
@@ -146,7 +147,7 @@ class GenerateLoginCustomerTokenTest extends GraphQlAbstract
      *
      * @return array
      */
-    public function dataProviderInvalidInfo(): array
+    public static function dataProviderInvalidInfo(): array
     {
         return [
             'invalid_admin_user_name' => [
@@ -215,6 +216,59 @@ MUTATION;
         try {
             $adminAccessToken = $this->adminTokenService->createAdminAccessToken($userName, $password);
             return ['Authorization' => 'Bearer ' . $adminAccessToken];
+        } catch (\Exception $e) {
+            throw new AuthenticationException(
+                __(
+                    'The account sign-in was incorrect or your account is disabled temporarily. '
+                    . 'Please wait and try again later.'
+                )
+            );
+        }
+    }
+
+    /**
+     * Verify customer token as admin with store
+     *
+     * @magentoApiDataFixture Magento/LoginAsCustomer/_files/admin.php
+     * @magentoConfigFixture admin_store login_as_customer/general/enabled 1
+     * @magentoApiDataFixture Magento/Store/_files/second_store.php
+     * @magentoApiDataFixture Magento/Customer/_files/customer_for_second_store.php
+     * @throws Exception
+     */
+    public function testGenerateCustomerValidTokenAsAdminWithStore()
+    {
+        $customerEmail = 'customer@example.com';
+
+        $mutation = $this->getQuery($customerEmail);
+
+        $response = $this->graphQlMutation(
+            $mutation,
+            [],
+            '',
+            $this->getAdminHeaderAuthenticationWithStore(
+                'TestAdmin1',
+                \Magento\TestFramework\Bootstrap::ADMIN_PASSWORD,
+                'fixture_second_store'
+            )
+        );
+        $this->assertArrayHasKey('generateCustomerTokenAsAdmin', $response);
+        $this->assertIsArray($response['generateCustomerTokenAsAdmin']);
+    }
+
+    /**
+     * To get admin access token with store
+     *
+     * @param string $userName
+     * @param string $password
+     * @param string $storeCode
+     * @return string[]
+     * @throws AuthenticationException
+     */
+    private function getAdminHeaderAuthenticationWithStore(string $userName, string $password, string $storeCode)
+    {
+        try {
+            $adminAccessToken = $this->adminTokenService->createAdminAccessToken($userName, $password);
+            return ['Authorization' => 'Bearer ' . $adminAccessToken, 'store' => $storeCode];
         } catch (\Exception $e) {
             throw new AuthenticationException(
                 __(

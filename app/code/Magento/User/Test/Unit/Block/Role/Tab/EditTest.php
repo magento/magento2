@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -9,13 +9,16 @@ namespace Magento\User\Test\Unit\Block\Role\Tab;
 
 use Magento\Authorization\Model\Acl\AclRetriever;
 use Magento\Authorization\Model\ResourceModel\Rules\CollectionFactory;
+use Magento\Directory\Helper\Data as DirectoryHelper;
 use Magento\Framework\Acl\AclResource\ProviderInterface;
 use Magento\Framework\Acl\RootResource;
+use Magento\Framework\Json\Helper\Data as JsonHelper;
 use Magento\Framework\Registry;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Integration\Helper\Data;
 use Magento\User\Block\Role\Tab\Edit;
 use Magento\User\Controller\Adminhtml\User\Role\SaveRole;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -47,39 +50,25 @@ class EditTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->rootResourceMock = $this->getMockBuilder(RootResource::class)
-            ->disableOriginalConstructor()
-            ->setMethods([])
-            ->getMock();
-
-        $this->rulesCollectionFactoryMock = $this
-            ->getMockBuilder(CollectionFactory::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['create'])
-            ->getMock();
-
-        $this->aclRetrieverMock = $this->getMockBuilder(AclRetriever::class)
-            ->disableOriginalConstructor()
-            ->setMethods([])
-            ->getMock();
-
-        $this->aclResourceProviderMock = $this->getMockBuilder(
-            ProviderInterface::class
-        )->disableOriginalConstructor()
-            ->setMethods([])
-            ->getMock();
-
-        $this->integrationDataMock = $this->getMockBuilder(Data::class)
-            ->disableOriginalConstructor()
-            ->setMethods([])
-            ->getMock();
-
-        $this->coreRegistryMock = $this->getMockBuilder(Registry::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['registry'])
-            ->getMock();
+        $this->rootResourceMock = $this->createMock(RootResource::class);
+        $this->rulesCollectionFactoryMock = $this->createPartialMock(CollectionFactory::class, ['create']);
+        $this->aclRetrieverMock = $this->createMock(AclRetriever::class);
+        $this->aclResourceProviderMock = $this->createMock(ProviderInterface::class);
+        $this->integrationDataMock = $this->createMock(Data::class);
+        $this->coreRegistryMock = $this->createPartialMock(Registry::class, ['registry']);
 
         $this->objectManagerHelper = new ObjectManager($this);
+        $objects = [
+            [
+                JsonHelper::class,
+                $this->createMock(JsonHelper::class)
+            ],
+            [
+                DirectoryHelper::class,
+                $this->createMock(DirectoryHelper::class)
+            ]
+        ];
+        $this->objectManagerHelper->prepareObjectManager($objects);
         $this->model = $this->objectManagerHelper->getObject(
             Edit::class,
             [
@@ -100,6 +89,13 @@ class EditTest extends TestCase
             ['id' => 'Invalid_Node', 'children' => ['resource4', 'resource5', 'resource6']]
         ];
         $mappedResources = ['mapped1', 'mapped2', 'mapped3'];
+        $this->coreRegistryMock->expects($this->once())
+            ->method('registry')
+            ->with(SaveRole::RESOURCE_ALL_FORM_DATA_SESSION_KEY)
+            ->willReturn(true);
+        $this->rootResourceMock->expects($this->exactly(1))
+            ->method('getId')
+            ->willReturn(10);
         $this->aclResourceProviderMock->expects($this->once())->method('getAclResources')->willReturn($resources);
         $this->integrationDataMock->expects($this->once())->method('mapResources')->willReturn($mappedResources);
 
@@ -110,6 +106,7 @@ class EditTest extends TestCase
      * @param bool $isAllowed
      * @dataProvider dataProviderBoolValues
      */
+    #[DataProvider('dataProviderBoolValues')]
     public function testIsEverythingAllowed($isAllowed)
     {
         $id = 10;
@@ -135,7 +132,7 @@ class EditTest extends TestCase
     /**
      * @return array
      */
-    public function dataProviderBoolValues()
+    public static function dataProviderBoolValues()
     {
         return [[true], [false]];
     }

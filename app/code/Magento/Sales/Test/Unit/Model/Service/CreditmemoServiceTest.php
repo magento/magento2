@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -35,6 +35,7 @@ use PHPUnit\Framework\TestCase;
  */
 class CreditmemoServiceTest extends TestCase
 {
+
     /**
      * @var CreditmemoRepositoryInterface|MockObject
      */
@@ -80,17 +81,9 @@ class CreditmemoServiceTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->creditmemoRepositoryMock = $this->getMockForAbstractClass(
-            CreditmemoRepositoryInterface::class,
-            ['get'],
-            '',
-            false
-        );
-        $this->creditmemoCommentRepositoryMock = $this->getMockForAbstractClass(
-            CreditmemoCommentRepositoryInterface::class,
-            [],
-            '',
-            false
+        $this->creditmemoRepositoryMock = $this->createMock(CreditmemoRepositoryInterface::class);
+        $this->creditmemoCommentRepositoryMock = $this->createMock(
+            CreditmemoCommentRepositoryInterface::class
         );
         $this->searchCriteriaBuilderMock = $this->createPartialMock(
             SearchCriteriaBuilder::class,
@@ -101,8 +94,7 @@ class CreditmemoServiceTest extends TestCase
             ['setField', 'setValue', 'setConditionType', 'create']
         );
         $this->creditmemoNotifierMock = $this->createMock(CreditmemoNotifier::class);
-        $this->priceCurrency = $this->getMockBuilder(PriceCurrencyInterface::class)
-            ->getMockForAbstractClass();
+        $this->priceCurrency = $this->createMock(PriceCurrencyInterface::class);
         $this->objectManagerHelper = new ObjectManager($this);
 
         $this->creditmemoService = $this->objectManagerHelper->getObject(
@@ -173,12 +165,7 @@ class CreditmemoServiceTest extends TestCase
         $id = 123;
         $returnValue = 'return-value';
 
-        $modelMock = $this->getMockForAbstractClass(
-            AbstractModel::class,
-            [],
-            '',
-            false
-        );
+        $modelMock = $this->createMock(AbstractModel::class);
 
         $this->creditmemoRepositoryMock->expects($this->once())
             ->method('get')
@@ -192,18 +179,20 @@ class CreditmemoServiceTest extends TestCase
         $this->assertEquals($returnValue, $this->creditmemoService->notify($id));
     }
 
+    /**
+     * Run test notify method
+     */
     public function testRefund()
     {
-        $creditMemoMock = $this->getMockBuilder(CreditmemoInterface::class)
-            ->setMethods(['getId', 'getOrder', 'getInvoice'])
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $creditMemoMock = $this->createPartialMock(
+            Creditmemo::class,
+            ['getId', 'getOrder', 'getOrderId', 'getBaseGrandTotal', 'getInvoice']
+        );
         $creditMemoMock->expects($this->once())->method('getId')->willReturn(null);
-        $orderMock = $this->getMockBuilder(Order::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $orderMock = $this->createMock(Order::class);
 
         $creditMemoMock->expects($this->atLeastOnce())->method('getOrder')->willReturn($orderMock);
+        $creditMemoMock->expects($this->atLeastOnce())->method('getOrderId')->willReturn(1);
         $orderMock->expects($this->once())->method('getBaseTotalRefunded')->willReturn(0);
         $orderMock->expects($this->once())->method('getBaseTotalPaid')->willReturn(10);
         $creditMemoMock->expects($this->once())->method('getBaseGrandTotal')->willReturn(10);
@@ -213,9 +202,7 @@ class CreditmemoServiceTest extends TestCase
             ->willReturnArgument(0);
 
         // Set payment adapter dependency
-        $refundAdapterMock = $this->getMockBuilder(RefundAdapterInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $refundAdapterMock = $this->createMock(RefundAdapterInterface::class);
         $this->objectManagerHelper->setBackwardCompatibleProperty(
             $this->creditmemoService,
             'refundAdapter',
@@ -223,9 +210,7 @@ class CreditmemoServiceTest extends TestCase
         );
 
         // Set resource dependency
-        $resourceMock = $this->getMockBuilder(ResourceConnection::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $resourceMock = $this->createMock(ResourceConnection::class);
         $this->objectManagerHelper->setBackwardCompatibleProperty(
             $this->creditmemoService,
             'resource',
@@ -233,18 +218,14 @@ class CreditmemoServiceTest extends TestCase
         );
 
         // Set order repository dependency
-        $orderRepositoryMock = $this->getMockBuilder(OrderRepositoryInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $orderRepositoryMock = $this->createMock(OrderRepositoryInterface::class);
         $this->objectManagerHelper->setBackwardCompatibleProperty(
             $this->creditmemoService,
             'orderRepository',
             $orderRepositoryMock
         );
 
-        $adapterMock = $this->getMockBuilder(AdapterInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $adapterMock = $this->createMock(AdapterInterface::class);
         $resourceMock->expects($this->once())->method('getConnection')->with('sales')->willReturn($adapterMock);
         $adapterMock->expects($this->once())->method('beginTransaction');
         $refundAdapterMock->expects($this->once())
@@ -266,16 +247,16 @@ class CreditmemoServiceTest extends TestCase
 
     public function testRefundPendingCreditMemo()
     {
-        $creditMemoMock = $this->getMockBuilder(CreditmemoInterface::class)
-            ->setMethods(['getId', 'getOrder', 'getState', 'getInvoice'])
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $creditMemoMock = $this->createPartialMock(
+            Creditmemo::class,
+            ['getId', 'getState', 'getOrderId', 'getOrder', 'getBaseGrandTotal', 'getInvoice']
+        );
         $creditMemoMock->expects($this->once())->method('getId')->willReturn(444);
         $creditMemoMock->expects($this->once())->method('getState')
             ->willReturn(Creditmemo::STATE_OPEN);
-        $orderMock = $this->getMockBuilder(Order::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $creditMemoMock->expects($this->once())->method('getOrderId')
+            ->willReturn(1);
+        $orderMock = $this->createMock(Order::class);
 
         $creditMemoMock->expects($this->atLeastOnce())->method('getOrder')->willReturn($orderMock);
         $orderMock->expects($this->once())->method('getBaseTotalRefunded')->willReturn(0);
@@ -287,9 +268,7 @@ class CreditmemoServiceTest extends TestCase
             ->willReturnArgument(0);
 
         // Set payment adapter dependency
-        $refundAdapterMock = $this->getMockBuilder(RefundAdapterInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $refundAdapterMock = $this->createMock(RefundAdapterInterface::class);
         $this->objectManagerHelper->setBackwardCompatibleProperty(
             $this->creditmemoService,
             'refundAdapter',
@@ -297,9 +276,7 @@ class CreditmemoServiceTest extends TestCase
         );
 
         // Set resource dependency
-        $resourceMock = $this->getMockBuilder(ResourceConnection::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $resourceMock = $this->createMock(ResourceConnection::class);
         $this->objectManagerHelper->setBackwardCompatibleProperty(
             $this->creditmemoService,
             'resource',
@@ -307,18 +284,14 @@ class CreditmemoServiceTest extends TestCase
         );
 
         // Set order repository dependency
-        $orderRepositoryMock = $this->getMockBuilder(OrderRepositoryInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $orderRepositoryMock = $this->createMock(OrderRepositoryInterface::class);
         $this->objectManagerHelper->setBackwardCompatibleProperty(
             $this->creditmemoService,
             'orderRepository',
             $orderRepositoryMock
         );
 
-        $adapterMock = $this->getMockBuilder(AdapterInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $adapterMock = $this->createMock(AdapterInterface::class);
         $resourceMock->expects($this->once())->method('getConnection')->with('sales')->willReturn($adapterMock);
         $adapterMock->expects($this->once())->method('beginTransaction');
         $refundAdapterMock->expects($this->once())
@@ -346,24 +319,32 @@ class CreditmemoServiceTest extends TestCase
         $baseTotalRefunded = 9;
         $baseTotalPaid = 10;
         /** @var CreditmemoInterface|MockObject $creditMemo */
-        $creditMemo = $this->getMockBuilder(CreditmemoInterface::class)
-            ->setMethods(['getId', 'getOrder'])
-            ->getMockForAbstractClass();
+        $creditMemo = $this->createPartialMock(
+            Creditmemo::class,
+            ['getId', 'getOrder', 'getOrderId', 'getBaseGrandTotal']
+        );
         $creditMemo->method('getId')
             ->willReturn(null);
         /** @var Order|MockObject $order */
-        $order = $this->getMockBuilder(Order::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $order = $this->createMock(Order::class);
         $creditMemo->method('getOrder')
             ->willReturn($order);
+        $creditMemo->method('getOrderId')
+            ->willReturn(1);
         $creditMemo->method('getBaseGrandTotal')
             ->willReturn($baseGrandTotal);
         $order->method('getBaseTotalRefunded')
             ->willReturn($baseTotalRefunded);
         $this->priceCurrency->method('round')
-            ->withConsecutive([$baseTotalRefunded + $baseGrandTotal], [$baseTotalPaid])
-            ->willReturnOnConsecutiveCalls($baseTotalRefunded + $baseGrandTotal, $baseTotalPaid);
+            ->willReturnCallback(
+                function ($arg) use ($baseTotalRefunded, $baseGrandTotal, $baseTotalPaid) {
+                    if ($arg == $baseTotalRefunded + $baseGrandTotal) {
+                        return $baseTotalRefunded + $baseGrandTotal;
+                    } elseif ($arg == $baseTotalPaid) {
+                        return $baseTotalPaid;
+                    }
+                }
+            );
         $order->method('getBaseTotalPaid')
             ->willReturn($baseTotalPaid);
         $baseAvailableRefund = $baseTotalPaid - $baseTotalRefunded;
@@ -382,10 +363,18 @@ class CreditmemoServiceTest extends TestCase
     {
         $this->expectException('Magento\Framework\Exception\LocalizedException');
         $this->expectExceptionMessage('We cannot register an existing credit memo.');
-        $creditMemoMock = $this->getMockBuilder(CreditmemoInterface::class)
-            ->setMethods(['getId'])
-            ->getMockForAbstractClass();
+        $creditMemoMock = $this->createPartialMock(Creditmemo::class, ['getId']);
         $creditMemoMock->expects($this->once())->method('getId')->willReturn(444);
+        $this->creditmemoService->refund($creditMemoMock, true);
+    }
+
+    public function testRefundDoNotExpectsOrderId()
+    {
+        $this->expectException('Magento\Framework\Exception\LocalizedException');
+        $this->expectExceptionMessage('We found an invalid order to refund.');
+        $creditMemoMock = $this->createPartialMock(Creditmemo::class, ['getId', 'getOrderId']);
+        $creditMemoMock->expects($this->once())->method('getId')->willReturn(null);
+        $creditMemoMock->expects($this->once())->method('getOrderId')->willReturn(null);
         $this->creditmemoService->refund($creditMemoMock, true);
     }
 
@@ -400,18 +389,19 @@ class CreditmemoServiceTest extends TestCase
         $totalRefunded = 7.929;
         $totalPaid = 8.81;
 
-        /** @var CreditmemoInterface|MockObject $creditMemo */
-        $creditMemo = $this->getMockBuilder(CreditmemoInterface::class)
-            ->setMethods(['getId', 'getOrder'])
-            ->getMockForAbstractClass();
+        /** @var Creditmemo|MockObject $creditMemo */
+        $creditMemo = $this->createPartialMock(
+            Creditmemo::class,
+            ['getId', 'getOrder', 'getOrderId', 'getBaseGrandTotal', 'getGrandTotal']
+        );
         $creditMemo->method('getId')
             ->willReturn(null);
         /** @var Order|MockObject $order */
-        $order = $this->getMockBuilder(Order::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $order = $this->createMock(Order::class);
         $creditMemo->method('getOrder')
             ->willReturn($order);
+        $creditMemo->method('getOrderId')
+            ->willReturn(1);
         $creditMemo->method('getBaseGrandTotal')
             ->willReturn($baseGrandTotal);
         $creditMemo->method('getGrandTotal')
@@ -421,8 +411,15 @@ class CreditmemoServiceTest extends TestCase
         $order->method('getTotalRefunded')
             ->willReturn($totalRefunded);
         $this->priceCurrency->method('round')
-            ->withConsecutive([$baseTotalRefunded + $baseGrandTotal], [$baseTotalPaid])
-            ->willReturnOnConsecutiveCalls($baseTotalRefunded + $baseGrandTotal, $baseTotalPaid);
+            ->willReturnCallback(
+                function ($arg) use ($baseTotalRefunded, $baseGrandTotal, $baseTotalPaid) {
+                    if ($arg == $baseTotalRefunded + $baseGrandTotal) {
+                        return $baseTotalRefunded + $baseGrandTotal;
+                    } elseif ($arg == $baseTotalPaid) {
+                        return $baseTotalPaid;
+                    }
+                }
+            );
         $order->method('getBaseTotalPaid')
             ->willReturn($baseTotalPaid);
         $order->method('getTotalPaid')

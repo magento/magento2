@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Elasticsearch\SearchAdapter\Dynamic;
 
@@ -16,6 +16,9 @@ use Psr\Log\LoggerInterface;
  *
  * @api
  * @since 100.1.0
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @deprecated Elasticsearch is no longer supported by Adobe
+ * @see this class will be responsible for ES only
  */
 class DataProvider implements \Magento\Framework\Search\Dynamic\DataProviderInterface, QueryAwareInterface
 {
@@ -50,32 +53,32 @@ class DataProvider implements \Magento\Framework\Search\Dynamic\DataProviderInte
 
     /**
      * @var \Magento\Elasticsearch\Model\Config
-     * @deprecated 100.2.0 as this class shouldn't be responsible for query building
-     * and should only modify existing query
+     * @deprecated 100.2.0
+     * @see this class shouldn't be responsible for query building and should only modify existing query
      * @since 100.1.0
      */
     protected $clientConfig;
 
     /**
      * @var \Magento\Store\Model\StoreManagerInterface
-     * @deprecated 100.2.0 as this class shouldn't be responsible for query building
-     * and should only modify existing query
+     * @deprecated 100.2.0
+     * @see this class shouldn't be responsible for query building and should only modify existing query
      * @since 100.1.0
      */
     protected $storeManager;
 
     /**
      * @var \Magento\Elasticsearch\SearchAdapter\SearchIndexNameResolver
-     * @deprecated 100.2.0 as this class shouldn't be responsible for query building
-     * and should only modify existing query
+     * @deprecated 100.2.0
+     * @see this class shouldn't be responsible for query building and should only modify existing query
      * @since 100.1.0
      */
     protected $searchIndexNameResolver;
 
     /**
      * @var string
-     * @deprecated 100.2.0 as this class shouldn't be responsible for query building
-     * and should only modify existing query
+     * @deprecated 100.2.0
+     * @see this class shouldn't be responsible for query building and should only modify existing query
      * @since 100.1.0
      */
     protected $indexerId;
@@ -126,8 +129,8 @@ class DataProvider implements \Magento\Framework\Search\Dynamic\DataProviderInte
         \Magento\Elasticsearch\SearchAdapter\SearchIndexNameResolver $searchIndexNameResolver,
         $indexerId,
         \Magento\Framework\App\ScopeResolverInterface $scopeResolver,
-        QueryContainer $queryContainer = null,
-        LoggerInterface $logger = null,
+        ?QueryContainer $queryContainer = null,
+        ?LoggerInterface $logger = null,
         ?string $aggregationFieldName = null
     ) {
         $this->connectionManager = $connectionManager;

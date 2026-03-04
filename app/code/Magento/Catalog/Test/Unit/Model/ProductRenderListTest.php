@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -58,41 +58,20 @@ class ProductRenderListTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->collectionFactoryMock = $this
-            ->getMockBuilder(CollectionFactory::class)
-            ->setMethods(['create'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->collectionProcessorMock = $this
-            ->getMockBuilder(CollectionProcessorInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-        $this->productRenderCollectorCompositeMock = $this
-            ->getMockBuilder(ProductRenderCollectorComposite::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->productRenderSearchResultsFactoryMock = $this
-            ->getMockBuilder(ProductRenderSearchResultsFactory::class)
-            ->setMethods(['create'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->productRenderFactoryMock = $this
-            ->getMockBuilder(ProductRenderFactory::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['create'])
-            ->getMock();
-        $this->configMock = $this->getMockBuilder(Config::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->collectionFactoryMock = $this->createPartialMock(CollectionFactory::class, ['create']);
+        $this->collectionProcessorMock = $this->createMock(CollectionProcessorInterface::class);
+        $this->productRenderCollectorCompositeMock = $this->createMock(ProductRenderCollectorComposite::class);
+        $this->productRenderSearchResultsFactoryMock = $this->createPartialMock(
+            ProductRenderSearchResultsFactory::class,
+            ['create']
+        );
+        $this->productRenderFactoryMock = $this->createPartialMock(ProductRenderFactory::class, ['create']);
+        $this->configMock = $this->createMock(Config::class);
         $this->configMock->expects($this->once())
             ->method('getProductAttributes')
             ->willReturn([]);
-        $this->productVisibility = $this->getMockBuilder(Visibility::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->collectionModifier = $this->getMockBuilder(CollectionModifier::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->productVisibility = $this->createMock(Visibility::class);
+        $this->collectionModifier = $this->createMock(CollectionModifier::class);
 
         $this->model = new ProductRenderList(
             $this->collectionFactoryMock,
@@ -111,22 +90,12 @@ class ProductRenderListTest extends TestCase
         $storeId = 1;
         $currencyCode = 'USD';
 
-        $product = $this->getMockBuilder(ProductInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $product = $this->createMock(ProductInterface::class);
         $iterator = new \IteratorIterator(new \ArrayIterator([$product]));
-        $productRender = $this->getMockBuilder(ProductRenderInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-        $searchResult = $this->getMockBuilder(SearchResultInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-        $searchCriteria = $this->getMockBuilder(SearchCriteria::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $productCollection = $this->getMockBuilder(Collection::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $productRender = $this->createMock(ProductRenderInterface::class);
+        $searchResult = $this->createMock(SearchResultInterface::class);
+        $searchCriteria = $this->createMock(SearchCriteria::class);
+        $productCollection = $this->createMock(Collection::class);
         $this->collectionFactoryMock->expects($this->once())
             ->method('create')
             ->willReturn($productCollection);

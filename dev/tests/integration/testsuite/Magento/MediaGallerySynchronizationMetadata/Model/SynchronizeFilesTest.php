@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -19,6 +19,7 @@ use Magento\MediaGallerySynchronizationApi\Api\SynchronizeFilesInterface;
 use Magento\MediaGalleryApi\Api\GetAssetsKeywordsInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Test for SynchronizeFiles.
@@ -55,18 +56,17 @@ class SynchronizeFilesTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->driver = Bootstrap::getObjectManager()->get(DriverInterface::class);
         $this->synchronizeFiles = Bootstrap::getObjectManager()->get(SynchronizeFilesInterface::class);
         $this->getAssetsByPath = Bootstrap::getObjectManager()->get(GetAssetsByPathsInterface::class);
         $this->getAssetKeywords = Bootstrap::getObjectManager()->get(GetAssetsKeywordsInterface::class);
         $this->mediaDirectory = Bootstrap::getObjectManager()->get(Filesystem::class)
             ->getDirectoryWrite(DirectoryList::MEDIA);
+        $this->driver = $this->mediaDirectory->getDriver();
     }
 
     /**
      * Test for SynchronizeFiles::execute
      *
-     * @dataProvider filesProvider
      * @param null|string $file
      * @param null|string $title
      * @param null|string $description
@@ -74,6 +74,7 @@ class SynchronizeFilesTest extends TestCase
      * @throws FileSystemException
      * @throws \Magento\Framework\Exception\LocalizedException
      */
+    #[DataProvider('filesProvider')]
     public function testExecute(
         ?string $file,
         ?string $title,
@@ -82,9 +83,9 @@ class SynchronizeFilesTest extends TestCase
     ): void {
         $path = realpath(__DIR__ . '/../_files/' . $file);
         $modifiableFilePath = $this->mediaDirectory->getAbsolutePath($file);
-        $this->driver->copy(
-            $path,
-            $modifiableFilePath
+        $this->driver->filePutContents(
+            $modifiableFilePath,
+            file_get_contents($path)
         );
 
         $this->synchronizeFiles->execute([$file]);
@@ -95,7 +96,6 @@ class SynchronizeFilesTest extends TestCase
         $this->assertEquals($title, $loadedAssets->getTitle());
         $this->assertEquals($description, $loadedAssets->getDescription());
         $this->assertEquals($keywords, $loadedKeywords);
-
         $this->driver->deleteFile($modifiableFilePath);
     }
 
@@ -104,7 +104,7 @@ class SynchronizeFilesTest extends TestCase
      *
      * @return array[]
      */
-    public function filesProvider(): array
+    public static function filesProvider(): array
     {
         return [
             [

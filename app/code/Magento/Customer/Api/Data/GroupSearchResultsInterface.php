@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Customer\Api\Data;
@@ -23,7 +23,6 @@ interface GroupSearchResultsInterface extends \Magento\Framework\Api\SearchResul
     /**
      * Set customer groups list.
      *
-     * @api
      * @param \Magento\Customer\Api\Data\GroupInterface[] $items
      * @return $this
      */

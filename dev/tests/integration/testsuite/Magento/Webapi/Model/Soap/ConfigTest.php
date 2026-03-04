@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Webapi\Model\Soap;
 
@@ -90,7 +90,8 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
             'resources' => [
                 'Magento_Customer::customer',
             ],
-            'parameters' => []
+            'parameters' => [],
+            'input-array-size-limit' => null,
         ];
         $actual = $this->soapConfig->getServiceMethodInfo(
             'customerCustomerRepositoryV1GetById',

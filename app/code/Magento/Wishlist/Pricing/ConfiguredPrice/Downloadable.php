@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Wishlist\Pricing\ConfiguredPrice;
 
@@ -42,7 +42,7 @@ class Downloadable extends FinalPrice implements ConfiguredPriceInterface
             $customOption = $this->getProduct()->getCustomOption('downloadable_link_ids');
             if ($customOption) {
                 $links = $this->getLinks();
-                $linkIds = explode(',', $customOption->getValue());
+                $linkIds = explode(',', (string) $customOption->getValue());
                 foreach ($linkIds as $linkId) {
                     if (isset($links[$linkId])) {
                         $result += $links[$linkId]->getPrice();
@@ -54,6 +54,8 @@ class Downloadable extends FinalPrice implements ConfiguredPriceInterface
     }
 
     /**
+     * This method get downloadable product links.
+     *
      * @return \Magento\Downloadable\Model\Link[]
      */
     private function getLinks()

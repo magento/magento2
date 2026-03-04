@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -22,6 +22,7 @@ use Magento\Framework\Exception\InputException;
 use Magento\TestFramework\Directory\Model\GetRegionIdByName;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\ObjectManager;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface as PsrLogger;
 
@@ -132,13 +133,12 @@ class CreateAddressTest extends TestCase
      *
      * @magentoDataFixture Magento/Customer/_files/customer_no_address.php
      *
-     * @dataProvider createDefaultAddressesDataProvider
-     *
      * @param array $addressData
      * @param bool $isShippingDefault
      * @param bool $isBillingDefault
      * @return void
      */
+    #[DataProvider('createDefaultAddressesDataProvider')]
     public function testCreateDefaultAddress(
         array $addressData,
         bool $isShippingDefault,
@@ -165,7 +165,7 @@ class CreateAddressTest extends TestCase
      *
      * @return array
      */
-    public function createDefaultAddressesDataProvider(): array
+    public static function createDefaultAddressesDataProvider(): array
     {
         return [
             'any_addresses_are_default' => [self::STATIC_CUSTOMER_ADDRESS_DATA, false, false],
@@ -180,12 +180,11 @@ class CreateAddressTest extends TestCase
      *
      * @magentoDataFixture Magento/Customer/_files/customer_no_address.php
      *
-     * @dataProvider createAddressesDataProvider
-     *
      * @param array $addressData
      * @param array $expectedData
      * @return void
      */
+    #[DataProvider('createAddressesDataProvider')]
     public function testAddressCreatedWithProperData(array $addressData, array $expectedData): void
     {
         if (isset($expectedData['custom_region_name'])) {
@@ -208,7 +207,7 @@ class CreateAddressTest extends TestCase
      *
      * @return array
      */
-    public function createAddressesDataProvider(): array
+    public static function createAddressesDataProvider(): array
     {
         return [
             'required_fields_valid_data' => [
@@ -280,12 +279,11 @@ class CreateAddressTest extends TestCase
      *
      * @magentoDataFixture Magento/Customer/_files/customer_no_address.php
      *
-     * @dataProvider createWrongAddressesDataProvider
-     *
      * @param array $addressData
      * @param \Exception $expectException
      * @return void
      */
+    #[DataProvider('createWrongAddressesDataProvider')]
     public function testExceptionThrownDuringCreateAddress(array $addressData, \Exception $expectException): void
     {
         $customer = $this->customerRepository->get('customer5@example.com');
@@ -298,7 +296,7 @@ class CreateAddressTest extends TestCase
      *
      * @return array
      */
-    public function createWrongAddressesDataProvider(): array
+    public static function createWrongAddressesDataProvider(): array
     {
         return [
             'required_field_empty_telephone' => [
@@ -504,7 +502,7 @@ class CreateAddressTest extends TestCase
                     $this->objectManager->get(PsrLogger::class)
                 ]
             )
-            ->setMethods(['checkVatNumber'])
+            ->onlyMethods(['checkVatNumber'])
             ->getMock();
         $customerVat->method('checkVatNumber')->willReturn($gatewayResponse);
         $this->objectManager->removeSharedInstance(Vat::class);

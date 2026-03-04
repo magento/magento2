@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2021 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -14,6 +14,7 @@ use Magento\Paypal\Model\ConfigFactory;
 use Magento\Paypal\Model\SmartButtonConfig;
 use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -42,21 +43,19 @@ class SdkUrlTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->localeResolverMock = $this->getMockForAbstractClass(ResolverInterface::class);
-        $this->configMock = $this->getMockBuilder(Config::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->localeResolverMock = $this->createMock(ResolverInterface::class);
+        $this->configMock = $this->createMock(Config::class);
 
         /** @var ScopeConfigInterface|MockObject $scopeConfigMock */
-        $scopeConfigMock = $this->getMockForAbstractClass(ScopeConfigInterface::class);
+        $scopeConfigMock = $this->createMock(ScopeConfigInterface::class);
         $scopeConfigMock->method('isSetFlag')
             ->willReturn(true);
 
         /** @var ConfigFactory|MockObject $configFactoryMock */
-        $configFactoryMock = $this->getMockBuilder(ConfigFactory::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['create'])
-            ->getMock();
+        $configFactoryMock = $this->createPartialMock(
+            ConfigFactory::class,
+            ['create']
+        );
         $configFactoryMock->expects($this->any())->method('create')->willReturn($this->configMock);
 
         /** @var Store|MockObject $storeMock */
@@ -65,7 +64,7 @@ class SdkUrlTest extends TestCase
             ->willReturn('USD');
 
         /** @var StoreManagerInterface|MockObject $storeManagerMock */
-        $storeManagerMock = $this->getMockForAbstractClass(StoreManagerInterface::class);
+        $storeManagerMock = $this->createMock(StoreManagerInterface::class);
         $storeManagerMock->method('getStore')
             ->willReturn($storeMock);
 
@@ -75,7 +74,8 @@ class SdkUrlTest extends TestCase
             $scopeConfigMock,
             $storeManagerMock,
             $this->getDisallowedFundingMap(),
-            $this->getUnsupportedPaymentMethods()
+            $this->getUnsupportedPaymentMethods(),
+            $this->getSupportedPaymentMethods()
         );
     }
 
@@ -85,14 +85,16 @@ class SdkUrlTest extends TestCase
      * @param string $locale
      * @param string $intent
      * @param string|null $disallowedFunding
+     * @param bool $isBuyerCountryEnabled
      * @param bool $isPaypalGuestCheckoutEnabled
      * @param array $expected
-     * @dataProvider getConfigDataProvider
      */
+    #[DataProvider('getConfigDataProvider')]
     public function testGetConfig(
         string $locale,
         string $intent,
         ?string $disallowedFunding,
+        bool $isBuyerCountryEnabled,
         bool $isPaypalGuestCheckoutEnabled,
         array $expected
     ) {
@@ -102,6 +104,7 @@ class SdkUrlTest extends TestCase
                 ['merchant_id', null, 'merchant'],
                 ['sandbox_client_id', null, 'sb'],
                 ['sandbox_flag', null, true],
+                ['buyer_country', null, $isBuyerCountryEnabled ? 'US' : ''],
                 ['disable_funding_options', null, $disallowedFunding],
                 ['paymentAction', null, $intent],
                 ['in_context', null, true],
@@ -113,6 +116,10 @@ class SdkUrlTest extends TestCase
             ]
         );
 
+        $this->configMock->method('getPayLaterConfigValue')
+            ->with('experience_active')
+            ->willReturn(true);
+
         self::assertEquals($expected['sdkUrl'], $this->model->getUrl());
     }
 
@@ -121,7 +128,7 @@ class SdkUrlTest extends TestCase
      *
      * @return array
      */
-    public function getConfigDataProvider()
+    public static function getConfigDataProvider()
     {
         return include __DIR__ . '/_files/expected_url_config.php';
     }
@@ -136,6 +143,7 @@ class SdkUrlTest extends TestCase
     {
         return [
             "CREDIT" => 'credit',
+            "VENMO" => 'venmo',
             "CARD" => 'card',
             "ELV" => 'sepa'
         ];
@@ -150,14 +158,27 @@ class SdkUrlTest extends TestCase
     private function getUnsupportedPaymentMethods()
     {
         return [
-            'venmo'=> 'venmo',
             'bancontact' => 'bancontact',
             'eps' => 'eps',
             'giropay' => 'giropay',
             'ideal' => 'ideal',
             'mybank' => 'mybank',
             'p24' => 'p24',
-            'sofort' => 'sofort'
+            'sofort' => 'sofort',
+        ];
+    }
+
+    /**
+     * Get supported payment methods
+     * See app/code/Magento/Paypal/etc/frontend/di.xml
+     *
+     * @return string[]
+     */
+    private function getSupportedPaymentMethods()
+    {
+        return [
+            'venmo'=> 'venmo',
+            'paylater'=> 'paylater',
         ];
     }
 }

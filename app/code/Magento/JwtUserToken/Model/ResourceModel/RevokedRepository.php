@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2021 Adobe
+ * All Rights Reserved.
  */
 
 declare(strict_types=1);
@@ -28,7 +28,8 @@ class RevokedRepository implements RevokedRepositoryInterface
     /**
      * @param ResourceConnection $resourceConnection
      */
-    public function __construct(ResourceConnection $resourceConnection) {
+    public function __construct(ResourceConnection $resourceConnection)
+    {
         $this->connection = $resourceConnection;
     }
 
@@ -38,7 +39,7 @@ class RevokedRepository implements RevokedRepositoryInterface
     public function saveRevoked(Revoked $revoked): void
     {
         $conn = $this->getAdapter();
-        $table = $conn->getTableName(self::TABLE);
+        $table = $conn->getTableName($this->connection->getTableName(self::TABLE));
 
         $conn->insertOnDuplicate($table, $revoked->getData(), array_keys($revoked->getData()));
     }
@@ -49,7 +50,7 @@ class RevokedRepository implements RevokedRepositoryInterface
     public function findRevoked(int $userTypeId, int $userId): ?Revoked
     {
         $conn = $this->getAdapter();
-        $table = $conn->getTableName(self::TABLE);
+        $table = $conn->getTableName($this->connection->getTableName(self::TABLE));
 
         $data = $conn->fetchRow(
             $conn->select()
@@ -64,6 +65,11 @@ class RevokedRepository implements RevokedRepositoryInterface
         return null;
     }
 
+    /**
+     * Resource connection
+     *
+     * @return AdapterInterface
+     */
     private function getAdapter(): AdapterInterface
     {
         return $this->connection->getConnection(ResourceConnection::DEFAULT_CONNECTION);

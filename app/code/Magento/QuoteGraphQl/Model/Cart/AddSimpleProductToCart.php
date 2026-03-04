@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -60,13 +60,15 @@ class AddSimpleProductToCart
         } catch (NoSuchEntityException $e) {
             throw new GraphQlNoSuchEntityException(__('Could not find a product with SKU "%sku"', ['sku' => $sku]));
         }
-        if (!in_array($cart->getStore()->getWebsiteId(), $product->getWebsiteIds())) {
-            throw new GraphQlNoSuchEntityException(__('Could not find a product with SKU "%sku"', ['sku' => $sku]));
-        }
 
         try {
             $result = $cart->addProduct($product, $this->buyRequestBuilder->build($cartItemData));
         } catch (Exception $e) {
+
+            if (str_contains($e->getMessage(), 'The requested qty is not available')) {
+                throw new GraphQlInputException(__('The requested qty. is not available'));
+            }
+
             throw new GraphQlInputException(
                 __(
                     'Could not add the product with SKU %sku to the shopping cart: %message',

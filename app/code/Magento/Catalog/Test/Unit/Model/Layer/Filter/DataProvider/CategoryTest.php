@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -47,32 +47,13 @@ class CategoryTest extends TestCase
     protected function setUp(): void
     {
         /** @var Registry $var */
-        $this->coreRegistry = $var = $this->getMockBuilder(Registry::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['register'])
-            ->getMock();
-        $this->category = $this->getMockBuilder(Category::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['getId', 'setStoreId', 'load', 'getPathIds'])
-            ->getMock();
-        $this->categoryFactory = $this->getMockBuilder(CategoryFactory::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['create'])
-            ->getMock();
-        $this->categoryFactory->expects($this->any())
-            ->method('create')
-            ->willReturn($this->category);
-        $this->store = $this->getMockBuilder(Store::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['getId'])
-            ->getMock();
-        $this->layer = $this->getMockBuilder(Layer::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['getCurrentStore', 'getCurrentCategory'])
-            ->getMock();
-        $this->layer->expects($this->any())
-            ->method('getCurrentStore')
-            ->willReturn($this->store);
+        $this->coreRegistry = $var = $this->createPartialMock(Registry::class, ['register']);
+        $this->category = $this->createPartialMock(Category::class, ['getId', 'setStoreId', 'load', 'getPathIds']);
+        $this->categoryFactory = $this->createPartialMock(CategoryFactory::class, ['create']);
+        $this->categoryFactory->method('create')->willReturn($this->category);
+        $this->store = $this->createPartialMock(Store::class, ['getId']);
+        $this->layer = $this->createPartialMock(Layer::class, ['getCurrentStore', 'getCurrentCategory']);
+        $this->layer->method('getCurrentStore')->willReturn($this->store);
         $objectManagerHelper = new ObjectManagerHelper($this);
         $this->target = $objectManagerHelper->getObject(
             \Magento\Catalog\Model\Layer\Filter\DataProvider\Category::class,
@@ -94,21 +75,15 @@ class CategoryTest extends TestCase
         $this->store->expects($this->once())
             ->method('getId')
             ->willReturn($storeId);
-        $this->layer->expects($this->any())
-            ->method('getCurrentCategory')
-            ->willReturn($this->category);
+        $this->layer->method('getCurrentCategory')->willReturn($this->category);
         $this->category->expects($this->once())
             ->method('setStoreId')
             ->with($storeId)->willReturnSelf();
         $this->category->expects($this->once())
             ->method('load')
             ->with($categoryId)->willReturnSelf();
-        $this->category->expects($this->any())
-            ->method('getId')
-            ->willReturn($categoryId);
-        $this->category->expects($this->any())
-            ->method('getPathIds')
-            ->willReturn([20, 10]);
+        $this->category->method('getId')->willReturn($categoryId);
+        $this->category->method('getPathIds')->willReturn([20, 10]);
         $this->coreRegistry->expects($this->once())
             ->method('register')
             ->with(

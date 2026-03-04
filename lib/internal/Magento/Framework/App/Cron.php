@@ -2,8 +2,8 @@
 /**
  * Cron application
  *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework\App;
 
@@ -58,7 +58,7 @@ class Cron implements \Magento\Framework\AppInterface
         Console\Response $response,
         ObjectManagerInterface $objectManager,
         array $parameters = [],
-        \Magento\Framework\App\AreaList $areaList = null
+        ?\Magento\Framework\App\AreaList $areaList = null
     ) {
         $this->_state = $state;
         $this->_request = $request;

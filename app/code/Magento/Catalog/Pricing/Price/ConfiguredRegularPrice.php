@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -20,7 +20,7 @@ class ConfiguredRegularPrice extends RegularPrice implements ConfiguredPriceInte
     /**
      * Price type configured.
      */
-    const PRICE_CODE = self::CONFIGURED_REGULAR_PRICE_CODE;
+    public const PRICE_CODE = self::CONFIGURED_REGULAR_PRICE_CODE;
 
     /**
      * @var null|ItemInterface
@@ -46,7 +46,7 @@ class ConfiguredRegularPrice extends RegularPrice implements ConfiguredPriceInte
         CalculatorInterface $calculator,
         PriceCurrencyInterface $priceCurrency,
         ConfiguredOptions $configuredOptions,
-        ItemInterface $item = null
+        ?ItemInterface $item = null
     ) {
         $this->item = $item;
         $this->configuredOptions = $configuredOptions;
@@ -54,6 +54,8 @@ class ConfiguredRegularPrice extends RegularPrice implements ConfiguredPriceInte
     }
 
     /**
+     * Set Item Implementation
+     *
      * @param ItemInterface $item
      * @return $this
      */

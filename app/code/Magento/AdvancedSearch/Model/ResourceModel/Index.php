@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\AdvancedSearch\Model\ResourceModel;
 
@@ -67,8 +67,8 @@ class Index extends AbstractDb
         StoreManagerInterface $storeManager,
         MetadataPool $metadataPool,
         $connectionName = null,
-        TableResolver $tableResolver = null,
-        DimensionCollectionFactory $dimensionCollectionFactory = null
+        ?TableResolver $tableResolver = null,
+        ?DimensionCollectionFactory $dimensionCollectionFactory = null
     ) {
         parent::__construct($context, $connectionName);
         $this->storeManager = $storeManager;
@@ -80,8 +80,10 @@ class Index extends AbstractDb
 
     /**
      * Implementation of abstract construct
+     *
      * @return void
      * @since 100.1.0
+     * phpcs:disable Magento2.CodeAnalysis.EmptyBlock
      */
     protected function _construct()
     {
@@ -118,7 +120,8 @@ class Index extends AbstractDb
 
         $result = [];
         foreach ($connection->fetchAll($catalogProductIndexPriceUnionSelect) as $row) {
-            $result[$row['website_id']][$row['entity_id']][$row['customer_group_id']] = round($row['min_price'], 2);
+            $result[$row['website_id']][$row['entity_id']][$row['customer_group_id']] =
+                round((float) $row['min_price'], 2);
         }
 
         return $result;

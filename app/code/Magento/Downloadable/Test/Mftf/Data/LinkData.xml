@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
  /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
+  * Copyright 2024 Adobe
+  * All Rights Reserved.
   */
 -->
 
@@ -61,6 +61,17 @@
         <data key="is_shareable">1</data>
         <data key="sort_order">2</data>
     </entity>
+    <entity name="downloadableLink3" type="downloadable_link">
+        <data key="title" unique="suffix">link-1</data>
+        <data key="price">2.43</data>
+        <data key="number_of_downloads">2</data>
+        <data key="sample_type">url</data>
+        <data key="sample_url">https://static.magento.com/sites/all/themes/mag_redesign/images/magento-logo.svg</data>
+        <data key="link_type">url</data>
+        <data key="link_url">https://static.magento.com/sites/all/themes/mag_redesign/images/magento-logo.svg</data>
+        <data key="is_shareable">0</data>
+        <data key="sort_order">1</data>
+    </entity>
     <entity name="ApiDownloadableLink" type="downloadable_link">
         <data key="title" unique="suffix">Api Downloadable Link</data>
         <data key="price">2.00</data>
@@ -104,6 +115,12 @@
         <data key="sort_order">0</data>
         <data key="sample_type">file</data>
         <requiredEntity type="sample_file_content">downloadableSampleLink_TestImage</requiredEntity>
+    </entity>
+    <entity name="DownloadableSampleWithStaticDomain" type="downloadable_sample">
+        <data key="title" unique="suffix">downloadableSampleUrl</data>
+        <data key="sort_order">1</data>
+        <data key="sample_type">url</data>
+        <data key="sample_url">https://static.magento.com/sites/all/themes/mag_redesign/images/magento-logo.svg</data>
     </entity>
 
     <!-- File Content -->

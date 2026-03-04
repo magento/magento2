@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Integration\Block\Adminhtml\Integration\Edit\Tab;
@@ -26,8 +26,6 @@ class Webapi extends \Magento\Backend\Block\Widget\Form\Generic implements
     protected $rootResource;
 
     /**
-     * Acl resource provider
-     *
      * @var \Magento\Framework\Acl\AclResource\ProviderInterface
      */
     protected $aclResourceProvider;
@@ -182,7 +180,7 @@ class Webapi extends \Magento\Backend\Block\Widget\Form\Generic implements
      */
     public function getTree()
     {
-        return $this->integrationData->mapResources($this->getAclResources());
+        return $this->integrationData->mapResources($this->getAclResources(), $this->getSelectedResources());
     }
 
     /**

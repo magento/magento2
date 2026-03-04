@@ -1,20 +1,22 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Catalog\Model\Product\Option\Validator;
 
+use Laminas\Validator\ValidatorInterface;
+
 class Pool
 {
     /**
-     * @var \Zend_Validate_Interface
+     * @var ValidatorInterface
      */
     protected $validators;
 
     /**
-     * @param \Zend_Validate_Interface[] $validators
+     * @param ValidatorInterface[] $validators
      */
     public function __construct(array $validators)
     {
@@ -25,10 +27,13 @@ class Pool
      * Get validator
      *
      * @param string $type
-     * @return \Zend_Validate_Interface
+     * @return ValidatorInterface
      */
     public function get($type)
     {
+        if ($type === null) {
+            return $this->validators['default'];
+        }
         return $this->validators[$type] ?? $this->validators['default'];
     }
 }

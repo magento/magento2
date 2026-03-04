@@ -1,13 +1,14 @@
 <?php
-/***
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+/**
+ * Copyright 2021 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Variable\Test\Unit\Model\Config\Structure;
 
 use Magento\Variable\Model\Config\Structure\AvailableVariables;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -17,8 +18,8 @@ class AvailableVariablesTest extends TestCase
 {
     /**
      * @covers \Magento\Variable\Model\Config\Structure\AvailableVariables::getConfigPaths
-     * @dataProvider getConfigPathsDataProvider
      */
+    #[DataProvider('getConfigPathsDataProvider')]
     public function testGetConfigPaths($data, $expected)
     {
         $model = new AvailableVariables($data);
@@ -28,7 +29,7 @@ class AvailableVariablesTest extends TestCase
     /**
      * @return array
      */
-    public function getConfigPathsDataProvider()
+    public static function getConfigPathsDataProvider()
     {
         return [
             [[],[]],

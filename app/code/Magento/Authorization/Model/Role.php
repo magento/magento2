@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Authorization\Model;
 
@@ -12,7 +12,6 @@ use Magento\Framework\Model\AbstractModel;
 /**
  * Admin Role Model
  *
- * @api
  * @method int getParentId()
  * @method Role setParentId(int $value)
  * @method int getTreeLevel()

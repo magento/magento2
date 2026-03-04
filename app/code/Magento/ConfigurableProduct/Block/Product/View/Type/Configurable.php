@@ -1,9 +1,7 @@
 <?php
 /**
- * Catalog super product configurable part block
- *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\ConfigurableProduct\Block\Product\View\Type;
 
@@ -21,7 +19,6 @@ use Magento\Store\Model\Store;
 /**
  * Confugurable product view type
  *
- * @api
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @api
  * @since 100.0.2
@@ -29,8 +26,6 @@ use Magento\Store\Model\Store;
 class Configurable extends \Magento\Catalog\Block\Product\View\AbstractView
 {
     /**
-     * Catalog product
-     *
      * @var \Magento\Catalog\Helper\Product
      */
     protected $catalogProduct = null;
@@ -39,13 +34,12 @@ class Configurable extends \Magento\Catalog\Block\Product\View\AbstractView
      * Current customer
      *
      * @deprecated 100.2.0 as unused property
+     * @see Nothing
      * @var CurrentCustomer
      */
     protected $currentCustomer;
 
     /**
-     * Prices
-     *
      * @var array
      */
     protected $_prices = [];
@@ -56,7 +50,7 @@ class Configurable extends \Magento\Catalog\Block\Product\View\AbstractView
     protected $jsonEncoder;
 
     /**
-     * @var \Magento\ConfigurableProduct\Helper\Data $imageHelper
+     * @var \Magento\ConfigurableProduct\Helper\Data
      */
     protected $helper;
 
@@ -110,9 +104,9 @@ class Configurable extends \Magento\Catalog\Block\Product\View\AbstractView
         PriceCurrencyInterface $priceCurrency,
         ConfigurableAttributeData $configurableAttributeData,
         array $data = [],
-        Format $localeFormat = null,
-        Session $customerSession = null,
-        \Magento\ConfigurableProduct\Model\Product\Type\Configurable\Variations\Prices $variationPrices = null
+        ?Format $localeFormat = null,
+        ?Session $customerSession = null,
+        ?\Magento\ConfigurableProduct\Model\Product\Type\Configurable\Variations\Prices $variationPrices = null
     ) {
         $this->priceCurrency = $priceCurrency;
         $this->helper = $helper;
@@ -209,7 +203,7 @@ class Configurable extends \Magento\Catalog\Block\Product\View\AbstractView
     }
 
     /**
-     * Returns additional values for js config, con be overridden by descendants
+     * Returns additional values for js config, can be overridden by descendants
      *
      * @return array
      */
@@ -236,7 +230,7 @@ class Configurable extends \Magento\Catalog\Block\Product\View\AbstractView
             'template' => str_replace('%s', '<%- data.price %>', $store->getCurrentCurrency()->getOutputFormat()),
             'currencyFormat' => $store->getCurrentCurrency()->getOutputFormat(),
             'optionPrices' => $this->getOptionPrices(),
-            'priceFormat' => $this->localeFormat->getPriceFormat(),
+            'priceFormat' => $this->localeFormat->getPriceFormat(null, $store->getCurrentCurrency()->getCurrencyCode()),
             'prices' => $this->variationPrices->getFormattedPrices($this->getProduct()->getPriceInfo()),
             'productId' => $currentProduct->getId(),
             'chooseText' => __('Choose an Option...'),
@@ -275,7 +269,7 @@ class Configurable extends \Magento\Catalog\Block\Product\View\AbstractView
                         'caption' => $image->getLabel(),
                         'position' => $image->getPosition(),
                         'isMain' => $image->getFile() == $product->getImage(),
-                        'type' => str_replace('external-', '', $image->getMediaType()),
+                        'type' =>  $image->getMediaType() ? str_replace('external-', '', $image->getMediaType()) : '',
                         'videoUrl' => $image->getVideoUrl(),
                     ];
             }
@@ -339,18 +333,23 @@ class Configurable extends \Magento\Catalog\Block\Product\View\AbstractView
         $tierPrices = [];
         $tierPriceModel = $product->getPriceInfo()->getPrice('tier_price');
         foreach ($tierPriceModel->getTierPriceList() as $tierPrice) {
+            $price = $this->_taxData->displayPriceExcludingTax() ?
+                $tierPrice['price']->getBaseAmount() : $tierPrice['price']->getValue();
+
             $tierPriceData = [
                 'qty' => $this->localeFormat->getNumber($tierPrice['price_qty']),
-                'price' => $this->localeFormat->getNumber($tierPrice['price']->getValue()),
+                'price' => $this->localeFormat->getNumber($price),
                 'percentage' => $this->localeFormat->getNumber(
                     $tierPriceModel->getSavePercent($tierPrice['price'])
                 ),
             ];
 
-            if (isset($tierPrice['excl_tax_price'])) {
-                $excludingTax = $tierPrice['excl_tax_price'];
-                $tierPriceData['excl_tax_price'] = $this->localeFormat->getNumber($excludingTax->getBaseAmount());
+            if ($this->_taxData->displayBothPrices()) {
+                $tierPriceData['basePrice'] = $this->localeFormat->getNumber(
+                    $tierPrice['price']->getBaseAmount()
+                );
             }
+
             $tierPrices[] = $tierPriceData;
         }
 
@@ -361,6 +360,7 @@ class Configurable extends \Magento\Catalog\Block\Product\View\AbstractView
      * Replace ',' on '.' for js
      *
      * @deprecated 100.1.10 Will be removed in major release
+     * @see Nothing
      * @param float $price
      * @return string
      */

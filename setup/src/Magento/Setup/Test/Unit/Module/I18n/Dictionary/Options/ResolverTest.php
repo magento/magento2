@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -12,6 +12,7 @@ use Magento\Framework\Component\ComponentRegistrar;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Setup\Module\I18n\Dictionary\Options\Resolver;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class ResolverTest extends TestCase
 {
@@ -19,8 +20,8 @@ class ResolverTest extends TestCase
      * @param string $directory
      * @param bool $withContext
      * @param array $result
-     * @dataProvider getOptionsDataProvider
      */
+    #[DataProvider('getOptionsDataProvider')]
     public function testGetOptions($directory, $withContext, $result)
     {
         $objectManagerHelper = new ObjectManager($this);
@@ -52,7 +53,7 @@ class ResolverTest extends TestCase
     /**
      * @return array
      */
-    public function getOptionsDataProvider()
+    public static function getOptionsDataProvider()
     {
         $sourceFirst = __DIR__ . '/_files/source';
         $sourceSecond = __DIR__ . '/_files/source';
@@ -118,8 +119,8 @@ class ResolverTest extends TestCase
      * @param string $directory
      * @param bool $withContext
      * @param string $message
-     * @dataProvider getOptionsWrongDirDataProvider
      */
+    #[DataProvider('getOptionsWrongDirDataProvider')]
     public function testGetOptionsWrongDir($directory, $withContext, $message)
     {
         $componentRegistrar = $this->createMock(ComponentRegistrar::class);
@@ -147,7 +148,7 @@ class ResolverTest extends TestCase
     /**
      * @return array
      */
-    public function getOptionsWrongDirDataProvider()
+    public static function getOptionsWrongDirDataProvider()
     {
         return [
             ['not_exist', true, 'Specified path is not a Magento root directory'],

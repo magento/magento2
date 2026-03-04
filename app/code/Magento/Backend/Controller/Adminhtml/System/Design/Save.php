@@ -1,12 +1,12 @@
 <?php
 /**
- *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Backend\Controller\Adminhtml\System\Design;
 
 use Magento\Framework\App\Action\HttpPostActionInterface;
+use Magento\Framework\Filter\FilterInput;
 
 /**
  * Save design action.
@@ -21,13 +21,13 @@ class Save extends \Magento\Backend\Controller\Adminhtml\System\Design implement
      */
     protected function _filterPostData($data)
     {
-        $inputFilter = new \Zend_Filter_Input(
+        $inputFilter = new FilterInput(
             ['date_from' => $this->dateFilter, 'date_to' => $this->dateFilter],
             [],
             $data
         );
-        $data = $inputFilter->getUnescaped();
-        return $data;
+
+        return $inputFilter->getUnescaped();
     }
 
     /**

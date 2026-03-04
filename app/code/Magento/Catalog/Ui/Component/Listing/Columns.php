@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Catalog\Ui\Component\Listing;
 
@@ -16,7 +16,7 @@ class Columns extends \Magento\Ui\Component\Listing\Columns
     /**
      * Default columns max order value
      */
-    const DEFAULT_COLUMNS_MAX_ORDER = 100;
+    public const DEFAULT_COLUMNS_MAX_ORDER = 100;
 
     /**
      * @var \Magento\Catalog\Ui\Component\Listing\Attribute\RepositoryInterface
@@ -71,6 +71,7 @@ class Columns extends \Magento\Ui\Component\Listing\Columns
                 $config['sortOrder'] = ++$columnSortOrder;
                 if ($attribute->getIsFilterableInGrid()) {
                     $config['filter'] = $this->getFilterType($attribute->getFrontendInput());
+                    $config['userDefined'] = $attribute->getIsUserDefined();
                 }
                 $column = $this->columnFactory->create($attribute, $this->getContext(), $config);
                 $column->prepare();

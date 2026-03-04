@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -39,9 +39,7 @@ class DataMapperResolverTest extends TestCase
         $this->dataMapperFactoryMock = $this->getMockBuilder(DataMapperFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->dataMapperEntity = $this->getMockBuilder(BatchDataMapperInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->dataMapperEntity = $this->createMock(BatchDataMapperInterface::class);
         $this->model = (new ObjectManagerHelper($this))->getObject(
             DataMapperResolver::class,
             [

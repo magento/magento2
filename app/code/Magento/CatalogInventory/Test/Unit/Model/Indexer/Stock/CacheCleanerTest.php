@@ -1,31 +1,42 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\CatalogInventory\Test\Unit\Model\Indexer\Stock;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\Catalog\Model\Category;
 use Magento\Catalog\Model\Product;
 use Magento\CatalogInventory\Api\StockConfigurationInterface;
+use Magento\CatalogInventory\Model\Configuration;
 use Magento\CatalogInventory\Model\Indexer\Stock\CacheCleaner;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\DB\Select;
+use Magento\Framework\EntityManager\EntityMetadata;
 use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Framework\Event\ManagerInterface;
 use Magento\Framework\Indexer\CacheContext;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 
 /**
  * Test for CacheCleaner
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.UnusedLocalVariable)
+ * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+ * @SuppressWarnings(PHPMD.TooManyFields)
+ *
  */
 class CacheCleanerTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var CacheCleaner
      */
@@ -73,35 +84,40 @@ class CacheCleanerTest extends TestCase
             ->getMock();
         $this->connectionMock = $this->getMockBuilder(AdapterInterface::class)
             ->getMock();
-        $this->stockConfigurationMock = $this->getMockBuilder(StockConfigurationInterface::class)
-            ->setMethods(['getStockThresholdQty'])
-            ->getMockForAbstractClass();
+        $this->stockConfigurationMock = $this->createPartialMockWithReflection(
+            Configuration::class,
+            ['getStockThresholdQty']
+        );
         $this->cacheContextMock = $this->getMockBuilder(CacheContext::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->eventManagerMock = $this->getMockBuilder(ManagerInterface::class)
             ->getMock();
-        $this->metadataPoolMock = $this->getMockBuilder(MetadataPool::class)
-            ->setMethods(['getMetadata', 'getLinkField'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        
+        $this->metadataPoolMock = $this->createPartialMockWithReflection(
+            MetadataPool::class,
+            ['getMetadata', 'getHydrator']
+        );
+        
+        $metadataMock = $this->createPartialMockWithReflection(
+            EntityMetadata::class,
+            ['getLinkField']
+        );
+        $metadataMock->method('getLinkField')->willReturn('row_id');
+        $this->metadataPoolMock->method('getMetadata')->willReturn($metadataMock);
+        
         $this->selectMock = $this->getMockBuilder(Select::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->resourceMock->expects($this->any())
-            ->method('getConnection')
-            ->willReturn($this->connectionMock);
+        $this->resourceMock->method('getConnection')->willReturn($this->connectionMock);
 
-        $this->unit = (new ObjectManager($this))->getObject(
-            CacheCleaner::class,
-            [
-                'resource' => $this->resourceMock,
-                'stockConfiguration' => $this->stockConfigurationMock,
-                'cacheContext' => $this->cacheContextMock,
-                'eventManager' => $this->eventManagerMock,
-                'metadataPool' => $this->metadataPoolMock
-            ]
+        $this->unit = new CacheCleaner(
+            $this->resourceMock,
+            $this->stockConfigurationMock,
+            $this->cacheContextMock,
+            $this->eventManagerMock,
+            $this->metadataPoolMock
         );
     }
 
@@ -112,18 +128,16 @@ class CacheCleanerTest extends TestCase
      * @param bool $stockStatusAfter
      * @param int $qtyAfter
      * @param bool|int $stockThresholdQty
-     * @dataProvider cleanDataProvider
      * @return void
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
+    #[DataProvider('cleanDataProvider')]
     public function testClean($stockStatusBefore, $stockStatusAfter, $qtyAfter, $stockThresholdQty): void
     {
         $productId = 123;
         $categoryId = 3;
         $this->selectMock->expects($this->any())
             ->method('from')
-            ->willReturnSelf();
-        $this->selectMock->expects($this->any())
-            ->method('where')
             ->willReturnSelf();
         $this->selectMock->expects($this->any())
             ->method('joinLeft')
@@ -141,27 +155,41 @@ class CacheCleanerTest extends TestCase
                     ['product_id' => $productId, 'stock_status' => $stockStatusAfter, 'qty' => $qtyAfter],
                 ]
             );
+        $this->selectMock->expects($this->exactly(7))
+            ->method('where')
+            ->willReturnCallback(function ($arg1, $arg2, $arg3) {
+                if ($arg1 == 'product_id IN (?)') {
+                    return $this->selectMock;
+                } elseif ($arg1 == 'stock_id = ?') {
+                    return $this->selectMock;
+                } elseif ($arg1 == 'website_id = ?') {
+                    return $this->selectMock;
+                } elseif ($arg1 == 'product_id IN (?)') {
+                    return $this->selectMock;
+                } elseif ($arg1 == 'stock_id = ?') {
+                    return $this->selectMock;
+                } elseif ($arg1 == 'website_id = ?') {
+                    return $this->selectMock;
+                } elseif ($arg1 == 'product_id IN (?)' && $arg2 == [123] && $arg3 == \Zend_Db::INT_TYPE) {
+                    return $this->selectMock;
+                }
+            });
         $this->connectionMock->expects($this->exactly(1))
             ->method('fetchCol')
             ->willReturn([$categoryId]);
-        $this->stockConfigurationMock->expects($this->once())
-            ->method('getStockThresholdQty')
-            ->willReturn($stockThresholdQty);
+        $this->stockConfigurationMock->method('getStockThresholdQty')->willReturn($stockThresholdQty);
         $this->cacheContextMock->expects($this->exactly(2))
             ->method('registerEntities')
-            ->withConsecutive(
-                [Product::CACHE_TAG, [$productId]],
-                [Category::CACHE_TAG, [$categoryId]],
-            );
+            ->willReturnCallback(function ($arg1, $arg2) use ($productId, $categoryId) {
+                if ($arg1 == Product::CACHE_TAG && $arg2 == [$productId]) {
+                    return null;
+                } elseif ($arg1 == Category::CACHE_TAG && $arg2 == [$categoryId]) {
+                    return null;
+                }
+            });
         $this->eventManagerMock->expects($this->exactly(2))
             ->method('dispatch')
             ->with('clean_cache_by_tags', ['object' => $this->cacheContextMock]);
-        $this->metadataPoolMock->expects($this->exactly(2))
-            ->method('getMetadata')
-            ->willReturnSelf();
-        $this->metadataPoolMock->expects($this->exactly(2))
-            ->method('getLinkField')
-            ->willReturn('row_id');
 
         $callback = function () {
         };
@@ -171,7 +199,7 @@ class CacheCleanerTest extends TestCase
     /**
      * @return array
      */
-    public function cleanDataProvider(): array
+    public static function cleanDataProvider(): array
     {
         return [
             [true, false, 1, false],
@@ -186,9 +214,9 @@ class CacheCleanerTest extends TestCase
      * @param bool $stockStatusAfter
      * @param int $qtyAfter
      * @param bool|int $stockThresholdQty
-     * @dataProvider notCleanCacheDataProvider
      * @return void
      */
+    #[DataProvider('notCleanCacheDataProvider')]
     public function testNotCleanCache($stockStatusBefore, $stockStatusAfter, $qtyAfter, $stockThresholdQty): void
     {
         $productId = 123;
@@ -211,19 +239,11 @@ class CacheCleanerTest extends TestCase
                     ['product_id' => $productId, 'stock_status' => $stockStatusAfter, 'qty' => $qtyAfter],
                 ]
             );
-        $this->stockConfigurationMock->expects($this->once())
-            ->method('getStockThresholdQty')
-            ->willReturn($stockThresholdQty);
+        $this->stockConfigurationMock->method('getStockThresholdQty')->willReturn($stockThresholdQty);
         $this->cacheContextMock->expects($this->never())
             ->method('registerEntities');
         $this->eventManagerMock->expects($this->never())
             ->method('dispatch');
-        $this->metadataPoolMock->expects($this->exactly(2))
-            ->method('getMetadata')
-            ->willReturnSelf();
-        $this->metadataPoolMock->expects($this->exactly(2))
-            ->method('getLinkField')
-            ->willReturn('row_id');
 
         $callback = function () {
         };
@@ -233,7 +253,7 @@ class CacheCleanerTest extends TestCase
     /**
      * @return array
      */
-    public function notCleanCacheDataProvider(): array
+    public static function notCleanCacheDataProvider(): array
     {
         return [
             [true, true, 1, false],

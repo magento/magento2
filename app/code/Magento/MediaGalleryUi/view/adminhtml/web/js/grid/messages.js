@@ -1,6 +1,6 @@
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 
 define([
@@ -70,6 +70,7 @@ define([
 
             delay = delay || this.messageDelay;
 
+            // eslint-disable-next-line no-unused-vars
             timerId = setTimeout(function () {
                 clearTimeout(timerId);
                 this.clear();

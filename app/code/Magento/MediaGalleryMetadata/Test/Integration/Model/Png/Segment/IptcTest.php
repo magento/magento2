@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -13,6 +13,7 @@ use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\DriverInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\MediaGalleryMetadata\Model\Png\Segment\WriteIptc;
 use Magento\MediaGalleryMetadata\Model\Png\Segment\ReadIptc;
 use Magento\MediaGalleryMetadata\Model\Png\ReadFile;
@@ -51,45 +52,52 @@ class IptcTest extends TestCase
     /**
      * @var WriteInterface
      */
-    private $varDirectory;
+    private $directory;
 
     /**
      * @inheritdoc
      */
     protected function setUp(): void
     {
-        $this->varDirectory = Bootstrap::getObjectManager()->get(Filesystem::class)
-            ->getDirectoryWrite(DirectoryList::VAR_DIR);
+        $this->directory = Bootstrap::getObjectManager()->get(FileSystem::class)
+            ->getDirectoryWrite(DirectoryList::MEDIA);
         $this->iptcWriter = Bootstrap::getObjectManager()->get(WriteIptc::class);
         $this->iptcReader = Bootstrap::getObjectManager()->get(ReadIptc::class);
         $this->fileReader = Bootstrap::getObjectManager()->get(ReadFile::class);
-        $this->driver = Bootstrap::getObjectManager()->get(DriverInterface::class);
+        $this->driver = $this->directory->getDriver();
         $this->metadataFactory = Bootstrap::getObjectManager()->get(MetadataFactory::class);
+        $this->directory->create('testDir');
+    }
+
+    /**
+     * @inheritDoc
+     */
+    protected function tearDown(): void
+    {
+        $this->directory->delete('testDir');
     }
 
     /**
      * Test for IPTC reader and writer
-     *
-     * @dataProvider filesProvider
      * @param string $fileName
      * @param string $title
      * @param string $description
      * @param array $keywords
      * @throws LocalizedException
      */
+    #[DataProvider('filesProvider')]
     public function testWriteRead(
         string $fileName,
         string $title,
         string $description,
         array $keywords
     ): void {
-        $path = realpath(__DIR__ . '/../../../../_files/' . $fileName);
-        $modifiableFilePath = $this->varDirectory->getAbsolutePath($fileName);
-        $this->driver->copy(
+        $path = $this->directory->getAbsolutePath('testDir/' . $fileName);
+        $this->driver->filePutContents(
             $path,
-            $modifiableFilePath
+            file_get_contents(__DIR__ . '/../../../../_files/' . $fileName)
         );
-        $modifiableFilePath = $this->fileReader->execute($modifiableFilePath);
+        $modifiableFilePath = $this->fileReader->execute($path);
         $originalMetadata = $this->iptcReader->execute($modifiableFilePath);
 
         $this->assertEmpty($originalMetadata->getTitle());
@@ -117,7 +125,7 @@ class IptcTest extends TestCase
      *
      * @return array[]
      */
-    public function filesProvider(): array
+    public static function filesProvider(): array
     {
         return [
             [

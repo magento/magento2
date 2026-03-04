@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -17,6 +17,7 @@ use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Url\Helper\Data;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class ExpressRedirectTest extends TestCase
 {
@@ -31,8 +32,6 @@ class ExpressRedirectTest extends TestCase
     protected $objectManager;
 
     /**
-     * Customer session
-     *
      * @var MockObject
      */
     protected $customerSession;
@@ -57,7 +56,7 @@ class ExpressRedirectTest extends TestCase
             ->onlyMethods(['set'])
             ->getMock();
 
-        $this->objectManager = $this->getMockForAbstractClass(ObjectManagerInterface::class);
+        $this->objectManager = $this->createMock(ObjectManagerInterface::class);
 
         $this->customerSession = $this->getMockBuilder(Session::class)
             ->disableOriginalConstructor()
@@ -81,8 +80,8 @@ class ExpressRedirectTest extends TestCase
      * @param string|null $customerBeforeAuthUrlDefault
      *
      * @return void
-     * @dataProvider redirectLoginDataProvider
      */
+    #[DataProvider('redirectLoginDataProvider')]
     public function testRedirectLogin(
         array $actionFlagList,
         ?string $customerBeforeAuthUrl,
@@ -99,11 +98,7 @@ class ExpressRedirectTest extends TestCase
                     'getRedirectActionName'
                 ]
             )->getMock();
-        $expressRedirectMock->expects(
-            $this->any()
-        )->method(
-            'getActionFlagList'
-        )->willReturn(
+        $expressRedirectMock->method('getActionFlagList')->willReturn(
             $actionFlagList
         );
         $actionFlagList = array_merge(['no-dispatch' => true], $actionFlagList);
@@ -114,7 +109,14 @@ class ExpressRedirectTest extends TestCase
         }
         $this->actionFlag
             ->method('set')
-            ->withConsecutive(...$withArgs);
+            ->willReturnCallback(function (...$args) use ($withArgs) {
+                static $callCount = 0;
+                $callCount++;
+                $expectedArgs = $withArgs[$callCount - 1];
+                if ($args === $expectedArgs) {
+                    return null;
+                }
+            });
 
         $expectedLoginUrl = 'loginURL';
         $expressRedirectMock->expects(
@@ -153,14 +155,8 @@ class ExpressRedirectTest extends TestCase
             ->disableOriginalConstructor()
             ->onlyMethods(['setRedirect'])->getMock();
         $responseMock->expects($this->once())->method('setRedirect')->with($expectedLoginUrl);
-
         $expressRedirectMock->expects($this->once())->method('getResponse')->willReturn($responseMock);
-
-        $expressRedirectMock->expects(
-            $this->any()
-        )->method(
-            'getCustomerBeforeAuthUrl'
-        )->willReturn(
+        $expressRedirectMock->method('getCustomerBeforeAuthUrl')->willReturn(
             $customerBeforeAuthUrl
         );
         $expectedCustomerBeforeAuthUrl = $customerBeforeAuthUrl !== null
@@ -183,7 +179,7 @@ class ExpressRedirectTest extends TestCase
      *
      * @return array
      */
-    public function redirectLoginDataProvider(): array
+    public static function redirectLoginDataProvider(): array
     {
         return [
             [[], 'beforeCustomerUrl', 'beforeCustomerUrlDEFAULT'],

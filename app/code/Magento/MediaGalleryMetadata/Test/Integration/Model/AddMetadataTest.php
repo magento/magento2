@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -11,12 +11,12 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Directory\WriteInterface;
-use Magento\Framework\Filesystem\DriverInterface;
 use Magento\MediaGalleryMetadataApi\Api\AddMetadataInterface;
 use Magento\MediaGalleryMetadataApi\Api\Data\MetadataInterfaceFactory;
 use Magento\MediaGalleryMetadataApi\Api\ExtractMetadataInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * ExtractMetadata test
@@ -31,12 +31,7 @@ class AddMetadataTest extends TestCase
     /**
      * @var WriteInterface
      */
-    private $varDirectory;
-
-    /**
-     * @var DriverInterface
-     */
-    private $driver;
+    private $directory;
 
     /**
      * @var MetadataInterfaceFactory
@@ -54,34 +49,41 @@ class AddMetadataTest extends TestCase
     protected function setUp(): void
     {
         $this->addMetadata = Bootstrap::getObjectManager()->get(AddMetadataInterface::class);
-        $this->varDirectory = Bootstrap::getObjectManager()->get(Filesystem::class)
-            ->getDirectoryWrite(DirectoryList::VAR_DIR);
-        $this->driver = Bootstrap::getObjectManager()->get(DriverInterface::class);
         $this->metadataFactory = Bootstrap::getObjectManager()->get(MetadataInterfaceFactory::class);
         $this->extractMetadata = Bootstrap::getObjectManager()->get(ExtractMetadataInterface::class);
+        $this->directory = Bootstrap::getObjectManager()->get(FileSystem::class)
+            ->getDirectoryWrite(DirectoryList::MEDIA);
+        $this->directory->create('testDir');
+    }
+
+    /**
+     * @inheritDoc
+     */
+    protected function tearDown(): void
+    {
+        $this->directory->delete('testDir');
     }
 
     /**
      * Test for ExtractMetadata::execute
-     *
-     * @dataProvider filesProvider
      * @param null|string $fileName
      * @param null|string $title
      * @param null|string $description
      * @param null|array $keywords
      * @throws LocalizedException
      */
+    #[DataProvider('filesProvider')]
     public function testExecute(
         ?string $fileName,
         ?string $title,
         ?string $description,
         ?array $keywords
     ): void {
-        $path = realpath(__DIR__ . '/../../_files/' . $fileName);
-        $modifiableFilePath = $this->varDirectory->getAbsolutePath($fileName);
-        $this->driver->copy(
-            $path,
-            $modifiableFilePath
+        $modifiableFilePath = $this->directory->getAbsolutePath('testDir/' . $fileName);
+        $driver = $this->directory->getDriver();
+        $driver->filePutContents(
+            $modifiableFilePath,
+            file_get_contents(__DIR__ . '/../../_files/' . $fileName)
         );
         $metadata = $this->metadataFactory->create([
             'title' => $title,
@@ -97,7 +99,7 @@ class AddMetadataTest extends TestCase
         $this->assertEquals($description, $updatedMetadata->getDescription());
         $this->assertEquals($keywords, $updatedMetadata->getKeywords());
 
-        $this->driver->deleteFile($modifiableFilePath);
+        $driver->deleteFile($modifiableFilePath);
     }
 
     /**
@@ -105,7 +107,7 @@ class AddMetadataTest extends TestCase
      *
      * @return array[]
      */
-    public function filesProvider(): array
+    public static function filesProvider(): array
     {
         return [
             [
@@ -174,7 +176,7 @@ class AddMetadataTest extends TestCase
                     'community'
                 ],
             ],
-             [
+            [
                 'exiftool.gif',
                 'Updated Title',
                 'Updated Description',
@@ -182,8 +184,8 @@ class AddMetadataTest extends TestCase
                     'magento2',
                     'mediagallery'
                 ]
-             ],
-             [
+            ],
+            [
                 'empty_exiftool.gif',
                 'Updated Title',
                 'Updated Description',
@@ -191,7 +193,7 @@ class AddMetadataTest extends TestCase
                     'magento2',
                     'mediagallery'
                 ]
-             ]
+            ]
         ];
     }
 }

@@ -1,6 +1,6 @@
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 define([
     'jquery',
@@ -606,7 +606,7 @@ define([
              * @private
              */
             _formatVimeoDuration: function (seconds) {
-                return (new Date(seconds * 1000)).toUTCString().match(/(\d\d:\d\d:\d\d)/)[0];
+                return new Date(seconds * 1000).toUTCString().match(/(\d\d:\d\d:\d\d)/)[0];
             },
 
             /**

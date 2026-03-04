@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Theme\Model\Design\Config\FileUploader;
@@ -54,7 +54,7 @@ class FileProcessor
     /**
      * @var string
      */
-    const FILE_DIR = 'design/file';
+    public const FILE_DIR = 'design/file';
 
     /**
      * @param UploaderFactory $uploaderFactory
@@ -115,7 +115,7 @@ class FileProcessor
      */
     protected function prepareFile($file)
     {
-        return ltrim(str_replace('\\', '/', $file), '/');
+        return $file !== null ? ltrim(str_replace('\\', '/', $file), '/') : '';
     }
 
     /**

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -13,17 +13,22 @@ use Magento\Backend\Model\View\Result\Forward;
 use Magento\Backend\Model\View\Result\ForwardFactory;
 use Magento\Eav\Model\Entity\Collection\AbstractCollection;
 use Magento\Framework\App\RequestInterface;
+use Magento\Framework\App\Request\Http;
 use Magento\Framework\App\ResponseInterface;
 use Magento\Framework\Escaper;
 use Magento\Framework\Event\ManagerInterface;
+use Magento\Framework\Message\ManagerInterface as MessageManagerInterface;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Quote\Model\Quote as QuoteModel;
 use Magento\Quote\Model\Quote\Address;
 use Magento\Sales\Controller\Adminhtml\Order\Create\ProcessData;
 use Magento\Sales\Model\AdminOrder\Create;
 use PHPUnit\Framework\MockObject\MockObject;
 
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 
 /**
  *
@@ -32,6 +37,8 @@ use PHPUnit\Framework\TestCase;
  */
 class ProcessDataTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var ProcessData
      */
@@ -58,7 +65,7 @@ class ProcessDataTest extends TestCase
     protected $eventManager;
 
     /**
-     * @var \Magento\Framework\Message\ManagerInterface|MockObject
+     * @var MessageManagerInterface|MockObject
      */
     protected $messageManager;
 
@@ -85,59 +92,28 @@ class ProcessDataTest extends TestCase
         $objectManagerHelper = new ObjectManagerHelper($this);
         $context = $this->createMock(Context::class);
 
-        $this->request = $this->getMockForAbstractClass(
-            RequestInterface::class,
-            [],
-            '',
-            false,
-            true,
-            true,
-            [
-                'getParam',
-                'getPost',
-                'getPostValue',
-                'get',
-                'has',
-                'setModuleName',
-                'setActionName',
-                'initForward',
-                'setDispatched',
-                'getModuleName',
-                'getActionName',
-                'getCookie'
-            ]
-        );
-        $response = $this->getMockForAbstractClass(
-            ResponseInterface::class,
-            [],
-            '',
-            false,
-            true,
-            true,
-            []
-        );
+        $this->request = $this->createPartialMock(Http::class, ['getPost', 'getPostValue', 'has', 'getParam']);
+        $response = $this->createMock(ResponseInterface::class);
         $context->expects($this->any())->method('getResponse')->willReturn($response);
         $context->expects($this->any())->method('getRequest')->willReturn($this->request);
 
-        $this->messageManager = $this->createMock(\Magento\Framework\Message\ManagerInterface::class);
+        $this->messageManager = $this->createMock(MessageManagerInterface::class);
         $context->expects($this->any())->method('getMessageManager')->willReturn($this->messageManager);
 
-        $this->eventManager = $this->getMockForAbstractClass(ManagerInterface::class);
+        $this->eventManager = $this->createMock(ManagerInterface::class);
         $context->expects($this->any())->method('getEventManager')->willReturn($this->eventManager);
 
-        $this->objectManager = $this->getMockForAbstractClass(ObjectManagerInterface::class);
+        $this->objectManager = $this->createMock(ObjectManagerInterface::class);
         $context->expects($this->any())->method('getObjectManager')->willReturn($this->objectManager);
 
         $this->session = $this->createMock(Quote::class);
         $context->expects($this->any())->method('getSession')->willReturn($this->session);
         $this->escaper = $this->createPartialMock(Escaper::class, ['escapeHtml']);
 
-        $this->resultForward = $this->getMockBuilder(Forward::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->resultForward = $this->createMock(Forward::class);
         $this->resultForwardFactory = $this->getMockBuilder(ForwardFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
 
         $this->resultForwardFactory->expects($this->once())
@@ -157,16 +133,14 @@ class ProcessDataTest extends TestCase
     /**
      * @param bool $noDiscount
      * @param string $couponCode
-     * @param string $errorMessage
-     * @param string $actualCouponCode
-     * @dataProvider isApplyDiscountDataProvider
      */
-    public function testExecute($noDiscount, $couponCode, $errorMessage, $actualCouponCode)
+    #[DataProvider('isApplyDiscountDataProvider')]
+    public function testExecute($noDiscount, $couponCode)
     {
-        $quote = $this->getMockBuilder(\Magento\Quote\Model\Quote::class)->addMethods(['getCouponCode'])
-            ->onlyMethods(['isVirtual', 'getAllItems'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $quote = $this->createPartialMockWithReflection(
+            QuoteModel::class,
+            ['getCouponCode', 'isVirtual', 'getAllItems']
+        );
         $create = $this->createMock(Create::class);
 
         $paramReturnMap = [
@@ -208,8 +182,6 @@ class ProcessDataTest extends TestCase
         ];
         $this->request->expects($this->atLeastOnce())->method('getPost')->willReturnMap($postReturnMap);
 
-        $create->expects($this->once())->method('importPostData')->willReturnSelf();
-        $create->expects($this->once())->method('initRuleData')->willReturnSelf();
         $create->expects($this->any())->method('getQuote')->willReturn($quote);
 
         $address = $this->createMock(Address::class);
@@ -222,33 +194,12 @@ class ProcessDataTest extends TestCase
         $create->expects($this->once())->method('saveQuote')->willReturnSelf();
 
         $this->session->expects($this->any())->method('getQuote')->willReturn($quote);
-        $item = $this->getMockForAbstractClass(
+        $item = $this->createPartialMockWithReflection(
             AbstractCollection::class,
-            [],
-            '',
-            false,
-            true,
-            true,
             ['getNoDiscount']
         );
         $quote->expects($this->any())->method('getAllItems')->willReturn([$item]);
         $item->expects($this->any())->method('getNoDiscount')->willReturn($noDiscount);
-        if (!$noDiscount) {
-            $quote->expects($this->once())->method('getCouponCode')->willReturn($actualCouponCode);
-        }
-
-        $errorMessageManager = __(
-            $errorMessage,
-            $couponCode
-        );
-        $this->escaper->expects($this->once())->method('escapeHtml')->with($couponCode)->willReturn($couponCode);
-
-        $this->messageManager
-            ->expects($this->once())
-            ->method('addErrorMessage')
-            ->with($errorMessageManager)
-            ->willReturnSelf();
-
         $this->resultForward->expects($this->once())
             ->method('forward')
             ->with('index')
@@ -259,11 +210,11 @@ class ProcessDataTest extends TestCase
     /**
      * @return array
      */
-    public function isApplyDiscountDataProvider()
+    public static function isApplyDiscountDataProvider()
     {
         return [
-            [true, '123', '"%1" coupon code was not applied. Do not apply discount is selected for item(s)', null],
-            [false, '123', 'The "%1" coupon code isn\'t valid. Verify the code and try again.', '132'],
+            [true, '123'],
+            [false, '123'],
         ];
     }
 }

@@ -1,18 +1,24 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Framework\Cache\Test\Unit\Backend;
 
 use Magento\Framework\Cache\Backend\MongoDb;
+use Magento\Framework\Cache\CacheConstants;
+use Magento\Framework\Cache\Exception\CacheException;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\Attributes\DataProvider;
+
 use PHPUnit\Framework\TestCase;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 
 class MongoDbTest extends TestCase
 {
+    use MockCreationTrait;
     /**
      * @var MongoDb|null
      */
@@ -25,9 +31,10 @@ class MongoDbTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->_collection = $this->getMockBuilder('MongoCollection')
-            ->setMethods(['find', 'findOne', 'distinct', 'save', 'update', 'remove', 'drop'])
-            ->getMock();
+        $this->_collection = $this->createPartialMockWithReflection(
+            \stdClass::class,
+            ['find', 'findOne', 'distinct', 'save', 'update', 'remove', 'drop']
+        );
         $this->_model = $this->createPartialMock(MongoDb::class, ['_getCollection']);
         $this->_model->expects($this->any())->method('_getCollection')->willReturn($this->_collection);
     }
@@ -41,8 +48,8 @@ class MongoDbTest extends TestCase
     /**
      * @param array $ids
      * @param array $expected
-     * @dataProvider getIdsDataProvider
      */
+     #[DataProvider('getIdsDataProvider')]
     public function testGetIds(array $ids, array $expected)
     {
         $result = new \ArrayIterator($ids);
@@ -54,7 +61,7 @@ class MongoDbTest extends TestCase
     /**
      * @return array
      */
-    public function getIdsDataProvider()
+    public static function getIdsDataProvider()
     {
         return [
             'empty db' => [[], []],
@@ -64,8 +71,8 @@ class MongoDbTest extends TestCase
 
     /**
      * @param array $tags
-     * @dataProvider getTagsDataProvider
      */
+     #[DataProvider('getTagsDataProvider')]
     public function testGetTags(array $tags)
     {
         $this->_collection->expects($this->once())->method('distinct')->with('tags')->willReturn($tags);
@@ -76,7 +83,7 @@ class MongoDbTest extends TestCase
     /**
      * @return array
      */
-    public function getTagsDataProvider()
+    public static function getTagsDataProvider()
     {
         return ['no tags' => [[]], 'multiple tags' => [['tag1', 'tag2']]];
     }
@@ -85,8 +92,8 @@ class MongoDbTest extends TestCase
      * @covers \Magento\Framework\Cache\Backend\MongoDb::getIdsMatchingTags
      * @covers \Magento\Framework\Cache\Backend\MongoDb::getIdsNotMatchingTags
      * @covers \Magento\Framework\Cache\Backend\MongoDb::getIdsMatchingAnyTags
-     * @dataProvider getIdsMatchingTagsDataProvider
      */
+     #[DataProvider('getIdsMatchingTagsDataProvider')]
     public function testGetIdsMatchingTags($method, $tags, $expectedInput)
     {
         $expectedOutput = new \ArrayIterator(['test1' => 'test1', 'test2' => 'test2']);
@@ -107,7 +114,7 @@ class MongoDbTest extends TestCase
     /**
      * @return array
      */
-    public function getIdsMatchingTagsDataProvider()
+    public static function getIdsMatchingTagsDataProvider()
     {
         return [
             'getIdsMatchingTags() - one tag' => [
@@ -168,8 +175,8 @@ class MongoDbTest extends TestCase
      * @param array $expectedInput
      * @param array|null $mongoOutput
      * @param array|bool $expected
-     * @dataProvider getMetadatasDataProvider
      */
+     #[DataProvider('getMetadatasDataProvider')]
     public function testGetMetadatas($cacheId, $expectedInput, $mongoOutput, $expected)
     {
         $this->_collection->expects(
@@ -188,7 +195,7 @@ class MongoDbTest extends TestCase
     /**
      * @return array
      */
-    public function getMetadatasDataProvider()
+    public static function getMetadatasDataProvider()
     {
         $time = time();
         return [
@@ -228,8 +235,8 @@ class MongoDbTest extends TestCase
 
     /**
      * @param bool $doNotTestValidity
-     * @dataProvider loadDataProvider
      */
+     #[DataProvider('loadDataProvider')]
     public function testLoad($doNotTestValidity)
     {
         include_once __DIR__ . '/_files/MongoBinData.txt';
@@ -258,7 +265,7 @@ class MongoDbTest extends TestCase
     /**
      * @return array
      */
-    public function loadDataProvider()
+    public static function loadDataProvider()
     {
         return ['test validity' => [false], 'do not test validity' => [true]];
     }
@@ -334,8 +341,8 @@ class MongoDbTest extends TestCase
      * @param string $mode
      * @param array $tags
      * @param array $expectedQuery
-     * @dataProvider cleanDataProvider
      */
+     #[DataProvider('cleanDataProvider')]
     public function testClean($mode, $tags, $expectedQuery)
     {
         $this->_collection->expects($this->once())->method('remove')->with($expectedQuery);
@@ -346,52 +353,52 @@ class MongoDbTest extends TestCase
     /**
      * @return array
      */
-    public function cleanDataProvider()
+    public static function cleanDataProvider()
     {
         return [
-            'clean expired' => [\Zend_Cache::CLEANING_MODE_OLD, [], $this->arrayHasKey('expire')],
+            'clean expired' => [CacheConstants::CLEANING_MODE_OLD, [], self::arrayHasKey('expire')],
             'clean cache matching all tags (string)' => [
-                \Zend_Cache::CLEANING_MODE_MATCHING_TAG,
-                'tag1',
+                CacheConstants::CLEANING_MODE_MATCHING_TAG,
+                ['tag1'],
                 ['$and' => [['tags' => 'tag1']]],
             ],
             'clean cache matching all tags (one tag)' => [
-                \Zend_Cache::CLEANING_MODE_MATCHING_TAG,
+                CacheConstants::CLEANING_MODE_MATCHING_TAG,
                 ['tag1'],
                 ['$and' => [['tags' => 'tag1']]],
             ],
             'clean cache matching all tags (multiple tags)' => [
-                \Zend_Cache::CLEANING_MODE_MATCHING_TAG,
+                CacheConstants::CLEANING_MODE_MATCHING_TAG,
                 ['tag1', 'tag2'],
                 ['$and' => [['tags' => 'tag1'], ['tags' => 'tag2']]],
             ],
             'clean cache not matching tags (string)' => [
-                \Zend_Cache::CLEANING_MODE_NOT_MATCHING_TAG,
-                'tag1',
+                CacheConstants::CLEANING_MODE_NOT_MATCHING_TAG,
+                ['tag1'],
                 ['$nor' => [['tags' => 'tag1']]],
             ],
             'clean cache not matching tags (one tag)' => [
-                \Zend_Cache::CLEANING_MODE_NOT_MATCHING_TAG,
+                CacheConstants::CLEANING_MODE_NOT_MATCHING_TAG,
                 ['tag1'],
                 ['$nor' => [['tags' => 'tag1']]],
             ],
             'clean cache not matching tags (multiple tags)' => [
-                \Zend_Cache::CLEANING_MODE_NOT_MATCHING_TAG,
+                CacheConstants::CLEANING_MODE_NOT_MATCHING_TAG,
                 ['tag1', 'tag2'],
                 ['$nor' => [['tags' => 'tag1'], ['tags' => 'tag2']]],
             ],
             'clean cache matching any tags (string)' => [
-                \Zend_Cache::CLEANING_MODE_MATCHING_ANY_TAG,
-                'tag1',
+                CacheConstants::CLEANING_MODE_MATCHING_ANY_TAG,
+                ['tag1'],
                 ['$or' => [['tags' => 'tag1']]],
             ],
             'clean cache matching any tags (one tag)' => [
-                \Zend_Cache::CLEANING_MODE_MATCHING_ANY_TAG,
+                CacheConstants::CLEANING_MODE_MATCHING_ANY_TAG,
                 ['tag1'],
                 ['$or' => [['tags' => 'tag1']]],
             ],
             'clean cache matching any tags (multiple tags)' => [
-                \Zend_Cache::CLEANING_MODE_MATCHING_ANY_TAG,
+                CacheConstants::CLEANING_MODE_MATCHING_ANY_TAG,
                 ['tag1', 'tag2'],
                 ['$or' => [['tags' => 'tag1'], ['tags' => 'tag2']]],
             ]
@@ -401,16 +408,16 @@ class MongoDbTest extends TestCase
     public function cleanAll()
     {
         $this->_collection->expects($this->once())->method('drop')->willReturn(['ok' => true]);
-        $this->assertTrue($this->_model->clean(\Zend_Cache::CLEANING_MODE_ALL));
+        $this->assertTrue($this->_model->clean(CacheConstants::CLEANING_MODE_ALL));
     }
 
     public function cleanNoTags()
     {
         $this->_collection->expects($this->never())->method('remove');
         $modes = [
-            \Zend_Cache::CLEANING_MODE_MATCHING_TAG,
-            \Zend_Cache::CLEANING_MODE_NOT_MATCHING_TAG,
-            \Zend_Cache::CLEANING_MODE_MATCHING_ANY_TAG,
+            CacheConstants::CLEANING_MODE_MATCHING_TAG,
+            CacheConstants::CLEANING_MODE_NOT_MATCHING_TAG,
+            CacheConstants::CLEANING_MODE_MATCHING_ANY_TAG,
         ];
         foreach ($modes as $mode) {
             $this->assertFalse($this->_model->clean($mode));
@@ -419,7 +426,7 @@ class MongoDbTest extends TestCase
 
     public function testCleanInvalidMode()
     {
-        $this->expectException('Zend_Cache_Exception');
+        $this->expectException(CacheException::class);
         $this->expectExceptionMessage('Unsupported cleaning mode: invalid_mode');
         $this->_model->clean('invalid_mode');
     }
