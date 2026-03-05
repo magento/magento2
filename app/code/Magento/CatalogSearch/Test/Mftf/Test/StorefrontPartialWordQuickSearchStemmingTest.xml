@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
-  */
+/**
+ * Copyright 2021 Adobe
+ * All Rights Reserved.
+ */
 -->
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -77,7 +77,7 @@
         <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="goToHomePage"/>
         <!--Search for word "5127S"-->
         <actionGroup ref="StorefrontCheckQuickSearchStringActionGroup" stepKey="search1">
-            <argument name="phrase" value="5127S"/>
+            <argument name="phrase" value="5127SS"/>
         </actionGroup>
         <!--Assert that product1 is present in the search result-->
         <actionGroup ref="StorefrontAssertProductNameOnProductMainPageActionGroup" stepKey="seeProduct1">

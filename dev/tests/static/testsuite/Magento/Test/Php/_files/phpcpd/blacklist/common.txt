@@ -111,3 +111,8 @@ app/code/Magento/ConfigurableProduct/view/adminhtml/templates/catalog/product/ed
 app/code/Magento/GoogleGtag
 app/code/Magento/AdminAdobeIms/Observer/AuthObserver
 app/code/Magento/OpenSearch/SearchAdapter/Adapter
+app/code/Magento/WebapiAsync/Controller/Rest/Asynchronous/InputParamsResolver.php
+app/code/Magento/Stomp/Model/Bulk/Publisher.php
+app/code/Magento/Stomp/Model/MassPublisher.php
+lib/internal/Magento/Framework/MessageQueue/Rpc/Publisher.php
+app/code/Magento/Stomp/Model/Rpc/Publisher.php

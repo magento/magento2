@@ -177,7 +177,7 @@ QUERY;
         mutation {
             cancelOrder(
               input: {
-                reason: "Cancel sample reason"
+                reason: "Other"
               }
             ){
                 error
@@ -212,7 +212,7 @@ QUERY;
             cancelOrder(
               input: {
                 order_id: 99999999,
-                reason: "Cancel sample reason"
+                reason: "Other"
               }
             ){
                 error
@@ -334,7 +334,7 @@ QUERY;
             cancelOrder(
               input: {
                 order_id: "{$order->getEntityId()}"
-                reason: "Cancel sample reason"
+                reason: "Other"
               }
             ){
                 error
@@ -405,7 +405,7 @@ QUERY;
             cancelOrder(
               input: {
                 order_id: "{$order->getEntityId()}"
-                reason: "Cancel sample reason"
+                reason: "Other"
               }
             ){
                 error
@@ -489,7 +489,7 @@ QUERY;
             cancelOrder(
               input: {
                 order_id: "{$order->getEntityId()}"
-                reason: "Cancel sample reason"
+                reason: "Other"
               }
             ){
                 error
@@ -566,7 +566,7 @@ QUERY;
             cancelOrder(
               input: {
                 order_id: "{$order->getEntityId()}"
-                reason: "Cancel sample reason"
+                reason: "Other"
               }
             ){
                 error
@@ -630,7 +630,7 @@ QUERY;
             cancelOrder(
               input: {
                 order_id: "{$order->getEntityId()}"
-                reason: "Cancel sample reason"
+                reason: "Other"
               }
             ){
                 error
@@ -668,7 +668,7 @@ QUERY;
         $this->assertEquals("Order cancellation notification email was sent.", $comment->getComment());
 
         $comment = array_pop($comments);
-        $this->assertEquals('Cancel sample reason', $comment->getComment());
+        $this->assertEquals('Other', $comment->getComment());
         $this->assertEquals('canceled', $comment->getStatus());
     }
 
@@ -691,7 +691,7 @@ QUERY;
             cancelOrder(
               input: {
                 order_id: "{$order->getEntityId()}"
-                reason: "Cancel sample reason"
+                reason: "Other"
               }
             ){
                 error
@@ -732,7 +732,7 @@ QUERY;
         $this->assertEquals("Order cancellation notification email was sent.", $comment->getComment());
 
         $comment = array_pop($comments);
-        $this->assertEquals('Cancel sample reason', $comment->getComment());
+        $this->assertEquals('Other', $comment->getComment());
         $this->assertEquals('closed', $comment->getStatus());
     }
 
@@ -788,7 +788,7 @@ QUERY;
             cancelOrder(
               input: {
                 order_id: "{$order->getEntityId()}"
-                reason: "Cancel sample reason"
+                reason: "Other"
               }
             ){
                 error
@@ -832,7 +832,7 @@ QUERY;
         $this->assertEquals("Order cancellation notification email was sent.", $comment->getComment());
 
         $comment = array_pop($comments);
-        $this->assertEquals('Cancel sample reason', $comment->getComment());
+        $this->assertEquals('Other', $comment->getComment());
         $this->assertEquals('closed', $comment->getStatus());
     }
 
@@ -878,19 +878,12 @@ QUERY;
             [
                 'cancelOrder' =>
                     [
-                        'error' => null,
-                        'order' => [
-                            'status' => 'Closed'
-                        ]
+                        'error' => 'Order cancellation reason is invalid.',
+                        'order' => null
                     ]
             ],
             $response
         );
-
-        $comments = $order->getStatusHistories();
-        $comment = reset($comments);
-        $this->assertEquals('&lt;script&gt;while(true){alert(666);}&lt;/script&gt;', $comment->getComment());
-        $this->assertEquals('closed', $comment->getStatus());
     }
 
     #[
@@ -934,7 +927,7 @@ QUERY;
             cancelOrder(
               input: {
                 order_id: "{$order->getEntityId()}"
-                reason: "Cancel sample reason"
+                reason: "Other"
               }
             ){
                 error
@@ -975,7 +968,7 @@ QUERY;
         $this->assertEquals("Order cancellation notification email was sent.", $comment->getComment());
 
         $comment = array_pop($comments);
-        $this->assertEquals('Cancel sample reason', $comment->getComment());
+        $this->assertEquals('Other', $comment->getComment());
         $this->assertEquals('canceled', $comment->getStatus());
     }
 

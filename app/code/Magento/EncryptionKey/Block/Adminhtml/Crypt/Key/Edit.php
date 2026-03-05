@@ -9,6 +9,8 @@ namespace Magento\EncryptionKey\Block\Adminhtml\Crypt\Key;
  * Encryption key change edit page block
  *
  * @api
+ * @deprecated
+ * @see Extensible Data ReEncryption Mechanism Implemented
  * @since 100.0.2
  */
 class Edit extends \Magento\Backend\Block\Widget\Form\Container

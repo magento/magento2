@@ -17,6 +17,7 @@
             <severity value="MAJOR"/>
             <testCaseId value="ACP2E-414"/>
             <group value="combinedReports"/>
+            <group value="guest_checkout"/>
         </annotations>
         <before>
             <magentoCLI command="config:set {{StorefrontEnableAddStoreCodeToUrls.path}} {{StorefrontEnableAddStoreCodeToUrls.value}}" stepKey="addStoreCodeToUrlEnable"/>

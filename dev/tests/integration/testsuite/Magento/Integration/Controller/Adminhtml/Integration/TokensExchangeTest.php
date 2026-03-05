@@ -46,6 +46,19 @@ class TokensExchangeTest extends AbstractBackendController
     {
         $integration = $this->integrationService->findByName('Fixture Integration');
 
+        if (!$integration || !$integration->getId()) {
+            // Create the integration manually if fixture didn't work
+            $integrationData = [
+                'name' => 'Fixture Integration',
+                'email' => 'john.doe@example.com',
+                'endpoint' => 'https://example.com/endpoint',
+                'identity_link_url' => 'https://example.com/link',
+                'all_resources' => 0,
+            ];
+
+            $integration = $this->integrationService->create($integrationData);
+        }
+
         $this->getRequest()->setMethod(HttpRequest::METHOD_GET);
         $this->getRequest()->setParams(['id' => $integration->getId()]);
         $this->dispatch(self::URL);

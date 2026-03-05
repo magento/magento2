@@ -18,6 +18,7 @@
             <testCaseId value="MC-36889"/>
             <group value="multiselect"/>
             <group value="pr_exclude" />
+            <group value="guest_checkout"/>
         </annotations>
         <before>
             <!--Set default flat rate shipping method settings-->

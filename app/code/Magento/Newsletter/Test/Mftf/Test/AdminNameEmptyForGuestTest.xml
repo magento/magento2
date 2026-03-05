@@ -17,6 +17,7 @@
             <description value="'Customer First Name' and 'Customer Last Name' should be empty for Guest Customer in Newsletter Subscribers Grid"/>
             <severity value="MINOR"/>
             <group value="cloud"/>
+            <group value="newsletter"/>
         </annotations>
 
         <before>

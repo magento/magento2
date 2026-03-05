@@ -18,6 +18,7 @@
             <testCaseId value="git-36030"/>
             <group value="sales"/>
             <group value="cloud"/>
+            <group value="guest_checkout"/>
         </annotations>
         <remove keyForRemoval="checkIfOrderStatusIsProcessing"/>
         <click selector="{{AdminInvoiceOrderInformationSection.sendEmail}}" stepKey="clickSendEmail"/>

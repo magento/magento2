@@ -246,6 +246,13 @@ class ServiceInputProcessor implements ServicePayloadConverterInterface, ResetAf
             if (isset($data[$parameter->getName()])) {
                 $parameterType = $this->typeProcessor->getParamType($parameter);
 
+                // Allow only simple types or Api Data Objects
+                if (!($this->typeProcessor->isTypeSimple($parameterType)
+                    || preg_match('~\\\\?\w+\\\\\w+\\\\Api\\\\Data\\\\~', $parameterType) === 1
+                )) {
+                    continue;
+                }
+
                 try {
                     $res[$parameter->getName()] = $this->convertValue($data[$parameter->getName()], $parameterType);
                 } catch (\ReflectionException $e) {
@@ -278,6 +285,12 @@ class ServiceInputProcessor implements ServicePayloadConverterInterface, ResetAf
         // convert to string directly to avoid situations when $className is object
         // which implements __toString method like \ReflectionObject
         $className = (string) $className;
+        if (is_subclass_of($className, \SimpleXMLElement::class)
+            || is_subclass_of($className, \DOMElement::class)) {
+            throw new SerializationException(
+                new Phrase('Invalid data type')
+            );
+        }
         $class = new ClassReflection($className);
         if (is_subclass_of($className, self::EXTENSION_ATTRIBUTES_TYPE)) {
             $className = substr($className, 0, -strlen('Interface'));
@@ -327,7 +340,7 @@ class ServiceInputProcessor implements ServicePayloadConverterInterface, ResetAf
                             )
                         );
                     }
-                    $this->serviceInputValidator->validateEntityValue($object, $propertyName, $setterValue);
+                    $this->serviceInputValidator->validateEntityValue($object, lcfirst($propertyName), $setterValue);
                     $object->{$setterName}($setterValue);
                 }
             } catch (\LogicException $e) {

@@ -18,8 +18,9 @@
             <group value="sales"/>
             <group value="mtf_migrated"/>
             <group value="cloud"/>
+            <group value="guest_checkout"/>
         </annotations>
-        
+
         <before>
 
             <actionGroup ref="AdminLoginActionGroup" stepKey="LoginAsAdmin"/>

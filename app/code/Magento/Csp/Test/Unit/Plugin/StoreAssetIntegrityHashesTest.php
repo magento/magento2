@@ -15,6 +15,7 @@ use PHPUnit\Framework\MockObject\MockObject;
 use Magento\Csp\Plugin\StoreAssetIntegrityHashes;
 use Magento\Csp\Model\SubresourceIntegrityCollector;
 use PHPUnit\Framework\TestCase;
+use Psr\Log\LoggerInterface;
 
 /**
  * Plugin that removes existing integrity hashes for all assets.
@@ -30,6 +31,11 @@ class StoreAssetIntegrityHashesTest extends TestCase
      * @var MockObject
      */
     private MockObject $integrityCollectorMock;
+
+    /**
+     * @var MockObject
+     */
+    private MockObject $loggerMock;
 
     /**
      * @var StoreAssetIntegrityHashes
@@ -52,9 +58,13 @@ class StoreAssetIntegrityHashesTest extends TestCase
             ->disableOriginalConstructor()
             ->onlyMethods(['release'])
             ->getMock();
+        $this->loggerMock = $this->getMockBuilder(LoggerInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->plugin = new StoreAssetIntegrityHashes(
             $this->integrityCollectorMock,
             $this->integrityRepositoryPoolMock,
+            $this->loggerMock
         );
     }
 

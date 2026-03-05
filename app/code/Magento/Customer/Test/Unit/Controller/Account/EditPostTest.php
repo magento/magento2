@@ -229,17 +229,12 @@ class EditPostTest extends TestCase
             ->method('extract')
             ->willReturn($customer);
 
-        $attr = 'attr1';
-        $this->request->expects($this->exactly(5))
+        $this->request->expects($this->exactly(3))
             ->method('getParam')
             ->withConsecutive(
-                ['change_email'],
-                [ 'delete_attribute_value'],
-                [$attr . File::UPLOADED_FILE_SUFFIX]
+                ['change_email']
             )->willReturnOnConsecutiveCalls(
-                false,
-                $attr,
-                'uploadedFileName'
+                false
             );
 
         $this->editPost->execute();

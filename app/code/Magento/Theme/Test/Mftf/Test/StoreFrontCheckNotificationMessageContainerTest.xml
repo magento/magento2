@@ -17,6 +17,7 @@
             <severity value="AVERAGE"/>
             <testCaseId value="MC-37339"/>
             <group value="Theme"/>
+            <group value="guest_checkout"/>
         </annotations>
         <before>
             <magentoCLI command="config:set {{EnableFlatRateConfigData.path}} {{EnableFlatRateConfigData.value}}" stepKey="enableFlatRate"/>

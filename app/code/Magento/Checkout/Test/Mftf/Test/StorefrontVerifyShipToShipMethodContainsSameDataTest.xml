@@ -16,6 +16,7 @@
             <description value="Ship To and Shipping Method blocks on Checkout contain actual information according to input data"/>
             <severity value="MAJOR"/>
             <testCaseId value="AC-4628"/>
+            <group value="guest_checkout"/>
         </annotations>
         <before>
             <!-- Enable free shipping -->

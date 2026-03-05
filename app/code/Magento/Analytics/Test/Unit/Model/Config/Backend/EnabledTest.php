@@ -16,6 +16,9 @@ use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
 
+/**
+ * Test class for Magento\Analytics\Model\Config\Backend\EnabledTest
+ */
 class EnabledTest extends TestCase
 {
     /**

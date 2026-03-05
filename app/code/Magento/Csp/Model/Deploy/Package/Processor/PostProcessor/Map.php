@@ -1,17 +1,19 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2025 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Csp\Model\Deploy\Package\Processor\PostProcessor;
 
+use Magento\Csp\Model\SubresourceIntegrityRepositoryPool;
 use Magento\Deploy\Package\Package;
 use Magento\Deploy\Package\PackageFileFactory;
 use Magento\Deploy\Service\DeployStaticFile;
 use Magento\Framework\App\DeploymentConfig\Writer\PhpFormatter;
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\FileSystemException;
 use Magento\Framework\Filesystem;
 use Magento\Framework\View\Asset\Minification;
@@ -20,6 +22,7 @@ use Magento\Csp\Model\SubresourceIntegrityFactory;
 use Magento\Csp\Model\SubresourceIntegrity\HashGenerator;
 use Magento\Framework\Filesystem\DriverInterface;
 use Magento\Csp\Model\SubresourceIntegrityCollector;
+use Psr\Log\LoggerInterface;
 
 /**
  * Class Adds Integrity attribute to requirejs-map.js asset
@@ -60,6 +63,16 @@ class Map extends \Magento\Deploy\Package\Processor\PostProcessor\Map
     private FileSystem $filesystem;
 
     /**
+     * @var SubresourceIntegrityRepositoryPool
+     */
+    private SubresourceIntegrityRepositoryPool $repositoryPool;
+
+    /**
+     * @var LoggerInterface
+     */
+    private LoggerInterface $logger;
+
+    /**
      * Constructor
      *
      * @param DeployStaticFile $deployStaticFile
@@ -71,6 +84,9 @@ class Map extends \Magento\Deploy\Package\Processor\PostProcessor\Map
      * @param DriverInterface $driver
      * @param SubresourceIntegrityCollector $integrityCollector
      * @param FileSystem $filesystem
+     * @param SubresourceIntegrityRepositoryPool|null $repositoryPool
+     * @param LoggerInterface|null $logger
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         DeployStaticFile $deployStaticFile,
@@ -81,7 +97,9 @@ class Map extends \Magento\Deploy\Package\Processor\PostProcessor\Map
         HashGenerator $hashGenerator,
         DriverInterface $driver,
         SubresourceIntegrityCollector $integrityCollector,
-        Filesystem $filesystem
+        Filesystem $filesystem,
+        ?SubresourceIntegrityRepositoryPool $repositoryPool = null,
+        ?LoggerInterface $logger = null
     ) {
         $this->minification = $minification;
         $this->integrityFactory = $integrityFactory;
@@ -89,6 +107,10 @@ class Map extends \Magento\Deploy\Package\Processor\PostProcessor\Map
         $this->driver = $driver;
         $this->integrityCollector = $integrityCollector;
         $this->filesystem = $filesystem;
+        $this->repositoryPool = $repositoryPool ??
+            ObjectManager::getInstance()->get(SubresourceIntegrityRepositoryPool::class);
+        $this->logger = $logger ??
+            ObjectManager::getInstance()->get(LoggerInterface::class);
         parent::__construct($deployStaticFile, $formatter, $packageFileFactory, $minification);
     }
 
@@ -118,7 +140,18 @@ class Map extends \Magento\Deploy\Package\Processor\PostProcessor\Map
                         ]
                     ]
                 );
-                $this->integrityCollector->collect($integrity);
+                // Save immediately to repository instead of using collector
+                $area = $package->getArea();
+
+                if (!empty($area)) {
+                    try {
+                        $this->repositoryPool->get($area)->save($integrity);
+                        $this->logger->info("Map PostProcessor: Saved SRI hash for {$relativePath} in {$area} area");
+                    } catch (\Exception $e) {
+                        //phpcs:ignore
+                        $this->logger->error("Map PostProcessor: Failed to save SRI hash for {$relativePath} in {$area} area");
+                    }
+                }
             }
         }
         return true;

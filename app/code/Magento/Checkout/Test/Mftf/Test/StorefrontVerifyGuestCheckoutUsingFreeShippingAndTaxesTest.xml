@@ -19,6 +19,7 @@
             <group value="checkout"/>
             <group value="tax"/>
             <group value="cloud"/>
+            <group value="guest_checkout"/>
         </annotations>
         <before>
             <createData entity="FlatRateShippingMethodConfig" stepKey="enableFlatRate"/>

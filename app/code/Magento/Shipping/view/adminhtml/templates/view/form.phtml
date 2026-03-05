@@ -183,3 +183,5 @@ script;
         </div>
     </div>
 </section>
+<?php $scriptString = '{ "*" : {"Magento_Sales/js/comment" : {}}}';?>
+<?= /* @noEscape */ $secureRenderer->renderTag('script', ['type' => 'text/x-magento-init'], $scriptString, false) ?>

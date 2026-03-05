@@ -1,21 +1,34 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All rights reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\GraphQl\Sales\CustomerOrders;
 
+use Magento\Catalog\Test\Fixture\Product as ProductFixture;
+use Magento\Checkout\Test\Fixture\PlaceOrder as PlaceOrderFixture;
+use Magento\Checkout\Test\Fixture\SetBillingAddress;
+use Magento\Checkout\Test\Fixture\SetDeliveryMethod as SetDeliveryMethodFixture;
+use Magento\Checkout\Test\Fixture\SetPaymentMethod as SetPaymentMethodFixture;
+use Magento\Checkout\Test\Fixture\SetShippingAddress;
+use Magento\Customer\Test\Fixture\Customer;
 use Magento\Framework\DB\Transaction;
 use Magento\Framework\Registry;
 use Magento\GraphQl\GetCustomerAuthenticationHeader;
 use Magento\GraphQl\Sales\Fixtures\CustomerPlaceOrder;
+use Magento\Quote\Test\Fixture\AddProductToCart;
+use Magento\Quote\Test\Fixture\CustomerCart;
 use Magento\Sales\Api\OrderRepositoryInterface;
 use Magento\Sales\Model\Order;
 use Magento\Sales\Model\Order\Shipment;
 use Magento\Sales\Model\Order\ShipmentFactory;
 use Magento\Sales\Model\ResourceModel\Order\Collection as OrderCollection;
+use Magento\Sales\Test\Fixture\Invoice as InvoiceFixture;
+use Magento\Sales\Test\Fixture\Shipment as ShipmentFixture;
+use Magento\TestFramework\Fixture\DataFixture;
+use Magento\TestFramework\Fixture\DataFixtureStorageManager;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
 
@@ -99,19 +112,53 @@ class OrderShipmentsTest extends GraphQlAbstract
     /**
      * @magentoApiDataFixture Magento/GraphQl/Sales/_files/customer_order_with_multiple_shipments.php
      */
+    #[
+        DataFixture(ProductFixture::class, as: 'product1'),
+        DataFixture(ProductFixture::class, as: 'product2'),
+        DataFixture(Customer::class, as: 'customer'),
+        DataFixture(CustomerCart::class, ['customer_id' => '$customer.id$'], as: 'quote'),
+        DataFixture(AddProductToCart::class, ['cart_id' => '$quote.id$', 'product_id' => '$product1.id$', 'qty' => 1]),
+        DataFixture(AddProductToCart::class, ['cart_id' => '$quote.id$', 'product_id' => '$product2.id$', 'qty' => 1]),
+        DataFixture(SetBillingAddress::class, ['cart_id' => '$quote.id$']),
+        DataFixture(SetShippingAddress::class, ['cart_id' => '$quote.id$']),
+        DataFixture(SetDeliveryMethodFixture::class, ['cart_id' => '$quote.id$']),
+        DataFixture(SetPaymentMethodFixture::class, ['cart_id' => '$quote.id$']),
+        DataFixture(PlaceOrderFixture::class, ['cart_id' => '$quote.id$'], 'order'),
+        DataFixture(InvoiceFixture::class, ['order_id' => '$order.id$'], 'invoice'),
+        DataFixture(
+            ShipmentFixture::class,
+            [
+                'order_id' => '$order.id$',
+                'items' => [['product_id' => '$product1.id$']]
+            ],
+            'shipment1'
+        ),
+        DataFixture(
+            ShipmentFixture::class,
+            [
+                'order_id' => '$order.id$',
+                'items' => [['product_id' => '$product2.id$']]
+            ],
+            'shipment2'
+        ),
+    ]
     public function testGetOrderShipmentsMultiple()
     {
-        $query = $this->getQuery('100000555');
-        $authHeader = $this->getCustomerAuthHeader->execute('customer_uk_address@test.com', 'password');
+        $shipmentNumber1 = DataFixtureStorageManager::getStorage()->get('shipment1')->getIncrementId();
+        $shipmentNumber2 = DataFixtureStorageManager::getStorage()->get('shipment2')->getIncrementId();
+        $orderNumber = DataFixtureStorageManager::getStorage()->get('order')->getIncrementId();
+        $customerEmail = DataFixtureStorageManager::getStorage()->get('customer')->getEmail();
+        $query = $this->getQuery($orderNumber);
+        $authHeader = $this->getCustomerAuthHeader->execute($customerEmail, 'password');
 
         $result = $this->graphQlQuery($query, [], '', $authHeader);
         $this->assertArrayNotHasKey('errors', $result);
         $order = $result['customer']['orders']['items'][0];
         $shipments = $order['shipments'];
         $this->assertCount(2, $shipments);
-        $this->assertEquals('0000000098', $shipments[0]['number']);
+        $this->assertEquals($shipmentNumber1, $shipments[0]['number']);
         $this->assertCount(1, $shipments[0]['items']);
-        $this->assertEquals('0000000099', $shipments[1]['number']);
+        $this->assertEquals($shipmentNumber2, $shipments[1]['number']);
         $this->assertCount(1, $shipments[1]['items']);
     }
 

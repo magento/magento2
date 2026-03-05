@@ -20,6 +20,7 @@
             <useCaseId value="MAGETWO-82221"/>
             <group value="ConfigurableProduct"/>
             <group value="cloud_smoke"/>
+            <group value="guest_checkout"/>
         </annotations>
 
         <before>

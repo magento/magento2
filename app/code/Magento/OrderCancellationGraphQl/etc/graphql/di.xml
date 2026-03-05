@@ -14,4 +14,7 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\OrderCancellation\Model\CancelOrder">
+        <plugin name="validateCancelOrderReason" type="Magento\OrderCancellationGraphQl\Plugin\Model\CancelOrder"/>
+    </type>
 </config>

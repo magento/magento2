@@ -20,6 +20,7 @@
             <group value="SimpleProduct"/>
         </annotations>
 
+        <scrollTo selector="{{AdminProductCustomizableOptionsSection.customizableOptions}}" stepKey="scrollToCustomOptions"/>
         <!-- Create two more custom options with 2 values -->
         <actionGroup ref="AdminCreateCustomDropDownOptionsActionGroup" stepKey="createSecondCustomOption">
             <argument name="customOptionName" value="{{ProductOptionDropDown.title}}2"/>

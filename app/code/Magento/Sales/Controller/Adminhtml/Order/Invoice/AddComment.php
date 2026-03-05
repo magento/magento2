@@ -19,9 +19,13 @@ use Magento\Framework\Registry;
 use Magento\Framework\Controller\Result\JsonFactory;
 use Magento\Framework\View\Result\PageFactory;
 use Magento\Framework\Controller\Result\RawFactory;
+use Magento\Sales\Model\Order\Invoice\Comment as InvoiceComment;
+use Magento\Sales\Model\ResourceModel\Order\Invoice\Comment as InvoiceCommentResource;
 
 /**
- * Class AddComment
+ * Add invoice comment
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class AddComment extends \Magento\Sales\Controller\Adminhtml\Invoice\AbstractInvoice\View implements
     HttpPostActionInterface
@@ -52,6 +56,16 @@ class AddComment extends \Magento\Sales\Controller\Adminhtml\Invoice\AbstractInv
     protected $invoiceRepository;
 
     /**
+     * @var InvoiceComment
+     */
+    private $invoiceComment;
+
+    /**
+     * @var InvoiceCommentResource
+     */
+    private $invoiceCommentResource;
+
+    /**
      * @param Context $context
      * @param Registry $registry
      * @param ForwardFactory $resultForwardFactory
@@ -59,7 +73,10 @@ class AddComment extends \Magento\Sales\Controller\Adminhtml\Invoice\AbstractInv
      * @param JsonFactory $resultJsonFactory
      * @param PageFactory $resultPageFactory
      * @param RawFactory $resultRawFactory
-     * @param InvoiceRepositoryInterface $invoiceRepository
+     * @param InvoiceRepositoryInterface|null $invoiceRepository
+     * @param InvoiceComment|null $invoiceComment
+     * @param InvoiceCommentResource|null $invoiceCommentResource
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         Context $context,
@@ -69,7 +86,9 @@ class AddComment extends \Magento\Sales\Controller\Adminhtml\Invoice\AbstractInv
         JsonFactory $resultJsonFactory,
         PageFactory $resultPageFactory,
         RawFactory $resultRawFactory,
-        InvoiceRepositoryInterface $invoiceRepository = null
+        InvoiceRepositoryInterface $invoiceRepository = null,
+        InvoiceComment $invoiceComment = null,
+        InvoiceCommentResource $invoiceCommentResource = null
     ) {
         $this->invoiceCommentSender = $invoiceCommentSender;
         $this->resultJsonFactory = $resultJsonFactory;
@@ -77,6 +96,9 @@ class AddComment extends \Magento\Sales\Controller\Adminhtml\Invoice\AbstractInv
         $this->resultRawFactory = $resultRawFactory;
         $this->invoiceRepository = $invoiceRepository ?:
             ObjectManager::getInstance()->get(InvoiceRepositoryInterface::class);
+        $this->invoiceComment = $invoiceComment ?? ObjectManager::getInstance()->get(InvoiceComment::class);
+        $this->invoiceCommentResource = $invoiceCommentResource ??
+            ObjectManager::getInstance()->get(InvoiceCommentResource::class);
         parent::__construct($context, $registry, $resultForwardFactory, $invoiceRepository);
     }
 
@@ -99,14 +121,21 @@ class AddComment extends \Magento\Sales\Controller\Adminhtml\Invoice\AbstractInv
                 $resultForward = $this->resultForwardFactory->create();
                 return $resultForward->forward('noroute');
             }
-            $invoice->addComment(
-                $data['comment'],
-                isset($data['is_customer_notified']),
-                isset($data['is_visible_on_front'])
-            );
 
-            $this->invoiceCommentSender->send($invoice, !empty($data['is_customer_notified']), $data['comment']);
-            $this->invoiceRepository->save($invoice);
+            if (empty($data['comment_id'])) {
+                $invoice->addComment(
+                    $data['comment'],
+                    isset($data['is_customer_notified']),
+                    isset($data['is_visible_on_front'])
+                );
+
+                $this->invoiceCommentSender->send($invoice, !empty($data['is_customer_notified']), $data['comment']);
+                $this->invoiceRepository->save($invoice);
+            } else {
+                $comment = $this->invoiceComment->setComment($data['comment'])->setId($data['comment_id']);
+                $comment->setInvoice($invoice);
+                $this->invoiceCommentResource->save($comment);
+            }
 
             /** @var \Magento\Backend\Model\View\Result\Page $resultPage */
             $resultPage = $this->resultPageFactory->create();

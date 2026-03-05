@@ -20,6 +20,9 @@ use Magento\Framework\Webapi\Rest\Request;
  */
 class CartRepositoryTest extends WebapiAbstract
 {
+    /**
+     * @var string Cart Url
+     */
     private static $mineCartUrl = '/V1/carts/mine';
 
     /**
@@ -267,23 +270,21 @@ class CartRepositoryTest extends WebapiAbstract
     }
 
     /**
-     * Saving quote - negative case, attempt to change customer id in the active quote for the user with Customer role.
+     * Test quote customer id
      *
      * @dataProvider customerIdDataProvider
      * @magentoApiDataFixture Magento/Checkout/_files/quote_with_shipping_method.php
      */
-    public function testSaveQuoteException($customerId)
+    public function testSaveQuoteWithCustomerData($customerId)
     {
-        $this->expectException(\Exception::class);
-        $this->expectExceptionMessage('Invalid state change requested');
-
         $token = $this->getToken();
 
         /** @var Quote $quote */
         $quote = $this->getCart('test_order_1');
+        $originalCustomerId = $quote->getCustomerId();
 
         $requestData = $this->getRequestData($quote->getId());
-        // Replace to customer id not much with current user id..
+        // Set customer id in request data
         $requestData['quote']['customer']['id'] = $customerId;
 
         $serviceInfo = [
@@ -301,6 +302,9 @@ class CartRepositoryTest extends WebapiAbstract
         ];
 
         $this->_webApiCall($serviceInfo, $requestData);
+
+        $quote->loadActive($requestData["quote"]["id"]);
+        $this->assertEquals($originalCustomerId, $quote->getCustomerId());
     }
 
     /**

@@ -19,6 +19,7 @@
             <group value="sales"/>
             <group value="catalogRule"/>
             <group value="cloud"/>
+            <group value="guest_checkout"/>
         </annotations>
 
         <before>

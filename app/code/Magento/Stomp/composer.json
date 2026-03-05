@@ -1,0 +1,29 @@
+{
+    "name": "magento/module-stomp",
+    "description": "N/A",
+    "type": "magento2-module",
+    "license": [
+        "OSL-3.0",
+        "AFL-3.0"
+    ],
+    "config": {
+        "sort-packages": true
+    },
+    "version": "100.4.3-p9",
+    "require": {
+        "magento/framework": "103.0.*",
+        "magento/framework-stomp": "100.4.*",
+        "magento/framework-message-queue": "100.4.*",
+        "magento/module-asynchronous-operations": "100.4.*",
+        "php": "~8.1.0||~8.2.0||~8.3.0"
+    },
+    "autoload": {
+        "files": [
+            "registration.php"
+        ],
+        "psr-4": {
+            "Magento\\Stomp\\": ""
+        }
+    }
+}
+

@@ -20,6 +20,7 @@
             <group value="checkout"/>
             <!-- @TODO: Remove "pr_exclude" group when issue ACQE-4977 is resolved -->
             <group value="pr_exclude" />
+            <group value="guest_checkout"/>
         </annotations>
         <before>
             <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer" />

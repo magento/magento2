@@ -35,6 +35,10 @@ class SqlVersionProvider
 
     public const MARIA_DB_10_4_27_VERSION = '10.4.27';
 
+    public const MARIA_DB_10_11_VERSION = '10.11.';
+
+    public const MARIA_DB_10_11_11_VERSION = '10.11.11';
+
     /**#@-*/
 
     /**
@@ -156,6 +160,23 @@ class SqlVersionProvider
         $isMariaDB106 = str_contains($sqlVersion, SqlVersionProvider::MARIA_DB_10_6_VERSION);
         $sqlExactVersion = $this->fetchSqlVersion(ResourceConnection::DEFAULT_CONNECTION);
         if ($isMariaDB106 && version_compare($sqlExactVersion, '10.6.11', '>=')) {
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * Check if MariaDB version is greater than equal to 10.11.11
+     *
+     * @return bool
+     * @throws ConnectionException
+     */
+    public function isMariaDBGte101111(): bool
+    {
+        $sqlVersion = $this->getSqlVersion();
+        $isMariaDB1011 = str_contains($sqlVersion, SqlVersionProvider::MARIA_DB_10_11_VERSION);
+        $sqlExactVersion = $this->fetchSqlVersion(ResourceConnection::DEFAULT_CONNECTION);
+        if ($isMariaDB1011 && version_compare($sqlExactVersion, '10.11.10', '>=')) {
             return true;
         }
         return false;

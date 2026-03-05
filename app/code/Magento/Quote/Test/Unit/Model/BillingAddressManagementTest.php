@@ -12,6 +12,7 @@ use Magento\Customer\Api\AddressRepositoryInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Quote\Api\CartRepositoryInterface;
 use Magento\Quote\Model\BillingAddressManagement;
+use Magento\Quote\Model\CartAddressMutexInterface;
 use Magento\Quote\Model\Quote;
 use Magento\Quote\Model\Quote\Address;
 use Magento\Quote\Model\QuoteAddressValidator;
@@ -56,6 +57,11 @@ class BillingAddressManagementTest extends TestCase
     private $shippingAssignmentMock;
 
     /**
+     * @var CartAddressMutexInterface
+     */
+    private MockObject|CartAddressMutexInterface $cartAddressMutex;
+
+    /**
      * @return void
      */
     protected function setUp(): void
@@ -65,13 +71,16 @@ class BillingAddressManagementTest extends TestCase
         $this->validatorMock = $this->createMock(QuoteAddressValidator::class);
         $this->addressRepository = $this->getMockForAbstractClass(AddressRepositoryInterface::class);
         $logger = $this->getMockForAbstractClass(LoggerInterface::class);
+        $this->cartAddressMutex = $this->getMockForAbstractClass(CartAddressMutexInterface::class);
+
         $this->model = $this->objectManager->getObject(
             BillingAddressManagement::class,
             [
                 'quoteRepository' => $this->quoteRepositoryMock,
                 'addressValidator' => $this->validatorMock,
                 'logger' => $logger,
-                'addressRepository' => $this->addressRepository
+                'addressRepository' => $this->addressRepository,
+                'cartAddressMutex' => $this->cartAddressMutex
             ]
         );
 
@@ -107,31 +116,31 @@ class BillingAddressManagementTest extends TestCase
     public function testSetAddress()
     {
         $cartId = 100;
-        $useForShipping = true;
         $addressId = 1;
+        $useForShipping = true;
 
-        $address = $this->createPartialMock(Address::class, ['getId']);
         $quoteMock = $this->createPartialMock(
             Quote::class,
-            ['removeAddress', 'getBillingAddress', 'setBillingAddress', 'setDataChanges']
+            ['getBillingAddress']
         );
+        $address = $this->createPartialMock(Address::class, ['getId']);
+        $address->expects($this->exactly(1))->method('getId')->willReturn($addressId);
+        $quoteMock->expects($this->exactly(1))->method('getBillingAddress')->willReturn($address);
 
         $this->quoteRepositoryMock->expects($this->once())
             ->method('getActive')
             ->with($cartId)
             ->willReturn($quoteMock);
 
-        $address->expects($this->exactly(2))->method('getId')->willReturn($addressId);
-        $quoteMock->expects($this->exactly(2))->method('getBillingAddress')->willReturn($address);
-        $quoteMock->expects($this->once())->method('removeAddress')->with($addressId)->willReturnSelf();
-        $quoteMock->expects($this->once())->method('setBillingAddress')->with($address)->willReturnSelf();
-        $quoteMock->expects($this->once())->method('setDataChanges')->with(1)->willReturnSelf();
+        $this->cartAddressMutex->expects($this->once())->method('execute')
+            ->with(
+                'cart_billing_address_lock_'.$addressId,
+                \Closure::fromCallable([$this, 'assignAddressMethod']),
+                $addressId,
+                [$address, $quoteMock, $useForShipping]
+            )
+            ->willReturn($addressId);
 
-        $this->shippingAssignmentMock->expects($this->once())
-            ->method('setAddress')
-            ->with($quoteMock, $address, $useForShipping);
-
-        $this->quoteRepositoryMock->expects($this->once())->method('save')->with($quoteMock);
         $this->assertEquals($addressId, $this->model->assign($cartId, $address, $useForShipping));
     }
 
@@ -142,7 +151,6 @@ class BillingAddressManagementTest extends TestCase
     {
         $this->expectException('Magento\Framework\Exception\InputException');
         $this->expectExceptionMessage('The address failed to save. Verify the address and try again.');
-        $cartId = 100;
         $addressId = 1;
 
         $address = $this->createPartialMock(Address::class, ['getId']);
@@ -150,11 +158,6 @@ class BillingAddressManagementTest extends TestCase
             Quote::class,
             ['removeAddress', 'getBillingAddress', 'setBillingAddress', 'setDataChanges']
         );
-
-        $this->quoteRepositoryMock->expects($this->once())
-            ->method('getActive')
-            ->with($cartId)
-            ->willReturn($quoteMock);
 
         $address->expects($this->once())->method('getId')->willReturn($addressId);
         $quoteMock->expects($this->once())->method('getBillingAddress')->willReturn($address);
@@ -172,6 +175,50 @@ class BillingAddressManagementTest extends TestCase
             ->willThrowException(
                 new \Exception('Some DB Error')
             );
-        $this->model->assign($cartId, $address);
+        $this->model->assignBillingAddress($address, $quoteMock, false);
+    }
+
+    /**
+     * Assign address method.
+     *
+     * @param string $var
+     * @return string
+     * @SuppressWarnings(PHPMD.UnusedPrivateMethod)
+     */
+    private function assignAddressMethod(string $var)
+    {
+        return $var;
+    }
+
+    /**
+     * Set billing address test
+     * @return void
+     * @throws \Magento\Framework\Exception\InputException
+     * @throws \PHPUnit\Framework\MockObject\Exception
+     */
+    public function testSetBillingAddress()
+    {
+        $useForShipping = true;
+        $addressId = 1;
+
+        $address = $this->createPartialMock(Address::class, ['getId']);
+
+        $quoteMock = $this->createPartialMock(
+            Quote::class,
+            ['removeAddress', 'getBillingAddress', 'setBillingAddress', 'setDataChanges']
+        );
+
+        $address->expects($this->exactly(2))->method('getId')->willReturn($addressId);
+        $quoteMock->expects($this->exactly(2))->method('getBillingAddress')->willReturn($address);
+        $quoteMock->expects($this->once())->method('removeAddress')->with($addressId)->willReturnSelf();
+        $quoteMock->expects($this->once())->method('setBillingAddress')->with($address)->willReturnSelf();
+        $quoteMock->expects($this->once())->method('setDataChanges')->with(1)->willReturnSelf();
+
+        $this->shippingAssignmentMock->expects($this->once())
+            ->method('setAddress')
+            ->with($quoteMock, $address, $useForShipping);
+
+        $this->quoteRepositoryMock->expects($this->once())->method('save')->with($quoteMock);
+        $this->assertEquals($addressId, $this->model->assignBillingAddress($address, $quoteMock, $useForShipping));
     }
 }

@@ -20,6 +20,7 @@
             <group value="shipping"/>
             <group value="SalesRule"/>
             <group value="cloud"/>
+            <group value="guest_checkout"/>
         </annotations>
         <before>
             <createData entity="SimpleProduct2" stepKey="createProduct"/>

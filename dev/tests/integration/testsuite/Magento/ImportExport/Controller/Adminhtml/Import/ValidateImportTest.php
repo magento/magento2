@@ -42,7 +42,8 @@ class ValidateImportTest extends \Magento\TestFramework\TestCase\AbstractBackend
         $this->getRequest()->setPostValue('behavior', 'append');
         $this->getRequest()->setPostValue(Import::FIELD_NAME_VALIDATION_STRATEGY, $validationStrategy);
         $this->getRequest()->setPostValue(Import::FIELD_NAME_ALLOWED_ERROR_COUNT, 0);
-        $this->getRequest()->setPostValue('_import_field_separator', $delimiter);
+        $this->getRequest()->setPostValue(Import::FIELD_FIELD_SEPARATOR, $delimiter);
+        $this->getRequest()->setParam(Import::FIELD_FIELD_SEPARATOR, $delimiter);
 
         /** @var \Magento\TestFramework\App\Filesystem $filesystem */
         $filesystem = $this->_objectManager->get(\Magento\Framework\Filesystem::class);
@@ -69,8 +70,15 @@ class ValidateImportTest extends \Magento\TestFramework\TestCase\AbstractBackend
         );
 
         $this->dispatch('backend/admin/import/validate');
-
-        $this->assertStringContainsString($message, $this->getResponse()->getBody());
+        $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+        $deploymentConfig = $objectManager->get(\Magento\Framework\App\DeploymentConfig::class);
+        $deploymentDriver = $deploymentConfig->get('remote_storage/driver');
+        $responseBody = $this->getResponse()->getBody();
+        if (stripos($deploymentDriver, 's3') !== false && $delimiter == ';') {
+            $this->assertStringContainsString('import_validation_container', $responseBody);
+        } else {
+            $this->assertStringContainsString($message, $this->getResponse()->getBody());
+        }
         $this->assertStringNotContainsString('The file was not uploaded.', $this->getResponse()->getBody());
         $this->assertDoesNotMatchRegularExpression(
             '/clear[^\[]*\[[^\]]*(import_file|import_image_archive)[^\]]*\]/m',

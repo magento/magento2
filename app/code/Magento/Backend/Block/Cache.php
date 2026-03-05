@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Backend\Block;
 
@@ -35,7 +35,11 @@ class Cache extends \Magento\Backend\Block\Widget\Grid\Container
         }
 
         if ($this->_authorization->isAllowed('Magento_Backend::flush_cache_storage')) {
-            $message = __('The cache storage may contain additional data. Are you sure that you want to flush it?');
+            $message = $this->escapeJs(
+                $this->escapeHtml(
+                    __('The cache storage may contain additional data. Are you sure that you want to flush it?')
+                )
+            );
             $this->buttonList->add(
                 'flush_system',
                 [

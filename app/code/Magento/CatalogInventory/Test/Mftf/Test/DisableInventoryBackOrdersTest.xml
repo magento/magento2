@@ -16,6 +16,7 @@
             <description value="[Disabled Inventory Check] Onepage Checkout and Enabled Backorders"/>
             <severity value="CRITICAL"/>
             <testCaseId value="AC-5245"/>
+            <group value="guest_checkout"/>
         </annotations>
 
         <before>

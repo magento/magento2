@@ -18,6 +18,7 @@
             <testCaseId value="MC-41679"/>
             <useCaseId value="MC-41668"/>
             <group value="multishipping"/>
+            <group value="guest_checkout"/>
         </annotations>
         <before>
             <createData entity="SimpleProduct2" stepKey="product1"/>
