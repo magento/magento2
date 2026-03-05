@@ -12,7 +12,7 @@ define([
 ], function (Squire, ko, $, Component) {
     'use strict';
 
-    describe('paypal/js/view/payment/method-renderer/paypal-express-abstract', function () {
+    describe('paypal/js/view/payment/method-renderer/paypal-express-in-context', function () {
         var injector = new Squire(),
             mocks = {
                 'Magento_Paypal/js/action/set-payment-method': jasmine.createSpy(),
@@ -36,7 +36,7 @@ define([
             window.checkoutConfig = {
                 quoteData: {
                     /* jscs:disable requireCamelCaseOrUpperCaseIdentifiers */
-                    entity_Id: 1
+                    entity_id: 1
                 },
                 formKey: 'formKey'
             };
@@ -59,7 +59,7 @@ define([
                     done();
                 });
         });
-
+        /*eslint-disable no-unused-vars*/
         afterEach(function () {
             try {
                 injector.clean();

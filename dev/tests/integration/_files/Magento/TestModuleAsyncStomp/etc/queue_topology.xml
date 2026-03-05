@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright 2025 Adobe
+ * All Rights Reserved.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework-message-queue:etc/topology.xsd">
+    <exchange name="magento" connection="stomp" type="topic">
+        <binding id="stomp.async.binding1" topic="stomp.multi.topic.queue.topic.c" destinationType="queue" destination="stomp.mixed.sync.and.async.queue"/>
+        <!-- Bindings for AsyncMultipleTopicsWithEachQueueTest - STOMP one-to-one mapping -->
+        <binding id="stomp.async.binding8" topic="stomp.multi.topic.queue.topic.y" destinationType="queue" destination="stomp.queue.for.multiple.topics.test.y"/>
+        <binding id="stomp.async.binding9" topic="stomp.multi.topic.queue.topic.z" destinationType="queue" destination="stomp.queue.for.multiple.topics.test.z"/>
+
+        <!-- Bindings for AsyncMultipleHandlersTest - STOMP one-to-one mapping -->
+        <binding id="stomp.async.binding.mtmh.1" topic="stomp.mtmh.topic.1" destinationType="queue" destination="stomp.mtmh.queue.1"/>
+        <binding id="stomp.async.binding.mtmh.2" topic="stomp.mtmh.topic.2" destinationType="queue" destination="stomp.mtmh.queue.2"/>
+    </exchange>
+</config>

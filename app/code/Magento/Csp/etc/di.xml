@@ -146,4 +146,10 @@
         </arguments>
     </type>
     <preference for="Magento\Csp\Model\SubresourceIntegrity\StorageInterface" type="Magento\Csp\Model\SubresourceIntegrity\Storage\File" />
+    <type name="Magento\Deploy\Service\Bundle">
+        <plugin name="addResourceIntegrityAfterBundleDeploy" type="Magento\Csp\Plugin\GenerateBundleAssetIntegrity" />
+    </type>
+    <type name="Magento\Framework\View\Asset\MergeStrategy\FileExists">
+        <plugin name="addResourceIntegrityAfterMergeFile" type="Magento\Csp\Plugin\GenerateMergedAssetIntegrity" />
+    </type>
 </config>

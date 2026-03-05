@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2023 Adobe
+ * All Rights Reserved.
  */
 
 declare(strict_types=1);
@@ -120,5 +120,19 @@ class UspsUrlTest extends TestCase
             ['https://shippingapis.info'],
             ['http://shippingapis.com.foo.com/foo/bar?baz=bash&fizz=buzz'],
         ];
+    }
+
+    /**
+     * Test for the case of invalid url
+     * @return void
+     */
+    public function testBeforeSaveWithInvalidUrl(): void
+    {
+        $this->url->expects($this->once())
+            ->method('isValid')
+            ->willReturn(false);
+
+        $this->expectException(ValidatorException::class);
+        $this->urlConfig->beforeSave();
     }
 }

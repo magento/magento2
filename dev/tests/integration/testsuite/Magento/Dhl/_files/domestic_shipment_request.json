@@ -1,0 +1,64 @@
+{
+  "plannedShippingDateAndTime": "2025-02-05T00:00:00GMT+00:00",
+  "pickup": {
+    "isRequested": false
+  },
+  "productCode": "N",
+  "accounts": [
+    {
+      "typeCode": "shipper",
+      "number": "998765432"
+    }
+  ],
+  "valueAddedServices": [
+    {
+      "serviceCode": "II",
+      "value": 10
+    }
+  ],
+  "customerDetails": {
+    "shipperDetails": {
+      "postalAddress": {
+        "postalCode": "90034",
+        "cityName": "los angeles",
+        "countryCode": "US",
+        "addressLine1": "los angeles"
+      },
+      "contactInformation": {
+        "phone": "1234567890",
+        "companyName": "demostore",
+        "fullName": "admin admin"
+      }
+    },
+    "receiverDetails": {
+      "postalAddress": {
+        "cityName": "los angeles",
+        "countryCode": "US",
+        "postalCode": "90001",
+        "addressLine1": "los angeles"
+      },
+      "contactInformation": {
+        "phone": "1234567890",
+        "companyName": "store new",
+        "fullName": "John Doe"
+      }
+    }
+  },
+  "content": {
+    "packages": [
+      {
+        "weight": 100,
+        "dimensions": {
+          "width": 5,
+          "height": 5,
+          "length": 5
+        },
+        "description": "item_name"
+      }
+    ],
+    "description": "Shipment",
+    "incoterm": "DAP",
+    "unitOfMeasurement": "imperial",
+    "isCustomsDeclarable": false
+  }
+}

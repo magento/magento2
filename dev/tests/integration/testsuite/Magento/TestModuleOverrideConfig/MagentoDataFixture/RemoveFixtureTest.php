@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -27,7 +27,7 @@ class RemoveFixtureTest extends AbstractOverridesTest
     {
         parent::setUp();
 
-        $this->fixtureCallStorage = $this->objectManager->get(FixtureCallStorage::class);
+        $this->fixtureCallStorage = $this->objectManager->get(FixtureCallStorage::class); //phpstan:ignore
     }
 
     /**
@@ -48,7 +48,7 @@ class RemoveFixtureTest extends AbstractOverridesTest
      * @magentoDataFixture Magento/TestModuleOverrideConfig/_files/fixture2_first_module.php
      * @magentoDataFixture Magento/TestModuleOverrideConfig/_files/fixture3_first_module.php
      *
-     * @dataProvider testDataProvider
+     * @dataProvider executeDataProvider
      *
      * @param string $fixtureName
      * @return void
@@ -61,7 +61,7 @@ class RemoveFixtureTest extends AbstractOverridesTest
     /**
      * @return array
      */
-    public static function testDataProvider(): array
+    public static function executeDataProvider(): array
     {
         return [
             'first_data_set' => ['fixture2_first_module.php'],

@@ -209,6 +209,7 @@
     <preference for="Magento\Framework\MessageQueue\ExchangeFactoryInterface" type="Magento\Framework\MessageQueue\ExchangeFactory" />
     <preference for="Magento\Framework\MessageQueue\Bulk\ExchangeFactoryInterface" type="Magento\Framework\MessageQueue\Bulk\ExchangeFactory" />
     <preference for="Magento\Framework\MessageQueue\QueueFactoryInterface" type="Magento\Framework\MessageQueue\QueueFactory" />
+    <preference for="Magento\Framework\MessageQueue\Bulk\Queue\QueueFactoryInterface" type="Magento\Framework\MessageQueue\Bulk\Queue\QueueFactory" />
     <preference for="Magento\Framework\Search\Request\IndexScopeResolverInterface" type="Magento\Framework\Indexer\ScopeResolver\IndexScopeResolver"/>
     <preference for="Magento\Framework\HTTP\ClientInterface" type="Magento\Framework\HTTP\Client\Curl" />
     <preference for="Magento\Framework\Interception\ConfigLoaderInterface" type="Magento\Framework\Interception\PluginListGenerator" />
@@ -1767,6 +1768,7 @@
             <argument name="connectionToExchangeMap" xsi:type="array">
                 <item name="amqp" xsi:type="string">magento</item>
                 <item name="db" xsi:type="string">magento</item>
+                <item name="stomp" xsi:type="string">magento</item>
             </argument>
         </arguments>
     </type>
@@ -1775,6 +1777,7 @@
             <argument name="publisherNameToConnectionMap" xsi:type="array">
                 <item name="amqp-magento" xsi:type="string">amqp</item>
                 <item name="db-magento" xsi:type="string">db</item>
+                <item name="stomp-magento" xsi:type="string">stomp</item>
             </argument>
         </arguments>
     </type>

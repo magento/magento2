@@ -1,8 +1,9 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
+
 declare(strict_types=1);
 
 namespace Magento\Customer\Test\Unit\Model\ResourceModel;
@@ -12,11 +13,13 @@ use Magento\Customer\Api\Data\AddressSearchResultsInterface;
 use Magento\Customer\Api\Data\AttributeMetadataInterface;
 use Magento\Customer\Api\Data\CustomerInterface;
 use Magento\Customer\Api\Data\CustomerSearchResultsInterfaceFactory;
+use Magento\Customer\Api\GroupRepositoryInterface;
 use Magento\Customer\Model\Customer\NotificationStorage;
 use Magento\Customer\Model\CustomerFactory;
 use Magento\Customer\Model\CustomerRegistry;
 use Magento\Customer\Model\Data\CustomerSecure;
 use Magento\Customer\Model\Data\CustomerSecureFactory;
+use Magento\Customer\Model\Delegation\Storage as DelegatedStorage;
 use Magento\Customer\Model\ResourceModel\AddressRepository;
 use Magento\Customer\Model\ResourceModel\Customer;
 use Magento\Customer\Model\ResourceModel\Customer\Collection;
@@ -125,6 +128,16 @@ class CustomerRepositoryTest extends TestCase
     private $model;
 
     /**
+     * @var DelegatedStorage|MockObject
+     */
+    private $delegatedStorage;
+
+    /**
+     * @var GroupRepositoryInterface|MockObject
+     */
+    private $groupRepository;
+
+    /**
      * @inheritDoc
      */
     protected function setUp(): void
@@ -194,6 +207,12 @@ class CustomerRepositoryTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
+        $this->delegatedStorage = $this->getMockBuilder(DelegatedStorage::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->groupRepository = $this->getMockBuilder(GroupRepositoryInterface::class)
+            ->getMock();
+
         $this->model = new CustomerRepository(
             $this->customerFactory,
             $this->customerSecureFactory,
@@ -209,7 +228,9 @@ class CustomerRepositoryTest extends TestCase
             $this->imageProcessor,
             $this->extensionAttributesJoinProcessor,
             $this->collectionProcessorMock,
-            $this->notificationStorage
+            $this->notificationStorage,
+            $this->delegatedStorage,
+            $this->groupRepository
         );
     }
 
@@ -254,7 +275,9 @@ class CustomerRepositoryTest extends TestCase
                 'getWebsiteId',
                 'getAddresses',
                 'setAddresses',
-                'getGroupId'
+                'getGroupId',
+                'getDefaultBilling',
+                'getDefaultShipping'
             ]
         );
         $customerSecureData = $this->getMockBuilder(CustomerSecure::class)
@@ -443,7 +466,9 @@ class CustomerRepositoryTest extends TestCase
                 'getWebsiteId',
                 'getAddresses',
                 'setAddresses',
-                'getGroupId'
+                'getGroupId',
+                'getDefaultBilling',
+                'getDefaultShipping'
             ]
         );
         $customerModel->expects($this->atLeastOnce())

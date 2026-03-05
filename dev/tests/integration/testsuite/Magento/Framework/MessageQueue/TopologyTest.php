@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 
 declare(strict_types=1);
@@ -31,17 +31,29 @@ class TopologyTest extends TestCase
     private $helper;
 
     /**
+     * @var string
+     */
+    private $connectionType;
+
+    /**
      * @return void
      */
     protected function setUp(): void
     {
-        $this->helper = Bootstrap::getObjectManager()->create(Amqp::class);
+        $objectManager = Bootstrap::getObjectManager();
+        /** @var DefaultValueProvider $defaultValueProvider */
+        $defaultValueProvider = $objectManager->get(DefaultValueProvider::class);
+        $this->connectionType = $defaultValueProvider->getConnection();
 
-        if (!$this->helper->isAvailable()) {
-            $this->fail('This test relies on RabbitMQ Management Plugin.');
+        if ($this->connectionType === 'amqp') {
+            $this->helper = Bootstrap::getObjectManager()->create(Amqp::class);
+
+            if (!$this->helper->isAvailable()) {
+                $this->fail('This test relies on RabbitMQ Management Plugin.');
+            }
+
+            $this->declaredExchanges = $this->helper->getExchanges();
         }
-
-        $this->declaredExchanges = $this->helper->getExchanges();
     }
 
     /**
@@ -51,6 +63,11 @@ class TopologyTest extends TestCase
      */
     public function testTopologyInstallation(array $expectedConfig, array $bindingConfig): void
     {
+        if ($this->connectionType === 'stomp') {
+            $this->markTestSkipped('AMQP test skipped because STOMP connection is available.
+            This test is AMQP-specific.');
+        }
+
         $name = $expectedConfig['name'];
         $this->assertArrayHasKey($name, $this->declaredExchanges);
         unset(

@@ -117,6 +117,8 @@
             <!-- Go to Checkout Page -->
             <actionGroup ref="StorefrontOpenCheckoutPageActionGroup" stepKey="goToCheckout"/>
             <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForSelectFedexShippingMethod"/>
+            <conditionalClick selector="{{CheckoutShippingMethodsSection.fedexExpressServerShippingMethod}}" dependentSelector="{{CheckoutShippingMethodsSection.fedexExpressServerShippingMethod}}" visible="true" stepKey="selectFedexShippingExpressServer"/>
+            <conditionalClick selector="{{CheckoutShippingMethodsSection.fedex2dayShippingMethod}}" dependentSelector="{{CheckoutShippingMethodsSection.fedex2dayShippingMethod}}" visible="true" stepKey="selectFedexShipping2Day"/>
             <conditionalClick selector="{{CheckoutShippingMethodsSection.smartPostShippingMethod}}" dependentSelector="{{CheckoutShippingMethodsSection.smartPostShippingMethod}}" visible="true" stepKey="selectFedexShippingMethod"/>
             <conditionalClick selector="{{CheckoutShippingMethodsSection.groundShippingMethod}}" dependentSelector="{{CheckoutShippingMethodsSection.groundShippingMethod}}" visible="true" stepKey="selectFedexShippingMethodGround"/>
             <actionGroup ref="StorefrontCheckoutClickNextOnShippingStepActionGroup" stepKey="clickNext"/>
@@ -199,6 +201,9 @@
             <!-- Reset shipping origin -->
             <actionGroup ref="AdminResetShippingOriginConfigurationActionGroup" stepKey="ResetCaliforniaShippingOrigin"/>
             <magentoCLI command="config:set {{AdminFedexEnableForCheckoutConfigData.path}} 0" stepKey="disableCheckout"/>
+            <!-- Reset Store information configuration -->
+            <magentoCLI command="config:set {{AdminGeneralSetStoreNameConfigData.path}} ''" stepKey="setStoreInformationName"/>
+            <magentoCLI command="config:set {{AdminGeneralSetStorePhoneConfigData.path}} ''" stepKey="setStoreInformationPhone"/>
             <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
             <!-- Delete configurable product data -->
             <deleteData createDataKey="createConfigChildProduct" stepKey="deleteConfigChildProduct"/>

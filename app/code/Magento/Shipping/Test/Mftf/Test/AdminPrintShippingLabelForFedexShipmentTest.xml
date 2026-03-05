@@ -60,6 +60,9 @@
             <!-- Reset shipping origin -->
             <actionGroup ref="AdminResetShippingOriginConfigurationActionGroup" stepKey="ResetCaliforniaShippingOrigin"/>
             <magentoCLI command="config:set {{AdminFedexEnableForCheckoutConfigData.path}} 0" stepKey="disableCheckout"/>
+            <!-- Reset Store information configuration -->
+            <magentoCLI command="config:set {{AdminGeneralSetStoreNameConfigData.path}} ''" stepKey="setStoreInformationName"/>
+            <magentoCLI command="config:set {{AdminGeneralSetStorePhoneConfigData.path}} ''" stepKey="setStoreInformationPhone"/>
             <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
             <!-- Delete category -->
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>

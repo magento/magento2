@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2023 Adobe
+ * All Rights Reserved.
  */
 
 declare(strict_types=1);
@@ -65,10 +65,9 @@ class FedexUrl extends Value
         if ($isValid) {
             // phpcs:ignore Magento2.Functions.DiscouragedFunction
             $host = parse_url((string)$this->getValue(), \PHP_URL_HOST);
-
-            if (!empty($host) && !preg_match('/(?:.+\.|^)fedex\.com$/i', $host)) {
-                throw new ValidatorException(__('Fedex API endpoint URL\'s must use fedex.com'));
-            }
+        }
+        if (!$isValid || (!empty($host) && !preg_match('/(?:.+\.|^)fedex\.com$/i', $host))) {
+            throw new ValidatorException(__('Fedex API endpoint URL\'s must use fedex.com'));
         }
 
         return parent::beforeSave();
