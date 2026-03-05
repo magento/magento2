@@ -23,6 +23,11 @@ use PHPUnit\Framework\TestCase;
 class TaxTest extends TestCase
 {
     /**
+     * @var float
+     */
+    private const EPSILON = 0.0000000001;
+
+    /**
      * @var Tax
      */
     protected $model;
@@ -118,13 +123,13 @@ class TaxTest extends TestCase
 
         //verify invoice data
         foreach ($expectedResults['creditmemo_data'] as $key => $value) {
-            $this->assertEquals($value, $this->creditmemo->getData($key));
+            $this->assertEqualsWithDelta($value, $this->creditmemo->getData($key), self::EPSILON);
         }
         //verify invoice item data
         foreach ($expectedResults['creditmemo_items'] as $itemKey => $itemData) {
             $creditmemoItem = $creditmemoItems[$itemKey];
             foreach ($itemData as $key => $value) {
-                $this->assertEquals($value, $creditmemoItem->getData($key));
+                $this->assertEqualsWithDelta($value, $creditmemoItem->getData($key), self::EPSILON);
             }
         }
     }

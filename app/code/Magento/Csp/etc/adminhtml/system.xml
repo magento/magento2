@@ -1,0 +1,35 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
+    <system>
+        <section id="csp" translate="label" type="text" sortOrder="305" showInDefault="1" showInWebsite="1" showInStore="1">
+            <label>Content Security Policy (CSP)</label>
+            <tab>security</tab>
+            <resource>Magento_Csp::config</resource>
+            <group id="mode" translate="label" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>Mode</label>
+                <group id="storefront" translate="label" sortOrder="2" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Storefront Default</label>
+                    <field id="report_uri" translate="label" type="text" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
+                        <label>Report URI</label>
+                        <comment>URI to report CSP violations on storefront. Used for all storefront pages that don't have own URI configured above.</comment>
+                        <validate>validate-url</validate>
+                    </field>
+                </group>
+                <group id="admin" translate="label" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Admin Default</label>
+                    <field id="report_uri" translate="label" type="text" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
+                        <label>Report URI</label>
+                        <comment>URI to report CSP violations in admin area. Used for all admin pages that don't have own URI configured above.</comment>
+                        <validate>validate-url</validate>
+                    </field>
+                </group>
+            </group>
+        </section>
+    </system>
+</config>

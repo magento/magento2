@@ -10,6 +10,7 @@ namespace Magento\Sales\Test\Unit\Model\ResourceModel\Order\Invoice;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\DB\Adapter\Pdo\Mysql;
+use Magento\Framework\DB\Select;
 use Magento\Framework\Model\ResourceModel\Db\Context;
 use Magento\Framework\Model\ResourceModel\Db\ObjectRelationProcessor;
 use Magento\Framework\Model\ResourceModel\Db\VersionControl\Snapshot;
@@ -18,6 +19,7 @@ use Magento\Sales\Model\Order\Invoice\Comment\Validator;
 use Magento\Sales\Model\ResourceModel\Order\Invoice\Comment;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Magento\Sales\Model\Order\Invoice as OrderInvoice;
 
 class CommentTest extends TestCase
 {
@@ -52,6 +54,16 @@ class CommentTest extends TestCase
     protected $entitySnapshotMock;
 
     /**
+     * @var Select|MockObject
+     */
+    protected $selectMock;
+
+    /**
+     * @var OrderInvoice|MockObject
+     */
+    private $orderInvoice;
+
+    /**
      * Set up
      */
     protected function setUp(): void
@@ -60,6 +72,8 @@ class CommentTest extends TestCase
         $this->appResourceMock = $this->createMock(ResourceConnection::class);
         $this->connectionMock = $this->createMock(Mysql::class);
         $this->validatorMock = $this->createMock(Validator::class);
+        $this->selectMock = $this->createMock(Select::class);
+        $this->orderInvoice = $this->createMock(OrderInvoice::class);
         $this->entitySnapshotMock = $this->createMock(
             Snapshot::class
         );
@@ -100,6 +114,33 @@ class CommentTest extends TestCase
      */
     public function testSave()
     {
+        $commentId = 1;
+        $output = [
+            'user_id' => 1,
+            'user_type' => 'demo',
+        ];
+
+        $this->commentModelMock->expects($this->any())->method('getId')->willReturn($commentId);
+        $this->commentModelMock->expects($this->any())->method('getInvoice')->willReturn($this->orderInvoice);
+        $this->orderInvoice->expects($this->any())->method('getId')->willReturn($commentId);
+
+        $this->connectionMock->expects($this->any())
+            ->method('select')
+            ->willReturn($this->selectMock);
+
+        $this->selectMock->expects($this->any())
+            ->method('from')
+            ->willReturnSelf();
+
+        $this->selectMock->expects($this->any())
+            ->method('where')
+            ->willReturnSelf();
+
+        $this->connectionMock->expects($this->any())
+            ->method('fetchRow')
+            ->with($this->selectMock)
+            ->willReturn($output);
+
         $this->entitySnapshotMock->expects($this->once())
             ->method('isModified')
             ->with($this->commentModelMock)

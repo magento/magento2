@@ -32,7 +32,7 @@
         </after>
 
         <!-- Initiate create new order -->
-        <actionGroup ref="NavigateToNewOrderPageExistingCustomerActionGroup" stepKey="navigateToNewOrderPageWithExistingCustomer">
+        <actionGroup ref="AdminNavigateToNewOrderPageExistingCustomerActionGroup" stepKey="navigateToNewOrderPageWithExistingCustomer">
             <argument name="customer" value="$simpleCustomer$"/>
         </actionGroup>
         <!-- Add to order maximum available quantity - 1 -->

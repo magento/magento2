@@ -4,12 +4,15 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\PageCache\Controller;
 
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Serialize\Serializer\Base64Json;
 use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Framework\Validator\RegexFactory;
-use Magento\Framework\App\ObjectManager;
 use Magento\Framework\View\Layout\LayoutCacheKeyInterface;
 
 abstract class Block extends \Magento\Framework\App\Action\Action
@@ -52,12 +55,23 @@ abstract class Block extends \Magento\Framework\App\Action\Action
     private const VALIDATION_RULE_PATTERN = '/^[a-z0-9]+[a-z0-9_]*$/i';
 
     /**
+     * @var ScopeConfigInterface
+     */
+    private $config;
+
+    /**
+     * Handle size system name
+     */
+    private const XML_HANDLES_SIZE = 'system/full_page_cache/handles_size';
+
+    /**
      * @param \Magento\Framework\App\Action\Context $context
      * @param \Magento\Framework\Translate\InlineInterface $translateInline
-     * @param Json $jsonSerializer
-     * @param Base64Json $base64jsonSerializer
-     * @param LayoutCacheKeyInterface $layoutCacheKey
+     * @param Json|null $jsonSerializer
+     * @param Base64Json|null $base64jsonSerializer
+     * @param LayoutCacheKeyInterface|null $layoutCacheKey
      * @param RegexFactory|null $regexValidatorFactory
+     * @param ScopeConfigInterface|null $scopeConfig
      */
     public function __construct(
         \Magento\Framework\App\Action\Context $context,
@@ -65,7 +79,8 @@ abstract class Block extends \Magento\Framework\App\Action\Action
         Json $jsonSerializer = null,
         Base64Json $base64jsonSerializer = null,
         LayoutCacheKeyInterface $layoutCacheKey = null,
-        ?RegexFactory $regexValidatorFactory = null
+        ?RegexFactory $regexValidatorFactory = null,
+        ScopeConfigInterface $scopeConfig = null
     ) {
         parent::__construct($context);
         $this->translateInline = $translateInline;
@@ -77,6 +92,7 @@ abstract class Block extends \Magento\Framework\App\Action\Action
             ?: ObjectManager::getInstance()->get(LayoutCacheKeyInterface::class);
         $this->regexValidatorFactory = $regexValidatorFactory
             ?: ObjectManager::getInstance()->get(RegexFactory::class);
+        $this->config = $scopeConfig;
     }
 
     /**
@@ -94,6 +110,12 @@ abstract class Block extends \Magento\Framework\App\Action\Action
         }
         $blocks = $this->jsonSerializer->unserialize($blocks);
         $handles = $this->base64jsonSerializer->unserialize($handles);
+
+        $handlesSize = (int) $this->config->getValue(self::XML_HANDLES_SIZE);
+
+        $handles = ($handlesSize && count($handles) > $handlesSize)
+            ? array_splice($handles, 0, $handlesSize) : $handles;
+
         if (!$this->validateHandleParam($handles)) {
             return [];
         }

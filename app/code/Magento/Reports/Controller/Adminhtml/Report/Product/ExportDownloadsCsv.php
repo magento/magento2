@@ -1,21 +1,31 @@
 <?php
 /**
- *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
  */
+declare(strict_types=1);
+
 namespace Magento\Reports\Controller\Adminhtml\Report\Product;
 
+use Magento\Framework\App\Action\HttpGetActionInterface;
+use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\App\ResponseInterface;
+use Magento\Reports\Block\Adminhtml\Product\Downloads\Grid;
+use Magento\Reports\Controller\Adminhtml\Report\Product;
 
-class ExportDownloadsCsv extends \Magento\Reports\Controller\Adminhtml\Report\Product
+/**
+ * Exporting list of product in CVS format.
+ *
+ * @SuppressWarnings(PHPMD.AllPurposeAction)
+ */
+class ExportDownloadsCsv extends Product implements HttpGetActionInterface
 {
     /**
      * Authorization level of a basic admin session
      *
      * @see _isAllowed()
      */
-    const ADMIN_RESOURCE = 'Magento_Reports::report_products';
+    public const ADMIN_RESOURCE = 'Magento_Reports::downloads';
 
     /**
      * Export products downloads report to CSV format
@@ -26,11 +36,11 @@ class ExportDownloadsCsv extends \Magento\Reports\Controller\Adminhtml\Report\Pr
     {
         $fileName = 'products_downloads.csv';
         $content = $this->_view->getLayout()->createBlock(
-            \Magento\Reports\Block\Adminhtml\Product\Downloads\Grid::class
+            Grid::class
         )->setSaveParametersInSession(
             true
         )->getCsv();
 
-        return $this->_fileFactory->create($fileName, $content);
+        return $this->_fileFactory->create($fileName, $content, DirectoryList::VAR_DIR);
     }
 }

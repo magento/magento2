@@ -7,6 +7,11 @@
 -->
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
     <body>
+        <referenceBlock name="messages">
+            <action method="addNotice">
+                <argument translate="true" name="message" xsi:type="string">Please Note: The encryption key change feature will only be supported via CLI commands in future releases and this page will be removed.</argument>
+            </action>
+        </referenceBlock>
         <referenceContainer name="content">
             <block class="Magento\EncryptionKey\Block\Adminhtml\Crypt\Key\Edit" name="crypt.key.edit" as="crypt_key_edit" template="Magento_Backend::widget/form/container.phtml">
                 <block class="Magento\EncryptionKey\Block\Adminhtml\Crypt\Key\Form" name="crypt.key.form" as="form"/>

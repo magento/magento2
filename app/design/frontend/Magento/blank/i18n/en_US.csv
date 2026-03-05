@@ -4,3 +4,6 @@ Summary,Summary
 Menu,Menu
 Account,Account
 Settings,Settings
+"Invalid data type","Invalid data type"
+"Max query complexity should be %1 but got %2.","Max query complexity should be %1 but got %2."
+"Max Aliases in query should be %1 but got %2.","Max Aliases in query should be %1 but got %2."

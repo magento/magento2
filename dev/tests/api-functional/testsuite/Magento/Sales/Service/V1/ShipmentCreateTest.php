@@ -3,23 +3,22 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Sales\Service\V1;
 
 use Magento\TestFramework\TestCase\WebapiAbstract;
 
 /**
- * Class ShipmentCreateTest
- *
  * Test shipment save API
  */
 class ShipmentCreateTest extends WebapiAbstract
 {
-    const RESOURCE_PATH = '/V1/shipment';
+    public const RESOURCE_PATH = '/V1/shipment';
 
-    const SERVICE_READ_NAME = 'salesShipmentRepositoryV1';
+    public const SERVICE_READ_NAME = 'salesShipmentRepositoryV1';
 
-    const SERVICE_VERSION = 'V1';
+    public const SERVICE_VERSION = 'V1';
 
     /**
      * @var \Magento\Framework\ObjectManagerInterface

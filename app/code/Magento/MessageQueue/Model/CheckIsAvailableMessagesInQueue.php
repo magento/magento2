@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -40,10 +40,18 @@ class CheckIsAvailableMessagesInQueue
     public function execute($connectionName, $queueName)
     {
         $queue = $this->queueRepository->get($connectionName, $queueName);
-        $message = $queue->dequeue();
-        if ($message) {
-            $queue->reject($message);
-            return true;
+        if ($connectionName === 'stomp') {
+            $queue->subscribeQueue();
+            $message = $queue->readMessage();
+            if ($message) {
+                return true;
+            }
+        } else {
+            $message = $queue->dequeue();
+            if ($message) {
+                $queue->reject($message);
+                return true;
+            }
         }
         return false;
     }

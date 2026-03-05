@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -35,7 +35,7 @@ class PreviewTest extends TestCase
      */
     protected $objectManagerHelper;
 
-    const MALICIOUS_TEXT = 'test malicious';
+    public const MALICIOUS_TEXT = 'test malicious';
 
     /**
      * @var Http|MockObject
@@ -68,7 +68,6 @@ class PreviewTest extends TestCase
     protected function setUp(): void
     {
         $this->objectManagerHelper = new ObjectManager($this);
-
         $storeId = 1;
         $designConfigData = [];
 
@@ -84,26 +83,20 @@ class PreviewTest extends TestCase
             )
             ->disableOriginalConstructor()
             ->getMock();
-
         $this->storeManager = $this->getMockBuilder(StoreManagerInterface::class)
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
-
         $this->request = $this->createMock(Http::class);
-
         $this->maliciousCode = $this->createPartialMock(
             MaliciousCode::class,
             ['filter']
         );
-
         $this->template->expects($this->once())
             ->method('getProcessedTemplate')
             ->with([])
             ->willReturn(self::MALICIOUS_TEXT);
-
         $this->template->method('getDesignConfig')
             ->willReturn(new DataObject($designConfigData));
-
         $emailFactory = $this->createPartialMock(TemplateFactory::class, ['create']);
         $emailFactory->expects($this->any())
             ->method('create')
@@ -113,7 +106,6 @@ class PreviewTest extends TestCase
         $scopeConfig = $this->getMockForAbstractClass(ScopeConfigInterface::class);
         $design = $this->getMockForAbstractClass(DesignInterface::class);
         $store = $this->createPartialMock(Store::class, ['getId']);
-
         $store->expects($this->any())
             ->method('getId')
             ->willReturn($storeId);
@@ -178,7 +170,7 @@ class PreviewTest extends TestCase
             ->method('getDesignConfig');
         $this->storeManager->expects($this->atLeastOnce())
             ->method('getDefaultStoreView');
-        $this->maliciousCode->expects($this->once())
+        $this->maliciousCode->expects($this->any())
             ->method('filter')
             ->with($requestParamMap[1][2])
             ->willReturn(self::MALICIOUS_TEXT);

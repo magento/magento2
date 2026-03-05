@@ -78,6 +78,10 @@
                     <comment>Public content cache lifetime in seconds. If field is empty default value 86400 will be saved. </comment>
                     <backend_model>Magento\PageCache\Model\System\Config\Backend\Ttl</backend_model>
                 </field>
+                <field id="handles_size" type="text" translate="label comment" sortOrder="5" showInDefault="1" canRestore="1">
+                    <label>Handles params size</label>
+                    <comment>Handles params size. For better performance use handles parameter size between 50 and 100. </comment>
+                </field>
             </group>
         </section>
     </system>

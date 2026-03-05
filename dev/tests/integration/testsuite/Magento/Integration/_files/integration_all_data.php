@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2021 Adobe
+ * All rights reserved.
  */
 declare(strict_types=1);
 
@@ -14,8 +14,8 @@ $integrationService = $objectManager->get(IntegrationServiceInterface::class);
 $data = [
     'name' => 'Fixture Integration',
     'email' => 'john.doe@example.com',
-    'endpoint' => 'https://example.com/endpoint',
-    'identity_link_url' => 'https://example.com/link',
+    'endpoint' => 'http://localhost/endpoint',
+    'identity_link_url' => 'http://localhost/link',
     'all_resources' => 0,
 ];
 $integrationService->create($data);

@@ -37,6 +37,8 @@ Footer,Footer
 "Shipping Info","Shipping Info"
 "Payment Method","Payment Method"
 "Shipping Method","Shipping Method"
+"Max query complexity should be %1 but got %2.","Max query complexity should be %1 but got %2."
+"Max Aliases in query should be %1 but got %2.","Max Aliases in query should be %1 but got %2."
 "Update to your %store_name credit memo","Update to your %store_name credit memo"
 "Your order #%increment_id has been updated with a status of <strong>%order_status</strong>.","Your order #%increment_id has been updated with a status of <strong>%order_status</strong>."
 "Invoice for your %store_name order","Invoice for your %store_name order"
@@ -54,3 +56,4 @@ Footer,Footer
 "Update to your %store_name shipment","Update to your %store_name shipment"
 "Address Book","Address Book"
 "Account Information","Account Information"
+"Invalid data type","Invalid data type"

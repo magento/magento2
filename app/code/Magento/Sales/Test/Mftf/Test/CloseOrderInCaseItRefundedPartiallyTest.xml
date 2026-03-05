@@ -11,6 +11,7 @@
     <test name="CloseOrderInCaseItRefundedPartiallyTest">
         <annotations>
             <group value="Sales"/>
+            <group value="guest_checkout"/>
             <stories value="Close order"/>
             <title value="Close order in case it refunded partially"/>
             <description value="Place order, generate invoice and do partial credit memos, it refunded partially and sales status should be closed"/>
@@ -30,6 +31,8 @@
             <actionGroup ref="CreateConfigurableProductActionGroup" stepKey="createProduct">
                 <argument name="category" value="$$createCategory$$"/>
             </actionGroup>
+            <!--Enable flat rate shipping-->
+            <magentoCLI command="config:set {{EnableFlatRateConfigData.path}} {{EnableFlatRateConfigData.value}}" stepKey="enableFlatRate"/>
         </before>
         <!-- add simple product into cart -->
         <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="goToFrontPage"/>

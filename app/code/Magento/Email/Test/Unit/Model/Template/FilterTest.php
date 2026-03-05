@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 declare(strict_types=1);
@@ -33,6 +33,7 @@ use Magento\Framework\View\Asset\ContentProcessorInterface;
 use Magento\Framework\View\Asset\File;
 use Magento\Framework\View\Asset\File\FallbackContext;
 use Magento\Framework\View\Asset\Repository;
+use Magento\Framework\View\Element\AbstractBlock;
 use Magento\Framework\View\LayoutFactory;
 use Magento\Framework\View\LayoutInterface;
 use Magento\Store\Api\Data\StoreInterface;
@@ -574,5 +575,82 @@ class FilterTest extends TestCase
             " http=\"https://url\" https=\"http://url\""
         ];
         $model->protocolDirective($data);
+    }
+
+    /**
+     * Test block directive cache key functionality
+     *
+     * @param bool $hasCacheKey
+     * @param bool $expectGetCacheKey
+     * @param bool $expectSetData
+     * @dataProvider blockDirectiveCacheKeyDataProvider
+     */
+    public function testBlockDirectiveCacheKey($hasCacheKey, $expectGetCacheKey, $expectSetData)
+    {
+        $block = $this->getMockBuilder(AbstractBlock::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->layout->expects($this->once())
+            ->method('createBlock')
+            ->willReturn($block);
+
+        $block->expects($this->once())
+            ->method('hasData')
+            ->with('cache_key')
+            ->willReturn($hasCacheKey);
+
+        if ($expectGetCacheKey) {
+            $block->expects($this->once())
+                ->method('getCacheKey')
+                ->willReturn('test_cache_key');
+        } else {
+            $block->expects($this->never())
+                ->method('getCacheKey');
+        }
+
+        if ($expectSetData) {
+            $block->expects($this->once())
+                ->method('setDataUsingMethod')
+                ->with('cache_key', 'test_cache_key');
+        } else {
+            $block->expects($this->never())
+                ->method('setDataUsingMethod');
+        }
+
+        $block->expects($this->once())
+            ->method('toHtml')
+            ->willReturn('block html');
+
+        $construction = [
+            '{{block class="Magento\\Framework\\View\\Element\\AbstractBlock"}}',
+            'block',
+            ' class="Magento\\Framework\\View\\Element\\AbstractBlock"'
+        ];
+
+        $filter = $this->getModel();
+        $result = $filter->blockDirective($construction);
+        $this->assertEquals('block html', $result);
+    }
+
+    /**
+     * Data provider for testBlockDirectiveCacheKey
+     *
+     * @return array
+     */
+    public static function blockDirectiveCacheKeyDataProvider()
+    {
+        return [
+            'block without cache key' => [
+                'hasCacheKey' => false,
+                'expectGetCacheKey' => true,
+                'expectSetData' => true
+            ],
+            'block with existing cache key' => [
+                'hasCacheKey' => true,
+                'expectGetCacheKey' => false,
+                'expectSetData' => false
+            ]
+        ];
     }
 }

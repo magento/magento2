@@ -14,6 +14,7 @@ use Magento\Sales\Model\Order;
 use Magento\Sales\Model\Order\Payment;
 use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
 use Magento\Framework\Stdlib\DateTime;
+use DateTimeZone;
 
 /**
  * Verify chart data by different period.
@@ -48,11 +49,12 @@ class ChartTest extends TestCase
      * @dataProvider getChartDataProvider
      * @return void
      */
-    public function testGetByPeriodWithParam(int $expectedDataQty, string $period, string $chartParam): void
-    {
-        $timezoneLocal = $this->objectManager->get(TimezoneInterface::class)->getConfigTimezone();
-        $order = $this->objectManager->get(Order::class);
-        $order->loadByIncrementId('100000002');
+    public function testGetByPeriodWithParam(
+        int $expectedDataQty,
+        string $period,
+        string $chartParam,
+        string $orderIncrementId
+    ): void {
         $payment = $this->objectManager->get(Payment::class);
         $payment->setMethod('checkmo');
         $payment->setAdditionalInformation('last_trans_id', '11122');
@@ -60,8 +62,28 @@ class ChartTest extends TestCase
             'type' => 'free',
             'fraudulent' => false
         ]);
+
+        $timezoneLocal = $this->objectManager->get(TimezoneInterface::class)->getConfigTimezone();
         $dateTime = new \DateTime('now', new \DateTimeZone($timezoneLocal));
-        $order->setCreatedAt($dateTime->modify('-1 hour')->format(DateTime::DATETIME_PHP_FORMAT));
+        if ($period === '1m') {
+            $dateTime->modify('first day of this month')->format(DateTime::DATETIME_PHP_FORMAT);
+        } elseif ($period === '1y') {
+            $monthlyDateTime = clone $dateTime;
+            $monthlyDateTime->modify('first day of this month')->format(DateTime::DATETIME_PHP_FORMAT);
+            $monthlyDateTime->setTimezone(new DateTimeZone('UTC'));
+            $monthlyOrder = $this->objectManager->get(Order::class);
+            $monthlyOrder->loadByIncrementId('100000004');
+            $monthlyOrder->setCreatedAt($monthlyDateTime->format(DateTime::DATETIME_PHP_FORMAT));
+            $monthlyOrder->setPayment($payment);
+            $monthlyOrder->save();
+            $dateTime->modify('first day of january this year')->format(DateTime::DATETIME_PHP_FORMAT);
+        } elseif ($period === '2y') {
+            $dateTime->modify('first day of january last year')->format(DateTime::DATETIME_PHP_FORMAT);
+        }
+        $dateTime->setTimezone(new DateTimeZone('UTC'));
+        $order = $this->objectManager->get(Order::class);
+        $order->loadByIncrementId($orderIncrementId);
+        $order->setCreatedAt($dateTime->format(DateTime::DATETIME_PHP_FORMAT));
         $order->setPayment($payment);
         $order->save();
         $ordersData = $this->model->getByPeriod($period, $chartParam);
@@ -80,29 +102,34 @@ class ChartTest extends TestCase
     {
         return [
             [
-                1,
+                2,
                 '24h',
-                'quantity'
+                'quantity',
+                '100000002'
             ],
             [
                 3,
                 '7d',
-                'quantity'
+                'quantity',
+                '100000003'
             ],
             [
                 4,
                 '1m',
-                'quantity'
+                'quantity',
+                '100000004'
             ],
             [
                 5,
                 '1y',
-                'quantity'
+                'quantity',
+                '100000005'
             ],
             [
                 6,
                 '2y',
-                'quantity'
+                'quantity',
+                '100000006'
             ]
         ];
     }

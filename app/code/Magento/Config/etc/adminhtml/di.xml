@@ -19,4 +19,8 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\Config\Model\Config\Backend\Locale">
+        <plugin name="installed_currency_configuration_validation"
+                type="Magento\Config\Plugin\Model\Config\Backend\LocalePlugin" sortOrder="10" />
+    </type>
 </config>

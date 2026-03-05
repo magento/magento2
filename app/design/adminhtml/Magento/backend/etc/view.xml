@@ -62,6 +62,6 @@
         <item type="directory">Lib::less</item>
         <item type="directory">Lib::fotorama</item>
         <item type="directory">Lib::magnifier</item>
-        <item type="directory">Lib::tiny_mce</item>
+        <item type="directory">Lib::hugerte</item>
     </exclude>
 </view>

@@ -17,8 +17,10 @@
             <useCaseId value="ACP2E-1105"/>
             <testCaseId value="AC-6439"/>
             <group value="checkout"/>
+            <group value="guest_checkout"/>
         </annotations>
         <before>
+            <magentoCLI command="config:set {{EnableFlatRateConfigData.path}} {{EnableFlatRateConfigData.value}}" stepKey="enableFlatRate"/>
             <createData entity="_defaultCategory" stepKey="createCategory"/>
             <createData entity="ApiSimpleProduct" stepKey="createProduct">
                 <requiredEntity createDataKey="createCategory"/>

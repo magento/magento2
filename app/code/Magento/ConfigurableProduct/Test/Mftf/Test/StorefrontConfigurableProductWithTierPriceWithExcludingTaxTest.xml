@@ -75,7 +75,9 @@
             <magentoCLI command="config:set tax/calculation/based_on shipping"  stepKey="unSetTaxCalculationBasedOn"/>
             <magentoCLI command="config:set tax/calculation/price_includes_tax 0"  stepKey="unsetCatalogPrice"/>
             <magentoCLI command="config:set tax/display/type 0" stepKey="disableShowExcludingTax"/>
-            <magentoCron groups="index" stepKey="reindexInvalidatedIndices"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindexInvalidatedIndices">
+                <argument name="indices" value=""/>
+            </actionGroup>
         </after>
 
         <!-- Create configurable product -->

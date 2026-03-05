@@ -6,18 +6,25 @@
 
 namespace Magento\EncryptionKey\Controller\Adminhtml\Crypt\Key;
 
+use Magento\Framework\App\Request\Http as HttpRequest;
+
+/**
+ * Test for Magento\EncryptionKey\Controller\Adminhtml\Crypt\Key\Save
+ */
 class SaveTest extends \Magento\TestFramework\TestCase\AbstractBackendController
 {
     /**
      * Test save action with empty encryption key
+     * @return void
      */
-    public function testSaveActionWithEmptyKey()
+    public function testSaveActionWithEmptyKey():void
     {
         // data set with no random encryption key and no provided encryption key
         $ifGenerateRandom = '0';
         $encryptionKey = '';
 
         $request = $this->getRequest();
+        $request->setMethod(HttpRequest::METHOD_POST);
         $request
             ->setPostValue('generate_random', $ifGenerateRandom)
             ->setPostValue('crypt_key', $encryptionKey);
@@ -32,8 +39,9 @@ class SaveTest extends \Magento\TestFramework\TestCase\AbstractBackendController
      * Test save action with provided encryption key
      *
      * @magentoDbIsolation enabled
+     * @return void
      */
-    public function testSaveActionWithProvidedKey()
+    public function testSaveActionWithProvidedKey():void
     {
         $this->markTestSkipped('Test is blocked by MAGETWO-33612.');
 
@@ -56,8 +64,9 @@ class SaveTest extends \Magento\TestFramework\TestCase\AbstractBackendController
 
     /**
      * Test save action with invalid encryption key
+     * @return void
      */
-    public function testSaveActionWithInvalidKey()
+    public function testSaveActionWithInvalidKey():void
     {
         // data set with provided encryption key
         $ifGenerateRandom = '0';
@@ -67,6 +76,7 @@ class SaveTest extends \Magento\TestFramework\TestCase\AbstractBackendController
             'generate_random' => $ifGenerateRandom,
             'crypt_key' => $encryptionKey,
         ];
+        $this->getRequest()->setMethod(HttpRequest::METHOD_POST);
         $this->getRequest()->setPostValue($params);
         $this->dispatch('backend/admin/crypt_key/save');
 
@@ -81,8 +91,9 @@ class SaveTest extends \Magento\TestFramework\TestCase\AbstractBackendController
      * Test save action with randomly generated key
      *
      * @magentoDbIsolation enabled
+     * @return void
      */
-    public function testSaveActionWithRandomKey()
+    public function testSaveActionWithRandomKey():void
     {
         $this->markTestSkipped('Test is blocked by MAGETWO-33612.');
 

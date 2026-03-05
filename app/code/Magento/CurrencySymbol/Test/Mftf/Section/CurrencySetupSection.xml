@@ -13,5 +13,9 @@
         <element name="baseCurrency" type="select" selector="#currency_options_base"/>
         <element name="baseCurrencyUseDefault" type="checkbox" selector="#currency_options_base_inherit"/>
         <element name="currencyOptions" type="select" selector="#currency_options-head"/>
+        <element name="defaultCurrency" type="select" selector="#currency_options_default"/>
+        <element name="defaultdisplayCurrency" type="select" selector="#currency_options_default_inherit"/>
+        <element name="allowcurrenciescheckbox" type="select" selector="#currency_options_allow_inherit"/>
+        <element name="CheckCurrencyOptionsIfTabExpand" type="button" selector="#currency_options-head:not(.open)"/>
     </section>
 </sections>

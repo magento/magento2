@@ -1,8 +1,10 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
+
+declare(strict_types=1);
 
 namespace Magento\Customer\Model\ResourceModel;
 
@@ -28,6 +30,7 @@ use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
 use Magento\Framework\Api\SearchCriteriaInterface;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Event\ManagerInterface;
+use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Store\Model\StoreManagerInterface;
@@ -39,6 +42,8 @@ use Magento\Store\Model\StoreManagerInterface;
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.TooManyFields)
+ * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+ * @SuppressWarnings(PHPMD.NPathComplexity)
  */
 class CustomerRepository implements CustomerRepositoryInterface
 {
@@ -196,16 +201,19 @@ class CustomerRepository implements CustomerRepositoryInterface
      * @throws \Magento\Framework\Exception\LocalizedException
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function save(CustomerInterface $customer, $passwordHash = null)
     {
         /** @var NewOperation|null $delegatedNewOperation */
         $delegatedNewOperation = !$customer->getId() ? $this->delegatedStorage->consumeNewOperation() : null;
         $prevCustomerData = $prevCustomerDataArr = null;
+        $defaultBillingAddressFlag = $defaultShippingAddressFlag = false;
         if ($customer->getId()) {
             $prevCustomerData = $this->getById($customer->getId());
             $prevCustomerDataArr = $this->prepareCustomerData($prevCustomerData->__toArray());
         }
+
         /** @var $customer \Magento\Customer\Model\Data\Customer */
         $customerArr = $customer->__toArray();
         $customer = $this->imageProcessor->save(
@@ -223,13 +231,35 @@ class CustomerRepository implements CustomerRepositoryInterface
 
         //Model's actual ID field maybe different than "id" so "id" field from $customerData may be ignored.
         $customerModel->setId($customer->getId());
+
+        if ($customer->getDefaultBilling()) {
+            $defaultBillingAddressFlag = $this->validateDefaultAddress(
+                $customer,
+                $prevCustomerData,
+                CustomerInterface::DEFAULT_BILLING
+            );
+            if (!$defaultBillingAddressFlag) {
+                $customerModel->setDefaultBilling(null);
+            }
+        }
+        if ($customer->getDefaultShipping()) {
+            $defaultShippingAddressFlag = $this->validateDefaultAddress(
+                $customer,
+                $prevCustomerData,
+                CustomerInterface::DEFAULT_SHIPPING
+            );
+            if (!$defaultShippingAddressFlag) {
+                $customerModel->setDefaultShipping(null);
+            }
+        }
+
         $storeId = $customerModel->getStoreId();
         if ($storeId === null) {
             $customerModel->setStoreId(
                 $prevCustomerData ? $prevCustomerData->getStoreId() : $this->storeManager->getStore()->getId()
             );
         }
-        $this->validateGroupId($customer->getGroupId());
+        $this->validateGroupId((int)$customer->getGroupId());
         $this->setCustomerGroupId($customerModel, $customerArr, $prevCustomerDataArr);
         // Need to use attribute set or future updates can cause data loss
         if (!$customerModel->getAttributeSetId()) {
@@ -240,6 +270,7 @@ class CustomerRepository implements CustomerRepositoryInterface
         if ($prevCustomerData && $prevCustomerData->getEmail() !== $customerModel->getEmail()) {
             $customerModel->setRpToken(null);
             $customerModel->setRpTokenCreatedAt(null);
+            $isEmailChanged = true;
         }
         if (!array_key_exists('addresses', $customerArr)
             && null !== $prevCustomerDataArr
@@ -286,6 +317,15 @@ class CustomerRepository implements CustomerRepositoryInterface
         }
         $this->customerRegistry->remove($customerId);
         $savedCustomer = $this->get($customer->getEmail(), $customer->getWebsiteId());
+        if (!empty($isEmailChanged)) {
+            $this->eventManager->dispatch(
+                'customer_email_changed',
+                [
+                    'customer' => $savedCustomer,
+                    'original_customer_email' => $prevCustomerData->getEmail()
+                ]
+            );
+        }
         $this->eventManager->dispatch(
             'customer_save_after_data_object',
             [
@@ -545,5 +585,75 @@ class CustomerRepository implements CustomerRepositoryInterface
             unset($customerData[CustomerInterface::CUSTOM_ATTRIBUTES]);
         }
         return $customerData;
+    }
+
+    /**
+     * To validate default address
+     *
+     * @param CustomerInterface $customer
+     * @param CustomerInterface|null $prevCustomerData
+     * @param string $defaultAddressType
+     * @return bool
+     * @throws InputException
+     */
+    private function validateDefaultAddress(
+        CustomerInterface $customer,
+        ?CustomerInterface $prevCustomerData,
+        string $defaultAddressType
+    ): bool {
+            $defaultAddressId = (int)(
+            $defaultAddressType === CustomerInterface::DEFAULT_BILLING
+                ? $customer->getDefaultBilling()
+                : $customer->getDefaultShipping()
+            );
+
+        if (!$defaultAddressId) {
+            return true;
+        }
+
+        $customerId = (int)($customer->getId() ?? 0);
+        if (!$customerId && $prevCustomerData) {
+            $customerId = (int)($prevCustomerData->getId() ?? 0);
+        }
+        if ($prevCustomerData && $prevCustomerData->getAddresses()) {
+            foreach ($prevCustomerData->getAddresses() as $address) {
+                if ($defaultAddressId === (int)$address->getId()) {
+                    if ($customerId && (int)$address->getCustomerId() !== $customerId) {
+                        $this->throwInvalidAddressException($defaultAddressType);
+                    }
+                    return true;
+                }
+            }
+            $this->throwInvalidAddressException($defaultAddressType);
+        }
+
+        if ($defaultAddressId) {
+            try {
+                $customerAddress = $this->addressRepository->getById($defaultAddressId);
+                if ((int)$customerAddress->getCustomerId() !== $customerId) {
+                    $this->throwInvalidAddressException($defaultAddressType);
+                }
+            } catch (NoSuchEntityException $e) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    /**
+     * Throw invalid address exception
+     *
+     * @param string $fieldName
+     * @return void
+     * @throws InputException
+     */
+    private function throwInvalidAddressException(string $fieldName): void
+    {
+        throw new InputException(
+            __(
+                'The %fieldName value is invalid. Set the correct value and try again.',
+                ['fieldName' => $fieldName]
+            )
+        );
     }
 }

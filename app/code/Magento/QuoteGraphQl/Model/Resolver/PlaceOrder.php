@@ -82,7 +82,7 @@ class PlaceOrder implements ResolverInterface
 
         return $this->placeOrderMutex->execute(
             $args['input']['cart_id'],
-            \Closure::fromCallable([$this, 'run']),
+            $this->run(...),
             [$field, $context, $info, $args]
         );
     }

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All rights reserved.
  */
 declare(strict_types=1);
 
@@ -16,7 +16,7 @@ use Magento\TestFramework\SkippableTrait;
  */
 class WrapperGenerator
 {
-    const SKIPPABLE_SUFFIX = 'Skippable';
+    public const SKIPPABLE_SUFFIX = 'Skippable';
 
     /**
      * @var ClassGenerator
@@ -39,15 +39,21 @@ class WrapperGenerator
      */
     public function generateTestWrapper(\ReflectionClass $class): string
     {
+        $docComment = $class->getDocComment();
+        $longDescription = (is_array($docComment) || is_string($docComment))
+            ? str_replace(['/**', '*/', '*'], '', $docComment)
+            : '';
+
         $wrapperCode = $this->classGenerator->setNamespaceName($class->getName())
-            ->setClassDocBlock(['longDescription' => str_replace(['/**', '*/', '*'], '', $class->getDocComment())])
+            ->setClassDocBlock(['longDescription' => $longDescription])
             ->setExtendedClass($class->getName())
             ->setName(self::SKIPPABLE_SUFFIX)
             ->setImplementedInterfaces([SkippableInterface::class])
             ->addTrait('\\' . SkippableTrait::class)
             ->generate();
-        // phpcs:ignore Squiz.PHP.Eval
+        // phpcs:disable
         eval($wrapperCode);
+        // phpcs:enable
 
         return $class->getName() . '\\' . self::SKIPPABLE_SUFFIX;
     }
