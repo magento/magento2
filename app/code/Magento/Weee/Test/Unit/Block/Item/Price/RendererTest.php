@@ -61,7 +61,14 @@ class RendererTest extends TestCase
             ]
         );
 
-        $this->priceCurrency = $this->createPartialMock(PriceCurrency::class, ['format']);
+        $this->priceCurrency = $this->createPartialMock(
+            PriceCurrency::class,
+            [
+                'format',
+                'getStore',
+                'convertAndRound',
+            ]
+        );
 
         $this->item = $this->createPartialMockWithReflection(
             Item::class,
@@ -80,7 +87,8 @@ class RendererTest extends TestCase
                 'getBaseWeeeTaxInclTax',
                 'getBasePriceInclTax',
                 'getQtyOrdered',
-                'getPrice'
+                'getCalculationPrice',
+                'getPrice',
             ]
         );
 
@@ -290,6 +298,10 @@ class RendererTest extends TestCase
         $this->item->expects($this->any())
             ->method('getWeeeTaxAppliedAmount')
             ->willReturn($weeeTax);
+
+        $this->priceCurrency->expects($this->once())
+            ->method('convertAndRound')
+            ->willReturn($price);
 
         $this->item->expects($this->once())
             ->method('getPrice')
@@ -600,6 +612,10 @@ class RendererTest extends TestCase
         $this->item->expects($this->any())
             ->method('getWeeeTaxAppliedAmount')
             ->willReturn($weeeTax);
+
+        $this->priceCurrency->expects($this->once())
+            ->method('convertAndRound')
+            ->willReturn($rowTotal);
 
         $this->item->expects($this->once())
             ->method('getPrice')

@@ -103,6 +103,14 @@ class TelephoneTest extends TestCase
             [
                 'telephone' => '(123) 456-7890',
                 'message' => 'spaces must be allowed in telephone'
+            ],
+            [
+                'telephone' => '06.76.40.32.22',
+                'message' => 'dots should be allowed in telephone (e.g. 06.76.40.32.22)'
+            ],
+            [
+                'telephone' => '+43680/2149568',
+                'message' => 'slash should be allowed in telephone (e.g. +43680/2149568)'
             ]
         ];
     }
@@ -138,10 +146,6 @@ class TelephoneTest extends TestCase
             [
                 'telephone' => '123$456',
                 'message' => 'Special character $ should not be allowed in telephone'
-            ],
-            [
-                'telephone' => '123.456.7890',
-                'message' => 'Dots should not be allowed in telephone'
             ],
             [
                 'telephone' => '123456789012345678901',
