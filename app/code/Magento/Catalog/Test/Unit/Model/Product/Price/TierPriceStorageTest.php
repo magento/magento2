@@ -17,6 +17,7 @@ use Magento\Catalog\Model\Product\Price\Validation\TierPriceValidator;
 use Magento\Catalog\Model\ProductIdLocatorInterface;
 use Magento\Customer\Model\ResourceModel\Group\GetCustomerGroupCodesByIds;
 use PHPUnit\Framework\MockObject\MockObject;
+use Magento\Framework\Exception\InputException;
 use PHPUnit\Framework\TestCase;
 
 class TierPriceStorageTest extends TestCase
@@ -340,5 +341,49 @@ class TierPriceStorageTest extends TestCase
             ->with([2]);
 
         $this->assertEmpty($this->tierPriceStorage->delete([$price]));
+    }
+
+    /**
+     * Test delete method with null input - should throw InputException
+     */
+    public function testDeleteWithNullInput(): void
+    {
+        $this->expectException(InputException::class);
+        $this->expectExceptionMessage('Invalid input data format. Expected an array of prices.');
+
+        $this->tierPriceStorage->delete(null);
+    }
+
+    /**
+     * Test delete method with non-array input - should throw InputException
+     */
+    public function testDeleteWithInvalidInput(): void
+    {
+        $this->expectException(InputException::class);
+        $this->expectExceptionMessage('Invalid input data format. Expected an array of prices.');
+
+        $this->tierPriceStorage->delete('invalid_string');
+    }
+
+    /**
+     * Test update method with null input - should throw InputException
+     */
+    public function testUpdateWithNullInput(): void
+    {
+        $this->expectException(InputException::class);
+        $this->expectExceptionMessage('Invalid input data format. Expected an array of prices.');
+
+        $this->tierPriceStorage->update(null);
+    }
+
+    /**
+     * Test update method with non-array input - should throw InputException
+     */
+    public function testUpdateWithInvalidInput(): void
+    {
+        $this->expectException(InputException::class);
+        $this->expectExceptionMessage('Invalid input data format. Expected an array of prices.');
+
+        $this->tierPriceStorage->update('invalid_string');
     }
 }

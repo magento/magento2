@@ -318,7 +318,7 @@ class Renderer implements RendererInterface
     {
         /** @var $group \Magento\Framework\View\Asset\PropertyGroup */
         foreach ($this->pageConfig->getAssetCollection()->getGroups() as $group) {
-            $type = $group->getProperty(GroupedCollection::PROPERTY_CONTENT_TYPE);
+            $type = $group->getProperty(GroupedCollection::PROPERTY_CONTENT_TYPE) ?? '';
             if (!isset($resultGroups[$type])) {
                 $resultGroups[$type] = '';
             }

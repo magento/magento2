@@ -51,7 +51,6 @@ class CalculationTest extends TestCase
             Calculation::class,
             '_createSearchPostCodeTemplates'
         );
-        $method->setAccessible(true);
 
         // test & verify
         $resultsArr = $method->invokeArgs($calcMock, [$postalCode, $exactPostalcode]);

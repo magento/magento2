@@ -88,13 +88,11 @@ class CliProxy implements \Magento\Framework\ObjectManager\NoninterceptableInter
             $object = new \ReflectionObject($cli);
 
             $attribute = $object->getProperty('objectManager');
-            $attribute->setAccessible(true);
 
             /** @var ObjectManagerInterface $objectManager */
             $objectManager = $attribute->getValue($cli);
             $objectManager->configure($diPreferences);
 
-            $attribute->setAccessible(false);
         }
 
         return true;

@@ -11,6 +11,7 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\App\State;
 use Magento\Framework\Shell\ComplexParameter;
 use Magento\TestFramework\Helper\Bootstrap as TestBootstrap;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -61,8 +62,8 @@ class CliStateTest extends TestCase
      *
      * @param string $mode
      * @return void
-     * @dataProvider modeDataProvider
      */
+    #[DataProvider('modeDataProvider')]
     public function testStateGetModeWithMagentoInitParams(string $mode)
     {
         // Set up test argv with --magento-init-params

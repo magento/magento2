@@ -47,14 +47,8 @@ class FormTest extends \PHPUnit\Framework\TestCase
 
         $this->session = $this->getMockBuilder(QuoteSession::class)
             ->disableOriginalConstructor()
-            ->addMethods(['getCustomerId', 'getStoreId', 'getQuoteId'])
-            ->onlyMethods(['getQuote', 'getStore'])
+            ->onlyMethods(['getQuote', 'getStore', '__call'])
             ->getMock();
-        $this->session->method('getCustomerId')
-            ->willReturn(1);
-
-        $this->session->method('getStoreId')
-            ->willReturn(1);
 
         $store = $this->getMockBuilder(Store::class)
             ->disableOriginalConstructor()
@@ -84,11 +78,20 @@ class FormTest extends \PHPUnit\Framework\TestCase
     public function testOrderDataJson()
     {
         $customerId = 1;
+        $storeId = 1;
         $quote = $this->getQuote('test01');
+        $quoteId = $quote->getId();
         $this->session->method('getQuote')
             ->willReturn($quote);
-        $this->session->method('getQuoteId')
-            ->willReturn($quote->getId());
+        $this->session->method('__call')
+            ->willReturnCallback(function ($method) use ($customerId, $storeId, $quoteId) {
+                return match ($method) {
+                    'getCustomerId' => $customerId,
+                    'getStoreId' => $storeId,
+                    'getQuoteId' => $quoteId,
+                    default => null,
+                };
+            });
         $addressData = $this->getAddressData();
         $addressIds = $this->setUpMockAddress($customerId, $addressData);
         $expected = [

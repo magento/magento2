@@ -292,8 +292,9 @@ class CreditmemoFactory
     {
         $qty = 0;
         if ($orderItem->isDummy()) {
-            if (isset($qtyList[$orderItem->getParentItemId()])) {
-                $parentQty = $qtyList[$orderItem->getParentItemId()];
+            $parentItemId = $orderItem->getParentItemId();
+            if ($parentItemId !== null && isset($qtyList[$parentItemId])) {
+                $parentQty = $qtyList[$parentItemId];
             } elseif ($orderItem->getProductType() === BundlePrice::PRODUCT_TYPE) {
                 $parentQty = $orderItem->getQtyInvoiced();
             } else {

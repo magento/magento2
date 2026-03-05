@@ -105,8 +105,9 @@ class Grouped extends \Magento\GroupedProduct\Block\Product\View\Type\Grouped
         if (is_array($configValues)) {
             $associatedProducts = $this->getAssociatedProducts();
             foreach ($associatedProducts as $item) {
-                if (isset($configValues[$item->getId()])) {
-                    $item->setQty($configValues[$item->getId()]);
+                $itemId = $item->getId() ?? '';
+                if (isset($configValues[$itemId])) {
+                    $item->setQty($configValues[$itemId]);
                 }
             }
         }

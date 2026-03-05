@@ -34,6 +34,7 @@ class ScopeFallbackResolver implements ScopeFallbackResolverInterface
      */
     public function getFallbackScope($scope, $scopeId, $forConfig = true)
     {
+        $scopeId = $scopeId ?? '';
         if (!isset($this->fallback[$scope][$scopeId][$forConfig])) {
             $fallback = [null, null];
             switch ($scope) {

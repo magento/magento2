@@ -22,7 +22,7 @@ class ReaderTest extends \PHPUnit\Framework\TestCase
 
     protected function setUp(): void
     {
-        $this->fileResolver = $this->getMockForAbstractClass(\Magento\Framework\Config\FileResolverInterface::class);
+        $this->fileResolver = $this->createMock(\Magento\Framework\Config\FileResolverInterface::class);
         $objectManager = Bootstrap::getObjectManager();
         $this->model = $objectManager->create(
             \Magento\Widget\Model\Config\Reader::class,

@@ -19,8 +19,10 @@ use Magento\Framework\Json\Helper\Data as JsonHelper;
 use Magento\Framework\Locale\CurrencyInterface;
 use Magento\Framework\Module\Manager as ModuleManager;
 use Magento\Framework\Registry;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\View\LayoutInterface;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -32,6 +34,7 @@ use PHPUnit\Framework\TestCase;
  */
 class TierTest extends TestCase
 {
+    use MockCreationTrait;
     /**
      * @var Tier
      */
@@ -101,15 +104,15 @@ class TierTest extends TestCase
         $this->objectManager->prepareObjectManager();
 
         $this->contextMock = $this->createMock(Context::class);
-        $this->groupRepositoryMock = $this->getMockForAbstractClass(GroupRepositoryInterface::class);
+        $this->groupRepositoryMock = $this->createMock(GroupRepositoryInterface::class);
         $this->directoryHelperMock = $this->createMock(DirectoryHelper::class);
         $this->moduleManagerMock = $this->createMock(ModuleManager::class);
         $this->registryMock = $this->createMock(Registry::class);
-        $this->groupManagementMock = $this->getMockForAbstractClass(GroupManagementInterface::class);
+        $this->groupManagementMock = $this->createMock(GroupManagementInterface::class);
         $this->searchCriteriaBuilderMock = $this->createMock(SearchCriteriaBuilder::class);
-        $this->localeCurrencyMock = $this->getMockForAbstractClass(CurrencyInterface::class);
+        $this->localeCurrencyMock = $this->createMock(CurrencyInterface::class);
         $this->jsonHelperMock = $this->createMock(JsonHelper::class);
-        $this->layoutMock = $this->getMockForAbstractClass(LayoutInterface::class);
+        $this->layoutMock = $this->createMock(LayoutInterface::class);
 
         $this->contextMock->expects($this->any())
             ->method('getLayout')
@@ -170,7 +173,7 @@ class TierTest extends TestCase
         $allCustomersGroupId = 0;
         $expectedLabel = 'ALL GROUPS';
 
-        $groupMock = $this->getMockForAbstractClass(GroupInterface::class);
+        $groupMock = $this->createMock(GroupInterface::class);
         $groupMock->expects($this->once())
             ->method('getId')
             ->willReturn($allCustomersGroupId);
@@ -182,7 +185,6 @@ class TierTest extends TestCase
         // Use reflection to call protected method
         $reflection = new \ReflectionClass($this->block);
         $method = $reflection->getMethod('_getInitialCustomerGroups');
-        $method->setAccessible(true);
         $result = $method->invoke($this->block);
 
         $this->assertIsArray($result);
@@ -206,7 +208,6 @@ class TierTest extends TestCase
         // Use reflection to call protected method
         $reflection = new \ReflectionClass($this->block);
         $method = $reflection->getMethod('_sortValues');
-        $method->setAccessible(true);
         $result = $method->invoke($this->block, $data);
 
         $this->assertIsArray($result);
@@ -264,13 +265,13 @@ class TierTest extends TestCase
      * Test sortTierPrices method returns expected comparison result
      *
      * @covers \Magento\Catalog\Block\Adminhtml\Product\Edit\Tab\Price\Tier::_sortTierPrices
-     * @dataProvider sortTierPricesDataProvider
      * @param array $item1
      * @param array $item2
      * @param bool $needsGroupMock
      * @param int $expectedResult
      * @return void
      */
+    #[DataProvider('sortTierPricesDataProvider')]
     public function testSortTierPricesReturnsExpectedResult(
         array $item1,
         array $item2,
@@ -278,7 +279,7 @@ class TierTest extends TestCase
         int $expectedResult
     ): void {
         if ($needsGroupMock) {
-            $groupMock = $this->getMockForAbstractClass(GroupInterface::class);
+            $groupMock = $this->createMock(GroupInterface::class);
             $groupMock->method('getId')->willReturn(0);
             $groupMock->method('getCode')->willReturn('General');
             $this->groupManagementMock->method('getAllCustomersGroup')->willReturn($groupMock);
@@ -288,7 +289,6 @@ class TierTest extends TestCase
         // Use reflection to call protected method
         $reflection = new \ReflectionClass($this->block);
         $method = $reflection->getMethod('_sortTierPrices');
-        $method->setAccessible(true);
         $result = $method->invoke($this->block, $item1, $item2);
 
         $this->assertSame($expectedResult, $result);
@@ -302,11 +302,10 @@ class TierTest extends TestCase
      */
     public function testPrepareLayoutCreatesAndConfiguresAddButton(): void
     {
-        $buttonMock = $this->getMockBuilder(Button::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['setName'])
-            ->onlyMethods(['setData'])
-            ->getMock();
+        $buttonMock = $this->createPartialMockWithReflection(
+            Button::class,
+            ['setName', 'setData']
+        );
 
         $this->layoutMock->expects($this->once())
             ->method('createBlock')
@@ -330,7 +329,6 @@ class TierTest extends TestCase
         // Use reflection to call protected method
         $reflection = new \ReflectionClass($this->block);
         $method = $reflection->getMethod('_prepareLayout');
-        $method->setAccessible(true);
         $result = $method->invoke($this->block);
 
         $this->assertSame($this->block, $result);
@@ -344,7 +342,7 @@ class TierTest extends TestCase
      */
     public function testSortValuesMaintainsDataIntegrityAfterSorting(): void
     {
-        $groupMock = $this->getMockForAbstractClass(GroupInterface::class);
+        $groupMock = $this->createMock(GroupInterface::class);
         $groupMock->method('getId')->willReturn(0);
         $groupMock->method('getCode')->willReturn('General');
 
@@ -360,7 +358,6 @@ class TierTest extends TestCase
         // Use reflection to call protected method
         $reflection = new \ReflectionClass($this->block);
         $method = $reflection->getMethod('_sortValues');
-        $method->setAccessible(true);
         $result = $method->invoke($this->block, $data);
 
         $this->assertCount(3, $result);

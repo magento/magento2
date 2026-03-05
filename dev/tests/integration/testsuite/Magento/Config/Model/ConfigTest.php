@@ -11,6 +11,7 @@ use Magento\Config\Model\ResourceModel\Config\Data\CollectionFactory;
 use Magento\Framework\Config\ScopeInterface;
 use Magento\Framework\Encryption\EncryptorInterface;
 use Magento\TestFramework\Helper\Bootstrap;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -22,9 +23,9 @@ class ConfigTest extends TestCase
      * @covers \Magento\Config\Model\Config::save
      * @param array $groups
      * @magentoDbIsolation enabled
-     * @dataProvider saveWithSingleStoreModeEnabledDataProvider
      * @magentoConfigFixture current_store general/single_store_mode/enabled 1
      */
+    #[DataProvider('saveWithSingleStoreModeEnabledDataProvider')]
     public function testSaveWithSingleStoreModeEnabled($groups)
     {
         Bootstrap::getObjectManager()->get(
@@ -63,8 +64,8 @@ class ConfigTest extends TestCase
      * @param array $groups
      * @param array $expected
      * @magentoDbIsolation enabled
-     * @dataProvider saveDataProvider
      */
+    #[DataProvider('saveDataProvider')]
     public function testSave($section, $groups, $expected)
     {
         $objectManager = Bootstrap::getObjectManager();
@@ -98,8 +99,8 @@ class ConfigTest extends TestCase
      * @param array $override
      * @param array $inherit
      * @param array $expected
-     * @dataProvider saveWebsiteScopeDataProvider
      */
+    #[DataProvider('saveWebsiteScopeDataProvider')]
     public function testSaveUseDefault(
         string $website,
         string $section,
@@ -141,8 +142,8 @@ class ConfigTest extends TestCase
     {
         return [
             [
-                'website' => 'base',
-                'section' => 'payment',
+                'base',
+                'payment',
                 [
                     'groups' => [
                         'account' => [
@@ -161,7 +162,7 @@ class ConfigTest extends TestCase
                         ],
                     ],
                 ],
-                'expected' => [
+                [
                     'paypal/general/merchant_country' => 'GB',
                 ],
             ]

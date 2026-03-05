@@ -63,20 +63,12 @@ class MergedMessageProcessorTest extends TestCase
         $topicName = 'topic';
         $messageId = 1;
         $messagesToAcknowledge = [];
-        $queue = $this->getMockBuilder(QueueInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-        $configuration = $this->getMockBuilder(ConsumerConfigurationInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $queue = $this->createMock(QueueInterface::class);
+        $configuration = $this->createMock(ConsumerConfigurationInterface::class);
         $configuration->expects($this->atLeastOnce())->method('getHandlers')->willReturn([]);
         $this->messageStatusProcessor->expects($this->exactly(2))->method('acknowledgeMessages');
-        $originalMessage = $this->getMockBuilder(EnvelopeInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-        $mergedMessage = $this->getMockBuilder(MergedMessageInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $originalMessage = $this->createMock(EnvelopeInterface::class);
+        $mergedMessage = $this->createMock(MergedMessageInterface::class);
         $mergedMessage->expects($this->atLeastOnce())->method('getOriginalMessagesIds')->willReturn([$messageId]);
         $mergedMessages = [
             $topicName => [$mergedMessage]
@@ -102,22 +94,14 @@ class MergedMessageProcessorTest extends TestCase
         $topicName = 'topic';
         $messageId = 1;
         $messagesToAcknowledge = [];
-        $queue = $this->getMockBuilder(QueueInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-        $configuration = $this->getMockBuilder(ConsumerConfigurationInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $queue = $this->createMock(QueueInterface::class);
+        $configuration = $this->createMock(ConsumerConfigurationInterface::class);
         $this->messageStatusProcessor->expects($this->once())->method('acknowledgeMessages');
         $exception = new \Exception();
         $configuration->expects($this->atLeastOnce())->method('getHandlers')->willThrowException($exception);
         $this->messageStatusProcessor->expects($this->atLeastOnce())->method('rejectMessages');
-        $originalMessage = $this->getMockBuilder(EnvelopeInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-        $mergedMessage = $this->getMockBuilder(MergedMessageInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $originalMessage = $this->createMock(EnvelopeInterface::class);
+        $mergedMessage = $this->createMock(MergedMessageInterface::class);
         $mergedMessages = [
             $topicName => [$mergedMessage]
         ];
