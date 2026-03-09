@@ -1,20 +1,16 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Sales\Model\ResourceModel\Report\Order;
 
 /**
  * Report order collection
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Collection extends \Magento\Sales\Model\ResourceModel\Report\Collection\AbstractCollection
 {
     /**
-     * Period format
-     *
      * @var string
      */
     protected $_periodFormat;
@@ -27,8 +23,6 @@ class Collection extends \Magento\Sales\Model\ResourceModel\Report\Collection\Ab
     protected $_aggregationTable = 'sales_order_aggregated_created';
 
     /**
-     * Selected columns
-     *
      * @var array
      */
     protected $_selectedColumns = [];

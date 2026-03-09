@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Sales\Model\Order;
@@ -393,7 +393,7 @@ class Payment extends Info implements OrderPaymentInterface
 
         $isCustomerNotified = $isCustomerNotified ?: $order->getCustomerNoteNotify();
 
-        if (!array_key_exists($orderStatus, $order->getConfig()->getStateStatuses($orderState))) {
+        if ($orderStatus === null || !array_key_exists($orderStatus, $order->getConfig()->getStateStatuses($orderState))) {
             $orderStatus = $order->getConfig()->getStateDefaultStatus($orderState);
         }
 
@@ -1175,7 +1175,7 @@ class Payment extends Info implements OrderPaymentInterface
             0 == $this->getBaseAmountCanceled()
         ) {
             if ($authTransaction->canVoidAuthorizationCompletely()) {
-                $amount = (double)$order->getBaseGrandTotal();
+                $amount = (float)$order->getBaseGrandTotal();
             }
         }
 

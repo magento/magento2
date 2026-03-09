@@ -1,0 +1,37 @@
+<!--
+/**
+ * Copyright 2025 Adobe
+ * All Rights Reserved.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework-message-queue:etc/publisher.xsd">
+    <publisher topic="stomp.multi.topic.queue.topic.c" queue="stomp.mixed.sync.and.async.queue">
+        <connection name="stomp" exchange="magento" />
+    </publisher>
+
+    <publisher topic="stomp.segment1.segment2.segment3.wildcard" queue="stomp.wildcard.queue.one">
+        <connection name="stomp" exchange="magento" />
+    </publisher>
+    <publisher topic="stomp.segment2.segment3.wildcard" queue="stomp.wildcard.queue.one">
+        <connection name="stomp" exchange="magento" />
+    </publisher>
+    <publisher topic="no.match.at.all" queue="unused.queue">
+        <connection name="stomp" exchange="magento" />
+    </publisher>
+
+    <!-- Publishers for AsyncMultipleTopicsWithEachQueueTest -->
+    <publisher topic="stomp.multi.topic.queue.topic.y" queue="stomp.queue.for.multiple.topics.test.y">
+        <connection name="stomp" exchange="magento" />
+    </publisher>
+    <publisher topic="stomp.multi.topic.queue.topic.z" queue="stomp.queue.for.multiple.topics.test.z">
+        <connection name="stomp" exchange="magento" />
+    </publisher>
+
+    <!-- Publishers for AsyncMultipleHandlersTest -->
+    <publisher topic="stomp.mtmh.topic.1" queue="stomp.mtmh.queue.1">
+        <connection name="stomp" exchange="magento" />
+    </publisher>
+    <publisher topic="stomp.mtmh.topic.2" queue="stomp.mtmh.queue.2">
+        <connection name="stomp" exchange="magento" />
+    </publisher>
+</config>

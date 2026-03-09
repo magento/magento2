@@ -38,7 +38,6 @@
                 <item name="minimum_password_length" xsi:type="string">customer/password/minimum_password_length</item>
                 <item name="autocomplete_on_storefront" xsi:type="string">customer/password/autocomplete_on_storefront</item>
                 <item name="create_account_confirmation" xsi:type="string">customer/create_account/confirm</item>
-                <item name="graphql_share_all_customer_groups" xsi:type="string">customer/account_information/graphql_share_all_customer_groups</item>
                 <item name="graphql_share_customer_group" xsi:type="string">customer/account_information/graphql_share_customer_group</item>
             </argument>
         </arguments>

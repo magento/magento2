@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -30,7 +30,7 @@ class NoRouteHandlerListTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->_objectManagerMock = $this->getMockForAbstractClass(ObjectManagerInterface::class);
+        $this->_objectManagerMock = $this->createStub(ObjectManagerInterface::class);
         $handlersList = [
             'default_handler' => ['class' => NoRouteHandler::class, 'sortOrder' => 100],
             'backend_handler' => ['class' => BackendNoRouteHandler::class, 'sortOrder' => 10],

@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\Bundle\Test\Unit\Pricing\Render;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\Bundle\Pricing\Price\FinalPrice;
 use Magento\Bundle\Pricing\Render\FinalPriceBox;
 use Magento\Catalog\Pricing\Price\CustomOptionPrice;
@@ -33,7 +34,7 @@ class FinalPriceBoxTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->saleableItem = $this->getMockForAbstractClass(SaleableInterface::class);
+        $this->saleableItem = $this->createMock(SaleableInterface::class);
 
         $objectHelper = new ObjectManager($this);
         $this->model = $objectHelper->getObject(
@@ -44,8 +45,8 @@ class FinalPriceBoxTest extends TestCase
 
     /**
      * @return void
-     * @dataProvider showRangePriceDataProvider
      */
+    #[DataProvider('showRangePriceDataProvider')]
     public function testShowRangePrice(
         $optMinValue,
         $optMaxValue,
@@ -56,12 +57,8 @@ class FinalPriceBoxTest extends TestCase
         $enableCustomOptionMocks = ($optMinValue == $optMaxValue);
 
         $priceInfo = $this->createMock(Base::class);
-        $bundlePrice = $this->getMockBuilder(FinalPrice::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $customOptionPrice = $this->getMockBuilder(CustomOptionPrice::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $bundlePrice = $this->createMock(FinalPrice::class);
+        $customOptionPrice = $this->createMock(CustomOptionPrice::class);
 
         $this->saleableItem->expects($this->atLeastOnce())
             ->method('getPriceInfo')

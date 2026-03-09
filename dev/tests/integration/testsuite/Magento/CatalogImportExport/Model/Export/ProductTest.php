@@ -21,6 +21,7 @@ use Magento\CatalogInventory\Api\StockConfigurationInterface;
 use Magento\CatalogInventory\Api\StockItemRepositoryInterface;
 use Magento\CatalogInventory\Model\Stock\Item;
 use Magento\Directory\Helper\Data as DirectoryData;
+use Magento\Framework\App\Area;
 use Magento\Framework\App\Config\ReinitableConfigInterface;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
@@ -37,6 +38,7 @@ use Magento\TestFramework\Fixture\DataFixtureStorage;
 use Magento\TestFramework\Fixture\DataFixtureStorageManager;
 use Magento\TestFramework\Fixture\DbIsolation;
 use Magento\Translation\Test\Fixture\Translation;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * @magentoDataFixtureBeforeTransaction Magento/Catalog/_files/enable_reindex_schedule.php
@@ -198,11 +200,11 @@ class ProductTest extends \PHPUnit\Framework\TestCase
      * @magentoDataFixture Magento/Catalog/_files/product_text_attribute.php
      * @magentoDataFixture Magento/Catalog/_files/second_product_simple.php
      * @magentoDbIsolation enabled
-     * @dataProvider exportWithJsonAndMarkupTextAttributeDataProvider
      * @param string $attributeData
      * @param string $expectedResult
      * @return void
      */
+    #[DataProvider('exportWithJsonAndMarkupTextAttributeDataProvider')]
     public function testExportWithJsonAndMarkupTextAttribute(string $attributeData, string $expectedResult): void
     {
         /** @var \Magento\Catalog\Api\ProductRepositoryInterface $productRepository */
@@ -789,13 +791,13 @@ class ProductTest extends \PHPUnit\Framework\TestCase
      * Verify that "stock status" filter correctly applies to export result
      *
      * @magentoDataFixture Magento/Catalog/_files/multiple_products_with_few_out_of_stock.php
-     * @dataProvider filterByQuantityAndStockStatusDataProvider
      *
      * @param string $value
      * @param array $productsIncluded
      * @param array $productsNotIncluded
      * @return void
      */
+    #[DataProvider('filterByQuantityAndStockStatusDataProvider')]
     public function testFilterByQuantityAndStockStatus(
         string $value,
         array $productsIncluded,
@@ -856,8 +858,8 @@ class ProductTest extends \PHPUnit\Framework\TestCase
      *
      * @magentoDataFixture Magento/Catalog/_files/product_simple_with_options.php
      * @magentoDataFixture Magento/Catalog/_files/product_with_two_websites.php
-     * @dataProvider websiteIdFilterDataProvider
      */
+    #[DataProvider('websiteIdFilterDataProvider')]
     public function testFilterByWebsiteId(string $websiteIdFilter): void
     {
         $websiteRepository = $this->objectManager->get(\Magento\Store\Api\WebsiteRepositoryInterface::class);
@@ -997,5 +999,23 @@ class ProductTest extends \PHPUnit\Framework\TestCase
         $csv = $this->doExport(['sku' => $sku]);
         $this->assertMatchesRegularExpression('#datetime_attr=7/19/15,\p{Zs}3:30\p{Zs}AM#u', $csv);
         $this->assertMatchesRegularExpression('#date_attr=2/7/17("|(,\w+=))#', $csv);
+    }
+
+    #[
+        AppArea(Area::AREA_ADMINHTML),
+        DataFixture(
+            AttributeFixture::class,
+            ['frontend_input' => 'boolean', 'backend_type' => 'int', 'attribute_code' => 'yesno_attr']
+        ),
+        DataFixture(ProductFixture::class, ['sku' => 'prod1']),
+        DataFixture(ProductFixture::class, ['sku' => 'prod2', 'yesno_attr' => '0']),
+        DataFixture(ProductFixture::class, ['sku' => 'prod3', 'yesno_attr' => '1']),
+    ]
+    public function testExportProductWithYesNoAttribute(): void
+    {
+        $csv = $this->doExport(['yesno_attr' => '0']);
+        self::assertStringContainsString('prod2', $csv);
+        self::assertStringNotContainsString('prod1', $csv);
+        self::assertStringNotContainsString('prod3', $csv);
     }
 }

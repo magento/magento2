@@ -19,6 +19,11 @@
             <useCaseId value="MC-40715"/>
             <group value="SearchEngine"/>
             <group value="pr_exclude"/>
+            <skip>
+                <issueId value="AC-13691">
+                    Skip due to application bug causing performance degradation; not planned to fix. Refer to Jira ticket comments.
+                </issueId>
+            </skip>
         </annotations>
         <before>
             <!--Create category-->

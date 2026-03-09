@@ -26,15 +26,17 @@
         <element name="paypalCart" type="text" selector="#transactionCart"/>
         <element name="productNamePosition" type="text" selector=".itemName"/>
         <element name="orderTotalOnPaypalCheckout" type="text" selector="//button[(@id='one-time-cta' and @data-atomic-wait-domain='xo') or @data-testid='submit-button-initial' or @data-id='payment-submit-btn']//div[starts-with(normalize-space(text()), '$')]"/>
-        <element name="subtotal" type="text" selector="//div[@data-testid='line-item-subtotal']//span[contains(text(),'{{subtotal}}')]" parameterized="true"/>
-        <element name="shipping" type="text" selector="//div[@data-testid='line-item-shipping']//span[contains(text(),'{{shippingAmount}}')]" parameterized="true"/>
-        <element name="total" type="text" selector="//span[@data-testid='cart-sheet-total']"/>
-        <element name="shippingAddress" type="text" selector="//div[@data-testid='shipping-address']/p[@data-testid='ship-to-address']"/>
+        <element name="orderTotalTabOnPaypalCheckout" type="text" selector="//div[contains(@class, 'group/accordion-item')]//button[contains(@data-dd-action-name, 'Order Tab')]"/>
+        <element name="subtotal" type="text" selector="//span[text()='Subtotal']/following-sibling::span[contains(text(),'{{subtotal}}')]" parameterized="true"/>
+        <element name="shipping" type="text" selector="//span[text()='Shipping']/following-sibling::span[contains(text(),'{{shippingAmount}}')]" parameterized="true"/>
+        <element name="total" type="text" selector="//span[text()='Total']/following-sibling::span[contains(text(),'{{total}}')]" parameterized="true"/>
+        <element name="shippingAddress" type="text" selector="//button[@data-dd-action-name='Ship to Tab']//div[contains(@class, 'items-end')]//span[contains(@class, 'text-caption')]"/>
         <element name="close" type="button" selector="//button[@aria-label='Close']"/>
         <element name="paypalPopupButton1" type="button" selector="//button[span[text()='Pay with Debit or Credit Card']]"/>
         <element name="paypalPopupButton2" type="button" selector="//button[span[text()='Create an Account']]"/>
-        <element name="changeShippingAddressButton" type="button" selector="#change-shipping"/>
-        <element name="shippingAddressDropdown" type="select" selector="#shippingDropdown"/>
+        <element name="changeShippingAddressButton" type="button" selector="//button[@data-dd-action-name='Ship to Tab']"/>
+        <element name="shippingAddressDropdown" type="select" selector="(//div[@data-dd-action-name='Shipping Address'][.//span[contains(normalize-space(.), '{{ShippingAddress}}')]])[1]" parameterized="true"/>
         <element name="selectedShippingAddress" type="text" selector="//div/p[contains(text(), '{{selectedAddress}}')]" parameterized="true"/>
+        <element name="usePasswordInsteadButton" type="button" selector="(//button[text()='Use Password Instead'] | //*[normalize-space(text())='Try another way'])[1]"/>
     </section>
 </sections>

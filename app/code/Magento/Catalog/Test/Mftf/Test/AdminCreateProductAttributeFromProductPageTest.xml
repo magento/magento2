@@ -34,8 +34,7 @@
         <after>
             <!--Delete created entity -->
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
-
-            <!--<deleteData createDataKey="createSimpleProduct" stepKey="deleteSimpleProduct"/>-->
+            <deleteData createDataKey="createSimpleProduct" stepKey="deleteSimpleProduct"/>
             <actionGroup ref="DeleteProductAttributeActionGroup" stepKey="deleteCreatedAttribute">
                 <argument name="ProductAttribute" value="newProductAttribute"/>
             </actionGroup>

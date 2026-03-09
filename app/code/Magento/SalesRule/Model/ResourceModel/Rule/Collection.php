@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\SalesRule\Model\ResourceModel\Rule;
@@ -116,7 +116,10 @@ class Collection extends \Magento\Rule\Model\ResourceModel\Rule\Collection\Abstr
 
         $items = [];
         foreach ($this->getItems() as $item) {
-            $items[$item->getData($ruleIdField)] = $item;
+            $itemRuleId = $item->getData($ruleIdField);
+            if ($itemRuleId !== null) {
+                $items[$itemRuleId] = $item;
+            }
         }
 
         $select = $this->getConnection()->select()->from(

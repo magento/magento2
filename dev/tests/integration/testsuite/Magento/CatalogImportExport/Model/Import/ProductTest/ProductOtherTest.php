@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2021 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -31,6 +31,7 @@ use Magento\TestFramework\Fixture\DataFixture;
 use Magento\TestFramework\Fixture\DataFixtureStorageManager;
 use Magento\Translation\Test\Fixture\Translation;
 use Magento\UrlRewrite\Model\ResourceModel\UrlRewriteCollection;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Integration test for \Magento\CatalogImportExport\Model\Import\Product class.
@@ -422,11 +423,11 @@ class ProductOtherTest extends ProductTestBase
      * @magentoDataFixture Magento/Catalog/_files/product_text_attribute.php
      * @magentoAppIsolation enabled
      * @magentoDbIsolation enabled
-     * @dataProvider importWithJsonAndMarkupTextAttributeDataProvider
      * @param string $productSku
      * @param string $expectedResult
      * @return void
      */
+    #[DataProvider('importWithJsonAndMarkupTextAttributeDataProvider')]
     public function testImportWithJsonAndMarkupTextAttribute(string $productSku, string $expectedResult): void
     {
         // added by _files/product_import_with_json_and_markup_attributes.csv

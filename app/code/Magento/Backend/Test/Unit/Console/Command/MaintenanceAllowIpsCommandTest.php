@@ -11,6 +11,7 @@ use Magento\Backend\Console\Command\MaintenanceAllowIpsCommand;
 use Magento\Framework\App\MaintenanceMode;
 use Magento\Backend\Model\Validator\IpValidator;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Tester\CommandTester;
 
@@ -42,8 +43,8 @@ class MaintenanceAllowIpsCommandTest extends TestCase
      * @param array $input
      * @param array $validatorMessages
      * @param string $expectedMessage
-     * @dataProvider executeDataProvider
      */
+    #[DataProvider('executeDataProvider')]
     public function testExecute(array $input, array $validatorMessages, $expectedMessage)
     {
         if (isset($input['--none']) && !$input['--none'] && isset($input['ip'])) {
@@ -75,8 +76,8 @@ class MaintenanceAllowIpsCommandTest extends TestCase
      * @param array $input
      * @param array $validatorMessages
      * @param string $expectedMessage
-     * @dataProvider executeWithAddDataProvider
      */
+    #[DataProvider('executeWithAddDataProvider')]
     public function testExecuteWithAdd(array $addressInfo, array $input, array $validatorMessages, $expectedMessage)
     {
         $newAddressInfo = array_unique(array_merge($addressInfo, $input['ip']));

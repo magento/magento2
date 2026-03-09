@@ -1,6 +1,6 @@
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2021 Adobe
+ * All Rights Reserved.
  */
 
 define([
@@ -47,18 +47,31 @@ define([
          * @returns {*}
          */
         initialize: function () {
-            let customer = customerData.get('customer'),
-                buyerCountry = customerData.get('paypal-buyer-country');
-
-            this.buyerCountry = buyerCountry().code;
-
-            if (customer().firstname && !this.buyerCountry) {
-                customerData.reload(['paypal-buyer-country'], false);
-                this.buyerCountry = customerData.get('paypal-buyer-country')().code;
-            }
+            let self = this,
+                buyerCountrySection = customerData.get('paypal-buyer-country'),
+                initialBuyerCountry = buyerCountrySection() && buyerCountrySection().code
+                    ? buyerCountrySection().code
+                    : null;
 
             this._super()
-                .observe(['amount']);
+                .observe(['amount', 'buyerCountry']);
+
+            // Set initial value (may be null for guests until section is loaded)
+            this.buyerCountry(initialBuyerCountry);
+
+            // Ensure buyer country is available for both guests and customers
+            if (!this.buyerCountry()) {
+                customerData.reload(['paypal-buyer-country'], false)
+                    .done(function () {
+                        let updated = customerData.get('paypal-buyer-country')(),
+                            code = updated && updated.code ? updated.code : null;
+
+                        self.buyerCountry(code);
+                        if (code) {
+                            self._refreshMessages();
+                        }
+                    });
+            }
 
             if (this.displayAmount) {
                 layout([this.amountComponentConfig]);

@@ -1,23 +1,27 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Weee\Test\Unit\Block\Item\Price;
 
 use Magento\Directory\Model\PriceCurrency;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Quote\Model\Quote\Item;
+use Magento\Sales\Model\Order\Item as OrderItem;
 use Magento\Weee\Block\Item\Price\Renderer;
 use Magento\Weee\Helper\Data;
 use Magento\Weee\Model\Tax as WeeeDisplayConfig;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 class RendererTest extends TestCase
 {
+    use MockCreationTrait;
     /**
      * @var Renderer
      */
@@ -45,26 +49,30 @@ class RendererTest extends TestCase
     {
         $objectManager = new ObjectManager($this);
 
-        $this->weeeHelper = $this->getMockBuilder(Data::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods([
+        $this->weeeHelper = $this->createPartialMock(
+            Data::class,
+            [
                 'isEnabled',
                 'typeOfDisplay',
                 'getWeeeTaxInclTax',
                 'getRowWeeeTaxInclTax',
                 'getBaseRowWeeeTaxInclTax',
                 'getBaseWeeeTaxInclTax',
-            ])
-            ->getMock();
+            ]
+        );
 
-        $this->priceCurrency = $this->getMockBuilder(PriceCurrency::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['format'])
-            ->getMock();
+        $this->priceCurrency = $this->createPartialMock(
+            PriceCurrency::class,
+            [
+                'format',
+                'getStore',
+                'convertAndRound',
+            ]
+        );
 
-        $this->item = $this->getMockBuilder(Item::class)
-            ->disableOriginalConstructor()
-            ->addMethods([
+        $this->item = $this->createPartialMockWithReflection(
+            Item::class,
+            [
                 'getWeeeTaxAppliedAmount',
                 'getPriceInclTax',
                 'getRowTotal',
@@ -78,10 +86,11 @@ class RendererTest extends TestCase
                 'getBaseWeeeTaxAppliedAmount',
                 'getBaseWeeeTaxInclTax',
                 'getBasePriceInclTax',
-                'getQtyOrdered'
-            ])
-            ->onlyMethods(['getCalculationPrice'])
-            ->getMock();
+                'getQtyOrdered',
+                'getCalculationPrice',
+                'getPrice',
+            ]
+        );
 
         $this->item->expects($this->any())
             ->method('getStoreId')
@@ -103,8 +112,8 @@ class RendererTest extends TestCase
      * @param bool $showWeeeDetails
      * @param bool $hasWeeeAmount
      * @param bool $expectedValue
-     * @dataProvider displayPriceWithWeeeDetailsDataProvider
      */
+    #[DataProvider('displayPriceWithWeeeDetailsDataProvider')]
     public function testDisplayPriceWithWeeeDetails(
         $isWeeeEnabled,
         $showWeeeDetails,
@@ -201,8 +210,8 @@ class RendererTest extends TestCase
      * @param bool $weeeEnabled
      * @param bool $includeWeee
      * @param int $expectedValue
-     * @dataProvider getDisplayPriceDataProvider
      */
+    #[DataProvider('getDisplayPriceDataProvider')]
     public function testGetUnitDisplayPriceInclTax(
         int $price,
         int $weeeTax,
@@ -237,8 +246,8 @@ class RendererTest extends TestCase
      * @param bool $weeeEnabled
      * @param bool $includeWeee
      * @param int $expectedValue
-     * @dataProvider getDisplayPriceDataProvider
      */
+    #[DataProvider('getDisplayPriceDataProvider')]
     public function testGetBaseUnitDisplayPriceInclTax(
         int $price,
         int $weeeTax,
@@ -273,8 +282,8 @@ class RendererTest extends TestCase
      * @param bool $weeeEnabled
      * @param bool $includeWeee
      * @param int $expectedValue
-     * @dataProvider getDisplayPriceDataProvider
      */
+    #[DataProvider('getDisplayPriceDataProvider')]
     public function testGetUnitDisplayPriceExclTax(
         int $price,
         int $weeeTax,
@@ -290,8 +299,12 @@ class RendererTest extends TestCase
             ->method('getWeeeTaxAppliedAmount')
             ->willReturn($weeeTax);
 
+        $this->priceCurrency->expects($this->once())
+            ->method('convertAndRound')
+            ->willReturn($price);
+
         $this->item->expects($this->once())
-            ->method('getCalculationPrice')
+            ->method('getPrice')
             ->willReturn($price);
 
         $this->weeeHelper->expects($this->any())
@@ -308,8 +321,8 @@ class RendererTest extends TestCase
      * @param bool $weeeEnabled
      * @param bool $includeWeee
      * @param int $expectedValue
-     * @dataProvider getDisplayPriceDataProvider
      */
+    #[DataProvider('getDisplayPriceDataProvider')]
     public function testGetBaseUnitDisplayPriceExclTax(
         int $price,
         int $weeeTax,
@@ -347,8 +360,8 @@ class RendererTest extends TestCase
      * @param bool $weeeEnabled
      * @param bool $includeWeee
      * @param int $expectedValue
-     * @dataProvider getDisplayPriceDataProvider
      */
+    #[DataProvider('getDisplayPriceDataProvider')]
     public function testGetRowDisplayPriceExclTax(
         int $price,
         int $weeeTax,
@@ -382,8 +395,8 @@ class RendererTest extends TestCase
      * @param bool $weeeEnabled
      * @param bool $includeWeee
      * @param int $expectedValue
-     * @dataProvider getDisplayPriceDataProvider
      */
+    #[DataProvider('getDisplayPriceDataProvider')]
     public function testGetBaseRowDisplayPriceExclTax(
         int $price,
         int $weeeTax,
@@ -417,8 +430,8 @@ class RendererTest extends TestCase
      * @param bool $weeeEnabled
      * @param bool $includeWeee
      * @param int $expectedValue
-     * @dataProvider getDisplayPriceDataProvider
      */
+    #[DataProvider('getDisplayPriceDataProvider')]
     public function testGetRowDisplayPriceInclTax(
         int $price,
         int $weeeTax,
@@ -453,8 +466,8 @@ class RendererTest extends TestCase
      * @param bool $weeeEnabled
      * @param bool $includeWeee
      * @param int $expectedValue
-     * @dataProvider getDisplayPriceDataProvider
      */
+    #[DataProvider('getDisplayPriceDataProvider')]
     public function testGetBaseRowDisplayPriceInclTax(
         int $price,
         int $weeeTax,
@@ -526,8 +539,8 @@ class RendererTest extends TestCase
      * @param int $weeeTax
      * @param bool $weeeEnabled
      * @param int $expectedValue
-     * @dataProvider getFinalDisplayPriceDataProvider
      */
+    #[DataProvider('getFinalDisplayPriceDataProvider')]
     public function testGetFinalUnitDisplayPriceInclTax(
         int $rowTotal,
         int $weeeTax,
@@ -555,8 +568,8 @@ class RendererTest extends TestCase
      * @param int $weeeTax
      * @param bool $weeeEnabled
      * @param int $expectedValue
-     * @dataProvider getFinalDisplayPriceDataProvider
      */
+    #[DataProvider('getFinalDisplayPriceDataProvider')]
     public function testGetBaseFinalUnitDisplayPriceInclTax(
         int $rowTotal,
         int $weeeTax,
@@ -584,8 +597,8 @@ class RendererTest extends TestCase
      * @param int $weeeTax
      * @param bool $weeeEnabled
      * @param int $expectedValue
-     * @dataProvider getFinalDisplayPriceDataProvider
      */
+    #[DataProvider('getFinalDisplayPriceDataProvider')]
     public function testGetFinalUnitDisplayPriceExclTax(
         int $rowTotal,
         int $weeeTax,
@@ -600,8 +613,12 @@ class RendererTest extends TestCase
             ->method('getWeeeTaxAppliedAmount')
             ->willReturn($weeeTax);
 
+        $this->priceCurrency->expects($this->once())
+            ->method('convertAndRound')
+            ->willReturn($rowTotal);
+
         $this->item->expects($this->once())
-            ->method('getCalculationPrice')
+            ->method('getPrice')
             ->willReturn($rowTotal);
 
         $this->assertEquals($expectedValue, $this->renderer->getFinalUnitDisplayPriceExclTax());
@@ -612,8 +629,8 @@ class RendererTest extends TestCase
      * @param int $weeeTax
      * @param bool $weeeEnabled
      * @param int $expectedValue
-     * @dataProvider getFinalDisplayPriceDataProvider
      */
+    #[DataProvider('getFinalDisplayPriceDataProvider')]
     public function testGetBaseFinalUnitDisplayPriceExclTax(
         int $rowTotal,
         int $weeeTax,
@@ -644,8 +661,8 @@ class RendererTest extends TestCase
      * @param int $weeeTax
      * @param bool $weeeEnabled
      * @param int $expectedValue
-     * @dataProvider getFinalDisplayPriceDataProvider
      */
+    #[DataProvider('getFinalDisplayPriceDataProvider')]
     public function testGetFianlRowDisplayPriceExclTax(
         int $rowTotal,
         int $weeeTax,
@@ -672,8 +689,8 @@ class RendererTest extends TestCase
      * @param int $weeeTax
      * @param bool $weeeEnabled
      * @param int $expectedValue
-     * @dataProvider getFinalDisplayPriceDataProvider
      */
+    #[DataProvider('getFinalDisplayPriceDataProvider')]
     public function testGetBaseFianlRowDisplayPriceExclTax(
         int $rowTotal,
         int $weeeTax,
@@ -700,8 +717,8 @@ class RendererTest extends TestCase
      * @param int $weeeTax
      * @param bool $weeeEnabled
      * @param int $expectedValue
-     * @dataProvider getFinalDisplayPriceDataProvider
      */
+    #[DataProvider('getFinalDisplayPriceDataProvider')]
     public function testGetFinalRowDisplayPriceInclTax(
         int $rowTotal,
         int $weeeTax,
@@ -729,8 +746,8 @@ class RendererTest extends TestCase
      * @param int $weeeTax
      * @param bool $weeeEnabled
      * @param int $expectedValue
-     * @dataProvider getFinalDisplayPriceDataProvider
      */
+    #[DataProvider('getFinalDisplayPriceDataProvider')]
     public function testGetBaseFinalRowDisplayPriceInclTax(
         int $rowTotal,
         int $weeeTax,
@@ -785,17 +802,15 @@ class RendererTest extends TestCase
 
         $expectedValue = 97;
 
-        $itemMock = $this->getMockBuilder(\Magento\Sales\Model\Order\Item::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(
-                [
-                    'getRowTotal',
-                    'getTaxAmount',
-                    'getDiscountTaxCompensationAmount',
-                    'getDiscountAmount'
-                ]
-            )
-            ->getMock();
+        $itemMock = $this->createPartialMock(
+            OrderItem::class,
+            [
+                'getRowTotal',
+                'getTaxAmount',
+                'getDiscountTaxCompensationAmount',
+                'getDiscountAmount'
+            ]
+        );
 
         $itemMock->expects($this->once())
             ->method('getRowTotal')
@@ -832,17 +847,15 @@ class RendererTest extends TestCase
         $expectedValue = $baseRowTotal + $baseTaxAmount + $baseDiscountTaxCompensationAmount -
             $baseDiscountAmount + $baseWeeeAmount;
 
-        $itemMock = $this->getMockBuilder(\Magento\Sales\Model\Order\Item::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(
-                [
-                    'getBaseRowTotal',
-                    'getBaseTaxAmount',
-                    'getBaseDiscountTaxCompensationAmount',
-                    'getBaseDiscountAmount'
-                ]
-            )
-            ->getMock();
+        $itemMock = $this->createPartialMock(
+            OrderItem::class,
+            [
+                'getBaseRowTotal',
+                'getBaseTaxAmount',
+                'getBaseDiscountTaxCompensationAmount',
+                'getBaseDiscountAmount'
+            ]
+        );
 
         $itemMock->expects($this->once())
             ->method('getBaseRowTotal')

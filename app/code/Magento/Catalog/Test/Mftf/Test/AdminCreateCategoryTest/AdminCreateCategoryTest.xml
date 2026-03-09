@@ -19,6 +19,9 @@
             <group value="cloud"/>
         </annotations>
         <after>
+            <actionGroup ref="AdminDeleteCategoryByNameActionGroup" stepKey="deleteCategory">
+                <argument name="categoryName" value="{{SimpleSubCategory.name}}"/>
+            </actionGroup>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="adminLogout"/>
         </after>
 

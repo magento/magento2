@@ -1,9 +1,7 @@
 <?php
 /**
- * Response redirector tests
- *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 declare(strict_types=1);
@@ -19,6 +17,7 @@ use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Framework\App\Area;
 use Magento\Store\Model\ScopeInterface;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -68,7 +67,7 @@ class RedirectTest extends TestCase
         $objectManager = new ObjectManager($this);
 
         $this->requestMock = $this->createMock(Http::class);
-        $this->storeManagerMock = $this->getMockForAbstractClass(StoreManagerInterface::class);
+        $this->storeManagerMock = $this->createMock(StoreManagerInterface::class);
         $this->appStateMock = $this->createMock(State::class);
         $this->scopeConfigMock = $this->createMock(ScopeConfigInterface::class);
 
@@ -86,14 +85,13 @@ class RedirectTest extends TestCase
     /**
      * Success url test
      *
-     * @dataProvider urlAddresses
-     *
      * @param string $url
      * @param string $area
      * @param bool $isCustomAdminUrlEnabled
      * @param string $expectedUrl
      * @return void
      */
+    #[DataProvider('urlAddresses')]
     public function testSuccessUrl(
         string $url,
         string $area,

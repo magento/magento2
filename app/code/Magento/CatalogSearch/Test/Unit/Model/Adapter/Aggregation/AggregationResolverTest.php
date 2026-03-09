@@ -64,15 +64,11 @@ class AggregationResolverTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->attributeSetFinder = $this->getMockBuilder(AttributeSetFinderInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->attributeSetFinder = $this->createMock(AttributeSetFinderInterface::class);
         $this->searchCriteriaBuilder = $this->getMockBuilder(SearchCriteriaBuilder::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->request = $this->getMockBuilder(RequestInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->request = $this->createMock(RequestInterface::class);
         $this->config = $this->getMockBuilder(Config::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -81,9 +77,7 @@ class AggregationResolverTest extends TestCase
         )
             ->disableOriginalConstructor()
             ->getMock();
-        $this->aggregationChecker = $this->getMockBuilder(RequestCheckerInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->aggregationChecker = $this->createMock(RequestCheckerInterface::class);
 
         $this->aggregationResolver = (new ObjectManager($this))->getObject(
             AggregationResolver::class,
@@ -116,11 +110,7 @@ class AggregationResolverTest extends TestCase
         $select =  $this->searchCriteriaBuilder = $this->getMockBuilder(Select::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $adapter = $this->searchCriteriaBuilder = $this->getMockBuilder(
-            AdapterInterface::class
-        )
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $adapter = $this->searchCriteriaBuilder = $this->createMock(AdapterInterface::class);
 
         $this->aggregationChecker
             ->expects($this->once())
@@ -149,21 +139,15 @@ class AggregationResolverTest extends TestCase
         $this->attributeCollection->expects($this->once())->method('getConnection')->willReturn($adapter);
         $adapter->expects($this->once())->method('fetchCol')->with($select)->willReturn(['code_1', 'code_2']);
 
-        $bucketFirst = $this->getMockBuilder(BucketInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $bucketFirst = $this->createMock(BucketInterface::class);
         $bucketFirst->expects($this->once())
             ->method('getField')
             ->willReturn('code_1');
-        $bucketSecond = $this->getMockBuilder(BucketInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $bucketSecond = $this->createMock(BucketInterface::class);
         $bucketSecond->expects($this->once())
             ->method('getField')
             ->willReturn('some_another_code');
-        $bucketThird = $this->getMockBuilder(BucketInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $bucketThird = $this->createMock(BucketInterface::class);
         $bucketThird->expects($this->once())
             ->method('getName')
             ->willReturn('custom_not_attribute_field');

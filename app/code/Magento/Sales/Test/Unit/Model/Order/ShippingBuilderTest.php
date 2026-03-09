@@ -17,6 +17,7 @@ use PHPUnit\Framework\TestCase;
 
 class ShippingBuilderTest extends TestCase
 {
+
     /**
      * @var ShippingBuilder
      */
@@ -42,15 +43,9 @@ class ShippingBuilderTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->orderFactory = $this->getMockBuilder(OrderFactory::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->shippingFactory = $this->getMockBuilder(ShippingInterfaceFactory::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->totalFactory = $this->getMockBuilder(TotalInterfaceFactory::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->orderFactory = $this->createMock(OrderFactory::class);
+        $this->shippingFactory = $this->createMock(ShippingInterfaceFactory::class);
+        $this->totalFactory = $this->createMock(TotalInterfaceFactory::class);
         $this->shippingBuilder = new ShippingBuilder($this->orderFactory, $this->shippingFactory, $this->totalFactory);
     }
 
@@ -62,7 +57,7 @@ class ShippingBuilderTest extends TestCase
     public function testCreateWithOrder() : void
     {
         $order = $this->getMockBuilder(OrderInterface::class)
-            ->getMockForAbstractClass();
+            ->getMock();
         $this->shippingBuilder->setOrder($order);
         $order->expects($this->any())
             ->method('getEntityId')

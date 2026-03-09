@@ -858,7 +858,7 @@
         <column xsi:type="varchar" name="label" nullable="true" length="255" comment="Label"/>
         <column xsi:type="int" name="position" unsigned="true" nullable="true" identity="false"
                 comment="Position"/>
-        <column xsi:type="smallint" name="disabled" unsigned="true" nullable="false" identity="false"
+        <column xsi:type="smallint" name="disabled" unsigned="true" nullable="true" identity="false"
                 default="0" comment="Is Disabled"/>
         <column xsi:type="int" name="record_id" unsigned="true" nullable="false" identity="true"
                 comment="Record ID"/>

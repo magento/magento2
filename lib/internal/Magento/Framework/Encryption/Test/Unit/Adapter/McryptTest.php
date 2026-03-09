@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 
 declare(strict_types=1);
@@ -13,6 +13,7 @@ namespace Magento\Framework\Encryption\Test\Unit\Adapter;
 
 use Magento\Framework\Encryption\Adapter\Mcrypt;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class McryptTest extends TestCase
 {
@@ -95,9 +96,8 @@ class McryptTest extends TestCase
         return $result;
     }
 
-    /**
-     * @dataProvider getCipherModeCombinations
-     */
+    /**     */
+    #[DataProvider('getCipherModeCombinations')]
     public function testConstructor(string $cipher, string $mode)
     {
         /* Generate random init vector */
@@ -132,9 +132,8 @@ class McryptTest extends TestCase
         return $result;
     }
 
-    /**
-     * @dataProvider getConstructorExceptionData
-     */
+    /**     */
+    #[DataProvider('getConstructorExceptionData')]
     public function testConstructorException(string $key, string $cipher, string $mode, ?string $initVector = null)
     {
         $this->expectException('Magento\Framework\Exception\LocalizedException');
@@ -173,9 +172,8 @@ class McryptTest extends TestCase
         return $result;
     }
 
-    /**
-     * @dataProvider getCryptData
-     */
+    /**     */
+    #[DataProvider('getCryptData')]
     public function testDecrypt(
         string $key,
         string $cipher,
@@ -189,9 +187,8 @@ class McryptTest extends TestCase
         $this->assertEquals($expectedData, $actualData);
     }
 
-    /**
-     * @dataProvider getCipherModeCombinations
-     */
+    /**     */
+    #[DataProvider('getCipherModeCombinations')]
     public function testInitVectorNone(string $cipher, string $mode)
     {
         $crypt = new Mcrypt(

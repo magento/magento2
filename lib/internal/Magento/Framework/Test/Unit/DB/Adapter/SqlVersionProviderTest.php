@@ -1,7 +1,8 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
+ *
  * @noinspection PhpDeprecationInspection
  */
 declare(strict_types=1);
@@ -13,7 +14,7 @@ use Magento\Framework\DB\Adapter\ConnectionException;
 use Magento\Framework\DB\Adapter\Pdo\Mysql;
 use Magento\Framework\DB\Adapter\SqlVersionProvider;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-use PHPUnit\Framework\MockObject\MockBuilder;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -61,28 +62,27 @@ class SqlVersionProviderTest extends TestCase
     protected function setUp(): void
     {
         $this->objectManager = new ObjectManager($this);
-        $this->resourceConnection = $this->getMockBuilder(ResourceConnection::class)
-            ->onlyMethods(['getConnection'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->mysqlAdapter = $this->getMockBuilder(Mysql::class)
-            ->onlyMethods(['fetchPairs'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->resourceConnection = $this->createPartialMock(
+            ResourceConnection::class,
+            ['getConnection']
+        );
+        $this->mysqlAdapter = $this->createPartialMock(
+            Mysql::class,
+            ['fetchPairs']
+        );
         $this->resourceConnection->expects($this->atLeastOnce())
             ->method('getConnection')
             ->willReturn($this->mysqlAdapter);
     }
 
     /**
-     * @dataProvider executeDataProvider
-     *
      * @param array $versionVariableValue
      * @param string $expectedResult
      *
      * @return void
      * @throws ConnectionException
      */
+    #[DataProvider('executeDataProvider')]
     public function testGetSqlVersionProviderReturnsRightResponse(
         array $versionVariableValue,
         string $expectedResult

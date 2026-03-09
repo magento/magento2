@@ -1447,16 +1447,22 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
         $collection = $this->_addressCollectionFactory->create()->setOrderFilter($this);
         if ($this->getId()) {
             foreach ($collection as $address) {
-                if (isset($this->regionItems[$address->getCountryId()][$address->getRegion()])) {
-                    if ($this->regionItems[$address->getCountryId()][$address->getRegion()]) {
-                        $address->setRegion($this->regionItems[$address->getCountryId()][$address->getRegion()]);
-                    }
-                } else {
-                    $region = $this->regionFactory->create();
-                    $this->regionResource->loadByName($region, $address->getRegion(), $address->getCountryId());
-                    $this->regionItems[$address->getCountryId()][$address->getRegion()] = $region->getName();
-                    if ($region->getName()) {
-                        $address->setRegion($region->getName());
+                // PHP 8.5 Compatibility: Check for null before using as array offset
+                $countryId = $address->getCountryId();
+                $region = $address->getRegion();
+
+                if ($countryId !== null && $region !== null) {
+                    if (isset($this->regionItems[$countryId][$region])) {
+                        if ($this->regionItems[$countryId][$region]) {
+                            $address->setRegion($this->regionItems[$countryId][$region]);
+                        }
+                    } else {
+                        $regionModel = $this->regionFactory->create();
+                        $this->regionResource->loadByName($regionModel, $region, $countryId);
+                        $this->regionItems[$countryId][$region] = $regionModel->getName();
+                        if ($regionModel->getName()) {
+                            $address->setRegion($regionModel->getName());
+                        }
                     }
                 }
                 $address->setOrder($this);
@@ -1614,6 +1620,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     public function getItemById($itemId)
     {
         $items = $this->getItems();
+        $itemId = $itemId ?? '';
 
         if (isset($items[$itemId])) {
             return $items[$itemId];
@@ -4703,12 +4710,12 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
      */
     private function isVisibleCustomerPrefix(): bool
     {
-        $prefixShowValue = $this->scopeConfig->getValue(
+        $value = $this->scopeConfig->getValue(
             'customer/address/prefix_show',
             ScopeInterface::SCOPE_STORE
         );
 
-        return $prefixShowValue !== Nooptreq::VALUE_NO;
+        return in_array($value, [Nooptreq::VALUE_OPTIONAL, Nooptreq::VALUE_REQUIRED], true);
     }
 
     /**
@@ -4718,12 +4725,12 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
      */
     private function isVisibleCustomerSuffix(): bool
     {
-        $prefixShowValue = $this->scopeConfig->getValue(
+        $value = $this->scopeConfig->getValue(
             'customer/address/suffix_show',
             ScopeInterface::SCOPE_STORE
         );
 
-        return $prefixShowValue !== Nooptreq::VALUE_NO;
+        return in_array($value, [Nooptreq::VALUE_OPTIONAL, Nooptreq::VALUE_REQUIRED], true);
     }
 
     //@codeCoverageIgnoreEnd

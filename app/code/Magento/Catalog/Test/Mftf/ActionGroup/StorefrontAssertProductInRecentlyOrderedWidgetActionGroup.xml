@@ -17,6 +17,6 @@
         </arguments>
 
         <waitForElementVisible selector="{{StorefrontWidgetsSection.widgetRecentlyOrderedProductsGrid}}" stepKey="waitWidgetRecentlyOrderedProductsGrid"/>
-        <see selector="{{StorefrontWidgetsSection.widgetRecentlyOrderedProductsGrid}}" userInput="{{product.name}}" stepKey="seeProductInRecentlyOrderedWidget"/>
+        <waitForText selector="{{StorefrontWidgetsSection.widgetRecentlyOrderedProductsGrid}}" userInput="{{product.name}}" stepKey="seeProductInRecentlyOrderedWidget"/>
     </actionGroup>
 </actionGroups>

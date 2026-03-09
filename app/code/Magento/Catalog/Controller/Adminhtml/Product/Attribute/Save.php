@@ -273,7 +273,7 @@ class Save extends Attribute implements HttpPostActionInterface
                 $data['default_value'] = null;
             } elseif (isset($data['default'])) {
                 $defaultOptions = [];
-                foreach ($data['default'] as $defaultValue) {
+                foreach ((array)$data['default'] as $defaultValue) {
                     if ((int)$defaultValue > 0) {
                         $defaultOptions[] = $defaultValue;
                     }

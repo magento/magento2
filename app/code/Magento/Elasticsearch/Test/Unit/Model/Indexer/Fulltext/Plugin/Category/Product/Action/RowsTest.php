@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2023 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -19,6 +19,7 @@ use Magento\Elasticsearch\Model\Indexer\Fulltext\Plugin\Category\Product\Action\
 use Magento\Catalog\Model\Indexer\Category\Product\Action\Rows as ActionRows;
 use Magento\Framework\App\ResourceConnection;
 use Magento\CatalogSearch\Model\Indexer\Fulltext as FulltextIndexer;
+use Magento\Store\Model\StoreManager;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -63,10 +64,8 @@ class RowsTest extends TestCase
     {
         parent::setUp();
         $this->indexerRegistryMock = $this->createMock(IndexerRegistry::class);
-        $this->storeManagerMock =
-            $this->getMockBuilder(StoreManagerInterface::class)->getMockForAbstractClass();
-        $this->connectionMock =
-            $this->getMockBuilder(AdapterInterface::class)->getMockForAbstractClass();
+        $this->storeManagerMock = $this->createPartialMock(StoreManager::class, ['getStores']);
+        $this->connectionMock = $this->createMock(AdapterInterface::class);
         $this->selectMock = $this->createMock(Select::class);
         $this->connectionMock->expects($this->any())->method('select')->willReturn($this->selectMock);
         $this->tableMaintainerMock = $this->createMock(TableMaintainer::class);

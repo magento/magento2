@@ -12,6 +12,7 @@ use Magento\Framework\ObjectManagerInterface;
 use Magento\TestFramework\Fixture\AppArea;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\AbstractBackendController;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Integration test for ArraySerializedPlugin
@@ -31,12 +32,9 @@ class ArraySerializedPluginTest extends AbstractBackendController
 
     /**
      * Test that plugin converts string keys to numeric keys. Works only on design config edit page
-     *
-     * @dataProvider serializeDataProvider
      */
-    #[
-        AppArea('adminhtml')
-    ]
+    #[AppArea('adminhtml')]
+    #[DataProvider('serializeDataProvider')]
     public function testPluginConvertsStringKeysOnDesignConfigEditPage($stringKeyedArray, $resultArray)
     {
         // Set up the request to simulate design config edit page
@@ -121,10 +119,8 @@ class ArraySerializedPluginTest extends AbstractBackendController
 
     /**
      * Data provider for ArraySerializedPlugin. Input array and resultant array.
-     *
-     * @return array
      */
-    public function serializeDataProvider()
+    public static function serializeDataProvider(): array
     {
         return [
             [ //Test that plugin converts string keys to numeric keys.

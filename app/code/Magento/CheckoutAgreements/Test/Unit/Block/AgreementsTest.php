@@ -50,8 +50,8 @@ class AgreementsTest extends TestCase
             ['create']
         );
 
-        $this->scopeConfigMock = $this->getMockForAbstractClass(ScopeConfigInterface::class);
-        $this->storeManagerMock = $this->getMockForAbstractClass(StoreManagerInterface::class);
+        $this->scopeConfigMock = $this->createMock(ScopeConfigInterface::class);
+        $this->storeManagerMock = $this->createMock(StoreManagerInterface::class);
 
         $contextMock = $this->createMock(Context::class);
         $contextMock->expects($this->once())->method('getScopeConfig')->willReturn($this->scopeConfigMock);

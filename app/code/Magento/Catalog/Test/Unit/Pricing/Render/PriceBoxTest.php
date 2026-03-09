@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\Catalog\Test\Unit\Pricing\Render;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Pricing\Render\PriceBox;
 use Magento\Framework\Json\Helper\Data;
@@ -81,8 +82,8 @@ class PriceBoxTest extends TestCase
      *
      * @param string $typeCode
      * @param bool $expected
-     * @dataProvider getCanDisplayQtyDataProvider
      */
+    #[DataProvider('getCanDisplayQtyDataProvider')]
     public function testGetCanDisplayQty($typeCode, $expected)
     {
         $product = $this->createPartialMock(Product::class, ['getTypeId']);

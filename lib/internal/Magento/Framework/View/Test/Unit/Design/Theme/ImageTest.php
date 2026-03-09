@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -27,12 +27,14 @@ use Magento\Theme\Model\Theme\Image\Path;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class ImageTest extends TestCase
 {
+    use MockCreationTrait;
     /**
      * @var Image
      */
@@ -78,7 +80,7 @@ class ImageTest extends TestCase
      */
     private function setupObjectManagerForCheckImageExist($return): void
     {
-        $objectManagerMock = $this->getMockForAbstractClass(ObjectManagerInterface::class);
+        $objectManagerMock = $this->createMock(ObjectManagerInterface::class);
         $mockFileSystem = $this->createMock(Filesystem::class);
         $mockRead = $this->createMock(ReadInterface::class);
         $objectManagerMock->method($this->logicalOr('get', 'create'))->willReturn($mockFileSystem);
@@ -101,11 +103,10 @@ class ImageTest extends TestCase
             Write::class,
             ['isExist', 'copyFile', 'getRelativePath', 'delete']
         );
-        $this->_filesystemMock = $this->getMockBuilder(Filesystem::class)
-            ->addMethods(['delete'])
-            ->onlyMethods(['getDirectoryWrite'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->_filesystemMock = $this->createPartialMockWithReflection(
+            Filesystem::class,
+            ['delete', 'getDirectoryWrite']
+        );
         $this->_filesystemMock
             ->method('getDirectoryWrite')
             ->willReturnCallback(
@@ -121,11 +122,11 @@ class ImageTest extends TestCase
         $this->_imageMock = $this->createMock(\Magento\Framework\Image::class);
         $imageFactory->expects($this->any())->method('create')->willReturn($this->_imageMock);
 
-        $logger = $this->getMockForAbstractClass(LoggerInterface::class);
-        $this->_themeMock = $this->getMockBuilder(Theme::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['getPreviewImage'])
-            ->getMock();
+        $logger = $this->createMock(LoggerInterface::class);
+        $this->_themeMock = $this->createPartialMockWithReflection(
+            Theme::class,
+            ['getPreviewImage']
+        );
         $this->_uploaderMock = $this->createMock(Uploader::class);
 
         $this->imagePathMock = $this->_getImagePathMock();
@@ -260,10 +261,10 @@ class ImageTest extends TestCase
             ->method('getPreviewImagePath')
             ->willReturn($previewImage);
 
-        $themeMock = $this->getMockBuilder(Theme::class)->disableOriginalConstructor()
-            ->onlyMethods(['getThemeImage'])
-            ->addMethods(['getPreviewImage'])
-            ->getMock();
+        $themeMock = $this->createPartialMockWithReflection(
+            Theme::class,
+            ['getThemeImage', 'getPreviewImage']
+        );
         $themeMock->expects($this->atLeastOnce())
             ->method('getPreviewImage')
             ->willReturn($previewImage);
