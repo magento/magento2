@@ -21,6 +21,7 @@ use Magento\Framework\Registry;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\UrlInterface;
 use Magento\Framework\View\Element\Template\Context;
+use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Theme\Block\Html\Topmenu;
 use Magento\Backend\Model\Menu;
@@ -165,9 +166,7 @@ HTML;
     public function testGetHtmlWithoutSelectedCategory(): void
     {
         $topmenuBlock = $this->getTopmenu();
-
         $treeNode = $this->buildTree(false);
-
         $transportObject = new DataObject(['html' => $this->navigationMenuHtml]);
 
         $this->eventManagerMock->expects($this->exactly(2))
@@ -201,9 +200,7 @@ HTML;
     public function testGetHtmlWithSelectedCategory(): void
     {
         $topmenuBlock = $this->getTopmenu();
-
         $treeNode = $this->buildTree(true);
-
         $transportObject = new DataObject(['html' => $this->navigationMenuHtml]);
 
         $this->eventManagerMock->expects($this->exactly(2))
@@ -241,7 +238,8 @@ HTML;
 
         $topmenu =  new Topmenu($this->context, $nodeFactory, $treeFactory);
         $this->urlBuilder->expects($this->once())->method('getBaseUrl')->willReturn('baseUrl');
-        $store = $this->getMockBuilder(\Magento\Store\Model\Store::class)->disableOriginalConstructor()
+        $store = $this->getMockBuilder(Store::class)
+            ->disableOriginalConstructor()
             ->onlyMethods(['getCode'])
             ->getMock();
         $store->expects($this->once())->method('getCode')->willReturn('321');
@@ -289,7 +287,6 @@ HTML;
                     'url' => "http://magento2/category-$i.html",
                     'is_active' => $i == 0 ? $isCurrentItem : false,
                     'is_current_item' => $i == 0 ? $isCurrentItem : false
-
                 ]
             );
             $children->add($categoryNode);
@@ -358,9 +355,10 @@ HTML;
 
     /**
      * Test counting items when there are no children.
+     *
      * @return void
      */
-    public function testCountItemsNoChildren():void
+    public function testCountItemsNoChildren(): void
     {
         $this->menuMock->expects($this->any())
             ->method('count')
@@ -384,11 +382,11 @@ HTML;
 
     /**
      * Test counting items when there are children.
+     *
      * @return void
      */
     public function testCountItemsWithChildren(): void
     {
-        // Setup child menu mock
         $childMenuMock = $this->createMock(Menu::class);
         $childMenuMock->expects($this->any())
             ->method('count')
@@ -404,7 +402,6 @@ HTML;
             ->method('getChildren')
             ->willReturn($childMenuMock);
 
-        // Setup menu mock
         $this->menuMock->expects($this->any())
             ->method('count')
             ->willReturn(2);
@@ -418,7 +415,6 @@ HTML;
         );
         $method->setAccessible(true);
 
-        // Total should be 2 (top level) + 2 * 3 (children) = 8
         $this->assertEquals(8, $method->invoke($this->getTopmenu(), $this->menuMock));
     }
 
@@ -446,7 +442,8 @@ HTML;
     public function testColumnBrakeWithoutItem(): void
     {
         $result = [
-            [   'total' => 8,
+            [
+                'total' => 8,
                 'max' => 2
             ],
             [
