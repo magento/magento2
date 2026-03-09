@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -24,6 +24,7 @@ use Magento\Wishlist\Model\ItemCarrier;
 use Magento\Wishlist\Model\LocaleQuantityProcessor;
 use Magento\Wishlist\Model\ResourceModel\Item\Collection;
 use Magento\Wishlist\Model\Wishlist;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
@@ -33,6 +34,8 @@ use Psr\Log\LoggerInterface;
  */
 class ItemCarrierTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var ItemCarrier
      */
@@ -88,29 +91,15 @@ class ItemCarrierTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->sessionMock = $this->getMockBuilder(Session::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->quantityProcessorMock = $this->getMockBuilder(LocaleQuantityProcessor::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->cartMock = $this->getMockBuilder(Cart::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->loggerMock = $this->getMockBuilder(LoggerInterface::class)
-            ->getMockForAbstractClass();
-        $this->wishlistHelperMock = $this->getMockBuilder(Data::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->cartHelperMock = $this->getMockBuilder(HelperCart::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->urlBuilderMock = $this->getMockBuilder(UrlInterface::class)
-            ->getMockForAbstractClass();
-        $this->managerMock = $this->getMockBuilder(ManagerInterface::class)
-            ->getMockForAbstractClass();
-        $this->redirectMock = $this->getMockBuilder(RedirectInterface::class)
-            ->getMockForAbstractClass();
+        $this->sessionMock = $this->createMock(Session::class);
+        $this->quantityProcessorMock = $this->createMock(LocaleQuantityProcessor::class);
+        $this->cartMock = $this->createMock(Cart::class);
+        $this->loggerMock = $this->createMock(LoggerInterface::class);
+        $this->wishlistHelperMock = $this->createMock(Data::class);
+        $this->cartHelperMock = $this->createMock(HelperCart::class);
+        $this->urlBuilderMock = $this->createMock(UrlInterface::class);
+        $this->managerMock = $this->createMock(ManagerInterface::class);
+        $this->redirectMock = $this->createMock(RedirectInterface::class);
 
         $this->model = new ItemCarrier(
             $this->sessionMock,
@@ -144,48 +133,42 @@ class ItemCarrierTest extends TestCase
         $redirectUrl = 'redirect_url';
 
         /** @var Item|MockObject $itemOneMock */
-        $itemOneMock = $this->getMockBuilder(Item::class)
-            ->onlyMethods(
-                [
-                    'getProduct',
-                    'getId',
-                    'setQty',
-                    'addToCart',
-                    'delete',
-                    'getProductUrl'
-                ]
-            )
-            ->addMethods(['unsProduct'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $itemOneMock = $this->createPartialMockWithReflection(
+            Item::class,
+            [
+                'getProduct',
+                'getId',
+                'setQty',
+                'addToCart',
+                'delete',
+                'getProductUrl',
+                'unsProduct'
+            ]
+        );
         /** @var Item|MockObject $itemTwoMock */
-        $itemTwoMock = $this->getMockBuilder(Item::class)
-            ->onlyMethods(
-                [
-                    'getProduct',
-                    'getId',
-                    'setQty',
-                    'addToCart',
-                    'delete',
-                    'getProductUrl'
-                ]
-            )
-            ->addMethods(['unsProduct'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $itemTwoMock = $this->createPartialMockWithReflection(
+            Item::class,
+            [
+                'getProduct',
+                'getId',
+                'setQty',
+                'addToCart',
+                'delete',
+                'getProductUrl',
+                'unsProduct'
+            ]
+        );
 
         /** @var Product|MockObject $productOneMock */
-        $productOneMock = $this->getMockBuilder(Product::class)
-            ->onlyMethods(['getName'])
-            ->addMethods(['getDisableAddToCart', 'setDisableAddToCart'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $productOneMock = $this->createPartialMockWithReflection(
+            Product::class,
+            ['getName', 'getDisableAddToCart', 'setDisableAddToCart']
+        );
         /** @var Product|MockObject $productTwoMock */
-        $productTwoMock = $this->getMockBuilder(Product::class)
-            ->onlyMethods(['getName'])
-            ->addMethods(['getDisableAddToCart', 'setDisableAddToCart'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $productTwoMock = $this->createPartialMockWithReflection(
+            Product::class,
+            ['getName', 'getDisableAddToCart', 'setDisableAddToCart']
+        );
 
         $itemOneMock->expects($this->any())
             ->method('getProduct')
@@ -197,9 +180,7 @@ class ItemCarrierTest extends TestCase
         $collection = [$itemOneMock, $itemTwoMock];
 
         /** @var Wishlist|MockObject $wishlistMock */
-        $wishlistMock = $this->getMockBuilder(Wishlist::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $wishlistMock = $this->createMock(Wishlist::class);
 
         $this->sessionMock->expects($this->once())
             ->method('getCustomerId')
@@ -214,9 +195,7 @@ class ItemCarrierTest extends TestCase
             ->willReturn($wishlistId);
 
         /** @var Collection|MockObject $collectionMock */
-        $collectionMock = $this->getMockBuilder(Collection::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $collectionMock = $this->createMock(Collection::class);
 
         $wishlistMock->expects($this->once())
             ->method('getItemCollection')
@@ -305,9 +284,7 @@ class ItemCarrierTest extends TestCase
             ->willReturnSelf();
 
         /** @var Quote|MockObject $collectionMock */
-        $quoteMock = $this->getMockBuilder(Quote::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $quoteMock = $this->createMock(Quote::class);
 
         $this->cartMock->expects($this->once())
             ->method('getQuote')
@@ -343,48 +320,42 @@ class ItemCarrierTest extends TestCase
         $sharingCode = 'sharingcode';
 
         /** @var Item|MockObject $itemOneMock */
-        $itemOneMock = $this->getMockBuilder(Item::class)
-            ->onlyMethods(
-                [
-                    'getProduct',
-                    'getId',
-                    'setQty',
-                    'addToCart',
-                    'delete',
-                    'getProductUrl'
-                ]
-            )
-            ->addMethods(['unsProduct'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $itemOneMock = $this->createPartialMockWithReflection(
+            Item::class,
+            [
+                'getProduct',
+                'getId',
+                'setQty',
+                'addToCart',
+                'delete',
+                'getProductUrl',
+                'unsProduct'
+            ]
+        );
         /** @var Item|MockObject $itemTwoMock */
-        $itemTwoMock = $this->getMockBuilder(Item::class)
-            ->onlyMethods(
-                [
-                    'getProduct',
-                    'getId',
-                    'setQty',
-                    'addToCart',
-                    'delete',
-                    'getProductUrl'
-                ]
-            )
-            ->addMethods(['unsProduct'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $itemTwoMock = $this->createPartialMockWithReflection(
+            Item::class,
+            [
+                'getProduct',
+                'getId',
+                'setQty',
+                'addToCart',
+                'delete',
+                'getProductUrl',
+                'unsProduct'
+            ]
+        );
 
         /** @var Product|MockObject $productOneMock */
-        $productOneMock = $this->getMockBuilder(Product::class)
-            ->onlyMethods(['getName'])
-            ->addMethods(['getDisableAddToCart', 'setDisableAddToCart'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $productOneMock = $this->createPartialMockWithReflection(
+            Product::class,
+            ['getName', 'getDisableAddToCart', 'setDisableAddToCart']
+        );
         /** @var Product|MockObject $productTwoMock */
-        $productTwoMock = $this->getMockBuilder(Product::class)
-            ->onlyMethods(['getName'])
-            ->addMethods(['getDisableAddToCart', 'setDisableAddToCart'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $productTwoMock = $this->createPartialMockWithReflection(
+            Product::class,
+            ['getName', 'getDisableAddToCart', 'setDisableAddToCart']
+        );
 
         $itemOneMock->expects($this->any())
             ->method('getProduct')
@@ -396,11 +367,10 @@ class ItemCarrierTest extends TestCase
         $collection = [$itemOneMock, $itemTwoMock];
 
         /** @var Wishlist|MockObject $wishlistMock */
-        $wishlistMock = $this->getMockBuilder(Wishlist::class)
-            ->onlyMethods(['isOwner', 'getItemCollection', 'getId', 'save'])
-            ->addMethods(['getSharingCode'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $wishlistMock = $this->createPartialMockWithReflection(
+            Wishlist::class,
+            ['isOwner', 'getItemCollection', 'getId', 'save', 'getSharingCode']
+        );
 
         $this->sessionMock->expects($this->once())
             ->method('getCustomerId')
@@ -412,9 +382,7 @@ class ItemCarrierTest extends TestCase
             ->willReturn($isOwner);
 
         /** @var Collection|MockObject $collectionMock */
-        $collectionMock = $this->getMockBuilder(Collection::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $collectionMock = $this->createMock(Collection::class);
 
         $wishlistMock->expects($this->once())
             ->method('getItemCollection')
@@ -476,18 +444,14 @@ class ItemCarrierTest extends TestCase
             ->willThrowException(new LocalizedException(__('Localized Exception.')));
 
         /** @var Quote|MockObject $collectionMock */
-        $quoteMock = $this->getMockBuilder(Quote::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $quoteMock = $this->createMock(Quote::class);
 
         $this->cartMock->expects($this->exactly(4))
             ->method('getQuote')
             ->willReturn($quoteMock);
 
         /** @var Quote\Item|MockObject $collectionMock */
-        $itemMock = $this->getMockBuilder(Quote\Item::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $itemMock = $this->createMock(Quote\Item::class);
 
         $quoteMock->expects($this->exactly(2))
             ->method('getItemByProduct')
@@ -559,48 +523,42 @@ class ItemCarrierTest extends TestCase
         $indexUrl = 'index_url';
 
         /** @var Item|MockObject $itemOneMock */
-        $itemOneMock = $this->getMockBuilder(Item::class)
-            ->onlyMethods(
-                [
-                    'getProduct',
-                    'getId',
-                    'setQty',
-                    'addToCart',
-                    'delete',
-                    'getProductUrl'
-                ]
-            )
-            ->addMethods(['unsProduct'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $itemOneMock = $this->createPartialMockWithReflection(
+            Item::class,
+            [
+                'getProduct',
+                'getId',
+                'setQty',
+                'addToCart',
+                'delete',
+                'getProductUrl',
+                'unsProduct'
+            ]
+        );
         /** @var Item|MockObject $itemTwoMock */
-        $itemTwoMock = $this->getMockBuilder(Item::class)
-            ->onlyMethods(
-                [
-                    'getProduct',
-                    'getId',
-                    'setQty',
-                    'addToCart',
-                    'delete',
-                    'getProductUrl'
-                ]
-            )
-            ->addMethods(['unsProduct'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $itemTwoMock = $this->createPartialMockWithReflection(
+            Item::class,
+            [
+                'getProduct',
+                'getId',
+                'setQty',
+                'addToCart',
+                'delete',
+                'getProductUrl',
+                'unsProduct'
+            ]
+        );
 
         /** @var Product|MockObject $productOneMock */
-        $productOneMock = $this->getMockBuilder(Product::class)
-            ->onlyMethods(['getName'])
-            ->addMethods(['getDisableAddToCart', 'setDisableAddToCart'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $productOneMock = $this->createPartialMockWithReflection(
+            Product::class,
+            ['getName', 'getDisableAddToCart', 'setDisableAddToCart']
+        );
         /** @var Product|MockObject $productTwoMock */
-        $productTwoMock = $this->getMockBuilder(Product::class)
-            ->onlyMethods(['getName'])
-            ->addMethods(['getDisableAddToCart', 'setDisableAddToCart'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $productTwoMock = $this->createPartialMockWithReflection(
+            Product::class,
+            ['getName', 'getDisableAddToCart', 'setDisableAddToCart']
+        );
 
         $itemOneMock->expects($this->any())
             ->method('getProduct')
@@ -612,9 +570,7 @@ class ItemCarrierTest extends TestCase
         $collection = [$itemOneMock, $itemTwoMock];
 
         /** @var Wishlist|MockObject $wishlistMock */
-        $wishlistMock = $this->getMockBuilder(Wishlist::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $wishlistMock = $this->createMock(Wishlist::class);
 
         $this->sessionMock->expects($this->once())
             ->method('getCustomerId')
@@ -629,9 +585,7 @@ class ItemCarrierTest extends TestCase
             ->willReturn($wishlistId);
 
         /** @var Collection|MockObject $collectionMock */
-        $collectionMock = $this->getMockBuilder(Collection::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $collectionMock = $this->createMock(Collection::class);
 
         $wishlistMock->expects($this->once())
             ->method('getItemCollection')
@@ -736,9 +690,7 @@ class ItemCarrierTest extends TestCase
             ->willReturnSelf();
 
         /** @var Quote|MockObject $collectionMock */
-        $quoteMock = $this->getMockBuilder(Quote::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $quoteMock = $this->createMock(Quote::class);
 
         $this->cartMock->expects($this->once())
             ->method('getQuote')

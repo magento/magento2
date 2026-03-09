@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -16,6 +16,7 @@ use Magento\Setup\Module\I18n\Factory;
 use Magento\Setup\Module\I18n\Locale;
 use Magento\Setup\Module\I18n\Pack\Writer\File\Csv;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 require_once __DIR__ . '/_files/ioMock.php';
@@ -82,9 +83,9 @@ class CsvTest extends TestCase
     /**
      * @param string $contextType
      * @param array $contextValue
-     * @dataProvider writeDictionaryWithRuntimeExceptionDataProvider
      * @return void
      */
+    #[DataProvider('writeDictionaryWithRuntimeExceptionDataProvider')]
     public function testWriteDictionaryWithRuntimeException($contextType, $contextValue)
     {
         $this->expectException('RuntimeException');
@@ -180,7 +181,7 @@ class CsvTest extends TestCase
             ->with($contextType, $contextValue)
             ->willReturn($path);
 
-        $writerMock = $this->getMockForAbstractClass(WriterInterface::class);
+        $writerMock = $this->createMock(WriterInterface::class);
         $writerMock->expects($this->once())
             ->method('write')
             ->with($this->phraseMock);

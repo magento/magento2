@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright 2025 Adobe
+ * All Rights Reserved.
+ */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminVerifyEditOrderForOutOfStockProductTest">
+        <annotations>
+            <features value="Checkout"/>
+            <stories value="Edit Order for out of stock Product"/>
+            <title value="Check Admin Order Edit doesn't work due to out of stock product"/>
+            <description value="Admin verify the order edit functionality shouldn't work out of stock product"/>
+            <severity value="MAJOR"/>
+            <group value="checkout"/>
+            <testCaseId value="AC-2078"/>
+        </annotations>
+        <before>
+            <!-- Precondition Step 1: Data creation: two simple products and a customer with two addresses -->
+            <createData stepKey="createSimpleProduct" entity="SimpleProduct"/>
+            <!-- Create Customer Account -->
+            <createData entity="Simple_US_Customer" stepKey="createCustomer"/>
+            <!-- Precondition Step 2: Create configurable product -->
+            <createData entity="ApiConfigurableProduct" stepKey="createConfigProduct"/>
+            <createData entity="productAttributeWithTwoOptions" stepKey="createConfigProductAttribute"/>
+            <createData entity="productAttributeOption1" stepKey="createConfigProductAttributeOption">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+            </createData>
+            <createData entity="AddToDefaultSet" stepKey="createConfigAddToAttributeSet">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+            </createData>
+            <getData entity="ProductAttributeOptionGetter" index="1" stepKey="getConfigAttributeOption">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+            </getData>
+            <createData entity="ApiSimpleOne" stepKey="createConfigChildProduct">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+                <requiredEntity createDataKey="getConfigAttributeOption"/>
+            </createData>
+            <createData entity="ConfigurableProductTwoOptions" stepKey="createConfigProductOption">
+                <requiredEntity createDataKey="createConfigProduct"/>
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+                <requiredEntity createDataKey="getConfigAttributeOption"/>
+            </createData>
+            <createData entity="ConfigurableProductAddChild" stepKey="createConfigProductAddChild">
+                <requiredEntity createDataKey="createConfigProduct"/>
+                <requiredEntity createDataKey="createConfigChildProduct"/>
+            </createData>
+        </before>
+        <after>
+            <!-- Cleanup data -->
+            <deleteData stepKey="deleteProduct" createDataKey="createSimpleProduct"/>
+            <deleteData createDataKey="createConfigChildProduct" stepKey="deleteConfigChildProduct"/>
+            <deleteData createDataKey="createConfigProduct" stepKey="deleteConfigProduct"/>
+            <deleteData createDataKey="createConfigProductAttribute" stepKey="deleteConfigProductAttribute"/>
+            <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
+            <!-- Logout from Admin -->
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+        <!-- Step-1/2: Open Storefront and add Simple product to the Shopping Cart -->
+        <actionGroup ref="AddSimpleProductToCartActionGroup" stepKey="cartAddSimpleProduct1ToCart">
+            <argument name="product" value="$$createSimpleProduct$$"/>
+        </actionGroup>
+        <actionGroup ref="GoToCheckoutFromMinicartActionGroup" stepKey="goToCheckout"/>
+        <!-- Step-3: Update qty in Cart to all available (10) -->
+        <actionGroup ref="StorefrontCartPageOpenActionGroup" stepKey="openCartForSimple"/>
+        <actionGroup ref="StorefrontUpdateProductQTYOnShoppingCartPageActionGroup" stepKey="updateQtyToAllSimple">
+            <argument name="product" value="$createSimpleProduct.name$"/>
+            <argument name="qty" value="10"/>
+        </actionGroup>
+        <!-- Step-4: Proceed checkout and place order as Guest -->
+        <actionGroup ref="StorefrontClickProceedToCheckoutActionGroup" stepKey="proceedToCheckoutSimple"/>
+        <actionGroup ref="GuestCheckoutFillingShippingSectionActionGroup" stepKey="fillShippingSimple">
+            <argument name="customerVar" value="CustomerEntityOne"/>
+            <argument name="customerAddressVar" value="CustomerAddressSimple"/>
+        </actionGroup>
+        <actionGroup ref="CheckoutSelectCheckMoneyOrderPaymentActionGroup" stepKey="selectCheckmoSimple"/>
+        <actionGroup ref="ClickPlaceOrderActionGroup" stepKey="placeOrderSimple"/>
+        <waitForElementVisible selector="{{StorefrontMinicartSection.emptyMiniCart}}" stepKey="assertEmptyCartAfterSimple"/>
+        <grabTextFrom selector="{{CheckoutSuccessMainSection.orderNumberWithoutLink}}" stepKey="grabOrderIdSimple"/>
+        <!-- Step-5/6: Open Admin and newly created order -->
+        <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdminForSimple"/>
+        <actionGroup ref="OpenOrderByIdActionGroup" stepKey="openOrderByIdSimple">
+            <argument name="orderId" value="{$grabOrderIdSimple}"/>
+        </actionGroup>
+        <!-- No error messages expected on order view page -->
+        <waitForElementNotVisible selector="div.message-error" stepKey="noErrorOnOrderViewSimple"/>
+        <!-- Step-7/8: Click Edit and confirm modal -->
+        <actionGroup ref="AdminEditOrderActionGroup" stepKey="editOrderSimple">
+            <argument name="orderId" value="{$grabOrderIdSimple}"/>
+        </actionGroup>
+        <!-- Step-9: Change any data except product amount (update Billing Address street) -->
+        <actionGroup ref="FillOrderCustomerInformationActionGroup" stepKey="fillCustomerInfo">
+            <argument name="customer" value="$createCustomer$"/>
+            <argument name="address" value="US_Address_TX"/>
+        </actionGroup>
+        <waitForElementClickable selector="{{AdminOrderFormPaymentSection.header}}" stepKey="waitToUnfocus"/>
+        <click selector="{{AdminOrderFormPaymentSection.header}}" stepKey="unfocus"/>
+        <waitForElementClickable selector="{{AdminOrderFormPaymentSection.getShippingMethods}}" stepKey="waitToClickShippingMethods"/>
+        <click selector="{{AdminOrderFormPaymentSection.getShippingMethods}}" stepKey="clickShippingMethods"/>
+        <!-- Checkout: select Check/Money Order payment -->
+        <actionGroup ref="SelectCheckMoneyPaymentMethodActionGroup" stepKey="selectCheckMoneyPayment"/>
+        <!-- Step-10: Save order and verify success -->
+        <actionGroup ref="AdminOrderClickSubmitOrderActionGroup" stepKey="submitOrder"/>
+        <!--Verify order information-->
+        <actionGroup ref="VerifyCreatedOrderInformationActionGroup" stepKey="verifyCreatedOrderInformation"/>
+        <!-- Step-11: Repeat with Configurable product -->
+        <actionGroup ref="StorefrontAddConfigurableProductToTheCartActionGroup" stepKey="addConfigurableProductToCart">
+            <argument name="urlKey" value="$$createConfigProduct.custom_attributes[url_key]$$"/>
+            <argument name="productAttribute" value="$$createConfigProductAttribute.default_value$$"/>
+            <argument name="productOption" value="$$getConfigAttributeOption.value$$"/>
+            <argument name="qty" value="1"/>
+        </actionGroup>
+        <!-- Update qty in Cart to all available (10 for selected child) -->
+        <actionGroup ref="StorefrontCartPageOpenActionGroup" stepKey="openCartForConfig"/>
+        <actionGroup ref="StorefrontUpdateProductQTYOnShoppingCartPageActionGroup" stepKey="updateQtyToAllConfig">
+            <argument name="product" value="$createConfigProduct.name$"/>
+            <argument name="qty" value="10"/>
+        </actionGroup>
+        <!-- Proceed checkout and place order as Guest -->
+        <actionGroup ref="StorefrontClickProceedToCheckoutActionGroup" stepKey="proceedToCheckoutConfig"/>
+        <actionGroup ref="GuestCheckoutFillingShippingSectionActionGroup" stepKey="fillShippingConfig">
+            <argument name="customerVar" value="CustomerEntityOne"/>
+            <argument name="customerAddressVar" value="CustomerAddressSimple"/>
+        </actionGroup>
+        <actionGroup ref="CheckoutSelectCheckMoneyOrderPaymentActionGroup" stepKey="selectCheckmoConfig"/>
+        <actionGroup ref="ClickPlaceOrderActionGroup" stepKey="placeOrderConfig"/>
+        <waitForElementVisible selector="{{StorefrontMinicartSection.emptyMiniCart}}" stepKey="assertEmptyCartAfterConfig"/>
+        <grabTextFrom selector="{{CheckoutSuccessMainSection.orderNumberWithoutLink}}" stepKey="grabOrderIdConfig"/>
+        <!-- Open Admin and newly created configurable order -->
+        <actionGroup ref="OpenOrderByIdActionGroup" stepKey="openOrderByIdConfig">
+            <argument name="orderId" value="{$grabOrderIdConfig}"/>
+        </actionGroup>
+        <waitForElementNotVisible selector="div.message-error" stepKey="noErrorOnOrderViewConfig"/>
+        <!-- Edit order and change address (not quantity) -->
+        <actionGroup ref="AdminEditOrderActionGroup" stepKey="editOrderConfig">
+            <argument name="orderId" value="{$grabOrderIdConfig}"/>
+        </actionGroup>
+        <actionGroup ref="FillOrderCustomerInformationActionGroup" stepKey="fillCustomerInfoConfigProduct">
+            <argument name="customer" value="$createCustomer$"/>
+            <argument name="address" value="US_Address_TX"/>
+        </actionGroup>
+        <waitForElementClickable selector="{{AdminOrderFormPaymentSection.header}}" stepKey="waitToUnfocusConfig"/>
+        <click selector="{{AdminOrderFormPaymentSection.header}}" stepKey="unfocusConfig"/>
+        <waitForElementClickable selector="{{AdminOrderFormPaymentSection.getShippingMethods}}" stepKey="waitToClickShippingMethod"/>
+        <click selector="{{AdminOrderFormPaymentSection.getShippingMethods}}" stepKey="clickShippingMethod"/>
+        <!-- Checkout: select Check/Money Order payment -->
+        <actionGroup ref="SelectCheckMoneyPaymentMethodActionGroup" stepKey="selectCheckMoneyPaymentMethod"/>
+        <!-- Step-10: Save order and verify success -->
+        <actionGroup ref="AdminOrderClickSubmitOrderActionGroup" stepKey="submitOrderConfig"/>
+        <!--Verify order information-->
+        <actionGroup ref="VerifyCreatedOrderInformationActionGroup" stepKey="verifyCreatedOrderInformationConfig"/>
+    </test>
+</tests>

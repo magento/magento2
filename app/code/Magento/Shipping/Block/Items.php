@@ -1,13 +1,11 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
  */
 
 /**
  * Sales order view items block
- *
- * @author     Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\Shipping\Block;
 
@@ -20,8 +18,6 @@ namespace Magento\Shipping\Block;
 class Items extends \Magento\Sales\Block\Items\AbstractItems
 {
     /**
-     * Core registry
-     *
      * @var \Magento\Framework\Registry
      */
     protected $_coreRegistry = null;

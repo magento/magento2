@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -16,6 +16,7 @@ use Magento\Framework\Cache\FrontendInterface;
 use Magento\Framework\DataObject;
 use Magento\Framework\Event\ManagerInterface;
 use Magento\Framework\View\DesignInterface;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Theme\Model\Config;
@@ -25,6 +26,8 @@ use PHPUnit\Framework\TestCase;
 
 class ConfigTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var MockObject
      */
@@ -67,22 +70,15 @@ class ConfigTest extends TestCase
     {
         /** @var $this->themeMock Theme */
         $this->themeMock = $this->createMock(Theme::class);
-        $this->storeManagerMock = $this->getMockForAbstractClass(
-            StoreManagerInterface::class,
-            [],
-            '',
-            true,
-            true,
-            true,
-            ['getStores', 'isSingleStoreMode']
+        $this->storeManagerMock = $this->createMock(
+            StoreManagerInterface::class
         );
-        $this->configData = $this->getMockBuilder(Value::class)
-            ->addMethods(['addFieldToFilter'])
-            ->onlyMethods(['getCollection', '__wakeup'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->configCacheMock = $this->getMockForAbstractClass(FrontendInterface::class);
-        $this->layoutCacheMock = $this->getMockForAbstractClass(FrontendInterface::class);
+        $this->configData = $this->createPartialMockWithReflection(
+            Value::class,
+            ['addFieldToFilter', 'getCollection', '__wakeup']
+        );
+        $this->configCacheMock = $this->createMock(FrontendInterface::class);
+        $this->layoutCacheMock = $this->createMock(FrontendInterface::class);
 
         $this->scopeConfigWriter = $this->createPartialMock(
             WriterInterface::class,
@@ -93,7 +89,7 @@ class ConfigTest extends TestCase
             $this->configData,
             $this->scopeConfigWriter,
             $this->storeManagerMock,
-            $this->getMockForAbstractClass(ManagerInterface::class),
+            $this->createMock(ManagerInterface::class),
             $this->configCacheMock,
             $this->layoutCacheMock
         );

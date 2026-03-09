@@ -1,21 +1,19 @@
 <?php declare(strict_types=1);
 /**
- * test Magento\Customer\Model\Metadata\Form\Boolean
- *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Customer\Test\Unit\Model\Metadata\Form;
 
 use Magento\Customer\Model\Metadata\Form\Boolean;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class BooleanTest extends AbstractFormTestCase
 {
     /**
      * @param mixed $value to assign to boolean
-     * @param mixed $expected text output
-     * @dataProvider getOptionTextDataProvider
-     */
+     * @param mixed $expected text output */
+    #[DataProvider('getOptionTextDataProvider')]
     public function testGetOptionText($value, $expected)
     {
         // calling outputValue() will cause the protected method getOptionText() to be called

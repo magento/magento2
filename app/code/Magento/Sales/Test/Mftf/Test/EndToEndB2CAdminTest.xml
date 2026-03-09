@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
-  */
+/**
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
+ */
 -->
+
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
     <test name="EndToEndB2CAdminTest">
@@ -297,5 +298,7 @@
         <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex" after="deleteStoreView">
             <argument name="indices" value=""/>
         </actionGroup>
+        <!--Delete all customers via API-->
+        <helper class="Magento\Customer\Test\Mftf\Helper\CustomerApiHelper" method="deleteAllCustomersApi" stepKey="deleteAllCustomersViaApi" after="reindex"/>
     </test>
 </tests>

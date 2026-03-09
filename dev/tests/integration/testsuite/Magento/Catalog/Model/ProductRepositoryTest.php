@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -35,6 +35,7 @@ use Magento\TestFramework\Fixture\DataFixtureStorage;
 use Magento\TestFramework\Fixture\DataFixtureStorageManager;
 use Magento\TestFramework\Fixture\DbIsolation;
 use Magento\TestFramework\Helper\Bootstrap;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -181,8 +182,8 @@ class ProductRepositoryTest extends TestCase
      * @param string $sku
      * @return void
      * @magentoDataFixture Magento/Catalog/_files/product_simple.php
-     * @dataProvider skuDataProvider
      */
+    #[DataProvider('skuDataProvider')]
     public function testGetProduct(string $sku): void
     {
         $expectedSku = 'simple';
@@ -307,7 +308,7 @@ class ProductRepositoryTest extends TestCase
     private function assertProductNotExist(string $sku): void
     {
         $this->expectExceptionObject(new NoSuchEntityException(
-            __("The product that was requested doesn't exist. Verify the product and try again.")
+            __('The product with SKU "' . $sku . '" does not exist.')
         ));
         $this->productRepository->get($sku);
     }
@@ -315,13 +316,13 @@ class ProductRepositoryTest extends TestCase
     /**
      * Tests product repository update
      *
-     * @dataProvider productUpdateDataProvider
      * @magentoDataFixture Magento/Catalog/_files/product_simple.php
      * @param int $storeId
      * @param int $checkStoreId
      * @param string $expectedNameStore
      * @param string $expectedNameCheckedStore
      */
+    #[DataProvider('productUpdateDataProvider')]
     public function testProductUpdate(
         int $storeId,
         int $checkStoreId,

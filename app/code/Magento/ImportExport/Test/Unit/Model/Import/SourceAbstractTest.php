@@ -1,13 +1,14 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\ImportExport\Test\Unit\Model\Import;
 
 use Magento\ImportExport\Model\Import\AbstractSource;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -20,20 +21,19 @@ class SourceAbstractTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->_model = $this->getMockForAbstractClass(
-            AbstractSource::class,
-            [['key1', 'key2', 'key3']]
-        );
+        $this->_model = $this->createPartialMock(AbstractSource::class, ['_getNextRow']);
+        $this->_model->__construct(['key1', 'key2', 'key3']);
     }
 
     /**
      * @param array $argument
-     * @dataProvider constructExceptionDataProvider
      */
+    #[DataProvider('constructExceptionDataProvider')]
     public function testConstructException($argument)
     {
         $this->expectException(\InvalidArgumentException::class);
-        $this->getMockForAbstractClass(AbstractSource::class, [$argument]);
+        $mock = $this->createPartialMock(AbstractSource::class, ['_getNextRow']);
+        $mock->__construct($argument);
     }
 
     /**
@@ -60,9 +60,7 @@ class SourceAbstractTest extends TestCase
             $this->exactly(4)
         )->method(
             '_getNextRow'
-        )->will(
-            $this->onConsecutiveCalls([1, 2, 3], [4, 5, 5], [6, 7, 8], [])
-        );
+        )->willReturnOnConsecutiveCalls([1, 2, 3], [4, 5, 5], [6, 7, 8], []);
         $data = [];
         foreach ($this->_model as $key => $value) {
             $data[$key] = $value;
@@ -88,9 +86,7 @@ class SourceAbstractTest extends TestCase
             $this->any()
         )->method(
             '_getNextRow'
-        )->will(
-            $this->onConsecutiveCalls([1, 2, 3], [4, 5, 5], [6, 7, 8], [1, 2, 3], [4, 5, 5])
-        );
+        )->willReturnOnConsecutiveCalls([1, 2, 3], [4, 5, 5], [6, 7, 8], [1, 2, 3], [4, 5, 5]);
         $this->_model->seek(2);
         $this->assertSame(['key1' => 6, 'key2' => 7, 'key3' => 8], $this->_model->current());
         $this->_model->seek(1);

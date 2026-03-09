@@ -1,8 +1,7 @@
 <?php
 /**
- *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -65,7 +64,7 @@ class ReaderTest extends TestCase
         $this->_protFactoryMock = $this->createMock(BaseFactory::class);
         $this->_dirsMock = $this->createMock(Dir::class);
         $this->_baseConfigMock = $this->createMock(Base::class);
-        $this->_moduleListMock = $this->getMockForAbstractClass(ModuleListInterface::class);
+        $this->_moduleListMock = $this->createMock(ModuleListInterface::class);
         $this->directoryReadFactoryMock = $this->createMock(ReadFactory::class);
         $this->_fileIteratorFactory = $this->createMock(FileIteratorFactory::class);
 
@@ -106,7 +105,7 @@ class ReaderTest extends TestCase
     public function testGetConfigurationFiles()
     {
         $configPath = 'app/code/Test/Module/etc/config.xml';
-        $modulesDirectoryMock = $this->getMockForAbstractClass(ReadInterface::class);
+        $modulesDirectoryMock = $this->createMock(ReadInterface::class);
         $modulesDirectoryMock->expects($this->any())->method('getRelativePath')->willReturnArgument(0);
         $modulesDirectoryMock->expects($this->any())->method('isExist')
             ->with($configPath)
@@ -132,7 +131,7 @@ class ReaderTest extends TestCase
     public function testGetComposerJsonFiles()
     {
         $configPath = 'app/code/Test/Module/composer.json';
-        $modulesDirectoryMock = $this->getMockForAbstractClass(ReadInterface::class);
+        $modulesDirectoryMock = $this->createMock(ReadInterface::class);
         $modulesDirectoryMock->expects($this->any())->method('getRelativePath')->willReturnArgument(0);
         $modulesDirectoryMock->expects($this->any())->method('isExist')
             ->with($configPath)

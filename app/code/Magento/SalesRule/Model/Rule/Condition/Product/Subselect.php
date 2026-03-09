@@ -156,9 +156,6 @@ class Subselect extends Combine
     public function validate(AbstractModel $model)
     {
         $subSelectConditionsFlag = true;
-        if (!$this->getConditions()) {
-            return false;
-        }
         $attr = $this->getAttribute();
         $total = 0;
         $isMultiShipping = (bool) $model->getQuote()->getIsMultiShipping();

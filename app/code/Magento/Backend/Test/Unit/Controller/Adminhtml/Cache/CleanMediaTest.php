@@ -12,6 +12,7 @@ use Magento\Backend\Controller\Adminhtml\Cache\CleanMedia;
 use Magento\Backend\Helper\Data;
 use Magento\Backend\Model\Session;
 use Magento\Backend\Model\View\Result\Redirect;
+use Magento\Framework\App\Request\Http as RequestHttp;
 use Magento\Framework\App\Response\Http;
 use Magento\Framework\Controller\ResultFactory;
 use Magento\Framework\Message\ExceptionMessageLookupFactory;
@@ -19,6 +20,7 @@ use Magento\Framework\Message\Manager;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Session\SessionManager;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\View\Asset\MergeService;
 use PHPUnit\Framework\TestCase;
 
@@ -27,29 +29,27 @@ use PHPUnit\Framework\TestCase;
  */
 class CleanMediaTest extends TestCase
 {
+    use MockCreationTrait;
+
     public function testExecute()
     {
         // Wire object with mocks
         $response = $this->createMock(Http::class);
-        $request = $this->createMock(\Magento\Framework\App\Request\Http::class);
+        $request = $this->createMock(RequestHttp::class);
 
-        $objectManager = $this->getMockForAbstractClass(ObjectManagerInterface::class);
+        $objectManager = $this->createMock(ObjectManagerInterface::class);
         $backendHelper = $this->createMock(Data::class);
         $helper = new ObjectManager($this);
 
-        $session = $this->getMockBuilder(Session::class)
-            ->addMethods(['setIsUrlNotice'])
-            ->setConstructorArgs($helper->getConstructArguments(Session::class))
-            ->getMock();
+        $session = $this->createPartialMockWithReflection(
+            Session::class,
+            ['setIsUrlNotice']
+        );
 
-        $exceptionMessageFactory = $this->getMockBuilder(
-            ExceptionMessageLookupFactory::class
-        )
-            ->disableOriginalConstructor()
-            ->addMethods(
-                ['getMessageGenerator']
-            )
-            ->getMock();
+        $exceptionMessageFactory = $this->createPartialMockWithReflection(
+            ExceptionMessageLookupFactory::class,
+            ['getMessageGenerator']
+        );
 
         $messageManagerParams = $helper->getConstructArguments(Manager::class);
         $messageManagerParams['exceptionMessageFactory'] = $exceptionMessageFactory;
@@ -73,13 +73,8 @@ class CleanMediaTest extends TestCase
             ->onlyMethods(['getRequest', 'getResponse', 'getMessageManager', 'getSession', 'getResultFactory'])
             ->setConstructorArgs($args)
             ->getMock();
-        $resultFactory = $this->getMockBuilder(ResultFactory::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['create'])
-            ->getMock();
-        $resultRedirect = $this->getMockBuilder(Redirect::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $resultFactory = $this->createPartialMock(ResultFactory::class, ['create']);
+        $resultRedirect = $this->createMock(Redirect::class);
         $resultFactory->expects($this->atLeastOnce())
             ->method('create')
             ->with(ResultFactory::TYPE_REDIRECT)

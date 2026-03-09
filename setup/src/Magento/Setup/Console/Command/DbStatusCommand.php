@@ -80,7 +80,7 @@ class DbStatusCommand extends AbstractSetupCommand
     /**
      * @inheritdoc
      */
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $timestamp = date('Y-m-d H:i:s');
         $output->writeln("<info>DbStatusCommand execution started at {$timestamp}</info>");

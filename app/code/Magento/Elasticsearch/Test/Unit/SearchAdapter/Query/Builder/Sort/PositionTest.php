@@ -60,7 +60,10 @@ class PositionTest extends TestCase
             ->willReturn('position_category_2');
 
         $result = $this->position->build($attributeMock, 'desc', $requestMock);
-        self::assertEquals(['position_category_2' => ['order' => 'desc']], $result);
+        self::assertEquals(
+            ['position_category_2' => ['order' => 'desc', 'unmapped_type' => 'integer']],
+            $result
+        );
     }
 
     /**
@@ -90,7 +93,10 @@ class PositionTest extends TestCase
             ->willReturn('position_category_5');
 
         $result = $this->position->build($attributeMock, 'desc', $requestMock);
-        self::assertEquals(['position_category_5' => ['order' => 'desc']], $result);
+        self::assertEquals(
+            ['position_category_5' => ['order' => 'desc', 'unmapped_type' => 'integer']],
+            $result
+        );
     }
 
     /**

@@ -268,7 +268,10 @@ class SubscriberTest extends TestCase
         $messageContent = $this->getMessageRawContent($message);
 
         $emailDom = new \DOMDocument();
-        $emailDom->loadHTML($messageContent);
+        $emailDom->loadHTML(
+            $messageContent,
+            LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD | LIBXML_NOERROR | LIBXML_NOWARNING
+        );
 
         $emailXpath = new \DOMXPath($emailDom);
         $greeting = $emailXpath->query("//p[contains(text(), '$expectedMessage')]");

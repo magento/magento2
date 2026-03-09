@@ -7,6 +7,8 @@ declare(strict_types=1);
 
 namespace Magento\AdvancedSearch\Test\Unit\Model\Indexer\Fulltext\Plugin;
 
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\AdvancedSearch\Model\Client\ClientOptionsInterface;
 use Magento\AdvancedSearch\Model\Indexer\Fulltext\Plugin\CustomerGroup as CustomerGroupPlugin;
 use Magento\CatalogSearch\Model\Indexer\Fulltext as FulltextIndexer;
@@ -17,9 +19,7 @@ use Magento\Framework\Indexer\IndexerRegistry;
 use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\MockObject\MockObject;
 
-/**
- * @covers \Magento\AdvancedSearch\Model\Indexer\Fulltext\Plugin\CustomerGroup
- */
+#[CoversClass(CustomerGroupPlugin::class)]
 class CustomerGroupTest extends TestCase
 {
     /**
@@ -55,15 +55,7 @@ class CustomerGroupTest extends TestCase
         $this->customerOptionsMock = $this->createMock(
             ClientOptionsInterface::class
         );
-        $this->indexerMock = $this->getMockForAbstractClass(
-            IndexerInterface::class,
-            [],
-            '',
-            false,
-            false,
-            true,
-            ['getId', 'getState', '__wakeup']
-        );
+        $this->indexerMock = $this->createMock(IndexerInterface::class);
         $this->indexerRegistryMock = $this->createPartialMock(
             IndexerRegistry::class,
             ['get']
@@ -79,8 +71,8 @@ class CustomerGroupTest extends TestCase
      * @param bool $isTaxClassIdChanged
      * @param int $invalidateCounter
      * @return void
-     * @dataProvider aroundSaveDataProvider
      */
+    #[DataProvider('aroundSaveDataProvider')]
     public function testAroundSave(
         bool $isObjectNew,
         bool $isTaxClassIdChanged,
@@ -90,7 +82,7 @@ class CustomerGroupTest extends TestCase
             CustomerGroupModel::class,
             ['dataHasChangedFor', 'isObjectNew', '__wakeup']
         );
-        $groupMock->expects($this->any())->method('isObjectNew')->willReturn($isObjectNew);
+        $groupMock->method('isObjectNew')->willReturn($isObjectNew);
         $groupMock->expects($this->any())
             ->method('dataHasChangedFor')
             ->with('tax_class_id')

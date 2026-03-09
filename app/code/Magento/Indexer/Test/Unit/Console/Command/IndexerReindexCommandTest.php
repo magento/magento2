@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -13,6 +13,7 @@ use Magento\Framework\Indexer\ConfigInterface;
 use Magento\Framework\Indexer\IndexerInterface;
 use Magento\Framework\Indexer\IndexerRegistry;
 use Magento\Framework\Indexer\StateInterface;
+use Magento\Indexer\Model\Indexer\State;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\Indexer\Console\Command\IndexerReindexCommand;
 use Magento\Indexer\Model\Config;
@@ -20,12 +21,17 @@ use Magento\Indexer\Model\Processor\MakeSharedIndexValid;
 use PHPUnit\Framework\MockObject\MockObject;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Console\Tester\CommandTester;
+use PHPUnit\Framework\Attributes\DataProvider;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.UnusedFormalParameter)
  */
 class IndexerReindexCommandTest extends AbstractIndexerCommandCommonSetup
 {
+    use MockCreationTrait;
+
     private const STUB_INDEXER_NAME = 'Indexer Name';
     /**
      * Command being tested
@@ -80,7 +86,7 @@ class IndexerReindexCommandTest extends AbstractIndexerCommandCommonSetup
         $this->dependencyInfoProviderMock = $this->objectManagerHelper->getObject(DependencyInfoProvider::class, [
             'config' => $this->configMock,
         ]);
-        $this->loggerMock = $this->getMockForAbstractClass(LoggerInterface::class);
+        $this->loggerMock = $this->createMock(LoggerInterface::class);
         parent::setUp();
     }
 
@@ -161,9 +167,8 @@ class IndexerReindexCommandTest extends AbstractIndexerCommandCommonSetup
      * @param array $reindexAllCallMatchers
      * @param array $executedIndexers
      * @param array $executedSharedIndexers
-     *
-     * @dataProvider executeWithIndexDataProvider
      */
+    #[DataProvider('executeWithIndexDataProvider')]
     public function testExecuteWithIndex(
         array $inputIndexers,
         array $indexers,
@@ -187,7 +192,8 @@ class IndexerReindexCommandTest extends AbstractIndexerCommandCommonSetup
                 );
             $indexer->method('isInvalid')
                 ->willReturn(StateInterface::STATUS_INVALID === ($states[$indexer->getId()]['status'] ?? ''));
-            $indexer->expects($reindexAllCallMatchers[$indexer->getId()])
+            $matcherMethod = $reindexAllCallMatchers[$indexer->getId()];
+            $indexer->expects($this->{$matcherMethod}())
                 ->method('reindexAll');
             $indexerMocks[] = $indexer;
         }
@@ -197,7 +203,7 @@ class IndexerReindexCommandTest extends AbstractIndexerCommandCommonSetup
         $this->indexerRegistryMock
             ->expects($this->exactly(count($executedSharedIndexers)))
             ->method('get')
-            ->willReturnCallback(function (...$executedSharedIndexers) use ($emptyIndexer) {
+            ->willReturnCallback(function (...$args) use ($emptyIndexer) {
                 return $emptyIndexer;
             });
         $emptyIndexer->method('getState')
@@ -264,18 +270,18 @@ class IndexerReindexCommandTest extends AbstractIndexerCommandCommonSetup
      * @param array|null $methods
      * @param array $data
      *
-     * @return MockObject|StateInterface
+     * @return MockObject|State
      */
     private function getStateMock(?array $methods = null, array $data = [])
     {
-        /** @var MockObject|StateInterface $state */
-        $state = $this->getMockBuilder(StateInterface::class)
-            ->addMethods(['save'])
-            ->onlyMethods($methods)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        /** @var MockObject|State $state */
+        $state = $this->createPartialMock(State::class, ['getStatus', 'setStatus', 'save']);
         $state->method('getStatus')
             ->willReturn($data['status'] ?? StateInterface::STATUS_INVALID);
+        $state->method('setStatus')
+            ->willReturnSelf();
+        $state->method('save')
+            ->willReturnSelf();
         return $state;
     }
 
@@ -319,9 +325,9 @@ class IndexerReindexCommandTest extends AbstractIndexerCommandCommonSetup
                     ],
                 ],
                 'reindexAllCallMatchers' => [
-                    'indexer_1' => self::once(),
-                    'indexer_2' => self::never(),
-                    'indexer_3' => self::never(),
+                    'indexer_1' => 'once',
+                    'indexer_2' => 'never',
+                    'indexer_3' => 'never',
                 ],
                 'executedIndexers' => ['indexer_1'],
                 'executedSharedIndexers' => [],
@@ -377,11 +383,11 @@ class IndexerReindexCommandTest extends AbstractIndexerCommandCommonSetup
                     ],
                 ],
                 'reindexAllCallMatchers' => [
-                    'indexer_1' => self::once(),
-                    'indexer_2' => self::never(),
-                    'indexer_3' => self::once(),
-                    'indexer_4' => self::never(),
-                    'indexer_5' => self::once(),
+                    'indexer_1' => 'once',
+                    'indexer_2' => 'never',
+                    'indexer_3' => 'once',
+                    'indexer_4' => 'never',
+                    'indexer_5' => 'once',
                 ],
                 'executedIndexers' => ['indexer_3', 'indexer_1', 'indexer_5'],
                 'executedSharedIndexers' => [['indexer_2'], ['indexer_3']],
@@ -435,11 +441,11 @@ class IndexerReindexCommandTest extends AbstractIndexerCommandCommonSetup
                     ],
                 ],
                 'reindexAllCallMatchers' => [
-                    'indexer_1' => self::once(),
-                    'indexer_2' => self::never(),
-                    'indexer_3' => self::once(),
-                    'indexer_4' => self::once(),
-                    'indexer_5' => self::once(),
+                    'indexer_1' => 'once',
+                    'indexer_2' => 'never',
+                    'indexer_3' => 'once',
+                    'indexer_4' => 'once',
+                    'indexer_5' => 'once',
                 ],
                 'executedIndexers' => ['indexer_1', 'indexer_4', 'indexer_3', 'indexer_5'],
                 'executedSharedIndexers' => [],

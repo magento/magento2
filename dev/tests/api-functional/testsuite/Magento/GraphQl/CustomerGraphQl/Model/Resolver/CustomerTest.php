@@ -30,6 +30,8 @@ use Magento\TestFramework\Fixture\DbIsolation;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\GraphQl\ResolverCacheAbstract;
 use Magento\TestFramework\TestCase\GraphQl\ResponseContainsErrorsException;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Test for customer resolver cache
@@ -108,8 +110,9 @@ class CustomerTest extends ResolverCacheAbstract
      * @magentoApiDataFixture Magento/Customer/_files/customer_address.php
      * @magentoApiDataFixture Magento/Store/_files/second_store.php
      * @magentoConfigFixture default/system/full_page_cache/caching_application 2
-     * @dataProvider invalidationMechanismProvider
      */
+    #[DataProvider('invalidationMechanismProvider')]
+    #[AllowMockObjectsWithoutExpectations]
     public function testCustomerResolverCacheAndInvalidation(callable $invalidationMechanismCallable)
     {
         $customer = $this->customerRepository->get('customer@example.com');
@@ -137,7 +140,9 @@ class CustomerTest extends ResolverCacheAbstract
         );
 
         // change customer data
-        $invalidationMechanismCallable($customer, $token);
+        // Bind closure to current instance so $this works inside the closure
+        $boundCallable = $invalidationMechanismCallable->bindTo($this, self::class);
+        $boundCallable($customer, $token);
         // assert that cache entry is invalidated
         $this->assertCurrentCustomerCacheRecordDoesNotExist();
     }
@@ -148,6 +153,7 @@ class CustomerTest extends ResolverCacheAbstract
      * @magentoApiDataFixture Magento/Store/_files/second_store.php
      * @magentoConfigFixture default/system/full_page_cache/caching_application 2
      */
+    #[AllowMockObjectsWithoutExpectations]
     public function testCustomerIsSubscribedResolverCacheAndInvalidation()
     {
         /** @var SubscriptionManagerInterface $subscriptionManager */
@@ -265,6 +271,7 @@ class CustomerTest extends ResolverCacheAbstract
      * @magentoApiDataFixture Magento/Store/_files/second_store.php
      * @magentoConfigFixture default/system/full_page_cache/caching_application 2
      */
+    #[AllowMockObjectsWithoutExpectations]
     public function testCustomerResolverCacheInvalidationOnStoreChange()
     {
         $customer = $this->customerRepository->get('customer@example.com');
@@ -338,6 +345,7 @@ class CustomerTest extends ResolverCacheAbstract
      * @magentoConfigFixture default/system/full_page_cache/caching_application 2
      * @return void
      */
+    #[AllowMockObjectsWithoutExpectations]
     public function testCustomerResolverCacheGeneratesSeparateEntriesForEachCustomer()
     {
         $customer1 = $this->customerRepository->get('customer@example.com');
@@ -408,6 +416,7 @@ class CustomerTest extends ResolverCacheAbstract
      * @magentoConfigFixture default/system/full_page_cache/caching_application 2
      * @return void
      */
+    #[AllowMockObjectsWithoutExpectations]
     public function testCustomerResolverCacheInvalidatesWhenCustomerGetsDeleted()
     {
         $customer = $this->customerRepository->get('customer@example.com');
@@ -467,6 +476,7 @@ class CustomerTest extends ResolverCacheAbstract
             ]
         )
     ]
+    #[AllowMockObjectsWithoutExpectations]
     public function testCustomerWithSameEmailInTwoSeparateWebsitesKeepsSeparateCacheEntries()
     {
         $website2 = $this->websiteRepository->get('website2');
@@ -542,6 +552,7 @@ class CustomerTest extends ResolverCacheAbstract
      * @magentoConfigFixture default/system/full_page_cache/caching_application 2
      * @return void
      */
+    #[AllowMockObjectsWithoutExpectations]
     public function testGuestQueryingCustomerDoesNotGenerateResolverCacheEntry()
     {
         $query = $this->getCustomerQuery();
@@ -569,6 +580,7 @@ class CustomerTest extends ResolverCacheAbstract
      * @throws \Magento\Framework\Exception\LocalizedException
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
+    #[AllowMockObjectsWithoutExpectations]
     public function testCustomerQueryingCustomerWithDifferentStoreHeaderDoesNotGenerateResolverCacheEntry()
     {
         $customer = $this->customerRepository->get('customer@example.com');
@@ -627,7 +639,10 @@ class CustomerTest extends ResolverCacheAbstract
         );
     }
 
-    public function invalidationMechanismProvider(): array
+    /**
+     * Data provider with closures that use $this via bindTo() at runtime.
+     */
+    public static function invalidationMechanismProvider(): array
     {
         // provider is invoked before setUp() is called so need to init here
         $repo = Bootstrap::getObjectManager()->get(
@@ -847,6 +862,7 @@ MUTATIONDELETE;
         DbIsolation(false),
         DataFixture(CustomerFixture::class, ['email' => 'customer@example.com'], as: 'customer'),
     ]
+    #[AllowMockObjectsWithoutExpectations]
     public function testChangeEmailSuccessfully(): void
     {
         $currentPassword = 'password';

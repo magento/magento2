@@ -9,7 +9,7 @@ namespace Magento\CustomerGraphQl\Model\Resolver;
 
 use Magento\Customer\Test\Fixture\Customer;
 use Magento\Framework\Exception\AuthenticationException;
-use Magento\Framework\ObjectManagerInterface;
+use Magento\Framework\Exception\EmailNotConfirmedException;
 use Magento\Framework\Serialize\SerializerInterface;
 use Magento\GraphQl\Service\GraphQlRequest;
 use Magento\Integration\Api\CustomerTokenServiceInterface;
@@ -24,24 +24,9 @@ use PHPUnit\Framework\TestCase;
 class ChangePasswordTest extends TestCase
 {
     /**
-     * @var ObjectManagerInterface
-     */
-    private $objectManager;
-
-    /**
      * @var DataFixtureStorage
      */
     private $fixtures;
-
-    /**
-     * @var GraphQlRequest
-     */
-    private $graphQlRequest;
-
-    /**
-     * @var SerializerInterface
-     */
-    private $json;
 
     /**
      * @var CustomerTokenServiceInterface
@@ -50,11 +35,8 @@ class ChangePasswordTest extends TestCase
 
     public function setUp(): void
     {
-        $this->objectManager = Bootstrap::getObjectManager();
         $this->fixtures = DataFixtureStorageManager::getStorage();
-        $this->graphQlRequest = $this->objectManager->create(GraphQlRequest::class);
-        $this->json = $this->objectManager->get(SerializerInterface::class);
-        $this->customerTokenService = $this->objectManager->get(CustomerTokenServiceInterface::class);
+        $this->customerTokenService = Bootstrap::getObjectManager()->get(CustomerTokenServiceInterface::class);
     }
 
     /**
@@ -65,38 +47,31 @@ class ChangePasswordTest extends TestCase
      */
     #[
         DbIsolation(false),
-        DataFixture(Customer::class, ['email' => 'customer@example.com'], as: 'customer'),
+        DataFixture(Customer::class, as: 'customer'),
     ]
     public function testChangePasswordSendsEmail(): void
     {
-        $currentPassword = 'password';
-        $query
-            = <<<QUERY
-mutation {
-  changeCustomerPassword(
-    currentPassword: "$currentPassword"
-    newPassword: "T3stP4assw0rd"
-  ) {
-    id
-    email
-  }
-}
-QUERY;
         $customer = $this->fixtures->get('customer');
-        $response = $this->graphQlRequest->send(
-            $query,
+        $response = Bootstrap::getObjectManager()->create(GraphQlRequest::class)->send(
+            $this->getChangePasswordMutation(),
             [],
             '',
-            $this->getCustomerAuthHeaders($customer->getEmail(), $currentPassword)
+            $this->getCustomerAuthHeaders($customer->getEmail())
         );
-        $responseData = $this->json->unserialize($response->getContent());
 
-        // Assert the response of the GraphQL request
-        $this->assertNull($responseData['data']['changeCustomerPassword']['id']);
-        $this->assertEquals($customer->getEmail(), $responseData['data']['changeCustomerPassword']['email']);
+        $this->assertEquals(
+            [
+                'data' => [
+                    'changeCustomerPassword' => [
+                        'email' => $customer->getEmail()
+                    ]
+                ]
+            ],
+            Bootstrap::getObjectManager()->get(SerializerInterface::class)->unserialize($response->getContent())
+        );
 
         /** @var TransportBuilderMock $transportBuilderMock */
-        $transportBuilderMock = $this->objectManager->get(TransportBuilderMock::class);
+        $transportBuilderMock = Bootstrap::getObjectManager()->get(TransportBuilderMock::class);
         $sentMessage = $transportBuilderMock->getSentMessage();
 
         // Verify an email was dispatched to the correct user
@@ -106,22 +81,43 @@ QUERY;
 
         // Assert the email contains the expected content
         $this->assertEquals('Your Main Website Store password has been changed', $sentMessage->getSubject());
-        $messageRaw = quoted_printable_decode($sentMessage->getBody()->bodyToString());
         $this->assertStringContainsString(
             'We have received a request to change the following information associated with your account',
-            $messageRaw
+            quoted_printable_decode($sentMessage->getBody()->bodyToString())
         );
     }
 
     /**
+     * Return change password mutation
+     *
+     * @return string
+     */
+    private function getChangePasswordMutation(): string
+    {
+        return <<<MUTATION
+            mutation {
+              changeCustomerPassword(
+                currentPassword: "password"
+                newPassword: "T3stP4assw0rd"
+              ) {
+                email
+              }
+            }
+        MUTATION;
+    }
+
+    /**
+     * Get customer authentication headers
+     *
      * @param string $email
-     * @param string $password
      * @return array
      * @throws AuthenticationException
+     * @throws EmailNotConfirmedException
      */
-    private function getCustomerAuthHeaders(string $email, string $password): array
+    private function getCustomerAuthHeaders(string $email): array
     {
-        $customerToken = $this->customerTokenService->createCustomerAccessToken($email, $password);
+        $customerToken = $this->customerTokenService->createCustomerAccessToken($email, 'password');
+
         return ['Authorization' => 'Bearer ' . $customerToken];
     }
 }

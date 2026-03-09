@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -77,18 +77,18 @@ class MergeTest extends TestCase
     {
         $this->objectManagerHelper = new ObjectManager($this);
 
-        $this->scope = $this->getMockForAbstractClass(ScopeInterface::class);
-        $this->cache = $this->getMockForAbstractClass(FrontendInterface::class);
+        $this->scope = $this->createMock(ScopeInterface::class);
+        $this->cache = $this->createMock(FrontendInterface::class);
         $this->layoutValidator = $this->getMockBuilder(Validator::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->logger = $this->getMockForAbstractClass(LoggerInterface::class);
-        $this->serializer = $this->getMockForAbstractClass(SerializerInterface::class);
+        $this->logger = $this->createMock(LoggerInterface::class);
+        $this->serializer = $this->createMock(SerializerInterface::class);
         $this->appState = $this->getMockBuilder(State::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->layoutCacheKeyMock = $this->getMockForAbstractClass(LayoutCacheKeyInterface::class);
+        $this->layoutCacheKeyMock = $this->createMock(LayoutCacheKeyInterface::class);
         $this->layoutCacheKeyMock->expects($this->any())
             ->method('getCacheKeys')
             ->willReturn([]);

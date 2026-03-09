@@ -18,19 +18,6 @@ use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\Mail\Template\TransportBuilderMock;
 use PHPUnit\Framework\TestCase;
 
-/**
- * Integration test for sending the "payment failed" email on virtual product order failure.
- *
- * Ensures that when a virtual product order fails during payment, the appropriate failure email is
- * sent and does not include any shipping address or method information.
- *
- * @magentoDbIsolation enabled
- * @magentoAppIsolation enabled
- * @magentoDataFixture Magento/Checkout/_files/quote_with_virtual_product_and_address.php
- *
- * @AllureSuite("Checkout")
- * @AllureFeature("Payment Failed Email")
- */
 class DataTest extends TestCase
 {
     /**
@@ -92,6 +79,8 @@ class DataTest extends TestCase
      * - The email content does not include shipping address or shipping method
      *   since the product is virtual.
      *
+     * @magentoDataFixture Magento/Checkout/_files/quote_with_virtual_product_and_address.php
+     *
      * @return void
      */
     public function testSendPaymentFailedEmail(): void
@@ -134,14 +123,6 @@ class DataTest extends TestCase
         );
     }
 
-    /**
-     * Prepare an order from a fixture quote containing a virtual product.
-     *
-     * Loads the quote with reserved_order_id from fixture,
-     * sets payment method, submits the quote to create the order.
-     *
-     * @return array{0: Order, 1: Quote} Returns the created order and the original quote.
-     */
     private function createOrderFromFixture(): array
     {
         /** @var Quote $quote */

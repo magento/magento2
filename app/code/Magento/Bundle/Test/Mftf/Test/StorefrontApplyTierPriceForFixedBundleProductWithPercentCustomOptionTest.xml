@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright 2025 Adobe
+ * All Rights Reserved.
+ */
+-->
+
+<tests
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontApplyTierPriceForFixedBundleProductWithPercentCustomOptionTest">
+        <annotations>
+            <features value="Bundle"/>
+            <stories value="Apply tier price on fixed bundle with percent custom option"/>
+            <title value="Apply tier customer group price for Bundle Fixed Product if custom options with percent price"/>
+            <description value="This test case verifies apply tier price for Bundle fixed product if Custom options with percent price."/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="AC-3885"/>
+            <group value="bundle"/>
+        </annotations>
+        <before>
+            <!-- Create category and 2 simple products to use as bundle selections -->
+            <createData entity="_defaultCategory" stepKey="createCategory"/>
+            <createData entity="_defaultProduct" stepKey="simple1">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <createData entity="_defaultProduct" stepKey="simple2">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <!-- Pre Condition 1: Create fixed bundle product and link items  -->
+            <createData entity="FixedBundleProduct" stepKey="createBundleProduct">
+                <field key="price">110</field>
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <!-- Pre Condition 2: Associated product price with two options: +5% and +10%  with price type percent -->
+            <createData entity="DropDownBundleOption" stepKey="dropDownBundleOption1">
+                <requiredEntity createDataKey="createBundleProduct"/>
+            </createData>
+            <createData entity="ApiBundleLink" stepKey="linkOptionToFirstProduct">
+                <requiredEntity createDataKey="createBundleProduct"/>
+                <requiredEntity createDataKey="dropDownBundleOption1"/>
+                <requiredEntity createDataKey="simple1"/>
+                <field key="price">5</field>
+                <field key="price_type">1</field>
+            </createData>
+            <createData entity="ApiBundleLink" stepKey="linkOptionToSecondProduct">
+                <requiredEntity createDataKey="createBundleProduct"/>
+                <requiredEntity createDataKey="dropDownBundleOption1"/>
+                <requiredEntity createDataKey="simple2"/>
+                <field key="price">10</field>
+                <field key="price_type">1</field>
+            </createData>
+            <!-- Pre Condition 3: Login and edit bundle product to add tier price 20% for 2 products with price view and custom option -->
+            <actionGroup ref="AdminLoginActionGroup" stepKey="adminLogin"/>
+            <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="openProductGrid"/>
+            <actionGroup ref="FilterProductGridBySkuActionGroup" stepKey="filterByBundleSku">
+                <argument name="product" value="$$createBundleProduct$$"/>
+            </actionGroup>
+            <actionGroup ref="OpenProductForEditByClickingRowXColumnYInProductGridActionGroup" stepKey="openBundleForEdit"/>
+            <actionGroup ref="AdminBundleProductSetAdvancedPricingActionGroup" stepKey="addProductTierPrice">
+                <argument name="quantity" value="2"/>
+                <argument name="price" value="Discount"/>
+                <argument name="amount" value="20"/>
+                <argument name="priceView" value="Price Range"/>
+            </actionGroup>
+            <!-- Pre Condition 4: Add custom option text field named '30 bucks', type is percent, price is 30 -->
+            <actionGroup ref="AdminCustomizableOptionWithOneOptionActionGroup" stepKey="addCustomOptionField"/>
+            <waitForElementVisible selector="{{AdminProductFormBundleSection.customOptionXTitle}}" stepKey="waitToSetCustomOptionTitle"/>
+            <fillField selector="{{AdminProductFormBundleSection.customOptionXTitle}}" userInput="30 bucks" stepKey="setCustomOptionTitle"/>
+            <!-- Ensure Customizable Option is set required yes -->
+            <waitForElementClickable selector="{{AdminProductFormBundleSection.uncheckRequired}}" stepKey="waitForToggleRequiredOn"/>
+            <click selector="{{AdminProductFormBundleSection.uncheckRequired}}" stepKey="toggleRequiredOn"/>
+            <!-- Save product -->
+            <actionGroup ref="AdminProductFormSaveActionGroup" stepKey="saveBundleProduct"/>
+        </before>
+        <after>
+            <!-- delete products,category and logout from admin -->
+            <deleteData createDataKey="simple1" stepKey="deleteSimple1"/>
+            <deleteData createDataKey="simple2" stepKey="deleteSimple2"/>
+            <deleteData createDataKey="createBundleProduct" stepKey="deleteBundleProduct"/>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="adminLogout"/>
+        </after>
+        <!-- Step 1: Navigate to category page and verify price range from/to -->
+        <actionGroup ref="StorefrontNavigateCategoryPageActionGroup" stepKey="goToCategory">
+            <argument name="category" value="$createCategory$"/>
+        </actionGroup>
+        <waitForText userInput="From $148.50" selector="{{StorefrontCategoryProductSection.priceFromByProductId($$createBundleProduct.id$$)}}" stepKey="seePriceFromInCategoryBundle1"/>
+        <waitForText userInput="To $154.00" selector="{{StorefrontCategoryProductSection.priceToByProductId($$createBundleProduct.id$$)}}" stepKey="seePriceToInCategoryBundle1"/>
+        <!-- Step 2: Navigate to product page and verify price range from/to -->
+        <actionGroup ref="AssertProductNameAndSkuInStorefrontProductPageByCustomAttributeUrlKeyActionGroup" stepKey="openProductPageAndVerifyProduct">
+            <argument name="product" value="$$createBundleProduct$$"/>
+        </actionGroup>
+        <actionGroup ref="AssertStorefrontElementVisibleActionGroup" stepKey="seePriceRangeIsVisible">
+            <argument name="selector" value="{{StorefrontProductInfoMainSection.priceFrom}}"/>
+            <argument name="userInput" value="$148.50"/>
+        </actionGroup>
+        <actionGroup ref="AssertStorefrontElementVisibleActionGroup" stepKey="seePriceRangeIsVisible1">
+            <argument name="selector" value="{{StorefrontProductInfoMainSection.priceTo}}"/>
+            <argument name="userInput" value="To $154.00"/>
+        </actionGroup>
+        <!-- Step 3: Click 'customize and add to cart' and verify configuration price $110 and tier message -->
+        <actionGroup ref="StorefrontSelectCustomizeAndAddToTheCartButtonActionGroup" stepKey="openCustomization"/>
+        <waitForText userInput="$110.00" selector="{{StorefrontBundledSection.bundleProductsPrice}}" stepKey="seeConfiguredPrice110"/>
+        <waitForText userInput="Buy 2 with 20% discount each" selector="{{StorefrontProductInfoMainSection.tierPriceWithIndex('1')}}" stepKey="seeTierMessage"/>
+        <!-- Step 4: Select first dropdown bundle option (+5%), fill custom option 'ok', set qty=2 and add to cart and verify price is configured $237.60-->
+        <waitForElementClickable selector="{{StorefrontBundledSection.dropDownOptionOneProducts($$dropDownBundleOption1.title$$)}}" stepKey="waitForDropdown"/>
+        <click selector="{{StorefrontBundledSection.dropDownOptionOneProducts($$dropDownBundleOption1.title$$)}}" stepKey="openDropdown"/>
+        <selectOption selector="{{StorefrontBundledSection.dropDownOptionOneProducts($$dropDownBundleOption1.title$$)}}" userInput="$$simple1.name$$" stepKey="chooseSimple1Option"/>
+        <waitForElementVisible selector="{{StorefrontBundleProductActionSection.customOptionField}}" stepKey="waitToFillCustomOptionValue"/>
+        <fillField selector="{{StorefrontBundleProductActionSection.customOptionField}}" userInput="ok" stepKey="fillCustomOptionValue"/>
+        <actionGroup ref="StorefrontEnterProductQuantityAndAddToTheCartActionGroup" stepKey="setQtyAndAddToCart">
+            <argument name="quantity" value="2"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontCartPageOpenActionGroup" stepKey="openCart"/>
+        <waitForText selector="{{CheckoutCartSummarySection.subtotal}}" userInput="$237.60" stepKey="assertCartSubtotal"/>
+    </test>
+</tests>

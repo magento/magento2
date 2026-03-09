@@ -9,8 +9,6 @@ use Magento\Backend\App\Action;
 
 /**
  * Adminhtml account controller
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 abstract class Account extends Action
 {
@@ -19,5 +17,5 @@ abstract class Account extends Action
      *
      * @see _isAllowed()
      */
-    const ADMIN_RESOURCE = 'Magento_Backend::myaccount';
+    public const ADMIN_RESOURCE = 'Magento_Backend::myaccount';
 }

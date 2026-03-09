@@ -40,17 +40,12 @@
                     <frontend_class>validate-digits</frontend_class>
                 </field>
             </group>
-            <group id="graphql" translate="label" showInDefault="1" sortOrder="20">
+            <group id="graphql" translate="label" showInDefault="1" sortOrder="10">
                 <label>GraphQl Configurations</label>
-                <field id="share_all_sales_rule" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="0" showInStore="0">
-                    <label>Share All Sales Rules</label>
+                <field id="share_applied_cart_rule" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Share Applied Cart Rules</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
-                    <comment>Configuration to allow to disable providing all cart rules via GraphQL</comment>
-                </field>
-                <field id="share_applied_sales_rule" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="0" showInStore="0">
-                    <label>Share Applied Sales Rules</label>
-                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
-                    <comment>Configuration to allow to disable currently applied sales rules for cart via GraphQL</comment>
+                    <comment>Allow to retrieve applied cart rules via GraphQL API</comment>
                 </field>
             </group>
         </section>

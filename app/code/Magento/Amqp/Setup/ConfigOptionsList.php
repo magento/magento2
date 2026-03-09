@@ -5,11 +5,11 @@
  */
 namespace Magento\Amqp\Setup;
 
+use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\Config\Data\ConfigData;
 use Magento\Framework\Config\File\ConfigFilePool;
 use Magento\Framework\Setup\ConfigOptionsListInterface;
 use Magento\Framework\Setup\Option\TextConfigOption;
-use Magento\Framework\App\DeploymentConfig;
 
 /**
  * Deployment configuration options needed for Setup application
@@ -26,6 +26,7 @@ class ConfigOptionsList implements ConfigOptionsListInterface
     public const INPUT_KEY_QUEUE_AMQP_VIRTUAL_HOST = 'amqp-virtualhost';
     public const INPUT_KEY_QUEUE_AMQP_SSL = 'amqp-ssl';
     public const INPUT_KEY_QUEUE_AMQP_SSL_OPTIONS = 'amqp-ssl-options';
+    public const INPUT_KEY_QUEUE_DEFAULT_CONNECTION ='queue-default-connection';
 
     /**
      * Path to the values in the deployment config
@@ -202,6 +203,11 @@ class ConfigOptionsList implements ConfigOptionsListInterface
 
             if (!$result) {
                 $errors[] = "Could not connect to the Amqp Server.";
+            }
+
+            if (isset($options[self::INPUT_KEY_QUEUE_DEFAULT_CONNECTION])
+                && $options[self::INPUT_KEY_QUEUE_DEFAULT_CONNECTION] !== 'amqp') {
+                $errors = [];
             }
         }
 

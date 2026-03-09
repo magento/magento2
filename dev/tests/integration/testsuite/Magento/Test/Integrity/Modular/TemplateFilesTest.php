@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Test\Integrity\Modular;
 
@@ -121,10 +121,12 @@ class TemplateFilesTest extends \Magento\TestFramework\TestCase\AbstractIntegrit
             }
             return $templates;
         } catch (\Exception $e) {
-            trigger_error(
+            // PHP 8.4+ Compatibility: throw exception instead of trigger_error with E_USER_ERROR
+            throw new \RuntimeException(
                 "Corrupted data provider. Last known block instantiation attempt: '{$blockClass}'." .
                 " Exception: {$e}",
-                E_USER_ERROR
+                0,
+                $e
             );
         }
     }

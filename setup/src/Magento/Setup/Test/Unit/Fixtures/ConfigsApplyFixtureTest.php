@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -16,10 +16,13 @@ use Magento\Framework\ObjectManager\ObjectManager;
 use Magento\Setup\Fixtures\ConfigsApplyFixture;
 use Magento\Setup\Fixtures\FixtureModel;
 use PHPUnit\Framework\MockObject\MockObject;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use PHPUnit\Framework\TestCase;
 
 class ConfigsApplyFixtureTest extends TestCase
 {
+    use MockCreationTrait;
+
 
     /**
      * @var MockObject|FixtureModel
@@ -69,9 +72,11 @@ class ConfigsApplyFixtureTest extends TestCase
 
     public function testNoFixtureConfigValue()
     {
-        $configMock = $this->getMockBuilder(ValueInterface::class)
-            ->addMethods(['save'])
-            ->getMockForAbstractClass();
+        $configMock = $this->createPartialMockWithReflection(
+            ValueInterface::class,
+            ['save', 'isValueChanged', 'getOldValue', 'getFieldsetDataValue', 'setScope', 'setPath',
+             'setValue', 'getScope', 'getPath', 'getValue', 'getId', 'setId']
+        );
         $configMock->expects($this->never())->method('save');
 
         $objectManagerMock = $this->createMock(ObjectManager::class);

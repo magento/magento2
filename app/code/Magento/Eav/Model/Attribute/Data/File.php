@@ -1,13 +1,14 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Eav\Model\Attribute\Data;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\Filesystem\Io\File as FileIo;
+use Magento\Framework\Exception\LocalizedException;
 
 /**
  * EAV Entity Attribute File Data Model
@@ -182,6 +183,7 @@ class File extends \Magento\Eav\Model\Attribute\Data\AbstractData
      * @return bool
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @throws LocalizedException
      */
     public function validateValue($value)
     {
@@ -210,7 +212,9 @@ class File extends \Magento\Eav\Model\Attribute\Data\AbstractData
             return true;
         }
 
-        if (!$attribute->getIsRequired() && !$toUpload) {
+        if ((!$attribute->getIsRequired() || ($this->getEntity()?->getSkipRequiredValidation()))
+            && !$toUpload
+        ) {
             return true;
         }
 
