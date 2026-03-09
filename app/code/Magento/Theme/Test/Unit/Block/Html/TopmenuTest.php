@@ -97,7 +97,7 @@ class TopmenuTest extends TestCase
     // @codingStandardsIgnoreStart
     /** @var string  */
     private $navigationMenuHtml = <<<HTML
-<li  class="level0 nav-1 first"><a href="http://magento2/category-0.html" ><span></span></a></li><li  class="level0 nav-2"><a href="http://magento2/category-1.html" ><span></span></a></li><li  class="level0 nav-3"><a href="http://magento2/category-2.html" ><span></span></a></li><li  class="level0 nav-4"><a href="http://magento2/category-3.html" ><span></span></a></li><li  class="level0 nav-5"><a href="http://magento2/category-4.html" ><span></span></a></li><li  class="level0 nav-6"><a href="http://magento2/category-5.html" ><span></span></a></li><li  class="level0 nav-7"><a href="http://magento2/category-6.html" ><span></span></a></li><li  class="level0 nav-8"><a href="http://magento2/category-7.html" ><span></span></a></li><li  class="level0 nav-9"><a href="http://magento2/category-8.html" ><span></span></a></li><li  class="level0 nav-10 last"><a href="http://magento2/category-9.html" ><span></span></a></li>
+<li  class="level0 nav-1 first" role="presentation"><a href="http://magento2/category-0.html" role="menuitem"><span></span></a></li><li  class="level0 nav-2" role="presentation"><a href="http://magento2/category-1.html" role="menuitem"><span></span></a></li><li  class="level0 nav-3" role="presentation"><a href="http://magento2/category-2.html" role="menuitem"><span></span></a></li><li  class="level0 nav-4" role="presentation"><a href="http://magento2/category-3.html" role="menuitem"><span></span></a></li><li  class="level0 nav-5" role="presentation"><a href="http://magento2/category-4.html" role="menuitem"><span></span></a></li><li  class="level0 nav-6" role="presentation"><a href="http://magento2/category-5.html" role="menuitem"><span></span></a></li><li  class="level0 nav-7" role="presentation"><a href="http://magento2/category-6.html" role="menuitem"><span></span></a></li><li  class="level0 nav-8" role="presentation"><a href="http://magento2/category-7.html" role="menuitem"><span></span></a></li><li  class="level0 nav-9" role="presentation"><a href="http://magento2/category-8.html" role="menuitem"><span></span></a></li><li  class="level0 nav-10 last" role="presentation"><a href="http://magento2/category-9.html" role="menuitem"><span></span></a></li>
 HTML;
     // @codingStandardsIgnoreEnd
 
@@ -106,24 +106,16 @@ HTML;
      */
     protected function setUp(): void
     {
-        $this->storeManager = $this->getMockBuilder(StoreManagerInterface::class)
-            ->getMockForAbstractClass();
+        $this->storeManager = $this->createMock(StoreManagerInterface::class);
 
-        $this->urlBuilder = $this->getMockBuilder(UrlInterface::class)
-            ->getMockForAbstractClass();
+        $this->urlBuilder = $this->createMock(UrlInterface::class);
 
-        $this->eventManagerMock = $this->getMockBuilder(ManagerInterface::class)
-            ->getMockForAbstractClass();
+        $this->eventManagerMock = $this->createMock(ManagerInterface::class);
 
-        $this->requestMock = $this->getMockBuilder(RequestInterface::class)
-            ->getMockForAbstractClass();
+        $this->requestMock = $this->createMock(RequestInterface::class);
 
-        $this->nodeFactory = $this->getMockBuilder(NodeFactory::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->treeFactory = $this->getMockBuilder(TreeFactory::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->nodeFactory = $this->createMock(NodeFactory::class);
+        $this->treeFactory = $this->createMock(TreeFactory::class);
 
         $this->menuMock = $this->getMockBuilder(Menu::class)
             ->onlyMethods(['count', 'getIterator'])
@@ -238,10 +230,7 @@ HTML;
 
         $topmenu =  new Topmenu($this->context, $nodeFactory, $treeFactory);
         $this->urlBuilder->expects($this->once())->method('getBaseUrl')->willReturn('baseUrl');
-        $store = $this->getMockBuilder(Store::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['getCode'])
-            ->getMock();
+        $store = $this->createPartialMock(Store::class, ['getCode']);
         $store->expects($this->once())->method('getCode')->willReturn('321');
         $this->storeManager->expects($this->exactly(2))->method('getStore')->willReturn($store);
 
@@ -261,9 +250,7 @@ HTML;
      */
     private function buildTree(bool $isCurrentItem): MockObject
     {
-        $treeMock = $this->getMockBuilder(Tree::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $treeMock = $this->createMock(Tree::class);
 
         $container = $this->createMock(CategoryTree::class);
 
@@ -294,10 +281,11 @@ HTML;
 
         $children->expects($this->once())->method('count')->willReturn(10);
 
-        $this->nodeMock->expects($this->once())
+        $nodeMock = $this->createPartialMock(Node::class, ['getChildren', '__call']);
+        $nodeMock->expects($this->once())
             ->method('getChildren')
             ->willReturn($children);
-        $this->nodeMock
+        $nodeMock
             ->method('__call')
             ->willReturnCallback(function ($arg1, $arg2) {
                 if ($arg1 == 'setOutermostClass') {
@@ -316,13 +304,13 @@ HTML;
         $this->nodeFactory->expects($this->any())
             ->method('create')
             ->with($nodeMockData)
-            ->willReturn($this->nodeMock);
+            ->willReturn($nodeMock);
 
         $this->treeFactory->expects($this->once())
             ->method('create')
             ->willReturn($treeMock);
 
-        return $this->nodeMock;
+        return $nodeMock;
     }
 
     /**
@@ -330,9 +318,7 @@ HTML;
      */
     public function testGetMenu(): void
     {
-        $treeMock = $this->getMockBuilder(Tree::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $treeMock = $this->createMock(Tree::class);
 
         $nodeMockData = [
             'data' => [],
@@ -340,17 +326,19 @@ HTML;
             'tree' => $treeMock
         ];
 
+        $nodeMock = $this->createMock(Node::class);
+
         $this->nodeFactory->expects($this->any())
             ->method('create')
             ->with($nodeMockData)
-            ->willReturn($this->nodeMock);
+            ->willReturn($nodeMock);
 
         $this->treeFactory->expects($this->once())
             ->method('create')
             ->willReturn($treeMock);
 
         $topmenuBlock = $this->getTopmenu();
-        $this->assertEquals($this->nodeMock, $topmenuBlock->getMenu());
+        $this->assertEquals($nodeMock, $topmenuBlock->getMenu());
     }
 
     /**
