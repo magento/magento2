@@ -24,9 +24,12 @@ use Magento\TestFramework\Fixture\DataFixtureStorage;
 use Magento\TestFramework\Fixture\DataFixtureStorageManager;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Test for updating shopping cart items
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class UpdateCartItemsTest extends GraphQlAbstract
 {
@@ -158,9 +161,9 @@ class UpdateCartItemsTest extends GraphQlAbstract
      * @param int $updateQuantity
      * @param bool $expectError
      * @param string|null $expectedErrorCode
-     * @dataProvider dataProviderUpdateCartItemQuantity
      */
     #[
+        DataProvider('dataProviderUpdateCartItemQuantity'),
         DataFixture(ProductFixture::class, as: 'product'),
         DataFixture(CustomerFixture::class, ['email' => 'customer@example.com'], as: 'customer'),
         DataFixture(CustomerCartFixture::class, ['customer_id' => '$customer.id$'], as: 'cart'),
@@ -406,10 +409,10 @@ class UpdateCartItemsTest extends GraphQlAbstract
      * @param string $input
      * @param string $message
      * @param string $errorCode
-     * @dataProvider dataProviderUpdateWithMissedRequiredParameters
      * @magentoApiDataFixture Magento/Checkout/_files/quote_with_address_saved.php
      * @throws NoSuchEntityException
      */
+    #[DataProvider('dataProviderUpdateWithMissedRequiredParameters')]
     public function testUpdateWithMissedItemRequiredParameters(string $input, string $message, string $errorCode)
     {
         $quote = $this->quoteFactory->create();

@@ -26,6 +26,7 @@ use Magento\TestFramework\Fixture\Config;
 use Magento\TestFramework\Fixture\DataFixture;
 use Magento\TestFramework\Fixture\DataFixtureStorageManager;
 use Magento\TestFramework\Helper\Bootstrap;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Integration test for \Magento\CatalogImportExport\Model\Import\Product class.
@@ -76,11 +77,11 @@ class ProductUrlKeyTest extends ProductTestBase
 
     /**
      * @magentoDataFixture Magento/Catalog/Model/ResourceModel/_files/product_simple.php
-     * @dataProvider validateUrlKeysDataProvider
      * @param $importFile string
      * @param $expectedErrors array
      * @throws LocalizedException
      */
+    #[DataProvider('validateUrlKeysDataProvider')]
     public function testValidateUrlKeys($importFile, $expectedErrors)
     {
         $filesystem = Bootstrap::getObjectManager()->create(

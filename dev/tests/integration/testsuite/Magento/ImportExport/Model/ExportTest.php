@@ -5,6 +5,7 @@
  */
 namespace Magento\ImportExport\Model;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use ReflectionClass;
 
 class ExportTest extends \PHPUnit\Framework\TestCase
@@ -28,9 +29,9 @@ class ExportTest extends \PHPUnit\Framework\TestCase
      *
      * @param string $entity
      * @param string $expectedEntityType
-     * @dataProvider getEntityDataProvider
      * @covers \Magento\ImportExport\Model\Export::_getEntityAdapter
      */
+    #[DataProvider('getEntityDataProvider')]
     public function testGetEntityAdapterWithValidEntity($entity, $expectedEntityType)
     {
         $this->_model->setData(['entity' => $entity]);

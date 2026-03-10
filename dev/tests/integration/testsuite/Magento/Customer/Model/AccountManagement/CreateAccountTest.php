@@ -31,6 +31,7 @@ use Magento\Store\Model\StoreManagerInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\Helper\Xpath;
 use Magento\TestFramework\Mail\Template\TransportBuilderMock;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -146,13 +147,13 @@ class CreateAccountTest extends TestCase
     }
 
     /**
-     * @dataProvider createInvalidAccountDataProvider
      * @param array $customerData
      * @param string $password
      * @param string $errorType
      * @param string $errorMessage
      * @return void
      */
+    #[DataProvider('createInvalidAccountDataProvider')]
     public function testCreateAccountWithInvalidFields(
         array $customerData,
         string $password,

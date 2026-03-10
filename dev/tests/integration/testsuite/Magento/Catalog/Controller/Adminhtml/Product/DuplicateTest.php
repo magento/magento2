@@ -53,10 +53,12 @@ class DuplicateTest extends AbstractBackendController
      */
     protected function tearDown(): void
     {
-        try {
-            $this->productRepository->deleteById($this->duplicatedProductSku);
-        } catch (NoSuchEntityException $e) {
-            // product already deleted
+        if ($this->duplicatedProductSku !== null) {
+            try {
+                $this->productRepository->deleteById($this->duplicatedProductSku);
+            } catch (NoSuchEntityException $e) {
+                // product already deleted
+            }
         }
 
         parent::tearDown();

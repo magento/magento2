@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\Quote\Api;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\Catalog\Model\ResourceModel\Product as ProductResource;
 use Magento\Framework\Exception\AuthenticationException;
 use Magento\Framework\Webapi\Rest\Request;
@@ -316,14 +317,12 @@ class CartAddingItemsTest extends WebapiAbstract
      * @magentoConfigFixture web/url/use_store 1
      * @magentoApiDataFixture Magento/Catalog/_files/product_simple_multistore.php
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
-     *
      * @param string $expectedProductName
      * @param string|null $storeCode
-     *
      * @return void
-     * @dataProvider dataProviderForMultiStoreView
      * @throws AuthenticationException
      */
+    #[DataProvider('dataProviderForMultiStoreView')]
     public function testForProductNameAsPerStoreView(string $expectedProductName, ?string $storeCode = null): void
     {
         $this->_markTestAsRestOnly();

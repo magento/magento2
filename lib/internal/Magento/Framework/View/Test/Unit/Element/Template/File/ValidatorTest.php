@@ -17,6 +17,7 @@ use Magento\Framework\Filesystem\DriverPool;
 use Magento\Framework\View\Element\Template\File\Validator;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class ValidatorTest extends TestCase
 {
@@ -68,9 +69,9 @@ class ValidatorTest extends TestCase
     protected function setUp(): void
     {
         $this->fileSystemMock = $this->createMock(Filesystem::class);
-        $this->scopeConfigMock = $this->getMockForAbstractClass(ScopeConfigInterface::class);
-        $this->rootDirectoryMock = $this->getMockForAbstractClass(ReadInterface::class);
-        $this->compiledDirectoryMock = $this->getMockForAbstractClass(ReadInterface::class);
+        $this->scopeConfigMock = $this->createMock(ScopeConfigInterface::class);
+        $this->rootDirectoryMock = $this->createMock(ReadInterface::class);
+        $this->compiledDirectoryMock = $this->createMock(ReadInterface::class);
 
         $this->fileSystemMock->expects($this->any())
             ->method('getDirectoryRead')
@@ -115,9 +116,8 @@ class ValidatorTest extends TestCase
      * @param string $file
      * @param bool $expectedResult
      * @return void
-     *
-     * @dataProvider isValidDataProvider
-     */
+     *     */
+    #[DataProvider('isValidDataProvider')]
     public function testIsValid($file, $expectedResult)
     {
         $this->rootDirectoryMock->expects($this->any())->method('isFile')->willReturn(true);
