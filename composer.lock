@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "a90de17446293eb96fe10af2f3c38950",
+    "content-hash": "86e862fe2f80a1a2004d1b284c55fc89",
     "packages": [
         {
             "name": "aws/aws-crt-php",
@@ -1145,6 +1145,50 @@
                 }
             ],
             "time": "2024-02-05T11:56:58+00:00"
+        },
+        {
+            "name": "duosecurity/duo_api_php",
+            "version": "1.2.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/duosecurity/duo_api_php.git",
+                "reference": "ecff0b813c5dcd5dd37fd002dbae0d61d955c748"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/duosecurity/duo_api_php/zipball/ecff0b813c5dcd5dd37fd002dbae0d61d955c748",
+                "reference": "ecff0b813c5dcd5dd37fd002dbae0d61d955c748",
+                "shasum": ""
+            },
+            "require": {
+                "ext-curl": "*",
+                "php": ">=8.0"
+            },
+            "require-dev": {
+                "php-coveralls/php-coveralls": "dev-master",
+                "phpunit/phpunit": "~9",
+                "squizlabs/php_codesniffer": "2.*"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.1.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "DuoAPI\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "description": "A PHP implementation of the Duo API.",
+            "homepage": "https://duo.com/",
+            "support": {
+                "email": "support@duosecurity.com",
+                "issues": "https://github.com/duosecurity/duo_api_php/issues",
+                "source": "https://github.com/duosecurity/duo_api_php/tree/1.2.1"
+            },
+            "time": "2026-02-04T19:44:58+00:00"
         },
         {
             "name": "duosecurity/duo_universal_php",
@@ -4107,52 +4151,6 @@
                 "source": "https://github.com/laminas/laminas-captcha"
             },
             "time": "2026-01-20T07:20:51+00:00"
-        },
-        {
-            "name": "magento/magento-zf-duo_api_php",
-            "version": "1.0.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/magento/magento-zf-duo_api_php.git",
-                "reference": "135fca9a0923a31f3df03b7399df04fd2bd33659"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/magento/magento-zf-duo_api_php/zipball/135fca9a0923a31f3df03b7399df04fd2bd33659",
-                "reference": "135fca9a0923a31f3df03b7399df04fd2bd33659",
-                "shasum": ""
-            },
-            "require": {
-                "ext-curl": "*",
-                "php": ">=8.0"
-            },
-            "replace": {
-                "duosecurity/duo_api_php": "^1.2"
-            },
-            "require-dev": {
-                "php-coveralls/php-coveralls": "dev-master",
-                "phpunit/phpunit": "~9",
-                "squizlabs/php_codesniffer": "2.*"
-            },
-            "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "1.1.x-dev"
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "DuoAPI\\": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "description": "A PHP implementation of the Duo API.",
-            "homepage": "https://duo.com/",
-            "support": {
-                "email": "support@duosecurity.com",
-                "source": "https://github.com/magento/magento-zf-duo_api_php/tree/1.0.0"
-            },
-            "time": "2026-01-20T09:19:02+00:00"
         },
         {
             "name": "magento/magento-zf-soap",
@@ -15172,5 +15170,5 @@
         "lib-libxml": "*"
     },
     "platform-dev": {},
-    "plugin-api-version": "2.6.0"
+    "plugin-api-version": "2.9.0"
 }

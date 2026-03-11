@@ -42,7 +42,7 @@
         "colinmollenhour/php-redis-session-abstract": "^2.0",
         "composer/composer": "^2.2",
         "elasticsearch/elasticsearch": "^8.15",
-        "magento/magento-zf-duo_api_php": "^1.0",
+        "duosecurity/duo_api_php": "^1.2",
         "duosecurity/duo_universal_php": "^1.0",
         "ezyang/htmlpurifier": "^4.17",
         "guzzlehttp/guzzle": "^7.5",
