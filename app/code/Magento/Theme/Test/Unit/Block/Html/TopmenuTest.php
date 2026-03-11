@@ -133,11 +133,10 @@ class TopmenuTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->nodeMock = $this->getMockBuilder(Node::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['getClass'])
-            ->onlyMethods(['getChildren', 'hasChildren', '__call'])
-            ->getMock();
+        $this->nodeMock = $this->createPartialMock(
+            Node::class,
+            ['getChildren', 'hasChildren', '__call']
+        );
 
         $objectManager = new ObjectManager($this);
         $this->context = $objectManager->getObject(
@@ -499,8 +498,8 @@ class TopmenuTest extends TestCase
      */
     public function testSetCurrentClass(): void
     {
-        $this->nodeMock->expects($this->once())
-            ->method('getClass')
+        $this->nodeMock->expects($this->exactly(2))
+            ->method('__call')
             ->willReturn(null);
 
         $method = new \ReflectionMethod(
