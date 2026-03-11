@@ -10,6 +10,7 @@ namespace Magento\Framework\File;
 use Magento\Customer\Model\FileProcessor;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Filesystem\Driver\File;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Test for \Magento\MediaStorage\Model\File\Uploader
@@ -130,11 +131,11 @@ class MediaStorageUploaderTest extends \PHPUnit\Framework\TestCase
      *
      * @magentoConfigFixture system/media_gallery/enabled 1
      * @magentoAppArea adminhtml
-     * @dataProvider dirCodeDataProvider
      *
      * @param string $directoryCode
      * @return void
      */
+    #[DataProvider('dirCodeDataProvider')]
     public function testUploadFileWhenOldMediaGalleryDisabled(string $directoryCode): void
     {
         $destinationDirectory = $this->filesystem->getDirectoryWrite($directoryCode);

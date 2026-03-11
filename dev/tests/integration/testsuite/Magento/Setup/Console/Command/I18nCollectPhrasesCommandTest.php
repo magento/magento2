@@ -28,9 +28,7 @@ class I18nCollectPhrasesCommandTest extends \PHPUnit\Framework\TestCase
     protected function tearDown(): void
     {
         $property = new \ReflectionProperty(\Magento\Setup\Module\I18n\ServiceLocator::class, '_dictionaryGenerator');
-        $property->setAccessible(true);
         $property->setValue(null, null);
-        $property->setAccessible(false);
     }
 
     public function testExecuteConsoleOutput()

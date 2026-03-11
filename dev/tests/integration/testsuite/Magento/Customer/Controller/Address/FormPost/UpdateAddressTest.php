@@ -18,6 +18,7 @@ use Magento\Framework\Escaper;
 use Magento\Framework\Message\MessageInterface;
 use Magento\TestFramework\Directory\Model\GetRegionIdByName;
 use Magento\TestFramework\TestCase\AbstractController;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Test cases related to check that customer address correctly updated from
@@ -119,13 +120,12 @@ class UpdateAddressTest extends AbstractController
      * @magentoDataFixture Magento/Customer/_files/customer.php
      * @magentoDataFixture Magento/Customer/_files/customer_two_addresses.php
      *
-     * @dataProvider postDataForSuccessCreateDefaultAddressDataProvider
-     *
      * @param array $postData
      * @param int $expectedShippingId
      * @param int $expectedBillingId
      * @return void
      */
+    #[DataProvider('postDataForSuccessCreateDefaultAddressDataProvider')]
     public function testAddressSuccessfullyCreatedAsDefaultForCustomer(
         array $postData,
         int $expectedShippingId,
@@ -180,12 +180,11 @@ class UpdateAddressTest extends AbstractController
     /**
      * Assert that customer address successfully updated via controller on frontend.
      *
-     * @dataProvider postDataForSuccessUpdateAddressDataProvider
-     *
      * @param array $postData
      * @param array $expectedData
      * @return void
      */
+    #[DataProvider('postDataForSuccessUpdateAddressDataProvider')]
     public function testAddressSuccessfullyUpdatedForCustomer(array $postData, array $expectedData): void
     {
         if (isset($expectedData['custom_region_name'])) {
@@ -277,12 +276,11 @@ class UpdateAddressTest extends AbstractController
      * Assert that customer address wasn't updated via controller on frontend
      * when POST data broken.
      *
-     * @dataProvider postDataForUpdateAddressWithErrorDataProvider
-     *
      * @param array $postData
      * @param array $expectedSessionMessages
      * @return void
      */
+    #[DataProvider('postDataForUpdateAddressWithErrorDataProvider')]
     public function testAddressWasntUpdatedForCustomer(array $postData, array $expectedSessionMessages): void
     {
         $this->performRequestWithData($postData, 1);

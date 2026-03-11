@@ -14,6 +14,7 @@ use Magento\Framework\App\View\Deployment\Version\StorageInterface;
 use Magento\Framework\Config\ConfigOptionsListConstants;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
 
@@ -48,8 +49,8 @@ class VersionTest extends TestCase
     {
         $objectManager = new ObjectManager($this);
         $this->appStateMock = $this->createMock(State::class);
-        $this->versionStorageMock = $this->getMockForAbstractClass(StorageInterface::class);
-        $this->loggerMock = $this->getMockForAbstractClass(LoggerInterface::class);
+        $this->versionStorageMock = $this->createMock(StorageInterface::class);
+        $this->loggerMock = $this->createMock(LoggerInterface::class);
         $this->deploymentConfigMock = $this->createMock(DeploymentConfig::class);
 
         $this->object = new Version($this->appStateMock, $this->versionStorageMock, $this->deploymentConfigMock);
@@ -58,8 +59,8 @@ class VersionTest extends TestCase
 
     /**
      * @param string $appMode
-     * @dataProvider getValueFromStorageDataProvider
      */
+    #[DataProvider('getValueFromStorageDataProvider')]
     public function testGetValueFromStorage($appMode)
     {
         $this->appStateMock

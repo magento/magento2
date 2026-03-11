@@ -1608,4 +1608,9 @@
         <var key="sku" entityType="product" entityKey="sku"/>
         <requiredEntity type="product_option">ProductOptionCheckboxFor2</requiredEntity>
     </entity>
+    <entity name="productWithFileUploadAndRadiobuttonOptions" type="product">
+        <var key="sku" entityType="product" entityKey="sku"/>
+        <requiredEntity type="product_option">ProductOptionFileUpload</requiredEntity>
+        <requiredEntity type="product_option">ProductOptionRadiobutton</requiredEntity>
+    </entity>
 </entities>

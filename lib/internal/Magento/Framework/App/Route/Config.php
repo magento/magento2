@@ -118,6 +118,7 @@ class Config implements ConfigInterface, ResetAfterRequestInterface
     public function getRouteFrontName($routeId, $scope = null)
     {
         $routes = $this->_getRoutes($scope);
+        $routeId = $routeId ?? '';
         return isset($routes[$routeId]) ? $routes[$routeId]['frontName'] : $routeId;
     }
 

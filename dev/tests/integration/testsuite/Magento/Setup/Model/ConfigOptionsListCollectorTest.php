@@ -45,7 +45,7 @@ class ConfigOptionsListCollectorTest extends \PHPUnit\Framework\TestCase
                 ]
             );
 
-        $serviceLocator = $this->getMockForAbstractClass(ServiceLocatorInterface::class);
+        $serviceLocator = $this->createMock(ServiceLocatorInterface::class);
 
         $serviceLocator->expects($this->once())
             ->method('get')

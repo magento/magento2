@@ -203,7 +203,7 @@ class PluginList extends Scoped implements InterceptionPluginList
      */
     protected function _loadScopedData()
     {
-        $scope = $this->_configScope->getCurrentScope();
+        $scope = $this->_configScope->getCurrentScope() ?? '';
         if (false === isset($this->_loadedScopes[$scope])) {
             $index = array_search($scope, $this->_scopePriorityScheme, true);
             /**

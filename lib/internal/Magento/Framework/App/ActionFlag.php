@@ -50,7 +50,9 @@ class ActionFlag implements ResetAfterRequestInterface
         if ('' === $action) {
             $action = $this->_request->getActionName();
         }
-        $this->_flags[$this->_getControllerKey()][$action][$flag] = $value;
+        $actionKey = $action ?? '';
+        $flagKey = $flag ?? '';
+        $this->_flags[$this->_getControllerKey()][$actionKey][$flagKey] = $value;
     }
 
     /**

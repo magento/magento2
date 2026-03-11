@@ -154,7 +154,7 @@ class QuoteRepository implements CartRepositoryInterface, ResetAfterRequestInter
      */
     public function get($cartId, array $sharedStoreIds = [])
     {
-        if (!isset($this->quotesById[$cartId])) {
+        if ($cartId === null || !isset($this->quotesById[$cartId])) {
             $quote = $this->loadQuote('loadByIdWithoutStore', 'cartId', $cartId, $sharedStoreIds);
             $this->quotesById[$cartId] = $quote;
             $this->getLoadHandler()->load($quote);
@@ -167,7 +167,7 @@ class QuoteRepository implements CartRepositoryInterface, ResetAfterRequestInter
      */
     public function getForCustomer($customerId, array $sharedStoreIds = [])
     {
-        if (!isset($this->quotesByCustomerId[$customerId])) {
+        if ($customerId === null || !isset($this->quotesByCustomerId[$customerId])) {
             $customerQuote = $this->loadQuote('loadByCustomer', 'customerId', $customerId, $sharedStoreIds);
             $customerQuoteId = $customerQuote->getId();
             //prevent loading quote items for same quote

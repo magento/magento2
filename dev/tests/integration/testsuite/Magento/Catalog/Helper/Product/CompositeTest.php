@@ -14,6 +14,7 @@ use Magento\Framework\DataObject;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Registry;
 use Magento\TestFramework\Helper\Bootstrap;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -93,11 +94,11 @@ class CompositeTest extends TestCase
     }
 
     /**
-     * @dataProvider renderConfigureResultExceptionProvider
      * @param array $data
      * @param string $expectedErrorMessage
      * @return void
      */
+    #[DataProvider('renderConfigureResultExceptionProvider')]
     public function testRenderConfigureResultException(array $data, string $expectedErrorMessage): void
     {
         /** @var DataObject $configureResult */

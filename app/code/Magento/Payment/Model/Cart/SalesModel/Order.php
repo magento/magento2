@@ -38,7 +38,7 @@ class Order implements \Magento\Payment\Model\Cart\SalesModel\SalesModelInterfac
                     'parent_item' => $item->getParentItem(),
                     'name' => $item->getName(),
                     'qty' => (int)$item->getQtyOrdered(),
-                    'price' => (double)$item->getBasePrice(),
+                    'price' => (float)$item->getBasePrice(),
                     'original_item' => $item,
                 ]
             );

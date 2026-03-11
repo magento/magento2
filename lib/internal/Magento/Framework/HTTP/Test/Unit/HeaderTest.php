@@ -12,6 +12,7 @@ use Magento\Framework\HTTP\Header;
 use Magento\Framework\Stdlib\StringUtils;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class HeaderTest extends TestCase
 {
@@ -44,15 +45,14 @@ class HeaderTest extends TestCase
      * @param string $method
      * @param boolean $clean
      * @param string $expectedValue
-     *
-     * @dataProvider methodsDataProvider
-     *
+     *     *
      * @covers \Magento\Framework\HTTP\Header::getHttpHost
      * @covers \Magento\Framework\HTTP\Header::getHttpUserAgent
      * @covers \Magento\Framework\HTTP\Header::getHttpAcceptLanguage
      * @covers \Magento\Framework\HTTP\Header::getHttpAcceptCharset
      * @covers \Magento\Framework\HTTP\Header::getHttpReferer
      */
+    #[DataProvider('methodsDataProvider')]
     public function testHttpMethods($method, $clean, $expectedValue)
     {
         $this->_request->expects($this->once())->method('getServer')->willReturn('value');
@@ -132,9 +132,8 @@ class HeaderTest extends TestCase
     /**
      * @param boolean $clean
      * @param string $expectedValue
-     *
-     * @dataProvider getRequestUriDataProvider
-     */
+     *     */
+    #[DataProvider('getRequestUriDataProvider')]
     public function testGetRequestUri($clean, $expectedValue)
     {
         $this->_request->expects($this->once())->method('getRequestUri')->willReturn('value');

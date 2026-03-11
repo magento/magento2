@@ -173,7 +173,6 @@ class FlatTest extends TestCase
 
         $reflection = new \ReflectionClass(get_class($this->model));
         $reflectionProperty = $reflection->getProperty('categoryFlatCollectionFactory');
-        $reflectionProperty->setAccessible(true);
         $reflectionProperty->setValue($this->model, $this->categoryCollectionFactoryMock);
 
         $this->assertEquals(

@@ -39,6 +39,8 @@ namespace Magento\Framework\Session {
 
     // @codingStandardsIgnoreEnd
 
+    use PHPUnit\Framework\Attributes\DataProvider;
+
     /**
      * @magentoAppIsolation enabled
      */
@@ -117,8 +119,8 @@ namespace Magento\Framework\Session {
         }
 
         /**
-         * @dataProvider optionsProvider
          */
+        #[DataProvider('optionsProvider')]
         public function testSetOptions($option, $getter, $value)
         {
             $model = $this->getModel();
@@ -311,8 +313,8 @@ namespace Magento\Framework\Session {
          * @param $expectedSavePath
          * @param $givenSaveHandler
          * @param $expectedSaveHandler
-         * @dataProvider constructorDataProvider
          */
+        #[DataProvider('constructorDataProvider')]
         public function testConstructor(
             $mockPHPFunctionNum,
             $givenSavePath,
