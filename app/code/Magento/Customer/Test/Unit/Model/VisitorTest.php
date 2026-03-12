@@ -9,13 +9,16 @@ namespace Magento\Customer\Test\Unit\Model;
 
 use Magento\Customer\Model\ResourceModel\Visitor as VisitorResourceModel;
 use Magento\Customer\Model\Session;
-use Magento\Customer\Model\Visitor;
 use Magento\Customer\Model\Visitor as VisitorModel;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\Request\Http as HttpRequest;
 use Magento\Framework\DataObject;
+use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Registry;
 use Magento\Framework\Session\SessionManagerInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Store\Api\Data\WebsiteInterface;
+use Magento\Store\Model\StoreManagerInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
@@ -191,11 +194,44 @@ class VisitorTest extends TestCase
 
     public function testBeforeSaveSetsWebsiteIdWhenNotSet()
     {
-        $this->visitor->unsetData('website_id');
-        $this->visitor->beforeSave();
-        // Website ID should be set by StoreManager (or remain null if not available)
-        // We can't easily mock ObjectManager here, so we just verify the method doesn't throw
-        $this->assertTrue(true);
+        $websiteId = 1;
+        $websiteMock = $this->createMock(WebsiteInterface::class);
+        $websiteMock->expects($this->once())
+            ->method('getId')
+            ->willReturn($websiteId);
+
+        $storeManagerMock = $this->createMock(StoreManagerInterface::class);
+        $storeManagerMock->expects($this->once())
+            ->method('getWebsite')
+            ->willReturn($websiteMock);
+
+        $objectManagerMock = $this->createMock(ObjectManagerInterface::class);
+        $objectManagerMock->expects($this->once())
+            ->method('get')
+            ->with(StoreManagerInterface::class)
+            ->willReturn($storeManagerMock);
+
+        // Save original ObjectManager instance
+        $originalObjectManager = null;
+        try {
+            $originalObjectManager = ObjectManager::getInstance();
+        } catch (\Exception $e) {
+            // ObjectManager not initialized yet
+        }
+
+        // Set mock ObjectManager
+        ObjectManager::setInstance($objectManagerMock);
+
+        try {
+            $this->visitor->unsetData('website_id');
+            $this->visitor->beforeSave();
+            $this->assertEquals($websiteId, $this->visitor->getWebsiteId());
+        } finally {
+            // Restore original ObjectManager instance
+            if ($originalObjectManager !== null) {
+                ObjectManager::setInstance($originalObjectManager);
+            }
+        }
     }
 
     public function testBeforeSaveDoesNotOverrideExistingWebsiteId()

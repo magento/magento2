@@ -208,7 +208,10 @@ class Visitor extends AbstractModel
                 $storeManager = ObjectManager::getInstance()->get(StoreManagerInterface::class);
                 $this->setWebsiteId($storeManager->getWebsite()->getId());
             } catch (\Exception $e) {
-                $this->_logger->critical($e);
+                $this->_logger->critical(
+                    'Unable to set website ID from StoreManager',
+                    ['exception' => $e]
+                );
             }
         }
 

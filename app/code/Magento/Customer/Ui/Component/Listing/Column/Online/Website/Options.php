@@ -18,7 +18,7 @@ class Options implements OptionSourceInterface
     /**
      * @var Store
      */
-    private Store $systemStore;
+    private readonly Store $systemStore;
 
     /**
      * @param Store $systemStore
