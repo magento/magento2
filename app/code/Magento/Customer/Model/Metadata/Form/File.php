@@ -20,10 +20,28 @@ use Magento\Framework\Filesystem\Io\File as IoFile;
  * Processes files that are save for customer.
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  */
 class File extends AbstractData
 {
     public const UPLOADED_FILE_SUFFIX = '_uploaded';
+
+    /**#@+ Value array keys for file input */
+    public const VALUE_KEY_NAME = 'name';
+    public const VALUE_KEY_FILE = 'file';
+    public const VALUE_KEY_TMP_NAME = 'tmp_name';
+    public const VALUE_KEY_DELETE = 'delete';
+    public const VALUE_KEY_SIZE = 'size';
+    public const VALUE_KEY_TYPE = 'type';
+    /**#@-*/
+
+    /**#@+ Result array keys for validation methods */
+    public const RESULT_KEY_ERROR = 'error';
+    public const RESULT_KEY_NAME = 'name';
+    public const RESULT_KEY_LABEL = 'label';
+    public const RESULT_KEY_FILE_PATH = 'filePath';
+    public const RESULT_KEY_IMAGE_PROP = 'imageProp';
+    /**#@-*/
 
     /**
      * Validator for check not protected extensions
@@ -157,14 +175,14 @@ class File extends AbstractData
                         $value[$fileKey] = $scopeData[$attrCode];
                     }
                 }
-            } elseif (isset($extend[0]['file']) && !empty($extend[0]['file'])) {
+            } elseif (isset($extend[0][self::VALUE_KEY_FILE]) && !empty($extend[0][self::VALUE_KEY_FILE])) {
                 /**
                  * This case is required by file uploader UI component
                  *
                  * $extend[0]['file'] - uses for AJAX validation
                  * $extend[0] - uses for POST request
                  */
-                $value = $this->getIsAjaxRequest() ? $extend[0]['file'] : $extend[0];
+                $value = $this->getIsAjaxRequest() ? $extend[0][self::VALUE_KEY_FILE] : $extend[0];
             } else {
                 $value = [];
             }
@@ -179,8 +197,8 @@ class File extends AbstractData
         }
         // phpcs:enable Magento2.Security.Superglobal
 
-        if (!empty($extend['delete'])) {
-            $value['delete'] = true;
+        if (!empty($extend[self::VALUE_KEY_DELETE])) {
+            $value[self::VALUE_KEY_DELETE] = true;
         }
 
         return $value;
@@ -194,31 +212,35 @@ class File extends AbstractData
      */
     protected function _validateByRules($value)
     {
-        $label = $value['name'] ?? $value['file'] ?? '';
+        $label = $value[self::VALUE_KEY_NAME] ?? $value[self::VALUE_KEY_FILE] ?? '';
         $rules = $this->getAttribute()->getValidationRules() ?? [];
 
         // Extract and validate file name
         $fileNameResult = $this->extractAndValidateFileName($value, $label);
-        if (!isset($fileNameResult['name'])) {
-            return $fileNameResult; // Return error array
+        if (isset($fileNameResult[self::RESULT_KEY_ERROR])) {
+            return $fileNameResult[self::RESULT_KEY_ERROR];
         }
-        $value['name'] = $fileNameResult['name'];
-        $label = $fileNameResult['label'];
+        $value[self::VALUE_KEY_NAME] = $fileNameResult[self::RESULT_KEY_NAME];
+        $label = $fileNameResult[self::RESULT_KEY_LABEL];
 
         // Validate file extension
-        $extensionResult = $this->validateFileExtension($value['name'], $rules, $label);
-        if (!empty($extensionResult)) {
-            return $extensionResult;
+        $extensionResult = $this->validateFileExtension($value[self::VALUE_KEY_NAME], $rules, $label);
+        if (isset($extensionResult[self::RESULT_KEY_ERROR])) {
+            return $extensionResult[self::RESULT_KEY_ERROR];
         }
 
         // Validate file path
-        $filePath = $this->getFilePath($value, $label);
-        if (is_array($filePath)) {
-            return $filePath; // Return error array
+        $filePathResult = $this->getFilePath($value, $label);
+        if (isset($filePathResult[self::RESULT_KEY_ERROR])) {
+            return $filePathResult[self::RESULT_KEY_ERROR];
         }
 
         // Validate file size
-        return $this->validateFileSize($value, $rules, $label);
+        $sizeResult = $this->validateFileSize($value, $rules, $label);
+        if (isset($sizeResult[self::RESULT_KEY_ERROR])) {
+            return $sizeResult[self::RESULT_KEY_ERROR];
+        }
+        return [];
     }
 
     /**
@@ -231,24 +253,24 @@ class File extends AbstractData
     private function extractAndValidateFileName(array $value, string $label): array
     {
         // For UI component uploads, get name from file path if not provided
-        if (empty($value['name']) && !empty($value['file'])) {
+        if (empty($value[self::VALUE_KEY_NAME]) && !empty($value[self::VALUE_KEY_FILE])) {
             // Validate file path for security before extracting filename
-            if (!$this->isValidFilePath($value['file'])) {
-                return [__('"%1" is not a valid file.', $label)];
+            if (!$this->isValidFilePath($value[self::VALUE_KEY_FILE])) {
+                return [self::RESULT_KEY_ERROR => [__('"%1" is not a valid file.', $label)]];
             }
-            $pathInfo = $this->ioFile->getPathInfo($value['file']);
+            $pathInfo = $this->ioFile->getPathInfo($value[self::VALUE_KEY_FILE]);
             $name = $pathInfo['basename'] ?? '';
             $label = $name;
         } else {
-            $name = $value['name'] ?? '';
+            $name = $value[self::VALUE_KEY_NAME] ?? '';
         }
 
         // Ensure we have a valid file name
         if (empty($name)) {
-            return [__('"%1" is not a valid file.', $label)];
+            return [self::RESULT_KEY_ERROR => [__('"%1" is not a valid file.', $label)]];
         }
 
-        return ['name' => $name, 'label' => $label];
+        return [self::RESULT_KEY_NAME => $name, self::RESULT_KEY_LABEL => $label];
     }
 
     /**
@@ -257,7 +279,7 @@ class File extends AbstractData
      * @param string $fileName
      * @param array $rules
      * @param string $label
-     * @return array Returns error array or empty array
+     * @return array Returns array with RESULT_KEY_ERROR on failure or empty array on success
      */
     private function validateFileExtension(string $fileName, array $rules, string $label): array
     {
@@ -265,7 +287,7 @@ class File extends AbstractData
         $extension = $pathInfo['extension'] ?? '';
 
         if (empty($extension)) {
-            return [__('"%1" is not a valid file.', $label)];
+            return [self::RESULT_KEY_ERROR => [__('"%1" is not a valid file.', $label)]];
         }
 
         $fileExtensions = ArrayObjectSearch::getArrayElementByName($rules, 'file_extensions');
@@ -273,13 +295,13 @@ class File extends AbstractData
             $extensions = explode(',', $fileExtensions);
             $extensions = array_map('trim', $extensions);
             if (!in_array($extension, $extensions)) {
-                return [__('"%1" is not a valid file extension.', $extension)];
+                return [self::RESULT_KEY_ERROR => [__('"%1" is not a valid file extension.', $extension)]];
             }
         }
 
         // Check protected file extension
         if (!$this->_fileValidator->isValid($extension)) {
-            return $this->_fileValidator->getMessages();
+            return [self::RESULT_KEY_ERROR => $this->_fileValidator->getMessages()];
         }
 
         return [];
@@ -290,20 +312,20 @@ class File extends AbstractData
      *
      * @param array $value
      * @param string $label
-     * @return string|array Returns file path or error array
+     * @return array Returns array with 'filePath' key on success or 'error' key on failure
      */
-    private function getFilePath(array $value, string $label)
+    private function getFilePath(array $value, string $label): array
     {
-        $filePath = $value['tmp_name'] ?? $value['file'] ?? null;
+        $filePath = $value[self::VALUE_KEY_TMP_NAME] ?? $value[self::VALUE_KEY_FILE] ?? null;
         if (empty($filePath)) {
-            return [__('"%1" is not a valid file.', $label)];
+            return [self::RESULT_KEY_ERROR => [__('"%1" is not a valid file.', $label)]];
         }
 
         if (!$this->_isUploadedFile($filePath)) {
-            return [__('"%1" is not a valid file.', $label)];
+            return [self::RESULT_KEY_ERROR => [__('"%1" is not a valid file.', $label)]];
         }
 
-        return $filePath;
+        return [self::RESULT_KEY_FILE_PATH => $filePath];
     }
 
     /**
@@ -312,7 +334,7 @@ class File extends AbstractData
      * @param array $value
      * @param array $rules
      * @param string $label
-     * @return array Returns error array or empty array
+     * @return array Returns array with RESULT_KEY_ERROR on failure or empty array on success
      */
     private function validateFileSize(array $value, array $rules, string $label): array
     {
@@ -321,14 +343,14 @@ class File extends AbstractData
             return [];
         }
 
-        $size = $value['size'] ?? 0;
+        $size = $value[self::VALUE_KEY_SIZE] ?? 0;
         // For UI component uploads, get file size if not provided
-        if ($size === 0 && !empty($value['file'])) {
-            $size = $this->getTemporaryFileSize($value['file']);
+        if ($size === 0 && !empty($value[self::VALUE_KEY_FILE])) {
+            $size = $this->getTemporaryFileSize($value[self::VALUE_KEY_FILE]);
         }
 
         if ($maxFileSize < $size) {
-            return [__('"%1" exceeds the allowed file size.', $label)];
+            return [self::RESULT_KEY_ERROR => [__('"%1" exceeds the allowed file size.', $label)]];
         }
 
         return [];
@@ -340,7 +362,7 @@ class File extends AbstractData
      * @param string $filePath
      * @return bool
      */
-    private function isValidFilePath(string $filePath): bool
+    protected function isValidFilePath(string $filePath): bool
     {
         // Check for null bytes
         if (strpos($filePath, "\0") !== false) {
@@ -431,9 +453,10 @@ class File extends AbstractData
         $attribute = $this->getAttribute();
         $label = $attribute->getStoreLabel();
 
-        $toDelete = !empty($value['delete']) ? true : false;
+        $toDelete = !empty($value[self::VALUE_KEY_DELETE]) ? true : false;
         // Check both tmp_name (traditional upload) and file (UI component upload)
-        $toUpload = !empty($value['tmp_name']) || (!empty($value['file']) && $value['file'] !== $this->_value);
+        $toUpload = !empty($value[self::VALUE_KEY_TMP_NAME])
+            || (!empty($value[self::VALUE_KEY_FILE]) && $value[self::VALUE_KEY_FILE] !== $this->_value);
 
         if (!$toUpload && !$toDelete && $this->_value) {
             return true;
@@ -472,7 +495,7 @@ class File extends AbstractData
 
         // Remove outdated file (in the case of file uploader UI component)
         if (!empty($this->_value)
-            && (!empty($value['delete'])
+            && (!empty($value[self::VALUE_KEY_DELETE])
                 || ($this->_entityTypeCode === 'customer' && empty($value)))
         ) {
             $this->fileProcessor->removeUploadedFile($this->_value);
@@ -481,7 +504,7 @@ class File extends AbstractData
 
         if ($value && is_string($value) && $this->fileProcessor->isExist($value)) {
             $result = $value;
-        } elseif (isset($value['file']) && !empty($value['file'])) {
+        } elseif (isset($value[self::VALUE_KEY_FILE]) && !empty($value[self::VALUE_KEY_FILE])) {
             $result = $this->processUiComponentValue($value);
         } else {
             $result = $this->processInputFieldValue($value);
@@ -498,10 +521,10 @@ class File extends AbstractData
      */
     protected function processUiComponentValue(array $value)
     {
-        if ($value['file'] == $this->_value) {
+        if ($value[self::VALUE_KEY_FILE] == $this->_value) {
             return $this->_value;
         }
-        $result = $this->fileProcessor->moveTemporaryFile($value['file']);
+        $result = $this->fileProcessor->moveTemporaryFile($value[self::VALUE_KEY_FILE]);
         return $result;
     }
 
@@ -516,11 +539,11 @@ class File extends AbstractData
         $toDelete = false;
         if ($this->_value) {
             if (!$this->getAttribute()->isRequired()
-                && !empty($value['delete'])
+                && !empty($value[self::VALUE_KEY_DELETE])
             ) {
                 $toDelete = true;
             }
-            if (!empty($value['tmp_name'])) {
+            if (!empty($value[self::VALUE_KEY_TMP_NAME])) {
                 $toDelete = true;
             }
         }
@@ -534,7 +557,7 @@ class File extends AbstractData
             $result = '';
         }
 
-        if (!empty($value['tmp_name'])) {
+        if (!empty($value[self::VALUE_KEY_TMP_NAME])) {
             $uploader = $this->uploaderFactory->create(['fileId' => $value]);
             $fileExtension = $uploader->getFileExtension();
             if (!$this->_fileValidator->isValid($fileExtension)) {
@@ -544,7 +567,7 @@ class File extends AbstractData
             $uploader->setFilenamesCaseSensitivity(false);
             $uploader->setAllowRenameFiles(true);
             try {
-                $uploader->save($mediaDir->getAbsolutePath($this->_entityTypeCode), $value['name']);
+                $uploader->save($mediaDir->getAbsolutePath($this->_entityTypeCode), $value[self::VALUE_KEY_NAME]);
             } catch (\Exception $e) {
                 $this->_logger->critical($e);
             }
@@ -597,10 +620,10 @@ class File extends AbstractData
     /**
      * Prepare File value.
      *
-     * @param array|string $value
-     * @return array|string
+     * @param array|string|null $value
+     * @return array|string|null
      */
-    private function prepareFileValue($value)
+    private function prepareFileValue($value): array|string|null
     {
         if (is_array($value) && isset($value['value'])) {
             $value = $value['value'];

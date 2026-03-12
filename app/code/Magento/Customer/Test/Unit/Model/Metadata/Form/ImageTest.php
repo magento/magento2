@@ -211,7 +211,7 @@ class ImageTest extends AbstractFormTestCase
         $result = $model->validateValue($value);
         $this->assertIsArray($result);
         $this->assertCount(1, $result);
-        $this->assertEquals('"realFileName" is not a valid image format.', (string)$result[0]);
+        $this->assertEquals('"realFileName" is not a valid file.', (string)$result[0]);
     }
 
     /**

@@ -136,30 +136,30 @@ class Image extends File
      */
     protected function _validateByRules($value)
     {
-        $label = $value['name'] ?? $value['file'] ?? '';
+        $label = $value[self::VALUE_KEY_NAME] ?? $value[self::VALUE_KEY_FILE] ?? '';
         $rules = $this->getAttribute()->getValidationRules();
 
         // Extract and validate file name
-        $fileName = $this->extractAndValidateFileName($value, $label);
-        if (is_array($fileName)) {
-            return $fileName;
+        $fileNameResult = $this->extractAndValidateFileName($value, $label);
+        if (isset($fileNameResult[self::RESULT_KEY_ERROR])) {
+            return $fileNameResult[self::RESULT_KEY_ERROR];
         }
-        $value['name'] = $fileName;
-        $label = $fileName;
+        $value[self::VALUE_KEY_NAME] = $fileNameResult[self::RESULT_KEY_NAME];
+        $label = $fileNameResult[self::RESULT_KEY_LABEL];
 
         // Get and validate file path, then validate image properties
         $validationResult = $this->validateFilePathAndProperties($value, $label);
-        if (is_array($validationResult) && isset($validationResult['error'])) {
-            return $validationResult['error'];
+        if (isset($validationResult[self::RESULT_KEY_ERROR])) {
+            return $validationResult[self::RESULT_KEY_ERROR];
         }
 
-        $filePath = $validationResult['filePath'];
-        $imageProp = $validationResult['imageProp'];
+        $filePath = $validationResult[self::RESULT_KEY_FILE_PATH];
+        $imageProp = $validationResult[self::RESULT_KEY_IMAGE_PROP];
 
         // Validate image format
-        $formatErrors = $this->validateImageFormat($imageProp, $value, $label);
-        if (!empty($formatErrors)) {
-            return $formatErrors;
+        $formatResult = $this->validateImageFormat($imageProp, $value, $label);
+        if (isset($formatResult[self::RESULT_KEY_ERROR])) {
+            return $formatResult[self::RESULT_KEY_ERROR];
         }
 
         // Validate size and dimensions
@@ -175,17 +175,20 @@ class Image extends File
      */
     private function validateFilePathAndProperties(array $value, string $label): array
     {
-        $filePath = $this->getValidatedFilePath($value, $label);
-        if (is_array($filePath)) {
-            return ['error' => $filePath];
+        $filePathResult = $this->getValidatedFilePath($value, $label);
+        if (isset($filePathResult[self::RESULT_KEY_ERROR])) {
+            return [self::RESULT_KEY_ERROR => $filePathResult[self::RESULT_KEY_ERROR]];
         }
 
-        $imageProp = $this->validateImageProperties($filePath, $label);
-        if (is_array($imageProp) && !isset($imageProp[0])) {
-            return ['error' => $imageProp];
+        $imageProp = $this->validateImageProperties($filePathResult[self::RESULT_KEY_FILE_PATH], $label);
+        if (isset($imageProp[self::RESULT_KEY_ERROR])) {
+            return [self::RESULT_KEY_ERROR => $imageProp[self::RESULT_KEY_ERROR]];
         }
 
-        return ['filePath' => $filePath, 'imageProp' => $imageProp];
+        return [
+            self::RESULT_KEY_FILE_PATH => $filePathResult[self::RESULT_KEY_FILE_PATH],
+            self::RESULT_KEY_IMAGE_PROP => $imageProp
+        ];
     }
 
     /**
@@ -193,18 +196,24 @@ class Image extends File
      *
      * @param array $value
      * @param string $label
-     * @return string|array Returns file name or error array
+     * @return array Returns array with name and label on success or error key on failure
      */
-    private function extractAndValidateFileName(array $value, string $label)
+    private function extractAndValidateFileName(array $value, string $label): array
     {
-        if (empty($value['name']) && !empty($value['file'])) {
-            if (!$this->isValidFilePath($value['file'])) {
-                return [__('"%1" is not a valid file.', $label)];
+        if (empty($value[self::VALUE_KEY_NAME]) && !empty($value[self::VALUE_KEY_FILE])) {
+            if (!$this->isValidFilePath($value[self::VALUE_KEY_FILE])) {
+                return [self::RESULT_KEY_ERROR => [__('"%1" is not a valid file.', $label)]];
             }
-            $pathInfo = $this->ioFileSystem->getPathInfo($value['file']);
-            return $pathInfo['basename'] ?? '';
+            $pathInfo = $this->ioFileSystem->getPathInfo($value[self::VALUE_KEY_FILE]);
+            $name = $pathInfo['basename'] ?? '';
+            $label = $name ?: $label;
+            return [self::RESULT_KEY_NAME => $name, self::RESULT_KEY_LABEL => $label];
         }
-        return $value['name'] ?? '';
+        $name = $value[self::VALUE_KEY_NAME] ?? '';
+        if (empty($name)) {
+            return [self::RESULT_KEY_ERROR => [__('"%1" is not a valid file.', $label)]];
+        }
+        return [self::RESULT_KEY_NAME => $name, self::RESULT_KEY_LABEL => $label];
     }
 
     /**
@@ -212,17 +221,17 @@ class Image extends File
      *
      * @param array $value
      * @param string $label
-     * @return string|array Returns file path or error array
+     * @return array Returns array with filePath key on success or error key on failure
      */
-    private function getValidatedFilePath(array $value, string $label)
+    private function getValidatedFilePath(array $value, string $label): array
     {
-        $filePath = $value['tmp_name'] ?? null;
+        $filePath = $value[self::VALUE_KEY_TMP_NAME] ?? null;
 
-        if (empty($filePath) && !empty($value['file'])) {
-            $tmpFileName = ltrim($value['file'], '/');
+        if (empty($filePath) && !empty($value[self::VALUE_KEY_FILE])) {
+            $tmpFileName = ltrim($value[self::VALUE_KEY_FILE], '/');
 
             if (!$this->isValidFilePath($tmpFileName)) {
-                return [__('"%1" is not a valid file.', $label)];
+                return [self::RESULT_KEY_ERROR => [__('"%1" is not a valid file.', $label)]];
             }
 
             if ($tmpFileName !== '') {
@@ -231,14 +240,14 @@ class Image extends File
         }
 
         if (empty($filePath) || !is_string($filePath)) {
-            return [__('"%1" is not a valid file.', $label)];
+            return [self::RESULT_KEY_ERROR => [__('"%1" is not a valid file.', $label)]];
         }
 
         if (!$this->mediaWriteDirectory->getDriver()->isExists($filePath)) {
-            return [__('"%1" is not a valid file.', $label)];
+            return [self::RESULT_KEY_ERROR => [__('"%1" is not a valid file.', $label)]];
         }
 
-        return $filePath;
+        return [self::RESULT_KEY_FILE_PATH => $filePath];
     }
 
     /**
@@ -246,9 +255,9 @@ class Image extends File
      *
      * @param string $filePath
      * @param string $label
-     * @return array|false Returns image properties or error array
+     * @return array Returns image properties array on success or array with error key on failure
      */
-    private function validateImageProperties(string $filePath, string $label)
+    private function validateImageProperties(string $filePath, string $label): array
     {
         try {
             // phpcs:ignore Magento2.Functions.DiscouragedFunction
@@ -258,7 +267,7 @@ class Image extends File
         }
 
         if (!$this->_isUploadedFile($filePath) || !$imageProp) {
-            return [__('"%1" is not a valid file.', $label)];
+            return [self::RESULT_KEY_ERROR => [__('"%1" is not a valid file.', $label)]];
         }
 
         return $imageProp;
@@ -277,15 +286,14 @@ class Image extends File
         $allowImageTypes = [1 => 'gif', 2 => 'jpg', 3 => 'png'];
 
         if (!isset($imageProp[2]) || !isset($allowImageTypes[$imageProp[2]])) {
-            return [__('"%1" is not a valid image format.', $label)];
+            return [self::RESULT_KEY_ERROR => [__('"%1" is not a valid image format.', $label)]];
         }
 
         // Modify image name if extension doesn't match
-        $extension = $this->ioFileSystem->getPathInfo($value['name'])['extension'];
+        $pathInfo = $this->ioFileSystem->getPathInfo($value[self::VALUE_KEY_NAME]);
+        $extension = $pathInfo['extension'] ?? '';
         if ($extension != $allowImageTypes[$imageProp[2]]) {
-            $value['name'] = $this->ioFileSystem->getPathInfo($value['name'])['filename']
-                . '.'
-                . $allowImageTypes[$imageProp[2]];
+            $value[self::VALUE_KEY_NAME] = ($pathInfo['filename'] ?? '') . '.' . $allowImageTypes[$imageProp[2]];
         }
 
         return [];
@@ -313,7 +321,7 @@ class Image extends File
 
         $maxFileSize = ArrayObjectSearch::getArrayElementByName($rules, 'max_file_size');
         if ($maxFileSize !== null) {
-            $size = $value['size'] ?? 0;
+            $size = $value[self::VALUE_KEY_SIZE] ?? 0;
             if ($size === 0 && !empty($filePath)) {
                 $size = $this->getFileSize($filePath);
             }
@@ -352,37 +360,6 @@ class Image extends File
     }
 
     /**
-     * Validate file path for security
-     *
-     * @param string $filePath
-     * @return bool
-     */
-    private function isValidFilePath(string $filePath): bool
-    {
-        // Check for null bytes
-        if (strpos($filePath, "\0") !== false) {
-            return false;
-        }
-
-        // Check for path traversal sequences
-        if (preg_match('#(^|/)\.\.(?:/|$)#', $filePath)) {
-            return false;
-        }
-
-        // Check for Windows absolute paths
-        if (preg_match('#^[a-zA-Z]:[\\\\/]#', $filePath)) {
-            return false;
-        }
-
-        // Check for backslashes at the start
-        if (isset($filePath[0]) && $filePath[0] === '\\') {
-            return false;
-        }
-
-        return true;
-    }
-
-    /**
      * Process file uploader UI component data
      *
      * @param array $value
@@ -416,7 +393,7 @@ class Image extends File
             ->getRealPathSafety(
                 $this->mediaEntityTmpReadDirectory->getAbsolutePath(
                     ltrim(
-                        $value['file'],
+                        $value[self::VALUE_KEY_FILE],
                         '/'
                     )
                 )
@@ -435,21 +412,21 @@ class Image extends File
      */
     protected function processCustomerValue(array $value)
     {
-        $file = ltrim($value['file'], '/');
+        $file = ltrim($value[self::VALUE_KEY_FILE], '/');
         if ($this->mediaEntityTmpReadDirectory->isExist($file)) {
             $temporaryFile = FileProcessor::TMP_DIR . '/' . $file;
             $base64EncodedData = $this->getFileProcessor()->getBase64EncodedData($temporaryFile);
             /** @var ImageContentInterface $imageContentDataObject */
             $imageContentDataObject = $this->imageContentFactory->create()
-                ->setName($value['name'])
+                ->setName($value[self::VALUE_KEY_NAME])
                 ->setBase64EncodedData($base64EncodedData)
-                ->setType($value['type']);
+                ->setType($value[self::VALUE_KEY_TYPE]);
             // Remove temporary file
             $this->getFileProcessor()->removeUploadedFile($temporaryFile);
 
             return $imageContentDataObject;
         }
 
-        return $this->_value ?: $value['file'];
+        return $this->_value ?: $value[self::VALUE_KEY_FILE];
     }
 }

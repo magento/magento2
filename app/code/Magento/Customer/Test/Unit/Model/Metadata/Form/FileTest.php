@@ -815,6 +815,68 @@ class FileTest extends AbstractFormTestCase
     }
 
     /**
+     * Test that validation rejects file path with path traversal sequences
+     *
+     * @return void
+     */
+    public function testValidateValueRejectsPathTraversalInFilePath(): void
+    {
+        $this->attributeMetadataMock->expects($this->any())->method('isRequired')->willReturn(false);
+        $this->attributeMetadataMock->expects($this->any())
+            ->method('getStoreLabel')
+            ->willReturn('File Input Field Label');
+
+        $value = [
+            'file' => 'tmp/../../etc/passwd',
+            'name' => '',
+        ];
+
+        $model = $this->initialize(
+            [
+                'value' => null,
+                'isAjax' => false,
+                'entityTypeCode' => self::ENTITY_TYPE,
+            ]
+        );
+
+        $result = $model->validateValue($value);
+        $this->assertIsArray($result);
+        $this->assertCount(1, $result);
+        $this->assertStringContainsString('is not a valid file', (string)$result[0]);
+    }
+
+    /**
+     * Test that validation rejects file path containing null byte
+     *
+     * @return void
+     */
+    public function testValidateValueRejectsNullByteInFilePath(): void
+    {
+        $this->attributeMetadataMock->expects($this->any())->method('isRequired')->willReturn(false);
+        $this->attributeMetadataMock->expects($this->any())
+            ->method('getStoreLabel')
+            ->willReturn('File Input Field Label');
+
+        $value = [
+            'file' => "tmp/valid\x00/malicious",
+            'name' => '',
+        ];
+
+        $model = $this->initialize(
+            [
+                'value' => null,
+                'isAjax' => false,
+                'entityTypeCode' => self::ENTITY_TYPE,
+            ]
+        );
+
+        $result = $model->validateValue($value);
+        $this->assertIsArray($result);
+        $this->assertCount(1, $result);
+        $this->assertStringContainsString('is not a valid file', (string)$result[0]);
+    }
+
+    /**
      * @return void
      */
     public function testCompactValueWithProtectedExtension(): void
