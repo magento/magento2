@@ -31,6 +31,7 @@ use Magento\Store\Model\StoreManagerInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\Helper\Xpath;
 use Magento\TestFramework\Mail\Template\TransportBuilderMock;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -146,13 +147,13 @@ class CreateAccountTest extends TestCase
     }
 
     /**
-     * @dataProvider createInvalidAccountDataProvider
      * @param array $customerData
      * @param string $password
      * @param string $errorType
      * @param string $errorMessage
      * @return void
      */
+    #[DataProvider('createInvalidAccountDataProvider')]
     public function testCreateAccountWithInvalidFields(
         array $customerData,
         string $password,
@@ -423,6 +424,12 @@ class CreateAccountTest extends TestCase
             ->setRegionId(null);
         $customerData->getAddresses()[1]->setIsDefaultBilling(true);
         $customerData->getAddresses()[1]->setIsDefaultShipping(true);
+        foreach ($customerData->getAddresses() as $address) {
+            $address->setId(null);
+            $address->setCustomerId(null);
+        }
+        $customerData->setDefaultBilling(null);
+        $customerData->setDefaultShipping(null);
         $customerData->setStoreId($store->getId())->setWebsiteId($store->getWebsiteId())->setId(null);
         $password = $this->random->getRandomString(8);
         $passwordHash = $this->encryptor->getHash($password, true);
@@ -459,6 +466,9 @@ class CreateAccountTest extends TestCase
         ];
         unset($expectedCustomerData[CustomerInterface::ID]);
         $customerEntity = $this->populateCustomerEntity($existingCustomer->__toArray(), $customerData);
+        $customerEntity->setDefaultBilling(null);
+        $customerEntity->setDefaultShipping(null);
+        $customerEntity->setAddresses([]);
 
         $customerAfter = $this->accountManagement->createAccount($customerEntity, '_aPassword1');
         $this->assertGreaterThan(0, $customerAfter->getId());
@@ -483,6 +493,8 @@ class CreateAccountTest extends TestCase
         $inBeforeOnly = array_diff_assoc($attributesBefore, $attributesAfter);
         $inAfterOnly = array_diff_assoc($attributesAfter, $attributesBefore);
         $expectedInBefore = [
+            'default_billing',
+            'default_shipping',
             'email',
             'firstname',
             'id',
@@ -610,6 +622,9 @@ class CreateAccountTest extends TestCase
         ];
         unset($expectedCustomerData[CustomerInterface::ID]);
         $customerEntity = $this->populateCustomerEntity($customerData, [], $customerEntity);
+        $customerEntity->setDefaultBilling(null);
+        $customerEntity->setDefaultShipping(null);
+        $customerEntity->setAddresses([]);
 
         $customer = $this->accountManagement->createAccount($customerEntity, '_aPassword1');
         $this->assertNotEmpty($customer->getId());

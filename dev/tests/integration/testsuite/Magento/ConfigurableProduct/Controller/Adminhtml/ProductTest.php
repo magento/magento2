@@ -21,6 +21,7 @@ use Magento\Framework\Message\MessageInterface;
 use Magento\Framework\Registry;
 use Magento\Framework\Serialize\SerializerInterface;
 use Magento\TestFramework\TestCase\AbstractBackendController;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Tests for configurable product admin save.
@@ -94,10 +95,10 @@ class ProductTest extends AbstractBackendController
 
     /**
      * @magentoDataFixture Magento/ConfigurableProduct/_files/configurable_attribute.php
-     * @dataProvider saveNewProductDataProvider
      * @param array $childProducts
      * @return void
      */
+    #[DataProvider('saveNewProductDataProvider')]
     public function testSaveNewProduct(array $childProducts): void
     {
         $this->serRequestParams($childProducts);
@@ -158,11 +159,11 @@ class ProductTest extends AbstractBackendController
     /**
      * @magentoDataFixture Magento/ConfigurableProduct/_files/configurable_product_with_one_simple.php
      * @magentoDataFixture Magento/ConfigurableProduct/_files/configurable_attribute_2.php
-     * @dataProvider saveExistProductDataProvider
      * @param array $childProducts
      * @param array $associatedProducts
      * @return void
      */
+    #[DataProvider('saveExistProductDataProvider')]
     public function testSaveExistProduct(array $childProducts, array $associatedProducts): void
     {
         $configurableProduct = $this->productRepository->get('configurable');

@@ -10,8 +10,10 @@ namespace Magento\Framework\Mail\Test\Unit;
 use Magento\Framework\Mail\Address;
 use Magento\Framework\Mail\AddressFactory;
 use Magento\Framework\Mail\EmailMessage;
+use Magento\Framework\Mail\MimeMessage;
 use Magento\Framework\Mail\MimeMessageInterface;
 use Magento\Framework\Mail\MimeMessageInterfaceFactory;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
@@ -89,9 +91,10 @@ class EmailMessageTest extends TestCase
         $textPart = new TextPart($body, 'utf-8', 'plain');
         $symfonyMessage = $options['symfonyMessage'] ?? new SymfonyMessage(null, $textPart);
 
-        $mock = $this->getMockBuilder(MimeMessageInterface::class)
-            ->addMethods(['getMimeMessage'])
-            ->getMockForAbstractClass();
+        $mock = $this->getMockBuilder(MimeMessage::class)
+            ->onlyMethods(['getMimeMessage'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $mock->method('getMimeMessage')->willReturn($symfonyMessage);
 
         return new EmailMessage(
@@ -178,6 +181,7 @@ class EmailMessageTest extends TestCase
      * @param bool $nullableIfEmpty
      * @return void
      */
+    #[DataProvider('addressDataProvider')]
     public function testAddressGetters(string $method, string $option, bool $nullableIfEmpty): void
     {
         $testEmail = 'test@test.com';
@@ -254,6 +258,7 @@ class EmailMessageTest extends TestCase
      * @param array<int, Address|array<string, string>> $to
      * @return void
      */
+    #[DataProvider('addressFormatDataProvider')]
     public function testAddressFormats(array $to): void
     {
         $message = $this->createMessage(['to' => $to]);
@@ -300,6 +305,7 @@ class EmailMessageTest extends TestCase
      * @param bool $shouldExist
      * @return void
      */
+    #[DataProvider('subjectDataProvider')]
     public function testSubjectHandling(?string $subject, bool $shouldExist): void
     {
         $message = $this->createMessage(['subject' => $subject ?? '']);
@@ -322,7 +328,7 @@ class EmailMessageTest extends TestCase
     {
         $this->logger->expects($this->atLeastOnce())
             ->method('warning')
-            ->with($this->stringContains('Could not add an invalid email address'), $this->isType('array'));
+            ->with($this->stringContains('Could not add an invalid email address'), $this->isArray());
 
         $message = $this->createMessage([
             'to' => [new Address(self::EMAIL, self::NAME), ['email' => 'invalid', 'name' => 'Bad']],
@@ -340,7 +346,7 @@ class EmailMessageTest extends TestCase
     {
         $this->logger->expects($this->atLeastOnce())
             ->method('warning')
-            ->with($this->stringContains('Could not add an invalid email address'), $this->isType('array'));
+            ->with($this->stringContains('Could not add an invalid email address'), $this->isArray());
 
         $encodedEmail = '=?UTF-8?B?' . base64_encode('test user@example.com') . '?=';
         $message = $this->createMessage([

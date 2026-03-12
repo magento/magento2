@@ -11,6 +11,7 @@ use Magento\Catalog\Model\Layer\Filter\AbstractFilter;
 use Magento\Catalog\Model\Layer\Resolver;
 use Magento\LayeredNavigation\Block\Navigation\AbstractFiltersTest;
 use Magento\Store\Model\Store;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Provides tests for custom multiselect filter in navigation block on category page.
@@ -24,12 +25,12 @@ class MultiselectFilterTest extends AbstractFiltersTest
     /**
      * @magentoDataFixture Magento/Catalog/_files/multiselect_attribute.php
      * @magentoDataFixture Magento/Catalog/_files/category_with_different_price_products.php
-     * @dataProvider getFiltersWithCustomAttributeDataProvider
      * @param array $products
      * @param array $attributeData
      * @param array $expectation
      * @return void
      */
+    #[DataProvider('getFiltersWithCustomAttributeDataProvider')]
     public function testGetFiltersWithCustomAttribute(array $products, array $attributeData, array $expectation): void
     {
         $this->getCategoryFiltersAndAssert($products, $attributeData, $expectation, 'Category 999');
@@ -76,13 +77,13 @@ class MultiselectFilterTest extends AbstractFiltersTest
     /**
      * @magentoDataFixture Magento/Catalog/_files/multiselect_attribute.php
      * @magentoDataFixture Magento/Catalog/_files/category_with_different_price_products.php
-     * @dataProvider getActiveFiltersWithCustomAttributeDataProvider
      * @param array $products
      * @param array $expectation
      * @param string $filterValue
      * @param int $productsCount
      * @return void
      */
+    #[DataProvider('getActiveFiltersWithCustomAttributeDataProvider')]
     public function testGetActiveFiltersWithCustomAttribute(
         array $products,
         array $expectation,

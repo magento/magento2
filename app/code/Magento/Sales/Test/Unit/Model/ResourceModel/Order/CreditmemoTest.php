@@ -188,7 +188,6 @@ class CreditmemoTest extends TestCase
     private function invokeBeforeSave(): void
     {
         $method = new \ReflectionMethod(CreditmemoResource::class, '_beforeSave');
-        $method->setAccessible(true);
         $method->invoke($this->resource, $this->creditmemo);
     }
 }

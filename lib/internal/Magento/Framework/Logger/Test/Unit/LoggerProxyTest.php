@@ -13,6 +13,7 @@ use Magento\Framework\Logger\Monolog;
 use Magento\Framework\ObjectManagerInterface;
 use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Test;
 use Psr\Log\LoggerInterface;
 use Psr\Log\LogLevel;
 
@@ -36,11 +37,10 @@ class LoggerProxyTest extends TestCase
     }
 
     /**
-     * @test
-     *
-     * @param $method
-     *
-     * @return void     */
+     * @param string $method
+     * @return void
+     */
+    #[Test]
     #[DataProvider('methodsList')]
     public function logMessage($method): void
     {
@@ -69,10 +69,9 @@ class LoggerProxyTest extends TestCase
     }
 
     /**
-     * @test
-     *
      * @return void
      */
+    #[Test]
     public function createWithArguments(): void
     {
         $deploymentConfig = $this->getMockBuilder(DeploymentConfig::class)
@@ -116,11 +115,10 @@ class LoggerProxyTest extends TestCase
     }
 
     /**
-     * @test
-     *
-     * @param $method
-     *
-     * @return void     */
+     * @param string $method
+     * @return void
+     */
+    #[Test]
     #[DataProvider('methodsList')]
     public function logException($method): void
     {

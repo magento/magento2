@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\WebapiAsync\Model;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Webapi\Rest\Request;
 use Magento\Sales\Api\Data\OrderInterface;
@@ -80,11 +81,11 @@ class OrderRepositoryInterfaceTest extends WebapiAbstract
      * Check that order is updated successfuly via async webapi
      *
      * @magentoApiDataFixture Magento/Sales/_files/order.php
-     * @dataProvider saveDataProvider
      * @param array $data
      * @param bool $isBulk
      * @return void
      */
+    #[DataProvider('saveDataProvider')]
     public function testSave(array $data, bool $isBulk = true): void
     {
         $this->_markTestAsRestOnly();

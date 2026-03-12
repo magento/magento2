@@ -13,6 +13,7 @@ use Magento\Framework\ObjectManagerInterface;
 use Magento\Store\Model\Store;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Verify generate url rewrites for anchor categories.
@@ -56,8 +57,8 @@ class AnchorUrlRewriteGeneratorTest extends TestCase
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      * @magentoDataFixture Magento/CatalogUrlRewrite/_files/product_with_stores.php
      * @magentoDbIsolation disabled
-     * @dataProvider getConfigGenerate
      */
+    #[DataProvider('getConfigGenerate')]
     public function testGenerate(string $expect): void
     {
         $product = $this->productRepository->get('simple');

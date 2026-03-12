@@ -14,6 +14,7 @@ use Magento\Deploy\Service\DeployPackage;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\App\State as AppState;
 use Magento\Framework\Locale\ResolverInterface as LocaleResolver;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
@@ -22,6 +23,7 @@ use Psr\Log\LoggerInterface;
  * Unit tests for Queue class.
  *
  * @coversDefaultClass \Magento\Deploy\Process\Queue
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class QueueTest extends TestCase
 {
@@ -186,9 +188,9 @@ class QueueTest extends TestCase
      * @param string $area
      * @param bool $hasParent
      * @return void
-     * @dataProvider addPackageDataProvider
      * @covers ::add
      */
+    #[DataProvider('addPackageDataProvider')]
     public function testAddReturnsTrueWhenPackageIsValid(array $deps, string $area, bool $hasParent): void
     {
         $queue = $this->createQueue();
@@ -204,10 +206,10 @@ class QueueTest extends TestCase
      * @param string $area
      * @param bool $hasParent
      * @return void
-     * @dataProvider addPackageDataProvider
      * @covers ::add
      * @covers ::getPackages
      */
+    #[DataProvider('addPackageDataProvider')]
     public function testAddAddsPackageToQueue(array $deps, string $area, bool $hasParent): void
     {
         $queue = $this->createQueue();
@@ -225,9 +227,9 @@ class QueueTest extends TestCase
      * @param string $area
      * @param bool $hasParent
      * @return void
-     * @dataProvider addPackageDataProvider
      * @covers ::process
      */
+    #[DataProvider('addPackageDataProvider')]
     public function testProcessReturnsZeroOnSuccess(array $deps, string $area, bool $hasParent): void
     {
         $queue = $this->createQueue();
@@ -264,11 +266,11 @@ class QueueTest extends TestCase
      * @param int|null $pid
      * @param bool $exec
      * @return void
-     * @dataProvider executePackageDataProvider
      * @covers ::executePackage
      * @covers ::getPid
      * @covers ::isDeployed
      */
+    #[DataProvider('executePackageDataProvider')]
     public function testExecutePackage(bool $inPkg, bool $depsNotDone, ?int $state, ?int $pid, bool $exec): void
     {
         $queue = $this->createQueue();
@@ -328,12 +330,12 @@ class QueueTest extends TestCase
      * @param bool $hasInProgress
      * @param bool $expectClose
      * @return void
-     * @dataProvider awaitDataProvider
      * @covers ::awaitForAllProcesses
      * @covers ::isDeployed
      * @covers ::refreshStatus
      * @covers ::isCanBeParalleled
      */
+    #[DataProvider('awaitDataProvider')]
     public function testAwaitForAllProcesses(int $maxProcs, bool $hasInProgress, bool $expectClose): void
     {
         if ($expectClose && !function_exists('pcntl_fork')) {
@@ -396,11 +398,11 @@ class QueueTest extends TestCase
      * @param bool $depInPkg
      * @param int $calls
      * @return void
-     * @dataProvider assertAndExecuteDataProvider
      * @covers ::assertAndExecute
      * @covers ::isDeployed
      * @covers ::executePackage
      */
+    #[DataProvider('assertAndExecuteDataProvider')]
     public function testAssertAndExecuteWithDependencies(bool $depDeployed, bool $depInPkg, int $calls): void
     {
         $queue = $this->createQueue();
@@ -524,11 +526,11 @@ class QueueTest extends TestCase
      * @param int|null $pid
      * @param bool $expected
      * @return void
-     * @dataProvider isDeployedDataProvider
      * @covers ::isDeployed
      * @covers ::isCanBeParalleled
      * @covers ::getPid
      */
+    #[DataProvider('isDeployedDataProvider')]
     public function testIsDeployed(int $maxProcs, ?int $state, ?int $pid, bool $expected): void
     {
         if ($maxProcs > 1 && !function_exists('pcntl_fork')) {
@@ -639,7 +641,7 @@ class QueueTest extends TestCase
         $package->expects($this->any())->method('getParent')->willReturn(null);
 
         $this->appState->expects($this->once())->method('emulateAreaCode')
-            ->with('frontend', $this->isType('callable'))
+            ->with('frontend', $this->isCallable())
             ->willReturnCallback(static function (string $area, callable $callback): mixed {
                 unset($area);
                 return $callback();
@@ -663,10 +665,10 @@ class QueueTest extends TestCase
      * @param int $exitCode
      * @param bool $expected
      * @return void
-     * @dataProvider childProcessExitDataProvider
      * @covers ::isDeployed
      * @covers ::getPid
      */
+    #[DataProvider('childProcessExitDataProvider')]
     public function testIsDeployedWithChildProcess(int $exitCode, bool $expected): void
     {
         if (!function_exists('pcntl_fork')) {
@@ -681,8 +683,8 @@ class QueueTest extends TestCase
             exit($exitCode);
         }
 
-        // Wait for child to exit and become a zombie (500ms should be plenty)
-        usleep(500000);
+        // Wait for child to exit and become a zombie (longer wait for slow/CI environments)
+        usleep(2000000);
 
         $queue = $this->createQueue(4);
         $package = $this->createMock(Package::class);

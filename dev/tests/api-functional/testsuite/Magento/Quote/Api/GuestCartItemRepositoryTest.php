@@ -200,8 +200,8 @@ class GuestCartItemRepositoryTest extends WebapiAbstract
      * @magentoApiDataFixture Magento/Checkout/_files/quote_with_items_saved.php
      * @param array $stockData
      * @param string|null $errorMessage
-     * @dataProvider updateItemDataProvider
      */
+    #[DataProvider('updateItemDataProvider')]
     public function testUpdateItem(array $stockData, ?string $errorMessage = null)
     {
         $this->updateStockData('simple_one', $stockData);

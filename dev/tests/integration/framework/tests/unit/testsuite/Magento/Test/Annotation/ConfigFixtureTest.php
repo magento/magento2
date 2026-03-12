@@ -12,10 +12,10 @@ use Magento\Store\Model\ScopeInterface;
 use Magento\TestFramework\Annotation\ConfigFixture;
 use Magento\TestFramework\App\MutableScopeConfig;
 use Magento\TestFramework\Helper\Bootstrap;
+use Magento\TestFramework\Annotation\TestCaseAnnotation;
 use Magento\TestFramework\Workaround\Override\Fixture\Resolver;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use PHPUnit\Metadata\Annotation\Parser\Registry;
 
 /**
  * Test class for \Magento\TestFramework\Annotation\ConfigFixture.
@@ -336,14 +336,12 @@ class ConfigFixtureTest extends TestCase
             ->disableOriginalConstructor()
             ->onlyMethods(['applyConfigFixtures'])
             ->getMock();
-        $annotations = Registry::getInstance()->forMethod(
-            get_class($this),
-            $this->name()
-        )->symbolAnnotations();
+        $annotations = TestCaseAnnotation::getInstance()->getAnnotations($this);
+        $configFixtures = $annotations['method'][$this->object::ANNOTATION] ?? [];
         $mock->method('applyConfigFixtures')
-            ->willReturn($annotations[$this->object::ANNOTATION]);
+            ->willReturn($configFixtures);
         $reflection = new \ReflectionClass(Resolver::class);
         $reflectionProperty = $reflection->getProperty('instance');
-        $reflectionProperty->setValue(Resolver::class, $mock);
+        $reflectionProperty->setValue(null, $mock);
     }
 }

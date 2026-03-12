@@ -11,6 +11,7 @@ namespace Magento\Framework\View\Helper;
 use Magento\Framework\View\Helper\SecureHtmlRender\TagData;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Test for the secure HTML helper.
@@ -61,8 +62,8 @@ class SecureHtmlRendererTest extends TestCase
      * @param TagData $tagData
      * @param string $expected Expected HTML.
      * @return void
-     * @dataProvider getTags
      */
+    #[DataProvider('getTags')]
     public function testRenderTag(TagData $tagData, string $expected): void
     {
         $this->assertEquals(
