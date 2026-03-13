@@ -11,7 +11,7 @@ use Magento\Framework\MessageQueue\ConnectionLostException;
 use Magento\Framework\MessageQueue\EnvelopeInterface;
 use Magento\Framework\MessageQueue\QueueInterface;
 use Magento\Framework\Phrase;
-use PhpAmqpLib\Exception\AMQPTimeoutException;
+use PhpAmqpLib\Channel\AMQPChannel;
 use PhpAmqpLib\Message\AMQPMessage;
 use Magento\Framework\MessageQueue\EnvelopeFactory;
 use Psr\Log\LoggerInterface;
@@ -98,6 +98,7 @@ class Queue implements QueueInterface
                 [
                     'topic_name' => $message->delivery_info['routing_key'],
                     'delivery_tag' => $message->delivery_info['delivery_tag'],
+                    'delivery_channel' => $message->getChannel(),
                 ]
             );
             $envelope = $this->envelopeFactory->create(['body' => $message->body, 'properties' => $properties]);
@@ -117,6 +118,7 @@ class Queue implements QueueInterface
         $channel = $this->amqpConfig->getChannel();
         // @codingStandardsIgnoreStart
         try {
+            $this->validateChannel($properties, $channel, 'ack');
             $channel->basic_ack($properties['delivery_tag']);
         } catch (Exception $exception) {
             throw new ConnectionLostException(
@@ -134,6 +136,7 @@ class Queue implements QueueInterface
      */
     public function subscribe($callback)
     {
+        $channel = $this->amqpConfig->getChannel();
         $callbackConverter = function (AMQPMessage $message) use ($callback) {
             // @codingStandardsIgnoreStart
             $properties = array_merge(
@@ -141,6 +144,7 @@ class Queue implements QueueInterface
                 [
                     'topic_name' => $message->delivery_info['routing_key'],
                     'delivery_tag' => $message->delivery_info['delivery_tag'],
+                    'delivery_channel' => $message->getChannel(),
                 ]
             );
             // @codingStandardsIgnoreEnd
@@ -153,7 +157,6 @@ class Queue implements QueueInterface
             }
         };
 
-        $channel = $this->amqpConfig->getChannel();
         // @codingStandardsIgnoreStart
         $channel->basic_qos(0, $this->prefetchCount, false);
         $channel->basic_consume($this->queueName, '', false, false, false, false, $callbackConverter);
@@ -173,7 +176,16 @@ class Queue implements QueueInterface
 
         $channel = $this->amqpConfig->getChannel();
         // @codingStandardsIgnoreStart
-        $channel->basic_reject($properties['delivery_tag'], $requeue);
+        try {
+            $this->validateChannel($properties, $channel, 'reject');
+            $channel->basic_reject($properties['delivery_tag'], $requeue);
+        } catch (Exception $exception) {
+            throw new ConnectionLostException(
+                $exception->getMessage(),
+                $exception->getCode(),
+                $exception
+            );
+        }
         // @codingStandardsIgnoreEnd
         if ($rejectionMessage !== null) {
             $this->logger->critical(
@@ -229,5 +241,28 @@ class Queue implements QueueInterface
     public function getConnectionName(): string
     {
         return $this->amqpConfig->getConnectionName();
+    }
+
+    /**
+     * Validate that the delivery tag's channel matches the current channel.
+     *
+     * @param array $properties
+     * @param AMQPChannel $channel
+     * @param string $operation
+     * @return void
+     * @throws ConnectionLostException
+     */
+    private function validateChannel(array $properties, AMQPChannel $channel, string $operation): void
+    {
+        if (isset($properties['delivery_channel']) && $properties['delivery_channel'] instanceof AMQPChannel
+            && $properties['delivery_channel'] !== $channel
+        ) {
+            throw new ConnectionLostException(
+                sprintf(
+                    'Delivery tag channel does not match current channel; skipping %s.',
+                    $operation
+                )
+            );
+        }
     }
 }
