@@ -153,7 +153,7 @@ class Transaction extends EntityAbstract implements TransactionResourceInterface
                 $transaction->setData('parent_id', $parentId);
             }
         } else {
-            $result = $this->getParentId($orderId);
+            $result = $this->getParentId($orderId, (string)$transaction->getTransactionId());
             if ($result) {
                 $transaction->setData('parent_id', $result[0]['transaction_id']);
                 $transaction->setData('parent_txn_id', $result[0]['parent_txn_id']);
@@ -224,9 +224,10 @@ class Transaction extends EntityAbstract implements TransactionResourceInterface
      * Retrieve transaction by the unique key of order_id
      *
      * @param int $orderId
+     * @param string $currentTransactionId
      * @return array
      */
-    protected function getParentId(int $orderId): array
+    protected function getParentId(int $orderId, string $currentTransactionId): array
     {
         $connection = $this->getConnection();
         $select = $connection->select()->from(
@@ -235,6 +236,9 @@ class Transaction extends EntityAbstract implements TransactionResourceInterface
         )->where(
             'order_id = ?',
             $orderId
+        )->where(
+            'transaction_id <> ?',
+            $currentTransactionId
         )->order('transaction_id', 'ASC')->limit(1);
         return $connection->fetchAll($select);
     }
