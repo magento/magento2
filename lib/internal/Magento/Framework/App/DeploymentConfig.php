@@ -51,9 +51,9 @@ class DeploymentConfig
     private $overrideData;
 
     /**
-     * @var array
+     * @var array|null
      */
-    private $envOverrides = [];
+    private ?array $envOverrides = null;
 
     /**
      * @var array
@@ -215,7 +215,8 @@ class DeploymentConfig
      */
     private function getAllEnvOverrides(): array
     {
-        if (empty($this->envOverrides)) {
+        if ($this->envOverrides === null) {
+            $this->envOverrides = [];
             // allow reading values from env variables by convention
             // MAGENTO_DC_{path}, like db/connection/default/host =>
             // can be overwritten by MAGENTO_DC_DB__CONNECTION__DEFAULT__HOST
