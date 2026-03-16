@@ -50,7 +50,7 @@ class Sanitizer
             } elseif (!is_bool($config)
                 && !array_key_exists($key, $config)
                 && (is_string($datum) || $datum instanceof Phrase)
-                && preg_match('/\$\{.+\}/', (string)$datum)
+                && preg_match('/\$\{.+\}/s', (string)$datum)
             ) {
                 //Templating is not disabled for all properties or for this property specifically
                 //Property is a string that contains template syntax, so we are disabling its rendering
@@ -72,6 +72,7 @@ class Sanitizer
      *
      * @param array|null $meta
      * @return array
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function sanitizeComponentMetadata(?array $meta): array
     {
