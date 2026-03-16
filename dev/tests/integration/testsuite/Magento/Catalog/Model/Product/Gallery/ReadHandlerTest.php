@@ -17,6 +17,7 @@ use Magento\Store\Api\StoreRepositoryInterface;
 use Magento\Store\Model\Store;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\ObjectManager;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Provide tests for loading gallery images on product load.
@@ -118,13 +119,13 @@ class ReadHandlerTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @dataProvider executeWithTwoImagesDataProvider
      * @magentoDataFixture Magento/Catalog/_files/product_with_multiple_images.php
      * @magentoDbIsolation enabled
      * @param array $images
      * @param array $expectation
      * @return void
      */
+    #[DataProvider('executeWithTwoImagesDataProvider')]
     public function testExecuteWithTwoImages(array $images, array $expectation): void
     {
         $this->setGalleryImages($this->getProduct(), $images);
@@ -206,7 +207,6 @@ class ReadHandlerTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @dataProvider executeOnStoreViewDataProvider
      * @magentoDataFixture Magento/Catalog/_files/product_with_image.php
      * @magentoDataFixture Magento/Store/_files/second_store.php
      * @magentoDbIsolation disabled
@@ -216,6 +216,7 @@ class ReadHandlerTest extends \PHPUnit\Framework\TestCase
      * @param array $expectation
      * @return void
      */
+    #[DataProvider('executeOnStoreViewDataProvider')]
     public function testExecuteOnStoreView(string $file, string $field, string $value, array $expectation): void
     {
         $product = $this->getProduct();

@@ -70,7 +70,6 @@ class CollectionTimeLabelTest extends TestCase
         $escaper = $objectManager->getObject(Escaper::class);
         $reflection = new \ReflectionClass($this->abstractElementMock);
         $reflection_property = $reflection->getProperty('_escaper');
-        $reflection_property->setAccessible(true);
         $reflection_property->setValue($this->abstractElementMock, $escaper);
 
         $this->contextMock = $this->getMockBuilder(Context::class)

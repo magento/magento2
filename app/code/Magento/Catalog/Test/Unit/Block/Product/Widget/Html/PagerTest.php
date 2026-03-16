@@ -14,6 +14,7 @@ use Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\Url;
 use Magento\Framework\View\Element\Template\Context;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
@@ -76,12 +77,13 @@ class PagerTest extends TestCase
      * Unit test for getCollectionSize()
      *
      * @covers \Magento\Catalog\Block\Product\Widget\Html\Pager::getCollectionSize()
-     * @dataProvider collectionSizeDataProvider
+     *
      * @param int $collectionSize
      * @param int $totalLimit
      * @param int $expectedResult
      * @return void
      */
+    #[DataProvider('collectionSizeDataProvider')]
     public function testGetCollectionSize(
         int $collectionSize,
         int $totalLimit,
@@ -97,12 +99,13 @@ class PagerTest extends TestCase
      * Reuses collectionSizeDataProvider to cover scenarios where total limit affects total number.
      *
      * @covers \Magento\Catalog\Block\Product\Widget\Html\Pager::getTotalNum()
-     * @dataProvider collectionSizeDataProvider
+     *
      * @param int $collectionSize
      * @param int $totalLimit
      * @param int $expectedResult
      * @return void
      */
+    #[DataProvider('collectionSizeDataProvider')]
     public function testGetTotalNum(int $collectionSize, int $totalLimit, int $expectedResult): void
     {
         $this->collectionSizeHelper($totalLimit, $collectionSize);
@@ -169,12 +172,13 @@ class PagerTest extends TestCase
      * Unit test for getLastPageNum()
      *
      * @covers \Magento\Catalog\Block\Product\Widget\Html\Pager::getLastPageNum()
-     * @dataProvider lastPageNumDataProvider
+     *
      * @param int $collectionSize
      * @param int $limit
      * @param int $expectedLastPage
      * @return void
      */
+    #[DataProvider('lastPageNumDataProvider')]
     public function testGetLastPageNum(int $collectionSize, int $limit, int $expectedLastPage): void
     {
         $this->collectionMock->method('getSize')->willReturn($collectionSize);
@@ -227,11 +231,12 @@ class PagerTest extends TestCase
      * Unit test for isLastPage()
      *
      * @covers \Magento\Catalog\Block\Product\Widget\Html\Pager::isLastPage()
-     * @dataProvider pageSizeDataProvider
+     *
      * @param int $pageSize
      * @param bool $expectedResult
      * @return void
      */
+    #[DataProvider('pageSizeDataProvider')]
     public function testIsLastPage(int $pageSize, bool $expectedResult): void
     {
         $this->collectionMock->method('getSize')->willReturn($pageSize);
@@ -288,13 +293,14 @@ class PagerTest extends TestCase
      * Verify _initFrame method with different current page and last page number.
      *
      * @covers \Magento\Catalog\Block\Product\Widget\Html\Pager::_initFrame()
-     * @dataProvider initFramesDataProvider
+     *
      * @param int $curPage
      * @param int $lastPageNo
      * @param int $frameStart
      * @param int $frameEnd
      * @return void
      */
+    #[DataProvider('initFramesDataProvider')]
     public function testInitFrame(int $curPage, int $lastPageNo, int $frameStart, int $frameEnd): void
     {
         $pager = $this->getMockBuilder(Pager::class)
@@ -307,7 +313,6 @@ class PagerTest extends TestCase
 
         $reflection = new ReflectionClass($pager);
         $initFrameMethod = $reflection->getMethod('_initFrame');
-        $initFrameMethod->setAccessible(true);
         $initFrameMethod->invoke($pager);
 
         $this->assertEquals($frameStart, $pager->getFrameStart());
@@ -334,7 +339,7 @@ class PagerTest extends TestCase
      * Unit test for getCurrentPage() using data provider
      *
      * @covers \Magento\Catalog\Block\Product\Widget\Html\Pager::getCurrentPage()
-     * @dataProvider getCurrentPageDataProvider
+     *
      * @param array $reqParams
      * @param int $collectionSize
      * @param int $limit
@@ -342,6 +347,7 @@ class PagerTest extends TestCase
      * @param int|null $expectedSecond
      * @return void
      */
+    #[DataProvider('getCurrentPageDataProvider')]
     public function testGetCurrentPageWithDataProvider(
         int  $reqParams,
         int  $collectionSize,
@@ -432,13 +438,14 @@ class PagerTest extends TestCase
      * Unit test for getFirstNum() using data provider
      *
      * @covers \Magento\Catalog\Block\Product\Widget\Html\Pager::getFirstNum()
-     * @dataProvider getFirstNumDataProvider
+     *
      * @param int $limit
      * @param int $collectionSize
      * @param int $requestPage
      * @param int $expectedFirstNum
      * @return void
      */
+    #[DataProvider('getFirstNumDataProvider')]
     public function testGetFirstNumWithDataProvider(
         int $limit,
         int $collectionSize,
@@ -479,11 +486,12 @@ class PagerTest extends TestCase
      * Unit test for getPreviousPageUrl() with data provider
      *
      * @covers \Magento\Catalog\Block\Product\Widget\Html\Pager::getPreviousPageUrl()
-     * @dataProvider previousPageUrlDataProvider
+     *
      * @param int $currentPage
      * @param int|null $expectedQueryValue
      * @return void
      */
+    #[DataProvider('previousPageUrlDataProvider')]
     public function testGetPreviousPageUrlWithDataProvider(int $currentPage, ?int $expectedQueryValue): void
     {
         $expectedUrl = 'http://example.com/prev';
@@ -513,11 +521,12 @@ class PagerTest extends TestCase
      * Data-driven test for getNextPageUrl()
      *
      * @covers \Magento\Catalog\Block\Product\Widget\Html\Pager::getNextPageUrl()
-     * @dataProvider nextPageUrlDataProvider
+     *
      * @param int $currentPage
      * @param int $expectedQueryValue
      * @return void
      */
+    #[DataProvider('nextPageUrlDataProvider')]
     public function testGetNextPageUrlWithDataProvider(int $currentPage, int $expectedQueryValue): void
     {
         $expectedUrl = 'http://example.com/next';
@@ -547,11 +556,12 @@ class PagerTest extends TestCase
      * Data-driven test for getLastPageUrl()
      *
      * @covers \Magento\Catalog\Block\Product\Widget\Html\Pager::getLastPageUrl()
-     * @dataProvider lastPageUrlDataProvider
+     *
      * @param int $lastPage
      * @param int|null $expectedQueryValue
      * @return void
      */
+    #[DataProvider('lastPageUrlDataProvider')]
     public function testGetLastPageUrlWithDataProvider(int $lastPage, ?int $expectedQueryValue): void
     {
         $expectedUrl = 'http://example.com/last';
@@ -580,7 +590,7 @@ class PagerTest extends TestCase
      * Unit test for setCollection() verifies limit() is called with correct offset and limit
      *
      * @covers \Magento\Catalog\Block\Product\Widget\Html\Pager::setCollection()
-     * @dataProvider setCollectionLimitDataProvider
+     *
      * @param int $limit
      * @param int $collectionSize
      * @param int $requestPage
@@ -588,6 +598,7 @@ class PagerTest extends TestCase
      * @param int $expectedLimit
      * @return void
      */
+    #[DataProvider('setCollectionLimitDataProvider')]
     public function testSetCollectionAppliesCorrectLimitAndOffset(
         int $limit,
         int $collectionSize,
@@ -675,7 +686,6 @@ class PagerTest extends TestCase
     private function setProtectedProperty(string $property, mixed $value): void
     {
         $reflection = new ReflectionProperty($this->pager, $property);
-        $reflection->setAccessible(true);
         $reflection->setValue($this->pager, $value);
     }
 

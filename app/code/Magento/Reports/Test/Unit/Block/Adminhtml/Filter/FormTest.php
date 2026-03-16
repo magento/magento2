@@ -97,13 +97,11 @@ class FormTest extends TestCase
         $form->method('getElement')->with('multiselect')->willReturn($element);
         $reflection = new ReflectionClass($form);
         $reflectionProp = $reflection->getProperty('_allElements');
-        $reflectionProp->setAccessible(true);
         $reflectionProp->setValue($form, new Collection($form));
         $form->addElement($element);
         $this->model->setForm($form);
         $reflection = new ReflectionClass($this->model);
         $reflectionMethod = $reflection->getMethod('_initFormValues');
-        $reflectionMethod->setAccessible(true);
         $reflectionMethod->invoke($this->model);
         $this->assertEquals(['5', '6'], $this->model->getForm()->getElement('multiselect')->getValue());
     }

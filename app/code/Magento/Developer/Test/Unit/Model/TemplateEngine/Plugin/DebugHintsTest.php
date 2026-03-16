@@ -19,6 +19,7 @@ use Magento\Framework\View\TemplateEngineInterface;
 use Magento\Store\Api\Data\StoreInterface;
 use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\StoreManagerInterface;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -64,11 +65,9 @@ class DebugHintsTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->scopeConfigMock = $this->getMockBuilder(ScopeConfigInterface::class)
-            ->getMockForAbstractClass();
+        $this->scopeConfigMock = $this->createMock(ScopeConfigInterface::class);
 
-        $this->storeManagerMock = $this->getMockBuilder(StoreManagerInterface::class)
-            ->getMockForAbstractClass();
+        $this->storeManagerMock = $this->createMock(StoreManagerInterface::class);
 
         $this->devHelperMock = $this->getMockBuilder(Data::class)
             ->disableOriginalConstructor()
@@ -83,7 +82,7 @@ class DebugHintsTest extends TestCase
 
         $this->httpMock = $this->createMock(Http::class);
 
-        $storeMock = $this->getMockForAbstractClass(StoreInterface::class);
+        $storeMock = $this->createMock(StoreInterface::class);
         $storeMock->expects($this->once())
             ->method('getCode')
             ->willReturn(static::STORE_CODE);
@@ -101,8 +100,8 @@ class DebugHintsTest extends TestCase
      * @param bool $debugHintsParameter
      *
      * @return void
-     * @dataProvider afterCreateActiveDataProvider
      */
+    #[DataProvider('afterCreateActiveDataProvider')]
     public function testAfterCreateActive(
         $debugHintsPath,
         $showBlockHints,
@@ -115,7 +114,7 @@ class DebugHintsTest extends TestCase
 
         $this->setupConfigFixture($debugHintsPath, true, $showBlockHints);
 
-        $engine = $this->getMockForAbstractClass(TemplateEngineInterface::class);
+        $engine = $this->createMock(TemplateEngineInterface::class);
 
         $debugHintsDecoratorMock = $this->getMockBuilder(
             DebugHintsDecorator::class
@@ -173,8 +172,8 @@ class DebugHintsTest extends TestCase
      * @param bool $debugHintsParameter
      *
      * @return void
-     * @dataProvider afterCreateInactiveDataProvider
      */
+    #[DataProvider('afterCreateInactiveDataProvider')]
     public function testAfterCreateInactive(
         $debugHintsPath,
         $isDevAllowed,
@@ -188,7 +187,7 @@ class DebugHintsTest extends TestCase
 
         $this->setupConfigFixture($debugHintsPath, $showTemplateHints, true);
 
-        $engine = $this->getMockForAbstractClass(TemplateEngineInterface::class);
+        $engine = $this->createMock(TemplateEngineInterface::class);
 
         $subjectMock = $this->getMockBuilder(TemplateEngineFactory::class)
             ->disableOriginalConstructor()

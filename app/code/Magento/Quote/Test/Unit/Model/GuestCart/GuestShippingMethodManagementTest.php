@@ -87,7 +87,6 @@ class GuestShippingMethodManagementTest extends TestCase
 
         $refObject = new \ReflectionClass(GuestShippingMethodManagement::class);
         $refProperty = $refObject->getProperty('shipmentEstimationManagement');
-        $refProperty->setAccessible(true);
         $refProperty->setValue($this->model, $this->shipmentEstimationManagement);
     }
 

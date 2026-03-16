@@ -262,8 +262,9 @@ class QuantityValidator implements ValidatorInterface
         if ($item->getQtyToRefund() < 0) {
             return false;
         }
-        if (isset($invoiceQtysRefundLimits[$item->getId()])) {
-            return $invoiceQtysRefundLimits[$item->getId()] > 0;
+        $itemId = $item->getId() ?? '';
+        if (isset($invoiceQtysRefundLimits[$itemId])) {
+            return $invoiceQtysRefundLimits[$itemId] > 0;
         }
         return true;
     }

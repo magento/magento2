@@ -9,6 +9,7 @@ namespace Magento\Framework\Validator\Test\Unit;
 
 use Magento\Framework\Validator\Url as UrlValidator;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class UrlTest extends TestCase
 {
@@ -25,9 +26,8 @@ class UrlTest extends TestCase
     /**
      * @param array $allowedSchemes
      * @param string $url
-     * @param bool $expectedResult
-     * @dataProvider isValidDataProvider
-     */
+     * @param bool $expectedResult     */
+    #[DataProvider('isValidDataProvider')]
     public function testIsValid(array $allowedSchemes, $url, $expectedResult)
     {
         $this->assertSame($expectedResult, $this->validator->isValid($url, $allowedSchemes));

@@ -104,6 +104,17 @@ class DynamicStorage extends BaseDbStorage
             return $this->findProductRewriteByRequestPath($data);
         }
 
+        // Handle TARGET_PATH lookup for product URLs with category context
+        if (isset($data[UrlRewrite::TARGET_PATH])
+            && isset($data[UrlRewrite::STORE_ID])
+            && !isset($data[UrlRewrite::ENTITY_TYPE])
+        ) {
+            $result = $this->findProductRewriteByTargetPath($data);
+            if ($result !== null) {
+                return $result;
+            }
+        }
+
         $filterResults = $this->findProductRewritesByFilter($data);
         if (!empty($filterResults)) {
             return reset($filterResults);
@@ -209,6 +220,63 @@ class DynamicStorage extends BaseDbStorage
         }
 
         $productFromDb[UrlRewrite::REQUEST_PATH] = $requestPath;
+
+        return $productFromDb;
+    }
+
+    /**
+     * Find product rewrite by target path containing category context
+     *
+     * Handles target paths like: catalog/product/view/id/{product_id}/category/{category_id}
+     *
+     * @param array $data
+     * @return array|null
+     */
+    private function findProductRewriteByTargetPath(array $data): ?array
+    {
+        $targetPath = $data[UrlRewrite::TARGET_PATH];
+
+        // Match pattern: catalog/product/view/id/{product_id}/category/{category_id}
+        if (!preg_match('#^catalog/product/view/id/(\d+)/category/(\d+)$#', $targetPath, $matches)) {
+            return null;
+        }
+
+        $productId = $matches[1];
+        $categoryId = $matches[2];
+        $storeId = $data[UrlRewrite::STORE_ID];
+
+        // Build search criteria using entity identifiers instead of target_path
+        $searchData = [
+            UrlRewrite::ENTITY_TYPE => 'product',
+            UrlRewrite::ENTITY_ID => $productId,
+            UrlRewrite::STORE_ID => $storeId,
+            UrlRewrite::METADATA => ['category_id' => $categoryId],
+        ];
+
+        $productFromDb = $this->connection->fetchRow($this->prepareSelect($searchData));
+        if ($productFromDb === false) {
+            return null;
+        }
+
+        // Construct the request_path with category if we have category context
+        $categorySuffix = $this->getCategoryUrlSuffix($storeId);
+        $categorySearchData = [
+            UrlRewrite::ENTITY_TYPE => 'category',
+            UrlRewrite::ENTITY_ID => $categoryId,
+            UrlRewrite::STORE_ID => $storeId,
+        ];
+        $categoryFromDb = $this->connection->fetchRow($this->prepareSelect($categorySearchData));
+
+        if ($categoryFromDb !== false) {
+            $productUrl = $this->getBaseName($productFromDb[UrlRewrite::REQUEST_PATH]);
+            $productFromDb[UrlRewrite::REQUEST_PATH] = str_replace(
+                $categorySuffix,
+                '',
+                $categoryFromDb[UrlRewrite::REQUEST_PATH] ?? ''
+            ) . '/' . $productUrl;
+            $productFromDb[UrlRewrite::TARGET_PATH] = $productFromDb[UrlRewrite::TARGET_PATH]
+                . '/category/' . $categoryId;
+        }
 
         return $productFromDb;
     }

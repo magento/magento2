@@ -3,7 +3,11 @@
  * Copyright 2016 Adobe
  * All Rights Reserved.
  */
+declare(strict_types=1);
+
 namespace Magento\Catalog\Ui\Component\Listing\Columns;
+
+use Magento\Ui\Component\Listing\Columns\Column;
 
 use Magento\Framework\View\Element\UiComponentFactory;
 use Magento\Framework\View\Element\UiComponent\ContextInterface;
@@ -13,12 +17,12 @@ use Magento\Eav\Api\AttributeSetRepositoryInterface;
  * @api
  * @since 101.0.0
  */
-class AttributeSetText extends \Magento\Ui\Component\Listing\Columns\Column
+class AttributeSetText extends Column
 {
     /**
      * Column name
      */
-    const NAME = 'attribute_set_id';
+    public const NAME = 'attribute_set_id';
 
     /**
      * @var AttributeSetRepositoryInterface
@@ -60,7 +64,7 @@ class AttributeSetText extends \Magento\Ui\Component\Listing\Columns\Column
             return $dataSource;
         }
 
-        $fieldName = $this->getData('name');
+        $fieldName = $this->getData('name') ?? '';
 
         foreach ($dataSource['data']['items'] as &$item) {
             if (!empty($item[static::NAME])) {

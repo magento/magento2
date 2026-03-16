@@ -23,12 +23,14 @@ class Config
     public function getCode($type, $code = '')
     {
         $codes = $this->getCodes();
+        $type = $type ?? '';
         if (!isset($codes[$type])) {
             return false;
         } elseif ('' === $code) {
             return $codes[$type];
         }
 
+        $code = $code ?? '';
         if (!isset($codes[$type][$code])) {
             return false;
         } else {

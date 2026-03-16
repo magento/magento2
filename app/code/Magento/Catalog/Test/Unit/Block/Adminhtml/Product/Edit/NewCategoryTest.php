@@ -23,6 +23,7 @@ use Magento\Framework\Phrase;
 use Magento\Framework\Registry;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\UrlInterface;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\Framework\View\Helper\SecureHtmlRenderer;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -83,10 +84,10 @@ class NewCategoryTest extends TestCase
 
         $this->formFactory = $this->createMock(FormFactory::class);
         $this->registry = $this->createMock(Registry::class);
-        $this->jsonEncoder = $this->getMockForAbstractClass(EncoderInterface::class);
+        $this->jsonEncoder = $this->createMock(EncoderInterface::class);
         $this->categoryFactory = $this->createMock(CategoryFactory::class);
         $this->secureRenderer = $this->createMock(SecureHtmlRenderer::class);
-        $this->urlBuilder = $this->getMockForAbstractClass(UrlInterface::class);
+        $this->urlBuilder = $this->createMock(UrlInterface::class);
 
         $context = $this->createMock(Context::class);
         $context->method('getUrlBuilder')->willReturn($this->urlBuilder);
@@ -183,7 +184,6 @@ class NewCategoryTest extends TestCase
         $this->invokePrepareForm();
 
         $reflectionProperty = (new ReflectionClass($this->block))->getProperty('_form');
-        $reflectionProperty->setAccessible(true);
         $assignedForm = $reflectionProperty->getValue($this->block);
 
         $this->assertSame($form, $assignedForm);
@@ -195,8 +195,8 @@ class NewCategoryTest extends TestCase
      * @param array $categoryData Array of [id => name] pairs
      * @param array $expectedResult Expected result from _getParentCategoryOptions
      * @return void
-     * @dataProvider parentCategoryOptionsDataProvider
      */
+    #[DataProvider('parentCategoryOptionsDataProvider')]
     public function testGetParentCategoryOptions(array $categoryData, array $expectedResult): void
     {
         $categories = [];
@@ -356,7 +356,6 @@ HTML;
     {
         $reflection = new ReflectionClass($this->block);
         $method = $reflection->getMethod('_prepareForm');
-        $method->setAccessible(true);
         $method->invoke($this->block);
     }
 
@@ -369,7 +368,6 @@ HTML;
     {
         $reflection = new ReflectionClass($this->block);
         $method = $reflection->getMethod('_getParentCategoryOptions');
-        $method->setAccessible(true);
         return $method->invoke($this->block);
     }
 
