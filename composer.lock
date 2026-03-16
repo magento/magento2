@@ -11939,16 +11939,16 @@
         },
         {
             "name": "magento/magento2-functional-testing-framework",
-            "version": "5.3.0",
+            "version": "6.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/magento/magento2-functional-testing-framework.git",
-                "reference": "e75f0077ca96ef4ee693ceb39c6e31cb500cf062"
+                "reference": "c09a7383eeb3c8358b2492f0ddb1c3ea9f1bb4e0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/magento/magento2-functional-testing-framework/zipball/e75f0077ca96ef4ee693ceb39c6e31cb500cf062",
-                "reference": "e75f0077ca96ef4ee693ceb39c6e31cb500cf062",
+                "url": "https://api.github.com/repos/magento/magento2-functional-testing-framework/zipball/c09a7383eeb3c8358b2492f0ddb1c3ea9f1bb4e0",
+                "reference": "c09a7383eeb3c8358b2492f0ddb1c3ea9f1bb4e0",
                 "shasum": ""
             },
             "require": {
@@ -11987,7 +11987,7 @@
                 "brainmaestro/composer-git-hooks": "^3.0",
                 "php-coveralls/php-coveralls": "^1.0||^2.2",
                 "phpmd/phpmd": "^2.8.0",
-                "phpunit/phpunit": "^10.0",
+                "phpunit/phpunit": "^12.0",
                 "squizlabs/php_codesniffer": "~3.11.0"
             },
             "suggest": {
@@ -12025,9 +12025,9 @@
             ],
             "support": {
                 "issues": "https://github.com/magento/magento2-functional-testing-framework/issues",
-                "source": "https://github.com/magento/magento2-functional-testing-framework/tree/5.3.0"
+                "source": "https://github.com/magento/magento2-functional-testing-framework/tree/6.0.0"
             },
-            "time": "2026-02-02T08:58:16+00:00"
+            "time": "2026-02-27T10:36:42+00:00"
         },
         {
             "name": "magento/php-compatibility-fork",
