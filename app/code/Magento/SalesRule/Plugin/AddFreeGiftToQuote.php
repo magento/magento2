@@ -116,6 +116,8 @@ class AddFreeGiftToQuote
                     $address->unsetData('cached_items_nominal');
                     $address->unsetData('cached_items_nonnominal');
                 }
+                $quote->setTotalsCollectedFlag(false);
+                $quote->collectTotals();
                 $this->cartRepository->save($quote);
             }
         } finally {

@@ -297,15 +297,10 @@ class FreeGiftTest extends GraphQlAbstract
 
         $giftItem = $this->findItemBySku($cart2['items'], 'fg_gift5');
         $this->assertNotNull($giftItem, 'Gift should appear when qty condition (>=2) is met');
-
-        // Query the cart fresh to ensure collectTotals runs with gift already persisted
-        $freshCartResponse = $this->graphQlQuery($this->getCartQuery($maskedQuoteId));
-        $freshCart = $freshCartResponse['cart'];
-        $freshGift = $this->findItemBySku($freshCart['items'], 'fg_gift5');
-        $this->assertNotNull($freshGift, 'Gift should be in fresh cart query');
-        $this->assertNotEmpty($freshGift['prices']['discounts'], 'Gift should have discount');
-        $this->assertEquals(15, $freshGift['prices']['discounts'][0]['amount']['value']);
-        $this->assertEquals(80, $freshCart['prices']['grand_total']['value'], 'Grand total = 2x$40 qualifying');
+        $this->assertEquals(1, $giftItem['quantity']);
+        $this->assertNotEmpty($giftItem['prices']['discounts'], 'Gift should have discount');
+        $this->assertEquals(15, $giftItem['prices']['discounts'][0]['amount']['value']);
+        $this->assertEquals(80, $cart2['prices']['grand_total']['value'], 'Grand total = 2x$40 qualifying');
 
         $orderNumber = $this->placeGuestOrder($maskedQuoteId);
         // Order grand total includes flatrate shipping ($5/item × 3 items = $15)
