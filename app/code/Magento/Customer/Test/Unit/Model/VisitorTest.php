@@ -11,7 +11,7 @@ use Magento\Customer\Model\ResourceModel\Visitor as VisitorResourceModel;
 use Magento\Customer\Model\Session;
 use Magento\Customer\Model\Visitor as VisitorModel;
 use Magento\Framework\App\ObjectManager;
-use Magento\Framework\App\Request\Http as HttpRequest;
+use Magento\Framework\App\RequestSafetyInterface;
 use Magento\Framework\DataObject;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Registry;
@@ -25,6 +25,8 @@ use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 
 /**
  * Unit Tests to cover Visitor Model
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class VisitorTest extends TestCase
 {
@@ -56,9 +58,9 @@ class VisitorTest extends TestCase
     protected $sessionMock;
 
     /**
-     * @var HttpRequest|MockObject
+     * @var RequestSafetyInterface|MockObject
      */
-    private $httpRequestMock;
+    private $requestSafetyMock;
 
     protected function setUp(): void
     {
@@ -67,7 +69,7 @@ class VisitorTest extends TestCase
             Session::class,
             ['getVisitorData', 'setVisitorData', 'getSessionId']
         );
-        $this->httpRequestMock = $this->createMock(HttpRequest::class);
+        $this->requestSafetyMock = $this->createMock(RequestSafetyInterface::class);
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
 
@@ -93,7 +95,6 @@ class VisitorTest extends TestCase
                 'registry' => $this->registryMock,
                 'session' => $this->sessionMock,
                 'resource' => $this->visitorResourceModelMock,
-                'request' => $this->httpRequestMock,
             ]
         );
 
@@ -126,10 +127,10 @@ class VisitorTest extends TestCase
                 'session' => $this->sessionMock,
                 'resource' => $this->visitorResourceModelMock,
                 'ignores' => ['test_route_name' => true],
-                'requestSafety' => $this->httpRequestMock,
+                'requestSafety' => $this->requestSafetyMock,
             ]
         );
-        $this->httpRequestMock->method('getRouteName')->willReturn('test_route_name');
+        $this->requestSafetyMock->method('getRouteName')->willReturn('test_route_name');
         $observer = new DataObject();
         $this->assertTrue($this->visitor->isModuleIgnored($observer));
     }
