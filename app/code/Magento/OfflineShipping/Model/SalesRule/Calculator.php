@@ -3,13 +3,12 @@
  * Copyright 2014 Adobe
  * All Rights Reserved.
  */
-
-/**
- * Shopping Cart Rule data model
- */
 namespace Magento\OfflineShipping\Model\SalesRule;
 
+use Magento\Quote\Model\Quote\Address;
+use Magento\Quote\Model\Quote\Item\AbstractItem;
 use Magento\SalesRule\Model\Validator;
+use \Magento\SalesRule\Model\Rule as SalesRule;
 
 /**
  * @api
@@ -22,38 +21,93 @@ class Calculator extends Validator
      * This process not affect information about applied rules, coupon code etc.
      * This information will be added during discount amounts processing
      *
-     * @param   \Magento\Quote\Model\Quote\Item\AbstractItem $item
-     * @return  \Magento\OfflineShipping\Model\SalesRule\Calculator
+     * @param AbstractItem $item
+     *
+     * @return \Magento\OfflineShipping\Model\SalesRule\Calculator
+     *
+     * @throws \Zend_Db_Select_Exception
      */
-    public function processFreeShipping(\Magento\Quote\Model\Quote\Item\AbstractItem $item)
+    public function processFreeShipping(AbstractItem $item)
     {
         $address = $item->getAddress();
         $item->setFreeShipping(false);
 
+        /* @var $rule SalesRule */
         foreach ($this->getRules($address) as $rule) {
-            /* @var $rule \Magento\SalesRule\Model\Rule */
-            if (!$this->validatorUtility->canProcessRule($rule, $address)) {
+            if (!$this->canApplyRuleToItem($rule, $address, $item)) {
                 continue;
             }
 
-            if (!$rule->getActions()->validate($item)) {
-                continue;
-            }
+            $this->applyFreeShippingRule($rule, $address, $item);
 
-            switch ($rule->getSimpleFreeShipping()) {
-                case Rule::FREE_SHIPPING_ITEM:
-                    $item->setFreeShipping($rule->getDiscountQty() ? $rule->getDiscountQty() : true);
-                    $item->setFreeShippingMethod($item->getAddress()->getShippingMethod());
-                    break;
-
-                case Rule::FREE_SHIPPING_ADDRESS:
-                    $address->setFreeShipping(true);
-                    break;
-            }
             if ($rule->getStopRulesProcessing()) {
                 break;
             }
         }
+
         return $this;
+    }
+
+    /**
+     * Validates rule for item
+     *
+     * @param SalesRule $rule
+     * @param Address $address
+     * @param AbstractItem $item
+     *
+     * @return bool
+     */
+    private function canApplyRuleToItem(SalesRule $rule, Address $address, AbstractItem $item): bool
+    {
+        if (!$this->validatorUtility->canProcessRule($rule, $address)) {
+            return false;
+        }
+
+        return (bool) $rule->getActions()->validate($item);
+    }
+
+    /**
+     * Apply free shipping rule for cart item
+     *
+     * @param SalesRule $rule
+     * @param Address $address
+     * @param AbstractItem $item
+     *
+     * @return void
+     */
+    private function applyFreeShippingRule(SalesRule $rule, Address $address, AbstractItem $item): void
+    {
+        $type = (int) $rule->getSimpleFreeShipping();
+
+        if ($type === Rule::FREE_SHIPPING_ITEM) {
+            $this->applyItemFreeShipping($rule, $item);
+            return;
+        }
+
+        if ($type === Rule::FREE_SHIPPING_ADDRESS) {
+            $address->setFreeShipping(true);
+        }
+    }
+
+    /**
+     * Free shipping can be applied to parent or child items
+     *
+     * @param SalesRule $rule
+     * @param AbstractItem $item
+     *
+     * @return void
+     */
+    private function applyItemFreeShipping(SalesRule $rule, AbstractItem $item): void
+    {
+        $method = $item->getAddress()->getShippingMethod();
+        $item->setFreeShipping($rule->getDiscountQty() ? $rule->getDiscountQty() : true);
+        $item->setFreeShippingMethod($method);
+
+        if ($item->getHasChildren() && $item->isShipSeparately()) {
+            foreach ($item->getChildren() as $child) {
+                $child->setFreeShipping($rule->getDiscountQty() ? $rule->getDiscountQty() : true);
+                $child->setFreeShippingMethod($method);
+            }
+        }
     }
 }
