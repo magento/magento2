@@ -48,6 +48,8 @@ class Rule extends AbstractExtensibleObject implements RuleInterface
     const KEY_USE_AUTO_GENERATION = 'use_auto_generation';
     const KEY_USES_PER_COUPON = 'uses_per_coupon';
     const KEY_SIMPLE_FREE_SHIPPING = 'simple_free_shipping';
+    const KEY_GIFT_SKU = 'gift_sku';
+    const KEY_GIFT_QTY = 'gift_qty';
 
     /**
      * Return rule id
@@ -620,6 +622,38 @@ class Rule extends AbstractExtensibleObject implements RuleInterface
     public function setSimpleFreeShipping($simpleFreeShipping)
     {
         return $this->setData(self::KEY_SIMPLE_FREE_SHIPPING, $simpleFreeShipping);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getGiftSku()
+    {
+        return $this->_get(self::KEY_GIFT_SKU);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function setGiftSku($giftSku)
+    {
+        return $this->setData(self::KEY_GIFT_SKU, $giftSku);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getGiftQty()
+    {
+        return $this->_get(self::KEY_GIFT_QTY);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function setGiftQty($giftQty)
+    {
+        return $this->setData(self::KEY_GIFT_QTY, $giftQty);
     }
 
     /**

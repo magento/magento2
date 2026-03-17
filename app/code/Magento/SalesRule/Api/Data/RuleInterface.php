@@ -23,6 +23,7 @@ interface RuleInterface extends ExtensibleDataInterface
     const DISCOUNT_ACTION_FIXED_AMOUNT = 'by_fixed';
     const DISCOUNT_ACTION_FIXED_AMOUNT_FOR_CART = 'cart_fixed';
     const DISCOUNT_ACTION_BUY_X_GET_Y = 'buy_x_get_y';
+    const DISCOUNT_ACTION_FREE_GIFT = 'free_gift';
 
     const COUPON_TYPE_NO_COUPON = 'NO_COUPON';
     const COUPON_TYPE_SPECIFIC_COUPON = 'SPECIFIC_COUPON';
@@ -438,6 +439,36 @@ interface RuleInterface extends ExtensibleDataInterface
      * @return $this
      */
     public function setSimpleFreeShipping($simpleFreeShipping);
+
+    /**
+     * Get gift product SKU
+     *
+     * @return string|null
+     */
+    public function getGiftSku();
+
+    /**
+     * Set gift product SKU
+     *
+     * @param string|null $giftSku
+     * @return $this
+     */
+    public function setGiftSku($giftSku);
+
+    /**
+     * Get gift product quantity
+     *
+     * @return int|null
+     */
+    public function getGiftQty();
+
+    /**
+     * Set gift product quantity
+     *
+     * @param int $giftQty
+     * @return $this
+     */
+    public function setGiftQty($giftQty);
 
     /**
      * Retrieve existing extension attributes object or create a new one.

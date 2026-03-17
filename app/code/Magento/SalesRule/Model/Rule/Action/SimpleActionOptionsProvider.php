@@ -24,7 +24,8 @@ class SimpleActionOptionsProvider implements OptionSourceInterface
             ['label' => __('Percent of product price discount'), 'value' =>  Rule::BY_PERCENT_ACTION],
             ['label' => __('Fixed amount discount'), 'value' => Rule::BY_FIXED_ACTION],
             ['label' => __('Fixed amount discount for whole cart'), 'value' => Rule::CART_FIXED_ACTION],
-            ['label' => __('Buy X get Y free (discount amount is Y)'), 'value' => Rule::BUY_X_GET_Y_ACTION]
+            ['label' => __('Buy X get Y free (discount amount is Y)'), 'value' => Rule::BUY_X_GET_Y_ACTION],
+            ['label' => __('Free Gift'), 'value' => Rule::FREE_GIFT_ACTION]
         ];
     }
 }

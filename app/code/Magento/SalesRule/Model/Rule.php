@@ -90,6 +90,8 @@ class Rule extends \Magento\Rule\Model\AbstractModel
 
     public const BUY_X_GET_Y_ACTION = 'buy_x_get_y';
 
+    public const FREE_GIFT_ACTION = 'free_gift';
+
     /**
      * Store coupon code generator instance
      *

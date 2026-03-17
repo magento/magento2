@@ -23,7 +23,9 @@
             "is_rss": true,
             "coupon_type": true,
             "use_auto_generation": true,
-            "uses_per_coupon": true
+            "uses_per_coupon": true,
+            "gift_sku": true,
+            "gift_qty": true
         },
         "index": {
             "SALESRULE_IS_ACTIVE_SORT_ORDER_TO_DATE_FROM_DATE": true

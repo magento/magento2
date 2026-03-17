@@ -46,6 +46,9 @@
                 identity="false" default="0" comment="Use Auto Generation"/>
         <column xsi:type="int" name="uses_per_coupon" unsigned="false" nullable="false" identity="false"
                 default="0" comment="User Per Coupon"/>
+        <column xsi:type="varchar" name="gift_sku" nullable="true" length="255" comment="Gift Product SKU"/>
+        <column xsi:type="int" name="gift_qty" unsigned="true" nullable="false" identity="false"
+                default="1" comment="Gift Product Quantity"/>
         <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="rule_id"/>
         </constraint>

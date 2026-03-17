@@ -409,9 +409,174 @@
                 </item>
             </argument>
             <settings>
+                <switcherConfig>
+                    <rules>
+                        <rule name="0">
+                            <value>free_gift</value>
+                            <actions>
+                                <action name="0">
+                                    <target>sales_rule_form.sales_rule_form.actions.gift_sku</target>
+                                    <callback>show</callback>
+                                </action>
+                                <action name="1">
+                                    <target>sales_rule_form.sales_rule_form.actions.gift_qty</target>
+                                    <callback>show</callback>
+                                </action>
+                                <action name="2">
+                                    <target>sales_rule_form.sales_rule_form.actions.discount_amount</target>
+                                    <callback>hide</callback>
+                                </action>
+                                <action name="3">
+                                    <target>sales_rule_form.sales_rule_form.actions.discount_qty</target>
+                                    <callback>hide</callback>
+                                </action>
+                                <action name="4">
+                                    <target>sales_rule_form.sales_rule_form.actions.discount_step</target>
+                                    <callback>hide</callback>
+                                </action>
+                            </actions>
+                        </rule>
+                        <rule name="1">
+                            <value>by_percent</value>
+                            <actions>
+                                <action name="0">
+                                    <target>sales_rule_form.sales_rule_form.actions.gift_sku</target>
+                                    <callback>hide</callback>
+                                </action>
+                                <action name="1">
+                                    <target>sales_rule_form.sales_rule_form.actions.gift_qty</target>
+                                    <callback>hide</callback>
+                                </action>
+                                <action name="2">
+                                    <target>sales_rule_form.sales_rule_form.actions.discount_amount</target>
+                                    <callback>show</callback>
+                                </action>
+                                <action name="3">
+                                    <target>sales_rule_form.sales_rule_form.actions.discount_qty</target>
+                                    <callback>show</callback>
+                                </action>
+                                <action name="4">
+                                    <target>sales_rule_form.sales_rule_form.actions.discount_step</target>
+                                    <callback>show</callback>
+                                </action>
+                            </actions>
+                        </rule>
+                        <rule name="2">
+                            <value>by_fixed</value>
+                            <actions>
+                                <action name="0">
+                                    <target>sales_rule_form.sales_rule_form.actions.gift_sku</target>
+                                    <callback>hide</callback>
+                                </action>
+                                <action name="1">
+                                    <target>sales_rule_form.sales_rule_form.actions.gift_qty</target>
+                                    <callback>hide</callback>
+                                </action>
+                                <action name="2">
+                                    <target>sales_rule_form.sales_rule_form.actions.discount_amount</target>
+                                    <callback>show</callback>
+                                </action>
+                                <action name="3">
+                                    <target>sales_rule_form.sales_rule_form.actions.discount_qty</target>
+                                    <callback>show</callback>
+                                </action>
+                                <action name="4">
+                                    <target>sales_rule_form.sales_rule_form.actions.discount_step</target>
+                                    <callback>show</callback>
+                                </action>
+                            </actions>
+                        </rule>
+                        <rule name="3">
+                            <value>cart_fixed</value>
+                            <actions>
+                                <action name="0">
+                                    <target>sales_rule_form.sales_rule_form.actions.gift_sku</target>
+                                    <callback>hide</callback>
+                                </action>
+                                <action name="1">
+                                    <target>sales_rule_form.sales_rule_form.actions.gift_qty</target>
+                                    <callback>hide</callback>
+                                </action>
+                                <action name="2">
+                                    <target>sales_rule_form.sales_rule_form.actions.discount_amount</target>
+                                    <callback>show</callback>
+                                </action>
+                                <action name="3">
+                                    <target>sales_rule_form.sales_rule_form.actions.discount_qty</target>
+                                    <callback>show</callback>
+                                </action>
+                                <action name="4">
+                                    <target>sales_rule_form.sales_rule_form.actions.discount_step</target>
+                                    <callback>show</callback>
+                                </action>
+                            </actions>
+                        </rule>
+                        <rule name="4">
+                            <value>buy_x_get_y</value>
+                            <actions>
+                                <action name="0">
+                                    <target>sales_rule_form.sales_rule_form.actions.gift_sku</target>
+                                    <callback>hide</callback>
+                                </action>
+                                <action name="1">
+                                    <target>sales_rule_form.sales_rule_form.actions.gift_qty</target>
+                                    <callback>hide</callback>
+                                </action>
+                                <action name="2">
+                                    <target>sales_rule_form.sales_rule_form.actions.discount_amount</target>
+                                    <callback>show</callback>
+                                </action>
+                                <action name="3">
+                                    <target>sales_rule_form.sales_rule_form.actions.discount_qty</target>
+                                    <callback>show</callback>
+                                </action>
+                                <action name="4">
+                                    <target>sales_rule_form.sales_rule_form.actions.discount_step</target>
+                                    <callback>show</callback>
+                                </action>
+                            </actions>
+                        </rule>
+                    </rules>
+                    <enabled>true</enabled>
+                </switcherConfig>
                 <dataType>number</dataType>
                 <label translate="true">Apply</label>
                 <dataScope>simple_action</dataScope>
+            </settings>
+        </field>
+        <field name="gift_sku" formElement="input">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="source" xsi:type="string">sales_rule</item>
+                </item>
+            </argument>
+            <settings>
+                <validation>
+                    <rule name="required-entry" xsi:type="boolean">true</rule>
+                </validation>
+                <dataType>text</dataType>
+                <label translate="true">Gift SKU</label>
+                <dataScope>gift_sku</dataScope>
+                <visible>false</visible>
+            </settings>
+        </field>
+        <field name="gift_qty" formElement="input">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="source" xsi:type="string">sales_rule</item>
+                    <item name="default" xsi:type="number">1</item>
+                </item>
+            </argument>
+            <settings>
+                <validation>
+                    <rule name="required-entry" xsi:type="boolean">true</rule>
+                    <rule name="validate-number" xsi:type="boolean">true</rule>
+                    <rule name="validate-greater-than-zero" xsi:type="boolean">true</rule>
+                </validation>
+                <dataType>text</dataType>
+                <label translate="true">Gift Qty</label>
+                <dataScope>gift_qty</dataScope>
+                <visible>false</visible>
             </settings>
         </field>
         <field name="discount_amount" formElement="input">
