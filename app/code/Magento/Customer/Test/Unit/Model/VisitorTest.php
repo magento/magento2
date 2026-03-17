@@ -11,6 +11,7 @@ use Magento\Customer\Model\ResourceModel\Visitor as VisitorResourceModel;
 use Magento\Customer\Model\Session;
 use Magento\Customer\Model\Visitor as VisitorModel;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\App\Request\Http as HttpRequest;
 use Magento\Framework\App\RequestSafetyInterface;
 use Magento\Framework\DataObject;
 use Magento\Framework\ObjectManagerInterface;
@@ -69,7 +70,13 @@ class VisitorTest extends TestCase
             Session::class,
             ['getVisitorData', 'setVisitorData', 'getSessionId']
         );
-        $this->requestSafetyMock = $this->createMock(RequestSafetyInterface::class);
+
+        $this->requestSafetyMock = $this->getMockBuilder(HttpRequest::class)
+            ->disableOriginalConstructor()
+            ->onlyMethods(['isSafeMethod', 'getRouteName'])
+            ->getMock();
+        $this->requestSafetyMock->method('isSafeMethod')->willReturn(false);
+        $this->requestSafetyMock->method('getRouteName')->willReturn('');
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
 
@@ -120,6 +127,16 @@ class VisitorTest extends TestCase
 
     public function testIsModuleIgnored()
     {
+        // Create a fresh mock for this test to avoid conflicts with setUp defaults
+        $requestSafetyMock = $this->getMockBuilder(HttpRequest::class)
+            ->disableOriginalConstructor()
+            ->onlyMethods(['isSafeMethod', 'getRouteName'])
+            ->getMock();
+        $requestSafetyMock->method('isSafeMethod')->willReturn(false);
+        $requestSafetyMock->expects($this->once())
+            ->method('getRouteName')
+            ->willReturn('test_route_name');
+        
         $this->visitor = $this->objectManagerHelper->getObject(
             VisitorModel::class,
             [
@@ -127,10 +144,9 @@ class VisitorTest extends TestCase
                 'session' => $this->sessionMock,
                 'resource' => $this->visitorResourceModelMock,
                 'ignores' => ['test_route_name' => true],
-                'requestSafety' => $this->requestSafetyMock,
+                'requestSafety' => $requestSafetyMock,
             ]
         );
-        $this->requestSafetyMock->method('getRouteName')->willReturn('test_route_name');
         $observer = new DataObject();
         $this->assertTrue($this->visitor->isModuleIgnored($observer));
     }
@@ -188,6 +204,7 @@ class VisitorTest extends TestCase
 
     public function testBeforeSaveUnsetsSessionId()
     {
+        $this->visitor->setWebsiteId(1);
         $this->visitor->setData('session_id', 'test_session_id');
         $this->visitor->beforeSave();
         $this->assertNull($this->visitor->getData('session_id'));
