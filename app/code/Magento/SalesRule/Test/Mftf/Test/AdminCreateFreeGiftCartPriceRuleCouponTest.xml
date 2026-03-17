@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright 2026 Adobe
+ * All Rights Reserved.
+ */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminCreateFreeGiftCartPriceRuleCouponTest">
+        <annotations>
+            <features value="SalesRule"/>
+            <stories value="Create cart price rule"/>
+            <title value="Admin creates Free Gift cart price rule with coupon and gift is added only after coupon is applied"/>
+            <description value="Admin creates a cart price rule with Free Gift action type requiring a coupon code. Gift product is not added until the coupon is applied on the storefront."/>
+            <severity value="CRITICAL"/>
+            <group value="SalesRule"/>
+        </annotations>
+
+        <before>
+            <createData entity="_defaultCategory" stepKey="createCategory"/>
+            <createData entity="FreeGiftQualifyingProduct" stepKey="createQualifyingProduct">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <createData entity="FreeGiftProduct" stepKey="createGiftProduct">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+        </before>
+
+        <after>
+            <actionGroup ref="DeleteCartPriceRuleByName" stepKey="deleteRule">
+                <argument name="ruleName" value="$$createQualifyingProduct.name$$ Free Gift Coupon Rule"/>
+            </actionGroup>
+            <deleteData createDataKey="createGiftProduct" stepKey="deleteGiftProduct"/>
+            <deleteData createDataKey="createQualifyingProduct" stepKey="deleteQualifyingProduct"/>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="adminLogout"/>
+        </after>
+
+        <!-- Create cart price rule with Free Gift action and specific coupon -->
+        <actionGroup ref="AdminOpenCartPriceRulesPageActionGroup" stepKey="goToCartPriceRules"/>
+        <click selector="{{AdminCartPriceRulesSection.addNewRuleButton}}" stepKey="clickAddNewRule"/>
+        <waitForElementVisible selector="{{AdminCartPriceRulesFormSection.ruleName}}" stepKey="waitForRuleName"/>
+        <fillField selector="{{AdminCartPriceRulesFormSection.ruleName}}" userInput="$$createQualifyingProduct.name$$ Free Gift Coupon Rule" stepKey="fillRuleName"/>
+        <selectOption selector="{{AdminCartPriceRulesFormSection.websites}}" userInput="Main Website" stepKey="selectWebsites"/>
+        <actionGroup ref="SelectNotLoggedInCustomerGroupActionGroup" stepKey="selectCustomerGroup"/>
+        <selectOption selector="{{AdminCartPriceRulesFormSection.coupon}}" userInput="Specific Coupon" stepKey="selectCouponType"/>
+        <waitForElementVisible selector="{{AdminCartPriceRulesFormSection.couponCode}}" stepKey="waitForCouponCodeField"/>
+        <fillField selector="{{AdminCartPriceRulesFormSection.couponCode}}" userInput="FREEGIFT123" stepKey="fillCouponCode"/>
+        <click selector="{{AdminCartPriceRulesFormSection.actionsHeader}}" stepKey="expandActionsTab"/>
+        <waitForElementVisible selector="{{AdminCartPriceRulesFormSection.apply}}" stepKey="waitForApplyField"/>
+        <selectOption selector="{{AdminCartPriceRulesFormSection.apply}}" userInput="Free Gift" stepKey="selectFreeGiftAction"/>
+        <waitForElementVisible selector="{{AdminCartPriceRulesFormSection.giftSku}}" stepKey="waitForGiftSkuField"/>
+        <fillField selector="{{AdminCartPriceRulesFormSection.giftSku}}" userInput="$$createGiftProduct.sku$$" stepKey="fillGiftSku"/>
+        <fillField selector="{{AdminCartPriceRulesFormSection.giftQty}}" userInput="1" stepKey="fillGiftQty"/>
+        <click selector="{{AdminCartPriceRulesFormSection.save}}" stepKey="clickSaveButton"/>
+        <waitForElementVisible selector="{{AdminMessagesSection.success}}" stepKey="waitForSuccess"/>
+        <see selector="{{AdminMessagesSection.success}}" userInput="You saved the rule." stepKey="seeSuccessMessage"/>
+
+        <!-- Go to the qualifying product on the storefront and add to cart -->
+        <amOnPage url="$$createQualifyingProduct.custom_attributes[url_key]$$.html" stepKey="goToQualifyingProductPage"/>
+        <waitForPageLoad stepKey="waitForProductPage"/>
+        <actionGroup ref="StorefrontClickAddToCartOnProductPageActionGroup" stepKey="addQualifyingProductToCart"/>
+
+        <!-- Go to cart and verify only the qualifying product is present (no gift yet) -->
+        <actionGroup ref="StorefrontCartPageOpenActionGroup" stepKey="goToCartPage"/>
+        <waitForPageLoad stepKey="waitForCartPage"/>
+        <seeElement selector="{{CheckoutCartProductSection.ProductLinkByName($$createQualifyingProduct.name$$)}}" stepKey="seeQualifyingProduct"/>
+        <dontSeeElement selector="{{CheckoutCartProductSection.ProductLinkByName($$createGiftProduct.name$$)}}" stepKey="dontSeeGiftProductBeforeCoupon"/>
+        <dontSeeElement selector="{{CheckoutCartSummarySection.discountAmount}}" stepKey="dontSeeDiscountBeforeCoupon"/>
+
+        <!-- Apply coupon code -->
+        <waitForElement selector="{{StorefrontSalesRuleCartCouponSection.couponHeader}}" time="30" stepKey="waitForCouponHeader"/>
+        <conditionalClick selector="{{StorefrontSalesRuleCartCouponSection.couponHeader}}" dependentSelector="{{StorefrontSalesRuleCartCouponSection.discountBlockActive}}" visible="false" stepKey="clickCouponHeader"/>
+        <waitForElementVisible selector="{{StorefrontSalesRuleCartCouponSection.couponField}}" stepKey="waitForCouponField"/>
+        <fillField selector="{{StorefrontSalesRuleCartCouponSection.couponField}}" userInput="FREEGIFT123" stepKey="fillCouponField"/>
+        <click selector="{{StorefrontSalesRuleCartCouponSection.applyButton}}" stepKey="clickApplyButton"/>
+        <waitForPageLoad stepKey="waitForCouponApplied"/>
+
+        <!-- Verify gift product is now in the cart -->
+        <seeElement selector="{{CheckoutCartProductSection.ProductLinkByName($$createGiftProduct.name$$)}}" stepKey="seeGiftProductAfterCoupon"/>
+
+        <!-- Verify gift product subtotal is $0.00 (fully discounted) -->
+        <see selector="{{CheckoutCartProductSection.productSubtotalByName($$createGiftProduct.name$$)}}" userInput="$0.00" stepKey="seeGiftProductSubtotalZero"/>
+    </test>
+</tests>

@@ -780,4 +780,41 @@
         <data key="uses_per_coupon">10</data>
         <data key="simple_free_shipping">1</data>
     </entity>
+
+    <entity name="FreeGiftCartPriceRule" type="SalesRule">
+        <data key="name" unique="suffix">FreeGiftRule</data>
+        <data key="websites">Main Website</data>
+        <data key="customerGroups">'NOT LOGGED IN', 'General', 'Wholesale', 'Retailer'</data>
+        <data key="apply">Free Gift</data>
+    </entity>
+
+    <entity name="FreeGiftProduct" type="product">
+        <data key="name" unique="suffix">Gift Product</data>
+        <data key="sku" unique="suffix">gift-product</data>
+        <data key="urlKey" unique="suffix">gift-product</data>
+        <data key="type_id">simple</data>
+        <data key="attribute_set_id">4</data>
+        <data key="price">50.00</data>
+        <data key="visibility">4</data>
+        <data key="status">1</data>
+        <data key="quantity">100</data>
+        <data key="weight">1</data>
+        <requiredEntity type="product_extension_attribute">EavStockItem</requiredEntity>
+        <requiredEntity type="custom_attribute_array">CustomAttributeCategoryIds</requiredEntity>
+    </entity>
+
+    <entity name="FreeGiftQualifyingProduct" type="product">
+        <data key="name" unique="suffix">Qualifying Product</data>
+        <data key="sku" unique="suffix">qualifying-product</data>
+        <data key="urlKey" unique="suffix">qualifying-product</data>
+        <data key="type_id">simple</data>
+        <data key="attribute_set_id">4</data>
+        <data key="price">100.00</data>
+        <data key="visibility">4</data>
+        <data key="status">1</data>
+        <data key="quantity">100</data>
+        <data key="weight">1</data>
+        <requiredEntity type="product_extension_attribute">EavStockItem</requiredEntity>
+        <requiredEntity type="custom_attribute_array">CustomAttributeCategoryIds</requiredEntity>
+    </entity>
 </entities>

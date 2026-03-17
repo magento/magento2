@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright 2026 Adobe
+ * All Rights Reserved.
+ */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminCreateFreeGiftCartPriceRuleActionGroup">
+        <annotations>
+            <description>Creates a Cart Price Rule with the "Free Gift" action type, filling the Gift SKU and Gift Qty fields.</description>
+        </annotations>
+        <arguments>
+            <argument name="ruleName" type="string"/>
+            <argument name="giftSku" type="string"/>
+            <argument name="giftQty" type="string" defaultValue="1"/>
+            <argument name="websites" type="string" defaultValue="Main Website"/>
+        </arguments>
+
+        <amOnPage url="{{AdminCartPriceRulesPage.url}}" stepKey="openCartPriceRulesPage"/>
+        <waitForPageLoad stepKey="waitForRulesPageLoad"/>
+        <click selector="{{AdminCartPriceRulesSection.addNewRuleButton}}" stepKey="clickAddNewRule"/>
+        <waitForElementVisible selector="{{AdminCartPriceRulesFormSection.ruleName}}" stepKey="waitForRuleNameField"/>
+        <fillField selector="{{AdminCartPriceRulesFormSection.ruleName}}" userInput="{{ruleName}}" stepKey="fillRuleName"/>
+        <selectOption selector="{{AdminCartPriceRulesFormSection.websites}}" userInput="{{websites}}" stepKey="selectWebsites"/>
+        <click selector="{{AdminCartPriceRulesFormSection.actionsHeader}}" stepKey="expandActionsTab"/>
+        <waitForElementVisible selector="{{AdminCartPriceRulesFormSection.apply}}" stepKey="waitForApplyField"/>
+        <selectOption selector="{{AdminCartPriceRulesFormSection.apply}}" userInput="Free Gift" stepKey="selectFreeGiftAction"/>
+        <waitForElementVisible selector="{{AdminCartPriceRulesFormSection.giftSku}}" stepKey="waitForGiftSkuField"/>
+        <fillField selector="{{AdminCartPriceRulesFormSection.giftSku}}" userInput="{{giftSku}}" stepKey="fillGiftSku"/>
+        <fillField selector="{{AdminCartPriceRulesFormSection.giftQty}}" userInput="{{giftQty}}" stepKey="fillGiftQty"/>
+        <click selector="{{AdminCartPriceRulesFormSection.save}}" stepKey="clickSaveButton"/>
+        <waitForElementVisible selector="{{AdminMessagesSection.success}}" stepKey="waitForSuccessMessage"/>
+        <see selector="{{AdminMessagesSection.success}}" userInput="You saved the rule." stepKey="seeSuccessMessage"/>
+    </actionGroup>
+</actionGroups>

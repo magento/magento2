@@ -38,6 +38,8 @@
     </event>
     <event name="sales_quote_collect_totals_before">
         <observer name="salesrule_sales_quote_collect_totals_before" instance="\Magento\SalesRule\Observer\QuoteResetAppliedRulesObserver" />
+    </event>
+    <event name="checkout_cart_product_add_after">
         <observer name="salesrule_add_free_gift" instance="\Magento\SalesRule\Observer\AddFreeGiftToCartObserver" />
     </event>
 </config>

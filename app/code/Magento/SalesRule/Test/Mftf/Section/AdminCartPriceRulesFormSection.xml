@@ -92,6 +92,8 @@
         <element name="discardSubsequentRulesByStatus" type="text" selector="div.admin__actions-switch input[name='stop_rules_processing'][value='{{value}}']+label" parameterized="true"/>
         <element name="addRewardPoints" type="input" selector="input[name='extension_attributes[reward_points_delta]']"/>
         <element name="freeShipping" type="select" selector="//select[@name='simple_free_shipping']"/>
+        <element name="giftSku" type="input" selector="input[name='gift_sku']"/>
+        <element name="giftQty" type="input" selector="input[name='gift_qty']"/>
 
         <!-- Labels sub-form -->
         <element name="labelsHeader" type="button" selector="div[data-index='labels']" timeout="30"/>

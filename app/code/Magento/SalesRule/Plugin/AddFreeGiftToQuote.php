@@ -49,8 +49,6 @@ class AddFreeGiftToQuote
             $customerGroupId = (int)$quote->getCustomerGroupId();
 
             $rules = $this->ruleCollectionFactory->create()
-                ->addFieldToFilter('simple_action', Rule::FREE_GIFT_ACTION)
-                ->addFieldToFilter('is_active', 1)
                 ->setValidationFilter($websiteId, $customerGroupId, $quote->getCouponCode() ?? '');
 
             $existingSkus = [];
@@ -60,6 +58,10 @@ class AddFreeGiftToQuote
 
             $giftsAdded = false;
             foreach ($rules as $rule) {
+                if ($rule->getSimpleAction() !== Rule::FREE_GIFT_ACTION) {
+                    continue;
+                }
+
                 $giftSku = $rule->getData('gift_sku');
                 $giftQty = (int)($rule->getData('gift_qty') ?: 1);
 
