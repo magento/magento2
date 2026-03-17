@@ -7,8 +7,8 @@ declare(strict_types=1);
 
 namespace Magento\SalesRule\Plugin;
 
-use Magento\Quote\Model\Quote;
-use Magento\QuoteGraphQl\Model\Cart\GetCartForUser;
+use Magento\Quote\Api\CartRepositoryInterface;
+use Magento\Quote\Api\Data\CartInterface;
 
 class AddFreeGiftOnCartLoad
 {
@@ -18,11 +18,17 @@ class AddFreeGiftOnCartLoad
     }
 
     /**
+     * After the cart is saved by any GraphQL mutation, check whether free-gift
+     * rules apply and, if so, add the gift product and re-save.
+     *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function afterExecute(GetCartForUser $subject, Quote $result): Quote
-    {
-        $this->addFreeGiftToQuote->addFreeGifts($result);
+    public function afterSave(
+        CartRepositoryInterface $subject,
+        mixed $result,
+        CartInterface $quote
+    ): mixed {
+        $this->addFreeGiftToQuote->addFreeGifts($quote);
         return $result;
     }
 }

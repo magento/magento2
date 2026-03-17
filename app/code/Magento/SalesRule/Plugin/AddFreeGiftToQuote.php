@@ -33,7 +33,7 @@ class AddFreeGiftToQuote
 
     public function addFreeGifts(Quote $quote): void
     {
-        if ($this->isProcessing || $quote->getData('free_gifts_processed')) {
+        if ($this->isProcessing) {
             return;
         }
 
@@ -42,7 +42,6 @@ class AddFreeGiftToQuote
         }
 
         $this->isProcessing = true;
-        $quote->setData('free_gifts_processed', true);
 
         try {
             $websiteId = (int)$this->storeManager->getStore($quote->getStoreId())->getWebsiteId();
@@ -66,6 +65,15 @@ class AddFreeGiftToQuote
                 $giftQty = (int)($rule->getData('gift_qty') ?: 1);
 
                 if (!$giftSku || isset($existingSkus[$giftSku])) {
+                    continue;
+                }
+
+                $rule->afterLoad();
+                $address = $quote->isVirtual()
+                    ? $quote->getBillingAddress()
+                    : $quote->getShippingAddress();
+                $address->unsetData('cached_items_all');
+                if (!$rule->validate($address)) {
                     continue;
                 }
 
@@ -103,12 +111,12 @@ class AddFreeGiftToQuote
             }
 
             if ($giftsAdded) {
-                $this->cartRepository->save($quote);
                 foreach ($quote->getAllAddresses() as $address) {
                     $address->unsetData('cached_items_all');
                     $address->unsetData('cached_items_nominal');
                     $address->unsetData('cached_items_nonnominal');
                 }
+                $this->cartRepository->save($quote);
             }
         } finally {
             $this->isProcessing = false;

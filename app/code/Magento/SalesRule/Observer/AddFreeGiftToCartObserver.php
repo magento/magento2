@@ -43,49 +43,38 @@ class AddFreeGiftToCartObserver implements ObserverInterface
         $this->isProcessing = true;
 
         try {
-            /** @var \Magento\Quote\Model\Quote\Item $quoteItem */
-            $quoteItem = $observer->getEvent()->getQuoteItem();
-            $this->logger->info('FreeGift: observer fired, quoteItem=' . ($quoteItem ? $quoteItem->getSku() : 'null'));
-            if (!$quoteItem) {
+            /** @var Quote $quote */
+            $quote = $observer->getEvent()->getQuote();
+            if (!$quote) {
                 return;
             }
 
-            /** @var Quote $quote */
-            $quote = $quoteItem->getQuote();
-            $allItems = $quote ? $quote->getAllVisibleItems() : [];
-            $this->logger->info('FreeGift: quote=' . ($quote ? $quote->getId() : 'null') . ', allVisibleItems=' . count($allItems));
-            if (!$quote || empty($allItems)) {
+            $allItems = $quote->getAllVisibleItems();
+            if (empty($allItems)) {
                 return;
             }
 
             $websiteId = (int)$this->storeManager->getStore($quote->getStoreId())->getWebsiteId();
             $customerGroupId = (int)$quote->getCustomerGroupId();
             $couponCode = $quote->getCouponCode() ?? '';
-            $this->logger->info("FreeGift: websiteId=$websiteId, customerGroupId=$customerGroupId, coupon=$couponCode");
 
             $rules = $this->ruleCollectionFactory->create()
                 ->setValidationFilter($websiteId, $customerGroupId, $couponCode);
-
-            $this->logger->info('FreeGift: found ' . $rules->getSize() . ' rules before filtering');
 
             $existingSkus = [];
             foreach ($quote->getAllItems() as $item) {
                 $existingSkus[$item->getSku()] = true;
             }
-            $this->logger->info('FreeGift: existing SKUs in cart: ' . implode(', ', array_keys($existingSkus)));
 
             foreach ($rules as $rule) {
-                /** @var Rule $rule */
                 if ($rule->getSimpleAction() !== Rule::FREE_GIFT_ACTION) {
                     continue;
                 }
 
                 $giftSku = $rule->getData('gift_sku');
                 $giftQty = (int)($rule->getData('gift_qty') ?: 1);
-                $this->logger->info("FreeGift: rule {$rule->getRuleId()}, giftSku=$giftSku, giftQty=$giftQty");
 
                 if (!$giftSku || isset($existingSkus[$giftSku])) {
-                    $this->logger->info("FreeGift: skipped - empty sku or already in cart");
                     continue;
                 }
 
@@ -93,11 +82,7 @@ class AddFreeGiftToCartObserver implements ObserverInterface
                     ? $quote->getBillingAddress()
                     : $quote->getShippingAddress();
                 $address->unsetData('cached_items_all');
-                $addressItems = $address->getAllItems();
-                $this->logger->info('FreeGift: address items count=' . count($addressItems));
-                $validated = $rule->validate($address);
-                $this->logger->info("FreeGift: rule->validate() = " . ($validated ? 'true' : 'false'));
-                if (!$validated) {
+                if (!$rule->validate($address)) {
                     continue;
                 }
 
@@ -111,7 +96,6 @@ class AddFreeGiftToCartObserver implements ObserverInterface
                 }
 
                 if (!$product->isSalable()) {
-                    $this->logger->info("FreeGift: product $giftSku is not salable");
                     continue;
                 }
 
@@ -119,7 +103,6 @@ class AddFreeGiftToCartObserver implements ObserverInterface
                 try {
                     $quote->addProduct($product, $buyRequest);
                     $existingSkus[$giftSku] = true;
-                    $this->logger->info("FreeGift: successfully added $giftSku to quote");
                 } catch (LocalizedException $e) {
                     $this->logger->warning(
                         sprintf(
