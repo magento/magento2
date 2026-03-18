@@ -7,20 +7,35 @@ declare(strict_types=1);
 
 namespace Magento\Catalog\Test\Unit\Helper\Product;
 
-use PHPUnit\Framework\Attributes\DataProvider;
+use Magento\Catalog\Api\CategoryRepositoryInterface;
+use Magento\Catalog\Api\Data\CategoryInterface;
 use Magento\Catalog\Helper\Product\ProductList;
 use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\App\RequestInterface;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 class ProductListTest extends TestCase
 {
     private const STUB_VIEW_MODE = 'grid';
+
     /**
      * @var ScopeConfigInterface|MockObject
      */
     private $scopeConfigMock;
+
+    /**
+     * @var CategoryRepositoryInterface|MockObject
+     */
+    private $categoryRepositoryMock;
+
+    /**
+     * @var RequestInterface|MockObject
+     */
+    private $requestMock;
 
     /**
      * @var ProductList
@@ -32,8 +47,12 @@ class ProductListTest extends TestCase
         $objectManager = new ObjectManager($this);
 
         $this->scopeConfigMock = $this->createMock(ScopeConfigInterface::class);
+        $this->categoryRepositoryMock = $this->createMock(CategoryRepositoryInterface::class);
+        $this->requestMock = $this->createMock(RequestInterface::class);
         $this->productListHelper = $objectManager->getObject(ProductList::class, [
-            'scopeConfig' => $this->scopeConfigMock
+            'scopeConfig' => $this->scopeConfigMock,
+            'categoryRepository' => $this->categoryRepositoryMock,
+            'request' => $this->requestMock,
         ]);
     }
 
@@ -68,5 +87,34 @@ class ProductListTest extends TestCase
                 'expectedReturn' => 10
             ]
         ];
+    }
+
+    public function testGetDefaultSortFieldReturnsCategorySortBy(): void
+    {
+        $categoryMock = $this->createMock(CategoryInterface::class);
+        $categoryMock->method('getDefaultSortBy')->willReturn('name');
+
+        $this->requestMock->method('getParam')->with('id')->willReturn('5');
+        $this->categoryRepositoryMock->method('get')->with(5)->willReturn($categoryMock);
+
+        $this->assertSame('name', $this->productListHelper->getDefaultSortField());
+    }
+
+    public function testGetDefaultSortFieldFallsBackToConfigOnMissingCategory(): void
+    {
+        $this->requestMock->method('getParam')->with('id')->willReturn('5');
+        $this->categoryRepositoryMock->method('get')->with(5)
+            ->willThrowException(new NoSuchEntityException());
+        $this->scopeConfigMock->method('getValue')->willReturn('price');
+
+        $this->assertSame('price', $this->productListHelper->getDefaultSortField());
+    }
+
+    public function testGetDefaultSortFieldFallsBackToConfigWithNoCategoryId(): void
+    {
+        $this->requestMock->method('getParam')->with('id')->willReturn('0');
+        $this->scopeConfigMock->method('getValue')->willReturn('price');
+
+        $this->assertSame('price', $this->productListHelper->getDefaultSortField());
     }
 }
