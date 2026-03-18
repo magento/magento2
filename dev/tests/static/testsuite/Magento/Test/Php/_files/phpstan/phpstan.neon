@@ -25,6 +25,10 @@ parameters:
     ignoreErrors:
         # Ignore PHPStan\Rules\Classes\UnusedConstructorParametersRule
         - '#Constructor of class [a-zA-Z0-9\\_]+ has an unused parameter#'
+        # Ignore DataFixture attribute class issues
+        - '#Attribute class Magento\\TestFramework\\Fixture\\DataFixture is not repeatable#'
+        # Ignore Config attribute class issues (Config is IS_REPEATABLE in framework)
+        - '#Attribute class Magento\\TestFramework\\Fixture\\Config is not repeatable#'
         # Ignore setCustomErrorHandler function not found in bootstrap files
         - '#Function setCustomErrorHandler not found#'
         # Ignore 'return statement is missing' error when 'void' is present in return type list

@@ -348,7 +348,7 @@ class ServiceInputProcessor implements ServicePayloadConverterInterface, ResetAf
                             )
                         );
                     }
-                    $this->serviceInputValidator->validateEntityValue($object, $propertyName, $setterValue);
+                    $this->serviceInputValidator->validateEntityValue($object, lcfirst($propertyName), $setterValue);
                     $object->{$setterName}($setterValue);
                 }
             } catch (\LogicException $e) {
