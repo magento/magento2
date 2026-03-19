@@ -8,8 +8,8 @@ declare(strict_types=1);
 namespace Magento\Catalog\Test\Unit\Helper\Product;
 
 use Magento\Catalog\Api\CategoryRepositoryInterface;
-use Magento\Catalog\Api\Data\CategoryInterface;
 use Magento\Catalog\Helper\Product\ProductList;
+use Magento\Catalog\Model\Category;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
@@ -91,7 +91,7 @@ class ProductListTest extends TestCase
 
     public function testGetDefaultSortFieldReturnsCategorySortBy(): void
     {
-        $categoryMock = $this->createMock(CategoryInterface::class);
+        $categoryMock = $this->createMock(Category::class);
         $categoryMock->method('getDefaultSortBy')->willReturn('name');
 
         $this->requestMock->method('getParam')->with('id')->willReturn('5');

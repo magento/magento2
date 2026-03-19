@@ -37,7 +37,8 @@ class ProductList
 
     /**
      * @var Registry
-     * @deprecated Registry is deprecated
+     * @deprecated 100.0.0 Registry is no longer used. Category is resolved via CategoryRepositoryInterface.
+     * @see \Magento\Catalog\Api\CategoryRepositoryInterface
      */
     private $coreRegistry;
 
@@ -131,7 +132,7 @@ class ProductList
                     return $sortBy;
                 }
             } catch (NoSuchEntityException $e) {
-                // category not found; fall through to store config
+                // phpcs:ignore Magento2.CodeAnalysis.EmptyBlock.DetectedCatch
             }
         }
 
