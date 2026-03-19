@@ -205,7 +205,7 @@ class ShipmentService
 
         foreach ($request->getPackages() as $packageData) {
             $requestParam['packageDescription'] = [
-                "weight" => $packageData['weight_pounds'] ?? 1,
+                "weight" => ($packageData['weight_pounds'] ?? 0) ?: 1,
                 "mailClass" => 'ALL'
             ];
             $requestParam['packageDescription']['length'] = $request->getLength() ? (int) $request->getLength() : 1;
