@@ -10,11 +10,9 @@ namespace Magento\Customer\Test\Unit\Model;
 use Magento\Customer\Model\ResourceModel\Visitor as VisitorResourceModel;
 use Magento\Customer\Model\Session;
 use Magento\Customer\Model\Visitor as VisitorModel;
-use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\Request\Http as HttpRequest;
 use Magento\Framework\App\RequestSafetyInterface;
 use Magento\Framework\DataObject;
-use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Registry;
 use Magento\Framework\Session\SessionManagerInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
@@ -63,6 +61,11 @@ class VisitorTest extends TestCase
      */
     private $requestSafetyMock;
 
+    /**
+     * @var StoreManagerInterface|MockObject
+     */
+    private $storeManagerMock;
+
     protected function setUp(): void
     {
         $this->registryMock = $this->createMock(Registry::class);
@@ -77,6 +80,7 @@ class VisitorTest extends TestCase
             ->getMock();
         $this->requestSafetyMock->method('isSafeMethod')->willReturn(false);
         $this->requestSafetyMock->method('getRouteName')->willReturn('');
+        $this->storeManagerMock = $this->createMock(StoreManagerInterface::class);
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
 
@@ -102,6 +106,7 @@ class VisitorTest extends TestCase
                 'registry' => $this->registryMock,
                 'session' => $this->sessionMock,
                 'resource' => $this->visitorResourceModelMock,
+                'storeManager' => $this->storeManagerMock,
             ]
         );
 
@@ -218,38 +223,13 @@ class VisitorTest extends TestCase
             ->method('getId')
             ->willReturn($websiteId);
 
-        $storeManagerMock = $this->createMock(StoreManagerInterface::class);
-        $storeManagerMock->expects($this->once())
+        $this->storeManagerMock->expects($this->once())
             ->method('getWebsite')
             ->willReturn($websiteMock);
 
-        $objectManagerMock = $this->createMock(ObjectManagerInterface::class);
-        $objectManagerMock->expects($this->once())
-            ->method('get')
-            ->with(StoreManagerInterface::class)
-            ->willReturn($storeManagerMock);
-
-        // Save original ObjectManager instance
-        $originalObjectManager = null;
-        try {
-            $originalObjectManager = ObjectManager::getInstance();
-        } catch (\Exception $e) {
-            // ObjectManager not initialized yet
-        }
-
-        // Set mock ObjectManager
-        ObjectManager::setInstance($objectManagerMock);
-
-        try {
-            $this->visitor->unsetData('website_id');
-            $this->visitor->beforeSave();
-            $this->assertEquals($websiteId, $this->visitor->getWebsiteId());
-        } finally {
-            // Restore original ObjectManager instance
-            if ($originalObjectManager !== null) {
-                ObjectManager::setInstance($originalObjectManager);
-            }
-        }
+        $this->visitor->unsetData('website_id');
+        $this->visitor->beforeSave();
+        $this->assertEquals($websiteId, $this->visitor->getWebsiteId());
     }
 
     public function testBeforeSaveDoesNotOverrideExistingWebsiteId()
