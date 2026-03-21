@@ -54,8 +54,10 @@ class Filesystem implements ConfigWriterInterface
      */
     private function initialize()
     {
-        if (!file_exists($this->directoryList->getPath(DirectoryList::GENERATED_METADATA))) {
-            mkdir($this->directoryList->getPath(DirectoryList::GENERATED_METADATA));
+        $metadataPath = $this->directoryList->getPath(DirectoryList::GENERATED_METADATA);
+        if (!is_dir($metadataPath)) {
+            // Use @ to suppress "File exists" warnings from concurrent fork()-based callers.
+            @mkdir($metadataPath, 0755, true);
         }
     }
 }
