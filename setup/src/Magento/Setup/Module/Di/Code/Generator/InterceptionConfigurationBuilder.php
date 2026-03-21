@@ -142,13 +142,16 @@ class InterceptionConfigurationBuilder
         $inheritedConfig = [];
         foreach ($this->areaCodesList as $areaKey) {
             $scopePriority = [Area::AREA_GLOBAL];
-            $pluginListCloned = clone $this->pluginList;
+            // Reset mutable state instead of cloning — avoids one deep object copy per area.
+            // reset() clears _data/_inherited/_processed/_pluginInstances and restores
+            // _scopePriorityScheme to [global], identical to what a fresh clone would have.
+            $this->pluginList->reset();
             if ($areaKey != Area::AREA_GLOBAL) {
                 $scopePriority[] = $areaKey;
-                $pluginListCloned->setScopePriorityScheme($scopePriority);
+                $this->pluginList->setScopePriorityScheme($scopePriority);
             }
             $key = implode('', $scopePriority);
-            $inheritedConfig[$key] = $this->filterNullInheritance($pluginListCloned->getPluginsConfig());
+            $inheritedConfig[$key] = $this->filterNullInheritance($this->pluginList->getPluginsConfig());
         }
         return $inheritedConfig;
     }
