@@ -22,6 +22,15 @@ class ClassesScanner implements ClassesScannerInterface
     protected $excludePatterns = [];
 
     /**
+     * Combined exclude pattern built from all $excludePatterns groups.
+     * Pre-built to avoid calling multiple preg_match() per file during directory traversal.
+     * Null means no exclusions apply.
+     *
+     * @var string|null
+     */
+    private ?string $combinedExcludePattern = null;
+
+    /**
      * @var array
      */
     private $fileResults = [];
@@ -39,6 +48,7 @@ class ClassesScanner implements ClassesScannerInterface
     public function __construct(array $excludePatterns = [], ?DirectoryList $directoryList = null)
     {
         $this->excludePatterns = $excludePatterns;
+        $this->rebuildCombinedExcludePattern();
         if ($directoryList === null) {
             $directoryList = ObjectManager::getInstance()->get(DirectoryList::class);
         }
@@ -54,6 +64,26 @@ class ClassesScanner implements ClassesScannerInterface
     public function addExcludePatterns(array $excludePatterns)
     {
         $this->excludePatterns = array_merge($this->excludePatterns, $excludePatterns);
+        $this->rebuildCombinedExcludePattern();
+    }
+
+    /**
+     * Pre-compile all exclude pattern groups into a single alternation regex.
+     * Reduces per-file preg_match() calls from N-patterns to 1 during directory traversal.
+     *
+     * @return void
+     */
+    private function rebuildCombinedExcludePattern(): void
+    {
+        $parts = [];
+        foreach ($this->excludePatterns as $group) {
+            foreach ((array)$group as $pattern) {
+                // Strip the # delimiter and any trailing flags, wrap in non-capturing group
+                $inner = preg_replace('/^#(.*)#[a-z]*$/s', '$1', $pattern);
+                $parts[] = '(?:' . $inner . ')';
+            }
+        }
+        $this->combinedExcludePattern = $parts ? '#' . implode('|', $parts) . '#' : null;
     }
 
     /**
@@ -106,10 +136,10 @@ class ClassesScanner implements ClassesScannerInterface
                 continue;
             }
             $fileItemPath = $fileItem->getRealPath();
-            foreach ($this->excludePatterns as $excludePatterns) {
-                if ($this->isExclude($fileItemPath, $excludePatterns)) {
-                    continue 2;
-                }
+            if ($this->combinedExcludePattern !== null
+                && preg_match($this->combinedExcludePattern, str_replace('\\', '/', $fileItemPath))
+            ) {
+                continue;
             }
             $fileScanner = new FileClassScanner($fileItemPath);
             $className = $fileScanner->getClassName();

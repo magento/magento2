@@ -9,6 +9,7 @@ namespace Magento\Setup\Module\Di\Code\Scanner;
 
 use Magento\Framework\Api\Code\Generator\ExtensionAttributesGenerator;
 use Magento\Framework\Api\Code\Generator\ExtensionAttributesInterfaceGenerator;
+use Magento\Framework\GetParameterClassTrait;
 use Magento\Framework\ObjectManager\Code\Generator\Factory as FactoryGenerator;
 use Magento\Framework\Reflection\TypeProcessor;
 use Magento\Setup\Module\Di\Compiler\Log\Log;
@@ -18,6 +19,7 @@ use Magento\Setup\Module\Di\Compiler\Log\Log;
  */
 class PhpScanner implements ScannerInterface
 {
+    use GetParameterClassTrait;
     /**
      * @var Log $log
      */
@@ -62,9 +64,14 @@ class PhpScanner implements ScannerInterface
         $parameters = $constructor->getParameters();
         /** @var $parameter \ReflectionParameter */
         foreach ($parameters as $parameter) {
-            preg_match('/\[\s\<\w+?>\s\??([\w\\\\]+)/s', $parameter->__toString(), $matches);
-            if (isset($matches[1]) && substr($matches[1], -strlen($entityType)) == $entityType) {
-                $missingClassName = $matches[1];
+            // Use the Reflection API directly instead of __toString() + preg_match,
+            // which serialises the parameter to a debug string purely to regex the type out of it.
+            $paramClass = $this->getParameterClass($parameter);
+            if ($paramClass === null) {
+                continue;
+            }
+            $missingClassName = $paramClass->getName();
+            if (substr($missingClassName, -strlen($entityType)) == $entityType) {
                 if ($this->shouldGenerateClass($missingClassName, $entityType, $file)) {
 
                     if (substr($missingClassName, -strlen($factorySuffix)) == $factorySuffix) {
