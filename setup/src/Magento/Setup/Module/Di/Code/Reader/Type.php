@@ -10,6 +10,14 @@ namespace Magento\Setup\Module\Di\Code\Reader;
 class Type
 {
     /**
+     * Memoized results of isConcrete() calls to avoid repeated ReflectionClass instantiation
+     * across the thousands of class checks performed during compilation.
+     *
+     * @var array<string, bool>
+     */
+    private array $concreteCache = [];
+
+    /**
      * Whether instance is concrete implementation
      *
      * @param string $type
@@ -17,11 +25,14 @@ class Type
      */
     public function isConcrete($type)
     {
-        try {
-            $instance = new \ReflectionClass($type);
-        } catch (\ReflectionException $e) {
-            return false;
+        if (!array_key_exists($type, $this->concreteCache)) {
+            try {
+                $instance = new \ReflectionClass($type);
+                $this->concreteCache[$type] = !$instance->isAbstract() && !$instance->isInterface();
+            } catch (\ReflectionException $e) {
+                $this->concreteCache[$type] = false;
+            }
         }
-        return !$instance->isAbstract() && !$instance->isInterface();
+        return $this->concreteCache[$type];
     }
 }
