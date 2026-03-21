@@ -142,13 +142,13 @@ class InterceptionConfigurationBuilder
         $inheritedConfig = [];
         foreach ($this->areaCodesList as $areaKey) {
             $scopePriority = [Area::AREA_GLOBAL];
-            $pluginListCloned = clone $this->pluginList;
+            $this->pluginList->reset();
             if ($areaKey != Area::AREA_GLOBAL) {
                 $scopePriority[] = $areaKey;
-                $pluginListCloned->setScopePriorityScheme($scopePriority);
+                $this->pluginList->setScopePriorityScheme($scopePriority);
             }
             $key = implode('', $scopePriority);
-            $inheritedConfig[$key] = $this->filterNullInheritance($pluginListCloned->getPluginsConfig());
+            $inheritedConfig[$key] = $this->filterNullInheritance($this->pluginList->getPluginsConfig());
         }
         return $inheritedConfig;
     }

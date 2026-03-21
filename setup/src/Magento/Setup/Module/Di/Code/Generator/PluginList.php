@@ -5,6 +5,7 @@
  */
 namespace Magento\Setup\Module\Di\Code\Generator;
 
+use Magento\Framework\App\Area;
 use Magento\Framework\Interception;
 
 /**
@@ -16,6 +17,20 @@ class PluginList extends Interception\PluginList\PluginList
      * @var array
      */
     private $interceptedClasses;
+
+    /**
+     * Resets accumulated per-area state so this instance can be reused without cloning.
+     *
+     * @return void
+     */
+    public function reset(): void
+    {
+        $this->_data = [];
+        $this->_inherited = [];
+        $this->_processed = null;
+        $this->_pluginInstances = [];
+        $this->_scopePriorityScheme = [Area::AREA_GLOBAL];
+    }
 
     /**
      * Returns plugins config
