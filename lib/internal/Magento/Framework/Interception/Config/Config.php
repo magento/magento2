@@ -81,6 +81,16 @@ class Config implements \Magento\Framework\Interception\ConfigInterface
     private $cacheManager;
 
     /**
+     * Memoized per-scope di.xml config reads.
+     * generateIntercepted() calls _reader->read($scope) for every scope on every invocation.
+     * During a single compile run the di.xml files do not change, so reads beyond the first
+     * for a given scope are wasteful DOM re-parses of all 600+ di.xml files.
+     *
+     * @var array<string, array>
+     */
+    private array $scopeReadCache = [];
+
+    /**
      * Config constructor
      *
      * @param \Magento\Framework\Config\ReaderInterface $reader
@@ -201,7 +211,12 @@ class Config implements \Magento\Framework\Interception\ConfigInterface
     {
         $config = [];
         foreach ($this->_scopeList->getAllScopes() as $scope) {
-            $config = array_replace_recursive($config, $this->_reader->read($scope));
+            // Memoize per-scope reads: di.xml files are static during a single compile run.
+            // Without this, INTERCEPTION and INTERCEPTION_CACHE phases both trigger full DOM re-parses.
+            if (!isset($this->scopeReadCache[$scope])) {
+                $this->scopeReadCache[$scope] = $this->_reader->read($scope);
+            }
+            $config = array_replace_recursive($config, $this->scopeReadCache[$scope]);
         }
         unset($config['preferences']);
         foreach ($config as $typeName => $typeConfig) {
