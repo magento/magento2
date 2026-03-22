@@ -57,7 +57,7 @@ class OrderStatusChangeDateTest extends GraphQlAbstract
     public function testOrderStatusChangeDateWithStatusChange(): void
     {
         /**
-         * @var $order OrderInterface
+         * @var OrderInterface $order
          */
         $order = DataFixtureStorageManager::getStorage()->get('order');
 
@@ -78,10 +78,15 @@ class OrderStatusChangeDateTest extends GraphQlAbstract
      */
     private function assertOrderStatusChangeDate(OrderInterface $order, string $status): void
     {
+        $orderRepository = Bootstrap::getObjectManager()->get(OrderRepository::class);
+
         //Update order status
         $order->setStatus($status);
         $order->setState($status);
-        Bootstrap::getObjectManager()->get(OrderRepository::class)->save($order);
+        $orderRepository->save($order);
+
+        // reload the order from the database, so we get the exact correct updatedAt timestamp, prevents flakyness
+        $order = $orderRepository->get($order->getEntityId());
 
         $updatedGuestOrder = $this->graphQlMutation($this->getQuery(
             $order->getIncrementId(),
