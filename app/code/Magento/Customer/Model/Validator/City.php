@@ -58,12 +58,10 @@ class City extends AbstractValidator
      */
     private function isValidCity($cityValue)
     {
-        if ($cityValue != null) {
-            if (preg_match(self::PATTERN_CITY, $cityValue, $matches)) {
-                return $matches[0] == $cityValue;
-            }
+        if ($cityValue === null || $cityValue === '') {
+            return true;
         }
 
-        return true;
+        return preg_match(self::PATTERN_CITY, $cityValue) === 1;
     }
 }

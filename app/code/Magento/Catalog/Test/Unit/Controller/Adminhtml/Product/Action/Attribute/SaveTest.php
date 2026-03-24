@@ -119,7 +119,6 @@ class SaveTest extends TestCase
         );
 
         $method = new \ReflectionMethod($controller, 'validateProductAttributes');
-        $method->setAccessible(true);
 
         $this->expectException(LocalizedException::class);
         $this->expectExceptionMessage('Make sure the To Date is later than or the same as the From Date.');
@@ -177,7 +176,6 @@ class SaveTest extends TestCase
         );
 
         $method = new \ReflectionMethod($controller, 'validateProductAttributes');
-        $method->setAccessible(true);
 
         // Should not throw
         $method->invoke($controller, [

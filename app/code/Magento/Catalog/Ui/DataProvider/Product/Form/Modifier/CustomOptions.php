@@ -195,10 +195,12 @@ class CustomOptions extends AbstractModifier
             }
         }
 
+        $productId = $this->locator->getProduct()->getId() ?? '';
+
         return array_replace_recursive(
             $data,
             [
-                $this->locator->getProduct()->getId() => [
+                $productId => [
                     static::DATA_SOURCE_DEFAULT => [
                         static::FIELD_ENABLE => 1,
                         static::GRID_OPTIONS_NAME => $options

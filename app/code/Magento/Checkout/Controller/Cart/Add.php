@@ -158,6 +158,7 @@ class Add extends \Magento\Checkout\Controller\Cart implements HttpPostActionInt
                         ]
                     );
                 }
+
                 if ($this->cart->getQuote()->getHasError()) {
                     $errors = $this->cart->getQuote()->getErrors();
                     foreach ($errors as $error) {

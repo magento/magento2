@@ -339,4 +339,80 @@ class SaveTest extends TestCase
 
         $this->assertSame($this->resultRedirect, $this->saveController->execute());
     }
+
+    /**
+     * Test that layout_update_selected is cleared when duplicating a page.
+     *
+     * @return void
+     */
+    public function testDuplicateClearsLayoutUpdateSelected(): void
+    {
+        $postData = [
+            'title' => 'Original Page',
+            'identifier' => 'original-page',
+            'stores' => ['0'],
+            'is_active' => true,
+            'content' => 'Page content',
+            'layout_update_selected' => 'Default',
+        ];
+
+        $this->dataProcessorMock->expects($this->any())
+            ->method('filter')
+            ->with($postData)
+            ->willReturn($postData);
+
+        $this->requestMock->expects($this->any())->method('getPostValue')->willReturn($postData);
+        $this->requestMock->expects($this->atLeastOnce())
+            ->method('getParam')
+            ->willReturnMap(
+                [
+                    ['page_id', null, $this->pageId],
+                    ['back', false, 'duplicate'],
+                ]
+            );
+
+        $originalPage = $this->getMockBuilder(Page::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $originalPage->method('getIdentifier')->willReturn('original-page');
+        $originalPage->method('getId')->willReturn($this->pageId);
+        $originalPage->method('getLayoutUpdateXml')->willReturn(null);
+        $originalPage->method('getCustomLayoutUpdateXml')->willReturn(null);
+
+        $newPage = $this->getMockBuilder(Page::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $newPage->method('getId')->willReturn(2);
+
+        $this->pageFactory->expects($this->exactly(2))
+            ->method('create')
+            ->willReturnOnConsecutiveCalls($originalPage, $newPage);
+
+        $this->pageRepository->expects($this->once())
+            ->method('getById')
+            ->with($this->pageId)
+            ->willReturn($originalPage);
+
+        $originalPage->expects($this->once())->method('setData');
+
+        // Verify that layout_update_selected is set to null on the duplicate
+        $newPage->expects($this->once())
+            ->method('setData')
+            ->with('layout_update_selected', null);
+
+        $newPage->expects($this->once())->method('setId')->with(null);
+        $newPage->expects($this->once())->method('setIdentifier');
+        $newPage->expects($this->once())->method('setIsActive')->with(false);
+
+        $this->pageRepository->expects($this->exactly(2))->method('save');
+
+        $this->messageManagerMock->expects($this->exactly(2))
+            ->method('addSuccessMessage');
+
+        $this->resultRedirect->expects($this->atLeastOnce())
+            ->method('setPath')
+            ->willReturnSelf();
+
+        $this->assertSame($this->resultRedirect, $this->saveController->execute());
+    }
 }

@@ -13,18 +13,18 @@ use IntlDateFormatter;
 use Magento\Framework\Stdlib\DateTime\Filter\Date;
 use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class DateTest extends TestCase
 {
     /**
      * @param string $inputData
      * @param string $expectedDate
-     *
-     * @dataProvider dateFilterDataProvider
-     */
+     *     */
+    #[DataProvider('dateFilterDataProvider')]
     public function testFilter($inputData, $expectedDate)
     {
-        $localeMock = $this->getMockForAbstractClass(TimezoneInterface::class);
+        $localeMock = $this->createMock(TimezoneInterface::class);
         $localeMock->expects(
             $this->once()
         )->method(
@@ -52,14 +52,13 @@ class DateTest extends TestCase
         ];
     }
 
-    /**
-     * @dataProvider dateFilterWithExceptionDataProvider
-     */
+    /**     */
+    #[DataProvider('dateFilterWithExceptionDataProvider')]
     public function testFilterWithException($inputData)
     {
         $this->expectException(Exception::class);
 
-        $localeMock = $this->getMockForAbstractClass(TimezoneInterface::class);
+        $localeMock = $this->createMock(TimezoneInterface::class);
         $localeMock->expects(
             $this->once()
         )->method(

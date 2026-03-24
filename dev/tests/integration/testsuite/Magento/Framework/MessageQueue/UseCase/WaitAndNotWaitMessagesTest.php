@@ -181,6 +181,8 @@ class WaitAndNotWaitMessagesTest extends QueueTestCaseAbstract
     protected function tearDown(): void
     {
         parent::tearDown();
-        $this->writeConfig($this->config);
+        if ($this->config !== null) {
+            $this->writeConfig($this->config);
+        }
     }
 }

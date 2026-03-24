@@ -40,8 +40,7 @@ class DiffManagerTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->comparatorMock = $this->getMockBuilder(Comparator::class)
-            ->getMockForAbstractClass();
+        $this->comparatorMock = $this->createMock(Comparator::class);
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->model = $this->objectManagerHelper->getObject(

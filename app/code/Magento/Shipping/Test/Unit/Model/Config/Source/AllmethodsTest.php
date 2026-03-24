@@ -8,9 +8,12 @@ declare(strict_types=1);
 namespace Magento\Shipping\Test\Unit\Model\Config\Source;
 
 use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Shipping\Model\Carrier\AbstractCarrier;
 use Magento\Shipping\Model\Carrier\AbstractCarrierInterface;
 use Magento\Shipping\Model\Config;
 use Magento\Shipping\Model\Config\Source\Allmethods;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -19,6 +22,7 @@ use PHPUnit\Framework\TestCase;
  */
 class AllmethodsTest extends TestCase
 {
+    use MockCreationTrait;
     /**
      * @var ScopeConfigInterface|MockObject $scopeConfig
      */
@@ -44,12 +48,12 @@ class AllmethodsTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->scopeConfig = $this->getMockForAbstractClass(ScopeConfigInterface::class);
+        $this->scopeConfig = $this->createMock(ScopeConfigInterface::class);
         $this->shippingConfig = $this->createMock(Config::class);
-        $this->carriersMock = $this->getMockBuilder(AbstractCarrierInterface::class)
-            ->addMethods(['getAllowedMethods'])
-            ->onlyMethods(['isActive'])
-            ->getMockForAbstractClass();
+        $this->carriersMock = $this->createPartialMockWithReflection(
+            AbstractCarrier::class,
+            ['getAllowedMethods', 'isActive', 'collectRates']
+        );
 
         $this->allmethods = new Allmethods(
             $this->scopeConfig,
@@ -60,10 +64,10 @@ class AllmethodsTest extends TestCase
     /**
      * Ensure that options converted correctly when isActiveOnlyFlag=false
      *
-     * @dataProvider getCarriersMethodsProvider
      * @param array $expectedArray
      * @return void
      */
+    #[DataProvider('getCarriersMethodsProvider')]
     public function testToOptionArrayGetAllCarriers(array $expectedArray): void
     {
         $expectedArray['getAllCarriers'] = [$this->carriersMock];
@@ -80,10 +84,10 @@ class AllmethodsTest extends TestCase
     /**
      * Ensure that options converted correctly when isActiveOnlyFlag=true
      *
-     * @dataProvider getCarriersMethodsProvider
      * @param array $expectedArray
      * @return void
      */
+    #[DataProvider('getCarriersMethodsProvider')]
     public function testToOptionArrayGetActiveCarriers(array $expectedArray): void
     {
         $expectedArray['getActiveCarriers'] = [$this->carriersMock];
@@ -105,20 +109,26 @@ class AllmethodsTest extends TestCase
     public static function getCarriersMethodsProvider(): array
     {
         return [
-            [
+            'null_method_code' => [
                 [
                     'allowedMethods' => [null => 'method_title'],
-                    'expected_result' => [ 'value' => [], 'label' => null],
-                    'getAllCarriers'  => [],
-                    'getActiveCarriers'  => []
-                ],
-                [
-                    'allowedMethods' => ['method_code' => 'method_title'],
-                    'expected_result' => [ 'value' => [], 'label' => 'method_code'],
+                    'expected_result' => ['value' => [], 'label' => null],
                     'getAllCarriers'  => [],
                     'getActiveCarriers'  => []
                 ]
-
+            ],
+            'valid_method_code' => [
+                [
+                    'allowedMethods' => ['method_code' => 'method_title'],
+                    'expected_result' => [
+                        'value' => [
+                            ['value' => '0_method_code', 'label' => '[0] method_title']
+                        ],
+                        'label' => null
+                    ],
+                    'getAllCarriers'  => [],
+                    'getActiveCarriers'  => []
+                ]
             ]
         ];
     }

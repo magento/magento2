@@ -14,6 +14,7 @@ use Magento\Catalog\Helper\Image as ImageHelper;
 use Magento\Catalog\Helper\ImageFactory as HelperFactory;
 use Magento\Catalog\Model\Product;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
 
@@ -219,13 +220,13 @@ class ImageBuilderTest extends TestCase
     /**
      * Test getRatio returns correct ratio
      *
-     * @dataProvider ratioDataProvider
      * @covers \Magento\Catalog\Block\Product\ImageBuilder::getRatio
      * @param int|null $width
      * @param int|null $height
      * @param float|int $expectedRatio
      * @return void
      */
+    #[DataProvider('ratioDataProvider')]
     public function testGetRatioReturnsCorrectRatio(?int $width, ?int $height, float|int $expectedRatio): void
     {
         $helperMock = $this->createMock(ImageHelper::class);
@@ -234,7 +235,6 @@ class ImageBuilderTest extends TestCase
 
         $reflection = new ReflectionClass($this->imageBuilder);
         $method = $reflection->getMethod('getRatio');
-        $method->setAccessible(true);
 
         $result = $method->invoke($this->imageBuilder, $helperMock);
 
@@ -290,12 +290,12 @@ class ImageBuilderTest extends TestCase
     /**
      * Test getCustomAttributes returns formatted string
      *
-     * @dataProvider customAttributesDataProvider
      * @covers \Magento\Catalog\Block\Product\ImageBuilder::getCustomAttributes
      * @param array $attributes
      * @param string $expectedResult
      * @return void
      */
+    #[DataProvider('customAttributesDataProvider')]
     public function testGetCustomAttributesReturnsFormattedString(
         array $attributes,
         string $expectedResult
@@ -304,7 +304,6 @@ class ImageBuilderTest extends TestCase
 
         $reflection = new ReflectionClass($this->imageBuilder);
         $method = $reflection->getMethod('getCustomAttributes');
-        $method->setAccessible(true);
 
         $result = $method->invoke($this->imageBuilder);
 

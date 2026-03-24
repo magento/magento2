@@ -61,7 +61,14 @@ class RendererTest extends TestCase
             ]
         );
 
-        $this->priceCurrency = $this->createPartialMock(PriceCurrency::class, ['format']);
+        $this->priceCurrency = $this->createPartialMock(
+            PriceCurrency::class,
+            [
+                'format',
+                'getStore',
+                'convertAndRound',
+            ]
+        );
 
         $this->item = $this->createPartialMockWithReflection(
             Item::class,
@@ -80,7 +87,8 @@ class RendererTest extends TestCase
                 'getBaseWeeeTaxInclTax',
                 'getBasePriceInclTax',
                 'getQtyOrdered',
-                'getPrice'
+                'getCalculationPrice',
+                'getPrice',
             ]
         );
 
@@ -290,6 +298,10 @@ class RendererTest extends TestCase
         $this->item->expects($this->any())
             ->method('getWeeeTaxAppliedAmount')
             ->willReturn($weeeTax);
+
+        $this->priceCurrency->expects($this->once())
+            ->method('convertAndRound')
+            ->willReturn($price);
 
         $this->item->expects($this->once())
             ->method('getPrice')
@@ -601,6 +613,10 @@ class RendererTest extends TestCase
             ->method('getWeeeTaxAppliedAmount')
             ->willReturn($weeeTax);
 
+        $this->priceCurrency->expects($this->once())
+            ->method('convertAndRound')
+            ->willReturn($rowTotal);
+
         $this->item->expects($this->once())
             ->method('getPrice')
             ->willReturn($rowTotal);
@@ -863,5 +879,102 @@ class RendererTest extends TestCase
             ->willReturn($baseWeeeAmount);
 
         $this->assertEquals($expectedValue, $this->renderer->getBaseTotalAmount($itemMock));
+    }
+
+    public static function rowTotalFallbackDataProvider(): array
+    {
+        return [
+            'weee_disabled_fallback_to_calc_price_x_qty' => [
+                false, // weeeEnabled
+                false, // includeWeee (unused when disabled)
+                0.0,   // rowTotal
+                20.0,  // calculationPrice
+                3.0,   // totalQty
+                0.0,   // weeeTaxRowAmount
+                60.0,  // expected
+            ],
+            'weee_enabled_exclude_weee_fallback_to_calc_price_x_qty' => [
+                true,
+                false,
+                0.0,
+                20.0,
+                3.0,
+                5.0,
+                60.0,
+            ],
+            'weee_enabled_include_weee_fallback_to_calc_price_x_qty_plus_weee' => [
+                true,
+                true,
+                0.0,
+                20.0,
+                3.0,
+                5.0,
+                65.0,
+            ],
+        ];
+    }
+
+    #[DataProvider('rowTotalFallbackDataProvider')]
+    public function testGetRowDisplayPriceExclTaxFallsBackToCalculationPriceTimesQty(
+        bool $weeeEnabled,
+        bool $includeWeee,
+        float $rowTotal,
+        float $calculationPrice,
+        float $totalQty,
+        float $weeeTaxRowAmount,
+        float $expected
+    ): void {
+        $item = $this->createPartialMockWithReflection(
+            Item::class,
+            [
+                'getStoreId',
+                'getRowTotal',
+                'getCalculationPrice',
+                'getTotalQty',
+                'getWeeeTaxAppliedRowAmount',
+            ]
+        );
+
+        $item->expects($this->any())
+            ->method('getStoreId')
+            ->willReturn(self::STORE_ID);
+
+        $item->expects($this->once())
+            ->method('getRowTotal')
+            ->willReturn($rowTotal);
+
+        $item->expects($this->once())
+            ->method('getCalculationPrice')
+            ->willReturn($calculationPrice);
+
+        $item->expects($this->once())
+            ->method('getTotalQty')
+            ->willReturn($totalQty);
+
+        $this->weeeHelper->expects($this->once())
+            ->method('isEnabled')
+            ->willReturn($weeeEnabled);
+
+        if ($weeeEnabled) {
+            $this->weeeHelper->expects($this->any())
+                ->method('typeOfDisplay')
+                ->with([WeeeDisplayConfig::DISPLAY_INCL_DESCR, WeeeDisplayConfig::DISPLAY_INCL], self::ZONE)
+                ->willReturn($includeWeee);
+
+            if ($includeWeee) {
+                $item->expects($this->once())
+                    ->method('getWeeeTaxAppliedRowAmount')
+                    ->willReturn($weeeTaxRowAmount);
+            } else {
+                $item->expects($this->never())
+                    ->method('getWeeeTaxAppliedRowAmount');
+            }
+        } else {
+            $item->expects($this->never())
+                ->method('getWeeeTaxAppliedRowAmount');
+        }
+
+        $this->renderer->setItem($item);
+        $this->assertEquals($expected, $this->renderer->getRowDisplayPriceExclTax());
     }
 }

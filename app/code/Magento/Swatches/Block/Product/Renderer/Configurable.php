@@ -427,7 +427,10 @@ class Configurable extends \Magento\ConfigurableProduct\Block\Product\View\Type\
                 $productAttribute = $attribute->getProductAttribute();
                 $productAttributeId = $productAttribute->getId();
                 if (isset($attributeData[$productAttributeId])) {
-                    $ids[$product->getData($productAttribute->getAttributeCode())] = 1;
+                    $attributeValue = $product->getData($productAttribute->getAttributeCode());
+                    if ($attributeValue !== null) {
+                        $ids[$attributeValue] = 1;
+                    }
                 }
             }
         }

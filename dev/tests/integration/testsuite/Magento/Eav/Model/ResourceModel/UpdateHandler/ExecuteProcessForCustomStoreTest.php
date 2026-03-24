@@ -6,6 +6,8 @@
 
 namespace Magento\Eav\Model\ResourceModel\UpdateHandler;
 
+use PHPUnit\Framework\Attributes\DataProvider;
+
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Model\Product;
 use Magento\Eav\Model\ResourceModel\UpdateHandlerAbstract;
@@ -22,13 +24,13 @@ class ExecuteProcessForCustomStoreTest extends UpdateHandlerAbstract
      * @covers \Magento\Eav\Model\ResourceModel\UpdateHandler::execute
      * @magentoDataFixture Magento/Catalog/_files/product_simple.php
      * @magentoDataFixture Magento/Store/_files/second_store.php
-     * @dataProvider getCustomStoreDataProvider
      * @param $code
      * @param $snapshotValue
      * @param $newValue
      * @param $expected
      * @magentoDbIsolation disabled
      */
+    #[DataProvider('getCustomStoreDataProvider')]
     public function testExecuteProcessForCustomStore($code, $snapshotValue, $newValue, $expected)
     {
         $store = Bootstrap::getObjectManager()->create(\Magento\Store\Model\Store::class);

@@ -84,7 +84,7 @@ class Images extends AbstractModifier
     {
         /** @var ProductInterface $product */
         $product = $this->locator->getProduct();
-        $modelId = $product->getId();
+        $modelId = $product->getId() ?? '';
         if (isset($data[$modelId][self::DATA_SOURCE_DEFAULT]['media_gallery'])
             && !empty($data[$modelId][self::DATA_SOURCE_DEFAULT]['media_gallery'])
             && !empty($data[$modelId][self::DATA_SOURCE_DEFAULT]['media_gallery']['images'])

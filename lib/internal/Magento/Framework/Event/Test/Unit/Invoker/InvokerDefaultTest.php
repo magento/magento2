@@ -13,6 +13,7 @@ use Magento\Framework\Event\Observer;
 use Magento\Framework\Event\ObserverFactory;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -59,7 +60,7 @@ class InvokerDefaultTest extends TestCase
             ['execute']
         );
         $this->_appStateMock = $this->createMock(State::class);
-        $this->loggerMock = $this->getMockForAbstractClass(LoggerInterface::class);
+        $this->loggerMock = $this->createMock(LoggerInterface::class);
 
         $this->_invokerDefault = new InvokerDefault(
             $this->_observerFactoryMock,
@@ -117,14 +118,12 @@ class InvokerDefaultTest extends TestCase
     }
 
     /**
-     * @param string $shared
-     * @dataProvider dataProviderForMethodIsNotDefined
-     */
+     * @param string $shared     */
+    #[DataProvider('dataProviderForMethodIsNotDefined')]
     public function testWrongInterfaceCallWithEnabledDeveloperMode($shared)
     {
         $this->expectException('LogicException');
-        $notObserver = $this->getMockBuilder('NotObserver')
-            ->getMock();
+        $notObserver = $this->createMock(\stdClass::class);
         $this->_observerFactoryMock->expects(
             $this->any()
         )->method(
@@ -162,13 +161,11 @@ class InvokerDefaultTest extends TestCase
     }
 
     /**
-     * @param string $shared
-     * @dataProvider dataProviderForMethodIsNotDefined
-     */
+     * @param string $shared     */
+    #[DataProvider('dataProviderForMethodIsNotDefined')]
     public function testWrongInterfaceCallWithDisabledDeveloperMode($shared)
     {
-        $notObserver = $this->getMockBuilder('NotObserver')
-            ->getMock();
+        $notObserver = $this->createMock(\stdClass::class);
         $this->_observerFactoryMock->expects(
             $this->any()
         )->method(

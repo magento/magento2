@@ -15,6 +15,7 @@ use Magento\TestFramework\Fixture\Config;
 use Magento\TestFramework\Fixture\DataFixture;
 use Magento\TestFramework\Fixture\DataFixtureStorageManager;
 use Magento\TestFramework\Helper\Bootstrap;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Test class for \Magento\Integration\Model\CustomerTokenService.
@@ -61,9 +62,7 @@ class CustomerTokenServiceTest extends \PHPUnit\Framework\TestCase
         $this->assertNotNull($accessToken);
     }
 
-    /**
-     * @dataProvider validationDataProvider
-     */
+    #[DataProvider('validationDataProvider')]
     public function testCreateCustomerAccessTokenEmptyOrNullCredentials($username, $password)
     {
         try {

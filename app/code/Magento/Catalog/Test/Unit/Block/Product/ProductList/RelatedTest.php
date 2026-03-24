@@ -41,7 +41,6 @@ class RelatedTest extends TestCase
             Related::class,
             '_itemCollection'
         );
-        $itemsCollection->setAccessible(true);
         $itemsCollection->setValue($this->block, [$product]);
 
         $this->assertEquals(
@@ -68,7 +67,6 @@ class RelatedTest extends TestCase
             Related::class,
             '_itemCollection'
         );
-        $itemsCollection->setAccessible(true);
         $itemsCollection->setValue($this->block, [$product]);
 
         $this->assertEquals(

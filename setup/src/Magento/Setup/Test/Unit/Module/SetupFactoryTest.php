@@ -18,12 +18,7 @@ class SetupFactoryTest extends TestCase
 {
     public function testCreate()
     {
-        $objectManager = $this->getMockForAbstractClass(
-            ObjectManagerInterface::class,
-            [],
-            '',
-            false
-        );
+        $objectManager = $this->createMock(ObjectManagerInterface::class);
         $objectManager->expects($this->once())
             ->method('get')
             ->with(ResourceConnection::class)
@@ -36,12 +31,7 @@ class SetupFactoryTest extends TestCase
 
     public function testCreateWithParam()
     {
-        $objectManager = $this->getMockForAbstractClass(
-            ObjectManagerInterface::class,
-            [],
-            '',
-            false
-        );
+        $objectManager = $this->createMock(ObjectManagerInterface::class);
         $objectManager->expects($this->never())->method('get');
         $resource = $this->createMock(ResourceConnection::class);
         $objectManagerProvider = $this->createMock(ObjectManagerProvider::class);

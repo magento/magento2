@@ -2079,6 +2079,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
         $option = $this->_itemOptionFactory->create()->addData(
             ['product_id' => $product->getId(), 'product' => $product, 'code' => $code, 'value' => $value]
         );
+        $code = (string)$code;
         $this->_customOptions[$code] = $option;
         return $this;
     }

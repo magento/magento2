@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 use Magento\Customer\Api\AccountManagementInterface;
 use Magento\Customer\Api\CustomerMetadataInterface;
+use Magento\Customer\Api\Data\AddressInterfaceFactory;
 use Magento\Customer\Model\Data\CustomerFactory;
 use Magento\Customer\Model\GroupManagement;
 use Magento\Eav\Model\AttributeRepository;
@@ -28,6 +29,21 @@ $defaultStoreId = $website->getDefaultStore()->getId();
 $attributeRepository = $objectManager->get(AttributeRepository::class);
 $gender = $attributeRepository->get(CustomerMetadataInterface::ENTITY_TYPE_CUSTOMER, 'gender')
     ->getSource()->getOptionId('Male');
+
+/** @var AddressInterfaceFactory $addressFactory */
+$addressFactory = $objectManager->get(AddressInterfaceFactory::class);
+$address = $addressFactory->create();
+$address->setFirstname('John')
+    ->setLastname('Smith')
+    ->setStreet(['123 Main St'])
+    ->setCity('New York')
+    ->setCountryId('US')
+    ->setRegionId(1)
+    ->setPostcode('10001')
+    ->setTelephone('555-1234')
+    ->setIsDefaultBilling(true)
+    ->setIsDefaultShipping(true);
+
 $customer = $customerFactory->create();
 $customer->setWebsiteId($website->getId())
     ->setEmail('new_customer@example.com')
@@ -38,7 +54,6 @@ $customer->setWebsiteId($website->getId())
     ->setMiddlename('A')
     ->setLastname('Smith')
     ->setSuffix('Esq.')
-    ->setDefaultBilling(1)
-    ->setDefaultShipping(1)
-    ->setGender($gender);
+    ->setGender($gender)
+    ->setAddresses([$address]);
 $accountManagement->createAccount($customer, 'Qwert12345');

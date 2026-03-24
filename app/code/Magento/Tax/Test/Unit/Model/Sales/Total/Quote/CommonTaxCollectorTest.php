@@ -730,7 +730,6 @@ class CommonTaxCollectorTest extends TestCase
 
         $ref = new \ReflectionClass(CommonTaxCollector::class);
         $method = $ref->getMethod('prepareQuoteDetails');
-        $method->setAccessible(true);
         $result = $method->invoke($sut, $shippingAssignment, []);
 
         $this->assertSame($quoteDetails, $result);
@@ -755,7 +754,6 @@ class CommonTaxCollectorTest extends TestCase
 
         $ref = new \ReflectionClass(CommonTaxCollector::class);
         $method = $ref->getMethod('prepareQuoteDetails');
-        $method->setAccessible(true);
         $result = $method->invoke($sut, $shippingAssignment, []);
 
         $this->assertSame($expectedQuoteDetails, $result);
@@ -831,7 +829,6 @@ class CommonTaxCollectorTest extends TestCase
 
         $ref = new \ReflectionClass(CommonTaxCollector::class);
         $method = $ref->getMethod('processProductItems');
-        $method->setAccessible(true);
         $method->invoke($sut, $shippingAssignment, [
             'code-xyz' => [
                 CommonTaxCollector::KEY_ITEM => $taxDetail,
@@ -914,7 +911,6 @@ class CommonTaxCollectorTest extends TestCase
 
         $ref = new \ReflectionClass(CommonTaxCollector::class);
         $method = $ref->getMethod('processAppliedTaxes');
-        $method->setAccessible(true);
         // Ensure correct type is passed for $shippingAssignment
         $typedShippingAssignment = $this->getMockBuilder(ShippingAssignmentInterface::class)->getMock();
         $typedShippingAssignment->method('getItems')->willReturn([$addressItem]);
@@ -998,7 +994,6 @@ class CommonTaxCollectorTest extends TestCase
         $sut = $this->createSut();
         $ref = new \ReflectionClass(CommonTaxCollector::class);
         $method = $ref->getMethod('processAppliedTaxes');
-        $method->setAccessible(true);
         $method->invoke($sut, $total, $shippingAssignment, $itemsByType);
         $this->assertTrue(true);
     }
@@ -1071,7 +1066,6 @@ class CommonTaxCollectorTest extends TestCase
         $sut = $this->createSut();
         $ref = new \ReflectionClass(CommonTaxCollector::class);
         $method = $ref->getMethod('processAppliedTaxes');
-        $method->setAccessible(true);
         $method->invoke($sut, $total, $shippingAssignment, $itemsByType);
         $this->assertTrue(true);
     }
@@ -1120,7 +1114,6 @@ class CommonTaxCollectorTest extends TestCase
         $sut = $this->createSut();
         $ref = new \ReflectionClass(CommonTaxCollector::class);
         $method = $ref->getMethod('processShippingTaxInfo');
-        $method->setAccessible(true);
         $method->invoke($sut, $shippingAssignment, $total, $shippingTaxDetails, $baseShippingTaxDetails);
 
         $this->assertTrue(true);
@@ -1140,7 +1133,6 @@ class CommonTaxCollectorTest extends TestCase
         $sut = $this->createSut();
         $ref = new \ReflectionClass(CommonTaxCollector::class);
         $method = $ref->getMethod('_saveAppliedTaxes');
-        $method->setAccessible(true);
         $method->invoke($sut, $total, [[
             'percent' => 10.0,
             'id' => 'id1',
@@ -1156,23 +1148,18 @@ class CommonTaxCollectorTest extends TestCase
         $ref = new \ReflectionClass(CommonTaxCollector::class);
 
         $includeShipping = $ref->getMethod('includeShipping');
-        $includeShipping->setAccessible(true);
         $this->assertFalse($includeShipping->invoke($sut));
 
         $includeItems = $ref->getMethod('includeItems');
-        $includeItems->setAccessible(true);
         $this->assertFalse($includeItems->invoke($sut));
 
         $includeExtraTax = $ref->getMethod('includeExtraTax');
-        $includeExtraTax->setAccessible(true);
         $this->assertFalse($includeExtraTax->invoke($sut));
 
         $saveAppliedTaxes = $ref->getMethod('saveAppliedTaxes');
-        $saveAppliedTaxes->setAccessible(true);
         $this->assertFalse($saveAppliedTaxes->invoke($sut));
 
         $getNextIncrement = $ref->getMethod('getNextIncrement');
-        $getNextIncrement->setAccessible(true);
         $first = $getNextIncrement->invoke($sut);
         $second = $getNextIncrement->invoke($sut);
         $this->assertSame($first + 1, $second);
@@ -1187,7 +1174,6 @@ class CommonTaxCollectorTest extends TestCase
         $sut = $this->createSut();
         $ref = new \ReflectionClass(CommonTaxCollector::class);
         $method = $ref->getMethod('getQuoteItemId');
-        $method->setAccessible(true);
 
         $quoteItem = $this->createPartialMockWithReflection(\stdClass::class, ['getId']);
         $quoteItem->method('getId')->willReturn(999);
@@ -1336,7 +1322,6 @@ class CommonTaxCollectorTest extends TestCase
                 ->onlyMethods(['mapAddress'])->getMock();
             $ref = new \ReflectionClass(CommonTaxCollector::class);
             $method = $ref->getMethod('setPriceForTaxCalculation');
-            $method->setAccessible(true);
             $qdi = $this->createMock(QuoteDetailsItemInterface::class);
             $qdi->method('getExtensionAttributes')->willReturn(null);
             $qdi->expects($this->once())->method('setExtensionAttributes')->with($ext)->willReturnSelf();
@@ -1555,7 +1540,6 @@ class CommonTaxCollectorTest extends TestCase
 
         $ref = new \ReflectionClass(CommonTaxCollector::class);
         $method = $ref->getMethod('processProductItems');
-        $method->setAccessible(true);
         $method->invoke($sut, $shippingAssignment, [
             'code-skip' => [
                 CommonTaxCollector::KEY_ITEM => $taxDetail,

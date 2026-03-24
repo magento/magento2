@@ -6,6 +6,7 @@
 
 namespace Magento\ProductVideo\Model\Plugin\Catalog\Product\Gallery;
 
+use Magento\Catalog\Model\Product;
 use Magento\ProductVideo\Model\Product\Attribute\Media\ExternalVideoEntryConverter;
 use Magento\Store\Model\Store;
 
@@ -23,16 +24,19 @@ class CreateHandler extends AbstractHandler
      * Execute before Plugin
      *
      * @param \Magento\Catalog\Model\Product\Gallery\CreateHandler $mediaGalleryCreateHandler
-     * @param \Magento\Catalog\Model\Product $product
+     * @param Product $product
      * @param array $arguments
      * @return void
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function beforeExecute(
         \Magento\Catalog\Model\Product\Gallery\CreateHandler $mediaGalleryCreateHandler,
-        \Magento\Catalog\Model\Product $product,
+        Product $product,
         array $arguments = []
     ) {
+        if (!$this->hasDataChanges($product, $mediaGalleryCreateHandler->getAttribute()->getAttributeCode())) {
+            return;
+        }
         /** @var \Magento\Catalog\Model\ResourceModel\Eav\Attribute $attribute */
         $attribute = $mediaGalleryCreateHandler->getAttribute();
         $mediaCollection = $this->getMediaEntriesDataCollection($product, $attribute);
@@ -50,13 +54,17 @@ class CreateHandler extends AbstractHandler
      * Execute plugin
      *
      * @param \Magento\Catalog\Model\Product\Gallery\CreateHandler $mediaGalleryCreateHandler
-     * @param \Magento\Catalog\Model\Product $product
-     * @return \Magento\Catalog\Model\Product
+     * @param Product $product
+     * @return Product
      */
     public function afterExecute(
         \Magento\Catalog\Model\Product\Gallery\CreateHandler $mediaGalleryCreateHandler,
-        \Magento\Catalog\Model\Product $product
+        Product $product
     ) {
+        if (!$this->hasDataChanges($product, $mediaGalleryCreateHandler->getAttribute()->getAttributeCode())) {
+            return $product;
+        }
+        
         $mediaCollection = $this->getMediaEntriesDataCollection(
             $product,
             $mediaGalleryCreateHandler->getAttribute()
@@ -362,5 +370,20 @@ class CreateHandler extends AbstractHandler
             }
         }
         return $mediaCollection;
+    }
+
+    /**
+     * Checks whether media gallery data changed
+     *
+     * @param Product $product
+     * @param string $attributeCode
+     * @return bool
+     */
+    private function hasDataChanges(Product $product, string $attributeCode): bool
+    {
+        $value = $product->getData($attributeCode);
+        $oldValue = $product->getOrigData($attributeCode);
+
+        return $value !== $oldValue;
     }
 }

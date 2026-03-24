@@ -36,8 +36,8 @@ class OnInsertTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->objectManager = $this->getMockForAbstractClass(ObjectManagerInterface::class);
-        $this->view = $this->getMockForAbstractClass(ViewInterface::class);
+        $this->objectManager = $this->createMock(ObjectManagerInterface::class);
+        $this->view = $this->createMock(ViewInterface::class);
         $this->storageHelper = $this->createMock(Storage::class);
         $this->response = $this->createPartialMock(Http::class, ['setBody']);
 

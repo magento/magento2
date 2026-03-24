@@ -40,7 +40,7 @@ class ExceptionMessageFactoryTest extends TestCase
     public function testCreateMessageDefaultType()
     {
         $exception = new \Exception('message');
-        $message = $this->getMockForAbstractClass(MessageInterface::class);
+        $message = $this->createMock(MessageInterface::class);
 
         $message->expects($this->once())
             ->method('setText')

@@ -380,8 +380,6 @@ class DataTest extends TestCase
 
         $reflector = new \ReflectionClass($this->_object);
         $method = $reflector->getMethod('getCurrentScope');
-        $method->setAccessible(true);
-
         $result = $method->invoke($this->_object);
         $this->assertIsArray($result);
         $this->assertEquals($scope, $result);

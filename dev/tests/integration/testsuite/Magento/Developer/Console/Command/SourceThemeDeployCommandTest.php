@@ -66,8 +66,7 @@ class SourceThemeDeployCommandTest extends \PHPUnit\Framework\TestCase
         $error = [];
 
         /** @var OutputInterface|\PHPUnit\Framework\MockObject\MockObject $outputMock */
-        $outputMock = $this->getMockBuilder(OutputInterface::class)
-            ->getMockForAbstractClass();
+        $outputMock = $this->createMock(OutputInterface::class);
 
         $this->clearStaticDirectory();
 
@@ -124,8 +123,7 @@ class SourceThemeDeployCommandTest extends \PHPUnit\Framework\TestCase
      */
     private function getInputMock()
     {
-        $inputMock = $this->getMockBuilder(InputInterface::class)
-            ->getMockForAbstractClass();
+        $inputMock = $this->createMock(InputInterface::class);
 
         $inputMock->expects(self::exactly(4))
             ->method('getOption')

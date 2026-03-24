@@ -15,6 +15,7 @@ use Magento\TestFramework\Helper\Bootstrap;
 use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
 use Magento\UrlRewrite\Service\V1\Data\UrlRewriteFactory;
 use Magento\UrlRewrite\Test\Fixture\UrlRewrite as UrlRewriteFixture;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -86,12 +87,12 @@ class DbStorageTest extends TestCase
      * 2. Can query URL rewrites with emojis
      * 3. Returns correct results with emoji matching
      *
-     * @dataProvider utf8mb4RequestPathDataProvider
      * @param string $requestPath
      * @param string $expectedTargetPath
      * @param string $description
      * @return void
      */
+    #[DataProvider('utf8mb4RequestPathDataProvider')]
     #[
         DataFixture(
             UrlRewriteFixture::class,
@@ -158,12 +159,12 @@ class DbStorageTest extends TestCase
     /**
      * Test that utf8mb3 characters work in both utf8 and utf8mb4
      *
-     * @dataProvider utf8RequestPathDataProvider
      * @param string $requestPath
      * @param string $expectedTargetPath
      * @param string $description
      * @return void
      */
+    #[DataProvider('utf8RequestPathDataProvider')]
     #[
         DataFixture(
             UrlRewriteFixture::class,
