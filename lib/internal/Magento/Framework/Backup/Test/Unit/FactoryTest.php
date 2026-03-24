@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -9,6 +9,7 @@ namespace Magento\Framework\Backup\Test\Unit;
 
 use Magento\Framework\Backup\Factory;
 use Magento\Framework\ObjectManagerInterface;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 class FactoryTest extends TestCase
@@ -25,7 +26,7 @@ class FactoryTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->_objectManager = $this->getMockForAbstractClass(ObjectManagerInterface::class);
+        $this->_objectManager = $this->createMock(ObjectManagerInterface::class);
         $this->_model = new Factory($this->_objectManager);
     }
 
@@ -37,8 +38,8 @@ class FactoryTest extends TestCase
 
     /**
      * @param string $type
-     * @dataProvider allowedTypesDataProvider
      */
+    #[DataProvider('allowedTypesDataProvider')]
     public function testCreate($type)
     {
         $this->_objectManager->expects($this->once())->method('create')->willReturn('ModelInstance');

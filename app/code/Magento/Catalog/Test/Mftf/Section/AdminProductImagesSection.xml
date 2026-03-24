@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
-  */
+/**
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
+ */
 -->
 
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -23,20 +23,65 @@
         <element name="nthProductImage" type="button" selector="#media_gallery_content > div:nth-child({{var}}) img.product-image" parameterized="true"/>
         <element name="nthRemoveImageBtn" type="button" selector="#media_gallery_content > div:nth-child({{var}}) button.action-remove" parameterized="true"/>
         <element name="thrumbnailimage" type="text" selector="//*[@class='thumbnail-wrapper']//img[contains(@src, '{{url}}')]" parameterized="true"/>
+        <element name="imagesContainer" type="text" selector="#media_gallery_content"/>
+        <element name="imageContainer" type="text" selector="//*[@id='media_gallery_content']//img[contains(@src, '{{url}}')]/ancestor::div[@data-role='image']" parameterized="true"/>
+        <element name="nthImageContainer" type="text" selector="#media_gallery_content > div[data-role='image']:nth-child({{var}})" parameterized="true"/>
 
         <element name="altText" type="textarea" selector="textarea[data-role='image-description']"/>
 
-        <element name="role" type="button" selector="//div[contains(@class, 'field-image-role')]//ul/li[label[normalize-space(.) = '{{role}}']]" parameterized="true"/>
-        <element name="roleBase" type="button" selector="//div[contains(@class, 'field-image-role')]//ul/li/label[normalize-space(.) = 'Base']"/>
-        <element name="roleSmall" type="button" selector="//div[contains(@class, 'field-image-role')]//ul/li/label[normalize-space(.) = 'Small']"/>
-        <element name="roleThumbnail" type="button" selector="//div[contains(@class, 'field-image-role')]//ul/li/label[normalize-space(.) = 'Thumbnail']"/>
-        <element name="roleSwatch" type="button" selector="//div[contains(@class, 'field-image-role')]//ul/li/label[normalize-space(.) = 'Swatch']"/>
-        <element name="isRoleChecked" type="button" selector="//div[contains(@class, 'field-image-role')]//ul/li/label[normalize-space(.) = '{{role}}']/parent::li[contains(@class,'selected')]" parameterized="true"/>
+        <element name="roleCheckbox" type="checkbox" selector=".field-image-role input[value='{{role}}']" parameterized="true"/>
+        <element name="role" type="button" selector=".field-image-role input[value='{{role}}']+label" parameterized="true"/>
+        <element name="roleBase" type="button" selector=".field-image-role [value='image']+label"/>
+        <element name="roleSmall" type="button" selector=".field-image-role [value='small_image']+label"/>
+        <element name="roleThumbnail" type="button" selector=".field-image-role [value='thumbnail']+label"/>
+        <element name="roleSwatch" type="button" selector=".field-image-role [value='swatch_image']+label"/>
 
-        <element name="isBaseSelected" type="button" selector="//div[contains(@class, 'field-image-role')]//ul/li[contains(@class, 'selected')]/label[normalize-space(.) = 'Base']"/>
-        <element name="isSmallSelected" type="button" selector="//div[contains(@class, 'field-image-role')]//ul/li[contains(@class, 'selected')]/label[normalize-space(.) = 'Small']"/>
-        <element name="isThumbnailSelected" type="button" selector="//div[contains(@class, 'field-image-role')]//ul/li[contains(@class, 'selected')]/label[normalize-space(.) = 'Thumbnail']"/>
-        <element name="isSwatchSelected" type="button" selector="//div[contains(@class, 'field-image-role')]//ul/li[contains(@class, 'selected')]/label[normalize-space(.) = 'Swatch']"/>
-        <element name="hideFromProductPage" type="checkbox" selector=".//*[@id='hide-from-product-page']"/>
+        <element name="hideFromProductPage" type="checkbox" selector="#hide-from-product-page"/>
+        <element name="hideFromProductPageLabel" type="button" selector="#hide-from-product-page+label"/>
+        
+        <element name="isRoleChecked" type="checkbox" selector=".field-image-role input[value='{{role}}']:checked" parameterized="true"/>
+        <element name="isRoleUnchecked" type="checkbox" selector=".field-image-role input[value='{{role}}']:not(:checked)" parameterized="true"/>
+        <element name="isBaseSelected" type="checkbox" selector=".field-image-role input[value='image']:checked"/>
+        <element name="isSmallSelected" type="checkbox" selector=".field-image-role input[value='small_image']:checked"/>
+        <element name="isThumbnailSelected" type="checkbox" selector=".field-image-role input[value='thumbnail']:checked"/>
+        <element name="isSwatchSelected" type="checkbox" selector=".field-image-role input[value='swatch_image']:checked"/>
+        
+        <element name="isHideFromProductPageSelected" type="checkbox" selector=".field-image-hide input:not([data-role=use-default]):checked"/>
+
+        <element name="isAltTextDisabled" type="textarea" selector="textarea[data-role='image-description']:disabled"/>
+        <element name="isAltTextEnabled" type="textarea" selector="textarea[data-role='image-description']:enabled"/>
+
+        <element name="isRoleDisabled" type="checkbox" selector=".field-image-role input[value='{{role}}']:disabled" parameterized="true"/>
+        <element name="isRoleEnabled" type="checkbox" selector=".field-image-role input[value='{{role}}']:enabled" parameterized="true"/>
+        <element name="isBaseDisabled" type="checkbox" selector=".field-image-role input[value='image']:disabled"/>
+        <element name="isSmallDisabled" type="checkbox" selector=".field-image-role input[value='small_image']:disabled"/>
+        <element name="isThumbnailDisabled" type="checkbox" selector=".field-image-role input[value='thumbnail']:disabled"/>
+        <element name="isSwatchDisabled" type="checkbox" selector=".field-image-role input[value='swatch_image']:disabled"/>
+        
+        <element name="isHideFromProductPageDisabled" type="checkbox" selector=".field-image-hide input:not([data-role=use-default]):disabled" />
+        <element name="isHideFromProductPageEnabled" type="checkbox" selector=".field-image-hide input:not([data-role=use-default]):enabled" />
+
+        <element name="altTextUseDefault" type="checkbox" selector=".field-image-description [data-role='use-default']"/>
+        
+        <element name="roleUseDefault" type="checkbox" selector=".field-image-role [data-role='use-default'][name='use_default[{{role}}]']" parameterized="true"/>
+        <element name="roleBaseUseDefault" type="checkbox" selector=".field-image-role [data-role='use-default'][name='use_default[image]']"/>
+        <element name="roleSmallUseDefault" type="checkbox" selector=".field-image-role [data-role='use-default'][name='use_default[small_image]']"/>
+        <element name="roleThumbnailUseDefault" type="checkbox" selector=".field-image-role [data-role='use-default'][name='use_default[thumbnail]']"/>
+        <element name="roleSwatchUseDefault" type="checkbox" selector=".field-image-role [data-role='use-default'][name='use_default[swatch_image]']"/>
+
+        <element name="hideFromProductUseDefault" type="checkbox" selector=".field-image-hide [data-role='use-default']"/>
+
+        <element name="isAltTextUseDefaultSelected" type="checkbox" selector=".field-image-description [data-role='use-default']:checked"/>
+
+        <element name="isRoleUseDefaultSelected" type="checkbox" selector=".field-image-role [data-role='use-default'][name='use_default[{{role}}]']:checked" parameterized="true"/>
+        <element name="isBaseUseDefaultSelected" type="checkbox" selector=".field-image-role [data-role='use-default'][name='use_default[image]']:checked"/>
+        <element name="isSmallUseDefaultSelected" type="checkbox" selector=".field-image-role [data-role='use-default'][name='use_default[small_image]']:checked"/>
+        <element name="isThumbnailUseDefaultSelected" type="checkbox" selector=".field-image-role [data-role='use-default'][name='use_default[thumbnail]']:checked"/>
+        <element name="isSwatchUseDefaultSelected" type="checkbox" selector=".field-image-role [data-role='use-default'][name='use_default[swatch_image]']:checked"/>
+
+        <element name="isHideFromProductPageUseDefaultSelected" type="checkbox" selector=".field-image-hide [data-role='use-default']:checked"/>
+        
+        <element name="sortOrderUseDefault" type="checkbox" selector="#media_gallery_content .field-sort-order-use_default input[type='checkbox']"/>
+        <element name="isSortOrderUseDefaultSelected" type="checkbox" selector="#media_gallery_content .field-sort-order-use_default input[type='checkbox']:checked"/>
     </section>
 </sections>

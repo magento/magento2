@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -14,6 +14,7 @@ use Magento\Framework\App\Config;
 use Magento\Framework\App\Config\ScopeCodeResolver;
 use Magento\Framework\App\DeploymentConfig;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -48,17 +49,10 @@ class SettingCheckerTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->configMock = $this->getMockBuilder(DeploymentConfig::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->placeholderMock = $this->getMockBuilder(PlaceholderInterface::class)
-            ->getMockForAbstractClass();
-        $this->scopeCodeResolverMock = $this->getMockBuilder(ScopeCodeResolver::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $placeholderFactoryMock = $this->getMockBuilder(PlaceholderFactory::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->configMock = $this->createMock(DeploymentConfig::class);
+        $this->placeholderMock = $this->createMock(PlaceholderInterface::class);
+        $this->scopeCodeResolverMock = $this->createMock(ScopeCodeResolver::class);
+        $placeholderFactoryMock = $this->createMock(PlaceholderFactory::class);
         $this->env = $_ENV;
 
         $placeholderFactoryMock->expects($this->once())
@@ -77,8 +71,8 @@ class SettingCheckerTest extends TestCase
      * @param array $variables
      * @param array $configMap
      * @param bool $expectedResult
-     * @dataProvider isReadonlyDataProvider
      */
+    #[DataProvider('isReadonlyDataProvider')]
     public function testIsReadonly(
         $path,
         $scope,

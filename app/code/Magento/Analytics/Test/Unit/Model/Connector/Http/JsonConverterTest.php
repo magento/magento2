@@ -1,8 +1,7 @@
 <?php
 /**
- * Copyright 2024 Adobe
- * All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -12,6 +11,8 @@ use Magento\Analytics\Model\Connector\Http\JsonConverter;
 use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\Attributes\DataProvider;
+
 use PHPUnit\Framework\TestCase;
 
 class JsonConverterTest extends TestCase
@@ -58,8 +59,8 @@ class JsonConverterTest extends TestCase
     /**
      * @param array|null $unserializedResult
      * @param array $expected
-     * @dataProvider convertBodyDataProvider
      */
+    #[DataProvider('convertBodyDataProvider')]
     public function testConvertBody($unserializedResult, $expected)
     {
         $this->serializerMock->expects($this->once())

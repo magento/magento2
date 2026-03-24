@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
  /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
+  * Copyright 2017 Adobe
+  * All Rights Reserved.
   */
 -->
 
@@ -60,5 +60,8 @@
     <entity name="EnableWishlistRssConfig">
         <data key="path">rss/wishlist/active</data>
         <data key="value">1</data>
+    </entity>
+    <entity name="NumberOfItemsInWishlist">
+        <data key="item">2 items</data>
     </entity>
 </entities>

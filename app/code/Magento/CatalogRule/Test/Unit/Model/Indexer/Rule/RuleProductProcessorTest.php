@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\CatalogRule\Test\Unit\Model\Indexer\Rule;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\Catalog\Model\Indexer\Product\Price\Processor as ProductPriceProcessor;
 use Magento\CatalogRule\Model\Indexer\Product\ProductRuleProcessor;
 use Magento\CatalogRule\Model\Indexer\Rule\GetAffectedProductIds;
@@ -69,8 +70,8 @@ class RuleProductProcessorTest extends TestCase
      * @param bool $isGetAffectedProductIdsInvoked
      * @param bool $isProductRuleProcessorInvoked
      * @param array $affectedProductIds
-     * @dataProvider reindexListDataProvider
      */
+    #[DataProvider('reindexListDataProvider')]
     public function testReindexList(
         array $ids,
         bool $forceReindex,
@@ -80,9 +81,7 @@ class RuleProductProcessorTest extends TestCase
         array $affectedProductIds,
     ): void {
         $indexer = $this->createMock(IndexerInterface::class);
-        $indexer->expects($this->any())
-            ->method('isScheduled')
-            ->willReturn($isScheduled);
+        $indexer->method('isScheduled')->willReturn($isScheduled);
         $this->indexerRegistry->expects($this->any())
             ->method('get')
             ->with(RuleProductProcessor::INDEXER_ID)
@@ -122,8 +121,8 @@ class RuleProductProcessorTest extends TestCase
      * @param bool $isGetAffectedProductIdsInvoked
      * @param bool $isProductRuleProcessorInvoked
      * @param array $affectedProductIds
-     * @dataProvider reindexRowDataProvider
      */
+    #[DataProvider('reindexRowDataProvider')]
     public function testReindexRow(
         int $id,
         bool $forceReindex,
@@ -136,9 +135,7 @@ class RuleProductProcessorTest extends TestCase
             $this->markTestSkipped('Not applicable');
         }
         $indexer = $this->createMock(IndexerInterface::class);
-        $indexer->expects($this->any())
-            ->method('isScheduled')
-            ->willReturn($isScheduled);
+        $indexer->method('isScheduled')->willReturn($isScheduled);
         $this->indexerRegistry->expects($this->any())
             ->method('get')
             ->with(RuleProductProcessor::INDEXER_ID)

@@ -1,10 +1,12 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Backend\Controller\Adminhtml;
+
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * @magentoAppArea adminhtml
@@ -33,7 +35,7 @@ class CacheTest extends \Magento\TestFramework\TestCase\AbstractBackendControlle
         );
         /** @var $cacheFrontend \Magento\Framework\Cache\FrontendInterface */
         foreach ($cachePool as $cacheFrontend) {
-            $this->assertFalse($cacheFrontend->getBackend()->load('NON_APPLICATION_FIXTURE'));
+            $this->assertFalse($cacheFrontend->load('NON_APPLICATION_FIXTURE'));
         }
     }
 
@@ -59,15 +61,15 @@ class CacheTest extends \Magento\TestFramework\TestCase\AbstractBackendControlle
         foreach ($cachePool as $cacheFrontend) {
             $this->assertSame(
                 'non-application cache data',
-                $cacheFrontend->getBackend()->load('NON_APPLICATION_FIXTURE')
+                $cacheFrontend->load('NON_APPLICATION_FIXTURE')
             );
         }
     }
 
     /**
-     * @dataProvider massActionsInvalidTypesDataProvider
      * @param $action
      */
+    #[DataProvider('massActionsInvalidTypesDataProvider')]
     public function testMassActionsInvalidTypes($action)
     {
         $this->getRequest()->setParams(['types' => ['invalid_type_1', 'invalid_type_2', 'config']]);

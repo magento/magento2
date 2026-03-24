@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework\MessageQueue\Publisher\Config;
 
@@ -16,6 +16,13 @@ class PublisherConfigItem implements PublisherConfigItemInterface
      * @var string
      */
     private $topic;
+
+    /**
+     * Publisher queue name.
+     *
+     * @var string
+     */
+    private $queue;
 
     /**
      * Publisher connection.
@@ -42,7 +49,7 @@ class PublisherConfigItem implements PublisherConfigItemInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getTopic()
     {
@@ -50,7 +57,7 @@ class PublisherConfigItem implements PublisherConfigItemInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function isDisabled()
     {
@@ -58,11 +65,19 @@ class PublisherConfigItem implements PublisherConfigItemInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getConnection()
     {
         return $this->connection;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getQueue()
+    {
+        return $this->queue;
     }
 
     /**
@@ -74,6 +89,7 @@ class PublisherConfigItem implements PublisherConfigItemInterface
     public function setData(array $data)
     {
         $this->topic = $data['topic'];
+        $this->queue = $data['queue'] ?? '';
         $this->isDisabled = $data['disabled'];
         $this->connection->setData($data['connection']);
     }

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -27,26 +27,25 @@ class ActionFactoryTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->objectManagerMock = $this->getMockForAbstractClass(ObjectManagerInterface::class);
+        $this->objectManagerMock = $this->createMock(ObjectManagerInterface::class);
         $this->model = new ActionFactory($this->objectManagerMock);
     }
 
     public function testGetWithException()
     {
         $this->expectException('InvalidArgumentException');
-        $this->expectExceptionMessage('NotAction doesn\'t implement \Magento\Framework\Indexer\ActionInterface');
-        $notActionInterfaceMock = $this->getMockBuilder('NotAction')
-            ->getMock();
+        $this->expectExceptionMessage('stdClass doesn\'t implement \Magento\Framework\Indexer\ActionInterface');
+        $notActionInterfaceMock = $this->createMock(\stdClass::class);
         $this->objectManagerMock->expects($this->once())
             ->method('create')
-            ->with('NotAction', [])
+            ->with(\stdClass::class, [])
             ->willReturn($notActionInterfaceMock);
-        $this->model->create('NotAction');
+        $this->model->create(\stdClass::class);
     }
 
     public function testCreate()
     {
-        $actionInterfaceMock = $this->getMockForAbstractClass(
+        $actionInterfaceMock = $this->createMock(
             ActionInterface::class,
             [],
             '',

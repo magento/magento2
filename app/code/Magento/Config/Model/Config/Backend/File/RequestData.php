@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Config\Model\Config\Backend\File;
 
@@ -48,7 +48,7 @@ class RequestData implements \Magento\Config\Model\Config\Backend\File\RequestDa
         }
         // phpcs:disable Magento2.Security.Superglobal
         $groupData = $_FILES['groups'][$paramName];
-        if (isset($groupData[$firstGroupId])) {
+        if ($firstGroupId !== null && isset($groupData[$firstGroupId])) {
             $groupData = $groupData[$firstGroupId];
         }
         foreach ($pathParts as $groupId) {

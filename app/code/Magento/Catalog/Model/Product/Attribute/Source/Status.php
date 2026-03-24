@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Catalog\Model\Product\Attribute\Source;
 
@@ -20,9 +20,9 @@ class Status extends AbstractSource implements SourceInterface, OptionSourceInte
     /**#@+
      * Product Status values
      */
-    const STATUS_ENABLED = 1;
+    public const STATUS_ENABLED = 1;
 
-    const STATUS_DISABLED = 2;
+    public const STATUS_DISABLED = 2;
 
     /**#@-*/
 
@@ -83,7 +83,7 @@ class Status extends AbstractSource implements SourceInterface, OptionSourceInte
     {
         $options = self::getOptionArray();
 
-        return $options[$optionId] ?? null;
+        return ($optionId !== null && isset($options[$optionId])) ? $options[$optionId] : null;
     }
 
     /**

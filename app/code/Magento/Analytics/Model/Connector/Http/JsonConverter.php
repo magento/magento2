@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -19,12 +19,12 @@ class JsonConverter implements ConverterInterface
      * @deprecated
      * @see CONTENT_MEDIA_TYPE
      */
-    const CONTENT_TYPE_HEADER = 'Content-Type: application/json';
+    public const CONTENT_TYPE_HEADER = 'Content-Type: application/json';
 
     /**
      * Media-Type corresponding to this converter.
      */
-    const CONTENT_MEDIA_TYPE = 'application/json';
+    public const CONTENT_MEDIA_TYPE = 'application/json';
 
     /**
      * @var Json
@@ -40,9 +40,7 @@ class JsonConverter implements ConverterInterface
     }
 
     /**
-     * @param string $body
-     *
-     * @return array
+     * @inheritdoc
      */
     public function fromBody($body)
     {
@@ -50,10 +48,8 @@ class JsonConverter implements ConverterInterface
         return $decodedBody === null ? [$body] : $decodedBody;
     }
 
-    /**c
-     * @param array $data
-     *
-     * @return string
+    /**
+     * @inheritdoc
      */
     public function toBody(array $data)
     {
@@ -61,7 +57,7 @@ class JsonConverter implements ConverterInterface
     }
 
     /**
-     * @return string
+     * @inheritdoc
      */
     public function getContentTypeHeader()
     {

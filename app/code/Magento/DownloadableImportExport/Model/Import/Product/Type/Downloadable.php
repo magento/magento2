@@ -1,18 +1,17 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\DownloadableImportExport\Model\Import\Product\Type;
 
 use Magento\CatalogImportExport\Model\Import\Product as ImportProduct;
 use Magento\Downloadable\Model\Url\DomainValidator;
+use Magento\Eav\Model\ResourceModel\Entity\Attribute\Option\CollectionFactory as AttributeOptionCollectionFactory;
 use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Store\Model\Store;
 
 /**
- * Class Downloadable
- *
  * phpcs:disable Magento2.Commenting.ConstantsPHPDocFormatting
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
@@ -266,7 +265,8 @@ class Downloadable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
      * @param \Magento\DownloadableImportExport\Helper\Uploader $uploaderHelper
      * @param \Magento\DownloadableImportExport\Helper\Data $downloadableHelper
      * @param DomainValidator $domainValidator
-     * @param MetadataPool $metadataPool
+     * @param MetadataPool|null $metadataPool
+     * @param AttributeOptionCollectionFactory|null $attributeOptionCollectionFactory
      */
     public function __construct(
         \Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\CollectionFactory $attrSetColFac,
@@ -276,9 +276,17 @@ class Downloadable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
         \Magento\DownloadableImportExport\Helper\Uploader $uploaderHelper,
         \Magento\DownloadableImportExport\Helper\Data $downloadableHelper,
         DomainValidator $domainValidator,
-        ?MetadataPool $metadataPool = null
+        ?MetadataPool $metadataPool = null,
+        ?AttributeOptionCollectionFactory $attributeOptionCollectionFactory = null
     ) {
-        parent::__construct($attrSetColFac, $prodAttrColFac, $resource, $params, $metadataPool);
+        parent::__construct(
+            $attrSetColFac,
+            $prodAttrColFac,
+            $resource,
+            $params,
+            $metadataPool,
+            $attributeOptionCollectionFactory
+        );
         $this->parameters = $this->_entityModel->getParameters();
         $this->_resource = $resource;
         $this->uploaderHelper = $uploaderHelper;
@@ -1028,7 +1036,7 @@ class Downloadable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
     /**
      * Uploading files into the "downloadable/files" media folder.
      *
-     * Return a new file name if the same file is already exists.
+     * Return a new file name if the same file already exists.
      *
      * @param string $fileName
      * @param string $type

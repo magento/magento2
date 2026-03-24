@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -52,26 +52,19 @@ class CategoryTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->categoryMock = $this->getMockBuilder(CategoryModel::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->categoryResourceMock = $this->getMockBuilder(CategoryResourceModel::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $connection = $this->getMockBuilder(AdapterInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->categoryMock = $this->createMock(CategoryModel::class);
+
+        $this->categoryResourceMock = $this->createMock(CategoryResourceModel::class);
+
+        $connection = $this->createMock(AdapterInterface::class);
         $this->categoryResourceMock->method('getConnection')->willReturn($connection);
 
-        $this->indexerMock = $this->getMockBuilder(IndexerInterface::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['__wakeup'])
-            ->onlyMethods(['getId', 'getState'])
-            ->getMockForAbstractClass();
-        $this->indexerRegistryMock = $this->getMockBuilder(IndexerRegistry::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['get'])
-            ->getMock();
+        $this->indexerMock = $this->createStub(IndexerInterface::class);
+
+        $this->indexerRegistryMock = $this->createPartialMock(
+            IndexerRegistry::class,
+            ['get']
+        );
 
         $this->proceed = function () {
             return $this->categoryResourceMock;

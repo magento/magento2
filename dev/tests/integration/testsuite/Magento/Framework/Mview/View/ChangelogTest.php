@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework\Mview\View;
 
@@ -107,21 +107,66 @@ class ChangelogTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * Test for clear() method
-     *
      * @return void
      * @throws ChangelogTableNotExistsException
-     * @throws \Magento\Framework\Exception\RuntimeException
      */
-    public function testClear()
+    public function testChangelogClearOversizeBatchSize()
     {
-        $this->assertEquals(0, $this->model->getVersion());
-        //the same that a table is empty
-        $changelogName = $this->resource->getTableName($this->model->getName());
-        $this->connection->insert($changelogName, ['version_id' => 1, 'entity_id' => 1]);
-        $this->assertEquals(1, $this->model->getVersion());
-        $this->model->clear(1);
-        $this->assertEquals(1, $this->model->getVersion()); //the same that a table is empty
+        $stateVersionId = 14001;
+        $changelog = $this->generateChangelog(20000);
+
+        // #0: check if changelog generated correctly
+        $this->assertEquals(1, $this->getChangelogFirstEntityId($changelog));
+        $this->assertEquals(20000, $this->getChangelogEntitiesCount($changelog));
+
+        // #1: check if changelog reduced by batch size value
+        $this->model->clear($stateVersionId);
+        $this->assertEquals($stateVersionId, $this->getChangelogFirstEntityId($changelog));
+        $this->assertEquals(6000, $this->getChangelogEntitiesCount($changelog));
+
+        // #2: fully clear changelog
+        $this->model->clear(20001);
+        $this->assertEquals(0, $this->getChangelogEntitiesCount($changelog));
+    }
+
+    /**
+     * @param string $changelog
+     * @return int
+     */
+    private function getChangelogFirstEntityId(string $changelog): int
+    {
+        return (int) $this->connection->fetchOne($this->connection->select()->from($changelog, 'version_id'));
+    }
+
+    /**
+     * @param string $changelog
+     * @return int
+     */
+    private function getChangelogEntitiesCount(string $changelog): int
+    {
+        return (int) $this->connection->fetchOne($this->connection->select()->from($changelog, 'COUNT(1)'));
+    }
+
+    /**
+     * @param int $entitiesCount
+     * @return string
+     */
+    private function generateChangelog(int $entitiesCount = 100): string
+    {
+        $data = [];
+        $changelog = $this->resource->getTableName($this->model->getName());
+
+        for ($i = 1; $i <= $entitiesCount; $i++) {
+            $data[$i]['version_id'] = $i;
+            $data[$i]['entity_id'] = $i;
+        }
+        $this->connection->insertArray(
+            $changelog,
+            ['version_id', 'entity_id'],
+            $data
+        );
+
+        return $changelog;
     }
 
     /**

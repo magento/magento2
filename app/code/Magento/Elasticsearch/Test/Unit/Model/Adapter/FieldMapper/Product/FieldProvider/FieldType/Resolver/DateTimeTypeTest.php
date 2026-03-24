@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -13,6 +13,7 @@ use Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider\FieldT
 use Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider\FieldType\Resolver\DateTimeType;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * @SuppressWarnings(PHPMD)
@@ -36,10 +37,7 @@ class DateTimeTypeTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->fieldTypeConverter = $this->getMockBuilder(FieldTypeConverterInterface::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['convert'])
-            ->getMockForAbstractClass();
+        $this->fieldTypeConverter = $this->createPartialMock(FieldTypeConverterInterface::class, ['convert']);
 
         $objectManager = new ObjectManagerHelper($this);
 
@@ -52,11 +50,11 @@ class DateTimeTypeTest extends TestCase
     }
 
     /**
-     * @dataProvider getFieldTypeProvider
      * @param $isDateTimeType
      * @param $expected
      * @return void
      */
+    #[DataProvider('getFieldTypeProvider')]
     public function testGetFieldType($isDateTimeType, $expected)
     {
         $attributeMock = $this->getMockBuilder(AttributeAdapter::class)

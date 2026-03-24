@@ -1,14 +1,14 @@
 <?php
 /**
- * Copyright 2024 Adobe
- * All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Backend\Test\Unit\Model\Widget\Grid;
 
 use Magento\Backend\Model\Widget\Grid\Parser;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 class ParserTest extends TestCase
@@ -26,8 +26,8 @@ class ParserTest extends TestCase
     /**
      * @param string $expression
      * @param array $expected
-     * @dataProvider parseExpressionDataProvider
      */
+    #[DataProvider('parseExpressionDataProvider')]
     public function testParseExpression($expression, $expected)
     {
         $this->assertEquals($expected, $this->_model->parseExpression($expression));
@@ -57,8 +57,8 @@ class ParserTest extends TestCase
     /**
      * @param $operation
      * @param $expected
-     * @dataProvider isOperationDataProvider
      */
+    #[DataProvider('isOperationDataProvider')]
     public function testIsOperation($operation, $expected)
     {
         $this->assertEquals($expected, $this->_model->isOperation($operation));

@@ -41,13 +41,13 @@ We encourage experts from the Community to help us with GitHub routines such as 
 - [Learn more about the Maintainer role](https://developer.adobe.com/commerce/contributor/guides/maintainers/)
 - [Maintainer's Handbook](https://developer.adobe.com/commerce/contributor/guides/maintainers/handbook/)
 
-[![](https://raw.githubusercontent.com/wiki/magento/magento2/images/maintainers.png)](https://magento.com/magento-contributors#maintainers)
+[![](https://raw.githubusercontent.com/wiki/magento/magento2/images/maintainers.png)](https://developer.adobe.com/commerce/contributor/guides/maintainers/)
 
 ### Leaders
 
-Adobe highly appreciates contributions that help us to improve the code, clarify the documentation, and increase test coverage. Check out our Community leaders, superstars, and superheroes on the [leaderboard](https://magento.biterg.io/app/kibana#/dashboard/41dc0c60-fa06-11eb-bbaa-dd6ca6f8fda8?_g=()).
+Adobe highly appreciates contributions that help us to improve the code, clarify the documentation, and increase test coverage. Check out our Community leaders, superstars, and superheroes on the [leaderboard](https://github.com/magento/magento2/graphs/contributors).
 
-[![](https://raw.githubusercontent.com/wiki/magento/magento2/images/contributors.png)](https://magento.com/magento-contributors)
+[![](https://raw.githubusercontent.com/wiki/magento/magento2/images/contributors.png)](https://github.com/magento/magento2/graphs/contributors)
 
 ### Labeling
 

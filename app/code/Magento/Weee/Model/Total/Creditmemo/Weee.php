@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Weee\Model\Total\Creditmemo;
@@ -14,7 +14,6 @@ use Magento\Framework\App\ObjectManager;
 class Weee extends \Magento\Sales\Model\Order\Creditmemo\Total\AbstractTotal
 {
     /**
-     * Weee data
      *
      * @var WeeeHelper
      */
@@ -116,7 +115,8 @@ class Weee extends \Magento\Sales\Model\Order\Creditmemo\Total\AbstractTotal
             $baseTotalWeeeAmount += $baseWeeeAmountExclTax;
 
             $item->setWeeeTaxAppliedRowAmount($weeeAmountExclTax);
-            $item->setBaseWeeeTaxAppliedRowAmount($baseWeeeAmountExclTax);
+            $baseWeeeAmountExclTax = $baseWeeeAmountExclTax > 0 ? $baseWeeeAmountExclTax : null;
+            $item->setBaseWeeeTaxAppliedRowAmnt($baseWeeeAmountExclTax);
 
             $totalTaxAmount += $itemTaxAmount;
             $baseTotalTaxAmount += $itemBaseTaxAmount;

@@ -27,15 +27,20 @@ $groupCss = $block->getGroupCss();
                     $label = $block->getChildData($alias, 'title');
                 ?>
                 <div class="section-item-title <?= $escaper->escapeHtmlAttr($groupCss) ?>-item-title"
-                     data-role="collapsible">
+                     data-role="collapsible"
+                     aria-controls="<?= $escaper->escapeHtmlAttr($alias) ?>"
+                     aria-expanded="false">
                     <a class="<?= $escaper->escapeHtmlAttr($groupCss) ?>-item-switch"
-                       data-toggle="switch" href="#<?= $escaper->escapeHtmlAttr($alias) ?>">
+                       data-toggle="switch"
+                       href="#<?= $escaper->escapeHtmlAttr($alias) ?>">
                         <?= /* @noEscape */ $label ?>
                     </a>
                 </div>
                 <div class="section-item-content <?= $escaper->escapeHtmlAttr($groupCss) ?>-item-content"
                      id="<?= $escaper->escapeHtmlAttr($alias) ?>"
-                     role="tab">
+                     role="tabpanel"
+                     aria-hidden="true"
+                     style="display: none;">
                     <?= /* @noEscape */ $html ?>
                 </div>
             <?php endforeach;?>

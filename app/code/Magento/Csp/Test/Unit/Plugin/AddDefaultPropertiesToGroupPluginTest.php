@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright 2024 Adobe.
+ * Copyright 2024 Adobe
  * All Rights Reserved.
  */
 declare(strict_types=1);
@@ -65,26 +65,17 @@ class AddDefaultPropertiesToGroupPluginTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $this->integrityRepositoryPoolMock = $this->getMockBuilder(SubresourceIntegrityRepositoryPool::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['get'])
-            ->getMock();
-        $this->assetInterfaceMock = $this->getMockBuilder(File::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['getPath'])
-            ->getMockForAbstractClass();
-        $this->stateMock = $this->getMockBuilder(State::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['getAreaCode'])
-            ->getMock();
-        $this->httpMock = $this->getMockBuilder(Http::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['getFullActionName'])
-            ->getMock();
-        $this->sriEnabledActionsMock = $this->getMockBuilder(SriEnabledActions::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['isPaymentPageAction'])
-            ->getMock();
+        $this->integrityRepositoryPoolMock = $this->createPartialMock(
+            SubresourceIntegrityRepositoryPool::class,
+            ['get']
+        );
+        $this->assetInterfaceMock = $this->createPartialMock(File::class, ['getPath']);
+        $this->stateMock = $this->createPartialMock(State::class, ['getAreaCode']);
+        $this->httpMock = $this->createPartialMock(Http::class, ['getFullActionName']);
+        $this->sriEnabledActionsMock = $this->createPartialMock(
+            SriEnabledActions::class,
+            ['isPaymentPageAction']
+        );
         $this->plugin = new AddDefaultPropertiesToGroupPlugin(
             $this->stateMock,
             $this->integrityRepositoryPoolMock,
@@ -104,13 +95,11 @@ class AddDefaultPropertiesToGroupPluginTest extends TestCase
         $actionName = "sales_order_create_index";
         $this->sriEnabledActionsMock->expects($this->once())->method('isPaymentPageAction')->willReturn(true);
         $this->httpMock->expects($this->once())->method('getFullActionName')->willReturn($actionName);
-        $integrityRepositoryMock = $this->getMockBuilder(SubresourceIntegrityRepository::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['getByPath'])
-            ->getMock();
-        $groupedCollectionMock = $this->getMockBuilder(GroupedCollection::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $integrityRepositoryMock = $this->createPartialMock(
+            SubresourceIntegrityRepository::class,
+            ['getByPath']
+        );
+        $groupedCollectionMock = $this->createMock(GroupedCollection::class);
         $path = 'jquery.js';
         $area = 'base';
 

@@ -1,5 +1,5 @@
-# Copyright © Magento, Inc. All rights reserved.
-# See COPYING.txt for license details.
+# Copyright 2021 Adobe
+# All Rights Reserved.
 type StoreConfig {
     zero_subtotal_enabled: Boolean @doc(description: "Indicates whether the Zero Subtotal payment method is enabled.")
     zero_subtotal_title: String @doc(description: "The title of the Zero Subtotal payment method displayed on the storefront.")

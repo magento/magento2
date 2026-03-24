@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -246,6 +246,13 @@ class ServiceInputProcessor implements ServicePayloadConverterInterface, ResetAf
             if (isset($data[$parameter->getName()])) {
                 $parameterType = $this->typeProcessor->getParamType($parameter);
 
+                // Allow only simple types or Api Data Objects
+                if (!($this->typeProcessor->isTypeSimple($parameterType)
+                    || preg_match('~\\\\?\w+\\\\\w+\\\\Api\\\\Data\\\\~', $parameterType) === 1
+                )) {
+                    continue;
+                }
+
                 try {
                     $res[$parameter->getName()] = $this->convertValue($data[$parameter->getName()], $parameterType);
                 } catch (\ReflectionException $e) {
@@ -341,7 +348,7 @@ class ServiceInputProcessor implements ServicePayloadConverterInterface, ResetAf
                             )
                         );
                     }
-                    $this->serviceInputValidator->validateEntityValue($object, $propertyName, $setterValue);
+                    $this->serviceInputValidator->validateEntityValue($object, lcfirst($propertyName), $setterValue);
                     $object->{$setterName}($setterValue);
                 }
             } catch (\LogicException $e) {

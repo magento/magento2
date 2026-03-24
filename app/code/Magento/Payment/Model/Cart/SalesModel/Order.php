@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Payment\Model\Cart\SalesModel;
 
@@ -38,7 +38,7 @@ class Order implements \Magento\Payment\Model\Cart\SalesModel\SalesModelInterfac
                     'parent_item' => $item->getParentItem(),
                     'name' => $item->getName(),
                     'qty' => (int)$item->getQtyOrdered(),
-                    'price' => (double)$item->getBasePrice(),
+                    'price' => (float)$item->getBasePrice(),
                     'original_item' => $item,
                 ]
             );

@@ -135,6 +135,10 @@
         <index referenceId="CATALOG_PRODUCT_ENTITY_INT_ATTRIBUTE_ID" indexType="btree">
             <column name="attribute_id"/>
         </index>
+        <index referenceId="CATALOG_PRODUCT_ENTITY_INT_ATTRIBUTE_ID_ENTITY_ID" indexType="btree">
+            <column name="attribute_id"/>
+            <column name="entity_id"/>
+        </index>
         <index referenceId="CATALOG_PRODUCT_ENTITY_INT_STORE_ID" indexType="btree">
             <column name="store_id"/>
         </index>
@@ -281,6 +285,12 @@
         <index referenceId="CATALOG_CATEGORY_ENTITY_PATH" indexType="btree">
             <column name="path"/>
         </index>
+        <!-- Performance optimization index for efficient tree traversal -->
+        <index referenceId="CATALOG_CATEGORY_ENTITY_PARENT_ID_LEVEL_POSITION" indexType="btree">
+            <column name="parent_id"/>
+            <column name="level"/>
+            <column name="position"/>
+        </index>
     </table>
     <table name="catalog_category_entity_datetime" resource="default" engine="innodb"
            comment="Catalog Category Datetime Attribute Backend Table">
@@ -397,6 +407,11 @@
         <index referenceId="CATALOG_CATEGORY_ENTITY_INT_STORE_ID" indexType="btree">
             <column name="store_id"/>
         </index>
+        <!-- Performance optimization index for is_active attribute filtering -->
+        <index referenceId="CATALOG_CATEGORY_ENTITY_INT_STORE_ID_VALUE" indexType="btree">
+            <column name="store_id"/>
+            <column name="value"/>
+        </index>
     </table>
     <table name="catalog_category_entity_text" resource="default" engine="innodb"
            comment="Catalog Category Text Attribute Backend Table">
@@ -501,6 +516,12 @@
         </constraint>
         <index referenceId="CATALOG_CATEGORY_PRODUCT_PRODUCT_ID" indexType="btree">
             <column name="product_id"/>
+        </index>
+        <!-- Performance optimization index for product count queries -->
+        <index referenceId="CATALOG_CATEGORY_PRODUCT_CATEGORY_ID_PRODUCT_ID_POSITION" indexType="btree">
+            <column name="category_id"/>
+            <column name="product_id"/>
+            <column name="position"/>
         </index>
     </table>
     <table name="catalog_category_product_index" resource="default" engine="innodb"
@@ -837,7 +858,7 @@
         <column xsi:type="varchar" name="label" nullable="true" length="255" comment="Label"/>
         <column xsi:type="int" name="position" unsigned="true" nullable="true" identity="false"
                 comment="Position"/>
-        <column xsi:type="smallint" name="disabled" unsigned="true" nullable="false" identity="false"
+        <column xsi:type="smallint" name="disabled" unsigned="true" nullable="true" identity="false"
                 default="0" comment="Is Disabled"/>
         <column xsi:type="int" name="record_id" unsigned="true" nullable="false" identity="true"
                 comment="Record ID"/>

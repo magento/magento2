@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 
 /**
@@ -26,8 +26,6 @@ class FilterTest extends \PHPUnit\Framework\TestCase
             \Magento\ImportExport\Block\Adminhtml\Export\Filter::class,
             '_getDateFromToHtmlWithValue'
         );
-        $method->setAccessible(true);
-
         $arguments = [
             'data' => [
                 'attribute_code' => 'date',

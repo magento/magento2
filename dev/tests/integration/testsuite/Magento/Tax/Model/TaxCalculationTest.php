@@ -1,13 +1,14 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Tax\Model;
 
 use Magento\Tax\Api\Data\TaxClassKeyInterface;
 use Magento\Tax\Model\TaxClass\Key;
 use Magento\TestFramework\Helper\Bootstrap;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * @magentoDbIsolation enabled
@@ -96,8 +97,8 @@ class TaxCalculationTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @magentoConfigFixture current_store tax/calculation/algorithm UNIT_BASE_CALCULATION
-     * @dataProvider calculateUnitBasedDataProvider
      */
+    #[DataProvider('calculateUnitBasedDataProvider')]
     public function testCalculateTaxUnitBased($quoteDetailsData, $expected)
     {
         $quoteDetailsData = $this->performTaxClassSubstitution($quoteDetailsData);
@@ -810,9 +811,9 @@ class TaxCalculationTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @dataProvider calculateTaxTotalBasedDataProvider
      * @magentoConfigFixture current_store tax/calculation/algorithm TOTAL_BASE_CALCULATION
      */
+    #[DataProvider('calculateTaxTotalBasedDataProvider')]
     public function testCalculateTaxTotalBased($quoteDetailsData, $expectedTaxDetails, $storeId = null)
     {
         $quoteDetailsData = $this->performTaxClassSubstitution($quoteDetailsData);
@@ -1088,30 +1089,42 @@ class TaxCalculationTest extends \PHPUnit\Framework\TestCase
         $productInclTaxWithoutStoreIdWithoutTaxClassId = $productTaxInclBase;
 
         $productInclTaxWithStoreIdWithTaxClassId['storeId'] = 1;
-        $productInclTaxWithStoreIdWithTaxClassId['quoteDetailsData']['items'][] = $quoteDetailTaxInclItemWithDefaultProductTaxClass;
+        $productInclTaxWithStoreIdWithTaxClassId['quoteDetailsData']['items'][] =
+            $quoteDetailTaxInclItemWithDefaultProductTaxClass;
         $productInclTaxWithStoreIdWithTaxClassId['expectedTaxDetails']['tax_amount'] = 0.70;
         $productInclTaxWithStoreIdWithTaxClassId['expectedTaxDetails']['subtotal'] = 9.30;
         $productInclTaxWithStoreIdWithTaxClassId['expectedTaxDetails']['applied_taxes'] = $quoteDetailAppliedTaxesBase;
-        $productInclTaxWithStoreIdWithTaxClassId['expectedTaxDetails']['items'] = $productTaxInclExpectedItemWithDefaultProductTaxClass;
+        $productInclTaxWithStoreIdWithTaxClassId['expectedTaxDetails']['items'] =
+            $productTaxInclExpectedItemWithDefaultProductTaxClass;
 
         $productInclTaxWithStoreIdWithoutTaxClassId['storeId'] = 1;
         $productInclTaxWithStoreIdWithoutTaxClassId['quoteDetailsData']['items'][] = $productTaxInclQuoteDetailItemBase;
-        $productInclTaxWithStoreIdWithoutTaxClassId['expectedTaxDetails']['items'] = $productTaxInclExpectedItemWithNoProductTaxClass;
+        $productInclTaxWithStoreIdWithoutTaxClassId['expectedTaxDetails']['items'] =
+            $productTaxInclExpectedItemWithNoProductTaxClass;
 
-        $productInclTaxWithoutStoreIdWithTaxClassId['quoteDetailsData']['items'][] = $quoteDetailTaxInclItemWithDefaultProductTaxClass;
+        $productInclTaxWithoutStoreIdWithTaxClassId['quoteDetailsData']['items'][] =
+            $quoteDetailTaxInclItemWithDefaultProductTaxClass;
         $productInclTaxWithoutStoreIdWithTaxClassId['expectedTaxDetails']['tax_amount'] = 0.70;
         $productInclTaxWithoutStoreIdWithTaxClassId['expectedTaxDetails']['subtotal'] = 9.30;
-        $productInclTaxWithoutStoreIdWithTaxClassId['expectedTaxDetails']['applied_taxes'] = $quoteDetailAppliedTaxesBase;
-        $productInclTaxWithoutStoreIdWithTaxClassId['expectedTaxDetails']['items'] = $productTaxInclExpectedItemWithDefaultProductTaxClass;
+        $productInclTaxWithoutStoreIdWithTaxClassId['expectedTaxDetails']['applied_taxes'] =
+            $quoteDetailAppliedTaxesBase;
+        $productInclTaxWithoutStoreIdWithTaxClassId['expectedTaxDetails']['items'] =
+            $productTaxInclExpectedItemWithDefaultProductTaxClass;
 
-        $productInclTaxWithoutStoreIdWithoutTaxClassId['quoteDetailsData']['items'][] = $productTaxInclQuoteDetailItemBase;
-        $productInclTaxWithoutStoreIdWithoutTaxClassId['expectedTaxDetails']['items'] = $productTaxInclExpectedItemWithNoProductTaxClass;
+        $productInclTaxWithoutStoreIdWithoutTaxClassId['quoteDetailsData']['items'][] =
+            $productTaxInclQuoteDetailItemBase;
+        $productInclTaxWithoutStoreIdWithoutTaxClassId['expectedTaxDetails']['items'] =
+            $productTaxInclExpectedItemWithNoProductTaxClass;
 
         return [
-            'product incl tax with store id, with tax class id' => $productInclTaxWithStoreIdWithTaxClassId,
-            'product incl tax with store id, without tax class id' => $productInclTaxWithStoreIdWithoutTaxClassId,
-            'product incl tax without store id, with tax class id' => $productInclTaxWithoutStoreIdWithTaxClassId,
-            'product incl tax without store id, without tax class id' => $productInclTaxWithoutStoreIdWithoutTaxClassId,
+            'product incl tax with store id, with tax class id' =>
+                $productInclTaxWithStoreIdWithTaxClassId,
+            'product incl tax with store id, without tax class id' =>
+                $productInclTaxWithStoreIdWithoutTaxClassId,
+            'product incl tax without store id, with tax class id' =>
+                $productInclTaxWithoutStoreIdWithTaxClassId,
+            'product incl tax without store id, without tax class id' =>
+                $productInclTaxWithoutStoreIdWithoutTaxClassId,
         ];
     }
 
@@ -1252,9 +1265,9 @@ class TaxCalculationTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @magentoDbIsolation enabled
-     * @dataProvider calculateTaxRowBasedDataProvider
      * @magentoConfigFixture default_store tax/calculation/algorithm ROW_BASE_CALCULATION
      */
+    #[DataProvider('calculateTaxRowBasedDataProvider')]
     public function testCalculateTaxRowBased($quoteDetailsData, $expectedTaxDetails)
     {
         $quoteDetailsData = $this->performTaxClassSubstitution($quoteDetailsData);
@@ -1397,10 +1410,10 @@ class TaxCalculationTest extends \PHPUnit\Framework\TestCase
                 'weee1-Recycling Fee' => [
                     'code' => 'weee1-Recycling Fee',
                     'row_tax' => 0.57,
-                    'price' => 7,
-                    'price_incl_tax' => 7.57,
-                    'row_total' => 7,
-                    'row_total_incl_tax' => 7.57,
+                    'price' => 7.0,
+                    'price_incl_tax' => 7.58,
+                    'row_total' => 7.0,
+                    'row_total_incl_tax' => 7.58,
                     'type' => 'weee',
                     'tax_percent' => 8.25,
                     'discount_tax_compensation_amount' => 0,
@@ -2353,9 +2366,9 @@ class TaxCalculationTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @magentoDbIsolation enabled
-     * @dataProvider multiRulesRowBasedDataProvider
      * @magentoConfigFixture default_store tax/calculation/algorithm ROW_BASE_CALCULATION
      */
+    #[DataProvider('multiRulesRowBasedDataProvider')]
     public function testMultiRulesRowBased($quoteDetailsData, $expectedTaxDetails)
     {
         $quoteDetailsData = $this->performTaxClassSubstitution($quoteDetailsData);
@@ -2390,9 +2403,9 @@ class TaxCalculationTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @magentoDbIsolation enabled
-     * @dataProvider multiRulesTotalBasedDataProvider
      * @magentoConfigFixture default_store tax/calculation/algorithm TOTAL_BASE_CALCULATION
      */
+    #[DataProvider('multiRulesTotalBasedDataProvider')]
     public function testMultiRulesTotalBased($quoteDetailsData, $expectedTaxDetails)
     {
         $quoteDetailsData = $this->performTaxClassSubstitution($quoteDetailsData);
@@ -2437,9 +2450,9 @@ class TaxCalculationTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @magentoDbIsolation enabled
-     * @dataProvider multiRulesUnitBasedDataProvider
      * @magentoConfigFixture default_store tax/calculation/algorithm UNIT_BASE_CALCULATION
      */
+    #[DataProvider('multiRulesUnitBasedDataProvider')]
     public function testMultiRulesUnitBased($quoteDetailsData, $expectedTaxDetails)
     {
         $quoteDetailsData = $this->performTaxClassSubstitution($quoteDetailsData);

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2022 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -9,6 +9,7 @@ namespace Magento\Tax\Test\Fixture;
 
 use Magento\Framework\DataObject;
 use Magento\Tax\Api\TaxRateRepositoryInterface;
+use Magento\TestFramework\Fixture\Api\DataMerger;
 use Magento\TestFramework\Fixture\Api\ServiceFactory;
 use Magento\TestFramework\Fixture\RevertibleDataFixtureInterface;
 
@@ -24,20 +25,19 @@ class TaxRate implements RevertibleDataFixtureInterface
         'zip_is_range' => null,
         'zip_from' => null,
         'zip_to' => null,
-        'titles' => [],
+        'titles' => []
     ];
 
     /**
-     * @var ServiceFactory
-     */
-    private ServiceFactory $serviceFactory;
-
-    /**
+     * TaxRate Constructor
+     *
      * @param ServiceFactory $serviceFactory
+     * @param DataMerger $dataMerger
      */
-    public function __construct(ServiceFactory $serviceFactory)
-    {
-        $this->serviceFactory = $serviceFactory;
+    public function __construct(
+        private readonly ServiceFactory $serviceFactory,
+        private readonly DataMerger $dataMerger
+    ) {
     }
 
     /**
@@ -46,10 +46,13 @@ class TaxRate implements RevertibleDataFixtureInterface
     public function apply(array $data = []): ?DataObject
     {
         $service = $this->serviceFactory->create(TaxRateRepositoryInterface::class, 'save');
+        $data = $this->dataMerger->merge(
+            self::DEFAULT_DATA,
+            $data
+        );
+        $data['code'] = str_replace('%uniqid%', uniqid(), $data['code']);
 
-        return $service->execute([
-            'taxRate' => array_merge(self::DEFAULT_DATA, $data),
-        ]);
+        return $service->execute(['taxRate' => $data]);
     }
 
     /**

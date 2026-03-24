@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -51,14 +51,14 @@ class Validator implements ValidatorInterface
     {
         $errors = [];
         $currentEngine = $this->scopeConfig->getValue('catalog/search/engine');
-        if (isset($this->excludedEngineList[$currentEngine])) {
+        if ($currentEngine !== null && isset($this->excludedEngineList[$currentEngine])) {
             $excludedEngine = $this->excludedEngineList[$currentEngine];
             $errors[] = "Your current search engine, '{$excludedEngine}', is not supported."
                 . " You must install a supported search engine before upgrading."
                 . " See the System Upgrade Guide for more information.";
         }
 
-        if (isset($this->engineValidators[$currentEngine])) {
+        if ($currentEngine !== null && isset($this->engineValidators[$currentEngine])) {
             $validator = $this->engineValidators[$currentEngine];
             $validationErrors = $validator->validate();
             $errors = array_merge($errors, $validationErrors);

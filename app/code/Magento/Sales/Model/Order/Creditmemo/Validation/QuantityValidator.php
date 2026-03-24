@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -262,8 +262,9 @@ class QuantityValidator implements ValidatorInterface
         if ($item->getQtyToRefund() < 0) {
             return false;
         }
-        if (isset($invoiceQtysRefundLimits[$item->getId()])) {
-            return $invoiceQtysRefundLimits[$item->getId()] > 0;
+        $itemId = $item->getId() ?? '';
+        if (isset($invoiceQtysRefundLimits[$itemId])) {
+            return $invoiceQtysRefundLimits[$itemId] > 0;
         }
         return true;
     }

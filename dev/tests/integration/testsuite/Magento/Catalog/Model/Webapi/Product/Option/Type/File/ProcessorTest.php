@@ -1,11 +1,12 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Catalog\Model\Webapi\Product\Option\Type\File;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class ProcessorTest extends \PHPUnit\Framework\TestCase
 {
@@ -20,8 +21,8 @@ class ProcessorTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @dataProvider pathConfigDataProvider
      */
+    #[DataProvider('pathConfigDataProvider')]
     public function testProcessFileContent($pathConfig)
     {
         $model = $this->getModel($pathConfig);

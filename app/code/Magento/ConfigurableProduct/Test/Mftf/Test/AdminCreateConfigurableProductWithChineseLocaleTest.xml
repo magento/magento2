@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright 2025 Adobe
+ * All Rights Reserved.
+ */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminCreateConfigurableProductWithChineseLocaleTest">
+        <annotations>
+            <features value="ConfigurableProduct"/>
+            <stories value="Create Configurable Product"/>
+            <title value="Admin should be able to create configurable product with Chinese locale and verify data persistence"/>
+            <description value="Create configurable product with size and color attributes under Chinese locale, verify data after save, reopen, and on storefront"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="AC-4089"/>
+            <group value="ConfigurableProduct"/>
+        </annotations>
+        <before>
+            <magentoCLI command="setup:static-content:deploy zh_Hans_CN" stepKey="deployStaticContentWithChineseLocale"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <actionGroup ref="SetAdminAccountActionGroup" stepKey="changeAdminLocaleToChina">
+                <argument name="InterfaceLocaleByValue" value="zh_Hans_CN"/>
+            </actionGroup>
+            <createData entity="productAttributeWithTwoOptions" stepKey="createColorAttribute"/>
+            <createData entity="productAttributeOption1" stepKey="createColorOptionRed">
+                <requiredEntity createDataKey="createColorAttribute"/>
+            </createData>
+            <createData entity="productAttributeOption2" stepKey="createColorOptionGreen">
+                <requiredEntity createDataKey="createColorAttribute"/>
+            </createData>
+            <createData entity="productAttributeOption3" stepKey="createColorOptionBlue">
+                <requiredEntity createDataKey="createColorAttribute"/>
+            </createData>
+            <createData entity="productAttributeWithTwoOptions" stepKey="createSizeAttribute"/>
+            <createData entity="productAttributeOption1" stepKey="createSizeOptionXL">
+                <requiredEntity createDataKey="createSizeAttribute"/>
+            </createData>
+            <createData entity="productAttributeOption2" stepKey="createSizeOptionL">
+                <requiredEntity createDataKey="createSizeAttribute"/>
+            </createData>
+            <createData entity="productAttributeOption3" stepKey="createSizeOptionM">
+                <requiredEntity createDataKey="createSizeAttribute"/>
+            </createData>
+            <createData entity="productAttributeOption4" stepKey="createSizeOptionS">
+                <requiredEntity createDataKey="createSizeAttribute"/>
+            </createData>
+            <createData entity="productAttributeOption5" stepKey="createSizeOptionXS">
+                <requiredEntity createDataKey="createSizeAttribute"/>
+            </createData>
+        </before>
+        <after>
+            <actionGroup ref="SetAdminAccountActionGroup" stepKey="resetAdminLocale">
+                <argument name="InterfaceLocaleByValue" value="en_US"/>
+            </actionGroup>
+            <!-- Delete configurable product -->
+            <helper class="Magento\Catalog\Test\Mftf\Helper\ProductApiHelper" method="deleteAllProductsApi" stepKey="deleteAllProductsViaApi"/>
+            <deleteData createDataKey="createColorAttribute" stepKey="deleteColorAttribute"/>
+            <deleteData createDataKey="createSizeAttribute" stepKey="deleteSizeAttribute"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+        <!-- Step 1: Create configurable product -->
+        <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="navigateToProductIndexPage"/>
+        <actionGroup ref="GoToCreateProductPageActionGroup" stepKey="goToCreateConfigurableProduct">
+            <argument name="product" value="BaseConfigurableProduct"/>
+        </actionGroup>
+        <!-- Step 2: Fill product form -->
+        <actionGroup ref="FillMainProductFormActionGroup" stepKey="fillProductForm">
+            <argument name="product" value="BaseConfigurableProduct"/>
+        </actionGroup>
+        <actionGroup ref="AdminFillProductQtyOnProductFormActionGroup" stepKey="fillProductQuantity">
+            <argument name="productQty" value="100"/>
+        </actionGroup>
+        <!-- Step 3: Create product configurations -->
+        <click selector="{{AdminProductFormConfigurationsSection.createConfigurations}}" stepKey="clickCreateConfigurations"/>
+        <waitForElementClickable selector="{{AdminCreateProductConfigurationsPanel.attributeCheckbox($createColorAttribute.attribute_code$)}}" stepKey="waitForColorAttributeCheckbox"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.attributeCheckbox($createColorAttribute.attribute_code$)}}" stepKey="selectColorAttribute"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.attributeCheckbox($createSizeAttribute.attribute_code$)}}" stepKey="selectSizeAttribute"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="clickNextStep1"/>
+        <waitForElementClickable selector="{{AdminCreateProductConfigurationsPanel.selectAllByAttribute($createColorAttribute.default_frontend_label$)}}" stepKey="waitForSelectAllColorButton"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.selectAllByAttribute($createColorAttribute.default_frontend_label$)}}" stepKey="selectAllColorAttributeOptions"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.selectAllByAttribute($createSizeAttribute.default_frontend_label$)}}" stepKey="selectAllSizeAttributeOptions"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="clickNextStep2"/>
+        <waitForPageLoad stepKey="waitForBulkStep"/>
+        <waitForElementClickable selector="{{AdminCreateProductConfigurationsPanel.applySingleSetOfImages}}" stepKey="waitForApplySingleImageSetButton"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.applySingleSetOfImages}}" stepKey="clickOnApplySingleImageSetToAllSku"/>
+        <waitForElementVisible selector="{{AdminCreateProductConfigurationsPanel.imageUploadButton}}" stepKey="waitForImageUploadButton"/>
+        <attachFile selector="{{AdminCreateProductConfigurationsPanel.imageFileUpload}}" userInput="{{MagentoLogo.file}}" stepKey="uploadConfigProductImage"/>
+        <waitForPageLoad stepKey="waitForImageUpload"/>
+        <waitForElementVisible selector="{{AdminCreateProductConfigurationsPanel.imageFile(MagentoLogo.filename)}}" stepKey="waitForImageThumbnail"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.applySingleQuantityToEachSkus}}" stepKey="clickOnApplySingleQuantityToEachSku"/>
+        <fillField selector="{{AdminCreateProductConfigurationsPanel.quantity}}" userInput="10" stepKey="enterAttributeQuantity"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="clickNextStep3"/>
+        <waitForElementClickable selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="waitForGenerateProductsButton"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="clickGenerateProducts"/>
+        <waitForElementVisible selector="{{AdminProductFormConfigurationsSection.confProductPriceCell('$createColorAttribute.default_frontend_label$: $createColorOptionRed.option[store_labels][1][label]$, $createSizeAttribute.default_frontend_label$: $createSizeOptionXL.option[store_labels][1][label]$')}}" stepKey="waitForPriceFields"/>
+        <fillField selector="{{AdminProductFormConfigurationsSection.confProductPriceCell('$createColorAttribute.default_frontend_label$: $createColorOptionRed.option[store_labels][1][label]$, $createSizeAttribute.default_frontend_label$: $createSizeOptionXL.option[store_labels][1][label]$')}}" userInput="50.00" stepKey="setPriceRedXL"/>
+        <fillField selector="{{AdminProductFormConfigurationsSection.confProductPriceCell('$createColorAttribute.default_frontend_label$: $createColorOptionRed.option[store_labels][1][label]$, $createSizeAttribute.default_frontend_label$: $createSizeOptionL.option[store_labels][1][label]$')}}" userInput="45.00" stepKey="setPriceRedL"/>
+        <fillField selector="{{AdminProductFormConfigurationsSection.confProductPriceCell('$createColorAttribute.default_frontend_label$: $createColorOptionRed.option[store_labels][1][label]$, $createSizeAttribute.default_frontend_label$: $createSizeOptionM.option[store_labels][1][label]$')}}" userInput="40.00" stepKey="setPriceRedM"/>
+        <fillField selector="{{AdminProductFormConfigurationsSection.confProductPriceCell('$createColorAttribute.default_frontend_label$: $createColorOptionRed.option[store_labels][1][label]$, $createSizeAttribute.default_frontend_label$: $createSizeOptionS.option[store_labels][1][label]$')}}" userInput="35.00" stepKey="setPriceRedS"/>
+        <fillField selector="{{AdminProductFormConfigurationsSection.confProductPriceCell('$createColorAttribute.default_frontend_label$: $createColorOptionRed.option[store_labels][1][label]$, $createSizeAttribute.default_frontend_label$: $createSizeOptionXS.option[store_labels][1][label]$')}}" userInput="30.00" stepKey="setPriceRedXS"/>
+        <fillField selector="{{AdminProductFormConfigurationsSection.confProductPriceCell('$createColorAttribute.default_frontend_label$: $createColorOptionGreen.option[store_labels][1][label]$, $createSizeAttribute.default_frontend_label$: $createSizeOptionXL.option[store_labels][1][label]$')}}" userInput="55.00" stepKey="setPriceGreenXL"/>
+        <fillField selector="{{AdminProductFormConfigurationsSection.confProductPriceCell('$createColorAttribute.default_frontend_label$: $createColorOptionGreen.option[store_labels][1][label]$, $createSizeAttribute.default_frontend_label$: $createSizeOptionL.option[store_labels][1][label]$')}}" userInput="50.00" stepKey="setPriceGreenL"/>
+        <fillField selector="{{AdminProductFormConfigurationsSection.confProductPriceCell('$createColorAttribute.default_frontend_label$: $createColorOptionGreen.option[store_labels][1][label]$, $createSizeAttribute.default_frontend_label$: $createSizeOptionM.option[store_labels][1][label]$')}}" userInput="45.00" stepKey="setPriceGreenM"/>
+        <fillField selector="{{AdminProductFormConfigurationsSection.confProductPriceCell('$createColorAttribute.default_frontend_label$: $createColorOptionGreen.option[store_labels][1][label]$, $createSizeAttribute.default_frontend_label$: $createSizeOptionS.option[store_labels][1][label]$')}}" userInput="40.00" stepKey="setPriceGreenS"/>
+        <fillField selector="{{AdminProductFormConfigurationsSection.confProductPriceCell('$createColorAttribute.default_frontend_label$: $createColorOptionGreen.option[store_labels][1][label]$, $createSizeAttribute.default_frontend_label$: $createSizeOptionXS.option[store_labels][1][label]$')}}" userInput="35.00" stepKey="setPriceGreenXS"/>
+        <fillField selector="{{AdminProductFormConfigurationsSection.confProductPriceCell('$createColorAttribute.default_frontend_label$: $createColorOptionBlue.option[store_labels][1][label]$, $createSizeAttribute.default_frontend_label$: $createSizeOptionXL.option[store_labels][1][label]$')}}" userInput="60.00" stepKey="setPriceBlueXL"/>
+        <fillField selector="{{AdminProductFormConfigurationsSection.confProductPriceCell('$createColorAttribute.default_frontend_label$: $createColorOptionBlue.option[store_labels][1][label]$, $createSizeAttribute.default_frontend_label$: $createSizeOptionL.option[store_labels][1][label]$')}}" userInput="55.00" stepKey="setPriceBlueL"/>
+        <fillField selector="{{AdminProductFormConfigurationsSection.confProductPriceCell('$createColorAttribute.default_frontend_label$: $createColorOptionBlue.option[store_labels][1][label]$, $createSizeAttribute.default_frontend_label$: $createSizeOptionM.option[store_labels][1][label]$')}}" userInput="50.00" stepKey="setPriceBlueM"/>
+        <fillField selector="{{AdminProductFormConfigurationsSection.confProductPriceCell('$createColorAttribute.default_frontend_label$: $createColorOptionBlue.option[store_labels][1][label]$, $createSizeAttribute.default_frontend_label$: $createSizeOptionS.option[store_labels][1][label]$')}}" userInput="45.00" stepKey="setPriceBlueS"/>
+        <fillField selector="{{AdminProductFormConfigurationsSection.confProductPriceCell('$createColorAttribute.default_frontend_label$: $createColorOptionBlue.option[store_labels][1][label]$, $createSizeAttribute.default_frontend_label$: $createSizeOptionXS.option[store_labels][1][label]$')}}" userInput="40.00" stepKey="setPriceBlueXS"/>
+        <!-- Step 4: Save product -->
+        <actionGroup ref="SaveConfigurableProductAddToCurrentAttributeSetActionGroup" stepKey="saveConfigProduct"/>
+        <!-- Step 5: Navigate back to product index page -->
+        <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="navigateBackToProductIndex"/>
+        <actionGroup ref="FilterProductGridBySkuActionGroup" stepKey="filterProductBySku">
+            <argument name="product" value="BaseConfigurableProduct"/>
+        </actionGroup>
+        <actionGroup ref="OpenEditProductOnBackendActionGroup" stepKey="openProductForEdit">
+            <argument name="product" value="BaseConfigurableProduct"/>
+        </actionGroup>
+        <!-- Verify product basic data -->
+        <seeInField selector="{{AdminProductFormSection.productName}}" userInput="{{BaseConfigurableProduct.name}}" stepKey="verifyProductName"/>
+        <seeInField selector="{{AdminProductFormSection.productSku}}" userInput="{{BaseConfigurableProduct.sku}}" stepKey="verifyProductSku"/>
+        <!-- Verify all 15 variations exist -->
+        <conditionalClick selector="{{AdminProductFormConfigurationsSection.sectionHeader}}" dependentSelector="{{AdminProductFormConfigurationsSection.currentVariations}}" visible="false" stepKey="expandConfigurationsSection"/>
+        <waitForElementVisible selector="{{AdminProductFormConfigurationsSection.currentVariations}}" stepKey="waitForConfigurationsContainer"/>
+        <seeNumberOfElements selector="{{AdminProductFormConfigurationsSection.currentVariationsAllRows}}" userInput="15" stepKey="verifyNumberOfVariationsAfterReopen"/>
+        <!-- Verify image is assigned to variations -->
+        <waitForElementVisible selector="{{AdminProductFormConfigurationsSection.variationImageSource(MagentoLogo.filename)}}" stepKey="verifyImageAssignedToVariations"/>
+        <!-- Step 6: Open product on storefront -->
+        <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="openProductOnStorefront">
+            <argument name="productUrl" value="{{BaseConfigurableProduct.urlKey}}"/>
+        </actionGroup>
+        <waitForText selector="{{StorefrontProductInfoMainSection.productName}}" userInput="{{BaseConfigurableProduct.name}}" stepKey="verifyProductNameOnStorefront"/>
+        <!-- Select color option (Red - option1) -->
+        <waitForElementVisible selector="{{StorefrontProductInfoMainSection.productOptionSelect($createColorAttribute.default_frontend_label$)}}" stepKey="waitForColorOptions"/>
+        <selectOption selector="{{StorefrontProductInfoMainSection.productOptionSelect($createColorAttribute.default_frontend_label$)}}" userInput="$createColorOptionRed.option[store_labels][1][label]$" stepKey="selectColorRed"/>
+        <!-- Select size option (XL - option1) -->
+        <waitForElementVisible selector="{{StorefrontProductInfoMainSection.productOptionSelect($createSizeAttribute.default_frontend_label$)}}" stepKey="waitForSizeOptions"/>
+        <selectOption selector="{{StorefrontProductInfoMainSection.productOptionSelect($createSizeAttribute.default_frontend_label$)}}" userInput="$createSizeOptionXL.option[store_labels][1][label]$" stepKey="selectSizeXL"/>
+        <waitForPageLoad stepKey="waitAfterOptionSelection"/>
+        <!-- Verify image is displayed after selecting options -->
+        <waitForElementVisible selector="{{StorefrontProductInfoMainSection.productImageSrc(MagentoLogo.filename)}}" stepKey="verifyProductImageOnStorefront"/>
+        <!-- Verify price for Red XL combination -->
+        <waitForText selector="{{StorefrontProductInfoMainSection.productPrice}}" userInput="50.00" stepKey="verifyProductPrice"/>
+        <actionGroup ref="StorefrontAddProductToCartActionGroup" stepKey="addProductToCart">
+            <argument name="product" value="BaseConfigurableProduct"/>
+            <argument name="productCount" value="1"/>
+        </actionGroup>
+        <actionGroup ref="GoToCheckoutFromMinicartActionGroup" stepKey="goToCheckout"/>
+        <actionGroup ref="GuestCheckoutFillingShippingSectionActionGroup" stepKey="fillShippingAddress">
+            <argument name="customerVar" value="CustomerEntityOne"/>
+            <argument name="customerAddressVar" value="CustomerAddressSimple"/>
+        </actionGroup>
+        <actionGroup ref="CheckoutSelectCheckMoneyOrderPaymentActionGroup" stepKey="selectCheckMoneyOrderPayment"/>
+        <actionGroup ref="ClickPlaceOrderActionGroup" stepKey="placeOrder"/>
+    </test>
+</tests>

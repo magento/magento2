@@ -11,7 +11,6 @@ use Magento\Customer\Model\ResourceModel\Customer\Collection;
 use Magento\Directory\Helper\Data as LocaleConfig;
 use Magento\Email\Test\Fixture\FileTransport as FileTransportFixture;
 use Magento\Framework\Filesystem;
-use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Store\Test\Fixture\Group as StoreGroupFixture;
 use Magento\Store\Test\Fixture\Store as StoreFixture;
 use Magento\Store\Test\Fixture\Website as WebsiteFixture;
@@ -139,34 +138,31 @@ class AsyncBulkAccountManagementTest extends WebapiAbstract
             $this->fail("Customer was not created");
         }
 
+        $mailConfig = $fixtures->get('mail_transport_config')->getData();
         $filesystem = $this->objectManager->get(Filesystem::class);
-        $directory = $filesystem->getDirectoryRead(DirectoryList::VAR_DIR);
+        $directory = $filesystem->getDirectoryRead($mailConfig['directory']);
 
         // wait until a mail is sent
         try {
             $this->publisherConsumerController->waitForAsynchronousResult(
-                function (\Magento\Framework\Filesystem\Directory\ReadInterface $directory) {
-                    return count($directory->read('')) > 0;
+                function (\Magento\Framework\Filesystem\Directory\ReadInterface $directory, string $path) {
+                    return $directory->isExist($path) && count($directory->read($path)) > 0;
                 },
-                [$directory]
+                [$directory, $mailConfig['path']]
             );
         } catch (PreconditionFailedException $e) {
             $this->fail("No mail was sent");
         }
 
-        $mailPaths = $directory->read(DirectoryList::VAR_DIR);
+        $mailPaths = $directory->read($mailConfig['path']);
         $sentMails = count($mailPaths);
         $this->assertCount(1, $mailPaths, "Only 1 mail was expected to be sent, actually $sentMails were sent.");
-        $mailContent = $directory->readFile('mail-transport-config.json');
+        $mailContent = $directory->readFile($mailPaths[0]);
         $parser = $this->objectManager->get(Parser::class);
-        $message = $parser->fromString((string)$mailContent)->getSymfonyMessage()->getBody();
-        $decoded_data = base64_decode($message->bodyToString());
-        $parts = explode("\r\n", $decoded_data);
-        $count = count($parts);
-        $mergedString = base64_decode($parts[$count - 2] . $parts[$count - 1]);
+        $message = $parser->fromString($mailContent);
         $this->assertStringContainsString(
             'Bienvenue sur Le Site de Paris.',
-            $mergedString
+            quoted_printable_decode($message->getSymfonyMessage()->getBody()->bodyToString())
         );
     }
 
