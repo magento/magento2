@@ -45,6 +45,22 @@ class FileTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals('123', $this->object->load());
     }
 
+    /**
+     * Trailing newline in deployed_version.txt must not be part of the version (breaks static URLs / JSON).
+     */
+    public function testLoadTrimsWhitespaceFromFileContents()
+    {
+        $this->directory->expects($this->once())
+            ->method('isReadable')
+            ->with('fixture_file.txt')
+            ->willReturn(true);
+        $this->directory->expects($this->once())
+            ->method('readFile')
+            ->with('fixture_file.txt')
+            ->willReturn("1774318753872\n");
+        $this->assertSame('1774318753872', $this->object->load());
+    }
+
     public function testSave()
     {
         $this->directory
