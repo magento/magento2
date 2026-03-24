@@ -94,7 +94,7 @@ class Visitor extends AbstractModel
     /**
      * @var StoreManagerInterface
      */
-    private StoreManagerInterface $storeManager;
+    private ?StoreManagerInterface $storeManager;
 
     /**
      * @param ModelContext $context
@@ -104,7 +104,7 @@ class Visitor extends AbstractModel
      * @param ScopeConfigInterface $scopeConfig
      * @param DateTime $dateTime
      * @param IndexerRegistry $indexerRegistry
-     * @param StoreManagerInterface $storeManager
+     * @param StoreManagerInterface|null $storeManager
      * @param AbstractResource|null $resource
      * @param AbstractDb|null $resourceCollection
      * @param array $ignoredUserAgents
@@ -121,7 +121,7 @@ class Visitor extends AbstractModel
         ScopeConfigInterface $scopeConfig,
         DateTime $dateTime,
         IndexerRegistry $indexerRegistry,
-        StoreManagerInterface $storeManager,
+        ?StoreManagerInterface $storeManager = null,
         ?AbstractResource $resource = null,
         ?AbstractDb $resourceCollection = null,
         array $ignoredUserAgents = [],
@@ -137,7 +137,7 @@ class Visitor extends AbstractModel
         $this->scopeConfig = $scopeConfig;
         $this->dateTime = $dateTime;
         $this->indexerRegistry = $indexerRegistry;
-        $this->storeManager = $storeManager;
+        $this->storeManager = $storeManager ?? ObjectManager::getInstance()->get(StoreManagerInterface::class);
         $this->requestSafety = $requestSafety ?? ObjectManager::getInstance()->get(RequestSafetyInterface::class);
     }
 
