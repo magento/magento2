@@ -129,4 +129,28 @@ class FedexUrlTest extends TestCase
             ['http://foofedex.com/foo/bar?baz=bash&fizz=buzz'],
         ];
     }
+
+    /**
+     * Test that invalid URLs throw validation exception
+     *
+     * @throws ValidatorException
+     */
+    public function testBeforeSaveWithInvalidUrl(): void
+    {
+        $invalidUrl = 'invalid-url';
+        
+        // Mock the URL validator to return false for invalid URL
+        $this->url->expects($this->once())
+            ->method('isValid')
+            ->with($invalidUrl, ['http', 'https'])
+            ->willReturn(false);
+        
+        $this->urlConfig->setValue($invalidUrl);
+        
+        // Expect validation exception for invalid URL
+        $this->expectException(ValidatorException::class);
+        $this->expectExceptionMessage('Fedex API endpoint URL\'s must use fedex.com');
+        
+        $this->urlConfig->beforeSave();
+    }
 }
