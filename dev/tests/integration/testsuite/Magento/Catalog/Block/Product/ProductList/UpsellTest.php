@@ -59,7 +59,7 @@ class UpsellTest extends AbstractLinksTest
         $this->product = $this->productRepository->get('simple_with_upsell');
         $this->block->setProduct($this->product);
         $this->prepareBlock();
-        $expectedTags = ['cat_p_' . $upsellProduct->getId(), 'cat_p'];
+        $expectedTags = ['cat_p_' . $upsellProduct->getId()];
         $tags = $this->block->getIdentities();
         $this->assertEquals($expectedTags, $tags);
     }

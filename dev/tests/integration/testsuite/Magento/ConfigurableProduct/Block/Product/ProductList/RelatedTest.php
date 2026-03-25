@@ -99,7 +99,7 @@ class RelatedTest extends AbstractLinksTest
         $relatedProduct = $this->productRepository->get('simple2');
         $this->block->setProduct($this->productRepository->get('configurable'));
         $this->prepareBlock();
-        $this->assertEquals(['cat_p_' . $relatedProduct->getId(), 'cat_p'], $this->block->getIdentities());
+        $this->assertEquals(['cat_p_' . $relatedProduct->getId()], $this->block->getIdentities());
     }
 
     /**

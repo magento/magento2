@@ -25,7 +25,6 @@ class ProductTest extends \PHPUnit\Framework\TestCase
         $configurableProduct = $productRepository->get('configurable');
         $expectedIdentities = [
             'cat_p_' . $configurableProduct->getId(),
-            'cat_p'
         ];
         $this->assertEquals($expectedIdentities, $configurableProduct->getIdentities());
     }

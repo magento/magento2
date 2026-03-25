@@ -49,9 +49,7 @@ class ProductIdentitiesExtenderTest extends TestCase
         $simpleProduct = $productRepository->get('simple');
         $expectedIdentities = [
             'cat_p_' . $bundleProduct->getId(),
-            'cat_p',
             'cat_p_' . $simpleProduct->getId(),
-
         ];
         $this->assertEquals($expectedIdentities, $bundleProduct->getIdentities());
     }

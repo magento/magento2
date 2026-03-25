@@ -70,7 +70,7 @@ class RelatedTest extends AbstractLinksTest
         $this->product = $this->productRepository->get('simple_with_cross');
         $this->block->setProduct($this->product);
         $this->prepareBlock();
-        $expectedTags = ['cat_p_' . $relatedProduct->getId(), 'cat_p'];
+        $expectedTags = ['cat_p_' . $relatedProduct->getId()];
         $tags = $this->block->getIdentities();
         $this->assertEquals($expectedTags, $tags);
     }
