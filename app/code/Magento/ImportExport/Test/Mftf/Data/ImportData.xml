@@ -13,4 +13,9 @@
         <data key="validFile">File is valid! To start import process press &quot;Import&quot; button</data>
         <data key="success">Import successfully done</data>
     </entity>
+    <!-- Product with long description -->
+    <entity name="ImportProductLongDescriptionSku">
+        <data key="sku">simple_long_desc</data>
+        <data key="name">Product With Long Description</data>
+    </entity>
 </entities>
