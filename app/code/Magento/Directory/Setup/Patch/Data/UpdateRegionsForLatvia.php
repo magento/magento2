@@ -117,6 +117,7 @@ class UpdateRegionsForLatvia implements DataPatchInterface
 
     /**
      * Update ISO codes for regions that survived the reform but had outdated codes.
+     *
      * Preserves region_id so existing customer addresses remain valid.
      *
      * @param AdapterInterface $connection
@@ -139,6 +140,7 @@ class UpdateRegionsForLatvia implements DataPatchInterface
 
     /**
      * Remove regions that no longer exist after the 2021 reform.
+     *
      * CASCADE FK on directory_country_region_name handles locale entries.
      *
      * @param AdapterInterface $connection
