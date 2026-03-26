@@ -35,6 +35,12 @@ class GetLoggedAsCustomerAdminId implements GetLoggedAsCustomerAdminIdInterface
      */
     public function execute(): int
     {
-        return (int)$this->session->getLoggedAsCustomerAdmindId();
+        $adminId = $this->session->getLoggedAsCustomerAdminId();
+        if ($adminId === null) {
+            // Backward compatibility for session values written with the previous typo.
+            $adminId = $this->session->getLoggedAsCustomerAdmindId();
+        }
+
+        return (int)$adminId;
     }
 }
