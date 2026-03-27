@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright 2025 Adobe
+ * Copyright 2026 Adobe
  * All Rights Reserved.
  */
 declare(strict_types=1);
@@ -14,9 +14,9 @@ use PHPUnit\Framework\TestCase;
 class SetLoggedAsCustomerAdminIdTest extends TestCase
 {
     /**
-     * @var Session
+     * @var Session&\PHPUnit\Framework\MockObject\MockObject
      */
-    private Session $sessionMock;
+    private $sessionMock;
 
     /**
      * @var SetLoggedAsCustomerAdminId
@@ -25,7 +25,10 @@ class SetLoggedAsCustomerAdminIdTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->sessionMock = $this->createMock(Session::class);
+        $this->sessionMock = $this->getMockBuilder(Session::class)
+            ->disableOriginalConstructor()
+            ->addMethods(['setLoggedAsCustomerAdminId', 'setLoggedAsCustomerAdmindId'])
+            ->getMock();
         $this->model = new SetLoggedAsCustomerAdminId($this->sessionMock);
     }
 
