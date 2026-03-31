@@ -56,10 +56,10 @@
                 <requiredEntity createDataKey="createCategoryC"/>
             </createData>
 
-            <comment userInput="Adding the comment to replace 'AdminSwitchAllIndexerToActionModeActionGroup' action group for preserving Backward Compatibility" stepKey="onUpdateBySchedule"/>
+            <magentoCLI command="indexer:set-mode" arguments="schedule" stepKey="onUpdateBySchedule"/>
         </before>
         <after>
-            <comment userInput="Adding the comment to replace 'AdminSwitchAllIndexerToActionModeActionGroup' action group for preserving Backward Compatibility" stepKey="onUpdateOnSave"/>
+            <magentoCLI command="indexer:set-mode" arguments="realtime" stepKey="onUpdateOnSave"/>
 
             <!-- Delete data -->
             <deleteData createDataKey="createProductA1" stepKey="deleteProductA1"/>
