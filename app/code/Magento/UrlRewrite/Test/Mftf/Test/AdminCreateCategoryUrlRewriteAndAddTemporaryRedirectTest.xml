@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
-  */
+/**
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
+ */
 -->
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
@@ -23,6 +23,8 @@
             <createData entity="_defaultCategory" stepKey="category"/>
        </before>
         <after>
+            <amOnPage url="{{AdminUrlRewriteProductPage.url}}" stepKey="openUrlRewriteProductPage"/>
+            <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearUrlRewriteFilter"/>
             <deleteData createDataKey="category" stepKey="deleteRootCategory"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>

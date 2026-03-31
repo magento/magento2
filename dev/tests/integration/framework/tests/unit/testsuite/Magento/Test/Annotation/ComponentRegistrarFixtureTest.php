@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Test\Annotation;
@@ -29,9 +29,9 @@ class ComponentRegistrarFixtureTest extends \PHPUnit\Framework\TestCase
     {
         /** @var ObjectManagerInterface|MockObject $objectManager */
         $objectManager = $this->getMockBuilder(ObjectManagerInterface::class)
-            ->onlyMethods(['get', 'create'])
+            ->onlyMethods(['get', 'create', 'configure'])
             ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+            ->getMock();
 
         $sharedInstances = [
             ComponentsDir::class => $this->createConfiguredMock(ComponentsDir::class, ['parse' => []])

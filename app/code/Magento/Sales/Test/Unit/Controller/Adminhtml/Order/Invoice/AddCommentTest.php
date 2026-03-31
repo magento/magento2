@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 declare(strict_types=1);
@@ -10,6 +10,7 @@ namespace Magento\Sales\Test\Unit\Controller\Adminhtml\Order\Invoice;
 
 use Magento\Backend\App\Action\Context;
 use Magento\Framework\App\Request\Http;
+use Magento\Framework\App\Response\Http as ResponseHttp;
 use Magento\Framework\App\View;
 use Magento\Framework\Controller\Result\Json;
 use Magento\Framework\Controller\Result\JsonFactory;
@@ -110,24 +111,12 @@ class AddCommentTest extends TestCase
     {
         $objectManager = new ObjectManager($this);
 
-        $this->requestMock = $this->getMockBuilder(Http::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->responseMock = $this->getMockBuilder(\Magento\Framework\App\Response\Http::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->viewMock = $this->getMockBuilder(View::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->resultPageMock = $this->getMockBuilder(Page::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->pageConfigMock = $this->getMockBuilder(Config::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->pageTitleMock = $this->getMockBuilder(Title::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->requestMock = $this->createMock(Http::class);
+        $this->responseMock = $this->createMock(ResponseHttp::class);
+        $this->viewMock = $this->createMock(View::class);
+        $this->resultPageMock = $this->createMock(Page::class);
+        $this->pageConfigMock = $this->createMock(Config::class);
+        $this->pageTitleMock = $this->createMock(Title::class);
         $contextMock = $this->getMockBuilder(Context::class)
             ->disableOriginalConstructor()
             ->onlyMethods(
@@ -167,9 +156,7 @@ class AddCommentTest extends TestCase
             ->disableOriginalConstructor()
             ->onlyMethods(['create'])
             ->getMock();
-        $this->resultJsonMock = $this->getMockBuilder(Json::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->resultJsonMock = $this->createMock(Json::class);
         $this->resultRawFactoryMock = $this->getMockBuilder(RawFactory::class)
             ->disableOriginalConstructor()
             ->onlyMethods(['create'])
@@ -178,12 +165,8 @@ class AddCommentTest extends TestCase
             ->disableOriginalConstructor()
             ->onlyMethods(['create'])
             ->getMock();
-        $this->commentSenderMock = $this->getMockBuilder(InvoiceCommentSender::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->invoiceRepository = $this->getMockBuilder(InvoiceRepositoryInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->commentSenderMock = $this->createMock(InvoiceCommentSender::class);
+        $this->invoiceRepository = $this->createMock(InvoiceRepositoryInterface::class);
 
         $this->controller = $objectManager->getObject(
             AddComment::class,
@@ -226,9 +209,7 @@ class AddCommentTest extends TestCase
             ->with('comment')
             ->willReturn($data);
 
-        $invoiceMock = $this->getMockBuilder(Invoice::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $invoiceMock = $this->createMock(Invoice::class);
         $invoiceMock->expects($this->once())
             ->method('addComment')
             ->with($data['comment'], false, false);
@@ -240,16 +221,12 @@ class AddCommentTest extends TestCase
             ->method('get')
             ->willReturn($invoiceMock);
 
-        $commentsBlockMock = $this->getMockBuilder(Comments::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $commentsBlockMock = $this->createMock(Comments::class);
         $commentsBlockMock->expects($this->once())
             ->method('toHtml')
             ->willReturn($response);
 
-        $layoutMock = $this->getMockBuilder(Layout::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $layoutMock = $this->createMock(Layout::class);
         $layoutMock->expects($this->once())
             ->method('getBlock')
             ->with('invoice_comments')
@@ -267,9 +244,7 @@ class AddCommentTest extends TestCase
             ->method('send')
             ->with($invoiceMock, false, $data['comment']);
 
-        $resultRaw = $this->getMockBuilder(Raw::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $resultRaw = $this->createMock(Raw::class);
         $resultRaw->expects($this->once())->method('setContents')->with($response);
 
         $this->resultRawFactoryMock->expects($this->once())->method('create')->willReturn($resultRaw);

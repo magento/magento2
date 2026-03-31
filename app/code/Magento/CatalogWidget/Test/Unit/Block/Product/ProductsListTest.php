@@ -22,6 +22,7 @@ use Magento\Framework\DataObject\IdentityInterface;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
 use Magento\Framework\Pricing\Render;
 use Magento\Framework\Serialize\Serializer\Json;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\Framework\View\Design\ThemeInterface;
 use Magento\Framework\View\DesignInterface;
@@ -31,6 +32,7 @@ use Magento\Rule\Model\Condition\Sql\Builder;
 use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Widget\Helper\Conditions;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -39,6 +41,8 @@ use PHPUnit\Framework\TestCase;
  */
 class ProductsListTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var ProductsList
      */
@@ -144,13 +148,11 @@ class ProductsListTest extends TestCase
 
     public function testGetCacheKeyInfo()
     {
-        $store = $this->getMockBuilder(Store::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['getId'])->getMock();
+        $store = $this->createPartialMock(Store::class, ['getId']);
         $store->expects($this->once())->method('getId')->willReturn(1);
         $this->storeManager->expects($this->once())->method('getStore')->willReturn($store);
 
-        $theme = $this->getMockForAbstractClass(ThemeInterface::class);
+        $theme = $this->createMock(ThemeInterface::class);
         $theme->expects($this->once())->method('getId')->willReturn('blank');
         $this->design->expects($this->once())->method('getDesignTheme')->willReturn($theme);
 
@@ -202,16 +204,10 @@ class ProductsListTest extends TestCase
 
     public function testGetProductPriceHtml()
     {
-        $product = $this->getMockBuilder(Product::class)
-            ->onlyMethods(['getId'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $product = $this->createPartialMock(Product::class, ['getId']);
         $product->expects($this->once())->method('getId')->willReturn(1);
 
-        $priceRenderer = $this->getMockBuilder(Render::class)
-            ->onlyMethods(['render'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $priceRenderer = $this->createPartialMock(Render::class, ['render']);
         $priceRenderer->expects($this->once())
             ->method('render')
             ->with('final_price', $product, [
@@ -241,26 +237,26 @@ class ProductsListTest extends TestCase
 
     public function testGetPagerHtml()
     {
-        $collection = $this->getMockBuilder(Collection::class)
-            ->onlyMethods(['getSize'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $collection = $this->createPartialMock(Collection::class, ['getSize']);
         $collection->expects($this->once())->method('getSize')->willReturn(3);
 
         $this->productsList->setData('show_pager', true);
         $this->productsList->setData('products_per_page', 2);
         $this->productsList->setData('product_collection', $collection);
 
-        $pagerBlock = $this->getMockBuilder(Pager::class)
-            ->addMethods(['setUseContainer', 'setShowAmounts', 'setTotalLimit'])
-            ->onlyMethods([
+        $pagerBlock = $this->createPartialMockWithReflection(
+            Pager::class,
+            [
+                'setUseContainer',
+                'setShowAmounts',
+                'setTotalLimit',
                 'toHtml',
                 'setShowPerPage',
                 'setPageVarName',
                 'setLimit',
                 'setCollection',
-            ])->disableOriginalConstructor()
-            ->getMock();
+            ]
+        );
 
         $pagerBlock->expects($this->once())->method('setUseContainer')->willReturnSelf();
         $pagerBlock->expects($this->once())->method('setShowAmounts')->willReturnSelf();
@@ -281,14 +277,20 @@ class ProductsListTest extends TestCase
      * @param bool $pagerEnable
      * @param int  $productsCount
      * @param int  $productsPerPage
-     * @param int  $expectedPageSize
-     *
-     * @dataProvider createCollectionDataProvider
+     * @param int  $expectedLimit
      */
-    public function testCreateCollection($pagerEnable, $productsCount, $productsPerPage, $expectedPageSize)
+    #[DataProvider('createCollectionDataProvider')]
+    public function testCreateCollection($pagerEnable, $productsCount, $productsPerPage, $expectedLimit)
     {
         $this->visibility->expects($this->once())->method('getVisibleInCatalogIds')
             ->willReturn([Visibility::VISIBILITY_IN_CATALOG, Visibility::VISIBILITY_BOTH]);
+
+        $select = $this->createMock(\Magento\Framework\DB\Select::class);
+        $select->expects($this->once())
+            ->method('limit')
+            ->with($expectedLimit, 0)
+            ->willReturnSelf();
+
         $collection = $this->createMock(Collection::class);
         $collection->expects($this->once())->method('setVisibility')
             ->with([Visibility::VISIBILITY_IN_CATALOG, Visibility::VISIBILITY_BOTH])
@@ -304,9 +306,8 @@ class ProductsListTest extends TestCase
             ->with(Product::STATUS, ProductStatus::STATUS_ENABLED)
             ->willReturnSelf();
         $collection->expects($this->once())->method('addAttributeToSort')->with('entity_id', 'desc')->willReturnSelf();
-        $collection->expects($this->once())->method('setPageSize')->with($expectedPageSize)->willReturnSelf();
-        $collection->expects($this->once())->method('setCurPage')->willReturnSelf();
         $collection->expects($this->once())->method('distinct')->willReturnSelf();
+        $collection->expects($this->once())->method('getSelect')->willReturn($select);
 
         $this->collectionFactory->expects($this->once())->method('create')->willReturn($collection);
         $this->productsList->setData('conditions_encoded', 'some_serialized_conditions');
@@ -328,6 +329,9 @@ class ProductsListTest extends TestCase
 
         $this->productsList->setData('show_pager', $pagerEnable);
         $this->productsList->setData('products_count', $productsCount);
+        $this->productsList->setData('page_var_name', 'page');
+
+        $this->request->expects($this->any())->method('getParam')->with('page')->willReturn(1);
 
         $this->assertSame($collection, $this->productsList->createCollection());
     }
@@ -338,10 +342,10 @@ class ProductsListTest extends TestCase
     public static function createCollectionDataProvider()
     {
         return [
-            [true, 1, null, 5],
+            [true, 1, null, 1],
             [true, 5, null, 5],
             [true, 10, null, 5],
-            [true, 1, 2, 2],
+            [true, 1, 2, 1],
             [true, 5, 3, 3],
             [true, 10, 7, 7],
             [false, 1, null, 1],
@@ -350,6 +354,88 @@ class ProductsListTest extends TestCase
             [false, 1, 3, 1],
             [false, 3, 5, 3],
             [false, 5, 10, 5]
+        ];
+    }
+
+    /**
+     * Test that collection limit respects total products count on subsequent pages
+     *
+     * @param int $currentPage
+     * @param int $productsPerPage
+     * @param int $totalProducts
+     * @param int $expectedLimit
+     * @param int $expectedOffset
+     */
+    #[DataProvider('createCollectionWithTotalLimitDataProvider')]
+    public function testCreateCollectionWithTotalLimit(
+        $currentPage,
+        $productsPerPage,
+        $totalProducts,
+        $expectedLimit,
+        $expectedOffset
+    ) {
+        $this->visibility->expects($this->once())->method('getVisibleInCatalogIds')
+            ->willReturn([Visibility::VISIBILITY_IN_CATALOG, Visibility::VISIBILITY_BOTH]);
+
+        $select = $this->createMock(\Magento\Framework\DB\Select::class);
+        $select->expects($this->once())
+            ->method('limit')
+            ->with($expectedLimit, $expectedOffset)
+            ->willReturnSelf();
+
+        $collection = $this->createMock(Collection::class);
+        $collection->expects($this->once())->method('setVisibility')->willReturnSelf();
+        $collection->expects($this->once())->method('addMinimalPrice')->willReturnSelf();
+        $collection->expects($this->once())->method('addFinalPrice')->willReturnSelf();
+        $collection->expects($this->once())->method('addTaxPercents')->willReturnSelf();
+        $collection->expects($this->once())->method('addAttributeToSelect')->willReturnSelf();
+        $collection->expects($this->once())->method('addUrlRewrite')->willReturnSelf();
+        $collection->expects($this->once())->method('addStoreFilter')->willReturnSelf();
+        $collection->expects($this->once())
+            ->method('addAttributeToFilter')
+            ->with(Product::STATUS, ProductStatus::STATUS_ENABLED)
+            ->willReturnSelf();
+        $collection->expects($this->once())->method('addAttributeToSort')->with('entity_id', 'desc')->willReturnSelf();
+        $collection->expects($this->once())->method('distinct')->willReturnSelf();
+        $collection->expects($this->once())->method('getSelect')->willReturn($select);
+
+        $this->collectionFactory->expects($this->once())->method('create')->willReturn($collection);
+        $this->productsList->setData('conditions_encoded', 'some_serialized_conditions');
+
+        $this->widgetConditionsHelper->expects($this->once())
+            ->method('decode')
+            ->with('some_serialized_conditions')
+            ->willReturn([]);
+
+        $this->builder->expects($this->once())->method('attachConditionToCollection')
+            ->with($collection, $this->getConditionsForCollection($collection))
+            ->willReturnSelf();
+
+        $this->productsList->setData('products_per_page', $productsPerPage);
+        $this->productsList->setData('show_pager', true);
+        $this->productsList->setData('products_count', $totalProducts);
+        $this->productsList->setData('page_var_name', 'page');
+
+        $this->request->expects($this->once())->method('getParam')->with('page')->willReturn($currentPage);
+
+        $this->assertSame($collection, $this->productsList->createCollection());
+    }
+
+    /**
+     * Data provider for testCreateCollectionWithTotalLimit
+     *
+     * @return array
+     */
+    public static function createCollectionWithTotalLimitDataProvider()
+    {
+        return [
+            // [currentPage, productsPerPage, totalProducts, expectedLimit, expectedOffset]
+            'page 1 of 2 with 9 total' => [1, 5, 9, 5, 0],
+            'page 2 of 2 with 9 total' => [2, 5, 9, 4, 5],
+            'page 1 of 3 with 12 total' => [1, 5, 12, 5, 0],
+            'page 2 of 3 with 12 total' => [2, 5, 12, 5, 5],
+            'page 3 of 3 with 12 total' => [3, 5, 12, 2, 10],
+            'page beyond limit' => [3, 5, 9, 0, 10],
         ];
     }
 
@@ -380,12 +466,13 @@ class ProductsListTest extends TestCase
 
     public function testGetIdentities()
     {
-        $collection = $this->getMockBuilder(Collection::class)
-            ->onlyMethods([
+        $collection = $this->createPartialMock(
+            Collection::class,
+            [
                 'addAttributeToSelect',
                 'getIterator',
-            ])->disableOriginalConstructor()
-            ->getMock();
+            ]
+        );
 
         $product = $this->createPartialMock(IdentityInterface::class, ['getIdentities']);
         $product->expects($this->once())->method('getIdentities')->willReturn(['product_identity']);
@@ -407,10 +494,10 @@ class ProductsListTest extends TestCase
      */
     private function getConditionsForCollection($collection)
     {
-        $conditions = $this->getMockBuilder(Combine::class)
-            ->addMethods(['collectValidatedAttributes'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $conditions = $this->createPartialMockWithReflection(
+            Combine::class,
+            ['collectValidatedAttributes']
+        );
         $conditions->expects($this->once())->method('collectValidatedAttributes')
             ->with($collection)
             ->willReturnSelf();

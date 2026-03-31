@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -10,6 +10,7 @@ namespace Magento\Sales\Controller\Adminhtml\Order\Creditmemo;
 use Magento\Sales\Api\Data\CreditmemoInterface;
 use Magento\Sales\Model\ResourceModel\Order\Creditmemo\CollectionFactory;
 use Magento\Sales\Controller\Adminhtml\Order\ExportBase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Tests for creditmemo export via admin grids.
@@ -36,12 +37,12 @@ class ExportTest extends ExportBase
      * @magentoConfigFixture general/locale/timezone America/Chicago
      * @magentoConfigFixture test_website general/locale/timezone America/Adak
      * @magentoDataFixture Magento/Sales/_files/order_with_invoice_shipment_creditmemo_on_second_website.php
-     * @dataProvider exportCreditmemoDataProvider
      * @param string $format
      * @param bool $addIdToUrl
      * @param string $namespace
      * @return void
      */
+    #[DataProvider('exportCreditmemoDataProvider')]
     public function testExportCreditmemo(
         string $format,
         bool $addIdToUrl,

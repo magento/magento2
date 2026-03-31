@@ -1,9 +1,11 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Sales\Model\ResourceModel\Report\Bestsellers;
+
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class CollectionTest extends \PHPUnit\Framework\TestCase
 {
@@ -36,13 +38,12 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @dataProvider tableForPeriodDataProvider
-     *
      * @param $period
      * @param $expectedTable
      * @param $dateFrom
      * @param $dateTo
      */
+    #[DataProvider('tableForPeriodDataProvider')]
     public function testTableSelection($period, $expectedTable, $dateFrom, $dateTo)
     {
         $dbTableName = $this->_collection->getTable($expectedTable);
@@ -64,7 +65,7 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
      *
      * @return array
      */
-    public static function tableForPeriodDataProvider()
+    public static function tableForPeriodDataProvider(): array
     {
         $dateNow = date('Y-m-d', time());
         $dateYearAgo = date('Y-m-d', strtotime($dateNow . ' -1 year'));

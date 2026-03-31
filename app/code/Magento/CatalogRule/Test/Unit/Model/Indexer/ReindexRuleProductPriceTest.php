@@ -60,10 +60,10 @@ class ReindexRuleProductPriceTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->storeManagerMock = $this->getMockForAbstractClass(StoreManagerInterface::class);
+        $this->storeManagerMock = $this->createMock(StoreManagerInterface::class);
         $this->ruleProductsSelectBuilderMock = $this->createMock(RuleProductsSelectBuilder::class);
         $this->productPriceCalculatorMock = $this->createMock(ProductPriceCalculator::class);
-        $this->localeDate = $this->getMockForAbstractClass(TimezoneInterface::class);
+        $this->localeDate = $this->createMock(TimezoneInterface::class);
         $this->pricesPersistorMock = $this->createMock(RuleProductPricesPersistor::class);
         $this->reindexRuleProductsPriceProcessorMock = $this->createMock(ReindexRuleProductsPriceProcessor::class);
 
@@ -86,7 +86,7 @@ class ReindexRuleProductPriceTest extends TestCase
         $websiteId = 234;
         $productId = 55;
 
-        $websiteMock = $this->getMockForAbstractClass(WebsiteInterface::class);
+        $websiteMock = $this->createMock(WebsiteInterface::class);
         $websiteMock->expects($this->once())
             ->method('getId')
             ->willReturn($websiteId);

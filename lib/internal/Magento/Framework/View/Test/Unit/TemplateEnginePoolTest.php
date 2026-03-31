@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -32,7 +32,7 @@ class TemplateEnginePoolTest extends TestCase
 
     public function testGet()
     {
-        $engine = $this->getMockForAbstractClass(TemplateEngineInterface::class);
+        $engine = $this->createMock(TemplateEngineInterface::class);
         $this->_factory->expects($this->once())->method('create')->with('test')->willReturn($engine);
         $this->assertSame($engine, $this->_model->get('test'));
         // Make sure factory is invoked only once and the same instance is returned afterwards

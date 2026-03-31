@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2021 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -56,8 +56,8 @@ class PayLaterConfig
     {
         $enabled = false;
         if ($this->isPPCreditEnabled()) {
-            $payLaterActive = (boolean)$this->config->getPayLaterConfigValue('experience_active');
-            $isPayLaterEnabled = (boolean)$this->config->getPayLaterConfigValue('enabled');
+            $payLaterActive = (bool)$this->config->getPayLaterConfigValue('experience_active');
+            $isPayLaterEnabled = (bool)$this->config->getPayLaterConfigValue('enabled');
             $enabled = $payLaterActive && $isPayLaterEnabled && $this->getSectionConfig($placement, 'display');
         }
         return $enabled;
@@ -94,7 +94,7 @@ class PayLaterConfig
                 ? self::CHECKOUT_PAYMENT_PLACEMENT : "{$section}page";
 
             $this->configData[$section] = [
-                'display' => (boolean)$this->config->getPayLaterConfigValue("{$sectionName}_display"),
+                'display' => (bool)$this->config->getPayLaterConfigValue("{$sectionName}_display"),
                 'position' => $this->config->getPayLaterConfigValue("{$sectionName}_position"),
                 'style' => $this->getConfigStyles($sectionName)
             ];

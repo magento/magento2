@@ -15,6 +15,7 @@ use Magento\Framework\MessageQueue\Consumer\ConfigInterface as ConsumerConfigInt
 use Magento\Framework\ShellInterface;
 use Magento\MessageQueue\Model\Cron\ConsumersRunner;
 use Magento\MessageQueue\Model\CheckIsAvailableMessagesInQueue;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Process\PhpExecutableFinder;
@@ -77,27 +78,16 @@ class ConsumersRunnerTest extends TestCase
     {
         require_once __DIR__ . '/../../_files/consumers_runner_functions_mocks.php';
 
-        $this->phpExecutableFinderMock = $this->getMockBuilder(PhpExecutableFinder::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->lockManagerMock = $this->getMockBuilder(LockManagerInterface::class)
-            ->getMockForAbstractClass();
-        $this->shellBackgroundMock = $this->getMockBuilder(ShellInterface::class)
-            ->getMockForAbstractClass();
-        $this->consumerConfigMock = $this->getMockBuilder(ConsumerConfigInterface::class)
-            ->getMockForAbstractClass();
-        $this->deploymentConfigMock = $this->getMockBuilder(DeploymentConfig::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->phpExecutableFinderMock = $this->createMock(PhpExecutableFinder::class);
+        $this->lockManagerMock = $this->createMock(LockManagerInterface::class);
+        $this->shellBackgroundMock = $this->createMock(ShellInterface::class);
+        $this->consumerConfigMock = $this->createMock(ConsumerConfigInterface::class);
+        $this->deploymentConfigMock = $this->createMock(DeploymentConfig::class);
         $this->checkIsAvailableMessagesMock = $this->createMock(CheckIsAvailableMessagesInQueue::class);
-        $this->connectionTypeResolver = $this->getMockBuilder(ConnectionTypeResolver::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->connectionTypeResolver = $this->createMock(ConnectionTypeResolver::class);
         $this->connectionTypeResolver->method('getConnectionType')->willReturn('something');
 
-        $this->loggerMock = $this->getMockBuilder(LoggerInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->loggerMock = $this->createMock(LoggerInterface::class);
 
         $this->consumersRunner = new ConsumersRunner(
             $this->phpExecutableFinderMock,
@@ -142,8 +132,8 @@ class ConsumersRunnerTest extends TestCase
      * @param array $allowedConsumers
      * @param int $shellBackgroundExpects
      * @param int $isRunExpects
-     * @dataProvider runDataProvider
      */
+    #[DataProvider('runDataProvider')]
     public function testRun(
         $maxMessages,
         $maxMessagesConsumer,
@@ -170,8 +160,7 @@ class ConsumersRunnerTest extends TestCase
             );
 
         /** @var ConsumerConfigInterface|MockObject $firstCunsumer */
-        $consumer = $this->getMockBuilder(ConsumerConfigItemInterface::class)
-            ->getMockForAbstractClass();
+        $consumer = $this->createMock(ConsumerConfigItemInterface::class);
         $consumer->method('getName')->willReturn($consumerName);
         $consumer->method('getMaxMessages')->willReturn($maxMessagesConsumer);
 
@@ -299,8 +288,8 @@ class ConsumersRunnerTest extends TestCase
      * @param array $returnMap
      * @param array $allowedConsumers
      * @param int $shellBackgroundExpects
-     * @dataProvider runMultiProcessesDataProvider
      */
+    #[DataProvider('runMultiProcessesDataProvider')]
     public function testRunMultiProcesses(
         int    $maxMessages,
         array  $isLocked,
@@ -327,8 +316,7 @@ class ConsumersRunnerTest extends TestCase
             );
 
         /** @var ConsumerConfigInterface|MockObject $firstCunsumer */
-        $consumer = $this->getMockBuilder(ConsumerConfigItemInterface::class)
-            ->getMockForAbstractClass();
+        $consumer = $this->createMock(ConsumerConfigItemInterface::class);
         $consumer->method('getName')->willReturn($consumerName);
 
         $this->phpExecutableFinderMock->expects($this->once())
@@ -416,8 +404,8 @@ class ConsumersRunnerTest extends TestCase
      * @param boolean $globalOnlySpawnWhenMessageAvailable
      * @param int $getOnlySpawnWhenMessageAvailableCallCount
      * @param int $isMassagesAvailableInTheQueueCallCount
-     * @dataProvider runBasedOnOnlySpawnWhenMessageAvailableConsumerConfigurationDataProvider
      */
+    #[DataProvider('runBasedOnOnlySpawnWhenMessageAvailableConsumerConfigurationDataProvider')]
     public function testRunBasedOnOnlySpawnWhenMessageAvailableConsumerConfiguration(
         $onlySpawnWhenMessageAvailable,
         $isMassagesAvailableInTheQueue,
@@ -442,8 +430,7 @@ class ConsumersRunnerTest extends TestCase
             );
 
         /** @var ConsumerConfigInterface|MockObject $firstCunsumer */
-        $consumer = $this->getMockBuilder(ConsumerConfigItemInterface::class)
-            ->getMockForAbstractClass();
+        $consumer = $this->createMock(ConsumerConfigItemInterface::class);
         $consumer->method('getName')->willReturn($consumerName);
         $consumer->expects($this->once())
             ->method('getConnection')

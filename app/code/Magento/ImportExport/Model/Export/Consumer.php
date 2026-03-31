@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -20,6 +20,11 @@ use Magento\Framework\Notification\NotifierInterface;
  */
 class Consumer
 {
+    /**
+     * Internal marker returned by export model for queue flow direct-to-file writes.
+     */
+    private const RESULT_WRITTEN_TO_FILE = '__RESULT_WRITTEN_TO_FILE__';
+
     /**
      * @var NotifierInterface
      */
@@ -68,10 +73,14 @@ class Consumer
     public function process(LocalizedExportInfoInterface $exportInfo)
     {
         try {
-            $data = $this->exportManager->export($exportInfo);
             $fileName = $exportInfo->getFileName();
+            $data = $this->exportManager->export($exportInfo);
             $directory = $this->filesystem->getDirectoryWrite(DirectoryList::VAR_IMPORT_EXPORT);
-            $directory->writeFile('export/' . $fileName, $data);
+            if ($data !== self::RESULT_WRITTEN_TO_FILE) {
+                $directory->writeFile('export/' . $fileName, $data);
+            } elseif (!$directory->isFile('export/' . $fileName)) {
+                throw new LocalizedException(__('Export file was not created.'));
+            }
 
             $this->notifier->addMajor(
                 __('Your export file is ready'),

@@ -89,10 +89,10 @@ class BulkManagementTest extends TestCase
             ->onlyMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
-        $this->publisher = $this->getMockForAbstractClass(BulkPublisherInterface::class);
+        $this->publisher = $this->createMock(BulkPublisherInterface::class);
         $this->metadataPool = $this->createMock(MetadataPool::class);
         $this->resourceConnection = $this->createMock(ResourceConnection::class);
-        $this->logger = $this->getMockForAbstractClass(LoggerInterface::class);
+        $this->logger = $this->createMock(LoggerInterface::class);
 
         $objectManager = new ObjectManager($this);
         $this->bulkManagement = $objectManager->getObject(
@@ -122,17 +122,17 @@ class BulkManagementTest extends TestCase
         $userType = UserContextInterface::USER_TYPE_ADMIN;
         $connectionName = 'default';
         $topicNames = ['topic.name.0', 'topic.name.1'];
-        $operation = $this->getMockForAbstractClass(OperationInterface::class);
-        $metadata = $this->getMockForAbstractClass(EntityMetadataInterface::class);
+        $operation = $this->createMock(OperationInterface::class);
+        $metadata = $this->createMock(EntityMetadataInterface::class);
         $this->metadataPool->expects($this->once())->method('getMetadata')
             ->with(BulkSummaryInterface::class)
             ->willReturn($metadata);
         $metadata->expects($this->once())->method('getEntityConnectionName')->willReturn($connectionName);
-        $connection = $this->getMockForAbstractClass(AdapterInterface::class);
+        $connection = $this->createMock(AdapterInterface::class);
         $this->resourceConnection->expects($this->once())
             ->method('getConnectionByName')->with($connectionName)->willReturn($connection);
         $connection->expects($this->once())->method('beginTransaction')->willReturnSelf();
-        $bulkSummary = $this->getMockForAbstractClass(BulkSummaryInterface::class);
+        $bulkSummary = $this->createMock(BulkSummaryInterface::class);
         $this->bulkSummaryFactory->expects($this->once())->method('create')->willReturn($bulkSummary);
         $this->entityManager->expects($this->once())
             ->method('load')->with($bulkSummary, $bulkUuid)->willReturn($bulkSummary);
@@ -176,17 +176,17 @@ class BulkManagementTest extends TestCase
         $userId = 1;
         $connectionName = 'default';
         $exceptionMessage = 'Exception message';
-        $operation = $this->getMockForAbstractClass(OperationInterface::class);
-        $metadata = $this->getMockForAbstractClass(EntityMetadataInterface::class);
+        $operation = $this->createMock(OperationInterface::class);
+        $metadata = $this->createMock(EntityMetadataInterface::class);
         $this->metadataPool->expects($this->once())->method('getMetadata')
             ->with(BulkSummaryInterface::class)
             ->willReturn($metadata);
         $metadata->expects($this->once())->method('getEntityConnectionName')->willReturn($connectionName);
-        $connection = $this->getMockForAbstractClass(AdapterInterface::class);
+        $connection = $this->createMock(AdapterInterface::class);
         $this->resourceConnection->expects($this->once())
             ->method('getConnectionByName')->with($connectionName)->willReturn($connection);
         $connection->expects($this->once())->method('beginTransaction')->willReturnSelf();
-        $bulkSummary = $this->getMockForAbstractClass(BulkSummaryInterface::class);
+        $bulkSummary = $this->createMock(BulkSummaryInterface::class);
         $this->bulkSummaryFactory->expects($this->once())->method('create')->willReturn($bulkSummary);
         $this->entityManager->expects($this->once())->method('load')
             ->with($bulkSummary, $bulkUuid)->willThrowException(new \LogicException($exceptionMessage));
@@ -210,6 +210,7 @@ class BulkManagementTest extends TestCase
         $connectionName = 'default';
         $exceptionMessage = 'Exception message';
         $operation = $this->createMock(OperationInterface::class);
+        $operation->method('getTopicName')->willReturn('async.operation.add');
         $metadata = $this->createMock(EntityMetadataInterface::class);
         $this->metadataPool->expects($this->once())
             ->method('getMetadata')
@@ -288,14 +289,14 @@ class BulkManagementTest extends TestCase
         $operationId = 0;
         $operationTable = 'magento_operation';
         $topicName = 'topic.name';
-        $metadata = $this->getMockForAbstractClass(EntityMetadataInterface::class);
+        $metadata = $this->createMock(EntityMetadataInterface::class);
         $this->metadataPool->expects($this->once())->method('getMetadata')
             ->with(OperationInterface::class)
             ->willReturn($metadata);
         $metadata->expects($this->once())->method('getEntityConnectionName')->willReturn($connectionName);
         $metadata->expects($this->once())->method('getEntityTable')->willReturn($operationTable);
         $metadata->expects($this->once())->method('getLinkField')->willReturn('id');
-        $connection = $this->getMockForAbstractClass(AdapterInterface::class);
+        $connection = $this->createMock(AdapterInterface::class);
         $this->resourceConnection->expects($this->once())
             ->method('getConnectionByName')->with($connectionName)->willReturn($connection);
         $operationCollection = $this->createMock(Collection::class);
@@ -311,9 +312,10 @@ class BulkManagementTest extends TestCase
 
         $operation = $this->getMockBuilder(Operation::class)
             ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+            ->getMock();
         $operation->setId($operationId);
         $operation->setTopicName($topicName);
+        $operation->method('getTopicName')->willReturn($topicName);
         $operationCollection->expects($this->once())->method('getItems')->willReturn([$operation]);
         $connection->expects($this->once())->method('beginTransaction')->willReturnSelf();
         $connection->expects($this->once())
@@ -339,14 +341,14 @@ class BulkManagementTest extends TestCase
         $operationTable = 'magento_operation';
         $exceptionMessage = 'Exception message';
         $topicName = 'topic.name';
-        $metadata = $this->getMockForAbstractClass(EntityMetadataInterface::class);
+        $metadata = $this->createMock(EntityMetadataInterface::class);
         $this->metadataPool->expects($this->once())->method('getMetadata')
             ->with(OperationInterface::class)
             ->willReturn($metadata);
         $metadata->expects($this->once())->method('getEntityConnectionName')->willReturn($connectionName);
         $metadata->expects($this->once())->method('getEntityTable')->willReturn($operationTable);
         $metadata->expects($this->once())->method('getLinkField')->willReturn('id');
-        $connection = $this->getMockForAbstractClass(AdapterInterface::class);
+        $connection = $this->createMock(AdapterInterface::class);
         $this->resourceConnection->expects($this->once())
             ->method('getConnectionByName')->with($connectionName)->willReturn($connection);
         $operationCollection = $this->createMock(Collection::class);
@@ -361,9 +363,10 @@ class BulkManagementTest extends TestCase
             });
         $operation = $this->getMockBuilder(Operation::class)
             ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+            ->getMock();
         $operation->setId($operationId);
         $operation->setTopicName($topicName);
+        $operation->method('getTopicName')->willReturn($topicName);
         $operationCollection->expects($this->once())->method('getItems')->willReturn([$operation]);
         $connection->expects($this->once())->method('beginTransaction')->willReturnSelf();
         $connection->expects($this->once())
@@ -384,7 +387,7 @@ class BulkManagementTest extends TestCase
     public function testDeleteBulk(): void
     {
         $bulkUuid = 'bulk-001';
-        $bulkSummary = $this->getMockForAbstractClass(BulkSummaryInterface::class);
+        $bulkSummary = $this->createMock(BulkSummaryInterface::class);
         $this->bulkSummaryFactory->expects($this->once())->method('create')->willReturn($bulkSummary);
         $this->entityManager->expects($this->once())
             ->method('load')->with($bulkSummary, $bulkUuid)->willReturn($bulkSummary);

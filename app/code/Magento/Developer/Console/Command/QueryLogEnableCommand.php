@@ -105,7 +105,7 @@ class QueryLogEnableCommand extends Command
      *
      * @throws InvalidArgumentException|\Magento\Framework\Exception\FileSystemException
      */
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $data = [LoggerProxy::PARAM_ALIAS => LoggerProxy::LOGGER_ALIAS_FILE];
 

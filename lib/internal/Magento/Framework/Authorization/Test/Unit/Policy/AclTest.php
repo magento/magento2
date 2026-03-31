@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2012 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -9,6 +9,7 @@ namespace Magento\Framework\Authorization\Test\Unit\Policy;
 
 use Laminas\Permissions\Acl\Exception\InvalidArgumentException;
 use Magento\Framework\Acl\Builder;
+use Magento\Framework\Acl\Role\CurrentRoleContext;
 use Magento\Framework\Authorization\Policy\Acl;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -39,7 +40,7 @@ class AclTest extends TestCase
         $this->_aclMock = $this->createMock(FrameworkAcl::class);
         $this->_aclBuilderMock = $this->createMock(Builder::class);
         $this->_aclBuilderMock->expects($this->any())->method('getAcl')->willReturn($this->_aclMock);
-        $this->_model = new Acl($this->_aclBuilderMock);
+        $this->_model = new Acl($this->_aclBuilderMock, $this->createMock(CurrentRoleContext::class));
     }
 
     /**
@@ -61,7 +62,7 @@ class AclTest extends TestCase
     public function testIsAllowedReturnsFalseIfRoleDoesntExist(): void
     {
         $this->_aclMock->expects($this->once())
-        ->method('isAllowed')
+            ->method('isAllowed')
             ->with('some_role', 'some_resource')
             ->willThrowException(new InvalidArgumentException());
 
@@ -88,5 +89,23 @@ class AclTest extends TestCase
 
         $this->_aclMock->expects($this->once())->method('hasResource')->with('some_resource')->willReturn(false);
         $this->assertTrue($this->_model->isAllowed('some_role', 'some_resource'));
+    }
+
+    public function testSetsAndResetsRoleContext(): void
+    {
+        $roleId = 123;
+        $roleContext = $this->getMockBuilder(CurrentRoleContext::class)
+            ->onlyMethods(['setRoleId', '_resetState'])
+            ->getMock();
+        $model = new Acl($this->_aclBuilderMock, $roleContext);
+
+        $roleContext->expects($this->once())->method('setRoleId')->with($roleId);
+        $this->_aclMock->expects($this->once())
+            ->method('isAllowed')
+            ->with($roleId, 'some_resource')
+            ->willReturn(true);
+        $roleContext->expects($this->once())->method('_resetState');
+
+        $this->assertTrue($model->isAllowed($roleId, 'some_resource'));
     }
 }

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -13,6 +13,7 @@ use Magento\Framework\View\Asset\Minification;
 use Magento\Framework\View\Asset\Source;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class FileTest extends TestCase
 {
@@ -39,7 +40,7 @@ class FileTest extends TestCase
     protected function setUp(): void
     {
         $this->source = $this->createMock(Source::class);
-        $this->context = $this->getMockForAbstractClass(ContextInterface::class);
+        $this->context = $this->createMock(ContextInterface::class);
         $this->minificationMock = $this->getMockBuilder(Minification::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -77,9 +78,8 @@ class FileTest extends TestCase
      * @param string $contextPath
      * @param string $module
      * @param string $filePath
-     * @param string $expected
-     * @dataProvider getPathDataProvider
-     */
+     * @param string $expected     */
+    #[DataProvider('getPathDataProvider')]
     public function testGetPath($contextPath, $module, $filePath, $expected)
     {
         $this->context->expects($this->once())->method('getPath')->willReturn($contextPath);
@@ -124,36 +124,39 @@ class FileTest extends TestCase
     }
 
     /**
-     * @param string $content
-     *
-     * @dataProvider getContentDataProvider
+     * @return void
      */
-    public function testGetContent($content)
+    public function testGetContentRegularRead(): void
     {
-        $this->source->expects($this->exactly(2))
+        $content = 'some content here';
+        $this->source->expects($this->once())
             ->method('getContent')
             ->with($this->object)
             ->willReturn($content);
         $this->assertEquals($content, $this->object->getContent());
-        $this->assertEquals($content, $this->object->getContent()); // no in-memory caching for content
     }
 
     /**
-     * @return array
+     * @return void
      */
-    public static function getContentDataProvider()
+    public function testGetContentWithRetries(): void
     {
-        return [
-            'normal content' => ['content'],
-            'empty content'  => [''],
-        ];
+        $content = 'some content here';
+        $this->source->expects($this->exactly(3))
+            ->method('getContent')
+            ->with($this->object)
+            ->willReturnOnConsecutiveCalls('', false, $content);
+        $this->assertEquals($content, $this->object->getContent());
     }
 
-    public function testGetContentNotFound()
+    /**
+     * @return void
+     */
+    public function testGetContentNotFound(): void
     {
         $this->expectException('Magento\Framework\View\Asset\File\NotFoundException');
         $this->expectExceptionMessage('Unable to get content for \'Magento_Module/dir/file.css\'');
-        $this->source->expects($this->once())
+        $this->source->expects($this->exactly(3))
             ->method('getContent')
             ->with($this->object)
             ->willReturn(false);
