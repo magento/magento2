@@ -63,6 +63,7 @@
         <conditionalClick selector="{{AdminProductGridSection.productCollapsibleColumns('closed','Design')}}" dependentSelector="{{AdminProductGridSection.productCollapsibleColumns('closed','Design')}}" visible="true" stepKey="expandDesign"/>
 
         <!-- Click on the date input field to trigger the calendar -->
+        <waitForElementClickable selector="{{AdminProductFormSection.datePickerCalendar('1')}}" stepKey="waitForDatePickerInput"/>
         <click selector="{{AdminProductFormSection.datePickerCalendar('1')}}" stepKey="clickDatePickerTrigger"/>
 
         <!-- Assert that the calendar is fully visible on screen -->
