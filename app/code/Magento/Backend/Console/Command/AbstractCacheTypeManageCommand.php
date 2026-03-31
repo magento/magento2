@@ -6,11 +6,13 @@
 
 namespace Magento\Backend\Console\Command;
 
+use Magento\Backend\Model\Cache\WarmupRunner;
+use Magento\Framework\App\Cache\Manager;
 use Magento\Framework\Console\Cli;
 use Magento\Framework\Event\ManagerInterface as EventManagerInterface;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
-use Magento\Framework\App\Cache\Manager;
 
 /**
  * phpcs:disable Magento2.Classes.AbstractApi
@@ -25,15 +27,38 @@ abstract class AbstractCacheTypeManageCommand extends AbstractCacheManageCommand
     protected $eventManager;
 
     /**
+     * @var WarmupRunner
+     */
+    private $cacheWarmupRunner;
+
+    /**
      * @param Manager $cacheManager
      * @param EventManagerInterface $eventManager
+     * @param WarmupRunner $cacheWarmupRunner
      */
     public function __construct(
         Manager $cacheManager,
-        EventManagerInterface $eventManager
+        EventManagerInterface $eventManager,
+        WarmupRunner $cacheWarmupRunner
     ) {
         $this->eventManager = $eventManager;
+        $this->cacheWarmupRunner = $cacheWarmupRunner;
         parent::__construct($cacheManager);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    protected function configure()
+    {
+        parent::configure();
+        $this->addOption(
+            'warmup',
+            'w',
+            InputOption::VALUE_NONE,
+            'After this operation, send HTTP GET requests to warm full-page cache '
+            . '(Stores > Configuration > Advanced > Developer > CLI Cache Warmup).'
+        );
     }
 
     /**
@@ -64,6 +89,10 @@ abstract class AbstractCacheTypeManageCommand extends AbstractCacheManageCommand
         $this->performAction($types);
         $output->writeln($this->getDisplayMessage());
         $output->writeln(join(PHP_EOL, $types));
+
+        if ($input->getOption('warmup')) {
+            $this->cacheWarmupRunner->run($output);
+        }
 
         return Cli::RETURN_SUCCESS;
     }
