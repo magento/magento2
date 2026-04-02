@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "d1a938e083355483b9f4ec1ebb15d5b0",
+    "content-hash": "0dafe45cf4c6d33c199ad8688c8bfafd",
     "packages": [
         {
             "name": "aws/aws-crt-php",
@@ -2050,6 +2050,73 @@
                 "source": "https://github.com/jsonrainbow/json-schema/tree/v6.7.2"
             },
             "time": "2026-02-15T15:06:22+00:00"
+        },
+        {
+            "name": "laminas/laminas-captcha",
+            "version": "2.20.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/laminas/laminas-captcha.git",
+                "reference": "78905e9f4147142ed875a8a265a9c8a4da924600"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/laminas/laminas-captcha/zipball/78905e9f4147142ed875a8a265a9c8a4da924600",
+                "reference": "78905e9f4147142ed875a8a265a9c8a4da924600",
+                "shasum": ""
+            },
+            "require": {
+                "laminas/laminas-recaptcha": "^3.4.0",
+                "laminas/laminas-session": "^2.25",
+                "laminas/laminas-stdlib": "^3.10.1",
+                "laminas/laminas-text": "^2.12.1",
+                "laminas/laminas-validator": "^2.19.0",
+                "php": "~8.2.0 || ~8.3.0 || ~8.4.0 || ~8.5.0"
+            },
+            "conflict": {
+                "zendframework/zend-captcha": "*"
+            },
+            "require-dev": {
+                "ext-gd": "*",
+                "laminas/laminas-coding-standard": "~2.5.0",
+                "phpunit/phpunit": "^9.5.26",
+                "psalm/plugin-phpunit": "^0.19.0",
+                "vimeo/psalm": "^6.13"
+            },
+            "suggest": {
+                "laminas/laminas-i18n-resources": "Translations of captcha messages"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Laminas\\Captcha\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "description": "Generate and validate CAPTCHAs using Figlets, images, ReCaptcha, and more",
+            "homepage": "https://laminas.dev",
+            "keywords": [
+                "captcha",
+                "laminas"
+            ],
+            "support": {
+                "chat": "https://laminas.dev/chat",
+                "docs": "https://docs.laminas.dev/laminas-captcha/",
+                "forum": "https://discourse.laminas.dev",
+                "issues": "https://github.com/laminas/laminas-captcha/issues",
+                "rss": "https://github.com/laminas/laminas-captcha/releases.atom",
+                "source": "https://github.com/laminas/laminas-captcha"
+            },
+            "funding": [
+                {
+                    "url": "https://funding.communitybridge.org/projects/laminas-project",
+                    "type": "community_bridge"
+                }
+            ],
+            "time": "2026-03-31T17:11:06+00:00"
         },
         {
             "name": "laminas/laminas-code",
@@ -4161,70 +4228,6 @@
                 "source": "https://github.com/magento/magento-composer-installer/tree/0.4.0"
             },
             "time": "2022-12-01T15:21:32+00:00"
-        },
-        {
-            "name": "magento/magento-zf-captcha",
-            "version": "1.0.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/magento/magento-zf-captcha.git",
-                "reference": "7f95e0e1fa8c5c34b0dc736eab5c2efd559200a1"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/magento/magento-zf-captcha/zipball/7f95e0e1fa8c5c34b0dc736eab5c2efd559200a1",
-                "reference": "7f95e0e1fa8c5c34b0dc736eab5c2efd559200a1",
-                "shasum": ""
-            },
-            "require": {
-                "laminas/laminas-recaptcha": "^3.4.0",
-                "laminas/laminas-session": "^2.25 || ^3.0",
-                "laminas/laminas-stdlib": "^3.10.1",
-                "laminas/laminas-text": "^2.12.1",
-                "laminas/laminas-validator": "^2.19.0 || ^3.0",
-                "php": "~8.2.0 || ~8.3.0 || ~8.4.0 || ~8.5.0"
-            },
-            "conflict": {
-                "zendframework/zend-captcha": "*"
-            },
-            "replace": {
-                "laminas/laminas-captcha": "^2.19"
-            },
-            "require-dev": {
-                "ext-gd": "*",
-                "laminas/laminas-coding-standard": "~2.5.0",
-                "phpunit/phpunit": "^9.5.26",
-                "psalm/plugin-phpunit": "^0.19.0",
-                "vimeo/psalm": "^6.13"
-            },
-            "suggest": {
-                "laminas/laminas-i18n-resources": "Translations of captcha messages"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "Laminas\\Captcha\\": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "BSD-3-Clause"
-            ],
-            "description": "Generate and validate CAPTCHAs using Figlets, images, ReCaptcha, and more",
-            "homepage": "https://laminas.dev",
-            "keywords": [
-                "captcha",
-                "laminas"
-            ],
-            "support": {
-                "chat": "https://laminas.dev/chat",
-                "docs": "https://docs.laminas.dev/laminas-captcha/",
-                "forum": "https://discourse.laminas.dev",
-                "issues": "https://github.com/laminas/laminas-captcha/issues",
-                "rss": "https://github.com/laminas/laminas-captcha/releases.atom",
-                "source": "https://github.com/laminas/laminas-captcha"
-            },
-            "time": "2026-01-20T07:20:51+00:00"
         },
         {
             "name": "magento/zend-cache",
