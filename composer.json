@@ -274,6 +274,7 @@
         "magento/module-quote": "*",
         "magento/module-quote-analytics": "*",
         "magento/module-quote-bundle-options": "*",
+        "magento/module-quote-commerce-graph-ql": "*",
         "magento/module-quote-configurable-options": "*",
         "magento/module-quote-downloadable-links": "*",
         "magento/module-quote-graph-ql": "*",
