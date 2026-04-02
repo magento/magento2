@@ -1,12 +1,13 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Catalog\Test\Unit\Model\Product\Attribute\Frontend\InputType;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\Catalog\Model\Product\Attribute\Frontend\Inputtype\Presentation;
 use Magento\Catalog\Model\ResourceModel\Eav\Attribute;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -27,21 +28,19 @@ class PresentationTest extends TestCase
     protected function setUp(): void
     {
         $this->presentation = new Presentation();
-        $this->attributeMock = $this->getMockBuilder(Attribute::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->attributeMock = $this->createMock(Attribute::class);
     }
 
     /**
      * @param string $inputType
      * @param boolean $isWysiwygEnabled
      * @param string $expectedResult
-     * @dataProvider getPresentationInputTypeDataProvider
      */
+    #[DataProvider('getPresentationInputTypeDataProvider')]
     public function testGetPresentationInputType(string $inputType, bool $isWysiwygEnabled, string $expectedResult)
     {
         $this->attributeMock->expects($this->once())->method('getFrontendInput')->willReturn($inputType);
-        $this->attributeMock->expects($this->any())->method('getIsWysiwygEnabled')->willReturn($isWysiwygEnabled);
+        $this->attributeMock->method('getIsWysiwygEnabled')->willReturn($isWysiwygEnabled);
         $this->assertEquals($expectedResult, $this->presentation->getPresentationInputType($this->attributeMock));
     }
 
@@ -60,8 +59,8 @@ class PresentationTest extends TestCase
     /**
      * @param array $data
      * @param array $expectedResult
-     * @dataProvider convertPresentationDataToInputTypeDataProvider
      */
+    #[DataProvider('convertPresentationDataToInputTypeDataProvider')]
     public function testConvertPresentationDataToInputType(array $data, array $expectedResult)
     {
         $this->assertEquals($expectedResult, $this->presentation->convertPresentationDataToInputType($data));

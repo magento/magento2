@@ -234,11 +234,11 @@ class QuoteManagement implements CartManagementInterface, ResetAfterRequestInter
         CustomerSession $customerSession,
         AccountManagementInterface $accountManagement,
         QuoteFactory $quoteFactory,
-        QuoteIdMaskFactory $quoteIdMaskFactory = null,
-        AddressRepositoryInterface $addressRepository = null,
-        RequestInterface $request = null,
-        RemoteAddress $remoteAddress = null,
-        LockManagerInterface $lockManager = null,
+        ?QuoteIdMaskFactory $quoteIdMaskFactory = null,
+        ?AddressRepositoryInterface $addressRepository = null,
+        ?RequestInterface $request = null,
+        ?RemoteAddress $remoteAddress = null,
+        ?LockManagerInterface $lockManager = null,
         ?CartMutexInterface $cartMutex = null
     ) {
         $this->eventManager = $eventManager;
@@ -397,7 +397,7 @@ class QuoteManagement implements CartManagementInterface, ResetAfterRequestInter
     /**
      * @inheritdoc
      */
-    public function placeOrder($cartId, PaymentInterface $paymentMethod = null)
+    public function placeOrder($cartId, ?PaymentInterface $paymentMethod = null)
     {
         return $this->cartMutex->execute(
             (int)$cartId,
@@ -417,7 +417,7 @@ class QuoteManagement implements CartManagementInterface, ResetAfterRequestInter
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @SuppressWarnings(PHPMD.UnusedPrivateMethod)
      */
-    private function placeOrderRun($cartId, PaymentInterface $paymentMethod = null)
+    private function placeOrderRun($cartId, ?PaymentInterface $paymentMethod = null)
     {
         $quote = $this->quoteRepository->getActive($cartId);
         $customer = $quote->getCustomer();
@@ -453,7 +453,7 @@ class QuoteManagement implements CartManagementInterface, ResetAfterRequestInter
             ) {
                 $quote->setCustomerFirstname($billingAddress->getFirstname());
                 $quote->setCustomerLastname($billingAddress->getLastname());
-                if ($billingAddress->getMiddlename() === null) {
+                if ($billingAddress->getMiddlename() !== null) {
                     $quote->setCustomerMiddlename($billingAddress->getMiddlename());
                 }
             }
@@ -528,7 +528,7 @@ class QuoteManagement implements CartManagementInterface, ResetAfterRequestInter
     {
         $orderItems = [];
         foreach ($quote->getAllItems() as $quoteItem) {
-            $itemId = $quoteItem->getId();
+            $itemId = $quoteItem->getId() ?? '';
 
             if (!empty($orderItems[$itemId])) {
                 continue;
@@ -542,7 +542,9 @@ class QuoteManagement implements CartManagementInterface, ResetAfterRequestInter
                     ['parent_item' => null]
                 );
             }
-            $parentItem = isset($orderItems[$parentItemId]) ? $orderItems[$parentItemId] : null;
+            $parentItem = (isset($parentItemId, $orderItems[$parentItemId]))
+                ? $orderItems[$parentItemId]
+                : null;
             $orderItems[$itemId] = $this->quoteItemToOrderItem->convert($quoteItem, ['parent_item' => $parentItem]);
         }
         return array_values($orderItems);

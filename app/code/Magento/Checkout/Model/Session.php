@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Checkout\Model;
 
@@ -160,7 +160,7 @@ class Session extends \Magento\Framework\Session\SessionManager
         \Magento\Customer\Api\CustomerRepositoryInterface $customerRepository,
         QuoteIdMaskFactory $quoteIdMaskFactory,
         \Magento\Quote\Model\QuoteFactory $quoteFactory,
-        LoggerInterface $logger = null
+        ?LoggerInterface $logger = null
     ) {
         $this->_orderFactory = $orderFactory;
         $this->_customerSession = $customerSession;
@@ -486,7 +486,9 @@ class Session extends \Magento\Framework\Session\SessionManager
      */
     public function clearQuote()
     {
-        $this->_eventManager->dispatch('checkout_quote_destroy', ['quote' => $this->getQuote()]);
+        if ($this->_quote !== null) {
+            $this->_eventManager->dispatch('checkout_quote_destroy', ['quote' => $this->_quote]);
+        }
         $this->_quote = null;
         $this->setQuoteId(null);
         $this->setLastSuccessQuoteId(null);

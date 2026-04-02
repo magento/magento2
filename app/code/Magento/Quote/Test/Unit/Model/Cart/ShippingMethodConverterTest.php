@@ -18,6 +18,7 @@ use Magento\Quote\Model\Quote\Address\Rate;
 use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Tax\Helper\Data;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -26,6 +27,7 @@ use PHPUnit\Framework\TestCase;
  */
 class ShippingMethodConverterTest extends TestCase
 {
+    use MockCreationTrait;
     /**
      * @var ShippingMethodConverter
      */
@@ -76,30 +78,13 @@ class ShippingMethodConverterTest extends TestCase
             ShippingMethodInterfaceFactory::class,
             ['create']
         );
-        $this->storeManagerMock = $this->getMockForAbstractClass(StoreManagerInterface::class);
+        $this->storeManagerMock = $this->createMock(StoreManagerInterface::class);
         $this->currencyMock = $this->createMock(Currency::class);
-        $this->shippingMethodMock = $this->getMockBuilder(ShippingMethod::class)
-            ->addMethods(['create'])
-            ->onlyMethods(
-                [
-                    'setCarrierCode',
-                    'setMethodCode',
-                    'setCarrierTitle',
-                    'setMethodTitle',
-                    'setAmount',
-                    'setBaseAmount',
-                    'setAvailable',
-                    'setPriceExclTax',
-                    'setPriceInclTax'
-                ]
-            )
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->rateModelMock = $this->getMockBuilder(Rate::class)
-            ->addMethods(['getPrice', 'getCarrier', 'getMethod', 'getCarrierTitle', 'getMethodTitle'])
-            ->onlyMethods(['__wakeup', 'getAddress'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->shippingMethodMock = $this->createMock(ShippingMethod::class);
+        $this->rateModelMock = $this->createPartialMockWithReflection(
+            Rate::class,
+            ['getCarrier', 'getMethod', 'getPrice', 'getCarrierTitle', 'getMethodTitle', 'getAddress']
+        );
         $this->storeMock = $this->createMock(Store::class);
         $this->taxHelper = $this->createMock(Data::class);
 
@@ -129,9 +114,9 @@ class ShippingMethodConverterTest extends TestCase
             ->method('getBaseCurrency')
             ->willReturn($this->currencyMock);
 
-        $this->rateModelMock->expects($this->once())->method('getCarrier')->willReturn('CARRIER_CODE');
-        $this->rateModelMock->expects($this->once())->method('getMethod')->willReturn('METHOD_CODE');
-        $this->rateModelMock->expects($this->any())->method('getPrice')->willReturn($price);
+        $this->rateModelMock->method('getCarrier')->willReturn('CARRIER_CODE');
+        $this->rateModelMock->method('getMethod')->willReturn('METHOD_CODE');
+        $this->rateModelMock->method('getPrice')->willReturn($price);
         $this->currencyMock
             ->method('convert')
             ->willReturnCallback(function ($arg1, $arg2) use ($price, $shippingPriceExclTax, $shippingPriceInclTax) {
@@ -144,10 +129,8 @@ class ShippingMethodConverterTest extends TestCase
                 }
             });
 
-        $this->rateModelMock->expects($this->once())
-            ->method('getCarrierTitle')->willReturn('CARRIER_TITLE');
-        $this->rateModelMock->expects($this->once())
-            ->method('getMethodTitle')->willReturn('METHOD_TITLE');
+        $this->rateModelMock->method('getCarrierTitle')->willReturn('CARRIER_TITLE');
+        $this->rateModelMock->method('getMethodTitle')->willReturn('METHOD_TITLE');
 
         $quoteMock = $this->createMock(Quote::class);
         $addressMock = $this->createMock(Address::class);
@@ -156,46 +139,47 @@ class ShippingMethodConverterTest extends TestCase
         $addressMock->expects($this->exactly(2))->method('getQuote')->willReturn($quoteMock);
         $quoteMock->expects($this->exactly(2))->method('getCustomerTaxClassId')->willReturn($customerTaxClassId);
 
-        $this->shippingMethodDataFactoryMock->expects($this->once())
+        $this->shippingMethodDataFactoryMock->expects($this->atLeastOnce())
             ->method('create')
             ->willReturn($this->shippingMethodMock);
 
         $this->shippingMethodMock->expects($this->once())
             ->method('setCarrierCode')
             ->with('CARRIER_CODE')
-            ->willReturn($this->shippingMethodMock);
+            ->willReturnSelf();
         $this->shippingMethodMock->expects($this->once())
             ->method('setMethodCode')
             ->with('METHOD_CODE')
-            ->willReturn($this->shippingMethodMock);
+            ->willReturnSelf();
         $this->shippingMethodMock->expects($this->once())
             ->method('setCarrierTitle')
             ->with('CARRIER_TITLE')
-            ->willReturn($this->shippingMethodMock);
+            ->willReturnSelf();
         $this->shippingMethodMock->expects($this->once())
             ->method('setMethodTitle')
             ->with('METHOD_TITLE')
-            ->willReturn($this->shippingMethodMock);
+            ->willReturnSelf();
         $this->shippingMethodMock->expects($this->once())
             ->method('setAmount')
             ->with('100.12')
-            ->willReturn($this->shippingMethodMock);
+            ->willReturnSelf();
         $this->shippingMethodMock->expects($this->once())
             ->method('setBaseAmount')
             ->with('90.12')
-            ->willReturn($this->shippingMethodMock);
+            ->willReturnSelf();
         $this->shippingMethodMock->expects($this->once())
             ->method('setAvailable')
             ->with(true)
-            ->willReturn($this->shippingMethodMock);
+            ->willReturnSelf();
+        $this->shippingMethodMock->method('setErrorMessage')->willReturnSelf();
         $this->shippingMethodMock->expects($this->once())
             ->method('setPriceExclTax')
             ->with($shippingPriceExclTax)
-            ->willReturn($this->shippingMethodMock);
+            ->willReturnSelf();
         $this->shippingMethodMock->expects($this->once())
             ->method('setPriceInclTax')
             ->with($shippingPriceInclTax)
-            ->willReturn($this->shippingMethodMock);
+            ->willReturnSelf();
 
         $this->taxHelper
             ->method('getShippingPrice')

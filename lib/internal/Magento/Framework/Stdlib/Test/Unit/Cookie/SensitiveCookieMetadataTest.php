@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -13,6 +13,7 @@ use Magento\Framework\Stdlib\StringUtils;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Test SensitiveCookieMetaData
@@ -45,9 +46,8 @@ class SensitiveCookieMetadataTest extends TestCase
 
     /**
      * @param array $metadata
-     * @param bool $httpOnly
-     * @dataProvider constructorAndGetHttpOnlyTestDataProvider
-     */
+     * @param bool $httpOnly     */
+    #[DataProvider('constructorAndGetHttpOnlyTestDataProvider')]
     public function testConstructorAndGetHttpOnly($metadata, $httpOnly)
     {
         /** @var \Magento\Framework\Stdlib\Cookie\SensitiveCookieMetadata $object */
@@ -92,9 +92,8 @@ class SensitiveCookieMetadataTest extends TestCase
      * @param bool $isSecure
      * @param array $metadata
      * @param bool $expected
-     * @param int $callNum
-     * @dataProvider getSecureDataProvider
-     */
+     * @param int $callNum     */
+    #[DataProvider('getSecureDataProvider')]
     public function testGetSecure($isSecure, $metadata, $expected, $callNum = 1)
     {
         $this->requestMock->expects($this->exactly($callNum))
@@ -151,9 +150,8 @@ class SensitiveCookieMetadataTest extends TestCase
      * @param bool $isSecure
      * @param array $metadata
      * @param bool $expected
-     * @param int $callNum
-     * @dataProvider toArrayDataProvider
-     */
+     * @param int $callNum     */
+    #[DataProvider('toArrayDataProvider')]
     public function testToArray($isSecure, $metadata, $expected, $callNum = 1)
     {
         $this->requestMock->expects($this->exactly($callNum))
@@ -227,9 +225,8 @@ class SensitiveCookieMetadataTest extends TestCase
     /**
      * @param StringUtils $setMethodName
      * @param StringUtils $getMethodName
-     * @param StringUtils $expectedValue
-     * @dataProvider getMethodData
-     */
+     * @param StringUtils $expectedValue     */
+    #[DataProvider('getMethodData')]
     public function testGetters($setMethodName, $getMethodName, $expectedValue)
     {
         $this->sensitiveCookieMetadata->$setMethodName($expectedValue);

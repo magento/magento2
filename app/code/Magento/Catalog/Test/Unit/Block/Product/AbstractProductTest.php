@@ -1,12 +1,15 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Catalog\Test\Unit\Block\Product;
 
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
+use Magento\Catalog\Block\Product\AbstractProduct;
 use Magento\Catalog\Block\Product\Context;
 use Magento\Catalog\Block\Product\Image;
 use Magento\Catalog\Block\Product\ImageBuilder;
@@ -25,6 +28,7 @@ use PHPUnit\Framework\TestCase;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
+#[CoversClass(AbstractProduct::class)]
 class AbstractProductTest extends TestCase
 {
     /**
@@ -64,15 +68,7 @@ class AbstractProductTest extends TestCase
         );
         $arrayUtilsMock = $this->createMock(ArrayUtils::class);
         $this->layoutMock = $this->createPartialMock(Layout::class, ['getBlock']);
-        $this->stockRegistryMock = $this->getMockForAbstractClass(
-            StockRegistryInterface::class,
-            [],
-            '',
-            false,
-            true,
-            true,
-            ['getStockItem']
-        );
+        $this->stockRegistryMock = $this->createMock(StockRegistryInterface::class);
 
         $this->imageBuilder = $this->createPartialMock(ImageBuilder::class, ['create']);
 
@@ -94,9 +90,6 @@ class AbstractProductTest extends TestCase
 
     /**
      * Test for method getProductPrice
-     *
-     * @covers \Magento\Catalog\Block\Product\AbstractProduct::getProductPriceHtml
-     * @covers \Magento\Catalog\Block\Product\AbstractProduct::getProductPrice
      */
     public function testGetProductPrice()
     {
@@ -145,9 +138,8 @@ class AbstractProductTest extends TestCase
      * @param int $minSale
      * @param int|null $result
      * @return void
-     *
-     * @dataProvider dataProviderGetMinimalQty
      */
+    #[DataProvider('dataProviderGetMinimalQty')]
     public function testGetMinimalQty($minSale, $result)
     {
         $id = 10;
@@ -155,15 +147,7 @@ class AbstractProductTest extends TestCase
 
         $productMock = $this->createPartialMock(Product::class, ['getId', 'getStore']);
         $storeMock = $this->createPartialMock(Store::class, ['getWebsiteId']);
-        $stockItemMock = $this->getMockForAbstractClass(
-            StockItemInterface::class,
-            [],
-            '',
-            false,
-            true,
-            true,
-            ['getMinSaleQty']
-        );
+        $stockItemMock = $this->createMock(StockItemInterface::class);
 
         $this->stockRegistryMock->expects($this->once())
             ->method('getStockItem')

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\CatalogUrlRewrite\Observer;
 
@@ -12,6 +12,7 @@ use Magento\Catalog\Model\ProductFactory;
 use Magento\Catalog\Test\Fixture\Category as CategoryFixture;
 use Magento\Catalog\Test\Fixture\Product as ProductFixture;
 use Magento\CatalogUrlRewrite\Model\ProductUrlRewriteGenerator;
+use Magento\Framework\App\Config\MutableScopeConfigInterface;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
@@ -38,29 +39,34 @@ use PHPUnit\Framework\TestCase;
 class ProductProcessUrlRewriteSavingObserverTest extends TestCase
 {
     /**
+     * @var MutableScopeConfigInterface
+     */
+    private MutableScopeConfigInterface $mutableConfig;
+
+    /**
      * @var ObjectManagerInterface
      */
-    private $objectManager;
+    private ObjectManagerInterface $objectManager;
 
     /**
      * @var StoreManagerInterface
      */
-    private $storeManager;
+    private StoreManagerInterface $storeManager;
 
     /**
      * @var ProductRepositoryInterface
      */
-    private $productRepository;
+    private ProductRepositoryInterface $productRepository;
 
     /**
      * @var UrlPersistInterface
      */
-    private $urlPersist;
+    private UrlPersistInterface $urlPersist;
 
     /**
      * @var DataFixtureStorage
      */
-    private $fixtures;
+    private DataFixtureStorage $fixtures;
 
     /**
      * Set up
@@ -72,6 +78,7 @@ class ProductProcessUrlRewriteSavingObserverTest extends TestCase
         $this->productRepository = $this->objectManager->get(ProductRepositoryInterface::class);
         $this->urlPersist = $this->objectManager->get(UrlPersistInterface::class);
         $this->fixtures = $this->objectManager->get(DataFixtureStorageManager::class)->getStorage();
+        $this->mutableConfig = $this->objectManager->get(MutableScopeConfigInterface::class);
     }
 
     /**
@@ -714,6 +721,7 @@ class ProductProcessUrlRewriteSavingObserverTest extends TestCase
     ]
     public function testNotVisibleOnDefaultStoreVisibleOnDefaultScope()
     {
+        $this->mutableConfig->setValue('catalog/seo/generate_category_product_rewrites', 1);
         $category = $this->fixtures->get('category');
         $product = $this->fixtures->get('product');
         $secondStore = $this->fixtures->get('store2');
@@ -780,33 +788,26 @@ class ProductProcessUrlRewriteSavingObserverTest extends TestCase
         ];
 
         $actualResults = $this->getActualResults($productFilter);
-        $this->assertCount(4, $actualResults);
+        $this->assertCount(2, $actualResults);
 
         $productScopeStore1 = $this->productRepository->get($product->getSku(), true, 1);
         $productScopeStore1->setVisibility(Visibility::VISIBILITY_NOT_VISIBLE);
         $this->productRepository->save($productScopeStore1);
 
         $actualResults = $this->getActualResults($productFilter);
-        $this->assertCount(2, $actualResults);
+        $this->assertCount(1, $actualResults);
 
         $productGlobal = $this->productRepository->get($product->getSku(), true, Store::DEFAULT_STORE_ID);
         $productGlobal->setVisibility(Visibility::VISIBILITY_IN_CATALOG);
         $this->productRepository->save($productGlobal);
 
         $actualResults = $this->getActualResults($productFilter);
-        $this->assertCount(2, $actualResults);
+        $this->assertCount(1, $actualResults);
 
         $expected = [
             [
                 'request_path' => $product->getUrlKey() . '.html',
                 'target_path' => 'catalog/product/view/id/' . $product->getId(),
-                'is_auto_generated' => 1,
-                'redirect_type' => 0,
-                'store_id' => $secondStore->getId(),
-            ],
-            [
-                'request_path' => $category->getUrlKey() . '/' . $product->getUrlKey() . '.html',
-                'target_path' => 'catalog/product/view/id/' . $product->getId() . '/category/' . $category->getId(),
                 'is_auto_generated' => 1,
                 'redirect_type' => 0,
                 'store_id' => $secondStore->getId(),

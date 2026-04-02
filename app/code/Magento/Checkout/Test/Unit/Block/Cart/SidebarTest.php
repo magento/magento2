@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -87,13 +87,13 @@ class SidebarTest extends TestCase
     {
         $this->_objectManager = new ObjectManager($this);
 
-        $this->requestMock = $this->getMockForAbstractClass(RequestInterface::class);
+        $this->requestMock = $this->createMock(RequestInterface::class);
         $this->layoutMock = $this->createMock(Layout::class);
         $this->checkoutSessionMock = $this->createMock(Session::class);
-        $this->urlBuilderMock = $this->getMockForAbstractClass(UrlInterface::class);
-        $this->storeManagerMock = $this->getMockForAbstractClass(StoreManagerInterface::class);
+        $this->urlBuilderMock = $this->createMock(UrlInterface::class);
+        $this->storeManagerMock = $this->createMock(StoreManagerInterface::class);
         $this->imageHelper = $this->createMock(Image::class);
-        $this->scopeConfigMock = $this->getMockForAbstractClass(ScopeConfigInterface::class);
+        $this->scopeConfigMock = $this->createMock(ScopeConfigInterface::class);
 
         $contextMock = $this->createPartialMock(
             Context::class,
@@ -111,9 +111,7 @@ class SidebarTest extends TestCase
         $contextMock->expects($this->once())
             ->method('getScopeConfig')
             ->willReturn($this->scopeConfigMock);
-        $contextMock->expects($this->any())
-            ->method('getRequest')
-            ->willReturn($this->requestMock);
+        $contextMock->method('getRequest')->willReturn($this->requestMock);
 
         $this->serializer = $this->createMock(Json::class);
 
@@ -187,14 +185,12 @@ class SidebarTest extends TestCase
             ['checkout/sidebar/removeItem', ['_secure' => false], $removeItemUrl]
         ];
 
-        $this->requestMock->expects($this->any())
-            ->method('isSecure')
-            ->willReturn(false);
+        $this->requestMock->method('isSecure')->willReturn(false);
 
         $this->urlBuilderMock->expects($this->exactly(4))
             ->method('getUrl')
             ->willReturnMap($valueMap);
-        $this->storeManagerMock->expects($this->any())->method('getStore')->willReturn($storeMock);
+        $this->storeManagerMock->method('getStore')->willReturn($storeMock);
         $storeMock->expects($this->once())->method('getBaseUrl')->willReturn($baseUrl);
 
         $this->scopeConfigMock

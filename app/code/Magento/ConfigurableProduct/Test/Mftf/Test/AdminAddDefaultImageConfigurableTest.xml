@@ -18,6 +18,8 @@
             <testCaseId value="MC-101"/>
             <group value="ConfigurableProduct"/>
             <group value="cloud"/>
+            <!-- Excluded from PR builds due to AC-12124 -->
+            <group value="pr_exclude"/>
         </annotations>
 
         <before>
@@ -82,6 +84,8 @@
             </createData>
         </before>
         <after>
+            <amOnPage url="{{ProductCatalogPage.url}}" stepKey="openProductPage"/>
+            <actionGroup ref="ClearFiltersAdminProductGridActionGroup" stepKey="clearProductGridFilter"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="amOnLogoutPage"/>
             <deleteData createDataKey="simple1Handle" stepKey="deleteSimple1"/>
             <deleteData createDataKey="simple2Handle" stepKey="deleteSimple2"/>

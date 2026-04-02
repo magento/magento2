@@ -116,9 +116,9 @@ class Data
         StoreManagerInterface $storeManager,
         SwatchCollectionFactory $swatchCollectionFactory,
         UrlBuilder $urlBuilder,
-        Json $serializer = null,
-        SwatchAttributesProvider $swatchAttributesProvider = null,
-        SwatchAttributeType $swatchTypeChecker = null
+        ?Json $serializer = null,
+        ?SwatchAttributesProvider $swatchAttributesProvider = null,
+        ?SwatchAttributeType $swatchTypeChecker = null
     ) {
         $this->productCollectionFactory = $productCollectionFactory;
         $this->productRepository = $productRepository;

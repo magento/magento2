@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework\Session;
 
@@ -44,7 +44,7 @@ class Storage extends \Magento\Framework\DataObject implements StorageInterface,
      */
     public function init(array $data)
     {
-        $namespace = $this->getNamespace();
+        $namespace = $this->getNamespace() ?? '';
         if (isset($data[$namespace])) {
             $this->setData($data[$namespace]);
         }

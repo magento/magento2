@@ -1,18 +1,21 @@
 <?php
 /**
- *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\User\Controller\Adminhtml\User;
 
+use Magento\Framework\App\Action\HttpPostActionInterface;
 use Magento\User\Block\User\Edit\Tab\Main as UserEdit;
 use Magento\Framework\Exception\AuthenticationException;
+use Magento\User\Controller\Adminhtml\User;
 
-class Delete extends \Magento\User\Controller\Adminhtml\User
+class Delete extends User implements HttpPostActionInterface
 {
     /**
+     * Execute
+     *
      * @return void
      */
     public function execute()
@@ -38,7 +41,12 @@ class Delete extends \Magento\User\Controller\Adminhtml\User
                 /** @var \Magento\User\Model\User $model */
                 $model = $this->_userFactory->create();
                 $model->setId($userId);
+                $deletedUser = $model->load($userId);
                 $model->delete();
+                $this->_eventManager->dispatch('log_user_after_delete', [
+                    'deletedUser' => $deletedUser,
+                    'model' => $model,
+                ]);
                 $this->messageManager->addSuccess(__('You deleted the user.'));
                 $this->_redirect('adminhtml/*/');
                 return;

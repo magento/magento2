@@ -112,7 +112,7 @@ abstract class AbstractProduct extends \Magento\Rule\Model\Condition\AbstractCon
         \Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\Collection $attrSetCollection,
         \Magento\Framework\Locale\FormatInterface $localeFormat,
         array $data = [],
-        ProductCategoryList $categoryList = null
+        ?ProductCategoryList $categoryList = null
     ) {
         $this->_backendData = $backendData;
         $this->_config = $config;
@@ -237,7 +237,7 @@ abstract class AbstractProduct extends \Magento\Rule\Model\Condition\AbstractCon
             $selectReady = null;
         } elseif (is_object($this->getAttributeObject())) {
             $attributeObject = $this->getAttributeObject();
-            if ($attributeObject->usesSource()) {
+            if (method_exists($attributeObject, 'usesSource') && $attributeObject->usesSource()) {
                 if ($attributeObject->getFrontendInput() == 'multiselect') {
                     $addEmptyOption = false;
                 } else {

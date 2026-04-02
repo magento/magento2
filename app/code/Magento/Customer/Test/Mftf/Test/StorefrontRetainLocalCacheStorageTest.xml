@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
-  */
+/**
+ * Copyright 2022 Adobe
+ * All Rights Reserved.
+ */
 -->
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -17,9 +17,6 @@
             <severity value="AVERAGE"/>
             <testCaseId value="AC-3635"/>
             <group value="customer"/>
-            <skip>
-            <issueId value="ACQE-4352"/>
-            </skip>
         </annotations>
         <before>
             <createData entity="Simple_US_Customer" stepKey="createCustomer"/>
@@ -49,7 +46,7 @@
         <see userInput="Welcome, $$createCustomer.firstname$$ $$createCustomer.lastname$$!" selector="{{StorefrontPanelHeaderSection.welcomeMessage}}" stepKey="checkWelcomeMessage"/>
 
         <!--Grab timezone offset-->
-        <executeJS function="return new Date().getTimezoneOffset();" stepKey="getTimezoneOffset"/>
+        <executeJS function="return -(new Date().getTimezoneOffset());" stepKey="getTimezoneOffset"/>
         <!--Verify default expiry date for cookies-->
         <actionGroup ref="StorefrontVerifyCustomerDefaultCookieExpiryDateActionGroup" stepKey="VerifyCookiesExpiryDate">
             <argument name="timezoneOffset" value="{$getTimezoneOffset}"/>

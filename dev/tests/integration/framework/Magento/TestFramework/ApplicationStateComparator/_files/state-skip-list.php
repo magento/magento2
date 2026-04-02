@@ -269,9 +269,12 @@ return [
         Magento\TestFramework\ObjectManager\Config::class => null,
         Magento\Framework\Escaper::class => null,
         Magento\Framework\Css\PreProcessor\Adapter\CssInliner::class => null, // FIXME
+        \Magento\Framework\DB\Adapter\SqlVersionProvider::class => null,
+        \Magento\Framework\Setup\Declaration\Schema\Dto\Factories\Table::class => null,
     ],
     '*-fromConstructed' => [
         // phpcs:disable Generic.Files.LineLength.TooLong
+        Magento\Catalog\Model\Product\Attribute\Backend\Url\Interceptor::class => null,
         Magento\Customer\Model\Cache\GroupExcludedWebsiteCache::class => null,
         Magento\Sales\Model\ResourceModel\Grid::class => null,
         Magento\Sales\Model\ResourceModel\GridPool::class => null,
@@ -289,6 +292,7 @@ return [
         Magento\Framework\Cache\LockGuardedCacheLoader::class => null,
         Magento\Framework\View\Asset\PreProcessor\Pool::class => null,
         Magento\Framework\App\Area::class => null,
+        Magento\Security\Model\ResourceModel\PasswordResetRequestEvent::class => null,
         Magento\Store\Model\Store\Interceptor::class => null,
         Magento\Framework\TestFramework\ApplicationStateComparator\Comparator::class => null, // Yes, our test uses mutable state itself :-)
         Magento\Framework\GraphQl\Query\QueryParser::class => null, // reloads as a ReloadProcessor
@@ -523,6 +527,7 @@ return [
         Magento\GroupedProduct\Model\ResourceModel\Indexer\Stock\Grouped::class => null,
         Magento\Elasticsearch\Model\Adapter\BatchDataMapper\DataMapperResolver::class => null,
         Magento\Elasticsearch\Model\Adapter\Elasticsearch::class => null,
+        Magento\Elasticsearch8\Model\Client\Elasticsearch::class => null,
         Magento\Tax\Model\TaxClass\Source\Product::class => null,
         Magento\Framework\View\TemplateEnginePool::class => null,
         Magento\Framework\View\Element\Template\File\Resolver::class => null,
@@ -546,6 +551,50 @@ return [
         Magento\Framework\MessageQueue\Topology\Config\QueueConfigItem\DataMapper::class => null,
         // phpcs:enable Generic.Files.LineLength.TooLong
     ],
-    '' => [
+    // Skip both AMQP and STOMP message queue objects for placeOrder operations
+    // This allows the test to work regardless of which message queue system is active
+    'placeOrder' => [
+        // AMQP message queue objects
+        \Magento\Framework\Amqp\ConfigPool::class => null,
+        \Magento\Framework\Amqp\Config::class => null,
+        \Magento\Framework\Amqp\Exchange::class => null,
+        \Magento\Framework\MessageQueue\Publisher::class => null,
+        PhpAmqpLib\Connection\AMQPStreamConnection::class => null,
+        PhpAmqpLib\Connection\AMQPSSLConnection::class => null,
+        // STOMP message queue objects
+        \Magento\Framework\Stomp\ConfigPool::class => null,
+        \Magento\Framework\Stomp\Config::class => null,
+        \Magento\Framework\Stomp\Queue::class => null,
+        \Magento\Framework\Stomp\StompClient::class => null,
+        \Magento\Framework\MessageQueue\QueueRepository::class => null,
+        Stomp\StatefulStomp::class => null,
+        \Magento\ProductVideo\Model\ResourceModel\Video::class => null,
+        \Magento\ProductVideo\Model\Plugin\ExternalVideoResourceBackend::class => null,
+    ],
+    'placeOrder-fromConstructed' => [
+        // AMQP message queue objects
+        \Magento\Framework\Amqp\ConfigPool::class => null,
+        \Magento\Framework\Amqp\Config::class => null,
+        \Magento\Framework\Amqp\Exchange::class => null,
+        \Magento\Framework\MessageQueue\Publisher::class => null,
+        PhpAmqpLib\Connection\AMQPStreamConnection::class => null,
+        PhpAmqpLib\Connection\AMQPSSLConnection::class => null,
+        // STOMP message queue objects
+        \Magento\Framework\Stomp\ConfigPool::class => null,
+        \Magento\Framework\Stomp\Config::class => null,
+        \Magento\Framework\Stomp\Queue::class => null,
+        \Magento\Framework\Stomp\StompClient::class => null,
+        \Magento\Framework\MessageQueue\QueueRepository::class => null,
+        \Stomp\StatefulStomp::class => null,
+    ],
+    'applyCouponToCart' => [
+        \Magento\ProductVideo\Model\ResourceModel\Video::class => null,
+        \Magento\ProductVideo\Model\Plugin\ExternalVideoResourceBackend::class => null,
+        \Magento\PageBuilder\Plugin\Catalog\Model\Product\Attribute\RepositoryPlugin::class => null,
+    ],
+    'mergeCarts' => [
+        \Magento\ProductVideo\Model\ResourceModel\Video::class => null,
+        \Magento\ProductVideo\Model\Plugin\ExternalVideoResourceBackend::class => null,
+        \Magento\PageBuilder\Plugin\Catalog\Model\Product\Attribute\RepositoryPlugin::class => null,
     ],
 ];

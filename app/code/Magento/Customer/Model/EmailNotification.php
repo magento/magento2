@@ -136,8 +136,8 @@ class EmailNotification implements EmailNotificationInterface
         CustomerViewHelper $customerViewHelper,
         DataObjectProcessor $dataProcessor,
         ScopeConfigInterface $scopeConfig,
-        SenderResolverInterface $senderResolver = null,
-        Emulation $emulation = null,
+        ?SenderResolverInterface $senderResolver = null,
+        ?Emulation $emulation = null,
         ?AccountConfirmation $accountConfirmation = null
     ) {
         $this->customerRegistry = $customerRegistry;
@@ -342,7 +342,7 @@ class EmailNotification implements EmailNotificationInterface
             $storeIds = $this->storeManager->getWebsite($customer->getWebsiteId())->getStoreIds();
             $defaultStoreId = reset($storeIds);
         }
-        return $defaultStoreId;
+        return (int)$defaultStoreId;
     }
 
     /**

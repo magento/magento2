@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -42,9 +42,9 @@ class Metadata implements MetadataInterface
      * @param MetadataExtensionInterface|null $extensionAttributes
      */
     public function __construct(
-        string $title = null,
-        string $description = null,
-        array $keywords = null,
+        ?string $title = null,
+        ?string $description = null,
+        ?array $keywords = null,
         ?MetadataExtensionInterface $extensionAttributes = null
     ) {
         $this->title = $title;

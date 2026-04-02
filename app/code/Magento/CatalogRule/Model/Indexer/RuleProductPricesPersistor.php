@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\CatalogRule\Model\Indexer;
@@ -45,7 +45,7 @@ class RuleProductPricesPersistor
         \Magento\Framework\Stdlib\DateTime $dateFormat,
         \Magento\Framework\App\ResourceConnection $resource,
         ActiveTableSwitcher $activeTableSwitcher,
-        TableSwapper $tableSwapper = null
+        ?TableSwapper $tableSwapper = null
     ) {
         $this->dateFormat = $dateFormat;
         $this->resource = $resource;

@@ -69,7 +69,7 @@ class BackupCommand extends AbstractSetupCommand
         ObjectManagerProvider $objectManagerProvider,
         MaintenanceMode $maintenanceMode,
         DeploymentConfig $deploymentConfig,
-        MaintenanceModeEnabler $maintenanceModeEnabler = null
+        ?MaintenanceModeEnabler $maintenanceModeEnabler = null
     ) {
         $this->objectManager = $objectManagerProvider->get();
         $this->backupRollbackFactory = $this->objectManager->get(\Magento\Framework\Setup\BackupRollbackFactory::class);
@@ -113,7 +113,7 @@ class BackupCommand extends AbstractSetupCommand
     /**
      * @inheritdoc
      */
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         if (!$this->deploymentConfig->isAvailable()
             && ($input->getOption(self::INPUT_KEY_MEDIA) || $input->getOption(self::INPUT_KEY_DB))) {

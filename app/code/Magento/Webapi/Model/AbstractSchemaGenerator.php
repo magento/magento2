@@ -1,8 +1,7 @@
 <?php
 /**
- *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Webapi\Model;
 
@@ -65,7 +64,7 @@ abstract class AbstractSchemaGenerator
         ServiceTypeListInterface $serviceTypeList,
         ServiceMetadata $serviceMetadata,
         Authorization $authorization,
-        Json $serializer = null
+        ?Json $serializer = null
     ) {
         $this->cache = $cache;
         $this->typeProcessor = $typeProcessor;

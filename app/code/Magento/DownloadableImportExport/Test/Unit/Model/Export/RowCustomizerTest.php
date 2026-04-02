@@ -1,12 +1,13 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\DownloadableImportExport\Test\Unit\Model\Export;
 
+use Magento\DownloadableImportExport\Model\Export\RowCustomizer;
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Model\ResourceModel\Product\Collection;
 use Magento\Downloadable\Model\LinkRepository;
@@ -37,7 +38,7 @@ class RowCustomizerTest extends TestCase
     private $sampleRepositoryMock;
 
     /**
-     * @var \Magento\DownloadableImportExport\Model\Export\RowCustomizer
+     * @var RowCustomizer
      */
     private $model;
 
@@ -48,21 +49,13 @@ class RowCustomizerTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->storeManagerMock = $this->getMockBuilder(StoreManagerInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $this->linkRepositoryMock = $this->getMockBuilder(LinkRepository::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $this->sampleRepositoryMock = $this->getMockBuilder(SampleRepository::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->storeManagerMock = $this->createMock(StoreManagerInterface::class);
+        $this->linkRepositoryMock = $this->createMock(LinkRepository::class);
+        $this->sampleRepositoryMock = $this->createMock(SampleRepository::class);
 
         $objectManagerHelper = new ObjectManagerHelper($this);
         $this->model = $objectManagerHelper->getObject(
-            \Magento\DownloadableImportExport\Model\Export\RowCustomizer::class,
+            RowCustomizer::class,
             [
                 'storeManager' => $this->storeManagerMock,
                 'linkRepository' => $this->linkRepositoryMock,
@@ -76,21 +69,11 @@ class RowCustomizerTest extends TestCase
      */
     public function testPrepareData()
     {
-        $product1 = $this->getMockBuilder(ProductInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $product1->expects($this->any())
-            ->method('getId')
-            ->willReturn(1);
-        $product2 = $this->getMockBuilder(ProductInterface::class)
-        ->disableOriginalConstructor()
-        ->getMock();
-        $product2->expects($this->any())
-            ->method('getId')
-            ->willReturn(2);
-        $collection = $this->getMockBuilder(Collection::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $product1 = $this->createMock(ProductInterface::class);
+        $product1->method('getId')->willReturn(1);
+        $product2 = $this->createMock(ProductInterface::class);
+        $product2->method('getId')->willReturn(2);
+        $collection = $this->createMock(Collection::class);
 
         $callCount = 0;
         $collection->expects($this->atLeastOnce())
@@ -112,10 +95,10 @@ class RowCustomizerTest extends TestCase
             ->willReturnSelf();
         $this->linkRepositoryMock->expects($this->exactly(2))
             ->method('getLinksByProduct')
-            ->will($this->returnValue([]));
+            ->willReturn([]);
         $this->sampleRepositoryMock->expects($this->exactly(2))
             ->method('getSamplesByProduct')
-            ->will($this->returnValue([]));
+            ->willReturn([]);
 
         $this->model->prepareData($collection, []);
     }

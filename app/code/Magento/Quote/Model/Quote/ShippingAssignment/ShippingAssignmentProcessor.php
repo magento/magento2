@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Quote\Model\Quote\ShippingAssignment;
 
@@ -47,7 +47,7 @@ class ShippingAssignmentProcessor
         ShippingAssignmentFactory $shippingAssignmentFactory,
         ShippingProcessor $shippingProcessor,
         CartItemPersister $cartItemPersister,
-        AddressRepositoryInterface $addressRepository = null
+        ?AddressRepositoryInterface $addressRepository = null
     ) {
         $this->shippingAssignmentFactory = $shippingAssignmentFactory;
         $this->shippingProcessor = $shippingProcessor;

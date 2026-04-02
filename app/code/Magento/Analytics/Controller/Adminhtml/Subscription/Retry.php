@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Analytics\Controller\Adminhtml\Subscription;
@@ -15,6 +15,7 @@ use Magento\Framework\Exception\LocalizedException;
 
 /**
  * Retry subscription to Magento BI Advanced Reporting.
+ * @SuppressWarnings(PHPMD.AllPurposeAction)
  */
 class Retry extends Action
 {
@@ -28,7 +29,7 @@ class Retry extends Action
     /**
      * @inheritdoc
      */
-    const ADMIN_RESOURCE = 'Magento_Analytics::analytics_settings';
+    public const ADMIN_RESOURCE = 'Magento_Analytics::analytics_settings';
 
     /**
      * @param Context $context

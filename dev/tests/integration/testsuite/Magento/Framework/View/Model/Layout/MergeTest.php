@@ -1,11 +1,12 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework\View\Model\Layout;
 
 use Magento\Framework\View\Layout\LayoutCacheKeyInterface;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class MergeTest extends \PHPUnit\Framework\TestCase
 {
@@ -69,7 +70,7 @@ class MergeTest extends \PHPUnit\Framework\TestCase
         $link2->setLayoutUpdateId($layoutUpdate2->getId());
         $link2->save();
 
-        $this->layoutCacheKeyMock = $this->getMockForAbstractClass(LayoutCacheKeyInterface::class);
+        $this->layoutCacheKeyMock = $this->createMock(LayoutCacheKeyInterface::class);
         $this->layoutCacheKeyMock->expects($this->any())
             ->method('getCacheKeys')
             ->willReturn([]);

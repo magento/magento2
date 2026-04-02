@@ -30,7 +30,7 @@ class ValidateConfirmRequest
             );
         }
 
-        if (!$input['order_id'] || (int)$input['order_id'] === 0) {
+        if (empty($input['order_id'])) {
             throw new GraphQlInputException(
                 __(
                     'Required parameter "%field" is missing or incorrect.',

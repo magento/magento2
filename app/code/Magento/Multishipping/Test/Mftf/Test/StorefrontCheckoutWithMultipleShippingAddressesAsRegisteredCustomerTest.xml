@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright 2025 Adobe
+ * All Rights Reserved.
+ */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontCheckoutWithMultipleShippingAddressesAsRegisteredCustomerTest">
+        <annotations>
+            <features value="Multishipping"/>
+            <stories value="Checkout with Multiple Addresses"/>
+            <title value="Checkout with Multiple Shipping Addresses as Registered Customer"/>
+            <description value="Check registered customer multi‑shipment checkout and validate created orders"/>
+            <severity value="MAJOR"/>
+            <group value="Multishipment"/>
+            <group value="catalog"/>
+            <testCaseId value="AC-7616"/>
+        </annotations>
+        <before>
+            <!-- Data creation: two simple products and a customer with two addresses -->
+            <createData stepKey="createSimpleProduct1" entity="SimpleProduct"/>
+            <createData stepKey="createSimpleProduct2" entity="SimpleProduct2"/>
+            <createData stepKey="customer" entity="Simple_Customer_Multiple_Addresses"/>
+        </before>
+        <after>
+            <!-- Logout from Storefront (best-effort) -->
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutFromStorefrontIfLoggedIn"/>
+            <!-- Cleanup data -->
+            <deleteData stepKey="deleteCustomerEntity" createDataKey="customer"/>
+            <deleteData stepKey="deleteProduct1" createDataKey="createSimpleProduct1"/>
+            <deleteData stepKey="deleteProduct2" createDataKey="createSimpleProduct2"/>
+            <!-- Logout from Admin -->
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+        <!-- Step-1: Go to Storefront as non-logged in customer -->
+        <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="goToStorefrontAsGuest"/>
+        <!-- Step-2: Add 2 products to Shopping Cart -->
+        <actionGroup ref="AddSimpleProductToCartActionGroup" stepKey="addFirstProductToCart">
+            <argument name="product" value="$createSimpleProduct1$"/>
+        </actionGroup>
+        <actionGroup ref="AddSimpleProductToCartActionGroup" stepKey="addSecondProductToCart">
+            <argument name="product" value="$createSimpleProduct2$"/>
+        </actionGroup>
+        <!-- Step-3: Open Shopping Cart -->
+        <actionGroup ref="StorefrontOpenCartFromMinicartActionGroup" stepKey="openShoppingCartFromMiniCart"/>
+        <!-- Step-4: Click 'Checkout with Multiple Addresses' -->
+        <actionGroup ref="StorefrontCheckoutWithMultipleAddressesActionGroup" stepKey="checkoutWithMultipleAddressesFromCart"/>
+        <!-- Step-5: Login on Checkout Method page -->
+        <actionGroup ref="StorefrontFillCustomerLoginFormActionGroup" stepKey="fillCredentialsOnCheckoutLogin">
+            <argument name="customer" value="$$customer$$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontClickSignOnCustomerLoginFormActionGroup" stepKey="loginFromCheckoutMethodPage"/>
+        <!-- Steps 6, 7: Select different addresses for items and continue to shipping information (covered inside previous step if page auto-redirects) -->
+        <actionGroup ref="StorefrontSelectAddressActionGroup" stepKey="selectNYAddress">
+            <argument name="sequenceNumber" value="2"/>
+            <argument name="option" value="{{Customer_Address.ny_address}}"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontUpdateMultishippingItemsQuantityAndAddressesActionGroup" stepKey="clickOnUpdateQtyAndAddress"/>
+        <waitForPageLoad stepKey="waitForShippingInformationPageLoad"/>
+        <actionGroup ref="StorefrontNavigateToShippingInformationPageActionGroup" stepKey="navigateToShippingInformation"/>
+        <!-- Steps 8, 9: Select Flat Rate for both shipments and continue to Billing Information -->
+        <actionGroup ref="StorefrontGoToBillingInformationActionGroup" stepKey="goToBillingInformation"/>
+        <!-- Step-10: Select Payment method (Check/Money Order) -->
+        <actionGroup ref="CheckoutSelectCheckMoneyOrderPaymentActionGroup" stepKey="selectCheckMoneyOrderPayment"/>
+        <!-- Step-11: Continue to Review Order -->
+        <actionGroup ref="SelectBillingInfoActionGroup" stepKey="goToReviewOrderPage"/>
+        <!-- Step-12: Place Order -->
+        <actionGroup ref="PlaceOrderActionGroup" stepKey="placeOrderForMultipleAddresses"/>
+        <!-- Step-13: Validate two order numbers are shown -->
+        <seeNumberOfElements selector="{{CheckoutSuccessMainSection.orderLinks}}" userInput="2" stepKey="assertTwoOrderNumbersShownOnSuccessPage"/>
+        <waitForElementVisible selector="{{StorefrontMultipleShippingMethodSection.orderId('1')}}" stepKey="waitForOrderIds"/>
+        <grabTextFrom selector="{{StorefrontMultipleShippingMethodSection.orderId('1')}}" stepKey="grabFirstOrderId"/>
+        <grabTextFrom selector="{{StorefrontMultipleShippingMethodSection.orderId('2')}}" stepKey="grabSecondOrderId"/>
+        <!-- Step-14: Admin - verify both orders exist in the grid -->
+        <actionGroup ref="AdminLoginActionGroup" stepKey="loginToAdmin"/>
+        <actionGroup ref="AdminOrdersPageOpenActionGroup" stepKey="goToAdminSalesOrders"/>
+        <actionGroup ref="SearchAdminDataGridByKeywordActionGroup" stepKey="assertForFirstOrder">
+            <argument name="keyword" value="{$grabFirstOrderId}"/>
+        </actionGroup>
+        <actionGroup ref="SearchAdminDataGridByKeywordActionGroup" stepKey="assertForSecondOrder">
+            <argument name="keyword" value="{$grabSecondOrderId}"/>
+        </actionGroup>
+    </test>
+</tests>

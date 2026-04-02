@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Store\Model\ResourceModel;
 
@@ -56,8 +56,8 @@ class StoreWebsiteRelation
     public function getWebsiteStores(
         int $websiteId,
         bool $available = false,
-        int $storeGroupId = null,
-        int $storeId = null
+        ?int $storeGroupId = null,
+        ?int $storeId = null
     ): array {
         $connection = $this->resource->getConnection();
         $storeTable = $this->resource->getTableName('store');

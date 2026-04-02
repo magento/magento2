@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Elasticsearch\Model\DataProvider\Base;
 
@@ -101,7 +101,7 @@ class Suggestions implements SuggestedQueriesInterface
         SearchIndexNameResolver $searchIndexNameResolver,
         StoreManager $storeManager,
         FieldProviderInterface $fieldProvider,
-        LoggerInterface $logger = null,
+        ?LoggerInterface $logger = null,
         ?GetSuggestionFrequencyInterface $getSuggestionFrequency = null,
         array $responseErrorExceptionList = []
     ) {

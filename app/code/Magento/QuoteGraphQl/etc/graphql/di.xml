@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2025 Adobe
+ * All Rights Reserved.
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
@@ -44,7 +44,7 @@
             </argument>
         </arguments>
     </virtualType>
-    <type name="Magento\QuoteGraphQl\Model\Resolver\PlaceOrder">
+    <type name="Magento\QuoteGraphQl\Model\OrderErrorProcessor">
         <arguments>
             <argument name="errorMessageFormatter" xsi:type="object">Magento\QuoteGraphQl\Helper\Error\PlaceOrderMessageFormatter</argument>
         </arguments>
@@ -72,12 +72,17 @@
                 <item name="cart_expires_in_days" xsi:type="string">checkout/cart/delete_quote_after</item>
                 <item name="grouped_product_image" xsi:type="string">checkout/cart/grouped_product_image</item>
                 <item name="configurable_product_image" xsi:type="string">checkout/cart/configurable_product_image</item>
+                <item name="is_checkout_agreements_enabled" xsi:type="string">checkout/options/enable_agreements</item>
+                <item name="cart_merge_preference" xsi:type="string">checkout/cart/cart_merge_preference</item>
             </argument>
         </arguments>
     </type>
     <type name="Magento\Quote\Model\QuoteManagement">
         <plugin name="merge_guest_orders_with_customer_after_place"
                 type="Magento\QuoteGraphQl\Plugin\Model\MergeGuestOrder" />
+        <plugin name="validate_payment_method_on_place_order"
+                type="Magento\QuoteGraphQl\Plugin\Quote\ValidatePaymentOnPlaceOrder"
+                sortOrder="10"/>
     </type>
     <type name="Magento\QuoteGraphQl\Model\Resolver\UpdateCartItems">
         <arguments>
@@ -90,5 +95,32 @@
                 <item name="Only %s of %s available" xsi:type="string">INSUFFICIENT_STOCK</item>
             </argument>
         </arguments>
+    </type>
+    <type name="Magento\Quote\Model\CustomerManagement">
+        <plugin name="billing_address_save_same_as_shipping"
+                type="Magento\QuoteGraphQl\Plugin\CustomerManagementPlugin"/>
+    </type>
+    <type name="Magento\Payment\Model\MethodList">
+        <plugin name="restrict_payment_methods_graphql" type="Magento\QuoteGraphQl\Plugin\Model\RestrictPaymentMethods"/>
+    </type>
+    <type name="Magento\QuoteGraphQl\Model\Resolver\MergeCarts">
+        <arguments>
+            <argument name="fields" xsi:type="array">
+                <item name="gift_message_id" xsi:type="string">gift_message_id</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\GraphQl\Query\QueryDataFormatter">
+        <arguments>
+            <argument name="formatters" xsi:type="array">
+                <item name="process_order_response_formatter" xsi:type="object">Magento\QuoteGraphQl\Model\OrderResponseFormatter</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Quote\Model\ValidationRules\ShippingMethodValidationRule">
+        <plugin name="shipping_method_validation_plugin"
+                type="Magento\QuoteGraphQl\Plugin\ShippingMethodValidationRulePlugin"
+                sortOrder="10"
+                disabled="false"/>
     </type>
 </config>

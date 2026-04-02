@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Customer\CustomerData;
 
@@ -55,7 +55,7 @@ class SectionPool implements SectionPoolInterface
     /**
      * @inheritdoc
      */
-    public function getSectionsData(array $sectionNames = null, $forceNewTimestamp = false)
+    public function getSectionsData(?array $sectionNames = null, $forceNewTimestamp = false)
     {
         $sectionsData = $sectionNames ? $this->getSectionDataByNames($sectionNames) : $this->getAllSectionData();
         $sectionsData = $this->identifier->markSections($sectionsData, $sectionNames, $forceNewTimestamp);

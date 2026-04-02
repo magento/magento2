@@ -1,12 +1,13 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Catalog\Test\Unit\Model\Attribute\Config;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\Framework\Config\Dom;
 use Magento\Framework\Config\Dom\UrnResolver;
 use Magento\Framework\Config\ValidationStateInterface;
@@ -31,11 +32,11 @@ class XsdTest extends TestCase
     /**
      * @param string $fixtureXml
      * @param array $expectedErrors
-     * @dataProvider exemplarXmlDataProvider
      */
+    #[DataProvider('exemplarXmlDataProvider')]
     public function testExemplarXml($fixtureXml, array $expectedErrors)
     {
-        $validationStateMock = $this->getMockForAbstractClass(ValidationStateInterface::class);
+        $validationStateMock = $this->createMock(ValidationStateInterface::class);
         $validationStateMock->method('isValidationRequired')
             ->willReturn(true);
         $dom = new Dom($fixtureXml, $validationStateMock, [], null, null, '%message%');

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Paypal\Model;
@@ -9,6 +9,7 @@ namespace Magento\Paypal\Model;
 use Exception;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Paypal\Model\Exception\UnknownIpnException;
 use Magento\Sales\Model\Order;
 use Magento\Sales\Model\Order\Email\Sender\CreditmemoSender;
 use Magento\Sales\Model\Order\Email\Sender\OrderSender;
@@ -151,6 +152,11 @@ class Ipn extends \Magento\Paypal\Model\AbstractIpn implements IpnInterface
     protected function _getOrder()
     {
         $incrementId = $this->getRequestData('invoice');
+        if (!$incrementId) {
+            throw new UnknownIpnException(
+                __('Missing invoice field in IPN request.')
+            );
+        }
         $this->_order = $this->_orderFactory->create()->loadByIncrementId($incrementId);
         if (!$this->_order->getId()) {
             // phpcs:ignore Magento2.Exceptions.DirectThrow

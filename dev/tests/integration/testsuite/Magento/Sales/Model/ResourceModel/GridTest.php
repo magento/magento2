@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -11,6 +11,7 @@ use Magento\Framework\ObjectManagerInterface;
 use Magento\Sales\Model\Grid\LastUpdateTimeCache;
 use Magento\Sales\Model\ResourceModel\Provider\UpdatedAtListProvider;
 use Magento\TestFramework\Helper\Bootstrap;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Magento\Framework\DB\Adapter\Pdo\Mysql;
 
@@ -39,10 +40,10 @@ class GridTest extends TestCase
     }
 
     /**
-     * @dataProvider gridDataProvider
      * @param array $constructorArgs
      * @param string $orderIdField
      */
+    #[DataProvider('gridDataProvider')]
     public function testRefreshBySchedule(array $constructorArgs, string $orderIdField)
     {
         $constructorArgs['orderIdField'] = $constructorArgs['mainTableName'] . '.' . $orderIdField;
@@ -137,11 +138,11 @@ class GridTest extends TestCase
     }
 
     /**
-     * @dataProvider shipmentGridDataProvider
      * @param array $constructorArgs
      * @param string $orderIdField
      * @param string $orderIdIndex
      */
+    #[DataProvider('shipmentGridDataProvider')]
     public function testSalesShipmentGridOrderIdFieldIndex(array $constructorArgs, string $orderIdField, string $orderIdIndex)
     {
         $constructorArgs['orderIdField'] = $constructorArgs['mainTableName'] . '.' . $orderIdField;

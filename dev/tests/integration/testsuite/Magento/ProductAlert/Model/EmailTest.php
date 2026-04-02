@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -20,6 +20,7 @@ use Magento\Store\Model\Website;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\Mail\Template\TransportBuilderMock;
 use Magento\TestFramework\ObjectManager;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -86,13 +87,13 @@ class EmailTest extends TestCase
      * @magentoAppArea frontend
      * @magentoDataFixture Magento/Customer/_files/customer.php
      * @magentoDataFixture Magento/Catalog/_files/product_simple.php
-     * @dataProvider customerFunctionDataProvider
      *
      * @param bool isCustomerIdUsed
      * @throws LocalizedException
      * @throws MailException
      * @throws NoSuchEntityException
      */
+    #[DataProvider('customerFunctionDataProvider')]
     public function testSend($isCustomerIdUsed)
     {
         /** @var Website $website */
@@ -113,10 +114,10 @@ class EmailTest extends TestCase
 
         $this->_emailModel->addPriceProduct($product);
         $this->_emailModel->send();
-
+        $emailMessage = quoted_printable_decode($this->transportBuilder->getSentMessage()->getBody()->bodyToString());
         $this->assertStringContainsString(
             'John Smith,',
-            $this->transportBuilder->getSentMessage()->getBody()->getParts()[0]->getRawContent()
+            $emailMessage
         );
     }
 
@@ -166,10 +167,12 @@ class EmailTest extends TestCase
             $expectedPriceBox = '<span id="product-price-' . $product->getId() . '" data-price-amount="'
                 . $expectedPrice . '" data-price-type="finalPrice" '
                 . 'class="price-wrapper "><span class="price">$' . $expectedPrice . '.00</span></span>';
-
+            $emailMessage = quoted_printable_decode(
+                $this->transportBuilder->getSentMessage()->getBody()->bodyToString()
+            );
             $this->assertStringContainsString(
                 $expectedPriceBox,
-                $this->transportBuilder->getSentMessage()->getBody()->getParts()[0]->getRawContent()
+                $emailMessage
             );
         }
     }

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- /**
-  * Copyright 2024 Adobe
-  * All Rights Reserved.
-  */
+/**
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
+ */
 -->
 
 <entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -1603,5 +1603,14 @@
         <requiredEntity type="product_option">ProductOptionField19</requiredEntity>
         <requiredEntity type="product_option">ProductOptionField20</requiredEntity>
         <requiredEntity type="product_option">ProductOptionField21</requiredEntity>
+    </entity>
+    <entity name="productWithCheckboxCustomOptions" type="product">
+        <var key="sku" entityType="product" entityKey="sku"/>
+        <requiredEntity type="product_option">ProductOptionCheckboxFor2</requiredEntity>
+    </entity>
+    <entity name="productWithFileUploadAndRadiobuttonOptions" type="product">
+        <var key="sku" entityType="product" entityKey="sku"/>
+        <requiredEntity type="product_option">ProductOptionFileUpload</requiredEntity>
+        <requiredEntity type="product_option">ProductOptionRadiobutton</requiredEntity>
     </entity>
 </entities>

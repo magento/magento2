@@ -106,9 +106,6 @@
             <argument name="scope" xsi:type="const">Magento\Store\Model\ScopeInterface::SCOPE_STORE</argument>
         </arguments>
     </virtualType>
-    <type name="Magento\Framework\App\ActionInterface">
-        <plugin name="designLoader" type="Magento\Theme\Plugin\LoadDesignPlugin"/>
-    </type>
     <type name="Magento\Framework\View\Element\UiComponent\DataProvider\CollectionFactory">
         <arguments>
              <argument name="collections" xsi:type="array">

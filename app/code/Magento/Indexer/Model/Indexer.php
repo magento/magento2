@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Indexer\Model;
@@ -468,6 +468,11 @@ class Indexer extends DataObject implements IndexerInterface, SuspendableIndexer
 
             try {
                 $this->getActionInstance()->executeFull();
+                // Re-acquire application lock if it was released by connection close during multi-process execution
+                // so that the working-state check below can succeed and mark the indexer as VALID.
+                $state->setStatus(StateInterface::STATUS_WORKING);
+                $state->save();
+
                 if ($this->workingStateProvider->isWorking($this->getId())) {
                     $state->setStatus(StateInterface::STATUS_VALID);
                     $state->save();

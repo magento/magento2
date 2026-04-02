@@ -1,0 +1,30 @@
+#
+# Copyright 2026 Adobe
+# All Rights Reserved.
+#
+
+
+type Mutation {
+    clearCart(input: ClearCartInput! @doc(description: "An input object that defines cart ID of the shopper.")): ClearCartOutput! @resolver (class: "\\Magento\\QuoteCommerceGraphQl\\Model\\Resolver\\ClearCart") @doc(description:"Remove all items from the specified cart.")
+}
+
+input ClearCartInput @doc(description: "Assigns a specific `cart_id` to the empty cart.") {
+    uid: ID! @doc(description: "The unique ID of a `Cart` object.")
+}
+
+type ClearCartOutput @doc(description: "Output of the request to clear the customer cart.") {
+    cart: Cart @doc(description: "The cart after clear cart items.")
+    errors: [ClearCartError!] @doc(description: "An array of errors encountered while clearing the cart item")
+}
+
+type ClearCartError @doc(description: "Contains details about errors encountered when a customer clear cart.") {
+  type: ClearCartErrorType! @doc(description: "A cart-specific error type.")
+  message: String! @doc(description: "A localized error message")
+}
+
+enum ClearCartErrorType {
+  NOT_FOUND
+  UNAUTHORISED
+  INACTIVE
+  UNDEFINED
+}

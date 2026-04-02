@@ -17,12 +17,12 @@ type Mutation {
 }
 
 input CancelOrderInput @doc(description: "Defines the order to cancel.") {
-    order_id: ID! @doc(description: "Order ID.")
+    order_id: ID! @doc(description: "The unique ID of an `Order` type.")
     reason: String! @doc(description: "Cancellation reason.")
 }
 
 input ConfirmCancelOrderInput {
-    order_id: ID! @doc(description: "Order ID.")
+    order_id: ID! @doc(description: "The unique ID of an `Order` type.")
     confirmation_key: String! @doc(description: "Confirmation Key to cancel the order.")
 }
 
@@ -51,6 +51,6 @@ enum CancelOrderErrorCode {
     INVALID_ORDER_STATUS
 }
 
-enum OrderActionType @doc(description: "The list of available order actions.") {
+enum OrderActionType {
     CANCEL
 }

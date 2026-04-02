@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework\Locale;
 
@@ -219,6 +219,7 @@ class Config implements \Magento\Framework\Locale\ConfigInterface
         'NAD', /*Namibia Dollar*/
         'NPR', /*Nepalese Rupee*/
         'ANG', /*Netherlands Antillan Guilder*/
+        'XCG', /*Caribbean guilder*/
         'YTL', /*New Turkish Lira*/
         'NZD', /*New Zealand Dollar*/
         'NIC', /*Nicaraguan Cordoba (1988–1991)*/

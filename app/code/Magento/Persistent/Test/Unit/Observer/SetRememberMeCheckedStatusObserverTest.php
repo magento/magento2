@@ -1,8 +1,7 @@
 <?php
 /**
- *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -11,14 +10,19 @@ namespace Magento\Persistent\Test\Unit\Observer;
 use Magento\Framework\App\Request\Http;
 use Magento\Framework\Event;
 use Magento\Framework\Event\Observer;
+use Magento\Checkout\Model\Session as CheckoutSession;
 use Magento\Persistent\Helper\Data;
 use Magento\Persistent\Helper\Session;
 use Magento\Persistent\Observer\SetRememberMeCheckedStatusObserver;
 use PHPUnit\Framework\MockObject\MockObject;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use PHPUnit\Framework\TestCase;
 
 class SetRememberMeCheckedStatusObserverTest extends TestCase
 {
+
+    use MockCreationTrait;
+
     /**
      * @var SetRememberMeCheckedStatusObserver
      */
@@ -59,15 +63,15 @@ class SetRememberMeCheckedStatusObserverTest extends TestCase
         $this->requestMock = $this->createMock(Http::class);
         $this->helperMock = $this->createMock(Data::class);
         $this->sessionHelperMock = $this->createMock(Session::class);
-        $this->checkoutSessionMock = $this->getMockBuilder(\Magento\Checkout\Model\Session::class)
-            ->addMethods(['setRememberMeChecked'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->checkoutSessionMock = $this->createPartialMockWithReflection(
+            CheckoutSession::class,
+            ['setRememberMeChecked']
+        );
         $this->observerMock = $this->createMock(Observer::class);
-        $this->eventManagerMock = $this->getMockBuilder(Event::class)
-            ->addMethods(['getRequest'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->eventManagerMock = $this->createPartialMockWithReflection(
+            Event::class,
+            ['getRequest']
+        );
         $this->model = new SetRememberMeCheckedStatusObserver(
             $this->helperMock,
             $this->sessionHelperMock,

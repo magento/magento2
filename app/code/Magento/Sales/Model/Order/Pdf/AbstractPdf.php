@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Sales\Model\Order\Pdf;
@@ -177,7 +177,7 @@ abstract class AbstractPdf extends \Magento\Framework\DataObject
         \Magento\Framework\Translate\Inline\StateInterface $inlineTranslation,
         \Magento\Sales\Model\Order\Address\Renderer $addressRenderer,
         array $data = [],
-        Database $fileStorageDatabase = null,
+        ?Database $fileStorageDatabase = null,
         ?RtlTextHandler $rtlTextHandler = null,
         ?Image $image = null,
         ?TaxHelper $taxHelper = null
@@ -1066,7 +1066,7 @@ abstract class AbstractPdf extends \Magento\Framework\DataObject
             if ($this->y - $itemsProp['shift'] < 15) {
                 $page = $this->newPage($pageSettings);
             }
-            $this->correctLines($lines, $page, $height);
+            $page = $this->correctLines($lines, $page, $height);
         }
 
         return $page;
@@ -1081,7 +1081,7 @@ abstract class AbstractPdf extends \Magento\Framework\DataObject
      * @throws \Zend_Pdf_Exception
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
-    private function correctLines($lines, $page, $height) :void
+    private function correctLines($lines, $page, $height) :\Zend_Pdf_Page
     {
         foreach ($lines as $line) {
             $maxHeight = 0;
@@ -1108,12 +1108,16 @@ abstract class AbstractPdf extends \Magento\Framework\DataObject
                 if (!is_array($column['text'])) {
                     $column['text'] = [$column['text']];
                 }
-                $top = $this->correctText($column, $height, $font, $page);
+                $textCorrection = $this->correctText($column, $height, $font, $page);
+                $top = $textCorrection['top'];
+                $page = $textCorrection['page'];
 
                 $maxHeight = $top > $maxHeight ? $top : $maxHeight;
             }
             $this->y -= $maxHeight;
         }
+
+        return $page;
     }
 
     /**
@@ -1127,7 +1131,7 @@ abstract class AbstractPdf extends \Magento\Framework\DataObject
      * @return int
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
-    private function correctText($column, $height, $font, $page) :int
+    private function correctText($column, $height, $font, $page) :array
     {
         $top = 0;
         $lineSpacing = !empty($column['height']) ? $column['height'] : $height;
@@ -1160,6 +1164,6 @@ abstract class AbstractPdf extends \Magento\Framework\DataObject
             $page->drawText($part, $feed, $this->y - $top, 'UTF-8');
             $top += $lineSpacing;
         }
-        return $top;
+        return ['top' => $top, 'page' => $page];
     }
 }

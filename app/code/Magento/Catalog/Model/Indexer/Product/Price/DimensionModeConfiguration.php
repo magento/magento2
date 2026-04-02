@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 namespace Magento\Catalog\Model\Indexer\Product\Price;
@@ -15,10 +15,10 @@ class DimensionModeConfiguration
     /**#@+
      * Available modes of dimensions for product price indexer
      */
-    const DIMENSION_NONE = 'none';
-    const DIMENSION_WEBSITE = 'website';
-    const DIMENSION_CUSTOMER_GROUP = 'customer_group';
-    const DIMENSION_WEBSITE_AND_CUSTOMER_GROUP = 'website_and_customer_group';
+    public const DIMENSION_NONE = 'none';
+    public const DIMENSION_WEBSITE = 'website';
+    public const DIMENSION_CUSTOMER_GROUP = 'customer_group';
+    public const DIMENSION_WEBSITE_AND_CUSTOMER_GROUP = 'website_and_customer_group';
     /**#@-*/
 
     /**
@@ -71,13 +71,14 @@ class DimensionModeConfiguration
 
     /**
      * Get names of dimensions which used for provided mode.
+     *
      * By default return dimensions for current enabled mode
      *
      * @param string|null $mode
      * @return string[]
      * @throws \InvalidArgumentException
      */
-    public function getDimensionConfiguration(string $mode = null): array
+    public function getDimensionConfiguration(?string $mode = null): array
     {
         if ($mode && !isset($this->modesMapping[$mode])) {
             throw new \InvalidArgumentException(
@@ -88,6 +89,8 @@ class DimensionModeConfiguration
     }
 
     /**
+     * Method to get the current mode for product price
+     *
      * @return string
      */
     private function getCurrentMode(): string

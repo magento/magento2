@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright 2021 Adobe
+ * All Rights Reserved.
+ */
+-->
+
+<entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:DataGenerator/etc/dataProfileSchema.xsd">
+    <entity name="EmailToFriendValidValues" type="emailToFFriend">
+        <data key="shareInfo_message">Sharing message.</data>
+        <data key="shareInfo_email">JohnDoe123456789@example.com</data>
+        <data key="recipient_name">John</data>
+    </entity>
+</entities>

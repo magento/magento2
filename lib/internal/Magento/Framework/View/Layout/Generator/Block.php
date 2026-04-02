@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework\View\Layout\Generator;
 
@@ -20,7 +20,7 @@ class Block implements Layout\GeneratorInterface
     /**
      * Type of generator
      */
-    const TYPE = 'block';
+    public const TYPE = 'block';
 
     /**
      * @var \Magento\Framework\View\Element\BlockFactory
@@ -123,7 +123,7 @@ class Block implements Layout\GeneratorInterface
         $scheduledStructure = $readerContext->getScheduledStructure();
         $layout = $generatorContext->getLayout();
         $structure = $generatorContext->getStructure();
-        /** @var $blocks \Magento\Framework\View\Element\AbstractBlock[] */
+        /** @var \Magento\Framework\View\Element\AbstractBlock[] $blocks */
         $blocks = [];
         $blockActions = [];
         // Instantiate blocks and collect all actions data
@@ -242,10 +242,13 @@ class Block implements Layout\GeneratorInterface
     /**
      * Create block instance
      *
-     * @param string|\Magento\Framework\View\Element\AbstractBlock $block
+     * @template T of \Magento\Framework\View\Element\AbstractBlock
+     *
+     * @param class-string<T>|T $block
      * @param string $name
      * @param array $arguments
-     * @return \Magento\Framework\View\Element\AbstractBlock
+     *
+     * @return T
      */
     public function createBlock($block, $name, array $arguments = [])
     {
@@ -259,10 +262,14 @@ class Block implements Layout\GeneratorInterface
     /**
      * Create block object instance based on block type
      *
-     * @param string|\Magento\Framework\View\Element\AbstractBlock $block
+     * @template T of \Magento\Framework\View\Element\AbstractBlock
+     *
+     * @param class-string<T>|T $block
      * @param array $arguments
+     *
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @return \Magento\Framework\View\Element\AbstractBlock
+     *
+     * @return T
      */
     protected function getBlockInstance($block, array $arguments = [])
     {

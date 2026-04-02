@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -53,7 +53,7 @@ class Admin extends \Magento\Framework\App\Helper\AbstractHelper
         \Magento\Sales\Model\Config $salesConfig,
         \Magento\Framework\Pricing\PriceCurrencyInterface $priceCurrency,
         \Magento\Framework\Escaper $escaper,
-        \DOMDocumentFactory $domDocumentFactory = null
+        ?\DOMDocumentFactory $domDocumentFactory = null
     ) {
         $this->priceCurrency = $priceCurrency;
         $this->_storeManager = $storeManager;
@@ -154,9 +154,9 @@ class Admin extends \Magento\Framework\App\Helper\AbstractHelper
     /**
      * Escape string preserving links
      *
-     * @param string $data
+     * @param string|int|float|\Stringable|array<string|int|float|\Stringable> $data
      * @param null|array $allowedTags
-     * @return string
+     * @return ($data is array ? string[] : string)
      */
     public function escapeHtmlWithLinks($data, $allowedTags = null)
     {

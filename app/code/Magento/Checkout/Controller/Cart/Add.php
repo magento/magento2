@@ -1,8 +1,7 @@
 <?php
 /**
- *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Checkout\Controller\Cart;
 
@@ -159,6 +158,7 @@ class Add extends \Magento\Checkout\Controller\Cart implements HttpPostActionInt
                         ]
                     );
                 }
+
                 if ($this->cart->getQuote()->getHasError()) {
                     $errors = $this->cart->getQuote()->getErrors();
                     foreach ($errors as $error) {

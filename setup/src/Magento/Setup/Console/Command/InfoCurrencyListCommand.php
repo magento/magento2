@@ -35,7 +35,7 @@ class InfoCurrencyListCommand extends Command
      * @param Lists $lists
      * @param TableFactory $tableHelperFactory
      */
-    public function __construct(Lists $lists, TableFactory $tableHelperFactory = null)
+    public function __construct(Lists $lists, ?TableFactory $tableHelperFactory = null)
     {
         $this->lists = $lists;
         $this->tableHelperFactory = $tableHelperFactory ?: ObjectManager::getInstance()->create(TableFactory::class);
@@ -56,7 +56,7 @@ class InfoCurrencyListCommand extends Command
     /**
      * @inheritdoc
      */
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $tableHelper = $this->tableHelperFactory->create(['output' => $output]);
         $tableHelper->setHeaders(['Currency', 'Code']);

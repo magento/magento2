@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Config\Model\ResourceModel;
 
@@ -30,7 +30,7 @@ class Config extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb implem
      * @return void
      */
     protected function _construct(
-        PoisonPillPutInterface $pillPut = null
+        ?PoisonPillPutInterface $pillPut = null
     ) {
         $this->_init('core_config_data', 'config_id');
         $this->pillPut = $pillPut ?: \Magento\Framework\App\ObjectManager::getInstance()

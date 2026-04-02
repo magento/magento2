@@ -109,9 +109,9 @@ class Image implements LocalInterface
         EncryptorInterface $encryptor,
         $filePath,
         array $miscParams,
-        ImageHelper $imageHelper = null,
-        CatalogMediaConfig $catalogMediaConfig = null,
-        StoreManagerInterface $storeManager = null,
+        ?ImageHelper $imageHelper = null,
+        ?CatalogMediaConfig $catalogMediaConfig = null,
+        ?StoreManagerInterface $storeManager = null,
         ?ConvertImageMiscParamsToReadableFormat $convertImageMiscParamsToReadableFormat = null
     ) {
         if (isset($miscParams['image_type'])) {

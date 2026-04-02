@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -49,7 +49,7 @@ class Product implements ResolverInterface
         ProductDataProvider $productDataProvider,
         ValueFactory $valueFactory,
         ProductFieldsSelector $productFieldsSelector,
-        ProductDataProviderFactory $productDataProviderFactory = null
+        ?ProductDataProviderFactory $productDataProviderFactory = null
     ) {
         $this->productDataProviderFactory = $productDataProviderFactory
             ?: ObjectManager::getInstance()->get(ProductDataProviderFactory::class);
@@ -60,7 +60,7 @@ class Product implements ResolverInterface
     /**
      * @inheritdoc
      */
-    public function resolve(Field $field, $context, ResolveInfo $info, array $value = null, array $args = null)
+    public function resolve(Field $field, $context, ResolveInfo $info, ?array $value = null, ?array $args = null)
     {
         if (!isset($value['sku'])) {
             throw new GraphQlInputException(__('No child sku found for product link.'));

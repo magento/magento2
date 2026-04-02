@@ -1,8 +1,7 @@
 <?php
 /**
- *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -13,6 +12,7 @@ use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\Request\InvalidRequestException;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\Exception\RemoteServiceUnavailableException;
+use Magento\Paypal\Model\Exception\UnknownIpnException;
 use Magento\Sales\Model\OrderFactory;
 
 /**
@@ -47,7 +47,7 @@ class Index extends \Magento\Framework\App\Action\Action implements CsrfAwareAct
         \Magento\Framework\App\Action\Context $context,
         \Magento\Paypal\Model\IpnFactory $ipnFactory,
         \Psr\Log\LoggerInterface $logger,
-        OrderFactory $orderFactory = null
+        ?OrderFactory $orderFactory = null
     ) {
         $this->_logger = $logger;
         $this->_ipnFactory = $ipnFactory;
@@ -86,19 +86,23 @@ class Index extends \Magento\Framework\App\Action\Action implements CsrfAwareAct
         try {
             $data = $this->getRequest()->getPostValue();
             $this->_ipnFactory->create(['data' => $data])->processIpnRequest();
-            $incrementId = $this->getRequest()->getPostValue()['invoice'];
-            $this->_eventManager->dispatch(
-                'paypal_checkout_success',
-                [
-                    'order' => $this->orderFactory->create()->loadByIncrementId($incrementId)
-                ]
-            );
+            $incrementId = $data['invoice'] ?? null;
+            if ($incrementId) {
+                $this->_eventManager->dispatch(
+                    'paypal_checkout_success',
+                    [
+                        'order' => $this->orderFactory->create()->loadByIncrementId($incrementId)
+                    ]
+                );
+            }
         } catch (RemoteServiceUnavailableException $e) {
             $this->_logger->critical($e);
             $this->getResponse()->setStatusHeader(503, '1.1', 'Service Unavailable')->sendResponse();
             /** @todo eliminate usage of exit statement */
             // phpcs:ignore Magento2.Security.LanguageConstruct.ExitUsage
             exit;
+        } catch (UnknownIpnException $e) {
+            $this->_logger->warning($e);
         } catch (\Exception $e) {
             $this->_logger->critical($e);
             $this->getResponse()->setHttpResponseCode(500);

@@ -1,19 +1,22 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\CatalogImportExport\Test\Unit\Model\Import\Product;
 
 use Magento\Catalog\Model\Category;
+use Magento\Catalog\Model\CategoryFactory;
 use Magento\Catalog\Model\ResourceModel\Category\Collection;
+use Magento\Catalog\Model\ResourceModel\Category\CollectionFactory;
 use Magento\CatalogImportExport\Model\Import\Product\CategoryProcessor;
 use Magento\CatalogImportExport\Model\Import\Product\Type\AbstractType;
 use Magento\Framework\Exception\AlreadyExistsException;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\Store\Model\Store;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -44,23 +47,21 @@ class CategoryProcessorTest extends TestCase
     protected $product;
 
     /**
-     * @var \Magento\Catalog\Model\Category
+     * @var Category
      */
     private $childCategory;
 
     /**
-     * @var \Magento\Catalog\Model\Category
+     * @var Category
      */
     private $parentCategory;
 
     protected function setUp(): void
     {
-        $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $this->objectManager = new ObjectManagerHelper($this);
         $this->objectManagerHelper = new ObjectManagerHelper($this);
 
-        $this->childCategory = $this->getMockBuilder(Category::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->childCategory = $this->createMock(Category::class);
         $this->childCategory->method('getId')->willReturn(self::CHILD_CATEGORY_ID);
         $this->childCategory->method('getName')->willReturn(self::CHILD_CATEGORY_NAME);
         $this->childCategory->method('getPath')->willReturn(
@@ -68,9 +69,7 @@ class CategoryProcessorTest extends TestCase
             . self::CHILD_CATEGORY_ID
         );
 
-        $this->parentCategory = $this->getMockBuilder(Category::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->parentCategory = $this->createMock(Category::class);
         $this->parentCategory->method('getId')->willReturn(self::PARENT_CATEGORY_ID);
         $this->parentCategory->method('getName')->willReturn('Parent');
         $this->parentCategory->method('getPath')->willReturn(self::PARENT_CATEGORY_ID);
@@ -99,13 +98,13 @@ class CategoryProcessorTest extends TestCase
             });
 
         $categoryColFactory = $this->createPartialMock(
-            \Magento\Catalog\Model\ResourceModel\Category\CollectionFactory::class,
+            CollectionFactory::class,
             ['create']
         );
 
         $categoryColFactory->method('create')->willReturn($categoryCollection);
 
-        $categoryFactory = $this->createPartialMock(\Magento\Catalog\Model\CategoryFactory::class, ['create']);
+        $categoryFactory = $this->createPartialMock(CategoryFactory::class, ['create']);
 
         $categoryFactory->method('create')->willReturn($this->childCategory);
 
@@ -154,9 +153,8 @@ class CategoryProcessorTest extends TestCase
 
     /**
      * Cover getCategoryById().
-     *
-     * @dataProvider getCategoryByIdDataProvider
      */
+    #[DataProvider('getCategoryByIdDataProvider')]
     public function testGetCategoryById($categoriesCache, $expectedResult)
     {
         $categoryId = 'category_id';
@@ -196,7 +194,6 @@ class CategoryProcessorTest extends TestCase
     {
         $reflection = new \ReflectionClass(get_class($object));
         $reflectionProperty = $reflection->getProperty($property);
-        $reflectionProperty->setAccessible(true);
         $reflectionProperty->setValue($object, $value);
         return $object;
     }
@@ -212,7 +209,6 @@ class CategoryProcessorTest extends TestCase
 
         $reflection = new \ReflectionClass($this->categoryProcessor);
         $createCategoryReflection = $reflection->getMethod('createCategory');
-        $createCategoryReflection->setAccessible(true);
         $createCategoryReflection->invokeArgs($this->categoryProcessor, ['testCategory', 2]);
     }
 }

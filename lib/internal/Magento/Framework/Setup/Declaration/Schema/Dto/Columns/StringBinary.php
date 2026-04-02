@@ -66,9 +66,9 @@ class StringBinary extends Column implements
         Table $table,
         int $length,
         bool $nullable = true,
-        string $default = null,
-        string $comment = null,
-        string $onCreate = null,
+        ?string $default = null,
+        ?string $comment = null,
+        ?string $onCreate = null,
         ?string $charset = 'utf8mb4',
         ?string $collation = 'utf8mb4_general_ci'
     ) {

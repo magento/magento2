@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2021 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -81,9 +81,7 @@ class ProductTestBase extends TestCase
     protected function setUp(): void
     {
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        $this->logger = $this->getMockBuilder(LoggerInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->logger = $this->createMock(LoggerInterface::class);
         $this->createNewModel();
         $this->importedProducts = [];
         $this->searchCriteriaBuilder = $this->objectManager->get(SearchCriteriaBuilder::class);
@@ -265,12 +263,12 @@ class ProductTestBase extends TestCase
     {
         $data = ['header' => [], 'data' => []];
 
-        $lines = str_getcsv($content, "\n");
+        $lines = str_getcsv($content, "\n",'"', '\\');
         foreach ($lines as $index => $line) {
             if ($index == 0) {
-                $data['header'] = str_getcsv($line);
+                $data['header'] = str_getcsv($line, ',', '"', '\\');
             } else {
-                $row = array_combine($data['header'], str_getcsv($line));
+                $row = array_combine($data['header'], str_getcsv($line, ',', '"', '\\'));
                 if ($entityId !== null && !empty($row[$entityId])) {
                     $data['data'][$row[$entityId]] = $row;
                 } else {

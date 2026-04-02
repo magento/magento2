@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -29,7 +29,7 @@ class TaxSetupTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->typeConfigMock = $this->getMockForAbstractClass(ConfigInterface::class);
+        $this->typeConfigMock = $this->createMock(ConfigInterface::class);
 
         $salesSetup = $this->createMock(SalesSetup::class);
         $salesSetupFactory = $this->createPartialMock(SalesSetupFactory::class, ['create']);
@@ -45,7 +45,7 @@ class TaxSetupTest extends TestCase
         );
     }
 
-    public function testGetTaxableItems()
+    public function testGetTaxableItems(): void
     {
         $refundable = ['simple', 'simple2'];
         $this->typeConfigMock->expects(

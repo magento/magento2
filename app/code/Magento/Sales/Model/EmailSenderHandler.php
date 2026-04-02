@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Sales\Model;
 
@@ -93,8 +93,8 @@ class EmailSenderHandler
         EntityAbstract $entityResource,
         AbstractCollection $entityCollection,
         ScopeConfigInterface $globalConfig,
-        IdentityInterface $identityContainer = null,
-        StoreManagerInterface $storeManager = null,
+        ?IdentityInterface $identityContainer = null,
+        ?StoreManagerInterface $storeManager = null,
         ?ValueFactory $configValueFactory = null,
         ?string $modifyStartFromDate = null,
     ) {
@@ -183,8 +183,9 @@ class EmailSenderHandler
         /** @var \Magento\Sales\Model\EntityInterface $item */
         foreach ($entityCollection->getItems() as $item) {
             /** @var StoreManagerInterface $store */
-            $store = $this->storeManager->getStore($item->getStoreId());
-            $stores[$item->getStoreId()] = $store;
+            $storeId = $item->getStoreId() ?? '';
+            $store = $this->storeManager->getStore($storeId);
+            $stores[$storeId] = $store;
         }
 
         return $stores;

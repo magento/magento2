@@ -1,17 +1,19 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2021 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\MessageQueue\Test\Unit\Console;
 
 use Magento\Framework\App\DeploymentConfig;
+use Magento\Framework\App\ObjectManager as AppObjectManager;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\MessageQueue\PoisonPill\PoisonPillPutInterface;
 use Magento\Framework\Module\ModuleListInterface;
 use Magento\Framework\Mview\TriggerCleaner;
+use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Registry;
 use Magento\Framework\Setup\ModuleContextInterface;
 use Magento\Framework\Setup\Patch\PatchApplier;
@@ -166,6 +168,18 @@ class PoisonPillApplyDuringSetupUpgradeTest extends TestCase
             });
         $this->setupFactory = $this->createMock(SetupFactory::class);
         $this->setupFactory->method('create')->willReturn($this->schemaSetupInterface);
+
+        try {
+            AppObjectManager::getInstance();
+        } catch (\RuntimeException) {
+            // Installer class creates instance of DeploymentConfig in the constructor
+            // so the object manager should be defined.
+            $objectManagerMock = $this->createMock(ObjectManagerInterface::class);
+            $objectManagerMock->method('get')
+                ->willReturnCallback(fn ($type) => $this->createMock($type));
+            AppObjectManager::setInstance($objectManagerMock);
+        }
+
         $this->installer = $objectManager->getObject(
             Installer::class,
             [

@@ -1,12 +1,13 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Catalog\Test\Unit\Model\Indexer\Category\Flat\Plugin;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\Catalog\Model\Indexer\Category\Flat\Plugin\IndexerConfigData;
 use Magento\Catalog\Model\Indexer\Category\Flat\State;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
@@ -44,8 +45,8 @@ class IndexerConfigDataTest extends TestCase
      * @param mixed $default
      * @param array $inputData
      * @param array $outputData
-     * @dataProvider aroundGetDataProvider
      */
+    #[DataProvider('aroundGetDataProvider')]
     public function testAroundGet($isFlat, $path, $default, $inputData, $outputData)
     {
         $this->stateMock->expects($this->once())->method('isFlatEnabled')->willReturn($isFlat);

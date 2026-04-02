@@ -54,7 +54,7 @@
             <!-- Click on PayPal payment radio button and click on continue btn -->
             <actionGroup ref="AdminSelectPaypalStandardPaymentInPaymentPageActionGroup" stepKey="selectPaypalStandardPaymentAndClickOnContinuebtn"/>
             <!-- Login to Paypal in-context and verify order total on paypal page-->
-            <actionGroup ref="DummyDataActionGroup" stepKey="loginToPayPal"/>
+            <actionGroup ref="StorefrontLoginToPayPalPaymentAccountTwoStepActionGroup" stepKey="loginToPayPal"/>
             <actionGroup ref="StorefrontPaypalSwitchBackToMagentoFromCheckoutPageActionGroup" stepKey="confirmPaymentAndGoBackToMagento"/>
             <waitForText selector="{{CheckoutSuccessMainSection.successTitle}}" userInput="Thank you for your purchase!" stepKey="waitForLoadSuccessPage"/>
             <waitForText selector="{{CheckoutSuccessMainSection.success}}" userInput="We'll email you an order confirmation with details and tracking info." stepKey="seeSuccessMessage"/>

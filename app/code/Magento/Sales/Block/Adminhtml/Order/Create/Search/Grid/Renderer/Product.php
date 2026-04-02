@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Sales\Block\Adminhtml\Order\Create\Search\Grid\Renderer;
 
@@ -11,8 +11,6 @@ use Magento\Framework\View\Helper\SecureHtmlRenderer;
 
 /**
  * Adminhtml sales create order product search grid product name column renderer
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Product extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Text
 {

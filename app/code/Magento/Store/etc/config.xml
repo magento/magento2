@@ -24,13 +24,13 @@
                 <merge_files>0</merge_files>
                 <minify_files>0</minify_files>
                 <minify_exclude>
-                    <tiny_mce_6>/tiny_mce_6/</tiny_mce_6>
+                    <hugerte>/hugerte/</hugerte>
                 </minify_exclude>
             </js>
             <css>
                 <minify_files>0</minify_files>
                 <minify_exclude>
-                    <tiny_mce_6>/tiny_mce_6/</tiny_mce_6>
+                    <hugerte>/hugerte/</hugerte>
                 </minify_exclude>
             </css>
             <image>

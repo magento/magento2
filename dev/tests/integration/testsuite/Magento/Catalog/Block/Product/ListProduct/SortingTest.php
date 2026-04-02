@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -21,6 +21,7 @@ use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\TestFramework\Helper\Bootstrap;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -85,18 +86,18 @@ class SortingTest extends TestCase
 
     /**
      * @magentoDataFixture Magento/Catalog/_files/products_with_not_empty_layered_navigation_attribute.php
-     * @dataProvider productListSortOrderDataProvider
      * @param string $sortBy
      * @param string $direction
      * @param array $expectation
      * @param string|null $incompleteReason
      * @return void
      */
+    #[DataProvider('productListSortOrderDataProvider')]
     public function testProductListSortOrder(
         string $sortBy,
         string $direction,
         array $expectation,
-        string $incompleteReason = null
+        ?string $incompleteReason = null
     ): void {
         if ($incompleteReason) {
             $this->markTestSkipped($incompleteReason);
@@ -108,18 +109,18 @@ class SortingTest extends TestCase
 
     /**
      * @magentoDataFixture Magento/Catalog/_files/products_with_not_empty_layered_navigation_attribute.php
-     * @dataProvider productListSortOrderDataProvider
      * @param string $sortBy
      * @param string $direction
      * @param array $expectation
      * @param string|null $incompleteReason
      * @return void
      */
+    #[DataProvider('productListSortOrderDataProvider')]
     public function testProductListSortOrderWithConfig(
         string $sortBy,
         string $direction,
         array $expectation,
-        string $incompleteReason = null
+        ?string $incompleteReason = null
     ): void {
         if ($incompleteReason) {
             $this->markTestSkipped($incompleteReason);
@@ -183,7 +184,6 @@ class SortingTest extends TestCase
     /**
      * @magentoDataFixture Magento/Store/_files/second_store.php
      * @magentoDataFixture Magento/Catalog/_files/products_with_not_empty_layered_navigation_attribute.php
-     * @dataProvider productListSortOrderDataProviderOnStoreView
      * @param string $sortBy
      * @param string $direction
      * @param array $expectation
@@ -191,12 +191,13 @@ class SortingTest extends TestCase
      * @param string|null $incompleteReason
      * @return void
      */
+    #[DataProvider('productListSortOrderDataProviderOnStoreView')]
     public function testProductListSortOrderOnStoreView(
         string $sortBy,
         string $direction,
         array $expectation,
         string $defaultSortBy,
-        string $incompleteReason = null
+        ?string $incompleteReason = null
     ): void {
         if ($incompleteReason) {
             $this->markTestSkipped($incompleteReason);
@@ -211,7 +212,6 @@ class SortingTest extends TestCase
     /**
      * @magentoDataFixture Magento/Store/_files/second_store.php
      * @magentoDataFixture Magento/Catalog/_files/products_with_not_empty_layered_navigation_attribute.php
-     * @dataProvider productListSortOrderDataProviderOnStoreView
      * @param string $sortBy
      * @param string $direction
      * @param array $expectation
@@ -219,12 +219,13 @@ class SortingTest extends TestCase
      * @param string|null $incompleteReason,
      * @return void
      */
+    #[DataProvider('productListSortOrderDataProviderOnStoreView')]
     public function testProductListSortOrderWithConfigOnStoreView(
         string $sortBy,
         string $direction,
         array $expectation,
         string $defaultSortBy,
-        string $incompleteReason = null
+        ?string $incompleteReason = null
     ): void {
         if ($incompleteReason) {
             $this->markTestSkipped($incompleteReason);
@@ -387,12 +388,12 @@ class SortingTest extends TestCase
      * @magentoDataFixture Magento/Catalog/_files/products_with_not_empty_layered_navigation_attribute.php
      * @magentoDataFixture Magento/Framework/Search/_files/product_configurable_with_out-of-stock_child.php
      * @magentoConfigFixture current_store cataloginventory/options/show_out_of_stock 1
-     * @dataProvider productListWithOutOfStockSortOrderDataProvider
      * @param string $sortBy
      * @param string $direction
      * @param array $expected
      * @return void
      */
+    #[DataProvider('productListWithOutOfStockSortOrderDataProvider')]
     public function testProductListOutOfStockSortOrderWithElasticsearch(
         string $sortBy,
         string $direction,
@@ -407,12 +408,12 @@ class SortingTest extends TestCase
      * @magentoDataFixture Magento/Catalog/_files/products_with_not_empty_layered_navigation_attribute.php
      * @magentoDataFixture Magento/Framework/Search/_files/product_configurable_with_out-of-stock_child.php
      * @magentoConfigFixture current_store cataloginventory/options/show_out_of_stock 1
-     * @dataProvider productListWithOutOfStockSortOrderDataProvider
      * @param string $sortBy
      * @param string $direction
      * @param array $expected
      * @return void
      */
+    #[DataProvider('productListWithOutOfStockSortOrderDataProvider')]
     public function testProductListOutOfStockSortOrderWithMysql(
         string $sortBy,
         string $direction,

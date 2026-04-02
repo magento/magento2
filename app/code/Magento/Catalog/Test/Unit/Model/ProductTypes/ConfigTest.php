@@ -1,12 +1,13 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Catalog\Test\Unit\Model\ProductTypes;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\Catalog\Model\ProductTypes\Config;
 use Magento\Catalog\Model\ProductTypes\Config\Reader;
 use Magento\Framework\Config\CacheInterface;
@@ -46,20 +47,18 @@ class ConfigTest extends TestCase
     {
         $this->objectManager = new ObjectManager($this);
         $this->readerMock = $this->createMock(Reader::class);
-        $this->cacheMock = $this->getMockForAbstractClass(CacheInterface::class);
-        $this->serializerMock = $this->getMockForAbstractClass(SerializerInterface::class);
+        $this->cacheMock = $this->createMock(CacheInterface::class);
+        $this->serializerMock = $this->createMock(SerializerInterface::class);
     }
 
     /**
      * @param array $value
      * @param mixed $expected
-     * @dataProvider getTypeDataProvider
      */
+    #[DataProvider('getTypeDataProvider')]
     public function testGetType($value, $expected)
     {
-        $this->cacheMock->expects($this->any())
-            ->method('load')
-            ->willReturn('serializedData');
+        $this->cacheMock->method('load')->willReturn('serializedData');
 
         $this->serializerMock->expects($this->once())
             ->method('unserialize')
