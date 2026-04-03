@@ -62,52 +62,44 @@ class StockStateTest extends TestCase
      */
     protected $objectResult;
 
+    /**
+     * @var int
+     */
     protected $productId = 111;
+    /**
+     * @var int
+     */
     protected $websiteId = 111;
+    /**
+     * @var int
+     */
     protected $qty = 111;
 
     protected function setUp(): void
     {
         $this->objectManagerHelper = new ObjectManagerHelper($this);
 
-        $this->stock = $this->getMockForAbstractClass(StockInterface::class);
-        $this->stockItem = $this->getMockForAbstractClass(StockItemInterface::class);
-        $this->stockStatus = $this->getMockForAbstractClass(StockStatusInterface::class);
+        $this->stock = $this->createMock(StockInterface::class);
+        $this->stockItem = $this->createMock(StockItemInterface::class);
+        $this->stockStatus = $this->createMock(StockStatusInterface::class);
         $this->objectResult = $this->createMock(DataObject::class);
 
-        $this->stockStateProvider = $this->createPartialMock(
-            StockStateProviderInterface::class,
-            [
-                'verifyStock',
-                'verifyNotification',
-                'checkQty',
-                'suggestQty',
-                'getStockQty',
-                'checkQtyIncrements',
-                'checkQuoteItemQty'
-            ]
-        );
-        $this->stockStateProvider->expects($this->any())->method('verifyStock')->willReturn(true);
-        $this->stockStateProvider->expects($this->any())->method('verifyNotification')->willReturn(true);
-        $this->stockStateProvider->expects($this->any())->method('checkQty')->willReturn(true);
-        $this->stockStateProvider->expects($this->any())->method('suggestQty')->willReturn($this->qty);
-        $this->stockStateProvider->expects($this->any())->method('getStockQty')->willReturn($this->qty);
-        $this->stockStateProvider->expects($this->any())->method('checkQtyIncrements')->willReturn($this->objectResult);
-        $this->stockStateProvider->expects($this->any())->method('checkQuoteItemQty')->willReturn($this->objectResult);
+        $this->stockStateProvider = $this->createMock(StockStateProviderInterface::class);
+        $this->stockStateProvider->method('verifyStock')->willReturn(true);
+        $this->stockStateProvider->method('verifyNotification')->willReturn(true);
+        $this->stockStateProvider->method('checkQty')->willReturn(true);
+        $this->stockStateProvider->method('suggestQty')->willReturn($this->qty);
+        $this->stockStateProvider->method('getStockQty')->willReturn($this->qty);
+        $this->stockStateProvider->method('checkQtyIncrements')->willReturn($this->objectResult);
+        $this->stockStateProvider->method('checkQuoteItemQty')->willReturn($this->objectResult);
 
         $this->stockRegistryProvider = $this->createPartialMock(
             StockRegistryProviderInterface::class,
             ['getStock', 'getStockItem', 'getStockStatus']
         );
-        $this->stockRegistryProvider->expects($this->any())
-            ->method('getStock')
-            ->willReturn($this->stock);
-        $this->stockRegistryProvider->expects($this->any())
-            ->method('getStockItem')
-            ->willReturn($this->stockItem);
-        $this->stockRegistryProvider->expects($this->any())
-            ->method('getStockStatus')
-            ->willReturn($this->stockStatus);
+        $this->stockRegistryProvider->method('getStock')->willReturn($this->stock);
+        $this->stockRegistryProvider->method('getStockItem')->willReturn($this->stockItem);
+        $this->stockRegistryProvider->method('getStockStatus')->willReturn($this->stockStatus);
 
         $this->stockState = $this->objectManagerHelper->getObject(
             StockState::class,

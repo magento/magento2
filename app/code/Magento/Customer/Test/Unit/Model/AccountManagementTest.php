@@ -13,10 +13,12 @@ use Magento\Customer\Api\CustomerMetadataInterface;
 use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Customer\Api\Data\AddressInterface;
 use Magento\Customer\Api\Data\CustomerInterface;
+use Magento\Customer\Api\Data\ValidationResultsInterface;
 use Magento\Customer\Api\Data\ValidationResultsInterfaceFactory;
 use Magento\Customer\Api\SessionCleanerInterface;
 use Magento\Customer\Helper\View;
 use Magento\Customer\Model\AccountConfirmation;
+use Magento\Customer\Model\AccountManagement\Authenticate;
 use Magento\Customer\Model\AccountManagement;
 use Magento\Customer\Model\Address;
 use Magento\Customer\Model\AddressFactory;
@@ -28,9 +30,12 @@ use Magento\Customer\Model\CustomerRegistry;
 use Magento\Customer\Model\Data\Customer;
 use Magento\Customer\Model\Data\CustomerSecure;
 use Magento\Customer\Model\EmailNotificationInterface;
+use Magento\Customer\Model\Log;
+use Magento\Customer\Model\Logger as CustomerLogger;
 use Magento\Customer\Model\Metadata\Validator;
 use Magento\Customer\Model\ResourceModel\Visitor\CollectionFactory;
 use Magento\Directory\Model\AllowedCountries;
+use Magento\Eav\Model\Validator\Attribute\Backend;
 use Magento\Email\Model\ResourceModel\Template\CollectionFactory as TemplateCollectionFactory;
 use Magento\Framework\Api\DataObjectHelper;
 use Magento\Framework\Api\ExtensibleDataObjectConverter;
@@ -46,8 +51,10 @@ use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\InvalidEmailOrPasswordException;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\Exception\MailException;
 use Magento\Framework\Exception\State\ExpiredException;
 use Magento\Framework\Exception\State\InputMismatchException;
+use Magento\Framework\Exception\State\InvalidTransitionException;
 use Magento\Framework\Intl\DateTimeFactory;
 use Magento\Framework\Mail\Template\TransportBuilder;
 use Magento\Framework\Mail\TransportInterface;
@@ -64,16 +71,21 @@ use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Store\Model\Website;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 
 /**
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.ExcessivePublicCount)
  */
 class AccountManagementTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var AccountManagement
      */
@@ -275,6 +287,21 @@ class AccountManagementTest extends TestCase
     private $sessionCleanerMock;
 
     /**
+     * @var CustomerLogger|MockObject
+     */
+    private $customerLoggerMock;
+
+    /**
+     * @var Authenticate|MockObject
+     */
+    private $authenticateMock;
+
+    /**
+     * @var Backend|MockObject
+     */
+    private $eavValidatorMock;
+
+    /**
      * @var int
      */
     private $getIdCounter;
@@ -328,11 +355,10 @@ class AccountManagementTest extends TestCase
         $this->authenticationMock = $this->createMock(AuthenticationInterface::class);
         $this->emailNotificationMock = $this->createMock(EmailNotificationInterface::class);
 
-        $this->customerSecure = $this->getMockBuilder(CustomerSecure::class)
-            ->onlyMethods(['addData', 'setData'])
-            ->addMethods(['setRpToken', 'setRpTokenCreatedAt'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->customerSecure = $this->createPartialMockWithReflection(
+            CustomerSecure::class,
+            ['addData', 'setData', 'setRpToken', 'setRpTokenCreatedAt']
+        );
 
         $this->dateTimeFactory = $this->createMock(DateTimeFactory::class);
         $this->accountConfirmation = $this->createMock(AccountConfirmation::class);
@@ -440,6 +466,24 @@ class AccountManagementTest extends TestCase
             'emailNotification',
             $this->emailNotificationMock
         );
+        $this->customerLoggerMock = $this->createMock(CustomerLogger::class);
+        $this->objectManagerHelper->setBackwardCompatibleProperty(
+            $this->accountManagement,
+            'customerLogger',
+            $this->customerLoggerMock
+        );
+        $this->authenticateMock = $this->createMock(Authenticate::class);
+        $this->objectManagerHelper->setBackwardCompatibleProperty(
+            $this->accountManagement,
+            'authenticate',
+            $this->authenticateMock
+        );
+        $this->eavValidatorMock = $this->createMock(Backend::class);
+        $this->objectManagerHelper->setBackwardCompatibleProperty(
+            $this->accountManagement,
+            'eavValidator',
+            $this->eavValidatorMock
+        );
         $this->allowedCountriesReader->method('getAllowedCountries')->willReturn(['US' => 'US']);
 
         $this->getIdCounter = 0;
@@ -460,15 +504,11 @@ class AccountManagementTest extends TestCase
         $customerEmail = 'email@email.com';
         $hash = '4nj54lkj5jfi03j49f8bgujfgsd';
 
-        $website = $this->getMockBuilder(Website::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $website = $this->createMock(Website::class);
         $website->expects($this->once())
             ->method('getStoreIds')
             ->willReturn([1, 2, 3]);
-        $customer = $this->getMockBuilder(Customer::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $customer = $this->createMock(Customer::class);
         $customer->expects($this->once())
             ->method('getId')
             ->willReturn($customerId);
@@ -511,24 +551,18 @@ class AccountManagementTest extends TestCase
         $customerEmail = 'email@email.com';
         $hash = '4nj54lkj5jfi03j49f8bgujfgsd';
 
-        $store = $this->getMockBuilder(Store::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $store = $this->createMock(Store::class);
         $store->expects($this->once())
             ->method('getId')
             ->willReturn($defaultStoreId);
-        $website = $this->getMockBuilder(Website::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $website = $this->createMock(Website::class);
         $website->expects($this->atLeastOnce())
             ->method('getStoreIds')
             ->willReturn([1, 2, 3]);
         $website->expects($this->atMost(2))
             ->method('getDefaultStore')
             ->willReturn($store);
-        $customer = $this->getMockBuilder(Customer::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $customer = $this->createMock(Customer::class);
         $customer->expects($this->atLeastOnce())
             ->method('getId')
             ->willReturn($customerId);
@@ -599,23 +633,17 @@ class AccountManagementTest extends TestCase
         $customerEmail = 'email@email.com';
         $hash = '4nj54lkj5jfi03j49f8bgujfgsd';
 
-        $store = $this->getMockBuilder(Store::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $store = $this->createMock(Store::class);
         $store->expects($this->once())
             ->method('getId')
             ->willReturn($defaultStoreId);
-        $website = $this->getMockBuilder(Website::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $website = $this->createMock(Website::class);
         $website->method('getStoreIds')
             ->willReturn([1, 2, 3]);
         $website->expects($this->atMost(2))
             ->method('getDefaultStore')
             ->willReturn($store);
-        $customer = $this->getMockBuilder(Customer::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $customer = $this->createMock(Customer::class);
         $customer->expects($this->atLeastOnce())
             ->method('getId')
             ->willReturn($customerId);
@@ -686,23 +714,17 @@ class AccountManagementTest extends TestCase
         $customerEmail = 'email@email.com';
         $hash = '4nj54lkj5jfi03j49f8bgujfgsd';
 
-        $store = $this->getMockBuilder(Store::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $store = $this->createMock(Store::class);
         $store->expects($this->once())
             ->method('getId')
             ->willReturn($defaultStoreId);
-        $website = $this->getMockBuilder(Website::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $website = $this->createMock(Website::class);
         $website->method('getStoreIds')
             ->willReturn([1, 2, 3]);
         $website->expects($this->atMost(2))
             ->method('getDefaultStore')
             ->willReturn($store);
-        $customer = $this->getMockBuilder(Customer::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $customer = $this->createMock(Customer::class);
         $customer->expects($this->atLeastOnce())
             ->method('getId')
             ->willReturn($customerId);
@@ -771,9 +793,7 @@ class AccountManagementTest extends TestCase
         $websiteId = 1;
         $hash = '4nj54lkj5jfi03j49f8bgujfgsd';
 
-        $customerMock = $this->getMockBuilder(Customer::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $customerMock = $this->createMock(Customer::class);
 
         $customerMock->expects($this->atLeastOnce())
             ->method('getId')
@@ -799,9 +819,7 @@ class AccountManagementTest extends TestCase
             ->expects($this->once())
             ->method('isWebsiteScope')
             ->willReturn(true);
-        $website = $this->getMockBuilder(Website::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $website = $this->createMock(Website::class);
         $website->expects($this->once())
             ->method('getStoreIds')
             ->willReturn([1, 2, 3]);
@@ -811,9 +829,7 @@ class AccountManagementTest extends TestCase
             ->with($websiteId)
             ->willReturn($website);
 
-        $storeMock = $this->getMockBuilder(Store::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $storeMock = $this->createMock(Store::class);
 
         $storeMock->expects($this->once())
             ->method('getName')
@@ -849,48 +865,42 @@ class AccountManagementTest extends TestCase
 
         $datetime = $this->prepareDateTimeFactory();
 
-        $store = $this->getMockBuilder(Store::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $store = $this->createMock(Store::class);
         $store->expects($this->once())
             ->method('getId')
             ->willReturn($defaultStoreId);
         $store->expects($this->once())
             ->method('getWebsiteId')
             ->willReturn($websiteId);
-        $website = $this->getMockBuilder(Website::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $website = $this->createMock(Website::class);
         $website->expects($this->atLeastOnce())
             ->method('getStoreIds')
             ->willReturn([1, 2, 3]);
-        $customer = $this->getMockBuilder(Customer::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $customer = $this->createMock(Customer::class);
         $testCase = $this;
         $customer->expects($this->any())
             ->method('getId')
-            ->will($this->returnCallback(function () use ($testCase, $customerId) {
+            ->willReturnCallback(function () use ($testCase, $customerId) {
                 if ($testCase->getIdCounter > 0) {
                     return $customerId;
                 } else {
                     $testCase->getIdCounter += 1;
                     return null;
                 }
-            }));
+            });
         $customer->expects($this->atLeastOnce())
             ->method('getEmail')
             ->willReturn($customerEmail);
         $customer->expects($this->any())
             ->method('getWebsiteId')
-            ->will($this->returnCallback(function () use ($testCase, $websiteId) {
+            ->willReturnCallback(function () use ($testCase, $websiteId) {
                 if ($testCase->getWebsiteIdCounter > 1) {
                     return $websiteId;
                 } else {
                     $testCase->getWebsiteIdCounter += 1;
                     return null;
                 }
-            }));
+            });
         $customer->expects($this->once())
             ->method('setWebsiteId')
             ->with($websiteId);
@@ -940,10 +950,10 @@ class AccountManagementTest extends TestCase
         $this->random->expects($this->once())
             ->method('getUniqueHash')
             ->willReturn($newLinkToken);
-        $customerSecure = $this->getMockBuilder(CustomerSecure::class)
-            ->addMethods(['setRpToken', 'setRpTokenCreatedAt', 'getPasswordHash'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $customerSecure = $this->createPartialMockWithReflection(
+            CustomerSecure::class,
+            ['setRpToken', 'setRpTokenCreatedAt', 'getPasswordHash']
+        );
         $customerSecure->expects($this->any())
             ->method('setRpToken')
             ->with($newLinkToken);
@@ -998,9 +1008,9 @@ class AccountManagementTest extends TestCase
      * @param int $minCharacterSetsNum
      *
      * @return void
-     * @dataProvider dataProviderCheckPasswordStrength
      * @throws LocalizedException
      */
+    #[DataProvider('dataProviderCheckPasswordStrength')]
     public function testCreateAccountWithPasswordInputException(
         $testNumber,
         $password,
@@ -1047,9 +1057,7 @@ class AccountManagementTest extends TestCase
             );
         }
 
-        $customer = $this->getMockBuilder(Customer::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $customer = $this->createMock(Customer::class);
         $customer->expects($this->atLeastOnce())
             ->method('getEmail')
             ->willReturn('email@email.com');
@@ -1073,9 +1081,7 @@ class AccountManagementTest extends TestCase
         $this->expectException(InputException::class);
         $this->expectExceptionMessage('Please enter a password with at most 256 characters.');
 
-        $customer = $this->getMockBuilder(Customer::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $customer = $this->createMock(Customer::class);
         $customer->expects($this->atLeastOnce())
             ->method('getEmail')
             ->willReturn('email@email.com');
@@ -1140,48 +1146,42 @@ class AccountManagementTest extends TestCase
             ->method('getHash')
             ->with($password, true)
             ->willReturn($hash);
-        $store = $this->getMockBuilder(Store::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $store = $this->createMock(Store::class);
         $store->expects($this->once())
             ->method('getId')
             ->willReturn($defaultStoreId);
         $store->expects($this->once())
             ->method('getWebsiteId')
             ->willReturn($websiteId);
-        $website = $this->getMockBuilder(Website::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $website = $this->createMock(Website::class);
         $website->expects($this->atLeastOnce())
             ->method('getStoreIds')
             ->willReturn([1, 2, 3]);
-        $customer = $this->getMockBuilder(Customer::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $customer = $this->createMock(Customer::class);
         $testCase = $this;
         $customer->expects($this->any())
             ->method('getId')
-            ->will($this->returnCallback(function () use ($testCase, $customerId) {
+            ->willReturnCallback(function () use ($testCase, $customerId) {
                 if ($testCase->getIdCounter > 0) {
                     return $customerId;
                 } else {
                     $testCase->getIdCounter += 1;
                     return null;
                 }
-            }));
+            });
         $customer->expects($this->atLeastOnce())
             ->method('getEmail')
             ->willReturn($customerEmail);
         $customer->expects($this->any())
             ->method('getWebsiteId')
-            ->will($this->returnCallback(function () use ($testCase, $websiteId) {
+            ->willReturnCallback(function () use ($testCase, $websiteId) {
                 if ($testCase->getWebsiteIdCounter > 1) {
                     return $websiteId;
                 } else {
                     $testCase->getWebsiteIdCounter += 1;
                     return null;
                 }
-            }));
+            });
         $customer->expects($this->once())
             ->method('setWebsiteId')
             ->with($websiteId);
@@ -1231,10 +1231,10 @@ class AccountManagementTest extends TestCase
         $this->random->expects($this->once())
             ->method('getUniqueHash')
             ->willReturn($newLinkToken);
-        $customerSecure = $this->getMockBuilder(CustomerSecure::class)
-            ->addMethods(['setRpToken', 'setRpTokenCreatedAt', 'getPasswordHash'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $customerSecure = $this->createPartialMockWithReflection(
+            CustomerSecure::class,
+            ['setRpToken', 'setRpTokenCreatedAt', 'getPasswordHash']
+        );
         $customerSecure->expects($this->any())
             ->method('setRpToken')
             ->with($newLinkToken);
@@ -1316,35 +1316,29 @@ class AccountManagementTest extends TestCase
             ->method('getHash')
             ->with($password, true)
             ->willReturn($hash);
-        $store = $this->getMockBuilder(Store::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $store = $this->createMock(Store::class);
         $store->expects($this->once())
             ->method('getId')
             ->willReturn($defaultStoreId);
         $store->expects($this->once())
             ->method('getWebsiteId')
             ->willReturn($websiteId);
-        $website = $this->getMockBuilder(Website::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $website = $this->createMock(Website::class);
         $website->expects($this->atLeastOnce())
             ->method('getStoreIds')
             ->willReturn([1, 2, 3]);
-        $customer = $this->getMockBuilder(Customer::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $customer = $this->createMock(Customer::class);
         $testCase = $this;
         $customer->expects($this->any())
             ->method('getId')
-            ->will($this->returnCallback(function () use ($testCase, $customerId) {
+            ->willReturnCallback(function () use ($testCase, $customerId) {
                 if ($testCase->getIdCounter > 0) {
                     return $customerId;
                 } else {
                     $testCase->getIdCounter += 1;
                     return null;
                 }
-            }));
+            });
         $customer
             ->method('setGroupId')
             ->willReturnOnConsecutiveCalls(null, $defaultGroupId);
@@ -1353,14 +1347,14 @@ class AccountManagementTest extends TestCase
             ->willReturn($customerEmail);
         $customer->expects($this->any())
             ->method('getWebsiteId')
-            ->will($this->returnCallback(function () use ($testCase, $websiteId) {
+            ->willReturnCallback(function () use ($testCase, $websiteId) {
                 if ($testCase->getWebsiteIdCounter > 1) {
                     return $websiteId;
                 } else {
                     $testCase->getWebsiteIdCounter += 1;
                     return null;
                 }
-            }));
+            });
         $customer->expects($this->once())
             ->method('setWebsiteId')
             ->with($websiteId);
@@ -1410,10 +1404,10 @@ class AccountManagementTest extends TestCase
         $this->random->expects($this->once())
             ->method('getUniqueHash')
             ->willReturn($newLinkToken);
-        $customerSecure = $this->getMockBuilder(CustomerSecure::class)
-            ->addMethods(['setRpToken', 'setRpTokenCreatedAt', 'getPasswordHash'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $customerSecure = $this->createPartialMockWithReflection(
+            CustomerSecure::class,
+            ['setRpToken', 'setRpTokenCreatedAt', 'getPasswordHash']
+        );
         $customerSecure->expects($this->any())
             ->method('setRpToken')
             ->with($newLinkToken);
@@ -1451,9 +1445,7 @@ class AccountManagementTest extends TestCase
         $templateIdentifier = 'Template Identifier';
         $sender = 'Sender';
 
-        $customer = $this->getMockBuilder(Customer::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $customer = $this->createMock(Customer::class);
         $customer->expects($this->any())
             ->method('getStoreId')
             ->willReturn($customerStoreId);
@@ -1529,8 +1521,7 @@ class AccountManagementTest extends TestCase
                 }
             });
 
-        $transport = $this->getMockBuilder(TransportInterface::class)
-            ->getMock();
+        $transport = $this->createMock(TransportInterface::class);
 
         $this->transportBuilder->expects($this->once())
             ->method('setTemplateIdentifier')
@@ -1598,21 +1589,19 @@ class AccountManagementTest extends TestCase
             ->willReturn($this->store);
 
         /** @var Address|MockObject $addressModel */
-        $addressModel = $this->getMockBuilder(Address::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['setShouldIgnoreValidation'])
-            ->getMock();
+        $addressModel = $this->createPartialMockWithReflection(
+            Address::class,
+            ['setShouldIgnoreValidation']
+        );
 
         /** @var AddressInterface|MockObject $customer */
-        $address = $this->getMockForAbstractClass(AddressInterface::class);
+        $address = $this->createMock(AddressInterface::class);
         $address->expects($this->once())
             ->method('getId')
             ->willReturn($addressId);
 
         /** @var Customer|MockObject $customer */
-        $customer = $this->getMockBuilder(Customer::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $customer = $this->createMock(Customer::class);
         $customer->expects($this->any())
             ->method('getEmail')
             ->willReturn($email);
@@ -1689,8 +1678,7 @@ class AccountManagementTest extends TestCase
      */
     protected function prepareEmailSend($email, $templateIdentifier, $sender, $storeId, $customerName): void
     {
-        $transport = $this->getMockBuilder(TransportInterface::class)
-            ->getMock();
+        $transport = $this->createMock(TransportInterface::class);
 
         $this->transportBuilder->expects($this->any())
             ->method('setTemplateIdentifier')
@@ -1872,22 +1860,20 @@ class AccountManagementTest extends TestCase
      */
     private function reInitModel(): void
     {
-        $this->customerSecure = $this->getMockBuilder(CustomerSecure::class)
-            ->disableOriginalConstructor()
-            ->addMethods(
-                [
-                    'getRpToken',
-                    'getRpTokenCreatedAt',
-                    'getPasswordHash',
-                    'setPasswordHash',
-                    'setRpToken',
-                    'setRpTokenCreatedAt',
-                    'setFailuresNum',
-                    'setFirstFailure',
-                    'setLockExpires',
-                ]
-            )
-            ->getMock();
+        $this->customerSecure = $this->createPartialMockWithReflection(
+            CustomerSecure::class,
+            [
+                'getRpToken',
+                'getRpTokenCreatedAt',
+                'getPasswordHash',
+                'setPasswordHash',
+                'setRpToken',
+                'setRpTokenCreatedAt',
+                'setFailuresNum',
+                'setFirstFailure',
+                'setLockExpires',
+            ]
+        );
         $this->customerSecure->expects($this->any())
             ->method('getRpToken')
             ->willReturn('newStringToken');
@@ -1901,17 +1887,12 @@ class AccountManagementTest extends TestCase
             ->getMock();
 
         $this->prepareDateTimeFactory();
-        $this->sessionManager = $this->getMockBuilder(SessionManagerInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->sessionManager = $this->createMock(SessionManagerInterface::class);
         $this->visitorCollectionFactory = $this->getMockBuilder(CollectionFactory::class)
             ->disableOriginalConstructor()
             ->onlyMethods(['create'])
             ->getMock();
-        $this->saveHandler = $this->getMockBuilder(SaveHandlerInterface::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['destroy'])
-            ->getMockForAbstractClass();
+        $this->saveHandler = $this->createMock(SaveHandlerInterface::class);
 
         $dateTime = '2017-10-25 18:57:08';
         $timestamp = 1508983028;
@@ -1981,9 +1962,7 @@ class AccountManagementTest extends TestCase
         $passwordHash = '1a2b3f4c';
 
         $this->reInitModel();
-        $customer = $this->getMockBuilder(CustomerInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $customer = $this->createMock(CustomerInterface::class);
         $customer->expects($this->any())
             ->method('getId')
             ->willReturn($customerId);
@@ -2062,21 +2041,19 @@ class AccountManagementTest extends TestCase
 
         $this->reInitModel();
         /** @var Address|MockObject $addressModel */
-        $addressModel = $this->getMockBuilder(Address::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['setShouldIgnoreValidation'])
-            ->getMock();
+        $addressModel = $this->createPartialMockWithReflection(
+            Address::class,
+            ['setShouldIgnoreValidation']
+        );
 
         /** @var AddressInterface|MockObject $customer */
-        $address = $this->getMockForAbstractClass(AddressInterface::class);
+        $address = $this->createMock(AddressInterface::class);
         $address->expects($this->any())
             ->method('getId')
             ->willReturn($addressId);
 
         /** @var Customer|MockObject $customer */
-        $customer = $this->getMockBuilder(Customer::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $customer = $this->createMock(Customer::class);
         $customer->expects($this->any())->method('getId')->willReturn($customerId);
         $customer->expects($this->any())
             ->method('getAddresses')
@@ -2143,9 +2120,9 @@ class AccountManagementTest extends TestCase
      * @param string $expected
      *
      * @return void
-     * @dataProvider dataProviderGetConfirmationStatus
      * @throws LocalizedException
      */
+    #[DataProvider('dataProviderGetConfirmationStatus')]
     public function testGetConfirmationStatus(
         $isConfirmationRequired,
         $confirmation,
@@ -2155,9 +2132,7 @@ class AccountManagementTest extends TestCase
         $customerId = 1;
         $customerEmail = 'test1@example.com';
 
-        $customerMock = $this->getMockBuilder(Customer::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $customerMock = $this->createMock(Customer::class);
         $customerMock->expects($this->once())
             ->method('getId')
             ->willReturn($customerId);
@@ -2210,17 +2185,13 @@ class AccountManagementTest extends TestCase
         $websiteId = 1;
         $hash = '4nj54lkj5jfi03j49f8bgujfgsd';
 
-        $storeMock = $this->getMockBuilder(Store::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $storeMock = $this->createMock(Store::class);
         $storeMock->method('getId')
             ->willReturn($storeId);
         $this->storeManager->method('getStores')
             ->willReturn([$storeMock]);
 
-        $customerMock = $this->getMockBuilder(Customer::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $customerMock = $this->createMock(Customer::class);
         $customerMock->method('getStoreId')->willReturn($storeId);
         $customerMock->method('getWebsiteId')->willReturn($websiteId);
         $customerMock->method('getId')->willReturnOnConsecutiveCalls(null, 1);
@@ -2249,9 +2220,7 @@ class AccountManagementTest extends TestCase
         $this->prepareDateTimeFactory();
 
         //Handle store
-        $store = $this->getMockBuilder(Store::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $store = $this->createMock(Store::class);
         $store->expects($this->any())
             ->method('getWebsiteId')
             ->willReturn($websiteId);
@@ -2280,9 +2249,7 @@ class AccountManagementTest extends TestCase
             ->method("setId")
             ->with(null);
         //Handle Customer calls
-        $customer = $this->getMockBuilder(Customer::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $customer = $this->createMock(Customer::class);
         $customer
             ->expects($this->atLeastOnce())
             ->method('getWebsiteId')
@@ -2305,10 +2272,10 @@ class AccountManagementTest extends TestCase
             ->method('getById')
             ->with($customerId)
             ->willReturn($customer);
-        $customerSecure = $this->getMockBuilder(CustomerSecure::class)
-            ->addMethods(['setRpToken', 'setRpTokenCreatedAt', 'getPasswordHash'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $customerSecure = $this->createPartialMockWithReflection(
+            CustomerSecure::class,
+            ['setRpToken', 'setRpTokenCreatedAt', 'getPasswordHash']
+        );
         $customerSecure->expects($this->once())
             ->method('setRpToken')
             ->with($hash);
@@ -2358,9 +2325,7 @@ class AccountManagementTest extends TestCase
             ->expects($this->atLeastOnce())
             ->method('isWebsiteScope')
             ->willReturn(true);
-        $website = $this->getMockBuilder(Website::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $website = $this->createMock(Website::class);
         $website->expects($this->once())
             ->method('getStoreIds')
             ->willReturn([1, 2, 3]);
@@ -2429,27 +2394,27 @@ class AccountManagementTest extends TestCase
         $testCase = $this;
         $customer->expects($this->any())
             ->method('getId')
-            ->will($this->returnCallback(function () use ($testCase, $customerId) {
+            ->willReturnCallback(function () use ($testCase, $customerId) {
                 if ($testCase->getIdCounter > 0) {
                     return $customerId;
                 } else {
                     $testCase->getIdCounter += 1;
                     return null;
                 }
-            }));
+            });
         $customer->expects($this->atLeastOnce())
             ->method('getEmail')
             ->willReturn($customerEmail);
         $customer->expects($this->any())
             ->method('getWebsiteId')
-            ->will($this->returnCallback(function () use ($testCase, $websiteId) {
+            ->willReturnCallback(function () use ($testCase, $websiteId) {
                 if ($testCase->getWebsiteIdCounter > 1) {
                     return $websiteId;
                 } else {
                     $testCase->getWebsiteIdCounter += 1;
                     return null;
                 }
-            }));
+            });
         $customer->expects($this->once())
             ->method('setWebsiteId')
             ->with($websiteId);
@@ -2499,10 +2464,10 @@ class AccountManagementTest extends TestCase
         $this->random->expects($this->once())
             ->method('getUniqueHash')
             ->willReturn($newLinkToken);
-        $customerSecure = $this->getMockBuilder(CustomerSecure::class)
-            ->addMethods(['setRpToken', 'setRpTokenCreatedAt', 'getPasswordHash'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $customerSecure = $this->createPartialMockWithReflection(
+            CustomerSecure::class,
+            ['setRpToken', 'setRpTokenCreatedAt', 'getPasswordHash']
+        );
         $customerSecure->expects($this->any())
             ->method('setRpToken')
             ->with($newLinkToken);
@@ -2534,9 +2499,7 @@ class AccountManagementTest extends TestCase
         $storeId = 1;
         $websiteId = 1;
         $hash = '4nj54lkj5jfi03j49f8bgujfgsd';
-        $customerMock = $this->getMockBuilder(Customer::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $customerMock = $this->createMock(Customer::class);
         $customerMock->expects($this->atLeastOnce())
             ->method('getId')
             ->willReturn(null);
@@ -2550,9 +2513,7 @@ class AccountManagementTest extends TestCase
             ->expects($this->once())
             ->method('isWebsiteScope')
             ->willReturn(true);
-        $website = $this->getMockBuilder(Website::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $website = $this->createMock(Website::class);
         $website->expects($this->once())
             ->method('getStoreIds')
             ->willReturn([2, 3]);
@@ -2572,14 +2533,10 @@ class AccountManagementTest extends TestCase
      */
     public function testValidateCustomerStoreIdByWebsiteId(): void
     {
-        $customerMock = $this->getMockBuilder(CustomerInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $customerMock = $this->createMock(CustomerInterface::class);
         $customerMock->method('getWebsiteId')->willReturn(1);
         $customerMock->method('getStoreId')->willReturn(1);
-        $storeMock = $this->getMockBuilder(Store::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $storeMock = $this->createMock(Store::class);
         $storeMock->method('getId')
             ->willReturn(1);
         $this->storeManager->method('getStores')
@@ -2598,12 +2555,8 @@ class AccountManagementTest extends TestCase
         $this->expectException(LocalizedException::class);
         $this->expectExceptionMessage('The store view is not in the associated website.');
 
-        $customerMock = $this->getMockBuilder(CustomerInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-        $storeMock = $this->getMockBuilder(Store::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $customerMock = $this->createMock(CustomerInterface::class);
+        $storeMock = $this->createMock(Store::class);
         $storeMock->method('getId')
             ->willReturn(1);
         $this->storeManager->method('getStores')
@@ -2626,17 +2579,13 @@ class AccountManagementTest extends TestCase
         $customerEmail = 'email@email.com';
         $hash = '4nj54lkj5jfi03j49f8bgujfgsd';
 
-        $website = $this->getMockBuilder(Website::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $website = $this->createMock(Website::class);
         $website->method('getStoreIds')
             ->willReturn([]);
         $website->expects($this->atMost(1))
             ->method('getDefaultStore')
             ->willReturn(null);
-        $customer = $this->getMockBuilder(Customer::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $customer = $this->createMock(Customer::class);
         $customer->expects($this->atLeastOnce())
             ->method('getId')
             ->willReturn($customerId);
@@ -2661,5 +2610,1149 @@ class AccountManagementTest extends TestCase
             ->with($websiteId)
             ->willReturn($website);
         $this->accountManagement->createAccountWithPasswordHash($customer, $hash);
+    }
+
+    /**
+     * Test that customer is deleted in secure area when address save throws InputException
+     *
+     * @covers \Magento\Customer\Model\AccountManagement::createAccountWithPasswordHash()
+     * @return void
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     */
+    public function testCreateAccountWithPasswordHashDeletesCustomerOnAddressInputException(): void
+    {
+        $websiteId = 1;
+        $storeId = 1;
+        $customerId = 1;
+        $hash = '4nj54lkj5jfi03j49f8bgujfgsd';
+        $inputException = new InputException(__('Invalid address data'));
+
+        $store = $this->createMock(Store::class);
+        $store->method('getWebsiteId')->willReturn($websiteId);
+        $store->method('getName')->willReturn('Default Store View');
+
+        $website = $this->createMock(Website::class);
+        $website->method('getStoreIds')->willReturn([1, 2, 3]);
+
+        $address = $this->createMock(AddressInterface::class);
+        $address->method('getCountryId')->willReturn('US');
+        $address->method('getId')->willReturn(null);
+
+        $customer = $this->createMock(Customer::class);
+        $getIdCallCount = 0;
+        $customer->expects($this->any())
+            ->method('getId')
+            ->willReturnCallback(function () use (&$getIdCallCount, $customerId) {
+                $getIdCallCount++;
+                return $getIdCallCount <= 2 ? null : $customerId;
+            });
+        $customer->method('getWebsiteId')->willReturn($websiteId);
+        $customer->method('getStoreId')->willReturn($storeId);
+        $customer->expects($this->once())
+            ->method('getAddresses')
+            ->willReturn([$address]);
+        $customer->expects($this->once())
+            ->method('setAddresses')
+            ->with(null);
+
+        $addressModel = $this->createMock(Address::class);
+        $this->addressFactory->expects($this->once())
+            ->method('create')
+            ->willReturn($addressModel);
+        $addressModel->expects($this->once())
+            ->method('updateData')
+            ->with($address)
+            ->willReturnSelf();
+        $validator = $this->createMock(\Magento\Framework\Validator::class);
+        $this->validatorFactory->expects($this->once())
+            ->method('createValidator')
+            ->with('customer_address', 'save')
+            ->willReturn($validator);
+        $validator->expects($this->once())
+            ->method('isValid')
+            ->with($addressModel)
+            ->willReturn(true);
+
+        $this->share->method('isWebsiteScope')->willReturn(true);
+        $this->storeManager->method('getWebsite')
+            ->with($websiteId)->willReturn($website);
+        $this->storeManager->method('getStore')
+            ->willReturn($store);
+        $this->allowedCountriesReader->method('getAllowedCountries')
+            ->willReturn(['US']);
+
+        $this->customerRepository->expects($this->once())
+            ->method('save')
+            ->with($customer, $hash)
+            ->willReturn($customer);
+
+        $address->expects($this->once())
+            ->method('setCustomerId')
+            ->with($customerId);
+        $this->addressRepository->expects($this->once())
+            ->method('save')
+            ->with($address)
+            ->willThrowException($inputException);
+
+        $this->registry->expects($this->once())
+            ->method('registry')
+            ->with('isSecureArea')
+            ->willReturn(null);
+        $this->registry->expects($this->exactly(2))
+            ->method('unregister')
+            ->with('isSecureArea');
+        $registerCallCount = 0;
+        $this->registry->expects($this->exactly(2))
+            ->method('register')
+            ->willReturnCallback(function (string $key, $value) use (&$registerCallCount) {
+                $registerCallCount++;
+                $this->assertSame('isSecureArea', $key);
+                if ($registerCallCount === 1) {
+                    $this->assertTrue($value);
+                } else {
+                    $this->assertNull($value);
+                }
+            });
+
+        $this->customerRepository->expects($this->once())
+            ->method('delete')
+            ->with($customer);
+
+        $this->expectException(InputException::class);
+        $this->expectExceptionMessage('Invalid address data');
+
+        $this->accountManagement->createAccountWithPasswordHash($customer, $hash);
+    }
+
+    /**
+     * Test that existing isSecureArea registry value is restored after customer deletion
+     *
+     * @covers \Magento\Customer\Model\AccountManagement::createAccountWithPasswordHash()
+     * @return void
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     */
+    public function testCreateAccountWithPasswordHashRestoresSecureAreaRegistryOnAddressInputException(): void
+    {
+        $websiteId = 1;
+        $storeId = 1;
+        $customerId = 1;
+        $hash = '4nj54lkj5jfi03j49f8bgujfgsd';
+        $originalSecureAreaValue = true;
+        $inputException = new InputException(__('Invalid address'));
+
+        $store = $this->createMock(Store::class);
+        $store->method('getWebsiteId')->willReturn($websiteId);
+        $store->method('getName')->willReturn('Default Store View');
+
+        $website = $this->createMock(Website::class);
+        $website->method('getStoreIds')->willReturn([1, 2, 3]);
+
+        $address = $this->createMock(AddressInterface::class);
+        $address->method('getCountryId')->willReturn('US');
+        $address->method('getId')->willReturn(null);
+
+        $customer = $this->createMock(Customer::class);
+        $getIdCallCount = 0;
+        $customer->expects($this->any())
+            ->method('getId')
+            ->willReturnCallback(function () use (&$getIdCallCount, $customerId) {
+                $getIdCallCount++;
+                return $getIdCallCount <= 2 ? null : $customerId;
+            });
+        $customer->method('getWebsiteId')->willReturn($websiteId);
+        $customer->method('getStoreId')->willReturn($storeId);
+        $customer->expects($this->once())
+            ->method('getAddresses')
+            ->willReturn([$address]);
+        $customer->expects($this->once())
+            ->method('setAddresses')
+            ->with(null);
+
+        $addressModel = $this->createMock(Address::class);
+        $this->addressFactory->expects($this->once())
+            ->method('create')
+            ->willReturn($addressModel);
+        $addressModel->expects($this->once())
+            ->method('updateData')
+            ->with($address)
+            ->willReturnSelf();
+        $validator = $this->createMock(\Magento\Framework\Validator::class);
+        $this->validatorFactory->expects($this->once())
+            ->method('createValidator')
+            ->with('customer_address', 'save')
+            ->willReturn($validator);
+        $validator->expects($this->once())
+            ->method('isValid')
+            ->with($addressModel)
+            ->willReturn(true);
+
+        $this->share->method('isWebsiteScope')->willReturn(true);
+        $this->storeManager->method('getWebsite')
+            ->with($websiteId)->willReturn($website);
+        $this->storeManager->method('getStore')
+            ->willReturn($store);
+        $this->allowedCountriesReader->method('getAllowedCountries')
+            ->willReturn(['US']);
+
+        $this->customerRepository->expects($this->once())
+            ->method('save')
+            ->with($customer, $hash)
+            ->willReturn($customer);
+
+        $address->expects($this->once())
+            ->method('setCustomerId')
+            ->with($customerId);
+        $this->addressRepository->expects($this->once())
+            ->method('save')
+            ->with($address)
+            ->willThrowException($inputException);
+
+        $this->registry->expects($this->once())
+            ->method('registry')
+            ->with('isSecureArea')
+            ->willReturn($originalSecureAreaValue);
+        $this->registry->expects($this->exactly(2))
+            ->method('unregister')
+            ->with('isSecureArea');
+        $registerCallCount = 0;
+        $this->registry->expects($this->exactly(2))
+            ->method('register')
+            ->willReturnCallback(
+                function (string $key, $value) use (&$registerCallCount, $originalSecureAreaValue) {
+                    $registerCallCount++;
+                    $this->assertSame('isSecureArea', $key);
+                    if ($registerCallCount === 1) {
+                        $this->assertTrue($value);
+                    } else {
+                        $this->assertSame($originalSecureAreaValue, $value);
+                    }
+                }
+            );
+
+        $this->customerRepository->expects($this->once())
+            ->method('delete')
+            ->with($customer);
+
+        $this->expectException(InputException::class);
+        $this->expectExceptionMessage('Invalid address');
+
+        $this->accountManagement->createAccountWithPasswordHash($customer, $hash);
+    }
+
+    /**
+     * Test that resendConfirmation throws InvalidTransitionException when confirmation is not needed
+     *
+     * @covers \Magento\Customer\Model\AccountManagement::resendConfirmation()
+     * @return void
+     */
+    public function testResendConfirmationThrowsExceptionWhenConfirmationNotNeeded(): void
+    {
+        $email = 'customer@example.com';
+        $websiteId = 1;
+
+        $customer = $this->createMock(CustomerInterface::class);
+        $customer->expects($this->once())
+            ->method('getConfirmation')
+            ->willReturn(null);
+
+        $this->customerRepository->expects($this->once())
+            ->method('get')
+            ->with($email, $websiteId)
+            ->willReturn($customer);
+
+        $this->emailNotificationMock->expects($this->never())
+            ->method('newAccount');
+
+        $this->expectException(InvalidTransitionException::class);
+        $this->expectExceptionMessage("Confirmation isn't needed.");
+
+        $this->accountManagement->resendConfirmation($email, $websiteId);
+    }
+
+    /**
+     * Test that resendConfirmation returns true when confirmation email is sent successfully
+     *
+     * @covers \Magento\Customer\Model\AccountManagement::resendConfirmation()
+     * @return void
+     */
+    public function testResendConfirmationReturnsTrueOnSuccess(): void
+    {
+        $email = 'customer@example.com';
+        $websiteId = 1;
+        $storeId = 1;
+        $redirectUrl = 'http://example.com/redirect';
+        $confirmationToken = 'abc123confirmation';
+
+        $customer = $this->createMock(CustomerInterface::class);
+        $customer->expects($this->once())
+            ->method('getConfirmation')
+            ->willReturn($confirmationToken);
+
+        $this->customerRepository->expects($this->once())
+            ->method('get')
+            ->with($email, $websiteId)
+            ->willReturn($customer);
+
+        $this->store->expects($this->once())
+            ->method('getId')
+            ->willReturn($storeId);
+        $this->storeManager->expects($this->once())
+            ->method('getStore')
+            ->willReturn($this->store);
+
+        $this->emailNotificationMock->expects($this->once())
+            ->method('newAccount')
+            ->with(
+                $customer,
+                AccountManagement::NEW_ACCOUNT_EMAIL_CONFIRMATION,
+                $redirectUrl,
+                $storeId
+            );
+
+        $this->assertTrue(
+            $this->accountManagement->resendConfirmation($email, $websiteId, $redirectUrl)
+        );
+    }
+
+    /**
+     * Test that resendConfirmation returns false when mail sending fails
+     *
+     * @covers \Magento\Customer\Model\AccountManagement::resendConfirmation()
+     * @return void
+     */
+    public function testResendConfirmationReturnsFalseOnMailException(): void
+    {
+        $email = 'customer@example.com';
+        $websiteId = 1;
+        $storeId = 1;
+        $confirmationToken = 'abc123confirmation';
+        $mailException = new MailException(__('Unable to send mail'));
+
+        $customer = $this->createMock(CustomerInterface::class);
+        $customer->expects($this->once())
+            ->method('getConfirmation')
+            ->willReturn($confirmationToken);
+
+        $this->customerRepository->expects($this->once())
+            ->method('get')
+            ->with($email, $websiteId)
+            ->willReturn($customer);
+
+        $this->store->expects($this->once())
+            ->method('getId')
+            ->willReturn($storeId);
+        $this->storeManager->expects($this->once())
+            ->method('getStore')
+            ->willReturn($this->store);
+
+        $this->emailNotificationMock->expects($this->once())
+            ->method('newAccount')
+            ->with(
+                $customer,
+                AccountManagement::NEW_ACCOUNT_EMAIL_CONFIRMATION,
+                '',
+                $storeId
+            )
+            ->willThrowException($mailException);
+
+        $this->logger->expects($this->once())
+            ->method('critical')
+            ->with($mailException);
+
+        $this->assertFalse(
+            $this->accountManagement->resendConfirmation($email, $websiteId)
+        );
+    }
+
+    /**
+     * Test that activate throws InvalidTransitionException when the account is already active
+     *
+     * @covers \Magento\Customer\Model\AccountManagement::activate()
+     * @return void
+     */
+    public function testActivateThrowsExceptionWhenAccountAlreadyActive(): void
+    {
+        $email = 'customer@example.com';
+        $confirmationKey = 'confirmKey123';
+
+        $customer = $this->createMock(Customer::class);
+        $customer->expects($this->once())
+            ->method('getConfirmation')
+            ->willReturn(null);
+
+        $this->customerRepository->expects($this->once())
+            ->method('get')
+            ->with($email)
+            ->willReturn($customer);
+
+        $this->customerRepository->expects($this->never())
+            ->method('save');
+
+        $this->expectException(InvalidTransitionException::class);
+        $this->expectExceptionMessage('The account is already active.');
+
+        $this->accountManagement->activate($email, $confirmationKey);
+    }
+
+    /**
+     * Test that activate throws InputMismatchException when the confirmation key is invalid
+     *
+     * @covers \Magento\Customer\Model\AccountManagement::activate()
+     * @return void
+     */
+    public function testActivateThrowsExceptionWhenConfirmationKeyInvalid(): void
+    {
+        $email = 'customer@example.com';
+        $confirmationKey = 'wrongKey';
+        $storedConfirmation = 'correctKey';
+
+        $customer = $this->createMock(Customer::class);
+        $customer->expects($this->exactly(2))
+            ->method('getConfirmation')
+            ->willReturn($storedConfirmation);
+
+        $this->customerRepository->expects($this->once())
+            ->method('get')
+            ->with($email)
+            ->willReturn($customer);
+
+        $this->customerRepository->expects($this->never())
+            ->method('save');
+
+        $this->expectException(InputMismatchException::class);
+        $this->expectExceptionMessage(
+            'The confirmation token is invalid. Verify the token and try again.'
+        );
+
+        $this->accountManagement->activate($email, $confirmationKey);
+    }
+
+    /**
+     * Test that activate succeeds and sends or skips confirmation email based on prior login
+     *
+     * @covers \Magento\Customer\Model\AccountManagement::activate()
+     * @param string|null $lastLoginAt
+     * @param bool $expectsEmail
+     * @return void
+     */
+    #[DataProvider('activateSuccessDataProvider')]
+    public function testActivateSuccessEmailBehaviorBasedOnPriorLogin(
+        ?string $lastLoginAt,
+        bool $expectsEmail
+    ): void {
+        $email = 'customer@example.com';
+        $confirmationKey = 'correctKey';
+        $customerId = 5;
+        $storeId = 1;
+
+        $customer = $this->createMock(Customer::class);
+        $customer->expects($this->exactly(2))
+            ->method('getConfirmation')
+            ->willReturn($confirmationKey);
+        $customer->expects($this->once())
+            ->method('setConfirmation')
+            ->with(null);
+        $customer->expects($this->once())
+            ->method('setData')
+            ->with('ignore_validation_flag', true);
+        $customer->expects($this->atLeastOnce())
+            ->method('getId')
+            ->willReturn($customerId);
+
+        $this->customerRepository->expects($this->once())
+            ->method('get')
+            ->with($email)
+            ->willReturn($customer);
+        $this->customerRepository->expects($this->once())
+            ->method('save')
+            ->with($customer);
+
+        $logMock = $this->createMock(Log::class);
+        $logMock->expects($this->once())
+            ->method('getLastLoginAt')
+            ->willReturn($lastLoginAt);
+        $this->customerLoggerMock->expects($this->once())
+            ->method('get')
+            ->with($customerId)
+            ->willReturn($logMock);
+
+        if ($expectsEmail) {
+            $this->store->expects($this->once())
+                ->method('getId')
+                ->willReturn($storeId);
+            $this->storeManager->expects($this->once())
+                ->method('getStore')
+                ->willReturn($this->store);
+            $this->emailNotificationMock->expects($this->once())
+                ->method('newAccount')
+                ->with($customer, 'confirmed', '', $storeId);
+        } else {
+            $this->emailNotificationMock->expects($this->never())
+                ->method('newAccount');
+        }
+
+        $this->assertSame($customer, $this->accountManagement->activate($email, $confirmationKey));
+    }
+
+    /**
+     * Data provider for testActivateSuccessEmailBehaviorBasedOnPriorLogin
+     *
+     * @return array<string, array{string|null, bool}>
+     */
+    public static function activateSuccessDataProvider(): array
+    {
+        return [
+            'no_prior_login_sends_email' => [null, true],
+            'has_prior_login_skips_email' => ['2025-01-15 10:30:00', false],
+        ];
+    }
+
+    /**
+     * Test that activateById throws the correct exception for invalid activation states
+     *
+     * @covers \Magento\Customer\Model\AccountManagement::activateById()
+     * @param string|null $confirmation
+     * @param string $confirmationKey
+     * @param int $getConfirmationCallCount
+     * @param string $expectedException
+     * @param string $expectedMessage
+     * @return void
+     */
+    #[DataProvider('activateByIdExceptionDataProvider')]
+    public function testActivateByIdThrowsExceptionForInvalidState(
+        ?string $confirmation,
+        string $confirmationKey,
+        int $getConfirmationCallCount,
+        string $expectedException,
+        string $expectedMessage
+    ): void {
+        $customerId = 5;
+
+        $customer = $this->createMock(Customer::class);
+        $customer->expects($this->exactly($getConfirmationCallCount))
+            ->method('getConfirmation')
+            ->willReturn($confirmation);
+
+        $this->customerRepository->expects($this->once())
+            ->method('getById')
+            ->with($customerId)
+            ->willReturn($customer);
+
+        $this->customerRepository->expects($this->never())
+            ->method('save');
+
+        $this->expectException($expectedException);
+        $this->expectExceptionMessage($expectedMessage);
+
+        $this->accountManagement->activateById($customerId, $confirmationKey);
+    }
+
+    /**
+     * Test that activateById successfully activates customer and sends confirmation email
+     *
+     * @covers \Magento\Customer\Model\AccountManagement::activateById()
+     * @return void
+     */
+    public function testActivateByIdSuccessReturnsCustomer(): void
+    {
+        $customerId = 5;
+        $confirmationKey = 'correctKey';
+        $storeId = 1;
+
+        $customer = $this->createMock(Customer::class);
+        $customer->expects($this->exactly(2))
+            ->method('getConfirmation')
+            ->willReturn($confirmationKey);
+        $customer->expects($this->once())
+            ->method('setConfirmation')
+            ->with(null);
+        $customer->expects($this->once())
+            ->method('setData')
+            ->with('ignore_validation_flag', true);
+        $customer->expects($this->atLeastOnce())
+            ->method('getId')
+            ->willReturn($customerId);
+
+        $this->customerRepository->expects($this->once())
+            ->method('getById')
+            ->with($customerId)
+            ->willReturn($customer);
+        $this->customerRepository->expects($this->once())
+            ->method('save')
+            ->with($customer);
+
+        $logMock = $this->createMock(Log::class);
+        $logMock->expects($this->once())
+            ->method('getLastLoginAt')
+            ->willReturn(null);
+        $this->customerLoggerMock->expects($this->once())
+            ->method('get')
+            ->with($customerId)
+            ->willReturn($logMock);
+
+        $this->store->expects($this->once())
+            ->method('getId')
+            ->willReturn($storeId);
+        $this->storeManager->expects($this->once())
+            ->method('getStore')
+            ->willReturn($this->store);
+
+        $this->emailNotificationMock->expects($this->once())
+            ->method('newAccount')
+            ->with($customer, 'confirmed', '', $storeId);
+
+        $this->assertSame(
+            $customer,
+            $this->accountManagement->activateById($customerId, $confirmationKey)
+        );
+    }
+
+    /**
+     * Data provider for testActivateByIdThrowsExceptionForInvalidState
+     *
+     * @return array<string, array{string|null, string, int, string, string}>
+     */
+    public static function activateByIdExceptionDataProvider(): array
+    {
+        return [
+            'already_active_account' => [
+                null,
+                'anyKey',
+                1,
+                InvalidTransitionException::class,
+                'The account is already active.',
+            ],
+            'invalid_confirmation_key' => [
+                'storedKey',
+                'wrongKey',
+                2,
+                InputMismatchException::class,
+                'The confirmation token is invalid. Verify the token and try again.',
+            ],
+        ];
+    }
+
+    /**
+     * Test that authenticate delegates to Authenticate::execute and returns the customer
+     *
+     * @covers \Magento\Customer\Model\AccountManagement::authenticate()
+     * @return void
+     */
+    public function testAuthenticateReturnsCustomerOnSuccess(): void
+    {
+        $username = 'customer@example.com';
+        $password = 'securePassword1';
+
+        $customer = $this->createMock(CustomerInterface::class);
+
+        $this->authenticateMock->expects($this->once())
+            ->method('execute')
+            ->with($username, $password)
+            ->willReturn($customer);
+
+        $this->assertSame($customer, $this->accountManagement->authenticate($username, $password));
+    }
+
+    /**
+     * Test that authenticate propagates exceptions thrown by Authenticate::execute
+     *
+     * @covers \Magento\Customer\Model\AccountManagement::authenticate()
+     * @return void
+     */
+    public function testAuthenticatePropagatesException(): void
+    {
+        $username = 'customer@example.com';
+        $password = 'wrongPassword';
+
+        $this->authenticateMock->expects($this->once())
+            ->method('execute')
+            ->with($username, $password)
+            ->willThrowException(new InvalidEmailOrPasswordException(__('Invalid login or password.')));
+
+        $this->expectException(InvalidEmailOrPasswordException::class);
+        $this->expectExceptionMessage('Invalid login or password.');
+
+        $this->accountManagement->authenticate($username, $password);
+    }
+
+    /**
+     * Test that getDefaultBillingAddress/getDefaultShippingAddress returns matching address
+     *
+     * @covers \Magento\Customer\Model\AccountManagement::getDefaultBillingAddress()
+     * @covers \Magento\Customer\Model\AccountManagement::getDefaultShippingAddress()
+     * @param string $method
+     * @param string $customerGetter
+     * @return void
+     */
+    #[DataProvider('defaultAddressMethodsDataProvider')]
+    public function testGetDefaultAddressReturnsMatchingAddress(
+        string $method,
+        string $customerGetter
+    ): void {
+        $customerId = 1;
+        $defaultAddressId = 10;
+
+        $matchingAddress = $this->createMock(AddressInterface::class);
+        $matchingAddress->method('getId')->willReturn($defaultAddressId);
+
+        $otherAddress = $this->createMock(AddressInterface::class);
+        $otherAddress->method('getId')->willReturn(99);
+
+        $customer = $this->createMock(CustomerInterface::class);
+        $customer->expects($this->once())
+            ->method($customerGetter)
+            ->willReturn($defaultAddressId);
+        $customer->expects($this->once())
+            ->method('getAddresses')
+            ->willReturn([$otherAddress, $matchingAddress]);
+
+        $this->customerRepository->expects($this->once())
+            ->method('getById')
+            ->with($customerId)
+            ->willReturn($customer);
+
+        $this->assertSame($matchingAddress, $this->accountManagement->$method($customerId));
+    }
+
+    /**
+     * Test that getDefaultBillingAddress/getDefaultShippingAddress returns null when not set
+     *
+     * @covers \Magento\Customer\Model\AccountManagement::getDefaultBillingAddress()
+     * @covers \Magento\Customer\Model\AccountManagement::getDefaultShippingAddress()
+     * @param string $method
+     * @param string $customerGetter
+     * @return void
+     */
+    #[DataProvider('defaultAddressMethodsDataProvider')]
+    public function testGetDefaultAddressReturnsNullWhenNotSet(
+        string $method,
+        string $customerGetter
+    ): void {
+        $customerId = 1;
+
+        $address = $this->createMock(AddressInterface::class);
+        $address->method('getId')->willReturn(5);
+
+        $customer = $this->createMock(CustomerInterface::class);
+        $customer->expects($this->once())
+            ->method($customerGetter)
+            ->willReturn(null);
+        $customer->expects($this->once())
+            ->method('getAddresses')
+            ->willReturn([$address]);
+
+        $this->customerRepository->expects($this->once())
+            ->method('getById')
+            ->with($customerId)
+            ->willReturn($customer);
+
+        $this->assertNull($this->accountManagement->$method($customerId));
+    }
+
+    /**
+     * Data provider for default address tests
+     *
+     * @return array<string, array{string, string}>
+     */
+    public static function defaultAddressMethodsDataProvider(): array
+    {
+        return [
+            'billing' => ['getDefaultBillingAddress', 'getDefaultBilling'],
+            'shipping' => ['getDefaultShippingAddress', 'getDefaultShipping'],
+        ];
+    }
+
+    /**
+     * @covers \Magento\Customer\Model\AccountManagement::changePasswordById()
+     *
+     * @return void
+     */
+    public function testChangePasswordByIdThrowsExceptionWhenCustomerNotFound(): void
+    {
+        $customerId = 999;
+        $currentPassword = 'oldPass123';
+        $newPassword = 'newPass456';
+
+        $this->customerRepository
+            ->expects($this->once())
+            ->method('getById')
+            ->with($customerId)
+            ->willThrowException(new NoSuchEntityException(new Phrase('No such entity.')));
+
+        $this->expectException(InvalidEmailOrPasswordException::class);
+        $this->expectExceptionMessage('Invalid login or password.');
+
+        $this->accountManagement->changePasswordById($customerId, $currentPassword, $newPassword);
+    }
+
+    /**
+     * @covers \Magento\Customer\Model\AccountManagement::changePasswordById()
+     *
+     * @return void
+     */
+    public function testChangePasswordByIdThrowsExceptionWhenCurrentPasswordInvalid(): void
+    {
+        $customerId = 7;
+        $currentPassword = 'wrongPass';
+        $newPassword = 'newPass456';
+
+        $customerMock = $this->createMock(CustomerInterface::class);
+        $customerMock->expects($this->once())
+            ->method('getId')
+            ->willReturn($customerId);
+
+        $this->customerRepository
+            ->expects($this->once())
+            ->method('getById')
+            ->with($customerId)
+            ->willReturn($customerMock);
+
+        $this->authenticationMock->expects($this->once())
+            ->method('authenticate')
+            ->with($customerId, $currentPassword)
+            ->willThrowException(new InvalidEmailOrPasswordException(new Phrase('Original auth error')));
+
+        $this->expectException(InvalidEmailOrPasswordException::class);
+        $this->expectExceptionMessage("The password doesn't match this account. Verify the password and try again.");
+
+        $this->accountManagement->changePasswordById($customerId, $currentPassword, $newPassword);
+    }
+
+    /**
+     * @covers \Magento\Customer\Model\AccountManagement::changePasswordById()
+     *
+     * @return void
+     * @throws LocalizedException
+     * @throws InvalidEmailOrPasswordException
+     */
+    public function testChangePasswordByIdSuccess(): void
+    {
+        $customerId = 7;
+        $currentPassword = '1234567';
+        $newPassword = 'abcdefg';
+        $passwordHash = '1a2b3f4c';
+
+        $this->reInitModel();
+        $customer = $this->createMock(CustomerInterface::class);
+        $customer->expects($this->any())
+            ->method('getId')
+            ->willReturn($customerId);
+        $customer->expects($this->once())
+            ->method('getAddresses')
+            ->willReturn([]);
+
+        $this->customerRepository
+            ->expects($this->once())
+            ->method('getById')
+            ->with($customerId)
+            ->willReturn($customer);
+
+        $this->authenticationMock->expects($this->once())
+            ->method('authenticate');
+
+        $this->customerSecure->expects($this->once())
+            ->method('setRpToken')
+            ->with(null);
+        $this->customerSecure->expects($this->once())
+            ->method('setRpTokenCreatedAt')
+            ->willReturnSelf();
+        $this->customerSecure->expects($this->any())
+            ->method('getPasswordHash')
+            ->willReturn($passwordHash);
+
+        $this->customerRegistry->expects($this->any())
+            ->method('retrieveSecureData')
+            ->with($customerId)
+            ->willReturn($this->customerSecure);
+
+        $this->scopeConfig->expects($this->any())
+            ->method('getValue')
+            ->willReturnMap(
+                [
+                    [
+                        AccountManagement::XML_PATH_MINIMUM_PASSWORD_LENGTH,
+                        'default',
+                        null,
+                        7
+                    ],
+                    [
+                        AccountManagement::XML_PATH_REQUIRED_CHARACTER_CLASSES_NUMBER,
+                        'default',
+                        null,
+                        1
+                    ]
+                ]
+            );
+        $this->string->expects($this->any())
+            ->method('strlen')
+            ->with($newPassword)
+            ->willReturn(7);
+
+        $this->sessionCleanerMock->expects($this->once())->method('clearFor')->with($customerId)->willReturnSelf();
+
+        $this->customerRepository
+            ->expects($this->once())
+            ->method('save')
+            ->with($customer);
+
+        $this->assertTrue($this->accountManagement->changePasswordById($customerId, $currentPassword, $newPassword));
+    }
+
+    /**
+     * @covers \Magento\Customer\Model\AccountManagement::validate()
+     *
+     * @return void
+     */
+    public function testValidateReturnsValidResultWhenEavValidationPasses(): void
+    {
+        $customerMock = $this->createMock(CustomerInterface::class);
+        $existingAddresses = [$this->createMock(AddressInterface::class)];
+
+        $customerMock->expects($this->once())
+            ->method('getAddresses')
+            ->willReturn($existingAddresses);
+        $customerMock->expects($this->exactly(2))
+            ->method('setAddresses')
+            ->willReturnCallback(function (array $addresses) use ($customerMock, $existingAddresses) {
+                static $callCount = 0;
+                $callCount++;
+                if ($callCount === 1) {
+                    $this->assertSame([], $addresses);
+                } else {
+                    $this->assertSame($existingAddresses, $addresses);
+                }
+                return $customerMock;
+            });
+
+        $customerModelMock = $this->createMock(\Magento\Customer\Model\Customer::class);
+        $customerModelMock->expects($this->once())
+            ->method('updateData')
+            ->with($customerMock)
+            ->willReturn($customerModelMock);
+        $this->customerFactory->expects($this->once())
+            ->method('create')
+            ->willReturn($customerModelMock);
+
+        $this->eavValidatorMock->expects($this->once())
+            ->method('isValid')
+            ->with($customerModelMock)
+            ->willReturn(true);
+
+        $validationResultsMock = $this->createMock(ValidationResultsInterface::class);
+        $this->validationResultsInterfaceFactory->expects($this->once())
+            ->method('create')
+            ->willReturn($validationResultsMock);
+        $validationResultsMock->expects($this->once())
+            ->method('setIsValid')
+            ->with(true)
+            ->willReturn($validationResultsMock);
+        $validationResultsMock->expects($this->once())
+            ->method('setMessages')
+            ->with([])
+            ->willReturn($validationResultsMock);
+
+        $result = $this->accountManagement->validate($customerMock);
+        $this->assertSame($validationResultsMock, $result);
+    }
+
+    /**
+     * @covers \Magento\Customer\Model\AccountManagement::validate()
+     *
+     * @return void
+     */
+    public function testValidateReturnsInvalidResultWhenEavValidationFails(): void
+    {
+        $customerMock = $this->createMock(CustomerInterface::class);
+
+        $customerMock->expects($this->once())
+            ->method('getAddresses')
+            ->willReturn([]);
+        $customerMock->expects($this->exactly(2))
+            ->method('setAddresses')
+            ->with([])
+            ->willReturn($customerMock);
+
+        $customerModelMock = $this->createMock(\Magento\Customer\Model\Customer::class);
+        $customerModelMock->expects($this->once())
+            ->method('updateData')
+            ->with($customerMock)
+            ->willReturn($customerModelMock);
+        $this->customerFactory->expects($this->once())
+            ->method('create')
+            ->willReturn($customerModelMock);
+
+        $validationErrors = [
+            'firstname' => ['First name is required.'],
+            'lastname' => ['Last name is required.'],
+        ];
+        $this->eavValidatorMock->expects($this->once())
+            ->method('isValid')
+            ->with($customerModelMock)
+            ->willReturn(false);
+        $this->eavValidatorMock->expects($this->exactly(2))
+            ->method('getMessages')
+            ->willReturn($validationErrors);
+
+        $mergedMessages = ['First name is required.', 'Last name is required.'];
+        $validationResultsMock = $this->createMock(ValidationResultsInterface::class);
+        $this->validationResultsInterfaceFactory->expects($this->once())
+            ->method('create')
+            ->willReturn($validationResultsMock);
+        $validationResultsMock->expects($this->once())
+            ->method('setIsValid')
+            ->with(false)
+            ->willReturn($validationResultsMock);
+        $validationResultsMock->expects($this->once())
+            ->method('setMessages')
+            ->with($mergedMessages)
+            ->willReturn($validationResultsMock);
+
+        $result = $this->accountManagement->validate($customerMock);
+        $this->assertSame($validationResultsMock, $result);
+    }
+
+    /**
+     * @covers \Magento\Customer\Model\AccountManagement::isReadonly()
+     *
+     * @param bool $deleteable
+     * @param bool $expectedReadonly
+     * @return void
+     */
+    #[DataProvider('isReadonlyDataProvider')]
+    public function testIsReadonly(bool $deleteable, bool $expectedReadonly): void
+    {
+        $customerId = 1;
+
+        $customerSecure = new CustomerSecure(['deleteable' => $deleteable]);
+
+        $this->customerRegistry->expects($this->once())
+            ->method('retrieveSecureData')
+            ->with($customerId)
+            ->willReturn($customerSecure);
+
+        $this->assertSame($expectedReadonly, $this->accountManagement->isReadonly($customerId));
+    }
+
+    /**
+     * @return array<string, array{bool, bool}>
+     */
+    public static function isReadonlyDataProvider(): array
+    {
+        return [
+            'deleteable_customer_is_not_readonly' => [true, false],
+            'non_deleteable_customer_is_readonly' => [false, true],
+        ];
+    }
+
+    /**
+     * @covers \Magento\Customer\Model\AccountManagement::sendPasswordResetConfirmationEmail()
+     *
+     * @return void
+     */
+    public function testSendPasswordResetConfirmationEmailSuccess(): void
+    {
+        $customerId = 1;
+        $email = 'test@example.com';
+        $storeId = 2;
+        $customerName = 'John Doe';
+        $templateIdentifier = 'forgot_password_template';
+        $sender = 'support_identity';
+        $customerData = ['firstname' => 'John', 'lastname' => 'Doe'];
+
+        $customerMock = $this->createMock(CustomerInterface::class);
+        $customerMock->expects($this->any())
+            ->method('getId')
+            ->willReturn($customerId);
+        $customerMock->expects($this->any())
+            ->method('getEmail')
+            ->willReturn($email);
+
+        $this->store->expects($this->any())
+            ->method('getId')
+            ->willReturn($storeId);
+        $this->storeManager->expects($this->any())
+            ->method('getStore')
+            ->willReturn($this->store);
+
+        $this->customerRegistry->expects($this->once())
+            ->method('retrieveSecureData')
+            ->with($customerId)
+            ->willReturn($this->customerSecure);
+        $this->dataObjectProcessor->expects($this->once())
+            ->method('buildOutputDataArray')
+            ->with($customerMock, CustomerInterface::class)
+            ->willReturn($customerData);
+        $this->customerSecure->expects($this->once())
+            ->method('addData')
+            ->with($customerData)
+            ->willReturnSelf();
+        $this->customerSecure->expects($this->once())
+            ->method('setData')
+            ->with('name', $customerName)
+            ->willReturnSelf();
+        $this->customerViewHelper->expects($this->any())
+            ->method('getCustomerName')
+            ->with($customerMock)
+            ->willReturn($customerName);
+
+        $this->scopeConfig->expects($this->exactly(2))
+            ->method('getValue')
+            ->willReturnCallback(function (string $path) use ($templateIdentifier, $sender) {
+                if ($path === AccountManagement::XML_PATH_FORGOT_EMAIL_TEMPLATE) {
+                    return $templateIdentifier;
+                }
+                if ($path === AccountManagement::XML_PATH_FORGOT_EMAIL_IDENTITY) {
+                    return $sender;
+                }
+                return null;
+            });
+
+        $transport = $this->createMock(TransportInterface::class);
+        $this->transportBuilder->expects($this->once())
+            ->method('setTemplateIdentifier')
+            ->with($templateIdentifier)
+            ->willReturnSelf();
+        $this->transportBuilder->expects($this->once())
+            ->method('setTemplateOptions')
+            ->with(['area' => Area::AREA_FRONTEND, 'store' => $storeId])
+            ->willReturnSelf();
+        $this->transportBuilder->expects($this->once())
+            ->method('setTemplateVars')
+            ->with(['customer' => $this->customerSecure, 'store' => $this->store])
+            ->willReturnSelf();
+        $this->transportBuilder->expects($this->once())
+            ->method('setFrom')
+            ->with($sender)
+            ->willReturnSelf();
+        $this->transportBuilder->expects($this->once())
+            ->method('addTo')
+            ->with($email, $customerName)
+            ->willReturnSelf();
+        $this->transportBuilder->expects($this->once())
+            ->method('getTransport')
+            ->willReturn($transport);
+        $transport->expects($this->once())
+            ->method('sendMessage');
+
+        $result = $this->accountManagement->sendPasswordResetConfirmationEmail($customerMock);
+        $this->assertSame($this->accountManagement, $result);
+    }
+
+    /**
+     * @covers \Magento\Customer\Model\AccountManagement::getPasswordHash()
+     *
+     * @return void
+     */
+    public function testGetPasswordHash(): void
+    {
+        $password = 'mySecretPassword';
+        $expectedHash = 'a1b2c3d4e5f6';
+
+        $this->encryptor->expects($this->once())
+            ->method('getHash')
+            ->with($password, true)
+            ->willReturn($expectedHash);
+
+        $this->assertSame($expectedHash, $this->accountManagement->getPasswordHash($password));
     }
 }

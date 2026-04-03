@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -17,6 +17,7 @@ use Magento\Payment\Block\Form;
 use Magento\Payment\Model\Method\AbstractMethod;
 use Magento\Payment\Model\MethodInterface;
 use Magento\Store\Model\StoreManager;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -79,7 +80,7 @@ class FormTest extends TestCase
 
     public function testGetMethodCode()
     {
-        $method = $this->getMockForAbstractClass(MethodInterface::class);
+        $method = $this->createMock(MethodInterface::class);
         $method->expects($this->once())
             ->method('getCode')
             ->willReturn('method_code');
@@ -88,8 +89,8 @@ class FormTest extends TestCase
     }
 
     /**
-     * @dataProvider getInfoDataProvider
      */
+    #[DataProvider('getInfoDataProvider')]
     public function testGetInfoData($field, $value, $expected)
     {
         $methodInstance = $this->getMockBuilder(AbstractMethod::class)
@@ -102,7 +103,7 @@ class FormTest extends TestCase
             ->willReturn($value);
         $method = $this->getMockBuilder(
             MethodInterface::class
-        )->getMockForAbstractClass();
+        )->getMock();
         $method->expects($this->any())
             ->method('getInfoInstance')
             ->willReturn($methodInstance);
@@ -129,7 +130,7 @@ class FormTest extends TestCase
     public function testSetMethod()
     {
         $methodInterfaceMock = $this->getMockBuilder(MethodInterface::class)
-            ->getMockForAbstractClass();
+            ->getMock();
 
         $this->assertSame($this->_object, $this->_object->setMethod($methodInterfaceMock));
     }

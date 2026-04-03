@@ -25,6 +25,7 @@ use Magento\Sitemap\Model\SitemapConfigReaderInterface;
 use Magento\Sitemap\Model\Source\Product\Image\IncludeImage;
 use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -69,39 +70,41 @@ class ProductTest extends TestCase
         $contextMock->method('getResources')->willReturn($resourceMock);
 
         // Create product model with minimal mocking
-        $this->model = $this->getMockBuilder(Product::class)
-            ->setConstructorArgs([
-                $contextMock,
-                $this->createMock(SitemapHelper::class),
-                $this->createConfiguredMock(ProductResource::class, ['getLinkField' => 'entity_id']),
-                $this->createConfiguredMock(StoreManagerInterface::class, [
-                    'getStore' => $this->createConfiguredMock(Store::class, ['getId' => 1])
-                ]),
-                $this->createConfiguredMock(Visibility::class, ['getVisibleInSiteIds' => [1, 2, 3, 4]]),
-                $this->createConfiguredMock(Status::class, ['getVisibleStatusIds' => [1]]),
-                $this->mediaGalleryResourceModelMock,
-                $this->createConfiguredMock(ReadHandler::class, [
-                    'getAttribute' => $this->createConfiguredMock(Attribute::class, ['getId' => 123])
-                ]),
-                $this->createMock(Config::class),
-                null, null, null, null,
-                $this->createMock(UrlBuilder::class),
-                $this->createConfiguredMock(ProductSelectBuilder::class, [
-                    'execute' => $this->createMock(Select::class)
-                ]),
-                $this->sitemapConfigReaderMock
-            ])
-            ->onlyMethods(
-                [
-                    'getMainTable',
-                    'getIdFieldName',
-                    'getConnection',
-                    '_addFilter',
-                    '_joinAttribute',
-                    'prepareSelectStatement'
-                ]
-            )
-            ->getMock();
+        $this->model = $this->createPartialMock(
+            Product::class,
+            [
+                'getMainTable',
+                'getIdFieldName',
+                'getConnection',
+                '_addFilter',
+                '_joinAttribute',
+                'prepareSelectStatement'
+            ]
+        );
+        $this->model->__construct(
+            $contextMock,
+            $this->createMock(SitemapHelper::class),
+            $this->createConfiguredMock(ProductResource::class, ['getLinkField' => 'entity_id']),
+            $this->createConfiguredMock(StoreManagerInterface::class, [
+                'getStore' => $this->createConfiguredMock(Store::class, ['getId' => 1])
+            ]),
+            $this->createConfiguredMock(Visibility::class, ['getVisibleInSiteIds' => [1, 2, 3, 4]]),
+            $this->createConfiguredMock(Status::class, ['getVisibleStatusIds' => [1]]),
+            $this->mediaGalleryResourceModelMock,
+            $this->createConfiguredMock(ReadHandler::class, [
+                'getAttribute' => $this->createConfiguredMock(Attribute::class, ['getId' => 123])
+            ]),
+            $this->createMock(Config::class),
+            null,
+            null,
+            null,
+            null,
+            $this->createMock(UrlBuilder::class),
+            $this->createConfiguredMock(ProductSelectBuilder::class, [
+                'execute' => $this->createMock(Select::class)
+            ]),
+            $this->sitemapConfigReaderMock
+        );
 
         // Setup model behavior
         $this->model->method('getMainTable')->willReturn('catalog_product_entity');
@@ -126,8 +129,10 @@ class ProductTest extends TestCase
     /**
      * Test that batch image loading is used instead of N+1 queries
      *
-     * @dataProvider productCountDataProvider
+     * @param int $productCount
+     * @param int $expectedBatchCalls
      */
+    #[DataProvider('productCountDataProvider')]
     public function testGetCollectionUsesBatchImageLoading(int $productCount, int $expectedBatchCalls): void
     {
         // Generate product data
@@ -159,7 +164,7 @@ class ProductTest extends TestCase
         $this->assertCount($productCount, $result);
     }
 
-    public function productCountDataProvider(): array
+    public static function productCountDataProvider(): array
     {
         return [
             '0 products' => [0, 0],

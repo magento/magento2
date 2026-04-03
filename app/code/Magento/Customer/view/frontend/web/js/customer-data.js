@@ -17,6 +17,8 @@ define([
 ], function ($, _, ko, sectionConfig, url) {
     'use strict';
 
+    const GLOBAL_SHARE = '0';
+
     var options = {},
         storage,
         storageInvalidation,
@@ -47,17 +49,22 @@ define([
      * Invalidate Cache By Close Cookie Session
      */
     invalidateCacheByCloseCookieSession = function () {
-        var isLoggedIn = parseInt(options.isLoggedIn, 10) || 0;
+        var isLoggedIn = parseInt(options.isLoggedIn, 10) || 0,
+            loginStorage = $.localStorage;
 
         if (!$.cookieStorage.isSet('mage-cache-sessid')) {
             storage.removeAll();
         }
 
-        if (!$.localStorage.isSet('mage-customer-login')) {
-            $.localStorage.set('mage-customer-login', isLoggedIn);
+        if (options.customerShare === GLOBAL_SHARE) {
+            loginStorage = $.cookieStorage;
         }
-        if ($.localStorage.get('mage-customer-login') !== isLoggedIn) {
-            $.localStorage.set('mage-customer-login', isLoggedIn);
+
+        if (!loginStorage.isSet('mage-customer-login')) {
+            loginStorage.set('mage-customer-login', isLoggedIn);
+        }
+        if (loginStorage.get('mage-customer-login') !== isLoggedIn) {
+            loginStorage.set('mage-customer-login', isLoggedIn);
             storage.removeAll();
         }
 

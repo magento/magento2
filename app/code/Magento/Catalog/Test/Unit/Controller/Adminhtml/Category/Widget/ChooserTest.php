@@ -71,42 +71,21 @@ class ChooserTest extends TestCase
         $this->requestMock = $this->createMock(\Magento\Framework\App\Request\Http::class);
         $this->viewMock = $this->createPartialMock(View::class, ['getLayout']);
         $this->objectManagerMock = $this->createMock(\Magento\Framework\ObjectManager\ObjectManager::class);
-        $helper = new ObjectManager($this);
 
-        $context = $this->getMockBuilder(Context::class)
-            ->onlyMethods(['getRequest', 'getResponse', 'getMessageManager', 'getSession'])
-            ->setConstructorArgs(
-                $helper->getConstructArguments(
-                    Context::class,
-                    [
-                        'response' => $this->responseMock,
-                        'request' => $this->requestMock,
-                        'view' => $this->viewMock,
-                        'objectManager' => $this->objectManagerMock
-                    ]
-                )
-            )
-            ->getMock();
+        $context = $this->createPartialMock(
+            Context::class,
+            ['getRequest', 'getResponse', 'getMessageManager', 'getSession']
+        );
 
-        $this->resultRaw = $this->getMockBuilder(Raw::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $resultRawFactory = $this->getMockBuilder(RawFactory::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['create'])
-            ->getMock();
+        $this->resultRaw = $this->createMock(Raw::class);
+        $resultRawFactory = $this->createPartialMock(RawFactory::class, ['create']);
         $resultRawFactory->expects($this->atLeastOnce())
             ->method('create')
             ->willReturn($this->resultRaw);
 
         $this->layoutMock = $this->createPartialMock(Layout::class, ['createBlock']);
-        $layoutFactory = $this->getMockBuilder(LayoutFactory::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['create'])
-            ->getMock();
-        $layoutFactory->expects($this->any())
-            ->method('create')
-            ->willReturn($this->layoutMock);
+        $layoutFactory = $this->createPartialMock(LayoutFactory::class, ['create']);
+        $layoutFactory->method('create')->willReturn($this->layoutMock);
 
         $context->expects($this->once())->method('getRequest')->willReturn($this->requestMock);
         $context->expects($this->once())->method('getResponse')->willReturn($this->responseMock);

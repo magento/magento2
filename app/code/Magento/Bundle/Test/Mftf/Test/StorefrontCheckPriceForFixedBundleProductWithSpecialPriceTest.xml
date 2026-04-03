@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright 2025 Adobe
+ * All Rights Reserved.
+ */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontCheckPriceForFixedBundleProductWithSpecialPriceTest">
+        <annotations>
+            <features value="Bundle"/>
+            <stories value="View bundle product price"/>
+            <title value="Price for fixed bundle product with special price"/>
+            <description value="This test case verifies price for fixed bundle product with special price"/>
+            <testCaseId value="AC-4146"/>
+            <severity value="MAJOR"/>
+            <group value="bundle"/>
+        </annotations>
+        <before>
+            <!--Pre Condition 1: Create category 1 -->
+            <createData entity="SimpleSubCategory" stepKey="createSubCategory">
+                <field key="name">Category 1</field>
+            </createData>
+            <!-- Pre Condition 2: Create simple products with specific price/status -->
+            <createData entity="SimpleProduct2" stepKey="simple1">
+                <field key="price">10</field>
+                <field key="status">1</field>
+            </createData>
+            <createData entity="SimpleProduct2" stepKey="simple2">
+                <field key="price">15</field>
+                <field key="status">2</field>
+            </createData>
+            <createData entity="SimpleProduct2" stepKey="simple3">
+                <field key="price">20</field>
+                <field key="status">1</field>
+            </createData>
+            <createData entity="SimpleProduct2" stepKey="simple4">
+                <field key="price">25</field>
+                <field key="status">1</field>
+            </createData>
+            <createData entity="SimpleProduct2" stepKey="simple5">
+                <field key="price">30</field>
+                <field key="status">2</field>
+            </createData>
+            <createData entity="SimpleProduct2" stepKey="simple6">
+                <field key="price">35</field>
+                <field key="status">1</field>
+            </createData>
+            <!-- Pre Condition 3: Create fixed bundle product assigned to Category 1 -->
+            <createData entity="FixedBundleProduct" stepKey="createBundleProduct">
+                <requiredEntity createDataKey="createSubCategory"/>
+                <field key="name">FixedBundle</field>
+                <field key="price">110</field>
+            </createData>
+            <!--Create  option 1: multi, required: false -->
+            <createData entity="MultipleSelectOption" stepKey="createOption1">
+                <requiredEntity createDataKey="createBundleProduct"/>
+                <field key="required">False</field>
+            </createData>
+            <!-- Simple 1: Fixed price 25, qty 2 -->
+            <createData entity="ApiBundleLink" stepKey="linkOpt1Simple1">
+                <requiredEntity createDataKey="createBundleProduct"/>
+                <requiredEntity createDataKey="createOption1"/>
+                <requiredEntity createDataKey="simple1"/>
+                <field key="price_type">0</field>
+                <field key="price">25</field>
+                <field key="qty">2</field>
+                <field key="is_default">0</field>
+            </createData>
+            <!-- Simple 2: percent 5, qty 5 -->
+            <createData entity="ApiBundleLink" stepKey="linkOpt1Simple2">
+                <requiredEntity createDataKey="createBundleProduct"/>
+                <requiredEntity createDataKey="createOption1"/>
+                <requiredEntity createDataKey="simple2"/>
+                <field key="price_type">1</field>
+                <field key="price">5</field>
+                <field key="qty">5</field>
+                <field key="is_default">0</field>
+            </createData>
+            <!-- Simple 3: percent 30, qty 2 -->
+            <createData entity="ApiBundleLink" stepKey="linkOpt1Simple3">
+                <requiredEntity createDataKey="createBundleProduct"/>
+                <requiredEntity createDataKey="createOption1"/>
+                <requiredEntity createDataKey="simple3"/>
+                <field key="price_type">1</field>
+                <field key="price">30</field>
+                <field key="qty">2</field>
+                <field key="is_default">0</field>
+            </createData>
+            <!-- Create option 2: dropdown, required: false -->
+            <createData entity="DropDownBundleOption" stepKey="createOption2">
+                <requiredEntity createDataKey="createBundleProduct"/>
+                <field key="required">False</field>
+            </createData>
+            <!-- Simple 4: percent 10, qty 2 -->
+            <createData entity="ApiBundleLink" stepKey="linkOpt2Simple4">
+                <requiredEntity createDataKey="createBundleProduct"/>
+                <requiredEntity createDataKey="createOption2"/>
+                <requiredEntity createDataKey="simple4"/>
+                <field key="price_type">1</field>
+                <field key="price">10</field>
+                <field key="qty">2</field>
+                <field key="is_default">0</field>
+            </createData>
+            <!-- Simple 5: fixed price 20, qty 5 -->
+            <createData entity="ApiBundleLink" stepKey="linkOpt2Simple5">
+                <requiredEntity createDataKey="createBundleProduct"/>
+                <requiredEntity createDataKey="createOption2"/>
+                <requiredEntity createDataKey="simple5"/>
+                <field key="price_type">0</field>
+                <field key="price">20</field>
+                <field key="qty">5</field>
+                <field key="is_default">0</field>
+            </createData>
+            <!-- Simple 6: percent 45, qty 1 -->
+            <createData entity="ApiBundleLink" stepKey="linkOpt2Simple6">
+                <requiredEntity createDataKey="createBundleProduct"/>
+                <requiredEntity createDataKey="createOption2"/>
+                <requiredEntity createDataKey="simple6"/>
+                <field key="price_type">1</field>
+                <field key="price">45</field>
+                <field key="qty">1</field>
+                <field key="is_default">0</field>
+            </createData>
+            <!-- Set special price = 70% on the bundle (fixed-price bundles interpret special_price as percent) -->
+            <actionGroup ref="AdminLoginActionGroup" stepKey="adminLogin"/>
+            <actionGroup ref="NavigateToCreatedProductEditPageActionGroup" stepKey="openBundleInAdmin">
+                <argument name="product" value="$$createBundleProduct$$"/>
+            </actionGroup>
+            <actionGroup ref="AddSpecialPriceToProductActionGroup" stepKey="setBundleSpecialPrice">
+                <argument name="price" value="70"/>
+            </actionGroup>
+            <actionGroup ref="AdminProductFormOpenAdvancedPricingDialogActionGroup" stepKey="openAdvancedPricing"/>
+            <selectOption selector="{{AdminProductFormAdvancedPricingSection.bundleAdvancedPriceView}}" userInput="Price Range" stepKey="setPriceViewToRange"/>
+            <actionGroup ref="AdminProductFormDoneAdvancedPricingDialogActionGroup" stepKey="closeAdvancedPricing"/>
+            <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProduct"/>
+        </before>
+        <after>
+            <!-- Delete products, category and logout from admin -->
+            <deleteData createDataKey="createBundleProduct" stepKey="delBundle"/>
+            <deleteData createDataKey="simple1" stepKey="delSimple1"/>
+            <deleteData createDataKey="simple2" stepKey="delSimple2"/>
+            <deleteData createDataKey="simple3" stepKey="delSimple3"/>
+            <deleteData createDataKey="simple4" stepKey="delSimple4"/>
+            <deleteData createDataKey="simple5" stepKey="delSimple5"/>
+            <deleteData createDataKey="simple6" stepKey="delSimple6"/>
+            <deleteData createDataKey="createSubCategory" stepKey="delCategory"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="adminLogout"/>
+        </after>
+        <!-- Step 1: go to category page on storefront -->
+        <actionGroup ref="StorefrontNavigateCategoryPageActionGroup" stepKey="goToCategory">
+            <argument name="category" value="$$createSubCategory$$"/>
+        </actionGroup>
+        <!-- Step 2: check the prices on category page -->
+        <actionGroup ref="AssertStorefrontElementVisibleActionGroup" stepKey="seeCategoryFromPriceDiscounted">
+            <argument name="selector" value="{{StorefrontCategoryProductSection.priceFromByProductId($$createBundleProduct.id$$)}}"/>
+            <argument name="userInput" value="77.00"/>
+        </actionGroup>
+        <actionGroup ref="AssertStorefrontElementVisibleActionGroup" stepKey="seeCategoryFromPriceRegular">
+            <argument name="selector" value="{{StorefrontCategoryProductSection.priceFromByProductId($$createBundleProduct.id$$)}}"/>
+            <argument name="userInput" value="110.00"/>
+        </actionGroup>
+        <actionGroup ref="AssertStorefrontElementVisibleActionGroup" stepKey="seeCategoryToPriceDiscounted">
+            <argument name="selector" value="{{StorefrontCategoryProductSection.priceToByProductId($$createBundleProduct.id$$)}}"/>
+            <argument name="userInput" value="192.85"/>
+        </actionGroup>
+        <actionGroup ref="AssertStorefrontElementVisibleActionGroup" stepKey="seeCategoryToPriceRegular">
+            <argument name="selector" value="{{StorefrontCategoryProductSection.priceToByProductId($$createBundleProduct.id$$)}}"/>
+            <argument name="userInput" value="275.50"/>
+        </actionGroup>
+        <!-- Step 3: go to product page -->
+        <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="openProductPage">
+            <argument name="productUrl" value="$$createBundleProduct.custom_attributes[url_key]$$"/>
+        </actionGroup>
+        <!-- Step 4: check the prices on product page  -->
+        <actionGroup ref="AssertStorefrontElementVisibleActionGroup" stepKey="seePdpFromPriceDiscounted">
+            <argument name="selector" value="{{StorefrontProductInfoMainSection.priceFrom}}"/>
+            <argument name="userInput" value="77.00"/>
+        </actionGroup>
+        <actionGroup ref="AssertStorefrontElementVisibleActionGroup" stepKey="seePdpFromPriceRegular">
+            <argument name="selector" value="{{StorefrontProductInfoMainSection.priceFrom}}"/>
+            <argument name="userInput" value="110.00"/>
+        </actionGroup>
+        <actionGroup ref="AssertStorefrontElementVisibleActionGroup" stepKey="seePdpToPriceDiscounted">
+            <argument name="selector" value="{{StorefrontProductInfoMainSection.priceTo}}"/>
+            <argument name="userInput" value="192.85"/>
+        </actionGroup>
+        <actionGroup ref="AssertStorefrontElementVisibleActionGroup" stepKey="seePdpToPriceRegular">
+            <argument name="selector" value="{{StorefrontProductInfoMainSection.priceTo}}"/>
+            <argument name="userInput" value="275.50"/>
+        </actionGroup>
+    </test>
+</tests>

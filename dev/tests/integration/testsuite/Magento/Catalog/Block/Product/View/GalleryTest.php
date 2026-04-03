@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -16,6 +16,7 @@ use Magento\Framework\View\LayoutInterface;
 use Magento\Store\Api\StoreRepositoryInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\ObjectManager;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Provide tests for displaying images on product page.
@@ -135,7 +136,6 @@ class GalleryTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @dataProvider galleryDisabledImagesDataProvider
      * @magentoDataFixture Magento/Catalog/_files/product_with_multiple_images.php
      * @magentoConfigFixture default/web/url/catalog_media_url_format hash
      * @magentoDbIsolation enabled
@@ -143,6 +143,7 @@ class GalleryTest extends \PHPUnit\Framework\TestCase
      * @param array $expectation
      * @return void
      */
+    #[DataProvider('galleryDisabledImagesDataProvider')]
     public function testGetGalleryImagesJsonWithDisabledImage(array $images, array $expectation): void
     {
         $product = $this->getProduct();
@@ -153,7 +154,6 @@ class GalleryTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @dataProvider galleryDisabledImagesDataProvider
      * @magentoDataFixture Magento/Catalog/_files/product_with_multiple_images.php
      * @magentoDataFixture Magento/Store/_files/second_store.php
      * @magentoConfigFixture default/web/url/catalog_media_url_format hash
@@ -162,6 +162,7 @@ class GalleryTest extends \PHPUnit\Framework\TestCase
      * @param array $expectation
      * @return void
      */
+    #[DataProvider('galleryDisabledImagesDataProvider')]
     public function testGetGalleryImagesJsonOnStoreWithDisabledImage(array $images, array $expectation): void
     {
         $secondStoreId = (int)$this->storeRepository->get('fixture_second_store')->getId();
@@ -191,13 +192,13 @@ class GalleryTest extends \PHPUnit\Framework\TestCase
     /**
      * Test default image generation format.
      *
-     * @dataProvider galleryImagesDataProvider
      * @magentoDataFixture Magento/Catalog/_files/product_with_multiple_images.php
      * @magentoDbIsolation enabled
      * @param array $images
      * @param array $expectation
      * @return void
      */
+    #[DataProvider('galleryImagesDataProvider')]
     public function testGetGalleryImagesJson(array $images, array $expectation): void
     {
         $product = $this->getProduct();
@@ -249,7 +250,6 @@ class GalleryTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @dataProvider galleryImagesWithImageOptimizationParametersInUrlDataProvider
      * @magentoDataFixture Magento/Catalog/_files/product_with_multiple_images.php
      * @magentoConfigFixture default/web/url/catalog_media_url_format image_optimization_parameters
      * @magentoDbIsolation enabled
@@ -257,6 +257,7 @@ class GalleryTest extends \PHPUnit\Framework\TestCase
      * @param array $expectation
      * @return void
      */
+    #[DataProvider('galleryImagesWithImageOptimizationParametersInUrlDataProvider')]
     public function testGetGalleryImagesJsonWithImageOptimizationParametersInUrl(
         array $images,
         array $expectation
@@ -333,7 +334,6 @@ class GalleryTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @dataProvider galleryImagesOnStoreViewDataProvider
      * @magentoDataFixture Magento/Catalog/_files/product_with_multiple_images.php
      * @magentoDataFixture Magento/Store/_files/second_store.php
      * @magentoConfigFixture default/web/url/catalog_media_url_format hash
@@ -342,6 +342,7 @@ class GalleryTest extends \PHPUnit\Framework\TestCase
      * @param array $expectation
      * @return void
      */
+    #[DataProvider('galleryImagesOnStoreViewDataProvider')]
     public function testGetGalleryImagesJsonOnStoreView(array $images, array $expectation): void
     {
         $secondStoreId = (int)$this->storeRepository->get('fixture_second_store')->getId();
@@ -399,13 +400,13 @@ class GalleryTest extends \PHPUnit\Framework\TestCase
      * @magentoDataFixture Magento/Catalog/_files/product_with_image.php
      * @magentoDataFixture Magento/Store/_files/second_store.php
      * @magentoConfigFixture default/web/url/catalog_media_url_format image_optimization_parameters
-     * @dataProvider imagesPositionStoreViewDataProvider
      * @param string $addFromStore
      * @param array $newImages
      * @param string $viewFromStore
      * @param array $expectedImages
      * @return void
      */
+    #[DataProvider('imagesPositionStoreViewDataProvider')]
     public function testImagesPositionStoreView(
         string $addFromStore,
         array $newImages,

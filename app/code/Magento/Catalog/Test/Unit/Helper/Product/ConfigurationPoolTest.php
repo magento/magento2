@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\Catalog\Test\Unit\Helper\Product;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\Catalog\Helper\Product\ConfigurationPool;
 use Magento\Framework\ObjectManagerInterface;
 use PHPUnit\Framework\TestCase;
@@ -27,15 +28,15 @@ class ConfigurationPoolTest extends TestCase
     {
         $this->instancesType = ['simple' => 'simple', 'default' => 'default'];
 
-        $objectManagerMock = $this->getMockForAbstractClass(ObjectManagerInterface::class);
+        $objectManagerMock = $this->createMock(ObjectManagerInterface::class);
         $this->model = new ConfigurationPool($objectManagerMock, $this->instancesType);
     }
 
     /**
-     * @dataProvider getByProductTypeDataProvider
      * @param string $productType
      * @param string $expectedResult
      */
+    #[DataProvider('getByProductTypeDataProvider')]
     public function testGetByProductType($productType, $expectedResult)
     {
         $this->assertEquals($expectedResult, $this->model->getByProductType($productType));

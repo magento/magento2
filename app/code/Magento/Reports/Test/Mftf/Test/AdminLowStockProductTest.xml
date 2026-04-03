@@ -24,7 +24,7 @@
         <after>
             <magentoCLI command="config:set cataloginventory/item_options/notify_stock_qty 1" stepKey="checkSystemValue1"/>
             <deleteData createDataKey="createSimpleProduct" stepKey="deleteSimpleProduct"/>
-            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <deleteData createDataKey="createCategory" stepKey="deletecreateCategory"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
         <!-- Go to Inventory configuration page -->

@@ -32,7 +32,7 @@ class VisibilityTest extends TestCase
             ['getAttributeCode']
         );
 
-        $abstractAttributeMock->expects($this->any())->method('getAttributeCode')->willReturn('code');
+        $abstractAttributeMock->method('getAttributeCode')->willReturn('code');
 
         $this->_model->setAttribute($abstractAttributeMock);
 

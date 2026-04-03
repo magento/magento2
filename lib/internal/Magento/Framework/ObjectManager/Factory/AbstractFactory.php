@@ -1,23 +1,28 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
+
 namespace Magento\Framework\ObjectManager\Factory;
 
 use Magento\Framework\Exception\RuntimeException;
+use Magento\Framework\ObjectManager\ConfigInterface;
+use Magento\Framework\ObjectManager\Definition\Runtime;
+use Magento\Framework\ObjectManager\DefinitionInterface;
+use Magento\Framework\ObjectManager\FactoryInterface;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Phrase;
-use Psr\Log\LoggerInterface;
 use Magento\Framework\App\ObjectManager;
+use Psr\Log\LoggerInterface;
 
 /**
  * Class AbstractFactory
  */
-abstract class AbstractFactory implements \Magento\Framework\ObjectManager\FactoryInterface
+abstract class AbstractFactory implements FactoryInterface
 {
     /**
-     * Object manager
+     * Object manager instance
      *
      * @var ObjectManagerInterface
      */
@@ -26,19 +31,19 @@ abstract class AbstractFactory implements \Magento\Framework\ObjectManager\Facto
     /**
      * Object manager config
      *
-     * @var \Magento\Framework\ObjectManager\ConfigInterface
+     * @var ConfigInterface
      */
     protected $config;
 
     /**
      * Definition list
      *
-     * @var \Magento\Framework\ObjectManager\DefinitionInterface
+     * @var DefinitionInterface
      */
     protected $definitions;
 
     /**
-     * Global arguments
+     * Global arguments list
      *
      * @var array
      */
@@ -52,15 +57,15 @@ abstract class AbstractFactory implements \Magento\Framework\ObjectManager\Facto
     protected $creationStack = [];
 
     /**
-     * @param \Magento\Framework\ObjectManager\ConfigInterface     $config
-     * @param ObjectManagerInterface                               $objectManager
-     * @param \Magento\Framework\ObjectManager\DefinitionInterface $definitions
-     * @param array                                                $globalArguments
+     * @param ConfigInterface $config
+     * @param ObjectManagerInterface $objectManager
+     * @param DefinitionInterface $definitions
+     * @param array $globalArguments
      */
     public function __construct(
-        \Magento\Framework\ObjectManager\ConfigInterface $config,
+        ConfigInterface $config,
         ?ObjectManagerInterface $objectManager = null,
-        ?\Magento\Framework\ObjectManager\DefinitionInterface $definitions = null,
+        ?DefinitionInterface $definitions = null,
         $globalArguments = []
     ) {
         $this->config = $config;
@@ -96,12 +101,12 @@ abstract class AbstractFactory implements \Magento\Framework\ObjectManager\Facto
     /**
      * Get definitions
      *
-     * @return \Magento\Framework\ObjectManager\DefinitionInterface
+     * @return DefinitionInterface
      */
     public function getDefinitions()
     {
         if ($this->definitions === null) {
-            $this->definitions = new \Magento\Framework\ObjectManager\Definition\Runtime();
+            $this->definitions = new Runtime();
         }
         return $this->definitions;
     }
@@ -110,7 +115,7 @@ abstract class AbstractFactory implements \Magento\Framework\ObjectManager\Facto
      * Create object
      *
      * @param string $type
-     * @param array  $args
+     * @param array $args
      *
      * @return object
      * @throws RuntimeException
@@ -118,7 +123,7 @@ abstract class AbstractFactory implements \Magento\Framework\ObjectManager\Facto
     protected function createObject($type, $args)
     {
         try {
-            return new $type(...array_values($args));
+            return new $type(...$args);
         } catch (\TypeError $exception) {
             /**
              * @var LoggerInterface $logger
@@ -140,9 +145,9 @@ abstract class AbstractFactory implements \Magento\Framework\ObjectManager\Facto
     /**
      * Resolve an argument
      *
-     * @param array  $argument
+     * @param array $argument
      * @param string $paramType
-     * @param mixed  $paramDefault
+     * @param mixed $paramDefault
      * @param string $paramName
      * @param string $requestedType
      *
@@ -224,8 +229,8 @@ abstract class AbstractFactory implements \Magento\Framework\ObjectManager\Facto
      * Resolve constructor arguments
      *
      * @param string $requestedType
-     * @param array  $parameters
-     * @param array  $arguments
+     * @param array $parameters
+     * @param array $arguments
      *
      * @return array
      *
@@ -245,16 +250,16 @@ abstract class AbstractFactory implements \Magento\Framework\ObjectManager\Facto
     /**
      * Get resolved argument from parameter
      *
-     * @param  string $requestedType
-     * @param  array  $parameter
-     * @param  array  $arguments
+     * @param string $requestedType
+     * @param array $parameter
+     * @param array $arguments
      * @return array
      */
     private function getResolvedArgument(string $requestedType, array $parameter, array $arguments): array
     {
         list($paramName, $paramType, $paramRequired, $paramDefault, $isVariadic) = $parameter;
         $argument = null;
-        if (!empty($arguments) && (isset($arguments[$paramName]) || array_key_exists($paramName, $arguments))) {
+        if (!empty($arguments) && (array_key_exists($paramName, $arguments))) {
             $argument = $arguments[$paramName];
         } elseif ($paramRequired) {
             if ($paramType) {

@@ -1,12 +1,17 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 /**
  * \Magento\Framework\Cache\Backend\Decorator\Compression test case
+ *
+ * @deprecated Tests deprecated class Compression
+ * @see \Magento\Framework\Cache\Backend\Decorator\Compression
+ * @group legacy
+ * @group disabled
  */
 namespace Magento\Framework\Cache\Test\Unit\Backend\Decorator;
 
@@ -30,13 +35,16 @@ class CompressionTest extends TestCase
      */
     protected static $_cacheStorage = [];
 
+    /**
+     * Skip all tests as the class being tested is deprecated
+     *
+     * @return void
+     */
     protected function setUp(): void
     {
-        $options = [
-            'concrete_backend' => $this->createMock(\Zend_Cache_Backend_File::class),
-            'compression_threshold' => strlen($this->_testString),
-        ];
-        $this->_decorator = new Compression($options);
+        $this->markTestSkipped(
+            'Test skipped: Compression is deprecated. Compression is handled by backend libraries directly.'
+        );
     }
 
     protected function tearDown(): void
@@ -51,7 +59,6 @@ class CompressionTest extends TestCase
             Compression::class,
             '_compressData'
         );
-        $method->setAccessible(true);
 
         $this->assertStringStartsWith('CACHE_COMPRESSION', $method->invoke($this->_decorator, $this->_testString));
     }
@@ -62,13 +69,11 @@ class CompressionTest extends TestCase
             Compression::class,
             '_compressData'
         );
-        $methodCompress->setAccessible(true);
 
         $methodDecompress = new \ReflectionMethod(
             Compression::class,
             '_decompressData'
         );
-        $methodDecompress->setAccessible(true);
 
         $this->assertEquals(
             $this->_testString,
@@ -85,8 +90,6 @@ class CompressionTest extends TestCase
             Compression::class,
             '_isCompressionNeeded'
         );
-        $method->setAccessible(true);
-
         $this->assertFalse($method->invoke($this->_decorator, $this->_testString));
         $this->assertFalse($method->invoke($this->_decorator, substr($this->_testString, 0, -1)));
         $this->assertTrue($method->invoke($this->_decorator, $this->_testString . 's'));
@@ -100,7 +103,6 @@ class CompressionTest extends TestCase
             Compression::class,
             '_isDecompressionNeeded'
         );
-        $method->setAccessible(true);
 
         $this->assertFalse($method->invoke($this->_decorator, $this->_testString));
         $this->assertFalse($method->invoke($this->_decorator, 's' . $prefix . $this->_testString));

@@ -67,7 +67,7 @@ class DataProviderTest extends TestCase
         );
         $this->operationDetailsMock = $this->createMock(Details::class);
         $this->bulkMock = $this->createMock(BulkSummary::class);
-        $this->requestMock = $this->getMockForAbstractClass(RequestInterface::class);
+        $this->requestMock = $this->createMock(RequestInterface::class);
 
         $this->bulkCollectionFactoryMock
             ->expects($this->once())

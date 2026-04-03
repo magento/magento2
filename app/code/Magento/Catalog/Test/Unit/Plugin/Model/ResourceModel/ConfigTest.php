@@ -42,9 +42,9 @@ class ConfigTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->cacheMock = $this->getMockForAbstractClass(CacheInterface::class);
-        $this->cacheStateMock = $this->getMockForAbstractClass(StateInterface::class);
-        $this->serializerMock = $this->getMockForAbstractClass(SerializerInterface::class);
+        $this->cacheMock = $this->createMock(CacheInterface::class);
+        $this->cacheStateMock = $this->createMock(StateInterface::class);
+        $this->serializerMock = $this->createMock(SerializerInterface::class);
         $this->configResourceModelMock = $this->createMock(ConfigResourceModel::class);
     }
 

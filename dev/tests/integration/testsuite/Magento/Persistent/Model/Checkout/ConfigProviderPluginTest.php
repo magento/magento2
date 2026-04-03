@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -20,6 +20,12 @@ use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\Interception\PluginList;
 use Magento\TestFramework\Quote\Model\GetQuoteByReservedOrderId;
 use PHPUnit\Framework\TestCase;
+use Magento\TestFramework\Fixture\DataFixture;
+use Magento\TestFramework\Fixture\Config;
+use Magento\Customer\Test\Fixture\Customer;
+use Magento\Quote\Test\Fixture\CustomerCart;
+use Magento\Catalog\Test\Fixture\Product as ProductFixture;
+use Magento\Quote\Test\Fixture\AddProductToCart as AddProductToCartFixture;
 
 /**
  * Test for checkout config provider plugin
@@ -131,11 +137,19 @@ class ConfigProviderPluginTest extends TestCase
     }
 
     /**
-     * @magentoDataFixture Magento/Checkout/_files/quote_with_customer_without_address.php
-     * @magentoConfigFixture current_store persistent/options/enabled 0
-     *
      * @return void
      */
+    #[
+        Config('persistent/options/enabled', 0, scopeType: \Magento\Store\Model\ScopeInterface::SCOPE_STORE),
+        DataFixture(Customer::class, as: 'customer'),
+        DataFixture(
+            CustomerCart::class,
+            ['customer_id' => '$customer.id$', 'reserved_order_id' => 'test_order_with_customer_without_address'],
+            as: 'cart'
+        ),
+        DataFixture(ProductFixture::class, as: 'product'),
+        DataFixture(AddProductToCartFixture::class, ['cart_id' => '$cart.id$', 'product_id' => '$product.id$']),
+    ]
     public function testPersistentDisabled(): void
     {
         $quote = $this->getQuoteByReservedOrderId->execute('test_order_with_customer_without_address');
@@ -145,11 +159,19 @@ class ConfigProviderPluginTest extends TestCase
     }
 
     /**
-     * @magentoDataFixture Magento/Checkout/_files/quote_with_customer_without_address.php
-     * @magentoConfigFixture current_store persistent/options/enabled 1
-     *
      * @return void
      */
+    #[
+        Config('persistent/options/enabled', 1, scopeType: \Magento\Store\Model\ScopeInterface::SCOPE_STORE),
+        DataFixture(Customer::class, as: 'customer'),
+        DataFixture(
+            CustomerCart::class,
+            ['customer_id' => '$customer.id$', 'reserved_order_id' => 'test_order_with_customer_without_address'],
+            as: 'cart'
+        ),
+        DataFixture(ProductFixture::class, as: 'product'),
+        DataFixture(AddProductToCartFixture::class, ['cart_id' => '$cart.id$', 'product_id' => '$product.id$']),
+    ]
     public function testWithoutPersistentSession(): void
     {
         $quote = $this->getQuoteByReservedOrderId->execute('test_order_with_customer_without_address');

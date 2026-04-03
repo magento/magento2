@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework\Cache;
 
@@ -9,6 +9,12 @@ use Magento\Framework\Cache\Backend\Redis;
 use Zend_Cache;
 use Zend_Cache_Exception;
 
+/**
+ * Extended Zend Cache Core with backend decorator support
+ *
+ * @deprecated No longer used in production. All cache operations now use Symfony cache adapter.
+ * @see \Magento\Framework\Cache\Frontend\Adapter\Symfony
+ */
 class Core extends \Zend_Cache_Core
 {
     /**

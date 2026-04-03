@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -9,6 +9,7 @@ namespace Magento\Framework\DB\Test\Unit\Ddl;
 
 use Magento\Framework\DB\Ddl\Trigger;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class TriggerTest extends TestCase
 {
@@ -191,9 +192,8 @@ class TriggerTest extends TestCase
 
     /**
      * Test addStatement and getStatements for trigger
-     *
-     * @dataProvider getStatementsDataProvider
-     */
+     *     */
+    #[DataProvider('getStatementsDataProvider')]
     public function testAddStatement($param, $expected)
     {
         $this->_object->addStatement($param);

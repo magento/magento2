@@ -31,15 +31,9 @@ class ProductFrontendActionSectionTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->synchronizerMock = $this
-            ->getMockBuilder(Synchronizer::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->appConfigMock = $this->getMockBuilder(Config::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->loggerMock = $this->getMockBuilder(LoggerInterface::class)
-            ->getMockForAbstractClass();
+        $this->synchronizerMock = $this->createMock(Synchronizer::class);
+        $this->appConfigMock = $this->createMock(Config::class);
+        $this->loggerMock = $this->createMock(LoggerInterface::class);
 
         $this->model = new ProductFrontendActionSection(
             $this->synchronizerMock,
@@ -55,10 +49,8 @@ class ProductFrontendActionSectionTest extends TestCase
             ->method('getValue')
             ->with(Synchronizer::ALLOW_SYNC_WITH_BACKEND_PATH)
             ->willReturn(1);
-        $actionFirst = $this->getMockBuilder(ProductFrontendActionInterface::class)
-            ->getMockForAbstractClass();
-        $actionSecond = $this->getMockBuilder(ProductFrontendActionInterface::class)
-            ->getMockForAbstractClass();
+        $actionFirst = $this->createMock(ProductFrontendActionInterface::class);
+        $actionSecond = $this->createMock(ProductFrontendActionInterface::class);
         $actions = [$actionFirst, $actionSecond];
         $actionFirst->expects($this->exactly(2))
             ->method('getProductId')

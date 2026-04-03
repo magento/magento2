@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -32,6 +32,7 @@ use Magento\Sales\Model\OrderFactory;
 use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -100,19 +101,17 @@ class GuestTest extends TestCase
     protected function setUp(): void
     {
         $appContextHelperMock = $this->createMock(Context::class);
-        $storeManagerInterfaceMock = $this->getMockForAbstractClass(StoreManagerInterface::class);
+        $storeManagerInterfaceMock = $this->createMock(StoreManagerInterface::class);
         $registryMock = $this->createMock(Registry::class);
         $this->sessionMock = $this->createMock(Session::class);
-        $this->cookieManagerMock = $this->getMockForAbstractClass(CookieManagerInterface::class);
+        $this->cookieManagerMock = $this->createMock(CookieManagerInterface::class);
         $this->cookieMetadataFactoryMock = $this->createMock(
             CookieMetadataFactory::class
         );
-        $this->managerInterfaceMock = $this->getMockForAbstractClass(ManagerInterface::class);
+        $this->managerInterfaceMock = $this->createMock(ManagerInterface::class);
         $this->orderFactoryMock = $this->createPartialMock(OrderFactory::class, ['create']);
-        $this->viewInterfaceMock = $this->getMockForAbstractClass(ViewInterface::class);
-        $this->storeModelMock = $this->getMockBuilder(Store::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->viewInterfaceMock = $this->createMock(ViewInterface::class);
+        $this->storeModelMock = $this->createMock(Store::class);
         $this->salesOrderMock = $this->createPartialMock(
             Order::class,
             [
@@ -124,18 +123,12 @@ class GuestTest extends TestCase
                 'getBillingAddress'
             ]
         );
-        $this->orderRepository = $this->getMockBuilder(OrderRepositoryInterface::class)
-            ->onlyMethods(['getList'])
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->orderRepository = $this->createMock(OrderRepositoryInterface::class);
         $this->searchCriteriaBuilder = $this->getMockBuilder(SearchCriteriaBuilder::class)
             ->onlyMethods(['addFilter', 'create'])
             ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-        $orderSearchResult = $this->getMockBuilder(OrderSearchResultInterface::class)
-            ->onlyMethods(['getTotalCount', 'getItems'])
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+            ->getMock();
+        $orderSearchResult = $this->createMock(OrderSearchResultInterface::class);
         $resultRedirectFactory =
             $this->getMockBuilder(RedirectFactory::class)
                 ->onlyMethods(['create'])
@@ -146,7 +139,7 @@ class GuestTest extends TestCase
         $orderSearchResult->method('getItems')->willReturn([ 2 => $this->salesOrderMock]);
         $searchCriteria = $this
             ->getMockBuilder(SearchCriteriaInterface::class)
-            ->getMockForAbstractClass();
+            ->getMock();
         $storeManagerInterfaceMock->expects($this->any())->method('getStore')->willReturn($this->storeModelMock);
         $this->searchCriteriaBuilder->method('create')->willReturn($searchCriteria);
         $this->storeModelMock->method('getId')->willReturn(1);
@@ -180,8 +173,8 @@ class GuestTest extends TestCase
      * @throws InputException
      * @throws CookieSizeLimitReachedException
      * @throws FailureToSendException
-     * @dataProvider loadValidOrderNotEmptyPostDataProvider
      */
+    #[DataProvider('loadValidOrderNotEmptyPostDataProvider')]
     public function testLoadValidOrderNotEmptyPost(array $post): void
     {
         $incrementId = $post['oar_order_id'];

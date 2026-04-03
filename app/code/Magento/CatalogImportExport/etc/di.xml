@@ -33,6 +33,7 @@
                 <item name="layout_update" xsi:type="object">Magento\CatalogImportExport\Model\Import\Product\Validator\LayoutUpdate</item>
                 <item name="layout_update_permissions" xsi:type="object">Magento\CatalogImportExport\Model\Import\Product\Validator\LayoutUpdatePermissions</item>
                 <item name="name" xsi:type="object">Magento\CatalogImportExport\Model\Import\Product\Validator\Name</item>
+                <item name="backorders" xsi:type="object">Magento\CatalogImportExport\Model\Import\Product\Validator\Backorders</item>
             </argument>
         </arguments>
     </type>
@@ -48,6 +49,17 @@
                 <item name="quantity_and_stock_status" xsi:type="object">Magento\CatalogImportExport\Model\Export\Product\StockStatusFilter</item>
                 <item name="website_ids" xsi:type="object">Magento\CatalogImportExport\Model\Export\Product\WebsiteFilter</item>
             </argument>
+        </arguments>
+    </type>
+    <virtualType name="Magento\CatalogImportExport\Model\ResourceModel\Product\ExportCollectionFactory" type="Magento\Catalog\Model\ResourceModel\Product\CollectionFactory">
+        <arguments>
+            <argument name="instanceName" xsi:type="string">Magento\CatalogImportExport\Model\ResourceModel\Product\ExportCollection</argument>
+        </arguments>
+    </virtualType>
+    <type name="Magento\CatalogImportExport\Model\Export\Product">
+        <arguments>
+            <argument name="collectionFactory" xsi:type="object">Magento\CatalogImportExport\Model\ResourceModel\Product\ExportCollectionFactory</argument>
+            <argument name="estimatedMemoryPerProduct" xsi:type="number">500000</argument>
         </arguments>
     </type>
     <type name="Magento\CatalogImportExport\Model\Import\Product\LinkProcessor">

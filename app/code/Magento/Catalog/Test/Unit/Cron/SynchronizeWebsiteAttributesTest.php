@@ -15,13 +15,10 @@ class SynchronizeWebsiteAttributesTest extends TestCase
 {
     public function testExecuteSuccess()
     {
-        $synchronizerMock = $this->getMockBuilder(WebsiteAttributesSynchronizer::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods([
-                'isSynchronizationRequired',
-                'synchronize',
-            ])
-            ->getMock();
+        $synchronizerMock = $this->createPartialMock(WebsiteAttributesSynchronizer::class, [
+            'isSynchronizationRequired',
+            'synchronize',
+        ]);
 
         $synchronizerMock->expects($this->once())
             ->method('isSynchronizationRequired')
@@ -38,13 +35,10 @@ class SynchronizeWebsiteAttributesTest extends TestCase
 
     public function testExecuteWithNoSyncRequired()
     {
-        $synchronizerMock = $this->getMockBuilder(WebsiteAttributesSynchronizer::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods([
-                'isSynchronizationRequired',
-                'synchronize',
-            ])
-            ->getMock();
+        $synchronizerMock = $this->createPartialMock(WebsiteAttributesSynchronizer::class, [
+            'isSynchronizationRequired',
+            'synchronize',
+        ]);
 
         $synchronizerMock->expects($this->once())
             ->method('isSynchronizationRequired')

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Sales\Model\Order\Payment;
@@ -520,7 +520,7 @@ class Transaction extends AbstractModel implements TransactionInterface
         if ($this->_transactionsAutoLinking && self::TYPE_AUTH === $this->getTxnType()) {
             try {
                 $paymentTransaction = $this->getParentTransaction();
-                if ($paymentTransaction) {
+                if ($paymentTransaction && $paymentTransaction->getId() !== $this->getId()) {
                     $paymentTransaction->close($shouldSave);
                 }
             } catch (\Exception $e) {
@@ -674,6 +674,10 @@ class Transaction extends AbstractModel implements TransactionInterface
         $this->_children = [];
         $this->_identifiedChildren = [];
         foreach ($children as $child) {
+            if ($child->getId() === $this->getId()) {
+                continue;
+            }
+
             if ($this->getPaymentId()) {
                 $child->setOrderId($this->getOrderId())->setPaymentId($this->getPaymentId());
             }

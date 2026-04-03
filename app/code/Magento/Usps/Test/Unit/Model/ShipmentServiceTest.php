@@ -8,17 +8,21 @@ declare(strict_types=1);
 namespace Magento\Usps\Test\Unit\Model;
 
 use Exception;
+use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory;
 use Magento\Framework\DataObject;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\HTTP\AsyncClient\HttpResponseDeferredInterface;
 use Magento\Framework\HTTP\AsyncClient\Response;
 use Magento\Framework\HTTP\AsyncClientInterface;
 use Magento\Framework\Measure\Length;
 use Magento\Framework\Measure\Weight;
+use Magento\Quote\Model\Quote\Address\RateResult\Error;
 use Magento\Quote\Model\Quote\Address\RateResult\ErrorFactory;
 use Magento\Quote\Model\Quote\Address\RateResult\MethodFactory;
 use Magento\Shipping\Helper\Carrier as CarrierHelper;
+use Magento\Shipping\Model\Rate\Result;
 use Magento\Shipping\Model\Rate\ResultFactory;
 use Magento\Shipping\Model\Rate\Result\ProxyDeferredFactory;
 use Magento\Usps\Model\Carrier;
@@ -37,6 +41,7 @@ use Psr\Log\LoggerInterface;
  */
 class ShipmentServiceTest extends TestCase
 {
+    use MockCreationTrait;
     /**
      * @var ShipmentService
      */
@@ -107,30 +112,16 @@ class ShipmentServiceTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->rateFactoryMock = $this->getMockBuilder(ResultFactory::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->rateMethodFactoryMock =
-            $this->getMockBuilder(MethodFactory::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->rateErrorFactoryMock =
-            $this->getMockBuilder(ErrorFactory::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->productCollectionFactoryMock =
-            $this->getMockBuilder(CollectionFactory::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->rateFactoryMock = $this->createMock(ResultFactory::class);
+        $this->rateMethodFactoryMock = $this->createMock(MethodFactory::class);
+        $this->rateErrorFactoryMock = $this->createMock(ErrorFactory::class);
+        $this->productCollectionFactoryMock = $this->createMock(CollectionFactory::class);
         $this->carrierHelperMock = $this->createMock(CarrierHelper::class);
         $this->loggerMock = $this->createMock(LoggerInterface::class);
         $this->uspsPaymentAuthTokenMock = $this->createMock(UspsPaymentAuthToken::class);
         $this->shippingMethodManagerMock = $this->createMock(ShippingMethodManager::class);
         $this->httpClientMock = $this->createMock(AsyncClientInterface::class);
-        $this->proxyDeferredFactoryMock =
-            $this->getMockBuilder(ProxyDeferredFactory::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->proxyDeferredFactoryMock = $this->createMock(ProxyDeferredFactory::class);
         $this->carrierModelMock = $this->createMock(Carrier::class);
         $carrierModelReflection = new \ReflectionClass(Carrier::class);
         $_defaultGatewayUrl = $carrierModelReflection->getProperty('_defaultRestUrl');
@@ -785,11 +776,10 @@ class ShipmentServiceTest extends TestCase
         ]);
 
         // Mock product collection
-        $productMock = $this->getMockBuilder(\Magento\Catalog\Model\Product::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['getCountryOfManufacture'])
-            ->onlyMethods(['getId'])
-            ->getMock();
+        $productMock = $this->createPartialMockWithReflection(
+            Product::class,
+            ['getId', 'getCountryOfManufacture']
+        );
         $productMock->method('getId')->willReturn(1);
         $productMock->method('getCountryOfManufacture')->willReturn('US');
 
@@ -934,11 +924,10 @@ class ShipmentServiceTest extends TestCase
             ->with('GB')
             ->willReturn('United Kingdom');
 
-        $productMock = $this->getMockBuilder(\Magento\Catalog\Model\Product::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['getCountryOfManufacture'])
-            ->onlyMethods(['getId'])
-            ->getMock();
+        $productMock = $this->createPartialMockWithReflection(
+            Product::class,
+            ['getId', 'getCountryOfManufacture']
+        );
         $productMock->method('getId')->willReturn(1);
         $productMock->method('getCountryOfManufacture')->willReturn('US');
 
@@ -1081,11 +1070,10 @@ class ShipmentServiceTest extends TestCase
             ->willReturn('test_payment_token');
 
         // Mock product collection
-        $productMock = $this->getMockBuilder(\Magento\Catalog\Model\Product::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['getCountryOfManufacture'])
-            ->onlyMethods(['getId'])
-            ->getMock();
+        $productMock = $this->createPartialMockWithReflection(
+            Product::class,
+            ['getId', 'getCountryOfManufacture']
+        );
         $productMock->method('getId')->willReturn(1);
         $productMock->method('getCountryOfManufacture')->willReturn('US');
 
@@ -1256,5 +1244,113 @@ class ShipmentServiceTest extends TestCase
 
         $this->assertInstanceOf(DataObject::class, $result);
         $this->assertNotEmpty($result->getErrors());
+    }
+
+    /**
+     * Test getJsonQuotes with only weight_ounces computes decimal weight (8 oz = 0.5 lb)
+     */
+    public function testGetJsonQuotesWithWeightOuncesOnlyUsesComputedWeight(): void
+    {
+        $requestMock = new DataObject();
+        $requestMock->setPackages([
+            [
+                'weight_ounces' => 8
+            ]
+        ]);
+        $capturedRequestParam = $this->getRequestParamHelper($requestMock);
+        $this->assertEquals(0.5, $capturedRequestParam['packageDescription']['weight']);
+    }
+
+    /**
+     * Test getJsonQuotes with weight_pounds = 0 and weight_ounces = 0 uses minimum 0.01
+     */
+    public function testGetJsonQuotesWithZeroWeightUsesMinimum(): void
+    {
+        $requestMock = new DataObject();
+        $requestMock->setPackages([
+            [
+                'weight_pounds' => 0,
+                'weight_ounces' => 0
+            ]
+        ]);
+        $capturedRequestParam = $this->getRequestParamHelper($requestMock);
+        $this->assertEquals(0.01, $capturedRequestParam['packageDescription']['weight']);
+    }
+
+    /**
+     * Test getJsonQuotes with weight_pounds and weight_ounces uses combined decimal weight
+     */
+    public function testGetJsonQuotesWithValidWeightPounds(): void
+    {
+        $requestMock = new DataObject();
+        $requestMock->setPackages([
+            [
+                'weight_pounds' => 5,
+                'weight_ounces' => 8
+            ]
+        ]);
+        $capturedRequestParam = $this->getRequestParamHelper($requestMock);
+        // 5 lb 8 oz = 5.5 lb
+        $this->assertEquals(5.5, $capturedRequestParam['packageDescription']['weight']);
+    }
+
+    /**
+     * @param DataObject $requestMock
+     * @return mixed|null
+     * @throws LocalizedException
+     * @throws \PHPUnit\Framework\MockObject\Exception
+     */
+    private function getRequestParamHelper(DataObject $requestMock): mixed
+    {
+        $requestMock->setOrigCountryId('US');
+        $requestMock->setOrigPostal('90210');
+        $requestMock->setDestCountryId('US');
+        $requestMock->setDestPostal('10001');
+        $requestMock->setLength(12);
+        $requestMock->setHeight(10);
+        $requestMock->setWidth(8);
+        $requestMock->setContainer('RECTANGULAR');
+        $this->carrierModelMock->expects($this->once())
+            ->method('getRawRequest')
+            ->willReturn($requestMock);
+        $this->carrierModelMock->expects($this->any())
+            ->method('_isUSCountry')
+            ->willReturn(true);
+        $this->carrierModelMock->expects($this->once())
+            ->method('getOauthAccessRequest')
+            ->willReturn('test_access_token');
+        $this->carrierModelMock->expects($this->atLeastOnce())
+            ->method('getConfigData')
+            ->willReturnCallback(function ($key) {
+                $configMap = [
+                    'price_type' => 'RETAIL',
+                    'title' => 'USPS',
+                    'specificerrmsg' => 'No rates available'
+                ];
+                return $configMap[$key] ?? null;
+            });
+        $capturedRequestParam = null;
+        $this->carrierModelMock->expects($this->once())
+            ->method('getCachedQuotes')
+            ->willReturnCallback(function ($param) use (&$capturedRequestParam) {
+                $capturedRequestParam = json_decode($param, true);
+                return json_encode([]);
+            });
+        $resultMock = $this->createMock(Result::class);
+        $this->rateFactoryMock->expects($this->once())
+            ->method('create')
+            ->willReturn($resultMock);
+        $errorMock = $this->getMockBuilder(Error::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->rateErrorFactoryMock->expects($this->once())
+            ->method('create')
+            ->willReturn($errorMock);
+        $resultMock->expects($this->once())
+            ->method('append')
+            ->with($errorMock);
+        $this->shipmentService->getJsonQuotes();
+        $this->assertNotNull($capturedRequestParam);
+        return $capturedRequestParam;
     }
 }

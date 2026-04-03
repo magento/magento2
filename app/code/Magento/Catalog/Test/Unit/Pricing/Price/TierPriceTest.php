@@ -7,10 +7,13 @@ declare(strict_types=1);
 
 namespace Magento\Catalog\Test\Unit\Pricing\Price;
 
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Pricing\Price\FinalPrice;
 use Magento\Catalog\Pricing\Price\TierPrice;
 use Magento\Customer\Api\GroupManagementInterface;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Customer\Model\Group;
 use Magento\Customer\Model\Group\RetrieverInterface;
 use Magento\Customer\Model\GroupManagement;
@@ -31,8 +34,11 @@ use PHPUnit\Framework\TestCase;
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
+#[CoversClass(\Magento\Catalog\Pricing\Price\TierPrice::class)]
 class TierPriceTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * Test customer group
      *
@@ -96,25 +102,17 @@ class TierPriceTest extends TestCase
     protected function setUp(): void
     {
         $this->priceInfo = $this->createMock(Base::class);
-
-        $this->product = $this->getMockBuilder(Product::class)
-            ->addMethods(['hasCustomerGroupId', 'getCustomerGroupId'])
-            ->onlyMethods(['getPriceInfo', 'getResource'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->product->expects($this->any())->method('getPriceInfo')->willReturn($this->priceInfo);
-        $this->customerGroupRetriever = $this->getMockBuilder(RetrieverInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->product = $this->createPartialMock(Product::class, ['getPriceInfo']);
+        $this->product->method('getPriceInfo')->willReturn($this->priceInfo);
+        $this->customerGroupRetriever = $this->createMock(RetrieverInterface::class);
         $this->session = $this->createMock(Session::class);
-        $this->session->expects($this->any())->method('getCustomerGroupId')
-            ->willReturn(self::$customerGroup);
-        $this->customerGroupRetriever = $this->getMockForAbstractClass(RetrieverInterface::class);
+        $this->session->method('getCustomerGroupId')->willReturn(self::$customerGroup);
+        $this->customerGroupRetriever = $this->createMock(RetrieverInterface::class);
         $this->calculator = $this->createMock(Calculator::class);
-        $this->groupManagement = $this->getMockForAbstractClass(GroupManagementInterface::class);
+        $this->groupManagement = $this->createMock(GroupManagementInterface::class);
 
-        $this->priceCurrencyMock = $this->getMockForAbstractClass(PriceCurrencyInterface::class);
-        $this->scopeConfigMock = $this->getMockForAbstractClass(ScopeConfigInterface::class);
+        $this->priceCurrencyMock = $this->createMock(PriceCurrencyInterface::class);
+        $this->scopeConfigMock = $this->createMock(ScopeConfigInterface::class);
 
         $this->model = new TierPrice(
             $this->product,
@@ -130,13 +128,8 @@ class TierPriceTest extends TestCase
 
     /**
      * Test base initialization of tier price
-     *
-     * @covers \Magento\Catalog\Pricing\Price\TierPrice::__construct
-     * @covers \Magento\Catalog\Pricing\Price\TierPrice::getValue
-     * @covers \Magento\Catalog\Pricing\Price\TierPrice::getStoredTierPrices
-     * @covers \Magento\Catalog\Pricing\Price\TierPrice::canApplyTierPrice
-     * @dataProvider providerForBaseInitialization
      */
+    #[DataProvider('providerForBaseInitialization')]
     public function testBaseInitialization($tierPrices, $expectedValue)
     {
         $convertedExpectedValue = $expectedValue - 1;
@@ -149,8 +142,8 @@ class TierPriceTest extends TestCase
             );
         $this->product->setData(TierPrice::PRICE_CODE, $tierPrices);
         $group = $this->createMock(\Magento\Customer\Model\Data\Group::class);
-        $group->expects($this->any())->method('getId')->willReturn(GroupManagement::CUST_GROUP_ALL);
-        $this->groupManagement->expects($this->any())->method('getAllCustomersGroup')->willReturn($group);
+        $group->method('getId')->willReturn(GroupManagement::CUST_GROUP_ALL);
+        $this->groupManagement->method('getAllCustomersGroup')->willReturn($group);
         $this->assertEquals($convertedExpectedValue, $this->model->getValue());
     }
 
@@ -221,17 +214,9 @@ class TierPriceTest extends TestCase
 
     /**
      * Test getter stored tier prices from eav model
-     *
-     * @covers \Magento\Catalog\Pricing\Price\TierPrice::__construct
-     * @covers \Magento\Catalog\Pricing\Price\TierPrice::getStoredTierPrices
      */
     public function testGetterStoredTierPrices()
     {
-        $this->product->expects($this->once())->method('hasCustomerGroupId')
-            ->willReturn(true);
-        $this->product->expects($this->once())->method('getCustomerGroupId')
-            ->willReturn(self::$customerGroup);
-
         $backendMock = $this->createMock(AbstractBackend::class);
 
         $attributeMock = $this->createMock(AbstractAttribute::class);
@@ -241,10 +226,14 @@ class TierPriceTest extends TestCase
         $productResource->expects($this->once())->method('getAttribute')->with(TierPrice::PRICE_CODE)
             ->willReturn($attributeMock);
 
-        $this->product->expects($this->once())->method('getResource')->willReturn($productResource);
+        $product = $this->createPartialMock(Product::class, ['getPriceInfo', 'getResource']);
+        $product->method('getPriceInfo')->willReturn($this->priceInfo);
+        $product->method('getResource')->willReturn($productResource);
+        $product->setHasCustomerGroupId(true);
+        $product->setCustomerGroupId(self::$customerGroup);
 
         $tierPrice = new TierPrice(
-            $this->product,
+            $product,
             $this->quantity,
             $this->calculator,
             $this->priceCurrencyMock,
@@ -261,22 +250,13 @@ class TierPriceTest extends TestCase
         $this->assertFalse($tierPrice->getValue());
     }
 
-    /**
-     * @covers \Magento\Catalog\Pricing\Price\TierPrice::__construct
-     * @covers \Magento\Catalog\Pricing\Price\TierPrice::getTierPriceList
-     * @covers \Magento\Catalog\Pricing\Price\TierPrice::getStoredTierPrices
-     * @covers \Magento\Catalog\Pricing\Price\TierPrice::applyAdjustment
-     * @covers \Magento\Catalog\Pricing\Price\TierPrice::getTierPriceCount
-     * @covers \Magento\Catalog\Pricing\Price\TierPrice::filterTierPrices
-     * @covers \Magento\Catalog\Pricing\Price\TierPrice::getBasePrice
-     * @dataProvider providerForGetterTierPriceList
-     */
+    #[DataProvider('providerForGetterTierPriceList')]
     public function testGetterTierPriceList($tierPrices, $basePrice, $expectedResult)
     {
         $this->product->setData(TierPrice::PRICE_CODE, $tierPrices);
 
-        $price = $this->getMockForAbstractClass(PriceInterface::class);
-        $price->expects($this->any())->method('getValue')->willReturn($basePrice);
+        $price = $this->createMock(PriceInterface::class);
+        $price->method('getValue')->willReturn($basePrice);
 
         $this->calculator->expects($this->atLeastOnce())->method('getAmount')
             ->willReturnArgument(0);
@@ -294,9 +274,8 @@ class TierPriceTest extends TestCase
             );
 
         $group = $this->createMock(\Magento\Customer\Model\Data\Group::class);
-        $group->expects($this->any())->method('getId')->willReturn(GroupManagement::CUST_GROUP_ALL);
-        $this->groupManagement->expects($this->any())->method('getAllCustomersGroup')
-            ->willReturn($group);
+        $group->method('getId')->willReturn(GroupManagement::CUST_GROUP_ALL);
+        $this->groupManagement->method('getAllCustomersGroup')->willReturn($group);
         $this->assertEquals($expectedResult, $this->model->getTierPriceList());
         $this->assertCount($this->model->getTierPriceCount(), $expectedResult);
         //Second call will get the cached value
@@ -368,29 +347,22 @@ class TierPriceTest extends TestCase
      * @param float $basePrice
      * @param float $tierPrice
      * @param float $savedPercent
-     *
-     * @dataProvider dataProviderGetSavePercent
      */
+    #[DataProvider('dataProviderGetSavePercent')]
     public function testGetSavePercent($basePrice, $tierPrice, $savedPercent)
     {
         /** @var AmountInterface|MockObject $amount */
-        $amount = $this->getMockForAbstractClass(AmountInterface::class);
+        $amount = $this->createMock(AmountInterface::class);
 
-        $amount->expects($this->any())
-            ->method('getValue')
-            ->willReturn($tierPrice);
+        $amount->method('getValue')->willReturn($tierPrice);
 
-        $basePriceAmount = $this->getMockForAbstractClass(AmountInterface::class);
+        $basePriceAmount = $this->createMock(AmountInterface::class);
 
-        $basePriceAmount->expects($this->any())
-            ->method('getValue')
-            ->willReturn($basePrice);
+        $basePriceAmount->method('getValue')->willReturn($basePrice);
 
-        $price = $this->getMockForAbstractClass(PriceInterface::class);
+        $price = $this->createMock(PriceInterface::class);
 
-        $price->expects($this->any())
-            ->method('getAmount')
-            ->willReturn($basePriceAmount);
+        $price->method('getAmount')->willReturn($basePriceAmount);
 
         $this->priceInfo->expects($this->any())
             ->method('getPrice')
@@ -416,8 +388,8 @@ class TierPriceTest extends TestCase
     /**
      * @param null|string|float $quantity
      * @param float $expectedValue
-     * @dataProvider getQuantityDataProvider
      */
+    #[DataProvider('getQuantityDataProvider')]
     public function testGetQuantity($quantity, $expectedValue)
     {
         $tierPrice = new TierPrice(
