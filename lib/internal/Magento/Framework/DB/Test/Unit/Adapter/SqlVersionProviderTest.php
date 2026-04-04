@@ -36,7 +36,8 @@ class SqlVersionProviderTest extends TestCase
                 '^8\.4\.',
                 '^5\.7\.',
                 '^10\.(?:[2-6]|11)\.',
-                '^11\.4\.'
+                '^11\.[4-8]\.',
+                '^12\.[2-3]\.'
             ]
         );
     }
@@ -68,6 +69,8 @@ class SqlVersionProviderTest extends TestCase
      *  - 10.6.x branch
      *  - 11.4.x branch mapping to 10.6.11 suffix
      *  - 10.11.x branch
+     *  - 12.2.x branch mapping to 10.6.11 suffix
+     *  - 12.3.x branch mapping to 10.6.11 suffix
      */
     public static function mariaDbSuffixKeyDataProvider(): array
     {
@@ -84,14 +87,26 @@ class SqlVersionProviderTest extends TestCase
                 'sqlExactVersion' => '10.6.11',
                 'expectedSuffixKey' => SqlVersionProvider::MARIA_DB_10_6_11_VERSION,
             ],
-            'MariaDB 11.4.x at/above threshold maps to 10.6.11 suffix' => [
-                'sqlExactVersion' => '11.4.3',
-                'expectedSuffixKey' => SqlVersionProvider::MARIA_DB_10_6_11_VERSION,
-            ],
             'MariaDB 10.11.x at/above threshold uses 10.11 suffix' => [
                 'sqlExactVersion' => '10.11.6',
                 'expectedSuffixKey' => SqlVersionProvider::MARIA_DB_10_11_VERSION,
             ],
+            'MariaDB 11.4.x at/above threshold maps to 10.6.11 suffix' => [
+                'sqlExactVersion' => '11.4.3',
+                'expectedSuffixKey' => SqlVersionProvider::MARIA_DB_10_6_11_VERSION,
+            ],
+            'MariaDB 11.8.x at/above threshold maps to 10.6.11 suffix' => [
+                'sqlExactVersion' => '11.8.2',
+                'expectedSuffixKey' => SqlVersionProvider::MARIA_DB_10_6_11_VERSION,
+            ],
+            'MariaDB 12.2.x at/above threshold maps to 10.6.11 suffix' => [
+                'sqlExactVersion' => '12.2.0',
+                'expectedSuffixKey' => SqlVersionProvider::MARIA_DB_10_6_11_VERSION,
+            ],
+            'MariaDB 12.3.x at/above threshold maps to 10.6.11 suffix' => [
+                'sqlExactVersion' => '12.3.5',
+                'expectedSuffixKey' => SqlVersionProvider::MARIA_DB_10_6_11_VERSION,
+            ]
         ];
     }
 }
