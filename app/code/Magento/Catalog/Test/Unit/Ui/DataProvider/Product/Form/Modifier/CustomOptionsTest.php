@@ -16,9 +16,9 @@ use Magento\Framework\Pricing\PriceCurrencyInterface;
 use Magento\Framework\Stdlib\ArrayManager;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
-use Magento\Store\Api\Data\StoreInterface;
 use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 
 class CustomOptionsTest extends AbstractModifierTestCase
@@ -213,10 +213,10 @@ class CustomOptionsTest extends AbstractModifierTestCase
     /**
      * Test formatPriceByPath preserves original decimal precision
      *
-     * @dataProvider formatPriceByPathDataProvider
      * @param mixed $inputValue
      * @param mixed $expectedValue
      */
+    #[DataProvider('formatPriceByPathDataProvider')]
     public function testFormatPriceByPath($inputValue, $expectedValue): void
     {
         $path = 'price';
@@ -380,10 +380,10 @@ class CustomOptionsTest extends AbstractModifierTestCase
     /**
      * Test getProductOptionTypes with enabled and disabled types
      *
-     * @dataProvider getProductOptionTypesDataProvider
      * @param array $optionsConfig
      * @param array $expectedResult
      */
+    #[DataProvider('getProductOptionTypesDataProvider')]
     public function testGetProductOptionTypes(array $optionsConfig, array $expectedResult): void
     {
         $this->productOptionsConfigMock->method('getAll')->willReturn($optionsConfig);
@@ -517,10 +517,10 @@ class CustomOptionsTest extends AbstractModifierTestCase
     /**
      * Test formatPriceValue method directly
      *
-     * @dataProvider formatPriceValueDataProvider
      * @param mixed $inputValue
      * @param string $expectedValue
      */
+    #[DataProvider('formatPriceValueDataProvider')]
     public function testFormatPriceValue($inputValue, string $expectedValue): void
     {
         $model = $this->objectManager->getObject(CustomOptions::class, [

@@ -10,6 +10,7 @@ namespace Magento\Framework\Filter\DirectiveProcessor\Filter;
 
 use Magento\Framework\App\ObjectManager;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class FilterApplierTest extends TestCase
 {
@@ -24,8 +25,8 @@ class FilterApplierTest extends TestCase
     }
 
     /**
-     * @dataProvider arrayUseCaseProvider
      */
+    #[DataProvider('arrayUseCaseProvider')]
     public function testArrayUseCases($param, $input, $expected)
     {
         $result = $this->applier->applyFromArray($param, $input);
@@ -52,8 +53,8 @@ class FilterApplierTest extends TestCase
     }
 
     /**
-     * @dataProvider rawUseCaseProvider
      */
+    #[DataProvider('rawUseCaseProvider')]
     public function testRawUseCases($param, $input, $expected)
     {
         $result = $this->applier->applyFromRawParam($param, $input, ['escape']);

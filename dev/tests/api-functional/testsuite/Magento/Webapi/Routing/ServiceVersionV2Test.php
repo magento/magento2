@@ -5,6 +5,8 @@
  */
 namespace Magento\Webapi\Routing;
 
+use PHPUnit\Framework\Attributes\DataProvider;
+
 class ServiceVersionV2Test extends \Magento\Webapi\Routing\BaseService
 {
     /**
@@ -75,9 +77,8 @@ class ServiceVersionV2Test extends \Magento\Webapi\Routing\BaseService
      * Test fetching items when filters are applied
      *
      * @param string[] $filters
-     * @param array $expectedResult
-     * @dataProvider itemsWithFiltersDataProvider
-     */
+     * @param array $expectedResult */
+    #[DataProvider('itemsWithFiltersDataProvider')]
     public function testItemsWithFilters($filters, $expectedResult)
     {
         $restFilter = '';

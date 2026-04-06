@@ -62,8 +62,8 @@ class CollectionTest extends TestCase
             ]
         );
 
-        $this->saleableItemMock = $this->getMockForAbstractClass(SaleableInterface::class);
-        $this->priceMock = $this->getMockForAbstractClass(PriceInterface::class);
+        $this->saleableItemMock = $this->createMock(SaleableInterface::class);
+        $this->priceMock = $this->createMock(PriceInterface::class);
         $this->factoryMock = $this->createMock(Factory::class);
 
         $this->collection = new Collection(

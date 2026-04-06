@@ -68,7 +68,7 @@ class FactoryTest extends TestCase
     {
         $this->defaultTranslator = AbstractValidator::getDefaultTranslator();
 
-        $this->objectManagerMock = $this->getMockForAbstractClass(ObjectManagerInterface::class);
+        $this->objectManagerMock = $this->createMock(ObjectManagerInterface::class);
         $this->validatorConfigMock = $this->createPartialMock(
             Config::class,
             ['createValidatorBuilder', 'createValidator']

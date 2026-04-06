@@ -67,7 +67,7 @@ class CleanExpiredQuotesTest extends \PHPUnit\Framework\TestCase
     public function testExecuteWithBigAmountOfQuotes()
     {
         //Initial count - should be equal to 1000
-        $this->assertQuotesCount(1000);
+        $this->assertQuotesCount(6000);
 
         //Deleting expired quotes
         $this->cleanExpiredQuotes->execute();

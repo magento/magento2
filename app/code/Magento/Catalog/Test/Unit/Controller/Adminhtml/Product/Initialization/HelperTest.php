@@ -144,7 +144,7 @@ class HelperTest extends TestCase
         );
         $productExtensionAttributes = $this->createPartialMockWithReflection(
             ProductExtensionInterface::class,
-            ['getCategoryLinks', 'setCategoryLinks']
+            $this->getProductExtensionMethods()
         );
         $this->productMock->setExtensionAttributes($productExtensionAttributes);
 
@@ -576,6 +576,32 @@ class HelperTest extends TestCase
                 'isReadOnlyUpSellItems' => true,
                 'ignoreLinksFlag' => true
             ],
+        ];
+    }
+
+    private function getProductExtensionMethods(): array
+    {
+        return [
+            'getWebsiteIds',
+            'setWebsiteIds',
+            'getCategoryLinks',
+            'setCategoryLinks',
+            'getBundleProductOptions',
+            'setBundleProductOptions',
+            'getStockItem',
+            'setStockItem',
+            'getDiscounts',
+            'setDiscounts',
+            'getConfigurableProductOptions',
+            'setConfigurableProductOptions',
+            'getConfigurableProductLinks',
+            'setConfigurableProductLinks',
+            'getDownloadableProductLinks',
+            'setDownloadableProductLinks',
+            'getDownloadableProductSamples',
+            'setDownloadableProductSamples',
+            'getGiftcardAmounts',
+            'setGiftcardAmounts',
         ];
     }
 

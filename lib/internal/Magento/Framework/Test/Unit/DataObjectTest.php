@@ -11,10 +11,13 @@ declare(strict_types=1);
 namespace Magento\Framework\Test\Unit;
 
 use Magento\Framework\DataObject;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 class DataObjectTest extends TestCase
 {
+    use MockCreationTrait;
     /**
      * @var DataObject
      */
@@ -164,10 +167,10 @@ string',
      */
     public function testSetGetDataUsingMethod()
     {
-        $mock = $this->getMockBuilder(DataObject::class)
-            ->addMethods(['setTestData', 'getTestData'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $mock = $this->createPartialMockWithReflection(
+            DataObject::class,
+            ['setTestData', 'getTestData']
+        );
         $mock->expects($this->once())->method('setTestData')->with('data');
         $mock->expects($this->once())->method('getTestData');
 
@@ -378,9 +381,8 @@ string',
 
     /**
      * Tests _underscore method directly
-     *
-     * @dataProvider underscoreDataProvider
      */
+    #[DataProvider('underscoreDataProvider')]
     public function testUnderscore($input, $expectedOutput)
     {
         $refObject = new \ReflectionObject($this->dataObject);

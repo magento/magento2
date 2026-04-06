@@ -68,11 +68,8 @@ class AttributeSetTest extends TestCase
         $objectManagerHelper->prepareObjectManager();
 
         $this->registry = $this->createMock(Registry::class);
-        $this->product = $this->getMockBuilder(Product::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['getAttributeSetId'])
-            ->getMock();
-        $this->urlBuilder = $this->getMockForAbstractClass(UrlInterface::class);
+        $this->product = $this->createPartialMock(Product::class, ['getAttributeSetId']);
+        $this->urlBuilder = $this->createMock(UrlInterface::class);
         $this->escaper = $this->createMock(Escaper::class);
         $this->jsonHelper = $this->createMock(JsonHelper::class);
 

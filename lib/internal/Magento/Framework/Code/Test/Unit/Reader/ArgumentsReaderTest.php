@@ -6,6 +6,7 @@
 namespace Magento\Framework\Code\Test\Unit\Reader;
 
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\Framework\Code\Reader\ArgumentsReader;
 
 require_once __DIR__ . '/_files/ClassesForArgumentsReader.php';
@@ -395,9 +396,8 @@ class ArgumentsReaderTest extends TestCase
     /**
      * @param string $requiredType
      * @param string $actualType
-     * @param bool $expectedResult
-     * @dataProvider isCompatibleTypeDataProvider
-     */
+     * @param bool $expectedResult     */
+    #[DataProvider('isCompatibleTypeDataProvider')]
     public function testIsCompatibleType($requiredType, $actualType, $expectedResult)
     {
         $actualResult = $this->_model->isCompatibleType($requiredType, $actualType);
