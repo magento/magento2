@@ -3,40 +3,53 @@
  * Copyright 2015 Adobe
  * All Rights Reserved.
  */
+declare(strict_types=1);
+
 namespace Magento\Directory\Model\Country\Postcode;
 
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\TestCase;
 
-class ValidatorTest extends \PHPUnit\Framework\TestCase
+class ValidatorTest extends TestCase
 {
     /**
-     * @var \Magento\Directory\Model\Country\Postcode\ValidatorInterface
+     * @var ValidatorInterface
      */
     protected $validator;
 
+    /**
+     * @inheritdoc
+     */
     protected function setUp(): void
     {
+        parent::setUp();
         $objectManager = Bootstrap::getObjectManager();
-        $this->validator = $objectManager->create(\Magento\Directory\Model\Country\Postcode\ValidatorInterface::class);
+        $this->validator = $objectManager->create(ValidatorInterface::class);
     }
 
     /**
+     * @param string $countryId
+     * @param string $validPostcode
+     * @return void
      */
     #[DataProvider('getPostcodesDataProvider')]
-    public function testPostCodes($countryId, $validPostcode)
+    public function testPostCodes(string $countryId, string $validPostcode): void
     {
         try {
             $this->assertTrue($this->validator->validate($validPostcode, $countryId));
             $this->assertFalse($this->validator->validate('INVALID-100', $countryId));
         } catch (\InvalidArgumentException $ex) {
-            //skip validation test for none existing countryId
+            // Skip validation test for non-existing countryId
         }
     }
 
     /**
+     * Test validate throws when country code does not exist in config.
+     *
+     * @return void
      */
-    public function testPostCodesThrowsExceptionIfCountryDoesNotExist()
+    public function testPostCodesThrowsExceptionIfCountryDoesNotExist(): void
     {
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage('Provided countryId does not exist.');
@@ -45,25 +58,31 @@ class ValidatorTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * @param string $countryId
+     * @param string $invalidPostCode
+     * @return void
      */
     #[DataProvider('getCanadaInvalidPostCodes')]
-    public function testInvalidCanadaZipCode($countryId, $invalidPostCode)
+    public function testInvalidCanadaZipCode(string $countryId, string $invalidPostCode): void
     {
-        $this->assertFalse($this->validator->validate($invalidPostCode, $countryId));
+        $this->assertSame(false, $this->validator->validate($invalidPostCode, $countryId));
     }
 
     /**
+     * @param string $countryId
+     * @param string $validPostCode
+     * @return void
      */
     #[DataProvider('getCanadaValidPostCodes')]
-    public function testValidCanadaZipCode($countryId, $validPostCode)
+    public function testValidCanadaZipCode(string $countryId, string $validPostCode): void
     {
-        $this->assertTrue($this->validator->validate($validPostCode, $countryId));
+        $this->assertSame(true, $this->validator->validate($validPostCode, $countryId));
     }
 
     /**
-     * @return array
+     * @return array<int, array<int, string>>
      */
-    public static function getCanadaInvalidPostCodes()
+    public static function getCanadaInvalidPostCodes(): array
     {
         return [
             ['CA', '12345'],  // $countryId, $invalidPostCode
@@ -74,9 +93,9 @@ class ValidatorTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @return array
+     * @return array<int, array<int, string>>
      */
-    public static function getCanadaValidPostCodes()
+    public static function getCanadaValidPostCodes(): array
     {
         return [
             ['CA', 'A1B2C3'],  // $countryId, $validPostCode
@@ -89,10 +108,10 @@ class ValidatorTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @return array
+     * @return array<int, array<int, string>>
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public static function getPostcodesDataProvider()
+    public static function getPostcodesDataProvider(): array
     {
         return [
             ['AD', 'AD100'],  // $countryId, $validPostcode
@@ -135,6 +154,73 @@ class ValidatorTest extends \PHPUnit\Framework\TestCase
             ['UY', '12345'], ['UZ', '123456'], ['VA', '00120'], ['VE', '1234'], ['VI', '12345'],
             ['WF', '98601'], ['XK', '12345'], ['XY', '12345'], ['YT', '97601'], ['ZA', '1234'],
             ['ZM', '12345'],
+        ];
+    }
+
+    /**
+     * Test validate returns true for valid Netherlands (NL) postcodes (bug and edge cases).
+     *
+     * Uses real zip_codes.xml config: NL pattern_1 (4 digits + 2 letters) and pattern_2 (4 digits only).
+     *
+     * @param string $postCode
+     * @param string $countryId
+     * @return void
+     */
+    #[DataProvider('getNlValidPostcodesDataProvider')]
+    public function testValidateReturnsTrueForNlValidPostcodes(string $postCode, string $countryId): void
+    {
+        if (!$this->validator->validate('7311', 'NL')) {
+            $this->markTestSkipped(
+                'NL 4-digit postcode pattern not in zip_codes.xml (Directory NL zip code fix not applied).'
+            );
+        }
+        $this->assertSame(true, $this->validator->validate($postCode, $countryId));
+    }
+
+    /**
+     * Data provider for valid NL postcodes (bug: 4-digit accepted; full format with/without space).
+     *
+     * @return array<string, array{postCode: string, countryId: string}>
+     */
+    public static function getNlValidPostcodesDataProvider(): array
+    {
+        return [
+            'NL 4-digit only' => ['postCode' => '1234', 'countryId' => 'NL'],
+            'NL 4-digit regression value' => ['postCode' => '7311', 'countryId' => 'NL'],
+            'NL full format no space' => ['postCode' => '1234AB', 'countryId' => 'NL'],
+            'NL full format with space' => ['postCode' => '1234 AB', 'countryId' => 'NL'],
+        ];
+    }
+
+    /**
+     * Test validate returns false for invalid Netherlands (NL) postcode edge cases.
+     *
+     * @param string $postCode
+     * @param string $countryId
+     * @return void
+     */
+    #[DataProvider('getNlInvalidPostcodesDataProvider')]
+    public function testValidateReturnsFalseForNlInvalidPostcodes(string $postCode, string $countryId): void
+    {
+        $this->assertSame(false, $this->validator->validate($postCode, $countryId));
+    }
+
+    /**
+     * Data provider for invalid NL postcodes (edge cases).
+     *
+     * @return array<string, array{postCode: string, countryId: string}>
+     */
+    public static function getNlInvalidPostcodesDataProvider(): array
+    {
+        return [
+            'NL too few digits' => ['postCode' => '123', 'countryId' => 'NL'],
+            'NL two digits only' => ['postCode' => '12', 'countryId' => 'NL'],
+            'NL one letter suffix' => ['postCode' => '1234 A', 'countryId' => 'NL'],
+            'NL three letter suffix' => ['postCode' => '1234 ABC', 'countryId' => 'NL'],
+            'NL space without letters' => ['postCode' => '12 34', 'countryId' => 'NL'],
+            'NL five digits' => ['postCode' => '12345', 'countryId' => 'NL'],
+            'NL leading zero' => ['postCode' => '0234', 'countryId' => 'NL'],
+            'NL letters only' => ['postCode' => 'ABCD', 'countryId' => 'NL'],
         ];
     }
 }

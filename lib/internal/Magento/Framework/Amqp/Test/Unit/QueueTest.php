@@ -9,7 +9,9 @@ namespace Magento\Framework\Amqp\Test\Unit;
 
 use Magento\Framework\Amqp\Config;
 use Magento\Framework\Amqp\Queue;
+use Magento\Framework\MessageQueue\ConnectionLostException;
 use Magento\Framework\MessageQueue\EnvelopeFactory;
+use Magento\Framework\MessageQueue\EnvelopeInterface;
 use PhpAmqpLib\Channel\AMQPChannel;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -70,5 +72,55 @@ class QueueTest extends TestCase
             ->willReturn($amqpChannel);
 
         $this->model->subscribe($callback);
+    }
+
+    public function testAcknowledgeThrowsExceptionWhenChannelChanged(): void
+    {
+        $deliveryChannel = $this->createMock(AMQPChannel::class);
+        $currentChannel = $this->createMock(AMQPChannel::class);
+        $envelope = $this->createMock(EnvelopeInterface::class);
+        $properties = [
+            'delivery_tag' => 123,
+            'delivery_channel' => $deliveryChannel
+        ];
+
+        $this->config->expects($this->once())
+            ->method('getChannel')
+            ->willReturn($currentChannel);
+        $currentChannel->expects($this->never())
+            ->method('basic_ack');
+        $envelope->expects($this->once())
+            ->method('getProperties')
+            ->willReturn($properties);
+
+        $this->expectException(ConnectionLostException::class);
+        $this->expectExceptionMessage('skipping ack');
+
+        $this->model->acknowledge($envelope);
+    }
+
+    public function testRejectThrowsExceptionWhenChannelChanged(): void
+    {
+        $deliveryChannel = $this->createMock(AMQPChannel::class);
+        $currentChannel = $this->createMock(AMQPChannel::class);
+        $envelope = $this->createMock(EnvelopeInterface::class);
+        $properties = [
+            'delivery_tag' => 123,
+            'delivery_channel' => $deliveryChannel
+        ];
+
+        $this->config->expects($this->once())
+            ->method('getChannel')
+            ->willReturn($currentChannel);
+        $currentChannel->expects($this->never())
+            ->method('basic_reject');
+        $envelope->expects($this->once())
+            ->method('getProperties')
+            ->willReturn($properties);
+
+        $this->expectException(ConnectionLostException::class);
+        $this->expectExceptionMessage('skipping reject');
+
+        $this->model->reject($envelope);
     }
 }
