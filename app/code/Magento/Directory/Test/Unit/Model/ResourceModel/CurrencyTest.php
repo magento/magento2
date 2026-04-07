@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright 2015 Adobe
+ * Copyright 2026 Adobe
  * All Rights Reserved.
  */
 declare(strict_types=1);
@@ -16,6 +16,8 @@ use Magento\Directory\Model\ResourceModel\Currency;
 use Magento\Framework\App\ResourceConnection;
 
 /**
+ * Unit test for \Magento\Directory\Model\ResourceModel\Currency
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class CurrencyTest extends TestCase
@@ -28,7 +30,7 @@ class CurrencyTest extends TestCase
     }
 
     /**
-     * Ensures that after setting new rates, the getRate method returns the updated rates and does not return cached rates. 
+     * Ensures that after setting new rates, the getRate method returns the updated rates and not cached rates.
      */
     public function testGetRateAfterSettingNewRates()
     {
@@ -58,11 +60,16 @@ class CurrencyTest extends TestCase
 
         $connection = $this->createMock(Mysql::class);
         $connection->method('select')->willReturn($select);
-        $connection->expects($this->exactly(4))->method('fetchOne')->willReturnCallback(function ($query, $bind) use (&$rateTable, &$ratesVersion) {
-            $currencyFrom = $bind[':currency_from'];
-            $currencyTo = $bind[':currency_to'];
-            return $rateTable[$ratesVersion][$currencyFrom][$currencyTo] ?? null;
-        });
+        $connection->expects($this->exactly(4))
+            ->method('fetchOne')
+            ->willReturnCallback(function ($query, $bind) use (&$rateTable, &$ratesVersion) {
+                if(!$query){
+                    return null;
+                }
+                $currencyFrom = $bind[':currency_from'];
+                $currencyTo = $bind[':currency_to'];
+                return $rateTable[$ratesVersion][$currencyFrom][$currencyTo] ?? null;
+            });
 
         $resourceConnection = $this->createMock(ResourceConnection::class);
         $resourceConnection->method('getConnection')->willReturn($connection);
