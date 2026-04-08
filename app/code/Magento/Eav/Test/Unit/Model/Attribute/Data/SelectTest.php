@@ -15,10 +15,14 @@ use Magento\Framework\Locale\ResolverInterface;
 use Magento\Framework\Model\AbstractModel;
 use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Psr\Log\LoggerInterface;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 
 class SelectTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var Select
      */
@@ -26,9 +30,9 @@ class SelectTest extends TestCase
 
     protected function setUp(): void
     {
-        $timezoneMock = $this->getMockForAbstractClass(TimezoneInterface::class);
-        $loggerMock = $this->getMockForAbstractClass(LoggerInterface::class);
-        $localeResolverMock = $this->getMockForAbstractClass(ResolverInterface::class);
+        $timezoneMock = $this->createMock(TimezoneInterface::class);
+        $loggerMock = $this->createMock(LoggerInterface::class);
+        $localeResolverMock = $this->createMock(ResolverInterface::class);
 
         $this->model = new Select($timezoneMock, $loggerMock, $localeResolverMock);
     }
@@ -39,8 +43,8 @@ class SelectTest extends TestCase
      * @param string $format
      * @param mixed $value
      * @param mixed $expectedResult
-     * @dataProvider outputValueDataProvider
      */
+    #[DataProvider('outputValueDataProvider')]
     public function testOutputValue($format, $value, $expectedResult)
     {
         $entityMock = $this->createMock(AbstractModel::class);
@@ -89,15 +93,14 @@ class SelectTest extends TestCase
      * @param bool $isRequired
      * @param bool $skipRequiredValidation
      * @param array $expectedResult
-     * @dataProvider validateValueDataProvider
      */
+    #[DataProvider('validateValueDataProvider')]
     public function testValidateValue($value, $originalValue, $isRequired, $skipRequiredValidation, $expectedResult)
     {
-        $entityMock = $this->getMockBuilder(AbstractModel::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['getData'])
-            ->addMethods(['getSkipRequiredValidation'])
-            ->getMock();
+        $entityMock = $this->createPartialMockWithReflection(
+            AbstractModel::class,
+            ['getSkipRequiredValidation', 'getData']
+        );
         $entityMock->expects($this->any())->method('getData')->willReturn($originalValue);
         $entityMock->expects($this->any())
             ->method('getSkipRequiredValidation')

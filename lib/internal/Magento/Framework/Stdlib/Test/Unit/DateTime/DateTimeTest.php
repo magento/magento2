@@ -14,6 +14,7 @@ use Magento\Framework\Stdlib\DateTime\DateTime;
 use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Tests for @see DateTime
@@ -28,9 +29,8 @@ class DateTimeTest extends TestCase
     /**
      * @param int|string|DateTimeInterface $input
      * @throws Exception
-     *
-     * @dataProvider dateTimeInputDataProvider
-     */
+     *     */
+    #[DataProvider('dateTimeInputDataProvider')]
     public function testGmtTimestamp($input)
     {
         /** @var TimezoneInterface|MockObject $timezone */
@@ -45,9 +45,8 @@ class DateTimeTest extends TestCase
     /**
      * @param int|string|DateTimeInterface $input
      * @throws Exception
-     *
-     * @dataProvider dateTimeInputDataProvider
-     */
+     *     */
+    #[DataProvider('dateTimeInputDataProvider')]
     public function testTimestamp($input)
     {
         /** @var TimezoneInterface|MockObject $timezone */
@@ -69,7 +68,7 @@ class DateTimeTest extends TestCase
         /** @var DateTime|MockObject $dateTime */
         $dateTime = $this->getMockBuilder(DateTime::class)
             ->setConstructorArgs([$timezone])
-            ->addMethods([])
+            ->onlyMethods([])
             ->getMock();
 
         $this->assertEquals(

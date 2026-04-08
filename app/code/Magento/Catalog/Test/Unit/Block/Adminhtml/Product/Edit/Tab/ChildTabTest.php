@@ -9,7 +9,9 @@ namespace Magento\Catalog\Test\Unit\Block\Adminhtml\Product\Edit\Tab;
 
 use Magento\Backend\Block\Widget\Tab\TabInterface;
 use Magento\Catalog\Block\Adminhtml\Product\Edit\Tab\ChildTab;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -20,6 +22,8 @@ use PHPUnit\Framework\TestCase;
  */
 class ChildTabTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * System under test
      *
@@ -42,10 +46,10 @@ class ChildTabTest extends TestCase
     protected function setUp(): void
     {
         $helper = new ObjectManager($this);
-        $this->tabMock = $this->getMockBuilder(TabInterface::class)
-            ->onlyMethods(['getTabLabel', 'getTabTitle', 'canShowTab', 'isHidden'])
-            ->addMethods(['toHtml', 'getTabId', 'getData'])
-            ->getMock();
+        $this->tabMock = $this->createPartialMockWithReflection(
+            TabInterface::class,
+            ['getTabLabel', 'getTabTitle', 'canShowTab', 'isHidden', 'toHtml', 'getTabId', 'getData']
+        );
         $this->block = $helper->getObject(ChildTab::class);
     }
 
@@ -126,11 +130,11 @@ class ChildTabTest extends TestCase
      * Test that isTabOpened returns boolean for various truthy/falsy values
      *
      * @covers \Magento\Catalog\Block\Adminhtml\Product\Edit\Tab\ChildTab::isTabOpened
-     * @dataProvider openedDataProvider
      * @param mixed $openedValue
      * @param bool $expectedResult
      * @return void
      */
+    #[DataProvider('openedDataProvider')]
     public function testIsTabOpenedHandlesDifferentDataTypes(mixed $openedValue, bool $expectedResult): void
     {
         $this->tabMock->expects($this->once())

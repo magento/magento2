@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright 2015 Adobe
+ * Copyright 2011 Adobe
  * All Rights Reserved.
  */
 namespace Magento\Catalog\Model\ResourceModel\Product\Compare\Item;
@@ -261,7 +261,9 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
             return ['list_id' => $this->getListId()];
         }
 
-        return ['customer_id' => ['null' => true], 'visitor_id' => '0'];
+        // If no customer id, visitor id or list id is passed ensure we add all these fields as 0 or null to the query
+        // To prevent data leaks.
+        return ['customer_id' => ['null' => true], 'visitor_id' => '0', 'list_id' => ['null' => true]];
     }
 
     /**

@@ -21,7 +21,7 @@ class DecoderTest extends TestCase
      */
     public function testDecode()
     {
-        $urlBuilderMock = $this->getMockForAbstractClass(UrlInterface::class);
+        $urlBuilderMock = $this->createMock(UrlInterface::class);
         /** @var UrlInterface|MockObject $urlBuilderMock */
         $decoder = new Decoder($urlBuilderMock);
         $encoder = new Encoder();

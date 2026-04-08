@@ -9,6 +9,7 @@ namespace Magento\Test\Workaround\Override\Fixture\Applier;
 
 use Magento\TestFramework\Workaround\Override\Fixture\Applier\AdminConfigFixture;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Provide tests for \Magento\TestFramework\Workaround\Override\Fixture\Applier\AdminConfigFixture
@@ -29,12 +30,11 @@ class AdminConfigFixtureTest extends TestCase
     }
 
     /**
-     * @dataProvider annotationsProvider
-     *
      * @param string $fixture
      * @param array $attributes
      * @return  void
      */
+    #[DataProvider('annotationsProvider')]
     public function testIsFixtureMatch(string $fixture, array $attributes): void
     {
         $this->assertTrue($this->invokeIsFixtureMatchMethod($attributes, $fixture));
@@ -64,12 +64,11 @@ class AdminConfigFixtureTest extends TestCase
     }
 
     /**
-     * @dataProvider wrongRecordsProvider
-     *
      * @param string $fixture
      * @param array $attributes
      * @return void
      */
+    #[DataProvider('wrongRecordsProvider')]
     public function testFixtureDoesNotMatch(string $fixture, array $attributes): void
     {
         $this->assertFalse($this->invokeIsFixtureMatchMethod($attributes, $fixture));
@@ -92,12 +91,11 @@ class AdminConfigFixtureTest extends TestCase
     }
 
     /**
-     * @dataProvider initFixtureProvider
-     *
      * @param array $attributes
      * @param string $expectedValue
      * @return void
      */
+    #[DataProvider('initFixtureProvider')]
     public function testInitConfigFixture(array $attributes, string $expectedValue): void
     {
         $reflectionMethod = new \ReflectionMethod(AdminConfigFixture::class, 'initConfigFixture');

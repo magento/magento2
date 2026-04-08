@@ -19,7 +19,9 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\TestFramework\Unit\Helper\SelectRendererTrait;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Psr\Log\LoggerInterface;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -27,6 +29,7 @@ use Psr\Log\LoggerInterface;
 class DbTest extends TestCase
 {
     use SelectRendererTrait;
+    use MockCreationTrait;
 
     /**
      * @var AbstractDb
@@ -60,7 +63,7 @@ class DbTest extends TestCase
             $this->createPartialMock(Query::class, ['fetchAll']);
         $this->entityFactoryMock =
             $this->createPartialMock(EntityFactory::class, ['create']);
-        $this->loggerMock = $this->getMockForAbstractClass(LoggerInterface::class);
+        $this->loggerMock = $this->createMock(LoggerInterface::class);
         $this->collection = new DbCollection(
             $this->entityFactoryMock,
             $this->loggerMock,
@@ -305,9 +308,8 @@ class DbTest extends TestCase
      * @param bool $printFlag
      * @param string $query
      * @param string $expected
-     *
-     * @dataProvider printLogQueryPrintingDataProvider
-     */
+     *     */
+    #[DataProvider('printLogQueryPrintingDataProvider')]
     public function testPrintLogQueryPrinting($printQuery, $printFlag, $query, $expected)
     {
         $this->expectOutputString($expected);
@@ -331,9 +333,8 @@ class DbTest extends TestCase
      * @param bool $logQuery
      * @param bool $logFlag
      * @param int $expectedCalls
-     *
-     * @dataProvider printLogQueryLoggingDataProvider
-     */
+     *     */
+    #[DataProvider('printLogQueryLoggingDataProvider')]
     public function testPrintLogQueryLogging($logQuery, $logFlag, $expectedCalls)
     {
         $this->collection->setFlag('log_query', $logFlag);
@@ -433,16 +434,7 @@ class DbTest extends TestCase
             ->with('testField1=testValue1');
         $selectMock->expects($this->exactly(3))
             ->method('where')
-            ->willReturnMap([
-                ['testValue2', $this->returnSelf()],
-                [
-                    'testField3 = testValue3',
-                    null,
-                    Select::TYPE_CONDITION,
-                    $this->returnSelf()
-                ],
-                ['testField4=testValue4', $this->returnSelf()],
-            ]);
+            ->willReturnSelf();
         $adapterMock->expects($this->once())
             ->method('prepareSqlCondition')
             ->with('testField3', 'testValue3')
@@ -524,9 +516,8 @@ class DbTest extends TestCase
         $this->assertNull($this->collection->getData());
     }
 
-    /**
-     * @dataProvider distinctDataProvider
-     */
+    /**     */
+    #[DataProvider('distinctDataProvider')]
     public function testDistinct($flag, $expectedFlag)
     {
         $adapterMock = $this->createPartialMock(Mysql::class, ['select']);
@@ -583,11 +574,10 @@ class DbTest extends TestCase
             ->with($selectMock, [])
             ->willReturn([$data]);
 
-        $objectMock = $this->getMockBuilder(DataObject::class)
-            ->addMethods(['setIdFieldName'])
-            ->onlyMethods(['addData', 'getData'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $objectMock = $this->createPartialMockWithReflection(
+            DataObject::class,
+            ['setIdFieldName', 'addData', 'getData']
+        );
         $objectMock->expects($this->once())
             ->method('addData')
             ->with($data);

@@ -14,6 +14,7 @@ use Magento\Quote\Api\CartRepositoryInterface;
 use Magento\Quote\Api\Data\ShippingAssignmentInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\Framework\Exception\InputException;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -55,8 +56,8 @@ class ShippingInformationManagementTest extends TestCase
      *
      * @magentoDataFixture Magento/Sales/_files/quote_with_customer.php
      * @magentoDataFixture Magento/Customer/_files/customer_with_addresses.php
-     * @dataProvider getAddressesVariation
      */
+    #[DataProvider('getAddressesVariation')]
     public function testDifferentAddresses(bool $swapShipping): void
     {
         $cartRepository = Bootstrap::getObjectManager()->create(CartRepositoryInterface::class);

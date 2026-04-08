@@ -67,7 +67,7 @@ class ThemeModularTest extends TestCase
         $this->readDirFactory->expects($this->any())
             ->method('create')
             ->willReturn($this->themeDirectory);
-        $this->componentRegistrar = $this->getMockForAbstractClass(
+        $this->componentRegistrar = $this->createMock(
             ComponentRegistrarInterface::class
         );
         $this->model = new ThemeModular(
@@ -84,7 +84,7 @@ class ThemeModularTest extends TestCase
         $this->componentRegistrar->expects($this->once())
             ->method('getPath')
             ->willReturn('');
-        $theme = $this->getMockForAbstractClass(ThemeInterface::class);
+        $theme = $this->createMock(ThemeInterface::class);
         $theme->expects($this->once())
             ->method('getFullPath')
             ->willReturn('area/Vendor/theme');
@@ -95,14 +95,14 @@ class ThemeModularTest extends TestCase
     {
         $themePath = 'area/theme_path';
         $inputPath = '*.xml';
-        $grandparentTheme = $this->getMockForAbstractClass(ThemeInterface::class);
+        $grandparentTheme = $this->createMock(ThemeInterface::class);
         $grandparentTheme->expects($this->once())->method('getCode')->willReturn('vendor/grand_parent_theme');
 
-        $parentTheme = $this->getMockForAbstractClass(ThemeInterface::class);
+        $parentTheme = $this->createMock(ThemeInterface::class);
         $parentTheme->expects($this->once())->method('getCode')->willReturn('vendor/parent_theme');
         $parentTheme->expects($this->once())->method('getParentTheme')->willReturn($grandparentTheme);
 
-        $theme = $this->getMockForAbstractClass(ThemeInterface::class);
+        $theme = $this->createMock(ThemeInterface::class);
         $theme->expects($this->once())->method('getFullPath')->willReturn($themePath);
         $theme->expects($this->once())->method('getParentTheme')->willReturn($parentTheme);
 
@@ -140,14 +140,14 @@ class ThemeModularTest extends TestCase
     {
         $themePath = 'area/theme_path';
         $inputPath = 'preset/3.xml';
-        $grandparentTheme = $this->getMockForAbstractClass(ThemeInterface::class);
+        $grandparentTheme = $this->createMock(ThemeInterface::class);
         $grandparentTheme->expects($this->once())->method('getCode')->willReturn('vendor/grand_parent_theme');
 
-        $parentTheme = $this->getMockForAbstractClass(ThemeInterface::class);
+        $parentTheme = $this->createMock(ThemeInterface::class);
         $parentTheme->expects($this->once())->method('getCode')->willReturn('vendor/parent_theme');
         $parentTheme->expects($this->once())->method('getParentTheme')->willReturn($grandparentTheme);
 
-        $theme = $this->getMockForAbstractClass(ThemeInterface::class);
+        $theme = $this->createMock(ThemeInterface::class);
         $theme->expects($this->once())->method('getFullPath')->willReturn($themePath);
         $theme->expects($this->once())->method('getParentTheme')->willReturn($parentTheme);
 
@@ -185,7 +185,7 @@ class ThemeModularTest extends TestCase
         $this->expectException(LocalizedException::class);
         $this->expectExceptionMessage($expectedMessage);
 
-        $theme = $this->getMockForAbstractClass(ThemeInterface::class);
+        $theme = $this->createMock(ThemeInterface::class);
         $theme->expects($this->once())->method('getFullPath')->willReturn($themePath);
         $theme->expects($this->once())->method('getParentTheme')->willReturn(null);
         $theme->expects($this->once())->method('getCode')->willReturn('vendor/theme_path');

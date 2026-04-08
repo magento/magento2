@@ -11,6 +11,7 @@ use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Store\Model\ScopeInterface;
 use Magento\TestFramework\Config\Model\ConfigStorage;
 use Magento\TestModuleOverrideConfig\AbstractOverridesTest;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Class checks that magentoConfigFixtures can be removed using override config
@@ -65,15 +66,13 @@ class RemoveFixtureTest extends AbstractOverridesTest
      *
      * @magentoConfigFixture default_store test_section/test_group/field_2 new_value
      * @magentoConfigFixture default_store test_section/test_group/field_3 new_value
-     *
-     * @dataProvider testDataProvider
-     *
      * @param string $expectedFirstValue
      * @param string $expectedSecondValue
      * @param bool $firstvalueExist
      * @param bool $secondvalueExist
      * @return void
      */
+    #[DataProvider('testDataProvider')]
     public function testRemoveFixtureForMethod(
         string $expectedFirstValue,
         string $expectedSecondValue,
@@ -138,16 +137,16 @@ class RemoveFixtureTest extends AbstractOverridesTest
     {
         return [
             'first_data_set' => [
-                'expected_first_config_value' => '2nd field default value',
-                'expected_second_config_value' => 'new_value',
-                'first_value_exist' => false,
-                'second_value_exist' => true,
+                '2nd field default value',
+                'new_value',
+                false,
+                true,
             ],
             'second_data_set' => [
-                'expected_first_config_value' => '2nd field default value',
-                'expected_second_config_value' => '3rd field website scope default value',
-                'first_value_exist' => false,
-                'second_value_exist' => false,
+                '2nd field default value',
+                '3rd field website scope default value',
+                false,
+                false,
             ],
         ];
     }

@@ -65,6 +65,8 @@
             </actionGroup>
             <!-- Set Billing Agreement value to default -->
             <magentoCLI command="config:set {{BillingAgreement.path}} {{BillingAgreement.default}}" stepKey="disableAutoBilling"/>
+            <!--Clear Filters-->
+            <actionGroup ref="AdminOrdersGridClearFiltersActionGroup" stepKey="clearOrdersFilters"/>
             <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer" />
             <!-- Delete Data -->
             <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>

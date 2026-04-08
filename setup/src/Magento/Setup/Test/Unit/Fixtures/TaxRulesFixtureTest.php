@@ -11,6 +11,8 @@ use Magento\Framework\App\Config\Storage\Writer as ConfigWriter;
 use Magento\Setup\Fixtures\FixtureModel;
 use Magento\Setup\Fixtures\TaxRulesFixture;
 use Magento\Tax\Api\Data\TaxRateInterfaceFactory;
+use Magento\Tax\Api\Data\TaxRateInterface;
+use Magento\Tax\Api\Data\TaxRuleInterface;
 use Magento\Tax\Api\Data\TaxRuleInterfaceFactory;
 use Magento\Tax\Api\TaxRateRepositoryInterface;
 use Magento\Tax\Api\TaxRuleRepositoryInterface;
@@ -75,9 +77,22 @@ class TaxRulesFixtureTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
+        // Configure taxRateFactory to return a mock TaxRateInterface
+        $taxRateMock = $this->createMock(TaxRateInterface::class);
+        $taxRateMock->method('setCode')->willReturnSelf();
+        $taxRateMock->method('setRate')->willReturnSelf();
+        $taxRateMock->method('setTaxCountryId')->willReturnSelf();
+        $taxRateMock->method('setTaxPostcode')->willReturnSelf();
+        $this->taxRateFactoryMock->method('create')->willReturn($taxRateMock);
+
         $this->taxRateRepositoryMock = $this->getMockBuilder(TaxRateRepositoryInterface::class)
             ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+            ->getMock();
+        
+        // Configure taxRateRepository to return a mock with getId() when save() is called
+        $taxRateDataMock = $this->createMock(TaxRateInterface::class);
+        $taxRateDataMock->method('getId')->willReturn(1);
+        $this->taxRateRepositoryMock->method('save')->willReturn($taxRateDataMock);
 
         $this->configWriterMock = $this->getMockBuilder(ConfigWriter::class)
             ->disableOriginalConstructor()
@@ -86,11 +101,21 @@ class TaxRulesFixtureTest extends TestCase
         $this->taxRuleFactoryMock = $this->getMockBuilder(TaxRuleInterfaceFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
+        
+        // Configure taxRuleFactory to return a mock TaxRuleInterface
+        $taxRuleMock = $this->createMock(TaxRuleInterface::class);
+        $taxRuleMock->method('setCode')->willReturnSelf();
+        $taxRuleMock->method('setTaxRateIds')->willReturnSelf();
+        $taxRuleMock->method('setCustomerTaxClassIds')->willReturnSelf();
+        $taxRuleMock->method('setProductTaxClassIds')->willReturnSelf();
+        $taxRuleMock->method('setPriority')->willReturnSelf();
+        $taxRuleMock->method('setPosition')->willReturnSelf();
+        $this->taxRuleFactoryMock->method('create')->willReturn($taxRuleMock);
 
         $this->taxRuleRepositoryMock = $this->getMockBuilder(TaxRuleRepositoryInterface::class)
             ->disableOriginalConstructor()
             ->onlyMethods(['save', 'get', 'delete', 'deleteById', 'getList'])
-            ->getMockForAbstractClass();
+            ->getMock();
 
         $this->fixtureModelMock
             ->expects($this->exactly(2))

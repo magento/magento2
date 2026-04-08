@@ -43,10 +43,10 @@ class ScopeCodeResolverTest extends TestCase
             ->getMock();
         $this->scopeResolver = $this->getMockBuilder(ScopeResolverInterface::class)
             ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+            ->getMock();
         $this->scope = $this->getMockBuilder(ScopeInterface::class)
             ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+            ->getMock();
 
         $this->scopeCodeResolver = new ScopeCodeResolver($this->scopeResolverPool);
     }

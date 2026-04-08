@@ -15,6 +15,7 @@ use Magento\TestFramework\Helper\Bootstrap;
 use Magento\Tax\Api\Data\TaxRateInterface;
 use Magento\Tax\Model\TaxRuleFixtureFactory;
 use Magento\Tax\Model\Rate\Provider as RatesProvider;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Tests for Tax Rules controllers.
@@ -87,9 +88,9 @@ class RuleTest extends \Magento\TestFramework\TestCase\AbstractBackendController
      *
      * @param array $postData
      * @param int $itemsCount
-     * @dataProvider ajaxActionDataProvider
      * @magentoDbIsolation enabled
      */
+    #[DataProvider('ajaxActionDataProvider')]
     public function testAjaxLoadRates($postData, $itemsCount)
     {
         $this->getRequest()->setPostValue($postData);

@@ -16,6 +16,7 @@ use PHPUnit\Framework\TestCase;
 use Magento\Ui\Component\Form;
 use Magento\Ui\Component\FormFactory;
 use Magento\Framework\View\Element\UiComponent\DataProvider\DataProviderInterface;
+use PHPUnit\Framework\Attributes\DataProvider as DataProviderAttribute;
 
 /**
  * Test UI component context.
@@ -55,7 +56,7 @@ class ContextTest extends TestCase
     private function generateMockProvider(): DataProviderInterface
     {
         /** @var DataProviderInterface|MockObject $mock */
-        $mock = $this->getMockForAbstractClass(DataProviderInterface::class);
+        $mock = $this->createMock(DataProviderInterface::class);
         $mock->method('getName')->willReturn('test');
         $mock->method('getPrimaryFieldName')->willReturn('id');
         $mock->method('getRequestFieldName')->willReturn('id');

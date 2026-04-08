@@ -75,6 +75,7 @@ class RowCustomizer implements RowCustomizerInterface
      */
     public function prepareData($collection, $productIds): void
     {
+        $this->downloadableData = [];
         $productCollection = clone $collection;
         $productCollection->addAttributeToFilter('entity_id', ['in' => $productIds])
             ->addAttributeToFilter('type_id', ['eq' => Type::TYPE_DOWNLOADABLE])

@@ -14,6 +14,7 @@ use Magento\Framework\Url\EncoderInterface;
 use Magento\Framework\Url\Helper\Data;
 use Magento\Framework\UrlInterface;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class DataTest extends TestCase
 {
@@ -29,17 +30,13 @@ class DataTest extends TestCase
 
     public function testGetCurrentBase64Url()
     {
-        $urlBuilderMock = $this->getMockBuilder(UrlInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $urlBuilderMock = $this->createMock(UrlInterface::class);
         $url = 'http://example.com';
         $urlBuilderMock->expects($this->once())
             ->method('getCurrentUrl')
             ->willReturn($url);
         $encodedUrl = 'encodedUrl';
-        $urlEncoder = $this->getMockBuilder(EncoderInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $urlEncoder = $this->createMock(EncoderInterface::class);
         $urlEncoder->expects($this->once())
             ->method('encode')
             ->willReturn($encodedUrl);
@@ -57,22 +54,17 @@ class DataTest extends TestCase
 
     /**
      * @param string $url
-     * @param int $callNum
-     * @dataProvider getEncodedUrlDataProvider
-     */
+     * @param int $callNum     */
+    #[DataProvider('getEncodedUrlDataProvider')]
     public function testGetEncodedUrl($url, $callNum)
     {
-        $urlBuilderMock = $this->getMockBuilder(UrlInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $urlBuilderMock = $this->createMock(UrlInterface::class);
         $encodingUrl = $url ? $url : 'http://example.com';
         $urlBuilderMock->expects($this->exactly($callNum))
             ->method('getCurrentUrl')
             ->willReturn($encodingUrl);
         $encodedUrl = 'encodedUrl';
-        $urlEncoder = $this->getMockBuilder(EncoderInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $urlEncoder = $this->createMock(EncoderInterface::class);
         $urlEncoder->expects($this->once())
             ->method('encode')
             ->willReturn($encodedUrl);
@@ -102,9 +94,8 @@ class DataTest extends TestCase
 
     /**
      * @param array $param
-     * @param string $expected
-     * @dataProvider addRequestParamDataProvider
-     */
+     * @param string $expected     */
+    #[DataProvider('addRequestParamDataProvider')]
     public function testAddRequestParam($param, $expected)
     {
         $helper = $this->getHelper([]);
@@ -150,9 +141,8 @@ class DataTest extends TestCase
 
     /**
      * @param string $paramKey
-     * @param string $expected
-     * @dataProvider removeRequestParamDataProvider
-     */
+     * @param string $expected     */
+    #[DataProvider('removeRequestParamDataProvider')]
     public function testRemoveRequestParam($paramKey, $expected)
     {
         $url = 'http://example.com?null&string=value&array[]=arrayVal1&array[]=arrayVal2&array[]=arrayVal3';

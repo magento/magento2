@@ -54,12 +54,12 @@ class AggregateTest extends TestCase
     protected function setUp(): void
     {
         $this->_fileList = $this->createMock(FileList::class);
-        $this->_baseFiles = $this->getMockForAbstractClass(CollectorInterface::class);
-        $this->_themeFiles = $this->getMockForAbstractClass(CollectorInterface::class);
-        $this->_overridingBaseFiles = $this->getMockForAbstractClass(
+        $this->_baseFiles = $this->createMock(CollectorInterface::class);
+        $this->_themeFiles = $this->createMock(CollectorInterface::class);
+        $this->_overridingBaseFiles = $this->createMock(
             CollectorInterface::class
         );
-        $this->_overridingThemeFiles = $this->getMockForAbstractClass(
+        $this->_overridingThemeFiles = $this->createMock(
             CollectorInterface::class
         );
         $fileListFactory = $this->createMock(Factory::class);
@@ -79,8 +79,8 @@ class AggregateTest extends TestCase
      */
     public function testGetFiles(): void
     {
-        $parentTheme = $this->getMockForAbstractClass(ThemeInterface::class);
-        $theme = $this->getMockForAbstractClass(ThemeInterface::class);
+        $parentTheme = $this->createMock(ThemeInterface::class);
+        $theme = $this->createMock(ThemeInterface::class);
         $theme->expects(
             $this->once()
         )->method(

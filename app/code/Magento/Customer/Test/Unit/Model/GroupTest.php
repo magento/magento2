@@ -17,6 +17,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Store\Model\StoresConfig;
 use Magento\Tax\Model\ClassModel;
 use Magento\Tax\Model\ClassModelFactory;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -145,12 +146,12 @@ class GroupTest extends TestCase
     /**
      * Test that _prepareData correctly handles multibyte characters
      *
-     * @dataProvider multibyteCharacterProvider
      * @param string $input
      * @param string $expected
      * @param int $expectedLength
      * @return void
      */
+    #[DataProvider('multibyteCharacterProvider')]
     public function testPrepareDataHandlesMultibyteCharacters(
         string $input,
         string $expected,

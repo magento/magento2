@@ -29,6 +29,7 @@ use Magento\Setup\Model\ModuleUninstaller;
 use Magento\Setup\Model\ObjectManagerProvider;
 use Magento\Setup\Model\UninstallCollector;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Helper\HelperSet;
 use Symfony\Component\Console\Helper\QuestionHelper;
@@ -135,12 +136,7 @@ class ModuleUninstallCommandTest extends TestCase
         $this->fullModuleList = $this->createMock(FullModuleList::class);
         $this->maintenanceMode = $this->createMock(MaintenanceMode::class);
         $objectManagerProvider = $this->createMock(ObjectManagerProvider::class);
-        $objectManager = $this->getMockForAbstractClass(
-            ObjectManagerInterface::class,
-            [],
-            '',
-            false
-        );
+        $objectManager = $this->createMock(ObjectManagerInterface::class);
         $this->uninstallCollector = $this->createMock(UninstallCollector::class);
         $this->packageInfo = $this->createMock(PackageInfo::class);
         $packageInfoFactory = $this->createMock(PackageInfoFactory::class);
@@ -154,12 +150,7 @@ class ModuleUninstallCommandTest extends TestCase
         $this->cache = $this->createMock(Cache::class);
         $this->cleanupFiles = $this->createMock(CleanupFiles::class);
         $objectManagerProvider->expects($this->any())->method('get')->willReturn($objectManager);
-        $configLoader = $this->getMockForAbstractClass(
-            ConfigLoaderInterface::class,
-            [],
-            '',
-            false
-        );
+        $configLoader = $this->createMock(ConfigLoaderInterface::class);
         $this->patchApplierMock = $this->getMockBuilder(PatchApplier::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -222,12 +213,12 @@ class ModuleUninstallCommandTest extends TestCase
     }
 
     /**
-     * @dataProvider executeFailedValidationDataProvider
      * @param array $packageInfoMap
      * @param array $fullModuleListMap
      * @param array $input
      * @param array $expect
      */
+    #[DataProvider('executeFailedValidationDataProvider')]
     public function testExecuteFailedValidation(
         array $packageInfoMap,
         array $fullModuleListMap,
@@ -351,11 +342,11 @@ class ModuleUninstallCommandTest extends TestCase
     }
 
     /**
-     * @dataProvider executeFailedDependenciesDataProvider
      * @param array $dependencies
      * @param array $input
      * @param array $expect
      */
+    #[DataProvider('executeFailedDependenciesDataProvider')]
     public function testExecuteFailedDependencies(
         array $dependencies,
         array $input,

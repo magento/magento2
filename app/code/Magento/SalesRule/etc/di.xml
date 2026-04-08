@@ -212,4 +212,11 @@
         </arguments>
     </type>
     <type name="Magento\SalesRule\Model\Rule\Action\Discount\ExistingDiscountRuleCollector" shared="true" />
+    <type name="Magento\SalesRule\Model\Data\Validator">
+        <arguments>
+            <argument name="validators" xsi:type="array">
+                <item name="condition" xsi:type="object">Magento\SalesRule\Model\Data\Condition\Validator</item>
+            </argument>
+        </arguments>
+    </type>
 </config>

@@ -31,12 +31,11 @@ class FormFactoryTest extends TestCase
     public function testWrongTypeException()
     {
         $this->expectException('Magento\Framework\Exception\LocalizedException');
-        $this->expectExceptionMessage('WrongClass doesn\'t extend \Magento\Framework\Data\Form');
-        $formMock = $this->getMockBuilder('WrongClass')
-            ->getMock();
+        $this->expectExceptionMessage('stdClass doesn\'t extend \Magento\Framework\Data\Form');
+        $formMock = $this->createMock(\stdClass::class);
         $this->_objectManagerMock->expects($this->once())->method('create')->willReturn($formMock);
 
-        $formFactory = new FormFactory($this->_objectManagerMock, 'WrongClass');
+        $formFactory = new FormFactory($this->_objectManagerMock, \stdClass::class);
         $formFactory->create();
     }
 

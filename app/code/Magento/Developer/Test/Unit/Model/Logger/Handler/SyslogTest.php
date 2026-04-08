@@ -48,7 +48,7 @@ class SyslogTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->scopeConfigMock = $this->getMockForAbstractClass(ScopeConfigInterface::class);
+        $this->scopeConfigMock = $this->createMock(ScopeConfigInterface::class);
         $this->deploymentConfigMock = $this->createMock(DeploymentConfig::class);
         $this->logRecord = new LogRecord(
             new \DateTimeImmutable(),

@@ -23,6 +23,7 @@ use Magento\ImportExport\Test\Fixture\CsvFile as CsvFileFixture;
 use Magento\TestFramework\Fixture\DataFixture;
 use Magento\TestFramework\Fixture\DataFixtureStorageManager;
 use Magento\TestFramework\Helper\Bootstrap as BootstrapHelper;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Integration test for \Magento\CatalogImportExport\Model\Import\Product class.
@@ -70,8 +71,8 @@ class ProductValidationTest extends ProductTestBase
      * @param bool $expectedResult
      * @magentoAppArea adminhtml
      * @magentoDataFixture Magento/Catalog/Model/ResourceModel/_files/product_simple.php
-     * @dataProvider validateRowDataProvider
      */
+    #[DataProvider('validateRowDataProvider')]
     public function testValidateRow(array $row, $behavior, $expectedResult)
     {
         $this->_model->setParameters(['behavior' => $behavior, 'entity' => 'catalog_product']);
@@ -215,8 +216,8 @@ class ProductValidationTest extends ProductTestBase
      * @magentoDataFixture Magento/CatalogImportExport/_files/product_export_with_product_links_data.php
      * @magentoAppArea adminhtml
      * @magentoAppIsolation enabled
-     * @dataProvider getEmptyLinkedData
      */
+    #[DataProvider('getEmptyLinkedData')]
     public function testProductLinksWithEmptyValue(
         string $pathToFile,
         bool $expectedResultCrossell,

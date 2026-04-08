@@ -155,7 +155,8 @@ class UpgradeCommand extends AbstractSetupCommand
             // Clean up deprecated 'SET NAMES utf8;' from database connections
             $output->writeln('<info>Cleaning up deprecated SET NAMES utf8 from database connections...</info>');
             $this->dbInitStatementsCleanup->execute();
-            
+            $this->deploymentConfig->resetData();
+
             $installer = $this->installerFactory->create(new ConsoleLogger($output));
             $installer->updateModulesSequence($keepGenerated);
             $searchConfig = $this->searchConfigFactory->create();

@@ -10,6 +10,7 @@ namespace Magento\Framework\View\Test\Unit\Helper;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\Framework\View\Helper\PathPattern;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class PathPatternTest extends TestCase
 {
@@ -34,9 +35,8 @@ class PathPatternTest extends TestCase
     /**
      * @param string $path
      * @param string $expectedPattern
-     *
-     * @dataProvider translatePatternFromGlobDataProvider
-     */
+     *     */
+    #[DataProvider('translatePatternFromGlobDataProvider')]
     public function testTranslatePatternFromGlob($path, $expectedPattern)
     {
         $this->assertEquals($expectedPattern, $this->pathPatternHelper->translatePatternFromGlob($path));

@@ -6,6 +6,7 @@
 
 namespace Magento\Quote\Api;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\Catalog\Test\Fixture\Product as ProductFixture;
 use Magento\Framework\Webapi\Rest\Request;
 use Magento\Quote\Api\Data\AddressInterface;
@@ -115,8 +116,8 @@ class GuestBillingAddressManagementTest extends WebapiAbstract
 
     /**
      * @magentoApiDataFixture Magento/Sales/_files/guest_quote_with_addresses.php
-     * @dataProvider setAddressDataProvider
      */
+    #[DataProvider('setAddressDataProvider')]
     public function testSetAddress($useForShipping)
     {
         /** @var \Magento\Quote\Model\Quote $quote */

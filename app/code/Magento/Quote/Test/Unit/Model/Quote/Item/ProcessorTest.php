@@ -11,6 +11,7 @@ namespace Magento\Quote\Test\Unit\Model\Quote\Item;
 use Magento\Catalog\Model\Product;
 use Magento\Framework\App\State;
 use Magento\Framework\DataObject;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Quote\Api\Data\CartItemInterface;
 use Magento\Quote\Model\Quote\Item;
 use Magento\Quote\Model\Quote\ItemFactory;
@@ -19,7 +20,6 @@ use Magento\Store\Api\Data\StoreInterface;
 use Magento\Store\Model\StoreManagerInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 
 class ProcessorTest extends TestCase
 {

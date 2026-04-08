@@ -44,7 +44,7 @@ class ProviderTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->_configReaderMock = $this->getMockForAbstractClass(ReaderInterface::class);
+        $this->_configReaderMock = $this->createMock(ReaderInterface::class);
         $this->_treeBuilderMock = $this->createMock(TreeBuilder::class);
         $this->serializerMock = $this->createPartialMock(
             Json::class,
@@ -66,7 +66,7 @@ class ProviderTest extends TestCase
                 }
             );
 
-        $this->aclDataCacheMock = $this->getMockForAbstractClass(CacheInterface::class);
+        $this->aclDataCacheMock = $this->createMock(CacheInterface::class);
 
         $this->_model = new Provider(
             $this->_configReaderMock,

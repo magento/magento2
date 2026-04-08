@@ -15,6 +15,7 @@ use Magento\Store\Model\StoreManagerInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\Theme\Model\ResourceModel\Theme\CollectionFactory;
 use Magento\Theme\Model\ResourceModel\Theme\Collection;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 class StoreThemesResolverInterfaceTest extends TestCase
@@ -78,11 +79,7 @@ class StoreThemesResolverInterfaceTest extends TestCase
         parent::tearDown();
     }
 
-    /**
-     * @param array $config
-     * @param array $expected
-     * @dataProvider getThemesDataProvider
-     */
+    #[DataProvider('getThemesDataProvider')]
     public function testGetThemes(array $config, array $expected): void
     {
         $store = $this->storeManager->getStore();
@@ -116,9 +113,6 @@ class StoreThemesResolverInterfaceTest extends TestCase
         );
     }
 
-    /**
-     * @return array
-     */
     public static function getThemesDataProvider(): array
     {
         return [

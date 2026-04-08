@@ -20,6 +20,7 @@ use Magento\Shipping\Model\Shipment\Request;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\HTTP\AsyncClientInterfaceMock;
 use Magento\Ups\Model\UpsAuth;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
@@ -69,7 +70,7 @@ class CarrierTest extends TestCase
         $this->httpClient = Bootstrap::getObjectManager()->get(AsyncClientInterface::class);
         $this->config = Bootstrap::getObjectManager()->get(ReinitableConfigInterface::class);
         $this->logs = [];
-        $this->loggerMock = $this->getMockForAbstractClass(LoggerInterface::class);
+        $this->loggerMock = $this->createMock(LoggerInterface::class);
         $this->loggerMock->method('debug')
             ->willReturnCallback(
                 function (string $message) {
@@ -189,13 +190,6 @@ class CarrierTest extends TestCase
     /**
      * Test processing rates response.
      *
-     * @param int $negotiable
-     * @param int $tax
-     * @param int $responseId
-     * @param string $method
-     * @param float $price
-     * @return void
-     * @dataProvider collectRatesDataProvider
      * @magentoConfigFixture default_store shipping/origin/country_id GB
      * @magentoConfigFixture default_store carriers/ups/active 1
      * @magentoConfigFixture current_store carriers/ups/type UPS_REST
@@ -207,6 +201,7 @@ class CarrierTest extends TestCase
      * @magentoConfigFixture default_store currency/options/allow GBP,USD,EUR
      * @magentoConfigFixture default_store currency/options/base GBP
      */
+    #[DataProvider('collectRatesDataProvider')]
     public function testCollectRates(int $negotiable, int $tax, int $responseId, string $method, float $price): void
     {
         $request = Bootstrap::getObjectManager()->create(
@@ -296,10 +291,8 @@ class CarrierTest extends TestCase
 
     /**
      * Get list of rates variations
-     *
-     * @return array
      */
-    public static function collectRatesDataProvider()
+    public static function collectRatesDataProvider(): array
     {
         return [
             [0, 0, 1, '03', 136.09 ],
@@ -424,9 +417,7 @@ class CarrierTest extends TestCase
      */
     public function testGetRatesWithHttpException(): void
     {
-        $deferredResponse = $this->getMockBuilder(HttpResponseDeferredInterface::class)
-            ->onlyMethods(['get'])
-            ->getMockForAbstractClass();
+        $deferredResponse = $this->createMock(HttpResponseDeferredInterface::class);
         $exception = new HttpException('Exception message');
         $deferredResponse->method('get')->willThrowException($exception);
         $this->httpClient->setDeferredResponseMock($deferredResponse);

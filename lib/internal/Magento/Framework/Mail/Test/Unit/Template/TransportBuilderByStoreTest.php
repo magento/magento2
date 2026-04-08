@@ -38,7 +38,7 @@ class TransportBuilderByStoreTest extends TestCase
     {
         $objectManagerHelper = new ObjectManager($this);
         $this->messageMock = $this->createMock(Message::class);
-        $this->senderResolverMock = $this->getMockForAbstractClass(SenderResolverInterface::class);
+        $this->senderResolverMock = $this->createMock(SenderResolverInterface::class);
 
         $this->model = $objectManagerHelper->getObject(
             TransportBuilderByStore::class,

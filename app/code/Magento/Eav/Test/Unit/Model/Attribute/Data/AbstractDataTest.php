@@ -15,11 +15,15 @@ use Magento\Framework\Locale\ResolverInterface;
 use Magento\Framework\Model\AbstractModel;
 use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
 use Magento\Framework\Stdlib\StringUtils;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
 
 class AbstractDataTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var AbstractData
      */
@@ -27,9 +31,9 @@ class AbstractDataTest extends TestCase
 
     protected function setUp(): void
     {
-        $timezoneMock = $this->getMockForAbstractClass(TimezoneInterface::class);
-        $loggerMock = $this->getMockForAbstractClass(LoggerInterface::class);
-        $localeResolverMock = $this->getMockForAbstractClass(ResolverInterface::class);
+        $timezoneMock = $this->createMock(TimezoneInterface::class);
+        $loggerMock = $this->createMock(LoggerInterface::class);
+        $localeResolverMock = $this->createMock(ResolverInterface::class);
         $stringMock = $this->createMock(StringUtils::class);
 
         /* testing abstract model through its child */
@@ -64,9 +68,8 @@ class AbstractDataTest extends TestCase
      *
      * @param string $index
      * @param mixed $expectedResult
-     *
-     * @dataProvider extractedDataDataProvider
      */
+    #[DataProvider('extractedDataDataProvider')]
     public function testGetExtractedData($index, $expectedResult)
     {
         $extractedData = ['index' => 'value', 'otherIndex' => 'otherValue'];
@@ -104,8 +107,8 @@ class AbstractDataTest extends TestCase
      * @param array $params
      * @param bool $requestScopeOnly
      * @param string|null $filter
-     * @dataProvider getRequestValueDataProvider
      */
+    #[DataProvider('getRequestValueDataProvider')]
     public function testGetRequestValue($requestScope, $value, $params, $requestScopeOnly, $expectedResult, $filter)
     {
         $requestMock = $this->createPartialMock(Http::class, ['getParams', 'getParam']);
@@ -115,11 +118,10 @@ class AbstractDataTest extends TestCase
         ]);
         $requestMock->expects($this->any())->method('getParams')->willReturn($params);
 
-        $attributeMock = $this->getMockBuilder(Attribute::class)
-            ->addMethods(['getInputFilter'])
-            ->onlyMethods(['getAttributeCode'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $attributeMock = $this->createPartialMockWithReflection(
+            Attribute::class,
+            ['getInputFilter', 'getAttributeCode']
+        );
         $attributeMock->expects($this->any())->method('getAttributeCode')->willReturn('attributeCode');
         if ($filter) {
             $attributeMock->expects($this->any())->method('getInputFilter')->willReturn($filter);

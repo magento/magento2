@@ -11,6 +11,7 @@ use Magento\Eav\Model\ResourceModel\Entity\Attribute\Option\Collection;
 use Magento\Framework\Search\EngineResolverInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestModuleCatalogSearch\Model\SearchEngineVersionReader;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Class AdapterTest
@@ -379,7 +380,6 @@ class AdapterTest extends \PHPUnit\Framework\TestCase
     /**
      * Sample Advanced search request test
      *
-     * @dataProvider elasticSearchAdvancedSearchDataProvider
      * @magentoAppIsolation enabled
      * @param string $nameQuery
      * @param string $descriptionQuery
@@ -387,6 +387,7 @@ class AdapterTest extends \PHPUnit\Framework\TestCase
      * @param int $expectedRecordsCount
      * phpcs:disable Generic.CodeAnalysis.UselessOverridingMethod
      */
+    #[DataProvider('elasticSearchAdvancedSearchDataProvider')]
     public function testSimpleAdvancedSearch(
         $nameQuery,
         $descriptionQuery,
@@ -462,11 +463,11 @@ class AdapterTest extends \PHPUnit\Framework\TestCase
      *
      * @magentoAppIsolation enabled
      * @magentoDataFixture Magento/Framework/Search/_files/filterable_attributes.php
-     * @dataProvider filterByAttributeValuesDataProvider
      * @param string $requestName
      * @param array $additionalData
      * @return void
      */
+    #[DataProvider('filterByAttributeValuesDataProvider')]
     public function testFilterByAttributeValues($requestName, $additionalData)
     {
         // Reindex Elastic Search since filterable_attribute data fixture added new fields to be indexed
@@ -501,8 +502,8 @@ class AdapterTest extends \PHPUnit\Framework\TestCase
      * @param $expectedRecordsCount
      * @magentoDataFixture Magento/Framework/Search/_files/date_attribute.php
      * @magentoAppIsolation enabled
-     * @dataProvider dateDataProvider
      */
+    #[DataProvider('dateDataProvider')]
     public function testAdvancedSearchDateField($rangeFilter, $expectedRecordsCount)
     {
         // Reindex Elastic Search since date_attribute data fixture added new fields to be indexed

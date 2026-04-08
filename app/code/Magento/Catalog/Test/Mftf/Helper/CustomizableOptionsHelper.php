@@ -44,7 +44,10 @@ class CustomizableOptionsHelper extends Helper
             for ($i = $start; $i <= $end; $i++) {
                 $webDriver->waitForElementClickable($addValueButton, 10);
                 $webDriver->click($addValueButton);
-                $webDriver->waitForElementVisible($valueTitleField, 10);
+                // Wait for loading/async DOM update (critical at pagination boundaries e.g. row 21, 31)
+                $webDriver->waitForLoadingMaskToDisappear(15);
+                $webDriver->wait(1);
+                $webDriver->waitForElementClickable($valueTitleField, 15);
                 $webDriver->fillField($valueTitleField, $titlePrefix . $i);
                 $webDriver->fillField($valuePriceField, $price);
             }

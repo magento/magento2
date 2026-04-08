@@ -10,11 +10,13 @@ namespace Magento\Setup\Test\Unit\Fixtures;
 use Magento\Customer\Api\Data\GroupInterface;
 use Magento\Customer\Api\Data\GroupInterfaceFactory;
 use Magento\Customer\Api\GroupRepositoryInterface;
+use Magento\Customer\Model\ResourceModel\Group\Collection;
 use Magento\Customer\Model\ResourceModel\Group\CollectionFactory;
 use Magento\Setup\Fixtures\CustomerGroupsFixture;
 use Magento\Setup\Fixtures\FixtureModel;
 use Magento\Setup\Fixtures\IndexersStatesApplyFixture;
 use PHPUnit\Framework\MockObject\MockObject;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -22,6 +24,8 @@ use PHPUnit\Framework\TestCase;
  */
 class CustomerGroupsFixtureTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var MockObject|FixtureModel
      */
@@ -61,11 +65,18 @@ class CustomerGroupsFixtureTest extends TestCase
         //Mock repository for customer groups
         $this->groupRepositoryMock = $this->getMockBuilder(GroupRepositoryInterface::class)
             ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+            ->getMock();
 
         //Mock for customer groups collection
+        $groupCollection = $this->createPartialMockWithReflection(
+            Collection::class,
+            ['getSize', 'addFieldToFilter', 'getIterator']
+        );
+        $groupCollection->expects($this->once())
+            ->method('getSize')
+            ->willReturn(0);
+
         $this->groupCollectionFactoryMock = $this->getMockBuilder(CollectionFactory::class)
-            ->addMethods(['getSize'])
             ->onlyMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
@@ -73,19 +84,10 @@ class CustomerGroupsFixtureTest extends TestCase
         $this->groupCollectionFactoryMock
             ->expects($this->once())
             ->method('create')
-            ->willReturn($this->groupCollectionFactoryMock);
-
-        $this->groupCollectionFactoryMock
-            ->expects($this->once())
-            ->method('getSize')
-            ->willReturn(0);
+            ->willReturn($groupCollection);
 
         //Mock customer groups data object
-        $this->groupDataObjectMock = $this->getMockBuilder(GroupInterface::class)
-            ->addMethods(['save'])
-            ->onlyMethods(['setCode', 'setTaxClassId'])
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->groupDataObjectMock = $this->createMock(GroupInterface::class);
 
         //Mock customer groups factory
         $this->groupFactoryMock = $this->getMockBuilder(GroupInterfaceFactory::class)

@@ -10,6 +10,7 @@ namespace Magento\Store\Test\Unit\Model\Validation;
 use Magento\Framework\Validator\Regex;
 use Magento\Framework\Validator\RegexFactory;
 use Magento\Store\Model\Validation\StoreCodeValidator;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -44,11 +45,11 @@ class StoreCodeValidatorTest extends TestCase
     }
 
     /**
-     * @dataProvider isValidDataProvider
      * @param string $value
      * @param bool $isValid
      * @param array $messages
      */
+    #[DataProvider('isValidDataProvider')]
     public function testIsValid(string $value, bool $isValid, array $messages): void
     {
         $this->regexValidatorMock->expects($this->once())

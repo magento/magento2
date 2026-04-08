@@ -7,6 +7,7 @@ namespace Magento\Theme\Model\View;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Store\Model\ScopeInterface;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * @magentoComponentsDir Magento/Theme/Model/_files/design
@@ -147,19 +148,16 @@ class DesignTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @dataProvider getFilenameDataProvider
      * @magentoAppIsolation enabled
      */
+    #[DataProvider('getFilenameDataProvider')]
     public function testGetFilename($file, $params)
     {
         $this->_emulateFixtureTheme();
         $this->assertFileExists($this->_viewFileSystem->getFilename($file, $params));
     }
 
-    /**
-     * @return array
-     */
-    public static function getFilenameDataProvider()
+    public static function getFilenameDataProvider(): array
     {
         return [
             ['theme_file.txt', ['module' => 'Magento_Catalog']],

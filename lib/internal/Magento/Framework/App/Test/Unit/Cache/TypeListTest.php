@@ -101,7 +101,7 @@ class TypeListTest extends TestCase
             CacheInterface::class,
             ['load', 'getFrontend', 'save', 'remove', 'clean']
         );
-        $this->serializerMock = $this->getMockForAbstractClass(SerializerInterface::class);
+        $this->serializerMock = $this->createMock(SerializerInterface::class);
 
         $objectHelper = new ObjectManager($this);
         $this->_typeList = $objectHelper->getObject(

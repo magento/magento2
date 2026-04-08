@@ -9,6 +9,7 @@ namespace Magento\Framework\View\Test\Unit\Url;
 
 use Magento\Framework\View\Url\CssResolver;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class CssResolverTest extends TestCase
 {
@@ -36,9 +37,8 @@ class CssResolverTest extends TestCase
 
     /**
      * @param string $cssContent
-     * @param string $expectedResult
-     * @dataProvider aggregateImportDirectivesDataProvider
-     */
+     * @param string $expectedResult     */
+    #[DataProvider('aggregateImportDirectivesDataProvider')]
     public function testAggregateImportDirectives($cssContent, $expectedResult)
     {
         $this->assertEquals($expectedResult, $this->object->aggregateImportDirectives($cssContent));
@@ -64,9 +64,8 @@ class CssResolverTest extends TestCase
     /**
      * @param string $cssContent
      * @param callback $inlineCallback
-     * @param string $expectedResult
-     * @dataProvider replaceRelativeUrlsDataProvider
-     */
+     * @param string $expectedResult     */
+    #[DataProvider('replaceRelativeUrlsDataProvider')]
     public function testReplaceRelativeUrls($cssContent, $inlineCallback, $expectedResult)
     {
         $actual = $this->object->replaceRelativeUrls($cssContent, $inlineCallback);

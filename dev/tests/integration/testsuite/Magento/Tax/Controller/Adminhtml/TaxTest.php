@@ -6,6 +6,7 @@
 namespace Magento\Tax\Controller\Adminhtml;
 
 use Magento\Framework\Exception\NoSuchEntityException;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * @magentoAppArea adminhtml
@@ -13,12 +14,12 @@ use Magento\Framework\Exception\NoSuchEntityException;
 class TaxTest extends \Magento\TestFramework\TestCase\AbstractBackendController
 {
     /**
-     * @dataProvider ajaxActionDataProvider
      * @magentoDbIsolation enabled
      *
      * @param array $postData
      * @param array $expectedData
      */
+    #[DataProvider('ajaxActionDataProvider')]
     public function testAjaxSaveAction($postData, $expectedData)
     {
         $this->getRequest()->setPostValue($postData);
@@ -43,12 +44,14 @@ class TaxTest extends \Magento\TestFramework\TestCase\AbstractBackendController
     }
 
     /**
-     * @dataProvider ajaxActionDataProvider
      * @magentoDbIsolation enabled
      *
      * @param array $taxClassData
+     * @param array $expectedData
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function testAjaxDeleteAction($taxClassData)
+    #[DataProvider('ajaxActionDataProvider')]
+    public function testAjaxDeleteAction($taxClassData, $expectedData)
     {
         /** @var \Magento\Tax\Api\TaxClassRepositoryInterface $taxClassService */
         $taxClassService = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(

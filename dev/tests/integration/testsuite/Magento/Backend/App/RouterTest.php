@@ -5,6 +5,8 @@
  */
 namespace Magento\Backend\App;
 
+use PHPUnit\Framework\Attributes\DataProvider;
+
 /**
  * @magentoAppArea adminhtml
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -39,9 +41,8 @@ class RouterTest extends \PHPUnit\Framework\TestCase
      * @param string $module
      * @param string $controller
      * @param string $className
-     *
-     * @dataProvider getControllerClassNameDataProvider
      */
+    #[DataProvider('getControllerClassNameDataProvider')]
     public function testGetControllerClassName($module, $controller, $className)
     {
         $this->assertEquals($className, $this->model->getActionClassName($module, $controller));

@@ -10,6 +10,7 @@ namespace Magento\Swatches\Controller\Adminhtml\Product;
 use Magento\Framework\App\Request\Http as HttpRequest;
 use Magento\Framework\Data\Form\FormKey;
 use Magento\Framework\Exception\LocalizedException;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Test for product attribute save controller.
@@ -185,12 +186,12 @@ class AttributeTest extends \Magento\TestFramework\TestCase\AbstractBackendContr
 
     /**
      * Test attribute saving with large amount of options exceeding maximum allowed by max_input_vars limit.
-     * @dataProvider getLargeSwatchesAmountAttributeData()
      * @param array $attributeData
      * @param int $expectedOptionsCount
      * @param array $expectedLabels
      * @return void
      */
+    #[DataProvider('getLargeSwatchesAmountAttributeData')]
     public function testLargeOptionsDataSet(
         array $attributeData,
         int $expectedOptionsCount,

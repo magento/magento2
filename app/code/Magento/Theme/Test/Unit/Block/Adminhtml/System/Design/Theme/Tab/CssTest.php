@@ -48,7 +48,7 @@ class CssTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->_objectManager = $this->getMockForAbstractClass(ObjectManagerInterface::class);
+        $this->_objectManager = $this->createMock(ObjectManagerInterface::class);
         $this->urlBuilder = $this->createMock(Url::class);
         $this->urlCoder = $this->createMock(UrlCoder::class);
 
@@ -99,7 +99,7 @@ class CssTest extends TestCase
         $method = self::getMethod('_getAdditionalElementTypes');
 
         /** @var ScopeConfigInterface $configModel */
-        $configModel = $this->getMockForAbstractClass(ScopeConfigInterface::class);
+        $configModel = $this->createMock(ScopeConfigInterface::class);
 
         $this->_objectManager->expects(
             $this->any()

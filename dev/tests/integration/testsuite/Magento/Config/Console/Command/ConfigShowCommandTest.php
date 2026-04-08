@@ -23,6 +23,7 @@ use Magento\TestFramework\Fixture\DataFixture;
 use Magento\TestFramework\Fixture\DbIsolation;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Symfony\Component\Console\Tester\CommandTester;
 
 /**
@@ -123,8 +124,8 @@ class ConfigShowCommandTest extends TestCase
      *
      * @magentoDbIsolation enabled
      * @magentoDataFixture Magento/Config/_files/config_data.php
-     * @dataProvider executeDataProvider
      */
+    #[DataProvider('executeDataProvider')]
     public function testExecute($scope, $scopeCode, $resultCode, array $configs): void
     {
         $this->setConfigPaths();

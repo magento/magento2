@@ -19,26 +19,21 @@
             <group value="pr_exclude" />
         </annotations>
         <before>
-            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
             <magentoCLI command="config:set {{StorefrontPaypalExpressAuthorizationPaymentActionOptionConfigData.path}} {{StorefrontPaypalExpressAuthorizationPaymentActionOptionConfigData.value}}" stepKey="setPaymentActionAuthorization"/>
             <magentoCLI command="config:set {{StorefrontPaypalEnableTransferCartLineConfigData.path}} {{StorefrontPaypalEnableTransferCartLineConfigData.value}}" stepKey="enableTransferCartLine"/>
-            <!-- New Customer -->
-            <createData entity="Simple_US_Customer" stepKey="createCustomer">
-                <field key="firstname">John1</field>
-                <field key="lastname">Doe1</field>
-            </createData>
             <createData entity="SimpleProduct2" stepKey="simpleProduct">
                 <field key="price">1</field>
             </createData>
         </before>
         <after>
             <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer" />
-            <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
-            <deleteData createDataKey="simpleProduct" stepKey="deleteSimpleProduct"/>
+            <helper class="Magento\Customer\Test\Mftf\Helper\CustomerApiHelper" method="deleteAllCustomersApi" stepKey="deleteCustomer"/>
+            <helper class="Magento\Catalog\Test\Mftf\Helper\ProductApiHelper" method="deleteAllProductsApi" stepKey="deleteSimpleProduct"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
-        <actionGroup ref="LoginToStorefrontActionGroup" stepKey="signUpNewUser">
-            <argument name="Customer" value="$$createCustomer$$"/>
+        <!--Create new customer in storefront-->
+        <actionGroup ref="SignUpNewUserFromStorefrontActionGroup" stepKey="createCustomerFromStorefront">
+            <argument name="Customer" value="Simple_US_Customer"/>
         </actionGroup>
         <actionGroup ref="AddSimpleProductToCartActionGroup" stepKey="addSimpleProductToCart">
             <argument name="product" value="$simpleProduct$"/>
@@ -61,6 +56,7 @@
         <actionGroup ref="AssertStorefrontCheckoutSuccessActionGroup" stepKey="assertCheckoutSuccess"/>
         <grabTextFrom selector="{{CheckoutSuccessMainSection.orderNumber22}}" stepKey="grabOrderNumber"/>
         <!--Go to Admin and check order information-->
+        <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
         <actionGroup ref="FilterOrderGridByIdActionGroup" stepKey="filterOrderGrid">
             <argument name="orderId" value="$grabOrderNumber"/>
         </actionGroup>

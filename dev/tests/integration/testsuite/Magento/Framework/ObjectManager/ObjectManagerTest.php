@@ -6,6 +6,7 @@
 namespace Magento\Framework\ObjectManager;
 
 use ReflectionClass;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class ObjectManagerTest extends \PHPUnit\Framework\TestCase
 {
@@ -129,9 +130,8 @@ class ObjectManagerTest extends \PHPUnit\Framework\TestCase
      * @param string $actualClassName
      * @param array $properties
      * @param string|null $expectedClassName
-     *
-     * @dataProvider newInstanceDataProvider
      */
+    #[DataProvider('newInstanceDataProvider')]
     public function testNewInstance($actualClassName, array $properties = [], $expectedClassName = null)
     {
         if (!$expectedClassName) {

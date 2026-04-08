@@ -12,6 +12,7 @@ use Magento\Framework\Cache\Backend\ExtendedBackendInterface;
 use Magento\Framework\Cache\Backend\RemoteSynchronizedCache;
 use Magento\Framework\Cache\Exception\CacheException;
 use Magento\Framework\DB\Adapter\Pdo\Mysql;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -52,8 +53,8 @@ class RemoteSynchronizedCacheTest extends TestCase
      *
      * @param array $options
      * @return void
-     * @dataProvider initializeWithExceptionDataProvider
      */
+    #[DataProvider('initializeWithExceptionDataProvider')]
     public function testInitializeWithException($options): void
     {
         $this->expectException(CacheException::class);
@@ -252,7 +253,7 @@ class RemoteSynchronizedCacheTest extends TestCase
 
         $this->remoteCacheMockExample
             ->method('load')
-            ->willReturnOnConsecutiveCalls(null, false, false, $lockSign);
+            ->willReturnOnConsecutiveCalls(null, false, false, $lockSign, false, false, false, false);
 
         $this->assertEquals(false, $this->remoteSyncCacheInstance->load('1'));
     }

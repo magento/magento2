@@ -21,6 +21,8 @@ use Magento\Framework\Cache\Core;
 use Magento\Framework\Cache\Frontend\Adapter\Zend;
 use Magento\Framework\Cache\Frontend\Decorator\Bare;
 use Magento\Framework\Cache\FrontendInterface;
+use PHPUnit\Framework\Attributes\DataProvider;
+
 use PHPUnit\Framework\TestCase;
 use Zend_Cache_Exception;
 
@@ -74,8 +76,8 @@ class CoreTest extends TestCase
     }
 
     /**
-     * @dataProvider setBackendExceptionProvider
      */
+     #[DataProvider('setBackendExceptionProvider')]
     public function testSetBackendException($decorators)
     {
         $this->expectException('Zend_Cache_Exception');

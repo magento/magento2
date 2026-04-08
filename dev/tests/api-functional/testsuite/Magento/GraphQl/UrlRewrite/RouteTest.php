@@ -21,6 +21,7 @@ use Magento\UrlRewrite\Model\UrlFinderInterface;
 use Magento\UrlRewrite\Model\UrlRewrite as UrlRewriteModel;
 use Magento\UrlRewrite\Service\V1\Data\UrlRewrite as UrlRewriteService;
 use Magento\UrlRewrite\Test\Fixture\UrlRewrite as UrlRewriteFixture;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Test the GraphQL endpoint's Route query to verify url route information is correctly returned.
@@ -342,10 +343,10 @@ QUERY;
      * @magentoApiDataFixture Magento/Catalog/_files/product_with_category.php
      * @magentoApiDataFixture Magento/Cms/_files/pages.php
      *
-     * @dataProvider urlRewriteEntitiesDataProvider
      * @param string $requestPath
      * @throws AlreadyExistsException
      */
+    #[DataProvider('urlRewriteEntitiesDataProvider')]
     public function testUrlRewriteCleansCacheOnChange(string $requestPath)
     {
 

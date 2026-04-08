@@ -10,6 +10,7 @@ namespace Magento\Ui\Test\Unit\Config\Converter;
 use Magento\Ui\Config\Converter\Item;
 use Magento\Ui\Config\ConverterInterface;
 use Magento\Ui\Config\ConverterUtils;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -35,16 +36,15 @@ class ItemTest extends TestCase
         $dom = new \DOMDocument('1.0', 'UTF-8');
         $dom->load(dirname(__FILE__) . DIRECTORY_SEPARATOR . '_files/test.xml');
         $this->domXpath = new \DOMXPath($dom);
-        $this->urlConverter = $this->getMockBuilder(ConverterInterface::class)
-            ->getMockForAbstractClass();
+        $this->urlConverter = $this->createMock(ConverterInterface::class);
         $this->converter = new Item($this->urlConverter, new ConverterUtils());
     }
 
     /**
      * @param array $expectedResult
      * @param string $xpath
-     * @dataProvider convertDataProvider
      */
+    #[DataProvider('convertDataProvider')]
     public function testConvert(array $expectedResult, string $xpath)
     {
         $node = $this->domXpath->query($xpath)->item(0);
@@ -132,7 +132,7 @@ class ItemTest extends TestCase
     private static function getSetTwo()
     {
         return [
-            'expectedResult' => [
+            [
                 'name' => 'editorConfig',
                 'xsi:type' => 'array',
                 'item' => [
@@ -174,7 +174,7 @@ class ItemTest extends TestCase
     private static function getSetThree()
     {
         return [
-            'xpath' => [
+            [
                 'name' => 'templates',
                 'xsi:type' => 'array',
                 'item' => [

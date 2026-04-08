@@ -12,12 +12,12 @@ namespace Magento\Framework\View\Test\Unit\Layout;
 
 use Magento\Framework\View\Layout\Element;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class ElementTest extends TestCase
 {
-    /**
-     * @dataProvider elementNameDataProvider
-     */
+    /**     */
+    #[DataProvider('elementNameDataProvider')]
     public function testGetElementName($xml, $name)
     {
         $model = new Element($xml);
@@ -56,9 +56,8 @@ class ElementTest extends TestCase
         ];
     }
 
-    /**
-     * @dataProvider cacheableDataProvider
-     */
+    /**     */
+    #[DataProvider('cacheableDataProvider')]
     public function testIsCacheable($xml, $expected)
     {
         $model = new Element($xml);

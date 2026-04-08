@@ -9,6 +9,8 @@
  */
 namespace Magento\Test\Event;
 
+use PHPUnit\Framework\Attributes\DataProvider;
+
 class TransactionTest extends \PHPUnit\Framework\TestCase
 {
     /**
@@ -102,8 +104,8 @@ class TransactionTest extends \PHPUnit\Framework\TestCase
     /**
      * @param string $method
      * @param string $eventName
-     * @dataProvider startAndRollbackTransactionDataProvider
      */
+    #[DataProvider('startAndRollbackTransactionDataProvider')]
     public function testStartAndRollbackTransaction($method, $eventName)
     {
         $eventManagerWithArgs = [];
@@ -133,8 +135,8 @@ class TransactionTest extends \PHPUnit\Framework\TestCase
     /**
      * @param string $method
      * @param string $eventName
-     * @dataProvider startAndRollbackTransactionDataProvider
      */
+    #[DataProvider('startAndRollbackTransactionDataProvider')]
     public function testDoNotStartAndRollbackTransaction($method, $eventName)
     {
         $this->_eventManager->expects($this->once())->method('fireEvent')->with($eventName);

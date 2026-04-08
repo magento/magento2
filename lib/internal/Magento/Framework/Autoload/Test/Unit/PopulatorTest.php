@@ -32,9 +32,7 @@ class PopulatorTest extends TestCase
 
     public function testPopulateMappings()
     {
-        $mockAutoloader = $this->getMockBuilder(AutoloaderInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $mockAutoloader = $this->createMock(AutoloaderInterface::class);
 
         $mockAutoloader->expects($this->once())
             ->method('addPsr4')

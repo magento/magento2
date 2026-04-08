@@ -239,7 +239,16 @@ class CustomerRepositoryTest extends TestCase
 
         $customerAttributesMetaData = $this->createPartialMockWithReflection(
             \Magento\Customer\Model\Data\Customer::class,
-            ['getId', 'getEmail', 'getWebsiteId', 'getAddresses', 'setAddresses', 'getGroupId', 'getDefaultBilling', 'getDefaultShipping']
+            [
+                'getId',
+                'getEmail',
+                'getWebsiteId',
+                'getAddresses',
+                'setAddresses',
+                'getGroupId',
+                'getDefaultBilling',
+                'getDefaultShipping'
+            ]
         );
         $customerSecureData = $this->createPartialMockWithReflection(
             CustomerSecure::class,

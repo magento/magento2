@@ -21,8 +21,7 @@ class CompositeTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->converter = $this->getMockBuilder(ConverterInterface::class)
-            ->getMockForAbstractClass();
+        $this->converter = $this->createMock(ConverterInterface::class);
     }
 
     public function testConvert()

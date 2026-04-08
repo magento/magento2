@@ -74,8 +74,8 @@ class BackupRollbackTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->objectManager = $this->getMockForAbstractClass(ObjectManagerInterface::class);
-        $this->log = $this->getMockForAbstractClass(ConsoleLoggerInterface::class);
+        $this->objectManager = $this->createMock(ObjectManagerInterface::class);
+        $this->log = $this->createMock(ConsoleLoggerInterface::class);
         $this->directoryList = $this->createMock(DirectoryList::class);
         $this->path = realpath(__DIR__);
         $this->directoryList->expects($this->any())

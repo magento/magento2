@@ -6,12 +6,16 @@
 namespace Magento\Framework\Code\Test\Unit\Generator;
 
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\Framework\Code\Generator\InterfaceGenerator;
 use Magento\SomeModule\Model\Two\Test;
 use Magento\Framework\Code\Generator\CodeGeneratorInterface;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 
 class InterfaceGeneratorTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var InterfaceGenerator
      */
@@ -74,9 +78,8 @@ class InterfaceGeneratorTest extends TestCase
         $this->interfaceGenerator = new InterfaceGenerator();
     }
 
-    /**
-     * @dataProvider generateDataProvider
-     */
+    /**     */
+    #[DataProvider('generateDataProvider')]
     public function testGenerate($additionalMethodsData, $expectedException, $expectedExceptionMessage)
     {
         if ($expectedException) {

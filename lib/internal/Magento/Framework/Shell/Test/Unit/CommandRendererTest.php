@@ -9,15 +9,15 @@ namespace Magento\Framework\Shell\Test\Unit;
 
 use Magento\Framework\Shell\CommandRenderer;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class CommandRendererTest extends TestCase
 {
     /**
      * @param $expectedCommand
      * @param $actualCommand
-     * @param $testArguments
-     * @dataProvider commandsDataProvider
-     */
+     * @param $testArguments     */
+    #[DataProvider('commandsDataProvider')]
     public function testRender($expectedCommand, $actualCommand, $testArguments)
     {
         $commandRenderer = new CommandRenderer();

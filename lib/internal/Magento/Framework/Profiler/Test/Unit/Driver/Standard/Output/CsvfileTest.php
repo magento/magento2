@@ -9,16 +9,16 @@ namespace Magento\Framework\Profiler\Test\Unit\Driver\Standard\Output;
 
 use Magento\Framework\Profiler\Driver\Standard\Output\Csvfile;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class CsvfileTest extends TestCase
 {
-    /**
-     * @dataProvider constructorProvider
-     * @param array $config
+    /**     * @param array $config
      * @param string $expectedFilePath
      * @param string $expectedDelimiter
      * @param string $expectedEnclosure
      */
+    #[DataProvider('constructorProvider')]
     public function testConstructor($config, $expectedFilePath, $expectedDelimiter, $expectedEnclosure)
     {
         $this->markTestSkipped('Skipped in #27500 due to testing protected/private methods and properties');

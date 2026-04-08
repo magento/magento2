@@ -10,6 +10,7 @@ namespace Magento\Ui\Component\Form\Element\DataType;
 use Magento\Framework\Locale\ResolverInterface;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\TestFramework\Helper\Bootstrap;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -38,13 +39,7 @@ class DateTest extends TestCase
         $this->localeResolver = $this->objectManager->get(ResolverInterface::class);
     }
 
-    /**
-     * @dataProvider localeDataProvider
-     *
-     * @param string $locale
-     * @param string $dateFormat
-     * @return void
-     */
+    #[DataProvider('localeDataProvider')]
     public function testDateFormat(string $locale, string $dateFormat): void
     {
         $this->localeResolver->setLocale($locale);
@@ -53,9 +48,6 @@ class DateTest extends TestCase
         $this->assertEquals($dateFormat, $date->getData('config')['options']['dateFormat']);
     }
 
-    /**
-     * @return array
-     */
     public static function localeDataProvider(): array
     {
         return [

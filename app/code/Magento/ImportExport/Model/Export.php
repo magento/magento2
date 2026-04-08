@@ -89,6 +89,11 @@ class Export extends \Magento\ImportExport\Model\AbstractModel
     private $localeEmulator;
 
     /**
+     * Internal marker returned in queue export flow to avoid loading full file content into memory.
+     */
+    private const RESULT_WRITTEN_TO_FILE = '__RESULT_WRITTEN_TO_FILE__';
+
+    /**
      * @param LoggerInterface $logger
      * @param Filesystem $filesystem
      * @param ConfigInterface $exportConfig
@@ -173,7 +178,16 @@ class Export extends \Magento\ImportExport\Model\AbstractModel
 
             if (isset($fileFormats[$this->getFileFormat()])) {
                 try {
-                    $this->_writer = $this->_exportAdapterFac->create($fileFormats[$this->getFileFormat()]['model']);
+                    $arguments = [];
+                    $fileName = (string)$this->getData('file_name');
+                    if ($fileName !== '') {
+                        // Queue export flow: write directly to final destination to avoid giant in-memory readback.
+                        $arguments['destination'] = 'export/' . $fileName;
+                    }
+                    $this->_writer = $this->_exportAdapterFac->create(
+                        $fileFormats[$this->getFileFormat()]['model'],
+                        $arguments
+                    );
                 } catch (\Exception $e) {
                     $this->_logger->critical($e);
                     throw new \Magento\Framework\Exception\LocalizedException(
@@ -219,10 +233,28 @@ class Export extends \Magento\ImportExport\Model\AbstractModel
     {
         if (isset($this->_data[self::FILTER_ELEMENT_GROUP])) {
             $this->addLogComment(__('Begin export of %1', $this->getEntity()));
+            $fileName = (string)$this->getData('file_name');
+            $isQueueFlow = $fileName !== '';
+
             $result = $this->_getEntityAdapter()->setWriter($this->_getWriter())->export();
-            $countRows = substr_count($result, "\n");
-            if (!$countRows) {
+            $contentLength = strlen((string)$result);
+            if ($contentLength === 0) {
+                if ($isQueueFlow) {
+                    $directory = $this->_varDirectory;
+                    $filePath = 'export/' . $fileName;
+                    if ($directory->isFile($filePath)) {
+                        $directory->delete($filePath);
+                    }
+                }
                 throw new \Magento\Framework\Exception\LocalizedException(__('There is no data for the export.'));
+            }
+            if ($isQueueFlow) {
+                // Consumer already knows destination filename; returning a marker avoids huge memory copy.
+                return self::RESULT_WRITTEN_TO_FILE;
+            }
+            $countRows = substr_count((string)$result, "\n");
+            if (!$countRows && $contentLength > 0) {
+                $countRows = 1;
             }
             if ($result) {
                 $this->addLogComment([__('Exported %1 rows.', $countRows), __('The export is finished.')]);
@@ -256,7 +288,7 @@ class Export extends \Magento\ImportExport\Model\AbstractModel
     public static function getAttributeFilterType(\Magento\Eav\Model\Entity\Attribute $attribute)
     {
         if ($attribute->usesSource() || $attribute->getFilterOptions()) {
-            return 'multiselect' == $attribute->getFrontendInput() ?
+            return 'multiselect' === $attribute->getFrontendInput() ?
                 self::FILTER_TYPE_MULTISELECT : self::FILTER_TYPE_SELECT;
         }
 

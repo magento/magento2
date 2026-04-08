@@ -12,6 +12,7 @@ use Magento\GraphQl\Quote\GetMaskedQuoteIdByReservedOrderId;
 use Magento\Integration\Api\CustomerTokenServiceInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Test for setting USPS shipping method on cart.
@@ -82,10 +83,10 @@ class SetUspsShippingMethodsOnCartTest extends GraphQlAbstract
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/set_new_shipping_address.php
      * @magentoApiDataFixture Magento/GraphQl/Usps/_files/enable_usps_shipping_method.php
      *
-     * @dataProvider dataProviderShippingMethods
      * @param string $methodCode
      * @param string $methodLabel
      */
+    #[DataProvider('dataProviderShippingMethods')]
     public function testSetUspsShippingMethod(string $methodCode, string $methodLabel)
     {
         $quoteReservedId = 'test_quote';
@@ -155,10 +156,10 @@ class SetUspsShippingMethodsOnCartTest extends GraphQlAbstract
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/set_new_shipping_canada_address.php
      * @magentoApiDataFixture Magento/GraphQl/Usps/_files/enable_usps_shipping_method.php
      *
-     * @dataProvider dataProviderShippingMethodsBasedOnCanadaAddress
      * @param string $methodCode
      * @param string $methodLabel
      */
+    #[DataProvider('dataProviderShippingMethodsBasedOnCanadaAddress')]
     public function testSetUspsShippingMethodBasedOnCanadaAddress(string $methodCode, string $methodLabel)
     {
         $quoteReservedId = 'test_quote';

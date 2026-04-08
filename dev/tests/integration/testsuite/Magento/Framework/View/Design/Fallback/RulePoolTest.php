@@ -10,6 +10,7 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Component\ComponentRegistrar;
 use Magento\Framework\Filesystem;
 use Magento\TestFramework\Helper\Bootstrap;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Factory Test
@@ -68,9 +69,8 @@ class RulePoolTest extends \PHPUnit\Framework\TestCase
      * @param string $type
      * @param array $overriddenParams
      * @param string $expectedErrorMessage
-     *
-     * @dataProvider getPatternDirsExceptionDataProvider
      */
+    #[DataProvider('getPatternDirsExceptionDataProvider')]
     public function testGetPatternDirsException($type, array $overriddenParams, $expectedErrorMessage)
     {
         $this->expectException('InvalidArgumentException');
@@ -123,9 +123,8 @@ class RulePoolTest extends \PHPUnit\Framework\TestCase
      * @param string $type
      * @param array $overriddenParams
      * @param array $expectedResult
-     *
-     * @dataProvider getPatternDirsDataProvider
      */
+    #[DataProvider('getPatternDirsDataProvider')]
     public function testGetPatternDirs($type, array $overriddenParams, array $expectedResult)
     {
         $actualResult = $this->model->getRule($type)

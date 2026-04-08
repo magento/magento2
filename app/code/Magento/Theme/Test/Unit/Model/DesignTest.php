@@ -75,7 +75,7 @@ class DesignTest extends TestCase
             ->method('getCacheManager')
             ->willReturn($this->cacheManager);
 
-        $this->serializerMock = $this->getMockForAbstractClass(SerializerInterface::class);
+        $this->serializerMock = $this->createMock(SerializerInterface::class);
 
         $objectManager = new ObjectManager($this);
         $this->model = $objectManager->getObject(

@@ -14,6 +14,7 @@ use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\GraphQl\Model\Query\ContextExtensionInterface;
 use Magento\GraphQl\Model\Query\ContextInterface;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Integration\Api\CustomerTokenServiceInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -23,6 +24,7 @@ use PHPUnit\Framework\TestCase;
  */
 class RevokeCustomerTokenTest extends TestCase
 {
+    use MockCreationTrait;
     /**
      * Object Manager Instance
      *
@@ -69,34 +71,30 @@ class RevokeCustomerTokenTest extends TestCase
     {
         $this->objectManager = new ObjectManager($this);
 
-        $this->contextMock = $this->getMockBuilder(ContextInterface::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(
-                [
-                    'getExtensionAttributes',
-                    'getUserId',
-                    'getUserType',
-                ]
-            )
-            ->getMockForAbstractClass();
+        $this->contextMock = $this->createPartialMock(
+            ContextInterface::class,
+            [
+                'getExtensionAttributes',
+                'getUserId',
+                'getUserType',
+            ]
+        );
 
-        $this->contextExtensionMock = $this->getMockBuilder(ContextExtensionInterface::class)
-            ->addMethods(
-                [
-                    'getIsCustomer',
-                    'getStore',
-                    'setStore',
-                    'setIsCustomer',
-                ]
-            )
-            ->getMockForAbstractClass();
+        $this->contextExtensionMock = $this->createPartialMockWithReflection(
+            ContextExtensionInterface::class,
+            [
+                'getIsCustomer',
+                'getStore',
+                'setStore',
+                'setIsCustomer',
+            ]
+        );
 
         $this->fieldMock = $this->getMockBuilder(Field::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->customerTokenServiceMock = $this->getMockBuilder(CustomerTokenServiceInterface::class)
-            ->getMockForAbstractClass();
+        $this->customerTokenServiceMock = $this->createMock(CustomerTokenServiceInterface::class);
 
         $this->resolveInfoMock = $this->getMockBuilder(ResolveInfo::class)
             ->disableOriginalConstructor()

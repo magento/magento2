@@ -11,6 +11,7 @@ use Magento\Backend\App\Area\FrontNameResolver;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Indexer\Console\Command\IndexerSetModeCommand;
 use Symfony\Component\Console\Tester\CommandTester;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Command for updating installed application after the code base has changed
@@ -90,8 +91,8 @@ class IndexerSetModeCommandTest extends AbstractIndexerCommandCommonSetup
      * @param bool $current
      * @param string $mode
      * @param $expectedValue
-     * @dataProvider executeWithIndexDataProvider
      */
+    #[DataProvider('executeWithIndexDataProvider')]
     public function testExecuteWithIndex($isScheduled, $previous, $current, $mode, $expectedValue)
     {
         $this->configureAdminArea();

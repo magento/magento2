@@ -9,6 +9,7 @@ namespace Magento\Framework\TestFramework\Test\Unit\Autoloader;
 
 use Magento\Framework\TestFramework\Unit\Autoloader\ExtensionAttributesInterfaceGenerator;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class ExtensionAttributesInterfaceGeneratorTest extends TestCase
 {
@@ -31,10 +32,9 @@ class ExtensionAttributesInterfaceGeneratorTest extends TestCase
         );
     }
 
-    /**
-     * @dataProvider generateNonExtensionAttributesInterfaceDataProvider
-     * @param string $className
+    /**     * @param string $className
      */
+    #[DataProvider('generateNonExtensionAttributesInterfaceDataProvider')]
     public function testGenerateNonExtensionAttributesInterface($className)
     {
         $this->assertFalse($this->subject->generate($className));

@@ -33,8 +33,8 @@ class AuthorizationTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->_policyMock = $this->getMockForAbstractClass(PolicyInterface::class);
-        $roleLocatorMock = $this->getMockForAbstractClass(RoleLocatorInterface::class);
+        $this->_policyMock = $this->createMock(PolicyInterface::class);
+        $roleLocatorMock = $this->createMock(RoleLocatorInterface::class);
         $roleLocatorMock->expects($this->any())->method('getAclRoleId')->willReturn('U1');
         $this->_model = new Authorization($this->_policyMock, $roleLocatorMock);
     }

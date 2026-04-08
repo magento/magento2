@@ -10,14 +10,14 @@ namespace Magento\Framework\DB\Test\Unit\Ddl;
 use Magento\Framework\DB\Ddl\Sequence;
 use Magento\Framework\DB\Ddl\Table;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class SequenceTest extends TestCase
 {
     /**
      * @param array $params
-     * @param string $expectedQuery
-     * @dataProvider createSequenceDdlDataProvider
-     */
+     * @param string $expectedQuery     */
+    #[DataProvider('createSequenceDdlDataProvider')]
     public function testGetCreateSequenceDdl(array $params, $expectedQuery)
     {
         $model = new Sequence();

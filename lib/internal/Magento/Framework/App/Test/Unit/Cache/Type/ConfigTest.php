@@ -15,6 +15,7 @@ use Magento\Framework\Cache\FrontendInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\TestFramework\Unit\Helper\ProxyTesting;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 class ConfigTest extends TestCase
@@ -41,21 +42,16 @@ class ConfigTest extends TestCase
             Config::class,
             ['cacheFrontendPool' => $cacheFrontendPoolMock]
         );
-        $this->frontendMock = $this->getMockForAbstractClass(FrontendInterface::class);
+        $this->frontendMock = $this->createMock(FrontendInterface::class);
         $cacheFrontendPoolMock->expects($this->once())
             ->method('get')
             ->with(Config::TYPE_IDENTIFIER)
             ->willReturn($this->frontendMock);
     }
 
-    /**
-     * @param string $method
-     * @param array $params
-     * @param mixed $expectedResult
-     *
-     * @return void
-     * @dataProvider proxyMethodDataProvider
+    /**     * @return void
      */
+    #[DataProvider('proxyMethodDataProvider')]
     public function testProxyMethod($method, $params, $expectedResult): void
     {
         $helper = new ProxyTesting();
@@ -146,12 +142,9 @@ class ConfigTest extends TestCase
         $this->assertSame($expectedResult, $actualResult);
     }
 
-    /**
-     * @param bool $fixtureResultOne
-     * @param bool $fixtureResultTwo
-     * @param bool $expectedResult
-     * @dataProvider cleanModeMatchingAnyTagDataProvider
+    /**     * @param bool $expectedResult
      */
+    #[DataProvider('cleanModeMatchingAnyTagDataProvider')]
     public function testCleanModeMatchingAnyTag($fixtureResultOne, $fixtureResultTwo, $expectedResult): void
     {
         $this->frontendMock

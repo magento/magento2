@@ -17,6 +17,7 @@ use Magento\Framework\View\Design\Fallback\Rule\ThemeFactory;
 use Magento\Framework\View\Design\Fallback\RulePool;
 use Magento\Framework\View\Design\ThemeInterface;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class RulePoolTest extends TestCase
 {
@@ -31,7 +32,7 @@ class RulePoolTest extends TestCase
         $filesystemMock->expects($this->any())
             ->method('getDirectoryRead')
             ->willReturnCallback(function ($code) {
-                $dirMock = $this->getMockForAbstractClass(ReadInterface::class);
+                $dirMock = $this->createMock(ReadInterface::class);
                 $dirMock->expects($this->any())
                     ->method('getAbsolutePath')
                     ->willReturnCallback(function ($path) use ($code) {
@@ -42,7 +43,7 @@ class RulePoolTest extends TestCase
             });
 
         $simpleFactory = $this->createMock(SimpleFactory::class);
-        $rule = $this->getMockForAbstractClass(RuleInterface::class);
+        $rule = $this->createMock(RuleInterface::class);
         $simpleFactory->expects($this->any())
             ->method('create')
             ->willReturn($rule);
@@ -68,10 +69,10 @@ class RulePoolTest extends TestCase
             $moduleSwitchFactory
         );
 
-        $parentTheme = $this->getMockForAbstractClass(ThemeInterface::class);
+        $parentTheme = $this->createMock(ThemeInterface::class);
         $parentTheme->expects($this->any())->method('getThemePath')->willReturn('parent_theme_path');
 
-        $theme = $this->getMockForAbstractClass(ThemeInterface::class);
+        $theme = $this->createMock(ThemeInterface::class);
         $theme->expects($this->any())->method('getThemePath')->willReturn('current_theme_path');
         $theme->expects($this->any())->method('getParentTheme')->willReturn($parentTheme);
     }
@@ -83,9 +84,8 @@ class RulePoolTest extends TestCase
 
     /**
      * @param string $type
-     *
-     * @dataProvider getRuleDataProvider
-     */
+     *     */
+    #[DataProvider('getRuleDataProvider')]
     public function testGetRule($type)
     {
         $actualResult = $this->model->getRule($type);

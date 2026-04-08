@@ -31,6 +31,7 @@ use Magento\TestFramework\Fixture\DataFixtureStorage;
 use Magento\TestFramework\Fixture\DataFixtureStorageManager;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\ObjectManager;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -197,8 +198,8 @@ class PrintShippingLabelsTest extends TestCase
      * @param bool $verifyFullWorkflow
      * @param string $trackingNumber
      * @return void
-     * @dataProvider shippingLabelScenariosProvider
      */
+    #[DataProvider('shippingLabelScenariosProvider')]
     #[
         ConfigFixture('carriers/fedex/active', '1', 'store', 'default'),
         ConfigFixture('carriers/fedex/api_key', 'test_api_key', 'store', 'default'),

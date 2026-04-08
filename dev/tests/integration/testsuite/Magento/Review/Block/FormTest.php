@@ -17,6 +17,7 @@ use Magento\TestFramework\Fixture\AppArea;
 use Magento\TestFramework\Fixture\DataFixture;
 use Magento\TestFramework\Fixture\DataFixtureStorageManager;
 use Magento\TestFramework\ObjectManager;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class FormTest extends \PHPUnit\Framework\TestCase
 {
@@ -35,8 +36,8 @@ class FormTest extends \PHPUnit\Framework\TestCase
     /**
      * @magentoDbIsolation enabled
      * @magentoDataFixture Magento/Review/_files/config.php
-     * @dataProvider getCorrectFlagDataProvider
      */
+    #[DataProvider('getCorrectFlagDataProvider')]
     public function testGetCorrectFlag(
         $path,
         $scope,

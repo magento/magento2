@@ -13,6 +13,7 @@ use Magento\Framework\Filesystem\Driver\File;
 use Magento\Store\Model\Store;
 use Magento\TestFramework\Annotation\DataFixture;
 use Magento\TestFramework\Workaround\Override\Fixture\Resolver;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Abstract class for testing product export and import scenarios
@@ -90,7 +91,9 @@ abstract class AbstractProductExportImportTestCase extends \PHPUnit\Framework\Te
      */
     protected function tearDown(): void
     {
-        $this->executeFixtures($this->fixtures, true);
+        if ($this->fixtures !== null) {
+            $this->executeFixtures($this->fixtures, true);
+        }
 
         if ($this->csvFile !== null) {
             $directoryWrite = $this->fileSystem->getDirectoryWrite(DirectoryList::VAR_IMPORT_EXPORT);
@@ -109,8 +112,8 @@ abstract class AbstractProductExportImportTestCase extends \PHPUnit\Framework\Te
      * @param string[] $skus
      * @param string[] $skippedAttributes
      * @return void
-     * @dataProvider exportImportDataProvider
      */
+    #[DataProvider('exportImportDataProvider')]
     public function testImportExport(array $fixtures, array $skus, array $skippedAttributes = []): void
     {
         $this->csvFile = null;
@@ -134,9 +137,9 @@ abstract class AbstractProductExportImportTestCase extends \PHPUnit\Framework\Te
      * @param array $fixtures
      * @param string[] $skus
      * @param string[] $skippedAttributes
-     * @dataProvider exportImportDataProvider
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
+    #[DataProvider('exportImportDataProvider')]
     public function testImportExportWithPagination(array $fixtures, array $skus, array $skippedAttributes = [])
     {
         $this->fixtures = $fixtures;

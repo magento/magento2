@@ -51,10 +51,10 @@ class CompositeReaderTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->validatorMock = $this->getMockForAbstractClass(ValidatorInterface::class);
-        $this->readerOneMock = $this->getMockForAbstractClass(ReaderInterface::class);
-        $this->readerTwoMock = $this->getMockForAbstractClass(ReaderInterface::class);
-        $this->readerThreeMock = $this->getMockForAbstractClass(ReaderInterface::class);
+        $this->validatorMock = $this->createMock(ValidatorInterface::class);
+        $this->readerOneMock = $this->createMock(ReaderInterface::class);
+        $this->readerTwoMock = $this->createMock(ReaderInterface::class);
+        $this->readerThreeMock = $this->createMock(ReaderInterface::class);
         $this->defaultConfigProviderMock =
             $this->createMock(DefaultValueProvider::class);
 

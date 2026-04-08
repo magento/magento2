@@ -19,6 +19,7 @@ use Magento\Setup\Fixtures\FixtureModel;
 use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManager;
 use PHPUnit\Framework\MockObject\MockObject;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -27,6 +28,8 @@ use PHPUnit\Framework\TestCase;
  */
 class EavVariationsFixtureTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var FixtureModel|MockObject
      */
@@ -81,7 +84,7 @@ class EavVariationsFixtureTest extends TestCase
             ->getMock();
         $this->cacheMock = $this->getMockBuilder(CacheInterface::class)
             ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+            ->getMock();
         $this->attributeFactoryMock = $this->getMockBuilder(AttributeFactory::class)
             ->onlyMethods(['create'])
             ->disableOriginalConstructor()
@@ -141,14 +144,10 @@ class EavVariationsFixtureTest extends TestCase
         $this->attributeSetMock->expects($this->once())->method('load')->willReturnSelf();
         $this->attributeSetMock->expects($this->once())->method('getDefaultGroupId')->willReturn(2);
 
-        $attributeMock = $this->getMockBuilder(Attribute::class)
-            ->addMethods(['setAttributeGroupId'])
-            ->onlyMethods([
-                'setAttributeSetId',
-                'save',
-            ])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $attributeMock = $this->createPartialMockWithReflection(
+            Attribute::class,
+            ['setAttributeSetId', 'save', 'setAttributeGroupId']
+        );
         $attributeMock->expects($this->exactly(2))->method('setAttributeSetId')->willReturnSelf();
         $attributeMock->expects($this->once())->method('setAttributeGroupId')->willReturnSelf();
         $this->attributeFactoryMock->expects($this->once())->method('create')

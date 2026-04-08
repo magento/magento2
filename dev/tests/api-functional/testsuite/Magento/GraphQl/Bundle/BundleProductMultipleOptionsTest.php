@@ -10,6 +10,7 @@ namespace Magento\GraphQl\Bundle;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\Helper\CompareArraysRecursively;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Bundle product with multiple options test.
@@ -34,9 +35,9 @@ class BundleProductMultipleOptionsTest extends GraphQlAbstract
      * @magentoApiDataFixture Magento/Bundle/_files/product_with_multiple_options.php
      * @param array $bundleProductDataProvider
      *
-     * @dataProvider getBundleProductDataProvider
      * @throws \Exception
      */
+    #[DataProvider('getBundleProductDataProvider')]
     public function testBundleProductWithMultipleOptions(array $bundleProductDataProvider): void
     {
         $productSku = 'bundle-product';

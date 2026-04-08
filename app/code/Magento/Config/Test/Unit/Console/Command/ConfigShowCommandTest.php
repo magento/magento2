@@ -542,7 +542,7 @@ class ConfigShowCommandTest extends TestCase
         } catch (\RuntimeException $e) {
             $hadOriginal = false;
         }
-        $objectManagerMock = $this->getMockForAbstractClass(
+        $objectManagerMock = $this->createMock(
             ObjectManagerInterface::class
         );
         $objectManagerMock->method('get')

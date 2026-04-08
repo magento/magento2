@@ -12,6 +12,7 @@ use Magento\Framework\HTTP\PhpEnvironment\ServerAddress;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class ServerAddressTest extends TestCase
 {
@@ -41,9 +42,8 @@ class ServerAddressTest extends TestCase
         );
     }
 
-    /**
-     * @dataProvider getServerAddressProvider
-     */
+    /**     */
+    #[DataProvider('getServerAddressProvider')]
     public function testGetServerAddress($serverVar, $expected, $ipToLong)
     {
         $this->_request->expects(

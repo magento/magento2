@@ -9,14 +9,14 @@ namespace Magento\Framework\Data\Test\Unit;
 
 use Magento\Framework\Data\Graph;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class GraphTest extends TestCase
 {
     /**
      * @param array $nodes
-     * @param array $relations
-     * @dataProvider constructorErrorDataProvider
-     */
+     * @param array $relations     */
+    #[DataProvider('constructorErrorDataProvider')]
     public function testConstructorError($nodes, $relations)
     {
         $this->expectException('InvalidArgumentException');

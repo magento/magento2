@@ -5,6 +5,8 @@
  */
 namespace Magento\Catalog\Model\Layer\Filter;
 
+use PHPUnit\Framework\Attributes\Depends;
+
 /**
  * Test class for \Magento\Catalog\Model\Layer\Filter\Category.
  *
@@ -82,9 +84,7 @@ class CategoryTest extends \PHPUnit\Framework\TestCase
         return $this->_model;
     }
 
-    /**
-     * @depends testApply
-     */
+    #[Depends('testApply')]
     public function testGetResetValueApplied(\Magento\Catalog\Model\Layer\Filter\Category $modelApplied)
     {
         $this->assertEquals(2, $modelApplied->getResetValue());

@@ -20,6 +20,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Setup\Console\Command\DeployStaticContentCommand;
 use Magento\Setup\Model\ObjectManagerProvider;
 use PHPUnit\Framework\MockObject\MockObject as Mock;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Tester\CommandTester;
 
@@ -76,7 +77,7 @@ class DeployStaticContentCommandTest extends TestCase
         $this->inputValidator = $this->createMock(InputValidator::class);
         $this->consoleLoggerFactory = $this->createMock(ConsoleLoggerFactory::class);
         $this->logger = $this->createMock(ConsoleLogger::class);
-        $this->objectManager = $this->getMockForAbstractClass(ObjectManagerInterface::class);
+        $this->objectManager = $this->createMock(ObjectManagerInterface::class);
         $this->appState = $this->createMock(State::class);
         $this->deployService = $this->createMock(DeployStaticContent::class);
 
@@ -95,8 +96,8 @@ class DeployStaticContentCommandTest extends TestCase
     /**
      * @param array $input
      * @see DeployStaticContentCommand::execute()
-     * @dataProvider executeDataProvider
      */
+    #[DataProvider('executeDataProvider')]
     public function testExecute($input)
     {
         $this->appState->expects($this->once())
@@ -166,8 +167,8 @@ class DeployStaticContentCommandTest extends TestCase
     /**
      * @param string $mode
      * @return void
-     * @dataProvider executionInNonProductionModeDataProvider
      */
+    #[DataProvider('executionInNonProductionModeDataProvider')]
     public function testExecuteInNonProductionMode($mode)
     {
         $this->expectException('Magento\Framework\Exception\LocalizedException');

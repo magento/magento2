@@ -9,14 +9,14 @@ namespace Magento\Framework\App\Test\Unit\Console;
 
 use Magento\Framework\App\Console\MaintenanceModeEnabler;
 use Magento\Framework\App\MaintenanceMode;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Output\OutputInterface;
 
 class MaintenanceModeEnablerTest extends TestCase
 {
-    /**
-     * @dataProvider initialAppStateProvider
-     */
+    /**     */
+    #[DataProvider('initialAppStateProvider')]
     public function testSuccessfulTask(bool $maintenanceModeEnabledInitially)
     {
         $maintenanceMode = $this->createMaintenanceMode($maintenanceModeEnabledInitially);
@@ -38,9 +38,8 @@ class MaintenanceModeEnablerTest extends TestCase
         );
     }
 
-    /**
-     * @dataProvider initialAppStateProvider
-     */
+    /**     */
+    #[DataProvider('initialAppStateProvider')]
     public function testFailedTaskWithMaintenanceModeOnFailure(bool $maintenanceModeEnabledInitially)
     {
         $maintenanceMode = $this->createMaintenanceMode($maintenanceModeEnabledInitially);
@@ -63,9 +62,8 @@ class MaintenanceModeEnablerTest extends TestCase
         }
     }
 
-    /**
-     * @dataProvider initialAppStateProvider
-     */
+    /**     */
+    #[DataProvider('initialAppStateProvider')]
     public function testFailedTaskWithRestoredModeOnFailure(bool $maintenanceModeEnabledInitially)
     {
         $maintenanceMode = $this->createMaintenanceMode($maintenanceModeEnabledInitially);
@@ -127,7 +125,7 @@ class MaintenanceModeEnablerTest extends TestCase
     private function createOutput(): OutputInterface
     {
         $output = $this->getMockBuilder(OutputInterface::class)
-            ->getMockForAbstractClass();
+            ->getMock();
         return $output;
     }
 }

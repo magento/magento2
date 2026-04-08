@@ -10,6 +10,7 @@ namespace Magento\Framework\Filesystem\Test\Unit\Driver;
 use Magento\Framework\Exception\FileSystemException;
 use Magento\Framework\Filesystem\Driver\Http;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Verify HttpTest class.
@@ -45,10 +46,9 @@ class HttpTest extends TestCase
      * Verify IsExists.
      *
      * @param string $status
-     * @param bool $result
-     * @dataProvider dataProviderForTestIsExists
-     * @return void
+     * @param bool $result     * @return void
      */
+    #[DataProvider('dataProviderForTestIsExists')]
     public function testIsExists(string $status, bool $result): void
     {
         self::$headers = [$status];
@@ -69,10 +69,9 @@ class HttpTest extends TestCase
      * Verify Stat.
      *
      * @param array $headers
-     * @param \Closure $result
-     * @dataProvider dataProviderForTestStat
-     * @return void
+     * @param \Closure $result     * @return void
      */
+    #[DataProvider('dataProviderForTestStat')]
     public function testStat(array $headers, \Closure $result): void
     {
         if (is_callable($result)) {

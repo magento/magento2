@@ -21,6 +21,7 @@ namespace Magento\Setup\Test\Unit\Model {
     use Magento\Framework\Config\ConfigOptionsListConstants;
     use Magento\Framework\Config\File\ConfigFilePool;
     use Magento\Framework\DB\Adapter\AdapterInterface;
+    use Magento\Framework\DB\Adapter\Pdo\Mysql;
     use Magento\Framework\DB\Ddl\Table;
     use Magento\Framework\DB\Select;
     use Magento\Framework\Exception\FileSystemException;
@@ -43,6 +44,7 @@ namespace Magento\Setup\Test\Unit\Model {
     use Magento\Framework\Setup\Patch\PatchApplierFactory;
     use Magento\Framework\Setup\SampleData\State;
     use Magento\Framework\Setup\SchemaListener;
+    use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
     use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
     use Magento\Framework\Validation\ValidationException;
     use Magento\Indexer\Model\Indexer\Collection;
@@ -66,6 +68,7 @@ namespace Magento\Setup\Test\Unit\Model {
     use Magento\Setup\Validator\DbValidator;
     use PHPUnit\Framework\MockObject\MockObject;
     use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
     use ReflectionException;
 
     /**
@@ -74,6 +77,8 @@ namespace Magento\Setup\Test\Unit\Model {
      */
     class InstallerTest extends TestCase
     {
+        use MockCreationTrait;
+
         /**
          * @var array
          */
@@ -259,17 +264,17 @@ namespace Magento\Setup\Test\Unit\Model {
             $this->configReader = $this->createMock(Reader::class);
             $this->config = $this->createMock(DeploymentConfig::class);
 
-            $this->moduleList = $this->getMockForAbstractClass(ModuleListInterface::class);
+            $this->moduleList = $this->createMock(ModuleListInterface::class);
             $this->moduleList->expects($this->any())->method('getNames')->willReturn(
                 ['Foo_One', 'Bar_Two']
             );
             $this->moduleLoader = $this->createMock(Loader::class);
             $this->adminFactory = $this->createMock(AdminAccountFactory::class);
-            $this->logger = $this->getMockForAbstractClass(ConsoleLoggerInterface::class);
-            $this->connection = $this->getMockForAbstractClass(AdapterInterface::class);
+            $this->logger = $this->createMock(ConsoleLoggerInterface::class);
+            $this->connection = $this->createMock(AdapterInterface::class);
             $this->maintenanceMode = $this->createMock(MaintenanceMode::class);
             $this->filesystem = $this->createMock(Filesystem::class);
-            $this->objectManager = $this->getMockForAbstractClass(ObjectManagerInterface::class);
+            $this->objectManager = $this->createMock(ObjectManagerInterface::class);
             $this->contextMock =
                 $this->createMock(Context::class);
             $this->configModel = $this->createMock(ConfigModel::class);
@@ -290,7 +295,7 @@ namespace Magento\Setup\Test\Unit\Model {
             );
             $this->indexerMock = $this->createMock(Collection::class);
             $this->indexerRegistryMock = $this->createMock(IndexerRegistry::class);
-            $this->indexerInterfaceMock = $this->getMockForAbstractClass(IndexerInterface::class);
+            $this->indexerInterfaceMock = $this->createMock(IndexerInterface::class);
 
             $this->object = $this->createObject();
         }
@@ -348,9 +353,9 @@ namespace Magento\Setup\Test\Unit\Model {
          * @param array $request
          * @param array $logMessages
          * @param array $logMetaMessages
-         * @dataProvider installDataProvider
          * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
          */
+    #[DataProvider('installDataProvider')]
         public function testInstall(array $request, array $logMessages, array $logMetaMessages)
         {
             $this->moduleList->method('getOne')
@@ -376,10 +381,7 @@ namespace Magento\Setup\Test\Unit\Model {
             $this->moduleLoader->expects($this->any())->method('load')->willReturn($allModules);
             $setup = $this->createMock(Setup::class);
             $table = $this->createMock(Table::class);
-            $connection = $this->getMockBuilder(AdapterInterface::class)
-                ->onlyMethods(['getTables', 'newTable'])
-                ->addMethods(['getSchemaListener'])
-                ->getMockForAbstractClass();
+            $connection = $this->createMock(Mysql::class);
             $connection->expects($this->any())->method('getSchemaListener')->willReturn($this->schemaListenerMock);
             $connection->expects($this->once())->method('getTables')->willReturn([]);
             $setup->expects($this->any())->method('getConnection')->willReturn($connection);
@@ -417,7 +419,6 @@ namespace Magento\Setup\Test\Unit\Model {
             $cacheManager->expects($this->once())->method('getStatus')->willReturn(['foo' => 1, 'bar' => 1]);
             $appState = $this->getMockBuilder(\Magento\Framework\App\State::class)
                 ->disableOriginalConstructor()
-                ->disableArgumentCloning()
                 ->getMock();
             $appState->expects($this->once())
                 ->method('setAreaCode')
@@ -677,9 +678,9 @@ namespace Magento\Setup\Test\Unit\Model {
          * @throws RuntimeException
          * @throws FileSystemException
          * @throws LocalizedException
-         * @dataProvider installWithOrderIncrementPrefixDataProvider
          * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
          */
+    #[DataProvider('installWithOrderIncrementPrefixDataProvider')]
         public function testInstallWithOrderIncrementPrefix(array $request, array $logMessages, array $logMetaMessages)
         {
             $this->moduleList->method('getOne')
@@ -710,10 +711,7 @@ namespace Magento\Setup\Test\Unit\Model {
             $select->expects($this->any())->method('from')->willReturn($select);
             $select->expects($this->any())->method('where')->willReturn($select);
 
-            $connection = $this->getMockBuilder(AdapterInterface::class)
-                ->onlyMethods(['getTables', 'newTable','select'])
-                ->addMethods(['getSchemaListener'])
-                ->getMockForAbstractClass();
+            $connection = $this->createMock(Mysql::class);
             $connection->expects($this->any())->method('getSchemaListener')->willReturn($this->schemaListenerMock);
             $connection->expects($this->once())->method('getTables')->willReturn([]);
             $connection->expects($this->any())->method('select')->willReturn($select);
@@ -759,7 +757,6 @@ namespace Magento\Setup\Test\Unit\Model {
             $cacheManager->expects($this->once())->method('getStatus')->willReturn(['foo' => 1, 'bar' => 1]);
             $appState = $this->getMockBuilder(\Magento\Framework\App\State::class)
                 ->disableOriginalConstructor()
-                ->disableArgumentCloning()
                 ->getMock();
             $appState->expects($this->once())
                 ->method('setAreaCode')
@@ -948,12 +945,12 @@ namespace Magento\Setup\Test\Unit\Model {
          * and reverts configuration back to local file driver
          *
          * @param bool $isDeploymentConfigWritable
-         * @dataProvider installWithInvalidRemoteStorageConfigurationDataProvider
          * @throws \Magento\Framework\Exception\FileSystemException
          * @throws \Magento\Framework\Exception\LocalizedException
          * @throws \Magento\Framework\Exception\RuntimeException
          * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
          */
+    #[DataProvider('installWithInvalidRemoteStorageConfigurationDataProvider')]
         public function testInstallWithInvalidRemoteStorageConfiguration(bool $isDeploymentConfigWritable)
         {
             $request = self::$request;
@@ -1004,10 +1001,7 @@ namespace Magento\Setup\Test\Unit\Model {
             $this->moduleLoader->expects(static::exactly(2))->method('load')->willReturn($allModules);
             $setup = $this->createMock(Setup::class);
             $table = $this->createMock(Table::class);
-            $connection = $this->getMockBuilder(AdapterInterface::class)
-                ->onlyMethods(['newTable', 'getTables'])
-                ->addMethods(['getSchemaListener'])
-                ->getMockForAbstractClass();
+            $connection = $this->createMock(Mysql::class);
             $connection->expects(static::any())->method('getSchemaListener')->willReturn($this->schemaListenerMock);
             $connection->expects(static::once())->method('getTables')->willReturn([]);
             $setup->expects(static::any())->method('getConnection')->willReturn($connection);
@@ -1030,7 +1024,6 @@ namespace Magento\Setup\Test\Unit\Model {
 
             $appState = $this->getMockBuilder(\Magento\Framework\App\State::class)
                 ->disableOriginalConstructor()
-                ->disableArgumentCloning()
                 ->getMock();
             $registry = $this->createMock(Registry::class);
             $searchConfigMock = $this->getMockBuilder(SearchConfig::class)->disableOriginalConstructor()->getMock();
@@ -1188,10 +1181,7 @@ namespace Magento\Setup\Test\Unit\Model {
             $this->moduleLoader->expects(static::any())->method('load')->willReturn($allModules);
             $setup = $this->createMock(Setup::class);
             $table = $this->createMock(Table::class);
-            $connection = $this->getMockBuilder(AdapterInterface::class)
-                ->addMethods(['getSchemaListener'])
-                ->onlyMethods(['getTables', 'newTable'])
-                ->getMockForAbstractClass();
+            $connection = $this->createMock(Mysql::class);
             $connection->expects(static::any())->method('getSchemaListener')->willReturn($this->schemaListenerMock);
             $connection->expects(static::once())->method('getTables')->willReturn([]);
             $setup->expects(static::any())->method('getConnection')->willReturn($connection);
@@ -1213,7 +1203,6 @@ namespace Magento\Setup\Test\Unit\Model {
             $cacheManager->expects(static::once())->method('getStatus')->willReturn(['foo' => 1, 'bar' => 1]);
             $appState = $this->getMockBuilder(\Magento\Framework\App\State::class)
                 ->disableOriginalConstructor()
-                ->disableArgumentCloning()
                 ->getMock();
             $appState->expects(static::once())
                 ->method('setAreaCode')
@@ -1375,12 +1364,12 @@ namespace Magento\Setup\Test\Unit\Model {
          * Test installation with invalid remote storage configuration is able to be caught earlier than
          * the queued validation step if necessary, and that configuration is reverted back to local file driver.
          *
-         * @dataProvider installWithInvalidRemoteStorageConfigurationWithEarlyExceptionDataProvider
          * @throws \Magento\Framework\Exception\FileSystemException
          * @throws \Magento\Framework\Exception\LocalizedException
          * @throws \Magento\Framework\Exception\RuntimeException
          * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
          */
+    #[DataProvider('installWithInvalidRemoteStorageConfigurationWithEarlyExceptionDataProvider')]
         public function testInstallWithInvalidRemoteStorageConfigurationWithEarlyException(\Exception $exception)
         {
             $request = self::$request;
@@ -1424,10 +1413,7 @@ namespace Magento\Setup\Test\Unit\Model {
             $this->moduleLoader->expects(static::exactly(2))->method('load')->willReturn($allModules);
             $setup = $this->createMock(Setup::class);
             $table = $this->createMock(Table::class);
-            $connection = $this->getMockBuilder(AdapterInterface::class)
-                ->onlyMethods(['getTables', 'newTable'])
-                ->addMethods(['getSchemaListener'])
-                ->getMockForAbstractClass();
+            $connection = $this->createMock(Mysql::class);
             $connection->expects(static::any())->method('getSchemaListener')->willReturn($this->schemaListenerMock);
             $connection->expects(static::once())->method('getTables')->willReturn([]);
             $setup->expects(static::any())->method('getConnection')->willReturn($connection);
@@ -1566,9 +1552,7 @@ namespace Magento\Setup\Test\Unit\Model {
                 ->method('getMissingWritableDirectoriesForDbUpgrade')
                 ->willReturn([]);
 
-            $connection = $this->getMockBuilder(AdapterInterface::class)
-                ->addMethods(['getSchemaListener'])
-                ->getMockForAbstractClass();
+            $connection = $this->createMock(Mysql::class);
             $connection->expects($this->once())
                 ->method('getSchemaListener')
                 ->willReturn($this->schemaListenerMock);
@@ -1726,7 +1710,7 @@ namespace Magento\Setup\Test\Unit\Model {
                     'ConfigTwo.php'
                 ]
             );
-            $configDir = $this->getMockForAbstractClass(
+            $configDir = $this->createMock(
                 WriteInterface::class
             );
             $configDir

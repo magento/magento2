@@ -2,6 +2,16 @@
 /**
  * Copyright 2025 Adobe
  * All Rights Reserved.
+ *
+ * NOTICE: All information contained herein is, and remains
+ * the property of Adobe and its suppliers, if any. The intellectual
+ * and technical concepts contained herein are proprietary to Adobe
+ * and its suppliers and are protected by all applicable intellectual
+ * property laws, including trade secret and copyright laws.
+ * Dissemination of this information or reproduction of this material
+ * is strictly forbidden unless prior written permission is obtained
+ * from Adobe.
+ *
  */
 
 declare(strict_types=1);
@@ -184,6 +194,19 @@ class ShipmentService
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      * @throws LocalizedException
      */
+    /**
+     * Minimum US postal code length to trigger USPS API call.
+     *
+     */
+    private const US_POSTCODE_MIN_LENGTH = 4;
+
+    /**
+     * Get Quote response in JSON
+     *
+     * @return Result
+     * @throws LocalizedException
+     * @throws \Throwable
+     */
     public function getJsonQuotes(): Result
     {
         $request = $this->carrierModel->getRawRequest();
@@ -193,38 +216,16 @@ class ShipmentService
             $responseBody = [];
             return $this->_parseJsonResponse($responseBody);
         }
-        $priceType = $this->carrierModel->getConfigData('price_type');
-        $requestParam = [
-            "originZIPCode" => $request->getOrigPostal(),
-            'pricingOptions' => [
-                [
-                    "priceType" => $priceType
-                ]
-            ],
-        ];
 
-        foreach ($request->getPackages() as $packageData) {
-            $requestParam['packageDescription'] = [
-                "weight" => $packageData['weight_pounds'] ?? 1,
-                "mailClass" => 'ALL'
-            ];
-            $requestParam['packageDescription']['length'] = $request->getLength() ? (int) $request->getLength() : 1;
-            $requestParam['packageDescription']['height'] = $request->getHeight() ? (int) $request->getHeight() : 1;
-            $requestParam['packageDescription']['width']  = $request->getWidth()  ? (int) $request->getWidth()  : 1;
-
-            if ($request->getContainer() == 'NONRECTANGULAR' || $request->getContainer() == 'VARIABLE') {
-                $requestParam['packageDescription']['girth'] = $request->getGirth() ? (int) $request->getGirth() : 1;
-            }
-
-            if ($this->carrierModel->_isUSCountry($request->getDestCountryId())) {
-                $requestParam['destinationZIPCode'] = is_string($request->getDestPostal()) ?
-                    substr($request->getDestPostal(), 0, 5) : '';
-            } else {
-                $requestParam['destinationCountryCode'] = $request->getDestCountryId();
-                $requestParam['foreignPostalCode'] = $request->getDestPostal() ?? '';
+        // Skip USPS API when US postcode is too short - reduces quota usage while typing
+        if ($this->carrierModel->_isUSCountry($request->getDestCountryId())) {
+            $destPostal = $request->getDestPostal();
+            if (!is_string($destPostal) || strlen(trim($destPostal)) < self::US_POSTCODE_MIN_LENGTH) {
+                return $this->_parseJsonResponse([]);
             }
         }
 
+        $requestParam = $this->_buildJsonQuotesRequestParam($request);
         $headers = [
             'Content-Type' => self::CONTENT_TYPE_JSON,
             'Authorization' => self::AUTHORIZATION_BEARER . $accessToken
@@ -268,6 +269,48 @@ class ShipmentService
             );
         }
         return $this->_parseJsonResponse(json_decode($responseBody, true));
+    }
+
+    /**
+     * Build request params for JSON rate quote API
+     *
+     * @param \Magento\Framework\DataObject $request
+     * @return array
+     */
+    private function _buildJsonQuotesRequestParam($request): array
+    {
+        $priceType = $this->carrierModel->getConfigData('price_type');
+        $requestParam = [
+            "originZIPCode" => $request->getOrigPostal(),
+            'pricingOptions' => [["priceType" => $priceType]],
+        ];
+        foreach ($request->getPackages() as $packageData) {
+            $weightInPounds = (float) ($packageData['weight'] ?? 0);
+            if ($weightInPounds <= 0) {
+                $weightPounds = (float) ($packageData['weight_pounds'] ?? 0);
+                $weightOunces = (float) ($packageData['weight_ounces'] ?? 0);
+                $weightInPounds = $weightPounds + ($weightOunces / Carrier::OUNCES_POUND);
+            }
+            $weightInPounds = max(0.01, round($weightInPounds, 2));
+            $requestParam['packageDescription'] = [
+                "weight" => $weightInPounds,
+                "mailClass" => 'ALL'
+            ];
+            $requestParam['packageDescription']['length'] = $request->getLength() ? (int) $request->getLength() : 1;
+            $requestParam['packageDescription']['height'] = $request->getHeight() ? (int) $request->getHeight() : 1;
+            $requestParam['packageDescription']['width'] = $request->getWidth() ? (int) $request->getWidth() : 1;
+            if ($request->getContainer() == 'NONRECTANGULAR' || $request->getContainer() == 'VARIABLE') {
+                $requestParam['packageDescription']['girth'] = $request->getGirth() ? (int) $request->getGirth() : 1;
+            }
+            if ($this->carrierModel->_isUSCountry($request->getDestCountryId())) {
+                $requestParam['destinationZIPCode'] = is_string($request->getDestPostal()) ?
+                    substr($request->getDestPostal(), 0, 5) : '';
+            } else {
+                $requestParam['destinationCountryCode'] = $request->getDestCountryId();
+                $requestParam['foreignPostalCode'] = $request->getDestPostal() ?? '';
+            }
+        }
+        return $requestParam;
     }
 
     /**
@@ -343,12 +386,28 @@ class ShipmentService
         }
         $productName = $rateElement['description'];
         $methodCode = strtoupper(substr($this->replaceSpaceWithUnderscore($productName), 0, 120));
-        $methodTitle = $this->shippingMethodManager->getMethodTitle($methodCode);
         $allowedMethods = $this->getRestAllowedMethods();
-        if (in_array($methodCode, array_keys($allowedMethods))) {
+        $allowedMethodCodes = array_keys($allowedMethods);
+
+        if (!in_array($methodCode, $allowedMethodCodes)) {
+            $rateMailClass = $rateElement['mailClass'] ?? '';
+            if ($rateMailClass) {
+                $methodCode = $this->shippingMethodManager->findAllowedMethodByMailClass(
+                    $rateMailClass,
+                    $allowedMethodCodes
+                );
+            }
+        }
+
+        if ($methodCode && in_array($methodCode, $allowedMethodCodes)) {
+            $methodTitle = $this->shippingMethodManager->getMethodTitle($methodCode);
             // Use totalPrice if available, otherwise use price
             $cost = isset($rateElement['totalPrice']) ?
                 (float)$rateElement['totalPrice'] : (float)$rateElement['price'];
+            // Keep lowest price when multiple API variants map to same method (e.g. Media Mail)
+            if (isset($costArr[$methodCode]) && $costArr[$methodCode]['price'] <= $cost) {
+                return;
+            }
             $costArr[$methodCode] = [
                 'price' => $cost,
                 'code' => $methodCode,
@@ -381,12 +440,8 @@ class ShipmentService
         $shippingOptions = function (array $response) use (&$foundValues, $searchKey, &$shippingOptions) {
             foreach ($response as $key => $value) {
                 if ($key === $searchKey) {
-                    // Include totalPrice in the rate data
-                    foreach ($value as &$rate) {
-                        if (isset($response['totalPrice'])) {
-                            $rate['totalPrice'] = $response['totalPrice'];
-                        }
-                    }
+                    // Use each rate's own price; do not copy rateOption-level totalPrice/totalBasePrice
+                    // to rates—that would override correct per-rate prices (e.g. Media Mail 3.26 vs 4.40)
                     $foundValues[] = $value;
                 }
                 if (is_array($value)) {
@@ -672,6 +727,10 @@ class ShipmentService
         $errorMessage = [];
         if (isset($response['error'])) {
             $error = $response['error'];
+            // TEMPORARY: Log full USPS error structure to identify exact error code/source
+            $this->_logger->warning(
+                'USPS_LABEL_ERROR_FULL_RESPONSE: ' . json_encode($response)
+            );
             if (isset($error['errors']) && is_array($error['errors'])) {
                 foreach ($error['errors'] as $errorDetail) {
                     $errorMessage[] = $errorDetail['detail'];

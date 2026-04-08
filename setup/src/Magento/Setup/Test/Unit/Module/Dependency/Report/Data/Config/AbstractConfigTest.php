@@ -17,10 +17,10 @@ class AbstractConfigTest extends TestCase
         $modules = ['foo', 'baz', 'bar'];
 
         /** @var AbstractConfig $config */
-        $config = $this->getMockForAbstractClass(
-            AbstractConfig::class,
-            ['modules' => $modules]
-        );
+        $config = $this->getMockBuilder(AbstractConfig::class)
+            ->setConstructorArgs([$modules])
+            ->onlyMethods(['getDependenciesCount'])
+            ->getMock();
 
         $this->assertEquals($modules, $config->getModules());
     }

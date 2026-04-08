@@ -18,6 +18,7 @@ use Magento\Framework\Api\SearchResults;
 use Magento\Framework\EntityManager\EntityMetadata;
 use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 class CustomAttributesMapperTest extends TestCase
@@ -218,8 +219,7 @@ class CustomAttributesMapperTest extends TestCase
         /* Attribute with the code we want to copy */
         $attribute = $this->getMockBuilder(AbstractAttribute::class)
             ->disableOriginalConstructor()
-            ->onlyMethods(['isStatic', 'getAttributeCode'])
-            ->getMockForAbstractClass();
+            ->onlyMethods(['isStatic', 'getAttributeCode'])->getMock();
         $attribute->expects($this->any())
             ->method('isStatic')
             ->willReturn(false);
@@ -230,8 +230,7 @@ class CustomAttributesMapperTest extends TestCase
         /* Attribute with the code we don't want to copy */
         $attribute1 = $this->getMockBuilder(AbstractAttribute::class)
             ->disableOriginalConstructor()
-            ->onlyMethods(['isStatic', 'getAttributeCode'])
-            ->getMockForAbstractClass();
+            ->onlyMethods(['isStatic', 'getAttributeCode'])->getMock();
         $attribute1->expects($this->any())
             ->method('isStatic')
             ->willReturn(false);
@@ -242,8 +241,7 @@ class CustomAttributesMapperTest extends TestCase
         /* Static attribute but with the code which exists in custom attributes */
         $attribute2 = $this->getMockBuilder(AbstractAttribute::class)
             ->disableOriginalConstructor()
-            ->onlyMethods(['isStatic', 'getAttributeCode'])
-            ->getMockForAbstractClass();
+            ->onlyMethods(['isStatic', 'getAttributeCode'])->getMock();
         $attribute2->expects($this->any())
             ->method('isStatic')
             ->willReturn(true);

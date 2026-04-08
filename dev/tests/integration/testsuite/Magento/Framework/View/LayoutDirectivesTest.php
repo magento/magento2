@@ -9,6 +9,7 @@
 namespace Magento\Framework\View;
 
 use Magento\Framework\App\State;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -276,9 +277,9 @@ class LayoutDirectivesTest extends \PHPUnit\Framework\TestCase
     /**
      * @param string $case
      * @param string $expectedResult
-     * @dataProvider sortSpecialCasesDataProvider
      * @magentoAppIsolation enabled
      */
+    #[DataProvider('sortSpecialCasesDataProvider')]
     public function testSortSpecialCases($case, $expectedResult)
     {
         $layout = $this->_getLayoutModel($case);

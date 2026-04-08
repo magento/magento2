@@ -15,6 +15,7 @@ use Magento\Framework\Event\ManagerInterface as EventManagerInterface;
 use Magento\Framework\Json\Helper\Data as JsonHelper;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\UrlInterface;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -54,8 +55,8 @@ class CreateTest extends TestCase
         ];
         $objectManager->prepareObjectManager($objects);
 
-        $this->urlBuilderMock = $this->getMockForAbstractClass(UrlInterface::class);
-        $this->eventManagerMock = $this->getMockForAbstractClass(EventManagerInterface::class);
+        $this->urlBuilderMock = $this->createMock(UrlInterface::class);
+        $this->eventManagerMock = $this->createMock(EventManagerInterface::class);
 
         $contextMock = $this->createMock(Context::class);
         $contextMock->method('getUrlBuilder')->willReturn($this->urlBuilderMock);
@@ -148,11 +149,11 @@ class CreateTest extends TestCase
     /**
      * Test getJsObjectName returns correct format
      *
-     * @dataProvider jsObjectNameDataProvider
      * @param string $id
      * @param string $expectedResult
      * @return void
      */
+    #[DataProvider('jsObjectNameDataProvider')]
     public function testGetJsObjectNameReturnsCorrectFormat(string $id, string $expectedResult): void
     {
         $this->block->setId($id);
@@ -364,7 +365,7 @@ class CreateTest extends TestCase
         ];
         $objectManager->prepareObjectManager($objects);
 
-        $eventManagerMock = $this->getMockForAbstractClass(EventManagerInterface::class);
+        $eventManagerMock = $this->createMock(EventManagerInterface::class);
         $eventManagerMock->method('dispatch');
 
         $contextMock = $this->createMock(Context::class);

@@ -11,6 +11,7 @@ use Magento\Catalog\Model\Layer\Resolver;
 use Magento\Framework\Module\Manager;
 use Magento\LayeredNavigation\Block\Navigation\AbstractFiltersTest;
 use Magento\Catalog\Model\Layer\Filter\AbstractFilter;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Provides tests for custom multiselect filter in navigation block on category page with bundle products.
@@ -42,12 +43,12 @@ class MultiselectFilterTest extends AbstractFiltersTest
     /**
      * @magentoDataFixture Magento/Catalog/_files/multiselect_attribute.php
      * @magentoDataFixture Magento/Bundle/_files/dynamic_and_fixed_bundle_products_in_category.php
-     * @dataProvider getFiltersWithCustomAttributeDataProvider
      * @param array $products
      * @param array $attributeData
      * @param array $expectation
      * @return void
      */
+    #[DataProvider('getFiltersWithCustomAttributeDataProvider')]
     public function testGetFiltersWithCustomAttribute(array $products, array $attributeData, array $expectation): void
     {
         $this->getCategoryFiltersAndAssert($products, $attributeData, $expectation, 'Category 1');

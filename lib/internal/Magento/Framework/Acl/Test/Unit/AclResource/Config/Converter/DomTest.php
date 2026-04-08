@@ -8,6 +8,7 @@ declare(strict_types=1);
 namespace Magento\Framework\Acl\Test\Unit\AclResource\Config\Converter;
 
 use Magento\Framework\Acl\AclResource\Config\Converter\Dom;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 class DomTest extends TestCase
@@ -25,8 +26,8 @@ class DomTest extends TestCase
     /**
      * @param array $expectedResult
      * @param string $xml
-     * @dataProvider convertWithValidDomDataProvider
      */
+    #[DataProvider('convertWithValidDomDataProvider')]
     public function testConvertWithValidDom(array $expectedResult, $xml)
     {
         $dom = new \DOMDocument();
@@ -49,8 +50,8 @@ class DomTest extends TestCase
 
     /**
      * @param string $xml
-     * @dataProvider convertWithInvalidDomDataProvider
      */
+    #[DataProvider('convertWithInvalidDomDataProvider')]
     public function testConvertWithInvalidDom($xml)
     {
         $this->expectException('Exception');

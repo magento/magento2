@@ -13,6 +13,7 @@ use Magento\Framework\UrlInterface;
 use Magento\Framework\View\Element\Html\Link\Current;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * @covers \Magento\Framework\View\Element\Html\Link\Current
@@ -64,7 +65,7 @@ class CurrentTest extends TestCase
         $this->_urlBuilderMock->expects($this->once())
             ->method('getUrl')
             ->with($pathStub)
-            ->will($this->returnValue($urlStub));
+            ->willReturn($urlStub);
 
         $this->currentLink->setPath($pathStub);
 
@@ -95,36 +96,35 @@ class CurrentTest extends TestCase
      * @param array $request
      * @param bool $expected
      *
-     * @return void
-     * @dataProvider isCurrentDataProvider
-     */
+     * @return void     */
+    #[DataProvider('isCurrentDataProvider')]
     public function testIsCurrent($pathStub, $urlStub, $request, $expected): void
     {
         $this->_requestMock->expects($this->any())
             ->method('getPathInfo')
-            ->will($this->returnValue($request['pathInfoStub']));
+            ->willReturn($request['pathInfoStub']);
         $this->_requestMock->expects($this->any())
             ->method('getModuleName')
-            ->will($this->returnValue($request['moduleStub']));
+            ->willReturn($request['moduleStub']);
         $this->_requestMock->expects($this->any())
             ->method('getControllerName')
-            ->will($this->returnValue($request['controllerStub']));
+            ->willReturn($request['controllerStub']);
         $this->_requestMock->expects($this->any())
             ->method('getActionName')
-            ->will($this->returnValue($request['actionStub']));
+            ->willReturn($request['actionStub']);
 
         $withArgs = $willReturnArgs = [];
 
         $withArgs[] = [$pathStub];
-        $willReturnArgs[] = $this->returnValue($urlStub);
+        $willReturnArgs[] = $urlStub;
         $withArgs[] = [$request['mcaStub']];
-        $willReturnArgs[] = $this->returnValue($request['getUrl']);
+        $willReturnArgs[] = $request['getUrl'];
         $withArgs[] = ['*/*/*', ['_current' => false, '_use_rewrite' => true]];
 
         if ($request['mcaStub'] == '') {
-            $willReturnArgs[] = $this->returnValue($urlStub);
+            $willReturnArgs[] = $urlStub;
         } else {
-            $willReturnArgs[] = $this->returnValue('');
+            $willReturnArgs[] = '';
         }
         $this->_urlBuilderMock
             ->method('getUrl')

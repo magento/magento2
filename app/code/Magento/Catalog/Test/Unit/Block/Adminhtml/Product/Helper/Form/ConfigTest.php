@@ -16,8 +16,10 @@ use Magento\Framework\Data\Form\Element\CollectionFactory;
 use Magento\Framework\Data\Form\Element\Factory;
 use Magento\Framework\Escaper;
 use Magento\Framework\Math\Random;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\View\Helper\SecureHtmlRenderer;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -28,6 +30,8 @@ use PHPUnit\Framework\TestCase;
  */
 class ConfigTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var Config
      */
@@ -70,10 +74,7 @@ class ConfigTest extends TestCase
      */
     private function createFormMock(): Form|MockObject
     {
-        $form = $this->getMockBuilder(Form::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['getHtmlIdPrefix', 'getHtmlIdSuffix'])
-            ->getMock();
+        $form = $this->createPartialMockWithReflection(Form::class, ['getHtmlIdPrefix', 'getHtmlIdSuffix']);
         $form->method('getHtmlIdPrefix')->willReturn('');
         $form->method('getHtmlIdSuffix')->willReturn('');
 
@@ -185,10 +186,10 @@ class ConfigTest extends TestCase
      * @param bool $readonly
      * @param array $expectedContains
      * @param array $expectedNotContains
-     * @dataProvider getElementHtmlDataProvider
      * @covers \Magento\Catalog\Block\Adminhtml\Product\Helper\Form\Config::getElementHtml
      * @return void
      */
+    #[DataProvider('getElementHtmlDataProvider')]
     public function testGetElementHtmlScenarios(
         string $value,
         bool $readonly,
@@ -261,10 +262,10 @@ class ConfigTest extends TestCase
      *
      * @param bool $testCallback
      * @param array $expectedContains
-     * @dataProvider getElementHtmlAdditionalDataProvider
      * @covers \Magento\Catalog\Block\Adminhtml\Product\Helper\Form\Config::getElementHtml
      * @return void
      */
+    #[DataProvider('getElementHtmlAdditionalDataProvider')]
     public function testGetElementHtmlAdditionalScenarios(
         bool $testCallback,
         array $expectedContains

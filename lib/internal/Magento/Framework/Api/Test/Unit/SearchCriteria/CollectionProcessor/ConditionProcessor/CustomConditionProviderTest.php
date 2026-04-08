@@ -23,7 +23,7 @@ class CustomConditionProviderTest extends TestCase
 
         $this->customConditionMock = $this->getMockBuilder(CustomConditionInterface::class)
             ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+            ->getMock();
 
         $this->customConditionProcessorBuilder = $objectManagerHelper
             ->getObject(

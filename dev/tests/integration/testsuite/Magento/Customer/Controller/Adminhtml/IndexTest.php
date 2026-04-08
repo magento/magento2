@@ -247,10 +247,12 @@ class IndexTest extends AbstractBackendController
         $name = $this->customerViewHelper->getCustomerName($customer);
 
         $transportMock = $this->getMockBuilder(TransportInterface::class)
-            ->onlyMethods(['sendMessage'])
-            ->getMockForAbstractClass();
+            ->onlyMethods(['sendMessage', 'getMessage'])
+            ->getMock();
         $transportMock->expects($this->exactly($occurrenceNumber))
             ->method('sendMessage');
+        $transportMock->method('getMessage')
+            ->willReturn(null);
         $transportBuilderMock = $this->getMockBuilder(TransportBuilder::class)
             ->disableOriginalConstructor()
             ->onlyMethods(

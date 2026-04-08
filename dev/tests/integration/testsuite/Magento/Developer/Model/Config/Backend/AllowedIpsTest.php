@@ -5,14 +5,16 @@
  */
 namespace Magento\Developer\Model\Config\Backend;
 
+use PHPUnit\Framework\Attributes\DataProvider;
+
 class AllowedIpsTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @param string $value
      * @param string $expected
      * @magentoDbIsolation enabled
-     * @dataProvider fieldDataProvider
      */
+    #[DataProvider('fieldDataProvider')]
     public function testSaveWithEscapeHtml($value, $expected)
     {
         /**

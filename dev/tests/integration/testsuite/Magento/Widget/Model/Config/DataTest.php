@@ -15,7 +15,7 @@ class DataTest extends \PHPUnit\Framework\TestCase
      */
     public function testGet()
     {
-        $fileResolver = $this->getMockForAbstractClass(\Magento\Framework\Config\FileResolverInterface::class);
+        $fileResolver = $this->createMock(\Magento\Framework\Config\FileResolverInterface::class);
         $fileResolver->expects($this->exactly(3))->method('get')->willReturnMap([
             ['widget.xml', 'global', [file_get_contents(__DIR__ . '/_files/orders_and_returns.xml')]],
             ['widget.xml', 'adminhtml', []],

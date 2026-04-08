@@ -14,6 +14,8 @@ use Magento\Framework\Filter\VariableResolver\StrictResolver;
 use Magento\Framework\Filter\VariableResolverInterface;
 use PHPUnit\Framework\TestCase;
 
+use PHPUnit\Framework\Attributes\DataProvider;
+
 class ForDirectiveTest extends TestCase
 {
     /**
@@ -42,18 +44,14 @@ class ForDirectiveTest extends TestCase
         );
     }
 
-    /**
-     * @dataProvider invalidFormatProvider
-     */
+    #[DataProvider('invalidFormatProvider')]
     public function testFallbackWithIncorrectFormat($template)
     {
         $result = $this->processor->process($this->createConstruction($this->processor, $template), $this->filter, []);
         self::assertEquals($template, $result);
     }
 
-    /**
-     * @dataProvider useCasesProvider
-     */
+    #[DataProvider('useCasesProvider')]
     public function testCases(string $template, array $variables, string $expect)
     {
         $result = $this->processor->process(

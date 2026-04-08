@@ -16,19 +16,25 @@ use Magento\Framework\App\Request\Http;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\App\State;
 use Magento\Framework\Filesystem;
+use Magento\Framework\Session\Generic as SessionGeneric;
+use Magento\Framework\Session\SessionManager;
 use Magento\Framework\Session\SessionManagerInterface;
+use Magento\Framework\Session\SessionStartChecker;
 use Magento\Framework\Session\SidResolverInterface;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\Url\ModifierInterface;
 use Magento\Framework\UrlInterface;
 use Magento\Store\Api\Data\GroupInterface;
 use Magento\Store\Api\Data\WebsiteInterface;
-use Magento\Store\Api\GroupRepositoryInterface;
-use Magento\Store\Api\WebsiteRepositoryInterface;
+use Magento\Store\Model\GroupRepository;
+use Magento\Store\Model\ResourceModel\Store as StoreResourceModel;
 use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Store\Model\Website;
+use Magento\Store\Model\WebsiteRepository;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -39,6 +45,7 @@ use PHPUnit\Framework\TestCase;
  */
 class StoreTest extends TestCase
 {
+    use MockCreationTrait;
     /**
      * @var Store
      */
@@ -93,14 +100,18 @@ class StoreTest extends TestCase
             'getServer',
         ]);
 
-        $this->filesystemMock = $this->getMockBuilder(Filesystem::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->configMock = $this->getMockBuilder(ReinitableConfigInterface::class)
-            ->getMock();
-        $this->sessionMock = $this->getMockBuilder(SessionManagerInterface::class)
-            ->addMethods(['getCurrencyCode'])
-            ->getMockForAbstractClass();
+        $this->filesystemMock = $this->createMock(Filesystem::class);
+        $this->configMock = $this->createMock(ReinitableConfigInterface::class);
+        $this->sessionMock = $this->createPartialMockWithReflection(
+            SessionManagerInterface::class,
+            [
+                'start', 'writeClose', 'isSessionExists', 'getSessionId', 'getName', 'setName',
+                'destroy', 'clearStorage', 'getCookieDomain', 'getCookiePath', 'getCookieLifetime',
+                'setSessionId', 'regenerateId', 'expireSessionCookie', 'getSessionIdForHost',
+                'isValidForHost', 'isValidForPath', 'getCurrencyCode'
+            ]
+        );
+        
         $this->store = $this->objectManagerHelper->getObject(
             Store::class,
             [
@@ -110,23 +121,22 @@ class StoreTest extends TestCase
             ]
         );
 
-        $this->urlModifierMock = $this->getMockForAbstractClass(ModifierInterface::class);
+        $this->urlModifierMock = $this->createMock(ModifierInterface::class);
         $this->urlModifierMock->expects($this->any())
             ->method('execute')
             ->willReturnArgument(0);
     }
 
     /**
-     * @dataProvider loadDataProvider
-     *
      * @param string|int $key
      * @param string $field
      */
+    #[DataProvider('loadDataProvider')]
     public function testLoad($key, $field)
     {
-        /** @var \Magento\Store\Model\ResourceModel\Store $resource */
+        /** @var StoreResourceModel $resource */
         $resource = $this->createPartialMock(
-            \Magento\Store\Model\ResourceModel\Store::class,
+            StoreResourceModel::class,
             ['load', 'getIdFieldName', '__wakeup']
         );
         $resource->expects($this->atLeastOnce())->method('load')
@@ -168,11 +178,12 @@ class StoreTest extends TestCase
     public function testGetWebsite()
     {
         $websiteId = 2;
-        $website = $this->getMockForAbstractClass(WebsiteInterface::class);
+        $website = $this->createMock(WebsiteInterface::class);
 
-        $websiteRepository = $this->getMockBuilder(WebsiteRepositoryInterface::class)
-            ->onlyMethods(['getById'])
-            ->getMockForAbstractClass();
+        $websiteRepository = $this->createPartialMock(
+            WebsiteRepository::class,
+            ['getById']
+        );
         $websiteRepository->expects($this->once())
             ->method('getById')
             ->with($websiteId)
@@ -193,9 +204,10 @@ class StoreTest extends TestCase
      */
     public function testGetWebsiteIfWebsiteIsNotExist()
     {
-        $websiteRepository = $this->getMockBuilder(WebsiteRepositoryInterface::class)
-            ->onlyMethods(['getById'])
-            ->getMockForAbstractClass();
+        $websiteRepository = $this->createPartialMock(
+            WebsiteRepository::class,
+            ['getById']
+        );
         $websiteRepository->expects($this->never())
             ->method('getById');
 
@@ -215,11 +227,12 @@ class StoreTest extends TestCase
     public function testGetGroup()
     {
         $groupId = 2;
-        $group = $this->getMockForAbstractClass(GroupInterface::class);
+        $group = $this->createMock(GroupInterface::class);
 
-        $groupRepository = $this->getMockBuilder(GroupRepositoryInterface::class)
-            ->onlyMethods(['get'])
-            ->getMockForAbstractClass();
+        $groupRepository = $this->createPartialMock(
+            GroupRepository::class,
+            ['get']
+        );
         $groupRepository->expects($this->once())
             ->method('get')
             ->with($groupId)
@@ -240,11 +253,7 @@ class StoreTest extends TestCase
      */
     public function testGetGroupIfGroupIsNotExist()
     {
-        $groupRepository = $this->getMockBuilder(GroupRepositoryInterface::class)
-            ->addMethods(['getById'])
-            ->getMockForAbstractClass();
-        $groupRepository->expects($this->never())
-            ->method('getById');
+        $groupRepository = $this->createMock(GroupRepository::class);
 
         /** @var Store $model */
         $model = $this->objectManagerHelper->getObject(
@@ -265,13 +274,13 @@ class StoreTest extends TestCase
         $defaultStore = $this->createPartialMock(Store::class, ['getId', '__wakeup']);
         $defaultStore->expects($this->atLeastOnce())->method('getId')->willReturn(5);
 
-        $url = $this->getMockForAbstractClass(UrlInterface::class);
+        $url = $this->createMock(UrlInterface::class);
         $url->expects($this->atLeastOnce())->method('setScope')->willReturnSelf();
         $url->expects($this->atLeastOnce())->method('getUrl')
             ->with('test/route', $params)
             ->willReturn('http://test/url');
 
-        $storeManager = $this->getMockForAbstractClass(StoreManagerInterface::class);
+        $storeManager = $this->createMock(StoreManagerInterface::class);
         $storeManager->expects($this->any())
             ->method('getStore')
             ->willReturn($defaultStore);
@@ -286,8 +295,6 @@ class StoreTest extends TestCase
     }
 
     /**
-     * @dataProvider getBaseUrlDataProvider
-     *
      * @covers \Magento\Store\Model\Store::getBaseUrl
      * @covers \Magento\Store\Model\Store::getCode
      * @covers \Magento\Store\Model\Store::_updatePathUseRewrites
@@ -298,6 +305,7 @@ class StoreTest extends TestCase
      * @param string $expectedPath
      * @param string $expectedBaseUrl
      */
+    #[DataProvider('getBaseUrlDataProvider')]
     public function testGetBaseUrl($type, $secure, $expectedPath, $expectedBaseUrl)
     {
         $this->requestMock->expects($this->any())
@@ -305,7 +313,7 @@ class StoreTest extends TestCase
             ->willReturn('http://distro.com/');
 
         /** @var \Magento\Framework\App\Config\ReinitableConfigInterface $configMock */
-        $configMock = $this->getMockForAbstractClass(ReinitableConfigInterface::class);
+        $configMock = $this->createMock(ReinitableConfigInterface::class);
         $configMock->expects($this->atLeastOnce())
             ->method('getValue')
             ->willReturnCallback(
@@ -395,7 +403,7 @@ class StoreTest extends TestCase
         $expectedPath = 'web/unsecure/base_link_url';
         $expectedBaseUrl = 'http://domain.com/web/unsecure/base_link_url/test_script.php/';
         /** @var \Magento\Framework\App\Config\ReinitableConfigInterface $configMock */
-        $configMock = $this->getMockForAbstractClass(ReinitableConfigInterface::class);
+        $configMock = $this->createMock(ReinitableConfigInterface::class);
         $configMock->expects($this->atLeastOnce())
             ->method('getValue')
             ->willReturnCallback(function ($path, $scope, $scopeCode) use ($expectedPath) {
@@ -436,13 +444,12 @@ class StoreTest extends TestCase
     }
 
     /**
-     * @dataProvider getCurrentUrlDataProvider
-     *
      * @param boolean $secure
      * @param string $url
      * @param string $expected
      * @param bool|string $fromStore
      */
+    #[DataProvider('getCurrentUrlDataProvider')]
     public function testGetCurrentUrl($secure, $url, $expected, $fromStore)
     {
         $defaultStore = $this->createPartialMock(Store::class, [
@@ -453,10 +460,10 @@ class StoreTest extends TestCase
         $defaultStore->expects($this->atLeastOnce())->method('getId')->willReturn(5);
         $defaultStore->expects($this->atLeastOnce())->method('isCurrentlySecure')->willReturn($secure);
 
-        $sidResolver = $this->getMockForAbstractClass(SidResolverInterface::class);
+        $sidResolver = $this->createMock(SidResolverInterface::class);
         $sidResolver->expects($this->any())->method('getSessionIdQueryParam')->willReturn('SID');
 
-        $config = $this->getMockForAbstractClass(ReinitableConfigInterface::class);
+        $config = $this->createMock(ReinitableConfigInterface::class);
 
         $requestString = preg_replace(
             '/http(s?)\:\/\/[a-z0-9\-]+\//i',
@@ -471,7 +478,7 @@ class StoreTest extends TestCase
             'SID' => 'sid'
         ]);
 
-        $urlMock = $this->getMockForAbstractClass(UrlInterface::class);
+        $urlMock = $this->createMock(UrlInterface::class);
         $urlMock
             ->expects($this->atLeastOnce())
             ->method('setScope')->willReturnSelf();
@@ -483,7 +490,7 @@ class StoreTest extends TestCase
             ->method('escape')
             ->willReturnArgument(0);
 
-        $storeManager = $this->getMockForAbstractClass(StoreManagerInterface::class);
+        $storeManager = $this->createMock(StoreManagerInterface::class);
         $storeManager->expects($this->any())
             ->method('getStore')
             ->willReturn($defaultStore);
@@ -534,15 +541,14 @@ class StoreTest extends TestCase
     }
 
     /**
-     * @dataProvider getBaseCurrencyDataProvider
-     *
      * @param int $priceScope
      * @param string $currencyCode
      */
+    #[DataProvider('getBaseCurrencyDataProvider')]
     public function testGetBaseCurrency($priceScope, $currencyCode)
     {
         /** @var \Magento\Framework\App\Config\ReinitableConfigInterface $config */
-        $config = $this->getMockForAbstractClass(ReinitableConfigInterface::class);
+        $config = $this->createMock(ReinitableConfigInterface::class);
         $config->expects($this->any())
             ->method('getValue')
             ->willReturnMap([
@@ -567,10 +573,7 @@ class StoreTest extends TestCase
         $currencyFactory = $this->createPartialMock(CurrencyFactory::class, ['create']);
         $currencyFactory->expects($this->any())->method('create')->willReturn($currency);
 
-        $appState = $this->getMockBuilder(State::class)
-            ->addMethods(['isInstalled'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $appState = $this->createPartialMockWithReflection(State::class, ['isInstalled']);
         $appState->expects($this->any())->method('isInstalled')->willReturn(true);
         /** @var Store $model */
         $model = $this->objectManagerHelper->getObject(
@@ -600,12 +603,7 @@ class StoreTest extends TestCase
         $currencyPath = 'cur/ren/cy/path';
         $expectedResult = ['EUR', 'USD'];
 
-        $configMock = $this->getMockForAbstractClass(
-            ReinitableConfigInterface::class,
-            [],
-            '',
-            false
-        );
+        $configMock = $this->createMock(ReinitableConfigInterface::class);
         $configMock->expects($this->once())
             ->method('getValue')
             ->with($currencyPath, 'store', null)
@@ -621,14 +619,13 @@ class StoreTest extends TestCase
     }
 
     /**
-     * @dataProvider isCurrentlySecureDataProvider
-     *
      * @param bool $expected
      * @param array|int|null $value
      * @param bool $requestSecure
      * @param bool $useSecureInFrontend
      * @param string|null $secureBaseUrl
      */
+    #[DataProvider('isCurrentlySecureDataProvider')]
     public function testIsCurrentlySecure(
         bool        $expected,
         array|int|null   $value,
@@ -637,9 +634,7 @@ class StoreTest extends TestCase
         ?string     $secureBaseUrl = 'https://example.com:443'
     ) {
         /* @var ReinitableConfigInterface|MockObject $configMock */
-        $configMock = $this->getMockBuilder(ReinitableConfigInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $configMock = $this->createMock(ReinitableConfigInterface::class);
         $configMock->expects($this->any())
             ->method('getValue')
             ->willReturnMap([
@@ -751,8 +746,8 @@ class StoreTest extends TestCase
      * @param string $defaultCode
      * @param string $expectedCode
      * @return void
-     * @dataProvider currencyCodeDataProvider
      */
+    #[DataProvider('currencyCodeDataProvider')]
     public function testGetCurrentCurrencyCode(
         array $availableCodes,
         string $currencyCode,

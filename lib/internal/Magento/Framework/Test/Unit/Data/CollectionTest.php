@@ -22,7 +22,7 @@ class CollectionTest extends TestCase
 
     protected function setUp(): void
     {
-        $factoryMock = $this->getMockForAbstractClass(EntityFactoryInterface::class);
+        $factoryMock = $this->createMock(EntityFactoryInterface::class);
         $this->collection = new Collection($factoryMock);
     }
 

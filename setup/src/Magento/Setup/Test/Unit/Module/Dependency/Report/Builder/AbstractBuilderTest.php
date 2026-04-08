@@ -13,6 +13,7 @@ use Magento\Setup\Module\Dependency\Report\Data\ConfigInterface;
 use Magento\Setup\Module\Dependency\Report\WriterInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class AbstractBuilderTest extends TestCase
 {
@@ -33,19 +34,19 @@ class AbstractBuilderTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->dependenciesParserMock = $this->getMockForAbstractClass(ParserInterface::class);
-        $this->reportWriterMock = $this->getMockForAbstractClass(WriterInterface::class);
+        $this->dependenciesParserMock = $this->createMock(ParserInterface::class);
+        $this->reportWriterMock = $this->createMock(WriterInterface::class);
 
-        $this->builder = $this->getMockForAbstractClass(
-            AbstractBuilder::class,
-            ['dependenciesParser' => $this->dependenciesParserMock, 'reportWriter' => $this->reportWriterMock]
-        );
+        $this->builder = $this->getMockBuilder(AbstractBuilder::class)
+            ->setConstructorArgs([$this->dependenciesParserMock, $this->reportWriterMock])
+            ->onlyMethods(['buildData'])
+            ->getMock();
     }
 
     /**
      * @param array $options
-     * @dataProvider dataProviderWrongParseOptions
      */
+    #[DataProvider('dataProviderWrongParseOptions')]
     public function testBuildWithWrongParseOptions($options)
     {
         $this->expectException('InvalidArgumentException');
@@ -63,8 +64,8 @@ class AbstractBuilderTest extends TestCase
 
     /**
      * @param array $options
-     * @dataProvider dataProviderWrongWriteOptions
      */
+    #[DataProvider('dataProviderWrongWriteOptions')]
     public function testBuildWithWrongWriteOptions($options)
     {
         $this->expectException('InvalidArgumentException');
@@ -88,7 +89,7 @@ class AbstractBuilderTest extends TestCase
         ];
 
         $parseResult = ['foo', 'bar', 'baz'];
-        $configMock = $this->getMockForAbstractClass(ConfigInterface::class);
+        $configMock = $this->createMock(ConfigInterface::class);
 
         $this->dependenciesParserMock->expects(
             $this->once()

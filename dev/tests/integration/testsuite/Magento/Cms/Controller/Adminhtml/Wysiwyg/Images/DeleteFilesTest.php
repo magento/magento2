@@ -16,6 +16,7 @@ use Magento\Framework\Filesystem\Directory\WriteInterface;
 use Magento\Framework\Filesystem\Driver\File;
 use Magento\RemoteStorage\Driver\DriverPool;
 use Magento\RemoteStorage\Model\Filesystem\Directory\WriteFactory;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Test for \Magento\Cms\Controller\Adminhtml\Wysiwyg\Images\DeleteFiles class.
@@ -127,8 +128,8 @@ class DeleteFilesTest extends \PHPUnit\Framework\TestCase
      *
      * @param string $filename
      * @return void
-     * @dataProvider executeDataProvider
      */
+    #[DataProvider('executeDataProvider')]
     public function testExecute(string $filename)
     {
         $filePath =  $this->fullDirectoryPath . DIRECTORY_SEPARATOR . $filename;

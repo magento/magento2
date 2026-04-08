@@ -10,6 +10,7 @@ namespace Magento\Framework\Test\Unit;
 use Magento\Framework\Profiler;
 use Magento\Framework\Profiler\Driver\Factory;
 use Magento\Framework\Profiler\DriverInterface;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -90,8 +91,7 @@ class ProfilerTest extends TestCase
      */
     protected function _getDriverMock(): MockObject
     {
-        return $this->getMockBuilder(DriverInterface::class)
-            ->onlyMethods(['start', 'stop', 'clear'])->getMockForAbstractClass();
+        return $this->createPartialMock(DriverInterface::class, ['start', 'stop', 'clear']);
     }
 
     /**
@@ -312,9 +312,9 @@ class ProfilerTest extends TestCase
     public function testClearTimer(): void
     {
         $driver = $this->_getDriverMock();
-        $driver
+        $driver->expects($this->atLeastOnce())
             ->method('clear')
-            ->with('timer');
+            ->with($this->logicalOr($this->equalTo('timer'), $this->equalTo('')));
 
         Profiler::add($driver);
         Profiler::clear('timer');
@@ -339,7 +339,7 @@ class ProfilerTest extends TestCase
         $this->markTestSkipped('Skipped in #27500 due to testing protected/private methods and properties');
 
         $driver = $this->_getDriverMock();
-        $driver->expects($this->once())->method('clear')->with(null);
+        $driver->expects($this->once())->method('clear')->with('');
 
         Profiler::add($driver);
         Profiler::reset();
@@ -358,8 +358,8 @@ class ProfilerTest extends TestCase
      * @param array $tags
      *
      * @return void
-     * @dataProvider skippedFilterDataProvider
      */
+    #[DataProvider('skippedFilterDataProvider')]
     public function testTagFilterSkip($timerName, ?array $tags = null): void
     {
         $driver = $this->_getDriverMock();
@@ -387,8 +387,8 @@ class ProfilerTest extends TestCase
      * @param array $tags
      *
      * @return void
-     * @dataProvider passedFilterDataProvider
      */
+    #[DataProvider('passedFilterDataProvider')]
     public function testTagFilterPass($timerName, ?array $tags = null): void
     {
         $driver = $this->_getDriverMock();
@@ -417,7 +417,7 @@ class ProfilerTest extends TestCase
     {
         $this->markTestSkipped('Skipped in #27500 due to testing protected/private methods and properties');
 
-        $mockDriver = $this->getMockForAbstractClass(DriverInterface::class);
+        $mockDriver = $this->createMock(DriverInterface::class);
         $driverConfig = ['type' => 'foo'];
         $mockDriverFactory = $this->getMockBuilder(
             Factory::class
@@ -455,8 +455,8 @@ class ProfilerTest extends TestCase
      * @param array $expected
      *
      * @return void
-     * @dataProvider parseConfigDataProvider
      */
+    #[DataProvider('parseConfigDataProvider')]
     public function testParseConfig($data, $isAjax, $expected): void
     {
         if (!empty($data['driverFactory']) && is_callable($data['driverFactory'])) {

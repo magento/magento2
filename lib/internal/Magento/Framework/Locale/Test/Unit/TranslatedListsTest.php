@@ -78,17 +78,13 @@ class TranslatedListsTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->mockConfig = $this->getMockBuilder(ConfigInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->mockConfig = $this->createMock(ConfigInterface::class);
         $this->mockConfig->method('getAllowedLocales')
             ->willReturn($this->expectedLocales);
         $this->mockConfig->method('getAllowedCurrencies')
             ->willReturn($this->expectedCurrencies);
 
-        $this->mockLocaleResolver = $this->getMockBuilder(ResolverInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->mockLocaleResolver = $this->createMock(ResolverInterface::class);
         $this->mockLocaleResolver->expects($this->once())
             ->method('getLocale')
             ->willReturn('en_US');

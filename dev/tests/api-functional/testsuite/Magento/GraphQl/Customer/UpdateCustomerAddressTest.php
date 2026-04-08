@@ -14,6 +14,7 @@ use Magento\Customer\Api\Data\AddressInterface;
 use Magento\Integration\Api\CustomerTokenServiceInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Update customer address tests
@@ -397,10 +398,10 @@ MUTATION;
      *
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
      * @magentoApiDataFixture Magento/Customer/_files/customer_address.php
-     * @dataProvider invalidInputDataProvider
      * @param string $input
      * @param string $exceptionMessage
      */
+    #[DataProvider('invalidInputDataProvider')]
     public function testUpdateCustomerAddressWithInvalidInput(string $input, string $exceptionMessage)
     {
         $userName = 'customer@example.com';

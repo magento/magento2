@@ -221,7 +221,6 @@ class GuestCartItemRepositoryTest extends WebapiAbstract
     /**
      * @param array $stockData
      * @param string|null $errorMessage
-     * @dataProvider updateItemDataProvider
      */
     #[
         DataFixture(ProductFixture::class, ['sku' => 'simple-update-%uniqid%', 'price' => 10], 'product'),
@@ -232,6 +231,7 @@ class GuestCartItemRepositoryTest extends WebapiAbstract
         ),
         DataFixture(SetBillingAddressFixture::class, ['cart_id' => '$cart.id$']),
         DataFixture(SetShippingAddressFixture::class, ['cart_id' => '$cart.id$']),
+        DataProvider('updateItemDataProvider')
     ]
     public function testUpdateItem(array $stockData, ?string $errorMessage = null)
     {

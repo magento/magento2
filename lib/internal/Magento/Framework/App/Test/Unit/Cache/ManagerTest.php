@@ -46,8 +46,8 @@ class ManagerTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->cacheTypeList = $this->getMockForAbstractClass(TypeListInterface::class);
-        $this->cacheState = $this->getMockForAbstractClass(StateInterface::class);
+        $this->cacheTypeList = $this->createMock(TypeListInterface::class);
+        $this->cacheState = $this->createMock(StateInterface::class);
         $this->response = $this->createMock(Response::class);
         $this->frontendPool = $this->createMock(FrontendPool::class);
         $this->model = new Manager($this->cacheTypeList, $this->cacheState, $this->frontendPool);
@@ -110,16 +110,16 @@ class ManagerTest extends TestCase
     public function testFlushAll()
     {
         $cacheTypes = ['foo', 'bar', 'baz'];
-        $frontendFoo = $this->getMockForAbstractClass(FrontendInterface::class);
-        $frontendBar = $this->getMockForAbstractClass(FrontendInterface::class);
-        $frontendBaz = $this->getMockForAbstractClass(FrontendInterface::class);
+        $frontendFoo = $this->createMock(FrontendInterface::class);
+        $frontendBar = $this->createMock(FrontendInterface::class);
+        $frontendBaz = $this->createMock(FrontendInterface::class);
         $this->frontendPool->expects($this->exactly(3))->method('get')->willReturnMap([
             ['foo', $frontendFoo],
             ['bar', $frontendBar],
             ['baz', $frontendBaz],
         ]);
-        $backendOne = $this->getMockForAbstractClass(BackendInterface::class);
-        $backendTwo = $this->getMockForAbstractClass(BackendInterface::class);
+        $backendOne = $this->createMock(BackendInterface::class);
+        $backendTwo = $this->createMock(BackendInterface::class);
         $frontendFoo->expects($this->once())->method('getBackend')->willReturn($backendOne);
         $frontendBar->expects($this->once())->method('getBackend')->willReturn($backendOne);
         $frontendBaz->expects($this->once())->method('getBackend')->willReturn($backendTwo);

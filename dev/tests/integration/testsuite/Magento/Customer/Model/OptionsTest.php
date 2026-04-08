@@ -14,6 +14,7 @@ use Magento\Framework\App\Config\MutableScopeConfigInterface;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Store\Model\ScopeInterface;
 use Magento\TestFramework\Helper\Bootstrap;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -49,14 +50,13 @@ class OptionsTest extends TestCase
     /**
      * Test suffix and prefix options
      *
-     * @dataProvider optionsDataProvider
-     *
      * @param string $optionType
      * @param array $showOptionConfig
      * @param array $optionValuesConfig
      * @param array $expectedOptions
      * @return void
      */
+    #[DataProvider('optionsDataProvider')]
     public function testOptions(
         string $optionType,
         array $showOptionConfig,

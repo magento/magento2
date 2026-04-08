@@ -34,7 +34,7 @@ class AddAttributeOptionTest extends TestCase
     protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
-        $setupMock = $this->getMockForAbstractClass(ModuleDataSetupInterface::class);
+        $setupMock = $this->createMock(ModuleDataSetupInterface::class);
         $this->connectionMock = $this->createMock(Mysql::class);
         $this->connectionMock->method('select')
             ->willReturn($objectManager->getObject(Select::class));

@@ -28,13 +28,13 @@ class FactoryTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->_objectManager = $this->getMockForAbstractClass(ObjectManagerInterface::class);
+        $this->_objectManager = $this->createMock(ObjectManagerInterface::class);
         $this->_model = new Factory($this->_objectManager);
     }
 
     public function testCreate()
     {
-        $theme = $this->getMockForAbstractClass(ThemeInterface::class);
+        $theme = $this->createMock(ThemeInterface::class);
         $file = new File(__FILE__, 'Fixture_Module', $theme);
         $isBase = true;
         $this->_objectManager

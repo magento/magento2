@@ -59,7 +59,7 @@ class ModuleRegistryUninstallerTest extends TestCase
         $this->dataSetup = $this->createMock(DataSetup::class);
         $dataSetupFactory = $this->createMock(DataSetupFactory::class);
         $dataSetupFactory->expects($this->any())->method('create')->willReturn($this->dataSetup);
-        $this->output = $this->getMockForAbstractClass(OutputInterface::class);
+        $this->output = $this->createMock(OutputInterface::class);
         $this->moduleRegistryUninstaller = new ModuleRegistryUninstaller(
             $dataSetupFactory,
             $this->deploymentConfig,

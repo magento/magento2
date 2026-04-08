@@ -24,8 +24,8 @@ class ResourceFactoryTest extends TestCase
     protected function setUp(): void
     {
         $serviceLocatorMock = $this->getMockBuilder(ServiceLocatorInterface::class)
-            ->onlyMethods(['get'])
-            ->getMockForAbstractClass();
+            ->onlyMethods(['get', 'has', 'build'])
+            ->getMock();
         $connectionFactory = new ConnectionFactory($serviceLocatorMock);
         $serviceLocatorMock
             ->expects($this->once())

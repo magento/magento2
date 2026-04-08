@@ -12,6 +12,7 @@ use Magento\Catalog\Model\Layer\Resolver;
 use Magento\Eav\Model\Entity\Attribute\ScopedAttributeInterface;
 use Magento\LayeredNavigation\Block\Navigation\AbstractFiltersTest;
 use Magento\Store\Model\StoreManagerInterface;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Provides tests for custom filter with different scopes in navigation block on category page.
@@ -51,12 +52,12 @@ class FilterScopeTest extends AbstractFiltersTest
     /**
      * @magentoDataFixture Magento/Catalog/_files/product_dropdown_attribute.php
      * @magentoDataFixture Magento/Catalog/_files/category_with_different_price_products_on_two_websites.php
-     * @dataProvider filtersWithScopeDataProvider
      * @param int $scope
      * @param array $products
      * @param array $expectation
      * @return void
      */
+    #[DataProvider('filtersWithScopeDataProvider')]
     public function testGetFilters(int $scope, array $products, array $expectation): void
     {
         $this->updateAttribute(

@@ -10,6 +10,7 @@ namespace Magento\Swatches\Controller\Adminhtml\Product\Attribute\Save\InputType
 use Magento\Catalog\Controller\Adminhtml\Product\Attribute\Save\AbstractSaveAttributeTest;
 use Magento\Eav\Api\Data\AttributeInterface;
 use Magento\Eav\Model\Entity\Attribute\Source\Table;
+use PHPUnit\Framework\Attributes\DataProviderExternal;
 
 /**
  * Test cases related to create attribute with input type text swatch.
@@ -22,12 +23,11 @@ class TextSwatchTest extends AbstractSaveAttributeTest
     /**
      * Test create attribute and compare attribute data and input data.
      *
-     * @dataProvider \Magento\TestFramework\Swatches\Model\Attribute\DataProvider\TextSwatch::getAttributeDataWithCheckArray
-     *
      * @param array $attributePostData
      * @param array $checkArray
      * @return void
      */
+    #[DataProviderExternal(\Magento\TestFramework\Swatches\Model\Attribute\DataProvider\TextSwatch::class, 'getAttributeDataWithCheckArray')]
     public function testCreateAttribute(array $attributePostData, array $checkArray): void
     {
         $this->createAttributeUsingDataAndAssert($attributePostData, $checkArray);
@@ -36,12 +36,11 @@ class TextSwatchTest extends AbstractSaveAttributeTest
     /**
      * Test create attribute with error.
      *
-     * @dataProvider \Magento\TestFramework\Swatches\Model\Attribute\DataProvider\TextSwatch::getAttributeDataWithErrorMessage
-     *
      * @param array $attributePostData
      * @param string $errorMessage
      * @return void
      */
+    #[DataProviderExternal(\Magento\TestFramework\Swatches\Model\Attribute\DataProvider\TextSwatch::class, 'getAttributeDataWithErrorMessage')]
     public function testCreateAttributeWithError(array $attributePostData, string $errorMessage): void
     {
         $this->createAttributeUsingDataWithErrorAndAssert($attributePostData, $errorMessage);

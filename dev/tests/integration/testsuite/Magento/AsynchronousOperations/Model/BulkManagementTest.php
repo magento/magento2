@@ -40,7 +40,7 @@ class BulkManagementTest extends \PHPUnit\Framework\TestCase
     protected function setUp(): void
     {
         $this->objectManager = Bootstrap::getObjectManager();
-        $this->publisherMock = $this->getMockForAbstractClass(BulkPublisherInterface::class);
+        $this->publisherMock = $this->createMock(BulkPublisherInterface::class);
 
         $this->model = $this->objectManager->create(
             BulkManagement::class,

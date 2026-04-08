@@ -11,6 +11,7 @@ use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Framework\DataObject;
 use Magento\Quote\Model\Quote;
 use Magento\Quote\Model\QuoteIdToMaskedQuoteIdInterface;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\Quote\Model\ResourceModel\Quote as QuoteResource;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
@@ -233,9 +234,9 @@ QUERY;
     /**
      * @magentoApiDataFixture Magento/Bundle/_files/product_with_multiple_options_and_custom_quantity.php
      * @magentoApiDataFixture Magento/Checkout/_files/active_quote.php
-     * @dataProvider bundleItemOptionsDataProvider
      * @return void
      */
+    #[DataProvider('bundleItemOptionsDataProvider')]
     public function testAddBundleItemWithCustomOptionQuantity(
         string $optionQty0,
         string $optionQty1,

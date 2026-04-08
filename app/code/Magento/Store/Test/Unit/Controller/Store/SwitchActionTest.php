@@ -9,8 +9,8 @@ namespace Magento\Store\Test\Unit\Controller\Store;
 
 use Magento\Framework\App\Http\Context as HttpContext;
 use Magento\Framework\App\RequestInterface;
+use Magento\Framework\App\Response\Http;
 use Magento\Framework\App\Response\RedirectInterface;
-use Magento\Framework\App\ResponseInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Store\Api\Data\StoreInterface;
 use Magento\Store\Api\StoreCookieManagerInterface;
@@ -88,15 +88,9 @@ class SwitchActionTest extends TestCase
         $this->httpContextMock = $this->getMockBuilder(\Magento\Framework\App\Http\Context::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->requestMock = $this->getMockBuilder(RequestInterface::class)
-            ->getMock();
-        $this->responseMock = $this->getMockBuilder(ResponseInterface::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['setRedirect'])
-            ->getMockForAbstractClass();
-        $this->redirectMock =
-            $this->getMockBuilder(RedirectInterface::class)
-                ->getMock();
+        $this->requestMock = $this->createMock(RequestInterface::class);
+        $this->responseMock = $this->createMock(Http::class);
+        $this->redirectMock = $this->createMock(RedirectInterface::class);
         $this->storeSwitcher = $this->getMockBuilder(StoreSwitcher::class)
             ->disableOriginalConstructor()
             ->onlyMethods(['switch'])
@@ -128,9 +122,7 @@ class SwitchActionTest extends TestCase
         $defaultStoreViewMock = $this->getMockBuilder(StoreInterface::class)
             ->getMock();
         $storeToSwitchToMock = $this->getMockBuilder(StoreInterface::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['isUseStoreInUrl'])
-            ->getMockForAbstractClass();
+            ->getMock();
 
         $this->requestMock->expects($this->any())->method('getParam')->willReturnMap(
             [

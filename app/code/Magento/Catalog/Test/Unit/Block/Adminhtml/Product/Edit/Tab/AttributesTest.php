@@ -22,6 +22,7 @@ use Magento\Framework\Data\FormFactory;
 use Magento\Framework\DataObject;
 use Magento\Framework\Event\ManagerInterface;
 use Magento\Framework\Registry;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\View\LayoutInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -41,6 +42,8 @@ use \Magento\Catalog\Block\Adminhtml\Helper\Form\Wysiwyg;
  */
 class AttributesTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * Test attribute set ID for mock product
      */
@@ -94,11 +97,10 @@ class AttributesTest extends TestCase
         $this->authorizationMock = $this->createMock(AuthorizationInterface::class);
         $this->layoutMock = $this->createMock(LayoutInterface::class);
 
-        $this->attributesMock = $this->getMockBuilder(Attributes::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['getGroup', 'getGroupAttributes'])
-            ->onlyMethods(['_setFieldset', 'setForm'])
-            ->getMock();
+        $this->attributesMock = $this->createPartialMockWithReflection(
+            Attributes::class,
+            ['getGroup', 'getGroupAttributes', '_setFieldset', 'setForm']
+        );
 
         $this->injectDependencies();
     }
@@ -508,11 +510,10 @@ class AttributesTest extends TestCase
      */
     private function createFormMock(): MockObject
     {
-        return $this->getMockBuilder(Form::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['setDataObject', 'getDataObject', 'setFieldNameSuffix'])
-            ->onlyMethods(['addFieldset', 'getElement', 'addValues'])
-            ->getMock();
+        return $this->createPartialMockWithReflection(
+            Form::class,
+            ['setDataObject', 'getDataObject', 'setFieldNameSuffix', 'addFieldset', 'getElement', 'addValues']
+        );
     }
 
     /**
@@ -522,10 +523,10 @@ class AttributesTest extends TestCase
      */
     private function createFieldsetMock(): MockObject
     {
-        return $this->getMockBuilder(Fieldset::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['setHeaderBar'])
-            ->getMock();
+        return $this->createPartialMockWithReflection(
+            Fieldset::class,
+            ['setHeaderBar']
+        );
     }
 
     /**
@@ -538,11 +539,10 @@ class AttributesTest extends TestCase
      */
     private function createGroupMock(string $code, string $name, ?int $id = null): MockObject
     {
-        $groupMock = $this->getMockBuilder(Group::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['getAttributeGroupCode'])
-            ->onlyMethods(['getAttributeGroupName', 'getId'])
-            ->getMock();
+        $groupMock = $this->createPartialMockWithReflection(
+            Group::class,
+            ['getAttributeGroupCode', 'getAttributeGroupName', 'getId']
+        );
 
         $groupMock->method('getAttributeGroupCode')->willReturn($code);
         $groupMock->method('getAttributeGroupName')->willReturn($name);
@@ -679,13 +679,13 @@ class AttributesTest extends TestCase
      */
     private function createAttributeConfigMock(): MockObject
     {
-        $configMock = $this->getMockBuilder(DataObject::class)
-            ->disableOriginalConstructor()
-            ->addMethods([
+        $configMock = $this->createPartialMockWithReflection(
+            DataObject::class,
+            [
                 'setAttributeGroupCode', 'setTabId', 'setGroupId',
                 'setStoreId', 'setAttributeSetId', 'setTypeId', 'setProductId'
-            ])
-            ->getMock();
+            ]
+        );
         $fluentMethods = [
             'setAttributeGroupCode', 'setTabId', 'setGroupId', 'setStoreId',
             'setAttributeSetId', 'setTypeId', 'setProductId'
@@ -721,11 +721,10 @@ class AttributesTest extends TestCase
      */
     private function createAttributeSearchBlockMock(): MockObject
     {
-        $searchBlockMock = $this->getMockBuilder(Search::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['setGroupId', 'setGroupCode', 'setAttributeCreate'])
-            ->onlyMethods(['toHtml'])
-            ->getMock();
+        $searchBlockMock = $this->createPartialMockWithReflection(
+            Search::class,
+            ['setGroupId', 'setGroupCode', 'setAttributeCreate', 'toHtml']
+        );
 
         $searchBlockMock->method('setGroupId')->willReturnSelf();
         $searchBlockMock->method('setGroupCode')->willReturnSelf();

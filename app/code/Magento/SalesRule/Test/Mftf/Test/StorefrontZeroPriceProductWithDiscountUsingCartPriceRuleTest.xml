@@ -37,6 +37,9 @@
             </createData>
         </before>
         <after>
+            <amOnPage url="{{AdminOrdersPage.url}}" stepKey="goToOrdersPage"/>
+            <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearOrdersFilters"/>
+            <waitForPageLoad stepKey="waitForOrdersPageToLoadAfterClearingFilters"/>
             <deleteData createDataKey="simpleProduct1" stepKey="DeleteSimpleProduct1"/>
             <deleteData createDataKey="simpleProduct2" stepKey="DeleteSimpleProduct2"/>
             <deleteData createDataKey="createSalesRule" stepKey="deleteSalesRule"/>

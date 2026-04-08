@@ -11,6 +11,7 @@ use Magento\Framework\Code\Reader\ClassReader;
 use Magento\Setup\Module\Di\Code\Reader\ClassReaderDecorator;
 use Magento\Setup\Module\Di\Compiler\ConstructorArgument;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 class ClassReaderDecoratorTest extends TestCase
@@ -37,8 +38,8 @@ class ClassReaderDecoratorTest extends TestCase
      * @param $expectation
      * @param $className
      * @param $willReturn
-     * @dataProvider getConstructorDataProvider
      */
+    #[DataProvider('getConstructorDataProvider')]
     public function testGetConstructor($expectation, $className, $willReturn)
     {
         $this->classReaderMock->expects($this->once())

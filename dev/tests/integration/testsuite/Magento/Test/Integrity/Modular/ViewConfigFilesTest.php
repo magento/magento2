@@ -5,12 +5,14 @@
  */
 namespace Magento\Test\Integrity\Modular;
 
+use PHPUnit\Framework\Attributes\DataProvider;
+
 class ViewConfigFilesTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @param string $file
-     * @dataProvider viewConfigFileDataProvider
      */
+    #[DataProvider('viewConfigFileDataProvider')]
     public function testViewConfigFile($file)
     {
         $validationStateMock = $this->createMock(\Magento\Framework\Config\ValidationStateInterface::class);

@@ -6,6 +6,7 @@
 namespace Magento\Customer\Block\Address\Renderer;
 
 use Magento\Eav\Model\AttributeDataFactory;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * DefaultRenderer
@@ -24,9 +25,7 @@ class DefaultRendererTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    /**
-     * @dataProvider renderArrayDataProvider
-     */
+    #[DataProvider('renderArrayDataProvider')]
     public function testRenderArray($addressAttributes, $format, $expected)
     {
         /** @var DefaultRenderer $renderer */
@@ -71,9 +70,7 @@ class DefaultRendererTest extends \PHPUnit\Framework\TestCase
         ];
     }
 
-    /**
-     * @dataProvider renderDataProvider
-     */
+    #[DataProvider('renderDataProvider')]
     public function testRender($address, $format, $expected)
     {
         /** @var DefaultRenderer $renderer */

@@ -13,6 +13,7 @@ use Magento\Framework\App\RequestInterface;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Json\DecoderInterface;
 use Magento\Framework\Serialize\Serializer\Json;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\View\Element\UiComponentFactory;
 use Magento\Ui\Api\BookmarkManagementInterface;
 use Magento\Ui\Api\BookmarkRepositoryInterface;
@@ -20,6 +21,7 @@ use Magento\Ui\Api\Data\BookmarkInterface;
 use Magento\Ui\Api\Data\BookmarkInterfaceFactory;
 use Magento\Ui\Api\Data\BookmarkSearchResultsInterface;
 use Magento\Ui\Controller\Adminhtml\Bookmark\Save;
+use Magento\Ui\Model\Bookmark;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -30,6 +32,7 @@ use PHPUnit\Framework\TestCase;
  */
 class SaveTest extends TestCase
 {
+    use MockCreationTrait;
     /**
      * @var MockObject|Context
      */
@@ -146,7 +149,7 @@ class SaveTest extends TestCase
         $this->serializer->expects($this->once())->method('unserialize')->with($currentConfig)
             ->willReturn(json_decode($currentConfig, true));
 
-        $request = $this->getMockForAbstractClass(RequestInterface::class);
+        $request = $this->createMock(RequestInterface::class);
         $request->expects($this->exactly(2))
             ->method('getParam')
             ->willReturnCallback(fn($param) => match ([$param]) {
@@ -195,14 +198,13 @@ class SaveTest extends TestCase
         $currentConfig = '{"current":' . json_encode($this->getConfigData('P1', 2, 1)) . '}';
 
         $this->userContext->expects($this->exactly(2))->method('getUserId')->willReturn(1);
-        $bookmark = $this->getMockBuilder(BookmarkInterface::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['getCurrent'])
-            ->onlyMethods(['getIdentifier'])
-            ->getMockForAbstractClass();
+        $bookmark = $this->createPartialMockWithReflection(
+            Bookmark::class,
+            ['getCurrent']
+        );
         $this->bookmarkFactory->expects($this->once())->method('create')->willReturn($bookmark);
 
-        $request = $this->getMockForAbstractClass(RequestInterface::class);
+        $request = $this->createMock(RequestInterface::class);
         $request->expects($this->atLeast(3))
             ->method('getParam')
             ->willReturnCallback(fn($param) => match ([$param]) {
@@ -281,11 +283,20 @@ class SaveTest extends TestCase
                     ]
                 ];
         }
-        $bookmark = $this->getMockBuilder(BookmarkInterface::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['getIdentifier'])
-            ->addMethods(['getCurrent'])
-            ->getMockForAbstractClass();
+        $bookmark = $this->createPartialMockWithReflection(
+            Bookmark::class,
+            [
+                'getCurrent',
+                'getIdentifier',
+                'getConfig',
+                'setCurrent',
+                'setConfig',
+                'setUserId',
+                'setNamespace',
+                'setIdentifier',
+                'setTitle',
+            ]
+        );
         $bookmark->expects($this->any())->method('getCurrent')->willReturn($current);
         $bookmark->expects($this->any())->method('getIdentifier')->willReturn($identifier);
         $configData = [

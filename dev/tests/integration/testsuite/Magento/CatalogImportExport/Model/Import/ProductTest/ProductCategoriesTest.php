@@ -19,6 +19,7 @@ use Magento\Indexer\Test\Fixture\ScheduleMode;
 use Magento\TestFramework\Fixture\AppArea;
 use Magento\TestFramework\Fixture\AppIsolation;
 use Magento\TestFramework\Fixture\DataFixtureBeforeTransaction;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Integration test for \Magento\CatalogImportExport\Model\Import\Product class.
@@ -32,9 +33,7 @@ use Magento\TestFramework\Fixture\DataFixtureBeforeTransaction;
 ]
 class ProductCategoriesTest extends ProductTestBase
 {
-    /**
-     * @dataProvider categoryTestDataProvider
-     */
+    #[DataProvider('categoryTestDataProvider')]
     public function testProductCategories($fixture, $separator)
     {
         // import data from CSV file

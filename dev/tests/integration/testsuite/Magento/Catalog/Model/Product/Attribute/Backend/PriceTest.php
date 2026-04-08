@@ -20,6 +20,7 @@ use Magento\TestFramework\Fixture\Config;
 use Magento\TestFramework\Fixture\DataFixture;
 use Magento\TestFramework\Fixture\DataFixtureStorageManager;
 use Magento\TestFramework\Fixture\DbIsolation;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Test class for \Magento\Catalog\Model\Product\Attribute\Backend\Price.
@@ -341,12 +342,10 @@ class PriceTest extends \PHPUnit\Framework\TestCase
             ->execute($observer);
     }
 
-    /**
-     * @dataProvider saveCustomPriceAttributeDataProvider
-     */
     #[
         AppArea('adminhtml'),
         DbIsolation(false),
+        DataProvider('saveCustomPriceAttributeDataProvider'),
         Config('catalog/price/scope', '1', 'store'),
         DataFixture(WebsiteFixture::class, as: 'website2'),
         DataFixture(StoreGroupFixture::class, ['website_id' => '$website2.id$'], 'store_group2'),

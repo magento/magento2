@@ -10,6 +10,7 @@ namespace Magento\Framework\View\Test\Unit\Element\UiComponent\DataProvider;
 
 use Magento\Framework\View\Element\UiComponent\DataProvider\Sanitizer;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Test sanitizer for different kind of scenarios.
@@ -105,9 +106,8 @@ class SanitizerTest extends TestCase
      *
      * @param array $input
      * @param array $expectedOutput
-     * @return void
-     * @dataProvider getSanitizeDataSets
-     */
+     * @return void     */
+    #[DataProvider('getSanitizeDataSets')]
     public function testSanitize(array $input, array $expectedOutput): void
     {
         $this->assertEquals($expectedOutput, $this->sanitizer->sanitize($input));
@@ -175,9 +175,8 @@ class SanitizerTest extends TestCase
      *
      * @param array $input
      * @param array $expectedOutput
-     * @return void
-     * @dataProvider getSanitizeComponentDataSets
-     */
+     * @return void     */
+    #[DataProvider('getSanitizeComponentDataSets')]
     public function testSanitizeComponentMetadata(array $input, array $expectedOutput): void
     {
         $this->assertEquals($expectedOutput, $this->sanitizer->sanitizeComponentMetadata($input));

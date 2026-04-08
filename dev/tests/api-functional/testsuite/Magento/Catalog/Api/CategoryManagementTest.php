@@ -6,6 +6,7 @@
 
 namespace Magento\Catalog\Api;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\TestFramework\TestCase\WebapiAbstract;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\Helper\CompareArraysRecursively;
@@ -15,9 +16,9 @@ use Magento\TestFramework\Helper\CompareArraysRecursively;
  */
 class CategoryManagementTest extends WebapiAbstract
 {
-    const RESOURCE_PATH = '/V1/categories';
+    public const RESOURCE_PATH = '/V1/categories';
 
-    const SERVICE_NAME = 'catalogCategoryManagementV1';
+    public const SERVICE_NAME = 'catalogCategoryManagementV1';
 
     /**
      * @var CompareArraysRecursively
@@ -36,9 +37,9 @@ class CategoryManagementTest extends WebapiAbstract
     /**
      * Tests getTree operation
      *
-     * @dataProvider treeDataProvider
      * @magentoApiDataFixture Magento/Catalog/_files/category_tree.php
      */
+    #[DataProvider('treeDataProvider')]
     public function testTree($rootCategoryId, $depth, $expected)
     {
         $requestData = ['rootCategoryId' => $rootCategoryId, 'depth' => $depth];
@@ -155,8 +156,8 @@ class CategoryManagementTest extends WebapiAbstract
 
     /**
      * @magentoApiDataFixture Magento/Catalog/_files/category_tree.php
-     * @dataProvider updateMoveDataProvider
      */
+    #[DataProvider('updateMoveDataProvider')]
     public function testUpdateMove($categoryId, $parentId, $afterId, $expectedPosition)
     {
         $expectedPath = '1/2/400/' . $categoryId;

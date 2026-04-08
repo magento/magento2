@@ -58,7 +58,7 @@ class GeneratorTest extends TestCase
     {
         $this->parserMock = $this->createMock(Parser::class);
         $this->contextualParserMock = $this->createMock(Contextual::class);
-        $this->writerMock = $this->getMockForAbstractClass(WriterInterface::class);
+        $this->writerMock = $this->createMock(WriterInterface::class);
         $this->factoryMock = $this->createMock(Factory::class);
         $this->factoryMock->expects($this->any())
             ->method('createDictionaryWriter')

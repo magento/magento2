@@ -7,6 +7,7 @@
 namespace Magento\Test\Integrity;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestStatus\TestStatus;
 
 /**
@@ -88,8 +89,8 @@ class StaticFilesTest extends \PHPUnit\Framework\TestCase
      * @param string $module
      * @param string $filePath
      * @param string $absolutePath
-     * @dataProvider referencesFromStaticFilesDataProvider
      */
+    #[DataProvider('referencesFromStaticFilesDataProvider')]
     public function testReferencesFromStaticFiles($area, $themePath, $locale, $module, $filePath, $absolutePath)
     {
         $contents = file_get_contents($absolutePath);
@@ -200,9 +201,11 @@ class StaticFilesTest extends \PHPUnit\Framework\TestCase
      * @param string $locale
      * @param string $module
      * @param string $filePath
-     * @dataProvider lessNotConfusedWithCssDataProvider
+     * @param string $absolutePath
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function testLessNotConfusedWithCss($area, $themePath, $locale, $module, $filePath)
+    #[DataProvider('lessNotConfusedWithCssDataProvider')]
+    public function testLessNotConfusedWithCss($area, $themePath, $locale, $module, $filePath, $absolutePath)
     {
         if (false !== strpos($filePath, 'widgets.css')) {
             $filePath .= '';
@@ -239,8 +242,8 @@ class StaticFilesTest extends \PHPUnit\Framework\TestCase
      * @param string $area
      * @param string $themePath
      * @param string $fileId
-     * @dataProvider referencesFromPhtmlFilesDataProvider
      */
+    #[DataProvider('referencesFromPhtmlFilesDataProvider')]
     public function testReferencesFromPhtmlFiles($phtmlFile, $area, $themePath, $fileId)
     {
         list($module, $filePath) = \Magento\Framework\View\Asset\Repository::extractModule($fileId);
@@ -287,8 +290,8 @@ class StaticFilesTest extends \PHPUnit\Framework\TestCase
      * @param string $area
      * @param string $themePath
      * @param string $fileId
-     * @dataProvider referencesFromLayoutFilesDataProvider
      */
+    #[DataProvider('referencesFromLayoutFilesDataProvider')]
     public function testReferencesFromLayoutFiles($layoutFile, $area, $themePath, $fileId)
     {
         list($module, $filePath) = \Magento\Framework\View\Asset\Repository::extractModule($fileId);

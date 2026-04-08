@@ -13,6 +13,7 @@ use Magento\Customer\Api\Data\CustomerInterfaceFactory;
 use Magento\Framework\Api\DataObjectHelper;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\TestFramework\Helper\Bootstrap;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -49,12 +50,11 @@ class ValidateTest extends TestCase
     /**
      * Validate customer fields.
      *
-     * @dataProvider validateFieldsProvider
-     *
      * @param array $customerData
      * @param array $expectedResults
      * @return void
      */
+    #[DataProvider('validateFieldsProvider')]
     public function testValidateFields(
         array $customerData,
         array $expectedResults

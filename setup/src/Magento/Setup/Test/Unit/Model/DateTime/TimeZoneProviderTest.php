@@ -20,12 +20,7 @@ class TimeZoneProviderTest extends TestCase
     public function testGet()
     {
         $timeZone = $this->createMock(Timezone::class);
-        $objectManager = $this->getMockForAbstractClass(
-            ObjectManagerInterface::class,
-            [],
-            '',
-            false
-        );
+        $objectManager = $this->createMock(ObjectManagerInterface::class);
         $objectManager->expects($this->once())
             ->method('create')
             ->with(

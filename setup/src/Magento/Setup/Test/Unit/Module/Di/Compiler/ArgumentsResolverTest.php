@@ -27,7 +27,7 @@ class ArgumentsResolverTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->diContainerConfig = $this->getMockForAbstractClass(ConfigInterface::class);
+        $this->diContainerConfig = $this->createMock(ConfigInterface::class);
         $this->model = new ArgumentsResolver($this->diContainerConfig);
     }
 

@@ -12,6 +12,7 @@ use Magento\Catalog\Model\CategoryFactory;
 use Magento\Framework\App\Config\Storage\Writer;
 use Magento\Framework\Event\ManagerInterface;
 use Magento\Framework\Locale\Config;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Setup\Fixtures\FixtureModel;
 use Magento\Setup\Fixtures\StoresFixture;
 use Magento\Store\Api\Data\GroupInterface;
@@ -23,6 +24,7 @@ use PHPUnit\Framework\TestCase;
 
 class StoresFixtureTest extends TestCase
 {
+    use MockCreationTrait;
 
     /**
      * @var MockObject|FixtureModel
@@ -83,26 +85,25 @@ class StoresFixtureTest extends TestCase
 
         $this->eventManagerMock = $this->getMockBuilder(ManagerInterface::class)
             ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+            ->getMock();
 
         $this->categoryFactoryMock = $this->getMockBuilder(CategoryFactory::class)
             ->disableOriginalConstructor()
             ->onlyMethods(['create'])
             ->getMock();
 
-        $categoryMock = $this->getMockBuilder(CategoryInterface::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['create', 'setDefaultSortBy', 'save'])
-            ->onlyMethods(
-                [
-                    'setName',
-                    'setPath',
-                    'setLevel',
-                    'setAvailableSortBy',
-                    'setIsActive',
-                ]
-            )
-            ->getMockForAbstractClass();
+        $categoryMock = $this->createPartialMockWithReflection(
+            CategoryInterface::class,
+            [
+                'getId', 'setId', 'getParentId', 'setParentId', 'getName', 'setName',
+                'getIsActive', 'setIsActive', 'getPosition', 'setPosition', 'getLevel', 'setLevel',
+                'getChildren', 'getCreatedAt', 'setCreatedAt', 'getUpdatedAt', 'setUpdatedAt',
+                'getPath', 'setPath', 'getAvailableSortBy', 'setAvailableSortBy',
+                'getIncludeInMenu', 'setIncludeInMenu', 'getExtensionAttributes', 'setExtensionAttributes',
+                'getCustomAttribute', 'setCustomAttribute', 'getCustomAttributes', 'setCustomAttributes',
+                'setDefaultSortBy', 'save'
+            ]
+        );
 
         $this->categoryFactoryMock->expects($this->exactly(5))
             ->method('create')
@@ -153,11 +154,15 @@ class StoresFixtureTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $storeMock = $this->getMockBuilder(StoreInterface::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['getRootCategoryId', 'addData', 'save'])
-            ->onlyMethods(['getId'])
-            ->getMockForAbstractClass();
+        $storeMock = $this->createPartialMockWithReflection(
+            StoreInterface::class,
+            [
+                'getId', 'setId', 'getCode', 'setCode', 'getName', 'setName',
+                'getWebsiteId', 'setWebsiteId', 'getStoreGroupId', 'setIsActive',
+                'getIsActive', 'setStoreGroupId', 'getExtensionAttributes', 'setExtensionAttributes',
+                'addData', 'save'
+            ]
+        );
 
         $storeMock->expects($this->exactly(11))
             ->method('getId')
@@ -171,11 +176,14 @@ class StoresFixtureTest extends TestCase
                 }
             });
 
-        $storeGroupMock = $this->getMockBuilder(GroupInterface::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['addData', 'save'])
-            ->onlyMethods(['getId'])
-            ->getMockForAbstractClass();
+        $storeGroupMock = $this->createPartialMockWithReflection(
+            GroupInterface::class,
+            [
+                'getId', 'setId', 'getWebsiteId', 'setWebsiteId', 'getRootCategoryId', 'setRootCategoryId',
+                'getDefaultStoreId', 'setDefaultStoreId', 'getName', 'setName', 'getCode', 'setCode',
+                'getExtensionAttributes', 'setExtensionAttributes', 'addData', 'save'
+            ]
+        );
 
         $storeGroupMock->expects($this->exactly(11))
             ->method('getId')
@@ -189,11 +197,14 @@ class StoresFixtureTest extends TestCase
                 }
             });
 
-        $websiteMock = $this->getMockBuilder(WebsiteInterface::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['addData', 'save'])
-            ->onlyMethods(['getId'])
-            ->getMockForAbstractClass();
+        $websiteMock = $this->createPartialMockWithReflection(
+            WebsiteInterface::class,
+            [
+                'getId', 'setId', 'getCode', 'setCode', 'getName', 'setName',
+                'getDefaultGroupId', 'setDefaultGroupId', 'getExtensionAttributes', 'setExtensionAttributes',
+                'addData', 'save'
+            ]
+        );
 
         $websiteMock->expects($this->exactly(3))
             ->method('getId')

@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\Sales\Service\V1;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\TestFramework\TestCase\WebapiAbstract;
 use Magento\Framework\Webapi\Rest\Request;
 use Magento\TestFramework\Fixture\DataFixture;
@@ -162,9 +163,8 @@ class OrderCreationValidationTest extends WebapiAbstract
 
     /**
      * Test various invalid payloads that should all fail
-     *
-     * @dataProvider invalidOrderDataProvider
      */
+    #[DataProvider('invalidOrderDataProvider')]
     #[DataFixture(User::class, as: 'admin_user')]
     #[DataFixture(Role::class, as: 'admin_role')]
     public function testCreateOrderWithInvalidDataFails(array $requestData, string $expectedError): void

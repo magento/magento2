@@ -53,9 +53,7 @@ class IndexStructureTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->connectionInterface = $this->getMockBuilder(AdapterInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->connectionInterface = $this->createMock(AdapterInterface::class);
         $this->resource = $this->getMockBuilder(ResourceConnection::class)
             ->onlyMethods(['getConnection'])
             ->disableOriginalConstructor()

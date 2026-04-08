@@ -99,7 +99,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
         } else {
             $content[] = file_get_contents($configFilePath);
         }
-        $fileResolver = $this->getMockForAbstractClass(\Magento\Framework\Config\FileResolverInterface::class);
+        $fileResolver = $this->createMock(\Magento\Framework\Config\FileResolverInterface::class);
         $fileResolver->expects($this->any())
             ->method('get')
             ->willReturn($content);
@@ -183,7 +183,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
     private function getCommunicationConfigInstance()
     {
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        $fileResolver = $this->getMockForAbstractClass(\Magento\Framework\Config\FileResolverInterface::class);
+        $fileResolver = $this->createMock(\Magento\Framework\Config\FileResolverInterface::class);
         $fileResolver->expects($this->any())
             ->method('get')
             ->willReturn([file_get_contents(__DIR__ . '/_files/communication.xml')]);

@@ -17,11 +17,14 @@ use Magento\Framework\View\Design\Theme\FileProviderInterface;
 use Magento\Framework\View\Design\ThemeInterface;
 use Magento\Theme\Model\Theme;
 use Magento\Theme\Model\Theme\File;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class CustomizationTest extends TestCase
 {
+    use MockCreationTrait;
     /**
      * @var Customization
      */
@@ -44,7 +47,7 @@ class CustomizationTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->fileProvider = $this->getMockForAbstractClass(FileProviderInterface::class);
+        $this->fileProvider = $this->createMock(FileProviderInterface::class);
         $collectionFactory = $this->createPartialMock(
             \Magento\Theme\Model\ResourceModel\Theme\File\CollectionFactory::class,
             ['create']
@@ -129,11 +132,10 @@ class CustomizationTest extends TestCase
     }
 
     /**
-     * @covers \Magento\Framework\View\Design\Theme\Customization::getThemeFilesPath
-     * @dataProvider getThemeFilesPathDataProvider
-     * @param string $type
+     * @covers \Magento\Framework\View\Design\Theme\Customization::getThemeFilesPath     * @param string $type
      * @param string $expectedMethod
      */
+    #[DataProvider('getThemeFilesPathDataProvider')]
     public function testGetThemeFilesPath($type, $expectedMethod)
     {
         $this->theme->setData(['id' => 123, 'type' => $type, 'area' => 'area51', 'theme_path' => 'theme_path']);
@@ -179,16 +181,18 @@ class CustomizationTest extends TestCase
     }
 
     /**
-     * @covers \Magento\Framework\View\Design\Theme\Customization::reorder
-     * @dataProvider customFileContent
-     */
+     * @covers \Magento\Framework\View\Design\Theme\Customization::reorder     */
+    #[DataProvider('customFileContent')]
     public function testReorder($sequence, $filesContent)
     {
         $files = [];
         $type = 'sample-type';
         foreach ($filesContent as $fileContent) {
             $file = $this->createPartialMock(File::class, ['__wakeup', 'save']);
-            $file->expects($fileContent['isCalled'])->method('save')->willReturnSelf();
+            $expects = is_string($fileContent['isCalled']) 
+                ? $this->createInvocationMatcher($fileContent['isCalled']) 
+                : $fileContent['isCalled'];
+            $file->expects($expects)->method('save')->willReturnSelf();
             $file->setData($fileContent['content']);
             $files[] = $file;
         }
@@ -220,7 +224,7 @@ class CustomizationTest extends TestCase
                 'sequence' => [3, 2, 1],
                 'filesContent' => [
                     [
-                        'isCalled' => self::once(),
+                        'isCalled' => 'once',
                         'content' => [
                             'id' => 1,
                             'theme_id' => 123,
@@ -230,7 +234,7 @@ class CustomizationTest extends TestCase
                         ],
                     ],
                     [
-                        'isCalled' => self::never(),
+                        'isCalled' => 'never',
                         'content' => [
                             'id' => 2,
                             'theme_id' => 123,
@@ -240,7 +244,7 @@ class CustomizationTest extends TestCase
                         ]
                     ],
                     [
-                        'isCalled' => self::once(),
+                        'isCalled' => 'once',
                         'content' => [
                             'id' => 3,
                             'theme_id' => 123,

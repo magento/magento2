@@ -89,10 +89,8 @@ class ModeTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->inputMock = $this->getMockBuilder(InputInterface::class)
-            ->getMockForAbstractClass();
-        $this->outputMock = $this->getMockBuilder(OutputInterface::class)
-            ->getMockForAbstractClass();
+        $this->inputMock = $this->createMock(InputInterface::class);
+        $this->outputMock = $this->createMock(OutputInterface::class);
         $this->writerMock = $this->getMockBuilder(Writer::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -111,7 +109,7 @@ class ModeTest extends TestCase
         $this->processorFacadeFactory = $this->getMockBuilder(ProcessorFacadeFactory::class)
             ->disableOriginalConstructor()
             ->onlyMethods(['create'])
-            ->getMockForAbstractClass();
+            ->getMock();
         $this->processorFacade = $this->getMockBuilder(ProcessorFacade::class)
             ->disableOriginalConstructor()
             ->getMock();

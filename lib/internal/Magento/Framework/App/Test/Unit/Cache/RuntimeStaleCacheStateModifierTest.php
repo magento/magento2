@@ -8,6 +8,7 @@ namespace Magento\Framework\App\Test\Unit\Cache;
 
 use Magento\Framework\App\Cache\InMemoryState;
 use Magento\Framework\App\Cache\RuntimeStaleCacheStateModifier;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -30,7 +31,7 @@ class RuntimeStaleCacheStateModifierTest extends TestCase
         );
     }
 
-    /** @test */
+    #[Test]
     public function doesNotModifyStateWithoutNotification()
     {
         new RuntimeStaleCacheStateModifier($this->cacheState, ['cache_one', 'cache_three']);
@@ -48,7 +49,7 @@ class RuntimeStaleCacheStateModifierTest extends TestCase
         );
     }
 
-    /** @test */
+    #[Test]
     public function modifiesOnlyConfiguredCacheTypesOnNotifiedStaleCache()
     {
         $stateModifier = new RuntimeStaleCacheStateModifier($this->cacheState, ['cache_one', 'cache_three']);
@@ -69,7 +70,7 @@ class RuntimeStaleCacheStateModifierTest extends TestCase
         );
     }
 
-    /** @test */
+    #[Test]
     public function doesNotPersistModifiedCacheTypes()
     {
         $stateModifier = new RuntimeStaleCacheStateModifier($this->cacheState, ['cache_one', 'cache_three']);

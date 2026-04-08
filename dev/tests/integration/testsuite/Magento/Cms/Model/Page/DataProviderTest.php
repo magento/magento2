@@ -76,12 +76,12 @@ class DataProviderTest extends TestCase
      * Check that custom layout date is handled properly.
      *
      * @magentoDataFixture Magento/Cms/_files/pages_with_layout_xml.php
-     * @dataProvider customLayoutDataProvider
      *
      * @param string $identifier
      * @param string|null $layoutUpdateSelected
      * @return void
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('customLayoutDataProvider')]
     public function testCustomLayoutData(string $identifier, ?string $layoutUpdateSelected): void
     {
         $page = $this->repo->execute($identifier, 0);

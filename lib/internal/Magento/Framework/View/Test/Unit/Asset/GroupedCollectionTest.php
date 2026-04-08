@@ -94,7 +94,7 @@ class GroupedCollectionTest extends TestCase
     {
         $cssAsset = new Remote('http://127.0.0.1/style.css', 'css');
         $jsAsset = new Remote('http://127.0.0.1/script.js', 'js');
-        $jsAssetAllowingMerge = $this->getMockForAbstractClass(MergeableInterface::class);
+        $jsAssetAllowingMerge = $this->createMock(MergeableInterface::class);
         $jsAssetAllowingMerge->expects($this->any())->method('getContentType')->willReturn('js');
 
         // assets with identical properties should be grouped together

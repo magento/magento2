@@ -10,6 +10,7 @@ use Magento\Framework\ObjectManagerInterface;
 use Magento\Sales\Api\InvoiceRepositoryInterface;
 use Magento\Sales\Model\Order;
 use Magento\TestFramework\Helper\Bootstrap;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Test for CreditmemoFactory class.
@@ -45,10 +46,10 @@ class CreditmemoFactoryTest extends \PHPUnit\Framework\TestCase
      * Checks a case when creditmemo created from the order.
      *
      * @magentoDataFixture Magento/Sales/_files/order_with_bundle_and_invoiced.php
-     * @dataProvider createByOrderDataProvider
      * @param array $creditmemoData
      * @param int $expectedQty
      */
+    #[DataProvider('createByOrderDataProvider')]
     public function testCreateByOrder(array $creditmemoData, $expectedQty)
     {
         $order = $this->getOrder('100000001');

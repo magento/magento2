@@ -34,10 +34,8 @@ class UiComponentFactoryTest extends \PHPUnit\Framework\TestCase
 
     protected function setUp(): void
     {
-        $this->objectManagerMock = $this->getMockBuilder(\Magento\Framework\ObjectManagerInterface::class)
-            ->getMockForAbstractClass();
-        $this->interpreterMock = $this->getMockBuilder(\Magento\Framework\Data\Argument\InterpreterInterface::class)
-            ->getMockForAbstractClass();
+        $this->objectManagerMock = $this->createMock(\Magento\Framework\ObjectManagerInterface::class);
+        $this->interpreterMock = $this->createMock(\Magento\Framework\Data\Argument\InterpreterInterface::class);
         $this->contextFactoryMock = $this
             ->getMockBuilder(\Magento\Framework\View\Element\UiComponent\ContextFactory::class)
             ->onlyMethods(['create'])

@@ -130,8 +130,7 @@ class UpdateTest extends TestCase
         $this->storeResourceMock = $this->getMockBuilder(StoreResource::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->eventManagerMock = $this->getMockBuilder(ManagerInterface::class)
-            ->getMockForAbstractClass();
+        $this->eventManagerMock = $this->createMock(ManagerInterface::class);
 
         $this->storeMock->expects($this->any())
             ->method('getResource')

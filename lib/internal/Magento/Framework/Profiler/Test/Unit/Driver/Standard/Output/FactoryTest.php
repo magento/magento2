@@ -11,6 +11,7 @@ namespace Magento\Framework\Profiler\Test\Unit\Driver\Standard\Output;
 use Magento\Framework\Profiler\Driver\Standard\Output\Factory;
 use Magento\Framework\Profiler\Driver\Standard\OutputInterface;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class FactoryTest extends TestCase
 {
@@ -54,11 +55,10 @@ class FactoryTest extends TestCase
         $this->assertAttributeNotEmpty('_defaultOutputType', $factory);
     }
 
-    /**
-     * @dataProvider createDataProvider
-     * @param array|string $configData
+    /**     * @param array|string $configData
      * @param string $expectedClass
      */
+    #[DataProvider('createDataProvider')]
     public function testCreate($configData, $expectedClass)
     {
         if (isset($configData['type']) && is_callable($configData['type'])) {

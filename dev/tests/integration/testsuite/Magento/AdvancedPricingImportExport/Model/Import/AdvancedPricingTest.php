@@ -18,6 +18,7 @@ use Magento\Catalog\Api\Data\ProductTierPriceInterfaceFactory;
 use Magento\Catalog\Api\Data\ProductTierPriceExtensionFactory;
 use Magento\TestFramework\Fixture\DataFixture;
 use Magento\TestFramework\Fixture\AppArea;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * @magentoAppArea adminhtml
@@ -267,8 +268,8 @@ class AdvancedPricingTest extends \PHPUnit\Framework\TestCase
      * @param array $importData
      * @param string $importBehavior
      * @param array $invalidRows
-     * @dataProvider importValidationDuplicateWithSameBaseCurrencyDataProvider
      */
+    #[DataProvider('importValidationDuplicateWithSameBaseCurrencyDataProvider')]
     public function testImportValidationDuplicateWithSameBaseCurrency(
         array $dbData,
         array $importData,
@@ -294,8 +295,8 @@ class AdvancedPricingTest extends \PHPUnit\Framework\TestCase
      * @param array $importData
      * @param string $importBehavior
      * @param array $invalidRows
-     * @dataProvider importValidationDuplicateWithDifferentBaseCurrencyDataProvider
      */
+    #[DataProvider('importValidationDuplicateWithDifferentBaseCurrencyDataProvider')]
     public function testImportValidationDuplicateWithDifferentBaseCurrency(
         array $dbData,
         array $importData,

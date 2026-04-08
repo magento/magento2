@@ -2,6 +2,8 @@
 /**
  * Copyright 2024 Adobe
  * All Rights Reserved.
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 declare(strict_types=1);
 
@@ -31,7 +33,11 @@ use Magento\TestFramework\Fixture\DataFixtureStorage;
 use Magento\TestFramework\Fixture\DataFixtureStorageManager;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
+use PHPUnit\Framework\Attributes\DataProvider;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 #[
     DataFixture(ProductFixture::class, as: 'product'),
     DataFixture(CustomerFixture::class, as: 'customer'),
@@ -75,9 +81,7 @@ class OrderAvailableActionTest extends GraphQlAbstract
         Config('sales/cancellation/enabled', 1),
         Config('sales/reorder/allow', 1)
     ]
-    /**
-     * @dataProvider orderStatusProvider
-     */
+    #[DataProvider('orderStatusProvider')]
     public function testCustomerOrderAvailableActions($status, $expectedResult): void
     {
         /**

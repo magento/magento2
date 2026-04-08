@@ -5,6 +5,7 @@
  */
 namespace Magento\Catalog\Api;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Model\ResourceModel\Product as ProductResource;
 use Magento\Framework\Exception\CouldNotSaveException;
@@ -117,9 +118,9 @@ class SpecialPriceStorageTest extends WebapiAbstract
      * Test update method.
      *
      * @magentoApiDataFixture Magento/Catalog/_files/product_virtual.php
-     * @dataProvider updateData
      * @param array $data
      */
+    #[DataProvider('updateData')]
     public function testUpdate(array $data)
     {
         $serviceInfo = [
@@ -191,13 +192,13 @@ class SpecialPriceStorageTest extends WebapiAbstract
      * Test delete method.
      *
      * @magentoApiDataFixture Magento/Catalog/_files/product_simple.php
-     * @dataProvider deleteData
      * @param array $data
      * @throws CouldNotSaveException
      * @throws InputException
      * @throws NoSuchEntityException
      * @throws StateException
      */
+    #[DataProvider('deleteData')]
     public function testDelete(array $data)
     {
         /** @var ProductRepositoryInterface $productRepository */

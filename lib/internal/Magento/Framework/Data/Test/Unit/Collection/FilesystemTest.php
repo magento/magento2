@@ -10,6 +10,7 @@ namespace Magento\Framework\Data\Test\Unit\Collection;
 use Magento\Framework\Data\Collection\Filesystem;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class FilesystemTest extends TestCase
 {
@@ -27,9 +28,8 @@ class FilesystemTest extends TestCase
      * @param $filterValue
      * @param $row
      * @param $expected
-     *
-     * @dataProvider filterCallbackLikeDataProvider
-     */
+     *     */
+    #[DataProvider('filterCallbackLikeDataProvider')]
     public function testFilterCallbackLike($field, $filterValue, $row, $expected)
     {
         $filterValue = new \Zend_Db_Expr($filterValue);

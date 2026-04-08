@@ -38,7 +38,7 @@ class DeleteEntityRowTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->connection = $this->getMockForAbstractClass(
+        $this->connection = $this->createMock(
             AdapterInterface::class,
             [],
             '',

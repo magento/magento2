@@ -95,8 +95,24 @@ class SaveInventoryDataObserverTest extends TestCase
          $this->assertFalse($parentProductStockItem->getIsInStock());
     }
 
+    /**
+     * Check that parent product will be out of stock when created with only out-of-stock children
+     *
+     * @magentoAppArea adminhtml
+     */
     #[
-        DataFixture(ProductFixture::class, ['stock_item' => ['qty' => 0]], 'p1'),
+        DataFixture(
+            ProductFixture::class,
+            [
+                'extension_attributes' => [
+                    'stock_item' => [
+                        'qty' => 0,
+                        'is_in_stock' => false
+                    ]
+                ]
+            ],
+            'p1'
+        ),
         DataFixture(AttributeFixture::class, as: 'attr'),
         DataFixture(
             ConfigurableProductFixture::class,
@@ -106,6 +122,11 @@ class SaveInventoryDataObserverTest extends TestCase
     ]
     public function testAutoChangingIsInStockForNewConfigurable(): void
     {
+        $childProduct = $this->fixtures->get('p1');
+        /** @var ProductInterface $product */
+        $product = $this->productRepository->get($childProduct->getSku());
+        $this->productRepository->save($product);
+
         $sku = $this->fixtures->get('conf1')->getSku();
         /** @var ProductInterface $parentProduct */
         $parentProduct = $this->productRepository->get($sku);

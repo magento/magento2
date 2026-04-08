@@ -7,6 +7,7 @@
 namespace Magento\Catalog\Api;
 
 use Magento\Authorization\Model\Role;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\Authorization\Model\RoleFactory;
 use Magento\Authorization\Model\Rules;
 use Magento\Authorization\Model\RulesFactory;
@@ -195,12 +196,11 @@ class CategoryRepositoryTest extends WebapiAbstract
     }
 
     /**
-     * @dataProvider deleteSystemOrRootDataProvider
-     *
      * @param int $categoryId
      * @param string $exceptionMsg
      * @return void
      */
+    #[DataProvider('deleteSystemOrRootDataProvider')]
     public function testDeleteSystemOrRoot(int $categoryId, string $exceptionMsg): void
     {
         $this->expectException(\Exception::class);

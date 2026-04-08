@@ -9,10 +9,12 @@
  */
 namespace Magento\Test\Bootstrap;
 
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\TestFramework\MemoryLimit;
 
 class MemoryTest extends \PHPUnit\Framework\TestCase
 {
+    use MockCreationTrait;
     /**
      * @var \Magento\TestFramework\Bootstrap\Memory
      */
@@ -31,9 +33,10 @@ class MemoryTest extends \PHPUnit\Framework\TestCase
     protected function setUp(): void
     {
         $this->_memoryLimit = $this->createPartialMock(MemoryLimit::class, ['printStats']);
-        $this->_activationPolicy = $this->getMockBuilder(\stdClass::class)
-            ->addMethods(['register_shutdown_function'])
-            ->getMock();
+        $this->_activationPolicy = $this->createPartialMockWithReflection(
+            \stdClass::class,
+            ['register_shutdown_function']
+        );
         $this->_object = new \Magento\TestFramework\Bootstrap\Memory(
             $this->_memoryLimit,
             [$this->_activationPolicy, 'register_shutdown_function']

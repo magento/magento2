@@ -13,6 +13,7 @@ use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
 use Magento\CatalogSearch\Model\Indexer\Fulltext\Processor;
 use Magento\Catalog\Api\Data\EavAttributeInterface;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Check catalogsearch_fulltext index status after create product attribute.
@@ -95,10 +96,10 @@ class AttributeTest extends TestCase
      *
      * @param string $field
      * @return void
-     * @dataProvider searchableAttributesDataProvider
      * @magentoDataFixture Magento/Catalog/_files/dropdown_attribute.php
      * @magentoDbIsolation enabled
      */
+    #[DataProvider('searchableAttributesDataProvider')]
     public function testCheckIndexStatusAfterUpdateNonSearchableAttributeToSearchable(string $field): void
     {
         $this->indexerProcessor->reindexAll();

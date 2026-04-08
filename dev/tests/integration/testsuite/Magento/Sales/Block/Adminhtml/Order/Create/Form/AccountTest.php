@@ -24,6 +24,7 @@ use Magento\Quote\Model\Quote;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\ObjectManager;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -71,13 +72,17 @@ class AccountTest extends TestCase
 
         $this->session = $this->getMockBuilder(SessionQuote::class)
             ->disableOriginalConstructor()
-            ->addMethods(['getCustomerId'])
-            ->onlyMethods(['getQuote'])
+            ->onlyMethods(['getQuote', '__call'])
             ->getMock();
         $this->session->method('getQuote')
             ->willReturn($quote);
-        $this->session->method('getCustomerId')
-            ->willReturn(1);
+        $this->session->method('__call')
+            ->willReturnCallback(function ($method) {
+                if ($method === 'getCustomerId') {
+                    return 1;
+                }
+                return null;
+            });
 
         /** @var LayoutInterface $layout */
         $layout = $this->objectManager->get(LayoutInterface::class);
@@ -178,13 +183,17 @@ class AccountTest extends TestCase
 
         $this->session = $this->getMockBuilder(SessionQuote::class)
             ->disableOriginalConstructor()
-            ->addMethods(['getCustomerId'])
-            ->onlyMethods(['getQuote'])
+            ->onlyMethods(['getQuote', '__call'])
             ->getMock();
         $this->session->method('getQuote')
             ->willReturn($quote);
-        $this->session->method('getCustomerId')
-            ->willReturn(1);
+        $this->session->method('__call')
+            ->willReturnCallback(function ($method) {
+                if ($method === 'getCustomerId') {
+                    return 1;
+                }
+                return null;
+            });
 
         $formFactory = $this->getFormFactoryMock();
         $this->objectManager->addSharedInstance($formFactory, FormFactory::class);
@@ -210,13 +219,13 @@ class AccountTest extends TestCase
     /**
      * Test for get form with customer group based on vat id validation
      *
-     * @dataProvider getDataForVatValidatedCustomer
      * @param int $defaultCustomerGroupId
      * @param int $vatValidatedCustomerGroupId
      * @param array $customerDetails
      * @param array $orderDetails
      * @return void
      */
+    #[DataProvider('getDataForVatValidatedCustomer')]
     public function testGetFormWithVatValidatedCustomerGroup(
         int $defaultCustomerGroupId,
         int $vatValidatedCustomerGroupId,
@@ -227,8 +236,7 @@ class AccountTest extends TestCase
             ->disableOriginalConstructor()
             ->disableOriginalClone()
             ->getMock();
-        $requestMock = $this->getMockBuilder(Request::class)
-            ->getMockForAbstractClass();
+        $requestMock = $this->createMock(Request::class);
         $contextMock->expects($this->once())
             ->method('getRequest')
             ->willReturn($requestMock);
@@ -240,15 +248,20 @@ class AccountTest extends TestCase
         $quote->setCustomerGroupId($defaultCustomerGroupId);
         $quote->setData($customerDetails);
 
+        $customerId = $customerDetails['customer_id'];
         $this->session = $this->getMockBuilder(SessionQuote::class)
             ->disableOriginalConstructor()
-            ->addMethods(['getCustomerId'])
-            ->onlyMethods(['getQuote'])
+            ->onlyMethods(['getQuote', '__call'])
             ->getMock();
         $this->session->method('getQuote')
             ->willReturn($quote);
-        $this->session->method('getCustomerId')
-            ->willReturn($customerDetails['customer_id']);
+        $this->session->method('__call')
+            ->willReturnCallback(function ($method) use ($customerId) {
+                if ($method === 'getCustomerId') {
+                    return $customerId;
+                }
+                return null;
+            });
 
         $formFactory = $this->getFormFactoryMock();
         $this->objectManager->addSharedInstance($formFactory, FormFactory::class);

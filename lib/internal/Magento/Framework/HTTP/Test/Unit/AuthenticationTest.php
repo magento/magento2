@@ -11,15 +11,15 @@ use Magento\Framework\App\Request\Http;
 use Magento\Framework\HTTP\Authentication;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class AuthenticationTest extends TestCase
 {
     /**
      * @param array $server
      * @param string $expectedLogin
-     * @param string $expectedPass
-     * @dataProvider getCredentialsDataProvider
-     */
+     * @param string $expectedPass     */
+    #[DataProvider('getCredentialsDataProvider')]
     public function testGetCredentials($server, $expectedLogin, $expectedPass)
     {
         $request = $this->createMock(Http::class);

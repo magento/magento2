@@ -20,8 +20,10 @@ use Magento\Framework\HTTP\LaminasClientFactory;
 use Magento\Framework\Locale\ResolverInterface;
 use Magento\Framework\Module\Dir\Reader;
 use Magento\Framework\Stdlib\DateTime\DateTime;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\Xml\Security;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\Quote\Model\Quote\Address\RateRequest;
 use Magento\Quote\Model\Quote\Address\RateResult\Error;
 use Magento\Quote\Model\Quote\Address\RateResult\ErrorFactory;
@@ -43,6 +45,8 @@ use Psr\Log\LoggerInterface;
  */
 class CarrierTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var ObjectManager
      */
@@ -110,11 +114,12 @@ class CarrierTest extends TestCase
     {
         $this->objectManager = new ObjectManager($this);
 
-        $this->scope = $this->getMockForAbstractClass(ScopeConfigInterface::class);
+        $this->scope = $this->createMock(ScopeConfigInterface::class);
 
-        $this->error = $this->getMockBuilder(Error::class)
-            ->addMethods(['setCarrier', 'setCarrierTitle', 'setErrorMessage'])
-            ->getMock();
+        $this->error = $this->createPartialMockWithReflection(
+            Error::class,
+            ['setCarrier', 'setCarrierTitle', 'setErrorMessage']
+        );
         $this->errorFactory = $this->getMockBuilder(ErrorFactory::class)
             ->disableOriginalConstructor()
             ->onlyMethods(['create'])
@@ -126,7 +131,7 @@ class CarrierTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->logger = $this->getMockForAbstractClass(LoggerInterface::class);
+        $this->logger = $this->createMock(LoggerInterface::class);
 
         $this->coreDateMock = $this->getMockBuilder(DateTime::class)
             ->disableOriginalConstructor()
@@ -134,9 +139,7 @@ class CarrierTest extends TestCase
         $this->coreDateMock->method('date')
             ->willReturn('currentTime');
 
-        $this->productMetadataMock = $this->getMockBuilder(ProductMetadataInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->productMetadataMock = $this->createMock(ProductMetadataInterface::class);
         $this->productMetadataMock->method('getName')
             ->willReturn('Software_Product_Name_30_Char_123456789');
         $this->productMetadataMock->method('getVersion')
@@ -217,9 +220,8 @@ class CarrierTest extends TestCase
 
     /**
      * Prepare shipping label content exception test
-     *
-     * @dataProvider prepareShippingLabelContentExceptionDataProvider
      */
+    #[DataProvider('prepareShippingLabelContentExceptionDataProvider')]
     public function testPrepareShippingLabelContentException(\SimpleXMLElement $xml)
     {
         $this->expectException('Magento\Framework\Exception\LocalizedException');
@@ -285,10 +287,10 @@ class CarrierTest extends TestCase
     /**
      * Get DHL products test
      *
-     * @dataProvider dhlProductsDataProvider
      * @param string $docType
      * @param array $products
      */
+    #[DataProvider('dhlProductsDataProvider')]
     public function testGetDhlProducts(string $docType, array $products)
     {
         $this->assertEquals($products, $this->model->getDhlProducts($docType));
@@ -352,10 +354,10 @@ class CarrierTest extends TestCase
     /**
      * Tests that the built MessageReference string is of the appropriate format.
      *
-     * @dataProvider buildMessageReferenceDataProvider
      * @param $servicePrefix
      * @throws \ReflectionException
      */
+    #[DataProvider('buildMessageReferenceDataProvider')]
     public function testBuildMessageReference($servicePrefix)
     {
         $method = new \ReflectionMethod($this->model, 'buildMessageReference');
@@ -394,10 +396,10 @@ class CarrierTest extends TestCase
     /**
      * Tests that the built software name string is of the appropriate format.
      *
-     * @dataProvider buildSoftwareNameDataProvider
      * @param $productName
      * @throws \ReflectionException
      */
+    #[DataProvider('buildSoftwareNameDataProvider')]
     public function testBuildSoftwareName($productName)
     {
         $method = new \ReflectionMethod($this->model, 'buildSoftwareName');
@@ -424,10 +426,10 @@ class CarrierTest extends TestCase
     /**
      * Tests that the built software version string is of the appropriate format.
      *
-     * @dataProvider buildSoftwareVersionProvider
      * @param $productVersion
      * @throws \ReflectionException
      */
+    #[DataProvider('buildSoftwareVersionProvider')]
     public function testBuildSoftwareVersion($productVersion)
     {
         $method = new \ReflectionMethod($this->model, 'buildSoftwareVersion');
@@ -454,12 +456,12 @@ class CarrierTest extends TestCase
     /**
      * Tests if the DHL client returns the appropriate API URL.
      *
-     * @dataProvider getGatewayURLProvider
      * @param $sandboxMode
      * @param string $type
      * @param $expectedURL
      * @throws \ReflectionException
      */
+    #[DataProvider('getGatewayURLProvider')]
     public function testGetGatewayURL($sandboxMode, $type, $expectedURL)
     {
         $scopeConfigValueMap = [
@@ -641,7 +643,7 @@ class CarrierTest extends TestCase
      */
     private function getCarrierHelper(): CarrierHelper
     {
-        $localeResolver = $this->getMockForAbstractClass(ResolverInterface::class);
+        $localeResolver = $this->createMock(ResolverInterface::class);
         $localeResolver->method('getLocale')
             ->willReturn('fr_FR');
         $carrierHelper = $this->objectManager->getObject(

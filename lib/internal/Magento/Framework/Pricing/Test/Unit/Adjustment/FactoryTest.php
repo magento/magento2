@@ -61,7 +61,7 @@ class FactoryTest extends TestCase
         $objectManager = $this->createPartialMock(\Magento\Framework\ObjectManager\ObjectManager::class, ['create']);
         $objectManager->expects($this->any())
             ->method('create')
-            ->willReturn($this->getMockForAbstractClass($adjustmentInterface));
+            ->willReturn($this->createMock($adjustmentInterface));
         return $objectManager;
     }
 

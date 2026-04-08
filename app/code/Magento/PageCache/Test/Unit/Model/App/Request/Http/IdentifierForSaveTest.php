@@ -18,9 +18,13 @@ use Magento\Framework\Serialize\Serializer\Json;
 use Magento\PageCache\Model\App\Request\Http\IdentifierForSave;
 use Magento\PageCache\Model\App\Request\Http\IdentifierStoreReader;
 use Magento\Framework\App\Response\Http;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class IdentifierForSaveTest extends TestCase
 {
     /**
@@ -281,9 +285,9 @@ class IdentifierForSaveTest extends TestCase
      * @param string $expectedVaryString
      * @param bool $expectContextCall
      * @return void
-     * @dataProvider varyStringDataProvider
      * @covers \Magento\PageCache\Model\App\Request\Http\IdentifierForSave::getValue
      */
+    #[DataProvider('varyStringDataProvider')]
     public function testGetValueVaryStringResolution(
         ?string $cookieVaryString,
         string $contextVaryString,

@@ -36,7 +36,7 @@ class QuoteGeneratorFactoryTest extends TestCase
     {
         $this->objectManager = $this->getMockBuilder(ObjectManagerInterface::class)
             ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+            ->getMock();
         $objectManager = new ObjectManager($this);
 
         $this->fixture = $objectManager->getObject(

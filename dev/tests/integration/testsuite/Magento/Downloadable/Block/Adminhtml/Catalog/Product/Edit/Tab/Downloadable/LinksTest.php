@@ -5,6 +5,8 @@
  */
 namespace Magento\Downloadable\Block\Adminhtml\Catalog\Product\Edit\Tab\Downloadable;
 
+use PHPUnit\Framework\Attributes\DataProvider;
+
 /**
  * Class LinksTest
  *
@@ -79,13 +81,13 @@ class LinksTest extends \PHPUnit\Framework\TestCase
      *
      * @magentoConfigFixture current_store catalog/downloadable/links_title Links Title Test
      * @magentoAppIsolation enabled
-     * @dataProvider productLinksTitleDataProvider
      *
      * @magentoAppArea adminhtml
      * @param string $productType
      * @param string $linksTitle
      * @param string $expectedResult
      */
+    #[DataProvider('productLinksTitleDataProvider')]
     public function testGetLinksTitle($productType, $linksTitle, $expectedResult)
     {
         /** @var $objectManager \Magento\TestFramework\ObjectManager */

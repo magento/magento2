@@ -14,6 +14,7 @@ use Magento\Framework\Escaper;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Test for \Magento\Framework\Data\Form\Element\Multiline
@@ -70,9 +71,8 @@ class MultilineTest extends TestCase
      * @param mixed $value
      * @param int $index
      * @param string $resultValue
-     * @return void
-     * @dataProvider dataProviderValues
-     */
+     * @return void     */
+    #[DataProvider('dataProviderValues')]
     public function testGetEscapedValue($value, $index, $resultValue)
     {
         $this->element->setValue($value);

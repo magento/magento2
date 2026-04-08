@@ -80,9 +80,7 @@ class MessageEncoderTest extends TestCase
         $this->communicationConfigMock->expects($this->any())->method('getTopic')->willReturn(
             $this->getQueueConfigData()
         );
-        $object = $this->getMockBuilder(CustomerInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $object = $this->createMock(CustomerInterface::class);
         $this->dataObjectEncoderMock
             ->expects($this->once())
             ->method('convertValue')
@@ -101,9 +99,7 @@ class MessageEncoderTest extends TestCase
         $this->communicationConfigMock->expects($this->any())->method('getTopic')->willReturn(
             $this->getQueueConfigData()
         );
-        $object = $this->getMockBuilder(CustomerInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $object = $this->createMock(CustomerInterface::class);
         $this->dataObjectEncoderMock
             ->expects($this->once())
             ->method('convertValue')

@@ -65,7 +65,7 @@ class ViewSubscribeTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->configMock = $this->getMockForAbstractClass(
+        $this->configMock = $this->createMock(
             ConfigInterface::class,
             [],
             '',
@@ -74,14 +74,11 @@ class ViewSubscribeTest extends TestCase
             true,
             ['getView']
         );
-        $this->iteratorMock = $this->getMockBuilder(ChangelogBatchWalkerInterface::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['walk'])
-            ->getMockForAbstractClass();
+        $this->iteratorMock = $this->createMock(ChangelogBatchWalkerInterface::class);
         $changeLogBatchWalkerFactory = $this->getMockBuilder(ChangelogBatchWalkerFactory::class)
             ->disableOriginalConstructor()
             ->onlyMethods(['create'])
-            ->getMockForAbstractClass();
+            ->getMock();
         $changeLogBatchWalkerFactory->method('create')->willReturn($this->iteratorMock);
         $this->actionFactoryMock = $this->createPartialMock(ActionFactory::class, ['get']);
         $this->stateMock = $this->createPartialMock(

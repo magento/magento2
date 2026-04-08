@@ -8,6 +8,7 @@ namespace Magento\Customer\Block\Account\Dashboard;
 
 use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\TestFramework\Helper\Bootstrap;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Class address test.
@@ -85,8 +86,8 @@ class AddressTest extends \PHPUnit\Framework\TestCase
      * @magentoDataFixture Magento/Customer/_files/customer.php
      * @magentoDataFixture Magento/Customer/_files/customer_two_addresses.php
      * @magentoDataFixture Magento/Customer/_files/customer_no_address.php
-     * @dataProvider getPrimaryShippingAddressHtmlDataProvider
      */
+    #[DataProvider('getPrimaryShippingAddressHtmlDataProvider')]
     public function testGetPrimaryShippingAddressHtml($customerId, $expected)
     {
         // todo: this test is sensitive to caching impact
@@ -114,8 +115,8 @@ class AddressTest extends \PHPUnit\Framework\TestCase
      * @magentoDataFixture Magento/Customer/_files/customer.php
      * @magentoDataFixture Magento/Customer/_files/customer_two_addresses.php
      * @magentoDataFixture Magento/Customer/_files/customer_no_address.php
-     * @dataProvider getPrimaryBillingAddressHtmlDataProvider
      */
+    #[DataProvider('getPrimaryBillingAddressHtmlDataProvider')]
     public function testGetPrimaryBillingAddressHtml($customerId, $expected)
     {
         if (!empty($customerId)) {
@@ -140,8 +141,8 @@ class AddressTest extends \PHPUnit\Framework\TestCase
      * @magentoDataFixture Magento/Customer/_files/customer.php
      * @magentoDataFixture Magento/Customer/_files/customer_two_addresses.php
      * @magentoDataFixture Magento/Customer/_files/customer_no_address.php
-     * @dataProvider getPrimaryAddressEditUrlDataProvider
      */
+    #[DataProvider('getPrimaryAddressEditUrlDataProvider')]
     public function testGetPrimaryShippingAddressEditUrl($customerId, $expected)
     {
         if (!empty($customerId)) {
@@ -155,8 +156,8 @@ class AddressTest extends \PHPUnit\Framework\TestCase
      * @magentoDataFixture Magento/Customer/_files/customer.php
      * @magentoDataFixture Magento/Customer/_files/customer_two_addresses.php
      * @magentoDataFixture Magento/Customer/_files/customer_no_address.php
-     * @dataProvider getPrimaryAddressEditUrlDataProvider
      */
+    #[DataProvider('getPrimaryAddressEditUrlDataProvider')]
     public function testGetPrimaryBillingAddressEditUrl($customerId, $expected)
     {
         if (!empty($customerId)) {

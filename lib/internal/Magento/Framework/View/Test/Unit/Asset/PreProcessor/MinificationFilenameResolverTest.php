@@ -11,6 +11,7 @@ use Magento\Framework\View\Asset\Minification;
 use Magento\Framework\View\Asset\PreProcessor\MinificationConfigProvider;
 use Magento\Framework\View\Asset\PreProcessor\MinificationFilenameResolver;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  *
@@ -24,9 +25,8 @@ class MinificationFilenameResolverTest extends TestCase
      * @param bool $isMin
      * @param string $input
      * @param string $expected
-     *
-     * @dataProvider dataProviderForTestResolve
-     */
+     *     */
+    #[DataProvider('dataProviderForTestResolve')]
     public function testResolve($isMin, $input, $expected)
     {
         $minificationMock = $this->getMockBuilder(Minification::class)

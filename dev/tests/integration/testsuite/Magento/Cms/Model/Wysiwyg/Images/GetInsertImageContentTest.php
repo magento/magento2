@@ -14,6 +14,7 @@ use Magento\Framework\Url\EncoderInterface;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class GetInsertImageContentTest extends TestCase
 {
@@ -51,7 +52,6 @@ class GetInsertImageContentTest extends TestCase
     /**
      * Test for GetInsertImageContent::execute
      *
-     * @dataProvider imageDataProvider
      * @magentoDataFixture Magento/Store/_files/core_fixturestore.php
      * @param string $filename
      * @param bool $forceStaticPath
@@ -59,6 +59,7 @@ class GetInsertImageContentTest extends TestCase
      * @param string|null $storeCode
      * @param string $expectedResult
      */
+    #[DataProvider('imageDataProvider')]
     public function testExecute(
         string $filename,
         bool $forceStaticPath,

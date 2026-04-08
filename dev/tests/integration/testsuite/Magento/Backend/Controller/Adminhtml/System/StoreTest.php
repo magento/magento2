@@ -13,6 +13,7 @@ use Magento\Store\Api\WebsiteRepositoryInterface;
 use Magento\Framework\Data\Form\FormKey;
 use Magento\Framework\Message\MessageInterface;
 use Magento\Framework\Message\ManagerInterface;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\Framework\App\Request\Http as HttpRequest;
 
 /**
@@ -106,8 +107,8 @@ class StoreTest extends \Magento\TestFramework\TestCase\AbstractBackendControlle
     /**
      * @param array $post
      * @param string $message
-     * @dataProvider saveActionWithExistCodeDataProvider
      */
+    #[DataProvider('saveActionWithExistCodeDataProvider')]
     public function testSaveActionWithExistCode($post, $message)
     {
         $post['form_key'] = $this->formKey->getFormKey();

@@ -7,6 +7,8 @@ declare(strict_types=1);
 
 namespace Magento\Framework;
 
+use Exception;
+
 /**
  * Magento escape methods
  *
@@ -107,11 +109,11 @@ class Escaper
                     $domDocument->loadHTML(
                         '<html><body id="' . $wrapperElementId . '">' . $string . '</body></html>'
                     );
-                } catch (\Exception $e) {
-                    restore_error_handler();
+                } catch (Exception $e) {
                     $this->getLogger()->critical($e);
+                } finally {
+                    restore_error_handler();
                 }
-                restore_error_handler();
 
                 $this->removeComments($domDocument);
                 $this->removeNotAllowedTags($domDocument, $allowedTags);

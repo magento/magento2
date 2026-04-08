@@ -9,6 +9,7 @@ namespace Magento\Framework\Module\Test\Unit\Declaration\Converter;
 
 use Magento\Framework\Module\Declaration\Converter\Dom;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class DomTest extends TestCase
 {
@@ -32,9 +33,8 @@ class DomTest extends TestCase
     }
 
     /**
-     * @param string $xmlString
-     * @dataProvider convertWithInvalidDomDataProvider
-     */
+     * @param string $xmlString     */
+    #[DataProvider('convertWithInvalidDomDataProvider')]
     public function testConvertWithInvalidDom($xmlString)
     {
         $this->expectException('Exception');

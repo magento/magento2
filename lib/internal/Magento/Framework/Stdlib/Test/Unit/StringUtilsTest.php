@@ -9,6 +9,7 @@ namespace Magento\Framework\Stdlib\Test\Unit;
 
 use Magento\Framework\Stdlib\StringUtils;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Magento\Framework\Stdlib\StringUtilsTest test case
@@ -83,9 +84,8 @@ class StringUtilsTest extends TestCase
     /**
      * @param string $testString
      * @param string $expected
-     *
-     * @dataProvider upperCaseWordsDataProvider
-     */
+     *     */
+    #[DataProvider('upperCaseWordsDataProvider')]
     public function testUpperCaseWords($testString, $expected)
     {
         $actual = $this->_string->upperCaseWords($testString);
@@ -109,9 +109,8 @@ class StringUtilsTest extends TestCase
      * @param string $sourceSeparator
      * @param string $destinationSeparator
      * @param string $expected
-     *
-     * @dataProvider upperCaseWordsWithSeparatorsDataProvider
-     */
+     *     */
+    #[DataProvider('upperCaseWordsWithSeparatorsDataProvider')]
     public function testUpperCaseWordsWithSeparators($testString, $sourceSeparator, $destinationSeparator, $expected)
     {
         $actual = $this->_string->upperCaseWords($testString, $sourceSeparator, $destinationSeparator);

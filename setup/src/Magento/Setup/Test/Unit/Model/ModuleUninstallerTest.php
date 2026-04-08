@@ -66,12 +66,7 @@ class ModuleUninstallerTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->objectManager = $this->getMockForAbstractClass(
-            ObjectManagerInterface::class,
-            [],
-            '',
-            false
-        );
+        $this->objectManager = $this->createMock(ObjectManagerInterface::class);
         $objectManagerProvider = $this->createMock(ObjectManagerProvider::class);
         $objectManagerProvider->expects($this->once())->method('get')->willReturn($this->objectManager);
 
@@ -90,12 +85,12 @@ class ModuleUninstallerTest extends TestCase
             $setupFactory
         );
 
-        $this->output = $this->getMockForAbstractClass(OutputInterface::class);
+        $this->output = $this->createMock(OutputInterface::class);
     }
 
     public function testUninstallRemoveData()
     {
-        $uninstall = $this->getMockForAbstractClass(UninstallInterface::class, [], '', false);
+        $uninstall = $this->createMock(UninstallInterface::class);
         $uninstall->expects($this->atLeastOnce())
             ->method('uninstall')
             ->with($this->setup, $this->isInstanceOf(ModuleContext::class));

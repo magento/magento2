@@ -9,16 +9,21 @@ namespace Magento\Theme\Test\Unit\Model\Design\Config\DataProvider;
 
 use Magento\Framework\App\Request\Http;
 use Magento\Framework\App\ScopeFallbackResolverInterface;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Theme\Api\Data\DesignConfigDataInterface;
+use Magento\Theme\Api\Data\DesignConfigExtensionInterface;
 use Magento\Theme\Api\Data\DesignConfigInterface;
 use Magento\Theme\Api\DesignConfigRepositoryInterface;
 use Magento\Theme\Model\Design\Config\DataProvider\MetadataLoader;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class MetadataLoaderTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var MetadataLoader
      */
@@ -50,7 +55,7 @@ class MetadataLoaderTest extends TestCase
     protected $designConfigData;
 
     /**
-     * @var \Magento\Theme\Api\Data\DesignConfigExtensionInterface|MockObject
+     * @var DesignConfigExtensionInterface|MockObject
      */
     protected $designConfigExtension;
 
@@ -65,23 +70,16 @@ class MetadataLoaderTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->scopeFallbackResolver = $this->getMockBuilder(
-            ScopeFallbackResolverInterface::class
-        )->getMockForAbstractClass();
+        $this->scopeFallbackResolver = $this->createMock(ScopeFallbackResolverInterface::class);
 
-        $this->designConfigRepository = $this->getMockBuilder(DesignConfigRepositoryInterface::class)
-            ->getMockForAbstractClass();
-        $this->designConfig = $this->getMockBuilder(DesignConfigInterface::class)
-            ->getMockForAbstractClass();
-        $this->designConfigData = $this->getMockBuilder(DesignConfigDataInterface::class)
-            ->getMockForAbstractClass();
-        $this->designConfigExtension = $this->getMockBuilder(
-            \Magento\Theme\Api\Data\DesignConfigExtensionInterface::class
-        )
-            ->addMethods(['getDesignConfigData'])
-            ->getMockForAbstractClass();
-        $this->storeManager = $this->getMockBuilder(StoreManagerInterface::class)
-            ->getMockForAbstractClass();
+        $this->designConfigRepository = $this->createMock(DesignConfigRepositoryInterface::class);
+        $this->designConfig = $this->createMock(DesignConfigInterface::class);
+        $this->designConfigData = $this->createMock(DesignConfigDataInterface::class);
+        $this->designConfigExtension = $this->createPartialMockWithReflection(
+            DesignConfigExtensionInterface::class,
+            ['getDesignConfigData']
+        );
+        $this->storeManager = $this->createMock(StoreManagerInterface::class);
 
         $this->model = new MetadataLoader(
             $this->request,
@@ -95,8 +93,8 @@ class MetadataLoaderTest extends TestCase
      * @param string $scope
      * @param string $scopeId
      * @param string $showFallbackReset
-     * @dataProvider dataProviderGetData
      */
+    #[DataProvider('dataProviderGetData')]
     public function testGetData(
         $scope,
         $scopeId,

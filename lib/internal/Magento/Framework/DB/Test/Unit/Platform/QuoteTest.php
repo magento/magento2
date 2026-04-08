@@ -12,6 +12,7 @@ use Magento\Framework\DB\Select;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class QuoteTest extends TestCase
 {
@@ -66,18 +67,20 @@ class QuoteTest extends TestCase
     {
         $identifier = [$this->zendDbExprMock, $this->zendDbExprMock];
         $expectedResult = 'string1.string2';
+        $callCount = 0;
         $this->zendDbExprMock->expects($this->exactly(2))
             ->method('__toString')
-            ->will($this->onConsecutiveCalls('string1', 'string2'));
+            ->willReturnCallback(function () use (&$callCount) {
+                return ++$callCount === 1 ? 'string1' : 'string2';
+            });
         $this->assertEquals($expectedResult, $this->model->quoteIdentifier($identifier));
     }
 
     /**
      * @param string|array $identifier
-     * @param string $expectedResult
-     * @dataProvider getStringArrayToQuoteDataProvider
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @param string $expectedResult     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
+    #[DataProvider('getStringArrayToQuoteDataProvider')]
     public function testQuoteIdentifier($identifier, $alias, $expectedResult)
     {
         $this->assertEquals($expectedResult, $this->model->quoteIdentifier($identifier));
@@ -86,9 +89,8 @@ class QuoteTest extends TestCase
     /**
      * @param string $string
      * @param string|null $alias
-     * @param string $expectedResult
-     * @dataProvider getExpressionToQuoteDataProvider
-     */
+     * @param string $expectedResult     */
+    #[DataProvider('getExpressionToQuoteDataProvider')]
     public function testQuoteColumnAsWithZendDbExpr($string, $alias, $expectedResult)
     {
         $this->zendDbExprMock->expects($this->once())
@@ -100,9 +102,8 @@ class QuoteTest extends TestCase
     /**
      * @param string $string
      * @param string|null $alias
-     * @param string $expectedResult
-     * @dataProvider getSelectToQuoteDataProvider
-     */
+     * @param string $expectedResult     */
+    #[DataProvider('getSelectToQuoteDataProvider')]
     public function testQuoteColumnAsWithSelect($string, $alias, $expectedResult)
     {
         $this->selectMock->expects($this->once())
@@ -113,9 +114,8 @@ class QuoteTest extends TestCase
 
     /**
      * @param string|array $identifier
-     * @param string $expectedResult
-     * @dataProvider getStringArrayToQuoteWithAliasDataProvider
-     */
+     * @param string $expectedResult     */
+    #[DataProvider('getStringArrayToQuoteWithAliasDataProvider')]
     public function testQuoteColumn($identifier, $alias, $expectedResult)
     {
         $this->assertEquals($expectedResult, $this->model->quoteColumnAs($identifier, $alias));
@@ -124,9 +124,8 @@ class QuoteTest extends TestCase
     /**
      * @param string $string
      * @param string|null $alias
-     * @param string $expectedResult
-     * @dataProvider getExpressionToQuoteDataProvider
-     */
+     * @param string $expectedResult     */
+    #[DataProvider('getExpressionToQuoteDataProvider')]
     public function testQuoteTableAsWithZendDbExpr($string, $alias, $expectedResult)
     {
         $this->zendDbExprMock->expects($this->once())
@@ -138,9 +137,8 @@ class QuoteTest extends TestCase
     /**
      * @param string $string
      * @param string|null $alias
-     * @param string $expectedResult
-     * @dataProvider getSelectToQuoteDataProvider
-     */
+     * @param string $expectedResult     */
+    #[DataProvider('getSelectToQuoteDataProvider')]
     public function testQuoteTableAsWithSelect($string, $alias, $expectedResult)
     {
         $this->selectMock->expects($this->once())
@@ -151,9 +149,8 @@ class QuoteTest extends TestCase
 
     /**
      * @param string|array $identifier
-     * @param string $expectedResult
-     * @dataProvider getStringArrayToQuoteWithAliasDataProvider
-     */
+     * @param string $expectedResult     */
+    #[DataProvider('getStringArrayToQuoteWithAliasDataProvider')]
     public function testQuoteTableAs($identifier, $alias, $expectedResult)
     {
         $this->assertEquals($expectedResult, $this->model->quoteTableAs($identifier, $alias));

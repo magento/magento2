@@ -8,6 +8,7 @@ declare(strict_types=1);
 namespace Magento\Catalog\Block\Adminhtml\Product\Edit\Tab\Alerts;
 
 use Magento\Framework\View\LayoutInterface;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Check stock alert grid
@@ -32,8 +33,6 @@ class StockTest extends AbstractAlertTest
     }
 
     /**
-     * @dataProvider alertsDataProvider
-     *
      * @magentoDbIsolation disabled
      * @magentoDataFixture Magento/ProductAlert/_files/product_alert.php
      * @magentoDataFixture Magento/ProductAlert/_files/stock_alert_on_second_website.php
@@ -43,6 +42,7 @@ class StockTest extends AbstractAlertTest
      * @param string|null $storeCode
      * @return void
      */
+    #[DataProvider('alertsDataProvider')]
     public function testGridCollectionWithStoreId(string $sku, string $expectedEmail, ?string $storeCode = null): void
     {
         $this->prepareRequest($sku, $storeCode);
@@ -70,11 +70,10 @@ class StockTest extends AbstractAlertTest
     }
 
     /**
-     * @dataProvider storeProvider
-     *
      * @param string|null $storeCode
      * @return void
      */
+    #[DataProvider('storeProvider')]
     public function testGetGridUrl(?string $storeCode): void
     {
         $this->prepareRequest(null, $storeCode);

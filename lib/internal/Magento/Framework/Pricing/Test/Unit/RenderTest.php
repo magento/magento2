@@ -60,17 +60,13 @@ class RenderTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->price = $this->getMockBuilder(PriceInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->price = $this->createMock(PriceInterface::class);
 
         $this->amount = $this->getMockBuilder(Base::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->saleableItem = $this->getMockBuilder(SaleableInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->saleableItem = $this->createMock(SaleableInterface::class);
 
         $this->renderPool = $this->getMockBuilder(RendererPool::class)
             ->disableOriginalConstructor()
@@ -96,7 +92,7 @@ class RenderTest extends TestCase
         $this->priceLayout->expects($this->once())
             ->method('loadLayout');
 
-        $layout = $this->getMockForAbstractClass(LayoutInterface::class);
+        $layout = $this->createMock(LayoutInterface::class);
         $this->model->setPriceRenderHandle($priceRenderHandle);
         $this->model->setLayout($layout);
     }

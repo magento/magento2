@@ -15,6 +15,7 @@ use Magento\Framework\Setup\Option\SelectConfigOption;
 use Magento\Framework\Setup\Option\TextConfigOption;
 use Magento\Setup\Model\ConfigOptionsList\Lock as LockConfigOptionsList;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 class LockTest extends TestCase
@@ -70,8 +71,8 @@ class LockTest extends TestCase
     /**
      * @param array $options
      * @param array $expectedResult
-     * @dataProvider createConfigDataProvider
      */
+    #[DataProvider('createConfigDataProvider')]
     public function testCreateConfig(array $options, array $expectedResult)
     {
         $this->deploymentConfigMock->expects($this->any())
@@ -197,8 +198,8 @@ class LockTest extends TestCase
     /**
      * @param array $options
      * @param array $expectedResult
-     * @dataProvider updateConfigDataProvider
      */
+    #[DataProvider('updateConfigDataProvider')]
     public function testUpdateConfig(array $options, array $expectedResult)
     {
         $valueMap = [
@@ -293,8 +294,8 @@ class LockTest extends TestCase
     /**
      * @param array $options
      * @param array $expectedResult
-     * @dataProvider validateDataProvider
      */
+    #[DataProvider('validateDataProvider')]
     public function testValidate(array $options, array $expectedResult)
     {
         $this->deploymentConfigMock->expects($this->any())

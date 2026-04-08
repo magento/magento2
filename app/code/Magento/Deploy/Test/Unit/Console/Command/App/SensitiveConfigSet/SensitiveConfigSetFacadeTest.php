@@ -77,20 +77,16 @@ class SensitiveConfigSetFacadeTest extends TestCase
         $this->configFilePoolMock = $this->getMockBuilder(ConfigFilePool::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->commentParserMock = $this->getMockBuilder(CommentParserInterface::class)
-            ->getMockForAbstractClass();
+        $this->commentParserMock = $this->createMock(CommentParserInterface::class);
         $this->configWriterMock = $this->getMockBuilder(ConfigWriter::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->scopeValidatorMock = $this->getMockBuilder(ValidatorInterface::class)
-            ->getMockForAbstractClass();
+        $this->scopeValidatorMock = $this->createMock(ValidatorInterface::class);
         $this->collectorFactoryMock = $this->getMockBuilder(CollectorFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->inputMock = $this->getMockBuilder(InputInterface::class)
-            ->getMockForAbstractClass();
-        $this->outputMock = $this->getMockBuilder(OutputInterface::class)
-            ->getMockForAbstractClass();
+        $this->inputMock = $this->createMock(InputInterface::class);
+        $this->outputMock = $this->createMock(OutputInterface::class);
 
         $this->command = new SensitiveConfigSetFacade(
             $this->configFilePoolMock,
@@ -150,8 +146,7 @@ class SensitiveConfigSetFacadeTest extends TestCase
                 'some/config/path1',
                 'some/config/path2'
             ]);
-        $collectorMock = $this->getMockBuilder(CollectorInterface::class)
-            ->getMockForAbstractClass();
+        $collectorMock = $this->createMock(CollectorInterface::class);
         $collectorMock->expects($this->once())
             ->method('getValues')
             ->willReturn(['some/config/pathNotExist' => 'value']);
@@ -212,8 +207,7 @@ class SensitiveConfigSetFacadeTest extends TestCase
                 'some/config/path1',
                 'some/config/path2'
             ]);
-        $collectorMock = $this->getMockBuilder(CollectorInterface::class)
-            ->getMockForAbstractClass();
+        $collectorMock = $this->createMock(CollectorInterface::class);
         $collectorMock->expects($this->once())
             ->method('getValues')
             ->willReturn($collectedValues);
@@ -252,8 +246,7 @@ class SensitiveConfigSetFacadeTest extends TestCase
                 'some/config/path2',
                 'some/config/path3'
             ]);
-        $collectorMock = $this->getMockBuilder(CollectorInterface::class)
-            ->getMockForAbstractClass();
+        $collectorMock = $this->createMock(CollectorInterface::class);
         $collectorMock->expects($this->once())
             ->method('getValues')
             ->willReturn($collectedValues);

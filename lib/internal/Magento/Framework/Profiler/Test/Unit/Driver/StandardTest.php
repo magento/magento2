@@ -130,8 +130,8 @@ class StandardTest extends TestCase
             'outputFactory' => $outputFactory
         ];
 
-        $outputOne = $this->getMockForAbstractClass(OutputInterface::class);
-        $outputTwo = $this->getMockForAbstractClass(OutputInterface::class);
+        $outputOne = $this->createMock(OutputInterface::class);
+        $outputTwo = $this->createMock(OutputInterface::class);
 
         $outputFactory->method('create')
             ->willReturnCallback(
@@ -156,9 +156,9 @@ class StandardTest extends TestCase
      */
     public function testDisplayAndRegisterOutput(): void
     {
-        $outputOne = $this->getMockForAbstractClass(OutputInterface::class);
+        $outputOne = $this->createMock(OutputInterface::class);
         $outputOne->expects($this->once())->method('display')->with($this->stat);
-        $outputTwo = $this->getMockForAbstractClass(OutputInterface::class);
+        $outputTwo = $this->createMock(OutputInterface::class);
         $outputTwo->expects($this->once())->method('display')->with($this->stat);
 
         $this->driver->registerOutput($outputOne);

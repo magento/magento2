@@ -60,7 +60,7 @@ class CancelOrder
     ): Order {
         $payment = $order->getPayment();
 
-        if ($payment->getAmountPaid() !== null) {
+        if ($payment->getAmountPaid() !== null || $payment->getMethod() === 'free') {
             $order = $payment->getMethodInstance()->isOffline()
                 ? $this->handleOfflinePayment($order)
                 : $this->handleOnlinePayment($order);

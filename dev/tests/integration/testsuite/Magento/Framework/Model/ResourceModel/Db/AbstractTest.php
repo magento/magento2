@@ -22,10 +22,10 @@ class AbstractTest extends \PHPUnit\Framework\TestCase
             \Magento\Framework\Model\ResourceModel\Db\Context::class,
             ['resource' => $resource]
         );
-        $this->_model = $this->getMockForAbstractClass(
-            \Magento\Framework\Model\ResourceModel\Db\AbstractDb::class,
-            ['context' => $context]
-        );
+        $this->_model = $this->getMockBuilder(\Magento\Framework\Model\ResourceModel\Db\AbstractDb::class)
+            ->setConstructorArgs(['context' => $context])
+            ->onlyMethods(['_construct'])
+            ->getMock();
     }
 
     public function testConstruct()
@@ -64,10 +64,10 @@ class AbstractTest extends \PHPUnit\Framework\TestCase
             ['resource' => $resource]
         );
 
-        $model = $this->getMockForAbstractClass(
-            \Magento\Framework\Model\ResourceModel\Db\AbstractDb::class,
-            ['context' => $context]
-        );
+        $model = $this->getMockBuilder(\Magento\Framework\Model\ResourceModel\Db\AbstractDb::class)
+            ->setConstructorArgs(['context' => $context])
+            ->onlyMethods(['_construct'])
+            ->getMock();
 
         $tableName = $model->getTable([$tableNameOrig, $tableSuffix]);
         $this->assertEquals('prefix_store_website_suffix', $tableName);

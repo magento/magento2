@@ -16,6 +16,7 @@ use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\View\LayoutInterface;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\TestFramework\Helper\Bootstrap;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -61,10 +62,10 @@ class ProductInCategoriesViewTest extends TestCase
 
     /**
      * @magentoDataFixture Magento/Catalog/_files/category_with_two_products.php
-     * @dataProvider productDataProvider
      * @param array $data
      * @return void
      */
+    #[DataProvider('productDataProvider')]
     public function testCategoryProductView(array $data): void
     {
         $this->updateProduct($data['sku'], $data);
@@ -115,10 +116,10 @@ class ProductInCategoriesViewTest extends TestCase
 
     /**
      * @magentoDataFixture Magento/Catalog/_files/category_product.php
-     * @dataProvider productVisibilityProvider
      * @param array $data
      * @return void
      */
+    #[DataProvider('productVisibilityProvider')]
     public function testCategoryProductVisibility(array $data): void
     {
         $this->updateProduct($data['data']['sku'], $data['data']);

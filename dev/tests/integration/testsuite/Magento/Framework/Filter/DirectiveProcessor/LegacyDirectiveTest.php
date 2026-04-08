@@ -11,6 +11,7 @@ use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Filter\Template;
 use Magento\TestModuleSimpleTemplateDirective\Model\LegacyFilter;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class LegacyDirectiveTest extends TestCase
 {
@@ -39,8 +40,8 @@ class LegacyDirectiveTest extends TestCase
     }
 
     /**
-     * @dataProvider useCaseProvider
      */
+    #[DataProvider('useCaseProvider')]
     public function testCases(string $template, array $variables, string $expect)
     {
         $result = $this->processor->process(

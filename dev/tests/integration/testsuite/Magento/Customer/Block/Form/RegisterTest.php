@@ -209,7 +209,6 @@ class RegisterTest extends \PHPUnit\Framework\TestCase
         $code = 'customer_create_form_submit';
         $buttonLock = $this->getMockBuilder(\Magento\ReCaptchaUi\Model\ButtonLock::class)
             ->disableOriginalConstructor()
-            ->disableAutoload()
             ->onlyMethods(['isDisabled', 'getCode'])
             ->getMock();
         $buttonLock->expects($this->any())->method('getCode')->willReturn($code);

@@ -11,6 +11,7 @@ use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Store\Model\ScopeInterface;
 use Magento\TestFramework\Config\Model\ConfigStorage;
 use Magento\TestModuleOverrideConfig\AbstractOverridesTest;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Class checks that magentoConfigFixtures can be added via override config
@@ -58,11 +59,10 @@ class AddFixtureTest extends AbstractOverridesTest
     /**
      * Checks that fixtures added in method and data set nodes successfully applied
      *
-     * @dataProvider testDataProvider
-     *
      * @param string $expectedConfigValue
      * @return void
      */
+    #[DataProvider('configValueDataProvider')]
     public function testAddFixtureToMethod(string $expectedConfigValue): void
     {
         $value = $this->config->getValue('test_section/test_group/field_1', ScopeInterface::SCOPE_STORES, 'default');
@@ -80,11 +80,11 @@ class AddFixtureTest extends AbstractOverridesTest
     /**
      * @return array
      */
-    public static function testDataProvider(): array
+    public static function configValueDataProvider(): array
     {
         return [
-            'first_data_set' => ['expected_config_value' => 'overridden value for method'],
-            'second_data_set' => ['expected_config_value' => 'overridden value for data set']
+            'first_data_set' => ['overridden value for method'],
+            'second_data_set' => ['overridden value for data set']
         ];
     }
 

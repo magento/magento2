@@ -24,6 +24,7 @@ use Magento\Framework\Filesystem\Directory\WriteInterface;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Serialize\Serializer\Serialize;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Cache\Adapter\FilesystemAdapter;
 use Symfony\Component\Cache\Adapter\NullAdapter;
@@ -106,11 +107,9 @@ class FactoryTest extends TestCase
         );
     }
 
-    /**
-     * @param array $options
-     * @param string $expectedPrefix
-     * @dataProvider idPrefixDataProvider
+    /**     * @param string $expectedPrefix
      */
+    #[DataProvider('idPrefixDataProvider')]
     public function testIdPrefix($options, $expectedPrefix)
     {
         $model = $this->_buildModelForCreate(['backend' => FilesystemAdapter::class]);
@@ -191,7 +190,7 @@ class FactoryTest extends TestCase
             $adapterMock
         );
 
-        $objectManager = $this->getMockForAbstractClass(ObjectManagerInterface::class);
+        $objectManager = $this->createMock(ObjectManagerInterface::class);
         $objectManager->expects($this->any())->method('create')->willReturnCallback($processFrontendFunc);
 
         // Create mock for SymfonyAdapterProvider
@@ -219,10 +218,10 @@ class FactoryTest extends TestCase
      */
     private function createFilesystemMock()
     {
-        $dirMock = $this->getMockForAbstractClass(ReadInterface::class);
+        $dirMock = $this->createMock(ReadInterface::class);
         $dirMock->expects($this->any())->method('getAbsolutePath')->willReturn('DIR');
 
-        $writeDirMock = $this->getMockForAbstractClass(WriteInterface::class);
+        $writeDirMock = $this->createMock(WriteInterface::class);
         $writeDirMock->expects($this->any())->method('getAbsolutePath')->willReturn('DIR');
         $writeDirMock->expects($this->any())->method('create')->willReturn(true);
 

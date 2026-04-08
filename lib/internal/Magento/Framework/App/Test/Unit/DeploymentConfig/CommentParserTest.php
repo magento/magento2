@@ -46,7 +46,7 @@ class CommentParserTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $this->readDirectoryMock = $this->getMockBuilder(ReadInterface::class)
-            ->getMockForAbstractClass();
+            ->getMock();
         $this->filesystemMock = $this->getMockBuilder(Filesystem::class)
             ->disableOriginalConstructor()
             ->getMock();

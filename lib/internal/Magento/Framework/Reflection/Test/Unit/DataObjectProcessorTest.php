@@ -19,6 +19,7 @@ use Magento\Framework\Serialize\SerializerInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -50,7 +51,7 @@ class DataObjectProcessorTest extends TestCase
                 'typeProcessor' => $objectManager->getObject(TypeProcessor::class),
             ]
         );
-        $serializerMock = $this->getMockForAbstractClass(SerializerInterface::class);
+        $serializerMock = $this->createMock(SerializerInterface::class);
         $serializerMock->method('serialize')
             ->willReturn('serializedData');
         $serializerMock->method('unserialize')
@@ -70,9 +71,8 @@ class DataObjectProcessorTest extends TestCase
     /**
      * @param array $extensionAttributes
      * @param array $excludedMethodsClassMap
-     * @param array $expectedOutput
-     * @dataProvider buildOutputDataArrayDataProvider
-     */
+     * @param array $expectedOutput     */
+    #[DataProvider('buildOutputDataArrayDataProvider')]
     public function testBuildOutputDataArray(
         array $extensionAttributes,
         array $excludedMethodsClassMap,
@@ -95,7 +95,7 @@ class DataObjectProcessorTest extends TestCase
         $testDataObject = $objectManager->getObject(
             TestDataObject::class,
             [
-                'extensionAttributes' => $this->getMockForAbstractClass(
+                'extensionAttributes' => $this->createMock(
                     ExtensionAttributesInterface::class
                 )
             ]

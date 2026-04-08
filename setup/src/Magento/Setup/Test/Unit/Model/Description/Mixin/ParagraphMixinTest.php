@@ -9,6 +9,7 @@ namespace Magento\Setup\Test\Unit\Model\Description\Mixin;
 
 use Magento\Setup\Model\Description\Mixin\ParagraphMixin;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class ParagraphMixinTest extends TestCase
 {
@@ -23,8 +24,8 @@ class ParagraphMixinTest extends TestCase
     }
 
     /**
-     * @dataProvider getTestData
      */
+    #[DataProvider('getTestData')]
     public function testApply($subject, $expectedResult)
     {
         $this->assertEquals($expectedResult, $this->mixin->apply($subject));

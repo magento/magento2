@@ -17,6 +17,7 @@ use Magento\Setup\Module\Di\Code\Reader\Decorator\Directory;
 use Magento\Setup\Module\Di\Code\Reader\Decorator\Interceptions;
 use Magento\Setup\Module\Di\Compiler\Log\Log;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 class InterceptionsTest extends TestCase
@@ -129,10 +130,10 @@ class InterceptionsTest extends TestCase
     }
 
     /**
-     * @dataProvider getListExceptionDataProvider
      *
      * @param $exception
      */
+    #[DataProvider('getListExceptionDataProvider')]
     public function testGetListException(\Exception $exception)
     {
         $path = '/tmp/test';

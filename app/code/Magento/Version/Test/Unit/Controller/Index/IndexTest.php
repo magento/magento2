@@ -39,10 +39,7 @@ class IndexTest extends TestCase
     {
         $this->contextMock = $this->createMock(Context::class);
 
-        $this->productMetadataMock = $this->getMockBuilder(ProductMetadataInterface::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['getName', 'getEdition', 'getVersion'])
-            ->getMockForAbstractClass();
+        $this->productMetadataMock = $this->createMock(ProductMetadataInterface::class);
 
         $this->rawResponseFactoryMock = $this->createPartialMock(RawFactory::class, ['create']);
         $this->rawResponseMock = $this->createPartialMock(Raw::class, ['setContents']);

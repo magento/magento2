@@ -12,6 +12,7 @@ namespace Magento\Framework\Encryption\Test\Unit;
 
 use Magento\Framework\Encryption\Crypt;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class CryptTest extends TestCase
 {
@@ -89,9 +90,8 @@ class CryptTest extends TestCase
         return $result;
     }
 
-    /**
-     * @dataProvider getCipherModeCombinations
-     */
+    /**     */
+    #[DataProvider('getCipherModeCombinations')]
     public function testConstructor($cipher, $mode)
     {
         /* Generate random init vector */
@@ -126,9 +126,8 @@ class CryptTest extends TestCase
         return $result;
     }
 
-    /**
-     * @dataProvider getConstructorExceptionData
-     */
+    /**     */
+    #[DataProvider('getConstructorExceptionData')]
     public function testConstructorException($key, $cipher, $mode, $initVector)
     {
         $this->expectException('Magento\Framework\Exception\LocalizedException');
@@ -161,9 +160,8 @@ class CryptTest extends TestCase
         return $result;
     }
 
-    /**
-     * @dataProvider getCryptData
-     */
+    /**     */
+    #[DataProvider('getCryptData')]
     public function testEncrypt($key, $cipher, $mode, $initVector, $inputData, $expectedData)
     {
         $crypt = new Crypt($key, $cipher, $mode, $initVector);
@@ -171,9 +169,8 @@ class CryptTest extends TestCase
         $this->assertEquals($expectedData, $actualData);
     }
 
-    /**
-     * @dataProvider getCryptData
-     */
+    /**     */
+    #[DataProvider('getCryptData')]
     public function testDecrypt($key, $cipher, $mode, $initVector, $expectedData, $inputData)
     {
         $crypt = new Crypt($key, $cipher, $mode, $initVector);
@@ -181,9 +178,8 @@ class CryptTest extends TestCase
         $this->assertEquals($expectedData, $actualData);
     }
 
-    /**
-     * @dataProvider getCipherModeCombinations
-     */
+    /**     */
+    #[DataProvider('getCipherModeCombinations')]
     public function testInitVectorRandom($cipher, $mode)
     {
         $crypt1 = new Crypt($this->_key, $cipher, $mode, true);
@@ -198,9 +194,8 @@ class CryptTest extends TestCase
         $this->assertNotEquals($initVector2, $initVector1);
     }
 
-    /**
-     * @dataProvider getCipherModeCombinations
-     */
+    /**     */
+    #[DataProvider('getCipherModeCombinations')]
     public function testInitVectorNone($cipher, $mode)
     {
         $crypt = new Crypt($this->_key, $cipher, $mode, false);

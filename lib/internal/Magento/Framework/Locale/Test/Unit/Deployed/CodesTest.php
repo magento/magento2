@@ -62,8 +62,7 @@ class CodesTest extends TestCase
         $area = 'area';
         $fullPath = 'some/full/path';
 
-        $themeMock = $this->getMockBuilder(ThemeInterface::class)
-            ->getMockForAbstractClass();
+        $themeMock = $this->createMock(ThemeInterface::class);
         $themeMock->expects($this->once())
             ->method('getFullPath')
             ->willReturn($fullPath);
@@ -71,8 +70,7 @@ class CodesTest extends TestCase
             ->method('create')
             ->with($code, $area)
             ->willReturn($themeMock);
-        $reader = $this->getMockBuilder(ReadInterface::class)
-            ->getMockForAbstractClass();
+        $reader = $this->createMock(ReadInterface::class);
         $reader->expects($this->once())
             ->method('read')
             ->with($fullPath)

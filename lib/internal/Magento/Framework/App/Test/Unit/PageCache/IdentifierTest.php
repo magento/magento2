@@ -15,6 +15,7 @@ use Magento\Framework\App\Request\Http as HttpRequest;
 use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 class IdentifierTest extends TestCase
@@ -175,12 +176,9 @@ class IdentifierTest extends TestCase
         $this->assertNotEquals($valuePath1, $valuePath2);
     }
 
-    /**
-     * @param $cookieExists
-     *
-     * @return void
-     * @dataProvider trueFalseDataProvider
+    /**     * @return void
      */
+    #[DataProvider('trueFalseDataProvider')]
     public function testVaryStringSource($cookieExists): void
     {
         $this->requestMock->method('get')->willReturn($cookieExists ? 'vary-string-from-cookie' : null);

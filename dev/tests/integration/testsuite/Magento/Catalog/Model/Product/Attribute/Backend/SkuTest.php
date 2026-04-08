@@ -5,6 +5,8 @@
  */
 namespace Magento\Catalog\Model\Product\Attribute\Backend;
 
+use PHPUnit\Framework\Attributes\DataProvider;
+
 /**
  * Test class for \Magento\Catalog\Model\Product\Attribute\Backend\Sku.
  * @magentoAppArea adminhtml
@@ -28,8 +30,8 @@ class SkuTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @param $product \Magento\Catalog\Model\Product
-     * @dataProvider uniqueSkuDataProvider
      */
+    #[DataProvider('uniqueSkuDataProvider')]
     public function testGenerateUniqueSkuNotExistingProduct($product)
     {
         $this->assertEquals('simple', $product->getSku());

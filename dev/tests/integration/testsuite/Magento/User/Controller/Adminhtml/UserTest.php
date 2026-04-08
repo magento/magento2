@@ -8,6 +8,7 @@ namespace Magento\User\Controller\Adminhtml;
 
 use Magento\Framework\App\Request\Http as HttpRequest;
 use Magento\TestFramework\Bootstrap;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * @magentoAppArea adminhtml
@@ -159,8 +160,8 @@ class UserTest extends \Magento\TestFramework\TestCase\AbstractBackendController
      * @param bool $isPasswordCorrect
      *
      * @magentoDbIsolation enabled
-     * @dataProvider saveActionPasswordChangeDataProvider
      */
+    #[DataProvider('saveActionPasswordChangeDataProvider')]
     public function testSaveActionPasswordChange($postData, $isPasswordCorrect)
     {
         $this->getRequest()->setMethod(HttpRequest::METHOD_POST);

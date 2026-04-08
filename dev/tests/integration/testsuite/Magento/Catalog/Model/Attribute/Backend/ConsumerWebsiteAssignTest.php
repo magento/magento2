@@ -20,6 +20,7 @@ use Magento\Framework\ObjectManagerInterface;
 use Magento\Store\Api\WebsiteRepositoryInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\MessageQueue\ClearQueueProcessor;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -136,14 +137,13 @@ class ConsumerWebsiteAssignTest extends TestCase
     }
 
     /**
-     * @dataProvider errorProvider
-     *
      * @magentoDataFixture Magento/Catalog/_files/update_product_website_quene_data.php
      *
      * @param \Throwable $exception
      * @param int $code
      * @return void
      */
+    #[DataProvider('errorProvider')]
     public function testWithException(\Throwable $exception, int $code): void
     {
         $this->prepareMock($exception);

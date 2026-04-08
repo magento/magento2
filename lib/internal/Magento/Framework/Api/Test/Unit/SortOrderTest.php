@@ -8,6 +8,7 @@ declare(strict_types=1);
 namespace Magento\Framework\Api\Test\Unit;
 
 use Magento\Framework\Api\SortOrder;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -30,9 +31,7 @@ class SortOrderTest extends TestCase
         $this->assertNull($this->sortOrder->getDirection());
     }
 
-    /**
-     * @dataProvider sortOrderDirectionProvider
-     */
+    #[DataProvider('sortOrderDirectionProvider')]
     public function testItReturnsTheCorrectValuesIfSortOrderIsSet($sortOrder)
     {
         $this->sortOrder->setDirection($sortOrder);
@@ -49,8 +48,8 @@ class SortOrderTest extends TestCase
 
     /**
      * @param mixed $invalidDirection
-     * @dataProvider invalidSortDirectionProvider
      */
+    #[DataProvider('invalidSortDirectionProvider')]
     public function testItThrowsAnExceptionIfAnInvalidSortOrderIsSet($invalidDirection)
     {
         $this->expectException('Magento\Framework\Exception\InputException');

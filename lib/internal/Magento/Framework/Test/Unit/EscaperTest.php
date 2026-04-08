@@ -11,6 +11,7 @@ use Magento\Framework\Escaper;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\Translate\Inline;
 use Magento\Framework\ZendEscaper;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
 use Magento\Framework\Translate\Inline\StateInterface;
@@ -59,7 +60,7 @@ class EscaperTest extends TestCase
         $this->escaper = new Escaper();
         $this->zendEscaper = new ZendEscaper();
         $this->translateInline = $this->objectManagerHelper->getObject(Inline::class);
-        $this->loggerMock = $this->getMockForAbstractClass(LoggerInterface::class);
+        $this->loggerMock = $this->createMock(LoggerInterface::class);
         $this->objectManagerHelper->setBackwardCompatibleProperty($this->escaper, 'escaper', $this->zendEscaper);
         $this->objectManagerHelper->setBackwardCompatibleProperty($this->escaper, 'logger', $this->loggerMock);
         $this->objectManagerHelper->setBackwardCompatibleProperty(
@@ -128,8 +129,8 @@ class EscaperTest extends TestCase
     /**
      * @param string $data
      * @param string $expected
-     * @dataProvider escapeJsDataProvider
      */
+    #[DataProvider('escapeJsDataProvider')]
     public function testEscapeJs($data, $expected)
     {
         $this->assertEquals($expected, $this->escaper->escapeJs($data));
@@ -174,8 +175,8 @@ class EscaperTest extends TestCase
 
     /**
      * @covers \Magento\Framework\Escaper::escapeHtml
-     * @dataProvider escapeHtmlDataProvider
      */
+    #[DataProvider('escapeHtmlDataProvider')]
     public function testEscapeHtml($data, $expected, $allowedTags = [])
     {
         $actual = $this->escaper->escapeHtml($data, $allowedTags);
@@ -188,8 +189,8 @@ class EscaperTest extends TestCase
      * @param string $input
      * @param string $output
      * @return void
-     * @dataProvider escapeHtmlAttributeWithInlineTranslateEnabledDataProvider
      */
+    #[DataProvider('escapeHtmlAttributeWithInlineTranslateEnabledDataProvider')]
     public function testEscapeHtmlAttributeWithInlineTranslateEnabled(string $input, string $output): void
     {
         $this->objectManagerHelper->setBackwardCompatibleProperty(
@@ -235,8 +236,8 @@ class EscaperTest extends TestCase
 
     /**
      * @covers \Magento\Framework\Escaper::escapeHtml
-     * @dataProvider escapeHtmlInvalidDataProvider
      */
+    #[DataProvider('escapeHtmlInvalidDataProvider')]
     public function testEscapeHtmlWithInvalidData($data, $expected, $allowedTags = [])
     {
         $this->loggerMock->expects($this->once())
@@ -366,9 +367,8 @@ class EscaperTest extends TestCase
      * @param string $data
      * @param string $expected
      * @return void
-     *
-     * @dataProvider escapeUrlDataProvider
      */
+    #[DataProvider('escapeUrlDataProvider')]
     public function testEscapeUrl(string $data, string $expected): void
     {
         $this->assertEquals($expected, $this->escaper->escapeUrl($data));
@@ -381,9 +381,8 @@ class EscaperTest extends TestCase
      * @param string $data
      * @param string $expected
      * @return void
-     *
-     * @dataProvider escapeCssDataProvider
      */
+    #[DataProvider('escapeCssDataProvider')]
     public function testEscapeCss($data, string $expected): void
     {
         $this->assertEquals($expected, $this->escaper->escapeCss($data));
@@ -412,9 +411,8 @@ class EscaperTest extends TestCase
      * @param string $data
      * @param string $expected
      * @return void
-     *
-     * @dataProvider encodeUrlParamDataProvider
      */
+    #[DataProvider('encodeUrlParamDataProvider')]
     public function testEncodeUrlParam($data, string $expected): void
     {
         $this->assertEquals($expected, $this->escaper->encodeUrlParam($data));
@@ -495,8 +493,8 @@ class EscaperTest extends TestCase
      * @covers \Magento\Framework\Escaper::escapeXssInUrl
      * @param string $input
      * @param string $expected
-     * @dataProvider escapeDataProvider
      */
+    #[DataProvider('escapeDataProvider')]
     public function testEscapeXssInUrl($input, $expected)
     {
         $this->assertEquals($expected, $this->escaper->escapeXssInUrl($input));
@@ -609,7 +607,7 @@ class EscaperTest extends TestCase
         $original = $patternProp->getValue();
 
         // Force preg_replace to fail and return null using an invalid pattern
-        $patternProp->setValue('/[/');
+        $patternProp->setValue($this->escaper, '/[/');
 
         try {
             // preg_replace compilation error emits a PHP warning; swallow it locally for this test
@@ -622,7 +620,7 @@ class EscaperTest extends TestCase
         } finally {
             restore_error_handler();
             // Restore original pattern to avoid side effects on other tests
-            $patternProp->setValue($original);
+            $patternProp->setValue($this->escaper, $original);
         }
     }
 
@@ -638,7 +636,7 @@ class EscaperTest extends TestCase
             $method = new \ReflectionMethod(Escaper::class, 'escapeScriptIdentifiers');
             $this->assertSame(':', $method->invoke($this->escaper, ':::'));
         } finally {
-            $patternProp->setValue(null, $original);
+            $patternProp->setValue($this->escaper, $original);
         }
     }
 
@@ -1106,7 +1104,7 @@ class EscaperTest extends TestCase
 
     public function testGetTranslateInlineReturnsExistingInstance(): void
     {
-        $existing = $this->getMockForAbstractClass(\Magento\Framework\Translate\InlineInterface::class);
+        $existing = $this->createMock(\Magento\Framework\Translate\InlineInterface::class);
         $prop = new \ReflectionProperty(Escaper::class, 'translateInline');
         $prop->setValue($this->escaper, $existing);
 
@@ -1121,7 +1119,7 @@ class EscaperTest extends TestCase
         $prop = new \ReflectionProperty(Escaper::class, 'translateInline');
         $prop->setValue($this->escaper, null);
 
-        $inlineMock = $this->getMockForAbstractClass(\Magento\Framework\Translate\InlineInterface::class);
+        $inlineMock = $this->createMock(\Magento\Framework\Translate\InlineInterface::class);
 
         $rp = new \ReflectionProperty(\Magento\Framework\App\ObjectManager::class, '_instance');
         $originalOm = $rp->getValue();
@@ -1184,7 +1182,7 @@ class EscaperTest extends TestCase
         $refProp = new \ReflectionProperty(Escaper::class, 'logger');
         $refProp->setValue($this->escaper, null);
 
-        $loggerMock = $this->getMockForAbstractClass(\Psr\Log\LoggerInterface::class);
+        $loggerMock = $this->createMock(\Psr\Log\LoggerInterface::class);
 
         $rp = new \ReflectionProperty(\Magento\Framework\App\ObjectManager::class, '_instance');
         $originalOm = $rp->getValue();

@@ -39,7 +39,7 @@ class InvalidateLoggerTest extends TestCase
     protected function setUp(): void
     {
         $this->requestMock = $this->createMock(Http::class);
-        $this->loggerMock = $this->getMockForAbstractClass(LoggerInterface::class);
+        $this->loggerMock = $this->createMock(LoggerInterface::class);
         $this->invalidateLogger = new InvalidateLogger(
             $this->requestMock,
             $this->loggerMock

@@ -19,6 +19,11 @@
         </arguments>
     </type>
     <preference for="Magento\ImportExport\Controller\Adminhtml\Export\GetFilter" type="Magento\AdvancedPricingImportExport\Controller\Adminhtml\Export\GetFilter" />
+    <type name="Magento\AdvancedPricingImportExport\Model\Export\AdvancedPricing">
+        <arguments>
+            <argument name="collectionFactory" xsi:type="object">Magento\CatalogImportExport\Model\ResourceModel\Product\ExportCollectionFactory</argument>
+        </arguments>
+    </type>
     <type name="Magento\ImportExport\Model\Export\EntityFiltersProvider">
         <arguments>
             <argument name="providers" xsi:type="array">

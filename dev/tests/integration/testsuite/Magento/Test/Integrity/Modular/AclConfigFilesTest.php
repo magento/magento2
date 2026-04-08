@@ -5,6 +5,8 @@
  */
 namespace Magento\Test\Integrity\Modular;
 
+use PHPUnit\Framework\Attributes\DataProvider;
+
 class AclConfigFilesTest extends \PHPUnit\Framework\TestCase
 {
     /**
@@ -30,8 +32,8 @@ class AclConfigFilesTest extends \PHPUnit\Framework\TestCase
     /**
      * Test each acl configuration file
      * @param string $file
-     * @dataProvider aclConfigFileDataProvider
      */
+    #[DataProvider('aclConfigFileDataProvider')]
     public function testAclConfigFile($file)
     {
         $validationStateMock = $this->createMock(\Magento\Framework\Config\ValidationStateInterface::class);

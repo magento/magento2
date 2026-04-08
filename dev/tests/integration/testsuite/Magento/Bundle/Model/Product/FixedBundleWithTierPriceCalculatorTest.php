@@ -6,12 +6,13 @@
 
 namespace Magento\Bundle\Model\Product;
 
-use \Magento\Bundle\Api\Data\LinkInterface;
-use \Magento\Catalog\Api\Data\ProductTierPriceInterfaceFactory;
+use Magento\Bundle\Api\Data\LinkInterface;
+use Magento\Catalog\Api\Data\ProductTierPriceInterfaceFactory;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
- * Class FixedBundleWithTierPRiceCalculatorTest
- * @package Magento\Bundle\Model\Product
+ * Tests fixed bundle product tier price calculation.
+ *
  * @magentoAppArea frontend
  */
 class FixedBundleWithTierPriceCalculatorTest extends BundlePriceAbstract
@@ -28,11 +29,11 @@ class FixedBundleWithTierPriceCalculatorTest extends BundlePriceAbstract
     /**
      * @param array $strategyModifiers
      * @param array $expectedResults
-     * @dataProvider getTestCases
      * @magentoAppIsolation enabled
      * @magentoDataFixture Magento/Bundle/_files/PriceCalculator/fixed_bundle_product.php
      * @magentoDbIsolation disabled
      */
+    #[DataProvider('getTestCases')]
     public function testPriceForFixedBundle(array $strategyModifiers, array $expectedResults)
     {
         $this->prepareFixture($strategyModifiers, 'bundle_product');

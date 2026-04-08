@@ -11,6 +11,7 @@ namespace Magento\Theme\Model\Theme;
 
 use Magento\Framework\App\Area;
 use Magento\Framework\App\Filesystem\DirectoryList;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * @magentoComponentsDir Magento/Theme/Model/_files/design
@@ -54,9 +55,8 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
 
     /**
      * Load from configuration
-     *
-     * @dataProvider expectedThemeDataFromConfiguration
      */
+    #[DataProvider('expectedThemeDataFromConfiguration')]
     public function testLoadFromConfiguration($area, $vendor, $themeName, $expectedData)
     {
         $this->_model->addConstraint(\Magento\Theme\Model\Theme\Collection::CONSTRAINT_AREA, $area);
@@ -68,10 +68,8 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
 
     /**
      * Expected theme data from configuration
-     *
-     * @return array
      */
-    public static function expectedThemeDataFromConfiguration()
+    public static function expectedThemeDataFromConfiguration(): array
     {
         return [
             [

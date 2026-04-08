@@ -9,6 +9,7 @@ namespace Magento\Framework\Code\Test\Unit\Reader;
 
 use Magento\Framework\Code\Reader\ClassReader;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 require_once __DIR__ . '/_files/ClassesForArgumentsReader.php';
 
@@ -31,10 +32,9 @@ class ClassReaderTest extends TestCase
     /**
      * Get constructor test
      *
-     * @param array $testData
-     * @dataProvider getTestData
-     * @throws \ReflectionException
+     * @param array $testData     * @throws \ReflectionException
      */
+    #[DataProvider('getTestData')]
     public function testGetConstructor(array $testData)
     {
         $this->assertEquals(

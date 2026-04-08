@@ -66,14 +66,11 @@ class PublisherTest extends TestCase
         $this->writeFactory = $this->createMock(WriteFactory::class);
         $this->object = new Publisher($this->filesystem, $this->materializationStrategyFactory, $this->writeFactory);
 
-        $this->sourceDirWrite = $this->getMockForAbstractClass(
-            WriteInterface::class
+        $this->sourceDirWrite = $this->createMock(WriteInterface::class
         );
-        $this->staticDirRead = $this->getMockForAbstractClass(
-            ReadInterface::class
+        $this->staticDirRead = $this->createMock(ReadInterface::class
         );
-        $this->staticDirWrite = $this->getMockForAbstractClass(
-            WriteInterface::class
+        $this->staticDirWrite = $this->createMock(WriteInterface::class
         );
         $this->filesystem->expects($this->any())
             ->method('getDirectoryRead')
@@ -101,7 +98,7 @@ class PublisherTest extends TestCase
             ->with('some/file.ext')
             ->willReturn(false);
         $materializationStrategy =
-            $this->getMockForAbstractClass(StrategyInterface::class);
+            $this->createMock(StrategyInterface::class);
 
         $this->materializationStrategyFactory->expects($this->once())
             ->method('create')

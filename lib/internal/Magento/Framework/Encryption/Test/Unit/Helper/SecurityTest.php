@@ -14,6 +14,7 @@ namespace Magento\Framework\Encryption\Test\Unit\Helper;
 
 use Magento\Framework\Encryption\Helper\Security;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class SecurityTest extends TestCase
 {
@@ -25,9 +26,8 @@ class SecurityTest extends TestCase
     /**
      * @param  string $expected
      * @param  string $actual
-     * @param  bool $result
-     * @dataProvider dataProvider
-     */
+     * @param  bool $result     */
+    #[DataProvider('dataProvider')]
     public function testCompareStrings($expected, $actual, $result)
     {
         $this->assertEquals($result, Security::compareStrings($expected, $actual));

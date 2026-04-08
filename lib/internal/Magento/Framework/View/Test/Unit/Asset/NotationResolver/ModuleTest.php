@@ -12,9 +12,13 @@ use Magento\Framework\View\Asset\NotationResolver\Module;
 use Magento\Framework\View\Asset\Repository;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 
 class ModuleTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var File|MockObject
      */
@@ -33,11 +37,10 @@ class ModuleTest extends TestCase
     protected function setUp(): void
     {
         $this->asset = $this->createMock(File::class);
-        $this->assetRepo = $this->getMockBuilder(Repository::class)
-            ->addMethods(['createUsingContext'])
-            ->onlyMethods(['createSimilar'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->assetRepo = $this->createPartialMockWithReflection(
+            Repository::class,
+            ['createUsingContext', 'createSimilar']
+        );
         $this->object = new Module($this->assetRepo);
     }
 
@@ -56,9 +59,8 @@ class ModuleTest extends TestCase
      * @param string $assetRelPath
      * @param string $relatedFieldId
      * @param string $similarRelPath
-     * @param string $expectedResult
-     * @dataProvider convertModuleNotationToPathModularSeparatorDataProvider
-     */
+     * @param string $expectedResult     */
+    #[DataProvider('convertModuleNotationToPathModularSeparatorDataProvider')]
     public function testConvertModuleNotationToPathModularSeparator(
         $assetRelPath,
         $relatedFieldId,

@@ -27,8 +27,8 @@ class CompositeQueryModifierTest extends TestCase
 
     public function testModify()
     {
-        $queryModifierMockOne = $this->getMockForAbstractClass(QueryModifierInterface::class);
-        $queryModifierMockTwo = $this->getMockForAbstractClass(QueryModifierInterface::class);
+        $queryModifierMockOne = $this->createMock(QueryModifierInterface::class);
+        $queryModifierMockTwo = $this->createMock(QueryModifierInterface::class);
         $selectMock = $this->createMock(Select::class);
         $queryModifierMockOne->expects($this->once())
             ->method('modify')

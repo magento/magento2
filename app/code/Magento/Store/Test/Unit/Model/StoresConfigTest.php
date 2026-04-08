@@ -47,8 +47,8 @@ class StoresConfigTest extends TestCase
     {
         $this->_storeOne = $this->createMock(Store::class);
         $this->_storeTwo = $this->createMock(Store::class);
-        $this->_storeManager = $this->getMockForAbstractClass(StoreManagerInterface::class);
-        $this->_config = $this->getMockForAbstractClass(ScopeConfigInterface::class);
+        $this->_storeManager = $this->createMock(StoreManagerInterface::class);
+        $this->_config = $this->createMock(ScopeConfigInterface::class);
 
         $this->_model = new StoresConfig(
             $this->_storeManager,

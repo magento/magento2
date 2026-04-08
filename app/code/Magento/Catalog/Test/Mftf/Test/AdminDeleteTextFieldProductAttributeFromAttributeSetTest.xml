@@ -32,6 +32,8 @@
         <after>
             <!--Delete cteated Data -->
             <deleteData createDataKey="createSimpleProduct" stepKey="deleteSimplaeProduct"/>
+            <amOnPage url="{{ProductCatalogPage.url}}" stepKey="openProductPage"/>
+            <actionGroup ref="ClearFiltersAdminProductGridActionGroup" stepKey="clearProductGridFilter"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
 
             <!-- Reindex invalidated indices after product attribute has been created/deleted -->

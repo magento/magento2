@@ -9,6 +9,7 @@ use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Quote\Model\Quote\TotalsCollector;
 use Magento\TestFramework\Helper\Bootstrap;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 require_once __DIR__ . '/SetupUtil.php';
 require_once __DIR__ . '/../../../../_files/tax_calculation_data_aggregated.php';
@@ -297,9 +298,9 @@ class TaxTest extends \Magento\TestFramework\Indexer\TestCase
      * @param array $expectedResults
      * @magentoDbIsolation disabled
      * @magentoAppIsolation enabled
-     * @dataProvider taxDataProvider
      * @return void
      */
+    #[DataProvider('taxDataProvider')]
     public function testTaxCalculation($config_data, $quote_data, $expected_results)
     {
         $db = \Magento\TestFramework\Helper\Bootstrap::getInstance()->getBootstrap()

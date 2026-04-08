@@ -30,11 +30,8 @@ class LinkTest extends TestCase
      */
     protected function setUp(): void
     {
-        $context = $this->getMockBuilder(ContextInterface::class)
-            ->getMockForAbstractClass();
-        $processor = $this->getMockBuilder(Processor::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $context = $this->createMock(ContextInterface::class);
+        $processor = $this->createMock(Processor::class);
         $context->expects($this->never())->method('getProcessor')->willReturn($processor);
 
         $this->objectManager = new ObjectManager($this);

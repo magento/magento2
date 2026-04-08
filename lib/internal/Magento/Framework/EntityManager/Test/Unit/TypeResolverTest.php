@@ -16,6 +16,7 @@ use Magento\Framework\EntityManager\TypeResolver;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class TypeResolverTest extends TestCase
 {
@@ -44,9 +45,8 @@ class TypeResolverTest extends TestCase
 
     /**
      * @param object $dataObject
-     * @param string $interfaceName
-     * @dataProvider resolveDataProvider
-     */
+     * @param string $interfaceName     */
+    #[DataProvider('resolveDataProvider')]
     public function testResolve($dataObject, $interfaceName)
     {
         $customerDataObject = $this->objectManager->getObject($dataObject);

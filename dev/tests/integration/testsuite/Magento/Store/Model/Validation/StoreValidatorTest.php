@@ -9,6 +9,7 @@ namespace Magento\Store\Model\Validation;
 
 use Magento\Store\Model\Store;
 use Magento\TestFramework\Helper\Bootstrap;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 class StoreValidatorTest extends TestCase
@@ -24,10 +25,10 @@ class StoreValidatorTest extends TestCase
     }
 
     /**
-     * @dataProvider isValidDataProvider
      * @param Store $store
      * @param bool $isValid
      */
+    #[DataProvider('isValidDataProvider')]
     public function testIsValid(Store $store, bool $isValid): void
     {
         $result = $this->storeValidator->isValid($store);

@@ -15,6 +15,7 @@ use Magento\Framework\App\Config\MutableScopeConfigInterface;
 use Magento\Framework\Indexer\StateInterface;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\TestFramework\Helper\Bootstrap;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -54,13 +55,13 @@ class BackordersTest extends TestCase
     }
 
     /**
-     * @dataProvider afterSaveDataProvider
      * @param int $value
      * @param int $currentValue
      * @param string $expectedIndexerStatus
      * @magentoDbIsolation disabled
      * @return void
      */
+    #[DataProvider('afterSaveDataProvider')]
     public function testAfterSave(int $value, int $currentValue, string $expectedIndexerStatus): void
     {
         $this->stockIndexerProcessor->reindexAll();

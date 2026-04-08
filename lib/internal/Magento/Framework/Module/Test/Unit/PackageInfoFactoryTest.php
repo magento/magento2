@@ -26,7 +26,7 @@ class PackageInfoFactoryTest extends TestCase
             [Reader::class, ['moduleList' => $fullModuleList], $reader],
             [PackageInfo::class, ['reader' => $reader], $packageInfo],
         ];
-        $objectManagerMock = $this->getMockForAbstractClass(ObjectManagerInterface::class);
+        $objectManagerMock = $this->createMock(ObjectManagerInterface::class);
         $objectManagerMock->expects($this->any())
             ->method('create')
             ->willReturnMap($returnValueMap);

@@ -33,7 +33,7 @@ use Magento\Catalog\Model\Attribute\Backend\Consumer;
  */
 class ConsumerTest extends TestCase
 {
-    const BULK_UUID = '5a12c1bd-a8b5-41d4-8c00-3f5bcaa6d3c8';
+    public const BULK_UUID = '5a12c1bd-a8b5-41d4-8c00-3f5bcaa6d3c8';
 
     /**
      * @var Consumer
@@ -71,7 +71,7 @@ class ConsumerTest extends TestCase
     protected function setUp(): void
     {
         $this->objectManager = Bootstrap::getObjectManager();
-        $this->publisherMock = $this->getMockForAbstractClass(BulkPublisherInterface::class);
+        $this->publisherMock = $this->createMock(BulkPublisherInterface::class);
 
         $this->bulkManagement = $this->objectManager->create(
             BulkManagement::class,

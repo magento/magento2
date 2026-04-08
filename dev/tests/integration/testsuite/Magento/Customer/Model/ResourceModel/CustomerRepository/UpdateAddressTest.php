@@ -8,6 +8,7 @@ declare(strict_types=1);
 namespace Magento\Customer\Model\ResourceModel\CustomerRepository;
 
 use Magento\Customer\Model\Address\UpdateAddressTest as UpdateAddressViaAddressRepositoryTest;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Test cases related to update customer address using customer repository.
@@ -22,14 +23,13 @@ class UpdateAddressTest extends UpdateAddressViaAddressRepositoryTest
      * @magentoDataFixture Magento/Customer/_files/customer.php
      * @magentoDataFixture Magento/Customer/_files/customer_address.php
      *
-     * @dataProvider updateAddressIsDefaultDataProvider
-     *
      * @param bool $isShippingDefault
      * @param bool $isBillingDefault
      * @param int|null $expectedShipping
      * @param int|null $expectedBilling
      * @return void
      */
+    #[DataProvider('updateAddressIsDefaultDataProvider')]
     public function testUpdateAddressIsDefault(
         bool $isShippingDefault,
         bool $isBillingDefault,
@@ -57,12 +57,11 @@ class UpdateAddressTest extends UpdateAddressViaAddressRepositoryTest
      * @magentoDataFixture Magento/Customer/_files/customer.php
      * @magentoDataFixture Magento/Customer/_files/customer_address.php
      *
-     * @dataProvider updateAddressesDataProvider
-     *
      * @param array $updateData
      * @param array $expectedData
      * @return void
      */
+    #[DataProvider('updateAddressesDataProvider')]
     public function testUpdateAddress(array $updateData, array $expectedData): void
     {
         $this->processedAddressesIds[] = 1;
@@ -86,12 +85,11 @@ class UpdateAddressTest extends UpdateAddressViaAddressRepositoryTest
      * @magentoDataFixture Magento/Customer/_files/customer.php
      * @magentoDataFixture Magento/Customer/_files/customer_address.php
      *
-     * @dataProvider updateWrongAddressesDataProvider
-     *
      * @param array $updateData
      * @param \Exception $expectException
      * @return void
      */
+    #[DataProvider('updateWrongAddressesDataProvider')]
     public function testExceptionThrownDuringUpdateAddress(array $updateData, \Exception $expectException): void
     {
         $this->processedAddressesIds[] = 1;

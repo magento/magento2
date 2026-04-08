@@ -9,6 +9,7 @@ declare(strict_types=1);
 namespace Magento\Framework\Interception\Config;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class CacheManagerTest extends \PHPUnit\Framework\TestCase
 {
@@ -61,9 +62,9 @@ class CacheManagerTest extends \PHPUnit\Framework\TestCase
 
     /**
      * Test load interception cache from generated/metadata
-     * @dataProvider interceptionCompiledConfigDataProvider
      * @param array $testConfig
      */
+    #[DataProvider('interceptionCompiledConfigDataProvider')]
     public function testInstantiateFromCompiled(array $testConfig)
     {
         $this->configWriter->write(self::CACHE_ID, $testConfig);
@@ -74,9 +75,9 @@ class CacheManagerTest extends \PHPUnit\Framework\TestCase
 
     /**
      * Test load interception cache from backend cache
-     * @dataProvider interceptionCacheConfigDataProvider
      * @param array $testConfig
      */
+    #[DataProvider('interceptionCacheConfigDataProvider')]
     public function testInstantiateFromCache(array $testConfig)
     {
         $this->cache->save($this->serializer->serialize($testConfig), self::CACHE_ID);

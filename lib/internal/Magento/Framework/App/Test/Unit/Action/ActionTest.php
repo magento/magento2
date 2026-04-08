@@ -20,9 +20,11 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHe
 use Magento\Framework\View\Page\Config as PageConfig;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 
 class ActionTest extends TestCase
 {
+    use MockCreationTrait;
     /**
      * @var ActionFake
      */
@@ -78,17 +80,17 @@ class ActionTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->_eventManagerMock = $this->getMockForAbstractClass(ManagerInterface::class);
+        $this->_eventManagerMock = $this->createMock(ManagerInterface::class);
         $this->_actionFlagMock = $this->createMock(ActionFlag::class);
-        $this->_redirectMock = $this->getMockForAbstractClass(RedirectInterface::class);
+        $this->_redirectMock = $this->createMock(RedirectInterface::class);
         $this->_requestMock = $this->createMock(HttpRequest::class);
-        $this->_responseMock = $this->getMockForAbstractClass(ResponseInterface::class);
+        $this->_responseMock = $this->createMock(ResponseInterface::class);
 
-        $this->pageConfigMock = $this->getMockBuilder(PageConfig::class)
-            ->addMethods(['getConfig'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->viewMock = $this->getMockForAbstractClass(ViewInterface::class);
+        $this->pageConfigMock = $this->createPartialMockWithReflection(
+            PageConfig::class,
+            ['getConfig']
+        );
+        $this->viewMock = $this->createMock(ViewInterface::class);
         $this->viewMock->expects($this->any())->method('getPage')->willReturn($this->pageConfigMock);
         $this->pageConfigMock->expects($this->any())->method('getConfig')->willReturn(1);
 

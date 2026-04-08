@@ -10,6 +10,7 @@ namespace Magento\Framework\View\Test\Unit\Asset\File;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\View\Asset\File\FallbackContext;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * @covers \Magento\Framework\View\Asset\File\FallbackContext
@@ -37,9 +38,8 @@ class FallbackContextTest extends TestCase
      * @param string $areaType
      * @param string $themePath
      * @param string $localeCode
-     * @param string $expectedResult
-     * @dataProvider getConfigPathDataProvider
-     */
+     * @param string $expectedResult     */
+    #[DataProvider('getConfigPathDataProvider')]
     public function testGetConfigPath(
         $baseUrl,
         $areaType,

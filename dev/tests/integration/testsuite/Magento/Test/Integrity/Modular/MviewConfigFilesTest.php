@@ -6,6 +6,7 @@
 namespace Magento\Test\Integrity\Modular;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class MviewConfigFilesTest extends \PHPUnit\Framework\TestCase
 {
@@ -32,8 +33,8 @@ class MviewConfigFilesTest extends \PHPUnit\Framework\TestCase
     /**
      * Test each acl configuration file
      * @param string $file
-     * @dataProvider mviewConfigFileDataProvider
      */
+    #[DataProvider('mviewConfigFileDataProvider')]
     public function testIndexerConfigFile($file)
     {
         $validationStateMock = $this->createMock(\Magento\Framework\Config\ValidationStateInterface::class);

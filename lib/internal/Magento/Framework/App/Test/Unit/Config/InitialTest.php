@@ -12,6 +12,7 @@ use Magento\Framework\App\Config\Initial;
 use Magento\Framework\Serialize\SerializerInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 class InitialTest extends TestCase
@@ -51,7 +52,7 @@ class InitialTest extends TestCase
             ->method('load')
             ->with('initial_config')
             ->willReturn(json_encode($this->data));
-        $serializerMock = $this->getMockForAbstractClass(SerializerInterface::class);
+        $serializerMock = $this->createMock(SerializerInterface::class);
         $serializerMock->method('unserialize')
             ->willReturn($this->data);
 
@@ -64,11 +65,9 @@ class InitialTest extends TestCase
         );
     }
 
-    /**
-     * @param string $scope
-     * @param array $expected
-     * @dataProvider getDataDataProvider
+    /**     * @param array $expected
      */
+    #[DataProvider('getDataDataProvider')]
     public function testGetData($scope, $expected)
     {
         $this->assertEquals($expected, $this->config->getData($scope));

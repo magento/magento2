@@ -6,7 +6,8 @@
 
 namespace Magento\Bundle\Model\Product;
 
-use \Magento\Bundle\Api\Data\LinkInterface;
+use Magento\Bundle\Api\Data\LinkInterface;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * @magentoAppArea frontend
@@ -16,11 +17,11 @@ class FixedBundleWithSpecialPriceCalculatorTest extends BundlePriceAbstract
     /**
      * @param array $strategyModifiers
      * @param array $expectedResults
-     * @dataProvider getTestCases
      * @magentoAppIsolation enabled
      * @magentoDataFixture Magento/Bundle/_files/PriceCalculator/fixed_bundle_product_with_special_price.php
      * @magentoDbIsolation disabled
      */
+    #[DataProvider('getTestCases')]
     public function testPriceForFixedBundle(array $strategyModifiers, array $expectedResults)
     {
         if (empty($strategyModifiers)) {

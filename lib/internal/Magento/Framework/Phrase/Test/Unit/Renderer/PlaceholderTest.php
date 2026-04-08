@@ -10,6 +10,7 @@ namespace Magento\Framework\Phrase\Test\Unit\Renderer;
 use Magento\Framework\Phrase\Renderer\Placeholder;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class PlaceholderTest extends TestCase
 {
@@ -26,9 +27,8 @@ class PlaceholderTest extends TestCase
      * @param string $text The text with placeholders
      * @param array $arguments The arguments supplying values for the placeholders
      * @param string $result The result of Phrase rendering
-     *
-     * @dataProvider renderPlaceholderDataProvider
-     */
+     *     */
+    #[DataProvider('renderPlaceholderDataProvider')]
     public function testRenderPlaceholder($text, array $arguments, $result)
     {
         $this->assertEquals($result, $this->_renderer->render([$text], $arguments));

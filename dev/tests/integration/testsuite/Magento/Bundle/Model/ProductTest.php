@@ -29,6 +29,7 @@ use Magento\Store\Api\StoreRepositoryInterface;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\TestFramework\Entity;
 use Magento\TestFramework\Helper\Bootstrap;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -166,9 +167,9 @@ class ProductTest extends \PHPUnit\Framework\TestCase
      * @param bool $isSalable
      * @magentoAppIsolation enabled
      * @magentoDataFixture Magento/Bundle/_files/product.php
-     * @dataProvider stockConfigDataProvider
      * @covers \Magento\Catalog\Model\Product::isSalable
      */
+    #[DataProvider('stockConfigDataProvider')]
     public function testIsSalable(
         float $selectionQty,
         float $qty,
@@ -259,7 +260,6 @@ class ProductTest extends \PHPUnit\Framework\TestCase
     /**
      * @magentoAppIsolation enabled
      * @magentoDataFixture Magento/Bundle/_files/bundle_product_with_dynamic_price.php
-     * @dataProvider shouldUpdateBundleStockStatusIfChildProductsStockStatusChangedDataProvider
      * @param bool $isOption1Required
      * @param bool $isOption2Required
      * @param array $outOfStockConfig
@@ -269,6 +269,7 @@ class ProductTest extends \PHPUnit\Framework\TestCase
      * @throws \Magento\Framework\Exception\InputException
      * @throws \Magento\Framework\Exception\StateException
      */
+    #[DataProvider('shouldUpdateBundleStockStatusIfChildProductsStockStatusChangedDataProvider')]
     public function testShouldUpdateBundleStockStatusIfChildProductsStockStatusChanged(
         bool $isOption1Required,
         bool $isOption2Required,

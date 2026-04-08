@@ -6,6 +6,8 @@
 
 namespace Magento\Backend\Controller\Adminhtml;
 
+use PHPUnit\Framework\Attributes\DataProvider;
+
 /**
  * @magentoAppArea adminhtml
  */
@@ -65,9 +67,9 @@ class CacheTest extends \Magento\TestFramework\TestCase\AbstractBackendControlle
     }
 
     /**
-     * @dataProvider massActionsInvalidTypesDataProvider
      * @param $action
      */
+    #[DataProvider('massActionsInvalidTypesDataProvider')]
     public function testMassActionsInvalidTypes($action)
     {
         $this->getRequest()->setParams(['types' => ['invalid_type_1', 'invalid_type_2', 'config']]);

@@ -8,6 +8,7 @@ namespace Magento\Framework\Data\Argument\Interpreter;
 
 use Magento\Framework\Phrase\RendererInterface;
 use Magento\Framework\Stdlib\BooleanUtils;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * @covers \Magento\Framework\Data\Argument\Interpreter\BaseStringUtils
@@ -39,9 +40,7 @@ class BaseStringUtilsTest extends \PHPUnit\Framework\TestCase
         );
         $this->model = new BaseStringUtils($this->booleanUtils);
         /** @var RendererInterface|\PHPUnit\Framework\MockObject\MockObject $translateRenderer */
-        $translateRenderer = $this->getMockBuilder(RendererInterface::class)
-          ->onlyMethods(['render'])
-          ->getMockForAbstractClass();
+        $translateRenderer = $this->createMock(RendererInterface::class);
         $translateRenderer->expects(self::never())->method('render');
         \Magento\Framework\Phrase::setRenderer($translateRenderer);
     }
@@ -51,9 +50,8 @@ class BaseStringUtilsTest extends \PHPUnit\Framework\TestCase
      *
      * @param array $input
      * @param bool $expected
-     *
-     * @dataProvider evaluateDataProvider
      */
+    #[DataProvider('evaluateDataProvider')]
     public function testEvaluate($input, $expected)
     {
         $actual = $this->model->evaluate($input);
@@ -82,8 +80,8 @@ class BaseStringUtilsTest extends \PHPUnit\Framework\TestCase
      * Check BaseStringUtils::evaluate() trows exception in case $input['value'] not a string.
      *
      * @param array $input
-     * @dataProvider evaluateExceptionDataProvider
      */
+    #[DataProvider('evaluateExceptionDataProvider')]
     public function testEvaluateException($input)
     {
         $this->expectException(\InvalidArgumentException::class);

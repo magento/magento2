@@ -54,14 +54,10 @@ class SearchResponseBuilderTest extends TestCase
     {
         $aggregations = ['aggregations'];
 
-        $document = $this->getMockBuilder(DocumentInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $document = $this->createMock(DocumentInterface::class);
 
         /** @var SearchResultInterface|MockObject $searchResult */
-        $searchResult = $this->getMockBuilder(SearchResultInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $searchResult = $this->createMock(SearchResultInterface::class);
         $searchResult->expects($this->once())
             ->method('setItems')
             ->with([$document]);
@@ -77,7 +73,7 @@ class SearchResponseBuilderTest extends TestCase
         $response = $this->getMockBuilder(QueryResponse::class)
             ->onlyMethods(['getIterator', 'getAggregations', 'getTotal'])
             ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+            ->getMock();
         $response->expects($this->any())
             ->method('getIterator')
             ->willReturn(new \ArrayIterator([$document]));

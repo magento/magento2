@@ -17,7 +17,7 @@ class CompositeStaleCacheNotifierTest extends TestCase implements StaleCacheNoti
     private $notifications = [];
 
     /** @test */
-    public function noNotifications()
+    public function testNoNotifications()
     {
         new CompositeStaleCacheNotifier([$this, $this, $this]);
 
@@ -25,7 +25,7 @@ class CompositeStaleCacheNotifierTest extends TestCase implements StaleCacheNoti
     }
     
     /** @test */
-    public function notifiesAllRegisteredNotifiersOfStaleContent()
+    public function testNotifiesAllRegisteredNotifiersOfStaleContent()
     {
         $notifier = new CompositeStaleCacheNotifier([$this, $this]);
         $notifier->cacheLoaderIsUsingStaleCache();

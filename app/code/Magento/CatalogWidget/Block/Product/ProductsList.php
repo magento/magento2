@@ -187,10 +187,10 @@ class ProductsList extends AbstractProduct implements BlockInterface, IdentityIn
         $this->layoutFactory = $layoutFactory ?: ObjectManager::getInstance()->get(LayoutFactory::class);
         $this->urlEncoder = $urlEncoder ?: ObjectManager::getInstance()->get(EncoderInterface::class);
         $this->categoryRepository = $categoryRepository ?? ObjectManager::getInstance()
-                ->get(CategoryRepositoryInterface::class);
+            ->get(CategoryRepositoryInterface::class);
         $this->optionsData = $optionsData ?: ObjectManager::getInstance()->get(OptionsData::class);
         $this->categoryConditionProcessor = $categoryConditionProcessor ?: ObjectManager::getInstance()
-                ->get(CategoryConditionProcessor::class);
+            ->get(CategoryConditionProcessor::class);
         parent::__construct(
             $context,
             $data
@@ -383,9 +383,7 @@ class ProductsList extends AbstractProduct implements BlockInterface, IdentityIn
         $collection = $this->_addProductAttributesAndPrices($collection)
             ->addStoreFilter()
             ->addAttributeToFilter(Product::STATUS, ProductStatus::STATUS_ENABLED)
-            ->addAttributeToSort('entity_id', 'desc')
-            ->setPageSize($this->getPageSize())
-            ->setCurPage($this->getRequest()->getParam($this->getData('page_var_name'), 1));
+            ->addAttributeToSort('entity_id', 'desc');
 
         $conditions = $this->getConditions();
         $conditions->collectValidatedAttributes($collection);
@@ -396,6 +394,21 @@ class ProductsList extends AbstractProduct implements BlockInterface, IdentityIn
          * several allowed values from condition simultaneously
          */
         $collection->distinct(true);
+
+        $currentPage = (int)($this->getRequest()->getParam($this->getData('page_var_name')) ?? 1);
+
+        // Apply pagination with total limit after all other operations
+        if ($this->showPager()) {
+            $pageSize = $this->getProductsPerPage();
+            $totalLimit = $this->getProductsCount();
+
+            $offset = ($currentPage - 1) * $pageSize;
+            $limit = min($pageSize, max(0, $totalLimit - $offset));
+
+            $collection->getSelect()->limit($limit, $offset);
+        } else {
+            $collection->getSelect()->limit($this->getProductsCount());
+        }
 
         return $collection;
     }

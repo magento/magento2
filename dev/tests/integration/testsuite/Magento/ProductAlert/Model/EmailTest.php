@@ -20,6 +20,7 @@ use Magento\Store\Model\Website;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\Mail\Template\TransportBuilderMock;
 use Magento\TestFramework\ObjectManager;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -86,13 +87,13 @@ class EmailTest extends TestCase
      * @magentoAppArea frontend
      * @magentoDataFixture Magento/Customer/_files/customer.php
      * @magentoDataFixture Magento/Catalog/_files/product_simple.php
-     * @dataProvider customerFunctionDataProvider
      *
      * @param bool isCustomerIdUsed
      * @throws LocalizedException
      * @throws MailException
      * @throws NoSuchEntityException
      */
+    #[DataProvider('customerFunctionDataProvider')]
     public function testSend($isCustomerIdUsed)
     {
         /** @var Website $website */

@@ -7,6 +7,7 @@ namespace Magento\Framework\Session\SaveHandler;
 
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\Encryption\EncryptorInterface;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class DbTableTest extends \PHPUnit\Framework\TestCase
 {
@@ -204,10 +205,9 @@ class DbTableTest extends \PHPUnit\Framework\TestCase
      *
      * @param string $sessionData
      *
-     * @dataProvider readEncodedDataProvider
-     *
      * @return void
      */
+    #[DataProvider('readEncodedDataProvider')]
     public function testReadEncoded($sessionData)
     {
         $sessionRecord = [self::COLUMN_SESSION_ID => $this->_encryptor->hash(self::SESSION_ID), self::COLUMN_SESSION_DATA => $sessionData];

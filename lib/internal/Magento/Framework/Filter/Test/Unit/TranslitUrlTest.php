@@ -10,6 +10,7 @@ namespace Magento\Framework\Filter\Test\Unit;
 use Magento\Framework\Filter\TranslitUrl;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class TranslitUrlTest extends TestCase
 {
@@ -28,9 +29,8 @@ class TranslitUrlTest extends TestCase
      * @param string $testString
      * @param string $result
      * @param string $resultIconv
-     * @param bool $isIconv
-     * @dataProvider filterDataProvider
-     */
+     * @param bool $isIconv     */
+    #[DataProvider('filterDataProvider')]
     public function testFilter($testString, $result, $resultIconv, $isIconv)
     {
         if ($isIconv) {

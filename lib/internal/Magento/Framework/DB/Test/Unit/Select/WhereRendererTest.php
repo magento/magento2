@@ -12,6 +12,7 @@ use Magento\Framework\DB\Select\WhereRenderer;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class WhereRendererTest extends TestCase
 {
@@ -38,9 +39,8 @@ class WhereRendererTest extends TestCase
     }
 
     /**
-     * @param array $mapValues
-     * @dataProvider renderNoPartDataProvider
-     */
+     * @param array $mapValues     */
+    #[DataProvider('renderNoPartDataProvider')]
     public function testRenderNoPart($mapValues)
     {
         $sql = 'SELECT';

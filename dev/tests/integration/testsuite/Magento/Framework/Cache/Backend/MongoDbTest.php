@@ -7,6 +7,7 @@ namespace Magento\Framework\Cache\Backend;
 
 use Magento\Framework\Cache\CacheConstants;
 use Magento\Framework\Cache\Exception\CacheException;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class MongoDbTest extends \PHPUnit\Framework\TestCase
 {
@@ -80,9 +81,7 @@ class MongoDbTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expected, $actual);
     }
 
-    /**
-     * @dataProvider getIdsMatchingTagsDataProvider
-     */
+    #[DataProvider('getIdsMatchingTagsDataProvider')]
     public function testGetIdsMatchingTags($searchTags, $expectedIds)
     {
         $this->_prepareCollection();
@@ -98,9 +97,7 @@ class MongoDbTest extends \PHPUnit\Framework\TestCase
         ];
     }
 
-    /**
-     * @dataProvider getIdsNotMatchingTagsDataProvider
-     */
+    #[DataProvider('getIdsNotMatchingTagsDataProvider')]
     public function testGetIdsNotMatchingTags($searchTags, $expectedIds)
     {
         $this->_prepareCollection();
@@ -116,9 +113,7 @@ class MongoDbTest extends \PHPUnit\Framework\TestCase
         ];
     }
 
-    /**
-     * @dataProvider getIdsMatchingAnyTagsDataProvider
-     */
+    #[DataProvider('getIdsMatchingAnyTagsDataProvider')]
     public function testGetIdsMatchingAnyTags($searchTags, $expectedIds)
     {
         $this->_prepareCollection();
@@ -150,8 +145,8 @@ class MongoDbTest extends \PHPUnit\Framework\TestCase
     /**
      * @param int $extraLifeTime
      * @param \PHPUnit\Framework\Constraint\Constraint $constraint
-     * @dataProvider touchDataProvider
      */
+    #[DataProvider('touchDataProvider')]
     public function testTouch($extraLifeTime, \PHPUnit\Framework\Constraint\Constraint $constraint)
     {
         $cacheId = 'test';
@@ -175,8 +170,8 @@ class MongoDbTest extends \PHPUnit\Framework\TestCase
      * @param int|bool|null $lifetime
      * @param bool $doNotTestValidity
      * @param string|bool $expected
-     * @dataProvider loadDataProvider
      */
+    #[DataProvider('loadDataProvider')]
     public function testLoad($data, $lifetime, $doNotTestValidity, $expected)
     {
         $cacheId = 'test';
@@ -225,9 +220,7 @@ class MongoDbTest extends \PHPUnit\Framework\TestCase
         $this->assertFalse($this->_model->test($cacheId), "Cache with id '{$cacheId}' has not been removed");
     }
 
-    /**
-     * @dataProvider cleanDataProvider
-     */
+    #[DataProvider('cleanDataProvider')]
     public function testClean($mode, $tags, $expectedIds)
     {
         $this->_prepareCollection();

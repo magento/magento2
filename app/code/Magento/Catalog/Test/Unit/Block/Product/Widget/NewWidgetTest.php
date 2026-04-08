@@ -24,6 +24,7 @@ use Magento\Framework\Event\Manager;
 use Magento\Framework\Pricing\Render;
 use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Framework\Stdlib\DateTime\Timezone;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\Framework\View\Design\ThemeInterface;
 use Magento\Framework\View\DesignInterface;
@@ -42,6 +43,7 @@ use ReflectionClass;
  */
 class NewWidgetTest extends TestCase
 {
+    use MockCreationTrait;
     /**
      * @var NewWidget
      */
@@ -130,10 +132,10 @@ class NewWidgetTest extends TestCase
      * Unit test for getProductPriceHtml()
      *
      * @covers \Magento\Catalog\Block\Product\Widget\NewWidget::getProductPriceHtml()
-     * @dataProvider getProductPriceHtmlDataProvider
      * @param array $args
      * @return void
      */
+    #[DataProvider('getProductPriceHtmlDataProvider')]
     public function testGetProductPriceHtml(array $args): void
     {
         $id = 6;
@@ -196,7 +198,6 @@ class NewWidgetTest extends TestCase
      * Unit test for getCurrentPage() using data provider
      *
      * @covers \Magento\Catalog\Block\Product\Widget\NewWidget::getCurrentPage()
-     * @dataProvider getCurrentPageDataProvider
      * @param int $pageNumber
      * @param int $expectedResult
      */
@@ -528,11 +529,13 @@ class NewWidgetTest extends TestCase
      */
     public function testGetPagerHtml(): void
     {
-        $pagerMock = $this->getMockBuilder(Pager::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['setShowPerPage', 'setPageVarName', 'setLimit', 'setCollection', 'toHtml'])
-            ->addMethods(['setUseContainer', 'setShowAmounts', 'setTotalLimit'])
-            ->getMock();
+        $pagerMock = $this->createPartialMockWithReflection(
+            Pager::class,
+            [
+                'setShowPerPage', 'setPageVarName', 'setLimit', 'setCollection',
+                'toHtml', 'setUseContainer', 'setShowAmounts', 'setTotalLimit'
+            ]
+        );
 
         $pagerMock->expects($this->once())
             ->method('setUseContainer')
@@ -650,11 +653,11 @@ class NewWidgetTest extends TestCase
      * Unit test for getProductsPerPage() using data provider
      *
      * @covers \Magento\Catalog\Block\Product\Widget\NewWidget::getProductsPerPage()
-     * @dataProvider getProductsPerPageDataProvider
      * @param int|null $productsPerPage
      * @param int $expectedResult
      * @return void
      */
+    #[DataProvider('getProductsPerPageDataProvider')]
     public function testGetProductsPerPageWithDataProvider(?int $productsPerPage, int $expectedResult): void
     {
         if ($productsPerPage === null) {

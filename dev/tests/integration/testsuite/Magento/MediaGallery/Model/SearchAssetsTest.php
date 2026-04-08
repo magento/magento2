@@ -13,6 +13,7 @@ use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\MediaGalleryApi\Api\SearchAssetsInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Verify SearchAssets By searchCriteria
@@ -55,9 +56,9 @@ class SearchAssetsTest extends TestCase
     /**
      * Verify search asstes by searching with search criteria
      *
-     * @dataProvider searchCriteriaProvider
      * @magentoDataFixture Magento/MediaGallery/_files/media_asset.php
      */
+    #[DataProvider('searchCriteriaProvider')]
     public function testExecute(array $searchCriteriaData): void
     {
         $titleFilter = $this->filterBuilder->setField($searchCriteriaData['field'])

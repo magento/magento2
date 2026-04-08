@@ -33,7 +33,7 @@ class LocaleFormatterTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $this->localeResolver = $this->getMockForAbstractClass(LocalResolverInterface::class);
+        $this->localeResolver = $this->createMock(LocalResolverInterface::class);
         $this->model = new LocaleFormatter($this->localeResolver);
     }
 

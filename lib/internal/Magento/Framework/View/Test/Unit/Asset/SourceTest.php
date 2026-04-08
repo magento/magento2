@@ -28,6 +28,7 @@ use Magento\Framework\View\Design\Theme\ThemeProviderInterface;
 use Magento\Framework\View\Design\ThemeInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -98,7 +99,7 @@ class SourceTest extends TestCase
         $this->viewFileResolution = $this->createMock(
             StaticFile::class
         );
-        $this->theme = $this->getMockForAbstractClass(ThemeInterface::class);
+        $this->theme = $this->createMock(ThemeInterface::class);
         /** @var ScopeConfigInterface $config */
         $this->chainFactory = $this->getMockBuilder(ChainFactoryInterface::class)
             ->getMock();
@@ -110,7 +111,7 @@ class SourceTest extends TestCase
             ->method('create')
             ->willReturn($this->chain);
 
-        $themeProvider = $this->getMockForAbstractClass(ThemeProviderInterface::class);
+        $themeProvider = $this->createMock(ThemeProviderInterface::class);
         $themeProvider->expects($this->any())
             ->method('getThemeByFullPath')
             ->with('frontend/magento_theme')
@@ -137,9 +138,8 @@ class SourceTest extends TestCase
      * @param bool $isMaterialization
      * @param bool $isExist
      *
-     * @return void
-     * @dataProvider getFileDataProvider
-     */
+     * @return void     */
+    #[DataProvider('getFileDataProvider')]
     public function testGetFile($origFile, $origPath, $origContent, $isMaterialization, $isExist): void
     {
         $filePath = 'some/file.ext';
@@ -196,9 +196,8 @@ class SourceTest extends TestCase
      * @param string $path
      * @param string $expected
      *
-     * @return void
-     * @dataProvider getContentTypeDataProvider
-     */
+     * @return void     */
+    #[DataProvider('getContentTypeDataProvider')]
     public function testGetContentType($path, $expected): void
     {
         $this->assertEquals($expected, $this->object->getContentType($path));
@@ -248,13 +247,13 @@ class SourceTest extends TestCase
     protected function initFilesystem(): void
     {
         $this->filesystem = $this->createMock(Filesystem::class);
-        $this->rootDirRead = $this->getMockForAbstractClass(
+        $this->rootDirRead = $this->createMock(
             ReadInterface::class
         );
-        $this->staticDirRead = $this->getMockForAbstractClass(
+        $this->staticDirRead = $this->createMock(
             ReadInterface::class
         );
-        $this->tmpDir = $this->getMockForAbstractClass(WriteInterface::class);
+        $this->tmpDir = $this->createMock(WriteInterface::class);
 
         $readDirMap = [
             [DirectoryList::ROOT, DriverPool::FILE, $this->rootDirRead],

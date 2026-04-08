@@ -781,6 +781,10 @@
                     <item name="tableAlias" xsi:type="string">sales_shipping_address</item>
                     <item name="columnName" xsi:type="string">postcode</item>
                 </item>
+                <item name="country_id" xsi:type="array">
+                    <item name="tableAlias" xsi:type="string">sales_shipping_address</item>
+                    <item name="columnName" xsi:type="string">country_id</item>
+                </item>
             </argument>
             <argument name="separator" xsi:type="string">, </argument>
         </arguments>
@@ -807,6 +811,10 @@
                 <item name="postcode" xsi:type="array">
                     <item name="tableAlias" xsi:type="string">sales_billing_address</item>
                     <item name="columnName" xsi:type="string">postcode</item>
+                </item>
+                <item name="country_id" xsi:type="array">
+                    <item name="tableAlias" xsi:type="string">sales_billing_address</item>
+                    <item name="columnName" xsi:type="string">country_id</item>
                 </item>
             </argument>
             <argument name="separator" xsi:type="string">, </argument>

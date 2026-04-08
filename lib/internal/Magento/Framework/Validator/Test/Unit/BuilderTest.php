@@ -24,6 +24,7 @@ use Magento\Framework\Validator\UniversalFactory;
 use Magento\Framework\Validator\ValidatorInterface;
 use Magento\Framework\ValidatorFactory;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  *
@@ -55,14 +56,13 @@ class BuilderTest extends TestCase
 
     /**
      * Test createValidator method
-     *
-     * @dataProvider createValidatorDataProvider
-     *
+     *     *
      * @param array $constraint
      * string $property
      * int $min
      * int $max
      */
+    #[DataProvider('createValidatorDataProvider')]
     public function testCreateValidator(array $constraints, string $property, int $min, int $max)
     {
         /** @var \Magento\Framework\Validator\Builder $builder */
@@ -76,9 +76,9 @@ class BuilderTest extends TestCase
             ]
         );
         /** @var AbstractAdapter $translator */
-        $translator = $this->getMockBuilder(
+        $translator = $this->createMock(
             AbstractAdapter::class
-        )->getMockForAbstractClass();
+        );
         AbstractValidator::setDefaultTranslator($translator);
 
         $expectedValidator = new Validator();
@@ -163,14 +163,13 @@ class BuilderTest extends TestCase
 
     /**
      * Check addConfiguration logic
-     *
-     * @dataProvider configurationDataProvider
-     *
+     *     *
      * @param array $constraints
      * @param string $alias
      * @param array $configuration
      * @param array $expected
      */
+    #[DataProvider('configurationDataProvider')]
     public function testAddConfiguration($constraints, $alias, $configuration, $expected)
     {
         $this->markTestSkipped('Skipped in #27500 due to testing protected/private methods and properties');
@@ -186,14 +185,13 @@ class BuilderTest extends TestCase
 
     /**
      * Check addConfigurations logic
-     *
-     * @dataProvider configurationDataProvider
-     *
+     *     *
      * @param array $constraints
      * @param string $alias
      * @param array $configuration
      * @param array $expected
      */
+    #[DataProvider('configurationDataProvider')]
     public function testAddConfigurations($constraints, $alias, $configuration, $expected)
     {
         $this->markTestSkipped('Skipped in #27500 due to testing protected/private methods and properties');
@@ -343,13 +341,12 @@ class BuilderTest extends TestCase
 
     /**
      * Check arguments validation passed into constructor
-     *
-     * @dataProvider invalidArgumentsDataProvider
-     *
+     *     *
      * @param array $options
      * @param string $exception
      * @param string $exceptionMessage
      */
+    #[DataProvider('invalidArgumentsDataProvider')]
     public function testConstructorConfigValidation(array $options, $exception, $exceptionMessage)
     {
         $this->expectException($exception);
@@ -365,13 +362,12 @@ class BuilderTest extends TestCase
 
     /**
      * Check arguments validation passed into configuration
-     *
-     * @dataProvider invalidArgumentsDataProvider
-     *
+     *     *
      * @param array $options
      * @param string $exception
      * @param string $exceptionMessage
      */
+    #[DataProvider('invalidArgumentsDataProvider')]
     public function testAddConfigurationConfigValidation(array $options, $exception, $exceptionMessage)
     {
         $this->expectException($exception);
@@ -443,12 +439,11 @@ class BuilderTest extends TestCase
 
     /**
      * Test invalid configuration formats
-     *
-     * @dataProvider invalidConfigurationFormatDataProvider
-     *
+     *     *
      *
      * @param mixed $configuration
      */
+    #[DataProvider('invalidConfigurationFormatDataProvider')]
     public function testAddConfigurationInvalidFormat($configuration)
     {
         $this->expectException('InvalidArgumentException');

@@ -10,6 +10,7 @@ namespace Magento\Framework\Cache\Test\Unit\Frontend\Decorator;
 use Magento\Framework\Cache\CacheConstants;
 use Magento\Framework\Cache\Frontend\Decorator\TagScope;
 use Magento\Framework\Cache\FrontendInterface;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -30,7 +31,7 @@ class TagScopeTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->_frontend = $this->getMockForAbstractClass(FrontendInterface::class);
+        $this->_frontend = $this->createMock(FrontendInterface::class);
         $this->_object = new TagScope($this->_frontend, 'enforced_tag');
     }
 
@@ -115,8 +116,8 @@ class TagScopeTest extends TestCase
      * @param bool $expectedResult
      *
      * @return void
-     * @dataProvider cleanModeMatchingAnyTagDataProvider
      */
+    #[DataProvider('cleanModeMatchingAnyTagDataProvider')]
     public function testCleanModeMatchingAnyTag($fixtureResultOne, $fixtureResultTwo, $expectedResult): void
     {
         $this->_frontend

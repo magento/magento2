@@ -13,6 +13,7 @@ use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Driver\File;
 use Magento\Framework\Filesystem\DriverInterface;
 use Magento\TestFramework\Helper\Bootstrap;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Test methods of class Storage
@@ -112,8 +113,8 @@ class GetThumbnailUrlsTest extends \PHPUnit\Framework\TestCase
      * @return void
      * @magentoAppIsolation enabled
      * @magentoAppArea adminhtml
-     * @dataProvider getThumbnailUrlDataProvider
      */
+    #[DataProvider('getThumbnailUrlDataProvider')]
     public function testGetThumbnailUrl(string $directory, string $filename, array $expectedUrls): void
     {
         $root = $this->storage->getCmsWysiwygImages()->getStorageRoot();

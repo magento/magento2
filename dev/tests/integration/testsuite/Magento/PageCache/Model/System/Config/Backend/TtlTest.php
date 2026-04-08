@@ -5,6 +5,8 @@
  */
 namespace Magento\PageCache\Model\System\Config\Backend;
 
+use PHPUnit\Framework\Attributes\DataProvider;
+
 class TtlTest extends \PHPUnit\Framework\TestCase
 {
     /**
@@ -26,17 +28,16 @@ class TtlTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @dataProvider beforeSaveDataProvider
-     *
      * @param $value
      * @param $path
      */
+    #[DataProvider('beforeSaveDataProvider')]
     public function testBeforeSave($value, $path)
     {
         $this->_prepareData($value, $path);
     }
 
-    public static function beforeSaveDataProvider()
+    public static function beforeSaveDataProvider(): array
     {
         return [
             [125, 'ttl_1'],
@@ -45,18 +46,17 @@ class TtlTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @dataProvider beforeSaveDataProviderWithException
-     *
      * @param $value
      * @param $path
      */
+    #[DataProvider('beforeSaveDataProviderWithException')]
     public function testBeforeSaveWithException($value, $path)
     {
         $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
         $this->_prepareData($value, $path);
     }
 
-    public static function beforeSaveDataProviderWithException()
+    public static function beforeSaveDataProviderWithException(): array
     {
         return [
             ['', 'ttl_3'],

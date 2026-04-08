@@ -59,6 +59,7 @@ class SafeInstallerTest extends SetupTestCase
         $testTableData = $this->getData();
         $row = reset($testTableData);
         $this->cliCommand->install(['Magento_TestSetupDeclarationModule4']);
+        $this->resourceConnection = Bootstrap::getObjectManager()->create(ResourceConnection::class);
         $adapter = $this->resourceConnection->getConnection();
         $testTableName = $this->resourceConnection->getTableName('test_table');
         $adapter->insertArray(

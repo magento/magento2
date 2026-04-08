@@ -15,6 +15,7 @@ use Magento\Framework\Message\MessageInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\Framework\App\Request\Http as HttpRequest;
 use Magento\TestFramework\TestCase\AbstractBackendController;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * @magentoAppArea adminhtml
@@ -68,8 +69,8 @@ class MassDeleteTest extends AbstractBackendController
      * @param string|null $messageType
      * @magentoDataFixture Magento/Customer/_files/five_repository_customers.php
      * @magentoDbIsolation disabled
-     * @dataProvider failedRequestDataProvider
      */
+    #[DataProvider('failedRequestDataProvider')]
     public function testFailedMassDeleteAction($ids, Constraint $constraint, $messageType)
     {
         $this->massDeleteAssertions($ids, $constraint, $messageType);
@@ -83,8 +84,8 @@ class MassDeleteTest extends AbstractBackendController
      * @param string $messageType
      * @magentoDataFixture Magento/Customer/_files/five_repository_customers.php
      * @magentoDbIsolation disabled
-     * @dataProvider successRequestDataProvider
      */
+    #[DataProvider('successRequestDataProvider')]
     public function testSuccessMassDeleteAction(array $emails, Constraint $constraint, string $messageType)
     {
         $ids = [];

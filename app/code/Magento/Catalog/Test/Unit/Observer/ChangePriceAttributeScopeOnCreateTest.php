@@ -14,6 +14,7 @@ use Magento\Catalog\Model\ResourceModel\Eav\Attribute;
 use Magento\Catalog\Observer\ChangePriceAttributeScopeOnCreate;
 use Magento\Framework\Event;
 use Magento\Framework\Event\Observer;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Store\Model\Store;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -24,6 +25,7 @@ use PHPUnit\Framework\TestCase;
  */
 class ChangePriceAttributeScopeOnCreateTest extends TestCase
 {
+    use MockCreationTrait;
     /**
      * @var ChangePriceAttributeScopeOnCreate
      */
@@ -64,10 +66,7 @@ class ChangePriceAttributeScopeOnCreateTest extends TestCase
         $this->observerMock = $this->createMock(Observer::class);
 
         // Event uses magic methods from DataObject, so we need to add getAttribute method
-        $this->eventMock = $this->getMockBuilder(Event::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['getAttribute'])
-            ->getMock();
+        $this->eventMock = $this->createPartialMockWithReflection(Event::class, ['getAttribute']);
 
         // Attribute uses magic properties, so we need to configure getId as property and methods
         $this->attributeMock = $this->getMockBuilder(Attribute::class)

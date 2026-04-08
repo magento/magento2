@@ -10,6 +10,7 @@ namespace Magento\LayeredNavigation\Block\Navigation\Search;
 use Magento\Catalog\Model\Layer\Filter\AbstractFilter;
 use Magento\Catalog\Model\Layer\Resolver;
 use Magento\LayeredNavigation\Block\Navigation\Category\DecimalFilterTest as CategoryDecimalFilterTest;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Provides tests for custom price filter in navigation block on search page.
@@ -23,12 +24,12 @@ class DecimalFilterTest extends CategoryDecimalFilterTest
     /**
      * @magentoDataFixture Magento/Catalog/_files/product_decimal_attribute.php
      * @magentoDataFixture Magento/Catalog/_files/category_with_different_price_products.php
-     * @dataProvider getFiltersWithCustomAttributeDataProvider
      * @param array $products
      * @param array $attributeData
      * @param array $expectation
      * @return void
      */
+    #[DataProvider('getFiltersWithCustomAttributeDataProvider')]
     public function testGetFiltersWithCustomAttribute(
         array $products,
         array $attributeData,

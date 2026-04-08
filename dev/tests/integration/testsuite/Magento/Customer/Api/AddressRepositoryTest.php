@@ -8,6 +8,7 @@ namespace Magento\Customer\Api;
 
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\NoSuchEntityException;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Integration test for service layer \Magento\Customer\Model\ResourceModel\AddressRepository
@@ -342,12 +343,11 @@ class AddressRepositoryTest extends \PHPUnit\Framework\TestCase
      * @param \Magento\Framework\Api\Filter[] $filterGroup
      * @param array $expectedResult array of expected results indexed by ID
      *
-     * @dataProvider searchAddressDataProvider
-     *
      * @magentoDataFixture  Magento/Customer/_files/customer.php
      * @magentoDataFixture  Magento/Customer/_files/customer_two_addresses.php
      * @magentoAppIsolation enabled
      */
+    #[DataProvider('searchAddressDataProvider')]
     public function testSearchAddresses($filters, $filterGroup, $expectedResult)
     {
         /** @var \Magento\Framework\Api\SearchCriteriaBuilder $searchBuilder */

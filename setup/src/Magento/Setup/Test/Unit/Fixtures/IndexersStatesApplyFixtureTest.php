@@ -37,9 +37,9 @@ class IndexersStatesApplyFixtureTest extends TestCase
 
     public function testExecute()
     {
-        $cacheInterfaceMock = $this->getMockForAbstractClass(CacheInterface::class);
+        $cacheInterfaceMock = $this->createMock(CacheInterface::class);
         $indexerRegistryMock = $this->createMock(IndexerRegistry::class);
-        $indexerMock = $this->getMockForAbstractClass(IndexerInterface::class);
+        $indexerMock = $this->createMock(IndexerInterface::class);
 
         $indexerRegistryMock->expects($this->once())
             ->method('get')
@@ -76,7 +76,7 @@ class IndexersStatesApplyFixtureTest extends TestCase
 
     public function testNoFixtureConfigValue()
     {
-        $cacheInterfaceMock = $this->getMockForAbstractClass(CacheInterface::class);
+        $cacheInterfaceMock = $this->createMock(CacheInterface::class);
         $cacheInterfaceMock->expects($this->never())->method('clean');
 
         $objectManagerMock = $this->createMock(ObjectManager::class);

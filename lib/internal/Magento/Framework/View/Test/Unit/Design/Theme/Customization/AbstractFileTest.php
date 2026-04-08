@@ -21,6 +21,7 @@ use Magento\Theme\Model\Theme;
 use Magento\Theme\Model\Theme\File;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class AbstractFileTest extends TestCase
 {
@@ -111,9 +112,8 @@ class AbstractFileTest extends TestCase
      * @covers \Magento\Framework\View\Design\Theme\Customization\AbstractFile::prepareFile
      * @covers \Magento\Framework\View\Design\Theme\Customization\AbstractFile::_prepareFileName
      * @covers \Magento\Framework\View\Design\Theme\Customization\AbstractFile::_prepareFilePath
-     * @covers \Magento\Framework\View\Design\Theme\Customization\AbstractFile::_prepareSortOrder
-     * @dataProvider getTestContent
-     */
+     * @covers \Magento\Framework\View\Design\Theme\Customization\AbstractFile::_prepareSortOrder     */
+    #[DataProvider('getTestContent')]
     public function testPrepareFile($type, $fileContent, $expectedContent, $existedFiles)
     {
         $model = $this->_modelBuilder->getMock();

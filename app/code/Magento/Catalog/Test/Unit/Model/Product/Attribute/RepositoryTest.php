@@ -26,6 +26,7 @@ use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\Api\SearchResultsInterface;
 use Magento\Framework\DataObject;
 use Magento\Framework\Filter\FilterManager;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Magento\Eav\Model\Validator\Attribute\Code;
@@ -35,6 +36,8 @@ use Magento\Eav\Model\Validator\Attribute\Code;
  */
 class RepositoryTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var Repository
      */
@@ -99,11 +102,10 @@ class RepositoryTest extends TestCase
             $this->createMock(\Magento\Catalog\Model\ResourceModel\Attribute::class);
         $this->productHelperMock =
             $this->createMock(Product::class);
-        $this->filterManagerMock =
-            $this->getMockBuilder(FilterManager::class)
-                ->disableOriginalConstructor()
-                ->addMethods(['translitUrl'])
-                ->getMock();
+        $this->filterManagerMock = $this->createPartialMockWithReflection(
+            FilterManager::class,
+            ['translitUrl']
+        );
         $this->eavAttributeRepositoryMock =
             $this->createMock(AttributeRepositoryInterface::class);
         $this->eavConfigMock = $this->createMock(Config::class);
@@ -473,28 +475,29 @@ class RepositoryTest extends TestCase
         $frontendInput = 'select';
         $backendType = 'int';
 
-        $storeLabelMock = $this->getMockForAbstractClass(AttributeOptionLabelInterface::class);
+        $storeLabelMock = $this->createMock(AttributeOptionLabelInterface::class);
         $storeLabelMock->expects($this->once())->method('getStoreId')->willReturn(1);
         $storeLabelMock->expects($this->once())->method('getLabel')->willReturn('Store Label');
 
-        $option1Mock = $this->getMockForAbstractClass(AttributeOptionInterface::class);
+        $option1Mock = $this->createMock(AttributeOptionInterface::class);
         $option1Mock->expects($this->any())->method('getValue')->willReturn('option_value_1');
         $option1Mock->expects($this->once())->method('getLabel')->willReturn('Option 1');
         $option1Mock->expects($this->once())->method('getSortOrder')->willReturn(10);
         $option1Mock->expects($this->exactly(2))->method('getStoreLabels')->willReturn([$storeLabelMock]);
         $option1Mock->expects($this->once())->method('getIsDefault')->willReturn(true);
 
-        $option2Mock = $this->getMockForAbstractClass(AttributeOptionInterface::class);
+        $option2Mock = $this->createMock(AttributeOptionInterface::class);
         $option2Mock->expects($this->any())->method('getValue')->willReturn(null);
         $option2Mock->expects($this->once())->method('getLabel')->willReturn('Option 2');
         $option2Mock->expects($this->once())->method('getSortOrder')->willReturn(null);
         $option2Mock->expects($this->once())->method('getStoreLabels')->willReturn(null);
         $option2Mock->expects($this->once())->method('getIsDefault')->willReturn(false);
 
-        $attributeMock = $this->getMockBuilder(Attribute::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['setDefault', 'setOption'])
-            ->onlyMethods([
+        $attributeMock = $this->createPartialMockWithReflection(
+            Attribute::class,
+            [
+                'setDefault',
+                'setOption',
                 'getAttributeId',
                 'setAttributeId',
                 'getDefaultFrontendLabel',
@@ -510,8 +513,8 @@ class RepositoryTest extends TestCase
                 'getData',
                 'getOptions',
                 'setEntityTypeId'
-            ])
-            ->getMock();
+            ]
+        );
         $attributeMock->expects($this->any())->method('getAttributeId')->willReturn(null);
         $attributeMock->expects($this->once())->method('setAttributeId')->with(null)->willReturnSelf();
         $attributeMock->expects($this->any())->method('getDefaultFrontendLabel')->willReturn('Select Attribute');

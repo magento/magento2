@@ -9,6 +9,7 @@ namespace Magento\Variable\Test\Unit\Model\Source;
 
 use Magento\Config\Model\Config\Structure\SearchInterface;
 use Magento\Config\Model\Config\StructureElementInterface;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Variable\Model\Config\Structure\AvailableVariables;
 use Magento\Variable\Model\Source\Variables;
@@ -20,6 +21,8 @@ use PHPUnit\Framework\TestCase;
  */
 class VariablesTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * Variables model
      *
@@ -41,10 +44,10 @@ class VariablesTest extends TestCase
 
     protected function setup(): void
     {
-        $this->configMock = $this->getMockBuilder(SearchInterface::class)
-            ->addMethods(['getElementByConfigPath'])
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->configMock = $this->createPartialMockWithReflection(
+            SearchInterface::class,
+            ['getElement', 'getElementByConfigPath']
+        );
         $helper = new ObjectManager($this);
         $configVariables = [
             'web' => [
@@ -57,8 +60,8 @@ class VariablesTest extends TestCase
 
         $element1 = $this->getMockBuilder(StructureElementInterface::class)
             ->disableOriginalConstructor()
-            ->onlyMethods(['getLabel'])
-            ->getMockForAbstractClass();
+            ->onlyMethods([])
+            ->getMock();
         $element2 = clone $element1;
         $groupElement = clone $element1;
         $element1->expects($this->any())->method('getLabel')->willReturn(__('Base URL'));

@@ -18,7 +18,7 @@ class BackupRollbackFactoryTest extends TestCase
 {
     public function testCreate()
     {
-        $objectManager = $this->getMockForAbstractClass(
+        $objectManager = $this->createMock(
             ObjectManagerInterface::class,
             [],
             '',
@@ -26,7 +26,7 @@ class BackupRollbackFactoryTest extends TestCase
         );
         $consoleLogger = $this->createMock(ConsoleLogger::class);
         $factory = $this->createMock(BackupRollback::class);
-        $output = $this->getMockForAbstractClass(
+        $output = $this->createMock(
             OutputInterface::class,
             [],
             '',

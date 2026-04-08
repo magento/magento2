@@ -16,6 +16,7 @@ use Magento\UrlRewrite\Model\ResourceModel\UrlRewriteCollection;
 use Magento\UrlRewrite\Model\ResourceModel\UrlRewriteCollectionFactory;
 use Magento\UrlRewrite\Model\UrlRewrite as UrlRewriteItem;
 use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -59,12 +60,12 @@ class FindByUrlRewriteTest extends TestCase
      * Assert that product is available by URL rewrite with different visibility.
      *
      * @magentoDataFixture Magento/ConfigurableProduct/_files/configurable_product_with_two_child_products.php
-     * @dataProvider visibilityWithExpectedResultDataProvider
      * @magentoDbIsolation enabled
      *
      * @param array $productsData
      * @return void
      */
+    #[DataProvider('visibilityWithExpectedResultDataProvider')]
     public function testCheckIsUrlRewriteForChildrenProductsHasCreated(array $productsData): void
     {
         $this->checkConfigurableUrlRewriteWasCreated();

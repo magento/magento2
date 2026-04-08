@@ -7,6 +7,8 @@ declare(strict_types=1);
 
 namespace Magento\Eav\Model\Entity;
 
+use PHPUnit\Framework\Attributes\DataProvider;
+
 use Magento\Framework\Locale\ResolverInterface;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\TestFramework\Helper\Bootstrap;
@@ -64,9 +66,9 @@ class AttributeTest extends TestCase
      * @param string $backendType
      * @param string $locale
      * @param string $expected
-     * @dataProvider beforeSaveDataProvider
      * @throws
      */
+    #[DataProvider('beforeSaveDataProvider')]
     public function testBeforeSave(
         string $defaultValue,
         string $backendType,
@@ -108,8 +110,8 @@ class AttributeTest extends TestCase
      * @param string $backendType
      * @param string $locale
      * @param string $expected
-     * @dataProvider beforeSaveErrorDataDataProvider
      */
+    #[DataProvider('beforeSaveErrorDataDataProvider')]
     public function testBeforeSaveErrorData($defaultValue, $backendType, $locale, $expected)
     {
         $this->expectException(\Magento\Framework\Exception\LocalizedException::class);

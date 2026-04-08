@@ -19,6 +19,7 @@ use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\Validator\AbstractValidator;
 use PHPUnit\Framework\Attributes\DataProvider;
+use Magento\Quote\Api\Data\CartExtension;
 use Magento\Quote\Api\Data\CartExtensionInterface;
 use Magento\Quote\Model\Quote;
 use Magento\Quote\Model\Quote\Address;
@@ -723,9 +724,11 @@ class ValidatorTest extends TestCase
             ]
         );
         $cartExtensionMock = $this->createPartialMockWithReflection(
-            CartExtensionInterface::class,
+            CartExtension::class,
             ['getShippingAssignments']
         );
+        $cartExtensionMock->method('getShippingAssignments')
+            ->willReturn($shippingAssignments);
 
         $quoteMock->method('getStore')
             ->willReturn($storeMock);
@@ -749,9 +752,6 @@ class ValidatorTest extends TestCase
 
         $quoteMock->method('getExtensionAttributes')
             ->willReturn($cartExtensionMock);
-
-        $cartExtensionMock->method('getShippingAssignments')
-            ->willReturn($shippingAssignments);
 
         $this->addressMock->method('getShippingAmountForDiscount')
             ->willReturn($shippingAmount);

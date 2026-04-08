@@ -9,6 +9,7 @@ namespace Magento\Quote\Model;
 
 use Magento\Quote\Api\GuestCartManagementInterface;
 use Magento\TestFramework\Helper\Bootstrap as BootstrapHelper;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class QuoteMutexTest extends \PHPUnit\Framework\TestCase
 {
@@ -39,8 +40,8 @@ class QuoteMutexTest extends \PHPUnit\Framework\TestCase
      * @param array $args
      * @param mixed $expectedResult
      * @return void
-     * @dataProvider callableDataProvider
      */
+    #[DataProvider('callableDataProvider')]
     public function testSuccessfulExecution(callable $callable, array $args, $expectedResult): void
     {
         $maskedQuoteId = $this->guestCartManagement->createEmptyCart();

@@ -537,7 +537,9 @@ class MagentoDatabaseAdapterTest extends TestCase
             ->expects($this->once())
             ->method('save')
             ->with(
-                $this->isType('string'),
+                $this->callback(function ($value) {
+                    return is_string($value);
+                }),
                 'test_save_key',
                 ['tag1', 'tag2'],
                 $this->greaterThan(0)
@@ -581,7 +583,9 @@ class MagentoDatabaseAdapterTest extends TestCase
             ->expects($this->once())
             ->method('save')
             ->with(
-                $this->isType('string'),
+                $this->callback(function ($value) {
+                    return is_string($value);
+                }),
                 'test_simple_key',
                 [], // No tags
                 $this->greaterThanOrEqual(0)

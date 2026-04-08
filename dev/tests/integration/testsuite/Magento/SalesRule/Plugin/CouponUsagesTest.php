@@ -34,6 +34,7 @@ use Magento\TestFramework\Fixture\DataFixtureStorageManager;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\MessageQueue\EnvironmentPreconditionException;
 use Magento\TestFramework\MessageQueue\PreconditionFailedException;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\TestFramework\MessageQueue\PublisherConsumerController;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -203,8 +204,8 @@ class CouponUsagesTest extends TestCase
      * @param array $mockObjects
      * @magentoDataFixture Magento/SalesRule/_files/coupons_limited_order.php
      * @magentoDbIsolation disabled
-     * @dataProvider quoteSubmitFailureDataProvider
      */
+    #[DataProvider('quoteSubmitFailureDataProvider')]
     public function testQuoteSubmitFailure(array $mockObjects)
     {
         if (!empty($mockObjects['orderManagement'])) {

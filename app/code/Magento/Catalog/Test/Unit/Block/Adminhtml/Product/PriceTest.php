@@ -13,6 +13,7 @@ use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Store\Model\Website;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -37,7 +38,7 @@ class PriceTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->storeManagerMock = $this->getMockForAbstractClass(StoreManagerInterface::class);
+        $this->storeManagerMock = $this->createMock(StoreManagerInterface::class);
 
         $this->block = $this->getMockBuilder(Price::class)
             ->disableOriginalConstructor()
@@ -75,11 +76,11 @@ class PriceTest extends TestCase
     /**
      * Test getWebsite returns website for given store ID
      *
-     * @dataProvider storeIdDataProvider
      * @covers \Magento\Catalog\Block\Adminhtml\Product\Price::getWebsite
      * @param int|string|bool|null $storeId
      * @return void
      */
+    #[DataProvider('storeIdDataProvider')]
     public function testGetWebsiteReturnsWebsiteForStoreId(
         int|string|bool|null $storeId
     ): void {

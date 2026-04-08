@@ -9,6 +9,7 @@ namespace Magento\Framework\Test\Unit\Message;
 
 use Magento\Framework\Message\Error;
 use Magento\Framework\Message\PhraseFactory;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 class PhraseFactoryTest extends TestCase
@@ -24,12 +25,12 @@ class PhraseFactoryTest extends TestCase
     }
 
     /**
-     * @dataProvider dataProvider
      * @param string $mainMessage
      * @param array $subMessages
      * @param string $separator
      * @param string $expectedResult
      */
+    #[DataProvider('dataProvider')]
     public function testCreate($mainMessage, $subMessages, $separator, $expectedResult)
     {
         $result = (string)$this->factory->create($mainMessage, $subMessages, $separator);

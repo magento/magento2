@@ -80,18 +80,13 @@ class LocaleResolverTest extends TestCase
     {
         $this->package = $this->createMock(Package::class);
         $this->storeView = $this->createMock(StoreView::class);
-        $this->adminUser = $this->getMockForAbstractClass(UserInterface::class);
+        $this->adminUser = $this->createMock(UserInterface::class);
         $this->userCollection = $this->createMock(Collection::class);
         $this->userCollectionFactory = $this->createMock(CollectionFactory::class);
         $this->userCollectionFactory->method('create')->willReturn($this->userCollection);
         $this->deploymentConfig = $this->createMock(DeploymentConfig::class);
         $this->locale = $this->createMock(Locale::class);
-        $this->logger = $this->getMockForAbstractClass(
-            LoggerInterface::class,
-            ['critical'],
-            '',
-            false
-        );
+        $this->logger = $this->createMock(LoggerInterface::class);
         $this->localeResolver = new LocaleResolver(
             $this->storeView,
             $this->userCollectionFactory,

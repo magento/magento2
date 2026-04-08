@@ -86,7 +86,7 @@ class SaveHandlerTest extends TestCase
 
         $extensionAttributes = $this->createPartialMockWithReflection(
             ProductExtensionInterface::class,
-            ['getCategoryLinks']
+            $this->getProductExtensionMethods()
         );
         $extensionAttributes->expects(static::any())
             ->method('getCategoryLinks')
@@ -227,5 +227,31 @@ class SaveHandlerTest extends TestCase
 
         $entity = $this->saveHandler->execute($product);
         static::assertSame($product, $entity);
+    }
+
+    private function getProductExtensionMethods(): array
+    {
+        return [
+            'getWebsiteIds',
+            'setWebsiteIds',
+            'getCategoryLinks',
+            'setCategoryLinks',
+            'getBundleProductOptions',
+            'setBundleProductOptions',
+            'getStockItem',
+            'setStockItem',
+            'getDiscounts',
+            'setDiscounts',
+            'getConfigurableProductOptions',
+            'setConfigurableProductOptions',
+            'getConfigurableProductLinks',
+            'setConfigurableProductLinks',
+            'getDownloadableProductLinks',
+            'setDownloadableProductLinks',
+            'getDownloadableProductSamples',
+            'setDownloadableProductSamples',
+            'getGiftcardAmounts',
+            'setGiftcardAmounts',
+        ];
     }
 }

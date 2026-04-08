@@ -17,6 +17,7 @@ use Magento\Framework\Registry;
 use Magento\Framework\View\LayoutInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Test Qty block in composite product configuration layout
@@ -88,11 +89,11 @@ class QtyTest extends TestCase
 
     /**
      * @magentoDataFixture Magento/Catalog/_files/product_simple_duplicated.php
-     * @dataProvider getQtyValueProvider
      * @param bool $isQty
      * @param int $qty
      * @return void
      */
+    #[DataProvider('getQtyValueProvider')]
     public function testGetQtyValue(bool $isQty = false, int $qty = 1): void
     {
         $product = $this->productRepository->get('simple-1');
