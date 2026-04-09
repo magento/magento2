@@ -308,6 +308,11 @@ class ServiceInputProcessor implements ServicePayloadConverterInterface, ResetAf
             if (isset($constructorArgs[$propertyName])) {
                 continue;
             }
+            // Also skip if the property was matched via snake_case → camelCase in constructor
+            $camelFromSnake = lcfirst(SimpleDataObjectConverter::snakeCaseToUpperCamelCase($propertyName));
+            if (isset($constructorArgs[$camelFromSnake])) {
+                continue;
+            }
 
             // Converts snake_case to uppercase CamelCase to help form getter/setter method names
             // This use case is for REST only. SOAP request data is already camel cased

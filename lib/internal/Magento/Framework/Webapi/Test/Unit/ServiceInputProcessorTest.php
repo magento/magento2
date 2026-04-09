@@ -289,6 +289,26 @@ class ServiceInputProcessorTest extends TestCase
         $this->assertEquals('Test', $arg->getName());
     }
 
+    /**
+     * Verify that constructor parameters are matched when data keys use snake_case
+     * (e.g. from ServiceOutputProcessor serialization) instead of camelCase.
+     */
+    public function testSimpleConstructorPropertiesWithSnakeCaseKeys()
+    {
+        $data = ['simpleConstructor' => ['entity_id' => 42, 'name' => 'SnakeCase']];
+        $result = $this->serviceInputProcessor->process(
+            TestService::class,
+            'simpleConstructor',
+            $data
+        );
+        $this->assertNotNull($result);
+        $arg = $result[0];
+
+        $this->assertInstanceOf(SimpleConstructor::class, $arg);
+        $this->assertEquals(42, $arg->getEntityId());
+        $this->assertEquals('SnakeCase', $arg->getName());
+    }
+
     public function testSimpleArrayProperties()
     {
         $data = ['ids' => [1, 2, 3, 4]];
