@@ -243,7 +243,10 @@ class ServiceInputProcessor implements ServicePayloadConverterInterface, ResetAf
         $res = [];
         $parameters = $constructor->getParameters();
         foreach ($parameters as $parameter) {
-            if (isset($data[$parameter->getName()])) {
+            $paramName = $parameter->getName();
+            $snakeCaseName = strtolower(preg_replace("/(?<=\\w)(?=[A-Z])/", "_$1", $paramName));
+            if (isset($data[$paramName]) || isset($data[$snakeCaseName])) {
+                $paramValue = $data[$paramName] ?? $data[$snakeCaseName];
                 $parameterType = $this->typeProcessor->getParamType($parameter);
 
                 // Allow only simple types or Api Data Objects
@@ -254,7 +257,7 @@ class ServiceInputProcessor implements ServicePayloadConverterInterface, ResetAf
                 }
 
                 try {
-                    $res[$parameter->getName()] = $this->convertValue($data[$parameter->getName()], $parameterType);
+                    $res[$paramName] = $this->convertValue($paramValue, $parameterType);
                 } catch (\ReflectionException $e) {
                     // Parameter was not correclty declared or the class is uknown.
                     // By not returing the contructor value, we will automatically fall back to the "setters" way.
