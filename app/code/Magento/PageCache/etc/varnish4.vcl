@@ -142,6 +142,12 @@ sub process_graphql_headers {
 }
 
 sub vcl_backend_response {
+    # Do not cache error responses (403, 404, 5xx)
+    if (beresp.status == 403 || beresp.status == 404 || beresp.status >= 500) {
+        set beresp.uncacheable = true;
+        set beresp.ttl = 120s;
+        return (deliver);
+    }
 
     set beresp.grace = 3d;
 
@@ -149,7 +155,7 @@ sub vcl_backend_response {
         set beresp.do_esi = true;
     }
 
-    if (bereq.url ~ "\.js$" || beresp.http.content-type ~ "text") {
+    if (bereq.url ~ "\.js$" || beresp.http.content-type ~ "text|javascript|json|css") {
         set beresp.do_gzip = true;
     }
 
@@ -157,10 +163,10 @@ sub vcl_backend_response {
         set beresp.http.X-Magento-Cache-Control = beresp.http.Cache-Control;
     }
 
-    # cache only successfully responses and 404s
-    if (beresp.status != 200 && beresp.status != 404) {
-        set beresp.ttl = 120s;
+    # Do not cache responses marked as private
+    if (beresp.http.Cache-Control ~ "private") {
         set beresp.uncacheable = true;
+        set beresp.ttl = 86400s;
         return (deliver);
     } elsif (beresp.http.Cache-Control ~ "private") {
         set beresp.uncacheable = true;
