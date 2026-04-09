@@ -67,8 +67,8 @@ sub vcl_recv {
         return (pass);
     }
 
-    # Bypass customer, shopping cart, checkout
-    if (req.url ~ "/customer" || req.url ~ "/checkout") {
+    # Bypass customer, shopping cart, checkout, login-as-customer
+    if (req.url ~ "/customer" || req.url ~ "/checkout" || req.url ~ "/loginascustomer") {
         return (pass);
     }
 
