@@ -13,6 +13,12 @@ namespace Magento\Reports\Model\ResourceModel;
 class Event extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
     /**
+     * Maximum number of batch iterations to prevent infinite loops
+     * when new events are inserted faster than they are cleaned up.
+     */
+    private const CLEAN_BATCH_LIMIT = 100;
+
+    /**
      * Core store config
      *
      * @var \Magento\Framework\App\Config\ScopeConfigInterface
@@ -177,12 +183,6 @@ class Event extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @return $this
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    /**
-     * Maximum number of batch iterations to prevent infinite loops
-     * when new events are inserted faster than they are cleaned up.
-     */
-    private const CLEAN_BATCH_LIMIT = 100;
-
     public function clean(\Magento\Reports\Model\Event $object)
     {
         $iterations = 0;
