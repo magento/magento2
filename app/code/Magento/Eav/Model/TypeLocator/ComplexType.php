@@ -52,7 +52,7 @@ class ComplexType implements ServiceTypeListInterface, CustomAttributeTypeLocato
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getType($attributeCode, $entityType)
     {
@@ -75,15 +75,14 @@ class ComplexType implements ServiceTypeListInterface, CustomAttributeTypeLocato
             $backendModel = class_exists($backendModelClass) ? $backendModelClass : null;
         }
 
-        $dataInterface = isset($attributeTypeMap[$backendModel])
-            ? $attributeTypeMap[$backendModel]
-            : TypeProcessor::NORMALIZED_ANY_TYPE;
+        $backendModel = $backendModel ?? '';
+        $dataInterface = $attributeTypeMap[$backendModel] ?? TypeProcessor::NORMALIZED_ANY_TYPE;
 
         return $dataInterface;
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getDataTypes()
     {
@@ -97,7 +96,7 @@ class ComplexType implements ServiceTypeListInterface, CustomAttributeTypeLocato
     }
 
     /**
-     * {@inheritDoc}
+     * @inheritdoc
      */
     public function getAllServiceDataInterfaces()
     {
@@ -105,6 +104,8 @@ class ComplexType implements ServiceTypeListInterface, CustomAttributeTypeLocato
     }
 
     /**
+     * Build backend model to data type map.
+     *
      * @return array [['backend model' => 'simple or complex type'], ..]
      */
     private function getAttributeBackendModelToTypeMapping()

@@ -204,7 +204,7 @@ class GeneralTest extends TestCase
                 'data' => [],
                 'defaultStatusValue' => 5,
                 'expectedResult' => [
-                    null => [
+                    '' => [
                         General::DATA_SOURCE_DEFAULT => [
                             ProductAttributeInterface::CODE_STATUS => 5,
                         ],
@@ -215,7 +215,7 @@ class GeneralTest extends TestCase
                 'data' => [],
                 'defaultStatusValue' => 0,
                 'expectedResult' => [
-                    null => [
+                    '' => [
                         General::DATA_SOURCE_DEFAULT => [
                             ProductAttributeInterface::CODE_STATUS => 1,
                         ],

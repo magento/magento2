@@ -66,6 +66,10 @@ class ReadHandler implements ExtensionInterface
             $entity,
             $mediaEntries
         );
+        $entity->setOrigData(
+            $this->getAttribute()->getAttributeCode(),
+            $entity->getData($this->getAttribute()->getAttributeCode())
+        );
 
         return $entity;
     }

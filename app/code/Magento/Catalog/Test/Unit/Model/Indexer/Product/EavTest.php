@@ -63,7 +63,6 @@ class EavTest extends TestCase
             Eav::class,
             'cacheContext'
         );
-        $cacheContextProperty->setAccessible(true);
         $cacheContextProperty->setValue($this->model, $this->cacheContextMock);
     }
 

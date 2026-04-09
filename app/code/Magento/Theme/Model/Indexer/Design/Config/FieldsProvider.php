@@ -48,7 +48,7 @@ class FieldsProvider implements FieldsetInterface
     {
         $fields = [];
         foreach ($metadata as $itemName => $itemData) {
-            if (isset($itemData['use_in_grid']) && (boolean)$itemData['use_in_grid']) {
+            if (isset($itemData['use_in_grid']) && (bool)$itemData['use_in_grid']) {
                 $fields[$itemName] = [
                     'name' => $itemName,
                     'origin' => 'value',

@@ -749,7 +749,7 @@ abstract class AbstractAttribute extends \Magento\Framework\Model\AbstractExtens
             return true;
         }
 
-        if (!is_array($setId) && array_key_exists($setId, $this->getAttributeSetInfo())) {
+        if (!is_array($setId) && $setId !== null && array_key_exists($setId, $this->getAttributeSetInfo())) {
             return true;
         }
 

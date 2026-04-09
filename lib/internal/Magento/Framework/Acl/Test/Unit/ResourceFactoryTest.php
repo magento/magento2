@@ -34,7 +34,7 @@ class ResourceFactoryTest extends TestCase
     {
         $helper = new ObjectManager($this);
 
-        $this->_objectManager = $this->getMockForAbstractClass(ObjectManagerInterface::class);
+        $this->_objectManager = $this->createMock(ObjectManagerInterface::class);
 
         $this->_expectedObject = $this->createMock(AclResource::class);
 

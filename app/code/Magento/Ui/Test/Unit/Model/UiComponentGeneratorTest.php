@@ -14,6 +14,7 @@ use Magento\Framework\View\Element\UiComponentInterface;
 use Magento\Framework\View\LayoutInterface as LayoutInterfaceView;
 use Magento\Ui\Model\UiComponentGenerator;
 use PHPUnit\Framework\MockObject\MockObject;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\TestCase;
 
 class UiComponentGeneratorTest extends TestCase
@@ -54,9 +55,9 @@ class UiComponentGeneratorTest extends TestCase
 
     public function testGenerateUiComponent()
     {
-        $uiComponentMock = $this->getMockForAbstractClass(UiComponentInterface::class);
-        $uiComponentMockChild1 = $this->getMockForAbstractClass(UiComponentInterface::class);
-        $uiComponentMockChild2 = $this->getMockForAbstractClass(UiComponentInterface::class);
+        $uiComponentMock = $this->createMock(UiComponentInterface::class);
+        $uiComponentMockChild1 = $this->createMock(UiComponentInterface::class);
+        $uiComponentMockChild2 = $this->createMock(UiComponentInterface::class);
         $uiComponentMockChild1->expects($this->once())
             ->method('prepare');
         $uiComponentMockChild2->expects($this->once())

@@ -121,4 +121,55 @@ class MediaGalleryTest extends TestCase
             ]
         ];
     }
+
+    /**
+     * Test that media gallery entries with disabled attribute are excluded from result.
+     *
+     * @return void
+     * @throws Exception
+     */
+    public function testResolveExcludesDisabledMediaEntries(): void
+    {
+        $enabledEntryMock = $this->createPartialMock(Entry::class, ['getExtensionAttributes']);
+        $enabledEntryMock->method('getExtensionAttributes')->willReturn(false);
+        $enabledEntryMock->setData(
+            [
+                'file' => '/e/enabled.jpg',
+                'media_type' => 'image',
+                'label' => null,
+                'position' => '1',
+                'disabled' => '0',
+                'id' => '1',
+            ]
+        );
+
+        $disabledEntryMock = $this->createPartialMock(Entry::class, ['getExtensionAttributes']);
+        $disabledEntryMock->method('getExtensionAttributes')->willReturn(false);
+        $disabledEntryMock->setData(
+            [
+                'file' => '/d/disabled.jpg',
+                'media_type' => 'image',
+                'label' => 'Disabled',
+                'position' => '2',
+                'disabled' => '1',
+                'id' => '2',
+            ]
+        );
+
+        $this->productMock->method('getName')->willReturn('Product');
+        $this->productMock->method('getMediaGalleryEntries')
+            ->willReturn([$enabledEntryMock, $disabledEntryMock]);
+
+        $result = $this->mediaGallery->resolve(
+            $this->fieldMock,
+            $this->contextMock,
+            $this->infoMock,
+            ['model' => $this->productMock],
+            []
+        );
+
+        $this->assertCount(1, $result);
+        $this->assertEquals('/e/enabled.jpg', $result[0]['file']);
+        $this->assertEquals('1', $result[0]['id']);
+    }
 }

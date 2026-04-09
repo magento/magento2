@@ -9,6 +9,7 @@ namespace Magento\TestModuleOverrideConfig\MagentoAdminConfigFixture;
 
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\TestModuleOverrideConfig\AbstractOverridesTest;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Class checks that magentoAdminConfigFixtures can be removed using override config
@@ -49,12 +50,11 @@ class RemoveFixtureTest extends AbstractOverridesTest
      * @magentoAdminConfigFixture test_section/test_group/field_2 new_value
      * @magentoAdminConfigFixture test_section/test_group/field_3 new_value
      *
-     * @dataProvider datasetDataProvider
-     *
      * @param string $expectedFirstValue
      * @param string $expectedSecondValue
      * @return void
      */
+    #[DataProvider('datasetDataProvider')]
     public function testRemoveFixtureForMethod(string $expectedFirstValue, string $expectedSecondValue): void
     {
         $fistValue = $this->config->getValue(
@@ -76,12 +76,12 @@ class RemoveFixtureTest extends AbstractOverridesTest
     {
         return [
             'first_data_set' => [
-                'expectedFirstValue' => '2nd field default value',
-                'expectedSecondValue' => 'new_value',
+                '2nd field default value',
+                'new_value',
             ],
             'second_data_set' => [
-                'expectedFirstValue' => '2nd field default value',
-                'expectedSecondValue' => '3rd field default value',
+                '2nd field default value',
+                '3rd field default value',
             ],
         ];
     }

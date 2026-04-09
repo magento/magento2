@@ -12,6 +12,7 @@ use Magento\Catalog\Model\Product\Attribute\Source\Status;
 use Magento\CatalogInventory\Api\Data\StockStatusInterface;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\TestFramework\Helper\Bootstrap;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -42,13 +43,12 @@ class SalableTest extends TestCase
     /**
      * @magentoDataFixture Magento/ConfigurableProduct/_files/product_configurable.php
      *
-     * @dataProvider salableDataProvider
-     *
      * @param array $productSkus
      * @param array $productData
      * @param bool $expectedValue
      * @return void
      */
+    #[DataProvider('salableDataProvider')]
     public function testIsSalable(array $productSkus, array $productData, bool $expectedValue): void
     {
         $this->updateProduct($productSkus, $productData);

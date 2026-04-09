@@ -11,6 +11,7 @@ use Magento\Framework\App\Request\Http as HttpRequest;
 use Magento\Framework\Data\Form\FormKey;
 use Magento\Framework\Message\MessageInterface;
 use Magento\TestFramework\TestCase\AbstractBackendController;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Tests for delete customer via backend/customer/index/delete controller.
@@ -35,13 +36,13 @@ class DeleteTest extends AbstractBackendController
     /**
      * Delete customer
      *
-     * @dataProvider deleteCustomerProvider
      * @magentoDataFixture Magento/Customer/_files/customer_sample.php
      *
      * @param array $paramsData
      * @param string $expected
      * @return void
      */
+    #[DataProvider('deleteCustomerProvider')]
     public function testDeleteCustomer(array $paramsData, array $expected): void
     {
         $this->dispatchCustomerDelete($paramsData);
