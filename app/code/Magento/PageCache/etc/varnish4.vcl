@@ -27,6 +27,10 @@ sub vcl_recv {
         set req.url = std.querysort(req.url);
     }
 
+    # Remove the proxy header to mitigate the httpoxy vulnerability
+    # See https://httpoxy.org/
+    unset req.http.proxy;
+
     if (req.method == "PURGE") {
         if (client.ip !~ purge) {
             return (synth(405, "Method not allowed"));
