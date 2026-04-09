@@ -72,6 +72,47 @@ class CurlTest extends TestCase
     }
 
     /**
+     * @dataProvider httpMethodsDataProvider
+     */
+    public function testHttpMethod(string $method, array $args, string $expectedHttpMethod): void
+    {
+        $curl = new class () extends Curl {
+            public string $lastMethod = '';
+            public string $lastUri = '';
+            public $lastParams = [];
+
+            protected function makeRequest($method, $uri, $params = [])
+            {
+                $this->lastMethod = $method;
+                $this->lastUri = $uri;
+                $this->lastParams = $params;
+            }
+        };
+
+        $curl->$method(...$args);
+
+        $this->assertEquals($expectedHttpMethod, $curl->lastMethod);
+        $this->assertEquals($args[0], $curl->lastUri);
+        if (isset($args[1])) {
+            $this->assertEquals($args[1], $curl->lastParams);
+        }
+    }
+
+    /**
+     * @return array
+     */
+    public static function httpMethodsDataProvider(): array
+    {
+        return [
+            'put' => ['put', ['http://example.com', ['key' => 'value']], 'PUT'],
+            'delete' => ['delete', ['http://example.com', ['key' => 'value']], 'DELETE'],
+            'patch' => ['patch', ['http://example.com', ['key' => 'value']], 'PATCH'],
+            'head' => ['head', ['http://example.com'], 'HEAD'],
+            'options' => ['options', ['http://example.com'], 'OPTIONS'],
+        ];
+    }
+
+    /**
      * @return array
      */
     public function headersDataProvider()
